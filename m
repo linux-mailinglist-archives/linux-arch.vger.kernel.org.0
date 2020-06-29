@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894D420D976
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 22:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F5920DA22
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 22:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732000AbgF2TsB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 15:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S1729872AbgF2TyD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 15:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388014AbgF2TrP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:47:15 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054E3C03E979
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 12:47:16 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id d10so7496448pls.5
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 12:47:16 -0700 (PDT)
+        with ESMTP id S1731850AbgF2Tx7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:53:59 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51374C03E97A
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 12:53:59 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id j12so8333119pfn.10
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 12:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1gz1zQHU9+r/YpON9C/k1EX29gyKSkYfOsfpz38zwBA=;
-        b=Im8v5EGyC2StppMSLYm6OQn+oLGyJfaUm6K7ize3Z/Umh4ZYnOr1TcUmPi9B+HpLUQ
-         cLC2XsUaCI472AeGUmVPqaS4Bmla9oHo9I+AIWRkU0tKMAkgxKOPmsmCHTRZotVKURc+
-         3Ej3S2v2UMRKvyl3Q/MUcNjQN9lw0K08BG3VVAlkAHIGdIZymVTArWa791V22RfReKvK
-         d4Xn9SrFlNP5F7C5P+8Tu8DV3TMfCi8RkBELIdz9ah/XgEYZ0E2gxGyacBn2DlN9d4M/
-         w6i7bvKZcnFz+1hsf9o46nd5nuTk8SAC+MJFu9ob0741d4CQ4emNSBIyIp+27VDHdBTP
-         6/hg==
+        bh=zKRhn9sIaFaGEW3xbHkfNQIj02f8YddLObFXUqnNhu8=;
+        b=bRgfBWJhw3k6vEkg+gGrA7QdNS4rt+ffVIqjxb8+xRH5Hf8e5n3ITha/4r/HQQjG1F
+         Mnp916bSSyiyNJ3mB4Pp24pG+NomV7NtlGrDIbs1/VO6qz2zh+2u4MyKygTW4DWOdEAW
+         h0hJeQ7dnSzCQo+TA8azgjmFV+w1Q1r8AkAQ6kyp/vQDX2e8LTYa1tMbaefxqY2R+gNz
+         opFp+Zy1OQeuKe8JMokYShmECU6iURq7DyQW5616Pz5i3j+aOZhMSWUTT6+QxBbnEYnE
+         2WnYAveyeIeVpJcFa2nui3COjVCHDpZHxL9us5S2uMZdxLknVjYHLMAByD7JWc3QqKQU
+         /rhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1gz1zQHU9+r/YpON9C/k1EX29gyKSkYfOsfpz38zwBA=;
-        b=R0KxbFFUPUPqJKnpukw4Q2HjKoyQsBkj8aG+xTGNaxZuLYQajStIz5huOHt8gF8ZMT
-         JS9s61jg+UFXOzYQwv8S4nny3Q5YDAcYK43T28c8Uf+h1Flm5uiiUPOOhYx+nDVC4Bkz
-         QvKP/PHHyqEOPBGcmKO8hYcE5EL1wxZgUdyG8n+s/d3ojog54FLlhOV9x069pMK05NNq
-         b848CXNv5/MvzHjTVYvCTssnAHxvXvoVuOspENez9Wce2EhQW+Qe3eOjqn5lrss9S+71
-         bWBSqKM82yOXd7ARdC97M9qb+JwbyTfidxAQfZ1pNXgo1QHak3Iw8vFK0MDPRVbkJLTf
-         VGWw==
-X-Gm-Message-State: AOAM530jFONV57hkocX4n8TgOpIGb9/JveIe3aWV7YGonGrUAFG8XNlc
-        pD4cOrsQo7SWRRctc/HXSX7pZZleu4DFlsE8bMMk6Q==
-X-Google-Smtp-Source: ABdhPJxD+NDMzpTLVtkwIahVlE1Ojd9ohblWdC3y8HeoT1NdlP3ApesamY48WnXvCXAzV3iGs4MYCMe98HbhJvlJHpE=
-X-Received: by 2002:a17:90a:30ea:: with SMTP id h97mr18995233pjb.32.1593460035317;
- Mon, 29 Jun 2020 12:47:15 -0700 (PDT)
+        bh=zKRhn9sIaFaGEW3xbHkfNQIj02f8YddLObFXUqnNhu8=;
+        b=V6alRN2eJVjgc61CfQPgyzilucNwb4C2GKBoijji2y4IRI0NyyJuftpOvUitrR3ucg
+         P9vnqmEzvwYXs3+JihW6tM18tQQSIt9USDa7fsBJX1SYxlOafITyIb2BlmUGSQ0xPi60
+         q1od3v6PNY4P40tbj/98yqGRR4LnecUJmzVoi60fpKGW1m7p3Rn0Unbhh/75KipZSaRx
+         ZF91+RpdaEV6arhCZSAgA14jgj93F5ZXuo7WBnoeZByq5bsmtqFjUCq5T03KnmJf/fVx
+         5df5LnKqfSvhLm7UEXmb4Vo4sv9w5PlzYR14QbOP92u7KnDeBv4hokMcLOQPS50Jv1yF
+         CEoA==
+X-Gm-Message-State: AOAM531jUF7yYswETcCLaq3FtYz7V14fvDKW4rCCZ2LS7AC5Nes+wp8x
+        /VbkY7So6YatEcVbjt46WwtNGnOO9PXJc0hZMWxxdw==
+X-Google-Smtp-Source: ABdhPJx1ZltZC8TxdLF0qs/W70OrjV+LgOyxShhZsT9U/M+Islb1fHf4YkGIw2+d4lhznk2dOuqEiVum9V3YVQvnVAQ=
+X-Received: by 2002:a63:7e55:: with SMTP id o21mr11995677pgn.263.1593460438609;
+ Mon, 29 Jun 2020 12:53:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200629061840.4065483-1-keescook@chromium.org> <20200629061840.4065483-15-keescook@chromium.org>
-In-Reply-To: <20200629061840.4065483-15-keescook@chromium.org>
+References: <20200629061840.4065483-1-keescook@chromium.org> <20200629061840.4065483-9-keescook@chromium.org>
+In-Reply-To: <20200629061840.4065483-9-keescook@chromium.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 29 Jun 2020 12:47:03 -0700
-Message-ID: <CAKwvOdnErUWrJUaw9gm3ZSOpD2JepZKod3REBctzBr4QuHLiAA@mail.gmail.com>
-Subject: Re: [PATCH v4 14/17] arm/build: Warn on orphan section placement
+Date:   Mon, 29 Jun 2020 12:53:47 -0700
+Message-ID: <CAKwvOd=r6bsBfSZxVYrnbm1Utq==ApWBDjx+0Fxsm90Aq3Jghw@mail.gmail.com>
+Subject: Re: [PATCH v4 08/17] arm64/mm: Remove needless section quotes
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -70,7 +70,8 @@ Cc:     Will Deacon <will@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-efi <linux-efi@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Joe Perches <joe@perches.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
@@ -79,91 +80,35 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Sun, Jun 28, 2020 at 11:18 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> We don't want to depend on the linker's orphan section placement
-> heuristics as these can vary between linkers, and may change between
-> versions. All sections need to be explicitly named in the linker
-> script.
+> Fix a case of needless quotes in __section(), which Clang doesn't like.
 >
-> Specifically, this would have made a recently fixed bug very obvious:
->
-> ld: warning: orphan section `.fixup' from `arch/arm/lib/copy_from_user.o' being placed in section `.fixup'
->
-> Discard unneeded sections .iplt, .rel.iplt, .igot.plt, and .modinfo.
->
-> Add missing text stub sections .vfp11_veneer and .v4_bx.
->
-> Add debug sections explicitly.
->
-> Finally enable orphan section warning.
->
+> Acked-by: Will Deacon <will@kernel.org>
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Thanks for following up on the previous suggestion regarding .glu_7 /
-.glu_7t ordering. LGTM
+Yep, I remember bugs from this.  Probably should scan the kernel for
+other instances of this.  +Joe for checkpatch.pl validation.
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
->  arch/arm/include/asm/vmlinux.lds.h | 6 +++++-
->  arch/arm/kernel/vmlinux-xip.lds.S  | 1 +
->  arch/arm/kernel/vmlinux.lds.S      | 1 +
->  3 files changed, 7 insertions(+), 1 deletion(-)
+>  arch/arm64/mm/mmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/arm/include/asm/vmlinux.lds.h b/arch/arm/include/asm/vmlinux.lds.h
-> index c66b16cd8837..d44fae722e7a 100644
-> --- a/arch/arm/include/asm/vmlinux.lds.h
-> +++ b/arch/arm/include/asm/vmlinux.lds.h
-> @@ -39,6 +39,8 @@
->                 __idmap_text_end = .;                                   \
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 1df25f26571d..dce024ea6084 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -42,7 +42,7 @@
+>  u64 idmap_t0sz = TCR_T0SZ(VA_BITS);
+>  u64 idmap_ptrs_per_pgd = PTRS_PER_PGD;
 >
->  #define ARM_COMMON_DISCARD                                             \
-> +               *(.iplt) *(.rel.iplt) *(.igot.plt)                      \
-> +               *(.modinfo)                                             \
->                 *(.discard)                                             \
->                 *(.discard.*)
+> -u64 __section(".mmuoff.data.write") vabits_actual;
+> +u64 __section(.mmuoff.data.write) vabits_actual;
+>  EXPORT_SYMBOL(vabits_actual);
 >
-> @@ -63,7 +65,9 @@
->  #define ARM_STUBS_TEXT                                                 \
->                 *(.gnu.warning)                                         \
->                 *(.glue_7)                                              \
-> -               *(.glue_7t)
-> +               *(.glue_7t)                                             \
-> +               *(.vfp11_veneer)                                        \
-> +               *(.v4_bx)
->
->  #define ARM_TEXT                                                       \
->                 IDMAP_TEXT                                              \
-> diff --git a/arch/arm/kernel/vmlinux-xip.lds.S b/arch/arm/kernel/vmlinux-xip.lds.S
-> index 57fcbf55f913..11ffa79751da 100644
-> --- a/arch/arm/kernel/vmlinux-xip.lds.S
-> +++ b/arch/arm/kernel/vmlinux-xip.lds.S
-> @@ -150,6 +150,7 @@ SECTIONS
->         _end = .;
->
->         STABS_DEBUG
-> +       DWARF_DEBUG
->         ARM_DETAILS
->  }
->
-> diff --git a/arch/arm/kernel/vmlinux.lds.S b/arch/arm/kernel/vmlinux.lds.S
-> index 1d3d3b599635..dc672fe35de3 100644
-> --- a/arch/arm/kernel/vmlinux.lds.S
-> +++ b/arch/arm/kernel/vmlinux.lds.S
-> @@ -149,6 +149,7 @@ SECTIONS
->         _end = .;
->
->         STABS_DEBUG
-> +       DWARF_DEBUG
->         ARM_DETAILS
->  }
->
+>  u64 kimage_voffset __ro_after_init;
 > --
 > 2.25.1
 >
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200629061840.4065483-15-keescook%40chromium.org.
-
 
 
 -- 
