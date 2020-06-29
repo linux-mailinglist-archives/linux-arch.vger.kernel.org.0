@@ -2,58 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 083B620DD6F
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DFD20DED9
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbgF2Syh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 14:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S1732885AbgF2U3v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 16:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729807AbgF2Sww (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 14:52:52 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9B7C031C7A;
-        Mon, 29 Jun 2020 11:15:17 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id z2so13590859qts.5;
-        Mon, 29 Jun 2020 11:15:17 -0700 (PDT)
+        with ESMTP id S1731827AbgF2U3u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 16:29:50 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302B5C03E979
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 13:29:50 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id j19so1964521pgm.11
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jun 2020 13:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ksn6KEgSSy4O04+EmiHmLNcv0njEAGgzFW6T11ji+vI=;
-        b=Xjvp/RucTJD7ys4so77HqyBdKQg72774rOpK0Iy63xJF5nLNOOILQoRIXkvOl8GSiV
-         +dq1LOTSqRzP649aH77rs+eXXLE6NrmWrR2ZfZCPcZIIXq+sCkRejxszABRcdazkcaLO
-         sosTZdgioDe0Awvmhn8VQ9Xq7tdlEZdqFPTfi0ICfdG4ZOw15yRKYNYyr7GlNnUU/Jc6
-         j+yXaf+nXfjR9kDYWQi3iHL2zZJ08F13kaTJcXndLsH6fIgDkpVttULkAJxaKMU4AZTG
-         otU+pDZSB+sDNIHb74V0Qlsb3g2ppZAYET8gjxxd9JFf9PRwuZVBIXjVJQHbrkmo8MjZ
-         lAEw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1nXbjmGuO9YghPzUiSigrzs5/9GT5Q6NNhUBnZ5BL6o=;
+        b=eQJ4C1Og5DxGMyP8fWLcdR8Z3CwksZFnIGnuQop7YqAIDkKSYG4ONb22hCetVI2dMa
+         XlTHs1YnKZwKbNTsc1vYgLQApn6CEsy11cVvAH0W8MA9tpog/jILDFawLHvAbnz6wbLc
+         MOr/DpyFN5amUZuAcTF6xCkw3l5ZA5IZ2aVkLt4pQ4hbAulAODM2O4kjrlBTBDFdFrsk
+         HN+QhWO3ClmIpA86xpuWF6l/Rt/cKlJGag5/A6V0kEXZvqbq1uaiEQ7D74BMh9YiBgqt
+         uN/F18cFPt8yiVVK3bgo2KkS/XgGaS4veeK+BkZYPP8LfdLBnFFHKYruXHYXkltdQrqW
+         5tFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ksn6KEgSSy4O04+EmiHmLNcv0njEAGgzFW6T11ji+vI=;
-        b=MMCFgfFy9XnVzlCnOmLXySRIJgDwwaAj3tfCJEP31d9kQcaS9N9s1aLPJeQJhQvxE+
-         3SRMx35eiwg5VzdZH60FFBN5CbgZ5KcZobnftXPg3HbGkyoznqcd8lp5p9RThLhLr01h
-         3NzspdNOa9bTIjExPT0NysjWKc/fTEqr4DWl0stTG7/Z9aV3cFLQbHgE09rj0NfZ1kEs
-         naM2suTJS37VlRM7S8QUsUj2uBFy34PjijFIkeyC29bKWJepv99TJC/rpbV2t64K88ua
-         q0uLpEwwqJ/QsgY/vak953jOQ9hJpK938DYmqNY+9YigJtuZQsEl9V90RUuhxKPl8ToV
-         MhBw==
-X-Gm-Message-State: AOAM532ECWZ/23VgLyHR8ClfLpqlvHPq6zguAWeTv/2/v5t3pFttUnoH
-        +P6Lp7caVaj2RH1UsbMqys0=
-X-Google-Smtp-Source: ABdhPJzHr+OXXpT2ladJEzyIUGa3Qh7oKbbNWJhQOzQ+NHJbTju9YGsvUo+VZ1jPBQ+dsZ58uYQ4Zw==
-X-Received: by 2002:ac8:7242:: with SMTP id l2mr16374761qtp.320.1593454516576;
-        Mon, 29 Jun 2020 11:15:16 -0700 (PDT)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id z17sm592545qth.24.2020.06.29.11.15.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 11:15:16 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Mon, 29 Jun 2020 14:15:14 -0400
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Will Deacon <will@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1nXbjmGuO9YghPzUiSigrzs5/9GT5Q6NNhUBnZ5BL6o=;
+        b=ebbLx08pUiUHGJWuK7rRlaVMHj6tb03+/XEz0YpB1d1UXyGkZ6R4GsuSXc6YHqdGyf
+         8qLNPM69H6HW+1wfw1Txjtikon8G15UIdWNENjvXELO63QsXaDS/Bq0CbNDRJfJ+vroI
+         oGLf5eOLfsFJVPXBKlJbmM1tJhUWyKZmhZQ6DIM9tB64m/0iwGHyOSLiIH4UaQBO93oj
+         v9Req/lKEyQgWbQmc23S0Hk9MRfhzthdb+vUjOObXqzSuWxUMtGWEpCtYpapSunTUjVo
+         GS0eDAKSWTTgG68nYPaNJ+e1ejgS3u3s4Ah2VRp/wizFelsM4ZTMmhYlEquB/fCd+COm
+         USEQ==
+X-Gm-Message-State: AOAM531KggZy6AnOZTxZIpbbUMySZASb0hYwpFHN9odFKJUEQNfr9jfq
+        dm101PCsze2wurkEvyG6ENx2qlybt99PFbYzLJOifA==
+X-Google-Smtp-Source: ABdhPJwv6SUxAiJU3OMeQLtrnFcvI/h1iY82pIlt6qbyAGsh50kqhWEDWLaUBKiAJzLF7/INflMcJGpqQT2M4cbcb6s=
+X-Received: by 2002:a05:6a00:15ca:: with SMTP id o10mr16122175pfu.169.1593462589513;
+ Mon, 29 Jun 2020 13:29:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200629061840.4065483-1-keescook@chromium.org>
+ <20200629061840.4065483-9-keescook@chromium.org> <CAKwvOd=r6bsBfSZxVYrnbm1Utq==ApWBDjx+0Fxsm90Aq3Jghw@mail.gmail.com>
+ <9b7f9c3aed7223e49def6e775d3b250aa780e562.camel@perches.com>
+In-Reply-To: <9b7f9c3aed7223e49def6e775d3b250aa780e562.camel@perches.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 29 Jun 2020 13:29:38 -0700
+Message-ID: <CAKwvOdnOCEZ8LUEY6+gVcTcNuaabRnj4hXG6-pcb_6fcQJsr6w@mail.gmail.com>
+Subject: Re: [PATCH v4 08/17] arm64/mm: Remove needless section quotes
+To:     Joe Perches <joe@perches.com>
+Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
@@ -62,56 +62,49 @@ Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
         Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
         Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 14/17] arm/build: Warn on orphan section placement
-Message-ID: <20200629181514.GA1046442@rani.riverdale.lan>
-References: <20200629061840.4065483-1-keescook@chromium.org>
- <20200629061840.4065483-15-keescook@chromium.org>
- <20200629155401.GB900899@rani.riverdale.lan>
- <20200629180703.GX1551@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200629180703.GX1551@shell.armlinux.org.uk>
+        Arnd Bergmann <arnd@arndb.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 07:07:04PM +0100, Russell King - ARM Linux admin wrote:
-> On Mon, Jun 29, 2020 at 11:54:01AM -0400, Arvind Sankar wrote:
-> > On Sun, Jun 28, 2020 at 11:18:37PM -0700, Kees Cook wrote:
-> > > We don't want to depend on the linker's orphan section placement
-> > > heuristics as these can vary between linkers, and may change between
-> > > versions. All sections need to be explicitly named in the linker
-> > > script.
-> > > 
-> > > Specifically, this would have made a recently fixed bug very obvious:
-> > > 
-> > > ld: warning: orphan section `.fixup' from `arch/arm/lib/copy_from_user.o' being placed in section `.fixup'
-> > > 
-> > > Discard unneeded sections .iplt, .rel.iplt, .igot.plt, and .modinfo.
-> > > 
-> > > Add missing text stub sections .vfp11_veneer and .v4_bx.
-> > > 
-> > > Add debug sections explicitly.
-> > > 
-> > > Finally enable orphan section warning.
-> > 
-> > This is unrelated to this patch as such, but I noticed that ARM32/64 places
-> > the .got section inside .text -- is that expected on ARM?
-> 
-> Do you mean in general, in the kernel vmlinux, in the decompressor
-> vmlinux or ... ?
-> 
+On Mon, Jun 29, 2020 at 1:03 PM Joe Perches <joe@perches.com> wrote:
+>
+> On Mon, 2020-06-29 at 12:53 -0700, Nick Desaulniers wrote:
+> > On Sun, Jun 28, 2020 at 11:18 PM Kees Cook <keescook@chromium.org> wrote:
+> > > Fix a case of needless quotes in __section(), which Clang doesn't like.
+> > >
+> > > Acked-by: Will Deacon <will@kernel.org>
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> >
+> > Yep, I remember bugs from this.  Probably should scan the kernel for
+> > other instances of this.  +Joe for checkpatch.pl validation.
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> $ git grep -P -n '__section\s*\(\s*\"'
+> arch/arm64/mm/mmu.c:45:u64 __section(".mmuoff.data.write") vabits_actual;
+> include/linux/compiler.h:211:   __section("___kentry" "+" #sym )                        \
+> include/linux/export.h:133:     static int __ksym_marker_##sym[0] __section(".discard.ksym") __used
+> include/linux/srcutree.h:127:           __section("___srcu_struct_ptrs") = &name
+>
+> My recollection is I submitted a patch
+> to _add_ quotes
+>
+> https://lore.kernel.org/patchwork/patch/1125785/
 
-Sorry, in the kernel vmlinux. ARM_TEXT includes *(.got) for 32-bit, and
-the 64-bit vmlinux.lds.S includes it in .text as well. The decompressor
-for 32-bit keeps it separate for non-EFI stub kernel and puts it inside
-.data for EFI stub.
+Hey, yeah!  Did you end up sending v2?
+
+-- 
+Thanks,
+~Nick Desaulniers
