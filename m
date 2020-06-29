@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EF320E245
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jun 2020 00:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C3620E19F
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731131AbgF2VDr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 17:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S1733210AbgF2U55 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 16:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729360AbgF2TMp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:12:45 -0400
+        with ESMTP id S1729621AbgF2TNF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:13:05 -0400
 Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D202C08EB1B
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:27:29 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id a127so7440300pfa.12
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:27:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0732DC08EB1F
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:27:30 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id b16so7438594pfi.13
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:27:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sXG3FvFqQ5OV+ZXnRU9R+TEF3U1pZeLG1jvNfenb62s=;
-        b=Dr3LTyOcepWrlYRx1KeZt7WsSGx24iQgQlE3vgItGgcuCz/Qqv46uWAW6jcWneSu/A
-         9yJ4dGHFVjLf2NoUg6xQd5a/3NE5S1FrFk5DcfZiZPXYfccXmblBSblmRC0P4wvwmqBH
-         ftFfk372fYI5M6GZiMGy5dJeCBhJDzsm2KTgQ=
+        bh=OcuGTfSUXtPYMFfpENNYu5S2NR6isuQ9uC03+go4k80=;
+        b=jRyLPLKJ/wflGnWNIhsw1/xtdO++qU/4G4jZjo+lnOqYVWgtIzMYOnTwQtGOp4VTv+
+         b8zRHjoyL25oKD4tWfpH43lrpeGB8egY2xI+HOcY319Hsy/yzaeePZ8YwW/uqTnkDoS9
+         fbCN5nnFFpuj2qqzr47ls2rlOBAuxjOrocN5I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sXG3FvFqQ5OV+ZXnRU9R+TEF3U1pZeLG1jvNfenb62s=;
-        b=O6a2XqBY/6cBgU9XgMwsYY10czVXI75uUVBAD3mh6xZmUE4AwuWpyZW7MQKhuoEPLS
-         2022E3E40aHxLRRstmP9IKShvWzSFugRbCYGPE7fRJ/za59m5TZTMIFvXU11gh0AYL0b
-         pxcBYnXN8aggVzZIYNPVje2znryzjiPn++pu60+rbgCxh8rqTGkde1FG1md0nxuObqbL
-         0WeBsX4VoUAov3HO1x+eJ/9/Wq36Zm30koc2irbAiam96uxw2TJmas2g1/staMaeU+3+
-         CIYsTvYwmla6yRzW8cidSzwFplbUMbNxaa4S0qUzE8cdaQUohLLX4+qKSvfct9egTPl6
-         C0kQ==
-X-Gm-Message-State: AOAM530XD92j66Yj2VQWdfEMumCf+hDujuyvg+lqubbI4be1O1rtUaGC
-        TJJuhTUrKDRES5NDNcWLsAE3WzuWr6s=
-X-Google-Smtp-Source: ABdhPJw033T79hmEnu5HLxCntZo9NI1/QGQweu55S6/mFEtAwjTX8shGo4HSRGOPCLPo2/+Sc0ET+Q==
-X-Received: by 2002:a65:410b:: with SMTP id w11mr6271531pgp.65.1593412049107;
+        bh=OcuGTfSUXtPYMFfpENNYu5S2NR6isuQ9uC03+go4k80=;
+        b=LRrGdBIz9x7G375IEt0daoeNs/OtIXki672e6MExoD8taXlAxq0hbhGrf/lhD5LLJt
+         McHOHdhZaL9wmYNx/vYLgf9jD6Mp43LGizeQvq2G1barlP4SSyPCYPuDUX8+tR5cQTYj
+         NIU8wvoL5svxuVjgE/a8sL32o9grGRlAPEUaLopzZQHXu4KD3tpdet0AfSz+0Zvye1kA
+         WQMnwD+HclGqhJbG3lbM6vTX0rbl718ED+l6t78NsF9bxzi9OhdYZelIad+NajV/Ni3S
+         yruTsD223erL2bw5Ljgzronb1mHVjdMV+0o5QdwcTnfFaVfHEfOveZBhLCO2LeLnfLH9
+         eA0Q==
+X-Gm-Message-State: AOAM531tlo/vBmekNINBobpJWfrlqJHR4s+vBH1+i2wU6HjcpJQEUo/1
+        NHJLdiRFptBKYSSUxVLvSCCPMA==
+X-Google-Smtp-Source: ABdhPJyp58Bg9f7GuaQUlT4KpenbA1Jul+PfAUND8VkiaE+umM/0tCY0B+FCqda7VoHqscVan5uu+w==
+X-Received: by 2002:a62:1646:: with SMTP id 67mr13176339pfw.281.1593412049613;
         Sun, 28 Jun 2020 23:27:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s9sm28713610pgo.22.2020.06.28.23.27.28
+        by smtp.gmail.com with ESMTPSA id 27sm18066808pjg.19.2020.06.28.23.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 28 Jun 2020 23:27:28 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -64,9 +64,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 15/17] arm/boot: Warn on orphan section placement
-Date:   Sun, 28 Jun 2020 23:18:38 -0700
-Message-Id: <20200629061840.4065483-16-keescook@chromium.org>
+Subject: [PATCH v4 16/17] x86/build: Warn on orphan section placement
+Date:   Sun, 28 Jun 2020 23:18:39 -0700
+Message-Id: <20200629061840.4065483-17-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200629061840.4065483-1-keescook@chromium.org>
 References: <20200629061840.4065483-1-keescook@chromium.org>
@@ -82,80 +82,70 @@ heuristics as these can vary between linkers, and may change between
 versions. All sections need to be explicitly named in the linker
 script.
 
-Use common macros for debug sections, discards, and text stubs. Add
-discards for unwanted .note, and .rel sections. Finally, enable orphan
-section warning.
+Discards the unused rela, plt, and got sections that are not needed
+in the final vmlinux, stop emitting kprobe sections without kprobes,
+and enable orphan section warnings.
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/arm/boot/compressed/Makefile      |  2 ++
- arch/arm/boot/compressed/vmlinux.lds.S | 18 ++++++++----------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ arch/x86/Makefile             | 4 ++++
+ arch/x86/include/asm/asm.h    | 6 +++++-
+ arch/x86/kernel/vmlinux.lds.S | 6 ++++++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
-index 00602a6fba04..b8a97d81662d 100644
---- a/arch/arm/boot/compressed/Makefile
-+++ b/arch/arm/boot/compressed/Makefile
-@@ -128,6 +128,8 @@ endif
- LDFLAGS_vmlinux += --no-undefined
- # Delete all temporary local symbols
- LDFLAGS_vmlinux += -X
-+# Report orphan sections
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 00e378de8bc0..f8a5b2333729 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -51,6 +51,10 @@ ifdef CONFIG_X86_NEED_RELOCS
+         LDFLAGS_vmlinux := --emit-relocs --discard-none
+ endif
+ 
++# We never want expected sections to be placed heuristically by the
++# linker. All sections should be explicitly named in the linker script.
 +LDFLAGS_vmlinux += --orphan-handling=warn
- # Next argument is a linker script
- LDFLAGS_vmlinux += -T
++
+ #
+ # Prevent GCC from generating any FP code by mistake.
+ #
+diff --git a/arch/x86/include/asm/asm.h b/arch/x86/include/asm/asm.h
+index 0f63585edf5f..92feec0f0a12 100644
+--- a/arch/x86/include/asm/asm.h
++++ b/arch/x86/include/asm/asm.h
+@@ -138,11 +138,15 @@
+ # define _ASM_EXTABLE_FAULT(from, to)				\
+ 	_ASM_EXTABLE_HANDLE(from, to, ex_handler_fault)
  
-diff --git a/arch/arm/boot/compressed/vmlinux.lds.S b/arch/arm/boot/compressed/vmlinux.lds.S
-index 09ac33f52814..636e9ceb79ec 100644
---- a/arch/arm/boot/compressed/vmlinux.lds.S
-+++ b/arch/arm/boot/compressed/vmlinux.lds.S
-@@ -2,6 +2,7 @@
- /*
-  *  Copyright (C) 2000 Russell King
-  */
-+#include <asm/vmlinux.lds.h>
+-# define _ASM_NOKPROBE(entry)					\
++# ifdef CONFIG_KPROBES
++#  define _ASM_NOKPROBE(entry)					\
+ 	.pushsection "_kprobe_blacklist","aw" ;			\
+ 	_ASM_ALIGN ;						\
+ 	_ASM_PTR (entry);					\
+ 	.popsection
++# else
++#  define _ASM_NOKPROBE(entry)
++# endif
  
- #ifdef CONFIG_CPU_ENDIAN_BE8
- #define ZIMAGE_MAGIC(x) ( (((x) >> 24) & 0x000000ff) | \
-@@ -17,8 +18,11 @@ ENTRY(_start)
- SECTIONS
- {
-   /DISCARD/ : {
-+    ARM_COMMON_DISCARD
-     *(.ARM.exidx*)
-     *(.ARM.extab*)
-+    *(.note.*)
-+    *(.rel.*)
-     /*
-      * Discard any r/w data - this produces a link error if we have any,
-      * which is required for PIC decompression.  Local data generates
-@@ -36,9 +40,7 @@ SECTIONS
-     *(.start)
-     *(.text)
-     *(.text.*)
--    *(.gnu.warning)
--    *(.glue_7t)
--    *(.glue_7)
-+    ARM_STUBS_TEXT
-   }
-   .table : ALIGN(4) {
-     _table_start = .;
-@@ -128,12 +130,8 @@ SECTIONS
-   PROVIDE(__pecoff_data_size = ALIGN(512) - ADDR(.data));
-   PROVIDE(__pecoff_end = ALIGN(512));
+ #else
+ # define _EXPAND_EXTABLE_HANDLE(x) #x
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 504d16968ed8..52e2b4952a0b 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -413,6 +413,12 @@ SECTIONS
+ 	ELF_DETAILS
  
--  .stab 0		: { *(.stab) }
--  .stabstr 0		: { *(.stabstr) }
--  .stab.excl 0		: { *(.stab.excl) }
--  .stab.exclstr 0	: { *(.stab.exclstr) }
--  .stab.index 0		: { *(.stab.index) }
--  .stab.indexstr 0	: { *(.stab.indexstr) }
--  .comment 0		: { *(.comment) }
-+  STABS_DEBUG
-+  DWARF_DEBUG
-+  ARM_DETAILS
+ 	DISCARDS
++	/DISCARD/ : {
++		*(.rela.*) *(.rela_*)
++		*(.rel.*) *(.rel_*)
++		*(.got) *(.got.*)
++		*(.igot.*) *(.iplt)
++	}
  }
- ASSERT(_edata_real == _edata, "error: zImage file size is incorrect");
+ 
+ 
 -- 
 2.25.1
 
