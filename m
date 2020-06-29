@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E1720E0E2
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jun 2020 23:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EF320E245
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jun 2020 00:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731452AbgF2Uuh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 16:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S1731131AbgF2VDr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Jun 2020 17:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731444AbgF2TNf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:13:35 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D90FC08EB14
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:55 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id gc15so574488pjb.0
-        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:18:55 -0700 (PDT)
+        with ESMTP id S1729360AbgF2TMp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Jun 2020 15:12:45 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D202C08EB1B
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:27:29 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id a127so7440300pfa.12
+        for <linux-arch@vger.kernel.org>; Sun, 28 Jun 2020 23:27:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HLLAJpxJCKF6GpXYjiXBbb2388G9eZDwIJVZRHrbyec=;
-        b=T04fL7iRnuJApQe2EOioew1j5Rlr2BMoJuzctdqWei6PMaoDnLB/LdaL5P+9eTJj3D
-         hrhcKHRUxkUBOU51xp8O7g+QcmVnD4KGJx8EsFA75GwrbM5HkoASL8Vcva2ox1Rzzz8T
-         u3NLRFeCUaao3XeiyLsPIVvzOAhdDEbGOuEs0=
+        bh=sXG3FvFqQ5OV+ZXnRU9R+TEF3U1pZeLG1jvNfenb62s=;
+        b=Dr3LTyOcepWrlYRx1KeZt7WsSGx24iQgQlE3vgItGgcuCz/Qqv46uWAW6jcWneSu/A
+         9yJ4dGHFVjLf2NoUg6xQd5a/3NE5S1FrFk5DcfZiZPXYfccXmblBSblmRC0P4wvwmqBH
+         ftFfk372fYI5M6GZiMGy5dJeCBhJDzsm2KTgQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HLLAJpxJCKF6GpXYjiXBbb2388G9eZDwIJVZRHrbyec=;
-        b=LKf9BfvaWKA88OuabMoGSfKogtRswkODstYgq564UjLaPn2QJdUqjouEqhk7DHc1DA
-         Tc5qBhkL51ha60fJuP3nrSnbZ3tqt8dUdXo5g3pPHC/9xYnoMmZb6ULC2GCGPjg3GlUk
-         S9oRX4FgG7uLstEb+MGa5G/ATythBhmwLOJrRg3VUoK9uh7omXcWQ26I68NKXU0lJrW3
-         CYt2Ipwy7bRvoqdJ8c7P5yrIZoZQ/DubH/zp+A0rToWFW1P8EgEwLH/UAdoBVRAINgfe
-         zFT+Uv9P/WnR4dtVcPz5cwW6h22T1L75wkNnKQZPIrNVp6wxrgEr0v3qS6mjlPvq0p5v
-         nfRQ==
-X-Gm-Message-State: AOAM530KihooOGrRkokOz0be3Q6oVqDYqsOIS2HI5sKsxhTFw10218UN
-        7M6xLh+xCQqqmgsJFQwmRRbTAw==
-X-Google-Smtp-Source: ABdhPJwNjvgfAOOh8VJ+onDG+dXJz2yzAp0DTMkKIotRBmI0ZoNMLyWXjjtPuqVD4FTZ8qL5j5J1DA==
-X-Received: by 2002:a17:90a:ed87:: with SMTP id k7mr5586555pjy.31.1593411534865;
-        Sun, 28 Jun 2020 23:18:54 -0700 (PDT)
+        bh=sXG3FvFqQ5OV+ZXnRU9R+TEF3U1pZeLG1jvNfenb62s=;
+        b=O6a2XqBY/6cBgU9XgMwsYY10czVXI75uUVBAD3mh6xZmUE4AwuWpyZW7MQKhuoEPLS
+         2022E3E40aHxLRRstmP9IKShvWzSFugRbCYGPE7fRJ/za59m5TZTMIFvXU11gh0AYL0b
+         pxcBYnXN8aggVzZIYNPVje2znryzjiPn++pu60+rbgCxh8rqTGkde1FG1md0nxuObqbL
+         0WeBsX4VoUAov3HO1x+eJ/9/Wq36Zm30koc2irbAiam96uxw2TJmas2g1/staMaeU+3+
+         CIYsTvYwmla6yRzW8cidSzwFplbUMbNxaa4S0qUzE8cdaQUohLLX4+qKSvfct9egTPl6
+         C0kQ==
+X-Gm-Message-State: AOAM530XD92j66Yj2VQWdfEMumCf+hDujuyvg+lqubbI4be1O1rtUaGC
+        TJJuhTUrKDRES5NDNcWLsAE3WzuWr6s=
+X-Google-Smtp-Source: ABdhPJw033T79hmEnu5HLxCntZo9NI1/QGQweu55S6/mFEtAwjTX8shGo4HSRGOPCLPo2/+Sc0ET+Q==
+X-Received: by 2002:a65:410b:: with SMTP id w11mr6271531pgp.65.1593412049107;
+        Sun, 28 Jun 2020 23:27:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g12sm4460965pfb.190.2020.06.28.23.18.48
+        by smtp.gmail.com with ESMTPSA id s9sm28713610pgo.22.2020.06.28.23.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2020 23:18:53 -0700 (PDT)
+        Sun, 28 Jun 2020 23:27:28 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Will Deacon <will@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -64,9 +64,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 14/17] arm/build: Warn on orphan section placement
-Date:   Sun, 28 Jun 2020 23:18:37 -0700
-Message-Id: <20200629061840.4065483-15-keescook@chromium.org>
+Subject: [PATCH v4 15/17] arm/boot: Warn on orphan section placement
+Date:   Sun, 28 Jun 2020 23:18:38 -0700
+Message-Id: <20200629061840.4065483-16-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200629061840.4065483-1-keescook@chromium.org>
 References: <20200629061840.4065483-1-keescook@chromium.org>
@@ -82,73 +82,80 @@ heuristics as these can vary between linkers, and may change between
 versions. All sections need to be explicitly named in the linker
 script.
 
-Specifically, this would have made a recently fixed bug very obvious:
-
-ld: warning: orphan section `.fixup' from `arch/arm/lib/copy_from_user.o' being placed in section `.fixup'
-
-Discard unneeded sections .iplt, .rel.iplt, .igot.plt, and .modinfo.
-
-Add missing text stub sections .vfp11_veneer and .v4_bx.
-
-Add debug sections explicitly.
-
-Finally enable orphan section warning.
+Use common macros for debug sections, discards, and text stubs. Add
+discards for unwanted .note, and .rel sections. Finally, enable orphan
+section warning.
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/arm/include/asm/vmlinux.lds.h | 6 +++++-
- arch/arm/kernel/vmlinux-xip.lds.S  | 1 +
- arch/arm/kernel/vmlinux.lds.S      | 1 +
- 3 files changed, 7 insertions(+), 1 deletion(-)
+ arch/arm/boot/compressed/Makefile      |  2 ++
+ arch/arm/boot/compressed/vmlinux.lds.S | 18 ++++++++----------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/include/asm/vmlinux.lds.h b/arch/arm/include/asm/vmlinux.lds.h
-index c66b16cd8837..d44fae722e7a 100644
---- a/arch/arm/include/asm/vmlinux.lds.h
-+++ b/arch/arm/include/asm/vmlinux.lds.h
-@@ -39,6 +39,8 @@
- 		__idmap_text_end = .;					\
+diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
+index 00602a6fba04..b8a97d81662d 100644
+--- a/arch/arm/boot/compressed/Makefile
++++ b/arch/arm/boot/compressed/Makefile
+@@ -128,6 +128,8 @@ endif
+ LDFLAGS_vmlinux += --no-undefined
+ # Delete all temporary local symbols
+ LDFLAGS_vmlinux += -X
++# Report orphan sections
++LDFLAGS_vmlinux += --orphan-handling=warn
+ # Next argument is a linker script
+ LDFLAGS_vmlinux += -T
  
- #define ARM_COMMON_DISCARD						\
-+		*(.iplt) *(.rel.iplt) *(.igot.plt)                      \
-+		*(.modinfo)                                             \
- 		*(.discard)						\
- 		*(.discard.*)
+diff --git a/arch/arm/boot/compressed/vmlinux.lds.S b/arch/arm/boot/compressed/vmlinux.lds.S
+index 09ac33f52814..636e9ceb79ec 100644
+--- a/arch/arm/boot/compressed/vmlinux.lds.S
++++ b/arch/arm/boot/compressed/vmlinux.lds.S
+@@ -2,6 +2,7 @@
+ /*
+  *  Copyright (C) 2000 Russell King
+  */
++#include <asm/vmlinux.lds.h>
  
-@@ -63,7 +65,9 @@
- #define ARM_STUBS_TEXT							\
- 		*(.gnu.warning)						\
- 		*(.glue_7)						\
--		*(.glue_7t)
-+		*(.glue_7t)						\
-+		*(.vfp11_veneer)                                        \
-+		*(.v4_bx)
+ #ifdef CONFIG_CPU_ENDIAN_BE8
+ #define ZIMAGE_MAGIC(x) ( (((x) >> 24) & 0x000000ff) | \
+@@ -17,8 +18,11 @@ ENTRY(_start)
+ SECTIONS
+ {
+   /DISCARD/ : {
++    ARM_COMMON_DISCARD
+     *(.ARM.exidx*)
+     *(.ARM.extab*)
++    *(.note.*)
++    *(.rel.*)
+     /*
+      * Discard any r/w data - this produces a link error if we have any,
+      * which is required for PIC decompression.  Local data generates
+@@ -36,9 +40,7 @@ SECTIONS
+     *(.start)
+     *(.text)
+     *(.text.*)
+-    *(.gnu.warning)
+-    *(.glue_7t)
+-    *(.glue_7)
++    ARM_STUBS_TEXT
+   }
+   .table : ALIGN(4) {
+     _table_start = .;
+@@ -128,12 +130,8 @@ SECTIONS
+   PROVIDE(__pecoff_data_size = ALIGN(512) - ADDR(.data));
+   PROVIDE(__pecoff_end = ALIGN(512));
  
- #define ARM_TEXT							\
- 		IDMAP_TEXT						\
-diff --git a/arch/arm/kernel/vmlinux-xip.lds.S b/arch/arm/kernel/vmlinux-xip.lds.S
-index 57fcbf55f913..11ffa79751da 100644
---- a/arch/arm/kernel/vmlinux-xip.lds.S
-+++ b/arch/arm/kernel/vmlinux-xip.lds.S
-@@ -150,6 +150,7 @@ SECTIONS
- 	_end = .;
- 
- 	STABS_DEBUG
-+	DWARF_DEBUG
- 	ARM_DETAILS
+-  .stab 0		: { *(.stab) }
+-  .stabstr 0		: { *(.stabstr) }
+-  .stab.excl 0		: { *(.stab.excl) }
+-  .stab.exclstr 0	: { *(.stab.exclstr) }
+-  .stab.index 0		: { *(.stab.index) }
+-  .stab.indexstr 0	: { *(.stab.indexstr) }
+-  .comment 0		: { *(.comment) }
++  STABS_DEBUG
++  DWARF_DEBUG
++  ARM_DETAILS
  }
- 
-diff --git a/arch/arm/kernel/vmlinux.lds.S b/arch/arm/kernel/vmlinux.lds.S
-index 1d3d3b599635..dc672fe35de3 100644
---- a/arch/arm/kernel/vmlinux.lds.S
-+++ b/arch/arm/kernel/vmlinux.lds.S
-@@ -149,6 +149,7 @@ SECTIONS
- 	_end = .;
- 
- 	STABS_DEBUG
-+	DWARF_DEBUG
- 	ARM_DETAILS
- }
- 
+ ASSERT(_edata_real == _edata, "error: zImage file size is incorrect");
 -- 
 2.25.1
 
