@@ -2,116 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB0A20EC36
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jun 2020 05:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1B220F0B9
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jun 2020 10:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727904AbgF3Dx7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Jun 2020 23:53:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:60194 "EHLO foss.arm.com"
+        id S1731608AbgF3Ip0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Jun 2020 04:45:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726710AbgF3Dx6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 29 Jun 2020 23:53:58 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2739030E;
-        Mon, 29 Jun 2020 20:53:58 -0700 (PDT)
-Received: from [10.163.84.101] (unknown [10.163.84.101])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EE3D3F73C;
-        Mon, 29 Jun 2020 20:53:47 -0700 (PDT)
-Subject: Re: [PATCH V3 0/4] mm/debug_vm_pgtable: Add some more tests
-To:     linux-mm@kvack.org
-Cc:     christophe.leroy@c-s.fr, ziy@nvidia.com,
-        gerald.schaefer@de.ibm.com, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        Qian Cai <cai@lca.pw>
-References: <1592192277-8421-1-git-send-email-anshuman.khandual@arm.com>
- <70ddc7dd-b688-b73e-642a-6363178c8cdd@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <1ed72a76-9f20-0169-4c16-c1d8808690eb@arm.com>
-Date:   Tue, 30 Jun 2020 09:23:35 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1731592AbgF3Ip0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 30 Jun 2020 04:45:26 -0400
+Received: from localhost (unknown [84.241.197.94])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F47D20768;
+        Tue, 30 Jun 2020 08:45:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593506725;
+        bh=iCDG5t6pi57MoyB91cUN21i5duN5jXpRfPSFAuFxS18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gyvLRhOabyVbn+eU/kHBK4TPsidN4UbIDrW3Zi8KxGa1cx+wJbLjCh9gFbb+1N4py
+         Y+0kUzWS9Tbe0/5h2KqnNNKXr7gCMS8KjvuKsBPGZASdAu0wYK6jbjOrvpQidLimFo
+         toHkvKPKESrTKNDs9Sb0/tPk2zyZkB9pG92dlzpo=
+Date:   Tue, 30 Jun 2020 10:45:22 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux-kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [RFC PATCH 1/2] Explicitly include linux/major.h where it is
+ needed
+Message-ID: <20200630084522.GB637565@kroah.com>
+References: <20200617092614.7897ccb2@canb.auug.org.au>
+ <20200617092747.0cadb2de@canb.auug.org.au>
+ <20200617055843.GB25631@kroah.com>
+ <20200630091203.55cdd5d9@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <70ddc7dd-b688-b73e-642a-6363178c8cdd@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200630091203.55cdd5d9@canb.auug.org.au>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Jun 30, 2020 at 09:12:03AM +1000, Stephen Rothwell wrote:
+> Hi Greg,
+> 
+> On Wed, 17 Jun 2020 07:58:43 +0200 Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Jun 17, 2020 at 09:27:47AM +1000, Stephen Rothwell wrote:
+> > > This is in preparation for removing the include of major.h where it is
+> > > not needed.
+> > > 
+> > > These files were found using
+> > > 
+> > > 	grep -E -L '[<"](uapi/)?linux/major\.h' $(git grep -l -w -f /tmp/xx)
+> > > 
+> > > where /tmp/xx contains all the symbols defined in major.h.  There were
+> > > a couple of files in that list that did not need the include since the
+> > > references are in comments.
+> > > 
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>  
+> > 
+> > Any reason this had an RFC, but patch 2/2 did not?
+> > 
+> > They look good to me, I will be glad to take these, but do you still
+> > want reviews from others for this?  It seems simple enough to me...
+> 
+> I am going to do another round of this patchset splitting out most of
+> the "safe" removals that can be done anytime so other maintainers can
+> take them.  Then there will be the left over order dependent changes at
+> the end.
 
+Ok, I'll wait for the next round of patches, thanks.
 
-On 06/24/2020 08:43 AM, Anshuman Khandual wrote:
-> 
-> 
-> On 06/15/2020 09:07 AM, Anshuman Khandual wrote:
->> This series adds some more arch page table helper validation tests which
->> are related to core and advanced memory functions. This also creates a
->> documentation, enlisting expected semantics for all page table helpers as
->> suggested by Mike Rapoport previously (https://lkml.org/lkml/2020/1/30/40).
->>
->> There are many TRANSPARENT_HUGEPAGE and ARCH_HAS_TRANSPARENT_HUGEPAGE_PUD
->> ifdefs scattered across the test. But consolidating all the fallback stubs
->> is not very straight forward because ARCH_HAS_TRANSPARENT_HUGEPAGE_PUD is
->> not explicitly dependent on ARCH_HAS_TRANSPARENT_HUGEPAGE.
->>
->> Tested on arm64, x86 platforms but only build tested on all other enabled
->> platforms through ARCH_HAS_DEBUG_VM_PGTABLE i.e powerpc, arc, s390. The
->> following failure on arm64 still exists which was mentioned previously. It
->> will be fixed with the upcoming THP migration on arm64 enablement series.
->>
->> WARNING .... mm/debug_vm_pgtable.c:860 debug_vm_pgtable+0x940/0xa54
->> WARN_ON(!pmd_present(pmd_mkinvalid(pmd_mkhuge(pmd))))
->>
->> This series is based on v5.8-rc1.
->>
->> Changes in V3:
->>
->> - Replaced HAVE_ARCH_SOFT_DIRTY with MEM_SOFT_DIRTY
->> - Added HAVE_ARCH_HUGE_VMAP checks in pxx_huge_tests() per Gerald
->> - Updated documentation for pmd_thp_tests() per Zi Yan
->> - Replaced READ_ONCE() with huge_ptep_get() per Gerald
->> - Added pte_mkhuge() and masking with PMD_MASK per Gerald
->> - Replaced pte_same() with holding pfn check in pxx_swap_tests()
->> - Added documentation for all (#ifdef #else #endif) per Gerald
->> - Updated pmd_protnone_tests() per Gerald
->> - Updated HugeTLB PTE creation in hugetlb_advanced_tests() per Gerald
->> - Replaced [pmd|pud]_mknotpresent() with [pmd|pud]_mkinvalid()
->> - Added has_transparent_hugepage() check for PMD and PUD tests
->> - Added a patch which debug prints all individual tests being executed
->> - Updated documentation for renamed [pmd|pud]_mkinvalid() helpers
-> 
-> Hello Gerald/Christophe/Vineet,
-> 
-> It would be really great if you could give this series a quick test
-> on s390/ppc/arc platforms respectively. Thank you.
-
-Thanks Alexander, Gerald and Christophe for testing this out on s390
-and ppc32 platforms. Probably Vineet and Qian (any other volunteers)
-could help us with arc and ppc64 platforms, which I would appreciate.
+greg k-h
