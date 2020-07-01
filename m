@@ -2,130 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B69210D93
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jul 2020 16:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486A2210E57
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jul 2020 17:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731635AbgGAOUU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 1 Jul 2020 10:20:20 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:26627 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731622AbgGAOUS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jul 2020 10:20:18 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-16-BVV8QEx9N7etV0JoaSvqjg-1; Wed, 01 Jul 2020 15:20:14 +0100
-X-MC-Unique: BVV8QEx9N7etV0JoaSvqjg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 1 Jul 2020 15:20:13 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 1 Jul 2020 15:20:13 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-CC:     Marco Elver <elver@google.com>,
+        id S1731209AbgGAPFV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Jul 2020 11:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731039AbgGAPFV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jul 2020 11:05:21 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9C0C08C5C1;
+        Wed,  1 Jul 2020 08:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yjUbAZQQ9f4rcShW5GkixqYv9x2nD42GGzyjdsiFm50=; b=i74sl3ZOPr1xqJIhkMJglGWOkB
+        U8dqkz+3Y5fKVBDLcgGRCYbTPQFBGPgHtaCMun69vkwL/Ry/Z+4Jsl8Mf+SEd1g2rFtmyvmpbWIYZ
+        K0Ycyjqzo60JLazLm+uQfh7KsY8FqjTzInhLzUzA/uu1WwZ1uS4jmIhsjRK2swdHfjsLC2mBUqXmb
+        tjLVkf7OGf4kz+DTg9+2SwJMjK14kVHRsmKF/8JUPsny87vwFakQlM7eTrs35Vus1k5vP28RmJNHc
+        Yyq+PGlJEHTv7w05Krc9LSs+q+qVge1miTYAIcksAas9z16JswYUyikbLlMyiWZjWWnmMZFBaj5Bf
+        7m/rqxmg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jqeIU-0005dy-9r; Wed, 01 Jul 2020 15:05:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 229A930015A;
+        Wed,  1 Jul 2020 17:05:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1242023D44E56; Wed,  1 Jul 2020 17:05:12 +0200 (CEST)
+Date:   Wed, 1 Jul 2020 17:05:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Marco Elver <elver@google.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Sami Tolvanen <samitolvanen@google.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Will Deacon <will@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kees Cook <keescook@chromium.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
         "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: RE: [PATCH 00/22] add support for Clang LTO
-Thread-Topic: [PATCH 00/22] add support for Clang LTO
-Thread-Index: AQHWT4eVR3DE4y9c50++UkzL75GurajywsMg
-Date:   Wed, 1 Jul 2020 14:20:13 +0000
-Message-ID: <4427b0f825324da4b1640e32265b04bd@AcuMS.aculab.com>
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200624211540.GS4817@hirez.programming.kicks-ass.net>
- <CAKwvOdmxz91c-M8egR9GdR1uOjeZv7-qoTP=pQ55nU8TCpkK6g@mail.gmail.com>
+Subject: Re: [PATCH 00/22] add support for Clang LTO
+Message-ID: <20200701150512.GH4817@hirez.programming.kicks-ass.net>
+References: <CAKwvOdmxz91c-M8egR9GdR1uOjeZv7-qoTP=pQ55nU8TCpkK6g@mail.gmail.com>
  <20200625080313.GY4817@hirez.programming.kicks-ass.net>
  <20200625082433.GC117543@hirez.programming.kicks-ass.net>
  <20200625085745.GD117543@hirez.programming.kicks-ass.net>
  <20200630191931.GA884155@elver.google.com>
  <20200630201243.GD4817@hirez.programming.kicks-ass.net>
  <20200630203016.GI9247@paulmck-ThinkPad-P72>
- <20200701091054.GW4781@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200701091054.GW4781@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <CANpmjNP+7TtE0WPU=nX5zs3T2+4hPkkm08meUm2VDVY3RgsHDw@mail.gmail.com>
+ <20200701114027.GO4800@hirez.programming.kicks-ass.net>
+ <20200701140654.GL9247@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200701140654.GL9247@paulmck-ThinkPad-P72>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 01 July 2020 10:11
-> On Tue, Jun 30, 2020 at 01:30:16PM -0700, Paul E. McKenney wrote:
-> > On Tue, Jun 30, 2020 at 10:12:43PM +0200, Peter Zijlstra wrote:
-> 
-> > > I'm not convinced C11 memory_order_consume would actually work for us,
-> > > even if it would work. That is, given:
-> > >
-> > >   https://lore.kernel.org/lkml/20150520005510.GA23559@linux.vnet.ibm.com/
-> > >
-> > > only pointers can have consume, but like I pointed out, we have code
-> > > that relies on dependent loads from integers.
-> >
-> > I agree that C11 memory_order_consume is not normally what we want,
-> > given that it is universally promoted to memory_order_acquire.
-> >
-> > However, dependent loads from integers are, if anything, more difficult
-> > to defend from the compiler than are control dependencies.  This applies
-> > doubly to integers that are used to index two-element arrays, in which
-> > case you are just asking the compiler to destroy your dependent loads
-> > by converting them into control dependencies.
-> 
-> Yes, I'm aware. However, as you might know, I'm firmly in the 'C is a
-> glorified assembler' camp (as I expect most actual OS people are, out of
-> necessity if nothing else) and if I wanted a control dependency I
-> would've bloody well written one.
+On Wed, Jul 01, 2020 at 07:06:54AM -0700, Paul E. McKenney wrote:
 
-I write in C because doing register tracking is hard :-)
-I've got an hdlc implementation in C that is carefully adjusted
-so that the worst case path is bounded.
-I probably know every one of the 1000 instructions in it.
+> The current state in the C++ committee is that marking variables
+> carrying dependencies is the way forward.  This is of course not what
+> the Linux kernel community does, but it should not be hard to have a
+> -fall-variables-dependent or some such that causes all variables to be
+> treated as if they were marked.  Though I was hoping for only pointers.
+> Are they -sure- that they -absolutely- need to carry dependencies
+> through integers???
 
-Would an asm statement that uses the same 'register' for input and
-output but doesn't actually do anything help?
-It won't generate any code, but the compiler ought to assume that
-it might change the value - so can't do optimisations that track
-the value across the call.
+What's 'need'? :-)
 
-> I think an optimizing compiler is awesome, but only in so far as that
-> optimization is actually helpful -- and yes, I just stepped into a giant
-> twilight zone there. That is, any optimization that has _any_
-> controversy should be controllable (like -fno-strict-overflow
-> -fno-strict-aliasing) and I'd very much like the same here.
+I'm thinking __ktime_get_fast_ns() is better off with a dependent load
+than it is with an extra smp_rmb().
 
-I'm fed up of gcc generating the code that uses SIMD instructions
-for the 'tail' loop at the end of a function that is already doing
-SIMD operations for the main part of the loop.
-And compilers that convert a byte copy loop to 'rep movsb'.
-If I'm copying 3 or 4 bytes I don't want a 40 clock overhead.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Yes we can stick an smp_rmb() in there, but I don't like it. Like I
+wrote earlier, if I wanted a control dependency, I'd have written one.
