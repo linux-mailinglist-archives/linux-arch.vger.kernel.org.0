@@ -2,98 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3A6212BD0
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jul 2020 20:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E54212D42
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jul 2020 21:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgGBSAn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jul 2020 14:00:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727927AbgGBSAn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Jul 2020 14:00:43 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 832662073E;
-        Thu,  2 Jul 2020 18:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593712842;
-        bh=Hak91qzk3x/aeXBK1n/XMiTpR5KSRvENrzPRsP83yxM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=QWmK8WMRCdHSwyVK000d5y6dbgLM+MjgvdkwYsTsrjr5LZBrjrxYWW1nMi6rZxccV
-         IiaPyrs2F2bjvlZIb4WjffkjC0aKcE/DRPRkmEy2Vz5+fS5gilxXEQzxwjlFv3ETvE
-         BcELqK8pbmTnqz6ggKuzaDwzCOlpTPOwyp2kT1xI=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 6CE89352334B; Thu,  2 Jul 2020 11:00:42 -0700 (PDT)
-Date:   Thu, 2 Jul 2020 11:00:42 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Peter Zijlstra' <peterz@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-Message-ID: <20200702180042.GW9247@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200625080313.GY4817@hirez.programming.kicks-ass.net>
- <20200625082433.GC117543@hirez.programming.kicks-ass.net>
- <20200625085745.GD117543@hirez.programming.kicks-ass.net>
- <20200630191931.GA884155@elver.google.com>
- <20200630201243.GD4817@hirez.programming.kicks-ass.net>
- <20200630203016.GI9247@paulmck-ThinkPad-P72>
- <20200701091054.GW4781@hirez.programming.kicks-ass.net>
- <4427b0f825324da4b1640e32265b04bd@AcuMS.aculab.com>
- <20200701160624.GO9247@paulmck-ThinkPad-P72>
- <aeed740a4d86470d84ae7d5f1cf07951@AcuMS.aculab.com>
+        id S1726081AbgGBTns (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jul 2020 15:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbgGBTns (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 15:43:48 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DCCC08C5C1
+        for <linux-arch@vger.kernel.org>; Thu,  2 Jul 2020 12:43:47 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id d4so13948095pgk.4
+        for <linux-arch@vger.kernel.org>; Thu, 02 Jul 2020 12:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=02nPDGPDAVQfN3MJD5rs46nDarUZU1rL7AbfWTkdy70=;
+        b=W0IP+tBXwLD79M9gzHVqcA2UCOcTO5qb7rFwgyHJsyG7o8h9bbN3mlAMAWJ/Yw9MYo
+         7Ok+zV4K+Z4dGPEgWt4SR/aT+pHv4QjpW6CckmPET4Kp/dTR0gSflYv/YQvZx7RqnpyQ
+         kQFE76H8TTr2+eH3bC0tesFAoaVlt2U8tCWoOSEFz215VHtztcwBOjlmc6lEnc3LJ/fI
+         trncb9P+jd1J03yXfeTyJ+6sgBqMPQgbIfVqfPuHnDxjD/Qkv/Vj2XYWx+mqZAEFbKdx
+         YmkdL8URmf36kq/Fa7MdBAMVXgGq/8XgtDcgEE+0M2kY0fMleB4nuMdqHS4Ff9fLcOKQ
+         wvhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=02nPDGPDAVQfN3MJD5rs46nDarUZU1rL7AbfWTkdy70=;
+        b=Vajx5txAu403/6MD0sZ7lM0pZKMf48XmVTCin/j8B1gas3NDW2TAyVAlw14WIaRvQy
+         ARKr99XRmr7MA7MrLGNjnCjRzlzdmZfkXRbJwYbfUVi6yjumMlBxamN9LXefMTuVb9pr
+         DGkpqKNPsRMeAbSyrU+y6XsiEdiryA2NAHcA/h+rO0B3UeghKO8gD5mxyT/2isPksDNp
+         rfi6GEWAaHGcYBpIeewyhUwhcjhj4mXxySDggN5yiVCh9soryOfZ/QBMXHEYsROMpUKj
+         aNJbFw9LY4rbM09je6zEbKxEXG1F+5Plr0ihgqAfWj82xgrgo0n2+KYLeG//XN6Xu29e
+         Wqbw==
+X-Gm-Message-State: AOAM530C0vDsucCB4M2cVPh/saEVzLD6fV8WYr4tLyyIpbhUZ9EVfVxV
+        IZvyiWoLPcseC9mXAPn1kvFpm2ipjl8voq0ncTw=
+X-Google-Smtp-Source: ABdhPJwNv96L/+VIT94MGFwQRV9ETP8Y3rQUNS/y2ZRw4RbtnFLyv6XNFGmPQisnes0YTwNr95D5IZhxGYmTLXUsMjs=
+X-Received: by 2002:a63:8949:: with SMTP id v70mr25490167pgd.256.1593719027597;
+ Thu, 02 Jul 2020 12:43:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aeed740a4d86470d84ae7d5f1cf07951@AcuMS.aculab.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Received: by 2002:a17:90a:fb8c:0:0:0:0 with HTTP; Thu, 2 Jul 2020 12:43:47
+ -0700 (PDT)
+Reply-To: barranthonycald@yahoo.com
+From:   Barr Anthony Calder <jessicaw2261@gmail.com>
+Date:   Thu, 2 Jul 2020 19:43:47 +0000
+Message-ID: <CAFPdKTYyFhRDfDmEXmEmAEc=uk_377qnfagKnQ_EMZWr0hS0=w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 09:37:26AM +0000, David Laight wrote:
-> From: Paul E. McKenney
-> > Sent: 01 July 2020 17:06
-> ...
-> > > Would an asm statement that uses the same 'register' for input and
-> > > output but doesn't actually do anything help?
-> > > It won't generate any code, but the compiler ought to assume that
-> > > it might change the value - so can't do optimisations that track
-> > > the value across the call.
-> > 
-> > It might replace the volatile load, but there are optimizations that
-> > apply to the downstream code as well.
-> > 
-> > Or are you suggesting periodically pushing the dependent variable
-> > through this asm?  That might work, but it would be easier and
-> > more maintainable to just mark the variable.
-> 
-> Marking the variable requires compiler support.
-> Although what 'volatile register int foo;' means might be interesting.
-> 
-> So I was thinking that in the case mentioned earlier you do:
-> 	ptr += LAUNDER(offset & 1);
-> to ensure the compiler didn't convert to:
-> 	if (offset & 1) ptr++;
-> (Which is probably a pessimisation - the reverse is likely better.)
-
-Indeed, Akshat's prototype follows the "volatile" qualifier in many
-ways.  https://github.com/AKG001/gcc/
-
-							Thanx, Paul
+Dobr=C3=BD den
+Jsem Anthony Calder, pr=C3=A1vn=C3=AD z=C3=A1stupce z Toga. Obr=C3=A1til js=
+em se na v=C3=A1s
+ohledn=C4=9B m=C3=A9ho pozdn=C3=ADho klienta, Dr. Edwin, majetek fondu ve v=
+=C3=BD=C5=A1i 2,5
+milionu dolar=C5=AF, kter=C3=BD bude vr=C3=A1cen na v=C3=A1=C5=A1 =C3=BA=C4=
+=8Det. Krom=C4=9B toho v t=C3=A9to
+transakci chci, abyste odpov=C4=9Bd=C4=9Bli d=C5=AFv=C4=9Brn=C4=9B.
+Anthony Calder
