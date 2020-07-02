@@ -2,62 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AABD62125B1
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jul 2020 16:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469992125B2
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jul 2020 16:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729424AbgGBOKM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jul 2020 10:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        id S1728516AbgGBOKR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jul 2020 10:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728216AbgGBOKL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 10:10:11 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A017C08C5C1
-        for <linux-arch@vger.kernel.org>; Thu,  2 Jul 2020 07:10:11 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id u5so12601068pfn.7
-        for <linux-arch@vger.kernel.org>; Thu, 02 Jul 2020 07:10:11 -0700 (PDT)
+        with ESMTP id S1728216AbgGBOKR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 10:10:17 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7125CC08C5C1
+        for <linux-arch@vger.kernel.org>; Thu,  2 Jul 2020 07:10:17 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id bj10so6134798plb.11
+        for <linux-arch@vger.kernel.org>; Thu, 02 Jul 2020 07:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f8X530ewYdklTpRShu04QgcFqIloEAYvsR2T5wI/7yQ=;
-        b=VIVHnUqYrvv7O/Ctq1E5DxdXqnWXeBucRsN6ZqqGmZJ6xgpsR8MAvsGFiTLktxQs9O
-         fug9UG2UtAze2ZkalbcwJ/c46+jn7uBwS5N/FByRK1Z8GevP0NfKEMfBEWiDgmCu6oF9
-         4AcUoknJS0H1IR7Z+8D0dFJx4q4ML/PtV8gjT0jT36Oyh9frYkQIlk0Alh+1Pf2meVnT
-         lkM9HT+JpzD6Bx/rLfgnlDRRPBBczjqwRmO2jKqlRFFOuafHWz916oe167UqBzRr8Xpk
-         s/wNGYA6TVyP++O2Pv/JA56p73CBGCkUp8Nqj1vwo4qv77M7zeS3It7i3KmsBTlYiGDo
-         06yQ==
+        bh=MZNukGqivXQcGV5PlGwWwQGP0z/tZaH3aPXDvp4XDIk=;
+        b=LCNpiDJ/KaAd0ZPQi4BEkQklasSqb2wlfHVAYZiZPxD79xWaYuPdZj6MU/ZsiMnK0i
+         vCqi+ht36XyfCR7yi/3h6jyYOE3ovSGhUH5YMMgfcod9pwGwYC3ToO953rMApe5cXSuc
+         THqVtBvieyTQoZhWle33ynexoXXXpmFdh8mOh1oRHZTsCB/jmeR/Y0Pjyd3vhEtIxHvG
+         3vAudIJro98W57x3w0cQnSHNQcbvndvdLboX3EqhEhziXPLia8P9cj9xnqaLYXFvWxow
+         wmD4sJqV/sJniW+iUV82sIqE6aUJb3ZNKbsnDtnRHhRCWn4OYLu6XpsvsIEU5Fb/27XB
+         I9IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f8X530ewYdklTpRShu04QgcFqIloEAYvsR2T5wI/7yQ=;
-        b=iOhS3fSBZ4XWCYUpWtcT/Hl+6x4f+JAiwylpIkzrM9qUlPkmQ8/q9Dv62LdotrqtwS
-         ZA2MhZTdnMYLm+ZtrfmdEInQVc7MAz4XvDbd4WXkN+SE0dqr65HSTpuWkxCl78BCOya7
-         iJwDvMFFDwqQQYOcUhwkN2b0llRJ2R8yKk46yDJHnHiPC14+hoVlb/etYzE9gTkztdP2
-         AqEZ+sZDA6VVWJ8zRxYAPFjQgelDpa41mhSudQ3rOhcat1xvaZ1IkqWSYF2rZR6+AjKU
-         BoOjt6lj45IuF9i19JKDZAo/fDsba8akI+IectvRlMlBx+hKjjwywCZ1MKdUzVtQDja0
-         fdfA==
-X-Gm-Message-State: AOAM532RnJ9fselQhWXF67iyYhEVpw1dIk80+ULX32EzEjvXTxf4GY9b
-        MXYveeezn3L2aOd3N3DYbuw=
-X-Google-Smtp-Source: ABdhPJz7U5QvBa+ncu6bSubTqmnhlWnP/aWyvqWvergcpAVltgWUDenIeHxOsd7CKNWl5uAOqR/YZg==
-X-Received: by 2002:a63:6ca:: with SMTP id 193mr19530263pgg.269.1593699010900;
-        Thu, 02 Jul 2020 07:10:10 -0700 (PDT)
+        bh=MZNukGqivXQcGV5PlGwWwQGP0z/tZaH3aPXDvp4XDIk=;
+        b=c3f3yCvS06LuTV0BfF1eRneDqnnaloKsApYNemVpOZxeP3JqicMkoZgUbbCvK1nWPN
+         hpo1f7YV+j5SmBjNSAOiPz0KP91Ul1dLRdQ7pLUB5rzy/yQi1gekgg/O6O9dxlRKkHZb
+         5u5wI9xdi5mwG/xmhuTiKsob/qRAhO7C686G32ywMvSip/6Tl+TNdL2KMQVujFr0YXjN
+         ClO8XMXBmw6QMULeHu2cEPku5urnJYYJSJnyFkGBDu5PI12f8Yj5dHY2/Q7qN94HCBgK
+         HuhEXFbUl5eE44wPFHKGxhFy/QFsZXRjO1J1EqESIx1UacraRU5n5TTOVLTOavsV6Xk+
+         Rhwg==
+X-Gm-Message-State: AOAM530/xdkIMYIIKJscCwjiHLRFLd1T6BYhPGfUNagFYeaIFbLgsQ/b
+        PdqR8TqfHDQkNchkPU441QDedpa2mWQ=
+X-Google-Smtp-Source: ABdhPJxXM7jliXWULuCpyI2wyiKmT3IYgUr98jmEcS4g9J29k9SCWT3wSbwT7U6T5FgKKQUQ3LqyMw==
+X-Received: by 2002:a17:902:be0e:: with SMTP id r14mr1133877pls.309.1593699016861;
+        Thu, 02 Jul 2020 07:10:16 -0700 (PDT)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id x1sm8471623pju.3.2020.07.02.07.10.09
+        by smtp.gmail.com with ESMTPSA id b21sm9225255pfp.172.2020.07.02.07.10.15
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 Jul 2020 07:10:10 -0700 (PDT)
+        Thu, 02 Jul 2020 07:10:16 -0700 (PDT)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 79028202D31D81; Thu,  2 Jul 2020 23:10:07 +0900 (JST)
+        id 2A5CE202D31D85; Thu,  2 Jul 2020 23:10:14 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         Hajime Tazaki <thehajime@gmail.com>
-Subject: [RFC v5 18/21] um: host: add utilities functions
-Date:   Thu,  2 Jul 2020 23:07:12 +0900
-Message-Id: <43793fcbc6809210012dba55859214ca29637bf1.1593697069.git.thehajime@gmail.com>
+Subject: [RFC v5 19/21] um: host: posix host operations
+Date:   Thu,  2 Jul 2020 23:07:13 +0900
+Message-Id: <4bfa3679f685f3c0d731f7d95e826f4c7d6bddb6.1593697069.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1593697069.git.thehajime@gmail.com>
 References: <cover.1593697069.git.thehajime@gmail.com>
@@ -68,283 +68,326 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add basic utility functions for getting a string from a kernel error
-code and a fprintf like function that uses the host print
-operation. The latter is useful for informing the user about errors
-that occur in the host library.
+This commit implements LKL host operations for POSIX hosts.  The
+operations are implemented to be portable in various POSIX OSs.
 
+Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 ---
- tools/um/lib/Build     |   4 +
- tools/um/lib/jmp_buf.c |  14 +++
- tools/um/lib/jmp_buf.h |   8 ++
- tools/um/lib/utils.c   | 210 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 236 insertions(+)
- create mode 100644 tools/um/lib/Build
- create mode 100644 tools/um/lib/jmp_buf.c
- create mode 100644 tools/um/lib/jmp_buf.h
- create mode 100644 tools/um/lib/utils.c
+ tools/um/lib/Build        |   2 +
+ tools/um/lib/posix-host.c | 292 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 294 insertions(+)
+ create mode 100644 tools/um/lib/posix-host.c
 
 diff --git a/tools/um/lib/Build b/tools/um/lib/Build
-new file mode 100644
-index 000000000000..fc967af4104a
---- /dev/null
+index fc967af4104a..dddff26a3b4e 100644
+--- a/tools/um/lib/Build
 +++ b/tools/um/lib/Build
-@@ -0,0 +1,4 @@
-+include $(objtree)/include/config/auto.conf
-+
-+liblinux-$(CONFIG_UMMODE_LIB) += utils.o
-+liblinux-$(CONFIG_UMMODE_LIB) += jmp_buf.o
-diff --git a/tools/um/lib/jmp_buf.c b/tools/um/lib/jmp_buf.c
+@@ -1,4 +1,6 @@
+ include $(objtree)/include/config/auto.conf
++CFLAGS_posix-host.o += -D_FILE_OFFSET_BITS=64
+ 
+ liblinux-$(CONFIG_UMMODE_LIB) += utils.o
++liblinux-$(CONFIG_UMMODE_LIB) += posix-host.o
+ liblinux-$(CONFIG_UMMODE_LIB) += jmp_buf.o
+diff --git a/tools/um/lib/posix-host.c b/tools/um/lib/posix-host.c
 new file mode 100644
-index 000000000000..f6bdd7e4bd83
+index 000000000000..b6b5b2902254
 --- /dev/null
-+++ b/tools/um/lib/jmp_buf.c
-@@ -0,0 +1,14 @@
++++ b/tools/um/lib/posix-host.c
+@@ -0,0 +1,292 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include <setjmp.h>
-+#include <lkl_host.h>
-+
-+void jmp_buf_set(struct lkl_jmp_buf *jmpb, void (*f)(void))
-+{
-+	if (!setjmp(*((jmp_buf *)jmpb->buf)))
-+		f();
-+}
-+
-+void jmp_buf_longjmp(struct lkl_jmp_buf *jmpb, int val)
-+{
-+	longjmp(*((jmp_buf *)jmpb->buf), val);
-+}
-diff --git a/tools/um/lib/jmp_buf.h b/tools/um/lib/jmp_buf.h
-new file mode 100644
-index 000000000000..8782cbaaf51f
---- /dev/null
-+++ b/tools/um/lib/jmp_buf.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LKL_LIB_JMP_BUF_H
-+#define _LKL_LIB_JMP_BUF_H
-+
-+void jmp_buf_set(struct lkl_jmp_buf *jmpb, void (*f)(void));
-+void jmp_buf_longjmp(struct lkl_jmp_buf *jmpb, int val);
-+
-+#endif
-diff --git a/tools/um/lib/utils.c b/tools/um/lib/utils.c
-new file mode 100644
-index 000000000000..4930479a8a35
---- /dev/null
-+++ b/tools/um/lib/utils.c
-@@ -0,0 +1,210 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdarg.h>
-+#include <stdio.h>
++#include <pthread.h>
++#include <limits.h>
++#include <errno.h>
 +#include <string.h>
++#include <stdlib.h>
++#include <assert.h>
++#include <sys/syscall.h>
 +#include <lkl_host.h>
++#include "jmp_buf.h"
 +
-+static const char * const lkl_err_strings[] = {
-+	"Success",
-+	"Operation not permitted",
-+	"No such file or directory",
-+	"No such process",
-+	"Interrupted system call",
-+	"I/O error",
-+	"No such device or address",
-+	"Argument list too long",
-+	"Exec format error",
-+	"Bad file number",
-+	"No child processes",
-+	"Try again",
-+	"Out of memory",
-+	"Permission denied",
-+	"Bad address",
-+	"Block device required",
-+	"Device or resource busy",
-+	"File exists",
-+	"Cross-device link",
-+	"No such device",
-+	"Not a directory",
-+	"Is a directory",
-+	"Invalid argument",
-+	"File table overflow",
-+	"Too many open files",
-+	"Not a typewriter",
-+	"Text file busy",
-+	"File too large",
-+	"No space left on device",
-+	"Illegal seek",
-+	"Read-only file system",
-+	"Too many links",
-+	"Broken pipe",
-+	"Math argument out of domain of func",
-+	"Math result not representable",
-+	"Resource deadlock would occur",
-+	"File name too long",
-+	"No record locks available",
-+	"Invalid system call number",
-+	"Directory not empty",
-+	"Too many symbolic links encountered",
-+	"Bad error code", /* EWOULDBLOCK is EAGAIN */
-+	"No message of desired type",
-+	"Identifier removed",
-+	"Channel number out of range",
-+	"Level 2 not synchronized",
-+	"Level 3 halted",
-+	"Level 3 reset",
-+	"Link number out of range",
-+	"Protocol driver not attached",
-+	"No CSI structure available",
-+	"Level 2 halted",
-+	"Invalid exchange",
-+	"Invalid request descriptor",
-+	"Exchange full",
-+	"No anode",
-+	"Invalid request code",
-+	"Invalid slot",
-+	"Bad error code", /* EDEADLOCK is EDEADLK */
-+	"Bad font file format",
-+	"Device not a stream",
-+	"No data available",
-+	"Timer expired",
-+	"Out of streams resources",
-+	"Machine is not on the network",
-+	"Package not installed",
-+	"Object is remote",
-+	"Link has been severed",
-+	"Advertise error",
-+	"Srmount error",
-+	"Communication error on send",
-+	"Protocol error",
-+	"Multihop attempted",
-+	"RFS specific error",
-+	"Not a data message",
-+	"Value too large for defined data type",
-+	"Name not unique on network",
-+	"File descriptor in bad state",
-+	"Remote address changed",
-+	"Can not access a needed shared library",
-+	"Accessing a corrupted shared library",
-+	".lib section in a.out corrupted",
-+	"Attempting to link in too many shared libraries",
-+	"Cannot exec a shared library directly",
-+	"Illegal byte sequence",
-+	"Interrupted system call should be restarted",
-+	"Streams pipe error",
-+	"Too many users",
-+	"Socket operation on non-socket",
-+	"Destination address required",
-+	"Message too long",
-+	"Protocol wrong type for socket",
-+	"Protocol not available",
-+	"Protocol not supported",
-+	"Socket type not supported",
-+	"Operation not supported on transport endpoint",
-+	"Protocol family not supported",
-+	"Address family not supported by protocol",
-+	"Address already in use",
-+	"Cannot assign requested address",
-+	"Network is down",
-+	"Network is unreachable",
-+	"Network dropped connection because of reset",
-+	"Software caused connection abort",
-+	"Connection reset by peer",
-+	"No buffer space available",
-+	"Transport endpoint is already connected",
-+	"Transport endpoint is not connected",
-+	"Cannot send after transport endpoint shutdown",
-+	"Too many references: cannot splice",
-+	"Connection timed out",
-+	"Connection refused",
-+	"Host is down",
-+	"No route to host",
-+	"Operation already in progress",
-+	"Operation now in progress",
-+	"Stale file handle",
-+	"Structure needs cleaning",
-+	"Not a XENIX named type file",
-+	"No XENIX semaphores available",
-+	"Is a named type file",
-+	"Remote I/O error",
-+	"Quota exceeded",
-+	"No medium found",
-+	"Wrong medium type",
-+	"Operation Canceled",
-+	"Required key not available",
-+	"Key has expired",
-+	"Key has been revoked",
-+	"Key was rejected by service",
-+	"Owner died",
-+	"State not recoverable",
-+	"Operation not possible due to RF-kill",
-+	"Memory page has hardware error",
++/* Let's see if the host has semaphore.h */
++#include <unistd.h>
++
++#ifdef _POSIX_SEMAPHORES
++#include <semaphore.h>
++/* TODO(pscollins): We don't support fork() for now, but maybe one day
++ * we will?
++ */
++#define SHARE_SEM 0
++#endif /* _POSIX_SEMAPHORES */
++
++
++struct lkl_mutex {
++	pthread_mutex_t mutex;
 +};
 +
-+const char *lkl_strerror(int err)
++struct lkl_sem {
++#ifdef _POSIX_SEMAPHORES
++	sem_t sem;
++#else
++	pthread_mutex_t lock;
++	int count;
++	pthread_cond_t cond;
++#endif /* _POSIX_SEMAPHORES */
++};
++
++struct lkl_tls_key {
++	pthread_key_t key;
++};
++
++static void print(const char *str, int len)
 +{
-+	if (err < 0)
-+		err = -err;
++	int ret __attribute__((unused));
 +
-+	if ((size_t)err >= sizeof(lkl_err_strings) / sizeof(const char *))
-+		return "Bad error code";
-+
-+	return lkl_err_strings[err];
++	ret = write(STDOUT_FILENO, str, len);
 +}
 +
-+void lkl_perror(char *msg, int err)
++static void panic(void)
 +{
-+	const char *err_msg = lkl_strerror(err);
-+	/* We need to use 'real' printf because lkl_host_ops.print can
-+	 * be turned off when debugging is off.
++	assert(0);
++}
++
++#define WARN_UNLESS(exp) do {						\
++		if (exp < 0)						\
++			lkl_printf("%s: %s\n", #exp, strerror(errno));	\
++	} while (0)
++
++static int _warn_pthread(int ret, char *str_exp)
++{
++	if (ret > 0)
++		lkl_printf("%s: %s\n", str_exp, strerror(ret));
++
++	return ret;
++}
++
++
++/* pthread_* functions use the reverse convention */
++#define WARN_PTHREAD(exp) _warn_pthread(exp, #exp)
++
++static struct lkl_sem *sem_alloc(int count)
++{
++	struct lkl_sem *sem;
++
++	sem = malloc(sizeof(*sem));
++	if (!sem)
++		return NULL;
++
++#ifdef _POSIX_SEMAPHORES
++	if (sem_init(&sem->sem, SHARE_SEM, count) < 0) {
++		lkl_printf("sem_init: %s\n", strerror(errno));
++		free(sem);
++		return NULL;
++	}
++#else
++	pthread_mutex_init(&sem->lock, NULL);
++	sem->count = count;
++	WARN_PTHREAD(pthread_cond_init(&sem->cond, NULL));
++#endif /* _POSIX_SEMAPHORES */
++
++	return sem;
++}
++
++static void sem_free(struct lkl_sem *sem)
++{
++#ifdef _POSIX_SEMAPHORES
++	WARN_UNLESS(sem_destroy(&sem->sem));
++#else
++	WARN_PTHREAD(pthread_cond_destroy(&sem->cond));
++	WARN_PTHREAD(pthread_mutex_destroy(&sem->lock));
++#endif /* _POSIX_SEMAPHORES */
++	free(sem);
++}
++
++static void sem_up(struct lkl_sem *sem)
++{
++#ifdef _POSIX_SEMAPHORES
++	WARN_UNLESS(sem_post(&sem->sem));
++#else
++	WARN_PTHREAD(pthread_mutex_lock(&sem->lock));
++	sem->count++;
++	if (sem->count > 0)
++		WARN_PTHREAD(pthread_cond_signal(&sem->cond));
++	WARN_PTHREAD(pthread_mutex_unlock(&sem->lock));
++#endif /* _POSIX_SEMAPHORES */
++
++}
++
++static void sem_down(struct lkl_sem *sem)
++{
++#ifdef _POSIX_SEMAPHORES
++	int err;
++
++	do {
++		err = sem_wait(&sem->sem);
++	} while (err < 0 && errno == EINTR);
++	if (err < 0 && errno != EINTR)
++		lkl_printf("sem_wait: %s\n", strerror(errno));
++#else
++	WARN_PTHREAD(pthread_mutex_lock(&sem->lock));
++	while (sem->count <= 0)
++		WARN_PTHREAD(pthread_cond_wait(&sem->cond, &sem->lock));
++	sem->count--;
++	WARN_PTHREAD(pthread_mutex_unlock(&sem->lock));
++#endif /* _POSIX_SEMAPHORES */
++}
++
++static struct lkl_mutex *mutex_alloc(int recursive)
++{
++	struct lkl_mutex *_mutex = malloc(sizeof(struct lkl_mutex));
++	pthread_mutex_t *mutex = NULL;
++	pthread_mutexattr_t attr;
++
++	if (!_mutex)
++		return NULL;
++
++	mutex = &_mutex->mutex;
++	WARN_PTHREAD(pthread_mutexattr_init(&attr));
++
++	/* PTHREAD_MUTEX_ERRORCHECK is *very* useful for debugging,
++	 * but has some overhead, so we provide an option to turn it
++	 * off.
 +	 */
-+	lkl_printf("%s: %s\n", msg, err_msg);
++#ifdef DEBUG
++	if (!recursive)
++		WARN_PTHREAD(pthread_mutexattr_settype(
++				     &attr, PTHREAD_MUTEX_ERRORCHECK));
++#endif /* DEBUG */
++
++	if (recursive)
++		WARN_PTHREAD(pthread_mutexattr_settype(
++				     &attr, PTHREAD_MUTEX_RECURSIVE));
++
++	WARN_PTHREAD(pthread_mutex_init(mutex, &attr));
++
++	return _mutex;
 +}
 +
-+static int lkl_vprintf(const char *fmt, va_list args)
++static void mutex_lock(struct lkl_mutex *mutex)
 +{
-+	int n;
-+	char *buffer;
-+	va_list copy;
++	WARN_PTHREAD(pthread_mutex_lock(&mutex->mutex));
++}
 +
-+	if (!lkl_host_ops.print)
++static void mutex_unlock(struct lkl_mutex *_mutex)
++{
++	pthread_mutex_t *mutex = &_mutex->mutex;
++
++	WARN_PTHREAD(pthread_mutex_unlock(mutex));
++}
++
++static void mutex_free(struct lkl_mutex *_mutex)
++{
++	pthread_mutex_t *mutex = &_mutex->mutex;
++
++	WARN_PTHREAD(pthread_mutex_destroy(mutex));
++	free(_mutex);
++}
++
++static lkl_thread_t thread_create(void* (*fn)(void *), void *arg)
++{
++	pthread_t thread;
++
++	if (WARN_PTHREAD(pthread_create(&thread, NULL, fn, arg)))
 +		return 0;
++	else
++		return (lkl_thread_t) thread;
++}
 +
-+	va_copy(copy, args);
-+	n = vsnprintf(NULL, 0, fmt, copy);
-+	va_end(copy);
++static void thread_detach(void)
++{
++	WARN_PTHREAD(pthread_detach(pthread_self()));
++}
 +
-+	buffer = lkl_host_ops.mem_alloc(n + 1);
-+	if (!buffer)
++static void thread_exit(void)
++{
++	pthread_exit(NULL);
++}
++
++static int thread_join(lkl_thread_t tid)
++{
++	if (WARN_PTHREAD(pthread_join((pthread_t)tid, NULL)))
 +		return (-1);
-+
-+	vsnprintf(buffer, n + 1, fmt, args);
-+
-+	lkl_host_ops.print(buffer, n);
-+	lkl_host_ops.mem_free(buffer);
-+
-+	return n;
++	else
++		return 0;
 +}
 +
-+int lkl_printf(const char *fmt, ...)
++static lkl_thread_t thread_self(void)
 +{
-+	int n;
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	n = lkl_vprintf(fmt, args);
-+	va_end(args);
-+
-+	return n;
++	return (lkl_thread_t)pthread_self();
 +}
 +
-+void lkl_bug(const char *fmt, ...)
++static int thread_equal(lkl_thread_t a, lkl_thread_t b)
 +{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	lkl_vprintf(fmt, args);
-+	va_end(args);
-+
-+	lkl_host_ops.panic();
++	return pthread_equal((pthread_t)a, (pthread_t)b);
 +}
++
++static long _gettid(void)
++{
++#ifdef	__FreeBSD__
++	return (long)pthread_self();
++#else
++	return syscall(SYS_gettid);
++#endif
++}
++
++static struct lkl_tls_key *tls_alloc(void (*destructor)(void *))
++{
++	struct lkl_tls_key *ret = malloc(sizeof(struct lkl_tls_key));
++
++	if (WARN_PTHREAD(pthread_key_create(&ret->key, destructor))) {
++		free(ret);
++		return NULL;
++	}
++	return ret;
++}
++
++static void tls_free(struct lkl_tls_key *key)
++{
++	WARN_PTHREAD(pthread_key_delete(key->key));
++	free(key);
++}
++
++static int tls_set(struct lkl_tls_key *key, void *data)
++{
++	if (WARN_PTHREAD(pthread_setspecific(key->key, data)))
++		return (-1);
++	return 0;
++}
++
++static void *tls_get(struct lkl_tls_key *key)
++{
++	return pthread_getspecific(key->key);
++}
++
++struct lkl_host_operations lkl_host_ops = {
++	.panic = panic,
++	.print = print,
++	.mem_alloc = (void *)malloc,
++	.mem_free = free,
++	.thread_create = thread_create,
++	.thread_detach = thread_detach,
++	.thread_exit = thread_exit,
++	.thread_join = thread_join,
++	.thread_self = thread_self,
++	.thread_equal = thread_equal,
++	.sem_alloc = sem_alloc,
++	.sem_free = sem_free,
++	.sem_up = sem_up,
++	.sem_down = sem_down,
++	.mutex_alloc = mutex_alloc,
++	.mutex_free = mutex_free,
++	.mutex_lock = mutex_lock,
++	.mutex_unlock = mutex_unlock,
++	.gettid = _gettid,
++	.tls_alloc = tls_alloc,
++	.tls_free = tls_free,
++	.tls_set = tls_set,
++	.tls_get = tls_get,
++	.jmp_buf_set = jmp_buf_set,
++	.jmp_buf_longjmp = jmp_buf_longjmp,
++};
++
 -- 
 2.21.0 (Apple Git-122.2)
 
