@@ -2,62 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 494E42125B0
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jul 2020 16:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AABD62125B1
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jul 2020 16:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729518AbgGBOKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jul 2020 10:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S1729424AbgGBOKM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jul 2020 10:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728216AbgGBOKF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 10:10:05 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A50DC08C5C1
-        for <linux-arch@vger.kernel.org>; Thu,  2 Jul 2020 07:10:05 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id bj10so6134573plb.11
-        for <linux-arch@vger.kernel.org>; Thu, 02 Jul 2020 07:10:05 -0700 (PDT)
+        with ESMTP id S1728216AbgGBOKL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 10:10:11 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A017C08C5C1
+        for <linux-arch@vger.kernel.org>; Thu,  2 Jul 2020 07:10:11 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id u5so12601068pfn.7
+        for <linux-arch@vger.kernel.org>; Thu, 02 Jul 2020 07:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6+EfrryUMCL7dAKUwTQI3rDTtu8cnZJN4QfF5pBjSyY=;
-        b=rdLCXj4DqlbBGPfEeu0fxp0rbywJfXzD/xhv4yNjU6w0S8CIJKcqfX2I3Se3pSJgFx
-         K5SoUFwXS8ODkC+38bYpvj27kfK8JEcGY9WxzXvl36LcYTRkuAml2JCoxTyTXQ58FjYc
-         s9kdxBkRPvzVBVdPucdGDtMy0+JTg+Zi6H0wStZIwFU0tjcgAngC4ayvBtGkOgLLjr8G
-         uahRu6tvDoWToSafeGeyB/lZZYKVN79QwVSvUVcpZfI7qZNBjfW2IwThhFqJuI9cePA2
-         iWkbRrg2Sbp6pqDc4s1WAfoGwurH3BYdtABXP/DL1IkOc8QpZyFvX+z2U9pjIMPJoBJ2
-         PjiQ==
+        bh=f8X530ewYdklTpRShu04QgcFqIloEAYvsR2T5wI/7yQ=;
+        b=VIVHnUqYrvv7O/Ctq1E5DxdXqnWXeBucRsN6ZqqGmZJ6xgpsR8MAvsGFiTLktxQs9O
+         fug9UG2UtAze2ZkalbcwJ/c46+jn7uBwS5N/FByRK1Z8GevP0NfKEMfBEWiDgmCu6oF9
+         4AcUoknJS0H1IR7Z+8D0dFJx4q4ML/PtV8gjT0jT36Oyh9frYkQIlk0Alh+1Pf2meVnT
+         lkM9HT+JpzD6Bx/rLfgnlDRRPBBczjqwRmO2jKqlRFFOuafHWz916oe167UqBzRr8Xpk
+         s/wNGYA6TVyP++O2Pv/JA56p73CBGCkUp8Nqj1vwo4qv77M7zeS3It7i3KmsBTlYiGDo
+         06yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6+EfrryUMCL7dAKUwTQI3rDTtu8cnZJN4QfF5pBjSyY=;
-        b=S4hvlEua9Hh1DX8VhcHDZN+N9ViTKRTDp3BJIchrlhJhrCyPtxFm5oM9hv+2CLXZGq
-         SIRdOHrDF3lcvs0cicHhJiZUE39dv+uXofDDz58On0T5ht++/oCOc3cfje4mpdH0AcEg
-         ZDZtKG77knOcsDE4g9AMOlJNf+MIvowdiUeYLQNqd6q2b8ByWQbaR/+qyojEJlR0AfMP
-         b9ZXHJb2Wah0zK25hmAFZkJFIr/J5CCWoAitrG7pB+PPX+lo8PIxB3KqV83kRWXpyua+
-         6e0yT9/ZZyz3p4RYxqNh7PA7LykRZGw5nA090baWWXUhUf5lKWLgsBvJo8rl//TiRl/Q
-         dFPw==
-X-Gm-Message-State: AOAM530b3NgQGG6keOH5e/LeOF9P77K7pyw8+Z0M9Pi30PUmMKjK4ApA
-        Ziq64EATKaclOhgF5/4IfSw=
-X-Google-Smtp-Source: ABdhPJyjY+xTMIGEoF/+tIEGDBT1l/Xu7Wvuqe1dt/iBNaBYb0aj7Hm5kbOU2j65R6rF9FnWSjFLIw==
-X-Received: by 2002:a17:90a:8b09:: with SMTP id y9mr33006359pjn.90.1593699004679;
-        Thu, 02 Jul 2020 07:10:04 -0700 (PDT)
+        bh=f8X530ewYdklTpRShu04QgcFqIloEAYvsR2T5wI/7yQ=;
+        b=iOhS3fSBZ4XWCYUpWtcT/Hl+6x4f+JAiwylpIkzrM9qUlPkmQ8/q9Dv62LdotrqtwS
+         ZA2MhZTdnMYLm+ZtrfmdEInQVc7MAz4XvDbd4WXkN+SE0dqr65HSTpuWkxCl78BCOya7
+         iJwDvMFFDwqQQYOcUhwkN2b0llRJ2R8yKk46yDJHnHiPC14+hoVlb/etYzE9gTkztdP2
+         AqEZ+sZDA6VVWJ8zRxYAPFjQgelDpa41mhSudQ3rOhcat1xvaZ1IkqWSYF2rZR6+AjKU
+         BoOjt6lj45IuF9i19JKDZAo/fDsba8akI+IectvRlMlBx+hKjjwywCZ1MKdUzVtQDja0
+         fdfA==
+X-Gm-Message-State: AOAM532RnJ9fselQhWXF67iyYhEVpw1dIk80+ULX32EzEjvXTxf4GY9b
+        MXYveeezn3L2aOd3N3DYbuw=
+X-Google-Smtp-Source: ABdhPJz7U5QvBa+ncu6bSubTqmnhlWnP/aWyvqWvergcpAVltgWUDenIeHxOsd7CKNWl5uAOqR/YZg==
+X-Received: by 2002:a63:6ca:: with SMTP id 193mr19530263pgg.269.1593699010900;
+        Thu, 02 Jul 2020 07:10:10 -0700 (PDT)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id 7sm9101774pgw.85.2020.07.02.07.10.03
+        by smtp.gmail.com with ESMTPSA id x1sm8471623pju.3.2020.07.02.07.10.09
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 Jul 2020 07:10:04 -0700 (PDT)
+        Thu, 02 Jul 2020 07:10:10 -0700 (PDT)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id AA5D1202D31D7F; Thu,  2 Jul 2020 23:10:01 +0900 (JST)
+        id 79028202D31D81; Thu,  2 Jul 2020 23:10:07 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org
 Cc:     Octavian Purdila <tavi.purdila@gmail.com>,
         Akira Moroo <retrage01@gmail.com>,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         Hajime Tazaki <thehajime@gmail.com>
-Subject: [RFC v5 17/21] um: host: add nommu build for ARCH=um
-Date:   Thu,  2 Jul 2020 23:07:11 +0900
-Message-Id: <bbe11c3c35f96c7c0870af4f0a599ecc2d04ed20.1593697069.git.thehajime@gmail.com>
+Subject: [RFC v5 18/21] um: host: add utilities functions
+Date:   Thu,  2 Jul 2020 23:07:12 +0900
+Message-Id: <43793fcbc6809210012dba55859214ca29637bf1.1593697069.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1593697069.git.thehajime@gmail.com>
 References: <cover.1593697069.git.thehajime@gmail.com>
@@ -68,358 +68,282 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds the skeleton for the host library.
-
-The host library is implementing the host operations needed by nommu
-mode and is split into host dependent (depends on a specific host, e.g.
-POSIX hosts) and host independent parts (will work on all supported
-hosts).
+Add basic utility functions for getting a string from a kernel error
+code and a fprintf like function that uses the host print
+operation. The latter is useful for informing the user about errors
+that occur in the host library.
 
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- tools/um/Makefile                  |   7 +-
- tools/um/Targets                   |   3 +-
- tools/um/include/lkl.h             | 151 +++++++++++++++++++++++++++++
- tools/um/include/lkl_host.h        |  26 +++++
- tools/um/uml/Build                 |  15 ++-
- tools/um/uml/nommu/Build           |   1 +
- tools/um/uml/nommu/registers.c     |  21 ++++
- tools/um/uml/nommu/unimplemented.c |  21 ++++
- 8 files changed, 238 insertions(+), 7 deletions(-)
- create mode 100644 tools/um/include/lkl.h
- create mode 100644 tools/um/include/lkl_host.h
- create mode 100644 tools/um/uml/nommu/Build
- create mode 100644 tools/um/uml/nommu/registers.c
- create mode 100644 tools/um/uml/nommu/unimplemented.c
+ tools/um/lib/Build     |   4 +
+ tools/um/lib/jmp_buf.c |  14 +++
+ tools/um/lib/jmp_buf.h |   8 ++
+ tools/um/lib/utils.c   | 210 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 236 insertions(+)
+ create mode 100644 tools/um/lib/Build
+ create mode 100644 tools/um/lib/jmp_buf.c
+ create mode 100644 tools/um/lib/jmp_buf.h
+ create mode 100644 tools/um/lib/utils.c
 
-diff --git a/tools/um/Makefile b/tools/um/Makefile
-index 552ed5f1edae..a93e060b1f89 100644
---- a/tools/um/Makefile
-+++ b/tools/um/Makefile
-@@ -5,6 +5,7 @@
- MAKEFLAGS += -r --no-print-directory
- 
- KCONFIG?=defconfig
-+UMMODE?=kernel
- 
- ifneq ($(silent),1)
-   ifneq ($(V),1)
-@@ -47,8 +48,9 @@ all: $(TARGETS)
- 
- # rule to build linux.o
- $(OUTPUT)lib/linux.o:
--	$(Q)CFLAGS= $(MAKE) -C ../.. ARCH=um $(KOPT) $(KCONFIG)
--	$(Q)CFLAGS= $(MAKE) -C ../.. ARCH=um $(KOPT) install INSTALL_PATH=$(OUTPUT)
-+	$(Q)CFLAGS= $(MAKE) -C ../.. ARCH=um UMMODE=$(UMMODE) $(KOPT) $(KCONFIG)
-+	$(Q)CFLAGS= $(MAKE) -C ../.. ARCH=um UMMODE=$(UMMODE) $(KOPT) install \
-+	INSTALL_PATH=$(OUTPUT)
- 
- $(OUTPUT)liblinux.a: $(OUTPUT)lib/linux.o $(OUTPUT)uml/liblinux-in.o $(OUTPUT)lib/liblinux-in.o
- 	$(QUIET_AR)$(AR) -rc $@ $^
-@@ -67,6 +69,7 @@ $(OUTPUT)%-in.o: $(OUTPUT)lib/linux.o FORCE
- clean:
- 	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
- 	 -delete -o -name '\.*.d' -delete
-+	$(call QUIET_CLEAN, headers)$(RM) -r $(OUTPUT)/include/lkl/
- 	$(call QUIET_CLEAN, liblinux.a)$(RM) $(OUTPUT)/liblinux.a
- 	$(call QUIET_CLEAN, $(TARGETS))$(RM) $(TARGETS)
- 
-diff --git a/tools/um/Targets b/tools/um/Targets
-index a4711f1ef422..4e1f0f4d81a3 100644
---- a/tools/um/Targets
-+++ b/tools/um/Targets
-@@ -1,4 +1,5 @@
- progs-y += uml/linux
--LDLIBS_linux-y := -lrt -lpthread -lutil
-+
-+LDLIBS := -lrt -lpthread -lutil
- LDFLAGS_linux-y := -no-pie -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
- LDFLAGS_linux-$(UML_STATIC) += -static
-diff --git a/tools/um/include/lkl.h b/tools/um/include/lkl.h
+diff --git a/tools/um/lib/Build b/tools/um/lib/Build
 new file mode 100644
-index 000000000000..707e01b64a70
+index 000000000000..fc967af4104a
 --- /dev/null
-+++ b/tools/um/include/lkl.h
-@@ -0,0 +1,151 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LKL_H
-+#define _LKL_H
++++ b/tools/um/lib/Build
+@@ -0,0 +1,4 @@
++include $(objtree)/include/config/auto.conf
 +
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+#define _LKL_LIBC_COMPAT_H
-+
-+#ifdef __cplusplus
-+#define class __lkl__class
-+#endif
-+
-+/*
-+ * Avoid collisions between Android which defines __unused and
-+ * linux/icmp.h which uses __unused as a structure field.
-+ */
-+#pragma push_macro("__unused")
-+#undef __unused
-+
-+#include <lkl/asm/syscalls.h>
-+
-+#pragma pop_macro("__unused")
-+
-+#ifdef __cplusplus
-+#undef class
-+#endif
-+
-+/**
-+ * lkl_strerror - returns a string describing the given error code
-+ *
-+ * @err - error code
-+ * @returns - string for the given error code
-+ */
-+const char *lkl_strerror(int err);
-+
-+/**
-+ * lkl_perror - prints a string describing the given error code
-+ *
-+ * @msg - prefix for the error message
-+ * @err - error code
-+ */
-+void lkl_perror(char *msg, int err);
-+
-+#if __LKL__BITS_PER_LONG == 64
-+#define lkl_sys_fstatat lkl_sys_newfstatat
-+#define lkl_sys_fstat lkl_sys_newfstat
-+
-+#else
-+#define __lkl__NR_fcntl __lkl__NR_fcntl64
-+
-+#define lkl_stat lkl_stat64
-+#define lkl_sys_stat lkl_sys_stat64
-+#define lkl_sys_lstat lkl_sys_lstat64
-+#define lkl_sys_truncate lkl_sys_truncate64
-+#define lkl_sys_ftruncate lkl_sys_ftruncate64
-+#define lkl_sys_sendfile lkl_sys_sendfile64
-+#define lkl_sys_fstatat lkl_sys_fstatat64
-+#define lkl_sys_fstat lkl_sys_fstat64
-+#define lkl_sys_fcntl lkl_sys_fcntl64
-+
-+#define lkl_statfs lkl_statfs64
-+
-+static inline int lkl_sys_statfs(const char *path, struct lkl_statfs *buf)
-+{
-+	return lkl_sys_statfs64(path, sizeof(*buf), buf);
-+}
-+
-+static inline int lkl_sys_fstatfs(unsigned int fd, struct lkl_statfs *buf)
-+{
-+	return lkl_sys_fstatfs64(fd, sizeof(*buf), buf);
-+}
-+
-+#define lkl_sys_nanosleep lkl_sys_nanosleep_time32
-+static inline int lkl_sys_nanosleep_time32(struct lkl_timespec *rqtp,
-+					   struct lkl_timespec *rmtp)
-+{
-+	long p[6] = {(long)rqtp, (long)rmtp, 0, 0, 0, 0};
-+
-+	return lkl_syscall(__lkl__NR_nanosleep, p);
-+}
-+
-+#endif
-+
-+static inline int lkl_sys_stat(const char *path, struct lkl_stat *buf)
-+{
-+	return lkl_sys_fstatat(LKL_AT_FDCWD, path, buf, 0);
-+}
-+
-+static inline int lkl_sys_lstat(const char *path, struct lkl_stat *buf)
-+{
-+	return lkl_sys_fstatat(LKL_AT_FDCWD, path, buf,
-+			       LKL_AT_SYMLINK_NOFOLLOW);
-+}
-+
-+#ifdef __lkl__NR_openat
-+/**
-+ * lkl_sys_open - wrapper for lkl_sys_openat
-+ */
-+static inline long lkl_sys_open(const char *file, int flags, int mode)
-+{
-+	return lkl_sys_openat(LKL_AT_FDCWD, file, flags, mode);
-+}
-+
-+/**
-+ * lkl_sys_creat - wrapper for lkl_sys_openat
-+ */
-+static inline long lkl_sys_creat(const char *file, int mode)
-+{
-+	return lkl_sys_openat(LKL_AT_FDCWD, file,
-+			      LKL_O_CREAT|LKL_O_WRONLY|LKL_O_TRUNC, mode);
-+}
-+#endif
-+
-+#ifdef __lkl__NR_mkdirat
-+/**
-+ * lkl_sys_mkdir - wrapper for lkl_sys_mkdirat
-+ */
-+static inline long lkl_sys_mkdir(const char *path, mode_t mode)
-+{
-+	return lkl_sys_mkdirat(LKL_AT_FDCWD, path, mode);
-+}
-+#endif
-+
-+#ifdef __lkl__NR_epoll_create1
-+/**
-+ * lkl_sys_epoll_create - wrapper for lkl_sys_epoll_create1
-+ */
-+static inline long lkl_sys_epoll_create(int size)
-+{
-+	return lkl_sys_epoll_create1(0);
-+}
-+#endif
-+
-+#ifdef __lkl__NR_epoll_pwait
-+/**
-+ * lkl_sys_epoll_wait - wrapper for lkl_sys_epoll_pwait
-+ */
-+static inline long lkl_sys_epoll_wait(int fd, struct lkl_epoll_event *ev,
-+				      int cnt, int to)
-+{
-+	return lkl_sys_epoll_pwait(fd, ev, cnt, to, 0, _LKL_NSIG/8);
-+}
-+#endif
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
-diff --git a/tools/um/include/lkl_host.h b/tools/um/include/lkl_host.h
++liblinux-$(CONFIG_UMMODE_LIB) += utils.o
++liblinux-$(CONFIG_UMMODE_LIB) += jmp_buf.o
+diff --git a/tools/um/lib/jmp_buf.c b/tools/um/lib/jmp_buf.c
 new file mode 100644
-index 000000000000..85e80eb4ad0d
+index 000000000000..f6bdd7e4bd83
 --- /dev/null
-+++ b/tools/um/include/lkl_host.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LKL_HOST_H
-+#define _LKL_HOST_H
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+#include <lkl/asm/host_ops.h>
-+#include <lkl.h>
-+
-+extern struct lkl_host_operations lkl_host_ops;
-+
-+/**
-+ * lkl_printf - print a message via the host print operation
-+ *
-+ * @fmt: printf like format string
-+ */
-+int lkl_printf(const char *fmt, ...);
-+
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
-diff --git a/tools/um/uml/Build b/tools/um/uml/Build
-index 435a9670d3ff..191c6479ad72 100644
---- a/tools/um/uml/Build
-+++ b/tools/um/uml/Build
-@@ -8,11 +8,19 @@ KCOV_INSTRUMENT                := n
- 
- include $(objtree)/include/config/auto.conf
- 
--liblinux-y += execvp.o file.o helper.o irq.o main.o mem.o process.o \
--	registers.o sigio.o signal.o start_up.o time.o tty.o \
--	umid.o user_syms.o util.o drivers/ skas/
-+liblinux-y += execvp.o file.o helper.o irq.o mem.o process.o \
-+	registers.o sigio.o signal.o time.o tty.o \
-+	umid.o user_syms.o util.o drivers/
- 
-+ifdef CONFIG_MMU
-+liblinux-y += main.o start_up.o skas/
-+HEADER_ARCH 	:= x86
- liblinux-y += x86/
-+else
-+HEADER_ARCH 	:= um/nommu
-+liblinux-y += nommu/
-+endif
-+
- 
- liblinux-$(CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA) += elf_aux.o
- 
-@@ -23,7 +31,6 @@ CFLAGS := -g -O2
- 
- # from arch/um/Makefile
- ARCH_DIR := arch/um
--HEADER_ARCH 	:= x86
- HOST_DIR := arch/$(HEADER_ARCH)
- ifdef CONFIG_64BIT
-   KBUILD_CFLAGS += -mcmodel=large
-diff --git a/tools/um/uml/nommu/Build b/tools/um/uml/nommu/Build
-new file mode 100644
-index 000000000000..98fd6b86a085
---- /dev/null
-+++ b/tools/um/uml/nommu/Build
-@@ -0,0 +1 @@
-+liblinux-y = registers.o unimplemented.o
-diff --git a/tools/um/uml/nommu/registers.c b/tools/um/uml/nommu/registers.c
-new file mode 100644
-index 000000000000..11573a204720
---- /dev/null
-+++ b/tools/um/uml/nommu/registers.c
-@@ -0,0 +1,21 @@
++++ b/tools/um/lib/jmp_buf.c
+@@ -0,0 +1,14 @@
 +// SPDX-License-Identifier: GPL-2.0
++#include <setjmp.h>
++#include <lkl_host.h>
 +
-+struct uml_pt_regs;
-+
-+int get_fp_registers(int pid, unsigned long *regs)
++void jmp_buf_set(struct lkl_jmp_buf *jmpb, void (*f)(void))
 +{
-+	return 0;
++	if (!setjmp(*((jmp_buf *)jmpb->buf)))
++		f();
 +}
 +
-+int save_i387_registers(int pid, unsigned long *fp_regs)
++void jmp_buf_longjmp(struct lkl_jmp_buf *jmpb, int val)
 +{
-+	return 0;
++	longjmp(*((jmp_buf *)jmpb->buf), val);
 +}
-+
-+void arch_init_registers(int pid)
-+{
-+}
-+
-+void get_regs_from_mc(struct uml_pt_regs *regs, void *mc)
-+{
-+}
-diff --git a/tools/um/uml/nommu/unimplemented.c b/tools/um/uml/nommu/unimplemented.c
+diff --git a/tools/um/lib/jmp_buf.h b/tools/um/lib/jmp_buf.h
 new file mode 100644
-index 000000000000..9da3e5c8bafb
+index 000000000000..8782cbaaf51f
 --- /dev/null
-+++ b/tools/um/uml/nommu/unimplemented.c
-@@ -0,0 +1,21 @@
++++ b/tools/um/lib/jmp_buf.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LKL_LIB_JMP_BUF_H
++#define _LKL_LIB_JMP_BUF_H
++
++void jmp_buf_set(struct lkl_jmp_buf *jmpb, void (*f)(void));
++void jmp_buf_longjmp(struct lkl_jmp_buf *jmpb, int val);
++
++#endif
+diff --git a/tools/um/lib/utils.c b/tools/um/lib/utils.c
+new file mode 100644
+index 000000000000..4930479a8a35
+--- /dev/null
++++ b/tools/um/lib/utils.c
+@@ -0,0 +1,210 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include <generated/user_constants.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <string.h>
++#include <lkl_host.h>
 +
-+struct uml_pt_regs;
++static const char * const lkl_err_strings[] = {
++	"Success",
++	"Operation not permitted",
++	"No such file or directory",
++	"No such process",
++	"Interrupted system call",
++	"I/O error",
++	"No such device or address",
++	"Argument list too long",
++	"Exec format error",
++	"Bad file number",
++	"No child processes",
++	"Try again",
++	"Out of memory",
++	"Permission denied",
++	"Bad address",
++	"Block device required",
++	"Device or resource busy",
++	"File exists",
++	"Cross-device link",
++	"No such device",
++	"Not a directory",
++	"Is a directory",
++	"Invalid argument",
++	"File table overflow",
++	"Too many open files",
++	"Not a typewriter",
++	"Text file busy",
++	"File too large",
++	"No space left on device",
++	"Illegal seek",
++	"Read-only file system",
++	"Too many links",
++	"Broken pipe",
++	"Math argument out of domain of func",
++	"Math result not representable",
++	"Resource deadlock would occur",
++	"File name too long",
++	"No record locks available",
++	"Invalid system call number",
++	"Directory not empty",
++	"Too many symbolic links encountered",
++	"Bad error code", /* EWOULDBLOCK is EAGAIN */
++	"No message of desired type",
++	"Identifier removed",
++	"Channel number out of range",
++	"Level 2 not synchronized",
++	"Level 3 halted",
++	"Level 3 reset",
++	"Link number out of range",
++	"Protocol driver not attached",
++	"No CSI structure available",
++	"Level 2 halted",
++	"Invalid exchange",
++	"Invalid request descriptor",
++	"Exchange full",
++	"No anode",
++	"Invalid request code",
++	"Invalid slot",
++	"Bad error code", /* EDEADLOCK is EDEADLK */
++	"Bad font file format",
++	"Device not a stream",
++	"No data available",
++	"Timer expired",
++	"Out of streams resources",
++	"Machine is not on the network",
++	"Package not installed",
++	"Object is remote",
++	"Link has been severed",
++	"Advertise error",
++	"Srmount error",
++	"Communication error on send",
++	"Protocol error",
++	"Multihop attempted",
++	"RFS specific error",
++	"Not a data message",
++	"Value too large for defined data type",
++	"Name not unique on network",
++	"File descriptor in bad state",
++	"Remote address changed",
++	"Can not access a needed shared library",
++	"Accessing a corrupted shared library",
++	".lib section in a.out corrupted",
++	"Attempting to link in too many shared libraries",
++	"Cannot exec a shared library directly",
++	"Illegal byte sequence",
++	"Interrupted system call should be restarted",
++	"Streams pipe error",
++	"Too many users",
++	"Socket operation on non-socket",
++	"Destination address required",
++	"Message too long",
++	"Protocol wrong type for socket",
++	"Protocol not available",
++	"Protocol not supported",
++	"Socket type not supported",
++	"Operation not supported on transport endpoint",
++	"Protocol family not supported",
++	"Address family not supported by protocol",
++	"Address already in use",
++	"Cannot assign requested address",
++	"Network is down",
++	"Network is unreachable",
++	"Network dropped connection because of reset",
++	"Software caused connection abort",
++	"Connection reset by peer",
++	"No buffer space available",
++	"Transport endpoint is already connected",
++	"Transport endpoint is not connected",
++	"Cannot send after transport endpoint shutdown",
++	"Too many references: cannot splice",
++	"Connection timed out",
++	"Connection refused",
++	"Host is down",
++	"No route to host",
++	"Operation already in progress",
++	"Operation now in progress",
++	"Stale file handle",
++	"Structure needs cleaning",
++	"Not a XENIX named type file",
++	"No XENIX semaphores available",
++	"Is a named type file",
++	"Remote I/O error",
++	"Quota exceeded",
++	"No medium found",
++	"Wrong medium type",
++	"Operation Canceled",
++	"Required key not available",
++	"Key has expired",
++	"Key has been revoked",
++	"Key was rejected by service",
++	"Owner died",
++	"State not recoverable",
++	"Operation not possible due to RF-kill",
++	"Memory page has hardware error",
++};
 +
-+/* os-Linux/skas/process.c */
-+int userspace_pid[UM_NR_CPUS];
-+void userspace(struct uml_pt_regs *regs, unsigned long *aux_fp_regs)
-+{}
-+
-+
-+/* x86/os-Linux/task_size.c */
-+unsigned long os_get_top_address(void)
++const char *lkl_strerror(int err)
 +{
-+	return 0;
++	if (err < 0)
++		err = -err;
++
++	if ((size_t)err >= sizeof(lkl_err_strings) / sizeof(const char *))
++		return "Bad error code";
++
++	return lkl_err_strings[err];
 +}
 +
-+/* start-up.c */
-+void os_early_checks(void)
++void lkl_perror(char *msg, int err)
 +{
++	const char *err_msg = lkl_strerror(err);
++	/* We need to use 'real' printf because lkl_host_ops.print can
++	 * be turned off when debugging is off.
++	 */
++	lkl_printf("%s: %s\n", msg, err_msg);
++}
++
++static int lkl_vprintf(const char *fmt, va_list args)
++{
++	int n;
++	char *buffer;
++	va_list copy;
++
++	if (!lkl_host_ops.print)
++		return 0;
++
++	va_copy(copy, args);
++	n = vsnprintf(NULL, 0, fmt, copy);
++	va_end(copy);
++
++	buffer = lkl_host_ops.mem_alloc(n + 1);
++	if (!buffer)
++		return (-1);
++
++	vsnprintf(buffer, n + 1, fmt, args);
++
++	lkl_host_ops.print(buffer, n);
++	lkl_host_ops.mem_free(buffer);
++
++	return n;
++}
++
++int lkl_printf(const char *fmt, ...)
++{
++	int n;
++	va_list args;
++
++	va_start(args, fmt);
++	n = lkl_vprintf(fmt, args);
++	va_end(args);
++
++	return n;
++}
++
++void lkl_bug(const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	lkl_vprintf(fmt, args);
++	va_end(args);
++
++	lkl_host_ops.panic();
 +}
 -- 
 2.21.0 (Apple Git-122.2)
