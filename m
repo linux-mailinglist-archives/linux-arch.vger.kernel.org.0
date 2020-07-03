@@ -2,121 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4342138F5
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 12:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DF32138F0
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 12:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgGCKvF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jul 2020 06:51:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:48998 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725915AbgGCKvC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 Jul 2020 06:51:02 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCF071045;
-        Fri,  3 Jul 2020 03:51:01 -0700 (PDT)
-Received: from gaia (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DEB8F3F68F;
-        Fri,  3 Jul 2020 03:50:59 -0700 (PDT)
-Date:   Fri, 3 Jul 2020 11:50:49 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Luis Machado <luis.machado@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alan Hayward <Alan.Hayward@arm.com>,
-        Omair Javaid <omair.javaid@linaro.org>
-Subject: Re: [PATCH v5 19/25] arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS
- support
-Message-ID: <20200703104412.GB14950@gaia>
-References: <20200624175244.25837-1-catalin.marinas@arm.com>
- <20200624175244.25837-20-catalin.marinas@arm.com>
- <7fd536af-f9fa-aa10-a4c3-001e80dd7d7b@linaro.org>
+        id S1725984AbgGCKtw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jul 2020 06:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725915AbgGCKtv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jul 2020 06:49:51 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5EBC08C5C1;
+        Fri,  3 Jul 2020 03:49:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49ysDD0gdYz9sSy;
+        Fri,  3 Jul 2020 20:49:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1593773388;
+        bh=RfcGFiZqerkVV2+Xy8mk+CmXEwgXM5XeAEZk9tVyLEo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=jE5FAgWTrhkfhhz6BYzecTvfdbDagKlkEWrYP3L0gbYhUVcSmlNc1lC6f2ixexXfj
+         QMnhT3le4DAgIHjrdKH22ewB074mqgaY+h4/qPtQCqXxPj1aL8oLqf9cRSSFg+ZpER
+         kOBkntxdcz0tYKdN5N9tEC3tWly5GI/no1ixwSUH2ll5U30V57HbQBu863Xoilh+tH
+         faLA8P2ykdWIk2tfZCnjGNmZvES09DuT2hr7WHCNOOgcbnej88JykIeo5CrGmWKVP4
+         mhpmHq+ygewJ07zs3nF7tn1T8SdxHp2Y2ozRdDw+CH0ePoLytwGYkTSssCCGuyHwKH
+         P9M8prScLig4Q==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>, Will Deacon <will@kernel.org>
+Cc:     Anton Blanchard <anton@ozlabs.org>,
+        Boqun Feng <boqun.feng@gmail.com>, kvm-ppc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 5/8] powerpc/64s: implement queued spinlocks and rwlocks
+In-Reply-To: <1593686722.w9psaqk7yp.astroid@bobo.none>
+References: <20200702074839.1057733-1-npiggin@gmail.com> <20200702074839.1057733-6-npiggin@gmail.com> <20200702080219.GB16113@willie-the-truck> <1593685459.r2tfxtfdp6.astroid@bobo.none> <20200702103506.GA16418@willie-the-truck> <1593686722.w9psaqk7yp.astroid@bobo.none>
+Date:   Fri, 03 Jul 2020 20:52:02 +1000
+Message-ID: <878sg07twt.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7fd536af-f9fa-aa10-a4c3-001e80dd7d7b@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Luis,
+Nicholas Piggin <npiggin@gmail.com> writes:
+> Excerpts from Will Deacon's message of July 2, 2020 8:35 pm:
+>> On Thu, Jul 02, 2020 at 08:25:43PM +1000, Nicholas Piggin wrote:
+>>> Excerpts from Will Deacon's message of July 2, 2020 6:02 pm:
+>>> > On Thu, Jul 02, 2020 at 05:48:36PM +1000, Nicholas Piggin wrote:
+>>> >> diff --git a/arch/powerpc/include/asm/qspinlock.h b/arch/powerpc/include/asm/qspinlock.h
+>>> >> new file mode 100644
+>>> >> index 000000000000..f84da77b6bb7
+>>> >> --- /dev/null
+>>> >> +++ b/arch/powerpc/include/asm/qspinlock.h
+>>> >> @@ -0,0 +1,20 @@
+>>> >> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> >> +#ifndef _ASM_POWERPC_QSPINLOCK_H
+>>> >> +#define _ASM_POWERPC_QSPINLOCK_H
+>>> >> +
+>>> >> +#include <asm-generic/qspinlock_types.h>
+>>> >> +
+>>> >> +#define _Q_PENDING_LOOPS	(1 << 9) /* not tuned */
+>>> >> +
+>>> >> +#define smp_mb__after_spinlock()   smp_mb()
+>>> >> +
+>>> >> +static __always_inline int queued_spin_is_locked(struct qspinlock *lock)
+>>> >> +{
+>>> >> +	smp_mb();
+>>> >> +	return atomic_read(&lock->val);
+>>> >> +}
+>>> > 
+>>> > Why do you need the smp_mb() here?
+>>> 
+>>> A long and sad tale that ends here 51d7d5205d338
+>>> 
+>>> Should probably at least refer to that commit from here, since this one 
+>>> is not going to git blame back there. I'll add something.
+>> 
+>> Is this still an issue, though?
+>> 
+>> See 38b850a73034 (where we added a similar barrier on arm64) and then
+>> c6f5d02b6a0f (where we removed it).
+>> 
+>
+> Oh nice, I didn't know that went away. Thanks for the heads up.
 
-On Thu, Jun 25, 2020 at 02:10:10PM -0300, Luis Machado wrote:
-> On 6/24/20 2:52 PM, Catalin Marinas wrote:
-> > +/*
-> > + * Access MTE tags in another process' address space as given in mm. Update
-> > + * the number of tags copied. Return 0 if any tags copied, error otherwise.
-> > + * Inspired by __access_remote_vm().
-> > + */
-> > +static int __access_remote_tags(struct task_struct *tsk, struct mm_struct *mm,
-> > +				unsigned long addr, struct iovec *kiov,
-> > +				unsigned int gup_flags)
-> > +{
-> > +	struct vm_area_struct *vma;
-> > +	void __user *buf = kiov->iov_base;
-> > +	size_t len = kiov->iov_len;
-> > +	int ret;
-> > +	int write = gup_flags & FOLL_WRITE;
-> > +
-> > +	if (!access_ok(buf, len))
-> > +		return -EFAULT;
-> > +
-> > +	if (mmap_read_lock_killable(mm))
-> > +		return -EIO;
-> > +
-> > +	while (len) {
-> > +		unsigned long tags, offset;
-> > +		void *maddr;
-> > +		struct page *page = NULL;
-> > +
-> > +		ret = get_user_pages_remote(tsk, mm, addr, 1, gup_flags,
-> > +					    &page, &vma, NULL);
-> > +		if (ret <= 0)
-> > +			break;
-> > +
-> > +		/*
-> > +		 * Only copy tags if the page has been mapped as PROT_MTE
-> > +		 * (PG_mte_tagged set). Otherwise the tags are not valid and
-> > +		 * not accessible to user. Moreover, an mprotect(PROT_MTE)
-> > +		 * would cause the existing tags to be cleared if the page
-> > +		 * was never mapped with PROT_MTE.
-> > +		 */
-> > +		if (!test_bit(PG_mte_tagged, &page->flags)) {
-> > +			ret = -EOPNOTSUPP;
-> > +			put_page(page);
-> > +			break;
-> > +		}
-[...]
-> My understanding is that both the PEEKMTETAGS and POKEMTETAGS can
-> potentially read/write less tags than requested, right? The iov_len field
-> will be updated accordingly.
+Argh! I spent so much time chasing that damn bug in the ipc code.
 
-Yes.
+> I'm going to say I'm too scared to remove it while changing the
+> spinlock algorithm, but I'll open an issue and we should look at 
+> removing it.
 
-(I missed this part due to the mix of top/bottom-posting)
+Sounds good.
 
-> So the ptrace caller would need to loop and make sure all the tags were
-> read/written, right?
-
-Yes. As per the documentation patch, if the ptrace call returns 0,
-iov_len is updated to the number of tags copied. The caller can retry
-until it gets a negative return (error) or everything was copied.
-
-> I'm considering the situation where the kernel reads/writes 0 tags (when
-> requested to read/write 1 or more tags) an error we can't recover from. So
-> this may indicate a page without PROT_MTE or an invalid address.
-
-For this case, it should return -EOPNOTSUPP (see the documentation
-patch; and, of course, also test the syscall in case I got anything
-wrong).
-
--- 
-Catalin
+cheers
