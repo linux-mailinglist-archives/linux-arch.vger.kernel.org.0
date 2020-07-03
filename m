@@ -2,112 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46243213065
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 02:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C0C21315A
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 04:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgGCAPm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jul 2020 20:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgGCAPm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 20:15:42 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE52C08C5C1;
-        Thu,  2 Jul 2020 17:15:41 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s14so11934616plq.6;
-        Thu, 02 Jul 2020 17:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=nuJRvdB0NXvVZz7pZcV4N1oDW2dnoBAuVAW0OAoXK2w=;
-        b=LSEdiF8O8c0k36FJz+J/p1Xm+032fT22eON16GPFoOrZL6GDx9jPsHusIL7FEU0XAV
-         lLDoHY9NSZfpcd5oNSgz7AXGqRLd1dfAW9ad86/buGeCa4uTE/vU9OPIKwfaZyBXfnsJ
-         uG05dXYdVlfndLY83LDfB7lzK6ZqRQP5RvYyTLEoAscx9LtDbk1kTfrj/Cwbbvqz6uxW
-         IUIYgXT0pd0DwhOqvL6wEv82lwldnFjq8WUAnvh0BthjGb+v++4h6R72lTgxl5Ir5SPV
-         KaijBTzwUbf0D6ex6rU/rFRlvvyVHMSFetaS1LKZRTYt3D1mhdMNSiJCFStkUNFQKfnS
-         w0+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=nuJRvdB0NXvVZz7pZcV4N1oDW2dnoBAuVAW0OAoXK2w=;
-        b=Hz5uPoOmI34jNibxFQgzG8dcvyTpPuwttGzgdY/dGS6GK8euGDlfSxLRaOd54uwZ7e
-         wg1iiQ1X2096xLB0jcr6U3QIZMnPvBS8sNWAwADZWzEAu7D8NKhAnoUq62vCcS6uwXAu
-         /WqcPecuG/yIXPQznZMzrrVoyJ5a0k8+GD8XSyIxviX+1bcoEwxfqJEDD3ENPhPrN3wS
-         80c7jzkC8CbweoPS71I664qGUHr7W0l4GNgVbip/eVDHWsTt23mSguKcinRIzVT0/4+7
-         WWapd1+dgB0ICBKKTBZpwu+F3gZWnFCqpzb7gX6mw3OSq8+WQFmkeKWYPfvBx1g8Mlkm
-         sq1A==
-X-Gm-Message-State: AOAM532WY+cpTtymdk9IBnjP7f1YFDQiWTyXYeWI9wDg38bzd1wrpoJE
-        GyZKyYga0cxBZwowUHIi4lGqmzE3
-X-Google-Smtp-Source: ABdhPJzVARbnUoiUECgH/rt6gF7oxr/jO/Or3UFnEeEEE5zO8Q2uC+eAackVR4Z456AOo0TJ+H99Rw==
-X-Received: by 2002:a17:902:b78a:: with SMTP id e10mr28875186pls.34.1593735341316;
-        Thu, 02 Jul 2020 17:15:41 -0700 (PDT)
-Received: from localhost (61-68-186-125.tpgi.com.au. [61.68.186.125])
-        by smtp.gmail.com with ESMTPSA id b11sm10202251pfr.179.2020.07.02.17.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 17:15:40 -0700 (PDT)
-Date:   Fri, 03 Jul 2020 10:15:34 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
-To:     linux-mm@kvack.org, Zefan Li <lizefan@huawei.com>
-Cc:     =?iso-8859-1?q?Borislav=0A?= Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@redhat.com>,
-        =?iso-8859-1?q?Thomas=0A?= Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org
-References: <20200413125303.423864-1-npiggin@gmail.com>
-        <20200413125303.423864-5-npiggin@gmail.com>
-        <d148f86c-b27b-63fb-31d2-35b8f52ec540@huawei.com>
-In-Reply-To: <d148f86c-b27b-63fb-31d2-35b8f52ec540@huawei.com>
+        id S1726119AbgGCCgF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jul 2020 22:36:05 -0400
+Received: from mga11.intel.com ([192.55.52.93]:52027 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725915AbgGCCgF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 2 Jul 2020 22:36:05 -0400
+IronPort-SDR: T9V2w7ZbFRO40T3LLRpSOHxsZuBJ58XiXiy9R/Yl6xwsikJaW6bqJHuy6lKFwshGaAghMr9UW0
+ mXu/VoZHx3Iw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="145213957"
+X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
+   d="scan'208";a="145213957"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 19:36:04 -0700
+IronPort-SDR: T2DxoJ+6pDgQH7e5SIxXyTgQ9QkegMOBSCNjFHu7YUc0H8gIQqRN5KQHpGrfYlDlqtc8ESDZ15
+ OICltGe0pc2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
+   d="scan'208";a="278295716"
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.152])
+  by orsmga003.jf.intel.com with ESMTP; 02 Jul 2020 19:36:04 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>,
+        Peter Feiner <pfeiner@google.com>,
+        Peter Shier <pshier@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Christoffer Dall <christoffer.dall@arm.com>
+Subject: [PATCH v3 00/21] KVM: Cleanup and unify kvm_mmu_memory_cache usage
+Date:   Thu,  2 Jul 2020 19:35:24 -0700
+Message-Id: <20200703023545.8771-1-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Message-Id: <1593735251.svr5r5cxle.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Zefan Li's message of July 1, 2020 5:10 pm:
->>  static void *__vmalloc_node(unsigned long size, unsigned long align,
->> -			    gfp_t gfp_mask, pgprot_t prot,
->> -			    int node, const void *caller);
->> +			gfp_t gfp_mask, pgprot_t prot, unsigned long vm_flags,
->> +			int node, const void *caller);
->>  static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask=
-,
->> -				 pgprot_t prot, int node)
->> +				 pgprot_t prot, unsigned int page_shift,
->> +				 int node)
->>  {
->>  	struct page **pages;
->> +	unsigned long addr =3D (unsigned long)area->addr;
->> +	unsigned long size =3D get_vm_area_size(area);
->> +	unsigned int page_order =3D page_shift - PAGE_SHIFT;
->>  	unsigned int nr_pages, array_size, i;
->>  	const gfp_t nested_gfp =3D (gfp_mask & GFP_RECLAIM_MASK) | __GFP_ZERO;
->>  	const gfp_t alloc_mask =3D gfp_mask | __GFP_NOWARN;
->>  	const gfp_t highmem_mask =3D (gfp_mask & (GFP_DMA | GFP_DMA32)) ?
->> -					0 :
->> -					__GFP_HIGHMEM;
->> +					0 : __GFP_HIGHMEM;
->> =20
->> -	nr_pages =3D get_vm_area_size(area) >> PAGE_SHIFT;
->> +	nr_pages =3D size >> page_shift;
->=20
-> while try out this patchset, we encountered a BUG_ON in account_kernel_st=
-ack()
-> in kernel/fork.c.
->=20
-> BUG_ON(vm->nr_pages !=3D THREAD_SIZE / PAGE_SIZE);
->=20
-> which obviously should be updated accordingly.
+The only interesting delta from v2 is that patch 18 is updated to handle
+a conflict with arm64's p4d rework.  Resolution was straightforward
+(famous last words).
 
-Thanks for finding that. We may have to change this around a bit so=20
-nr_pages still appears to be in PAGE_SIZE units for anybody looking.
 
-Thanks,
-Nick
+This series resurrects Christoffer Dall's series[1] to provide a common
+MMU memory cache implementation that can be shared by x86, arm64 and MIPS.
+
+It also picks up a suggested change from Ben Gardon[2] to clear shadow
+page tables during initial allocation so as to avoid clearing entire
+pages while holding mmu_lock.
+
+The front half of the patches do house cleaning on x86's memory cache
+implementation in preparation for moving it to common code, along with a
+fair bit of cleanup on the usage.  The middle chunk moves the patches to
+common KVM, and the last two chunks convert arm64 and MIPS to the common
+implementation.
+
+Fully tested on x86 only.  Compile tested patches 14-21 on arm64, MIPS,
+s390 and PowerPC.
+
+v3:
+  - Rebased to kvm/queue, commit a037ff353ba6 ("Merge ... into HEAD")
+  - Collect more review tags. [Ben]
+
+v2:
+  - Rebase to kvm-5.8-2, commit 49b3deaad345 ("Merge tag ...").
+  - Use an asm-generic kvm_types.h for s390 and PowerPC instead of an
+    empty arch-specific file. [Marc]
+  - Explicit document "GFP_PGTABLE_USER == GFP_KERNEL_ACCOUNT | GFP_ZERO"
+    in the arm64 conversion patch. [Marc]
+  - Collect review tags. [Ben]
+
+Sean Christopherson (21):
+  KVM: x86/mmu: Track the associated kmem_cache in the MMU caches
+  KVM: x86/mmu: Consolidate "page" variant of memory cache helpers
+  KVM: x86/mmu: Use consistent "mc" name for kvm_mmu_memory_cache locals
+  KVM: x86/mmu: Remove superfluous gotos from mmu_topup_memory_caches()
+  KVM: x86/mmu: Try to avoid crashing KVM if a MMU memory cache is empty
+  KVM: x86/mmu: Move fast_page_fault() call above
+    mmu_topup_memory_caches()
+  KVM: x86/mmu: Topup memory caches after walking GVA->GPA
+  KVM: x86/mmu: Clean up the gorilla math in mmu_topup_memory_caches()
+  KVM: x86/mmu: Separate the memory caches for shadow pages and gfn
+    arrays
+  KVM: x86/mmu: Make __GFP_ZERO a property of the memory cache
+  KVM: x86/mmu: Zero allocate shadow pages (outside of mmu_lock)
+  KVM: x86/mmu: Skip filling the gfn cache for guaranteed direct MMU
+    topups
+  KVM: x86/mmu: Prepend "kvm_" to memory cache helpers that will be
+    global
+  KVM: Move x86's version of struct kvm_mmu_memory_cache to common code
+  KVM: Move x86's MMU memory cache helpers to common KVM code
+  KVM: arm64: Drop @max param from mmu_topup_memory_cache()
+  KVM: arm64: Use common code's approach for __GFP_ZERO with memory
+    caches
+  KVM: arm64: Use common KVM implementation of MMU memory caches
+  KVM: MIPS: Drop @max param from mmu_topup_memory_cache()
+  KVM: MIPS: Account pages used for GPA page tables
+  KVM: MIPS: Use common KVM implementation of MMU memory caches
+
+ arch/arm64/include/asm/kvm_host.h  |  11 ---
+ arch/arm64/include/asm/kvm_types.h |   8 ++
+ arch/arm64/kvm/arm.c               |   2 +
+ arch/arm64/kvm/mmu.c               |  56 +++----------
+ arch/mips/include/asm/kvm_host.h   |  11 ---
+ arch/mips/include/asm/kvm_types.h  |   7 ++
+ arch/mips/kvm/mmu.c                |  44 ++--------
+ arch/powerpc/include/asm/Kbuild    |   1 +
+ arch/s390/include/asm/Kbuild       |   1 +
+ arch/x86/include/asm/kvm_host.h    |  14 +---
+ arch/x86/include/asm/kvm_types.h   |   7 ++
+ arch/x86/kvm/mmu/mmu.c             | 129 +++++++++--------------------
+ arch/x86/kvm/mmu/paging_tmpl.h     |  10 +--
+ include/asm-generic/kvm_types.h    |   5 ++
+ include/linux/kvm_host.h           |   7 ++
+ include/linux/kvm_types.h          |  19 +++++
+ virt/kvm/kvm_main.c                |  55 ++++++++++++
+ 17 files changed, 176 insertions(+), 211 deletions(-)
+ create mode 100644 arch/arm64/include/asm/kvm_types.h
+ create mode 100644 arch/mips/include/asm/kvm_types.h
+ create mode 100644 arch/x86/include/asm/kvm_types.h
+ create mode 100644 include/asm-generic/kvm_types.h
+
+-- 
+2.26.0
+
