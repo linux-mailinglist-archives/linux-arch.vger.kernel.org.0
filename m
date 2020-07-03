@@ -2,152 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFDB213018
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 01:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46243213065
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 02:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgGBX1U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jul 2020 19:27:20 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:50395 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726568AbgGBX1U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 19:27:20 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7BB1A58038B;
-        Thu,  2 Jul 2020 19:27:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 02 Jul 2020 19:27:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kdrag0n.dev; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=e7+7Th1m9BXZP
-        GB/OmZlUELLweXezZABXtnEK2WW7Ys=; b=dNCDR6kgzoEDQdtwBKLbkJCwCan4I
-        RI46j74E4g4TGyr6dID+KO3w0enVII8cvN9YWe9X/ZfO37ifrSPmk2LqhhcH93nA
-        v1bZYC7XhyOFDIpWEB4bXQOaZMnktvb6knu/2w5sMGaXNRYhDtPM7oyb2dArGVum
-        iZt0diytvXFsraC90ApYj1QAjBVkXCliwVHNfPP99NFgkX9T8JovBNneJtbbbYTL
-        DwX7NsUXUauIa93viG4K39FN3QXgDbyyxUEZGlf21L9vSJfM05gospeI5rTd4v8K
-        cHfpiI0XpmFdSuChFgy6SgjqP04gOSiZ+DqqYzs+PGnwx8sss3DGkmKJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=e7+7Th1m9BXZPGB/OmZlUELLweXezZABXtnEK2WW7Ys=; b=E06uoqPv
-        cqVkHstrueopNY7IfV99ERqSVZV6o5cvihIcRb2Nmn6IF2yJNSvZFZpMBA2ZdnwH
-        PP97straB9PExMebjC9d/fiPiFvP6e+Jnv3bp7CTJeuQl6ZhIAmtOhRGq1LP8MTm
-        +wYU/GMDIPvRYI/wKIT3HiLzpnN81nKaXyRgHHkvwP46EZo27hgle0sRgzzdhLy1
-        bvbDyOZini8rEvHvN3UgR2Zm16XiZBkJjGcIQrD5QybW4orUnw0V7JRbkT0G6Abp
-        0Nwz4lJ1ij/+l7/iaw0J1RkHVTEwvCA29C+xg09Xzzh0ICpCmMpa0jJX6w9jwbUb
-        fI/WkIlm+Yv/3Q==
-X-ME-Sender: <xms:VW3-XhUwNoCh7-UgD6Sbje0eplrd3gRO5mvHxJ0BcsK88MFvDbNigQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrtdehgddvtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhnhicu
-    nfhinhcuoegurghnnhihsehkughrrghgtdhnrdguvghvqeenucggtffrrghtthgvrhhnpe
-    ffvdfgjeekleetleekkeegvdetvdejgfelkeevtdffffefhfefvddvtdffieegjeenucff
-    ohhmrghinhepghhithhhuhgsrdgtohhmpdhlphgsgidruggrthgrnecukfhppeejfedrvd
-    dvhedrgedrudefkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpegurghnnhihsehkughrrghgtdhnrdguvghv
-X-ME-Proxy: <xmx:VW3-XhlzlxfgqeJyrBhe6M6wqjtR5wx-lNWT11WYYN6Q8ijDmJfDGA>
-    <xmx:VW3-XtbPUN3EUr0Dti1m_2HetNM1yPb_QZ387ZbbavZmLQdic-aBkA>
-    <xmx:VW3-XkUuTkjbzViTrlUmmDJll3fs_-n8b5qqpaaa8cKPwGz7wSHIpA>
-    <xmx:Vm3-XpX1F6a7TEQqKJXIjRcoscaln2Epa91xc0AsE1qf3YbiOvRMmA>
-Received: from pinwheel.hsd1.wa.comcast.net (c-73-225-4-138.hsd1.wa.comcast.net [73.225.4.138])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 87861306006C;
-        Thu,  2 Jul 2020 19:27:16 -0400 (EDT)
-From:   Danny Lin <danny@kdrag0n.dev>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Danny Lin <danny@kdrag0n.dev>, stable@vger.kernel.org
-Subject: [PATCH v2] vmlinux.lds.h: Coalesce transient LLVM dead code elimination sections
-Date:   Thu,  2 Jul 2020 16:27:13 -0700
-Message-Id: <20200702232713.123893-1-danny@kdrag0n.dev>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <7304fdf3-23d7-442b-b870-e88ae6f37004@localhost>
-References: <7304fdf3-23d7-442b-b870-e88ae6f37004@localhost>
+        id S1726017AbgGCAPm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jul 2020 20:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbgGCAPm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jul 2020 20:15:42 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE52C08C5C1;
+        Thu,  2 Jul 2020 17:15:41 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id s14so11934616plq.6;
+        Thu, 02 Jul 2020 17:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=nuJRvdB0NXvVZz7pZcV4N1oDW2dnoBAuVAW0OAoXK2w=;
+        b=LSEdiF8O8c0k36FJz+J/p1Xm+032fT22eON16GPFoOrZL6GDx9jPsHusIL7FEU0XAV
+         lLDoHY9NSZfpcd5oNSgz7AXGqRLd1dfAW9ad86/buGeCa4uTE/vU9OPIKwfaZyBXfnsJ
+         uG05dXYdVlfndLY83LDfB7lzK6ZqRQP5RvYyTLEoAscx9LtDbk1kTfrj/Cwbbvqz6uxW
+         IUIYgXT0pd0DwhOqvL6wEv82lwldnFjq8WUAnvh0BthjGb+v++4h6R72lTgxl5Ir5SPV
+         KaijBTzwUbf0D6ex6rU/rFRlvvyVHMSFetaS1LKZRTYt3D1mhdMNSiJCFStkUNFQKfnS
+         w0+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=nuJRvdB0NXvVZz7pZcV4N1oDW2dnoBAuVAW0OAoXK2w=;
+        b=Hz5uPoOmI34jNibxFQgzG8dcvyTpPuwttGzgdY/dGS6GK8euGDlfSxLRaOd54uwZ7e
+         wg1iiQ1X2096xLB0jcr6U3QIZMnPvBS8sNWAwADZWzEAu7D8NKhAnoUq62vCcS6uwXAu
+         /WqcPecuG/yIXPQznZMzrrVoyJ5a0k8+GD8XSyIxviX+1bcoEwxfqJEDD3ENPhPrN3wS
+         80c7jzkC8CbweoPS71I664qGUHr7W0l4GNgVbip/eVDHWsTt23mSguKcinRIzVT0/4+7
+         WWapd1+dgB0ICBKKTBZpwu+F3gZWnFCqpzb7gX6mw3OSq8+WQFmkeKWYPfvBx1g8Mlkm
+         sq1A==
+X-Gm-Message-State: AOAM532WY+cpTtymdk9IBnjP7f1YFDQiWTyXYeWI9wDg38bzd1wrpoJE
+        GyZKyYga0cxBZwowUHIi4lGqmzE3
+X-Google-Smtp-Source: ABdhPJzVARbnUoiUECgH/rt6gF7oxr/jO/Or3UFnEeEEE5zO8Q2uC+eAackVR4Z456AOo0TJ+H99Rw==
+X-Received: by 2002:a17:902:b78a:: with SMTP id e10mr28875186pls.34.1593735341316;
+        Thu, 02 Jul 2020 17:15:41 -0700 (PDT)
+Received: from localhost (61-68-186-125.tpgi.com.au. [61.68.186.125])
+        by smtp.gmail.com with ESMTPSA id b11sm10202251pfr.179.2020.07.02.17.15.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 17:15:40 -0700 (PDT)
+Date:   Fri, 03 Jul 2020 10:15:34 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
+To:     linux-mm@kvack.org, Zefan Li <lizefan@huawei.com>
+Cc:     =?iso-8859-1?q?Borislav=0A?= Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@redhat.com>,
+        =?iso-8859-1?q?Thomas=0A?= Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
+References: <20200413125303.423864-1-npiggin@gmail.com>
+        <20200413125303.423864-5-npiggin@gmail.com>
+        <d148f86c-b27b-63fb-31d2-35b8f52ec540@huawei.com>
+In-Reply-To: <d148f86c-b27b-63fb-31d2-35b8f52ec540@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <1593735251.svr5r5cxle.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A recent LLVM 11 commit [1] made LLD stop implicitly coalescing some
-temporary LLVM sections, namely .{data,bss}..compoundliteral.XXX:
+Excerpts from Zefan Li's message of July 1, 2020 5:10 pm:
+>>  static void *__vmalloc_node(unsigned long size, unsigned long align,
+>> -			    gfp_t gfp_mask, pgprot_t prot,
+>> -			    int node, const void *caller);
+>> +			gfp_t gfp_mask, pgprot_t prot, unsigned long vm_flags,
+>> +			int node, const void *caller);
+>>  static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask=
+,
+>> -				 pgprot_t prot, int node)
+>> +				 pgprot_t prot, unsigned int page_shift,
+>> +				 int node)
+>>  {
+>>  	struct page **pages;
+>> +	unsigned long addr =3D (unsigned long)area->addr;
+>> +	unsigned long size =3D get_vm_area_size(area);
+>> +	unsigned int page_order =3D page_shift - PAGE_SHIFT;
+>>  	unsigned int nr_pages, array_size, i;
+>>  	const gfp_t nested_gfp =3D (gfp_mask & GFP_RECLAIM_MASK) | __GFP_ZERO;
+>>  	const gfp_t alloc_mask =3D gfp_mask | __GFP_NOWARN;
+>>  	const gfp_t highmem_mask =3D (gfp_mask & (GFP_DMA | GFP_DMA32)) ?
+>> -					0 :
+>> -					__GFP_HIGHMEM;
+>> +					0 : __GFP_HIGHMEM;
+>> =20
+>> -	nr_pages =3D get_vm_area_size(area) >> PAGE_SHIFT;
+>> +	nr_pages =3D size >> page_shift;
+>=20
+> while try out this patchset, we encountered a BUG_ON in account_kernel_st=
+ack()
+> in kernel/fork.c.
+>=20
+> BUG_ON(vm->nr_pages !=3D THREAD_SIZE / PAGE_SIZE);
+>=20
+> which obviously should be updated accordingly.
 
-  [30] .data..compoundli PROGBITS         ffffffff9ac9a000  19e9a000
-       000000000000cea0  0000000000000000  WA       0     0     32
-  [31] .rela.data..compo RELA             0000000000000000  40965440
-       0000000000001d88  0000000000000018   I      2238    30     8
-  [32] .data..compoundli PROGBITS         ffffffff9aca6ea0  19ea6ea0
-       00000000000033c0  0000000000000000  WA       0     0     32
-  [33] .rela.data..compo RELA             0000000000000000  409671c8
-       0000000000000948  0000000000000018   I      2238    32     8
-  [...]
-  [2213] .bss..compoundlit NOBITS           ffffffffa3000000  1d85c000
-       00000000000000a0  0000000000000000  WA       0     0     32
-  [2214] .bss..compoundlit NOBITS           ffffffffa30000a0  1d85c000
-       0000000000000040  0000000000000000  WA       0     0     32
-  [...]
+Thanks for finding that. We may have to change this around a bit so=20
+nr_pages still appears to be in PAGE_SIZE units for anybody looking.
 
-.{data,bss}..L<symbol name> sections are also created in some cases.
-While there aren't any in this example, they should also be coalesced to
-be safe in case some config or future LLVM change makes it start
-creating more of those sections in the future. For example, enabling
-global merging causes ..L_MergedGlobals sections to be created, but it's
-likely that other changes will result in such sections as well.
-
-While these extra sections don't typically cause any breakage, they do
-inflate the vmlinux size due to the overhead of storing metadata for
-thousands of extra sections.
-
-It's also worth noting that for some reason, some downstream Android
-kernels can't boot at all if these sections aren't coalesced.
-
-This issue isn't limited to any specific architecture; it affects arm64
-and x86 if CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is forced on.
-
-Example on x86 allyesconfig:
-    Before: 2241 sections, 1171169 KiB
-    After:    56 sections, 1170972 KiB
-
-[1] https://github.com/llvm/llvm-project/commit/9e33c096476ab5e02ab1c8442cc3cb4e32e29f17
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/958
-Cc: stable@vger.kernel.org # v4.4+
-Suggested-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Danny Lin <danny@kdrag0n.dev>
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
----
-v2:
-  - Fixed swapped example sizes
-  - Added .{data,bss}..L* sections, since it looks like they're emitted
-    in some cases even when LTO is disabled
-
- include/asm-generic/vmlinux.lds.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index db600ef218d7..737ecf782229 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -94,10 +94,11 @@
-  */
- #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
- #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
--#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..LPBX*
-+#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..LPBX* \
-+		  .data..compoundliteral* .data..L*
- #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
- #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]*
--#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]*
-+#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral* .bss..L*
- #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
- #else
- #define TEXT_MAIN .text
--- 
-2.27.0
-
+Thanks,
+Nick
