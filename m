@@ -2,135 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17500213AAB
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 15:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45FB213ABD
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 15:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbgGCNNj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jul 2020 09:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGCNNj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jul 2020 09:13:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3842C08C5C1;
-        Fri,  3 Jul 2020 06:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uqsQimSA3ZVIJmzJ+g3hxvE+rQFiKwkEojhvCeRdahw=; b=ItGZjDRIImf27YsAGtOG8yy/um
-        tHTSFrVgQyOISf1u9ovbSydWGKTsYFOu1QdZqaIrPrVC+BQULRRFgfurUr+UHbhbVAjFYXc0yCGNH
-        NRV6Ty0xvDowLbPzhWsEfUHzZqw0FT874nx/34bvhnQsXXmIDYEOYRNqxPNQYH8rAHKE2/8AwTRk8
-        wHLizFfF5+qhuvmcj3dz1f5NSP8/5ZJsGkhy1O/RcYnmb5zr+RExexvUuyCwYq8Luedw4dSOP2EUv
-        Sin4pSha9/RbjtlWc8OZlJovtZ17d+oq5poGsjxjQDDenUnzl1rkiSj26lYRo48qjQPCyZuX1TsWH
-        IDaagGpA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jrLVT-0003j1-Sa; Fri, 03 Jul 2020 13:13:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 71D12301124;
-        Fri,  3 Jul 2020 15:13:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 30A0521476E91; Fri,  3 Jul 2020 15:13:30 +0200 (CEST)
-Date:   Fri, 3 Jul 2020 15:13:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Marco Elver <elver@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-Message-ID: <20200703131330.GX4800@hirez.programming.kicks-ass.net>
-References: <20200630191931.GA884155@elver.google.com>
- <20200630201243.GD4817@hirez.programming.kicks-ass.net>
- <20200630203016.GI9247@paulmck-ThinkPad-P72>
- <CANpmjNP+7TtE0WPU=nX5zs3T2+4hPkkm08meUm2VDVY3RgsHDw@mail.gmail.com>
- <20200701114027.GO4800@hirez.programming.kicks-ass.net>
- <20200701140654.GL9247@paulmck-ThinkPad-P72>
- <20200701150512.GH4817@hirez.programming.kicks-ass.net>
- <20200701160338.GN9247@paulmck-ThinkPad-P72>
- <20200702082040.GB4781@hirez.programming.kicks-ass.net>
- <20200702175948.GV9247@paulmck-ThinkPad-P72>
+        id S1726098AbgGCNSv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jul 2020 09:18:51 -0400
+Received: from foss.arm.com ([217.140.110.172]:33310 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726022AbgGCNSu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Jul 2020 09:18:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0951B31B;
+        Fri,  3 Jul 2020 06:18:50 -0700 (PDT)
+Received: from gaia (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 263D13F73C;
+        Fri,  3 Jul 2020 06:18:48 -0700 (PDT)
+Date:   Fri, 3 Jul 2020 14:18:37 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Luis Machado <luis.machado@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alan Hayward <Alan.Hayward@arm.com>,
+        Omair Javaid <omair.javaid@linaro.org>
+Subject: Re: [PATCH v5 19/25] arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS
+ support
+Message-ID: <20200703123117.GC14950@gaia>
+References: <20200624175244.25837-1-catalin.marinas@arm.com>
+ <20200624175244.25837-20-catalin.marinas@arm.com>
+ <7fd536af-f9fa-aa10-a4c3-001e80dd7d7b@linaro.org>
+ <20200701171549.GF5191@gaia>
+ <8fa5c891-0f4a-c925-679e-94c41a546490@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200702175948.GV9247@paulmck-ThinkPad-P72>
+In-Reply-To: <8fa5c891-0f4a-c925-679e-94c41a546490@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 10:59:48AM -0700, Paul E. McKenney wrote:
-> On Thu, Jul 02, 2020 at 10:20:40AM +0200, Peter Zijlstra wrote:
-> > On Wed, Jul 01, 2020 at 09:03:38AM -0700, Paul E. McKenney wrote:
+On Wed, Jul 01, 2020 at 02:32:43PM -0300, Luis Machado wrote:
+> On 7/1/20 2:16 PM, Catalin Marinas wrote:
+> > On Thu, Jun 25, 2020 at 02:10:10PM -0300, Luis Machado wrote:
+> > > I have one point below I wanted to clarify regarding
+> > > PEEKMTETAGS/POKEMTETAGS.
+> > > 
+> > > But before that, I've pushed v2 of the MTE series for GDB here:
+> > > 
+> > > https://sourceware.org/git/?p=binutils-gdb.git;a=shortlog;h=refs/heads/users/luisgpm/aarch64-mte-v2
+> > > 
+> > > That series adds sctlr and gcr registers to the NT_ARM_MTE (still using a
+> > > dummy value of 0x407) register set. It would be nice if the Linux Kernel and
+> > > the debuggers were in sync in terms of supporting this new register set. GDB
+> > > assumes the register set exists if HWCAP2_MTE is there.
+> > > 
+> > > So, if we want to adjust the register set, we should probably consider doing
+> > > that now. That prevents the situation where debuggers would need to do
+> > > another check to confirm NT_ARM_MTE is exported. I'd rather avoid that.
 > > 
-> > > But it looks like we are going to have to tell the compiler.
+> > I'm happy to do this before merging, though we need to agree on the
+> > semantics.
 > > 
-> > What does the current proposal look like? I can certainly annotate the
-> > seqcount latch users, but who knows what other code is out there....
+> > Do you need both read and write access? Also wondering whether the
 > 
-> For pointers, yes, within the Linux kernel it is hopeless, thus the
-> thought of a -fall-dependent-ptr or some such that makes the compiler
-> pretend that each and every pointer is marked with the _Dependent_ptr
-> qualifier.
+> If I recall the previous discussion correctly, Kevin thought access to both
+> of these would be interesting to the user. It sounded like having read-only
+> access was enough. If so,...
 > 
-> New non-Linux-kernel code might want to use his qualifier explicitly,
-> perhaps something like the following:
+> > prctl() value would be a better option than the raw register bits (well,
+> > not entirely raw, masking out the irrelevant part).
 > 
-> 	_Dependent_ptr struct foo *p;  // Or maybe after the "*"?
+> ... then exposing the most useful bits to the user would be better, and up
+> to you to define.
+> 
+> I can tweak the GDB patches to turn the sctlr and gcr values into flag
+> fields. Then GDB can just show those in a more meaningful way. I just need
+> to know what the bits would look like.
 
-After, as you've written it, it's a pointer to a '_Dependent struct
-foo'.
+We may have some software only behaviour added to these bits at some
+point (e.g. deliver signal on return from syscall for faults on the
+uaccess routines). They would not be represented in the SCTLR/GCR
+registers.
 
-> 
-> 	rcu_read_lock();
-> 	p = rcu_dereference(gp);
-> 	// And so on...
-> 
-> If a function is to take a dependent pointer as a function argument,
-> then the corresponding parameter need the _Dependent_ptr marking.
-> Ditto for return values.
-> 
-> The proposal did not cover integers due to concerns about the number of
-> optimization passes that would need to be reviewed to make that work.
-> Nevertheless, using a marked integer would be safer than using an unmarked
-> one, and if the review can be carried out, why not?  Maybe something
-> like this:
-> 
-> 	_Dependent_ptr int idx;
-> 
-> 	rcu_read_lock();
-> 	idx = READ_ONCE(gidx);
-> 	d = rcuarray[idx];
-> 	rcu_read_unlock();
-> 	do_something_with(d);
-> 
-> So use of this qualifier is quite reasonable.
+> I'd rather not make these values writable if we don't think there is a good
+> use case for it. Better avoid giving developers more knobs than they need?
 
-The above usage might warrant a rename of the qualifier though, since
-clearly there isn't anything ptr around.
+There's the CRIU use-case for restoring this but I don't think we do it
+for other prctl() controls.
 
-> The prototype for GCC is here: https://github.com/AKG001/gcc/
-
-Thanks! Those test cases are somewhat over qualified though:
-
-       static volatile _Atomic (TYPE) * _Dependent_ptr a;     		\
-
-Also, if C goes and specifies load dependencies, in any form, is then
-not the corrolary that they need to specify control dependencies? How
-else can they exclude the transformation.
-
-And of course, once we're there, can we get explicit support for control
-dependencies too? :-) :-)
+-- 
+Catalin
