@@ -2,102 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FEC213C18
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 16:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85437213CB7
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 17:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgGCOvw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jul 2020 10:51:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55518 "EHLO mail.kernel.org"
+        id S1726310AbgGCPhW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jul 2020 11:37:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726098AbgGCOvw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 3 Jul 2020 10:51:52 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726147AbgGCPhW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Jul 2020 11:37:22 -0400
+Received: from localhost.localdomain (unknown [95.146.230.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61D192088E;
-        Fri,  3 Jul 2020 14:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593787911;
-        bh=OfQ9QrrhTEkwVc9D/6kQ4OLMbBVifUwGjpIqyu/to+g=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=P08qXOSK/SsmY8VAxSWxJZlh9y2mElMtAZzYp/JpETdbeuKyxfeNiEOPVeAjMtgmm
-         cVQ6zWd/th8wPaVLaFElx/6ZkEKB/7VSwS0fonaGWl2nOftDG+g5Bf9ZqxlWOJSJrJ
-         eDszUhoHxsOqHSNzzZyn6clVtx/aI8MGpxWzyq84=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 4C40135206C0; Fri,  3 Jul 2020 07:51:51 -0700 (PDT)
-Date:   Fri, 3 Jul 2020 07:51:51 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Marco Elver <elver@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id C2D1421534;
+        Fri,  3 Jul 2020 15:37:19 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-Message-ID: <20200703145151.GG9247@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200630203016.GI9247@paulmck-ThinkPad-P72>
- <CANpmjNP+7TtE0WPU=nX5zs3T2+4hPkkm08meUm2VDVY3RgsHDw@mail.gmail.com>
- <20200701114027.GO4800@hirez.programming.kicks-ass.net>
- <20200701140654.GL9247@paulmck-ThinkPad-P72>
- <20200701150512.GH4817@hirez.programming.kicks-ass.net>
- <20200701160338.GN9247@paulmck-ThinkPad-P72>
- <20200702082040.GB4781@hirez.programming.kicks-ass.net>
- <20200702175948.GV9247@paulmck-ThinkPad-P72>
- <20200703131330.GX4800@hirez.programming.kicks-ass.net>
- <20200703132523.GM117543@hirez.programming.kicks-ass.net>
+        Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v6 00/26]  arm64: Memory Tagging Extension user-space support
+Date:   Fri,  3 Jul 2020 16:36:52 +0100
+Message-Id: <20200703153718.16973-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200703132523.GM117543@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 03, 2020 at 03:25:23PM +0200, Peter Zijlstra wrote:
-> On Fri, Jul 03, 2020 at 03:13:30PM +0200, Peter Zijlstra wrote:
-> > > The prototype for GCC is here: https://github.com/AKG001/gcc/
-> > 
-> > Thanks! Those test cases are somewhat over qualified though:
-> > 
-> >        static volatile _Atomic (TYPE) * _Dependent_ptr a;     		\
-> 
-> One question though; since its a qualifier, and we've recently spend a
-> whole lot of effort to strip qualifiers in say READ_ONCE(), how does,
-> and how do we want, this qualifier to behave.
+This is version 6 (5th version here [1]) of the series adding user-space
+support for the ARMv8.5 Memory Tagging Extension ([2], [3]). The patches
+are also available on this branch:
 
-Dereferencing a _Dependent_ptr pointer gives you something that is not
-_Dependent_ptr, unless the declaration was like this:
+  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux for-next/mte
 
-	_Dependent_ptr _Atomic (TYPE) * _Dependent_ptr a;
+There are no ABI changes since v4/v5. I'll push these patches into
+linux-next for wider coverage, aiming for merging into 5.9. There are
+still some acks needed on the core mm and fs patches in the series.
+Thanks for the review/acks on v5.
 
-And if I recall correctly, the current state is that assigning a
-_Dependent_ptr variable to a non-_Dependent_ptr variable strips this
-marking (though the thought was to be able to ask for a warning).
+An important note, patch 7 introduces a core mm change to
+__split_huge_page_tail() so that it transfers the PG_arch_* flags from
+the head page to the tail ones. My understanding is that it shouldn't
+break anything but a more informed opinion from the mm folk is needed.
 
-So, yes, it would be nice to be able to explicitly strip the
-_Dependent_ptr, perhaps the kill_dependency() macro, which is already
-in the C standard.
+Changes in this version:
 
-> C++ has very convenient means of manipulating qualifiers, so it's not
-> much of a problem there, but for C it is, as we've found, really quite
-> cumbersome. Even with _Generic() we can't manipulate individual
-> qualifiers afaict.
+- __split_huge_page_tail() function update to preserve the PG_arch_*
+  flags.
 
-Fair point, and in C++ this is a templated class, at least in the same
-sense that std::atomic<> is a templated class.
+- copy_mount_options() simplified with a fall-back to byte-by-byte
+  copying. It turns out we arm64 can't guarantee an exact
+  copy_from_user() with intra-page (tag) faults.
 
-But in this case, would kill_dependency do what you want?
+- Dropped CONFIG_ARCH_USES_PG_ARCH_2 in favour of simply guarding
+  PG_arch_2 by CONFIG_64BIT.
 
-							Thanx, Paul
+- Added comments on where the new arch_swap_* and __HAVE_ARCH_SWAP_*
+  macros should be defined by the arch code if they need to be
+  overridden.
+
+- Fixed broken rebase conflict resolution in v5 re-introducing
+  asm-generic/pgtable.h.
+
+- Added the acks received so far.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20200624175244.25837-1-catalin.marinas@arm.com/
+[2] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/enhancing-memory-safety
+[3] https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/Arm_Memory_Tagging_Extension_Whitepaper.pdf
+[4] https://sourceware.org/pipermail/libc-alpha/2020-June/115039.html
+
+Catalin Marinas (14):
+  arm64: mte: Use Normal Tagged attributes for the linear map
+  mm: Preserve the PG_arch_* flags in __split_huge_page_tail()
+  arm64: mte: Clear the tags when a page is mapped in user-space with
+    PROT_MTE
+  arm64: Avoid unnecessary clear_user_page() indirection
+  arm64: mte: Tags-aware aware memcmp_pages() implementation
+  arm64: mte: Add PROT_MTE support to mmap() and mprotect()
+  mm: Introduce arch_validate_flags()
+  arm64: mte: Validate the PROT_MTE request via arch_validate_flags()
+  mm: Allow arm64 mmap(PROT_MTE) on RAM-based files
+  arm64: mte: Allow user control of the tag check mode via prctl()
+  arm64: mte: Allow user control of the generated random tags via
+    prctl()
+  arm64: mte: Restore the GCR_EL1 register after a suspend
+  arm64: mte: Add PTRACE_{PEEK,POKE}MTETAGS support
+  fs: Handle intra-page faults in copy_mount_options()
+
+Kevin Brodsky (1):
+  mm: Introduce arch_calc_vm_flag_bits()
+
+Steven Price (4):
+  mm: Add PG_arch_2 page flag
+  mm: Add arch hooks for saving/restoring tags
+  arm64: mte: Enable swap of tagged pages
+  arm64: mte: Save tags when hibernating
+
+Vincenzo Frascino (7):
+  arm64: mte: system register definitions
+  arm64: mte: CPU feature detection and initial sysreg configuration
+  arm64: mte: Add specific SIGSEGV codes
+  arm64: mte: Handle synchronous and asynchronous tag check faults
+  arm64: mte: Tags-aware copy_{user_,}highpage() implementations
+  arm64: mte: Kconfig entry
+  arm64: mte: Add Memory Tagging Extension documentation
+
+ Documentation/arm64/cpu-feature-registers.rst |   2 +
+ Documentation/arm64/elf_hwcaps.rst            |   4 +
+ Documentation/arm64/index.rst                 |   1 +
+ .../arm64/memory-tagging-extension.rst        | 297 ++++++++++++++++
+ arch/arm64/Kconfig                            |  28 ++
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |   6 +
+ arch/arm64/include/asm/hwcap.h                |   1 +
+ arch/arm64/include/asm/kvm_arm.h              |   3 +-
+ arch/arm64/include/asm/memory.h               |  17 +-
+ arch/arm64/include/asm/mman.h                 |  56 ++-
+ arch/arm64/include/asm/mte.h                  |  86 +++++
+ arch/arm64/include/asm/page.h                 |  19 +-
+ arch/arm64/include/asm/pgtable-prot.h         |   2 +
+ arch/arm64/include/asm/pgtable.h              |  46 ++-
+ arch/arm64/include/asm/processor.h            |   4 +
+ arch/arm64/include/asm/sysreg.h               |  61 ++++
+ arch/arm64/include/asm/thread_info.h          |   4 +-
+ arch/arm64/include/uapi/asm/hwcap.h           |   1 +
+ arch/arm64/include/uapi/asm/mman.h            |   1 +
+ arch/arm64/include/uapi/asm/ptrace.h          |   4 +
+ arch/arm64/kernel/Makefile                    |   1 +
+ arch/arm64/kernel/cpufeature.c                |  61 ++++
+ arch/arm64/kernel/cpuinfo.c                   |   1 +
+ arch/arm64/kernel/entry.S                     |  37 ++
+ arch/arm64/kernel/hibernate.c                 | 118 +++++++
+ arch/arm64/kernel/mte.c                       | 331 ++++++++++++++++++
+ arch/arm64/kernel/process.c                   |  31 +-
+ arch/arm64/kernel/ptrace.c                    |   9 +-
+ arch/arm64/kernel/signal.c                    |   9 +
+ arch/arm64/kernel/suspend.c                   |   4 +
+ arch/arm64/kernel/syscall.c                   |  10 +
+ arch/arm64/lib/Makefile                       |   2 +
+ arch/arm64/lib/mte.S                          | 151 ++++++++
+ arch/arm64/mm/Makefile                        |   1 +
+ arch/arm64/mm/copypage.c                      |  25 +-
+ arch/arm64/mm/dump.c                          |   4 +
+ arch/arm64/mm/fault.c                         |   9 +-
+ arch/arm64/mm/mmu.c                           |  22 +-
+ arch/arm64/mm/mteswap.c                       |  83 +++++
+ arch/arm64/mm/proc.S                          |   8 +-
+ arch/x86/kernel/signal_compat.c               |   2 +-
+ fs/namespace.c                                |  25 +-
+ fs/proc/page.c                                |   3 +
+ fs/proc/task_mmu.c                            |   4 +
+ include/linux/kernel-page-flags.h             |   1 +
+ include/linux/mm.h                            |   8 +
+ include/linux/mman.h                          |  23 +-
+ include/linux/page-flags.h                    |   3 +
+ include/linux/pgtable.h                       |  28 ++
+ include/trace/events/mmflags.h                |   9 +-
+ include/uapi/asm-generic/siginfo.h            |   4 +-
+ include/uapi/linux/prctl.h                    |   9 +
+ mm/huge_memory.c                              |   4 +
+ mm/mmap.c                                     |   9 +
+ mm/mprotect.c                                 |   6 +
+ mm/page_io.c                                  |  10 +
+ mm/shmem.c                                    |   9 +
+ mm/swapfile.c                                 |   2 +
+ mm/util.c                                     |   2 +-
+ tools/vm/page-types.c                         |   2 +
+ 61 files changed, 1678 insertions(+), 48 deletions(-)
+ create mode 100644 Documentation/arm64/memory-tagging-extension.rst
+ create mode 100644 arch/arm64/include/asm/mte.h
+ create mode 100644 arch/arm64/kernel/mte.c
+ create mode 100644 arch/arm64/lib/mte.S
+ create mode 100644 arch/arm64/mm/mteswap.c
+
