@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E18213194
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 04:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6295021317F
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 04:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbgGCCg5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jul 2020 22:36:57 -0400
-Received: from mga09.intel.com ([134.134.136.24]:3198 "EHLO mga09.intel.com"
+        id S1726376AbgGCCgZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jul 2020 22:36:25 -0400
+Received: from mga09.intel.com ([134.134.136.24]:3199 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726319AbgGCCgN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Jul 2020 22:36:13 -0400
-IronPort-SDR: 19juRkF0zOA/tayQa5bs6yallRua+SLn4jb6cVsIduM4wqlTW3Kjxo8tTlaLEJT0wM/zEuIkzS
- kLt0R4rFdVyA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="148599916"
+        id S1726358AbgGCCgP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 2 Jul 2020 22:36:15 -0400
+IronPort-SDR: /gB6s91+gCWf9n1C5WQtfk7CDXHwLFX43hOsKChMkyIaP3ebBFo+/uMIKukOGqWHoVhqBhPB5r
+ PgJEaEKPHPpw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="148599917"
 X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="148599916"
+   d="scan'208";a="148599917"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 19:36:06 -0700
-IronPort-SDR: PFslKE7FImhgbkhI1kag4qP27HpXp33Wl+BVDjfY4qg20UNFz+mjVTnpk7iL3nyjg1hf0g2jlp
- 3C6M1DYUpGiQ==
+IronPort-SDR: gc+V4jelwd6cdgDX/gNAN+SSR2GE6Zg27AtHAEY7cnfQ0WEuRH0dbo014d86x55dkDeDQ0CoOi
+ ASJavvqq280g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="278295773"
+   d="scan'208";a="278295778"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.152])
   by orsmga003.jf.intel.com with ESMTP; 02 Jul 2020 19:36:06 -0700
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
@@ -46,9 +46,9 @@ Cc:     James Morse <james.morse@arm.com>,
         Peter Shier <pshier@google.com>,
         Junaid Shahid <junaids@google.com>,
         Christoffer Dall <christoffer.dall@arm.com>
-Subject: [PATCH v3 16/21] KVM: arm64: Drop @max param from mmu_topup_memory_cache()
-Date:   Thu,  2 Jul 2020 19:35:40 -0700
-Message-Id: <20200703023545.8771-17-sean.j.christopherson@intel.com>
+Subject: [PATCH v3 17/21] KVM: arm64: Use common code's approach for __GFP_ZERO with memory caches
+Date:   Thu,  2 Jul 2020 19:35:41 -0700
+Message-Id: <20200703023545.8771-18-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.26.0
 In-Reply-To: <20200703023545.8771-1-sean.j.christopherson@intel.com>
 References: <20200703023545.8771-1-sean.j.christopherson@intel.com>
@@ -59,61 +59,86 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Replace the @max param in mmu_topup_memory_cache() and instead use
-ARRAY_SIZE() to terminate the loop to fill the cache.  This removes a
-BUG_ON() and sets the stage for moving arm64 to the common memory cache
-implementation.
+Add a "gfp_zero" member to arm64's 'struct kvm_mmu_memory_cache' to make
+the struct and its usage compatible with the common 'struct
+kvm_mmu_memory_cache' in linux/kvm_host.h.  This will minimize code
+churn when arm64 moves to the common implementation in a future patch, at
+the cost of temporarily having somewhat silly code.
+
+Note, GFP_PGTABLE_USER is equivalent to GFP_KERNEL_ACCOUNT | GFP_ZERO:
+
+  #define GFP_PGTABLE_USER  (GFP_PGTABLE_KERNEL | __GFP_ACCOUNT)
+  |
+  -> #define GFP_PGTABLE_KERNEL        (GFP_KERNEL | __GFP_ZERO)
+
+  == GFP_KERNEL | __GFP_ACCOUNT | __GFP_ZERO
+
+versus
+
+  #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
+
+    with __GFP_ZERO explicitly OR'd in
+
+  == GFP_KERNEL | __GFP_ACCOUNT | __GFP_ZERO
 
 No functional change intended.
 
 Tested-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/arm64/kvm/mmu.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ arch/arm64/include/asm/kvm_host.h | 1 +
+ arch/arm64/kvm/arm.c              | 2 ++
+ arch/arm64/kvm/mmu.c              | 5 +++--
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index c3e6fcc664b1..335170b59899 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -105,6 +105,7 @@ struct kvm_arch {
+  */
+ struct kvm_mmu_memory_cache {
+ 	int nobjs;
++	gfp_t gfp_zero;
+ 	void *objects[KVM_NR_MEM_OBJS];
+ };
+ 
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 90cb90561446..1016635b3782 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -270,6 +270,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 	vcpu->arch.target = -1;
+ 	bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+ 
++	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
++
+ 	/* Set up the timer */
+ 	kvm_timer_vcpu_init(vcpu);
+ 
 diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index 8c0035cab6b6..f78aa3e269e9 100644
+index f78aa3e269e9..5220623a4efb 100644
 --- a/arch/arm64/kvm/mmu.c
 +++ b/arch/arm64/kvm/mmu.c
-@@ -124,15 +124,13 @@ static void stage2_dissolve_pud(struct kvm *kvm, phys_addr_t addr, pud_t *pudp)
- 	put_page(virt_to_page(pudp));
- }
- 
--static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache,
--				  int min, int max)
-+static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
- {
- 	void *page;
- 
--	BUG_ON(max > KVM_NR_MEM_OBJS);
+@@ -131,7 +131,8 @@ static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache, int min)
  	if (cache->nobjs >= min)
  		return 0;
--	while (cache->nobjs < max) {
-+	while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
- 		page = (void *)__get_free_page(GFP_PGTABLE_USER);
+ 	while (cache->nobjs < ARRAY_SIZE(cache->objects)) {
+-		page = (void *)__get_free_page(GFP_PGTABLE_USER);
++		page = (void *)__get_free_page(GFP_KERNEL_ACCOUNT |
++					       cache->gfp_zero);
  		if (!page)
  			return -ENOMEM;
-@@ -1481,8 +1479,7 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
- 			pte = kvm_s2pte_mkwrite(pte);
+ 		cache->objects[cache->nobjs++] = page;
+@@ -1467,7 +1468,7 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
+ 	phys_addr_t addr, end;
+ 	int ret = 0;
+ 	unsigned long pfn;
+-	struct kvm_mmu_memory_cache cache = { 0, };
++	struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, };
  
- 		ret = mmu_topup_memory_cache(&cache,
--					     kvm_mmu_cache_min_pages(kvm),
--					     KVM_NR_MEM_OBJS);
-+					     kvm_mmu_cache_min_pages(kvm));
- 		if (ret)
- 			goto out;
- 		spin_lock(&kvm->mmu_lock);
-@@ -1882,8 +1879,7 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
- 	mmap_read_unlock(current->mm);
- 
- 	/* We need minimum second+third level pages */
--	ret = mmu_topup_memory_cache(memcache, kvm_mmu_cache_min_pages(kvm),
--				     KVM_NR_MEM_OBJS);
-+	ret = mmu_topup_memory_cache(memcache, kvm_mmu_cache_min_pages(kvm));
- 	if (ret)
- 		return ret;
- 
+ 	end = (guest_ipa + size + PAGE_SIZE - 1) & PAGE_MASK;
+ 	pfn = __phys_to_pfn(pa);
 -- 
 2.26.0
 
