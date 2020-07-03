@@ -2,103 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DF32138F0
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 12:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17500213AAB
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jul 2020 15:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgGCKtw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jul 2020 06:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S1726074AbgGCNNj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jul 2020 09:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725915AbgGCKtv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jul 2020 06:49:51 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5EBC08C5C1;
-        Fri,  3 Jul 2020 03:49:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49ysDD0gdYz9sSy;
-        Fri,  3 Jul 2020 20:49:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1593773388;
-        bh=RfcGFiZqerkVV2+Xy8mk+CmXEwgXM5XeAEZk9tVyLEo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jE5FAgWTrhkfhhz6BYzecTvfdbDagKlkEWrYP3L0gbYhUVcSmlNc1lC6f2ixexXfj
-         QMnhT3le4DAgIHjrdKH22ewB074mqgaY+h4/qPtQCqXxPj1aL8oLqf9cRSSFg+ZpER
-         kOBkntxdcz0tYKdN5N9tEC3tWly5GI/no1ixwSUH2ll5U30V57HbQBu863Xoilh+tH
-         faLA8P2ykdWIk2tfZCnjGNmZvES09DuT2hr7WHCNOOgcbnej88JykIeo5CrGmWKVP4
-         mhpmHq+ygewJ07zs3nF7tn1T8SdxHp2Y2ozRdDw+CH0ePoLytwGYkTSssCCGuyHwKH
-         P9M8prScLig4Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nicholas Piggin <npiggin@gmail.com>, Will Deacon <will@kernel.org>
-Cc:     Anton Blanchard <anton@ozlabs.org>,
-        Boqun Feng <boqun.feng@gmail.com>, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH 5/8] powerpc/64s: implement queued spinlocks and rwlocks
-In-Reply-To: <1593686722.w9psaqk7yp.astroid@bobo.none>
-References: <20200702074839.1057733-1-npiggin@gmail.com> <20200702074839.1057733-6-npiggin@gmail.com> <20200702080219.GB16113@willie-the-truck> <1593685459.r2tfxtfdp6.astroid@bobo.none> <20200702103506.GA16418@willie-the-truck> <1593686722.w9psaqk7yp.astroid@bobo.none>
-Date:   Fri, 03 Jul 2020 20:52:02 +1000
-Message-ID: <878sg07twt.fsf@mpe.ellerman.id.au>
+        with ESMTP id S1725984AbgGCNNj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jul 2020 09:13:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3842C08C5C1;
+        Fri,  3 Jul 2020 06:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uqsQimSA3ZVIJmzJ+g3hxvE+rQFiKwkEojhvCeRdahw=; b=ItGZjDRIImf27YsAGtOG8yy/um
+        tHTSFrVgQyOISf1u9ovbSydWGKTsYFOu1QdZqaIrPrVC+BQULRRFgfurUr+UHbhbVAjFYXc0yCGNH
+        NRV6Ty0xvDowLbPzhWsEfUHzZqw0FT874nx/34bvhnQsXXmIDYEOYRNqxPNQYH8rAHKE2/8AwTRk8
+        wHLizFfF5+qhuvmcj3dz1f5NSP8/5ZJsGkhy1O/RcYnmb5zr+RExexvUuyCwYq8Luedw4dSOP2EUv
+        Sin4pSha9/RbjtlWc8OZlJovtZ17d+oq5poGsjxjQDDenUnzl1rkiSj26lYRo48qjQPCyZuX1TsWH
+        IDaagGpA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jrLVT-0003j1-Sa; Fri, 03 Jul 2020 13:13:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 71D12301124;
+        Fri,  3 Jul 2020 15:13:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 30A0521476E91; Fri,  3 Jul 2020 15:13:30 +0200 (CEST)
+Date:   Fri, 3 Jul 2020 15:13:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Marco Elver <elver@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH 00/22] add support for Clang LTO
+Message-ID: <20200703131330.GX4800@hirez.programming.kicks-ass.net>
+References: <20200630191931.GA884155@elver.google.com>
+ <20200630201243.GD4817@hirez.programming.kicks-ass.net>
+ <20200630203016.GI9247@paulmck-ThinkPad-P72>
+ <CANpmjNP+7TtE0WPU=nX5zs3T2+4hPkkm08meUm2VDVY3RgsHDw@mail.gmail.com>
+ <20200701114027.GO4800@hirez.programming.kicks-ass.net>
+ <20200701140654.GL9247@paulmck-ThinkPad-P72>
+ <20200701150512.GH4817@hirez.programming.kicks-ass.net>
+ <20200701160338.GN9247@paulmck-ThinkPad-P72>
+ <20200702082040.GB4781@hirez.programming.kicks-ass.net>
+ <20200702175948.GV9247@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702175948.GV9247@paulmck-ThinkPad-P72>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Nicholas Piggin <npiggin@gmail.com> writes:
-> Excerpts from Will Deacon's message of July 2, 2020 8:35 pm:
->> On Thu, Jul 02, 2020 at 08:25:43PM +1000, Nicholas Piggin wrote:
->>> Excerpts from Will Deacon's message of July 2, 2020 6:02 pm:
->>> > On Thu, Jul 02, 2020 at 05:48:36PM +1000, Nicholas Piggin wrote:
->>> >> diff --git a/arch/powerpc/include/asm/qspinlock.h b/arch/powerpc/include/asm/qspinlock.h
->>> >> new file mode 100644
->>> >> index 000000000000..f84da77b6bb7
->>> >> --- /dev/null
->>> >> +++ b/arch/powerpc/include/asm/qspinlock.h
->>> >> @@ -0,0 +1,20 @@
->>> >> +/* SPDX-License-Identifier: GPL-2.0 */
->>> >> +#ifndef _ASM_POWERPC_QSPINLOCK_H
->>> >> +#define _ASM_POWERPC_QSPINLOCK_H
->>> >> +
->>> >> +#include <asm-generic/qspinlock_types.h>
->>> >> +
->>> >> +#define _Q_PENDING_LOOPS	(1 << 9) /* not tuned */
->>> >> +
->>> >> +#define smp_mb__after_spinlock()   smp_mb()
->>> >> +
->>> >> +static __always_inline int queued_spin_is_locked(struct qspinlock *lock)
->>> >> +{
->>> >> +	smp_mb();
->>> >> +	return atomic_read(&lock->val);
->>> >> +}
->>> > 
->>> > Why do you need the smp_mb() here?
->>> 
->>> A long and sad tale that ends here 51d7d5205d338
->>> 
->>> Should probably at least refer to that commit from here, since this one 
->>> is not going to git blame back there. I'll add something.
->> 
->> Is this still an issue, though?
->> 
->> See 38b850a73034 (where we added a similar barrier on arm64) and then
->> c6f5d02b6a0f (where we removed it).
->> 
->
-> Oh nice, I didn't know that went away. Thanks for the heads up.
+On Thu, Jul 02, 2020 at 10:59:48AM -0700, Paul E. McKenney wrote:
+> On Thu, Jul 02, 2020 at 10:20:40AM +0200, Peter Zijlstra wrote:
+> > On Wed, Jul 01, 2020 at 09:03:38AM -0700, Paul E. McKenney wrote:
+> > 
+> > > But it looks like we are going to have to tell the compiler.
+> > 
+> > What does the current proposal look like? I can certainly annotate the
+> > seqcount latch users, but who knows what other code is out there....
+> 
+> For pointers, yes, within the Linux kernel it is hopeless, thus the
+> thought of a -fall-dependent-ptr or some such that makes the compiler
+> pretend that each and every pointer is marked with the _Dependent_ptr
+> qualifier.
+> 
+> New non-Linux-kernel code might want to use his qualifier explicitly,
+> perhaps something like the following:
+> 
+> 	_Dependent_ptr struct foo *p;  // Or maybe after the "*"?
 
-Argh! I spent so much time chasing that damn bug in the ipc code.
+After, as you've written it, it's a pointer to a '_Dependent struct
+foo'.
 
-> I'm going to say I'm too scared to remove it while changing the
-> spinlock algorithm, but I'll open an issue and we should look at 
-> removing it.
+> 
+> 	rcu_read_lock();
+> 	p = rcu_dereference(gp);
+> 	// And so on...
+> 
+> If a function is to take a dependent pointer as a function argument,
+> then the corresponding parameter need the _Dependent_ptr marking.
+> Ditto for return values.
+> 
+> The proposal did not cover integers due to concerns about the number of
+> optimization passes that would need to be reviewed to make that work.
+> Nevertheless, using a marked integer would be safer than using an unmarked
+> one, and if the review can be carried out, why not?  Maybe something
+> like this:
+> 
+> 	_Dependent_ptr int idx;
+> 
+> 	rcu_read_lock();
+> 	idx = READ_ONCE(gidx);
+> 	d = rcuarray[idx];
+> 	rcu_read_unlock();
+> 	do_something_with(d);
+> 
+> So use of this qualifier is quite reasonable.
 
-Sounds good.
+The above usage might warrant a rename of the qualifier though, since
+clearly there isn't anything ptr around.
 
-cheers
+> The prototype for GCC is here: https://github.com/AKG001/gcc/
+
+Thanks! Those test cases are somewhat over qualified though:
+
+       static volatile _Atomic (TYPE) * _Dependent_ptr a;     		\
+
+Also, if C goes and specifies load dependencies, in any form, is then
+not the corrolary that they need to specify control dependencies? How
+else can they exclude the transformation.
+
+And of course, once we're there, can we get explicit support for control
+dependencies too? :-) :-)
