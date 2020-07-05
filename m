@@ -2,43 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B8C214D3E
-	for <lists+linux-arch@lfdr.de>; Sun,  5 Jul 2020 16:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7664C214D48
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Jul 2020 17:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgGEOvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Jul 2020 10:51:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726861AbgGEOvU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 5 Jul 2020 10:51:20 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 719A92073E
-        for <linux-arch@vger.kernel.org>; Sun,  5 Jul 2020 14:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593960679;
-        bh=LxBZTJANNJdPomcTrtcPVv1//sorAgNSAm12j74xRCc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DAz4u9F2p62ma6a0lH0wfl4UtCoEANXz/ZXoqXnCjF7jZC2BL6hPwXDfrHyyuG+hJ
-         M5PzYO6uopv634sV9DsS1V2Kqimokx5rNi+oeaXC916NOPgsumUJ86wAj1z5bW8LKQ
-         2RF13xOt0qZVW+Tkg9boErzARr7ogdcHdXVI7dfM=
-Received: by mail-lf1-f50.google.com with SMTP id g139so21130163lfd.10
-        for <linux-arch@vger.kernel.org>; Sun, 05 Jul 2020 07:51:19 -0700 (PDT)
-X-Gm-Message-State: AOAM530ZSZDHOhO3GNvbtSZP1dYZcveaT4v4OmzEKbCCeHpFHF1XKOa9
-        A6EGUXidnfCEzHKYdGCDCzsutVQgrPkaA56Hmus=
-X-Google-Smtp-Source: ABdhPJyBmTFcDzykIlFA0+IHy5zcT/roqfhnYAJ17ytE4YfElPz4jfUL7wv37GCNNDxncBzcZtCFX85JteFCXjjhZl4=
-X-Received: by 2002:a19:e56:: with SMTP id 83mr27222210lfo.212.1593960677727;
- Sun, 05 Jul 2020 07:51:17 -0700 (PDT)
+        id S1726864AbgGEPDX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Jul 2020 11:03:23 -0400
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:38888 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726826AbgGEPDX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Jul 2020 11:03:23 -0400
+Received: by mail-yb1-f193.google.com with SMTP id a30so2428102ybj.5
+        for <linux-arch@vger.kernel.org>; Sun, 05 Jul 2020 08:03:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7GPeP5MzENduE2hfu8IqaVVzjukSNYc23i7dv0fDD4Q=;
+        b=c+5BIXG53jUybwultR1EHo9OF4D2hcIFtH6nky0JtPUVj6R193Lf5tNcwTDjpD8J2v
+         cmroMCsLkBFwAiTIoEoZE2eEzzOF0Caxak5aXPPG4FP3vljdznMPz36nNsVeOE+H+NVc
+         ZsbjVbNL6IxHDTwMrhuL5FnujxPCPUulHbwwHWglg7h2aIzh9tGkw5epHoQUIqhIBjKG
+         tqmyRakBV3bp3znwkQ1mKgzbbdzj0lh/zjAS7yC1vf6OmYF4aYMRlWtjqIf5q+4IbNXf
+         fGgN+yq/mZoQJ+pSyF0WufUjB0rYu7rW5gln9RSBsz0htYM/anIK5nXSwpiwWk0SCD79
+         lMOQ==
+X-Gm-Message-State: AOAM5302aqnbL1sb/9RAy1eRKBWiqFyubvRhtE1I8agyqdYjOZgSbC5X
+        UJq1gQo1xQFgHFYC7ImlqDd6LMqB5rVXeQE19do=
+X-Google-Smtp-Source: ABdhPJxjMnCmpriOMpAr302IrCf8lCJCqNMcblicbvdhqj/DWvb1d0L31p3O8xBZPGZtw/tH/Ygz0BvjX7631aSNjII=
+X-Received: by 2002:a25:6806:: with SMTP id d6mr15853416ybc.124.1593961402246;
+ Sun, 05 Jul 2020 08:03:22 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200705142640.279439-1-kernel@esmil.dk> <CAJF2gTSi+2qxfzWxa5xvZnyJBFi5WcdSc-LDrqavB-hZ9-e9-Q@mail.gmail.com>
 In-Reply-To: <CAJF2gTSi+2qxfzWxa5xvZnyJBFi5WcdSc-LDrqavB-hZ9-e9-Q@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 5 Jul 2020 22:51:06 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRr=7_S5M5Y71Fxx66o6fvv1NN=d9nWiUqnAqHFHiu3Cw@mail.gmail.com>
-Message-ID: <CAJF2gTRr=7_S5M5Y71Fxx66o6fvv1NN=d9nWiUqnAqHFHiu3Cw@mail.gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Sun, 5 Jul 2020 17:03:11 +0200
+Message-ID: <CANBLGcxWuO=xGfwwKPp7Faw1ZU=Z3p37KbopgQnB5HLg=CXTdg@mail.gmail.com>
 Subject: Re: [PATCH] asm-generic/mmiowb: Get cpu in mmiowb_set_pending
-To:     Emil Renner Berthing <kernel@esmil.dk>
+To:     Guo Ren <guoren@kernel.org>
 Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -50,17 +48,9 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sorry:  Use atomic_set, not atomic read,
-seams like:
- +       atomic_set(&ms->mmiowb_pending, ms->nesting_count);
+Hi Ren,
 
-But you need still deal with these for atomic
-struct mmiowb_state {
-        u16     nesting_count;
-        u16     mmiowb_pending;
-};
-
-On Sun, Jul 5, 2020 at 10:43 PM Guo Ren <guoren@kernel.org> wrote:
+On Sun, 5 Jul 2020 at 16:44, Guo Ren <guoren@kernel.org> wrote:
 >
 > Hi Emil,
 >
@@ -136,18 +126,18 @@ On Sun, Jul 5, 2020 at 10:43 PM Guo Ren <guoren@kernel.org> wrote:
 > -       ms->mmiowb_pending = ms->nesting_count;
 > +      ms->mmiowb_pending = atomic_read(ms->nesting_count);
 > }
->
->
+
+You may be right, but it doesn't fix the BUG. As far as I can tell it
+happens in __mmiowb_state() which expands through this_cpu_ptr and
+arch_raw_cpu_ptr to SHIFT_PERCPU_PTR(ptr, __my_cpu_offset), where
+__my_cpu_offset is per_cpu_offset(smp_processor_id()) and with
+CONFIG_DEBUG_PREEMPT smp_processor_id is actually
+debug_smp_processor_id, which eventually checks that preemption is
+disabled in check_preemption_disabled.
+
+/Emil
 > --
 > Best Regards
 >  Guo Ren
 >
 > ML: https://lore.kernel.org/linux-csky/
-
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
