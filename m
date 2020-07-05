@@ -2,100 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC28214E43
-	for <lists+linux-arch@lfdr.de>; Sun,  5 Jul 2020 19:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B80214EC6
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Jul 2020 21:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbgGERwy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Jul 2020 13:52:54 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:62714 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727781AbgGERwx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 5 Jul 2020 13:52:53 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4B0GWL1WR1z9tyPL;
-        Sun,  5 Jul 2020 19:52:46 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id V_KhQkkJwpw0; Sun,  5 Jul 2020 19:52:46 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4B0GWL0fMFz9tyPK;
-        Sun,  5 Jul 2020 19:52:46 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id EF0F88B780;
-        Sun,  5 Jul 2020 19:52:50 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id lsEM1ItNQNVD; Sun,  5 Jul 2020 19:52:50 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 997028B75B;
-        Sun,  5 Jul 2020 19:52:50 +0200 (CEST)
-Subject: Re: [PATCH 3/5] selftests/powerpc: Update the stack expansion test
-To:     Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@ozlabs.org
-Cc:     linux-arch@vger.kernel.org, hughd@google.com,
-        linux-kernel@vger.kernel.org
-References: <20200703141327.1732550-1-mpe@ellerman.id.au>
- <20200703141327.1732550-3-mpe@ellerman.id.au>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <8f6c5175-32ce-34a2-873d-b5fb3a5d7c4c@csgroup.eu>
-Date:   Sun, 5 Jul 2020 19:52:44 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727931AbgGETAb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Jul 2020 15:00:31 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:44784 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728071AbgGETAb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Jul 2020 15:00:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593975629;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QRbjCVGiS+K3wjBojGpFQuJRSNreXkAJC07JF2rP2ac=;
+        b=RX1q2KNDVSIYckdk6RCrRjZQoSLZyZIMzPfVbYxV43RTiuLyEGqBghzhsjA/2pDllmFEi1
+        okHMpDqo6WVrwjcVr9FXGR6bXqUq9e7J3yu0iw2rC+kpMpIZSGTN50nk0LSsAMfIxzl0tv
+        1OVCimRjA4FcjmvEOknCjbkTOwuzx7w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-194--h0XVojeMPy8x53Oioav9g-1; Sun, 05 Jul 2020 15:00:25 -0400
+X-MC-Unique: -h0XVojeMPy8x53Oioav9g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F26A5EB;
+        Sun,  5 Jul 2020 19:00:23 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-112-238.rdu2.redhat.com [10.10.112.238])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 43C0B60BF3;
+        Sun,  5 Jul 2020 19:00:22 +0000 (UTC)
+Subject: Re: [PATCH v2 5/6] powerpc/pseries: implement paravirt qspinlocks for
+ SPLPAR
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm-ppc@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20200703073516.1354108-1-npiggin@gmail.com>
+ <20200703073516.1354108-6-npiggin@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <81d9981b-8a20-729c-b861-c7229e40bb65@redhat.com>
+Date:   Sun, 5 Jul 2020 15:00:21 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200703141327.1732550-3-mpe@ellerman.id.au>
+In-Reply-To: <20200703073516.1354108-6-npiggin@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 03/07/2020 à 16:13, Michael Ellerman a écrit :
-> Update the stack expansion load/store test to take into account the
-> new allowance of 4096 bytes below the stack pointer.
-
-[I didn't receive patch 2, don't know why, hence commenting patch 2 here.]
-
-Shouldn't patch 2 carry a fixes tag and be Cced to stable for 
-application to previous kernel releases ?
-
-Christophe
-
-> 
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+On 7/3/20 3:35 AM, Nicholas Piggin wrote:
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 > ---
->   .../selftests/powerpc/mm/stack_expansion_ldst.c        | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c b/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c
-> index 0587e11437f5..95c3f3de16a1 100644
-> --- a/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c
-> +++ b/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c
-> @@ -186,17 +186,17 @@ static void test_one_type(enum access_type type, unsigned long page_size, unsign
->   	// But if we go past the rlimit it should fail
->   	assert(test_one(DEFAULT_SIZE, rlim_cur + 1, type) != 0);
->   
-> -	// Above 1MB powerpc only allows accesses within 2048 bytes of
-> +	// Above 1MB powerpc only allows accesses within 4096 bytes of
->   	// r1 for accesses that aren't stdu
-> -	assert(test_one(1 * _MB + page_size - 128, -2048, type) == 0);
-> +	assert(test_one(1 * _MB + page_size - 128, -4096, type) == 0);
->   #ifdef __powerpc__
-> -	assert(test_one(1 * _MB + page_size - 128, -2049, type) != 0);
-> +	assert(test_one(1 * _MB + page_size - 128, -4097, type) != 0);
+>   arch/powerpc/include/asm/paravirt.h           | 28 ++++++++++
+>   arch/powerpc/include/asm/qspinlock.h          | 55 +++++++++++++++++++
+>   arch/powerpc/include/asm/qspinlock_paravirt.h |  5 ++
+>   arch/powerpc/platforms/pseries/Kconfig        |  5 ++
+>   arch/powerpc/platforms/pseries/setup.c        |  6 +-
+>   include/asm-generic/qspinlock.h               |  2 +
+>   6 files changed, 100 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/powerpc/include/asm/qspinlock_paravirt.h
+>
+> diff --git a/arch/powerpc/include/asm/paravirt.h b/arch/powerpc/include/asm/paravirt.h
+> index 7a8546660a63..f2d51f929cf5 100644
+> --- a/arch/powerpc/include/asm/paravirt.h
+> +++ b/arch/powerpc/include/asm/paravirt.h
+> @@ -29,6 +29,16 @@ static inline void yield_to_preempted(int cpu, u32 yield_count)
+>   {
+>   	plpar_hcall_norets(H_CONFER, get_hard_smp_processor_id(cpu), yield_count);
+>   }
+> +
+> +static inline void prod_cpu(int cpu)
+> +{
+> +	plpar_hcall_norets(H_PROD, get_hard_smp_processor_id(cpu));
+> +}
+> +
+> +static inline void yield_to_any(void)
+> +{
+> +	plpar_hcall_norets(H_CONFER, -1, 0);
+> +}
 >   #else
-> -	assert(test_one(1 * _MB + page_size - 128, -2049, type) == 0);
-> +	assert(test_one(1 * _MB + page_size - 128, -4097, type) == 0);
+>   static inline bool is_shared_processor(void)
+>   {
+> @@ -45,6 +55,19 @@ static inline void yield_to_preempted(int cpu, u32 yield_count)
+>   {
+>   	___bad_yield_to_preempted(); /* This would be a bug */
+>   }
+> +
+> +extern void ___bad_yield_to_any(void);
+> +static inline void yield_to_any(void)
+> +{
+> +	___bad_yield_to_any(); /* This would be a bug */
+> +}
+> +
+> +extern void ___bad_prod_cpu(void);
+> +static inline void prod_cpu(int cpu)
+> +{
+> +	___bad_prod_cpu(); /* This would be a bug */
+> +}
+> +
 >   #endif
 >   
->   	// By consuming 2MB of stack we test the stdu case
-> -	assert(test_one(2 * _MB + page_size - 128, -2048, type) == 0);
-> +	assert(test_one(2 * _MB + page_size - 128, -4096, type) == 0);
+>   #define vcpu_is_preempted vcpu_is_preempted
+> @@ -57,5 +80,10 @@ static inline bool vcpu_is_preempted(int cpu)
+>   	return false;
 >   }
 >   
->   static int test(void)
-> 
+> +static inline bool pv_is_native_spin_unlock(void)
+> +{
+> +     return !is_shared_processor();
+> +}
+> +
+>   #endif /* __KERNEL__ */
+>   #endif /* __ASM_PARAVIRT_H */
+> diff --git a/arch/powerpc/include/asm/qspinlock.h b/arch/powerpc/include/asm/qspinlock.h
+> index c49e33e24edd..0960a0de2467 100644
+> --- a/arch/powerpc/include/asm/qspinlock.h
+> +++ b/arch/powerpc/include/asm/qspinlock.h
+> @@ -3,9 +3,36 @@
+>   #define _ASM_POWERPC_QSPINLOCK_H
+>   
+>   #include <asm-generic/qspinlock_types.h>
+> +#include <asm/paravirt.h>
+>   
+>   #define _Q_PENDING_LOOPS	(1 << 9) /* not tuned */
+>   
+> +#ifdef CONFIG_PARAVIRT_SPINLOCKS
+> +extern void native_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+> +extern void __pv_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+> +
+> +static __always_inline void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+> +{
+> +	if (!is_shared_processor())
+> +		native_queued_spin_lock_slowpath(lock, val);
+> +	else
+> +		__pv_queued_spin_lock_slowpath(lock, val);
+> +}
+
+In a previous mail, I said that:
+
+You may need to match the use of __pv_queued_spin_lock_slowpath() with 
+the corresponding __pv_queued_spin_unlock(), e.g.
+
+#define queued_spin_unlock queued_spin_unlock
+static inline queued_spin_unlock(struct qspinlock *lock)
+{
+         if (!is_shared_processor())
+                 smp_store_release(&lock->locked, 0);
+         else
+                 __pv_queued_spin_unlock(lock);
+}
+
+Otherwise, pv_kick() will never be called.
+
+Maybe PowerPC HMT is different that the shared cpus can still process 
+instruction, though slower, that cpu kicking like what was done in kvm 
+is not really necessary. If that is the case, I think we should document 
+that.
+
+Cheers,
+Longman
+
