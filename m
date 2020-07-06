@@ -2,96 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A746215EE2
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 20:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0A5215EE9
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 20:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730061AbgGFSje (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jul 2020 14:39:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39754 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730051AbgGFSje (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 6 Jul 2020 14:39:34 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-111-31.bvtn.or.frontiernet.net [50.39.111.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1729599AbgGFSkC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jul 2020 14:40:02 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:34501 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729743AbgGFSkB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 14:40:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594060799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fGfzwKmfId0nPt6AjeRSKqUxZBg1dc0lbe/SE6/v6yI=;
+        b=I+vFqR7cN56J14zf1G6x9NDqGEfPHnVCsqcq8EKjRZVAGEk/Oyc96yD1bnsF7LLb6orb1p
+        9EnSi2fk9exFJC9FbwD/efODeU6B7XnmMe5tyrZTShJDEIxrYdsJUtVnOhjMQwag/dECWB
+        QP52LShddjeKIUKf8cj5iSvKMXbFCjI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-43-ZRiGS6MdOQm63DvY3owoAw-1; Mon, 06 Jul 2020 14:39:57 -0400
+X-MC-Unique: ZRiGS6MdOQm63DvY3owoAw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC023207BB;
-        Mon,  6 Jul 2020 18:39:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594060773;
-        bh=C73gOuGPht9dIixGPBoEUXES1WGxsODtcKpLKnFrDqc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DxcjcPLXo5KKl20GXi3gR8saz6u7T52XB2h7KY4zD+cFOdG6eQqu/eTW1KOIHVTH1
-         wju8yVd1Y7IK4dLVkNpXeViYSln0h7JZ5Y1n9IdBD6jdjIrKMxJo0PG6DWDkUmV68w
-         2PZAalihX+WlZ2m6xkVYthoCCWtQgQAL3RpYBP7s=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C7CAE3522637; Mon,  6 Jul 2020 11:39:33 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 11:39:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Marco Elver <elver@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-Message-ID: <20200706183933.GE9247@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200701114027.GO4800@hirez.programming.kicks-ass.net>
- <20200701140654.GL9247@paulmck-ThinkPad-P72>
- <20200701150512.GH4817@hirez.programming.kicks-ass.net>
- <20200701160338.GN9247@paulmck-ThinkPad-P72>
- <20200702082040.GB4781@hirez.programming.kicks-ass.net>
- <20200702175948.GV9247@paulmck-ThinkPad-P72>
- <20200703131330.GX4800@hirez.programming.kicks-ass.net>
- <20200703144228.GF9247@paulmck-ThinkPad-P72>
- <20200706162633.GA13288@paulmck-ThinkPad-P72>
- <20200706182926.GH4800@hirez.programming.kicks-ass.net>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 597AF8014D4;
+        Mon,  6 Jul 2020 18:39:55 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-117-98.rdu2.redhat.com [10.10.117.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 150B52C2BC;
+        Mon,  6 Jul 2020 18:39:54 +0000 (UTC)
+Subject: Re: [PATCH v3 0/6] powerpc: queued spinlocks and rwlocks
+To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm-ppc@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20200706043540.1563616-1-npiggin@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <24f75d2c-60cd-2766-4aab-1a3b1c80646e@redhat.com>
+Date:   Mon, 6 Jul 2020 14:39:53 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706182926.GH4800@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200706043540.1563616-1-npiggin@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 08:29:26PM +0200, Peter Zijlstra wrote:
-> On Mon, Jul 06, 2020 at 09:26:33AM -0700, Paul E. McKenney wrote:
-> 
-> > And perhaps more constructively, we do need to prioritize address and data
-> > dependencies over control dependencies.  For one thing, there are a lot
-> > more address/data dependencies in existing code than there are control
-> > dependencies, and (sadly, perhaps more importantly) there are a lot more
-> > people who are convinced that address/data dependencies are important.
-> 
-> If they do not consider their Linux OS running correctly :-)
+On 7/6/20 12:35 AM, Nicholas Piggin wrote:
+> v3 is updated to use __pv_queued_spin_unlock, noticed by Waiman (thank you).
+>
+> Thanks,
+> Nick
+>
+> Nicholas Piggin (6):
+>    powerpc/powernv: must include hvcall.h to get PAPR defines
+>    powerpc/pseries: move some PAPR paravirt functions to their own file
+>    powerpc: move spinlock implementation to simple_spinlock
+>    powerpc/64s: implement queued spinlocks and rwlocks
+>    powerpc/pseries: implement paravirt qspinlocks for SPLPAR
+>    powerpc/qspinlock: optimised atomic_try_cmpxchg_lock that adds the
+>      lock hint
+>
+>   arch/powerpc/Kconfig                          |  13 +
+>   arch/powerpc/include/asm/Kbuild               |   2 +
+>   arch/powerpc/include/asm/atomic.h             |  28 ++
+>   arch/powerpc/include/asm/paravirt.h           |  89 +++++
+>   arch/powerpc/include/asm/qspinlock.h          |  91 ++++++
+>   arch/powerpc/include/asm/qspinlock_paravirt.h |   7 +
+>   arch/powerpc/include/asm/simple_spinlock.h    | 292 +++++++++++++++++
+>   .../include/asm/simple_spinlock_types.h       |  21 ++
+>   arch/powerpc/include/asm/spinlock.h           | 308 +-----------------
+>   arch/powerpc/include/asm/spinlock_types.h     |  17 +-
+>   arch/powerpc/lib/Makefile                     |   3 +
+>   arch/powerpc/lib/locks.c                      |  12 +-
+>   arch/powerpc/platforms/powernv/pci-ioda-tce.c |   1 +
+>   arch/powerpc/platforms/pseries/Kconfig        |   5 +
+>   arch/powerpc/platforms/pseries/setup.c        |   6 +-
+>   include/asm-generic/qspinlock.h               |   4 +
+>   16 files changed, 577 insertions(+), 322 deletions(-)
+>   create mode 100644 arch/powerpc/include/asm/paravirt.h
+>   create mode 100644 arch/powerpc/include/asm/qspinlock.h
+>   create mode 100644 arch/powerpc/include/asm/qspinlock_paravirt.h
+>   create mode 100644 arch/powerpc/include/asm/simple_spinlock.h
+>   create mode 100644 arch/powerpc/include/asm/simple_spinlock_types.h
+>
+This patch looks OK to me.
 
-Many of them really do not care at all.  In fact, some would consider
-Linux failing to run as an added bonus.
+I had run some microbenchmark on powerpc system with or w/o the patch.
 
-> > For another (admittedly more theoretical) thing, the OOTA scenarios
-> > stemming from control dependencies are a lot less annoying than those
-> > from address/data dependencies.
-> > 
-> > And address/data dependencies are as far as I know vulnerable to things
-> > like conditional-move instructions that can cause problems for control
-> > dependencies.
-> > 
-> > Nevertheless, yes, control dependencies also need attention.
-> 
-> Today I added one more \o/
+On a 2-socket 160-thread SMT4 POWER9 system (not virtualized):
 
-Just make sure you continually check to make sure that compilers
-don't break it, along with the others you have added.  ;-)
+5.8.0-rc4
+=========
 
-							Thanx, Paul
+Running locktest with spinlock [runtime = 10s, load = 1]
+Threads = 160, Min/Mean/Max = 77,665/90,153/106,895
+Threads = 160, Total Rate = 1,441,759 op/s; Percpu Rate = 9,011 op/s
+
+Running locktest with rwlock [runtime = 10s, r% = 50%, load = 1]
+Threads = 160, Min/Mean/Max = 47,879/53,807/63,689
+Threads = 160, Total Rate = 860,192 op/s; Percpu Rate = 5,376 op/s
+
+Running locktest with spinlock [runtime = 10s, load = 1]
+Threads = 80, Min/Mean/Max = 242,907/319,514/463,161
+Threads = 80, Total Rate = 2,555 kop/s; Percpu Rate = 32 kop/s
+
+Running locktest with rwlock [runtime = 10s, r% = 50%, load = 1]
+Threads = 80, Min/Mean/Max = 146,161/187,474/259,270
+Threads = 80, Total Rate = 1,498 kop/s; Percpu Rate = 19 kop/s
+
+Running locktest with spinlock [runtime = 10s, load = 1]
+Threads = 40, Min/Mean/Max = 646,639/1,000,817/1,455,205
+Threads = 40, Total Rate = 4,001 kop/s; Percpu Rate = 100 kop/s
+
+Running locktest with rwlock [runtime = 10s, r% = 50%, load = 1]
+Threads = 40, Min/Mean/Max = 402,165/597,132/814,555
+Threads = 40, Total Rate = 2,388 kop/s; Percpu Rate = 60 kop/s
+
+5.8.0-rc4-qlock+
+================
+
+Running locktest with spinlock [runtime = 10s, load = 1]
+Threads = 160, Min/Mean/Max = 123,835/124,580/124,587
+Threads = 160, Total Rate = 1,992 kop/s; Percpu Rate = 12 kop/s
+
+Running locktest with rwlock [runtime = 10s, r% = 50%, load = 1]
+Threads = 160, Min/Mean/Max = 254,210/264,714/276,784
+Threads = 160, Total Rate = 4,231 kop/s; Percpu Rate = 26 kop/s
+
+Running locktest with spinlock [runtime = 10s, load = 1]
+Threads = 80, Min/Mean/Max = 599,715/603,397/603,450
+Threads = 80, Total Rate = 4,825 kop/s; Percpu Rate = 60 kop/s
+
+Running locktest with rwlock [runtime = 10s, r% = 50%, load = 1]
+Threads = 80, Min/Mean/Max = 492,687/525,224/567,456
+Threads = 80, Total Rate = 4,199 kop/s; Percpu Rate = 52 kop/s
+
+Running locktest with spinlock [runtime = 10s, load = 1]
+Threads = 40, Min/Mean/Max = 1,325,623/1,325,628/1,325,636
+Threads = 40, Total Rate = 5,299 kop/s; Percpu Rate = 132 kop/s
+
+Running locktest with rwlock [runtime = 10s, r% = 50%, load = 1]
+Threads = 40, Min/Mean/Max = 1,249,731/1,292,977/1,342,815
+Threads = 40, Total Rate = 5,168 kop/s; Percpu Rate = 129 kop/s
+
+On systems on large number of cpus, qspinlock lock is faster and more fair.
+
+With some tuning, we may be able to squeeze out more performance.
+
+Cheers,
+Longman
+
