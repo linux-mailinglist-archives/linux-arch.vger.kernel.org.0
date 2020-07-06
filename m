@@ -2,223 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDECE2153B5
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 10:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3F82153EF
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 10:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbgGFIIi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jul 2020 04:08:38 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:33944 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728299AbgGFIIh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 04:08:37 -0400
-Received: by mail-yb1-f195.google.com with SMTP id l19so5728144ybl.1
-        for <linux-arch@vger.kernel.org>; Mon, 06 Jul 2020 01:08:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5UNBk5tcjVMBwezwEiHbyroDsV8fbNZ3BsirJGPr1T0=;
-        b=hQ1gOo9iEjUgkpWq6WAWCSatcUQT0dEcvqlrLLW7HndLAdBau77O1vljCNivJcfMpa
-         A2EFboWVgtH8pIGfPSLa6DOxAP7XSLxRFG3OJlLsDQg5U6z9mnvS1f5MFuwWZYjYOYlt
-         0HNSVXK4gVx0aZ0AhKuZ90OnWn8pKL7phGtQJXCpE/ffz933+mQKlgJFnHPluwdPY0xD
-         DJFmxSaZmVV/tZ+MjVvTrxdwgLBSACZ9SKHfkCMIwbRw+TcuUotIHdkaakTm5hWGZcx3
-         +IGYJE4lm544X9guFZb1d5Q+9ZIw1GknatBUX4I5ybHuAJowM0PSRHMEmimnz/ufTyJP
-         e9aw==
-X-Gm-Message-State: AOAM533eQm91TpVSnMKwVYFuxcvH5PKeD7nbqekmBnHH0ExvlxlEr/e3
-        glxDramXkpBYes9ea6MZtrdtrXg4QsolvWc93tCgzXpGWW8=
-X-Google-Smtp-Source: ABdhPJyKZ7ZF0PkHKp0oFpwtztiNMOlmSnu1q0cWzFQimsC3Kugo2V1CBo+2oGwPRbj0ID/+cYAmyOylqjG58+RPzHI=
-X-Received: by 2002:a5b:347:: with SMTP id q7mr73259110ybp.509.1594022916018;
- Mon, 06 Jul 2020 01:08:36 -0700 (PDT)
+        id S1728339AbgGFIYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jul 2020 04:24:19 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:31221 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726277AbgGFIYT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 04:24:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594023857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=quj4+LzktSufcReK8cEx0HO5INxJ+LynwUM2i7cDKgs=;
+        b=dMBtrYfGvFWNquTbXNGFL9EjMrDVG36p+Lf8EywCuBXktdMp7yeaJM5UsrdqoUKcUlUxos
+        alktbqfmEkf1xE38rVHOT/hydJGFG7WV5htSejb3mTJjWudk9rKXW31P7jZIsW9Ac4LWfD
+        aD+DPS3bjhI4M5KZR4cJcNpsSirYiD4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-231-xb6nmaRIP3WDF3FeImt83Q-1; Mon, 06 Jul 2020 04:24:13 -0400
+X-MC-Unique: xb6nmaRIP3WDF3FeImt83Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B1E3F188360D;
+        Mon,  6 Jul 2020 08:24:11 +0000 (UTC)
+Received: from [10.36.114.3] (ovpn-114-3.ams2.redhat.com [10.36.114.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9DB53108BD32;
+        Mon,  6 Jul 2020 08:24:06 +0000 (UTC)
+Subject: Re: [PATCH v6 06/26] mm: Add PG_arch_2 page flag
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Price <steven.price@arm.com>
+References: <20200703153718.16973-1-catalin.marinas@arm.com>
+ <20200703153718.16973-7-catalin.marinas@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
+ 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
+Organization: Red Hat GmbH
+Message-ID: <27fe044a-8315-5394-575e-8f763696b0cd@redhat.com>
+Date:   Mon, 6 Jul 2020 10:24:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <20200705142640.279439-1-kernel@esmil.dk> <CAJF2gTSi+2qxfzWxa5xvZnyJBFi5WcdSc-LDrqavB-hZ9-e9-Q@mail.gmail.com>
- <CANBLGcxWuO=xGfwwKPp7Faw1ZU=Z3p37KbopgQnB5HLg=CXTdg@mail.gmail.com>
- <CAJF2gTQhax2ZR8fvfm-HwK2wZinXoVRS8Var5y1AkrinDFHzUQ@mail.gmail.com>
- <CANBLGcx1BeMTMBTS4YQUN=qrQqg9g3A_tw_F7xRngY0Lh9VGrQ@mail.gmail.com> <CAJF2gTTa+rDb2OX0evh30v3oCH=Oih3OGdvQK8CyqnrGBf=J=w@mail.gmail.com>
-In-Reply-To: <CAJF2gTTa+rDb2OX0evh30v3oCH=Oih3OGdvQK8CyqnrGBf=J=w@mail.gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Mon, 6 Jul 2020 10:08:24 +0200
-Message-ID: <CANBLGcw8nVvshaOxiBO3zSpjE2oEmWE7C4vuvDXYheRdFVLK0A@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic/mmiowb: Get cpu in mmiowb_set_pending
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200703153718.16973-7-catalin.marinas@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 6 Jul 2020 at 02:48, Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Jul 6, 2020 at 1:09 AM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> >
-> > On Sun, 5 Jul 2020 at 17:52, Guo Ren <guoren@kernel.org> wrote:
-> > > On Sun, Jul 5, 2020 at 11:03 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > > > On Sun, 5 Jul 2020 at 16:44, Guo Ren <guoren@kernel.org> wrote:
-> > > > >
-> > > > > Hi Emil,
-> > > > >
-> > > > > On Sun, Jul 5, 2020 at 10:27 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > > > > >
-> > > > > > Without this enabling CONFIG_PREEMPT and CONFIG_DEBUG_PREEMPT
-> > > > > > results in many errors like this on the HiFive Unleashed
-> > > > > > RISC-V board:
-> > > > > >
-> > > > > > BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-> > > > > > caller is regmap_mmio_write32le+0x1c/0x46
-> > > > > > CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-hfu+ #1
-> > > > > > Call Trace:
-> > > > > > [<ffffffe000201f6e>] walk_stackframe+0x0/0x7a
-> > > > > > [<ffffffe0005b290e>] dump_stack+0x6e/0x88
-> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
-> > > > > > [<ffffffe0005c4c26>] check_preemption_disabled+0xa4/0xaa
-> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
-> > > > > > [<ffffffe0004737c8>] regmap_mmio_write+0x26/0x44
-> > > > > > [<ffffffe0004715c4>] regmap_write+0x28/0x48
-> > > > > > [<ffffffe00043dccc>] sifive_gpio_probe+0xc0/0x1da
-> > > > > > [<ffffffe00000113e>] rdinit_setup+0x22/0x26
-> > > > > > [<ffffffe000469054>] platform_drv_probe+0x24/0x52
-> > > > > > [<ffffffe000467e16>] really_probe+0x92/0x21a
-> > > > > > [<ffffffe0004683a8>] device_driver_attach+0x42/0x4a
-> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
-> > > > > > [<ffffffe0004683f0>] __driver_attach+0x40/0xac
-> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
-> > > > > > [<ffffffe000466a3e>] bus_for_each_dev+0x3c/0x64
-> > > > > > [<ffffffe000467118>] bus_add_driver+0x11e/0x184
-> > > > > > [<ffffffe00046889a>] driver_register+0x32/0xc6
-> > > > > > [<ffffffe00000e5ac>] gpiolib_sysfs_init+0xaa/0xae
-> > > > > > [<ffffffe0000019ec>] do_one_initcall+0x50/0xfc
-> > > > > > [<ffffffe00000113e>] rdinit_setup+0x22/0x26
-> > > > > > [<ffffffe000001bea>] kernel_init_freeable+0x152/0x1da
-> > > > > > [<ffffffe0005c4d28>] rest_init+0xde/0xe2
-> > > > > > [<ffffffe0005c4d36>] kernel_init+0xa/0x11a
-> > > > > > [<ffffffe0005c4d28>] rest_init+0xde/0xe2
-> > > > > > [<ffffffe000200ff6>] ret_from_syscall_rejected+0x8/0xc
-> > > > > >
-> > > > > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > > > > > ---
-> > > > > > This patch fixes it, but my guess is that it's not the right
-> > > > > > fix. Do anyone have a better idea?
-> > > > > >
-> > > > > >  include/asm-generic/mmiowb.h | 6 +++++-
-> > > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
-> > > > > > index 9439ff037b2d..31a21cdfbbcf 100644
-> > > > > > --- a/include/asm-generic/mmiowb.h
-> > > > > > +++ b/include/asm-generic/mmiowb.h
-> > > > > > @@ -34,8 +34,12 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
-> > > > > >
-> > > > > >  static inline void mmiowb_set_pending(void)
-> > > > > >  {
-> > > > > > -       struct mmiowb_state *ms = __mmiowb_state();
-> > > > > > +       struct mmiowb_state *ms;
-> > > > > > +
-> > > > > > +       get_cpu();
-> > > > > > +       ms = __mmiowb_state();
-> > > > > >         ms->mmiowb_pending = ms->nesting_count;
-> > > > > > +       put_cpu();
-> > > > > >  }
-> > > > >
-> > > > > #define __mmiowb_state()        this_cpu_ptr(&__mmiowb_state)
-> > > > >
-> > > > > The ptr is a fixed address, so don't worry about the change, and just
-> > > > > use an atomic_read is enough.
-> > > > > static inline void mmiowb_set_pending(void)
-> > > > > {
-> > > > >         struct mmiowb_state *ms = __mmiowb_state();
-> > > > > -       ms->mmiowb_pending = ms->nesting_count;
-> > > > > +      ms->mmiowb_pending = atomic_read(ms->nesting_count);
-> > > > > }
-> > > >
-> > > > You may be right, but it doesn't fix the BUG. As far as I can tell it
-> > > > happens in __mmiowb_state() which expands through this_cpu_ptr and
-> > > > arch_raw_cpu_ptr to SHIFT_PERCPU_PTR(ptr, __my_cpu_offset), where
-> > > > __my_cpu_offset is per_cpu_offset(smp_processor_id()) and with
-> > > > CONFIG_DEBUG_PREEMPT smp_processor_id is actually
-> > > > debug_smp_processor_id, which eventually checks that preemption is
-> > > > disabled in check_preemption_disabled.
-> > > Thx for explaining.
-> > >
-> > > Seems we need to find who disable preemption during:
-> > > > > > [<ffffffe000201f6e>] walk_stackframe+0x0/0x7a
-> > > > > > [<ffffffe0005b290e>] dump_stack+0x6e/0x88
-> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
-> > > > > > [<ffffffe0005c4c26>] check_preemption_disabled+0xa4/0xaa
-> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
-> > > > > > [<ffffffe0004737c8>] regmap_mmio_write+0x26/0x44
-> > > > > > [<ffffffe0004715c4>] regmap_write+0x28/0x48
-> > > > > > [<ffffffe00043dccc>] sifive_gpio_probe+0xc0/0x1da
-> > > > > > [<ffffffe00000113e>] rdinit_setup+0x22/0x26
-> > > > > > [<ffffffe000469054>] platform_drv_probe+0x24/0x52
-> > > > > > [<ffffffe000467e16>] really_probe+0x92/0x21a
-> > > > > > [<ffffffe0004683a8>] device_driver_attach+0x42/0x4a
-> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
-> > > > > > [<ffffffe0004683f0>] __driver_attach+0x40/0xac
-> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
-> > > > > > [<ffffffe000466a3e>] bus_for_each_dev+0x3c/0x64
-> > > > > > [<ffffffe000467118>] bus_add_driver+0x11e/0x184
-> > > > > > [<ffffffe00046889a>] driver_register+0x32/0xc6
-> > > > > > [<ffffffe00000e5ac>] gpiolib_sysfs_init+0xaa/0xae
-> > > > > > [<ffffffe0000019ec>] do_one_initcall+0x50/0xfc
-> >
-> > Hmm.. the problem is that preemption is *not* disabled when
-> > smp_processor_id is called, right?
->
-> Yes!
->
-> smp_processor_id is defined as:
->
->  * This is the normal accessor to the CPU id and should be used
->  * whenever possible.
->  *
->  * The CPU id is stable when:
->  *
->  *  - IRQs are disabled;
->  *  - preemption is disabled;
->  *  - the task is CPU affine.
->  *
->  * When CONFIG_DEBUG_PREEMPT; we verify these assumption and WARN
->  * when smp_processor_id() is used when the CPU id is not stable.
->
-> So regmap_write->regmap_mmio_write should be PREEMPT disabled in
-> sifive_gpio_probe().
+On 03.07.20 17:36, Catalin Marinas wrote:
+> From: Steven Price <steven.price@arm.com>
+> 
+> For arm64 MTE support it is necessary to be able to mark pages that
+> contain user space visible tags that will need to be saved/restored e.g.
+> when swapped out.
+> 
+> To support this add a new arch specific flag (PG_arch_2). This flag is
+> only available on 64-bit architectures due to the limited number of
+> spare page flags on the 32-bit ones.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> [catalin.marinas@arm.com: use CONFIG_64BIT for guarding this new flag]
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+> 
+> Notes:
+>     v6:
+>     - Using CONFIG_64BIT instead of a new CONFIG_ARCH_USES_PG_ARCH_2 option.
+>     
+>     New in v4.
+> 
+>  fs/proc/page.c                    | 3 +++
+>  include/linux/kernel-page-flags.h | 1 +
+>  include/linux/page-flags.h        | 3 +++
+>  include/trace/events/mmflags.h    | 9 ++++++++-
+>  tools/vm/page-types.c             | 2 ++
+>  5 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/page.c b/fs/proc/page.c
+> index f909243d4a66..9f1077d94cde 100644
+> --- a/fs/proc/page.c
+> +++ b/fs/proc/page.c
+> @@ -217,6 +217,9 @@ u64 stable_page_flags(struct page *page)
+>  	u |= kpf_copy_bit(k, KPF_PRIVATE_2,	PG_private_2);
+>  	u |= kpf_copy_bit(k, KPF_OWNER_PRIVATE,	PG_owner_priv_1);
+>  	u |= kpf_copy_bit(k, KPF_ARCH,		PG_arch_1);
+> +#ifdef CONFIG_64BIT
+> +	u |= kpf_copy_bit(k, KPF_ARCH_2,	PG_arch_2);
+> +#endif
+>  
+>  	return u;
+>  };
+> diff --git a/include/linux/kernel-page-flags.h b/include/linux/kernel-page-flags.h
+> index abd20ef93c98..eee1877a354e 100644
+> --- a/include/linux/kernel-page-flags.h
+> +++ b/include/linux/kernel-page-flags.h
+> @@ -17,5 +17,6 @@
+>  #define KPF_ARCH		38
+>  #define KPF_UNCACHED		39
+>  #define KPF_SOFTDIRTY		40
+> +#define KPF_ARCH_2		41
+>  
+>  #endif /* LINUX_KERNEL_PAGE_FLAGS_H */
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 6be1aa559b1e..276140c94f4a 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -135,6 +135,9 @@ enum pageflags {
+>  #if defined(CONFIG_IDLE_PAGE_TRACKING) && defined(CONFIG_64BIT)
+>  	PG_young,
+>  	PG_idle,
+> +#endif
+> +#ifdef CONFIG_64BIT
+> +	PG_arch_2,
+>  #endif
+>  	__NR_PAGEFLAGS,
 
-Ah! Sorry, now I think I understand. So you're saying that the real
-problem is that the driver framework should have disabled preemption
-before calling any .probe functions, but for some reason that doesn't
-happen on RISC-V?
+People are usually *very* picky when it comes to new page flags. It
+somewhat concerns me that we bump up __NR_PAGEFLAGS for any 64bit arch.
+That feels wrong.
 
-> >
-> > > do_one_initcall's preempt_count = 0
-> > > (gdb) bt
-> > > #0  do_one_initcall (fn=0xffffffe000003b0e
-> > > <trace_init_flags_sys_exit>) at init/main.c:1190
-> > > #1  0xffffffe000001f20 in do_pre_smp_initcalls () at ./include/linux/init.h:131
-> > >
-> > > #2  kernel_init_freeable () at init/main.c:1494
-> > > #3  0xffffffe0009d6ea6 in kernel_init (unused=<optimized out>) a
-> > >    t init/main.c:1399
-> > > #4  0xffffffe000201c2a in handle_exception () at arch/riscv/kernel/entry.S:188
-> > > Backtrace stopped: frame did not save the PC
-> > > (gdb) p *(struct task_struct*)$tp
-> > > $2 = {thread_info = {flags = 0, preempt_count = 0,
-> > >
-> > > Can you debug like this ? to see which function's preempt_count = 0 in
-> > > your backtrace.
-> >
-> > I'm sorry, I'm not exactly sure what you mean by this, but it seems to
-> > happen multiple places in writel-like functions. Both at probe time in
-> > sifive_gpio_probe and sifive_spi_probe and when the spi driver is
-> > running. Here is the full log:
-> >
-> I mean Use jtag + gdb to detect  preempt_count = 0 in parent function.
-> I do this in qemu :)
->
-> If couldn't use jtag, then just add printk preempt_count trace, or kgdb.
 
-Right, thanks. I'll look into it.
+-- 
+Thanks,
 
-/Emil
+David / dhildenb
+
