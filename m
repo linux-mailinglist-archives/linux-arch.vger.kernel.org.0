@@ -2,98 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF0C2160FD
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 23:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEA021626B
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Jul 2020 01:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgGFVgf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jul 2020 17:36:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36494 "EHLO mail.kernel.org"
+        id S1726918AbgGFXlh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jul 2020 19:41:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37638 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726864AbgGFVge (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 6 Jul 2020 17:36:34 -0400
+        id S1726280AbgGFXlh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 6 Jul 2020 19:41:37 -0400
 Received: from paulmck-ThinkPad-P72.home (50-39-111-31.bvtn.or.frontiernet.net [50.39.111.31])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9A68206B6;
-        Mon,  6 Jul 2020 21:36:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A9A620720;
+        Mon,  6 Jul 2020 23:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594071394;
-        bh=sA/7CXYi0ngP//7JK4jQdpW143pvzFd4LbBtxm/Bwto=;
+        s=default; t=1594078897;
+        bh=yuEVLSFWzFuIU16JSRCjoy4DCC3vZQD9mtnpRVx+k3Q=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=wcL9Oo6+GRQVlu4lYInBXGnS8fdoH513Ix30eHlAWrkjitwgzj2QYtMplSKu9Ejqp
-         3Eyp3iBuZGMqyt+ArDL/u3atI/41gdwQe/4aKCPfiNCuJqc7Ts/6J8ZaJ5GvvM4v3A
-         Y7rqyhQ42pmjGjRnAC58RxkeuWNlgNP5SYJRIPS4=
+        b=kH6JpuxO4VcDqDcyojdQfYGTHKg4PNOiHrbQiENKeoPSy0ZVSRSUp36IctVlrxCfg
+         Py5tnQ3aqNWzAsUWq7cSTJZ9xs4GrC7bOF7ScnS6uyF1RxsPRZrbPsF6yIEB4yWmBX
+         Q00WDW1a9kdhgxJoHkm8GLzgTCfs57TBHtdBC46w=
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id D2D793522637; Mon,  6 Jul 2020 14:36:33 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 14:36:33 -0700
+        id F16FE3522637; Mon,  6 Jul 2020 16:41:36 -0700 (PDT)
+Date:   Mon, 6 Jul 2020 16:41:36 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: LKMM
-Message-ID: <20200706213633.GL9247@paulmck-ThinkPad-P72>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marco Elver <elver@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH 00/22] add support for Clang LTO
+Message-ID: <20200706234136.GS9247@paulmck-ThinkPad-P72>
 Reply-To: paulmck@kernel.org
-References: <20200706190324.20638-1-grandmaster@al2klimov.de>
+References: <20200701150512.GH4817@hirez.programming.kicks-ass.net>
+ <20200701160338.GN9247@paulmck-ThinkPad-P72>
+ <20200702082040.GB4781@hirez.programming.kicks-ass.net>
+ <20200702175948.GV9247@paulmck-ThinkPad-P72>
+ <20200703131330.GX4800@hirez.programming.kicks-ass.net>
+ <20200703144228.GF9247@paulmck-ThinkPad-P72>
+ <20200706162633.GA13288@paulmck-ThinkPad-P72>
+ <20200706182926.GH4800@hirez.programming.kicks-ass.net>
+ <20200706183933.GE9247@paulmck-ThinkPad-P72>
+ <20200706194012.GA5523@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200706190324.20638-1-grandmaster@al2klimov.de>
+In-Reply-To: <20200706194012.GA5523@worktop.programming.kicks-ass.net>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 09:03:24PM +0200, Alexander A. Klimov wrote:
-> Rationale:
-> Reduces attack surface on kernel devs opening the links for MITM
-> as HTTPS traffic is much harder to manipulate.
+On Mon, Jul 06, 2020 at 09:40:12PM +0200, Peter Zijlstra wrote:
+> On Mon, Jul 06, 2020 at 11:39:33AM -0700, Paul E. McKenney wrote:
+> > On Mon, Jul 06, 2020 at 08:29:26PM +0200, Peter Zijlstra wrote:
+> > > On Mon, Jul 06, 2020 at 09:26:33AM -0700, Paul E. McKenney wrote:
 > 
-> Deterministic algorithm:
-> For each file:
->   If not .svg:
->     For each line:
->       If doesn't contain `\bxmlns\b`:
->         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
->           If both the HTTP and HTTPS versions
->           return 200 OK and serve the same content:
->             Replace HTTP with HTTPS.
+> > > If they do not consider their Linux OS running correctly :-)
+> > 
+> > Many of them really do not care at all.  In fact, some would consider
+> > Linux failing to run as an added bonus.
 > 
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> This I think is why we have compiler people in the thread that care a
+> lot more.
 
-Queued, thank you!
+Here is hoping! ;-)
 
-						Thanx, Paul
+> > > > Nevertheless, yes, control dependencies also need attention.
+> > > 
+> > > Today I added one more \o/
+> > 
+> > Just make sure you continually check to make sure that compilers
+> > don't break it, along with the others you have added.  ;-)
+> 
+> There's:
+> 
+> kernel/locking/mcs_spinlock.h:  smp_cond_load_acquire(l, VAL);                          \
+> kernel/sched/core.c:                    smp_cond_load_acquire(&p->on_cpu, !VAL);
+> kernel/smp.c:   smp_cond_load_acquire(&csd->node.u_flags, !(VAL & CSD_FLAG_LOCK));
+> 
+> arch/x86/kernel/alternative.c:          atomic_cond_read_acquire(&desc.refs, !VAL);
+> kernel/locking/qrwlock.c:               atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
+> kernel/locking/qrwlock.c:       atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
+> kernel/locking/qrwlock.c:               atomic_cond_read_acquire(&lock->cnts, VAL == _QW_WAITING);
+> kernel/locking/qspinlock.c:             atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_MASK));
+> kernel/locking/qspinlock.c:     val = atomic_cond_read_acquire(&lock->val, !(VAL & _Q_LOCKED_PENDING_MASK));
+> 
+> include/linux/refcount.h:               smp_acquire__after_ctrl_dep();
+> ipc/mqueue.c:                   smp_acquire__after_ctrl_dep();
+> ipc/msg.c:                      smp_acquire__after_ctrl_dep();
+> ipc/sem.c:                      smp_acquire__after_ctrl_dep();
+> kernel/locking/rwsem.c:                 smp_acquire__after_ctrl_dep();
+> kernel/sched/core.c:    smp_acquire__after_ctrl_dep();
+> 
+> kernel/events/ring_buffer.c:__perf_output_begin()
+> 
+> And I'm fairly sure I'm forgetting some... One could argue there's too
+> many of them to check already.
+> 
+> Both GCC and CLANG had better think about it.
 
-> ---
->  Continuing my work started at 93431e0607e5.
-> 
->  If there are any URLs to be removed completely or at least not HTTPSified:
->  Just clearly say so and I'll *undo my change*.
->  See also https://lkml.org/lkml/2020/6/27/64
-> 
->  If there are any valid, but yet not changed URLs:
->  See https://lkml.org/lkml/2020/6/26/837
-> 
->  tools/memory-model/Documentation/references.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/memory-model/Documentation/references.txt b/tools/memory-model/Documentation/references.txt
-> index b177f3e4a614..9b2d7d56e842 100644
-> --- a/tools/memory-model/Documentation/references.txt
-> +++ b/tools/memory-model/Documentation/references.txt
-> @@ -103,7 +103,7 @@ o	Jade Alglave, Luc Maranget, and Michael Tautschnig. 2014. "Herding
->  
->  o	Jade Alglave, Patrick Cousot, and Luc Maranget. 2016. "Syntax and
->  	semantics of the weak consistency model specification language
-> -	cat". CoRR abs/1608.07531 (2016). http://arxiv.org/abs/1608.07531
-> +	cat". CoRR abs/1608.07531 (2016). https://arxiv.org/abs/1608.07531
->  
->  
->  Memory-model comparisons
-> -- 
-> 2.27.0
-> 
+That would be good!
+
+I won't list the number of address/data dependencies given that there
+are well over a thousand of them.
+
+							Thanx, Paul
