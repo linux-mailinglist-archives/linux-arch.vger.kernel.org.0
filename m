@@ -2,132 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2A12150CC
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 03:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F019D215122
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 04:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbgGFBP3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Jul 2020 21:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S1728623AbgGFCSg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Jul 2020 22:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728280AbgGFBP2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Jul 2020 21:15:28 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEB9C061794;
-        Sun,  5 Jul 2020 18:15:28 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id b16so16268769pfi.13;
-        Sun, 05 Jul 2020 18:15:28 -0700 (PDT)
+        with ESMTP id S1728579AbgGFCSg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Jul 2020 22:18:36 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D698EC061794
+        for <linux-arch@vger.kernel.org>; Sun,  5 Jul 2020 19:18:35 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id o8so37643463wmh.4
+        for <linux-arch@vger.kernel.org>; Sun, 05 Jul 2020 19:18:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=kKz4Uc8g6oN59bjHPGbiXHOBXR+HQpK1+CYrAwQF6u8=;
-        b=GIS2xLAWfhMaHveWqzZJDX6s+nlPSKSGES/PgtapW79bxCXnHLgwpi3IRej0D/5vea
-         vcMjrsmYG2ido/dabasTOULFOK/llqAitqk9qCPIkktoAEosRf+H5oTnlVJ2HNT/zXm5
-         zKILOGDgvrzAgw6KZvRC8+Qb1o0kLcUyL03Sgw5A3ko7mKZvOe5Q9p6ZFKOUndmSvEV1
-         6SJzXM0CmToBu7vnOj+tYiSX8dy2bQPwil8jyvU5gUV3kR0ou38nGG7XOv8L92UibqIX
-         QnDf03bF08Z2Hr0Zm1gKNGxQba7TKOYg2dRNLE8fsqm8V2+TpuHWKULuDXFvtToLtQ55
-         Xi1A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8azaCA9X1iEXFHYq8WU7gBmP5Jpn7hLBsRbOcU8tD5s=;
+        b=mI6BLefG8kiEdyrg3ZfySPw/VMbyr7KUsuiPQfDyaYllWfFDAsc4lEex0NPJsZ5uUT
+         8mCI15rM9FpIlS2UFl5ho/2H52kvZ0eL0oBjMZ1ZUHXn6iuPCiCS4Fs2jorkhGtrsD3u
+         YMed9/HJs0T3wXtX/vcFJ7td+hk78SxduBvsQzFIkp04w5YdKJ8WJfb752ml1TWLw1FS
+         cU30FSRc4N7wnXGmc0ScNERfIU1VCNHAWlkvISXHCyQFtbWt7e2xFF6lMT1A0zb34BoX
+         vpod83/VMHQ3QoKNhAD+qOXWW3IQXHAHv2A1ugBwA+UN5uC3Rye7/gHK7S+W5qle8cwN
+         EOKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=kKz4Uc8g6oN59bjHPGbiXHOBXR+HQpK1+CYrAwQF6u8=;
-        b=tovt66Hnr+NbAtKGgog/oXiMUY8HSJ7FmOUfGrz6qHOP7BnoBlW59j2ePlBl6vDZr/
-         vhKBi8aQsk3fG9MtuSdteXDjzh1JjZO+MP7rSTSLOWgMyqoY2l/3Lry4AjOr9yWFIFov
-         PUuCAL7g8oGbGeKPFzjUg7r1RP0LYiMAEIy3HeKHUHOoha0UFAofjxxbJMfr6X86oHGy
-         OOhrxNWfRiSWMGQRiTYVWqERqzLvCTgGqGrzUoficOczrteSxBkRwf3CUy50IMmKtOFz
-         8rNkdcU/GZgcHwBBJzVaB7tW7RP9hGuhcuW5wYkL+Xu5Vh0j2T37LyvRdIEzJK6PTU7C
-         e8OA==
-X-Gm-Message-State: AOAM5307PXEGNBqrllBQLoTntS5HeEfQ+ZVQcsIbgfvJvXiX4pUUKGWG
-        ZM7PeOvszUKqgVXBQ/O+oeQ=
-X-Google-Smtp-Source: ABdhPJx0bijqELQmwViOLeclUZEr6ZTl8k5qss/sx+9ojiJYxl/I3BLU3z+/ZuiTlj/nDQzOs87zvw==
-X-Received: by 2002:a62:ae0d:: with SMTP id q13mr34199195pff.89.1593998128402;
-        Sun, 05 Jul 2020 18:15:28 -0700 (PDT)
-Received: from localhost (61-68-186-125.tpgi.com.au. [61.68.186.125])
-        by smtp.gmail.com with ESMTPSA id e12sm17074775pfd.69.2020.07.05.18.15.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8azaCA9X1iEXFHYq8WU7gBmP5Jpn7hLBsRbOcU8tD5s=;
+        b=KdQw34LuXJhgYIAQy70VWwX1u/7g+r1h+LY5Ux8Au4HHHreEGiry3aMwuRRXm71Q1F
+         zejn6KJWZF/ldLELZvgvo+if9n28c/XDHV7NYs5FjDDmIqN3DmKjoVxXCWxRmwji1n+C
+         wsE9FSaaCINWvYWf4nqY2Q+YnD0DJ3a5HoBhpLmNcRp3/SnW/fr5beNiW9kZWtgDqG1P
+         Tsjs1F88cfGD8wBIKcuQo/f50rkEwI0S0D2T3npsIHl5adxL26weMS1H0JKIWjD8p2WN
+         RP7PiwzZSPZQEKz3KUbY6BcOLccU3tXDXgSnl0Lmus6EQfMZrLLklW+dfSEQiuKGdCpV
+         jacg==
+X-Gm-Message-State: AOAM531xh8uljXxJdmxXbsPCrYFn0M/8nq3P1anXPNgvaRoOi5ua617z
+        dPOlnNxDrAwd0HxNQY2MGoI=
+X-Google-Smtp-Source: ABdhPJytt4H9PGzg2ntcpGdqYseJUZTiSJiP3ITiJ9lfclGIF9hzX1UAiNy7r8mkzTctoX04E9T9CQ==
+X-Received: by 2002:a7b:c208:: with SMTP id x8mr47340897wmi.49.1594001914526;
+        Sun, 05 Jul 2020 19:18:34 -0700 (PDT)
+Received: from bobo.ibm.com (61-68-186-125.tpgi.com.au. [61.68.186.125])
+        by smtp.gmail.com with ESMTPSA id g14sm19096722wrw.83.2020.07.05.19.18.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2020 18:15:27 -0700 (PDT)
-Date:   Mon, 06 Jul 2020 11:15:22 +1000
+        Sun, 05 Jul 2020 19:18:33 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [RFC PATCH 4/5] powerpc/mm: Remove custom stack expansion
- checking
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@ozlabs.org, Michael Ellerman <mpe@ellerman.id.au>
-Cc:     hughd@google.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200703141327.1732550-1-mpe@ellerman.id.au>
-        <20200703141327.1732550-4-mpe@ellerman.id.au>
-        <fb3aad5f-17a1-93cc-1a3a-c50fe16ab711@csgroup.eu>
-In-Reply-To: <fb3aad5f-17a1-93cc-1a3a-c50fe16ab711@csgroup.eu>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] powerpc: select ARCH_HAS_MEMBARRIER_SYNC_CORE
+Date:   Mon,  6 Jul 2020 12:18:22 +1000
+Message-Id: <20200706021822.1515189-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Message-Id: <1593997323.8pwn48yz8u.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Christophe Leroy's message of July 6, 2020 3:49 am:
->=20
->=20
-> Le 03/07/2020 =C3=A0 16:13, Michael Ellerman a =C3=A9crit=C2=A0:
->> We have powerpc specific logic in our page fault handling to decide if
->> an access to an unmapped address below the stack pointer should expand
->> the stack VMA.
->>=20
->> The logic aims to prevent userspace from doing bad accesses below the
->> stack pointer. However as long as the stack is < 1MB in size, we allow
->> all accesses without further checks. Adding some debug I see that I
->> can do a full kernel build and LTP run, and not a single process has
->> used more than 1MB of stack. So for the majority of processes the
->> logic never even fires.
->>=20
->> We also recently found a nasty bug in this code which could cause
->> userspace programs to be killed during signal delivery. It went
->> unnoticed presumably because most processes use < 1MB of stack.
->>=20
->> The generic mm code has also grown support for stack guard pages since
->> this code was originally written, so the most heinous case of the
->> stack expanding into other mappings is now handled for us.
->>=20
->> Finally although some other arches have special logic in this path,
->> from what I can tell none of x86, arm64, arm and s390 impose any extra
->> checks other than those in expand_stack().
->>=20
->> So drop our complicated logic and like other architectures just let
->> the stack expand as long as its within the rlimit.
->=20
-> I agree that's probably not worth a so complicated logic that is nowhere=20
-> documented.
+powerpc return from interrupt and return from system call sequences are
+context synchronising.
 
-Agreed.
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ .../features/sched/membarrier-sync-core/arch-support.txt      | 4 ++--
+ arch/powerpc/Kconfig                                          | 1 +
+ arch/powerpc/include/asm/exception-64s.h                      | 4 ++++
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
->> @@ -569,30 +488,15 @@ static int __do_page_fault(struct pt_regs *regs, u=
-nsigned long address,
->>   	vma =3D find_vma(mm, address);
->>   	if (unlikely(!vma))
->>   		return bad_area(regs, address);
->> -	if (likely(vma->vm_start <=3D address))
->> -		goto good_area;
->> -	if (unlikely(!(vma->vm_flags & VM_GROWSDOWN)))
->> -		return bad_area(regs, address);
->>  =20
->> -	/* The stack is being expanded, check if it's valid */
->> -	if (unlikely(bad_stack_expansion(regs, address, vma, flags,
->> -					 &must_retry))) {
->> -		if (!must_retry)
->> +	if (unlikely(vma->vm_start > address)) {
->> +		if (unlikely(!(vma->vm_flags & VM_GROWSDOWN)))
->=20
-> We are already in an unlikely() branch, I don't think it is worth having=20
-> a second level of unlikely(), better let gcc decide what's most efficient=
-.
+diff --git a/Documentation/features/sched/membarrier-sync-core/arch-support.txt b/Documentation/features/sched/membarrier-sync-core/arch-support.txt
+index 8a521a622966..52ad74a25f54 100644
+--- a/Documentation/features/sched/membarrier-sync-core/arch-support.txt
++++ b/Documentation/features/sched/membarrier-sync-core/arch-support.txt
+@@ -5,7 +5,7 @@
+ #
+ # Architecture requirements
+ #
+-# * arm/arm64
++# * arm/arm64/powerpc
+ #
+ # Rely on implicit context synchronization as a result of exception return
+ # when returning from IPI handler, and when returning to user-space.
+@@ -45,7 +45,7 @@
+     |       nios2: | TODO |
+     |    openrisc: | TODO |
+     |      parisc: | TODO |
+-    |     powerpc: | TODO |
++    |     powerpc: |  ok  |
+     |       riscv: | TODO |
+     |        s390: | TODO |
+     |          sh: | TODO |
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 9fa23eb320ff..920c4e3ca4ef 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -131,6 +131,7 @@ config PPC
+ 	select ARCH_HAS_PTE_DEVMAP		if PPC_BOOK3S_64
+ 	select ARCH_HAS_PTE_SPECIAL
+ 	select ARCH_HAS_MEMBARRIER_CALLBACKS
++	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_SCALED_CPUTIME		if VIRT_CPU_ACCOUNTING_NATIVE && PPC_BOOK3S_64
+ 	select ARCH_HAS_STRICT_KERNEL_RWX	if (PPC32 && !HIBERNATION)
+ 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
+diff --git a/arch/powerpc/include/asm/exception-64s.h b/arch/powerpc/include/asm/exception-64s.h
+index 47bd4ea0837d..b88cb3a989b6 100644
+--- a/arch/powerpc/include/asm/exception-64s.h
++++ b/arch/powerpc/include/asm/exception-64s.h
+@@ -68,6 +68,10 @@
+  *
+  * The nop instructions allow us to insert one or more instructions to flush the
+  * L1-D cache when returning to userspace or a guest.
++ *
++ * powerpc relies on return from interrupt/syscall being context synchronising
++ * (which hrfid, rfid, and rfscv are) to support ARCH_HAS_MEMBARRIER_SYNC_CORE
++ * without additional additional synchronisation instructions.
+  */
+ #define RFI_FLUSH_SLOT							\
+ 	RFI_FLUSH_FIXUP_SECTION;					\
+-- 
+2.23.0
 
-I'm not sure being nested matters. It does in terms of how the code is=20
-generated and how much it might acutally matter, but if we say we=20
-optimise the expand stack case rather than the segfault case, then=20
-unlikely is fine here. I find it can be a readability aid as well.
-
-Thanks,
-Nick
