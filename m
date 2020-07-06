@@ -2,267 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA43215343
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 09:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDECE2153B5
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 10:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbgGFHXg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jul 2020 03:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728192AbgGFHXf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 03:23:35 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF5CC061794
-        for <linux-arch@vger.kernel.org>; Mon,  6 Jul 2020 00:23:35 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id j20so932673pfe.5
-        for <linux-arch@vger.kernel.org>; Mon, 06 Jul 2020 00:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:mime-version:message-id
-         :content-transfer-encoding;
-        bh=/n7qmna+81iqwNn7K7nxIBKAMee6aaPGWP4cNzBkYLk=;
-        b=hH90ovSYTNc2CcHvuW1P2E7SRzuhUGci7vhQD+L7r9PjTiFOMTmRFOtm+sfl6vOCEE
-         oyV/eY/hvGINE1SyqjY68tFRe2W4xPataCSesjUKHYNIuaIfwleuAaEU8/ISxxLo+QpI
-         1tf+aTe+REo2ejlC/YIEx05OMUzyRHkFYa2FHdKtPY0j1dHab/RzKmM5QELr6jaSAtL3
-         fuHs5h0YL1CXNUOoloL+RK7hVHZ/NfeBfzRFnXRq+/dVCpxty/jgCsEStKta6Nj8PbiE
-         qH202WWbgqdjRtQr8I+QfuDIhf1Pff2k944SNJUaHcWop3CIf750zLo/Ax4mfxi7Upv8
-         HQ6Q==
+        id S1726969AbgGFIIi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jul 2020 04:08:38 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:33944 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728299AbgGFIIh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 04:08:37 -0400
+Received: by mail-yb1-f195.google.com with SMTP id l19so5728144ybl.1
+        for <linux-arch@vger.kernel.org>; Mon, 06 Jul 2020 01:08:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:mime-version:message-id
-         :content-transfer-encoding;
-        bh=/n7qmna+81iqwNn7K7nxIBKAMee6aaPGWP4cNzBkYLk=;
-        b=cqS47O4B4HSZnct73ty22l197EIG/aNsFwro/XZ7AX0P5KuJdp0gJ/Doa1ZaKNAQrs
-         jRHfHlTae+cua5rp2WBdf+Bwb6RBaE6hcNHvqIDyIBSWsz82KH1rPpf9sELQIBItJewB
-         /rDbV052RmCbbr3seIve846Q8u7uoymQYUg1iu88shrifLJWqN+2WxILyBiqThDUvQQ7
-         1Xa3j776f1oXv5P6fRdo35KB6Y4TeSPtuwiWAKGmQu853omf85hFgkMY/cXRuSYvDI3V
-         GRFYZBAF/Zr3FTAje68rMmbnJXxmbw7N5+naWH2kj1UJkaSKGvw6o2+LgkK5u6oGJRrJ
-         d2Jw==
-X-Gm-Message-State: AOAM531jVBVRjkVMFqRQxtgCyxNmBz5I0/GPPgxT3t5I5p3+OLZC0CLk
-        I+dZi1IdUE15wC2jl8vD0ZwDRVVW
-X-Google-Smtp-Source: ABdhPJwl+PnyQNGtGUDDASWiyBV3TkmhGfL/yWOjH9QczG29EW+OMQfWP33zlFtb3PwPLEvJLpk2Nw==
-X-Received: by 2002:a65:5c88:: with SMTP id a8mr4464661pgt.215.1594020215189;
-        Mon, 06 Jul 2020 00:23:35 -0700 (PDT)
-Received: from localhost (61-68-186-125.tpgi.com.au. [61.68.186.125])
-        by smtp.gmail.com with ESMTPSA id e128sm18527158pfe.196.2020.07.06.00.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 00:23:34 -0700 (PDT)
-Date:   Mon, 06 Jul 2020 17:23:29 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: [RFC][PATCH] avoid refcounting the lazy tlb mm struct
-To:     linux-mm@kvack.org
-Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Anton Blanchard <anton@ozlabs.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5UNBk5tcjVMBwezwEiHbyroDsV8fbNZ3BsirJGPr1T0=;
+        b=hQ1gOo9iEjUgkpWq6WAWCSatcUQT0dEcvqlrLLW7HndLAdBau77O1vljCNivJcfMpa
+         A2EFboWVgtH8pIGfPSLa6DOxAP7XSLxRFG3OJlLsDQg5U6z9mnvS1f5MFuwWZYjYOYlt
+         0HNSVXK4gVx0aZ0AhKuZ90OnWn8pKL7phGtQJXCpE/ffz933+mQKlgJFnHPluwdPY0xD
+         DJFmxSaZmVV/tZ+MjVvTrxdwgLBSACZ9SKHfkCMIwbRw+TcuUotIHdkaakTm5hWGZcx3
+         +IGYJE4lm544X9guFZb1d5Q+9ZIw1GknatBUX4I5ybHuAJowM0PSRHMEmimnz/ufTyJP
+         e9aw==
+X-Gm-Message-State: AOAM533eQm91TpVSnMKwVYFuxcvH5PKeD7nbqekmBnHH0ExvlxlEr/e3
+        glxDramXkpBYes9ea6MZtrdtrXg4QsolvWc93tCgzXpGWW8=
+X-Google-Smtp-Source: ABdhPJyKZ7ZF0PkHKp0oFpwtztiNMOlmSnu1q0cWzFQimsC3Kugo2V1CBo+2oGwPRbj0ID/+cYAmyOylqjG58+RPzHI=
+X-Received: by 2002:a5b:347:: with SMTP id q7mr73259110ybp.509.1594022916018;
+ Mon, 06 Jul 2020 01:08:36 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <1594019787.286knc5cet.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20200705142640.279439-1-kernel@esmil.dk> <CAJF2gTSi+2qxfzWxa5xvZnyJBFi5WcdSc-LDrqavB-hZ9-e9-Q@mail.gmail.com>
+ <CANBLGcxWuO=xGfwwKPp7Faw1ZU=Z3p37KbopgQnB5HLg=CXTdg@mail.gmail.com>
+ <CAJF2gTQhax2ZR8fvfm-HwK2wZinXoVRS8Var5y1AkrinDFHzUQ@mail.gmail.com>
+ <CANBLGcx1BeMTMBTS4YQUN=qrQqg9g3A_tw_F7xRngY0Lh9VGrQ@mail.gmail.com> <CAJF2gTTa+rDb2OX0evh30v3oCH=Oih3OGdvQK8CyqnrGBf=J=w@mail.gmail.com>
+In-Reply-To: <CAJF2gTTa+rDb2OX0evh30v3oCH=Oih3OGdvQK8CyqnrGBf=J=w@mail.gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Mon, 6 Jul 2020 10:08:24 +0200
+Message-ID: <CANBLGcw8nVvshaOxiBO3zSpjE2oEmWE7C4vuvDXYheRdFVLK0A@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic/mmiowb: Get cpu in mmiowb_set_pending
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On big systems, the mm refcount can become highly contented when doing
-a lot of context switching with threaded applications (particularly
-switching between the idle thread and an application thread).
+On Mon, 6 Jul 2020 at 02:48, Guo Ren <guoren@kernel.org> wrote:
+> On Mon, Jul 6, 2020 at 1:09 AM Emil Renner Berthing <kernel@esmil.dk> wrote:
+> >
+> > On Sun, 5 Jul 2020 at 17:52, Guo Ren <guoren@kernel.org> wrote:
+> > > On Sun, Jul 5, 2020 at 11:03 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
+> > > > On Sun, 5 Jul 2020 at 16:44, Guo Ren <guoren@kernel.org> wrote:
+> > > > >
+> > > > > Hi Emil,
+> > > > >
+> > > > > On Sun, Jul 5, 2020 at 10:27 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
+> > > > > >
+> > > > > > Without this enabling CONFIG_PREEMPT and CONFIG_DEBUG_PREEMPT
+> > > > > > results in many errors like this on the HiFive Unleashed
+> > > > > > RISC-V board:
+> > > > > >
+> > > > > > BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
+> > > > > > caller is regmap_mmio_write32le+0x1c/0x46
+> > > > > > CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-hfu+ #1
+> > > > > > Call Trace:
+> > > > > > [<ffffffe000201f6e>] walk_stackframe+0x0/0x7a
+> > > > > > [<ffffffe0005b290e>] dump_stack+0x6e/0x88
+> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
+> > > > > > [<ffffffe0005c4c26>] check_preemption_disabled+0xa4/0xaa
+> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
+> > > > > > [<ffffffe0004737c8>] regmap_mmio_write+0x26/0x44
+> > > > > > [<ffffffe0004715c4>] regmap_write+0x28/0x48
+> > > > > > [<ffffffe00043dccc>] sifive_gpio_probe+0xc0/0x1da
+> > > > > > [<ffffffe00000113e>] rdinit_setup+0x22/0x26
+> > > > > > [<ffffffe000469054>] platform_drv_probe+0x24/0x52
+> > > > > > [<ffffffe000467e16>] really_probe+0x92/0x21a
+> > > > > > [<ffffffe0004683a8>] device_driver_attach+0x42/0x4a
+> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
+> > > > > > [<ffffffe0004683f0>] __driver_attach+0x40/0xac
+> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
+> > > > > > [<ffffffe000466a3e>] bus_for_each_dev+0x3c/0x64
+> > > > > > [<ffffffe000467118>] bus_add_driver+0x11e/0x184
+> > > > > > [<ffffffe00046889a>] driver_register+0x32/0xc6
+> > > > > > [<ffffffe00000e5ac>] gpiolib_sysfs_init+0xaa/0xae
+> > > > > > [<ffffffe0000019ec>] do_one_initcall+0x50/0xfc
+> > > > > > [<ffffffe00000113e>] rdinit_setup+0x22/0x26
+> > > > > > [<ffffffe000001bea>] kernel_init_freeable+0x152/0x1da
+> > > > > > [<ffffffe0005c4d28>] rest_init+0xde/0xe2
+> > > > > > [<ffffffe0005c4d36>] kernel_init+0xa/0x11a
+> > > > > > [<ffffffe0005c4d28>] rest_init+0xde/0xe2
+> > > > > > [<ffffffe000200ff6>] ret_from_syscall_rejected+0x8/0xc
+> > > > > >
+> > > > > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > > > > > ---
+> > > > > > This patch fixes it, but my guess is that it's not the right
+> > > > > > fix. Do anyone have a better idea?
+> > > > > >
+> > > > > >  include/asm-generic/mmiowb.h | 6 +++++-
+> > > > > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
+> > > > > > index 9439ff037b2d..31a21cdfbbcf 100644
+> > > > > > --- a/include/asm-generic/mmiowb.h
+> > > > > > +++ b/include/asm-generic/mmiowb.h
+> > > > > > @@ -34,8 +34,12 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+> > > > > >
+> > > > > >  static inline void mmiowb_set_pending(void)
+> > > > > >  {
+> > > > > > -       struct mmiowb_state *ms = __mmiowb_state();
+> > > > > > +       struct mmiowb_state *ms;
+> > > > > > +
+> > > > > > +       get_cpu();
+> > > > > > +       ms = __mmiowb_state();
+> > > > > >         ms->mmiowb_pending = ms->nesting_count;
+> > > > > > +       put_cpu();
+> > > > > >  }
+> > > > >
+> > > > > #define __mmiowb_state()        this_cpu_ptr(&__mmiowb_state)
+> > > > >
+> > > > > The ptr is a fixed address, so don't worry about the change, and just
+> > > > > use an atomic_read is enough.
+> > > > > static inline void mmiowb_set_pending(void)
+> > > > > {
+> > > > >         struct mmiowb_state *ms = __mmiowb_state();
+> > > > > -       ms->mmiowb_pending = ms->nesting_count;
+> > > > > +      ms->mmiowb_pending = atomic_read(ms->nesting_count);
+> > > > > }
+> > > >
+> > > > You may be right, but it doesn't fix the BUG. As far as I can tell it
+> > > > happens in __mmiowb_state() which expands through this_cpu_ptr and
+> > > > arch_raw_cpu_ptr to SHIFT_PERCPU_PTR(ptr, __my_cpu_offset), where
+> > > > __my_cpu_offset is per_cpu_offset(smp_processor_id()) and with
+> > > > CONFIG_DEBUG_PREEMPT smp_processor_id is actually
+> > > > debug_smp_processor_id, which eventually checks that preemption is
+> > > > disabled in check_preemption_disabled.
+> > > Thx for explaining.
+> > >
+> > > Seems we need to find who disable preemption during:
+> > > > > > [<ffffffe000201f6e>] walk_stackframe+0x0/0x7a
+> > > > > > [<ffffffe0005b290e>] dump_stack+0x6e/0x88
+> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
+> > > > > > [<ffffffe0005c4c26>] check_preemption_disabled+0xa4/0xaa
+> > > > > > [<ffffffe00047365e>] regmap_mmio_write32le+0x18/0x46
+> > > > > > [<ffffffe0004737c8>] regmap_mmio_write+0x26/0x44
+> > > > > > [<ffffffe0004715c4>] regmap_write+0x28/0x48
+> > > > > > [<ffffffe00043dccc>] sifive_gpio_probe+0xc0/0x1da
+> > > > > > [<ffffffe00000113e>] rdinit_setup+0x22/0x26
+> > > > > > [<ffffffe000469054>] platform_drv_probe+0x24/0x52
+> > > > > > [<ffffffe000467e16>] really_probe+0x92/0x21a
+> > > > > > [<ffffffe0004683a8>] device_driver_attach+0x42/0x4a
+> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
+> > > > > > [<ffffffe0004683f0>] __driver_attach+0x40/0xac
+> > > > > > [<ffffffe0004683ac>] device_driver_attach+0x46/0x4a
+> > > > > > [<ffffffe000466a3e>] bus_for_each_dev+0x3c/0x64
+> > > > > > [<ffffffe000467118>] bus_add_driver+0x11e/0x184
+> > > > > > [<ffffffe00046889a>] driver_register+0x32/0xc6
+> > > > > > [<ffffffe00000e5ac>] gpiolib_sysfs_init+0xaa/0xae
+> > > > > > [<ffffffe0000019ec>] do_one_initcall+0x50/0xfc
+> >
+> > Hmm.. the problem is that preemption is *not* disabled when
+> > smp_processor_id is called, right?
+>
+> Yes!
+>
+> smp_processor_id is defined as:
+>
+>  * This is the normal accessor to the CPU id and should be used
+>  * whenever possible.
+>  *
+>  * The CPU id is stable when:
+>  *
+>  *  - IRQs are disabled;
+>  *  - preemption is disabled;
+>  *  - the task is CPU affine.
+>  *
+>  * When CONFIG_DEBUG_PREEMPT; we verify these assumption and WARN
+>  * when smp_processor_id() is used when the CPU id is not stable.
+>
+> So regmap_write->regmap_mmio_write should be PREEMPT disabled in
+> sifive_gpio_probe().
 
-Not doing lazy tlb at all slows switching down quite a bit, so I wonder
-if we can avoid the refcount for the lazy tlb, but have __mmdrop() IPI
-all CPUs that might be using this mm lazily.
+Ah! Sorry, now I think I understand. So you're saying that the real
+problem is that the driver framework should have disabled preemption
+before calling any .probe functions, but for some reason that doesn't
+happen on RISC-V?
 
-This patch has only had light testing so far, but seems to work okay.
+> >
+> > > do_one_initcall's preempt_count = 0
+> > > (gdb) bt
+> > > #0  do_one_initcall (fn=0xffffffe000003b0e
+> > > <trace_init_flags_sys_exit>) at init/main.c:1190
+> > > #1  0xffffffe000001f20 in do_pre_smp_initcalls () at ./include/linux/init.h:131
+> > >
+> > > #2  kernel_init_freeable () at init/main.c:1494
+> > > #3  0xffffffe0009d6ea6 in kernel_init (unused=<optimized out>) a
+> > >    t init/main.c:1399
+> > > #4  0xffffffe000201c2a in handle_exception () at arch/riscv/kernel/entry.S:188
+> > > Backtrace stopped: frame did not save the PC
+> > > (gdb) p *(struct task_struct*)$tp
+> > > $2 = {thread_info = {flags = 0, preempt_count = 0,
+> > >
+> > > Can you debug like this ? to see which function's preempt_count = 0 in
+> > > your backtrace.
+> >
+> > I'm sorry, I'm not exactly sure what you mean by this, but it seems to
+> > happen multiple places in writel-like functions. Both at probe time in
+> > sifive_gpio_probe and sifive_spi_probe and when the spi driver is
+> > running. Here is the full log:
+> >
+> I mean Use jtag + gdb to detect  preempt_count = 0 in parent function.
+> I do this in qemu :)
+>
+> If couldn't use jtag, then just add printk preempt_count trace, or kgdb.
 
-Thanks,
-Nick
+Right, thanks. I'll look into it.
 
---
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 8cc35dc556c7..69ea7172db3d 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -411,6 +411,16 @@ config MMU_GATHER_NO_GATHER
- 	bool
- 	depends on MMU_GATHER_TABLE_FREE
-=20
-+config MMU_LAZY_TLB_SHOOTDOWN
-+	bool
-+	help
-+	  Instead of refcounting the "lazy tlb" mm struct, which can cause
-+	  contention with multi-threaded apps on large multiprocessor systems,
-+	  this option causes __mmdrop to IPI all CPUs in the mm_cpumask and
-+	  switch to init_mm if they were using the to-be-freed mm as the lazy
-+	  tlb. Architectures which do not track all possible lazy tlb CPUs in
-+	  mm_cpumask can not use this (without modification).
-+
- config ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	bool
-=20
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 920c4e3ca4ef..24ac85c868db 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -225,6 +225,7 @@ config PPC
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select MMU_GATHER_RCU_TABLE_FREE
- 	select MMU_GATHER_PAGE_SIZE
-+	select MMU_LAZY_TLB_SHOOTDOWN
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RELIABLE_STACKTRACE		if PPC_BOOK3S_64 && CPU_LITTLE_ENDIAN
- 	select HAVE_SYSCALL_TRACEPOINTS
-diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s6=
-4/radix_tlb.c
-index b5cc9b23cf02..52730629b3eb 100644
---- a/arch/powerpc/mm/book3s64/radix_tlb.c
-+++ b/arch/powerpc/mm/book3s64/radix_tlb.c
-@@ -652,10 +652,10 @@ static void do_exit_flush_lazy_tlb(void *arg)
- 		 * Must be a kernel thread because sender is single-threaded.
- 		 */
- 		BUG_ON(current->mm);
--		mmgrab(&init_mm);
-+		mmgrab_lazy_tlb(&init_mm);
- 		switch_mm(mm, &init_mm, current);
- 		current->active_mm =3D &init_mm;
--		mmdrop(mm);
-+		mmdrop_lazy_tlb(mm);
- 	}
- 	_tlbiel_pid(pid, RIC_FLUSH_ALL);
- }
-diff --git a/fs/exec.c b/fs/exec.c
-index e6e8a9a70327..6c96c8feba1f 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1119,7 +1119,7 @@ static int exec_mmap(struct mm_struct *mm)
- 		mmput(old_mm);
- 		return 0;
- 	}
--	mmdrop(active_mm);
-+	mmdrop_lazy_tlb(active_mm);
- 	return 0;
- }
-=20
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index 480a4d1b7dd8..ef28059086a1 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -51,6 +51,25 @@ static inline void mmdrop(struct mm_struct *mm)
-=20
- void mmdrop(struct mm_struct *mm);
-=20
-+static inline void mmgrab_lazy_tlb(struct mm_struct *mm)
-+{
-+	if (!IS_ENABLED(CONFIG_MMU_LAZY_TLB_SHOOTDOWN))
-+		mmgrab(mm);
-+}
-+
-+static inline void mmdrop_lazy_tlb(struct mm_struct *mm)
-+{
-+	if (!IS_ENABLED(CONFIG_MMU_LAZY_TLB_SHOOTDOWN))
-+		mmdrop(mm);
-+}
-+
-+static inline void mmdrop_lazy_tlb_smp_mb(struct mm_struct *mm)
-+{
-+	mmdrop_lazy_tlb(mm);
-+	if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_SHOOTDOWN))
-+		smp_mb();
-+}
-+
- /*
-  * This has to be called after a get_task_mm()/mmget_not_zero()
-  * followed by taking the mmap_lock for writing before modifying the
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 142b23645d82..e3f1039cee9f 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -685,6 +685,34 @@ static void check_mm(struct mm_struct *mm)
- #define allocate_mm()	(kmem_cache_alloc(mm_cachep, GFP_KERNEL))
- #define free_mm(mm)	(kmem_cache_free(mm_cachep, (mm)))
-=20
-+static void do_shoot_lazy_tlb(void *arg)
-+{
-+	struct mm_struct *mm =3D arg;
-+
-+	if (current->active_mm =3D=3D mm) {
-+		BUG_ON(current->mm);
-+		switch_mm(mm, &init_mm, current);
-+		current->active_mm =3D &init_mm;
-+	}
-+}
-+
-+static void do_check_lazy_tlb(void *arg)
-+{
-+	struct mm_struct *mm =3D arg;
-+
-+	BUG_ON(current->active_mm =3D=3D mm);
-+}
-+
-+void shoot_lazy_tlbs(struct mm_struct *mm)
-+{
-+	if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_SHOOTDOWN)) {
-+		smp_call_function_many(mm_cpumask(mm), do_shoot_lazy_tlb, (void *)mm, 1)=
-;
-+		do_shoot_lazy_tlb(mm);
-+	}
-+	smp_call_function(do_check_lazy_tlb, (void *)mm, 1);
-+	do_check_lazy_tlb(mm);
-+}
-+
- /*
-  * Called when the last reference to the mm
-  * is dropped: either by a lazy thread or by
-@@ -692,6 +720,7 @@ static void check_mm(struct mm_struct *mm)
-  */
- void __mmdrop(struct mm_struct *mm)
- {
-+	shoot_lazy_tlbs(mm);
- 	BUG_ON(mm =3D=3D &init_mm);
- 	WARN_ON_ONCE(mm =3D=3D current->mm);
- 	WARN_ON_ONCE(mm =3D=3D current->active_mm);
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ca5db40392d4..4d615e0be9e0 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3308,7 +3308,7 @@ static struct rq *finish_task_switch(struct task_stru=
-ct *prev)
- 	 */
- 	if (mm) {
- 		membarrier_mm_sync_core_before_usermode(mm);
--		mmdrop(mm);
-+		mmdrop_lazy_tlb_smp_mb(mm);
- 	}
- 	if (unlikely(prev_state =3D=3D TASK_DEAD)) {
- 		if (prev->sched_class->task_dead)
-@@ -3413,9 +3413,9 @@ context_switch(struct rq *rq, struct task_struct *pre=
-v,
-=20
- 	/*
- 	 * kernel -> kernel   lazy + transfer active
--	 *   user -> kernel   lazy + mmgrab() active
-+	 *   user -> kernel   lazy + mmgrab_lazy_tlb() active
- 	 *
--	 * kernel ->   user   switch + mmdrop() active
-+	 * kernel ->   user   switch + mmdrop_lazy_tlb() active
- 	 *   user ->   user   switch
- 	 */
- 	if (!next->mm) {                                // to kernel
-@@ -3423,7 +3423,7 @@ context_switch(struct rq *rq, struct task_struct *pre=
-v,
-=20
- 		next->active_mm =3D prev->active_mm;
- 		if (prev->mm)                           // from user
--			mmgrab(prev->active_mm);
-+			mmgrab_lazy_tlb(prev->active_mm);
- 		else
- 			prev->active_mm =3D NULL;
- 	} else {                                        // to user
-@@ -3439,7 +3439,7 @@ context_switch(struct rq *rq, struct task_struct *pre=
-v,
- 		switch_mm_irqs_off(prev->active_mm, next->mm, next);
-=20
- 		if (!prev->mm) {                        // from kernel
--			/* will mmdrop() in finish_task_switch(). */
-+			/* will mmdrop_lazy_tlb() in finish_task_switch(). */
- 			rq->prev_mm =3D prev->active_mm;
- 			prev->active_mm =3D NULL;
- 		}
+/Emil
