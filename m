@@ -2,53 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D4C21577A
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 14:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2EC21593C
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jul 2020 16:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729236AbgGFMnb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jul 2020 08:43:31 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:60600 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729186AbgGFMnM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 08:43:12 -0400
+        id S1729217AbgGFOQ2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jul 2020 10:16:28 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:23958 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729214AbgGFOQ2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jul 2020 10:16:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594039390;
+        s=mimecast20190719; t=1594044986;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=cg64mZpsZmqfkf6QdZ6P1kp+wAyzlXTnNNbKuGsyi4Y=;
-        b=XekEGTW6I0pXODk0MIlSP7pLk6eVqv8L6pNJ8oqKEYhcklstvPppeAD44xYvWiurE10IhT
-        DTKYSciX0ZbkrftMsnTIn1oq8AuKbfpnI6S4SEWZAeMf4xJyFgIdwD8VFkWBsA9FpufSyJ
-        6INTzM6bRNx2a9e2WPpvfNh1oX797k0=
+        bh=CKO/YHoOO9zNXffM+ppN9rmKneTA5mdTtAyR+rjcBnw=;
+        b=b4uP7/J9OgU62JcCzHi8qGrWZIDtgIhF7DSfwAUT3E1RaDSyXMGLiofNpnIGvk3b3zQRnl
+        GUwCqm4gc6NUy4m+s1kEsvpdcW9QgDYlyB4IYvpleDIqj1z9aCY8EVYFhhHOoeNj4ROqyP
+        0t1iR1umLSNquzHmNFqSipK9yj7r+Uc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-361-fn8NoYCjP-uivGlvhP44dQ-1; Mon, 06 Jul 2020 08:43:08 -0400
-X-MC-Unique: fn8NoYCjP-uivGlvhP44dQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-120-GphKuLDBMQKC0sbfnkyXBw-1; Mon, 06 Jul 2020 10:16:21 -0400
+X-MC-Unique: GphKuLDBMQKC0sbfnkyXBw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C843010059AF;
-        Mon,  6 Jul 2020 12:43:05 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6944100A8E8;
+        Mon,  6 Jul 2020 14:16:19 +0000 (UTC)
 Received: from [10.36.114.3] (ovpn-114-3.ams2.redhat.com [10.36.114.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28D7FCF939;
-        Mon,  6 Jul 2020 12:43:01 +0000 (UTC)
-Subject: Re: [PATCH v6 06/26] mm: Add PG_arch_2 page flag
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B8C9C10013D9;
+        Mon,  6 Jul 2020 14:16:14 +0000 (UTC)
+Subject: Re: [PATCH v6 07/26] mm: Preserve the PG_arch_* flags in
+ __split_huge_page_tail()
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
         Dave P Martin <Dave.Martin@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Price <steven.price@arm.com>
+        Andrew Morton <akpm@linux-foundation.org>
 References: <20200703153718.16973-1-catalin.marinas@arm.com>
- <20200703153718.16973-7-catalin.marinas@arm.com>
- <27fe044a-8315-5394-575e-8f763696b0cd@redhat.com>
- <20200706112057.GA6432@gaia>
+ <20200703153718.16973-8-catalin.marinas@arm.com>
 From:   David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
  mQINBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -94,57 +93,80 @@ Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
  njnuI31KBiLUks+paRkHQlFcgS2N3gkRBzH7xSZ+t7Re3jvXdXEzKBbQ+dC3lpJB0wPnyMcX
  FOTT3aZT7IgePkt5iC/BKBk3hqKteTnJFeVIT7EC+a6YUFg=
 Organization: Red Hat GmbH
-Message-ID: <2f77487a-e92e-1a38-ffd9-e5506441d25d@redhat.com>
-Date:   Mon, 6 Jul 2020 14:42:59 +0200
+Message-ID: <16aeea8c-b5c4-0d19-2fde-f95ef8dfddc6@redhat.com>
+Date:   Mon, 6 Jul 2020 16:16:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200706112057.GA6432@gaia>
+In-Reply-To: <20200703153718.16973-8-catalin.marinas@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06.07.20 13:21, Catalin Marinas wrote:
-> On Mon, Jul 06, 2020 at 10:24:04AM +0200, David Hildenbrand wrote:
->> On 03.07.20 17:36, Catalin Marinas wrote:
->>> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
->>> index 6be1aa559b1e..276140c94f4a 100644
->>> --- a/include/linux/page-flags.h
->>> +++ b/include/linux/page-flags.h
->>> @@ -135,6 +135,9 @@ enum pageflags {
->>>  #if defined(CONFIG_IDLE_PAGE_TRACKING) && defined(CONFIG_64BIT)
->>>  	PG_young,
->>>  	PG_idle,
->>> +#endif
->>> +#ifdef CONFIG_64BIT
->>> +	PG_arch_2,
->>>  #endif
->>>  	__NR_PAGEFLAGS,
->>
->> People are usually *very* picky when it comes to new page flags. It
->> somewhat concerns me that we bump up __NR_PAGEFLAGS for any 64bit arch.
->> That feels wrong.
+On 03.07.20 17:36, Catalin Marinas wrote:
+> When a huge page is split into normal pages, part of the head page flags
+> are transferred to the tail pages. However, the PG_arch_* flags are not
+> part of the preserved set.
 > 
-> It was guarded by a specific config option initially but the comments
-> suggested that it could be dropped for 64-bit architectures:
-> 
-> https://lore.kernel.org/linux-arm-kernel/20200624113307.6165b3db2404c9d37b870a90@linux-foundation.org/
-> 
-> The page flags is indeed a pretty limited resource as it also includes
-> the sparsemem section, node and zone fields. However, on 64-bit this
-> should be fine (the sparsemem section is gone with vmemmap support).
+> PG_arch_1 is currently used by the arch code to handle cache maintenance
+> for user space (either for I-D cache coherency or for D-cache aliases
+> consistent with the kernel mapping). Since splitting a huge page does
+> not change the physical or virtual address of a mapping, additional
+> cache maintenance for the tail pages is unnecessary. Preserving the
+> PG_arch_1 flag from the head page in the tail pages would not break the
+> current use-cases.
 
-Right, so 64bit architectures/configs with SPARSEMEM &&
-!SPARSEMEM_VMEMMAP could be affected only. I think mips would be one
-example where we don't have VMEMMAP support. For most other 64bit
-architectures (x86_64, s390x, powerpc, ...) SPARSEMEM_VMEMMAP should be
-the default (although I've seen bug reports/configs where VMEMMAP was
-disabled).
+^ is fairly arm64 specific, no? (I remember that the semantics are
+different e.g., on s390x).
+
+Did you check if this is actually safe to do on other architectures?
+Maybe rephrase the description to make this clearer.
+
+> 
+> PG_arch_2 is currently used for arm64 MTE support to mark pages that
+> have valid tags. The absence of such flag causes the arm64 set_pte_at()
+> to clear the tags in order to avoid stale tags exposed to user or the
+> swapping out hooks to ignore the tags. Not preserving PG_arch_2 on huge
+> page splitting leads to tag corruption in the tail pages.
+
+"currently"? I don't think so - isn't it follow-up patches in this series?
+
+> 
+> To avoid the above and for consistency between the two PG_arch_* flags,
+> preserve both PG_arch_1 and PG_arch_2 in __split_huge_page_tail().
+> 
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+> 
+> Notes:
+>     New in v6.
+> 
+>  mm/huge_memory.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 78c84bee7e29..22b3236a6dd8 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2364,6 +2364,10 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>  			 (1L << PG_workingset) |
+>  			 (1L << PG_locked) |
+>  			 (1L << PG_unevictable) |
+> +			 (1L << PG_arch_1) |
+> +#ifdef CONFIG_64BIT
+> +			 (1L << PG_arch_2) |
+> +#endif
+>  			 (1L << PG_dirty)));
+>  
+>  	/* ->mapping in first tail page is compound_mapcount */
+> 
+
 
 -- 
 Thanks,
