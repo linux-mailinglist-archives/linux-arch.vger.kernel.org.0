@@ -2,98 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD50F2188DC
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 15:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6CC218980
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729248AbgGHNVP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jul 2020 09:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729147AbgGHNVO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jul 2020 09:21:14 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2C4C061A0B;
-        Wed,  8 Jul 2020 06:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=+RqR1kYT0E+mIwb2z3JHix29G2Tjj0bnkWavGGFqh3k=; b=kwOuGr/+r/Cs6PkNR64wAQevbo
-        9QK6VPYIdyKLt3Fus84356sLfucme8iCE/fu6eVrl2bWzIUyfVI5tfYwV1UanXw8PHSxl47KyGZ78
-        QpCwAKRR7gOwGjBHe77cRWfATtKBJ28l+xfNCKRzObd3Qomw0Ci9EdDMFiBbBZw+UrjH8Vs2KBw7I
-        vPXygGRTkKQ1D+Xrnm9m4d04i0Y70SVVH3dF+QQQc0l/E/Vucg+psM6bF5gK+r3Ypl61zVFFV5tKU
-        QmsLrPVsWRdYqHk2Axf1T2M/+5W68WLrHxsZzi3jZ4XNc2PEzoxH7Y05w1amXllv3xfVNj4sApJnc
-        nGPBPHEQ==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jtA0b-0006b0-EQ; Wed, 08 Jul 2020 13:21:09 +0000
-Subject: Re: [PATCH -next] Documentation/vm: fix tables in
- arch_pgtable_helpers
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux MM <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <02ee60d0-e836-2237-4881-5c57ccac5551@infradead.org>
- <20200708064332.GD128651@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <7d43f116-51f0-8cab-f8ee-ea9387039d1d@infradead.org>
-Date:   Wed, 8 Jul 2020 06:21:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1729540AbgGHNuS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 8 Jul 2020 09:50:18 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:46273 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729392AbgGHNuR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jul 2020 09:50:17 -0400
+Received: from mail-qt1-f181.google.com ([209.85.160.181]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MJm8H-1kCc5m2mEr-00K5vV; Wed, 08 Jul 2020 15:50:15 +0200
+Received: by mail-qt1-f181.google.com with SMTP id g13so34469581qtv.8;
+        Wed, 08 Jul 2020 06:50:14 -0700 (PDT)
+X-Gm-Message-State: AOAM532DtPDX0V0xlxgv5JdhWqePX0BHlyAKzf1pBVKlqTk15Xe/UREa
+        MWN2w1eQs9BJ7mLGKm77odAN5QFSEddKqu5Bm9k=
+X-Google-Smtp-Source: ABdhPJzGbqSLDVa+22V+OxqUS2NDeQMLg4lKFCfmasSmlQFshduHvuFJ4EYxw9p5RNP/z2hlcFkstPMlyhdckAfJkBA=
+X-Received: by 2002:ac8:7587:: with SMTP id s7mr60215048qtq.304.1594216213827;
+ Wed, 08 Jul 2020 06:50:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200708064332.GD128651@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200707180955.53024-1-mic@digikod.net> <20200707180955.53024-9-mic@digikod.net>
+ <CAK8P3a0FkoxFtcQJ2jSqyLbDCOp3R8-1JoY8CWAgbSZ9hH9wdQ@mail.gmail.com> <7f407b67-d470-25fd-1287-f4f55f18e74a@digikod.net>
+In-Reply-To: <7f407b67-d470-25fd-1287-f4f55f18e74a@digikod.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 8 Jul 2020 15:49:57 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1ehWZErD2a0iBqn37s-LTAtW0AbV_gt32iX3cQkXbpOQ@mail.gmail.com>
+Message-ID: <CAK8P3a1ehWZErD2a0iBqn37s-LTAtW0AbV_gt32iX3cQkXbpOQ@mail.gmail.com>
+Subject: Re: [PATCH v19 08/12] landlock: Add syscall implementation
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:1EbzIoFyJM0srBmwqFU/S9OU4GrMN1MwPgI0Rt8D93c7MKFw8Vh
+ XAL2Mqzq8tROm189yfmIAAkwGBnqfvIAFmIXjoKW2kH0dmD3+NzqCb/ckj+Eb8wYodD69GC
+ UX3OO53NSdcm3ZmOC3ng/iiAQ+yoZ/tyGlG+Z6/45CQLkPDw6XjkwbRG4riXwmEhLWXzbtt
+ 2tt6J/Rja18C7l932QkIQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:311prxkKa2c=:8xNBGuQmWDWcOOo2Np72ie
+ iYO+qSJE0vLVPmqxDNEMH9dFwohmv/IWW8w1MF/hFbXPm1ZTuuL29xTPOLVO6ST1lamB63dgq
+ /oyNrqfINWsYPsPTUGV/cvjcL12wbjSThqPq9j+6ybZ88xJ1hlCpG7zC70MMohYsMtvC0/SIT
+ oN/1H71C4qmAu+L/SPY0peHovz8LZW5l1kOqlj1pRiT3cfNsIJqq3BWkcO2QxdQ7OTH4Rh3Md
+ VYuOpujXqrqZROak/a+LvR6pfMrcfuLsChK42uYeO1GiIurqVJvwgub4REhXeM8VAXXlGriz2
+ /IKPoq0hCetvMBo9tfZhs1pPp8E8zeToSTprSeimjAIrwySD5w0IQV74rrNzUMjNwL8N0OLBB
+ pxTE7H0D6humbFN/t1om7dhvl54XNOdczbQ2OI7AV17J+xr73yD+VhIOrh46P86qN1V6LrR8b
+ cgHzkU34XHWBn4XR7rMsvVoMLms6zcwrBlotosrs96bDtXU5hlS9XAGa1MiCKRpcMYtiuj2Wh
+ z4IKSiXqa9dHsG4iQZ/Yhp5NyhKUJn5a87Bo3f3dYdbbe5/V5cYF1e3ARDNC0AiyIhLlGnhbE
+ yh1kwxRPO4yWgeUu521IES/q3W0ZpDZvKmN3UAh1oWRZ1pjFo70KH8D5eNZ/4VNKJgMwGp9ac
+ CintiunzKm45WMH+75nhq6ioxqoJXHnpppg4Y/eb0l9fpI0FfR+Z5Uy8MzM/cWttkZQysowIZ
+ cYc5NdXuFeYXIy0/WwdZUz9PnrwF7QKFju3jnwHtxIZgMxQVqJ4FofJWQL3xAeq+4mbVdWgkB
+ dYS6VeYAszYLC7uILbm9BGBMDWCvpBOEeN1WHWtUYBgKxmLQxeR5qze8YqtqKJ6L3gqefSQ0e
+ 4Wm4oU3nd4D4LBcrPOHL3KMefI1JkXMLK9viTZKq1DQ0HLRF3zW/Y9YfikYvC7A/ZxIQ7pgj3
+ dYx+DEA3oBMSb8iF+hUk1EDGJh/6S2o8/Wl+HRYz7j778DOnf9pqm
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/7/20 11:43 PM, Mike Rapoport wrote:
-> Hi Randy,
-> 
-> On Tue, Jul 07, 2020 at 06:07:40PM -0700, Randy Dunlap wrote:
->> From: Randy Dunlap <rdunlap@infradead.org>
->>
->> Make the tables be presented as tables in the generated output files
->> (the line drawing did not present well).
->>
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: linux-doc@vger.kernel.org
->> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->> Cc: Mike Rapoport <rppt@kernel.org>
->> Cc: linux-arch@vger.kernel.org
->> Cc: linux-mm@kvack.org
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> ---
->>  Documentation/vm/arch_pgtable_helpers.rst |  333 ++++++--------------
->>  1 file changed, 116 insertions(+), 217 deletions(-)
->>
->> --- linux-next-20200707.orig/Documentation/vm/arch_pgtable_helpers.rst
->> +++ linux-next-20200707/Documentation/vm/arch_pgtable_helpers.rst
->> @@ -17,242 +17,141 @@ test need to be in sync.
->>  PTE Page Table Helpers
->>  ======================
->>  
->> ---------------------------------------------------------------------------------
->> -| pte_same                  | Tests whether both PTE entries are the same      |
->> ---------------------------------------------------------------------------------
-> 
-> According to ReST docs [1] we can use +---+---+ as row delimiter and
-> than we can keep | as column delimiter.
-> 
-> @Andrew, can you please fold the below patch into Anshuman's original
-> patch?
-> 
-> [1] https://docutils.sourceforge.io/docs/user/rst/quickref.html#tables
+On Wed, Jul 8, 2020 at 3:04 PM Mickaël Salaün <mic@digikod.net> wrote:
+> On 08/07/2020 10:57, Arnd Bergmann wrote:
+> > On Tue, Jul 7, 2020 at 8:10 PM Mickaël Salaün <mic@digikod.net> wrote:
+> >
+> > It looks like all you need here today is a single argument bit, plus
+> > possibly some room for extensibility. I would suggest removing all
+> > the extra bits and using a syscall like
+> >
+> > SYSCALL_DEFINE1(landlock_create_ruleset, u32, flags);
+> >
+> > I don't really see how this needs any variable-length arguments,
+> > it really doesn't do much.
+>
+> We need the attr_ptr/attr_size pattern because the number of ruleset
+> properties will increase (e.g. network access mask).
 
-Works for me. Thanks.
+But how many bits do you think you will *actually* need in total that
+this needs to be a two-dimensional set of flags? At the moment you
+only have a single bit that you interpret.
 
--- 
-~Randy
+> > To be on the safe side, you might split up the flags into either the
+> > upper/lower 16 bits or two u32 arguments, to allow both compatible
+> > (ignored by older kernels if flag is set) and incompatible (return error
+> > when an unknown flag is set) bits.
+>
+> This may be a good idea in general, but in the case of Landlock, because
+> this kind of (discretionary) sandboxing should be a best-effort security
+> feature, we should avoid incompatible behavior. In practice, every
+> unknown bit returns an error because userland can probe for available
+> bits thanks to the get_features command. This kind of (in)compatibility
+> can then be handled by userland.
 
+If there are not going to be incompatible extensions, then just ignore
+all unknown bits and never return an error but get rid of the user
+space probing that just complicates the interface.
+
+In general, it's hard to rely on user space to first ask the kernel
+what it can do, the way this normally works is that user space
+asks the kernel for something and it either does it or not, but gives
+an indication of whether it worked.
+
+> I suggest this syscall signature:
+> SYSCALL_DEFINE3(landlock_create_ruleset, __u32, options, const struct
+> landlock_attr_ruleset __user *, ruleset_ptr, size_t, ruleset_size);
+
+The other problem here is that indirect variable-size structured arguments
+are a pain to instrument with things like strace or seccomp, so you
+should first try to use a fixed argument list, and fall back to a fixed
+structure if that fails.
+
+> >> +static int syscall_add_rule_path_beneath(const void __user *const attr_ptr,
+> >> +               const size_t attr_size)
+> >> +{
+> >> +       struct landlock_attr_path_beneath attr_path_beneath;
+> >> +       struct path path;
+> >> +       struct landlock_ruleset *ruleset;
+> >> +       int err;
+> >
+> > Similarly, it looks like this wants to be
+> >
+> > SYSCALL_DEFINE3(landlock_add_rule_path_beneath, int, ruleset, int,
+> > path, __u32, flags)
+> >
+> > I don't see any need to extend this in a way that wouldn't already
+> > be served better by adding another system call. You might argue
+> > that 'flags' and 'allowed_access' could be separate, with the latter
+> > being an indirect in/out argument here, like
+> >
+> > SYSCALL_DEFINE4(landlock_add_rule_path_beneath, int, ruleset, int, path,
+> >                            __u64 *, allowed_acces, __u32, flags)
+>
+> To avoid adding a new syscall for each new rule type (e.g. path_beneath,
+> path_range, net_ipv4_range, etc.), I think it would be better to keep
+> the attr_ptr/attr_size pattern and to explicitely set a dedicated option
+> flag to specify the attr type.
+>
+> This would look like this:
+> SYSCALL_DEFINE4(landlock_add_rule, __u32, options, int, ruleset, const
+> void __user *, rule_ptr, size_t, rule_size);
+>
+> The rule_ptr could then point to multiple types like struct
+> landlock_attr_path_beneath (without the current ruleset_fd field).
+
+This again introduces variable-sized structured data. How many different
+kinds of rule types do you think there will be (most likely, and maybe an
+upper bound)?
+
+Could (some of) these be generalized to use the same data structure?
+
+> >> +static int syscall_enforce_ruleset(const void __user *const attr_ptr,
+> >> +               const size_t attr_size)
+> >
+> > Here it seems like you just need to pass the file descriptor, or maybe
+> >
+> > SYSCALL_DEFINE2(landlock_enforce, int, ruleset, __u32 flags);
+> >
+> > if you need flags for extensibility.
+>
+> Right, but for consistency I prefer to change the arguments like this:
+> SYSCALL_DEFINE2(landlock_enforce, __u32 options, int, ruleset);
+
+Most system calls pass the object they work on as the first argument,
+in this case this would be the ruleset file descriptor.
+
+     Arnd
