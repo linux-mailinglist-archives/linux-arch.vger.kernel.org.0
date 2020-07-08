@@ -2,129 +2,215 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9833F2189DD
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 16:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CBB218F24
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 19:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbgGHOMd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jul 2020 10:12:33 -0400
-Received: from mail.efficios.com ([167.114.26.124]:43086 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728148AbgGHOMd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jul 2020 10:12:33 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 445831B5C91;
-        Wed,  8 Jul 2020 10:12:32 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dyUYSYYd0_cL; Wed,  8 Jul 2020 10:12:32 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id F14FB1B586C;
-        Wed,  8 Jul 2020 10:12:31 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com F14FB1B586C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1594217551;
-        bh=ZbJcrkbdvyTqPfeZb8iusPjkZ8XiMQXX6lZKgVlkHCU=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=Mst6b4tROqtQpP5xBYQmofE1rE3p92VcC8mPkJUZKe7jnB8LN2XSmerybm6N8CMXF
-         SEbDQBWzt/tZ0WiGrZ2DxHOg25c3lCHwFFgH8jPFQm2Af7kT1G2jQNeIrnOmEUGzO6
-         bku8/Eq0lF90V6Ieggqo+SWRFTvFHASV62+3N98R+U5ykDIoaN0qTLZ+a21TJpDdN/
-         GsvHJ3NWoqNeZs9HvGDS7Vf1hh6dzBo/hNWijeGIdXL8Fokk6HqjfNRfU1aOWqRdd0
-         VeCv8hhuqEckSxVhhpZK8NnqsRUycnDflR2ME+gYLONhUlAa5WVaJBJVozN+jXzZP9
-         hiYXlTnvr8cPQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xnJCUT8kTkcZ; Wed,  8 Jul 2020 10:12:31 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id E44AE1B5C8E;
-        Wed,  8 Jul 2020 10:12:31 -0400 (EDT)
-Date:   Wed, 8 Jul 2020 10:12:31 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        id S1726106AbgGHRuO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jul 2020 13:50:14 -0400
+Received: from smtp-42ad.mail.infomaniak.ch ([84.16.66.173]:57019 "EHLO
+        smtp-42ad.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725949AbgGHRuO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jul 2020 13:50:14 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B26Jy6zZ9zlhZKc;
+        Wed,  8 Jul 2020 19:50:10 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4B26Js1rjFzlh8TH;
+        Wed,  8 Jul 2020 19:50:05 +0200 (CEST)
+Subject: Re: [PATCH v19 08/12] landlock: Add syscall implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Message-ID: <407005394.1910.1594217551840.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1594185107.e130s0d92x.astroid@bobo.none>
-References: <20200706021822.1515189-1-npiggin@gmail.com> <cf10b0bc-de79-1b2b-8355-fc7bbeec47c3@csgroup.eu> <1594098302.nadnq2txti.astroid@bobo.none> <638683144.970.1594121101349.JavaMail.zimbra@efficios.com> <1594185107.e130s0d92x.astroid@bobo.none>
-Subject: Re: [PATCH] powerpc: select ARCH_HAS_MEMBARRIER_SYNC_CORE
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <20200707180955.53024-1-mic@digikod.net>
+ <20200707180955.53024-9-mic@digikod.net>
+ <CAK8P3a0FkoxFtcQJ2jSqyLbDCOp3R8-1JoY8CWAgbSZ9hH9wdQ@mail.gmail.com>
+ <7f407b67-d470-25fd-1287-f4f55f18e74a@digikod.net>
+ <CAK8P3a1ehWZErD2a0iBqn37s-LTAtW0AbV_gt32iX3cQkXbpOQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <ec79f6ad-1c11-d69f-724b-622baa28f19f@digikod.net>
+Date:   Wed, 8 Jul 2020 19:50:03 +0200
+User-Agent: 
 MIME-Version: 1.0
+In-Reply-To: <CAK8P3a1ehWZErD2a0iBqn37s-LTAtW0AbV_gt32iX3cQkXbpOQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
-Thread-Topic: powerpc: select ARCH_HAS_MEMBARRIER_SYNC_CORE
-Thread-Index: 7ZdakloO4BcuERqqIFVdRhXTmEAP1A==
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Jul 8, 2020, at 1:17 AM, Nicholas Piggin npiggin@gmail.com wrote:
 
-> Excerpts from Mathieu Desnoyers's message of July 7, 2020 9:25 pm:
->> ----- On Jul 7, 2020, at 1:50 AM, Nicholas Piggin npiggin@gmail.com wrote:
->> 
-[...]
->>> I should actually change the comment for 64-bit because soft masked
->>> interrupt replay is an interesting case. I thought it was okay (because
->>> the IPI would cause a hard interrupt which does do the rfi) but that
->>> should at least be written.
->> 
->> Yes.
->> 
->>> The context synchronisation happens before
->>> the Linux IPI function is called, but for the purpose of membarrier I
->>> think that is okay (the membarrier just needs to have caused a memory
->>> barrier + context synchronistaion by the time it has done).
->> 
->> Can you point me to the code implementing this logic ?
+On 08/07/2020 15:49, Arnd Bergmann wrote:
+> On Wed, Jul 8, 2020 at 3:04 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> On 08/07/2020 10:57, Arnd Bergmann wrote:
+>>> On Tue, Jul 7, 2020 at 8:10 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>>
+>>> It looks like all you need here today is a single argument bit, plus
+>>> possibly some room for extensibility. I would suggest removing all
+>>> the extra bits and using a syscall like
+>>>
+>>> SYSCALL_DEFINE1(landlock_create_ruleset, u32, flags);
+>>>
+>>> I don't really see how this needs any variable-length arguments,
+>>> it really doesn't do much.
+>>
+>> We need the attr_ptr/attr_size pattern because the number of ruleset
+>> properties will increase (e.g. network access mask).
 > 
-> It's mostly in arch/powerpc/kernel/exception-64s.S and
-> powerpc/kernel/irq.c, but a lot of asm so easier to explain.
-> 
-> When any Linux code does local_irq_disable(), we set interrupts as
-> software-masked in a per-cpu flag. When interrupts (including IPIs) come
-> in, the first thing we do is check that flag and if we are masked, then
-> record that the interrupt needs to be "replayed" in another per-cpu
-> flag. The interrupt handler then exits back using RFI (which is context
-> synchronising the CPU). Later, when the kernel code does
-> local_irq_enable(), it checks the replay flag to see if anything needs
-> to be done. At that point we basically just call the interrupt handler
-> code like a normal function, and when that returns there is no context
-> synchronising instruction.
+> But how many bits do you think you will *actually* need in total that
+> this needs to be a two-dimensional set of flags? At the moment you
+> only have a single bit that you interpret.
 
-AFAIU this can only happen for interrupts nesting over irqoff sections,
-therefore over kernel code, never userspace, right ?
+I think there is a misunderstanding. For this syscall I wasn't talking
+about the "options" field but about the "handled_access_fs" field which
+has 14 bits dedicated to control access to the file system:
+https://landlock.io/linux-doc/landlock-v19/security/landlock/user.html#filesystem-flags
+The idea is to add other handled_access_* fields for other kernel object
+types (e.g. network, process, etc.).
+
+The "options" field is fine as a raw __u32 syscall argument.
 
 > 
-> So membarrier IPI will always cause target CPUs to perform a context
-> synchronising instruction, but sometimes it happens before the IPI
-> handler function runs.
+>>> To be on the safe side, you might split up the flags into either the
+>>> upper/lower 16 bits or two u32 arguments, to allow both compatible
+>>> (ignored by older kernels if flag is set) and incompatible (return error
+>>> when an unknown flag is set) bits.
+>>
+>> This may be a good idea in general, but in the case of Landlock, because
+>> this kind of (discretionary) sandboxing should be a best-effort security
+>> feature, we should avoid incompatible behavior. In practice, every
+>> unknown bit returns an error because userland can probe for available
+>> bits thanks to the get_features command. This kind of (in)compatibility
+>> can then be handled by userland.
+> 
+> If there are not going to be incompatible extensions, then just ignore
+> all unknown bits and never return an error but get rid of the user
+> space probing that just complicates the interface.
 
-If my understanding is correct, the replayed interrupt handler logic
-only nests over kernel code, which will eventually need to issue a
-context synchronizing instruction before returning to user-space.
+There was multiple discussions about ABI compatibility, especially
+inspired by open(2) vs. openat2(2), and ignoring flags seems to be a bad
+idea. In the "sandboxer" example, we first probe the supported features
+and then mask unknown bits (i.e. access rights) at run time in userland.
+This strategy is quite straightforward, backward compatible and
+future-proof.
 
-All we care about is that starting from the membarrier, each core
-either:
+What does the linux-api folks think about this?
 
-- interrupt user-space to issue the context synchronizing instruction if
-  they were running userspace, or
-- _eventually_ issue a context synchronizing instruction before returning
-  to user-space if they were running kernel code.
+> 
+> In general, it's hard to rely on user space to first ask the kernel
+> what it can do, the way this normally works is that user space
+> asks the kernel for something and it either does it or not, but gives
+> an indication of whether it worked.
 
-So your earlier statement "the membarrier just needs to have caused a memory
-barrier + context synchronistaion by the time it has done" is not strictly
-correct: the context synchronizing instruction does not strictly need to
-happen on each core before membarrier returns. A similar line of thoughts
-can be followed for memory barriers.
+Right, but this is a special case (i.e. best-effort security, not a
+required feature to run an application properly). As previously
+discussed, this kind of security feature should be used as much as
+possible by userland, but it may run on a system without Landlock. To
+encourage a wide use of this kind of security sandboxing by userland
+developers we should avoid the case when all the sandboxing is disabled
+because not all sandboxing features are supported by the running kernel.
 
-Thanks,
+> 
+>> I suggest this syscall signature:
+>> SYSCALL_DEFINE3(landlock_create_ruleset, __u32, options, const struct
+>> landlock_attr_ruleset __user *, ruleset_ptr, size_t, ruleset_size);
+> 
+> The other problem here is that indirect variable-size structured arguments
+> are a pain to instrument with things like strace or seccomp, so you
+> should first try to use a fixed argument list, and fall back to a fixed
+> structure if that fails.
 
-Mathieu
+I agree that it is not perfect with the current tools but this kind of
+extensible structs are becoming common and well defined (e.g. openat2).
+Moreover there is some work going on for seccomp to support "extensible
+argument" syscalls: https://lwn.net/Articles/822256/
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> 
+>>>> +static int syscall_add_rule_path_beneath(const void __user *const attr_ptr,
+>>>> +               const size_t attr_size)
+>>>> +{
+>>>> +       struct landlock_attr_path_beneath attr_path_beneath;
+>>>> +       struct path path;
+>>>> +       struct landlock_ruleset *ruleset;
+>>>> +       int err;
+>>>
+>>> Similarly, it looks like this wants to be
+>>>
+>>> SYSCALL_DEFINE3(landlock_add_rule_path_beneath, int, ruleset, int,
+>>> path, __u32, flags)
+>>>
+>>> I don't see any need to extend this in a way that wouldn't already
+>>> be served better by adding another system call. You might argue
+>>> that 'flags' and 'allowed_access' could be separate, with the latter
+>>> being an indirect in/out argument here, like
+>>>
+>>> SYSCALL_DEFINE4(landlock_add_rule_path_beneath, int, ruleset, int, path,
+>>>                            __u64 *, allowed_acces, __u32, flags)
+>>
+>> To avoid adding a new syscall for each new rule type (e.g. path_beneath,
+>> path_range, net_ipv4_range, etc.), I think it would be better to keep
+>> the attr_ptr/attr_size pattern and to explicitely set a dedicated option
+>> flag to specify the attr type.
+>>
+>> This would look like this:
+>> SYSCALL_DEFINE4(landlock_add_rule, __u32, options, int, ruleset, const
+>> void __user *, rule_ptr, size_t, rule_size);
+>>
+>> The rule_ptr could then point to multiple types like struct
+>> landlock_attr_path_beneath (without the current ruleset_fd field).
+> 
+> This again introduces variable-sized structured data. How many different
+> kinds of rule types do you think there will be (most likely, and maybe an
+> upper bound)?
+
+I don't know how many rule types will come, but right now I think it may
+be less than 10.
+
+> 
+> Could (some of) these be generalized to use the same data structure?
+
+I don't think so, file path and network addresses are an example of very
+different types.
+
+> 
+>>>> +static int syscall_enforce_ruleset(const void __user *const attr_ptr,
+>>>> +               const size_t attr_size)
+>>>
+>>> Here it seems like you just need to pass the file descriptor, or maybe
+>>>
+>>> SYSCALL_DEFINE2(landlock_enforce, int, ruleset, __u32 flags);
+>>>
+>>> if you need flags for extensibility.
+>>
+>> Right, but for consistency I prefer to change the arguments like this:
+>> SYSCALL_DEFINE2(landlock_enforce, __u32 options, int, ruleset);
+> 
+> Most system calls pass the object they work on as the first argument,
+> in this case this would be the ruleset file descriptor.
+
+OK, makes sense, I'll try to follow this as much as possible then.
