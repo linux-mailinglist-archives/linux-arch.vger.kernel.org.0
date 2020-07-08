@@ -2,101 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB6521870B
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 14:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC7A218765
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 14:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728723AbgGHMRi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jul 2020 08:17:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36666 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728681AbgGHMRi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 8 Jul 2020 08:17:38 -0400
-Received: from gaia (unknown [95.146.230.158])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 81D74206C3;
-        Wed,  8 Jul 2020 12:17:35 +0000 (UTC)
-Date:   Wed, 8 Jul 2020 13:17:33 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: [PATCH v6 07/26] mm: Preserve the PG_arch_* flags in
- __split_huge_page_tail()
-Message-ID: <20200708121732.GC6308@gaia>
-References: <20200703153718.16973-1-catalin.marinas@arm.com>
- <20200703153718.16973-8-catalin.marinas@arm.com>
- <16aeea8c-b5c4-0d19-2fde-f95ef8dfddc6@redhat.com>
- <20200706163012.GH28170@gaia>
- <bed8d086-8ed5-d72a-7a1f-327ef982d1a5@redhat.com>
+        id S1729162AbgGHMdR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jul 2020 08:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729097AbgGHMdK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jul 2020 08:33:10 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D66C08C5DC
+        for <linux-arch@vger.kernel.org>; Wed,  8 Jul 2020 05:33:10 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id f23so46808994iof.6
+        for <linux-arch@vger.kernel.org>; Wed, 08 Jul 2020 05:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=fRBxl+Jly3zkBGRbLPYyolv6RN+tGDu250AQgHs6wNMnBAQthZ90eOvUI9D0qLlG4W
+         v42kUn+2+5Bhw26pEmDj74BGKBtrXSLCiFAqJXVUU93wwrqcNnYOoDeh2T5ij7kcaTNU
+         vvcKIRhThwOH0A0t6UY9+McUAEh2KRZD3GjnqJSZzRCMKENBJA/2Rbl3FsOHTCJOajpC
+         LS3jwNeXQ97uwHdyAh1QxZJ+4mur60fdsDHmSVGsDvfJfv/rhvN3IA9Xg1IdoNbeETsr
+         ZvBshIQwT/207HPTgTPWcNeBBXKH0zzc3YF+Q8UUDd/gq8TtJ1D8/qpw4gRrvzFvycY2
+         qY/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=Orb7qBUCStN48VhP7pr3sriybm2Sv1D1dSR6GgXnukMKfgUzi2YIjdkCdWeaKtrKdE
+         4Winx/JXdp/3HSspCEc8GyL3ficlacgTGyejafgcIKEXX6Ypy+njS20naubblYMHoIwN
+         v1R99yLJ9HgQGsZSyKosTEG7OVh5WQ7jgtk7BZm0oKB/8C9/aroCr2CplM6/VKIYcoM2
+         4geRIjDrO+eI6Xf3YL8WUYdPPJwPlL1IobsJXHdFytJ+6CKxG9tNsxfm7GCZPbWqT/fp
+         txJ0zIIEH7sGuWIk5dBAbl1cF9dW9RqeLPt+cDz1SfH9scylB0NF+OmiTbDg2dRKesVs
+         wrwg==
+X-Gm-Message-State: AOAM532XvShyIk7VibWa5HGfJaf+p7fcqcLvdNkhbSRU0xt79YxAOxBL
+        4XRhzecLCPqDBkxk1J7gmWige3rlaFCQaRuSu14=
+X-Google-Smtp-Source: ABdhPJz+Yw/tRR3NYggdpI3xCJxdjZQQgovxkCgb7YeCM8zekh0rEvkzj7MEhsVQw3diu4X8+/vwvpSUXvtx+pQ6vnY=
+X-Received: by 2002:a05:6602:2c0a:: with SMTP id w10mr36231222iov.46.1594211588881;
+ Wed, 08 Jul 2020 05:33:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bed8d086-8ed5-d72a-7a1f-327ef982d1a5@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6602:1582:0:0:0:0 with HTTP; Wed, 8 Jul 2020 05:33:07
+ -0700 (PDT)
+Reply-To: mmsafiatou057@gmail.com
+From:   "Mrs. Safitaou Zoungrana" <richardlaurentdr@gmail.com>
+Date:   Wed, 8 Jul 2020 12:33:07 +0000
+Message-ID: <CALJAiTWJsL=xj-+mKa2Ry1622htq4_Fbxq9sWotVPkJRo5P=pQ@mail.gmail.com>
+Subject: My Dear Beloved One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 07:56:43PM +0200, David Hildenbrand wrote:
-> On 06.07.20 18:30, Catalin Marinas wrote:
-> > On Mon, Jul 06, 2020 at 04:16:13PM +0200, David Hildenbrand wrote:
-> >> On 03.07.20 17:36, Catalin Marinas wrote:
-> >>> When a huge page is split into normal pages, part of the head page flags
-> >>> are transferred to the tail pages. However, the PG_arch_* flags are not
-> >>> part of the preserved set.
-> >>>
-> >>> PG_arch_1 is currently used by the arch code to handle cache maintenance
-> >>> for user space (either for I-D cache coherency or for D-cache aliases
-> >>> consistent with the kernel mapping). Since splitting a huge page does
-> >>> not change the physical or virtual address of a mapping, additional
-> >>> cache maintenance for the tail pages is unnecessary. Preserving the
-> >>> PG_arch_1 flag from the head page in the tail pages would not break the
-> >>> current use-cases.
-> >>
-> >> ^ is fairly arm64 specific, no? (I remember that the semantics are
-> >> different e.g., on s390x).
-> > 
-> > Not entirely arm64 specific. Apart from s390 and x86, I think all the
-> > other architectures use this flag for cache maintenance (I guess they
-> > followed the cachetlb.rst suggestion). My understanding of the s390 and
-> > x86 is that transferring this flag from the head of a compound page to
-> > the tail pages should not cause any issue. We don't even document
-> > anywhere that this flag is meant to disappear on huge page splitting. I
-> > guess no-one noticed because clearing it is relatively benign.
-> 
-> On s390x, PG_arch_1 indicates (s390/kernel/uv.c:arch_make_page_accessible())
-> - kernel page tables
-> - for hugetlbfs pages, that storage keys are initialized for that page
->   (IIRC KVM only)
-> - a user space page might be encrypted/secure (KVM only)
-> 
-> The latter does not support hugetlbfs/THP. KVM does not support THP. So
-> on s390x the bit should never be set in that context and, therefore,
-> also won't be affected by this change.
+My Dear Beloved One,
 
-Thanks for checking.
+I greet you in the name of God almighty the givers of all good things
+in life. Please kindly pardon me for any inconvenience this letter may
+cost you because I know it may come to you as a surprise as we have no
+previous correspondence.  I sent this mail praying for it to reach you
+in good health, since I myself are in a very critical health condition
+in which I sleep every night without knowing if I may be alive to see
+the next day.
 
-> > But if there are concerns, I'm happy to guard it with something like
-> > __ARCH_WANT_PG_ARCH_HEAD_TAIL (I need to think of a more suggestive
-> > name).
-> 
-> I guess we can avoid that if we properly check+document all users.
-> (ignoring x86 and s390x behavior here might be dangerous, although my
-> gut feeling is that it's ok for both)
+I am Mrs. Safiatou Zoungrana,  the wife of late Engineer Ralph
+Alphonso Zoungrana from Paris France but based here in Burkina Faso
+West Africa since eight years ago as a business woman dealing with
+gold exportation and Sales. We have been married for years before his
+sudden death although we were childless. I have been diagnosed with
+ovarian cancer and I have been battling with the sickness when my late
+lovely husband of a blessed memory was alive. May his soul rest in
+peace, Amen.
 
-I'll post an independent patch for PG_arch_1 to get consensus among
-architectures. The PG_arch_2 introduced by the MTE patches can have the
-new behaviour since it would only be used by arm64 initially.
+My late Husband left the sum of =E2=82=AC7.900.000.00 Seven Million Nine
+Hundred Thousand Euros in a fix/suspense account in one of the prime
+bank here in Burkina Faso. Recently, my Doctor told me that I have few
+days to live due to the cancer problem. The one that disturbs me most
+is my blood pressure sickness.
 
--- 
-Catalin
+Having known my health condition I decided to seek for your kind
+assistance to transfer this fund into your account and you will use it
+to establish an orphanage home in my name. I will give you more
+details about the project as soon as I receive your reply in my
+private email (mmsafiatou057@gmail.com) to handle this project because
+I do not want to state all here until I see your reply, desire and
+commitment to handle this project.
+
+My Regards to your family.
+Mrs. Safiatou Zoungrana.
