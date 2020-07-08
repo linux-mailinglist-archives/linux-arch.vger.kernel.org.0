@@ -2,81 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EC7217E7A
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 06:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E789217EEA
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jul 2020 07:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729365AbgGHEi1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jul 2020 00:38:27 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40703 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgGHEi0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jul 2020 00:38:26 -0400
-Received: by mail-pl1-f193.google.com with SMTP id x11so17644150plo.7;
-        Tue, 07 Jul 2020 21:38:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rLqyPrHmkwwskxepcX7hcpAy9KCQ3ceDS+STlZ/U0Zo=;
-        b=s1CMpuWz3Qqa9b1izEWrOkElyZCNOU9qFgjvI898V5bQ+IoXGBbMwIO+DoksmXmtx5
-         vDUjWBgH4mppktjbl4m+M/gbjakjQsBFDm/P9tT1DD4073FlW/p8vdo44UCEGVs79qJU
-         diwHpIpsUkLXX6Y8u3hXjaHn1iU1wiyetd3w23yk47x0tAQlXkxjLO0nan7Ha7nvEsa7
-         KnKu0C8vhsWqXdvjIRFUUIKs+Nu4m9nTdUv30lm5J3NTCFvvv8D2UmxwqkD/jUV/cQeE
-         x8FjsstqhIvKjQCDcdS+QecEWe+OnSkilb+mpRBdSstST+L5Zou70PNCfW/KYB/u/gey
-         GEag==
-X-Gm-Message-State: AOAM53264Ip0SXINTaGAnRCk8PshnUW8oooTyOWyxQ0YfdAAgogl44fa
-        97lQH4FLkitD+5oWD94lcqs=
-X-Google-Smtp-Source: ABdhPJzQZBDpIZw9iAzqNJSgkNYuYBasQcAK531ZK3GOkmKLjjDjlLx8Uewlh2xjKVlV5/alkiMSig==
-X-Received: by 2002:a17:90a:e017:: with SMTP id u23mr7680022pjy.179.1594183105448;
-        Tue, 07 Jul 2020 21:38:25 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id e5sm3979787pjy.26.2020.07.07.21.38.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 21:38:24 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id C7031400DB; Wed,  8 Jul 2020 04:38:23 +0000 (UTC)
-Date:   Wed, 8 Jul 2020 04:38:23 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        monstr@monstr.eu, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v5 08/12] init: main: add KUnit to kernel init
-Message-ID: <20200708043823.GZ4332@42.do-not-panic.com>
-References: <20200626210917.358969-1-brendanhiggins@google.com>
- <20200626210917.358969-9-brendanhiggins@google.com>
+        id S1729129AbgGHFKN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jul 2020 01:10:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:42080 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728589AbgGHFKM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 8 Jul 2020 01:10:12 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4242C0A;
+        Tue,  7 Jul 2020 22:10:11 -0700 (PDT)
+Received: from [192.168.0.129] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DB5C3F71E;
+        Tue,  7 Jul 2020 22:10:09 -0700 (PDT)
+Subject: Re: [PATCH -next] Documentation/vm: fix tables in
+ arch_pgtable_helpers
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <02ee60d0-e836-2237-4881-5c57ccac5551@infradead.org>
+ <b9dfad77-8dee-4628-a9f3-43417568a0e5@arm.com>
+ <13943665-f1c8-dc34-37cc-a1f56ae57a5b@infradead.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <b738eae9-79b7-60d6-0d8e-0c57d23d4e41@arm.com>
+Date:   Wed, 8 Jul 2020 10:39:38 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200626210917.358969-9-brendanhiggins@google.com>
+In-Reply-To: <13943665-f1c8-dc34-37cc-a1f56ae57a5b@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 02:09:13PM -0700, Brendan Higgins wrote:
-> Remove KUnit from init calls entirely, instead call directly from
-> kernel_init().
 
-The commit log does not explain *why*.
 
-> Co-developed-by: Alan Maguire <alan.maguire@oracle.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+On 07/08/2020 07:36 AM, Randy Dunlap wrote:
+> On 7/7/20 6:22 PM, Anshuman Khandual wrote:
+>>
+>>
+>> On 07/08/2020 06:37 AM, Randy Dunlap wrote:
+>>> From: Randy Dunlap <rdunlap@infradead.org>
+>>>
+>>> Make the tables be presented as tables in the generated output files
+>>> (the line drawing did not present well).
+>>>
+>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>> Cc: Jonathan Corbet <corbet@lwn.net>
+>>> Cc: linux-doc@vger.kernel.org
+>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> Cc: Mike Rapoport <rppt@kernel.org>
+>>> Cc: linux-arch@vger.kernel.org
+>>> Cc: linux-mm@kvack.org
+>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>> ---
+>>>  Documentation/vm/arch_pgtable_helpers.rst |  333 ++++++--------------
+>>>  1 file changed, 116 insertions(+), 217 deletions(-)
+>>
+>> Do you have a git URL some where to see these new output ? This
+>> documentation is also useful when reading from a terminal where
+>> these manual line drawing tables make sense.
+>>
+> 
+> No, I don't have a git URL.
+> You can go to
+> https://drive.google.com/file/d/1FO6lCRKldzESwLdylvY8tw10dOBvwz84/view?usp=sharing
+> 
+> I had to Download the file and then view it locally. I couldn't get Google Drive
+> to display it for me as html (only as text).
 
-Other than that:
+I could see it locally as well on a browser and the table looks the same
+way like those current manual ones on a terminal, so looks good to me.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> 
+> I understand about reading tables at a terminal.
+> This file could have been a txt file for that, but it's not. It's a RsT file.
 
-  Luis
+Thats right. All files in Documentation/vm/ are .rst type, hence would
+not like to have a .txt type in there.
+
+> 
+> If you want to leave it as is, please fix these warnings:
+
+Thats right. Can not have in both ways. Lets stick with .rst and change
+as required.
