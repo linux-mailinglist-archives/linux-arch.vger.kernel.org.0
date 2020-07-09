@@ -2,99 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C51C4219A03
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 09:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ACA219AD6
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 10:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbgGIHc5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jul 2020 03:32:57 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:39018 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbgGIHc4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jul 2020 03:32:56 -0400
-Received: by mail-ed1-f65.google.com with SMTP id d18so1023768edv.6;
-        Thu, 09 Jul 2020 00:32:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=j7DqbPSyBqq2qwNcdYTCxivolsap4LLnpECg1M+YJYk=;
-        b=qZiNwlyRJ57VPjR+dosZ69Gym7GNS4FukUdkgaYsGriBesMWF22pXa3pVLiOfXPOJQ
-         tqPklsHrjCnY4xSsVGStmBcWYDca3eRq3xqpWrLoLZuZkxUTIRZSAS5SVCN/jt7UBvfC
-         JWkPCkrp2b7mAm7VCHEy3g5i2dU2f5qBGCOYds9I/9NHL+mxbckjgBUxczwV44RdlwiX
-         VuOd4cuKP7tVGADCX94TArCvW7SI+nzGX6N/nbOwRfqgA+xd2Rvlyo+rGQW756j6YjI8
-         RNUMh0ewYcb483hIjKyOB8jrUfNHW6gpl6RZ6jCN72lxM9HmtY9eqJ4CJ1sZY+/I4NUG
-         Tx/Q==
-X-Gm-Message-State: AOAM531GEd/SInI4qyhu3bABdWnHgQNCsywdZCeke95PuT+Mo+P9zEBG
-        EuYDAHLIhUr+a0PVB8zlGxQ=
-X-Google-Smtp-Source: ABdhPJwrkOg1VmskPen0ndAgGUffYWkrKR783vprCdOePKnp0T8h/KXoPOC3hmTqCSglRRVLLvqDkw==
-X-Received: by 2002:a50:d8c2:: with SMTP id y2mr62468108edj.114.1594279973653;
-        Thu, 09 Jul 2020 00:32:53 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.195])
-        by smtp.googlemail.com with ESMTPSA id sa10sm1258696ejb.79.2020.07.09.00.32.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 09 Jul 2020 00:32:52 -0700 (PDT)
-Date:   Thu, 9 Jul 2020 09:32:49 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        id S1726320AbgGIIb3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jul 2020 04:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgGIIb2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jul 2020 04:31:28 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6457AC061A0B;
+        Thu,  9 Jul 2020 01:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2u6IXv0WvuYmLy64Ol8ToLNhgDQTw8a7diWyD8qQt08=; b=F0s0r0RGrn5TfKzoVnYXlTKpg+
+        KGNajxhzv6v7lQl2vblqcIsoUZOfS0vFJigwA3e9/RP28IYSY/w/fMOqFWMDqdBjISV03OsTlM8hu
+        LZqsSCgVytkRYh5ISkCcBLr4Le1Nh2Ql7PK1dzZdVgSQAlgUSnSTvqEkqAHfaeJXFaWg+DTGddS1c
+        4rKztouBM+OG3AGJvLZScssnBagjrXd+I0tpCAUr7QuU+cpcf+lja0j1YbFdUWenzhQa1pfrdaTlJ
+        sGnWvmh+F87Ou5hBRP3Mbqxb15xqCM+gQyE5R0kCel3LAyVegAqk0RpHYPBIsqc2Un1Oji38WRzKa
+        ybx7cLnw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jtRxb-00026c-Cs; Thu, 09 Jul 2020 08:31:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BD0133013E5;
+        Thu,  9 Jul 2020 10:31:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A7C6C29E916A5; Thu,  9 Jul 2020 10:31:13 +0200 (CEST)
+Date:   Thu, 9 Jul 2020 10:31:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+        Anton Blanchard <anton@ozlabs.org>,
+        Boqun Feng <boqun.feng@gmail.com>, kvm-ppc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
         virtualization@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] iomap: Constify ioreadX() iomem argument (as in
- generic implementation)
-Message-ID: <20200709073249.GA6335@kozik-lap>
-References: <20200709072837.5869-1-krzk@kernel.org>
- <20200709072837.5869-2-krzk@kernel.org>
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 0/6] powerpc: queued spinlocks and rwlocks
+Message-ID: <20200709083113.GI597537@hirez.programming.kicks-ass.net>
+References: <20200706043540.1563616-1-npiggin@gmail.com>
+ <24f75d2c-60cd-2766-4aab-1a3b1c80646e@redhat.com>
+ <1594101082.hfq9x5yact.astroid@bobo.none>
+ <20200708084106.GE597537@hirez.programming.kicks-ass.net>
+ <a9834278-25bf-90e9-10f2-cd10e5407ff6@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200709072837.5869-2-krzk@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <a9834278-25bf-90e9-10f2-cd10e5407ff6@redhat.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 09:28:34AM +0200, Krzysztof Kozlowski wrote:
-> The ioreadX() and ioreadX_rep() helpers have inconsistent interface.  On
-> some architectures void *__iomem address argument is a pointer to const,
-> on some not.
-> 
-> Implementations of ioreadX() do not modify the memory under the address
-> so they can be converted to a "const" version for const-safety and
-> consistency among architectures.
-> 
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Jul 08, 2020 at 07:54:34PM -0400, Waiman Long wrote:
+> On 7/8/20 4:41 AM, Peter Zijlstra wrote:
+> > On Tue, Jul 07, 2020 at 03:57:06PM +1000, Nicholas Piggin wrote:
+> > > Yes, powerpc could certainly get more performance out of the slow
+> > > paths, and then there are a few parameters to tune.
+> > Can you clarify? The slow path is already in use on ARM64 which is weak,
+> > so I doubt there's superfluous serialization present. And Will spend a
+> > fair amount of time on making that thing guarantee forward progressm, so
+> > there just isn't too much room to play.
+> > 
+> > > We don't have a good alternate patching for function calls yet, but
+> > > that would be something to do for native vs pv.
+> > Going by your jump_label implementation, support for static_call should
+> > be fairly straight forward too, no?
+> > 
+> >    https://lkml.kernel.org/r/20200624153024.794671356@infradead.org
+> > 
+> Speaking of static_call, I am also looking forward to it. Do you have an
+> idea when that will be merged?
 
-I forgot to put here one more Ack, for PowerPC:
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+0day had one crash on the last round, I think Steve send a fix for that
+last night and I'll go look at it.
 
-https://lore.kernel.org/lkml/87ftedj0zz.fsf@mpe.ellerman.id.au/
+That said, the last posting got 0 feedback, so either everybody is
+really happy with it, or not interested. So let us know in the thread,
+with some review feedback.
 
-Best regards,
-Krzysztof
-
+Once I get through enough of the inbox to actually find the fix and test
+it, I'll also update the thread, and maybe threaten to merge it if
+everybody stays silent :-)
