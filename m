@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C90D7219D3C
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 12:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772DA219D88
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 12:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbgGIKNi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jul 2020 06:13:38 -0400
-Received: from ozlabs.org ([203.11.71.1]:57885 "EHLO ozlabs.org"
+        id S1726315AbgGIKSL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jul 2020 06:18:11 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48913 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726347AbgGIKNh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 9 Jul 2020 06:13:37 -0400
+        id S1726313AbgGIKSL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 Jul 2020 06:18:11 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B2X7g5nVsz9sSd;
-        Thu,  9 Jul 2020 20:13:35 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B2XDx5w9fz9sSd;
+        Thu,  9 Jul 2020 20:18:09 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1594289615;
-        bh=V/UfiEcEJmEZN4U3f8evnqswy/uVMHS/9JdwtGfPUdY=;
+        s=201909; t=1594289889;
+        bh=ou5GvH7X+W5XkenHcVbChXPfY+zWQZQPug6Gv9qz3HE=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nzRAwHg5DWqxnr64TpRTPXGRnE8/0g/MyPqvHEW3TplcuZ3VZBDq81ZBJjsHRPTfO
-         WsF67x5DG9UVg2a+ikk+zlNznorFWPGELSjP7EJNjUETZRVcWnF+6eFUI+sARv0w89
-         XmFkeR/7TehGnZiVKu6YYFKLGW8hNZc/gnQcUwejYBC3byHW8EBZb19YX67mHIQYKc
-         cLm365Y07n+K60Q2nwUmyXjBB4LGBvpb6xIwZgrvc6vJFfdVIO/82FuL9RSpKLGfyo
-         0DKn3B2IBr7N3KP7jsgXda8lowUQ5CSUzWetkPqOxOJ71izeS+acNFfg6Gr0mcz8ci
-         mGMQBP8XgO4aA==
+        b=Vq+WB38V5Vr/85nXNhGqpqupy+34Vv3WSzVEQwoNCfqjMOzALtdReOZo98sRNdF4v
+         sGsRiBQZQRt9C10DozPjdUV+RVnAD+xtRpukIAyztq9aHvkQ7/XJdsPUAl3LuHK+wj
+         I+iQuTB21OEn2hVajUA+VVaiYzvot5nUEtDX3PWAK0rNKp94aOfUACCnwCPfDJHTD/
+         KdBs6WLMY5gzQ3OaXS2KwOuuu+1z1BuTcE9hZDf/FSr1zbkU2zqJX99Vfvgk6YPtuA
+         Jd7OYgdjaDbdWZq1nwUULVHLrRzs0jKC70v2D3AgBk59KBxHS6YKhIhksR5MJn+pvZ
+         8f7eEgvbfiJuA==
 From:   Michael Ellerman <mpe@ellerman.id.au>
 To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, Will Deacon <will@kernel.org>,
@@ -38,11 +38,11 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, kvm-ppc@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] powerpc: move spinlock implementation to simple_spinlock
-In-Reply-To: <20200706043540.1563616-4-npiggin@gmail.com>
-References: <20200706043540.1563616-1-npiggin@gmail.com> <20200706043540.1563616-4-npiggin@gmail.com>
-Date:   Thu, 09 Jul 2020 20:15:51 +1000
-Message-ID: <87a709vvs8.fsf@mpe.ellerman.id.au>
+Subject: Re: [PATCH v3 4/6] powerpc/64s: implement queued spinlocks and rwlocks
+In-Reply-To: <20200706043540.1563616-5-npiggin@gmail.com>
+References: <20200706043540.1563616-1-npiggin@gmail.com> <20200706043540.1563616-5-npiggin@gmail.com>
+Date:   Thu, 09 Jul 2020 20:20:25 +1000
+Message-ID: <877dvdvvkm.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
@@ -51,56 +51,68 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 Nicholas Piggin <npiggin@gmail.com> writes:
-> To prepare for queued spinlocks. This is a simple rename except to update
-> preprocessor guard name and a file reference.
+> These have shown significantly improved performance and fairness when
+> spinlock contention is moderate to high on very large systems.
+>
+>  [ Numbers hopefully forthcoming after more testing, but initial
+>    results look good ]
+
+Would be good to have something here, even if it's preliminary.
+
+> Thanks to the fast path, single threaded performance is not noticably
+> hurt.
 >
 > Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 > ---
->  arch/powerpc/include/asm/simple_spinlock.h    | 292 ++++++++++++++++++
->  .../include/asm/simple_spinlock_types.h       |  21 ++
->  arch/powerpc/include/asm/spinlock.h           | 285 +----------------
->  arch/powerpc/include/asm/spinlock_types.h     |  12 +-
->  4 files changed, 315 insertions(+), 295 deletions(-)
->  create mode 100644 arch/powerpc/include/asm/simple_spinlock.h
->  create mode 100644 arch/powerpc/include/asm/simple_spinlock_types.h
->
-> diff --git a/arch/powerpc/include/asm/simple_spinlock.h b/arch/powerpc/include/asm/simple_spinlock.h
-> new file mode 100644
-> index 000000000000..e048c041c4a9
-> --- /dev/null
-> +++ b/arch/powerpc/include/asm/simple_spinlock.h
-> @@ -0,0 +1,292 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +#ifndef __ASM_SIMPLE_SPINLOCK_H
-> +#define __ASM_SIMPLE_SPINLOCK_H
+>  arch/powerpc/Kconfig                      | 13 ++++++++++++
+>  arch/powerpc/include/asm/Kbuild           |  2 ++
+>  arch/powerpc/include/asm/qspinlock.h      | 25 +++++++++++++++++++++++
+>  arch/powerpc/include/asm/spinlock.h       |  5 +++++
+>  arch/powerpc/include/asm/spinlock_types.h |  5 +++++
+>  arch/powerpc/lib/Makefile                 |  3 +++
 
-_ASM_POWERPC_SIMPLE_SPINLOCK_H
+>  include/asm-generic/qspinlock.h           |  2 ++
 
-> +#ifdef __KERNEL__
+Who's ack do we need for that part?
 
-Shouldn't be necessary.
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 24ac85c868db..17663ea57697 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -492,6 +494,17 @@ config HOTPLUG_CPU
+>  
+>  	  Say N if you are unsure.
+>  
+> +config PPC_QUEUED_SPINLOCKS
+> +	bool "Queued spinlocks"
+> +	depends on SMP
+> +	default "y" if PPC_BOOK3S_64
 
-> +/*
-> + * Simple spin lock operations.  
-> + *
-> + * Copyright (C) 2001-2004 Paul Mackerras <paulus@au.ibm.com>, IBM
-> + * Copyright (C) 2001 Anton Blanchard <anton@au.ibm.com>, IBM
-> + * Copyright (C) 2002 Dave Engebretsen <engebret@us.ibm.com>, IBM
-> + *	Rework to support virtual processors
-> + *
-> + * Type of int is used as a full 64b word is not necessary.
-> + *
-> + * (the type definitions are in asm/simple_spinlock_types.h)
-> + */
-> +#include <linux/irqflags.h>
-> +#include <asm/paravirt.h>
-> +#ifdef CONFIG_PPC64
-> +#include <asm/paca.h>
-> +#endif
+Not sure about default y? At least until we've got a better idea of the
+perf impact on a range of small/big new/old systems.
 
-I don't think paca.h needs a CONFIG_PPC64 guard, it contains one. I know
-you're just moving the code, but still nice to cleanup slightly along
-the way.
+> +	help
+> +	  Say Y here to use to use queued spinlocks which are more complex
+> +	  but give better salability and fairness on large SMP and NUMA
+> +	  systems.
+> +
+> +	  If unsure, say "Y" if you have lots of cores, otherwise "N".
+
+Would be nice if we could give a range for "lots".
+
+> diff --git a/arch/powerpc/include/asm/Kbuild b/arch/powerpc/include/asm/Kbuild
+> index dadbcf3a0b1e..1dd8b6adff5e 100644
+> --- a/arch/powerpc/include/asm/Kbuild
+> +++ b/arch/powerpc/include/asm/Kbuild
+> @@ -6,5 +6,7 @@ generated-y += syscall_table_spu.h
+>  generic-y += export.h
+>  generic-y += local64.h
+>  generic-y += mcs_spinlock.h
+> +generic-y += qrwlock.h
+> +generic-y += qspinlock.h
+
+The 2nd line spits a warning about a redundant entry. I think you want
+to just drop it.
+
 
 cheers
-
