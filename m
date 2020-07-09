@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 365CD21A8AA
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 22:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229E221A8A1
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 22:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726898AbgGIUIg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jul 2020 16:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S1726790AbgGIUIQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jul 2020 16:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgGIUIO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jul 2020 16:08:14 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF7BC08C5DC
-        for <linux-arch@vger.kernel.org>; Thu,  9 Jul 2020 13:08:14 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id o1so1275561plk.1
-        for <linux-arch@vger.kernel.org>; Thu, 09 Jul 2020 13:08:14 -0700 (PDT)
+        with ESMTP id S1726782AbgGIUIQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jul 2020 16:08:16 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD65AC08C5DC
+        for <linux-arch@vger.kernel.org>; Thu,  9 Jul 2020 13:08:15 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id x11so1263332plo.7
+        for <linux-arch@vger.kernel.org>; Thu, 09 Jul 2020 13:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=IQHnIdNal54sm3+jz3EltBqGOpDb3rbWGPv97/p+Pks=;
-        b=QIHl7zMIw3dGasAbWEpkiyTYrYO/wW+l27wwB2XS1xUbnpHgx9zs6JtenqDqkpFTuq
-         eCkf3uIP50+24+GxlZMW2r/IL4C8lmNDNgpgQHKbEYpia+1x2q4JN22cCh/q8nXMXf0c
-         bfBKLWiVEqeplwEg2MJFhCy+LGqQxDsSaGtdlvfSZQLOoHU/T57UWg358fw2aWi+k2PR
-         AfBBxfay/L20rPj575Em3qZoddhy8cgVjGtIDXokMV8CYV+3PVPSVQ1O13LYohVu3Q+1
-         xw1fGKsO5788ubA6PWyHLy4K+K1g36JOri9y/1vX4o+bBywOQVgLBRxlb3/hcPTuAmlt
-         U2hA==
+        bh=n3uMLnloJ4eoHyrHmlqZET1T4BdruPnLDoTh0ErPA48=;
+        b=fc4JFaNMdyj0dPO/QlxHDnNGYF06MrbAFpp8sghfIUTy9dRGb9sGKTljAM/dZfdB2J
+         nju7OIrLaeY0xcFvtPbU14enOZWIPr+6Jp7iwm9BOsywiSS4GbXB5LGvfTSgS8MYJQfo
+         wa/5mP4c22pL2wlOc0LmsEZ4Hyno4ztpOYJaIV60LjxDcw2YaB+jn5C7ETt4a7WeT4Jo
+         GgVwqvFwY3RRSLDCxEOH3JoZcD0ps5TN9GS4uQbmuJUr5TmEvqOHSY4u5HtUexKZn2uE
+         xe70ZY3UqKrjiPZd8mUbw8C88c51Lq4w+n/w+kuulNZw/j+fz/5hYb597azr5VWVxm2d
+         1PZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=IQHnIdNal54sm3+jz3EltBqGOpDb3rbWGPv97/p+Pks=;
-        b=TOIrxPgDN4d0yd7QjDZq5W5teor/POMxrS4Z/mA0QWXwYRi8CANVl7rKVqQIE3tnST
-         VqwbGm8WCPnvgHKzDKeLKcCwcYx8c3GdP61lGX+YFPqQbh0o2vDO0EK8h3qT1lbZUK2v
-         xx6w6wywpXu07hOhCLUWKiqVYA+ryFdXKH+Fm6i7F6ElxPxcY99KMCIdjMzHW1mD46f7
-         5+rYG/pyce7M1XzcXSy92JaZCFt1VNTMPgR6mSklXDjc3nOSh15Aqk59V45dy5bXDUDd
-         K5RKfuYv7F8ahkBatUhqebfzWTPnBy78NW6vGA7dWEu7lqn9O9xmMuBYggX9zNGYqypS
-         y9ng==
-X-Gm-Message-State: AOAM5315mjahwQ4O7Bg2qo0fCyN4Z/wutc5mpO7Swbeenaov4qB2Q7Qu
-        DDdJ5uFtEUYxj65gWaWJe9XXkA==
-X-Google-Smtp-Source: ABdhPJwd1DAa2K1UIdVt7iL6iamwAYF1TNfLnv3LuSla0FowJ3LMBrvCDu1SaUFZ2GKjnTk7/YE82w==
-X-Received: by 2002:a17:902:c405:: with SMTP id k5mr40035169plk.233.1594325293632;
-        Thu, 09 Jul 2020 13:08:13 -0700 (PDT)
+        bh=n3uMLnloJ4eoHyrHmlqZET1T4BdruPnLDoTh0ErPA48=;
+        b=ctH+dNfgLZrEkuu5dxfenOzKL5v/TJsl/fvVxQ3xT5UgEt7jLtysYubZcxr5iz0VH3
+         J6TnjjcCcZP7V1fgNrNbaAuhqJ7PTUHMgyepcgS5FN0ObG1S3TAuM6kd4MCiC09NLmuf
+         35JRlKurZQME2EQ2jAn8vlgJmfLJPtq2d6oDIp9p4dzrwKV23FS3D6MOwtjf1Qnn2Jw+
+         AjxL7BL84dUQ7U9StnskdgXQojkCNV3HjnID1m//aZqxRtOMyHFx6nTaR2GaAV4TGCe6
+         TMIiKTXIZqZHTZNcqSupu+7asgd/EqYQRB1FlLb9e8e0j/Awbsb53kMA9lCYx5cqL4fW
+         3iSw==
+X-Gm-Message-State: AOAM531QIZ/MxE5UNdxaSe4NwEJXSWVbBanZ7/MsBAhquOTKao+fRbSg
+        ua7XyMsaFVnb3cquSz04o3mXUw==
+X-Google-Smtp-Source: ABdhPJzPLSTzb969rohb6kFQ0eaLxRBJfCFE9pkdCodyKMGtAcVwwZo/EK1rcCJ/fOCGGMRDDpxRxQ==
+X-Received: by 2002:a17:90a:f981:: with SMTP id cq1mr1890239pjb.173.1594325295201;
+        Thu, 09 Jul 2020 13:08:15 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id m3sm4030032pfk.171.2020.07.09.13.08.12
+        by smtp.gmail.com with ESMTPSA id u26sm3619193pgo.71.2020.07.09.13.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 13:08:13 -0700 (PDT)
-Subject: [PATCH 1/5] lib: Add a generic version of devmem_is_allowed()
-Date:   Thu,  9 Jul 2020 13:05:48 -0700
-Message-Id: <20200709200552.1910298-2-palmer@dabbelt.com>
+        Thu, 09 Jul 2020 13:08:14 -0700 (PDT)
+Subject: [PATCH 2/5] RISC-V: Use the new generic devmem_is_allowed()
+Date:   Thu,  9 Jul 2020 13:05:49 -0700
+Message-Id: <20200709200552.1910298-3-palmer@dabbelt.com>
 X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
 In-Reply-To: <20200709200552.1910298-1-palmer@dabbelt.com>
 References: <20200709200552.1910298-1-palmer@dabbelt.com>
@@ -86,90 +86,25 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Palmer Dabbelt <palmerdabbelt@google.com>
 
-As part of adding support for STRICT_DEVMEM to the RISC-V port, Zong
-provided a devmem_is_allowed() implementation that's exactly the same as
-all the others I checked.  Instead I'm adding a generic version, which
-will soon be used.
+This allows us to enable STRICT_DEVMEM.
 
 Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
 ---
- include/asm-generic/io.h |  4 ++++
- lib/Kconfig              |  4 ++++
- lib/Makefile             |  2 ++
- lib/devmem_is_allowed.c  | 27 +++++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 lib/devmem_is_allowed.c
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 8b1e020e9a03..69e3db65fba0 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1122,6 +1122,10 @@ static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
- }
- #endif
- 
-+#ifndef CONFIG_GENERIC_DEVMEM_IS_ALLOWED
-+extern int devmem_is_allowed(unsigned long pfn);
-+#endif
-+
- #endif /* __KERNEL__ */
- 
- #endif /* __ASM_GENERIC_IO_H */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index df3f3da95990..3b1b6481e073 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -676,3 +676,7 @@ config GENERIC_LIB_CMPDI2
- 
- config GENERIC_LIB_UCMPDI2
- 	bool
-+
-+config GENERIC_LIB_DEVMEM_IS_ALLOWED
-+	bool
-+	select ARCH_HAS_DEVMEM_IS_ALLOWED
-diff --git a/lib/Makefile b/lib/Makefile
-index b1c42c10073b..554ef14f9be5 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -318,3 +318,5 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- # KUnit tests
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-+
-+obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
-diff --git a/lib/devmem_is_allowed.c b/lib/devmem_is_allowed.c
-new file mode 100644
-index 000000000000..c0d67c541849
---- /dev/null
-+++ b/lib/devmem_is_allowed.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * A generic version of devmem_is_allowed.
-+ *
-+ * Based on arch/arm64/mm/mmap.c
-+ *
-+ * Copyright (C) 2020 Google, Inc.
-+ * Copyright (C) 2012 ARM Ltd.
-+ */
-+
-+#include <linux/mm.h>
-+#include <linux/ioport.h>
-+
-+/*
-+ * devmem_is_allowed() checks to see if /dev/mem access to a certain address
-+ * is valid. The argument is a physical page number.  We mimic x86 here by
-+ * disallowing access to system RAM as well as device-exclusive MMIO regions.
-+ * This effectively disable read()/write() on /dev/mem.
-+ */
-+int devmem_is_allowed(unsigned long pfn)
-+{
-+	if (iomem_is_exclusive(pfn << PAGE_SHIFT))
-+		return 0;
-+	if (!page_is_ram(pfn))
-+		return 1;
-+	return 0;
-+}
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 089293e4ad46..8ff368a65a07 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -37,6 +37,7 @@ config RISCV
+ 	select GENERIC_IOREMAP
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select GENERIC_IRQ_SHOW
++	select GENERIC_LIB_DEVMEM_IS_ALLOWED
+ 	select GENERIC_PCI_IOMAP
+ 	select GENERIC_PTDUMP if MMU
+ 	select GENERIC_SCHED_CLOCK
 -- 
 2.27.0.383.g050319c2ae-goog
 
