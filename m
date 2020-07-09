@@ -2,116 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 792C42198DE
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 08:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985DE2199B5
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 09:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbgGIGvT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jul 2020 02:51:19 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7825 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726119AbgGIGvT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 9 Jul 2020 02:51:19 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 1BB15177614AC0946EA4;
-        Thu,  9 Jul 2020 14:51:16 +0800 (CST)
-Received: from [127.0.0.1] (10.174.186.75) by DGGEMS413-HUB.china.huawei.com
- (10.3.19.213) with Microsoft SMTP Server id 14.3.487.0; Thu, 9 Jul 2020
- 14:51:07 +0800
-Subject: Re: [RFC PATCH v5 2/2] arm64: tlb: Use the TLBI RANGE feature in
- arm64
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
-        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-References: <20200708124031.1414-1-yezhenyu2@huawei.com>
- <20200708124031.1414-3-yezhenyu2@huawei.com> <20200708182451.GF6308@gaia>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <27a4d364-d967-c644-83ed-805ba75f13f6@huawei.com>
-Date:   Thu, 9 Jul 2020 14:51:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <20200708182451.GF6308@gaia>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.186.75]
-X-CFilter-Loop: Reflected
+        id S1726269AbgGIH2u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jul 2020 03:28:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42088 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726006AbgGIH2t (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 Jul 2020 03:28:49 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6505D2070E;
+        Thu,  9 Jul 2020 07:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594279728;
+        bh=ihrn0AVJZvkOuVrPMlLyS+S/P5UfhHadBXpyvV7CV34=;
+        h=From:To:Cc:Subject:Date:From;
+        b=05Zm0mLcRLT//JVQcYmwazKkHZEz773gn+ecJt0+HI6mS6C7jmlKkroRhVIDWD0a8
+         VPJs/6kEeTX0CWU4RMvaQ8WJH/8qgSyOS7shRx9Bhe8Knx92xZOyEbNHwTE/QQSe/l
+         cpBi/YFMPbiseb3kp430S8rscEO/UbEc3Jy5t97o=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        virtualization@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v3 0/4] iomap: Constify ioreadX() iomem argument
+Date:   Thu,  9 Jul 2020 09:28:33 +0200
+Message-Id: <20200709072837.5869-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020/7/9 2:24, Catalin Marinas wrote:
-> On Wed, Jul 08, 2020 at 08:40:31PM +0800, Zhenyu Ye wrote:
->> Add __TLBI_VADDR_RANGE macro and rewrite __flush_tlb_range().
->>
->> In this patch, we only use the TLBI RANGE feature if the stride == PAGE_SIZE,
->> because when stride > PAGE_SIZE, usually only a small number of pages need
->> to be flushed and classic tlbi intructions are more effective.
-> 
-> Why are they more effective? I guess a range op would work on this as
-> well, say unmapping a large THP range. If we ignore this stride ==
-> PAGE_SIZE, it could make the code easier to read.
-> 
+Hi,
 
-OK, I will remove the stride == PAGE_SIZE here.
+Multiple architectures are affected in the first patch and all further
+patches depend on the first.
 
->> We can also use 'end - start < threshold number' to decide which way
->> to go, however, different hardware may have different thresholds, so
->> I'm not sure if this is feasible.
->>
->> Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
->> ---
->>  arch/arm64/include/asm/tlbflush.h | 104 ++++++++++++++++++++++++++----
->>  1 file changed, 90 insertions(+), 14 deletions(-)
-> 
-> Could you please rebase these patches on top of the arm64 for-next/tlbi
-> branch:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/tlbi
-> 
-
-OK, I will send a formal version patch of this series soon.
-
->>  
->> -	if ((end - start) >= (MAX_TLBI_OPS * stride)) {
->> +	if ((!cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
->> +	    (end - start) >= (MAX_TLBI_OPS * stride)) ||
->> +	    range_pages >= MAX_TLBI_RANGE_PAGES) {
->>  		flush_tlb_mm(vma->vm_mm);
->>  		return;
->>  	}
-> 
-> Is there any value in this range_pages check here? What's the value of
-> MAX_TLBI_RANGE_PAGES? If we have TLBI range ops, we make a decision here
-> but without including the stride. Further down we use the stride to skip
-> the TLBI range ops.
-> 
-
-MAX_TLBI_RANGE_PAGES is defined as __TLBI_RANGE_PAGES(31, 3), which is
-decided by ARMv8.4 spec. The address range is determined by below formula:
-
-	[BADDR, BADDR + (NUM + 1) * 2^(5*SCALE + 1) * PAGESIZE)
-
-Which has nothing to do with the stride.  After removing the stride ==
-PAGE_SIZE below, there will be more clear.
+Maybe this could go in through Andrew Morton's tree?
 
 
->>  }
-> 
-> I think the algorithm is correct, though I need to work it out on a
-> piece of paper.
-> 
-> The code could benefit from some comments (above the loop) on how the
-> range is built and the right scale found.
-> 
+Changes since v2
+================
+1. Drop all non-essential patches (cleanups),
+2. Update also drivers/sh/clk/cpg.c .
 
-OK.
 
-Thanks,
-Zhenyu
+Changes since v1
+================
+https://lore.kernel.org/lkml/1578415992-24054-1-git-send-email-krzk@kernel.org/
+1. Constify also ioreadX_rep() and mmio_insX(),
+2. Squash lib+alpha+powerpc+parisc+sh into one patch for bisectability,
+3. Add acks and reviews,
+4. Re-order patches so all optional driver changes are at the end.
+
+
+Description
+===========
+The ioread8/16/32() and others have inconsistent interface among the
+architectures: some taking address as const, some not.
+
+It seems there is nothing really stopping all of them to take
+pointer to const.
+
+Patchset was only compile tested on affected architectures.  No real
+testing.
+
+
+volatile
+========
+There is still interface inconsistency between architectures around
+"volatile" qualifier:
+ - include/asm-generic/io.h:static inline u32 ioread32(const volatile void __iomem *addr)
+ - include/asm-generic/iomap.h:extern unsigned int ioread32(const void __iomem *);
+
+This is still discussed and out of scope of this patchset.
+
+
+Best regards,
+Krzysztof
+
+
+Krzysztof Kozlowski (4):
+  iomap: Constify ioreadX() iomem argument (as in generic
+    implementation)
+  rtl818x: Constify ioreadX() iomem argument (as in generic
+    implementation)
+  ntb: intel: Constify ioreadX() iomem argument (as in generic
+    implementation)
+  virtio: pci: Constify ioreadX() iomem argument (as in generic
+    implementation)
+
+ arch/alpha/include/asm/core_apecs.h           |  6 +-
+ arch/alpha/include/asm/core_cia.h             |  6 +-
+ arch/alpha/include/asm/core_lca.h             |  6 +-
+ arch/alpha/include/asm/core_marvel.h          |  4 +-
+ arch/alpha/include/asm/core_mcpcia.h          |  6 +-
+ arch/alpha/include/asm/core_t2.h              |  2 +-
+ arch/alpha/include/asm/io.h                   | 12 ++--
+ arch/alpha/include/asm/io_trivial.h           | 16 ++---
+ arch/alpha/include/asm/jensen.h               |  2 +-
+ arch/alpha/include/asm/machvec.h              |  6 +-
+ arch/alpha/kernel/core_marvel.c               |  2 +-
+ arch/alpha/kernel/io.c                        | 12 ++--
+ arch/parisc/include/asm/io.h                  |  4 +-
+ arch/parisc/lib/iomap.c                       | 72 +++++++++----------
+ arch/powerpc/kernel/iomap.c                   | 28 ++++----
+ arch/sh/kernel/iomap.c                        | 22 +++---
+ .../realtek/rtl818x/rtl8180/rtl8180.h         |  6 +-
+ drivers/ntb/hw/intel/ntb_hw_gen1.c            |  2 +-
+ drivers/ntb/hw/intel/ntb_hw_gen3.h            |  2 +-
+ drivers/ntb/hw/intel/ntb_hw_intel.h           |  2 +-
+ drivers/sh/clk/cpg.c                          |  2 +-
+ drivers/virtio/virtio_pci_modern.c            |  6 +-
+ include/asm-generic/iomap.h                   | 28 ++++----
+ include/linux/io-64-nonatomic-hi-lo.h         |  4 +-
+ include/linux/io-64-nonatomic-lo-hi.h         |  4 +-
+ lib/iomap.c                                   | 30 ++++----
+ 26 files changed, 146 insertions(+), 146 deletions(-)
+
+-- 
+2.17.1
 
