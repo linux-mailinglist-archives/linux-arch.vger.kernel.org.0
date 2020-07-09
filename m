@@ -2,91 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AB3219811
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 07:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792C42198DE
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 08:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbgGIFnW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jul 2020 01:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726129AbgGIFnV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jul 2020 01:43:21 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF81C061A0B
-        for <linux-arch@vger.kernel.org>; Wed,  8 Jul 2020 22:43:21 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id md7so602527pjb.1
-        for <linux-arch@vger.kernel.org>; Wed, 08 Jul 2020 22:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Njmc1vyPe75JslBINheBTnA8lemCls4rpnddifbo0bM=;
-        b=Tvlbnc6MDGfSfqeM/smYqpc0feAlERrwBiblUCBtKfK+it2lz045dBNfFnJEu0fzPE
-         Zs72nVW0drH2HES6CA6ikXmAaLcxcpgGm66YqbDh53Aq6l2mjMgqSjki6gsO/mhmobGV
-         WMxSlbeRt/Jip07ibeC/Q3b17ZuehPlBLDyFI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Njmc1vyPe75JslBINheBTnA8lemCls4rpnddifbo0bM=;
-        b=P1+EMjlfCyH2FRFXADCzgfr8yWmM4doT9AWDVPUx0I9ISfLpRm2U52PyFTGBfsvXBI
-         j1SUUTUuN9JKrEK2+o9pPIltDC7aLbuNUiN5H1/irKfi4wxMsj/FEpaDgKkmpkKzJuSM
-         J0vsqOXOLv0++9uwWus/7fN28WxN8M4XsCStnKzs/xyLTJX4gTpZqtBsJpqU+AsiFzaY
-         sIjHOsfZwl2TdC0PGuJClRLYOwSBAEO/c4Czwz9ZtLAQJxTcIqhInbOZBUBAI6VuYS61
-         pKxh0VQYvF79MqyuKbK0xdFZcY6H4dCjgUCgSBrwKHxTsnr3ZMWx67do68KShU+M76ag
-         LYJw==
-X-Gm-Message-State: AOAM530qNkgI7zGxpJBEDC1QO8ua2F+65n5O2/1trrDcGUG3KNjWCk/5
-        K3gq/0pdwtBh8VcPmycXyLzwGA==
-X-Google-Smtp-Source: ABdhPJwFCs3gNneJ3e5IhDAi3UVeMslNSOmLd6gGIwVLwQJArIjnjDf2nsIP2hKka3h5Q4fhILGSDw==
-X-Received: by 2002:a17:90a:e618:: with SMTP id j24mr12895872pjy.41.1594273400806;
-        Wed, 08 Jul 2020 22:43:20 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t5sm1431481pgl.38.2020.07.08.22.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 22:43:19 -0700 (PDT)
-Date:   Wed, 8 Jul 2020 22:43:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Jian Cai <jiancai@google.com>,
-        Luis Lozano <llozano@google.com>,
-        Manoj Gupta <manojgupta@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Subject: Re: [PATCH v2] vmlinux.lds: add PGO and AutoFDO input sections
-Message-ID: <202007082240.815932C2@keescook>
-References: <20200622231536.7jcshis5mdn3vr54@google.com>
- <20200625184752.73095-1-ndesaulniers@google.com>
- <CAKwvOd=cum+BNHOk2djXx5JtAcCBwq2Bxy=j5ucRd2RcLWwDZQ@mail.gmail.com>
- <CAK8P3a1mBCC=hBMzxZVukHhrWhv=LiPOfV6Mgnw1QpNg=MpONg@mail.gmail.com>
- <202007020856.78DDE23F4A@keescook>
- <CAKwvOd=NeOodb=ebbodd278=ErRSmPxFNVABQS3ZO=D00yFWGw@mail.gmail.com>
+        id S1726163AbgGIGvT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jul 2020 02:51:19 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7825 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726119AbgGIGvT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 Jul 2020 02:51:19 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 1BB15177614AC0946EA4;
+        Thu,  9 Jul 2020 14:51:16 +0800 (CST)
+Received: from [127.0.0.1] (10.174.186.75) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.487.0; Thu, 9 Jul 2020
+ 14:51:07 +0800
+Subject: Re: [RFC PATCH v5 2/2] arm64: tlb: Use the TLBI RANGE feature in
+ arm64
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
+        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>
+References: <20200708124031.1414-1-yezhenyu2@huawei.com>
+ <20200708124031.1414-3-yezhenyu2@huawei.com> <20200708182451.GF6308@gaia>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <27a4d364-d967-c644-83ed-805ba75f13f6@huawei.com>
+Date:   Thu, 9 Jul 2020 14:51:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=NeOodb=ebbodd278=ErRSmPxFNVABQS3ZO=D00yFWGw@mail.gmail.com>
+In-Reply-To: <20200708182451.GF6308@gaia>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.186.75]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 04:13:54PM -0700, Nick Desaulniers wrote:
-> On Thu, Jul 2, 2020 at 8:57 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > This looks good to me. Do you want me to carry it as part of the orphan
-> > series? (It doesn't look like it'll collide, so that's not needed, but I
-> > can if that makes things easier.)
-> >
-> > Acked-by: Kees Cook <keescook@chromium.org>
+On 2020/7/9 2:24, Catalin Marinas wrote:
+> On Wed, Jul 08, 2020 at 08:40:31PM +0800, Zhenyu Ye wrote:
+>> Add __TLBI_VADDR_RANGE macro and rewrite __flush_tlb_range().
+>>
+>> In this patch, we only use the TLBI RANGE feature if the stride == PAGE_SIZE,
+>> because when stride > PAGE_SIZE, usually only a small number of pages need
+>> to be flushed and classic tlbi intructions are more effective.
 > 
-> If you would be so kind, I'd owe you yet another beer!
+> Why are they more effective? I guess a range op would work on this as
+> well, say unmapping a large THP range. If we ignore this stride ==
+> PAGE_SIZE, it could make the code easier to read.
+> 
 
-Yup! It's on my list; I've been clearing other stuff so I can do another
-revision. (I want to move some things out of discard and into 0-size
-asserts, and possibly collect Arvind's runtime relocations series too
-(since it seems basically done but no x86 maintainers have snagged it).
+OK, I will remove the stride == PAGE_SIZE here.
 
--- 
-Kees Cook
+>> We can also use 'end - start < threshold number' to decide which way
+>> to go, however, different hardware may have different thresholds, so
+>> I'm not sure if this is feasible.
+>>
+>> Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
+>> ---
+>>  arch/arm64/include/asm/tlbflush.h | 104 ++++++++++++++++++++++++++----
+>>  1 file changed, 90 insertions(+), 14 deletions(-)
+> 
+> Could you please rebase these patches on top of the arm64 for-next/tlbi
+> branch:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/tlbi
+> 
+
+OK, I will send a formal version patch of this series soon.
+
+>>  
+>> -	if ((end - start) >= (MAX_TLBI_OPS * stride)) {
+>> +	if ((!cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
+>> +	    (end - start) >= (MAX_TLBI_OPS * stride)) ||
+>> +	    range_pages >= MAX_TLBI_RANGE_PAGES) {
+>>  		flush_tlb_mm(vma->vm_mm);
+>>  		return;
+>>  	}
+> 
+> Is there any value in this range_pages check here? What's the value of
+> MAX_TLBI_RANGE_PAGES? If we have TLBI range ops, we make a decision here
+> but without including the stride. Further down we use the stride to skip
+> the TLBI range ops.
+> 
+
+MAX_TLBI_RANGE_PAGES is defined as __TLBI_RANGE_PAGES(31, 3), which is
+decided by ARMv8.4 spec. The address range is determined by below formula:
+
+	[BADDR, BADDR + (NUM + 1) * 2^(5*SCALE + 1) * PAGESIZE)
+
+Which has nothing to do with the stride.  After removing the stride ==
+PAGE_SIZE below, there will be more clear.
+
+
+>>  }
+> 
+> I think the algorithm is correct, though I need to work it out on a
+> piece of paper.
+> 
+> The code could benefit from some comments (above the loop) on how the
+> range is built and the right scale found.
+> 
+
+OK.
+
+Thanks,
+Zhenyu
+
