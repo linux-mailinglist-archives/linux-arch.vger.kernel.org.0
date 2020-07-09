@@ -2,43 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10034219DE6
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 12:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A58C219E36
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jul 2020 12:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbgGIKds (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jul 2020 06:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726357AbgGIKdr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jul 2020 06:33:47 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917A5C061A0B;
-        Thu,  9 Jul 2020 03:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IvpXUYK9H+QnmAsI+N7Y+NJkZMFkfZkklbiU2ToyVQs=; b=ysIolg+CeRhNjk4NEZhTj9mj5g
-        ca828lNtjuaGV9NHITlG2ZDPtxGhXNhk3KrvudsXjUJmb8J4XG/OF1nzUOwI//gHDtqE0EANnpbE+
-        bbiBnPXo5VHSiHumhpr2Qu+akcJEqpES74jCyTShVPKFLAmD/sBzeRgZb/ORaBfu5DUyt8R+5OLWf
-        GfezKgB7POj5RVO9xyLQJYa4YqvWXnYTcjZguHbo5tiN+wTk/yxkJo9dnoBBMvOLBeJh/GXmNplaB
-        k6UuaBO7U4dpxgXLgt+GyuZ9p/eO25EDL03UeJAkSn2ViIUTHUSjhhYACWMO+fCLOzes7hYXYC/zl
-        7sbP7/LA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jtTs4-0007rF-9q; Thu, 09 Jul 2020 10:33:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66F76300739;
-        Thu,  9 Jul 2020 12:33:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 53455235B3D17; Thu,  9 Jul 2020 12:33:38 +0200 (CEST)
-Date:   Thu, 9 Jul 2020 12:33:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        Will Deacon <will@kernel.org>,
+        id S1726340AbgGIKvG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jul 2020 06:51:06 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34817 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726339AbgGIKvG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 Jul 2020 06:51:06 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B2Xyv3zTwz9sQt;
+        Thu,  9 Jul 2020 20:51:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1594291864;
+        bh=VI4aFN/tvbsGFEJ4xA4/0VeUoMRZZnfq/gpr3pAx8G0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=IKD2ten4BhzVwExubvn3K93mtWqnC3WWAZoRzc+c3H8YbG4WdsqsYIsWtHE7Mr0GH
+         nGpjcBK6Dan3kZ/RMkJ8HleBBVOarl2j8GlhAGagpMFmLzOUokO9woJyZe4KB9Tvwf
+         0gHMuKiiBQ3KcLbW84Ee0saFgPCykKlyofIbboYWIBK9RSlMTJJFeFiEwRu+zC4apq
+         bE4ngiBaxW+gJCjWBfPK2R/oK0LL8F7QhMQriTR0TsdOezFACf1z9JYBLvElvotO+B
+         y9apR0IOzs3WlCA9v8OvGe3t3FZaAfE4Haq+4aFUFiz6O2rlfWYCuDwrQiPGASWc69
+         zr4ZnuPJOXulA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Ingo Molnar <mingo@redhat.com>,
         Waiman Long <longman@redhat.com>,
@@ -46,50 +38,115 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, kvm-ppc@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] powerpc/64s: implement queued spinlocks and
- rwlocks
-Message-ID: <20200709103338.GQ597537@hirez.programming.kicks-ass.net>
-References: <20200706043540.1563616-1-npiggin@gmail.com>
- <20200706043540.1563616-5-npiggin@gmail.com>
- <877dvdvvkm.fsf@mpe.ellerman.id.au>
+Subject: Re: [PATCH v3 5/6] powerpc/pseries: implement paravirt qspinlocks for SPLPAR
+In-Reply-To: <20200706043540.1563616-6-npiggin@gmail.com>
+References: <20200706043540.1563616-1-npiggin@gmail.com> <20200706043540.1563616-6-npiggin@gmail.com>
+Date:   Thu, 09 Jul 2020 20:53:16 +1000
+Message-ID: <874kqhvu1v.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877dvdvvkm.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 08:20:25PM +1000, Michael Ellerman wrote:
-> Nicholas Piggin <npiggin@gmail.com> writes:
-> > These have shown significantly improved performance and fairness when
-> > spinlock contention is moderate to high on very large systems.
-> >
-> >  [ Numbers hopefully forthcoming after more testing, but initial
-> >    results look good ]
-> 
-> Would be good to have something here, even if it's preliminary.
-> 
-> > Thanks to the fast path, single threaded performance is not noticably
-> > hurt.
-> >
-> > Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> > ---
-> >  arch/powerpc/Kconfig                      | 13 ++++++++++++
-> >  arch/powerpc/include/asm/Kbuild           |  2 ++
-> >  arch/powerpc/include/asm/qspinlock.h      | 25 +++++++++++++++++++++++
-> >  arch/powerpc/include/asm/spinlock.h       |  5 +++++
-> >  arch/powerpc/include/asm/spinlock_types.h |  5 +++++
-> >  arch/powerpc/lib/Makefile                 |  3 +++
-> 
-> >  include/asm-generic/qspinlock.h           |  2 ++
-> 
-> Who's ack do we need for that part?
+Nicholas Piggin <npiggin@gmail.com> writes:
 
-Mine I suppose would do, as discussed earlier, it probably isn't
-required anymore, but I understand the paranoia of not wanting to change
-too many things at once :-)
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> ---
+>  arch/powerpc/include/asm/paravirt.h           | 28 ++++++++
+>  arch/powerpc/include/asm/qspinlock.h          | 66 +++++++++++++++++++
+>  arch/powerpc/include/asm/qspinlock_paravirt.h |  7 ++
+>  arch/powerpc/platforms/pseries/Kconfig        |  5 ++
+>  arch/powerpc/platforms/pseries/setup.c        |  6 +-
+>  include/asm-generic/qspinlock.h               |  2 +
+
+Another ack?
+
+> diff --git a/arch/powerpc/include/asm/paravirt.h b/arch/powerpc/include/asm/paravirt.h
+> index 7a8546660a63..f2d51f929cf5 100644
+> --- a/arch/powerpc/include/asm/paravirt.h
+> +++ b/arch/powerpc/include/asm/paravirt.h
+> @@ -45,6 +55,19 @@ static inline void yield_to_preempted(int cpu, u32 yield_count)
+>  {
+>  	___bad_yield_to_preempted(); /* This would be a bug */
+>  }
+> +
+> +extern void ___bad_yield_to_any(void);
+> +static inline void yield_to_any(void)
+> +{
+> +	___bad_yield_to_any(); /* This would be a bug */
+> +}
+
+Why do we do that rather than just not defining yield_to_any() at all
+and letting the build fail on that?
+
+There's a condition somewhere that we know will false at compile time
+and drop the call before linking?
+
+> diff --git a/arch/powerpc/include/asm/qspinlock_paravirt.h b/arch/powerpc/include/asm/qspinlock_paravirt.h
+> new file mode 100644
+> index 000000000000..750d1b5e0202
+> --- /dev/null
+> +++ b/arch/powerpc/include/asm/qspinlock_paravirt.h
+> @@ -0,0 +1,7 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +#ifndef __ASM_QSPINLOCK_PARAVIRT_H
+> +#define __ASM_QSPINLOCK_PARAVIRT_H
+
+_ASM_POWERPC_QSPINLOCK_PARAVIRT_H please.
+
+> +
+> +EXPORT_SYMBOL(__pv_queued_spin_unlock);
+
+Why's that in a header? Should that (eventually) go with the generic implementation?
+
+> diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
+> index 24c18362e5ea..756e727b383f 100644
+> --- a/arch/powerpc/platforms/pseries/Kconfig
+> +++ b/arch/powerpc/platforms/pseries/Kconfig
+> @@ -25,9 +25,14 @@ config PPC_PSERIES
+>  	select SWIOTLB
+>  	default y
+>  
+> +config PARAVIRT_SPINLOCKS
+> +	bool
+> +	default n
+
+default n is the default.
+
+> diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platforms/pseries/setup.c
+> index 2db8469e475f..747a203d9453 100644
+> --- a/arch/powerpc/platforms/pseries/setup.c
+> +++ b/arch/powerpc/platforms/pseries/setup.c
+> @@ -771,8 +771,12 @@ static void __init pSeries_setup_arch(void)
+>  	if (firmware_has_feature(FW_FEATURE_LPAR)) {
+>  		vpa_init(boot_cpuid);
+>  
+> -		if (lppaca_shared_proc(get_lppaca()))
+> +		if (lppaca_shared_proc(get_lppaca())) {
+>  			static_branch_enable(&shared_processor);
+> +#ifdef CONFIG_PARAVIRT_SPINLOCKS
+> +			pv_spinlocks_init();
+> +#endif
+> +		}
+
+We could avoid the ifdef with this I think?
+
+diff --git a/arch/powerpc/include/asm/spinlock.h b/arch/powerpc/include/asm/spinlock.h
+index 434615f1d761..6ec72282888d 100644
+--- a/arch/powerpc/include/asm/spinlock.h
++++ b/arch/powerpc/include/asm/spinlock.h
+@@ -10,5 +10,9 @@
+ #include <asm/simple_spinlock.h>
+ #endif
+
++#ifndef CONFIG_PARAVIRT_SPINLOCKS
++static inline void pv_spinlocks_init(void) { }
++#endif
++
+ #endif /* __KERNEL__ */
+ #endif /* __ASM_SPINLOCK_H */
 
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+cheers
