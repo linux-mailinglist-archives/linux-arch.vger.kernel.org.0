@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C1121B74A
+	by mail.lfdr.de (Postfix) with ESMTP id BBBD421B74B
 	for <lists+linux-arch@lfdr.de>; Fri, 10 Jul 2020 15:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgGJN5O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jul 2020 09:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S1727810AbgGJN5n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jul 2020 09:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgGJN5N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jul 2020 09:57:13 -0400
+        with ESMTP id S1726965AbgGJN5O (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jul 2020 09:57:14 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B434CC08C5DC;
-        Fri, 10 Jul 2020 06:57:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9ADC08C5CE;
+        Fri, 10 Jul 2020 06:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=8kIpdB7MOVPeE6Mtm6qS57nGC+Nbr8eHQGmiVAURoO0=; b=TLw7FcKOx/J3rJJLHO1uwPsxbU
-        qCr32vMX3YIHMLwj8rYB/m1Gr5BAGjsVbdVF0guFsdtHfoOOzRIN66UZEKN2aLGdXm+xW/Abx/qt/
-        02CU7VJ4COqrSPT7WbNAhbEEshaYNNMsX0ooRRVoQLhamuZzb3t1Z3/MqFq7mBEqcs176+aRo8Xc+
-        UyyKU0TEmW1qfFRWR9msKPCHgVrFapZar9l/au56KaAT4I8YZEw94sZ2KmJfUOwlbmy8JUUJjOCqk
-        q/yd9g6uGQljMMl9jMKackS9xAAS8OsfRAQ/8YTsES3sjxnZTjjyryLAn25I/DELDwHNP3SoieCH4
-        xiIckrAw==;
+        bh=wVXOB0bwTse/Sz4zv+YiEUb+RJzy2LQixEil7fBzx3k=; b=FwiKwS4KtMrB3DtxFidvXGvg0I
+        r21BX3mpVgWXJKfxFomXL6ipq2kN7zleUIZLHIAbMnMpLdQtb/DSzVlrlmPGjkDSwQYb/Ilbvhs/2
+        WziOZM487LBn6WlXuxadZhfCkIqsQNlqGNj7vbNwzJUph3scHCDLYUbjGg4Uv08dLpkQWrzop/Pwk
+        wbZahGTPC78QyBsCk0xmnF74kxhkVEMKVN6MX34XcylMWuz0HlrCWPJjzzX12YFH9pgOnzty9K42A
+        1yG3wZji4FLx4YXEHKmUfdEJY5VvA6Lvoyj5W+B3LlgBQiop3s3LgBEMAibpXcCDxk66G2yZLOfm5
+        /DeL8dzQ==;
 Received: from [2001:4bb8:188:5f50:c70:4a89:bc61:2] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jttWW-0004gU-FH; Fri, 10 Jul 2020 13:57:08 +0000
+        id 1jttWX-0004gf-LT; Fri, 10 Jul 2020 13:57:10 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
@@ -36,9 +36,9 @@ To:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] syscalls: use uaccess_kernel in addr_limit_user_check
-Date:   Fri, 10 Jul 2020 15:57:01 +0200
-Message-Id: <20200710135706.537715-2-hch@lst.de>
+Subject: [PATCH 2/6] nds32: use uaccess_kernel in show_regs
+Date:   Fri, 10 Jul 2020 15:57:02 +0200
+Message-Id: <20200710135706.537715-3-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200710135706.537715-1-hch@lst.de>
 References: <20200710135706.537715-1-hch@lst.de>
@@ -54,22 +54,22 @@ Use the uaccess_kernel helper instead of duplicating it.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- include/linux/syscalls.h | 2 +-
+ arch/nds32/kernel/process.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index b951a87da9877c..e933a43d4a69ac 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -263,7 +263,7 @@ static inline void addr_limit_user_check(void)
- 		return;
- #endif
+diff --git a/arch/nds32/kernel/process.c b/arch/nds32/kernel/process.c
+index 9712fd474f2ca3..f06265949ec28b 100644
+--- a/arch/nds32/kernel/process.c
++++ b/arch/nds32/kernel/process.c
+@@ -121,7 +121,7 @@ void show_regs(struct pt_regs *regs)
+ 		regs->uregs[3], regs->uregs[2], regs->uregs[1], regs->uregs[0]);
+ 	pr_info("  IRQs o%s  Segment %s\n",
+ 		interrupts_enabled(regs) ? "n" : "ff",
+-		segment_eq(get_fs(), KERNEL_DS)? "kernel" : "user");
++		uaccess_kernel() ? "kernel" : "user");
+ }
  
--	if (CHECK_DATA_CORRUPTION(!segment_eq(get_fs(), USER_DS),
-+	if (CHECK_DATA_CORRUPTION(uaccess_kernel(),
- 				  "Invalid address limit on user-mode return"))
- 		force_sig(SIGKILL);
- 
+ EXPORT_SYMBOL(show_regs);
 -- 
 2.26.2
 
