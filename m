@@ -2,116 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C4121AF02
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jul 2020 07:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7CA21AF23
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jul 2020 08:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726288AbgGJFvp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jul 2020 01:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgGJFvo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jul 2020 01:51:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487A2C08C5CE;
-        Thu,  9 Jul 2020 22:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RLTu3+HsCxbyd0XHLP7eqfjDQF9m/c45x4E/TaQCods=; b=TdwzKJ6KbOxKPNVPgtlBSB8eCE
-        GiUZ/mHUxX+IkLfgDjuZWly7AhMRgob3HvY24kAOGFO07yG4CWvBAsYSneiAVMIlGfl4UYsHQ6/r7
-        QEC9VXjWzgog2kozgtbitj5C0W6jnv/CtLWa/Z9J/dLfrjGQyH+YNPXWWyeVNVReuG5Ul1nz5OcHb
-        Qx+GixWi/iLAkyBxaBnqMqXoOy1Z0o8ayJoShQ2zPXbf15O9YcvLUQg6FpDs5mv4VAiDi1ojjGcx5
-        dqa+iwhvPqxEyuWAcxCaAbqlG41xKw8VCI/n3bgrKPBIrCAc1yBi6mD54voeiD6p/mdtiAdJadxjr
-        0DzQw7HA==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jtlwS-0007tK-I4; Fri, 10 Jul 2020 05:51:24 +0000
-Date:   Fri, 10 Jul 2020 06:51:24 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Nick Kossifidis <mick@ics.forth.gr>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, mark.rutland@arm.com,
-        steve@sk2.org, gregory.0xf0@gmail.com, catalin.marinas@arm.com,
-        linus.walleij@linaro.org,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        zaslonko@linux.ibm.com, glider@google.com, krzk@kernel.org,
-        zong.li@sifive.com, mchehab+samsung@kernel.org,
-        linux-riscv@lists.infradead.org, alex.shi@linux.alibaba.com,
-        will@kernel.org, ardb@kernel.org, linux-arch@vger.kernel.org,
-        paulmck@kernel.org, alex@ghiti.fr, bgolaszewski@baylibre.com,
-        masahiroy@kernel.org, linux@armlinux.org.uk, willy@infradead.org,
-        takahiro.akashi@linaro.org, james.morse@arm.com,
-        kernel-team@android.com, Arnd Bergmann <arnd@arndb.de>,
-        pmladek@suse.com, elver@google.com, aou@eecs.berkeley.edu,
-        keescook@chromium.org, uwe@kleine-koenig.org, rostedt@goodmis.org,
-        broonie@kernel.org, davidgow@google.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        dan.j.williams@intel.com, andriy.shevchenko@linux.intel.com,
-        gxt@pku.edu.cn, linux-arm-kernel@lists.infradead.org,
-        Nick Desaulniers <ndesaulniers@google.com>, tglx@linutronix.de,
-        rdunlap@infradead.org, matti.vaittinen@fi.rohmeurope.com,
-        linux-kernel@vger.kernel.org, mcgrof@kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>, mhiramat@kernel.org,
-        akpm@linux-foundation.org, davem@davemloft.net
-Subject: Re: [PATCH 1/5] lib: Add a generic version of devmem_is_allowed()
-Message-ID: <20200710055124.GA30265@infradead.org>
-References: <20200709200552.1910298-1-palmer@dabbelt.com>
- <20200709200552.1910298-2-palmer@dabbelt.com>
- <20200709204921.GJ781326@linux.ibm.com>
- <20200710053850.GA27019@infradead.org>
- <a037dac961c989d027eab293a0280643@mailhost.ics.forth.gr>
+        id S1725943AbgGJGHs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jul 2020 02:07:48 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:42238 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725851AbgGJGHr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Jul 2020 02:07:47 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id F1D5F97A1F5DAAF31D88;
+        Fri, 10 Jul 2020 14:07:41 +0800 (CST)
+Received: from [127.0.0.1] (10.174.186.75) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Fri, 10 Jul 2020
+ 14:07:34 +0800
+Subject: Re: [PATCH v1 2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
+        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>
+References: <20200709091054.1698-1-yezhenyu2@huawei.com>
+ <20200709091054.1698-3-yezhenyu2@huawei.com> <20200709173616.GC6579@gaia>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <8ada2e1b-19d8-58cc-e9cb-e52ddeafd876@huawei.com>
+Date:   Fri, 10 Jul 2020 14:07:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a037dac961c989d027eab293a0280643@mailhost.ics.forth.gr>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200709173616.GC6579@gaia>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.186.75]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 08:48:17AM +0300, Nick Kossifidis wrote:
-> ???????? 2020-07-10 08:38, Christoph Hellwig ????????????:
-> > On Thu, Jul 09, 2020 at 11:49:21PM +0300, Mike Rapoport wrote:
-> > > > +#ifndef CONFIG_GENERIC_DEVMEM_IS_ALLOWED
-> > > > +extern int devmem_is_allowed(unsigned long pfn);
-> > > > +#endif
-> > 
-> > Nit: no need for the extern here.
-> > 
-> > > > +config GENERIC_LIB_DEVMEM_IS_ALLOWED
-> > > > +	bool
-> > > > +	select ARCH_HAS_DEVMEM_IS_ALLOWED
-> > > 
-> > > This seems to work the other way around from the usual Kconfig chains.
-> > > In the most cases ARCH_HAS_SOMETHING selects GENERIC_SOMETHING.
-> > > 
-> > > I believe nicer way would be to make
-> > > 
-> > > config STRICT_DEVMEM
-> > > 	bool "Filter access to /dev/mem"
-> > > 	depends on MMU && DEVMEM
-> > > 	depends on ARCH_HAS_DEVMEM_IS_ALLOWED ||
-> > > GENERIC_LIB_DEVMEM_IS_ALLOWED
-> > > 
-> > > config GENERIC_LIB_DEVMEM_IS_ALLOWED
-> > > 	bool
-> > > 
-> > > and then s/select ARCH_HAS_DEVMEM_IS_ALLOWED/select
-> > > GENERIC_LIB_DEVMEM_IS_ALLOWED/
-> > > in the arch Kconfigs and drop ARCH_HAS_DEVMEM_IS_ALLOWED in the end.
-> > 
-> > To take a step back:  Is there any reason to not just always
-> > STRICT_DEVMEM? Maybe for a few architectures that don't currently
-> > support a strict /dev/mem the generic version isn't quite correct, but
-> > someone selecting the option and finding the issue is the best way to
-> > figure that out..
-> > 
-> 
-> During prototyping / testing having full access to all physical memory
-> through /dev/mem is very useful. We should have it enabled by default but
-> leave the config option there so that users / developers can disable it if
-> needed IMHO.
+Hi Catalin,
 
-I did not suggest to take the config option away.  Just to
-unconditionally allow enabling the option on all architectures.
+On 2020/7/10 1:36, Catalin Marinas wrote:
+> On Thu, Jul 09, 2020 at 05:10:54PM +0800, Zhenyu Ye wrote:
+>>  #define __tlbi_level(op, addr, level) do {				\
+>>  	u64 arg = addr;							\
+>>  									\
+>>  	if (cpus_have_const_cap(ARM64_HAS_ARMv8_4_TTL) &&		\
+>> +	    !cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&		\
+>>  	    level) {							\
+>>  		u64 ttl = level & 3;					\
+>> -									\
+>> -		switch (PAGE_SIZE) {					\
+>> -		case SZ_4K:						\
+>> -			ttl |= TLBI_TTL_TG_4K << 2;			\
+>> -			break;						\
+>> -		case SZ_16K:						\
+>> -			ttl |= TLBI_TTL_TG_16K << 2;			\
+>> -			break;						\
+>> -		case SZ_64K:						\
+>> -			ttl |= TLBI_TTL_TG_64K << 2;			\
+>> -			break;						\
+>> -		}							\
+>> -									\
+>> +		ttl |= get_trans_granule() << 2;			\
+>>  		arg &= ~TLBI_TTL_MASK;					\
+>>  		arg |= FIELD_PREP(TLBI_TTL_MASK, ttl);			\
+>>  	}								\
+> 
+> I think checking for !ARM64_HAS_TLBI_RANGE here is incorrect. I can see
+> why you attempted this since the range and classic ops have a different
+> position for the level but now you are not passing the TTL at all for
+> the classic TLBI. It's also inconsistent to have the range ops get the
+> level in the addr argument while the classic ops added in the
+> __tlbi_level macro.
+> 
+
+You are right, this is really a serious problem.  But this can be avoided
+after removing the check for ARM64_HAS_TLBI_RANGE and dropping the
+__tlbi_last_level.
+Just call __tlbi() and __tlbi_user() when doing range ops.
+
+> I'd rather have two sets of macros, __tlbi_level and __tlbi_range_level,
+> called depending on whether you use classic or range ops.
+> 
+
+Then we have to add __tlbi_user_range_level, too. And if we move the num
+and scale out of __TLBI_VADDR_RANGE, the __TLBI_VADDR_RANGE macro will make
+little sense (addr and asid also can be moved out).
+
+__TLBI_VADDR macro is defined to create a properly formatted VA operand for
+the TLBI, then how about add the level to __TLBI_VADDR, just like:
+
+	#define __TLBI_VADDR(addr, asid, level)				\
+	({								\
+		unsigned long __ta = (addr) >> 12;			\
+		__ta &= GENMASK_ULL(43, 0);				\
+		__ta |= (unsigned long)(asid) << 48;			\
+		if (cpus_have_const_cap(ARM64_HAS_ARMv8_4_TTL)) {	\
+			u64 ttl = get_trans_granule() << 2 + level & 3;	\
+			__ta |= ttl << 44;				\
+		}							\
+		__ta;							\
+	})
+
+Then we should make sure __TLBI_VADDR is used for all TLBI operands. But
+the related code has changed a lot in this merge window, so I perfer to
+do this in the future, after all below be merged:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/el2-obj-v4.1
+git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/pre-nv-5.9
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/tlbi
+
+Currently, keep the range ops get the level in the addr argument, the classic
+ops added the level in the __tlbi_level macro.
+
+>> @@ -108,6 +119,49 @@
+>>  		__tlbi_level(op, (arg | USER_ASID_FLAG), level);	\
+>>  } while (0)
+>>  
+>> +#define __tlbi_last_level(op1, op2, arg, last_level, tlb_level) do {	\
+>> +	if (last_level)	{						\
+>> +		__tlbi_level(op1, arg, tlb_level);			\
+>> +		__tlbi_user_level(op1, arg, tlb_level);			\
+>> +	} else {							\
+>> +		__tlbi_level(op2, arg, tlb_level);			\
+>> +		__tlbi_user_level(op2, arg, tlb_level);			\
+>> +	}								\
+>> +} while (0)
+> 
+> And you could drop this altogether. I know it's slightly more lines of
+> code but keeping it expanded in __flush_tlb_range() would be clearer.
+
+Thanks,
+Zhenyu
+
