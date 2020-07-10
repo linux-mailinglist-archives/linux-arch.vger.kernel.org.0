@@ -2,77 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B479A21B1B9
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jul 2020 10:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0039C21B260
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jul 2020 11:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgGJIxe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Jul 2020 04:53:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33700 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726615AbgGJIxe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 10 Jul 2020 04:53:34 -0400
-Received: from gaia (unknown [95.146.230.158])
+        id S1726725AbgGJJgQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jul 2020 05:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726288AbgGJJgP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jul 2020 05:36:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E8EC08C5CE;
+        Fri, 10 Jul 2020 02:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Pz3n/bmDz0/TOVCscTPa/2tvCyIHBk++33SZIn5QfrE=; b=qOccywes3VQXkn+HfWcUHh55kG
+        MBOf7pYpA0zeOdJZRzb8sneDHo+1Q3OHPGdPY2ldjVM4B0dbh+9It/saBEg0oROqO4ei9uPf3QKzC
+        oFUwOUawlzbiFkl2L7vbe/Hdpf0GwTPaLwZ1X6QXqxGfEYYscRVeZu90wbFsSX3RFtfhxuzmnQ6TL
+        qX1W81Z3c4irF3kbpp/6qIevZa+30MiN383Fmau66CgysGMLTDGqiO4GbofMgSIrBD9+0H+cicSm4
+        gm/mnvE5MHLhWI+5T35OceZPl6zIEQzoRSsyByeQivEfIKZI+ZoOHtDKTj5QsaGVCK7eljKXWc6N2
+        JHJnfJsw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jtpRl-0001Ay-M5; Fri, 10 Jul 2020 09:35:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E6EA0207BC;
-        Fri, 10 Jul 2020 08:53:29 +0000 (UTC)
-Date:   Fri, 10 Jul 2020 09:53:27 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Zhenyu Ye <yezhenyu2@huawei.com>
-Cc:     peterz@infradead.org, mark.rutland@arm.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
-        npiggin@gmail.com, arnd@arndb.de, rostedt@goodmis.org,
-        maz@kernel.org, suzuki.poulose@arm.com, tglx@linutronix.de,
-        yuzhao@google.com, Dave.Martin@arm.com, steven.price@arm.com,
-        broonie@kernel.org, guohanjun@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
-        xiexiangyou@huawei.com, prime.zeng@hisilicon.com,
-        zhangshaokun@hisilicon.com, kuhn.chenqun@huawei.com
-Subject: Re: [RESEND PATCH v5 3/6] arm64: Add tlbi_user_level TLB
- invalidation helper
-Message-ID: <20200710085326.GA11839@gaia>
-References: <20200625080314.230-1-yezhenyu2@huawei.com>
- <20200625080314.230-4-yezhenyu2@huawei.com>
- <20200709164845.GB6579@gaia>
- <33a5dc75-8209-e198-bb41-8b4ab82c000e@huawei.com>
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 96A0F3013E5;
+        Fri, 10 Jul 2020 11:35:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 837652B5130C4; Fri, 10 Jul 2020 11:35:56 +0200 (CEST)
+Date:   Fri, 10 Jul 2020 11:35:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     linux-arch@vger.kernel.org, x86@kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+        Anton Blanchard <anton@ozlabs.org>
+Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy
+ tlb option
+Message-ID: <20200710093556.GY4800@hirez.programming.kicks-ass.net>
+References: <20200710015646.2020871-1-npiggin@gmail.com>
+ <20200710015646.2020871-8-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <33a5dc75-8209-e198-bb41-8b4ab82c000e@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200710015646.2020871-8-npiggin@gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 09:20:59AM +0800, Zhenyu Ye wrote:
-> On 2020/7/10 0:48, Catalin Marinas wrote:
-> > On Thu, Jun 25, 2020 at 04:03:11PM +0800, Zhenyu Ye wrote:
-> >> @@ -189,8 +195,9 @@ static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
-> >>  	unsigned long addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
-> >>  
-> >>  	dsb(ishst);
-> >> -	__tlbi(vale1is, addr);
-> >> -	__tlbi_user(vale1is, addr);
-> >> +	/* This function is only called on a small page */
-> >> +	__tlbi_level(vale1is, addr, 3);
-> >> +	__tlbi_user_level(vale1is, addr, 3);
-> >>  }
-> > 
-> > Actually, that's incorrect. It was ok in v2 of your patches when I
-> > suggested to drop level 0, just leave the function unchanged but I
-> > missed that you updated it to pass level 3.
-> > 
-> > pmdp_set_access_flags -> ptep_set_access_flags ->
-> > flush_tlb_fix_spurious_fault -> flush_tlb_page -> flush_tlb_page_nosync.
+On Fri, Jul 10, 2020 at 11:56:46AM +1000, Nicholas Piggin wrote:
+> On big systems, the mm refcount can become highly contented when doing
+> a lot of context switching with threaded applications (particularly
+> switching between the idle thread and an application thread).
 > 
-> How do you want to fix this error? I notice that this series have been applied
-> to arm64 (for-next/tlbi).  Should I send a new series based on arm64 (for-next/tlbi)?
+> Abandoning lazy tlb slows switching down quite a bit in the important
+> user->idle->user cases, so so instead implement a non-refcounted scheme
+> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
+> any remaining lazy ones.
+> 
+> On a 16-socket 192-core POWER8 system, a context switching benchmark
+> with as many software threads as CPUs (so each switch will go in and
+> out of idle), upstream can achieve a rate of about 1 million context
+> switches per second. After this patch it goes up to 118 million.
 
-Just a patch on top with a Fixes: tag.
+That's mighty impressive, however:
 
-Thanks.
+> +static void shoot_lazy_tlbs(struct mm_struct *mm)
+> +{
+> +	if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_SHOOTDOWN)) {
+> +		smp_call_function_many(mm_cpumask(mm), do_shoot_lazy_tlb, (void *)mm, 1);
+> +		do_shoot_lazy_tlb(mm);
+> +	}
+> +}
 
--- 
-Catalin
+IIRC you (power) never clear a CPU from that mask, so for other
+workloads I can see this resulting in massive amounts of IPIs.
+
+For instance, take as many processes as you have CPUs. For each,
+manually walk the task across all CPUs and exit. Again.
+
+Clearly, that's an extreme, but still...
+
+
