@@ -2,98 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A24C21C546
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Jul 2020 18:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D884321C5B6
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Jul 2020 20:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728645AbgGKQcr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Jul 2020 12:32:47 -0400
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:51923 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728412AbgGKQcr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 11 Jul 2020 12:32:47 -0400
-Received: from [192.168.0.6] (ip5f5af27f.dynamic.kabel-deutschland.de [95.90.242.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728510AbgGKSW5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Jul 2020 14:22:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47281 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726281AbgGKSW5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Jul 2020 14:22:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594491775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=ltTy2GcHC036Egycy6GY0oL2cPL6zzaGde4AZbh1z7Q=;
+        b=DkOIw48FNlR0A7+oI1hkc5NnHVHw/B1r0AteeI+P4OTbic7qxtah9lfEbNJOM9j/sqvqyN
+        eWVypIk+KFqc0aCnNP6jra3norRGrvJwJORHDdxywBZpD1poGV9SJfhJPdUR8asqyI7m3h
+        cavrk35TLcy3zgDfoQBbqQ0nO9r6gyg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-373-5zlWZQn6MS6VvBPZPers8Q-1; Sat, 11 Jul 2020 14:22:53 -0400
+X-MC-Unique: 5zlWZQn6MS6VvBPZPers8Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1B9102002EE32;
-        Sat, 11 Jul 2020 18:32:42 +0200 (CEST)
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-To:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-References: <20200624203200.78870-1-samitolvanen@google.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <671d8923-ed43-4600-2628-33ae7cb82ccb@molgen.mpg.de>
-Date:   Sat, 11 Jul 2020 18:32:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200624203200.78870-1-samitolvanen@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB3A1107ACCA;
+        Sat, 11 Jul 2020 18:22:51 +0000 (UTC)
+Received: from llong.com (ovpn-112-135.rdu2.redhat.com [10.10.112.135])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5FC965D9CC;
+        Sat, 11 Jul 2020 18:22:47 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH 0/2] locking/qspinlock: Allow lock to store lock holder cpu number
+Date:   Sat, 11 Jul 2020 14:21:26 -0400
+Message-Id: <20200711182128.29130-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dear Sami,
+This patchset modifies the qspinlock code to allow it to store the lock
+holder cpu number in the lock itself if feasible for easier debugging
+and crash dump analysis. This lock holder cpu information may also be
+useful to architectures like PowerPC that needs the lock holder cpu
+number for better paravirtual spinlock performance.
 
+A new config option QUEUED_SPINLOCKS_CPUINFO is added. If this config
+option is set, lock holder cpu number will always be stored if the
+number is small enough.  Without this option, lock holder cpu number
+will only be stored in the slowpath of the native qspinlock.
 
-Am 24.06.20 um 22:31 schrieb Sami Tolvanen:
-> This patch series adds support for building x86_64 and arm64 kernels
-> with Clang's Link Time Optimization (LTO).
-> 
-> In addition to performance, the primary motivation for LTO is to allow
-> Clang's Control-Flow Integrity (CFI) to be used in the kernel. Google's
-> Pixel devices have shipped with LTO+CFI kernels since 2018.
-> 
-> Most of the patches are build system changes for handling LLVM bitcode,
-> which Clang produces with LTO instead of ELF object files, postponing
-> ELF processing until a later stage, and ensuring initcall ordering.
-> 
-> Note that first objtool patch in the series is already in linux-next,
-> but as it's needed with LTO, I'm including it also here to make testing
-> easier.
+Waiman Long (2):
+  locking/qspinlock: Store lock holder cpu in lock if feasible
+  locking/pvqspinlock: Optionally store lock holder cpu into lock
 
-[…]
+ arch/Kconfig                              | 12 ++++++
+ arch/x86/include/asm/qspinlock_paravirt.h |  9 ++--
+ include/asm-generic/qspinlock.h           | 13 ++++--
+ include/asm-generic/qspinlock_types.h     |  5 +++
+ kernel/locking/qspinlock.c                | 50 +++++++++++++++--------
+ kernel/locking/qspinlock_paravirt.h       | 41 ++++++++++---------
+ 6 files changed, 87 insertions(+), 43 deletions(-)
 
-Thank you very much for sending these changes.
+-- 
+2.18.1
 
-Do you have a branch, where your current work can be pulled from? Your 
-branch on GitHub [1] seems 15 months old.
-
-Out of curiosity, I applied the changes, allowed the selection for i386 
-(x86), and with Clang 1:11~++20200701093119+ffee8040534-1~exp1 from 
-Debian experimental, it failed with `Invalid absolute R_386_32 
-relocation: KERNEL_PAGES`:
-
-> make -f ./scripts/Makefile.build obj=arch/x86/boot arch/x86/boot/bzImage
-> make -f ./scripts/Makefile.build obj=arch/x86/boot/compressed arch/x86/boot/compressed/vmlinux
->   llvm-nm vmlinux | sed -n -e 's/^\([0-9a-fA-F]*\) [ABCDGRSTVW] \(_text\|__bss_start\|_end\)$/#define VO_ _AC(0x,UL)/p' > arch/x86/boot/compressed/../voffset.h
->   clang -Wp,-MMD,arch/x86/boot/compressed/.misc.o.d -nostdinc -isystem /usr/lib/llvm-11/lib/clang/11.0.0/include -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -m32 -O2 -fno-strict-aliasing -fPIE -DDISABLE_BRANCH_PROFILING -march=i386 -mno-mmx -mno-sse -ffreestanding -fno-stack-protector -Wno-address-of-packed-member -Wno-gnu -Wno-pointer-sign -fmacro-prefix-map=./= -fno-asynchronous-unwind-tables    -DKBUILD_MODFILE='"arch/x86/boot/compressed/misc"' -DKBUILD_BASENAME='"misc"' -DKBUILD_MODNAME='"misc"' -D__KBUILD_MODNAME=misc -c -o arch/x86/boot/compressed/misc.o arch/x86/boot/compressed/misc.c
->   llvm-objcopy  -R .comment -S vmlinux arch/x86/boot/compressed/vmlinux.bin
->   arch/x86/tools/relocs vmlinux > arch/x86/boot/compressed/vmlinux.relocs;arch/x86/tools/relocs --abs-relocs vmlinux
-> Invalid absolute R_386_32 relocation: KERNEL_PAGES
-> make[2]: *** [arch/x86/boot/compressed/Makefile:134: arch/x86/boot/compressed/vmlinux.relocs] Error 1
-> make[2]: *** Deleting file 'arch/x86/boot/compressed/vmlinux.relocs'
-> make[1]: *** [arch/x86/boot/Makefile:115: arch/x86/boot/compressed/vmlinux] Error 2
-> make: *** [arch/x86/Makefile:268: bzImage] Error 2
-
-
-Kind regards,
-
-Paul
-
-
-
-[1]: https://github.com/samitolvanen/linux/tree/clang-lto
