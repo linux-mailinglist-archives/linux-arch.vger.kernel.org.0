@@ -2,130 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4AA21C2B5
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Jul 2020 08:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A24C21C546
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Jul 2020 18:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgGKGvB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Jul 2020 02:51:01 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:54364 "EHLO huawei.com"
+        id S1728645AbgGKQcr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Jul 2020 12:32:47 -0400
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:51923 "EHLO mx1.molgen.mpg.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726963AbgGKGvB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 11 Jul 2020 02:51:01 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 104F5913F15158AB43CC;
-        Sat, 11 Jul 2020 14:50:57 +0800 (CST)
-Received: from [127.0.0.1] (10.174.186.75) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Sat, 11 Jul 2020
- 14:50:47 +0800
-Subject: Re: [PATCH v2 2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
-        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>
-References: <20200710094420.517-1-yezhenyu2@huawei.com>
- <20200710094420.517-3-yezhenyu2@huawei.com> <20200710183158.GE11839@gaia>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <b34e3d42-faaa-73ba-9b54-8e4017514ee0@huawei.com>
-Date:   Sat, 11 Jul 2020 14:50:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728412AbgGKQcr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 11 Jul 2020 12:32:47 -0400
+Received: from [192.168.0.6] (ip5f5af27f.dynamic.kabel-deutschland.de [95.90.242.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1B9102002EE32;
+        Sat, 11 Jul 2020 18:32:42 +0200 (CEST)
+Subject: Re: [PATCH 00/22] add support for Clang LTO
+To:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+References: <20200624203200.78870-1-samitolvanen@google.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Message-ID: <671d8923-ed43-4600-2628-33ae7cb82ccb@molgen.mpg.de>
+Date:   Sat, 11 Jul 2020 18:32:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200710183158.GE11839@gaia>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.186.75]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20200624203200.78870-1-samitolvanen@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Catalin,
+Dear Sami,
 
-On 2020/7/11 2:31, Catalin Marinas wrote:
-> On Fri, Jul 10, 2020 at 05:44:20PM +0800, Zhenyu Ye wrote:
->> -	if ((end - start) >= (MAX_TLBI_OPS * stride)) {
->> +	if ((!cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
->> +	    (end - start) >= (MAX_TLBI_OPS * stride)) ||
->> +	    pages >= MAX_TLBI_RANGE_PAGES) {
->>  		flush_tlb_mm(vma->vm_mm);
->>  		return;
->>  	}
+
+Am 24.06.20 um 22:31 schrieb Sami Tolvanen:
+> This patch series adds support for building x86_64 and arm64 kernels
+> with Clang's Link Time Optimization (LTO).
 > 
-> I think we can use strictly greater here rather than greater or equal.
-> MAX_TLBI_RANGE_PAGES can be encoded as num 31, scale 3.
-
-Sorry, we can't.
-For a boundary value (such as 2^6), we have two way to express it
-in TLBI RANGE operations:
-1. scale = 0, num = 31.
-2. scale = 1, num = 0.
-
-I used the second way in following implementation.  However, for the
-MAX_TLBI_RANGE_PAGES, we can only use scale = 3, num = 31.
-So if use strictly greater here, ERROR will happen when range pages
-equal to MAX_TLBI_RANGE_PAGES.
-
-There are two ways to avoid this bug:
-1. Just keep 'greater or equal' here.  The ARM64 specification does
-not specify how we flush tlb entries in this case, flush_tlb_mm()
-is also a good choice for such a wide range of pages.
-2. Add check in the loop, just like: (this may cause the codes a bit ugly)
-
-	num = __TLBI_RANGE_NUM(pages, scale) - 1;
-
-	/* scale = 4, num = 0 is equal to scale = 3, num = 31. */
-	if (scale == 4 && num == 0) {
-		scale = 3;
-		num = 31;
-	}
-
-	if (num >= 0) {
-	...
-
-Which one do you prefer and how do you want to fix this error? Just
-a fix patch again?
-
+> In addition to performance, the primary motivation for LTO is to allow
+> Clang's Control-Flow Integrity (CFI) to be used in the kernel. Google's
+> Pixel devices have shipped with LTO+CFI kernels since 2018.
 > 
->>  
->> -	/* Convert the stride into units of 4k */
->> -	stride >>= 12;
->> +	dsb(ishst);
->>  
->> -	start = __TLBI_VADDR(start, asid);
->> -	end = __TLBI_VADDR(end, asid);
->> +	/*
->> +	 * When cpu does not support TLBI RANGE feature, we flush the tlb
->> +	 * entries one by one at the granularity of 'stride'.
->> +	 * When cpu supports the TLBI RANGE feature, then:
->> +	 * 1. If pages is odd, flush the first page through non-RANGE
->> +	 *    instruction;
->> +	 * 2. For remaining pages: The minimum range granularity is decided
->> +	 *    by 'scale', so we can not flush all pages by one instruction
->> +	 *    in some cases.
->> +	 *    Here, we start from scale = 0, flush corresponding pages
->> +	 *    (from 2^(5*scale + 1) to 2^(5*(scale + 1) + 1)), and increase
->> +	 *    it until no pages left.
->> +	 */
->> +	while (pages > 0) {
+> Most of the patches are build system changes for handling LLVM bitcode,
+> which Clang produces with LTO instead of ELF object files, postponing
+> ELF processing until a later stage, and ensuring initcall ordering.
 > 
-> I did some simple checks on ((end - start) % stride) and never
-> triggered. I had a slight worry that pages could become negative (and
-> we'd loop forever since it's unsigned long) for some mismatched stride
-> and flush size. It doesn't seem like.
-> 
+> Note that first objtool patch in the series is already in linux-next,
+> but as it's needed with LTO, I'm including it also here to make testing
+> easier.
 
-The start and end are round_down/up in the function:
+[…]
 
-	start = round_down(start, stride);
- 	end = round_up(end, stride);
+Thank you very much for sending these changes.
 
-So the flush size and stride will never mismatch.
+Do you have a branch, where your current work can be pulled from? Your 
+branch on GitHub [1] seems 15 months old.
 
-Thanks,
-Zhenyu
+Out of curiosity, I applied the changes, allowed the selection for i386 
+(x86), and with Clang 1:11~++20200701093119+ffee8040534-1~exp1 from 
+Debian experimental, it failed with `Invalid absolute R_386_32 
+relocation: KERNEL_PAGES`:
 
+> make -f ./scripts/Makefile.build obj=arch/x86/boot arch/x86/boot/bzImage
+> make -f ./scripts/Makefile.build obj=arch/x86/boot/compressed arch/x86/boot/compressed/vmlinux
+>   llvm-nm vmlinux | sed -n -e 's/^\([0-9a-fA-F]*\) [ABCDGRSTVW] \(_text\|__bss_start\|_end\)$/#define VO_ _AC(0x,UL)/p' > arch/x86/boot/compressed/../voffset.h
+>   clang -Wp,-MMD,arch/x86/boot/compressed/.misc.o.d -nostdinc -isystem /usr/lib/llvm-11/lib/clang/11.0.0/include -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -m32 -O2 -fno-strict-aliasing -fPIE -DDISABLE_BRANCH_PROFILING -march=i386 -mno-mmx -mno-sse -ffreestanding -fno-stack-protector -Wno-address-of-packed-member -Wno-gnu -Wno-pointer-sign -fmacro-prefix-map=./= -fno-asynchronous-unwind-tables    -DKBUILD_MODFILE='"arch/x86/boot/compressed/misc"' -DKBUILD_BASENAME='"misc"' -DKBUILD_MODNAME='"misc"' -D__KBUILD_MODNAME=misc -c -o arch/x86/boot/compressed/misc.o arch/x86/boot/compressed/misc.c
+>   llvm-objcopy  -R .comment -S vmlinux arch/x86/boot/compressed/vmlinux.bin
+>   arch/x86/tools/relocs vmlinux > arch/x86/boot/compressed/vmlinux.relocs;arch/x86/tools/relocs --abs-relocs vmlinux
+> Invalid absolute R_386_32 relocation: KERNEL_PAGES
+> make[2]: *** [arch/x86/boot/compressed/Makefile:134: arch/x86/boot/compressed/vmlinux.relocs] Error 1
+> make[2]: *** Deleting file 'arch/x86/boot/compressed/vmlinux.relocs'
+> make[1]: *** [arch/x86/boot/Makefile:115: arch/x86/boot/compressed/vmlinux] Error 2
+> make: *** [arch/x86/Makefile:268: bzImage] Error 2
+
+
+Kind regards,
+
+Paul
+
+
+
+[1]: https://github.com/samitolvanen/linux/tree/clang-lto
