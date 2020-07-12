@@ -2,114 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0B721C82A
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Jul 2020 10:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC69C21C935
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Jul 2020 14:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728264AbgGLI7b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 12 Jul 2020 04:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbgGLI7a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Jul 2020 04:59:30 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E66C061794;
-        Sun, 12 Jul 2020 01:59:30 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id v8so10415484iox.2;
-        Sun, 12 Jul 2020 01:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=+Dl8Q1XzZiYA4GO8ZZtoY/mYTNvNLG4yL/TSgXjOVXM=;
-        b=et8c4srf7jKz/ghq6ldgJw1wpsajAh/iicKsgGLSk5HCxGZ5CQ86IFUST3G/dAZS9R
-         BK+JEehQthnnir07FeiPcL/qpVUZ2NGCyUjND9byzvK8PnixOnaWkF96m/M5kUymOL2C
-         LII6vqDG01OkywVTUDEiMrt1QcYjd+y6es/0VA01BLEP3VrfKh/wxRZhab4S/+5xDWOB
-         xe88vsXrHJ2oYLtwubG993g1CAsa5aM8/V0M7++JN1XNtMqDZiEmh7FXGrho8fAIGKiT
-         KJW0LpTSPQuedYjKrMO8KvYmRECOyDbXavBRUCJEaU4kO1PGAriZ+FRdd/Me8DIzlfab
-         p9uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=+Dl8Q1XzZiYA4GO8ZZtoY/mYTNvNLG4yL/TSgXjOVXM=;
-        b=CafyuPnaQWggO8PEixrRbkVAkgjZD8f+UkmoKcWcFsIIRaq3RLpP5cwWOhMKEYh4g8
-         7WxtNI9ca8lHQjl1ja7ble2ASNCYrAXjbMY4EDJhmkYKvfYZ+opVMil8K3MAJ4AUxtp1
-         ThSji8sFkAuCrCmuoI8SKYA/MUZ2lYLZJbG3fCmkC6CJnX22aAki8TujsHHuyKuqXE1c
-         JGVxO18dDrfMHjtyX9YzEM/x6A0CS15REVPqzvxL5SpXT2NINXroaR5kuuPEZs3Ssa+8
-         O7GUgeZZ30hY3jNuXo92vW3anwL6vy/EqoGatulaOuTz3X2ABz27nuyd2vdbcj1sbCZT
-         HGQg==
-X-Gm-Message-State: AOAM5327tf9z0the4zjHMjxdw8A4JgjbiCsSC1ieJkvlNQ9WMeswB739
-        cjSsXZ8h9jX9FML4QC/xNOGhWU2wnuT4JxOdrLw=
-X-Google-Smtp-Source: ABdhPJz6yajbht8v21aUb5AqbeseJZbW7WiEMt9+Xzj6unIHhgR9p8E/p5dg9MyRRh3U33wQNCR5IYqWyZHeGZXnsKY=
-X-Received: by 2002:a05:6602:1555:: with SMTP id h21mr6773338iow.163.1594544369052;
- Sun, 12 Jul 2020 01:59:29 -0700 (PDT)
+        id S1728756AbgGLMDn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 12 Jul 2020 08:03:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50592 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725765AbgGLMDm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 12 Jul 2020 08:03:42 -0400
+Received: from gaia (unknown [95.146.230.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 336B1206E2;
+        Sun, 12 Jul 2020 12:03:39 +0000 (UTC)
+Date:   Sun, 12 Jul 2020 13:03:36 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     will@kernel.org, suzuki.poulose@arm.com, maz@kernel.org,
+        steven.price@arm.com, guohanjun@huawei.com, olof@lixom.net,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
+        xiexiangyou@huawei.com, prime.zeng@hisilicon.com,
+        zhangshaokun@hisilicon.com, kuhn.chenqun@huawei.com
+Subject: Re: [PATCH v2 2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
+Message-ID: <20200712120335.GA30896@gaia>
+References: <20200710094420.517-1-yezhenyu2@huawei.com>
+ <20200710094420.517-3-yezhenyu2@huawei.com>
+ <20200710183158.GE11839@gaia>
+ <b34e3d42-faaa-73ba-9b54-8e4017514ee0@huawei.com>
 MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com> <671d8923-ed43-4600-2628-33ae7cb82ccb@molgen.mpg.de>
-In-Reply-To: <671d8923-ed43-4600-2628-33ae7cb82ccb@molgen.mpg.de>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sun, 12 Jul 2020 10:59:17 +0200
-Message-ID: <CA+icZUXPB_C1bjA13zi3OLFCpiZh+GsgHT0y6kumzVRavs4LkQ@mail.gmail.com>
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b34e3d42-faaa-73ba-9b54-8e4017514ee0@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jul 11, 2020 at 6:32 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Sami,
->
->
-> Am 24.06.20 um 22:31 schrieb Sami Tolvanen:
-> > This patch series adds support for building x86_64 and arm64 kernels
-> > with Clang's Link Time Optimization (LTO).
-> >
-> > In addition to performance, the primary motivation for LTO is to allow
-> > Clang's Control-Flow Integrity (CFI) to be used in the kernel. Google's
-> > Pixel devices have shipped with LTO+CFI kernels since 2018.
-> >
-> > Most of the patches are build system changes for handling LLVM bitcode,
-> > which Clang produces with LTO instead of ELF object files, postponing
-> > ELF processing until a later stage, and ensuring initcall ordering.
-> >
-> > Note that first objtool patch in the series is already in linux-next,
-> > but as it's needed with LTO, I'm including it also here to make testing
-> > easier.
->
-> [=E2=80=A6]
->
-> Thank you very much for sending these changes.
->
-> Do you have a branch, where your current work can be pulled from? Your
-> branch on GitHub [1] seems 15 months old.
->
+On Sat, Jul 11, 2020 at 02:50:46PM +0800, Zhenyu Ye wrote:
+> On 2020/7/11 2:31, Catalin Marinas wrote:
+> > On Fri, Jul 10, 2020 at 05:44:20PM +0800, Zhenyu Ye wrote:
+> >> -	if ((end - start) >= (MAX_TLBI_OPS * stride)) {
+> >> +	if ((!cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) &&
+> >> +	    (end - start) >= (MAX_TLBI_OPS * stride)) ||
+> >> +	    pages >= MAX_TLBI_RANGE_PAGES) {
+> >>  		flush_tlb_mm(vma->vm_mm);
+> >>  		return;
+> >>  	}
+> > 
+> > I think we can use strictly greater here rather than greater or equal.
+> > MAX_TLBI_RANGE_PAGES can be encoded as num 31, scale 3.
+> 
+> Sorry, we can't.
+> For a boundary value (such as 2^6), we have two way to express it
+> in TLBI RANGE operations:
+> 1. scale = 0, num = 31.
+> 2. scale = 1, num = 0.
+> 
+> I used the second way in following implementation.  However, for the
+> MAX_TLBI_RANGE_PAGES, we can only use scale = 3, num = 31.
+> So if use strictly greater here, ERROR will happen when range pages
+> equal to MAX_TLBI_RANGE_PAGES.
 
-Agreed it's easier to git-pull.
-I have seen [1] - not sure if this is the latest version.
-Alternatively, you can check patchwork LKML by searching for $submitter.
-( You can open patch 01/22 and download the whole patch-series by
-following the link "series", see [3]. )
+You are right, I got confused by the __TLBI_RANGE_NUM() macro which
+doesn't return the actual 'num' for the TLBI argument as it would go
+from 0 to 31. After subtracting 1, num end sup from -1 to 30, so we
+never get the maximum range. I think for scale 3 and num 31, this would
+be 8GB with 4K pages, so the maximum we'd cover 8GB - 64K * 4K.
 
-- Sedat -
+> There are two ways to avoid this bug:
+> 1. Just keep 'greater or equal' here.  The ARM64 specification does
+> not specify how we flush tlb entries in this case, flush_tlb_mm()
+> is also a good choice for such a wide range of pages.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.=
-git/log/?h=3Dlto
-[2] https://lore.kernel.org/patchwork/project/lkml/list/?series=3D&submitte=
-r=3D19676
-[3] https://lore.kernel.org/patchwork/series/450026/mbox/
+I'll go for this option, I don't think it would make much difference in
+practice if we stop at 8GB - 256M range.
+
+> 2. Add check in the loop, just like: (this may cause the codes a bit ugly)
+> 
+> 	num = __TLBI_RANGE_NUM(pages, scale) - 1;
+> 
+> 	/* scale = 4, num = 0 is equal to scale = 3, num = 31. */
+> 	if (scale == 4 && num == 0) {
+> 		scale = 3;
+> 		num = 31;
+> 	}
+> 
+> 	if (num >= 0) {
+> 	...
+> 
+> Which one do you prefer and how do you want to fix this error? Just
+> a fix patch again?
+
+I'll fold the diff below and refresh the patch:
+
+diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+index 1eb0588718fb..0300e433ffe6 100644
+--- a/arch/arm64/include/asm/tlbflush.h
++++ b/arch/arm64/include/asm/tlbflush.h
+@@ -147,9 +147,13 @@ static inline unsigned long get_trans_granule(void)
+ #define __TLBI_RANGE_PAGES(num, scale)	(((num) + 1) << (5 * (scale) + 1))
+ #define MAX_TLBI_RANGE_PAGES		__TLBI_RANGE_PAGES(31, 3)
+ 
++/*
++ * Generate 'num' values from -1 to 30 with -1 rejected by the
++ * __flush_tlb_range() loop below.
++ */
+ #define TLBI_RANGE_MASK			GENMASK_ULL(4, 0)
+ #define __TLBI_RANGE_NUM(range, scale)	\
+-	(((range) >> (5 * (scale) + 1)) & TLBI_RANGE_MASK)
++	((((range) >> (5 * (scale) + 1)) & TLBI_RANGE_MASK) - 1)
+ 
+ /*
+  *	TLB Invalidation
+@@ -285,8 +289,8 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
+ 	pages = (end - start) >> PAGE_SHIFT;
+ 
+ 	if ((!cpus_have_const_cap(ARM64_HAS_TLB_RANGE) &&
+-	     (end - start) > (MAX_TLBI_OPS * stride)) ||
+-	    pages > MAX_TLBI_RANGE_PAGES) {
++	     (end - start) >= (MAX_TLBI_OPS * stride)) ||
++	    pages >= MAX_TLBI_RANGE_PAGES) {
+ 		flush_tlb_mm(vma->vm_mm);
+ 		return;
+ 	}
+@@ -306,6 +310,10 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
+ 	 *    Start from scale = 0, flush the corresponding number of pages
+ 	 *    ((num+1)*2^(5*scale+1) starting from 'addr'), then increase it
+ 	 *    until no pages left.
++	 *
++	 * Note that certain ranges can be represented by either num = 31 and
++	 * scale or num = 0 and scale + 1. The loop below favours the latter
++	 * since num is limited to 30 by the __TLBI_RANGE_NUM() macro.
+ 	 */
+ 	while (pages > 0) {
+ 		if (!cpus_have_const_cap(ARM64_HAS_TLB_RANGE) ||
+@@ -323,7 +331,7 @@ static inline void __flush_tlb_range(struct vm_area_struct *vma,
+ 			continue;
+ 		}
+ 
+-		num = __TLBI_RANGE_NUM(pages, scale) - 1;
++		num = __TLBI_RANGE_NUM(pages, scale);
+ 		if (num >= 0) {
+ 			addr = __TLBI_VADDR_RANGE(start, asid, scale,
+ 						  num, tlb_level);
+
+> >> -	/* Convert the stride into units of 4k */
+> >> -	stride >>= 12;
+> >> +	dsb(ishst);
+> >>  
+> >> -	start = __TLBI_VADDR(start, asid);
+> >> -	end = __TLBI_VADDR(end, asid);
+> >> +	/*
+> >> +	 * When cpu does not support TLBI RANGE feature, we flush the tlb
+> >> +	 * entries one by one at the granularity of 'stride'.
+> >> +	 * When cpu supports the TLBI RANGE feature, then:
+> >> +	 * 1. If pages is odd, flush the first page through non-RANGE
+> >> +	 *    instruction;
+> >> +	 * 2. For remaining pages: The minimum range granularity is decided
+> >> +	 *    by 'scale', so we can not flush all pages by one instruction
+> >> +	 *    in some cases.
+> >> +	 *    Here, we start from scale = 0, flush corresponding pages
+> >> +	 *    (from 2^(5*scale + 1) to 2^(5*(scale + 1) + 1)), and increase
+> >> +	 *    it until no pages left.
+> >> +	 */
+> >> +	while (pages > 0) {
+> > 
+> > I did some simple checks on ((end - start) % stride) and never
+> > triggered. I had a slight worry that pages could become negative (and
+> > we'd loop forever since it's unsigned long) for some mismatched stride
+> > and flush size. It doesn't seem like.
+> 
+> The start and end are round_down/up in the function:
+> 
+> 	start = round_down(start, stride);
+>  	end = round_up(end, stride);
+> 
+> So the flush size and stride will never mismatch.
+
+Right.
+
+To make sure we don't miss any corner cases, I'll try to through the
+algorithm above at CBMC (model checker; hopefully next week if I find
+some time).
+
+-- 
+Catalin
