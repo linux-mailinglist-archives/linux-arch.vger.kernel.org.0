@@ -2,111 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531AC21D8D9
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 16:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C0E21DAB6
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 17:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729905AbgGMOo2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 10:44:28 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9541 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729703AbgGMOo2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 10:44:28 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f0c72dc0000>; Mon, 13 Jul 2020 07:42:36 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 13 Jul 2020 07:44:28 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 13 Jul 2020 07:44:28 -0700
-Received: from [10.26.72.101] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jul
- 2020 14:44:18 +0000
-Subject: Re: [PATCH v2 2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
-To:     Zhenyu Ye <yezhenyu2@huawei.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
-        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
-        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
-        <kuhn.chenqun@huawei.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20200710094420.517-1-yezhenyu2@huawei.com>
- <20200710094420.517-3-yezhenyu2@huawei.com>
- <4040f429-21c8-0825-2ad4-97786c3fe7c1@nvidia.com>
- <cee60718-ced2-069f-8dad-48941c6fc09b@huawei.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <7237888d-2168-cd8b-c83d-c8e54871793d@nvidia.com>
-Date:   Mon, 13 Jul 2020 15:44:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729988AbgGMPsa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 11:48:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43290 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729649AbgGMPsa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Jul 2020 11:48:30 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F6882082F
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 15:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594655309;
+        bh=FiLSo9R0STPJ54NQ+j4cquzz90YqRrZ+tVdT8FICfPw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u/HSfMU9F7rxmTiqX4sRr4Pk8VxlDbewsgkjIe6pG2nB4ATgq01e1Xrr0clJ4LJmf
+         KF6xr1Xv2GX82a28cw4dDUZuiL8A6ohB3EUIdPA0Gz22eJVXxmjte4lc3XkjzocFbw
+         v5Jvv0F2fEGEoQbUjFwMLPV7iO/JAL2dOHC42qck=
+Received: by mail-wr1-f47.google.com with SMTP id s10so17020930wrw.12
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 08:48:29 -0700 (PDT)
+X-Gm-Message-State: AOAM531s24R2nUxdXdUZmG5O7iQCiKo78L+VDmYOrEaNWO+XRsM8MjEb
+        C+hMLICrUAd8SOKO6D+jSHP8l9xjZh+6/EcqDlmRqA==
+X-Google-Smtp-Source: ABdhPJx0toL1Ye0o0H7c4Y3A41BrSlbEq0nHhnxAApxWZf2y0+ABJ/8JMUZOzKNFFHuITvPQPnyOqJdLGjq2hZLzWb4=
+X-Received: by 2002:adf:a111:: with SMTP id o17mr79174967wro.257.1594655308027;
+ Mon, 13 Jul 2020 08:48:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cee60718-ced2-069f-8dad-48941c6fc09b@huawei.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1594651356; bh=GMqdGNMQAH4AHg5hTa7waqJrHwyKyA4TXJmzHNKG13w=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=X0D1DS8Q43SgE5F9IDdU432zVIipKfOXH09pQUdZ9nwA/5YJw5NgTcaeOTeDp1MbU
-         ZtFrObX3/F6AItK2Kaz/Jdj5ln5HbEbuqjOpJwaB97qoVpRmi4eRHG0RAgY/w+qBO6
-         O83/VWEQOAHYks9bxeUkSDB0FMoXhXsn4MX9rmJ2TcqXT1xdefUZgAVlGNDLe2vAMI
-         LHblN/7vNqKTDmUaPDmThJlWenrobGwK1npattjHleKBjjVrwIU8LIRTbCPFjgveeQ
-         ljgVMQFJWxJBsbLsK8mvDDjQE2jrZ6uET1MeXoy3Vy2Y3ZM78D81s9qTAwEGsOEGbC
-         E7AzNNZBDWqDw==
+References: <20200710015646.2020871-1-npiggin@gmail.com> <20200710015646.2020871-5-npiggin@gmail.com>
+ <CALCETrVqHDLo09HcaoeOoAVK8w+cNWkSNTLkDDU=evUhaXkyhQ@mail.gmail.com>
+ <1594613902.1wzayj0p15.astroid@bobo.none> <1594647408.wmrazhwjzb.astroid@bobo.none>
+ <284592761.9860.1594649601492.JavaMail.zimbra@efficios.com>
+In-Reply-To: <284592761.9860.1594649601492.JavaMail.zimbra@efficios.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 13 Jul 2020 08:48:16 -0700
+X-Gmail-Original-Message-ID: <CALCETrUHsYp0oGAiy3N-yAauPyx2nKqp1AiETgSJWc77GwO-Sg@mail.gmail.com>
+Message-ID: <CALCETrUHsYp0oGAiy3N-yAauPyx2nKqp1AiETgSJWc77GwO-Sg@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Jul 13, 2020 at 7:13 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> ----- On Jul 13, 2020, at 9:47 AM, Nicholas Piggin npiggin@gmail.com wrote:
+>
+> > Excerpts from Nicholas Piggin's message of July 13, 2020 2:45 pm:
+> >> Excerpts from Andy Lutomirski's message of July 11, 2020 3:04 am:
+> >>> Also, as it stands, I can easily see in_irq() ceasing to promise to
+> >>> serialize.  There are older kernels for which it does not promise to
+> >>> serialize.  And I have plans to make it stop serializing in the
+> >>> nearish future.
+> >>
+> >> You mean x86's return from interrupt? Sounds fun... you'll konw where to
+> >> update the membarrier sync code, at least :)
+> >
+> > Oh, I should actually say Mathieu recently clarified a return from
+> > interrupt doesn't fundamentally need to serialize in order to support
+> > membarrier sync core.
+>
+> Clarification to your statement:
+>
+> Return from interrupt to kernel code does not need to be context serializing
+> as long as kernel serializes before returning to user-space.
+>
+> However, return from interrupt to user-space needs to be context serializing.
+>
 
-On 13/07/2020 15:39, Zhenyu Ye wrote:
-> Hi Jon,
-> 
-> On 2020/7/13 22:27, Jon Hunter wrote:
->> After this change I am seeing the following build errors ...
->>
->> /tmp/cckzq3FT.s: Assembler messages:
->> /tmp/cckzq3FT.s:854: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:870: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:1095: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:1111: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:1964: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:1980: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:2286: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:2302: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x7'
->> /tmp/cckzq3FT.s:4833: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x6'
->> /tmp/cckzq3FT.s:4849: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x6'
->> /tmp/cckzq3FT.s:5090: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x6'
->> /tmp/cckzq3FT.s:5106: Error: unknown or missing operation name at operand 1 -- `tlbi rvae1is,x6'
->> /tmp/cckzq3FT.s:874: Error: attempt to move .org backwards
->> /tmp/cckzq3FT.s:1115: Error: attempt to move .org backwards
->> /tmp/cckzq3FT.s:1984: Error: attempt to move .org backwards
->> /tmp/cckzq3FT.s:2306: Error: attempt to move .org backwards
->> /tmp/cckzq3FT.s:4853: Error: attempt to move .org backwards
->> /tmp/cckzq3FT.s:5110: Error: attempt to move .org backwards
->> scripts/Makefile.build:280: recipe for target 'arch/arm64/mm/hugetlbpage.o' failed
->> make[3]: *** [arch/arm64/mm/hugetlbpage.o] Error 1
->> scripts/Makefile.build:497: recipe for target 'arch/arm64/mm' failed
->> make[2]: *** [arch/arm64/mm] Error 2
->>
->> Cheers
->> Jon
->>
-> 
-> The code must be built with binutils >= 2.30.
-> Maybe I should add  a check on whether binutils supports ARMv8.4-a instructions...
+Indeed, and I figured this out on the first read through because I'm
+quite familiar with the x86 entry code.  But Nick somehow missed this,
+and Nick is the one who wrote the patch.
 
-Yes I believe so.
+Nick, I think this helps prove my point.  The code you're submitting
+may well be correct, but it's unmaintainable.  At the very least, this
+needs a comment explaining, from the perspective of x86, *exactly*
+what exit_lazy_tlb() is promising, why it's promising it, how it
+achieves that promise, and what code cares about it.  Or we could do
+something with TIF flags and make this all less magical, although that
+will probably end up very slightly slower.
 
-Cheers
-Jon
-
--- 
-nvpublic
+--Andy
