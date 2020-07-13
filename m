@@ -2,117 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1567121D619
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 14:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601A821D69A
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 15:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729267AbgGMMlm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 08:41:42 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7296 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726586AbgGMMll (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Jul 2020 08:41:41 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id C32079BA0D8FA8D4044F;
-        Mon, 13 Jul 2020 20:41:38 +0800 (CST)
-Received: from [127.0.0.1] (10.174.186.75) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Mon, 13 Jul 2020
- 20:41:32 +0800
-Subject: Re: [PATCH v2 0/2] arm64: tlb: add support for TLBI RANGE
- instructions
-To:     Catalin Marinas <catalin.marinas@arm.com>, <maz@kernel.org>,
-        <steven.price@arm.com>, <guohanjun@huawei.com>, <will@kernel.org>,
-        <olof@lixom.net>, <suzuki.poulose@arm.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <zhangshaokun@hisilicon.com>, <prime.zeng@hisilicon.com>,
-        <linux-arch@vger.kernel.org>, <kuhn.chenqun@huawei.com>,
-        <xiexiangyou@huawei.com>, <linux-mm@kvack.org>, <arm@kernel.org>
-References: <20200710094420.517-1-yezhenyu2@huawei.com>
- <159440712962.27784.4664678472466095995.b4-ty@arm.com>
- <20200713122123.GC15829@gaia>
-From:   Zhenyu Ye <yezhenyu2@huawei.com>
-Message-ID: <2edcf1ce-38d4-82b2-e500-51f742cae357@huawei.com>
-Date:   Mon, 13 Jul 2020 20:41:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1729545AbgGMNTy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 09:19:54 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40381 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729523AbgGMNTy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 09:19:54 -0400
+Received: by mail-ot1-f65.google.com with SMTP id c25so9465262otf.7;
+        Mon, 13 Jul 2020 06:19:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SATb1dq9lhpVtePq4rLhojB0Hr7gHjZG7fllFCUlzZU=;
+        b=f2YEiG3A91itYOB8sMDinMP/Z6LnlM8JlmpGB7lno6H2neYczPpYWa6/0pebzR2IfR
+         waW7XkaIkFFL1viwxchFsKggdq2opuP/I17DqLEwloSKb1DK2EzARUk4ZQ2CsUZgqQ9B
+         uxqVfm2ZYx548h+UfnxVcofAtCAl5PdcOzFxT0IhHaNqHZTgm/vFN9gyuyW45UOB6Kjr
+         N6b0hmWisvbTzn0lmP1/SKTMtpB+jDWk4r+Fl5KvbYQCIxSpdzelI0UKgjSuJv3qMrK5
+         vlPk6swiN5ElZ9S7h8FPB3pHf1u5PjicYT+790J7bz1diEk5q3V116Q29ORjiaWm24Ae
+         HBpQ==
+X-Gm-Message-State: AOAM530ejyjCCkaa4K1eqyi7pL5YG4CWM+QPlKnqQReZkkeAMVvnPlpR
+        0pTnvaVIVT/OWTA3Z8eR3EG0+Z5HauFNcVcjBvzCDd9K
+X-Google-Smtp-Source: ABdhPJxrDHVPb8cSNkcVN2tMRT9a1iKussPsrWGym59W6ecTQuAg4tTKmjvM3pVTLMwzznFcAu0e7d72NIcQofeksAI=
+X-Received: by 2002:a05:6830:1451:: with SMTP id w17mr57441798otp.250.1594646393513;
+ Mon, 13 Jul 2020 06:19:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200713122123.GC15829@gaia>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.186.75]
-X-CFilter-Loop: Reflected
+References: <20200710135706.537715-1-hch@lst.de> <20200710135706.537715-6-hch@lst.de>
+ <20200713122148.GA51007@lakrids.cambridge.arm.com>
+In-Reply-To: <20200713122148.GA51007@lakrids.cambridge.arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 13 Jul 2020 15:19:42 +0200
+Message-ID: <CAMuHMdUCmEeU0G9wkUxZKm5tC9YoB-KXSSCLKwpSia746Myebw@mail.gmail.com>
+Subject: Re: [PATCH 5/6] uaccess: add force_uaccess_{begin,end} helpers
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Catalin,
+Hi Mark,
 
-On 2020/7/13 20:21, Catalin Marinas wrote:
-> On Fri, Jul 10, 2020 at 08:11:19PM +0100, Catalin Marinas wrote:
->> On Fri, 10 Jul 2020 17:44:18 +0800, Zhenyu Ye wrote:
->>> NOTICE: this series are based on the arm64 for-next/tlbi branch:
->>> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/tlbi
->>>
->>> --
->>> ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
->>> range of input addresses. This series add support for this feature.
->>>
->>> [...]
->>
->> Applied to arm64 (for-next/tlbi), thanks!
->>
->> [1/2] arm64: tlb: Detect the ARMv8.4 TLBI RANGE feature
->>       https://git.kernel.org/arm64/c/a2fd755f77ff
->> [2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
->>       https://git.kernel.org/arm64/c/db34a081d273
-> 
-> I'm dropping these two patches from for-next/tlbi and for-next/core.
-> They need a check on whether binutils supports the new "tlbi rva*"
-> instructions, otherwise the build mail fail.
-> 
-> I kept the latest incarnation of these patches on devel/tlbi-range for
-> reference.
-> 
+On Mon, Jul 13, 2020 at 2:21 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> On Fri, Jul 10, 2020 at 03:57:05PM +0200, Christoph Hellwig wrote:
+> > Add helpers to wraper the get_fs/set_fs magic for undoing any damange
+> > done by set_fs(KERNEL_DS).  There is no real functional benefit, but this
+> > documents the intent of these calls better, and will allow stubbing the
+> > functions out easily for kernels builds that do not allow address space
+> > overrides in the future.
+>
+> > diff --git a/arch/m68k/include/asm/tlbflush.h b/arch/m68k/include/asm/tlbflush.h
+> > index 191e75a6bb249e..30471549e1e224 100644
+> > --- a/arch/m68k/include/asm/tlbflush.h
+> > +++ b/arch/m68k/include/asm/tlbflush.h
+> > @@ -13,13 +13,13 @@ static inline void flush_tlb_kernel_page(void *addr)
+> >       if (CPU_IS_COLDFIRE) {
+> >               mmu_write(MMUOR, MMUOR_CNL);
+> >       } else if (CPU_IS_040_OR_060) {
+> > -             mm_segment_t old_fs = get_fs();
+> > -             set_fs(KERNEL_DS);
+> > +             mm_segment_t old_fs = force_uaccess_begin();
+> > +
+>
+> This used to set KERNEL_DS, and now it sets USER_DS, which looks wrong
+> superficially.
 
-Should we add a check for the binutils version? Just like:
+Thanks for noticing, and sorry for missing that myself.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index fad573883e89..d5fb6567e0d2 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1300,6 +1300,20 @@ config ARM64_AMU_EXTN
- 	  correctly reflect reality. Most commonly, the value read will be 0,
- 	  indicating that the counter is not enabled.
+The same issue is present for SuperH:
 
-+config ARM64_TLBI_RANGE
-+	bool "Enable support for tlbi range feature"
-+	default y
-+	depends on AS_HAS_TLBI_RANGE
-+	help
-+	  ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
-+	  range of input addresses.
-+
-+	  The feature introduces new assembly instructions, and they were
-+	  support when binutils >= 2.30.
-+
-+config AS_HAS_TLBI_RANGE
-+	def_bool $(as-option, -Wa$(comma)-march=armv8.4-a)
-+
- endmenu
+    -               set_fs(KERNEL_DS);
+    +               oldfs = force_uaccess_begin();
 
- menu "ARMv8.5 architectural features"
+So the patch description should be:
 
-Then uses the check in the loop:
+    "Add helpers to wraper the get_fs/set_fs magic for undoing any damage
+     done by set_fs(USER_DS)."
 
-	while (pages > 0) {
-		if (!IS_ENABLED(CONFIG_ARM64_TLBI_RANGE) ||
-		   !cpus_have_const_cap(ARM64_HAS_TLBI_RANGE) ||
+and leave alone users setting KERNEL_DS?
+
+> If the new behaviour is fine it suggests that the old behaviour was
+> wrong, or that this is superfluous and could go entirely.
+>
+> Geert?
+
+Nope, on m68k, TLB cache operations operate on the current address space.
+Hence to flush a kernel TLB entry, you have to switch to KERNEL_DS first.
+
+If we're guaranteed to be already using KERNEL_DS, I guess the
+address space handling can be removed.  But can we be sure?
 
 
-If this is ok, I could send a new series soon.
+> >               __asm__ __volatile__(".chip 68040\n\t"
+> >                                    "pflush (%0)\n\t"
+> >                                    ".chip 68k"
+> >                                    : : "a" (addr));
+> > -             set_fs(old_fs);
+> > +             force_uaccess_end(old_fs);
+> >       } else if (CPU_IS_020_OR_030)
+> >               __asm__ __volatile__("pflush #4,#4,(%0)" : : "a" (addr));
+>
+> > +/*
+> > + * Force the uaccess routines to be wired up for actual userspace access,
+> > + * overriding any possible set_fs(KERNEL_DS) still lingering around.  Undone
+> > + * using force_uaccess_end below.
+> > + */
+> > +static inline mm_segment_t force_uaccess_begin(void)
+> > +{
+> > +     mm_segment_t fs = get_fs();
+> > +
+> > +     set_fs(USER_DS);
+> > +     return fs;
+> > +}
+> > +
+> > +static inline void force_uaccess_end(mm_segment_t oldfs)
+> > +{
+> > +     set_fs(oldfs);
+> > +}
 
-Thanks,
-Zhenyu
+Gr{oetje,eeting}s,
 
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
