@@ -2,125 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 497FF21DDD6
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 18:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4D021DE12
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 18:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730129AbgGMQsW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 12:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729687AbgGMQsW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 12:48:22 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F8EC061755;
-        Mon, 13 Jul 2020 09:48:22 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id s189so1217182pgc.13;
-        Mon, 13 Jul 2020 09:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=INPs3nxni2V4l7Wi5FNDIFPFwYguU/xf1qgvb0BuhC4=;
-        b=R+6LRuLZbvncOfmOwYY5q8IVDwZiV+RDPEu6DkwQ7DghW24zrjlhrUTVAvXZR3UUHH
-         mkBdeBPq/GcwQRrBAUjLvieWEIgcEhNfLRhInWKe9n46bjAtdCWUhOcKDGBJWiwjkxgR
-         6Rj9VkbiyOt3ADuG2ZXGxNQKLMZBBmZCoDqbFodM2xjHs/iLWVOY/Bl5KLgNhYdeleLA
-         edC+A3d9UvHuGkddJK37cHRQypGFRiX+ha42c3w/yAXtJr1q/VMTuk7Vb7ki7dk5K3bW
-         ZS52GW3lsY3/2uK3rwUG7dp8gk5XfTe7av83x249Xfkf9EShHRcn4+fBVSnTnIstdvKZ
-         5a9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=INPs3nxni2V4l7Wi5FNDIFPFwYguU/xf1qgvb0BuhC4=;
-        b=rv5AQMlSA8PFstTuWDmCpdrMdEzxh7NCQyfTxnFnYruzQpVIzMiHVid7x3AGURvLJ6
-         a1h1HdgibBqDKQq1jQEO7kEmaGxS3gHA8Xj+wW5CUoiyqpFk4yXdbovH3PQMK6XWofnH
-         KFI4pHlGHKEbfc0xS6145dqJwW25EQZ5VfapGMviNVGi9eXj4TLASYoWsAPeCmBouVz/
-         59YAt5wJya0SZid0RAsErtr1eHJCNl7wyFyOqgfRY7bcZ/jwzYZ06SUQfd90yjAHgvw7
-         RXXC0kx9zKkglJWl/G7U7ujy0LLZq+ypw2lDzV6EforI2awiXkAcmY1dJK1cib83qLmP
-         ePiA==
-X-Gm-Message-State: AOAM533EAKdOeMha4FqwoZ1Vx0rdFef0MJkE9KHvU5UpO6Rb9dHNIL/9
-        62q4FKwqrg6HYsT2wprkPd4=
-X-Google-Smtp-Source: ABdhPJyzYE/gbgNRIvd8T1nEKwOmWyQ0D6wBLrY+CaPnFOU0pgGH0kYtLwOHfmaSiihyfPeLfiiMRg==
-X-Received: by 2002:aa7:8ac3:: with SMTP id b3mr723937pfd.45.1594658901764;
-        Mon, 13 Jul 2020 09:48:21 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id m68sm121909pje.24.2020.07.13.09.48.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 09:48:21 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 02:48:15 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy
- tlb option
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-References: <20200710015646.2020871-1-npiggin@gmail.com>
-        <20200710015646.2020871-8-npiggin@gmail.com>
-        <CALCETrWbD=3SUOuq9P7Syb+a1DoBjjem8hq9_HCvn7wyqETkpw@mail.gmail.com>
-In-Reply-To: <CALCETrWbD=3SUOuq9P7Syb+a1DoBjjem8hq9_HCvn7wyqETkpw@mail.gmail.com>
+        id S1730325AbgGMQ7L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 12:59:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44146 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730185AbgGMQ7K (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Jul 2020 12:59:10 -0400
+Received: from gaia (unknown [95.146.230.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1AA4B20738;
+        Mon, 13 Jul 2020 16:59:06 +0000 (UTC)
+Date:   Mon, 13 Jul 2020 17:59:04 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     maz@kernel.org, steven.price@arm.com, guohanjun@huawei.com,
+        will@kernel.org, olof@lixom.net, suzuki.poulose@arm.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        zhangshaokun@hisilicon.com, prime.zeng@hisilicon.com,
+        linux-arch@vger.kernel.org, kuhn.chenqun@huawei.com,
+        xiexiangyou@huawei.com, linux-mm@kvack.org, arm@kernel.org
+Subject: Re: [PATCH v2 0/2] arm64: tlb: add support for TLBI RANGE
+ instructions
+Message-ID: <20200713165903.GD15829@gaia>
+References: <20200710094420.517-1-yezhenyu2@huawei.com>
+ <159440712962.27784.4664678472466095995.b4-ty@arm.com>
+ <20200713122123.GC15829@gaia>
+ <2edcf1ce-38d4-82b2-e500-51f742cae357@huawei.com>
 MIME-Version: 1.0
-Message-Id: <1594658283.qabzoxga67.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2edcf1ce-38d4-82b2-e500-51f742cae357@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Andy Lutomirski's message of July 14, 2020 1:59 am:
-> On Thu, Jul 9, 2020 at 6:57 PM Nicholas Piggin <npiggin@gmail.com> wrote:
->>
->> On big systems, the mm refcount can become highly contented when doing
->> a lot of context switching with threaded applications (particularly
->> switching between the idle thread and an application thread).
->>
->> Abandoning lazy tlb slows switching down quite a bit in the important
->> user->idle->user cases, so so instead implement a non-refcounted scheme
->> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
->> any remaining lazy ones.
->>
->> On a 16-socket 192-core POWER8 system, a context switching benchmark
->> with as many software threads as CPUs (so each switch will go in and
->> out of idle), upstream can achieve a rate of about 1 million context
->> switches per second. After this patch it goes up to 118 million.
->>
->=20
-> I read the patch a couple of times, and I have a suggestion that could
-> be nonsense.  You are, effectively, using mm_cpumask() as a sort of
-> refcount.  You're saying "hey, this mm has no more references, but it
-> still has nonempty mm_cpumask(), so let's send an IPI and shoot down
-> those references too."  I'm wondering whether you actually need the
-> IPI.  What if, instead, you actually treated mm_cpumask as a refcount
-> for real?  Roughly, in __mmdrop(), you would only free the page tables
-> if mm_cpumask() is empty.  And, in the code that removes a CPU from
-> mm_cpumask(), you would check if mm_users =3D=3D 0 and, if so, check if
-> you just removed the last bit from mm_cpumask and potentially free the
-> mm.
->=20
-> Getting the locking right here could be a bit tricky -- you need to
-> avoid two CPUs simultaneously exiting lazy TLB and thinking they
-> should free the mm, and you also need to avoid an mm with mm_users
-> hitting zero concurrently with the last remote CPU using it lazily
-> exiting lazy TLB.  Perhaps this could be resolved by having mm_count
-> =3D=3D 1 mean "mm_cpumask() is might contain bits and, if so, it owns the
-> mm" and mm_count =3D=3D 0 meaning "now it's dead" and using some careful
-> cmpxchg or dec_return to make sure that only one CPU frees it.
->=20
-> Or maybe you'd need a lock or RCU for this, but the idea would be to
-> only ever take the lock after mm_users goes to zero.
+On Mon, Jul 13, 2020 at 08:41:31PM +0800, Zhenyu Ye wrote:
+> On 2020/7/13 20:21, Catalin Marinas wrote:
+> > On Fri, Jul 10, 2020 at 08:11:19PM +0100, Catalin Marinas wrote:
+> >> On Fri, 10 Jul 2020 17:44:18 +0800, Zhenyu Ye wrote:
+> >>> NOTICE: this series are based on the arm64 for-next/tlbi branch:
+> >>> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/tlbi
+> >>>
+> >>> --
+> >>> ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
+> >>> range of input addresses. This series add support for this feature.
+> >>>
+> >>> [...]
+> >>
+> >> Applied to arm64 (for-next/tlbi), thanks!
+> >>
+> >> [1/2] arm64: tlb: Detect the ARMv8.4 TLBI RANGE feature
+> >>       https://git.kernel.org/arm64/c/a2fd755f77ff
+> >> [2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
+> >>       https://git.kernel.org/arm64/c/db34a081d273
+> > 
+> > I'm dropping these two patches from for-next/tlbi and for-next/core.
+> > They need a check on whether binutils supports the new "tlbi rva*"
+> > instructions, otherwise the build mail fail.
+> > 
+> > I kept the latest incarnation of these patches on devel/tlbi-range for
+> > reference.
+> 
+> Should we add a check for the binutils version? Just like:
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index fad573883e89..d5fb6567e0d2 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1300,6 +1300,20 @@ config ARM64_AMU_EXTN
+>  	  correctly reflect reality. Most commonly, the value read will be 0,
+>  	  indicating that the counter is not enabled.
+> 
+> +config ARM64_TLBI_RANGE
+> +	bool "Enable support for tlbi range feature"
+> +	default y
+> +	depends on AS_HAS_TLBI_RANGE
+> +	help
+> +	  ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
+> +	  range of input addresses.
+> +
+> +	  The feature introduces new assembly instructions, and they were
+> +	  support when binutils >= 2.30.
 
-I don't think it's nonsense, it could be a good way to avoid IPIs.
+It looks like 2.30. I tracked it down to this commit:
 
-I haven't seen much problem here that made me too concerned about IPIs=20
-yet, so I think the simple patch may be good enough to start with
-for powerpc. I'm looking at avoiding/reducing the IPIs by combining the
-unlazying with the exit TLB flush without doing anything fancy with
-ref counting, but we'll see.
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=793a194839bc8add71fdc7429c58b10f0667a6f6;hp=1a7ed57c840dcb0401f1a67c6763a89f7d2686d2
 
-Thanks,
-Nick
+> +config AS_HAS_TLBI_RANGE
+> +	def_bool $(as-option, -Wa$(comma)-march=armv8.4-a)
+> +
+>  endmenu
+
+The problem is that we don't pass -Wa,-march=armv8.4-a to gas. AFAICT,
+we only set an 8.3 for PAC but I'm not sure how passing two such options
+goes.
+
+I'm slightly surprised that my toolchains (and yours) did not complain
+about these instructions. Looking at the binutils code, I think it
+should have complained if -march=armv8.4-a wasn't passed but works fine.
+I thought gas doesn't enable the maximum arch feature by default.
+
+An alternative would be to check for a specific instruction (untested):
+
+	def_bool $(as-instr,tlbi rvae1is, x0)
+
+but we need to figure out whether gas not requiring -march=armv8.4-a is
+a bug (which may be fixed) or that gas accepts all TLBI instructions.
+
+A safer bet may be to simply encode the instructions by hand:
+
+#define SYS_TLBI_RVAE1IS(Rt) \
+	__emit_inst(0xd5000000 | sys_insn(1, 0, 8, 2, 1) | ((Rt) & 0x1f))
+#define SYS_TLBI_RVALE1IS(Rt) \
+	__emit_inst(0xd5000000 | sys_insn(1, 0, 8, 2, 5) | ((Rt) & 0x1f))
+
+(please check that they are correct)
+
+-- 
+Catalin
