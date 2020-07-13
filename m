@@ -2,144 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601A821D69A
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 15:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0666821D77B
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 15:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729545AbgGMNTy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 09:19:54 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40381 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729523AbgGMNTy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 09:19:54 -0400
-Received: by mail-ot1-f65.google.com with SMTP id c25so9465262otf.7;
-        Mon, 13 Jul 2020 06:19:53 -0700 (PDT)
+        id S1729492AbgGMNrY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 09:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728950AbgGMNrX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 09:47:23 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF19AC061755;
+        Mon, 13 Jul 2020 06:47:23 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id p3so6052206pgh.3;
+        Mon, 13 Jul 2020 06:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=mRbOWPWSQUmvbKy0Vhub198si/9PqoOoJ0fQEFD1GNw=;
+        b=CtIxbjVvQWa4NtOA2BUa9bC75CZlL25vYzXPl0w/DuaxfU7K7Mef69GwIEcJ/9v5p6
+         OyTNMFwhm1f7HQM2uGsZmLP6xjXBKRuhMQ9hjYqV97z8vDpzvMPKqVrCZulwKV7l0ws5
+         K3UvPYHj/ywEJNqexpv9wcG57oWMcuiEgeUfm8PlVDi9B4tbFzDLz+RsIOz47QLajLgr
+         bl4VArfJGMgjlFM+VPivRlfKklIGQka+bNxVx5kmcekxM4Un3QInWNH/VVOGvCzsetup
+         O936Idv00TK0lxrJMmpDZv2HzgcR7mQsgOx8oeQ7xRjaoRoTVDzsffuYhhhu9CHwevtT
+         ptHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SATb1dq9lhpVtePq4rLhojB0Hr7gHjZG7fllFCUlzZU=;
-        b=f2YEiG3A91itYOB8sMDinMP/Z6LnlM8JlmpGB7lno6H2neYczPpYWa6/0pebzR2IfR
-         waW7XkaIkFFL1viwxchFsKggdq2opuP/I17DqLEwloSKb1DK2EzARUk4ZQ2CsUZgqQ9B
-         uxqVfm2ZYx548h+UfnxVcofAtCAl5PdcOzFxT0IhHaNqHZTgm/vFN9gyuyW45UOB6Kjr
-         N6b0hmWisvbTzn0lmP1/SKTMtpB+jDWk4r+Fl5KvbYQCIxSpdzelI0UKgjSuJv3qMrK5
-         vlPk6swiN5ElZ9S7h8FPB3pHf1u5PjicYT+790J7bz1diEk5q3V116Q29ORjiaWm24Ae
-         HBpQ==
-X-Gm-Message-State: AOAM530ejyjCCkaa4K1eqyi7pL5YG4CWM+QPlKnqQReZkkeAMVvnPlpR
-        0pTnvaVIVT/OWTA3Z8eR3EG0+Z5HauFNcVcjBvzCDd9K
-X-Google-Smtp-Source: ABdhPJxrDHVPb8cSNkcVN2tMRT9a1iKussPsrWGym59W6ecTQuAg4tTKmjvM3pVTLMwzznFcAu0e7d72NIcQofeksAI=
-X-Received: by 2002:a05:6830:1451:: with SMTP id w17mr57441798otp.250.1594646393513;
- Mon, 13 Jul 2020 06:19:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=mRbOWPWSQUmvbKy0Vhub198si/9PqoOoJ0fQEFD1GNw=;
+        b=lgNHXKOJ8zllkJIzBxx24sq0d5JyWO8mQocRF1uwr3MCWPv36+rO6Y0R5KiQS1eVZ3
+         GMBq8h/LIgnWSWX5RfKL9Fp1brO3OaFyjXFmtypdKaAqI9EgGlhjr7XYA6hEzczwvAkm
+         JS+TNDP3kqhx1b2t925k0RhCOqrgiFuyhhBRQmU4RXSYNjo12qN6HpZaQtZIvvAGiWQh
+         AMKiTbQ85zfw98hE8KxI1S2F77+A6TT/bnAvQvq7BBXMXoN8gFaYlBJz9vHluetVN2fy
+         46LP1rvCADxawynHnf9B7a3lpkkyd1M08XZ3ZZZTKPNz/H2flTJZ6TKAzrlkGQnEmTCA
+         +6ug==
+X-Gm-Message-State: AOAM530J2fmChkXtmDXFPrQV/h2/aW1ZYyPQNr6LbnU9yrQcLI5Jkdps
+        AwhjzxhUKUqRJJlZ8JjE9bY=
+X-Google-Smtp-Source: ABdhPJy5mkqYezxWFiByUdDFyfgS7gHSAPhE+WWD7boFv7QO+6zf4EAUVlnl8xvc6AjqSYD9L+nxnA==
+X-Received: by 2002:a63:e057:: with SMTP id n23mr67589534pgj.368.1594648043180;
+        Mon, 13 Jul 2020 06:47:23 -0700 (PDT)
+Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
+        by smtp.gmail.com with ESMTPSA id h15sm15368954pjc.14.2020.07.13.06.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 06:47:20 -0700 (PDT)
+Date:   Mon, 13 Jul 2020 23:47:14 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+References: <20200710015646.2020871-1-npiggin@gmail.com>
+        <20200710015646.2020871-5-npiggin@gmail.com>
+        <CALCETrVqHDLo09HcaoeOoAVK8w+cNWkSNTLkDDU=evUhaXkyhQ@mail.gmail.com>
+        <1594613902.1wzayj0p15.astroid@bobo.none>
+In-Reply-To: <1594613902.1wzayj0p15.astroid@bobo.none>
 MIME-Version: 1.0
-References: <20200710135706.537715-1-hch@lst.de> <20200710135706.537715-6-hch@lst.de>
- <20200713122148.GA51007@lakrids.cambridge.arm.com>
-In-Reply-To: <20200713122148.GA51007@lakrids.cambridge.arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 13 Jul 2020 15:19:42 +0200
-Message-ID: <CAMuHMdUCmEeU0G9wkUxZKm5tC9YoB-KXSSCLKwpSia746Myebw@mail.gmail.com>
-Subject: Re: [PATCH 5/6] uaccess: add force_uaccess_{begin,end} helpers
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1594647408.wmrazhwjzb.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Mark,
+Excerpts from Nicholas Piggin's message of July 13, 2020 2:45 pm:
+> Excerpts from Andy Lutomirski's message of July 11, 2020 3:04 am:
+>> Also, as it stands, I can easily see in_irq() ceasing to promise to
+>> serialize.  There are older kernels for which it does not promise to
+>> serialize.  And I have plans to make it stop serializing in the
+>> nearish future.
+>=20
+> You mean x86's return from interrupt? Sounds fun... you'll konw where to=20
+> update the membarrier sync code, at least :)
 
-On Mon, Jul 13, 2020 at 2:21 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> On Fri, Jul 10, 2020 at 03:57:05PM +0200, Christoph Hellwig wrote:
-> > Add helpers to wraper the get_fs/set_fs magic for undoing any damange
-> > done by set_fs(KERNEL_DS).  There is no real functional benefit, but this
-> > documents the intent of these calls better, and will allow stubbing the
-> > functions out easily for kernels builds that do not allow address space
-> > overrides in the future.
->
-> > diff --git a/arch/m68k/include/asm/tlbflush.h b/arch/m68k/include/asm/tlbflush.h
-> > index 191e75a6bb249e..30471549e1e224 100644
-> > --- a/arch/m68k/include/asm/tlbflush.h
-> > +++ b/arch/m68k/include/asm/tlbflush.h
-> > @@ -13,13 +13,13 @@ static inline void flush_tlb_kernel_page(void *addr)
-> >       if (CPU_IS_COLDFIRE) {
-> >               mmu_write(MMUOR, MMUOR_CNL);
-> >       } else if (CPU_IS_040_OR_060) {
-> > -             mm_segment_t old_fs = get_fs();
-> > -             set_fs(KERNEL_DS);
-> > +             mm_segment_t old_fs = force_uaccess_begin();
-> > +
->
-> This used to set KERNEL_DS, and now it sets USER_DS, which looks wrong
-> superficially.
+Oh, I should actually say Mathieu recently clarified a return from
+interrupt doesn't fundamentally need to serialize in order to support
+membarrier sync core.
 
-Thanks for noticing, and sorry for missing that myself.
+https://lists.ozlabs.org/pipermail/linuxppc-dev/2020-July/214171.html
 
-The same issue is present for SuperH:
+So you may not need to do anything more if you relaxed it.
 
-    -               set_fs(KERNEL_DS);
-    +               oldfs = force_uaccess_begin();
-
-So the patch description should be:
-
-    "Add helpers to wraper the get_fs/set_fs magic for undoing any damage
-     done by set_fs(USER_DS)."
-
-and leave alone users setting KERNEL_DS?
-
-> If the new behaviour is fine it suggests that the old behaviour was
-> wrong, or that this is superfluous and could go entirely.
->
-> Geert?
-
-Nope, on m68k, TLB cache operations operate on the current address space.
-Hence to flush a kernel TLB entry, you have to switch to KERNEL_DS first.
-
-If we're guaranteed to be already using KERNEL_DS, I guess the
-address space handling can be removed.  But can we be sure?
-
-
-> >               __asm__ __volatile__(".chip 68040\n\t"
-> >                                    "pflush (%0)\n\t"
-> >                                    ".chip 68k"
-> >                                    : : "a" (addr));
-> > -             set_fs(old_fs);
-> > +             force_uaccess_end(old_fs);
-> >       } else if (CPU_IS_020_OR_030)
-> >               __asm__ __volatile__("pflush #4,#4,(%0)" : : "a" (addr));
->
-> > +/*
-> > + * Force the uaccess routines to be wired up for actual userspace access,
-> > + * overriding any possible set_fs(KERNEL_DS) still lingering around.  Undone
-> > + * using force_uaccess_end below.
-> > + */
-> > +static inline mm_segment_t force_uaccess_begin(void)
-> > +{
-> > +     mm_segment_t fs = get_fs();
-> > +
-> > +     set_fs(USER_DS);
-> > +     return fs;
-> > +}
-> > +
-> > +static inline void force_uaccess_end(mm_segment_t oldfs)
-> > +{
-> > +     set_fs(oldfs);
-> > +}
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Nick
