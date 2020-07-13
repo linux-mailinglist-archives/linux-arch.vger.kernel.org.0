@@ -2,25 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3A421D5BE
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 14:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF94D21D5E6
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 14:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728714AbgGMMV5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 08:21:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:59286 "EHLO foss.arm.com"
+        id S1729523AbgGMM0l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 08:26:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:59566 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726586AbgGMMV4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Jul 2020 08:21:56 -0400
+        id S1729259AbgGMM0l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Jul 2020 08:26:41 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E83530E;
-        Mon, 13 Jul 2020 05:21:56 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78D3930E;
+        Mon, 13 Jul 2020 05:26:40 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA0163F887;
-        Mon, 13 Jul 2020 05:21:54 -0700 (PDT)
-Date:   Mon, 13 Jul 2020 13:21:48 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F05E3F887;
+        Mon, 13 Jul 2020 05:26:38 -0700 (PDT)
+Date:   Mon, 13 Jul 2020 13:26:37 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -30,7 +29,7 @@ Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
         linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 5/6] uaccess: add force_uaccess_{begin,end} helpers
-Message-ID: <20200713122148.GA51007@lakrids.cambridge.arm.com>
+Message-ID: <20200713122636.GB51007@lakrids.cambridge.arm.com>
 References: <20200710135706.537715-1-hch@lst.de>
  <20200710135706.537715-6-hch@lst.de>
 MIME-Version: 1.0
@@ -49,53 +48,25 @@ On Fri, Jul 10, 2020 at 03:57:05PM +0200, Christoph Hellwig wrote:
 > documents the intent of these calls better, and will allow stubbing the
 > functions out easily for kernels builds that do not allow address space
 > overrides in the future.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/arm64/kernel/sdei.c         |  2 +-
+>  arch/m68k/include/asm/tlbflush.h | 12 ++++++------
+>  arch/mips/kernel/unaligned.c     | 27 +++++++++++++--------------
+>  arch/nds32/mm/alignment.c        |  7 +++----
+>  arch/sh/kernel/traps_32.c        | 18 ++++++++----------
+>  drivers/firmware/arm_sdei.c      |  5 ++---
+>  include/linux/uaccess.h          | 18 ++++++++++++++++++
+>  kernel/events/callchain.c        |  5 ++---
+>  kernel/events/core.c             |  5 ++---
+>  kernel/kthread.c                 |  5 ++---
+>  kernel/stacktrace.c              |  5 ++---
+>  mm/maccess.c                     | 22 ++++++++++------------
+>  12 files changed, 69 insertions(+), 62 deletions(-)
 
-> diff --git a/arch/m68k/include/asm/tlbflush.h b/arch/m68k/include/asm/tlbflush.h
-> index 191e75a6bb249e..30471549e1e224 100644
-> --- a/arch/m68k/include/asm/tlbflush.h
-> +++ b/arch/m68k/include/asm/tlbflush.h
-> @@ -13,13 +13,13 @@ static inline void flush_tlb_kernel_page(void *addr)
->  	if (CPU_IS_COLDFIRE) {
->  		mmu_write(MMUOR, MMUOR_CNL);
->  	} else if (CPU_IS_040_OR_060) {
-> -		mm_segment_t old_fs = get_fs();
-> -		set_fs(KERNEL_DS);
-> +		mm_segment_t old_fs = force_uaccess_begin();
-> +
+The perf core and arm64/sdei bits look sound. FWIW:
 
-This used to set KERNEL_DS, and now it sets USER_DS, which looks wrong
-superficially.
-
-If the new behaviour is fine it suggests that the old behaviour was
-wrong, or that this is superfluous and could go entirely.
-
-Geert?
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
 Mark.
-
->  		__asm__ __volatile__(".chip 68040\n\t"
->  				     "pflush (%0)\n\t"
->  				     ".chip 68k"
->  				     : : "a" (addr));
-> -		set_fs(old_fs);
-> +		force_uaccess_end(old_fs);
->  	} else if (CPU_IS_020_OR_030)
->  		__asm__ __volatile__("pflush #4,#4,(%0)" : : "a" (addr));
-
-> +/*
-> + * Force the uaccess routines to be wired up for actual userspace access,
-> + * overriding any possible set_fs(KERNEL_DS) still lingering around.  Undone
-> + * using force_uaccess_end below.
-> + */
-> +static inline mm_segment_t force_uaccess_begin(void)
-> +{
-> +	mm_segment_t fs = get_fs();
-> +
-> +	set_fs(USER_DS);
-> +	return fs;
-> +}
-> +
-> +static inline void force_uaccess_end(mm_segment_t oldfs)
-> +{
-> +	set_fs(oldfs);
-> +}
