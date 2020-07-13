@@ -2,98 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9460A21D318
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 11:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6CA21D35B
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 12:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729523AbgGMJpm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 05:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S1729572AbgGMKDW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 06:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726523AbgGMJpl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 05:45:41 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90175C061755
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 02:45:41 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id cm21so5980612pjb.3
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 02:45:41 -0700 (PDT)
+        with ESMTP id S1729570AbgGMKDW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jul 2020 06:03:22 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378B8C061755;
+        Mon, 13 Jul 2020 03:03:22 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id u8so5489390qvj.12;
+        Mon, 13 Jul 2020 03:03:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0olB/Kj5+mM078/bHyZqezPaPK0WajdFbhRfxVSilRM=;
-        b=Gn2xMHlOBxombYzdcOBeNb7/n3j/kqRvvaLLW0WODfv8XcYN4wvPkv/VelKSuBP69N
-         UqYAzOFnTRyOXYGP4stWtS1e2WJ0541MZUrW7Jn4EzmpRWNfZnAHVFxP4CCNc+KNr+va
-         otUTk2GbD0GCOa0jrU4/V+OEz7yEdEQbnY273ksNxPIWRSHkSE9A04vZDs/2YxcHamFI
-         TDYExsyQlQ3acmCutMiKev+tyJl0jWuD2kpvnT7lXyVT6nqpoW6VhD6egu6RJJVIgVsS
-         7pnNeiJwjDebLCS0ZkRE3+BoAGVWSRHbiIEEviLgMmkeayuCOeqeCxxGfQsNP4fU3PFy
-         mckA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1Bp6ooBnl29LgQwgRasRlGwvso/97p63GtfZ5PiBQTw=;
+        b=fR22FJr528HTbVr5yiXlhTnjGckWEGpRvUrfyASmhnDxv6mvCczdyorbQCxUHO6G3T
+         4q9ZBdkP1yjgEj59VZVCDj3VFcZoXzLjOoDn1Sg23HMGi7cxs1/9ml3IHiBW9nmjM1zc
+         pNrmqAneD7xhJynGDsNTRlI1VUgbs41JNz+qsasrr9rHx87rYwUsMWmfGGfXHcfVomWh
+         bwB6J+Za2xh4yLI4L8YNvnNJ7IMLIIcK1+qjgA6EW5lnnUWakEqyRj5uAbPQt2XyOULt
+         Jb3sjcmmLgcspQ1IAkGNLXyykglmsY4ZKOAPw56zJmk3NggmDBfeFJFjIa5vGF4KA7hL
+         cOxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0olB/Kj5+mM078/bHyZqezPaPK0WajdFbhRfxVSilRM=;
-        b=JGaxLso/H9ZrrrQTvAsePzVC+6r1oBtFAIVHGlO50Sr9MGvPSqMS0ZFIVc9+YB6Qrt
-         Z21INsCf2PP6v24Ns5EZ5RT7wPsN14A6lEDhsQNyueM1REhjiHEgk6qIk+GxxCwNUqw7
-         yYjqH9n4GY1IjyTkApojhsi9/qpLBkphUJBz2htoKdXNqn4+9LISHFTuiO5msl3584lp
-         vDRj1Jrf1SO+S8uzfKGF6H5G5xpEKJsp7MCGFT3S4Dpc4gyHlR90e9ElkXPN6xDiXAuV
-         cdWrMW700tCOKRyrK/jnKnkFzst3SEW24MytKaiWNvNMbKDui1UYLH00MVoyv3WkozjM
-         uQcg==
-X-Gm-Message-State: AOAM5326zuPEX4CqBsI2pXZ9foac4492XN9GEURKdykrtxmp9rMJ3sO4
-        CNGgN566VApu2zudWRVgvilJctcoQ14=
-X-Google-Smtp-Source: ABdhPJw6RpvjZvtN9GfY5lgA9lyTRdntA6c5g4jImyUp+kuNOOIMz04NipT9in353pzQI6555/bXiA==
-X-Received: by 2002:a17:902:9042:: with SMTP id w2mr59195104plz.8.1594633541141;
-        Mon, 13 Jul 2020 02:45:41 -0700 (PDT)
-Received: from localhost ([122.172.34.142])
-        by smtp.gmail.com with ESMTPSA id u2sm13654333pfl.21.2020.07.13.02.45.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Jul 2020 02:45:40 -0700 (PDT)
-Date:   Mon, 13 Jul 2020 15:15:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic/sembuf: Update architecture related
- information in comment
-Message-ID: <20200713094538.ix5g5bt6ss55kwrn@vireshk-i7>
-References: <64efe033394b6f0dfef043a63fd8897a81ba6d16.1589970173.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1Bp6ooBnl29LgQwgRasRlGwvso/97p63GtfZ5PiBQTw=;
+        b=aULHB2++DmBR5+W4m1UAM/vXZl2+bnf7qm2y9mGNcpnkOlhhHtddOgqQxPuhMrMAII
+         JjcdKdPPsPXDl6SR30p9D6IQnGEPskthUL28STEhUEwr6Wi7KOTSCPS0lZh3AqYJZq7m
+         QeaeetN/uYaCLohVOEbZ3ddZkjFz82tpYC/0/aYaD2RW7RblQr4tLmYB2O5tYcz/DEOQ
+         jDXedpImcTMIcZTVjsBFysmMb2JGvFoo5o1XzC0gUwNhNn4ubfG8KBuko3nis9SD6o/C
+         Yxn/uvRVcV0hbQeWzWggs4N+5es6VVpN4V9x4/M8XZTxIlC7OfqMIBw1/gHLhMu6j9iY
+         LA3g==
+X-Gm-Message-State: AOAM533vttyxJFXb2mU8LkAreWNx7zKonKU6bXSPbLvBuJoJ1sgbS+Rq
+        q/yDp2AsnThYfr47q2oEVwgWSIl3bFzBSBeFaDw=
+X-Google-Smtp-Source: ABdhPJyG9JgXRd06w9jCyfF/WDMYIp+vUYSvmAwfGAEme8KlkS+YHZBhN5qetyJzGOkuVRlY4lr0HRKihqYP5EOwdVo=
+X-Received: by 2002:a0c:fe01:: with SMTP id x1mr77159663qvr.246.1594634601328;
+ Mon, 13 Jul 2020 03:03:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64efe033394b6f0dfef043a63fd8897a81ba6d16.1589970173.git.viresh.kumar@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200710135706.537715-1-hch@lst.de> <20200710135706.537715-3-hch@lst.de>
+In-Reply-To: <20200710135706.537715-3-hch@lst.de>
+From:   Greentime Hu <green.hu@gmail.com>
+Date:   Mon, 13 Jul 2020 18:02:44 +0800
+Message-ID: <CAEbi=3dKwDQ5-wdxQagX2n5Z3tYeYwTcmDNqxPH=83Dy-VKA1w@mail.gmail.com>
+Subject: Re: [PATCH 2/6] nds32: use uaccess_kernel in show_regs
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Nick Hu <nickhu@andestech.com>, Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-riscv@lists.infradead.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 20-05-20, 15:53, Viresh Kumar wrote:
-> The structure came originally from x86_32 but is used by most of the
-> architectures now. Update the comment which says it is for x86 only.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Christoph Hellwig <hch@lst.de> =E6=96=BC 2020=E5=B9=B47=E6=9C=8810=E6=97=A5=
+ =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=889:57=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Use the uaccess_kernel helper instead of duplicating it.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  include/uapi/asm-generic/sembuf.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/uapi/asm-generic/sembuf.h b/include/uapi/asm-generic/sembuf.h
-> index 0e709bd3d730..f54e48fc91ae 100644
-> --- a/include/uapi/asm-generic/sembuf.h
-> +++ b/include/uapi/asm-generic/sembuf.h
-> @@ -6,9 +6,9 @@
->  #include <asm/ipcbuf.h>
->  
->  /*
-> - * The semid64_ds structure for x86 architecture.
-> - * Note extra padding because this structure is passed back and forth
-> - * between kernel and user space.
-> + * The semid64_ds structure for most architectures (though it came from x86_32
-> + * originally). Note extra padding because this structure is passed back and
-> + * forth between kernel and user space.
->   *
->   * semid64_ds was originally meant to be architecture specific, but
->   * everyone just ended up making identical copies without specific
+>  arch/nds32/kernel/process.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/nds32/kernel/process.c b/arch/nds32/kernel/process.c
+> index 9712fd474f2ca3..f06265949ec28b 100644
+> --- a/arch/nds32/kernel/process.c
+> +++ b/arch/nds32/kernel/process.c
+> @@ -121,7 +121,7 @@ void show_regs(struct pt_regs *regs)
+>                 regs->uregs[3], regs->uregs[2], regs->uregs[1], regs->ure=
+gs[0]);
+>         pr_info("  IRQs o%s  Segment %s\n",
+>                 interrupts_enabled(regs) ? "n" : "ff",
+> -               segment_eq(get_fs(), KERNEL_DS)? "kernel" : "user");
+> +               uaccess_kernel() ? "kernel" : "user");
+>  }
+>
+>  EXPORT_SYMBOL(show_regs);
 
-Arnd, Ping.
-
--- 
-viresh
+Hi Christoph, Thank you.
+Acked-by: Greentime Hu <green.hu@gmail.com>
