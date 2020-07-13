@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED2A21CDA1
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 05:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F73821CDA6
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 05:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbgGMDYP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 12 Jul 2020 23:24:15 -0400
-Received: from foss.arm.com ([217.140.110.172]:37550 "EHLO foss.arm.com"
+        id S1728803AbgGMDY3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 12 Jul 2020 23:24:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:37608 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726523AbgGMDYP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 12 Jul 2020 23:24:15 -0400
+        id S1728463AbgGMDY3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 12 Jul 2020 23:24:29 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 362B81FB;
-        Sun, 12 Jul 2020 20:24:14 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B64FD1FB;
+        Sun, 12 Jul 2020 20:24:27 -0700 (PDT)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.87.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5B5423F7D8;
-        Sun, 12 Jul 2020 20:24:02 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BB9343F7D8;
+        Sun, 12 Jul 2020 20:24:14 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     agordeev@linux.ibm.com, ziy@nvidia.com, gerald.schaefer@de.ibm.com,
@@ -45,9 +45,9 @@ Cc:     agordeev@linux.ibm.com, ziy@nvidia.com, gerald.schaefer@de.ibm.com,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-riscv@lists.infradead.org, x86@kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V5 2/4] mm/debug_vm_pgtable: Add tests validating advanced arch page table helpers
-Date:   Mon, 13 Jul 2020 08:53:05 +0530
-Message-Id: <1594610587-4172-3-git-send-email-anshuman.khandual@arm.com>
+Subject: [PATCH V5 3/4] mm/debug_vm_pgtable: Add debug prints for individual tests
+Date:   Mon, 13 Jul 2020 08:53:06 +0530
+Message-Id: <1594610587-4172-4-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1594610587-4172-1-git-send-email-anshuman.khandual@arm.com>
 References: <1594610587-4172-1-git-send-email-anshuman.khandual@arm.com>
@@ -56,19 +56,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This adds new tests validating for these following arch advanced page table
-helpers. These tests create and test specific mapping types at various page
-table levels.
+This adds debug print information that enlists all tests getting executed
+on a given platform. With dynamic debug enabled, the following information
+will be splashed during boot. For compactness purpose, dropped both time
+stamp and prefix (i.e debug_vm_pgtable) from this sample output.
 
-1. pxxp_set_wrprotect()
-2. pxxp_get_and_clear()
-3. pxxp_set_access_flags()
-4. pxxp_get_and_clear_full()
-5. pxxp_test_and_clear_young()
-6. pxx_leaf()
-7. pxx_set_huge()
-8. pxx_(clear|mk)_savedwrite()
-9. huge_pxxp_xxx()
+[debug_vm_pgtable      ]: Validating architecture page table helpers
+[pte_basic_tests       ]: Validating PTE basic
+[pmd_basic_tests       ]: Validating PMD basic
+[p4d_basic_tests       ]: Validating P4D basic
+[pgd_basic_tests       ]: Validating PGD basic
+[pte_clear_tests       ]: Validating PTE clear
+[pmd_clear_tests       ]: Validating PMD clear
+[pte_advanced_tests    ]: Validating PTE advanced
+[pmd_advanced_tests    ]: Validating PMD advanced
+[hugetlb_advanced_tests]: Validating HugeTLB advanced
+[pmd_leaf_tests        ]: Validating PMD leaf
+[pmd_huge_tests        ]: Validating PMD huge
+[pte_savedwrite_tests  ]: Validating PTE saved write
+[pmd_savedwrite_tests  ]: Validating PMD saved write
+[pmd_populate_tests    ]: Validating PMD populate
+[pte_special_tests     ]: Validating PTE special
+[pte_protnone_tests    ]: Validating PTE protnone
+[pmd_protnone_tests    ]: Validating PMD protnone
+[pte_devmap_tests      ]: Validating PTE devmap
+[pmd_devmap_tests      ]: Validating PMD devmap
+[pte_swap_tests        ]: Validating PTE swap
+[swap_migration_tests  ]: Validating swap migration
+[hugetlb_basic_tests   ]: Validating HugeTLB basic
+[pmd_thp_tests         ]: Validating PMD based THP
 
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Gerald Schaefer <gerald.schaefer@de.ibm.com>
@@ -100,406 +116,348 @@ Cc: linux-mm@kvack.org
 Cc: linux-arch@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Tested-by: Vineet Gupta <vgupta@synopsys.com>	#arc
-Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- mm/debug_vm_pgtable.c | 312 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 312 insertions(+)
+ mm/debug_vm_pgtable.c | 46 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
 diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index 2fac47db3eb7..9c7c11eecf17 100644
+index 9c7c11eecf17..0db4390435be 100644
 --- a/mm/debug_vm_pgtable.c
 +++ b/mm/debug_vm_pgtable.c
-@@ -21,6 +21,7 @@
- #include <linux/module.h>
- #include <linux/pfn_t.h>
- #include <linux/printk.h>
-+#include <linux/pgtable.h>
- #include <linux/random.h>
- #include <linux/spinlock.h>
- #include <linux/swap.h>
-@@ -28,6 +29,7 @@
- #include <linux/start_kernel.h>
- #include <linux/sched/mm.h>
- #include <asm/pgalloc.h>
-+#include <asm/tlbflush.h>
+@@ -8,7 +8,7 @@
+  *
+  * Author: Anshuman Khandual <anshuman.khandual@arm.com>
+  */
+-#define pr_fmt(fmt) "debug_vm_pgtable: %s: " fmt, __func__
++#define pr_fmt(fmt) "debug_vm_pgtable: [%-25s]: " fmt, __func__
  
- #define VMFLAGS	(VM_READ|VM_WRITE|VM_EXEC)
- 
-@@ -55,6 +57,55 @@ static void __init pte_basic_tests(unsigned long pfn, pgprot_t prot)
- 	WARN_ON(pte_write(pte_wrprotect(pte_mkwrite(pte))));
- }
- 
-+static void __init pte_advanced_tests(struct mm_struct *mm,
-+				      struct vm_area_struct *vma, pte_t *ptep,
-+				      unsigned long pfn, unsigned long vaddr,
-+				      pgprot_t prot)
-+{
-+	pte_t pte = pfn_pte(pfn, prot);
-+
-+	pte = pfn_pte(pfn, prot);
-+	set_pte_at(mm, vaddr, ptep, pte);
-+	ptep_set_wrprotect(mm, vaddr, ptep);
-+	pte = ptep_get(ptep);
-+	WARN_ON(pte_write(pte));
-+
-+	pte = pfn_pte(pfn, prot);
-+	set_pte_at(mm, vaddr, ptep, pte);
-+	ptep_get_and_clear(mm, vaddr, ptep);
-+	pte = ptep_get(ptep);
-+	WARN_ON(!pte_none(pte));
-+
-+	pte = pfn_pte(pfn, prot);
-+	pte = pte_wrprotect(pte);
-+	pte = pte_mkclean(pte);
-+	set_pte_at(mm, vaddr, ptep, pte);
-+	pte = pte_mkwrite(pte);
-+	pte = pte_mkdirty(pte);
-+	ptep_set_access_flags(vma, vaddr, ptep, pte, 1);
-+	pte = ptep_get(ptep);
-+	WARN_ON(!(pte_write(pte) && pte_dirty(pte)));
-+
-+	pte = pfn_pte(pfn, prot);
-+	set_pte_at(mm, vaddr, ptep, pte);
-+	ptep_get_and_clear_full(mm, vaddr, ptep, 1);
-+	pte = ptep_get(ptep);
-+	WARN_ON(!pte_none(pte));
-+
-+	pte = pte_mkyoung(pte);
-+	set_pte_at(mm, vaddr, ptep, pte);
-+	ptep_test_and_clear_young(vma, vaddr, ptep);
-+	pte = ptep_get(ptep);
-+	WARN_ON(pte_young(pte));
-+}
-+
-+static void __init pte_savedwrite_tests(unsigned long pfn, pgprot_t prot)
-+{
-+	pte_t pte = pfn_pte(pfn, prot);
-+
-+	WARN_ON(!pte_savedwrite(pte_mk_savedwrite(pte_clear_savedwrite(pte))));
-+	WARN_ON(pte_savedwrite(pte_clear_savedwrite(pte_mk_savedwrite(pte))));
-+}
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot)
+ #include <linux/gfp.h>
+ #include <linux/highmem.h>
+@@ -48,6 +48,7 @@ static void __init pte_basic_tests(unsigned long pfn, pgprot_t prot)
  {
-@@ -77,6 +128,90 @@ static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot)
- 	WARN_ON(!pmd_bad(pmd_mkhuge(pmd)));
- }
+ 	pte_t pte = pfn_pte(pfn, prot);
  
-+static void __init pmd_advanced_tests(struct mm_struct *mm,
-+				      struct vm_area_struct *vma, pmd_t *pmdp,
-+				      unsigned long pfn, unsigned long vaddr,
-+				      pgprot_t prot)
-+{
-+	pmd_t pmd = pfn_pmd(pfn, prot);
-+
-+	if (!has_transparent_hugepage())
-+		return;
-+
-+	/* Align the address wrt HPAGE_PMD_SIZE */
-+	vaddr = (vaddr & HPAGE_PMD_MASK) + HPAGE_PMD_SIZE;
-+
-+	pmd = pfn_pmd(pfn, prot);
-+	set_pmd_at(mm, vaddr, pmdp, pmd);
-+	pmdp_set_wrprotect(mm, vaddr, pmdp);
-+	pmd = READ_ONCE(*pmdp);
-+	WARN_ON(pmd_write(pmd));
-+
-+	pmd = pfn_pmd(pfn, prot);
-+	set_pmd_at(mm, vaddr, pmdp, pmd);
-+	pmdp_huge_get_and_clear(mm, vaddr, pmdp);
-+	pmd = READ_ONCE(*pmdp);
-+	WARN_ON(!pmd_none(pmd));
-+
-+	pmd = pfn_pmd(pfn, prot);
-+	pmd = pmd_wrprotect(pmd);
-+	pmd = pmd_mkclean(pmd);
-+	set_pmd_at(mm, vaddr, pmdp, pmd);
-+	pmd = pmd_mkwrite(pmd);
-+	pmd = pmd_mkdirty(pmd);
-+	pmdp_set_access_flags(vma, vaddr, pmdp, pmd, 1);
-+	pmd = READ_ONCE(*pmdp);
-+	WARN_ON(!(pmd_write(pmd) && pmd_dirty(pmd)));
-+
-+	pmd = pmd_mkhuge(pfn_pmd(pfn, prot));
-+	set_pmd_at(mm, vaddr, pmdp, pmd);
-+	pmdp_huge_get_and_clear_full(vma, vaddr, pmdp, 1);
-+	pmd = READ_ONCE(*pmdp);
-+	WARN_ON(!pmd_none(pmd));
-+
-+	pmd = pmd_mkyoung(pmd);
-+	set_pmd_at(mm, vaddr, pmdp, pmd);
-+	pmdp_test_and_clear_young(vma, vaddr, pmdp);
-+	pmd = READ_ONCE(*pmdp);
-+	WARN_ON(pmd_young(pmd));
-+}
-+
-+static void __init pmd_leaf_tests(unsigned long pfn, pgprot_t prot)
-+{
-+	pmd_t pmd = pfn_pmd(pfn, prot);
-+
-+	/*
-+	 * PMD based THP is a leaf entry.
-+	 */
-+	pmd = pmd_mkhuge(pmd);
-+	WARN_ON(!pmd_leaf(pmd));
-+}
-+
-+static void __init pmd_huge_tests(pmd_t *pmdp, unsigned long pfn, pgprot_t prot)
-+{
-+	pmd_t pmd;
-+
-+	if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
-+		return;
-+	/*
-+	 * X86 defined pmd_set_huge() verifies that the given
-+	 * PMD is not a populated non-leaf entry.
-+	 */
-+	WRITE_ONCE(*pmdp, __pmd(0));
-+	WARN_ON(!pmd_set_huge(pmdp, __pfn_to_phys(pfn), prot));
-+	WARN_ON(!pmd_clear_huge(pmdp));
-+	pmd = READ_ONCE(*pmdp);
-+	WARN_ON(!pmd_none(pmd));
-+}
-+
-+static void __init pmd_savedwrite_tests(unsigned long pfn, pgprot_t prot)
-+{
-+	pmd_t pmd = pfn_pmd(pfn, prot);
-+
-+	WARN_ON(!pmd_savedwrite(pmd_mk_savedwrite(pmd_clear_savedwrite(pmd))));
-+	WARN_ON(pmd_savedwrite(pmd_clear_savedwrite(pmd_mk_savedwrite(pmd))));
-+}
-+
- #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
- static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot)
++	pr_debug("Validating PTE basic\n");
+ 	WARN_ON(!pte_same(pte, pte));
+ 	WARN_ON(!pte_young(pte_mkyoung(pte_mkold(pte))));
+ 	WARN_ON(!pte_dirty(pte_mkdirty(pte_mkclean(pte))));
+@@ -64,6 +65,7 @@ static void __init pte_advanced_tests(struct mm_struct *mm,
  {
-@@ -100,12 +235,119 @@ static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot)
- 	 */
- 	WARN_ON(!pud_bad(pud_mkhuge(pud)));
- }
-+
-+static void __init pud_advanced_tests(struct mm_struct *mm,
-+				      struct vm_area_struct *vma, pud_t *pudp,
-+				      unsigned long pfn, unsigned long vaddr,
-+				      pgprot_t prot)
-+{
-+	pud_t pud = pfn_pud(pfn, prot);
-+
-+	if (!has_transparent_hugepage())
-+		return;
-+
-+	/* Align the address wrt HPAGE_PUD_SIZE */
-+	vaddr = (vaddr & HPAGE_PUD_MASK) + HPAGE_PUD_SIZE;
-+
-+	set_pud_at(mm, vaddr, pudp, pud);
-+	pudp_set_wrprotect(mm, vaddr, pudp);
-+	pud = READ_ONCE(*pudp);
-+	WARN_ON(pud_write(pud));
-+
-+#ifndef __PAGETABLE_PMD_FOLDED
-+	pud = pfn_pud(pfn, prot);
-+	set_pud_at(mm, vaddr, pudp, pud);
-+	pudp_huge_get_and_clear(mm, vaddr, pudp);
-+	pud = READ_ONCE(*pudp);
-+	WARN_ON(!pud_none(pud));
-+
-+	pud = pfn_pud(pfn, prot);
-+	set_pud_at(mm, vaddr, pudp, pud);
-+	pudp_huge_get_and_clear_full(mm, vaddr, pudp, 1);
-+	pud = READ_ONCE(*pudp);
-+	WARN_ON(!pud_none(pud));
-+#endif /* __PAGETABLE_PMD_FOLDED */
-+	pud = pfn_pud(pfn, prot);
-+	pud = pud_wrprotect(pud);
-+	pud = pud_mkclean(pud);
-+	set_pud_at(mm, vaddr, pudp, pud);
-+	pud = pud_mkwrite(pud);
-+	pud = pud_mkdirty(pud);
-+	pudp_set_access_flags(vma, vaddr, pudp, pud, 1);
-+	pud = READ_ONCE(*pudp);
-+	WARN_ON(!(pud_write(pud) && pud_dirty(pud)));
-+
-+	pud = pud_mkyoung(pud);
-+	set_pud_at(mm, vaddr, pudp, pud);
-+	pudp_test_and_clear_young(vma, vaddr, pudp);
-+	pud = READ_ONCE(*pudp);
-+	WARN_ON(pud_young(pud));
-+}
-+
-+static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot)
-+{
-+	pud_t pud = pfn_pud(pfn, prot);
-+
-+	/*
-+	 * PUD based THP is a leaf entry.
-+	 */
-+	pud = pud_mkhuge(pud);
-+	WARN_ON(!pud_leaf(pud));
-+}
-+
-+static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
-+{
-+	pud_t pud;
-+
-+	if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
-+		return;
-+	/*
-+	 * X86 defined pud_set_huge() verifies that the given
-+	 * PUD is not a populated non-leaf entry.
-+	 */
-+	WRITE_ONCE(*pudp, __pud(0));
-+	WARN_ON(!pud_set_huge(pudp, __pfn_to_phys(pfn), prot));
-+	WARN_ON(!pud_clear_huge(pudp));
-+	pud = READ_ONCE(*pudp);
-+	WARN_ON(!pud_none(pud));
-+}
- #else  /* !CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD */
- static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot) { }
-+static void __init pud_advanced_tests(struct mm_struct *mm,
-+				      struct vm_area_struct *vma, pud_t *pudp,
-+				      unsigned long pfn, unsigned long vaddr,
-+				      pgprot_t prot)
-+{
-+}
-+static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot) { }
-+static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
-+{
-+}
- #endif /* CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD */
- #else  /* !CONFIG_TRANSPARENT_HUGEPAGE */
- static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot) { }
- static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot) { }
-+static void __init pmd_advanced_tests(struct mm_struct *mm,
-+				      struct vm_area_struct *vma, pmd_t *pmdp,
-+				      unsigned long pfn, unsigned long vaddr,
-+				      pgprot_t prot)
-+{
-+}
-+static void __init pud_advanced_tests(struct mm_struct *mm,
-+				      struct vm_area_struct *vma, pud_t *pudp,
-+				      unsigned long pfn, unsigned long vaddr,
-+				      pgprot_t prot)
-+{
-+}
-+static void __init pmd_leaf_tests(unsigned long pfn, pgprot_t prot) { }
-+static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot) { }
-+static void __init pmd_huge_tests(pmd_t *pmdp, unsigned long pfn, pgprot_t prot)
-+{
-+}
-+static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
-+{
-+}
-+static void __init pmd_savedwrite_tests(unsigned long pfn, pgprot_t prot) { }
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 	pte_t pte = pfn_pte(pfn, prot);
  
- static void __init p4d_basic_tests(unsigned long pfn, pgprot_t prot)
-@@ -495,8 +737,56 @@ static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot)
- 	WARN_ON(!pte_huge(pte_mkhuge(pte)));
- #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
- }
-+
-+static void __init hugetlb_advanced_tests(struct mm_struct *mm,
-+					  struct vm_area_struct *vma,
-+					  pte_t *ptep, unsigned long pfn,
-+					  unsigned long vaddr, pgprot_t prot)
-+{
-+	struct page *page = pfn_to_page(pfn);
-+	pte_t pte = ptep_get(ptep);
-+	unsigned long paddr = __pfn_to_phys(pfn) & PMD_MASK;
-+
-+	pte = pte_mkhuge(mk_pte(pfn_to_page(PHYS_PFN(paddr)), prot));
-+	set_huge_pte_at(mm, vaddr, ptep, pte);
-+	barrier();
-+	WARN_ON(!pte_same(pte, huge_ptep_get(ptep)));
-+	huge_pte_clear(mm, vaddr, ptep, PMD_SIZE);
-+	pte = huge_ptep_get(ptep);
-+	WARN_ON(!huge_pte_none(pte));
-+
-+	pte = mk_huge_pte(page, prot);
-+	set_huge_pte_at(mm, vaddr, ptep, pte);
-+	barrier();
-+	huge_ptep_set_wrprotect(mm, vaddr, ptep);
-+	pte = huge_ptep_get(ptep);
-+	WARN_ON(huge_pte_write(pte));
-+
-+	pte = mk_huge_pte(page, prot);
-+	set_huge_pte_at(mm, vaddr, ptep, pte);
-+	barrier();
-+	huge_ptep_get_and_clear(mm, vaddr, ptep);
-+	pte = huge_ptep_get(ptep);
-+	WARN_ON(!huge_pte_none(pte));
-+
-+	pte = mk_huge_pte(page, prot);
-+	pte = huge_pte_wrprotect(pte);
-+	set_huge_pte_at(mm, vaddr, ptep, pte);
-+	barrier();
-+	pte = huge_pte_mkwrite(pte);
-+	pte = huge_pte_mkdirty(pte);
-+	huge_ptep_set_access_flags(vma, vaddr, ptep, pte, 1);
-+	pte = huge_ptep_get(ptep);
-+	WARN_ON(!(huge_pte_write(pte) && huge_pte_dirty(pte)));
-+}
- #else  /* !CONFIG_HUGETLB_PAGE */
- static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot) { }
-+static void __init hugetlb_advanced_tests(struct mm_struct *mm,
-+					  struct vm_area_struct *vma,
-+					  pte_t *ptep, unsigned long pfn,
-+					  unsigned long vaddr, pgprot_t prot)
-+{
-+}
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-@@ -568,6 +858,7 @@ static unsigned long __init get_random_vaddr(void)
- 
- static int __init debug_vm_pgtable(void)
++	pr_debug("Validating PTE advanced\n");
+ 	pte = pfn_pte(pfn, prot);
+ 	set_pte_at(mm, vaddr, ptep, pte);
+ 	ptep_set_wrprotect(mm, vaddr, ptep);
+@@ -103,6 +105,7 @@ static void __init pte_savedwrite_tests(unsigned long pfn, pgprot_t prot)
  {
-+	struct vm_area_struct *vma;
- 	struct mm_struct *mm;
- 	pgd_t *pgdp;
- 	p4d_t *p4dp, *saved_p4dp;
-@@ -596,6 +887,12 @@ static int __init debug_vm_pgtable(void)
- 	 */
- 	protnone = __P000;
+ 	pte_t pte = pfn_pte(pfn, prot);
  
-+	vma = vm_area_alloc(mm);
-+	if (!vma) {
-+		pr_err("vma allocation failed\n");
-+		return 1;
-+	}
-+
++	pr_debug("Validating PTE saved write\n");
+ 	WARN_ON(!pte_savedwrite(pte_mk_savedwrite(pte_clear_savedwrite(pte))));
+ 	WARN_ON(pte_savedwrite(pte_clear_savedwrite(pte_mk_savedwrite(pte))));
+ }
+@@ -114,6 +117,7 @@ static void __init pmd_basic_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!has_transparent_hugepage())
+ 		return;
+ 
++	pr_debug("Validating PMD basic\n");
+ 	WARN_ON(!pmd_same(pmd, pmd));
+ 	WARN_ON(!pmd_young(pmd_mkyoung(pmd_mkold(pmd))));
+ 	WARN_ON(!pmd_dirty(pmd_mkdirty(pmd_mkclean(pmd))));
+@@ -138,6 +142,7 @@ static void __init pmd_advanced_tests(struct mm_struct *mm,
+ 	if (!has_transparent_hugepage())
+ 		return;
+ 
++	pr_debug("Validating PMD advanced\n");
+ 	/* Align the address wrt HPAGE_PMD_SIZE */
+ 	vaddr = (vaddr & HPAGE_PMD_MASK) + HPAGE_PMD_SIZE;
+ 
+@@ -180,6 +185,7 @@ static void __init pmd_leaf_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pmd_t pmd = pfn_pmd(pfn, prot);
+ 
++	pr_debug("Validating PMD leaf\n");
  	/*
- 	 * PFN for mapping at PTE level is determined from a standard kernel
- 	 * text symbol. But pfns for higher page table levels are derived by
-@@ -644,6 +941,20 @@ static int __init debug_vm_pgtable(void)
- 	p4d_clear_tests(mm, p4dp);
- 	pgd_clear_tests(mm, pgdp);
+ 	 * PMD based THP is a leaf entry.
+ 	 */
+@@ -193,6 +199,8 @@ static void __init pmd_huge_tests(pmd_t *pmdp, unsigned long pfn, pgprot_t prot)
  
-+	pte_advanced_tests(mm, vma, ptep, pte_aligned, vaddr, prot);
-+	pmd_advanced_tests(mm, vma, pmdp, pmd_aligned, vaddr, prot);
-+	pud_advanced_tests(mm, vma, pudp, pud_aligned, vaddr, prot);
-+	hugetlb_advanced_tests(mm, vma, ptep, pte_aligned, vaddr, prot);
+ 	if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
+ 		return;
 +
-+	pmd_leaf_tests(pmd_aligned, prot);
-+	pud_leaf_tests(pud_aligned, prot);
-+
-+	pmd_huge_tests(pmdp, pmd_aligned, prot);
-+	pud_huge_tests(pudp, pud_aligned, prot);
-+
-+	pte_savedwrite_tests(pte_aligned, prot);
-+	pmd_savedwrite_tests(pmd_aligned, prot);
-+
- 	pte_unmap_unlock(ptep, ptl);
++	pr_debug("Validating PMD huge\n");
+ 	/*
+ 	 * X86 defined pmd_set_huge() verifies that the given
+ 	 * PMD is not a populated non-leaf entry.
+@@ -208,6 +216,7 @@ static void __init pmd_savedwrite_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pmd_t pmd = pfn_pmd(pfn, prot);
  
- 	pmd_populate_tests(mm, pmdp, saved_ptep);
-@@ -678,6 +989,7 @@ static int __init debug_vm_pgtable(void)
- 	pmd_free(mm, saved_pmdp);
- 	pte_free(mm, saved_ptep);
++	pr_debug("Validating PMD saved write\n");
+ 	WARN_ON(!pmd_savedwrite(pmd_mk_savedwrite(pmd_clear_savedwrite(pmd))));
+ 	WARN_ON(pmd_savedwrite(pmd_clear_savedwrite(pmd_mk_savedwrite(pmd))));
+ }
+@@ -220,6 +229,7 @@ static void __init pud_basic_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!has_transparent_hugepage())
+ 		return;
  
-+	vm_area_free(vma);
- 	mm_dec_nr_puds(mm);
- 	mm_dec_nr_pmds(mm);
- 	mm_dec_nr_ptes(mm);
++	pr_debug("Validating PUD basic\n");
+ 	WARN_ON(!pud_same(pud, pud));
+ 	WARN_ON(!pud_young(pud_mkyoung(pud_mkold(pud))));
+ 	WARN_ON(!pud_write(pud_mkwrite(pud_wrprotect(pud))));
+@@ -246,6 +256,7 @@ static void __init pud_advanced_tests(struct mm_struct *mm,
+ 	if (!has_transparent_hugepage())
+ 		return;
+ 
++	pr_debug("Validating PUD advanced\n");
+ 	/* Align the address wrt HPAGE_PUD_SIZE */
+ 	vaddr = (vaddr & HPAGE_PUD_MASK) + HPAGE_PUD_SIZE;
+ 
+@@ -288,6 +299,7 @@ static void __init pud_leaf_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pud_t pud = pfn_pud(pfn, prot);
+ 
++	pr_debug("Validating PUD leaf\n");
+ 	/*
+ 	 * PUD based THP is a leaf entry.
+ 	 */
+@@ -301,6 +313,8 @@ static void __init pud_huge_tests(pud_t *pudp, unsigned long pfn, pgprot_t prot)
+ 
+ 	if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
+ 		return;
++
++	pr_debug("Validating PUD huge\n");
+ 	/*
+ 	 * X86 defined pud_set_huge() verifies that the given
+ 	 * PUD is not a populated non-leaf entry.
+@@ -354,6 +368,7 @@ static void __init p4d_basic_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	p4d_t p4d;
+ 
++	pr_debug("Validating P4D basic\n");
+ 	memset(&p4d, RANDOM_NZVALUE, sizeof(p4d_t));
+ 	WARN_ON(!p4d_same(p4d, p4d));
+ }
+@@ -362,6 +377,7 @@ static void __init pgd_basic_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pgd_t pgd;
+ 
++	pr_debug("Validating PGD basic\n");
+ 	memset(&pgd, RANDOM_NZVALUE, sizeof(pgd_t));
+ 	WARN_ON(!pgd_same(pgd, pgd));
+ }
+@@ -374,6 +390,7 @@ static void __init pud_clear_tests(struct mm_struct *mm, pud_t *pudp)
+ 	if (mm_pmd_folded(mm))
+ 		return;
+ 
++	pr_debug("Validating PUD clear\n");
+ 	pud = __pud(pud_val(pud) | RANDOM_ORVALUE);
+ 	WRITE_ONCE(*pudp, pud);
+ 	pud_clear(pudp);
+@@ -388,6 +405,8 @@ static void __init pud_populate_tests(struct mm_struct *mm, pud_t *pudp,
+ 
+ 	if (mm_pmd_folded(mm))
+ 		return;
++
++	pr_debug("Validating PUD populate\n");
+ 	/*
+ 	 * This entry points to next level page table page.
+ 	 * Hence this must not qualify as pud_bad().
+@@ -414,6 +433,7 @@ static void __init p4d_clear_tests(struct mm_struct *mm, p4d_t *p4dp)
+ 	if (mm_pud_folded(mm))
+ 		return;
+ 
++	pr_debug("Validating P4D clear\n");
+ 	p4d = __p4d(p4d_val(p4d) | RANDOM_ORVALUE);
+ 	WRITE_ONCE(*p4dp, p4d);
+ 	p4d_clear(p4dp);
+@@ -429,6 +449,7 @@ static void __init p4d_populate_tests(struct mm_struct *mm, p4d_t *p4dp,
+ 	if (mm_pud_folded(mm))
+ 		return;
+ 
++	pr_debug("Validating P4D populate\n");
+ 	/*
+ 	 * This entry points to next level page table page.
+ 	 * Hence this must not qualify as p4d_bad().
+@@ -447,6 +468,7 @@ static void __init pgd_clear_tests(struct mm_struct *mm, pgd_t *pgdp)
+ 	if (mm_p4d_folded(mm))
+ 		return;
+ 
++	pr_debug("Validating PGD clear\n");
+ 	pgd = __pgd(pgd_val(pgd) | RANDOM_ORVALUE);
+ 	WRITE_ONCE(*pgdp, pgd);
+ 	pgd_clear(pgdp);
+@@ -462,6 +484,7 @@ static void __init pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp,
+ 	if (mm_p4d_folded(mm))
+ 		return;
+ 
++	pr_debug("Validating PGD populate\n");
+ 	/*
+ 	 * This entry points to next level page table page.
+ 	 * Hence this must not qualify as pgd_bad().
+@@ -490,6 +513,7 @@ static void __init pte_clear_tests(struct mm_struct *mm, pte_t *ptep,
+ {
+ 	pte_t pte = ptep_get(ptep);
+ 
++	pr_debug("Validating PTE clear\n");
+ 	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
+ 	set_pte_at(mm, vaddr, ptep, pte);
+ 	barrier();
+@@ -502,6 +526,7 @@ static void __init pmd_clear_tests(struct mm_struct *mm, pmd_t *pmdp)
+ {
+ 	pmd_t pmd = READ_ONCE(*pmdp);
+ 
++	pr_debug("Validating PMD clear\n");
+ 	pmd = __pmd(pmd_val(pmd) | RANDOM_ORVALUE);
+ 	WRITE_ONCE(*pmdp, pmd);
+ 	pmd_clear(pmdp);
+@@ -514,6 +539,7 @@ static void __init pmd_populate_tests(struct mm_struct *mm, pmd_t *pmdp,
+ {
+ 	pmd_t pmd;
+ 
++	pr_debug("Validating PMD populate\n");
+ 	/*
+ 	 * This entry points to next level page table page.
+ 	 * Hence this must not qualify as pmd_bad().
+@@ -531,6 +557,7 @@ static void __init pte_special_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!IS_ENABLED(CONFIG_ARCH_HAS_PTE_SPECIAL))
+ 		return;
+ 
++	pr_debug("Validating PTE special\n");
+ 	WARN_ON(!pte_special(pte_mkspecial(pte)));
+ }
+ 
+@@ -541,6 +568,7 @@ static void __init pte_protnone_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!IS_ENABLED(CONFIG_NUMA_BALANCING))
+ 		return;
+ 
++	pr_debug("Validating PTE protnone\n");
+ 	WARN_ON(!pte_protnone(pte));
+ 	WARN_ON(!pte_present(pte));
+ }
+@@ -553,6 +581,7 @@ static void __init pmd_protnone_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!IS_ENABLED(CONFIG_NUMA_BALANCING))
+ 		return;
+ 
++	pr_debug("Validating PMD protnone\n");
+ 	WARN_ON(!pmd_protnone(pmd));
+ 	WARN_ON(!pmd_present(pmd));
+ }
+@@ -565,6 +594,7 @@ static void __init pte_devmap_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pte_t pte = pfn_pte(pfn, prot);
+ 
++	pr_debug("Validating PTE devmap\n");
+ 	WARN_ON(!pte_devmap(pte_mkdevmap(pte)));
+ }
+ 
+@@ -573,6 +603,7 @@ static void __init pmd_devmap_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pmd_t pmd = pfn_pmd(pfn, prot);
+ 
++	pr_debug("Validating PMD devmap\n");
+ 	WARN_ON(!pmd_devmap(pmd_mkdevmap(pmd)));
+ }
+ 
+@@ -581,6 +612,7 @@ static void __init pud_devmap_tests(unsigned long pfn, pgprot_t prot)
+ {
+ 	pud_t pud = pfn_pud(pfn, prot);
+ 
++	pr_debug("Validating PUD devmap\n");
+ 	WARN_ON(!pud_devmap(pud_mkdevmap(pud)));
+ }
+ #else  /* !CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD */
+@@ -603,6 +635,7 @@ static void __init pte_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+ 		return;
+ 
++	pr_debug("Validating PTE soft dirty\n");
+ 	WARN_ON(!pte_soft_dirty(pte_mksoft_dirty(pte)));
+ 	WARN_ON(pte_soft_dirty(pte_clear_soft_dirty(pte)));
+ }
+@@ -614,6 +647,7 @@ static void __init pte_swap_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+ 		return;
+ 
++	pr_debug("Validating PTE swap soft dirty\n");
+ 	WARN_ON(!pte_swp_soft_dirty(pte_swp_mksoft_dirty(pte)));
+ 	WARN_ON(pte_swp_soft_dirty(pte_swp_clear_soft_dirty(pte)));
+ }
+@@ -626,6 +660,7 @@ static void __init pmd_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+ 		return;
+ 
++	pr_debug("Validating PMD soft dirty\n");
+ 	WARN_ON(!pmd_soft_dirty(pmd_mksoft_dirty(pmd)));
+ 	WARN_ON(pmd_soft_dirty(pmd_clear_soft_dirty(pmd)));
+ }
+@@ -638,6 +673,7 @@ static void __init pmd_swap_soft_dirty_tests(unsigned long pfn, pgprot_t prot)
+ 		!IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION))
+ 		return;
+ 
++	pr_debug("Validating PMD swap soft dirty\n");
+ 	WARN_ON(!pmd_swp_soft_dirty(pmd_swp_mksoft_dirty(pmd)));
+ 	WARN_ON(pmd_swp_soft_dirty(pmd_swp_clear_soft_dirty(pmd)));
+ }
+@@ -653,6 +689,7 @@ static void __init pte_swap_tests(unsigned long pfn, pgprot_t prot)
+ 	swp_entry_t swp;
+ 	pte_t pte;
+ 
++	pr_debug("Validating PTE swap\n");
+ 	pte = pfn_pte(pfn, prot);
+ 	swp = __pte_to_swp_entry(pte);
+ 	pte = __swp_entry_to_pte(swp);
+@@ -665,6 +702,7 @@ static void __init pmd_swap_tests(unsigned long pfn, pgprot_t prot)
+ 	swp_entry_t swp;
+ 	pmd_t pmd;
+ 
++	pr_debug("Validating PMD swap\n");
+ 	pmd = pfn_pmd(pfn, prot);
+ 	swp = __pmd_to_swp_entry(pmd);
+ 	pmd = __swp_entry_to_pmd(swp);
+@@ -681,6 +719,8 @@ static void __init swap_migration_tests(void)
+ 
+ 	if (!IS_ENABLED(CONFIG_MIGRATION))
+ 		return;
++
++	pr_debug("Validating swap migration\n");
+ 	/*
+ 	 * swap_migration_tests() requires a dedicated page as it needs to
+ 	 * be locked before creating a migration entry from it. Locking the
+@@ -720,6 +760,7 @@ static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot)
+ 	struct page *page;
+ 	pte_t pte;
+ 
++	pr_debug("Validating HugeTLB basic\n");
+ 	/*
+ 	 * Accessing the page associated with the pfn is safe here,
+ 	 * as it was previously derived from a real kernel symbol.
+@@ -747,6 +788,7 @@ static void __init hugetlb_advanced_tests(struct mm_struct *mm,
+ 	pte_t pte = ptep_get(ptep);
+ 	unsigned long paddr = __pfn_to_phys(pfn) & PMD_MASK;
+ 
++	pr_debug("Validating HugeTLB advanced\n");
+ 	pte = pte_mkhuge(mk_pte(pfn_to_page(PHYS_PFN(paddr)), prot));
+ 	set_huge_pte_at(mm, vaddr, ptep, pte);
+ 	barrier();
+@@ -797,6 +839,7 @@ static void __init pmd_thp_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!has_transparent_hugepage())
+ 		return;
+ 
++	pr_debug("Validating PMD based THP\n");
+ 	/*
+ 	 * pmd_trans_huge() and pmd_present() must return positive after
+ 	 * MMU invalidation with pmd_mkinvalid(). This behavior is an
+@@ -825,6 +868,7 @@ static void __init pud_thp_tests(unsigned long pfn, pgprot_t prot)
+ 	if (!has_transparent_hugepage())
+ 		return;
+ 
++	pr_debug("Validating PUD based THP\n");
+ 	pud = pfn_pud(pfn, prot);
+ 	WARN_ON(!pud_trans_huge(pud_mkhuge(pud)));
+ 
 -- 
 2.20.1
 
