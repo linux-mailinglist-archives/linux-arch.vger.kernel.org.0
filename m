@@ -2,98 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C0E21DAB6
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 17:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9C621DAF9
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jul 2020 17:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729988AbgGMPsa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jul 2020 11:48:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43290 "EHLO mail.kernel.org"
+        id S1730276AbgGMP7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jul 2020 11:59:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48404 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729649AbgGMPsa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 13 Jul 2020 11:48:30 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        id S1729644AbgGMP7S (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Jul 2020 11:59:18 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F6882082F
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 15:48:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5802B20791
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 15:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594655309;
-        bh=FiLSo9R0STPJ54NQ+j4cquzz90YqRrZ+tVdT8FICfPw=;
+        s=default; t=1594655957;
+        bh=KyCw4fkjqGBP+Ng7/LXUCofxHSgPOYAylS5bQauPuV4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=u/HSfMU9F7rxmTiqX4sRr4Pk8VxlDbewsgkjIe6pG2nB4ATgq01e1Xrr0clJ4LJmf
-         KF6xr1Xv2GX82a28cw4dDUZuiL8A6ohB3EUIdPA0Gz22eJVXxmjte4lc3XkjzocFbw
-         v5Jvv0F2fEGEoQbUjFwMLPV7iO/JAL2dOHC42qck=
-Received: by mail-wr1-f47.google.com with SMTP id s10so17020930wrw.12
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 08:48:29 -0700 (PDT)
-X-Gm-Message-State: AOAM531s24R2nUxdXdUZmG5O7iQCiKo78L+VDmYOrEaNWO+XRsM8MjEb
-        C+hMLICrUAd8SOKO6D+jSHP8l9xjZh+6/EcqDlmRqA==
-X-Google-Smtp-Source: ABdhPJx0toL1Ye0o0H7c4Y3A41BrSlbEq0nHhnxAApxWZf2y0+ABJ/8JMUZOzKNFFHuITvPQPnyOqJdLGjq2hZLzWb4=
-X-Received: by 2002:adf:a111:: with SMTP id o17mr79174967wro.257.1594655308027;
- Mon, 13 Jul 2020 08:48:28 -0700 (PDT)
+        b=J6B1/an87Uz+Ik5Zm/ikXniJFfkB0OJpKuPGtOS2jbFknhgYBK84N6z3WsA+39h32
+         PIVdl90MO3IcY5znDYwiVHWLvaEypp3S2PIYeR4tpEiDakNY6jKisITSFJqHaHAgj5
+         vtQuv/rRYW1/UBP9ICpJLNgkUogL19k2zGmWv098=
+Received: by mail-wr1-f53.google.com with SMTP id a6so17100036wrm.4
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jul 2020 08:59:17 -0700 (PDT)
+X-Gm-Message-State: AOAM531DYeoo3KCOxBPO2jtGrei+ftSfo2v0vcyQ5y/rTTij4H8jO1Ya
+        4YgcLLUEoMrhTHI7D0VNX8zTs9j4HbgeBsAS4Zbj+Q==
+X-Google-Smtp-Source: ABdhPJxU2n3wnRIWWwiKNhxrwmUD4JY7g5VTemgvAdq6OBgmfsRoQL9sAN5gakJjmLDCt30osVAF5ooJLNn0n7EpJd8=
+X-Received: by 2002:adf:e482:: with SMTP id i2mr11665wrm.75.1594655955925;
+ Mon, 13 Jul 2020 08:59:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200710015646.2020871-1-npiggin@gmail.com> <20200710015646.2020871-5-npiggin@gmail.com>
- <CALCETrVqHDLo09HcaoeOoAVK8w+cNWkSNTLkDDU=evUhaXkyhQ@mail.gmail.com>
- <1594613902.1wzayj0p15.astroid@bobo.none> <1594647408.wmrazhwjzb.astroid@bobo.none>
- <284592761.9860.1594649601492.JavaMail.zimbra@efficios.com>
-In-Reply-To: <284592761.9860.1594649601492.JavaMail.zimbra@efficios.com>
+References: <20200710015646.2020871-1-npiggin@gmail.com> <20200710015646.2020871-8-npiggin@gmail.com>
+In-Reply-To: <20200710015646.2020871-8-npiggin@gmail.com>
 From:   Andy Lutomirski <luto@kernel.org>
-Date:   Mon, 13 Jul 2020 08:48:16 -0700
-X-Gmail-Original-Message-ID: <CALCETrUHsYp0oGAiy3N-yAauPyx2nKqp1AiETgSJWc77GwO-Sg@mail.gmail.com>
-Message-ID: <CALCETrUHsYp0oGAiy3N-yAauPyx2nKqp1AiETgSJWc77GwO-Sg@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Anton Blanchard <anton@ozlabs.org>,
+Date:   Mon, 13 Jul 2020 08:59:04 -0700
+X-Gmail-Original-Message-ID: <CALCETrWbD=3SUOuq9P7Syb+a1DoBjjem8hq9_HCvn7wyqETkpw@mail.gmail.com>
+Message-ID: <CALCETrWbD=3SUOuq9P7Syb+a1DoBjjem8hq9_HCvn7wyqETkpw@mail.gmail.com>
+Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy
+ tlb option
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
+        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 7:13 AM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
+On Thu, Jul 9, 2020 at 6:57 PM Nicholas Piggin <npiggin@gmail.com> wrote:
 >
-> ----- On Jul 13, 2020, at 9:47 AM, Nicholas Piggin npiggin@gmail.com wrote:
+> On big systems, the mm refcount can become highly contented when doing
+> a lot of context switching with threaded applications (particularly
+> switching between the idle thread and an application thread).
 >
-> > Excerpts from Nicholas Piggin's message of July 13, 2020 2:45 pm:
-> >> Excerpts from Andy Lutomirski's message of July 11, 2020 3:04 am:
-> >>> Also, as it stands, I can easily see in_irq() ceasing to promise to
-> >>> serialize.  There are older kernels for which it does not promise to
-> >>> serialize.  And I have plans to make it stop serializing in the
-> >>> nearish future.
-> >>
-> >> You mean x86's return from interrupt? Sounds fun... you'll konw where to
-> >> update the membarrier sync code, at least :)
-> >
-> > Oh, I should actually say Mathieu recently clarified a return from
-> > interrupt doesn't fundamentally need to serialize in order to support
-> > membarrier sync core.
+> Abandoning lazy tlb slows switching down quite a bit in the important
+> user->idle->user cases, so so instead implement a non-refcounted scheme
+> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
+> any remaining lazy ones.
 >
-> Clarification to your statement:
->
-> Return from interrupt to kernel code does not need to be context serializing
-> as long as kernel serializes before returning to user-space.
->
-> However, return from interrupt to user-space needs to be context serializing.
+> On a 16-socket 192-core POWER8 system, a context switching benchmark
+> with as many software threads as CPUs (so each switch will go in and
+> out of idle), upstream can achieve a rate of about 1 million context
+> switches per second. After this patch it goes up to 118 million.
 >
 
-Indeed, and I figured this out on the first read through because I'm
-quite familiar with the x86 entry code.  But Nick somehow missed this,
-and Nick is the one who wrote the patch.
+I read the patch a couple of times, and I have a suggestion that could
+be nonsense.  You are, effectively, using mm_cpumask() as a sort of
+refcount.  You're saying "hey, this mm has no more references, but it
+still has nonempty mm_cpumask(), so let's send an IPI and shoot down
+those references too."  I'm wondering whether you actually need the
+IPI.  What if, instead, you actually treated mm_cpumask as a refcount
+for real?  Roughly, in __mmdrop(), you would only free the page tables
+if mm_cpumask() is empty.  And, in the code that removes a CPU from
+mm_cpumask(), you would check if mm_users == 0 and, if so, check if
+you just removed the last bit from mm_cpumask and potentially free the
+mm.
 
-Nick, I think this helps prove my point.  The code you're submitting
-may well be correct, but it's unmaintainable.  At the very least, this
-needs a comment explaining, from the perspective of x86, *exactly*
-what exit_lazy_tlb() is promising, why it's promising it, how it
-achieves that promise, and what code cares about it.  Or we could do
-something with TIF flags and make this all less magical, although that
-will probably end up very slightly slower.
+Getting the locking right here could be a bit tricky -- you need to
+avoid two CPUs simultaneously exiting lazy TLB and thinking they
+should free the mm, and you also need to avoid an mm with mm_users
+hitting zero concurrently with the last remote CPU using it lazily
+exiting lazy TLB.  Perhaps this could be resolved by having mm_count
+== 1 mean "mm_cpumask() is might contain bits and, if so, it owns the
+mm" and mm_count == 0 meaning "now it's dead" and using some careful
+cmpxchg or dec_return to make sure that only one CPU frees it.
+
+Or maybe you'd need a lock or RCU for this, but the idea would be to
+only ever take the lock after mm_users goes to zero.
 
 --Andy
