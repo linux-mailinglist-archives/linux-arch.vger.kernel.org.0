@@ -2,135 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 839FA21F16C
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 14:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C74C21F1C2
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 14:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727886AbgGNMgI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jul 2020 08:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S1726352AbgGNMqK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jul 2020 08:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbgGNMgI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 08:36:08 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519CFC061755;
-        Tue, 14 Jul 2020 05:36:08 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id e64so17063436iof.12;
-        Tue, 14 Jul 2020 05:36:08 -0700 (PDT)
+        with ESMTP id S1728253AbgGNMqJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 08:46:09 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0D0C08C5C1
+        for <linux-arch@vger.kernel.org>; Tue, 14 Jul 2020 05:46:09 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id mn17so1523499pjb.4
+        for <linux-arch@vger.kernel.org>; Tue, 14 Jul 2020 05:46:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=Gb+Q70LB3bQ72JL0eSnIdekJKUYUeTWGONZ+6Nqwogo=;
-        b=exjA6lvAWxUvf1Td2gq98AcVXUNkO3OPeywwuYDfsL+Z0YPJPbs2u85bRho4FdyAYG
-         h1Me90Y/Xi9mrbBb8IaCwjCCtYe0iU8Kdh8gvx4lPvw3ww0BSuQCAaIggiGzNrJ/rvTH
-         NUMDgXk2hTiz164UVDp0X/EMe5UZSZk9rzOG8RZLS92wGG7i2sWIFctBkIViYipOQgok
-         xcfHbLR2UQt/A0WzfMGMQVUKm26Utu92kngSJt91ObuRmBmWkKww8U1+XQaxchUIoULg
-         LETQQruiS74VAz/QrOz41g7p3HeSVdiEqjGWDHkLxWa7roAfEPM+hfKFIBuOgsfaV0cy
-         L0ew==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=/SewYUnqs72nnjMOfIaT/P3hnIetrZLumBpPg+JegX0=;
+        b=D1NGAPg9DguAGriffg1ZKDQlJlC1+rzx1RCn9Z1SjvMh8mVyP85iJVTOk27SO4a08k
+         1V5qK1FMv2kRDf61ZAwWSToubCahJWjZawbE9dK/JQl/n6KGaGigwT8v4+/JvSOH3c9g
+         Mz5Lgz2PjW6tfU5YGXzfAQPF4Wg/hMeniIXfs+bXaz6nZPur23tEIN3EVe4/csCszP7T
+         aa4VAfNXB2ufQhsSmU5YlKzEACcAVaHvnN4wfizMbk4JbzAHCQuXlr1YyqS155MassiF
+         mgNzS52TqPR5Z4Go7wsaOTe0Q3qKQGveLcrduWSquAZ69BfUR0H0nvbYv0E4QcG7eqYv
+         Zv5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=Gb+Q70LB3bQ72JL0eSnIdekJKUYUeTWGONZ+6Nqwogo=;
-        b=RrEsTEE91Wa5ahkqfMec8OOktXXg9tpa7vfbpZfvPrtgaOiXTVTN3lHjYDhP+D+/gs
-         PLvxwhL5vgnOmtHLDr+ij1bmS0m2FYfPO3K/LEe2xwkJx6f9D9vqLT7tPncNJE6ucaGk
-         HB3gJMWAPDByjayaTvAcviDUKJF83bSJsPiO4F0W8d7LFja/nITv5inugh2s2BEFhQq+
-         /JCdaoASDY5LQFFxueP+2yAe/hwam1d1m34OT3GT26a+l1oiNqUrSMNOFhH50KWxo9w3
-         YIbERlv7jWfMKelNhKSOWpJZDaPV2HSJwbXRnA0MdHxE5va9F6RKoGVHcmvpHZEcKcz/
-         eCZA==
-X-Gm-Message-State: AOAM530+7GaOsg7gTlQ6o73+pA6GTpfoKEHHuoJrRuX9tJoKGeEwadnH
-        VuJRaOLpWyxWgLg4ukGKE7IIKFyMQPO3sKMyhTuR6t7b14E=
-X-Google-Smtp-Source: ABdhPJy08S8ez9XwftwQn5CP8eSR816kqqnMmTFnXtvq9GDL8Kyd4FJY0vpVR/06YozpswqRqTbLAb4BcgAV34vv4aM=
-X-Received: by 2002:a5e:9309:: with SMTP id k9mr4608670iom.135.1594730166218;
- Tue, 14 Jul 2020 05:36:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <671d8923-ed43-4600-2628-33ae7cb82ccb@molgen.mpg.de> <CABCJKuedpxAqndgL=jHT22KtjnLkb1dsYaM6hQYyhqrWjkEe6A@mail.gmail.com>
- <2ac9e722-949b-aa92-3553-df1bf69bf9e5@molgen.mpg.de>
-In-Reply-To: <2ac9e722-949b-aa92-3553-df1bf69bf9e5@molgen.mpg.de>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Tue, 14 Jul 2020 14:35:52 +0200
-Message-ID: <CA+icZUXwLocrBNRL+1-koCW50Fm+f4_u3xzy-_eJSxyoW2VTfw@mail.gmail.com>
-Subject: Re: [PATCH 00/22] add support for Clang LTO
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=/SewYUnqs72nnjMOfIaT/P3hnIetrZLumBpPg+JegX0=;
+        b=YLukXCzvmaRQoGPn1+vF0fAAWF9P5QDoDrPSlVeAq3l8hOOd+q5d0LLzA50aeNS6yW
+         NmWbw56zK+odl4y1+6mggVgPwj1cY6iblDyb/9CxBWe8JR1XZL+KXdXXfa1RwMUjgkvW
+         s7OKvxRQ12Fm73wlDaOw1uqY37rQUJgTqGXuh0VYV2xXH+Snqa4AN23K+zhIhGxZlpeJ
+         a/xvhA34wrKBXKYzA1cACMzRYKJQTgnwzeGn7zcMxmwtaOkdhJJSjnMCV3Osz10V5LZt
+         omH2ecLCrrqV40/c0m2WZUtq+KyHQ2/JIajBUoPcPeEsSji7iBL1eIepAPGeaaQutl+W
+         PRXw==
+X-Gm-Message-State: AOAM533Zo+QIfNsKrBr9+ejWkBxhh/cmwFFzP91nCjT/EU19ZEuq3vY5
+        qkxoJn86Kli3tR2nzpPABsJvhA==
+X-Google-Smtp-Source: ABdhPJxJbeD76js5UkUJHGRXxQF8mvRABkEpz0TioNSqyjRD+fSmGpaHXMGBmfPRvfGBot/P0MR7fg==
+X-Received: by 2002:a17:90a:3a81:: with SMTP id b1mr4539573pjc.217.1594730768819;
+        Tue, 14 Jul 2020 05:46:08 -0700 (PDT)
+Received: from ?IPv6:2601:646:c200:1ef2:d111:b7a3:a3d3:c7aa? ([2601:646:c200:1ef2:d111:b7a3:a3d3:c7aa])
+        by smtp.gmail.com with ESMTPSA id g28sm17494542pfr.70.2020.07.14.05.46.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jul 2020 05:46:07 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+Date:   Tue, 14 Jul 2020 05:46:05 -0700
+Message-Id: <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
+References: <1594708054.04iuyxuyb5.astroid@bobo.none>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+In-Reply-To: <1594708054.04iuyxuyb5.astroid@bobo.none>
+To:     Nicholas Piggin <npiggin@gmail.com>
+X-Mailer: iPhone Mail (17F80)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 2:16 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Sami,
->
->
-> Am 13.07.20 um 01:34 schrieb Sami Tolvanen:
-> > On Sat, Jul 11, 2020 at 9:32 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
-> >> Thank you very much for sending these changes.
-> >>
-> >> Do you have a branch, where your current work can be pulled from? Your
-> >> branch on GitHub [1] seems 15 months old.
-> >
-> > The clang-lto branch is rebased regularly on top of Linus' tree.
-> > GitHub just looks at the commit date of the last commit in the tree,
-> > which isn't all that informative.
->
-> Thank you for clearing this up, and sorry for not checking myself.
->
-> >> Out of curiosity, I applied the changes, allowed the selection for i386
-> >> (x86), and with Clang 1:11~++20200701093119+ffee8040534-1~exp1 from
-> >> Debian experimental, it failed with `Invalid absolute R_386_32
-> >> relocation: KERNEL_PAGES`:
-> >
-> > I haven't looked at getting this to work on i386, which is why we only
-> > select ARCH_SUPPORTS_LTO for x86_64. I would expect there to be a few
-> > issues to address.
-> >
-> >>>    arch/x86/tools/relocs vmlinux > arch/x86/boot/compressed/vmlinux.relocs;arch/x86/tools/relocs --abs-relocs vmlinux
-> >>> Invalid absolute R_386_32 relocation: KERNEL_PAGES
-> >
-> > KERNEL_PAGES looks like a constant, so it's probably safe to ignore
-> > the absolute relocation in tools/relocs.c.
->
-> Thank you for pointing me to the right direction. I am happy to report,
-> that with the diff below (no idea to what list to add the string), Linux
-> 5.8-rc5 with the LLVM/Clang/LTO patches on top, builds and boots on the
-> ASRock E350M1.
->
-> ```
-> diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-> index 8f3bf34840cef..e91af127ed3c0 100644
-> --- a/arch/x86/tools/relocs.c
-> +++ b/arch/x86/tools/relocs.c
-> @@ -79,6 +79,7 @@ static const char * const
-> sym_regex_kernel[S_NSYMTYPES] = {
->          "__end_rodata_hpage_align|"
->   #endif
->          "__vvar_page|"
-> +       "KERNEL_PAGES|"
->          "_end)$"
->   };
-> ```
->
 
-What llvm-toolchain and version did you use?
 
-Can you post your linux-config?
+> On Jul 13, 2020, at 11:31 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
+>=20
+> =EF=BB=BFExcerpts from Nicholas Piggin's message of July 14, 2020 3:04 pm:=
 
-Thanks.
+>> Excerpts from Andy Lutomirski's message of July 14, 2020 4:18 am:
+>>>=20
+>>>> On Jul 13, 2020, at 9:48 AM, Nicholas Piggin <npiggin@gmail.com> wrote:=
 
-- Sedat -
+>>>>=20
+>>>> =EF=BB=BFExcerpts from Andy Lutomirski's message of July 14, 2020 1:59 a=
+m:
+>>>>>> On Thu, Jul 9, 2020 at 6:57 PM Nicholas Piggin <npiggin@gmail.com> wr=
+ote:
+>>>>>>=20
+>>>>>> On big systems, the mm refcount can become highly contented when doin=
+g
+>>>>>> a lot of context switching with threaded applications (particularly
+>>>>>> switching between the idle thread and an application thread).
+>>>>>>=20
+>>>>>> Abandoning lazy tlb slows switching down quite a bit in the important=
+
+>>>>>> user->idle->user cases, so so instead implement a non-refcounted sche=
+me
+>>>>>> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot do=
+wn
+>>>>>> any remaining lazy ones.
+>>>>>>=20
+>>>>>> On a 16-socket 192-core POWER8 system, a context switching benchmark
+>>>>>> with as many software threads as CPUs (so each switch will go in and
+>>>>>> out of idle), upstream can achieve a rate of about 1 million context
+>>>>>> switches per second. After this patch it goes up to 118 million.
+>>>>>>=20
+>>>>>=20
+>>>>> I read the patch a couple of times, and I have a suggestion that could=
+
+>>>>> be nonsense.  You are, effectively, using mm_cpumask() as a sort of
+>>>>> refcount.  You're saying "hey, this mm has no more references, but it
+>>>>> still has nonempty mm_cpumask(), so let's send an IPI and shoot down
+>>>>> those references too."  I'm wondering whether you actually need the
+>>>>> IPI.  What if, instead, you actually treated mm_cpumask as a refcount
+>>>>> for real?  Roughly, in __mmdrop(), you would only free the page tables=
+
+>>>>> if mm_cpumask() is empty.  And, in the code that removes a CPU from
+>>>>> mm_cpumask(), you would check if mm_users =3D=3D 0 and, if so, check i=
+f
+>>>>> you just removed the last bit from mm_cpumask and potentially free the=
+
+>>>>> mm.
+>>>>>=20
+>>>>> Getting the locking right here could be a bit tricky -- you need to
+>>>>> avoid two CPUs simultaneously exiting lazy TLB and thinking they
+>>>>> should free the mm, and you also need to avoid an mm with mm_users
+>>>>> hitting zero concurrently with the last remote CPU using it lazily
+>>>>> exiting lazy TLB.  Perhaps this could be resolved by having mm_count
+>>>>> =3D=3D 1 mean "mm_cpumask() is might contain bits and, if so, it owns t=
+he
+>>>>> mm" and mm_count =3D=3D 0 meaning "now it's dead" and using some caref=
+ul
+>>>>> cmpxchg or dec_return to make sure that only one CPU frees it.
+>>>>>=20
+>>>>> Or maybe you'd need a lock or RCU for this, but the idea would be to
+>>>>> only ever take the lock after mm_users goes to zero.
+>>>>=20
+>>>> I don't think it's nonsense, it could be a good way to avoid IPIs.
+>>>>=20
+>>>> I haven't seen much problem here that made me too concerned about IPIs=20=
+
+>>>> yet, so I think the simple patch may be good enough to start with
+>>>> for powerpc. I'm looking at avoiding/reducing the IPIs by combining the=
+
+>>>> unlazying with the exit TLB flush without doing anything fancy with
+>>>> ref counting, but we'll see.
+>>>=20
+>>> I would be cautious with benchmarking here. I would expect that the
+>>> nasty cases may affect power consumption more than performance =E2=80=94=
+ the=20
+>>> specific issue is IPIs hitting idle cores, and the main effects are to=20=
+
+>>> slow down exit() a bit but also to kick the idle core out of idle.=20
+>>> Although, if the idle core is in a deep sleep, that IPI could be=20
+>>> *very* slow.
+>>=20
+>> It will tend to be self-limiting to some degree (deeper idle cores
+>> would tend to have less chance of IPI) but we have bigger issues on
+>> powerpc with that, like broadcast IPIs to the mm cpumask for THP
+>> management. Power hasn't really shown up as an issue but powerpc
+>> CPUs may have their own requirements and issues there, shall we say.
+>>=20
+>>> So I think it=E2=80=99s worth at least giving this a try.
+>>=20
+>> To be clear it's not a complete solution itself. The problem is of=20
+>> course that mm cpumask gives you false negatives, so the bits
+>> won't always clean up after themselves as CPUs switch away from their
+>> lazy tlb mms.
+>=20
+> ^^
+>=20
+> False positives: CPU is in the mm_cpumask, but is not using the mm
+> as a lazy tlb. So there can be bits left and never freed.
+>=20
+> If you closed the false positives, you're back to a shared mm cache
+> line on lazy mm context switches.
+
+x86 has this exact problem. At least no more than 64*8 CPUs share the cache l=
+ine :)
+
+Can your share your benchmark?
+
+>=20
+> Thanks,
+> Nick
