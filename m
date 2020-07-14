@@ -2,87 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7411021F63C
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 17:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAAE21F695
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 17:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725280AbgGNPdn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jul 2020 11:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726780AbgGNPdl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 11:33:41 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03348C061794
-        for <linux-arch@vger.kernel.org>; Tue, 14 Jul 2020 08:33:41 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id d17so23330607ljl.3
-        for <linux-arch@vger.kernel.org>; Tue, 14 Jul 2020 08:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3rYU4sbMcFdjvk+wenfKOdKBg9lSiSVy3qR8AsDWIT4=;
-        b=IobWZMZ2K4lfIlp2s0OMaugN8Nr0+nroGDJtXkiC4e/XOIRS/xcHqGwEs/K6W4JaY9
-         vx/FIjFLSo1MrfLf/XK1RlzcMb1/WLsHEyRjvsEhdixC9gGSR6G0trgFj5aiUsbt1zRC
-         5VvJnSve8NLK8sjeRHlLk7K93NUoBQ/sk2+O8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3rYU4sbMcFdjvk+wenfKOdKBg9lSiSVy3qR8AsDWIT4=;
-        b=eWlonWhbzqADGMWAn/+1nf/8qqN7xYlh2znRheYA2TIBkratoXChfCtWwCLJnGKYw9
-         NTArkuYm7OwaYS9TZVaKL+xkHpD5n0YFYiEOn+JKN3UXMS+12nLf9dFAJgwOp8tv4YSk
-         03FB16NNoW5m5bkcHPheW2KWkgCx+6qaZ3KjKoeaiz1n/lE94xnVZ9xVEXvwrb0swm0a
-         vCnC5et/iMbsJLvysa6Djymy3yL7y2kRqKwzxIrH4+AZtRQq6C4TR++byu3tNhpxcH9z
-         v2MfTziv+JjpgTyVLaPovkEkvk/1btlmVJY35MVm5UreFNKA9KUGX3WwlapGEH1LfWcc
-         W8HQ==
-X-Gm-Message-State: AOAM530nxLy1p51AUfBL9craMmUvOdTJlsgUXOY7PMiYdtIvTb7NXpzW
-        9Dnp6ESXvcKJtfb8xxaZ5jm8Mt4F/oY=
-X-Google-Smtp-Source: ABdhPJyXA1P55nqyUGwmUaYI+E5pprflVZ7Q/FxhSc5T+TOwVurxmSYdmnEuVzQBV9mtOICSgz0kIQ==
-X-Received: by 2002:a2e:b164:: with SMTP id a4mr2750993ljm.151.1594740818705;
-        Tue, 14 Jul 2020 08:33:38 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id v24sm5363379lfo.4.2020.07.14.08.33.37
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2020 08:33:37 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id e4so23315444ljn.4
-        for <linux-arch@vger.kernel.org>; Tue, 14 Jul 2020 08:33:37 -0700 (PDT)
-X-Received: by 2002:a2e:999a:: with SMTP id w26mr2542103lji.371.1594740817078;
- Tue, 14 Jul 2020 08:33:37 -0700 (PDT)
+        id S1727888AbgGNP6q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jul 2020 11:58:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33482 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725890AbgGNP6q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Jul 2020 11:58:46 -0400
+Received: from gaia (unknown [95.146.230.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 93708223C6;
+        Tue, 14 Jul 2020 15:58:43 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 16:58:41 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     maz@kernel.org, steven.price@arm.com, guohanjun@huawei.com,
+        will@kernel.org, olof@lixom.net, suzuki.poulose@arm.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        zhangshaokun@hisilicon.com, prime.zeng@hisilicon.com,
+        linux-arch@vger.kernel.org, kuhn.chenqun@huawei.com,
+        xiexiangyou@huawei.com, linux-mm@kvack.org, arm@kernel.org
+Subject: Re: [PATCH v2 0/2] arm64: tlb: add support for TLBI RANGE
+ instructions
+Message-ID: <20200714155840.GE18793@gaia>
+References: <20200710094420.517-1-yezhenyu2@huawei.com>
+ <159440712962.27784.4664678472466095995.b4-ty@arm.com>
+ <20200713122123.GC15829@gaia>
+ <2edcf1ce-38d4-82b2-e500-51f742cae357@huawei.com>
+ <20200713165903.GD15829@gaia>
+ <b0c1ae56-3c22-dafe-a145-305714b211eb@huawei.com>
 MIME-Version: 1.0
-References: <20200710135706.537715-1-hch@lst.de> <CAHk-=wjGjwtgYJvLOd5aO2dWyPsC-6ED2Hthoxm1Eerf-Ahd-w@mail.gmail.com>
- <20200714070955.GB776@lst.de>
-In-Reply-To: <20200714070955.GB776@lst.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 14 Jul 2020 08:33:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wibed1S5_XMgjrUTOgUf0UOy1djm3e14c3YOm1Loj2vzw@mail.gmail.com>
-Message-ID: <CAHk-=wibed1S5_XMgjrUTOgUf0UOy1djm3e14c3YOm1Loj2vzw@mail.gmail.com>
-Subject: Re: clean up address limit helpers
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-riscv@lists.infradead.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0c1ae56-3c22-dafe-a145-305714b211eb@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 12:09 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Fri, Jul 10, 2020 at 08:25:35AM -0700, Linus Torvalds wrote:
-> >
-> > Ack. All the patches looked like no-ops to me, but with better naming
-> > and clarity.
->
-> Is that a formal Acked-by?
+On Tue, Jul 14, 2020 at 11:17:01PM +0800, Zhenyu Ye wrote:
+> On 2020/7/14 0:59, Catalin Marinas wrote:
+> >> +config ARM64_TLBI_RANGE
+> >> +	bool "Enable support for tlbi range feature"
+> >> +	default y
+> >> +	depends on AS_HAS_TLBI_RANGE
+> >> +	help
+> >> +	  ARMv8.4-TLBI provides TLBI invalidation instruction that apply to a
+> >> +	  range of input addresses.
+> >> +
+> >> +	  The feature introduces new assembly instructions, and they were
+> >> +	  support when binutils >= 2.30.
+> > 
+> > It looks like 2.30. I tracked it down to this commit:
+> > 
+> > https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=793a194839bc8add71fdc7429c58b10f0667a6f6;hp=1a7ed57c840dcb0401f1a67c6763a89f7d2686d2
+> > 
+> >> +config AS_HAS_TLBI_RANGE
+> >> +	def_bool $(as-option, -Wa$(comma)-march=armv8.4-a)
 
-Yup, the patch series looks fine to me, and it looks like you fixed up
-the things people noticed about off m68k behavior.
+You could make this more generic like AS_HAS_ARMV8_4.
 
-              Linus
+> > The problem is that we don't pass -Wa,-march=armv8.4-a to gas. AFAICT,
+> > we only set an 8.3 for PAC but I'm not sure how passing two such options
+> > goes.
+> 
+> Pass the -march twice may not have bad impact.  Test in my toolchains
+> and the newer one will be chosen.  Anyway, we can add judgment to avoid
+> them be passed at the same time.
+
+I think the last one always overrides the previous (same with the .arch
+statements in asm files). For example:
+
+echo "paciasp" | aarch64-none-linux-gnu-as -march=armv8.2-a -march=armv8.3-a
+
+succeeds but the one below fails:
+
+echo "paciasp" | aarch64-none-linux-gnu-as -march=armv8.3-a -march=armv8.2-a
+
+> > A safer bet may be to simply encode the instructions by hand:
+> > 
+> > #define SYS_TLBI_RVAE1IS(Rt) \
+> > 	__emit_inst(0xd5000000 | sys_insn(1, 0, 8, 2, 1) | ((Rt) & 0x1f))
+> > #define SYS_TLBI_RVALE1IS(Rt) \
+> > 	__emit_inst(0xd5000000 | sys_insn(1, 0, 8, 2, 5) | ((Rt) & 0x1f))
+> > 
+> > (please check that they are correct)
+> 
+> Currently in kernel, all tlbi instructions are passed through __tlbi()
+> and __tlbi_user(). If we encode the range instructions by hand, we may
+> should have to add a new mechanism for this:
+> 
+> 1. choose a register and save it;
+> 2. put the operations for tlbi range to the register;
+> 3. do tlbi range by asm(SYS_TLBI_RVAE1IS(x0));
+> 4. restore the value of the register.
+> 
+> It's complicated and will only be used with tlbi range instructions.
+> (Am I understand something wrong? )
+> 
+> So I am prefer to pass -march=armv8.4-a to toolschains to support tlbi
+> range instruction, just like what PAC does.
+
+It will indeed get more complicated than necessary. So please go with
+the -Wa,-march=armv8.4-a check in Kconfig and update the
+arch/arm64/Makefile to pass this option (after the 8.3 one).
+
+Thanks.
+
+-- 
+Catalin
