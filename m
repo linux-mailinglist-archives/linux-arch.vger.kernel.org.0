@@ -2,74 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7244A21E9B8
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 09:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D6F21EC03
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 11:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726782AbgGNHMP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jul 2020 03:12:15 -0400
-Received: from verein.lst.de ([213.95.11.211]:53045 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgGNHMP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 14 Jul 2020 03:12:15 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id DB14B68CFE; Tue, 14 Jul 2020 09:12:11 +0200 (CEST)
-Date:   Tue, 14 Jul 2020 09:12:11 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Christoph Hellwig <hch@lst.de>, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] uaccess: add force_uaccess_{begin,end} helpers
-Message-ID: <20200714071211.GC776@lst.de>
-References: <20200710135706.537715-1-hch@lst.de> <20200710135706.537715-6-hch@lst.de> <20200713122148.GA51007@lakrids.cambridge.arm.com> <CAMuHMdUCmEeU0G9wkUxZKm5tC9YoB-KXSSCLKwpSia746Myebw@mail.gmail.com>
+        id S1725820AbgGNJBr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jul 2020 05:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbgGNJBq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 05:01:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BDEC061755;
+        Tue, 14 Jul 2020 02:01:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IEtrkLlps7g52f3KP4zftkc/KLK6f+C0uXLbsSjl3uQ=; b=RLz9MrfHLmONZpFpC3K3FlC3Fr
+        TPk0T+JjqliICOmcZq8FaHFbIpxjaj7Zj5MvC5z3HSM04AcgptnCTRFzNrJkzySwPvuXi8jg2BSwM
+        mIkcy6wD0cBETlP/w8NhrPb0+MqJm90qMZfumCkLb+vN4qWg5tDt1N3Q6s/qDOlPyWxuOvpi254wk
+        RqXLOzAshCSOT04yao6ZNjhgkfu3fY82YQ//zG/W2kRfYPH2jhT/2iCikeZiG4xQlEQD+9sg72Nm5
+        fzMKLwMrofbyCWOE/m+0XojzSDjLh7EUMIY7LQQuLInA7YX7U6raXqcUkQ7MUKJpPohSaLpqnDXxh
+        CEKyTQ3A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jvGob-00014B-6s; Tue, 14 Jul 2020 09:01:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A43CF305C22;
+        Tue, 14 Jul 2020 11:01:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 86E1628B91075; Tue, 14 Jul 2020 11:01:26 +0200 (CEST)
+Date:   Tue, 14 Jul 2020 11:01:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will.deacon@arm.com>, x86@kernel.org
+Subject: Re: [PATCH 2/2] locking/pvqspinlock: Optionally store lock holder
+ cpu into lock
+Message-ID: <20200714090126.GR10769@hirez.programming.kicks-ass.net>
+References: <20200711182128.29130-1-longman@redhat.com>
+ <20200711182128.29130-3-longman@redhat.com>
+ <20200712173452.GB10769@hirez.programming.kicks-ass.net>
+ <bed22603-e347-8bff-f586-072a18987946@redhat.com>
+ <1594613637.ds7pt1by9l.astroid@bobo.none>
+ <e850b327-d747-fbe8-95db-4e2fbb1d7871@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdUCmEeU0G9wkUxZKm5tC9YoB-KXSSCLKwpSia746Myebw@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <e850b327-d747-fbe8-95db-4e2fbb1d7871@redhat.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 03:19:42PM +0200, Geert Uytterhoeven wrote:
-> > This used to set KERNEL_DS, and now it sets USER_DS, which looks wrong
-> > superficially.
-> 
-> Thanks for noticing, and sorry for missing that myself.
-> 
-> The same issue is present for SuperH:
-> 
->     -               set_fs(KERNEL_DS);
->     +               oldfs = force_uaccess_begin();
-> 
-> So the patch description should be:
-> 
->     "Add helpers to wraper the get_fs/set_fs magic for undoing any damage
->      done by set_fs(USER_DS)."
-> 
-> and leave alone users setting KERNEL_DS?
+On Mon, Jul 13, 2020 at 10:48:00PM -0400, Waiman Long wrote:
+> Storing the cpu number into the lock can be useful for other reason too. It
+> is not totally related to PPC support.
 
-Yes, this was broken.  Fixed for the next version.
-
-> > If the new behaviour is fine it suggests that the old behaviour was
-> > wrong, or that this is superfluous and could go entirely.
-> >
-> > Geert?
-> 
-> Nope, on m68k, TLB cache operations operate on the current address space.
-> Hence to flush a kernel TLB entry, you have to switch to KERNEL_DS first.
-> 
-> If we're guaranteed to be already using KERNEL_DS, I guess the
-> address space handling can be removed.  But can we be sure?
-
-We can't be sure yet.  But with a lot of my pending work we should be
-able to get there in the not too far future.
+Well, the thing you did only works for 'small' (<253 CPU) systems.
+There's a number of Power systems that's distinctly larger than that. So
+it simply cannot work as anything other than a suggestion/hint. It must
+not be a correctness thing.
