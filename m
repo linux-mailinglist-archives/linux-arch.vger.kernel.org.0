@@ -2,72 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1424F21F263
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 15:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EAB21F333
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jul 2020 15:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbgGNNXz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jul 2020 09:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727858AbgGNNXy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 09:23:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA85C061755;
-        Tue, 14 Jul 2020 06:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T7rggtXykXMc4C3uWwX+AsNgDJpkydxTqpZAtzGfPZw=; b=Kh3uWg7u8XQglQ4xrw+ceXYX8S
-        CWYZSH7s+NgPkTUhlq3N/9wlFTdrJWTUnC9eq/G9rVKsKpa3nSNgKcvTJyVzIzkn5nUzA/PZoDzoU
-        dLfUT4nS8snnIwOWcrOzkVucwrUhbZdhbvN+5Dr/QZ+Asez6AXurhhpzMkQ2139xhUsSPU2xWIIQQ
-        7gxe6uFmEEyfFAzvaexTRkN7d5JSEbyo9mJKoddyBTvgQyAvEWHAF6x06dSySkk64A+k4SRf2+Nf6
-        wB4G28sTRoDwXUGqj2sP0qL2DpJotZ27Aa94peKoOJ0bT/0WvZ+cCmHU5fXW+e2BbzVlAJRePIXXd
-        TkX/DowA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jvKuM-0004mD-H6; Tue, 14 Jul 2020 13:23:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BF165302753;
-        Tue, 14 Jul 2020 15:23:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AB5BC2BE34E09; Tue, 14 Jul 2020 15:23:41 +0200 (CEST)
-Date:   Tue, 14 Jul 2020 15:23:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        X86 ML <x86@kernel.org>
-Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy
- tlb option
-Message-ID: <20200714132341.GY10769@hirez.programming.kicks-ass.net>
-References: <1594708054.04iuyxuyb5.astroid@bobo.none>
- <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
+        id S1726440AbgGNN5D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jul 2020 09:57:03 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:57448 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725821AbgGNN5D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 14 Jul 2020 09:57:03 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id A5B01131134F9A7732CE;
+        Tue, 14 Jul 2020 21:51:53 +0800 (CST)
+Received: from [127.0.0.1] (10.174.186.75) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Tue, 14 Jul 2020
+ 21:51:44 +0800
+Subject: Re: [PATCH v2 2/2] arm64: tlb: Use the TLBI RANGE feature in arm64
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     <will@kernel.org>, <suzuki.poulose@arm.com>, <maz@kernel.org>,
+        <steven.price@arm.com>, <guohanjun@huawei.com>, <olof@lixom.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <arm@kernel.org>, <xiexiangyou@huawei.com>,
+        <prime.zeng@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <kuhn.chenqun@huawei.com>
+References: <20200710094420.517-1-yezhenyu2@huawei.com>
+ <20200710094420.517-3-yezhenyu2@huawei.com> <20200714103629.GA18793@gaia>
+From:   Zhenyu Ye <yezhenyu2@huawei.com>
+Message-ID: <cda3d6bc-a7e2-5669-372c-3c34cc822e08@huawei.com>
+Date:   Tue, 14 Jul 2020 21:51:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
+In-Reply-To: <20200714103629.GA18793@gaia>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.186.75]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 05:46:05AM -0700, Andy Lutomirski wrote:
-> x86 has this exact problem. At least no more than 64*8 CPUs share the cache line :)
+On 2020/7/14 18:36, Catalin Marinas wrote:
+> On Fri, Jul 10, 2020 at 05:44:20PM +0800, Zhenyu Ye wrote:
+>> +#define __TLBI_RANGE_PAGES(num, scale)	(((num) + 1) << (5 * (scale) + 1))
+>> +#define MAX_TLBI_RANGE_PAGES		__TLBI_RANGE_PAGES(31, 3)
+>> +
+>> +#define TLBI_RANGE_MASK			GENMASK_ULL(4, 0)
+>> +#define __TLBI_RANGE_NUM(range, scale)	\
+>> +	(((range) >> (5 * (scale) + 1)) & TLBI_RANGE_MASK)
+> [...]
+>> +	int num = 0;
+>> +	int scale = 0;
+> [...]
+>> +			start += __TLBI_RANGE_PAGES(num, scale) << PAGE_SHIFT;
+> [...]
+> 
+> Since num is an int, __TLBI_RANGE_PAGES is still an int. Shifting it by
+> PAGE_SHIFT can overflow as the maximum would be 8GB for 4K pages (or
+> 128GB for 64K pages). I think we probably get away with this because of
+> some implicit type conversion but I'd rather make __TLBI_RANGE_PAGES an
+> explicit unsigned long:
+> 
+> #define __TLBI_RANGE_PAGES(num, scale)	((unsigned long)((num) + 1) << (5 * (scale) + 1))
+> 
 
-I've seen patches for a 'sparse' bitmap to solve related problems.
+This is valuable and I will update this in next series, with the check
+for binutils (or encode the instructions by hand), as soon as possible.
 
-It's basically the same code, except it multiplies everything (size,
-bit-nr) by a constant to reduce the number of active bits per line.
+> Without this change, the CBMC check fails (see below for the test). In
+> the kernel, we don't have this problem as we encode the address via
+> __TLBI_VADDR_RANGE and it doesn't overflow.> The good part is that CBMC reckons the algorithm is correct ;).
 
-This sadly doesn't take topology into account, but reducing contention
-is still good ofcourse.
+Thanks for your test!
+
+Zhenyu
+
