@@ -2,188 +2,182 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A027C22151A
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 21:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39095221551
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 21:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgGOT2c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jul 2020 15:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbgGOT2b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jul 2020 15:28:31 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474F6C061755
-        for <linux-arch@vger.kernel.org>; Wed, 15 Jul 2020 12:28:31 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id d27so2685056qtg.4
-        for <linux-arch@vger.kernel.org>; Wed, 15 Jul 2020 12:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PMgEusFSc7qqgR9Wh9Vc9NkHNHEql1tbsxy2XlEu5jA=;
-        b=QQl+stRx0THiGLOhlhYjMC/gkTN5p/8VNdlFA1b3dbpXE2kjdJPTZb3EGj9hV5SIAu
-         vLj71MR0+Cppdy39ehbR/V9sRXY+f472sj48uR/zVcYeIuIqmrhSBhsgb6bxk3AhkNZx
-         G94GEPiVQCFtyIJqzwNqn6s5gXAg5KVLCVChJKGgD27o6gf8NTjAy+i2K6S8e6TOwi5B
-         8vAZudsswFHNL92L8C2dKDHUJ1v/CE57tP8mrz1Br7oY0VRwfoxv6dZg2ZNV8clT7nWn
-         E6xrcEoZJRf4yzcqex3PbmqbKUZO5isuJkGzc9jCxnurQnI/rmdD5JQOo+His6SYgFSK
-         f5Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PMgEusFSc7qqgR9Wh9Vc9NkHNHEql1tbsxy2XlEu5jA=;
-        b=Lpwx3Dg7qZsQ5B/2J67VQttyKQgIViZUnU25B+7dtVbrjFFFxb9stvv6tKbN8A85em
-         hu6zdeKbWoqvR0CRP89sRT0k00/AfMUvUsz5PdETB0wfyOfH7Ggwrr3dikdEWyNLS54X
-         PEq2BSd40qxtLdqm5dTFGceSF3RPdSU+CrKCa2PQCe1jTZyff2csU2ZaeIOnc8JU7ovq
-         QBorxozH7VfBdn5of0j/xsypzCfB/GIXB6U9H4kYfYtbSxZiiTVZ4FgUOodx89yHnmjw
-         dtzVx99L5w1TjOrWlGptJTkApeXlO1JxxOp0hbqLiI3w6m2B7Dzq8Zbe2aV2es+0ZssE
-         aOyg==
-X-Gm-Message-State: AOAM533rDyQp9oheaQDkASwfhf7VP7iIFd5qcHdTQvXYywcmLw2Rij3W
-        BP3pEhSkrxdbkqHYd5HAYbnZCpKY2VSSHSjVP92NrA==
-X-Google-Smtp-Source: ABdhPJwh2eRhat/lWnPhQw89dDCcMnYwZRHtiVGy2runEadgzqTjasvHuiQwiQz+a9HV0oMXaq4y2jsH/3ExGFMFZyk=
-X-Received: by 2002:ac8:1bad:: with SMTP id z42mr1523513qtj.110.1594841310184;
- Wed, 15 Jul 2020 12:28:30 -0700 (PDT)
+        id S1727029AbgGOTqI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jul 2020 15:46:08 -0400
+Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:56651 "EHLO
+        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726996AbgGOTqI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Jul 2020 15:46:08 -0400
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.93)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1jvnLt-000SMm-0U; Wed, 15 Jul 2020 21:46:01 +0200
+Received: from p57bd93f9.dip0.t-ipconnect.de ([87.189.147.249] helo=[192.168.178.139])
+          by inpost2.zedat.fu-berlin.de (Exim 4.93)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1jvnLs-0034NF-Pm; Wed, 15 Jul 2020 21:46:00 +0200
+Subject: Re: [PATCH v6 10/18] sh/tlb: Convert SH to generic mmu_gather
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Will Deacon <will.deacon@arm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Rik van Riel <riel@surriel.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20190219103148.192029670@infradead.org>
+ <20190219103233.443069009@infradead.org>
+ <CAMuHMdW3nwckjA9Bt-_Dmf50B__sZH+9E5s0_ziK1U_y9onN=g@mail.gmail.com>
+ <20191204104733.GR2844@hirez.programming.kicks-ass.net>
+ <CAMuHMdXs_Fm93t=O9jJPLxcREZy-T53Z_U_RtHcvaWyV+ESdjg@mail.gmail.com>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Autocrypt: addr=glaubitz@physik.fu-berlin.de; keydata=
+ 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
+ scOkTAZQGVpD/8AaLH4v1w==
+Message-ID: <524b87c5-0e94-1578-4395-fd53226d02aa@physik.fu-berlin.de>
+Date:   Wed, 15 Jul 2020 21:45:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200715144806.GA3443108@google.com> <mhng-d6287ba3-3b57-431e-b0e7-9d17b514748c@palmerdabbelt-glaptop1>
-In-Reply-To: <mhng-d6287ba3-3b57-431e-b0e7-9d17b514748c@palmerdabbelt-glaptop1>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-Date:   Wed, 15 Jul 2020 12:28:19 -0700
-Message-ID: <CANs6eM=qamw=vgh7GFSLBL_MiPTcj7MGa3+qQ9+gyT16i0zeJA@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic/mmiowb: Get cpu in mmiowb_set_pending
-To:     Will Deacon <willdeacon@google.com>
-Cc:     kernel@esmil.dk, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAMuHMdXs_Fm93t=O9jJPLxcREZy-T53Z_U_RtHcvaWyV+ESdjg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.147.249
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 9:41 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Wed, 15 Jul 2020 07:48:06 PDT (-0700), Will Deacon wrote:
-> > On Wed, Jul 15, 2020 at 07:03:49AM -0700, Palmer Dabbelt wrote:
-> >> On Wed, 15 Jul 2020 03:42:46 PDT (-0700), Will Deacon wrote:
-> >> > Hmm. Although I _think_ something like the diff below ought to work, are you
-> >> > sure you want to be doing MMIO writes in preemptible context? Setting
-> >> > '.disable_locking = true' in 'sifive_gpio_regmap_config' implies to me that
-> >> > you should be handling the locking within the driver itself, and all the
-> >> > other regmap writes are protected by '&gc->bgpio_lock'.
-> >>
-> >> I guess my goal here was to avoid fixing the drivers: it's one thing if it's
-> >> just broken SiFive drivers, as they're all a bit crusty, but this is blowing up
-> >> for me in the 8250 driver on QEMU as well.  At that point I figured there'd be
-> >> an endless stream of bugs around this and I'd rather just.
-> >
-> > Right, and my patch should solve that.
-> >
-> >> > Given that riscv is one of the few architectures needing an implementation
-> >> > of mmiowb(), doing MMIO in a preemptible section seems especially dangerous
-> >> > as you have no way to ensure completion of the writes without adding an
-> >> > mmiowb() to the CPU migration path (i.e. context switch).
-> >>
-> >> I was going to just stick one in our context switching code unconditionally.
-> >> While we could go track cumulative writes outside the locks, the mmiowb is
-> >> essentially free for us because the one RISC-V implementation treats all fences
-> >> the same way so the subsequent store_release would hold all this up anyway.
-> >>
-> >> I think the right thing to do is to add some sort of arch hook right about here
-> >>
-> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> index cfd71d61aa3c..14b4f8b7433f 100644
-> >> --- a/kernel/sched/core.c
-> >> +++ b/kernel/sched/core.c
-> >> @@ -3212,6 +3212,7 @@ static struct rq *finish_task_switch(struct task_struct *prev)
-> >>      prev_state = prev->state;
-> >>      vtime_task_switch(prev);
-> >>      perf_event_task_sched_in(prev, current);
-> >> +    finish_arch_pre_release(prev);
-> >>      finish_task(prev);
-> >>      finish_lock_switch(rq);
-> >>      finish_arch_post_lock_switch();
-> >>
-> >> but I was just going to stick it in switch_to for now... :).  I guess we could
-> >> also roll the fence up into yet another one-off primitive for the scheduler,
-> >> something like
-> >
-> > What does the above get you over switch_to()?
-> >
-> >> > diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
-> >> > index 9439ff037b2d..5698fca3bf56 100644
-> >> > --- a/include/asm-generic/mmiowb.h
-> >> > +++ b/include/asm-generic/mmiowb.h
-> >> > @@ -27,7 +27,7 @@
-> >> >  #include <asm/smp.h>
-> >> >
-> >> >  DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
-> >> > -#define __mmiowb_state()       this_cpu_ptr(&__mmiowb_state)
-> >> > +#define __mmiowb_state()       raw_cpu_ptr(&__mmiowb_state)
-> >> >  #else
-> >> >  #define __mmiowb_state()       arch_mmiowb_state()
-> >> >  #endif /* arch_mmiowb_state */
-> >> > @@ -35,7 +35,9 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
-> >> >  static inline void mmiowb_set_pending(void)
-> >> >  {
-> >> >         struct mmiowb_state *ms = __mmiowb_state();
-> >> > -       ms->mmiowb_pending = ms->nesting_count;
-> >> > +
-> >> > +       if (likely(ms->nesting_count))
-> >> > +               ms->mmiowb_pending = ms->nesting_count;
-> >>
-> >> Ya, that's one of the earlier ideas I had, but I decided it doesn't actually do
-> >> anything: if we're scheduleable then we know that pending and count are zero,
-> >> thus the check isn't necessary.  It made sense late last night and still does
-> >> this morning, but I haven't had my coffee yet.
-> >
-> > What it does is prevent preemptible writeX() from trashing the state on
-> > another CPU, so I think it's a valid fix. I agree that it doesn't help
-> > you if you need mmiowb(), but then that _really_ should only be needed if
-> > you're holding a spinlock. If you're doing concurrent lockless MMIO you
-> > deserve all the pain you get.
-> >
-> > I don't get why you think the patch does nothing, as it will operate as
-> > expected if writeX() is called with preemption disabled, which is the common
-> > case.
->
-> Aside from PREEMPT_RT, I don't understand how you can be scheduled onto a CPU
-> that has a non-zero nesting_count.  Doesn't that mean that the CPU you're
-> scheduled on to is itself holding a spinlock, and therefor can't be scheduled
-> on?
->
-> Sure, some interrupt could come in the middle, but it's still going to see the
-> non-zero nesting_count left over from the spinlock being held and therefor will
-> avoid trashing the accumulated mmiowb.  As far as I can tell everything then
-> proceeds acceptably: when the interrupt unlocks it'll do an mmiowb (whether it
-> did an IO or not), which is sufficient to ensure that the IO from the
-> interrupted code is completed before the unlock from that code.
->
-> I must be missing something here?
+Hi!
 
-Will and I talked for a bit, this patch is correct.  He's going to
-send it, I'm promoting smp_mb__after_spinlock to include IO ordering
-so we don't break code when scheduling.
+On 12/4/19 1:32 PM, Geert Uytterhoeven wrote:
+>>>> Cc: Will Deacon <will.deacon@arm.com>
+>>>> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.vnet.ibm.com>
+>>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>>> Cc: Nick Piggin <npiggin@gmail.com>
+>>>> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+>>>> Cc: Rich Felker <dalias@libc.org>
+>>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>>>
+>>> I got remote access to an SH7722-based Migo-R again, which spews a long
+>>> sequence of BUGs during userspace startup.  I've bisected this to commit
+>>> c5b27a889da92f4a ("sh/tlb: Convert SH to generic mmu_gather").
+>>
+>> Whoopsy.. also, is this really the first time anybody booted an SH
+>> kernel in over a year ?!?
+> 
+> Nah, but the v5.4-rc3 I booted recently on qemu -M r2d had
+> CONFIG_PGTABLE_LEVELS=2, so it didn't show the problem.
+> 
+>>> Do you have a clue?
+>>
+>> Does the below help?
+> 
+> Unfortunately not.
+> 
+>> diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgalloc.h
+>> index 22d968bfe9bb..73a2c00de6c5 100644
+>> --- a/arch/sh/include/asm/pgalloc.h
+>> +++ b/arch/sh/include/asm/pgalloc.h
+>> @@ -36,9 +36,8 @@ do {                                                  \
+>>  #if CONFIG_PGTABLE_LEVELS > 2
+>>  #define __pmd_free_tlb(tlb, pmdp, addr)                        \
+>>  do {                                                   \
+>> -       struct page *page = virt_to_page(pmdp);         \
+>> -       pgtable_pmd_page_dtor(page);                    \
+>> -       tlb_remove_page((tlb), page);                   \
+>> +       pgtable_pmd_page_dtor(pmdp);                    \
+> 
+> expected ‘struct page *’ but argument is of type ‘pmd_t * {aka struct
+> <anonymous> *}’
+> 
+>> +       tlb_remove_page((tlb), (pmdp));                 \
+> 
+> likewise
+> 
+>>  } while (0);
+>>  #endif
 
-Thanks!
+Any chance we can have another go at this? The original change
 
->
-> >> I'm kind of tempted to just declare "mmiowb() is fast on RISC-V, so let's do it
-> >> unconditionally everywhere it's necessary".  IIRC that's essentially true on
-> >> the existing implementation, as it'll get rolled up to any upcoming fence
-> >> anyway.  It seems like building any real machine that relies on the orderings
-> >> provided by mmiowb is going to have an infinate rabbit hole of bugs anyway, so
-> >> in that case we'd just rely on the hardware to elide the now unnecessary fences
-> >> so we'd just be throwing static code size at this wacky memory model and then
-> >> forgetting about it.
-> >
-> > If you can do that, that's obviously the best approach.
-> >
-> >> I'm going to send out a patch set that does all the work I think is necessary
-> >> to avoid fixing up the various drivers, with the accounting code to avoid
-> >> mmiowbs all over our port.  I'm not sure I'm going to like it, but I guess we
-> >> can argue as to exactly how ugly it is :)
-> >
-> > Ok.
-> >
-> > Will
+commit c5b27a889da92f4a969d61df77bd4f79ffce57c9 (refs/bisect/bad)
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Tue Sep 4 14:45:04 2018 +0200
+
+    sh/tlb: Convert SH to generic mmu_gather
+    
+    Generic mmu_gather provides everything SH needs (range tracking and
+    cache coherency).
+
+breaks systemd for me on my SH-7785LCR [1].
+
+Adrian
+
+> [1] https://marc.info/?l=linux-kernel&m=159479951822677&w=2
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
