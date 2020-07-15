@@ -2,134 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC747220196
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 03:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9D42202F3
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 05:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgGOBEc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Jul 2020 21:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726965AbgGOBEc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 21:04:32 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE82C061755;
-        Tue, 14 Jul 2020 18:04:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B5zgH5lGlz9sQt;
-        Wed, 15 Jul 2020 11:04:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1594775068;
-        bh=DRW9yi5rJrMkAE9FJwWBtPJ4PTfLdPhmlR2SiTJPUEA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=WwupWKzZobPRuA0ewfQ/OibLdE136XZAxIa6okCeJFSZDbAOw/ndIILKb5eMGYCkY
-         zHhUoRY/HBoO/u7mhE256GPlkDqO7dzJwO9S3/JM6Wlzm509/x6ZSNqD6yFyr0E3pr
-         tMQlga8blXrq4k1TCuRJYTO5WNX8EnD85h6WLusGlw241MRKDzTGFt/AdxNJjkAXe+
-         ixTMKNB6sGuB/35Yx/+fubQLUq+s1LANQJpO/VRS1wTcCGjSUyGxW/RJxc6dFtwFVl
-         hsvo5DxpXVwVHbqXrNveC3J7JJMB5S/HkD5xRJeETKKxfGGKxPh4nXzlGzkkInSc5E
-         /tRwbikclFpbw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        luto@kernel.org, linux-arch@vger.kernel.org,
-        Tulio Magno Quites Machado Filho <tuliom@linux.ibm.com>
-Subject: Re: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
-In-Reply-To: <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr>
-References: <cover.1588079622.git.christophe.leroy@c-s.fr> <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr>
-Date:   Wed, 15 Jul 2020 11:04:26 +1000
-Message-ID: <878sflvbad.fsf@mpe.ellerman.id.au>
+        id S1727090AbgGODgB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Jul 2020 23:36:01 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:42686 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726648AbgGODgB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Jul 2020 23:36:01 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out03.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jvYD7-000181-1R; Tue, 14 Jul 2020 21:35:57 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1jvYD5-0005mz-Hq; Tue, 14 Jul 2020 21:35:56 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Nick Hu <nickhu@andestech.com>, Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200714105505.935079-1-hch@lst.de>
+        <20200714105505.935079-7-hch@lst.de>
+Date:   Tue, 14 Jul 2020 22:33:05 -0500
+In-Reply-To: <20200714105505.935079-7-hch@lst.de> (Christoph Hellwig's message
+        of "Tue, 14 Jul 2020 12:55:05 +0200")
+Message-ID: <87v9ip4fm6.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
+X-XM-SPF: eid=1jvYD5-0005mz-Hq;;;mid=<87v9ip4fm6.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18jRvo1LY05IcyELAS/Dyw89Gb+7bU2HOk=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4841]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 0; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: ; sa06 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Christoph Hellwig <hch@lst.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1061 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 12 (1.2%), b_tie_ro: 11 (1.0%), parse: 1.41
+        (0.1%), extract_message_metadata: 20 (1.9%), get_uri_detail_list: 2.2
+        (0.2%), tests_pri_-1000: 15 (1.4%), tests_pri_-950: 1.37 (0.1%),
+        tests_pri_-900: 1.10 (0.1%), tests_pri_-90: 122 (11.5%), check_bayes:
+        117 (11.0%), b_tokenize: 14 (1.4%), b_tok_get_all: 9 (0.9%),
+        b_comp_prob: 4.2 (0.4%), b_tok_touch_all: 84 (7.9%), b_finish: 2.5
+        (0.2%), tests_pri_0: 256 (24.1%), check_dkim_signature: 0.73 (0.1%),
+        check_dkim_adsp: 2.9 (0.3%), poll_dns_idle: 609 (57.4%), tests_pri_10:
+        2.1 (0.2%), tests_pri_500: 625 (59.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 6/6] exec: use force_uaccess_begin during exec and exit
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@c-s.fr> writes:
-> Prepare for switching VDSO to generic C implementation in following
-> patch. Here, we:
-> - Modify __get_datapage() to take an offset
-> - Prepare the helpers to call the C VDSO functions
-> - Prepare the required callbacks for the C VDSO functions
-> - Prepare the clocksource.h files to define VDSO_ARCH_CLOCKMODES
-> - Add the C trampolines to the generic C VDSO functions
+Christoph Hellwig <hch@lst.de> writes:
+
+> Both exec and exit want to ensure that the uaccess routines actually do
+> access user pointers.  Use the newly added force_uaccess_begin helper
+> instead of an open coded set_fs for that to prepare for kernel builds
+> where set_fs() does not exist.
+
+Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+
+Have you played with a tree with all of your patches
+and placing force_uaccess_begin in init/main.c:start_kernel?
+
+Somewhere deep in the arch code we seem to have it all backwards
+and kernel threads are all set_fs(KERNEL_DS).  So just putting
+a force_uaccess_begin somewhere very early should be enough
+to switch things around.
+
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  fs/exec.c     | 7 ++++++-
+>  kernel/exit.c | 2 +-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
 >
-> powerpc is a bit special for VDSO as well as system calls in the
-> way that it requires setting CR SO bit which cannot be done in C.
-> Therefore, entry/exit needs to be performed in ASM.
->
-> Implementing __arch_get_vdso_data() would clobber the link register,
-> requiring the caller to save it. As the ASM calling function already
-> has to set a stack frame and saves the link register before calling
-> the C vdso function, retriving the vdso data pointer there is lighter.
-...
-
-> diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-> new file mode 100644
-> index 000000000000..4452897f9bd8
-> --- /dev/null
-> +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-> @@ -0,0 +1,175 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
-> +#define __ASM_VDSO_GETTIMEOFDAY_H
+> diff --git a/fs/exec.c b/fs/exec.c
+> index e6e8a9a7032784..769af470b69124 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1380,7 +1380,12 @@ int begin_new_exec(struct linux_binprm * bprm)
+>  	if (retval)
+>  		goto out_unlock;
+>  
+> -	set_fs(USER_DS);
+> +	/*
+> +	 * Ensure that the uaccess routines can actually operate on userspace
+> +	 * pointers:
+> +	 */
+> +	force_uaccess_begin();
 > +
-> +#include <asm/ptrace.h>
-> +
-> +#ifdef __ASSEMBLY__
-> +
-> +.macro cvdso_call funct
-> +  .cfi_startproc
-> +	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
-> +	mflr		r0
-> +  .cfi_register lr, r0
-> +	PPC_STL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
-
-This doesn't work for me on ppc64(le) with glibc.
-
-glibc doesn't create a stack frame before making the VDSO call, so the
-store of r0 (LR) goes into the caller's frame, corrupting the saved LR,
-leading to an infinite loop.
-
-This is an example from a statically built program that calls
-clock_gettime():
-
-0000000010030cb0 <__clock_gettime>:
-    10030cb0:   0e 10 40 3c     lis     r2,4110
-    10030cb4:   00 7a 42 38     addi    r2,r2,31232
-    10030cb8:   a6 02 08 7c     mflr    r0
-    10030cbc:   ff ff 22 3d     addis   r9,r2,-1
-    10030cc0:   58 6d 29 39     addi    r9,r9,27992
-    10030cc4:   f0 ff c1 fb     std     r30,-16(r1)			<-- redzone store
-    10030cc8:   78 23 9e 7c     mr      r30,r4
-    10030ccc:   f8 ff e1 fb     std     r31,-8(r1)			<-- redzone store
-    10030cd0:   78 1b 7f 7c     mr      r31,r3
-    10030cd4:   10 00 01 f8     std     r0,16(r1)			<-- save LR to caller's frame
-    10030cd8:   00 00 09 e8     ld      r0,0(r9)
-    10030cdc:   00 00 20 2c     cmpdi   r0,0
-    10030ce0:   50 00 82 41     beq     10030d30 <__clock_gettime+0x80>
-    10030ce4:   a6 03 09 7c     mtctr   r0
-    10030ce8:   21 04 80 4e     bctrl					<-- vdso call
-    10030cec:   26 00 00 7c     mfcr    r0
-    10030cf0:   00 10 09 74     andis.  r9,r0,4096
-    10030cf4:   78 1b 69 7c     mr      r9,r3
-    10030cf8:   28 00 82 40     bne     10030d20 <__clock_gettime+0x70>
-    10030cfc:   b4 07 23 7d     extsw   r3,r9
-    10030d00:   10 00 01 e8     ld      r0,16(r1)			<-- load saved LR, since clobbered by the VDSO
-    10030d04:   f0 ff c1 eb     ld      r30,-16(r1)
-    10030d08:   f8 ff e1 eb     ld      r31,-8(r1)
-    10030d0c:   a6 03 08 7c     mtlr    r0				<-- restore LR
-    10030d10:   20 00 80 4e     blr					<-- jumps to 10030cec
-
-
-I'm kind of confused how it worked for you on 32-bit.
-
-There's also no code to load/restore the TOC pointer on BE, which I
-think we'll need to handle.
-
-cheers
+>  	me->flags &= ~(PF_RANDOMIZE | PF_FORKNOEXEC | PF_KTHREAD |
+>  					PF_NOFREEZE | PF_NO_SETAFFINITY);
+>  	flush_thread();
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index 727150f2810338..17d486a20f0dc6 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -731,7 +731,7 @@ void __noreturn do_exit(long code)
+>  	 * mm_release()->clear_child_tid() from writing to a user-controlled
+>  	 * kernel address.
+>  	 */
+> -	set_fs(USER_DS);
+> +	force_uaccess_begin();
+>  
+>  	if (unlikely(in_atomic())) {
+>  		pr_info("note: %s[%d] exited with preempt_count %d\n",
