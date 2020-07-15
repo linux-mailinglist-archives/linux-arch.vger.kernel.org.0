@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6CF22133C
+	by mail.lfdr.de (Postfix) with ESMTP id BD2A822133D
 	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 19:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbgGORIy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1725838AbgGORIy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 15 Jul 2020 13:08:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36554 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:36692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725838AbgGORIv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Jul 2020 13:08:51 -0400
+        id S1726479AbgGORIy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Jul 2020 13:08:54 -0400
 Received: from localhost.localdomain (unknown [95.146.230.158])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 952852072E;
-        Wed, 15 Jul 2020 17:08:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E5A62206F4;
+        Wed, 15 Jul 2020 17:08:50 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -26,10 +26,12 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v7 01/29] arm64: mte: system register definitions
-Date:   Wed, 15 Jul 2020 18:08:16 +0100
-Message-Id: <20200715170844.30064-2-catalin.marinas@arm.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <Suzuki.Poulose@arm.com>
+Subject: [PATCH v7 02/29] arm64: mte: CPU feature detection and initial sysreg configuration
+Date:   Wed, 15 Jul 2020 18:08:17 +0100
+Message-Id: <20200715170844.30064-3-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200715170844.30064-1-catalin.marinas@arm.com>
 References: <20200715170844.30064-1-catalin.marinas@arm.com>
@@ -42,197 +44,200 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-Add Memory Tagging Extension system register definitions together with
-the relevant bitfields.
+Add the cpufeature and hwcap entries to detect the presence of MTE on
+the boot CPUs (primary and secondary). Any late secondary CPU not
+supporting the feature, if detected during boot, will be parked.
+
+In addition, add the minimum SCTLR_EL1 and HCR_EL2 bits for enabling
+MTE. Without subsequent setting of MAIR, these bits do not have an
+effect on tag checking.
 
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Suzuki K Poulose <Suzuki.Poulose@arm.com>
 ---
 
 Notes:
-    v2:
-    - Added SET_PSTATE_TCO() macro.
+    v7:
+    - Hide the MTE ID register field for guests until MTE gains support for KVM.
 
- arch/arm64/include/asm/kvm_arm.h     |  1 +
- arch/arm64/include/asm/sysreg.h      | 53 ++++++++++++++++++++++++++++
- arch/arm64/include/uapi/asm/ptrace.h |  1 +
- arch/arm64/kernel/ptrace.c           |  2 +-
- 4 files changed, 56 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/cpucaps.h    |  3 ++-
+ arch/arm64/include/asm/cpufeature.h |  6 ++++++
+ arch/arm64/include/asm/hwcap.h      |  1 +
+ arch/arm64/include/asm/kvm_arm.h    |  2 +-
+ arch/arm64/include/asm/sysreg.h     |  1 +
+ arch/arm64/include/uapi/asm/hwcap.h |  1 +
+ arch/arm64/kernel/cpufeature.c      | 30 +++++++++++++++++++++++++++++
+ arch/arm64/kernel/cpuinfo.c         |  1 +
+ arch/arm64/kvm/sys_regs.c           |  2 ++
+ 9 files changed, 45 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
+index d7b3bb0cb180..6bc3e21e5929 100644
+--- a/arch/arm64/include/asm/cpucaps.h
++++ b/arch/arm64/include/asm/cpucaps.h
+@@ -62,7 +62,8 @@
+ #define ARM64_HAS_GENERIC_AUTH			52
+ #define ARM64_HAS_32BIT_EL1			53
+ #define ARM64_BTI				54
++#define ARM64_MTE				55
+ 
+-#define ARM64_NCAPS				55
++#define ARM64_NCAPS				56
+ 
+ #endif /* __ASM_CPUCAPS_H */
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index 5d1f4ae42799..c673283abd31 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -681,6 +681,12 @@ static inline bool system_uses_irq_prio_masking(void)
+ 	       cpus_have_const_cap(ARM64_HAS_IRQ_PRIO_MASKING);
+ }
+ 
++static inline bool system_supports_mte(void)
++{
++	return IS_ENABLED(CONFIG_ARM64_MTE) &&
++		cpus_have_const_cap(ARM64_MTE);
++}
++
+ static inline bool system_has_prio_mask_debugging(void)
+ {
+ 	return IS_ENABLED(CONFIG_ARM64_DEBUG_PRIORITY_MASKING) &&
+diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
+index d683bcbf1e7c..0d4a6741b6a5 100644
+--- a/arch/arm64/include/asm/hwcap.h
++++ b/arch/arm64/include/asm/hwcap.h
+@@ -95,6 +95,7 @@
+ #define KERNEL_HWCAP_DGH		__khwcap2_feature(DGH)
+ #define KERNEL_HWCAP_RNG		__khwcap2_feature(RNG)
+ #define KERNEL_HWCAP_BTI		__khwcap2_feature(BTI)
++#define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
+ 
+ /*
+  * This yields a mask that user programs can use to figure out what
 diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-index 51c1d9918999..8a1cbfd544d6 100644
+index 8a1cbfd544d6..6c3b2fc922bb 100644
 --- a/arch/arm64/include/asm/kvm_arm.h
 +++ b/arch/arm64/include/asm/kvm_arm.h
-@@ -12,6 +12,7 @@
- #include <asm/types.h>
+@@ -78,7 +78,7 @@
+ 			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
+ 			 HCR_FMO | HCR_IMO)
+ #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
+-#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK)
++#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
+ #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
  
- /* Hyp Configuration Register (HCR) bits */
-+#define HCR_ATA		(UL(1) << 56)
- #define HCR_FWB		(UL(1) << 46)
- #define HCR_API		(UL(1) << 41)
- #define HCR_APK		(UL(1) << 40)
+ /* TCR_EL2 Registers bits */
 diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 463175f80341..97bc523882f3 100644
+index 97bc523882f3..2e12d8049d1c 100644
 --- a/arch/arm64/include/asm/sysreg.h
 +++ b/arch/arm64/include/asm/sysreg.h
-@@ -91,10 +91,12 @@
- #define PSTATE_PAN			pstate_field(0, 4)
- #define PSTATE_UAO			pstate_field(0, 3)
- #define PSTATE_SSBS			pstate_field(3, 1)
-+#define PSTATE_TCO			pstate_field(3, 4)
+@@ -613,6 +613,7 @@
+ 			 SCTLR_EL1_SA0  | SCTLR_EL1_SED  | SCTLR_ELx_I    |\
+ 			 SCTLR_EL1_DZE  | SCTLR_EL1_UCT                   |\
+ 			 SCTLR_EL1_NTWE | SCTLR_ELx_IESB | SCTLR_EL1_SPAN |\
++			 SCTLR_ELx_ITFSB| SCTLR_ELx_ATA  | SCTLR_EL1_ATA0 |\
+ 			 ENDIAN_SET_EL1 | SCTLR_EL1_UCI  | SCTLR_EL1_RES1)
  
- #define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
- #define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
- #define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
-+#define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
+ /* MAIR_ELx memory attributes (used by Linux) */
+diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
+index 2d6ba1c2592e..b8f41aa234ee 100644
+--- a/arch/arm64/include/uapi/asm/hwcap.h
++++ b/arch/arm64/include/uapi/asm/hwcap.h
+@@ -74,5 +74,6 @@
+ #define HWCAP2_DGH		(1 << 15)
+ #define HWCAP2_RNG		(1 << 16)
+ #define HWCAP2_BTI		(1 << 17)
++#define HWCAP2_MTE		(1 << 18)
  
- #define __SYS_BARRIER_INSN(CRm, op2, Rt) \
- 	__emit_inst(0xd5000000 | sys_insn(0, 3, 3, (CRm), (op2)) | ((Rt) & 0x1f))
-@@ -181,6 +183,8 @@
- #define SYS_SCTLR_EL1			sys_reg(3, 0, 1, 0, 0)
- #define SYS_ACTLR_EL1			sys_reg(3, 0, 1, 0, 1)
- #define SYS_CPACR_EL1			sys_reg(3, 0, 1, 0, 2)
-+#define SYS_RGSR_EL1			sys_reg(3, 0, 1, 0, 5)
-+#define SYS_GCR_EL1			sys_reg(3, 0, 1, 0, 6)
+ #endif /* _UAPI__ASM_HWCAP_H */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 9f63053a63a9..ccfdcb93d736 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -240,6 +240,8 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
+ static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_MPAMFRAC_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_RASFRAC_SHIFT, 4, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_MTE),
++		       FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_MTE_SHIFT, 4, ID_AA64PFR1_MTE_NI),
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_SSBS_SHIFT, 4, ID_AA64PFR1_SSBS_PSTATE_NI),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_BTI),
+ 				    FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_BT_SHIFT, 4, 0),
+@@ -1657,6 +1659,18 @@ static void bti_enable(const struct arm64_cpu_capabilities *__unused)
+ }
+ #endif /* CONFIG_ARM64_BTI */
  
- #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
- 
-@@ -218,6 +222,8 @@
- #define SYS_ERXADDR_EL1			sys_reg(3, 0, 5, 4, 3)
- #define SYS_ERXMISC0_EL1		sys_reg(3, 0, 5, 5, 0)
- #define SYS_ERXMISC1_EL1		sys_reg(3, 0, 5, 5, 1)
-+#define SYS_TFSR_EL1			sys_reg(3, 0, 5, 6, 0)
-+#define SYS_TFSRE0_EL1			sys_reg(3, 0, 5, 6, 1)
- 
- #define SYS_FAR_EL1			sys_reg(3, 0, 6, 0, 0)
- #define SYS_PAR_EL1			sys_reg(3, 0, 7, 4, 0)
-@@ -368,6 +374,7 @@
- 
- #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
- #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
-+#define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
- #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
- 
- #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
-@@ -460,6 +467,7 @@
- #define SYS_ESR_EL2			sys_reg(3, 4, 5, 2, 0)
- #define SYS_VSESR_EL2			sys_reg(3, 4, 5, 2, 3)
- #define SYS_FPEXC32_EL2			sys_reg(3, 4, 5, 3, 0)
-+#define SYS_TFSR_EL2			sys_reg(3, 4, 5, 6, 0)
- #define SYS_FAR_EL2			sys_reg(3, 4, 6, 0, 0)
- 
- #define SYS_VDISR_EL2			sys_reg(3, 4, 12, 1,  1)
-@@ -516,6 +524,7 @@
- #define SYS_AFSR0_EL12			sys_reg(3, 5, 5, 1, 0)
- #define SYS_AFSR1_EL12			sys_reg(3, 5, 5, 1, 1)
- #define SYS_ESR_EL12			sys_reg(3, 5, 5, 2, 0)
-+#define SYS_TFSR_EL12			sys_reg(3, 5, 5, 6, 0)
- #define SYS_FAR_EL12			sys_reg(3, 5, 6, 0, 0)
- #define SYS_MAIR_EL12			sys_reg(3, 5, 10, 2, 0)
- #define SYS_AMAIR_EL12			sys_reg(3, 5, 10, 3, 0)
-@@ -531,6 +540,15 @@
- 
- /* Common SCTLR_ELx flags. */
- #define SCTLR_ELx_DSSBS	(BIT(44))
-+#define SCTLR_ELx_ATA	(BIT(43))
++#ifdef CONFIG_ARM64_MTE
++static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
++{
++	/* all non-zero tags excluded by default */
++	write_sysreg_s(SYS_GCR_EL1_RRND | SYS_GCR_EL1_EXCL_MASK, SYS_GCR_EL1);
++	write_sysreg_s(0, SYS_TFSR_EL1);
++	write_sysreg_s(0, SYS_TFSRE0_EL1);
 +
-+#define SCTLR_ELx_TCF_SHIFT	40
-+#define SCTLR_ELx_TCF_NONE	(UL(0x0) << SCTLR_ELx_TCF_SHIFT)
-+#define SCTLR_ELx_TCF_SYNC	(UL(0x1) << SCTLR_ELx_TCF_SHIFT)
-+#define SCTLR_ELx_TCF_ASYNC	(UL(0x2) << SCTLR_ELx_TCF_SHIFT)
-+#define SCTLR_ELx_TCF_MASK	(UL(0x3) << SCTLR_ELx_TCF_SHIFT)
++	isb();
++}
++#endif /* CONFIG_ARM64_MTE */
 +
-+#define SCTLR_ELx_ITFSB	(BIT(37))
- #define SCTLR_ELx_ENIA	(BIT(31))
- #define SCTLR_ELx_ENIB	(BIT(30))
- #define SCTLR_ELx_ENDA	(BIT(27))
-@@ -559,6 +577,14 @@
+ /* Internal helper functions to match cpu capability type */
+ static bool
+ cpucap_late_cpu_optional(const struct arm64_cpu_capabilities *cap)
+@@ -2056,6 +2070,19 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sign = FTR_UNSIGNED,
+ 	},
  #endif
++#ifdef CONFIG_ARM64_MTE
++	{
++		.desc = "Memory Tagging Extension",
++		.capability = ARM64_MTE,
++		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
++		.matches = has_cpuid_feature,
++		.sys_reg = SYS_ID_AA64PFR1_EL1,
++		.field_pos = ID_AA64PFR1_MTE_SHIFT,
++		.min_field_value = ID_AA64PFR1_MTE,
++		.sign = FTR_UNSIGNED,
++		.cpu_enable = cpu_enable_mte,
++	},
++#endif /* CONFIG_ARM64_MTE */
+ 	{},
+ };
  
- /* SCTLR_EL1 specific flags. */
-+#define SCTLR_EL1_ATA0		(BIT(42))
-+
-+#define SCTLR_EL1_TCF0_SHIFT	38
-+#define SCTLR_EL1_TCF0_NONE	(UL(0x0) << SCTLR_EL1_TCF0_SHIFT)
-+#define SCTLR_EL1_TCF0_SYNC	(UL(0x1) << SCTLR_EL1_TCF0_SHIFT)
-+#define SCTLR_EL1_TCF0_ASYNC	(UL(0x2) << SCTLR_EL1_TCF0_SHIFT)
-+#define SCTLR_EL1_TCF0_MASK	(UL(0x3) << SCTLR_EL1_TCF0_SHIFT)
-+
- #define SCTLR_EL1_BT1		(BIT(36))
- #define SCTLR_EL1_BT0		(BIT(35))
- #define SCTLR_EL1_UCI		(BIT(26))
-@@ -595,6 +621,7 @@
- #define MAIR_ATTR_DEVICE_GRE		UL(0x0c)
- #define MAIR_ATTR_NORMAL_NC		UL(0x44)
- #define MAIR_ATTR_NORMAL_WT		UL(0xbb)
-+#define MAIR_ATTR_NORMAL_TAGGED		UL(0xf0)
- #define MAIR_ATTR_NORMAL		UL(0xff)
- #define MAIR_ATTR_MASK			UL(0xff)
+@@ -2172,6 +2199,9 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
+ 	HWCAP_MULTI_CAP(ptr_auth_hwcap_addr_matches, CAP_HWCAP, KERNEL_HWCAP_PACA),
+ 	HWCAP_MULTI_CAP(ptr_auth_hwcap_gen_matches, CAP_HWCAP, KERNEL_HWCAP_PACG),
+ #endif
++#ifdef CONFIG_ARM64_MTE
++	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
++#endif /* CONFIG_ARM64_MTE */
+ 	{},
+ };
  
-@@ -683,6 +710,10 @@
- #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
- #define ID_AA64PFR1_BT_BTI		0x1
+diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
+index 86637466daa8..5ce478c0b4b1 100644
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -93,6 +93,7 @@ static const char *const hwcap_str[] = {
+ 	"dgh",
+ 	"rng",
+ 	"bti",
++	"mte",
+ 	NULL
+ };
  
-+#define ID_AA64PFR1_MTE_NI		0x0
-+#define ID_AA64PFR1_MTE_EL0		0x1
-+#define ID_AA64PFR1_MTE			0x2
-+
- /* id_aa64zfr0 */
- #define ID_AA64ZFR0_F64MM_SHIFT		56
- #define ID_AA64ZFR0_F32MM_SHIFT		52
-@@ -875,6 +906,28 @@
- #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
- #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
- 
-+/* TCR EL1 Bit Definitions */
-+#define SYS_TCR_EL1_TCMA1	(BIT(58))
-+#define SYS_TCR_EL1_TCMA0	(BIT(57))
-+
-+/* GCR_EL1 Definitions */
-+#define SYS_GCR_EL1_RRND	(BIT(16))
-+#define SYS_GCR_EL1_EXCL_MASK	0xffffUL
-+
-+/* RGSR_EL1 Definitions */
-+#define SYS_RGSR_EL1_TAG_MASK	0xfUL
-+#define SYS_RGSR_EL1_SEED_SHIFT	8
-+#define SYS_RGSR_EL1_SEED_MASK	0xffffUL
-+
-+/* GMID_EL1 field definitions */
-+#define SYS_GMID_EL1_BS_SHIFT	0
-+#define SYS_GMID_EL1_BS_SIZE	4
-+
-+/* TFSR{,E0}_EL1 bit definitions */
-+#define SYS_TFSR_EL1_TF0_SHIFT	0
-+#define SYS_TFSR_EL1_TF1_SHIFT	1
-+#define SYS_TFSR_EL1_TF0	(UL(1) << SYS_TFSR_EL1_TF0_SHIFT)
-+#define SYS_TFSR_EL1_TF1	(UK(2) << SYS_TFSR_EL1_TF1_SHIFT)
- 
- /* Safe value for MPIDR_EL1: Bit31:RES1, Bit30:U:0, Bit24:MT:0 */
- #define SYS_MPIDR_SAFE_VAL	(BIT(31))
-diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
-index 42cbe34d95ce..06413d9f2341 100644
---- a/arch/arm64/include/uapi/asm/ptrace.h
-+++ b/arch/arm64/include/uapi/asm/ptrace.h
-@@ -51,6 +51,7 @@
- #define PSR_PAN_BIT	0x00400000
- #define PSR_UAO_BIT	0x00800000
- #define PSR_DIT_BIT	0x01000000
-+#define PSR_TCO_BIT	0x02000000
- #define PSR_V_BIT	0x10000000
- #define PSR_C_BIT	0x20000000
- #define PSR_Z_BIT	0x40000000
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 68b7f34a08f5..4582014dda25 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -1873,7 +1873,7 @@ void syscall_trace_exit(struct pt_regs *regs)
-  * We also reserve IL for the kernel; SS is handled dynamically.
-  */
- #define SPSR_EL1_AARCH64_RES0_BITS \
--	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 25) | GENMASK_ULL(23, 22) | \
-+	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 26) | GENMASK_ULL(23, 22) | \
- 	 GENMASK_ULL(20, 13) | GENMASK_ULL(5, 5))
- #define SPSR_EL1_AARCH32_RES0_BITS \
- 	(GENMASK_ULL(63, 32) | GENMASK_ULL(22, 22) | GENMASK_ULL(20, 20))
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index baf5ce9225ce..552a7d860a45 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1104,6 +1104,8 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu,
+ 		if (!vcpu_has_sve(vcpu))
+ 			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+ 		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
++	} else if (id == SYS_ID_AA64PFR1_EL1) {
++		val &= ~(0xfUL << ID_AA64PFR1_MTE_SHIFT);
+ 	} else if (id == SYS_ID_AA64ISAR1_EL1 && !vcpu_has_ptrauth(vcpu)) {
+ 		val &= ~((0xfUL << ID_AA64ISAR1_APA_SHIFT) |
+ 			 (0xfUL << ID_AA64ISAR1_API_SHIFT) |
