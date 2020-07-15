@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5219221346
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 19:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA9B221347
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 19:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726086AbgGORJQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jul 2020 13:09:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37182 "EHLO mail.kernel.org"
+        id S1726479AbgGORJS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jul 2020 13:09:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37234 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbgGORJP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Jul 2020 13:09:15 -0400
+        id S1725798AbgGORJS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Jul 2020 13:09:18 -0400
 Received: from localhost.localdomain (unknown [95.146.230.158])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7218E2065F;
-        Wed, 15 Jul 2020 17:09:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6711206F4;
+        Wed, 15 Jul 2020 17:09:15 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -27,9 +27,9 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v7 11/29] arm64: mte: Tags-aware aware memcmp_pages() implementation
-Date:   Wed, 15 Jul 2020 18:08:26 +0100
-Message-Id: <20200715170844.30064-12-catalin.marinas@arm.com>
+Subject: [PATCH v7 12/29] arm64: mte: Handle the MAIR_EL1 changes for late CPU bring-up
+Date:   Wed, 15 Jul 2020 18:08:27 +0100
+Message-Id: <20200715170844.30064-13-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200715170844.30064-1-catalin.marinas@arm.com>
 References: <20200715170844.30064-1-catalin.marinas@arm.com>
@@ -40,88 +40,91 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When the Memory Tagging Extension is enabled, two pages are identical
-only if both their data and tags are identical.
+CnP must be enabled only after the MAIR_EL1 register has been set up by
+the cpu_enable_mte() function. Inconsistent MAIR_EL1 between CPUs
+sharing the same TLB may lead to the wrong memory type being used for a
+brief window during CPU power-up.
 
-Make the generic memcmp_pages() a __weak function and add an
-arm64-specific implementation which returns non-zero if any of the two
-pages contain valid MTE tags (PG_mte_tagged set). There isn't much
-benefit in comparing the tags of two pages since these are normally used
-for heap allocations and likely to differ anyway.
+Move the ARM64_HAS_CNP capability to a higher number and add a
+corresponding BUILD_BUG_ON() to check for any inadvertent future
+change in the relative positions of MTE and CnP. The cpufeature.c code
+ensures that the cpu_enable() function is called in the ascending order
+of the capability number.
 
-Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+In addition, move the TLB invalidation to cpu_enable_mte() since late
+CPUs brought up won't be covered by the flush_tlb_all() in
+system_enable_mte().
+
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 ---
 
 Notes:
-    v4:
-    - Remove page tag comparison. This is not very useful to detect
-      identical pages as long as set_pte_at() can zero the tags on a page
-      without copy-on-write if mapped with PROT_MTE. This can be improved
-      if a real case appears but it's unlikely for heap pages to be
-      identical across multiple processes.
-    - Move the memcmp_pages() function to mte.c.
+    New in v7.
 
- arch/arm64/kernel/mte.c | 26 ++++++++++++++++++++++++++
- mm/util.c               |  2 +-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/cpucaps.h |  4 ++--
+ arch/arm64/kernel/cpufeature.c   | 14 ++++++++++----
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
-index 5bf9bbed5a25..5f54fd140610 100644
---- a/arch/arm64/kernel/mte.c
-+++ b/arch/arm64/kernel/mte.c
-@@ -5,6 +5,7 @@
+diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
+index 6bc3e21e5929..bc39fdbf0706 100644
+--- a/arch/arm64/include/asm/cpucaps.h
++++ b/arch/arm64/include/asm/cpucaps.h
+@@ -22,7 +22,7 @@
+ #define ARM64_WORKAROUND_CAVIUM_27456		12
+ #define ARM64_HAS_32BIT_EL0			13
+ #define ARM64_HARDEN_EL2_VECTORS		14
+-#define ARM64_HAS_CNP				15
++#define ARM64_MTE				15
+ #define ARM64_HAS_NO_FPSIMD			16
+ #define ARM64_WORKAROUND_REPEAT_TLBI		17
+ #define ARM64_WORKAROUND_QCOM_FALKOR_E1003	18
+@@ -62,7 +62,7 @@
+ #define ARM64_HAS_GENERIC_AUTH			52
+ #define ARM64_HAS_32BIT_EL1			53
+ #define ARM64_BTI				54
+-#define ARM64_MTE				55
++#define ARM64_HAS_CNP				55
  
- #include <linux/bitops.h>
- #include <linux/mm.h>
-+#include <linux/string.h>
- #include <linux/thread_info.h>
+ #define ARM64_NCAPS				56
  
- #include <asm/cpufeature.h>
-@@ -23,6 +24,31 @@ void mte_sync_tags(pte_t *ptep, pte_t pte)
- 	}
- }
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index c1df72bfede4..4d3abb51f7d4 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1670,6 +1670,14 @@ static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
+ 	write_sysreg_s(0, SYS_TFSR_EL1);
+ 	write_sysreg_s(0, SYS_TFSRE0_EL1);
  
-+int memcmp_pages(struct page *page1, struct page *page2)
-+{
-+	char *addr1, *addr2;
-+	int ret;
-+
-+	addr1 = page_address(page1);
-+	addr2 = page_address(page2);
-+	ret = memcmp(addr1, addr2, PAGE_SIZE);
-+
-+	if (!system_supports_mte() || ret)
-+		return ret;
-+
 +	/*
-+	 * If the page content is identical but at least one of the pages is
-+	 * tagged, return non-zero to avoid KSM merging. If only one of the
-+	 * pages is tagged, set_pte_at() may zero or change the tags of the
-+	 * other page via mte_sync_tags().
++	 * CnP must be enabled only after the MAIR_EL1 register has been set
++	 * up. Inconsistent MAIR_EL1 between CPUs sharing the same TLB may
++	 * lead to the wrong memory type being used for a brief window during
++	 * CPU power-up.
 +	 */
-+	if (test_bit(PG_mte_tagged, &page1->flags) ||
-+	    test_bit(PG_mte_tagged, &page2->flags))
-+		return addr1 != addr2;
++	BUILD_BUG_ON(ARM64_HAS_CNP < ARM64_MTE);
 +
-+	return ret;
-+}
+ 	/*
+ 	 * Update the MT_NORMAL_TAGGED index in MAIR_EL1. Tag checking is
+ 	 * disabled for the kernel, so there won't be any observable effect
+@@ -1679,8 +1687,9 @@ static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
+ 	mair &= ~MAIR_ATTRIDX(MAIR_ATTR_MASK, MT_NORMAL_TAGGED);
+ 	mair |= MAIR_ATTRIDX(MAIR_ATTR_NORMAL_TAGGED, MT_NORMAL_TAGGED);
+ 	write_sysreg_s(mair, SYS_MAIR_EL1);
+-
+ 	isb();
 +
- void flush_mte_state(void)
- {
- 	if (!system_supports_mte())
-diff --git a/mm/util.c b/mm/util.c
-index c63c8e47be57..c856f5fec69d 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -911,7 +911,7 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen)
- 	return res;
++	local_flush_tlb_all();
  }
  
--int memcmp_pages(struct page *page1, struct page *page2)
-+int __weak memcmp_pages(struct page *page1, struct page *page2)
- {
- 	char *addr1, *addr2;
- 	int ret;
+ static int __init system_enable_mte(void)
+@@ -1688,9 +1697,6 @@ static int __init system_enable_mte(void)
+ 	if (!system_supports_mte())
+ 		return 0;
+ 
+-	/* Ensure the TLB does not have stale MAIR attributes */
+-	flush_tlb_all();
+-
+ 	/*
+ 	 * Clear the tags in the zero page. This needs to be done via the
+ 	 * linear map which has the Tagged attribute.
