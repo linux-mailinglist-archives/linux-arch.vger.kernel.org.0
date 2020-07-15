@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 429A3221356
+	by mail.lfdr.de (Postfix) with ESMTP id B051B221357
 	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 19:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgGORJt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jul 2020 13:09:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38074 "EHLO mail.kernel.org"
+        id S1726023AbgGORJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jul 2020 13:09:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726777AbgGORJt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Jul 2020 13:09:49 -0400
+        id S1725907AbgGORJw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Jul 2020 13:09:52 -0400
 Received: from localhost.localdomain (unknown [95.146.230.158])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E0092065E;
-        Wed, 15 Jul 2020 17:09:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB3C3206F4;
+        Wed, 15 Jul 2020 17:09:49 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -28,9 +28,9 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Peter Collingbourne <pcc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steven Price <steven.price@arm.com>
-Subject: [PATCH v7 25/29] mm: Add arch hooks for saving/restoring tags
-Date:   Wed, 15 Jul 2020 18:08:40 +0100
-Message-Id: <20200715170844.30064-26-catalin.marinas@arm.com>
+Subject: [PATCH v7 26/29] arm64: mte: Enable swap of tagged pages
+Date:   Wed, 15 Jul 2020 18:08:41 +0100
+Message-Id: <20200715170844.30064-27-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200715170844.30064-1-catalin.marinas@arm.com>
 References: <20200715170844.30064-1-catalin.marinas@arm.com>
@@ -43,134 +43,297 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Steven Price <steven.price@arm.com>
 
-Arm's Memory Tagging Extension (MTE) adds some metadata (tags) to
-every physical page, when swapping pages out to disk it is necessary to
-save these tags, and later restore them when reading the pages back.
-
-Add some hooks along with dummy implementations to enable the
-arch code to handle this.
-
-Three new hooks are added to the swap code:
- * arch_prepare_to_swap() and
- * arch_swap_invalidate_page() / arch_swap_invalidate_area().
-One new hook is added to shmem:
- * arch_swap_restore()
+When swapping pages out to disk it is necessary to save any tags that
+have been set, and restore when swapping back in. Make use of the new
+page flag (PG_ARCH_2, locally named PG_mte_tagged) to identify pages
+with tags. When swapping out these pages the tags are stored in memory
+and later restored when the pages are brought back in. Because shmem can
+swap pages back in without restoring the userspace PTE it is also
+necessary to add a hook for shmem.
 
 Signed-off-by: Steven Price <steven.price@arm.com>
-[catalin.marinas@arm.com: add unlock_page() on the error path]
-[catalin.marinas@arm.com: dropped the _tags suffix]
+[catalin.marinas@arm.com: move function prototypes to mte.h]
+[catalin.marinas@arm.com: drop '_tags' from arch_swap_restore_tags()]
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Acked-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Will Deacon <will@kernel.org>
 ---
 
 Notes:
     v6:
-    - Added comment on where the arch code should define the overriding
-      macros (asm/pgtable.h).
-    - Dropped _tags suffix from arch_swap_restore_tags().
+    - Remove stale copy of include/asm-generic/pgtable.h (bad conflict
+      resolution in v5).
+    - check_swap should be true for nr_pages == 1.
     
     New in v4.
 
- include/linux/pgtable.h | 28 ++++++++++++++++++++++++++++
- mm/page_io.c            | 10 ++++++++++
- mm/shmem.c              |  6 ++++++
- mm/swapfile.c           |  2 ++
- 4 files changed, 46 insertions(+)
+ arch/arm64/include/asm/mte.h     |  8 +++
+ arch/arm64/include/asm/pgtable.h | 32 ++++++++++++
+ arch/arm64/kernel/mte.c          | 19 +++++++-
+ arch/arm64/lib/mte.S             | 45 +++++++++++++++++
+ arch/arm64/mm/Makefile           |  1 +
+ arch/arm64/mm/mteswap.c          | 83 ++++++++++++++++++++++++++++++++
+ 6 files changed, 187 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/mm/mteswap.c
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 56c1e8eb7bb0..cbe775d3446f 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -631,6 +631,34 @@ static inline int arch_unmap_one(struct mm_struct *mm,
- }
- #endif
+diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
+index 7ea0c0e526d1..1c99fcadb58c 100644
+--- a/arch/arm64/include/asm/mte.h
++++ b/arch/arm64/include/asm/mte.h
+@@ -21,6 +21,14 @@ unsigned long mte_copy_tags_from_user(void *to, const void __user *from,
+ 				      unsigned long n);
+ unsigned long mte_copy_tags_to_user(void __user *to, void *from,
+ 				    unsigned long n);
++int mte_save_tags(struct page *page);
++void mte_save_page_tags(const void *page_addr, void *tag_storage);
++bool mte_restore_tags(swp_entry_t entry, struct page *page);
++void mte_restore_page_tags(void *page_addr, const void *tag_storage);
++void mte_invalidate_tags(int type, pgoff_t offset);
++void mte_invalidate_tags_area(int type);
++void *mte_allocate_tag_storage(void);
++void mte_free_tag_storage(char *storage);
  
-+/*
-+ * Allow architectures to preserve additional metadata associated with
-+ * swapped-out pages. The corresponding __HAVE_ARCH_SWAP_* macros and function
-+ * prototypes must be defined in the arch-specific asm/pgtable.h file.
-+ */
-+#ifndef __HAVE_ARCH_PREPARE_TO_SWAP
+ #ifdef CONFIG_ARM64_MTE
+ 
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 78a545536a45..6150d5bcc7d8 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -857,6 +857,38 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+ 
+ extern int kern_addr_valid(unsigned long addr);
+ 
++#ifdef CONFIG_ARM64_MTE
++
++#define __HAVE_ARCH_PREPARE_TO_SWAP
 +static inline int arch_prepare_to_swap(struct page *page)
 +{
++	if (system_supports_mte())
++		return mte_save_tags(page);
 +	return 0;
 +}
-+#endif
 +
-+#ifndef __HAVE_ARCH_SWAP_INVALIDATE
++#define __HAVE_ARCH_SWAP_INVALIDATE
 +static inline void arch_swap_invalidate_page(int type, pgoff_t offset)
 +{
++	if (system_supports_mte())
++		mte_invalidate_tags(type, offset);
 +}
 +
 +static inline void arch_swap_invalidate_area(int type)
 +{
++	if (system_supports_mte())
++		mte_invalidate_tags_area(type);
 +}
-+#endif
 +
-+#ifndef __HAVE_ARCH_SWAP_RESTORE
++#define __HAVE_ARCH_SWAP_RESTORE
 +static inline void arch_swap_restore(swp_entry_t entry, struct page *page)
 +{
++	if (system_supports_mte() && mte_restore_tags(entry, page))
++		set_bit(PG_mte_tagged, &page->flags);
 +}
-+#endif
 +
- #ifndef __HAVE_ARCH_PGD_OFFSET_GATE
- #define pgd_offset_gate(mm, addr)	pgd_offset(mm, addr)
- #endif
-diff --git a/mm/page_io.c b/mm/page_io.c
-index e8726f3e3820..9f3835161002 100644
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -252,6 +252,16 @@ int swap_writepage(struct page *page, struct writeback_control *wbc)
- 		unlock_page(page);
- 		goto out;
- 	}
-+	/*
-+	 * Arch code may have to preserve more data than just the page
-+	 * contents, e.g. memory tags.
-+	 */
-+	ret = arch_prepare_to_swap(page);
-+	if (ret) {
-+		set_page_dirty(page);
-+		unlock_page(page);
-+		goto out;
-+	}
- 	if (frontswap_store(page) == 0) {
- 		set_page_writeback(page);
- 		unlock_page(page);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index dacee627dae6..66024b1884c1 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1673,6 +1673,12 @@ static int shmem_swapin_page(struct inode *inode, pgoff_t index,
- 	}
- 	wait_on_page_writeback(page);
++#endif /* CONFIG_ARM64_MTE */
++
+ /*
+  * On AArch64, the cache coherency is handled via the set_pte_at() function.
+  */
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index 0a8b90afe9d7..eb39504e390a 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -10,6 +10,8 @@
+ #include <linux/sched.h>
+ #include <linux/sched/mm.h>
+ #include <linux/string.h>
++#include <linux/swap.h>
++#include <linux/swapops.h>
+ #include <linux/thread_info.h>
+ #include <linux/uio.h>
  
-+	/*
-+	 * Some architectures may have to restore extra metadata to the
-+	 * physical page after reading from swap.
-+	 */
-+	arch_swap_restore(swap, page);
+@@ -18,15 +20,30 @@
+ #include <asm/ptrace.h>
+ #include <asm/sysreg.h>
+ 
++static void mte_sync_page_tags(struct page *page, pte_t *ptep, bool check_swap)
++{
++	pte_t old_pte = READ_ONCE(*ptep);
 +
- 	if (shmem_should_replace_page(page, gfp)) {
- 		error = shmem_replace_page(&page, gfp, info, index);
- 		if (error)
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 987276c557d1..b7a3ed45e606 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -716,6 +716,7 @@ static void swap_range_free(struct swap_info_struct *si, unsigned long offset,
- 	else
- 		swap_slot_free_notify = NULL;
- 	while (offset <= end) {
-+		arch_swap_invalidate_page(si->type, offset);
- 		frontswap_invalidate_page(si->type, offset);
- 		if (swap_slot_free_notify)
- 			swap_slot_free_notify(si->bdev, offset);
-@@ -2675,6 +2676,7 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
- 	frontswap_map = frontswap_map_get(p);
- 	spin_unlock(&p->lock);
- 	spin_unlock(&swap_lock);
-+	arch_swap_invalidate_area(p->type);
- 	frontswap_invalidate_area(p->type);
- 	frontswap_map_set(p, NULL);
- 	mutex_unlock(&swapon_mutex);
++	if (check_swap && is_swap_pte(old_pte)) {
++		swp_entry_t entry = pte_to_swp_entry(old_pte);
++
++		if (!non_swap_entry(entry) && mte_restore_tags(entry, page))
++			return;
++	}
++
++	mte_clear_page_tags(page_address(page));
++}
++
+ void mte_sync_tags(pte_t *ptep, pte_t pte)
+ {
+ 	struct page *page = pte_page(pte);
+ 	long i, nr_pages = compound_nr(page);
++	bool check_swap = nr_pages == 1;
+ 
+ 	/* if PG_mte_tagged is set, tags have already been initialised */
+ 	for (i = 0; i < nr_pages; i++, page++) {
+ 		if (!test_and_set_bit(PG_mte_tagged, &page->flags))
+-			mte_clear_page_tags(page_address(page));
++			mte_sync_page_tags(page, ptep, check_swap);
+ 	}
+ }
+ 
+diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
+index 434f81d9a180..03ca6d8b8670 100644
+--- a/arch/arm64/lib/mte.S
++++ b/arch/arm64/lib/mte.S
+@@ -104,3 +104,48 @@ SYM_FUNC_START(mte_copy_tags_to_user)
+ 2:	sub	x0, x0, x3		// update the number of tags copied
+ 	ret
+ SYM_FUNC_END(mte_copy_tags_to_user)
++
++/*
++ * Save the tags in a page
++ *   x0 - page address
++ *   x1 - tag storage
++ */
++SYM_FUNC_START(mte_save_page_tags)
++	multitag_transfer_size x7, x5
++1:
++	mov	x2, #0
++2:
++	ldgm	x5, [x0]
++	orr	x2, x2, x5
++	add	x0, x0, x7
++	tst	x0, #0xFF		// 16 tag values fit in a register,
++	b.ne	2b			// which is 16*16=256 bytes
++
++	str	x2, [x1], #8
++
++	tst	x0, #(PAGE_SIZE - 1)
++	b.ne	1b
++
++	ret
++SYM_FUNC_END(mte_save_page_tags)
++
++/*
++ * Restore the tags in a page
++ *   x0 - page address
++ *   x1 - tag storage
++ */
++SYM_FUNC_START(mte_restore_page_tags)
++	multitag_transfer_size x7, x5
++1:
++	ldr	x2, [x1], #8
++2:
++	stgm	x2, [x0]
++	add	x0, x0, x7
++	tst	x0, #0xFF
++	b.ne	2b
++
++	tst	x0, #(PAGE_SIZE - 1)
++	b.ne	1b
++
++	ret
++SYM_FUNC_END(mte_restore_page_tags)
+diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+index d91030f0ffee..5bcc9e0aa259 100644
+--- a/arch/arm64/mm/Makefile
++++ b/arch/arm64/mm/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_PTDUMP_CORE)	+= dump.o
+ obj-$(CONFIG_PTDUMP_DEBUGFS)	+= ptdump_debugfs.o
+ obj-$(CONFIG_NUMA)		+= numa.o
+ obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
++obj-$(CONFIG_ARM64_MTE)		+= mteswap.o
+ KASAN_SANITIZE_physaddr.o	+= n
+ 
+ obj-$(CONFIG_KASAN)		+= kasan_init.o
+diff --git a/arch/arm64/mm/mteswap.c b/arch/arm64/mm/mteswap.c
+new file mode 100644
+index 000000000000..c52c1847079c
+--- /dev/null
++++ b/arch/arm64/mm/mteswap.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/pagemap.h>
++#include <linux/xarray.h>
++#include <linux/slab.h>
++#include <linux/swap.h>
++#include <linux/swapops.h>
++#include <asm/mte.h>
++
++static DEFINE_XARRAY(mte_pages);
++
++void *mte_allocate_tag_storage(void)
++{
++	/* tags granule is 16 bytes, 2 tags stored per byte */
++	return kmalloc(PAGE_SIZE / 16 / 2, GFP_KERNEL);
++}
++
++void mte_free_tag_storage(char *storage)
++{
++	kfree(storage);
++}
++
++int mte_save_tags(struct page *page)
++{
++	void *tag_storage, *ret;
++
++	if (!test_bit(PG_mte_tagged, &page->flags))
++		return 0;
++
++	tag_storage = mte_allocate_tag_storage();
++	if (!tag_storage)
++		return -ENOMEM;
++
++	mte_save_page_tags(page_address(page), tag_storage);
++
++	/* page_private contains the swap entry.val set in do_swap_page */
++	ret = xa_store(&mte_pages, page_private(page), tag_storage, GFP_KERNEL);
++	if (WARN(xa_is_err(ret), "Failed to store MTE tags")) {
++		mte_free_tag_storage(tag_storage);
++		return xa_err(ret);
++	} else if (ret) {
++		/* Entry is being replaced, free the old entry */
++		mte_free_tag_storage(ret);
++	}
++
++	return 0;
++}
++
++bool mte_restore_tags(swp_entry_t entry, struct page *page)
++{
++	void *tags = xa_load(&mte_pages, entry.val);
++
++	if (!tags)
++		return false;
++
++	mte_restore_page_tags(page_address(page), tags);
++
++	return true;
++}
++
++void mte_invalidate_tags(int type, pgoff_t offset)
++{
++	swp_entry_t entry = swp_entry(type, offset);
++	void *tags = xa_erase(&mte_pages, entry.val);
++
++	mte_free_tag_storage(tags);
++}
++
++void mte_invalidate_tags_area(int type)
++{
++	swp_entry_t entry = swp_entry(type, 0);
++	swp_entry_t last_entry = swp_entry(type + 1, 0);
++	void *tags;
++
++	XA_STATE(xa_state, &mte_pages, entry.val);
++
++	xa_lock(&mte_pages);
++	xas_for_each(&xa_state, tags, last_entry.val - 1) {
++		__xa_erase(&mte_pages, xa_state.xa_index);
++		mte_free_tag_storage(tags);
++	}
++	xa_unlock(&mte_pages);
++}
