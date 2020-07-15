@@ -2,152 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF1C2214A7
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 20:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A027C22151A
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jul 2020 21:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbgGOSqV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 15 Jul 2020 14:46:21 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:62816 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726670AbgGOSqU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Jul 2020 14:46:20 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4B6RDS377kz9vBLp;
-        Wed, 15 Jul 2020 20:46:16 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id v3pZUE7jclzU; Wed, 15 Jul 2020 20:46:16 +0200 (CEST)
-Received: from vm-hermes.si.c-s.fr (vm-hermes.si.c-s.fr [192.168.25.253])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4B6RDS1Lj6z9vBLn;
-        Wed, 15 Jul 2020 20:46:16 +0200 (CEST)
-Received: by vm-hermes.si.c-s.fr (Postfix, from userid 33)
-        id 037EE6CC; Wed, 15 Jul 2020 20:47:25 +0200 (CEST)
-Received: from 37.173.149.38 ([37.173.149.38]) by messagerie.si.c-s.fr
- (Horde Framework) with HTTP; Wed, 15 Jul 2020 20:47:25 +0200
-Date:   Wed, 15 Jul 2020 20:47:25 +0200
-Message-ID: <20200715204725.Horde.5GZvsEv4ZkdzFHL76HZiFg8@messagerie.si.c-s.fr>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Tulio Magno Quites Machado Filho <tuliom@linux.ibm.com>,
-        linux-arch@vger.kernel.org, luto@kernel.org,
-        vincenzo.frascino@arm.com, tglx@linutronix.de, arnd@arndb.de,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        nathanl@linux.ibm.com, Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: Re: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to
- generic C implementation.
-References: <cover.1588079622.git.christophe.leroy@c-s.fr>
- <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr>
- <878sflvbad.fsf@mpe.ellerman.id.au>
-In-Reply-To: <878sflvbad.fsf@mpe.ellerman.id.au>
-User-Agent: Internet Messaging Program (IMP) H5 (6.2.3)
-Content-Type: text/plain; charset=UTF-8; format=flowed; DelSp=Yes
+        id S1726650AbgGOT2c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jul 2020 15:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgGOT2b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jul 2020 15:28:31 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474F6C061755
+        for <linux-arch@vger.kernel.org>; Wed, 15 Jul 2020 12:28:31 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id d27so2685056qtg.4
+        for <linux-arch@vger.kernel.org>; Wed, 15 Jul 2020 12:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PMgEusFSc7qqgR9Wh9Vc9NkHNHEql1tbsxy2XlEu5jA=;
+        b=QQl+stRx0THiGLOhlhYjMC/gkTN5p/8VNdlFA1b3dbpXE2kjdJPTZb3EGj9hV5SIAu
+         vLj71MR0+Cppdy39ehbR/V9sRXY+f472sj48uR/zVcYeIuIqmrhSBhsgb6bxk3AhkNZx
+         G94GEPiVQCFtyIJqzwNqn6s5gXAg5KVLCVChJKGgD27o6gf8NTjAy+i2K6S8e6TOwi5B
+         8vAZudsswFHNL92L8C2dKDHUJ1v/CE57tP8mrz1Br7oY0VRwfoxv6dZg2ZNV8clT7nWn
+         E6xrcEoZJRf4yzcqex3PbmqbKUZO5isuJkGzc9jCxnurQnI/rmdD5JQOo+His6SYgFSK
+         f5Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PMgEusFSc7qqgR9Wh9Vc9NkHNHEql1tbsxy2XlEu5jA=;
+        b=Lpwx3Dg7qZsQ5B/2J67VQttyKQgIViZUnU25B+7dtVbrjFFFxb9stvv6tKbN8A85em
+         hu6zdeKbWoqvR0CRP89sRT0k00/AfMUvUsz5PdETB0wfyOfH7Ggwrr3dikdEWyNLS54X
+         PEq2BSd40qxtLdqm5dTFGceSF3RPdSU+CrKCa2PQCe1jTZyff2csU2ZaeIOnc8JU7ovq
+         QBorxozH7VfBdn5of0j/xsypzCfB/GIXB6U9H4kYfYtbSxZiiTVZ4FgUOodx89yHnmjw
+         dtzVx99L5w1TjOrWlGptJTkApeXlO1JxxOp0hbqLiI3w6m2B7Dzq8Zbe2aV2es+0ZssE
+         aOyg==
+X-Gm-Message-State: AOAM533rDyQp9oheaQDkASwfhf7VP7iIFd5qcHdTQvXYywcmLw2Rij3W
+        BP3pEhSkrxdbkqHYd5HAYbnZCpKY2VSSHSjVP92NrA==
+X-Google-Smtp-Source: ABdhPJwh2eRhat/lWnPhQw89dDCcMnYwZRHtiVGy2runEadgzqTjasvHuiQwiQz+a9HV0oMXaq4y2jsH/3ExGFMFZyk=
+X-Received: by 2002:ac8:1bad:: with SMTP id z42mr1523513qtj.110.1594841310184;
+ Wed, 15 Jul 2020 12:28:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
+References: <20200715144806.GA3443108@google.com> <mhng-d6287ba3-3b57-431e-b0e7-9d17b514748c@palmerdabbelt-glaptop1>
+In-Reply-To: <mhng-d6287ba3-3b57-431e-b0e7-9d17b514748c@palmerdabbelt-glaptop1>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+Date:   Wed, 15 Jul 2020 12:28:19 -0700
+Message-ID: <CANs6eM=qamw=vgh7GFSLBL_MiPTcj7MGa3+qQ9+gyT16i0zeJA@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic/mmiowb: Get cpu in mmiowb_set_pending
+To:     Will Deacon <willdeacon@google.com>
+Cc:     kernel@esmil.dk, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Michael Ellerman <mpe@ellerman.id.au> a écrit :
-
-> Christophe Leroy <christophe.leroy@c-s.fr> writes:
->> Prepare for switching VDSO to generic C implementation in following
->> patch. Here, we:
->> - Modify __get_datapage() to take an offset
->> - Prepare the helpers to call the C VDSO functions
->> - Prepare the required callbacks for the C VDSO functions
->> - Prepare the clocksource.h files to define VDSO_ARCH_CLOCKMODES
->> - Add the C trampolines to the generic C VDSO functions
->>
->> powerpc is a bit special for VDSO as well as system calls in the
->> way that it requires setting CR SO bit which cannot be done in C.
->> Therefore, entry/exit needs to be performed in ASM.
->>
->> Implementing __arch_get_vdso_data() would clobber the link register,
->> requiring the caller to save it. As the ASM calling function already
->> has to set a stack frame and saves the link register before calling
->> the C vdso function, retriving the vdso data pointer there is lighter.
-> ...
+On Wed, Jul 15, 2020 at 9:41 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
 >
->> diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h  
->> b/arch/powerpc/include/asm/vdso/gettimeofday.h
->> new file mode 100644
->> index 000000000000..4452897f9bd8
->> --- /dev/null
->> +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
->> @@ -0,0 +1,175 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
->> +#define __ASM_VDSO_GETTIMEOFDAY_H
->> +
->> +#include <asm/ptrace.h>
->> +
->> +#ifdef __ASSEMBLY__
->> +
->> +.macro cvdso_call funct
->> +  .cfi_startproc
->> +	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
->> +	mflr		r0
->> +  .cfi_register lr, r0
->> +	PPC_STL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
+> On Wed, 15 Jul 2020 07:48:06 PDT (-0700), Will Deacon wrote:
+> > On Wed, Jul 15, 2020 at 07:03:49AM -0700, Palmer Dabbelt wrote:
+> >> On Wed, 15 Jul 2020 03:42:46 PDT (-0700), Will Deacon wrote:
+> >> > Hmm. Although I _think_ something like the diff below ought to work, are you
+> >> > sure you want to be doing MMIO writes in preemptible context? Setting
+> >> > '.disable_locking = true' in 'sifive_gpio_regmap_config' implies to me that
+> >> > you should be handling the locking within the driver itself, and all the
+> >> > other regmap writes are protected by '&gc->bgpio_lock'.
+> >>
+> >> I guess my goal here was to avoid fixing the drivers: it's one thing if it's
+> >> just broken SiFive drivers, as they're all a bit crusty, but this is blowing up
+> >> for me in the 8250 driver on QEMU as well.  At that point I figured there'd be
+> >> an endless stream of bugs around this and I'd rather just.
+> >
+> > Right, and my patch should solve that.
+> >
+> >> > Given that riscv is one of the few architectures needing an implementation
+> >> > of mmiowb(), doing MMIO in a preemptible section seems especially dangerous
+> >> > as you have no way to ensure completion of the writes without adding an
+> >> > mmiowb() to the CPU migration path (i.e. context switch).
+> >>
+> >> I was going to just stick one in our context switching code unconditionally.
+> >> While we could go track cumulative writes outside the locks, the mmiowb is
+> >> essentially free for us because the one RISC-V implementation treats all fences
+> >> the same way so the subsequent store_release would hold all this up anyway.
+> >>
+> >> I think the right thing to do is to add some sort of arch hook right about here
+> >>
+> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >> index cfd71d61aa3c..14b4f8b7433f 100644
+> >> --- a/kernel/sched/core.c
+> >> +++ b/kernel/sched/core.c
+> >> @@ -3212,6 +3212,7 @@ static struct rq *finish_task_switch(struct task_struct *prev)
+> >>      prev_state = prev->state;
+> >>      vtime_task_switch(prev);
+> >>      perf_event_task_sched_in(prev, current);
+> >> +    finish_arch_pre_release(prev);
+> >>      finish_task(prev);
+> >>      finish_lock_switch(rq);
+> >>      finish_arch_post_lock_switch();
+> >>
+> >> but I was just going to stick it in switch_to for now... :).  I guess we could
+> >> also roll the fence up into yet another one-off primitive for the scheduler,
+> >> something like
+> >
+> > What does the above get you over switch_to()?
+> >
+> >> > diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
+> >> > index 9439ff037b2d..5698fca3bf56 100644
+> >> > --- a/include/asm-generic/mmiowb.h
+> >> > +++ b/include/asm-generic/mmiowb.h
+> >> > @@ -27,7 +27,7 @@
+> >> >  #include <asm/smp.h>
+> >> >
+> >> >  DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+> >> > -#define __mmiowb_state()       this_cpu_ptr(&__mmiowb_state)
+> >> > +#define __mmiowb_state()       raw_cpu_ptr(&__mmiowb_state)
+> >> >  #else
+> >> >  #define __mmiowb_state()       arch_mmiowb_state()
+> >> >  #endif /* arch_mmiowb_state */
+> >> > @@ -35,7 +35,9 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+> >> >  static inline void mmiowb_set_pending(void)
+> >> >  {
+> >> >         struct mmiowb_state *ms = __mmiowb_state();
+> >> > -       ms->mmiowb_pending = ms->nesting_count;
+> >> > +
+> >> > +       if (likely(ms->nesting_count))
+> >> > +               ms->mmiowb_pending = ms->nesting_count;
+> >>
+> >> Ya, that's one of the earlier ideas I had, but I decided it doesn't actually do
+> >> anything: if we're scheduleable then we know that pending and count are zero,
+> >> thus the check isn't necessary.  It made sense late last night and still does
+> >> this morning, but I haven't had my coffee yet.
+> >
+> > What it does is prevent preemptible writeX() from trashing the state on
+> > another CPU, so I think it's a valid fix. I agree that it doesn't help
+> > you if you need mmiowb(), but then that _really_ should only be needed if
+> > you're holding a spinlock. If you're doing concurrent lockless MMIO you
+> > deserve all the pain you get.
+> >
+> > I don't get why you think the patch does nothing, as it will operate as
+> > expected if writeX() is called with preemption disabled, which is the common
+> > case.
 >
-> This doesn't work for me on ppc64(le) with glibc.
+> Aside from PREEMPT_RT, I don't understand how you can be scheduled onto a CPU
+> that has a non-zero nesting_count.  Doesn't that mean that the CPU you're
+> scheduled on to is itself holding a spinlock, and therefor can't be scheduled
+> on?
 >
-> glibc doesn't create a stack frame before making the VDSO call, so the
-> store of r0 (LR) goes into the caller's frame, corrupting the saved LR,
-> leading to an infinite loop.
+> Sure, some interrupt could come in the middle, but it's still going to see the
+> non-zero nesting_count left over from the spinlock being held and therefor will
+> avoid trashing the accumulated mmiowb.  As far as I can tell everything then
+> proceeds acceptably: when the interrupt unlocks it'll do an mmiowb (whether it
+> did an IO or not), which is sufficient to ensure that the IO from the
+> interrupted code is completed before the unlock from that code.
+>
+> I must be missing something here?
 
-Where should it be saved if it can't be saved in the standard location ?
+Will and I talked for a bit, this patch is correct.  He's going to
+send it, I'm promoting smp_mb__after_spinlock to include IO ordering
+so we don't break code when scheduling.
 
->
-> This is an example from a statically built program that calls
-> clock_gettime():
->
-> 0000000010030cb0 <__clock_gettime>:
->     10030cb0:   0e 10 40 3c     lis     r2,4110
->     10030cb4:   00 7a 42 38     addi    r2,r2,31232
->     10030cb8:   a6 02 08 7c     mflr    r0
->     10030cbc:   ff ff 22 3d     addis   r9,r2,-1
->     10030cc0:   58 6d 29 39     addi    r9,r9,27992
->     10030cc4:   f0 ff c1 fb     std     r30,-16(r1)			<-- redzone store
->     10030cc8:   78 23 9e 7c     mr      r30,r4
->     10030ccc:   f8 ff e1 fb     std     r31,-8(r1)			<-- redzone store
->     10030cd0:   78 1b 7f 7c     mr      r31,r3
->     10030cd4:   10 00 01 f8     std     r0,16(r1)			<-- save LR to  
-> caller's frame
->     10030cd8:   00 00 09 e8     ld      r0,0(r9)
->     10030cdc:   00 00 20 2c     cmpdi   r0,0
->     10030ce0:   50 00 82 41     beq     10030d30 <__clock_gettime+0x80>
->     10030ce4:   a6 03 09 7c     mtctr   r0
->     10030ce8:   21 04 80 4e     bctrl					<-- vdso call
->     10030cec:   26 00 00 7c     mfcr    r0
->     10030cf0:   00 10 09 74     andis.  r9,r0,4096
->     10030cf4:   78 1b 69 7c     mr      r9,r3
->     10030cf8:   28 00 82 40     bne     10030d20 <__clock_gettime+0x70>
->     10030cfc:   b4 07 23 7d     extsw   r3,r9
->     10030d00:   10 00 01 e8     ld      r0,16(r1)			<-- load saved  
-> LR, since clobbered by the VDSO
->     10030d04:   f0 ff c1 eb     ld      r30,-16(r1)
->     10030d08:   f8 ff e1 eb     ld      r31,-8(r1)
->     10030d0c:   a6 03 08 7c     mtlr    r0				<-- restore LR
->     10030d10:   20 00 80 4e     blr					<-- jumps to 10030cec
->
->
-> I'm kind of confused how it worked for you on 32-bit.
-
-So am I then. I'm away for 3 weeks, summer break. I'll check when I'm back.
+Thanks!
 
 >
-> There's also no code to load/restore the TOC pointer on BE, which I
-> think we'll need to handle.
-
-What does it means exactly ? Just saving r2 all the time ? Is there a  
-dedicated location in the stack frame for it ? Is that only for 64 be ?
-
-Christophe
-
-
+> >> I'm kind of tempted to just declare "mmiowb() is fast on RISC-V, so let's do it
+> >> unconditionally everywhere it's necessary".  IIRC that's essentially true on
+> >> the existing implementation, as it'll get rolled up to any upcoming fence
+> >> anyway.  It seems like building any real machine that relies on the orderings
+> >> provided by mmiowb is going to have an infinate rabbit hole of bugs anyway, so
+> >> in that case we'd just rely on the hardware to elide the now unnecessary fences
+> >> so we'd just be throwing static code size at this wacky memory model and then
+> >> forgetting about it.
+> >
+> > If you can do that, that's obviously the best approach.
+> >
+> >> I'm going to send out a patch set that does all the work I think is necessary
+> >> to avoid fixing up the various drivers, with the accounting code to avoid
+> >> mmiowbs all over our port.  I'm not sure I'm going to like it, but I guess we
+> >> can argue as to exactly how ugly it is :)
+> >
+> > Ok.
+> >
+> > Will
