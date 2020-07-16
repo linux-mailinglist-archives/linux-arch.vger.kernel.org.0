@@ -2,140 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E18222BF8
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BC7222D41
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 22:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729673AbgGPTbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 15:31:17 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:31604 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729651AbgGPTbF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:31:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594927863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=qxETwBdUi8IQyqE8w1AoWdSu7aZcWlS4JLpVKb6zYWo=;
-        b=Tp80hgmiaU8tXfDfNzIjIIXPvY317v9X+EcmN7nNX8UpgeHQka0gpnkz1P7AO7Jnu6pcP5
-        QpnUY00LsBBodIhfBWSoKES6BqcbQIgeIZ+4MX4dFBemhoPgTx2cAkI0fzJqtw9OCXNvbX
-        /hoNpK6krfnDp0/Oz0+tYpr66Vsou0g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-314-OELazEwUNeGx2Fv-Vvd_RQ-1; Thu, 16 Jul 2020 15:31:01 -0400
-X-MC-Unique: OELazEwUNeGx2Fv-Vvd_RQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 692C615C2B;
-        Thu, 16 Jul 2020 19:30:59 +0000 (UTC)
-Received: from llong.com (ovpn-119-61.rdu2.redhat.com [10.10.119.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5439974F70;
-        Thu, 16 Jul 2020 19:30:58 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 5/5] locking/qrwlock: Make qrwlock store writer cpu number
-Date:   Thu, 16 Jul 2020 15:29:27 -0400
-Message-Id: <20200716192927.12944-6-longman@redhat.com>
-In-Reply-To: <20200716192927.12944-1-longman@redhat.com>
-References: <20200716192927.12944-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        id S1726069AbgGPUwh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 16:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbgGPUwg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 16:52:36 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D53C08C5C0
+        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 13:52:36 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id q17so4381260pls.9
+        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 13:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aquIO2FGAE3lkoXCYp5iGwupgQI/65LCYOM68Vjw6Tk=;
+        b=e4nnEJcZ/2dm2oYM392D+Ygv7VRrVE4tmm+yuKAqRtbsZNjS/1PkZ46Uxg8lMawtjg
+         El2Z81ViYhNC0aaun3sECRkjhMsnRv98wWpt8kupNRE2/dtD/TMRkXdwdzaMZqMcaa4L
+         ei0O+fZuVfuoMtxgfqNKcekKxywb2hDgAl3ec=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aquIO2FGAE3lkoXCYp5iGwupgQI/65LCYOM68Vjw6Tk=;
+        b=Oot6zA0XKirS1AT/0ifOhn1aMuXNI/y2UbEFvEKeH2MOvDU+LBDdAj8E8O4ViI9c8M
+         6RmTFYC1Q6t2UvPoVb1Ny2gYTQL4hsyKItZ3EFKsyRZWV8iyytoW2R4H9odklBGgiGrz
+         DN7Q0HokT/R/bXxZ2h9zu+fkRtAY5QOPdffvO8Fy77xll2xb4GJPU0wmd7BrDC+cBgji
+         6rQbh6pGS8Asvfwt/ZheryPVeU/tiSywOjf9JZXe6CW0GBqLVd5Cj6jBvBgduBt7gkrj
+         mOzcVghTBaqPvyo501RqT1AM+Ai/MSZVF6Mdzk+5axJcKU2sz8BdBG3ICYPgkNmxJW6T
+         fPng==
+X-Gm-Message-State: AOAM530SeloB94oD3CIkIS6VovgozKZbfhjpLjGbl0rJb4raBqRmT6yv
+        Qnj2J+4UwgctLw97IrkYMvp4fg==
+X-Google-Smtp-Source: ABdhPJzbQgJCDG9LnefQx5i570VFQUbYsZndgRWWuoW2VeaNkft010xcMMlGVftM1UOa8T+so1E6cQ==
+X-Received: by 2002:a17:902:a611:: with SMTP id u17mr5040902plq.263.1594932755485;
+        Thu, 16 Jul 2020 13:52:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 4sm5532894pgk.68.2020.07.16.13.52.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 13:52:34 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 13:52:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>
+Subject: Re: [patch V3 01/13] entry: Provide generic syscall entry
+ functionality
+Message-ID: <202007161336.B993ED938@keescook>
+References: <20200716182208.180916541@linutronix.de>
+ <20200716185424.011950288@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200716185424.011950288@linutronix.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Make the qrwlock code to store an encoded cpu number (+1 saturated)
-for the writer that hold the write lock if desired.
+On Thu, Jul 16, 2020 at 08:22:09PM +0200, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> On syscall entry certain work needs to be done:
+> 
+>    - Establish state (lockdep, context tracking, tracing)
+>    - Conditional work (ptrace, seccomp, audit...)
+> 
+> This code is needlessly duplicated and  different in all
+> architectures.
+> 
+> Provide a generic version based on the x86 implementation which has all the
+> RCU and instrumentation bits right.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/asm-generic/qrwlock.h | 12 +++++++++++-
- kernel/locking/qrwlock.c      | 11 ++++++-----
- 2 files changed, 17 insertions(+), 6 deletions(-)
+Ahh! You're reading my mind! I was just thinking about this while
+reviewing the proposed syscall redirection series[1], and pondering the
+lack of x86 TIF flags, and that nearly everything in the series (and for
+seccomp and other things) didn't need to be arch-specific. And now that
+series absolutely needs to be rebased and it'll magically work for every
+arch that switches to the generic entry code. :)
 
-diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
-index 3aefde23dcea..1b1d5253e314 100644
---- a/include/asm-generic/qrwlock.h
-+++ b/include/asm-generic/qrwlock.h
-@@ -15,11 +15,21 @@
- 
- #include <asm-generic/qrwlock_types.h>
- 
-+/*
-+ * If __cpu_number_sadd1 (+2 saturated cpu number) is defined, use it as the
-+ * writer lock value.
-+ */
-+#ifdef __cpu_number_sadd1
-+#define _QW_LOCKED	__cpu_number_sadd1
-+#else
-+#define _QW_LOCKED	0xff
-+#endif
-+
- /*
-  * Writer states & reader shift and bias.
-  */
- #define	_QW_WAITING	0x100		/* A writer is waiting	   */
--#define	_QW_LOCKED	0x0ff		/* A writer holds the lock */
-+#define	_QW_LMASK	0x0ff		/* A writer lock byte mask */
- #define	_QW_WMASK	0x1ff		/* Writer mask		   */
- #define	_QR_SHIFT	9		/* Reader count shift	   */
- #define _QR_BIAS	(1U << _QR_SHIFT)
-diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-index fe9ca92faa2a..394f34db4b8f 100644
---- a/kernel/locking/qrwlock.c
-+++ b/kernel/locking/qrwlock.c
-@@ -30,7 +30,7 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 		 * so spin with ACQUIRE semantics until the lock is available
- 		 * without waiting in the queue.
- 		 */
--		atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
-+		atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LMASK));
- 		return;
- 	}
- 	atomic_sub(_QR_BIAS, &lock->cnts);
-@@ -46,7 +46,7 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 	 * that accesses can't leak upwards out of our subsequent critical
- 	 * section in the case that the lock is currently held for write.
- 	 */
--	atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LOCKED));
-+	atomic_cond_read_acquire(&lock->cnts, !(VAL & _QW_LMASK));
- 
- 	/*
- 	 * Signal the next one in queue to become queue head
-@@ -61,12 +61,14 @@ EXPORT_SYMBOL(queued_read_lock_slowpath);
-  */
- void queued_write_lock_slowpath(struct qrwlock *lock)
- {
-+	const u8 lockval = _QW_LOCKED;
-+
- 	/* Put the writer into the wait queue */
- 	arch_spin_lock(&lock->wait_lock);
- 
- 	/* Try to acquire the lock directly if no reader is present */
- 	if (!atomic_read(&lock->cnts) &&
--	    (atomic_cmpxchg_acquire(&lock->cnts, 0, _QW_LOCKED) == 0))
-+	    (atomic_cmpxchg_acquire(&lock->cnts, 0, lockval) == 0))
- 		goto unlock;
- 
- 	/* Set the waiting flag to notify readers that a writer is pending */
-@@ -75,8 +77,7 @@ void queued_write_lock_slowpath(struct qrwlock *lock)
- 	/* When no more readers or writers, set the locked flag */
- 	do {
- 		atomic_cond_read_acquire(&lock->cnts, VAL == _QW_WAITING);
--	} while (atomic_cmpxchg_relaxed(&lock->cnts, _QW_WAITING,
--					_QW_LOCKED) != _QW_WAITING);
-+	} while (atomic_cmpxchg_relaxed(&lock->cnts, _QW_WAITING, lockval) != _QW_WAITING);
- unlock:
- 	arch_spin_unlock(&lock->wait_lock);
- }
+Notes below...
+
+[1] https://lore.kernel.org/lkml/20200716193141.4068476-2-krisman@collabora.com/
+
+> +/*
+> + * Define dummy _TIF work flags if not defined by the architecture or for
+> + * disabled functionality.
+> + */
+
+When I was thinking about this last week I was pondering having a split
+between the arch-agnositc TIF flags and the arch-specific TIF flags, and
+that each arch could have a single "there is agnostic work to be done"
+TIF in their thread_info, and the agnostic flags could live in
+task_struct or something. Anyway, I'll keep reading...
+
+> +/**
+> + * syscall_enter_from_user_mode - Check and handle work before invoking
+> + *				 a syscall
+> + * @regs:	Pointer to currents pt_regs
+> + * @syscall:	The syscall number
+> + *
+> + * Invoked from architecture specific syscall entry code with interrupts
+> + * disabled. The calling code has to be non-instrumentable. When the
+> + * function returns all state is correct and the subsequent functions can be
+> + * instrumented.
+> + *
+> + * Returns: The original or a modified syscall number
+> + *
+> + * If the returned syscall number is -1 then the syscall should be
+> + * skipped. In this case the caller may invoke syscall_set_error() or
+> + * syscall_set_return_value() first.  If neither of those are called and -1
+> + * is returned, then the syscall will fail with ENOSYS.
+
+There's been some recent confusion over "has the syscall changed,
+or did seccomp request it be skipped?" that was explored in arm64[2]
+(though I see Will and Keno in CC already). There might need to be a
+clearer way to distinguish between "wild userspace issued a -1 syscall"
+and "seccomp or ptrace asked for the syscall to be skipped". The
+difference is mostly about when ENOSYS gets set, with respect to calls
+to syscall_set_return_value(), but if the syscall gets changed, the arch
+may need to recheck the value and consider ENOSYS, etc. IIUC, what Will
+ended up with[3] was having syscall_trace_enter() return the syscall return
+value instead of the new syscall.
+
+[2] https://lore.kernel.org/lkml/20200704125027.GB21185@willie-the-truck/
+[3] https://lore.kernel.org/lkml/20200703083914.GA18516@willie-the-truck/
+
+> +static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+> +				unsigned long ti_work)
+> +{
+> +	long ret = 0;
+> +
+> +	/* Handle ptrace */
+> +	if (ti_work & (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_EMU)) {
+> +		ret = arch_syscall_enter_tracehook(regs);
+> +		if (ret || (ti_work & _TIF_SYSCALL_EMU))
+> +			return -1L;
+> +	}
+> +
+> +	/* Do seccomp after ptrace, to catch any tracer changes. */
+> +	if (ti_work & _TIF_SECCOMP) {
+> +		ret = arch_syscall_enter_seccomp(regs);
+> +		if (ret == -1L)
+> +			return ret;
+> +	}
+> +
+> +	if (unlikely(ti_work & _TIF_SYSCALL_TRACEPOINT))
+> +		trace_sys_enter(regs, syscall);
+> +
+> +	arch_syscall_enter_audit(regs);
+> +
+> +	return ret ? : syscall;
+> +}
+
+Modulo the notes about -1 vs syscall number above, this looks correct to
+me for ptrace and seccomp.
+
 -- 
-2.18.1
-
+Kees Cook
