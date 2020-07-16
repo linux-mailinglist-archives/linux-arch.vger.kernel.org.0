@@ -2,201 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11749222D81
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 23:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0089A222DCF
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 23:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbgGPVOC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 17:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726256AbgGPVOA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 17:14:00 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A9CC061755
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 14:14:00 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id cm21so5422302pjb.3
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 14:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CSCv+qenN8fQz+hz3SBJPq4lxH8/L5lNiF/O/RXH4cs=;
-        b=I+5xqu6T187eBlA+tL31dh5CS7wCkNI25QanX8f0QfAWVGToBzsZX8AeIKyT7710Bs
-         F94Tg6+plhmnLGCVlrr/UFEsPF9kU5zpXXmZwrmqg0W/0MYVN46CtWYu55uxwXw2fCn6
-         +2FGuZWQiqu1zo5Jq+VajaCuGX6Q4J7vQ4gJI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CSCv+qenN8fQz+hz3SBJPq4lxH8/L5lNiF/O/RXH4cs=;
-        b=eGy1PAYQV1N401euxRMK+dV2gOh0UnXzW58PD2vSTBBht1SrPACDw6rKjlrnkH0b3z
-         8SxhiXrGlCbav03mf7l3NLQ948I+iOErrFqlgD83tLVkwtZJQw4pg9d2S+dy14fNZ/IB
-         c/r0xvlkbH5gUu3dYZpMnu0VqjBgxj3Sr9EQBHLmcQrlm/KUbObvn+SFKEzhBNRssTlb
-         Rlft3vu8+963WfFpxMscRHPbpuKi+rNWRMFsM51ozC6pSnBN+bk94TowLlrq7LTH2St8
-         KLxLyZ9jZ+hJF60+oJqsGtxWa15O7CHwqssHWdcdlUIJBS1fvJari0QSjxRACFz0CDPq
-         +ixQ==
-X-Gm-Message-State: AOAM531XBUIJzFqRAL9++CX3y+Kz5NARIa4m05IIeEzztRV/Z1F4+roN
-        Ejcq79FjasLuKMSmugUlHvkFjg==
-X-Google-Smtp-Source: ABdhPJz1BmB9fwt+demvs5kOAZ0MYGo3jfds+eP75BLBTh2DsDI3UFftrsMyrJVfYldCQpL3sKvIZQ==
-X-Received: by 2002:a17:902:8206:: with SMTP id x6mr5160870pln.328.1594934040349;
-        Thu, 16 Jul 2020 14:14:00 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x13sm5361936pfj.122.2020.07.16.14.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 14:13:59 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 14:13:58 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        id S1726002AbgGPVYR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 17:24:17 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57513 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725959AbgGPVYR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 17:24:17 -0400
+Received: (qmail 1127425 invoked by uid 1000); 16 Jul 2020 17:24:16 -0400
+Date:   Thu, 16 Jul 2020 17:24:16 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, paulmck <paulmck@kernel.org>,
+        Anton Blanchard <anton@ozlabs.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [patch V3 08/13] x86/entry: Use generic syscall entry function
-Message-ID: <202007161359.AB211685@keescook>
-References: <20200716182208.180916541@linutronix.de>
- <20200716185424.765294277@linutronix.de>
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
+Message-ID: <20200716212416.GA1126458@rowland.harvard.edu>
+References: <20200710015646.2020871-1-npiggin@gmail.com>
+ <1594613902.1wzayj0p15.astroid@bobo.none>
+ <1594647408.wmrazhwjzb.astroid@bobo.none>
+ <284592761.9860.1594649601492.JavaMail.zimbra@efficios.com>
+ <1594868476.6k5kvx8684.astroid@bobo.none>
+ <1594873644.viept6os6j.astroid@bobo.none>
+ <1494299304.15894.1594914382695.JavaMail.zimbra@efficios.com>
+ <1370747990.15974.1594915396143.JavaMail.zimbra@efficios.com>
+ <595582123.17106.1594925921537.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200716185424.765294277@linutronix.de>
+In-Reply-To: <595582123.17106.1594925921537.JavaMail.zimbra@efficios.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 08:22:16PM +0200, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On Thu, Jul 16, 2020 at 02:58:41PM -0400, Mathieu Desnoyers wrote:
+> ----- On Jul 16, 2020, at 12:03 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 > 
-> Replace the syscall entry work handling with the generic version. Provide
-> the necessary helper inlines to handle the real architecture specific
-> parts, e.g. audit and seccomp invocations.
+> > ----- On Jul 16, 2020, at 11:46 AM, Mathieu Desnoyers
+> > mathieu.desnoyers@efficios.com wrote:
+> > 
+> >> ----- On Jul 16, 2020, at 12:42 AM, Nicholas Piggin npiggin@gmail.com wrote:
+> >>> I should be more complete here, especially since I was complaining
+> >>> about unclear barrier comment :)
+> >>> 
+> >>> 
+> >>> CPU0                     CPU1
+> >>> a. user stuff            1. user stuff
+> >>> b. membarrier()          2. enter kernel
+> >>> c. smp_mb()              3. smp_mb__after_spinlock(); // in __schedule
+> >>> d. read rq->curr         4. rq->curr switched to kthread
+> >>> e. is kthread, skip IPI  5. switch_to kthread
+> >>> f. return to user        6. rq->curr switched to user thread
+> >>> g. user stuff            7. switch_to user thread
+> >>>                         8. exit kernel
+> >>>                         9. more user stuff
+> >>> 
+> >>> What you're really ordering is a, g vs 1, 9 right?
+> >>> 
+> >>> In other words, 9 must see a if it sees g, g must see 1 if it saw 9,
+> >>> etc.
+> >>> 
+> >>> Userspace does not care where the barriers are exactly or what kernel
+> >>> memory accesses might be being ordered by them, so long as there is a
+> >>> mb somewhere between a and g, and 1 and 9. Right?
+> >> 
+> >> This is correct.
+> > 
+> > Actually, sorry, the above is not quite right. It's been a while
+> > since I looked into the details of membarrier.
+> > 
+> > The smp_mb() at the beginning of membarrier() needs to be paired with a
+> > smp_mb() _after_ rq->curr is switched back to the user thread, so the
+> > memory barrier is between store to rq->curr and following user-space
+> > accesses.
+> > 
+> > The smp_mb() at the end of membarrier() needs to be paired with the
+> > smp_mb__after_spinlock() at the beginning of schedule, which is
+> > between accesses to userspace memory and switching rq->curr to kthread.
+> > 
+> > As to *why* this ordering is needed, I'd have to dig through additional
+> > scenarios from https://lwn.net/Articles/573436/. Or maybe Paul remembers ?
 > 
-> Use a temporary define for idtentry_enter_user which will be cleaned up
-> seperately.
+> Thinking further about this, I'm beginning to consider that maybe we have been
+> overly cautious by requiring memory barriers before and after store to rq->curr.
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> [...]
-> --- /dev/null
-> +++ b/arch/x86/include/asm/entry-common.h
-> @@ -0,0 +1,86 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef _ASM_X86_ENTRY_COMMON_H
-> +#define _ASM_X86_ENTRY_COMMON_H
-> +
-> +#include <linux/seccomp.h>
-> +#include <linux/audit.h>
-> +
-> +/* Check that the stack and regs on entry from user mode are sane. */
-> +static __always_inline void arch_check_user_regs(struct pt_regs *regs)
-> +{
-> +	if (IS_ENABLED(CONFIG_DEBUG_ENTRY)) {
-> +		/*
-> +		 * Make sure that the entry code gave us a sensible EFLAGS
-> +		 * register.  Native because we want to check the actual CPU
-> +		 * state, not the interrupt state as imagined by Xen.
-> +		 */
-> +		unsigned long flags = native_save_fl();
-> +		WARN_ON_ONCE(flags & (X86_EFLAGS_AC | X86_EFLAGS_DF |
-> +				      X86_EFLAGS_NT));
-> +
-> +		/* We think we came from user mode. Make sure pt_regs agrees. */
-> +		WARN_ON_ONCE(!user_mode(regs));
-> +
-> +		/*
-> +		 * All entries from user mode (except #DF) should be on the
-> +		 * normal thread stack and should have user pt_regs in the
-> +		 * correct location.
-> +		 */
-> +		WARN_ON_ONCE(!on_thread_stack());
-> +		WARN_ON_ONCE(regs != task_pt_regs(current));
-> +	}
-> +}
-> +#define arch_check_user_regs arch_check_user_regs
+> If CPU0 observes a CPU1's rq->curr->mm which differs from its own process (current)
+> while running the membarrier system call, it necessarily means that CPU1 had
+> to issue smp_mb__after_spinlock when entering the scheduler, between any user-space
+> loads/stores and update of rq->curr.
+> 
+> Requiring a memory barrier between update of rq->curr (back to current process's
+> thread) and following user-space memory accesses does not seem to guarantee
+> anything more than what the initial barrier at the beginning of __schedule already
+> provides, because the guarantees are only about accesses to user-space memory.
+> 
+> Therefore, with the memory barrier at the beginning of __schedule, just observing that
+> CPU1's rq->curr differs from current should guarantee that a memory barrier was issued
+> between any sequentially consistent instructions belonging to the current process on
+> CPU1.
+> 
+> Or am I missing/misremembering an important point here ?
 
-Will architectures implement subsets of these functions? (i.e. instead
-of each of the defines, is CONFIG_ENTRY_GENERIC sufficient for the
-no-op inlines?)
+Is it correct to say that the switch_to operations in 5 and 7 include 
+memory barriers?  If they do, then skipping the IPI should be okay.
 
-> +
-> +static inline long arch_syscall_enter_seccomp(struct pt_regs *regs)
-> +{
-> +#ifdef CONFIG_SECCOMP
-> +	u32 arch = in_ia32_syscall() ? AUDIT_ARCH_I386 : AUDIT_ARCH_X86_64;
-> +	struct seccomp_data sd;
-> +
-> +	sd.arch = arch;
-> +	sd.nr = regs->orig_ax;
-> +	sd.instruction_pointer = regs->ip;
-> +
-> +#ifdef CONFIG_X86_64
-> +	if (arch == AUDIT_ARCH_X86_64) {
-> +		sd.args[0] = regs->di;
-> +		sd.args[1] = regs->si;
-> +		sd.args[2] = regs->dx;
-> +		sd.args[3] = regs->r10;
-> +		sd.args[4] = regs->r8;
-> +		sd.args[5] = regs->r9;
-> +	} else
-> +#endif
-> +	{
-> +		sd.args[0] = regs->bx;
-> +		sd.args[1] = regs->cx;
-> +		sd.args[2] = regs->dx;
-> +		sd.args[3] = regs->si;
-> +		sd.args[4] = regs->di;
-> +		sd.args[5] = regs->bp;
-> +	}
-> +
-> +	return __secure_computing(&sd);
-> +#else
-> +	return 0;
-> +#endif
-> +}
-> +#define arch_syscall_enter_seccomp arch_syscall_enter_seccomp
+The reason is as follows: The guarantee you need to enforce is that 
+anything written by CPU0 before the membarrier() will be visible to CPU1 
+after it returns to user mode.  Let's say that a writes to X and 9 
+reads from X.
 
-Actually, I've been meaning to clean this up. It's not needed at all.
-This was left over from the seccomp fast-path code that got ripped out a
-while ago. seccomp already has everything it needs to do this work, so
-just:
+Then we have an instance of the Store Buffer pattern:
 
-	__secure_computing(NULL);
+	CPU0			CPU1
+	a. Write X		6. Write rq->curr for user thread
+	c. smp_mb()		7. switch_to memory barrier
+	d. Read rq->curr	9. Read X
 
-is sufficient for every architecture that supports seccomp. (See kernel/seccomp.c
-populate_seccomp_data().)
+In this pattern, the memory barriers make it impossible for both reads 
+to miss their corresponding writes.  Since d does fail to read 6 (it 
+sees the earlier value stored by 4), 9 must read a.
 
-And if you want more generalization work, note that the secure_computing()
-macro performs a TIF test before calling __secure_computing(NULL). But
-my point is, I think arch_syscall_enter_seccomp() is not needed.
+The other guarantee you need is that g on CPU0 will observe anything 
+written by CPU1 in 1.  This is easier to see, using the fact that 3 is a 
+memory barrier and d reads from 4.
 
-> +static inline void arch_syscall_enter_audit(struct pt_regs *regs)
-> +{
-> +#ifdef CONFIG_X86_64
-> +	if (in_ia32_syscall()) {
-> +		audit_syscall_entry(regs->orig_ax, regs->di,
-> +				    regs->si, regs->dx, regs->r10);
-> +	} else
-> +#endif
-> +	{
-> +		audit_syscall_entry(regs->orig_ax, regs->bx,
-> +				    regs->cx, regs->dx, regs->si);
-> +	}
-> +}
-> +#define arch_syscall_enter_audit arch_syscall_enter_audit
-
-Similarly, I think these can be redefined in the generic case
-using the existing accessors for syscall arguments, etc. e.g.
-arch_syscall_enter_audit() is not needed for any architecture, and the
-generic is:
-
-	unsigned long args[6];
-
-        syscall_get_arguments(task, regs, args);
-	audit_syscall_entry(syscall_get_nr(current, regs),
-			    args[0], args[1], args[2], args[3]);
-
-
-
--- 
-Kees Cook
+Alan Stern
