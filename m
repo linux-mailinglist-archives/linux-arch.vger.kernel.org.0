@@ -2,149 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7410A222C3E
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E021A222BF1
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729776AbgGPTvG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 15:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729727AbgGPTvA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:51:00 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE37C08C5CE;
-        Thu, 16 Jul 2020 12:50:59 -0700 (PDT)
-Message-Id: <20200716185425.307587523@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1594929058;
+        id S1729632AbgGPTa7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 15:30:59 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:29128 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729609AbgGPTa7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:30:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594927858;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=9xkAs7jG5EBlpBrFKUyEy4hqz+L6GrXswNue6258hSg=;
-        b=D7FuUAYthunwvlhxyDHFNWxdUIk+TTqXfqddyjMDbxw+FGiYiviomWcOF9jyUZdTqCv1FH
-        KNVuVw8VQXyoSW4+y3Y8SgzpeEM7se6uVodXFIJkKQXt7dym+na+BClavT4KmTd4ZsBENT
-        1CsN51U85hqJQ85ylh+y+BlMgjwwD57D3i9gjkQVCttMNWqgm+FL/EghUSXqbIXroSKT47
-        Z1Efk495z2Y56LloFcnWl8VOPL6O+qljnxzk9R62zoeQCCb6fALbUyQRB5eO4pBLVCr11x
-        c2vfDn/IKyUWf2FBPv7m/I+10+NFyFr2c2hpQDZ28LK0Zi3q1Orlog9PB2GgXQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1594929058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=9xkAs7jG5EBlpBrFKUyEy4hqz+L6GrXswNue6258hSg=;
-        b=/vm5ygBP046ZbGw4YdWZBN+fbSUqdCpS9v7s3dN4aTrESeC/JaK2E/UCk4ht37doKd7DBC
-        SsjBKMh/ITvg4wDg==
-Date:   Thu, 16 Jul 2020 20:22:21 +0200
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: [patch V3 13/13] x86/kvm: Use generic exit to guest work function
-References: <20200716182208.180916541@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-transfer-encoding: 8-bit
+         to:to:cc:cc; bh=NhQ2ROHSxC2oK8u3E25aErfE2eiG8dl+nWxZQxJ4JJw=;
+        b=FtOhGhpIyGRuvrP84S7IrBICXb1+QAThMmitCboJX/F/aC4hjhfSgNJK88REXeNBaVL8yN
+        OE+JS9ZpthBKv8iug6MbtLY6vyI9C3ciDsKCdy+Dmeka6Ipg51eFme35v5kjd3Pt2TtV4d
+        WOsVyFEVunZ5eaRH5MjgxcXOe46Xay0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-370-ESBw1fneMi2Pcp_zkTEpzw-1; Thu, 16 Jul 2020 15:30:54 -0400
+X-MC-Unique: ESBw1fneMi2Pcp_zkTEpzw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0AE21800400;
+        Thu, 16 Jul 2020 19:30:51 +0000 (UTC)
+Received: from llong.com (ovpn-119-61.rdu2.redhat.com [10.10.119.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C009874F70;
+        Thu, 16 Jul 2020 19:30:46 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/5] x86, locking/qspinlock: Allow lock to store lock holder cpu number
+Date:   Thu, 16 Jul 2020 15:29:22 -0400
+Message-Id: <20200716192927.12944-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use the generic infrastructure to check for and handle pending work before
-entering into guest mode.
+This patchset modifies the x86 qspinlock and qrwlock code to allow it to
+store the lock holder cpu number (lock writer cpu number for qrwlock)
+in the lock itself if feasible.  This lock holder cpu information is 
+useful for debugging and crash dump analysis. It may also be useful to
+architectures like PowerPC that needs the lock holder cpu number for
+better paravirtual spinlock performance.
 
-This now handles TIF_NOTIFY_RESUME as well which was ignored so
-far. Handling it is important as this covers task work and task work will
-be used to offload the heavy lifting of POSIX CPU timers to thread context.
+This capability is enabled on a per-architecture basis by defining
+the macros __cpu_number_sadd1 (for qrwlock) and __cpu_number_sadd2
+(for qspinlock). These macros define the architecture's way to get
+to a percpu saturated +1 and +2 cpu number that can be used in the
+lock byte of qspinlock and qrwlock.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
----
- arch/x86/kvm/Kconfig   |    1 +
- arch/x86/kvm/vmx/vmx.c |   11 +++++------
- arch/x86/kvm/x86.c     |   15 ++++++---------
- 3 files changed, 12 insertions(+), 15 deletions(-)
+This patchset enables it for the x86 architecture only. Additional
+patches can be submitted later on to enable other architectures,
+if desired.
 
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -42,6 +42,7 @@ config KVM
- 	select HAVE_KVM_MSI
- 	select HAVE_KVM_CPU_RELAX_INTERCEPT
- 	select HAVE_KVM_NO_POLL
-+	select KVM_EXIT_TO_GUEST_WORK
- 	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
- 	select KVM_VFIO
- 	select SRCU
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -27,6 +27,7 @@
- #include <linux/slab.h>
- #include <linux/tboot.h>
- #include <linux/trace_events.h>
-+#include <linux/entry-kvm.h>
- 
- #include <asm/apic.h>
- #include <asm/asm.h>
-@@ -5376,14 +5377,12 @@ static int handle_invalid_guest_state(st
- 		}
- 
- 		/*
--		 * Note, return 1 and not 0, vcpu_run() is responsible for
--		 * morphing the pending signal into the proper return code.
-+		 * Note, return 1 and not 0, vcpu_run() will invoke
-+		 * exit_to_guest_mode() which will create a proper return
-+		 * code.
- 		 */
--		if (signal_pending(current))
-+		if (__exit_to_guest_mode_work_pending())
- 			return 1;
--
--		if (need_resched())
--			schedule();
- 	}
- 
- 	return 1;
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -56,6 +56,7 @@
- #include <linux/sched/stat.h>
- #include <linux/sched/isolation.h>
- #include <linux/mem_encrypt.h>
-+#include <linux/entry-kvm.h>
- 
- #include <trace/events/kvm.h>
- 
-@@ -1585,7 +1586,7 @@ EXPORT_SYMBOL_GPL(kvm_emulate_wrmsr);
- bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu)
- {
- 	return vcpu->mode == EXITING_GUEST_MODE || kvm_request_pending(vcpu) ||
--		need_resched() || signal_pending(current);
-+		exit_to_guest_mode_work_pending();
- }
- EXPORT_SYMBOL_GPL(kvm_vcpu_exit_request);
- 
-@@ -8676,15 +8677,11 @@ static int vcpu_run(struct kvm_vcpu *vcp
- 			break;
- 		}
- 
--		if (signal_pending(current)) {
--			r = -EINTR;
--			vcpu->run->exit_reason = KVM_EXIT_INTR;
--			++vcpu->stat.signal_exits;
--			break;
--		}
--		if (need_resched()) {
-+		if (exit_to_guest_mode_work_pending()) {
- 			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
--			cond_resched();
-+			r = exit_to_guest_mode(vcpu);
-+			if (r)
-+				return r;
- 			vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
- 		}
- 	}
+I have run some locking microbenchmark with and without this patch. I
+saw about 1% peformance degradation at low lock contention level, but
+about 1% performance gain at high lock contention level. That slight
+performance may be caused by a slight difference in the generated code
+and may not be entirely due to the access of the percpu variable. Anyway,
+that performance difference should be negligible for most real workloads.
+
+Waiman Long (5):
+  x86/smp: Add saturated +1/+2 1-byte cpu numbers
+  locking/pvqspinlock: Make pvqsinlock code easier to read
+  locking/qspinlock: Pass lock value as function argument
+  locking/qspinlock: Make qspinhlock store lock holder cpu number
+  locking/qrwlock: Make qrwlock store writer cpu number
+
+ arch/x86/include/asm/qspinlock_paravirt.h | 42 +++++++++++------------
+ arch/x86/include/asm/spinlock.h           |  5 +++
+ arch/x86/kernel/setup_percpu.c            | 11 ++++++
+ include/asm-generic/qrwlock.h             | 12 ++++++-
+ include/asm-generic/qspinlock.h           | 10 ++++++
+ include/asm-generic/qspinlock_types.h     |  2 +-
+ kernel/locking/qrwlock.c                  | 11 +++---
+ kernel/locking/qspinlock.c                | 31 ++++++++---------
+ kernel/locking/qspinlock_paravirt.h       | 35 ++++++++++---------
+ 9 files changed, 97 insertions(+), 62 deletions(-)
+
+-- 
+2.18.1
 
