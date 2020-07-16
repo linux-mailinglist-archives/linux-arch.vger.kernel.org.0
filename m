@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6FF2219DB
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 04:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40390221A27
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 04:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgGPC1I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jul 2020 22:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S1727851AbgGPCfU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jul 2020 22:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726479AbgGPC1I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jul 2020 22:27:08 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBF0C061755;
-        Wed, 15 Jul 2020 19:27:07 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j4so5199384wrp.10;
-        Wed, 15 Jul 2020 19:27:07 -0700 (PDT)
+        with ESMTP id S1726479AbgGPCfU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jul 2020 22:35:20 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30675C061755;
+        Wed, 15 Jul 2020 19:35:20 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id o11so5231781wrv.9;
+        Wed, 15 Jul 2020 19:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=04uHn/CL7pyDvOHTAcht7iY7evRRiAgOiMIVel5xtkk=;
-        b=N7NSh/ZnIW59iFvKpadE4to2XYXD0lW8+rmmz2hxj49n80h1+5qGV+WGBgstCePJB2
-         Ala7SN70AbDeqv6A7wM52AfGxizEgFKBgl7/5362D3K+26JM99KaLL9T/DOzwp0dTCGq
-         aboVNbeOMlbLglLqauca4ya+mIxDaP7CxgiMLUFTPPqGpPSOZ2BL6wKi85C0gBjFv8jL
-         6a8xmKUr2YfwFVCPmttiUXPhlKIGk7O2S+DX6naFzXOHL90x1QFOfeYuj/Ha3vFq5PQC
-         8etFaFksfyIyUQeeC4Hg/WswjjSc9euzuKROH9oLxunLwg5IJG/n1W7/+WscQ+B1cvoK
-         P9Ng==
+        bh=zXeIy2ePTaW1WcCtqXXzYiM+52x43mwukDkyOFdBArE=;
+        b=uNLf3n0D7Qu4h1hbLPUuunRiVCBX2Lyi8LRRfrkUyw/6bxvl47ZrFT7AC0G7UdacXX
+         c6+QrsjNTwoOq37N5uFU3QbbBZ5cRutFyI9ZXl2FVTjma5MpfbtwJA9JB75KD3mnpInx
+         HcZiDM+TqoKevx4n6G0jFXwA3RYHSIbITjePdij1I8rqNjv3lGDhPeQb/4sr19zZ1D43
+         xEuD1M/m9160XiL7U4s0w5QSSil+NxJItFWA0LUt+cI91b3UmLubjqFi5eRUOzZBUeW4
+         2ReYm7yv5QnD3OD5iJ+QI454gI1nvkIo/ThBY1fJjyr0XfrD+eFc/s0fgm1bT2X+ofsi
+         btdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=04uHn/CL7pyDvOHTAcht7iY7evRRiAgOiMIVel5xtkk=;
-        b=uRylAf97B21HtWF41I7aq167E4cYi8REAUZstN4GzcrDPkSovVrpg16a8/xTDsUavH
-         7vHOUqb/pytG86XleJwEcXemVCrR9qEB82YqEvkBvjY4/McpSvP5DtfeBFM0aGFs/oEy
-         dR+1c5t7rvkzGYJHMItEp9z+724m4CchVy1o2VFM07LtBitMxOjFjbHcUm//jDbRhcb5
-         GQytAu0sWAcZJ7n763lJN5U73OyKRNZx3BxMzzsgtvdPitxnzJOk7pB9Uvx6NiBa2Dwu
-         iIGVuK7Fjtyb+tL/L8GhdieourpW0BGlTzYTWlTBNOSaIATf3BBtxASXzBtxxuBOyGb0
-         KzMQ==
-X-Gm-Message-State: AOAM533jLogO49dOhZikvg6m+QFKEABE5TXsNiU3NBKxgGp2iroTbF7u
-        FskPDrY2FRxL2KCN+p7LEfc=
-X-Google-Smtp-Source: ABdhPJweqAS/z8czeSNIY8AyXtowHcjFsy6DuNN3ZzLZ9nFQDTCR+fJAIxMgdGQwRsde5Dq07FdbRg==
-X-Received: by 2002:adf:ff90:: with SMTP id j16mr2542331wrr.364.1594866426470;
-        Wed, 15 Jul 2020 19:27:06 -0700 (PDT)
+        bh=zXeIy2ePTaW1WcCtqXXzYiM+52x43mwukDkyOFdBArE=;
+        b=oQFy8MywTeTNIbNoooD6yV0SUzKOrkMjVi6XUO2U8GugG97xC2N9tAd4KF9tcTCngv
+         8i31ZIdlFAZSpsfSpaaCylafdFEjKmBZefk/6FfzYCv2EptqPutW7Q4j0WAcZZzB0WHc
+         Yo8BuGU/tykA1L+txFutcd40QPSVLH810iDnqEuYTmTG7bSJjk1JULZvOV/GI4hL4oWi
+         kUpvMdqWGnTtMyCLWF7AU8ZAg6mOxmDyILfZe0Xr6OZ1GzfjDbgWDZUL0slIw4jTuCT2
+         BEUTmLOj5xquzx7gh79BSIfH+sU+o1syNrZ2YStIKyP23WKJW+RW38o+Y/jm10e668vc
+         pgkg==
+X-Gm-Message-State: AOAM533Cp4182F/4S8vW0EM6uq1rBU4V+aj8cfNQRl+h6HIgHOax5tl6
+        2iAuQEGqoniavT+c/N8HcPk=
+X-Google-Smtp-Source: ABdhPJyExXtlVi+Zc+5Zqws9ZmSeFfANLu2ZDScXx6Mtc2Gkhtt4LsfwhHFZsu0tuLx0owk7AOkMTg==
+X-Received: by 2002:adf:e80d:: with SMTP id o13mr2571048wrm.112.1594866918928;
+        Wed, 15 Jul 2020 19:35:18 -0700 (PDT)
 Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id j145sm6361889wmj.7.2020.07.15.19.27.04
+        by smtp.gmail.com with ESMTPSA id g13sm6584482wro.84.2020.07.15.19.35.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 19:27:05 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 12:26:59 +1000
+        Wed, 15 Jul 2020 19:35:18 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 12:35:12 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
 Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy
  tlb option
@@ -64,7 +64,7 @@ References: <1594708054.04iuyxuyb5.astroid@bobo.none>
         <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
 In-Reply-To: <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
 MIME-Version: 1.0
-Message-Id: <1594866023.tjwr7nhhg2.astroid@bobo.none>
+Message-Id: <1594866490.ultl891sgk.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
@@ -188,13 +188,17 @@ he line :)
 >=20
 > Can your share your benchmark?
 
-It's just context_switch1_threads from will-it-scale, running with 1/2
-the number of CPUs, and core affinity with an SMT processor (so each
-thread from the switching pairs gets spread to their own CPU and so you
-get the task->idle->task switching.
+Just testing the IPI rates (on a smaller 176 CPU system), on a
+kernel compile, it causes about 300 shootdown interrupts (not
+300 broadcasts but total interrupts).
 
-It's really just about the worst case, so I wouldn't say it's something
-to panic about.
+And very short lived fork;exec;exit things like typical scripting
+commands doesn't typically generate any.
+
+So yeah the really high exit rate things self-limit pretty well.
+
+I documented the concern and added a few of the possible ways to
+further reduce IPIs in the comments though.
 
 Thanks,
 Nick
