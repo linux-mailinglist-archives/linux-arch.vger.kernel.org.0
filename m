@@ -2,35 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96738222BF7
+	by mail.lfdr.de (Postfix) with ESMTP id 2A760222BF6
 	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729100AbgGPTbP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1729666AbgGPTbP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Thu, 16 Jul 2020 15:31:15 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:56399 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729675AbgGPTbI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:31:08 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45960 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729673AbgGPTbH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 16 Jul 2020 15:31:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594927866;
+        s=mimecast20190719; t=1594927865;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=4G03ao0IqhS+yawog6tsoUqq/BT2hKG9U4PF9Ly9ods=;
-        b=TgAphQuya6Ei/EukxyPFedoT71XCJNK2gcovzuBAy/dJ3w3lAV4QjTJ5FILJ61SWtauo83
-        /7FgoTrSHhnfBlGp91U21+7rYQLcfE5P5HoPUnyNCrxw+77xxtyqeuL+qXfRgM1VKjJuk2
-        nA21wYwYgYB5jYOCSFcPxQ3iDfezm0s=
+        bh=cMumL/AjGqSxXARJ8N6jIpB3gmviuYImvYtraTxOE6E=;
+        b=Sj175QE/N34Q5vz0g9yf5tqYieThAlVlKEYhlNt07+bECIRoyk972eTACeaQTal2BJtP9S
+        SKV7iYLIBMVn0Xw391ZgLJ3z2i1YRHHd6J4rtJMpC+kk1BOWS3Fo5re4JNdh3H162uMpoE
+        apDRIfA1w5B7fTPhi35Sqaf1wKnr8uE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-371-5c7_pQlqNqi8Me3SVB25hw-1; Thu, 16 Jul 2020 15:30:56 -0400
-X-MC-Unique: 5c7_pQlqNqi8Me3SVB25hw-1
+ us-mta-150-m53Cxvd0M6SrxWlVGLPcbQ-1; Thu, 16 Jul 2020 15:30:59 -0400
+X-MC-Unique: m53Cxvd0M6SrxWlVGLPcbQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C94C91940920;
-        Thu, 16 Jul 2020 19:30:54 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32EC51940923;
+        Thu, 16 Jul 2020 19:30:58 +0000 (UTC)
 Received: from llong.com (ovpn-119-61.rdu2.redhat.com [10.10.119.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9DBA74F70;
-        Thu, 16 Jul 2020 19:30:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EBA7F7B40B;
+        Thu, 16 Jul 2020 19:30:54 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -41,9 +42,9 @@ Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 3/5] locking/qspinlock: Pass lock value as function argument
-Date:   Thu, 16 Jul 2020 15:29:25 -0400
-Message-Id: <20200716192927.12944-4-longman@redhat.com>
+Subject: [PATCH v2 4/5] locking/qspinlock: Make qspinhlock store lock holder cpu number
+Date:   Thu, 16 Jul 2020 15:29:26 -0400
+Message-Id: <20200716192927.12944-5-longman@redhat.com>
 In-Reply-To: <20200716192927.12944-1-longman@redhat.com>
 References: <20200716192927.12944-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
@@ -52,193 +53,155 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Update the various internal qspinlock functions to pass in the lock
-value to be used as a function argument instead of hardcoding it to
-_Q_LOCKED_VAL. There is no functional change.
+Make the qspinlock code to store an encoded cpu number (+2 saturated)
+into the locked byte. The lock value of 1 is used by PV qspinlock to
+signal that the PV unlock slowpath has to be called.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/locking/qspinlock.c          | 19 ++++++++++---------
- kernel/locking/qspinlock_paravirt.h | 24 +++++++++++++-----------
- 2 files changed, 23 insertions(+), 20 deletions(-)
+ arch/x86/include/asm/qspinlock_paravirt.h | 42 +++++++++++------------
+ include/asm-generic/qspinlock.h           | 10 ++++++
+ include/asm-generic/qspinlock_types.h     |  2 +-
+ kernel/locking/qspinlock_paravirt.h       |  7 ++--
+ 4 files changed, 36 insertions(+), 25 deletions(-)
 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index b256e2d03817..527601eab7bf 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -158,9 +158,9 @@ static __always_inline void clear_pending(struct qspinlock *lock)
-  *
-  * Lock stealing is not allowed if this function is used.
-  */
--static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
-+static __always_inline void clear_pending_set_locked(struct qspinlock *lock, const u8 lockval)
- {
--	WRITE_ONCE(lock->locked_pending, _Q_LOCKED_VAL);
-+	WRITE_ONCE(lock->locked_pending, lockval);
- }
+diff --git a/arch/x86/include/asm/qspinlock_paravirt.h b/arch/x86/include/asm/qspinlock_paravirt.h
+index 159622ee0674..82128803569c 100644
+--- a/arch/x86/include/asm/qspinlock_paravirt.h
++++ b/arch/x86/include/asm/qspinlock_paravirt.h
+@@ -12,7 +12,6 @@
+ 
+ PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
+ #define __pv_queued_spin_unlock	__pv_queued_spin_unlock
+-#define PV_UNLOCK		"__raw_callee_save___pv_queued_spin_unlock"
+ #define PV_UNLOCK_SLOWPATH	"__raw_callee_save___pv_queued_spin_unlock_slowpath"
  
  /*
-@@ -202,9 +202,9 @@ static __always_inline void clear_pending(struct qspinlock *lock)
+@@ -22,43 +21,44 @@ PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
   *
-  * *,1,0 -> *,0,1
-  */
--static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
-+static __always_inline void clear_pending_set_locked(struct qspinlock *lock, const u8 lockval)
- {
--	atomic_add(-_Q_PENDING_VAL + _Q_LOCKED_VAL, &lock->val);
-+	atomic_add(-_Q_PENDING_VAL + lockval, &lock->val);
- }
- 
- /**
-@@ -258,9 +258,9 @@ static __always_inline u32 queued_fetch_set_pending_acquire(struct qspinlock *lo
+  * void __pv_queued_spin_unlock(struct qspinlock *lock)
+  * {
+- *	u8 lockval = cmpxchg(&lock->locked, _Q_LOCKED_VAL, 0);
++ *	const u8 lockval = _Q_LOCKED_VAL;
++ *	u8 locked = cmpxchg(&lock->locked, lockval, 0);
   *
-  * *,*,0 -> *,0,1
+- *	if (likely(lockval == _Q_LOCKED_VAL))
++ *	if (likely(locked == lockval))
+  *		return;
+- *	pv_queued_spin_unlock_slowpath(lock, lockval);
++ *	__pv_queued_spin_unlock_slowpath(lock, locked);
+  * }
+  *
+  * For x86-64,
+  *   rdi = lock              (first argument)
+  *   rsi = lockval           (second argument)
+- *   rdx = internal variable (set to 0)
   */
--static __always_inline void set_locked(struct qspinlock *lock)
-+static __always_inline void set_locked(struct qspinlock *lock, const u8 lockval)
- {
--	WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
-+	WRITE_ONCE(lock->locked, lockval);
- }
- 
- 
-@@ -317,6 +317,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	struct mcs_spinlock *prev, *next, *node;
- 	u32 old, tail;
- 	int idx;
-+	const u8 lockval = _Q_LOCKED_VAL;
- 
- 	BUILD_BUG_ON(CONFIG_NR_CPUS >= (1U << _Q_TAIL_CPU_BITS));
- 
-@@ -386,7 +387,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	 *
- 	 * 0,1,0 -> 0,0,1
- 	 */
--	clear_pending_set_locked(lock);
-+	clear_pending_set_locked(lock, lockval);
- 	lockevent_inc(lock_pending);
- 	return;
- 
-@@ -529,7 +530,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	 *       PENDING will make the uncontended transition fail.
- 	 */
- 	if ((val & _Q_TAIL_MASK) == tail) {
--		if (atomic_try_cmpxchg_relaxed(&lock->val, &val, _Q_LOCKED_VAL))
-+		if (atomic_try_cmpxchg_relaxed(&lock->val, &val, lockval))
- 			goto release; /* No contention */
- 	}
- 
-@@ -538,7 +539,7 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	 * which will then detect the remaining tail and queue behind us
- 	 * ensuring we'll see a @next.
- 	 */
--	set_locked(lock);
-+	set_locked(lock, lockval);
- 
- 	/*
- 	 * contended path; wait for next if not observed yet, release.
-diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
-index 17878e531f51..c8558876fc69 100644
---- a/kernel/locking/qspinlock_paravirt.h
-+++ b/kernel/locking/qspinlock_paravirt.h
-@@ -80,6 +80,8 @@ struct pv_node {
- #define queued_spin_trylock(l)	pv_hybrid_queued_unfair_trylock(l)
- static inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock)
- {
+-asm    (".pushsection .text;"
+-	".globl " PV_UNLOCK ";"
+-	".type " PV_UNLOCK ", @function;"
+-	".align 4,0x90;"
+-	PV_UNLOCK ": "
+-	FRAME_BEGIN
++__visible void notrace
++__raw_callee_save___pv_queued_spin_unlock(struct qspinlock *lock)
++{
 +	const u8 lockval = _Q_LOCKED_VAL;
 +
- 	/*
- 	 * Stay in unfair lock mode as long as queued mode waiters are
- 	 * present in the MCS wait queue but the pending bit isn't set.
-@@ -88,7 +90,7 @@ static inline bool pv_hybrid_queued_unfair_trylock(struct qspinlock *lock)
- 		int val = atomic_read(&lock->val);
++	asm volatile("or %0,%0" : : "a" (lockval));
++
++	asm volatile(
+ 	"push  %rdx;"
+-	"mov   $0x1,%eax;"
+-	"xor   %edx,%edx;"
+-	LOCK_PREFIX "cmpxchg %dl,(%rdi);"
+-	"cmp   $0x1,%al;"
++	"push  %rcx;"
++	"xor   %ecx,%ecx;"
++	"mov   %eax,%edx;"
++	LOCK_PREFIX "cmpxchg %cl,(%rdi);"
++	"pop   %rcx;"
++	"cmp   %dl,%al;"
+ 	"jne   .slowpath;"
+ 	"pop   %rdx;"
+ 	FRAME_END
+ 	"ret;"
+ 	".slowpath: "
++	"pop    %rdx;"
+ 	"push   %rsi;"
+ 	"movzbl %al,%esi;"
+ 	"call " PV_UNLOCK_SLOWPATH ";"
+-	"pop    %rsi;"
+-	"pop    %rdx;"
+-	FRAME_END
+-	"ret;"
+-	".size " PV_UNLOCK ", .-" PV_UNLOCK ";"
+-	".popsection");
++	"pop    %rsi;");
++}
  
- 		if (!(val & _Q_LOCKED_PENDING_MASK) &&
--		   (cmpxchg_acquire(&lock->locked, 0, _Q_LOCKED_VAL) == 0)) {
-+		   (cmpxchg_acquire(&lock->locked, 0, lockval) == 0)) {
- 			lockevent_inc(pv_lock_stealing);
- 			return true;
- 		}
-@@ -112,15 +114,15 @@ static __always_inline void set_pending(struct qspinlock *lock)
- }
+ #else /* CONFIG_64BIT */
+ 
+diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
+index fde943d180e0..7003fcc94a43 100644
+--- a/include/asm-generic/qspinlock.h
++++ b/include/asm-generic/qspinlock.h
+@@ -12,6 +12,16 @@
+ 
+ #include <asm-generic/qspinlock_types.h>
+ 
++/*
++ * If __cpu_number_sadd2 (+2 saturated cpu number) is defined, use it as the
++ * lock value. Otherwise, use 0xff instead. The lock value of 1 is reserved
++ * for PV qspinlock.
++ */
++#ifdef __cpu_number_sadd2
++#undef  _Q_LOCKED_VAL
++#define _Q_LOCKED_VAL		__cpu_number_sadd2
++#endif
++
+ /**
+  * queued_spin_is_locked - is the spinlock locked?
+  * @lock: Pointer to queued spinlock structure
+diff --git a/include/asm-generic/qspinlock_types.h b/include/asm-generic/qspinlock_types.h
+index 56d1309d32f8..f8b51bf42122 100644
+--- a/include/asm-generic/qspinlock_types.h
++++ b/include/asm-generic/qspinlock_types.h
+@@ -97,7 +97,7 @@ typedef struct qspinlock {
+ #define _Q_TAIL_OFFSET		_Q_TAIL_IDX_OFFSET
+ #define _Q_TAIL_MASK		(_Q_TAIL_IDX_MASK | _Q_TAIL_CPU_MASK)
+ 
+-#define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
++#define _Q_LOCKED_VAL		(255U << _Q_LOCKED_OFFSET)
+ #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
+ 
+ #endif /* __ASM_GENERIC_QSPINLOCK_TYPES_H */
+diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+index c8558876fc69..ffac1caabd7d 100644
+--- a/kernel/locking/qspinlock_paravirt.h
++++ b/kernel/locking/qspinlock_paravirt.h
+@@ -21,7 +21,7 @@
+  * native_queued_spin_unlock().
+  */
+ 
+-#define _Q_SLOW_VAL	(3U << _Q_LOCKED_OFFSET)
++#define _Q_SLOW_VAL	(1U << _Q_LOCKED_OFFSET)
  
  /*
-- * The pending bit check in pv_queued_spin_steal_lock() isn't a memory
-+ * The pending bit check in pv_hybrid_queued_unfair_trylock() isn't a memory
-  * barrier. Therefore, an atomic cmpxchg_acquire() is used to acquire the
-  * lock just to be sure that it will get it.
-  */
--static __always_inline int trylock_clear_pending(struct qspinlock *lock)
-+static __always_inline int trylock_clear_pending(struct qspinlock *lock, const u8 lockval)
- {
- 	return !READ_ONCE(lock->locked) &&
- 	       (cmpxchg_acquire(&lock->locked_pending, _Q_PENDING_VAL,
--				_Q_LOCKED_VAL) == _Q_PENDING_VAL);
-+				lockval) == _Q_PENDING_VAL);
- }
- #else /* _Q_PENDING_BITS == 8 */
- static __always_inline void set_pending(struct qspinlock *lock)
-@@ -128,7 +130,7 @@ static __always_inline void set_pending(struct qspinlock *lock)
- 	atomic_or(_Q_PENDING_VAL, &lock->val);
- }
- 
--static __always_inline int trylock_clear_pending(struct qspinlock *lock)
-+static __always_inline int trylock_clear_pending(struct qspinlock *lock, const u8 lockval)
- {
- 	int val = atomic_read(&lock->val);
- 
-@@ -142,7 +144,7 @@ static __always_inline int trylock_clear_pending(struct qspinlock *lock)
- 		 * Try to clear pending bit & set locked bit
- 		 */
- 		old = val;
--		new = (val & ~_Q_PENDING_MASK) | _Q_LOCKED_VAL;
-+		new = (val & ~_Q_PENDING_MASK) | lockval;
- 		val = atomic_cmpxchg_acquire(&lock->val, old, new);
- 
- 		if (val == old)
-@@ -406,6 +408,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
- 	struct qspinlock **lp = NULL;
- 	int waitcnt = 0;
- 	int loop;
-+	const u8 lockval = _Q_LOCKED_VAL;
- 
- 	/*
- 	 * If pv_kick_node() already advanced our state, we don't need to
-@@ -432,7 +435,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
- 		 */
- 		set_pending(lock);
- 		for (loop = SPIN_THRESHOLD; loop; loop--) {
--			if (trylock_clear_pending(lock))
-+			if (trylock_clear_pending(lock, lockval))
- 				goto gotlock;
- 			cpu_relax();
- 		}
-@@ -459,7 +462,7 @@ pv_wait_head_or_lock(struct qspinlock *lock, struct mcs_spinlock *node)
- 				 * Change the lock value back to _Q_LOCKED_VAL
- 				 * and unhash the table.
- 				 */
--				WRITE_ONCE(lock->locked, _Q_LOCKED_VAL);
-+				WRITE_ONCE(lock->locked, lockval);
- 				WRITE_ONCE(*lp, NULL);
- 				goto gotlock;
- 			}
-@@ -544,14 +547,13 @@ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
- #ifndef __pv_queued_spin_unlock
- __visible void __pv_queued_spin_unlock(struct qspinlock *lock)
- {
--	u8 locked;
--
- 	/*
- 	 * We must not unlock if SLOW, because in that case we must first
+  * Queue Node Adaptive Spinning
+@@ -552,9 +552,10 @@ __visible void __pv_queued_spin_unlock(struct qspinlock *lock)
  	 * unhash. Otherwise it would be possible to have multiple @lock
  	 * entries, which would be BAD.
  	 */
--	locked = cmpxchg_release(&lock->locked, _Q_LOCKED_VAL, 0);
-+	u8 locked = cmpxchg_release(&lock->locked, _Q_LOCKED_VAL, 0);
-+
- 	if (likely(locked == _Q_LOCKED_VAL))
+-	u8 locked = cmpxchg_release(&lock->locked, _Q_LOCKED_VAL, 0);
++	const u8 lockval = _Q_LOCKED_VAL;
++	u8 locked = cmpxchg_release(&lock->locked, lockval, 0);
+ 
+-	if (likely(locked == _Q_LOCKED_VAL))
++	if (likely(locked == lockval))
  		return;
  
+ 	__pv_queued_spin_unlock_slowpath(lock, locked);
 -- 
 2.18.1
 
