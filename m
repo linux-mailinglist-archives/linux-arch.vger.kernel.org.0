@@ -2,156 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8562F222E36
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 23:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBBC222EE6
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 01:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgGPV4D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 17:56:03 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:36182 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726579AbgGPV4C (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 17:56:02 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1594936560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bsyDj+dTue2WIP0pk5zGUno9OU1LywpIXSAi/vYPoQs=;
-        b=0bVNdp0B/UaxWgy72YFKyLzQWdf8CSVx64FHBr83D1ciBRuFI7A71FoDrXfl5k3sL2QxdA
-        O8HpHbYGFRD3puE/L/2afZxpVP0HFM0c2sKxDFinhbAagHNwd7GuBxrvsUULzf5yAcBN03
-        gcDoijt0QYA2T9DXQiY6GMOYLdn91/duWpMYvKapnmsS5SffIRK9PNF3ByiQ8I7gvFHKGg
-        dKkJdLi+8GIOHjNkjypLKkRgEATqfMP+fyLcyZgpWsaSwDxuxhyO8wj2wdurJEV6+UXbhh
-        Vhsvy4Y49jASsQb21QP69Hrr164Ifsyjk1FvdluSho+nGrUDX4bDffZ5y2TxkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1594936560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bsyDj+dTue2WIP0pk5zGUno9OU1LywpIXSAi/vYPoQs=;
-        b=KgVJ09qAZ9uHZF5kMPNjFmsbcKwamC34NQluBD8GHOBcuwsj+txXWXeFm9UVhLJpJH7haY
-        4L92gYWqPCKrh3Cg==
-To:     Kees Cook <keescook@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: Re: [patch V3 01/13] entry: Provide generic syscall entry functionality
-In-Reply-To: <202007161336.B993ED938@keescook>
-References: <20200716182208.180916541@linutronix.de> <20200716185424.011950288@linutronix.de> <202007161336.B993ED938@keescook>
-Date:   Thu, 16 Jul 2020 23:55:59 +0200
-Message-ID: <87d04vt98w.fsf@nanos.tec.linutronix.de>
+        id S1726907AbgGPXTZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 16 Jul 2020 19:19:25 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37712 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726846AbgGPXTV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 16 Jul 2020 19:19:21 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06GN2r0f177405;
+        Thu, 16 Jul 2020 19:18:36 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 329x6077m7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jul 2020 19:18:36 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06GNBBQ8031579;
+        Thu, 16 Jul 2020 23:18:34 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04wdc.us.ibm.com with ESMTP id 327529cf4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Jul 2020 23:18:34 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06GNIYpI53281202
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Jul 2020 23:18:34 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4081DAE060;
+        Thu, 16 Jul 2020 23:18:34 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 996E5AE05C;
+        Thu, 16 Jul 2020 23:18:33 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.65.214.95])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Jul 2020 23:18:33 +0000 (GMT)
+From:   Tulio Magno Quites Machado Filho <tuliom@linux.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-arch@vger.kernel.org, nathanl@linux.ibm.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>, luto@kernel.org,
+        tglx@linutronix.de, vincenzo.frascino@arm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
+In-Reply-To: <20200715204725.Horde.5GZvsEv4ZkdzFHL76HZiFg8@messagerie.si.c-s.fr>
+References: <cover.1588079622.git.christophe.leroy@c-s.fr> <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr> <878sflvbad.fsf@mpe.ellerman.id.au> <20200715204725.Horde.5GZvsEv4ZkdzFHL76HZiFg8@messagerie.si.c-s.fr>
+User-Agent: Notmuch/0.29.1 (http://notmuchmail.org) Emacs/26.3 (x86_64-redhat-linux-gnu)
+Date:   Thu, 16 Jul 2020 20:18:32 -0300
+Message-ID: <87ft9rdp6f.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-16_11:2020-07-16,2020-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007160148
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> On Thu, Jul 16, 2020 at 08:22:09PM +0200, Thomas Gleixner wrote:
->> This code is needlessly duplicated and  different in all
->> architectures.
->> 
->> Provide a generic version based on the x86 implementation which has all the
->> RCU and instrumentation bits right.
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+
+> Michael Ellerman <mpe@ellerman.id.au> a écrit :
 >
-> Ahh! You're reading my mind!
-
-I told you about that plan at the last conference over a beer :)
-
-> I was just thinking about this while reviewing the proposed syscall
-> redirection series[1], and pondering the lack of x86 TIF flags, and
-> that nearly everything in the series (and for seccomp and other
-> things) didn't need to be arch-specific. And now that series
-> absolutely needs to be rebased and it'll magically work for every arch
-> that switches to the generic entry code. :)
-
-That's the plan. 
-
-> Notes below...
+>> Christophe Leroy <christophe.leroy@c-s.fr> writes:
+>>> Prepare for switching VDSO to generic C implementation in following
+>>> patch. Here, we:
+>>> - Modify __get_datapage() to take an offset
+>>> - Prepare the helpers to call the C VDSO functions
+>>> - Prepare the required callbacks for the C VDSO functions
+>>> - Prepare the clocksource.h files to define VDSO_ARCH_CLOCKMODES
+>>> - Add the C trampolines to the generic C VDSO functions
+>>>
+>>> powerpc is a bit special for VDSO as well as system calls in the
+>>> way that it requires setting CR SO bit which cannot be done in C.
+>>> Therefore, entry/exit needs to be performed in ASM.
+>>>
+>>> Implementing __arch_get_vdso_data() would clobber the link register,
+>>> requiring the caller to save it. As the ASM calling function already
+>>> has to set a stack frame and saves the link register before calling
+>>> the C vdso function, retriving the vdso data pointer there is lighter.
+>> ...
+>>
+>>> diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h  
+>>> b/arch/powerpc/include/asm/vdso/gettimeofday.h
+>>> new file mode 100644
+>>> index 000000000000..4452897f9bd8
+>>> --- /dev/null
+>>> +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
+>>> @@ -0,0 +1,175 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+>>> +#define __ASM_VDSO_GETTIMEOFDAY_H
+>>> +
+>>> +#include <asm/ptrace.h>
+>>> +
+>>> +#ifdef __ASSEMBLY__
+>>> +
+>>> +.macro cvdso_call funct
+>>> +  .cfi_startproc
+>>> +	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
+>>> +	mflr		r0
+>>> +  .cfi_register lr, r0
+>>> +	PPC_STL		r0, STACK_FRAME_OVERHEAD + PPC_LR_STKOFF(r1)
+>>
+>> This doesn't work for me on ppc64(le) with glibc.
+>>
+>> glibc doesn't create a stack frame before making the VDSO call, so the
+>> store of r0 (LR) goes into the caller's frame, corrupting the saved LR,
+>> leading to an infinite loop.
 >
-> [1] https://lore.kernel.org/lkml/20200716193141.4068476-2-krisman@collabora.com/
+> Where should it be saved if it can't be saved in the standard location ?
 
-Saw that fly by. *shudder*
+As Michael pointed out, userspace doesn't treat the VDSO as a normal function
+call.  In order to keep compatibility with existent software, LR would need to
+be saved on another stack frame.
 
->> +/*
->> + * Define dummy _TIF work flags if not defined by the architecture or for
->> + * disabled functionality.
->> + */
->
-> When I was thinking about this last week I was pondering having a split
-> between the arch-agnositc TIF flags and the arch-specific TIF flags, and
-> that each arch could have a single "there is agnostic work to be done"
-> TIF in their thread_info, and the agnostic flags could live in
-> task_struct or something. Anyway, I'll keep reading...
-
-That's going to be nasty. We rather go and expand the TIF storage to
-64bit. And then do the following in a generic header:
-
-#ifndef TIF_ARCH_SPECIFIC
-# define TIF_ARCH_SPECIFIC
-#endif
-
-enum tif_bits {
-	TIF_NEED_RESCHED = 0,
-        TIF_...,
-        TIF_LAST_GENERIC,
-        TIF_ARCH_SPECIFIC,
-};
-        
-and in the arch specific one:
-
-#define TIF_ARCH_SPECIFIC	\
-	TIF_ARCH_1,             \
-        TIF_ARCH_2,
-
-or something like that.
-
->> +/**
->> + * syscall_enter_from_user_mode - Check and handle work before invoking
->> + *				 a syscall
->> + * @regs:	Pointer to currents pt_regs
->> + * @syscall:	The syscall number
->> + *
->> + * Invoked from architecture specific syscall entry code with interrupts
->> + * disabled. The calling code has to be non-instrumentable. When the
->> + * function returns all state is correct and the subsequent functions can be
->> + * instrumented.
->> + *
->> + * Returns: The original or a modified syscall number
->> + *
->> + * If the returned syscall number is -1 then the syscall should be
->> + * skipped. In this case the caller may invoke syscall_set_error() or
->> + * syscall_set_return_value() first.  If neither of those are called and -1
->> + * is returned, then the syscall will fail with ENOSYS.
->
-> There's been some recent confusion over "has the syscall changed,
-> or did seccomp request it be skipped?" that was explored in arm64[2]
-> (though I see Will and Keno in CC already). There might need to be a
-> clearer way to distinguish between "wild userspace issued a -1 syscall"
-> and "seccomp or ptrace asked for the syscall to be skipped". The
-> difference is mostly about when ENOSYS gets set, with respect to calls
-> to syscall_set_return_value(), but if the syscall gets changed, the arch
-> may need to recheck the value and consider ENOSYS, etc. IIUC, what Will
-> ended up with[3] was having syscall_trace_enter() return the syscall return
-> value instead of the new syscall.
-
-I was chatting with Will about that yesterday. IIRC he plans to fix the
-immediate issue on arm64 first and then move arm64 over to the generic
-variant. That's the reason why I reshuffled the patch series so the
-generic parts are first which allows me to provide will a branch with
-just those. If there are any changes needed we can just feed them back
-into that branch and fixup the affected architecture trees.
-
-IOW, that should not block progress on this stuff.
-
-Thanks,
-
-        tglx
-
-
-
+-- 
+Tulio Magno
