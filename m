@@ -2,173 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CACBC222B56
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 20:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D973B222B5C
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbgGPS6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 14:58:44 -0400
-Received: from mail.efficios.com ([167.114.26.124]:59594 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbgGPS6n (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 14:58:43 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2493D297CAB;
-        Thu, 16 Jul 2020 14:58:42 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id jho3kzP0Uhx3; Thu, 16 Jul 2020 14:58:41 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B8552297D0D;
-        Thu, 16 Jul 2020 14:58:41 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B8552297D0D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1594925921;
-        bh=4y3OZc0uvqLRNtfhBnb/Pl6FBzMj468Y31eGzsZO15Y=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=YgwfmSUmKI5QGNkVW/ZZ4DkKkDfr6+Hx/88oYF+i0AnoO/Z9FhYpe84gUEYocOQZs
-         9YhXWYkwGT6T1MBDwQSVG52oBQHsCzbEu3te/aG2x3gC6D4Ct4Tg+ZhasUje9+KMDx
-         hU95kX5H6X+56H71ssixg7KPiZhw6SOybRTXFdnfUfURYh5zYw+0WneFlzLtl/t4Tt
-         JN1LzdW1iz+hxNNqnAVpLaaIAAdfyWLN/KTn9tdroxw0L7iCs0t9rq5BBsFGHyBULI
-         j1YpgVOwQwHVBV5Rdk21VIMyt9QZIbAt3Xw3/fbE14m0SXc+CByVsMsZHcPrXKlX/h
-         dYSAnCv5SaUAA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id T-n-DAhdMKvn; Thu, 16 Jul 2020 14:58:41 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A1E69297CA8;
-        Thu, 16 Jul 2020 14:58:41 -0400 (EDT)
-Date:   Thu, 16 Jul 2020 14:58:41 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Nicholas Piggin <npiggin@gmail.com>, paulmck <paulmck@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
-Message-ID: <595582123.17106.1594925921537.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1370747990.15974.1594915396143.JavaMail.zimbra@efficios.com>
-References: <20200710015646.2020871-1-npiggin@gmail.com> <1594613902.1wzayj0p15.astroid@bobo.none> <1594647408.wmrazhwjzb.astroid@bobo.none> <284592761.9860.1594649601492.JavaMail.zimbra@efficios.com> <1594868476.6k5kvx8684.astroid@bobo.none> <1594873644.viept6os6j.astroid@bobo.none> <1494299304.15894.1594914382695.JavaMail.zimbra@efficios.com> <1370747990.15974.1594915396143.JavaMail.zimbra@efficios.com>
-Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
-Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
-Thread-Index: cb6zdS0KPjkbq8hxmgetruE+ExgftXKEdKLPFXA9iBY=
+        id S1729100AbgGPTAD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 15:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726986AbgGPTAD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:00:03 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48420C061755
+        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 12:00:03 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id mn17so5263438pjb.4
+        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 12:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JfJefRWjeb9DH1MrBUsvBscaMgupvBInX+3elN90M+E=;
+        b=KnSzidzo66xdykVg2SLxktyn55MXR0V55tGOU4DaExdIhtIt3GeqanAb1iKPf9R7KE
+         +2piaCrkav87qgcni5NLFfUDAKLxjdaJPx9WQJnAac+UYP6ESjs+6B8huzoSkq4mC2T3
+         VUWb5deEwYeyRTHXqAK/Q+wDPKoivdAzPEnDP7MKYsI3tXH/rNF7N7r2+6M5zLpI5Ukp
+         fnmBHBu9jGkYkc4McRpEiI3ISoIIvnA4QXAd8EFuUQROxCThFFTJaW2nb3DticgpBMGI
+         qUkxoJJzHo097Q195B3t4fK4L83tbp2rQ3/Y5v0+xqURCSyJBlaw35OFl2xfIKTKYpzI
+         W3bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=JfJefRWjeb9DH1MrBUsvBscaMgupvBInX+3elN90M+E=;
+        b=kEkofioth3qxpCPpofT/7K0yGgLVJHIiM4lBiH8fKUWjCRtmehVAd1UnwvN6sPp+gJ
+         4M+6NNwq0NY9iHb3ag14Gi6SGpjNNXfyT/Un+zUJTQ0VXFIVSZ9g8pDdw4h9nQ4bYRYM
+         KRcxLsyt3tqXDVVam1oRmiGgC2s+3L1LDHA44NoQsq5GIrnrpUmdHJIhYBCmpb8k+wgv
+         uBqgfljPhLOhOx6bOcAQZk+Awl+xGC6dtcm4R87NvtaJPGFij2zzvTCPbqm5pPvTZsLr
+         CYqaovoRhiTmloeigx5H8xdWVuOIUdz+hE1l11CBmNRD80CYMHFqoAJuftDUwOAAPW/x
+         AKSg==
+X-Gm-Message-State: AOAM532DXfvjjH90CeMDKD5q5g/EVCX8t0Ngz5aUxYlBlDBxvnjavtY0
+        3RJbqbziGWfS6RFh1WhhIgvBBQ==
+X-Google-Smtp-Source: ABdhPJz6CJzyKeJCf96A5qLRYs4FcPz9lfbS3DVtPeqeYK5pu2QxyfXQvlIhSQOHGR+IIdSxznfGCQ==
+X-Received: by 2002:a17:902:8697:: with SMTP id g23mr4595359plo.94.1594926002609;
+        Thu, 16 Jul 2020 12:00:02 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id u73sm5753263pfc.113.2020.07.16.12.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 12:00:01 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 12:00:01 -0700 (PDT)
+X-Google-Original-Date: Thu, 16 Jul 2020 11:59:58 PDT (-0700)
+Subject:     Re: [PATCH] asm-generic/mmiowb: Allow mmiowb_set_pending() when preemptible()
+In-Reply-To: <20200716112816.7356-1-will@kernel.org>
+CC:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        will@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>, guoren@kernel.org,
+        mpe@ellerman.id.au
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     will@kernel.org
+Message-ID: <mhng-6528b0ae-d92c-41b2-b0fd-3be58c80f280@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Jul 16, 2020, at 12:03 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On Thu, 16 Jul 2020 04:28:16 PDT (-0700), will@kernel.org wrote:
+> Although mmiowb() is concerned only with serialising MMIO writes occuring
+> in contexts where a spinlock is held, the call to mmiowb_set_pending()
+> from the MMIO write accessors can occur in preemptible contexts, such
+> as during driver probe() functions where ordering between CPUs is not
+> usually a concern, assuming that the task migration path provides the
+> necessary ordering guarantees.
+>
+> Unfortunately, the default implementation of mmiowb_set_pending() is not
+> preempt-safe, as it makes use of a a per-cpu variable to track its
+> internal state. This has been reported to generate the following splat
+> on riscv:
+>
+>  | BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
+>  | caller is regmap_mmio_write32le+0x1c/0x46
+>  | CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-hfu+ #1
+>  | Call Trace:
+>  |  walk_stackframe+0x0/0x7a
+>  |  dump_stack+0x6e/0x88
+>  |  regmap_mmio_write32le+0x18/0x46
+>  |  check_preemption_disabled+0xa4/0xaa
+>  |  regmap_mmio_write32le+0x18/0x46
+>  |  regmap_mmio_write+0x26/0x44
+>  |  regmap_write+0x28/0x48
+>  |  sifive_gpio_probe+0xc0/0x1da
+>
+> Although it's possible to fix the driver in this case, other splats have
+> been seen from other drivers, including the infamous 8250 UART, and so
+> it's better to address this problem in the mmiowb core itself.
+>
+> Fix mmiowb_set_pending() by using the raw_cpu_ptr() to get at the mmiowb
+> state and then only updating the 'mmiowb_pending' field if we are not
+> preemptible (i.e. we have a non-zero nesting count).
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Reported-by: Palmer Dabbelt <palmer@dabbelt.com>
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
+>
+> I can queue this in the arm64 tree as a fix, as I already have some other
+> fixes targetting -rc6.
+>
+>  include/asm-generic/mmiowb.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
+> index 9439ff037b2d..5698fca3bf56 100644
+> --- a/include/asm-generic/mmiowb.h
+> +++ b/include/asm-generic/mmiowb.h
+> @@ -27,7 +27,7 @@
+>  #include <asm/smp.h>
+>
+>  DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+> -#define __mmiowb_state()	this_cpu_ptr(&__mmiowb_state)
+> +#define __mmiowb_state()	raw_cpu_ptr(&__mmiowb_state)
+>  #else
+>  #define __mmiowb_state()	arch_mmiowb_state()
+>  #endif	/* arch_mmiowb_state */
+> @@ -35,7 +35,9 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+>  static inline void mmiowb_set_pending(void)
+>  {
+>  	struct mmiowb_state *ms = __mmiowb_state();
+> -	ms->mmiowb_pending = ms->nesting_count;
+> +
+> +	if (likely(ms->nesting_count))
+> +		ms->mmiowb_pending = ms->nesting_count;
+>  }
+>
+>  static inline void mmiowb_spin_lock(void)
 
-> ----- On Jul 16, 2020, at 11:46 AM, Mathieu Desnoyers
-> mathieu.desnoyers@efficios.com wrote:
-> 
->> ----- On Jul 16, 2020, at 12:42 AM, Nicholas Piggin npiggin@gmail.com wrote:
->>> I should be more complete here, especially since I was complaining
->>> about unclear barrier comment :)
->>> 
->>> 
->>> CPU0                     CPU1
->>> a. user stuff            1. user stuff
->>> b. membarrier()          2. enter kernel
->>> c. smp_mb()              3. smp_mb__after_spinlock(); // in __schedule
->>> d. read rq->curr         4. rq->curr switched to kthread
->>> e. is kthread, skip IPI  5. switch_to kthread
->>> f. return to user        6. rq->curr switched to user thread
->>> g. user stuff            7. switch_to user thread
->>>                         8. exit kernel
->>>                         9. more user stuff
->>> 
->>> What you're really ordering is a, g vs 1, 9 right?
->>> 
->>> In other words, 9 must see a if it sees g, g must see 1 if it saw 9,
->>> etc.
->>> 
->>> Userspace does not care where the barriers are exactly or what kernel
->>> memory accesses might be being ordered by them, so long as there is a
->>> mb somewhere between a and g, and 1 and 9. Right?
->> 
->> This is correct.
-> 
-> Actually, sorry, the above is not quite right. It's been a while
-> since I looked into the details of membarrier.
-> 
-> The smp_mb() at the beginning of membarrier() needs to be paired with a
-> smp_mb() _after_ rq->curr is switched back to the user thread, so the
-> memory barrier is between store to rq->curr and following user-space
-> accesses.
-> 
-> The smp_mb() at the end of membarrier() needs to be paired with the
-> smp_mb__after_spinlock() at the beginning of schedule, which is
-> between accesses to userspace memory and switching rq->curr to kthread.
-> 
-> As to *why* this ordering is needed, I'd have to dig through additional
-> scenarios from https://lwn.net/Articles/573436/. Or maybe Paul remembers ?
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
 
-Thinking further about this, I'm beginning to consider that maybe we have been
-overly cautious by requiring memory barriers before and after store to rq->curr.
+The arm64 tree works for me.
 
-If CPU0 observes a CPU1's rq->curr->mm which differs from its own process (current)
-while running the membarrier system call, it necessarily means that CPU1 had
-to issue smp_mb__after_spinlock when entering the scheduler, between any user-space
-loads/stores and update of rq->curr.
-
-Requiring a memory barrier between update of rq->curr (back to current process's
-thread) and following user-space memory accesses does not seem to guarantee
-anything more than what the initial barrier at the beginning of __schedule already
-provides, because the guarantees are only about accesses to user-space memory.
-
-Therefore, with the memory barrier at the beginning of __schedule, just observing that
-CPU1's rq->curr differs from current should guarantee that a memory barrier was issued
-between any sequentially consistent instructions belonging to the current process on
-CPU1.
-
-Or am I missing/misremembering an important point here ?
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> 
->> Note that the accesses to user-space memory can be
->> done either by user-space code or kernel code, it doesn't matter.
->> However, in order to be considered as happening before/after
->> either membarrier or the matching compiler barrier, kernel code
->> needs to have causality relationship with user-space execution,
->> e.g. user-space does a system call, or returns from a system call.
->> 
->> In the case of io_uring, submitting a request or returning from waiting
->> on request completion appear to provide this causality relationship.
->> 
->> Thanks,
->> 
->> Mathieu
->> 
->> 
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks!
