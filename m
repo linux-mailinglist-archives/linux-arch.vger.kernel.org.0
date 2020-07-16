@@ -2,99 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0367022267C
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 17:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21712222716
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 17:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbgGPPHd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 11:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728374AbgGPPHc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 11:07:32 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA83EC061755
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 08:07:31 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s10so7371527wrw.12
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 08:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=k5K4JVLgAWN8MXhgEOCvgA0UlIhXTRBJEiv3tL9R3rg=;
-        b=tH9ktcN12P46E6ApuPGUoyvnzH2E2th2kh40XGNX4k8iM8no7a+s0FV7F+FCDpfTHr
-         Wr5FS6ieqFbOPl8MzqMWYXPUm+PpEeOc2ndZGy4d8i7H43/i0wB0wSclSrebRIPIzR2W
-         DbGSllnO3UA0b0ulfYo24MJN6Z8eqKcDx+6X2OttiaWZB1WpL+FXKLtIIPlfyhdf+Bni
-         a5T06Sobj5n5MR7BpjtmWaV64Y9rRzTkiAyt3jOICkL+B+Za5VQU+vBM+90acYba4CMS
-         KFf5uNn1iwtG/u7+TH0qv7F/eibowIcJ6Aku1oc5q0HS4762yQ2WQRp8v+4z1ASQ16EZ
-         X9Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=k5K4JVLgAWN8MXhgEOCvgA0UlIhXTRBJEiv3tL9R3rg=;
-        b=S5UFPAa2fEQOv7bcuflpawlaTwcTrpGdCHWjlhUVFqvpahEogeoHpYQi6uDOWWLOv8
-         2w3ZrvWJIED0XgSDUr1z+d1xNzz0i0z1dsz8qaB/gJhKi4UQCE0hYtsQhcwawyC3nLlz
-         2RGkQnfJw6aevr4meXtEWFZPKfCPCV/Ck2fxhUxHjBKe4BsT5OHfQMykwxfatHUMuWrW
-         9FOXBUU9OuhGaBycl1D2DiHzJuuwPOEQpNPdP8XyK6lFPBf5Tnr+ycsg/gl1MeeBX5Nb
-         BO6Jt/aJMWM9VZswSvnozS36Je0bNnAcg3pCqp2izdcKSEVVkpHHyCklHhfPxXdPCB2u
-         e0QA==
-X-Gm-Message-State: AOAM533KC3g6H4KAbfJzvdC4YKyZ0LMRzesV/eathhTcbiI8KkFgNTk7
-        xZ5XoV8Idt0Ps2pu/4YD7l8HFgReRg==
-X-Google-Smtp-Source: ABdhPJzfH0gJAdUum+zexeKADRJslWPQ0rn3StclWShURwDj7HhipMxMfF2t+Vie9f+1p2bxxWHyxg==
-X-Received: by 2002:a5d:40cb:: with SMTP id b11mr5573136wrq.263.1594912049806;
-        Thu, 16 Jul 2020 08:07:29 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810b:f40:e00:922b:34ff:fe38:6455])
-        by smtp.googlemail.com with ESMTPSA id c25sm8505784wml.18.2020.07.16.08.07.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 08:07:28 -0700 (PDT)
-From:   Alex Bee <knaerzche@gmail.com>
-To:     linux-arch@vger.kernel.org
-Cc:     Alex Bee <knaerzche@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: [PATCH] linux: arm: vdso: nullpatch vdso_clock_gettime64 for non-virtual timers
-Date:   Thu, 16 Jul 2020 17:07:23 +0200
-Message-Id: <20200716150723.9389-1-knaerzche@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728402AbgGPPey (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 11:34:54 -0400
+Received: from mail.efficios.com ([167.114.26.124]:37668 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728374AbgGPPex (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 11:34:53 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id C021D295A82;
+        Thu, 16 Jul 2020 11:34:52 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PgTosnGDK1sK; Thu, 16 Jul 2020 11:34:52 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 5B51329547E;
+        Thu, 16 Jul 2020 11:34:52 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5B51329547E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1594913692;
+        bh=L9rT0fzuMGMghk/dEAcEzzkVjyKyZYNObrqiQ0DoanQ=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=RgaNfAf/qoYxhHgbRYFkX7WlrrMStDTGaEU8qr/CVA7cq3dKzJPZp1ls9bOuEFOay
+         713X1tULNXG0XScInlJLS3gVB5DhgcTf/33UG8lAhqwz0cW80lP3OGch5BZRRscWkQ
+         oJjBBhbUW7lZr7hF1UJsCnzhyEtuchi0saqFa97K+NQyihrBZk0dYi1+Gh+v+qprR7
+         1hPRkBcgiJIgBDsNsL6YTPt6YAuhZ84BiMgu/j2Hr9a0wNhfKNs6NqmtFu3x/Tbw3S
+         MtlD4wlJ9l3TRACzBEGOWf8J7rHyrPo25GYaeAOdDgFhrDNnIn9o3RzBU4ewFK68X3
+         NgoxFHyBSun8Q==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id DMMJqRBwC3nh; Thu, 16 Jul 2020 11:34:52 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 4B494295833;
+        Thu, 16 Jul 2020 11:34:52 -0400 (EDT)
+Date:   Thu, 16 Jul 2020 11:34:52 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@kernel.org>, x86 <x86@kernel.org>
+Message-ID: <47821133.15875.1594913692220.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20200716110038.GA119549@hirez.programming.kicks-ass.net>
+References: <1594868476.6k5kvx8684.astroid@bobo.none> <EFAD6E2F-EC08-4EB3-9ECC-2A963C023FC5@amacapital.net> <20200716085032.GO10769@hirez.programming.kicks-ass.net> <1594892300.mxnq3b9a77.astroid@bobo.none> <20200716110038.GA119549@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
+Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
+Thread-Index: iW27IjJDBx/ElQOPTNbM0E0vDOu3JA==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Along with commit commit 74d06efb9c2f ("ARM: 8932/1: Add clock_gettime64
-entry point") clock_gettime64 was added for ARM platform to solve the
-y2k38 problem on 32-bit platforms. glibc from version 2.31 onwards
-started using this vdso-call on ARM platforms.
-However it was (probably) forgotten to "nullpatch" this call, when no
-reliable timer source is available, for example when
-"arm,cpu-registers-not-fw-configured" is defined in devicetree for
-"arm,armv7-timer".
-This results in erratic time jumps whenever "gettimeofday" gets called,
-since the (non-working) vdso-call will be used instead of a syscall.
+----- On Jul 16, 2020, at 7:00 AM, Peter Zijlstra peterz@infradead.org wrot=
+e:
 
-This patch adds clock_gettime64 to get nullpatched as well. It has been
-verified to work and solve this issue on Rockchip RK322x, RK3288 and
-RPi4 (32-bit kernel build) platforms.
+> On Thu, Jul 16, 2020 at 08:03:36PM +1000, Nicholas Piggin wrote:
+>> Excerpts from Peter Zijlstra's message of July 16, 2020 6:50 pm:
+>> > On Wed, Jul 15, 2020 at 10:18:20PM -0700, Andy Lutomirski wrote:
+>> >> > On Jul 15, 2020, at 9:15 PM, Nicholas Piggin <npiggin@gmail.com> wr=
+ote:
+>=20
+>> >> But I=E2=80=99m wondering if all this deferred sync stuff is wrong. I=
+n the
+>> >> brave new world of io_uring and such, perhaps kernel access matter
+>> >> too.  Heck, even:
+>> >=20
+>> > IIRC the membarrier SYNC_CORE use-case is about user-space
+>> > self-modifying code.
+>> >=20
+>> > Userspace re-uses a text address and needs to SYNC_CORE before it can =
+be
+>> > sure the old text is forgotten. Nothing the kernel does matters there.
+>> >=20
+>> > I suppose the manpage could be more clear there.
+>>=20
+>> True, but memory ordering of kernel stores from kernel threads for
+>> regular mem barrier is the concern here.
+>>=20
+>> Does io_uring update completion queue from kernel thread or interrupt,
+>> for example? If it does, then membarrier will not order such stores
+>> with user memory accesses.
+>=20
+> So we're talking about regular membarrier() then? Not the SYNC_CORE
+> variant per-se.
+>=20
+> Even there, I'll argue we don't care, but perhaps Mathieu has a
+> different opinion.
 
-Signed-off-by: Alex Bee <knaerzche@gmail.com>
----
- arch/arm/kernel/vdso.c | 1 +
- 1 file changed, 1 insertion(+)
+I agree with Peter that we don't care about accesses to user-space
+memory performed concurrently with membarrier.
 
-diff --git a/arch/arm/kernel/vdso.c b/arch/arm/kernel/vdso.c
-index 6bfdca4769a7..fddd08a6e063 100644
---- a/arch/arm/kernel/vdso.c
-+++ b/arch/arm/kernel/vdso.c
-@@ -184,6 +184,7 @@ static void __init patch_vdso(void *ehdr)
- 	if (!cntvct_ok) {
- 		vdso_nullpatch_one(&einfo, "__vdso_gettimeofday");
- 		vdso_nullpatch_one(&einfo, "__vdso_clock_gettime");
-+		vdso_nullpatch_one(&einfo, "__vdso_clock_gettime64");
- 	}
- }
- 
--- 
-2.17.1
+What we'd care about in terms of accesses to user-space memory from the
+kernel is something that would be clearly ordered as happening before
+or after the membarrier call, for instance a read(2) followed by
+membarrier(2) after the read returns, or a read(2) issued after return
+from membarrier(2). The other scenario we'd care about is with the compiler
+barrier paired with membarrier: e.g. read(2) returns, compiler barrier,
+followed by a store. Or load, compiler barrier, followed by write(2).
 
+All those scenarios imply before/after ordering wrt either membarrier or
+the compiler barrier. I notice that io_uring has a "completion" queue.
+Let's try to come up with realistic usage scenarios.
+
+So the dependency chain would be provided by e.g.:
+
+* Infrequent read / Frequent write, communicating read completion through v=
+ariable X
+
+wait for io_uring read request completion -> membarrier -> store X=3D1
+
+with matching
+
+load from X (waiting for X=3D=3D1) -> asm volatile (::: "memory") -> submit=
+ io_uring write request
+
+or this other scenario:
+
+* Frequent read / Infrequent write, communicating read completion through v=
+ariable X
+
+load from X (waiting for X=3D=3D1) -> membarrier -> submit io_uring write r=
+equest
+
+with matching
+
+wait for io_uring read request completion -> asm volatile (::: "memory") ->=
+ store X=3D1
+
+Thanks,
+
+Mathieu
+
+
+--=20
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
