@@ -2,125 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FBF222EF3
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 01:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E29222EF6
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 01:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbgGPXZ7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 19:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
+        id S1726113AbgGPX1E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 19:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726113AbgGPXZ7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 19:25:59 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081A2C061755
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 16:25:58 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id f18so9010223wrs.0
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jul 2020 16:25:58 -0700 (PDT)
+        with ESMTP id S1726189AbgGPX1E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 19:27:04 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2F6C061755;
+        Thu, 16 Jul 2020 16:27:04 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id l63so5690732pge.12;
+        Thu, 16 Jul 2020 16:27:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=CZCZw6UIqWa4eGCjjDxYWCcfpSKWkLW/z2join0b1/E=;
-        b=djx20166Ifzrkr/PBx+ibbY+7XRIJbbbeYbSp67v/mKoxf4rpIIwsmwY5APU/jOcKk
-         7TgeIM8PtP788D8YW8dMk7tOM8NaoAyQhP1MGmipdmEia7IyRdD52m852nfGYNbCpCbh
-         jPFvMzGjsHmxm8n2ospOoiPjQJsPPoCO767CCt87u1J4/c639Rq51F7Hy6Pg5bt4VY+U
-         LvG7idYriK9JU7031REZjP606u/s0zKLZaXkZqnYTB+qz9tXbPLB91E7CwhdJtnbThSu
-         J89uYpNrdQarIsHmfeg7+Z5lGlpJg3RZ9YYVSJUincS9JFrR9VIwFTI6euxE9dNF0Ajv
-         o0bA==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=emv834qbGgi893dX/IaKrVeomPzEVS0ZG+EyN4ke6Jw=;
+        b=BxY54KCj4kiARNkK+N4vp/W9OTuudktsuJd+WODxPAeDB4oFxO4DQsQB4GI6IM8Gas
+         UJN/mRtbMfMb7XYESBrFdSYxHm0/dz5lI2i/IvV6zif0bXiZCQ+gabEvMQ/IDQfQisVf
+         qes+jiODle+UMzXIbB4xMZ9XK1erPvZaombyKjkf2dPCBjxm1hRdpabhchByUJPhDzib
+         1F8S+2UX/dzkcedaYb5el1Xm3NMrNgCIzlZ/QU0AfZ6HYI73UBsnFviQsYS1R4bLJyiY
+         ZznnhHQxDV5gPYJtSWQnGIgTy8kG8Ine/794rLiZ9vTmkP2RhhiHUWsR4lNJs0KKqWp4
+         Ibpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=CZCZw6UIqWa4eGCjjDxYWCcfpSKWkLW/z2join0b1/E=;
-        b=AX+Y3SWcTVLe60pxZuhnHUGilhmne9eHdrQRZjZnWthEDrxUSnkX7MbsA7yF1D/yAA
-         i5foCkwzu8r7IOkEijm0N89J83sUduDvtxdVSliiXzlwiXfpGQZueFzZZw4E8eVH79qq
-         wMFdCJ8qD7Lqj6MAaCiKMIKYqNFs+bCHk4pXjxMrxsYyoN0YqnHAytzv8QvwQsy15nfJ
-         HSSU6baKAqw/QCvSVHYCGPfi4ZbS59SetIAKJlA6AvmxwAwDxeGN/VwlAPXxOgHwvkJO
-         L6HLCcwOrwyqMvTUjIK3y+zJ9/KJkca5kYlBOtlc2PRD7ZNALlNf7g/IxnoxE3UmyJHd
-         KJMg==
-X-Gm-Message-State: AOAM531s0QGsYi3ka3RysmBppqBNUxxIAFrMfadcZuhmzIJ3769ly6Zi
-        Vxw043Rq3YHzDtMvM8Pxvw==
-X-Google-Smtp-Source: ABdhPJzus8Uaf40w+JktJKlxNdRPX6rleQXh/c9z6onH1BS9Qb6f9cV/vmRw5LKKSzewA2nrJKNWgA==
-X-Received: by 2002:a5d:6342:: with SMTP id b2mr7238485wrw.262.1594941957497;
-        Thu, 16 Jul 2020 16:25:57 -0700 (PDT)
-Received: from [192.168.200.34] (ip5b436a54.dynamic.kabel-deutschland.de. [91.67.106.84])
-        by smtp.gmail.com with ESMTPSA id u186sm10923422wmu.10.2020.07.16.16.25.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jul 2020 16:25:56 -0700 (PDT)
-Subject: Re: [PATCH] linux: arm: vdso: nullpatch vdso_clock_gettime64 for
- non-virtual timers
-To:     Robin Murphy <robin.murphy@arm.com>, linux-arch@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20200716150723.9389-1-knaerzche@gmail.com>
- <ac44a5a3-ca35-cd0a-f823-4b814c01c498@arm.com>
-From:   Alex Bee <knaerzche@gmail.com>
-Message-ID: <2c4484bf-a127-6f07-75f2-e0f0a15fe257@gmail.com>
-Date:   Fri, 17 Jul 2020 01:25:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=emv834qbGgi893dX/IaKrVeomPzEVS0ZG+EyN4ke6Jw=;
+        b=sSfhWaxXF+xNariXnzkSVtRhaQQnJasKUaF+qLb0QwhMwF3opD6kRSQ005h4Xd7W9A
+         IGFbyNICM1iHoXKyWtRFgelqL+T/ea46Vj9kbsS0VLcxGxCyKJL5h/ezhr+S3b4E9l+V
+         Xk1QFvsqU6GwwSy0UDeMvvOOKHp69uRYItizBimx/rFtnh2m12qwYn8JtVW0qt8TcGTo
+         vajA2c0PtgosYqDTKxtYLbcKIiWVxaUMGpdCpOCTdrUTblRvRvUDVV3Q6BRQ1LlU/hTl
+         JV7N250s12iL999HRzh9pxRTiz8GsujXoqiml2ZafO4HprrC5yywetGOGd+4LLipSs7g
+         s27g==
+X-Gm-Message-State: AOAM530cNtnP6jXIzqVq4nrOA48LlyKq2ayU7emTsdNMUc8irOSallk0
+        8CBbAg901HJ5vF3UA4rKGWw=
+X-Google-Smtp-Source: ABdhPJzsas/W/l7YZ8rsW53AbEGEaqr8R3Pt+kUjAsFkMcalVEs2KKHzvH8Zn5PQ137qjCJoqRQ5XQ==
+X-Received: by 2002:a63:fc52:: with SMTP id r18mr6477752pgk.334.1594942023742;
+        Thu, 16 Jul 2020 16:27:03 -0700 (PDT)
+Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
+        by smtp.gmail.com with ESMTPSA id 4sm5684665pgk.68.2020.07.16.16.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 16:27:03 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 09:26:57 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
+To:     peterz@infradead.org
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        x86 <x86@kernel.org>
+References: <1594868476.6k5kvx8684.astroid@bobo.none>
+        <EFAD6E2F-EC08-4EB3-9ECC-2A963C023FC5@amacapital.net>
+        <20200716085032.GO10769@hirez.programming.kicks-ass.net>
+        <1594892300.mxnq3b9a77.astroid@bobo.none>
+        <20200716110038.GA119549@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200716110038.GA119549@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <ac44a5a3-ca35-cd0a-f823-4b814c01c498@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Message-Id: <1594906688.ikv6r4gznx.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Robin,
+Excerpts from peterz@infradead.org's message of July 16, 2020 9:00 pm:
+> On Thu, Jul 16, 2020 at 08:03:36PM +1000, Nicholas Piggin wrote:
+>> Excerpts from Peter Zijlstra's message of July 16, 2020 6:50 pm:
+>> > On Wed, Jul 15, 2020 at 10:18:20PM -0700, Andy Lutomirski wrote:
+>> >> > On Jul 15, 2020, at 9:15 PM, Nicholas Piggin <npiggin@gmail.com> wr=
+ote:
+>=20
+>> >> But I=E2=80=99m wondering if all this deferred sync stuff is wrong. I=
+n the
+>> >> brave new world of io_uring and such, perhaps kernel access matter
+>> >> too.  Heck, even:
+>> >=20
+>> > IIRC the membarrier SYNC_CORE use-case is about user-space
+>> > self-modifying code.
+>> >=20
+>> > Userspace re-uses a text address and needs to SYNC_CORE before it can =
+be
+>> > sure the old text is forgotten. Nothing the kernel does matters there.
+>> >=20
+>> > I suppose the manpage could be more clear there.
+>>=20
+>> True, but memory ordering of kernel stores from kernel threads for
+>> regular mem barrier is the concern here.
+>>=20
+>> Does io_uring update completion queue from kernel thread or interrupt,
+>> for example? If it does, then membarrier will not order such stores
+>> with user memory accesses.
+>=20
+> So we're talking about regular membarrier() then? Not the SYNC_CORE
+> variant per-se.
 
-Am 16.07.20 um 20:46 schrieb Robin Murphy:
-> Hi Alex,
->
-> On 2020-07-16 16:07, Alex Bee wrote:
->> Along with commit commit 74d06efb9c2f ("ARM: 8932/1: Add clock_gettime64
->> entry point") clock_gettime64 was added for ARM platform to solve the
->> y2k38 problem on 32-bit platforms. glibc from version 2.31 onwards
->> started using this vdso-call on ARM platforms.
->> However it was (probably) forgotten to "nullpatch" this call, when no
->> reliable timer source is available, for example when
->> "arm,cpu-registers-not-fw-configured" is defined in devicetree for
->> "arm,armv7-timer".
->> This results in erratic time jumps whenever "gettimeofday" gets called,
->> since the (non-working) vdso-call will be used instead of a syscall.
->>
->> This patch adds clock_gettime64 to get nullpatched as well. It has been
->> verified to work and solve this issue on Rockchip RK322x, RK3288 and
->> RPi4 (32-bit kernel build) platforms.
->
-> FYI, a version of this patch was already submitted, and is just 
-> waiting for Russell to apply it:
->
-> https://www.armlinux.org.uk/developer/patches/viewpatch.php?id=8987/1
->
-> Robin.
-OK - couldn't find this before. You can drop my patch than.
->
->> Signed-off-by: Alex Bee <knaerzche@gmail.com>
->> ---
->>   arch/arm/kernel/vdso.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/arm/kernel/vdso.c b/arch/arm/kernel/vdso.c
->> index 6bfdca4769a7..fddd08a6e063 100644
->> --- a/arch/arm/kernel/vdso.c
->> +++ b/arch/arm/kernel/vdso.c
->> @@ -184,6 +184,7 @@ static void __init patch_vdso(void *ehdr)
->>       if (!cntvct_ok) {
->>           vdso_nullpatch_one(&einfo, "__vdso_gettimeofday");
->>           vdso_nullpatch_one(&einfo, "__vdso_clock_gettime");
->> +        vdso_nullpatch_one(&einfo, "__vdso_clock_gettime64");
->>       }
->>   }
->>
-Regards,
+Well, both but Andy in this case was wondering about kernel writes
+vs user.
 
-Alex
+>=20
+> Even there, I'll argue we don't care, but perhaps Mathieu has a
+> different opinion. All we care about is that all other threads (or CPUs
+> for GLOBAL) observe an smp_mb() before it returns.
+>=20
+> Any serialization against whatever those other threads/CPUs are running
+> at the instant of the syscall is external to the syscall, we make no
+> gauarantees about that. That is, we can fundamentally not say what
+> another CPU is executing concurrently. Nor should we want to.
+>=20
+> So if you feel that your membarrier() ought to serialize against remote
+> execution, you need to arrange a quiecent state on the remote side
+> yourself.
+>=20
+> Now, normally membarrier() is used to implement userspace RCU like
+> things, and there all that matters is that the remote CPUs observe the
+> beginngin of the new grace-period, ie counter flip, and we observe their
+> read-side critical sections, or smething like that, it's been a while
+> since I looked at all that.
+>=20
+> It's always been the case that concurrent syscalls could change user
+> memory, io_uring doesn't change that, it just makes it even less well
+> defined when that would happen. If you want to serialize against that,
+> you need to arrange that externally.
 
+membarrier does replace barrier instructions on remote CPUs, which do
+order accesses performed by the kernel on the user address space. So
+membarrier should too I guess.
+
+Normal process context accesses like read(2) will do so because they
+don't get filtered out from IPIs, but kernel threads using the mm may
+not.
+
+Thanks,
+Nick
