@@ -2,203 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40390221A27
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 04:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD360221A64
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 04:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgGPCfU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jul 2020 22:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S1727034AbgGPC7b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jul 2020 22:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726479AbgGPCfU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jul 2020 22:35:20 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30675C061755;
-        Wed, 15 Jul 2020 19:35:20 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id o11so5231781wrv.9;
-        Wed, 15 Jul 2020 19:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=zXeIy2ePTaW1WcCtqXXzYiM+52x43mwukDkyOFdBArE=;
-        b=uNLf3n0D7Qu4h1hbLPUuunRiVCBX2Lyi8LRRfrkUyw/6bxvl47ZrFT7AC0G7UdacXX
-         c6+QrsjNTwoOq37N5uFU3QbbBZ5cRutFyI9ZXl2FVTjma5MpfbtwJA9JB75KD3mnpInx
-         HcZiDM+TqoKevx4n6G0jFXwA3RYHSIbITjePdij1I8rqNjv3lGDhPeQb/4sr19zZ1D43
-         xEuD1M/m9160XiL7U4s0w5QSSil+NxJItFWA0LUt+cI91b3UmLubjqFi5eRUOzZBUeW4
-         2ReYm7yv5QnD3OD5iJ+QI454gI1nvkIo/ThBY1fJjyr0XfrD+eFc/s0fgm1bT2X+ofsi
-         btdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=zXeIy2ePTaW1WcCtqXXzYiM+52x43mwukDkyOFdBArE=;
-        b=oQFy8MywTeTNIbNoooD6yV0SUzKOrkMjVi6XUO2U8GugG97xC2N9tAd4KF9tcTCngv
-         8i31ZIdlFAZSpsfSpaaCylafdFEjKmBZefk/6FfzYCv2EptqPutW7Q4j0WAcZZzB0WHc
-         Yo8BuGU/tykA1L+txFutcd40QPSVLH810iDnqEuYTmTG7bSJjk1JULZvOV/GI4hL4oWi
-         kUpvMdqWGnTtMyCLWF7AU8ZAg6mOxmDyILfZe0Xr6OZ1GzfjDbgWDZUL0slIw4jTuCT2
-         BEUTmLOj5xquzx7gh79BSIfH+sU+o1syNrZ2YStIKyP23WKJW+RW38o+Y/jm10e668vc
-         pgkg==
-X-Gm-Message-State: AOAM533Cp4182F/4S8vW0EM6uq1rBU4V+aj8cfNQRl+h6HIgHOax5tl6
-        2iAuQEGqoniavT+c/N8HcPk=
-X-Google-Smtp-Source: ABdhPJyExXtlVi+Zc+5Zqws9ZmSeFfANLu2ZDScXx6Mtc2Gkhtt4LsfwhHFZsu0tuLx0owk7AOkMTg==
-X-Received: by 2002:adf:e80d:: with SMTP id o13mr2571048wrm.112.1594866918928;
-        Wed, 15 Jul 2020 19:35:18 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id g13sm6584482wro.84.2020.07.15.19.35.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 19:35:18 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 12:35:12 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [RFC PATCH 7/7] lazy tlb: shoot lazies, a non-refcounting lazy
- tlb option
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-References: <1594708054.04iuyxuyb5.astroid@bobo.none>
-        <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
-In-Reply-To: <6D3D1346-DB1E-43EB-812A-184918CCC16A@amacapital.net>
+        with ESMTP id S1726996AbgGPC7a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jul 2020 22:59:30 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9888C061755;
+        Wed, 15 Jul 2020 19:59:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B6f9W42bZz9sRK;
+        Thu, 16 Jul 2020 12:59:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1594868368;
+        bh=jzbuvvlMTLS4EHeC88n/VPIkgVW18hN1jUzcnLgJ8d8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=KMMinymWhupPskkr7ijdgeKRQBfmcQ4UD12mWc7vxc+iRvR808D5wY8Mj/qG7RzH1
+         OHI/TsSDwoR7pyjvHq/2M9xVkWbTVyIx7qfuWkbqTBZq8UU8nXRDct3ncuimUMoMmi
+         KCZyddshC1iZkGKtl12ydu6Z03cBSK3qenn+FwbYwRwNypcN9XciDtMxTYBXwn0QUB
+         0/rY8qC6joGsomWAVYkgt7g268mAUpFLF4Q6e1Z/MgSQrrOl3BVPOjUd4iBr9ABxKd
+         b76to3OCrSbin7CCh/LrEhpoqSSCIxaCAC9VJZiS1TVle+0mUSbEVuqxX+UIW1QuN1
+         DhJ20PPAVjEhw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        luto@kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v8 2/8] powerpc/vdso: Remove __kernel_datapage_offset and simplify __get_datapage()
+In-Reply-To: <0d2201efe3c7727f2acc718aefd7c5bb22c66c57.1588079622.git.christophe.leroy@c-s.fr>
+References: <cover.1588079622.git.christophe.leroy@c-s.fr> <0d2201efe3c7727f2acc718aefd7c5bb22c66c57.1588079622.git.christophe.leroy@c-s.fr>
+Date:   Thu, 16 Jul 2020 12:59:23 +1000
+Message-ID: <87wo34tbas.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Message-Id: <1594866490.ultl891sgk.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Andy Lutomirski's message of July 14, 2020 10:46 pm:
->=20
->=20
->> On Jul 13, 2020, at 11:31 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
->>=20
->> =EF=BB=BFExcerpts from Nicholas Piggin's message of July 14, 2020 3:04 p=
-m:
->>> Excerpts from Andy Lutomirski's message of July 14, 2020 4:18 am:
->>>>=20
->>>>> On Jul 13, 2020, at 9:48 AM, Nicholas Piggin <npiggin@gmail.com> wrot=
-e:
->>>>>=20
->>>>> =EF=BB=BFExcerpts from Andy Lutomirski's message of July 14, 2020 1:5=
-9 am:
->>>>>>> On Thu, Jul 9, 2020 at 6:57 PM Nicholas Piggin <npiggin@gmail.com> =
-wrote:
->>>>>>>=20
->>>>>>> On big systems, the mm refcount can become highly contented when do=
-ing
->>>>>>> a lot of context switching with threaded applications (particularly
->>>>>>> switching between the idle thread and an application thread).
->>>>>>>=20
->>>>>>> Abandoning lazy tlb slows switching down quite a bit in the importa=
-nt
->>>>>>> user->idle->user cases, so so instead implement a non-refcounted sc=
-heme
->>>>>>> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot =
-down
->>>>>>> any remaining lazy ones.
->>>>>>>=20
->>>>>>> On a 16-socket 192-core POWER8 system, a context switching benchmar=
-k
->>>>>>> with as many software threads as CPUs (so each switch will go in an=
-d
->>>>>>> out of idle), upstream can achieve a rate of about 1 million contex=
-t
->>>>>>> switches per second. After this patch it goes up to 118 million.
->>>>>>>=20
->>>>>>=20
->>>>>> I read the patch a couple of times, and I have a suggestion that cou=
-ld
->>>>>> be nonsense.  You are, effectively, using mm_cpumask() as a sort of
->>>>>> refcount.  You're saying "hey, this mm has no more references, but i=
-t
->>>>>> still has nonempty mm_cpumask(), so let's send an IPI and shoot down
->>>>>> those references too."  I'm wondering whether you actually need the
->>>>>> IPI.  What if, instead, you actually treated mm_cpumask as a refcoun=
-t
->>>>>> for real?  Roughly, in __mmdrop(), you would only free the page tabl=
-es
->>>>>> if mm_cpumask() is empty.  And, in the code that removes a CPU from
->>>>>> mm_cpumask(), you would check if mm_users =3D=3D 0 and, if so, check=
- if
->>>>>> you just removed the last bit from mm_cpumask and potentially free t=
-he
->>>>>> mm.
->>>>>>=20
->>>>>> Getting the locking right here could be a bit tricky -- you need to
->>>>>> avoid two CPUs simultaneously exiting lazy TLB and thinking they
->>>>>> should free the mm, and you also need to avoid an mm with mm_users
->>>>>> hitting zero concurrently with the last remote CPU using it lazily
->>>>>> exiting lazy TLB.  Perhaps this could be resolved by having mm_count
->>>>>> =3D=3D 1 mean "mm_cpumask() is might contain bits and, if so, it own=
-s the
->>>>>> mm" and mm_count =3D=3D 0 meaning "now it's dead" and using some car=
-eful
->>>>>> cmpxchg or dec_return to make sure that only one CPU frees it.
->>>>>>=20
->>>>>> Or maybe you'd need a lock or RCU for this, but the idea would be to
->>>>>> only ever take the lock after mm_users goes to zero.
->>>>>=20
->>>>> I don't think it's nonsense, it could be a good way to avoid IPIs.
->>>>>=20
->>>>> I haven't seen much problem here that made me too concerned about IPI=
-s=20
->>>>> yet, so I think the simple patch may be good enough to start with
->>>>> for powerpc. I'm looking at avoiding/reducing the IPIs by combining t=
-he
->>>>> unlazying with the exit TLB flush without doing anything fancy with
->>>>> ref counting, but we'll see.
->>>>=20
->>>> I would be cautious with benchmarking here. I would expect that the
->>>> nasty cases may affect power consumption more than performance =E2=80=
-=94 the=20
->>>> specific issue is IPIs hitting idle cores, and the main effects are to=
-=20
->>>> slow down exit() a bit but also to kick the idle core out of idle.=20
->>>> Although, if the idle core is in a deep sleep, that IPI could be=20
->>>> *very* slow.
->>>=20
->>> It will tend to be self-limiting to some degree (deeper idle cores
->>> would tend to have less chance of IPI) but we have bigger issues on
->>> powerpc with that, like broadcast IPIs to the mm cpumask for THP
->>> management. Power hasn't really shown up as an issue but powerpc
->>> CPUs may have their own requirements and issues there, shall we say.
->>>=20
->>>> So I think it=E2=80=99s worth at least giving this a try.
->>>=20
->>> To be clear it's not a complete solution itself. The problem is of=20
->>> course that mm cpumask gives you false negatives, so the bits
->>> won't always clean up after themselves as CPUs switch away from their
->>> lazy tlb mms.
->>=20
->> ^^
->>=20
->> False positives: CPU is in the mm_cpumask, but is not using the mm
->> as a lazy tlb. So there can be bits left and never freed.
->>=20
->> If you closed the false positives, you're back to a shared mm cache
->> line on lazy mm context switches.
->=20
-> x86 has this exact problem. At least no more than 64*8 CPUs share the cac=
-he line :)
->=20
-> Can your share your benchmark?
+Christophe Leroy <christophe.leroy@c-s.fr> writes:
+> The VDSO datapage and the text pages are always located immediately
+> next to each other, so it can be hardcoded without an indirection
+> through __kernel_datapage_offset
+>
+> In order to ease things, move the data page in front like other
+> arches, that way there is no need to know the size of the library
+> to locate the data page.
+>
+> Before:
+> clock-getres-realtime-coarse:    vdso: 714 nsec/call
+> clock-gettime-realtime-coarse:    vdso: 792 nsec/call
+> clock-gettime-realtime:    vdso: 1243 nsec/call
+>
+> After:
+> clock-getres-realtime-coarse:    vdso: 699 nsec/call
+> clock-gettime-realtime-coarse:    vdso: 784 nsec/call
+> clock-gettime-realtime:    vdso: 1231 nsec/call
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> ---
+> v7:
+> - Moved the removal of the tmp param of __get_datapage()
+> in a subsequent patch
+> - Included the addition of the offset param to __get_datapage()
+> in the further preparatory patch
+> ---
+>  arch/powerpc/include/asm/vdso_datapage.h |  8 ++--
+>  arch/powerpc/kernel/vdso.c               | 53 ++++--------------------
+>  arch/powerpc/kernel/vdso32/datapage.S    |  3 --
+>  arch/powerpc/kernel/vdso32/vdso32.lds.S  |  7 +---
+>  arch/powerpc/kernel/vdso64/datapage.S    |  3 --
+>  arch/powerpc/kernel/vdso64/vdso64.lds.S  |  7 +---
+>  6 files changed, 16 insertions(+), 65 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/vdso_datapage.h b/arch/powerpc/include/asm/vdso_datapage.h
+> index b9ef6cf50ea5..11886467dfdf 100644
+> --- a/arch/powerpc/include/asm/vdso_datapage.h
+> +++ b/arch/powerpc/include/asm/vdso_datapage.h
+> @@ -118,10 +118,12 @@ extern struct vdso_data *vdso_data;
+>  
+>  .macro get_datapage ptr, tmp
+>  	bcl	20, 31, .+4
+> +999:
+>  	mflr	\ptr
+> -	addi	\ptr, \ptr, (__kernel_datapage_offset - (.-4))@l
+> -	lwz	\tmp, 0(\ptr)
+> -	add	\ptr, \tmp, \ptr
+> +#if CONFIG_PPC_PAGE_SHIFT > 14
+> +	addis	\ptr, \ptr, (_vdso_datapage - 999b)@ha
+> +#endif
+> +	addi	\ptr, \ptr, (_vdso_datapage - 999b)@l
+>  .endm
+>  
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
+> index f38f26e844b6..d33fa22ddbed 100644
+> --- a/arch/powerpc/kernel/vdso.c
+> +++ b/arch/powerpc/kernel/vdso.c
+> @@ -190,7 +190,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+>  	 * install_special_mapping or the perf counter mmap tracking code
+>  	 * will fail to recognise it as a vDSO (since arch_vma_name fails).
+>  	 */
+> -	current->mm->context.vdso_base = vdso_base;
+> +	current->mm->context.vdso_base = vdso_base + PAGE_SIZE;
 
-Just testing the IPI rates (on a smaller 176 CPU system), on a
-kernel compile, it causes about 300 shootdown interrupts (not
-300 broadcasts but total interrupts).
+I merged this but then realised it breaks the display of the vdso in /proc/self/maps.
 
-And very short lived fork;exec;exit things like typical scripting
-commands doesn't typically generate any.
+ie. the vdso vma gets no name:
 
-So yeah the really high exit rate things self-limit pretty well.
+  # cat /proc/self/maps
+  110f90000-110fa0000 r-xp 00000000 08:03 17021844                         /usr/bin/cat
+  110fa0000-110fb0000 r--p 00000000 08:03 17021844                         /usr/bin/cat
+  110fb0000-110fc0000 rw-p 00010000 08:03 17021844                         /usr/bin/cat
+  126000000-126030000 rw-p 00000000 00:00 0                                [heap]
+  7fffa8790000-7fffa87d0000 rw-p 00000000 00:00 0 
+  7fffa87d0000-7fffa8830000 r--p 00000000 08:03 17521786                   /usr/lib/locale/en_AU.utf8/LC_CTYPE
+  7fffa8830000-7fffa8840000 r--p 00000000 08:03 16958337                   /usr/lib/locale/en_AU.utf8/LC_NUMERIC
+  7fffa8840000-7fffa8850000 r--p 00000000 08:03 8501358                    /usr/lib/locale/en_AU.utf8/LC_TIME
+  7fffa8850000-7fffa8ad0000 r--p 00000000 08:03 16870886                   /usr/lib/locale/en_AU.utf8/LC_COLLATE
+  7fffa8ad0000-7fffa8ae0000 r--p 00000000 08:03 8509433                    /usr/lib/locale/en_AU.utf8/LC_MONETARY
+  7fffa8ae0000-7fffa8af0000 r--p 00000000 08:03 25383753                   /usr/lib/locale/en_AU.utf8/LC_MESSAGES/SYS_LC_MESSAGES
+  7fffa8af0000-7fffa8b00000 r--p 00000000 08:03 17521790                   /usr/lib/locale/en_AU.utf8/LC_PAPER
+  7fffa8b00000-7fffa8b10000 r--p 00000000 08:03 8501354                    /usr/lib/locale/en_AU.utf8/LC_NAME
+  7fffa8b10000-7fffa8b20000 r--p 00000000 08:03 8509431                    /usr/lib/locale/en_AU.utf8/LC_ADDRESS
+  7fffa8b20000-7fffa8b30000 r--p 00000000 08:03 8509434                    /usr/lib/locale/en_AU.utf8/LC_TELEPHONE
+  7fffa8b30000-7fffa8b40000 r--p 00000000 08:03 17521787                   /usr/lib/locale/en_AU.utf8/LC_MEASUREMENT
+  7fffa8b40000-7fffa8b50000 r--s 00000000 08:03 25623315                   /usr/lib64/gconv/gconv-modules.cache
+  7fffa8b50000-7fffa8d40000 r-xp 00000000 08:03 25383789                   /usr/lib64/libc-2.30.so
+  7fffa8d40000-7fffa8d50000 r--p 001e0000 08:03 25383789                   /usr/lib64/libc-2.30.so
+  7fffa8d50000-7fffa8d60000 rw-p 001f0000 08:03 25383789                   /usr/lib64/libc-2.30.so
+  7fffa8d60000-7fffa8d70000 r--p 00000000 08:03 8509432                    /usr/lib/locale/en_AU.utf8/LC_IDENTIFICATION
+  7fffa8d70000-7fffa8d90000 r-xp 00000000 00:00 0						<--- missing
+  7fffa8d90000-7fffa8dc0000 r-xp 00000000 08:03 25383781                   /usr/lib64/ld-2.30.so
+  7fffa8dc0000-7fffa8dd0000 r--p 00020000 08:03 25383781                   /usr/lib64/ld-2.30.so
+  7fffa8dd0000-7fffa8de0000 rw-p 00030000 08:03 25383781                   /usr/lib64/ld-2.30.so
+  7fffc31c0000-7fffc31f0000 rw-p 00000000 00:00 0                          [stack]
 
-I documented the concern and added a few of the possible ways to
-further reduce IPIs in the comments though.
 
-Thanks,
-Nick
+And it's also going to break the logic in arch_unmap() to detect if
+we're unmapping (part of) the VDSO. And it will break arch_remap() too.
+
+And the logic to recognise the signal trampoline in
+arch/powerpc/perf/callchain_*.c as well.
+
+So I'm going to rebase and drop this for now.
+
+Basically we have a bunch of places that assume that vdso_base is == the
+start of the VDSO vma, and also that the code starts there. So that will
+need some work to tease out all those assumptions and make them work
+with this change.
+
+cheers
