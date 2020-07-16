@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F02F222C47
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF43222C3B
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jul 2020 21:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729806AbgGPTv0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 15:51:26 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:35282 "EHLO
+        id S1729759AbgGPTvB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jul 2020 15:51:01 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:35348 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729693AbgGPTuz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:50:55 -0400
-Message-Id: <20200716185424.765294277@linutronix.de>
+        with ESMTP id S1729703AbgGPTu5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jul 2020 15:50:57 -0400
+Message-Id: <20200716185424.872183268@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1594929052;
+        s=2020; t=1594929053;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=WQ8/w8anIf65NuZQ59f92ctNO50e6ggjwkWnIr+VLZ4=;
-        b=rRjEwfs0vT9c2R/Sn1+dyi+wKBSmHKYnR7hjsaDrQVkvv2oryOPIAvUbcFWKQMdLA3wKaz
-        gnD5mGGqwcMaxQdX0kRIkgsfhSNTXpblI7/orVt5y3o/+ZfnLWtxSdmWaAkzY/3jkECmLv
-        D2cynPDCxtJFCRoVcVLRquAvTxr+kC5utv+POYnimeGxWEpUWgzR2lfEEk7mvKbf5Ehg0G
-        IAUIW+g51s76tVHWj5XLb6NJ+mVmO9c36MfaY6o8o1dueGXVFBm6BF183AZLuIX0tC3BSq
-        PWUUAm8lNjSPIpaEzG1U6esV5Q5q5lm8Aq8/mN1P9v0whQixbTxn0vIRB9WKGw==
+        bh=EN2od1ywZ6SkCpGoBdnMWUVsfu/lI73Grkm5kM9+ZkE=;
+        b=3Lp1PVFk7fRQ+u4NYgwFL+tPCxSPobz+lGkoMFIMTqZgb0dy0vji4SgMA44ZtPUgmaxSoA
+        HRDtmTg4h1i8u2vwDu43ReCoPyCN9W+OvCNF7psjodqph6+lvfYuRaC+GLzAYC1tgvrvLD
+        O5VqpErxlCReJgpWQB7wXucFmH4Y8GHMCQM09sUOo0ESe4UGsSS8BL3D+K5dXcjziRiCfX
+        O5+KBrcb0M/tpgm6Jet3Y2LaFAmf2Y1SR/nzjQJatlX0iZWnfjf3ZOWAAtj4o8petpCvFd
+        nluSkGSUZEm7i4UO4G3YGX3UqQd4PdLhrelo/Ya+UAjUnaFqGKzj6KB/mCfsXA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1594929052;
+        s=2020e; t=1594929053;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=WQ8/w8anIf65NuZQ59f92ctNO50e6ggjwkWnIr+VLZ4=;
-        b=Tm+S07QOkfzoXivMaEcqb22uEsX1t08+lURcWRQBfFPdDgO8UXjvCHI0yhIAVOloWeKZ2E
-        rvF2i+m2F+EiEyCw==
-Date:   Thu, 16 Jul 2020 20:22:16 +0200
+        bh=EN2od1ywZ6SkCpGoBdnMWUVsfu/lI73Grkm5kM9+ZkE=;
+        b=KRWHo3Op/D4fm9NPtr5uMXed2e8f4vT7mC0lHIzXacY3btfXrj5VYSFLgzrEU89OmwRXuU
+        qWTUIhCknqIB1oDw==
+Date:   Thu, 16 Jul 2020 20:22:17 +0200
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
@@ -40,7 +40,7 @@ Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
         Keno Fischer <keno@juliacomputing.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: [patch V3 08/13] x86/entry: Use generic syscall entry function
+Subject: [patch V3 09/13] x86/entry: Use generic syscall exit functionality
 References: <20200716182208.180916541@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,419 +50,421 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Replace the x86 variant with the generic version. Provide the relevant
+architecture specific helper functions and defines.
 
-Replace the syscall entry work handling with the generic version. Provide
-the necessary helper inlines to handle the real architecture specific
-parts, e.g. audit and seccomp invocations.
-
-Use a temporary define for idtentry_enter_user which will be cleaned up
+Use a temporary define for idtentry_exit_user which will be cleaned up
 seperately.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
-V3: Adapt to the noinstr changes
----
- arch/x86/Kconfig                    |    1 
- arch/x86/entry/common.c             |  181 +-----------------------------------
- arch/x86/include/asm/entry-common.h |   86 +++++++++++++++++
- arch/x86/include/asm/idtentry.h     |    5 
- arch/x86/include/asm/thread_info.h  |    5 
- 5 files changed, 99 insertions(+), 179 deletions(-)
+ arch/x86/entry/common.c             |  221 ------------------------------------
+ arch/x86/entry/entry_32.S           |    2 
+ arch/x86/entry/entry_64.S           |    2 
+ arch/x86/include/asm/entry-common.h |   49 +++++++
+ arch/x86/include/asm/idtentry.h     |    3 
+ arch/x86/include/asm/signal.h       |    1 
+ arch/x86/kernel/signal.c            |    2 
+ 7 files changed, 58 insertions(+), 222 deletions(-)
 
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -115,6 +115,7 @@ config X86
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_EARLY_IOREMAP
-+	select GENERIC_ENTRY
- 	select GENERIC_FIND_FIRST_BIT
- 	select GENERIC_IOMAP
- 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK	if SMP
 --- a/arch/x86/entry/common.c
 +++ b/arch/x86/entry/common.c
-@@ -10,13 +10,13 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/entry-common.h>
- #include <linux/mm.h>
+@@ -15,15 +15,8 @@
  #include <linux/smp.h>
  #include <linux/errno.h>
  #include <linux/ptrace.h>
- #include <linux/tracehook.h>
- #include <linux/audit.h>
--#include <linux/seccomp.h>
- #include <linux/signal.h>
+-#include <linux/tracehook.h>
+-#include <linux/audit.h>
+-#include <linux/signal.h>
  #include <linux/export.h>
- #include <linux/context_tracking.h>
-@@ -42,70 +42,8 @@
+-#include <linux/context_tracking.h>
+-#include <linux/user-return-notifier.h>
+ #include <linux/nospec.h>
+-#include <linux/uprobes.h>
+-#include <linux/livepatch.h>
+ #include <linux/syscalls.h>
+ #include <linux/uaccess.h>
+ 
+@@ -42,191 +35,6 @@
  #include <asm/syscall.h>
  #include <asm/irq_stack.h>
  
--#define CREATE_TRACE_POINTS
- #include <trace/events/syscalls.h>
- 
--/* Check that the stack and regs on entry from user mode are sane. */
--static noinstr void check_user_regs(struct pt_regs *regs)
--{
--	if (IS_ENABLED(CONFIG_DEBUG_ENTRY)) {
--		/*
--		 * Make sure that the entry code gave us a sensible EFLAGS
--		 * register.  Native because we want to check the actual CPU
--		 * state, not the interrupt state as imagined by Xen.
--		 */
--		unsigned long flags = native_save_fl();
--		WARN_ON_ONCE(flags & (X86_EFLAGS_AC | X86_EFLAGS_DF |
--				      X86_EFLAGS_NT));
+-#include <trace/events/syscalls.h>
 -
--		/* We think we came from user mode. Make sure pt_regs agrees. */
--		WARN_ON_ONCE(!user_mode(regs));
--
--		/*
--		 * All entries from user mode (except #DF) should be on the
--		 * normal thread stack and should have user pt_regs in the
--		 * correct location.
--		 */
--		WARN_ON_ONCE(!on_thread_stack());
--		WARN_ON_ONCE(regs != task_pt_regs(current));
--	}
--}
--
--#ifdef CONFIG_CONTEXT_TRACKING
 -/**
-- * enter_from_user_mode - Establish state when coming from user mode
+- * exit_to_user_mode - Fixup state when exiting to user mode
 - *
-- * Syscall entry disables interrupts, but user mode is traced as interrupts
-- * enabled. Also with NO_HZ_FULL RCU might be idle.
+- * Syscall exit enables interrupts, but the kernel state is interrupts
+- * disabled when this is invoked. Also tell RCU about it.
 - *
-- * 1) Tell lockdep that interrupts are disabled
-- * 2) Invoke context tracking if enabled to reactivate RCU
-- * 3) Trace interrupts off state
+- * 1) Trace interrupts on state
+- * 2) Invoke context tracking if enabled to adjust RCU state
+- * 3) Clear CPU buffers if CPU is affected by MDS and the migitation is on.
+- * 4) Tell lockdep that interrupts are enabled
 - */
--static noinstr void enter_from_user_mode(struct pt_regs *regs)
+-static __always_inline void exit_to_user_mode(void)
 -{
--	enum ctx_state state = ct_state();
--
--	check_user_regs(regs);
--	lockdep_hardirqs_off(CALLER_ADDR0);
--	user_exit_irqoff();
--
 -	instrumentation_begin();
--	CT_WARN_ON(state != CONTEXT_USER);
--	trace_hardirqs_off_finish();
+-	trace_hardirqs_on_prepare();
+-	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
 -	instrumentation_end();
--}
--#else
--static __always_inline void enter_from_user_mode(struct pt_regs *regs)
--{
--	check_user_regs(regs);
--	lockdep_hardirqs_off(CALLER_ADDR0);
--	instrumentation_begin();
--	trace_hardirqs_off_finish();
--	instrumentation_end();
--}
--#endif
 -
- /**
-  * exit_to_user_mode - Fixup state when exiting to user mode
-  *
-@@ -129,83 +67,6 @@ static __always_inline void exit_to_user
- 	lockdep_hardirqs_on(CALLER_ADDR0);
- }
- 
--static void do_audit_syscall_entry(struct pt_regs *regs, u32 arch)
+-	user_enter_irqoff();
+-	mds_user_clear_cpu_buffers();
+-	lockdep_hardirqs_on(CALLER_ADDR0);
+-}
+-
+-#define EXIT_TO_USERMODE_LOOP_FLAGS				\
+-	(_TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_UPROBE |	\
+-	 _TIF_NEED_RESCHED | _TIF_USER_RETURN_NOTIFY | _TIF_PATCH_PENDING)
+-
+-static void exit_to_usermode_loop(struct pt_regs *regs, u32 cached_flags)
 -{
--#ifdef CONFIG_X86_64
--	if (arch == AUDIT_ARCH_X86_64) {
--		audit_syscall_entry(regs->orig_ax, regs->di,
--				    regs->si, regs->dx, regs->r10);
--	} else
--#endif
--	{
--		audit_syscall_entry(regs->orig_ax, regs->bx,
--				    regs->cx, regs->dx, regs->si);
+-	/*
+-	 * In order to return to user mode, we need to have IRQs off with
+-	 * none of EXIT_TO_USERMODE_LOOP_FLAGS set.  Several of these flags
+-	 * can be set at any time on preemptible kernels if we have IRQs on,
+-	 * so we need to loop.  Disabling preemption wouldn't help: doing the
+-	 * work to clear some of the flags can sleep.
+-	 */
+-	while (true) {
+-		/* We have work to do. */
+-		local_irq_enable();
+-
+-		if (cached_flags & _TIF_NEED_RESCHED)
+-			schedule();
+-
+-		if (cached_flags & _TIF_UPROBE)
+-			uprobe_notify_resume(regs);
+-
+-		if (cached_flags & _TIF_PATCH_PENDING)
+-			klp_update_patch_state(current);
+-
+-		/* deal with pending signal delivery */
+-		if (cached_flags & _TIF_SIGPENDING)
+-			do_signal(regs);
+-
+-		if (cached_flags & _TIF_NOTIFY_RESUME) {
+-			clear_thread_flag(TIF_NOTIFY_RESUME);
+-			tracehook_notify_resume(regs);
+-			rseq_handle_notify_resume(NULL, regs);
+-		}
+-
+-		if (cached_flags & _TIF_USER_RETURN_NOTIFY)
+-			fire_user_return_notifiers();
+-
+-		/* Disable IRQs and retry */
+-		local_irq_disable();
+-
+-		cached_flags = READ_ONCE(current_thread_info()->flags);
+-
+-		if (!(cached_flags & EXIT_TO_USERMODE_LOOP_FLAGS))
+-			break;
 -	}
+-}
+-
+-static void __prepare_exit_to_usermode(struct pt_regs *regs)
+-{
+-	struct thread_info *ti = current_thread_info();
+-	u32 cached_flags;
+-
+-	addr_limit_user_check();
+-
+-	lockdep_assert_irqs_disabled();
+-	lockdep_sys_exit();
+-
+-	cached_flags = READ_ONCE(ti->flags);
+-
+-	if (unlikely(cached_flags & EXIT_TO_USERMODE_LOOP_FLAGS))
+-		exit_to_usermode_loop(regs, cached_flags);
+-
+-	/* Reload ti->flags; we may have rescheduled above. */
+-	cached_flags = READ_ONCE(ti->flags);
+-
+-	if (unlikely(cached_flags & _TIF_IO_BITMAP))
+-		tss_update_io_bitmap();
+-
+-	fpregs_assert_state_consistent();
+-	if (unlikely(cached_flags & _TIF_NEED_FPU_LOAD))
+-		switch_fpu_return();
+-
+-#ifdef CONFIG_COMPAT
+-	/*
+-	 * Compat syscalls set TS_COMPAT.  Make sure we clear it before
+-	 * returning to user mode.  We need to clear it *after* signal
+-	 * handling, because syscall restart has a fixup for compat
+-	 * syscalls.  The fixup is exercised by the ptrace_syscall_32
+-	 * selftest.
+-	 *
+-	 * We also need to clear TS_REGS_POKED_I386: the 32-bit tracer
+-	 * special case only applies after poking regs and before the
+-	 * very next return to user mode.
+-	 */
+-	ti->status &= ~(TS_COMPAT|TS_I386_REGS_POKED);
+-#endif
+-}
+-
+-static noinstr void prepare_exit_to_usermode(struct pt_regs *regs)
+-{
+-	instrumentation_begin();
+-	__prepare_exit_to_usermode(regs);
+-	instrumentation_end();
+-	exit_to_user_mode();
+-}
+-
+-#define SYSCALL_EXIT_WORK_FLAGS				\
+-	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT |	\
+-	 _TIF_SINGLESTEP | _TIF_SYSCALL_TRACEPOINT)
+-
+-static void syscall_slow_exit_work(struct pt_regs *regs, u32 cached_flags)
+-{
+-	bool step;
+-
+-	audit_syscall_exit(regs);
+-
+-	if (cached_flags & _TIF_SYSCALL_TRACEPOINT)
+-		trace_sys_exit(regs, regs->ax);
+-
+-	/*
+-	 * If TIF_SYSCALL_EMU is set, we only get here because of
+-	 * TIF_SINGLESTEP (i.e. this is PTRACE_SYSEMU_SINGLESTEP).
+-	 * We already reported this syscall instruction in
+-	 * syscall_trace_enter().
+-	 */
+-	step = unlikely(
+-		(cached_flags & (_TIF_SINGLESTEP | _TIF_SYSCALL_EMU))
+-		== _TIF_SINGLESTEP);
+-	if (step || cached_flags & _TIF_SYSCALL_TRACE)
+-		tracehook_report_syscall_exit(regs, step);
+-}
+-
+-static void __syscall_return_slowpath(struct pt_regs *regs)
+-{
+-	struct thread_info *ti = current_thread_info();
+-	u32 cached_flags = READ_ONCE(ti->flags);
+-
+-	CT_WARN_ON(ct_state() != CONTEXT_KERNEL);
+-
+-	if (IS_ENABLED(CONFIG_PROVE_LOCKING) &&
+-	    WARN(irqs_disabled(), "syscall %ld left IRQs disabled", regs->orig_ax))
+-		local_irq_enable();
+-
+-	rseq_syscall(regs);
+-
+-	/*
+-	 * First do one-time work.  If these work items are enabled, we
+-	 * want to run them exactly once per syscall exit with IRQs on.
+-	 */
+-	if (unlikely(cached_flags & SYSCALL_EXIT_WORK_FLAGS))
+-		syscall_slow_exit_work(regs, cached_flags);
+-
+-	local_irq_disable();
+-	__prepare_exit_to_usermode(regs);
 -}
 -
 -/*
-- * Returns the syscall nr to run (which should match regs->orig_ax) or -1
-- * to skip the syscall.
+- * Called with IRQs on and fully valid regs.  Returns with IRQs off in a
+- * state such that we can immediately switch to user mode.
 - */
--static long syscall_trace_enter(struct pt_regs *regs)
+-__visible noinstr void syscall_return_slowpath(struct pt_regs *regs)
 -{
--	u32 arch = in_ia32_syscall() ? AUDIT_ARCH_I386 : AUDIT_ARCH_X86_64;
--
--	struct thread_info *ti = current_thread_info();
--	unsigned long ret = 0;
--	u32 work;
--
--	work = READ_ONCE(ti->flags);
--
--	if (work & (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_EMU)) {
--		ret = tracehook_report_syscall_entry(regs);
--		if (ret || (work & _TIF_SYSCALL_EMU))
--			return -1L;
--	}
--
--#ifdef CONFIG_SECCOMP
--	/*
--	 * Do seccomp after ptrace, to catch any tracer changes.
--	 */
--	if (work & _TIF_SECCOMP) {
--		struct seccomp_data sd;
--
--		sd.arch = arch;
--		sd.nr = regs->orig_ax;
--		sd.instruction_pointer = regs->ip;
--#ifdef CONFIG_X86_64
--		if (arch == AUDIT_ARCH_X86_64) {
--			sd.args[0] = regs->di;
--			sd.args[1] = regs->si;
--			sd.args[2] = regs->dx;
--			sd.args[3] = regs->r10;
--			sd.args[4] = regs->r8;
--			sd.args[5] = regs->r9;
--		} else
--#endif
--		{
--			sd.args[0] = regs->bx;
--			sd.args[1] = regs->cx;
--			sd.args[2] = regs->dx;
--			sd.args[3] = regs->si;
--			sd.args[4] = regs->di;
--			sd.args[5] = regs->bp;
--		}
--
--		ret = __secure_computing(&sd);
--		if (ret == -1)
--			return ret;
--	}
--#endif
--
--	if (unlikely(test_thread_flag(TIF_SYSCALL_TRACEPOINT)))
--		trace_sys_enter(regs, regs->orig_ax);
--
--	do_audit_syscall_entry(regs, arch);
--
--	return ret ?: regs->orig_ax;
--}
--
- #define EXIT_TO_USERMODE_LOOP_FLAGS				\
- 	(_TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_UPROBE |	\
- 	 _TIF_NEED_RESCHED | _TIF_USER_RETURN_NOTIFY | _TIF_PATCH_PENDING)
-@@ -366,26 +227,10 @@ static void __syscall_return_slowpath(st
- 	exit_to_user_mode();
- }
- 
--static noinstr long syscall_enter(struct pt_regs *regs, unsigned long nr)
--{
--	struct thread_info *ti;
--
--	enter_from_user_mode(regs);
 -	instrumentation_begin();
--
--	local_irq_enable();
--	ti = current_thread_info();
--	if (READ_ONCE(ti->flags) & _TIF_WORK_SYSCALL_ENTRY)
--		nr = syscall_trace_enter(regs);
--
+-	__syscall_return_slowpath(regs);
 -	instrumentation_end();
--	return nr;
+-	exit_to_user_mode();
 -}
 -
  #ifdef CONFIG_X86_64
  __visible noinstr void do_syscall_64(unsigned long nr, struct pt_regs *regs)
  {
--	nr = syscall_enter(regs, nr);
-+	nr = syscall_enter_from_user_mode(regs, nr);
+@@ -245,7 +53,7 @@ static void __syscall_return_slowpath(st
+ #endif
+ 	}
+ 	instrumentation_end();
+-	syscall_return_slowpath(regs);
++	syscall_exit_to_user_mode(regs);
+ }
+ #endif
  
- 	instrumentation_begin();
- 	if (likely(nr < NR_syscalls)) {
-@@ -407,6 +252,8 @@ static noinstr long syscall_enter(struct
- #if defined(CONFIG_X86_32) || defined(CONFIG_IA32_EMULATION)
- static __always_inline unsigned int syscall_32_enter(struct pt_regs *regs)
- {
-+	unsigned int nr = (unsigned int)regs->orig_ax;
-+
- 	if (IS_ENABLED(CONFIG_IA32_EMULATION))
- 		current_thread_info()->status |= TS_COMPAT;
- 	/*
-@@ -414,7 +261,7 @@ static __always_inline unsigned int sysc
- 	 * orig_ax, the unsigned int return value truncates it.  This may
- 	 * or may not be necessary, but it matches the old asm behavior.
- 	 */
--	return syscall_enter(regs, (unsigned int)regs->orig_ax);
-+	return (unsigned int)syscall_enter_from_user_mode(regs, nr);
+@@ -284,7 +92,7 @@ static __always_inline void do_syscall_3
+ 	unsigned int nr = syscall_32_enter(regs);
+ 
+ 	do_syscall_32_irqs_on(regs, nr);
+-	syscall_return_slowpath(regs);
++	syscall_exit_to_user_mode(regs);
  }
  
- /*
-@@ -568,7 +415,7 @@ SYSCALL_DEFINE0(ni_syscall)
-  * solves the problem of kernel mode pagefaults which can schedule, which
-  * is not possible after invoking rcu_irq_enter() without undoing it.
-  *
-- * For user mode entries enter_from_user_mode() must be invoked to
-+ * For user mode entries irqentry_enter_from_user_mode() must be invoked to
-  * establish the proper context for NOHZ_FULL. Otherwise scheduling on exit
-  * would not be possible.
-  *
-@@ -584,7 +431,7 @@ idtentry_state_t noinstr idtentry_enter(
- 	};
- 
- 	if (user_mode(regs)) {
--		enter_from_user_mode(regs);
-+		irqentry_enter_from_user_mode(regs);
- 		return ret;
+ static noinstr bool __do_fast_syscall_32(struct pt_regs *regs)
+@@ -310,13 +118,13 @@ static noinstr bool __do_fast_syscall_32
+ 	if (res) {
+ 		/* User code screwed up. */
+ 		regs->ax = -EFAULT;
+-		syscall_return_slowpath(regs);
++		syscall_exit_to_user_mode(regs);
+ 		return false;
  	}
  
-@@ -615,7 +462,7 @@ idtentry_state_t noinstr idtentry_enter(
- 		/*
- 		 * If RCU is not watching then the same careful
- 		 * sequence vs. lockdep and tracing is required
--		 * as in enter_from_user_mode().
-+		 * as in irqentry_enter_from_user_mode().
- 		 */
- 		lockdep_hardirqs_off(CALLER_ADDR0);
- 		rcu_irq_enter();
-@@ -709,18 +556,6 @@ void noinstr idtentry_exit(struct pt_reg
+ 	/* Now this is just like a normal syscall. */
+ 	do_syscall_32_irqs_on(regs, nr);
+-	syscall_return_slowpath(regs);
++	syscall_exit_to_user_mode(regs);
+ 	return true;
  }
  
- /**
-- * idtentry_enter_user - Handle state tracking on idtentry from user mode
-- * @regs:	Pointer to pt_regs of interrupted context
+@@ -524,7 +332,7 @@ void noinstr idtentry_exit(struct pt_reg
+ 
+ 	/* Check whether this returns to user mode */
+ 	if (user_mode(regs)) {
+-		prepare_exit_to_usermode(regs);
++		irqentry_exit_to_user_mode(regs);
+ 	} else if (regs->flags & X86_EFLAGS_IF) {
+ 		/*
+ 		 * If RCU was not watching on entry this needs to be done
+@@ -555,25 +363,6 @@ void noinstr idtentry_exit(struct pt_reg
+ 	}
+ }
+ 
+-/**
+- * idtentry_exit_user - Handle return from exception to user mode
+- * @regs:	Pointer to pt_regs (exception entry regs)
 - *
-- * Invokes enter_from_user_mode() to establish the proper context for
-- * NOHZ_FULL. Otherwise scheduling on exit would not be possible.
+- * Runs the necessary preemption and work checks and returns to the caller
+- * with interrupts disabled and no further work pending.
+- *
+- * This is the last action before returning to the low level ASM code which
+- * just needs to return to the appropriate context.
+- *
+- * Counterpart to idtentry_enter_user().
 - */
--void noinstr idtentry_enter_user(struct pt_regs *regs)
+-void noinstr idtentry_exit_user(struct pt_regs *regs)
 -{
--	enter_from_user_mode(regs);
+-	lockdep_assert_irqs_disabled();
+-
+-	prepare_exit_to_usermode(regs);
 -}
 -
--/**
-  * idtentry_exit_user - Handle return from exception to user mode
-  * @regs:	Pointer to pt_regs (exception entry regs)
-  *
---- /dev/null
+ #ifdef CONFIG_XEN_PV
+ #ifndef CONFIG_PREEMPTION
+ /*
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -846,7 +846,7 @@ SYM_CODE_START(ret_from_fork)
+ 2:
+ 	/* When we fork, we trace the syscall return in the child, too. */
+ 	movl    %esp, %eax
+-	call    syscall_return_slowpath
++	call    syscall_exit_to_user_mode
+ 	jmp     .Lsyscall_32_done
+ 
+ 	/* kernel thread */
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -283,7 +283,7 @@ SYM_CODE_START(ret_from_fork)
+ 2:
+ 	UNWIND_HINT_REGS
+ 	movq	%rsp, %rdi
+-	call	syscall_return_slowpath	/* returns with IRQs disabled */
++	call	syscall_exit_to_user_mode	/* returns with IRQs disabled */
+ 	jmp	swapgs_restore_regs_and_return_to_usermode
+ 
+ 1:
+--- a/arch/x86/include/asm/entry-common.h
 +++ b/arch/x86/include/asm/entry-common.h
-@@ -0,0 +1,86 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _ASM_X86_ENTRY_COMMON_H
-+#define _ASM_X86_ENTRY_COMMON_H
+@@ -2,9 +2,14 @@
+ #ifndef _ASM_X86_ENTRY_COMMON_H
+ #define _ASM_X86_ENTRY_COMMON_H
+ 
++#include <linux/user-return-notifier.h>
++#include <linux/context_tracking.h>
+ #include <linux/seccomp.h>
+ #include <linux/audit.h>
+ 
++#include <asm/nospec-branch.h>
++#include <asm/fpu/api.h>
 +
-+#include <linux/seccomp.h>
-+#include <linux/audit.h>
+ /* Check that the stack and regs on entry from user mode are sane. */
+ static __always_inline void arch_check_user_regs(struct pt_regs *regs)
+ {
+@@ -83,4 +88,48 @@ static inline void arch_syscall_enter_au
+ }
+ #define arch_syscall_enter_audit arch_syscall_enter_audit
+ 
++#define ARCH_SYSCALL_EXIT_WORK		(_TIF_SINGLESTEP)
 +
-+/* Check that the stack and regs on entry from user mode are sane. */
-+static __always_inline void arch_check_user_regs(struct pt_regs *regs)
++#define ARCH_EXIT_TO_USERMODE_WORK	(_TIF_USER_RETURN_NOTIFY)
++
++#define ARCH_EXIT_TO_USER_FROM_SYSCALL_EXIT
++
++static inline void arch_exit_to_user_mode_work(struct pt_regs *regs,
++					       unsigned long ti_work)
 +{
-+	if (IS_ENABLED(CONFIG_DEBUG_ENTRY)) {
-+		/*
-+		 * Make sure that the entry code gave us a sensible EFLAGS
-+		 * register.  Native because we want to check the actual CPU
-+		 * state, not the interrupt state as imagined by Xen.
-+		 */
-+		unsigned long flags = native_save_fl();
-+		WARN_ON_ONCE(flags & (X86_EFLAGS_AC | X86_EFLAGS_DF |
-+				      X86_EFLAGS_NT));
-+
-+		/* We think we came from user mode. Make sure pt_regs agrees. */
-+		WARN_ON_ONCE(!user_mode(regs));
-+
-+		/*
-+		 * All entries from user mode (except #DF) should be on the
-+		 * normal thread stack and should have user pt_regs in the
-+		 * correct location.
-+		 */
-+		WARN_ON_ONCE(!on_thread_stack());
-+		WARN_ON_ONCE(regs != task_pt_regs(current));
-+	}
++	if (ti_work & _TIF_USER_RETURN_NOTIFY)
++		fire_user_return_notifiers();
 +}
-+#define arch_check_user_regs arch_check_user_regs
++#define arch_exit_to_user_mode_work arch_exit_to_user_mode_work
 +
-+static inline long arch_syscall_enter_seccomp(struct pt_regs *regs)
++static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
++						  unsigned long ti_work)
 +{
-+#ifdef CONFIG_SECCOMP
-+	u32 arch = in_ia32_syscall() ? AUDIT_ARCH_I386 : AUDIT_ARCH_X86_64;
-+	struct seccomp_data sd;
++	fpregs_assert_state_consistent();
++	if (unlikely(ti_work & _TIF_NEED_FPU_LOAD))
++		switch_fpu_return();
 +
-+	sd.arch = arch;
-+	sd.nr = regs->orig_ax;
-+	sd.instruction_pointer = regs->ip;
-+
-+#ifdef CONFIG_X86_64
-+	if (arch == AUDIT_ARCH_X86_64) {
-+		sd.args[0] = regs->di;
-+		sd.args[1] = regs->si;
-+		sd.args[2] = regs->dx;
-+		sd.args[3] = regs->r10;
-+		sd.args[4] = regs->r8;
-+		sd.args[5] = regs->r9;
-+	} else
-+#endif
-+	{
-+		sd.args[0] = regs->bx;
-+		sd.args[1] = regs->cx;
-+		sd.args[2] = regs->dx;
-+		sd.args[3] = regs->si;
-+		sd.args[4] = regs->di;
-+		sd.args[5] = regs->bp;
-+	}
-+
-+	return __secure_computing(&sd);
-+#else
-+	return 0;
++#ifdef CONFIG_COMPAT
++	/*
++	 * Compat syscalls set TS_COMPAT.  Make sure we clear it before
++	 * returning to user mode.  We need to clear it *after* signal
++	 * handling, because syscall restart has a fixup for compat
++	 * syscalls.  The fixup is exercised by the ptrace_syscall_32
++	 * selftest.
++	 *
++	 * We also need to clear TS_REGS_POKED_I386: the 32-bit tracer
++	 * special case only applies after poking regs and before the
++	 * very next return to user mode.
++	 */
++	current_thread_info()->status &= ~(TS_COMPAT | TS_I386_REGS_POKED);
 +#endif
 +}
-+#define arch_syscall_enter_seccomp arch_syscall_enter_seccomp
++#define arch_exit_to_user_mode_prepare arch_exit_to_user_mode_prepare
 +
-+static inline void arch_syscall_enter_audit(struct pt_regs *regs)
++static __always_inline void arch_exit_to_user_mode(void)
 +{
-+#ifdef CONFIG_X86_64
-+	if (in_ia32_syscall()) {
-+		audit_syscall_entry(regs->orig_ax, regs->di,
-+				    regs->si, regs->dx, regs->r10);
-+	} else
-+#endif
-+	{
-+		audit_syscall_entry(regs->orig_ax, regs->bx,
-+				    regs->cx, regs->dx, regs->si);
-+	}
++	mds_user_clear_cpu_buffers();
 +}
-+#define arch_syscall_enter_audit arch_syscall_enter_audit
++#define arch_exit_to_user_mode arch_exit_to_user_mode
 +
-+#endif
+ #endif
 --- a/arch/x86/include/asm/idtentry.h
 +++ b/arch/x86/include/asm/idtentry.h
-@@ -6,11 +6,14 @@
- #include <asm/trapnr.h>
+@@ -13,8 +13,7 @@
  
- #ifndef __ASSEMBLY__
-+#include <linux/entry-common.h>
- #include <linux/hardirq.h>
- 
- #include <asm/irq_stack.h>
- 
--void idtentry_enter_user(struct pt_regs *regs);
-+/* Temporary define */
-+#define idtentry_enter_user	irqentry_enter_from_user_mode
-+
- void idtentry_exit_user(struct pt_regs *regs);
+ /* Temporary define */
+ #define idtentry_enter_user	irqentry_enter_from_user_mode
+-
+-void idtentry_exit_user(struct pt_regs *regs);
++#define idtentry_exit_user	irqentry_exit_to_user_mode
  
  typedef struct idtentry_state {
---- a/arch/x86/include/asm/thread_info.h
-+++ b/arch/x86/include/asm/thread_info.h
-@@ -133,11 +133,6 @@ struct thread_info {
- #define _TIF_X32		(1 << TIF_X32)
- #define _TIF_FSCHECK		(1 << TIF_FSCHECK)
+ 	bool exit_rcu;
+--- a/arch/x86/include/asm/signal.h
++++ b/arch/x86/include/asm/signal.h
+@@ -35,7 +35,6 @@ typedef sigset_t compat_sigset_t;
+ #endif /* __ASSEMBLY__ */
+ #include <uapi/asm/signal.h>
+ #ifndef __ASSEMBLY__
+-extern void do_signal(struct pt_regs *regs);
  
--/* Work to do before invoking the actual syscall. */
--#define _TIF_WORK_SYSCALL_ENTRY	\
--	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_EMU | _TIF_SYSCALL_AUDIT |	\
--	 _TIF_SECCOMP | _TIF_SYSCALL_TRACEPOINT)
--
- /* flags to check in __switch_to() */
- #define _TIF_WORK_CTXSW_BASE					\
- 	(_TIF_NOCPUID | _TIF_NOTSC | _TIF_BLOCKSTEP |		\
+ #define __ARCH_HAS_SA_RESTORER
+ 
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -803,7 +803,7 @@ static inline unsigned long get_nr_resta
+  * want to handle. Thus you cannot kill init even with a SIGKILL even by
+  * mistake.
+  */
+-void do_signal(struct pt_regs *regs)
++void arch_do_signal(struct pt_regs *regs)
+ {
+ 	struct ksignal ksig;
+ 
 
