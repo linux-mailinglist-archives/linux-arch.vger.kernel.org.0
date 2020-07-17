@@ -2,32 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5A8223671
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 10:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC8C2237FF
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 11:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727002AbgGQICN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 04:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S1726316AbgGQJSM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 05:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728207AbgGQICM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 04:02:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D951AC08C5C0
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jul 2020 01:02:11 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1jwLJO-0000MA-Fl; Fri, 17 Jul 2020 10:01:42 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:6150:3c6e:283b:b7f7] (unknown [IPv6:2a03:f580:87bc:d400:6150:3c6e:283b:b7f7])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AE488532E22;
-        Fri, 17 Jul 2020 08:01:30 +0000 (UTC)
-Subject: Re: [PATCH 22/22] net: make ->{get,set}sockopt in proto_ops optional
+        with ESMTP id S1725932AbgGQJSL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 05:18:11 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D373C08C5C0
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jul 2020 02:18:11 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id n22so7084948ejy.3
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jul 2020 02:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ABtoKcunWta1zPd9OAU4HivGakSrvH6t7PoGrVg1IHw=;
+        b=xR7/TE9+zWjcsvx6d03jd1AgLl1RxCF+57iDGUw8QqO8NNJiU5y/1PDhMHyK6SBPD0
+         Tu9kE2ltrVcgIGDsEFYeGOdvGGs9gXhWrY0fvfmRtJuRWzhuLiSsJxij8VwijPfHjTPS
+         3aRzO2LOdNynO+M1Cxqg8LEaNT7+cWaMS9ZleuZy42uIKF7zbE+VVsfyNZHqDLg2WCO5
+         2IhHaXOEiidwv/4zssU9rGm6ibTKTyOzBFUfh4ZlLc65xFj4ZNu5VWofuJadgyUIYj5C
+         Y93p7sEtG5rh/7aWXf9IEREZyDETtvRRffJXB7kNBwNCJiHJc9kale3U3Oqjmxgbkhyq
+         rtqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ABtoKcunWta1zPd9OAU4HivGakSrvH6t7PoGrVg1IHw=;
+        b=TZou6T/TX3q8goPrsKVIPpBdSpIfWRWPW3e0K2WQs+Sv+R8MSbOSTgKSr104PiJOvI
+         lUrfVKLuMaw4QxyRl8bCiM2RcIGWKpDLKYFedgO0eR21Mtu3XwNiu7qc0uUet9yVD6tH
+         XG7LKURHHqDQBloeT2fwlZ4+IEFLCQ9h4aL+RzNLRNBxngTnj1kel9rX7cRaA3UqKshW
+         Z2sbIxWP0KDwJ4ofxZ2mv+ULkpdw5KLIQV4F9M5sjLHCr8QCId933TYFi4ptsI8EXhse
+         6E3iVi5cmYrfOMO0a9/yJXh3e9C7+xG1bPHtNlVRpPlwTWHpqqD/mOocorZoQgj/cLV4
+         5omQ==
+X-Gm-Message-State: AOAM530oVud+/l5oPMEoEbJhVWG1ohIp/1wk8XL0ClOMgFaHpjrGUQt1
+        zeEVmi2ZLCgzS4xq2aqcB9Rl+zKb4B8=
+X-Google-Smtp-Source: ABdhPJwKJni/XUuyRKR8S/sAchcIII3C/3Gdc/GCPUNVX6T8sPkuUFzqwgJFnhzYtCojkw18DlkE7Q==
+X-Received: by 2002:a17:907:426c:: with SMTP id nx20mr7604495ejb.548.1594977490002;
+        Fri, 17 Jul 2020 02:18:10 -0700 (PDT)
+Received: from tsr-lap-08.nix.tessares.net ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id p4sm7541372eji.123.2020.07.17.02.18.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jul 2020 02:18:08 -0700 (PDT)
+Subject: Re: [MPTCP] [PATCH 05/22] net: remove
+ compat_sock_common_{get,set}sockopt
 To:     Christoph Hellwig <hch@lst.de>,
         "David S. Miller" <davem@davemloft.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -35,7 +57,6 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Chas Williams <3chas3@gmail.com>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
@@ -45,66 +66,44 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         linux-can@vger.kernel.org, dccp@vger.kernel.org,
         linux-wpan@vger.kernel.org, mptcp@lists.01.org
 References: <20200717062331.691152-1-hch@lst.de>
- <20200717062331.691152-23-hch@lst.de>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
- zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
- QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
- 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
- Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
- XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
- nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
- Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
- eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
- kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
- ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
- CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
- iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
- Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
- Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
- tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
- yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
- BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
- mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
- 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
- Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
- 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
-Message-ID: <5f88e695-d787-2191-feef-883a067788ed@pengutronix.de>
-Date:   Fri, 17 Jul 2020 10:01:28 +0200
+ <20200717062331.691152-6-hch@lst.de>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Message-ID: <203f5f41-1de0-575e-864b-53a9412d97f6@tessares.net>
+Date:   Fri, 17 Jul 2020 11:18:08 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200717062331.691152-23-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+In-Reply-To: <20200717062331.691152-6-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-arch@vger.kernel.org
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/17/20 8:23 AM, Christoph Hellwig wrote:
-> Just check for a NULL method instead of wiring up
-> sock_no_{get,set}sockopt.
+Hi Christoph,
+
+On 17/07/2020 08:23, Christoph Hellwig wrote:
+> Add the compat handling to sock_common_{get,set}sockopt instead,
+> keyed of in_compat_syscall().  This allow to remove the now unused
+> ->compat_{get,set}sockopt methods from struct proto_ops.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  net/can/bcm.c               |  2 --
->  net/core/sock.c             | 14 --------------
+>   include/linux/net.h      |  6 ------
+>   include/net/sock.h       |  4 ----
+>   net/core/sock.c          | 30 ++++++------------------------
+>   net/mptcp/protocol.c     |  6 ------
 
-For the CAN part:
+Thank you for looking at that!
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+For MPTCP-related code:
 
-Marc
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
+Cheers,
+Matt
 -- 
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
