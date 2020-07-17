@@ -2,136 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73598224439
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 21:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC9A22452A
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 22:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728268AbgGQT3k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 15:29:40 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:42658 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727999AbgGQT3k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 15:29:40 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595014176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=epByd5xUArlj64sAwQwDhQ0ku+RyRhUcoJ9aqhT7QZw=;
-        b=pOJnlIP89W85WkeayXUyvnSOlcLSwC7H0IKBi1adAhCjyZQZ8ap6hcFeAxrRMuyl1bvCK8
-        fZBnF4fLXYdvGFo7FgMdfTl0+ojF3kR37ClLv1hxwtHQ7xyGCK2EF2yfVVA+aXgRxqCFdP
-        l6b7H6h9JE8w+01yq5WbN5fvxjqB6r8KvyUgRblFhgz8TtN9hiWijxCTYcHrGfXdFny+Pi
-        HJdaz4269YX7A7nbjjwigVzIWHldKqmV7j7lCHnHSd/Q0jet3cbrMUuP3Wze/YGVxOJpMD
-        gkDKGeGFG2fAah6fjoVEesLSQxklUa3S7TeYLtc+MfphKcrIarcQ7RCILa/k1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595014176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=epByd5xUArlj64sAwQwDhQ0ku+RyRhUcoJ9aqhT7QZw=;
-        b=S3UsK4BQe5+3DBSPnvpLNIWCaUaYjdBOdD/TwxDOUdmqfUwFqJXlwPMQl+PDTogKSBkfSx
-        8KaURcHGtkWfcXCg==
-To:     Kees Cook <keescook@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: Re: [patch V3 01/13] entry: Provide generic syscall entry functionality
-In-Reply-To: <202007171045.FB4A586F1D@keescook>
-References: <20200716182208.180916541@linutronix.de> <20200716185424.011950288@linutronix.de> <202007161336.B993ED938@keescook> <87d04vt98w.fsf@nanos.tec.linutronix.de> <202007171045.FB4A586F1D@keescook>
-Date:   Fri, 17 Jul 2020 21:29:36 +0200
-Message-ID: <87mu3yq6sf.fsf@nanos.tec.linutronix.de>
+        id S1728623AbgGQU0W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 16:26:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32944 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726510AbgGQU0W (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Jul 2020 16:26:22 -0400
+Received: from localhost (mobile-166-175-191-139.mycingular.net [166.175.191.139])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9C36A20684;
+        Fri, 17 Jul 2020 20:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595017582;
+        bh=/hYopkLccKkwFpSirohLu9rK4PERmsXifMkvfY8na74=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=s3QH/t9ocNHEPH2/jvWRB8qEQKIK64CQ+GlRWp8yjZLbWaD3J5hfVQ80kDY7xshpH
+         xeiUCkt/Irn0dwJ5rev9qj5TqMu055YbwJsqTl3kaW+lblQMHHzeP7vMEYgEstIATL
+         o2+gGzz8bNJr4YllTtvOL6MhViMZk5u3gpLyaYYU=
+Date:   Fri, 17 Jul 2020 15:26:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 11/22] pci: lto: fix PREL32 relocations
+Message-ID: <20200717202620.GA768846@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200624203200.78870-12-samitolvanen@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> On Thu, Jul 16, 2020 at 11:55:59PM +0200, Thomas Gleixner wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> >> +/*
->> >> + * Define dummy _TIF work flags if not defined by the architecture or for
->> >> + * disabled functionality.
->> >> + */
->> >
->> > When I was thinking about this last week I was pondering having a split
->> > between the arch-agnositc TIF flags and the arch-specific TIF flags, and
->> > that each arch could have a single "there is agnostic work to be done"
->> > TIF in their thread_info, and the agnostic flags could live in
->> > task_struct or something. Anyway, I'll keep reading...
->> 
->> That's going to be nasty. We rather go and expand the TIF storage to
->> 64bit. And then do the following in a generic header:
->
-> I though the point was to make the TIF_WORK check as fast as possible,
-> even on the 32-bit word systems. I mean it's not a huge performance hit,
-> but *shrug*
+OK by me, but please update the subject to match convention:
 
-For 64bit it's definitely faster to have 64bit flags.
+  PCI: Fix PREL32 relocations for LTO
 
-For 32bit it's debatable whether having to fiddle with two words and
-taking care about ordering is faster or not. It's a pain on 32bit in any
-case.
+and include a hint in the commit log about what LTO is.  At least
+expand the initialism once.  Googling for "LTO" isn't very useful.
 
-But what we can do is distangle the flags into those which really need
-to be grouped into a single 32bit TIF word and architecture specific
-ones which can live in a different place.
+  With Clang's Link Time Optimization (LTO), the compiler ... ?
 
-Looking at x86 which has the most pressure on TIF bits:
+On Wed, Jun 24, 2020 at 01:31:49PM -0700, Sami Tolvanen wrote:
+> With LTO, the compiler can rename static functions to avoid global
+> naming collisions. As PCI fixup functions are typically static,
+> renaming can break references to them in inline assembly. This
+> change adds a global stub to DECLARE_PCI_FIXUP_SECTION to fix the
+> issue when PREL32 relocations are used.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-Real TIF bits
-TIF_SYSCALL_TRACE       Entry/exit
-TIF_SYSCALL_TRACEPOINT	Entry/exit
-TIF_NOTIFY_RESUME       Entry/exit
-TIF_SIGPENDING          Entry/exit
-TIF_NEED_RESCHED        Entry/exit
-TIF_SINGLESTEP          Entry/exit
-TIF_SYSCALL_EMU         Entry/exit
-TIF_SYSCALL_AUDIT       Entry/exit
-TIF_SECCOMP             Entry/exit
-TIF_USER_RETURN_NOTIFY	Entry/exit      (x86 specific)
-TIF_UPROBE		Entry/exit
-TIF_PATCH_PENDING       Entry/exit
-TIF_POLLING_NRFLAG      Scheduler (related to TIF_NEED_RESCHED)
-TIF_MEMDIE              Historical, but not required to be a real one
-TIF_FSCHECK		Historical, but not required to be a real one
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Context switch group
-TIF_NOCPUID             X86 Context switch
-TIF_NOTSC               X86 Context switch
-TIF_SLD                 X86 Context switch
-TIF_BLOCKSTEP           X86 Context switch
-TIF_IO_BITMAP           X86 Context switch + Entry/exit (see below)
-TIF_NEED_FPU_LOAD       X86 Context switch + Entry/exit (see below)
-TIF_SSBD                X86 Context switch
-TIF_SPEC_IB             X86 Context switch
-TIF_SPEC_FORCE_UPDATE   X86 Context switch
-
-No group requirements
-TIF_IA32                X86 random
-TIF_FORCED_TF           X86 random
-TIF_LAZY_MMU_UPDATES    X86 random
-TIF_ADDR32              X86 random
-TIF_X32                 X86 random
-
-So the only interesting ones are TIF_IO_BITMAP and TIF_NEED_FPU_LOAD,
-but those are really not required to be in the real TIF group because
-they are independently evaluated _after_ the real TIF flags on exit to
-user space and that requires a reread of the flags anyway. So if we put
-the context switch and the random bits into a seperate word right after
-thread_info->flags then the second word is in the same cacheline and it
-wont matter. That way we gain plenty of free bits on 32 bit and have no
-dependency between the two words at all.
-
-The alternative is to play nasty games with TIF_IA32, TIF_ADDR32 and
-TIF_X32 to free up bits for 32bit and make the flags field 64 bit on 64
-bit kernels, but I prefer to do the above seperation.
-
-Thanks,
-
-        tglx
+> ---
+>  include/linux/pci.h | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index c79d83304e52..1e65e16f165a 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1909,19 +1909,24 @@ enum pci_fixup_pass {
+>  };
+>  
+>  #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+> -#define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+> -				    class_shift, hook)			\
+> -	__ADDRESSABLE(hook)						\
+> +#define ___DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+> +				    class_shift, hook, stub)		\
+> +	void stub(struct pci_dev *dev) { hook(dev); }			\
+>  	asm(".section "	#sec ", \"a\"				\n"	\
+>  	    ".balign	16					\n"	\
+>  	    ".short "	#vendor ", " #device "			\n"	\
+>  	    ".long "	#class ", " #class_shift "		\n"	\
+> -	    ".long "	#hook " - .				\n"	\
+> +	    ".long "	#stub " - .				\n"	\
+>  	    ".previous						\n");
+> +
+> +#define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+> +				  class_shift, hook, stub)		\
+> +	___DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+> +				  class_shift, hook, stub)
+>  #define DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+>  				  class_shift, hook)			\
+>  	__DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
+> -				  class_shift, hook)
+> +				  class_shift, hook, __UNIQUE_ID(hook))
+>  #else
+>  /* Anonymous variables would be nice... */
+>  #define DECLARE_PCI_FIXUP_SECTION(section, name, vendor, device, class,	\
+> -- 
+> 2.27.0.212.ge8ba1cc988-goog
+> 
