@@ -2,129 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76A9224081
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 18:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0002A224149
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 19:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgGQQWw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 12:22:52 -0400
-Received: from mail.efficios.com ([167.114.26.124]:43290 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbgGQQWv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 12:22:51 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 420DC2C8FB5;
-        Fri, 17 Jul 2020 12:22:50 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DrMZ3PK9QUvm; Fri, 17 Jul 2020 12:22:50 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id E70C52C8CB5;
-        Fri, 17 Jul 2020 12:22:49 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com E70C52C8CB5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1595002969;
-        bh=SI5wUypTRLM5H8MPVlD9dpid26u5Bm0FCC72XQP4wSs=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=YOiv6ozxu4E6A5foQYmqBv+qNQXDkOPxMiTdoBYTzfQkc/ObGjUFdJzRTGNPcEAr1
-         lUBBs0tfgyeEtGvPbVbpNKLDLR2NcnWYAQ3fbTM2Jjv2+/K9OQVZwcolRJ+weQMgSw
-         Tr5O6JxmjIzYAdS7ta4wex86s9+HpeI8V+9kT3trf6Pk2OrQl3kxr6QSju4QZjD8V5
-         Kj2ALcAIToCll1QYChYjzqCBuLNeaywR/i/IV+BY5RQcc1pEzBxwE/p72Bk90Vc53m
-         CwsWAQ+kV7ZcU1QOZRkZIs44jSEHC/bES7rgw2BgUqr81nSLGdjdvrrqCMdG0ExOHl
-         AuVcHb9PyJLdA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id F1yIO4N-dRQg; Fri, 17 Jul 2020 12:22:49 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id D3F542C8F1B;
-        Fri, 17 Jul 2020 12:22:49 -0400 (EDT)
-Date:   Fri, 17 Jul 2020 12:22:49 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, paulmck <paulmck@kernel.org>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
-Message-ID: <12700909.18968.1595002969773.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20200717161145.GA1150454@rowland.harvard.edu>
-References: <20200710015646.2020871-1-npiggin@gmail.com> <1370747990.15974.1594915396143.JavaMail.zimbra@efficios.com> <595582123.17106.1594925921537.JavaMail.zimbra@efficios.com> <20200716212416.GA1126458@rowland.harvard.edu> <1770378591.18523.1594993165391.JavaMail.zimbra@efficios.com> <20200717145102.GC1147780@rowland.harvard.edu> <1697220787.18880.1595000348405.JavaMail.zimbra@efficios.com> <20200717161145.GA1150454@rowland.harvard.edu>
-Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
+        id S1728050AbgGQRAq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 13:00:46 -0400
+Received: from mga12.intel.com ([192.55.52.136]:38516 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726938AbgGQRAq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Jul 2020 13:00:46 -0400
+IronPort-SDR: ThkC0W66uHL9/qZLRfwIrLqWjoJahS5GhssQW77ZJ4wUlzXjG7vh4qEBUqubs9HkbjHsxAgw1k
+ NpVDehrW9mTw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="129202492"
+X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
+   d="scan'208";a="129202492"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 10:00:44 -0700
+IronPort-SDR: 48hV9N2ZV95iTOqnJkajWh5Yu8b7gpJwIBPXkRuLfGJbaTivBdVrhxWZzfhRqAVR2PA/jZy9q0
+ EfTGxeH1E6VA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
+   d="scan'208";a="270862022"
+Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.33.149])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Jul 2020 10:00:37 -0700
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     arjan@linux.intel.com, linux-kernel@vger.kernel.org,
+        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v4 04/10] x86: Makefile: Add build and config option for CONFIG_FG_KASLR
+Date:   Fri, 17 Jul 2020 10:00:01 -0700
+Message-Id: <20200717170008.5949-5-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200717170008.5949-1-kristen@linux.intel.com>
+References: <20200717170008.5949-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
-Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
-Thread-Index: 0YKEfKGIYUqxyDBXMitHDrNBdhjyuQ==
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Jul 17, 2020, at 12:11 PM, Alan Stern stern@rowland.harvard.edu wrote:
+Allow user to select CONFIG_FG_KASLR if dependencies are met. Change
+the make file to build with -ffunction-sections if CONFIG_FG_KASLR.
 
->> > I agree with Nick: A memory barrier is needed somewhere between the
->> > assignment at 6 and the return to user mode at 8.  Otherwise you end up
->> > with the Store Buffer pattern having a memory barrier on only one side,
->> > and it is well known that this arrangement does not guarantee any
->> > ordering.
->> 
->> Yes, I see this now. I'm still trying to wrap my head around why the memory
->> barrier at the end of membarrier() needs to be paired with a scheduler
->> barrier though.
-> 
-> The memory barrier at the end of membarrier() on CPU0 is necessary in
-> order to enforce the guarantee that any writes occurring on CPU1 before
-> the membarrier() is executed will be visible to any code executing on
-> CPU0 after the membarrier().  Ignoring the kthread issue, we can have:
-> 
->	CPU0			CPU1
->				x = 1
->				barrier()
->				y = 1
->	r2 = y
->	membarrier():
->	  a: smp_mb()
->	  b: send IPI		IPI-induced mb
->	  c: smp_mb()
->	r1 = x
-> 
-> The writes to x and y are unordered by the hardware, so it's possible to
-> have r2 = 1 even though the write to x doesn't execute until b.  If the
-> memory barrier at c is omitted then "r1 = x" can be reordered before b
-> (although not before a), so we get r1 = 0.  This violates the guarantee
-> that membarrier() is supposed to provide.
-> 
-> The timing of the memory barrier at c has to ensure that it executes
-> after the IPI-induced memory barrier on CPU1.  If it happened before
-> then we could still end up with r1 = 0.  That's why the pairing matters.
-> 
-> I hope this helps your head get properly wrapped.  :-)
+While the only architecture that supports CONFIG_FG_KASLR does not
+currently enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION, make sure these
+2 features play nicely together for the future by ensuring that if
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is selected when used with
+CONFIG_FG_KASLR the function sections will not be consolidated back
+into .text. Thanks to Kees Cook for the dead code elimination changes.
 
-It does help a bit! ;-)
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Tony Luck <tony.luck@intel.com>
+---
+ Makefile                          |  6 +++++-
+ arch/x86/Kconfig                  |  4 ++++
+ include/asm-generic/vmlinux.lds.h | 16 ++++++++++++++--
+ init/Kconfig                      | 14 ++++++++++++++
+ 4 files changed, 37 insertions(+), 3 deletions(-)
 
-This explains this part of the comment near the smp_mb at the end of membarrier:
-
-         * Memory barrier on the caller thread _after_ we finished
-         * waiting for the last IPI. [...]
-
-However, it does not explain why it needs to be paired with a barrier in the
-scheduler, clearly for the case where the IPI is skipped. I wonder whether this part
-of the comment is factually correct:
-
-         * [...] Matches memory barriers around rq->curr modification in scheduler.
-
-Thanks,
-
-Mathieu
-
+diff --git a/Makefile b/Makefile
+index 0b5f8538bde5..66427b12de53 100644
+--- a/Makefile
++++ b/Makefile
+@@ -872,7 +872,7 @@ KBUILD_CFLAGS += $(call cc-option, -fno-inline-functions-called-once)
+ endif
+ 
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+-KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
++KBUILD_CFLAGS_KERNEL += -fdata-sections
+ LDFLAGS_vmlinux += --gc-sections
+ endif
+ 
+@@ -880,6 +880,10 @@ ifdef CONFIG_LIVEPATCH
+ KBUILD_CFLAGS += $(call cc-option, -flive-patching=inline-clone)
+ endif
+ 
++ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
++KBUILD_CFLAGS += -ffunction-sections
++endif
++
+ ifdef CONFIG_SHADOW_CALL_STACK
+ CC_FLAGS_SCS	:= -fsanitize=shadow-call-stack
+ KBUILD_CFLAGS	+= $(CC_FLAGS_SCS)
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 883da0abf779..e7a2db3e270d 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -372,6 +372,10 @@ config CC_HAS_SANE_STACKPROTECTOR
+ 	   We have to make sure stack protector is unconditionally disabled if
+ 	   the compiler produces broken code.
+ 
++config ARCH_HAS_FG_KASLR
++	def_bool y
++	depends on RANDOMIZE_BASE && X86_64
++
+ menu "Processor type and features"
+ 
+ config ZONE_DMA
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index db600ef218d7..a5552cf28d5d 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -93,14 +93,12 @@
+  * sections to be brought in with rodata.
+  */
+ #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+-#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+ #define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..LPBX*
+ #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+ #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]*
+ #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]*
+ #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
+ #else
+-#define TEXT_MAIN .text
+ #define DATA_MAIN .data
+ #define SDATA_MAIN .sdata
+ #define RODATA_MAIN .rodata
+@@ -108,6 +106,20 @@
+ #define SBSS_MAIN .sbss
+ #endif
+ 
++/*
++ * Both LD_DEAD_CODE_DATA_ELIMINATION and CONFIG_FG_KASLR options enable
++ * -ffunction-sections, which produces separately named .text sections. In
++ * the case of CONFIG_FG_KASLR, they need to stay distict so they can be
++ * separately randomized. Without CONFIG_FG_KASLR, the separate .text
++ * sections can be collected back into a common section, which makes the
++ * resulting image slightly smaller
++ */
++#if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(CONFIG_FG_KASLR)
++#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
++#else
++#define TEXT_MAIN .text
++#endif
++
+ /*
+  * Align to a 32 byte boundary equal to the
+  * alignment gcc 4.5 uses for a struct
+diff --git a/init/Kconfig b/init/Kconfig
+index 0498af567f70..82f042a1062f 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1990,6 +1990,20 @@ config PROFILING
+ config TRACEPOINTS
+ 	bool
+ 
++config FG_KASLR
++	bool "Function Granular Kernel Address Space Layout Randomization"
++	depends on $(cc-option, -ffunction-sections)
++	depends on ARCH_HAS_FG_KASLR
++	default n
++	help
++	  This option improves the randomness of the kernel text
++	  over basic Kernel Address Space Layout Randomization (KASLR)
++	  by reordering the kernel text at boot time. This feature
++	  uses information generated at compile time to re-layout the
++	  kernel text section at boot time at function level granularity.
++
++	  If unsure, say N.
++
+ endmenu		# General setup
+ 
+ source "arch/Kconfig"
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.20.1
+
