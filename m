@@ -2,31 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A882F223294
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 06:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D421223312
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 07:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbgGQEp4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 00:45:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42308 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725864AbgGQEp4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 17 Jul 2020 00:45:56 -0400
-Received: from sol.hsd1.ca.comcast.net (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E66952071A;
-        Fri, 17 Jul 2020 04:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594961155;
-        bh=2d9QmkmWrAR4QgerUk4A9L+J8tlPTeoVoUmhc6Of+hM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SERugfeU3gZ8i8FENUn2s6y6Zh3X0wlF6xeSmAdyIe0xy1genwn9EdD/xjO6LMogx
-         9fHBbceh9pNb0bSIOqEXAfLoJet26PdioE7glSYpCRZ3igepH3zhPrqppLDktS+kN+
-         K1DPdxXI/7kDPq6rl1R3Ee8BGRU4vOUrMYiJBXRU=
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        id S1725912AbgGQFtP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 01:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbgGQFtO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 01:49:14 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F5FC061755;
+        Thu, 16 Jul 2020 22:49:14 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id f23so9275872iof.6;
+        Thu, 16 Jul 2020 22:49:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=jRkz34kzHFPJP/YTtWgR3dxC6hqrBlvuag30CVq0UoQ=;
+        b=iI/+5rrkFI4dnPFFL/L9iw7HH0VcWjZdoGZaaLuBlmQLDJBqtgojCpPaS3yo+FxkxR
+         QnsmJXspT3A6FdmPPRQi1kCxZI3LL4vXUOxU9+4MTQFH8ebFhEC6t9sSPUzTHryU2S9P
+         wA4jU47UYjRo8kflfSBSCbrZn1YjpOsYYvNfxjL+8oSiE/dp8lXc4Ieoe3wd/ezx+p6X
+         Y23br8KsxQoPQ8wl8rvcmJ3qSQ4E8lZjIC7NzYhOtXZR6nkY8+XsUhqu94AC0nRBLKkf
+         wbjb8wv4lIfPYwBANTy2DmUI/ncQ0uDt5kIhcoBMNekF+PvbzBgB7lsW37mcntgP1ZDg
+         fV/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=jRkz34kzHFPJP/YTtWgR3dxC6hqrBlvuag30CVq0UoQ=;
+        b=OoGVshz3SCffiY5Hctbq15Zb/iYxrkW8s7K29oHjaNdOZbrkJEoa201dg80eSdnt/K
+         ydqAJJ3P5NHZQT5rI2D0qjaXEZ85Xy7qaAYTBWxa4iNpypvZN96hmvWEu15HWPr4BI6j
+         EovtwB5Xy3F65cTEIZYEMhjnTrGlHDllJDeeI4WMHsVeiVwKG6YySzqiXL39hIzAsRpx
+         lyz5fWgiWOr0KapdfDT6SBRAR9z/UEQ+b2fA5W1R5K91O6Z9zvBgwhV/0bxXAw1/sZw4
+         U41cyAoZL9kXiiaebu/Qj1i8lOJ2nOmX6Dfd4Xe54PL0sa4UO2MDSdQYjnO1m+YzQqYp
+         Cg9w==
+X-Gm-Message-State: AOAM5337XQ2up79OdCBHIIYSwg1PIw9n7uLxZo69YZwMOPzpXohV+aXR
+        z+lqU1B3V40s6qiDm2PhOOpVJIvb1FuNvvvxmXk=
+X-Google-Smtp-Source: ABdhPJwJ///MEyrS1OLVdgShQV62SL/Jv9Vfiv4k/9Hxb86brLgF/WS6Lsx3au+bsCH1wKjhDxJ9MhMotr+Lz82o9EU=
+X-Received: by 2002:a5e:c91a:: with SMTP id z26mr8188202iol.70.1594964954143;
+ Thu, 16 Jul 2020 22:49:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200717044427.68747-1-ebiggers@kernel.org>
+In-Reply-To: <20200717044427.68747-1-ebiggers@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 17 Jul 2020 07:49:02 +0200
+Message-ID: <CA+icZUVztkBRBhs_NQpTOg7rc34VkBQ1GCr5iXgw+P9XORwd9A@mail.gmail.com>
+Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Andrea Parri <parri.andrea@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
@@ -39,208 +67,26 @@ Cc:     linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>
-Subject: [PATCH] tools/memory-model: document the "one-time init" pattern
-Date:   Thu, 16 Jul 2020 21:44:27 -0700
-Message-Id: <20200717044427.68747-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Fri, Jul 17, 2020 at 6:48 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> From: Eric Biggers <ebiggers@google.com>
+...
+> This is motivated by the discussion at
+> https://lkml.kernel.org/linux-fsdevel/20200713033330.205104-1-ebiggers@kernel.org/T/#u
+...
+> +In where cases where taking the mutex in the "already initialized" case
 
-The "one-time init" pattern is implemented incorrectly in various places
-in the kernel.  And when people do try to implement it correctly, it is
-unclear what to use.  Try to give some proper guidance.
+"In cases where..." (drop first "where")
 
-This is motivated by the discussion at
-https://lkml.kernel.org/linux-fsdevel/20200713033330.205104-1-ebiggers@kernel.org/T/#u
-regarding fixing the initialization of super_block::s_dio_done_wq.
+> +presents scalability concerns, the implementation can be optimized to
+> +check the 'inited' flag outside the mutex.  Unfortunately, this
+> +optimization is often implemented incorrectly by using a plain load.
+> +That violates the memory model and may result in unpredictable behavior.
 
-Cc: Akira Yokosawa <akiyks@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Andrea Parri <parri.andrea@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Daniel Lustig <dlustig@nvidia.com>
-Cc: Darrick J. Wong <darrick.wong@oracle.com>
-Cc: Dave Chinner <david@fromorbit.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-Cc: Luc Maranget <luc.maranget@inria.fr>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- tools/memory-model/Documentation/recipes.txt | 151 +++++++++++++++++++
- 1 file changed, 151 insertions(+)
-
-diff --git a/tools/memory-model/Documentation/recipes.txt b/tools/memory-model/Documentation/recipes.txt
-index 7fe8d7aa3029..04beb06dbfc7 100644
---- a/tools/memory-model/Documentation/recipes.txt
-+++ b/tools/memory-model/Documentation/recipes.txt
-@@ -519,6 +519,157 @@ CPU1 puts the waiting task to sleep and CPU0 fails to wake it up.
- 
- Note that use of locking can greatly simplify this pattern.
- 
-+One-time init
-+-------------
-+
-+The "one-time init" pattern is when multiple tasks can race to
-+initialize the same data structure(s) on first use.
-+
-+In many cases, it's best to just avoid the need for this by simply
-+initializing the data ahead of time.
-+
-+But in cases where the data would often go unused, one-time init can be
-+appropriate to avoid wasting kernel resources.  It can also be
-+appropriate if the initialization has other prerequisites which preclude
-+it being done ahead of time.
-+
-+First, consider if your data has (a) global or static scope, (b) can be
-+initialized from atomic context, and (c) cannot fail to be initialized.
-+If all of those apply, just use DO_ONCE() from <linux/once.h>:
-+
-+	DO_ONCE(func);
-+
-+If that doesn't apply, you'll have to implement one-time init yourself.
-+
-+The simplest implementation just uses a mutex and an 'inited' flag.
-+This implementation should be used where feasible:
-+
-+	static bool foo_inited;
-+	static DEFINE_MUTEX(foo_init_mutex);
-+
-+	int init_foo_if_needed(void)
-+	{
-+		int err = 0;
-+
-+		mutex_lock(&foo_init_mutex);
-+		if (!foo_inited) {
-+			err = init_foo();
-+			if (err == 0)
-+				foo_inited = true;
-+		}
-+		mutex_unlock(&foo_init_mutex);
-+		return err;
-+	}
-+
-+The above example uses static variables, but this solution also works
-+for initializing something that is part of another data structure.  The
-+mutex may still be static.
-+
-+In where cases where taking the mutex in the "already initialized" case
-+presents scalability concerns, the implementation can be optimized to
-+check the 'inited' flag outside the mutex.  Unfortunately, this
-+optimization is often implemented incorrectly by using a plain load.
-+That violates the memory model and may result in unpredictable behavior.
-+
-+A correct implementation is:
-+
-+	static bool foo_inited;
-+	static DEFINE_MUTEX(foo_init_mutex);
-+
-+	int init_foo_if_needed(void)
-+	{
-+		int err = 0;
-+
-+		/* pairs with smp_store_release() below */
-+		if (smp_load_acquire(&foo_inited))
-+			return 0;
-+
-+		mutex_lock(&foo_init_mutex);
-+		if (!foo_inited) {
-+			err = init_foo();
-+			if (err == 0) /* pairs with smp_load_acquire() above */
-+				smp_store_release(&foo_inited, true);
-+		}
-+		mutex_unlock(&foo_init_mutex);
-+		return err;
-+	}
-+
-+If only a single data structure is being initialized, then the pointer
-+itself can take the place of the 'inited' flag:
-+
-+	static struct foo *foo;
-+	static DEFINE_MUTEX(foo_init_mutex);
-+
-+	int init_foo_if_needed(void)
-+	{
-+		int err = 0;
-+
-+		/* pairs with smp_store_release() below */
-+		if (smp_load_acquire(&foo))
-+			return 0;
-+
-+		mutex_lock(&foo_init_mutex);
-+		if (!foo) {
-+			struct foo *p = alloc_foo();
-+
-+			if (p) /* pairs with smp_load_acquire() above */
-+				smp_store_release(&foo, p);
-+			else
-+				err = -ENOMEM;
-+		}
-+		mutex_unlock(&foo_init_mutex);
-+		return err;
-+	}
-+
-+There are also cases in which the smp_load_acquire() can be replaced by
-+the more lightweight READ_ONCE().  (smp_store_release() is still
-+required.)  Specifically, if all initialized memory is transitively
-+reachable from the pointer itself, then there is no control dependency
-+so the data dependency barrier provided by READ_ONCE() is sufficient.
-+
-+However, using the READ_ONCE() optimization is discouraged for
-+nontrivial data structures, as it can be difficult to determine if there
-+is a control dependency.  For complex data structures it may depend on
-+internal implementation details of other kernel subsystems.
-+
-+For the single-pointer case, a further optimized implementation
-+eliminates the mutex and instead uses compare-and-exchange:
-+
-+	static struct foo *foo;
-+
-+	int init_foo_if_needed(void)
-+	{
-+		struct foo *p;
-+
-+		/* pairs with successful cmpxchg_release() below */
-+		if (smp_load_acquire(&foo))
-+			return 0;
-+
-+		p = alloc_foo();
-+		if (!p)
-+			return -ENOMEM;
-+
-+		/* on success, pairs with smp_load_acquire() above and below */
-+		if (cmpxchg_release(&foo, NULL, p) != NULL) {
-+			free_foo(p);
-+			/* pairs with successful cmpxchg_release() above */
-+			smp_load_acquire(&foo);
-+		}
-+		return 0;
-+	}
-+
-+Note that when the cmpxchg_release() fails due to another task already
-+having done it, a second smp_load_acquire() is required, since we still
-+need to acquire the data that the other task released.  You may be
-+tempted to upgrade cmpxchg_release() to cmpxchg() with the goal of it
-+acting as both ACQUIRE and RELEASE, but that doesn't work here because
-+cmpxchg() only guarantees memory ordering if it succeeds.
-+
-+Because of the above subtlety, the version with the mutex instead of
-+cmpxchg_release() should be preferred, except potentially in cases where
-+it is difficult to provide anything other than a global mutex and where
-+the one-time data is part of a frequently allocated structure.  In that
-+case, a global mutex might present scalability concerns.
- 
- Rules of thumb
- ==============
--- 
-2.27.0
-
+- Sedat -
