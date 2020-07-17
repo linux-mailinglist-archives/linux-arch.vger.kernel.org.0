@@ -2,146 +2,245 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5472722318F
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 05:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A882F223294
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 06:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbgGQDVy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jul 2020 23:21:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:47852 "EHLO foss.arm.com"
+        id S1725811AbgGQEp4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 00:45:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbgGQDVy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Jul 2020 23:21:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5723DD6E;
-        Thu, 16 Jul 2020 20:21:53 -0700 (PDT)
-Received: from [192.168.0.129] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E0ED73F68F;
-        Thu, 16 Jul 2020 20:21:43 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH V5 1/4] mm/debug_vm_pgtable: Add tests validating arch
- helpers for core MM features
-To:     Steven Price <steven.price@arm.com>, linux-mm@kvack.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, agordeev@linux.ibm.com,
-        Will Deacon <will@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        christophe.leroy@csgroup.eu, Mike Rapoport <rppt@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, ziy@nvidia.com,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-snps-arc@lists.infradead.org,
-        Vasily Gorbik <gor@linux.ibm.com>, cai@lca.pw,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        gerald.schaefer@de.ibm.com, christophe.leroy@c-s.fr,
-        Vineet Gupta <vgupta@synopsys.com>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        aneesh.kumar@linux.ibm.com, Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, rppt@kernel.org
-References: <1594610587-4172-1-git-send-email-anshuman.khandual@arm.com>
- <1594610587-4172-2-git-send-email-anshuman.khandual@arm.com>
- <2ff756c5-28e2-b64a-3788-260ba30c6409@arm.com>
-Message-ID: <efdd0b57-6515-2ee7-a245-a23be6a1d823@arm.com>
-Date:   Fri, 17 Jul 2020 08:50:35 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1725864AbgGQEp4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Jul 2020 00:45:56 -0400
+Received: from sol.hsd1.ca.comcast.net (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E66952071A;
+        Fri, 17 Jul 2020 04:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594961155;
+        bh=2d9QmkmWrAR4QgerUk4A9L+J8tlPTeoVoUmhc6Of+hM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SERugfeU3gZ8i8FENUn2s6y6Zh3X0wlF6xeSmAdyIe0xy1genwn9EdD/xjO6LMogx
+         9fHBbceh9pNb0bSIOqEXAfLoJet26PdioE7glSYpCRZ3igepH3zhPrqppLDktS+kN+
+         K1DPdxXI/7kDPq6rl1R3Ee8BGRU4vOUrMYiJBXRU=
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] tools/memory-model: document the "one-time init" pattern
+Date:   Thu, 16 Jul 2020 21:44:27 -0700
+Message-Id: <20200717044427.68747-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <2ff756c5-28e2-b64a-3788-260ba30c6409@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+From: Eric Biggers <ebiggers@google.com>
 
+The "one-time init" pattern is implemented incorrectly in various places
+in the kernel.  And when people do try to implement it correctly, it is
+unclear what to use.  Try to give some proper guidance.
 
-On 07/16/2020 07:44 PM, Steven Price wrote:
-> On 13/07/2020 04:23, Anshuman Khandual wrote:
->> This adds new tests validating arch page table helpers for these following
->> core memory features. These tests create and test specific mapping types at
->> various page table levels.
->>
->> 1. SPECIAL mapping
->> 2. PROTNONE mapping
->> 3. DEVMAP mapping
->> 4. SOFTDIRTY mapping
->> 5. SWAP mapping
->> 6. MIGRATION mapping
->> 7. HUGETLB mapping
->> 8. THP mapping
->>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Gerald Schaefer <gerald.schaefer@de.ibm.com>
->> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
->> Cc: Mike Rapoport <rppt@linux.ibm.com>
->> Cc: Vineet Gupta <vgupta@synopsys.com>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
->> Cc: Paul Mackerras <paulus@samba.org>
->> Cc: Michael Ellerman <mpe@ellerman.id.au>
->> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
->> Cc: Vasily Gorbik <gor@linux.ibm.com>
->> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: "H. Peter Anvin" <hpa@zytor.com>
->> Cc: Kirill A. Shutemov <kirill@shutemov.name>
->> Cc: Paul Walmsley <paul.walmsley@sifive.com>
->> Cc: Palmer Dabbelt <palmer@dabbelt.com>
->> Cc: linux-snps-arc@lists.infradead.org
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linuxppc-dev@lists.ozlabs.org
->> Cc: linux-s390@vger.kernel.org
->> Cc: linux-riscv@lists.infradead.org
->> Cc: x86@kernel.org
->> Cc: linux-mm@kvack.org
->> Cc: linux-arch@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Tested-by: Vineet Gupta <vgupta@synopsys.com>    #arc
->> Reviewed-by: Zi Yan <ziy@nvidia.com>
->> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   mm/debug_vm_pgtable.c | 302 +++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 301 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
->> index 61ab16fb2e36..2fac47db3eb7 100644
->> --- a/mm/debug_vm_pgtable.c
->> +++ b/mm/debug_vm_pgtable.c
-> [...]
->> +
->> +static void __init pte_swap_tests(unsigned long pfn, pgprot_t prot)
->> +{
->> +    swp_entry_t swp;
->> +    pte_t pte;
->> +
->> +    pte = pfn_pte(pfn, prot);
->> +    swp = __pte_to_swp_entry(pte);
-> 
-> Minor issue: this doesn't look necessarily valid - there's no reason a normal PTE can be turned into a swp_entry. In practise this is likely to work on all architectures because there's no reason not to use (at least) all the PFN bits for the swap entry, but it doesn't exactly seem correct.
+This is motivated by the discussion at
+https://lkml.kernel.org/linux-fsdevel/20200713033330.205104-1-ebiggers@kernel.org/T/#u
+regarding fixing the initialization of super_block::s_dio_done_wq.
 
-Agreed, that it is a simple test but nonetheless a valid one which
-makes sure that PFN value remained unchanged during pte <---> swp
-conversion.
+Cc: Akira Yokosawa <akiyks@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Andrea Parri <parri.andrea@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Daniel Lustig <dlustig@nvidia.com>
+Cc: Darrick J. Wong <darrick.wong@oracle.com>
+Cc: Dave Chinner <david@fromorbit.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+Cc: Luc Maranget <luc.maranget@inria.fr>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ tools/memory-model/Documentation/recipes.txt | 151 +++++++++++++++++++
+ 1 file changed, 151 insertions(+)
 
-> 
-> Can we start with a swp_entry_t (from __swp_entry()) and check the round trip of that?
-> 
-> It would also seem sensible to have a check that is_swap_pte(__swp_entry_to_pte(__swp_entry(x,y))) is true.
+diff --git a/tools/memory-model/Documentation/recipes.txt b/tools/memory-model/Documentation/recipes.txt
+index 7fe8d7aa3029..04beb06dbfc7 100644
+--- a/tools/memory-model/Documentation/recipes.txt
++++ b/tools/memory-model/Documentation/recipes.txt
+@@ -519,6 +519,157 @@ CPU1 puts the waiting task to sleep and CPU0 fails to wake it up.
+ 
+ Note that use of locking can greatly simplify this pattern.
+ 
++One-time init
++-------------
++
++The "one-time init" pattern is when multiple tasks can race to
++initialize the same data structure(s) on first use.
++
++In many cases, it's best to just avoid the need for this by simply
++initializing the data ahead of time.
++
++But in cases where the data would often go unused, one-time init can be
++appropriate to avoid wasting kernel resources.  It can also be
++appropriate if the initialization has other prerequisites which preclude
++it being done ahead of time.
++
++First, consider if your data has (a) global or static scope, (b) can be
++initialized from atomic context, and (c) cannot fail to be initialized.
++If all of those apply, just use DO_ONCE() from <linux/once.h>:
++
++	DO_ONCE(func);
++
++If that doesn't apply, you'll have to implement one-time init yourself.
++
++The simplest implementation just uses a mutex and an 'inited' flag.
++This implementation should be used where feasible:
++
++	static bool foo_inited;
++	static DEFINE_MUTEX(foo_init_mutex);
++
++	int init_foo_if_needed(void)
++	{
++		int err = 0;
++
++		mutex_lock(&foo_init_mutex);
++		if (!foo_inited) {
++			err = init_foo();
++			if (err == 0)
++				foo_inited = true;
++		}
++		mutex_unlock(&foo_init_mutex);
++		return err;
++	}
++
++The above example uses static variables, but this solution also works
++for initializing something that is part of another data structure.  The
++mutex may still be static.
++
++In where cases where taking the mutex in the "already initialized" case
++presents scalability concerns, the implementation can be optimized to
++check the 'inited' flag outside the mutex.  Unfortunately, this
++optimization is often implemented incorrectly by using a plain load.
++That violates the memory model and may result in unpredictable behavior.
++
++A correct implementation is:
++
++	static bool foo_inited;
++	static DEFINE_MUTEX(foo_init_mutex);
++
++	int init_foo_if_needed(void)
++	{
++		int err = 0;
++
++		/* pairs with smp_store_release() below */
++		if (smp_load_acquire(&foo_inited))
++			return 0;
++
++		mutex_lock(&foo_init_mutex);
++		if (!foo_inited) {
++			err = init_foo();
++			if (err == 0) /* pairs with smp_load_acquire() above */
++				smp_store_release(&foo_inited, true);
++		}
++		mutex_unlock(&foo_init_mutex);
++		return err;
++	}
++
++If only a single data structure is being initialized, then the pointer
++itself can take the place of the 'inited' flag:
++
++	static struct foo *foo;
++	static DEFINE_MUTEX(foo_init_mutex);
++
++	int init_foo_if_needed(void)
++	{
++		int err = 0;
++
++		/* pairs with smp_store_release() below */
++		if (smp_load_acquire(&foo))
++			return 0;
++
++		mutex_lock(&foo_init_mutex);
++		if (!foo) {
++			struct foo *p = alloc_foo();
++
++			if (p) /* pairs with smp_load_acquire() above */
++				smp_store_release(&foo, p);
++			else
++				err = -ENOMEM;
++		}
++		mutex_unlock(&foo_init_mutex);
++		return err;
++	}
++
++There are also cases in which the smp_load_acquire() can be replaced by
++the more lightweight READ_ONCE().  (smp_store_release() is still
++required.)  Specifically, if all initialized memory is transitively
++reachable from the pointer itself, then there is no control dependency
++so the data dependency barrier provided by READ_ONCE() is sufficient.
++
++However, using the READ_ONCE() optimization is discouraged for
++nontrivial data structures, as it can be difficult to determine if there
++is a control dependency.  For complex data structures it may depend on
++internal implementation details of other kernel subsystems.
++
++For the single-pointer case, a further optimized implementation
++eliminates the mutex and instead uses compare-and-exchange:
++
++	static struct foo *foo;
++
++	int init_foo_if_needed(void)
++	{
++		struct foo *p;
++
++		/* pairs with successful cmpxchg_release() below */
++		if (smp_load_acquire(&foo))
++			return 0;
++
++		p = alloc_foo();
++		if (!p)
++			return -ENOMEM;
++
++		/* on success, pairs with smp_load_acquire() above and below */
++		if (cmpxchg_release(&foo, NULL, p) != NULL) {
++			free_foo(p);
++			/* pairs with successful cmpxchg_release() above */
++			smp_load_acquire(&foo);
++		}
++		return 0;
++	}
++
++Note that when the cmpxchg_release() fails due to another task already
++having done it, a second smp_load_acquire() is required, since we still
++need to acquire the data that the other task released.  You may be
++tempted to upgrade cmpxchg_release() to cmpxchg() with the goal of it
++acting as both ACQUIRE and RELEASE, but that doesn't work here because
++cmpxchg() only guarantees memory ordering if it succeeds.
++
++Because of the above subtlety, the version with the mutex instead of
++cmpxchg_release() should be preferred, except potentially in cases where
++it is difficult to provide anything other than a global mutex and where
++the one-time data is part of a frequently allocated structure.  In that
++case, a global mutex might present scalability concerns.
+ 
+ Rules of thumb
+ ==============
+-- 
+2.27.0
 
-From past experiences, getting any these new tests involving platform
-helpers, working on all existing enabled archs is neither trivial nor
-going to be quick. Existing tests here are known to succeed in enabled
-platforms. Nonetheless, proposed tests as in the above suggestions do
-make sense but will try to accommodate them in a later patch.
