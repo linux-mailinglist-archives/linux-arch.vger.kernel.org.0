@@ -2,126 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC48F22424E
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 19:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990F6224285
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 19:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728308AbgGQRoC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 13:44:02 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37627 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726593AbgGQRoB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 13:44:01 -0400
-Received: (qmail 1156982 invoked by uid 1000); 17 Jul 2020 13:44:00 -0400
-Date:   Fri, 17 Jul 2020 13:44:00 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, paulmck <paulmck@kernel.org>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
-Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
-Message-ID: <20200717174400.GA1156312@rowland.harvard.edu>
-References: <20200710015646.2020871-1-npiggin@gmail.com>
- <1370747990.15974.1594915396143.JavaMail.zimbra@efficios.com>
- <595582123.17106.1594925921537.JavaMail.zimbra@efficios.com>
- <20200716212416.GA1126458@rowland.harvard.edu>
- <1770378591.18523.1594993165391.JavaMail.zimbra@efficios.com>
- <20200717145102.GC1147780@rowland.harvard.edu>
- <1697220787.18880.1595000348405.JavaMail.zimbra@efficios.com>
- <20200717161145.GA1150454@rowland.harvard.edu>
- <12700909.18968.1595002969773.JavaMail.zimbra@efficios.com>
+        id S1726256AbgGQRrz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 13:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbgGQRrz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 13:47:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDD6C0619D2;
+        Fri, 17 Jul 2020 10:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5bNn1iv9D2whBZXnI8V5/oS3EG1YDPh+syl8DNPsUhU=; b=U1Kt4wEojI31oe5jA4aI9n41ye
+        RZezlbwJ3X5butEOMLladO4jta0f0vUwJqYU8ihCRZ4yFReYwo0/Vjrmyq8kRDeBHPXt7UfwAyHyy
+        pWahWEldkFExAGO4V2T1OYGcSJ2FFPQ/3j4copIVUZl+bizT33QXFj5hboCKts4RC/KrpM9Q7MmNw
+        okSWSQXnJpfB2uAt3vOcAP/djy3NIRDRn8odyEKYx4QzyHGFcS2vEXMZl7Qf611ePcwtNPZP+1fTI
+        vGzba+AjWykxIei1LwB1yuSoS6pz9LTNanBUxQoBw3No3wPpKcQ/8ba/Gi+EZCOBB/o80CYg3EBQV
+        puExjdtQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jwUSc-00036X-Lw; Fri, 17 Jul 2020 17:47:50 +0000
+Date:   Fri, 17 Jul 2020 18:47:50 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
+Message-ID: <20200717174750.GQ12769@casper.infradead.org>
+References: <20200717044427.68747-1-ebiggers@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12700909.18968.1595002969773.JavaMail.zimbra@efficios.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200717044427.68747-1-ebiggers@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 12:22:49PM -0400, Mathieu Desnoyers wrote:
-> ----- On Jul 17, 2020, at 12:11 PM, Alan Stern stern@rowland.harvard.edu wrote:
-> 
-> >> > I agree with Nick: A memory barrier is needed somewhere between the
-> >> > assignment at 6 and the return to user mode at 8.  Otherwise you end up
-> >> > with the Store Buffer pattern having a memory barrier on only one side,
-> >> > and it is well known that this arrangement does not guarantee any
-> >> > ordering.
-> >> 
-> >> Yes, I see this now. I'm still trying to wrap my head around why the memory
-> >> barrier at the end of membarrier() needs to be paired with a scheduler
-> >> barrier though.
-> > 
-> > The memory barrier at the end of membarrier() on CPU0 is necessary in
-> > order to enforce the guarantee that any writes occurring on CPU1 before
-> > the membarrier() is executed will be visible to any code executing on
-> > CPU0 after the membarrier().  Ignoring the kthread issue, we can have:
-> > 
-> >	CPU0			CPU1
-> >				x = 1
-> >				barrier()
-> >				y = 1
-> >	r2 = y
-> >	membarrier():
-> >	  a: smp_mb()
-> >	  b: send IPI		IPI-induced mb
-> >	  c: smp_mb()
-> >	r1 = x
-> > 
-> > The writes to x and y are unordered by the hardware, so it's possible to
-> > have r2 = 1 even though the write to x doesn't execute until b.  If the
-> > memory barrier at c is omitted then "r1 = x" can be reordered before b
-> > (although not before a), so we get r1 = 0.  This violates the guarantee
-> > that membarrier() is supposed to provide.
-> > 
-> > The timing of the memory barrier at c has to ensure that it executes
-> > after the IPI-induced memory barrier on CPU1.  If it happened before
-> > then we could still end up with r1 = 0.  That's why the pairing matters.
-> > 
-> > I hope this helps your head get properly wrapped.  :-)
-> 
-> It does help a bit! ;-)
-> 
-> This explains this part of the comment near the smp_mb at the end of membarrier:
-> 
->          * Memory barrier on the caller thread _after_ we finished
->          * waiting for the last IPI. [...]
-> 
-> However, it does not explain why it needs to be paired with a barrier in the
-> scheduler, clearly for the case where the IPI is skipped. I wonder whether this part
-> of the comment is factually correct:
-> 
->          * [...] Matches memory barriers around rq->curr modification in scheduler.
+On Thu, Jul 16, 2020 at 09:44:27PM -0700, Eric Biggers wrote:
+> +If that doesn't apply, you'll have to implement one-time init yourself.
+> +
+> +The simplest implementation just uses a mutex and an 'inited' flag.
+> +This implementation should be used where feasible:
 
-The reasoning is pretty much the same as above:
+I think some syntactic sugar should make it feasible for normal people
+to implement the most efficient version of this just like they use locks.
 
-	CPU0			CPU1
-				x = 1
-				barrier()
-				y = 1
-	r2 = y
-	membarrier():
-	  a: smp_mb()
-				switch to kthread (includes mb)
-	  b: read rq->curr == kthread
-				switch to user (includes mb)
-	  c: smp_mb()
-	r1 = x
+> +For the single-pointer case, a further optimized implementation
+> +eliminates the mutex and instead uses compare-and-exchange:
+> +
+> +	static struct foo *foo;
+> +
+> +	int init_foo_if_needed(void)
+> +	{
+> +		struct foo *p;
+> +
+> +		/* pairs with successful cmpxchg_release() below */
+> +		if (smp_load_acquire(&foo))
+> +			return 0;
+> +
+> +		p = alloc_foo();
+> +		if (!p)
+> +			return -ENOMEM;
+> +
+> +		/* on success, pairs with smp_load_acquire() above and below */
+> +		if (cmpxchg_release(&foo, NULL, p) != NULL) {
 
-Once again, it is possible that x = 1 doesn't become visible to CPU0 
-until shortly before b.  But if c is omitted then "r1 = x" can be 
-reordered before b (to any time after a), so we can have r1 = 0.
+Why do we have cmpxchg_release() anyway?  Under what circumstances is
+cmpxchg() useful _without_ having release semantics?
 
-Here the timing requirement is that c executes after the first memory 
-barrier on CPU1 -- which is one of the ones around the rq->curr 
-modification.  (In fact, in this scenario CPU1's switch back to the user 
-process is irrelevant.)
+> +			free_foo(p);
+> +			/* pairs with successful cmpxchg_release() above */
+> +			smp_load_acquire(&foo);
+> +		}
+> +		return 0;
+> +	}
 
-Alan Stern
+How about something like this ...
+
+once.h:
+
+static struct init_once_pointer {
+	void *p;
+};
+
+static inline void *once_get(struct init_once_pointer *oncep)
+{ ... }
+
+static inline bool once_store(struct init_once_pointer *oncep, void *p)
+{ ... }
+
+--- foo.c ---
+
+struct foo *get_foo(gfp_t gfp)
+{
+	static struct init_once_pointer my_foo;
+	struct foo *foop;
+
+	foop = once_get(&my_foo);
+	if (foop)
+		return foop;
+
+	foop = alloc_foo(gfp);
+	if (!once_store(&my_foo, foop)) {
+		free_foo(foop);
+		foop = once_get(&my_foo);
+	}
+
+	return foop;
+}
+
+Any kernel programmer should be able to handle that pattern.  And no mutex!
