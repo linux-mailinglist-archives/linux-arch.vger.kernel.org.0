@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4BF223A1D
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 13:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5380D223A19
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jul 2020 13:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726629AbgGQLOl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 07:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S1726422AbgGQLOj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 07:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726525AbgGQLOk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 07:14:40 -0400
+        with ESMTP id S1725912AbgGQLOi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 07:14:38 -0400
 Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D871BC08C5DB;
-        Fri, 17 Jul 2020 04:14:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF6EC061755;
+        Fri, 17 Jul 2020 04:14:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=LJ3sw53oU99bJUNlz+ZPKQESK/v2SDXFGx5kri1RxHA=; b=mW9BkUrdORbTIfPggDbuXHG04P
-        vCB4+S08tm1Ocf2AwK2fgRL5Z3xoCetQtur/ZtwHqsPjZyWzsEWXg/Ip+JJ01RKTNXQtvbRs+p4wQ
-        Rtlh3rxfbsLXEdDC4EA+JGYP4+cth5V1pYwo/CUI+uhfMF/FCH+FPxsGHa0Qxv98nUlMB2O5LfeGn
-        76uku3heKukpjwJsmr+QWhayyffHIapPntJuifnOtS8eftI1cLoiD8fwy79B12vBBVdWVK6nwNu9V
-        c3dXF9QSaUXQEzzdrBQNbf7xX4kUygNN/Os21nFZoo+1Bzj9/2pKz1V+KcRM2zJ+FzRpvfRyHdXc7
-        T+DnKayA==;
+        bh=fCoot8j0cWA9ciC5yvURdWvuq4otc5g+z9FwRrkMqPI=; b=i1mn0vBQKBaNacLXDfsoK+7QG6
+        g0aa0ADr+4bhdnmt9IAIw4EPzJLymoj2ob/Pya5sBqVBjtTrLs5vxWkeWzIq7rGnfwzBQO0abZ1Uj
+        BuR8IUQ0Ml0ePeFrjIt+l0gsm+yIU4UoeY5S/I68dX4EeXb+RtLM/VFN4c/WB11lJSyBJ/1GN29F3
+        yGhK/yyH5IZPFpfHrT6WRUl9WY0rbD0MfUTCczycRrvJeXpzl0OT0EXN7kuPWC6KR61BCLR5PDDTJ
+        8OmSei+N/7sTQS1KghadHxTFf1CdjVubg7GAgPWtYzeluEq1AZ7yh7NnFu/4QSNEOEyQqJLXEsnwH
+        dBXDZN6w==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jwOJZ-0001Zm-Jw; Fri, 17 Jul 2020 11:14:05 +0000
+        id 1jwOJb-0001eW-7I; Fri, 17 Jul 2020 11:14:07 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 144D5305DD1;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0E5B3304B90;
         Fri, 17 Jul 2020 13:14:02 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AF019203D4091; Fri, 17 Jul 2020 13:14:02 +0200 (CEST)
-Message-ID: <20200717111349.533637732@infradead.org>
+        id B515C203D4093; Fri, 17 Jul 2020 13:14:02 +0200 (CEST)
+Message-ID: <20200717111349.591934380@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 17 Jul 2020 13:10:08 +0200
+Date:   Fri, 17 Jul 2020 13:10:09 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Will Deacon <will@kernel.org>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
@@ -57,7 +57,7 @@ Cc:     linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 03/11] sh/tlb: Fix __pmd_free_tlb()
+Subject: [PATCH v2 04/11] sparc32/tlb: Fix __p*_free_tlb()
 References: <20200717111005.024867618@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -66,67 +66,104 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-SH violates the freeing order for it's PMD page directories. It's
-__pmd_free_tlb() does not ensure there is a TLB invalidation between
-itself and the eventualy freeing of the page.
+Just like regular pages, page directories need to observe the
+following order:
 
-Further complicating the situation is that SH uses non page based
-allocation for it's PMDs.
+ 1) unhook
+ 2) TLB invalidate
+ 3) free
 
-Use the shiny new HAVE_TABLE_FREE option to enable a custom page table
-freeer.
+to ensure it is safe against concurrent accesses.
 
-(SuperH uses IPI based TLB invalidation and therefore doesn't need
-HAVE_RCU_TABLE_FREE for its HAVE_FAST_GUP).
+Because Sparc32 has non-page based page directories, use a custom
+table freeer.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/sh/Kconfig               |    1 +
- arch/sh/include/asm/pgalloc.h |    3 ++-
- arch/sh/mm/pgtable.c          |    6 ++++++
- 3 files changed, 9 insertions(+), 1 deletion(-)
+ arch/sparc/Kconfig                  |    1 +
+ arch/sparc/include/asm/pgalloc_32.h |    7 +++++--
+ arch/sparc/mm/srmmu.c               |   28 ++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 2 deletions(-)
 
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -14,6 +14,7 @@ config SUPERH
- 	select HAVE_PERF_EVENTS
- 	select HAVE_DEBUG_BUGVERBOSE
- 	select HAVE_FAST_GUP if MMU
-+	select MMU_GATHER_TABLE_FREE if X2TLB
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
- 	select ARCH_HAS_GCOV_PROFILE_ALL
---- a/arch/sh/include/asm/pgalloc.h
-+++ b/arch/sh/include/asm/pgalloc.h
-@@ -12,7 +12,8 @@ extern void pgd_free(struct mm_struct *m
- extern void pud_populate(struct mm_struct *mm, pud_t *pudp, pmd_t *pmd);
- extern pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address);
- extern void pmd_free(struct mm_struct *mm, pmd_t *pmd);
--#define __pmd_free_tlb(tlb, pmdp, addr)		pmd_free((tlb)->mm, (pmdp))
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -57,6 +57,7 @@ config SPARC32
+ 	select CLZ_TAB
+ 	select HAVE_UID16
+ 	select OLD_SIGACTION
++	select MMU_GATHER_TABLE_FREE
+ 
+ config SPARC64
+ 	def_bool 64BIT
+--- a/arch/sparc/include/asm/pgalloc_32.h
++++ b/arch/sparc/include/asm/pgalloc_32.h
+@@ -12,6 +12,9 @@
+ 
+ struct page;
+ 
++extern void pgtable_free_tlb(struct mmu_gather *tlb, void *table, int idx);
 +extern void __tlb_remove_table(void *table);
-+#define __pmd_free_tlb(tlb, pmdp, addr)	tlb_remove_table((tlb), (pmdp))
- #endif
++
+ void *srmmu_get_nocache(int size, int align);
+ void srmmu_free_nocache(void *addr, int size);
  
- static inline void pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd,
---- a/arch/sh/mm/pgtable.c
-+++ b/arch/sh/mm/pgtable.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/mm.h>
- #include <linux/slab.h>
-+#include <asm/pgalloc.h>
- 
- #define PGALLOC_GFP GFP_KERNEL | __GFP_ZERO
- 
-@@ -55,4 +56,9 @@ void pmd_free(struct mm_struct *mm, pmd_
- {
- 	kmem_cache_free(pmd_cachep, pmd);
+@@ -48,7 +51,7 @@ static inline void free_pmd_fast(pmd_t *
  }
+ 
+ #define pmd_free(mm, pmd)		free_pmd_fast(pmd)
+-#define __pmd_free_tlb(tlb, pmd, addr)	pmd_free((tlb)->mm, pmd)
++#define __pmd_free_tlb(tlb, pmd, addr)	pgtable_free_tlb((tlb), (pmd), 1)
+ 
+ #define pmd_populate(mm, pmd, pte)	pmd_set(pmd, pte)
+ #define pmd_pgtable(pmd)		(pgtable_t)__pmd_page(pmd)
+@@ -73,6 +76,6 @@ static inline void free_pte_fast(pte_t *
+ #define pte_free_kernel(mm, pte)	free_pte_fast(pte)
+ 
+ void pte_free(struct mm_struct * mm, pgtable_t pte);
+-#define __pte_free_tlb(tlb, pte, addr)	pte_free((tlb)->mm, pte)
++#define __pte_free_tlb(tlb, pte, addr)	pgtable_free_tlb((tlb), (pte), 0)
+ 
+ #endif /* _SPARC_PGALLOC_H */
+--- a/arch/sparc/mm/srmmu.c
++++ b/arch/sparc/mm/srmmu.c
+@@ -38,6 +38,7 @@
+ #include <asm/page.h>
+ #include <asm/asi.h>
+ #include <asm/smp.h>
++#include <asm/tlb.h>
+ #include <asm/io.h>
+ 
+ /* Now the cpu specific definitions. */
+@@ -1831,3 +1832,30 @@ void __init load_mmu(void)
+ 		sun4m_init_smp();
+ #endif
+ }
++
++#define TLB_IDX_MASK	1UL
 +
 +void __tlb_remove_table(void *table)
 +{
-+	pmd_free(NULL, table);
++	void *dir = (void *)((unsigned long)table & ~TLB_IDX_MASK);
++	int idx = (unsigned long)table & TLB_IDX_MASK;
++
++	switch (idx) {
++	case 1: /* PMD */
++		pmd_free(NULL, dir);
++		break;
++	case 0: /* PTE */
++		pte_free(NULL, dir);
++		break;
++	}
 +}
- #endif /* PAGETABLE_LEVELS > 2 */
++
++void pgtable_free_tlb(struct mmu_gather *tlb, void *table, int idx)
++{
++	unsigned long pgf = (unsigned long)table;
++	BUG_ON(idx > TLB_IDX_MASK);
++	BUG_ON(pgf & TLB_IDX_MASK);
++	pgf |= idx;
++	tlb_remove_table(tlb, (void *)pgf);
++}
++
 
 
