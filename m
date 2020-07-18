@@ -2,32 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C3A2247D4
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Jul 2020 03:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1992247EE
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Jul 2020 04:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgGRBkw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 21:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726710AbgGRBkw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 21:40:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418E6C0619D2;
-        Fri, 17 Jul 2020 18:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=z/LXzyQQvIbTaBiNEA7lgQw3JPPFGRlWt4h9R1rYhrg=; b=TW/I1cKuOLoHLOvAY6NeiZQoKd
-        Zz2vamGQF53yhMt6PyvGcRSJc2NCJiD8AoqZotSvdc5IfQQi3RarSXe0+gx/TrcCItHtOmrWo9qVD
-        hSWDbi8PLUGIcVHTKBVSin6QPQ0TmYJ9L83ixHQ/dnfUYOUhI0C6jF+x3q+ftwoA78tmPw0utlJYo
-        AXikpTIu3x3a7vkZWPeGKiaitOu9+2+GwAdXj493Fppw/gsg7RJpflX2FbkSZZ+4vfDkCPGYLps85
-        X1+TZzzOwYMb+6L0J8qB0DvdAZ9754djv/z+wkZUqFKfdF+SMT2frO01tVaf7p4UI/uCgjUwFFJfA
-        68q3E16A==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jwbqH-00016U-IO; Sat, 18 Jul 2020 01:40:45 +0000
-Date:   Sat, 18 Jul 2020 02:40:45 +0100
-From:   Matthew Wilcox <willy@infradead.org>
+        id S1726817AbgGRCAJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 22:00:09 -0400
+Received: from mail110.syd.optusnet.com.au ([211.29.132.97]:55270 "EHLO
+        mail110.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726665AbgGRCAJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Jul 2020 22:00:09 -0400
+Received: from dread.disaster.area (pa49-180-53-24.pa.nsw.optusnet.com.au [49.180.53.24])
+        by mail110.syd.optusnet.com.au (Postfix) with ESMTPS id 5990F105E9E;
+        Sat, 18 Jul 2020 12:00:02 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1jwc8v-0002KH-1J; Sat, 18 Jul 2020 12:00:01 +1000
+Date:   Sat, 18 Jul 2020 12:00:01 +1000
+From:   Dave Chinner <david@fromorbit.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Eric Biggers <ebiggers@kernel.org>,
         "Darrick J. Wong" <darrick.wong@oracle.com>,
@@ -37,7 +29,6 @@ Cc:     Eric Biggers <ebiggers@kernel.org>,
         Andrea Parri <parri.andrea@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Daniel Lustig <dlustig@nvidia.com>,
-        Dave Chinner <david@fromorbit.com>,
         David Howells <dhowells@redhat.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
@@ -45,7 +36,7 @@ Cc:     Eric Biggers <ebiggers@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>
 Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
-Message-ID: <20200718014045.GR12769@casper.infradead.org>
+Message-ID: <20200718020001.GO5369@dread.disaster.area>
 References: <20200717044427.68747-1-ebiggers@kernel.org>
  <20200717205340.GR7625@magnolia>
  <20200718005857.GB2183@sol.localdomain>
@@ -54,6 +45,13 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20200718012555.GA1168834@rowland.harvard.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.3 cv=LPwYv6e9 c=1 sm=1 tr=0
+        a=moVtWZxmCkf3aAMJKIb/8g==:117 a=moVtWZxmCkf3aAMJKIb/8g==:17
+        a=kj9zAlcOel0A:10 a=_RQrkK6FrEwA:10 a=7-415B0cAAAA:8
+        a=m2fqJy7gfEZGdrr6IoAA:9 a=uIZ0nfzhNTXwYeV5:21 a=TVXeNXAKodzJbbhi:21
+        a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -98,11 +96,27 @@ On Fri, Jul 17, 2020 at 09:25:55PM -0400, Alan Stern wrote:
 > 	-- certainly not for reads, and depending on the compiler, 
 > 	possibly not for some writes -- and therefore a load-acquire is 
 > 	necessary.
-> 
+
+Recipes are aimed at people who simply don't understand any of that
+goobledegook. This won't help them -write correct code-.
+
 > Perhaps this is more wordy than you want, but it does get the important 
 > ideas across.
 
-I don't think we should worry about wordsmithing this.  We should just
-say "Use the init_pointer_once API" and then people who want to worry
-about optimising the implementation of that API never have to talk to
-the people who want to use that API.
+You think they are important because you understand what those words
+mean.  Large numbers of developers do not understand what they mean,
+nor how to put them into practise correctly.
+
+Seriously: if you want people to use this stuff correctly, you need
+to -dumb it down-, not make it even more challenging by explaining
+words people don't understand with yet more words they don't
+understand...
+
+This is the "curse of knowledge" cognative bias in a nutshell.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
