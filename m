@@ -2,25 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 346AD2247FD
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Jul 2020 04:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58528224800
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Jul 2020 04:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbgGRCMR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jul 2020 22:12:17 -0400
-Received: from mail109.syd.optusnet.com.au ([211.29.132.80]:48019 "EHLO
-        mail109.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726665AbgGRCMR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 17 Jul 2020 22:12:17 -0400
-X-Greylist: delayed 1805 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Jul 2020 22:12:14 EDT
-Received: from dread.disaster.area (pa49-180-53-24.pa.nsw.optusnet.com.au [49.180.53.24])
-        by mail109.syd.optusnet.com.au (Postfix) with ESMTPS id 2D677D7AA03;
-        Sat, 18 Jul 2020 11:42:05 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1jwbrY-0002AX-Dz; Sat, 18 Jul 2020 11:42:04 +1000
-Date:   Sat, 18 Jul 2020 11:42:04 +1000
-From:   Dave Chinner <david@fromorbit.com>
+        id S1726817AbgGRCNI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jul 2020 22:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726665AbgGRCNI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jul 2020 22:13:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080E0C0619D2;
+        Fri, 17 Jul 2020 19:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b6Lq/lewhmuN9xzWi3dHd0xI6Cg0i4KUL37C2Kg1dS8=; b=HophwgPLXdiolehFqCeYvePvXL
+        mriM58eqE9tYcmpXbUWG10+WG8uvKd6NEuRdIlMGpFhQug0EDt90vDBzTAK9ytr9agSs9T6JwgQJA
+        enP39pgqZ1bPQn7D7t+Z8nSKdTfPKa18YImWxT3eb0xI91O9SF+5zZZBXnvstFoLvEqZ8zMu/q09t
+        yOMU0piavcn8/bXAmmrPHlQWBzKysq/eq3urOQKYfUxu7NbgW4Kr4unl4jmTiYDQzsWUojYpjD9A6
+        3x+xXINHbilI0enTEFRP5+/o4QC9Ee2KAI/TU7zj6Zk7a4fMvWVgOyJJ9H33/odet6gNXxM7nLxWw
+        9YOEbGMw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jwcLY-0002fS-VR; Sat, 18 Jul 2020 02:13:05 +0000
+Date:   Sat, 18 Jul 2020 03:13:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
 To:     Eric Biggers <ebiggers@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         "Paul E . McKenney" <paulmck@kernel.org>,
@@ -30,6 +37,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Boqun Feng <boqun.feng@gmail.com>,
         Daniel Lustig <dlustig@nvidia.com>,
         "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
         David Howells <dhowells@redhat.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
@@ -37,217 +45,147 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>
 Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
-Message-ID: <20200718014204.GN5369@dread.disaster.area>
+Message-ID: <20200718021304.GS12769@casper.infradead.org>
 References: <20200717044427.68747-1-ebiggers@kernel.org>
+ <20200717174750.GQ12769@casper.infradead.org>
+ <20200718013839.GD2183@sol.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200717044427.68747-1-ebiggers@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=QIgWuTDL c=1 sm=1 tr=0
-        a=moVtWZxmCkf3aAMJKIb/8g==:117 a=moVtWZxmCkf3aAMJKIb/8g==:17
-        a=kj9zAlcOel0A:10 a=_RQrkK6FrEwA:10 a=1XWaLZrsAAAA:8 a=VwQbUJbxAAAA:8
-        a=pGLkceISAAAA:8 a=JfrnYn6hAAAA:8 a=7-415B0cAAAA:8 a=8yHV2tFA8b4t9lnhJkUA:9
-        a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22 a=1CNFftbPRP8L7MoqJWF3:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
+In-Reply-To: <20200718013839.GD2183@sol.localdomain>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 09:44:27PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Fri, Jul 17, 2020 at 06:38:39PM -0700, Eric Biggers wrote:
+> On Fri, Jul 17, 2020 at 06:47:50PM +0100, Matthew Wilcox wrote:
+> > On Thu, Jul 16, 2020 at 09:44:27PM -0700, Eric Biggers wrote:
+> > > +If that doesn't apply, you'll have to implement one-time init yourself.
+> > > +
+> > > +The simplest implementation just uses a mutex and an 'inited' flag.
+> > > +This implementation should be used where feasible:
+> > 
+> > I think some syntactic sugar should make it feasible for normal people
+> > to implement the most efficient version of this just like they use locks.
 > 
-> The "one-time init" pattern is implemented incorrectly in various places
-> in the kernel.  And when people do try to implement it correctly, it is
-> unclear what to use.  Try to give some proper guidance.
+> Note that the cmpxchg version is not necessarily the "most efficient".
 > 
-> This is motivated by the discussion at
-> https://lkml.kernel.org/linux-fsdevel/20200713033330.205104-1-ebiggers@kernel.org/T/#u
-> regarding fixing the initialization of super_block::s_dio_done_wq.
+> If the one-time initialization is expensive, e.g. if it allocates a lot of
+> memory or if takes a long time, it could be better to use the mutex version so
+> that at most one task does it.
 
-You're still using words that the target audience of the
-documentation will not understand.
-
-This is known as the "curse of knowledge" cognative bias, where
-subject matter experts try to explain something to non-experts using
-terms only subject matter experts understand....
-
-This is one of the reasons that the LKMM documetnation is so damn
-difficult to read and understand: just understanding the vocabulary
-it uses requires a huge learning curve, and it's not defined
-anywhere. Understanding the syntax of examples requires a huge
-learning curve, because it's not defined anywhere. 
-
-Recipes are *not useful* if you need to understand the LKMM
-documenation to select the correct recipe to use. Recipes are not
-useful if you say "here's 5 different variations of the same thing,
-up to you to understand which one you need to use". Recipes are not
-useful if changes in other code can silently break the recipe that
-was selected by the user by carefully considering the most optimal
-variant at the time they selected it.
-
-i.e. Recipes are not for experts who understand the LKMM - recipes
-are for developers who don't really understand how the LKMM all
-works and just want a single, solid, reliable pattern they can use
-just about everywhere for that specific operation.
-
-Performance and optimisation doesn't even enter the picture here -
-we need to provide a simple, easy to use and understand pattern that
-just works. We need to stop making this harder than it should be.
-
-So....
-
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  tools/memory-model/Documentation/recipes.txt | 151 +++++++++++++++++++
->  1 file changed, 151 insertions(+)
-> 
-> diff --git a/tools/memory-model/Documentation/recipes.txt b/tools/memory-model/Documentation/recipes.txt
-> index 7fe8d7aa3029..04beb06dbfc7 100644
-> --- a/tools/memory-model/Documentation/recipes.txt
-> +++ b/tools/memory-model/Documentation/recipes.txt
-> @@ -519,6 +519,157 @@ CPU1 puts the waiting task to sleep and CPU0 fails to wake it up.
->  
->  Note that use of locking can greatly simplify this pattern.
->  
-> +One-time init
-> +-------------
-> +
-> +The "one-time init" pattern is when multiple tasks can race to
-> +initialize the same data structure(s) on first use.
-> +
-> +In many cases, it's best to just avoid the need for this by simply
-> +initializing the data ahead of time.
-> +
-> +But in cases where the data would often go unused, one-time init can be
-> +appropriate to avoid wasting kernel resources.  It can also be
-> +appropriate if the initialization has other prerequisites which preclude
-> +it being done ahead of time.
-> +
-> +First, consider if your data has (a) global or static scope, (b) can be
-> +initialized from atomic context, and (c) cannot fail to be initialized.
-> +If all of those apply, just use DO_ONCE() from <linux/once.h>:
-> +
-> +	DO_ONCE(func);
-> +
-> +If that doesn't apply, you'll have to implement one-time init yourself.
-> +
-> +The simplest implementation just uses a mutex and an 'inited' flag.
-> +This implementation should be used where feasible:
-> +
-> +	static bool foo_inited;
-> +	static DEFINE_MUTEX(foo_init_mutex);
-> +
-> +	int init_foo_if_needed(void)
-> +	{
-> +		int err = 0;
-> +
-> +		mutex_lock(&foo_init_mutex);
-> +		if (!foo_inited) {
-> +			err = init_foo();
-> +			if (err == 0)
-> +				foo_inited = true;
-> +		}
-> +		mutex_unlock(&foo_init_mutex);
-> +		return err;
-> +	}
-> +
-> +The above example uses static variables, but this solution also works
-> +for initializing something that is part of another data structure.  The
-> +mutex may still be static.
-
-All good up to here - people will see this and understand that this
-is the pattern they want to use, and DO_ONCE() is a great, simple
-API that is easy to use.
-
-What needs to follow is a canonical example of how to do it
-locklessly and efficiently, without describing conditional use of it
-using words like "initialised memory is transitively reachable" (I
-don't know WTF that means!).  Don't discuss potential optimisations,
-control flow/data dependencies, etc, because failing to understand
-those details are the reason people are looking for a simple recipe
-that does what they need in the first place ("curse of knowledge").
-
-However, I think the whole problem around code like this is that it
-is being open-coded and that is the reason people get it wrong.
-Hence I agree with Willy that this needs to be wrapped in a simple,
-easy to use and hard to get wrong APIs for the patterns we expect to
-see people use.
-
-And the recipes should doucment the use of that API for the
-init-once pattern, not try to teach people how to open-code their
-own init-once pattern that they will continue to screw up....
-
-As a result, I think the examples should document correct use of the
-API for the two main variants it would be used for. The first
-variant has an external "inited" flag that handles multiple
-structure initialisations, and the second variant handles allocation
-and initialisation of a single structure that is stored and accessed
-by a single location.
-
-Work out an API to do these things correctly, then write the recipes
-to use them. Then people like yourself can argue all day and night
-on how to best optimise them, and people like myself can just ignore
-that all knowing that my init_once() call will always do the right
+Sure, but I think those are far less common than just allocating a single
 thing.
 
-> +For the single-pointer case, a further optimized implementation
-> +eliminates the mutex and instead uses compare-and-exchange:
-> +
-> +	static struct foo *foo;
-> +
-> +	int init_foo_if_needed(void)
-> +	{
-> +		struct foo *p;
-> +
-> +		/* pairs with successful cmpxchg_release() below */
-> +		if (smp_load_acquire(&foo))
-> +			return 0;
-> +
-> +		p = alloc_foo();
-> +		if (!p)
-> +			return -ENOMEM;
-> +
-> +		/* on success, pairs with smp_load_acquire() above and below */
-> +		if (cmpxchg_release(&foo, NULL, p) != NULL) {
-> +			free_foo(p);
-> +			/* pairs with successful cmpxchg_release() above */
-> +			smp_load_acquire(&foo);
+> > How about something like this ...
+> > 
+> > once.h:
+> > 
+> > static struct init_once_pointer {
+> > 	void *p;
+> > };
+> > 
+> > static inline void *once_get(struct init_once_pointer *oncep)
+> > { ... }
+> > 
+> > static inline bool once_store(struct init_once_pointer *oncep, void *p)
+> > { ... }
+> > 
+> > --- foo.c ---
+> > 
+> > struct foo *get_foo(gfp_t gfp)
+> > {
+> > 	static struct init_once_pointer my_foo;
+> > 	struct foo *foop;
+> > 
+> > 	foop = once_get(&my_foo);
+> > 	if (foop)
+> > 		return foop;
+> > 
+> > 	foop = alloc_foo(gfp);
+> > 	if (!once_store(&my_foo, foop)) {
+> > 		free_foo(foop);
+> > 		foop = once_get(&my_foo);
+> > 	}
+> > 
+> > 	return foop;
+> > }
+> > 
+> > Any kernel programmer should be able to handle that pattern.  And no mutex!
+> 
+> I don't think this version would be worthwhile.  It eliminates type safety due
+> to the use of 'void *', and doesn't actually save any lines of code.  Nor does
+> it eliminate the need to correctly implement the cmpxchg failure case, which is
+> tricky (it must free the object and get the new one) and will be rarely tested.
 
-This is the failure path, not the success. So it describing it as
-pairing with "successful cmpxchg_release() above" when the code that
-is executing is in the path where  the cmpxchg_release() above -just
-failed- doesn't help anyone understand exactly what it is pairing
-with.
+You're missing the point.  It prevents people from trying to optimise
+"can I use READ_ONCE() here, or do I need to use smp_rmb()?"  The type
+safety is provided by the get_foo() function.  I suppose somebody could
+play some games with _Generic or something, but there's really no need to.
+It's like using a list_head and casting to the container_of.
 
-This is why I said in that other thread "just saying 'pairs with
-<foo>' is not sufficient to explain to the reader exactly what the
-memory barrier is doing. You needed two full paragraphs to explain
-why this was put here and that, to me, indicate the example and
-expected use case is wrong.
+> It also forces all users of the struct to use this helper function to access it.
+> That could be considered a good thing, but it's also bad because even with
+> one-time init there's still usually some sort of ordering of "initialization"
+> vs. "use".  Just taking a random example I'm familiar with, we do one-time init
+> of inode::i_crypt_info when we open an encrypted file, so we guarantee it's set
+> for all I/O to the file, where we then simply access ->i_crypt_info directly.
+> We don't want the code to read like it's initializing ->i_crypt_info in the
+> middle of ->writepages(), since that would be wrong.
 
-But even then, I think this example is incorrect and doesn't fit the
-patterns people might expect. That is, if this init function
--returned foo for the caller to use-, then the smp_load_acquire() on
-failure is necessary to ensure the initialisation done by the racing
-context is correct seen. But this function doesn't return foo, and
-so the smp_load_acquire() is required in whatever context is trying
-to access the contents of foo, not the init function.
+Right, and I wouldn't use this pattern for that.  You can't get to
+writepages without having opened the file, so just initialising the
+pointer in open is fine.
 
-Hence I think this example is likely incorrect and will lead to bugs
-because it does not, in any way, indicate that
-smp_load_acquire(&foo) must always be used in the contexts where foo
-may accessed before (or during) the init function has been run...
+> An improvement might be to make once_store() take the free function as a
+> parameter so that it would handle the failure case for you:
+> 
+> struct foo *get_foo(gfp_t gfp)
+> {
+> 	static struct init_once_pointer my_foo;
+> 	struct foo *foop;
+>  
+>  	foop = once_get(&my_foo);
+>  	if (!foop) {
+> 		foop = alloc_foo(gfp);
+> 		if (foop)
+> 			once_store(&my_foo, foop, free_foo);
 
-Cheers,
+Need to mark once_store as __must_check to avoid the bug you have here:
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+			foop = once_store(&my_foo, foop, free_foo);
+
+Maybe we could use a macro for once_store so we could write:
+
+void *once_get(struct init_pointer_once *);
+int once_store(struct init_pointer_once *, void *);
+
+#define once_alloc(s, o_alloc, o_free) ({                               \
+        void *__p = o_alloc;                                            \
+        if (__p) {                                                      \
+                if (!once_store(s, __p)) {                              \
+                        o_free(__p);                                    \
+                        __p = once_get(s);                              \
+                }                                                       \
+        }                                                               \
+        __p;                                                            \
+})
+
+---
+
+struct foo *alloc_foo(gfp_t);
+void free_foo(struct foo *);
+
+struct foo *get_foo(gfp_t gfp)
+{
+        static struct init_pointer_once my_foo;
+        struct foo *foop;
+
+        foop = once_get(&my_foo);
+        if (!foop)
+                foop = once_alloc(&my_foo, alloc_foo(gfp), free_foo);
+        return foop;
+}
+
+That's pretty hard to misuse (I compile-tested it, and it works).
