@@ -2,104 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB28225272
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Jul 2020 17:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E33E2253AF
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Jul 2020 21:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbgGSPZJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Jul 2020 11:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S1726135AbgGST2e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Jul 2020 15:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbgGSPZI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Jul 2020 11:25:08 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67E6C0619D5
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jul 2020 08:25:08 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id p3so9138916pgh.3
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jul 2020 08:25:08 -0700 (PDT)
+        with ESMTP id S1726093AbgGST2d (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Jul 2020 15:28:33 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9E6C0619D4
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jul 2020 12:28:33 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id u12so8609753lff.2
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jul 2020 12:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=G6noA34E2/1K2YEmWWWvytBE/BSHjy5e1V9oQ5WK4u8=;
-        b=NR0cgf5cBbpYVGAMHvjRCO4t6MnPwJdvoE3mJ1A0kCTMWL8b7WKtAqxAdN1ZGdxydD
-         mjsN5H2vv/M5XsiCu5TYyUOat0KmRvmljU9H10ydknjN3e8jaWT97EHTFJNOPnUhEBgS
-         KBsyycqGNhcnPulvUkmZzqhwSP7mMQm9pBD97x8CfHB2LNQ5oLtoRdBpsogce6KZrJ1/
-         57SKOjao55eQdoJlPAPc8UVNys2HZ48ffsyBHTROtacZhM+kvn9IjK7nxIEFqUorF5tZ
-         GwaVXiUtQuqa0pvHTkxVHlduKz7IO1SSTe/aMMG0gFyp+wc0Co6Fy+z+LUGaid1KpaiQ
-         NA1w==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eOzG0VwI/nHjqcTTd/0RSnaqr0ty8WGWju2cNR/S0kY=;
+        b=EXMQsuOcBH+qn3lSJ6Zx5JRTyYr/4OdJYaSMa4Bry4+gKY7gSdpbzK3GfXZScLAxXq
+         pXBClpedVFxqvZNlQm7uABVvo9duzFbRns/ysfziBPCqArrRWPV4Ovr73eJqvwGS5A9t
+         TMG9FhnMf83M1eb05gEyFrEkjtO/hs/Oz//jk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=G6noA34E2/1K2YEmWWWvytBE/BSHjy5e1V9oQ5WK4u8=;
-        b=NSahtqc0CIeDsbQUgGFvOstkjUfUpKKLQUTv6kLPvriBQAw8oSEHoFay9hDxq5ura1
-         yG81vaGSnDpfZuhWtxu4bKqGBsJb9+VYcaZM2vkzqyKSWJodTeoEbmXwiyA+7jkGynnx
-         Ykyc9yBA0aq8vhXhtvYVoLfRHE7Y2jciPJ7XG+66o6h+EZu74X+2shkgo/NqDVV11UST
-         +dyBvkS2yQGiy5FxeEgu/ukedl+m5oqzXnms0gUIVdl7sEenNnby51GMlW4HgAjxhsVY
-         tVFrpxlaDxXC526WK4e4c18NF1ZJFacSDe1yvDc0PDxJA4wjKkUm1fwYK5sPuonzIYlm
-         bD0A==
-X-Gm-Message-State: AOAM533wvIGv0l2IcBhG8rQz5lEA0sjgMOwwH2518mrgquZnTwgma5N2
-        vfsioc7RKPTyATxRoa91zxUONQ==
-X-Google-Smtp-Source: ABdhPJxuE7qpwKlTTYqMwf/wSgZDSPJ+s6c+g2banxhS6ephCD2iCZG8IP76J+p+dQqsR9MRV3i6YQ==
-X-Received: by 2002:a63:3c41:: with SMTP id i1mr16186511pgn.349.1595172308247;
-        Sun, 19 Jul 2020 08:25:08 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:c0b0:ea7d:297a:9f43? ([2601:646:c200:1ef2:c0b0:ea7d:297a:9f43])
-        by smtp.gmail.com with ESMTPSA id n22sm8499202pjq.25.2020.07.19.08.25.07
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eOzG0VwI/nHjqcTTd/0RSnaqr0ty8WGWju2cNR/S0kY=;
+        b=oAzGZTDXQdDctJxzv/uXSthW98HYBiSv/LQoyGvZ/sJV0HSX2MN6SRLEdArXofz3K2
+         34Gf7h9EaptvlEE9NMAnyAgOZ7lNtYKVLcZY89OZDwnclNMgVeUTjwBNEmv12H2JwphQ
+         8xUYM1JWgnGQ0HcrhRlXOeIf8D8AcVND7Dh8hbAqxEnTV9Nlvzv87G/ex7eiha88kOGZ
+         VOTbFg0PCPchdcn9VmiUdzbm2bodk8Hs1/mnV6WjD3r/GiCCYx2SSVcQY1KnJO8BmhCU
+         gLn7SybM8QpfR5JmkAxErWMvKRMeVVMV+n3ixpXagPXlk04gqwFkalLTGfB7bMa3HAe7
+         MdOA==
+X-Gm-Message-State: AOAM533H0Q7BCq258GPlXe83SFcRKckOKpXlwTf0jNV2ZgC8pgJ8+owv
+        DsD9OOrpcD4i4byBmik2tjAJ/LccbPw=
+X-Google-Smtp-Source: ABdhPJzs4p4lm77cUER72JWHZloMPgps1T49awsboTtxNz4OcYqiyMBAyOWvB2dah+RDALgOrZ28hg==
+X-Received: by 2002:a19:4c57:: with SMTP id z84mr8485391lfa.92.1595186911246;
+        Sun, 19 Jul 2020 12:28:31 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id i24sm3305532lfg.83.2020.07.19.12.28.29
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jul 2020 08:25:07 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [patch V3 01/13] entry: Provide generic syscall entry functionality
-Date:   Sun, 19 Jul 2020 08:25:05 -0700
-Message-Id: <A790AF9D-3BF7-4FEE-9E29-7C13FA3FE0C3@amacapital.net>
-References: <87v9ijollo.fsf@nanos.tec.linutronix.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-In-Reply-To: <87v9ijollo.fsf@nanos.tec.linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-X-Mailer: iPhone Mail (17F80)
+        Sun, 19 Jul 2020 12:28:30 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id r19so17886721ljn.12
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jul 2020 12:28:29 -0700 (PDT)
+X-Received: by 2002:a2e:86c4:: with SMTP id n4mr9071955ljj.312.1595186909554;
+ Sun, 19 Jul 2020 12:28:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200719031733.GI2786714@ZenIV.linux.org.uk>
+In-Reply-To: <20200719031733.GI2786714@ZenIV.linux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 19 Jul 2020 12:28:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi7f5vG+s=aFsskzcTRs+f7MVHK9yJFZtUEfndy6ScKRQ@mail.gmail.com>
+Message-ID: <CAHk-=wi7f5vG+s=aFsskzcTRs+f7MVHK9yJFZtUEfndy6ScKRQ@mail.gmail.com>
+Subject: Re: [RFC] raw_copy_from_user() semantics
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Sat, Jul 18, 2020 at 8:17 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+>         So any byte-squeezing loop of that sort would break on a bunch
+> of architectures.
 
+I think we should try to get rid of the exact semantics.
 
-> On Jul 19, 2020, at 3:17 AM, Thomas Gleixner <tglx@linutronix.de> wrote:
->=20
-> =EF=BB=BFAndy Lutomirski <luto@kernel.org> writes:
->>> On Sat, Jul 18, 2020 at 7:16 AM Thomas Gleixner <tglx@linutronix.de> wro=
-te:
->>> Andy Lutomirski <luto@kernel.org> writes:
->>>> FWIW, TIF_USER_RETURN_NOTIFY is a bit of an odd duck: it's an
->>>> entry/exit word *and* a context switch word.  The latter is because
->>>> it's logically a per-cpu flag, not a per-task flag, and the context
->>>> switch code moves it around so it's always set on the running task.
->>>=20
->>> Gah, I missed the context switch thing of that. That stuff is hideous.
->>=20
->> It's also delightful because anything that screws up that dance (such
->> as failure to do the exit-to-usermode path exactly right) likely
->> results in an insta-root-hole.  If we fail to run user return
->> notifiers, we can run user code with incorrect syscall MSRs, etc.
->=20
-> Looking at it deeper, having that thing in the loop is a pointless
-> exercise. This really wants to be done _after_ the loop.
->=20
+If "copy_from/to_user()" takes a fault because it does a
+larger-than-byte access (and with unrolling, it could be a _lot_
+larger than one byte: x86 dcurrently has that "generic" case that
+isn't used very much, but it unrolls 8-byte accesses 8 times, so it
+does a 64-byte block that we could just say "if any fo those didn't
+work, then you're done), then the copy failed. The exact number of
+bytes we _could_ have copied is not important.
 
-As long as we=E2=80=99re confident that nothing after the loop can set the f=
-lag again.
+So we could simplify the x86 end condition too and remove all the
+"handle_tail" complexity.
 
-> Thanks,
->=20
->        tglx
+                  Linus
+
+(*) Yes, it aligns things to 64-byte boundaries too, but only for the
+write side, not the read side.
