@@ -2,161 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77790225D86
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 13:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051A02261E6
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 16:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbgGTLgW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 07:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728058AbgGTLgW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 07:36:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7E7C061794;
-        Mon, 20 Jul 2020 04:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=p0iwoGCkvJZcwbHnFm61xWYRiIRUAJSGvnjR7QZKDdg=; b=ezM213CZTPPS6HSORVwJNY4EKG
-        R/4HU5dBmTi4a8Z3M4lWqQTnzQO28k8rSegjkSH7DjhaNYt/6nGNJ0sFan1bKBkcFNBmWoauJBhCK
-        O8BKmhdD45V/bX8jhr7rmAIv8XF8dgWqr5g9o56j9TiizY70cGoEq+HvKW0aDAIMZPZ156h+CxUOH
-        +daB8llARAezDJhHVA0QdcOVPmUu4dpHZkz0glzWWDgGe4HCN5woZpZuLiqfGYP9RmLx2mg75DxyE
-        9tBhboVY1l26eW0c25T21dAlttlhCALa8CcN9V+RtTR9AxXNIKWlT78Q4Y8yY8i6iF4MVmGn12iGZ
-        IXhipm4w==;
-Received: from [2001:4bb8:105:4a81:ec09:aa20:3c1e:ebea] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jxU5Z-0000eP-Pi; Mon, 20 Jul 2020 11:36:10 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     msalter@redhat.com, jacquiot.aurelien@gmail.com,
-        ley.foon.tan@intel.com, arnd@arndb.de
-Cc:     linux-c6x-dev@linux-c6x.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] arch, net: remove the last csum_partial_copy() leftovers
-Date:   Mon, 20 Jul 2020 13:36:09 +0200
-Message-Id: <20200720113609.177259-1-hch@lst.de>
-X-Mailer: git-send-email 2.27.0
+        id S1726899AbgGTOVK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 10:21:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726759AbgGTOVK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 10:21:10 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 268A520B1F;
+        Mon, 20 Jul 2020 14:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595254869;
+        bh=HLsnWapSZr1TpttXIYrQQDMJGrH8nj1rqvBMPrAFCRE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQFs0H8abPDZJviZX+5bTqQNawGqmx/pBTGly2VfVP90WSpMzcMHYQaTLQ4IRVWLD
+         k/TvI13Gi+NhRKv0vTnOIb6rS5YvbMFxFB2Z5aBUzsuJsDlzLpFqI8rMGY5I1SWibn
+         SqtW927tzctc+7dbf6a1ky5SigWZ7PMcfQCFsoO4=
+Date:   Mon, 20 Jul 2020 17:20:53 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-nvdimm@lists.01.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [PATCH 3/6] mm: introduce secretmemfd system call to create
+ "secret" memory areas
+Message-ID: <20200720142053.GC8593@kernel.org>
+References: <20200720092435.17469-1-rppt@kernel.org>
+ <20200720092435.17469-4-rppt@kernel.org>
+ <CAK8P3a0NyvRMqH7X0YNO5E6DGtvZXD5ZcD6Y6n7AkocufkMnHA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0NyvRMqH7X0YNO5E6DGtvZXD5ZcD6Y6n7AkocufkMnHA@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Most of the tree only uses and implements csum_partial_copy_nocheck,
-but the c6x and lib/checksum.c implement a csum_partial_copy that
-isn't used anywere except to define csum_partial_copy.  Get rid of
-this pointless alias.
+On Mon, Jul 20, 2020 at 01:30:13PM +0200, Arnd Bergmann wrote:
+> On Mon, Jul 20, 2020 at 11:25 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> >
+> > Introduce "secretmemfd" system call with the ability to create memory areas
+> > visible only in the context of the owning process and not mapped not only
+> > to other processes but in the kernel page tables as well.
+> >
+> > The user will create a file descriptor using the secretmemfd system call
+> > where flags supplied as a parameter to this system call will define the
+> > desired protection mode for the memory associated with that file
+> > descriptor. Currently there are two protection modes:
+> >
+> > * exclusive - the memory area is unmapped from the kernel direct map and it
+> >               is present only in the page tables of the owning mm.
+> > * uncached  - the memory area is present only in the page tables of the
+> >               owning mm and it is mapped there as uncached.
+> >
+> > For instance, the following example will create an uncached mapping (error
+> > handling is omitted):
+> >
+> >         fd = secretmemfd(SECRETMEM_UNCACHED);
+> >         ftruncate(fd, MAP_SIZE);
+> >         ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED,
+> >                    fd, 0);
+> >
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> I wonder if this should be more closely related to dmabuf file
+> descriptors, which
+> are already used for a similar purpose: sharing access to secret memory areas
+> that are not visible to the OS but can be shared with hardware through device
+> drivers that can import a dmabuf file descriptor.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/c6x/lib/checksum.c           | 2 +-
- arch/c6x/lib/csum_64plus.S        | 8 ++++----
- arch/nios2/include/asm/checksum.h | 5 ++---
- include/asm-generic/checksum.h    | 6 ++----
- lib/checksum.c                    | 4 ++--
- 5 files changed, 11 insertions(+), 14 deletions(-)
+TBH, I didn't think about dmabuf, but my undestanding is that is this
+case memory areas are not visible to the OS because they are on device
+memory rather than normal RAM and when dmabuf is backed by the normal
+RAM, the memory is visible to the OS.
 
-diff --git a/arch/c6x/lib/checksum.c b/arch/c6x/lib/checksum.c
-index 335ca490080847..dff2e2ec6e6472 100644
---- a/arch/c6x/lib/checksum.c
-+++ b/arch/c6x/lib/checksum.c
-@@ -6,6 +6,6 @@
- 
- /* These are from csum_64plus.S */
- EXPORT_SYMBOL(csum_partial);
--EXPORT_SYMBOL(csum_partial_copy);
-+EXPORT_SYMBOL(csum_partial_copy_nocheck);
- EXPORT_SYMBOL(ip_compute_csum);
- EXPORT_SYMBOL(ip_fast_csum);
-diff --git a/arch/c6x/lib/csum_64plus.S b/arch/c6x/lib/csum_64plus.S
-index 8e625a30fd435a..9c07127485d165 100644
---- a/arch/c6x/lib/csum_64plus.S
-+++ b/arch/c6x/lib/csum_64plus.S
-@@ -10,8 +10,8 @@
- #include <linux/linkage.h>
- 
- ;
--;unsigned int csum_partial_copy(const char *src, char * dst,
--;				int len, int sum)
-+;unsigned int csum_partial_copy_nocheck(const char *src, char * dst,
-+;					int len, int sum)
- ;
- ; A4:	src
- ; B4:	dst
-@@ -21,7 +21,7 @@
- ;
- 
- 	.text
--ENTRY(csum_partial_copy)
-+ENTRY(csum_partial_copy_nocheck)
- 	MVC	.S2	ILC,B30
- 
- 	MV	.D1X	B6,A31		; given csum
-@@ -149,7 +149,7 @@ L10:	ADD	.D1	A31,A9,A9
- 
- 	BNOP	.S2	B3,4
- 	MVC	.S2	B30,ILC
--ENDPROC(csum_partial_copy)
-+ENDPROC(csum_partial_copy_nocheck)
- 
- ;
- ;unsigned short
-diff --git a/arch/nios2/include/asm/checksum.h b/arch/nios2/include/asm/checksum.h
-index ec39698d3beac8..b4316c361729f0 100644
---- a/arch/nios2/include/asm/checksum.h
-+++ b/arch/nios2/include/asm/checksum.h
-@@ -12,10 +12,9 @@
- 
- /* Take these from lib/checksum.c */
- extern __wsum csum_partial(const void *buff, int len, __wsum sum);
--extern __wsum csum_partial_copy(const void *src, void *dst, int len,
-+__wsum csum_partial_copy_nocheck(const void *src, void *dst, int len,
- 				__wsum sum);
--#define csum_partial_copy_nocheck(src, dst, len, sum)	\
--	csum_partial_copy((src), (dst), (len), (sum))
-+#define csum_partial_copy_nocheck csum_partial_copy_nocheck
- 
- extern __sum16 ip_fast_csum(const void *iph, unsigned int ihl);
- extern __sum16 ip_compute_csum(const void *buff, int len);
-diff --git a/include/asm-generic/checksum.h b/include/asm-generic/checksum.h
-index 5a80f8e543008a..cd8b75aa770d00 100644
---- a/include/asm-generic/checksum.h
-+++ b/include/asm-generic/checksum.h
-@@ -23,11 +23,9 @@ extern __wsum csum_partial(const void *buff, int len, __wsum sum);
-  * here even more important to align src and dst on a 32-bit (or even
-  * better 64-bit) boundary
-  */
--extern __wsum csum_partial_copy(const void *src, void *dst, int len, __wsum sum);
--
- #ifndef csum_partial_copy_nocheck
--#define csum_partial_copy_nocheck(src, dst, len, sum)	\
--	csum_partial_copy((src), (dst), (len), (sum))
-+__wsum csum_partial_copy_nocheck(const void *src, void *dst, int len,
-+		__wsum sum);
- #endif
- 
- #ifndef ip_fast_csum
-diff --git a/lib/checksum.c b/lib/checksum.c
-index 7ac65a0000ff09..c7861e84c5261a 100644
---- a/lib/checksum.c
-+++ b/lib/checksum.c
-@@ -149,12 +149,12 @@ EXPORT_SYMBOL(ip_compute_csum);
-  * copy from ds while checksumming, otherwise like csum_partial
-  */
- __wsum
--csum_partial_copy(const void *src, void *dst, int len, __wsum sum)
-+csum_partial_copy_nocheck(const void *src, void *dst, int len, __wsum sum)
- {
- 	memcpy(dst, src, len);
- 	return csum_partial(dst, len, sum);
- }
--EXPORT_SYMBOL(csum_partial_copy);
-+EXPORT_SYMBOL(csum_partial_copy_nocheck);
- 
- #ifndef csum_tcpudp_nofold
- static inline u32 from64to32(u64 x)
+Did I miss anything?
+
+
+>       Arnd
+
 -- 
-2.27.0
-
+Sincerely yours,
+Mike.
