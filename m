@@ -2,82 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A93225AA9
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 11:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2F2225B6F
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 11:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727963AbgGTJBU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 05:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgGTJBU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 05:01:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA252C061794;
-        Mon, 20 Jul 2020 02:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LZEFw1oLYgj4zsscQtdY4wJjNPA8ihmwOeaubjV41Pk=; b=oc0IUr21+u3R3HHyVc1+ohxgyl
-        2z+5E1O/YRnEKTIQlTiPNRaYbA9cD+zV/YrdzOno4RV55SiABJACPM7N5pw4qV1fgUX76id9TMEVF
-        zlLv6R4dbfd15db/jFUWEJjrDIfhxSBWh6Ppfrc/542neYLxXw5lVC0IK6Q8EIspILT+WikBiEMFm
-        0snzsabiSnAyw2g0n3gT6UpKBvBc+w/09bOD0GIvfWR3Q3vOd2DG2VB+BevBiTQ3nVvn653RJjnps
-        kpaxpkGT07Um/Fy19L2KrvtATLeo5rbgftQhXX3NnDWasECY0nmtJIF1oklga9nIuHvB+NcLQQz3M
-        DKVkdjWA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jxRfI-0000Iv-3d; Mon, 20 Jul 2020 09:00:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A99F0300446;
-        Mon, 20 Jul 2020 11:00:50 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 91FED23646C08; Mon, 20 Jul 2020 11:00:50 +0200 (CEST)
-Date:   Mon, 20 Jul 2020 11:00:50 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
+        id S1728000AbgGTJY6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 05:24:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38242 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727769AbgGTJY6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 05:24:58 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B05072176B;
+        Mon, 20 Jul 2020 09:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595237097;
+        bh=DZJgFWT9EBpxUAxDadsCWuChLAtXVn8oZMtP9QRL6C8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZTwUZAfjeouKDVccICNkfWj3AXzdsSuDk2rXgQ1No8faUuhgdJkyGv8pNjSwr1p8s
+         KG+pxfIgNxDLMiwrUoHqNrpWJhB5PtUOQUvLH6+XLLQNsMur9U/3CoZ5gGNVXCI9pB
+         je+UNlkcrWBPmVpDOLe0ai7+vZwqHYtU7Ofhrs9o=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
         Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
-Message-ID: <20200720090050.GK10769@hirez.programming.kicks-ass.net>
-References: <20200717044427.68747-1-ebiggers@kernel.org>
- <20200717174750.GQ12769@casper.infradead.org>
- <20200718013839.GD2183@sol.localdomain>
- <20200718021304.GS12769@casper.infradead.org>
- <20200718052818.GF2183@sol.localdomain>
- <20200720020731.GQ5369@dread.disaster.area>
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: [PATCH 0/6] mm: introduce secretmemfd system call to create "secret" memory areas
+Date:   Mon, 20 Jul 2020 12:24:29 +0300
+Message-Id: <20200720092435.17469-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200720020731.GQ5369@dread.disaster.area>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 12:07:31PM +1000, Dave Chinner wrote:
-> The whole serialisation/atomic/ordering APIs have fallen badly off
-> the macro cliff, to the point where finding out something as simple
-> as the order of parameters passed to cmpxchg and what semantics it
-> provides requires macro-spelunking 5 layers deep to find the generic
-> implementation function that contains a comment describing what it
-> does....
-> 
-> That's yet another barrier to understanding what all the different
-> synchronisation primitives do.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Documentation/atomic_t.txt ?
+Hi,
+
+This is the third version of "secret" mappings implementation backed by a
+file descriptor. 
+
+The file descriptor is created using a dedicated secretmemfd system call
+The desired protection mode for the memory is configured using flags
+parameter of the system call. The mmap() of the file descriptor created
+with secretmemfd() will create a "secret" memory mapping. The pages in that
+mapping will be marked as not present in the direct map and will have
+desired protection bits set in the user page table. For instance, current
+implementation allows uncached mappings.
+
+Although normally Linux userspace mappings are protected from other users, 
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
+
+Additionally, the secret mappings may be used as a mean to protect guest
+memory in a virtual machine host.
+
+For demonstration of secret memory usage we've created a userspace library
+[1] that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
+
+I've hesitated whether to continue to use new flags to memfd_create() or to
+add a new system call and I've decided to use a new system call after I've
+started to look into man pages update. There would have been two completely
+independent descriptions and I think it would have been very confusing.
+
+Hiding secret memory mappings behind an anonymous file allows (ab)use of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
+
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
+
+As the fragmentation of the direct map was one of the major concerns raised
+during the previous postings, I've added an amortizing cache of PMD-size
+pages to each file descriptor and an ability to reserve large chunks of the
+physical memory at boot time and then use this memory as an allocation pool
+for the secret memory areas.
+
+In addition, I've tried to find some numbers that show the benefit of using
+larger pages in the direct map, but I couldn't find anything so I've run a
+couple of benchmarks from phoronix-test-suite on my laptop (i7-8650U with
+32G RAM).
+
+I've tested three variants: the default with 28G of the physical memory
+covered with 1G pages, then I disabled 1G pages using "nogbpages" in the
+kernel command line and at last I've forced the entire direct map to use 4K
+pages using a simple patch to arch/x86/mm/init.c.
+I've made runs of the benchmarks with SSD and tmpfs.
+
+Surprisingly, the results does not show huge advantage for large pages. For
+instance, here the results for kernel build with 'make -j8', in seconds:
+
+                        |  1G    |  2M    |  4K
+------------------------+--------+--------+---------
+ssd, mitigations=on	| 308.75 | 317.37 | 314.9 
+ssd, mitigations=off	| 305.25 | 295.32 | 304.92 
+ram, mitigations=on	| 301.58 | 322.49 | 306.54 
+ram, mitigations=off	| 299.32 | 288.44 | 310.65
+
+All the results I have are available at [2].
+If anybody is interested in plain text, please let me know.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/rppt/secret-memory-preloader.git/
+[2] https://docs.google.com/spreadsheets/d/1tdD-cu8e93vnfGsTFxZ5YdaEfs2E1GELlvWNOGkJV2U/edit?usp=sharing
+
+Mike Rapoport (6):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  mm: introduce secretmemfd system call to create "secret" memory areas
+  arch, mm: wire up secretmemfd system call were relevant
+  mm: secretmem: use PMD-size pages to amortize direct map fragmentation
+  mm: secretmem: add ability to reserve memory at boot
+
+ arch/arm64/include/asm/unistd32.h      |   2 +
+ arch/arm64/include/uapi/asm/unistd.h   |   1 +
+ arch/riscv/include/asm/unistd.h        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+ fs/dax.c                               |  10 +-
+ include/linux/pgtable.h                |   3 +
+ include/linux/syscalls.h               |   1 +
+ include/uapi/asm-generic/unistd.h      |   7 +-
+ include/uapi/linux/magic.h             |   1 +
+ include/uapi/linux/secretmem.h         |   9 +
+ mm/Kconfig                             |   4 +
+ mm/Makefile                            |   1 +
+ mm/internal.h                          |   3 +
+ mm/mmap.c                              |   5 +-
+ mm/secretmem.c                         | 450 +++++++++++++++++++++++++
+ 16 files changed, 491 insertions(+), 9 deletions(-)
+ create mode 100644 include/uapi/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+
+
+base-commit: f932d58abc38c898d7d3fe635ecb2b821a256f54
+-- 
+2.26.2
+
