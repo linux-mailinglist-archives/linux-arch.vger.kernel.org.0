@@ -2,112 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C027C226D18
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 19:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1ED226D7B
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 19:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730535AbgGTR27 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 13:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729686AbgGTR26 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 13:28:58 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FD1C0619D5
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 10:28:58 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id p3so10610880pgh.3
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 10:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=xHiR/oaIUa5pbgNSUHGq5QFpcwnJQsNkMFGVCEqO8so=;
-        b=a1MsoLnahfulhQyk3sQsJrIU0k/+OszU3zBP0cJH82Ram+mo+waJkr1NTjIeMwkiqn
-         ed9V1qkSCCh7AMcPedy3Ec5w+9GPs5vum5IXSsQiRy0zdzFN2oktRwyJ9S6bOkASAJHQ
-         J5kbITP0bxBBJHKljVCnY5OzhNgXH3IUG8QTLjr5GGwIPYblTMvorMwFOZKX3pQptQuD
-         Z9cwzEtJcIoupOadWfvGjTH/UfcgqbRTo4EUQvX/KTyygXaGUF9ELU2D7595CYK/IHW7
-         bgV+8Btko85b47omINODDlL7L+UfFa38WNmSs01PM2yzgR9sl/M5bNlUXAtUa4NsGF1y
-         Pzjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=xHiR/oaIUa5pbgNSUHGq5QFpcwnJQsNkMFGVCEqO8so=;
-        b=KFkopvBVBQAbr5rYhj6jQbSn5CuChGRVyNZqRKmXS90B2LvCMPAOeLmAWgWgNTN1kP
-         /1GtsH/s6kEepnd7zQg7UsF0FvoGTaW+bb8i3652ezWuO44Ll2kmQMBcn8kN2CDDNde5
-         hrdr43lfIY1+YQNf1mPzgL/J9Y85WnPDvE/7gNoCUqPD6uA1rlhqIfFvsZyoTKLouGRo
-         FqL+1eZLQTNVIbgGvJOcB4msOunO8MrTxc6MbY/fR+EvHBrb3P6a2l4VjFlyF+KGWIAu
-         UCFPNyWsAbhUH6GctXOAHjwBmuaYaoKvEf9ynLj/xKCWcRj6rKj/mdGCqBXk2Vmod6bV
-         RAXA==
-X-Gm-Message-State: AOAM532CGQwBOWEpj1v5rhEvLJh5y3utlARibgptU0N7kOA7NkhamKH1
-        hyggYuHgJI2PITQk8jQdhSNuYpXrf+BQeg==
-X-Google-Smtp-Source: ABdhPJzw98Kgq+brxFH0izVyuVi0opuOriMG8dW3/iCgRExLS3kbTbxih/QZd30S6kgN2/SxOMHx5g==
-X-Received: by 2002:a62:3744:: with SMTP id e65mr21637646pfa.20.1595266137524;
-        Mon, 20 Jul 2020 10:28:57 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:600f:2f5b:3d86:4df5? ([2601:646:c200:1ef2:600f:2f5b:3d86:4df5])
-        by smtp.gmail.com with ESMTPSA id ji2sm189425pjb.1.2020.07.20.10.28.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2020 10:28:56 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: io_uring vs in_compat_syscall()
-Date:   Mon, 20 Jul 2020 10:28:55 -0700
-Message-Id: <8987E376-6B13-4798-BDBA-616A457447CF@amacapital.net>
-References: <b754dad5-ee85-8a2f-f41a-8bdc56de42e8@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org
-In-Reply-To: <b754dad5-ee85-8a2f-f41a-8bdc56de42e8@kernel.dk>
-To:     Jens Axboe <axboe@kernel.dk>
-X-Mailer: iPhone Mail (17F80)
+        id S1729431AbgGTRrG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 13:47:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48018 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732122AbgGTRrG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 13:47:06 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 45F9D20709;
+        Mon, 20 Jul 2020 17:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595267225;
+        bh=h7xTJHL3tD3hyqROKlN47q+7JtwYj6iU2IDwcwmnD10=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YlqRcxTuXQfRrbeqatLbuRaOeADiac4H6X9sEArUzE5oRMfR8PHkKo5MsS8CqIiH2
+         30gUB8awpWvMVLHqbmwCRcCebqbRb3WB5zVyQMWCeasxnsnHVcByE17hsBPHomNYe/
+         2IYK/lsU5KfUy43NS89poYLzWTie5RjpZ+F0ezt8=
+Date:   Mon, 20 Jul 2020 20:46:50 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-nvdimm@lists.01.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [PATCH 3/6] mm: introduce secretmemfd system call to create
+ "secret" memory areas
+Message-ID: <20200720174650.GD8593@kernel.org>
+References: <20200720092435.17469-1-rppt@kernel.org>
+ <20200720092435.17469-4-rppt@kernel.org>
+ <CAK8P3a0NyvRMqH7X0YNO5E6DGtvZXD5ZcD6Y6n7AkocufkMnHA@mail.gmail.com>
+ <20200720142053.GC8593@kernel.org>
+ <CAK8P3a07jAec4hKyNMcha032TT6OXjYHaZZ4Za9ncDsvapeg8Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a07jAec4hKyNMcha032TT6OXjYHaZZ4Za9ncDsvapeg8Q@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Jul 20, 2020 at 04:34:12PM +0200, Arnd Bergmann wrote:
+> On Mon, Jul 20, 2020 at 4:21 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > On Mon, Jul 20, 2020 at 01:30:13PM +0200, Arnd Bergmann wrote:
+> > > On Mon, Jul 20, 2020 at 11:25 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > > >
+> > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > >
+> > > > Introduce "secretmemfd" system call with the ability to create memory areas
+> > > > visible only in the context of the owning process and not mapped not only
+> > > > to other processes but in the kernel page tables as well.
+> > > >
+> > > > The user will create a file descriptor using the secretmemfd system call
+> > > > where flags supplied as a parameter to this system call will define the
+> > > > desired protection mode for the memory associated with that file
+> > > > descriptor. Currently there are two protection modes:
+> > > >
+> > > > * exclusive - the memory area is unmapped from the kernel direct map and it
+> > > >               is present only in the page tables of the owning mm.
+> > > > * uncached  - the memory area is present only in the page tables of the
+> > > >               owning mm and it is mapped there as uncached.
+> > > >
+> > > > For instance, the following example will create an uncached mapping (error
+> > > > handling is omitted):
+> > > >
+> > > >         fd = secretmemfd(SECRETMEM_UNCACHED);
+> > > >         ftruncate(fd, MAP_SIZE);
+> > > >         ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED,
+> > > >                    fd, 0);
+> > > >
+> > > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > >
+> > > I wonder if this should be more closely related to dmabuf file
+> > > descriptors, which
+> > > are already used for a similar purpose: sharing access to secret memory areas
+> > > that are not visible to the OS but can be shared with hardware through device
+> > > drivers that can import a dmabuf file descriptor.
+> >
+> > TBH, I didn't think about dmabuf, but my undestanding is that is this
+> > case memory areas are not visible to the OS because they are on device
+> > memory rather than normal RAM and when dmabuf is backed by the normal
+> > RAM, the memory is visible to the OS.
+> 
+> No, dmabuf is normally about normal RAM that is shared between multiple
+> devices, the idea is that you can have one driver allocate a buffer in RAM
+> and export it to user space through a file descriptor. The application can then
+> go and mmap() it or pass it into one or more other drivers.
+> 
+> This can be used e.g. for sharing a buffer between a video codec and the
+> gpu, or between a crypto engine and another device that accesses
+> unencrypted data while software can only observe the encrypted version.
 
+For our usecase sharing is optional from one side and there are no
+devices involved from the other.
 
-> On Jul 20, 2020, at 10:02 AM, Jens Axboe <axboe@kernel.dk> wrote:
->=20
-> =EF=BB=BFOn 7/20/20 10:58 AM, Andy Lutomirski wrote:
->>=20
->>>> On Jul 20, 2020, at 9:37 AM, Jens Axboe <axboe@kernel.dk> wrote:
->>>=20
->>> =EF=BB=BFOn 7/20/20 12:10 AM, Christoph Hellwig wrote:
->>>> Hi Jens,
->>>>=20
->>>> I just found a (so far theoretical) issue with the io_uring submission
->>>> offloading to workqueues or threads.  We have lots of places using
->>>> in_compat_syscall() to check if a syscall needs compat treatmenet.
->>>> While the biggest users is iocttl(), we also have a fair amount of
->>>> places using in_compat_task() in read and write methods, and these
->>>> will not do the wrong thing when used with io_uring under certain
->>>> conditions.  I'm not sure how to best fix this, except for making sure
->>>> in_compat_syscall() returns true one way or another for these cases.
->>>=20
->>> We can probably propagate this information in the io_kiocb via a flag,
->>> and have the io-wq worker set TS_COMPAT if that's the case.
->>>=20
->>=20
->> Is TS_COMPAT actually a cross-arch concept for which this is safe?
->> Having a real arch helper for =E2=80=9Cset the current syscall arch for t=
-he
->> current kernel thread=E2=80=9D seems more sensible to me.=20
->=20
-> Sure, I'd consider that implementation detail for the actual patch(es)
-> for this issue.
+As James pointed out, there is no match for the userspace API and if
+there will emerge a usacase that requires integration of secretmem with
+dma-buf, we'll deal with it then.
 
-There=E2=80=99s a corner case, though: doesn=E2=80=99t io_uring submission f=
-requently do the work synchronously in the context of the calling thread?  I=
-f so, can a thread do a 64-bit submit with 32-bit work or vice versa?
+>        Arnd
 
-Sometimes I think that in_compat_syscall() should have a mode in which calli=
-ng it warns (e.g. not actually in a syscall when doing things in io_uring). =
- And the relevant operations should be properly wired up to avoid global sta=
-te like this.
-
->=20
-> --=20
-> Jens Axboe
->=20
+-- 
+Sincerely yours,
+Mike.
