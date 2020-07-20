@@ -2,119 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BDB226C6E
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 18:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F067226C73
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 18:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728589AbgGTQwM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 12:52:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:34718 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726506AbgGTQwL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Jul 2020 12:52:11 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD674106F;
-        Mon, 20 Jul 2020 09:52:10 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B27703F66E;
-        Mon, 20 Jul 2020 09:52:09 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 17:52:07 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     linux-arch@vger.kernel.org, linux-man@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 0/2] prctl.2 man page updates for Linux 5.6
-Message-ID: <20200720165205.GI30452@arm.com>
-References: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
- <c17e330c-69f7-da7a-feae-cb8b8f5d7ea0@gmail.com>
+        id S1729284AbgGTQwv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 12:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728930AbgGTQwu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 12:52:50 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2317DC0619D5
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 09:52:50 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id y10so18811975eje.1
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 09:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WjwIKDNMRO86HLiza3ekP7Z4qpEbwmULQ/L4/V4YUtE=;
+        b=aKi09317EgbufEHdPz6ybPx9SBQ3iXd5Qr1oxjOv5QrJguwLfk+bp9TvU+POgEqNC8
+         E9WJUEpjgUVnd4A6HMqkPY1IIekaq1PzTfjnSMhOysWqSQHFxU2VpsbyaAfBSvi55tCf
+         OsQMetqysDIjWPonv8j8aSyT8PHbE2MY4MEap62x4hEwJiTGeKO4UE/AqW6CYkuqHJFK
+         +jNk4cgc5ueo3XySM27EJlzHTQmL7o1dFCUGkubIzjmwWtHygQSqOr7J4KrirT0N5ii5
+         6jmz3r9OZwZaSF0lhj6qB061kySusc6q4saf79ctFwnqDim1fh9xHMNQHSN4aeXTLI+e
+         WmFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WjwIKDNMRO86HLiza3ekP7Z4qpEbwmULQ/L4/V4YUtE=;
+        b=YChwlsmlGCYqI79Ckpt7VBc9LwKGwuNztn/P+BfIaNgN6Cwrc2A5kySVkQXj+aFM8w
+         bGLZO5kZ7nLBfjmDzQgOo+nhgEGd8p/Z3DIlgZG98ZEb6KT9GbY0OqTPY+lReroMTqFm
+         1li80hKw7daNAnqf//iJarM8LgeUwOcbmicqu7Fr4Y0oT8F63ww4/WiZSa+S7Ds97T58
+         SabWQOvIMmfKTIu9gd0NWcmV7O6SAJZRC8UekbftQ2N26oV3DFuXSAB8wFEoeCKtPOl0
+         vZdcsPRH7UEXx2pkSzH2JIsKmaHjWWjKFmeH9oKov+tbFsCLqfjtMjVgr/A4EOO/LWwb
+         NG0g==
+X-Gm-Message-State: AOAM533+ibnzy1oUJrLa52EnBNRujY93y7g1aSfJR8AVsRHceZpGXHyG
+        TpsM2ud+6tJ/vvsZpc0EqGKQq+BeFI2SWMnp5brtSw==
+X-Google-Smtp-Source: ABdhPJwXfmksCBX85u+pwB/9F5hgtRX4ZE8Dkw8qbJ6G2uTpNqzPbNioN4uT7/TWkHbxi+iplWhAeGWkg23vKqV2cIc=
+X-Received: by 2002:a17:906:6959:: with SMTP id c25mr21009671ejs.375.1595263968366;
+ Mon, 20 Jul 2020 09:52:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c17e330c-69f7-da7a-feae-cb8b8f5d7ea0@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200624203200.78870-5-samitolvanen@google.com> <20200624212737.GV4817@hirez.programming.kicks-ass.net>
+ <20200624214530.GA120457@google.com> <20200625074530.GW4817@hirez.programming.kicks-ass.net>
+ <20200625161503.GB173089@google.com> <20200625200235.GQ4781@hirez.programming.kicks-ass.net>
+ <20200625224042.GA169781@google.com> <20200626112931.GF4817@hirez.programming.kicks-ass.net>
+ <CABCJKucSM7gqWmUtiBPbr208wB0pc25afJXc6yBQzJDZf4LSWA@mail.gmail.com>
+ <20200717133645.7816c0b6@oasis.local.home> <CABCJKuda0AFCZ-1J2NTLc-M0xax007a9u-fzOoxmU2z60jvzbA@mail.gmail.com>
+ <20200717140545.6f008208@oasis.local.home>
+In-Reply-To: <20200717140545.6f008208@oasis.local.home>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 20 Jul 2020 09:52:37 -0700
+Message-ID: <CABCJKucDrS9wNZLjtmN5qMbZBTHLvB1Z7WqTwT3b11-K4kNcyg@mail.gmail.com>
+Subject: Re: [RFC][PATCH] objtool,x86_64: Replace recordmcount with objtool
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Matt Helsley <mhelsley@vmware.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 01:52:24PM +0200, Michael Kerrisk (man-pages) wrote:
-> Hi Dave,
-> 
-> On 6/24/20 7:36 PM, Dave Martin wrote:
-> > A bunch of updates to the prctl(2) man page to fill in missing
-> > prctls (mostly) up to Linux 5.6 (along with a few other tweaks and
-> > fixes).
-> > 
-> > Patches from the v2 series [1] that have been applied or rejected
-> > already have been dropped.
-> > 
-> > All that remain here now are the SVE and tagged address ABI controls
-> > for arm64.
-> > 
-> > 
-> > 
-> > [1] https://lore.kernel.org/linux-man/1590614258-24728-1-git-send-email-Dave.Martin@arm.com/
-> > 
-> > 
-> > Dave Martin (2):
-> >   prctl.2: Add SVE prctls (arm64)
-> >   prctl.2: Add tagged address ABI control prctls (arm64)
-> > 
-> >  man2/prctl.2 | 331 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 331 insertions(+)
-> Thanks. I've pushed these changes to master now.
+On Fri, Jul 17, 2020 at 11:05 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Fri, 17 Jul 2020 10:47:51 -0700
+> Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> > > Someone just submitted a patch for arm64 for this:
+> > >
+> > > https://lore.kernel.org/r/20200717143338.19302-1-gregory.herrero@oracle.com
+> > >
+> > > Is that what you want?
+> >
+> > That looks like the same issue, but we need to fix this on x86 instead.
+>
+> Does x86 have a way to differentiate between the two that record mcount
+> can check?
 
-Thanks -- btw I finally got around to reviewing master, and noted a few
-editorial changes that man-pages(7) does not make any statement about:
+I'm not sure if looking at the relocation alone is sufficient on x86,
+we might also have to decode the instruction, which is what objtool
+does. Did you have any thoughts on Peter's patch, or my initial
+suggestion, which adds a __nomcount attribute to affected functions?
 
-"arg1, arg2, and arg3"
-
-	Do you strictly prefer the command before "and" here?
-
-	Conventionally, the final comma would typically be omitted in
-	prose, except where the list members are complex enough that the
-	command is required to assist parsing.  However, lists of formal
-	arguments are not quite vanilla prose.
-
-"Providing that" -> "Provided that"
-
-	Any particular rationale here?
-
-"error EFOO" -> "the error EFOO"
-
-	Is this a rule, in general?
-
-.IP \(bu 2
-
-	I assumed that specifying an explicit indentation amount would
-	be fragile.  Going with the default behaviour also tends to
-	result in a more consistent appearance.  Do you have any
-	recommandations in this area?
-
-	Do you have rules about the order to use bullet symbols?  I tend
-	to avoid \(bu if possible, since while it's "correct", nroff can
-	render it nastily as an unadorned letter "o" (e.g., with -Tascii
-	or LC_CTYPE=C).  This is particlarly annoying if the indent is
-	<= 2, since then the "o" tends to be visually swallowed by the
-	following text (i.e., to a casual glance it looks like a word,
-	particlarly if the following text is not capitalised).  Perhaps
-	this is a bad glyph substitution decision in nroff rather than
-	something that should be fixed in the man-pages source, but the
-	man-pages source may be easier to fix...
-	
-	There is already inconsistency here: there are may top-level
-	lists using ".IP *" in prctl.2, and plenty of places where the
-	default indentation is used.
-
-
-Should any of these be written up in man-pages(7), or is there a checker
-than can detect them?
-
-I wan't to minimise the amount of tweaking you have to do when merging
-patches.
-
-Cheers
----Dave
+Sami
