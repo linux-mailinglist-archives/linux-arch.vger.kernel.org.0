@@ -2,89 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FB0226CA6
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 19:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19F9226CB0
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 19:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389046AbgGTQ6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 12:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729409AbgGTQ6n (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 12:58:43 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB79C061794
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 09:58:43 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 207so9324655pfu.3
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 09:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=43I7clNDsReFiDnQ/eG8o/xxDWM5jfx4yXluLFGgUPg=;
-        b=sc9jlE/K1DrDneIJnR6n5x32DQheHojWvPTx4A7npjm875HZtsCBR0i9U4673qY+A8
-         3WHkGIO7hvQpDhn8xnJXg6rIYv4iccpNk98bO9LmT8plqMZeN1NMCtxnPXHfu4kQM6lh
-         VWdL6N7aXyJ28oOxAHpfRyI2VDi+9eBLPLiFmqckrwIohpK4ofXbR+gAJ5sLhz3Tk46E
-         uBfxUgHScO/Gwq07Mku6yJKFfkGiRiDSfFqRTkku9ZHj3rzhUd+OKtX1daAWLdF7b0YB
-         RgViOZKZuBEi0A8SR46Q3J+6zgQj/bsKZ9U1WaODjM2qrqOUw83UZuc7Y0Fd4b1bGoCz
-         m9DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=43I7clNDsReFiDnQ/eG8o/xxDWM5jfx4yXluLFGgUPg=;
-        b=JJ/CaZ/9t6G4YbfYZ3AXLqtR2i21ZHooNJLHO5DTs+qDKseTuFJ6MFHXo5Y1oh5lXx
-         PkfpnqXBk1aLhapxe/cqCEgyzWxWWEzqi0u5qhm9kiS/Q0Ja5i0+5IaiNVRXJ60/nM85
-         sPu6cMT8/reaA1z3TUg4uME2y/q9awfNtxM8fudI7bfvvNd+ByKYq727JDu86eis5mRK
-         scwgNsVXORnexKZui9fUFpFfk7vp//GfYC4TQjy/Bx2ly/PXG51PWfvSuSedPHib9LJE
-         6mLtj+sWZDGcb+Q7oyE3Sy26VZ2MVhnES3bed0yqYtXVrKCSRWbq3FheXYftRPRUZ7Vc
-         I0lA==
-X-Gm-Message-State: AOAM530pfBWpV039DWMBY6fAuULQRcw30JcBdTB65lPRwcuxphLerhyx
-        BUDt8L2kAw51txDRBmRzGYoSBA==
-X-Google-Smtp-Source: ABdhPJwqbJwpMW1IhTYxfzLesmIFawwVTSzbWgxylzmrSdVa8Tk5mPHoVns2ROD6CM8Hjhjhno57fQ==
-X-Received: by 2002:a62:1c13:: with SMTP id c19mr19584029pfc.52.1595264322829;
-        Mon, 20 Jul 2020 09:58:42 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:600f:2f5b:3d86:4df5? ([2601:646:c200:1ef2:600f:2f5b:3d86:4df5])
-        by smtp.gmail.com with ESMTPSA id mg17sm95384pjb.55.2020.07.20.09.58.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2020 09:58:42 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: io_uring vs in_compat_syscall()
-Date:   Mon, 20 Jul 2020 09:58:37 -0700
-Message-Id: <BACE670C-6A65-4D86-BC5F-A7EA267C3140@amacapital.net>
-References: <ceb21006-26d0-b216-84a9-5da0b89b5fbf@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org
-In-Reply-To: <ceb21006-26d0-b216-84a9-5da0b89b5fbf@kernel.dk>
-To:     Jens Axboe <axboe@kernel.dk>
-X-Mailer: iPhone Mail (17F80)
+        id S1728827AbgGTRAz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 13:00:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:35522 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728495AbgGTRAy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 13:00:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C62AE106F;
+        Mon, 20 Jul 2020 10:00:53 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BCD03F66E;
+        Mon, 20 Jul 2020 10:00:52 -0700 (PDT)
+Date:   Mon, 20 Jul 2020 18:00:50 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Kevin Brodsky <kevin.brodsky@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v7 18/29] arm64: mte: Allow user control of the tag check
+ mode via prctl()
+Message-ID: <20200720170050.GJ30452@arm.com>
+References: <20200715170844.30064-1-catalin.marinas@arm.com>
+ <20200715170844.30064-19-catalin.marinas@arm.com>
+ <e9feb87e-41a8-17e6-eeba-4038da3bdde2@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9feb87e-41a8-17e6-eeba-4038da3bdde2@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Jul 20, 2020 at 04:30:35PM +0100, Kevin Brodsky wrote:
+> On 15/07/2020 18:08, Catalin Marinas wrote:
+> >By default, even if PROT_MTE is set on a memory range, there is no tag
+> >check fault reporting (SIGSEGV). Introduce a set of option to the
+> >exiting prctl(PR_SET_TAGGED_ADDR_CTRL) to allow user control of the tag
+> >check fault mode:
+> >
+> >   PR_MTE_TCF_NONE  - no reporting (default)
+> >   PR_MTE_TCF_SYNC  - synchronous tag check fault reporting
+> >   PR_MTE_TCF_ASYNC - asynchronous tag check fault reporting
+> >
+> >These options translate into the corresponding SCTLR_EL1.TCF0 bitfield,
+> >context-switched by the kernel. Note that uaccess done by the kernel is
+> >not checked and cannot be configured by the user.
+> >
+> >Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> >Cc: Will Deacon <will@kernel.org>
+> >---
+> >
+> >Notes:
+> >     v3:
+> >     - Use SCTLR_EL1_TCF0_NONE instead of 0 for consistency.
+> >     - Move mte_thread_switch() in this patch from an earlier one. In
+> >       addition, it is called after the dsb() in __switch_to() so that any
+> >       asynchronous tag check faults have been registered in the TFSR_EL1
+> >       registers (to be added with the in-kernel MTE support.
+> >     v2:
+> >     - Handle SCTLR_EL1_TCF0_NONE explicitly for consistency with PR_MTE_TCF_NONE.
+> >     - Fix SCTLR_EL1 register setting in flush_mte_state() (thanks to Peter
+> >       Collingbourne).
+> >     - Added ISB to update_sctlr_el1_tcf0() since, with the latest
+> >       architecture update/fix, the TCF0 field is used by the uaccess
+> >       routines.
 
-> On Jul 20, 2020, at 9:37 AM, Jens Axboe <axboe@kernel.dk> wrote:
->=20
-> =EF=BB=BFOn 7/20/20 12:10 AM, Christoph Hellwig wrote:
->> Hi Jens,
->>=20
->> I just found a (so far theoretical) issue with the io_uring submission
->> offloading to workqueues or threads.  We have lots of places using
->> in_compat_syscall() to check if a syscall needs compat treatmenet.
->> While the biggest users is iocttl(), we also have a fair amount of
->> places using in_compat_task() in read and write methods, and these
->> will not do the wrong thing when used with io_uring under certain
->> conditions.  I'm not sure how to best fix this, except for making sure
->> in_compat_syscall() returns true one way or another for these cases.
->=20
-> We can probably propagate this information in the io_kiocb via a flag,
-> and have the io-wq worker set TS_COMPAT if that's the case.
->=20
+[...]
 
-Is TS_COMPAT actually a cross-arch concept for which this is safe?  Having a=
- real arch helper for =E2=80=9Cset the current syscall arch for the current k=
-ernel thread=E2=80=9D seems more sensible to me.=20=
+> >diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+
+[...]
+
+> >+void mte_thread_switch(struct task_struct *next)
+> >+{
+> >+	if (!system_supports_mte())
+> >+		return;
+> >+
+> >+	/* avoid expensive SCTLR_EL1 accesses if no change */
+> >+	if (current->thread.sctlr_tcf0 != next->thread.sctlr_tcf0)
+> 
+> I think this could be improved by checking whether `next` is a kernel
+> thread, in which case thread.sctlr_tcf0 is 0 but there is no point in
+> setting SCTLR_EL1.TCF0, since there should not be any access via TTBR0.
+
+Out of interest, do we have a nice way of testing for a kernel thread
+now?
+
+I remember fpsimd_thread_switch() used to check for task->mm, but we
+seem to have got rid of that at some point.  set_mm() can defeat this,
+and anyway the heavy lifting for FPSIMD is now deferred until returning
+to userspace.
+
+Cheers
+---Dave
