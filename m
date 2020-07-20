@@ -2,87 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03444226AB3
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 18:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF4A226C14
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 18:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388796AbgGTQgw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 12:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732980AbgGTQgn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 12:36:43 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C49C061794
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 09:36:43 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id x9so13854528ila.3
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jul 2020 09:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gBnhc9kYq0E6+vqUJS1jDU/1F1sS+K3Lh6YLjAXrPIA=;
-        b=IJM4F9kEuWWZ9HWNrJw+/v44b3wlVooucvBHu8ZYu8BUTGD5nEtsKNyzUXoTwNSTEY
-         +bYLs/oEfkJ7TI+wg3wqDbe/+j2D8FZZ+9w2kK7V4HwSe+AzjwElQJfRiaflWvmPXZgr
-         bXgpTKOrNGv2fnoAHU35bus/WtnzUUcC7j8iH6Sp3HbSK+FymkGn0BgI/YffgYLJR0ox
-         sBgfdmHN6KCjmzreGDBnzbbO3cvKE4LDgna3CAHCOSG27AtgoCLXhS4OGzLlFFlF/CaO
-         SvOcMUX2AWEnvyi4W69b4nj3DC+Yr5/MXaC6sOpNKcUKRHLr/ofvZzc87WX/VE814Tgs
-         C6qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gBnhc9kYq0E6+vqUJS1jDU/1F1sS+K3Lh6YLjAXrPIA=;
-        b=apGGiFtEniBCslCmKQ+pesOhd4/P7f+8gAtc7Irg7DsvOpW9dmySHKI9hlSWzszd9c
-         JN9kiT33Qwnzt2Iw6MIdFInHFVokHD91J3AOefyYVkQsMYbqL8+6KWbBJQ31yX5zp+Og
-         w54Of+qNNZ0nBnfhNns2h691f4XRsVz7fLXZx2IW6mZzB+ZMj1iwGkxVVGIRFfcEDBVW
-         1nxXj07bV7ui8Ef47at8MbxClF9G22F4dZYb55iAoTyxOptmQf3l6hAF8bOvzoTPbpuQ
-         JxII69i7fCNUQtSgD4dFfarVLjr0Tcpstgbbb4s5ZWwoIvLhkk2xLGqUsuGAEo4iRVDV
-         6k8Q==
-X-Gm-Message-State: AOAM531npF57yGXFfyX2asQx8XScxFBiI1saEUWZ4bk7l8g/8XgGVABx
-        jYo5bqt+uUkZ3tISpjykAl/ZyQ==
-X-Google-Smtp-Source: ABdhPJxukhVb2zn3N2KCfVMsxmqpS2RZySUveN6hPJ2GEvDdyWHhLuaqHOHq9wpkvxNqmBkiJFxtrA==
-X-Received: by 2002:a92:7306:: with SMTP id o6mr23184732ilc.90.1595263002078;
-        Mon, 20 Jul 2020 09:36:42 -0700 (PDT)
-Received: from [192.168.1.58] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id w15sm9315257ila.65.2020.07.20.09.36.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2020 09:36:41 -0700 (PDT)
-Subject: Re: io_uring vs in_compat_syscall()
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-References: <20200720061046.GA10678@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <ceb21006-26d0-b216-84a9-5da0b89b5fbf@kernel.dk>
-Date:   Mon, 20 Jul 2020 10:36:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730579AbgGTQqg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 12:46:36 -0400
+Received: from mail.efficios.com ([167.114.26.124]:40442 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729732AbgGTQqc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 12:46:32 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 4A2722C34AA;
+        Mon, 20 Jul 2020 12:46:31 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id y8N1uMCN0ppf; Mon, 20 Jul 2020 12:46:30 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id CCD872C3619;
+        Mon, 20 Jul 2020 12:46:30 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CCD872C3619
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1595263590;
+        bh=qGPk0zNFwo5cVQw8ZAK/QyIsHyu6OZPMekpsDrpVWP0=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=HXiT5Rdi/FF5QIH6XZv4gJJ1Kju6lX5VX4hzPj+hydfPtz1E9pzRTxh8iaYZG2R73
+         eg3S6CBN/N3CzdOA1wtGesnftvZPn/jreiYbon5BVt5Xo07uYCDrp3r6+T6NpduFg1
+         +WaAaCvuMdvcOz7ILW26ZFzs7SSho+yUvlWOXk4X3/jZCbCPPaJVfE8ksX3ESVXYZy
+         UJHjbMPAPdnxAbLqWKXe13jwyDGaE1j2dwhFeLRbe2rF5E+yQnFrtHCIHes82YNUuZ
+         hMFVlmdcxzHjcByqw0tk6PQeH+vfVINABK0AxVRl9R/75dRRzYKUr7TbPkcu/OxiEL
+         QX9rO3DoP+RtQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id lJkhJIb6W00t; Mon, 20 Jul 2020 12:46:30 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id B98062C34A7;
+        Mon, 20 Jul 2020 12:46:30 -0400 (EDT)
+Date:   Mon, 20 Jul 2020 12:46:30 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Message-ID: <2055788870.20749.1595263590675.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1595213677.kxru89dqy2.astroid@bobo.none>
+References: <1594868476.6k5kvx8684.astroid@bobo.none> <EFAD6E2F-EC08-4EB3-9ECC-2A963C023FC5@amacapital.net> <20200716085032.GO10769@hirez.programming.kicks-ass.net> <1594892300.mxnq3b9a77.astroid@bobo.none> <20200716110038.GA119549@hirez.programming.kicks-ass.net> <1594906688.ikv6r4gznx.astroid@bobo.none> <1314561373.18530.1594993363050.JavaMail.zimbra@efficios.com> <1595213677.kxru89dqy2.astroid@bobo.none>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
 MIME-Version: 1.0
-In-Reply-To: <20200720061046.GA10678@lst.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
+Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
+Thread-Index: 9hzlA0XuD7jqnfPzlJuu2D9uF0Nx4Q==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/20/20 12:10 AM, Christoph Hellwig wrote:
-> Hi Jens,
-> 
-> I just found a (so far theoretical) issue with the io_uring submission
-> offloading to workqueues or threads.  We have lots of places using
-> in_compat_syscall() to check if a syscall needs compat treatmenet.
-> While the biggest users is iocttl(), we also have a fair amount of
-> places using in_compat_task() in read and write methods, and these
-> will not do the wrong thing when used with io_uring under certain
-> conditions.  I'm not sure how to best fix this, except for making sure
-> in_compat_syscall() returns true one way or another for these cases.
+----- On Jul 19, 2020, at 11:03 PM, Nicholas Piggin npiggin@gmail.com wrote:
 
-We can probably propagate this information in the io_kiocb via a flag,
-and have the io-wq worker set TS_COMPAT if that's the case.
+> Excerpts from Mathieu Desnoyers's message of July 17, 2020 11:42 pm:
+>> ----- On Jul 16, 2020, at 7:26 PM, Nicholas Piggin npiggin@gmail.com wrote:
+>> [...]
+>>> 
+>>> membarrier does replace barrier instructions on remote CPUs, which do
+>>> order accesses performed by the kernel on the user address space. So
+>>> membarrier should too I guess.
+>>> 
+>>> Normal process context accesses like read(2) will do so because they
+>>> don't get filtered out from IPIs, but kernel threads using the mm may
+>>> not.
+>> 
+>> But it should not be an issue, because membarrier's ordering is only with
+>> respect
+>> to submit and completion of io_uring requests, which are performed through
+>> system calls from the context of user-space threads, which are called from the
+>> right mm.
+> 
+> Is that true? Can io completions be written into an address space via a
+> kernel thread? I don't know the io_uring code well but it looks like
+> that's asynchonously using the user mm context.
+
+Indeed, the io completion appears to be signaled asynchronously between kernel
+and user-space. Therefore, both kernel and userspace code need to have proper
+memory barriers in place to signal completion, otherwise user-space could read
+garbage after it notices completion of a read.
+
+I did not review the entire io_uring implementation, but the publish side
+for completion appears to be:
+
+static void __io_commit_cqring(struct io_ring_ctx *ctx)
+{
+        struct io_rings *rings = ctx->rings;
+
+        /* order cqe stores with ring update */
+        smp_store_release(&rings->cq.tail, ctx->cached_cq_tail);
+
+        if (wq_has_sleeper(&ctx->cq_wait)) {
+                wake_up_interruptible(&ctx->cq_wait);
+                kill_fasync(&ctx->cq_fasync, SIGIO, POLL_IN);
+        }
+}
+
+The store-release on tail should be paired with a load_acquire on the
+reader-side (it's called "read_barrier()" in the code):
+
+tools/io_uring/queue.c:
+
+static int __io_uring_get_cqe(struct io_uring *ring,
+                              struct io_uring_cqe **cqe_ptr, int wait)
+{
+        struct io_uring_cq *cq = &ring->cq;
+        const unsigned mask = *cq->kring_mask;
+        unsigned head;
+        int ret;
+
+        *cqe_ptr = NULL;
+        head = *cq->khead;
+        do {
+                /*
+                 * It's necessary to use a read_barrier() before reading
+                 * the CQ tail, since the kernel updates it locklessly. The
+                 * kernel has the matching store barrier for the update. The
+                 * kernel also ensures that previous stores to CQEs are ordered
+                 * with the tail update.
+                 */
+                read_barrier();
+                if (head != *cq->ktail) {
+                        *cqe_ptr = &cq->cqes[head & mask];
+                        break;
+                }
+                if (!wait)
+                        break;
+                ret = io_uring_enter(ring->ring_fd, 0, 1,
+                                        IORING_ENTER_GETEVENTS, NULL);
+                if (ret < 0)
+                        return -errno;
+        } while (1);
+
+        return 0;
+}
+
+So as far as membarrier memory ordering dependencies are concerned, it relies
+on the store-release/load-acquire dependency chain in the completion queue to
+order against anything that was done prior to the completed requests.
+
+What is in-flight while the requests are being serviced provides no memory
+ordering guarantee whatsoever.
+
+> How about other memory accesses via kthread_use_mm? Presumably there is
+> still ordering requirement there for membarrier,
+
+Please provide an example case with memory accesses via kthread_use_mm where
+ordering matters to support your concern.
+
+> so I really think
+> it's a fragile interface with no real way for the user to know how
+> kernel threads may use its mm for any particular reason, so membarrier
+> should synchronize all possible kernel users as well.
+
+I strongly doubt so, but perhaps something should be clarified in the documentation
+if you have that feeling.
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks,
+> Nick
 
 -- 
-Jens Axboe
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
