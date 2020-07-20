@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88846227097
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 23:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C724F2270B2
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 23:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbgGTViC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 17:38:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56316 "EHLO mail.kernel.org"
+        id S1728252AbgGTVir (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 17:38:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727931AbgGTViB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Jul 2020 17:38:01 -0400
+        id S1728242AbgGTViq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 17:38:46 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E25022D04;
-        Mon, 20 Jul 2020 21:37:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9352822D0B;
+        Mon, 20 Jul 2020 21:38:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595281080;
+        s=default; t=1595281125;
         bh=dVQ0hwlWWpDvG5Xm+0dZcSPdLlPaxjOtR+QNtoShlzE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2zLYRU593nx12iFElgAmBndEGNWW81NANOK3NCUOTpiHnYxh42agFjTaBFAqgUm1
-         +diutGeLibd2Jl3Q+7vQ1MyMLqJBaAV5ICquTC4iOeYB5yNbgx8EmYc/bZc1LwNm6/
-         qXoar2cKTHQ6nbo140ElTYwj4Gm2ijajVfcVxwgA=
+        b=LzTVT6maV93tQpnPVIYn3zOM15RlZ+wBG3qzaiaoUehtBBhBJ2JecHfqkqrOxzJ3h
+         d3SRmzssA6ni+g7z82yaZrR8K+T7wX4oB09RWivzMD+TyzZN64RqOLMxs/7CGMLmav
+         5twBvSMXGMtIhm2Im3wtkJaOQ84xM0IMEvkSN0aU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -34,12 +34,12 @@ Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Palmer Dabbelt <palmerdabbelt@google.com>,
         Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.7 36/40] asm-generic/mmiowb: Allow mmiowb_set_pending() when preemptible()
-Date:   Mon, 20 Jul 2020 17:37:11 -0400
-Message-Id: <20200720213715.406997-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 31/34] asm-generic/mmiowb: Allow mmiowb_set_pending() when preemptible()
+Date:   Mon, 20 Jul 2020 17:38:04 -0400
+Message-Id: <20200720213807.407380-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200720213715.406997-1-sashal@kernel.org>
-References: <20200720213715.406997-1-sashal@kernel.org>
+In-Reply-To: <20200720213807.407380-1-sashal@kernel.org>
+References: <20200720213807.407380-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
