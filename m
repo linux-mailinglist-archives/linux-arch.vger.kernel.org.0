@@ -2,88 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D492257FE
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 08:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A93225AA9
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 11:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgGTGuG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 02:50:06 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:55554 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgGTGuG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 02:50:06 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595227804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t/qYtaXCKWFcQ++IUuI+8VoH3i4cW6b42fWT4jOgYmA=;
-        b=I8NrnAiDCGeIzMpOK6d/529QMrR7yLW1IOA3Bpek9vOOlA2k5NqKlqZcIMaf1j/rYd9B7i
-        /DxmDZ2C+Nbdvj9u/8Qq3lQkvHe7gnEEHyii2lHAY76prCZMPmkADNulos5ebbC43Ao3am
-        rHmpG/LtLwFFz6wZNAje4k4SNHTbAse2Bj6ythgYRHMm7QQOFZBPAkCkMmHxEf8EY8WIAI
-        22SrH2ZbgY/tfUZBgBPJL3Z5uWN3pIJERqp9XBjuGrTnUURQpM/OrFaI5f9eYE449INOef
-        KsVHSDgfX0QAsNfyXOx5l6L5To5hWalfvr/+390Tjjf8wf1NakStsO0UXQNyPQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595227804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t/qYtaXCKWFcQ++IUuI+8VoH3i4cW6b42fWT4jOgYmA=;
-        b=JmW05mx6NDlANlEtUmk8WumFr8XSkHzEyeysCjvJt7mjlaCLUU8+tb2WwbeVWfpUHTjnBy
-        IV0x3wGCbxgNtKBA==
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: Re: [patch V3 01/13] entry: Provide generic syscall entry functionality
-In-Reply-To: <A790AF9D-3BF7-4FEE-9E29-7C13FA3FE0C3@amacapital.net>
-References: <87v9ijollo.fsf@nanos.tec.linutronix.de> <A790AF9D-3BF7-4FEE-9E29-7C13FA3FE0C3@amacapital.net>
-Date:   Mon, 20 Jul 2020 08:50:02 +0200
-Message-ID: <87a6zuof39.fsf@nanos.tec.linutronix.de>
+        id S1727963AbgGTJBU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 05:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgGTJBU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 05:01:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA252C061794;
+        Mon, 20 Jul 2020 02:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LZEFw1oLYgj4zsscQtdY4wJjNPA8ihmwOeaubjV41Pk=; b=oc0IUr21+u3R3HHyVc1+ohxgyl
+        2z+5E1O/YRnEKTIQlTiPNRaYbA9cD+zV/YrdzOno4RV55SiABJACPM7N5pw4qV1fgUX76id9TMEVF
+        zlLv6R4dbfd15db/jFUWEJjrDIfhxSBWh6Ppfrc/542neYLxXw5lVC0IK6Q8EIspILT+WikBiEMFm
+        0snzsabiSnAyw2g0n3gT6UpKBvBc+w/09bOD0GIvfWR3Q3vOd2DG2VB+BevBiTQ3nVvn653RJjnps
+        kpaxpkGT07Um/Fy19L2KrvtATLeo5rbgftQhXX3NnDWasECY0nmtJIF1oklga9nIuHvB+NcLQQz3M
+        DKVkdjWA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jxRfI-0000Iv-3d; Mon, 20 Jul 2020 09:00:52 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A99F0300446;
+        Mon, 20 Jul 2020 11:00:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 91FED23646C08; Mon, 20 Jul 2020 11:00:50 +0200 (CEST)
+Date:   Mon, 20 Jul 2020 11:00:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
+Message-ID: <20200720090050.GK10769@hirez.programming.kicks-ass.net>
+References: <20200717044427.68747-1-ebiggers@kernel.org>
+ <20200717174750.GQ12769@casper.infradead.org>
+ <20200718013839.GD2183@sol.localdomain>
+ <20200718021304.GS12769@casper.infradead.org>
+ <20200718052818.GF2183@sol.localdomain>
+ <20200720020731.GQ5369@dread.disaster.area>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720020731.GQ5369@dread.disaster.area>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Andy Lutomirski <luto@amacapital.net> writes:
->> On Jul 19, 2020, at 3:17 AM, Thomas Gleixner <tglx@linutronix.de> wrote:
->>=20
->> =EF=BB=BFAndy Lutomirski <luto@kernel.org> writes:
->>>> On Sat, Jul 18, 2020 at 7:16 AM Thomas Gleixner <tglx@linutronix.de> w=
-rote:
->>>> Andy Lutomirski <luto@kernel.org> writes:
->>>>> FWIW, TIF_USER_RETURN_NOTIFY is a bit of an odd duck: it's an
->>>>> entry/exit word *and* a context switch word.  The latter is because
->>>>> it's logically a per-cpu flag, not a per-task flag, and the context
->>>>> switch code moves it around so it's always set on the running task.
->>>>=20
->>>> Gah, I missed the context switch thing of that. That stuff is hideous.
->>>=20
->>> It's also delightful because anything that screws up that dance (such
->>> as failure to do the exit-to-usermode path exactly right) likely
->>> results in an insta-root-hole.  If we fail to run user return
->>> notifiers, we can run user code with incorrect syscall MSRs, etc.
->>=20
->> Looking at it deeper, having that thing in the loop is a pointless
->> exercise. This really wants to be done _after_ the loop.
->>=20
-> As long as we=E2=80=99re confident that nothing after the loop can set th=
-e flag again.
+On Mon, Jul 20, 2020 at 12:07:31PM +1000, Dave Chinner wrote:
+> The whole serialisation/atomic/ordering APIs have fallen badly off
+> the macro cliff, to the point where finding out something as simple
+> as the order of parameters passed to cmpxchg and what semantics it
+> provides requires macro-spelunking 5 layers deep to find the generic
+> implementation function that contains a comment describing what it
+> does....
+> 
+> That's yet another barrier to understanding what all the different
+> synchronisation primitives do.
 
-Yes, because that's the direct way off to user space.
-
-Thanks,
-
-        tglx
+Documentation/atomic_t.txt ?
