@@ -2,117 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6132255C4
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 04:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8C42255F6
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 04:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbgGTCHi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Jul 2020 22:07:38 -0400
-Received: from mail110.syd.optusnet.com.au ([211.29.132.97]:42707 "EHLO
-        mail110.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726225AbgGTCHi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 19 Jul 2020 22:07:38 -0400
-Received: from dread.disaster.area (pa49-180-53-24.pa.nsw.optusnet.com.au [49.180.53.24])
-        by mail110.syd.optusnet.com.au (Postfix) with ESMTPS id 70025104E5B;
-        Mon, 20 Jul 2020 12:07:32 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1jxLDH-00026c-AP; Mon, 20 Jul 2020 12:07:31 +1000
-Date:   Mon, 20 Jul 2020 12:07:31 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
-Message-ID: <20200720020731.GQ5369@dread.disaster.area>
-References: <20200717044427.68747-1-ebiggers@kernel.org>
- <20200717174750.GQ12769@casper.infradead.org>
- <20200718013839.GD2183@sol.localdomain>
- <20200718021304.GS12769@casper.infradead.org>
- <20200718052818.GF2183@sol.localdomain>
+        id S1726499AbgGTCtI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Jul 2020 22:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726312AbgGTCtI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Jul 2020 22:49:08 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9278C0619D2;
+        Sun, 19 Jul 2020 19:49:07 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id a9so3798280pjd.3;
+        Sun, 19 Jul 2020 19:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=MHAQuV7wqFXE2gTJXyIGBJkkSS+/2fb6/SqEN+IMJpU=;
+        b=CdpDdzgwHD6KDQNhDlu82DlmyWWjZ/tE6sKRBv4R+f6DNQQk3obKV028wEN8NHQe44
+         ivpvsS3MyhDPBNTyPoxFeJ7XFObRFd8p5lDUvQWmEZLORZNpDUmsYDtCQtQBjWEph5Jh
+         4UbuZHebtzX2AFmWHCKMSDCUU6CrNCv//mNYHHIp2g9SX31oJe5mi7j4eUwDehYc29+H
+         ylq58SwOBe5p0fVnwPLea9PkWcZG7C43Si1MqGYbndJH1usUs612RiFtiYzoCGbhlNlq
+         NNAAB8WinXGMNgzrYPheT/QyRtpMt8ZSuDngMgeue+/ZpaK+oENAp4e9Kc8cNPqxAKW8
+         HoTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=MHAQuV7wqFXE2gTJXyIGBJkkSS+/2fb6/SqEN+IMJpU=;
+        b=jFmBMDJsu7xDxNdkT6oZZ4lJFvv2MyRccAyI6174/3LjpebageeX7YSJXTr3jnoGIG
+         1v+P3CXXVZJW0u2HjA/8SIIUzBar8iOArMEf1soMYvS8hI49Q64c8aAoomwo6p4ufb2E
+         KZnMxLrznSUMWUuW/RT6UiCx+bi1WzuR/lBB7se92gxUS5b+pGGihbde0Xkh3PyJxYU/
+         oI3JKNATK96RFB5KgbvF9owud301hXsuU1aaabfVCldAZc3bnKK14Fkg9q5qaGJAWjqU
+         VSfHgD5qmz2HKeNmH51ejdzi772qHEvcVSlAoIStyg4exBiAijGk59/daNkNB4F+XiXs
+         uEBA==
+X-Gm-Message-State: AOAM531TT++3IdnUnmBVbFEvETFqUBSe11FQuUkB3r6OQmOUz7IEOrFn
+        KG3dpqftTYfNUHwX/bHTEbk=
+X-Google-Smtp-Source: ABdhPJyKOJqndxCg3mIhcaYDZPJSsTmVuKMyFWNLPeExLhzmb2sdnZbuRmCL/dLOi+bJNfrzWai0hA==
+X-Received: by 2002:a17:90a:6448:: with SMTP id y8mr21541193pjm.142.1595213347563;
+        Sun, 19 Jul 2020 19:49:07 -0700 (PDT)
+Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
+        by smtp.gmail.com with ESMTPSA id f131sm13389215pgc.14.2020.07.19.19.49.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jul 2020 19:49:06 -0700 (PDT)
+Date:   Mon, 20 Jul 2020 12:49:02 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 4/4] mm/vmalloc: Hugepage vmalloc mappings
+To:     linux-mm@kvack.org, Zefan Li <lizefan@huawei.com>
+Cc:     =?iso-8859-1?q?Borislav=0A?= Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@redhat.com>,
+        =?iso-8859-1?q?Thomas=0A?= Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
+References: <20200413125303.423864-1-npiggin@gmail.com>
+        <20200413125303.423864-5-npiggin@gmail.com>
+        <0e43e743-7c78-fb86-6c36-f42e6184d32c@huawei.com>
+In-Reply-To: <0e43e743-7c78-fb86-6c36-f42e6184d32c@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200718052818.GF2183@sol.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=LPwYv6e9 c=1 sm=1 tr=0
-        a=moVtWZxmCkf3aAMJKIb/8g==:117 a=moVtWZxmCkf3aAMJKIb/8g==:17
-        a=kj9zAlcOel0A:10 a=_RQrkK6FrEwA:10 a=7-415B0cAAAA:8
-        a=6eSPBXchJsNOt_dXz80A:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+Message-Id: <1595213278.m30kayfsvu.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 10:28:18PM -0700, Eric Biggers wrote:
-> What do people think about the following instead?  (Not proofread / tested yet,
-> so please comment on the high-level approach, not minor mistakes :-) )
+Excerpts from Zefan Li's message of July 20, 2020 12:02 pm:
+>> +static int vmap_pages_range_noflush(unsigned long start, unsigned long =
+end,
+>> +				    pgprot_t prot, struct page **pages,
+>> +				    unsigned int page_shift)
+>> +{
+>> +	if (page_shift =3D=3D PAGE_SIZE) {
+>=20
+> Is this a typo of PAGE_SHIFT?
 
-No huge long macros, please.
+Oh good catch, yeah that'll always be going via the one-at-a-time route=20
+and slow down the small page vmaps. Will fix.
 
-We don't accept people writing long complex static inline functions,
-so for the same reasons it is not acceptable to write long complex
-macros.  Especially ones that use variable arguments and embed
-invisible locking within them.
+Thanks,
+Nick
 
-The whole serialisation/atomic/ordering APIs have fallen badly off
-the macro cliff, to the point where finding out something as simple
-as the order of parameters passed to cmpxchg and what semantics it
-provides requires macro-spelunking 5 layers deep to find the generic
-implementation function that contains a comment describing what it
-does....
-
-That's yet another barrier to understanding what all the different
-synchronisation primitives do.
-
-....
-
-> In the fs/direct-io.c case we'd use:
-> 
-> int sb_init_dio_done_wq(struct super_block *sb)
-> {
-> 	static DEFINE_MUTEX(sb_init_dio_done_mutex);
-> 
-> 	return INIT_ONCE_PTR(&sb->s_dio_done_wq, &sb_init_dio_done_mutex,
-> 			     alloc_workqueue,
-> 			     "dio/%s", WQ_MEM_RECLAIM, 0, sb->s_id);
-> }
-
-Yeah, that's pretty horrible...
-
-I *much* prefer an API like Willy's suggested to somethign like
-this. Just because you can hide all sorts of stuff in macros doesn't
-mean you should.
-
-> The only part I really don't like is the way arguments are passed to the
-> alloc_func.  We could also make it work like the following, though it would
-> break the usual rules since it looks like the function call is always executed,
-> but it's not:
-> 
-> 	return INIT_ONCE_PTR(&sb->s_dio_done_wq, &sb_init_dio_done_mutex,
-> 			     alloc_workqueue("dio/%s", WQ_MEM_RECLAIM, 0,
-> 					     sb->s_id));
-
-Yeah, that's even worse. Code that does not do what it looks like it
-should needs to be nuked from orbit.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+>=20
+>> +		return vmap_small_pages_range_noflush(start, end, prot, pages);
+>> +	} else {
+>> +		unsigned long addr =3D start;
+>> +		unsigned int i, nr =3D (end - start) >> page_shift;
+>> +
+>> +		for (i =3D 0; i < nr; i++) {
+>> +			int err;
+>> +
+>> +			err =3D vmap_range_noflush(addr,
+>> +					addr + (1UL << page_shift),
+>> +					__pa(page_address(pages[i])), prot,
+>> +					page_shift);
+>> +			if (err)
+>> +				return err;
+>> +
+>> +			addr +=3D 1UL << page_shift;
+>> +		}
+>> +
+>> +		return 0;
+>> +	}
+>> +}
+>> +
+>=20
