@@ -2,200 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D666A226291
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 16:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4812262A2
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 16:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728010AbgGTOwN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 10:52:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44865 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726437AbgGTOwM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 10:52:12 -0400
-Received: (qmail 1232004 invoked by uid 1000); 20 Jul 2020 10:52:11 -0400
-Date:   Mon, 20 Jul 2020 10:52:11 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
-Message-ID: <20200720145211.GC1228057@rowland.harvard.edu>
-References: <20200717044427.68747-1-ebiggers@kernel.org>
- <20200718014204.GN5369@dread.disaster.area>
- <20200718140811.GA1179836@rowland.harvard.edu>
- <20200720013320.GP5369@dread.disaster.area>
+        id S1726686AbgGTOzq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 10:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726506AbgGTOzp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 10:55:45 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6A8C061794;
+        Mon, 20 Jul 2020 07:55:45 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id k27so10407988pgm.2;
+        Mon, 20 Jul 2020 07:55:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fnqbnijwClMci6tPbDEsjP556VCP5ZOUnv3MSoBXeYE=;
+        b=obmB5/lPOQz3AzvyG/2VXvcAL2NVyqvUp/WDzPZuC0X99oO+puiKNH5SmvXqtGUMxQ
+         ZwLaTqnZRihuuAE0kDCE93oc7+UZUbVmuWofEIHX8Wk43IgRMCJtfexfk4af/TnkNUa+
+         b1KMQtXkMeHVhEg04OcRwqnmI+j3jqVgZaOaFAr9leMZRePpyIzF3lT5VjaqULUNABQa
+         NHk3CJ55gwjmcvnt31dtPgmR/H8DalAa1EqiI9biTgNvDKbKNzV/Z2dJRgmFgIyawQ/i
+         6lLh13kuGX5UA5j4JZyyd2d92BOZ2hTMEAphuPyZXA4ZQKmj/ym/xzdcbiiOAgv5+jVX
+         z0WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fnqbnijwClMci6tPbDEsjP556VCP5ZOUnv3MSoBXeYE=;
+        b=mfXoiyghSM6oJdtYNNu0WY9aa7Uni/jefydyqDaIcLPNPoj5Eh03KKYT5DNLorRKuw
+         Fuv13CWtmCxTVa53sHdEVdbAUDgcz01+Eb2IbJvIOxc9P/X6IKv6prvt/58LH3nakIGl
+         5+LzvJObqvucF2QoK9Y2Hih5pOS55J3fFK/sy1PTpNOrQVOuS/8VgC4vNjHS91/mf2ZK
+         W6euXKRIpKZqmPj7wkJ3Ex9fXglKbLgMSuCii/GPrjjJzR+wY8x0Eml98SSp+Udm1ZBR
+         UfCXbiwGpiOHg3IKw/5NLULGwdEiph+s6QMQMdk0lFVEeC5YTpwgpX1wQISitE4yijuI
+         RWDg==
+X-Gm-Message-State: AOAM530bfPlzvVnSMVQMq95Uo45TrGbHK+pRIQiS3USrOB0xAeLNVZuZ
+        cAG6fQMqh9teBS6rMM2tSyo=
+X-Google-Smtp-Source: ABdhPJzdpCZ2gP92UV6oH70h6AIHA4wJstXUDN042hpqclo3Yv6f70pl/T6XbIaPYF0u9pBA55X8iw==
+X-Received: by 2002:a63:8c5c:: with SMTP id q28mr18771110pgn.111.1595256945183;
+        Mon, 20 Jul 2020 07:55:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h23sm17008916pfo.166.2020.07.20.07.55.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2020 07:55:44 -0700 (PDT)
+Subject: Re: [PATCH 1/6] syscalls: use uaccess_kernel in addr_limit_user_check
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Maydell <peter.maydell@linaro.org>
+References: <20200714105505.935079-1-hch@lst.de>
+ <20200714105505.935079-2-hch@lst.de> <20200718013849.GA157764@roeck-us.net>
+ <20200718094846.GA8593@lst.de>
+ <fe1d4a6d-e32d-6994-a08b-40134000e988@roeck-us.net>
+ <20200720100104.GA20196@lst.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <c6099697-5ccd-22b4-f5cb-cbe1c14644a9@roeck-us.net>
+Date:   Mon, 20 Jul 2020 07:55:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <20200720100104.GA20196@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200720013320.GP5369@dread.disaster.area>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 11:33:20AM +1000, Dave Chinner wrote:
-> On Sat, Jul 18, 2020 at 10:08:11AM -0400, Alan Stern wrote:
-> > > This is one of the reasons that the LKMM documetnation is so damn
-> > > difficult to read and understand: just understanding the vocabulary
-> > > it uses requires a huge learning curve, and it's not defined
-> > > anywhere. Understanding the syntax of examples requires a huge
-> > > learning curve, because it's not defined anywhere. 
-> > 
-> > Have you seen tools/memory-model/Documentation/explanation.txt?
+On 7/20/20 3:01 AM, Christoph Hellwig wrote:
+> To try to reproduce your report I built a mps2_defconfig kernel
+> and then run the qemu command line manually extraced from your
+> script below, using a mainline qemu built for arm-softmmu, but it
+> crashes with the following message even for the baseline kernel.
 > 
-> <raises eyebrow>
+> qemu: fatal: Lockup: can't escalate 3 to HardFault (current priority -1)
 > 
-> Well, yes. Several times. I look at it almost daily, but that
-> doesn't mean it's approachable, easy to read or even -that I
-> understand what large parts of it say-. IOWs, that's one of the 
-> problematic documents that I've been saying have a huge learning
-> curve.
-
-Can you be more specific?  For example, exactly where does it start to 
-become unapproachable or difficult to read?
-
-Don't forget that this document was meant to help mitigate the LKMM's 
-learning curve.  If it isn't successful, I want to improve it.
-
-> So, if I say "the LKMM documentation", I mean -all- of the
-> documentation, not just some tiny subset of it. I've read it all,
-> I've even installed herd7 so I can run the litmus tests to see if
-> that helps me understand the documentation better.
+> R00=00000000 R01=00000000 R02=00000000 R03=00000000
+> R04=00000000 R05=00000000 R06=00000000 R07=00000000
+> R08=00000000 R09=00000000 R10=00000000 R11=00000000
+> R12=00000000 R13=ffffffe0 R14=fffffff9 R15=00000000
+> XPSR=40000003 -Z-- A handler
+> FPSCR: 00000000
 > 
-> That only increased the WTF factor because the documentation of that
-> stuff is far, far more impenetrable than the LKMM documentation.  If
-> the LKMM learnign curve is near vertical, then the stuff in the
-> herd7 tools is an -overhang-. And I most certainly can't climb
-> that....
-
-I can't argue with that.  Really understanding herd7 does require a 
-pretty extensive background in the field.
-
-> /me idly wonders if you recognise that your comment is, yet again, a
-> classic demonstration of the behaviour the "curse of knowledge"
-> cognitive bias describes.
-
-Not at all.  I think you are confusing several different things.
-
-For one, at a purely literal level my comment could not possibly be 
-taken as a demonstration of "curse of knowledge" behavior, because it 
-was a simple question: Have you seen explanation.txt?  Nothing obscure 
-or outré about that.
-
-For another, you appear to be confusing the LKMM with the kernel's API, 
-and reference documents with programming guides (or recipes).  I'm sure 
-that you aren't doing this deliberately and are well aware of these 
-distinctions, but that's the impression your email leaves.
-
-> > That
-> > file was specifically written for non-experts to help them overcome the
-> > learning curve.  It tries to define the vocabulary as terms are
-> > introduced and to avoid using obscure syntax.
+> Does anyone have an idea what this means?
 > 
-> It tries to teach people about what a memory model is at the same
-> time it tries to define the LKMM. What it doesn't do at all is
-> teach people how to write safe code.
 
-Of course it doesn't.  It was never meant to.  You can see this right in 
-the filename "explanation.txt"; its purpose is to explain the LKMM.  
-Nobody ever claimed it teaches how to write safe code or how to use the 
-kernel's concurrent-programming API.  Those things belong in a separate 
-document, such as recipes.txt.
+Ah, sorry, you can't use the upstream version of qemu to test mps2-an385
+Linux images. You'll have to use a version from https://github.com/groeck/qemu.
+I'd recommend to use the v5.0.0-local branch.
 
->  People want to write safe code,
-> not become "memory model experts".
+I had to make some changes to qemu to be able to boot mps2-an385.
+I tried to submit those changes into upstream qemu, but that was
+rejected because, as I was told, the qemu implementation
+would no longer reflect the real hardware with those changes in
+place.
 
-Speak for yourself.  I personally want both, and no doubt there are 
-others who feel the same way.
-
-> Memory models are -your expertise- but they aren't mine. My
-> expertise is filesystems: I don't care about the nitty gritty
-> details of memory models, I just want to be able to write lockless
-> algorithms correctly. Which, I might point out, I've been doing for
-> well over a decade...
-
-That's perfectly fine; I understand completely.  But your criticism is 
-misplaced: It should be applied to recipes.txt, not to explanation.txt.
-
-And remember: It was _you_ who claimed: "just understanding the 
-vocabulary [the LKMM] uses requires a huge learning curve, and it's not 
-defined anywhere".  explanation.txt shows that this statement is at 
-least partly wrong.  Besides, given that you don't care about the nitty 
-gritty details of memory models in any case, why are you complaining 
-that understanding the LKMM is so hard?
-
-My impression is that you really want to complain about the inadequate 
-quality of recipes.txt as a programmers' guide.  Fine, but don't extend 
-that to a blanket condemnation of all the LKMM documentation.
-
-> > If you think it needs improvement and can give some specific
-> > details about where it falls short, I would like to hear them.
-> 
-> Haven't you understood anything I've been saying? That developers
-> don't care about how the theory behind the memory model  or how it
-> works - we just want to be able to write safe code.
-
-Again, speak for yourself.
-
->  And to do that
-> quickly and efficiently. The "make the documentation more complex"
-> response is the wrong direction. Please *dumb it down* to the most
-> basic, simplest, common concurrency patterns that programmers use
-> and then write APIs to do those things that *hide the memory model
-> for the programmer*.
-> 
-> Adding documentation about all the possible things you could do,
-> all the optimisations you could make, all the intricate, subtle
-> variations you can use, etc is not helpful. It might be interesting
-> to you, but I just want -somethign that works- and not have to
-> understand the LKMM to get stuff done.
-
-In principle, both can be included in the same document.  Say, with the 
-more in-depth discussions relegated to specially marked-off sections 
-that readers are invited to skip if they aren't interested.
-
-> Example: I know how smp_load_acquire() works. I know that I can
-> expect the same behavioural semantics from smp_cond_load_acquire().
-> But I don't care how the implementation of smp_cond_load_acquire()
-> is optimised to minimise ordering barriers as it spins. That sort of
-> optimisation is your job, not mine - I just want a function that
-> will spin safely until a specific value is seen and then return with
-> acquire semantics on the successful load.....
-> 
-> Can you see the difference between "understanding the LKMM
-> documenation" vs "using a well defined API that provides commonly
-> used functionality" to write correct, optimal code that needs to
-> spin waiting for some other context to update a variable?
-
-Certainly I can.  Can't _you_ see the difference between a document that 
-helps people "understand the LKMM" and one that demonstrates "using a 
-well defined API that provides commonly used functionality"?
-
-> That's the problem the LKMM documentation fails to address. It is
-> written to explain the theory behind the LKMM rather than provide
-> developers with pointers to the templates and APIs that implement
-> the lockless co-ordination functionality they want to use....
-
-That's the difference between a reference document and a programmers' 
-guide.  Grousing that one isn't the other is futile.
-
-On the other hand, pointing out specific areas of improvement for a 
-document that was meant to be a programmers' guide can be very helpful. 
-You may not be inclined to spend any time editing recipes.txt, but 
-perhaps you could point out a few of the specific areas most in need of 
-work?
-
-Alan Stern
+Guenter
