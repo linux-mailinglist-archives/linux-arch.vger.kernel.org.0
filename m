@@ -2,183 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFFF22705F
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 23:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88846227097
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 23:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgGTVb3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 17:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726677AbgGTVb3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jul 2020 17:31:29 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2D1C061794;
-        Mon, 20 Jul 2020 14:31:28 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 18so13420617otv.6;
-        Mon, 20 Jul 2020 14:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=F3DG5j2CQiF9a3m3vmmNDb/y5vL9QYFQV166fB5VSyg=;
-        b=Uw7fCuG0BGzW8Mq3KgbD2uF4gm1QZHMKec8OW6jPcmbf34Izl/UvJilSFuAAQIKfcu
-         Gmjgqpo8XZYhnVW2P7MCH2BsDL45XBCCb1bnri4rghnvijVb3snnOkCE6POFr+gJ4Qzg
-         1Trots/VNpJLPrzYrHD0GeU9goIMcp0XKukFNsui9F2RwgS/H2qq8MH9cn3PzPhkDxEK
-         yE68QZpa5Qa8AMcm1WDYvVNPLKpl6k8Mc9fgHpHlnOgWsCQ8vn+jdCsYGhe251Uype/b
-         Zmbn88NT76Tsf5GlZNdsnBB3Surttk0tz5E8BrWvBYm9zmDvW6tK66+tVLwrDWwamy5Q
-         hDng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=F3DG5j2CQiF9a3m3vmmNDb/y5vL9QYFQV166fB5VSyg=;
-        b=i7geIOVJyO10mLftZXXvAcfupo07FZwwTLblainjeyNby8Fgbm2uSyQCTgCsL8I8gd
-         xaA43G2NlqpDHEVRW+VbN9Z+IP1KM5xJiVV4Oi9j+B//5uJD65D9iPp/tXXag//D9KBg
-         vj2Mb4N8WM9pavLdx/ZJJBwahxK61qaxmVWdMOjrwJNQFDckbUbI0FvEiXeccKbdmUMS
-         vzlIfgHF7lU6B5j5ESmg8rbh+bFk3IVW0URgySTwRZtIiqJ2Auc2AUbVAUm4odQo0Whw
-         I7QRgL83Glk6FlLb7+bmR95TjZ53UZ4NNNzXtmsqVv2ARvsKWm50jwdZ7cCN6sAZE6qV
-         vcUg==
-X-Gm-Message-State: AOAM533d8ymg5mgJSW2kytBFIlcZaaxImVsnIya2GBJ9djxxkhpw09KL
-        4OJ1oCnVFXFw3uKjw+SIPFgu5I4h8mXj2v0zwfM=
-X-Google-Smtp-Source: ABdhPJxX1M5v1Jnr5QqGZEDYkrNWO688vjA9QMhjA3NFxtcvrGdlSN489ePp5LJy8OQsQrrRNSZd4gh1ukV8VoLAcYE=
-X-Received: by 2002:a05:6830:2081:: with SMTP id y1mr21381138otq.114.1595280688037;
- Mon, 20 Jul 2020 14:31:28 -0700 (PDT)
+        id S1727942AbgGTViC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 17:38:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56316 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727931AbgGTViB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 17:38:01 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6E25022D04;
+        Mon, 20 Jul 2020 21:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595281080;
+        bh=dVQ0hwlWWpDvG5Xm+0dZcSPdLlPaxjOtR+QNtoShlzE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=K2zLYRU593nx12iFElgAmBndEGNWW81NANOK3NCUOTpiHnYxh42agFjTaBFAqgUm1
+         +diutGeLibd2Jl3Q+7vQ1MyMLqJBaAV5ICquTC4iOeYB5yNbgx8EmYc/bZc1LwNm6/
+         qXoar2cKTHQ6nbo140ElTYwj4Gm2ijajVfcVxwgA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.7 36/40] asm-generic/mmiowb: Allow mmiowb_set_pending() when preemptible()
+Date:   Mon, 20 Jul 2020 17:37:11 -0400
+Message-Id: <20200720213715.406997-36-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200720213715.406997-1-sashal@kernel.org>
+References: <20200720213715.406997-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
- <c17e330c-69f7-da7a-feae-cb8b8f5d7ea0@gmail.com> <20200720165205.GI30452@arm.com>
-In-Reply-To: <20200720165205.GI30452@arm.com>
-Reply-To: mtk.manpages@gmail.com
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Date:   Mon, 20 Jul 2020 23:31:16 +0200
-Message-ID: <CAKgNAkggayFEjHgPNu1HzvXGfSDoCq=Y-Ni4iv=RBYk2Eb6U1Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] prctl.2 man page updates for Linux 5.6
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Dave,
+From: Will Deacon <will@kernel.org>
 
-TL;DR: don't worry about the small stuff; I'm happy to do the minor
-edits given the high quality of your patches.
+[ Upstream commit bd024e82e4cd95c7f1a475a55f99871936c2b2db ]
 
-On Mon, 20 Jul 2020 at 18:52, Dave Martin <Dave.Martin@arm.com> wrote:
->
-> On Mon, Jun 29, 2020 at 01:52:24PM +0200, Michael Kerrisk (man-pages) wrote:
-> > Hi Dave,
-> >
-> > On 6/24/20 7:36 PM, Dave Martin wrote:
-> > > A bunch of updates to the prctl(2) man page to fill in missing
-> > > prctls (mostly) up to Linux 5.6 (along with a few other tweaks and
-> > > fixes).
-> > >
-> > > Patches from the v2 series [1] that have been applied or rejected
-> > > already have been dropped.
-> > >
-> > > All that remain here now are the SVE and tagged address ABI controls
-> > > for arm64.
-> > >
-> > >
-> > >
-> > > [1] https://lore.kernel.org/linux-man/1590614258-24728-1-git-send-email-Dave.Martin@arm.com/
-> > >
-> > >
-> > > Dave Martin (2):
-> > >   prctl.2: Add SVE prctls (arm64)
-> > >   prctl.2: Add tagged address ABI control prctls (arm64)
-> > >
-> > >  man2/prctl.2 | 331 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 331 insertions(+)
-> > Thanks. I've pushed these changes to master now.
->
-> Thanks -- btw I finally got around to reviewing master, and noted a few
-> editorial changes that man-pages(7) does not make any statement about:
->
-> "arg1, arg2, and arg3"
->
->         Do you strictly prefer the command before "and" here?
->
->         Conventionally, the final comma would typically be omitted in
->         prose, except where the list members are complex enough that the
->         command is required to assist parsing.  However, lists of formal
->         arguments are not quite vanilla prose.
+Although mmiowb() is concerned only with serialising MMIO writes occuring
+in contexts where a spinlock is held, the call to mmiowb_set_pending()
+from the MMIO write accessors can occur in preemptible contexts, such
+as during driver probe() functions where ordering between CPUs is not
+usually a concern, assuming that the task migration path provides the
+necessary ordering guarantees.
 
-There are two camps wrt that comma. I prefer the so-called Oxford
-comma convention, as shown above. man-pages uses it generally.
+Unfortunately, the default implementation of mmiowb_set_pending() is not
+preempt-safe, as it makes use of a a per-cpu variable to track its
+internal state. This has been reported to generate the following splat
+on riscv:
 
-> "Providing that" -> "Provided that"
->
->         Any particular rationale here?
+ | BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
+ | caller is regmap_mmio_write32le+0x1c/0x46
+ | CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-hfu+ #1
+ | Call Trace:
+ |  walk_stackframe+0x0/0x7a
+ |  dump_stack+0x6e/0x88
+ |  regmap_mmio_write32le+0x18/0x46
+ |  check_preemption_disabled+0xa4/0xaa
+ |  regmap_mmio_write32le+0x18/0x46
+ |  regmap_mmio_write+0x26/0x44
+ |  regmap_write+0x28/0x48
+ |  sifive_gpio_probe+0xc0/0x1da
 
-Either would be fine; the past tense is just slightly better, to my ear.
+Although it's possible to fix the driver in this case, other splats have
+been seen from other drivers, including the infamous 8250 UART, and so
+it's better to address this problem in the mmiowb core itself.
 
-> "error EFOO" -> "the error EFOO"
->
->         Is this a rule, in general?
+Fix mmiowb_set_pending() by using the raw_cpu_ptr() to get at the mmiowb
+state and then only updating the 'mmiowb_pending' field if we are not
+preemptible (i.e. we have a non-zero nesting count).
 
-I think the change that you refer to was actually: "with EFOO" to
-"with the error EFOO". The former is just a little too brief, to my
-ear.
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Reported-by: Palmer Dabbelt <palmer@dabbelt.com>
+Reported-by: Emil Renner Berthing <kernel@esmil.dk>
+Tested-by: Emil Renner Berthing <kernel@esmil.dk>
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Link: https://lore.kernel.org/r/20200716112816.7356-1-will@kernel.org
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/asm-generic/mmiowb.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> .IP \(bu 2
->
->         I assumed that specifying an explicit indentation amount would
->         be fragile.  Going with the default behaviour also tends to
->         result in a more consistent appearance.  Do you have any
->         recommandations in this area?
->
->         Do you have rules about the order to use bullet symbols?  I tend
->         to avoid \(bu if possible, since while it's "correct", nroff can
->         render it nastily as an unadorned letter "o" (e.g., with -Tascii
->         or LC_CTYPE=C).  This is particlarly annoying if the indent is
->         <= 2, since then the "o" tends to be visually swallowed by the
->         following text (i.e., to a casual glance it looks like a word,
->         particlarly if the following text is not capitalised).  Perhaps
->         this is a bad glyph substitution decision in nroff rather than
->         something that should be fixed in the man-pages source, but the
->         man-pages source may be easier to fix...
->
->         There is already inconsistency here: there are may top-level
->         lists using ".IP *" in prctl.2, and plenty of places where the
->         default indentation is used.
-
-I must admit that I'm in the process of rethinking bulleted lists, and
-I have not come to a conclusion (and that's why nothing is said in
-man-pages(7), and also why there is currently inconsistency).
-
-Using .IP with the default indent (8n) results in a very deep indent
-between the glyph and the text, so it's not my preference.
-
-Your note about the poor rendering with "-Tascii" is interesting.
-Perhaps ".IP \(bu 3" may be better. But, I really do not know: do
-people really render with "-Tascii" these days?
-
-> Should any of these be written up in man-pages(7), or is there a checker
-> than can detect them?
-
-Perhaps man-pages should say something about the Oxford comma.
-
-> I wan't to minimise the amount of tweaking you have to do when merging
-> patches.
-
-If every patch that I received was of the same quality as yours are,
-my life would be much easier. The tweaks are minimal work on my part.
-Don't worry. Just send me more patches :-).
-
-Cheers,
-
-Michael
-
+diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
+index 9439ff037b2d1..5698fca3bf560 100644
+--- a/include/asm-generic/mmiowb.h
++++ b/include/asm-generic/mmiowb.h
+@@ -27,7 +27,7 @@
+ #include <asm/smp.h>
+ 
+ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+-#define __mmiowb_state()	this_cpu_ptr(&__mmiowb_state)
++#define __mmiowb_state()	raw_cpu_ptr(&__mmiowb_state)
+ #else
+ #define __mmiowb_state()	arch_mmiowb_state()
+ #endif	/* arch_mmiowb_state */
+@@ -35,7 +35,9 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
+ static inline void mmiowb_set_pending(void)
+ {
+ 	struct mmiowb_state *ms = __mmiowb_state();
+-	ms->mmiowb_pending = ms->nesting_count;
++
++	if (likely(ms->nesting_count))
++		ms->mmiowb_pending = ms->nesting_count;
+ }
+ 
+ static inline void mmiowb_spin_lock(void)
 -- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+2.25.1
+
