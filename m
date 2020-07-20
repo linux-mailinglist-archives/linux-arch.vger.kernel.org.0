@@ -2,130 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C724F2270B2
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jul 2020 23:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02AB2271FA
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 00:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728252AbgGTVir (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jul 2020 17:38:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57566 "EHLO mail.kernel.org"
+        id S1726691AbgGTWGw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jul 2020 18:06:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728242AbgGTViq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 20 Jul 2020 17:38:46 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726021AbgGTWGw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 20 Jul 2020 18:06:52 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-111-31.bvtn.or.frontiernet.net [50.39.111.31])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9352822D0B;
-        Mon, 20 Jul 2020 21:38:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B425820729;
+        Mon, 20 Jul 2020 22:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595281125;
-        bh=dVQ0hwlWWpDvG5Xm+0dZcSPdLlPaxjOtR+QNtoShlzE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LzTVT6maV93tQpnPVIYn3zOM15RlZ+wBG3qzaiaoUehtBBhBJ2JecHfqkqrOxzJ3h
-         d3SRmzssA6ni+g7z82yaZrR8K+T7wX4oB09RWivzMD+TyzZN64RqOLMxs/7CGMLmav
-         5twBvSMXGMtIhm2Im3wtkJaOQ84xM0IMEvkSN0aU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Guo Ren <guoren@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 31/34] asm-generic/mmiowb: Allow mmiowb_set_pending() when preemptible()
-Date:   Mon, 20 Jul 2020 17:38:04 -0400
-Message-Id: <20200720213807.407380-31-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200720213807.407380-1-sashal@kernel.org>
-References: <20200720213807.407380-1-sashal@kernel.org>
+        s=default; t=1595282811;
+        bh=6x2B6tHzk/AK+Gp4nhiVnHJOFQxF6ZQYhvHBPpGLxx8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GfYo84e5NH9ySeUlI335uKO6IHp9m/oJPecOGmfcLn7P6RguHpvYx/9GZHtn+Am9+
+         bMucw9MVP6y/46wsq4bkniwV2aKUaPzLds6Cih4EusxY4SAlt9Pkh3Ol1JcI5nrKUZ
+         k/NpJoetfBLQT8T8U2fLrpiIykP7D2DHzkLU00N0=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 99A843522C1A; Mon, 20 Jul 2020 15:06:51 -0700 (PDT)
+Date:   Mon, 20 Jul 2020 15:06:51 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     peterz@infradead.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dave Chinner <david@fromorbit.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] tools/memory-model: document the "one-time init" pattern
+Message-ID: <20200720220651.GV9247@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200717044427.68747-1-ebiggers@kernel.org>
+ <20200718014204.GN5369@dread.disaster.area>
+ <20200718140811.GA1179836@rowland.harvard.edu>
+ <20200720013320.GP5369@dread.disaster.area>
+ <20200720145211.GC1228057@rowland.harvard.edu>
+ <20200720153911.GX12769@casper.infradead.org>
+ <20200720160433.GQ9247@paulmck-ThinkPad-P72>
+ <20200720164850.GF119549@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720164850.GF119549@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Will Deacon <will@kernel.org>
+On Mon, Jul 20, 2020 at 06:48:50PM +0200, peterz@infradead.org wrote:
+> On Mon, Jul 20, 2020 at 09:04:34AM -0700, Paul E. McKenney wrote:
+> > 2.	If we were to say "unlock" instead of "release", consistency
+> > 	would demand that we also say "lock" instead of "acquire".
+> > 	But "lock" is subtlely different than "acquire", and there is
+> > 	a history of people requesting further divergence.
+> 
+> This, acquire/release are RCpc, while (with the exception of Power)
+> LOCK/UNLOCK are RCsc.
+> 
+> ( Or did we settle on RCtso for our release/acquire order? I have vague
+> memories of a long-ish thread, but seem to have forgotten the outcome,
+> if any. )
+> 
+> Lots of subtlety and head-aches right about there. Anyway, it would be
+> awesome if we can get Power into the RCsc locking camp :-)
 
-[ Upstream commit bd024e82e4cd95c7f1a475a55f99871936c2b2db ]
+I will let you take that one up with the Power folks.
 
-Although mmiowb() is concerned only with serialising MMIO writes occuring
-in contexts where a spinlock is held, the call to mmiowb_set_pending()
-from the MMIO write accessors can occur in preemptible contexts, such
-as during driver probe() functions where ordering between CPUs is not
-usually a concern, assuming that the task migration path provides the
-necessary ordering guarantees.
+But I should give an example of a current difference between lock and
+acquire, and just to spread the blame, I will pick on an architecture
+other than Power.  ;-)
 
-Unfortunately, the default implementation of mmiowb_set_pending() is not
-preempt-safe, as it makes use of a a per-cpu variable to track its
-internal state. This has been reported to generate the following splat
-on riscv:
+With lock acquisition, the following orders the access to X and Z:
 
- | BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
- | caller is regmap_mmio_write32le+0x1c/0x46
- | CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-hfu+ #1
- | Call Trace:
- |  walk_stackframe+0x0/0x7a
- |  dump_stack+0x6e/0x88
- |  regmap_mmio_write32le+0x18/0x46
- |  check_preemption_disabled+0xa4/0xaa
- |  regmap_mmio_write32le+0x18/0x46
- |  regmap_mmio_write+0x26/0x44
- |  regmap_write+0x28/0x48
- |  sifive_gpio_probe+0xc0/0x1da
+	WRITE_ONCE(X, 1);
+	spin_lock(&my_lock);
+	smp_mb__after_lock();
+	r1 = READ_ONCE(Z);
 
-Although it's possible to fix the driver in this case, other splats have
-been seen from other drivers, including the infamous 8250 UART, and so
-it's better to address this problem in the mmiowb core itself.
+But if we replace the lock acquisition with a load acquire, there are
+no ordering guarantees for the accesses to X and Z:
 
-Fix mmiowb_set_pending() by using the raw_cpu_ptr() to get at the mmiowb
-state and then only updating the 'mmiowb_pending' field if we are not
-preemptible (i.e. we have a non-zero nesting count).
+	WRITE_ONCE(X, 1);
+	r2 = smp_load_acquire(&Y);
+	smp_mb__after_lock();  // Yeah, there is no lock.  ;-)
+	r3 = READ_ONCE(Z);
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Reported-by: Palmer Dabbelt <palmer@dabbelt.com>
-Reported-by: Emil Renner Berthing <kernel@esmil.dk>
-Tested-by: Emil Renner Berthing <kernel@esmil.dk>
-Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
-Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
-Link: https://lore.kernel.org/r/20200716112816.7356-1-will@kernel.org
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/asm-generic/mmiowb.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+There -is- ordering between the accesses to Y and Z, but not to X and Z.
+This is not a theoretical issue.  The x86 platform really can reorder
+the access to X to follow that of both Y and Z.
 
-diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
-index 9439ff037b2d1..5698fca3bf560 100644
---- a/include/asm-generic/mmiowb.h
-+++ b/include/asm-generic/mmiowb.h
-@@ -27,7 +27,7 @@
- #include <asm/smp.h>
- 
- DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
--#define __mmiowb_state()	this_cpu_ptr(&__mmiowb_state)
-+#define __mmiowb_state()	raw_cpu_ptr(&__mmiowb_state)
- #else
- #define __mmiowb_state()	arch_mmiowb_state()
- #endif	/* arch_mmiowb_state */
-@@ -35,7 +35,9 @@ DECLARE_PER_CPU(struct mmiowb_state, __mmiowb_state);
- static inline void mmiowb_set_pending(void)
- {
- 	struct mmiowb_state *ms = __mmiowb_state();
--	ms->mmiowb_pending = ms->nesting_count;
-+
-+	if (likely(ms->nesting_count))
-+		ms->mmiowb_pending = ms->nesting_count;
- }
- 
- static inline void mmiowb_spin_lock(void)
--- 
-2.25.1
+So the memory-model divergence between lock acquisition and acquire
+loads is very real in the here and now.
 
+							Thanx, Paul
