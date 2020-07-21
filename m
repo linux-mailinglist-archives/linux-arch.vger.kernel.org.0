@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0EE2289D0
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 22:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE33C2289D3
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 22:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728691AbgGUUZy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 16:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        id S1731051AbgGUU0N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 16:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730874AbgGUUZx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 16:25:53 -0400
+        with ESMTP id S1730696AbgGUUZw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 16:25:52 -0400
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5925C061794;
-        Tue, 21 Jul 2020 13:25:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BD8C0619DB;
+        Tue, 21 Jul 2020 13:25:51 -0700 (PDT)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jxypi-00HPpD-Jt; Tue, 21 Jul 2020 20:25:50 +0000
+        id 1jxypi-00HPpJ-NT; Tue, 21 Jul 2020 20:25:50 +0000
 From:   Al Viro <viro@ZenIV.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 10/18] i386: propagate the calling conventions change down to csum_partial_copy_generic()
-Date:   Tue, 21 Jul 2020 21:25:41 +0100
-Message-Id: <20200721202549.4150745-10-viro@ZenIV.linux.org.uk>
+Subject: [PATCH 11/18] sparc32: propagate the calling conventions change down to __csum_partial_copy_sparc_generic()
+Date:   Tue, 21 Jul 2020 21:25:42 +0100
+Message-Id: <20200721202549.4150745-11-viro@ZenIV.linux.org.uk>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200721202549.4150745-1-viro@ZenIV.linux.org.uk>
 References: <20200721202425.GA2786714@ZenIV.linux.org.uk>
@@ -35,316 +35,468 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Al Viro <viro@zeniv.linux.org.uk>
 
-... and don't bother zeroing destination on error
+... and get rid of zeroing the target, etc. on fault.
+All exception handlers merge into one; moreover, since we are not
+calling lookup_fault() anymore, we don't need the magic with passing
+arguments for it from the page fault handler.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/x86/include/asm/checksum_32.h |  18 ++----
- arch/x86/lib/checksum_32.S         | 117 +++++++++++++------------------------
- 2 files changed, 47 insertions(+), 88 deletions(-)
+ arch/sparc/include/asm/checksum_32.h |  49 +--------
+ arch/sparc/lib/checksum_32.S         | 202 +++++++----------------------------
+ arch/sparc/mm/fault_32.c             |   6 +-
+ 3 files changed, 44 insertions(+), 213 deletions(-)
 
-diff --git a/arch/x86/include/asm/checksum_32.h b/arch/x86/include/asm/checksum_32.h
-index 5948cde9e4ad..17da95387997 100644
---- a/arch/x86/include/asm/checksum_32.h
-+++ b/arch/x86/include/asm/checksum_32.h
-@@ -27,9 +27,7 @@ asmlinkage __wsum csum_partial(const void *buff, int len, __wsum sum);
-  * better 64-bit) boundary
-  */
+diff --git a/arch/sparc/include/asm/checksum_32.h b/arch/sparc/include/asm/checksum_32.h
+index b5873b7b7bf0..d55e480172a6 100644
+--- a/arch/sparc/include/asm/checksum_32.h
++++ b/arch/sparc/include/asm/checksum_32.h
+@@ -50,9 +50,9 @@ csum_partial_copy_nocheck(const void *src, void *dst, int len)
  
--asmlinkage __wsum csum_partial_copy_generic(const void *src, void *dst,
--					    int len, __wsum sum,
--					    int *src_err_ptr, int *dst_err_ptr);
-+asmlinkage __wsum csum_partial_copy_generic(const void *src, void *dst, int len);
+ 	__asm__ __volatile__ (
+ 		"call __csum_partial_copy_sparc_generic\n\t"
+-		" mov %6, %%g7\n"
++		" mov -1, %%g7\n"
+ 	: "=&r" (ret), "=&r" (d), "=&r" (l)
+-	: "0" (ret), "1" (d), "2" (l), "r" (0)
++	: "0" (ret), "1" (d), "2" (l)
+ 	: "o2", "o3", "o4", "o5", "o7",
+ 	  "g2", "g3", "g4", "g5", "g7",
+ 	  "memory", "cc");
+@@ -61,29 +61,10 @@ csum_partial_copy_nocheck(const void *src, void *dst, int len)
  
- /*
-  *	Note: when you get a NULL pointer exception here this means someone
-@@ -40,23 +38,21 @@ asmlinkage __wsum csum_partial_copy_generic(const void *src, void *dst,
-  */
- static inline __wsum csum_partial_copy_nocheck(const void *src, void *dst, int len)
- {
--	return csum_partial_copy_generic(src, dst, len, 0, NULL, NULL);
-+	return csum_partial_copy_generic(src, dst, len);
- }
- 
- static inline __wsum csum_and_copy_from_user(const void __user *src,
- 					     void *dst, int len)
- {
- 	__wsum ret;
+ static inline __wsum
+ csum_and_copy_from_user(const void __user *src, void *dst, int len)
+-  {
+-	register unsigned long ret asm("o0") = (unsigned long)src;
+-	register char *d asm("o1") = dst;
+-	register int l asm("g1") = len;
+-	register __wsum s asm("g7") = ~0U;
 -	int err = 0;
- 
- 	might_sleep();
- 	if (!user_access_begin(src, len))
+-
++{
+ 	if (unlikely(!access_ok(src, len)))
  		return 0;
--	ret = csum_partial_copy_generic((__force void *)src, dst,
--					len, ~0U, &err, NULL);
-+	ret = csum_partial_copy_generic((__force void *)src, dst, len);
- 	user_access_end();
- 
--	return err ? 0 : ret;
-+	return ret;
+-
+-	__asm__ __volatile__ (
+-	".section __ex_table,#alloc\n\t"
+-	".align 4\n\t"
+-	".word 1f,2\n\t"
+-	".previous\n"
+-	"1:\n\t"
+-	"call __csum_partial_copy_sparc_generic\n\t"
+-	" st %8, [%%sp + 64]\n"
+-	: "=&r" (ret), "=&r" (d), "=&r" (l), "=&r" (s)
+-	: "0" (ret), "1" (d), "2" (l), "3" (s), "r" (&err)
+-	: "o2", "o3", "o4", "o5", "o7", "g2", "g3", "g4", "g5",
+-	  "cc", "memory");
+-	return err ? 0 : (__force __wsum)ret;
++	return csum_partial_copy_nocheck((__force void *)src, dst, len);
  }
  
- /*
-@@ -177,16 +173,14 @@ static inline __wsum csum_and_copy_to_user(const void *src,
- 					   int len)
+ #define HAVE_CSUM_COPY_USER
+@@ -91,29 +72,9 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
+ static inline __wsum
+ csum_and_copy_to_user(const void *src, void __user *dst, int len)
  {
- 	__wsum ret;
+-	register unsigned long ret asm("o0") = (unsigned long)src;
+-	register char __user *d asm("o1") = dst;
+-	register int l asm("g1") = len;
+-	register __wsum s asm("g7") = ~0U;
 -	int err = 0;
- 
- 	might_sleep();
- 	if (!user_access_begin(dst, len))
+-
+ 	if (!access_ok(dst, len))
  		return 0;
- 
--	ret = csum_partial_copy_generic(src, (__force void *)dst,
--					len, ~0U, NULL, &err);
-+	ret = csum_partial_copy_generic(src, (__force void *)dst, len);
- 	user_access_end();
--	return err ? 0 : ret;
-+	return ret;
+-
+-	__asm__ __volatile__ (
+-	".section __ex_table,#alloc\n\t"
+-	".align 4\n\t"
+-	".word 1f,1\n\t"
+-	".previous\n"
+-	"1:\n\t"
+-	"call __csum_partial_copy_sparc_generic\n\t"
+-	" st %8, [%%sp + 64]\n"
+-	: "=&r" (ret), "=&r" (d), "=&r" (l), "=&r" (s)
+-	: "0" (ret), "1" (d), "2" (l), "3" (s), "r" (&err)
+-	: "o2", "o3", "o4", "o5", "o7",
+-	  "g2", "g3", "g4", "g5",
+-	  "cc", "memory");
+-	return err ? 0 : (__force __wsum)ret;
++	return csum_partial_copy_nocheck(src, (__force void *)dst, len);
  }
  
- #endif /* _ASM_X86_CHECKSUM_32_H */
-diff --git a/arch/x86/lib/checksum_32.S b/arch/x86/lib/checksum_32.S
-index d1d768912368..4304320e51f4 100644
---- a/arch/x86/lib/checksum_32.S
-+++ b/arch/x86/lib/checksum_32.S
-@@ -253,28 +253,17 @@ EXPORT_SYMBOL(csum_partial)
+ /* ihl is always 5 or greater, almost always is 5, and iph is word aligned
+diff --git a/arch/sparc/lib/checksum_32.S b/arch/sparc/lib/checksum_32.S
+index 6a5469c97246..7488d130faf7 100644
+--- a/arch/sparc/lib/checksum_32.S
++++ b/arch/sparc/lib/checksum_32.S
+@@ -144,44 +144,21 @@ cpte:	bne	csum_partial_end_cruft			! yep, handle it
+ cpout:	retl						! get outta here
+ 	 mov	%o2, %o0				! return computed csum
  
- /*
- unsigned int csum_partial_copy_generic (const char *src, char *dst,
--				  int len, int sum, int *src_err_ptr, int *dst_err_ptr)
-+				  int len)
-  */ 
- 
- /*
-  * Copy from ds while checksumming, otherwise like csum_partial
-- *
-- * The macros SRC and DST specify the type of access for the instruction.
-- * thus we can call a custom exception handler for all access types.
-- *
-- * FIXME: could someone double-check whether I haven't mixed up some SRC and
-- *	  DST definitions? It's damn hard to trigger all cases.  I hope I got
-- *	  them all but there's no guarantee.
-  */
- 
--#define SRC(y...)			\
-+#define EXC(y...)			\
- 	9999: y;			\
- 	_ASM_EXTABLE_UA(9999b, 6001f)
- 
--#define DST(y...)			\
--	9999: y;			\
--	_ASM_EXTABLE_UA(9999b, 6002f)
+-	.globl __csum_partial_copy_start, __csum_partial_copy_end
+-__csum_partial_copy_start:
 -
- #ifndef CONFIG_X86_USE_PPRO_CHECKSUM
- 
- #define ARGBASE 16		
-@@ -285,20 +274,20 @@ SYM_FUNC_START(csum_partial_copy_generic)
- 	pushl %edi
- 	pushl %esi
- 	pushl %ebx
--	movl ARGBASE+16(%esp),%eax	# sum
- 	movl ARGBASE+12(%esp),%ecx	# len
- 	movl ARGBASE+4(%esp),%esi	# src
- 	movl ARGBASE+8(%esp),%edi	# dst
- 
-+	movl $-1, %eax			# sum
- 	testl $2, %edi			# Check alignment. 
- 	jz 2f				# Jump if alignment is ok.
- 	subl $2, %ecx			# Alignment uses up two bytes.
- 	jae 1f				# Jump if we had at least two bytes.
- 	addl $2, %ecx			# ecx was < 2.  Deal with it.
- 	jmp 4f
--SRC(1:	movw (%esi), %bx	)
-+EXC(1:	movw (%esi), %bx	)
- 	addl $2, %esi
--DST(	movw %bx, (%edi)	)
-+EXC(	movw %bx, (%edi)	)
- 	addl $2, %edi
- 	addw %bx, %ax	
- 	adcl $0, %eax
-@@ -306,34 +295,34 @@ DST(	movw %bx, (%edi)	)
- 	movl %ecx, FP(%esp)
- 	shrl $5, %ecx
- 	jz 2f
--	testl %esi, %esi
--SRC(1:	movl (%esi), %ebx	)
--SRC(	movl 4(%esi), %edx	)
-+	testl %esi, %esi		# what's wrong with clc?
-+EXC(1:	movl (%esi), %ebx	)
-+EXC(	movl 4(%esi), %edx	)
- 	adcl %ebx, %eax
--DST(	movl %ebx, (%edi)	)
-+EXC(	movl %ebx, (%edi)	)
- 	adcl %edx, %eax
--DST(	movl %edx, 4(%edi)	)
-+EXC(	movl %edx, 4(%edi)	)
- 
--SRC(	movl 8(%esi), %ebx	)
--SRC(	movl 12(%esi), %edx	)
-+EXC(	movl 8(%esi), %ebx	)
-+EXC(	movl 12(%esi), %edx	)
- 	adcl %ebx, %eax
--DST(	movl %ebx, 8(%edi)	)
-+EXC(	movl %ebx, 8(%edi)	)
- 	adcl %edx, %eax
--DST(	movl %edx, 12(%edi)	)
-+EXC(	movl %edx, 12(%edi)	)
- 
--SRC(	movl 16(%esi), %ebx 	)
--SRC(	movl 20(%esi), %edx	)
-+EXC(	movl 16(%esi), %ebx 	)
-+EXC(	movl 20(%esi), %edx	)
- 	adcl %ebx, %eax
--DST(	movl %ebx, 16(%edi)	)
-+EXC(	movl %ebx, 16(%edi)	)
- 	adcl %edx, %eax
--DST(	movl %edx, 20(%edi)	)
-+EXC(	movl %edx, 20(%edi)	)
- 
--SRC(	movl 24(%esi), %ebx	)
--SRC(	movl 28(%esi), %edx	)
-+EXC(	movl 24(%esi), %ebx	)
-+EXC(	movl 28(%esi), %edx	)
- 	adcl %ebx, %eax
--DST(	movl %ebx, 24(%edi)	)
-+EXC(	movl %ebx, 24(%edi)	)
- 	adcl %edx, %eax
--DST(	movl %edx, 28(%edi)	)
-+EXC(	movl %edx, 28(%edi)	)
- 
- 	lea 32(%esi), %esi
- 	lea 32(%edi), %edi
-@@ -345,9 +334,9 @@ DST(	movl %edx, 28(%edi)	)
- 	andl $0x1c, %edx
- 	je 4f
- 	shrl $2, %edx			# This clears CF
--SRC(3:	movl (%esi), %ebx	)
-+EXC(3:	movl (%esi), %ebx	)
- 	adcl %ebx, %eax
--DST(	movl %ebx, (%edi)	)
-+EXC(	movl %ebx, (%edi)	)
- 	lea 4(%esi), %esi
- 	lea 4(%edi), %edi
- 	dec %edx
-@@ -357,39 +346,24 @@ DST(	movl %ebx, (%edi)	)
- 	jz 7f
- 	cmpl $2, %ecx
- 	jb 5f
--SRC(	movw (%esi), %cx	)
-+EXC(	movw (%esi), %cx	)
- 	leal 2(%esi), %esi
--DST(	movw %cx, (%edi)	)
-+EXC(	movw %cx, (%edi)	)
- 	leal 2(%edi), %edi
- 	je 6f
- 	shll $16,%ecx
--SRC(5:	movb (%esi), %cl	)
--DST(	movb %cl, (%edi)	)
-+EXC(5:	movb (%esi), %cl	)
-+EXC(	movb %cl, (%edi)	)
- 6:	addl %ecx, %eax
- 	adcl $0, %eax
- 7:
--5000:
- 
- # Exception handler:
- .section .fixup, "ax"							
- 
- 6001:
--	movl ARGBASE+20(%esp), %ebx	# src_err_ptr
--	movl $-EFAULT, (%ebx)
+ /* Work around cpp -rob */
+ #define ALLOC #alloc
+ #define EXECINSTR #execinstr
+-#define EX(x,y,a,b)				\
+-98:     x,y;                                    \
+-        .section .fixup,ALLOC,EXECINSTR;	\
+-        .align  4;                              \
+-99:     ba 30f;                                 \
+-         a, b, %o3;                             \
+-        .section __ex_table,ALLOC;		\
+-        .align  4;                              \
+-        .word   98b, 99b;                       \
+-        .text;                                  \
+-        .align  4
 -
--	# zero the complete destination - computing the rest
--	# is too much work 
--	movl ARGBASE+8(%esp), %edi	# dst
--	movl ARGBASE+12(%esp), %ecx	# len
--	xorl %eax,%eax
--	rep ; stosb
+-#define EX2(x,y)				\
+-98:     x,y;                                    \
+-        .section __ex_table,ALLOC;		\
+-        .align  4;                              \
+-        .word   98b, 30f;                       \
+-        .text;                                  \
+-        .align  4
 -
--	jmp 5000b
+-#define EX3(x,y)				\
++#define EX(x,y)					\
+ 98:     x,y;                                    \
+         .section __ex_table,ALLOC;		\
+         .align  4;                              \
+-        .word   98b, 96f;                       \
++        .word   98b, cc_fault;                   \
+         .text;                                  \
+         .align  4
+ 
+-#define EXT(start,end,handler)			\
++#define EXT(start,end)				\
+         .section __ex_table,ALLOC;		\
+         .align  4;                              \
+-        .word   start, 0, end, handler;         \
++        .word   start, 0, end, cc_fault;         \
+         .text;                                  \
+         .align  4
+ 
+@@ -252,21 +229,21 @@ __csum_partial_copy_start:
+ cc_end_cruft:
+ 	be	1f
+ 	 andcc	%o3, 4, %g0
+-	EX(ldd	[%o0 + 0x00], %g2, and %o3, 0xf)
++	EX(ldd	[%o0 + 0x00], %g2)
+ 	add	%o1, 8, %o1
+ 	addcc	%g2, %g7, %g7
+ 	add	%o0, 8, %o0
+ 	addxcc	%g3, %g7, %g7
+-	EX2(st	%g2, [%o1 - 0x08])
++	EX(st	%g2, [%o1 - 0x08])
+ 	addx	%g0, %g7, %g7
+ 	andcc	%o3, 4, %g0
+-	EX2(st	%g3, [%o1 - 0x04])
++	EX(st	%g3, [%o1 - 0x04])
+ 1:	be	1f
+ 	 andcc	%o3, 3, %o3
+-	EX(ld	[%o0 + 0x00], %g2, add %o3, 4)
++	EX(ld	[%o0 + 0x00], %g2)
+ 	add	%o1, 4, %o1
+ 	addcc	%g2, %g7, %g7
+-	EX2(st	%g2, [%o1 - 0x04])
++	EX(st	%g2, [%o1 - 0x04])
+ 	addx	%g0, %g7, %g7
+ 	andcc	%o3, 3, %g0
+ 	add	%o0, 4, %o0
+@@ -276,14 +253,14 @@ cc_end_cruft:
+ 	 subcc	%o3, 2, %o3
+ 	b	4f
+ 	 or	%g0, %g0, %o4
+-2:	EX(lduh	[%o0 + 0x00], %o4, add %o3, 2)
++2:	EX(lduh	[%o0 + 0x00], %o4)
+ 	add	%o0, 2, %o0
+-	EX2(sth	%o4, [%o1 + 0x00])
++	EX(sth	%o4, [%o1 + 0x00])
+ 	be	6f
+ 	 add	%o1, 2, %o1
+ 	sll	%o4, 16, %o4
+-4:	EX(ldub	[%o0 + 0x00], %o5, add %g0, 1)
+-	EX2(stb	%o5, [%o1 + 0x00])
++4:	EX(ldub	[%o0 + 0x00], %o5)
++	EX(stb	%o5, [%o1 + 0x00])
+ 	sll	%o5, 8, %o5
+ 	or	%o5, %o4, %o4
+ 6:	addcc	%o4, %g7, %g7
+@@ -306,9 +283,9 @@ cc_dword_align:
+ 	 andcc	%o0, 0x2, %g0
+ 	be	1f
+ 	 andcc	%o0, 0x4, %g0
+-	EX(lduh	[%o0 + 0x00], %g4, add %g1, 0)
++	EX(lduh	[%o0 + 0x00], %g4)
+ 	sub	%g1, 2, %g1
+-	EX2(sth	%g4, [%o1 + 0x00])
++	EX(sth	%g4, [%o1 + 0x00])
+ 	add	%o0, 2, %o0
+ 	sll	%g4, 16, %g4
+ 	addcc	%g4, %g7, %g7
+@@ -322,9 +299,9 @@ cc_dword_align:
+ 	or	%g3, %g7, %g7
+ 1:	be	3f
+ 	 andcc	%g1, 0xffffff80, %g0
+-	EX(ld	[%o0 + 0x00], %g4, add %g1, 0)
++	EX(ld	[%o0 + 0x00], %g4)
+ 	sub	%g1, 4, %g1
+-	EX2(st	%g4, [%o1 + 0x00])
++	EX(st	%g4, [%o1 + 0x00])
+ 	add	%o0, 4, %o0
+ 	addcc	%g4, %g7, %g7
+ 	add	%o1, 4, %o1
+@@ -354,7 +331,7 @@ __csum_partial_copy_sparc_generic:
+ 	CSUMCOPY_BIGCHUNK(%o0,%o1,%g7,0x20,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o3)
+ 	CSUMCOPY_BIGCHUNK(%o0,%o1,%g7,0x40,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o3)
+ 	CSUMCOPY_BIGCHUNK(%o0,%o1,%g7,0x60,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o3)
+-10:	EXT(5b, 10b, 20f)		! note for exception handling
++10:	EXT(5b, 10b)			! note for exception handling
+ 	sub	%g1, 128, %g1		! detract from length
+ 	addx	%g0, %g7, %g7		! add in last carry bit
+ 	andcc	%g1, 0xffffff80, %g0	! more to csum?
+@@ -379,7 +356,7 @@ cctbl:	CSUMCOPY_LASTCHUNK(%o0,%o1,%g7,0x68,%g2,%g3,%g4,%g5)
+ 	CSUMCOPY_LASTCHUNK(%o0,%o1,%g7,0x28,%g2,%g3,%g4,%g5)
+ 	CSUMCOPY_LASTCHUNK(%o0,%o1,%g7,0x18,%g2,%g3,%g4,%g5)
+ 	CSUMCOPY_LASTCHUNK(%o0,%o1,%g7,0x08,%g2,%g3,%g4,%g5)
+-12:	EXT(cctbl, 12b, 22f)		! note for exception table handling
++12:	EXT(cctbl, 12b)			! note for exception table handling
+ 	addx	%g0, %g7, %g7
+ 	andcc	%o3, 0xf, %g0		! check for low bits set
+ ccte:	bne	cc_end_cruft		! something left, handle it out of band
+@@ -390,7 +367,7 @@ ccdbl:	CSUMCOPY_BIGCHUNK_ALIGNED(%o0,%o1,%g7,0x00,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o
+ 	CSUMCOPY_BIGCHUNK_ALIGNED(%o0,%o1,%g7,0x20,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o3)
+ 	CSUMCOPY_BIGCHUNK_ALIGNED(%o0,%o1,%g7,0x40,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o3)
+ 	CSUMCOPY_BIGCHUNK_ALIGNED(%o0,%o1,%g7,0x60,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o3)
+-11:	EXT(ccdbl, 11b, 21f)		! note for exception table handling
++11:	EXT(ccdbl, 11b)			! note for exception table handling
+ 	sub	%g1, 128, %g1		! detract from length
+ 	addx	%g0, %g7, %g7		! add in last carry bit
+ 	andcc	%g1, 0xffffff80, %g0	! more to csum?
+@@ -407,9 +384,9 @@ ccslow:	cmp	%g1, 0
+ 	be,a	1f
+ 	 srl	%g1, 1, %g4		
+ 	sub	%g1, 1, %g1	
+-	EX(ldub	[%o0], %g5, add %g1, 1)
++	EX(ldub	[%o0], %g5)
+ 	add	%o0, 1, %o0	
+-	EX2(stb	%g5, [%o1])
++	EX(stb	%g5, [%o1])
+ 	srl	%g1, 1, %g4
+ 	add	%o1, 1, %o1
+ 1:	cmp	%g4, 0		
+@@ -418,34 +395,34 @@ ccslow:	cmp	%g1, 0
+ 	andcc	%o0, 2, %g0	
+ 	be,a	1f
+ 	 srl	%g4, 1, %g4
+-	EX(lduh	[%o0], %o4, add %g1, 0)
++	EX(lduh	[%o0], %o4)
+ 	sub	%g1, 2, %g1	
+ 	srl	%o4, 8, %g2
+ 	sub	%g4, 1, %g4	
+-	EX2(stb	%g2, [%o1])
++	EX(stb	%g2, [%o1])
+ 	add	%o4, %g5, %g5
+-	EX2(stb	%o4, [%o1 + 1])
++	EX(stb	%o4, [%o1 + 1])
+ 	add	%o0, 2, %o0	
+ 	srl	%g4, 1, %g4
+ 	add	%o1, 2, %o1
+ 1:	cmp	%g4, 0		
+ 	be,a	2f
+ 	 andcc	%g1, 2, %g0
+-	EX3(ld	[%o0], %o4)
++	EX(ld	[%o0], %o4)
+ 5:	srl	%o4, 24, %g2
+ 	srl	%o4, 16, %g3
+-	EX2(stb	%g2, [%o1])
++	EX(stb	%g2, [%o1])
+ 	srl	%o4, 8, %g2
+-	EX2(stb	%g3, [%o1 + 1])
++	EX(stb	%g3, [%o1 + 1])
+ 	add	%o0, 4, %o0
+-	EX2(stb	%g2, [%o1 + 2])
++	EX(stb	%g2, [%o1 + 2])
+ 	addcc	%o4, %g5, %g5
+-	EX2(stb	%o4, [%o1 + 3])
++	EX(stb	%o4, [%o1 + 3])
+ 	addx	%g5, %g0, %g5	! I am now to lazy to optimize this (question it
+ 	add	%o1, 4, %o1	! is worthy). Maybe some day - with the sll/srl
+ 	subcc	%g4, 1, %g4	! tricks
+ 	bne,a	5b
+-	 EX3(ld	[%o0], %o4)
++	 EX(ld	[%o0], %o4)
+ 	sll	%g5, 16, %g2
+ 	srl	%g5, 16, %g5
+ 	srl	%g2, 16, %g2
+@@ -453,19 +430,19 @@ ccslow:	cmp	%g1, 0
+ 	add	%g2, %g5, %g5 
+ 2:	be,a	3f		
+ 	 andcc	%g1, 1, %g0
+-	EX(lduh	[%o0], %o4, and %g1, 3)
++	EX(lduh	[%o0], %o4)
+ 	andcc	%g1, 1, %g0
+ 	srl	%o4, 8, %g2
+ 	add	%o0, 2, %o0	
+-	EX2(stb	%g2, [%o1])
++	EX(stb	%g2, [%o1])
+ 	add	%g5, %o4, %g5
+-	EX2(stb	%o4, [%o1 + 1])
++	EX(stb	%o4, [%o1 + 1])
+ 	add	%o1, 2, %o1
+ 3:	be,a	1f		
+ 	 sll	%g5, 16, %o4
+-	EX(ldub	[%o0], %g2, add %g0, 1)
++	EX(ldub	[%o0], %g2)
+ 	sll	%g2, 8, %o4	
+-	EX2(stb	%g2, [%o1])
++	EX(stb	%g2, [%o1])
+ 	add	%g5, %o4, %g5
+ 	sll	%g5, 16, %o4
+ 1:	addcc	%o4, %g5, %g5
+@@ -481,113 +458,10 @@ ccslow:	cmp	%g1, 0
+ 4:	addcc	%g7, %g5, %g7
+ 	retl	
+ 	 addx	%g0, %g7, %o0
+-__csum_partial_copy_end:
+ 
+ /* We do these strange calculations for the csum_*_from_user case only, ie.
+  * we only bother with faults on loads... */
+ 
+-/* o2 = ((g2%20)&3)*8
+- * o3 = g1 - (g2/20)*32 - o2 */
+-20:
+-	cmp	%g2, 20
+-	blu,a	1f
+-	 and	%g2, 3, %o2
+-	sub	%g1, 32, %g1
+-	b	20b
+-	 sub	%g2, 20, %g2
+-1:
+-	sll	%o2, 3, %o2
+-	b	31f
+-	 sub	%g1, %o2, %o3
 -
--6002:
--	movl ARGBASE+24(%esp), %ebx	# dst_err_ptr
--	movl $-EFAULT,(%ebx)
--	jmp 5000b
-+	xorl %eax, %eax
-+	jmp 7b
+-/* o2 = (!(g2 & 15) ? 0 : (((g2 & 15) + 1) & ~1)*8)
+- * o3 = g1 - (g2/16)*32 - o2 */
+-21:
+-	andcc	%g2, 15, %o3
+-	srl	%g2, 4, %g2
+-	be,a	1f
+-	 clr	%o2
+-	add	%o3, 1, %o3
+-	and	%o3, 14, %o3
+-	sll	%o3, 3, %o2
+-1:
+-	sll	%g2, 5, %g2
+-	sub	%g1, %g2, %o3
+-	b	31f
+-	 sub	%o3, %o2, %o3
+-
+-/* o0 += (g2/10)*16 - 0x70
+- * 01 += (g2/10)*16 - 0x70
+- * o2 = (g2 % 10) ? 8 : 0
+- * o3 += 0x70 - (g2/10)*16 - o2 */
+-22:
+-	cmp	%g2, 10
+-	blu,a	1f
+-	 sub	%o0, 0x70, %o0
+-	add	%o0, 16, %o0
+-	add	%o1, 16, %o1
+-	sub	%o3, 16, %o3
+-	b	22b
+-	 sub	%g2, 10, %g2
+-1:
+-	sub	%o1, 0x70, %o1
+-	add	%o3, 0x70, %o3
+-	clr	%o2
+-	tst	%g2
+-	bne,a	1f
+-	 mov	8, %o2
+-1:
+-	b	31f
+-	 sub	%o3, %o2, %o3
+-96:
+-	and	%g1, 3, %g1
+-	sll	%g4, 2, %g4
+-	add	%g1, %g4, %o3
+-30:
+-/* %o1 is dst
+- * %o3 is # bytes to zero out
+- * %o4 is faulting address
+- * %o5 is %pc where fault occurred */
+-	clr	%o2
+-31:
+-/* %o0 is src
+- * %o1 is dst
+- * %o2 is # of bytes to copy from src to dst
+- * %o3 is # bytes to zero out
+- * %o4 is faulting address
+- * %o5 is %pc where fault occurred */
+-	save	%sp, -104, %sp
+-        mov     %i5, %o0
+-        mov     %i7, %o1
+-        mov	%i4, %o2
+-        call    lookup_fault
+-	 mov	%g7, %i4
+-	cmp	%o0, 2
+-	bne	1f	
+-	 add	%g0, -EFAULT, %i5
+-	tst	%i2
+-	be	2f
+-	 mov	%i0, %o1
+-	mov	%i1, %o0
+-5:
+-	call	memcpy
+-	 mov	%i2, %o2
+-	tst	%o0
+-	bne,a	2f
+-	 add	%i3, %i2, %i3
+-	add	%i1, %i2, %i1
+-2:
+-	mov	%i1, %o0
+-6:
+-	call	__bzero
+-	 mov	%i3, %o1
+-1:
+-	ld	[%sp + 168], %o2		! struct_ptr of parent
+-	st	%i5, [%o2]
++cc_fault:
+ 	ret
+-	 restore
+-
+-        .section __ex_table,#alloc
+-        .align 4
+-        .word 5b,2
+-	.word 6b,2
++	 clr	%o0
+diff --git a/arch/sparc/mm/fault_32.c b/arch/sparc/mm/fault_32.c
+index cfef656eda0f..1185b6169144 100644
+--- a/arch/sparc/mm/fault_32.c
++++ b/arch/sparc/mm/fault_32.c
+@@ -297,8 +297,6 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
+ 		if (fixup > 10) {
+ 			extern const unsigned int __memset_start[];
+ 			extern const unsigned int __memset_end[];
+-			extern const unsigned int __csum_partial_copy_start[];
+-			extern const unsigned int __csum_partial_copy_end[];
  
- .previous
- 
-@@ -405,14 +379,14 @@ SYM_FUNC_END(csum_partial_copy_generic)
- /* Version for PentiumII/PPro */
- 
- #define ROUND1(x) \
--	SRC(movl x(%esi), %ebx	)	;	\
-+	EXC(movl x(%esi), %ebx	)	;	\
- 	addl %ebx, %eax			;	\
--	DST(movl %ebx, x(%edi)	)	; 
-+	EXC(movl %ebx, x(%edi)	)	;
- 
- #define ROUND(x) \
--	SRC(movl x(%esi), %ebx	)	;	\
-+	EXC(movl x(%esi), %ebx	)	;	\
- 	adcl %ebx, %eax			;	\
--	DST(movl %ebx, x(%edi)	)	;
-+	EXC(movl %ebx, x(%edi)	)	;
- 
- #define ARGBASE 12
- 		
-@@ -423,7 +397,7 @@ SYM_FUNC_START(csum_partial_copy_generic)
- 	movl ARGBASE+4(%esp),%esi	#src
- 	movl ARGBASE+8(%esp),%edi	#dst	
- 	movl ARGBASE+12(%esp),%ecx	#len
--	movl ARGBASE+16(%esp),%eax	#sum
-+	movl $-1, %eax			#sum
- #	movl %ecx, %edx  
- 	movl %ecx, %ebx  
- 	movl %esi, %edx
-@@ -439,7 +413,7 @@ SYM_FUNC_START(csum_partial_copy_generic)
- 	JMP_NOSPEC ebx
- 1:	addl $64,%esi
- 	addl $64,%edi 
--	SRC(movb -32(%edx),%bl)	; SRC(movb (%edx),%bl)
-+	EXC(movb -32(%edx),%bl)	; EXC(movb (%edx),%bl)
- 	ROUND1(-64) ROUND(-60) ROUND(-56) ROUND(-52)	
- 	ROUND (-48) ROUND(-44) ROUND(-40) ROUND(-36)	
- 	ROUND (-32) ROUND(-28) ROUND(-24) ROUND(-20)	
-@@ -453,29 +427,20 @@ SYM_FUNC_START(csum_partial_copy_generic)
- 	jz 7f
- 	cmpl $2, %edx
- 	jb 5f
--SRC(	movw (%esi), %dx         )
-+EXC(	movw (%esi), %dx         )
- 	leal 2(%esi), %esi
--DST(	movw %dx, (%edi)         )
-+EXC(	movw %dx, (%edi)         )
- 	leal 2(%edi), %edi
- 	je 6f
- 	shll $16,%edx
- 5:
--SRC(	movb (%esi), %dl         )
--DST(	movb %dl, (%edi)         )
-+EXC(	movb (%esi), %dl         )
-+EXC(	movb %dl, (%edi)         )
- 6:	addl %edx, %eax
- 	adcl $0, %eax
- 7:
- .section .fixup, "ax"
--6001:	movl	ARGBASE+20(%esp), %ebx	# src_err_ptr	
--	movl $-EFAULT, (%ebx)
--	# zero the complete destination (computing the rest is too much work)
--	movl ARGBASE+8(%esp),%edi	# dst
--	movl ARGBASE+12(%esp),%ecx	# len
--	xorl %eax,%eax
--	rep; stosb
--	jmp 7b
--6002:	movl ARGBASE+24(%esp), %ebx	# dst_err_ptr
--	movl $-EFAULT, (%ebx)
-+6001:	xorl %eax, %eax
- 	jmp  7b			
- .previous				
- 
+ #ifdef DEBUG_EXCEPTIONS
+ 			printk("Exception: PC<%08lx> faddr<%08lx>\n",
+@@ -307,9 +305,7 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
+ 				regs->pc, fixup, g2);
+ #endif
+ 			if ((regs->pc >= (unsigned long)__memset_start &&
+-			     regs->pc < (unsigned long)__memset_end) ||
+-			    (regs->pc >= (unsigned long)__csum_partial_copy_start &&
+-			     regs->pc < (unsigned long)__csum_partial_copy_end)) {
++			     regs->pc < (unsigned long)__memset_end)) {
+ 				regs->u_regs[UREG_I4] = address;
+ 				regs->u_regs[UREG_I5] = regs->pc;
+ 			}
 -- 
 2.11.0
 
