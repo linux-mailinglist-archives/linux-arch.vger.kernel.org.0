@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA72B227D18
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 12:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7F9227D14
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 12:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729330AbgGUKbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 06:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S1729260AbgGUKap (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 06:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729161AbgGUKam (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 06:30:42 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5837C0619DC
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 03:30:41 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id 89so12894261wrr.15
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 03:30:41 -0700 (PDT)
+        with ESMTP id S1729240AbgGUKao (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 06:30:44 -0400
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA559C0619D8
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 03:30:43 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id c81so833842wmd.2
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 03:30:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=LMk4339Zjhhu0K58clMlPfJmEmRgvFiVE2OU6iIU7ro=;
-        b=MwwVb4fGj4UF6WUdljPc2Yyh7/QUZ3SHJv2NwaZ4xQTH8XfmMwDR9wkH0TDBatmSkQ
-         lKpbRekcC6QG1WNEDOaS8beQqoMJJSNrt8T603+xGu2Pj6OgIoowA3eWC9HjT+4rbSCP
-         Xi6w/Wo454/e7IfrHEZStyPqoPdh2/dg4SGj8IdcRFL8vde9MhXZ/8UyQeSl3V37HqVT
-         bDTZLEGQr+lBUHLiy/Jkkn/AeBVoZzo1/io0ZXL/6y3zs9nLoxgJzqcsZyC7W+F0BefV
-         91KH6W0enHrIcuTzYuz2CEqzbNFkaw11X/zZNrsISCQYX9tOPI3aItyNNJuBjQzYLnec
-         AkTQ==
+        bh=lzumWwjBCjoWvyaVpmfup+Sfq7jvpdMDLzihovn9kHY=;
+        b=XzNICzMl96GTqpwyTEKH5WKZeDkOtiAXlCZP7pH5ox0PR5UXpNDwNxPWg0EGzpsMmu
+         pA0+IUug3DbSzs9VGjOzLmSr3vBkQeKlCW9ITE52cMpX7CELsrfKiDprEb6vyeO/i//a
+         EXRVaWM8cgtlHEsKnsJKojvbtRlSct98lnKW3um17+/QFnGZWjLF6FamD28VnpVYBOWv
+         vLkPioi7u19bxDSdsCzD3iiN0ltF+/KoY0jpmm9tn3GglNEajbwwkYqGCjw/skwhz3YH
+         lEMqA9pADOQz3uvTCf6N6bmiD7Yi1So40YbiDDmED7qaHwFjYZxF0J2Y89LQ3VIMCmPt
+         pc6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=LMk4339Zjhhu0K58clMlPfJmEmRgvFiVE2OU6iIU7ro=;
-        b=j0i636/3T1Cc0n9wAgsYzi5on791QasH/FsBt5qZfWtvycb49HdAX2SSAEHSw2UM5V
-         68e+ytBffQBpT8xkPqjYue4phajDGR98bH8Vyp9OoxcOo/k7f6YPp59aeQ6rv08Bjm9k
-         FgGxxV22haRx6V7fIik8C59zjdTWz6uGW7aAAHfQfjGtHJvk8vBv9071cQBKfzlz3ZAc
-         JfgOdk7oMmElHTxj9Z8E83AIt6qbPnY0QdRDDaOU2YT4YhwyPTxkd07kUF+YH++E/TyK
-         ExNuSYx3KiYF2VuhZ5ERrchrLPNxx3DSuFk3M7/CbXYPXaEXsxomCbZzOyP8wBMo6Z4V
-         5bOg==
-X-Gm-Message-State: AOAM532Jabh7+PLuCb+48huL5i3cHRf6lNMCyLxQAMFTXbikCpeeKxG3
-        ES15i0eer96COCmkunuBw6hb8jvS7A==
-X-Google-Smtp-Source: ABdhPJxmyS4vwAM8i+9rhvqtd6A42ZE9DqAAf0SiBEc/vJycx4V7hZmCBcRyew9iQzlsiCxvXrQBrLErmQ==
-X-Received: by 2002:a1c:cc09:: with SMTP id h9mr407498wmb.1.1595327439944;
- Tue, 21 Jul 2020 03:30:39 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 12:30:12 +0200
+        bh=lzumWwjBCjoWvyaVpmfup+Sfq7jvpdMDLzihovn9kHY=;
+        b=jbjXDisKSh2B3slxqmj8wDJokITDwYoWLBBLDQ/LqU6vpw92pAbMe2c0gK5hsbcI7x
+         hP2yvmog2eyNkG7h3Sg0gcCt7enZVxSfWIKw2q5f0STAfPFcGIfLU9j8mwK/Igpvx90/
+         WiO0z4BUEQzLf2j1ASk/cpmkeGht2+AnxQ4cZzr3xRsviBykNlobQN31ZCywcgVkdXzg
+         +1oGIeNlvWpoW2qUbhBF8OIZovwmnNc5j9tYOa6KLt69RERLcXZM1VrcpDyr5bZ2QnxT
+         +Cdi3fDXtGc/RTWGcHundNZilLRLN7csjho2j6dS/DA5/ZMJ0hJQJphAbxDHl8V3ypOI
+         qD+g==
+X-Gm-Message-State: AOAM531Ag+RNFWOKCQAIoCtI7bYNJ/T/oruoBAbbA+Ehtdpsz2eB0hqF
+        N43Jhg68cMosme7xsOrNvJiyrDSz6A==
+X-Google-Smtp-Source: ABdhPJwgd8IpT+jUQd7OWmDImA2feZ4wIkPNBF7HY1ArJ7SmudBXqMqL+teaLONo/sLplPkXM8vt+KfgUQ==
+X-Received: by 2002:a1c:984d:: with SMTP id a74mr3644277wme.140.1595327442395;
+ Tue, 21 Jul 2020 03:30:42 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 12:30:13 +0200
 In-Reply-To: <20200721103016.3287832-1-elver@google.com>
-Message-Id: <20200721103016.3287832-5-elver@google.com>
+Message-Id: <20200721103016.3287832-6-elver@google.com>
 Mime-Version: 1.0
 References: <20200721103016.3287832-1-elver@google.com>
 X-Mailer: git-send-email 2.28.0.rc0.105.gf9edc3c819-goog
-Subject: [PATCH 4/8] kcsan: Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks
+Subject: [PATCH 5/8] kcsan: Test support for compound instrumentation
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, paulmck@kernel.org
 Cc:     will@kernel.org, peterz@infradead.org, arnd@arndb.de,
@@ -62,79 +62,146 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks for the builtin atomics
-instrumentation.
+Changes kcsan-test module to support checking reports that include
+compound instrumentation. Since we should not fail the test if this
+support is unavailable, we have to add a config variable that the test
+can use to decide what to check for.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
-Added to this series, as it would otherwise cause patch conflicts.
----
- kernel/kcsan/core.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ kernel/kcsan/kcsan-test.c | 65 ++++++++++++++++++++++++++++++---------
+ lib/Kconfig.kcsan         |  5 +++
+ 2 files changed, 56 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-index 4633baebf84e..f53524ea0292 100644
---- a/kernel/kcsan/core.c
-+++ b/kernel/kcsan/core.c
-@@ -892,14 +892,17 @@ EXPORT_SYMBOL(__tsan_init);
- 	u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder);                      \
- 	u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder)                       \
- 	{                                                                                          \
--		check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);                      \
-+		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-+			check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);              \
- 		return __atomic_load_n(ptr, memorder);                                             \
- 	}                                                                                          \
- 	EXPORT_SYMBOL(__tsan_atomic##bits##_load);                                                 \
- 	void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder);                   \
- 	void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder)                    \
- 	{                                                                                          \
--		check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC); \
-+		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-+			check_access(ptr, bits / BITS_PER_BYTE,                                    \
-+				     KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);                    \
- 		__atomic_store_n(ptr, v, memorder);                                                \
- 	}                                                                                          \
- 	EXPORT_SYMBOL(__tsan_atomic##bits##_store)
-@@ -908,8 +911,10 @@ EXPORT_SYMBOL(__tsan_init);
- 	u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder);                 \
- 	u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder)                  \
- 	{                                                                                          \
--		check_access(ptr, bits / BITS_PER_BYTE,                                            \
--			     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
-+		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-+			check_access(ptr, bits / BITS_PER_BYTE,                                    \
-+				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
-+					     KCSAN_ACCESS_ATOMIC);                                 \
- 		return __atomic_##op##suffix(ptr, v, memorder);                                    \
- 	}                                                                                          \
- 	EXPORT_SYMBOL(__tsan_atomic##bits##_##op)
-@@ -937,8 +942,10 @@ EXPORT_SYMBOL(__tsan_init);
- 	int __tsan_atomic##bits##_compare_exchange_##strength(u##bits *ptr, u##bits *exp,          \
- 							      u##bits val, int mo, int fail_mo)    \
- 	{                                                                                          \
--		check_access(ptr, bits / BITS_PER_BYTE,                                            \
--			     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
-+		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-+			check_access(ptr, bits / BITS_PER_BYTE,                                    \
-+				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
-+					     KCSAN_ACCESS_ATOMIC);                                 \
- 		return __atomic_compare_exchange_n(ptr, exp, val, weak, mo, fail_mo);              \
- 	}                                                                                          \
- 	EXPORT_SYMBOL(__tsan_atomic##bits##_compare_exchange_##strength)
-@@ -949,8 +956,10 @@ EXPORT_SYMBOL(__tsan_init);
- 	u##bits __tsan_atomic##bits##_compare_exchange_val(u##bits *ptr, u##bits exp, u##bits val, \
- 							   int mo, int fail_mo)                    \
- 	{                                                                                          \
--		check_access(ptr, bits / BITS_PER_BYTE,                                            \
--			     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
-+		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-+			check_access(ptr, bits / BITS_PER_BYTE,                                    \
-+				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
-+					     KCSAN_ACCESS_ATOMIC);                                 \
- 		__atomic_compare_exchange_n(ptr, &exp, val, 0, mo, fail_mo);                       \
- 		return exp;                                                                        \
- 	}                                                                                          \
+diff --git a/kernel/kcsan/kcsan-test.c b/kernel/kcsan/kcsan-test.c
+index 721180cbbab1..ebe7fd245104 100644
+--- a/kernel/kcsan/kcsan-test.c
++++ b/kernel/kcsan/kcsan-test.c
+@@ -27,6 +27,12 @@
+ #include <linux/types.h>
+ #include <trace/events/printk.h>
+ 
++#ifdef CONFIG_CC_HAS_TSAN_COMPOUND_READ_BEFORE_WRITE
++#define __KCSAN_ACCESS_RW(alt) (KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE)
++#else
++#define __KCSAN_ACCESS_RW(alt) (alt)
++#endif
++
+ /* Points to current test-case memory access "kernels". */
+ static void (*access_kernels[2])(void);
+ 
+@@ -186,20 +192,21 @@ static bool report_matches(const struct expect_report *r)
+ 
+ 	/* Access 1 & 2 */
+ 	for (i = 0; i < 2; ++i) {
++		const int ty = r->access[i].type;
+ 		const char *const access_type =
+-			(r->access[i].type & KCSAN_ACCESS_ASSERT) ?
+-				((r->access[i].type & KCSAN_ACCESS_WRITE) ?
+-					 "assert no accesses" :
+-					 "assert no writes") :
+-				((r->access[i].type & KCSAN_ACCESS_WRITE) ?
+-					 "write" :
+-					 "read");
++			(ty & KCSAN_ACCESS_ASSERT) ?
++				      ((ty & KCSAN_ACCESS_WRITE) ?
++					       "assert no accesses" :
++					       "assert no writes") :
++				      ((ty & KCSAN_ACCESS_WRITE) ?
++					       ((ty & KCSAN_ACCESS_COMPOUND) ?
++							"read-write" :
++							"write") :
++					       "read");
+ 		const char *const access_type_aux =
+-			(r->access[i].type & KCSAN_ACCESS_ATOMIC) ?
+-				" (marked)" :
+-				((r->access[i].type & KCSAN_ACCESS_SCOPED) ?
+-					 " (scoped)" :
+-					 "");
++			(ty & KCSAN_ACCESS_ATOMIC) ?
++				      " (marked)" :
++				      ((ty & KCSAN_ACCESS_SCOPED) ? " (scoped)" : "");
+ 
+ 		if (i == 1) {
+ 			/* Access 2 */
+@@ -277,6 +284,12 @@ static noinline void test_kernel_write_atomic(void)
+ 	WRITE_ONCE(test_var, READ_ONCE_NOCHECK(test_sink) + 1);
+ }
+ 
++static noinline void test_kernel_atomic_rmw(void)
++{
++	/* Use builtin, so we can set up the "bad" atomic/non-atomic scenario. */
++	__atomic_fetch_add(&test_var, 1, __ATOMIC_RELAXED);
++}
++
+ __no_kcsan
+ static noinline void test_kernel_write_uninstrumented(void) { test_var++; }
+ 
+@@ -439,8 +452,8 @@ static void test_concurrent_races(struct kunit *test)
+ 	const struct expect_report expect = {
+ 		.access = {
+ 			/* NULL will match any address. */
+-			{ test_kernel_rmw_array, NULL, 0, KCSAN_ACCESS_WRITE },
+-			{ test_kernel_rmw_array, NULL, 0, 0 },
++			{ test_kernel_rmw_array, NULL, 0, __KCSAN_ACCESS_RW(KCSAN_ACCESS_WRITE) },
++			{ test_kernel_rmw_array, NULL, 0, __KCSAN_ACCESS_RW(0) },
+ 		},
+ 	};
+ 	static const struct expect_report never = {
+@@ -629,6 +642,29 @@ static void test_read_plain_atomic_write(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, match_expect);
+ }
+ 
++/* Test that atomic RMWs generate correct report. */
++__no_kcsan
++static void test_read_plain_atomic_rmw(struct kunit *test)
++{
++	const struct expect_report expect = {
++		.access = {
++			{ test_kernel_read, &test_var, sizeof(test_var), 0 },
++			{ test_kernel_atomic_rmw, &test_var, sizeof(test_var),
++				KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC },
++		},
++	};
++	bool match_expect = false;
++
++	if (IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))
++		return;
++
++	begin_test_checks(test_kernel_read, test_kernel_atomic_rmw);
++	do {
++		match_expect = report_matches(&expect);
++	} while (!end_test_checks(match_expect));
++	KUNIT_EXPECT_TRUE(test, match_expect);
++}
++
+ /* Zero-sized accesses should never cause data race reports. */
+ __no_kcsan
+ static void test_zero_size_access(struct kunit *test)
+@@ -942,6 +978,7 @@ static struct kunit_case kcsan_test_cases[] = {
+ 	KCSAN_KUNIT_CASE(test_write_write_struct_part),
+ 	KCSAN_KUNIT_CASE(test_read_atomic_write_atomic),
+ 	KCSAN_KUNIT_CASE(test_read_plain_atomic_write),
++	KCSAN_KUNIT_CASE(test_read_plain_atomic_rmw),
+ 	KCSAN_KUNIT_CASE(test_zero_size_access),
+ 	KCSAN_KUNIT_CASE(test_data_race),
+ 	KCSAN_KUNIT_CASE(test_assert_exclusive_writer),
+diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+index 3d282d51849b..cde5b62b0a01 100644
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -40,6 +40,11 @@ menuconfig KCSAN
+ 
+ if KCSAN
+ 
++# Compiler capabilities that should not fail the test if they are unavailable.
++config CC_HAS_TSAN_COMPOUND_READ_BEFORE_WRITE
++	def_bool (CC_IS_CLANG && $(cc-option,-fsanitize=thread -mllvm -tsan-compound-read-before-write=1)) || \
++		 (CC_IS_GCC && $(cc-option,-fsanitize=thread --param -tsan-compound-read-before-write=1))
++
+ config KCSAN_VERBOSE
+ 	bool "Show verbose reports with more information about system state"
+ 	depends on PROVE_LOCKING
 -- 
 2.28.0.rc0.105.gf9edc3c819-goog
 
