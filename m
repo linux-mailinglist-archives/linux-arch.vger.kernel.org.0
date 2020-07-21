@@ -2,341 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED872289CF
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 22:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31702289EE
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 22:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730832AbgGUUZy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 16:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730877AbgGUUZx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 16:25:53 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12143C0619E0;
-        Tue, 21 Jul 2020 13:25:53 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jxypj-00HPq0-RJ; Tue, 21 Jul 2020 20:25:51 +0000
-From:   Al Viro <viro@ZenIV.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 18/18] ppc: propagate the calling conventions change down to csum_partial_copy_generic()
-Date:   Tue, 21 Jul 2020 21:25:49 +0100
-Message-Id: <20200721202549.4150745-18-viro@ZenIV.linux.org.uk>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200721202549.4150745-1-viro@ZenIV.linux.org.uk>
-References: <20200721202425.GA2786714@ZenIV.linux.org.uk>
- <20200721202549.4150745-1-viro@ZenIV.linux.org.uk>
+        id S1731046AbgGUU1q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 16:27:46 -0400
+Received: from mga11.intel.com ([192.55.52.93]:39000 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728691AbgGUU1p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Jul 2020 16:27:45 -0400
+IronPort-SDR: pAvP2tZ7/0lumg010VNwGFhlmiHGcEFnlbGilcNxm1FmSQDOsRTz1w1DeoQNtY0Psj4ASlUV+6
+ FIRr6p6c51rw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="148165061"
+X-IronPort-AV: E=Sophos;i="5.75,380,1589266800"; 
+   d="scan'208";a="148165061"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 13:27:45 -0700
+IronPort-SDR: Di7XWoAMlVe/6yt1473v/d/4u04SiS189Wzdft/sNGm1KA66RIDYhg+JwtBOBrO8eYuBNkYRZ6
+ XPffxJoOaJUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,380,1589266800"; 
+   d="scan'208";a="318449992"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2020 13:27:45 -0700
+Date:   Tue, 21 Jul 2020 13:27:45 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>
+Subject: Re: [patch V4 15/15] x86/kvm: Use generic exit to guest work function
+Message-ID: <20200721202745.GJ22083@linux.intel.com>
+References: <20200721105706.030914876@linutronix.de>
+ <20200721110809.855490955@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721110809.855490955@linutronix.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+On Tue, Jul 21, 2020 at 12:57:21PM +0200, Thomas Gleixner wrote:
+> Use the generic infrastructure to check for and handle pending work before
+> entering into guest mode.
+> 
+> This now handles TIF_NOTIFY_RESUME as well which was ignored so
+> far. Handling it is important as this covers task work and task work will
+> be used to offload the heavy lifting of POSIX CPU timers to thread context.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  arch/x86/kvm/Kconfig   |    1 +
+>  arch/x86/kvm/vmx/vmx.c |   11 +++++------
+>  arch/x86/kvm/x86.c     |   15 ++++++---------
+>  3 files changed, 12 insertions(+), 15 deletions(-)
+> 
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -42,6 +42,7 @@ config KVM
+>  	select HAVE_KVM_MSI
+>  	select HAVE_KVM_CPU_RELAX_INTERCEPT
+>  	select HAVE_KVM_NO_POLL
+> +	select KVM_EXIT_TO_GUEST_WORK
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>  	select KVM_VFIO
+>  	select SRCU
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/tboot.h>
+>  #include <linux/trace_events.h>
+> +#include <linux/entry-kvm.h>
+>  
+>  #include <asm/apic.h>
+>  #include <asm/asm.h>
+> @@ -5376,14 +5377,12 @@ static int handle_invalid_guest_state(st
+>  		}
+>  
+>  		/*
+> -		 * Note, return 1 and not 0, vcpu_run() is responsible for
+> -		 * morphing the pending signal into the proper return code.
+> +		 * Note, return 1 and not 0, vcpu_run() will invoke
+> +		 * exit_to_guest_mode() which will create a proper return
+> +		 * code.
+>  		 */
+> -		if (signal_pending(current))
+> +		if (__exit_to_guest_mode_work_pending())
 
-... and get rid of the pointless fallback in the wrappers.  On error it used
-to zero the unwritten area and calculate the csum of the entire thing.  Not
-wanting to do it in assembler part had been very reasonable; doing that in
-the first place, OTOH...  In case of an error the caller discards the data
-we'd copied, along with whatever checksum it might've had.
+I whined about this back in v2[*].  "exit to guest mode" is confusing becuase
+virt terminology is "enter to guest" and "exit from guest", whereas the
+kernel's terminology here is "exit from kernel to guest".
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- arch/powerpc/include/asm/checksum.h  |  6 +--
- arch/powerpc/lib/checksum_32.S       | 74 +++++++++++++-----------------------
- arch/powerpc/lib/checksum_64.S       | 37 ++++++------------
- arch/powerpc/lib/checksum_wrappers.c | 32 +++-------------
- 4 files changed, 46 insertions(+), 103 deletions(-)
+My past and current self still like XFER_TO_GUEST as the base terminology.
 
-diff --git a/arch/powerpc/include/asm/checksum.h b/arch/powerpc/include/asm/checksum.h
-index 97343e1a7d1c..fd0e4d1356a2 100644
---- a/arch/powerpc/include/asm/checksum.h
-+++ b/arch/powerpc/include/asm/checksum.h
-@@ -18,9 +18,7 @@
-  * Like csum_partial, this must be called with even lengths,
-  * except for the last fragment.
-  */
--extern __wsum csum_partial_copy_generic(const void *src, void *dst,
--					      int len, __wsum sum,
--					      int *src_err, int *dst_err);
-+extern __wsum csum_partial_copy_generic(const void *src, void *dst, int len);
- 
- #define _HAVE_ARCH_COPY_AND_CSUM_FROM_USER
- extern __wsum csum_and_copy_from_user(const void __user *src, void *dst,
-@@ -30,7 +28,7 @@ extern __wsum csum_and_copy_to_user(const void *src, void __user *dst,
- 				    int len);
- 
- #define csum_partial_copy_nocheck(src, dst, len)   \
--        csum_partial_copy_generic((src), (dst), (len), 0, NULL, NULL)
-+        csum_partial_copy_generic((src), (dst), (len))
- 
- 
- /*
-diff --git a/arch/powerpc/lib/checksum_32.S b/arch/powerpc/lib/checksum_32.S
-index ecd150dc3ed9..ec5cd2dede35 100644
---- a/arch/powerpc/lib/checksum_32.S
-+++ b/arch/powerpc/lib/checksum_32.S
-@@ -78,12 +78,10 @@ EXPORT_SYMBOL(__csum_partial)
- 
- /*
-  * Computes the checksum of a memory block at src, length len,
-- * and adds in "sum" (32-bit), while copying the block to dst.
-- * If an access exception occurs on src or dst, it stores -EFAULT
-- * to *src_err or *dst_err respectively, and (for an error on
-- * src) zeroes the rest of dst.
-+ * and adds in 0xffffffff, while copying the block to dst.
-+ * If an access exception occurs it returns zero.
-  *
-- * csum_partial_copy_generic(src, dst, len, sum, src_err, dst_err)
-+ * csum_partial_copy_generic(src, dst, len)
-  */
- #define CSUM_COPY_16_BYTES_WITHEX(n)	\
- 8 ## n ## 0:			\
-@@ -108,14 +106,14 @@ EXPORT_SYMBOL(__csum_partial)
- 	adde	r12,r12,r10
- 
- #define CSUM_COPY_16_BYTES_EXCODE(n)		\
--	EX_TABLE(8 ## n ## 0b, src_error);	\
--	EX_TABLE(8 ## n ## 1b, src_error);	\
--	EX_TABLE(8 ## n ## 2b, src_error);	\
--	EX_TABLE(8 ## n ## 3b, src_error);	\
--	EX_TABLE(8 ## n ## 4b, dst_error);	\
--	EX_TABLE(8 ## n ## 5b, dst_error);	\
--	EX_TABLE(8 ## n ## 6b, dst_error);	\
--	EX_TABLE(8 ## n ## 7b, dst_error);
-+	EX_TABLE(8 ## n ## 0b, fault);	\
-+	EX_TABLE(8 ## n ## 1b, fault);	\
-+	EX_TABLE(8 ## n ## 2b, fault);	\
-+	EX_TABLE(8 ## n ## 3b, fault);	\
-+	EX_TABLE(8 ## n ## 4b, fault);	\
-+	EX_TABLE(8 ## n ## 5b, fault);	\
-+	EX_TABLE(8 ## n ## 6b, fault);	\
-+	EX_TABLE(8 ## n ## 7b, fault);
- 
- 	.text
- 	.stabs	"arch/powerpc/lib/",N_SO,0,0,0f
-@@ -127,11 +125,8 @@ LG_CACHELINE_BYTES = L1_CACHE_SHIFT
- CACHELINE_MASK = (L1_CACHE_BYTES-1)
- 
- _GLOBAL(csum_partial_copy_generic)
--	stwu	r1,-16(r1)
--	stw	r7,12(r1)
--	stw	r8,8(r1)
--
--	addic	r12,r6,0
-+	li	r12,-1
-+	addic	r0,r0,0			/* clear carry */
- 	addi	r6,r4,-4
- 	neg	r0,r4
- 	addi	r4,r3,-4
-@@ -246,34 +241,19 @@ _GLOBAL(csum_partial_copy_generic)
- 	rlwinm	r3,r3,8,0,31	/* odd destination address: rotate one byte */
- 	blr
- 
--/* read fault */
--src_error:
--	lwz	r7,12(r1)
--	addi	r1,r1,16
--	cmpwi	cr0,r7,0
--	beqlr
--	li	r0,-EFAULT
--	stw	r0,0(r7)
--	blr
--/* write fault */
--dst_error:
--	lwz	r8,8(r1)
--	addi	r1,r1,16
--	cmpwi	cr0,r8,0
--	beqlr
--	li	r0,-EFAULT
--	stw	r0,0(r8)
-+fault:
-+	li	r3,0
- 	blr
- 
--	EX_TABLE(70b, src_error);
--	EX_TABLE(71b, dst_error);
--	EX_TABLE(72b, src_error);
--	EX_TABLE(73b, dst_error);
--	EX_TABLE(54b, dst_error);
-+	EX_TABLE(70b, fault);
-+	EX_TABLE(71b, fault);
-+	EX_TABLE(72b, fault);
-+	EX_TABLE(73b, fault);
-+	EX_TABLE(54b, fault);
- 
- /*
-  * this stuff handles faults in the cacheline loop and branches to either
-- * src_error (if in read part) or dst_error (if in write part)
-+ * fault (if in read part) or fault (if in write part)
-  */
- 	CSUM_COPY_16_BYTES_EXCODE(0)
- #if L1_CACHE_BYTES >= 32
-@@ -290,12 +270,12 @@ dst_error:
- #endif
- #endif
- 
--	EX_TABLE(30b, src_error);
--	EX_TABLE(31b, dst_error);
--	EX_TABLE(40b, src_error);
--	EX_TABLE(41b, dst_error);
--	EX_TABLE(50b, src_error);
--	EX_TABLE(51b, dst_error);
-+	EX_TABLE(30b, fault);
-+	EX_TABLE(31b, fault);
-+	EX_TABLE(40b, fault);
-+	EX_TABLE(41b, fault);
-+	EX_TABLE(50b, fault);
-+	EX_TABLE(51b, fault);
- 
- EXPORT_SYMBOL(csum_partial_copy_generic)
- 
-diff --git a/arch/powerpc/lib/checksum_64.S b/arch/powerpc/lib/checksum_64.S
-index 514978f908d4..98ff51bd2f7d 100644
---- a/arch/powerpc/lib/checksum_64.S
-+++ b/arch/powerpc/lib/checksum_64.S
-@@ -182,34 +182,33 @@ EXPORT_SYMBOL(__csum_partial)
- 
- 	.macro srcnr
- 100:
--	EX_TABLE(100b,.Lsrc_error_nr)
-+	EX_TABLE(100b,.Lerror_nr)
- 	.endm
- 
- 	.macro source
- 150:
--	EX_TABLE(150b,.Lsrc_error)
-+	EX_TABLE(150b,.Lerror)
- 	.endm
- 
- 	.macro dstnr
- 200:
--	EX_TABLE(200b,.Ldest_error_nr)
-+	EX_TABLE(200b,.Lerror_nr)
- 	.endm
- 
- 	.macro dest
- 250:
--	EX_TABLE(250b,.Ldest_error)
-+	EX_TABLE(250b,.Lerror)
- 	.endm
- 
- /*
-  * Computes the checksum of a memory block at src, length len,
-- * and adds in "sum" (32-bit), while copying the block to dst.
-- * If an access exception occurs on src or dst, it stores -EFAULT
-- * to *src_err or *dst_err respectively. The caller must take any action
-- * required in this case (zeroing memory, recalculating partial checksum etc).
-+ * and adds in 0xffffffff (32-bit), while copying the block to dst.
-+ * If an access exception occurs, it returns 0.
-  *
-- * csum_partial_copy_generic(r3=src, r4=dst, r5=len, r6=sum, r7=src_err, r8=dst_err)
-+ * csum_partial_copy_generic(r3=src, r4=dst, r5=len)
-  */
- _GLOBAL(csum_partial_copy_generic)
-+	li	r6,-1
- 	addic	r0,r6,0			/* clear carry */
- 
- 	srdi.	r6,r5,3			/* less than 8 bytes? */
-@@ -401,29 +400,15 @@ dstnr;	stb	r6,0(r4)
- 	srdi	r3,r3,32
- 	blr
- 
--.Lsrc_error:
-+.Lerror:
- 	ld	r14,STK_REG(R14)(r1)
- 	ld	r15,STK_REG(R15)(r1)
- 	ld	r16,STK_REG(R16)(r1)
- 	addi	r1,r1,STACKFRAMESIZE
--.Lsrc_error_nr:
--	cmpdi	0,r7,0
--	beqlr
--	li	r6,-EFAULT
--	stw	r6,0(r7)
-+.Lerror_nr:
-+	li	r3,0
- 	blr
- 
--.Ldest_error:
--	ld	r14,STK_REG(R14)(r1)
--	ld	r15,STK_REG(R15)(r1)
--	ld	r16,STK_REG(R16)(r1)
--	addi	r1,r1,STACKFRAMESIZE
--.Ldest_error_nr:
--	cmpdi	0,r8,0
--	beqlr
--	li	r6,-EFAULT
--	stw	r6,0(r8)
--	blr
- EXPORT_SYMBOL(csum_partial_copy_generic)
- 
- /*
-diff --git a/arch/powerpc/lib/checksum_wrappers.c b/arch/powerpc/lib/checksum_wrappers.c
-index b1faa82dd8af..b895166afc82 100644
---- a/arch/powerpc/lib/checksum_wrappers.c
-+++ b/arch/powerpc/lib/checksum_wrappers.c
-@@ -14,8 +14,7 @@
- __wsum csum_and_copy_from_user(const void __user *src, void *dst,
- 			       int len)
- {
--	unsigned int csum;
--	int err = 0;
-+	__wsum csum;
- 
- 	might_sleep();
- 
-@@ -24,27 +23,16 @@ __wsum csum_and_copy_from_user(const void __user *src, void *dst,
- 
- 	allow_read_from_user(src, len);
- 
--	csum = csum_partial_copy_generic((void __force *)src, dst,
--					 len, ~0U, &err, NULL);
--
--	if (unlikely(err)) {
--		int missing = __copy_from_user(dst, src, len);
--
--		if (missing)
--			csum = 0;
--		else
--			csum = csum_partial(dst, len, ~0U);
--	}
-+	csum = csum_partial_copy_generic((void __force *)src, dst, len);
- 
- 	prevent_read_from_user(src, len);
--	return (__force __wsum)csum;
-+	return csum;
- }
- EXPORT_SYMBOL(csum_and_copy_from_user);
- 
- __wsum csum_and_copy_to_user(const void *src, void __user *dst, int len)
- {
--	unsigned int csum;
--	int err = 0;
-+	__wsum csum;
- 
- 	might_sleep();
- 	if (unlikely(!access_ok(dst, len)))
-@@ -52,17 +40,9 @@ __wsum csum_and_copy_to_user(const void *src, void __user *dst, int len)
- 
- 	allow_write_to_user(dst, len);
- 
--	csum = csum_partial_copy_generic(src, (void __force *)dst,
--					 len, ~0U, NULL, &err);
--
--	if (unlikely(err)) {
--		csum = csum_partial(src, len, ~0U);
--
--		if (copy_to_user(dst, src, len))
--			csum = 0;
--	}
-+	csum = csum_partial_copy_generic(src, (void __force *)dst, len);
- 
- 	prevent_write_to_user(dst, len);
--	return (__force __wsum)csum;
-+	return csum;
- }
- EXPORT_SYMBOL(csum_and_copy_to_user);
--- 
-2.11.0
+[*] https://lkml.kernel.org/r/20191023144848.GH329@linux.intel.com
 
+>  			return 1;
+> -
+> -		if (need_resched())
+> -			schedule();
+>  	}
+>  
+>  	return 1;
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -56,6 +56,7 @@
+>  #include <linux/sched/stat.h>
+>  #include <linux/sched/isolation.h>
+>  #include <linux/mem_encrypt.h>
+> +#include <linux/entry-kvm.h>
+>  
+>  #include <trace/events/kvm.h>
+>  
+> @@ -1585,7 +1586,7 @@ EXPORT_SYMBOL_GPL(kvm_emulate_wrmsr);
+>  bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu)
+>  {
+>  	return vcpu->mode == EXITING_GUEST_MODE || kvm_request_pending(vcpu) ||
+> -		need_resched() || signal_pending(current);
+> +		exit_to_guest_mode_work_pending();
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_vcpu_exit_request);
+>  
+> @@ -8676,15 +8677,11 @@ static int vcpu_run(struct kvm_vcpu *vcp
+>  			break;
+>  		}
+>  
+> -		if (signal_pending(current)) {
+> -			r = -EINTR;
+> -			vcpu->run->exit_reason = KVM_EXIT_INTR;
+> -			++vcpu->stat.signal_exits;
+> -			break;
+> -		}
+> -		if (need_resched()) {
+> +		if (exit_to_guest_mode_work_pending()) {
+>  			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
+> -			cond_resched();
+> +			r = exit_to_guest_mode(vcpu);
+> +			if (r)
+
+This loses the stat.signal_exits accounting.  Maybe this?
+
+			if (r) {
+				if (r == -EINTR)
+					++vcpu->stat.signal_exits;
+				return r;
+			}
+
+> +				return r;
+>  			vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
+>  		}
+>  	}
+> 
