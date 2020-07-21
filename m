@@ -2,36 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 901D0227E6C
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 13:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92F0227E35
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 13:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729827AbgGULKD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 07:10:03 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37356 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgGULIm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 07:08:42 -0400
-Message-Id: <20200721110808.780082657@linutronix.de>
+        id S1729639AbgGULIo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 07:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729633AbgGULIn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 07:08:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9CDC061794;
+        Tue, 21 Jul 2020 04:08:42 -0700 (PDT)
+Message-Id: <20200721110808.889765456@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595329720;
+        s=2020; t=1595329721;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=kg3tYFw5AM7077WcbqjxPP5BJjGJU17MR3Uz7axOyXw=;
-        b=c4ItvpAD+jEAYDMaM8CvqGjpJ1kou8wkrO27IgPLluOEIgovJSyG3dnU/nguKm9fO1b74i
-        76mQrxgHi21/SsHwsSBKD06bypEgprDn6xBaF7nbidbbw8H95PT6WLPA7YD0B64Ynhmc6n
-        wfBvbhefw+2QsPuVbWAwoqVGKCRk3G7Urnl7toyk9FbqQB/7dag+vacFOYKfmEBPAyw8SL
-        8DXwkzaVbd56CCueM/+EmDfUs3nlcqTOvB8SjNtWCpPUEHYpnBkZp1BDEu8glvLVvwDQFA
-        BcvgXDfs6Q4DXOmZQyt6Fi7QLxoG3Q5m6p4L7n5l7dLBx+QztyNLc/poClOI9g==
+        bh=BIblg0GvIzHOdzEAdRS9LO1K9FW06VcbJ687eytc7nU=;
+        b=WtJsFn/6dUUDuHDoecrwXQUtqkqhjMdJt72qtYarcr6RrHzROukeGf56reCuQQUE1qAm/R
+        iOfEKnTMnO8WV+ekQExCJt8SWQcMPG3Ztvq6kQIgb7dJUjPUNoP6cqHV27LdVkh7Q6enH8
+        IdWWrxNeeIO/JePmWzLla1i622X6/kXroHhELIc1qSRyzcZhBvqgIjN/BLzi3hq9giI4vn
+        JnzSf4uHIA0dwkSSKxtQO5TmImunYfIsRyIK96uIM9h10w7LGwIVqlQKey0jVHTMLbE8gO
+        QPt/X98kym1uNBca8d7KvF82vi07sXklxu9ewHSfA3I5yKy/kbUGs4R+kVwasQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595329720;
+        s=2020e; t=1595329721;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=kg3tYFw5AM7077WcbqjxPP5BJjGJU17MR3Uz7axOyXw=;
-        b=nRUVF8BtNSGJLxY3HfxEYfqnSovH+ZlRJHtiSBqiUckM7+qxmvdGCaYJYabrjan0pEOHA4
-        9niox1G8UtV4CSAQ==
-Date:   Tue, 21 Jul 2020 12:57:11 +0200
+        bh=BIblg0GvIzHOdzEAdRS9LO1K9FW06VcbJ687eytc7nU=;
+        b=ir8573MpWDS0nQj1ym4ooLH2eTMBO6h1epOla8UuGn2MB9fOkdGbmaTAoL9VqDjcTxD+9J
+        Urp2Agv2nHHDSNCg==
+Date:   Tue, 21 Jul 2020 12:57:12 +0200
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
@@ -41,8 +44,7 @@ Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
         Keno Fischer <keno@juliacomputing.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: [patch V4 05/15] entry: Provide infrastructure for work before
- exiting to guest mode
+Subject: [patch V4 06/15] x86/entry: Consolidate check_user_regs()
 References: <20200721105706.030914876@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,214 +56,100 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Entering a guest is similar to exiting to user space. Pending work like
-handling signals, rescheduling, task work etc. needs to be handled before
-that.
-
-Provide generic infrastructure to avoid duplication of the same handling
-code all over the place.
-
-The exit to guest mode handling is different from the exit to usermode
-handling, e.g. vs. rseq and live patching, so a separate function is used.
-
-The initial list of work items handled is:
-
-    TIF_SIGPENDING, TIF_NEED_RESCHED, TIF_NOTIFY_RESUME
-
-Architecture specific TIF flags can be added via defines in the
-architecture specific include files.
-
-The calling convention is also different from the syscall/interrupt entry
-functions as KVM invokes this from the outer vcpu_run() loop with
-interrupts and preemption disabled. To prevent missing a pending work item
-it invokes a check for pending TIF work from interrupt disabled code right
-before exiting to guest mode. The lockdep, RCU and tracing state handling
-is also done directly around the switch to and from guest mode.
+The user register sanity check is sprinkled all over the place. Move it
+into enter_from_user_mode().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
-V3: Reworked and simplified version adopted to recent X86 and KVM changes
-    
-V2: Moved KVM specific functions to kvm (Paolo)
-    Added lockdep assert (Andy)
-    Dropped live patching from enter guest mode work (Miroslav)
----
- include/linux/entry-kvm.h |   80 ++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/kvm_host.h  |    8 ++++
- kernel/entry/Makefile     |    3 +
- kernel/entry/kvm.c        |   51 +++++++++++++++++++++++++++++
- virt/kvm/Kconfig          |    3 +
- 5 files changed, 144 insertions(+), 1 deletion(-)
+ arch/x86/entry/common.c |   24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
---- /dev/null
-+++ b/include/linux/entry-kvm.h
-@@ -0,0 +1,80 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __LINUX_ENTRYKVM_H
-+#define __LINUX_ENTRYKVM_H
-+
-+#include <linux/entry-common.h>
-+
-+/* Exit to guest mode work */
-+#ifdef CONFIG_KVM_EXIT_TO_GUEST_WORK
-+
-+#ifndef ARCH_EXIT_TO_GUEST_MODE_WORK
-+# define ARCH_EXIT_TO_GUEST_MODE_WORK	(0)
-+#endif
-+
-+#define EXIT_TO_GUEST_MODE_WORK					\
-+	(_TIF_NEED_RESCHED | _TIF_SIGPENDING |			\
-+	 _TIF_NOTIFY_RESUME | ARCH_EXIT_TO_GUEST_MODE_WORK)
-+
-+struct kvm_vcpu;
-+
-+/**
-+ * arch_exit_to_guest_mode_work - Architecture specific exit to guest mode
-+ *				  work function.
-+ * @vcpu:	Pointer to current's VCPU data
-+ * @ti_work:	Cached TIF flags gathered in exit_to_guest_mode()
-+ *
-+ * Invoked from exit_to_guest_mode_work(). Defaults to NOOP. Can be
-+ * replaced by architecture specific code.
-+ */
-+static inline int arch_exit_to_guest_mode_work(struct kvm_vcpu *vcpu,
-+					      unsigned long ti_work);
-+
-+#ifndef arch_exit_to_guest_mode_work
-+static inline int arch_exit_to_guest_mode_work(struct kvm_vcpu *vcpu,
-+					       unsigned long ti_work)
-+{
-+	return 0;
-+}
-+#endif
-+
-+/**
-+ * exit_to_guest_mode - Check and handle pending work which needs to be
-+ *			handled before returning to guest mode
-+ * @vcpu:	Pointer to current's VCPU data
-+ *
-+ * Returns: 0 or an error code
-+ */
-+int exit_to_guest_mode(struct kvm_vcpu *vcpu);
-+
-+/**
-+ * __exit_to_guest_mode_work_pending - Check if work is pending
-+ *
-+ * Returns: True if work pending, False otherwise.
-+ *
-+ * Bare variant of exit_to_guest_mode_work_pending(). Can be called from
-+ * interrupt enabled code for racy quick checks with care.
-+ */
-+static inline bool __exit_to_guest_mode_work_pending(void)
-+{
-+	unsigned long ti_work = READ_ONCE(current_thread_info()->flags);
-+
-+	return !!(ti_work & EXIT_TO_GUEST_MODE_WORK);
-+}
-+
-+/**
-+ * exit_to_guest_mode_work_pending - Check if work is pending which needs to be
-+ *				     handled before returning to guest mode
-+ *
-+ * Returns: True if work pending, False otherwise.
-+ *
-+ * Has to be invoked with interrupts disabled before the transition to
-+ * guest mode.
-+ */
-+static inline bool exit_to_guest_mode_work_pending(void)
-+{
-+	lockdep_assert_irqs_disabled();
-+	return __exit_to_guest_mode_work_pending();
-+}
-+#endif /* CONFIG_KVM_EXIT_TO_GUEST_WORK */
-+
-+#endif
-
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1439,4 +1439,12 @@ int kvm_vm_create_worker_thread(struct k
- 				uintptr_t data, const char *name,
- 				struct task_struct **thread_ptr);
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -82,10 +82,11 @@ static noinstr void check_user_regs(stru
+  * 2) Invoke context tracking if enabled to reactivate RCU
+  * 3) Trace interrupts off state
+  */
+-static noinstr void enter_from_user_mode(void)
++static noinstr void enter_from_user_mode(struct pt_regs *regs)
+ {
+ 	enum ctx_state state = ct_state();
  
-+#ifdef CONFIG_KVM_EXIT_TO_GUEST_WORK
-+static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
-+{
-+	vcpu->run->exit_reason = KVM_EXIT_INTR;
-+	vcpu->stat.signal_exits++;
-+}
-+#endif /* CONFIG_KVM_EXIT_TO_GUEST_WORK */
-+
- #endif
---- a/kernel/entry/Makefile
-+++ b/kernel/entry/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
++	check_user_regs(regs);
+ 	lockdep_hardirqs_off(CALLER_ADDR0);
+ 	user_exit_irqoff();
  
--obj-$(CONFIG_GENERIC_ENTRY) += common.o
-+obj-$(CONFIG_GENERIC_ENTRY) 		+= common.o
-+obj-$(CONFIG_KVM_EXIT_TO_GUEST_WORK)	+= kvm.o
---- /dev/null
-+++ b/kernel/entry/kvm.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/entry-kvm.h>
-+#include <linux/kvm_host.h>
-+
-+static int exit_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
-+{
-+	do {
-+		int ret;
-+
-+		if (ti_work & _TIF_SIGPENDING) {
-+			kvm_handle_signal_exit(vcpu);
-+			return -EINTR;
-+		}
-+
-+		if (ti_work & _TIF_NEED_RESCHED)
-+			schedule();
-+
-+		if (ti_work & _TIF_NOTIFY_RESUME) {
-+			clear_thread_flag(TIF_NOTIFY_RESUME);
-+			tracehook_notify_resume(NULL);
-+		}
-+
-+		ret = arch_exit_to_guest_mode_work(vcpu, ti_work);
-+		if (ret)
-+			return ret;
-+
-+		ti_work = READ_ONCE(current_thread_info()->flags);
-+	} while (ti_work & EXIT_TO_GUEST_MODE_WORK || need_resched());
-+	return 0;
-+}
-+
-+int exit_to_guest_mode(struct kvm_vcpu *vcpu)
-+{
-+	unsigned long ti_work;
-+
-+	/*
-+	 * This is invoked from the outer guest loop with interrupts and
-+	 * preemption enabled.
-+	 *
-+	 * KVM invokes exit_to_guest_mode_work_pending() with interrupts
-+	 * disabled in the inner loop before going into guest mode. No need
-+	 * to disable interrupts here.
-+	 */
-+	ti_work = READ_ONCE(current_thread_info()->flags);
-+	if (!(ti_work & EXIT_TO_GUEST_MODE_WORK))
-+		return 0;
-+
-+	return exit_to_guest_mode_work(vcpu, ti_work);
-+}
-+EXPORT_SYMBOL_GPL(exit_to_guest_mode);
---- a/virt/kvm/Kconfig
-+++ b/virt/kvm/Kconfig
-@@ -60,3 +60,6 @@ config HAVE_KVM_VCPU_RUN_PID_CHANGE
+@@ -95,8 +96,9 @@ static noinstr void enter_from_user_mode
+ 	instrumentation_end();
+ }
+ #else
+-static __always_inline void enter_from_user_mode(void)
++static __always_inline void enter_from_user_mode(struct pt_regs *regs)
+ {
++	check_user_regs(regs);
+ 	lockdep_hardirqs_off(CALLER_ADDR0);
+ 	instrumentation_begin();
+ 	trace_hardirqs_off_finish();
+@@ -369,9 +371,7 @@ static void __syscall_return_slowpath(st
+ {
+ 	struct thread_info *ti;
  
- config HAVE_KVM_NO_POLL
-        bool
-+
-+config KVM_EXIT_TO_GUEST_WORK
-+       bool
+-	check_user_regs(regs);
+-
+-	enter_from_user_mode();
++	enter_from_user_mode(regs);
+ 	instrumentation_begin();
+ 
+ 	local_irq_enable();
+@@ -434,9 +434,7 @@ static void do_syscall_32_irqs_on(struct
+ /* Handles int $0x80 */
+ __visible noinstr void do_int80_syscall_32(struct pt_regs *regs)
+ {
+-	check_user_regs(regs);
+-
+-	enter_from_user_mode();
++	enter_from_user_mode(regs);
+ 	instrumentation_begin();
+ 
+ 	local_irq_enable();
+@@ -487,8 +485,6 @@ static bool __do_fast_syscall_32(struct
+ 					vdso_image_32.sym_int80_landing_pad;
+ 	bool success;
+ 
+-	check_user_regs(regs);
+-
+ 	/*
+ 	 * SYSENTER loses EIP, and even SYSCALL32 needs us to skip forward
+ 	 * so that 'regs->ip -= 2' lands back on an int $0x80 instruction.
+@@ -496,7 +492,7 @@ static bool __do_fast_syscall_32(struct
+ 	 */
+ 	regs->ip = landing_pad;
+ 
+-	enter_from_user_mode();
++	enter_from_user_mode(regs);
+ 	instrumentation_begin();
+ 
+ 	local_irq_enable();
+@@ -599,8 +595,7 @@ idtentry_state_t noinstr idtentry_enter(
+ 	};
+ 
+ 	if (user_mode(regs)) {
+-		check_user_regs(regs);
+-		enter_from_user_mode();
++		enter_from_user_mode(regs);
+ 		return ret;
+ 	}
+ 
+@@ -733,8 +728,7 @@ void noinstr idtentry_exit(struct pt_reg
+  */
+ void noinstr idtentry_enter_user(struct pt_regs *regs)
+ {
+-	check_user_regs(regs);
+-	enter_from_user_mode();
++	enter_from_user_mode(regs);
+ }
+ 
+ /**
 
 
