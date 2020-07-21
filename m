@@ -2,39 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D92F0227E35
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 13:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C034C227E68
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 13:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729639AbgGULIo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 07:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S1729648AbgGULJ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 07:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729633AbgGULIn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 07:08:43 -0400
+        with ESMTP id S1729646AbgGULIo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 07:08:44 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9CDC061794;
-        Tue, 21 Jul 2020 04:08:42 -0700 (PDT)
-Message-Id: <20200721110808.889765456@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A15C061794;
+        Tue, 21 Jul 2020 04:08:44 -0700 (PDT)
+Message-Id: <20200721110808.999191026@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595329721;
+        s=2020; t=1595329722;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=BIblg0GvIzHOdzEAdRS9LO1K9FW06VcbJ687eytc7nU=;
-        b=WtJsFn/6dUUDuHDoecrwXQUtqkqhjMdJt72qtYarcr6RrHzROukeGf56reCuQQUE1qAm/R
-        iOfEKnTMnO8WV+ekQExCJt8SWQcMPG3Ztvq6kQIgb7dJUjPUNoP6cqHV27LdVkh7Q6enH8
-        IdWWrxNeeIO/JePmWzLla1i622X6/kXroHhELIc1qSRyzcZhBvqgIjN/BLzi3hq9giI4vn
-        JnzSf4uHIA0dwkSSKxtQO5TmImunYfIsRyIK96uIM9h10w7LGwIVqlQKey0jVHTMLbE8gO
-        QPt/X98kym1uNBca8d7KvF82vi07sXklxu9ewHSfA3I5yKy/kbUGs4R+kVwasQ==
+        bh=CzTMYZJ8u4jqJ98Hb7xf395PUKYKXs/C3yjBA+A3za8=;
+        b=v3kbdKO52bmQ52DyV4sT4V2NGxaLtMP74YyMZWeyLo/1WrzarmdjRumDCXad8hymUng1fq
+        KdtJCLG4w3pl7+j+/FzVCYkIA8NbnygjFIKMJkKnX1G94NQhsQb7os5rNxzszNlGWLIfMA
+        A6Po9FbUCVocA28vkxLI7wPnWwv+LAhAUQDbPe38mxCpaqqQlM/4q3l0z3nOev+fXzgESG
+        4D64fEApWu8uwEkWeW1D9Jiu2zglF86hujgv3yKtcMrqpiFV7KPN/BR8+/mc/7a/j+cMFf
+        lj+EMn3mwvHDArlIBB7lOtDRJM/VrTVLGCwM4sdyZFCp5vLCSwwuEpYcGGUlPA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595329721;
+        s=2020e; t=1595329722;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=BIblg0GvIzHOdzEAdRS9LO1K9FW06VcbJ687eytc7nU=;
-        b=ir8573MpWDS0nQj1ym4ooLH2eTMBO6h1epOla8UuGn2MB9fOkdGbmaTAoL9VqDjcTxD+9J
-        Urp2Agv2nHHDSNCg==
-Date:   Tue, 21 Jul 2020 12:57:12 +0200
+        bh=CzTMYZJ8u4jqJ98Hb7xf395PUKYKXs/C3yjBA+A3za8=;
+        b=5ZhysItuKAEW3tz6fno7bTKfFwKLv7WHre6oEQm7aZb3B2lzuWYrhPkBbwKXpqDrVIrWPs
+        gc3E1bIaemzlDaAA==
+Date:   Tue, 21 Jul 2020 12:57:13 +0200
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
@@ -44,7 +44,7 @@ Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
         Keno Fischer <keno@juliacomputing.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: [patch V4 06/15] x86/entry: Consolidate check_user_regs()
+Subject: [patch V4 07/15] x86/entry: Consolidate 32/64 bit syscall entry
 References: <20200721105706.030914876@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,100 +56,183 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-The user register sanity check is sprinkled all over the place. Move it
-into enter_from_user_mode().
+64bit and 32bit entry code have the same open coded syscall entry handling
+after the bitwidth specific bits.
+
+Move it to a helper function and share the code.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/entry/common.c |   24 +++++++++---------------
- 1 file changed, 9 insertions(+), 15 deletions(-)
+ arch/x86/entry/common.c |   93 +++++++++++++++++++++---------------------------
+ 1 file changed, 41 insertions(+), 52 deletions(-)
 
 --- a/arch/x86/entry/common.c
 +++ b/arch/x86/entry/common.c
-@@ -82,10 +82,11 @@ static noinstr void check_user_regs(stru
-  * 2) Invoke context tracking if enabled to reactivate RCU
-  * 3) Trace interrupts off state
-  */
--static noinstr void enter_from_user_mode(void)
-+static noinstr void enter_from_user_mode(struct pt_regs *regs)
- {
- 	enum ctx_state state = ct_state();
- 
-+	check_user_regs(regs);
- 	lockdep_hardirqs_off(CALLER_ADDR0);
- 	user_exit_irqoff();
- 
-@@ -95,8 +96,9 @@ static noinstr void enter_from_user_mode
- 	instrumentation_end();
+@@ -366,8 +366,7 @@ static void __syscall_return_slowpath(st
+ 	exit_to_user_mode();
  }
- #else
--static __always_inline void enter_from_user_mode(void)
-+static __always_inline void enter_from_user_mode(struct pt_regs *regs)
- {
-+	check_user_regs(regs);
- 	lockdep_hardirqs_off(CALLER_ADDR0);
- 	instrumentation_begin();
- 	trace_hardirqs_off_finish();
-@@ -369,9 +371,7 @@ static void __syscall_return_slowpath(st
+ 
+-#ifdef CONFIG_X86_64
+-__visible noinstr void do_syscall_64(unsigned long nr, struct pt_regs *regs)
++static noinstr long syscall_enter(struct pt_regs *regs, unsigned long nr)
  {
  	struct thread_info *ti;
  
--	check_user_regs(regs);
--
--	enter_from_user_mode();
-+	enter_from_user_mode(regs);
- 	instrumentation_begin();
+@@ -379,6 +378,16 @@ static void __syscall_return_slowpath(st
+ 	if (READ_ONCE(ti->flags) & _TIF_WORK_SYSCALL_ENTRY)
+ 		nr = syscall_trace_enter(regs);
  
- 	local_irq_enable();
-@@ -434,9 +434,7 @@ static void do_syscall_32_irqs_on(struct
++	instrumentation_end();
++	return nr;
++}
++
++#ifdef CONFIG_X86_64
++__visible noinstr void do_syscall_64(unsigned long nr, struct pt_regs *regs)
++{
++	nr = syscall_enter(regs, nr);
++
++	instrumentation_begin();
+ 	if (likely(nr < NR_syscalls)) {
+ 		nr = array_index_nospec(nr, NR_syscalls);
+ 		regs->ax = sys_call_table[nr](regs);
+@@ -390,64 +399,53 @@ static void __syscall_return_slowpath(st
+ 		regs->ax = x32_sys_call_table[nr](regs);
+ #endif
+ 	}
+-	__syscall_return_slowpath(regs);
+-
+ 	instrumentation_end();
+-	exit_to_user_mode();
++	syscall_return_slowpath(regs);
+ }
+ #endif
+ 
+ #if defined(CONFIG_X86_32) || defined(CONFIG_IA32_EMULATION)
++static __always_inline unsigned int syscall_32_enter(struct pt_regs *regs)
++{
++	if (IS_ENABLED(CONFIG_IA32_EMULATION))
++		current_thread_info()->status |= TS_COMPAT;
++	/*
++	 * Subtlety here: if ptrace pokes something larger than 2^32-1 into
++	 * orig_ax, the unsigned int return value truncates it.  This may
++	 * or may not be necessary, but it matches the old asm behavior.
++	 */
++	return syscall_enter(regs, (unsigned int)regs->orig_ax);
++}
++
+ /*
+- * Does a 32-bit syscall.  Called with IRQs on in CONTEXT_KERNEL.  Does
+- * all entry and exit work and returns with IRQs off.  This function is
+- * extremely hot in workloads that use it, and it's usually called from
+- * do_fast_syscall_32, so forcibly inline it to improve performance.
++ * Invoke a 32-bit syscall.  Called with IRQs on in CONTEXT_KERNEL.
+  */
+-static void do_syscall_32_irqs_on(struct pt_regs *regs)
++static __always_inline void do_syscall_32_irqs_on(struct pt_regs *regs,
++						  unsigned int nr)
+ {
+-	struct thread_info *ti = current_thread_info();
+-	unsigned int nr = (unsigned int)regs->orig_ax;
+-
+-#ifdef CONFIG_IA32_EMULATION
+-	ti->status |= TS_COMPAT;
+-#endif
+-
+-	if (READ_ONCE(ti->flags) & _TIF_WORK_SYSCALL_ENTRY) {
+-		/*
+-		 * Subtlety here: if ptrace pokes something larger than
+-		 * 2^32-1 into orig_ax, this truncates it.  This may or
+-		 * may not be necessary, but it matches the old asm
+-		 * behavior.
+-		 */
+-		nr = syscall_trace_enter(regs);
+-	}
+-
+ 	if (likely(nr < IA32_NR_syscalls)) {
++		instrumentation_begin();
+ 		nr = array_index_nospec(nr, IA32_NR_syscalls);
+ 		regs->ax = ia32_sys_call_table[nr](regs);
++		instrumentation_end();
+ 	}
+-
+-	__syscall_return_slowpath(regs);
+ }
+ 
  /* Handles int $0x80 */
  __visible noinstr void do_int80_syscall_32(struct pt_regs *regs)
  {
--	check_user_regs(regs);
+-	enter_from_user_mode(regs);
+-	instrumentation_begin();
 -
--	enter_from_user_mode();
-+	enter_from_user_mode(regs);
- 	instrumentation_begin();
+-	local_irq_enable();
+-	do_syscall_32_irqs_on(regs);
++	unsigned int nr = syscall_32_enter(regs);
  
- 	local_irq_enable();
-@@ -487,8 +485,6 @@ static bool __do_fast_syscall_32(struct
+-	instrumentation_end();
+-	exit_to_user_mode();
++	do_syscall_32_irqs_on(regs, nr);
++	syscall_return_slowpath(regs);
+ }
+ 
+-static bool __do_fast_syscall_32(struct pt_regs *regs)
++static noinstr bool __do_fast_syscall_32(struct pt_regs *regs)
+ {
++	unsigned int nr	= syscall_32_enter(regs);
+ 	int res;
+ 
++	instrumentation_begin();
+ 	/* Fetch EBP from where the vDSO stashed it. */
+ 	if (IS_ENABLED(CONFIG_X86_64)) {
+ 		/*
+@@ -460,17 +458,18 @@ static bool __do_fast_syscall_32(struct
+ 		res = get_user(*(u32 *)&regs->bp,
+ 		       (u32 __user __force *)(unsigned long)(u32)regs->sp);
+ 	}
++	instrumentation_end();
+ 
+ 	if (res) {
+ 		/* User code screwed up. */
+ 		regs->ax = -EFAULT;
+-		local_irq_disable();
+-		__prepare_exit_to_usermode(regs);
++		syscall_return_slowpath(regs);
+ 		return false;
+ 	}
+ 
+ 	/* Now this is just like a normal syscall. */
+-	do_syscall_32_irqs_on(regs);
++	do_syscall_32_irqs_on(regs, nr);
++	syscall_return_slowpath(regs);
+ 	return true;
+ }
+ 
+@@ -483,7 +482,6 @@ static bool __do_fast_syscall_32(struct
+ 	 */
+ 	unsigned long landing_pad = (unsigned long)current->mm->context.vdso +
  					vdso_image_32.sym_int80_landing_pad;
- 	bool success;
+-	bool success;
  
--	check_user_regs(regs);
--
  	/*
  	 * SYSENTER loses EIP, and even SYSCALL32 needs us to skip forward
- 	 * so that 'regs->ip -= 2' lands back on an int $0x80 instruction.
-@@ -496,7 +492,7 @@ static bool __do_fast_syscall_32(struct
+@@ -492,17 +490,8 @@ static bool __do_fast_syscall_32(struct
  	 */
  	regs->ip = landing_pad;
  
--	enter_from_user_mode();
-+	enter_from_user_mode(regs);
- 	instrumentation_begin();
+-	enter_from_user_mode(regs);
+-	instrumentation_begin();
+-
+-	local_irq_enable();
+-	success = __do_fast_syscall_32(regs);
+-
+-	instrumentation_end();
+-	exit_to_user_mode();
+-
+-	/* If it failed, keep it simple: use IRET. */
+-	if (!success)
++	/* Invoke the syscall. If it failed, keep it simple: use IRET. */
++	if (!__do_fast_syscall_32(regs))
+ 		return 0;
  
- 	local_irq_enable();
-@@ -599,8 +595,7 @@ idtentry_state_t noinstr idtentry_enter(
- 	};
- 
- 	if (user_mode(regs)) {
--		check_user_regs(regs);
--		enter_from_user_mode();
-+		enter_from_user_mode(regs);
- 		return ret;
- 	}
- 
-@@ -733,8 +728,7 @@ void noinstr idtentry_exit(struct pt_reg
-  */
- void noinstr idtentry_enter_user(struct pt_regs *regs)
- {
--	check_user_regs(regs);
--	enter_from_user_mode();
-+	enter_from_user_mode(regs);
- }
- 
- /**
+ #ifdef CONFIG_X86_64
 
 
