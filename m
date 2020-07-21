@@ -2,101 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBBA228AFE
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 23:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E447D228B06
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 23:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731197AbgGUVSx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 17:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S1731187AbgGUVVM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 17:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730488AbgGUVSw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 17:18:52 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA12C061794
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:18:52 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id l6so10792289plt.7
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:18:52 -0700 (PDT)
+        with ESMTP id S1731143AbgGUVVL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 17:21:11 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59494C061794
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:21:11 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id x72so60226pfc.6
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:21:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=oZ+JoLZ43wxde/v2pWNQdBZEy1k9AMtxsdeltF18Z30=;
-        b=fOZplhzkfQjlmMs+fOOuHWAQH5KetgWFj/VhzU6eSu8vpND0m0V1TjB7faHy1uVoIa
-         sZC4ttKuAEfqwYAq8Iu35cFDDvzYO2gjOwmE/6e8Ntj3StOFb5lCeFP9XVDQn4B8x528
-         /Pwo508mh8yuA8uMG1/YVxp+HL2r0nOycSxXQ=
+        bh=Wo2KSkt2uKsTjaxUKUx/AXgKzZQLVgE9fv7oC1pgM9U=;
+        b=fxicQTWxrU2WqFRihd/VZT/MbC0QG/JVXizq/OhLoM/dTFzG3ztptOTItob3McBPXl
+         s/8rfUZi4yvPRDPzB4x1DM25Qk+bOwKx9ZxSOBscZuk4ExZ2eBtnhHe9rpBAjbWdJNu3
+         j1RWLpTE+MfqYyimAtHkTaWYpckroafRcSc40=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=oZ+JoLZ43wxde/v2pWNQdBZEy1k9AMtxsdeltF18Z30=;
-        b=G9TEeFOlJx1S9M1Pp6wPD0Uzt01OrWm4Bun+sNIWHXI6q0lLnsgiHAmN9a4DreldAp
-         waMU5uvQVo2bZzJrVkVPMs+JGz1+Uuw+w7zJ6OzbpQ4mBTq8SEDGShWOumKaa+YjFbLP
-         US7gPHehAvn8K2FMjbCh1b33XRIDkTYsM2d+6WEHfU8z9UgI6g+5y4VUI5TmwgN6yqYA
-         WBmYzmGZsIdvX2Tdlz1JDhHj6viSu4s6fk+MnqtdUZJfedjSFXfsrY31mCtzAE2bCEPt
-         jLtCnqFzUHtsb7gh5lQhBUABDedJ3HTyxWBzYFW00Z6E8zaeXMsQbUvR6m+YI3QBvuQW
-         gSxg==
-X-Gm-Message-State: AOAM533jCeap7wnB9qy0u4Ns/+WNpAv+l+cm+TLqkisaVckBST8LRIMP
-        gCuis2wGwuXt5Qhx4M93kGOcYg==
-X-Google-Smtp-Source: ABdhPJz5PFwUqQLM2s2i11W2OpAjR8V3PUupz65U68wR4YNmFEEFoBSMVi6o9VV+D61gFDTdZgWxIQ==
-X-Received: by 2002:a17:90a:70cd:: with SMTP id a13mr6768113pjm.89.1595366331967;
-        Tue, 21 Jul 2020 14:18:51 -0700 (PDT)
+        bh=Wo2KSkt2uKsTjaxUKUx/AXgKzZQLVgE9fv7oC1pgM9U=;
+        b=LndOPUcJNs3o0bdOax5N8acDf5LENmesMugeKI36iCCp+CZ2ztInsTcLZQGESC/ByW
+         k3Rgqaa162DudSqIMWHWhA4HsOi6lLBinEPoRXmtAwbEZUdcKgr5MZ7XmLibMf9X97z4
+         Q956XgNrsfKlY8bW4PHV5pivnPZD/htKmnXPS8nh7XL2qFOjT4TFnH+/24G7sOn5NDJE
+         8cD2PNHK4imnAMzdkDBa0uDNgQHoL43QcpKvsl/3+qsggWQ35x2znPaPk1UY1db6V389
+         YwjjCWccHtfRYHoqwhzNOdL+nXEi20j68BX5ZgPjQu0seNl2bjjox+7LwaFP0z/Hc1Rc
+         zruQ==
+X-Gm-Message-State: AOAM532GE6XThxm48FAbjslkQpAVNnYLZ8/0/qHqvevlQd/yhY/+XyyT
+        V3xDI+4ap0zX2rCqHHKbz0n44A==
+X-Google-Smtp-Source: ABdhPJxDDnyEVXIY4rLb+RsPBAy4yKWxQVpSGTnpY8gFur3vVyP2p27baBMA8SghPFnQbtOFo9/T2w==
+X-Received: by 2002:a62:6305:: with SMTP id x5mr26195638pfb.81.1595366470930;
+        Tue, 21 Jul 2020 14:21:10 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c71sm4448104pje.32.2020.07.21.14.18.50
+        by smtp.gmail.com with ESMTPSA id 66sm21380770pfg.63.2020.07.21.14.21.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 14:18:51 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 14:18:50 -0700
+        Tue, 21 Jul 2020 14:21:10 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 14:21:09 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org, hpa@zytor.com,
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Bob Haarman <inglorion@google.com>, hjl.tools@gmail.com,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] x86, vmlinux.lds: Page-Align end of ..page_aligned
- sections
-Message-ID: <202007211416.1A2B618DE@keescook>
-References: <202007211143.AC36D096@keescook>
- <87r1t43a8e.fsf@nanos.tec.linutronix.de>
+        Mark Rutland <mark.rutland@arm.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>
+Subject: Re: [patch V4 01/15] seccomp: Provide stub for __secure_computing()
+Message-ID: <202007211421.FE862FEE@keescook>
+References: <20200721105706.030914876@linutronix.de>
+ <20200721110808.348199175@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87r1t43a8e.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <20200721110808.348199175@linutronix.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 10:05:05PM +0200, Thomas Gleixner wrote:
-> Kees,
+On Tue, Jul 21, 2020 at 12:57:07PM +0200, Thomas Gleixner wrote:
+> To avoid #ifdeffery in the upcoming generic syscall entry work code provide
+> a stub for __secure_computing() as this is preferred over
+> secure_computing() because the TIF flag is already evaluated.
 > 
-> Kees Cook <keescook@chromium.org> writes:
-> > On Tue, Jul 21, 2020 at 11:34:48AM +0200, Joerg Roedel wrote:
-> >> From: Joerg Roedel <jroedel@suse.de>
-> >> 
-> >> Align the end of the .bss..page_aligned and .data..page_aligned section
-> >> on page-size too. Otherwise the linker might place other objects on the
-> >> page of the last ..page_aligned object. This is inconsistent with other
-> >> objects in those sections, which all have their own page.
-> >
-> > What problem was actually encountered? (i.e. why is it a problem for the
-> > other data to be in the page of the page-aligned data? shouldn't those
-> > data have their own, separate, alignment hint?)
-> 
-> See: lore.kernel.org/r/87sgdmm8u4.fsf@nanos.tec.linutronix.de
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Ah-ha: "But with explicit sections which store only page aligned objects
-there is an implicit guarantee that the object is alone in the page
-in which it is placed. That works for all objects except the last
-one. That's inconsistent."
-
-Understood now. The bit in this commit log for "which all have their own
-page" wasn't clear to me about _why_ (it was coming from .page_aligned,
-which means both aligned and dedicated).
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
