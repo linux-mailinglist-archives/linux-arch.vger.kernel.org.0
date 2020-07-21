@@ -2,107 +2,194 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EBF228217
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 16:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04753228232
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 16:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728700AbgGUO1D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 10:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S1728755AbgGUOaL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 10:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbgGUO1D (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 10:27:03 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E9FC061794
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 07:27:03 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id a15so6467508wrh.10
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 07:27:03 -0700 (PDT)
+        with ESMTP id S1728600AbgGUOaK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 10:30:10 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D486C061794;
+        Tue, 21 Jul 2020 07:30:10 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 184so3119012wmb.0;
+        Tue, 21 Jul 2020 07:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kvJLCEgw2Y91sCTQ6JSG1TMyYmzQtuSE0ssBK5vqs5A=;
-        b=Tn+r0hMiMyEfGIJmZgmo6wJEFjb2HH6GCrM+njCb9LqnllYAU1jL/tRFHVOeISf8V0
-         cUgzOv7/XLu0fcSl8pd3MBTDTZY4dB7Vj4ztR+pUk27T4bLEaDmQjd870ztfZE0Kh12K
-         4qq1hYirQGcUBcFBjWPZSZhsCbhkLRbJfpQswZDiNdzKd7iwJfENFFapWeWcielyE7x8
-         zoi0q6a4YYf2XTduTfPeWTq3gUNdYH24cM0O/EmtkUk2u7/Fq5B8/oEPdSSJJ8E2fXK8
-         1PxAqg5uOIoTDm453qNw/rmJn2Qqgv6kUu99tXCA1QdwzumYYSbR+0M+eaovBe/b9MlF
-         cNlA==
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=NtR3vJ1N4iGqoNW7LE2c1cXPrbxowMXHvYixqbulC4A=;
+        b=BuKjOr11JAgWbiAF4Sj32zPuFLiD9iRV+uWXQboiosDmEW5UZ0xy9LEwHdcmln3L/w
+         Z4yi4/arnJ6RZmqym+O1wipOeuqgSE/gQ7NyaQhtWKSDNESyouAirTmB7XBlAZtP7cNK
+         ho/3x9QXKzM/HXaUFbrpHKEpUepG36+GVXUo1FGKXksY4ivDE6wzLClaydvaDAnvBNBa
+         0rolFj5vLpGYFwcf7tSPNgYnMfQyP74LejqxV5QPQEQ2RvpgrT0wv1m5zzFIrzoGBEc9
+         ADgk+yYBe4UqtY2SfkETXxoEfUgH1mo4et8iwb1JyQO1sj85KsMTahA3LqaBH2PWR3Mx
+         Mw+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kvJLCEgw2Y91sCTQ6JSG1TMyYmzQtuSE0ssBK5vqs5A=;
-        b=Nnvt3+Bbq2ajdeNfPJbU6o1J+M4j43TMxv3Lxe0xn2U6l0zmc57EmkKpE5SXlytNsC
-         S+W+cZzZ1zDY6sEPTJNP5/Uf7qX1zaKl3rPyDLRWhYFdsWyqriA88qJ79hysFIib8mA4
-         AhDh81RMIlSvjqlK19jJnJGZq+xyL0kQBgc6bP1qlrF/TJp6YISmliiuzuDeA9asfxX8
-         XfcV38zBOx954ZeGFIdXl1xlqeE0keTrCAZ6sC5dZCHXuzm/X75wzyb78noTiKoMOPNb
-         fRGP1ku9nzbZUEVeP9EyCXMBRBERsXB/bucaRL7ya+U4/uiV8GKUDv8NA6GtywSvwHVw
-         /LqQ==
-X-Gm-Message-State: AOAM533dSa0Qf64tNdToItZeQefjcbBF880hXMXaBqGg0El2Yh9M9K0E
-        Eo/CgaCB9Ec28T1g1AxvnGxevw==
-X-Google-Smtp-Source: ABdhPJxGzk4oR9ONcZurm+l1j9rPZGsvwGlNZG3a4Foe4DEAKpp2AmXipHtkPf+S4ADPqd9YhnTwMA==
-X-Received: by 2002:adf:dfd1:: with SMTP id q17mr25505561wrn.94.1595341620825;
-        Tue, 21 Jul 2020 07:27:00 -0700 (PDT)
-Received: from elver.google.com ([100.105.32.75])
-        by smtp.gmail.com with ESMTPSA id b18sm36258317wrs.46.2020.07.21.07.26.59
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=NtR3vJ1N4iGqoNW7LE2c1cXPrbxowMXHvYixqbulC4A=;
+        b=k59m1oN3DgqvFO51rqDL4kfhURjm+stQDUccc2B7wHtZvS5nGDSR1AVcH/0NwgAP3L
+         FMadrDQI5YxCnYkE+WQEWgLKcopQfJ1MzdMlPAQ/0YRvZyWUZLUN0FmlES+Yio5ii16h
+         yOaB/R39l5DZl9KRQ0EujWgW6GDqg5+vzR5SWkxXMkcycw6MSTzgtjAP0MH3SCT+XCN2
+         m24e1gQozwhcPkCygiWbJ+epI2B3Pe/ZrFMBJrhj8p1LMBDGQfTzTYJMawBQgotJb1ct
+         nsbv12y19lJchzXd7a9t/4uTDOKRtJ0/rgny2jHDY2SXVy+lYtERw2rEVF6/Lpjm5ZQj
+         AGaA==
+X-Gm-Message-State: AOAM531PnHvEy19GTwq3bh6l1XD6+/j9Dq66Xl8Xf549aNB3z65+YzRi
+        DFsKH80octKPv8v5ntjVJk0=
+X-Google-Smtp-Source: ABdhPJwB9fyGj6S2BjQwyEItOwht6pp2/UOFe0UgTMjlm93I+Hjufyw5bWfBW9fmR+lDu40fsypZXA==
+X-Received: by 2002:a1c:6809:: with SMTP id d9mr4291206wmc.34.1595341809069;
+        Tue, 21 Jul 2020 07:30:09 -0700 (PDT)
+Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
+        by smtp.gmail.com with ESMTPSA id a22sm3655822wmj.9.2020.07.21.07.30.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 07:27:00 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 16:26:54 +0200
-From:   Marco Elver <elver@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     paulmck@kernel.org, will@kernel.org, arnd@arndb.de,
-        mark.rutland@arm.com, dvyukov@google.com, glider@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/8] kcsan: Skew delay to be longer for certain access
- types
-Message-ID: <20200721142654.GA3396394@elver.google.com>
-References: <20200721103016.3287832-1-elver@google.com>
- <20200721103016.3287832-4-elver@google.com>
- <20200721140523.GA10769@hirez.programming.kicks-ass.net>
+        Tue, 21 Jul 2020 07:30:08 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 00:30:01 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
+References: <1594868476.6k5kvx8684.astroid@bobo.none>
+        <1594892300.mxnq3b9a77.astroid@bobo.none>
+        <20200716110038.GA119549@hirez.programming.kicks-ass.net>
+        <1594906688.ikv6r4gznx.astroid@bobo.none>
+        <1314561373.18530.1594993363050.JavaMail.zimbra@efficios.com>
+        <1595213677.kxru89dqy2.astroid@bobo.none>
+        <2055788870.20749.1595263590675.JavaMail.zimbra@efficios.com>
+        <1595324577.x3bf55tpgu.astroid@bobo.none>
+        <470490605.22057.1595337118562.JavaMail.zimbra@efficios.com>
+In-Reply-To: <470490605.22057.1595337118562.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200721140523.GA10769@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.14.4 (2020-06-18)
+Message-Id: <1595341248.r2i8fnhz28.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 04:05PM +0200, Peter Zijlstra wrote:
-> On Tue, Jul 21, 2020 at 12:30:11PM +0200, Marco Elver wrote:
-> > For compound instrumentation and assert accesses, skew the watchpoint
-> > delay to be longer. We still shouldn't exceed the maximum delays, but it
-> > is safe to skew the delay for these accesses.
-> 
-> Complete lack of actual justification.. *why* are you doing this, and
-> *why* is it safe etc..
+Excerpts from Mathieu Desnoyers's message of July 21, 2020 11:11 pm:
+> ----- On Jul 21, 2020, at 6:04 AM, Nicholas Piggin npiggin@gmail.com wrot=
+e:
+>=20
+>> Excerpts from Mathieu Desnoyers's message of July 21, 2020 2:46 am:
+> [...]
+>>=20
+>> Yeah you're probably right in this case I think. Quite likely most kerne=
+l
+>> tasks that asynchronously write to user memory would at least have some
+>> kind of producer-consumer barriers.
+>>=20
+>> But is that restriction of all async modifications documented and enforc=
+ed
+>> anywhere?
+>>=20
+>>>> How about other memory accesses via kthread_use_mm? Presumably there i=
+s
+>>>> still ordering requirement there for membarrier,
+>>>=20
+>>> Please provide an example case with memory accesses via kthread_use_mm =
+where
+>>> ordering matters to support your concern.
+>>=20
+>> I think the concern Andy raised with io_uring was less a specific
+>> problem he saw and more a general concern that we have these memory
+>> accesses which are not synchronized with membarrier.
+>>=20
+>>>> so I really think
+>>>> it's a fragile interface with no real way for the user to know how
+>>>> kernel threads may use its mm for any particular reason, so membarrier
+>>>> should synchronize all possible kernel users as well.
+>>>=20
+>>> I strongly doubt so, but perhaps something should be clarified in the
+>>> documentation
+>>> if you have that feeling.
+>>=20
+>> I'd rather go the other way and say if you have reasoning or numbers for
+>> why PF_KTHREAD is an important optimisation above rq->curr =3D=3D rq->id=
+le
+>> then we could think about keeping this subtlety with appropriate
+>> documentation added, otherwise we can just kill it and remove all doubt.
+>>=20
+>> That being said, the x86 sync core gap that I imagined could be fixed
+>> by changing to rq->curr =3D=3D rq->idle test does not actually exist bec=
+ause
+>> the global membarrier does not have a sync core option. So fixing the
+>> exit_lazy_tlb points that this series does *should* fix that. So
+>> PF_KTHREAD may be less problematic than I thought from implementation
+>> point of view, only semantics.
+>=20
+> Today, the membarrier global expedited command explicitly skips kernel th=
+reads,
+> but it happens that membarrier private expedited considers those with the
+> same mm as target for the IPI.
+>=20
+> So we already implement a semantic which differs between private and glob=
+al
+> expedited membarriers.
 
-CONFIG_KCSAN_UDELAY_{TASK,INTERRUPT} define the upper bound. When
-randomized, the delays aggregate around a mean of KCSAN_UDELAY/2. We're
-not breaking the promise of not exceeding the max by skewing the delay
-if randomized. That's all this was meant to say.
+Which is not a good thing.
 
-I'll rewrite the commit message:
+> This can be explained in part by the fact that
+> kthread_use_mm was introduced after 4.16, where the most recent membarrie=
+r
+> commands where introduced. It seems that the effect on membarrier was not
+> considered when kthread_use_mm was introduced.
 
-	For compound instrumentation and assert accesses, skew the
-	watchpoint delay to be longer if randomized. This is useful to
-	improve race detection for such accesses.
+No it was just renamed, it used to be called use_mm and has been in the=20
+kernel for ~ever.
 
-	For compound accesses we should increase the delay as we've
-	aggregated both read and write instrumentation. By giving up 1
-	call into the runtime, we're less likely to set up a watchpoint
-	and thus less likely to detect a race. We can balance this by
-	increasing the watchpoint delay.
+That you hadn't considered this is actually weight for my point, which=20
+is that there's so much subtle behaviour that's easy to miss we're=20
+better off with simpler and fewer special cases until it's proven=20
+they're needed. Not the other way around.
 
-	For assert accesses, we know these are of increased interest,
-	and we wish to increase our chances of detecting races for such
-	checks.
+>=20
+> Looking at membarrier(2) documentation, it states that IPIs are only sent=
+ to
+> threads belonging to the same process as the calling thread. If my unders=
+tanding
+> of the notion of process is correct, this should rule out sending the IPI=
+ to
+> kernel threads, given they are not "part" of the same process, only borro=
+wing
+> the mm. But I agree that the distinction is moot, and should be clarified=
+.
 
-	Note that, CONFIG_KCSAN_UDELAY_{TASK,INTERRUPT} define the upper
-	bound delays. Skewing the delay does not break this promise as
-	long as the defined upper bounds are still adhered to.
+It does if you read it in a user-hostile legalistic way. The reality is=20
+userspace shouldn't and can't know about how the kernel might implement=20
+functionality.
+
+> Without a clear use-case to justify adding a constraint on membarrier, I =
+am
+> tempted to simply clarify documentation of current membarrier commands,
+> stating clearly that they are not guaranteed to affect kernel threads. Th=
+en,
+> if we have a compelling use-case to implement a different behavior which =
+covers
+> kthreads, this could be added consistently across membarrier commands wit=
+h a
+> flag (or by adding new commands).
+>=20
+> Does this approach make sense ?
+
+The other position is without a clear use case for PF_KTHREAD, seeing as=20
+async kernel accesses had not been considered before now, we limit the=20
+optimision to only skipping the idle thread. I think that makes more=20
+sense (unless you have a reason for PF_KTHREAD but it doesn't seem like=20
+there is much of one).
 
 Thanks,
--- Marco
+Nick
