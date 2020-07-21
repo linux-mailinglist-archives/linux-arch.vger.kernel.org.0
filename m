@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D19228BA2
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 23:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B3C228BA4
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 23:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgGUVsc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 17:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
+        id S1731001AbgGUVs4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 17:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727850AbgGUVsb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 17:48:31 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B976AC0619DC
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:48:31 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a9so75777pjd.3
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:48:31 -0700 (PDT)
+        with ESMTP id S1728456AbgGUVs4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 17:48:56 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F95CC0619DB
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:48:56 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id a14so101829pfi.2
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 14:48:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=I3Ujz+mGEEmYDtCY+li6aHvm42OcR56inDy8k+DDdmg=;
-        b=Bu516rifBpuY5ZDwiN64YiR1VJ0K377jNrHj2J5rzO593y9MhlMUSYD/mQHhNGlp3Y
-         ToxeSAWxN0/8+do3wrz37LZUiBjnCt/6rLw12ZC/S2NZ5JL8H/I3BwBRrHCzaNgdyqIW
-         YcvWaGe9WchkSieuy1S39/LASSbGePbYl25IA=
+        bh=DyUMSyCvKRYW4MD4ELntmNMKa8iS1Uqy8qtQ5GRD50Y=;
+        b=RG0AVML5JPLKh1gC4Yp7oNCkx99dZ9fnFTUGOz8UovIZDJzKW32LdIVokMTsN0TvOy
+         KbEUErep5CkAGc2tzZn3ShhRZXTvZsrPkKk+21w/wQKOCKCbuuEN7kcuWAq5HyOcgGPi
+         itNKg5ZZrt8SDWM0tUVL5qj1/Yb7Cf/3K5j8M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=I3Ujz+mGEEmYDtCY+li6aHvm42OcR56inDy8k+DDdmg=;
-        b=aqpR38TLR3B8O7GG1lXrn+Ad7qAT82PMTq6PEAlsEum0geAJeAhlhBOP0YqeHqq1K3
-         zSOJwpGgxQ/s6cMTvKhaOfIWMUJmb5iAQ1akJxDeg9H9BpdRs30QIheUKHx7k+pUVZGf
-         IAtaNU1QqBFbccrwKjBxV8ALoJn4LWKiQSdbY4LiE65cCpvBa7Ns7pBeis5Tbqcg603j
-         k1BZ2CltamNlozHsOx8//7AiqpFa60Uu/0hcqyCeRG2Da7A8coLLaoH+VXf+vq5uVXKK
-         +1TfTBiVBOTK7krqUpgfamCZaWyeOpq+/TpgVkvhRt3YiRNLzdHBAFL/8Mkk6IUjvpMr
-         mPIw==
-X-Gm-Message-State: AOAM531pz31Q2HKjxI39+/ebikwgxzJRsZ1tYZnHqfWJBnUO2WtVmSud
-        AT/CG7uZPm7xnG1tZbXS1kRxrQ==
-X-Google-Smtp-Source: ABdhPJyfQSnwouxRVdXPtrJI1D17mvws8IaUEh7pE+T8DeNIXkEpBIHHleD4+rafpLBha5i4wBKHzQ==
-X-Received: by 2002:a17:902:8d95:: with SMTP id v21mr24276699plo.108.1595368111361;
-        Tue, 21 Jul 2020 14:48:31 -0700 (PDT)
+        bh=DyUMSyCvKRYW4MD4ELntmNMKa8iS1Uqy8qtQ5GRD50Y=;
+        b=C6DN5BWulCB/BBWTlpFVZyY7Ky74xMQp54LwKjMLyJCCgGCW9rAJXQRw0jEpSB8loK
+         qN1fcqz4exiqP3PjjzjH5S25iQaHW8BcTdQiRTJp3lva2VJfPdb6bk4ZibBjiwEsODCO
+         UF0VZKBKBV5JmbycTYX5sIOxN/heIAA8AWhjQSWWd3AENxXPknXfwG+SNGSVsGgnb9Qn
+         jG1NAYFMJkfecol9OTsNPHo+k6puKqTuGSzfnyXAsvIe89UlVmIcXIob83kNhR1HmWvT
+         G/V7P6XjN9S8tKK9qW/n4yKuoEc3S7ahKIeKN9jeOy+wtb4W2qeiBDIapB8LfPUaOgbi
+         mKEQ==
+X-Gm-Message-State: AOAM530o1LuSicbwL8zVbBbGhXWIzTz1bZqhNMTV8mqbz4ey+FS0L21q
+        fCNIo3bzmO6oasD5JZ912tSo9w==
+X-Google-Smtp-Source: ABdhPJwevklT4e/5X1FPV+4eAjXjbwppCGlsYeJC9yecBh6vXjQodUdX5w6Z+6/rtIjc7fywF1XA8w==
+X-Received: by 2002:a63:de4b:: with SMTP id y11mr24014742pgi.26.1595368135462;
+        Tue, 21 Jul 2020 14:48:55 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w71sm21629848pfd.6.2020.07.21.14.48.30
+        by smtp.gmail.com with ESMTPSA id 198sm21548925pfb.27.2020.07.21.14.48.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 14:48:30 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 14:48:29 -0700
+        Tue, 21 Jul 2020 14:48:54 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 14:48:53 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
@@ -54,21 +54,21 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Keno Fischer <keno@juliacomputing.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: Re: [patch V4 12/15] x86/entry: Cleanup idtentry_entry/exit_user
-Message-ID: <202007211448.A8AFA81@keescook>
+Subject: Re: [patch V4 14/15] x86/entry: Cleanup idtentry_enter/exit
+Message-ID: <202007211448.9BB6C2E8B5@keescook>
 References: <20200721105706.030914876@linutronix.de>
- <20200721110809.531305010@linutronix.de>
+ <20200721110809.747620036@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200721110809.531305010@linutronix.de>
+In-Reply-To: <20200721110809.747620036@linutronix.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 12:57:18PM +0200, Thomas Gleixner wrote:
-> Cleanup the temporary defines and use irqentry_ instead of idtentry_.
+On Tue, Jul 21, 2020 at 12:57:20PM +0200, Thomas Gleixner wrote:
+> Remove the temporary defines and fixup all references.
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
