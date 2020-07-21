@@ -2,159 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539D12281E8
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 16:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EBF228217
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 16:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbgGUOVm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 10:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S1728700AbgGUO1D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 10:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbgGUOVl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 10:21:41 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FCBC061794
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 07:21:41 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id x83so17333846oif.10
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 07:21:41 -0700 (PDT)
+        with ESMTP id S1726412AbgGUO1D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 10:27:03 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E9FC061794
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 07:27:03 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a15so6467508wrh.10
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 07:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h3blU9DE8kAEI9eRjgIJ+1oJjjf2jq7rcjTXCotUTV0=;
-        b=g7kYPNqCJeG7iBoiEnGjyi4KCe4WoyCjqsV1kdm3NIv5sBs5jAeEu/qe9czw4EjRrz
-         nlKfX5ktHhKPSVkEbMDwT7mac5RCbOhP82cULp58/fF7sXBSXYviqx+BX2qPI04vlZFs
-         whaiUYZmS/BbSHReAfAbd1yXLoRJdzPCGLTyL//ZmoKb8RWYJihJcPu0Fkv4fmhmeTJ8
-         cdOKOgZPNKyry49qMDHPAi8fXClu/+uprYNnOmhmXZTuuUd9lXFfrnqjo+EKMtHnuiJQ
-         gj3C7CgsVzYf+Y/zcS2c2w+SPC4B20v/HBqhvah0cU0sOC7hTPf+ji027y5LdPtDT9Ka
-         izQw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kvJLCEgw2Y91sCTQ6JSG1TMyYmzQtuSE0ssBK5vqs5A=;
+        b=Tn+r0hMiMyEfGIJmZgmo6wJEFjb2HH6GCrM+njCb9LqnllYAU1jL/tRFHVOeISf8V0
+         cUgzOv7/XLu0fcSl8pd3MBTDTZY4dB7Vj4ztR+pUk27T4bLEaDmQjd870ztfZE0Kh12K
+         4qq1hYirQGcUBcFBjWPZSZhsCbhkLRbJfpQswZDiNdzKd7iwJfENFFapWeWcielyE7x8
+         zoi0q6a4YYf2XTduTfPeWTq3gUNdYH24cM0O/EmtkUk2u7/Fq5B8/oEPdSSJJ8E2fXK8
+         1PxAqg5uOIoTDm453qNw/rmJn2Qqgv6kUu99tXCA1QdwzumYYSbR+0M+eaovBe/b9MlF
+         cNlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h3blU9DE8kAEI9eRjgIJ+1oJjjf2jq7rcjTXCotUTV0=;
-        b=QSgZGy83rcpMb3Vl/L9gS+2PBQrZmkCSwDEpZ0wxXHEzGrTLSGacF0HVriRZ5684E0
-         a6eCB+8fceHeSaEY4mMdZz7f7yACYib14jrC+xNOUkc+27QEeM7mLhhK3GBCGqrZOkH7
-         o4eoajBMpDgLaT52ICyiGesJLKb3EGmBwsmGJyOC2NL+oMa8zoW1FEH7X4YZN8wLtZsM
-         9wv2q0J67m8a0cSJHFOZv+Dl4eXhp9413od7SDsGCsSmOYmNmLqqz3Zjh/ajHKLmn+yl
-         N932pfuuZoa1Uyze46cJ5H0ZipsFHTUrj14r+tniomDsnYJFeh30HIYRyF+jhKjsJOTv
-         DbIA==
-X-Gm-Message-State: AOAM533uO/ZCCmh4PZqjDPtM4ctC9S0mIFESsObOhRGTtWhfE+Y2zTDG
-        CIfeBB7o8VnyvLTa3GBc2AH1UqHwUZXZgekkduvrqg==
-X-Google-Smtp-Source: ABdhPJwNZUqfNDQerHr3EqfvlG+Rz1k6hPzGDgniqSjwMQBNUioBFz7zDlQiMLxKNo4ePlQ722PQD5sl45gvdNdco+A=
-X-Received: by 2002:aca:cf4f:: with SMTP id f76mr3216158oig.172.1595341300634;
- Tue, 21 Jul 2020 07:21:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200721103016.3287832-1-elver@google.com> <20200721103016.3287832-5-elver@google.com>
- <20200721140929.GB10769@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200721140929.GB10769@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kvJLCEgw2Y91sCTQ6JSG1TMyYmzQtuSE0ssBK5vqs5A=;
+        b=Nnvt3+Bbq2ajdeNfPJbU6o1J+M4j43TMxv3Lxe0xn2U6l0zmc57EmkKpE5SXlytNsC
+         S+W+cZzZ1zDY6sEPTJNP5/Uf7qX1zaKl3rPyDLRWhYFdsWyqriA88qJ79hysFIib8mA4
+         AhDh81RMIlSvjqlK19jJnJGZq+xyL0kQBgc6bP1qlrF/TJp6YISmliiuzuDeA9asfxX8
+         XfcV38zBOx954ZeGFIdXl1xlqeE0keTrCAZ6sC5dZCHXuzm/X75wzyb78noTiKoMOPNb
+         fRGP1ku9nzbZUEVeP9EyCXMBRBERsXB/bucaRL7ya+U4/uiV8GKUDv8NA6GtywSvwHVw
+         /LqQ==
+X-Gm-Message-State: AOAM533dSa0Qf64tNdToItZeQefjcbBF880hXMXaBqGg0El2Yh9M9K0E
+        Eo/CgaCB9Ec28T1g1AxvnGxevw==
+X-Google-Smtp-Source: ABdhPJxGzk4oR9ONcZurm+l1j9rPZGsvwGlNZG3a4Foe4DEAKpp2AmXipHtkPf+S4ADPqd9YhnTwMA==
+X-Received: by 2002:adf:dfd1:: with SMTP id q17mr25505561wrn.94.1595341620825;
+        Tue, 21 Jul 2020 07:27:00 -0700 (PDT)
+Received: from elver.google.com ([100.105.32.75])
+        by smtp.gmail.com with ESMTPSA id b18sm36258317wrs.46.2020.07.21.07.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 07:27:00 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 16:26:54 +0200
 From:   Marco Elver <elver@google.com>
-Date:   Tue, 21 Jul 2020 16:21:29 +0200
-Message-ID: <CANpmjNNCrz+d6FOWCkC68NKO3PFToY1seRRKVQmn_KHa4D07hA@mail.gmail.com>
-Subject: Re: [PATCH 4/8] kcsan: Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     paulmck@kernel.org, will@kernel.org, arnd@arndb.de,
+        mark.rutland@arm.com, dvyukov@google.com, glider@google.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 3/8] kcsan: Skew delay to be longer for certain access
+ types
+Message-ID: <20200721142654.GA3396394@elver.google.com>
+References: <20200721103016.3287832-1-elver@google.com>
+ <20200721103016.3287832-4-elver@google.com>
+ <20200721140523.GA10769@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721140523.GA10769@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.14.4 (2020-06-18)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 21 Jul 2020 at 16:09, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Jul 21, 2020 at 12:30:12PM +0200, Marco Elver wrote:
-> > Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks for the builtin atomics
-> > instrumentation.
-> >
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > ---
-> > Added to this series, as it would otherwise cause patch conflicts.
-> > ---
-> >  kernel/kcsan/core.c | 25 +++++++++++++++++--------
-> >  1 file changed, 17 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> > index 4633baebf84e..f53524ea0292 100644
-> > --- a/kernel/kcsan/core.c
-> > +++ b/kernel/kcsan/core.c
-> > @@ -892,14 +892,17 @@ EXPORT_SYMBOL(__tsan_init);
-> >       u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder);                      \
-> >       u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder)                       \
-> >       {                                                                                          \
-> > -             check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);                      \
-> > +             if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-> > +                     check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);              \
-> >               return __atomic_load_n(ptr, memorder);                                             \
-> >       }                                                                                          \
-> >       EXPORT_SYMBOL(__tsan_atomic##bits##_load);                                                 \
-> >       void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder);                   \
-> >       void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder)                    \
-> >       {                                                                                          \
-> > -             check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC); \
-> > +             if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-> > +                     check_access(ptr, bits / BITS_PER_BYTE,                                    \
-> > +                                  KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);                    \
-> >               __atomic_store_n(ptr, v, memorder);                                                \
-> >       }                                                                                          \
-> >       EXPORT_SYMBOL(__tsan_atomic##bits##_store)
-> > @@ -908,8 +911,10 @@ EXPORT_SYMBOL(__tsan_init);
-> >       u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder);                 \
-> >       u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder)                  \
-> >       {                                                                                          \
-> > -             check_access(ptr, bits / BITS_PER_BYTE,                                            \
-> > -                          KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
-> > +             if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-> > +                     check_access(ptr, bits / BITS_PER_BYTE,                                    \
-> > +                                  KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
-> > +                                          KCSAN_ACCESS_ATOMIC);                                 \
-> >               return __atomic_##op##suffix(ptr, v, memorder);                                    \
-> >       }                                                                                          \
-> >       EXPORT_SYMBOL(__tsan_atomic##bits##_##op)
-> > @@ -937,8 +942,10 @@ EXPORT_SYMBOL(__tsan_init);
-> >       int __tsan_atomic##bits##_compare_exchange_##strength(u##bits *ptr, u##bits *exp,          \
-> >                                                             u##bits val, int mo, int fail_mo)    \
-> >       {                                                                                          \
-> > -             check_access(ptr, bits / BITS_PER_BYTE,                                            \
-> > -                          KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
-> > +             if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-> > +                     check_access(ptr, bits / BITS_PER_BYTE,                                    \
-> > +                                  KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
-> > +                                          KCSAN_ACCESS_ATOMIC);                                 \
-> >               return __atomic_compare_exchange_n(ptr, exp, val, weak, mo, fail_mo);              \
-> >       }                                                                                          \
-> >       EXPORT_SYMBOL(__tsan_atomic##bits##_compare_exchange_##strength)
-> > @@ -949,8 +956,10 @@ EXPORT_SYMBOL(__tsan_init);
-> >       u##bits __tsan_atomic##bits##_compare_exchange_val(u##bits *ptr, u##bits exp, u##bits val, \
-> >                                                          int mo, int fail_mo)                    \
-> >       {                                                                                          \
-> > -             check_access(ptr, bits / BITS_PER_BYTE,                                            \
-> > -                          KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
-> > +             if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS))                                      \
-> > +                     check_access(ptr, bits / BITS_PER_BYTE,                                    \
-> > +                                  KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
-> > +                                          KCSAN_ACCESS_ATOMIC);                                 \
-> >               __atomic_compare_exchange_n(ptr, &exp, val, 0, mo, fail_mo);                       \
-> >               return exp;                                                                        \
-> >       }                                                                                          \
->
->
-> *groan*, that could really do with a bucket of '{', '}'. Also, it is
-> inconsistent in style with the existing use in
-> DEFINE_TSAN_VOLATILE_READ_WRITE() where the define causes an early
-> return.
+On Tue, Jul 21, 2020 at 04:05PM +0200, Peter Zijlstra wrote:
+> On Tue, Jul 21, 2020 at 12:30:11PM +0200, Marco Elver wrote:
+> > For compound instrumentation and assert accesses, skew the watchpoint
+> > delay to be longer. We still shouldn't exceed the maximum delays, but it
+> > is safe to skew the delay for these accesses.
+> 
+> Complete lack of actual justification.. *why* are you doing this, and
+> *why* is it safe etc..
 
-Sadly we can't do an early return because we must always execute what
-comes after the check. Unlike normal read/write instrumentation, TSAN
-instrumentation for builtin atomics replaces the atomic with a call
-into the runtime, and the runtime must also execute the atomic.
+CONFIG_KCSAN_UDELAY_{TASK,INTERRUPT} define the upper bound. When
+randomized, the delays aggregate around a mean of KCSAN_UDELAY/2. We're
+not breaking the promise of not exceeding the max by skewing the delay
+if randomized. That's all this was meant to say.
 
-I'll add the {}.
+I'll rewrite the commit message:
+
+	For compound instrumentation and assert accesses, skew the
+	watchpoint delay to be longer if randomized. This is useful to
+	improve race detection for such accesses.
+
+	For compound accesses we should increase the delay as we've
+	aggregated both read and write instrumentation. By giving up 1
+	call into the runtime, we're less likely to set up a watchpoint
+	and thus less likely to detect a race. We can balance this by
+	increasing the watchpoint delay.
+
+	For assert accesses, we know these are of increased interest,
+	and we wish to increase our chances of detecting races for such
+	checks.
+
+	Note that, CONFIG_KCSAN_UDELAY_{TASK,INTERRUPT} define the upper
+	bound delays. Skewing the delay does not break this promise as
+	long as the defined upper bounds are still adhered to.
 
 Thanks,
 -- Marco
