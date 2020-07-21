@@ -2,146 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 813D122839F
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 17:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5EB228746
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 19:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729771AbgGUPWa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 11:22:30 -0400
-Received: from mail.efficios.com ([167.114.26.124]:48708 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726436AbgGUPW3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 11:22:29 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B74E72CC666;
-        Tue, 21 Jul 2020 11:22:28 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id upMwOGFpg_bC; Tue, 21 Jul 2020 11:22:28 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 5870B2CC665;
-        Tue, 21 Jul 2020 11:22:28 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5870B2CC665
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1595344948;
-        bh=8uCfUfdQu4oiK+bNjIHkykJf9WIgaALv0rxaHjwJr0E=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=RqlkE4zVklECaxgeEECd1ul22p1CQT7ScOQBrY2/z5PANaX24xgz3b5ttCog1+uvi
-         87lYZRgkYGyBlftIRnErWHjpcLipK4MC/HJlE08bJovtVbKPiajoKGtCx3smOBtOZe
-         gmqRx/6ufGZy/xt3vJbp4rKPREWlvusJzUgA244/qb0TtUAeXv08r/tzVviS9oCASG
-         8xV2/jAxu71lpFnOTRWeH9fZSxLSopk8YPrXq3XcPaxSt/niiCJqtIEIXyFwfxm3R5
-         m1OOCxW2+aLYPclYCvGEqN7WdVBhv1b6TNXkE0Y2F0YKAHdybJmQc9gh/FcyHoLpx4
-         gHXfyvODcnJSg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dO6tyL1LYrsh; Tue, 21 Jul 2020 11:22:28 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 481932CC991;
-        Tue, 21 Jul 2020 11:22:28 -0400 (EDT)
-Date:   Tue, 21 Jul 2020 11:22:28 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andy Lutomirski <luto@kernel.org>, x86 <x86@kernel.org>
-Message-ID: <2141750915.22379.1595344948206.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20200721151947.GD10769@hirez.programming.kicks-ass.net>
-References: <1594868476.6k5kvx8684.astroid@bobo.none> <1314561373.18530.1594993363050.JavaMail.zimbra@efficios.com> <1595213677.kxru89dqy2.astroid@bobo.none> <2055788870.20749.1595263590675.JavaMail.zimbra@efficios.com> <1595324577.x3bf55tpgu.astroid@bobo.none> <20200721150656.GN119549@hirez.programming.kicks-ass.net> <616209816.22376.1595344513051.JavaMail.zimbra@efficios.com> <20200721151947.GD10769@hirez.programming.kicks-ass.net>
-Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
+        id S1730091AbgGURZi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 13:25:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59006 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729107AbgGURZh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 21 Jul 2020 13:25:37 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B01A22BEF
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 17:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595352337;
+        bh=RKV0BW+9C8tbyA2otgwhYFbwcP7+9Ge72XqOAPbxQ8E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jAPq9v3BGHemfkujTIuG3ZqyDILVFZKDieQ9PnauZyxdybPri0Rk7zvR5TaW+x6lu
+         b9lQuEB76XCTQHcF0W10LhSheHFqSZHYw7sbNFwuh4YhROQorjgEmoqxLkTwzwB3/a
+         fhSXhZN+b1UnlENBla7DuCUmsj37/gLzp4m+2RvM=
+Received: by mail-wr1-f43.google.com with SMTP id z2so22017089wrp.2
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 10:25:37 -0700 (PDT)
+X-Gm-Message-State: AOAM531OBej9OBwNaWmWwzRySA4EGXl1pl8xN+A0BQ2GXLql2tBbi9WF
+        fUBvNO9MHITlLDOsdw0V+vWOtdPMlkt89RVjxWbwpw==
+X-Google-Smtp-Source: ABdhPJxhK47OGKg5u9wulGLbiutPzOKjaFb1WaziXlqqFghfIN1JaY+AIUojD2fdQbL4Ey8ktxLwrw3b08ACtiFgUv8=
+X-Received: by 2002:adf:e482:: with SMTP id i2mr26959033wrm.75.1595352335661;
+ Tue, 21 Jul 2020 10:25:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
-Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
-Thread-Index: 3qMKvpn4CTaC/gUF9DBM4QQjSdBktA==
+References: <b754dad5-ee85-8a2f-f41a-8bdc56de42e8@kernel.dk>
+ <8987E376-6B13-4798-BDBA-616A457447CF@amacapital.net> <20200721070709.GB11432@lst.de>
+ <CALCETrXWZBXZuCeRYvYY8AWG51e_P3bOeNeqc8zXPLOTDTHY0g@mail.gmail.com> <20200721143412.GA8099@lst.de>
+In-Reply-To: <20200721143412.GA8099@lst.de>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 21 Jul 2020 10:25:24 -0700
+X-Gmail-Original-Message-ID: <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
+Message-ID: <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
+Subject: Re: io_uring vs in_compat_syscall()
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andy Lutomirski <luto@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Jul 21, 2020, at 11:19 AM, Peter Zijlstra peterz@infradead.org wrote:
+On Tue, Jul 21, 2020 at 7:34 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Tue, Jul 21, 2020 at 07:31:02AM -0700, Andy Lutomirski wrote:
+> > > What do you mean with "properly wired up".  Do you really want to spread
+> > > ->compat_foo methods everywhere, including read and write?  I found
+> > > in_compat_syscall() a lot small and easier to maintain than all the
+> > > separate compat cruft.
+> >
+> > I was imagining using a flag.  Some of the net code uses
+> > MSG_CMSG_COMPAT for this purpose.
+>
+> Killing that nightmarish monster is what actually got me into looking
+> io_uring and starting this thread.
 
-> On Tue, Jul 21, 2020 at 11:15:13AM -0400, Mathieu Desnoyers wrote:
->> ----- On Jul 21, 2020, at 11:06 AM, Peter Zijlstra peterz@infradead.org wrote:
->> 
->> > On Tue, Jul 21, 2020 at 08:04:27PM +1000, Nicholas Piggin wrote:
->> > 
->> >> That being said, the x86 sync core gap that I imagined could be fixed
->> >> by changing to rq->curr == rq->idle test does not actually exist because
->> >> the global membarrier does not have a sync core option. So fixing the
->> >> exit_lazy_tlb points that this series does *should* fix that. So
->> >> PF_KTHREAD may be less problematic than I thought from implementation
->> >> point of view, only semantics.
->> > 
->> > So I've been trying to figure out where that PF_KTHREAD comes from,
->> > commit 227a4aadc75b ("sched/membarrier: Fix p->mm->membarrier_state racy
->> > load") changed 'p->mm' to '!(p->flags & PF_KTHREAD)'.
->> > 
->> > So the first version:
->> > 
->> >  https://lkml.kernel.org/r/20190906031300.1647-5-mathieu.desnoyers@efficios.com
->> > 
->> > appears to unconditionally send the IPI and checks p->mm in the IPI
->> > context, but then v2:
->> > 
->> >  https://lkml.kernel.org/r/20190908134909.12389-1-mathieu.desnoyers@efficios.com
->> > 
->> > has the current code. But I've been unable to find the reason the
->> > 'p->mm' test changed into '!(p->flags & PF_KTHREAD)'.
->> 
->> Looking back at my inbox, it seems like you are the one who proposed to
->> skip all kthreads:
->> 
->> https://lkml.kernel.org/r/20190904124333.GQ2332@hirez.programming.kicks-ass.net
-> 
-> I had a feeling it might've been me ;-) I just couldn't find the email.
-> 
->> > The comment doesn't really help either; sure we have the whole lazy mm
->> > thing, but that's ->active_mm, not ->mm.
->> > 
->> > Possibly it is because {,un}use_mm() do not have sufficient barriers to
->> > make the remote p->mm test work? Or were we over-eager with the !p->mm
->> > doesn't imply kthread 'cleanups' at the time?
->> 
->> The nice thing about adding back kthreads to the threads considered for
->> membarrier
->> IPI is that it has no observable effect on the user-space ABI. No pre-existing
->> kthread
->> rely on this, and we just provide an additional guarantee for future kthread
->> implementations.
->> 
->> > Also, I just realized, I still have a fix for use_mm() now
->> > kthread_use_mm() that seems to have been lost.
->> 
->> I suspect we need to at least document the memory barriers in kthread_use_mm and
->> kthread_unuse_mm to state that they are required by membarrier if we want to
->> ipi kthreads as well.
-> 
-> Right, so going by that email you found it was mostly a case of being
-> lazy, but yes, if we audit the kthread_{,un}use_mm() barriers and add
-> any other bits that might be needed, covering kthreads should be
-> possible.
-> 
-> No objections from me for making it so.
+I agree that MSG_CMSG_COMPAT is nasty, but I think the concept is
+sound -- rather than tracking whether we're compat by using a
+different function or a per-thread variable, actually explicitly
+tracking the mode seems sensible.
 
-I'm OK on making membarrier cover kthreads using mm as well, provided we
-audit kthread_{,un}use_mm() to make sure the proper barriers are in place
-after setting task->mm and before clearing it.
+If we're going to play in_compat_syscall() games, let's please make
+io_uring_enter() return -EINVAL if in_compat_syscall() != ctx->compat.
 
-Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--Andy
