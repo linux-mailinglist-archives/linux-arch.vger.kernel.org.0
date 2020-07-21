@@ -2,123 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E492227EA4
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 13:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6C02280AB
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 15:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729591AbgGULUT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 07:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729514AbgGULUS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 07:20:18 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977AEC061794;
-        Tue, 21 Jul 2020 04:20:18 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id r12so20722571wrj.13;
-        Tue, 21 Jul 2020 04:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=cgE7yCvC2TsM3N9RxN0ivNvrTATSLMzpTj/dTB9AGDk=;
-        b=mu8Irwtky5HM+EiEeEeJR5ujsfvK+4dRAQRaaVcc7HsqkvVK5OdZ66y3jHwGTwX8Cu
-         zczEMY4FPKkfMJPyqoq/zEQTDqVrWHiKq35CWL+NseYxjRUXqM17lsfcA3S2fUbacz4F
-         paoMeJ2RbHu5MMFCr9bSA1dbKVqhP5CQFlBIRXxKK2DBfodI5dmWrdix02VwYwBLvq7Y
-         TftEIFzy6Oqpsf3KxqPjswQGUu4zx2fkccY9iW9azevcnJDENK3yYmxXnT8KmtHnkU+O
-         QAlb9uxvjbo6Lx3o/O/kQVN+N4n65xMKivLjHruWEFxL5BOP2ogapw3UZF/MG5dgU8Tv
-         2Uxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=cgE7yCvC2TsM3N9RxN0ivNvrTATSLMzpTj/dTB9AGDk=;
-        b=qL82uYsPowA7MbjQOkjHd/3xRt/ye2bs5oF/qyJR1VGSv+NZrp0GsFynCGZCTmEfYV
-         tBkR/Z66Ju6yDnmt7m5vGhVJMTey/jxOvUrL9fujW5KHDfdTAJL9siniwcedgkqW2LUO
-         VcjJpG49NPPhNgqUwNA1lTCeV/J9Cts0Eftbd0p3WgIBD/WGSfpmNV2vKGQqr/Evd3Cd
-         ehtgrtNsKOYTcYKKvb0fhzJ8P0lvhbp6f9l8aNSlTqUQW74KzrRTfAm9A/VIpVnhF2b6
-         iZXA8W1QcGZNwrhnDBe+5itNG1OfSX+WSdnVcmcb/cZNHtm80YFfWw58m4cijYCD5VHj
-         En4g==
-X-Gm-Message-State: AOAM530aL0Xqk/xXVDL0Go1fUOljWH9Yz54I+oQMMWMW9u8rj46/lMJL
-        Fs95b8hF/Foph1VO01Vx6cY=
-X-Google-Smtp-Source: ABdhPJwmCaJOo8AdzQqS2eChCE+7XLE3Au1lXisG7/a/kYL/4vC9x9VNW5OotawEVy00sIUB49kphA==
-X-Received: by 2002:adf:de12:: with SMTP id b18mr28232045wrm.390.1595330417294;
-        Tue, 21 Jul 2020 04:20:17 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id c188sm3106579wma.22.2020.07.21.04.20.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 04:20:16 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 21:20:09 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 0/6] powerpc: queued spinlocks and rwlocks
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Anton Blanchard <anton@ozlabs.org>,
-        Boqun Feng <boqun.feng@gmail.com>, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        Will Deacon <will@kernel.org>
-References: <20200706043540.1563616-1-npiggin@gmail.com>
-        <24f75d2c-60cd-2766-4aab-1a3b1c80646e@redhat.com>
-        <1594101082.hfq9x5yact.astroid@bobo.none>
-        <20200708084106.GE597537@hirez.programming.kicks-ass.net>
-        <a9834278-25bf-90e9-10f2-cd10e5407ff6@redhat.com>
-        <20200709083113.GI597537@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200709083113.GI597537@hirez.programming.kicks-ass.net>
+        id S1727799AbgGUNMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 09:12:00 -0400
+Received: from mail.efficios.com ([167.114.26.124]:53232 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbgGUNMA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 09:12:00 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 38C8F2CB608;
+        Tue, 21 Jul 2020 09:11:59 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PPeQyMfgGubd; Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id C150F2CB9E3;
+        Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C150F2CB9E3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1595337118;
+        bh=0FzZwzLd/Z/vpUIiWCr7Q1hJk/9TD3I9q2HN7VpjQsk=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=TbeYjfKfvZxAGqtB11GVb5XqOHAKg2eKsbOGMlSNpgsYi78GStsexknzpopA5gYjd
+         iHW5pJeBlD9K41JNcKHEhCXFtl6TXTOiuks37rMUgNNyxEtV1JiwhdJOZpmN5BwmOJ
+         C1qw7Nz+Z+aXC6F72ruRruWZUTMFaWY8gOg+CohD5g+7k6LkOV5AfuY4EuJgQphMvA
+         qyBDRD77CQ3RGF4P9bdqDFNR240kwOmkxFpNqfXOqyByvwnVDzBnBzJ4/JbyMVAlvx
+         tv+xyVSuXGIKtSIrbcsom5VY1p1AP5DiuSLr1KmKilBpD6G2v84tT/dYzF0TE8mX4p
+         XzC6ra9yQ52zQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ivaCxDrJH8Q5; Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id A6DDB2CB7D9;
+        Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
+Date:   Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
+Message-ID: <470490605.22057.1595337118562.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1595324577.x3bf55tpgu.astroid@bobo.none>
+References: <1594868476.6k5kvx8684.astroid@bobo.none> <1594892300.mxnq3b9a77.astroid@bobo.none> <20200716110038.GA119549@hirez.programming.kicks-ass.net> <1594906688.ikv6r4gznx.astroid@bobo.none> <1314561373.18530.1594993363050.JavaMail.zimbra@efficios.com> <1595213677.kxru89dqy2.astroid@bobo.none> <2055788870.20749.1595263590675.JavaMail.zimbra@efficios.com> <1595324577.x3bf55tpgu.astroid@bobo.none>
+Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
+ membarrier_mm_sync_core_before_usermode
 MIME-Version: 1.0
-Message-Id: <1595329799.y24rka8cv4.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
+Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
+Thread-Index: vi7IW503i62QJHH8I6RRgM2HetIWrA==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Peter Zijlstra's message of July 9, 2020 6:31 pm:
-> On Wed, Jul 08, 2020 at 07:54:34PM -0400, Waiman Long wrote:
->> On 7/8/20 4:41 AM, Peter Zijlstra wrote:
->> > On Tue, Jul 07, 2020 at 03:57:06PM +1000, Nicholas Piggin wrote:
->> > > Yes, powerpc could certainly get more performance out of the slow
->> > > paths, and then there are a few parameters to tune.
->> > Can you clarify? The slow path is already in use on ARM64 which is wea=
-k,
->> > so I doubt there's superfluous serialization present. And Will spend a
->> > fair amount of time on making that thing guarantee forward progressm, =
-so
->> > there just isn't too much room to play.
->> >=20
->> > > We don't have a good alternate patching for function calls yet, but
->> > > that would be something to do for native vs pv.
->> > Going by your jump_label implementation, support for static_call shoul=
-d
->> > be fairly straight forward too, no?
->> >=20
->> >    https://lkml.kernel.org/r/20200624153024.794671356@infradead.org
->> >=20
->> Speaking of static_call, I am also looking forward to it. Do you have an
->> idea when that will be merged?
->=20
-> 0day had one crash on the last round, I think Steve send a fix for that
-> last night and I'll go look at it.
->=20
-> That said, the last posting got 0 feedback, so either everybody is
-> really happy with it, or not interested. So let us know in the thread,
-> with some review feedback.
->=20
-> Once I get through enough of the inbox to actually find the fix and test
-> it, I'll also update the thread, and maybe threaten to merge it if
-> everybody stays silent :-)
+----- On Jul 21, 2020, at 6:04 AM, Nicholas Piggin npiggin@gmail.com wrote:
 
-I'd like to use it in powerpc. We have code now for example that patches=20
-a branch immediately at the top of memcpy which branches to a different=20
-version of the function. pv queued spinlock selection obviously, and
-there's a bunch of platform ops struct things that get filled in at boot=20
-time, etc.
+> Excerpts from Mathieu Desnoyers's message of July 21, 2020 2:46 am:
+[...]
+> 
+> Yeah you're probably right in this case I think. Quite likely most kernel
+> tasks that asynchronously write to user memory would at least have some
+> kind of producer-consumer barriers.
+> 
+> But is that restriction of all async modifications documented and enforced
+> anywhere?
+> 
+>>> How about other memory accesses via kthread_use_mm? Presumably there is
+>>> still ordering requirement there for membarrier,
+>> 
+>> Please provide an example case with memory accesses via kthread_use_mm where
+>> ordering matters to support your concern.
+> 
+> I think the concern Andy raised with io_uring was less a specific
+> problem he saw and more a general concern that we have these memory
+> accesses which are not synchronized with membarrier.
+> 
+>>> so I really think
+>>> it's a fragile interface with no real way for the user to know how
+>>> kernel threads may use its mm for any particular reason, so membarrier
+>>> should synchronize all possible kernel users as well.
+>> 
+>> I strongly doubt so, but perhaps something should be clarified in the
+>> documentation
+>> if you have that feeling.
+> 
+> I'd rather go the other way and say if you have reasoning or numbers for
+> why PF_KTHREAD is an important optimisation above rq->curr == rq->idle
+> then we could think about keeping this subtlety with appropriate
+> documentation added, otherwise we can just kill it and remove all doubt.
+> 
+> That being said, the x86 sync core gap that I imagined could be fixed
+> by changing to rq->curr == rq->idle test does not actually exist because
+> the global membarrier does not have a sync core option. So fixing the
+> exit_lazy_tlb points that this series does *should* fix that. So
+> PF_KTHREAD may be less problematic than I thought from implementation
+> point of view, only semantics.
 
-So +1 here if you can get them through. I'm not 100% sure we can do
-it with existing toolchain and no ugly hacks, but there's no way to
-structure things that can get around that AFAIKS. We'd eventually
-use it though, I'd say.
+Today, the membarrier global expedited command explicitly skips kernel threads,
+but it happens that membarrier private expedited considers those with the
+same mm as target for the IPI.
+
+So we already implement a semantic which differs between private and global
+expedited membarriers. This can be explained in part by the fact that
+kthread_use_mm was introduced after 4.16, where the most recent membarrier
+commands where introduced. It seems that the effect on membarrier was not
+considered when kthread_use_mm was introduced.
+
+Looking at membarrier(2) documentation, it states that IPIs are only sent to
+threads belonging to the same process as the calling thread. If my understanding
+of the notion of process is correct, this should rule out sending the IPI to
+kernel threads, given they are not "part" of the same process, only borrowing
+the mm. But I agree that the distinction is moot, and should be clarified.
+
+Without a clear use-case to justify adding a constraint on membarrier, I am
+tempted to simply clarify documentation of current membarrier commands,
+stating clearly that they are not guaranteed to affect kernel threads. Then,
+if we have a compelling use-case to implement a different behavior which covers
+kthreads, this could be added consistently across membarrier commands with a
+flag (or by adding new commands).
+
+Does this approach make sense ?
 
 Thanks,
-Nick
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
