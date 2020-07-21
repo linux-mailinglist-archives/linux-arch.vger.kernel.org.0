@@ -2,75 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5EB228746
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 19:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E02E228879
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 20:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730091AbgGURZi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 13:25:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59006 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729107AbgGURZh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 21 Jul 2020 13:25:37 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B01A22BEF
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 17:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595352337;
-        bh=RKV0BW+9C8tbyA2otgwhYFbwcP7+9Ge72XqOAPbxQ8E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jAPq9v3BGHemfkujTIuG3ZqyDILVFZKDieQ9PnauZyxdybPri0Rk7zvR5TaW+x6lu
-         b9lQuEB76XCTQHcF0W10LhSheHFqSZHYw7sbNFwuh4YhROQorjgEmoqxLkTwzwB3/a
-         fhSXhZN+b1UnlENBla7DuCUmsj37/gLzp4m+2RvM=
-Received: by mail-wr1-f43.google.com with SMTP id z2so22017089wrp.2
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 10:25:37 -0700 (PDT)
-X-Gm-Message-State: AOAM531OBej9OBwNaWmWwzRySA4EGXl1pl8xN+A0BQ2GXLql2tBbi9WF
-        fUBvNO9MHITlLDOsdw0V+vWOtdPMlkt89RVjxWbwpw==
-X-Google-Smtp-Source: ABdhPJxhK47OGKg5u9wulGLbiutPzOKjaFb1WaziXlqqFghfIN1JaY+AIUojD2fdQbL4Ey8ktxLwrw3b08ACtiFgUv8=
-X-Received: by 2002:adf:e482:: with SMTP id i2mr26959033wrm.75.1595352335661;
- Tue, 21 Jul 2020 10:25:35 -0700 (PDT)
+        id S1729197AbgGUSoK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 14:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727115AbgGUSoJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 14:44:09 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEDEC0619DA
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 11:44:09 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id cv18so1755463pjb.1
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jul 2020 11:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3LfPahCwDgYlI4ZTOgCGD9fC1JmncfD/lLqsHCCVbWU=;
+        b=gIpYGseTcRAt3cbtJglK96ny0HOxl1F4IoVHOXhGC6OA9GiYAUprn5cq0v3Qk60oku
+         QB3Qr0eNGhxW2wgiq1UOxgfCXcPyWOKOIZcptCpnEMbDlZnS/sX990Y/hxH3a8t6Y0WF
+         KglLs08Gw2HR/h42Calo8PdHfhFbeiLXaUTcE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3LfPahCwDgYlI4ZTOgCGD9fC1JmncfD/lLqsHCCVbWU=;
+        b=Mb1W8y2HFN7lr7Lajicz83xWPq+hGXcPnGkHoxy3T7qc706rYP2Mm0nthnc3Sb0aAP
+         ggFci+nBtMNSXa0R3wxfR09Amx1y7yx7ROF3pYhISOJRDi91RHDzzOj7carkIIM8s3iN
+         B+3mtkGe/UJUbwECExTL38q8GSPcN41CNVGg+sETZm46yT95sWlMGdB4qX5hjI0GrR6M
+         77MRO9/RaNTL7r3tKfsDPf4iqrvMhwPdg4fGsgUnRt2H+3Q0VmhS/QST7I+h1oahEdHw
+         LVKkWxzpA1FW5x+SCCv4VmsJn8Xuz9zB1pM68xtMX2j7XumqUNt/B5XVQ2jLuCl/Si3T
+         +kxw==
+X-Gm-Message-State: AOAM5306VJ8UmwfVjnSKBuQNSKDCpKuUDmmKng7R2qbEdbajgtdDkcMZ
+        LD+Po6gKaou7ACB+UlfJI+YOpQ==
+X-Google-Smtp-Source: ABdhPJyB/3YWANGTyrbmV6E+f+nN2vwpyNyu5QDKBTxjc0vSe5agtQfARQFqwLL8aP2pPlmZzs5sYg==
+X-Received: by 2002:a17:902:aa93:: with SMTP id d19mr11336859plr.272.1595357048961;
+        Tue, 21 Jul 2020 11:44:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x13sm20479444pfj.122.2020.07.21.11.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 11:44:08 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 11:44:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     x86@kernel.org, hpa@zytor.com, Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Bob Haarman <inglorion@google.com>, hjl.tools@gmail.com,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] x86, vmlinux.lds: Page-Align end of ..page_aligned
+ sections
+Message-ID: <202007211143.AC36D096@keescook>
+References: <20200721093448.10417-1-joro@8bytes.org>
 MIME-Version: 1.0
-References: <b754dad5-ee85-8a2f-f41a-8bdc56de42e8@kernel.dk>
- <8987E376-6B13-4798-BDBA-616A457447CF@amacapital.net> <20200721070709.GB11432@lst.de>
- <CALCETrXWZBXZuCeRYvYY8AWG51e_P3bOeNeqc8zXPLOTDTHY0g@mail.gmail.com> <20200721143412.GA8099@lst.de>
-In-Reply-To: <20200721143412.GA8099@lst.de>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 21 Jul 2020 10:25:24 -0700
-X-Gmail-Original-Message-ID: <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
-Message-ID: <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
-Subject: Re: io_uring vs in_compat_syscall()
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andy Lutomirski <luto@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721093448.10417-1-joro@8bytes.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 7:34 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Tue, Jul 21, 2020 at 07:31:02AM -0700, Andy Lutomirski wrote:
-> > > What do you mean with "properly wired up".  Do you really want to spread
-> > > ->compat_foo methods everywhere, including read and write?  I found
-> > > in_compat_syscall() a lot small and easier to maintain than all the
-> > > separate compat cruft.
-> >
-> > I was imagining using a flag.  Some of the net code uses
-> > MSG_CMSG_COMPAT for this purpose.
->
-> Killing that nightmarish monster is what actually got me into looking
-> io_uring and starting this thread.
+On Tue, Jul 21, 2020 at 11:34:48AM +0200, Joerg Roedel wrote:
+> From: Joerg Roedel <jroedel@suse.de>
+> 
+> Align the end of the .bss..page_aligned and .data..page_aligned section
+> on page-size too. Otherwise the linker might place other objects on the
+> page of the last ..page_aligned object. This is inconsistent with other
+> objects in those sections, which all have their own page.
 
-I agree that MSG_CMSG_COMPAT is nasty, but I think the concept is
-sound -- rather than tracking whether we're compat by using a
-different function or a per-thread variable, actually explicitly
-tracking the mode seems sensible.
+What problem was actually encountered? (i.e. why is it a problem for the
+other data to be in the page of the page-aligned data? shouldn't those
+data have their own, separate, alignment hint?)
 
-If we're going to play in_compat_syscall() games, let's please make
-io_uring_enter() return -EINVAL if in_compat_syscall() != ctx->compat.
-
---Andy
+-- 
+Kees Cook
