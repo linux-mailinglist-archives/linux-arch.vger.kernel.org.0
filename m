@@ -2,144 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6C02280AB
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 15:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7043A22819C
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jul 2020 16:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727799AbgGUNMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jul 2020 09:12:00 -0400
-Received: from mail.efficios.com ([167.114.26.124]:53232 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbgGUNMA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 09:12:00 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 38C8F2CB608;
-        Tue, 21 Jul 2020 09:11:59 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id PPeQyMfgGubd; Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C150F2CB9E3;
-        Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C150F2CB9E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1595337118;
-        bh=0FzZwzLd/Z/vpUIiWCr7Q1hJk/9TD3I9q2HN7VpjQsk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=TbeYjfKfvZxAGqtB11GVb5XqOHAKg2eKsbOGMlSNpgsYi78GStsexknzpopA5gYjd
-         iHW5pJeBlD9K41JNcKHEhCXFtl6TXTOiuks37rMUgNNyxEtV1JiwhdJOZpmN5BwmOJ
-         C1qw7Nz+Z+aXC6F72ruRruWZUTMFaWY8gOg+CohD5g+7k6LkOV5AfuY4EuJgQphMvA
-         qyBDRD77CQ3RGF4P9bdqDFNR240kwOmkxFpNqfXOqyByvwnVDzBnBzJ4/JbyMVAlvx
-         tv+xyVSuXGIKtSIrbcsom5VY1p1AP5DiuSLr1KmKilBpD6G2v84tT/dYzF0TE8mX4p
-         XzC6ra9yQ52zQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ivaCxDrJH8Q5; Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A6DDB2CB7D9;
-        Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
-Date:   Tue, 21 Jul 2020 09:11:58 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86 <x86@kernel.org>
-Message-ID: <470490605.22057.1595337118562.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1595324577.x3bf55tpgu.astroid@bobo.none>
-References: <1594868476.6k5kvx8684.astroid@bobo.none> <1594892300.mxnq3b9a77.astroid@bobo.none> <20200716110038.GA119549@hirez.programming.kicks-ass.net> <1594906688.ikv6r4gznx.astroid@bobo.none> <1314561373.18530.1594993363050.JavaMail.zimbra@efficios.com> <1595213677.kxru89dqy2.astroid@bobo.none> <2055788870.20749.1595263590675.JavaMail.zimbra@efficios.com> <1595324577.x3bf55tpgu.astroid@bobo.none>
-Subject: Re: [RFC PATCH 4/7] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
+        id S1728735AbgGUOE4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jul 2020 10:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728426AbgGUOE4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jul 2020 10:04:56 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1DEC061794;
+        Tue, 21 Jul 2020 07:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=35SbtfWGz45hL6nU4tFXWLRurwYHBqmeuQ1Pfog9lBE=; b=0vFJ01JML6wAxqx0pgoErHwFWm
+        qgYuA1U50+QuNkCwa4AAwpV95tjuDr4qpsWJTXWQgdrh2sg3jeCzWLEri5cWOm0pdYjjBVdOLNkWU
+        W71JJO0GypwD9MgwhTFgGGTvtW87X5kKZ2pPqc998yJkhTfzsqXJtkOSk4v+XnDqeS+F3v5zQPWMM
+        kA9oc3/BmPxl+U81YAt+TcQrP8352Pt3dTI32jB+evjClILufPhW9gV0QEd/H/WroCoqIJh48OLPh
+        uxqV4uWPVIfETObbKHS8nHPPnfcWL/VKLoKXszfRorLG33+LEZ2LP9v3vtqV8s4btah6+p23tnc2R
+        ECB9q1WQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jxssz-0007zy-LP; Tue, 21 Jul 2020 14:04:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3E0A6304D28;
+        Tue, 21 Jul 2020 16:04:48 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1603B20DCCA0B; Tue, 21 Jul 2020 16:04:48 +0200 (CEST)
+Date:   Tue, 21 Jul 2020 16:04:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     paulmck@kernel.org, will@kernel.org, arnd@arndb.de,
+        mark.rutland@arm.com, dvyukov@google.com, glider@google.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 2/8] objtool, kcsan: Add __tsan_read_write to uaccess
+ whitelist
+Message-ID: <20200721140448.GZ10769@hirez.programming.kicks-ass.net>
+References: <20200721103016.3287832-1-elver@google.com>
+ <20200721103016.3287832-3-elver@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF78 (Linux)/8.8.15_GA_3953)
-Thread-Topic: x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
-Thread-Index: vi7IW503i62QJHH8I6RRgM2HetIWrA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721103016.3287832-3-elver@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Jul 21, 2020, at 6:04 AM, Nicholas Piggin npiggin@gmail.com wrote:
-
-> Excerpts from Mathieu Desnoyers's message of July 21, 2020 2:46 am:
-[...]
+On Tue, Jul 21, 2020 at 12:30:10PM +0200, Marco Elver wrote:
+> Adds the new __tsan_read_write compound instrumentation to objtool's
+> uaccess whitelist.
 > 
-> Yeah you're probably right in this case I think. Quite likely most kernel
-> tasks that asynchronously write to user memory would at least have some
-> kind of producer-consumer barriers.
+> Signed-off-by: Marco Elver <elver@google.com>
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+> ---
+>  tools/objtool/check.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> But is that restriction of all async modifications documented and enforced
-> anywhere?
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 63d8b630c67a..38d82e705c93 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -528,6 +528,11 @@ static const char *uaccess_safe_builtin[] = {
+>  	"__tsan_write4",
+>  	"__tsan_write8",
+>  	"__tsan_write16",
+> +	"__tsan_read_write1",
+> +	"__tsan_read_write2",
+> +	"__tsan_read_write4",
+> +	"__tsan_read_write8",
+> +	"__tsan_read_write16",
+>  	"__tsan_atomic8_load",
+>  	"__tsan_atomic16_load",
+>  	"__tsan_atomic32_load",
+> -- 
+> 2.28.0.rc0.105.gf9edc3c819-goog
 > 
->>> How about other memory accesses via kthread_use_mm? Presumably there is
->>> still ordering requirement there for membarrier,
->> 
->> Please provide an example case with memory accesses via kthread_use_mm where
->> ordering matters to support your concern.
-> 
-> I think the concern Andy raised with io_uring was less a specific
-> problem he saw and more a general concern that we have these memory
-> accesses which are not synchronized with membarrier.
-> 
->>> so I really think
->>> it's a fragile interface with no real way for the user to know how
->>> kernel threads may use its mm for any particular reason, so membarrier
->>> should synchronize all possible kernel users as well.
->> 
->> I strongly doubt so, but perhaps something should be clarified in the
->> documentation
->> if you have that feeling.
-> 
-> I'd rather go the other way and say if you have reasoning or numbers for
-> why PF_KTHREAD is an important optimisation above rq->curr == rq->idle
-> then we could think about keeping this subtlety with appropriate
-> documentation added, otherwise we can just kill it and remove all doubt.
-> 
-> That being said, the x86 sync core gap that I imagined could be fixed
-> by changing to rq->curr == rq->idle test does not actually exist because
-> the global membarrier does not have a sync core option. So fixing the
-> exit_lazy_tlb points that this series does *should* fix that. So
-> PF_KTHREAD may be less problematic than I thought from implementation
-> point of view, only semantics.
-
-Today, the membarrier global expedited command explicitly skips kernel threads,
-but it happens that membarrier private expedited considers those with the
-same mm as target for the IPI.
-
-So we already implement a semantic which differs between private and global
-expedited membarriers. This can be explained in part by the fact that
-kthread_use_mm was introduced after 4.16, where the most recent membarrier
-commands where introduced. It seems that the effect on membarrier was not
-considered when kthread_use_mm was introduced.
-
-Looking at membarrier(2) documentation, it states that IPIs are only sent to
-threads belonging to the same process as the calling thread. If my understanding
-of the notion of process is correct, this should rule out sending the IPI to
-kernel threads, given they are not "part" of the same process, only borrowing
-the mm. But I agree that the distinction is moot, and should be clarified.
-
-Without a clear use-case to justify adding a constraint on membarrier, I am
-tempted to simply clarify documentation of current membarrier commands,
-stating clearly that they are not guaranteed to affect kernel threads. Then,
-if we have a compelling use-case to implement a different behavior which covers
-kthreads, this could be added consistently across membarrier commands with a
-flag (or by adding new commands).
-
-Does this approach make sense ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
