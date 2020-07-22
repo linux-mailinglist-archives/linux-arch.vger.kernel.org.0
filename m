@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0A522A211
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 00:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0104622A1F2
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 00:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733202AbgGVWMZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1733206AbgGVWMZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Wed, 22 Jul 2020 18:12:25 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:52690 "EHLO
+Received: from Galois.linutronix.de ([193.142.43.55]:52552 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733165AbgGVWLm (ORCPT
+        with ESMTP id S1733150AbgGVWLm (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 18:11:42 -0400
-Message-Id: <20200722220520.711492752@linutronix.de>
+Message-Id: <20200722220520.855839271@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595455898;
+        s=2020; t=1595455900;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=V/R9YoJMWiPsEXC7CtH2TFLpMALtyUA+rhE3Vsekrrw=;
-        b=F3YtnZlDzzSids8yTmFe7ksXE74SXWhJCfCzDdPwiBK+NJjG7leeZklSMsmmlWQBBcN+rl
-        BibisPN2wqw0jxZUohNeHx53aa8/me4t7gCWbyXA69CxBkLlynJyd+1arM85tthMl20iq2
-        kehOWSBkGNL40CMsAvRcAXmMWIi4By6ZrFvqGPKNU5jMG06U72QaM8Gvtfm1sMbzgk0+MW
-        r8vzVjrIFLwc3/+UV7jtGcUssBd0AB4bR1IoEg4Rr1HsJhDvCdLeBfwfiM2tWM7n/bvVKR
-        1AwDQYsDTVyl3GGrZIjWFBhhp7iNTA1/i62J1AUG+L8Zrh0YFIyzs02YYDNtkQ==
+        bh=RjhPGcuOSxiM5h2vqZ/ay/HrgGpLDZMkPwTL1jcmYpc=;
+        b=H1dpczW7kN3lnZbDHYf0bplk5nfI/8oeJ/kXKjlDuvRyq12M8xpQM5i37c0rVCCHk0g5MF
+        xgGoryDcwU02TuFi7X/WBxjlaeFHKqz4l88DCXBXBDgo0AywT0ewdjy9vejRWERPO4OuXB
+        3vwZo6JswDEa8m0B49lrthPVQ1a1neaZU0D4MpVpwrKYMY9QJeYDP8LQWkm+wR0v9TZ0v5
+        igfab0CoC3lNBkFX3xzh4k72NM1K75jq3FXEeZYHz8bDi36FNBHeYLVUx9bUA5VWSWZM5/
+        ZXQDoyIS44P9Dqwp2BRagLtCfvlhmeRjlZUv39BGMOcodcTmdvC1igOAOxQLpA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595455898;
+        s=2020e; t=1595455900;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=V/R9YoJMWiPsEXC7CtH2TFLpMALtyUA+rhE3Vsekrrw=;
-        b=ssWHc5d+u0GvH4uG+wT0q/zviHxVUh9ClNu5eveBRvJkjMdMi5HgQ/qTOciq23tY04kqtn
-        kndZcX+cLnu6egCA==
-Date:   Thu, 23 Jul 2020 00:00:07 +0200
+        bh=RjhPGcuOSxiM5h2vqZ/ay/HrgGpLDZMkPwTL1jcmYpc=;
+        b=3AjL0kv7a4HLsOlpWGMZsnql2rhJ4PLKhHFyN23fgzttmHHviwoDPvE2kP/pqIBGIcRovz
+        tz6B7LC7o8t4u5Bw==
+Date:   Thu, 23 Jul 2020 00:00:08 +0200
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
@@ -42,7 +42,7 @@ Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [patch V5 13/15] x86/entry: Use generic interrupt entry/exit code
+Subject: [patch V5 14/15] x86/entry: Cleanup idtentry_enter/exit
 References: <20200722215954.464281930@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,217 +54,248 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Replace the x86 code with the generic variant. Use temporary defines for
-idtentry_* which will be cleaned up in the next step.
+Remove the temporary defines and fixup all references.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 ---
- arch/x86/entry/common.c         |  167 ----------------------------------------
- arch/x86/include/asm/idtentry.h |   10 --
- 2 files changed, 5 insertions(+), 172 deletions(-)
+ arch/x86/entry/common.c         |    6 +++---
+ arch/x86/include/asm/idtentry.h |   33 ++++++++++++++-------------------
+ arch/x86/kernel/kvm.c           |    6 +++---
+ arch/x86/kernel/traps.c         |    6 +++---
+ arch/x86/mm/fault.c             |    6 +++---
+ 5 files changed, 26 insertions(+), 31 deletions(-)
 
 --- a/arch/x86/entry/common.c
 +++ b/arch/x86/entry/common.c
-@@ -198,171 +198,6 @@ SYSCALL_DEFINE0(ni_syscall)
- 	return -ENOSYS;
- }
+@@ -248,9 +248,9 @@ static void __xen_pv_evtchn_do_upcall(vo
+ {
+ 	struct pt_regs *old_regs;
+ 	bool inhcall;
+-	idtentry_state_t state;
++	irqentry_state_t state;
  
--/**
-- * idtentry_enter - Handle state tracking on ordinary idtentries
-- * @regs:	Pointer to pt_regs of interrupted context
-- *
-- * Invokes:
-- *  - lockdep irqflag state tracking as low level ASM entry disabled
-- *    interrupts.
-- *
-- *  - Context tracking if the exception hit user mode.
-- *
-- *  - The hardirq tracer to keep the state consistent as low level ASM
-- *    entry disabled interrupts.
-- *
-- * As a precondition, this requires that the entry came from user mode,
-- * idle, or a kernel context in which RCU is watching.
-- *
-- * For kernel mode entries RCU handling is done conditional. If RCU is
-- * watching then the only RCU requirement is to check whether the tick has
-- * to be restarted. If RCU is not watching then rcu_irq_enter() has to be
-- * invoked on entry and rcu_irq_exit() on exit.
-- *
-- * Avoiding the rcu_irq_enter/exit() calls is an optimization but also
-- * solves the problem of kernel mode pagefaults which can schedule, which
-- * is not possible after invoking rcu_irq_enter() without undoing it.
-- *
-- * For user mode entries irqentry_enter_from_user_mode() must be invoked to
-- * establish the proper context for NOHZ_FULL. Otherwise scheduling on exit
-- * would not be possible.
-- *
-- * Returns: An opaque object that must be passed to idtentry_exit()
-- *
-- * The return value must be fed into the state argument of
-- * idtentry_exit().
-- */
--idtentry_state_t noinstr idtentry_enter(struct pt_regs *regs)
--{
--	idtentry_state_t ret = {
--		.exit_rcu = false,
--	};
--
--	if (user_mode(regs)) {
--		irqentry_enter_from_user_mode(regs);
--		return ret;
--	}
--
--	/*
--	 * If this entry hit the idle task invoke rcu_irq_enter() whether
--	 * RCU is watching or not.
--	 *
--	 * Interupts can nest when the first interrupt invokes softirq
--	 * processing on return which enables interrupts.
--	 *
--	 * Scheduler ticks in the idle task can mark quiescent state and
--	 * terminate a grace period, if and only if the timer interrupt is
--	 * not nested into another interrupt.
--	 *
--	 * Checking for __rcu_is_watching() here would prevent the nesting
--	 * interrupt to invoke rcu_irq_enter(). If that nested interrupt is
--	 * the tick then rcu_flavor_sched_clock_irq() would wrongfully
--	 * assume that it is the first interupt and eventually claim
--	 * quiescient state and end grace periods prematurely.
--	 *
--	 * Unconditionally invoke rcu_irq_enter() so RCU state stays
--	 * consistent.
--	 *
--	 * TINY_RCU does not support EQS, so let the compiler eliminate
--	 * this part when enabled.
--	 */
--	if (!IS_ENABLED(CONFIG_TINY_RCU) && is_idle_task(current)) {
--		/*
--		 * If RCU is not watching then the same careful
--		 * sequence vs. lockdep and tracing is required
--		 * as in irqentry_enter_from_user_mode().
--		 */
--		lockdep_hardirqs_off(CALLER_ADDR0);
--		rcu_irq_enter();
--		instrumentation_begin();
--		trace_hardirqs_off_finish();
--		instrumentation_end();
--
--		ret.exit_rcu = true;
--		return ret;
--	}
--
--	/*
--	 * If RCU is watching then RCU only wants to check whether it needs
--	 * to restart the tick in NOHZ mode. rcu_irq_enter_check_tick()
--	 * already contains a warning when RCU is not watching, so no point
--	 * in having another one here.
--	 */
--	instrumentation_begin();
--	rcu_irq_enter_check_tick();
--	/* Use the combo lockdep/tracing function */
--	trace_hardirqs_off();
--	instrumentation_end();
--
--	return ret;
--}
--
--static void idtentry_exit_cond_resched(struct pt_regs *regs, bool may_sched)
--{
--	if (may_sched && !preempt_count()) {
--		/* Sanity check RCU and thread stack */
--		rcu_irq_exit_check_preempt();
--		if (IS_ENABLED(CONFIG_DEBUG_ENTRY))
--			WARN_ON_ONCE(!on_thread_stack());
--		if (need_resched())
--			preempt_schedule_irq();
--	}
--	/* Covers both tracing and lockdep */
--	trace_hardirqs_on();
--}
--
--/**
-- * idtentry_exit - Handle return from exception that used idtentry_enter()
-- * @regs:	Pointer to pt_regs (exception entry regs)
-- * @state:	Return value from matching call to idtentry_enter()
-- *
-- * Depending on the return target (kernel/user) this runs the necessary
-- * preemption and work checks if possible and reguired and returns to
-- * the caller with interrupts disabled and no further work pending.
-- *
-- * This is the last action before returning to the low level ASM code which
-- * just needs to return to the appropriate context.
-- *
-- * Counterpart to idtentry_enter(). The return value of the entry
-- * function must be fed into the @state argument.
-- */
--void noinstr idtentry_exit(struct pt_regs *regs, idtentry_state_t state)
--{
--	lockdep_assert_irqs_disabled();
--
--	/* Check whether this returns to user mode */
--	if (user_mode(regs)) {
--		irqentry_exit_to_user_mode(regs);
--	} else if (regs->flags & X86_EFLAGS_IF) {
--		/*
--		 * If RCU was not watching on entry this needs to be done
--		 * carefully and needs the same ordering of lockdep/tracing
--		 * and RCU as the return to user mode path.
--		 */
--		if (state.exit_rcu) {
--			instrumentation_begin();
--			/* Tell the tracer that IRET will enable interrupts */
--			trace_hardirqs_on_prepare();
--			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
--			instrumentation_end();
--			rcu_irq_exit();
--			lockdep_hardirqs_on(CALLER_ADDR0);
--			return;
--		}
--
--		instrumentation_begin();
--		idtentry_exit_cond_resched(regs, IS_ENABLED(CONFIG_PREEMPTION));
--		instrumentation_end();
--	} else {
--		/*
--		 * IRQ flags state is correct already. Just tell RCU if it
--		 * was not watching on entry.
--		 */
--		if (state.exit_rcu)
--			rcu_irq_exit();
--	}
--}
--
- #ifdef CONFIG_XEN_PV
- #ifndef CONFIG_PREEMPTION
- /*
-@@ -427,7 +262,7 @@ static void __xen_pv_evtchn_do_upcall(vo
- 	inhcall = get_and_clear_inhcall();
- 	if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
- 		instrumentation_begin();
--		idtentry_exit_cond_resched(regs, true);
-+		irqentry_exit_cond_resched();
+-	state = idtentry_enter(regs);
++	state = irqentry_enter(regs);
+ 	old_regs = set_irq_regs(regs);
+ 
+ 	instrumentation_begin();
+@@ -266,7 +266,7 @@ static void __xen_pv_evtchn_do_upcall(vo
  		instrumentation_end();
  		restore_inhcall(inhcall);
  	} else {
+-		idtentry_exit(regs, state);
++		irqentry_exit(regs, state);
+ 	}
+ }
+ #endif /* CONFIG_XEN_PV */
 --- a/arch/x86/include/asm/idtentry.h
 +++ b/arch/x86/include/asm/idtentry.h
-@@ -11,12 +11,10 @@
+@@ -11,11 +11,6 @@
  
  #include <asm/irq_stack.h>
  
--typedef struct idtentry_state {
--	bool exit_rcu;
--} idtentry_state_t;
+-/* Temporary defines */
+-typedef irqentry_state_t idtentry_state_t;
+-#define idtentry_enter irqentry_enter
+-#define idtentry_exit irqentry_exit
 -
--idtentry_state_t idtentry_enter(struct pt_regs *regs);
--void idtentry_exit(struct pt_regs *regs, idtentry_state_t state);
-+/* Temporary defines */
-+typedef irqentry_state_t idtentry_state_t;
-+#define idtentry_enter irqentry_enter
-+#define idtentry_exit irqentry_exit
- 
  /**
   * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+  *		      No error code pushed by hardware
+@@ -45,8 +40,8 @@ typedef irqentry_state_t idtentry_state_
+  * The macro is written so it acts as function definition. Append the
+  * body with a pair of curly brackets.
+  *
+- * idtentry_enter() contains common code which has to be invoked before
+- * arbitrary code in the body. idtentry_exit() contains common code
++ * irqentry_enter() contains common code which has to be invoked before
++ * arbitrary code in the body. irqentry_exit() contains common code
+  * which has to run before returning to the low level assembly code.
+  */
+ #define DEFINE_IDTENTRY(func)						\
+@@ -54,12 +49,12 @@ static __always_inline void __##func(str
+ 									\
+ __visible noinstr void func(struct pt_regs *regs)			\
+ {									\
+-	idtentry_state_t state = idtentry_enter(regs);			\
++	irqentry_state_t state = irqentry_enter(regs);			\
+ 									\
+ 	instrumentation_begin();					\
+ 	__##func (regs);						\
+ 	instrumentation_end();						\
+-	idtentry_exit(regs, state);					\
++	irqentry_exit(regs, state);					\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs)
+@@ -101,12 +96,12 @@ static __always_inline void __##func(str
+ __visible noinstr void func(struct pt_regs *regs,			\
+ 			    unsigned long error_code)			\
+ {									\
+-	idtentry_state_t state = idtentry_enter(regs);			\
++	irqentry_state_t state = irqentry_enter(regs);			\
+ 									\
+ 	instrumentation_begin();					\
+ 	__##func (regs, error_code);					\
+ 	instrumentation_end();						\
+-	idtentry_exit(regs, state);					\
++	irqentry_exit(regs, state);					\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs,		\
+@@ -161,7 +156,7 @@ static __always_inline void __##func(str
+  * body with a pair of curly brackets.
+  *
+  * Contrary to DEFINE_IDTENTRY_ERRORCODE() this does not invoke the
+- * idtentry_enter/exit() helpers before and after the body invocation. This
++ * irqentry_enter/exit() helpers before and after the body invocation. This
+  * needs to be done in the body itself if applicable. Use if extra work
+  * is required before the enter/exit() helpers are invoked.
+  */
+@@ -197,7 +192,7 @@ static __always_inline void __##func(str
+ __visible noinstr void func(struct pt_regs *regs,			\
+ 			    unsigned long error_code)			\
+ {									\
+-	idtentry_state_t state = idtentry_enter(regs);			\
++	irqentry_state_t state = irqentry_enter(regs);			\
+ 									\
+ 	instrumentation_begin();					\
+ 	irq_enter_rcu();						\
+@@ -205,7 +200,7 @@ static __always_inline void __##func(str
+ 	__##func (regs, (u8)error_code);				\
+ 	irq_exit_rcu();							\
+ 	instrumentation_end();						\
+-	idtentry_exit(regs, state);					\
++	irqentry_exit(regs, state);					\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs, u8 vector)
+@@ -229,7 +224,7 @@ static __always_inline void __##func(str
+  * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
+  * @func:	Function name of the entry point
+  *
+- * idtentry_enter/exit() and irq_enter/exit_rcu() are invoked before the
++ * irqentry_enter/exit() and irq_enter/exit_rcu() are invoked before the
+  * function body. KVM L1D flush request is set.
+  *
+  * Runs the function on the interrupt stack if the entry hit kernel mode
+@@ -239,7 +234,7 @@ static void __##func(struct pt_regs *reg
+ 									\
+ __visible noinstr void func(struct pt_regs *regs)			\
+ {									\
+-	idtentry_state_t state = idtentry_enter(regs);			\
++	irqentry_state_t state = irqentry_enter(regs);			\
+ 									\
+ 	instrumentation_begin();					\
+ 	irq_enter_rcu();						\
+@@ -247,7 +242,7 @@ static void __##func(struct pt_regs *reg
+ 	run_on_irqstack_cond(__##func, regs, regs);			\
+ 	irq_exit_rcu();							\
+ 	instrumentation_end();						\
+-	idtentry_exit(regs, state);					\
++	irqentry_exit(regs, state);					\
+ }									\
+ 									\
+ static noinline void __##func(struct pt_regs *regs)
+@@ -268,7 +263,7 @@ static __always_inline void __##func(str
+ 									\
+ __visible noinstr void func(struct pt_regs *regs)			\
+ {									\
+-	idtentry_state_t state = idtentry_enter(regs);			\
++	irqentry_state_t state = irqentry_enter(regs);			\
+ 									\
+ 	instrumentation_begin();					\
+ 	__irq_enter_raw();						\
+@@ -276,7 +271,7 @@ static __always_inline void __##func(str
+ 	__##func (regs);						\
+ 	__irq_exit_raw();						\
+ 	instrumentation_end();						\
+-	idtentry_exit(regs, state);					\
++	irqentry_exit(regs, state);					\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs)
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -233,7 +233,7 @@ EXPORT_SYMBOL_GPL(kvm_read_and_reset_apf
+ noinstr bool __kvm_handle_async_pf(struct pt_regs *regs, u32 token)
+ {
+ 	u32 reason = kvm_read_and_reset_apf_flags();
+-	idtentry_state_t state;
++	irqentry_state_t state;
+ 
+ 	switch (reason) {
+ 	case KVM_PV_REASON_PAGE_NOT_PRESENT:
+@@ -243,7 +243,7 @@ noinstr bool __kvm_handle_async_pf(struc
+ 		return false;
+ 	}
+ 
+-	state = idtentry_enter(regs);
++	state = irqentry_enter(regs);
+ 	instrumentation_begin();
+ 
+ 	/*
+@@ -264,7 +264,7 @@ noinstr bool __kvm_handle_async_pf(struc
+ 	}
+ 
+ 	instrumentation_end();
+-	idtentry_exit(regs, state);
++	irqentry_exit(regs, state);
+ 	return true;
+ }
+ 
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -245,7 +245,7 @@ static noinstr bool handle_bug(struct pt
+ 
+ DEFINE_IDTENTRY_RAW(exc_invalid_op)
+ {
+-	idtentry_state_t state;
++	irqentry_state_t state;
+ 
+ 	/*
+ 	 * We use UD2 as a short encoding for 'CALL __WARN', as such
+@@ -255,11 +255,11 @@ DEFINE_IDTENTRY_RAW(exc_invalid_op)
+ 	if (!user_mode(regs) && handle_bug(regs))
+ 		return;
+ 
+-	state = idtentry_enter(regs);
++	state = irqentry_enter(regs);
+ 	instrumentation_begin();
+ 	handle_invalid_op(regs);
+ 	instrumentation_end();
+-	idtentry_exit(regs, state);
++	irqentry_exit(regs, state);
+ }
+ 
+ DEFINE_IDTENTRY(exc_coproc_segment_overrun)
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1377,7 +1377,7 @@ handle_page_fault(struct pt_regs *regs,
+ DEFINE_IDTENTRY_RAW_ERRORCODE(exc_page_fault)
+ {
+ 	unsigned long address = read_cr2();
+-	idtentry_state_t state;
++	irqentry_state_t state;
+ 
+ 	prefetchw(&current->mm->mmap_lock);
+ 
+@@ -1412,11 +1412,11 @@ DEFINE_IDTENTRY_RAW_ERRORCODE(exc_page_f
+ 	 * code reenabled RCU to avoid subsequent wreckage which helps
+ 	 * debugability.
+ 	 */
+-	state = idtentry_enter(regs);
++	state = irqentry_enter(regs);
+ 
+ 	instrumentation_begin();
+ 	handle_page_fault(regs, error_code, address);
+ 	instrumentation_end();
+ 
+-	idtentry_exit(regs, state);
++	irqentry_exit(regs, state);
+ }
+
 
 
