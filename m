@@ -2,51 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15ED3228FD8
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 07:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9602290D9
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 08:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbgGVFk5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 22 Jul 2020 01:40:57 -0400
-Received: from smtp.utu.edu.uy ([190.0.150.6]:46274 "EHLO delta45.utu.edu.uy"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726696AbgGVFk5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Jul 2020 01:40:57 -0400
-X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Jul 2020 01:40:54 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by delta45.utu.edu.uy (Postfix) with ESMTP id B6A1E1D0EF11;
-        Wed, 22 Jul 2020 02:32:12 -0300 (GMT+3)
-Received: from delta45.utu.edu.uy ([127.0.0.1])
-        by localhost (delta45.utu.edu.uy [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OxV12qveerB9; Wed, 22 Jul 2020 02:32:12 -0300 (GMT+3)
-Received: from localhost (localhost [127.0.0.1])
-        by delta45.utu.edu.uy (Postfix) with ESMTP id B04AD1D0EEF0;
-        Wed, 22 Jul 2020 02:32:11 -0300 (GMT+3)
-X-Virus-Scanned: amavisd-new at delta45.utu.edu.uy
-Received: from delta45.utu.edu.uy ([127.0.0.1])
-        by localhost (delta45.utu.edu.uy [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id y6g8PCAdXJ3S; Wed, 22 Jul 2020 02:32:11 -0300 (GMT+3)
-Received: from delta45.utu.edu.uy (delta45 [172.17.1.45])
-        by delta45.utu.edu.uy (Postfix) with ESMTP id 7FB051D0EEFB;
-        Wed, 22 Jul 2020 02:32:10 -0300 (GMT+3)
-Date:   Wed, 22 Jul 2020 02:32:10 -0300 (GMT-03:00)
-From:   Darlehen Bedienung <aemartinez@utu.edu.uy>
-Reply-To: info_innoxcapitalservicesolution@aol.com
-Message-ID: <754360867.138094.1595395930510.JavaMail.zimbra@utu.edu.uy>
-Subject: 
+        id S1728871AbgGVGay (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jul 2020 02:30:54 -0400
+Received: from verein.lst.de ([213.95.11.211]:54974 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728649AbgGVGay (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Jul 2020 02:30:54 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 4624868AFE; Wed, 22 Jul 2020 08:30:51 +0200 (CEST)
+Date:   Wed, 22 Jul 2020 08:30:50 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org
+Subject: Re: io_uring vs in_compat_syscall()
+Message-ID: <20200722063050.GA24968@lst.de>
+References: <b754dad5-ee85-8a2f-f41a-8bdc56de42e8@kernel.dk> <8987E376-6B13-4798-BDBA-616A457447CF@amacapital.net> <20200721070709.GB11432@lst.de> <CALCETrXWZBXZuCeRYvYY8AWG51e_P3bOeNeqc8zXPLOTDTHY0g@mail.gmail.com> <20200721143412.GA8099@lst.de> <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [172.17.1.45]
-X-Mailer: Zimbra 8.8.12_GA_3866 (zclient/8.8.12_GA_3866)
-X-Authenticated-User: aemartinez@utu.edu.uy
-Thread-Index: sHxyVNlBzwToKpIuoIGp0++CnI1oLA==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Jul 21, 2020 at 10:25:24AM -0700, Andy Lutomirski wrote:
+> On Tue, Jul 21, 2020 at 7:34 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > On Tue, Jul 21, 2020 at 07:31:02AM -0700, Andy Lutomirski wrote:
+> > > > What do you mean with "properly wired up".  Do you really want to spread
+> > > > ->compat_foo methods everywhere, including read and write?  I found
+> > > > in_compat_syscall() a lot small and easier to maintain than all the
+> > > > separate compat cruft.
+> > >
+> > > I was imagining using a flag.  Some of the net code uses
+> > > MSG_CMSG_COMPAT for this purpose.
+> >
+> > Killing that nightmarish monster is what actually got me into looking
+> > io_uring and starting this thread.
+> 
+> I agree that MSG_CMSG_COMPAT is nasty, but I think the concept is
+> sound -- rather than tracking whether we're compat by using a
+> different function or a per-thread variable, actually explicitly
+> tracking the mode seems sensible.
 
+I very strongly disagree.  Two recent projects I did was to remove
+the compat_exec mess, and the compat get/setsockopt mess, and each
+time it removed hundreds of lines of code duplicating native
+functionality, often in slightly broken ways.  We need a generic
+out of band way to transfer the information down and just check in
+in a few strategic places, and in_compat_syscall() does the right
+thing for that.
 
-Schönen Tag,Wir sind zuverlässige, vertrauenswürdige Kreditgeber, Wir bieten Darlehen an Unternehmen und Privatpersonen zu niedrigen und günstigen Zinssatz von 2%. Sind Sie auf der Suche nach einem Business-Darlehen, persönliche Darlehen, Schuldenkonsolidierung, unbesicherte Darlehen, Venture Capital. Kontaktieren Sie uns mit Name, Land, Darlehensbetrag, Dauer und Telefonnummer.GrüßeHerr DA COSTA DARREN FAY
+> If we're going to play in_compat_syscall() games, let's please make
+> io_uring_enter() return -EINVAL if in_compat_syscall() != ctx->compat.
+
+That sounds like a plan, but still doesn't help with submissions from
+the offload WQ or the sqpoll thread.
