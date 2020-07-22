@@ -2,92 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BA0229D8D
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 18:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0268229EA3
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 19:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730802AbgGVQxv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jul 2020 12:53:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726649AbgGVQxv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Jul 2020 12:53:51 -0400
-Received: from gaia (unknown [95.146.230.158])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DBE0B206F5;
-        Wed, 22 Jul 2020 16:53:49 +0000 (UTC)
-Date:   Wed, 22 Jul 2020 17:53:47 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Laight <David.Laight@ACULAB.COM>
+        id S1726349AbgGVRjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jul 2020 13:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726157AbgGVRjK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 13:39:10 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790B5C0619DC;
+        Wed, 22 Jul 2020 10:39:10 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jyIhr-000Qcs-Cu; Wed, 22 Jul 2020 17:39:03 +0000
+Date:   Wed, 22 Jul 2020 18:39:03 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Laight <David.Laight@aculab.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] raw_copy_from_user() semantics
-Message-ID: <20200722165346.GB4069@gaia>
-References: <20200719031733.GI2786714@ZenIV.linux.org.uk>
- <CAHk-=wi7f5vG+s=aFsskzcTRs+f7MVHK9yJFZtUEfndy6ScKRQ@mail.gmail.com>
- <CAHk-=wirA7zJJB17KJPCE-V9pKwn8VKxXTeiaM+F+Sa1Xd2SWA@mail.gmail.com>
- <20200722113707.GC27540@gaia>
- <8fde1b9044a34ff59eb5ff3dafbf2b97@AcuMS.aculab.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 04/18] csum_and_copy_..._user(): pass 0xffffffff instead
+ of 0 as initial sum
+Message-ID: <20200722173903.GG2786714@ZenIV.linux.org.uk>
+References: <20200721202425.GA2786714@ZenIV.linux.org.uk>
+ <20200721202549.4150745-1-viro@ZenIV.linux.org.uk>
+ <20200721202549.4150745-4-viro@ZenIV.linux.org.uk>
+ <2d85ebb8ea2248c8a14f038a0c60297e@AcuMS.aculab.com>
+ <20200722144213.GE2786714@ZenIV.linux.org.uk>
+ <4e03cce8ed184d40bb0ea40fd3d51000@AcuMS.aculab.com>
+ <20200722155452.GF2786714@ZenIV.linux.org.uk>
+ <a55679c8d4dc4fb08d1e1782b5fc572c@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8fde1b9044a34ff59eb5ff3dafbf2b97@AcuMS.aculab.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <a55679c8d4dc4fb08d1e1782b5fc572c@AcuMS.aculab.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 01:14:21PM +0000, David Laight wrote:
-> From: Catalin Marinas
-> > Sent: 22 July 2020 12:37
-> > On Sun, Jul 19, 2020 at 12:34:11PM -0700, Linus Torvalds wrote:
-> > > On Sun, Jul 19, 2020 at 12:28 PM Linus Torvalds
-> > > <torvalds@linux-foundation.org> wrote:
-> > > > I think we should try to get rid of the exact semantics.
-> > >
-> > > Side note: I think one of the historical reasons for the exact
-> > > semantics was that we used to do things like the mount option copying
-> > > with a "copy_from_user()" iirc.
-> > >
-> > > And that could take a fault at the end of the stack etc, because
-> > > "copy_mount_options()" is nasty and doesn't get a size, and just
-> > > copies "up to 4kB" of data.
-> > >
-> > > It's a mistake in the interface, but it is what it is. But we've
-> > > always handled the inexact count there anyway by originally doing byte
-> > > accesses, and at some point you optimized it to just look at where
-> > > page boundaries might be..
-> > 
-> > And we may have to change this again since, with arm64 MTE, the page
-> > boundary check is insufficient:
-> > 
-> > https://lore.kernel.org/linux-fsdevel/20200715170844.30064-25-catalin.marinas@arm.com/
-> > 
-> > While currently the fault path is unlikely to trigger, with MTE in user
-> > space it's a lot more likely since the buffer (e.g. a string) is
-> > normally less than 4K and the adjacent addresses would have a different
-> > colour.
-> > 
-> > I looked (though briefly) into passing the copy_from_user() problem to
-> > filesystems that would presumably know better how much to copy. In most
-> > cases the options are string, so something like strncpy_from_user()
-> > would work. For mount options as binary blobs (IIUC btrfs) maybe the fs
-> > has a better way to figure out how much to copy.
+On Wed, Jul 22, 2020 at 04:17:02PM +0000, David Laight wrote:
+> > David, do you *ever* bother to RTFS?  I mean, competent supercilious twits
+> > are annoying, but at least with those you can generally assume that what
+> > they say makes sense and has some relation to reality.  You, OTOH, keep
+> > spewing utter bollocks, without ever lowering yourself to checking if your
+> > guesses have anything to do with the reality.  With supercilious twit part
+> > proudly on the display - you do speak with confidence, and the way you
+> > dispense the oh-so-valuable advice to everyone around...
 > 
-> What about changing the mount code to loop calling get_user()
-> to read aligned words until failure?
-> Mount is fairly uncommon and the extra cost is probably small compared
-> to the rest of doing a mount.
+> Yes, I do look at the code.
+> I've actually spent a lot of time looking at the x86 checksum code.
+> I've posted a patch for a version that is about twice as fast as the
+> current one on a large range of x86 cpus.
+> 
+> Possibly I meant the 32bit reduction inside csum_add()
+> rather than what csum_fold() does.
 
-Before commit 12efec560274 ("saner copy_mount_options()"), it was using
-single-byte get_user(). That could have been optimised for aligned words
-reading but I don't really think it's worth the hassle. Since the source
-and destination don't have the same alignment and some architecture
-don't support unaligned accesses (for storing to the kernel buffer), it
-would just make this function unnecessarily complicated.
+Really?
+static inline unsigned add32_with_carry(unsigned a, unsigned b)
+{  
+        asm("addl %2,%0\n\t"
+            "adcl $0,%0"
+            : "=r" (a)
+            : "0" (a), "rm" (b));
+        return a;
+}
+static inline __wsum csum_add(__wsum csum, __wsum addend)
+{
+        return (__force __wsum)add32_with_carry((__force unsigned)csum,
+                                                (__force unsigned)addend);
+}
 
--- 
-Catalin
+I would love to see your patch, anyway, along with the testcases and performance
+comparison.
+
+> Having worked on the internals of SYSV, NetBSD and Linux I probably
+> forget the exact names for a few things.
+
+That's usually dealt with by a few minutes with grep and vi...
+
+> The brain can only hold so much information.
+
+Bravo.  "I can't be arsed to check anything" spun into the claim of one's
+superior experience.
+
+What it means in practice is that your output is so much garbage that _might_
+be untangled into something meaningful if the reader manages to guess the
+substitutions.  Provided that the reconstruction won't not turn out to be
+a composite of things applying to different versions of different kernels,
+not being valid for any of those, that is...
