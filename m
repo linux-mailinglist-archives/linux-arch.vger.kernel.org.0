@@ -2,80 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B533022929E
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 09:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7397F2293BC
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 10:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgGVHzF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jul 2020 03:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726506AbgGVHzF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 03:55:05 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160EBC0619DC;
-        Wed, 22 Jul 2020 00:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RM7GOf2CU2j7IEdxsQ76+7tPsuDp35umedz/Oe8IL6c=; b=wVfIXSUtGE9pDSPf46IprCtRvt
-        rlP4DWLTU+26h7YnzffGvPwx+Q2V5KStDB4gowD8s7ZZPyjjQVbdcNRz7+j0R7IR4XOtvs2rUjWC1
-        k6y/xZUeyIKYZGAM7I8yNwLrgkRoj1kgHzOVzvTP0ydEzmzgaYqYxd0TV0b9aCa4+k3NQb8+7IVqs
-        ICcLMaAeUsXe1p6j3U2a9gtA5y2ra0GrRVvTm5UBCFozLFNoWobQZLIMxocwnw8BEZWEwm+L6+iPh
-        Nc0Bf4pLM6xygsvwGTyEYclLbqc97zAnATlncIKI8vXTQwPnxeuPouY72d2tZkMrMcTJEnDtMCQW3
-        ZETQILTQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jy9aa-0005h7-Sf; Wed, 22 Jul 2020 07:54:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8529E301AC6;
-        Wed, 22 Jul 2020 09:54:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4B06D20140AD7; Wed, 22 Jul 2020 09:54:55 +0200 (CEST)
-Date:   Wed, 22 Jul 2020 09:54:55 +0200
-From:   peterz@infradead.org
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: Re: [patch V4 02/15] entry: Provide generic syscall entry
- functionality
-Message-ID: <20200722075455.GQ119549@hirez.programming.kicks-ass.net>
-References: <20200721105706.030914876@linutronix.de>
- <20200721110808.455350746@linutronix.de>
- <202007211426.B40A7A7BD@keescook>
+        id S1728173AbgGVIjL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 22 Jul 2020 04:39:11 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:46949 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726526AbgGVIjL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Jul 2020 04:39:11 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-2-069i4kReMsq9RSpkpaVvZA-1;
+ Wed, 22 Jul 2020 09:39:07 +0100
+X-MC-Unique: 069i4kReMsq9RSpkpaVvZA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 22 Jul 2020 09:39:07 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 22 Jul 2020 09:39:07 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>, Andy Lutomirski <luto@kernel.org>
+CC:     Jens Axboe <axboe@kernel.dk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
+Subject: RE: io_uring vs in_compat_syscall()
+Thread-Topic: io_uring vs in_compat_syscall()
+Thread-Index: AQHWX/GrvZMJhuIwWE2T9O3qn36ZwKkTQzqg
+Date:   Wed, 22 Jul 2020 08:39:06 +0000
+Message-ID: <8fefa815a3924fb3b893371c988781ad@AcuMS.aculab.com>
+References: <b754dad5-ee85-8a2f-f41a-8bdc56de42e8@kernel.dk>
+ <8987E376-6B13-4798-BDBA-616A457447CF@amacapital.net>
+ <20200721070709.GB11432@lst.de>
+ <CALCETrXWZBXZuCeRYvYY8AWG51e_P3bOeNeqc8zXPLOTDTHY0g@mail.gmail.com>
+ <20200721143412.GA8099@lst.de>
+ <CALCETrWMQpKe7jqw2t39yn4HgGhGTSEFGK6MPR4wPs=tBBhjbg@mail.gmail.com>
+ <20200722063050.GA24968@lst.de>
+In-Reply-To: <20200722063050.GA24968@lst.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202007211426.B40A7A7BD@keescook>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 02:38:16PM -0700, Kees Cook wrote:
-> One thing I noticed while doing syscall entry timings for the kernel
-> stack base offset randomization was that the stack protector was being
-> needlessly enabled in certain paths (seccomp, audit) due to seeing a
-> register array being declared on the stack. As part of that series I
-> suggested down-grading the stack protector. Since then, Peter's changes
-> entirely disabled the stack protector on the entry code, which I
-> grudgingly accept (I'd rather have a way to mark a variable as "ignore
-> this for stack protector detection", but ... there isn't, so fine.)
+From: Christoph Hellwig
+> Sent: 22 July 2020 07:31
+...
+> > I agree that MSG_CMSG_COMPAT is nasty, but I think the concept is
+> > sound -- rather than tracking whether we're compat by using a
+> > different function or a per-thread variable, actually explicitly
+> > tracking the mode seems sensible.
+> 
+> I very strongly disagree.  Two recent projects I did was to remove
+> the compat_exec mess, and the compat get/setsockopt mess, and each
+> time it removed hundreds of lines of code duplicating native
+> functionality, often in slightly broken ways.  We need a generic
+> out of band way to transfer the information down and just check in
+> in a few strategic places, and in_compat_syscall() does the right
+> thing for that.
 
-I don't think I'd like to have that per variable, but a function
-attribute to disable stack protector would be awesome, except our
-GCC-besties forgot to create that function attribute :-(
+Hmmm... set_fs(KERNEL_DS) is a per-thread variable that indicates
+that the current system call is being done by the kernel.
 
-If/when we get such a function attribute, we can add it to noinstr.
+So you are pulling two different bits of code in opposite directions.
 
-Also see this here:
+It has to be safer to track the flag through with the request.
+Then once any conversion has been done the flag can be corrected.
 
-  https://lkml.kernel.org/r/20200314164451.346497-1-slyfox@gentoo.org
+Imagine something like a bpf hook on a compat syscall.
+Having read the user buffer into kernel space it may decide
+to reformat it to the native layout to process it.
+After which the code has a native format buffer even though
+in_compat_syscall() returns true.
+
+To the native/compat flag is actually a property of the buffer
+much the same as whether it is user/kernel.
+
+The other property of the buffer is whether embedded addresses
+are user or kernel.
+If the buffer has been read from userspace then they are user.
+If the request originated in the kernel they are kernel.
+This difference may matter in the future.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
