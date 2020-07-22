@@ -2,153 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F13CB22A1F0
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 00:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2008522A36C
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 01:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733032AbgGVWMY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jul 2020 18:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S1733112AbgGVX4u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jul 2020 19:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733190AbgGVWLn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 18:11:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5436EC0619DC;
-        Wed, 22 Jul 2020 15:11:43 -0700 (PDT)
-Message-Id: <20200722220520.979724969@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595455901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=fyK4bEaw4vLDvxA5c9xUboQ6FfeyiYAtOZNHTGpDJ/Q=;
-        b=3Avni9XQxVhjGJAzbNZiEgYS9TgBI8N9MS854IyYeyIIhMIuAs2KBxo0kmHl5+VAvHtw1V
-        vnzPqLzI4voN3IvLygtntQEbFMyobIBlnDuzB+W5bhZj5jvZIdi7uumWY8QNKyzuOjpbFX
-        /jEPsmreWiQh9FHo1c36nuodpgv7NYnX7gTNFHG6Dc5ONtvdtGsj+VD2sEoX7YOKFifCP7
-        +81x0VGKI/3Frnc6gjnYQHroALTJDGvvPoRVC+Out7hm11yfDKP71SJsfGiPAN6dsw0Dgo
-        ghxcGCCG2LyCaMy2oaa2XCdaAwIcppozD0P1KYN8aqJ/LhzvWB8HSfNUCIb5Hw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595455901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=fyK4bEaw4vLDvxA5c9xUboQ6FfeyiYAtOZNHTGpDJ/Q=;
-        b=xR0tkiw7OdTpq6Bydhg5ii+LnuP8DgtDNKPR9xkR5JZ5Z2DGjEn/gU+5HQr5fveqGIsJxk
-        TLpSeOD9n6o1NEBQ==
-Date:   Thu, 23 Jul 2020 00:00:09 +0200
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
+        with ESMTP id S1729198AbgGVX4u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 19:56:50 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1319CC0619E1;
+        Wed, 22 Jul 2020 16:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+o+RK6ajhbuXa8t53WrOJ/qO/QqSI4MSwqISfWHz0Bo=; b=AOTr95qzy3NNS7ydya0oEhrj0x
+        IXsE0BLHInLxK7LMENdQilIfh2cpaGkvHT95pCgdQwNllmzwOLo3+ojeCbEeS4ONogdi/FdZvcsKA
+        vAAlb2nO3vfaHmXrCG9JS/bvR5nFxAh//2dmSV204vs1qw1GWAabgr/uWXOtCYgSy/mF0P8ZAPH1a
+        0M834X7yscfS6C56SWvXovBm3e9oXECz2XoS4GyQhiQw3PA9SiSIXRP8eb+3AJdmfYbzvrwZxEpS7
+        UoeZWuAa/x/uCWzeKIKFz1PRB4jr7Bgi4tjCA67T2axhMjY8cp+HgOR0/H1DXp/uKqGGDB/OHYF0s
+        5GlHzNUw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jyOb0-0007ot-PD; Wed, 22 Jul 2020 23:56:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4C193060EF;
+        Thu, 23 Jul 2020 01:56:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8E31729BEC9E1; Thu, 23 Jul 2020 01:56:20 +0200 (CEST)
+Date:   Thu, 23 Jul 2020 01:56:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [patch V5 15/15] x86/kvm: Use generic xfer to guest work function
-References: <20200722215954.464281930@linutronix.de>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [RFC][PATCH] objtool,x86_64: Replace recordmcount with objtool
+Message-ID: <20200722235620.GR10769@hirez.programming.kicks-ass.net>
+References: <20200624212737.GV4817@hirez.programming.kicks-ass.net>
+ <20200624214530.GA120457@google.com>
+ <20200625074530.GW4817@hirez.programming.kicks-ass.net>
+ <20200625161503.GB173089@google.com>
+ <20200625200235.GQ4781@hirez.programming.kicks-ass.net>
+ <20200625224042.GA169781@google.com>
+ <20200626112931.GF4817@hirez.programming.kicks-ass.net>
+ <20200722135542.41127cc4@oasis.local.home>
+ <20200722184137.GP10769@hirez.programming.kicks-ass.net>
+ <20200722150943.53046592@oasis.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-transfer-encoding: 8-bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200722150943.53046592@oasis.local.home>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+On Wed, Jul 22, 2020 at 03:09:43PM -0400, Steven Rostedt wrote:
+> On Wed, 22 Jul 2020 20:41:37 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > > That said, Andi Kleen added an option to gcc called -mnop-mcount which
+> > > will have gcc do both create the mcount section and convert the calls
+> > > into nops. When doing so, it defines CC_USING_NOP_MCOUNT which will
+> > > tell ftrace to expect the calls to already be converted.  
+> > 
+> > That seems like the much easier solution, then we can forget about
+> > recordmcount / objtool entirely for this.
+> 
+> Of course that was only for some gcc compilers, and I'm not sure if
+> clang can do this.
+> 
+> Or do you just see all compilers doing this in the future, and not
+> worrying about record-mcount at all, and bothering with objtool?
 
-Use the generic infrastructure to check for and handle pending work before
-transitioning into guest mode.
+I got the GCC version wrong :/ Both -mnop-mcount and -mrecord-mcount
+landed in GCC-5, where our minimum GCC is now at 4.9.
 
-This now handles TIF_NOTIFY_RESUME as well which was ignored so
-far. Handling it is important as this covers task work and task work will
-be used to offload the heavy lifting of POSIX CPU timers to thread context.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V5: Rename exit -> xfer
----
- arch/x86/kvm/Kconfig   |    1 +
- arch/x86/kvm/vmx/vmx.c |   11 +++++------
- arch/x86/kvm/x86.c     |   15 ++++++---------
- 3 files changed, 12 insertions(+), 15 deletions(-)
-
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -42,6 +42,7 @@ config KVM
- 	select HAVE_KVM_MSI
- 	select HAVE_KVM_CPU_RELAX_INTERCEPT
- 	select HAVE_KVM_NO_POLL
-+	select KVM_XFER_TO_GUEST_WORK
- 	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
- 	select KVM_VFIO
- 	select SRCU
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -27,6 +27,7 @@
- #include <linux/slab.h>
- #include <linux/tboot.h>
- #include <linux/trace_events.h>
-+#include <linux/entry-kvm.h>
- 
- #include <asm/apic.h>
- #include <asm/asm.h>
-@@ -5376,14 +5377,12 @@ static int handle_invalid_guest_state(st
- 		}
- 
- 		/*
--		 * Note, return 1 and not 0, vcpu_run() is responsible for
--		 * morphing the pending signal into the proper return code.
-+		 * Note, return 1 and not 0, vcpu_run() will invoke
-+		 * xfer_to_guest_mode() which will create a proper return
-+		 * code.
- 		 */
--		if (signal_pending(current))
-+		if (__xfer_to_guest_mode_work_pending())
- 			return 1;
--
--		if (need_resched())
--			schedule();
- 	}
- 
- 	return 1;
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -56,6 +56,7 @@
- #include <linux/sched/stat.h>
- #include <linux/sched/isolation.h>
- #include <linux/mem_encrypt.h>
-+#include <linux/entry-kvm.h>
- 
- #include <trace/events/kvm.h>
- 
-@@ -1585,7 +1586,7 @@ EXPORT_SYMBOL_GPL(kvm_emulate_wrmsr);
- bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu)
- {
- 	return vcpu->mode == EXITING_GUEST_MODE || kvm_request_pending(vcpu) ||
--		need_resched() || signal_pending(current);
-+		xfer_to_guest_mode_work_pending();
- }
- EXPORT_SYMBOL_GPL(kvm_vcpu_exit_request);
- 
-@@ -8676,15 +8677,11 @@ static int vcpu_run(struct kvm_vcpu *vcp
- 			break;
- 		}
- 
--		if (signal_pending(current)) {
--			r = -EINTR;
--			vcpu->run->exit_reason = KVM_EXIT_INTR;
--			++vcpu->stat.signal_exits;
--			break;
--		}
--		if (need_resched()) {
-+		if (xfer_to_guest_mode_work_pending()) {
- 			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
--			cond_resched();
-+			r = xfer_to_guest_mode(vcpu);
-+			if (r)
-+				return r;
- 			vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
- 		}
- 	}
-
+Anyway, what do you prefer, I suppose I can make objtool whatever we
+need, that patch is trivial. Simply recording the sites and not
+rewriting them should be simple enough.
