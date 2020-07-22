@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0663229D52
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 18:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEE5229D56
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 18:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgGVQpB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jul 2020 12:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S1729015AbgGVQpD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jul 2020 12:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbgGVQpB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 12:45:01 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94B1C0619DC
-        for <linux-arch@vger.kernel.org>; Wed, 22 Jul 2020 09:45:00 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id z15so2543391wrl.8
-        for <linux-arch@vger.kernel.org>; Wed, 22 Jul 2020 09:45:00 -0700 (PDT)
+        with ESMTP id S1726462AbgGVQpC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 12:45:02 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64739C0619E0
+        for <linux-arch@vger.kernel.org>; Wed, 22 Jul 2020 09:45:02 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id f139so2618616wmf.5
+        for <linux-arch@vger.kernel.org>; Wed, 22 Jul 2020 09:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uK8JM1EQn953l4hGDn7zKBHviQV8WaFyoUu/xfhEpC4=;
-        b=uicjnXpHLyBycUGbJeXW1bnB5AdLJ1vIB5qSpkXxiiI0/QNUiM2C/tpeHlrOE1EsZW
-         aYvVDSXzKs6F/PWWDz+eCkjv/alvVv8dpbsda0R9i3ZWyQdHh6OUTSKx0uG8uaq0E7Xc
-         KeejKt/rn73e0BYz8UDnVX79SoUII3hDUDVVuUxuFDN+uBYJeKOeMmXMy4Ytimhaejil
-         p7t0h/y68w3BjV9hhkphxrH3yBNiCjlrtyHfwKwGwjrx1P5gC6DlBWVRIH1SgPR8kx4b
-         bOx5jIJM2pIUODErYnMEhS7zO/hOhG1NC1m8HlpCdo8FNK7fH/XWc8DkGZ5kiSLTc7eh
-         nIlw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6iEzS/K7FKWZpD3ua8htStuWzJAGtakSYjlBsBpxZ/4=;
+        b=l8EUVZgCpIRU1QL7F3sHnMulBx+ndcr+hiyAH/9TDLEfZ3e4nRnvYcMRlw8pJ1RZDD
+         usP3/tJ/orr9olI8t2Qx+Sj/5tEnhSWSaxwGyGsDcxf+AzwpzLvAQgo1GARi5BT9Pose
+         fSVvL492qfWaMefMcn5RNZm4KMBSxUa2R4mITHBHTG4G42tVvAyz5XC8X1EHjDPKKVTC
+         gnO+1g9xzqhkqboMF9feb+jULlJjKVO8BTsdu5IB3Jql+dhjkP+s/fUtYQxamWeUqX3k
+         YELPwGsw80aBmerABn4F7VHRlZuY5XWbtJqzVum5e1OoTgXIAeaBwQQFl2H3zHD4YBs6
+         8Exw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uK8JM1EQn953l4hGDn7zKBHviQV8WaFyoUu/xfhEpC4=;
-        b=ZsZhTqHppVpM2v3kb11X9r8p9k2+yeT8yVwaH+MmuhHBBSaX8Ny2AyUopoPDNqMl6k
-         3Tqkl5cwLDK2CWADjjwryl2yvegrQG5Xb1D6v7kY0xz1wgAtmqgQcWLP1hZ4v0EQl6iM
-         a0YjkubKvTzDwvlTRayitmHEenY2jfJehSi1hvwKOpZKu2jXLbxWq17vxuGLdNzKIELG
-         BeXVv2oxV33hQJ4NlQe175ewgY2/9M+PooW2xtBEnvQjN0Zl/px4kP0T3gx+dNCEaujz
-         Dr/j7k0ZxcoCy2AwWaJq0du8XbxGTgi/ZwrOL8cz6ivlwp5psC3IUqoNYO1SGnaXXovd
-         O5eQ==
-X-Gm-Message-State: AOAM530ZgMbkiTVwAFEhR/883zFQF9vZe8AEV4u4VsHUyaYK39cQdyAo
-        wIrlixrD+5/xHTPXl0LVsMaU1Q==
-X-Google-Smtp-Source: ABdhPJz2GhTgbxEm97Jbg+actM1Hl9ijg1JYz6533hzpsH9VeShzXrQ2seUMjDFp65Edaw0F/0nFQg==
-X-Received: by 2002:a5d:4649:: with SMTP id j9mr389718wrs.270.1595436299200;
-        Wed, 22 Jul 2020 09:44:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6iEzS/K7FKWZpD3ua8htStuWzJAGtakSYjlBsBpxZ/4=;
+        b=VLLwlHEfVK+SVrDShlkUL9u/PtklHuKCmpey+IUIslpxB4uIuQd6MiBJyKGxrVi/RE
+         4LMYENStRkzBiD2RaKqP9VyAuHE9WQSdza1A5qb824mbqDDemK4/1+yDnPvvVXaU8sse
+         9pXn7kuzzkWYxfU27tq57NsnJRLNs5HNA0CrrEmlR4OcEWjbWEQw8vK3SFcj1FjUb8Su
+         jC9XO+46NyJZJbrXvdPukmXL1VMsV5GL/+HW8RHmRtCsS9vuunM5ZeRWoUrIGw1T5ocf
+         tDaX7G2o9AEp3Op6ZCuU24FUb+RjJm2jdfFoTU6IcYfcSTuQ+eTGtRga+D6VYb1A70cc
+         xROw==
+X-Gm-Message-State: AOAM530gXw6/a7WANnw7XCDombnQ8xNjXTLT5ZtW5isx/aN4giQI0/Zp
+        N41+Xs3hE1cwSHlHRaXdwtJo+w==
+X-Google-Smtp-Source: ABdhPJyvvcrdUvKbE/hxCmWbSibjaaJ7nEtZ3HDL894GJKBpxshjcuwx5vl2E/hVxnCbvqkXRidabQ==
+X-Received: by 2002:a1c:a756:: with SMTP id q83mr457233wme.168.1595436300851;
+        Wed, 22 Jul 2020 09:45:00 -0700 (PDT)
 Received: from localhost ([2a01:4b00:8523:2d03:b0ee:900a:e004:b9d0])
-        by smtp.gmail.com with ESMTPSA id p14sm517283wrx.90.2020.07.22.09.44.58
+        by smtp.gmail.com with ESMTPSA id u20sm265826wmm.15.2020.07.22.09.44.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2020 09:44:58 -0700 (PDT)
+        Wed, 22 Jul 2020 09:45:00 -0700 (PDT)
 From:   David Brazdil <dbrazdil@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -58,10 +58,12 @@ Cc:     James Morse <james.morse@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
         kernel-team@google.com, David Brazdil <dbrazdil@google.com>
-Subject: [PATCH 0/9] Independent per-CPU data section for nVHE
-Date:   Wed, 22 Jul 2020 17:44:15 +0100
-Message-Id: <20200722164424.42225-1-dbrazdil@google.com>
+Subject: [PATCH 1/9] Macros to override naming of percpu symbols and sections
+Date:   Wed, 22 Jul 2020 17:44:16 +0100
+Message-Id: <20200722164424.42225-2-dbrazdil@google.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200722164424.42225-1-dbrazdil@google.com>
+References: <20200722164424.42225-1-dbrazdil@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
@@ -69,72 +71,102 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce '.hyp.data..percpu' as part of ongoing effort to make nVHE
-hyp code self-contained and independent of the rest of the kernel.
+Modify generic linker script macros to generate section/symbol names for
+percpu area using overridable macros. No functional changes.
 
-The series builds on top of the "Split off nVHE hyp code" series which
-used objcopy to rename '.text' to '.hyp.text' and prefix all ELF
-symbols with '__kvm_nvhe' for all object files under kvm/hyp/nvhe.
+This will allow arm64 linker script to define a second KVM-specific percpu
+data section using the generic PERCPU_SECTION macro.
 
-The series is structured as follows:
+Signed-off-by: David Brazdil <dbrazdil@google.com>
+---
+ include/asm-generic/vmlinux.lds.h | 40 +++++++++++++++++++++----------
+ 1 file changed, 27 insertions(+), 13 deletions(-)
 
- - patch 1: Modify generic PERCPU_* linker script macros to make it
-     possible to define multiple per-CPU ELF sections with prefixed
-     section and symbol names.
-
- - patches 2-3: Replace hyp helpers for accessing per-CPU variables
-     with common helpers modified to work correctly in hyp. Per-CPU
-     variables can now be accessed with one API anywhere.
-
- - patches 4-6: Where VHE and nVHE use per-CPU variables defined in
-     kernel proper, move their definitions to hyp/ where they are
-     duplicated and owned by VHE/nVHE, respectively. Non-VHE hyp code
-     now refers only to per-CPU variables defined in its source files.
-     Helpers are added so that kernel proper can continue to access
-     nVHE hyp variables, same way as it does with other nVHE symbols.
-
- - patches 7-9: Introduce '.hyp.data..percpu' ELF section and allocate
-     memory for every CPU core during KVM init. All nVHE per-CPU state
-     is now grouped together in ELF and in memory. Introducing a new
-     per-CPU variable does not require adding new memory mappings any
-     more. nVHE hyp code cannot accidentally refer to kernel-proper
-     per-CPU data as it only has the pointer to its own per-CPU memory.
-
-The patches are rebased on current kvmarm/next (commit b72eb1f6813)
-and are available in branch 'topic/percpu' at:
-    https://android-kvm.googlesource.com/linux
-
-David Brazdil (9):
-  Macros to override naming of percpu symbols and sections
-  kvm: arm64: Remove __hyp_this_cpu_read
-  kvm: arm64: Remove hyp_adr/ldr_this_cpu
-  kvm: arm64: Add helpers for accessing nVHE hyp per-cpu vars
-  kvm: arm64: Duplicate arm64_ssbd_callback_required for nVHE hyp
-  kvm: arm64: Create separate instances of kvm_host_data for VHE/nVHE
-  kvm: arm64: Mark hyp stack pages reserved
-  kvm: arm64: Set up hyp percpu data for nVHE
-  kvm: arm64: Remove unnecessary hyp mappings
-
- arch/arm64/include/asm/assembler.h        |  27 ++++--
- arch/arm64/include/asm/kvm_asm.h          |  74 ++++++++-------
- arch/arm64/include/asm/kvm_host.h         |   2 +-
- arch/arm64/include/asm/kvm_mmu.h          |  23 ++---
- arch/arm64/include/asm/percpu.h           |  33 ++++++-
- arch/arm64/include/asm/sections.h         |   1 +
- arch/arm64/kernel/image-vars.h            |   2 -
- arch/arm64/kernel/vmlinux.lds.S           |  10 ++
- arch/arm64/kvm/arm.c                      | 110 ++++++++++++++++++----
- arch/arm64/kvm/hyp/hyp-entry.S            |   2 +-
- arch/arm64/kvm/hyp/include/hyp/debug-sr.h |   4 +-
- arch/arm64/kvm/hyp/include/hyp/switch.h   |   6 +-
- arch/arm64/kvm/hyp/nvhe/Makefile          |   2 +
- arch/arm64/kvm/hyp/nvhe/switch.c          |   8 +-
- arch/arm64/kvm/hyp/vhe/switch.c           |   5 +-
- arch/arm64/kvm/hyp/vhe/sysreg-sr.c        |   4 +-
- arch/arm64/kvm/pmu.c                      |  13 ++-
- include/asm-generic/vmlinux.lds.h         |  40 +++++---
- 18 files changed, 257 insertions(+), 109 deletions(-)
-
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index db600ef218d7..1bfc002ecfce 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -892,6 +892,20 @@
+ #define INIT_RAM_FS
+ #endif
+ 
++/*
++ * Macros to override the naming of percpu symbols and sections.
++ * Used by arm64 linker script to define a separate percpu area for KVM.
++ */
++#define PERCPU_SECTION_BASE_NAME .data..percpu
++
++#ifndef PERCPU_SECTION_NAME
++#define PERCPU_SECTION_NAME(suffix) PERCPU_SECTION_BASE_NAME ## suffix
++#endif
++
++#ifndef PERCPU_SYMBOL_NAME
++#define PERCPU_SYMBOL_NAME(name) name
++#endif
++
+ /*
+  * Memory encryption operates on a page basis. Since we need to clear
+  * the memory encryption mask for this section, it needs to be aligned
+@@ -903,7 +917,7 @@
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ #define PERCPU_DECRYPTED_SECTION					\
+ 	. = ALIGN(PAGE_SIZE);						\
+-	*(.data..percpu..decrypted)					\
++	*(PERCPU_SECTION_NAME(..decrypted))				\
+ 	. = ALIGN(PAGE_SIZE);
+ #else
+ #define PERCPU_DECRYPTED_SECTION
+@@ -947,17 +961,17 @@
+  * sharing between subsections for different purposes.
+  */
+ #define PERCPU_INPUT(cacheline)						\
+-	__per_cpu_start = .;						\
+-	*(.data..percpu..first)						\
++	PERCPU_SYMBOL_NAME(__per_cpu_start) = .;			\
++	*(PERCPU_SECTION_NAME(..first))					\
+ 	. = ALIGN(PAGE_SIZE);						\
+-	*(.data..percpu..page_aligned)					\
++	*(PERCPU_SECTION_NAME(..page_aligned))				\
+ 	. = ALIGN(cacheline);						\
+-	*(.data..percpu..read_mostly)					\
++	*(PERCPU_SECTION_NAME(..read_mostly))				\
+ 	. = ALIGN(cacheline);						\
+-	*(.data..percpu)						\
+-	*(.data..percpu..shared_aligned)				\
++	*(PERCPU_SECTION_NAME())					\
++	*(PERCPU_SECTION_NAME(..shared_aligned))			\
+ 	PERCPU_DECRYPTED_SECTION					\
+-	__per_cpu_end = .;
++	PERCPU_SYMBOL_NAME(__per_cpu_end) = .;
+ 
+ /**
+  * PERCPU_VADDR - define output section for percpu area
+@@ -984,11 +998,11 @@
+  * address, use PERCPU_SECTION.
+  */
+ #define PERCPU_VADDR(cacheline, vaddr, phdr)				\
+-	__per_cpu_load = .;						\
+-	.data..percpu vaddr : AT(__per_cpu_load - LOAD_OFFSET) {	\
++	PERCPU_SYMBOL_NAME(__per_cpu_load) = .;				\
++	PERCPU_SECTION_NAME() vaddr : AT(PERCPU_SYMBOL_NAME(__per_cpu_load) - LOAD_OFFSET) { \
+ 		PERCPU_INPUT(cacheline)					\
+ 	} phdr								\
+-	. = __per_cpu_load + SIZEOF(.data..percpu);
++	. = PERCPU_SYMBOL_NAME(__per_cpu_load) + SIZEOF(PERCPU_SECTION_NAME());
+ 
+ /**
+  * PERCPU_SECTION - define output section for percpu area, simple version
+@@ -1004,8 +1018,8 @@
+  */
+ #define PERCPU_SECTION(cacheline)					\
+ 	. = ALIGN(PAGE_SIZE);						\
+-	.data..percpu	: AT(ADDR(.data..percpu) - LOAD_OFFSET) {	\
+-		__per_cpu_load = .;					\
++	PERCPU_SECTION_NAME() : AT(ADDR(PERCPU_SECTION_NAME()) - LOAD_OFFSET) { \
++		PERCPU_SYMBOL_NAME(__per_cpu_load) = .;			\
+ 		PERCPU_INPUT(cacheline)					\
+ 	}
+ 
 -- 
 2.27.0
 
