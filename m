@@ -2,87 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C45D5229F18
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 20:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDCA229F37
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jul 2020 20:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732203AbgGVSP2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jul 2020 14:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726841AbgGVSP1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 14:15:27 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E8C0619E1
-        for <linux-arch@vger.kernel.org>; Wed, 22 Jul 2020 11:15:27 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id bm28so2380216edb.2
-        for <linux-arch@vger.kernel.org>; Wed, 22 Jul 2020 11:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+SReuFYVGjLRX5r5xj5YpIfyUC4xzq9ishSeECc8oc0=;
-        b=NuIYTIiKaQc1CsD0KXBC5Yhe7GX8yMqprWzzn8wTzzFy0PzxzGczcaGqdeb4YKryxx
-         gDGjWE4EW1L+rsFD2ozcBAmUlUjqvHcfmeZTjicgfj/G2zjx+4h3skQn3dcUWxhf/HGA
-         34blS1DVtvnecxc1FIU189JqspE7/zPXYiT+P+DU7dpREkeZiHpbse3hobDGVMvtNzbD
-         KrJtaaqMOlcqXc8kDvP2uFSCHPNCwCqMldtmcSw2My/VgU3ZZIe/FRFIcNJ7iFkbw6cy
-         utbf98JYdXdwWcsEetVbf/K56+HhaYsRX5rkPaO+4MJKlgRMduJzLaAbfn7bk7LRFtsA
-         Fi8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+SReuFYVGjLRX5r5xj5YpIfyUC4xzq9ishSeECc8oc0=;
-        b=o01r9gIlBn+b4nJyfHWnZ+oK6HeffPn5eEHA5JtaViHgbp6H6uqxssOz+KyUAkSWAU
-         E2iYULQt7IPslCAa0Dl2ordpefElnpasn1+mS9iu7TQ7tGnxgnQ5xeHqJjeHGftSbmWh
-         QSPyZF5CfiOhcZMrfn2IiBFLai2Iv4bDtvaiqxKSGD8Mf2S3Xob17g5uPTZUWCAydKId
-         oC9THp+EyFa5A9Nm6kec8CdpS8LhsBvRQ2Agb9P7BpwzoBcYkfv4+VNDxKI+1MKsFlvK
-         7YxScbUBd6ZRPkXL0fNFdYxSP+C3oXFaSN+EWukuZGWes/yG9H4cFFRb+TBswzAp+NS6
-         pWog==
-X-Gm-Message-State: AOAM531Hh5PcZ3PElEqLuK7QT0xclqmOsETUJax6/diQ6PN4j4umLzfF
-        CpXPl0gz0601tFmUEP77RvAaH4BOOowqAh+DR6+qfQ==
-X-Google-Smtp-Source: ABdhPJxrA+hjx0Q1mNxWSy2JCrzqouCMw/jbe01R8hqj3aXOsgJE0QWv/Xu+8L2SG1RhOKQ8MRvH9R8RbRpmUUnfeh4=
-X-Received: by 2002:a50:931e:: with SMTP id m30mr677030eda.341.1595441726019;
- Wed, 22 Jul 2020 11:15:26 -0700 (PDT)
+        id S1728497AbgGVSZ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jul 2020 14:25:58 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:51176 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbgGVSZ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jul 2020 14:25:58 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595442356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=De2Oo3WYSjxDYyxtzHkgNAFZFz1uqYilAgoG2Mi1/0E=;
+        b=wTi597w8/WAvYo6fRhtK8Csx9AtQpbzEmpgE3ZBRJ9pE/j2ad+0y5sTi0vRAghKFrxVejv
+        EpcFdThV2BtJrR/Gf/tlO7DUSE4/2+wnqa6iCfEIyHY0yDh9QnXo5ZBOj64gGsX6qKsPkd
+        8ZzWGZ5VrSiVViESnb4dXPf0P6vk+RTYWNZum31cPDhAQsSlZgNQW4wDP82kQf/bUZutwN
+        so3gzqknEwCf/CFXSRbqx9VmYjIi49DyJpDeLcQdHTL3H4Zh9V/Vuco21Cem5ntUFIDcH4
+        DFuwT5YrOXYcUyvpd17rnlvGAaFdbIE9Q4FvGjV8h/4LrIVkhQ64CyufKz2ZOg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595442356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=De2Oo3WYSjxDYyxtzHkgNAFZFz1uqYilAgoG2Mi1/0E=;
+        b=rzdia+Of0BW+JLmcJkwDHHcZakCXbL4PaRIYIuDNTEyyNIpL5hKfZCt7BOCx58Zq7T0/9t
+        yJk/QNK9n7b1XmCA==
+To:     Kees Cook <keescook@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>
+Subject: Re: [patch V4 10/15] x86/entry: Use generic syscall entry function
+In-Reply-To: <202007211440.BEF76E2@keescook>
+References: <20200721105706.030914876@linutronix.de> <20200721110809.325060396@linutronix.de> <202007211440.BEF76E2@keescook>
+Date:   Wed, 22 Jul 2020 20:25:55 +0200
+Message-ID: <87wo2vz9sc.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-References: <20200624203200.78870-12-samitolvanen@google.com> <20200717202620.GA768846@bjorn-Precision-5520>
-In-Reply-To: <20200717202620.GA768846@bjorn-Precision-5520>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Wed, 22 Jul 2020 11:15:14 -0700
-Message-ID: <CABCJKudTCwt3J19u8Em493a3Z9J2SD+imtVZTpz5cPv7Wza5iQ@mail.gmail.com>
-Subject: Re: [PATCH 11/22] pci: lto: fix PREL32 relocations
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Bjorn,
+Kees,
 
-On Fri, Jul 17, 2020 at 1:26 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+Kees Cook <keescook@chromium.org> writes:
+> On Tue, Jul 21, 2020 at 12:57:16PM +0200, Thomas Gleixner wrote:
 >
-> OK by me, but please update the subject to match convention:
->
->   PCI: Fix PREL32 relocations for LTO
->
-> and include a hint in the commit log about what LTO is.  At least
-> expand the initialism once.  Googling for "LTO" isn't very useful.
->
->   With Clang's Link Time Optimization (LTO), the compiler ... ?
+> This doesn't look very expensive, and they certain indicate really bad
+> conditions. Does this need to be behind a CONFIG? (Whatever the answer,
+> we can probably make those changes in a later series -- some of these
+> also look not arch-specific...)
 
-Sure, I'll change this in the next version. Thanks for taking a look!
+The most expensive part is native_save_flags(). The extra branches could
+be visible in benchmarks, but its a good question whether this should be
+just enabled.
 
-Sami
+I just keep it as is for now as I would need to make the flags and the
+on_thread_stack() part x86 specific anyway, but yes we can revisit that
+once we agreed on the general direction of this.
+
+Thanks,
+
+        tglx
