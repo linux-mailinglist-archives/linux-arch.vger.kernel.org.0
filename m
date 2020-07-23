@@ -2,181 +2,248 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B232622B107
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 16:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5200122B10A
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 16:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbgGWOJ4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 10:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S1728306AbgGWOLR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 10:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727068AbgGWOJz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 10:09:55 -0400
+        with ESMTP id S1728002AbgGWOLQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 10:11:16 -0400
 Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0479C0619DC;
-        Thu, 23 Jul 2020 07:09:55 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id s189so3153216pgc.13;
-        Thu, 23 Jul 2020 07:09:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B77C0619E2
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jul 2020 07:11:16 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id k27so3170834pgm.2
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jul 2020 07:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=QQ+1Br77BLz8lQjoivkzwXKzJFU6kfi+6X+tKUpNas4=;
-        b=VrjaKnJdpR1Q8/zxNQwaywYVL4aRO5VkRzHmFjYwybGM9tx089/g1Ffv46QKdc+RUs
-         R6DCZA9k7t+FSZ+Mx0vuWBZYJQ3WTcoGb0I4V6VpiEKCbu9AdTetnakuIydsSwfoz2+j
-         l9EEEwDmIUWZaHP8Ud2g2is+SUIFouXgPyKbBKXnQFdCHgwraxGL1m6ZgEJgDc8Y5tPM
-         A9btbBCW4lz7/PYi8S0j5NpaOSvPfDMwrMQ9KKnOcxBdZWT/pclllFueGNwszxTu6NYA
-         M65pHDPqBZpoRwWQi+vBgtEGz3FonNJXLnNsaxu5yE/7TsVl63Qg3ZTXw78Xo8A9jJtj
-         DI4A==
+        d=axtens.net; s=google;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=ysWuWF6gqJ2pHJaZJm1QwqnHU9OdxaAIZL3B1hN90eM=;
+        b=g5vyr8Pl/p/lEI7Y8guC1W1L4781mToGXliNVuzvXS0kFNtodOXVVvsX1yFSlPNR5I
+         hwrVEzMo9wIA3sm4LFYqkFqkqTcNlWLqGv4I0S64Jr0XpAY0Nj+GUWZugKttc86psCYR
+         cXy1suut9ECSC8XV0aPk7bp2Fo+3oL7Kp5kEw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=QQ+1Br77BLz8lQjoivkzwXKzJFU6kfi+6X+tKUpNas4=;
-        b=YZmZBSJlNjpgxHp26SH9siM08cWzI0Jnz0fs9lg8OEal0jEMhr8JHs5lMQYc4I40QE
-         srF636l0Mp8d2p7B1CEzY/RxXwDKTLWnanoDIE6dPO0e2TwM4dpj1YG+u0yv3jSwsktB
-         O/PwpKUIjNzcorBhEizuyF45wp1cMPpm+W+o9mHSIx8Nwjsy7aTzmO/nTTHCTNgCyY32
-         R5juYZl3JGvmPx757hzIwFDxfwYq9P5R1AgA5tDzQcJtuskLE/Cpb7QhCfgl39xz60a4
-         BtHZHVWNYwxca62rA3ROSXHOrYDS1eJHJB6RqiMVttavnXJwsd3OBznHLsy6uvMe9D0a
-         rgYg==
-X-Gm-Message-State: AOAM530KN1Uywyz8Qsa0o51scKmOFSI3iNvW3YTwIQnKgpjjKRKNesI3
-        Ij8hpLG/L1KEYJKsU4OPo3g=
-X-Google-Smtp-Source: ABdhPJz9Ux/xe9gUmHJptXyzmvpTWCDbn3NSD1ykHJ9GcvjlxMgG8/bFHnuOpReypGSbZRKQ2OYRGA==
-X-Received: by 2002:a63:ca11:: with SMTP id n17mr4276124pgi.439.1595513395017;
-        Thu, 23 Jul 2020 07:09:55 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id q4sm3208683pjq.36.2020.07.23.07.09.53
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ysWuWF6gqJ2pHJaZJm1QwqnHU9OdxaAIZL3B1hN90eM=;
+        b=q6yXtMIzyTtX5ZJ96TFwuR2qBes6ehDI0yxhzQWT4GJyL+SAeDMZo8aHB8/28IJELs
+         +h0ec0cviSFDjvl2sJ7uphOWto8mnFT3pYO1YUiH3zMvkc4z6MClOC5QWtT+bomBSzhJ
+         QzJZ2biHVJMyqpKG/RFj0j2YKOjJzwv/E0M5sRtz8w+vgvTPhmMH0NuGoyAOJHe11V6Y
+         BOPYTS4Cl2zPWP5NDum9UEtYWyXAb8ra3mUmbtXak2y4OOvHtUv1zfo7/vgn+OByVHJR
+         X/NE6YJhCQKTwq1OAjLB08h7W+OkYdt/sbhnUbKQYZaHmfRp648VU//F4IIrJ3hHvISv
+         Xidg==
+X-Gm-Message-State: AOAM5313/Iqdlt3OMa8G573tHO8SGewLBwcexyHszwGXHHnxidyX23Nb
+        6pdOP8Ns9kBVDFmE4NvjQPdqqg==
+X-Google-Smtp-Source: ABdhPJz4p+KRDLB+MZxus77/edll9JJWc9jVmufPxWveQCofgvnnK+IJ9fSnEeHcIcq6nicvT2wK7Q==
+X-Received: by 2002:a63:eb52:: with SMTP id b18mr4209245pgk.434.1595513476033;
+        Thu, 23 Jul 2020 07:11:16 -0700 (PDT)
+Received: from localhost (2001-44b8-111e-5c00-8915-8b02-da60-7583.static.ipv6.internode.on.net. [2001:44b8:111e:5c00:8915:8b02:da60:7583])
+        by smtp.gmail.com with ESMTPSA id l4sm2893791pjr.46.2020.07.23.07.11.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 07:09:54 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 00:09:48 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 5/6] powerpc/pseries: implement paravirt qspinlocks for
- SPLPAR
-To:     linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Anton Blanchard <anton@ozlabs.org>,
-        Boqun Feng <boqun.feng@gmail.com>, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        virtualization@lists.linux-foundation.org,
-        Will Deacon <will@kernel.org>
-References: <20200706043540.1563616-1-npiggin@gmail.com>
-        <20200706043540.1563616-6-npiggin@gmail.com>
-        <874kqhvu1v.fsf@mpe.ellerman.id.au>
-In-Reply-To: <874kqhvu1v.fsf@mpe.ellerman.id.au>
+        Thu, 23 Jul 2020 07:11:15 -0700 (PDT)
+From:   Daniel Axtens <dja@axtens.net>
+To:     Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@ozlabs.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hughd@google.com
+Subject: Re: [RFC PATCH 4/5] powerpc/mm: Remove custom stack expansion checking
+In-Reply-To: <20200703141327.1732550-4-mpe@ellerman.id.au>
+References: <20200703141327.1732550-1-mpe@ellerman.id.au> <20200703141327.1732550-4-mpe@ellerman.id.au>
+Date:   Fri, 24 Jul 2020 00:11:12 +1000
+Message-ID: <878sfatj7j.fsf@dja-thinkpad.axtens.net>
 MIME-Version: 1.0
-Message-Id: <1595512823.5k2rrd4zk5.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Michael Ellerman's message of July 9, 2020 8:53 pm:
-> Nicholas Piggin <npiggin@gmail.com> writes:
->=20
->> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> ---
->>  arch/powerpc/include/asm/paravirt.h           | 28 ++++++++
->>  arch/powerpc/include/asm/qspinlock.h          | 66 +++++++++++++++++++
->>  arch/powerpc/include/asm/qspinlock_paravirt.h |  7 ++
->>  arch/powerpc/platforms/pseries/Kconfig        |  5 ++
->>  arch/powerpc/platforms/pseries/setup.c        |  6 +-
->>  include/asm-generic/qspinlock.h               |  2 +
->=20
-> Another ack?
->=20
->> diff --git a/arch/powerpc/include/asm/paravirt.h b/arch/powerpc/include/=
-asm/paravirt.h
->> index 7a8546660a63..f2d51f929cf5 100644
->> --- a/arch/powerpc/include/asm/paravirt.h
->> +++ b/arch/powerpc/include/asm/paravirt.h
->> @@ -45,6 +55,19 @@ static inline void yield_to_preempted(int cpu, u32 yi=
-eld_count)
->>  {
->>  	___bad_yield_to_preempted(); /* This would be a bug */
->>  }
->> +
->> +extern void ___bad_yield_to_any(void);
->> +static inline void yield_to_any(void)
->> +{
->> +	___bad_yield_to_any(); /* This would be a bug */
->> +}
->=20
-> Why do we do that rather than just not defining yield_to_any() at all
-> and letting the build fail on that?
->=20
-> There's a condition somewhere that we know will false at compile time
-> and drop the call before linking?
+Hi Michael,
 
-Mainly so you could use it in if (IS_ENABLED()) blocks, but would still
-catch the (presumably buggy) case where something calls it without the
-option set.
+> We have powerpc specific logic in our page fault handling to decide if
+> an access to an unmapped address below the stack pointer should expand
+> the stack VMA.
+>
+> The logic aims to prevent userspace from doing bad accesses below the
+> stack pointer. However as long as the stack is < 1MB in size, we allow
+> all accesses without further checks. Adding some debug I see that I
+> can do a full kernel build and LTP run, and not a single process has
+> used more than 1MB of stack. So for the majority of processes the
+> logic never even fires.
+>
+> We also recently found a nasty bug in this code which could cause
+> userspace programs to be killed during signal delivery. It went
+> unnoticed presumably because most processes use < 1MB of stack.
+>
+> The generic mm code has also grown support for stack guard pages since
+> this code was originally written, so the most heinous case of the
+> stack expanding into other mappings is now handled for us.
+>
+> Finally although some other arches have special logic in this path,
+> from what I can tell none of x86, arm64, arm and s390 impose any extra
+> checks other than those in expand_stack().
+>
+> So drop our complicated logic and like other architectures just let
+> the stack expand as long as its within the rlimit.
+>
 
-I think I had it arranged a different way that was using IS_ENABLED=20
-earlier and changed it but might as well keep it this way.
+I applied and tested this. While I wouldn't call my testing
+comprehensive, I have not been able to reproduce the crash with this
+patch applied.
 
->=20
->> diff --git a/arch/powerpc/include/asm/qspinlock_paravirt.h b/arch/powerp=
-c/include/asm/qspinlock_paravirt.h
->> new file mode 100644
->> index 000000000000..750d1b5e0202
->> --- /dev/null
->> +++ b/arch/powerpc/include/asm/qspinlock_paravirt.h
->> @@ -0,0 +1,7 @@
->> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->> +#ifndef __ASM_QSPINLOCK_PARAVIRT_H
->> +#define __ASM_QSPINLOCK_PARAVIRT_H
->=20
-> _ASM_POWERPC_QSPINLOCK_PARAVIRT_H please.
->=20
->> +
->> +EXPORT_SYMBOL(__pv_queued_spin_unlock);
->=20
-> Why's that in a header? Should that (eventually) go with the generic impl=
-ementation?
+Kind regards,
+Daniel
 
-Yeah the qspinlock_paravirt.h header is a bit weird and only gets=20
-included into kernel/locking/qspinlock.c
 
->> diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platf=
-orms/pseries/Kconfig
->> index 24c18362e5ea..756e727b383f 100644
->> --- a/arch/powerpc/platforms/pseries/Kconfig
->> +++ b/arch/powerpc/platforms/pseries/Kconfig
->> @@ -25,9 +25,14 @@ config PPC_PSERIES
->>  	select SWIOTLB
->>  	default y
->> =20
->> +config PARAVIRT_SPINLOCKS
->> +	bool
->> +	default n
->=20
-> default n is the default.
->=20
->> diff --git a/arch/powerpc/platforms/pseries/setup.c b/arch/powerpc/platf=
-orms/pseries/setup.c
->> index 2db8469e475f..747a203d9453 100644
->> --- a/arch/powerpc/platforms/pseries/setup.c
->> +++ b/arch/powerpc/platforms/pseries/setup.c
->> @@ -771,8 +771,12 @@ static void __init pSeries_setup_arch(void)
->>  	if (firmware_has_feature(FW_FEATURE_LPAR)) {
->>  		vpa_init(boot_cpuid);
->> =20
->> -		if (lppaca_shared_proc(get_lppaca()))
->> +		if (lppaca_shared_proc(get_lppaca())) {
->>  			static_branch_enable(&shared_processor);
->> +#ifdef CONFIG_PARAVIRT_SPINLOCKS
->> +			pv_spinlocks_init();
->> +#endif
->> +		}
->=20
-> We could avoid the ifdef with this I think?
-
-Yes I think so.
-
-Thanks,
-Nick
-
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> ---
+>  arch/powerpc/mm/fault.c | 106 ++--------------------------------------
+>  1 file changed, 5 insertions(+), 101 deletions(-)
+>
+> diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
+> index ed01329dd12b..925a7231abb3 100644
+> --- a/arch/powerpc/mm/fault.c
+> +++ b/arch/powerpc/mm/fault.c
+> @@ -42,39 +42,7 @@
+>  #include <asm/kup.h>
+>  #include <asm/inst.h>
+>  
+> -/*
+> - * Check whether the instruction inst is a store using
+> - * an update addressing form which will update r1.
+> - */
+> -static bool store_updates_sp(struct ppc_inst inst)
+> -{
+> -	/* check for 1 in the rA field */
+> -	if (((ppc_inst_val(inst) >> 16) & 0x1f) != 1)
+> -		return false;
+> -	/* check major opcode */
+> -	switch (ppc_inst_primary_opcode(inst)) {
+> -	case OP_STWU:
+> -	case OP_STBU:
+> -	case OP_STHU:
+> -	case OP_STFSU:
+> -	case OP_STFDU:
+> -		return true;
+> -	case OP_STD:	/* std or stdu */
+> -		return (ppc_inst_val(inst) & 3) == 1;
+> -	case OP_31:
+> -		/* check minor opcode */
+> -		switch ((ppc_inst_val(inst) >> 1) & 0x3ff) {
+> -		case OP_31_XOP_STDUX:
+> -		case OP_31_XOP_STWUX:
+> -		case OP_31_XOP_STBUX:
+> -		case OP_31_XOP_STHUX:
+> -		case OP_31_XOP_STFSUX:
+> -		case OP_31_XOP_STFDUX:
+> -			return true;
+> -		}
+> -	}
+> -	return false;
+> -}
+> +
+>  /*
+>   * do_page_fault error handling helpers
+>   */
+> @@ -267,54 +235,6 @@ static bool bad_kernel_fault(struct pt_regs *regs, unsigned long error_code,
+>  	return false;
+>  }
+>  
+> -static bool bad_stack_expansion(struct pt_regs *regs, unsigned long address,
+> -				struct vm_area_struct *vma, unsigned int flags,
+> -				bool *must_retry)
+> -{
+> -	/*
+> -	 * N.B. The POWER/Open ABI allows programs to access up to
+> -	 * 288 bytes below the stack pointer.
+> -	 * The kernel signal delivery code writes up to 4KB
+> -	 * below the stack pointer (r1) before decrementing it.
+> -	 * The exec code can write slightly over 640kB to the stack
+> -	 * before setting the user r1.  Thus we allow the stack to
+> -	 * expand to 1MB without further checks.
+> -	 */
+> -	if (address + 0x100000 < vma->vm_end) {
+> -		struct ppc_inst __user *nip = (struct ppc_inst __user *)regs->nip;
+> -		/* get user regs even if this fault is in kernel mode */
+> -		struct pt_regs *uregs = current->thread.regs;
+> -		if (uregs == NULL)
+> -			return true;
+> -
+> -		/*
+> -		 * A user-mode access to an address a long way below
+> -		 * the stack pointer is only valid if the instruction
+> -		 * is one which would update the stack pointer to the
+> -		 * address accessed if the instruction completed,
+> -		 * i.e. either stwu rs,n(r1) or stwux rs,r1,rb
+> -		 * (or the byte, halfword, float or double forms).
+> -		 *
+> -		 * If we don't check this then any write to the area
+> -		 * between the last mapped region and the stack will
+> -		 * expand the stack rather than segfaulting.
+> -		 */
+> -		if (address + 4096 >= uregs->gpr[1])
+> -			return false;
+> -
+> -		if ((flags & FAULT_FLAG_WRITE) && (flags & FAULT_FLAG_USER) &&
+> -		    access_ok(nip, sizeof(*nip))) {
+> -			struct ppc_inst inst;
+> -
+> -			if (!probe_user_read_inst(&inst, nip))
+> -				return !store_updates_sp(inst);
+> -			*must_retry = true;
+> -		}
+> -		return true;
+> -	}
+> -	return false;
+> -}
+> -
+>  #ifdef CONFIG_PPC_MEM_KEYS
+>  static bool access_pkey_error(bool is_write, bool is_exec, bool is_pkey,
+>  			      struct vm_area_struct *vma)
+> @@ -480,7 +400,6 @@ static int __do_page_fault(struct pt_regs *regs, unsigned long address,
+>  	int is_user = user_mode(regs);
+>  	int is_write = page_fault_is_write(error_code);
+>  	vm_fault_t fault, major = 0;
+> -	bool must_retry = false;
+>  	bool kprobe_fault = kprobe_page_fault(regs, 11);
+>  
+>  	if (unlikely(debugger_fault_handler(regs) || kprobe_fault))
+> @@ -569,30 +488,15 @@ static int __do_page_fault(struct pt_regs *regs, unsigned long address,
+>  	vma = find_vma(mm, address);
+>  	if (unlikely(!vma))
+>  		return bad_area(regs, address);
+> -	if (likely(vma->vm_start <= address))
+> -		goto good_area;
+> -	if (unlikely(!(vma->vm_flags & VM_GROWSDOWN)))
+> -		return bad_area(regs, address);
+>  
+> -	/* The stack is being expanded, check if it's valid */
+> -	if (unlikely(bad_stack_expansion(regs, address, vma, flags,
+> -					 &must_retry))) {
+> -		if (!must_retry)
+> +	if (unlikely(vma->vm_start > address)) {
+> +		if (unlikely(!(vma->vm_flags & VM_GROWSDOWN)))
+>  			return bad_area(regs, address);
+>  
+> -		mmap_read_unlock(mm);
+> -		if (fault_in_pages_readable((const char __user *)regs->nip,
+> -					    sizeof(unsigned int)))
+> -			return bad_area_nosemaphore(regs, address);
+> -		goto retry;
+> +		if (unlikely(expand_stack(vma, address)))
+> +			return bad_area(regs, address);
+>  	}
+>  
+> -	/* Try to expand it */
+> -	if (unlikely(expand_stack(vma, address)))
+> -		return bad_area(regs, address);
+> -
+> -good_area:
+> -
+>  #ifdef CONFIG_PPC_MEM_KEYS
+>  	if (unlikely(access_pkey_error(is_write, is_exec,
+>  				       (error_code & DSISR_KEYFAULT), vma)))
+> -- 
+> 2.25.1
