@@ -2,48 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A7E22AAA0
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 10:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF3622AAC3
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 10:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgGWI3H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 23 Jul 2020 04:29:07 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:21727 "EHLO
+        id S1725911AbgGWIhc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 23 Jul 2020 04:37:32 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:41435 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726975AbgGWI3H (ORCPT
+        by vger.kernel.org with ESMTP id S1725858AbgGWIhc (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jul 2020 04:29:07 -0400
+        Thu, 23 Jul 2020 04:37:32 -0400
 Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- uk-mta-273-yLbMdh2jNnOD6IwmQddN9g-1; Thu, 23 Jul 2020 09:29:03 +0100
-X-MC-Unique: yLbMdh2jNnOD6IwmQddN9g-1
+ uk-mta-80-5MUK7J35NxGiTT6rTbxaSA-1; Thu, 23 Jul 2020 09:37:27 +0100
+X-MC-Unique: 5MUK7J35NxGiTT6rTbxaSA-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 09:29:02 +0100
+ Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 09:37:27 +0100
 Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
  AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 23 Jul 2020 09:29:02 +0100
+ Thu, 23 Jul 2020 09:37:27 +0100
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Al Viro' <viro@zeniv.linux.org.uk>
+To:     'Catalin Marinas' <catalin.marinas@arm.com>
 CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [PATCH 04/18] csum_and_copy_..._user(): pass 0xffffffff instead
- of 0 as initial sum
-Thread-Topic: [PATCH 04/18] csum_and_copy_..._user(): pass 0xffffffff instead
- of 0 as initial sum
-Thread-Index: AQHWX51MlcPCEWebQUuN/OB/armWnKkTU0FggABJU4CAABlpkP//+uQAgAAU8xCAAAgogIABBOPg
-Date:   Thu, 23 Jul 2020 08:29:02 +0000
-Message-ID: <b8c5cecfcbad428a9146bd01ad7d03c7@AcuMS.aculab.com>
-References: <20200721202425.GA2786714@ZenIV.linux.org.uk>
- <20200721202549.4150745-1-viro@ZenIV.linux.org.uk>
- <20200721202549.4150745-4-viro@ZenIV.linux.org.uk>
- <2d85ebb8ea2248c8a14f038a0c60297e@AcuMS.aculab.com>
- <20200722144213.GE2786714@ZenIV.linux.org.uk>
- <4e03cce8ed184d40bb0ea40fd3d51000@AcuMS.aculab.com>
- <20200722155452.GF2786714@ZenIV.linux.org.uk>
- <a55679c8d4dc4fb08d1e1782b5fc572c@AcuMS.aculab.com>
- <20200722173903.GG2786714@ZenIV.linux.org.uk>
-In-Reply-To: <20200722173903.GG2786714@ZenIV.linux.org.uk>
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC] raw_copy_from_user() semantics
+Thread-Topic: [RFC] raw_copy_from_user() semantics
+Thread-Index: AQHWYBxygAO6HUS840aFW/LsMa1rTakTksjwgAAtkICAARbBwA==
+Date:   Thu, 23 Jul 2020 08:37:27 +0000
+Message-ID: <9c22700a16db4a4f8ae9203efcaed27b@AcuMS.aculab.com>
+References: <20200719031733.GI2786714@ZenIV.linux.org.uk>
+ <CAHk-=wi7f5vG+s=aFsskzcTRs+f7MVHK9yJFZtUEfndy6ScKRQ@mail.gmail.com>
+ <CAHk-=wirA7zJJB17KJPCE-V9pKwn8VKxXTeiaM+F+Sa1Xd2SWA@mail.gmail.com>
+ <20200722113707.GC27540@gaia>
+ <8fde1b9044a34ff59eb5ff3dafbf2b97@AcuMS.aculab.com>
+ <20200722165346.GB4069@gaia>
+In-Reply-To: <20200722165346.GB4069@gaia>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -60,57 +56,62 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Al Viro
-> Sent: 22 July 2020 18:39
-> On Wed, Jul 22, 2020 at 04:17:02PM +0000, David Laight wrote:
-> > > David, do you *ever* bother to RTFS?  I mean, competent supercilious twits
-> > > are annoying, but at least with those you can generally assume that what
-> > > they say makes sense and has some relation to reality.  You, OTOH, keep
-> > > spewing utter bollocks, without ever lowering yourself to checking if your
-> > > guesses have anything to do with the reality.  With supercilious twit part
-> > > proudly on the display - you do speak with confidence, and the way you
-> > > dispense the oh-so-valuable advice to everyone around...
-> >
-> > Yes, I do look at the code.
-> > I've actually spent a lot of time looking at the x86 checksum code.
-> > I've posted a patch for a version that is about twice as fast as the
-> > current one on a large range of x86 cpus.
-> >
-> > Possibly I meant the 32bit reduction inside csum_add()
-> > rather than what csum_fold() does.
+From: Catalin Marinas
+> Sent: 22 July 2020 17:54
 > 
-> Really?
-> static inline unsigned add32_with_carry(unsigned a, unsigned b)
-> {
->         asm("addl %2,%0\n\t"
->             "adcl $0,%0"
->             : "=r" (a)
->             : "0" (a), "rm" (b));
->         return a;
-> }
+> On Wed, Jul 22, 2020 at 01:14:21PM +0000, David Laight wrote:
+> > From: Catalin Marinas
+> > > Sent: 22 July 2020 12:37
+> > > On Sun, Jul 19, 2020 at 12:34:11PM -0700, Linus Torvalds wrote:
+> > > > On Sun, Jul 19, 2020 at 12:28 PM Linus Torvalds
+> > > > <torvalds@linux-foundation.org> wrote:
+> > > > > I think we should try to get rid of the exact semantics.
+> > > >
+> > > > Side note: I think one of the historical reasons for the exact
+> > > > semantics was that we used to do things like the mount option copying
+> > > > with a "copy_from_user()" iirc.
+> > > >
+> > > > And that could take a fault at the end of the stack etc, because
+> > > > "copy_mount_options()" is nasty and doesn't get a size, and just
+> > > > copies "up to 4kB" of data.
+> > > >
+> > > > It's a mistake in the interface, but it is what it is. But we've
+> > > > always handled the inexact count there anyway by originally doing byte
+> > > > accesses, and at some point you optimized it to just look at where
+> > > > page boundaries might be..
+> > >
+> > > And we may have to change this again since, with arm64 MTE, the page
+> > > boundary check is insufficient:
+> > >
+> > > https://lore.kernel.org/linux-fsdevel/20200715170844.30064-25-catalin.marinas@arm.com/
+> > >
+> > > While currently the fault path is unlikely to trigger, with MTE in user
+> > > space it's a lot more likely since the buffer (e.g. a string) is
+> > > normally less than 4K and the adjacent addresses would have a different
+> > > colour.
+> > >
+> > > I looked (though briefly) into passing the copy_from_user() problem to
+> > > filesystems that would presumably know better how much to copy. In most
+> > > cases the options are string, so something like strncpy_from_user()
+> > > would work. For mount options as binary blobs (IIUC btrfs) maybe the fs
+> > > has a better way to figure out how much to copy.
+> >
+> > What about changing the mount code to loop calling get_user()
+> > to read aligned words until failure?
+> > Mount is fairly uncommon and the extra cost is probably small compared
+> > to the rest of doing a mount.
+> 
+> Before commit 12efec560274 ("saner copy_mount_options()"), it was using
+> single-byte get_user(). That could have been optimised for aligned words
+> reading but I don't really think it's worth the hassle. Since the source
+> and destination don't have the same alignment and some architecture
+> don't support unaligned accesses (for storing to the kernel buffer), it
+> would just make this function unnecessarily complicated.
 
-I agree it isn't much, but both those instructions almost certainly
-get replicated with the initial value fed into the checksum function.
+It could do aligned words if the user buffer is aligned (it will be
+most of the time) and bytes otherwise.
 
-Everything except x86, sparc/64 and powerpc/64 uses the C code
-from include/net/checksum.h which is the longer sequences:
-	csum += addend;
-	csum += csum < addend;
-That's three instructions on something like MIPS - not too bad.
-I'm not sure about ARM - ARM could probably use adc.
-Some architectures may end up with an actual conditional jump.
-
-Quite how the instructions get scheduled probably makes more
-difference.
-The sequence is a register dependency chain, and the checksum
-register could easily be limiting the execution speed.
-On x86 the 'adc' loop runs at two clocks per adc on a wide
-range of Intel cpus.
-
-Actually there is lot more to be gained in the code that reads
-the iovec[] from userspace.
-The calling sequences for the two nexted functions used are horrid.
-Fixing that does make a measurable difference to semdmsg().
+Or just fallback to a byte loop if the full 4k read fails.
 
 	David
 
