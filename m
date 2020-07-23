@@ -2,90 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ABE22B1D8
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 16:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67EB22B1DC
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 16:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbgGWOxW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 10:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S1727108AbgGWOxt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 10:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726761AbgGWOxV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 10:53:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0537C0619DC;
-        Thu, 23 Jul 2020 07:53:21 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595516000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xReGl6rTwlABQqLHz4nZq26+2OiWDgg160LyB2p5G1Y=;
-        b=h+R7c7Oqa+NtfxuxU6ErUL3QgyKMiY86p1+Kw7jgFvrPWdf1Q0qClfz317j9HUmF2fwC/1
-        5acMlB6QLMHuQ5C80LW1aEUjGMzQKOLyRA1SAmDUiUIFBgINPfAmbPmW258xRB4SST2MAd
-        GsIWTwBzzKWejXNRLcn0/kylOrHmYzxeC+YBi5HEro2PJgagKpxzZ/H2OjSnTCbjwhoJ22
-        xkmLAuyyoc25iqroV83OtXKN3Ts+LbJSF0t5tzsVbkxhIuuNqUCPkFbZGSqZEgmsXrkCIr
-        pnMbd2XwB2NTi505+WXCf8zIwWxOv0AIhY/IC+XmYNJ03E2iS3sY9MAhMmqOEQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595516000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xReGl6rTwlABQqLHz4nZq26+2OiWDgg160LyB2p5G1Y=;
-        b=ZWPvwgt7LIfOjZ/LyDvsBRAenC3Lmc63twFT/Q12fb4/k/DMfWqwI6MbrS7HjD3pi6hH84
-        QAlVEytmbw2nKuAQ==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alex Belits <abelits@marvell.com>,
-        "frederic\@kernel.org" <frederic@kernel.org>,
-        "rostedt\@goodmis.org" <rostedt@goodmis.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "mingo\@kernel.org" <mingo@kernel.org>,
-        "davem\@davemloft.net" <davem@davemloft.net>,
-        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "catalin.marinas\@arm.com" <catalin.marinas@arm.com>,
-        "will\@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel\@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v4 00/13] "Task_isolation" mode
-In-Reply-To: <20200723142623.GS5523@worktop.programming.kicks-ass.net>
-References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com> <87imeextf3.fsf@nanos.tec.linutronix.de> <20200723142623.GS5523@worktop.programming.kicks-ass.net>
-Date:   Thu, 23 Jul 2020 16:53:19 +0200
-Message-ID: <87y2nawae8.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S1726761AbgGWOxt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 10:53:49 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A294CC0619DC;
+        Thu, 23 Jul 2020 07:53:48 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jycbO-000zNa-Hu; Thu, 23 Jul 2020 14:53:42 +0000
+Date:   Thu, 23 Jul 2020 15:53:42 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 04/18] csum_and_copy_..._user(): pass 0xffffffff instead
+ of 0 as initial sum
+Message-ID: <20200723145342.GH2786714@ZenIV.linux.org.uk>
+References: <20200721202425.GA2786714@ZenIV.linux.org.uk>
+ <20200721202549.4150745-1-viro@ZenIV.linux.org.uk>
+ <20200721202549.4150745-4-viro@ZenIV.linux.org.uk>
+ <2d85ebb8ea2248c8a14f038a0c60297e@AcuMS.aculab.com>
+ <20200722144213.GE2786714@ZenIV.linux.org.uk>
+ <4e03cce8ed184d40bb0ea40fd3d51000@AcuMS.aculab.com>
+ <20200722155452.GF2786714@ZenIV.linux.org.uk>
+ <a55679c8d4dc4fb08d1e1782b5fc572c@AcuMS.aculab.com>
+ <20200722173903.GG2786714@ZenIV.linux.org.uk>
+ <02938acd78fd40beb02ffc5a1b803d85@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <02938acd78fd40beb02ffc5a1b803d85@AcuMS.aculab.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
-> On Thu, Jul 23, 2020 at 03:17:04PM +0200, Thomas Gleixner wrote:
->
->>   2) Instruction synchronization
->> 
->>      Trying to do instruction synchronization delayed is a clear recipe
->>      for hard to diagnose failures. Just because it blew not up in your
->>      face does not make it correct in any way. It's broken by design and
->>      violates _all_ rules of safe instruction patching and introduces a
->>      complete trainwreck in x86 NMI processing.
->> 
->>      If you really think that this is correct, then please have at least
->>      the courtesy to come up with a detailed and precise argumentation
->>      why this is a valid approach.
->> 
->>      While writing that up you surely will find out why it is not.
->
-> So delaying the sync_core() IPIs for kernel text patching _might_ be
-> possible, but it very much wants to be a separate patchset and not
-> something hidden inside a 'gem' like this.
+On Thu, Jul 23, 2020 at 01:54:47PM +0000, David Laight wrote:
+> From: Al Viro
+> > Sent: 22 July 2020 18:39
+> > I would love to see your patch, anyway, along with the testcases and performance
+> > comparison.
+> 
+> See attached program.
+> Compile and run (as root): csum_iov 1
+> 
+> Unpatched (as shipped) 16 vectors of 1 byte take ~430 clocks on my haswell cpu.
+> With dsl_patch defined they take ~393.
+> 
+> The maximum throughput is ~1.16 clocks/word for 16 vectors of 1k.
+> For longer vectors the data gets lost from the cache between the iterations.
+> 
+> On an older Ivy Bridge cpu it never goes faster than 2 clocks/word.
+> (Due to the implementation of ADC.)
+> 
+> The absolute limit is 1 clock/word - limited by the memory write.
+> I suspect that is achievable on Haswell with much less loop unrolling.
+> 
+> I had to replace the ror32() with __builtin_bswap32().
+> The kernel object do contain the 'ror' instruction - even though I
+> didn't find the asm for it.
 
-I'm not saying it's impossible, but the proposed hack is definitely
-beyond broken and you really don't want to be the one who has to mop up
-the pieces later.
+First of all,
+;  git grep -n -w ror32|grep '\.h:'
+include/linux/bitops.h:109: * ror32 - rotate a 32-bit value right
+include/linux/bitops.h:113:static inline __u32 ror32(__u32 word, unsigned int shift)
+include/net/checksum.h:81:              sum = ror32(sum, 8);
+; grep -A3 ror32 include/linux/bitops.h 
+ * ror32 - rotate a 32-bit value right
+ * @word: value to rotate
+ * @shift: bits to roll
+ */
+static inline __u32 ror32(__u32 word, unsigned int shift)
+{
+        return (word >> (shift & 31)) | (word << ((-shift) & 31));
+}
+; cat >/tmp/a.c <<'EOF'
+unsigned f(unsigned n)
+{
+        return (n >> 8) | (n << 24);
+}
+EOF
+; gcc -c -O2 /tmp/a.c -o /tmp/a.o
+; objdump /tmp/a.o
+/tmp/a.o:     file format elf64-x86-64
 
-Thanks,
 
-        tglx
+Disassembly of section .text:
+
+0000000000000000 <f>:
+   0:   89 f8                   mov    %edi,%eax
+   2:   c1 c8 08                ror    $0x8,%eax
+   5:   c3                      retq   
+;
+which ought to cover _that_ question.  Takes a couple of minutes, but that's
+a trivial side issue.
+
+Said that, what you've printed for 1-byte segments (and that's going to be
+seriously affected by the setup costs in csum-copy.S, sensitive to calling
+convention changes) is time to run the 16-iteration loop divided by 1 * 16 / 8;
+IOW, your difference for 16 iterations here is 37*2 = 74 cycles.  With
+per-iteration diff being a bit under 5 cycles.  Which is not implausible,
+but
+	1) extrapolating to other compiler versions, flags, etc. is not obvious
+	2) the effects of calling convention changes need to be taken into account
+	3) for copying to/from userland the effects of calling convention changes
+are be even larger, and kernel is certainly not going to issue kvec iters of _that_
+sort, TYVM.
