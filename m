@@ -2,123 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AFE22B00C
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 15:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B86F22B03F
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 15:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727885AbgGWNLK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 09:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727859AbgGWNLK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 09:11:10 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9F4C0619DC;
-        Thu, 23 Jul 2020 06:11:10 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gc9so3148941pjb.2;
-        Thu, 23 Jul 2020 06:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=E/e6bkQ7xor2tf39B3HoCRN8UgDNduwN1Zl5yinxqAQ=;
-        b=VHCvV4tDO0Bo5lG2Zc4hPcBRi5ULljYg08PlC0vzAhBt1p+CAjOX0WO/MyIX6FT/Xz
-         AVXqfD1jopjxBj0S7kL4mgO5TWFgxhWjIwgiNW/HnU1AXeN9Wa9A/R9UWkrrkJZDEl9A
-         Y4GRXVfQdi2aBc5if6fb1s/fm8E43m7KFrJmOZ5D4lLx1neR//DLIeK5TXy+RMVs9mWL
-         zXyf0bGiSKnAjEfPXF02FACc0rMk0Ikkzot//SenWG4yCVgqJ4UgWgE4sRgiS6gbaRIH
-         maTuWUdkFpnk4sPb5nhbOtEDUUMLgvXitYsyqxIZqPsm2ZMlXRIHbfw+ZRcAv2LRAGjV
-         wLfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=E/e6bkQ7xor2tf39B3HoCRN8UgDNduwN1Zl5yinxqAQ=;
-        b=NEvO9CeaUnSEZ+hDUG4eF6pvVN7c0ts44PCupbUm1bYVFYjHFL+YsFBs0AHWS8UWJu
-         loObe8hhl2pYlStSrxERDRluP8smrjVDwS/sZrYdHIeyHZuR1TAqp/QoFfPx9ETxxnih
-         2NDot1AOlN0rj16dfX87zklXfd39dI1BfjrjhkhgJKryD88qyGGAgvg9Bxw15nc0iU94
-         u3wrEDXAM+dJzb1v/5CxBntNMsfhgbJjocxwmVpgZgpMlzcVE6aA6peHaMjfuRXSq3Uh
-         oe5/lJb4qLWSE/hWQid7T0E2y36mvufV33RH7WdYcgJZWLKv/zj0RKFDaEEF264IUKql
-         L5Jg==
-X-Gm-Message-State: AOAM5336AMSISRXHwZi/JXahnDtrJX3FM6T8r3W4fFolix7gJJi6jzTs
-        UqeY2Hda2j9t+1fZzqJwkp0=
-X-Google-Smtp-Source: ABdhPJzyDRqU0+pKFo017avcsBGjeFT0wLcR3XwTdTSuoYbBl6djhiXCSDZYxDgTPpeRhvXDAsKYsw==
-X-Received: by 2002:a17:90a:6b02:: with SMTP id v2mr310422pjj.163.1595509869825;
-        Thu, 23 Jul 2020 06:11:09 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id g18sm3001623pfi.141.2020.07.23.06.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 06:11:09 -0700 (PDT)
-Date:   Thu, 23 Jul 2020 23:11:03 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
- synchronisation with actual irq state
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-References: <20200723105615.1268126-1-npiggin@gmail.com>
-        <20200723114010.GO5523@worktop.programming.kicks-ass.net>
-In-Reply-To: <20200723114010.GO5523@worktop.programming.kicks-ass.net>
+        id S1729238AbgGWNRH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 09:17:07 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:57992 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728995AbgGWNRG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 09:17:06 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595510224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eZpHq0wJmoP/QXQlRoyC1nwl6NlG0XCOjSsjs7SeBVk=;
+        b=I5uUAnslI9iohcWcGvwQ1La8igmc08Dgutc4K//ZOliRBQaRsCvuWzc70N//cMry0vvrwH
+        BKtNKQK2R6FuwQbymWrVlq1H766ZtytsV+w3XlJHlILbIxNyCPFOrkPY/PgkLStzNEVlpZ
+        ExnlHmkAFLgeRofqnevAlRou3mGVDq+YsL5M5ajc2FXqt0WB/u24ZCK3ed6yEdWGmWC9T2
+        ISXOUS0/toZi2WFWflYc+eIH8Qw7UsY8Ip8KA+qKQMRU7Sfo89WKBsASebhKJ25ZKzPVfF
+        EAPBco13PdctmXrPup1XDQFusXVSvpOdaemNoWJMM0RFwWrGyE5G60g+AWBCuQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595510224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eZpHq0wJmoP/QXQlRoyC1nwl6NlG0XCOjSsjs7SeBVk=;
+        b=WwsN8Q02+6+OIT1IGfrmoJ1cKOXiIf+cRiWF3uIDoAkx/POgXeIUtk17XXPG2yXE9l/RJX
+        We5XQT2JyzofwSBg==
+To:     Alex Belits <abelits@marvell.com>,
+        "frederic\@kernel.org" <frederic@kernel.org>,
+        "rostedt\@goodmis.org" <rostedt@goodmis.org>
+Cc:     Prasun Kapoor <pkapoor@marvell.com>,
+        "mingo\@kernel.org" <mingo@kernel.org>,
+        "davem\@davemloft.net" <davem@davemloft.net>,
+        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "peterz\@infradead.org" <peterz@infradead.org>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "catalin.marinas\@arm.com" <catalin.marinas@arm.com>,
+        "will\@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel\@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 00/13] "Task_isolation" mode
+In-Reply-To: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com>
+References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com>
+Date:   Thu, 23 Jul 2020 15:17:04 +0200
+Message-ID: <87imeextf3.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Message-Id: <1595506730.3mvrxktem5.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Peter Zijlstra's message of July 23, 2020 9:40 pm:
-> On Thu, Jul 23, 2020 at 08:56:14PM +1000, Nicholas Piggin wrote:
->=20
->> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/as=
-m/hw_irq.h
->> index 3a0db7b0b46e..35060be09073 100644
->> --- a/arch/powerpc/include/asm/hw_irq.h
->> +++ b/arch/powerpc/include/asm/hw_irq.h
->> @@ -200,17 +200,14 @@ static inline bool arch_irqs_disabled(void)
->>  #define powerpc_local_irq_pmu_save(flags)			\
->>  	 do {							\
->>  		raw_local_irq_pmu_save(flags);			\
->> -		trace_hardirqs_off();				\
->> +		if (!raw_irqs_disabled_flags(flags))		\
->> +			trace_hardirqs_off();			\
->>  	} while(0)
->>  #define powerpc_local_irq_pmu_restore(flags)			\
->>  	do {							\
->> -		if (raw_irqs_disabled_flags(flags)) {		\
->> -			raw_local_irq_pmu_restore(flags);	\
->> -			trace_hardirqs_off();			\
->> -		} else {					\
->> +		if (!raw_irqs_disabled_flags(flags))		\
->>  			trace_hardirqs_on();			\
->> -			raw_local_irq_pmu_restore(flags);	\
->> -		}						\
->> +		raw_local_irq_pmu_restore(flags);		\
->>  	} while(0)
->=20
-> You shouldn't be calling lockdep from NMI context!
+Alex,
 
-After this patch it doesn't.
+Alex Belits <abelits@marvell.com> writes:
+> This is a new version of task isolation implementation. Previous version is at
+> https://lore.kernel.org/lkml/07c25c246c55012981ec0296eee23e68c719333a.camel@marvell.com/
+>
+> Mostly this covers race conditions prevention on breaking isolation. Early after kernel entry,
+> task_isolation_enter() is called to update flags visible to other CPU cores and to perform
+> synchronization if necessary. Before this call only "safe" operations happen, as long as
+> CONFIG_TRACE_IRQFLAGS is not enabled.
 
-trace_hardirqs_on/off implementation appears to expect to be called in NMI=20
-context though, for some reason.
+Without going into details of the individual patches, let me give you a
+high level view of this series:
 
-> That is, I recently
-> added suport for that on x86:
->=20
->   https://lkml.kernel.org/r/20200623083721.155449112@infradead.org
->   https://lkml.kernel.org/r/20200623083721.216740948@infradead.org
->=20
-> But you need to be very careful on how you order things, as you can see
-> the above relies on preempt_count() already having been incremented with
-> NMI_MASK.
+  1) Entry code handling:
 
-Hmm. My patch seems simpler.
+     That's completely broken vs. the careful ordering and instrumentation
+     protection of the entry code. You can't just slap stuff randomly
+     into places which you think are safe w/o actually trying to understand
+     why this code is ordered in the way it is.
 
-I don't know this stuff very well, I don't really understand what your patc=
-h=20
-enables for x86 but at least it shouldn't be incompatible with this one=20
-AFAIKS.
+     This clearly was never built and tested with any of the relevant
+     debug options enabled. Both build and boot would have told you.
+
+  2) Instruction synchronization
+
+     Trying to do instruction synchronization delayed is a clear recipe
+     for hard to diagnose failures. Just because it blew not up in your
+     face does not make it correct in any way. It's broken by design and
+     violates _all_ rules of safe instruction patching and introduces a
+     complete trainwreck in x86 NMI processing.
+
+     If you really think that this is correct, then please have at least
+     the courtesy to come up with a detailed and precise argumentation
+     why this is a valid approach.
+
+     While writing that up you surely will find out why it is not.
+
+  3) Debug calls
+
+     Sprinkling debug calls around the codebase randomly is not going to
+     happen. That's an unmaintainable mess.
+
+     Aside of that none of these dmesg based debug things is necessary.
+     This can simply be monitored with tracing.
+
+  4) Tons of undocumented smp barriers
+
+     See Documentation/process/submit-checklist.rst #25
+
+  5) Signal on page fault
+
+     Why is this a magic task isolation feature instead of making it
+     something which can be used in general? There are other legit
+     reasons why a task might want a notification about an unexpected
+     (resolved) page fault.
+
+  6) Coding style violations all over the place
+
+     Using checkpatch.pl is mandatory
+
+  7) Not Cc'ed maintainers
+
+     While your Cc list is huge, you completely fail to Cc the relevant
+     maintainers of various files and subsystems as requested in
+     Documentation/process/*
+
+  8) Changelogs
+
+     Most of the changelogs have something along the lines:
+
+     'task isolation does not want X, so do Y to make it not do X'
+
+     without any single line of explanation why this approach was chosen
+     and why it is correct under all circumstances and cannot have nasty
+     side effects.
+
+     It's not the job of the reviewers/maintainers to figure this out.
+
+Please come up with a coherent design first and then address the
+identified issues one by one in a way which is palatable and reviewable.
+
+Throwing a big pile of completely undocumented 'works for me' mess over
+the fence does not get you anywhere, not even to the point that people
+are willing to review it in detail.
 
 Thanks,
-Nick
+
+        tglx
