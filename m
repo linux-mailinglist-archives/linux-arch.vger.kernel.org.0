@@ -2,126 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8F722B357
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 18:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE8C22B366
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 18:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729773AbgGWQU1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 12:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbgGWQU1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 12:20:27 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B3AC0619DC;
-        Thu, 23 Jul 2020 09:20:27 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x72so3245722pfc.6;
-        Thu, 23 Jul 2020 09:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=dWKUB0kRohvexbkkPgRM1qwRkgK/3Sd5V3qmYHkfVHc=;
-        b=CLFlyE2INNHRtu0udQhGXB/xueYWvsHUKQOa7BhUp+CQibOINf6pl9x8l8tzZnhdso
-         ra1AtKgGgUmh80B1VBWFNou9SX1AkDMjVJPKEd6z7bXtYEtL4VtsWvWBKt85CviMvodt
-         BCPDK7o0NLHmmMijpm4MSZoDNzKJgXcYkyPwgQI94LaTdG3ZWY8hKiJp0FQZTwHSGX68
-         03TQQk4bUoK7KOZGgWGPD5qw1ZjGeDnIGEuePIN3oPvkWPaQfDouRmp3sEiQiRAei0kZ
-         iuFRqCxyVbeCBhNxZt0y4ohF4dbrYNqIKL71S9OHION9X5XkwajhSEhjg2H7M3QCdc2S
-         CGQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=dWKUB0kRohvexbkkPgRM1qwRkgK/3Sd5V3qmYHkfVHc=;
-        b=qnIN6AGh1S9ugAjE2eItzb6iHj93ZS7nDVtuAiZe7QExKJtyzIN1Qp34qJFmEsrC2V
-         /1UwBa2p2qtv2BfpqFK7KfWcnwaCcenegBLWVpc/OpDT5eiIuw6COs1PSOOgVKqMdeTM
-         qzAnlGj5fgQ9SY6kT6X11SR/lOuRo/C7MuMALSqzZm3iGdrA3WKyrsskpRhrw2bHJx+f
-         mGJdbMCY3SlIQ+i4X3y8JFF2EtAdsZUb9thLKbukY7cGvNuIixJLNhYGWBS+TYdth0TZ
-         WfLqhAp/zWp1HgejGAa/XTj67BG1CKrs/NAU9sSv6wfuy04+mCfEhaTmp7+FcPeFmWt7
-         1fdg==
-X-Gm-Message-State: AOAM530wj73IFkm7Ntj5Y4d43I9NdQ6HWtAehrkuqj8JITiIzCdeHILg
-        glivfjJ4BQJJeAb5htg6xOQ=
-X-Google-Smtp-Source: ABdhPJysDWhvIJQomw/DqEdIwc2bVMwxFcnItkq2Ze5+GnmO9BChUUQuuGE4h+UgCL2QhudHR2afgw==
-X-Received: by 2002:a65:6246:: with SMTP id q6mr4842817pgv.133.1595521226642;
-        Thu, 23 Jul 2020 09:20:26 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id z11sm3376688pfr.71.2020.07.23.09.20.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 09:20:26 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 02:20:20 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
- synchronisation with actual irq state
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-References: <20200723105615.1268126-1-npiggin@gmail.com>
-        <20200723114010.GO5523@worktop.programming.kicks-ass.net>
-        <1595506730.3mvrxktem5.astroid@bobo.none>
-        <20200723145904.GU5523@worktop.programming.kicks-ass.net>
-In-Reply-To: <20200723145904.GU5523@worktop.programming.kicks-ass.net>
+        id S1728139AbgGWQWQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 12:22:16 -0400
+Received: from mga11.intel.com ([192.55.52.93]:24631 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726632AbgGWQWQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 23 Jul 2020 12:22:16 -0400
+IronPort-SDR: z5N4fbWKImmiwnK71WXZ2HciV2+Fi7Ne4dFvWX4g0NZstESE075S9iwvLaNEWnJbUkyR3aDGFn
+ Tsf5zY0DKn0g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="148496987"
+X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
+   d="scan'208";a="148496987"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 09:22:15 -0700
+IronPort-SDR: OJt4vWrnoAP6pK5ymUZfgjDLP5rmH9XKLAPLTI79wcTcZb9YrBtgh2IIbZMntAMNwYvSx0bkCH
+ eLMX9JaGcUSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
+   d="scan'208";a="363096816"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga001.jf.intel.com with ESMTP; 23 Jul 2020 09:22:14 -0700
+Message-ID: <2590914945c04d7758f54a9c51dfc6b82924b4e6.camel@intel.com>
+Subject: Re: [PATCH v10 03/26] x86/fpu/xstate: Introduce CET MSR XSAVES
+ supervisor states
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Date:   Thu, 23 Jul 2020 09:21:16 -0700
+In-Reply-To: <20200723161039.GE21891@linux.intel.com>
+References: <20200429220732.31602-1-yu-cheng.yu@intel.com>
+         <20200429220732.31602-4-yu-cheng.yu@intel.com>
+         <20200723161039.GE21891@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Message-Id: <1595520766.9z4077xel7.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Peter Zijlstra's message of July 24, 2020 12:59 am:
-> On Thu, Jul 23, 2020 at 11:11:03PM +1000, Nicholas Piggin wrote:
->> Excerpts from Peter Zijlstra's message of July 23, 2020 9:40 pm:
->> > On Thu, Jul 23, 2020 at 08:56:14PM +1000, Nicholas Piggin wrote:
->> >=20
->> >> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include=
-/asm/hw_irq.h
->> >> index 3a0db7b0b46e..35060be09073 100644
->> >> --- a/arch/powerpc/include/asm/hw_irq.h
->> >> +++ b/arch/powerpc/include/asm/hw_irq.h
->> >> @@ -200,17 +200,14 @@ static inline bool arch_irqs_disabled(void)
->> >>  #define powerpc_local_irq_pmu_save(flags)			\
->> >>  	 do {							\
->> >>  		raw_local_irq_pmu_save(flags);			\
->> >> -		trace_hardirqs_off();				\
->> >> +		if (!raw_irqs_disabled_flags(flags))		\
->> >> +			trace_hardirqs_off();			\
->> >>  	} while(0)
->> >>  #define powerpc_local_irq_pmu_restore(flags)			\
->> >>  	do {							\
->> >> -		if (raw_irqs_disabled_flags(flags)) {		\
->> >> -			raw_local_irq_pmu_restore(flags);	\
->> >> -			trace_hardirqs_off();			\
->> >> -		} else {					\
->> >> +		if (!raw_irqs_disabled_flags(flags))		\
->> >>  			trace_hardirqs_on();			\
->> >> -			raw_local_irq_pmu_restore(flags);	\
->> >> -		}						\
->> >> +		raw_local_irq_pmu_restore(flags);		\
->> >>  	} while(0)
->> >=20
->> > You shouldn't be calling lockdep from NMI context!
->>=20
->> After this patch it doesn't.
->=20
-> You sure, trace_hardirqs_{on,off}() calls into lockdep.
+On Thu, 2020-07-23 at 09:10 -0700, Sean Christopherson wrote:
+> On Wed, Apr 29, 2020 at 03:07:09PM -0700, Yu-cheng Yu wrote:
+> > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> > index 12c9684d59ba..47f603729543 100644
+> > --- a/arch/x86/include/asm/msr-index.h
+> > +++ b/arch/x86/include/asm/msr-index.h
+> > @@ -885,4 +885,22 @@
+> >  #define MSR_VM_IGNNE                    0xc0010115
+> >  #define MSR_VM_HSAVE_PA                 0xc0010117
+> >  
+> > +/* Control-flow Enforcement Technology MSRs */
+> > +#define MSR_IA32_U_CET		0x6a0 /* user mode cet setting */
+> > +#define MSR_IA32_S_CET		0x6a2 /* kernel mode cet setting */
+> > +#define MSR_IA32_PL0_SSP	0x6a4 /* kernel shstk pointer */
+> > +#define MSR_IA32_PL1_SSP	0x6a5 /* ring-1 shstk pointer */
+> > +#define MSR_IA32_PL2_SSP	0x6a6 /* ring-2 shstk pointer */
+> > +#define MSR_IA32_PL3_SSP	0x6a7 /* user shstk pointer */
+> > +#define MSR_IA32_INT_SSP_TAB	0x6a8 /* exception shstk table */
+> > +
+> > +/* MSR_IA32_U_CET and MSR_IA32_S_CET bits */
+> > +#define MSR_IA32_CET_SHSTK_EN		0x0000000000000001ULL
+> 
+> Can we drop the MSR_IA32 prefix for the individual bits?  Mostly to yield
+> shorter line lengths, but also because it's more or less redundant info,
+> and in some ways unhelpful as it's hard to quickly differentiate between
+> "this is an MSR index" and "this is a bit/mask for an MSR".
 
-At least for irq enable/disable functions yes. NMI runs with
-interrupts disabled so these will never call trace_hardirqs_on/off
-after this patch.
+Agree!
 
-> (FWIW they're
-> also broken vs entry ordering, but that's another story).
->=20
->> trace_hardirqs_on/off implementation appears to expect to be called in N=
-MI=20
->> context though, for some reason.
->=20
-> Hurpm, not sure.. I'll have to go grep arch code now :/ The generic NMI
-> code didn't touch that stuff.
->=20
-> Argh, yes, there might be broken there... damn! I'll go frob around.
->=20
+> 
+> My vote would also be to use BIT() or BIT_ULL().  The SDM defines the flags
+> by their (decimal) bit number.  Manually converting the bits to masks makes
+> it difficult to check for correctness.
+> 
+> E.g.
+> 
+> #define CET_SHSTK_EN		BIT(0)
+> #define CET_WRSS_EN		BIT(1)
+> #define CET_ENDBR_EN		BIT(2)
+> #define CET_LEG_IW_EN		BIT(3)
+> #define CET_NO_TRACK_EN		BIT(4)
+> #define CET_WAIT_ENDBR		BIT(5)
+
+I will change them.
+
+> 
+> > +#define MSR_IA32_CET_WRSS_EN		0x0000000000000002ULL
+> > +#define MSR_IA32_CET_ENDBR_EN		0x0000000000000004ULL
+> > +#define MSR_IA32_CET_LEG_IW_EN		0x0000000000000008ULL
+> > +#define MSR_IA32_CET_NO_TRACK_EN	0x0000000000000010ULL
+> > +#define MSR_IA32_CET_WAIT_ENDBR	0x00000000000000800UL
+> > +#define MSR_IA32_CET_BITMAP_MASK	0xfffffffffffff000ULL
+> 
+> This particular define, the so called BITMAP_MASK, is no longer used in the
+> IBT series.  IMO it'd be better off dropping this mask as it's not clear
+> from the name that this is really nothing more than a mask for a virtual
+> address, e.g. at first glance (for someone without CET knowledge) it looks
+> like bits 63:12 hold a bitmap as opposed to holding a pointer to a bitmap.
+
+I will remove this.
 
 Thanks,
-Nick
+Yu-cheng
+
