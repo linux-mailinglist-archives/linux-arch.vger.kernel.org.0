@@ -2,212 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEA622B17B
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 16:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05ABE22B1D8
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jul 2020 16:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729021AbgGWOha (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 10:37:30 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39966 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727108AbgGWOha (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jul 2020 10:37:30 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DFF4DAD80;
-        Thu, 23 Jul 2020 14:37:36 +0000 (UTC)
-Date:   Thu, 23 Jul 2020 16:37:27 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Ingo Molnar <mingo@redhat.com>, kvm-ppc@vger.kernel.org,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 4/6] powerpc/64s: implement queued spinlocks and
- rwlocks
-Message-ID: <20200723143727.GW32107@kitsune.suse.cz>
-References: <20200706043540.1563616-1-npiggin@gmail.com>
- <20200706043540.1563616-5-npiggin@gmail.com>
+        id S1728712AbgGWOxW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 10:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726761AbgGWOxV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 10:53:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0537C0619DC;
+        Thu, 23 Jul 2020 07:53:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595516000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xReGl6rTwlABQqLHz4nZq26+2OiWDgg160LyB2p5G1Y=;
+        b=h+R7c7Oqa+NtfxuxU6ErUL3QgyKMiY86p1+Kw7jgFvrPWdf1Q0qClfz317j9HUmF2fwC/1
+        5acMlB6QLMHuQ5C80LW1aEUjGMzQKOLyRA1SAmDUiUIFBgINPfAmbPmW258xRB4SST2MAd
+        GsIWTwBzzKWejXNRLcn0/kylOrHmYzxeC+YBi5HEro2PJgagKpxzZ/H2OjSnTCbjwhoJ22
+        xkmLAuyyoc25iqroV83OtXKN3Ts+LbJSF0t5tzsVbkxhIuuNqUCPkFbZGSqZEgmsXrkCIr
+        pnMbd2XwB2NTi505+WXCf8zIwWxOv0AIhY/IC+XmYNJ03E2iS3sY9MAhMmqOEQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595516000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xReGl6rTwlABQqLHz4nZq26+2OiWDgg160LyB2p5G1Y=;
+        b=ZWPvwgt7LIfOjZ/LyDvsBRAenC3Lmc63twFT/Q12fb4/k/DMfWqwI6MbrS7HjD3pi6hH84
+        QAlVEytmbw2nKuAQ==
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alex Belits <abelits@marvell.com>,
+        "frederic\@kernel.org" <frederic@kernel.org>,
+        "rostedt\@goodmis.org" <rostedt@goodmis.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "mingo\@kernel.org" <mingo@kernel.org>,
+        "davem\@davemloft.net" <davem@davemloft.net>,
+        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "catalin.marinas\@arm.com" <catalin.marinas@arm.com>,
+        "will\@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel\@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 00/13] "Task_isolation" mode
+In-Reply-To: <20200723142623.GS5523@worktop.programming.kicks-ass.net>
+References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com> <87imeextf3.fsf@nanos.tec.linutronix.de> <20200723142623.GS5523@worktop.programming.kicks-ass.net>
+Date:   Thu, 23 Jul 2020 16:53:19 +0200
+Message-ID: <87y2nawae8.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706043540.1563616-5-npiggin@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 02:35:38PM +1000, Nicholas Piggin wrote:
-> These have shown significantly improved performance and fairness when
-> spinlock contention is moderate to high on very large systems.
-> 
->  [ Numbers hopefully forthcoming after more testing, but initial
->    results look good ]
-> 
-> Thanks to the fast path, single threaded performance is not noticably
-> hurt.
-> 
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> ---
->  arch/powerpc/Kconfig                      | 13 ++++++++++++
->  arch/powerpc/include/asm/Kbuild           |  2 ++
->  arch/powerpc/include/asm/qspinlock.h      | 25 +++++++++++++++++++++++
->  arch/powerpc/include/asm/spinlock.h       |  5 +++++
->  arch/powerpc/include/asm/spinlock_types.h |  5 +++++
->  arch/powerpc/lib/Makefile                 |  3 +++
->  include/asm-generic/qspinlock.h           |  2 ++
->  7 files changed, 55 insertions(+)
->  create mode 100644 arch/powerpc/include/asm/qspinlock.h
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 24ac85c868db..17663ea57697 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -146,6 +146,8 @@ config PPC
->  	select ARCH_SUPPORTS_ATOMIC_RMW
->  	select ARCH_USE_BUILTIN_BSWAP
->  	select ARCH_USE_CMPXCHG_LOCKREF		if PPC64
-> +	select ARCH_USE_QUEUED_RWLOCKS		if PPC_QUEUED_SPINLOCKS
-> +	select ARCH_USE_QUEUED_SPINLOCKS	if PPC_QUEUED_SPINLOCKS
->  	select ARCH_WANT_IPC_PARSE_VERSION
->  	select ARCH_WEAK_RELEASE_ACQUIRE
->  	select BINFMT_ELF
-> @@ -492,6 +494,17 @@ config HOTPLUG_CPU
->  
->  	  Say N if you are unsure.
->  
-> +config PPC_QUEUED_SPINLOCKS
-> +	bool "Queued spinlocks"
-> +	depends on SMP
-> +	default "y" if PPC_BOOK3S_64
-> +	help
-> +	  Say Y here to use to use queued spinlocks which are more complex
-> +	  but give better salability and fairness on large SMP and NUMA
-                           ^ +c?
-Thanks
+Peter Zijlstra <peterz@infradead.org> writes:
+> On Thu, Jul 23, 2020 at 03:17:04PM +0200, Thomas Gleixner wrote:
+>
+>>   2) Instruction synchronization
+>> 
+>>      Trying to do instruction synchronization delayed is a clear recipe
+>>      for hard to diagnose failures. Just because it blew not up in your
+>>      face does not make it correct in any way. It's broken by design and
+>>      violates _all_ rules of safe instruction patching and introduces a
+>>      complete trainwreck in x86 NMI processing.
+>> 
+>>      If you really think that this is correct, then please have at least
+>>      the courtesy to come up with a detailed and precise argumentation
+>>      why this is a valid approach.
+>> 
+>>      While writing that up you surely will find out why it is not.
+>
+> So delaying the sync_core() IPIs for kernel text patching _might_ be
+> possible, but it very much wants to be a separate patchset and not
+> something hidden inside a 'gem' like this.
 
-Michal
-> +	  systems.
-> +
-> +	  If unsure, say "Y" if you have lots of cores, otherwise "N".
-> +
->  config ARCH_CPU_PROBE_RELEASE
->  	def_bool y
->  	depends on HOTPLUG_CPU
-> diff --git a/arch/powerpc/include/asm/Kbuild b/arch/powerpc/include/asm/Kbuild
-> index dadbcf3a0b1e..1dd8b6adff5e 100644
-> --- a/arch/powerpc/include/asm/Kbuild
-> +++ b/arch/powerpc/include/asm/Kbuild
-> @@ -6,5 +6,7 @@ generated-y += syscall_table_spu.h
->  generic-y += export.h
->  generic-y += local64.h
->  generic-y += mcs_spinlock.h
-> +generic-y += qrwlock.h
-> +generic-y += qspinlock.h
->  generic-y += vtime.h
->  generic-y += early_ioremap.h
-> diff --git a/arch/powerpc/include/asm/qspinlock.h b/arch/powerpc/include/asm/qspinlock.h
-> new file mode 100644
-> index 000000000000..c49e33e24edd
-> --- /dev/null
-> +++ b/arch/powerpc/include/asm/qspinlock.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_POWERPC_QSPINLOCK_H
-> +#define _ASM_POWERPC_QSPINLOCK_H
-> +
-> +#include <asm-generic/qspinlock_types.h>
-> +
-> +#define _Q_PENDING_LOOPS	(1 << 9) /* not tuned */
-> +
-> +#define smp_mb__after_spinlock()   smp_mb()
-> +
-> +static __always_inline int queued_spin_is_locked(struct qspinlock *lock)
-> +{
-> +	/*
-> +	 * This barrier was added to simple spinlocks by commit 51d7d5205d338,
-> +	 * but it should now be possible to remove it, asm arm64 has done with
-> +	 * commit c6f5d02b6a0f.
-> +	 */
-> +	smp_mb();
-> +	return atomic_read(&lock->val);
-> +}
-> +#define queued_spin_is_locked queued_spin_is_locked
-> +
-> +#include <asm-generic/qspinlock.h>
-> +
-> +#endif /* _ASM_POWERPC_QSPINLOCK_H */
-> diff --git a/arch/powerpc/include/asm/spinlock.h b/arch/powerpc/include/asm/spinlock.h
-> index 21357fe05fe0..434615f1d761 100644
-> --- a/arch/powerpc/include/asm/spinlock.h
-> +++ b/arch/powerpc/include/asm/spinlock.h
-> @@ -3,7 +3,12 @@
->  #define __ASM_SPINLOCK_H
->  #ifdef __KERNEL__
->  
-> +#ifdef CONFIG_PPC_QUEUED_SPINLOCKS
-> +#include <asm/qspinlock.h>
-> +#include <asm/qrwlock.h>
-> +#else
->  #include <asm/simple_spinlock.h>
-> +#endif
->  
->  #endif /* __KERNEL__ */
->  #endif /* __ASM_SPINLOCK_H */
-> diff --git a/arch/powerpc/include/asm/spinlock_types.h b/arch/powerpc/include/asm/spinlock_types.h
-> index 3906f52dae65..c5d742f18021 100644
-> --- a/arch/powerpc/include/asm/spinlock_types.h
-> +++ b/arch/powerpc/include/asm/spinlock_types.h
-> @@ -6,6 +6,11 @@
->  # error "please don't include this file directly"
->  #endif
->  
-> +#ifdef CONFIG_PPC_QUEUED_SPINLOCKS
-> +#include <asm-generic/qspinlock_types.h>
-> +#include <asm-generic/qrwlock_types.h>
-> +#else
->  #include <asm/simple_spinlock_types.h>
-> +#endif
->  
->  #endif
-> diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-> index 5e994cda8e40..d66a645503eb 100644
-> --- a/arch/powerpc/lib/Makefile
-> +++ b/arch/powerpc/lib/Makefile
-> @@ -41,7 +41,10 @@ obj-$(CONFIG_PPC_BOOK3S_64) += copyuser_power7.o copypage_power7.o \
->  obj64-y	+= copypage_64.o copyuser_64.o mem_64.o hweight_64.o \
->  	   memcpy_64.o memcpy_mcsafe_64.o
->  
-> +ifndef CONFIG_PPC_QUEUED_SPINLOCKS
->  obj64-$(CONFIG_SMP)	+= locks.o
-> +endif
-> +
->  obj64-$(CONFIG_ALTIVEC)	+= vmx-helper.o
->  obj64-$(CONFIG_KPROBES_SANITY_TEST)	+= test_emulate_step.o \
->  					   test_emulate_step_exec_instr.o
-> diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
-> index fde943d180e0..fb0a814d4395 100644
-> --- a/include/asm-generic/qspinlock.h
-> +++ b/include/asm-generic/qspinlock.h
-> @@ -12,6 +12,7 @@
->  
->  #include <asm-generic/qspinlock_types.h>
->  
-> +#ifndef queued_spin_is_locked
->  /**
->   * queued_spin_is_locked - is the spinlock locked?
->   * @lock: Pointer to queued spinlock structure
-> @@ -25,6 +26,7 @@ static __always_inline int queued_spin_is_locked(struct qspinlock *lock)
->  	 */
->  	return atomic_read(&lock->val);
->  }
-> +#endif
->  
->  /**
->   * queued_spin_value_unlocked - is the spinlock structure unlocked?
-> -- 
-> 2.23.0
-> 
+I'm not saying it's impossible, but the proposed hack is definitely
+beyond broken and you really don't want to be the one who has to mop up
+the pieces later.
+
+Thanks,
+
+        tglx
