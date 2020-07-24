@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7023622BE7D
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 09:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB58322BE74
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 09:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgGXHAx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jul 2020 03:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S1727015AbgGXHAk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jul 2020 03:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726987AbgGXHAi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 03:00:38 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B0DC0619E7
-        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:38 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id t3so845346wrr.5
-        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:38 -0700 (PDT)
+        with ESMTP id S1726997AbgGXHAk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 03:00:40 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18B2C0619E4
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:39 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k75so9279483ybf.19
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nzPB/8gD7tiXvmPnGkXWvRfHEEqZYmZWnzjoz4lCFa4=;
-        b=URAz3B9pmI3bMj/6AQUMnQQhW0rplCGsl7EloPnKMvSTNGhtNnCDfpGQ/8+TWhN/lS
-         eu93QjVcDkQhVrqUknfjSvB0XOajZEZToOyVflz40sULKVkXx6GdG2Jl9RetHholLscb
-         PoV5V60V4M9lw/Srge2zKAj1zk8uQFxfbooBj805sbbIK/sv+2won75T8Ek6ZGQN9uEK
-         4+p+bDebrCVEHu50+mjp7zz0MS0fpWFGfLHruk2rEJmQEiqiXAcTlPldK0MredKRg7Tu
-         hIeWfrLaMilSJpOi81uGZWmzYRa14TOKhpPwhFvIXdYF90TU+Nm8AI28zeAGN4zl+ncI
-         mmoQ==
+        bh=exjoV/J3QIlZtyiULDQJFxa/y5F8DBbC61V96IvJHj0=;
+        b=Mmh2Mf3qHUOuy8eXKOYTiPh6vb93RN+wecn2vV/u6zFddlr6vz9bN5kOKUiri7yOh2
+         1896t51EtovsfkIEKPQV41bWfidSxvayY8PvL4Q59YAL/qdQ3bmPpe/Kp2rnAf2ThrD/
+         aJITzBcYr85ihHIGkTdiQHA4qHqnktG7N6to1AnOr5SQyD8hJ3GiAC7GEp82MVUCD6C8
+         9byF3eBGDOe5SMj0Qf8WbbQmJFlU6CtgjnhuBes4oZcvG+MJtxtkYocfznIGSyNEv7JD
+         6UXlNRpxLmY9bY1rfWs7ItnfkFtfmnrj2G6T7qVsyykmokdT3NgzwUUnQvssX2TaxKJz
+         7Npw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nzPB/8gD7tiXvmPnGkXWvRfHEEqZYmZWnzjoz4lCFa4=;
-        b=mYZQVsp8kRZcA6iZwk9eIalgcTLJ5+MOjEpreCMDT8ZrxLvscJE7223YySRtNZftTv
-         qNR4I3Z1Cnq24tMfBLk9/vzyjCy1j/TYRDc7Qz29CV6dpTHbYNEtCZIkTS93pULCSNzA
-         Kec+J6h+k8cxrTztZwQ8s3XG/bnB3BOj8LWe+SWwu2puqGvDyyRJcS/xqmdWvvoyquJE
-         wq8PbZIj8wBhm5y7JMAv7jSvDU7Qugboj2yqYZiRQg0MphpkDKVQ8jlJtg2jmU+It2vz
-         3+VJGxYstQ2ckOQTa5dHzVd3SQU95pHCaLts3amJWYB73CjSCriFp60Vyr0zDH7Y5XEP
-         XKqw==
-X-Gm-Message-State: AOAM531PVmm9o9Ow/87u+KWZ1fvfbDO7+nUQcvL7DckhEkRfFX/cm2fx
-        upcQPUQ+hySWxJEqNociizloIZruPw==
-X-Google-Smtp-Source: ABdhPJx2JoNHbcPJzjn4ZQvYwamZ3dXW5+J9rF1Ytf7+0vXB5i7gS14K5hdGsJuzH9+fJNjTZ5Y2F4/QdQ==
-X-Received: by 2002:adf:e805:: with SMTP id o5mr7608214wrm.419.1595574036687;
- Fri, 24 Jul 2020 00:00:36 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 09:00:06 +0200
+        bh=exjoV/J3QIlZtyiULDQJFxa/y5F8DBbC61V96IvJHj0=;
+        b=Uv7+VLJRm0TuwIWFZmgvs2eI9sQe1HoE1vTvrkYyQIv0BuvFTTgir6+f8Eqs65/hw4
+         C3eNJdPoQKcirIXdcankFYqaWBZDaR2c8TmT4vEJCRgfgguZXXb+DP5N74x+vwUwwSN0
+         ZIJqEUBqKN8u4f4OYHl9ztyC0BqaeK1RsH92lid2V5gOpZskOrQ0llyOG2nt3qT8J1n0
+         gWZMY4zozct4pbh362OHIMp0jTrEj/bi7g88Pg+4wPR2DzNHKWuN4+Uj1c57/w3i52rp
+         Tgp+P/QMZWm1wPDCnf0sZDt6HaX8GM1RgtE4OL329aqixE/3OIgZARIsZBhDWoB9Ccky
+         1pFw==
+X-Gm-Message-State: AOAM530IfobZfonYILjR+ZO+fKy05l84iY5WmbGYd8sWiQ/Napb87rVe
+        AGlW3QQ6n/lkMUCtrfOb+1NXsjSjxA==
+X-Google-Smtp-Source: ABdhPJzFQ7drXC3Zymk1HSiBzLPuR2JrwD8P5jtaLjgCUJ7OyiCpkZu7On5nca4wHIjy8q46ZT+rhlRRyQ==
+X-Received: by 2002:a25:ca8d:: with SMTP id a135mr12598725ybg.459.1595574039087;
+ Fri, 24 Jul 2020 00:00:39 -0700 (PDT)
+Date:   Fri, 24 Jul 2020 09:00:07 +0200
 In-Reply-To: <20200724070008.1389205-1-elver@google.com>
-Message-Id: <20200724070008.1389205-7-elver@google.com>
+Message-Id: <20200724070008.1389205-8-elver@google.com>
 Mime-Version: 1.0
 References: <20200724070008.1389205-1-elver@google.com>
 X-Mailer: git-send-email 2.28.0.rc0.142.g3c755180ce-goog
-Subject: [PATCH v2 6/8] instrumented.h: Introduce read-write instrumentation hooks
+Subject: [PATCH v2 7/8] asm-generic/bitops: Use instrument_read_write() where appropriate
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, paulmck@kernel.org
 Cc:     will@kernel.org, peterz@infradead.org, arnd@arndb.de,
@@ -62,67 +62,90 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce read-write instrumentation hooks, to more precisely denote an
-operation's behaviour.
-
-KCSAN is able to distinguish compound instrumentation, and with the new
-instrumentation we then benefit from improved reporting. More
-importantly, read-write compound operations should not implicitly be
-treated as atomic, if they aren't actually atomic.
+Use the new instrument_read_write() where appropriate.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- include/linux/instrumented.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ include/asm-generic/bitops/instrumented-atomic.h     | 6 +++---
+ include/asm-generic/bitops/instrumented-lock.h       | 2 +-
+ include/asm-generic/bitops/instrumented-non-atomic.h | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index 43e6ea591975..42faebbaa202 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -42,6 +42,21 @@ static __always_inline void instrument_write(const volatile void *v, size_t size
- 	kcsan_check_write(v, size);
+diff --git a/include/asm-generic/bitops/instrumented-atomic.h b/include/asm-generic/bitops/instrumented-atomic.h
+index fb2cb33a4013..81915dcd4b4e 100644
+--- a/include/asm-generic/bitops/instrumented-atomic.h
++++ b/include/asm-generic/bitops/instrumented-atomic.h
+@@ -67,7 +67,7 @@ static inline void change_bit(long nr, volatile unsigned long *addr)
+  */
+ static inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
+ {
+-	instrument_atomic_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch_test_and_set_bit(nr, addr);
  }
  
-+/**
-+ * instrument_read_write - instrument regular read-write access
-+ *
-+ * Instrument a regular write access. The instrumentation should be inserted
-+ * before the actual write happens.
-+ *
-+ * @ptr address of access
-+ * @size size of access
-+ */
-+static __always_inline void instrument_read_write(const volatile void *v, size_t size)
-+{
-+	kasan_check_write(v, size);
-+	kcsan_check_read_write(v, size);
-+}
-+
- /**
-  * instrument_atomic_read - instrument atomic read access
-  *
-@@ -72,6 +87,21 @@ static __always_inline void instrument_atomic_write(const volatile void *v, size
- 	kcsan_check_atomic_write(v, size);
+@@ -80,7 +80,7 @@ static inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
+  */
+ static inline bool test_and_clear_bit(long nr, volatile unsigned long *addr)
+ {
+-	instrument_atomic_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch_test_and_clear_bit(nr, addr);
  }
  
-+/**
-+ * instrument_atomic_read_write - instrument atomic read-write access
-+ *
-+ * Instrument an atomic read-write access. The instrumentation should be
-+ * inserted before the actual write happens.
-+ *
-+ * @ptr address of access
-+ * @size size of access
-+ */
-+static __always_inline void instrument_atomic_read_write(const volatile void *v, size_t size)
-+{
-+	kasan_check_write(v, size);
-+	kcsan_check_atomic_read_write(v, size);
-+}
-+
- /**
-  * instrument_copy_to_user - instrument reads of copy_to_user
-  *
+@@ -93,7 +93,7 @@ static inline bool test_and_clear_bit(long nr, volatile unsigned long *addr)
+  */
+ static inline bool test_and_change_bit(long nr, volatile unsigned long *addr)
+ {
+-	instrument_atomic_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch_test_and_change_bit(nr, addr);
+ }
+ 
+diff --git a/include/asm-generic/bitops/instrumented-lock.h b/include/asm-generic/bitops/instrumented-lock.h
+index b9bec468ae03..75ef606f7145 100644
+--- a/include/asm-generic/bitops/instrumented-lock.h
++++ b/include/asm-generic/bitops/instrumented-lock.h
+@@ -52,7 +52,7 @@ static inline void __clear_bit_unlock(long nr, volatile unsigned long *addr)
+  */
+ static inline bool test_and_set_bit_lock(long nr, volatile unsigned long *addr)
+ {
+-	instrument_atomic_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_atomic_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch_test_and_set_bit_lock(nr, addr);
+ }
+ 
+diff --git a/include/asm-generic/bitops/instrumented-non-atomic.h b/include/asm-generic/bitops/instrumented-non-atomic.h
+index 20f788a25ef9..f86234c7c10c 100644
+--- a/include/asm-generic/bitops/instrumented-non-atomic.h
++++ b/include/asm-generic/bitops/instrumented-non-atomic.h
+@@ -68,7 +68,7 @@ static inline void __change_bit(long nr, volatile unsigned long *addr)
+  */
+ static inline bool __test_and_set_bit(long nr, volatile unsigned long *addr)
+ {
+-	instrument_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch___test_and_set_bit(nr, addr);
+ }
+ 
+@@ -82,7 +82,7 @@ static inline bool __test_and_set_bit(long nr, volatile unsigned long *addr)
+  */
+ static inline bool __test_and_clear_bit(long nr, volatile unsigned long *addr)
+ {
+-	instrument_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch___test_and_clear_bit(nr, addr);
+ }
+ 
+@@ -96,7 +96,7 @@ static inline bool __test_and_clear_bit(long nr, volatile unsigned long *addr)
+  */
+ static inline bool __test_and_change_bit(long nr, volatile unsigned long *addr)
+ {
+-	instrument_write(addr + BIT_WORD(nr), sizeof(long));
++	instrument_read_write(addr + BIT_WORD(nr), sizeof(long));
+ 	return arch___test_and_change_bit(nr, addr);
+ }
+ 
 -- 
 2.28.0.rc0.142.g3c755180ce-goog
 
