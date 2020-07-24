@@ -2,92 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE11022C1F6
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 11:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C9022C310
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 12:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgGXJUZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jul 2020 05:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726861AbgGXJUZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 05:20:25 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1226EC0619D3;
-        Fri, 24 Jul 2020 02:20:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726114AbgGXK0v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jul 2020 06:26:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58582 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726520AbgGXK0v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 24 Jul 2020 06:26:51 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BCkFK6JGBz9sR4;
-        Fri, 24 Jul 2020 19:20:21 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1595582422;
-        bh=UPIxsyZfLqUDnT8iObHrZ8nb9iLP4cZ7fUXdGyHcmoY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=IBcm+Zm6smdWh9PEK2Ss0rAnWl1DnQ/MqeA9ZxGG7OMSj5P/JP1IPUY2izxEO91Lh
-         YAkwG4Qio5k7RC4FL7WIQZuF7oyC3Xd1RRYOZkSUxy5QMknsyJUJDHz+Eeu/KKy8D2
-         Yj8ivvRvo695X+JLD7Sv+CqSKISjUJCY4NXGryZHHqScHu6DLebQN5O2YeWJVK91aS
-         kTpe65r4wtIWyXCXq9ZJmHY3iAOobFHTdAGAataxWlkQOYyGRq4xNEumJ9p3qztAfJ
-         oEtCBqHexVP0DDwwP8IINOU9+Qu43bHU1dzxXV7MkNfTUKFrCQTC8+SlwQuxuOA24I
-         a73JbJdb8pVzA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Daniel Axtens <dja@axtens.net>, linuxppc-dev@ozlabs.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hughd@google.com
-Subject: Re: [PATCH 2/5] powerpc: Allow 4096 bytes of stack expansion for the signal frame
-In-Reply-To: <87blk6tkuv.fsf@dja-thinkpad.axtens.net>
-References: <20200703141327.1732550-1-mpe@ellerman.id.au> <20200703141327.1732550-2-mpe@ellerman.id.au> <87blk6tkuv.fsf@dja-thinkpad.axtens.net>
-Date:   Fri, 24 Jul 2020 19:20:18 +1000
-Message-ID: <87wo2tp8vh.fsf@mpe.ellerman.id.au>
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B46E2065C;
+        Fri, 24 Jul 2020 10:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595586410;
+        bh=rVdfRLF8yznNkp/wFEbFevU/Hg1CdRSyD1U/86auq+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ISuPeAIlsG5DP6x+uysiGR64wgnZiwHi2/PlNEX4EJ5gZ6a2BsFtRlWen7/jtskTJ
+         zqgCfl/IgqzipJSfqA0TnF6HXBXuCj05y2wR8foas1wGZPtTOT79Aom/l7w1yeygpI
+         LD3rcZMAX69m9q/i8RFTqTuldH+yKRQg1n51312A=
+Date:   Fri, 24 Jul 2020 13:26:41 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andi Kleen <ak@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jessica Yu <jeyu@kernel.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v5 0/6] arch/x86: kprobes: Remove MODULES dependency
+Message-ID: <20200724102641.GC2831654@kernel.org>
+References: <20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Daniel Axtens <dja@axtens.net> writes:
-> Hi Michael,
->
-> Unfortunately, this patch doesn't completely solve the problem.
->
-> Trying the original reproducer, I'm still able to trigger the crash even
-> with this patch, although not 100% of the time. (If I turn ASLR off
-> outside of tmux it reliably crashes, if I turn ASLR off _inside_ of tmux
-> it reliably succeeds; all of this is on a serial console.)
->
-> ./foo 1241000 & sleep 1; killall -USR1 foo; echo ok
->
-> If I add some debugging information, I see that I'm getting
-> address + 4096 = 7fffffed0fa0
-> gpr1 =           7fffffed1020
->
-> So address + 4096 is 0x80 bytes below the 4k window. I haven't been able
-> to figure out why, gdb gives me a NIP in __kernel_sigtramp_rt64 but I
-> don't know what to make of that.
+(cc people whi particpaged in v2 disuccsion)
 
-Thanks for testing.
+On Fri, Jul 24, 2020 at 08:05:47AM +0300, Jarkko Sakkinen wrote:
+> Remove MODULES dependency by migrating from module_alloc() to the new
+> text_alloc() API. Essentially these changes provide preliminaries for
+> allowing to compile a static kernel with a proper tracing support.
+> 
+> The same API can be used later on in other sites that allocate space for
+> trampolines, and trivially scaled to other arch's. An arch can inform
+> with CONFIG_ARCH_HAS_TEXT_ALLOC that it's providing implementation for
+> text_alloc().
+> 
+> Cc: linux-mm@kvack.org
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> 
+> v4:
+> * Squash lock_modules() patches into one.
+> * Remove fallback versions of text_alloc() and text_free(). Instead, use
+>   ARCH_HAS_TEXT_ALLOC at site when required.
+> * Use lockdep_assert_irqs_enabled() in text_free() instead of
+>   WARN_ON(in_interrupt()).
+> 
+> v3:
+> * Make text_alloc() API disjoint.
+> * Remove all the possible extra clutter not absolutely required and
+>   split into more logical pieces.
+> 
+> Jarkko Sakkinen (6):
+>   kprobes: Remove dependency to the module_mutex
+>   vmalloc: Add text_alloc() and text_free()
+>   arch/x86: Implement text_alloc() and text_free()
+>   arch/x86: kprobes: Use text_alloc() and text_free()
+>   kprobes: Use text_alloc() and text_free()
+>   kprobes: Remove CONFIG_MODULES dependency
+> 
+>  arch/Kconfig                   |  2 +-
+>  arch/x86/Kconfig               |  3 ++
+>  arch/x86/kernel/Makefile       |  1 +
+>  arch/x86/kernel/kprobes/core.c |  4 +--
+>  arch/x86/kernel/text_alloc.c   | 41 +++++++++++++++++++++++
+>  include/linux/module.h         | 32 ++++++++++++++----
+>  include/linux/vmalloc.h        | 17 ++++++++++
+>  kernel/kprobes.c               | 61 +++++++++++++++++++++++-----------
+>  kernel/trace/trace_kprobe.c    | 20 ++++++++---
+>  9 files changed, 147 insertions(+), 34 deletions(-)
+>  create mode 100644 arch/x86/kernel/text_alloc.c
+> 
+> -- 
+> 2.25.1
+> 
 
-I looked at it again this morning and it's fairly obvious when it's not
-11pm :)
-
-We need space for struct rt_sigframe as well as another 128 bytes,
-which is __SIGNAL_FRAMESIZE. It's actually mentioned in the comment
-above struct rt_sigframe.
-
-I'll send a v2.
-
-> P.S. I don't know what your policy on linking to kernel bugzilla is, but
-> if you want:
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=205183
-
-In general I prefer to keep things clean with just a single Link: tag
-pointing to the archive of the patch submission.
-
-That can then contain further links and other info, and has the
-advantage that people can reply to the patch submission in the future to
-add information to the thread that wasn't known at the time of the
-commit.
-
-cheers
+-- 
+Sincerely yours,
+Mike.
