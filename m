@@ -2,50 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096C022BE66
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 09:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED8F22BE6E
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 09:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgGXHAY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jul 2020 03:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S1726878AbgGXHAd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jul 2020 03:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgGXHAX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 03:00:23 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92485C0619E4
-        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:23 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id t12so1890794wrp.0
-        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:23 -0700 (PDT)
+        with ESMTP id S1726962AbgGXHAc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 03:00:32 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A3AC0619D3
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:32 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k75so9278909ybf.19
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=nYhmgKcIIGxCsAi7Og+Yd3I+h1LrKRUSXiXnS3u5PnU=;
-        b=VmnqZ2EAprygZLrhVFCDi1Q7n6PIAKLoT1x9Cs7iRuMS9jOciQw4aEchwk0UUJj/gw
-         y57PDiIC8p+PXhimWgNMj9P6oIq9m3Zy7zJUxtFTEhP3eNPohY76S0hioVUMfGuGIlCO
-         ywRo1uwLVvKZjpg14Khds/2WCEasTQy/V71ZaxJcybYQQeTglIFrfgeGdJawJTshRfMA
-         lAKfjy7kNTAneGiNTkiyKuKrajor9Fc0cqJl+JXvUfmShF4AjflzwPA7/HqygLYj/Osc
-         ro6YVGAxUZzX2cIlgbfc7vclHWfJCIRel0mSHx9ttd8IAWj6QMQNof8cxr1i2zKwPjMx
-         92Kg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=5cayCuPk2wPjGrqLjRjs0da5Omg5sZGp1EbJR3QFOWA=;
+        b=XgaUDS6lp9nfPXqDpwi2F+CnJNkzEBfzakfczBxRxMHopo8/GKoQHgb1J4G2BLOPId
+         Tj7TokenLtlE0yd10U3xLpw2pvexm+cQHg8qZDXd1Hds+R8Ya60ZJRzH+X1ph8/9V0NP
+         gWGpMVej7a3D2OA5JAw31HMddDv9tUp2mmDz2ZVfGLMEWvFVPBmAWMbP2ZgSVe7ESAqV
+         W8GVG/bfHd984S3my9TIYv7ONr7HbP4/d7XOruVcCrWouarTuQeqHybf1gWxg8jKLCOd
+         1XOxupusauqtoiWHSTZ/+XEgsRxcCjs9WGMhPi069xiPfUBLCQtcY6BeixmJGEmKEamC
+         JG7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=nYhmgKcIIGxCsAi7Og+Yd3I+h1LrKRUSXiXnS3u5PnU=;
-        b=SVMMHIO1ZhDSe2m9hqXsElSGeKq0Cnc6Ce5Qz4EiWkexn2cBTBQO+5LmDHqeH+fY7g
-         huEX5rlG9sHQsRsEjNae2/cDNZa0adgNJo5GZPs5iMjPEkq032hf8gm++0Y8kcZ8oGp8
-         H93bvibnnDcwI+/4H25tbWgXtRNsiP9eB9NLCF1tJdg+jo3PlRaeISohaAnWS9SU7LqO
-         e4kr+tkNjNQYBLNcQ4qWRmT9O+iw/XWMH7uGqje6MSPZ5l6KdYYUeeXOHUX2k7Z9fvlv
-         lD9HiaFuSnWpzHnfRc1jKvExQc+50Pr+L0ZQv7graIRyACuBi1j7QczTjVw/JB9J23ro
-         2f3A==
-X-Gm-Message-State: AOAM5316Jrd3NJNPeDVnFclCMIoNHwTL0dY39SDHXh30TF09ij3yATIu
-        0V8tyBaJ1LTlV3UBZJIjKmm39uUhpA==
-X-Google-Smtp-Source: ABdhPJwyFtmvu9bRVNtMmlRK6Q0X/qg/iAtZTfSgzPG7LzT+yt9euH/Zilz9OA5fKWTwtXmakhuSPXqthA==
-X-Received: by 2002:a7b:c4d3:: with SMTP id g19mr939521wmk.29.1595574022053;
- Fri, 24 Jul 2020 00:00:22 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 09:00:00 +0200
-Message-Id: <20200724070008.1389205-1-elver@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=5cayCuPk2wPjGrqLjRjs0da5Omg5sZGp1EbJR3QFOWA=;
+        b=ia7KNwOrEWIdnPuy6RIlnsU3q9UrgSaM+Rg5GipXYexwuRgRcwl3ojqhRy/LQgDRCb
+         ++MuIe21ENX88kG0Wo3B39wPqeNmV0uMNdQo6lsyvaGjlts7V6j9OWU6AUnFkq/d1DYi
+         vehpeJ7mX8VTNwemlwBcP3R5y26mvS/TbPPhg8moXeCGN8zLj7As2Wv13Zyd01/pUHTq
+         IysYOmp0qJSZ+4+r3kVv9gbRYP9UMM2JcE7/S1fhP/lt+HptIURE8e7luLjKca1+JXGm
+         o4rzUZ44F11Z3mvT8eHJZLpw4f+B8/ThZyTYQ9ihbjrjBTh8nx/5Gn2kqyYWNarLo6iq
+         rTMA==
+X-Gm-Message-State: AOAM531nPescrv2RdK9J4o0XmeXvYde9MTqyWkvb1n7P0NZYBZalCBJQ
+        G1IiUeJ9IBuVulTEsxvkDKnuODPepw==
+X-Google-Smtp-Source: ABdhPJzcsx9MWCrFPtOouS3kHQd2xrtiLfC+0hwi+LxDJkH7/b/r8aGAco8bTXZRQ9ZDKDFku2rj0XEIzA==
+X-Received: by 2002:a25:b68d:: with SMTP id s13mr13979168ybj.330.1595574031586;
+ Fri, 24 Jul 2020 00:00:31 -0700 (PDT)
+Date:   Fri, 24 Jul 2020 09:00:04 +0200
+In-Reply-To: <20200724070008.1389205-1-elver@google.com>
+Message-Id: <20200724070008.1389205-5-elver@google.com>
 Mime-Version: 1.0
+References: <20200724070008.1389205-1-elver@google.com>
 X-Mailer: git-send-email 2.28.0.rc0.142.g3c755180ce-goog
-Subject: [PATCH v2 0/8] kcsan: Compound read-write instrumentation
+Subject: [PATCH v2 4/8] kcsan: Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, paulmck@kernel.org
 Cc:     will@kernel.org, peterz@infradead.org, arnd@arndb.de,
@@ -58,52 +62,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This series adds support for enabling compounded read-write
-instrumentation, if supported by the compiler (Clang 12 will be the
-first compiler to support the feature). The new instrumentation is
-emitted for sets of memory accesses in the same basic block to the same
-address with at least one read appearing before a write. These typically
-result from compound operations such as ++, --, +=, -=, |=, &=, etc. but
-also equivalent forms such as "var = var + 1".
+Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks for the builtin atomics
+instrumentation.
 
-We can then benefit from improved performance (fewer instrumentation
-calls) and better reporting for such accesses. In addition, existing
-explicit instrumentation via instrumented.h was updated to use explicit
-read-write instrumentation where appropriate, so we can also benefit
-from the better report generation.
-
+Signed-off-by: Marco Elver <elver@google.com>
+---
 v2:
-* Fix CC_HAS_TSAN_COMPOUND_READ_BEFORE_WRITE: s/--param -tsan/--param tsan/
-* Add some {} for readability.
-* Rewrite commit message of 'kcsan: Skew delay to be longer for certain
-  access types'.
-* Update comment for gen-atomic-instrumented.sh.
+* Add {} for readability.
 
-Marco Elver (8):
-  kcsan: Support compounded read-write instrumentation
-  objtool, kcsan: Add __tsan_read_write to uaccess whitelist
-  kcsan: Skew delay to be longer for certain access types
-  kcsan: Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks
-  kcsan: Test support for compound instrumentation
-  instrumented.h: Introduce read-write instrumentation hooks
-  asm-generic/bitops: Use instrument_read_write() where appropriate
-  locking/atomics: Use read-write instrumentation for atomic RMWs
+Added to this series, as it would otherwise cause patch conflicts.
+---
+ kernel/kcsan/core.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
- include/asm-generic/atomic-instrumented.h     | 330 +++++++++---------
- .../asm-generic/bitops/instrumented-atomic.h  |   6 +-
- .../asm-generic/bitops/instrumented-lock.h    |   2 +-
- .../bitops/instrumented-non-atomic.h          |   6 +-
- include/linux/instrumented.h                  |  30 ++
- include/linux/kcsan-checks.h                  |  45 ++-
- kernel/kcsan/core.c                           |  51 ++-
- kernel/kcsan/kcsan-test.c                     |  65 +++-
- kernel/kcsan/report.c                         |   4 +
- lib/Kconfig.kcsan                             |   5 +
- scripts/Makefile.kcsan                        |   2 +-
- scripts/atomic/gen-atomic-instrumented.sh     |  21 +-
- tools/objtool/check.c                         |   5 +
- 13 files changed, 354 insertions(+), 218 deletions(-)
-
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index 4633baebf84e..e43a55643e00 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -892,14 +892,19 @@ EXPORT_SYMBOL(__tsan_init);
+ 	u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder);                      \
+ 	u##bits __tsan_atomic##bits##_load(const u##bits *ptr, int memorder)                       \
+ 	{                                                                                          \
+-		check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);                      \
++		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
++			check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_ATOMIC);              \
++		}                                                                                  \
+ 		return __atomic_load_n(ptr, memorder);                                             \
+ 	}                                                                                          \
+ 	EXPORT_SYMBOL(__tsan_atomic##bits##_load);                                                 \
+ 	void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder);                   \
+ 	void __tsan_atomic##bits##_store(u##bits *ptr, u##bits v, int memorder)                    \
+ 	{                                                                                          \
+-		check_access(ptr, bits / BITS_PER_BYTE, KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC); \
++		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
++			check_access(ptr, bits / BITS_PER_BYTE,                                    \
++				     KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);                    \
++		}                                                                                  \
+ 		__atomic_store_n(ptr, v, memorder);                                                \
+ 	}                                                                                          \
+ 	EXPORT_SYMBOL(__tsan_atomic##bits##_store)
+@@ -908,8 +913,11 @@ EXPORT_SYMBOL(__tsan_init);
+ 	u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder);                 \
+ 	u##bits __tsan_atomic##bits##_##op(u##bits *ptr, u##bits v, int memorder)                  \
+ 	{                                                                                          \
+-		check_access(ptr, bits / BITS_PER_BYTE,                                            \
+-			     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
++		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
++			check_access(ptr, bits / BITS_PER_BYTE,                                    \
++				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
++					     KCSAN_ACCESS_ATOMIC);                                 \
++		}                                                                                  \
+ 		return __atomic_##op##suffix(ptr, v, memorder);                                    \
+ 	}                                                                                          \
+ 	EXPORT_SYMBOL(__tsan_atomic##bits##_##op)
+@@ -937,8 +945,11 @@ EXPORT_SYMBOL(__tsan_init);
+ 	int __tsan_atomic##bits##_compare_exchange_##strength(u##bits *ptr, u##bits *exp,          \
+ 							      u##bits val, int mo, int fail_mo)    \
+ 	{                                                                                          \
+-		check_access(ptr, bits / BITS_PER_BYTE,                                            \
+-			     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
++		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
++			check_access(ptr, bits / BITS_PER_BYTE,                                    \
++				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
++					     KCSAN_ACCESS_ATOMIC);                                 \
++		}                                                                                  \
+ 		return __atomic_compare_exchange_n(ptr, exp, val, weak, mo, fail_mo);              \
+ 	}                                                                                          \
+ 	EXPORT_SYMBOL(__tsan_atomic##bits##_compare_exchange_##strength)
+@@ -949,8 +960,11 @@ EXPORT_SYMBOL(__tsan_init);
+ 	u##bits __tsan_atomic##bits##_compare_exchange_val(u##bits *ptr, u##bits exp, u##bits val, \
+ 							   int mo, int fail_mo)                    \
+ 	{                                                                                          \
+-		check_access(ptr, bits / BITS_PER_BYTE,                                            \
+-			     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE | KCSAN_ACCESS_ATOMIC);    \
++		if (!IS_ENABLED(CONFIG_KCSAN_IGNORE_ATOMICS)) {                                    \
++			check_access(ptr, bits / BITS_PER_BYTE,                                    \
++				     KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE |                  \
++					     KCSAN_ACCESS_ATOMIC);                                 \
++		}                                                                                  \
+ 		__atomic_compare_exchange_n(ptr, &exp, val, 0, mo, fail_mo);                       \
+ 		return exp;                                                                        \
+ 	}                                                                                          \
 -- 
 2.28.0.rc0.142.g3c755180ce-goog
 
