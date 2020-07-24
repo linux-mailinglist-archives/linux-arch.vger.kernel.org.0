@@ -2,34 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAD522BADF
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 02:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2F422BB18
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 02:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbgGXARh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 20:17:37 -0400
-Received: from mga14.intel.com ([192.55.52.115]:40353 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728285AbgGXARh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Jul 2020 20:17:37 -0400
-IronPort-SDR: MSTgVbt5ad2r6z1M2EuQ9kngtvbHQA3b6Ui02ON3iielnSNC26A0NI6llVRWf7hQ5MZXBTtuRG
- GNqkpM72l0wA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="149830200"
-X-IronPort-AV: E=Sophos;i="5.75,388,1589266800"; 
-   d="scan'208";a="149830200"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 17:17:37 -0700
-IronPort-SDR: iPXtMmifS+ni/CWHgiVnsagsSt2+a2bKOlh85IU8i4dHH3eHGI9SHAgxCJ2UsNDCusf2OnRU+I
- ssEpYYD230OA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,388,1589266800"; 
-   d="scan'208";a="488556715"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Jul 2020 17:17:36 -0700
-Date:   Thu, 23 Jul 2020 17:17:36 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
+        id S1727982AbgGXAq3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 20:46:29 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:34170 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727783AbgGXAq3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 20:46:29 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595551586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rtfgquq0SEtwZ4k84B82DPLcPpqLHnp8JJ3FWAcLToc=;
+        b=FCgBIDO4dFsTETDUU2z/PvMVPTNfhdLwM5G/qDHHhVn2Gs40PUDpnDpAOj3DEVrkHdll98
+        7wAgbLI/+nDwQpJDtNYgT6mqBoKwiCRV4gyxmHfMOtUSi7DN6ICz3XPdRgrJd4EoAiLdpp
+        eQ/9G7ynZYGbAB2vUMWGo+xiVHX0Hz7DVsxZFMJfYt3v/iLlq0+S/2M+h9DvO+DChPsK0Y
+        wzni2LKKB+siE3TZ1Jv0QkYIOAqk+OMRaDafmvVfG3K0GT5ORqNRnL9fBOGKa8xDVq6LiJ
+        7ihiBQyTB+GsD+mLaNyW79iXXxNhjvTggArcGvrEnykstAVlNf+queHKwAEqKQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595551586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rtfgquq0SEtwZ4k84B82DPLcPpqLHnp8JJ3FWAcLToc=;
+        b=+72kDR/MnJXvaBvbhjSwQo5IS35v9oHJhgRGmkKtKtzg6sQLvwVBCrjHDfoUoWBVBeX80p
+        sslkbtIwIa5O9sCA==
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -39,63 +41,42 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>
 Subject: Re: [patch V5 15/15] x86/kvm: Use generic xfer to guest work function
-Message-ID: <20200724001736.GK21891@linux.intel.com>
-References: <20200722215954.464281930@linutronix.de>
- <20200722220520.979724969@linutronix.de>
+In-Reply-To: <20200724001736.GK21891@linux.intel.com>
+References: <20200722215954.464281930@linutronix.de> <20200722220520.979724969@linutronix.de> <20200724001736.GK21891@linux.intel.com>
+Date:   Fri, 24 Jul 2020 02:46:26 +0200
+Message-ID: <87eep1vixp.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200722220520.979724969@linutronix.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 12:00:09AM +0200, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Use the generic infrastructure to check for and handle pending work before
-> transitioning into guest mode.
-> 
-> This now handles TIF_NOTIFY_RESUME as well which was ignored so
-> far. Handling it is important as this covers task work and task work will
-> be used to offload the heavy lifting of POSIX CPU timers to thread context.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
-> V5: Rename exit -> xfer
-> ---
+Sean,
 
-One nit/question below (though it's really about patch 5).
+Sean Christopherson <sean.j.christopherson@intel.com> writes:
+> On Thu, Jul 23, 2020 at 12:00:09AM +0200, Thomas Gleixner wrote:
+>> +		if (xfer_to_guest_mode_work_pending()) {
+>>  			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
+>> -			cond_resched();
+>> +			r = xfer_to_guest_mode(vcpu);
+>
+> Any reason not to call this xfer_to_guest_mode_work()?  Or handle_work(),
+> do_work(), etc...  Without the "work" part, it looks like a function that
+> should be invoked unconditionally.  It's obvious that's not the case if
+> one looks at the implementation, but it's a bit confusing on the KVM side
+> of things.
 
-Reviewed-and-tested-by: Sean Christopherson <sean.j.christopherson@intel.com>
+The reason is probably lazyness. The original approach was to have this
+as close as possible to user entry/exit but with the recent changes
+vs. instrumentation and RCU this is not longer the case.
 
-> @@ -8676,15 +8677,11 @@ static int vcpu_run(struct kvm_vcpu *vcp
->  			break;
->  		}
->  
-> -		if (signal_pending(current)) {
-> -			r = -EINTR;
-> -			vcpu->run->exit_reason = KVM_EXIT_INTR;
-> -			++vcpu->stat.signal_exits;
-> -			break;
-> -		}
-> -		if (need_resched()) {
-> +		if (xfer_to_guest_mode_work_pending()) {
->  			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
-> -			cond_resched();
-> +			r = xfer_to_guest_mode(vcpu);
+I really want to keep the notion of transitioning in the function name,
+so xfer_to_guest_mode_handle_work() makes a lot of sense.
 
-Any reason not to call this xfer_to_guest_mode_work()?  Or handle_work(),
-do_work(), etc...  Without the "work" part, it looks like a function that
-should be invoked unconditionally.  It's obvious that's not the case if
-one looks at the implementation, but it's a bit confusing on the KVM side
-of things.
+I'll change that before merging the lot into the tip tree if your
+Reviewed-by still stands with that change made w/o reposting.
 
-> +			if (r)
-> +				return r;
->  			vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
->  		}
->  	}
-> 
+Thanks,
+
+        tglx
