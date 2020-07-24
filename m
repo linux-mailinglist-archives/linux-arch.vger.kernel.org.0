@@ -2,76 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE23722BE26
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 08:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096C022BE66
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 09:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbgGXGlU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jul 2020 02:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S1726567AbgGXHAY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jul 2020 03:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgGXGlU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 02:41:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BC6C0619D3;
-        Thu, 23 Jul 2020 23:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9Azj/mUx6+f5fk9NY2T38Tsh0GsS8yhWgaldDHz0tL8=; b=FNuNTItzxYtnjPlhenZldsMDjP
-        UJEtFzx9eiLn0Tbo78Z+kWRU+Hwkch6CqZFZInK657N6vhC2wQoww6clvA3lkv1jAUmPRCQgGyvPq
-        YKZ9vBWDPPkDM3plh+tQgac3iS+o5mT9S7WZ2isdHergByE1OO5wHxG/GdQIABZDMUHvzgl7tRMeK
-        hX27fyZY0JGzFau0RCtQ7NEBlbTJnfnKL3coyrtbYsc4bLv6Ah/SmEQ7mPcgHnzHp90KgGLUpQzlH
-        kzxNDVVe2h+SbL9rNVoylyyR2Q7M+R6NRLHjGhxCDikA8K+ZEVbRTDpHKowBCKdUF7w6kf1qyuTgv
-        6HCNTkSA==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jyrOP-0002uR-Ew; Fri, 24 Jul 2020 06:41:17 +0000
-Date:   Fri, 24 Jul 2020 07:41:17 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 04/20] unify generic instances of
- csum_partial_copy_nocheck()
-Message-ID: <20200724064117.GA10522@infradead.org>
-References: <20200724012512.GK2786714@ZenIV.linux.org.uk>
- <20200724012546.302155-1-viro@ZenIV.linux.org.uk>
- <20200724012546.302155-4-viro@ZenIV.linux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200724012546.302155-4-viro@ZenIV.linux.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+        with ESMTP id S1726381AbgGXHAX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 03:00:23 -0400
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92485C0619E4
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:23 -0700 (PDT)
+Received: by mail-wr1-x44a.google.com with SMTP id t12so1890794wrp.0
+        for <linux-arch@vger.kernel.org>; Fri, 24 Jul 2020 00:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=nYhmgKcIIGxCsAi7Og+Yd3I+h1LrKRUSXiXnS3u5PnU=;
+        b=VmnqZ2EAprygZLrhVFCDi1Q7n6PIAKLoT1x9Cs7iRuMS9jOciQw4aEchwk0UUJj/gw
+         y57PDiIC8p+PXhimWgNMj9P6oIq9m3Zy7zJUxtFTEhP3eNPohY76S0hioVUMfGuGIlCO
+         ywRo1uwLVvKZjpg14Khds/2WCEasTQy/V71ZaxJcybYQQeTglIFrfgeGdJawJTshRfMA
+         lAKfjy7kNTAneGiNTkiyKuKrajor9Fc0cqJl+JXvUfmShF4AjflzwPA7/HqygLYj/Osc
+         ro6YVGAxUZzX2cIlgbfc7vclHWfJCIRel0mSHx9ttd8IAWj6QMQNof8cxr1i2zKwPjMx
+         92Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=nYhmgKcIIGxCsAi7Og+Yd3I+h1LrKRUSXiXnS3u5PnU=;
+        b=SVMMHIO1ZhDSe2m9hqXsElSGeKq0Cnc6Ce5Qz4EiWkexn2cBTBQO+5LmDHqeH+fY7g
+         huEX5rlG9sHQsRsEjNae2/cDNZa0adgNJo5GZPs5iMjPEkq032hf8gm++0Y8kcZ8oGp8
+         H93bvibnnDcwI+/4H25tbWgXtRNsiP9eB9NLCF1tJdg+jo3PlRaeISohaAnWS9SU7LqO
+         e4kr+tkNjNQYBLNcQ4qWRmT9O+iw/XWMH7uGqje6MSPZ5l6KdYYUeeXOHUX2k7Z9fvlv
+         lD9HiaFuSnWpzHnfRc1jKvExQc+50Pr+L0ZQv7graIRyACuBi1j7QczTjVw/JB9J23ro
+         2f3A==
+X-Gm-Message-State: AOAM5316Jrd3NJNPeDVnFclCMIoNHwTL0dY39SDHXh30TF09ij3yATIu
+        0V8tyBaJ1LTlV3UBZJIjKmm39uUhpA==
+X-Google-Smtp-Source: ABdhPJwyFtmvu9bRVNtMmlRK6Q0X/qg/iAtZTfSgzPG7LzT+yt9euH/Zilz9OA5fKWTwtXmakhuSPXqthA==
+X-Received: by 2002:a7b:c4d3:: with SMTP id g19mr939521wmk.29.1595574022053;
+ Fri, 24 Jul 2020 00:00:22 -0700 (PDT)
+Date:   Fri, 24 Jul 2020 09:00:00 +0200
+Message-Id: <20200724070008.1389205-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.rc0.142.g3c755180ce-goog
+Subject: [PATCH v2 0/8] kcsan: Compound read-write instrumentation
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, paulmck@kernel.org
+Cc:     will@kernel.org, peterz@infradead.org, arnd@arndb.de,
+        mark.rutland@arm.com, dvyukov@google.com, glider@google.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 02:25:30AM +0100, Al Viro wrote:
-> From: Al Viro <viro@zeniv.linux.org.uk>
-> 
-> quite a few architectures have the same csum_partial_copy_nocheck() -
-> simply memcpy() the data and then return the csum of the copy.
-> 
-> hexagon, parisc, ia64, s390, um: explicitly spelled out that way.
-> 
-> arc, arm64, csky, h8300, m68k/nommu, microblaze, mips/GENERIC_CSUM, nds32,
-> nios2, openrisc, riscv, unicore32: end up picking the same thing spelled
-> out in lib/checksum.h (with varying amounts of perversions along the way).
-> 
-> everybody else (alpha, arm, c6x, m68k/mmu, mips/!GENERIC_CSUM, powerpc,
-> sh, sparc, x86, xtensa) have non-generic variants.  For all except c6x
-> the declaration is in their asm/checksum.h.  c6x uses the wrapper
-> from asm-generic/checksum.h that would normally lead to the lib/checksum.h
-> instance, but in case of c6x we end up using an asm function from arch/c6x
-> instead.
-> 
-> Screw that mess - have architectures with private instances define
-> _HAVE_ARCH_CSUM_AND_COPY in their asm/checksum.h and have the default
-> one right in net/checksum.h conditional on _HAVE_ARCH_CSUM_AND_COPY
-> *not* defined.
+This series adds support for enabling compounded read-write
+instrumentation, if supported by the compiler (Clang 12 will be the
+first compiler to support the feature). The new instrumentation is
+emitted for sets of memory accesses in the same basic block to the same
+address with at least one read appearing before a write. These typically
+result from compound operations such as ++, --, +=, -=, |=, &=, etc. but
+also equivalent forms such as "var = var + 1".
 
-net-next has a patch from me killing off csum_and_copy_from_user
-already:
+We can then benefit from improved performance (fewer instrumentation
+calls) and better reporting for such accesses. In addition, existing
+explicit instrumentation via instrumented.h was updated to use explicit
+read-write instrumentation where appropriate, so we can also benefit
+from the better report generation.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=f1bfd71c8662f20d53e71ef4e18bfb0e5677c27f
+v2:
+* Fix CC_HAS_TSAN_COMPOUND_READ_BEFORE_WRITE: s/--param -tsan/--param tsan/
+* Add some {} for readability.
+* Rewrite commit message of 'kcsan: Skew delay to be longer for certain
+  access types'.
+* Update comment for gen-atomic-instrumented.sh.
+
+Marco Elver (8):
+  kcsan: Support compounded read-write instrumentation
+  objtool, kcsan: Add __tsan_read_write to uaccess whitelist
+  kcsan: Skew delay to be longer for certain access types
+  kcsan: Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks
+  kcsan: Test support for compound instrumentation
+  instrumented.h: Introduce read-write instrumentation hooks
+  asm-generic/bitops: Use instrument_read_write() where appropriate
+  locking/atomics: Use read-write instrumentation for atomic RMWs
+
+ include/asm-generic/atomic-instrumented.h     | 330 +++++++++---------
+ .../asm-generic/bitops/instrumented-atomic.h  |   6 +-
+ .../asm-generic/bitops/instrumented-lock.h    |   2 +-
+ .../bitops/instrumented-non-atomic.h          |   6 +-
+ include/linux/instrumented.h                  |  30 ++
+ include/linux/kcsan-checks.h                  |  45 ++-
+ kernel/kcsan/core.c                           |  51 ++-
+ kernel/kcsan/kcsan-test.c                     |  65 +++-
+ kernel/kcsan/report.c                         |   4 +
+ lib/Kconfig.kcsan                             |   5 +
+ scripts/Makefile.kcsan                        |   2 +-
+ scripts/atomic/gen-atomic-instrumented.sh     |  21 +-
+ tools/objtool/check.c                         |   5 +
+ 13 files changed, 354 insertions(+), 218 deletions(-)
+
+-- 
+2.28.0.rc0.142.g3c755180ce-goog
+
