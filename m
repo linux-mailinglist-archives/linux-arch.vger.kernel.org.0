@@ -2,105 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C9022C310
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 12:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F01D22C4F9
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 14:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbgGXK0v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jul 2020 06:26:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58582 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726520AbgGXK0v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 24 Jul 2020 06:26:51 -0400
-Received: from kernel.org (unknown [87.71.40.38])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B46E2065C;
-        Fri, 24 Jul 2020 10:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595586410;
-        bh=rVdfRLF8yznNkp/wFEbFevU/Hg1CdRSyD1U/86auq+s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ISuPeAIlsG5DP6x+uysiGR64wgnZiwHi2/PlNEX4EJ5gZ6a2BsFtRlWen7/jtskTJ
-         zqgCfl/IgqzipJSfqA0TnF6HXBXuCj05y2wR8foas1wGZPtTOT79Aom/l7w1yeygpI
-         LD3rcZMAX69m9q/i8RFTqTuldH+yKRQg1n51312A=
-Date:   Fri, 24 Jul 2020 13:26:41 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jessica Yu <jeyu@kernel.org>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] arch/x86: kprobes: Remove MODULES dependency
-Message-ID: <20200724102641.GC2831654@kernel.org>
-References: <20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com>
+        id S1726326AbgGXMTW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jul 2020 08:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726258AbgGXMTW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 08:19:22 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999B1C0619D3;
+        Fri, 24 Jul 2020 05:19:22 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jywfW-001cC2-8O; Fri, 24 Jul 2020 12:19:18 +0000
+Date:   Fri, 24 Jul 2020 13:19:18 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 04/20] unify generic instances of
+ csum_partial_copy_nocheck()
+Message-ID: <20200724121918.GL2786714@ZenIV.linux.org.uk>
+References: <20200724012512.GK2786714@ZenIV.linux.org.uk>
+ <20200724012546.302155-1-viro@ZenIV.linux.org.uk>
+ <20200724012546.302155-4-viro@ZenIV.linux.org.uk>
+ <20200724064117.GA10522@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200724050553.1724168-1-jarkko.sakkinen@linux.intel.com>
+In-Reply-To: <20200724064117.GA10522@infradead.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-(cc people whi particpaged in v2 disuccsion)
+On Fri, Jul 24, 2020 at 07:41:17AM +0100, Christoph Hellwig wrote:
+> On Fri, Jul 24, 2020 at 02:25:30AM +0100, Al Viro wrote:
+> > From: Al Viro <viro@zeniv.linux.org.uk>
+> > 
+> > quite a few architectures have the same csum_partial_copy_nocheck() -
+> > simply memcpy() the data and then return the csum of the copy.
+> > 
+> > hexagon, parisc, ia64, s390, um: explicitly spelled out that way.
+> > 
+> > arc, arm64, csky, h8300, m68k/nommu, microblaze, mips/GENERIC_CSUM, nds32,
+> > nios2, openrisc, riscv, unicore32: end up picking the same thing spelled
+> > out in lib/checksum.h (with varying amounts of perversions along the way).
+> > 
+> > everybody else (alpha, arm, c6x, m68k/mmu, mips/!GENERIC_CSUM, powerpc,
+> > sh, sparc, x86, xtensa) have non-generic variants.  For all except c6x
+> > the declaration is in their asm/checksum.h.  c6x uses the wrapper
+> > from asm-generic/checksum.h that would normally lead to the lib/checksum.h
+> > instance, but in case of c6x we end up using an asm function from arch/c6x
+> > instead.
+> > 
+> > Screw that mess - have architectures with private instances define
+> > _HAVE_ARCH_CSUM_AND_COPY in their asm/checksum.h and have the default
+> > one right in net/checksum.h conditional on _HAVE_ARCH_CSUM_AND_COPY
+> > *not* defined.
+> 
+> net-next has a patch from me killing off csum_and_copy_from_user
+> already:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=f1bfd71c8662f20d53e71ef4e18bfb0e5677c27f
 
-On Fri, Jul 24, 2020 at 08:05:47AM +0300, Jarkko Sakkinen wrote:
-> Remove MODULES dependency by migrating from module_alloc() to the new
-> text_alloc() API. Essentially these changes provide preliminaries for
-> allowing to compile a static kernel with a proper tracing support.
-> 
-> The same API can be used later on in other sites that allocate space for
-> trampolines, and trivially scaled to other arch's. An arch can inform
-> with CONFIG_ARCH_HAS_TEXT_ALLOC that it's providing implementation for
-> text_alloc().
-> 
-> Cc: linux-mm@kvack.org
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> 
-> v4:
-> * Squash lock_modules() patches into one.
-> * Remove fallback versions of text_alloc() and text_free(). Instead, use
->   ARCH_HAS_TEXT_ALLOC at site when required.
-> * Use lockdep_assert_irqs_enabled() in text_free() instead of
->   WARN_ON(in_interrupt()).
-> 
-> v3:
-> * Make text_alloc() API disjoint.
-> * Remove all the possible extra clutter not absolutely required and
->   split into more logical pieces.
-> 
-> Jarkko Sakkinen (6):
->   kprobes: Remove dependency to the module_mutex
->   vmalloc: Add text_alloc() and text_free()
->   arch/x86: Implement text_alloc() and text_free()
->   arch/x86: kprobes: Use text_alloc() and text_free()
->   kprobes: Use text_alloc() and text_free()
->   kprobes: Remove CONFIG_MODULES dependency
-> 
->  arch/Kconfig                   |  2 +-
->  arch/x86/Kconfig               |  3 ++
->  arch/x86/kernel/Makefile       |  1 +
->  arch/x86/kernel/kprobes/core.c |  4 +--
->  arch/x86/kernel/text_alloc.c   | 41 +++++++++++++++++++++++
->  include/linux/module.h         | 32 ++++++++++++++----
->  include/linux/vmalloc.h        | 17 ++++++++++
->  kernel/kprobes.c               | 61 +++++++++++++++++++++++-----------
->  kernel/trace/trace_kprobe.c    | 20 ++++++++---
->  9 files changed, 147 insertions(+), 34 deletions(-)
->  create mode 100644 arch/x86/kernel/text_alloc.c
-> 
-> -- 
-> 2.25.1
-> 
-
--- 
-Sincerely yours,
-Mike.
+Nothing in that patch of yours touches csum_and_copy_from_user(). what
+are you talking about?
