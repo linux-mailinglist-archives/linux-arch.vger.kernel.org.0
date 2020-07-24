@@ -2,69 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7157822C0FA
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 10:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE11022C1F6
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 11:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgGXIjd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jul 2020 04:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S1726945AbgGXJUZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jul 2020 05:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgGXIjd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 04:39:33 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E54C0619D3;
-        Fri, 24 Jul 2020 01:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kXKoci4B8YFJHJ87vnIjv2pljX59x+0imMdXpdyFpys=; b=NOYfAHJA8hb2Qu9M1EZf7yK6p7
-        oAGUnuV0K8ZPNz8luha/UDR+MErxMNAsWl7tyldtKpLUEwE4KadkV1OvV8ilFUkYfZv7TJDdWESXn
-        Bv0lYR1TyldeSGNn6nqqTTdrfXbGEHkz16ZQotN57YyMlCtyfCYs8H/QUAYA7Ijl5XI/GdPPWRpDS
-        ZxBMqC+t8TFI9+IbyUCahfq8OvwYopWJdFXLG3R/cAhza18nt8WFjZxkyj1Zv9/ixuRtO3dE5CuIq
-        b6t8COU0aCgQqeI4ABEpLc2zmYb+zVUdj63R2WJ0o57i6FXxl1AVlF9Kq01eWxBV9EDuYkpKZErXZ
-        jVD9r4Gg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jytEi-0000RG-O8; Fri, 24 Jul 2020 08:39:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8C4C430768E;
-        Fri, 24 Jul 2020 10:39:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5B86925942EE1; Fri, 24 Jul 2020 10:39:20 +0200 (CEST)
-Date:   Fri, 24 Jul 2020 10:39:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     paulmck@kernel.org, will@kernel.org, arnd@arndb.de,
-        mark.rutland@arm.com, dvyukov@google.com, glider@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] kcsan: Compound read-write instrumentation
-Message-ID: <20200724083920.GV10769@hirez.programming.kicks-ass.net>
-References: <20200724070008.1389205-1-elver@google.com>
+        with ESMTP id S1726861AbgGXJUZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jul 2020 05:20:25 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1226EC0619D3;
+        Fri, 24 Jul 2020 02:20:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BCkFK6JGBz9sR4;
+        Fri, 24 Jul 2020 19:20:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1595582422;
+        bh=UPIxsyZfLqUDnT8iObHrZ8nb9iLP4cZ7fUXdGyHcmoY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=IBcm+Zm6smdWh9PEK2Ss0rAnWl1DnQ/MqeA9ZxGG7OMSj5P/JP1IPUY2izxEO91Lh
+         YAkwG4Qio5k7RC4FL7WIQZuF7oyC3Xd1RRYOZkSUxy5QMknsyJUJDHz+Eeu/KKy8D2
+         Yj8ivvRvo695X+JLD7Sv+CqSKISjUJCY4NXGryZHHqScHu6DLebQN5O2YeWJVK91aS
+         kTpe65r4wtIWyXCXq9ZJmHY3iAOobFHTdAGAataxWlkQOYyGRq4xNEumJ9p3qztAfJ
+         oEtCBqHexVP0DDwwP8IINOU9+Qu43bHU1dzxXV7MkNfTUKFrCQTC8+SlwQuxuOA24I
+         a73JbJdb8pVzA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Daniel Axtens <dja@axtens.net>, linuxppc-dev@ozlabs.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hughd@google.com
+Subject: Re: [PATCH 2/5] powerpc: Allow 4096 bytes of stack expansion for the signal frame
+In-Reply-To: <87blk6tkuv.fsf@dja-thinkpad.axtens.net>
+References: <20200703141327.1732550-1-mpe@ellerman.id.au> <20200703141327.1732550-2-mpe@ellerman.id.au> <87blk6tkuv.fsf@dja-thinkpad.axtens.net>
+Date:   Fri, 24 Jul 2020 19:20:18 +1000
+Message-ID: <87wo2tp8vh.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200724070008.1389205-1-elver@google.com>
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 09:00:00AM +0200, Marco Elver wrote:
+Daniel Axtens <dja@axtens.net> writes:
+> Hi Michael,
+>
+> Unfortunately, this patch doesn't completely solve the problem.
+>
+> Trying the original reproducer, I'm still able to trigger the crash even
+> with this patch, although not 100% of the time. (If I turn ASLR off
+> outside of tmux it reliably crashes, if I turn ASLR off _inside_ of tmux
+> it reliably succeeds; all of this is on a serial console.)
+>
+> ./foo 1241000 & sleep 1; killall -USR1 foo; echo ok
+>
+> If I add some debugging information, I see that I'm getting
+> address + 4096 = 7fffffed0fa0
+> gpr1 =           7fffffed1020
+>
+> So address + 4096 is 0x80 bytes below the 4k window. I haven't been able
+> to figure out why, gdb gives me a NIP in __kernel_sigtramp_rt64 but I
+> don't know what to make of that.
 
-> Marco Elver (8):
->   kcsan: Support compounded read-write instrumentation
->   objtool, kcsan: Add __tsan_read_write to uaccess whitelist
->   kcsan: Skew delay to be longer for certain access types
->   kcsan: Add missing CONFIG_KCSAN_IGNORE_ATOMICS checks
->   kcsan: Test support for compound instrumentation
->   instrumented.h: Introduce read-write instrumentation hooks
->   asm-generic/bitops: Use instrument_read_write() where appropriate
->   locking/atomics: Use read-write instrumentation for atomic RMWs
+Thanks for testing.
 
-Looks good to me,
+I looked at it again this morning and it's fairly obvious when it's not
+11pm :)
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+We need space for struct rt_sigframe as well as another 128 bytes,
+which is __SIGNAL_FRAMESIZE. It's actually mentioned in the comment
+above struct rt_sigframe.
+
+I'll send a v2.
+
+> P.S. I don't know what your policy on linking to kernel bugzilla is, but
+> if you want:
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=205183
+
+In general I prefer to keep things clean with just a single Link: tag
+pointing to the archive of the patch submission.
+
+That can then contain further links and other info, and has the
+advantage that people can reply to the patch submission in the future to
+add information to the thread that wasn't known at the time of the
+commit.
+
+cheers
