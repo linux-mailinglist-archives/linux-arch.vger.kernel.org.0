@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FEF22BB76
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 03:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014CB22BB71
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jul 2020 03:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgGXB0k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jul 2020 21:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S1727804AbgGXB0d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jul 2020 21:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726792AbgGXBZt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 21:25:49 -0400
+        with ESMTP id S1726953AbgGXBZw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jul 2020 21:25:52 -0400
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1300C0619E7;
-        Thu, 23 Jul 2020 18:25:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EE5C0619E5;
+        Thu, 23 Jul 2020 18:25:49 -0700 (PDT)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jymT5-001Gcs-C8; Fri, 24 Jul 2020 01:25:47 +0000
+        id 1jymT5-001Gcz-Nn; Fri, 24 Jul 2020 01:25:47 +0000
 From:   Al Viro <viro@ZenIV.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH v2 09/20] arm: propagate the calling convention changes down to csum_partial_copy_from_user()
-Date:   Fri, 24 Jul 2020 02:25:35 +0100
-Message-Id: <20200724012546.302155-9-viro@ZenIV.linux.org.uk>
+Subject: [PATCH v2 10/20] m68k: get rid of zeroing destination on error in csum_and_copy_from_user()
+Date:   Fri, 24 Jul 2020 02:25:36 +0100
+Message-Id: <20200724012546.302155-10-viro@ZenIV.linux.org.uk>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200724012546.302155-1-viro@ZenIV.linux.org.uk>
 References: <20200724012512.GK2786714@ZenIV.linux.org.uk>
@@ -35,114 +35,113 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Al Viro <viro@zeniv.linux.org.uk>
 
-... and get rid of the "clean the destination on error" crap.
-Simplifies the fault handlers and the function itself...
-
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/arm/include/asm/checksum.h       |  7 ++-----
- arch/arm/lib/csumpartialcopy.S        |  1 -
- arch/arm/lib/csumpartialcopygeneric.S |  1 +
- arch/arm/lib/csumpartialcopyuser.S    | 26 ++++++--------------------
- 4 files changed, 9 insertions(+), 26 deletions(-)
+ arch/m68k/lib/checksum.c | 79 +++++++++---------------------------------------
+ 1 file changed, 15 insertions(+), 64 deletions(-)
 
-diff --git a/arch/arm/include/asm/checksum.h b/arch/arm/include/asm/checksum.h
-index 1601c132b064..f0f54aef3724 100644
---- a/arch/arm/include/asm/checksum.h
-+++ b/arch/arm/include/asm/checksum.h
-@@ -38,20 +38,17 @@ __wsum
- csum_partial_copy_nocheck(const void *src, void *dst, int len);
+diff --git a/arch/m68k/lib/checksum.c b/arch/m68k/lib/checksum.c
+index 3aeca261f622..7e6afeae6217 100644
+--- a/arch/m68k/lib/checksum.c
++++ b/arch/m68k/lib/checksum.c
+@@ -236,82 +236,33 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
+ 		"clrl %5\n\t"
+ 		"addxl %5,%0\n\t"	/* add X bit */
+ 	     "7:\t"
+-		"clrl %5\n"		/* no error - clear return value */
+-	     "8:\n"
+ 		".section .fixup,\"ax\"\n"
+ 		".even\n"
+-		/* If any exception occurs zero out the rest.
+-		   Similarities with the code above are intentional :-) */
++		/* If any exception occurs, return 0 */
+ 	     "90:\t"
+-		"clrw %3@+\n\t"
+-		"movel %1,%4\n\t"
+-		"lsrl #5,%1\n\t"
+-		"jeq 1f\n\t"
+-		"subql #1,%1\n"
+-	     "91:\t"
+-		"clrl %3@+\n"
+-	     "92:\t"
+-		"clrl %3@+\n"
+-	     "93:\t"
+-		"clrl %3@+\n"
+-	     "94:\t"
+-		"clrl %3@+\n"
+-	     "95:\t"
+-		"clrl %3@+\n"
+-	     "96:\t"
+-		"clrl %3@+\n"
+-	     "97:\t"
+-		"clrl %3@+\n"
+-	     "98:\t"
+-		"clrl %3@+\n\t"
+-		"dbra %1,91b\n\t"
+-		"clrw %1\n\t"
+-		"subql #1,%1\n\t"
+-		"jcc 91b\n"
+-	     "1:\t"
+-		"movel %4,%1\n\t"
+-		"andw #0x1c,%4\n\t"
+-		"jeq 1f\n\t"
+-		"lsrw #2,%4\n\t"
+-		"subqw #1,%4\n"
+-	     "99:\t"
+-		"clrl %3@+\n\t"
+-		"dbra %4,99b\n\t"
+-	     "1:\t"
+-		"andw #3,%1\n\t"
+-		"jeq 9f\n"
+-	     "100:\t"
+-		"clrw %3@+\n\t"
+-		"tstw %1\n\t"
+-		"jeq 9f\n"
+-	     "101:\t"
+-		"clrb %3@+\n"
+-	     "9:\t"
+-#define STR(X) STR1(X)
+-#define STR1(X) #X
+-		"moveq #-" STR(EFAULT) ",%5\n\t"
+-		"jra 8b\n"
++		"clrl %0\n"
++		"jra 7b\n"
+ 		".previous\n"
+ 		".section __ex_table,\"a\"\n"
+ 		".long 10b,90b\n"
+-		".long 11b,91b\n"
+-		".long 12b,92b\n"
+-		".long 13b,93b\n"
+-		".long 14b,94b\n"
+-		".long 15b,95b\n"
+-		".long 16b,96b\n"
+-		".long 17b,97b\n"
+-		".long 18b,98b\n"
+-		".long 19b,99b\n"
+-		".long 20b,100b\n"
+-		".long 21b,101b\n"
++		".long 11b,90b\n"
++		".long 12b,90b\n"
++		".long 13b,90b\n"
++		".long 14b,90b\n"
++		".long 15b,90b\n"
++		".long 16b,90b\n"
++		".long 17b,90b\n"
++		".long 18b,90b\n"
++		".long 19b,90b\n"
++		".long 20b,90b\n"
++		".long 21b,90b\n"
+ 		".previous"
+ 		: "=d" (sum), "=d" (len), "=a" (src), "=a" (dst),
+ 		  "=&d" (tmp1), "=d" (tmp2)
+ 		: "0" (sum), "1" (len), "2" (src), "3" (dst)
+ 	    );
  
- __wsum
--csum_partial_copy_from_user(const void __user *src, void *dst, int len, __wsum sum, int *err_ptr);
-+csum_partial_copy_from_user(const void __user *src, void *dst, int len);
- 
- #define _HAVE_ARCH_COPY_AND_CSUM_FROM_USER
- #define _HAVE_ARCH_CSUM_AND_COPY
- static inline
- __wsum csum_and_copy_from_user(const void __user *src, void *dst, int len)
- {
--	int err = 0;
--
- 	if (!access_ok(src, len))
- 		return 0;
- 
--	sum = csum_partial_copy_from_user(src, dst, len, ~0U, &err);
--	return err ? 0 : sum;
-+	return csum_partial_copy_from_user(src, dst, len);
+-	return tmp2 ? 0 : sum;
++	return sum;
  }
  
- /*
-diff --git a/arch/arm/lib/csumpartialcopy.S b/arch/arm/lib/csumpartialcopy.S
-index aab914fbc86b..1ca6aadd649c 100644
---- a/arch/arm/lib/csumpartialcopy.S
-+++ b/arch/arm/lib/csumpartialcopy.S
-@@ -16,7 +16,6 @@
- 
- 		.macro	save_regs
- 		stmfd	sp!, {r1, r4 - r8, lr}
--		mov	r3, #0
- 		.endm
- 
- 		.macro	load_regs
-diff --git a/arch/arm/lib/csumpartialcopygeneric.S b/arch/arm/lib/csumpartialcopygeneric.S
-index 0b706a39a677..0fd5c10e90a7 100644
---- a/arch/arm/lib/csumpartialcopygeneric.S
-+++ b/arch/arm/lib/csumpartialcopygeneric.S
-@@ -86,6 +86,7 @@ sum	.req	r3
- 
- FN_ENTRY
- 		save_regs
-+		mov	sum, #-1
- 
- 		cmp	len, #8			@ Ensure that we have at least
- 		blo	.Lless8			@ 8 bytes to copy.
-diff --git a/arch/arm/lib/csumpartialcopyuser.S b/arch/arm/lib/csumpartialcopyuser.S
-index 6bd3a93eaa3c..6928781e6bee 100644
---- a/arch/arm/lib/csumpartialcopyuser.S
-+++ b/arch/arm/lib/csumpartialcopyuser.S
-@@ -62,9 +62,9 @@
- 
- /*
-  * unsigned int
-- * csum_partial_copy_from_user(const char *src, char *dst, int len, int sum, int *err_ptr)
-- *  r0 = src, r1 = dst, r2 = len, r3 = sum, [sp] = *err_ptr
-- *  Returns : r0 = checksum, [[sp, #0], #0] = 0 or -EFAULT
-+ * csum_partial_copy_from_user(const char *src, char *dst, int len)
-+ *  r0 = src, r1 = dst, r2 = len
-+ *  Returns : r0 = checksum or 0
-  */
- 
- #define FN_ENTRY	ENTRY(csum_partial_copy_from_user)
-@@ -73,25 +73,11 @@
- #include "csumpartialcopygeneric.S"
- 
- /*
-- * FIXME: minor buglet here
-- * We don't return the checksum for the data present in the buffer.  To do
-- * so properly, we would have to add in whatever registers were loaded before
-- * the fault, which, with the current asm above is not predictable.
-+ * We report fault by returning 0 csum - impossible in normal case, since
-+ * we start with 0xffffffff for initial sum.
-  */
- 		.pushsection .text.fixup,"ax"
- 		.align	4
--9001:		mov	r4, #-EFAULT
--#ifdef CONFIG_CPU_SW_DOMAIN_PAN
--		ldr	r5, [sp, #9*4]		@ *err_ptr
--#else
--		ldr	r5, [sp, #8*4]		@ *err_ptr
--#endif
--		str	r4, [r5]
--		ldmia	sp, {r1, r2}		@ retrieve dst, len
--		add	r2, r2, r1
--		mov	r0, #0			@ zero the buffer
--9002:		teq	r2, r1
--		strbne	r0, [r1], #1
--		bne	9002b
-+9001:		mov	r0, #0
- 		load_regs
- 		.popsection
+ EXPORT_SYMBOL(csum_and_copy_from_user);
 -- 
 2.11.0
 
