@@ -2,124 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A70FF22D8F7
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jul 2020 19:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB0822D8FF
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Jul 2020 19:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgGYRgi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 25 Jul 2020 13:36:38 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:47794 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726904AbgGYRgi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 25 Jul 2020 13:36:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595698596;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B89z7bSsPBlDl23wp5UaTzRFVbTHuOzryOgcGYTtGpc=;
-        b=Np6wwRcHPiwkJRVNSETiSxFxs3REP/Go/KTKlAXxyhbnkiLe1P8Cf2+ONpYQl7s/x6HEU3
-        dW/M1voXtv8lvOcxEe+LPleE3TEodF69BI+8LwSlnf9vdFZELUKaT9w2fQWLF1S/2KU0fs
-        t/6s87994A6KlZFT+uTxVZCSrp6oEhI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-490-BmOl6uFZMzCjad-UsEKw1g-1; Sat, 25 Jul 2020 13:36:33 -0400
-X-MC-Unique: BmOl6uFZMzCjad-UsEKw1g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726926AbgGYRkQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 25 Jul 2020 13:40:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35504 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726904AbgGYRkQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 25 Jul 2020 13:40:16 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D649E18C63C0;
-        Sat, 25 Jul 2020 17:36:31 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-112-134.rdu2.redhat.com [10.10.112.134])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 462B15FC30;
-        Sat, 25 Jul 2020 17:36:30 +0000 (UTC)
-Subject: Re: [PATCH v3 5/6] powerpc/pseries: implement paravirt qspinlocks for
- SPLPAR
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm-ppc@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20200706043540.1563616-1-npiggin@gmail.com>
- <20200706043540.1563616-6-npiggin@gmail.com>
- <874kqhvu1v.fsf@mpe.ellerman.id.au>
- <8265d782-4e50-a9b2-a908-0cb588ffa09c@redhat.com>
- <20200723140011.GR5523@worktop.programming.kicks-ass.net>
- <845de183-56f5-2958-3159-faa131d46401@redhat.com>
- <20200723184759.GS119549@hirez.programming.kicks-ass.net>
- <20200724081647.GA16642@willie-the-truck>
- <8532332b-85dd-661b-cf72-81a8ceb70747@redhat.com>
- <20200725172630.GF10769@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <4db0cff6-dabb-2f1b-df66-33ce2082088b@redhat.com>
-Date:   Sat, 25 Jul 2020 13:36:29 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        by mail.kernel.org (Postfix) with ESMTPSA id 20514206D7;
+        Sat, 25 Jul 2020 17:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595698815;
+        bh=sJTStXJxf1wWNfeh1Vyqzn+5Ew232NcAG80ITNfG5hI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uUkwBFhOHVDjpU7noEGFnVI9DSAoxP2OMDAudhOzaP1GS/psPb4m3M44mvCX+IojX
+         xLTQveOr84GVFSSBW3fFF2ds+maI2ShlY5vmyl+b2F4RmKk1ltK0djQfnBtcVcBwTc
+         AAXGU3+mxr47wJ9VkoxCZnvT9sMbCB6K5gBCF/Ww=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jzO9d-00EsjE-IF; Sat, 25 Jul 2020 18:40:13 +0100
 MIME-Version: 1.0
-In-Reply-To: <20200725172630.GF10769@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Date:   Sat, 25 Jul 2020 18:40:13 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        steven.price@arm.com, mark.rutland@arm.com, ascull@google.com,
+        kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
+        xiexiangyou@huawei.com
+Subject: Re: [RESEND RFC PATCH v1] arm64: kvm: flush tlbs by range in
+ unmap_stage2_range function
+In-Reply-To: <20200724134315.805-1-yezhenyu2@huawei.com>
+References: <20200724134315.805-1-yezhenyu2@huawei.com>
+User-Agent: Roundcube Webmail/1.4.5
+Message-ID: <5d54c860b3b4e7a98e4d53397e6424ae@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: yezhenyu2@huawei.com, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, steven.price@arm.com, mark.rutland@arm.com, ascull@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org, xiexiangyou@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/25/20 1:26 PM, Peter Zijlstra wrote:
-> On Fri, Jul 24, 2020 at 03:10:59PM -0400, Waiman Long wrote:
->> On 7/24/20 4:16 AM, Will Deacon wrote:
->>> On Thu, Jul 23, 2020 at 08:47:59PM +0200, peterz@infradead.org wrote:
->>>> On Thu, Jul 23, 2020 at 02:32:36PM -0400, Waiman Long wrote:
->>>>> BTW, do you have any comment on my v2 lock holder cpu info qspinlock patch?
->>>>> I will have to update the patch to fix the reported 0-day test problem, but
->>>>> I want to collect other feedback before sending out v3.
->>>> I want to say I hate it all, it adds instructions to a path we spend an
->>>> aweful lot of time optimizing without really getting anything back for
->>>> it.
->>>>
->>>> Will, how do you feel about it?
->>> I can see it potentially being useful for debugging, but I hate the
->>> limitation to 256 CPUs. Even arm64 is hitting that now.
->> After thinking more about that, I think we can use all the remaining bits in
->> the 16-bit locked_pending. Reserving 1 bit for locked and 1 bit for pending,
->> there are 14 bits left. So as long as NR_CPUS < 16k (requirement for 16-bit
->> locked_pending), we can put all possible cpu numbers into the lock. We can
->> also just use smp_processor_id() without additional percpu data.
-> That sounds horrific, wouldn't that destroy the whole point of using a
-> byte for pending?
-You are right. I realized that later on and had sent a follow-up mail to 
-correct that.
->>> Also, you're talking ~1% gains here. I think our collective time would
->>> be better spent off reviewing the CNA series and trying to make it more
->>> deterministic.
->> I thought you guys are not interested in CNA. I do want to get CNA merged,
->> if possible. Let review the current version again and see if there are ways
->> we can further improve it.
-> It's not a lack of interrest. We were struggling with the fairness
-> issues and the complexity of the thing. I forgot the current state of
-> matters, but at one point UNLOCK was O(n) in waiters, which is, of
-> course, 'unfortunate'.
->
-> I'll have to look up whatever notes remain, but the basic idea of
-> keeping remote nodes on a secondary list is obviously breaking all sorts
-> of fairness. After that they pile on a bunch of hacks to fix the worst
-> of them, but it feels exactly like that, a bunch of hacks.
->
-> One of the things I suppose we ought to do is see if some of the ideas
-> of phase-fair locks can be applied to this.
-That could be a possible solution to ensure better fairness.
->
-> That coupled with a chronic lack of time for anything :-(
->
-That is always true and I feel this way too:-)
+On 2020-07-24 14:43, Zhenyu Ye wrote:
+> Now in unmap_stage2_range(), we flush tlbs one by one just after the
+> corresponding pages cleared.  However, this may cause some performance
+> problems when the unmap range is very large (such as when the vm
+> migration rollback, this may cause vm downtime too loog).
 
-Cheers,
-Longman
+You keep resending this patch, but you don't give any numbers
+that would back your assertion.
 
+> This patch moves the kvm_tlb_flush_vmid_ipa() out of loop, and
+> flush tlbs by range after other operations completed.  Because we
+> do not make new mapping for the pages here, so this doesn't violate
+> the Break-Before-Make rules.
+> 
+> Signed-off-by: Zhenyu Ye <yezhenyu2@huawei.com>
+> ---
+>  arch/arm64/include/asm/kvm_asm.h |  2 ++
+>  arch/arm64/kvm/hyp/tlb.c         | 36 ++++++++++++++++++++++++++++++++
+>  arch/arm64/kvm/mmu.c             | 11 +++++++---
+>  3 files changed, 46 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_asm.h 
+> b/arch/arm64/include/asm/kvm_asm.h
+> index 352aaebf4198..ef8203d3ca45 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -61,6 +61,8 @@ extern char __kvm_hyp_vector[];
+> 
+>  extern void __kvm_flush_vm_context(void);
+>  extern void __kvm_tlb_flush_vmid_ipa(struct kvm *kvm, phys_addr_t 
+> ipa);
+> +extern void __kvm_tlb_flush_vmid_range(struct kvm *kvm, phys_addr_t 
+> start,
+> +				       phys_addr_t end);
+>  extern void __kvm_tlb_flush_vmid(struct kvm *kvm);
+>  extern void __kvm_tlb_flush_local_vmid(struct kvm_vcpu *vcpu);
+> 
+> diff --git a/arch/arm64/kvm/hyp/tlb.c b/arch/arm64/kvm/hyp/tlb.c
+> index d063a576d511..4f4737a7e588 100644
+> --- a/arch/arm64/kvm/hyp/tlb.c
+> +++ b/arch/arm64/kvm/hyp/tlb.c
+> @@ -189,6 +189,42 @@ void __hyp_text __kvm_tlb_flush_vmid_ipa(struct
+> kvm *kvm, phys_addr_t ipa)
+>  	__tlb_switch_to_host(kvm, &cxt);
+>  }
+> 
+> +void __hyp_text __kvm_tlb_flush_vmid_range(struct kvm *kvm, 
+> phys_addr_t start,
+> +					   phys_addr_t end)
+> +{
+> +	struct tlb_inv_context cxt;
+> +	unsigned long addr;
+> +
+> +	start = __TLBI_VADDR(start, 0);
+> +	end = __TLBI_VADDR(end, 0);
+> +
+> +	dsb(ishst);
+> +
+> +	/* Switch to requested VMID */
+> +	kvm = kern_hyp_va(kvm);
+> +	__tlb_switch_to_guest(kvm, &cxt);
+> +
+> +	if ((end - start) >= 512 << (PAGE_SHIFT - 12)) {
+> +		__tlbi(vmalls12e1is);
+
+And what is this magic value based on? You don't even mention in the
+commit log that you are taking this shortcut.
+
+> +		goto end;
+> +	}
+> +
+> +	for (addr = start; addr < end; addr += 1 << (PAGE_SHIFT - 12))
+> +		__tlbi(ipas2e1is, addr);
+> +
+> +	dsb(ish);
+> +	__tlbi(vmalle1is);
+> +
+> +end:
+> +	dsb(ish);
+> +	isb();
+> +
+> +	if (!has_vhe() && icache_is_vpipt())
+> +		__flush_icache_all();
+> +
+> +	__tlb_switch_to_host(kvm, &cxt);
+> +}
+> +
+
+I'm sorry, but without numbers backing this approach for a number
+of workloads and a representative set of platforms, this is
+going nowhere.
+
+Thanks,
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...
