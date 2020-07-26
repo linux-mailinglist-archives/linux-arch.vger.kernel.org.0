@@ -2,102 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D1B22DF3D
-	for <lists+linux-arch@lfdr.de>; Sun, 26 Jul 2020 14:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793EF22E103
+	for <lists+linux-arch@lfdr.de>; Sun, 26 Jul 2020 18:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgGZMxd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 26 Jul 2020 08:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S1727085AbgGZQEI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 26 Jul 2020 12:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbgGZMxd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Jul 2020 08:53:33 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B39C0619D2;
-        Sun, 26 Jul 2020 05:53:33 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id a9so7716367pjd.3;
-        Sun, 26 Jul 2020 05:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R4T7tQMcRvlhK7jzS9wpJG+H4i1GMckJZWYDGHoH/II=;
-        b=rU77LQ6i8gZi61P3L9deG+VaqhuXUapmjk1algjVPC2JSElAiPIN/5qEGgW38mfTnj
-         QAX7dULkwcwM6Ubq5rMyHZsOsi4GSWpYDtUCAt5fVozNjLCfpbA9MQy5fD90PADw/mka
-         QepdRFrkGRoT+DQDXJnHe0qwyJ5zifDt9SQeCav2jscmmAFfU5a7fGVZQKdcr8Ocl9kV
-         IxxVrcZluClcwuEl9Di+lcSeqBmbw42UN9IwJezMGs2v/kRpGPn42zDHTyVWK7dVm9uW
-         UCJ1dtoem9CCYI39A0ajsZlt26ESpArPyPRcYNnHgnuvcbey0juBUIOljbZb499WWeJT
-         AXmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R4T7tQMcRvlhK7jzS9wpJG+H4i1GMckJZWYDGHoH/II=;
-        b=oKu1VNwSlLGA6ikAXfaZN7bf3h7FnFYWVycelq7Ri4IwG26HAzb0O9eus4xDZ8q4Hf
-         jkmqptU4Squr0X+GQ8+S5pVs7DxI2jyK7OyqeXx5ni81wgRCvaC4CjdGgLGqzE7mQcUp
-         QCs/GnkYgAdaMgDQI4rYHqZ3IQKx5Qd6oTNhcvxtEQFm/a7eyfQRpJrb/CesUW80yr9Y
-         IHd5xnngYiqYZIPqPPF+Ws0dBIpcqxI+Va17VLKhCzrba6023eB8k6ThhvroFpU27X/u
-         bkJLl5hs9Jj1acKaTmwaz9WKHoYzgDpSSGkHUgWi/QbYk7SQkpW3Abh02l0eLbjmXlov
-         1eUQ==
-X-Gm-Message-State: AOAM532BPBeYJOKJIcgmMo4SPtZJIuyVLfpn/WozWStRMIPMlQIjQ1M9
-        vX8TNbDXoxXX4glnXqoOxiTZBMbx6t4=
-X-Google-Smtp-Source: ABdhPJy+XjmUnqWgwhLFuieksNeTmaaDQA6UZSj6j+mjeRVxWyBNwf/r/1Tb+sxOqJMyku2EF7qUyA==
-X-Received: by 2002:a17:902:8f8b:: with SMTP id z11mr14408279plo.49.1595768012739;
-        Sun, 26 Jul 2020 05:53:32 -0700 (PDT)
-Received: from localhost (g155.222-224-148.ppp.wakwak.ne.jp. [222.224.148.155])
-        by smtp.gmail.com with ESMTPSA id x7sm12033589pfq.197.2020.07.26.05.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2020 05:53:32 -0700 (PDT)
-Date:   Sun, 26 Jul 2020 21:53:25 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] io: Fix return type of _inb and _inl
-Message-ID: <20200726125325.GC80756@lianli.shorne-pla.net>
-References: <20200726031154.1012044-1-shorne@gmail.com>
- <CAHp75VciC+gqkCZ9voNKHU3hrtiOVzeWBu9_YEagpCGdTME2yg@mail.gmail.com>
+        with ESMTP id S1726998AbgGZQEH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Jul 2020 12:04:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55741C0619D4;
+        Sun, 26 Jul 2020 09:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=UyAQuKzOjtI/x1r3Rxgb+Q9XWacAff5rq+0vrGSNTvw=; b=FafvLAUw2Km0gfGFD6euiu6kRr
+        AkfcGLFyA7DNFjZb+gYe7/VuiUDIQsKcqi3Mz/B74maTqHuig5mQ0FQqeXV4gCrQn7q7KGQT0oRgY
+        UUQJBeI9Icto65wHQRDvNE+GaZFZDJeEJuxLtBaStcBBvyVuYz82cSJj0QesJdalXKgfLRUIssZol
+        BNaj+YK9hDgc9BCY6h+6RU+mpefIEPlpqwczaa+SdGN4EoB4G7GHRfkuFVb2R5v0QcQwWcivty2u7
+        1zld9ry8CAPrkWFpr14FZQ72uN6HzbqoiWLNqm0URIZrP+0GXSnC5wkZyt3oGX+hcwGHGpfIyadjp
+        ptOJHnIw==;
+Received: from [2001:4bb8:18c:2acc:2375:88ff:9f84:118d] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jzj87-0000YT-Ed; Sun, 26 Jul 2020 16:04:03 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     x86@kernel.org, Jan Kara <jack@suse.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: improve compat handling for the i386 u64 alignment quirk
+Date:   Sun, 26 Jul 2020 18:03:57 +0200
+Message-Id: <20200726160401.311569-1-hch@lst.de>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VciC+gqkCZ9voNKHU3hrtiOVzeWBu9_YEagpCGdTME2yg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jul 26, 2020 at 12:00:37PM +0300, Andy Shevchenko wrote:
-> On Sun, Jul 26, 2020 at 6:14 AM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > The return type of functions _inb, _inw and _inl are all u16 which looks
-> > wrong.  This patch makes them u8, u16 and u32 respectively.
-> >
-> > The original commit text for these does not indicate that these should
-> > be all forced to u16.
-> 
-> Is it in alight with all architectures? that support this interface natively?
-> 
-> (Return value is arch-dependent AFAIU, so it might actually return
-> 16-bit for byte read, but I agree that this is weird for 32-bit value.
-> I think you have elaborate more in the commit message)
+Hi all,
 
-Well, this is the generic io code,  at least these api's appear to not be different
-for each architecture.  The output read by the architecture dependant code i.e.
-__raw_readb() below is getting is placed into a u8.  So I think the output of
-the function will be u8.
+the i386 ABI is a little special in that it uses less than natural
+alignment for 64-bit integer types (u64 and s64), and a significant
+amount of our compat handlers deals with just that.  Unfortunately
+there is no good way to check for this specific quirk at runtime,
+similar how in_compat_syscall() checks for a compat syscall.  This
+series adds such a check, and then uses the quota code as an example
+of how this improves the compat handling.  I have a few other places
+in mind where this will also be useful going forward.
 
-static inline u8 _inb(unsigned long addr)
-{
-	u8 val;
-
-	__io_pbr();
-	val = __raw_readb(PCI_IOBASE + addr);
-	__io_par(val);
-	return val;
-}
-
-I can expand the commit text, but I would like to get some comments from the
-original author to confirm if this is an issue.
-
--Stafford
+Diffstat:
+ b/arch/arm64/include/asm/compat.h        |    2 
+ b/arch/arm64/include/asm/stat.h          |    2 
+ b/arch/arm64/kernel/process.c            |    1 
+ b/arch/arm64/kernel/ptrace.c             |    1 
+ b/arch/mips/include/asm/compat.h         |    2 
+ b/arch/parisc/include/asm/compat.h       |    2 
+ b/arch/powerpc/include/asm/compat.h      |    2 
+ b/arch/s390/include/asm/compat.h         |    2 
+ b/arch/sparc/include/asm/compat.h        |    3 
+ b/arch/x86/entry/syscalls/syscall_32.tbl |    2 
+ b/arch/x86/include/asm/compat.h          |    3 
+ b/fs/quota/Kconfig                       |    5 -
+ b/fs/quota/Makefile                      |    1 
+ b/fs/quota/compat.h                      |   34 ++++++++
+ b/fs/quota/quota.c                       |   73 +++++++++++++++---
+ b/include/linux/compat.h                 |   17 ++++
+ b/include/linux/quotaops.h               |    3 
+ b/kernel/sys_ni.c                        |    1 
+ fs/quota/compat.c                        |  120 -------------------------------
+ 19 files changed, 114 insertions(+), 162 deletions(-)
