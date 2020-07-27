@@ -2,148 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE9622F62F
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jul 2020 19:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C5922F647
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jul 2020 19:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730132AbgG0RH7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jul 2020 13:07:59 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:59392 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729403AbgG0RH7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jul 2020 13:07:59 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06RGgkN5077073;
-        Mon, 27 Jul 2020 17:02:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=EH2bcmGiKig5NQUr25P5VYLKdWqRTYRE1Orwb4KgXik=;
- b=l1LOF0dmlbi1ncVDq7RWlEvNJYr2LbPMPmGo3aXniYWPZhLlMSHR0iWNp/2cDgmG6dbR
- RsmBzBxwcJM3BxRVkITqX1WvldXoqwBEQ03KjtD+yDZgD1mbk32LJV5cwSQ381iZh3Y9
- BCtLvGVqEyXedSXoHlknOTfyCHrbE6mWURmbGcIEEHGXvrGUEJ5/qtMwH8azy5BTtzxL
- krFCtP1n2bTqG81bcnd5Xz1b8ajPJlHCouPTuK7bHtdIFfZN519587R0e4/RkkwN7uww
- /QNbyjqx8Ocr6uD0+RLlm6G5JCez12sO4h0aSAWN1OV1n+iLEpHqky6Wc6yI5u2WSKKf jg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 32hu1j2rvc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Jul 2020 17:02:16 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06RGgViM055487;
-        Mon, 27 Jul 2020 17:02:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 32hu5r9fda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Jul 2020 17:02:16 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06RGuWGn111604;
-        Mon, 27 Jul 2020 17:02:15 GMT
-Received: from ca-qasparc-x86-2.us.oracle.com (ca-qasparc-x86-2.us.oracle.com [10.147.24.103])
-        by userp3020.oracle.com with ESMTP id 32hu5r9f7r-6;
-        Mon, 27 Jul 2020 17:02:15 +0000
-From:   Anthony Yznaga <anthony.yznaga@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     mhocko@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, arnd@arndb.de,
-        ebiederm@xmission.com, keescook@chromium.org, gerg@linux-m68k.org,
-        ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
-        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com,
-        steven.sistare@oracle.com
-Subject: [RFC PATCH 5/5] mm: introduce MADV_DOEXEC
-Date:   Mon, 27 Jul 2020 10:11:27 -0700
-Message-Id: <1595869887-23307-6-git-send-email-anthony.yznaga@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9695 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 clxscore=1015
- malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007270116
+        id S1728254AbgG0RMh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jul 2020 13:12:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728045AbgG0RMh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Jul 2020 13:12:37 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B562206E7;
+        Mon, 27 Jul 2020 17:12:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595869956;
+        bh=WogOJT1SpSbDm9BIS5mq+VMEccrmGTd/fbEvNfTWPgM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lQ1Z9K59C8/AlkD1/eM/JwEqvlO7ySlctuRPoQqZ36nRK1Dy7JlBuq/54o4cIjEcD
+         cbn9dbymYVSeLmrss7+oAwKbKw0LEVhdVjYi0OVwO3tnBP+DzAKy8Wn2N0a0srie7z
+         DjhgZiDTdIYE3B13+xlYN3P1+D7OOQalV77YMcwg=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1k06fy-00FNOn-Va; Mon, 27 Jul 2020 18:12:35 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 27 Jul 2020 18:12:34 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zhenyu Ye <yezhenyu2@huawei.com>
+Cc:     james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        steven.price@arm.com, mark.rutland@arm.com, ascull@google.com,
+        kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org,
+        xiexiangyou@huawei.com
+Subject: Re: [RESEND RFC PATCH v1] arm64: kvm: flush tlbs by range in
+ unmap_stage2_range function
+In-Reply-To: <f74277fd-5af2-c46f-169f-c15a321165cd@huawei.com>
+References: <20200724134315.805-1-yezhenyu2@huawei.com>
+ <5d54c860b3b4e7a98e4d53397e6424ae@kernel.org>
+ <f74277fd-5af2-c46f-169f-c15a321165cd@huawei.com>
+User-Agent: Roundcube Webmail/1.4.5
+Message-ID: <fb4756b58892fbc2022cf1f5b9320c27@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: yezhenyu2@huawei.com, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, steven.price@arm.com, mark.rutland@arm.com, ascull@google.com, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, arm@kernel.org, xiexiangyou@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-madvise MADV_DOEXEC preserves a memory range across exec.  Initially
-only supported for non-executable, non-stack, anonymous memory.
-MADV_DONTEXEC reverts the effect of a previous MADV_DOXEXEC call and
-undoes the preservation of the range.  After a successful exec call,
-the behavior of all ranges reverts to MADV_DONTEXEC.
+Zhenyu,
 
-Signed-off-by: Steve Sistare <steven.sistare@oracle.com>
-Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
----
- include/uapi/asm-generic/mman-common.h |  3 +++
- mm/madvise.c                           | 25 +++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+On 2020-07-27 15:51, Zhenyu Ye wrote:
+> Hi Marc,
+> 
+> On 2020/7/26 1:40, Marc Zyngier wrote:
+>> On 2020-07-24 14:43, Zhenyu Ye wrote:
+>>> Now in unmap_stage2_range(), we flush tlbs one by one just after the
+>>> corresponding pages cleared.  However, this may cause some 
+>>> performance
+>>> problems when the unmap range is very large (such as when the vm
+>>> migration rollback, this may cause vm downtime too loog).
+>> 
+>> You keep resending this patch, but you don't give any numbers
+>> that would back your assertion.
+> 
+> I have tested the downtime of vm migration rollback on arm64, and found
+> the downtime could even take up to 7s.  Then I traced the cost of
+> unmap_stage2_range() and found it could take a maximum of 1.2s.  The
+> vm configuration is as follows (with high memory pressure, the dirty
+> rate is about 500MB/s):
+> 
+>   <memory unit='GiB'>192</memory>
+>   <vcpu placement='static'>48</vcpu>
+>   <memoryBacking>
+>     <hugepages>
+>       <page size='1' unit='GiB' nodeset='0'/>
+>     </hugepages>
+>   </memoryBacking>
 
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index f94f65d429be..7c5f616b28f7 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -72,6 +72,9 @@
- #define MADV_COLD	20		/* deactivate these pages */
- #define MADV_PAGEOUT	21		/* reclaim these pages */
- 
-+#define MADV_DOEXEC	22		/* do inherit across exec */
-+#define MADV_DONTEXEC	23		/* don't inherit across exec */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/mm/madvise.c b/mm/madvise.c
-index dd1d43cf026d..b447fa748649 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -103,6 +103,26 @@ static long madvise_behavior(struct vm_area_struct *vma,
- 	case MADV_KEEPONFORK:
- 		new_flags &= ~VM_WIPEONFORK;
- 		break;
-+	case MADV_DOEXEC:
-+		/*
-+		 * MADV_DOEXEC is only supported on private, non-executable,
-+		 * non-stack anonymous memory and if the VM_EXEC_KEEP flag
-+		 * is available.
-+		 */
-+		if (!VM_EXEC_KEEP || vma->vm_file || vma->vm_flags & (VM_EXEC|VM_SHARED|VM_STACK)) {
-+			error = -EINVAL;
-+			goto out;
-+		}
-+		new_flags |= (new_flags & ~VM_MAYEXEC) | VM_EXEC_KEEP;
-+		break;
-+	case MADV_DONTEXEC:
-+		if (!VM_EXEC_KEEP) {
-+			error = -EINVAL;
-+			goto out;
-+		}
-+		if (new_flags & VM_EXEC_KEEP)
-+			new_flags |= (new_flags & ~VM_EXEC_KEEP) | VM_MAYEXEC;
-+		break;
- 	case MADV_DONTDUMP:
- 		new_flags |= VM_DONTDUMP;
- 		break;
-@@ -983,6 +1003,8 @@ static int madvise_inject_error(int behavior,
- 	case MADV_SOFT_OFFLINE:
- 	case MADV_HWPOISON:
- #endif
-+	case MADV_DOEXEC:
-+	case MADV_DONTEXEC:
- 		return true;
- 
- 	default:
-@@ -1037,6 +1059,9 @@ static int madvise_inject_error(int behavior,
-  *  MADV_DONTDUMP - the application wants to prevent pages in the given range
-  *		from being included in its core dump.
-  *  MADV_DODUMP - cancel MADV_DONTDUMP: no longer exclude from core dump.
-+ *  MADV_DOEXEC - On exec, preserve and duplicate this area in the new process
-+ *		  if the new process allows it.
-+ *  MADV_DONTEXEC - Undo the effect of MADV_DOEXEC.
-  *
-  * return values:
-  *  zero    - success
+This means nothing to me, I'm afraid.
+
+> 
+> After this patch applied, the cost of unmap_stage2_range() can reduce 
+> to
+> 16ms, and VM downtime can be less than 1s.
+> 
+> The following figure shows a clear comparison:
+> 
+> 	      |	vm downtime  |	cost of unmap_stage2_range()
+> --------------+--------------+----------------------------------
+> before change |		7s   |		1200 ms
+> after  change |		1s   |		  16 ms
+> --------------+--------------+----------------------------------
+
+I don't see how you turn a 1.184s reduction into a 6s gain.
+Surely there is more to it than what you posted.
+
+>>> +
+>>> +    if ((end - start) >= 512 << (PAGE_SHIFT - 12)) {
+>>> +        __tlbi(vmalls12e1is);
+>> 
+>> And what is this magic value based on? You don't even mention in the
+>> commit log that you are taking this shortcut.
+>> 
+> 
+> 
+> If the page num is bigger than 512, flush all tlbs of this vm to avoid
+> soft lock-ups on large TLB flushing ranges.  Just like what the
+> flush_tlb_range() does.
+
+I'm not sure this is applicable here, and it doesn't mean
+this is as good on other systems.
+
+Thanks,
+
+         M.
 -- 
-1.8.3.1
-
+Jazz is not dead. It just smells funny...
