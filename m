@@ -2,108 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C012F22E1B7
-	for <lists+linux-arch@lfdr.de>; Sun, 26 Jul 2020 19:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2502F22E493
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jul 2020 05:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727067AbgGZRou (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 26 Jul 2020 13:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S1726717AbgG0D6S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 26 Jul 2020 23:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727060AbgGZRou (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Jul 2020 13:44:50 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFE0C0619D5
-        for <linux-arch@vger.kernel.org>; Sun, 26 Jul 2020 10:44:50 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id k27so8126229pgm.2
-        for <linux-arch@vger.kernel.org>; Sun, 26 Jul 2020 10:44:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rz8PmAevX+AVytGTYCByWyvIy1/4eNHrEUMkdI13ieQ=;
-        b=QWRKokJ1jbQuW0PkRJtwvVGJquSmHlRYaYTPngCykthHbtqC79WUZMe9dn94R+JHQ3
-         MD6r4dbJ5S5EaTgzrs+PGRazPszQO6zgfKXIJWnhSpchzyta3doIZ1/mZ5P+pYMOJDQz
-         H3b5dNV2gTNEO8N8SPevaOxawfoYNgAXdLyr0+yPXY3YUsKjNCb7/MEFYzngumWotZa2
-         SRpKioyQgEhCAChtQDAJaDviE+f1X6taWqAtuQ0sMa5r2GQyorbXhCUrIaxkZai+xhQ/
-         gE9k0/WeZ7f9KgmR16E5JMvK0QwTmEkUJjdbe7w5yBQg5IhZ/XLHXP1aTWzYshwZtbN7
-         T23w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=rz8PmAevX+AVytGTYCByWyvIy1/4eNHrEUMkdI13ieQ=;
-        b=S7LFCNF4sMZwDj9OFTDTKIIz5qkRcIA5NFoXWnV/KRYKy2nI86b0l/WhVkL2ulUHaP
-         vLd0CYmLbt2jjeZPgfY8r78lvFO73aY7hbRzHKEJaLiPZtKFbZDOAZkjmfnSWCVcO9Gm
-         TfZ23oCBHcK0riIU/x2Q2iFb7Vn0TN4bSSksEHh7TixazPfe2pVaC7agIqxQks+6l5sP
-         2Dw7g2b9juzsCsKhdlY/p4TciyzazNCafiLNQ1wWrdhuneP4vvkEDUxXYex3GY+SxaPW
-         HeS4sAyH/I1PRgttHXZaaYxbZsUkmtthA1irOES5zd6R04/07pNwnRBc7dbBeYoOd88w
-         FZqA==
-X-Gm-Message-State: AOAM5300THd2u5tQDQEZqYoWrTnRGU2BfrAd8VBGOmW9tNasQfue6ygp
-        M0ipcFE30RbRy9LQo/uzVBhx9w==
-X-Google-Smtp-Source: ABdhPJwMFBKRD5d4MvMpsgEw1KumsNACvODlt+6//ct5AFSF4islz3zAwhx/bKFoMeysRB9OE9FIlA==
-X-Received: by 2002:a62:8081:: with SMTP id j123mr30331pfd.80.1595785489483;
-        Sun, 26 Jul 2020 10:44:49 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id u2sm12465061pfl.21.2020.07.26.10.44.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2020 10:44:48 -0700 (PDT)
-Date:   Sun, 26 Jul 2020 10:44:48 -0700 (PDT)
-X-Google-Original-Date: Sun, 26 Jul 2020 10:44:45 PDT (-0700)
-Subject:     Re: [PATCH 4/6] arch, mm: wire up secretmemfd system call were relevant
-In-Reply-To: <20200720092435.17469-5-rppt@kernel.org>
-CC:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, luto@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, bp@alien8.de,
-        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, elena.reshetova@intel.com,
-        hpa@zytor.com, idan.yaniv@ibm.com, mingo@redhat.com,
-        jejb@linux.ibm.com, kirill@shutemov.name, willy@infradead.org,
-        rppt@linux.ibm.com, rppt@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, peterz@infradead.org,
-        tglx@linutronix.de, tycho@tycho.ws, will@kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     rppt@kernel.org
-Message-ID: <mhng-ffb01b1d-16c2-4998-8434-99f1cae575bd@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S1726676AbgG0D6R (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Jul 2020 23:58:17 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3362C0619D2;
+        Sun, 26 Jul 2020 20:58:17 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jzuHG-003PCx-LN; Mon, 27 Jul 2020 03:58:14 +0000
+Date:   Mon, 27 Jul 2020 04:58:14 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 04/20] unify generic instances of
+ csum_partial_copy_nocheck()
+Message-ID: <20200727035814.GA794331@ZenIV.linux.org.uk>
+References: <20200724012512.GK2786714@ZenIV.linux.org.uk>
+ <20200724012546.302155-1-viro@ZenIV.linux.org.uk>
+ <20200724012546.302155-4-viro@ZenIV.linux.org.uk>
+ <20200724064117.GA10522@infradead.org>
+ <20200724121918.GL2786714@ZenIV.linux.org.uk>
+ <20200724122337.GA23095@infradead.org>
+ <20200724123040.GM2786714@ZenIV.linux.org.uk>
+ <20200726071132.GA8862@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200726071132.GA8862@infradead.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 20 Jul 2020 02:24:33 PDT (-0700), rppt@kernel.org wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> Wire up secretmemfd system call on architectures that define
-> ARCH_HAS_SET_DIRECT_MAP, namely arm64, risc-v and x86.
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/arm64/include/asm/unistd32.h      | 2 ++
->  arch/arm64/include/uapi/asm/unistd.h   | 1 +
->  arch/riscv/include/asm/unistd.h        | 1 +
->  arch/x86/entry/syscalls/syscall_32.tbl | 1 +
->  arch/x86/entry/syscalls/syscall_64.tbl | 1 +
->  include/linux/syscalls.h               | 1 +
->  include/uapi/asm-generic/unistd.h      | 7 ++++++-
->  7 files changed, 13 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/unistd.h b/arch/riscv/include/asm/unistd.h
-> index 977ee6181dab..9e47d9aed5eb 100644
-> --- a/arch/riscv/include/asm/unistd.h
-> +++ b/arch/riscv/include/asm/unistd.h
-> @@ -9,6 +9,7 @@
->   */
->
->  #define __ARCH_WANT_SYS_CLONE
-> +#define __ARCH_WANT_SECRETMEMFD
->
->  #include <uapi/asm/unistd.h>
+On Sun, Jul 26, 2020 at 08:11:32AM +0100, Christoph Hellwig wrote:
+> On Fri, Jul 24, 2020 at 01:30:40PM +0100, Al Viro wrote:
+> > > Sorry, I meant csum_and_copy_from_nocheck, just as in this patch.
+> > > 
+> > > Merging your branch into the net-next tree thus will conflict in
+> > > the nios2 and asm-geneeric/checksum.h as well as lib/checksum.c.
+> > 
+> > Noted, but that asm-generic/checksum.h conflict will be "massage
+> > in net-next/outright removal in this branch"; the same goes for
+> > lib/checksum.c and nios2.  It's c6x that is unpleasant in that respect...
+> 
+> What about just rebasing your branch on the net-next tree?
 
-Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+For now I've just cherry-picked your commit in there.  net-next interaction
+there is minimal; most of the PITA (and potential breakage) is in arch/*...
