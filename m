@@ -2,138 +2,423 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7902022E7F2
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jul 2020 10:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AA022EC61
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jul 2020 14:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726227AbgG0Ilt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jul 2020 04:41:49 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:44333 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgG0Ilt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jul 2020 04:41:49 -0400
-Received: from mail-qv1-f49.google.com ([209.85.219.49]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MgNlH-1kR3ae0Egx-00htln; Mon, 27 Jul 2020 10:41:47 +0200
-Received: by mail-qv1-f49.google.com with SMTP id di5so7035416qvb.11;
-        Mon, 27 Jul 2020 01:41:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530yS4+RaonJrbla95HZiwRrIyxT4V4282Enlt2KgZHCsM1W7ILs
-        AHOulQCiVbpZKpWoRzGM6CRS3PNXPI4rW+ni3/0=
-X-Google-Smtp-Source: ABdhPJyFy7iTz1AbZ0fR7sKfDU51z6IeCONSD5JbC+rvcHhVLzEoSaPB8khjv+HojCYyEyIzph23AGS99NUwimzjZoE=
-X-Received: by 2002:a0c:cc01:: with SMTP id r1mr709301qvk.4.1595839305851;
- Mon, 27 Jul 2020 01:41:45 -0700 (PDT)
+        id S1728367AbgG0Mla (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jul 2020 08:41:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50344 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728128AbgG0Mla (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Jul 2020 08:41:30 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7859EACC6;
+        Mon, 27 Jul 2020 12:41:38 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id E01941E12C5; Mon, 27 Jul 2020 14:41:27 +0200 (CEST)
+Date:   Mon, 27 Jul 2020 14:41:27 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     x86@kernel.org, Jan Kara <jack@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 4/4] quota: simplify the quotactl compat handling
+Message-ID: <20200727124127.GO23179@quack2.suse.cz>
+References: <20200726160401.311569-1-hch@lst.de>
+ <20200726160401.311569-5-hch@lst.de>
 MIME-Version: 1.0
-References: <20200726031154.1012044-1-shorne@gmail.com> <CAHp75VciC+gqkCZ9voNKHU3hrtiOVzeWBu9_YEagpCGdTME2yg@mail.gmail.com>
- <20200726125325.GC80756@lianli.shorne-pla.net> <CAK8P3a0-wPsVi-fXPW4Dghn30cumrzvLujp7usio50EHmCHM=g@mail.gmail.com>
- <a55f21a7-aff9-09a9-2fcd-c9ef76728116@huawei.com>
-In-Reply-To: <a55f21a7-aff9-09a9-2fcd-c9ef76728116@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 27 Jul 2020 10:41:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a37s8ct5moydwwVO+C5TLfW+GU6VS-+zuAQfZzs2czXaw@mail.gmail.com>
-Message-ID: <CAK8P3a37s8ct5moydwwVO+C5TLfW+GU6VS-+zuAQfZzs2czXaw@mail.gmail.com>
-Subject: Re: [PATCH] io: Fix return type of _inb and _inl
-To:     John Garry <john.garry@huawei.com>
-Cc:     Stafford Horne <shorne@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gzg4p9Vgjp+46iDBHEFnConwigWrr+5uZFAlW//h7+Z9pmupd4h
- LQy9RHqT1BM3PygvxEJAfygQ9Iq56S/lXffJxD8EbY4pBHLohnIqxAVATfI+AKZm81lP5fr
- w7lm32PtZSq5LYtiGPSPVt0tcS7avhyjG/jDrrY0FdO7kzksply7HS2JlNXeDep7gX63puk
- OGdEEa2tLUUDnp3Sbpn0A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yD8d1g1NW7g=:SehQg26NrsPZDVWSpyInSx
- Pw6nBb9dAfbt0G0+MJt7ZC18+XwDjHQUkz6zYakN73u72EVaRmJqJ/K/D1VN1+ETP+Wlg4PVU
- GGA2LqoxTNK3gox/nnkj0qzxRJK9fvhIrN4lnDDtV8m/T6DB5/myRIZKt2Bj7IT7Bj/IsK2Ks
- oTma2KROK5iopV4zQKvj7sOeFmIV4loR/3YgZqRVIPqJzup82+h0tKlioU7AfsrrhnVjH9N0H
- j+o94VMsn8GL5PKKFmCI/Uas9YRyujH159wxdEjj1L4Mp8MUUMRA3ch46X9Og0JZF/Ov3JSAT
- MayaHwXCGz6BUbysk3YFix33p3ASBzBgPt7QzfZffdlIQrbsVn2Rla5waDfrRu4oPzYOlwBdd
- qawDoziVEqk8uS7p6Ww/SCbDSWJ4Djei43UuOtOkSGLpZtc2qqs6zTj8djQDM3KqDCAinui+i
- TZokX613Hnbrp2+Mi7hD9l6/GkHHD9U7ZKqvF3plMG9mN2st2k9hE6rm+bcL1RxIqnFlaB6ey
- oGPunheLjNveZMpZo44y0KlxUix/3wkTbo/UaLgioKdqBp9HlxEWpAy/vYe/oHFeLXshsR/GE
- fdwZ8jQC4VyAdk+6ammoAcrZ9Rc62bx4RtIY39nvA/r3QM4Fx1kzCuEJgjbsAjY27FhwMgNF8
- YWRHi284XTPUrxUO/D3UYeX/rFUKsxBtO3CskaRx4cnPlq65A/BC8VT009rrylA6v2zk7dZI3
- PVO8CVV2k5B/VpZ6eYNgO7zhXvMXFvXlqjrF8ashU1DVgbWetCuddXqjgL1854lJbLT0HBoKR
- +rJX9wcqz3jxZxEiWr4pM+7kqWJHmFfGwkUOsvLTock/C04dBb82Vs0pY6B114y5Y7D+lXygM
- yXyU18UAOo5UQxJddeD2hbnSuZ2q0FFzBTRAmyLGiuXY0ggw/LPlARY2kwrKjGv61e3ZJ+GUN
- gYy1Hs3Dg5zNNLc3r6ulz3gmFjVgmNqpgGL/Gp63twJAs39svx9Ob
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200726160401.311569-5-hch@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 10:30 AM John Garry <john.garry@huawei.com> wrote:
-> On 27/07/2020 09:04, Arnd Bergmann wrote:> On Sun, Jul 26, 2020 at 2:53
-> PM Stafford Horne <shorne@gmail.com> wrote:
-> >>
-> >> On Sun, Jul 26, 2020 at 12:00:37PM +0300, Andy Shevchenko wrote:
-> >>> On Sun, Jul 26, 2020 at 6:14 AM Stafford Horne <shorne@gmail.com> wrote:
-> >>>>
-> >>>> The return type of functions _inb, _inw and _inl are all u16 which looks
-> >>>> wrong.  This patch makes them u8, u16 and u32 respectively.
-> >>>>
-> >>>> The original commit text for these does not indicate that these should
-> >>>> be all forced to u16.
-> >>>
-> >>> Is it in alight with all architectures? that support this interface natively?
-> >>>
-> >>> (Return value is arch-dependent AFAIU, so it might actually return
-> >>> 16-bit for byte read, but I agree that this is weird for 32-bit value.
-> >>> I think you have elaborate more in the commit message)
-> >>
-> >> Well, this is the generic io code,  at least these api's appear to not be different
-> >> for each architecture.  The output read by the architecture dependant code i.e.
-> >> __raw_readb() below is getting is placed into a u8.  So I think the output of
-> >> the function will be u8.
-> >>
-> >> static inline u8 _inb(unsigned long addr)
-> >> {
-> >>          u8 val;
-> >>
-> >>          __io_pbr();
-> >>          val = __raw_readb(PCI_IOBASE + addr);
-> >>          __io_par(val);
-> >>          return val;
-> >> }
-> >>
-> >> I can expand the commit text, but I would like to get some comments from the
-> >> original author to confirm if this is an issue.
-> >
-> > I think your original version is fine, this was clearly just a typo and I've
-> > applied your fix now and will forward it to Linus in the next few days,
-> > giving John the chance to add his Ack or further comments.
-> >
-> > Thanks a lot for spotting it and sending a fix.
->
-> Thanks Arnd.
->
-> Yeah, these looks like copy+paste errors on my part:
->
-> Reviewed-by: John Garry <john.garry@huawei.com>
+On Sun 26-07-20 18:04:01, Christoph Hellwig wrote:
+> Fold the misaligned u64 workarounds into the main quotactl flow instead
+> of implementing a separate compat syscall handler.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Thanks!
+The patch looks good to me and it saves a lot of boiler-plate code so feel
+free to add:
 
->
-> I'll give this patch a spin, but not expecting any differences (since
-> original seems ok).
->
-> Note that kbuild robot also reported this:
-> https://lore.kernel.org/lkml/202007140549.J7X9BVPT%25lkp@intel.com/
->
-> Extract:
->
-> include/asm-generic/io.h:521:22: sparse: sparse: incorrect type in
-> argument 1 (different base types) @@     expected unsigned int
-> [usertype] value @@     got restricted __le32 [usertype] @@
->     include/asm-generic/io.h:521:22: sparse:     expected unsigned int
-> [usertype] value
->     include/asm-generic/io.h:521:22: sparse:     got restricted __le32
-> [usertype]
->
-> But they look like issues which were in the existing code.
+Acked-by: Jan Kara <jack@suse.cz>
 
-Yes, this driver code (atm/ambassador.c) seems to have been broken that
-way since it was merged in 1999.
+								Honza
 
-      Arnd
+> ---
+>  arch/x86/entry/syscalls/syscall_32.tbl |   2 +-
+>  fs/quota/Kconfig                       |   5 --
+>  fs/quota/Makefile                      |   1 -
+>  fs/quota/compat.c                      | 120 -------------------------
+>  fs/quota/compat.h                      |  34 +++++++
+>  fs/quota/quota.c                       |  73 ++++++++++++---
+>  include/linux/quotaops.h               |   3 -
+>  kernel/sys_ni.c                        |   1 -
+>  8 files changed, 94 insertions(+), 145 deletions(-)
+>  delete mode 100644 fs/quota/compat.c
+>  create mode 100644 fs/quota/compat.h
+> 
+> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+> index d8f8a1a69ed11f..41d442d7c2db67 100644
+> --- a/arch/x86/entry/syscalls/syscall_32.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
+> @@ -142,7 +142,7 @@
+>  128	i386	init_module		sys_init_module
+>  129	i386	delete_module		sys_delete_module
+>  130	i386	get_kernel_syms
+> -131	i386	quotactl		sys_quotactl			compat_sys_quotactl32
+> +131	i386	quotactl		sys_quotactl
+>  132	i386	getpgid			sys_getpgid
+>  133	i386	fchdir			sys_fchdir
+>  134	i386	bdflush			sys_bdflush
+> diff --git a/fs/quota/Kconfig b/fs/quota/Kconfig
+> index 7218314ca13f00..4f5bb85099a904 100644
+> --- a/fs/quota/Kconfig
+> +++ b/fs/quota/Kconfig
+> @@ -70,8 +70,3 @@ config QFMT_V2
+>  config QUOTACTL
+>  	bool
+>  	default n
+> -
+> -config QUOTACTL_COMPAT
+> -	bool
+> -	depends on QUOTACTL && COMPAT_FOR_U64_ALIGNMENT
+> -	default y
+> diff --git a/fs/quota/Makefile b/fs/quota/Makefile
+> index f2b49d0f0287c9..9160639daffa75 100644
+> --- a/fs/quota/Makefile
+> +++ b/fs/quota/Makefile
+> @@ -4,5 +4,4 @@ obj-$(CONFIG_QFMT_V1)		+= quota_v1.o
+>  obj-$(CONFIG_QFMT_V2)		+= quota_v2.o
+>  obj-$(CONFIG_QUOTA_TREE)	+= quota_tree.o
+>  obj-$(CONFIG_QUOTACTL)		+= quota.o kqid.o
+> -obj-$(CONFIG_QUOTACTL_COMPAT)	+= compat.o
+>  obj-$(CONFIG_QUOTA_NETLINK_INTERFACE)	+= netlink.o
+> diff --git a/fs/quota/compat.c b/fs/quota/compat.c
+> deleted file mode 100644
+> index c305728576193d..00000000000000
+> --- a/fs/quota/compat.c
+> +++ /dev/null
+> @@ -1,120 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -
+> -#include <linux/syscalls.h>
+> -#include <linux/compat.h>
+> -#include <linux/quotaops.h>
+> -
+> -/*
+> - * This code works only for 32 bit quota tools over 64 bit OS (x86_64, ia64)
+> - * and is necessary due to alignment problems.
+> - */
+> -struct compat_if_dqblk {
+> -	compat_u64 dqb_bhardlimit;
+> -	compat_u64 dqb_bsoftlimit;
+> -	compat_u64 dqb_curspace;
+> -	compat_u64 dqb_ihardlimit;
+> -	compat_u64 dqb_isoftlimit;
+> -	compat_u64 dqb_curinodes;
+> -	compat_u64 dqb_btime;
+> -	compat_u64 dqb_itime;
+> -	compat_uint_t dqb_valid;
+> -};
+> -
+> -/* XFS structures */
+> -struct compat_fs_qfilestat {
+> -	compat_u64 dqb_bhardlimit;
+> -	compat_u64 qfs_nblks;
+> -	compat_uint_t qfs_nextents;
+> -};
+> -
+> -struct compat_fs_quota_stat {
+> -	__s8		qs_version;
+> -	__u16		qs_flags;
+> -	__s8		qs_pad;
+> -	struct compat_fs_qfilestat	qs_uquota;
+> -	struct compat_fs_qfilestat	qs_gquota;
+> -	compat_uint_t	qs_incoredqs;
+> -	compat_int_t	qs_btimelimit;
+> -	compat_int_t	qs_itimelimit;
+> -	compat_int_t	qs_rtbtimelimit;
+> -	__u16		qs_bwarnlimit;
+> -	__u16		qs_iwarnlimit;
+> -};
+> -
+> -COMPAT_SYSCALL_DEFINE4(quotactl32, unsigned int, cmd,
+> -		       const char __user *, special, qid_t, id,
+> -		       void __user *, addr)
+> -{
+> -	unsigned int cmds;
+> -	struct if_dqblk __user *dqblk;
+> -	struct compat_if_dqblk __user *compat_dqblk;
+> -	struct fs_quota_stat __user *fsqstat;
+> -	struct compat_fs_quota_stat __user *compat_fsqstat;
+> -	compat_uint_t data;
+> -	u16 xdata;
+> -	long ret;
+> -
+> -	cmds = cmd >> SUBCMDSHIFT;
+> -
+> -	switch (cmds) {
+> -	case Q_GETQUOTA:
+> -		dqblk = compat_alloc_user_space(sizeof(struct if_dqblk));
+> -		compat_dqblk = addr;
+> -		ret = kernel_quotactl(cmd, special, id, dqblk);
+> -		if (ret)
+> -			break;
+> -		if (copy_in_user(compat_dqblk, dqblk, sizeof(*compat_dqblk)) ||
+> -			get_user(data, &dqblk->dqb_valid) ||
+> -			put_user(data, &compat_dqblk->dqb_valid))
+> -			ret = -EFAULT;
+> -		break;
+> -	case Q_SETQUOTA:
+> -		dqblk = compat_alloc_user_space(sizeof(struct if_dqblk));
+> -		compat_dqblk = addr;
+> -		ret = -EFAULT;
+> -		if (copy_in_user(dqblk, compat_dqblk, sizeof(*compat_dqblk)) ||
+> -			get_user(data, &compat_dqblk->dqb_valid) ||
+> -			put_user(data, &dqblk->dqb_valid))
+> -			break;
+> -		ret = kernel_quotactl(cmd, special, id, dqblk);
+> -		break;
+> -	case Q_XGETQSTAT:
+> -		fsqstat = compat_alloc_user_space(sizeof(struct fs_quota_stat));
+> -		compat_fsqstat = addr;
+> -		ret = kernel_quotactl(cmd, special, id, fsqstat);
+> -		if (ret)
+> -			break;
+> -		ret = -EFAULT;
+> -		/* Copying qs_version, qs_flags, qs_pad */
+> -		if (copy_in_user(compat_fsqstat, fsqstat,
+> -			offsetof(struct compat_fs_quota_stat, qs_uquota)))
+> -			break;
+> -		/* Copying qs_uquota */
+> -		if (copy_in_user(&compat_fsqstat->qs_uquota,
+> -			&fsqstat->qs_uquota,
+> -			sizeof(compat_fsqstat->qs_uquota)) ||
+> -			get_user(data, &fsqstat->qs_uquota.qfs_nextents) ||
+> -			put_user(data, &compat_fsqstat->qs_uquota.qfs_nextents))
+> -			break;
+> -		/* Copying qs_gquota */
+> -		if (copy_in_user(&compat_fsqstat->qs_gquota,
+> -			&fsqstat->qs_gquota,
+> -			sizeof(compat_fsqstat->qs_gquota)) ||
+> -			get_user(data, &fsqstat->qs_gquota.qfs_nextents) ||
+> -			put_user(data, &compat_fsqstat->qs_gquota.qfs_nextents))
+> -			break;
+> -		/* Copying the rest */
+> -		if (copy_in_user(&compat_fsqstat->qs_incoredqs,
+> -			&fsqstat->qs_incoredqs,
+> -			sizeof(struct compat_fs_quota_stat) -
+> -			offsetof(struct compat_fs_quota_stat, qs_incoredqs)) ||
+> -			get_user(xdata, &fsqstat->qs_iwarnlimit) ||
+> -			put_user(xdata, &compat_fsqstat->qs_iwarnlimit))
+> -			break;
+> -		ret = 0;
+> -		break;
+> -	default:
+> -		ret = kernel_quotactl(cmd, special, id, addr);
+> -	}
+> -	return ret;
+> -}
+> diff --git a/fs/quota/compat.h b/fs/quota/compat.h
+> new file mode 100644
+> index 00000000000000..ef7d1e12d650b3
+> --- /dev/null
+> +++ b/fs/quota/compat.h
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/compat.h>
+> +
+> +struct compat_if_dqblk {
+> +	compat_u64			dqb_bhardlimit;
+> +	compat_u64			dqb_bsoftlimit;
+> +	compat_u64			dqb_curspace;
+> +	compat_u64			dqb_ihardlimit;
+> +	compat_u64			dqb_isoftlimit;
+> +	compat_u64			dqb_curinodes;
+> +	compat_u64			dqb_btime;
+> +	compat_u64			dqb_itime;
+> +	compat_uint_t			dqb_valid;
+> +};
+> +
+> +struct compat_fs_qfilestat {
+> +	compat_u64			dqb_bhardlimit;
+> +	compat_u64			qfs_nblks;
+> +	compat_uint_t			qfs_nextents;
+> +};
+> +
+> +struct compat_fs_quota_stat {
+> +	__s8				qs_version;
+> +	__u16				qs_flags;
+> +	__s8				qs_pad;
+> +	struct compat_fs_qfilestat	qs_uquota;
+> +	struct compat_fs_qfilestat	qs_gquota;
+> +	compat_uint_t			qs_incoredqs;
+> +	compat_int_t			qs_btimelimit;
+> +	compat_int_t			qs_itimelimit;
+> +	compat_int_t			qs_rtbtimelimit;
+> +	__u16				qs_bwarnlimit;
+> +	__u16				qs_iwarnlimit;
+> +};
+> diff --git a/fs/quota/quota.c b/fs/quota/quota.c
+> index 5444d3c4d93f37..e1e9d05a14c3e4 100644
+> --- a/fs/quota/quota.c
+> +++ b/fs/quota/quota.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/types.h>
+>  #include <linux/writeback.h>
+>  #include <linux/nospec.h>
+> +#include "compat.h"
+>  
+>  static int check_quotactl_permission(struct super_block *sb, int type, int cmd,
+>  				     qid_t id)
+> @@ -211,8 +212,18 @@ static int quota_getquota(struct super_block *sb, int type, qid_t id,
+>  	if (ret)
+>  		return ret;
+>  	copy_to_if_dqblk(&idq, &fdq);
+> -	if (copy_to_user(addr, &idq, sizeof(idq)))
+> -		return -EFAULT;
+> +
+> +	if (compat_need_64bit_alignment_fixup()) {
+> +		struct compat_if_dqblk __user *compat_dqblk = addr;
+> +
+> +		if (copy_to_user(compat_dqblk, &idq, sizeof(*compat_dqblk)))
+> +			return -EFAULT;
+> +		if (put_user(idq.dqb_valid, &compat_dqblk->dqb_valid))
+> +			return -EFAULT;
+> +	} else {
+> +		if (copy_to_user(addr, &idq, sizeof(idq)))
+> +			return -EFAULT;
+> +	}
+>  	return 0;
+>  }
+>  
+> @@ -277,8 +288,16 @@ static int quota_setquota(struct super_block *sb, int type, qid_t id,
+>  	struct if_dqblk idq;
+>  	struct kqid qid;
+>  
+> -	if (copy_from_user(&idq, addr, sizeof(idq)))
+> -		return -EFAULT;
+> +	if (compat_need_64bit_alignment_fixup()) {
+> +		struct compat_if_dqblk __user *compat_dqblk = addr;
+> +
+> +		if (copy_from_user(&idq, compat_dqblk, sizeof(*compat_dqblk)) ||
+> +		    get_user(idq.dqb_valid, &compat_dqblk->dqb_valid))
+> +			return -EFAULT;
+> +	} else {
+> +		if (copy_from_user(&idq, addr, sizeof(idq)))
+> +			return -EFAULT;
+> +	}
+>  	if (!sb->s_qcop->set_dqblk)
+>  		return -ENOSYS;
+>  	qid = make_kqid(current_user_ns(), type, id);
+> @@ -382,6 +401,33 @@ static int quota_getstate(struct super_block *sb, int type,
+>  	return 0;
+>  }
+>  
+> +static int compat_copy_fs_qfilestat(struct compat_fs_qfilestat __user *to,
+> +		struct fs_qfilestat *from)
+> +{
+> +	if (copy_to_user(to, from, sizeof(*to)) ||
+> +	    put_user(from->qfs_nextents, &to->qfs_nextents))
+> +		return -EFAULT;
+> +	return 0;
+> +}
+> +
+> +static int compat_copy_fs_quota_stat(struct compat_fs_quota_stat __user *to,
+> +		struct fs_quota_stat *from)
+> +{
+> +	if (put_user(from->qs_version, &to->qs_version) ||
+> +	    put_user(from->qs_flags, &to->qs_flags) ||
+> +	    put_user(from->qs_pad, &to->qs_pad) ||
+> +	    compat_copy_fs_qfilestat(&to->qs_uquota, &from->qs_uquota) ||
+> +	    compat_copy_fs_qfilestat(&to->qs_gquota, &from->qs_gquota) ||
+> +	    put_user(from->qs_incoredqs, &to->qs_incoredqs) ||
+> +	    put_user(from->qs_btimelimit, &to->qs_btimelimit) ||
+> +	    put_user(from->qs_itimelimit, &to->qs_itimelimit) ||
+> +	    put_user(from->qs_rtbtimelimit, &to->qs_rtbtimelimit) ||
+> +	    put_user(from->qs_bwarnlimit, &to->qs_bwarnlimit) ||
+> +	    put_user(from->qs_iwarnlimit, &to->qs_iwarnlimit))
+> +		return -EFAULT;
+> +	return 0;
+> +}
+> +
+>  static int quota_getxstate(struct super_block *sb, int type, void __user *addr)
+>  {
+>  	struct fs_quota_stat fqs;
+> @@ -390,9 +436,14 @@ static int quota_getxstate(struct super_block *sb, int type, void __user *addr)
+>  	if (!sb->s_qcop->get_state)
+>  		return -ENOSYS;
+>  	ret = quota_getstate(sb, type, &fqs);
+> -	if (!ret && copy_to_user(addr, &fqs, sizeof(fqs)))
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (compat_need_64bit_alignment_fixup())
+> +		return compat_copy_fs_quota_stat(addr, &fqs);
+> +	if (copy_to_user(addr, &fqs, sizeof(fqs)))
+>  		return -EFAULT;
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int quota_getstatev(struct super_block *sb, int type,
+> @@ -816,8 +867,8 @@ static struct super_block *quotactl_block(const char __user *special, int cmd)
+>   * calls. Maybe we need to add the process quotas etc. in the future,
+>   * but we probably should use rlimits for that.
+>   */
+> -int kernel_quotactl(unsigned int cmd, const char __user *special,
+> -		    qid_t id, void __user *addr)
+> +SYSCALL_DEFINE4(quotactl, unsigned int, cmd, const char __user *, special,
+> +		qid_t, id, void __user *, addr)
+>  {
+>  	uint cmds, type;
+>  	struct super_block *sb = NULL;
+> @@ -871,9 +922,3 @@ int kernel_quotactl(unsigned int cmd, const char __user *special,
+>  		path_put(pathp);
+>  	return ret;
+>  }
+> -
+> -SYSCALL_DEFINE4(quotactl, unsigned int, cmd, const char __user *, special,
+> -		qid_t, id, void __user *, addr)
+> -{
+> -	return kernel_quotactl(cmd, special, id, addr);
+> -}
+> diff --git a/include/linux/quotaops.h b/include/linux/quotaops.h
+> index 9cf0cd3dc88c68..a0f6668924d3ef 100644
+> --- a/include/linux/quotaops.h
+> +++ b/include/linux/quotaops.h
+> @@ -27,9 +27,6 @@ static inline bool is_quota_modification(struct inode *inode, struct iattr *ia)
+>  		(ia->ia_valid & ATTR_GID && !gid_eq(ia->ia_gid, inode->i_gid));
+>  }
+>  
+> -int kernel_quotactl(unsigned int cmd, const char __user *special,
+> -		    qid_t id, void __user *addr);
+> -
+>  #if defined(CONFIG_QUOTA)
+>  
+>  #define quota_error(sb, fmt, args...) \
+> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+> index 3b69a560a7ac56..f01b91cc57fa00 100644
+> --- a/kernel/sys_ni.c
+> +++ b/kernel/sys_ni.c
+> @@ -370,7 +370,6 @@ COND_SYSCALL_COMPAT(fanotify_mark);
+>  /* x86 */
+>  COND_SYSCALL(vm86old);
+>  COND_SYSCALL(modify_ldt);
+> -COND_SYSCALL_COMPAT(quotactl32);
+>  COND_SYSCALL(vm86);
+>  COND_SYSCALL(kexec_file_load);
+>  
+> -- 
+> 2.27.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
