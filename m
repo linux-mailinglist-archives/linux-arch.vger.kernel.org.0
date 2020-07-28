@@ -2,87 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C6A230A7C
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jul 2020 14:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9A3230B59
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jul 2020 15:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729601AbgG1Mmh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jul 2020 08:42:37 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:36081 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729379AbgG1Mmh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jul 2020 08:42:37 -0400
-Received: from mail-qk1-f180.google.com ([209.85.222.180]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1N9MlI-1ko7Me0HB6-015Jcv; Tue, 28 Jul 2020 14:42:36 +0200
-Received: by mail-qk1-f180.google.com with SMTP id d14so18383589qke.13;
-        Tue, 28 Jul 2020 05:42:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532xR0yaFjd4bosS3E+dYU04hNP8IkCcgmVok0kYRbiwIHINxnnf
-        xmdE6V7iPPKM9YjSwocgy3tiYQMTxBIC+r5YH+M=
-X-Google-Smtp-Source: ABdhPJw3K3lvAgYAGemxdtvcTTa313hHGShCGNtpEv9UT2n69gfyTUSK1mtIz0h/zUJQYI9RNcSKyp+FbIUCGKG3RCM=
-X-Received: by 2002:a37:b484:: with SMTP id d126mr27679043qkf.394.1595940154887;
- Tue, 28 Jul 2020 05:42:34 -0700 (PDT)
+        id S1729996AbgG1NXb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jul 2020 09:23:31 -0400
+Received: from relay.sw.ru ([185.231.240.75]:37472 "EHLO relay3.sw.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729433AbgG1NXb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 28 Jul 2020 09:23:31 -0400
+Received: from [192.168.15.36]
+        by relay3.sw.ru with esmtp (Exim 4.93)
+        (envelope-from <ktkhai@virtuozzo.com>)
+        id 1k0PYr-0004Hm-NN; Tue, 28 Jul 2020 16:22:30 +0300
+Subject: Re: [RFC PATCH 5/5] mm: introduce MADV_DOEXEC
+To:     Anthony Yznaga <anthony.yznaga@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     mhocko@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, arnd@arndb.de,
+        ebiederm@xmission.com, keescook@chromium.org, gerg@linux-m68k.org,
+        christian.brauner@ubuntu.com, peterz@infradead.org,
+        esyr@redhat.com, jgg@ziepe.ca, christian@kellner.me,
+        areber@redhat.com, cyphar@cyphar.com, steven.sistare@oracle.com
+References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
+ <1595869887-23307-6-git-send-email-anthony.yznaga@oracle.com>
+From:   Kirill Tkhai <ktkhai@virtuozzo.com>
+Message-ID: <743a51db-dc27-c49c-9c65-ac164f5283ba@virtuozzo.com>
+Date:   Tue, 28 Jul 2020 16:22:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 28 Jul 2020 14:42:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Qy0OOcXOO4twf3OKZ66ESTNT60nOR9i-ixcPubeUuVA@mail.gmail.com>
-Message-ID: <CAK8P3a2Qy0OOcXOO4twf3OKZ66ESTNT60nOR9i-ixcPubeUuVA@mail.gmail.com>
-Subject: [GIT PULL] asm-generic: bugfix for v5.8
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        John Garry <john.garry@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:x3nttk669UjzwEn2hDNj3i4LS8B8RF+s+pHwbjCJLlNvssgNla+
- oSVCg+hPM33wPIM/ff53c+YmNcMp7v21JnHRNoiPiujLS0/NrY7eJ8NJ9zTDlw/uKbc4zlH
- jBnFsgBJ4/Mab5HZYiDBzgFxDqOJhQfMIWRz7RyQDAkgLN32nIghrtsax1NaxrqTt34Lucm
- I+sWzcDczCtbcB3k4Xr/w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:o2PRq9Nw7vY=:dZI4iNpszFeu1srXpxZJiW
- PUEM+SFWHJovNF+lu5oFfQ7FtljQACstGq4+9wAxbGE18MupWtS83lFOPZg0WQm5MgKsaGzQb
- yuX37eM0FaL37cuvX70bTqmtASp1EwqYsWBu8CubKn/+IW3jVPzTMPs2n7UBqnpJSR/TfX0eM
- V3HEyyHW//zSvtItuemGwc6aGQLBgIAcmN2ir0QHcePREm0v4ta8a2L7fsjL+YXDsg6FEb8lb
- sq9vU7uqAcAYIzy8SSVGL5W8MiXFRcH0VwM7o9qQ3f5dqCMVA+ZVuewmyG6u0fTPjGikATAYl
- ojc+f3LZiQWwxf3KbHS1djdfrhWBRNr+AdDBhj2Mh4w6JCq81GX4XBoR2lTmqyPmvl6r/WYSW
- 0WLHIyfWdUiWClBNIBDQ7s6pPStd/tY5tOXYzgRrnEhx2trvZQdfFvO5v1gpKxvG62gzndPVz
- QxcLXvQamL36Sw40bHtzQGgdIliDjn6Kg+JY43TOi0dZqOxJ1r05XmD3w4+iGEb2tLBpar4SM
- znaVqOGpk4t8KRGsiCZu+7t8ZGbxF9eQd0iu7Br0Nircdm2Tj5DGr3kbpqT1J4vnGHjtDr5wO
- yeOMRtKQ1qnq2G8sCtidXqWwHDmdU3yglpK7C5Prr5DjidUQiRvOK7UlReh0FXZJ/z9MqNS4s
- BEMGob92yrI3i2SylLWclvQhktPmvcgftnVjFRrBleZpeXRA/RIgOvijsRG3aLdhCGvaBnadX
- hByHUvjzPqZq+iNkHKAxKMTvOutAtJx7QApHXkYmFvQhq5EFBFGGYtgE1WS5XugZsljIP48iv
- LJB4ROIsXQCp8zuKvDemXqis8col09drndUl/nSg5LKQgGj6Atq7FS3RRv1u1gi0YpxLrAS5+
- 5NVvQi0oHnN+qFFwRbJBcDqIFTQHgCAEzrjmAegX7KoyEg2H31eGwB5rP0kTh53gSA0FKGvZk
- OX/Dt4kh7DyGOOhXTt4d2g0pWiCjD+6GgnhKOc1J9N2wo99Z4DuQY
+In-Reply-To: <1595869887-23307-6-git-send-email-anthony.yznaga@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+On 27.07.2020 20:11, Anthony Yznaga wrote:
+> madvise MADV_DOEXEC preserves a memory range across exec.  Initially
+> only supported for non-executable, non-stack, anonymous memory.
+> MADV_DONTEXEC reverts the effect of a previous MADV_DOXEXEC call and
+> undoes the preservation of the range.  After a successful exec call,
+> the behavior of all ranges reverts to MADV_DONTEXEC.
+> 
+> Signed-off-by: Steve Sistare <steven.sistare@oracle.com>
+> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+> ---
+>  include/uapi/asm-generic/mman-common.h |  3 +++
+>  mm/madvise.c                           | 25 +++++++++++++++++++++++++
+>  2 files changed, 28 insertions(+)
+> 
+> diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
+> index f94f65d429be..7c5f616b28f7 100644
+> --- a/include/uapi/asm-generic/mman-common.h
+> +++ b/include/uapi/asm-generic/mman-common.h
+> @@ -72,6 +72,9 @@
+>  #define MADV_COLD	20		/* deactivate these pages */
+>  #define MADV_PAGEOUT	21		/* reclaim these pages */
+>  
+> +#define MADV_DOEXEC	22		/* do inherit across exec */
+> +#define MADV_DONTEXEC	23		/* don't inherit across exec */
+> +
+>  /* compatibility flags */
+>  #define MAP_FILE	0
+>  
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index dd1d43cf026d..b447fa748649 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -103,6 +103,26 @@ static long madvise_behavior(struct vm_area_struct *vma,
+>  	case MADV_KEEPONFORK:
+>  		new_flags &= ~VM_WIPEONFORK;
+>  		break;
+> +	case MADV_DOEXEC:
 
-  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+For me MADV_KEEPONEXEC sounds better as it's symmetric to MADV_KEEPONFORK.
 
-are available in the Git repository at:
+> +		/*
+> +		 * MADV_DOEXEC is only supported on private, non-executable,
+> +		 * non-stack anonymous memory and if the VM_EXEC_KEEP flag
+> +		 * is available.
+> +		 */
+> +		if (!VM_EXEC_KEEP || vma->vm_file || vma->vm_flags & (VM_EXEC|VM_SHARED|VM_STACK)) {
+> +			error = -EINVAL;
+> +			goto out;
+> +		}
+> +		new_flags |= (new_flags & ~VM_MAYEXEC) | VM_EXEC_KEEP;
+> +		break;
+> +	case MADV_DONTEXEC:
+> +		if (!VM_EXEC_KEEP) {
+> +			error = -EINVAL;
+> +			goto out;
+> +		}
+> +		if (new_flags & VM_EXEC_KEEP)
+> +			new_flags |= (new_flags & ~VM_EXEC_KEEP) | VM_MAYEXEC;
+> +		break;
+>  	case MADV_DONTDUMP:
+>  		new_flags |= VM_DONTDUMP;
+>  		break;
+> @@ -983,6 +1003,8 @@ static int madvise_inject_error(int behavior,
+>  	case MADV_SOFT_OFFLINE:
+>  	case MADV_HWPOISON:
+>  #endif
+> +	case MADV_DOEXEC:
+> +	case MADV_DONTEXEC:
+>  		return true;
+>  
+>  	default:
+> @@ -1037,6 +1059,9 @@ static int madvise_inject_error(int behavior,
+>   *  MADV_DONTDUMP - the application wants to prevent pages in the given range
+>   *		from being included in its core dump.
+>   *  MADV_DODUMP - cancel MADV_DONTDUMP: no longer exclude from core dump.
+> + *  MADV_DOEXEC - On exec, preserve and duplicate this area in the new process
+> + *		  if the new process allows it.
+> + *  MADV_DONTEXEC - Undo the effect of MADV_DOEXEC.
+>   *
+>   * return values:
+>   *  zero    - success
+> 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-fixes-5.8
-
-for you to fetch changes up to 214ba3584b2e2c57536fa8aed52521ac59c5b448:
-
-  io: Fix return type of _inb and _inl (2020-07-27 10:32:29 +0200)
-
-----------------------------------------------------------------
-asm-generic: bugfix for v5.8
-
-This is a single bugfix for a regression introduced through a
-typo in the v5.8 merge window, leading to incorrect data
-returned from inl() on some architectures.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Stafford Horne (1):
-      io: Fix return type of _inb and _inl
-
- include/asm-generic/io.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
