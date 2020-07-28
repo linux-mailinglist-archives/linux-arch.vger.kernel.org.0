@@ -2,122 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18072230824
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jul 2020 12:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BC0230828
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jul 2020 12:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728784AbgG1Kxb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jul 2020 06:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S1728800AbgG1KyV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jul 2020 06:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728588AbgG1Kxa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jul 2020 06:53:30 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEACC061794;
-        Tue, 28 Jul 2020 03:53:30 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id k1so11320293pjt.5;
-        Tue, 28 Jul 2020 03:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=agRMqGGlf6WEhzng1JHJTfSL3lgFlGnxzJ0Cav+bYwY=;
-        b=LOlyux900DwySJrPY4APfRX1lil/nI28/QfYF1AYlmE+78dPK5RYl6rQ+sD5+x5MA7
-         playMugBZGJPi4cNxmeP+cB0atQX1/GTXF03Pb/x2CQuKNPkiq1Waz1Ky+uypI3zPBSW
-         YxU5r/gfiPvvENminX12cG6746FlKyqgYVwOqF0W5IlOPxW4T/F2yNlR2vFRm8/RzuPL
-         P1B0c7lbUooXxICuyibePBquJuQisL8LvIEyaJISfFRcWpoYQESGRDwq8TevCKApJ6e/
-         fJla/uli1Og8SbOWaKOadogeThM5RYLbSZ5LSpD9XEG3FW2zmhtctXWhQqI+shiRcdy8
-         7X2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=agRMqGGlf6WEhzng1JHJTfSL3lgFlGnxzJ0Cav+bYwY=;
-        b=QvnoEQ9CBQ6TFqk9tu+Mn5DqHBZgYaJ2xsBqz1c29fb2Ikf/NOB4tRPzyOvQSbaoth
-         OtsA24NcQNQ2EHHIs7SBkVMHYEUDMFees7ZS1c8MHHiM2YIpo6MZpjWGKO1cDqIZPsSv
-         5yV0S22sf+bKifLB3H+9BhYSlNJy3bHd2vbocwFj3GXi0iq1Nozo0Q/81S9YfV1UJM+4
-         0Gy7qhs2b10oMB72uNcycM5R2dB5d7g9rsEkRGVXZaZZ0oak/LkoGxzee/MfQrXOrVTe
-         qa43A3dIAiB4S6sD0L0aBo5p0SG+eXtR6ge4BCjxmhr0m15CfPZ27UJdEO02Fc0AdhY3
-         hA4g==
-X-Gm-Message-State: AOAM530eqWN5q46iaJtHPMeL3Swm8sBkUODnHFxFcqGkS50Yn7jZ5SLp
-        Mom318Vmf580P4l27Jemtq7eQApH
-X-Google-Smtp-Source: ABdhPJzDyUiZdoRIhWil/eQB9vL3D+ZkGma3UEEEz2L1OSFLOod9x5RLtms6ZoVyeVTnVsDId/pLZw==
-X-Received: by 2002:a17:902:fe10:: with SMTP id g16mr955299plj.227.1595933609963;
-        Tue, 28 Jul 2020 03:53:29 -0700 (PDT)
-Received: from localhost (110-174-173-27.tpgi.com.au. [110.174.173.27])
-        by smtp.gmail.com with ESMTPSA id z11sm17894138pfk.46.2020.07.28.03.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 03:53:29 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 20:53:23 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [patch 01/15] mm/memory.c: avoid access flag update TLB flush for
- retried page fault
-To:     linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Hugh Dickins <hughd@google.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux-MM <linux-mm@kvack.org>, mm-commits@vger.kernel.org,
-        Will Deacon <will.deacon@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yu Xu <xuyu@linux.alibaba.com>, linuxppc-dev@lists.ozlabs.org
-References: <20200723211432.b31831a0df3bc2cbdae31b40@linux-foundation.org>
-        <20200724041508.QlTbrHnfh%akpm@linux-foundation.org>
-        <CAHk-=wguPA=pDskR-eMMjwR5LDEaMXrqbmDbrKr0u=wV1LE4rg@mail.gmail.com>
-        <CAHk-=wh4kmU5FdT=Yy7N9wA=se=ALbrquCrOkjCMhiQnOBLvDA@mail.gmail.com>
-        <0323de82-cfbd-8506-fa9c-a702703dd654@linux.alibaba.com>
-        <20200727110512.GB25400@gaia>
-        <39560818-463f-da3a-fc9e-3a4a0a082f61@linux.alibaba.com>
-        <eb1f5cb4-7c3d-df42-f4aa-804e12df45e2@linux.alibaba.com>
-        <CAHk-=wha6f0gF1SJg96R77h0oTuc_oO7-37wD=mYGy6TyJOwbQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wha6f0gF1SJg96R77h0oTuc_oO7-37wD=mYGy6TyJOwbQ@mail.gmail.com>
+        with ESMTP id S1728782AbgG1KyU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jul 2020 06:54:20 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FC4C061794;
+        Tue, 28 Jul 2020 03:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=W8EGYrbvZ2JVHYH7/4O92e1pVKCkXBCpOwNppiviJYk=; b=Wtfoox39Dk/76/LPPiZmQbB7Q8
+        ma4Cgj5I6CFvppLLACjfC+ulmhw/ikvx8xKuq4K4ZT/lcPpweCF9s1X/W6nHXPBaW2WzQ1U7i/+x8
+        MeSEecGjjKG7KPW0+GURGhA00crHAaWslebe2FvBrszZJx4y6U9xYk18WCHfspXFwhG/K9iFHT3N7
+        Nez/SMmoBFj36/bAJU87dpZNAOu+QZCZb/vhQFCM13w/RHlej0vCqmtWbLb6CLPvKaZnPT991gkAD
+        zpYh9IaUYHFcPBXQVRfh5qsmqfbSQWA5vBzvfjHcsHlcwRWAVGNZaAqLl6u5+s03PaK01+nhRDZAQ
+        8tu2wF+w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k0NFL-0003No-RN; Tue, 28 Jul 2020 10:54:12 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B0CC300238;
+        Tue, 28 Jul 2020 12:54:10 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 20B842BE3E477; Tue, 28 Jul 2020 12:54:10 +0200 (CEST)
+Date:   Tue, 28 Jul 2020 12:54:10 +0200
+From:   peterz@infradead.org
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 23/24] x86: use asm-generic/mmu_context.h for no-op
+ implementations
+Message-ID: <20200728105410.GU119549@hirez.programming.kicks-ass.net>
+References: <20200728033405.78469-1-npiggin@gmail.com>
+ <20200728033405.78469-24-npiggin@gmail.com>
 MIME-Version: 1.0
-Message-Id: <1595932767.wga6c4yy6a.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200728033405.78469-24-npiggin@gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Linus Torvalds's message of July 28, 2020 4:37 am:
-> [ Adding linux-arch, just to make other architectures aware of this issue=
- too.
->=20
->   We have a "flush_tlb_fix_spurious_fault()" thing to take care of the
-> "TLB may contain stale entries, we can't take the same fault over and
-> over again" situation.
->=20
->   On x86, it's a no-op, because x86 doesn't do that. x86 will re-walk
-> the page tables - or possibly just always invalidate the faulting TLB
-> entry - before taking a fault, so there can be no long-term stale
-> TLB's.
+On Tue, Jul 28, 2020 at 01:34:04PM +1000, Nicholas Piggin wrote:
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 
-[snip]
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
->   It looks like powerpc people at least thought about this, and only
-> do it if there is a coprocessor. Which sounds a bit confused, but I
-> don't know the rules.
-
-I'm not sure about ppc32 and 64e, I'm almost certain they should do a=20
-local flush if anyting, and someone with a good understanding of the=20
-ISAs and CPUs might be able to nop it entirely. I agree global can't=20
-ever really make sense (except as a default because we have no generic=20
-local flush).
-
-powerpc/64s reloads translations after taking a fault, so it's fine with=20
-a nop here.
-
-The quirk is a problem with coprocessor where it's supposed to=20
-invalidate the translation after a fault but it doesn't, so we can get a=20
-read-only TLB stuck after something else does a RO->RW upgrade on the=20
-TLB. Something like that IIRC.  Coprocessors have their own MMU which=20
-lives in the nest not the core, so you need a global TLB flush to
-invalidate that thing.
-
-Thanks,
-Nick
+> ---
+>  arch/x86/include/asm/mmu_context.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+> index 47562147e70b..255750548433 100644
+> --- a/arch/x86/include/asm/mmu_context.h
+> +++ b/arch/x86/include/asm/mmu_context.h
+> @@ -92,12 +92,14 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
+>  }
+>  #endif
+>  
+> +#define enter_lazy_tlb enter_lazy_tlb
+>  extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
+>  
+>  /*
+>   * Init a new mm.  Used on mm copies, like at fork()
+>   * and on mm's that are brand-new, like at execve().
+>   */
+> +#define init_new_context init_new_context
+>  static inline int init_new_context(struct task_struct *tsk,
+>  				   struct mm_struct *mm)
+>  {
+> @@ -117,6 +119,8 @@ static inline int init_new_context(struct task_struct *tsk,
+>  	init_new_context_ldt(mm);
+>  	return 0;
+>  }
+> +
+> +#define destroy_context destroy_context
+>  static inline void destroy_context(struct mm_struct *mm)
+>  {
+>  	destroy_context_ldt(mm);
+> @@ -215,4 +219,6 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
+>  
+>  unsigned long __get_current_cr3_fast(void);
+>  
+> +#include <asm-generic/mmu_context.h>
+> +
+>  #endif /* _ASM_X86_MMU_CONTEXT_H */
+> -- 
+> 2.23.0
+> 
