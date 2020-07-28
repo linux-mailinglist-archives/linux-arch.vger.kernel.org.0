@@ -2,87 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD292309F2
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jul 2020 14:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C6A230A7C
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jul 2020 14:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728751AbgG1M02 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jul 2020 08:26:28 -0400
-Received: from relay.sw.ru ([185.231.240.75]:51548 "EHLO relay3.sw.ru"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728300AbgG1M02 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Jul 2020 08:26:28 -0400
-X-Greylist: delayed 3052 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Jul 2020 08:26:26 EDT
-Received: from [192.168.15.38]
-        by relay3.sw.ru with esmtp (Exim 4.93)
-        (envelope-from <ktkhai@virtuozzo.com>)
-        id 1k0NsJ-0003Qb-E5; Tue, 28 Jul 2020 14:34:27 +0300
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-To:     Anthony Yznaga <anthony.yznaga@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     mhocko@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, arnd@arndb.de,
-        ebiederm@xmission.com, keescook@chromium.org, gerg@linux-m68k.org,
-        christian.brauner@ubuntu.com, peterz@infradead.org,
-        esyr@redhat.com, jgg@ziepe.ca, christian@kellner.me,
-        areber@redhat.com, cyphar@cyphar.com, steven.sistare@oracle.com
-References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-From:   Kirill Tkhai <ktkhai@virtuozzo.com>
-Message-ID: <46891e3b-ca08-197d-935f-fa0a52a60051@virtuozzo.com>
-Date:   Tue, 28 Jul 2020 14:34:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729601AbgG1Mmh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jul 2020 08:42:37 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:36081 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729379AbgG1Mmh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jul 2020 08:42:37 -0400
+Received: from mail-qk1-f180.google.com ([209.85.222.180]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1N9MlI-1ko7Me0HB6-015Jcv; Tue, 28 Jul 2020 14:42:36 +0200
+Received: by mail-qk1-f180.google.com with SMTP id d14so18383589qke.13;
+        Tue, 28 Jul 2020 05:42:35 -0700 (PDT)
+X-Gm-Message-State: AOAM532xR0yaFjd4bosS3E+dYU04hNP8IkCcgmVok0kYRbiwIHINxnnf
+        xmdE6V7iPPKM9YjSwocgy3tiYQMTxBIC+r5YH+M=
+X-Google-Smtp-Source: ABdhPJw3K3lvAgYAGemxdtvcTTa313hHGShCGNtpEv9UT2n69gfyTUSK1mtIz0h/zUJQYI9RNcSKyp+FbIUCGKG3RCM=
+X-Received: by 2002:a37:b484:: with SMTP id d126mr27679043qkf.394.1595940154887;
+ Tue, 28 Jul 2020 05:42:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 28 Jul 2020 14:42:19 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Qy0OOcXOO4twf3OKZ66ESTNT60nOR9i-ixcPubeUuVA@mail.gmail.com>
+Message-ID: <CAK8P3a2Qy0OOcXOO4twf3OKZ66ESTNT60nOR9i-ixcPubeUuVA@mail.gmail.com>
+Subject: [GIT PULL] asm-generic: bugfix for v5.8
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        John Garry <john.garry@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:x3nttk669UjzwEn2hDNj3i4LS8B8RF+s+pHwbjCJLlNvssgNla+
+ oSVCg+hPM33wPIM/ff53c+YmNcMp7v21JnHRNoiPiujLS0/NrY7eJ8NJ9zTDlw/uKbc4zlH
+ jBnFsgBJ4/Mab5HZYiDBzgFxDqOJhQfMIWRz7RyQDAkgLN32nIghrtsax1NaxrqTt34Lucm
+ I+sWzcDczCtbcB3k4Xr/w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:o2PRq9Nw7vY=:dZI4iNpszFeu1srXpxZJiW
+ PUEM+SFWHJovNF+lu5oFfQ7FtljQACstGq4+9wAxbGE18MupWtS83lFOPZg0WQm5MgKsaGzQb
+ yuX37eM0FaL37cuvX70bTqmtASp1EwqYsWBu8CubKn/+IW3jVPzTMPs2n7UBqnpJSR/TfX0eM
+ V3HEyyHW//zSvtItuemGwc6aGQLBgIAcmN2ir0QHcePREm0v4ta8a2L7fsjL+YXDsg6FEb8lb
+ sq9vU7uqAcAYIzy8SSVGL5W8MiXFRcH0VwM7o9qQ3f5dqCMVA+ZVuewmyG6u0fTPjGikATAYl
+ ojc+f3LZiQWwxf3KbHS1djdfrhWBRNr+AdDBhj2Mh4w6JCq81GX4XBoR2lTmqyPmvl6r/WYSW
+ 0WLHIyfWdUiWClBNIBDQ7s6pPStd/tY5tOXYzgRrnEhx2trvZQdfFvO5v1gpKxvG62gzndPVz
+ QxcLXvQamL36Sw40bHtzQGgdIliDjn6Kg+JY43TOi0dZqOxJ1r05XmD3w4+iGEb2tLBpar4SM
+ znaVqOGpk4t8KRGsiCZu+7t8ZGbxF9eQd0iu7Br0Nircdm2Tj5DGr3kbpqT1J4vnGHjtDr5wO
+ yeOMRtKQ1qnq2G8sCtidXqWwHDmdU3yglpK7C5Prr5DjidUQiRvOK7UlReh0FXZJ/z9MqNS4s
+ BEMGob92yrI3i2SylLWclvQhktPmvcgftnVjFRrBleZpeXRA/RIgOvijsRG3aLdhCGvaBnadX
+ hByHUvjzPqZq+iNkHKAxKMTvOutAtJx7QApHXkYmFvQhq5EFBFGGYtgE1WS5XugZsljIP48iv
+ LJB4ROIsXQCp8zuKvDemXqis8col09drndUl/nSg5LKQgGj6Atq7FS3RRv1u1gi0YpxLrAS5+
+ 5NVvQi0oHnN+qFFwRbJBcDqIFTQHgCAEzrjmAegX7KoyEg2H31eGwB5rP0kTh53gSA0FKGvZk
+ OX/Dt4kh7DyGOOhXTt4d2g0pWiCjD+6GgnhKOc1J9N2wo99Z4DuQY
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 27.07.2020 20:11, Anthony Yznaga wrote:
-> This patchset adds support for preserving an anonymous memory range across
-> exec(3) using a new madvise MADV_DOEXEC argument.  The primary benefit for
-> sharing memory in this manner, as opposed to re-attaching to a named shared
-> memory segment, is to ensure it is mapped at the same virtual address in
-> the new process as it was in the old one.  An intended use for this is to
-> preserve guest memory for guests using vfio while qemu exec's an updated
-> version of itself.  By ensuring the memory is preserved at a fixed address,
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
 
-So, the goal is an update of QEMU binary without a stopping of virtual machine?
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 
-> vfio mappings and their associated kernel data structures can remain valid.
-> In addition, for the qemu use case, qemu instances that back guest RAM with
-> anonymous memory can be updated.
-> 
-> Patches 1 and 2 ensure that loading of ELF load segments does not silently
-> clobber existing VMAS, and remove assumptions that the stack is the only
-> VMA in the mm when the stack is set up.  Patch 1 re-introduces the use of
-> MAP_FIXED_NOREPLACE to load ELF binaries that addresses the previous issues
-> and could be considered on its own.
-> 
-> Patches 3, 4, and 5 introduce the feature and an opt-in method for its use
-> using an ELF note.
-> 
-> Anthony Yznaga (5):
->   elf: reintroduce using MAP_FIXED_NOREPLACE for elf executable mappings
->   mm: do not assume only the stack vma exists in setup_arg_pages()
->   mm: introduce VM_EXEC_KEEP
->   exec, elf: require opt-in for accepting preserved mem
->   mm: introduce MADV_DOEXEC
-> 
->  arch/x86/Kconfig                       |   1 +
->  fs/binfmt_elf.c                        | 196 +++++++++++++++++++++++++--------
->  fs/exec.c                              |  33 +++++-
->  include/linux/binfmts.h                |   7 +-
->  include/linux/mm.h                     |   5 +
->  include/uapi/asm-generic/mman-common.h |   3 +
->  kernel/fork.c                          |   2 +-
->  mm/madvise.c                           |  25 +++++
->  mm/mmap.c                              |  47 ++++++++
->  9 files changed, 266 insertions(+), 53 deletions(-)
-> 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-fixes-5.8
+
+for you to fetch changes up to 214ba3584b2e2c57536fa8aed52521ac59c5b448:
+
+  io: Fix return type of _inb and _inl (2020-07-27 10:32:29 +0200)
+
+----------------------------------------------------------------
+asm-generic: bugfix for v5.8
+
+This is a single bugfix for a regression introduced through a
+typo in the v5.8 merge window, leading to incorrect data
+returned from inl() on some architectures.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Stafford Horne (1):
+      io: Fix return type of _inb and _inl
+
+ include/asm-generic/io.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
