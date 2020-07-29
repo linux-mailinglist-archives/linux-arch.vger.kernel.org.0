@@ -2,75 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 788DD231E63
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Jul 2020 14:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AD7231F6F
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Jul 2020 15:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgG2MSY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Jul 2020 08:18:24 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:41764 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbgG2MSY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Jul 2020 08:18:24 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1596025102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ly5lKlt5+T8rjsxUijX+AknXGpRtZhyO/+W9xI8yMEs=;
-        b=NrlJIt3zQ4aIa5wj65OpStrRFgZ5MSXz6spZIAKfO1kOjA9cXNBgP2bQW54pLpkCrCwvIb
-        UggMJU1I06R0lCphDduHZWs7fjdN9tW6mx69Y3wFRsK9QMfQJ5gOspgJPTNpuN+eMaxCyB
-        N6wE4NyBf8jk80309EsKGumgG6nmIXYgOL4bI+naj2pHY4Kiu3OHDFz/ZCjbSAdSHWz3Lh
-        IfTXldmzK6EFUKRniALL0q8K3pdWszisJfzdQlgjC7Uka/Uq6ZHoZOEUVbI4eZWIW4wbyZ
-        5OenmVSN3Kn48CnT506PbQyZwEKjBwHNnWnpFWdAwGJUgbbI0zyPj3mnk1EEZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1596025102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ly5lKlt5+T8rjsxUijX+AknXGpRtZhyO/+W9xI8yMEs=;
-        b=IWZv7P3FRyXOaZUh/YYV0zCmYLJzVjlqQZR8JHuVqqKiihPN/iUlTmP03IWU7z3fPY95NV
-        LZAG0I0FiRvbiKAA==
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        id S1726449AbgG2Nj7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Jul 2020 09:39:59 -0400
+Received: from foss.arm.com ([217.140.110.172]:51864 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726365AbgG2Nj7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 29 Jul 2020 09:39:59 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 694621FB;
+        Wed, 29 Jul 2020 06:39:58 -0700 (PDT)
+Received: from [192.168.1.84] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59E5C3F66E;
+        Wed, 29 Jul 2020 06:39:56 -0700 (PDT)
+Subject: Re: [patch V5 00/15] entry, x86, kvm: Generic entry/exit
+ functionality for host and guest
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, linux-arch@vger.kernel.org,
         Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Mark Rutland <mark.rutland@arm.com>,
         Kees Cook <keescook@chromium.org>,
         Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: Re: [patch V4 04/15] entry: Provide generic interrupt entry/exit code
-In-Reply-To: <CALCETrUBQa=L_Chd=RAPDEihvUWC_9KoHG00zYsGOwiYg87naQ@mail.gmail.com>
-References: <20200721105706.030914876@linutronix.de> <20200721110808.671110583@linutronix.de> <CALCETrUBQa=L_Chd=RAPDEihvUWC_9KoHG00zYsGOwiYg87naQ@mail.gmail.com>
-Date:   Wed, 29 Jul 2020 14:18:22 +0200
-Message-ID: <87sgdaa50x.fsf@nanos.tec.linutronix.de>
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <20200722215954.464281930@linutronix.de>
+ <878sf8tz51.fsf@nanos.tec.linutronix.de>
+From:   Steven Price <steven.price@arm.com>
+Message-ID: <e0edb228-b7e1-09ae-c41a-b5f4cbf37347@arm.com>
+Date:   Wed, 29 Jul 2020 14:39:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <878sf8tz51.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Andy Lutomirski <luto@kernel.org> writes:
-> On Tue, Jul 21, 2020 at 4:08 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> From: Thomas Gleixner <tglx@linutronix.de>
->>
->> Like the syscall entry/exit code interrupt/exception entry after the real
->> low level ASM bits should not be different accross architectures.
->>
->> Provide a generic version based on the x86 code.
->
-> I don't like the name.  Sure, idtentry is ugly and x86-specific, but
-> irq gives the wrong impression.  This is an entry path suitable for
-> any entry that is guaranteed not to hit during entry/exit handling.
-> Syscalls, page faults, etc are not "irqs".
+On 24/07/2020 21:51, Thomas Gleixner wrote:
+> Thomas Gleixner <tglx@linutronix.de> writes:
+>> This is the 5th version of generic entry/exit functionality for host and
+>> guest.
+> 
+> I've merged the pile in two steps. Patch 1-5, i.e. the generic code is
+> here:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/entry
+> 
+> and merged this branch and patch 6-15 into
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/entry
+> 
+> core/entry is immutable and any updates, changes go on top. It's meant
+> as a base for other architecture developers who want to fiddle with that
+> without having to get the x86 mess as well.
 
-Yeah, it's exceptions and interrupts, but I did not come up with a
-better name so far.
+Hi Thomas,
+
+Just FYI: I'm going to take a look at arm64 support for this. I know 
+Mark previously posted[1] a series moving much of the code to C, so 
+hopefully I can build on that and make use of the generic code.
 
 Thanks,
 
-        tglx
+Steve
+
+[1] https://lore.kernel.org/r/20200108185634.1163-1-mark.rutland@arm.com
