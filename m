@@ -2,94 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAB0233615
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Jul 2020 17:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51873233630
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Jul 2020 18:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729833AbgG3Pyw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Jul 2020 11:54:52 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:55682 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727072AbgG3Pyw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jul 2020 11:54:52 -0400
-Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1k1AtK-0000Fx-Sz; Thu, 30 Jul 2020 15:54:46 +0000
-Date:   Thu, 30 Jul 2020 17:54:45 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Anthony Yznaga <anthony.yznaga@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        id S1728452AbgG3QAv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Jul 2020 12:00:51 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:41320 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbgG3QAv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jul 2020 12:00:51 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06UFvHn4041953;
+        Thu, 30 Jul 2020 16:00:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=Qc8yTS3/0uqmBgDDziPyn/x72XbIBs2YRTJ1co+pfuQ=;
+ b=vTt+f3pkLBuNfIO582kSbvGeBWJpW/dSw+mleXLSPBeQQGFFDXCbzReXezY/2Ph3JTWt
+ Gw1cTpot8k1gTQAmj/49tSfNtJcOVg3fRaeVrMLE9nCaZd9MXM2HBSzSKU9zFFyF+vAx
+ kmFZtp10+5NNfiE2ETSILcnrXZ1KSakXeKTdS1Tp3+soLiiu1h0l2bEM0FCXZiqI5INS
+ rDA9vpad91EK8H5wn9FtBaMRfJ2jP9Q0tNQYeHKLGMEWk5KHPXUgELn8RzweKuqjTW7r
+ 6n6u6gjSZ2AKn+/E85SxbN3fCBzm1TnWcDIBUUHbOUN9CxNcGF2n/PUOsWkdupZXXhHa cg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 32hu1jmk99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Jul 2020 16:00:00 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06UFrVRG009502;
+        Thu, 30 Jul 2020 15:59:59 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 32hu5wxtw2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jul 2020 15:59:59 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06UFxlZu022011;
+        Thu, 30 Jul 2020 15:59:48 GMT
+Received: from [10.39.200.60] (/10.39.200.60)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 30 Jul 2020 08:59:47 -0700
+Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
+To:     Matthew Wilcox <willy@infradead.org>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
         hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
         arnd@arndb.de, ebiederm@xmission.com, keescook@chromium.org,
-        gerg@linux-m68k.org, ktkhai@virtuozzo.com, peterz@infradead.org,
+        gerg@linux-m68k.org, ktkhai@virtuozzo.com,
+        christian.brauner@ubuntu.com, peterz@infradead.org,
         esyr@redhat.com, jgg@ziepe.ca, christian@kellner.me,
-        areber@redhat.com, cyphar@cyphar.com, steven.sistare@oracle.com
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-Message-ID: <20200730155445.2xiyzbglibqlyioo@wittgenstein>
+        areber@redhat.com, cyphar@cyphar.com
 References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
  <20200730152250.GG23808@casper.infradead.org>
- <20200730152705.ol42jppnl4xfhl32@wittgenstein>
- <20200730153450.GH23808@casper.infradead.org>
+From:   Steven Sistare <steven.sistare@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
+Date:   Thu, 30 Jul 2020 11:59:42 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200730152250.GG23808@casper.infradead.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200730153450.GH23808@casper.infradead.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9698 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007300112
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9698 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 clxscore=1011
+ malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007300112
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 04:34:50PM +0100, Matthew Wilcox wrote:
-> On Thu, Jul 30, 2020 at 05:27:05PM +0200, Christian Brauner wrote:
-> > On Thu, Jul 30, 2020 at 04:22:50PM +0100, Matthew Wilcox wrote:
-> > > On Mon, Jul 27, 2020 at 10:11:22AM -0700, Anthony Yznaga wrote:
-> > > > This patchset adds support for preserving an anonymous memory range across
-> > > > exec(3) using a new madvise MADV_DOEXEC argument.  The primary benefit for
-> > > > sharing memory in this manner, as opposed to re-attaching to a named shared
-> > > > memory segment, is to ensure it is mapped at the same virtual address in
-> > > > the new process as it was in the old one.  An intended use for this is to
-> > > > preserve guest memory for guests using vfio while qemu exec's an updated
-> > > > version of itself.  By ensuring the memory is preserved at a fixed address,
-> > > > vfio mappings and their associated kernel data structures can remain valid.
-> > > > In addition, for the qemu use case, qemu instances that back guest RAM with
-> > > > anonymous memory can be updated.
-> > > 
-> > > I just realised that something else I'm working on might be a suitable
-> > > alternative to this.  Apologies for not realising it sooner.
-> > > 
-> > > http://www.wil.cx/~willy/linux/sileby.html
-> > 
-> > Just skimming: make it O_CLOEXEC by default. ;)
+On 7/30/2020 11:22 AM, Matthew Wilcox wrote:
+> On Mon, Jul 27, 2020 at 10:11:22AM -0700, Anthony Yznaga wrote:
+>> This patchset adds support for preserving an anonymous memory range across
+>> exec(3) using a new madvise MADV_DOEXEC argument.  The primary benefit for
+>> sharing memory in this manner, as opposed to re-attaching to a named shared
+>> memory segment, is to ensure it is mapped at the same virtual address in
+>> the new process as it was in the old one.  An intended use for this is to
+>> preserve guest memory for guests using vfio while qemu exec's an updated
+>> version of itself.  By ensuring the memory is preserved at a fixed address,
+>> vfio mappings and their associated kernel data structures can remain valid.
+>> In addition, for the qemu use case, qemu instances that back guest RAM with
+>> anonymous memory can be updated.
 > 
-> I appreciate the suggestion, and it makes sense for many 'return an fd'
-> interfaces, but the point of mshare() is to, well, share.  So sharing
-> the fd with a child is a common usecase, unlike say sharing a timerfd.
+> I just realised that something else I'm working on might be a suitable
+> alternative to this.  Apologies for not realising it sooner.
+> 
+> http://www.wil.cx/~willy/linux/sileby.html
+> 
+> To use this, you'd mshare() the anonymous memory range, essentially
+> detaching the VMA from the current process's mm_struct and reparenting
+> it to this new mm_struct, which has an fd referencing it.
+> 
+> Then you call exec(), and the exec'ed task gets to call mmap() on that
+> new fd to attach the memory range to its own address space.
+> 
+> Presto!
 
-Fair point, from reading I thought the main reason was share after
-fork() but having an fd over exec() may be a good use-case too.
-(Fwiw, this very much looks like what the memfd_create() api should have
-looked like, i.e. mshare() could've possibly encompassed both.)
+To be suitable for the qemu use case, we need a guarantee that the same VA range
+is available in the new process, with nothing else mapped there.  From your spec,
+it sounds like the new process could do a series of unrelated mmap's which could
+overlap the desired va range before the silby mmap(fd) is performed??
 
-> The only other reason to use mshare() is to pass the fd over a unix
-> socket to a non-child, and I submit that is far less common than wanting
-> to share with a child.
+Also, we need to support updating legacy processes that already created anon segments.
+We inject code that calls MADV_DOEXEC for such segments.
 
-Well, we have use-cases for that too. E.g. where we need to attach to an
-existing pid namespace which requires a first fork() of an intermediate
-process so that the caller doesn't change the pid_for_children
-namespace. Then we setns() to the target pid namespace in the
-intermediate process which changes the pid_ns_children namespace such
-that the next process will be a proper member of the target pid
-namespace. Finally, we fork() the target process that is now a full
-member of the target pid namespace. We also set CLONE_PARENT so
-grandfather process == father process for the second process and then
-have the intermediate process exit. Some fds we only ever open or create
-after the intermediate process exited and some fds we can only open or
-create after the intermediate process has been created and then send the
-fds via scm (since we can't share the fdtable) to the final process.
-
-Christian
+- Steve
