@@ -2,134 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54D423385F
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Jul 2020 20:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3D02339E8
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Jul 2020 22:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbgG3S2H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Jul 2020 14:28:07 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:36808 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726343AbgG3S2H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jul 2020 14:28:07 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06UIGvNI092335;
-        Thu, 30 Jul 2020 18:27:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=Mrk5eWbP8fSGwrV33j3TTul01WXb6p2DuUr4h0aNQjE=;
- b=EVFXOxKNsyjLE7Mz9OC5iCUHTCcKYcSYOvVSBF6GvCRP1fPAUb1vsi8UbE5YhDKmTK/h
- u4q8dX3diP8UavnbfzQ2elsGw/j5XuLY2t1czN0ce8N9sx/TBhNGiCMuVFKYqCxkZCvA
- On4v9NhMLT4fRyGOjSByg3SQSp2UVC9x7iONmyLjntPdtdGFFyHZFVA2Q9MQ+I/jGdFx
- rfqOKHCti5lUSjYhQHLkrI/zoyeou+pvBdayRhDRPE+r0OMsLmorCvDgTF8iDvMOZ6Wl
- KWUE641IG2TKXQZyG88aaRJ0fUoBIVhV1oTDSIj9fYF6THvVIA3gXFDS4Gvl7vtVjOVO zw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 32hu1jna4c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 30 Jul 2020 18:27:33 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06UIIoKJ054143;
-        Thu, 30 Jul 2020 18:27:32 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 32hu5xrwua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jul 2020 18:27:32 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06UIRP4c002811;
-        Thu, 30 Jul 2020 18:27:26 GMT
-Received: from [10.39.200.60] (/10.39.200.60)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 30 Jul 2020 11:27:25 -0700
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Anthony Yznaga <anthony.yznaga@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        arnd@arndb.de, ebiederm@xmission.com, keescook@chromium.org,
-        gerg@linux-m68k.org, ktkhai@virtuozzo.com,
-        christian.brauner@ubuntu.com, peterz@infradead.org,
-        esyr@redhat.com, jgg@ziepe.ca, christian@kellner.me,
-        areber@redhat.com, cyphar@cyphar.com
-References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
- <20200730152250.GG23808@casper.infradead.org>
- <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
- <20200730171251.GI23808@casper.infradead.org>
- <63a7404c-e4f6-a82e-257b-217585b0277f@oracle.com>
- <20200730174956.GK23808@casper.infradead.org>
-From:   Steven Sistare <steven.sistare@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <ab7a25bf-3321-77c8-9bc3-28a223a14032@oracle.com>
-Date:   Thu, 30 Jul 2020 14:27:21 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728653AbgG3Uo1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Jul 2020 16:44:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39082 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728586AbgG3Uo1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 30 Jul 2020 16:44:27 -0400
+Received: from kernel.org (unknown [87.70.91.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 715E220838;
+        Thu, 30 Jul 2020 20:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596141866;
+        bh=sZKYPMSX12eBmbaRqySKTHS1smjkmdh3zWo010nIk8M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BmsOo3YUFCDw4gkyz7ZfQOn2kMn5QK/7KTwPtnQBqKiwbYcNBoz+qwKW/hGKQwn6F
+         B9NMUdyu3EPJylOAMbuE0DD99sT3k6OWuEoKFMV4rR/rqwql2n/fAPL1B+he1E2TFF
+         0UoU05MxTEQpp1qzhn8HCcZC6Zx2ZqD62fqBrpYw=
+Date:   Thu, 30 Jul 2020 23:44:09 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 3/7] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20200730204409.GB534153@kernel.org>
+References: <20200727162935.31714-1-rppt@kernel.org>
+ <20200727162935.31714-4-rppt@kernel.org>
+ <20200730162209.GB3128@gaia>
 MIME-Version: 1.0
-In-Reply-To: <20200730174956.GK23808@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9698 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007300130
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9698 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 clxscore=1015
- malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007300130
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200730162209.GB3128@gaia>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/30/2020 1:49 PM, Matthew Wilcox wrote:
-> On Thu, Jul 30, 2020 at 01:35:51PM -0400, Steven Sistare wrote:
->> mshare + VA reservation is another possible solution.
->>
->> Or MADV_DOEXEC alone, which is ready now.  I hope we can get back to reviewing that.
+On Thu, Jul 30, 2020 at 05:22:10PM +0100, Catalin Marinas wrote:
+> Hi Mike,
 > 
-> We are.  This is the part of the review process where we explore other
-> solutions to the problem.
+> On Mon, Jul 27, 2020 at 07:29:31PM +0300, Mike Rapoport wrote:
+> > For instance, the following example will create an uncached mapping (error
+> > handling is omitted):
+> > 
+> > 	fd = memfd_secret(SECRETMEM_UNCACHED);
+> > 	ftruncate(fd, MAP_SIZE);
+> > 	ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> [...]
+> > +static struct page *secretmem_alloc_page(gfp_t gfp)
+> > +{
+> > +	/*
+> > +	 * FIXME: use a cache of large pages to reduce the direct map
+> > +	 * fragmentation
+> > +	 */
+> > +	return alloc_page(gfp);
+> > +}
+> > +
+> > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+> > +{
+> > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> > +	struct inode *inode = file_inode(vmf->vma->vm_file);
+> > +	pgoff_t offset = vmf->pgoff;
+> > +	unsigned long addr;
+> > +	struct page *page;
+> > +	int ret = 0;
+> > +
+> > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+> > +		return vmf_error(-EINVAL);
+> > +
+> > +	page = find_get_entry(mapping, offset);
+> > +	if (!page) {
+> > +		page = secretmem_alloc_page(vmf->gfp_mask);
+> > +		if (!page)
+> > +			return vmf_error(-ENOMEM);
+> > +
+> > +		ret = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
+> > +		if (unlikely(ret))
+> > +			goto err_put_page;
+> > +
+> > +		ret = set_direct_map_invalid_noflush(page);
+> > +		if (ret)
+> > +			goto err_del_page_cache;
+> > +
+> > +		addr = (unsigned long)page_address(page);
+> > +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> > +
+> > +		__SetPageUptodate(page);
+> > +
+> > +		ret = VM_FAULT_LOCKED;
+> > +	}
+> > +
+> > +	vmf->page = page;
+> > +	return ret;
+> > +
+> > +err_del_page_cache:
+> > +	delete_from_page_cache(page);
+> > +err_put_page:
+> > +	put_page(page);
+> > +	return vmf_error(ret);
+> > +}
+> > +
+> > +static const struct vm_operations_struct secretmem_vm_ops = {
+> > +	.fault = secretmem_fault,
+> > +};
+> > +
+> > +static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
+> > +{
+> > +	struct secretmem_ctx *ctx = file->private_data;
+> > +	unsigned long mode = ctx->mode;
+> > +	unsigned long len = vma->vm_end - vma->vm_start;
+> > +
+> > +	if (!mode)
+> > +		return -EINVAL;
+> > +
+> > +	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
+> > +		return -EINVAL;
+> > +
+> > +	if (mlock_future_check(vma->vm_mm, vma->vm_flags | VM_LOCKED, len))
+> > +		return -EAGAIN;
+> > +
+> > +	switch (mode) {
+> > +	case SECRETMEM_UNCACHED:
+> > +		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+> > +		fallthrough;
+> > +	case SECRETMEM_EXCLUSIVE:
+> > +		vma->vm_ops = &secretmem_vm_ops;
+> > +		break;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	vma->vm_flags |= VM_LOCKED;
+> > +
+> > +	return 0;
+> > +}
 > 
->>>> Also, we need to support updating legacy processes that already created anon segments.
->>>> We inject code that calls MADV_DOEXEC for such segments.
->>>
->>> Yes, I was assuming you'd inject code that called mshare().
->>
->> OK, mshare works on existing memory and builds a new vma.
-> 
-> Actually, reparents an existing VMA, and reuses the existing page tables.
-> 
->>> Actually, since you're injecting code, why do you need the kernel to
->>> be involved?  You can mmap the new executable and any libraries it depends
->>> upon, set up a new stack and jump to the main() entry point, all without
->>> calling exec().  I appreciate it'd be a fair amount of code, but it'd all
->>> be in userspace and you can probably steal / reuse code from ld.so (I'm
->>> not familiar with the details of how setting up an executable is done).
->>
->> Duplicating all the work that the kernel and loader do to exec a process would
->> be error prone, require ongoing maintenance, and be redundant.  Better to define 
->> a small kernel extension and leave exec to the kernel.
-> 
-> Either this is a one-off kind of thing, in which case it doesn't need
-> ongoing maintenance, or it's something with broad applicability, in
-> which case it can live as its own userspace project.  It could even
-> start off life as part of qemu and then fork into its own project.
+> I think the uncached mapping is not the right thing for arm/arm64. First
+> of all, pgprot_noncached() gives us Strongly Ordered (Device memory)
+> semantics together with not allowing unaligned accesses. I suspect the
+> semantics are different on x86.
+ 
+Hmm, on x86 it's also Strongly Ordered, but I didn't find any alignment
+restrictions. Is there a mode for arm64 that can provide similar
+semantics?
 
-exec will be enhanced over time in the kernel.  A separate user space implementation
-would need to track that.
+Would it make sence to use something like
 
-Reimplementing exec in userland would be a big gross mess.  Not a good solution when
-we have simple and concise ways of solving the problem.
+#define pgprot_uncached(prot) \
+	__pgprot_modify(prot, PTE_ATTRINDX_MASK, \
+			PTE_ATTRINDX(MT_NORMAL_NC) | PTE_PXN)
 
-> The idea of tagging an ELF executable to say "I can cope with having
-> chunks of my address space provided to me by my executor" is ... odd.
+or is it too weak?
 
-I don't disagree.  But it is useful.  We already pass a block of data containing
-environment variables and arguments from one process to the next.  Preserving 
-additional segments is not a big leap from there.
+> The second, more serious problem, is that I can't find any place where
+> the caches are flushed for the page mapped on fault. When a page is
+> allocated, assuming GFP_ZERO, only the caches are guaranteed to be
+> zeroed. Exposing this subsequently to user space as uncached would allow
+> the user to read stale data prior to zeroing. The arm64
+> set_direct_map_default_noflush() doesn't do any cache maintenance.
 
-- Steve
+Well, the idea of uncached mappings came from Elena [1] to prevent
+possibility of side channels that leak user space memory. So I think
+even without cache flushing after the allocation, user space is
+protected as all its memory accesses bypass cache so even after the page
+is freed there won't be stale data in the cache.
+
+I think that it makes sense to limit SECRETMEM_UNCACHED only for
+architectures that define an appropriate protection, e.g.
+pgprot_uncahced(). For x86 it can be aliased to pgprot_noncached() and
+other architecures can define their versions.
+
+[1] https://lore.kernel.org/lkml/2236FBA76BA1254E88B949DDB74E612BA4EEC0CE@IRSMSX102.ger.corp.intel.com/
+
+-- 
+Sincerely yours,
+Mike.
