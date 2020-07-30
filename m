@@ -2,207 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3D02339E8
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Jul 2020 22:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4085233A6C
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Jul 2020 23:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728653AbgG3Uo1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Jul 2020 16:44:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39082 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728586AbgG3Uo1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 30 Jul 2020 16:44:27 -0400
-Received: from kernel.org (unknown [87.70.91.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 715E220838;
-        Thu, 30 Jul 2020 20:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596141866;
-        bh=sZKYPMSX12eBmbaRqySKTHS1smjkmdh3zWo010nIk8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BmsOo3YUFCDw4gkyz7ZfQOn2kMn5QK/7KTwPtnQBqKiwbYcNBoz+qwKW/hGKQwn6F
-         B9NMUdyu3EPJylOAMbuE0DD99sT3k6OWuEoKFMV4rR/rqwql2n/fAPL1B+he1E2TFF
-         0UoU05MxTEQpp1qzhn8HCcZC6Zx2ZqD62fqBrpYw=
-Date:   Thu, 30 Jul 2020 23:44:09 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        id S1730594AbgG3VUm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Jul 2020 17:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730552AbgG3VUl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jul 2020 17:20:41 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1EAC061575
+        for <linux-arch@vger.kernel.org>; Thu, 30 Jul 2020 14:20:41 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id c10so2794860pjn.1
+        for <linux-arch@vger.kernel.org>; Thu, 30 Jul 2020 14:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T9TN+IiG05axbq9DvASXkbUWMclW/1L5ezZkeAERv5E=;
+        b=UM7q/hh3+ycXamy6DmVDsqTeyGwToom5lGdDqRMu9nAmBIv9chtjGOtptQGetwvOLM
+         dsbPN8u5TFZ4QxDmLlK2Qc8xKyIcI/Q4NYjbUuaSrkkEI6pidokfHVungFblJBmjzoz6
+         m8k0/Kw7NxtrkfSYNWkXwhoqyaNZZ6d/gv+ZRsx9H+ofRvhogUmbxCvbEb9ELRr/ntEr
+         seYQhSQhj4IkcOY/BiB6K++rUFLn5u5hKFGYT3+Q79YBWK/qBEMpIgkbhzctmN/Qmqqt
+         CMP9i25xSEC9So5qlz7pEJooph+gaPlzD40QmetOhYuvq0Tc5Ft0hUd0GDEKws4bGMMs
+         xBpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=T9TN+IiG05axbq9DvASXkbUWMclW/1L5ezZkeAERv5E=;
+        b=hsI2mekmrNOfxO42+AU3cGETo3fmo3lVS/mhKazM1TmwPcYBFxjhcGvbb5EOyoqLXZ
+         ichjbljofsyVe2Dx+9/ebKkOQqn/KDISNGJd7Ul4AnQVBINglDB/ml4lhH1tlFtGvvXM
+         O1a/Vx1sirhIrdYsO+ftttEsx0CwKBcW35srY2kbH3v0EtLcFfJOEjVh4wEEe28nqCVq
+         wDoVwILOc2fzshAhqCab80071t3buOLQquRuNHa7oG4sGdsJ3faJFA435Fqj9g1uTVFL
+         4yUcEmLfWFW4IhHWjTaLU+4Prdnl6cI//tjf/IVegO6ukUUhH/IkmRRI78RvIkW7bZvG
+         dYjQ==
+X-Gm-Message-State: AOAM530MgWkfyP2q6cWorEWcjCFf4bzePunyVtUpldWImEJGigs2HIpW
+        F1BtI49ZLjh6u+5UrbIIDeXifKhOYEc=
+X-Google-Smtp-Source: ABdhPJzjBOdzPpZw2Zy8gz/U2wDGlNr+GQCGfyGI52RbMq/aPY97IjWGN5aeZxp17vggsWF8JUIiGw==
+X-Received: by 2002:a63:5b55:: with SMTP id l21mr813118pgm.348.1596144040321;
+        Thu, 30 Jul 2020 14:20:40 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id d9sm7277389pgv.45.2020.07.30.14.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2020 14:20:39 -0700 (PDT)
+Date:   Thu, 30 Jul 2020 14:20:39 -0700 (PDT)
+X-Google-Original-Date: Thu, 30 Jul 2020 14:20:34 PDT (-0700)
+Subject:     Re: [PATCH 17/24] riscv: use asm-generic/mmu_context.h for no-op implementations
+In-Reply-To: <20200728033405.78469-18-npiggin@gmail.com>
+CC:     linux-arch@vger.kernel.org, npiggin@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Arnd Bergmann <arnd@arndb.de>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2 3/7] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20200730204409.GB534153@kernel.org>
-References: <20200727162935.31714-1-rppt@kernel.org>
- <20200727162935.31714-4-rppt@kernel.org>
- <20200730162209.GB3128@gaia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200730162209.GB3128@gaia>
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     npiggin@gmail.com
+Message-ID: <mhng-5c1b7324-11f8-4334-bfc4-6fc1920aeaa3@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 05:22:10PM +0100, Catalin Marinas wrote:
-> Hi Mike,
-> 
-> On Mon, Jul 27, 2020 at 07:29:31PM +0300, Mike Rapoport wrote:
-> > For instance, the following example will create an uncached mapping (error
-> > handling is omitted):
-> > 
-> > 	fd = memfd_secret(SECRETMEM_UNCACHED);
-> > 	ftruncate(fd, MAP_SIZE);
-> > 	ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> [...]
-> > +static struct page *secretmem_alloc_page(gfp_t gfp)
-> > +{
-> > +	/*
-> > +	 * FIXME: use a cache of large pages to reduce the direct map
-> > +	 * fragmentation
-> > +	 */
-> > +	return alloc_page(gfp);
-> > +}
-> > +
-> > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> > +{
-> > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> > +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> > +	pgoff_t offset = vmf->pgoff;
-> > +	unsigned long addr;
-> > +	struct page *page;
-> > +	int ret = 0;
-> > +
-> > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> > +		return vmf_error(-EINVAL);
-> > +
-> > +	page = find_get_entry(mapping, offset);
-> > +	if (!page) {
-> > +		page = secretmem_alloc_page(vmf->gfp_mask);
-> > +		if (!page)
-> > +			return vmf_error(-ENOMEM);
-> > +
-> > +		ret = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
-> > +		if (unlikely(ret))
-> > +			goto err_put_page;
-> > +
-> > +		ret = set_direct_map_invalid_noflush(page);
-> > +		if (ret)
-> > +			goto err_del_page_cache;
-> > +
-> > +		addr = (unsigned long)page_address(page);
-> > +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> > +
-> > +		__SetPageUptodate(page);
-> > +
-> > +		ret = VM_FAULT_LOCKED;
-> > +	}
-> > +
-> > +	vmf->page = page;
-> > +	return ret;
-> > +
-> > +err_del_page_cache:
-> > +	delete_from_page_cache(page);
-> > +err_put_page:
-> > +	put_page(page);
-> > +	return vmf_error(ret);
-> > +}
-> > +
-> > +static const struct vm_operations_struct secretmem_vm_ops = {
-> > +	.fault = secretmem_fault,
-> > +};
-> > +
-> > +static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
-> > +{
-> > +	struct secretmem_ctx *ctx = file->private_data;
-> > +	unsigned long mode = ctx->mode;
-> > +	unsigned long len = vma->vm_end - vma->vm_start;
-> > +
-> > +	if (!mode)
-> > +		return -EINVAL;
-> > +
-> > +	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
-> > +		return -EINVAL;
-> > +
-> > +	if (mlock_future_check(vma->vm_mm, vma->vm_flags | VM_LOCKED, len))
-> > +		return -EAGAIN;
-> > +
-> > +	switch (mode) {
-> > +	case SECRETMEM_UNCACHED:
-> > +		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-> > +		fallthrough;
-> > +	case SECRETMEM_EXCLUSIVE:
-> > +		vma->vm_ops = &secretmem_vm_ops;
-> > +		break;
-> > +	default:
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	vma->vm_flags |= VM_LOCKED;
-> > +
-> > +	return 0;
-> > +}
-> 
-> I think the uncached mapping is not the right thing for arm/arm64. First
-> of all, pgprot_noncached() gives us Strongly Ordered (Device memory)
-> semantics together with not allowing unaligned accesses. I suspect the
-> semantics are different on x86.
- 
-Hmm, on x86 it's also Strongly Ordered, but I didn't find any alignment
-restrictions. Is there a mode for arm64 that can provide similar
-semantics?
+On Mon, 27 Jul 2020 20:33:58 PDT (-0700), npiggin@gmail.com wrote:
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: linux-riscv@lists.infradead.org
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> ---
+>  arch/riscv/include/asm/mmu_context.h | 22 ++--------------------
+>  1 file changed, 2 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/mmu_context.h b/arch/riscv/include/asm/mmu_context.h
+> index 67c463812e2d..250defa06f3a 100644
+> --- a/arch/riscv/include/asm/mmu_context.h
+> +++ b/arch/riscv/include/asm/mmu_context.h
+> @@ -13,34 +13,16 @@
+>  #include <linux/mm.h>
+>  #include <linux/sched.h>
+>
+> -static inline void enter_lazy_tlb(struct mm_struct *mm,
+> -	struct task_struct *task)
+> -{
+> -}
+> -
+> -/* Initialize context-related info for a new mm_struct */
+> -static inline int init_new_context(struct task_struct *task,
+> -	struct mm_struct *mm)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline void destroy_context(struct mm_struct *mm)
+> -{
+> -}
+> -
+>  void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+>  	struct task_struct *task);
+>
+> +#define activate_mm activate_mm
+>  static inline void activate_mm(struct mm_struct *prev,
+>  			       struct mm_struct *next)
+>  {
+>  	switch_mm(prev, next, NULL);
+>  }
+>
+> -static inline void deactivate_mm(struct task_struct *task,
+> -	struct mm_struct *mm)
+> -{
+> -}
+> +#include <asm-generic/mmu_context.h>
+>
+>  #endif /* _ASM_RISCV_MMU_CONTEXT_H */
 
-Would it make sence to use something like
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
 
-#define pgprot_uncached(prot) \
-	__pgprot_modify(prot, PTE_ATTRINDX_MASK, \
-			PTE_ATTRINDX(MT_NORMAL_NC) | PTE_PXN)
-
-or is it too weak?
-
-> The second, more serious problem, is that I can't find any place where
-> the caches are flushed for the page mapped on fault. When a page is
-> allocated, assuming GFP_ZERO, only the caches are guaranteed to be
-> zeroed. Exposing this subsequently to user space as uncached would allow
-> the user to read stale data prior to zeroing. The arm64
-> set_direct_map_default_noflush() doesn't do any cache maintenance.
-
-Well, the idea of uncached mappings came from Elena [1] to prevent
-possibility of side channels that leak user space memory. So I think
-even without cache flushing after the allocation, user space is
-protected as all its memory accesses bypass cache so even after the page
-is freed there won't be stale data in the cache.
-
-I think that it makes sense to limit SECRETMEM_UNCACHED only for
-architectures that define an appropriate protection, e.g.
-pgprot_uncahced(). For x86 it can be aliased to pgprot_noncached() and
-other architecures can define their versions.
-
-[1] https://lore.kernel.org/lkml/2236FBA76BA1254E88B949DDB74E612BA4EEC0CE@IRSMSX102.ger.corp.intel.com/
-
--- 
-Sincerely yours,
-Mike.
+I'm assuming this is going in along with the others.  Thanks!
