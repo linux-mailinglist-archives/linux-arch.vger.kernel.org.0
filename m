@@ -2,48 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5A8234A0C
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 19:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA08234A35
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 19:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387586AbgGaRQb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 13:16:31 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:59464 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387580AbgGaRQb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 13:16:31 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VHBvmu156609;
-        Fri, 31 Jul 2020 17:15:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=QLP5yum5fU8UgsIzhvQlNIqfGdJsDfckQfn3DAzacW8=;
- b=mmal8FRzyoj+O8X9csReBhlK93p5+cMh/ETJ0OUmlvwnyInxLy+PDCUxfNp7SWT751Lz
- wPFJZcEJb3ERLInaZIpcUlN3mgHrEILwqs8rAPYpjJLcAlq4bh9+OW6LOwIk4zNMEB84
- hEofFiwTosRxp1RQZJV0f+9lAddx2h3vS6a4SlKHw5oum+g/sh5/KedgUE0YrS3/GXf0
- Suhh4XB77kYufFl/+ZFn8CGMPkV3XqrkpTKaRMPdMYp4doN88E862Ka1ATMXw20FKtV/
- +cog0eAkaVh1d9pc3uk56Akc7KQavBGp0fBcuauoBxwrK3pRyujlNJq62QmDEptEqyYm 3g== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 32mf702hp7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Jul 2020 17:15:50 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VHCsS3048730;
-        Fri, 31 Jul 2020 17:15:50 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 32hu6064n3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jul 2020 17:15:49 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06VHFc2P019306;
-        Fri, 31 Jul 2020 17:15:38 GMT
-Received: from [10.39.235.87] (/10.39.235.87)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 31 Jul 2020 10:15:38 -0700
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
+        id S1732973AbgGaRXr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 13:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732970AbgGaRXr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 13:23:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46667C061574;
+        Fri, 31 Jul 2020 10:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1mijjRYuRlV1nsas7+RkkJeUm22srBJgqC/kjl8CxTo=; b=VfUjSEfRmnrJ+EhnkKqaubP8LY
+        bPDymb+ADlyxt4KSFmNG0Kdi9f0XdEd3AGurw1Iq1LfD3qNEFLgZg5KXh3fjBauS+N3hpvaoF2KCz
+        6qDSKlY6nElZV7JEGX5vEWwcXkW7KdWomh3ez+xbuveQumtBN9ETF65jZxsfubRxRYSE6KC2QY9Jz
+        l4SdO5PEVzXiyZge4/yp5ddWWP8TqXfSoXy2ce0B7OsiSsK4zXCJSVCtfK8jPJQtcpzJ2+Ep3YeXh
+        JmGNgfodGHSCuxWnen/BJOFvJKpMd4185WrTmsN7H330wpeVTaZ/nCYJRedW3ux9Tqh3wXb6H5Vd9
+        T3UAQkyA==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k1Ykr-0008T6-G9; Fri, 31 Jul 2020 17:23:37 +0000
+Date:   Fri, 31 Jul 2020 18:23:37 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Steven Sistare <steven.sistare@oracle.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Anthony Yznaga <anthony.yznaga@oracle.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
@@ -51,8 +37,10 @@ Cc:     Matthew Wilcox <willy@infradead.org>,
         hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
         arnd@arndb.de, keescook@chromium.org, gerg@linux-m68k.org,
         ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, esyr@redhat.com, christian@kellner.me,
-        areber@redhat.com, cyphar@cyphar.com
+        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
+        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com
+Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
+Message-ID: <20200731172337.GQ23808@casper.infradead.org>
 References: <20200730152250.GG23808@casper.infradead.org>
  <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
  <20200730171251.GI23808@casper.infradead.org>
@@ -63,47 +51,45 @@ References: <20200730152250.GG23808@casper.infradead.org>
  <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
  <20200731152736.GP23808@casper.infradead.org>
  <9ba26063-0098-e796-9431-8c1d0c076ffc@oracle.com>
- <20200731165649.GG24045@ziepe.ca>
-From:   Steven Sistare <steven.sistare@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <71ddd3c1-bb59-3e63-e137-99b88ace454d@oracle.com>
-Date:   Fri, 31 Jul 2020 13:15:34 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200731165649.GG24045@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9699 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007310129
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9699 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- adultscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007310129
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ba26063-0098-e796-9431-8c1d0c076ffc@oracle.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/31/2020 12:56 PM, Jason Gunthorpe wrote:
-> On Fri, Jul 31, 2020 at 12:11:52PM -0400, Steven Sistare wrote:
->>> Your preservation-across-exec use-case might or might not need the
->>> VMA to be mapped at the same address.  
->>
->> It does.  qemu registers memory with vfio which remembers the va's in kernel
->> metadata for the device.
+On Fri, Jul 31, 2020 at 12:11:52PM -0400, Steven Sistare wrote:
+> On 7/31/2020 11:27 AM, Matthew Wilcox wrote:
+> > On Fri, Jul 31, 2020 at 10:57:44AM -0400, Steven Sistare wrote:
+> >> Matthews sileby/mshare proposal has the same issue.  If a process opts-in
+> >> and mmap's an address in the shared region, then content becomes mapped at
+> >> a VA that was known to the pre-fork or pre-exec process.  Trust must still
+> >> be established.
+> > 
+> > It's up to the recipient whether they try to map it at the same address
+> > or at a fresh address.  The intended use case is a "semi-shared" address
+> > space between two processes (ie partway between a threaded, fully-shared
+> > address space and a forked un-shared address space), in which case
+> > there's a certain amount of trust and cooperation between the processes.
 > 
-> Once the memory is registered with vfio the VA doesn't matter, vfio
-> will keep the iommu pointing at the same physical pages no matter
-> where they are mapped.
+> Understood, but if the recipient does map at any of the same, which is the whole
+> point because you want to share the page table.  The trust relationship is no
+> different than for the live update case.  
 
-Yes, but there are other code paths that compute and use offsets between va and the
-base va.  Mapping at a different va in the new process breaks vfio; I have tried it.
+You don't have to map at the same address to share the page tables.
+For example, on x86 if you share an 8GB region, that must be aligned at
+1GB in both the donor and the recipient, but they need not be mapped at
+the same address.
 
-- Steve
+> > It's a net increase of 200 lines of kernel code.  If 4 lines of userspace
+> > code removes 200 lines of kernel code, I think I know which I prefer ...
+> 
+> It will be *far* more than 4 lines.
+> Much of the 200 lines is mostly for the elf opt in, and much of the elf code is from
+> anthony reviving an earlier patch that use MAP_FIXED_NOREPLACE during segment setup.
+
+It doesn't really matter how much of it is for the opt-in and how much
+is for the exec path itself.  The MAP_FIXED_NOREPLACE patch is only net
++16 lines, so that's not the problem.
