@@ -2,421 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609CB2345BE
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 14:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F44234772
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 16:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733282AbgGaMW1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 08:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733296AbgGaMWP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 08:22:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4D2C061574;
-        Fri, 31 Jul 2020 05:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=xABHaGccHyeMiOAO3PmSx6x4b+NSs8y5Q9sXTcSjN2c=; b=moaquv5iHzVmRq5IbxFGXS1D6/
-        q90RHvkyG/m9AfAQ2Iw++XQyFaeesY9nZtzz2Lt1oRbqqmVBBtrNRLaKTRkQWos86KUNsHY40XgAw
-        KcBRV6RQLFAel0M61uBJZfjso6lBliWcMwX2m6j/FS5H0uKHbwLKzVH/L4GwhccLehUIXMgQlTOWh
-        Zk1NzZstMp2mi3ZWc3GFPgGmnyRR0v5S3erpYsSG8lAefVxZDsmyB2vOK8CGejjXaMMumig87fgA0
-        CdAQ+Bs5LXy9p/PvrB2RRjm/ReWpvMtnIxxtpXmzVhfoQ5COWF7i+QjH+xSVdFmQ7LRaCKWk72+Jj
-        4jvjufkA==;
-Received: from 138.57.168.109.cust.ip.kpnqwest.it ([109.168.57.138] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k1U38-00026U-H3; Fri, 31 Jul 2020 12:22:11 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     x86@kernel.org, Jan Kara <jack@suse.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S1732351AbgGaOKk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 10:10:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58696 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728206AbgGaOKk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 31 Jul 2020 10:10:40 -0400
+Received: from gaia (unknown [95.146.230.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 52369206DA;
+        Fri, 31 Jul 2020 14:10:34 +0000 (UTC)
+Date:   Fri, 31 Jul 2020 15:10:31 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH 3/3] quota: simplify the quotactl compat handling
-Date:   Fri, 31 Jul 2020 14:22:02 +0200
-Message-Id: <20200731122202.213333-4-hch@lst.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200731122202.213333-1-hch@lst.de>
-References: <20200731122202.213333-1-hch@lst.de>
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 3/7] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20200731141031.GD29569@gaia>
+References: <20200727162935.31714-1-rppt@kernel.org>
+ <20200727162935.31714-4-rppt@kernel.org>
+ <20200730162209.GB3128@gaia>
+ <20200730204409.GB534153@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200730204409.GB534153@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Fold the misaligned u64 workarounds into the main quotactl flow instead
-of implementing a separate compat syscall handler.
+On Thu, Jul 30, 2020 at 11:44:09PM +0300, Mike Rapoport wrote:
+> On Thu, Jul 30, 2020 at 05:22:10PM +0100, Catalin Marinas wrote:
+> > On Mon, Jul 27, 2020 at 07:29:31PM +0300, Mike Rapoport wrote:
+> > > For instance, the following example will create an uncached mapping (error
+> > > handling is omitted):
+> > > 
+> > > 	fd = memfd_secret(SECRETMEM_UNCACHED);
+> > > 	ftruncate(fd, MAP_SIZE);
+> > > 	ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+[...]
+> > > +static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
+> > > +{
+> > > +	struct secretmem_ctx *ctx = file->private_data;
+> > > +	unsigned long mode = ctx->mode;
+> > > +	unsigned long len = vma->vm_end - vma->vm_start;
+> > > +
+> > > +	if (!mode)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (mlock_future_check(vma->vm_mm, vma->vm_flags | VM_LOCKED, len))
+> > > +		return -EAGAIN;
+> > > +
+> > > +	switch (mode) {
+> > > +	case SECRETMEM_UNCACHED:
+> > > +		vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+> > > +		fallthrough;
+> > > +	case SECRETMEM_EXCLUSIVE:
+> > > +		vma->vm_ops = &secretmem_vm_ops;
+> > > +		break;
+> > > +	default:
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	vma->vm_flags |= VM_LOCKED;
+> > > +
+> > > +	return 0;
+> > > +}
+> > 
+> > I think the uncached mapping is not the right thing for arm/arm64. First
+> > of all, pgprot_noncached() gives us Strongly Ordered (Device memory)
+> > semantics together with not allowing unaligned accesses. I suspect the
+> > semantics are different on x86.
+>  
+> Hmm, on x86 it's also Strongly Ordered, but I didn't find any alignment
+> restrictions. Is there a mode for arm64 that can provide similar
+> semantics?
+> 
+> Would it make sence to use something like
+> 
+> #define pgprot_uncached(prot) \
+> 	__pgprot_modify(prot, PTE_ATTRINDX_MASK, \
+> 			PTE_ATTRINDX(MT_NORMAL_NC) | PTE_PXN)
+> 
+> or is it too weak?
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Jan Kara <jack@suse.cz>
----
- arch/x86/entry/syscalls/syscall_32.tbl |   2 +-
- fs/quota/Kconfig                       |   5 --
- fs/quota/Makefile                      |   1 -
- fs/quota/compat.c                      | 120 -------------------------
- fs/quota/compat.h                      |  34 +++++++
- fs/quota/quota.c                       |  73 ++++++++++++---
- include/linux/quotaops.h               |   3 -
- kernel/sys_ni.c                        |   1 -
- 8 files changed, 94 insertions(+), 145 deletions(-)
- delete mode 100644 fs/quota/compat.c
- create mode 100644 fs/quota/compat.h
+Reading Elena's email, that's about preventing speculative loads. While
+the arm64 Normal NC is non-cacheable (equivalent to write-combine), a
+CPU is allowed to speculatively read from it. A carefully crafted gadget
+could leave an imprint on a different part of the cache via speculative
+execution based on a value in the secret memory. So IIUC, we want memory
+that cannot be speculatively loaded from and that would be Device memory
+on arm64 (with the alignment restrictions).
 
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index d8f8a1a69ed11f..41d442d7c2db67 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -142,7 +142,7 @@
- 128	i386	init_module		sys_init_module
- 129	i386	delete_module		sys_delete_module
- 130	i386	get_kernel_syms
--131	i386	quotactl		sys_quotactl			compat_sys_quotactl32
-+131	i386	quotactl		sys_quotactl
- 132	i386	getpgid			sys_getpgid
- 133	i386	fchdir			sys_fchdir
- 134	i386	bdflush			sys_bdflush
-diff --git a/fs/quota/Kconfig b/fs/quota/Kconfig
-index 7218314ca13f00..4f5bb85099a904 100644
---- a/fs/quota/Kconfig
-+++ b/fs/quota/Kconfig
-@@ -70,8 +70,3 @@ config QFMT_V2
- config QUOTACTL
- 	bool
- 	default n
--
--config QUOTACTL_COMPAT
--	bool
--	depends on QUOTACTL && COMPAT_FOR_U64_ALIGNMENT
--	default y
-diff --git a/fs/quota/Makefile b/fs/quota/Makefile
-index f2b49d0f0287c9..9160639daffa75 100644
---- a/fs/quota/Makefile
-+++ b/fs/quota/Makefile
-@@ -4,5 +4,4 @@ obj-$(CONFIG_QFMT_V1)		+= quota_v1.o
- obj-$(CONFIG_QFMT_V2)		+= quota_v2.o
- obj-$(CONFIG_QUOTA_TREE)	+= quota_tree.o
- obj-$(CONFIG_QUOTACTL)		+= quota.o kqid.o
--obj-$(CONFIG_QUOTACTL_COMPAT)	+= compat.o
- obj-$(CONFIG_QUOTA_NETLINK_INTERFACE)	+= netlink.o
-diff --git a/fs/quota/compat.c b/fs/quota/compat.c
-deleted file mode 100644
-index c305728576193d..00000000000000
---- a/fs/quota/compat.c
-+++ /dev/null
-@@ -1,120 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <linux/syscalls.h>
--#include <linux/compat.h>
--#include <linux/quotaops.h>
--
--/*
-- * This code works only for 32 bit quota tools over 64 bit OS (x86_64, ia64)
-- * and is necessary due to alignment problems.
-- */
--struct compat_if_dqblk {
--	compat_u64 dqb_bhardlimit;
--	compat_u64 dqb_bsoftlimit;
--	compat_u64 dqb_curspace;
--	compat_u64 dqb_ihardlimit;
--	compat_u64 dqb_isoftlimit;
--	compat_u64 dqb_curinodes;
--	compat_u64 dqb_btime;
--	compat_u64 dqb_itime;
--	compat_uint_t dqb_valid;
--};
--
--/* XFS structures */
--struct compat_fs_qfilestat {
--	compat_u64 dqb_bhardlimit;
--	compat_u64 qfs_nblks;
--	compat_uint_t qfs_nextents;
--};
--
--struct compat_fs_quota_stat {
--	__s8		qs_version;
--	__u16		qs_flags;
--	__s8		qs_pad;
--	struct compat_fs_qfilestat	qs_uquota;
--	struct compat_fs_qfilestat	qs_gquota;
--	compat_uint_t	qs_incoredqs;
--	compat_int_t	qs_btimelimit;
--	compat_int_t	qs_itimelimit;
--	compat_int_t	qs_rtbtimelimit;
--	__u16		qs_bwarnlimit;
--	__u16		qs_iwarnlimit;
--};
--
--COMPAT_SYSCALL_DEFINE4(quotactl32, unsigned int, cmd,
--		       const char __user *, special, qid_t, id,
--		       void __user *, addr)
--{
--	unsigned int cmds;
--	struct if_dqblk __user *dqblk;
--	struct compat_if_dqblk __user *compat_dqblk;
--	struct fs_quota_stat __user *fsqstat;
--	struct compat_fs_quota_stat __user *compat_fsqstat;
--	compat_uint_t data;
--	u16 xdata;
--	long ret;
--
--	cmds = cmd >> SUBCMDSHIFT;
--
--	switch (cmds) {
--	case Q_GETQUOTA:
--		dqblk = compat_alloc_user_space(sizeof(struct if_dqblk));
--		compat_dqblk = addr;
--		ret = kernel_quotactl(cmd, special, id, dqblk);
--		if (ret)
--			break;
--		if (copy_in_user(compat_dqblk, dqblk, sizeof(*compat_dqblk)) ||
--			get_user(data, &dqblk->dqb_valid) ||
--			put_user(data, &compat_dqblk->dqb_valid))
--			ret = -EFAULT;
--		break;
--	case Q_SETQUOTA:
--		dqblk = compat_alloc_user_space(sizeof(struct if_dqblk));
--		compat_dqblk = addr;
--		ret = -EFAULT;
--		if (copy_in_user(dqblk, compat_dqblk, sizeof(*compat_dqblk)) ||
--			get_user(data, &compat_dqblk->dqb_valid) ||
--			put_user(data, &dqblk->dqb_valid))
--			break;
--		ret = kernel_quotactl(cmd, special, id, dqblk);
--		break;
--	case Q_XGETQSTAT:
--		fsqstat = compat_alloc_user_space(sizeof(struct fs_quota_stat));
--		compat_fsqstat = addr;
--		ret = kernel_quotactl(cmd, special, id, fsqstat);
--		if (ret)
--			break;
--		ret = -EFAULT;
--		/* Copying qs_version, qs_flags, qs_pad */
--		if (copy_in_user(compat_fsqstat, fsqstat,
--			offsetof(struct compat_fs_quota_stat, qs_uquota)))
--			break;
--		/* Copying qs_uquota */
--		if (copy_in_user(&compat_fsqstat->qs_uquota,
--			&fsqstat->qs_uquota,
--			sizeof(compat_fsqstat->qs_uquota)) ||
--			get_user(data, &fsqstat->qs_uquota.qfs_nextents) ||
--			put_user(data, &compat_fsqstat->qs_uquota.qfs_nextents))
--			break;
--		/* Copying qs_gquota */
--		if (copy_in_user(&compat_fsqstat->qs_gquota,
--			&fsqstat->qs_gquota,
--			sizeof(compat_fsqstat->qs_gquota)) ||
--			get_user(data, &fsqstat->qs_gquota.qfs_nextents) ||
--			put_user(data, &compat_fsqstat->qs_gquota.qfs_nextents))
--			break;
--		/* Copying the rest */
--		if (copy_in_user(&compat_fsqstat->qs_incoredqs,
--			&fsqstat->qs_incoredqs,
--			sizeof(struct compat_fs_quota_stat) -
--			offsetof(struct compat_fs_quota_stat, qs_incoredqs)) ||
--			get_user(xdata, &fsqstat->qs_iwarnlimit) ||
--			put_user(xdata, &compat_fsqstat->qs_iwarnlimit))
--			break;
--		ret = 0;
--		break;
--	default:
--		ret = kernel_quotactl(cmd, special, id, addr);
--	}
--	return ret;
--}
-diff --git a/fs/quota/compat.h b/fs/quota/compat.h
-new file mode 100644
-index 00000000000000..ef7d1e12d650b3
---- /dev/null
-+++ b/fs/quota/compat.h
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/compat.h>
-+
-+struct compat_if_dqblk {
-+	compat_u64			dqb_bhardlimit;
-+	compat_u64			dqb_bsoftlimit;
-+	compat_u64			dqb_curspace;
-+	compat_u64			dqb_ihardlimit;
-+	compat_u64			dqb_isoftlimit;
-+	compat_u64			dqb_curinodes;
-+	compat_u64			dqb_btime;
-+	compat_u64			dqb_itime;
-+	compat_uint_t			dqb_valid;
-+};
-+
-+struct compat_fs_qfilestat {
-+	compat_u64			dqb_bhardlimit;
-+	compat_u64			qfs_nblks;
-+	compat_uint_t			qfs_nextents;
-+};
-+
-+struct compat_fs_quota_stat {
-+	__s8				qs_version;
-+	__u16				qs_flags;
-+	__s8				qs_pad;
-+	struct compat_fs_qfilestat	qs_uquota;
-+	struct compat_fs_qfilestat	qs_gquota;
-+	compat_uint_t			qs_incoredqs;
-+	compat_int_t			qs_btimelimit;
-+	compat_int_t			qs_itimelimit;
-+	compat_int_t			qs_rtbtimelimit;
-+	__u16				qs_bwarnlimit;
-+	__u16				qs_iwarnlimit;
-+};
-diff --git a/fs/quota/quota.c b/fs/quota/quota.c
-index 5444d3c4d93f37..e1e9d05a14c3e4 100644
---- a/fs/quota/quota.c
-+++ b/fs/quota/quota.c
-@@ -19,6 +19,7 @@
- #include <linux/types.h>
- #include <linux/writeback.h>
- #include <linux/nospec.h>
-+#include "compat.h"
- 
- static int check_quotactl_permission(struct super_block *sb, int type, int cmd,
- 				     qid_t id)
-@@ -211,8 +212,18 @@ static int quota_getquota(struct super_block *sb, int type, qid_t id,
- 	if (ret)
- 		return ret;
- 	copy_to_if_dqblk(&idq, &fdq);
--	if (copy_to_user(addr, &idq, sizeof(idq)))
--		return -EFAULT;
-+
-+	if (compat_need_64bit_alignment_fixup()) {
-+		struct compat_if_dqblk __user *compat_dqblk = addr;
-+
-+		if (copy_to_user(compat_dqblk, &idq, sizeof(*compat_dqblk)))
-+			return -EFAULT;
-+		if (put_user(idq.dqb_valid, &compat_dqblk->dqb_valid))
-+			return -EFAULT;
-+	} else {
-+		if (copy_to_user(addr, &idq, sizeof(idq)))
-+			return -EFAULT;
-+	}
- 	return 0;
- }
- 
-@@ -277,8 +288,16 @@ static int quota_setquota(struct super_block *sb, int type, qid_t id,
- 	struct if_dqblk idq;
- 	struct kqid qid;
- 
--	if (copy_from_user(&idq, addr, sizeof(idq)))
--		return -EFAULT;
-+	if (compat_need_64bit_alignment_fixup()) {
-+		struct compat_if_dqblk __user *compat_dqblk = addr;
-+
-+		if (copy_from_user(&idq, compat_dqblk, sizeof(*compat_dqblk)) ||
-+		    get_user(idq.dqb_valid, &compat_dqblk->dqb_valid))
-+			return -EFAULT;
-+	} else {
-+		if (copy_from_user(&idq, addr, sizeof(idq)))
-+			return -EFAULT;
-+	}
- 	if (!sb->s_qcop->set_dqblk)
- 		return -ENOSYS;
- 	qid = make_kqid(current_user_ns(), type, id);
-@@ -382,6 +401,33 @@ static int quota_getstate(struct super_block *sb, int type,
- 	return 0;
- }
- 
-+static int compat_copy_fs_qfilestat(struct compat_fs_qfilestat __user *to,
-+		struct fs_qfilestat *from)
-+{
-+	if (copy_to_user(to, from, sizeof(*to)) ||
-+	    put_user(from->qfs_nextents, &to->qfs_nextents))
-+		return -EFAULT;
-+	return 0;
-+}
-+
-+static int compat_copy_fs_quota_stat(struct compat_fs_quota_stat __user *to,
-+		struct fs_quota_stat *from)
-+{
-+	if (put_user(from->qs_version, &to->qs_version) ||
-+	    put_user(from->qs_flags, &to->qs_flags) ||
-+	    put_user(from->qs_pad, &to->qs_pad) ||
-+	    compat_copy_fs_qfilestat(&to->qs_uquota, &from->qs_uquota) ||
-+	    compat_copy_fs_qfilestat(&to->qs_gquota, &from->qs_gquota) ||
-+	    put_user(from->qs_incoredqs, &to->qs_incoredqs) ||
-+	    put_user(from->qs_btimelimit, &to->qs_btimelimit) ||
-+	    put_user(from->qs_itimelimit, &to->qs_itimelimit) ||
-+	    put_user(from->qs_rtbtimelimit, &to->qs_rtbtimelimit) ||
-+	    put_user(from->qs_bwarnlimit, &to->qs_bwarnlimit) ||
-+	    put_user(from->qs_iwarnlimit, &to->qs_iwarnlimit))
-+		return -EFAULT;
-+	return 0;
-+}
-+
- static int quota_getxstate(struct super_block *sb, int type, void __user *addr)
- {
- 	struct fs_quota_stat fqs;
-@@ -390,9 +436,14 @@ static int quota_getxstate(struct super_block *sb, int type, void __user *addr)
- 	if (!sb->s_qcop->get_state)
- 		return -ENOSYS;
- 	ret = quota_getstate(sb, type, &fqs);
--	if (!ret && copy_to_user(addr, &fqs, sizeof(fqs)))
-+	if (ret)
-+		return ret;
-+
-+	if (compat_need_64bit_alignment_fixup())
-+		return compat_copy_fs_quota_stat(addr, &fqs);
-+	if (copy_to_user(addr, &fqs, sizeof(fqs)))
- 		return -EFAULT;
--	return ret;
-+	return 0;
- }
- 
- static int quota_getstatev(struct super_block *sb, int type,
-@@ -816,8 +867,8 @@ static struct super_block *quotactl_block(const char __user *special, int cmd)
-  * calls. Maybe we need to add the process quotas etc. in the future,
-  * but we probably should use rlimits for that.
-  */
--int kernel_quotactl(unsigned int cmd, const char __user *special,
--		    qid_t id, void __user *addr)
-+SYSCALL_DEFINE4(quotactl, unsigned int, cmd, const char __user *, special,
-+		qid_t, id, void __user *, addr)
- {
- 	uint cmds, type;
- 	struct super_block *sb = NULL;
-@@ -871,9 +922,3 @@ int kernel_quotactl(unsigned int cmd, const char __user *special,
- 		path_put(pathp);
- 	return ret;
- }
--
--SYSCALL_DEFINE4(quotactl, unsigned int, cmd, const char __user *, special,
--		qid_t, id, void __user *, addr)
--{
--	return kernel_quotactl(cmd, special, id, addr);
--}
-diff --git a/include/linux/quotaops.h b/include/linux/quotaops.h
-index 9cf0cd3dc88c68..a0f6668924d3ef 100644
---- a/include/linux/quotaops.h
-+++ b/include/linux/quotaops.h
-@@ -27,9 +27,6 @@ static inline bool is_quota_modification(struct inode *inode, struct iattr *ia)
- 		(ia->ia_valid & ATTR_GID && !gid_eq(ia->ia_gid, inode->i_gid));
- }
- 
--int kernel_quotactl(unsigned int cmd, const char __user *special,
--		    qid_t id, void __user *addr);
--
- #if defined(CONFIG_QUOTA)
- 
- #define quota_error(sb, fmt, args...) \
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index 3b69a560a7ac56..f01b91cc57fa00 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -370,7 +370,6 @@ COND_SYSCALL_COMPAT(fanotify_mark);
- /* x86 */
- COND_SYSCALL(vm86old);
- COND_SYSCALL(modify_ldt);
--COND_SYSCALL_COMPAT(quotactl32);
- COND_SYSCALL(vm86);
- COND_SYSCALL(kexec_file_load);
- 
+Now, I think we could relax this to Device_GRE. So maybe add a
+pgprot_nospec() and allow architectures to define whatever they find
+suitable. The exact semantics will be different between architectures.
+
+> > The second, more serious problem, is that I can't find any place where
+> > the caches are flushed for the page mapped on fault. When a page is
+> > allocated, assuming GFP_ZERO, only the caches are guaranteed to be
+> > zeroed. Exposing this subsequently to user space as uncached would allow
+> > the user to read stale data prior to zeroing. The arm64
+> > set_direct_map_default_noflush() doesn't do any cache maintenance.
+> 
+> Well, the idea of uncached mappings came from Elena [1] to prevent
+> possibility of side channels that leak user space memory. So I think
+> even without cache flushing after the allocation, user space is
+> protected as all its memory accesses bypass cache so even after the page
+> is freed there won't be stale data in the cache.
+> 
+> I think that it makes sense to limit SECRETMEM_UNCACHED only for
+> architectures that define an appropriate protection, e.g.
+> pgprot_uncahced(). For x86 it can be aliased to pgprot_noncached() and
+> other architecures can define their versions.
+
+Indeed, though as I said above, maybe use a name that suggests no
+speculation since non-cacheable doesn't always guarantee that. Something
+like pgprot_nospec() and SECRETMEM_NOSPEC.
+
+However, your implementation still has the problem that such memory must
+have the caches flushed before being mapped in user-space, otherwise we
+leak other secrets via such pages to the caller. The only generic API we
+have in the kernel for such things is the DMA one. If hch doesn't mind,
+you could abuse it and call arch_dma_prep_coherent() prior to
+set_direct_map_invalid_noflush() (if the mapping is non-cacheable).
+
 -- 
-2.27.0
-
+Catalin
