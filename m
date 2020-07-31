@@ -2,112 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C0B23481F
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 17:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21C223486E
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 17:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731912AbgGaPAc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 11:00:32 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:35595 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731692AbgGaPAb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 11:00:31 -0400
-Received: from mail-qt1-f175.google.com ([209.85.160.175]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MplTn-1kXnTk3Bm9-00qAKt; Fri, 31 Jul 2020 17:00:29 +0200
-Received: by mail-qt1-f175.google.com with SMTP id e5so9099225qth.5;
-        Fri, 31 Jul 2020 08:00:29 -0700 (PDT)
-X-Gm-Message-State: AOAM530kJqh/uBPlz+0h/6gXvGLDfMocQXbevDbSmuid1LGnzijd5BJJ
-        tytiamJ6CuvqaLfq/xUKxzmP7WWnN9U3zmTjxCI=
-X-Google-Smtp-Source: ABdhPJzO/erL08bCGwMduOM/V0DeqInBOr6E8Io9U9J6HsgWZw3VlesVETo5I46uVVvCLprU6rHevJnFSzTp7PNQoVU=
-X-Received: by 2002:ac8:5195:: with SMTP id c21mr4078600qtn.304.1596207628426;
- Fri, 31 Jul 2020 08:00:28 -0700 (PDT)
+        id S2387526AbgGaP1u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 11:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387521AbgGaP1t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 11:27:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C35C061574;
+        Fri, 31 Jul 2020 08:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Bsi9xPmSMWSxHDG9tcc/ZmIBBdGYL5RzEu0Vz8YRBRg=; b=bUfjRImbe/fazmrVUlDrO7qo7p
+        XgRpbbXCL+hV9Dqk/dBw8POrfT022WbSD15UpCQDAUPlUSCj2PAkbM6R27OpRxymm3L7YOi9/BRsE
+        bv2W18JgDF5Ly5bKpeM0CCQ7+yi743p5SNM7I+rvEAIj9H9IPF/tng3FU+e05ZLNmFhnNekqIlmza
+        vSvqMrer1bN0iDbn5NqpSaCs1kvaVoKWoWUp2Gpx77GizjAvaRAxBEUhnzKvD5XQqPT/XiLxluoz4
+        c9QcsZn1yG6uCThYdwdvrosh9soo50ts83HhDciRmV5KgPv5kXW8Xl0ou3kXFg9C6gLHxfHE1RCkv
+        ArFe76MA==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k1Wwa-0002d9-3F; Fri, 31 Jul 2020 15:27:36 +0000
+Date:   Fri, 31 Jul 2020 16:27:36 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Steven Sistare <steven.sistare@oracle.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        arnd@arndb.de, keescook@chromium.org, gerg@linux-m68k.org,
+        ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
+        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
+        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com
+Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
+Message-ID: <20200731152736.GP23808@casper.infradead.org>
+References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
+ <20200730152250.GG23808@casper.infradead.org>
+ <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
+ <20200730171251.GI23808@casper.infradead.org>
+ <63a7404c-e4f6-a82e-257b-217585b0277f@oracle.com>
+ <20200730174956.GK23808@casper.infradead.org>
+ <ab7a25bf-3321-77c8-9bc3-28a223a14032@oracle.com>
+ <87y2n03brx.fsf@x220.int.ebiederm.org>
+ <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 31 Jul 2020 17:00:12 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2PK_bC5=3wcWm43=y5xk-Dq5-fGPExJMnOrNfGfB1m1A@mail.gmail.com>
-Message-ID: <CAK8P3a2PK_bC5=3wcWm43=y5xk-Dq5-fGPExJMnOrNfGfB1m1A@mail.gmail.com>
-Subject: [TECH TOPIC] Planning code obsolescence
-To:     ksummit <ksummit-discuss@lists.linuxfoundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:R3dzn0u/Cd3SGlckPr69i1hze7Sij8F+F4cJtVcQQJX7RIecFRV
- JLchhzub3y8jChdZ/pkrxWadkHsxSwmuDIpLKOH4Mvk02VQHPcQBkMFqq1c9WnNMuh+c45i
- bouL7OjOxs7gAbA0A+YPOyBqgBFljQL5thSvn//rEFlsex1WeKZyL/Bv8bbrOiOv54n4Pv8
- p8w+QNnBEUceq2mScju6w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1eAfryoAUxQ=:78/KI1B6k3qbqS8jeGx8Yh
- +wrv4KgMtaVEbMm9899DGxEl5FgPqAJtBERZj4bcXqzINyGPwuSZlkWd9wpxEhPuXSHBzDXfD
- U/qaMQpigwpgWy2tOBoeGU340YYBlnSGKoh94gSCUY9nuGnMePZRUhZzxqcxlOXpvTQ1z1jVj
- 9qs8sTIE1lZAgnk7DivAgRHJuLRxEMo/HOXW63MCYiR/z3+O7C2yZAgMw/XfnbFa24PBUHYYE
- FHdX3yWRYhjK8RzaIwOyEgbcVbiByAlqGSquu9qMS2QCzxTRc2v2UuTRZmjy7g9FFA6M4mxnf
- D13viQRUj4yUClAoXhiXF6pbbK+rQ61In4wNjIuhAtTkycZh/uhqGKOMXRV4NzSdJ0LvHiFzD
- /4iquJFKSnp5OIgWV2cY58YUgtW6fqx5NVxz26XfZvlPuz196KJugE8UAMVzT7m9D9yHRAm41
- 7G4fANCjLqN+1LF2xvPKJ4r+XGDaxST+h4+UVtUcGo20bjNR0XayMKDVUCvFybFrmW8uKFVL6
- 0ZjKDvvj/0jdq/W12dAOEJPLRDFmq8vbSviGUagOCoFr3Y6iCfGiDU6DZNSruPBDGEUmaY8a4
- DKiJ5ZLokwzh6RU0igNRIRJs7RdzhhYWfZl4DgiTNPsVuvbnTjDUQxxcSN63k/ofjneq754+t
- RkT97YeQLusme7lNEl3litAd+ScIuUpVGEBzUU+RxLj0YzbrWJjDfqsReF+PCd3jQpxhIpCY6
- 3IrU8m+rOcL0s/SU9x/w0FeDpqPkt7HVEaEH604+HS+B24q66vvGYY9TXkNiBs8S9wCcGXf7e
- UVmsnflDKkZSzSd8V83WJY/G0Zietc5/e6ozBNxFkTigRG3yoTzdYjqnahC7j+pUo1DDsu1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I have submitted the below as a topic for the linux/arch/* MC that Mike
-and I run, but I suppose it also makes sense to discuss it on the
-ksummit-discuss mailing list (cross-posted to linux-arch and lkml) as well
-even if we don't discuss it at the main ksummit track.
+On Fri, Jul 31, 2020 at 10:57:44AM -0400, Steven Sistare wrote:
+> Matthews sileby/mshare proposal has the same issue.  If a process opts-in
+> and mmap's an address in the shared region, then content becomes mapped at
+> a VA that was known to the pre-fork or pre-exec process.  Trust must still
+> be established.
 
-     Arnd
+It's up to the recipient whether they try to map it at the same address
+or at a fresh address.  The intended use case is a "semi-shared" address
+space between two processes (ie partway between a threaded, fully-shared
+address space and a forked un-shared address space), in which case
+there's a certain amount of trust and cooperation between the processes.
 
-8<---
-The majority of the code in the kernel deals with hardware that was made
-a long time ago, and we are regularly discussing which of those bits are
-still needed. In some cases (e.g. 20+ year old RISC workstation support),
-there are hobbyists that take care of maintainership despite there being
-no commercial interest. In other cases (e.g. x.25 networking) it turned
-out that there are very long-lived products that are actively supported
-on new kernels.
+Your preservation-across-exec use-case might or might not need the
+VMA to be mapped at the same address.  I don't know whether qemu stores
+pointers in this VMA which are absolute within the qemu address space.
+If it's just the emulated process's address space, then everything will
+be absolute within its own address space and everything will be opaque
+to qemu.  If qemu is storing its own pointers in it, then it has to be
+mapped at the same address.
 
-When I removed support for eight instruction set architectures in 2018,
-those were the ones that no longer had any users of mainline kernels,
-and removing them allowed later cleanup of cross-architecture code that
-would have been much harder before.
+> > Here is another suggestion.
+> > 
+> > Have a very simple program that does:
+> > 
+> > 	for (;;) {
+> > 		handle = dlopen("/my/real/program");
+> > 		real_main = dlsym(handle, "main");
+> > 		real_main(argc, argv, envp);
+> > 		dlclose(handle);
+> > 	}
+> > 
+> > With whatever obvious adjustments are needed to fit your usecase.
+> > 
+> > That should give the same level of functionality, be portable to all
+> > unices, and not require you to duplicate code.  It belive it limits you
+> > to not upgrading libc, or librt but that is a comparatively small
+> > limitation.
+> > 
+> > 
+> > Given that in general the interesting work is done in userspace and that
+> > userspace has provided an interface for reusing that work already.
+> > I don't see the justification for adding anything to exec at this point. 
+> 
+> Thanks for the suggestion.  That is clever, and would make a fun project,
+> but I would not trust it for production.  These few lines are just
+> the first of many that it would take to reset the environment to the
+> well-defined post-exec initial conditions that all executables expect,
+> and incrementally tearing down state will be prone to bugs.  Getting a
+> clean slate from a kernel exec is a much more reliable design.  The use
+> case is creating long-lived apps that never go down, and the simplest
+> implementation will have the fewest bugs and is the best.  MADV_DOEXEC is
+> simple, and does not even require a new system call, and the kernel already
+> knows how to exec without bugs.
 
-I propose adding a Documentation file that keeps track of any notable
-kernel feature that could be classified as "obsolete", and listing
-e.g. following properties:
-
-* Kconfig symbol controlling the feature
-
-* How long we expect to keep it as a minimum
-
-* Known use cases, or other reasons this needs to stay
-
-* Latest kernel in which it was known to have worked
-
-* Contact information for known users (mailing list, personal email)
-
-* Other features that may depend on this
-
-* Possible benefits of eventually removing it
-
-With that information, my hope is that it becomes easier to plan when
-some code can be removed after the last users have stopped upgrading
-their kernels, while also preventing code from being removed that is
-actually still in active use.
-
-In the discussion at the linux/arch/* MC, I would hope to answer these
-questions:
-
-* Do other developers find this useful to have?
-
-* Where should the information be kept (Documentation/*, Kconfig,
-MAINTAINERS, wiki.kernel.org, ...)
-
-* Which information should be part of an entry?
-
-* What granularity should this be applied to -- only high-level features
-like CPU architectures and subsystems, or individual drivers and machines?
+It's a net increase of 200 lines of kernel code.  If 4 lines of userspace
+code removes 200 lines of kernel code, I think I know which I prefer ...
