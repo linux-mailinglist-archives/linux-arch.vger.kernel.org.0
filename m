@@ -2,99 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8339234BAE
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 21:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389A6234CF7
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 23:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbgGaTmg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 15:42:36 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:56088 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbgGaTmg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 15:42:36 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VJfmfq036480;
-        Fri, 31 Jul 2020 19:41:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=jBXujslfGLcy/uxKVs6euah0Afp+K2q+zLyuafXCuYs=;
- b=V/UmbF9Z6fJS4SNlcf5gW/z+uk4ICCEH8d4bET9Wtn05VqGE/OlnQz5vRv/uaNPNJaLw
- AITqFHUxx8k58B03kImuXfXECS84E2NdizSoF1QGowa4+AA4DNISVFwcOOWODSuMzlSe
- /m9zGzOt6EJY4i2WEv5QRKNIp86f27WCmDKN26BHEv+MR9DzX0S1qSabTHYVXqYtNik6
- aVhd0xjbspLZuw2A7+Sn8WTNNh0Knq+tgBnSU3LrKK3CtvaXShIzu8OrRNvThBujA9P/
- hjigm1cWus2RjREhOdziWMIReYoyuBNkUhGILrwGmBghQ1onIgZdpxQAQJcsokVkwAL4 ng== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 32mf7036up-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Jul 2020 19:41:57 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VJIc20163330;
-        Fri, 31 Jul 2020 19:41:56 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 32hu64wdy6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jul 2020 19:41:56 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06VJff9C019420;
-        Fri, 31 Jul 2020 19:41:42 GMT
-Received: from [10.39.235.87] (/10.39.235.87)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 31 Jul 2020 12:41:41 -0700
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     mhocko@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org, arnd@arndb.de,
-        ebiederm@xmission.com, keescook@chromium.org, gerg@linux-m68k.org,
-        ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
-        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com
-References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-From:   Steven Sistare <steven.sistare@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <389f79f9-f1a5-963e-dd05-4d0aaabb5346@oracle.com>
-Date:   Fri, 31 Jul 2020 15:41:37 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1728000AbgGaV1a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 17:27:30 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:39629 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727888AbgGaV1a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 17:27:30 -0400
+X-Originating-IP: 50.39.163.217
+Received: from localhost (50-39-163-217.bvtn.or.frontiernet.net [50.39.163.217])
+        (Authenticated sender: josh@joshtriplett.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id BAB531C0002;
+        Fri, 31 Jul 2020 21:27:24 +0000 (UTC)
+Date:   Fri, 31 Jul 2020 14:27:21 -0700
+From:   josh@joshtriplett.org
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     ksummit <ksummit-discuss@lists.linuxfoundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [Ksummit-discuss] [TECH TOPIC] Planning code obsolescence
+Message-ID: <20200731212721.GC32670@localhost>
+References: <CAK8P3a2PK_bC5=3wcWm43=y5xk-Dq5-fGPExJMnOrNfGfB1m1A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9699 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 spamscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007310142
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9699 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- adultscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007310143
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2PK_bC5=3wcWm43=y5xk-Dq5-fGPExJMnOrNfGfB1m1A@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 7/27/2020 1:11 PM, Anthony Yznaga wrote:
-> This patchset adds support for preserving an anonymous memory range across
-> exec(3) using a new madvise MADV_DOEXEC argument.  The primary benefit for
-> sharing memory in this manner, as opposed to re-attaching to a named shared
-> memory segment, is to ensure it is mapped at the same virtual address in
-> the new process as it was in the old one.  An intended use for this is to
-> preserve guest memory for guests using vfio while qemu exec's an updated
-> version of itself.  By ensuring the memory is preserved at a fixed address,
-> vfio mappings and their associated kernel data structures can remain valid.
-> In addition, for the qemu use case, qemu instances that back guest RAM with
-> anonymous memory can be updated.
+On Fri, Jul 31, 2020 at 05:00:12PM +0200, Arnd Bergmann wrote:
+> The majority of the code in the kernel deals with hardware that was made
+> a long time ago, and we are regularly discussing which of those bits are
+> still needed. In some cases (e.g. 20+ year old RISC workstation support),
+> there are hobbyists that take care of maintainership despite there being
+> no commercial interest. In other cases (e.g. x.25 networking) it turned
+> out that there are very long-lived products that are actively supported
+> on new kernels.
+> 
+> When I removed support for eight instruction set architectures in 2018,
+> those were the ones that no longer had any users of mainline kernels,
+> and removing them allowed later cleanup of cross-architecture code that
+> would have been much harder before.
+> 
+> I propose adding a Documentation file that keeps track of any notable
+> kernel feature that could be classified as "obsolete", and listing
+> e.g. following properties:
+> 
+> * Kconfig symbol controlling the feature
+> 
+> * How long we expect to keep it as a minimum
+> 
+> * Known use cases, or other reasons this needs to stay
+> 
+> * Latest kernel in which it was known to have worked
+> 
+> * Contact information for known users (mailing list, personal email)
+> 
+> * Other features that may depend on this
+> 
+> * Possible benefits of eventually removing it
 
-I forgot to mention, our use case is not just theoretical.  It has been implemented
-and is pretty cool (but I am biased).  The pause time for the guest is in the
-100 - 200 msec range.  We submitted qemu patches for review based on the MADV_DOEXEC
-proposal.  In case you are curious:
-  https://lore.kernel.org/qemu-devel/1596122076-341293-1-git-send-email-steven.sistare@oracle.com/
+We had this once, in the form of feature-removal-schedule.txt. It was,
+itself, removed in commit 9c0ece069b32e8e122aea71aa47181c10eb85ba7.
 
-- Steve
-
+I *do* think there'd be value in having policies and processes for "how
+do we carefully remove a driver/architecture/etc we think nobody cares
+about". That's separate from having an actual in-kernel list of "things
+we think we can remove".
