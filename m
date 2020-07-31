@@ -2,57 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 670582349C5
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 18:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5A8234A0C
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 19:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732710AbgGaQ4w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 12:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732481AbgGaQ4w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 12:56:52 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA38EC06174A
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 09:56:51 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id 11so29435595qkn.2
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 09:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Oxr5YTGpl3qCmnQ7jzJ1mzURsOCkDMcn0o5yKiLVjHk=;
-        b=gIRjHM+pqqI3fhGfhHetDCeS8wl+rUrVsc+3J0YFUBcz20bHIPwgLmOQY4NF2aH9r+
-         w29TYsuxRB8kX1umvuRt8rgqgg+zLqbG0T5mn7qENr3b9j9L/3gou6LceoOVF2sJrr5g
-         3cm8eJoDDyzXkAscEulakGjBhHgEyuCHQUHJbED5fbGyAMJ/Apcuv1UvzxpjL+krWgWk
-         ecEppJXJ2FCKKi10ZOuySLhYaW23mxakZAkKdRqA6zovDr0sCMIMJIJtrK5//XBLInj6
-         8/b80D3rcP4xfOyT82ZZ6OGyIq5yD3dNJG+dHFnEFFjDH3e8HxkAQ6d8ByfXja3H4fzq
-         a5Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Oxr5YTGpl3qCmnQ7jzJ1mzURsOCkDMcn0o5yKiLVjHk=;
-        b=Z5OUSWE8wfx/fDaRABxZuG0zCcNFqM/gxK53LmKYvD1EfjxadzOvfy7PVl5t1anaqW
-         Vylbhf24aI44/iNHP+MjcJWntMi9lE0KJ5BeNPQGEKDxY7uXXYTBEaQfLhk1LYi/BD3S
-         imu3wbjJ5+9rWrBHfPSD+qSKdISHSRQwxS473p9Q8BEZhe8q32ESBrEuWyR9douhXE5I
-         OSNdxkBoYbgUhlnh/hDwxBgWcSw4/wOi5NgmYM4+97kwt6F3Y/mifqqBJybYZtgQip+u
-         VsI3JjFH8r1V9ZpMmPU8ebEC3JMz2FKJU7KfKZCkWHrSU5GNutKTUKN1Nv1kw0zlTELj
-         Q2Tw==
-X-Gm-Message-State: AOAM532fkijWUqnmbEKgn1c08z31l9uMUSFB4/Jx0NyxIpgK3+IrJHOZ
-        YRv9Yjuwb6bbwFiYvzeaWYM+SQ==
-X-Google-Smtp-Source: ABdhPJwp4q4H+n2t8EwsSAIeoGxof5jqJr4YurxgVxQhOgcYX02rAHX3VKDNoNbEMZAJ+ao9mDe6Bg==
-X-Received: by 2002:a37:de15:: with SMTP id h21mr4809113qkj.77.1596214611012;
-        Fri, 31 Jul 2020 09:56:51 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id j16sm8994078qke.87.2020.07.31.09.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2020 09:56:50 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1k1YKv-0027Bk-Hr; Fri, 31 Jul 2020 13:56:49 -0300
-Date:   Fri, 31 Jul 2020 13:56:49 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Steven Sistare <steven.sistare@oracle.com>
+        id S2387586AbgGaRQb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 13:16:31 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:59464 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387580AbgGaRQb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 13:16:31 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VHBvmu156609;
+        Fri, 31 Jul 2020 17:15:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=QLP5yum5fU8UgsIzhvQlNIqfGdJsDfckQfn3DAzacW8=;
+ b=mmal8FRzyoj+O8X9csReBhlK93p5+cMh/ETJ0OUmlvwnyInxLy+PDCUxfNp7SWT751Lz
+ wPFJZcEJb3ERLInaZIpcUlN3mgHrEILwqs8rAPYpjJLcAlq4bh9+OW6LOwIk4zNMEB84
+ hEofFiwTosRxp1RQZJV0f+9lAddx2h3vS6a4SlKHw5oum+g/sh5/KedgUE0YrS3/GXf0
+ Suhh4XB77kYufFl/+ZFn8CGMPkV3XqrkpTKaRMPdMYp4doN88E862Ka1ATMXw20FKtV/
+ +cog0eAkaVh1d9pc3uk56Akc7KQavBGp0fBcuauoBxwrK3pRyujlNJq62QmDEptEqyYm 3g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 32mf702hp7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 31 Jul 2020 17:15:50 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VHCsS3048730;
+        Fri, 31 Jul 2020 17:15:50 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 32hu6064n3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Jul 2020 17:15:49 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06VHFc2P019306;
+        Fri, 31 Jul 2020 17:15:38 GMT
+Received: from [10.39.235.87] (/10.39.235.87)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 31 Jul 2020 10:15:38 -0700
+Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
+To:     Jason Gunthorpe <jgg@ziepe.ca>
 Cc:     Matthew Wilcox <willy@infradead.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Anthony Yznaga <anthony.yznaga@oracle.com>,
@@ -64,8 +53,6 @@ Cc:     Matthew Wilcox <willy@infradead.org>,
         ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
         peterz@infradead.org, esyr@redhat.com, christian@kellner.me,
         areber@redhat.com, cyphar@cyphar.com
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-Message-ID: <20200731165649.GG24045@ziepe.ca>
 References: <20200730152250.GG23808@casper.infradead.org>
  <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
  <20200730171251.GI23808@casper.infradead.org>
@@ -76,24 +63,47 @@ References: <20200730152250.GG23808@casper.infradead.org>
  <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
  <20200731152736.GP23808@casper.infradead.org>
  <9ba26063-0098-e796-9431-8c1d0c076ffc@oracle.com>
+ <20200731165649.GG24045@ziepe.ca>
+From:   Steven Sistare <steven.sistare@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <71ddd3c1-bb59-3e63-e137-99b88ace454d@oracle.com>
+Date:   Fri, 31 Jul 2020 13:15:34 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ba26063-0098-e796-9431-8c1d0c076ffc@oracle.com>
+In-Reply-To: <20200731165649.GG24045@ziepe.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9699 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007310129
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9699 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ adultscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007310129
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 12:11:52PM -0400, Steven Sistare wrote:
-> > Your preservation-across-exec use-case might or might not need the
-> > VMA to be mapped at the same address.  
+On 7/31/2020 12:56 PM, Jason Gunthorpe wrote:
+> On Fri, Jul 31, 2020 at 12:11:52PM -0400, Steven Sistare wrote:
+>>> Your preservation-across-exec use-case might or might not need the
+>>> VMA to be mapped at the same address.  
+>>
+>> It does.  qemu registers memory with vfio which remembers the va's in kernel
+>> metadata for the device.
 > 
-> It does.  qemu registers memory with vfio which remembers the va's in kernel
-> metadata for the device.
+> Once the memory is registered with vfio the VA doesn't matter, vfio
+> will keep the iommu pointing at the same physical pages no matter
+> where they are mapped.
 
-Once the memory is registered with vfio the VA doesn't matter, vfio
-will keep the iommu pointing at the same physical pages no matter
-where they are mapped.
+Yes, but there are other code paths that compute and use offsets between va and the
+base va.  Mapping at a different va in the new process breaks vfio; I have tried it.
 
-Jason
+- Steve
