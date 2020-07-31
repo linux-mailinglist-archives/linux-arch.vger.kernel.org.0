@@ -2,34 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA08234A35
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 19:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71C3234A77
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 19:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732973AbgGaRXr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 13:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S2387550AbgGaRsk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 13:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732970AbgGaRXr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 13:23:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46667C061574;
-        Fri, 31 Jul 2020 10:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1mijjRYuRlV1nsas7+RkkJeUm22srBJgqC/kjl8CxTo=; b=VfUjSEfRmnrJ+EhnkKqaubP8LY
-        bPDymb+ADlyxt4KSFmNG0Kdi9f0XdEd3AGurw1Iq1LfD3qNEFLgZg5KXh3fjBauS+N3hpvaoF2KCz
-        6qDSKlY6nElZV7JEGX5vEWwcXkW7KdWomh3ez+xbuveQumtBN9ETF65jZxsfubRxRYSE6KC2QY9Jz
-        l4SdO5PEVzXiyZge4/yp5ddWWP8TqXfSoXy2ce0B7OsiSsK4zXCJSVCtfK8jPJQtcpzJ2+Ep3YeXh
-        JmGNgfodGHSCuxWnen/BJOFvJKpMd4185WrTmsN7H330wpeVTaZ/nCYJRedW3ux9Tqh3wXb6H5Vd9
-        T3UAQkyA==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k1Ykr-0008T6-G9; Fri, 31 Jul 2020 17:23:37 +0000
-Date:   Fri, 31 Jul 2020 18:23:37 +0100
-From:   Matthew Wilcox <willy@infradead.org>
+        with ESMTP id S2387529AbgGaRsj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 13:48:39 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60027C06174A
+        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 10:48:39 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id j187so29497773qke.11
+        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 10:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PgavFM9fv9RyVhfrzNoVsCZw1UsAPzbtBmN1LRCEpDI=;
+        b=NVVxcC3PrAhlWdWZAWXxQH3YnlOFLgOFSt9l4fAQh5s9CGD+7SfmnH7YtjzVCrmpAL
+         /yoy1xD/5Y3ppQ/nvRTkHrv4u9eJ2hIDdvbPZvVyBWzSnVn4Q1ZI6Ogru6RAZXtl9WNZ
+         jHZQMgE64oC3noQpXLWf3N6gOB4ERfg3ihC16yTOCMhwlAvGABhNAPpSfLKnWw2rdN2l
+         ATEDeLEF7WEbyWs3zItzJaX/FLJuVcoO3JorFxvMhgyU24GVw2xIRGKxJ8Bh12drH+w0
+         /ZR4XSjBm0Hr4fb7q1NoZQ/bqna8kQn6OutHIE+wtJzCRTc29vF8cZQKnO/JZK9zM+dl
+         kQbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PgavFM9fv9RyVhfrzNoVsCZw1UsAPzbtBmN1LRCEpDI=;
+        b=o4V6SfsuA3gJTDMaRGUCIt0UgBNdbgnDLcmH+cSXf7Z8X44vdI5NY8qTxPSjcwK10c
+         pmSr4FAj+C4jXfE/mHsUxobhSAC2+4JAnuGtrcn+pc7/a+UCRcIe2AG9KRzI0S83MBNU
+         7btcriQapZdXRBgqDAPeyuE1pcFOloummO8k1YIhYKLQEebBbB8QEwLgo9FAmXjG9j/G
+         bKzaB1He6ed+EwaHqxLovXTDCxOrbxUPUbT+rMnTMdI2YAmV4IwKZ4mvJk5TOVe5g94d
+         X/cOpgtIZTCcZSWPG/nSrvXm7Qncj0hOc9svbXS0mo61LAT+C8RNufOaq4EZ0NM0IGbX
+         VWSw==
+X-Gm-Message-State: AOAM531/sDBf02DNmU2T2B7vzyRtZux+WkT524ee7X1jf3Ge9DzswHk5
+        ZjY5FOEo98YO4APD+11W8lWJZw==
+X-Google-Smtp-Source: ABdhPJz0MnmxY5FGxiJd/Rlf5vNi7glj7xvlTjk3q/iCWrbWoe08wUQotvFp9C66WBoUIiITj3nu9g==
+X-Received: by 2002:a37:b942:: with SMTP id j63mr5170964qkf.138.1596217718437;
+        Fri, 31 Jul 2020 10:48:38 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id 22sm8910314qkd.64.2020.07.31.10.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2020 10:48:37 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1k1Z93-002AAS-77; Fri, 31 Jul 2020 14:48:37 -0300
+Date:   Fri, 31 Jul 2020 14:48:37 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Steven Sistare <steven.sistare@oracle.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         Anthony Yznaga <anthony.yznaga@oracle.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
@@ -37,13 +62,11 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
         arnd@arndb.de, keescook@chromium.org, gerg@linux-m68k.org,
         ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
-        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com
+        peterz@infradead.org, esyr@redhat.com, christian@kellner.me,
+        areber@redhat.com, cyphar@cyphar.com
 Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-Message-ID: <20200731172337.GQ23808@casper.infradead.org>
-References: <20200730152250.GG23808@casper.infradead.org>
- <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
- <20200730171251.GI23808@casper.infradead.org>
+Message-ID: <20200731174837.GH24045@ziepe.ca>
+References: <20200730171251.GI23808@casper.infradead.org>
  <63a7404c-e4f6-a82e-257b-217585b0277f@oracle.com>
  <20200730174956.GK23808@casper.infradead.org>
  <ab7a25bf-3321-77c8-9bc3-28a223a14032@oracle.com>
@@ -51,45 +74,34 @@ References: <20200730152250.GG23808@casper.infradead.org>
  <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
  <20200731152736.GP23808@casper.infradead.org>
  <9ba26063-0098-e796-9431-8c1d0c076ffc@oracle.com>
+ <20200731165649.GG24045@ziepe.ca>
+ <71ddd3c1-bb59-3e63-e137-99b88ace454d@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9ba26063-0098-e796-9431-8c1d0c076ffc@oracle.com>
+In-Reply-To: <71ddd3c1-bb59-3e63-e137-99b88ace454d@oracle.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 12:11:52PM -0400, Steven Sistare wrote:
-> On 7/31/2020 11:27 AM, Matthew Wilcox wrote:
-> > On Fri, Jul 31, 2020 at 10:57:44AM -0400, Steven Sistare wrote:
-> >> Matthews sileby/mshare proposal has the same issue.  If a process opts-in
-> >> and mmap's an address in the shared region, then content becomes mapped at
-> >> a VA that was known to the pre-fork or pre-exec process.  Trust must still
-> >> be established.
+On Fri, Jul 31, 2020 at 01:15:34PM -0400, Steven Sistare wrote:
+> On 7/31/2020 12:56 PM, Jason Gunthorpe wrote:
+> > On Fri, Jul 31, 2020 at 12:11:52PM -0400, Steven Sistare wrote:
+> >>> Your preservation-across-exec use-case might or might not need the
+> >>> VMA to be mapped at the same address.  
+> >>
+> >> It does.  qemu registers memory with vfio which remembers the va's in kernel
+> >> metadata for the device.
 > > 
-> > It's up to the recipient whether they try to map it at the same address
-> > or at a fresh address.  The intended use case is a "semi-shared" address
-> > space between two processes (ie partway between a threaded, fully-shared
-> > address space and a forked un-shared address space), in which case
-> > there's a certain amount of trust and cooperation between the processes.
+> > Once the memory is registered with vfio the VA doesn't matter, vfio
+> > will keep the iommu pointing at the same physical pages no matter
+> > where they are mapped.
 > 
-> Understood, but if the recipient does map at any of the same, which is the whole
-> point because you want to share the page table.  The trust relationship is no
-> different than for the live update case.  
+> Yes, but there are other code paths that compute and use offsets between va and the
+> base va.  Mapping at a different va in the new process breaks vfio; I have tried it.
 
-You don't have to map at the same address to share the page tables.
-For example, on x86 if you share an 8GB region, that must be aligned at
-1GB in both the donor and the recipient, but they need not be mapped at
-the same address.
+Maybe you could fix vfio instead of having this adventure, if vfio is
+the only motivation.
 
-> > It's a net increase of 200 lines of kernel code.  If 4 lines of userspace
-> > code removes 200 lines of kernel code, I think I know which I prefer ...
-> 
-> It will be *far* more than 4 lines.
-> Much of the 200 lines is mostly for the elf opt in, and much of the elf code is from
-> anthony reviving an earlier patch that use MAP_FIXED_NOREPLACE during segment setup.
-
-It doesn't really matter how much of it is for the opt-in and how much
-is for the exec path itself.  The MAP_FIXED_NOREPLACE patch is only net
-+16 lines, so that's not the problem.
+Jason
