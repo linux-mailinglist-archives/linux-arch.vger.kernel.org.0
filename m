@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D60C234E6A
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 01:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9494234E60
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 01:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727897AbgGaXS0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 19:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S1727906AbgGaXSU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 19:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727893AbgGaXST (ORCPT
+        with ESMTP id S1727846AbgGaXST (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 19:18:19 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D1DC061756
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:19 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id z188so7342588pfc.6
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:19 -0700 (PDT)
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F5FC06138D
+        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:18 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id u10so8615382plr.7
+        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j7Lys61YjFpfMX3OTBjlFH6rsXYj3ZGDYGY4DwTK5Rs=;
-        b=d1nsCRiVeR5V7xSyyra8TUXkzVGGZyVGicIMpvsBxz4UYBltmv2pChbuD9HAWx1JRZ
-         nTzgrAEI4ydMYR6/86qDA5RBERE0C3DwH6MGQ/ocUxKfyvRkYDsOGgPU8V7aUbsGFQfr
-         K/ypLFr1ufBcI2TdFJYN71D2tSdiicMgRSswc=
+        bh=FPxMtdaVEuf/TmmMX8wDVhETGtH9LgUyfSDjSNQd8LQ=;
+        b=PtKKgTcchPWFwmNHCOELBCbedImXn8QMPZUx6BmT8IS2wiMXkAnvVSwandzH318pso
+         Hjyv+KSkEYyXk4GV2I31Nrts7XxM6cf+zk2+8PSOG4M9OnwOvFGW0i2HmWqrqkC4EY2C
+         U/pecA93OxRO8DIbgvcfQD7SYw3Ny8vnG8WlQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j7Lys61YjFpfMX3OTBjlFH6rsXYj3ZGDYGY4DwTK5Rs=;
-        b=mvuyCkuUnDkywUHFSkO0aQ2wO5Vp0R14P3KpmDeFbuvlWneWd/87hdjgC+eGUljpAW
-         6NdtaLmaqVFhGG1/MPK0pghNqtcIjmvs58qxpw7M4K5G8dQhm3zSFGEKimtbjXedrEcM
-         hp/OWh88MIqmdqTvX+ITp+4q5xPqtQ1TRyspEmVi9NtU26BmdUvcdhLTtdysUbQubYj1
-         De2AFDn4aAcOz7O3lH0iaJKvZZKi5Fwq3PhFbt1Z6stu0YZQZMe5EGnujWk31X+zaCJa
-         D6rCBfD54bBmQuyn7t7vlokhANBNKx2Pc0CufOEcqPS5qWAETQBA1ACJYM9qTyRKRabf
-         rPoA==
-X-Gm-Message-State: AOAM53320UHGTHeHNB5cog5NchqK/4hbaTd4B/lhywvo4TdL9zXc8xLj
-        PSD7+kX1tf8kpGYq9F2wTtuHIg==
-X-Google-Smtp-Source: ABdhPJylqiQpL9f/Meacfle4u2dUrOQCvbKxNn7AAVKGg1HE/JSZSV2cXWPDWp4nKgsIRycs40SrKA==
-X-Received: by 2002:a62:2546:: with SMTP id l67mr5959404pfl.154.1596237499260;
-        Fri, 31 Jul 2020 16:18:19 -0700 (PDT)
+        bh=FPxMtdaVEuf/TmmMX8wDVhETGtH9LgUyfSDjSNQd8LQ=;
+        b=ci2TtD4b7kC7tjaWxKJLJvYiLYhpXAHyG8fqIpja6coXa4Fw22UarJsOsvytDA2Ca0
+         Q+dNcq6Eft/9g9JdVTlZUTKHn9PZRHWefiUiPmQmSSJUsj2SSn/kn7KszyYiCnfduduT
+         vaaVjydwZaXldvOfGWRCiOFp2wtiZOQRDZn7uN3Rb/Z2KLHIH8eE2jdkkczaJodSyqS+
+         lVWQWLuKLZcIB7gfT2o+wt453ONGO6AteJDPcq4ES+v2g7LPiinfGrdTS+3XeubVf2bw
+         8jUwmwE3owecQ80E82zE7xyt6uLJ75D3IjS+AGuZLZWfe8+Gz7Vy+94/aHbKK4njGi6+
+         /hOQ==
+X-Gm-Message-State: AOAM531MA3yfLXdinfywXxMdMAMJUuVDukh+q7Rwi8QX1Nvd2ozf+jd0
+        p2gYs1faCXj+3R2/YX6OXZ+qoQ==
+X-Google-Smtp-Source: ABdhPJznb0jB8vv08BLZve0OvcyfCLdlXMgQKl4ItQYtZUCrXVmc6VSnzMZBZfdW62Kpwqwn9GzGMA==
+X-Received: by 2002:a17:902:9a96:: with SMTP id w22mr5577756plp.172.1596237497869;
+        Fri, 31 Jul 2020 16:18:17 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c2sm11380501pgb.52.2020.07.31.16.18.14
+        by smtp.gmail.com with ESMTPSA id t1sm11510899pgq.66.2020.07.31.16.18.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2020 16:18:15 -0700 (PDT)
+        Fri, 31 Jul 2020 16:18:14 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -62,9 +62,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 24/36] arm/build: Add missing sections
-Date:   Fri, 31 Jul 2020 16:08:08 -0700
-Message-Id: <20200731230820.1742553-25-keescook@chromium.org>
+Subject: [PATCH v5 25/36] arm/build: Warn on orphan section placement
+Date:   Fri, 31 Jul 2020 16:08:09 -0700
+Message-Id: <20200731230820.1742553-26-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200731230820.1742553-1-keescook@chromium.org>
 References: <20200731230820.1742553-1-keescook@chromium.org>
@@ -75,56 +75,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add missing text stub sections .vfp11_veneer and .v4_bx, as well as
-missing DWARF sections, when present in the build.
+We don't want to depend on the linker's orphan section placement
+heuristics as these can vary between linkers, and may change between
+versions. All sections need to be explicitly handled in the linker
+script.
+
+Specifically, this would have made a recently fixed bug very obvious:
+
+ld: warning: orphan section `.fixup' from `arch/arm/lib/copy_from_user.o' being placed in section `.fixup'
+
+With all sections handled, enable orphan section warning.
 
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/arm/include/asm/vmlinux.lds.h | 4 +++-
- arch/arm/kernel/vmlinux-xip.lds.S  | 1 +
- arch/arm/kernel/vmlinux.lds.S      | 1 +
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ arch/arm/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/include/asm/vmlinux.lds.h b/arch/arm/include/asm/vmlinux.lds.h
-index c4af5182ab48..6624dd97475c 100644
---- a/arch/arm/include/asm/vmlinux.lds.h
-+++ b/arch/arm/include/asm/vmlinux.lds.h
-@@ -59,7 +59,9 @@
- #define ARM_STUBS_TEXT							\
- 		*(.gnu.warning)						\
- 		*(.glue_7)						\
--		*(.glue_7t)
-+		*(.glue_7t)						\
-+		*(.vfp11_veneer)                                        \
-+		*(.v4_bx)
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 59fde2d598d8..e414e3732b3a 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -16,6 +16,10 @@ LDFLAGS_vmlinux	+= --be8
+ KBUILD_LDFLAGS_MODULE	+= --be8
+ endif
  
- #define ARM_TEXT							\
- 		IDMAP_TEXT						\
-diff --git a/arch/arm/kernel/vmlinux-xip.lds.S b/arch/arm/kernel/vmlinux-xip.lds.S
-index 57fcbf55f913..11ffa79751da 100644
---- a/arch/arm/kernel/vmlinux-xip.lds.S
-+++ b/arch/arm/kernel/vmlinux-xip.lds.S
-@@ -150,6 +150,7 @@ SECTIONS
- 	_end = .;
- 
- 	STABS_DEBUG
-+	DWARF_DEBUG
- 	ARM_DETAILS
- }
- 
-diff --git a/arch/arm/kernel/vmlinux.lds.S b/arch/arm/kernel/vmlinux.lds.S
-index 1d3d3b599635..dc672fe35de3 100644
---- a/arch/arm/kernel/vmlinux.lds.S
-+++ b/arch/arm/kernel/vmlinux.lds.S
-@@ -149,6 +149,7 @@ SECTIONS
- 	_end = .;
- 
- 	STABS_DEBUG
-+	DWARF_DEBUG
- 	ARM_DETAILS
- }
- 
++# We never want expected sections to be placed heuristically by the
++# linker. All sections should be explicitly named in the linker script.
++LDFLAGS_vmlinux += --orphan-handling=warn
++
+ ifeq ($(CONFIG_ARM_MODULE_PLTS),y)
+ KBUILD_LDS_MODULE	+= $(srctree)/arch/arm/kernel/module.lds
+ endif
 -- 
 2.25.1
 
