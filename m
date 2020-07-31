@@ -2,233 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C2D234218
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 11:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC94D2345B2
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Jul 2020 14:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732010AbgGaJMX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 05:12:23 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:28909 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732077AbgGaJMW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 31 Jul 2020 05:12:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596186740;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=6bhSR+BAUMbcG04K3ykGLY28I4XLjMXKCr7yKjPcSyI=;
-        b=KO5o0Pd//8hyiM5UpIhxaJg5k36AkUVXYIrvjyvZa4OYH05KNEMqn0bIORev0PMCsvYlaE
-        4KsaQCA7k/2OU5vtiYSQzHVCS3NDqQ9mBnrhJmghHT3TDCW4GxDG+ZVkG+zC1KfRZO+FEn
-        T2EAjWawVyBoz5q1KtfuzxQL9Ku5+t4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-432-aUsgmxYyOfS6mkJo17tMDQ-1; Fri, 31 Jul 2020 05:12:18 -0400
-X-MC-Unique: aUsgmxYyOfS6mkJo17tMDQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DD2D6107ACCA;
-        Fri, 31 Jul 2020 09:12:14 +0000 (UTC)
-Received: from localhost (ovpn-114-6.ams2.redhat.com [10.36.114.6])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 308CB25278;
-        Fri, 31 Jul 2020 09:12:02 +0000 (UTC)
-Date:   Fri, 31 Jul 2020 10:12:01 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Anthony Yznaga <anthony.yznaga@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        arnd@arndb.de, ebiederm@xmission.com, keescook@chromium.org,
-        gerg@linux-m68k.org, ktkhai@virtuozzo.com, peterz@infradead.org,
-        esyr@redhat.com, jgg@ziepe.ca, christian@kellner.me,
-        areber@redhat.com, cyphar@cyphar.com, steven.sistare@oracle.com,
-        Andrea Arcangeli <aarcange@redhat.com>, jasowang@redhat.com,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        Peter Xu <peterx@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alexander Graf <graf@amazon.com>, vgoyal@redhat.com
-Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
-Message-ID: <20200731091201.GA173964@stefanha-x1.localdomain>
+        id S1733295AbgGaMWP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 08:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733283AbgGaMWM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 08:22:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBFAC061574;
+        Fri, 31 Jul 2020 05:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=9uobcNq4xnks0xuZFqsb4L1vX6lu2ZzJrjBZkoGvKIg=; b=HVR60Foe6Jwbbk3eyWFKnqiWUJ
+        kRHzd5fEOlD2Ra24dhIxR21iHdOAgywXsD9oeRf5cXQ6L9JaMN6j9lS+JZPbxpoXaBeLu2kJ0AOwj
+        dJW2otfOm9g7GA22FWO97ZJzmKMTh1hmzSHq0WLvU/0QaNMJqOrKGvi2dBYw8yI9tE1W/Af/zZzdC
+        /np8onjsYtFwryiFxMVAPNKraBbqEfblPmuwL43IM/dR11tXO2xqlTDUULxFw+T1djBjS2GK59Nlb
+        j0UCvqB8pb2qi34ymIs+S/dq+3uvdusgtUWkptaB+v3Yhfnjsj/YDbkzB5a53Zm7y+qpkIR5eNKrw
+        DaDGIlpA==;
+Received: from 138.57.168.109.cust.ip.kpnqwest.it ([109.168.57.138] helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k1U31-000256-PI; Fri, 31 Jul 2020 12:22:06 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     x86@kernel.org, Jan Kara <jack@suse.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: improve compat handling for the i386 u64 alignment quirk v2
+Date:   Fri, 31 Jul 2020 14:21:59 +0200
+Message-Id: <20200731122202.213333-1-hch@lst.de>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20200730152705.ol42jppnl4xfhl32@wittgenstein>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YiEDa0DAkWCtVeE4"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---YiEDa0DAkWCtVeE4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi all,
 
-Hi,
-Sileby looks interesting! I had just written up the following idea which
-seems similar but includes a mechanism for revoking mappings.
+the i386 ABI is a little special in that it uses less than natural
+alignment for 64-bit integer types (u64 and s64), and a significant
+amount of our compat handlers deals with just that.  Unfortunately
+there is no good way to check for this specific quirk at runtime,
+similar how in_compat_syscall() checks for a compat syscall.  This
+series adds such a check, and then uses the quota code as an example
+of how this improves the compat handling.  I have a few other places
+in mind where this will also be useful going forward.
 
-Alexander Graf recently brought up an idea that solves the following
-problem:
+Changes since v1:
+ - use asm-generic/compat.h instead of linux/compat.h for
+   compat_u64 and compat_s64
+ - fix a typo
 
-When process A passes shared memory file descriptors to process B there
-is no way for process A to revoke access or change page protection bits
-after passing the fd.
-
-I'll describe the idea (not sure if it's exactly what Alexander had in
-mind).
-
-Memory view driver
-------------------
-The memory view driver allows process A to control the page table
-entries of an mmap in process B. It is a character device driver that
-process A opens like this:
-
-  int fd = open("/dev/memory-view", O_RDWR);
-
-This returns a file descriptor to a new memory view.
-
-Next process A sets the size of the memory view:
-
-  ftruncate(fd, 16 * GiB);
-
-The size determines how large the memory view will be. The size is a
-virtual memory concept and does not consume resources (there is no
-physical memory backing this).
-
-Process A populates the memory view with ranges from file descriptors it
-wishes to share. The file descriptor can be a shared memory file
-descriptor:
-
-  int memfd = memfd_create("guest-ram, 0);
-  ftruncate(memfd, 32 * GiB);
-
-  /* Map [8GB, 10GB) at 8GB into the memory view */
-  struct memview_map_fd_info = {
-      .fd = memfd,
-      .fd_offset = 8 * GiB,
-      .size = 2 * GiB,
-      .mem_offset = 8 * GiB,
-      .flags = MEMVIEW_MAP_READ | MEMVIEW_MAP_WRITE,
-  };
-  ioctl(fd, MEMVIEW_MAP_FD, &map_fd_info);
-
-It is also possible to populate the memory view from the page cache:
-
-  int filefd = open("big-file.iso", O_RDONLY);
-
-  /* Map [4GB, 12GB) at 0B into the memory view */
-  struct memview_map_fd_info = {
-      .fd = filefd,
-      .fd_offset = 4 * GiB,
-      .size = 8 * GiB,
-      .mem_offset = 0,
-      .flags = MEMVIEW_MAP_READ,
-  };
-  ioctl(fd, MEMVIEW_MAP_FD, &map_fd_info);
-
-The memory view has now been populated like this:
-
-Range (GiB)   Fd               Permissions
-0-8           big-file.iso     read
-8-10          guest-ram        read+write
-10-16         <none>           <none>
-
-Now process A gets the "view" file descriptor for this memory view. The
-view file descriptor does not allow ioctls. It can be safely passed to
-process B in the knowledge that process B can only mmap or close it:
-
-  int viewfd = ioctl(fd, MEMVIEW_GET_VIEWFD);
-
-  ...pass viewfd to process B...
-
-Process B receives viewfd and mmaps it:
-
-  void *ptr = mmap(NULL, 16 * GiB, PROT_READ | PROT_WRITE, MAP_SHARED,
-                   viewfd, 0);
-
-When process B accesses a page in the mmap region the memory view
-driver resolves the page fault by checking if the page is mapped to an
-fd and what its permissions are.
-
-For example, accessing the page at 4GB from the start of the memory view
-is an access at 8GB into big-file.iso. That's because 8GB of
-big-file.iso was mapped at 0 with fd_offset 4GB.
-
-To summarize, there is one vma in process B and the memory view driver
-maps pages from the file descriptors added with ioctl(MEMVIEW_MAP_FD) by
-process A.
-
-Page protection bits are the AND of the mmap
-PROT_READ/PROT_WRITE/PROT_EXEC flags with the memory view driver's
-MEMVIEW_MAP_READ/MEMVIEW_MAP_WRITE/MEMVIEW_MAP_EXEC flags for the
-mapping in question.
-
-Does vmf_insert_mixed_prot() or a similar Linux API allow this?
-
-Can the memory view driver map pages from fds without pinning the pages?
-
-Process A can make further ioctl(MEMVIEW_MAP_FD) calls and also
-ioctl(MEMVIEW_UNMAP_FD) calls to change the mappings. This requires
-zapping affected process B ptes. When process B accesses those pages
-again the fault handler will handle the page fault based on the latest
-memory view layout.
-
-If process B accesses a page with incorrect permissions or that has not
-been configured by process A ioctl calls, a SIGSEGV/SIGBUS signal is
-raised.
-
-When process B uses mprotect(2) and other virtual memory syscalls it
-is unable to increase page permissions. Instead it can only reduce them
-because the pte protection bits are the AND of the mmap flags and the
-memory view driver's MEMVIEW_MAP_READ/MEMVIEW_MAP_WRITE/MEMVIEW_MAP_EXEC
-flags.
-
-Use cases
----------
-How to use the memory view driver for vhost-user
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-vhost-user and other out-of-process device emulation interfaces need a
-way for the VMM to enforce the IOMMU mappings on the device emulation
-process.
-
-Today the VMM passes all guest RAM fds to the device emulation process
-and has no way of restricting access or revoking it later. With the
-memory view driver the VMM will pass one or more memory view fds instead
-of the actual guest RAM fds. This allows the VMM to invoke
-ioctl(MEMVIEW_MAP_FD/MEMVIEW_UNMAP_FD) to enforce permissions or revoke
-access.
-
-How to use the memory view driver for virtio-fs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The virtiofsd vhost-user process creates a memory view for the device's
-DAX Window and passes it to QEMU. QEMU installs it as a kvm.ko memory
-region so that the guest directly accesses the memory view.
-
-Now virtiofsd can map portions of files into the DAX Window without
-coordinating with the QEMU process. This simplifies the virtio-fs code
-and should also improve DAX map/unmap performance.
-
-Stefan
-
---YiEDa0DAkWCtVeE4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAl8j4GEACgkQnKSrs4Gr
-c8ifDQgAjLeYf5nD/LJSs1tJ4vMLKsebK4OIkz7iOIJDeklVxePFIDc6dDZGMQLk
-u//b8qLfr/0dZ5Q+KCT0GI96oHPK4Eod/PkB73XBm5lXj4wn3/MIKpITgfIN3oQX
-Eb53sfAcDgXtceGB51vjemSDFD0KomE+j/Qj/yASxW1XpB3c1jT4N2XlaUNTYycG
-8whaLYHvfhqkMX7HMbQVc1HGriYcAMgZkMMrn7RYbt4o58hirgauhD87x4kYDMk9
-8Ph1wIeCzUnoxUkL8gjLC5/6qN1OMJ4NjMilYI4QqsUYfnCJYvwsPvrnVjdNs/Cm
-qih0ktK8TMKEBLhHNOVQEJLp24DBdQ==
-=szmz
------END PGP SIGNATURE-----
-
---YiEDa0DAkWCtVeE4--
-
+Diffstat:
+ b/arch/arm64/include/asm/compat.h        |    2 
+ b/arch/mips/include/asm/compat.h         |    2 
+ b/arch/parisc/include/asm/compat.h       |    2 
+ b/arch/powerpc/include/asm/compat.h      |    2 
+ b/arch/s390/include/asm/compat.h         |    2 
+ b/arch/sparc/include/asm/compat.h        |    3 
+ b/arch/x86/entry/syscalls/syscall_32.tbl |    2 
+ b/arch/x86/include/asm/compat.h          |    3 
+ b/fs/quota/Kconfig                       |    5 -
+ b/fs/quota/Makefile                      |    1 
+ b/fs/quota/compat.h                      |   34 ++++++++
+ b/fs/quota/quota.c                       |   73 +++++++++++++++---
+ b/include/asm-generic/compat.h           |    8 ++
+ b/include/linux/compat.h                 |    9 ++
+ b/include/linux/quotaops.h               |    3 
+ b/kernel/sys_ni.c                        |    1 
+ fs/quota/compat.c                        |  120 -------------------------------
+ 17 files changed, 113 insertions(+), 159 deletions(-)
