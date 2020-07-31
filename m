@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC910234E74
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 01:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A66C1234E7D
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 01:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbgGaXSk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Jul 2020 19:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S1726347AbgGaXSu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Jul 2020 19:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727845AbgGaXST (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 19:18:19 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17074C0617B1
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:17 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id u185so15200121pfu.1
-        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:17 -0700 (PDT)
+        with ESMTP id S1726215AbgGaXSQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Jul 2020 19:18:16 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D2C06179E
+        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:14 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t15so8525669pjq.5
+        for <linux-arch@vger.kernel.org>; Fri, 31 Jul 2020 16:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dCXoZ6vwcRTLoMlYpWHYOqZEmN50vC99VSBByVG6tNg=;
-        b=gQ2kBPm9q0b4ouhPZ6T6zt99vNNF0eP14E7gJXRtWUIvU4j82+oxEfdDO2Pf/0XU4P
-         w09ztBEuvHLJCydLNM91dJEnFqfK0fQKKtDUFCjJ+figlvB7P/2cn3GD7GZ1HNX+R4jA
-         H1vOnXWTO7NByBLNOYfBGd1Dt2p269tjKBwrg=
+        bh=rx9BNhtOHihN4cC/yR211OAq+faeKI6Zes69oCeQM6w=;
+        b=d74fEfH+AJT4QLl/pweek9M8JQU04VeKWDA6U2gixgr/mciheG5Ezlv7MgN6Rb1HWY
+         2OBg7xnc3sUVIMCFnR1Y+igiUqbxr8jaR2zt1f0TV1ldOv8LhbyjysXpqao6LAEOouE3
+         Rwi1z6MIeG7fXDb29GK8Dc5L/EDvqKHqNhytQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dCXoZ6vwcRTLoMlYpWHYOqZEmN50vC99VSBByVG6tNg=;
-        b=s12su9YCoJmEwKDBQMc89cU4ImRISK71QDqF5Pi3yKLjaSGmb3Wm40kv6ltIemV+yF
-         q0AIDw4q0ts95NAUbWzfdamt/DtRdX0tdG/9ppmMJycUwg/lmP+PcSC4LB3MHfSRNtpZ
-         NzMfUjg8R4BVeTWjl4JWyCSTwYiisXDQrRqHNybg7+VsVX73mh41KlsPkFFd7C0/Vppi
-         GUfjrfO93v6yLsM6tRJPWLvi/HVa2YqZi/sxJdQ4Qf4IWDyjCgWWvpTTJa6O+eZABKM4
-         hhgxjAsF0Yv41PvVa3C9v8kceasP98qjrF2AinirCv+FkcrnsI+5h4BfF3avEkTqOLs2
-         F7lg==
-X-Gm-Message-State: AOAM531H9hWHr3VZ/icGg3Y4R1DmP7jxcGf5yjj20H7tGtLTVI/BukkO
-        QDH3NDr/JyYHIwMWAubl7R/W0w==
-X-Google-Smtp-Source: ABdhPJxykfNbyUgTzEuAmMvQ2SlDq9N1S3QBPoWqnwl2G3pY+OaKurGdTDKceGp+pjJPCmAQjYtSBA==
-X-Received: by 2002:a65:5c43:: with SMTP id v3mr5559806pgr.214.1596237496666;
-        Fri, 31 Jul 2020 16:18:16 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z11sm10923285pfk.46.2020.07.31.16.18.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=rx9BNhtOHihN4cC/yR211OAq+faeKI6Zes69oCeQM6w=;
+        b=n7hzkAnCa8yQZ8tAaLKgnIJPurhYO7Ylhgkp+dAmmfoy4PntAIFZBI3R0YWJCJMm0J
+         Z8kUWenLoq0Zsa9S9ZtVM7JnNmWCSYItIsFHXLUJ6K68/J+k1lt5ulw5hxrz9VarRf68
+         HyCsbpgdh47HQUU6rP7ZqvPMpstjYcpbOfoD7FW+wPVc0uDsuSNbz5e3DmNfPaszbHIK
+         aUboGi3IIdlJGs//M3fSqVB8u0I5+rprQA0Xf3KWW5vN0436UwWIb7I4DnWaxaJ5RDsZ
+         vMVi4i/nb/kBFnDJ3PDPeRGMrgz+5U3iYvm7XFxW+hapFcCHfDhQRAJeUSE4jL8Piqtr
+         DOBA==
+X-Gm-Message-State: AOAM5303GT+F6piTAVbFSVupAFbEzl5p3KxkPExeYLHhy4U3xUlaI9Wx
+        VBy+fp7B+Ey0vZHXex+jrc1HPA==
+X-Google-Smtp-Source: ABdhPJy/UWkqz0kX/iI9reViU3q1mzpCLU62ykzIRw2Fvekz5tfwEf5puBHtXUakR6EdYyybPNSt/w==
+X-Received: by 2002:a17:902:b101:: with SMTP id q1mr5482552plr.136.1596237494096;
         Fri, 31 Jul 2020 16:18:14 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z19sm11621350pfa.9.2020.07.31.16.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2020 16:18:11 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Peter Collingbourne <pcc@google.com>,
         James Morse <james.morse@arm.com>,
         Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
@@ -62,9 +62,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 17/36] arm64/build: Remove .eh_frame* sections due to unwind tables
-Date:   Fri, 31 Jul 2020 16:08:01 -0700
-Message-Id: <20200731230820.1742553-18-keescook@chromium.org>
+Subject: [PATCH v5 18/36] arm64/build: Use common DISCARDS in linker script
+Date:   Fri, 31 Jul 2020 16:08:02 -0700
+Message-Id: <20200731230820.1742553-19-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200731230820.1742553-1-keescook@chromium.org>
 References: <20200731230820.1742553-1-keescook@chromium.org>
@@ -75,55 +75,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Avoid .eh_frame* section generation by making sure both CFLAGS and AFLAGS
-contain -fno-asychronous-unwind-tables and -fno-unwind-tables.
+Use the common DISCARDS rule for the linker script in an effort to
+regularize the linker script to prepare for warning on orphaned
+sections. Additionally clean up left-over no-op macros.
 
-With all sources of .eh_frame now removed from the build, drop this
-DISCARD so we can be alerted in the future if it returns unexpectedly
-once orphan section warnings have been enabled.
-
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Will Deacon <will@kernel.org>
 Signed-off-by: Kees Cook <keescook@chromium.org>
+Acked-by: Will Deacon <will@kernel.org>
 ---
- arch/arm64/Makefile             | 5 ++++-
- arch/arm64/kernel/vmlinux.lds.S | 1 -
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ arch/arm64/kernel/vmlinux.lds.S | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 70f5905954dd..35de43c29873 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -47,13 +47,16 @@ endif
- 
- KBUILD_CFLAGS	+= -mgeneral-regs-only	\
- 		   $(compat_vdso) $(cc_has_k_constraint)
--KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
- KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
- KBUILD_AFLAGS	+= $(compat_vdso)
- 
- KBUILD_CFLAGS	+= $(call cc-option,-mabi=lp64)
- KBUILD_AFLAGS	+= $(call cc-option,-mabi=lp64)
- 
-+# Avoid generating .eh_frame* sections.
-+KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
-+KBUILD_AFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
-+
- ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
- prepare: stack_protector_prepare
- stack_protector_prepare: prepare0
 diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index df2916b25ee0..b29081d16a70 100644
+index b29081d16a70..5c1960406b08 100644
 --- a/arch/arm64/kernel/vmlinux.lds.S
 +++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -95,7 +95,6 @@ SECTIONS
- 		*(.discard.*)
+@@ -6,6 +6,7 @@
+  */
+ 
+ #define RO_EXCEPTION_TABLE_ALIGN	8
++#define RUNTIME_DISCARD_EXIT
+ 
+ #include <asm-generic/vmlinux.lds.h>
+ #include <asm/cache.h>
+@@ -89,10 +90,8 @@ SECTIONS
+ 	 * matching the same input section name.  There is no documented
+ 	 * order of matching.
+ 	 */
++	DISCARDS
+ 	/DISCARD/ : {
+-		EXIT_CALL
+-		*(.discard)
+-		*(.discard.*)
  		*(.interp .dynamic)
  		*(.dynsym .dynstr .hash .gnu.hash)
--		*(.eh_frame)
  	}
- 
- 	. = KIMAGE_VADDR + TEXT_OFFSET;
 -- 
 2.25.1
 
