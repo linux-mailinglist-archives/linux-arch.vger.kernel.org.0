@@ -2,58 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1032A2353BC
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 19:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8C72353C5
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 19:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgHARM3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Aug 2020 13:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S1727001AbgHAR1u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Aug 2020 13:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbgHARM3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Aug 2020 13:12:29 -0400
+        with ESMTP id S1726534AbgHAR1u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Aug 2020 13:27:50 -0400
 Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5460C06174A;
-        Sat,  1 Aug 2020 10:12:28 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id c9so1876482qvu.5;
-        Sat, 01 Aug 2020 10:12:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC7C06174A;
+        Sat,  1 Aug 2020 10:27:49 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id j10so8896624qvo.13;
+        Sat, 01 Aug 2020 10:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=2o6GVTZCy3XlmzBSwd7fA26VADSjJEkCYNl3YQKOr2M=;
-        b=Ldn6PBxD4m7lMPymQjipKfl27zylKQuiR2k8wfxVSrmlQ5jpqIVVImGSZWjlPgIbGC
-         hDJ7BkFuGFrS7733Sa79QeGiqV0qQCemUiXRE/QiwWnLbm5EQ82dmxs/kG3UyfU7E7n8
-         nL536EWJMI21gMA9GAQJpy1F9/6iR1lsI9mBQIIRfbo6g7chxN3cmdc3uVhPEga7RQ4V
-         TEliR1I27x7f40QWq2Ktg3mUvoW/3WDyyvpBb63myjZ0gnPKNIW0MqE9glVDJBy3Bgqw
-         In5hjK+9C4XkaeRowWu/SdcdFCcOWgZbXvoQRkQSw2xxEZumWAOjTxrQxGG+33eaNoFE
-         aj7w==
+        bh=sH4ZgoE2+krh+pccRrSZUcqU9PhKP/eT8yH9LsNvEAE=;
+        b=lDrKUAaQxNvYx4tI3nODZhJ8NcdsIkFV5oX3fhol8e4eN7e+SiVw939+t1R8UOsx01
+         NSBpVkU25zrVoic7dwx7vwPpt2Aoqluvpt9j57py3CrKQWNWRW/0ocBMD52snn+v8caX
+         M5EIHqZBjgjmuY1sMynhvFwF9WFUnBJY9U/R0onHK6bADrVu5jsdfo7KQi7I+b3rmiyH
+         I94kcHuWo7JSHfdbKTGM6SWqwPkurjVD4/oFL2UnQJjspmk2pVz1JyEb9FbK2c5RyjH8
+         e8Hlx4C+F+z+XQ3k78QRq/hE1RDG6ofkeYYFzko1A5R84bKXmrmY/eSIefXtxSAK4nDW
+         K76Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=2o6GVTZCy3XlmzBSwd7fA26VADSjJEkCYNl3YQKOr2M=;
-        b=Dlxkj4gwDa3VAZVNrv9hw1JojMt5+vpiOLB+vkYEQBPdwM9S5jDV2rIGne+HuUAQOU
-         7BlQ/YkXTwh/eVktZHaijfYequ8PWQge+Kk4a/24lKyW5IAq/lQuS8ylOiK2n+Ui4wQp
-         7EnrtXgTPfBhCPqZq4DlY58FS7qjlMRiBU9pKOHU5K6UULrmMwWLV6LUuwFR2mdNugu0
-         in8ILi+AU9zuXaELgilZFz8+sIOVlpLFCJDMxymC+A9W+q3wMsQiKZZM+z5nsyfuitK8
-         RSx21XmrDqODOHGNAu12ZpUO/S/t/hhT+CqFkLlOROoPeREm/4TrqdHi/nHqPrieo+FD
-         7UVA==
-X-Gm-Message-State: AOAM532WSU+s03VmHGTa7xM8vcen43CLZOlnvD59LN4QYCPK5lKZeCdM
-        VXIHBrZ/aXx6iBtB9kUSxKA=
-X-Google-Smtp-Source: ABdhPJyvisrUtCH+yT5SZkhMZ5hRzUqOeeL+iqxCLSrjVaYvR2aM1RnsJVQsxy3ZgehzESYLcwGpwg==
-X-Received: by 2002:a0c:ffc6:: with SMTP id h6mr9551061qvv.251.1596301947711;
-        Sat, 01 Aug 2020 10:12:27 -0700 (PDT)
+        bh=sH4ZgoE2+krh+pccRrSZUcqU9PhKP/eT8yH9LsNvEAE=;
+        b=MTPYBAxVbM1E8LjLl+ZvzGea48iUR/V7PiezQ6Q6mmlYL8nDAZFHUuFdvTipXQsVB9
+         ftPFXn4YSQgwuGziioJnk3B2SCfvQ0RxCqaL4SzxTlZFN/4PsNjZBOSTTNONl44im0ZO
+         fWQx8VJt3dHpL3eHmWpxvFaPv0KMpMw0xr1N5JLEj6oSmaBY67qk3hy3ZSHiIohninTi
+         MxUPm5RmDUok5fDdUnpgR+Va2vRqMJsaHscR1N83TvgnRoV2v6DEghs/iHtggByZGwn1
+         df8kRCpkISIjqWW3WhHueN37jduN+B07IqBVwXo8cwkoMsIkol/jqniJC2cjgktJwhlv
+         9gag==
+X-Gm-Message-State: AOAM530AK+4zEsGiJFJCjSZGvpEtVGqo3tJDBP1hvo74Y3M6VcHvbFZm
+        K2dkZRpuKmTx8fT0lkwFpvs=
+X-Google-Smtp-Source: ABdhPJzHOFdwhm3qJs8SrnZpWK+1UKvwkZdOAaQkwtzYxCu1nPpleYVo2pqxw+5n/1qFGKkbypbvDA==
+X-Received: by 2002:ad4:43c9:: with SMTP id o9mr9657897qvs.217.1596302868608;
+        Sat, 01 Aug 2020 10:27:48 -0700 (PDT)
 Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id i19sm12760874qkk.68.2020.08.01.10.12.26
+        by smtp.gmail.com with ESMTPSA id z197sm13658960qkb.66.2020.08.01.10.27.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2020 10:12:27 -0700 (PDT)
+        Sat, 01 Aug 2020 10:27:48 -0700 (PDT)
 From:   Arvind Sankar <nivedita@alum.mit.edu>
 X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Sat, 1 Aug 2020 13:12:25 -0400
+Date:   Sat, 1 Aug 2020 13:27:46 -0400
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jian Cai <jiancai@google.com>,
+        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+        Luis Lozano <llozano@google.com>,
+        Manoj Gupta <manojgupta@google.com>, stable@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
@@ -62,125 +67,96 @@ Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
         Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
         Russell King <linux@armlinux.org.uk>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 32/36] x86/boot/compressed: Reorganize zero-size
- section asserts
-Message-ID: <20200801171225.GB3249534@rani.riverdale.lan>
+        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>
+Subject: Re: [PATCH v5 13/36] vmlinux.lds.h: add PGO and AutoFDO input
+ sections
+Message-ID: <20200801172746.GC3249534@rani.riverdale.lan>
 References: <20200731230820.1742553-1-keescook@chromium.org>
- <20200731230820.1742553-33-keescook@chromium.org>
- <20200801014755.GA2700342@rani.riverdale.lan>
- <20200801025325.GA2800311@rani.riverdale.lan>
- <202007312235.4A48157938@keescook>
+ <20200731230820.1742553-14-keescook@chromium.org>
+ <20200801035128.GB2800311@rani.riverdale.lan>
+ <202007312237.4F385EB3@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202007312235.4A48157938@keescook>
+In-Reply-To: <202007312237.4F385EB3@keescook>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 10:36:00PM -0700, Kees Cook wrote:
-> On Fri, Jul 31, 2020 at 10:53:25PM -0400, Arvind Sankar wrote:
-> > On Fri, Jul 31, 2020 at 09:47:55PM -0400, Arvind Sankar wrote:
-> > > On Fri, Jul 31, 2020 at 04:08:16PM -0700, Kees Cook wrote:
-> > > > For readability, move the zero-sized sections to the end after DISCARDS
-> > > > and mark them NOLOAD for good measure.
-> > > > 
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > >  arch/x86/boot/compressed/vmlinux.lds.S | 42 +++++++++++++++-----------
-> > > >  1 file changed, 25 insertions(+), 17 deletions(-)
-> > > > 
-> > > > diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
-> > > > index 3c2ee9a5bf43..42dea70a5091 100644
-> > > > --- a/arch/x86/boot/compressed/vmlinux.lds.S
-> > > > +++ b/arch/x86/boot/compressed/vmlinux.lds.S
-> > > > @@ -42,18 +42,16 @@ SECTIONS
-> > > >  		*(.rodata.*)
-> > > >  		_erodata = . ;
-> > > >  	}
-> > > > -	.rel.dyn : {
-> > > > -		*(.rel.*)
-> > > > -	}
-> > > > -	.rela.dyn : {
-> > > > -		*(.rela.*)
-> > > > -	}
-> > > > -	.got : {
-> > > > -		*(.got)
-> > > > -	}
-> > > >  	.got.plt : {
-> > > >  		*(.got.plt)
-> > > >  	}
-> > > > +	ASSERT(SIZEOF(.got.plt) == 0 ||
-> > > > +#ifdef CONFIG_X86_64
-> > > > +	       SIZEOF(.got.plt) == 0x18,
-> > > > +#else
-> > > > +	       SIZEOF(.got.plt) == 0xc,
-> > > > +#endif
-> > > > +	       "Unexpected GOT/PLT entries detected!")
-> > > >  
-> > > >  	.data :	{
-> > > >  		_data = . ;
-> > > > @@ -85,13 +83,23 @@ SECTIONS
-> > > >  	ELF_DETAILS
-> > > >  
-> > > >  	DISCARDS
-> > > > -}
-> > > >  
-> > > > -ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
-> > > > -#ifdef CONFIG_X86_64
-> > > > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, "Unexpected GOT/PLT entries detected!")
-> > > > -#else
-> > > > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0xc, "Unexpected GOT/PLT entries detected!")
-> > > > -#endif
-> > > > +	/*
-> > > > +	 * Sections that should stay zero sized, which is safer to
-> > > > +	 * explicitly check instead of blindly discarding.
-> > > > +	 */
-> > > > +	.got (NOLOAD) : {
-> > > > +		*(.got)
-> > > > +	}
-> > > > +	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
-> > > >  
-> > > > -ASSERT(SIZEOF(.rel.dyn) == 0 && SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations detected!")
-> > > > +	/* ld.lld does not like .rel* sections being made "NOLOAD". */
-> > > > +	.rel.dyn : {
-> > > > +		*(.rel.*)
-> > > > +	}
-> > > > +	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
-> > > > +	.rela.dyn : {
-> > > > +		*(.rela.*)
-> > > > +	}
-> > > > +	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
-> > > > +}
-> > > > -- 
-> > > > 2.25.1
-> > > > 
-> > > 
-> > > There's no point in marking zero-size sections NOLOAD -- if the ASSERT's
-> > > passed, they won't be present in the file at all anyway.
-> > > 
-> > > The only section for which there might be a point is .got.plt, which is
-> > > non-empty on 32-bit, and only if it is first moved to the end. That
-> > > saves a few bytes.
+On Fri, Jul 31, 2020 at 11:18:02PM -0700, Kees Cook wrote:
+> On Fri, Jul 31, 2020 at 11:51:28PM -0400, Arvind Sankar wrote:
 > > 
-> > Btw, you should move .got.plt also to the end anyway for readability,
-> > it's unused even if non-empty. And with the ASSERT being placed
-> > immediately after it, it's even more distracting from the actual section
-> > layout.
+> > This also changes the ordering to place all hot resp unlikely sections separate
+> > from other text, while currently it places the hot/unlikely bits of each file
+> > together with the rest of the code in that file. That seems like a reasonable
 > 
-> ld.bfd (if I'm remembering correctly) was extraordinarily upset about it
-> being at the end. I will retest and report back.
-> 
-> -- 
-> Kees Cook
+> Oh, hmm, yes, we aren't explicitly using SORT() here. Does that mean the
+> input sections were entirely be ordered in compilation unit link order,
+> even in the case of orphan sections? (And I think either way, the answer
+> isn't the same between bfd and lld.) I actually thought the like-named
+> input sections were collected together first with lld, but bfd strictly
+> appended to the output section. I guess it's time for me to stare at -M
+> output from ld...
 
-Actually, moving it to the end also requires marking it INFO or
-stripping it out when creating the bzImage. Otherwise we get back to
-that old problem of materializing .bss/.pgtable in the bzImage.
+I don't know what happened to the orphans previously. But .text.hot and
+.text.unlikely will now change ordering. It sounds from below like this
+wasn't intentional? Though it does seem to be how BFD's default linker
+scripts lay it out.
+
+> 
+> Regardless, this patch is attempting to fix the problem where bfd and lld
+> lay out the orphans differently (as mentioned above, lld seems to sort
+> them in a way that is not strictly appended, and bfd seems to sort them
+> strictly appended). In the case of being appended to the .text output
+> section, this would cause boot failures due to _etext not covering the
+> resulting sections (which this[1] also encountered and fixed to be more
+> robust for such appended collection -- that series actually _depends_ on
+> orphan handling doing the appending, because there is no current way
+> to map wildcard input sections to their own separate output sections).
+> 
+> > change and should be mentioned in the commit message.
+> > 
+> > However, the history of their being together comes from
+> > 
+> >   9bebe9e5b0f3 ("kbuild: Fix .text.unlikely placement")
+> > 
+> > which seems to indicate there was some problem with having them separated out,
+> > although I don't quite understand what the issue was from the commit message.
+> 
+> Looking at this again, I actually wonder if we have bigger issues here
+> with dead code elimination:
+> 
+> #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+> #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+> ...
+> 
+> that would catch: .text.hot .text.fixup .text.unlikely and .text.unknown
+> but not .text.hot.*, etc (i.e. the third dot isn't matched, which is,
+> I assume, why Clang switched to adding a trailing dot). However, this
+> patch lists .text.hot .text.hot.* first, so they'd get pulled to the
+> front correctly, but the trailing ones (with 2 dots) would not, since
+> they'd match the TEXT_MAIN wildcard first. (This problem actually existed
+> before this patch too, and is not the fault of 9bebe9e5b0f3, but rather
+> the addition of TEXT_MAIN, which could potentially match .text.unlikely
+> and .text.fixup)
+
+The existing comment on TEXT_TEXT mentions that issue. However, note
+that the dead code stuff is only available currently on mips and ppc,
+and is hidden behind EXPERT for those, so I'm not sure if anyone
+actually uses it.
+
+9bebe9e5b0f3 predates LD_DEAD_CODE_DATA_ELIMINATION, and there were no
+wildcards I can see in .text at the time, which is why I don't
+understand what problem is referred to in the commit message.
+
+Btw, for the FGKASLR stuff, instead of keeping the output sections per
+function, couldn't you generate a table of functions with sizes, and use
+that when randomizing the order? Then the sections themselves could be
+collected into .text explicitly.
