@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 532D223538A
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 19:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1032A2353BC
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 19:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbgHARAy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Aug 2020 13:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S1726748AbgHARM3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Aug 2020 13:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbgHARAy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Aug 2020 13:00:54 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6743C06174A;
-        Sat,  1 Aug 2020 10:00:53 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id g26so31780280qka.3;
-        Sat, 01 Aug 2020 10:00:53 -0700 (PDT)
+        with ESMTP id S1726494AbgHARM3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Aug 2020 13:12:29 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5460C06174A;
+        Sat,  1 Aug 2020 10:12:28 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id c9so1876482qvu.5;
+        Sat, 01 Aug 2020 10:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mJ6hTZT24AWhGEqcPC20wN8kBdsxrLI/peNCFh80II0=;
-        b=nUZWj8j7d2X5T3sH7PVKVcJ/tJMEQcJ4psgs1gcLJol13d1RvdpJ4+3wBuHldXvZBk
-         SjZOvjpj18wRh7IwgoW/w72o85g6VIRQqsdhKjeIodtrCeem5YngLBL+85bAezTuvvQ9
-         gEA47e7rp1XiVJR6GxAXnZ2zwYbpQ+pT01pVgaUCkcAdJldxGCrlhU5wzfAzTNrVtyoU
-         4P/Sa+lAMZnq3EELOqy7A33g+g3Vfw0ZCcJ8dsIqesEfsByzZ6GVh9zuW/kiQbWuhoYR
-         vFRgJxZpHOWpv2hrariGEk0FnyOTVNVtkFKl2PLFAHHG4yf9tW71qTdizyL74bOdX69I
-         0Ttw==
+        bh=2o6GVTZCy3XlmzBSwd7fA26VADSjJEkCYNl3YQKOr2M=;
+        b=Ldn6PBxD4m7lMPymQjipKfl27zylKQuiR2k8wfxVSrmlQ5jpqIVVImGSZWjlPgIbGC
+         hDJ7BkFuGFrS7733Sa79QeGiqV0qQCemUiXRE/QiwWnLbm5EQ82dmxs/kG3UyfU7E7n8
+         nL536EWJMI21gMA9GAQJpy1F9/6iR1lsI9mBQIIRfbo6g7chxN3cmdc3uVhPEga7RQ4V
+         TEliR1I27x7f40QWq2Ktg3mUvoW/3WDyyvpBb63myjZ0gnPKNIW0MqE9glVDJBy3Bgqw
+         In5hjK+9C4XkaeRowWu/SdcdFCcOWgZbXvoQRkQSw2xxEZumWAOjTxrQxGG+33eaNoFE
+         aj7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=mJ6hTZT24AWhGEqcPC20wN8kBdsxrLI/peNCFh80II0=;
-        b=VM39u3hJ9qDcsincVg70EDwD/D8+B/9JietPzOHR+dlqoI0BdVl5fIS5PAqahIRxxm
-         C0v4H/ZDrqcPVZXNy7t7uV+ue24NSPNtd9vnAAIrGjxt3X+WhfWjY2rbjyc2NVMKvDGy
-         QFyQVg1QbZdaFcWJ14EySTREDTFZkEkTDmdUT947wrzpCONYoGPNt9FTe/YN04xLSP8S
-         06oQpN14oVwwXQkIevmq2s9kTcsdtLy/NvZOo/10CIemg31JsV+wMvHp4UQN7oZT1EqR
-         wdstypXGTKefNJVRoFb5rafQLA5t319mAa/BVu49yhKBdW35TKDBqTisuBz+P4aHFtyB
-         Ag4w==
-X-Gm-Message-State: AOAM530qy3R5c3DEZNoFJP1Wt2ziLYJFYH+v0riqKzjtVnfrKRR9paAw
-        ZGxZUNFmsUxa0CU/x7ybR/o=
-X-Google-Smtp-Source: ABdhPJzCKZ2YWRRKt7EbAjYlMwe4HoJyEC/wkWrDWjL843q2i/oFkciOE/2KezdZ9h6RIJbu6Yv/dQ==
-X-Received: by 2002:a37:aa56:: with SMTP id t83mr9283794qke.150.1596301252633;
-        Sat, 01 Aug 2020 10:00:52 -0700 (PDT)
+        bh=2o6GVTZCy3XlmzBSwd7fA26VADSjJEkCYNl3YQKOr2M=;
+        b=Dlxkj4gwDa3VAZVNrv9hw1JojMt5+vpiOLB+vkYEQBPdwM9S5jDV2rIGne+HuUAQOU
+         7BlQ/YkXTwh/eVktZHaijfYequ8PWQge+Kk4a/24lKyW5IAq/lQuS8ylOiK2n+Ui4wQp
+         7EnrtXgTPfBhCPqZq4DlY58FS7qjlMRiBU9pKOHU5K6UULrmMwWLV6LUuwFR2mdNugu0
+         in8ILi+AU9zuXaELgilZFz8+sIOVlpLFCJDMxymC+A9W+q3wMsQiKZZM+z5nsyfuitK8
+         RSx21XmrDqODOHGNAu12ZpUO/S/t/hhT+CqFkLlOROoPeREm/4TrqdHi/nHqPrieo+FD
+         7UVA==
+X-Gm-Message-State: AOAM532WSU+s03VmHGTa7xM8vcen43CLZOlnvD59LN4QYCPK5lKZeCdM
+        VXIHBrZ/aXx6iBtB9kUSxKA=
+X-Google-Smtp-Source: ABdhPJyvisrUtCH+yT5SZkhMZ5hRzUqOeeL+iqxCLSrjVaYvR2aM1RnsJVQsxy3ZgehzESYLcwGpwg==
+X-Received: by 2002:a0c:ffc6:: with SMTP id h6mr9551061qvv.251.1596301947711;
+        Sat, 01 Aug 2020 10:12:27 -0700 (PDT)
 Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id m26sm14886142qtc.83.2020.08.01.10.00.50
+        by smtp.gmail.com with ESMTPSA id i19sm12760874qkk.68.2020.08.01.10.12.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2020 10:00:51 -0700 (PDT)
+        Sat, 01 Aug 2020 10:12:27 -0700 (PDT)
 From:   Arvind Sankar <nivedita@alum.mit.edu>
 X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Sat, 1 Aug 2020 13:00:49 -0400
+Date:   Sat, 1 Aug 2020 13:12:25 -0400
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -70,150 +70,117 @@ Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v5 32/36] x86/boot/compressed: Reorganize zero-size
  section asserts
-Message-ID: <20200801170049.GA3249534@rani.riverdale.lan>
+Message-ID: <20200801171225.GB3249534@rani.riverdale.lan>
 References: <20200731230820.1742553-1-keescook@chromium.org>
  <20200731230820.1742553-33-keescook@chromium.org>
  <20200801014755.GA2700342@rani.riverdale.lan>
- <202007312233.1BA0E2EFC@keescook>
+ <20200801025325.GA2800311@rani.riverdale.lan>
+ <202007312235.4A48157938@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202007312233.1BA0E2EFC@keescook>
+In-Reply-To: <202007312235.4A48157938@keescook>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 10:35:14PM -0700, Kees Cook wrote:
-> On Fri, Jul 31, 2020 at 09:47:55PM -0400, Arvind Sankar wrote:
-> > On Fri, Jul 31, 2020 at 04:08:16PM -0700, Kees Cook wrote:
-> > > For readability, move the zero-sized sections to the end after DISCARDS
-> > > and mark them NOLOAD for good measure.
+On Fri, Jul 31, 2020 at 10:36:00PM -0700, Kees Cook wrote:
+> On Fri, Jul 31, 2020 at 10:53:25PM -0400, Arvind Sankar wrote:
+> > On Fri, Jul 31, 2020 at 09:47:55PM -0400, Arvind Sankar wrote:
+> > > On Fri, Jul 31, 2020 at 04:08:16PM -0700, Kees Cook wrote:
+> > > > For readability, move the zero-sized sections to the end after DISCARDS
+> > > > and mark them NOLOAD for good measure.
+> > > > 
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > > >  arch/x86/boot/compressed/vmlinux.lds.S | 42 +++++++++++++++-----------
+> > > >  1 file changed, 25 insertions(+), 17 deletions(-)
+> > > > 
+> > > > diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
+> > > > index 3c2ee9a5bf43..42dea70a5091 100644
+> > > > --- a/arch/x86/boot/compressed/vmlinux.lds.S
+> > > > +++ b/arch/x86/boot/compressed/vmlinux.lds.S
+> > > > @@ -42,18 +42,16 @@ SECTIONS
+> > > >  		*(.rodata.*)
+> > > >  		_erodata = . ;
+> > > >  	}
+> > > > -	.rel.dyn : {
+> > > > -		*(.rel.*)
+> > > > -	}
+> > > > -	.rela.dyn : {
+> > > > -		*(.rela.*)
+> > > > -	}
+> > > > -	.got : {
+> > > > -		*(.got)
+> > > > -	}
+> > > >  	.got.plt : {
+> > > >  		*(.got.plt)
+> > > >  	}
+> > > > +	ASSERT(SIZEOF(.got.plt) == 0 ||
+> > > > +#ifdef CONFIG_X86_64
+> > > > +	       SIZEOF(.got.plt) == 0x18,
+> > > > +#else
+> > > > +	       SIZEOF(.got.plt) == 0xc,
+> > > > +#endif
+> > > > +	       "Unexpected GOT/PLT entries detected!")
+> > > >  
+> > > >  	.data :	{
+> > > >  		_data = . ;
+> > > > @@ -85,13 +83,23 @@ SECTIONS
+> > > >  	ELF_DETAILS
+> > > >  
+> > > >  	DISCARDS
+> > > > -}
+> > > >  
+> > > > -ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+> > > > -#ifdef CONFIG_X86_64
+> > > > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, "Unexpected GOT/PLT entries detected!")
+> > > > -#else
+> > > > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0xc, "Unexpected GOT/PLT entries detected!")
+> > > > -#endif
+> > > > +	/*
+> > > > +	 * Sections that should stay zero sized, which is safer to
+> > > > +	 * explicitly check instead of blindly discarding.
+> > > > +	 */
+> > > > +	.got (NOLOAD) : {
+> > > > +		*(.got)
+> > > > +	}
+> > > > +	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+> > > >  
+> > > > -ASSERT(SIZEOF(.rel.dyn) == 0 && SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations detected!")
+> > > > +	/* ld.lld does not like .rel* sections being made "NOLOAD". */
+> > > > +	.rel.dyn : {
+> > > > +		*(.rel.*)
+> > > > +	}
+> > > > +	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
+> > > > +	.rela.dyn : {
+> > > > +		*(.rela.*)
+> > > > +	}
+> > > > +	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
+> > > > +}
+> > > > -- 
+> > > > 2.25.1
+> > > > 
 > > > 
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  arch/x86/boot/compressed/vmlinux.lds.S | 42 +++++++++++++++-----------
-> > >  1 file changed, 25 insertions(+), 17 deletions(-)
+> > > There's no point in marking zero-size sections NOLOAD -- if the ASSERT's
+> > > passed, they won't be present in the file at all anyway.
 > > > 
-> > > diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
-> > > index 3c2ee9a5bf43..42dea70a5091 100644
-> > > --- a/arch/x86/boot/compressed/vmlinux.lds.S
-> > > +++ b/arch/x86/boot/compressed/vmlinux.lds.S
-> > > @@ -42,18 +42,16 @@ SECTIONS
-> > >  		*(.rodata.*)
-> > >  		_erodata = . ;
-> > >  	}
-> > > -	.rel.dyn : {
-> > > -		*(.rel.*)
-> > > -	}
-> > > -	.rela.dyn : {
-> > > -		*(.rela.*)
-> > > -	}
-> > > -	.got : {
-> > > -		*(.got)
-> > > -	}
-> > >  	.got.plt : {
-> > >  		*(.got.plt)
-> > >  	}
-> > > +	ASSERT(SIZEOF(.got.plt) == 0 ||
-> > > +#ifdef CONFIG_X86_64
-> > > +	       SIZEOF(.got.plt) == 0x18,
-> > > +#else
-> > > +	       SIZEOF(.got.plt) == 0xc,
-> > > +#endif
-> > > +	       "Unexpected GOT/PLT entries detected!")
-> > >  
-> > >  	.data :	{
-> > >  		_data = . ;
-> > > @@ -85,13 +83,23 @@ SECTIONS
-> > >  	ELF_DETAILS
-> > >  
-> > >  	DISCARDS
-> > > -}
-> > >  
-> > > -ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
-> > > -#ifdef CONFIG_X86_64
-> > > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, "Unexpected GOT/PLT entries detected!")
-> > > -#else
-> > > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0xc, "Unexpected GOT/PLT entries detected!")
-> > > -#endif
-> > > +	/*
-> > > +	 * Sections that should stay zero sized, which is safer to
-> > > +	 * explicitly check instead of blindly discarding.
-> > > +	 */
-> > > +	.got (NOLOAD) : {
-> > > +		*(.got)
-> > > +	}
-> > > +	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
-> > >  
-> > > -ASSERT(SIZEOF(.rel.dyn) == 0 && SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations detected!")
-> > > +	/* ld.lld does not like .rel* sections being made "NOLOAD". */
-> > > +	.rel.dyn : {
-> > > +		*(.rel.*)
-> > > +	}
-> > > +	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
-> > > +	.rela.dyn : {
-> > > +		*(.rela.*)
-> > > +	}
-> > > +	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
-> > > +}
-> > > -- 
-> > > 2.25.1
-> > > 
+> > > The only section for which there might be a point is .got.plt, which is
+> > > non-empty on 32-bit, and only if it is first moved to the end. That
+> > > saves a few bytes.
 > > 
-> > There's no point in marking zero-size sections NOLOAD -- if the ASSERT's
-> > passed, they won't be present in the file at all anyway.
+> > Btw, you should move .got.plt also to the end anyway for readability,
+> > it's unused even if non-empty. And with the ASSERT being placed
+> > immediately after it, it's even more distracting from the actual section
+> > layout.
 > 
-> I did not find that universally true. I found some sections be written
-> out with a 0 size. Some I could remove from disk with NOLOAD, others did
-> not like that so much.
-
-Neither LLD nor BFD is creating 0-sized .got or .rel sections in my
-builds. In any case, if they're 0-sized, NOLOAD shouldn't affect
-anything: it doesn't remove them from disk, it stops them being loaded
-into memory, which is a nop if it was 0-sized.
-
-> 
-> > The only section for which there might be a point is .got.plt, which is
-> > non-empty on 32-bit, and only if it is first moved to the end. That
-> > saves a few bytes.
-> 
-> What do you mean about "only if it is first moved to the end"? Would it
-> be zero-sized if it was closer to .text?
+> ld.bfd (if I'm remembering correctly) was extraordinarily upset about it
+> being at the end. I will retest and report back.
 > 
 > -- 
 > Kees Cook
 
-Sorry, my sentence is confusingly worded: it's always non-empty on
-x86-32. I meant, move .got.plt to the end (after _end), add (INFO) to
-it, and it might save a few bytes, or not, depending on alignment
-padding. If it's left in the middle, it still pushes the addresses of
-the remaining sections out, so it doesn't save anything.
-
-I'd tested that out the last time we talked about this, but left it out
-of my series as Fangrui was negative about the idea.
-
-I tested with NOLOAD instead of INFO, and at least ld.bfd actually
-errors out if .got.plt is marked NOLOAD, no matter where it's located.
-
-	  LDS     arch/x86/boot/compressed/vmlinux.lds
-	  LD      arch/x86/boot/compressed/vmlinux
-	ld: final link failed: section has no contents
-
-Side note: I also discovered something peculiar with the gcc/lld combo.
-On x86-64, it turns out that this still generates a .got.plt section,
-which was unexpected as _GLOBAL_OFFSET_TABLE_ shouldn't be referenced on
-64-bit. It turns out that when gcc (or even clang) generates an
-out-of-line call to memcpy from a __builtin_memcpy call, it doesn't
-declare the memcpy as hidden even with Ard's hidden.h, or even if memcpy
-was explicitly declared with hidden visibility. It uses memcpy@PLT
-instead of memcpy, and this generates a reference to
-_GLOBAL_OFFSET_TABLE_ in the .o file.  The linker later converts this to
-a direct call to the function, but LLD leaves .got.plt in the
-executable, while BFD strips it out.
-
-It also turns out that clang's integrated assembler, unlike gas, does
-not generate a reference to _GLOBAL_OFFSET_TABLE for a foo@PLT call. And
-because we redefine KBUILD_CFLAGS in boot/compressed Makefile, we lose
-the -no-integrated-as option, and clang is using its integrated
-assembler when building the compressed kernel.
+Actually, moving it to the end also requires marking it INFO or
+stripping it out when creating the bzImage. Otherwise we get back to
+that old problem of materializing .bss/.pgtable in the bzImage.
