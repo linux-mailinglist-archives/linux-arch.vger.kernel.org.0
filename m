@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56D723589D
-	for <lists+linux-arch@lfdr.de>; Sun,  2 Aug 2020 18:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719142358A5
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Aug 2020 18:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbgHBQhB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 2 Aug 2020 12:37:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46036 "EHLO mail.kernel.org"
+        id S1727019AbgHBQhL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 2 Aug 2020 12:37:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46334 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725768AbgHBQhA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 2 Aug 2020 12:37:00 -0400
+        id S1725768AbgHBQhL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 2 Aug 2020 12:37:11 -0400
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61207207BB;
-        Sun,  2 Aug 2020 16:36:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 79B9E20759;
+        Sun,  2 Aug 2020 16:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596386219;
-        bh=ZNedWWEIR7TjyqHerem6v1zcO0bsRchN/rxztlGnBuY=;
+        s=default; t=1596386230;
+        bh=AMOYvuZ/her7m+eqvV/W61Gb+3lMX5jMPD36qVEB+h0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pHqq6FahliEH30kIlqPeo4mDFVDbMBYtzNQjYqi+0+McbruOc0824V9shITYaBbsE
-         drhDOyhFCdGhq1OkgwrUWBpsWUckdWsjE555OcyBI2trXf/BnbC/sxKILe31cYdrsi
-         UOClFX1+acUGkqTFA8GkqPJWP99b6NKzFSdLnqgw=
+        b=XkobRDnslNvkbET3s8a765CgR+CoQW7Lz73pcB2Vu/C3Q3ZQuhFAKrsw4xYvT9L3B
+         rWYBMoBBt5cUWMzPTYMp97l6nMm7xLiIfEcygKCxGqn1vH3JvBe21jHFYqL8Irgxkl
+         C4RH3kgHLYZRs/lETcx0TJHEWWVmIow5S7yDOFR4=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
@@ -57,11 +57,10 @@ Cc:     Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 04/17] arm64: numa: simplify dummy_numa_init()
-Date:   Sun,  2 Aug 2020 19:35:48 +0300
-Message-Id: <20200802163601.8189-5-rppt@kernel.org>
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: [PATCH v2 05/17] h8300, nds32, openrisc: simplify detection of memory extents
+Date:   Sun,  2 Aug 2020 19:35:49 +0300
+Message-Id: <20200802163601.8189-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200802163601.8189-1-rppt@kernel.org>
 References: <20200802163601.8189-1-rppt@kernel.org>
@@ -74,97 +73,85 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-dummy_numa_init() loops over memblock.memory and passes nid=0 to
-numa_add_memblk() which essentially wraps memblock_set_node(). However,
-memblock_set_node() can cope with entire memory span itself, so the loop
-over memblock.memory regions is redundant.
-
-Using a single call to memblock_set_node() rather than a loop also fixes an
-issue with a buggy ACPI firmware in which the SRAT table covers some but
-not all of the memory in the EFI memory map.
-
-Jonathan Cameron says:
-
-  This issue can be easily triggered by having an SRAT table which fails
-  to cover all elements of the EFI memory map.
-
-  This firmware error is detected and a warning printed. e.g.
-  "NUMA: Warning: invalid memblk node 64 [mem 0x240000000-0x27fffffff]"
-  At that point we fall back to dummy_numa_init().
-
-  However, the failed ACPI init has left us with our memblocks all broken
-  up as we split them when trying to assign them to NUMA nodes.
-
-  We then iterate over the memblocks and add them to node 0.
-
-  numa_add_memblk() calls memblock_set_node() which merges regions that
-  were previously split up during the earlier attempt to add them to different
-  nodes during parsing of SRAT.
-
-  This means elements are moved in the memblock array and we can end up
-  in a different memblock after the call to numa_add_memblk().
-  Result is:
-
-  Unable to handle kernel paging request at virtual address 0000000000003a40
-  Mem abort info:
-    ESR = 0x96000004
-    EC = 0x25: DABT (current EL), IL = 32 bits
-    SET = 0, FnV = 0
-    EA = 0, S1PTW = 0
-  Data abort info:
-    ISV = 0, ISS = 0x00000004
-    CM = 0, WnR = 0
-  [0000000000003a40] user address but active_mm is swapper
-  Internal error: Oops: 96000004 [#1] PREEMPT SMP
-
-  ...
-
-  Call trace:
-    sparse_init_nid+0x5c/0x2b0
-    sparse_init+0x138/0x170
-    bootmem_init+0x80/0xe0
-    setup_arch+0x2a0/0x5fc
-    start_kernel+0x8c/0x648
-
-Replace the loop with a single call to memblock_set_node() to the entire
-memory.
+Instead of traversing memblock.memory regions to find memory_start and
+memory_end, simply query memblock_{start,end}_of_DRAM().
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/arm64/mm/numa.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ arch/h8300/kernel/setup.c    | 8 +++-----
+ arch/nds32/kernel/setup.c    | 8 ++------
+ arch/openrisc/kernel/setup.c | 9 ++-------
+ 3 files changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm64/mm/numa.c b/arch/arm64/mm/numa.c
-index aafcee3e3f7e..0cbdbcc885fb 100644
---- a/arch/arm64/mm/numa.c
-+++ b/arch/arm64/mm/numa.c
-@@ -423,19 +423,16 @@ static int __init numa_init(int (*init_func)(void))
-  */
- static int __init dummy_numa_init(void)
- {
-+	phys_addr_t start = memblock_start_of_DRAM();
-+	phys_addr_t end = memblock_end_of_DRAM();
- 	int ret;
--	struct memblock_region *mblk;
+diff --git a/arch/h8300/kernel/setup.c b/arch/h8300/kernel/setup.c
+index 28ac88358a89..0281f92eea3d 100644
+--- a/arch/h8300/kernel/setup.c
++++ b/arch/h8300/kernel/setup.c
+@@ -74,17 +74,15 @@ static void __init bootmem_init(void)
+ 	memory_end = memory_start = 0;
  
- 	if (numa_off)
- 		pr_info("NUMA disabled\n"); /* Forced off on command line. */
--	pr_info("Faking a node at [mem %#018Lx-%#018Lx]\n",
--		memblock_start_of_DRAM(), memblock_end_of_DRAM() - 1);
--
--	for_each_memblock(memory, mblk) {
--		ret = numa_add_memblk(0, mblk->base, mblk->base + mblk->size);
--		if (!ret)
--			continue;
-+	pr_info("Faking a node at [mem %#018Lx-%#018Lx]\n", start, end - 1);
+ 	/* Find main memory where is the kernel */
+-	for_each_memblock(memory, region) {
+-		memory_start = region->base;
+-		memory_end = region->base + region->size;
+-	}
++	memory_start = memblock_start_of_DRAM();
++	memory_end = memblock_end_of_DRAM();
  
-+	ret = numa_add_memblk(0, start, end);
-+	if (ret) {
- 		pr_err("NUMA init failed\n");
- 		return ret;
- 	}
+ 	if (!memory_end)
+ 		panic("No memory!");
+ 
+ 	/* setup bootmem globals (we use no_bootmem, but mm still depends on this) */
+ 	min_low_pfn = PFN_UP(memory_start);
+-	max_low_pfn = PFN_DOWN(memblock_end_of_DRAM());
++	max_low_pfn = PFN_DOWN(memory_end);
+ 	max_pfn = max_low_pfn;
+ 
+ 	memblock_reserve(__pa(_stext), _end - _stext);
+diff --git a/arch/nds32/kernel/setup.c b/arch/nds32/kernel/setup.c
+index a066efbe53c0..c356e484dcab 100644
+--- a/arch/nds32/kernel/setup.c
++++ b/arch/nds32/kernel/setup.c
+@@ -249,12 +249,8 @@ static void __init setup_memory(void)
+ 	memory_end = memory_start = 0;
+ 
+ 	/* Find main memory where is the kernel */
+-	for_each_memblock(memory, region) {
+-		memory_start = region->base;
+-		memory_end = region->base + region->size;
+-		pr_info("%s: Memory: 0x%x-0x%x\n", __func__,
+-			memory_start, memory_end);
+-	}
++	memory_start = memblock_start_of_DRAM();
++	memory_end = memblock_end_of_DRAM();
+ 
+ 	if (!memory_end) {
+ 		panic("No memory!");
+diff --git a/arch/openrisc/kernel/setup.c b/arch/openrisc/kernel/setup.c
+index 8aa438e1f51f..c5706153d3b6 100644
+--- a/arch/openrisc/kernel/setup.c
++++ b/arch/openrisc/kernel/setup.c
+@@ -48,17 +48,12 @@ static void __init setup_memory(void)
+ 	unsigned long ram_start_pfn;
+ 	unsigned long ram_end_pfn;
+ 	phys_addr_t memory_start, memory_end;
+-	struct memblock_region *region;
+ 
+ 	memory_end = memory_start = 0;
+ 
+ 	/* Find main memory where is the kernel, we assume its the only one */
+-	for_each_memblock(memory, region) {
+-		memory_start = region->base;
+-		memory_end = region->base + region->size;
+-		printk(KERN_INFO "%s: Memory: 0x%x-0x%x\n", __func__,
+-		       memory_start, memory_end);
+-	}
++	memory_start = memblock_start_of_DRAM();
++	memory_end = memblock_end_of_DRAM();
+ 
+ 	if (!memory_end) {
+ 		panic("No memory!");
 -- 
 2.26.2
 
