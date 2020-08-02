@@ -2,161 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8C72353C5
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Aug 2020 19:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3EB235883
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Aug 2020 18:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgHAR1u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Aug 2020 13:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726534AbgHAR1u (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Aug 2020 13:27:50 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC7C06174A;
-        Sat,  1 Aug 2020 10:27:49 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id j10so8896624qvo.13;
-        Sat, 01 Aug 2020 10:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sH4ZgoE2+krh+pccRrSZUcqU9PhKP/eT8yH9LsNvEAE=;
-        b=lDrKUAaQxNvYx4tI3nODZhJ8NcdsIkFV5oX3fhol8e4eN7e+SiVw939+t1R8UOsx01
-         NSBpVkU25zrVoic7dwx7vwPpt2Aoqluvpt9j57py3CrKQWNWRW/0ocBMD52snn+v8caX
-         M5EIHqZBjgjmuY1sMynhvFwF9WFUnBJY9U/R0onHK6bADrVu5jsdfo7KQi7I+b3rmiyH
-         I94kcHuWo7JSHfdbKTGM6SWqwPkurjVD4/oFL2UnQJjspmk2pVz1JyEb9FbK2c5RyjH8
-         e8Hlx4C+F+z+XQ3k78QRq/hE1RDG6ofkeYYFzko1A5R84bKXmrmY/eSIefXtxSAK4nDW
-         K76Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=sH4ZgoE2+krh+pccRrSZUcqU9PhKP/eT8yH9LsNvEAE=;
-        b=MTPYBAxVbM1E8LjLl+ZvzGea48iUR/V7PiezQ6Q6mmlYL8nDAZFHUuFdvTipXQsVB9
-         ftPFXn4YSQgwuGziioJnk3B2SCfvQ0RxCqaL4SzxTlZFN/4PsNjZBOSTTNONl44im0ZO
-         fWQx8VJt3dHpL3eHmWpxvFaPv0KMpMw0xr1N5JLEj6oSmaBY67qk3hy3ZSHiIohninTi
-         MxUPm5RmDUok5fDdUnpgR+Va2vRqMJsaHscR1N83TvgnRoV2v6DEghs/iHtggByZGwn1
-         df8kRCpkISIjqWW3WhHueN37jduN+B07IqBVwXo8cwkoMsIkol/jqniJC2cjgktJwhlv
-         9gag==
-X-Gm-Message-State: AOAM530AK+4zEsGiJFJCjSZGvpEtVGqo3tJDBP1hvo74Y3M6VcHvbFZm
-        K2dkZRpuKmTx8fT0lkwFpvs=
-X-Google-Smtp-Source: ABdhPJzHOFdwhm3qJs8SrnZpWK+1UKvwkZdOAaQkwtzYxCu1nPpleYVo2pqxw+5n/1qFGKkbypbvDA==
-X-Received: by 2002:ad4:43c9:: with SMTP id o9mr9657897qvs.217.1596302868608;
-        Sat, 01 Aug 2020 10:27:48 -0700 (PDT)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id z197sm13658960qkb.66.2020.08.01.10.27.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2020 10:27:48 -0700 (PDT)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
-Date:   Sat, 1 Aug 2020 13:27:46 -0400
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
+        id S1726534AbgHBQgR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 2 Aug 2020 12:36:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725768AbgHBQgR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 2 Aug 2020 12:36:17 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A84AE20738;
+        Sun,  2 Aug 2020 16:36:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596386176;
+        bh=wmlXgD0X96/wIUhcM0J0CaJw2U1ECwrd3G0AsFvEO4Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LIo4s4fRmWHT6ME6g/ZjvzQ7HJRSuVu2NYrDbrd0chKpt6+b3ohxjDTyat5mFYLn4
+         aeP921+3zEtXOmJIAFZ0JgLAmKkmGOMoKwCqYXkOSHVuvR6uN6W8dMclI8JjGsPtcE
+         w3N+AA1SHOYg14yG/yF0pyqesAV5aB4w9VaQvzZA=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jian Cai <jiancai@google.com>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Luis Lozano <llozano@google.com>,
-        Manoj Gupta <manojgupta@google.com>, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>
-Subject: Re: [PATCH v5 13/36] vmlinux.lds.h: add PGO and AutoFDO input
- sections
-Message-ID: <20200801172746.GC3249534@rani.riverdale.lan>
-References: <20200731230820.1742553-1-keescook@chromium.org>
- <20200731230820.1742553-14-keescook@chromium.org>
- <20200801035128.GB2800311@rani.riverdale.lan>
- <202007312237.4F385EB3@keescook>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: [PATCH v2 00/17] memblock: seasonal cleaning^w cleanup
+Date:   Sun,  2 Aug 2020 19:35:44 +0300
+Message-Id: <20200802163601.8189-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202007312237.4F385EB3@keescook>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 11:18:02PM -0700, Kees Cook wrote:
-> On Fri, Jul 31, 2020 at 11:51:28PM -0400, Arvind Sankar wrote:
-> > 
-> > This also changes the ordering to place all hot resp unlikely sections separate
-> > from other text, while currently it places the hot/unlikely bits of each file
-> > together with the rest of the code in that file. That seems like a reasonable
-> 
-> Oh, hmm, yes, we aren't explicitly using SORT() here. Does that mean the
-> input sections were entirely be ordered in compilation unit link order,
-> even in the case of orphan sections? (And I think either way, the answer
-> isn't the same between bfd and lld.) I actually thought the like-named
-> input sections were collected together first with lld, but bfd strictly
-> appended to the output section. I guess it's time for me to stare at -M
-> output from ld...
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-I don't know what happened to the orphans previously. But .text.hot and
-.text.unlikely will now change ordering. It sounds from below like this
-wasn't intentional? Though it does seem to be how BFD's default linker
-scripts lay it out.
+Hi,
 
-> 
-> Regardless, this patch is attempting to fix the problem where bfd and lld
-> lay out the orphans differently (as mentioned above, lld seems to sort
-> them in a way that is not strictly appended, and bfd seems to sort them
-> strictly appended). In the case of being appended to the .text output
-> section, this would cause boot failures due to _etext not covering the
-> resulting sections (which this[1] also encountered and fixed to be more
-> robust for such appended collection -- that series actually _depends_ on
-> orphan handling doing the appending, because there is no current way
-> to map wildcard input sections to their own separate output sections).
-> 
-> > change and should be mentioned in the commit message.
-> > 
-> > However, the history of their being together comes from
-> > 
-> >   9bebe9e5b0f3 ("kbuild: Fix .text.unlikely placement")
-> > 
-> > which seems to indicate there was some problem with having them separated out,
-> > although I don't quite understand what the issue was from the commit message.
-> 
-> Looking at this again, I actually wonder if we have bigger issues here
-> with dead code elimination:
-> 
-> #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
-> #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
-> ...
-> 
-> that would catch: .text.hot .text.fixup .text.unlikely and .text.unknown
-> but not .text.hot.*, etc (i.e. the third dot isn't matched, which is,
-> I assume, why Clang switched to adding a trailing dot). However, this
-> patch lists .text.hot .text.hot.* first, so they'd get pulled to the
-> front correctly, but the trailing ones (with 2 dots) would not, since
-> they'd match the TEXT_MAIN wildcard first. (This problem actually existed
-> before this patch too, and is not the fault of 9bebe9e5b0f3, but rather
-> the addition of TEXT_MAIN, which could potentially match .text.unlikely
-> and .text.fixup)
+These patches simplify several uses of memblock iterators and hide some of
+the memblock implementation details from the rest of the system.
 
-The existing comment on TEXT_TEXT mentions that issue. However, note
-that the dead code stuff is only available currently on mips and ppc,
-and is hidden behind EXPERT for those, so I'm not sure if anyone
-actually uses it.
+The patches are on top of v5.8-rc7 + cherry-pick of "mm/sparse: cleanup the
+code surrounding memory_present()" [1] from mmotm tree.
 
-9bebe9e5b0f3 predates LD_DEAD_CODE_DATA_ELIMINATION, and there were no
-wildcards I can see in .text at the time, which is why I don't
-understand what problem is referred to in the commit message.
+v2 changes:
+* replace for_each_memblock() with two versions, one for memblock.memory
+  and another one for memblock.reserved
+* fix overzealous cleanup of powerpc fadamp: keep the traversal over the
+  memblocks, but use better suited iterators
+* don't remove traversal over memblock.reserved in x86 numa cleanup but
+  replace for_each_memblock() with new for_each_reserved_mem_region()
+* simplify ramdisk and crash kernel allocations on x86
+* drop more redundant and unused code: __next_reserved_mem_region() and
+  memblock_mem_size()
+* add description of numa initialization fix on arm64 (thanks Jonathan)
+* add Acked and Reviewed tags
 
-Btw, for the FGKASLR stuff, instead of keeping the output sections per
-function, couldn't you generate a table of functions with sizes, and use
-that when randomizing the order? Then the sections themselves could be
-collected into .text explicitly.
+[1] http://lkml.kernel.org/r/20200712083130.22919-1-rppt@kernel.org 
+
+Mike Rapoport (17):
+  KVM: PPC: Book3S HV: simplify kvm_cma_reserve()
+  dma-contiguous: simplify cma_early_percent_memory()
+  arm, xtensa: simplify initialization of high memory pages
+  arm64: numa: simplify dummy_numa_init()
+  h8300, nds32, openrisc: simplify detection of memory extents
+  riscv: drop unneeded node initialization
+  mircoblaze: drop unneeded NUMA and sparsemem initializations
+  memblock: make for_each_memblock_type() iterator private
+  memblock: make memblock_debug and related functionality private
+  memblock: reduce number of parameters in for_each_mem_range()
+  arch, mm: replace for_each_memblock() with for_each_mem_pfn_range()
+  arch, drivers: replace for_each_membock() with for_each_mem_range()
+  x86/setup: simplify initrd relocation and reservation
+  x86/setup: simplify reserve_crashkernel()
+  memblock: remove unused memblock_mem_size()
+  memblock: implement for_each_reserved_mem_region() using __next_mem_region()
+  memblock: use separate iterators for memory and reserved regions
+
+ .clang-format                            |  4 +-
+ arch/arm/kernel/setup.c                  | 18 +++--
+ arch/arm/mm/init.c                       | 59 ++++------------
+ arch/arm/mm/mmu.c                        | 39 ++++-------
+ arch/arm/mm/pmsa-v7.c                    | 20 +++---
+ arch/arm/mm/pmsa-v8.c                    | 17 +++--
+ arch/arm/xen/mm.c                        |  7 +-
+ arch/arm64/kernel/machine_kexec_file.c   |  6 +-
+ arch/arm64/kernel/setup.c                |  4 +-
+ arch/arm64/mm/init.c                     | 11 ++-
+ arch/arm64/mm/kasan_init.c               | 10 +--
+ arch/arm64/mm/mmu.c                      | 11 +--
+ arch/arm64/mm/numa.c                     | 15 ++---
+ arch/c6x/kernel/setup.c                  |  9 +--
+ arch/h8300/kernel/setup.c                |  8 +--
+ arch/microblaze/mm/init.c                | 24 ++-----
+ arch/mips/cavium-octeon/dma-octeon.c     | 12 ++--
+ arch/mips/kernel/setup.c                 | 31 +++++----
+ arch/mips/netlogic/xlp/setup.c           |  2 +-
+ arch/nds32/kernel/setup.c                |  8 +--
+ arch/openrisc/kernel/setup.c             |  9 +--
+ arch/openrisc/mm/init.c                  |  8 ++-
+ arch/powerpc/kernel/fadump.c             | 57 ++++++++--------
+ arch/powerpc/kvm/book3s_hv_builtin.c     | 11 +--
+ arch/powerpc/mm/book3s64/hash_utils.c    | 16 ++---
+ arch/powerpc/mm/book3s64/radix_pgtable.c | 11 ++-
+ arch/powerpc/mm/kasan/kasan_init_32.c    |  8 +--
+ arch/powerpc/mm/mem.c                    | 33 +++++----
+ arch/powerpc/mm/numa.c                   |  7 +-
+ arch/powerpc/mm/pgtable_32.c             |  8 +--
+ arch/riscv/mm/init.c                     | 34 +++-------
+ arch/riscv/mm/kasan_init.c               | 10 +--
+ arch/s390/kernel/crash_dump.c            |  8 +--
+ arch/s390/kernel/setup.c                 | 31 +++++----
+ arch/s390/mm/page-states.c               |  6 +-
+ arch/s390/mm/vmem.c                      | 16 +++--
+ arch/sh/mm/init.c                        |  9 +--
+ arch/sparc/mm/init_64.c                  | 12 ++--
+ arch/x86/kernel/setup.c                  | 56 +++++-----------
+ arch/x86/mm/numa.c                       |  2 +-
+ arch/xtensa/mm/init.c                    | 55 +++------------
+ drivers/bus/mvebu-mbus.c                 | 12 ++--
+ drivers/irqchip/irq-gic-v3-its.c         |  2 +-
+ drivers/s390/char/zcore.c                |  9 +--
+ include/linux/memblock.h                 | 65 +++++++++---------
+ kernel/dma/contiguous.c                  | 11 +--
+ mm/memblock.c                            | 85 ++++++++----------------
+ mm/page_alloc.c                          | 11 ++-
+ mm/sparse.c                              | 10 ++-
+ 49 files changed, 366 insertions(+), 561 deletions(-)
+
+-- 
+2.26.2
+
