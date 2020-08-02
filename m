@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB4F235994
-	for <lists+linux-arch@lfdr.de>; Sun,  2 Aug 2020 20:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A7D23599D
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Aug 2020 20:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgHBSBR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 2 Aug 2020 14:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S1726163AbgHBSC2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 2 Aug 2020 14:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbgHBSBQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 2 Aug 2020 14:01:16 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598E8C06174A;
-        Sun,  2 Aug 2020 11:01:16 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id f24so15844056ejx.6;
-        Sun, 02 Aug 2020 11:01:16 -0700 (PDT)
+        with ESMTP id S1725906AbgHBSC2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 2 Aug 2020 14:02:28 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C94C06174A;
+        Sun,  2 Aug 2020 11:02:28 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id c15so16010048edj.3;
+        Sun, 02 Aug 2020 11:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=cWqP425OZ00Oz4x2XaCg5sL4Bi3BuFHBZ9fhbstEoPo=;
-        b=uknpQ4DMxgwRI+7RXzKKaxSHSsHT4JX+qN+G3Zw62I+z7K+v0oM82e+YsM5L2ibFwZ
-         ZtPLnfzJt8IFqkH991n5kK4zcZ2/fsZTMmLNrFK7hPe3auCniFr0qepP8+PKlvq/+X4Y
-         6FOXivLK6+BH8tYzSACnWRFDv80Xb8yKxgJKQm36t4gslbAugHoQp37YMrGD2IIEXvEW
-         lHLgWw9HHo88+yhhI1SsXvM9DHpmveOnmArUrLkNHDmUxgOR5yVJEiJKHqYfS7BI8LbU
-         2xANFxjuEWzWjHDwLiCM886yebnNr5jnEbr0RMGk15mMx04KzIUKhAfWZe7dw+zaroY/
-         roWA==
+        bh=hIidJgHuEfm+QUxSjJcyWhB4lu2Xjl7LW3yKbJJeIh0=;
+        b=uIs7/vU9Kx/pklkEtgD7hBiuHs6a0R+dGlNTjUGRPw721sRkbKusjxGi7PfHcXOJ+P
+         EjAE8Vd54opYw74GdBkeR4XNF5IP2MPUk9fmgk6V6Ahfe99oRVQ2eTOjx4V/HNnjxo1p
+         8JTL4om9ZC3cnlFf7IvLus1+6HB/iVpPvgkNBuxCV3vkFTVqsYvmHOwMCmyNnjJul9R4
+         NyUbZELRb/+vAfU647duOFbumJn5NHcHvq2jBsmvofhPXlaOdyNnECGIYrfm3l1GH6Kt
+         lYQels7sHnZLCY218xDI/G+/wAKH/pz8dPVH6DrvKapbnVTrwoCPcuTqLRUxp8GcwS18
+         4m4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=cWqP425OZ00Oz4x2XaCg5sL4Bi3BuFHBZ9fhbstEoPo=;
-        b=qCdOCZpG7/sz7BFat4IaZBpFpBNC4rySzQREiTNaBC3onXjdu7Ayn4Ds8H5qBm0qLN
-         Tjudbzz7DesieuzKE758Bu/pGXbrCi50WUxTtsLXgctGf+AKIRyWICrN8VURgKOzSwKm
-         yejLw28lTL+gllHMiqr0enMKndpTm7/3nMf5Ps0/kPSte8A3Bjzl5vxIUyAVqBHAYcvi
-         wAfiMcXiuu/59k9X99jDPl2f+dwH8AFhk7G840YX6Mcr9J3pLfyXQHaUKn5TcmutMDE1
-         kqeNkNtWgNEqC/pABcW+nEExVLlQKpwYL5W5O5VLn8VlvLY8uYTKp9IC235z1/Tis2AH
-         qpDg==
-X-Gm-Message-State: AOAM532N1e5Iq13l2IZ3ehtocfYpaduM/+U1aKn3bVwDV49bSy4e+uWt
-        8PfQP50/xpnfy6geOglkZJU=
-X-Google-Smtp-Source: ABdhPJzKJVSrfGoQ7+sK5UMaqi5wNpNE5CXoSPOw/FVAw4VikTzayUXH2AGSuVR6AmkbWWniCTFE/A==
-X-Received: by 2002:a17:906:c187:: with SMTP id g7mr13929214ejz.108.1596391275076;
-        Sun, 02 Aug 2020 11:01:15 -0700 (PDT)
+        bh=hIidJgHuEfm+QUxSjJcyWhB4lu2Xjl7LW3yKbJJeIh0=;
+        b=JP5m+gLpa0w+fNX6l3aEOLFr8Ii/uIV3PUZ4/5bKR3YeO7pwsyfBmeViSDCok/+kG1
+         xm97vjhdI+V0/negVVfjxZuYq1c8879Xb2VeBpR+hrCCTvNeH6O9782XtDfeGiUAIPIK
+         0v7cukw3uu3SgstdDD+mWwglE455DQYF0VtjoaK07wSvp6V+AVl0SVYMwPx5uS9WweUi
+         cn5fA1u4pmuC4rlnttzEZlceYNHPKimkLXeVm3JYg/EkZGighzhVpej+mBSQbUFdY6ph
+         hZG9hfk4d9mUwB/VrOdVpCBPjqAUMl6J40phkoUKwXkAwCbOTh4brJZFBinYrgcnR1qz
+         SXZQ==
+X-Gm-Message-State: AOAM532fVmUo+auDPMb5/10Y7gnxzH/iAxO7yYRvAMRNgSwUvDnyMlp5
+        8LITHijlxIkRW0ozROc+yVw=
+X-Google-Smtp-Source: ABdhPJxqUvJyL87Stg26v1+JoHbkpad0yhpL8P6CjttoB9bwnL2tuiWl2R60zFRBWtP21v7K7J2UFg==
+X-Received: by 2002:aa7:cb15:: with SMTP id s21mr12929126edt.175.1596391346876;
+        Sun, 02 Aug 2020 11:02:26 -0700 (PDT)
 Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id t19sm14191760edw.63.2020.08.02.11.01.12
+        by smtp.gmail.com with ESMTPSA id j21sm14090092edq.20.2020.08.02.11.02.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2020 11:01:13 -0700 (PDT)
-Date:   Sun, 2 Aug 2020 20:01:10 +0200
+        Sun, 02 Aug 2020 11:02:26 -0700 (PDT)
+Date:   Sun, 2 Aug 2020 20:02:23 +0200
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -83,15 +83,14 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
         uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: Re: [PATCH v2 13/17] x86/setup: simplify initrd relocation and
- reservation
-Message-ID: <20200802180110.GA86614@gmail.com>
+Subject: Re: [PATCH v2 14/17] x86/setup: simplify reserve_crashkernel()
+Message-ID: <20200802180223.GB86614@gmail.com>
 References: <20200802163601.8189-1-rppt@kernel.org>
- <20200802163601.8189-14-rppt@kernel.org>
+ <20200802163601.8189-15-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200802163601.8189-14-rppt@kernel.org>
+In-Reply-To: <20200802163601.8189-15-rppt@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -102,25 +101,18 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 > From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Currently, initrd image is reserved very early during setup and then it
-> might be relocated and re-reserved after the initial physical memory
-> mapping is created. The "late" reservation of memblock verifies that mapped
-> memory size exceeds the size of initrd, the checks whether the relocation
-> required and, if yes, relocates inirtd to a new memory allocated from
-> memblock and frees the old location.
-> 
-> The check for memory size is excessive as memblock allocation will anyway
-> fail if there is not enough memory. Besides, there is no point to allocate
-> memory from memblock using memblock_find_in_range() + memblock_reserve()
-> when there exists memblock_phys_alloc_range() with required functionality.
-> 
-> Remove the redundant check and simplify memblock allocation.
+> * Replace magic numbers with defines
+> * Replace memblock_find_in_range() + memblock_reserve() with
+>   memblock_phys_alloc_range()
+> * Stop checking for low memory size in reserve_crashkernel_low(). The
+>   allocation from limited range will anyway fail if there is no enough
+>   memory, so there is no need for extra traversal of memblock.memory
 > 
 > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Assuming there's no hidden dependency here breaking something:
+Assuming that this got or will get tested with a crash kernel:
 
-  Acked-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Ingo Molnar <mingo@kernel.org>
 
 Thanks,
 
