@@ -2,98 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBD423ADC9
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Aug 2020 21:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B322E23ADED
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Aug 2020 22:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728658AbgHCTvT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Aug 2020 15:51:19 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:44847 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728275AbgHCTvS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Aug 2020 15:51:18 -0400
-Received: from mail-qk1-f172.google.com ([209.85.222.172]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1N0X4c-1kz4Qi3fU4-00wYvQ; Mon, 03 Aug 2020 21:51:17 +0200
-Received: by mail-qk1-f172.google.com with SMTP id d14so36283277qke.13;
-        Mon, 03 Aug 2020 12:51:16 -0700 (PDT)
-X-Gm-Message-State: AOAM5309Z18JMxzK449IjpocCeEVIlVM2ug0Qr/L7ntvmqgeMr2wE0Or
-        +qAmaZxmrI4zyjZTSZC+NR3PR+fKSyRGx5sIWfs=
-X-Google-Smtp-Source: ABdhPJzXbakRhT/9DWqVXTuVR8CfkgieaCHqepsu4ZZ/ORIbDhqwN1vHGkMOM70/LNdH8z9+PBsj6hyq23fJ3eMBpfo=
-X-Received: by 2002:a37:9004:: with SMTP id s4mr17629472qkd.286.1596484275660;
- Mon, 03 Aug 2020 12:51:15 -0700 (PDT)
+        id S1727091AbgHCUEz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Aug 2020 16:04:55 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:59540 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726693AbgHCUEz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Aug 2020 16:04:55 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 073K39Jf003459;
+        Mon, 3 Aug 2020 20:04:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=7669qL3S88I58HL7dnTpCNibUM3RomZTzMGtd4cZ7RM=;
+ b=zOuBCb8UEdIuoPhRncWCn69rOkipJMyX8V2sNYL6Cry8lQttK0FjSPXZlMMEQASPy9S3
+ aOWJuLCVFmhxyevxnmAFle6RGh9njHg2ReiDZrbG/Jh8Jy6qW8NTyZQYw9b6bq9dP/QN
+ L/uG5QHGmA6H7Q6/ZA2nZ8JBCAzv2GfacJjuRawPVfWI3GvUh3uc2NWUL27B3IzD7CYo
+ Zsu6u53cqnIeVtNsHlsMUZ+fcrCC1DsQ71cvJW7xLKLeAlayax4t8ImI7N+UVRukrwfA
+ F+858wh4KseAZMSYZig35BZVgzuIYEL32dYYt1b5fMgCWFntScgLpDCC/ZhDvag55idP Xg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 32pdnq3sah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 03 Aug 2020 20:04:09 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 073K34Zd028201;
+        Mon, 3 Aug 2020 20:04:09 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 32p5gr726j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Aug 2020 20:04:09 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 073K434H002398;
+        Mon, 3 Aug 2020 20:04:03 GMT
+Received: from [10.39.192.124] (/10.39.192.124)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 03 Aug 2020 13:04:03 -0700
+Subject: Re: [RFC PATCH 0/5] madvise MADV_DOEXEC
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org, mhocko@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        arnd@arndb.de, keescook@chromium.org, gerg@linux-m68k.org,
+        ktkhai@virtuozzo.com, christian.brauner@ubuntu.com,
+        peterz@infradead.org, esyr@redhat.com, jgg@ziepe.ca,
+        christian@kellner.me, areber@redhat.com, cyphar@cyphar.com
+References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
+ <20200730152250.GG23808@casper.infradead.org>
+ <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
+ <20200730171251.GI23808@casper.infradead.org>
+ <63a7404c-e4f6-a82e-257b-217585b0277f@oracle.com>
+ <20200730174956.GK23808@casper.infradead.org>
+ <ab7a25bf-3321-77c8-9bc3-28a223a14032@oracle.com>
+ <87y2n03brx.fsf@x220.int.ebiederm.org>
+ <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
+ <877dufvje9.fsf@x220.int.ebiederm.org>
+ <1596469370.29091.13.camel@HansenPartnership.com>
+From:   Steven Sistare <steven.sistare@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <e4bf2e19-adc2-ad5e-f516-e8014500456d@oracle.com>
+Date:   Mon, 3 Aug 2020 16:03:59 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <20200803151134.3740544-1-shorne@gmail.com>
-In-Reply-To: <20200803151134.3740544-1-shorne@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 3 Aug 2020 21:50:59 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1m=PPg1sDdRsCz7BOu44-zD87b80SvdZbMuvfLTWsc-A@mail.gmail.com>
-Message-ID: <CAK8P3a1m=PPg1sDdRsCz7BOu44-zD87b80SvdZbMuvfLTWsc-A@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic/io.h: Fix sparse warnings on big-endian architectures
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UgOW1dNGGTMrAPNwvxp2MHDEgnMOwt5LjVoykbLr6P+1/V3vqj5
- tcg2p26mjtywVVkmjK4qz9KN+/EmcboZiOljkfrHu8ym5VNLWloLSanebDHAr75R8eBVXJh
- VADkvIt5B7gzwmXC60+GK0F24hSul6pEMhSIzKFJySxWqUC2Tc5zy+ZTqTfIc2fUT1GiS+V
- NePZHQo63kQ9cSJ+BQseg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BHXUN0dyYTg=:47gWcfEKDH2jJPDSxNISRr
- vn9yHtuI7YCGOCIs1h+gHNKjcXT4Ul83QA1ds0K8DKtH3DAD1nMZeUe00HUaOoZ8kbM/yA+Ku
- bqf7q135a4VTpAsL5y+IyRyL3P+p13YCpUA/iRQ481epS8qWMDHsA+8rRb3BHb1Wy3G8vmx7Y
- 8ePtFb1NkOxS74e6hAd4cKZNYaxjRIV0Pz5pPCxQ5kC1mNINY/YmTVQDnjBOQHm+v/4P8Lwqa
- OK3aW0meRUhK3MmCGqWBhZQ8/7BANgrNdeAUtQ0uu09o68xSXG1last5I2F1tRNtnzV2VtkgM
- QX0lH3WY9DR9hYzlfizGqWE/RMjEr93/Mms0tFt5AYjPkTuCRjFxKqw1Xqecsak/XaYqwYHZD
- Uct0f3pBqs+PBf8vaQuyuCmmCsTeGF+g2lnxWKpIwp4MSpGm4mkvRfASRk8EOZRVXhC+QwC7i
- QbEfnoGrKDvl2BRbWOvhrqWUtsA9NnSgMYytf+aIvGOTJpMRBksYcfYK/6nTT8KKc0+GCbONE
- /XPQWHw9Nq7BZ29DOKA+EI2j02CNDpT/E26kor50wtv8uulAh3H1GZQelN2qukZtTayiybjyR
- movXtSptutsjQEidOGuPRiEtBSYdP5paa37i4Hky2orrlYpCUYFeqwJ8sbSvJBwgN/m6Nrh2B
- xuNb5CtZkCg55ZurfvcvQyzeCnyWP+JfKuazK7PJFfaUR9pyqR4gkNQhZTG5uQ4mfED9qgvJN
- NnF9A3ZBxNNO5e0bI9qojMieN2bKwUUkkiDP1ow65sQyJzv8m8x9NRUTBH+jPunHvfc+iyNty
- xMKvdREEBQf+8/yyS9CKQfzW6ZwPYhXFT5LygbNES7FtKf92r6TRTmE7yovNfVPH3OWh5zK
+In-Reply-To: <1596469370.29091.13.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9702 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 bulkscore=0
+ phishscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008030139
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9702 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxscore=0
+ suspectscore=0 clxscore=1011 priorityscore=1501 bulkscore=0 adultscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008030139
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 3, 2020 at 5:11 PM Stafford Horne <shorne@gmail.com> wrote:
->
-> On big-endian architectures like OpenRISC, sparse outputs below warnings on
-> asm-generic/io.h.  This is due to io statements like:
->
->   __raw_writel(cpu_to_le32(value), PCI_IOBASE + addr);
->
-> The __raw_writel() function expects native endianness, however
-> cpu_to_le32() returns __le32.  On little-endian machines these match up
-> and there is no issue.  However, on big-endian we get warnings, for IO
-> that is defined as little-endian the mismatch is expected.
->
-> The fix I propose is to __force to native endian.
->
-> Warnings:
->
-> ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> ./include/asm-generic/io.h:215:22: warning: incorrect type in argument 1 (different base types)
-> ./include/asm-generic/io.h:215:22:    expected unsigned short [usertype] value
-> ./include/asm-generic/io.h:215:22:    got restricted __le16 [usertype]
-> ./include/asm-generic/io.h:225:22: warning: incorrect type in argument 1 (different base types)
-> ./include/asm-generic/io.h:225:22:    expected unsigned int [usertype] value
-> ./include/asm-generic/io.h:225:22:    got restricted __le32 [usertype]
->
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
+On 8/3/2020 11:42 AM, James Bottomley wrote:
+> On Mon, 2020-08-03 at 10:28 -0500, Eric W. Biederman wrote:
+> [...]
+>> What is wrong with live migration between one qemu process and
+>> another qemu process on the same machine not work for this use case?
+>>
+>> Just reusing live migration would seem to be the simplest path of
+>> all, as the code is already implemented.  Further if something goes
+>> wrong with the live migration you can fallback to the existing
+>> process.  With exec there is no fallback if the new version does not
+>> properly support the handoff protocol of the old version.
+> 
+> Actually, could I ask this another way: the other patch set you sent to
+> the KVM list was to snapshot the VM to a PKRAM capsule preserved across
+> kexec using zero copy for extremely fast save/restore.  The original
+> idea was to use this as part of a CRIU based snapshot, kexec to new
+> system, restore.  However, why can't you do a local snapshot, restart
+> qemu, restore using the PKRAM capsule to achieve exactly the same as
+> MADV_DOEXEC does but using a system that's easy to reason about?  It
+> may be slightly slower, but I think we're still talking milliseconds.
 
-Looks good to me.
+Hi James, good to hear from you.  PKRAM or SysV shm could be used for
+a restart in that manner, but it would only support sriov guests if the
+guest exports an agent that supports suspend-to-ram, and if all guest
+drivers support the suspend-to-ram method.  I have done this using a linux
+guest and qemu guest agent, and IIRC the guest pause time is 500 - 1000 msec.
+With MADV_DOEXEC, pause time is 100 - 200 msec.  The pause time is a handful
+of seconds if the guest uses an nvme drive because CC.SHN takes so long
+to persist metadata to stable storage.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+We could instead pass vfio descriptors from the old process to a 3rd party escrow 
+process and pass  them back to the new qemu process, but the shm that vfio has 
+already registered must be remapped at the same VA as the previous process, and 
+there is no interface to guarantee that.  MAP_FIXED blows away existing mappings 
+and breaks the app. MAP_FIXED_NOREPLACE respects existing mappings but cannot map 
+the shm and breaks the app.  Adding a feature that reserves VAs would fix that, we 
+have experimnted with one.  Fixing the vfio kernel implementation to not use the 
+original VA base would also work, but I don't know how doable/difficult that would be.
 
-Can you just merge that through your openrisc tree? I don't have
-any other asm-generic changes for this merge window.
+Both solutions would require a qemu instance to be stopped and relaunched using shm
+as guest ram, and its guest rebooted, so they do not let us update legacy 
+already-running instances that use anon memory.  That problem solves itself if we 
+get these rfe's into linux and qemu, and eventually users shut down the legacy
+instances, but that takes years and we need to do it sooner.
+
+- Steve
