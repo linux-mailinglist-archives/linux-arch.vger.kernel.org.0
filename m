@@ -2,379 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6D623ACA3
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Aug 2020 20:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D73D23ACB5
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Aug 2020 21:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgHCSxw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Aug 2020 14:53:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725945AbgHCSxw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 3 Aug 2020 14:53:52 -0400
-Received: from localhost.localdomain (unknown [95.146.230.158])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B18EB207DF;
-        Mon,  3 Aug 2020 18:53:48 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 and cross-arch updates for 5.9
-Date:   Mon,  3 Aug 2020 19:53:47 +0100
-Message-Id: <20200803185347.21925-1-catalin.marinas@arm.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726906AbgHCTCU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Aug 2020 15:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726847AbgHCTCT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Aug 2020 15:02:19 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6028EC061756
+        for <linux-arch@vger.kernel.org>; Mon,  3 Aug 2020 12:02:19 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id i92so384377pje.0
+        for <linux-arch@vger.kernel.org>; Mon, 03 Aug 2020 12:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O6tP2dRjUFwZbhO7kTIUZzIPSMn6S/VsoDqV/IeCHas=;
+        b=GwyGimjvlfZSm4rPZf87qz1lpYAb9Sb5zXQ8UcytIulZag6qIJXsvXyLdFFUopSqv0
+         /Fl1mCDdlrGtNOLSad2vl3ZlOQsuBisUBiYIQzm7JpDk1z9AjEBamBieoyh1KTMHOfZw
+         tTglBd2CZnJo/XvFepNNiaRJ+uKZqWJnhtQBcDQTFDZJqiFuZKGXSJHh2q0IcYen5MAj
+         +OLdSIe09Sb9neR+ZY70179YUgHipcD+bi/EBZby9k184pQbkAG1gF+JC2xh72xxod+t
+         LO7i8FjJzU+JuKl2NXKM+BD1j8+TKX7ofkLgn1K+/f0ff8iojdwSiaSlDqhIeoReXUdu
+         ODzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O6tP2dRjUFwZbhO7kTIUZzIPSMn6S/VsoDqV/IeCHas=;
+        b=V5Plf9RwhWfY84VFCt6Bj5Jx01OlylcmibWPmvbI5AGyvXkNs3XBo9nDYK+3fS3leg
+         WvQNMiSO12n/bPJ73xpbSk5ZKbGuaeVg8ko4Lpy88KeZ/OeCYZT3sTwJeJ85n0B6Qwxk
+         cAUlFNba9b70KnjKqa4kNuwR4YzCN3qwa/5v9cAkuE0MlAHzdSSj8xEiljcFrdxW8SrU
+         5puLfjiCn/kQJTqZDNyHJ8zfSCR+adRCem78NUi6FjZljW79D326w7eP8QgamXe05uux
+         RGa/4hnd8chlKmny8d7f/NfK5oIzWVx+GyCMrOz0evdm0d4wyHVdMh4z1eH97wXQMzQe
+         EpZw==
+X-Gm-Message-State: AOAM533lI2gC8b+yOutxfp5+1MZjxewsuXcl570OhvcUIRuxKUAI3kI6
+        sgXyDv9wJKGjcHQcNgKPwC4zAip4Dhk5TZIKSMJqTw==
+X-Google-Smtp-Source: ABdhPJxOc/yfQNk64Iy0M39ewebcq0NAT7dVOLQV9Zog2Bi8sDwMJRwELSzWvaGVypHwF46JkoKwRl+45aGkQMpUBps=
+X-Received: by 2002:a17:90b:1103:: with SMTP id gi3mr726306pjb.32.1596481338531;
+ Mon, 03 Aug 2020 12:02:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200731230820.1742553-1-keescook@chromium.org> <20200731230820.1742553-24-keescook@chromium.org>
+In-Reply-To: <20200731230820.1742553-24-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 3 Aug 2020 12:02:07 -0700
+Message-ID: <CAKwvOdn11z+iFQZC54JvQHC=NFX1FsoRMw2a-2P=5sQ6FKwbnw@mail.gmail.com>
+Subject: Re: [PATCH v5 23/36] arm/build: Explicitly keep .ARM.attributes sections
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+On Fri, Jul 31, 2020 at 4:18 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> In preparation for adding --orphan-handling=warn, explicitly keep the
+> .ARM.attributes section by expanding the existing ELF_DETAILS macro into
+> ARM_DETAILS.
+>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Link: https://lore.kernel.org/lkml/CAKwvOdk-racgq5pxsoGS6Vtifbtrk5fmkmnoLxrQMaOvV0nPWw@mail.gmail.com/
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/arm/include/asm/vmlinux.lds.h | 4 ++++
+>  arch/arm/kernel/vmlinux-xip.lds.S  | 2 +-
+>  arch/arm/kernel/vmlinux.lds.S      | 2 +-
+>  3 files changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm/include/asm/vmlinux.lds.h b/arch/arm/include/asm/vmlinux.lds.h
+> index a08f4301b718..c4af5182ab48 100644
+> --- a/arch/arm/include/asm/vmlinux.lds.h
+> +++ b/arch/arm/include/asm/vmlinux.lds.h
+> @@ -52,6 +52,10 @@
+>                 ARM_MMU_DISCARD(*(__ex_table))                          \
+>                 COMMON_DISCARDS
+>
+> +#define ARM_DETAILS                                                    \
+> +               ELF_DETAILS                                             \
+> +               .ARM.attributes 0 : { *(.ARM.attributes) }
 
-Here's a slightly wider-spread set of updates for 5.9. Going outside the
-usual arch/arm64/ is the removal of read_barrier_depends() series from
-Will (http://lkml.kernel.org/r/20200710165203.31284-1-will@kernel.org)
-and the MSI/IOMMU ID translation series from Lorenzo
-(http://lkml.kernel.org/r/20200619082013.13661-1-lorenzo.pieralisi@arm.com).
-The notable arm64 updates include ARMv8.4 TLBI range operations and
-translation level hint, time namespace support, perf.
+I had to look up what the `0` meant:
+https://sourceware.org/binutils/docs/ld/Output-Section-Attributes.html#Output-Section-Attributes
+mentions it's an "address" and
+https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html#SEC21
+mentions it as "start" (an address).
+Unless we need those, can we drop them? (Sorry for the resulting churn
+that would cause).  I think the NO_LOAD stuff makes more sense, but
+I'm curious if the kernel checks for that.
 
-There is only a trivial conflict with v5.8, resolved as:
+> +
+>  #define ARM_STUBS_TEXT                                                 \
+>                 *(.gnu.warning)                                         \
+>                 *(.glue_7)                                              \
+> diff --git a/arch/arm/kernel/vmlinux-xip.lds.S b/arch/arm/kernel/vmlinux-xip.lds.S
+> index 904c31fa20ed..57fcbf55f913 100644
+> --- a/arch/arm/kernel/vmlinux-xip.lds.S
+> +++ b/arch/arm/kernel/vmlinux-xip.lds.S
+> @@ -150,7 +150,7 @@ SECTIONS
+>         _end = .;
+>
+>         STABS_DEBUG
+> -       ELF_DETAILS
+> +       ARM_DETAILS
+>  }
+>
+>  /*
+> diff --git a/arch/arm/kernel/vmlinux.lds.S b/arch/arm/kernel/vmlinux.lds.S
+> index bb950c896a67..1d3d3b599635 100644
+> --- a/arch/arm/kernel/vmlinux.lds.S
+> +++ b/arch/arm/kernel/vmlinux.lds.S
+> @@ -149,7 +149,7 @@ SECTIONS
+>         _end = .;
+>
+>         STABS_DEBUG
+> -       ELF_DETAILS
+> +       ARM_DETAILS
+>  }
+>
+>  #ifdef CONFIG_STRICT_KERNEL_RWX
+> --
+> 2.25.1
+>
 
-------------8<-------------------------
-diff --cc arch/arm64/include/asm/vdso/compat_gettimeofday.h
-index 9a625e8947ff,d0cbb04bfc10..85b6873b1cfa
---- a/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-+++ b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
-@@@ -152,12 -153,18 +153,24 @@@ static __always_inline const struct vds
-  	return ret;
-  }
-  
- +static inline bool vdso_clocksource_ok(const struct vdso_data *vd)
- +{
- +	return vd->clock_mode == VDSO_CLOCKMODE_ARCHTIMER;
- +}
- +#define vdso_clocksource_ok	vdso_clocksource_ok
- +
-+ #ifdef CONFIG_TIME_NS
-+ static __always_inline const struct vdso_data *__arch_get_timens_vdso_data(void)
-+ {
-+ 	const struct vdso_data *ret;
-+ 
-+ 	/* See __arch_get_vdso_data(). */
-+ 	asm volatile("mov %0, %1" : "=r"(ret) : "r"(_timens_data));
-+ 
-+ 	return ret;
-+ }
-+ #endif
-+ 
-  #endif /* !__ASSEMBLY__ */
-  
-  #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
-------------8<-------------------------
 
-If there are any issues, please let me know. I can send separate pull
-requests if necessary. Thanks.
-
-The following changes since commit 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68:
-
-  Linux 5.8-rc3 (2020-06-28 15:00:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-upstream
-
-for you to fetch changes up to 0e4cd9f2654915be8d09a1bd1b405ce5426e64c4:
-
-  Merge branch 'for-next/read-barrier-depends' into for-next/core (2020-07-31 18:09:57 +0100)
-
-----------------------------------------------------------------
-arm64 and cross-arch updates for 5.9:
-
-- Removal of the tremendously unpopular read_barrier_depends() barrier,
-  which is a NOP on all architectures apart from Alpha, in favour of
-  allowing architectures to override READ_ONCE() and do whatever dance
-  they need to do to ensure address dependencies provide LOAD ->
-  LOAD/STORE ordering. This work also offers a potential solution if
-  compilers are shown to convert LOAD -> LOAD address dependencies into
-  control dependencies (e.g. under LTO), as weakly ordered architectures
-  will effectively be able to upgrade READ_ONCE() to smp_load_acquire().
-  The latter case is not used yet, but will be discussed further at LPC.
-
-- Make the MSI/IOMMU input/output ID translation PCI agnostic, augment
-  the MSI/IOMMU ACPI/OF ID mapping APIs to accept an input ID
-  bus-specific parameter and apply the resulting changes to the device
-  ID space provided by the Freescale FSL bus.
-
-- arm64 support for TLBI range operations and translation table level
-  hints (part of the ARMv8.4 architecture version).
-
-- Time namespace support for arm64.
-
-- Export the virtual and physical address sizes in vmcoreinfo for
-  makedumpfile and crash utilities.
-
-- CPU feature handling cleanups and checks for programmer errors
-  (overlapping bit-fields).
-
-- ACPI updates for arm64: disallow AML accesses to EFI code regions and
-  kernel memory.
-
-- perf updates for arm64.
-
-- Miscellaneous fixes and cleanups, most notably PLT counting
-  optimisation for module loading, recordmcount fix to ignore
-  relocations other than R_AARCH64_CALL26, CMA areas reserved for
-  gigantic pages on 16K and 64K configurations.
-
-- Trivial typos, duplicate words.
-
-----------------------------------------------------------------
-Ahmed S. Darwish (1):
-      time/sched_clock: Use raw_read_seqcount_latch()
-
-Andrei Vagin (6):
-      arm64/vdso: use the fault callback to map vvar pages
-      arm64/vdso: Zap vvar pages when switching to a time namespace
-      arm64/vdso: Add time namespace page
-      arm64/vdso: Handle faults on timens page
-      arm64/vdso: Restrict splitting VVAR VMA
-      arm64: enable time namespace support
-
-Andrew Scull (1):
-      smccc: Make constants available to assembly
-
-Anshuman Khandual (7):
-      arm64/panic: Unify all three existing notifier blocks
-      arm64/cpufeature: Add remaining feature bits in ID_AA64MMFR0 register
-      arm64/cpufeature: Add remaining feature bits in ID_AA64MMFR1 register
-      arm64/cpufeature: Add remaining feature bits in ID_AA64MMFR2 register
-      arm64/cpufeature: Replace all open bits shift encodings with macros
-      arm64/cpufeature: Validate feature bits spacing in arm64_ftr_regs[]
-      arm64/hugetlb: Reserve CMA areas for gigantic pages on 16K and 64K configs
-
-Ard Biesheuvel (3):
-      arm64/acpi: disallow AML memory opregions to access kernel memory
-      arm64/acpi: disallow writeable AML opregion mapping for EFI code regions
-      arm64/entry: deduplicate SW PAN entry/exit routines
-
-Bhupesh Sharma (3):
-      crash_core, vmcoreinfo: Append 'MAX_PHYSMEM_BITS' to vmcoreinfo
-      arm64/crash_core: Export TCR_EL1.T1SZ in vmcoreinfo
-      arm64/defconfig: Enable CONFIG_KEXEC_FILE
-
-Catalin Marinas (5):
-      arm64: Shift the __tlbi_level() indentation left
-      arm64: Reserve HWCAP2_MTE as (1 << 18)
-      Merge branches 'for-next/misc', 'for-next/vmcoreinfo', 'for-next/cpufeature', 'for-next/acpi', 'for-next/perf', 'for-next/timens', 'for-next/msi-iommu' and 'for-next/trivial' into for-next/core
-      Merge branch 'for-next/tlbi' into for-next/core
-      Merge branch 'for-next/read-barrier-depends' into for-next/core
-
-Diana Craciun (2):
-      of/irq: make of_msi_map_get_device_domain() bus agnostic
-      bus/fsl-mc: Refactor the MSI domain creation in the DPRC driver
-
-Gavin Shan (1):
-      arm64/mm: Redefine CONT_{PTE, PMD}_SHIFT
-
-Gregory Herrero (1):
-      recordmcount: only record relocation of type R_AARCH64_CALL26 on arm64.
-
-Jay Chen (1):
-      perf/smmuv3: To simplify code for ioremap page in pmcg
-
-Laurentiu Tudor (1):
-      dt-bindings: arm: fsl: Add msi-map device-tree binding for fsl-mc bus
-
-Leo Yan (1):
-      tools headers UAPI: Update tools's copy of linux/perf_event.h
-
-Lorenzo Pieralisi (8):
-      ACPI/IORT: Make iort_match_node_callback walk the ACPI namespace for NC
-      ACPI/IORT: Make iort_get_device_domain IRQ domain agnostic
-      ACPI/IORT: Make iort_msi_map_rid() PCI agnostic
-      ACPI/IORT: Remove useless PCI bus walk
-      ACPI/IORT: Add an input ID to acpi_dma_configure()
-      of/iommu: Make of_map_rid() PCI agnostic
-      of/device: Add input id to of_dma_configure()
-      of/irq: Make of_msi_map_rid() PCI bus agnostic
-
-Makarand Pawagi (1):
-      bus: fsl-mc: Add ACPI support for fsl-mc
-
-Maninder Singh (1):
-      arm64: use IRQ_STACK_SIZE instead of THREAD_SIZE for irq stack
-
-Marc Zyngier (3):
-      arm64: Detect the ARMv8.4 TTL feature
-      arm64: Document SW reserved PTE/PMD bits in Stage-2 descriptors
-      arm64: Add level-hinted TLB invalidation helper
-
-Mark Brown (2):
-      arm64: Document sysctls for emulated deprecated instructions
-      arm64: stacktrace: Move export for save_stack_trace_tsk()
-
-Peter Zijlstra (5):
-      sched_clock: Expose struct clock_read_data
-      arm64: perf: Implement correct cap_user_time
-      arm64: perf: Only advertise cap_user_time for arch_timer
-      perf: Add perf_event_mmap_page::cap_user_time_short ABI
-      arm64: perf: Add cap_user_time_short
-
-Peter Zijlstra (Intel) (1):
-      tlb: mmu_gather: add tlb_flush_*_range APIs
-
-Pingfan Liu (1):
-      arm64/mm: save memory access in check_and_switch_context() fast switch path
-
-Randy Dunlap (3):
-      arm64: pgtable-hwdef.h: delete duplicated words
-      arm64: ptrace.h: delete duplicated word
-      arm64: sigcontext.h: delete duplicated word
-
-Saravana Kannan (1):
-      arm64/module: Optimize module load time by optimizing PLT counting
-
-SeongJae Park (1):
-      Documentation/barriers/kokr: Remove references to [smp_]read_barrier_depends()
-
-Shaokun Zhang (2):
-      arm64: perf: Correct the event index in sysfs
-      arm64: perf: Expose some new events via sysfs
-
-Vladimir Murzin (1):
-      arm64: s/AMEVTYPE/AMEVTYPER
-
-Will Deacon (15):
-      tools: bpf: Use local copy of headers including uapi/linux/filter.h
-      compiler.h: Split {READ,WRITE}_ONCE definitions out into rwonce.h
-      asm/rwonce: Allow __READ_ONCE to be overridden by the architecture
-      alpha: Override READ_ONCE() with barriered implementation
-      asm/rwonce: Remove smp_read_barrier_depends() invocation
-      asm/rwonce: Don't pull <asm/barrier.h> into 'asm-generic/rwonce.h'
-      vhost: Remove redundant use of read_barrier_depends() barrier
-      alpha: Replace smp_read_barrier_depends() usage with smp_[r]mb()
-      locking/barriers: Remove definitions for [smp_]read_barrier_depends()
-      Documentation/barriers: Remove references to [smp_]read_barrier_depends()
-      tools/memory-model: Remove smp_read_barrier_depends() from informal doc
-      include/linux: Remove smp_read_barrier_depends() from comments
-      checkpatch: Remove checks relating to [smp_]read_barrier_depends()
-      compiler.h: Move compiletime_assert() macros into compiler_types.h
-      arm64: Reduce the number of header files pulled into vmlinux.lds.S
-
-Zhenyu Ye (7):
-      arm64: Add tlbi_user_level TLB invalidation helper
-      arm64: tlb: Set the TTL field in flush_tlb_range
-      arm64: tlb: Set the TTL field in flush_*_tlb_range
-      arm64: tlb: don't set the ttl value in flush_tlb_page_nosync
-      arm64: tlb: Detect the ARMv8.4 TLBI RANGE feature
-      arm64: enable tlbi range instructions
-      arm64: tlb: Use the TLBI RANGE feature in arm64
-
- .../RCU/Design/Requirements/Requirements.rst       |   2 +-
- Documentation/admin-guide/kdump/vmcoreinfo.rst     |  16 ++
- .../devicetree/bindings/misc/fsl,qoriq-mc.txt      |  50 +++++-
- Documentation/memory-barriers.txt                  | 156 +-----------------
- .../translations/ko_KR/memory-barriers.txt         | 146 +----------------
- arch/alpha/include/asm/atomic.h                    |  16 +-
- arch/alpha/include/asm/barrier.h                   |  59 +------
- arch/alpha/include/asm/pgtable.h                   |  10 +-
- arch/alpha/include/asm/rwonce.h                    |  35 ++++
- arch/arm/include/asm/vdso/gettimeofday.h           |   1 +
- arch/arm64/Kconfig                                 |  23 ++-
- arch/arm64/Makefile                                |   7 +
- arch/arm64/configs/defconfig                       |   1 +
- arch/arm64/include/asm/acpi.h                      |  15 +-
- arch/arm64/include/asm/cpucaps.h                   |   4 +-
- arch/arm64/include/asm/cpufeature.h                |   7 +
- arch/arm64/include/asm/hugetlb.h                   |   2 +
- arch/arm64/include/asm/hwcap.h                     |   1 +
- arch/arm64/include/asm/kernel-pgtable.h            |   2 +-
- arch/arm64/include/asm/memory.h                    |  12 +-
- arch/arm64/include/asm/mmu_context.h               |   6 +-
- arch/arm64/include/asm/perf_event.h                |  27 ++++
- arch/arm64/include/asm/pgtable-hwdef.h             |  23 +--
- arch/arm64/include/asm/pgtable.h                   |  10 ++
- arch/arm64/include/asm/ptrace.h                    |   2 +-
- arch/arm64/include/asm/stage2_pgtable.h            |   9 ++
- arch/arm64/include/asm/sysreg.h                    |  49 +++++-
- arch/arm64/include/asm/tlb.h                       |  29 +++-
- arch/arm64/include/asm/tlbflush.h                  | 177 +++++++++++++++++++--
- arch/arm64/include/asm/uaccess.h                   |   1 +
- arch/arm64/include/asm/vdso.h                      |   2 +
- arch/arm64/include/asm/vdso/compat_gettimeofday.h  |  13 ++
- arch/arm64/include/asm/vdso/gettimeofday.h         |   9 ++
- arch/arm64/include/uapi/asm/hwcap.h                |   1 +
- arch/arm64/include/uapi/asm/sigcontext.h           |   2 +-
- arch/arm64/kernel/acpi.c                           |  75 +++++++++
- arch/arm64/kernel/cpufeature.c                     | 149 ++++++++++++-----
- arch/arm64/kernel/cpuinfo.c                        |   1 +
- arch/arm64/kernel/crash_core.c                     |  10 ++
- arch/arm64/kernel/entry.S                          |  96 +++++------
- arch/arm64/kernel/module-plts.c                    |  46 +++++-
- arch/arm64/kernel/perf_event.c                     |  89 ++++++++---
- arch/arm64/kernel/setup.c                          |  24 +--
- arch/arm64/kernel/stacktrace.c                     |   2 +-
- arch/arm64/kernel/traps.c                          |   2 +-
- arch/arm64/kernel/vdso.c                           | 136 ++++++++++++++--
- arch/arm64/kernel/vdso/vdso.lds.S                  |   5 +-
- arch/arm64/kernel/vdso32/vdso.lds.S                |   5 +-
- arch/arm64/kernel/vmlinux.lds.S                    |   1 -
- arch/arm64/kvm/hyp-init.S                          |   1 +
- arch/arm64/kvm/sys_regs.c                          |  68 ++++----
- arch/arm64/mm/context.c                            |  10 +-
- arch/arm64/mm/hugetlbpage.c                        |  42 ++++-
- arch/arm64/mm/init.c                               |  22 +--
- arch/riscv/include/asm/vdso/gettimeofday.h         |   1 +
- drivers/acpi/arm64/iort.c                          | 108 +++++++++----
- drivers/acpi/scan.c                                |   8 +-
- drivers/bus/fsl-mc/dprc-driver.c                   |  31 +---
- drivers/bus/fsl-mc/fsl-mc-bus.c                    |  79 ++++++---
- drivers/bus/fsl-mc/fsl-mc-msi.c                    |  36 +++--
- drivers/bus/fsl-mc/fsl-mc-private.h                |   6 +-
- drivers/iommu/of_iommu.c                           |  81 +++++-----
- drivers/irqchip/irq-gic-v3-its-fsl-mc-msi.c        | 105 +++++++++---
- drivers/of/base.c                                  |  42 ++---
- drivers/of/device.c                                |   8 +-
- drivers/of/irq.c                                   |  34 ++--
- drivers/pci/msi.c                                  |   9 +-
- drivers/perf/arm_smmuv3_pmu.c                      |   3 +-
- drivers/vhost/vhost.c                              |   5 -
- include/acpi/acpi_bus.h                            |   9 +-
- include/asm-generic/Kbuild                         |   1 +
- include/asm-generic/barrier.h                      |  19 +--
- include/asm-generic/rwonce.h                       |  90 +++++++++++
- include/asm-generic/tlb.h                          |  55 +++++--
- include/linux/acpi.h                               |   7 +
- include/linux/acpi_iort.h                          |  20 +--
- include/linux/arm-smccc.h                          |  44 ++---
- include/linux/compiler.h                           | 134 +---------------
- include/linux/compiler_types.h                     |  41 +++++
- include/linux/nospec.h                             |   2 +
- include/linux/of.h                                 |   4 +-
- include/linux/of_device.h                          |  16 +-
- include/linux/of_iommu.h                           |   6 +-
- include/linux/of_irq.h                             |  13 +-
- include/linux/percpu-refcount.h                    |   2 +-
- include/linux/ptr_ring.h                           |   2 +-
- include/linux/sched_clock.h                        |  28 ++++
- include/uapi/linux/perf_event.h                    |  23 ++-
- include/vdso/datapage.h                            |   1 +
- kernel/crash_core.c                                |   1 +
- kernel/time/sched_clock.c                          |  41 ++---
- mm/memory.c                                        |   2 +-
- scripts/checkpatch.pl                              |   9 +-
- scripts/recordmcount.c                             |   6 +
- tools/bpf/Makefile                                 |   3 +-
- tools/include/uapi/linux/filter.h                  |  90 +++++++++++
- tools/include/uapi/linux/perf_event.h              |  23 ++-
- tools/memory-model/Documentation/explanation.txt   |  26 ++-
- 98 files changed, 1892 insertions(+), 1091 deletions(-)
- create mode 100644 arch/alpha/include/asm/rwonce.h
- create mode 100644 include/asm-generic/rwonce.h
- create mode 100644 tools/include/uapi/linux/filter.h
+-- 
+Thanks,
+~Nick Desaulniers
