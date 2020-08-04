@@ -2,112 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F26023B6FB
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 10:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DF323B819
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 11:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729959AbgHDIou (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Aug 2020 04:44:50 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:59107 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726233AbgHDIot (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 04:44:49 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-248-G1izeoNFPnOWrVPFbURiZA-1; Tue, 04 Aug 2020 09:44:45 +0100
-X-MC-Unique: G1izeoNFPnOWrVPFbURiZA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 4 Aug 2020 09:44:42 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 4 Aug 2020 09:44:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'James Bottomley' <James.Bottomley@HansenPartnership.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Steven Sistare <steven.sistare@oracle.com>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        Anthony Yznaga <anthony.yznaga@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gerg@linux-m68k.org" <gerg@linux-m68k.org>,
-        "ktkhai@virtuozzo.com" <ktkhai@virtuozzo.com>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "esyr@redhat.com" <esyr@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "christian@kellner.me" <christian@kellner.me>,
-        "areber@redhat.com" <areber@redhat.com>,
-        "cyphar@cyphar.com" <cyphar@cyphar.com>
-Subject: RE: [RFC PATCH 0/5] madvise MADV_DOEXEC
-Thread-Topic: [RFC PATCH 0/5] madvise MADV_DOEXEC
-Thread-Index: AQHWaay+eK06OQMZZUSyBX/76a/Faaknoqtw
-Date:   Tue, 4 Aug 2020 08:44:42 +0000
-Message-ID: <9371b8272fd84280ae40b409b260bab3@AcuMS.aculab.com>
-References: <1595869887-23307-1-git-send-email-anthony.yznaga@oracle.com>
-         <20200730152250.GG23808@casper.infradead.org>
-         <db3bdbae-eb0f-1ae3-94dd-045e37bc94ba@oracle.com>
-         <20200730171251.GI23808@casper.infradead.org>
-         <63a7404c-e4f6-a82e-257b-217585b0277f@oracle.com>
-         <20200730174956.GK23808@casper.infradead.org>
-         <ab7a25bf-3321-77c8-9bc3-28a223a14032@oracle.com>
-         <87y2n03brx.fsf@x220.int.ebiederm.org>
-         <689d6348-6029-5396-8de7-a26bc3c017e5@oracle.com>
-         <877dufvje9.fsf@x220.int.ebiederm.org>
- <1596469370.29091.13.camel@HansenPartnership.com>
-In-Reply-To: <1596469370.29091.13.camel@HansenPartnership.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727792AbgHDJut (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Aug 2020 05:50:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45458 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726844AbgHDJut (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 4 Aug 2020 05:50:49 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2A61D206DA;
+        Tue,  4 Aug 2020 09:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596534648;
+        bh=td5J9Vxgk+gTO+L9zbaF5BaPjjiLjmM4vrr/SBOLFKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RmFywTyRGmjSjjTGim05to90O8GVoSHviD+l0nIkYuIaFtl1JVO+6upwcXnWdTUQX
+         lkiRQ6AbRc5Y05F6PO7WjYZU9ibrAtxRMsRsAfzikpflcCJKMWGPzYp8AwUTqpVpkc
+         YWncexe8pS1r0ZZ6v4SxAIyNUNyGQ+9cOkXZRy8k=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: [PATCH v3 0/6] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Tue,  4 Aug 2020 12:50:29 +0300
+Message-Id: <20200804095035.18778-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogSmFtZXMgQm90dG9tbGV5DQo+IFNlbnQ6IDAzIEF1Z3VzdCAyMDIwIDE2OjQzDQo+IA0K
-PiBPbiBNb24sIDIwMjAtMDgtMDMgYXQgMTA6MjggLTA1MDAsIEVyaWMgVy4gQmllZGVybWFuIHdy
-b3RlOg0KPiBbLi4uXQ0KPiA+IFdoYXQgaXMgd3Jvbmcgd2l0aCBsaXZlIG1pZ3JhdGlvbiBiZXR3
-ZWVuIG9uZSBxZW11IHByb2Nlc3MgYW5kDQo+ID4gYW5vdGhlciBxZW11IHByb2Nlc3Mgb24gdGhl
-IHNhbWUgbWFjaGluZSBub3Qgd29yayBmb3IgdGhpcyB1c2UgY2FzZT8NCj4gPg0KPiA+IEp1c3Qg
-cmV1c2luZyBsaXZlIG1pZ3JhdGlvbiB3b3VsZCBzZWVtIHRvIGJlIHRoZSBzaW1wbGVzdCBwYXRo
-IG9mDQo+ID4gYWxsLCBhcyB0aGUgY29kZSBpcyBhbHJlYWR5IGltcGxlbWVudGVkLiAgRnVydGhl
-ciBpZiBzb21ldGhpbmcgZ29lcw0KPiA+IHdyb25nIHdpdGggdGhlIGxpdmUgbWlncmF0aW9uIHlv
-dSBjYW4gZmFsbGJhY2sgdG8gdGhlIGV4aXN0aW5nDQo+ID4gcHJvY2Vzcy4gIFdpdGggZXhlYyB0
-aGVyZSBpcyBubyBmYWxsYmFjayBpZiB0aGUgbmV3IHZlcnNpb24gZG9lcyBub3QNCj4gPiBwcm9w
-ZXJseSBzdXBwb3J0IHRoZSBoYW5kb2ZmIHByb3RvY29sIG9mIHRoZSBvbGQgdmVyc2lvbi4NCj4g
-DQo+IEFjdHVhbGx5LCBjb3VsZCBJIGFzayB0aGlzIGFub3RoZXIgd2F5OiB0aGUgb3RoZXIgcGF0
-Y2ggc2V0IHlvdSBzZW50IHRvDQo+IHRoZSBLVk0gbGlzdCB3YXMgdG8gc25hcHNob3QgdGhlIFZN
-IHRvIGEgUEtSQU0gY2Fwc3VsZSBwcmVzZXJ2ZWQgYWNyb3NzDQo+IGtleGVjIHVzaW5nIHplcm8g
-Y29weSBmb3IgZXh0cmVtZWx5IGZhc3Qgc2F2ZS9yZXN0b3JlLiAgVGhlIG9yaWdpbmFsDQo+IGlk
-ZWEgd2FzIHRvIHVzZSB0aGlzIGFzIHBhcnQgb2YgYSBDUklVIGJhc2VkIHNuYXBzaG90LCBrZXhl
-YyB0byBuZXcNCj4gc3lzdGVtLCByZXN0b3JlLiAgSG93ZXZlciwgd2h5IGNhbid0IHlvdSBkbyBh
-IGxvY2FsIHNuYXBzaG90LCByZXN0YXJ0DQo+IHFlbXUsIHJlc3RvcmUgdXNpbmcgdGhlIFBLUkFN
-IGNhcHN1bGUgdG8gYWNoaWV2ZSBleGFjdGx5IHRoZSBzYW1lIGFzDQo+IE1BRFZfRE9FWEVDIGRv
-ZXMgYnV0IHVzaW5nIGEgc3lzdGVtIHRoYXQncyBlYXN5IHRvIHJlYXNvbiBhYm91dD8gIEl0DQo+
-IG1heSBiZSBzbGlnaHRseSBzbG93ZXIsIGJ1dCBJIHRoaW5rIHdlJ3JlIHN0aWxsIHRhbGtpbmcg
-bWlsbGlzZWNvbmRzLg0KDQoNCkkndmUgaGFkIGFub3RoZXIgaWRlYSAodGhhdCBpcyBwcm9iYWJs
-eSBpbXBvc3NpYmxlLi4uKS4NCldoYXQgYWJvdXQgYSAncmV2ZXJzZSBtbWFwJyBvcGVyYXRpb24u
-DQpTb21ldGhpbmcgdGhhdCBjcmVhdGVzIGFuIGZkIHdob3NlIGNvbnRlbnRzIGFyZSBhIGNodW5r
-IG9mIHRoZQ0KcHJvY2Vzc2VzIGFkZHJlc3Mgc3BhY2UuDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
-cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
-eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+From: Mike Rapoport <rppt@linux.ibm.com>
+
+Hi,
+
+This is an implementation of "secret" mappings backed by a file descriptor. 
+
+v3 changes:
+* Squash kernel-parameters.txt update into the commit that added the
+  command line option.
+* Make uncached mode explicitly selectable by architectures. For now enable
+  it only on x86.
+
+v2 changes:
+* Follow Michael's suggestion and name the new system call 'memfd_secret'
+* Add kernel-parameters documentation about the boot option
+* Fix i386-tinyconfig regression reported by the kbuild bot.
+  CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+  from one side and still make it available unconditionally on
+  architectures that support SET_DIRECT_MAP.
+
+The file descriptor backing secret memory mappings is created using a
+dedicated memfd_secret system call The desired protection mode for the
+memory is configured using flags parameter of the system call. The mmap()
+of the file descriptor created with memfd_secret() will create a "secret"
+memory mapping. The pages in that mapping will be marked as not present in
+the direct map and will have desired protection bits set in the user page
+table. For instance, current implementation allows uncached mappings.
+
+Although normally Linux userspace mappings are protected from other users, 
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
+
+Additionally, the secret mappings may be used as a mean to protect guest
+memory in a virtual machine host.
+
+For demonstration of secret memory usage we've created a userspace library
+[1] that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
+
+I've hesitated whether to continue to use new flags to memfd_create() or to
+add a new system call and I've decided to use a new system call after I've
+started to look into man pages update. There would have been two completely
+independent descriptions and I think it would have been very confusing.
+
+Hiding secret memory mappings behind an anonymous file allows (ab)use of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
+
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
+
+As the fragmentation of the direct map was one of the major concerns raised
+during the previous postings, I've added an amortizing cache of PMD-size
+pages to each file descriptor and an ability to reserve large chunks of the
+physical memory at boot time and then use this memory as an allocation pool
+for the secret memory areas.
+
+v2: https://lore.kernel.org/lkml/20200727162935.31714-1-rppt@kernel.org
+v1: https://lore.kernel.org/lkml/20200720092435.17469-1-rppt@kernel.org/
+rfc-v2: https://lore.kernel.org/lkml/20200706172051.19465-1-rppt@kernel.org/
+rfc-v1: https://lore.kernel.org/lkml/20200130162340.GA14232@rapoport-lnx/
+
+Mike Rapoport (6):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  mm: introduce memfd_secret system call to create "secret" memory areas
+  arch, mm: wire up memfd_secret system call were relevant
+  mm: secretmem: use PMD-size pages to amortize direct map fragmentation
+  mm: secretmem: add ability to reserve memory at boot
+
+ arch/Kconfig                           |   7 +
+ arch/arm64/include/asm/unistd.h        |   2 +-
+ arch/arm64/include/asm/unistd32.h      |   2 +
+ arch/arm64/include/uapi/asm/unistd.h   |   1 +
+ arch/riscv/include/asm/unistd.h        |   1 +
+ arch/x86/Kconfig                       |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+ fs/dax.c                               |  10 +-
+ include/linux/pgtable.h                |   3 +
+ include/linux/syscalls.h               |   1 +
+ include/uapi/asm-generic/unistd.h      |   7 +-
+ include/uapi/linux/magic.h             |   1 +
+ include/uapi/linux/secretmem.h         |   9 +
+ kernel/sys_ni.c                        |   2 +
+ mm/Kconfig                             |   4 +
+ mm/Makefile                            |   1 +
+ mm/internal.h                          |   3 +
+ mm/mmap.c                              |   5 +-
+ mm/secretmem.c                         | 458 +++++++++++++++++++++++++
+ 20 files changed, 510 insertions(+), 10 deletions(-)
+ create mode 100644 include/uapi/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+
+-- 
+2.26.2
 
