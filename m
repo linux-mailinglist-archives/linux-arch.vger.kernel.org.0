@@ -2,116 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4847D23BA37
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 14:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62DB23BABD
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 14:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730348AbgHDLst (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Aug 2020 07:48:49 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:36669 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730242AbgHDLsQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 4 Aug 2020 07:48:16 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BLY0R3gCnz9tyRq;
-        Tue,  4 Aug 2020 13:47:51 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Jup3KUwuPW94; Tue,  4 Aug 2020 13:47:51 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BLY0R2vf8z9tyRh;
-        Tue,  4 Aug 2020 13:47:51 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 350258B7A5;
-        Tue,  4 Aug 2020 13:47:53 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ckh2gzc1q3le; Tue,  4 Aug 2020 13:47:53 +0200 (CEST)
-Received: from po16052vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.103])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0F2A98B767;
-        Tue,  4 Aug 2020 13:47:53 +0200 (CEST)
-Received: by po16052vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 0644F65BBB; Tue,  4 Aug 2020 11:47:52 +0000 (UTC)
-Message-Id: <21e46e2f81e5db4675be113ef00edbf398398dc9.1596541334.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1596541334.git.christophe.leroy@csgroup.eu>
-References: <cover.1596541334.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v9 5/5] powerpc/vdso: Provide __kernel_clock_gettime64() on
- vdso32
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        anton@ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        luto@kernel.org, linux-arch@vger.kernel.org
-Date:   Tue,  4 Aug 2020 11:47:52 +0000 (UTC)
+        id S1726356AbgHDMwS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Aug 2020 08:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbgHDMwS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 08:52:18 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BE6C06174A;
+        Tue,  4 Aug 2020 05:52:18 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id k12so13627624otr.1;
+        Tue, 04 Aug 2020 05:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=pMO7xyI02u/N3BhtYFkNjauZHH09qS1894eAogsqric=;
+        b=dqIg4irnWWoY+Y5RxKJEqmwSgROMfRLLQIvLQwZca2rpKDo+n6etnvAPBYGleJ2+rw
+         jBiX/nOfWx/KPTZ+doBnbFLdjLRLYeTh/KC+XddIFecTlCgj3Kz6xWUknyUmLCEZj1pF
+         3/yiVCFgroeRsYd+JHeXuLL+PDpZvBTSoyXnk1zINW6r6exODy/+inAb/JZ9SgJA9+Gi
+         YMpWh1BkQ1EqMT59UfeO02muIwdsbe/bCllv+ixdsQB+3LNrsSgFNOOhk+nLb/NNAJXc
+         mm6zfNBrDtQ09G+t5EP4VXefsJl+NAzUp21zavSkxdQ709N3ZafisgwGqq/DdhpmOuoS
+         G/TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=pMO7xyI02u/N3BhtYFkNjauZHH09qS1894eAogsqric=;
+        b=miZ+VmBXEUKfFTu+ijNYuOna1/VqK1PIElAiqn5MIIfVmQ7ttDtRcJqLb91wqxQJxp
+         eGtTabL+VfVbr86ILJjcEFRnGXuxbvqxA//IZIHXAi1WNgr6qORXGVYHChVyMF5XfRzr
+         ntLzUsjmAxK0RR3Rn07buw6JezemDKVGzTEijGBO1taXu8xM0ONu/H2zU7Juv7RTIBt/
+         NFjCSY2kAX2Dy2aBcJ7EDnOToz7UptSzQbECFjuQwqkQb4rAdjbwdW2IVC7VFztCqN2P
+         PjjxS4Npp/r9Ijc9xjIkku8p53V9x3cd7K44HD8ldBLrFp01ysBCe19cHNKQeWRTD2RO
+         yXOw==
+X-Gm-Message-State: AOAM5306947phWW2hNEfrgOOidBKPsYoW+eRdx03r9ABtMl1hUTGfRqS
+        fU6zEbe/KTNYKPSjL3IM5gYH3AfMvelz9rgrEgo=
+X-Google-Smtp-Source: ABdhPJwantcnKcYDUuZ2NeqMXi+nkqQYITvuIUuQn8NpTq7Q1pEvWayGqwiPzaoF9nt+Lij6f/xZwIc/mvJLcfV14IM=
+X-Received: by 2002:a05:6830:148f:: with SMTP id s15mr16155634otq.323.1596545537578;
+ Tue, 04 Aug 2020 05:52:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
+ <c17e330c-69f7-da7a-feae-cb8b8f5d7ea0@gmail.com> <20200720165205.GI30452@arm.com>
+ <CAKgNAkggayFEjHgPNu1HzvXGfSDoCq=Y-Ni4iv=RBYk2Eb6U1Q@mail.gmail.com> <20200729145630.GH21941@arm.com>
+In-Reply-To: <20200729145630.GH21941@arm.com>
+Reply-To: mtk.manpages@gmail.com
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Date:   Tue, 4 Aug 2020 14:52:05 +0200
+Message-ID: <CAKgNAkhrjuAXOey2Mp64oitqyjyTu1Zbtx0dy5J2-qzpyFf33Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] prctl.2 man page updates for Linux 5.6
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Provides __kernel_clock_gettime64() on vdso32. This is the
-64 bits version of __kernel_clock_gettime() which is
-y2038 compliant.
+> > >         There is already inconsistency here: there are may top-level
+> > >         lists using ".IP *" in prctl.2, and plenty of places where the
+> > >         default indentation is used.
+> >
+> > I must admit that I'm in the process of rethinking bulleted lists, and
+> > I have not come to a conclusion (and that's why nothing is said in
+> > man-pages(7), and also why there is currently inconsistency).
+> >
+> > Using .IP with the default indent (8n) results in a very deep indent
+> > between the glyph and the text, so it's not my preference.
+>
+> Is it worth trying to change the default indent in the macro package, or
+> will that just upset other people?
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/vdso32/gettimeofday.S  | 9 +++++++++
- arch/powerpc/kernel/vdso32/vdso32.lds.S    | 1 +
- arch/powerpc/kernel/vdso32/vgettimeofday.c | 6 ++++++
- 3 files changed, 16 insertions(+)
+I imagine it would break other stuff.
 
-diff --git a/arch/powerpc/kernel/vdso32/gettimeofday.S b/arch/powerpc/kernel/vdso32/gettimeofday.S
-index fd7b01c51281..a6e29f880e0e 100644
---- a/arch/powerpc/kernel/vdso32/gettimeofday.S
-+++ b/arch/powerpc/kernel/vdso32/gettimeofday.S
-@@ -35,6 +35,15 @@ V_FUNCTION_BEGIN(__kernel_clock_gettime)
- 	cvdso_call __c_kernel_clock_gettime
- V_FUNCTION_END(__kernel_clock_gettime)
- 
-+/*
-+ * Exact prototype of clock_gettime64()
-+ *
-+ * int __kernel_clock_gettime64(clockid_t clock_id, struct __timespec64 *ts);
-+ *
-+ */
-+V_FUNCTION_BEGIN(__kernel_clock_gettime64)
-+	cvdso_call __c_kernel_clock_gettime64
-+V_FUNCTION_END(__kernel_clock_gettime64)
- 
- /*
-  * Exact prototype of clock_getres()
-diff --git a/arch/powerpc/kernel/vdso32/vdso32.lds.S b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-index 4c985467a668..582c5b046cc9 100644
---- a/arch/powerpc/kernel/vdso32/vdso32.lds.S
-+++ b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-@@ -148,6 +148,7 @@ VERSION
- #ifndef CONFIG_PPC_BOOK3S_601
- 		__kernel_gettimeofday;
- 		__kernel_clock_gettime;
-+		__kernel_clock_gettime64;
- 		__kernel_clock_getres;
- 		__kernel_time;
- 		__kernel_get_tbfreq;
-diff --git a/arch/powerpc/kernel/vdso32/vgettimeofday.c b/arch/powerpc/kernel/vdso32/vgettimeofday.c
-index 0b9ab4c22ef2..f7f71fecf4ed 100644
---- a/arch/powerpc/kernel/vdso32/vgettimeofday.c
-+++ b/arch/powerpc/kernel/vdso32/vgettimeofday.c
-@@ -11,6 +11,12 @@ int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
- 	return __cvdso_clock_gettime32_data(vd, clock, ts);
- }
- 
-+int __c_kernel_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts,
-+			       const struct vdso_data *vd)
-+{
-+	return __cvdso_clock_gettime_data(vd, clock, ts);
-+}
-+
- int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
- 			    const struct vdso_data *vd)
- {
+Thanks,
+
+Michael
+
 -- 
-2.25.0
-
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
