@@ -2,92 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D62DB23BABD
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 14:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32CB23BB72
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 15:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726356AbgHDMwS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Aug 2020 08:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
+        id S1725826AbgHDNxe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Aug 2020 09:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgHDMwS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 08:52:18 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BE6C06174A;
-        Tue,  4 Aug 2020 05:52:18 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id k12so13627624otr.1;
-        Tue, 04 Aug 2020 05:52:18 -0700 (PDT)
+        with ESMTP id S1726948AbgHDNxY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 09:53:24 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74505C061757
+        for <linux-arch@vger.kernel.org>; Tue,  4 Aug 2020 06:53:20 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id o13so22184972pgf.0
+        for <linux-arch@vger.kernel.org>; Tue, 04 Aug 2020 06:53:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=pMO7xyI02u/N3BhtYFkNjauZHH09qS1894eAogsqric=;
-        b=dqIg4irnWWoY+Y5RxKJEqmwSgROMfRLLQIvLQwZca2rpKDo+n6etnvAPBYGleJ2+rw
-         jBiX/nOfWx/KPTZ+doBnbFLdjLRLYeTh/KC+XddIFecTlCgj3Kz6xWUknyUmLCEZj1pF
-         3/yiVCFgroeRsYd+JHeXuLL+PDpZvBTSoyXnk1zINW6r6exODy/+inAb/JZ9SgJA9+Gi
-         YMpWh1BkQ1EqMT59UfeO02muIwdsbe/bCllv+ixdsQB+3LNrsSgFNOOhk+nLb/NNAJXc
-         mm6zfNBrDtQ09G+t5EP4VXefsJl+NAzUp21zavSkxdQ709N3ZafisgwGqq/DdhpmOuoS
-         G/TA==
+        d=axtens.net; s=google;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=nig2/fJdYyt3b0Q5A/SU+0msFseeyybXCaAI4dDRdTg=;
+        b=jumdjySCSXZVJzizm9OUzoU9OXCS+Cfq57D4M9+nOmcjFx/ImlUYxx8bn1JnW+143W
+         B6tMiLN9WKIVbxAyKxyw81HdIULr1/GZN+VKaYR0TvHVg/4jcAFDj42GWXCA2Swm1Yfw
+         5v27iYJTlRgBYWmLp+/HqtnWpSjejedeiZ1fo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=pMO7xyI02u/N3BhtYFkNjauZHH09qS1894eAogsqric=;
-        b=miZ+VmBXEUKfFTu+ijNYuOna1/VqK1PIElAiqn5MIIfVmQ7ttDtRcJqLb91wqxQJxp
-         eGtTabL+VfVbr86ILJjcEFRnGXuxbvqxA//IZIHXAi1WNgr6qORXGVYHChVyMF5XfRzr
-         ntLzUsjmAxK0RR3Rn07buw6JezemDKVGzTEijGBO1taXu8xM0ONu/H2zU7Juv7RTIBt/
-         NFjCSY2kAX2Dy2aBcJ7EDnOToz7UptSzQbECFjuQwqkQb4rAdjbwdW2IVC7VFztCqN2P
-         PjjxS4Npp/r9Ijc9xjIkku8p53V9x3cd7K44HD8ldBLrFp01ysBCe19cHNKQeWRTD2RO
-         yXOw==
-X-Gm-Message-State: AOAM5306947phWW2hNEfrgOOidBKPsYoW+eRdx03r9ABtMl1hUTGfRqS
-        fU6zEbe/KTNYKPSjL3IM5gYH3AfMvelz9rgrEgo=
-X-Google-Smtp-Source: ABdhPJwantcnKcYDUuZ2NeqMXi+nkqQYITvuIUuQn8NpTq7Q1pEvWayGqwiPzaoF9nt+Lij6f/xZwIc/mvJLcfV14IM=
-X-Received: by 2002:a05:6830:148f:: with SMTP id s15mr16155634otq.323.1596545537578;
- Tue, 04 Aug 2020 05:52:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <1593020162-9365-1-git-send-email-Dave.Martin@arm.com>
- <c17e330c-69f7-da7a-feae-cb8b8f5d7ea0@gmail.com> <20200720165205.GI30452@arm.com>
- <CAKgNAkggayFEjHgPNu1HzvXGfSDoCq=Y-Ni4iv=RBYk2Eb6U1Q@mail.gmail.com> <20200729145630.GH21941@arm.com>
-In-Reply-To: <20200729145630.GH21941@arm.com>
-Reply-To: mtk.manpages@gmail.com
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Date:   Tue, 4 Aug 2020 14:52:05 +0200
-Message-ID: <CAKgNAkhrjuAXOey2Mp64oitqyjyTu1Zbtx0dy5J2-qzpyFf33Q@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] prctl.2 man page updates for Linux 5.6
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=nig2/fJdYyt3b0Q5A/SU+0msFseeyybXCaAI4dDRdTg=;
+        b=n4L+8y7efluxEWQA8X7ggdI6TZHXneg19luBbZEelKFwAKb+R3C3syN+HFxkaGEsT6
+         vwjX0CDPKQ1S5ebXW1rFMH/mODZzsARbYJfYJ8FsgilgDX4MxpXRYlRK4gG7F2WUKjfC
+         yHUj2YDaUAjd0UpNqOFwFBcFUpbEkeeRbiUkUhz9Cgj6L6u0K0smevIG1JZBJ34/QdHn
+         KJ0tYguNmRhtRQ0FFquWuHFoTz799+E6iJqxxQsvFmCeErMaLfgvGfILbLP144Uuo5A9
+         UnCWRvLtjjTH8HYBI7MlqYhrCCI3PB6BLpDhnF9wySf/Ze10y1dDPeysw+9X1YPI+K8k
+         9qlw==
+X-Gm-Message-State: AOAM530y+tCO1sCF88DYzlPHVkBjAP4V5Nv2Q3IhEHKwYEB2/291XWQT
+        3YIOGic2ZL4AYN8OtLT2/z3shw==
+X-Google-Smtp-Source: ABdhPJzULAmNSkaX32weXl1O34te5NSuX9EJVhPlxbPjsXptEZqiJedi5i9MSO/avpj2cLsHaUiFtw==
+X-Received: by 2002:a63:3587:: with SMTP id c129mr20025647pga.322.1596549199803;
+        Tue, 04 Aug 2020 06:53:19 -0700 (PDT)
+Received: from localhost (2001-44b8-1113-6700-0414-2e33-60ed-75ec.static.ipv6.internode.on.net. [2001:44b8:1113:6700:414:2e33:60ed:75ec])
+        by smtp.gmail.com with ESMTPSA id g8sm9981404pfo.132.2020.08.04.06.53.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2020 06:53:19 -0700 (PDT)
+From:   Daniel Axtens <dja@axtens.net>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        clang-built-linux@googlegroups.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
+Subject: Re: [PATCH v2 01/17] KVM: PPC: Book3S HV: simplify kvm_cma_reserve()
+In-Reply-To: <20200802163601.8189-2-rppt@kernel.org>
+References: <20200802163601.8189-1-rppt@kernel.org> <20200802163601.8189-2-rppt@kernel.org>
+Date:   Tue, 04 Aug 2020 23:53:15 +1000
+Message-ID: <87tuxio6us.fsf@dja-thinkpad.axtens.net>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> > >         There is already inconsistency here: there are may top-level
-> > >         lists using ".IP *" in prctl.2, and plenty of places where the
-> > >         default indentation is used.
-> >
-> > I must admit that I'm in the process of rethinking bulleted lists, and
-> > I have not come to a conclusion (and that's why nothing is said in
-> > man-pages(7), and also why there is currently inconsistency).
-> >
-> > Using .IP with the default indent (8n) results in a very deep indent
-> > between the glyph and the text, so it's not my preference.
+Hi Mike,
+
 >
-> Is it worth trying to change the default indent in the macro package, or
-> will that just upset other people?
+> The memory size calculation in kvm_cma_reserve() traverses memblock.memory
+> rather than simply call memblock_phys_mem_size(). The comment in that
+> function suggests that at some point there should have been call to
+> memblock_analyze() before memblock_phys_mem_size() could be used.
+> As of now, there is no memblock_analyze() at all and
+> memblock_phys_mem_size() can be used as soon as cold-plug memory is
+> registerd with memblock.
+>
+> Replace loop over memblock.memory with a call to memblock_phys_mem_size().
+>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/powerpc/kvm/book3s_hv_builtin.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/powerpc/kvm/book3s_hv_builtin.c b/arch/powerpc/kvm/book3s_hv_builtin.c
+> index 7cd3cf3d366b..56ab0d28de2a 100644
+> --- a/arch/powerpc/kvm/book3s_hv_builtin.c
+> +++ b/arch/powerpc/kvm/book3s_hv_builtin.c
+> @@ -95,22 +95,15 @@ EXPORT_SYMBOL_GPL(kvm_free_hpt_cma);
+>  void __init kvm_cma_reserve(void)
+>  {
+>  	unsigned long align_size;
+> -	struct memblock_region *reg;
+> -	phys_addr_t selected_size = 0;
+> +	phys_addr_t selected_size;
+>  
+>  	/*
+>  	 * We need CMA reservation only when we are in HV mode
+>  	 */
+>  	if (!cpu_has_feature(CPU_FTR_HVMODE))
+>  		return;
+> -	/*
+> -	 * We cannot use memblock_phys_mem_size() here, because
+> -	 * memblock_analyze() has not been called yet.
+> -	 */
+> -	for_each_memblock(memory, reg)
+> -		selected_size += memblock_region_memory_end_pfn(reg) -
+> -				 memblock_region_memory_base_pfn(reg);
+>  
+> +	selected_size = PHYS_PFN(memblock_phys_mem_size());
+>  	selected_size = (selected_size * kvm_cma_resv_ratio / 100) << PAGE_SHIFT;
 
-I imagine it would break other stuff.
+I think this is correct, but PHYS_PFN does x >> PAGE_SHIFT and then the
+next line does x << PAGE_SHIFT, so I think we could combine those two
+lines as:
 
-Thanks,
+selected_size = PAGE_ALIGN(memblock_phys_mem_size() * kvm_cma_resv_ratio / 100);
 
-Michael
+(I think that might technically change it from aligning down to aligning
+up but I don't think 1 page matters here.)
 
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+Kind regards,
+Daniel
+
+
+>  	if (selected_size) {
+>  		pr_debug("%s: reserving %ld MiB for global area\n", __func__,
+> -- 
+> 2.26.2
