@@ -2,113 +2,206 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B02D723B135
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 01:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F045F23B236
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Aug 2020 03:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgHCXrS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Aug 2020 19:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S1728924AbgHDBTl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Aug 2020 21:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726718AbgHCXrR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Aug 2020 19:47:17 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13A5C06174A;
-        Mon,  3 Aug 2020 16:47:17 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id c6so1001227pje.1;
-        Mon, 03 Aug 2020 16:47:17 -0700 (PDT)
+        with ESMTP id S1728532AbgHDBTk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Aug 2020 21:19:40 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E15C061757
+        for <linux-arch@vger.kernel.org>; Mon,  3 Aug 2020 18:19:40 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id p8so5090757pgn.13
+        for <linux-arch@vger.kernel.org>; Mon, 03 Aug 2020 18:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ZyIOGyXvGoWyVgpe6lMSEU3Lh4L4f7rUlyfG7uAF2bs=;
-        b=tCVXV5dDP0sDqcuGj8j01E2XwxH+3jXttYLUYybxXmz/9/ncIQTDG2VF2Lrkm0Ul23
-         VEalCLWgIVUjsbD52jx5UjTDoTFfuRXWnS6xTprlUKYAza/D68A39ouPFnV7lwCCv+Ph
-         eQ1MMg1rIiJCacr4SXEi+FRdqsbAADoyM7L0WnRFByF2YQ3VKhJ5/1IVLCSQD4evkJJE
-         ae6Py5Dgjo4WgIrix1tbGPkijWrS4Ku9gaX5OZm9uyZz9Aq7trjEOJr4rZNxOxPxVWy5
-         B4fpnOHv8LXKXwvh6M9Z3Bs1+YW3H72oo/d3y8+DwPwJHepmtUGpxG3XjMJQap0srI82
-         DJ2g==
+        bh=yLe9ughSSWWsyDhsI7ztPaWolRKsxiUjg5w5lMi5jv0=;
+        b=lCrMugQUVSPuyKgDXCz53qjx8GpRoloxBAlY5KPxbmQ12O72BOerb0UFBL4jyWCZRr
+         YG2/z1jkquu3Dh32tC8iEO4WNJCj7lRufInMQ8f4t5RYS0p/W80vJLslkmt+Zg82l2kU
+         sh5JzBBuyuzHRtnRFi98hxZrc0Vpeyofp94flLPq9R4TczJuwAaUa75N+I2WiyKEADGh
+         J1n2uqRVPrLq0A7jsM/UehNHwvhX/sPpSH4R1dAjlb6f9YC0Pb/sgSa9Vv4cvGAGrWJW
+         LZvSpMWaEtD2YIJWWq/dAVqLCM1hK/KDENo7+dSia+AQHXEomiTC+DTfD9Lzd3Z84DUv
+         ge9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ZyIOGyXvGoWyVgpe6lMSEU3Lh4L4f7rUlyfG7uAF2bs=;
-        b=NGhtpK+LtvGQm3xnM3D5k4Ut22cYxp5ufhy3ADv2tALLgGkXw9qitA0IT1BFK8upc9
-         VwoqpO0H+O0GTqtdulOyYgNoBfn0NhZfziAG4va+Iu2WSsG4bs0A15RQ3y/B/NpkWqxV
-         55chistKr9+M91J7AUyipPXtVc2uQIdoHFGwvMudEN11BZPW2HWSuFMBdF/pplNFR+1r
-         vq+JCAZ+9qEgrfgKY57t5FskiT1dnbn5/g0zhhMTe8bqFaosqJk9k276aVPDQEy8jTBr
-         oyl+P+nXwEb8HGd0C3Dde0VAcNwm49vZaCX02XLi+cmoZW6ePP+KU/NR/4xa9Z6v+rxo
-         9LbA==
-X-Gm-Message-State: AOAM530IWkCqk3qRzo2zga0ESVCbiCivnkMw5UE7+ZV/5t3bENxMAAFB
-        RVvILOfpRBK5t00kaQJRq+mqelcH
-X-Google-Smtp-Source: ABdhPJwpTYLSOc9+nMUubN13f9LJByOdVdA7OoYwfrtOWiOoLPj6IaVx8XPi1pPpjRVVbGt31wBRew==
-X-Received: by 2002:a17:90a:d904:: with SMTP id c4mr1581963pjv.145.1596498437278;
-        Mon, 03 Aug 2020 16:47:17 -0700 (PDT)
-Received: from localhost (g223.115-65-55.ppp.wakwak.ne.jp. [115.65.55.223])
-        by smtp.gmail.com with ESMTPSA id o16sm22034123pfu.188.2020.08.03.16.47.16
+        bh=yLe9ughSSWWsyDhsI7ztPaWolRKsxiUjg5w5lMi5jv0=;
+        b=I7hAVSyVhij3vpsy4apQ5FQ86xqLssq/ZEiLCV3S862XJZ414oSrg5uCUIJRaWof44
+         +GbcpGFrhmBBH2bEZ3mmiJOANbA2eAgkNPMvSHa9VrjqG248fGn0advz9PiQvZpliGG4
+         kfBElLKrBnLg2pZLVGunp/S2v7ANZQQMyqiUIUuYDlSXX7ILhlpYZEsL7Y3sjKydsXAW
+         AQevreMxBB+nNWQ9XOiOvsUmTzU/s81cmVh800sijZ0k3qwLLjTCgvL/jhgQA/EgpJ/9
+         WHGQda+kRlOcWQaRIDibCRCfafjYytATNsGNfTx4PsbQrMpZ/tN1freFxwnri4H39bno
+         gcIQ==
+X-Gm-Message-State: AOAM532b/e5SYI3tVrIYkPjmjDkhVzErJ/R7Lwmivd+6WTi+qs7Hzptc
+        utF/2F2TqGCLi2OEQOtCxWuxsg==
+X-Google-Smtp-Source: ABdhPJw1aC/ZBhM8ma32FF1cdfeNt3UNq3X8Np+PVxOtcg04d9iH5iUgJhrh8gVOdwwfq82yIjRsgw==
+X-Received: by 2002:a63:454d:: with SMTP id u13mr16807380pgk.309.1596503979605;
+        Mon, 03 Aug 2020 18:19:39 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:0:a6ae:11ff:fe11:4abb])
+        by smtp.gmail.com with ESMTPSA id q82sm7823264pfc.139.2020.08.03.18.19.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 16:47:16 -0700 (PDT)
-Date:   Tue, 4 Aug 2020 08:47:14 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] asm-generic/io.h: Fix sparse warnings on big-endian
- architectures
-Message-ID: <20200803234714.GL80756@lianli.shorne-pla.net>
-References: <20200803151134.3740544-1-shorne@gmail.com>
- <CAK8P3a1m=PPg1sDdRsCz7BOu44-zD87b80SvdZbMuvfLTWsc-A@mail.gmail.com>
+        Mon, 03 Aug 2020 18:19:38 -0700 (PDT)
+Date:   Mon, 3 Aug 2020 18:19:35 -0700
+From:   =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jian Cai <jiancai@google.com>,
+        Luis Lozano <llozano@google.com>,
+        Manoj Gupta <manojgupta@google.com>, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Subject: Re: [PATCH v5 13/36] vmlinux.lds.h: add PGO and AutoFDO input
+ sections
+Message-ID: <20200804011935.b4asdxdxwvwic7js@google.com>
+References: <20200731230820.1742553-1-keescook@chromium.org>
+ <20200731230820.1742553-14-keescook@chromium.org>
+ <20200801035128.GB2800311@rani.riverdale.lan>
+ <20200803190506.GE1299820@tassilo.jf.intel.com>
+ <20200803201525.GA1351390@rani.riverdale.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1m=PPg1sDdRsCz7BOu44-zD87b80SvdZbMuvfLTWsc-A@mail.gmail.com>
+In-Reply-To: <20200803201525.GA1351390@rani.riverdale.lan>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 03, 2020 at 09:50:59PM +0200, Arnd Bergmann wrote:
-> On Mon, Aug 3, 2020 at 5:11 PM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > On big-endian architectures like OpenRISC, sparse outputs below warnings on
-> > asm-generic/io.h.  This is due to io statements like:
-> >
-> >   __raw_writel(cpu_to_le32(value), PCI_IOBASE + addr);
-> >
-> > The __raw_writel() function expects native endianness, however
-> > cpu_to_le32() returns __le32.  On little-endian machines these match up
-> > and there is no issue.  However, on big-endian we get warnings, for IO
-> > that is defined as little-endian the mismatch is expected.
-> >
-> > The fix I propose is to __force to native endian.
-> >
-> > Warnings:
-> >
-> > ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> > ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> > ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> > ./include/asm-generic/io.h:166:15: warning: cast to restricted __le16
-> > ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> > ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> > ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> > ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> > ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> > ./include/asm-generic/io.h:179:15: warning: cast to restricted __le32
-> > ./include/asm-generic/io.h:215:22: warning: incorrect type in argument 1 (different base types)
-> > ./include/asm-generic/io.h:215:22:    expected unsigned short [usertype] value
-> > ./include/asm-generic/io.h:215:22:    got restricted __le16 [usertype]
-> > ./include/asm-generic/io.h:225:22: warning: incorrect type in argument 1 (different base types)
-> > ./include/asm-generic/io.h:225:22:    expected unsigned int [usertype] value
-> > ./include/asm-generic/io.h:225:22:    got restricted __le32 [usertype]
-> >
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> 
-> Looks good to me.
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Can you just merge that through your openrisc tree? I don't have
-> any other asm-generic changes for this merge window.
+On 2020-08-03, Arvind Sankar wrote:
+>On Mon, Aug 03, 2020 at 12:05:06PM -0700, Andi Kleen wrote:
+>> > However, the history of their being together comes from
+>> >
+>> >   9bebe9e5b0f3 ("kbuild: Fix .text.unlikely placement")
+>> >
+>> > which seems to indicate there was some problem with having them separated out,
+>> > although I don't quite understand what the issue was from the commit message.
+>>
+>> Separating it out is less efficient. Gives worse packing for the hot part
+>> if they are not aligned to 64byte boundaries, which they are usually not.
+>>
+>> It also improves packing of the cold part, but that probably doesn't matter.
+>>
+>> -Andi
+>
+>Why is that? Both .text and .text.hot have alignment of 2^4 (default
+>function alignment on x86) by default, so it doesn't seem like it should
+>matter for packing density.  Avoiding interspersing cold text among
+>regular/hot text seems like it should be a net win.
+>
+>That old commit doesn't reference efficiency -- it says there was some
+>problem with matching when they were separated out, but there were no
+>wildcard section names back then.
 
-That's fine with me.  Thank you.
+I just want to share some context. GNU ld's internal linker script does
+impose a particular input section order by specifying separate input section descriptions:
 
--Stafford
+   .text           :
+   {
+     *(.text.unlikely .text.*_unlikely .text.unlikely.*)
+     *(.text.exit .text.exit.*)
+     *(.text.startup .text.startup.*)
+     *(.text.hot .text.hot.*)
+     *(SORT(.text.sorted.*))   # binutils 5fa5f8f5fe494ba4fe98c11899a5464cd164ec75, invented for GCC's call graph profiling. LLVM doesn't use it
+     *(.text .stub .text.* .gnu.linkonce.t.*)
+     ...
+
+This order is a bit arbitrary. gold and LLD have -z keep-text-section-prefix. With the option,
+there can be several output sections, with the '.unlikely'/'.exit'/'.startup'/etc suffix.
+This has the advantage that the hot/unlikely/exit/etc attribution of a particular function is more obvious:
+
+   [ 2] .text             PROGBITS        000000000040007c 00007c 000003 00  AX  0   0  4
+   [ 3] .text.startup     PROGBITS        000000000040007f 00007f 000001 00  AX  0   0  1
+   [ 4] .text.exit        PROGBITS        0000000000400080 000080 000002 00  AX  0   0  1
+   [ 5] .text.unlikely    PROGBITS        0000000000400082 000082 000001 00  AX  0   0  1 
+   ...
+
+In our case we only need one output section.......
+
+If we place all text sections in one input section description:
+
+     *(.text.unlikely .text.*_unlikely .text.exit .text.exit.* .text.startup .text.startup.* .text.hot .text.hot.* ... )
+
+In many cases the input sections are laid out in the input order. In LLD there are two ordering cases:
+
+* If clang PGO (-fprofile-use=) is enabled, .llvm.call-graph-profile will be created automatically.
+   LLD can perform reordering **within an input section description**. The ordering is quite complex,
+   you can read https://github.com/llvm/llvm-project/blob/master/lld/ELF/CallGraphSort.cpp#L9 if you are curious:)
+
+   I don't know the performance improvement of this heuristic. (I don't think the original paper
+   cgo2017-hfsort-final1.pdf took ThinLTO into account, so the result might not
+   reflect realistic work loads where both ThinLTO and PGO are used) This, if matters, likely only matters
+   for very large executable, not the case for the kernel.
+* On some RISC architectures (ARM/AArch64/PowerPC),
+   the ordered sections (due to either .llvm.call-graph-profile or
+   --symbol-reordering-file=; the two can't be used together) are placed in a
+   suitable place in the input section description
+   ( http://reviews.llvm.org/D44969 )
+
+
+In summary, using one (large) input section description may have some
+performance improvement with LLD but I don't think it will be significant.
+There may be some size improvement for ARM/AArch64/PowerPC if someone wants to test.
+
+>commit 9bebe9e5b0f3109a14000df25308c2971f872605
+>Author: Andi Kleen <ak@linux.intel.com>
+>Date:   Sun Jul 19 18:01:19 2015 -0700
+>
+>    kbuild: Fix .text.unlikely placement
+>
+>    When building a kernel with .text.unlikely text the unlikely text for
+>    each translation unit was put next to the main .text code in the
+>    final vmlinux.
+>
+>    The problem is that the linker doesn't allow more specific submatches
+>    of a section name in a different linker script statement after the
+>    main match.
+>
+>    So we need to move them all into one line. With that change
+>    .text.unlikely is at the end of everything again.
+>
+>    I also moved .text.hot into the same statement though, even though
+>    that's not strictly needed.
+>
+>    Signed-off-by: Andi Kleen <ak@linux.intel.com>
+>    Signed-off-by: Michal Marek <mmarek@suse.com>
+>
+>diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+>index 8bd374d3cf21..1781e54ea6d3 100644
+>--- a/include/asm-generic/vmlinux.lds.h
+>+++ b/include/asm-generic/vmlinux.lds.h
+>@@ -412,12 +412,10 @@
+>  * during second ld run in second ld pass when generating System.map */
+> #define TEXT_TEXT							\
+> 		ALIGN_FUNCTION();					\
+>-		*(.text.hot)						\
+>-		*(.text .text.fixup)					\
+>+		*(.text.hot .text .text.fixup .text.unlikely)		\
+> 		*(.ref.text)						\
+> 	MEM_KEEP(init.text)						\
+> 	MEM_KEEP(exit.text)						\
+>-		*(.text.unlikely)
+>
+>
+> /* sched.text is aling to function alignment to secure we have same
