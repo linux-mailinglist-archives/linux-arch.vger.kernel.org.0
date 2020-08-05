@@ -2,74 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2908A23CEBF
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5700623CEC4
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727789AbgHETDZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 15:03:25 -0400
-Received: from gate.crashing.org ([63.228.1.57]:57203 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728019AbgHETB4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 5 Aug 2020 15:01:56 -0400
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 075Ieuu6004765;
-        Wed, 5 Aug 2020 13:40:56 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 075IesOr004764;
-        Wed, 5 Aug 2020 13:40:54 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 5 Aug 2020 13:40:54 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        anton@ozlabs.org, linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
-        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v10 2/5] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
-Message-ID: <20200805184054.GQ6753@gate.crashing.org>
-References: <cover.1596611196.git.christophe.leroy@csgroup.eu> <348528c33cd4007f3fee7fe643ef160843d09a6c.1596611196.git.christophe.leroy@csgroup.eu> <20200805140307.GO6753@gate.crashing.org> <3db2a590-b842-83db-ed2b-f3ee62595f18@csgroup.eu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3db2a590-b842-83db-ed2b-f3ee62595f18@csgroup.eu>
-User-Agent: Mutt/1.4.2.3i
+        id S1728434AbgHETBy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 15:01:54 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45523 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728413AbgHES7p (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Aug 2020 14:59:45 -0400
+Received: by mail-oi1-f193.google.com with SMTP id o21so19829167oie.12;
+        Wed, 05 Aug 2020 11:59:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HPsV2zoZzYtOhvNoZSOkLk25C0ml14YDgasXK3+w6VE=;
+        b=tMR/PBhMUHMguPTr5Gyr8IQgCY3BIOBiiNqdGaYmGoT5LpVNd3g1v1P97cEqhEQdcq
+         cOOOus0vdNjBaqhXSHuwu8xKRBApxY5Au4PGlUhbP6g103nA8PahjfZXyYJzfo+bdgLW
+         FOv9BfNf1GR7ZhcwJhOkRMqVfFwHVrYg3WAh7aXsDrlzv1dtwy58iPYsfYka3gyiRClP
+         sHVQxTS5HTWYBjgdCZW0dIJNPlZghH/o9PmiWxqtbnRoMtYAIq0Wpu5e/LcXnaiameBf
+         DtI9UdeH+8xpjPNGvUj9pw+z0amgDG3c1RVjxz0IAsl7jV9UCLneQ7iR33FmDnmuiGhw
+         10uQ==
+X-Gm-Message-State: AOAM532KV/Q06JuNoNZaCEIb08uEaK63VHbcU/6tWsF+yB4H43hQcS5w
+        5+xDIXR6se5Zzby54ddz3wvwm9dd2iUM0UXHz2AdSg==
+X-Google-Smtp-Source: ABdhPJyjRO4HSKl3hSDUVF5bSG5jZ4RKTOAV+ZERBUYtGBdE78D2y4bJ+423aczt1eKUP/YF0MvfgAOfOKarZ6B+Nu4=
+X-Received: by 2002:aca:b742:: with SMTP id h63mr3779425oif.148.1596653455300;
+ Wed, 05 Aug 2020 11:50:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAK8P3a2PK_bC5=3wcWm43=y5xk-Dq5-fGPExJMnOrNfGfB1m1A@mail.gmail.com>
+ <20200805172629.GA1040@bug>
+In-Reply-To: <20200805172629.GA1040@bug>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 5 Aug 2020 20:50:43 +0200
+Message-ID: <CAMuHMdV20tZSu5gGsjf8h334+0xr1f=N9NvOoxHQGq42GYsj4g@mail.gmail.com>
+Subject: Re: [Ksummit-discuss] [TECH TOPIC] Planning code obsolescence
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ksummit <ksummit-discuss@lists.linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi!
+Hi Pavel,
 
-On Wed, Aug 05, 2020 at 04:40:16PM +0000, Christophe Leroy wrote:
-> >It cannot optimise it because it does not know shift < 32.  The code
-> >below is incorrect for shift equal to 32, fwiw.
-> 
-> Is there a way to tell it ?
+On Wed, Aug 5, 2020 at 7:26 PM Pavel Machek <pavel@ucw.cz> wrote:
+> > I have submitted the below as a topic for the linux/arch/* MC that Mike
+> > and I run, but I suppose it also makes sense to discuss it on the
+> > ksummit-discuss mailing list (cross-posted to linux-arch and lkml) as well
+> > even if we don't discuss it at the main ksummit track.
+>
+> > * Latest kernel in which it was known to have worked
+>
+> For some old hardware, I started collecting kernel version, .config and dmesg from
+> successful boots. github.com/pavelmachek, click on "missy".
 
-Sure, for example the &31 should work (but it doesn't, with the GCC
-version you used -- which version is that?)
+You mean your complete hardware collection doesn't boot v5.8? ;-)
 
-> >What does the compiler do for just
-> >
-> >static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
-> >	return ns >> (shift & 31);
-> >}
-> >
-> 
-> Worse:
+Gr{oetje,eeting}s,
 
-I cannot make heads or tails of all that branch spaghetti, sorry.
+                        Geert
 
->  73c:	55 8c 06 fe 	clrlwi  r12,r12,27
->  740:	7f c8 f0 14 	addc    r30,r8,r30
->  744:	7c c6 4a 14 	add     r6,r6,r9
->  748:	7c c6 e1 14 	adde    r6,r6,r28
->  74c:	34 6c ff e0 	addic.  r3,r12,-32
->  750:	41 80 00 70 	blt     7c0 <__c_kernel_clock_gettime+0x114>
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-This branch is always true.  Hrm.
-
-
-Segher
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
