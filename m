@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8E923C436
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 05:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CA723C454
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 06:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgHED7D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Aug 2020 23:59:03 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45993 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725904AbgHED7C (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Aug 2020 23:59:02 -0400
+        id S1725887AbgHEEUj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 00:20:39 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:23673 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbgHEEUj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Aug 2020 00:20:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596599941;
+        s=mimecast20190719; t=1596601237;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TYHMWO+/kd/xb1BEqnZIo41jyaK7ZhQvyZqkmGc35KI=;
-        b=JGV8WEMSwL2McCw5HQCd/QQflWHcws9XR6xRTwHTc8QI5eslB1SC6ucyai5PLZJe9E37CK
-        OxC8OfghmwaYJDJnZyJjZ4e8jFQXm6lS9CDM5Zv057YFRpix4Torr/+qdPOfUSLLteJQ1v
-        0Kju2tNq94oDRX6lT+DLWXOZW126ALg=
+        bh=twertatwzUrM7ldiTnLyq8dIY3NouOKQbE23vgZibYc=;
+        b=RhB7tJrWsV46yFoehAYmxLRKZCWlHdsxIYJKxQV1BjXImPnPGbcPU6V368xtzPpT8l+y2N
+        KOIzb3ETxq+JUYWFHDfnWn7ZFyX7kyfYNAjP/tGJCSGm5VxuDZQnRtGjoaDq+EoKLy2dTo
+        aEXBlqjVykf8BUIRQmUAnBKVDoaGdv8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-301-qwjgBZnQPM-_Txp2UuCA1g-1; Tue, 04 Aug 2020 23:57:25 -0400
-X-MC-Unique: qwjgBZnQPM-_Txp2UuCA1g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-14-pdUQtGUaN4iDPq52ne80Vw-1; Wed, 05 Aug 2020 00:20:34 -0400
+X-MC-Unique: pdUQtGUaN4iDPq52ne80Vw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7FD12800138;
-        Wed,  5 Aug 2020 03:57:20 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B26651009600;
+        Wed,  5 Aug 2020 04:20:29 +0000 (UTC)
 Received: from localhost (ovpn-12-71.pek2.redhat.com [10.72.12.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B719C87B38;
-        Wed,  5 Aug 2020 03:57:18 +0000 (UTC)
-Date:   Wed, 5 Aug 2020 11:57:15 +0800
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2C71071765;
+        Wed,  5 Aug 2020 04:20:27 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 12:20:24 +0800
 From:   Baoquan He <bhe@redhat.com>
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -68,17 +68,17 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
         uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: Re: [PATCH v2 11/17] arch, mm: replace for_each_memblock() with
- for_each_mem_pfn_range()
-Message-ID: <20200805035715.GS10792@MiWiFi-R3L-srv>
+Subject: Re: [PATCH v2 13/17] x86/setup: simplify initrd relocation and
+ reservation
+Message-ID: <20200805042024.GT10792@MiWiFi-R3L-srv>
 References: <20200802163601.8189-1-rppt@kernel.org>
- <20200802163601.8189-12-rppt@kernel.org>
+ <20200802163601.8189-14-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200802163601.8189-12-rppt@kernel.org>
+In-Reply-To: <20200802163601.8189-14-rppt@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
@@ -87,32 +87,81 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On 08/02/20 at 07:35pm, Mike Rapoport wrote:
 > From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> There are several occurrences of the following pattern:
+> Currently, initrd image is reserved very early during setup and then it
+> might be relocated and re-reserved after the initial physical memory
+> mapping is created. The "late" reservation of memblock verifies that mapped
+> memory size exceeds the size of initrd, the checks whether the relocation
+                                          ~ then?
+> required and, if yes, relocates inirtd to a new memory allocated from
+> memblock and frees the old location.
 > 
-> 	for_each_memblock(memory, reg) {
-> 		start_pfn = memblock_region_memory_base_pfn(reg);
-> 		end_pfn = memblock_region_memory_end_pfn(reg);
+> The check for memory size is excessive as memblock allocation will anyway
+> fail if there is not enough memory. Besides, there is no point to allocate
+> memory from memblock using memblock_find_in_range() + memblock_reserve()
+> when there exists memblock_phys_alloc_range() with required functionality.
 > 
-> 		/* do something with start_pfn and end_pfn */
-> 	}
-> 
-> Rather than iterate over all memblock.memory regions and each time query
-> for their start and end PFNs, use for_each_mem_pfn_range() iterator to get
-> simpler and clearer code.
+> Remove the redundant check and simplify memblock allocation.
 > 
 > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 > ---
->  arch/arm/mm/init.c           | 11 ++++-------
->  arch/arm64/mm/init.c         | 11 ++++-------
->  arch/powerpc/kernel/fadump.c | 11 ++++++-----
->  arch/powerpc/mm/mem.c        | 15 ++++++++-------
->  arch/powerpc/mm/numa.c       |  7 ++-----
->  arch/s390/mm/page-states.c   |  6 ++----
->  arch/sh/mm/init.c            |  9 +++------
->  mm/memblock.c                |  6 ++----
->  mm/sparse.c                  | 10 ++++------
->  9 files changed, 35 insertions(+), 51 deletions(-)
+>  arch/x86/kernel/setup.c | 16 +++-------------
+>  1 file changed, 3 insertions(+), 13 deletions(-)
 > 
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index a3767e74c758..d8de4053c5e8 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -262,16 +262,12 @@ static void __init relocate_initrd(void)
+>  	u64 area_size     = PAGE_ALIGN(ramdisk_size);
+>  
+>  	/* We need to move the initrd down into directly mapped mem */
+> -	relocated_ramdisk = memblock_find_in_range(0, PFN_PHYS(max_pfn_mapped),
+> -						   area_size, PAGE_SIZE);
+> -
+> +	relocated_ramdisk = memblock_phys_alloc_range(area_size, PAGE_SIZE, 0,
+> +						      PFN_PHYS(max_pfn_mapped));
+>  	if (!relocated_ramdisk)
+>  		panic("Cannot find place for new RAMDISK of size %lld\n",
+>  		      ramdisk_size);
+>  
+> -	/* Note: this includes all the mem currently occupied by
+> -	   the initrd, we rely on that fact to keep the data intact. */
+> -	memblock_reserve(relocated_ramdisk, area_size);
+>  	initrd_start = relocated_ramdisk + PAGE_OFFSET;
+>  	initrd_end   = initrd_start + ramdisk_size;
+>  	printk(KERN_INFO "Allocated new RAMDISK: [mem %#010llx-%#010llx]\n",
+> @@ -298,13 +294,13 @@ static void __init early_reserve_initrd(void)
+>  
+>  	memblock_reserve(ramdisk_image, ramdisk_end - ramdisk_image);
+>  }
+> +
+>  static void __init reserve_initrd(void)
+>  {
+>  	/* Assume only end is not page aligned */
+>  	u64 ramdisk_image = get_ramdisk_image();
+>  	u64 ramdisk_size  = get_ramdisk_size();
+>  	u64 ramdisk_end   = PAGE_ALIGN(ramdisk_image + ramdisk_size);
+> -	u64 mapped_size;
+>  
+>  	if (!boot_params.hdr.type_of_loader ||
+>  	    !ramdisk_image || !ramdisk_size)
+> @@ -312,12 +308,6 @@ static void __init reserve_initrd(void)
+>  
+>  	initrd_start = 0;
+>  
+> -	mapped_size = memblock_mem_size(max_pfn_mapped);
+> -	if (ramdisk_size >= (mapped_size>>1))
+> -		panic("initrd too large to handle, "
+> -		       "disabling initrd (%lld needed, %lld available)\n",
+> -		       ramdisk_size, mapped_size>>1);
 
 Reviewed-by: Baoquan He <bhe@redhat.com>
+
+> -
+>  	printk(KERN_INFO "RAMDISK: [mem %#010llx-%#010llx]\n", ramdisk_image,
+>  			ramdisk_end - 1);
+>  
+> -- 
+> 2.26.2
+> 
 
