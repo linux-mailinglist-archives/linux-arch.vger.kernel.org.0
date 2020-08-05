@@ -2,105 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E9D23D002
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2908A23CEBF
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728064AbgHET1l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 15:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728205AbgHERLn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Aug 2020 13:11:43 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B86C061757;
-        Wed,  5 Aug 2020 10:11:43 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id x9so48587344ljc.5;
-        Wed, 05 Aug 2020 10:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wXACrCF85ppHwQuHqdOjCkc1N78NkRlSijLNjTow210=;
-        b=oziJJooKYyQ5sG761r04I5LKIuXOAb4zkqQY0rWC/xo2s+cTYTs9U7RyQWnqJ5pq1v
-         Nbi4cMvrIp/CIcHu8pIr+eoqlm0BvwqSZf/j11GWMus1IVdOI8eFA+JP3OpxAqxrqH8K
-         4U3LrHkbnbOlDfybyMuly/WmuqEo0ptHsHBq2XUlda4WU2cHiLw7ZD+AnmV8uuOJ/jgu
-         3gjhgLG0ATcZI4I3fwTk7ZEPoMTcfQVSsz4xqNOlCB6RK7j7M3zBxlIMpYdsF8DV3rrq
-         yNVU9YFhsTtYiIivGSgzfm9XcHZ9fq/Ugzzwuzkf0diKBR/hJ5MKs2YpE9NsOoFGUM2c
-         kG+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wXACrCF85ppHwQuHqdOjCkc1N78NkRlSijLNjTow210=;
-        b=fy2+1n+7THDOEOMfrVeJoNVXeUqTWB47Cc5jeeq3qV6qII/TPZkzjoM5F1zwN39SH7
-         sJ9f4arOEr8QeMfM6ndrmRgQjA8pAsRkiBk269x2RFtnqX7vOaHgkpbfSK884linWLTX
-         Q6LD9UEeZWg5R2weVdDlFCxgMhc66yJ88KgWHxOcTxPNtMvW8aGuR1WdczwUt/LFXiBx
-         GZtQPgsyOV6Q933OBKv1D53VoUPs2u0gvM6fg3RomCgZ8ZYiDVCE0MiyCRcKY26cyUjJ
-         n1XCVadQ6UvT+0vhUC9orPSvP9R8Hr/tcAkV0iIeOxPeimdtsCpVSaWCpUjG0P4+V7Ji
-         +Bmw==
-X-Gm-Message-State: AOAM533MjCaGTP9PVtFlKGkuWRVb4n3t+wyPMSIgeiiDRUMSvpo07Xwr
-        dUNSKEd2lTISYT0l4kE0KfrqOQqNYUbaI3c/oGk=
-X-Google-Smtp-Source: ABdhPJwaicIhf8YdyAekvXwX7eOOzcHPiY2LvmIo6u440HJ6sOevFi0lA9FP0nbD1iVE8pjbKUmnQK8GBjMj1kpsXT0=
-X-Received: by 2002:a2e:b814:: with SMTP id u20mr1829339ljo.202.1596647501750;
- Wed, 05 Aug 2020 10:11:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200802163601.8189-1-rppt@kernel.org> <20200802163601.8189-17-rppt@kernel.org>
-In-Reply-To: <20200802163601.8189-17-rppt@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 5 Aug 2020 19:11:30 +0200
-Message-ID: <CANiq72k-hZwbnttADQhi3+NrHkLDVe95jxLAPvLbvSOW41+HaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 16/17] memblock: implement for_each_reserved_mem_region()
- using __next_mem_region()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        id S1727789AbgHETDZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 15:03:25 -0400
+Received: from gate.crashing.org ([63.228.1.57]:57203 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728019AbgHETB4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 5 Aug 2020 15:01:56 -0400
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 075Ieuu6004765;
+        Wed, 5 Aug 2020 13:40:56 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 075IesOr004764;
+        Wed, 5 Aug 2020 13:40:54 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Wed, 5 Aug 2020 13:40:54 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-c6x-dev@linux-c6x.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
-        sparclinux@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
+        anton@ozlabs.org, linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
+        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v10 2/5] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
+Message-ID: <20200805184054.GQ6753@gate.crashing.org>
+References: <cover.1596611196.git.christophe.leroy@csgroup.eu> <348528c33cd4007f3fee7fe643ef160843d09a6c.1596611196.git.christophe.leroy@csgroup.eu> <20200805140307.GO6753@gate.crashing.org> <3db2a590-b842-83db-ed2b-f3ee62595f18@csgroup.eu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3db2a590-b842-83db-ed2b-f3ee62595f18@csgroup.eu>
+User-Agent: Mutt/1.4.2.3i
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Aug 2, 2020 at 6:40 PM Mike Rapoport <rppt@kernel.org> wrote:
->
->  .clang-format                    |  2 +-
+Hi!
 
-The .clang-format bit:
+On Wed, Aug 05, 2020 at 04:40:16PM +0000, Christophe Leroy wrote:
+> >It cannot optimise it because it does not know shift < 32.  The code
+> >below is incorrect for shift equal to 32, fwiw.
+> 
+> Is there a way to tell it ?
 
-Acked-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Sure, for example the &31 should work (but it doesn't, with the GCC
+version you used -- which version is that?)
 
-Cheers,
-Miguel
+> >What does the compiler do for just
+> >
+> >static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
+> >	return ns >> (shift & 31);
+> >}
+> >
+> 
+> Worse:
+
+I cannot make heads or tails of all that branch spaghetti, sorry.
+
+>  73c:	55 8c 06 fe 	clrlwi  r12,r12,27
+>  740:	7f c8 f0 14 	addc    r30,r8,r30
+>  744:	7c c6 4a 14 	add     r6,r6,r9
+>  748:	7c c6 e1 14 	adde    r6,r6,r28
+>  74c:	34 6c ff e0 	addic.  r3,r12,-32
+>  750:	41 80 00 70 	blt     7c0 <__c_kernel_clock_gettime+0x114>
+
+This branch is always true.  Hrm.
+
+
+Segher
