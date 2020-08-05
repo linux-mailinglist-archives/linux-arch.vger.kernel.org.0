@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D73223D018
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E9D23D002
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728827AbgHET3D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 15:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S1728064AbgHET1l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 15:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728587AbgHERKf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Aug 2020 13:10:35 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C17EC06179E;
-        Wed,  5 Aug 2020 10:10:17 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id v15so20124964lfg.6;
-        Wed, 05 Aug 2020 10:10:17 -0700 (PDT)
+        with ESMTP id S1728205AbgHERLn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Aug 2020 13:11:43 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B86C061757;
+        Wed,  5 Aug 2020 10:11:43 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id x9so48587344ljc.5;
+        Wed, 05 Aug 2020 10:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=q+69HNPUBLn+0j8xa7ztNqSpAC3bH5kdSFM7se7mw/Y=;
-        b=RdzmbMMLETEqNtoVgyRCKj1pU2wD/0M8qEqvRXNRRNY+b914UvXZkxoVgayVQubBPC
-         CE/souAwCoROj7cmbTcH2Md3LKEYbq7hyPYtIYReTO92nMUXfSeWszPI988KPS2REOZ/
-         x8Lg5axuTOlNvJMwV7URNblxu16MjbinauMnuxvVDwlqKDPHVH06HlMC2htBpXCjb11y
-         71kjYcUyosO0NzQGNjoXOZVONMcKv4BHAUmemA/OfyAvVhCb2Eag/fpp10a8cB3ymmQm
-         ukYz/pLgzNQdHe5F/wMNFpu3aiLl6i8gq8ye/o/O6zNgd9JR7Oi+/mkdZRJPFt4uOCZ/
-         Wj4A==
+        bh=wXACrCF85ppHwQuHqdOjCkc1N78NkRlSijLNjTow210=;
+        b=oziJJooKYyQ5sG761r04I5LKIuXOAb4zkqQY0rWC/xo2s+cTYTs9U7RyQWnqJ5pq1v
+         Nbi4cMvrIp/CIcHu8pIr+eoqlm0BvwqSZf/j11GWMus1IVdOI8eFA+JP3OpxAqxrqH8K
+         4U3LrHkbnbOlDfybyMuly/WmuqEo0ptHsHBq2XUlda4WU2cHiLw7ZD+AnmV8uuOJ/jgu
+         3gjhgLG0ATcZI4I3fwTk7ZEPoMTcfQVSsz4xqNOlCB6RK7j7M3zBxlIMpYdsF8DV3rrq
+         yNVU9YFhsTtYiIivGSgzfm9XcHZ9fq/Ugzzwuzkf0diKBR/hJ5MKs2YpE9NsOoFGUM2c
+         kG+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q+69HNPUBLn+0j8xa7ztNqSpAC3bH5kdSFM7se7mw/Y=;
-        b=TXA78WnFRc7+kmsk06wFjNijSy6LcK6tOgi2FTu2ciKvRimGzMeuck5iG/SZL7JiD9
-         GwZ+CFCpm9kMgB2Ld+pG1hFVfufKo3zPrBbmTqn5Y9qDfMdA7Oxl0qP3G/GesI4a61QB
-         BSYpmKkZk7PrSKqdiRb3FQ6EYKkVdzL/XqXwnsI9TvlVXpZEOAEJRSlGTbcGNJnpRK2x
-         vYCK9PIvqb8fjsv5ewo+yM54g6YjxZAwl4GhbGOenmAvFaTZgkumx8hW4yhBXqrY27xo
-         7joA0Jryu0v1/H1v77ciO/uy29dQaFhQjKcJEMEA7s4BabD6KpMiYJ/pDsMWabNqNQ7V
-         8NUQ==
-X-Gm-Message-State: AOAM532WYA+IN1EbKq89uAf0HSpe48/1ZkI9I2oWCmM69FfDECjegqem
-        4igrjEsW9b8kbHB0IENnsnh0LWeW4WNhD3NfjCE=
-X-Google-Smtp-Source: ABdhPJwrfD4lQmBmRhZhj4oSbWRKgm3lTiWKFBcnnoErai4/oJd38wR2GismiRK0iE3hYzt+6N6iDQ3Zkito0n/twrM=
-X-Received: by 2002:a05:6512:3b7:: with SMTP id v23mr2064439lfp.10.1596647415748;
- Wed, 05 Aug 2020 10:10:15 -0700 (PDT)
+        bh=wXACrCF85ppHwQuHqdOjCkc1N78NkRlSijLNjTow210=;
+        b=fy2+1n+7THDOEOMfrVeJoNVXeUqTWB47Cc5jeeq3qV6qII/TPZkzjoM5F1zwN39SH7
+         sJ9f4arOEr8QeMfM6ndrmRgQjA8pAsRkiBk269x2RFtnqX7vOaHgkpbfSK884linWLTX
+         Q6LD9UEeZWg5R2weVdDlFCxgMhc66yJ88KgWHxOcTxPNtMvW8aGuR1WdczwUt/LFXiBx
+         GZtQPgsyOV6Q933OBKv1D53VoUPs2u0gvM6fg3RomCgZ8ZYiDVCE0MiyCRcKY26cyUjJ
+         n1XCVadQ6UvT+0vhUC9orPSvP9R8Hr/tcAkV0iIeOxPeimdtsCpVSaWCpUjG0P4+V7Ji
+         +Bmw==
+X-Gm-Message-State: AOAM533MjCaGTP9PVtFlKGkuWRVb4n3t+wyPMSIgeiiDRUMSvpo07Xwr
+        dUNSKEd2lTISYT0l4kE0KfrqOQqNYUbaI3c/oGk=
+X-Google-Smtp-Source: ABdhPJwaicIhf8YdyAekvXwX7eOOzcHPiY2LvmIo6u440HJ6sOevFi0lA9FP0nbD1iVE8pjbKUmnQK8GBjMj1kpsXT0=
+X-Received: by 2002:a2e:b814:: with SMTP id u20mr1829339ljo.202.1596647501750;
+ Wed, 05 Aug 2020 10:11:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200802163601.8189-1-rppt@kernel.org> <20200802163601.8189-18-rppt@kernel.org>
-In-Reply-To: <20200802163601.8189-18-rppt@kernel.org>
+References: <20200802163601.8189-1-rppt@kernel.org> <20200802163601.8189-17-rppt@kernel.org>
+In-Reply-To: <20200802163601.8189-17-rppt@kernel.org>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 5 Aug 2020 19:10:04 +0200
-Message-ID: <CANiq72kaw7EMePMbgYyKMCkBC+7CgERq4FV2Lp-fH+ea3H12vg@mail.gmail.com>
-Subject: Re: [PATCH v2 17/17] memblock: use separate iterators for memory and
- reserved regions
+Date:   Wed, 5 Aug 2020 19:11:30 +0200
+Message-ID: <CANiq72k-hZwbnttADQhi3+NrHkLDVe95jxLAPvLbvSOW41+HaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 16/17] memblock: implement for_each_reserved_mem_region()
+ using __next_mem_region()
 To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
@@ -94,9 +94,9 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Aug 2, 2020 at 6:41 PM Mike Rapoport <rppt@kernel.org> wrote:
+On Sun, Aug 2, 2020 at 6:40 PM Mike Rapoport <rppt@kernel.org> wrote:
 >
->  .clang-format                  |  3 ++-
+>  .clang-format                    |  2 +-
 
 The .clang-format bit:
 
