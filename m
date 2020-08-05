@@ -2,95 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F3323D163
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 22:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7A823D127
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 21:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729835AbgHEUAA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 16:00:00 -0400
-Received: from elvis.franken.de ([193.175.24.41]:35625 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727897AbgHEQkk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 5 Aug 2020 12:40:40 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1k3HAl-0001HW-01; Wed, 05 Aug 2020 13:01:27 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 899DDC0C25; Wed,  5 Aug 2020 13:00:35 +0200 (CEST)
-Date:   Wed, 5 Aug 2020 13:00:35 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
+        id S1728001AbgHET5B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 15:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727999AbgHEQoM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Aug 2020 12:44:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2B5C034625;
+        Wed,  5 Aug 2020 06:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=da1gRr0zZ2t7B4lRqNuRkoPDQjMi6ltCJuE8Al1tVCE=; b=HWXVkRHwN832dRG05UXHB0oBIw
+        bVIHmST3idcP9ekdGW3zfjwF0Pw9NtKHZriMtDEWG2IfLDr6OCBzltDSMhOl6UaR4VB+MKj5TLP04
+        D+y2OfSJNRXduO2wurxCTyIhNrEbjOfxiC3fQ9kowloxLDsXYz+qNZBWskWkV4r67YJb5rni6tnxu
+        zEaPdgkZf+diFOhUAogaiUm5PlxPfMHj+JY1pUqMrnKYwv3swkoiKxzB+3OAJw82jZfkAD5C/RvSG
+        ZSbD7oGskSaQ/+z+rKi6n9bG70XhVIbZNtZ+0+ODNHwM6cKpRLNKr0S7UXSrAbxLcx/udZsOs7w26
+        cmMvbHww==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k3J6n-0003pL-49; Wed, 05 Aug 2020 13:05:31 +0000
+Subject: Re: [PATCH v3 3/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux@googlegroups.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, x86@kernel.org
-Subject: Re: [PATCH v2 12/17] arch, drivers: replace for_each_membock() with
- for_each_mem_range()
-Message-ID: <20200805110035.GB11658@alpha.franken.de>
-References: <20200802163601.8189-1-rppt@kernel.org>
- <20200802163601.8189-13-rppt@kernel.org>
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+References: <20200804095035.18778-1-rppt@kernel.org>
+ <20200804095035.18778-4-rppt@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <1f52d43e-29e4-b175-73d5-0aa3c3e79f23@infradead.org>
+Date:   Wed, 5 Aug 2020 06:05:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200802163601.8189-13-rppt@kernel.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200804095035.18778-4-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Aug 02, 2020 at 07:35:56PM +0300, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> There are several occurrences of the following pattern:
-> 
-> 	for_each_memblock(memory, reg) {
-> 		start = __pfn_to_phys(memblock_region_memory_base_pfn(reg);
-> 		end = __pfn_to_phys(memblock_region_memory_end_pfn(reg));
-> 
-> 		/* do something with start and end */
-> 	}
-> 
-> Using for_each_mem_range() iterator is more appropriate in such cases and
-> allows simpler and cleaner code.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/mips/cavium-octeon/dma-octeon.c     | 12 +++---
->  arch/mips/kernel/setup.c                 | 31 +++++++--------
+On 8/4/20 2:50 AM, Mike Rapoport wrote:
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index f2104cc0d35c..8378175e72a4 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -872,4 +872,8 @@ config ARCH_HAS_HUGEPD
+>  config MAPPING_DIRTY_HELPERS
+>          bool
+>  
+> +config SECRETMEM
+> +        def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+use tab above, not spaces.
 
-Thomas.
+> +	select GENERIC_ALLOCATOR
+> +
+>  endmenu
+
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+~Randy
+
