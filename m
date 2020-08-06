@@ -2,128 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 462DC23DA74
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 14:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E64323DE8A
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 19:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728479AbgHFMto (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Aug 2020 08:49:44 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18576 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725272AbgHFLNu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Aug 2020 07:13:50 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 076B27hF073142;
-        Thu, 6 Aug 2020 07:11:14 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32rfvv9d7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Aug 2020 07:11:14 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 076B6D04086959;
-        Thu, 6 Aug 2020 07:11:13 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32rfvv9d6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Aug 2020 07:11:13 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 076BAWFJ024047;
-        Thu, 6 Aug 2020 11:11:10 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 32n018b9k5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Aug 2020 11:11:10 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 076BB82e21496274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Aug 2020 11:11:08 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 49BE211C052;
-        Thu,  6 Aug 2020 11:11:08 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EFE8111C050;
-        Thu,  6 Aug 2020 11:11:04 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.24.39])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  6 Aug 2020 11:11:04 +0000 (GMT)
-Date:   Thu, 6 Aug 2020 14:11:02 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        id S1729442AbgHFR1I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Aug 2020 13:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729685AbgHFRBx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Aug 2020 13:01:53 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B9AC0698CD;
+        Thu,  6 Aug 2020 06:50:41 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id c2so29333088edx.8;
+        Thu, 06 Aug 2020 06:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pYOAU4zyTtJPYkEQfnQ4aWaYGVh8/wQuqp7IpTtJ6do=;
+        b=LvlvYpq9JUMWnC9/yFSS4wQkoMzm46piNKWyoQ5DuTwW/jjZl7ANZ4j592Uyj1yy3Y
+         31H9pN3pbfyxBlVjBg64O+j4LwbZFScsNLIjvF/xJffyXB6z4b1w/YA+UINKPohJPaKM
+         DhL8lwL+cYEe5vSJyl7gu1SCgZsX7iilU2sURy2UrTJgoEa0KrNbaU6eVmOsX1Dtp1Vs
+         A040v/hmZTFY4JNauiwROduRvAeiJehMUPswUJA9yeARYk+30rTwtZkzc7LQhJPv/sEt
+         kSF0maMNyYzQhF8UsZAf9VAKcQmDJRyt8GUPaEH5dTUt+t8xVfWwudrXhnv/OhxEJC80
+         KuwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=pYOAU4zyTtJPYkEQfnQ4aWaYGVh8/wQuqp7IpTtJ6do=;
+        b=YR5fT+QSuZ/dBEwGSsK5mYJhzW5ArBsUUbmkhC2vO9ujgh28/V39u3+fYVINmBhtPa
+         VzC3j7Pk5FyqHRdOTHGnlahNraAcGs+h/zjzwQwYmatyOSSUjy02EgrhDf3cxdSRmu84
+         WyWmD8/v3U8oWvcw4Sapmd//IPbXaqZcVmuIpo2kBzMNbHMFK2SAmgAuh773KjV+Hytk
+         0o2UlcGFts9eAQe/WnqPSLjeh/8+L5gGfdk2bfgzsPKckEliazNJ4Rey/jyu0h4K+Epr
+         PN5gPZZRJWhORszPSQqsBulo3xw4+mHny527WiQ7OsfBMxQK205LVUKr/5nXt08GoRIm
+         BxmA==
+X-Gm-Message-State: AOAM5313a4W/raGmtwtZunkPZFZMPgMCw3CtdHFOILHjACLXUZfm19nC
+        SaFhMSomLM8OaA6qV8euLvs=
+X-Google-Smtp-Source: ABdhPJzYxh9mNb/BHUYWWWsOHgNjPXvNZwBtPKO84YZdhn5EUVlGhMh8pj2PSHlZ0cZ/+d3acTJDPQ==
+X-Received: by 2002:a05:6402:13d9:: with SMTP id a25mr4192009edx.141.1596721839522;
+        Thu, 06 Aug 2020 06:50:39 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id c7sm3614732edf.1.2020.08.06.06.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2020 06:50:38 -0700 (PDT)
+Date:   Thu, 6 Aug 2020 15:50:36 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     x86@kernel.org, Jan Kara <jack@suse.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v3 3/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20200806111102.GK163101@linux.ibm.com>
-References: <20200804095035.18778-1-rppt@kernel.org>
- <20200804095035.18778-4-rppt@kernel.org>
- <1f52d43e-29e4-b175-73d5-0aa3c3e79f23@infradead.org>
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: improve compat handling for the i386 u64 alignment quirk v2
+Message-ID: <20200806135036.GA2077896@gmail.com>
+References: <20200731122202.213333-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1f52d43e-29e4-b175-73d5-0aa3c3e79f23@infradead.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-06_06:2020-08-06,2020-08-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- mlxlogscore=935 suspectscore=1 clxscore=1015 impostorscore=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008060075
+In-Reply-To: <20200731122202.213333-1-hch@lst.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 05, 2020 at 06:05:18AM -0700, Randy Dunlap wrote:
-> On 8/4/20 2:50 AM, Mike Rapoport wrote:
-> > diff --git a/mm/Kconfig b/mm/Kconfig
-> > index f2104cc0d35c..8378175e72a4 100644
-> > --- a/mm/Kconfig
-> > +++ b/mm/Kconfig
-> > @@ -872,4 +872,8 @@ config ARCH_HAS_HUGEPD
-> >  config MAPPING_DIRTY_HELPERS
-> >          bool
-> >  
-> > +config SECRETMEM
-> > +        def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
-> 
-> use tab above, not spaces.
 
-Will fix.
+* Christoph Hellwig <hch@lst.de> wrote:
 
-> > +	select GENERIC_ALLOCATOR
-> > +
-> >  endmenu
+> Hi all,
 > 
+> the i386 ABI is a little special in that it uses less than natural
+> alignment for 64-bit integer types (u64 and s64), and a significant
+> amount of our compat handlers deals with just that.  Unfortunately
+> there is no good way to check for this specific quirk at runtime,
+> similar how in_compat_syscall() checks for a compat syscall.  This
+> series adds such a check, and then uses the quota code as an example
+> of how this improves the compat handling.  I have a few other places
+> in mind where this will also be useful going forward.
 > 
-> -- 
-> ~Randy
+> Changes since v1:
+>  - use asm-generic/compat.h instead of linux/compat.h for
+>    compat_u64 and compat_s64
+>  - fix a typo
 > 
+> Diffstat:
+>  b/arch/arm64/include/asm/compat.h        |    2 
+>  b/arch/mips/include/asm/compat.h         |    2 
+>  b/arch/parisc/include/asm/compat.h       |    2 
+>  b/arch/powerpc/include/asm/compat.h      |    2 
+>  b/arch/s390/include/asm/compat.h         |    2 
+>  b/arch/sparc/include/asm/compat.h        |    3 
+>  b/arch/x86/entry/syscalls/syscall_32.tbl |    2 
+>  b/arch/x86/include/asm/compat.h          |    3 
+>  b/fs/quota/Kconfig                       |    5 -
+>  b/fs/quota/Makefile                      |    1 
+>  b/fs/quota/compat.h                      |   34 ++++++++
+>  b/fs/quota/quota.c                       |   73 +++++++++++++++---
+>  b/include/asm-generic/compat.h           |    8 ++
+>  b/include/linux/compat.h                 |    9 ++
+>  b/include/linux/quotaops.h               |    3 
+>  b/kernel/sys_ni.c                        |    1 
+>  fs/quota/compat.c                        |  120 -------------------------------
+>  17 files changed, 113 insertions(+), 159 deletions(-)
 
--- 
-Sincerely yours,
-Mike.
+If nobody objects to this being done at runtime, and if it's 100% ABI 
+compatible, then the x86 impact looks good to me:
+
+Acked-by: Ingo Molnar <mingo@kernel.org>
+
+Thanks,
+
+	Ingo
