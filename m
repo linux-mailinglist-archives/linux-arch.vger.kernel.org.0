@@ -2,130 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0389523D68A
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 07:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C858A23D922
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 12:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgHFFqc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Aug 2020 01:46:32 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:40016 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726051AbgHFFqc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Aug 2020 01:46:32 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BMctW4D6qz9tytV;
-        Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Cn2j-KJGPYQE; Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BMctW21YWz9tysQ;
-        Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 50E668B770;
-        Thu,  6 Aug 2020 07:46:28 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 9Cs47VjaX3ER; Thu,  6 Aug 2020 07:46:28 +0200 (CEST)
-Received: from po16052vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.102])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E77838B75E;
-        Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
-Subject: Re: [PATCH v10 2/5] powerpc/vdso: Prepare for switching VDSO to
- generic C implementation.
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        anton@ozlabs.org, linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
-        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
-References: <cover.1596611196.git.christophe.leroy@csgroup.eu>
- <348528c33cd4007f3fee7fe643ef160843d09a6c.1596611196.git.christophe.leroy@csgroup.eu>
- <20200805140307.GO6753@gate.crashing.org>
- <3db2a590-b842-83db-ed2b-f3ee62595f18@csgroup.eu>
- <20200805184054.GQ6753@gate.crashing.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <24b9a5ea-f860-3b38-aee8-4d5676453d50@csgroup.eu>
-Date:   Thu, 6 Aug 2020 05:46:18 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.7.0
+        id S1729234AbgHFKLW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Aug 2020 06:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726094AbgHFKLO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Aug 2020 06:11:14 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D8CC061574
+        for <linux-arch@vger.kernel.org>; Thu,  6 Aug 2020 03:11:13 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id i80so25798348lfi.13
+        for <linux-arch@vger.kernel.org>; Thu, 06 Aug 2020 03:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FmHNrmiGc1oEc9Yta/aBuQn+1EulEN2xZuLGLoeLXHQ=;
+        b=vdAe04pQJi4piGZ5+mZ0j2zhjTn6XVtWXoKVvfYvjkZt497I/uZbgq0bCXUw9yqxv1
+         aDwbG4fQLRxllT940g4JJIoLaihdHAzLTznrUByrMW1Sxn0NV4LG6ITrocLkxfQ/UbR8
+         /22r5p3LxUUJDP/bT5Lo9OvmnoXmRxUSyOPo0gH4uKUH+elU8Mn1VlYg4xH7/Swt6AEz
+         woNXvCrI7kpsrhxnMJDhchfVxMGgUKsXYC/i/xUa92sA04Rdaab+RLuwLDiP7hERRYMU
+         MGSXXRnFS4yE+plzwECIlQPOIq5Q9sL11BNdJXjz4h7FpV4jOJJQ0vybui6R3DGZ4y4F
+         e/Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FmHNrmiGc1oEc9Yta/aBuQn+1EulEN2xZuLGLoeLXHQ=;
+        b=eLoitWSbCX4bmXkLK372Nd4swDiNzaPAOlAU0xlC4eKY38heBcgMvuBmsiuZlTr+/C
+         06ixHfiMfoiT+yTzyxUa+K8cI/Ow6ecIJQ0wnZeDI/Hek4dF8Id0w7XMl4spC3cHA8Sz
+         rtZMwFgXVV0P61LtjIUVYZsd2NIkfNSGd6HAGkzkx9Lo75vIeGs1fYqiP1E5isLlhDoi
+         fdg3ARXsZaE2uOljzGHN+A15VjR1097RIl0TfOmS4MjOgv+hcoSd20sFPmED0+OI/gjs
+         pHaVILKZYY6uZ1xstVf3aYYEc0XfdyYIPUXAqNnUQAhCJrDkjZU9Vfn6j9KMQsaUZShD
+         Pm5Q==
+X-Gm-Message-State: AOAM5317v/bnyPtMFlgKBgMya3LoeWqukxjwQQKfjKNfamEaUGvVRF1q
+        HhPrayePpth0FjjrizHmzbk54Q==
+X-Google-Smtp-Source: ABdhPJztxQdmUqdlmLCUV07uqArQbN1pckvCcR5Q9hxz1Dr0Q7jnsmbBT95GM1N8CkcdipmeoNGGIA==
+X-Received: by 2002:a19:70c:: with SMTP id 12mr3611270lfh.207.1596708665300;
+        Thu, 06 Aug 2020 03:11:05 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id v9sm2356183lja.81.2020.08.06.03.11.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2020 03:11:04 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 92823102E1B; Thu,  6 Aug 2020 13:11:12 +0300 (+03)
+Date:   Thu, 6 Aug 2020 13:11:12 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v3 1/6] mm: add definition of PMD_PAGE_ORDER
+Message-ID: <20200806101112.bjw4mxu2odpsg2hh@box>
+References: <20200804095035.18778-1-rppt@kernel.org>
+ <20200804095035.18778-2-rppt@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200805184054.GQ6753@gate.crashing.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200804095035.18778-2-rppt@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On 08/05/2020 06:40 PM, Segher Boessenkool wrote:
-> Hi!
+On Tue, Aug 04, 2020 at 12:50:30PM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> On Wed, Aug 05, 2020 at 04:40:16PM +0000, Christophe Leroy wrote:
->>> It cannot optimise it because it does not know shift < 32.  The code
->>> below is incorrect for shift equal to 32, fwiw.
->>
->> Is there a way to tell it ?
+> The definition of PMD_PAGE_ORDER denoting the number of base pages in the
+> second-level leaf page is already used by DAX and maybe handy in other
+> cases as well.
 > 
-> Sure, for example the &31 should work (but it doesn't, with the GCC
-> version you used -- which version is that?)
-
-GCC 10.1
-
+> Several architectures already have definition of PMD_ORDER as the size of
+> second level page table, so to avoid conflict with these definitions use
+> PMD_PAGE_ORDER name and update DAX respectively.
 > 
->>> What does the compiler do for just
->>>
->>> static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
->>> 	return ns >> (shift & 31);
->>> }
->>>
->>
->> Worse:
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  fs/dax.c                | 10 +++++-----
+>  include/linux/pgtable.h |  3 +++
+>  2 files changed, 8 insertions(+), 5 deletions(-)
 > 
-> I cannot make heads or tails of all that branch spaghetti, sorry.
-> 
->>   73c:	55 8c 06 fe 	clrlwi  r12,r12,27
->>   740:	7f c8 f0 14 	addc    r30,r8,r30
->>   744:	7c c6 4a 14 	add     r6,r6,r9
->>   748:	7c c6 e1 14 	adde    r6,r6,r28
->>   74c:	34 6c ff e0 	addic.  r3,r12,-32
->>   750:	41 80 00 70 	blt     7c0 <__c_kernel_clock_gettime+0x114>
-> 
-> This branch is always true.  Hrm.
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 11b16729b86f..b91d8c8dda45 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -50,7 +50,7 @@ static inline unsigned int pe_order(enum page_entry_size pe_size)
+>  #define PG_PMD_NR	(PMD_SIZE >> PAGE_SHIFT)
+>  
+>  /* The order of a PMD entry */
+> -#define PMD_ORDER	(PMD_SHIFT - PAGE_SHIFT)
+> +#define PMD_PAGE_ORDER	(PMD_SHIFT - PAGE_SHIFT)
 
-As a standalone function:
+Hm. Wouldn't it conflict with definition in pgtable.h? Or should we
+include it instead?
 
-With your suggestion:
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index 56c1e8eb7bb0..79f8443609e7 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -28,6 +28,9 @@
+>  #define USER_PGTABLES_CEILING	0UL
+>  #endif
+>  
+> +/* Number of base pages in a second level leaf page */
+> +#define PMD_PAGE_ORDER	(PMD_SHIFT - PAGE_SHIFT)
+> +
+>  /*
+>   * A page table page can be thought of an array like this: pXd_t[PTRS_PER_PxD]
+>   *
 
-000006ac <vdso_shift_ns>:
-  6ac:	54 a5 06 fe 	clrlwi  r5,r5,27
-  6b0:	35 25 ff e0 	addic.  r9,r5,-32
-  6b4:	41 80 00 10 	blt     6c4 <vdso_shift_ns+0x18>
-  6b8:	7c 64 4c 30 	srw     r4,r3,r9
-  6bc:	38 60 00 00 	li      r3,0
-  6c0:	4e 80 00 20 	blr
-  6c4:	54 69 08 3c 	rlwinm  r9,r3,1,0,30
-  6c8:	21 45 00 1f 	subfic  r10,r5,31
-  6cc:	7c 84 2c 30 	srw     r4,r4,r5
-  6d0:	7d 29 50 30 	slw     r9,r9,r10
-  6d4:	7c 63 2c 30 	srw     r3,r3,r5
-  6d8:	7d 24 23 78 	or      r4,r9,r4
-  6dc:	4e 80 00 20 	blr
-
-
-With the version as is in my series:
-
-000006ac <vdso_shift_ns>:
-  6ac:	21 25 00 20 	subfic  r9,r5,32
-  6b0:	7c 69 48 30 	slw     r9,r3,r9
-  6b4:	7c 84 2c 30 	srw     r4,r4,r5
-  6b8:	7d 24 23 78 	or      r4,r9,r4
-  6bc:	7c 63 2c 30 	srw     r3,r3,r5
-  6c0:	4e 80 00 20 	blr
-
-
-Christophe
+-- 
+ Kirill A. Shutemov
