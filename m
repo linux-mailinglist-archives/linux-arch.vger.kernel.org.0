@@ -2,136 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 247E523D542
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 04:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0389523D68A
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 07:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbgHFCDp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 22:03:45 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:40043 "EHLO ozlabs.org"
+        id S1727792AbgHFFqc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Aug 2020 01:46:32 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:40016 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbgHFCDo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 5 Aug 2020 22:03:44 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BMWxQ0tC6z9sPC;
-        Thu,  6 Aug 2020 12:03:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1596679421;
-        bh=L//yJHWbHVRpreWBMXxnk8oP5TZkpSP3UMUfWWjPDB4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ATC+m0ylO/cnYUwq5zBrFLw4yIqF8B38lyf13k+5sws6nAXv+IfWsPlr0/8ggd0S0
-         Z3Kq0xYNwERrKWngZbb6FC5Pl7W4MK4QRPjK8eO8UiYNAK8LK3FpQcJ74wbO66n0fz
-         UA9n64PmnfdllxDpQdP5OP9ydjogwSPi6RbmSOY9wsIhA1ahx9xmwR8P9Budg5TrYq
-         8C+lzNb8gjr+d9uOT03UnI7mS3aMLsepebQeddvmYYKEXfiyXfjEgd2OEAHUqwQl+l
-         K0soc0YNNG1IVRKNX2INYuszYCeijMhLt19v8BLK4uUCRXZXSil9IluUq8VIzi6alx
-         Ysz2L2iNN2c1g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
+        id S1726051AbgHFFqc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Aug 2020 01:46:32 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4BMctW4D6qz9tytV;
+        Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id Cn2j-KJGPYQE; Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4BMctW21YWz9tysQ;
+        Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 50E668B770;
+        Thu,  6 Aug 2020 07:46:28 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 9Cs47VjaX3ER; Thu,  6 Aug 2020 07:46:28 +0200 (CEST)
+Received: from po16052vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.102])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E77838B75E;
+        Thu,  6 Aug 2020 07:46:27 +0200 (CEST)
+Subject: Re: [PATCH v10 2/5] powerpc/vdso: Prepare for switching VDSO to
+ generic C implementation.
 To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com,
-        linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org,
-        Tulio Magno Quites Machado Filho <tuliom@linux.ibm.com>,
-        luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
-In-Reply-To: <20200805133505.GN6753@gate.crashing.org>
-References: <cover.1588079622.git.christophe.leroy@c-s.fr> <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr> <878sflvbad.fsf@mpe.ellerman.id.au> <65fd7823-cc9d-c05a-0816-c34882b5d55a@csgroup.eu> <87wo2dy5in.fsf@mpe.ellerman.id.au> <20200805133505.GN6753@gate.crashing.org>
-Date:   Thu, 06 Aug 2020 12:03:33 +1000
-Message-ID: <87r1sky1hm.fsf@mpe.ellerman.id.au>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
+        anton@ozlabs.org, linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
+        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
+References: <cover.1596611196.git.christophe.leroy@csgroup.eu>
+ <348528c33cd4007f3fee7fe643ef160843d09a6c.1596611196.git.christophe.leroy@csgroup.eu>
+ <20200805140307.GO6753@gate.crashing.org>
+ <3db2a590-b842-83db-ed2b-f3ee62595f18@csgroup.eu>
+ <20200805184054.GQ6753@gate.crashing.org>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <24b9a5ea-f860-3b38-aee8-4d5676453d50@csgroup.eu>
+Date:   Thu, 6 Aug 2020 05:46:18 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200805184054.GQ6753@gate.crashing.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Segher Boessenkool <segher@kernel.crashing.org> writes:
-> On Wed, Aug 05, 2020 at 04:24:16PM +1000, Michael Ellerman wrote:
->> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
->> > Indeed, 32-bit doesn't have a redzone, so I believe it needs a stack 
->> > frame whenever it has anything to same.
->> 
->> Yeah OK that would explain it.
->> 
->> > Here is what I have in libc.so:
->> >
->> > 000fbb60 <__clock_gettime>:
->> >     fbb60:	94 21 ff e0 	stwu    r1,-32(r1)
->
-> This is the *only* place where you can use a negative offset from r1:
-> in the stwu to extend the stack (set up a new stack frame, or make the
-> current one bigger).
+Hi,
 
-(You're talking about 32-bit code here right?)
+On 08/05/2020 06:40 PM, Segher Boessenkool wrote:
+> Hi!
+> 
+> On Wed, Aug 05, 2020 at 04:40:16PM +0000, Christophe Leroy wrote:
+>>> It cannot optimise it because it does not know shift < 32.  The code
+>>> below is incorrect for shift equal to 32, fwiw.
+>>
+>> Is there a way to tell it ?
+> 
+> Sure, for example the &31 should work (but it doesn't, with the GCC
+> version you used -- which version is that?)
 
->> > diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h 
->> > b/arch/powerpc/include/asm/vdso/gettimeofday.h
->> > index a0712a6e80d9..0b6fa245d54e 100644
->> > --- a/arch/powerpc/include/asm/vdso/gettimeofday.h
->> > +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
->> > @@ -10,6 +10,7 @@
->> >     .cfi_startproc
->> >   	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
->> >   	mflr		r0
->> > +	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
->> >     .cfi_register lr, r0
->> 
->> The cfi_register should come directly after the mflr I think.
->
-> That is the idiomatic way to write it, and most obviously correct.  But
-> as long as the value in LR at function entry is available in multiple
-> places (like, in LR and in R0 here), it is fine to use either for
-> unwinding.  Sometimes you can use this to optimise the unwind tables a
-> bit -- not really worth it in hand-written code, it's more important to
-> make it legible ;-)
+GCC 10.1
 
-OK. Because LR still holds the LR value until it's clobbered later, by
-which point the cfi_register has taken effect.
+> 
+>>> What does the compiler do for just
+>>>
+>>> static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
+>>> 	return ns >> (shift & 31);
+>>> }
+>>>
+>>
+>> Worse:
+> 
+> I cannot make heads or tails of all that branch spaghetti, sorry.
+> 
+>>   73c:	55 8c 06 fe 	clrlwi  r12,r12,27
+>>   740:	7f c8 f0 14 	addc    r30,r8,r30
+>>   744:	7c c6 4a 14 	add     r6,r6,r9
+>>   748:	7c c6 e1 14 	adde    r6,r6,r28
+>>   74c:	34 6c ff e0 	addic.  r3,r12,-32
+>>   750:	41 80 00 70 	blt     7c0 <__c_kernel_clock_gettime+0x114>
+> 
+> This branch is always true.  Hrm.
 
-But yeah I think for readability it's best to keep the cfi_register next
-to the mflr.
+As a standalone function:
 
->> >> There's also no code to load/restore the TOC pointer on BE, which I
->> >> think we'll need to handle.
->> >
->> > I see no code in the generated vdso64.so doing anything with r2, but if 
->> > you think that's needed, just let's do it:
->> 
->> Hmm, true.
->> 
->> The compiler will use the toc for globals (and possibly also for large
->> constants?)
->
-> And anything else it bloody well wants to, yeah :-)
+With your suggestion:
 
-Haha yeah OK.
+000006ac <vdso_shift_ns>:
+  6ac:	54 a5 06 fe 	clrlwi  r5,r5,27
+  6b0:	35 25 ff e0 	addic.  r9,r5,-32
+  6b4:	41 80 00 10 	blt     6c4 <vdso_shift_ns+0x18>
+  6b8:	7c 64 4c 30 	srw     r4,r3,r9
+  6bc:	38 60 00 00 	li      r3,0
+  6c0:	4e 80 00 20 	blr
+  6c4:	54 69 08 3c 	rlwinm  r9,r3,1,0,30
+  6c8:	21 45 00 1f 	subfic  r10,r5,31
+  6cc:	7c 84 2c 30 	srw     r4,r4,r5
+  6d0:	7d 29 50 30 	slw     r9,r9,r10
+  6d4:	7c 63 2c 30 	srw     r3,r3,r5
+  6d8:	7d 24 23 78 	or      r4,r9,r4
+  6dc:	4e 80 00 20 	blr
 
->> AFAIK there's no way to disable use of the toc, or make it a build error
->> if it's needed.
->
-> Yes.
->
->> At the same time it's much safer for us to just save/restore r2, and
->> probably in the noise performance wise.
->
-> If you want a function to be able to work with ABI-compliant code safely
-> (in all cases), you'll have to make it itself ABI-compliant as well,
-> yes :-)
 
-True. Except this is the VDSO which has previously been a bit wild west
-as far as ABI goes :)
+With the version as is in my series:
 
->> So yeah we should probably do as below.
->
-> [ snip ]
->
-> Looks good yes.
+000006ac <vdso_shift_ns>:
+  6ac:	21 25 00 20 	subfic  r9,r5,32
+  6b0:	7c 69 48 30 	slw     r9,r3,r9
+  6b4:	7c 84 2c 30 	srw     r4,r4,r5
+  6b8:	7d 24 23 78 	or      r4,r9,r4
+  6bc:	7c 63 2c 30 	srw     r3,r3,r5
+  6c0:	4e 80 00 20 	blr
 
-Thanks for reviewing.
 
-cheers
+Christophe
