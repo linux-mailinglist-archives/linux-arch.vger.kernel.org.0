@@ -2,80 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 791A523D350
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Aug 2020 22:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB60423D466
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 02:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbgHEU4o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 16:56:44 -0400
-Received: from gate.crashing.org ([63.228.1.57]:39741 "EHLO gate.crashing.org"
+        id S1726515AbgHFAKQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 20:10:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgHEU4n (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 5 Aug 2020 16:56:43 -0400
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 075KtxCR012156;
-        Wed, 5 Aug 2020 15:55:59 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 075KtuFg012155;
-        Wed, 5 Aug 2020 15:55:56 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 5 Aug 2020 15:55:56 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        anton@ozlabs.org, linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
-        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v10 2/5] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
-Message-ID: <20200805205556.GR6753@gate.crashing.org>
-References: <cover.1596611196.git.christophe.leroy@csgroup.eu> <348528c33cd4007f3fee7fe643ef160843d09a6c.1596611196.git.christophe.leroy@csgroup.eu> <20200805140307.GO6753@gate.crashing.org> <7d409421-6396-8eba-8250-b6c9ff8232d9@csgroup.eu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7d409421-6396-8eba-8250-b6c9ff8232d9@csgroup.eu>
-User-Agent: Mutt/1.4.2.3i
+        id S1725779AbgHFAKO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 5 Aug 2020 20:10:14 -0400
+Received: from guoren-Inspiron-7460.lan (unknown [89.208.247.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A089B22CA1;
+        Thu,  6 Aug 2020 00:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596672613;
+        bh=iU0ZUkOjTpHNy95m8ekQCDxNWW2NYU6kn26pzXQoobQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Mmt0yIpqytj8FppbALT5zLqthA8Qey1R/hquzYIcyx20zy0N08Zf9vYvMegcOWV1H
+         7DDm6+Iocg7fXDNg7hr/C+Vc4XPGeWVi0WSCBfO7w4VXzRRcUrt15H3BNRL4EpW6RM
+         QmVKplVmse1UAQwRn6dNLWz14pnSSC0hE4oolqog=
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky updates for v5.9-rc1
+Date:   Thu,  6 Aug 2020 08:10:01 +0800
+Message-Id: <1596672601-8227-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi!
+Hi Linus,
 
-On Wed, Aug 05, 2020 at 06:51:44PM +0200, Christophe Leroy wrote:
-> Le 05/08/2020 à 16:03, Segher Boessenkool a écrit :
-> >On Wed, Aug 05, 2020 at 07:09:23AM +0000, Christophe Leroy wrote:
-> >>+/*
-> >>+ * The macros sets two stack frames, one for the caller and one for the 
-> >>callee
-> >>+ * because there are no requirement for the caller to set a stack frame 
-> >>when
-> >>+ * calling VDSO so it may have omitted to set one, especially on PPC64
-> >>+ */
-> >
-> >If the caller follows the ABI, there always is a stack frame.  So what
-> >is going on?
-> 
-> Looks like it is not the case. See discussion at 
-> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr/
-> 
-> Seems like GCC uses the redzone and doesn't set a stack frame. I guess 
-> it doesn't know that the inline assembly contains a function call so it 
-> doesn't set the frame.
+Please pull csky updates for v5.9-rc1:
 
-Yes, that is the problem.  See
-https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gcc/Extended-Asm.html#AssemblerTemplate
-where this is (briefly) discussed:
-  "Accessing data from C programs without using input/output operands
-  (such as by using global symbols directly from the assembler
-  template) may not work as expected. Similarly, calling functions
-  directly from an assembler template requires a detailed understanding
-  of the target assembler and ABI."
+The following changes since commit 92ed301919932f777713b9172e525674157e983d:
 
-I don't know of a good way to tell GCC some function needs a frame (that
-is, one that doesn't result in extra code other than to set up the
-frame).  I'll think about it.
+  Linux 5.8-rc7 (2020-07-26 14:14:06 -0700)
 
+are available in the git repository at:
 
-Segher
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.9-rc1
+
+for you to fetch changes up to bdcd93ef9afb42a6051e472fa62c693b1f9edbd8:
+
+  csky: Add context tracking support (2020-08-01 08:17:51 +0000)
+
+----------------------------------------------------------------
+arch/csky patches for 5.9-rc1
+
+Features:
+ - seccomp-filter
+ - err-injection
+ - top-down&random mmap-layout
+ - irq_work
+ - show_ipi
+ - context-tracking)
+
+Fixup & Optimize:
+ - kprobe_on_ftrace
+ - optimize panic print
+
+----------------------------------------------------------------
+Guo Ren (12):
+      csky: Add SECCOMP_FILTER supported
+      csky: Add cpu feature register hint for smp
+      csky: Fixup duplicated restore sp in RESTORE_REGS_FTRACE
+      csky: Fixup kprobes handler couldn't change pc
+      csky: Add support for function error injection
+      csky: Optimize the trap processing flow
+      csky: Use top-down mmap layout
+      csky: Set CONFIG_NR_CPU 4 as default
+      csky: Fixup warning by EXPORT_SYMBOL(kmap)
+      csky: Add irq_work support
+      csky: Add arch_show_interrupts for IPI interrupts
+      csky: Add context tracking support
+
+Tobias Klauser (1):
+      csky: remove unusued thread_saved_pc and *_segments functions/macros
+
+ arch/csky/Kconfig                             |  29 +++-
+ arch/csky/abiv2/inc/abi/entry.h               |   3 -
+ arch/csky/abiv2/mcount.S                      |   4 +-
+ arch/csky/include/asm/Kbuild                  |   1 +
+ arch/csky/include/asm/bug.h                   |   3 +-
+ arch/csky/include/asm/irq_work.h              |  11 ++
+ arch/csky/include/asm/processor.h             |   6 -
+ arch/csky/include/asm/ptrace.h                |   7 +
+ arch/csky/include/asm/thread_info.h           |   2 +-
+ arch/csky/kernel/entry.S                      |  28 ++++
+ arch/csky/kernel/process.c                    |  10 --
+ arch/csky/kernel/ptrace.c                     |  37 +----
+ arch/csky/kernel/smp.c                        |  62 ++++++-
+ arch/csky/kernel/traps.c                      | 223 +++++++++++++++++---------
+ arch/csky/lib/Makefile                        |   1 +
+ arch/csky/lib/error-inject.c                  |  10 ++
+ arch/csky/mm/fault.c                          |  10 +-
+ arch/csky/mm/highmem.c                        |   2 -
+ tools/testing/selftests/seccomp/seccomp_bpf.c |  13 +-
+ 19 files changed, 319 insertions(+), 143 deletions(-)
+ create mode 100644 arch/csky/include/asm/irq_work.h
+ create mode 100644 arch/csky/lib/error-inject.c
