@@ -2,154 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E587623DF6C
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 19:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BA023E0CC
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 20:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgHFRrh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Aug 2020 13:47:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43984 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729046AbgHFQg6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Aug 2020 12:36:58 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 076AX2Zk023945;
-        Thu, 6 Aug 2020 07:10:47 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32rdt2n6mc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Aug 2020 07:10:47 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 076AeeeC049571;
-        Thu, 6 Aug 2020 07:10:46 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32rdt2n6ht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Aug 2020 07:10:46 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 076B7Jv2015021;
-        Thu, 6 Aug 2020 11:10:44 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 32mynh5cuj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Aug 2020 11:10:44 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 076BAf3t30736750
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Aug 2020 11:10:41 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C2F7CAE05A;
-        Thu,  6 Aug 2020 11:10:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7CDD7AE063;
-        Thu,  6 Aug 2020 11:10:38 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.24.39])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu,  6 Aug 2020 11:10:38 +0000 (GMT)
-Date:   Thu, 6 Aug 2020 14:10:36 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v3 1/6] mm: add definition of PMD_PAGE_ORDER
-Message-ID: <20200806111036.GJ163101@linux.ibm.com>
-References: <20200804095035.18778-1-rppt@kernel.org>
- <20200804095035.18778-2-rppt@kernel.org>
- <20200806101112.bjw4mxu2odpsg2hh@box>
-MIME-Version: 1.0
+        id S1728472AbgHFSic (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Aug 2020 14:38:32 -0400
+Received: from gate.crashing.org ([63.228.1.57]:59882 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728053AbgHFSeW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Aug 2020 14:34:22 -0400
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 076IXI7v018034;
+        Thu, 6 Aug 2020 13:33:18 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 076IXGtc018033;
+        Thu, 6 Aug 2020 13:33:16 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 6 Aug 2020 13:33:16 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com,
+        linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org,
+        Tulio Magno Quites Machado Filho <tuliom@linux.ibm.com>,
+        luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
+Message-ID: <20200806183316.GV6753@gate.crashing.org>
+References: <cover.1588079622.git.christophe.leroy@c-s.fr> <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr> <878sflvbad.fsf@mpe.ellerman.id.au> <65fd7823-cc9d-c05a-0816-c34882b5d55a@csgroup.eu> <87wo2dy5in.fsf@mpe.ellerman.id.au> <20200805133505.GN6753@gate.crashing.org> <87r1sky1hm.fsf@mpe.ellerman.id.au>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200806101112.bjw4mxu2odpsg2hh@box>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-06_06:2020-08-06,2020-08-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- mlxlogscore=997 clxscore=1011 suspectscore=1 spamscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008060075
+In-Reply-To: <87r1sky1hm.fsf@mpe.ellerman.id.au>
+User-Agent: Mutt/1.4.2.3i
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 06, 2020 at 01:11:12PM +0300, Kirill A. Shutemov wrote:
-> On Tue, Aug 04, 2020 at 12:50:30PM +0300, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > The definition of PMD_PAGE_ORDER denoting the number of base pages in the
-> > second-level leaf page is already used by DAX and maybe handy in other
-> > cases as well.
-> > 
-> > Several architectures already have definition of PMD_ORDER as the size of
-> > second level page table, so to avoid conflict with these definitions use
-> > PMD_PAGE_ORDER name and update DAX respectively.
-> > 
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> >  fs/dax.c                | 10 +++++-----
-> >  include/linux/pgtable.h |  3 +++
-> >  2 files changed, 8 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/fs/dax.c b/fs/dax.c
-> > index 11b16729b86f..b91d8c8dda45 100644
-> > --- a/fs/dax.c
-> > +++ b/fs/dax.c
-> > @@ -50,7 +50,7 @@ static inline unsigned int pe_order(enum page_entry_size pe_size)
-> >  #define PG_PMD_NR	(PMD_SIZE >> PAGE_SHIFT)
-> >  
-> >  /* The order of a PMD entry */
-> > -#define PMD_ORDER	(PMD_SHIFT - PAGE_SHIFT)
-> > +#define PMD_PAGE_ORDER	(PMD_SHIFT - PAGE_SHIFT)
+Hi!
+
+On Thu, Aug 06, 2020 at 12:03:33PM +1000, Michael Ellerman wrote:
+> Segher Boessenkool <segher@kernel.crashing.org> writes:
+> > On Wed, Aug 05, 2020 at 04:24:16PM +1000, Michael Ellerman wrote:
+> >> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> >> > Indeed, 32-bit doesn't have a redzone, so I believe it needs a stack 
+> >> > frame whenever it has anything to same.
+
+^^^
+
+> >> >     fbb60:	94 21 ff e0 	stwu    r1,-32(r1)
+> >
+> > This is the *only* place where you can use a negative offset from r1:
+> > in the stwu to extend the stack (set up a new stack frame, or make the
+> > current one bigger).
 > 
-> Hm. Wouldn't it conflict with definition in pgtable.h? Or should we
-> include it instead?
+> (You're talking about 32-bit code here right?)
 
-Actually I meant to remove it here and keep only the definition in
-pgtable.h.
-Will fix.
+The "SYSV" ELF binding, yeah, which is used for 32-bit on Linux (give or
+take, ho hum).
 
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index 56c1e8eb7bb0..79f8443609e7 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -28,6 +28,9 @@
-> >  #define USER_PGTABLES_CEILING	0UL
-> >  #endif
-> >  
-> > +/* Number of base pages in a second level leaf page */
-> > +#define PMD_PAGE_ORDER	(PMD_SHIFT - PAGE_SHIFT)
-> > +
-> >  /*
-> >   * A page table page can be thought of an array like this: pXd_t[PTRS_PER_PxD]
-> >   *
+The ABIs that have a red zone are much nicer here (but less simple) :-)
+
+> >> At the same time it's much safer for us to just save/restore r2, and
+> >> probably in the noise performance wise.
+> >
+> > If you want a function to be able to work with ABI-compliant code safely
+> > (in all cases), you'll have to make it itself ABI-compliant as well,
+> > yes :-)
 > 
-> -- 
->  Kirill A. Shutemov
+> True. Except this is the VDSO which has previously been a bit wild west
+> as far as ABI goes :)
 
--- 
-Sincerely yours,
-Mike.
+It could get away with many things because it was guaranteed to be a
+leaf function.  Some of those things even violate the ABIs, but you can
+get away with it easily, much reduced scope.  Now if this is generated
+code, violating the rules will catch up with you sooner rather than
+later ;-)
+
+
+Segher
