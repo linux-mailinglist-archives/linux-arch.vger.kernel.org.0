@@ -2,114 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E64323DE8A
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 19:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9B323DEBC
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 19:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729442AbgHFR1I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Aug 2020 13:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S1728862AbgHFR3M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Aug 2020 13:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729685AbgHFRBx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Aug 2020 13:01:53 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B9AC0698CD;
-        Thu,  6 Aug 2020 06:50:41 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id c2so29333088edx.8;
-        Thu, 06 Aug 2020 06:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pYOAU4zyTtJPYkEQfnQ4aWaYGVh8/wQuqp7IpTtJ6do=;
-        b=LvlvYpq9JUMWnC9/yFSS4wQkoMzm46piNKWyoQ5DuTwW/jjZl7ANZ4j592Uyj1yy3Y
-         31H9pN3pbfyxBlVjBg64O+j4LwbZFScsNLIjvF/xJffyXB6z4b1w/YA+UINKPohJPaKM
-         DhL8lwL+cYEe5vSJyl7gu1SCgZsX7iilU2sURy2UrTJgoEa0KrNbaU6eVmOsX1Dtp1Vs
-         A040v/hmZTFY4JNauiwROduRvAeiJehMUPswUJA9yeARYk+30rTwtZkzc7LQhJPv/sEt
-         kSF0maMNyYzQhF8UsZAf9VAKcQmDJRyt8GUPaEH5dTUt+t8xVfWwudrXhnv/OhxEJC80
-         KuwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=pYOAU4zyTtJPYkEQfnQ4aWaYGVh8/wQuqp7IpTtJ6do=;
-        b=YR5fT+QSuZ/dBEwGSsK5mYJhzW5ArBsUUbmkhC2vO9ujgh28/V39u3+fYVINmBhtPa
-         VzC3j7Pk5FyqHRdOTHGnlahNraAcGs+h/zjzwQwYmatyOSSUjy02EgrhDf3cxdSRmu84
-         WyWmD8/v3U8oWvcw4Sapmd//IPbXaqZcVmuIpo2kBzMNbHMFK2SAmgAuh773KjV+Hytk
-         0o2UlcGFts9eAQe/WnqPSLjeh/8+L5gGfdk2bfgzsPKckEliazNJ4Rey/jyu0h4K+Epr
-         PN5gPZZRJWhORszPSQqsBulo3xw4+mHny527WiQ7OsfBMxQK205LVUKr/5nXt08GoRIm
-         BxmA==
-X-Gm-Message-State: AOAM5313a4W/raGmtwtZunkPZFZMPgMCw3CtdHFOILHjACLXUZfm19nC
-        SaFhMSomLM8OaA6qV8euLvs=
-X-Google-Smtp-Source: ABdhPJzYxh9mNb/BHUYWWWsOHgNjPXvNZwBtPKO84YZdhn5EUVlGhMh8pj2PSHlZ0cZ/+d3acTJDPQ==
-X-Received: by 2002:a05:6402:13d9:: with SMTP id a25mr4192009edx.141.1596721839522;
-        Thu, 06 Aug 2020 06:50:39 -0700 (PDT)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id c7sm3614732edf.1.2020.08.06.06.50.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2020 06:50:38 -0700 (PDT)
-Date:   Thu, 6 Aug 2020 15:50:36 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     x86@kernel.org, Jan Kara <jack@suse.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: improve compat handling for the i386 u64 alignment quirk v2
-Message-ID: <20200806135036.GA2077896@gmail.com>
-References: <20200731122202.213333-1-hch@lst.de>
+        with ESMTP id S1729894AbgHFRAf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Aug 2020 13:00:35 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F17C0A8884;
+        Thu,  6 Aug 2020 07:10:49 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k3gbU-00AXNn-TC; Thu, 06 Aug 2020 14:10:45 +0000
+Date:   Thu, 6 Aug 2020 15:10:44 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [git pull] regset work
+Message-ID: <20200806141044.GP1236603@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200731122202.213333-1-hch@lst.de>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+	regset API changes.  Regularize copy_regset_{to,from}_user() callers,
+switch to saner calling conventions for ->get(), kill user_regset_copyout().
+->put() side of things will have to wait for the next cycle, unfortunately.
+The series had been posted (l-k, linux-arch) and sat in -next for weeks.
+The balance is about -1KLoC and replacements for ->get() instances are a lot
+saner.
 
-* Christoph Hellwig <hch@lst.de> wrote:
+	Two trivial conflicts - one in arch/x86/include/asm/fpu/xstate.h
+(obvious merge), another in arch/x86/kernel/fpu/xstate.c (the variant from
+this branch is the right one).
 
-> Hi all,
-> 
-> the i386 ABI is a little special in that it uses less than natural
-> alignment for 64-bit integer types (u64 and s64), and a significant
-> amount of our compat handlers deals with just that.  Unfortunately
-> there is no good way to check for this specific quirk at runtime,
-> similar how in_compat_syscall() checks for a compat syscall.  This
-> series adds such a check, and then uses the quota code as an example
-> of how this improves the compat handling.  I have a few other places
-> in mind where this will also be useful going forward.
-> 
-> Changes since v1:
->  - use asm-generic/compat.h instead of linux/compat.h for
->    compat_u64 and compat_s64
->  - fix a typo
-> 
-> Diffstat:
->  b/arch/arm64/include/asm/compat.h        |    2 
->  b/arch/mips/include/asm/compat.h         |    2 
->  b/arch/parisc/include/asm/compat.h       |    2 
->  b/arch/powerpc/include/asm/compat.h      |    2 
->  b/arch/s390/include/asm/compat.h         |    2 
->  b/arch/sparc/include/asm/compat.h        |    3 
->  b/arch/x86/entry/syscalls/syscall_32.tbl |    2 
->  b/arch/x86/include/asm/compat.h          |    3 
->  b/fs/quota/Kconfig                       |    5 -
->  b/fs/quota/Makefile                      |    1 
->  b/fs/quota/compat.h                      |   34 ++++++++
->  b/fs/quota/quota.c                       |   73 +++++++++++++++---
->  b/include/asm-generic/compat.h           |    8 ++
->  b/include/linux/compat.h                 |    9 ++
->  b/include/linux/quotaops.h               |    3 
->  b/kernel/sys_ni.c                        |    1 
->  fs/quota/compat.c                        |  120 -------------------------------
->  17 files changed, 113 insertions(+), 159 deletions(-)
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
 
-If nobody objects to this being done at runtime, and if it's 100% ABI 
-compatible, then the x86 impact looks good to me:
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 
-Acked-by: Ingo Molnar <mingo@kernel.org>
+are available in the git repository at:
 
-Thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.regset
 
-	Ingo
+for you to fetch changes up to ce327e1c54119179066d6f3573a28001febc9265:
+
+  regset: kill user_regset_copyout{,_zero}() (2020-07-27 14:31:13 -0400)
+
+----------------------------------------------------------------
+Al Viro (42):
+      x86: copy_fpstate_to_sigframe(): have fpregs_soft_get() use kernel buffer
+      x86: kill dump_fpu()
+      [ia64] sanitize elf_access_gpreg()
+      [ia64] teach elf_access_reg() to handle the missing range (r16..r31)
+      [ia64] regularize do_gpregs_[gs]et()
+      [ia64] access_uarea(): stop bothering with gpregs_[gs]et()
+      [ia64] access_uarea(): don't bother with fpregs_[gs]et()
+      sparc64: switch genregs32_get() to use of get_from_target()
+      sparc32: get rid of odd callers of copy_regset_to_user()
+      sparc64: get rid of odd callers of copy_regset_to_user()
+      arm64: take fetching compat reg out of pt_regs into a new helper
+      arm64: get rid of copy_regset_to_user() in compat_ptrace_read_user()
+      arm64: sanitize compat_ptrace_write_user()
+      sparc32: get rid of odd callers of copy_regset_from_user()
+      sparc64: get rid of odd callers of copy_regset_from_user()
+      introduction of regset ->get() wrappers, switching ELF coredumps to those
+      Merge branches 'regset.x86', 'regset.ia64', 'regset.sparc' and 'regset.arm64' into work.regset
+      copy_regset_to_user(): do all copyout at once.
+      regset: new method and helpers for it
+      x86: switch to ->regset_get()
+      powerpc: switch to ->regset_get()
+      s390: switch to ->regset_get()
+      sparc: switch to ->regset_get()
+      mips: switch to ->regset_get()
+      arm64: switch to ->regset_get()
+      sh: convert to ->regset_get()
+      arm: switch to ->regset_get()
+      arc: switch to ->regset_get()
+      ia64: switch to ->regset_get()
+      c6x: switch to ->regset_get()
+      riscv: switch to ->regset_get()
+      openrisc: switch to ->regset_get()
+      h8300: switch to ->regset_get()
+      hexagon: switch to ->regset_get()
+      nios2: switch to ->regset_get()
+      nds32: switch to ->regset_get()
+      parisc: switch to ->regset_get()
+      xtensa: switch to ->regset_get()
+      csky: switch to ->regset_get()
+      regset: kill ->get()
+      regset(): kill ->get_size()
+      regset: kill user_regset_copyout{,_zero}()
+
+ arch/arc/kernel/ptrace.c                    | 148 +++----
+ arch/arm/kernel/ptrace.c                    |  52 +--
+ arch/arm64/kernel/ptrace.c                  | 303 +++++---------
+ arch/c6x/kernel/ptrace.c                    |  11 +-
+ arch/csky/kernel/ptrace.c                   |  24 +-
+ arch/h8300/kernel/ptrace.c                  |  17 +-
+ arch/hexagon/kernel/ptrace.c                |  62 +--
+ arch/ia64/kernel/ptrace.c                   | 396 +++++++------------
+ arch/mips/kernel/ptrace.c                   | 204 +++-------
+ arch/nds32/kernel/ptrace.c                  |   9 +-
+ arch/nios2/kernel/ptrace.c                  |  51 +--
+ arch/openrisc/kernel/ptrace.c               |  26 +-
+ arch/parisc/kernel/ptrace.c                 |  84 +---
+ arch/powerpc/kernel/ptrace/ptrace-altivec.c |  37 +-
+ arch/powerpc/kernel/ptrace/ptrace-decl.h    |  44 +--
+ arch/powerpc/kernel/ptrace/ptrace-novsx.c   |   5 +-
+ arch/powerpc/kernel/ptrace/ptrace-spe.c     |  16 +-
+ arch/powerpc/kernel/ptrace/ptrace-tm.c      | 152 +++----
+ arch/powerpc/kernel/ptrace/ptrace-view.c    | 185 ++++-----
+ arch/powerpc/kernel/ptrace/ptrace-vsx.c     |  13 +-
+ arch/riscv/kernel/ptrace.c                  |  33 +-
+ arch/s390/kernel/ptrace.c                   | 199 +++-------
+ arch/sh/kernel/process_32.c                 |   5 +-
+ arch/sh/kernel/ptrace_32.c                  |  48 +--
+ arch/sparc/kernel/ptrace_32.c               | 269 +++++++------
+ arch/sparc/kernel/ptrace_64.c               | 591 ++++++++++++++--------------
+ arch/x86/include/asm/fpu/internal.h         |   1 -
+ arch/x86/include/asm/fpu/regset.h           |   4 +-
+ arch/x86/include/asm/fpu/xstate.h           |   4 +-
+ arch/x86/kernel/fpu/regset.c                |  55 +--
+ arch/x86/kernel/fpu/signal.c                |  13 +-
+ arch/x86/kernel/fpu/xstate.c                | 164 ++------
+ arch/x86/kernel/ptrace.c                    |  75 ++--
+ arch/x86/kernel/tls.c                       |  32 +-
+ arch/x86/kernel/tls.h                       |   2 +-
+ arch/x86/math-emu/fpu_entry.c               |  19 +-
+ arch/xtensa/kernel/ptrace.c                 |  16 +-
+ fs/binfmt_elf.c                             |  54 ++-
+ include/linux/regset.h                      | 218 +++-------
+ kernel/Makefile                             |   2 +-
+ kernel/regset.c                             |  76 ++++
+ 41 files changed, 1370 insertions(+), 2349 deletions(-)
+ create mode 100644 kernel/regset.c
