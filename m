@@ -2,108 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB60423D466
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 02:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247E523D542
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Aug 2020 04:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgHFAKQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Aug 2020 20:10:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37042 "EHLO mail.kernel.org"
+        id S1726026AbgHFCDp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Aug 2020 22:03:45 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:40043 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725779AbgHFAKO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 5 Aug 2020 20:10:14 -0400
-Received: from guoren-Inspiron-7460.lan (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1725999AbgHFCDo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 5 Aug 2020 22:03:44 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A089B22CA1;
-        Thu,  6 Aug 2020 00:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596672613;
-        bh=iU0ZUkOjTpHNy95m8ekQCDxNWW2NYU6kn26pzXQoobQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Mmt0yIpqytj8FppbALT5zLqthA8Qey1R/hquzYIcyx20zy0N08Zf9vYvMegcOWV1H
-         7DDm6+Iocg7fXDNg7hr/C+Vc4XPGeWVi0WSCBfO7w4VXzRRcUrt15H3BNRL4EpW6RM
-         QmVKplVmse1UAQwRn6dNLWz14pnSSC0hE4oolqog=
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky updates for v5.9-rc1
-Date:   Thu,  6 Aug 2020 08:10:01 +0800
-Message-Id: <1596672601-8227-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BMWxQ0tC6z9sPC;
+        Thu,  6 Aug 2020 12:03:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1596679421;
+        bh=L//yJHWbHVRpreWBMXxnk8oP5TZkpSP3UMUfWWjPDB4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ATC+m0ylO/cnYUwq5zBrFLw4yIqF8B38lyf13k+5sws6nAXv+IfWsPlr0/8ggd0S0
+         Z3Kq0xYNwERrKWngZbb6FC5Pl7W4MK4QRPjK8eO8UiYNAK8LK3FpQcJ74wbO66n0fz
+         UA9n64PmnfdllxDpQdP5OP9ydjogwSPi6RbmSOY9wsIhA1ahx9xmwR8P9Budg5TrYq
+         8C+lzNb8gjr+d9uOT03UnI7mS3aMLsepebQeddvmYYKEXfiyXfjEgd2OEAHUqwQl+l
+         K0soc0YNNG1IVRKNX2INYuszYCeijMhLt19v8BLK4uUCRXZXSil9IluUq8VIzi6alx
+         Ysz2L2iNN2c1g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com,
+        linux-arch@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org,
+        Tulio Magno Quites Machado Filho <tuliom@linux.ibm.com>,
+        luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v8 5/8] powerpc/vdso: Prepare for switching VDSO to generic C implementation.
+In-Reply-To: <20200805133505.GN6753@gate.crashing.org>
+References: <cover.1588079622.git.christophe.leroy@c-s.fr> <2a67c333893454868bbfda773ba4b01c20272a5d.1588079622.git.christophe.leroy@c-s.fr> <878sflvbad.fsf@mpe.ellerman.id.au> <65fd7823-cc9d-c05a-0816-c34882b5d55a@csgroup.eu> <87wo2dy5in.fsf@mpe.ellerman.id.au> <20200805133505.GN6753@gate.crashing.org>
+Date:   Thu, 06 Aug 2020 12:03:33 +1000
+Message-ID: <87r1sky1hm.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+Segher Boessenkool <segher@kernel.crashing.org> writes:
+> On Wed, Aug 05, 2020 at 04:24:16PM +1000, Michael Ellerman wrote:
+>> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+>> > Indeed, 32-bit doesn't have a redzone, so I believe it needs a stack 
+>> > frame whenever it has anything to same.
+>> 
+>> Yeah OK that would explain it.
+>> 
+>> > Here is what I have in libc.so:
+>> >
+>> > 000fbb60 <__clock_gettime>:
+>> >     fbb60:	94 21 ff e0 	stwu    r1,-32(r1)
+>
+> This is the *only* place where you can use a negative offset from r1:
+> in the stwu to extend the stack (set up a new stack frame, or make the
+> current one bigger).
 
-Please pull csky updates for v5.9-rc1:
+(You're talking about 32-bit code here right?)
 
-The following changes since commit 92ed301919932f777713b9172e525674157e983d:
+>> > diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h 
+>> > b/arch/powerpc/include/asm/vdso/gettimeofday.h
+>> > index a0712a6e80d9..0b6fa245d54e 100644
+>> > --- a/arch/powerpc/include/asm/vdso/gettimeofday.h
+>> > +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
+>> > @@ -10,6 +10,7 @@
+>> >     .cfi_startproc
+>> >   	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
+>> >   	mflr		r0
+>> > +	PPC_STLU	r1, -STACK_FRAME_OVERHEAD(r1)
+>> >     .cfi_register lr, r0
+>> 
+>> The cfi_register should come directly after the mflr I think.
+>
+> That is the idiomatic way to write it, and most obviously correct.  But
+> as long as the value in LR at function entry is available in multiple
+> places (like, in LR and in R0 here), it is fine to use either for
+> unwinding.  Sometimes you can use this to optimise the unwind tables a
+> bit -- not really worth it in hand-written code, it's more important to
+> make it legible ;-)
 
-  Linux 5.8-rc7 (2020-07-26 14:14:06 -0700)
+OK. Because LR still holds the LR value until it's clobbered later, by
+which point the cfi_register has taken effect.
 
-are available in the git repository at:
+But yeah I think for readability it's best to keep the cfi_register next
+to the mflr.
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.9-rc1
+>> >> There's also no code to load/restore the TOC pointer on BE, which I
+>> >> think we'll need to handle.
+>> >
+>> > I see no code in the generated vdso64.so doing anything with r2, but if 
+>> > you think that's needed, just let's do it:
+>> 
+>> Hmm, true.
+>> 
+>> The compiler will use the toc for globals (and possibly also for large
+>> constants?)
+>
+> And anything else it bloody well wants to, yeah :-)
 
-for you to fetch changes up to bdcd93ef9afb42a6051e472fa62c693b1f9edbd8:
+Haha yeah OK.
 
-  csky: Add context tracking support (2020-08-01 08:17:51 +0000)
+>> AFAIK there's no way to disable use of the toc, or make it a build error
+>> if it's needed.
+>
+> Yes.
+>
+>> At the same time it's much safer for us to just save/restore r2, and
+>> probably in the noise performance wise.
+>
+> If you want a function to be able to work with ABI-compliant code safely
+> (in all cases), you'll have to make it itself ABI-compliant as well,
+> yes :-)
 
-----------------------------------------------------------------
-arch/csky patches for 5.9-rc1
+True. Except this is the VDSO which has previously been a bit wild west
+as far as ABI goes :)
 
-Features:
- - seccomp-filter
- - err-injection
- - top-down&random mmap-layout
- - irq_work
- - show_ipi
- - context-tracking)
+>> So yeah we should probably do as below.
+>
+> [ snip ]
+>
+> Looks good yes.
 
-Fixup & Optimize:
- - kprobe_on_ftrace
- - optimize panic print
+Thanks for reviewing.
 
-----------------------------------------------------------------
-Guo Ren (12):
-      csky: Add SECCOMP_FILTER supported
-      csky: Add cpu feature register hint for smp
-      csky: Fixup duplicated restore sp in RESTORE_REGS_FTRACE
-      csky: Fixup kprobes handler couldn't change pc
-      csky: Add support for function error injection
-      csky: Optimize the trap processing flow
-      csky: Use top-down mmap layout
-      csky: Set CONFIG_NR_CPU 4 as default
-      csky: Fixup warning by EXPORT_SYMBOL(kmap)
-      csky: Add irq_work support
-      csky: Add arch_show_interrupts for IPI interrupts
-      csky: Add context tracking support
-
-Tobias Klauser (1):
-      csky: remove unusued thread_saved_pc and *_segments functions/macros
-
- arch/csky/Kconfig                             |  29 +++-
- arch/csky/abiv2/inc/abi/entry.h               |   3 -
- arch/csky/abiv2/mcount.S                      |   4 +-
- arch/csky/include/asm/Kbuild                  |   1 +
- arch/csky/include/asm/bug.h                   |   3 +-
- arch/csky/include/asm/irq_work.h              |  11 ++
- arch/csky/include/asm/processor.h             |   6 -
- arch/csky/include/asm/ptrace.h                |   7 +
- arch/csky/include/asm/thread_info.h           |   2 +-
- arch/csky/kernel/entry.S                      |  28 ++++
- arch/csky/kernel/process.c                    |  10 --
- arch/csky/kernel/ptrace.c                     |  37 +----
- arch/csky/kernel/smp.c                        |  62 ++++++-
- arch/csky/kernel/traps.c                      | 223 +++++++++++++++++---------
- arch/csky/lib/Makefile                        |   1 +
- arch/csky/lib/error-inject.c                  |  10 ++
- arch/csky/mm/fault.c                          |  10 +-
- arch/csky/mm/highmem.c                        |   2 -
- tools/testing/selftests/seccomp/seccomp_bpf.c |  13 +-
- 19 files changed, 319 insertions(+), 143 deletions(-)
- create mode 100644 arch/csky/include/asm/irq_work.h
- create mode 100644 arch/csky/lib/error-inject.c
+cheers
