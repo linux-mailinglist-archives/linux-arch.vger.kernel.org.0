@@ -2,171 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1291F23EC15
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Aug 2020 13:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 060B923EF55
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Aug 2020 16:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgHGLNU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Aug 2020 07:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728064AbgHGLLm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Aug 2020 07:11:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE36C061574;
-        Fri,  7 Aug 2020 04:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=H9pFCH3Moi70e7rPhQDsmelFkTpyLNVCigPJMZhbh4M=; b=unE27pINXTEXPyCzsiuOqFGJ3T
-        btSDm/aYdoK9MTat9yPFqQPYM78+m2/AsFj+yr3YRQ7nLXlarKa+n2oS+9kspkv07ANWDg8VFAGsD
-        BEgWU3pMKrNpE01GHlBqlEtOBjRL5kBuuinu1VHsNK70/EAhQxnjBLfuWmWwv5MvjRHhcPi/STG67
-        4mxM0E/0Np9If37fkQWdHzrSl4vroNEZQn4+vfsEE1pmc2t5K04Mf/dKijKgjSScesaI7766NbMKL
-        K73JIP2ASefw7evgpqCbNr/3B+U2WQNPCahBXUE2lJr211M1yPpKkTmTZPTjLgLopiPwCfz2oJzAb
-        kwFckUwA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k40HY-0005Qq-4Q; Fri, 07 Aug 2020 11:11:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D9F8D304BAE;
-        Fri,  7 Aug 2020 13:11:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C01C4236DA3E1; Fri,  7 Aug 2020 13:11:26 +0200 (CEST)
-Date:   Fri, 7 Aug 2020 13:11:26 +0200
-From:   peterz@infradead.org
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>
-Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
- synchronisation with actual irq state
-Message-ID: <20200807111126.GI2674@hirez.programming.kicks-ass.net>
-References: <20200723105615.1268126-1-npiggin@gmail.com>
+        id S1726683AbgHGOuU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Fri, 7 Aug 2020 10:50:20 -0400
+Received: from mail.furshetcrimea.ru ([193.27.243.220]:51882 "EHLO
+        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726721AbgHGOuT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Aug 2020 10:50:19 -0400
+X-Greylist: delayed 4990 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 10:50:18 EDT
+Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
+  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
+  with ESMTPA id 11097429; Fri, 07 Aug 2020 16:34:38 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200723105615.1268126-1-npiggin@gmail.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Bei Interesse antworten.
+To:     Recipients <info@furshetcrimea.ru>
+From:   info@furshetcrimea.ru
+Date:   Fri, 07 Aug 2020 14:22:02 +0100
+Reply-To: mattiassjoborg751@gmail.com
+X-Antivirus: Avast (VPS 200807-0, 08/07/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <auto-000011097429@furshetcrimea.ru>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Schöne Grüße,
 
-What's wrong with something like this?
+Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
 
-AFAICT there's no reason to actually try and add IRQ tracing here, it's
-just a hand full of instructions at the most.
+Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
 
----
+Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
 
-diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm/hw_irq.h
-index 3a0db7b0b46e..6be22c1838e2 100644
---- a/arch/powerpc/include/asm/hw_irq.h
-+++ b/arch/powerpc/include/asm/hw_irq.h
-@@ -196,33 +196,6 @@ static inline bool arch_irqs_disabled(void)
- 		arch_local_irq_restore(flags);				\
- 	} while(0)
- 
--#ifdef CONFIG_TRACE_IRQFLAGS
--#define powerpc_local_irq_pmu_save(flags)			\
--	 do {							\
--		raw_local_irq_pmu_save(flags);			\
--		trace_hardirqs_off();				\
--	} while(0)
--#define powerpc_local_irq_pmu_restore(flags)			\
--	do {							\
--		if (raw_irqs_disabled_flags(flags)) {		\
--			raw_local_irq_pmu_restore(flags);	\
--			trace_hardirqs_off();			\
--		} else {					\
--			trace_hardirqs_on();			\
--			raw_local_irq_pmu_restore(flags);	\
--		}						\
--	} while(0)
--#else
--#define powerpc_local_irq_pmu_save(flags)			\
--	do {							\
--		raw_local_irq_pmu_save(flags);			\
--	} while(0)
--#define powerpc_local_irq_pmu_restore(flags)			\
--	do {							\
--		raw_local_irq_pmu_restore(flags);		\
--	} while (0)
--#endif  /* CONFIG_TRACE_IRQFLAGS */
--
- #endif /* CONFIG_PPC_BOOK3S */
- 
- #ifdef CONFIG_PPC_BOOK3E
-diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
-index bc4bd19b7fc2..b357a35672b1 100644
---- a/arch/powerpc/include/asm/local.h
-+++ b/arch/powerpc/include/asm/local.h
-@@ -32,9 +32,9 @@ static __inline__ void local_##op(long i, local_t *l)			\
- {									\
- 	unsigned long flags;						\
- 									\
--	powerpc_local_irq_pmu_save(flags);				\
-+	raw_powerpc_local_irq_pmu_save(flags);				\
- 	l->v c_op i;						\
--	powerpc_local_irq_pmu_restore(flags);				\
-+	raw_powerpc_local_irq_pmu_restore(flags);				\
- }
- 
- #define LOCAL_OP_RETURN(op, c_op)					\
-@@ -43,9 +43,9 @@ static __inline__ long local_##op##_return(long a, local_t *l)		\
- 	long t;								\
- 	unsigned long flags;						\
- 									\
--	powerpc_local_irq_pmu_save(flags);				\
-+	raw_powerpc_local_irq_pmu_save(flags);				\
- 	t = (l->v c_op a);						\
--	powerpc_local_irq_pmu_restore(flags);				\
-+	raw_powerpc_local_irq_pmu_restore(flags);				\
- 									\
- 	return t;							\
- }
-@@ -81,11 +81,11 @@ static __inline__ long local_cmpxchg(local_t *l, long o, long n)
- 	long t;
- 	unsigned long flags;
- 
--	powerpc_local_irq_pmu_save(flags);
-+	raw_powerpc_local_irq_pmu_save(flags);
- 	t = l->v;
- 	if (t == o)
- 		l->v = n;
--	powerpc_local_irq_pmu_restore(flags);
-+	raw_powerpc_local_irq_pmu_restore(flags);
- 
- 	return t;
- }
-@@ -95,10 +95,10 @@ static __inline__ long local_xchg(local_t *l, long n)
- 	long t;
- 	unsigned long flags;
- 
--	powerpc_local_irq_pmu_save(flags);
-+	raw_powerpc_local_irq_pmu_save(flags);
- 	t = l->v;
- 	l->v = n;
--	powerpc_local_irq_pmu_restore(flags);
-+	raw_powerpc_local_irq_pmu_restore(flags);
- 
- 	return t;
- }
-@@ -117,12 +117,12 @@ static __inline__ int local_add_unless(local_t *l, long a, long u)
- 	unsigned long flags;
- 	int ret = 0;
- 
--	powerpc_local_irq_pmu_save(flags);
-+	raw_powerpc_local_irq_pmu_save(flags);
- 	if (l->v != u) {
- 		l->v += a;
- 		ret = 1;
- 	}
--	powerpc_local_irq_pmu_restore(flags);
-+	raw_powerpc_local_irq_pmu_restore(flags);
- 
- 	return ret;
- }
+www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
+
+Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
+
+Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
+
+Freundliche Grüße,
+Mr.Mattias Sjoborg
+(Vorsitzender des Vergütungs- und Nominierungsausschusses)
+Tethys Petroleum.
+London, England
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
