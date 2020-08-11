@@ -2,94 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32518241111
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Aug 2020 21:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E101A2419C9
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Aug 2020 12:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728296AbgHJTjZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Aug 2020 15:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbgHJTjY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Aug 2020 15:39:24 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5DCC061756
-        for <linux-arch@vger.kernel.org>; Mon, 10 Aug 2020 12:39:24 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id k23so10165642iom.10
-        for <linux-arch@vger.kernel.org>; Mon, 10 Aug 2020 12:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KG7HkPdgfYza0KKOehXlJf0mICZpLgyaJzR9GuUofuc=;
-        b=fUXOloVbCXuF+NPnW17bzh2jLA3H8qu/dOC7TPKOL2QUos/sBzQ5CRoxtQJFb8g3G2
-         AYIyYbs0ZfZ6aDIaEoKZNgRRcvbTvgMlsOjLIYpmuy/J3SQhbHXV5dM/VhBeVH8XellB
-         6N4elr0PMDoF7N56qBjJa5HD3724dVmbT1YCW1KovZJp2EVcKcAZIlSRmBQ0dOMRG8NV
-         gxciGLPqMXMCMBAt0FPiDJwhSVy/LDGoZp0gSnby2PTGC0UM1mVSjd/0MuGwflaH95zs
-         j03sj8mSaBzXWRfQq5lyPgMhXF45BsJug4i9aO4ErNTiuPZEXVroBiDBsJAczCMY7u9e
-         vg2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KG7HkPdgfYza0KKOehXlJf0mICZpLgyaJzR9GuUofuc=;
-        b=CJ3rcvH8bJQUvow6aRASF/8w+zKvnX4gkbhwlEWzHtMzW+jXYraLsLkK7YCU13kkko
-         GNQAXIk8Xp04CNNgROwxVjzLCQrj7vftbHjbF28rEJ06Rla3M0BNoXWOMHS9dFDTcCNK
-         xYnoPEu2V0vytojACYXmgFPpjRsG+kgUBPPa4EIH/5UTcLk/7X0APddbcn9QC+DJqFS2
-         GTMKD54Od8ZHKPSyufFt+KBD4kaTBKEXqMzUC0g+SX+14LzRr0Mg2h/GDn3q7h8t1hAI
-         8x+sDiUK8oyvQ8WhgnZong1iIHQo3bLucTo56M0wYdog51j9db9akf8LSi8LAeCJF+AJ
-         Hdzg==
-X-Gm-Message-State: AOAM531zT7kZZkGklsQqB1FfSrjwdGdxfm0vtwoNguYDyTudiJ1MuAy6
-        FyDtpMlDE5Ra2eX7TTawHFiQUhC9gUZMmuJV2QwONQ==
-X-Google-Smtp-Source: ABdhPJyNCjBD+ApAm5EKXSFXpNtiLnuZQXUEji/Nk9r66AH8XDVZRUMie+STAQO5PpX/pDgrcUhz8sHf1IdT/5swGmI=
-X-Received: by 2002:a6b:5c17:: with SMTP id z23mr18928874ioh.67.1597088363879;
- Mon, 10 Aug 2020 12:39:23 -0700 (PDT)
+        id S1728454AbgHKKaz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Aug 2020 06:30:55 -0400
+Received: from mout.gmx.net ([212.227.15.19]:56193 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728280AbgHKKay (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 11 Aug 2020 06:30:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1597141852;
+        bh=TQiX4fEKRzWrITACzvC/FrFoTdfBi1/ynPROfWfjH60=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=g9iHXfC7Hbqjq4xllG/hEkRpg6y0VgDLgfmmMpQlsGASqPWeA+I32pfqpDtq4zvqY
+         1/hJTkvtPTMPRm+DNR2fWxlFfXdqs6+i6DMQQnVLif1ucED77X8kVS0BRaXmR0zNPO
+         m7wCK+sDR9fXvSUZrtPTZEcDvnYHw1I+iLbMV4HM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530.fritz.box ([92.116.143.39]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKsjH-1kQYlt1S3h-00LFrv; Tue, 11
+ Aug 2020 12:30:52 +0200
+Date:   Tue, 11 Aug 2020 12:30:50 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Subject: [PATCH] sections.h: dereference_function_descriptor() returns void
+ pointer
+Message-ID: <20200811103050.GA6645@ls3530.fritz.box>
 MIME-Version: 1.0
-References: <CAK8P3a2PK_bC5=3wcWm43=y5xk-Dq5-fGPExJMnOrNfGfB1m1A@mail.gmail.com>
- <20200805172629.GA1040@bug> <CAMuHMdV20tZSu5gGsjf8h334+0xr1f=N9NvOoxHQGq42GYsj4g@mail.gmail.com>
- <20200805193001.nebwdutcek53pnit@duo.ucw.cz>
-In-Reply-To: <20200805193001.nebwdutcek53pnit@duo.ucw.cz>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Mon, 10 Aug 2020 12:39:12 -0700
-Message-ID: <CAOesGMjaJ=jcdBp7b-DfetUKKF+cC6NcJdHavBXyP49b9Bztwg@mail.gmail.com>
-Subject: Re: [Ksummit-discuss] [TECH TOPIC] Planning code obsolescence
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        ksummit <ksummit-discuss@lists.linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:tds8f2G04nb1fmFYqSSVjheMpDt5sARFmYT6RzZdlJgXyFBIRDY
+ luDxbKpOqQ1GeVg7MSTMM0jEjEY9+JnBUoiluaTZ/UgyM2+Rgu+9WEDbRFydBRIuX6dZxSS
+ EFiyLjUk3O2w9f5d9XxQurFflQ96NgzZ1HDrcnqlNbKzX3txy7Dby2NPyiIhNObsI/HxLzC
+ 3jxZpZPfBEj1mwFfMOjBQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X/koSh1x8uQ=:jAPyPkq6C4W6cncmr6rAXQ
+ yhNwq7eHzKuZTz0C844DplMdGSNDuhNlAqTpAT1CDQDitiigU/6FYau4ep0NPAVv9hHZZahSy
+ wJRrWSzJe1OPJq/BH6AjWbrfiW0FK2eWh0eIuFwnHNMius5Y8hiX5jEkpYligpT9t6JYULPB9
+ WYayU0AdUlZsHftuWoLW0joft7JCEorhHuuJioREi8gAZA/ss7fJRepWGW7ikMtxeD/vFYG+c
+ MjlJtotvrPipR5Jm0bCppyxio4FyjJXxNTeCdfygw774H4u5y7OrcU3ND8n3u12PZlZ6iTw42
+ ts7NpJOH+lcOExiGSyPkGdXoeMY0EMvjMlenV9PlNhMB6KC3p1wuvKw7jTUTXdHlJJhvkniU9
+ qCqxjdqmZrPtm4+3Okn01634OXibDqCqbNBtXx/3Scx26hkl/NqDoDr4IrCDrisVf8YAyDfGi
+ 6Vd7Dt5mIYaVpDoq7388YDSKBz3HSP8vwGV6Gwa8+jHaVUaG1WcDBcbAS4PLmRMSbQIlLEvNM
+ nst6vH7bVQOAr2pw2gdNjf410mgNif/H4N42SyaktV4XnDYJRpmBF6LbZHYisD3g2dgZR4LKE
+ TLzF6OLB+cvqbfygi5EvIP1NVKo8STqwxAlr6TEQ48RuWCZxYIqMQD80NZovSu40eqtXWnvvm
+ 4HL0MGj/uz43PyqZ5/RKKouBdKo8g0/DWe+bqX1nYchDptETkPlJq3bBmncY7dg1wwW3agNX2
+ /VlqcMYtgcdI57bAYoP/uHQh2A/vzb5euPgB8LBIeBORsYjdIv+sCdcKvS1ZZlX3gefQTDuaA
+ leu2wQxqk1lJAvzrDeJsl4bQmLlX12QxnC6LPNC1L0DjJyOmk8OXPYm3rPlQcWOfTivVml9XN
+ Q0udJ1Yem2PDqZqLCzUNt+jDEHPQbNw07cqHVc3zaYyCgiUNYXMVMkdqGQMBKq0YxMNj1/gHq
+ GnvbPXs0W3Phsm7nHlbm/f0yWKjrx5z2bKJPfLssbcbVrYW1mPbESKARFXJyMRGrpUXX+2Xee
+ zGU7MxaqBbz8wTGg4bmhvA2O9pejokostlGggisQey/A1k4KDNZr7eE5+2DTJdPrQJOEzDyf1
+ EhGL79s4ldV19J1i2zu6DsqriMnB7bK90oX2PY0YHF0qA0CGf/JAMnpplepAac38nID/IvYZz
+ fD4G9wVqypWQ9Ln/fH3ze1ZnDqQa4BaDPptuUdDM3Ve4oftPyg6uUmhFEM7wToCgxgllY7ByY
+ HecyWjFe7Y2grCW82
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 12:30 PM Pavel Machek <pavel@denx.de> wrote:
->
-> On Wed 2020-08-05 20:50:43, Geert Uytterhoeven wrote:
-> > Hi Pavel,
-> >
-> > On Wed, Aug 5, 2020 at 7:26 PM Pavel Machek <pavel@ucw.cz> wrote:
-> > > > I have submitted the below as a topic for the linux/arch/* MC that Mike
-> > > > and I run, but I suppose it also makes sense to discuss it on the
-> > > > ksummit-discuss mailing list (cross-posted to linux-arch and lkml) as well
-> > > > even if we don't discuss it at the main ksummit track.
-> > >
-> > > > * Latest kernel in which it was known to have worked
-> > >
-> > > For some old hardware, I started collecting kernel version, .config and dmesg from
-> > > successful boots. github.com/pavelmachek, click on "missy".
-> >
-> > You mean your complete hardware collection doesn't boot v5.8? ;-)
->
-> I need to do some pushing, and yes, maybe some more testing.
->
-> But I was wondering if someone sees this as useful and wants to
-> contribute more devices? :-).
+The function dereference_function_descriptor() takes on hppa64, ppc64
+and ia64 a pointer to a function descriptor and returns a (void) pointer
+to the dereferenced function.
+To make cross-arch coding easier, on all other architectures the
+dereference_function_descriptor() macro should return a void pointer
+too.
 
-There's in my opinion a big difference between "the last user of this
-device sent it to Pavel and now it will be supported forever in spite
-of no users" and "there's a whole group of people using mainline on
-these old devices and Pavel makes sure it keeps booting for them".
+Signed-off-by: Helge Deller <deller@gmx.de>
 
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections=
+.h
+index 66397ed10acb..d16302d3eb59 100644
+=2D-- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -60,8 +60,8 @@ extern __visible const void __nosave_begin, __nosave_end=
+;
 
--Olof
+ /* Function descriptor handling (if any).  Override in asm/sections.h */
+ #ifndef dereference_function_descriptor
+-#define dereference_function_descriptor(p) (p)
+-#define dereference_kernel_function_descriptor(p) (p)
++#define dereference_function_descriptor(p) ((void *)(p))
++#define dereference_kernel_function_descriptor(p) ((void *)(p))
+ #endif
+
+ /* random extra sections (if any).  Override
