@@ -2,184 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 577EE241FC6
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Aug 2020 20:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93A424209B
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Aug 2020 21:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726143AbgHKSf1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Aug 2020 14:35:27 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:37295 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725889AbgHKSf1 (ORCPT
+        id S1726134AbgHKTwO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Aug 2020 15:52:14 -0400
+Received: from sonic304-10.consmr.mail.bf2.yahoo.com ([74.6.128.33]:40018 "EHLO
+        sonic304-10.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726023AbgHKTwO (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 11 Aug 2020 14:35:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597170927; h=Content-Transfer-Encoding: Content-Type:
- MIME-Version: Message-ID: Date: Subject: In-Reply-To: References: Cc:
- To: From: Reply-To: Sender;
- bh=HLfx66Qfv2Fz/O1/H/r9cB91ctPu5jWiwIdXdnUxrZ8=; b=AuEf7/08/pQCsprI3beHNCS+QsYPMS6YdWsyB0wHYbjwIUUqbfEox6n5wZtoa5gApSMA9A9X
- IqoLNX8fu4GyiRqtpBVa6hEFUCIB130LMode/WxNQHGdQMT7Mghe+gnVX+K1X6wAAgW8sv6P
- 8KujHBTPDqbrOOlfTpIXhkw1PAM=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n13.prod.us-east-1.postgun.com with SMTP id
- 5f32e4ee856720175157cf0c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Aug 2020 18:35:26
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 20066C433CB; Tue, 11 Aug 2020 18:35:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from BCAIN (104-54-226-75.lightspeed.austtx.sbcglobal.net [104.54.226.75])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bcain)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A1525C433C9;
-        Tue, 11 Aug 2020 18:35:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A1525C433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=bcain@codeaurora.org
-Reply-To: <bcain@codeaurora.org>
-From:   "Brian Cain" <bcain@codeaurora.org>
-To:     "'Al Viro'" <viro@ZenIV.linux.org.uk>,
-        "'Linus Torvalds'" <torvalds@linux-foundation.org>
-Cc:     <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "'David Miller'" <davem@davemloft.net>,
-        "'Tony Luck'" <tony.luck@intel.com>,
-        "'Will Deacon'" <will@kernel.org>
-References: <20200629182349.GA2786714@ZenIV.linux.org.uk> <20200629182628.529995-1-viro@ZenIV.linux.org.uk> <20200629182628.529995-33-viro@ZenIV.linux.org.uk>
-In-Reply-To: <20200629182628.529995-33-viro@ZenIV.linux.org.uk>
-Subject: RE: [PATCH 33/41] hexagon: switch to ->get2()
-Date:   Tue, 11 Aug 2020 13:35:23 -0500
-Message-ID: <038001d6700e$2da6af80$88f40e80$@codeaurora.org>
+        Tue, 11 Aug 2020 15:52:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1597175533; bh=A26Tg+Pk4QH3U1HJc53qJOy0JwCT0JkMhdiBXpuSJFc=; h=Date:From:Reply-To:Subject:References:From:Subject; b=o4hbqgsW0nGFrDfNEthMnJ88wOwUr86EKnqRtEvKzCnebBah4uepQX3HhP0MBY9LxvmUkaaYHY1+q8Da60+x7MUk9dWL8cZUVySzmDdIJexfAKalPEbsmnyZYRxyL35bWASEMe70s4NBYcekaIi7b950SdXRc2YHRyGuEbTZ9GxtwuDbaN99/oWoENp8p/P8eoRsN/Jx6JUO8vXNH/hNZMBp7rhwN4kj8efoMdD7n6Pmivw6E+B7i6C6CiQ6OequuCIPUJSICrC1XPrinIuHXkXrrL0rzLK87KiXGOus0oAhx/KCYIxHOjgZEfnB993FymwmshBHz62Gcv4jSjya0w==
+X-YMail-OSG: rs67cKEVM1lHdJBpg5KYbjZ_uzQ2RIUkH1ZE.NIn_6f9OtOL0VslTcYYP5pPFQw
+ SJWoz2WnQTkogO8XbrLzR0BO_Wy56mYhsciRx0a3UON8GAkjSWu9fiNbCJUCZ.C5N7RouAWRInVt
+ hZuooXipiTda8pRY7eiJHJ_v_reIWiQ4UFKkj.9pDSrv39ITWpAKJveW1kVZYDi7FviIx_VzMk0F
+ CKNrFtGzQX81HsgrUiRwMV66zzfxhy_705KcdBb8xhK_PLvB1fN5n_a6D7SliAsb8fKxfDs8I_im
+ RvCeU1jkp2wDuzGhuYjsHuCyurgJObFq4H2tJNs946jcLZ4LNkGT4fKnE5nLNxC6zObQAWb9rGdh
+ l0B6J_H70lsXWLDxd34OIcPRInM._TO1AEZqANZy4CwG9zAQddL4Bo2pNyENduZS6Yn_b28IbXqr
+ ah2sAn6129iPPJUbUfoMESJDUMa9TQXCN64EFuUdKhBlTCZfNWTZy3cYQ11Dqnqzo2eBgM7TeeA6
+ Gf2IR7x8.7J5LKV_pCNHlQhzMafqzEKXz_vDbFKd8AxP2646JIE9yP.LpX4lwqb.6VOEAESi9_xn
+ fF53VfevLzpDRjNzg4Wjz3DCPzAUaltBOrX2gFqFNCqEbsBHGKiwLCPP1_3o6AHmi_0l9wW_zeDN
+ adKjIGOPcV6HqAf31TexcahkCW139C_necDyboVwg7r2Oj.dmxqaQAf4ErsadZA3OmPirnz3l.wF
+ 9xX96BIaTNpFS20l3WVdD_Cbw.h1MpjnlaWePNNuNKoFfb3OB3QoceMp_cuIKcUrWd94izMAxJHb
+ miWPTUAAwtuYRLLm0hkiukCKlPws5hLm5jwWqGWBKOCLpkkJ.kcTtdeKqjqDsx1xG3Abt3vjQZP_
+ vu3lMM9v8qnMVR7J0Mu7cHG3sGwiyFhRkb44JG_2cWU90hYFE7iF5NSeX9n0RtX3exVJ6sw2cyKG
+ mizpBYBsOMxk0NxZZw5adi2SoLInLD8wCIfqkpWUjfaovZtZIlMFAsARIBxAHmlRfXHhJ1o7jZDn
+ 6rBh99wZskFXjh.NHzI6Ohw4fxxvVlKJZqSNz7_Jl.CtIUdYUaj9pY4W1rhr7kgF.P2aIvVixGw5
+ apFXQdZr64alcqkXvVowdexaxrLZmERY.o0LadtB8wBPyoY.k5W0K1Br6BI2U.cECG994SWDywJU
+ lFXLrHAm5RHQTwASPgMwxNB2tePtmj5hJoEC7spXIFqNfjtWETf2EyaUmm5N3npqR3uNQRivoiCI
+ v6Q.oSN.ijnLIuT1zT2i1te0WV.31LkbW5S8Y5ghHtrojyFclnFulBvOZTqFoHff2LgN5P5cj9nz
+ vhNGMqa3g1qfTESJaoW.K56oGqnKgPCF_QSmPTA.wLsow00kE9A--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.bf2.yahoo.com with HTTP; Tue, 11 Aug 2020 19:52:13 +0000
+Date:   Tue, 11 Aug 2020 19:52:09 +0000 (UTC)
+From:   Aisha Gadafi <aishagadafi100@aol.com>
+Reply-To: aishagadafi609@gmail.com
+Message-ID: <2118364924.335373.1597175529292@mail.yahoo.com>
+Subject: Dear Friend,
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEanwUtOMewLvTwAuMraiGO5PXRUAF01hBRAYLg5auqkyCGQA==
-Content-Language: en-us
+References: <2118364924.335373.1597175529292.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16455 YMailNodin Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Greetings of the day from Mrs Aisha Gaddafi
 
-> -----Original Message-----
-> From: linux-arch-owner@vger.kernel.org <linux-arch-owner@vger.kernel.org>
-> On Behalf Of Al Viro
+Dear Friend,
+Greetings and Nice Day.
+Assalamu Alaikum
+May i  use this medium to open a mutual communication with you seeking your acceptance towards investing in your country under your management as my partner, My name is Aisha  Gaddafi and presently living in Oman, i am a Widow and single Mother with three Children, the only biological Daughter of late Libyan President (Late Colonel Muammar Gaddafi) and presently i am under political asylum protection by the Omani Government.
 
-Acked-by: Brian Cain <bcain@codeaurora.org>
+I have funds worth "Twenty Seven Million Five Hundred Thousand United State Dollars" -$27.500.000.00 US Dollars which i want to entrust on you for investment project in your country.If you are willing to handle this project on my behalf, kindly reply urgent to enable me provide you more details to start the transfer process.
+I shall appreciate your urgent response through my email address below:
+ 
+aishagadafi609@gmail.com
 
-> From: Al Viro <viro@zeniv.linux.org.uk>
-> 
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> ---
->  arch/hexagon/kernel/ptrace.c | 62
-+++++++++++++++-----------------------------
->  1 file changed, 21 insertions(+), 41 deletions(-)
-> 
-> diff --git a/arch/hexagon/kernel/ptrace.c b/arch/hexagon/kernel/ptrace.c
-index
-> dcbf7ea960cc..fa6287d1a061 100644
-> --- a/arch/hexagon/kernel/ptrace.c
-> +++ b/arch/hexagon/kernel/ptrace.c
-> @@ -35,58 +35,38 @@ void user_disable_single_step(struct task_struct
-*child)
-> 
->  static int genregs_get(struct task_struct *target,
->  		   const struct user_regset *regset,
-> -		   unsigned int pos, unsigned int count,
-> -		   void *kbuf, void __user *ubuf)
-> +		   srtuct membuf to)
->  {
-> -	int ret;
-> -	unsigned int dummy;
->  	struct pt_regs *regs = task_pt_regs(target);
-> 
-> -
-> -	if (!regs)
-> -		return -EIO;
-> -
->  	/* The general idea here is that the copyout must happen in
->  	 * exactly the same order in which the userspace expects these
->  	 * regs. Now, the sequence in userspace does not match the
->  	 * sequence in the kernel, so everything past the 32 gprs
->  	 * happens one at a time.
->  	 */
-> -	ret = user_regset_copyout(&pos, &count, &kbuf, &ubuf,
-> -				  &regs->r00, 0, 32*sizeof(unsigned long));
-> -
-> -#define ONEXT(KPT_REG, USR_REG) \
-> -	if (!ret) \
-> -		ret = user_regset_copyout(&pos, &count, &kbuf, &ubuf, \
-> -			KPT_REG, offsetof(struct user_regs_struct, USR_REG),
-> \
-> -			offsetof(struct user_regs_struct, USR_REG) + \
-> -				 sizeof(unsigned long));
-> -
-> +	membuf_write(&to, &regs->r00, 32*sizeof(unsigned long));
->  	/* Must be exactly same sequence as struct user_regs_struct */
-> -	ONEXT(&regs->sa0, sa0);
-> -	ONEXT(&regs->lc0, lc0);
-> -	ONEXT(&regs->sa1, sa1);
-> -	ONEXT(&regs->lc1, lc1);
-> -	ONEXT(&regs->m0, m0);
-> -	ONEXT(&regs->m1, m1);
-> -	ONEXT(&regs->usr, usr);
-> -	ONEXT(&regs->preds, p3_0);
-> -	ONEXT(&regs->gp, gp);
-> -	ONEXT(&regs->ugp, ugp);
-> -	ONEXT(&pt_elr(regs), pc);
-> -	dummy = pt_cause(regs);
-> -	ONEXT(&dummy, cause);
-> -	ONEXT(&pt_badva(regs), badva);
-> +	membuf_store(&to, regs->sa0);
-> +	membuf_store(&to, regs->lc0);
-> +	membuf_store(&to, regs->sa1);
-> +	membuf_store(&to, regs->lc1);
-> +	membuf_store(&to, regs->m0);
-> +	membuf_store(&to, regs->m1);
-> +	membuf_store(&to, regs->usr);
-> +	membuf_store(&to, regs->p3_0);
-> +	membuf_store(&to, regs->gp);
-> +	membuf_store(&to, regs->ugp);
-> +	membuf_store(&to, pt_elr(regs)); // pc
-> +	membuf_store(&to, (unsigned long)pt_cause(regs)); // cause
-> +	membuf_store(&to, pt_badva(regs)); // badva
->  #if CONFIG_HEXAGON_ARCH_VERSION >=4
-> -	ONEXT(&regs->cs0, cs0);
-> -	ONEXT(&regs->cs1, cs1);
-> +	membuf_store(&to, regs->cs0);
-> +	membuf_store(&to, regs->cs1);
-> +	return membuf_zero(&to, sizeof(unsigned long)); #else
-> +	return membuf_zero(&to, 3 * sizeof(unsigned long));
->  #endif
-> -
-> -	/* Pad the rest with zeros, if needed */
-> -	if (!ret)
-> -		ret = user_regset_copyout_zero(&pos, &count, &kbuf, &ubuf,
-> -					offsetof(struct user_regs_struct,
-> pad1), -1);
-> -	return ret;
->  }
-> 
->  static int genregs_set(struct task_struct *target, @@ -159,7 +139,7 @@
-static
-> const struct user_regset hexagon_regsets[] = {
->  		.n = ELF_NGREG,
->  		.size = sizeof(unsigned long),
->  		.align = sizeof(unsigned long),
-> -		.get = genregs_get,
-> +		.get2 = genregs_get,
->  		.set = genregs_set,
->  	},
->  };
-> --
-> 2.11.0
-
-
+Best Regards
+Mrs Aisha Gaddafi
