@@ -2,141 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD40E241E4F
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Aug 2020 18:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36BF241F12
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Aug 2020 19:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729004AbgHKQcV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Aug 2020 12:32:21 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2593 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728862AbgHKQcV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 11 Aug 2020 12:32:21 -0400
-Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 32B4919F89EF9A6C1C68;
-        Tue, 11 Aug 2020 17:32:19 +0100 (IST)
-Received: from localhost (10.227.96.57) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 11 Aug
- 2020 17:32:18 +0100
-Date:   Tue, 11 Aug 2020 17:32:17 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
+        id S1729186AbgHKRUo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Aug 2020 13:20:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58232 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729103AbgHKRUo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 11 Aug 2020 13:20:44 -0400
+Received: from gaia (unknown [95.146.230.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C9FA20756;
+        Tue, 11 Aug 2020 17:20:40 +0000 (UTC)
+Date:   Tue, 11 Aug 2020 18:20:38 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Dave Martin <Dave.Martin@arm.com>, linux-arch@vger.kernel.org,
+        Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Zefan Li" <lizefan@huawei.com>
-Subject: Re: [PATCH v3 0/8] huge vmalloc mappings
-Message-ID: <20200811173217.0000161e@huawei.com>
-In-Reply-To: <20200810022732.1150009-1-npiggin@gmail.com>
-References: <20200810022732.1150009-1-npiggin@gmail.com>
-Organization: Huawei tech. R&D (UK)  Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        linux-arm-kernel@lists.infradead.org, nd@arm.com
+Subject: Re: [PATCH v7 29/29] arm64: mte: Add Memory Tagging Extension
+ documentation
+Message-ID: <20200811172038.GB1429@gaia>
+References: <20200715170844.30064-1-catalin.marinas@arm.com>
+ <20200715170844.30064-30-catalin.marinas@arm.com>
+ <20200727163634.GO7127@arm.com>
+ <20200728110758.GA21941@arm.com>
+ <20200728145350.GR7127@arm.com>
+ <20200728195957.GA31698@gaia>
+ <20200803124309.GC14398@arm.com>
+ <20200807151906.GM6750@gaia>
+ <20200810141309.GK14398@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.227.96.57]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200810141309.GK14398@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 10 Aug 2020 12:27:24 +1000
-Nicholas Piggin <npiggin@gmail.com> wrote:
-
-> Not tested on x86 or arm64, would appreciate a quick test there so I can
-> ask Andrew to put it in -mm. Other option is I can disable huge vmallocs
-> for them for the time being.
-
-Hi Nicholas,
-
-For arm64 testing with a Kunpeng920.
-
-I ran a quick sanity test with this series on top of mainline (yes mid merge window
-so who knows what state is...).  Could I be missing some dependency?
-
-Without them it boots, with them it doesn't.  Any immediate guesses?
-
-[    0.069507] Dentry cache hash table entries: 33554432 (order: 16, 268435456 bytes, vmalloc)                                                               
-[    0.087134] Inode-cache hash table entries: 16777216 (order: 15, 134217728 bytes, vmalloc)                                                                
-[    0.097044] Mount-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc)                                                                    
-[    0.106534] Mountpoint-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc)
-[    0.116349] ------------[ cut here ]------------   
-[    0.121465] kernel BUG at kernel/fork.c:402!
-[    0.126194] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-[    0.132273] Modules linked in:
-[    0.135653] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.8.0-12307-g2b197e00c338 #637
-[    0.144240] pstate: 20000009 (nzCv daif -PAN -UAO BTYPE=--)
-[    0.150420] pc : copy_process+0x10c0/0x1690
-[    0.155049] lr : copy_process+0x2e0/0x1690
-[    0.159584] sp : ffffd96c55773d60
-[    0.163250] x29: ffffd96c55773d70 x28: ffff20bf87060000
-[    0.169134] x27: 0000000000800300 x26: 00000000ffffffff
-[    0.175018] x25: ffff8000108a8000 x24: ffffd96c55a32708
-[    0.180901] x23: ffff20bf87043800 x22: 0000000000000000
-[    0.186787] x21: 0000000000000000 x20: ffffd96c55773ef0
-[    0.192672] x19: ffffd96c55783bc0 x18: 0000000000000010
-[    0.198557] x17: 00000000855c858e x16: 00000000a8256fca
-[    0.204441] x15: ffffffffffffffff x14: ffff000000000000
-[    0.210327] x13: ffff800010901000 x12: ffff8000108b1000
-[    0.216212] x11: 0000000000000001 x10: ffffd96c55a6d000
-[    0.222096] x9 : ffffd96c53bf7594 x8 : 0000000000000041
-[    0.227980] x7 : ffff004fffffa6b0 x6 : ffff800010aa8000
-[    0.233864] x5 : 000000000000fffd x4 : 0000000000000000
-[    0.239748] x3 : ffffd96c55a63598 x2 : 0000000000000001
-[    0.245632] x1 : ffffd96c55783bc0 x0 : 0000000000000008
-[    0.251519] Call trace:
-[    0.254221]  copy_process+0x10c0/0x1690
-[    0.258466]  _do_fork+0x98/0x488
-[    0.262036]  kernel_thread+0x6c/0x90
-[    0.265997]  rest_init+0x38/0xf0
-[    0.269568]  arch_call_rest_init+0x18/0x24
-[    0.274105]  start_kernel+0x60c/0x644
-[    0.278159] Code: f000a441 f943f421 cb010000 17ffffe1 (d4210000)
-[    0.284961] ---[ end trace 985361e2cb97a0d9 ]---
-[    0.290073] Kernel panic - not syncing: Attempted to kill the idle task!
-[    0.297532] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-
-Thanks,
-
-Jonathan
-
-
+On Mon, Aug 10, 2020 at 03:13:09PM +0100, Szabolcs Nagy wrote:
+> The 08/07/2020 16:19, Catalin Marinas wrote:
+> > On Mon, Aug 03, 2020 at 01:43:10PM +0100, Szabolcs Nagy wrote:
+> > > if we can always turn sync tag checks on early whenever mte is
+> > > available then i think there is no issue.
+> > > 
+> > > but if we have to make the decision later for compatibility or
+> > > performance reasons then per thread setting is problematic.
+> > 
+> > At least for libc, I'm not sure how you could even turn MTE on at
+> > run-time. The heap allocations would have to be mapped with PROT_MTE as
+> > we can't easily change them (well, you could mprotect(), assuming the
+> > user doesn't use tagged pointers on them).
 > 
-> Since v2:
-> - Rebased on vmalloc cleanups, split series into simpler pieces.
-> - Fixed several compile errors and warnings
-> - Keep the page array and accounting in small page units because
->   struct vm_struct is an interface (this should fix x86 vmap stack debug
->   assert). [Thanks Zefan]
-> 
-> Nicholas Piggin (8):
->   mm/vmalloc: fix vmalloc_to_page for huge vmap mappings
->   mm: apply_to_pte_range warn and fail if a large pte is encountered
->   mm/vmalloc: rename vmap_*_range vmap_pages_*_range
->   lib/ioremap: rename ioremap_*_range to vmap_*_range
->   mm: HUGE_VMAP arch support cleanup
->   mm: Move vmap_range from lib/ioremap.c to mm/vmalloc.c
->   mm/vmalloc: add vmap_range_noflush variant
->   mm/vmalloc: Hugepage vmalloc mappings
-> 
->  .../admin-guide/kernel-parameters.txt         |   2 +
->  arch/arm64/mm/mmu.c                           |  10 +-
->  arch/powerpc/mm/book3s64/radix_pgtable.c      |   8 +-
->  arch/x86/mm/ioremap.c                         |  10 +-
->  include/linux/io.h                            |   9 -
->  include/linux/vmalloc.h                       |  13 +
->  init/main.c                                   |   1 -
->  mm/ioremap.c                                  | 231 +--------
->  mm/memory.c                                   |  60 ++-
->  mm/vmalloc.c                                  | 442 +++++++++++++++---
->  10 files changed, 453 insertions(+), 333 deletions(-)
-> 
+> e.g. dlopen of library with stack tagging. (libc can mark stacks with
+> PROT_MTE at that time)
 
+If we allow such mixed object support with stack tagging enabled at
+dlopen, PROT_MTE would need to be turned on for each thread stack. This
+wouldn't require synchronisation, only knowing where the thread stacks
+are, but you'd need to make sure threads don't call into the new library
+until the stacks have been mprotect'ed. Doing this midway through a
+function execution may corrupt the tags.
+
+So I'm not sure how safe any of this is without explicit user
+synchronisation (i.e. don't call into the library until all threads have
+been updated). Even changing options like GCR_EL1.Excl across multiple
+threads may have unwanted effects. See this comment from Peter, the
+difference being that instead of an explicit prctl() call on the current
+stack, another thread would do it:
+
+https://lore.kernel.org/linux-arch/CAMn1gO5rhOG1W+nVe103v=smvARcFFp_Ct9XqH2Ca4BUMfpDdg@mail.gmail.com/
+
+> or just turn on sync tag checks later when using heap tagging.
+
+I wonder whether setting the synchronous tag check mode by default would
+improve this aspect. This would not have any effect until PROT_MTE is
+used. If software wants some better performance they can explicitly opt
+in to asynchronous mode or disable tag checking after some SIGSEGV +
+reporting (this shouldn't exclude the environment variables you
+currently use for controlling the tag check mode).
+
+Also, if there are saner defaults for the user GCR_EL1.Excl (currently
+all masked), we should decide them now.
+
+If stack tagging will come with some ELF information, we could make the
+default tag checking and GCR_EL1.Excl choices based on that, otherwise
+maybe we should revisit the default configuration the kernel sets for
+the user in the absence of any other information.
+
+> > There is a case to switch tag checking from asynchronous to synchronous
+> > at run-time based on a signal but that's rather specific to Android
+> > where zygote controls the signal handler. I don't think you can do this
+> > with libc. Even on Android, since the async fault signal is delivered
+> > per thread, it probably does this lazily (alternatively, it could issue
+> > a SIGUSRx to the other threads for synchronisation).
+> 
+> i think what that zygote is doing is a valid use-case but
+> in a normal linux setup the application owns the signal
+> handlers so the tag check switch has to be done by the
+> application. the libc can expose some api for it, so in
+> principle it's enough if the libc can do the runtime
+> switch, but we dont plan to add new libc apis for mte.
+
+Due to the synchronisation aspect especially regarding the stack
+tagging, I'm not sure the kernel alone can safely do this.
+
+Changing the tagged address syscall ABI across multiple threads should
+be safer (well, at least the relaxing part). But if we don't solve the
+other aspects I mentioned above, I don't think there is much point in
+only doing it for this.
+
+> > > - library code normally initializes per thread state on the first call
+> > >   into the library from a given thread, but with mte, as soon as
+> > >   memory / pointers are tagged in one thread, all threads are
+> > >   affected: not performing checks in other threads is less secure (may
+> > >   be ok) and it means incompatible syscall abi (not ok). so at least
+> > >   PR_TAGGED_ADDR_ENABLE should have process wide setting for this
+> > >   usage.
+> > 
+> > My assumption with MTE is that the libc will initialise it when the
+> > library is loaded (something __attribute__((constructor))) and it's
+> > still in single-threaded mode. Does it wait until the first malloc()
+> > call? Also, is there such thing as a per-thread initialiser for a
+> > dynamic library (not sure it can be implemented in practice though)?
+> 
+> there is no per thread initializer in an elf module.
+> (tls state is usually initialized lazily in threads
+> when necessary.)
+> 
+> malloc calls can happen before the ctors of an LD_PRELOAD
+> library and threads can be created before both.
+> glibc runs ldpreload ctors after other library ctors.
+
+In the presence of stack tagging, I think any subsequent MTE config
+change across all threads is unsafe, irrespective of whether it's done
+by the kernel or user via SIGUSRx. I think the best we can do here is
+start with more appropriate defaults or enable them based on an ELF note
+before the application is started. The dynamic loader would not have to
+do anything extra here.
+
+If we ignore stack tagging, the global configuration change may be
+achievable. I think for the MTE bits, this could be done lazily by the
+libc (e.g. on malloc()/free() call). The tag checking won't happen
+before such calls unless we change the kernel defaults. There is still
+the tagged address ABI enabling, could this be done lazily on syscall by
+the libc? If not, the kernel could synchronise (force) this on syscall
+entry from each thread based on some global prctl() bit.
+
+-- 
+Catalin
