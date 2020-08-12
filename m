@@ -2,72 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B01A6242849
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Aug 2020 12:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE0A242946
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Aug 2020 14:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbgHLKhR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Aug 2020 06:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726404AbgHLKhR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Aug 2020 06:37:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFDCC06174A;
-        Wed, 12 Aug 2020 03:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=a6/dAk8hzb0WYY+kQF71Fgx1O3nwOedWBapk4f0aaOE=; b=KA3A4rKfqtBkAolbpGhZQn0gae
-        rIqsIfEejxM64L+YMTBJUSvg9fEFIfvHxwctOuhc9kOyfSdozptYsA0jAOiKaRSfUdNi72MKP9/pK
-        nkS/znp2LKbSteLjA3WozUbWSHli0WpEytH2VWZvz/eAOBqRX+XYtpWzwnEOCloZYCLFOC3afCNHm
-        rkq0HuJB3Rc7Zw8PRD3F29LxE2f6cEgqiZbZbThXq4+UEfKq9D08M/+swMXJRha+LvkLztxW2QGL2
-        ViWxhZVhOuYLHsAyeFHBmHL/uIcJ0MWeVdzlotQr4696vPqatWO8tc8k9EQnzrdgHJJkzsiPQxZg3
-        zd6QAwzg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k5o6c-0008Cw-Cp; Wed, 12 Aug 2020 10:36:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 911FF300DAE;
-        Wed, 12 Aug 2020 12:35:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 787BB2B412CB6; Wed, 12 Aug 2020 12:35:30 +0200 (CEST)
-Date:   Wed, 12 Aug 2020 12:35:30 +0200
-From:   peterz@infradead.org
+        id S1727858AbgHLM04 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Aug 2020 08:26:56 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2597 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726722AbgHLM04 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 12 Aug 2020 08:26:56 -0400
+Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id DB8FA142F805B19C9470;
+        Wed, 12 Aug 2020 13:26:53 +0100 (IST)
+Received: from localhost (10.52.122.74) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Wed, 12 Aug
+ 2020 13:26:53 +0100
+Date:   Wed, 12 Aug 2020 13:25:24 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
- synchronisation with actual irq state
-Message-ID: <20200812103530.GL2674@hirez.programming.kicks-ass.net>
-References: <20200723105615.1268126-1-npiggin@gmail.com>
- <20200807111126.GI2674@hirez.programming.kicks-ass.net>
- <1597220073.mbvcty6ghk.astroid@bobo.none>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Zefan Li" <lizefan@huawei.com>
+Subject: Re: [PATCH v3 8/8] mm/vmalloc: Hugepage vmalloc mappings
+Message-ID: <20200812132524.000067a6@Huawei.com>
+In-Reply-To: <20200810022732.1150009-9-npiggin@gmail.com>
+References: <20200810022732.1150009-1-npiggin@gmail.com>
+        <20200810022732.1150009-9-npiggin@gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1597220073.mbvcty6ghk.astroid@bobo.none>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.122.74]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 06:18:28PM +1000, Nicholas Piggin wrote:
-> Excerpts from peterz@infradead.org's message of August 7, 2020 9:11 pm:
-> > 
-> > What's wrong with something like this?
-> > 
-> > AFAICT there's no reason to actually try and add IRQ tracing here, it's
-> > just a hand full of instructions at the most.
-> 
-> Because we may want to use that in other places as well, so it would
-> be nice to have tracing.
-> 
-> Hmm... also, I thought NMI context was free to call local_irq_save/restore
-> anyway so the bug would still be there in those cases?
+On Mon, 10 Aug 2020 12:27:32 +1000
+Nicholas Piggin <npiggin@gmail.com> wrote:
 
-NMI code has in_nmi() true, in which case the IRQ tracing is disabled
-(except for x86 which has CONFIG_TRACE_IRQFLAGS_NMI).
+> On platforms that define HAVE_ARCH_HUGE_VMAP and support PMD vmaps,
+> vmalloc will attempt to allocate PMD-sized pages first, before falling
+> back to small pages.
+> 
+> Allocations which use something other than PAGE_KERNEL protections are
+> not permitted to use huge pages yet, not all callers expect this (e.g.,
+> module allocations vs strict module rwx).
+> 
+> This reduces TLB misses by nearly 30x on a `git diff` workload on a
+> 2-node POWER9 (59,800 -> 2,100) and reduces CPU cycles by 0.54%.
+> 
+> This can result in more internal fragmentation and memory overhead for a
+> given allocation, an option nohugevmap is added to disable at boot.
+> 
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Hi Nicholas,
+
+Busy afternoon, but a possible point of interest in line in the meantime.
+
+
+...
+
+> @@ -2701,22 +2760,45 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+>  			pgprot_t prot, unsigned long vm_flags, int node,
+>  			const void *caller)
+>  {
+> -	struct vm_struct *area;
+> +	struct vm_struct *area = NULL;
+>  	void *addr;
+>  	unsigned long real_size = size;
+> +	unsigned long real_align = align;
+> +	unsigned int shift = PAGE_SHIFT;
+>  
+>  	size = PAGE_ALIGN(size);
+>  	if (!size || (size >> PAGE_SHIFT) > totalram_pages())
+>  		goto fail;
+>  
+> -	area = __get_vm_area_node(real_size, align, VM_ALLOC | VM_UNINITIALIZED |
+> +	if (vmap_allow_huge && (pgprot_val(prot) == pgprot_val(PAGE_KERNEL))) {
+> +		unsigned long size_per_node;
+> +
+> +		/*
+> +		 * Try huge pages. Only try for PAGE_KERNEL allocations,
+> +		 * others like modules don't yet expect huge pages in
+> +		 * their allocations due to apply_to_page_range not
+> +		 * supporting them.
+> +		 */
+> +
+> +		size_per_node = size;
+> +		if (node == NUMA_NO_NODE)
+> +			size_per_node /= num_online_nodes();
+> +		if (size_per_node >= PMD_SIZE)
+> +			shift = PMD_SHIFT;
+> +	}
+> +
+> +again:
+> +	align = max(real_align, 1UL << shift);
+> +	size = ALIGN(real_size, align);
+
+So my suspicion is that the issue on arm64 is related to this.
+In the relevant call path, align is 32K whilst the size is 16K
+
+Previously I don't think we force size to be a multiple of align.
+
+I think this results in nr_pages being double what it was before.
+
+
+> +
+> +	area = __get_vm_area_node(size, align, VM_ALLOC | VM_UNINITIALIZED |
+>  				vm_flags, start, end, node, gfp_mask, caller);
+>  	if (!area)
+>  		goto fail;
+>  
+> -	addr = __vmalloc_area_node(area, gfp_mask, prot, node);
+> +	addr = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
+>  	if (!addr)
+> -		return NULL;
+> +		goto fail;
+>  
+>  	/*
+>  	 * In this function, newly allocated vm_struct has VM_UNINITIALIZED
+> @@ -2730,8 +2812,16 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+>  	return addr;
+>  
+>  fail:
+> -	warn_alloc(gfp_mask, NULL,
+> +	if (shift > PAGE_SHIFT) {
+> +		shift = PAGE_SHIFT;
+> +		goto again;
+> +	}
+> +
+> +	if (!area) {
+> +		/* Warn for area allocation, page allocations already warn */
+> +		warn_alloc(gfp_mask, NULL,
+>  			  "vmalloc: allocation failure: %lu bytes", real_size);
+> +	}
+>  	return NULL;
+>  }
+>  
+
+
