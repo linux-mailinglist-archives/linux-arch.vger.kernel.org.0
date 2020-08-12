@@ -2,70 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDC3242690
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Aug 2020 10:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC48242698
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Aug 2020 10:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbgHLILd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Aug 2020 04:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S1726255AbgHLISf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Aug 2020 04:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726629AbgHLILc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Aug 2020 04:11:32 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C4CC06174A;
-        Wed, 12 Aug 2020 01:11:32 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u128so624995pfb.6;
-        Wed, 12 Aug 2020 01:11:32 -0700 (PDT)
+        with ESMTP id S1726182AbgHLISf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Aug 2020 04:18:35 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA02C06174A;
+        Wed, 12 Aug 2020 01:18:35 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ha11so736578pjb.1;
+        Wed, 12 Aug 2020 01:18:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=Gqk0IHazkAbnd1TceTY1ZmQMSGqDC0SOsCEO7z8wdv4=;
-        b=eDg4DOyGlwZXAxfvrAWm2bCGM35Xhc/MB9AlQ5a1VVdBg214Fqq5NUhxfeckALVZVq
-         wshSpJhFV1UCo2gBcr2GGbD55UBFts6DFhFkvmTXBF0lBdloY7tgosoqUiST7/3+f4Wy
-         m3UjaCLNjlrWpvYZYHC5+klYfXP17VtghaLl7pRWaAMR1WBENVLQYlEANV+cZudg+7PM
-         KSCK/45JABfmQvheqKAbLQdbOnlT99QuAvOj6/AID7IafCM387DZA3oBUkeCAl910hCa
-         Kmo6hG6oIwJngdWFZ2hs+X4wZZ/80PKxgjTW96HR0Zh6X+gJwR38Uq7MueTEyFISYi1X
-         O91g==
+        bh=79f2Q6E1np8SG+am2XzUSjzcDBDgFqCYmgnZYDZDf0A=;
+        b=nlhfMQnM79bkE++hU9UHzfAUO66rEjOEAxexFuScCLj0xVeTisj/51Sld5gT92RraL
+         AIS1BNxrJdTMd/O/cmh0/IGywD8U+UHWRAWdJw4sn6pFNJ1aM+ZEFJykhekp8fyRlekv
+         LNTPHdU9+KOMOqB4Be8S/E5WxkWJoog5eZn7ITX+DJUEKrw0BTVVaIMiHMlJ7VXRMMwo
+         kiCYV0pib4I4ri3GTSoo9n57yoWVf8Vp7rHBmryszp5U/Rr18mZaWiOGWRmwA4iTrrCr
+         KNrv3q9Zt3T+MKIrxclD6UrzJkuhy0i1V0g7GfQb/NXC/roh2pwnOrLc4NQSycPfN/Pr
+         mMyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=Gqk0IHazkAbnd1TceTY1ZmQMSGqDC0SOsCEO7z8wdv4=;
-        b=FHEWypDB7Rw6tWgXbqkxzt5VbfzfBfI+26tRkYesXZSYgjIzC1ypKl+VxDZLGzWaS2
-         c5HUh48IrriCTSU4ARwqqKlcPtaEvC+R6QMvz9vNZoZAM7M9C5l+dwiWwyswh/XCmiKH
-         GYoh9q3gpFGK6npVg3HBHn8qAK0uPCboMt/B4pGBImbHixeFSBbRjuXL31EOLxgvse8K
-         aWaGOaWcZTACrBQ1MWovSMTypnnQQBX711jrPAgMXu+0W4KrYAgXvQCbgsv0X2++WjdU
-         MK7JbchyB46lKEXzzB5KdY22adaxDocGicJCXlk3ZaBVyTQhVhmPCDnranSCxuM/zc4h
-         VlZA==
-X-Gm-Message-State: AOAM533ieRYG4Y7CE2jarylOJIRpAFGA51Xc5gn7RqIW3eK2SvQbgEEK
-        HifkY0LzPrR6vdhwC6lV0I4=
-X-Google-Smtp-Source: ABdhPJyqkUbovHh5ka3/XaSTC8ODlUDFJft07FCaI95cZAdpIni7GZOC8/CuFKmKXdXYaPrreAj/Bw==
-X-Received: by 2002:a05:6a00:787:: with SMTP id g7mr9620510pfu.290.1597219892350;
-        Wed, 12 Aug 2020 01:11:32 -0700 (PDT)
+        bh=79f2Q6E1np8SG+am2XzUSjzcDBDgFqCYmgnZYDZDf0A=;
+        b=jbIeel8cq2Pv6qd3hVQIjF5CUuIwdmuCeiFHWw/t7qtmYkV/WRp1rxENSZ/pE0ref6
+         QtfUIcsaxfC7EYILcnhzD8AjXs/jQr4Oi1aBZtXrQmxwX7jCiV3V0/E/6M3HnzMRDWd/
+         163hXcQjnzHBJ+XicavAK0PvFk8uAFEmpb5cKAspK9dvOdhDctCfxDbSeL7T9cIl9kqD
+         Fb/GK9OPkMdXdD0SA+ZAikZPWGxdDhXxDQKGQ5oMjQH/9fxYgZwppUsifK4NVlVZEKmE
+         uRMGOH13oL1KXsmVD9+oRHxelXVAYf54HKBdGmZ0FESHuMm1a9mg3jbByP2c8qcnqGt0
+         /QaQ==
+X-Gm-Message-State: AOAM532EcxYuWE6rfxVHpiQZ3c9n3r2P7HnMRwpyUGJ4yIVNTVqfgDMX
+        j0U1TLJ4xUn0L9fVqQi0+iQ=
+X-Google-Smtp-Source: ABdhPJxeeFrT8J1cTifNM8kGu2J2wqCIyrp58B7SlaMaeh8+s3Jr8gHNTZT1n1PHaZ/FvCH/wjcD2w==
+X-Received: by 2002:a17:90b:f09:: with SMTP id br9mr5035461pjb.11.1597220314648;
+        Wed, 12 Aug 2020 01:18:34 -0700 (PDT)
 Received: from localhost (193-116-193-175.tpgi.com.au. [193.116.193.175])
-        by smtp.gmail.com with ESMTPSA id w82sm1547171pff.7.2020.08.12.01.11.30
+        by smtp.gmail.com with ESMTPSA id n15sm1501361pgs.25.2020.08.12.01.18.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2020 01:11:31 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 18:11:25 +1000
+        Wed, 12 Aug 2020 01:18:34 -0700 (PDT)
+Date:   Wed, 12 Aug 2020 18:18:28 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 0/8] huge vmalloc mappings
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Zefan Li <lizefan@huawei.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        =?iso-8859-1?q?Catalin=0A?= Marinas <catalin.marinas@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org
-References: <20200810022732.1150009-1-npiggin@gmail.com>
-        <20200811173217.0000161e@huawei.com>
-        <d457aabc-9f58-f47e-f5fa-9539618b2759@huawei.com>
-In-Reply-To: <d457aabc-9f58-f47e-f5fa-9539618b2759@huawei.com>
+Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
+ synchronisation with actual irq state
+To:     peterz@infradead.org
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+References: <20200723105615.1268126-1-npiggin@gmail.com>
+        <20200807111126.GI2674@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200807111126.GI2674@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-Id: <1597219299.b5noer1k93.astroid@bobo.none>
+Message-Id: <1597220073.mbvcty6ghk.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
@@ -73,50 +67,137 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Zefan Li's message of August 12, 2020 11:07 am:
-> On 2020/8/12 0:32, Jonathan Cameron wrote:
->> On Mon, 10 Aug 2020 12:27:24 +1000
->> Nicholas Piggin <npiggin@gmail.com> wrote:
->>=20
->>> Not tested on x86 or arm64, would appreciate a quick test there so I ca=
-n
->>> ask Andrew to put it in -mm. Other option is I can disable huge vmalloc=
-s
->>> for them for the time being.
->>=20
->> Hi Nicholas,
->>=20
->> For arm64 testing with a Kunpeng920.
->>=20
->> I ran a quick sanity test with this series on top of mainline (yes mid m=
-erge window
->> so who knows what state is...).  Could I be missing some dependency?
->>=20
->> Without them it boots, with them it doesn't.  Any immediate guesses?
->>=20
+Excerpts from peterz@infradead.org's message of August 7, 2020 9:11 pm:
 >=20
-> I've already reported this bug in v2, and yeah I also tested it on arm64
-> (not Kunpeng though), so looks like it still hasn't been fixed.
-
-Huh, I thought I did fix it but seems not. vmap stacks shouldn't be=20
-big enough to use huge pages though, so I don't know what's going on
-there. I'll dig around a bit more.
-
+> What's wrong with something like this?
 >=20
-> ...
->>>
->>> Since v2:
->>> - Rebased on vmalloc cleanups, split series into simpler pieces.
->>> - Fixed several compile errors and warnings
->>> - Keep the page array and accounting in small page units because
->>>   struct vm_struct is an interface (this should fix x86 vmap stack debu=
-g
->>>   assert). [Thanks Zefan]
->=20
-> though the changelog says it's fixed for x86.
+> AFAICT there's no reason to actually try and add IRQ tracing here, it's
+> just a hand full of instructions at the most.
 
-Yes, my mistake that was supposed to say arm64.
+Because we may want to use that in other places as well, so it would
+be nice to have tracing.
+
+Hmm... also, I thought NMI context was free to call local_irq_save/restore
+anyway so the bug would still be there in those cases?
 
 Thanks,
 Nick
 
+>=20
+> ---
+>=20
+> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/asm=
+/hw_irq.h
+> index 3a0db7b0b46e..6be22c1838e2 100644
+> --- a/arch/powerpc/include/asm/hw_irq.h
+> +++ b/arch/powerpc/include/asm/hw_irq.h
+> @@ -196,33 +196,6 @@ static inline bool arch_irqs_disabled(void)
+>  		arch_local_irq_restore(flags);				\
+>  	} while(0)
+> =20
+> -#ifdef CONFIG_TRACE_IRQFLAGS
+> -#define powerpc_local_irq_pmu_save(flags)			\
+> -	 do {							\
+> -		raw_local_irq_pmu_save(flags);			\
+> -		trace_hardirqs_off();				\
+> -	} while(0)
+> -#define powerpc_local_irq_pmu_restore(flags)			\
+> -	do {							\
+> -		if (raw_irqs_disabled_flags(flags)) {		\
+> -			raw_local_irq_pmu_restore(flags);	\
+> -			trace_hardirqs_off();			\
+> -		} else {					\
+> -			trace_hardirqs_on();			\
+> -			raw_local_irq_pmu_restore(flags);	\
+> -		}						\
+> -	} while(0)
+> -#else
+> -#define powerpc_local_irq_pmu_save(flags)			\
+> -	do {							\
+> -		raw_local_irq_pmu_save(flags);			\
+> -	} while(0)
+> -#define powerpc_local_irq_pmu_restore(flags)			\
+> -	do {							\
+> -		raw_local_irq_pmu_restore(flags);		\
+> -	} while (0)
+> -#endif  /* CONFIG_TRACE_IRQFLAGS */
+> -
+>  #endif /* CONFIG_PPC_BOOK3S */
+> =20
+>  #ifdef CONFIG_PPC_BOOK3E
+> diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/=
+local.h
+> index bc4bd19b7fc2..b357a35672b1 100644
+> --- a/arch/powerpc/include/asm/local.h
+> +++ b/arch/powerpc/include/asm/local.h
+> @@ -32,9 +32,9 @@ static __inline__ void local_##op(long i, local_t *l)		=
+	\
+>  {									\
+>  	unsigned long flags;						\
+>  									\
+> -	powerpc_local_irq_pmu_save(flags);				\
+> +	raw_powerpc_local_irq_pmu_save(flags);				\
+>  	l->v c_op i;						\
+> -	powerpc_local_irq_pmu_restore(flags);				\
+> +	raw_powerpc_local_irq_pmu_restore(flags);				\
+>  }
+> =20
+>  #define LOCAL_OP_RETURN(op, c_op)					\
+> @@ -43,9 +43,9 @@ static __inline__ long local_##op##_return(long a, loca=
+l_t *l)		\
+>  	long t;								\
+>  	unsigned long flags;						\
+>  									\
+> -	powerpc_local_irq_pmu_save(flags);				\
+> +	raw_powerpc_local_irq_pmu_save(flags);				\
+>  	t =3D (l->v c_op a);						\
+> -	powerpc_local_irq_pmu_restore(flags);				\
+> +	raw_powerpc_local_irq_pmu_restore(flags);				\
+>  									\
+>  	return t;							\
+>  }
+> @@ -81,11 +81,11 @@ static __inline__ long local_cmpxchg(local_t *l, long=
+ o, long n)
+>  	long t;
+>  	unsigned long flags;
+> =20
+> -	powerpc_local_irq_pmu_save(flags);
+> +	raw_powerpc_local_irq_pmu_save(flags);
+>  	t =3D l->v;
+>  	if (t =3D=3D o)
+>  		l->v =3D n;
+> -	powerpc_local_irq_pmu_restore(flags);
+> +	raw_powerpc_local_irq_pmu_restore(flags);
+> =20
+>  	return t;
+>  }
+> @@ -95,10 +95,10 @@ static __inline__ long local_xchg(local_t *l, long n)
+>  	long t;
+>  	unsigned long flags;
+> =20
+> -	powerpc_local_irq_pmu_save(flags);
+> +	raw_powerpc_local_irq_pmu_save(flags);
+>  	t =3D l->v;
+>  	l->v =3D n;
+> -	powerpc_local_irq_pmu_restore(flags);
+> +	raw_powerpc_local_irq_pmu_restore(flags);
+> =20
+>  	return t;
+>  }
+> @@ -117,12 +117,12 @@ static __inline__ int local_add_unless(local_t *l, =
+long a, long u)
+>  	unsigned long flags;
+>  	int ret =3D 0;
+> =20
+> -	powerpc_local_irq_pmu_save(flags);
+> +	raw_powerpc_local_irq_pmu_save(flags);
+>  	if (l->v !=3D u) {
+>  		l->v +=3D a;
+>  		ret =3D 1;
+>  	}
+> -	powerpc_local_irq_pmu_restore(flags);
+> +	raw_powerpc_local_irq_pmu_restore(flags);
+> =20
+>  	return ret;
+>  }
+>=20
