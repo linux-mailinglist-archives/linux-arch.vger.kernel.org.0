@@ -2,187 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 708C5242F84
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Aug 2020 21:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8132F243306
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Aug 2020 05:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgHLToz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Aug 2020 15:44:55 -0400
-Received: from mail.efficios.com ([167.114.26.124]:39788 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726540AbgHLToy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Aug 2020 15:44:54 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id AAD4D2D929D;
-        Wed, 12 Aug 2020 15:44:52 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id bWQ-UzXqrOsE; Wed, 12 Aug 2020 15:44:52 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 53F4A2D8FC5;
-        Wed, 12 Aug 2020 15:44:52 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 53F4A2D8FC5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1597261492;
-        bh=27YeVv9LTcVA+WNghyxUs9/L79lcl7/RQBwB643XlH4=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=jLSBTUeSs5464E1gkJ7QKLaFNrvqBwdGbt3JW6cy9SfDaU4jyVeRyYVrxQnhggOdq
-         lZzrsKW5ajM3NqhdFDeUi+xelAR+1D5jP+E9NPTK7PjIMZXnEOvUQOhp8xDPFB/efF
-         RBnd+RsXExk7vuVbGWk1j2hxrVyvZN7ZV73hGM2zZAxOtYuVEFNq6dxZbnZirEc2N2
-         YgedSJ7TFC7cs2o7cncM0vIVnQ07Lttfwc6iAFcrokUZA5SQVTtAA24MDiU+q76q8y
-         7ht7Uju5f511xLBnhoC/v5D8JopPzrI3I/J7W8I/2CVAAe+8t6qmTCl1dnNzVAPOPF
-         0L0f9BTkww9xQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xo32z08Mecvr; Wed, 12 Aug 2020 15:44:52 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 461DF2D906D;
-        Wed, 12 Aug 2020 15:44:52 -0400 (EDT)
-Date:   Wed, 12 Aug 2020 15:44:52 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Oskolkov <posk@posk.io>,
-        linux-arch <linux-arch@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Peter Oskolkov <posk@google.com>, paulmck <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Turner <pjt@google.com>,
-        Chris Kennelly <ckennelly@google.com>
-Message-ID: <1477195446.6156.1597261492255.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAFTs51XJhKXn7M2U2dZpFRsTrog4juy=UQfbtcdJfOj5TUSbqQ@mail.gmail.com>
-References: <20200811000959.2486636-1-posk@google.com> <20200811062733.GP3982@worktop.programming.kicks-ass.net> <CAFTs51XK0HLwCCvXCcfE5P7a4ExANPNPw7UvNigwHZ8sZVP+nQ@mail.gmail.com> <1003774683.6088.1597257002027.JavaMail.zimbra@efficios.com> <CAFTs51XJhKXn7M2U2dZpFRsTrog4juy=UQfbtcdJfOj5TUSbqQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2 v3] rseq/membarrier: add
- MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
+        id S1726600AbgHMD5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Aug 2020 23:57:06 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:42202 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726546AbgHMD5F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Aug 2020 23:57:05 -0400
+Received: by mail-il1-f198.google.com with SMTP id z1so3437722ilz.9
+        for <linux-arch@vger.kernel.org>; Wed, 12 Aug 2020 20:57:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=818BGdNc1wvnUSaZirTtzYWcZvgSsVpOYq9GYar7pzo=;
+        b=B7i1bL6DhnnWg0we3qs/pvs0/tgk69cgYEIo/AEnCjYqJ5gymdhWVgzFiJLPqEJtW/
+         eA6i7lYJ1+C1s/W7jKfDINWSUvz/11qCaLEsEyFOaQmj7EIgQ34SYfjdgGrMN6cz+UrT
+         GHF4Ct4DrOEwSDavNWFi1l56D9lB051jGlMlzEbSIPZh+yIuSPrKsKQwIviHqWLmsnO0
+         RK+LLmZ5J4P1Ejh0zBYdmepkBKUTd64Y4JOwVhFaYdBWHYYjpTez4od8fQaEfWYFt9dX
+         kQzxy1F7Fexd7/cZ40o9gVuM0p0Lxb8U4gaVwGzDA4FNkssH4UpUJ5BRE4J2snIcmHim
+         P1Tg==
+X-Gm-Message-State: AOAM530B4YJsdOdXVlg4M538sXk3ORSplQF2JJ++Vkvzqp39S82LIa4G
+        kzUiBwYU9AL/FtcFLNBTA14Hhwz9JKCFVp3UzeELl63Av2L0
+X-Google-Smtp-Source: ABdhPJxyW2a+ykA+fUEC8D6mFHSlTwIHpmNmLpjhnj+1O5R02Uizom5WTc4bNxK6AVfdyCvjg+GBZ9zseGC71qHLHgVFHLNbJAN8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3959 (ZimbraWebClient - FF79 (Linux)/8.8.15_GA_3953)
-Thread-Topic: rseq/membarrier: add MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
-Thread-Index: PhnLhe0vwNWrPvX80tp/NjrejyMQtA==
+X-Received: by 2002:a92:874a:: with SMTP id d10mr2849478ilm.273.1597291024427;
+ Wed, 12 Aug 2020 20:57:04 -0700 (PDT)
+Date:   Wed, 12 Aug 2020 20:57:04 -0700
+In-Reply-To: <00000000000084b59f05abe928ee@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001d3cbb05acba4cc2@google.com>
+Subject: Re: INFO: task hung in pipe_release (2)
+From:   syzbot <syzbot+61acc40a49a3e46e25ea@syzkaller.appspotmail.com>
+To:     James.Bottomley@HansenPartnership.com, amanieu@gmail.com,
+        arnd@arndb.de, benh@kernel.crashing.org, bfields@fieldses.org,
+        borntraeger@de.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
+        chris@zankel.net, christian@brauner.io, corbet@lwn.net,
+        cyphar@cyphar.com, dalias@libc.org, davem@davemloft.net,
+        deller@gmx.de, dvyukov@google.com, fenghua.yu@intel.com,
+        geert@linux-m68k.org, gor@linux.ibm.com, heiko.carstens@de.ibm.com,
+        hpa@zytor.com, ink@jurassic.park.msu.ru, jcmvbkbc@gmail.com,
+        jhogan@kernel.org, jlayton@kernel.org, kvalo@codeaurora.org,
+        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux@armlinux.org.uk,
+        linux@dominikbrodowski.net, linuxppc-dev@lists.ozlabs.org,
+        luis.f.correia@gmail.com, luto@kernel.org, martink@posteo.de,
+        mattst88@gmail.com, ming.lei@canonical.com, ming.lei@redhat.com,
+        mingo@redhat.com, monstr@monstr.eu
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
------ On Aug 12, 2020, at 2:48 PM, Peter Oskolkov posk@posk.io wrote:
+syzbot has bisected this issue to:
 
-> On Wed, Aug 12, 2020 at 11:30 AM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> 
-> [...]
-> 
->> "flags" is there to allow extensibility without requiring to add new
->> membarrier commands for every change. Even though it is not used now,
->> I don't think re-purposing it is a good idea. What is wrong with just
->> adding an additional "cpu" parameter to the system call ?
-> 
-> Can we do that? I thought adding an additional parameter means adding
-> another syscall (ABI => parameter types/count cannot change?)
+commit fddb5d430ad9fa91b49b1d34d0202ffe2fa0e179
+Author: Aleksa Sarai <cyphar@cyphar.com>
+Date:   Sat Jan 18 12:07:59 2020 +0000
 
-I was under the impression that adding parameters to a system call
-for new flags (or commands) was not an issue. One example is the
-clone system call which expects the ctid argument if the
-CLONE_CHILD_CLEARTID flag is set. But maybe it was OK at some earlier
-point in time, but it's not OK anymore ? (CCing linux-arch to ask for
-advice)
+    open: introduce openat2(2) syscall
 
-> 
->> A "flags" parameter is very common for system calls. I don't see why
->> we should change its name, especially given it is already exposed and
->> documented as "flags" in man pages.
->>
-> 
-> [...]
-> 
->> We basically have the following feature matrix:
->>
->> - private / global
->> - expedited / non-expedited
->> - sync-core / non-sync-core
->> - rseq-fence / non-rseq-fence
->>
->> For a total of about 16 combinations in total if we want to support them
->> all.
->>
->> We can continue to add separate commands for new combinations, but if we
->> want to allow them to be combined, using flags rather than adding extra
->> commands would have the advantage of keeping the number of commands
->> manageable.
->>
->> However, if there is no actual use-case for combining a membarrier sync-core
->> and a membarrier rseq-fence, then it limits the number of commands and maybe
->> then it's acceptable to add the rseq-fence as a separate membarrier command.
->>
->> I prefer to have this discussion now rather than once we get to the point of
->> having 40 membarrier commands for all possible combinations.
-> 
-> All commands are currently distinct bits, but are treated as separate commands.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=164e716a900000
+start commit:   6ba1b005 Merge tag 'asm-generic-fixes-5.8' of git://git.ke..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=154e716a900000
+console output: https://syzkaller.appspot.com/x/log.txt?x=114e716a900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=84f076779e989e69
+dashboard link: https://syzkaller.appspot.com/bug?extid=61acc40a49a3e46e25ea
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142ae224900000
 
-Indeed! I forgot about that. It was done so we can return a mask of supported
-commands with the MEMBARRIER_CMD_QUERY for feature discoverability. Those were
-never meant to be OR'd though, because then it's hard for user-space to discover
-what are the allowed command combinations.
+Reported-by: syzbot+61acc40a49a3e46e25ea@syzkaller.appspotmail.com
+Fixes: fddb5d430ad9 ("open: introduce openat2(2) syscall")
 
-> One way of doing what you suggest is to allow some commands to be bitwise-ORed.
-> 
-> So, for example, the user could call
-> 
-> membarrier(CMD_PRIVATE_EXPEDITED_SYNC_CORE | CMD_PRIVATE_EXPEDITED_RSEQ, cpu_id)
-> 
-> Is this what you have in mind?
-
-Not really. This would not take care of the fact that we would end up multiplying
-the number of commands as we allow combinations. E.g. if we ever want to have RSEQ
-work in private and global, and in non-expedited and expedited, we end up needing:
-
-- CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ
-- CMD_PRIVATE_EXPEDITED_RSEQ
-- CMD_PRIVATE_RSEQ
-- CMD_REGISTER_GLOBAL_EXPEDITED_RSEQ
-- CMD_GLOBAL_EXPEDITED_RSEQ
-- CMD_GLOBAL_RSEQ
-
-The only thing we would save by OR'ing it with the SYNC_CORE command is the additional
-list:
-
-- CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ_SYNC_CORE
-- CMD_PRIVATE_EXPEDITED_RSEQ_SYNC_CORE
-- CMD_PRIVATE_RSEQ_SYNC_CORE
-- CMD_REGISTER_GLOBAL_EXPEDITED_RSEQ_SYNC_CORE
-- CMD_GLOBAL_EXPEDITED_RSEQ_SYNC_CORE
-- CMD_GLOBAL_RSEQ_SYNC_CORE
-
-But unless we receive feedback that doing a membarrier with RSEQ+sync_core all in
-one go is a significant use-case, I am tempted to leave out that scenario for now.
-If we go for new commands, this means we could add (for private-expedited-rseq):
-
-- MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ,
-- MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
-
-I do however have use-cases for using RSEQ across shared memory (between
-processes). Not currently for a rseq-fence, but for rseq acting as per-cpu
-atomic operations. If I ever end up needing rseq-fence across shared memory,
-that would result in the following new commands:
-
-- MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED_RSEQ,
-- MEMBARRIER_CMD_GLOBAL_EXPEDITED_RSEQ,
-
-The remaining open question is whether it would be OK to define a new
-membarrier flag=MEMBARRIER_FLAG_CPU, which would expect an additional
-@cpu parameter.
-
-Thanks,
-
-Mathieu
-
-> 
-> [...]
-> 
-> Thanks,
-> Peter
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
