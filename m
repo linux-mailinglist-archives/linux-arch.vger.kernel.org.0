@@ -2,125 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B658B245017
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Aug 2020 01:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87322456EA
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Aug 2020 11:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgHNXWB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Aug 2020 19:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S1727864AbgHPJJS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Aug 2020 05:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726213AbgHNXWB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Aug 2020 19:22:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E9AC061385;
-        Fri, 14 Aug 2020 16:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=gcuzMKy5ca6nfpuGB7Mj7FbeflYqFCzDME2EUzPv4RI=; b=fAOOWOgbBBcaQyop3AF67ybOEX
-        k/WF+pgpKGKLLKzbe7Ulx6Ps2XQvg8KHEStyZjDY9NPvQupoQrFENxvNiHJrEXtnvlGDDUcxy1Hyj
-        XQLxy2PVel5XjaOyffpPuWnLysmtajdns/y4kJge3K1NOqDyk0EmYxCucuH0KGwYOq93fSKGR2n3r
-        hSFZ36NXhNa4O7937jfUb3hG0bXZkcE2na7NvzfjDoV9YDkKDgrif4pPhgnyTq8LvLvE7ANflQpbA
-        taeK74i9uBbRoIqgS7v6qkVtUqX9qrXlOIoFxcn/S+q8EUPAi1jZ4EhqobOVsVaOKHKzUHG4/pn35
-        1748qU+Q==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k6j19-0003gu-0n; Fri, 14 Aug 2020 23:21:53 +0000
-Subject: Re: [RFC/RFT PATCH 6/6] riscv: Add numa support for riscv64 platform
-To:     Atish Patra <atish.patra@wdc.com>, linux-kernel@vger.kernel.org
-Cc:     Greentime Hu <greentime.hu@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Anup Patel <Anup.Patel@wdc.com>, Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S1726867AbgHPJJR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Aug 2020 05:09:17 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A06C061756;
+        Sun, 16 Aug 2020 02:09:17 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id k18so6666966pfp.7;
+        Sun, 16 Aug 2020 02:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nrJg5dHzARiyIgQKcQeBmx5MsP72TzRX4UN4jKQ0FKU=;
+        b=WLvoIRIzkAfofpEParlRFy972z69/RbpgtcgqW5BIqiYhP/rvrHlxmqvSHGCq6cXxh
+         KWCKFOBQJNHewsjEkigYGaGoIeRmGo36LpOp6988mQpaJulfeI8Kn7aWXEALzOk2YgNe
+         YzrnK6UeGwiFiMy7u81dbGKyMq3cgKctsyCaY1QzU1VztYbPgmoJwOz6mYd2rCkNdExZ
+         C3kQKTj/iP7gJoam9/wSfc31fblhQsD+6XCPRM7fzCiEHYeEN6WkS3e2P1o7Gagyteey
+         61w+j3zr6jrdEKg29APNHXKmxMAIX0OP6IM5cVYB5usU2he5EXr8z3W2k7V4CFuRAOtM
+         Fz7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nrJg5dHzARiyIgQKcQeBmx5MsP72TzRX4UN4jKQ0FKU=;
+        b=OvRSCGCBSUdWhgo5fSgbMg7/LkHhS9mBNNzOPuIelnQ9NHjJDNW2yavI0xaGRxivhN
+         zr2su3MFu1hCNWhPXRx8Y6f60vtbj2mNz9aZCNpplgLY72gjrZ+WxXGigmI73zM+qz8L
+         acBiUdWXaY/3zsdorVQq+gTCGYjL5a68lrNUjf7NCQTQr8ENElavHV7RhO5ywAt75UHk
+         x+9TvY2u2OjnGPuI4qCuluxpKBB6qI3QGuN5IfZeKHqu0lVN8wbXi7MYGZhRE60Fxv45
+         Ztf41Vf6aF7knDH1MFSuS6UtZ/vT3OEEVR6yLK4ysBdkHgfyctJ1OMYe/hPkuq0bnFLx
+         HFuQ==
+X-Gm-Message-State: AOAM532Dnttc6u8dlgwo/8FgYH7XWHQK3+3JvMEhqge+fx4SqbvHzQc4
+        zYXtNzOHnRr78eyLEBJdzR0cTcK9H8Q=
+X-Google-Smtp-Source: ABdhPJyzIFpwRi/Ye1hyQXChNaeuAzQ4Swk/DOVybSf+u7iXsUyYbQPKNoluotDUjitLamCitTCoeQ==
+X-Received: by 2002:a63:cc49:: with SMTP id q9mr6397442pgi.390.1597568956323;
+        Sun, 16 Aug 2020 02:09:16 -0700 (PDT)
+Received: from bobo.ozlabs.ibm.com (193-116-193-175.tpgi.com.au. [193.116.193.175])
+        by smtp.gmail.com with ESMTPSA id o19sm12768369pjs.8.2020.08.16.02.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Aug 2020 02:09:15 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
-        Ganapatrao Kulkarni <gkulkarni@cavium.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20200814214725.28818-1-atish.patra@wdc.com>
- <20200814214725.28818-7-atish.patra@wdc.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <0d5046a4-8b7e-6279-ccd2-e02b2a091139@infradead.org>
-Date:   Fri, 14 Aug 2020 16:21:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Zefan Li <lizefan@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Subject: [PATCH v4 0/8] huge vmalloc mappings
+Date:   Sun, 16 Aug 2020 19:08:56 +1000
+Message-Id: <20200816090904.83947-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20200814214725.28818-7-atish.patra@wdc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/14/20 2:47 PM, Atish Patra wrote:
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 7b5905529146..4bd67f94aaac 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -137,7 +137,7 @@ config PAGE_OFFSET
->  	default 0xffffffe000000000 if 64BIT && MAXPHYSMEM_128GB
->  
->  config ARCH_FLATMEM_ENABLE
-> -	def_bool y
-> +	def_bool !NUMA
->  
->  config ARCH_SPARSEMEM_ENABLE
->  	def_bool y
-> @@ -295,6 +295,35 @@ config TUNE_GENERIC
->  
->  endchoice
->  
-> +# Common NUMA Features
-> +config NUMA
-> +	bool "Numa Memory Allocation and Scheduler Support"
+Let's try again.
 
-	      NUMA
+Thanks,
+Nick
 
-> +	select GENERIC_ARCH_NUMA
-> +	select OF_NUMA
-> +	select ARCH_SUPPORTS_NUMA_BALANCING
-> +	help
-> +	  Enable NUMA (Non-Uniform Memory Access) support.
-> +
-> +	  The kernel will try to allocate memory used by a CPU on the
-> +	  local memory of the CPU and add some more NUMA awareness to the kernel.
-> +
-> +config NODES_SHIFT
-> +	int "Maximum NUMA Nodes (as a power of 2)"
-> +	range 1 10
-> +	default "2"
-> +	depends on NEED_MULTIPLE_NODES
-> +	help
-> +	  Specify the maximum number of NUMA Nodes available on the target
-> +	  system.  Increases memory reserved to accommodate various tables.
-> +
-> +config USE_PERCPU_NUMA_NODE_ID
-> +	def_bool y
-> +	depends on NUMA
-> +
-> +config NEED_PER_CPU_EMBED_FIRST_CHUNK
-> +	def_bool y
-> +	depends on NUMA
-> +
->  config RISCV_ISA_C
->  	bool "Emit compressed instructions when building Linux"
->  	default y
+Since v3:
+- Fixed an off-by-one bug in a loop
+- Fix !CONFIG_HAVE_ARCH_HUGE_VMAP build fail
+- Hopefully this time fix the arm64 vmap stack bug, thanks Jonathan
+  Cameron for debugging the cause of this (hopefully).
 
+Since v2:
+- Rebased on vmalloc cleanups, split series into simpler pieces.
+- Fixed several compile errors and warnings
+- Keep the page array and accounting in small page units because
+  struct vm_struct is an interface (this should fix x86 vmap stack debug
+  assert). [Thanks Zefan]
 
-thanks.
+Nicholas Piggin (8):
+  mm/vmalloc: fix vmalloc_to_page for huge vmap mappings
+  mm: apply_to_pte_range warn and fail if a large pte is encountered
+  mm/vmalloc: rename vmap_*_range vmap_pages_*_range
+  lib/ioremap: rename ioremap_*_range to vmap_*_range
+  mm: HUGE_VMAP arch support cleanup
+  mm: Move vmap_range from lib/ioremap.c to mm/vmalloc.c
+  mm/vmalloc: add vmap_range_noflush variant
+  mm/vmalloc: Hugepage vmalloc mappings
+
+ .../admin-guide/kernel-parameters.txt         |   2 +
+ arch/arm64/mm/mmu.c                           |  12 +-
+ arch/powerpc/mm/book3s64/radix_pgtable.c      |  10 +-
+ arch/x86/mm/ioremap.c                         |  12 +-
+ include/linux/io.h                            |   9 -
+ include/linux/vmalloc.h                       |  13 +
+ init/main.c                                   |   1 -
+ mm/ioremap.c                                  | 231 +--------
+ mm/memory.c                                   |  60 ++-
+ mm/vmalloc.c                                  | 445 +++++++++++++++---
+ 10 files changed, 461 insertions(+), 334 deletions(-)
+
 -- 
-~Randy
+2.23.0
 
