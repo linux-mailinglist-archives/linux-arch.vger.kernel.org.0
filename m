@@ -2,89 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7448F245F9F
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Aug 2020 10:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3B5246749
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Aug 2020 15:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgHQIXo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 17 Aug 2020 04:23:44 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:56383 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727959AbgHQIXR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:23:17 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-180-lNRQs7-OMBKEt5epJ5rllg-1; Mon, 17 Aug 2020 09:23:12 +0100
-X-MC-Unique: lNRQs7-OMBKEt5epJ5rllg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 17 Aug 2020 09:23:11 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 17 Aug 2020 09:23:11 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     Kees Cook <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: RE: [PATCH 09/11] x86: remove address space overrides using set_fs()
-Thread-Topic: [PATCH 09/11] x86: remove address space overrides using set_fs()
-Thread-Index: AQHWdGicIkTuqnSld0yWphpVxhe9Oqk79IHw
-Date:   Mon, 17 Aug 2020 08:23:11 +0000
-Message-ID: <935d551809894d14965e430e05d21057@AcuMS.aculab.com>
-References: <20200817073212.830069-1-hch@lst.de>
- <20200817073212.830069-10-hch@lst.de>
-In-Reply-To: <20200817073212.830069-10-hch@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728489AbgHQNYx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Aug 2020 09:24:53 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:36182 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727953AbgHQNYw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 17 Aug 2020 09:24:52 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 7A00CE75938667D035FB;
+        Mon, 17 Aug 2020 21:24:10 +0800 (CST)
+Received: from [127.0.0.1] (10.174.178.19) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Mon, 17 Aug 2020
+ 21:24:04 +0800
+Subject: Re: [PATCH v4 6/8] mm: Move vmap_range from lib/ioremap.c to
+ mm/vmalloc.c
+To:     Nicholas Piggin <npiggin@gmail.com>, <linux-mm@kvack.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Zefan Li <lizefan@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        <john.wanghui@huawei.com>
+References: <20200816090904.83947-1-npiggin@gmail.com>
+ <20200816090904.83947-7-npiggin@gmail.com>
+From:   Tang Yizhou <tangyizhou@huawei.com>
+Message-ID: <27dd4db0-00e1-383a-f276-1622b2e68a4d@huawei.com>
+Date:   Mon, 17 Aug 2020 21:23:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.1.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200816090904.83947-7-npiggin@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.19]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 17 August 2020 08:32
->
-> Stop providing the possibility to override the address space using
-> set_fs() now that there is no need for that any more.  To properly
-> handle the TASK_SIZE_MAX checking for 4 vs 5-level page tables on
-> x86 a new alternative is introduced, which just like the one in
-> entry_64.S has to use the hardcoded virtual address bits to escape
-> the fact that TASK_SIZE_MAX isn't actually a constant when 5-level
-> page tables are enabled.
-....
-> @@ -93,7 +69,7 @@ static inline bool pagefault_disabled(void);
->  #define access_ok(addr, size)					\
->  ({									\
->  	WARN_ON_IN_IRQ();						\
-> -	likely(!__range_not_ok(addr, size, user_addr_max()));		\
-> +	likely(!__range_not_ok(addr, size, TASK_SIZE_MAX));		\
->  })
+Hi Nicholas,
 
-Can't that always compare against a constant even when 5-levl
-page tables are enabled on x86-64?
+We may change the title as follows:
+mm: Move vmap_range from mm/ioremap.c to mm/vmalloc.c
 
-On x86-64 it can (probably) reduce to (addr | (addr + size)) < 0.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Yizhou
 
