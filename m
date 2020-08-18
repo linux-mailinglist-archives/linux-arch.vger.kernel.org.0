@@ -2,121 +2,177 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B102D2480B9
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 10:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5F02486FA
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 16:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgHRIeq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Aug 2020 04:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgHRIeo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 04:34:44 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A907C061389
-        for <linux-arch@vger.kernel.org>; Tue, 18 Aug 2020 01:34:44 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id j7so17257882oij.9
-        for <linux-arch@vger.kernel.org>; Tue, 18 Aug 2020 01:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VaNLfRHzjmAhC1MdbIpHRe1zX0H+Foac1RDS2VP3MjY=;
-        b=V8m3BO+xQsaDn6apX6pTobxkTbSUhaMeuMiydfuHreAWCgHIaA991/fUS80QjjH6tr
-         9Lfd3ND0qs72vIyYPvdS6NX4eSyCjqJVLGkwnfxit5pv0DWj0rzvb75ZfUBuogBAKUEI
-         ZCM+qe2Qpg8RDHCsOOwIW77ytRIC3Oh97zJ80dKa7gO0DSp4imvOur356ErhatfrY7ow
-         4xJg4OQdWztwPcPMt/d45VF32M4g4plqkKxpWjzFAjts+apj2yvLW4Nw6pF6l2X1i6Lv
-         rBCIYWRNFhsVsun8E2QDtNBeFTf+/IwwbOb7SNoenOgPJJA9D6tXe9vH8SJJJ81AAEuf
-         LbHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VaNLfRHzjmAhC1MdbIpHRe1zX0H+Foac1RDS2VP3MjY=;
-        b=lWxMc+Y+D7XurkYtMZxLaliVQHFOq3vKQ/yto3KCfnFWsSuxgLnWbCBGs3p9fQbysn
-         bEIwZnGeZxWMF7/s+hxfwqTTR5my/WI0b0tD0QdVgtaqwYzeDAIdpZgnFhBavbtXKe/I
-         F7GE09PlkoeHEYyy3rkOi9N/eENpdTDQaSV/37VUISHGLS9pcH672E9xk/6EdQmz3jUx
-         JKUPLAUr4ohGZGox1r43Fvn0GQ9GE9l01NvF7qTVDSrVZOHebltGJ+kOabWlrDnl2wk8
-         tIdN4E7mkVF1cmGuL0ucTF2TuaqaPiM2juSwMmC3DLjOupzBnJE2V0z7VIYwzN+tWjsR
-         fM9Q==
-X-Gm-Message-State: AOAM531u4JCbZ0kCJSnrwVlgVcqqVDqmzhvmnO2Z8h7ioV8iZvudPAnh
-        D/DjAB2pOrsQOm9dEch63Z5SaR1LbR0vKzG7qWTg1A==
-X-Google-Smtp-Source: ABdhPJyUI34+cEe7L+qs4oF73ktcijLK54TBk3MsXc7f1Mxc3Kxj21GJmXN46BOFLKz3XUly164YYJYQGgakd45oPhc=
-X-Received: by 2002:aca:5145:: with SMTP id f66mr12152867oib.172.1597739680577;
- Tue, 18 Aug 2020 01:34:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200813163859.1542009-1-elver@google.com>
-In-Reply-To: <20200813163859.1542009-1-elver@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 18 Aug 2020 10:34:28 +0200
-Message-ID: <CANpmjNOvS2FbvAk+j8N0uSuUJgbi=L2_zfK_koOKvJCuys7r7Q@mail.gmail.com>
-Subject: Re: [PATCH] bitops, kcsan: Partially revert instrumentation for
- non-atomic bitops
-To:     Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        id S1727077AbgHROQS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Aug 2020 10:16:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50124 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727072AbgHROQP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 18 Aug 2020 10:16:15 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 27F7D20786;
+        Tue, 18 Aug 2020 14:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597760172;
+        bh=IMWe0uEfWphXmdXBrS86ktgzLDd1wXmECJxjWh3Nbo8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LOEB8BvlwPsxT0KMHs+tqeqV7zbJtoHgcBTgZ+8IJhT+2BYuPOPjEYKZJgJ0/iSed
+         xePxCrxKM3sPMLM9VrIdwT8ed/0huYmu1K+pbIjZA+U8rLDxGliw1hPUwTj76rN7dh
+         uq/IsuqIyFZiAZbDbOqQ13mwiVJK6fuUnJKnQ8sc=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Subject: [PATCH v4 0/6] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Tue, 18 Aug 2020 17:15:48 +0300
+Message-Id: <20200818141554.13945-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 13 Aug 2020 at 18:39, Marco Elver <elver@google.com> wrote:
-> Previous to the change to distinguish read-write accesses, when
-> CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=y is set, KCSAN would consider
-> the non-atomic bitops as atomic. We want to partially revert to this
-> behaviour, but with one important distinction: report racing
-> modifications, since lost bits due to non-atomicity are certainly
-> possible.
->
-> Given the operations here only modify a single bit, assuming
-> non-atomicity of the writer is sufficient may be reasonable for certain
-> usage (and follows the permissible nature of the "assume plain writes
-> atomic" rule). In other words:
->
->         1. We want non-atomic read-modify-write races to be reported;
->            this is accomplished by kcsan_check_read(), where any
->            concurrent write (atomic or not) will generate a report.
->
->         2. We do not want to report races with marked readers, but -do-
->            want to report races with unmarked readers; this is
->            accomplished by the instrument_write() ("assume atomic
->            write" with Kconfig option set).
->
-> With the above rules, when KCSAN_ASSUME_PLAIN_WRITES_ATOMIC is selected,
-> it is hoped that KCSAN's reporting behaviour is better aligned with
-> current expected permissible usage for non-atomic bitops.
->
-> Note that, a side-effect of not telling KCSAN that the accesses are
-> read-writes, is that this information is not displayed in the access
-> summary in the report. It is, however, visible in inline-expanded stack
-> traces. For now, it does not make sense to introduce yet another special
-> case to KCSAN's runtime, only to cater to the case here.
->
-> Signed-off-by: Marco Elver <elver@google.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> ---
-> As discussed, partially reverting behaviour for non-atomic bitops when
-> KCSAN_ASSUME_PLAIN_WRITES_ATOMIC is selected.
->
-> I'd like to avoid more special cases in KCSAN's runtime to cater to
-> cases like this, not only because it adds more complexity, but it
-> invites more special cases to be added. If there are other such
-> primitives, we likely have to do it on a case-by-case basis as well, and
-> justify carefully for each such case. But currently, as far as I can
-> tell, the bitops are truly special, simply because we do know each op
-> just touches a single bit.
-> ---
->  .../bitops/instrumented-non-atomic.h          | 30 +++++++++++++++++--
->  1 file changed, 27 insertions(+), 3 deletions(-)
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Paul, if it looks good to you, feel free to pick it up.
+Hi,
 
-Thanks,
--- Marco
+This is an implementation of "secret" mappings backed by a file descriptor. 
+
+v4 changes:
+* rebase on v5.9-rc1
+* Do not redefine PMD_PAGE_ORDER in fs/dax.c, thanks Kirill
+* Make secret mappings exclusive by default and only require flags to
+  memfd_secret() system call for uncached mappings, thanks again Kirill :)
+
+v3 changes:
+* Squash kernel-parameters.txt update into the commit that added the
+  command line option.
+* Make uncached mode explicitly selectable by architectures. For now enable
+  it only on x86.
+
+v2 changes:
+* Follow Michael's suggestion and name the new system call 'memfd_secret'
+* Add kernel-parameters documentation about the boot option
+* Fix i386-tinyconfig regression reported by the kbuild bot.
+  CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+  from one side and still make it available unconditionally on
+  architectures that support SET_DIRECT_MAP.
+
+
+The file descriptor backing secret memory mappings is created using a
+dedicated memfd_secret system call The desired protection mode for the
+memory is configured using flags parameter of the system call. The mmap()
+of the file descriptor created with memfd_secret() will create a "secret"
+memory mapping. The pages in that mapping will be marked as not present in
+the direct map and will have desired protection bits set in the user page
+table. For instance, current implementation allows uncached mappings.
+
+Although normally Linux userspace mappings are protected from other users, 
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
+
+Additionally, the secret mappings may be used as a mean to protect guest
+memory in a virtual machine host.
+
+For demonstration of secret memory usage we've created a userspace library
+[1] that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
+
+I've hesitated whether to continue to use new flags to memfd_create() or to
+add a new system call and I've decided to use a new system call after I've
+started to look into man pages update. There would have been two completely
+independent descriptions and I think it would have been very confusing.
+
+Hiding secret memory mappings behind an anonymous file allows (ab)use of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
+
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
+
+As the fragmentation of the direct map was one of the major concerns raised
+during the previous postings, I've added an amortizing cache of PMD-size
+pages to each file descriptor and an ability to reserve large chunks of the
+physical memory at boot time and then use this memory as an allocation pool
+for the secret memory areas.
+
+v3: https://lore.kernel.org/lkml/20200804095035.18778-1-rppt@kernel.org
+v2: https://lore.kernel.org/lkml/20200727162935.31714-1-rppt@kernel.org
+v1: https://lore.kernel.org/lkml/20200720092435.17469-1-rppt@kernel.org/
+rfc-v2: https://lore.kernel.org/lkml/20200706172051.19465-1-rppt@kernel.org/
+rfc-v1: https://lore.kernel.org/lkml/20200130162340.GA14232@rapoport-lnx/
+
+Mike Rapoport (6):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  mm: introduce memfd_secret system call to create "secret" memory areas
+  arch, mm: wire up memfd_secret system call were relevant
+  mm: secretmem: use PMD-size pages to amortize direct map fragmentation
+  mm: secretmem: add ability to reserve memory at boot
+
+ arch/Kconfig                           |   7 +
+ arch/arm64/include/asm/unistd.h        |   2 +-
+ arch/arm64/include/asm/unistd32.h      |   2 +
+ arch/arm64/include/uapi/asm/unistd.h   |   1 +
+ arch/riscv/include/asm/unistd.h        |   1 +
+ arch/x86/Kconfig                       |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+ fs/dax.c                               |  11 +-
+ include/linux/pgtable.h                |   3 +
+ include/linux/syscalls.h               |   1 +
+ include/uapi/asm-generic/unistd.h      |   7 +-
+ include/uapi/linux/magic.h             |   1 +
+ include/uapi/linux/secretmem.h         |   8 +
+ kernel/sys_ni.c                        |   2 +
+ mm/Kconfig                             |   4 +
+ mm/Makefile                            |   1 +
+ mm/internal.h                          |   3 +
+ mm/mmap.c                              |   5 +-
+ mm/secretmem.c                         | 451 +++++++++++++++++++++++++
+ 20 files changed, 501 insertions(+), 12 deletions(-)
+ create mode 100644 include/uapi/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+
+-- 
+2.26.2
+
