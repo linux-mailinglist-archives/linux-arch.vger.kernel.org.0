@@ -2,97 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 016F7247F47
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 09:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B102D2480B9
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 10:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbgHRHWm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Aug 2020 03:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S1726640AbgHRIeq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Aug 2020 04:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgHRHWk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 03:22:40 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA7AC061389;
-        Tue, 18 Aug 2020 00:22:40 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id t11so8810246plr.5;
-        Tue, 18 Aug 2020 00:22:39 -0700 (PDT)
+        with ESMTP id S1726043AbgHRIeo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 04:34:44 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A907C061389
+        for <linux-arch@vger.kernel.org>; Tue, 18 Aug 2020 01:34:44 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id j7so17257882oij.9
+        for <linux-arch@vger.kernel.org>; Tue, 18 Aug 2020 01:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=ngrPbPBRbUsq6w+flBSZQV2nOcmo/y3wzfu+I9RjOwM=;
-        b=TSPQYiEu1Z3JAOqWBoqY0hkMurM6qzutlorBVGTCiYHNvCTc6oGO2lvpnf9ygeWYuk
-         /hGBax/Aor+9svcSrfngM0CKK3dbpDJc8onXTK9HHtR8G1nWkVBzOz/GzwYyI2Yydf0y
-         28NXnmPerG5D0pXpjDvuYp+cFFSYBQujB7GhYS9wU9QhpDn82QALLxrH4lMdBz4XlGEL
-         ZyWsXpMC/yMp1GmvYiGoqK5+pBRrbFENkDXjDALUFLx+piH1/xZ2McUr3DB0MXJB/zJR
-         Ev8G5+7QjObdSdOFB4uNtu0xANrJPcsSOfvdEN/I3bu5ZF5+xyaxjBcJno801fSmWgRr
-         yxkA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VaNLfRHzjmAhC1MdbIpHRe1zX0H+Foac1RDS2VP3MjY=;
+        b=V8m3BO+xQsaDn6apX6pTobxkTbSUhaMeuMiydfuHreAWCgHIaA991/fUS80QjjH6tr
+         9Lfd3ND0qs72vIyYPvdS6NX4eSyCjqJVLGkwnfxit5pv0DWj0rzvb75ZfUBuogBAKUEI
+         ZCM+qe2Qpg8RDHCsOOwIW77ytRIC3Oh97zJ80dKa7gO0DSp4imvOur356ErhatfrY7ow
+         4xJg4OQdWztwPcPMt/d45VF32M4g4plqkKxpWjzFAjts+apj2yvLW4Nw6pF6l2X1i6Lv
+         rBCIYWRNFhsVsun8E2QDtNBeFTf+/IwwbOb7SNoenOgPJJA9D6tXe9vH8SJJJ81AAEuf
+         LbHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=ngrPbPBRbUsq6w+flBSZQV2nOcmo/y3wzfu+I9RjOwM=;
-        b=kH4sSiZkvG3lgpfpA6m6pQZqax9CAYWEC4kXATYHvu2P8PsNCe2P5i1qGTcBvN/gGK
-         u9cac4MVGpaMTb+jOpxgOJkYORPXYU3jgGpySiuYwMEGqQ/XuCqn7LObN8WYQmYwXt4D
-         G4M23xlSuN/MfrOugPotPHLHFOfgfQ9aOVmf1iaE4Q9EWbJgl3BIE9IXYaPt3akKob8i
-         rwyrNRzp0hxoel1UeGeYA8TgSliKngCBEnETO5J8meGWpnIqRNuJ3mE7pD4EcurYxsBZ
-         eUvcVVX3XQBRsqFMbPflw6SNHqAHpxd3Y6iBeFoqthCn5r52ZDSqFAtVoHDCqTsxP/PF
-         S52w==
-X-Gm-Message-State: AOAM532xwEUMjEFrE2mkSTLl6JPsJSJzI5D13ftUWCRTaGfBZX+mzWJo
-        nGRX7ugDHnyA4TAV7/NceOE=
-X-Google-Smtp-Source: ABdhPJwWicVHjLC3nLnAfAzUswzycukvUhFKVQxdfOgfh/aUNHN6aaAIYbgqXGGLh0wn8G5+FzQeQw==
-X-Received: by 2002:a17:90a:e990:: with SMTP id v16mr16323320pjy.194.1597735359589;
-        Tue, 18 Aug 2020 00:22:39 -0700 (PDT)
-Received: from localhost (193-116-193-175.tpgi.com.au. [193.116.193.175])
-        by smtp.gmail.com with ESMTPSA id z26sm21152854pgc.44.2020.08.18.00.22.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2020 00:22:39 -0700 (PDT)
-Date:   Tue, 18 Aug 2020 17:22:33 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
- synchronisation with actual irq state
-To:     peterz@infradead.org
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-References: <20200723105615.1268126-1-npiggin@gmail.com>
-        <20200807111126.GI2674@hirez.programming.kicks-ass.net>
-        <1597220073.mbvcty6ghk.astroid@bobo.none>
-        <20200812103530.GL2674@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200812103530.GL2674@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VaNLfRHzjmAhC1MdbIpHRe1zX0H+Foac1RDS2VP3MjY=;
+        b=lWxMc+Y+D7XurkYtMZxLaliVQHFOq3vKQ/yto3KCfnFWsSuxgLnWbCBGs3p9fQbysn
+         bEIwZnGeZxWMF7/s+hxfwqTTR5my/WI0b0tD0QdVgtaqwYzeDAIdpZgnFhBavbtXKe/I
+         F7GE09PlkoeHEYyy3rkOi9N/eENpdTDQaSV/37VUISHGLS9pcH672E9xk/6EdQmz3jUx
+         JKUPLAUr4ohGZGox1r43Fvn0GQ9GE9l01NvF7qTVDSrVZOHebltGJ+kOabWlrDnl2wk8
+         tIdN4E7mkVF1cmGuL0ucTF2TuaqaPiM2juSwMmC3DLjOupzBnJE2V0z7VIYwzN+tWjsR
+         fM9Q==
+X-Gm-Message-State: AOAM531u4JCbZ0kCJSnrwVlgVcqqVDqmzhvmnO2Z8h7ioV8iZvudPAnh
+        D/DjAB2pOrsQOm9dEch63Z5SaR1LbR0vKzG7qWTg1A==
+X-Google-Smtp-Source: ABdhPJyUI34+cEe7L+qs4oF73ktcijLK54TBk3MsXc7f1Mxc3Kxj21GJmXN46BOFLKz3XUly164YYJYQGgakd45oPhc=
+X-Received: by 2002:aca:5145:: with SMTP id f66mr12152867oib.172.1597739680577;
+ Tue, 18 Aug 2020 01:34:40 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <1597735273.s0usqkrlsk.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20200813163859.1542009-1-elver@google.com>
+In-Reply-To: <20200813163859.1542009-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 18 Aug 2020 10:34:28 +0200
+Message-ID: <CANpmjNOvS2FbvAk+j8N0uSuUJgbi=L2_zfK_koOKvJCuys7r7Q@mail.gmail.com>
+Subject: Re: [PATCH] bitops, kcsan: Partially revert instrumentation for
+ non-atomic bitops
+To:     Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from peterz@infradead.org's message of August 12, 2020 8:35 pm:
-> On Wed, Aug 12, 2020 at 06:18:28PM +1000, Nicholas Piggin wrote:
->> Excerpts from peterz@infradead.org's message of August 7, 2020 9:11 pm:
->> >=20
->> > What's wrong with something like this?
->> >=20
->> > AFAICT there's no reason to actually try and add IRQ tracing here, it'=
-s
->> > just a hand full of instructions at the most.
->>=20
->> Because we may want to use that in other places as well, so it would
->> be nice to have tracing.
->>=20
->> Hmm... also, I thought NMI context was free to call local_irq_save/resto=
-re
->> anyway so the bug would still be there in those cases?
->=20
-> NMI code has in_nmi() true, in which case the IRQ tracing is disabled
-> (except for x86 which has CONFIG_TRACE_IRQFLAGS_NMI).
->=20
+On Thu, 13 Aug 2020 at 18:39, Marco Elver <elver@google.com> wrote:
+> Previous to the change to distinguish read-write accesses, when
+> CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=y is set, KCSAN would consider
+> the non-atomic bitops as atomic. We want to partially revert to this
+> behaviour, but with one important distinction: report racing
+> modifications, since lost bits due to non-atomicity are certainly
+> possible.
+>
+> Given the operations here only modify a single bit, assuming
+> non-atomicity of the writer is sufficient may be reasonable for certain
+> usage (and follows the permissible nature of the "assume plain writes
+> atomic" rule). In other words:
+>
+>         1. We want non-atomic read-modify-write races to be reported;
+>            this is accomplished by kcsan_check_read(), where any
+>            concurrent write (atomic or not) will generate a report.
+>
+>         2. We do not want to report races with marked readers, but -do-
+>            want to report races with unmarked readers; this is
+>            accomplished by the instrument_write() ("assume atomic
+>            write" with Kconfig option set).
+>
+> With the above rules, when KCSAN_ASSUME_PLAIN_WRITES_ATOMIC is selected,
+> it is hoped that KCSAN's reporting behaviour is better aligned with
+> current expected permissible usage for non-atomic bitops.
+>
+> Note that, a side-effect of not telling KCSAN that the accesses are
+> read-writes, is that this information is not displayed in the access
+> summary in the report. It is, however, visible in inline-expanded stack
+> traces. For now, it does not make sense to introduce yet another special
+> case to KCSAN's runtime, only to cater to the case here.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+> As discussed, partially reverting behaviour for non-atomic bitops when
+> KCSAN_ASSUME_PLAIN_WRITES_ATOMIC is selected.
+>
+> I'd like to avoid more special cases in KCSAN's runtime to cater to
+> cases like this, not only because it adds more complexity, but it
+> invites more special cases to be added. If there are other such
+> primitives, we likely have to do it on a case-by-case basis as well, and
+> justify carefully for each such case. But currently, as far as I can
+> tell, the bitops are truly special, simply because we do know each op
+> just touches a single bit.
+> ---
+>  .../bitops/instrumented-non-atomic.h          | 30 +++++++++++++++++--
+>  1 file changed, 27 insertions(+), 3 deletions(-)
 
-That doesn't help. It doesn't fix the lockdep irq state going out of
-synch with the actual irq state. The code which triggered this with the
-special powerpc irq disable has in_nmi() true as well.
+Paul, if it looks good to you, feel free to pick it up.
 
 Thanks,
-Nick
+-- Marco
