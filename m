@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD77248D1F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 19:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C30248D24
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 19:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728823AbgHRRfX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Aug 2020 13:35:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:52460 "EHLO
+        id S1728748AbgHRRfT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Aug 2020 13:35:19 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:52465 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728664AbgHRReh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 13:34:37 -0400
+        with ESMTP id S1728678AbgHRRej (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 13:34:39 -0400
 Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1k85VJ-0003E9-0d; Tue, 18 Aug 2020 17:34:33 +0000
+        id 1k85VK-0003E9-Cg; Tue, 18 Aug 2020 17:34:34 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Christoph Hewllig <hch@infradead.org>,
         linux-kernel@vger.kernel.org,
@@ -48,13 +48,10 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         kgdb-bugreport@lists.sourceforge.net,
         linux-kselftest@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jason Wessel <jason.wessel@windriver.com>
-Subject: [PATCH 09/11] kgdbts: switch to kernel_clone()
-Date:   Tue, 18 Aug 2020 19:34:09 +0200
-Message-Id: <20200818173411.404104-10-christian.brauner@ubuntu.com>
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH 10/11] tracing: switch to kernel_clone()
+Date:   Tue, 18 Aug 2020 19:34:10 +0200
+Message-Id: <20200818173411.404104-11-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200818173411.404104-1-christian.brauner@ubuntu.com>
 References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
@@ -68,152 +65,387 @@ X-Mailing-List: linux-arch@vger.kernel.org
 The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
 The latter adheres to naming conventions for kernel internal syscall helpers.
 
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: kgdb-bugreport@lists.sourceforge.net
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Alexandre Chartre <alexandre.chartre@oracle.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Xiao Yang <yangx.jy@cn.fujitsu.com>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
- drivers/misc/kgdbts.c | 48 +++++++++++++++++++++----------------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+ Documentation/trace/histogram.rst                  |  4 ++--
+ samples/kprobes/kretprobe_example.c                |  4 ++--
+ .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |  2 +-
+ .../ftrace/test.d/dynevent/clear_select_events.tc  |  2 +-
+ .../ftrace/test.d/dynevent/generic_clear_event.tc  |  2 +-
+ .../ftrace/test.d/ftrace/func-filter-stacktrace.tc |  4 ++--
+ .../ftrace/test.d/kprobe/add_and_remove.tc         |  2 +-
+ .../selftests/ftrace/test.d/kprobe/busy_check.tc   |  2 +-
+ .../selftests/ftrace/test.d/kprobe/kprobe_args.tc  |  4 ++--
+ .../ftrace/test.d/kprobe/kprobe_args_comm.tc       |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_args_string.tc     |  4 ++--
+ .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     | 10 +++++-----
+ .../ftrace/test.d/kprobe/kprobe_args_type.tc       |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_ftrace.tc          | 14 +++++++-------
+ .../ftrace/test.d/kprobe/kprobe_multiprobe.tc      |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   | 12 ++++++------
+ .../ftrace/test.d/kprobe/kretprobe_args.tc         |  4 ++--
+ .../selftests/ftrace/test.d/kprobe/profile.tc      |  2 +-
+ 18 files changed, 39 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-index d5d2af4d10e6..945701bce553 100644
---- a/drivers/misc/kgdbts.c
-+++ b/drivers/misc/kgdbts.c
-@@ -33,16 +33,16 @@
-  * You can also specify optional tests:
-  * N## = Go to sleep with interrupts of for ## seconds
-  *       to test the HW NMI watchdog
-- * F## = Break at do_fork for ## iterations
-+ * F## = Break at kernel_clone for ## iterations
-  * S## = Break at sys_open for ## iterations
-  * I## = Run the single step test ## iterations
-  *
-- * NOTE: that the do_fork and sys_open tests are mutually exclusive.
-+ * NOTE: that the kernel_clone and sys_open tests are mutually exclusive.
-  *
-  * To invoke the kgdb test suite from boot you use a kernel start
-  * argument as follows:
-  * 	kgdbts=V1 kgdbwait
-- * Or if you wanted to perform the NMI test for 6 seconds and do_fork
-+ * Or if you wanted to perform the NMI test for 6 seconds and kernel_clone
-  * test for 100 forks, you could use:
-  * 	kgdbts=V1N6F100 kgdbwait
-  *
-@@ -74,7 +74,7 @@
-  * echo kgdbts=V1S10000 > /sys/module/kgdbts/parameters/kgdbts
-  * fg # and hit control-c
-  * fg # and hit control-c
-- * ## This tests break points on do_fork
-+ * ## This tests break points on kernel_clone
-  * while [ 1 ] ; do date > /dev/null ; done &
-  * while [ 1 ] ; do date > /dev/null ; done &
-  * echo kgdbts=V1F1000 > /sys/module/kgdbts/parameters/kgdbts
-@@ -209,8 +209,8 @@ static unsigned long lookup_addr(char *arg)
- 		addr = (unsigned long)kgdbts_break_test;
- 	else if (!strcmp(arg, "sys_open"))
- 		addr = (unsigned long)do_sys_open;
--	else if (!strcmp(arg, "do_fork"))
--		addr = (unsigned long)_do_fork;
-+	else if (!strcmp(arg, "kernel_clone"))
-+		addr = (unsigned long)kernel_clone;
- 	else if (!strcmp(arg, "hw_break_val"))
- 		addr = (unsigned long)&hw_break_val;
- 	addr = (unsigned long) dereference_function_descriptor((void *)addr);
-@@ -310,7 +310,7 @@ static int check_and_rewind_pc(char *put_str, char *arg)
+diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
+index 8408670d0328..f93333524a44 100644
+--- a/Documentation/trace/histogram.rst
++++ b/Documentation/trace/histogram.rst
+@@ -1495,7 +1495,7 @@ Extended error information
+     #
  
- 	if (arch_needs_sstep_emulation && sstep_addr &&
- 	    ip + offset == sstep_addr &&
--	    ((!strcmp(arg, "sys_open") || !strcmp(arg, "do_fork")))) {
-+	    ((!strcmp(arg, "sys_open") || !strcmp(arg, "kernel_clone")))) {
- 		/* This is special case for emulated single step */
- 		v2printk("Emul: rewind hit single step bp\n");
- 		restart_from_top_after_write = 1;
-@@ -596,19 +596,19 @@ static struct test_struct singlestep_break_test[] = {
- };
+     { stacktrace:
+-             _do_fork+0x18e/0x330
++             kernel_clone+0x18e/0x330
+              kernel_thread+0x29/0x30
+              kthreadd+0x154/0x1b0
+              ret_from_fork+0x3f/0x70
+@@ -1588,7 +1588,7 @@ Extended error information
+              SYSC_sendto+0xef/0x170
+     } hitcount:         88
+     { stacktrace:
+-             _do_fork+0x18e/0x330
++             kernel_clone+0x18e/0x330
+              SyS_clone+0x19/0x20
+              entry_SYSCALL_64_fastpath+0x12/0x6a
+     } hitcount:        244
+diff --git a/samples/kprobes/kretprobe_example.c b/samples/kprobes/kretprobe_example.c
+index 78a2da6fb3cd..0c40f7236989 100644
+--- a/samples/kprobes/kretprobe_example.c
++++ b/samples/kprobes/kretprobe_example.c
+@@ -8,7 +8,7 @@
+  *
+  * usage: insmod kretprobe_example.ko func=<func_name>
+  *
+- * If no func_name is specified, _do_fork is instrumented
++ * If no func_name is specified, kernel_clone is instrumented
+  *
+  * For more information on theory of operation of kretprobes, see
+  * Documentation/staging/kprobes.rst
+@@ -26,7 +26,7 @@
+ #include <linux/limits.h>
+ #include <linux/sched.h>
  
- /*
-- * Test for hitting a breakpoint at do_fork for what ever the number
-+ * Test for hitting a breakpoint at kernel_clone for what ever the number
-  * of iterations required by the variable repeat_test.
-  */
--static struct test_struct do_fork_test[] = {
-+static struct test_struct do_kernel_clone_test[] = {
- 	{ "?", "S0*" }, /* Clear break points */
--	{ "do_fork", "OK", sw_break, }, /* set sw breakpoint */
-+	{ "kernel_clone", "OK", sw_break, }, /* set sw breakpoint */
- 	{ "c", "T0*", NULL, get_thread_id_continue }, /* Continue */
--	{ "do_fork", "OK", sw_rem_break }, /*remove breakpoint */
--	{ "g", "do_fork", NULL, check_and_rewind_pc }, /* check location */
-+	{ "kernel_clone", "OK", sw_rem_break }, /*remove breakpoint */
-+	{ "g", "kernel_clone", NULL, check_and_rewind_pc }, /* check location */
- 	{ "write", "OK", write_regs, emul_reset }, /* Write registers */
- 	{ "s", "T0*", emul_sstep_get, emul_sstep_put }, /* Single step */
--	{ "g", "do_fork", NULL, check_single_step },
--	{ "do_fork", "OK", sw_break, }, /* set sw breakpoint */
-+	{ "g", "kernel_clone", NULL, check_single_step },
-+	{ "kernel_clone", "OK", sw_break, }, /* set sw breakpoint */
- 	{ "7", "T0*", skip_back_repeat_test }, /* Loop based on repeat_test */
- 	{ "D", "OK", NULL, final_ack_set }, /* detach and unregister I/O */
- 	{ "", "", get_cont_catch, put_cont_catch },
-@@ -935,11 +935,11 @@ static void run_bad_read_test(void)
- 	kgdb_breakpoint();
+-static char func_name[NAME_MAX] = "_do_fork";
++static char func_name[NAME_MAX] = "kernel_clone";
+ module_param_string(func, func_name, NAME_MAX, S_IRUGO);
+ MODULE_PARM_DESC(func, "Function to kretprobe; this module will report the"
+ 			" function's execution time");
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
+index 68550f97d3c3..3bcd4c3624ee 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
+@@ -6,7 +6,7 @@
+ echo 0 > events/enable
+ echo > dynamic_events
+ 
+-PLACE=_do_fork
++PLACE=kernel_clone
+ 
+ echo "p:myevent1 $PLACE" >> dynamic_events
+ echo "r:myevent2 $PLACE" >> dynamic_events
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/clear_select_events.tc b/tools/testing/selftests/ftrace/test.d/dynevent/clear_select_events.tc
+index c969be9eb7de..438961971b7e 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/clear_select_events.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/clear_select_events.tc
+@@ -6,7 +6,7 @@
+ echo 0 > events/enable
+ echo > dynamic_events
+ 
+-PLACE=_do_fork
++PLACE=kernel_clone
+ 
+ setup_events() {
+ echo "p:myevent1 $PLACE" >> dynamic_events
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/generic_clear_event.tc b/tools/testing/selftests/ftrace/test.d/dynevent/generic_clear_event.tc
+index 16d543eaac88..a8603bd23e0d 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/generic_clear_event.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/generic_clear_event.tc
+@@ -6,7 +6,7 @@
+ echo 0 > events/enable
+ echo > dynamic_events
+ 
+-PLACE=_do_fork
++PLACE=kernel_clone
+ 
+ setup_events() {
+ echo "p:myevent1 $PLACE" >> dynamic_events
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
+index 0f41e441c203..98305d76bd04 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
+@@ -4,9 +4,9 @@
+ # requires: set_ftrace_filter
+ # flags: instance
+ 
+-echo _do_fork:stacktrace >> set_ftrace_filter
++echo kernel_clone:stacktrace >> set_ftrace_filter
+ 
+-grep -q "_do_fork:stacktrace:unlimited" set_ftrace_filter
++grep -q "kernel_clone:stacktrace:unlimited" set_ftrace_filter
+ 
+ (echo "forked"; sleep 1)
+ 
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/add_and_remove.tc b/tools/testing/selftests/ftrace/test.d/kprobe/add_and_remove.tc
+index eba858c21815..9737cd0578a7 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/add_and_remove.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/add_and_remove.tc
+@@ -3,7 +3,7 @@
+ # description: Kprobe dynamic event - adding and removing
+ # requires: kprobe_events
+ 
+-echo p:myevent _do_fork > kprobe_events
++echo p:myevent kernel_clone > kprobe_events
+ grep myevent kprobe_events
+ test -d events/kprobes/myevent
+ echo > kprobe_events
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/busy_check.tc b/tools/testing/selftests/ftrace/test.d/kprobe/busy_check.tc
+index d10bf4f05bc8..f9a40af76888 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/busy_check.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/busy_check.tc
+@@ -3,7 +3,7 @@
+ # description: Kprobe dynamic event - busy event check
+ # requires: kprobe_events
+ 
+-echo p:myevent _do_fork > kprobe_events
++echo p:myevent kernel_clone > kprobe_events
+ test -d events/kprobes/myevent
+ echo 1 > events/kprobes/myevent/enable
+ echo > kprobe_events && exit_fail # this must fail
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args.tc
+index 61f2ac441aec..eb543d3cfe5f 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args.tc
+@@ -3,13 +3,13 @@
+ # description: Kprobe dynamic event with arguments
+ # requires: kprobe_events
+ 
+-echo 'p:testprobe _do_fork $stack $stack0 +0($stack)' > kprobe_events
++echo 'p:testprobe kernel_clone $stack $stack0 +0($stack)' > kprobe_events
+ grep testprobe kprobe_events | grep -q 'arg1=\$stack arg2=\$stack0 arg3=+0(\$stack)'
+ test -d events/kprobes/testprobe
+ 
+ echo 1 > events/kprobes/testprobe/enable
+ ( echo "forked")
+-grep testprobe trace | grep '_do_fork' | \
++grep testprobe trace | grep 'kernel_clone' | \
+   grep -q 'arg1=0x[[:xdigit:]]* arg2=0x[[:xdigit:]]* arg3=0x[[:xdigit:]]*$'
+ 
+ echo 0 > events/kprobes/testprobe/enable
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+index 05aaeed6987f..4e5b63be51c9 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_comm.tc
+@@ -5,7 +5,7 @@
+ 
+ grep -A1 "fetcharg:" README | grep -q "\$comm" || exit_unsupported # this is too old
+ 
+-echo 'p:testprobe _do_fork comm=$comm ' > kprobe_events
++echo 'p:testprobe kernel_clone comm=$comm ' > kprobe_events
+ grep testprobe kprobe_events | grep -q 'comm=$comm'
+ test -d events/kprobes/testprobe
+ 
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+index b5fa05443b39..a1d70588ab21 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+@@ -30,13 +30,13 @@ esac
+ : "Test get argument (1)"
+ echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string" > kprobe_events
+ echo 1 > events/kprobes/testprobe/enable
+-echo "p:test _do_fork" >> kprobe_events
++echo "p:test kernel_clone" >> kprobe_events
+ grep -qe "testprobe.* arg1=\"test\"" trace
+ 
+ echo 0 > events/kprobes/testprobe/enable
+ : "Test get argument (2)"
+ echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):string arg2=+0(${ARG1}):string" > kprobe_events
+ echo 1 > events/kprobes/testprobe/enable
+-echo "p:test _do_fork" >> kprobe_events
++echo "p:test kernel_clone" >> kprobe_events
+ grep -qe "testprobe.* arg1=\"test\" arg2=\"test\"" trace
+ 
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+index b8c75a3d003c..bd25dd0ba0d0 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_symbol.tc
+@@ -14,12 +14,12 @@ elif ! grep "$SYMBOL\$" /proc/kallsyms; then
+ fi
+ 
+ : "Test get basic types symbol argument"
+-echo "p:testprobe_u _do_fork arg1=@linux_proc_banner:u64 arg2=@linux_proc_banner:u32 arg3=@linux_proc_banner:u16 arg4=@linux_proc_banner:u8" > kprobe_events
+-echo "p:testprobe_s _do_fork arg1=@linux_proc_banner:s64 arg2=@linux_proc_banner:s32 arg3=@linux_proc_banner:s16 arg4=@linux_proc_banner:s8" >> kprobe_events
++echo "p:testprobe_u kernel_clone arg1=@linux_proc_banner:u64 arg2=@linux_proc_banner:u32 arg3=@linux_proc_banner:u16 arg4=@linux_proc_banner:u8" > kprobe_events
++echo "p:testprobe_s kernel_clone arg1=@linux_proc_banner:s64 arg2=@linux_proc_banner:s32 arg3=@linux_proc_banner:s16 arg4=@linux_proc_banner:s8" >> kprobe_events
+ if grep -q "x8/16/32/64" README; then
+-  echo "p:testprobe_x _do_fork arg1=@linux_proc_banner:x64 arg2=@linux_proc_banner:x32 arg3=@linux_proc_banner:x16 arg4=@linux_proc_banner:x8" >> kprobe_events
++  echo "p:testprobe_x kernel_clone arg1=@linux_proc_banner:x64 arg2=@linux_proc_banner:x32 arg3=@linux_proc_banner:x16 arg4=@linux_proc_banner:x8" >> kprobe_events
+ fi
+-echo "p:testprobe_bf _do_fork arg1=@linux_proc_banner:b8@4/32" >> kprobe_events
++echo "p:testprobe_bf kernel_clone arg1=@linux_proc_banner:b8@4/32" >> kprobe_events
+ echo 1 > events/kprobes/enable
+ (echo "forked")
+ echo 0 > events/kprobes/enable
+@@ -27,7 +27,7 @@ grep "testprobe_[usx]:.* arg1=.* arg2=.* arg3=.* arg4=.*" trace
+ grep "testprobe_bf:.* arg1=.*" trace
+ 
+ : "Test get string symbol argument"
+-echo "p:testprobe_str _do_fork arg1=@linux_proc_banner:string" > kprobe_events
++echo "p:testprobe_str kernel_clone arg1=@linux_proc_banner:string" > kprobe_events
+ echo 1 > events/kprobes/enable
+ (echo "forked")
+ echo 0 > events/kprobes/enable
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+index 0610e0b5587c..91fcce1c241c 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+@@ -4,7 +4,7 @@
+ # requires: kprobe_events "x8/16/32/64":README
+ 
+ gen_event() { # Bitsize
+-  echo "p:testprobe _do_fork \$stack0:s$1 \$stack0:u$1 \$stack0:x$1 \$stack0:b4@4/$1"
++  echo "p:testprobe kernel_clone \$stack0:s$1 \$stack0:u$1 \$stack0:x$1 \$stack0:b4@4/$1"
  }
  
--static void run_do_fork_test(void)
-+static void run_kernel_clone_test(void)
- {
- 	init_simple_test();
--	ts.tst = do_fork_test;
--	ts.name = "do_fork_test";
-+	ts.tst = do_kernel_clone_test;
-+	ts.name = "do_kernel_clone_test";
- 	/* Activate test with initial breakpoint */
- 	kgdb_breakpoint();
- }
-@@ -967,7 +967,7 @@ static void run_singlestep_break_test(void)
- static void kgdbts_run_tests(void)
- {
- 	char *ptr;
--	int fork_test = 0;
-+	int clone_test = 0;
- 	int do_sys_open_test = 0;
- 	int sstep_test = 1000;
- 	int nmi_sleep = 0;
-@@ -981,7 +981,7 @@ static void kgdbts_run_tests(void)
+ check_types() { # s-type u-type x-type bf-type width
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc
+index 81d8b58c03bc..0d179094191f 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_ftrace.tc
+@@ -5,29 +5,29 @@
  
- 	ptr = strchr(config, 'F');
- 	if (ptr)
--		fork_test = simple_strtol(ptr + 1, NULL, 10);
-+		clone_test = simple_strtol(ptr + 1, NULL, 10);
- 	ptr = strchr(config, 'S');
- 	if (ptr)
- 		do_sys_open_test = simple_strtol(ptr + 1, NULL, 10);
-@@ -1025,16 +1025,16 @@ static void kgdbts_run_tests(void)
- 		run_nmi_sleep_test(nmi_sleep);
- 	}
+ # prepare
+ echo nop > current_tracer
+-echo _do_fork > set_ftrace_filter
+-echo 'p:testprobe _do_fork' > kprobe_events
++echo kernel_clone > set_ftrace_filter
++echo 'p:testprobe kernel_clone' > kprobe_events
  
--	/* If the do_fork test is run it will be the last test that is
-+	/* If the kernel_clone test is run it will be the last test that is
- 	 * executed because a kernel thread will be spawned at the very
- 	 * end to unregister the debug hooks.
- 	 */
--	if (fork_test) {
--		repeat_test = fork_test;
--		printk(KERN_INFO "kgdbts:RUN do_fork for %i breakpoints\n",
-+	if (clone_test) {
-+		repeat_test = clone_test;
-+		printk(KERN_INFO "kgdbts:RUN kernel_clone for %i breakpoints\n",
- 			repeat_test);
- 		kthread_run(kgdbts_unreg_thread, NULL, "kgdbts_unreg");
--		run_do_fork_test();
-+		run_kernel_clone_test();
- 		return;
- 	}
+ # kprobe on / ftrace off
+ echo 1 > events/kprobes/testprobe/enable
+ echo > trace
+ ( echo "forked")
+ grep testprobe trace
+-! grep '_do_fork <-' trace
++! grep 'kernel_clone <-' trace
  
+ # kprobe on / ftrace on
+ echo function > current_tracer
+ echo > trace
+ ( echo "forked")
+ grep testprobe trace
+-grep '_do_fork <-' trace
++grep 'kernel_clone <-' trace
+ 
+ # kprobe off / ftrace on
+ echo 0 > events/kprobes/testprobe/enable
+ echo > trace
+ ( echo "forked")
+ ! grep testprobe trace
+-grep '_do_fork <-' trace
++grep 'kernel_clone <-' trace
+ 
+ # kprobe on / ftrace on
+ echo 1 > events/kprobes/testprobe/enable
+@@ -35,11 +35,11 @@ echo function > current_tracer
+ echo > trace
+ ( echo "forked")
+ grep testprobe trace
+-grep '_do_fork <-' trace
++grep 'kernel_clone <-' trace
+ 
+ # kprobe on / ftrace off
+ echo nop > current_tracer
+ echo > trace
+ ( echo "forked")
+ grep testprobe trace
+-! grep '_do_fork <-' trace
++! grep 'kernel_clone <-' trace
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_multiprobe.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_multiprobe.tc
+index 366b7e1b6718..45d90b6c763d 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_multiprobe.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_multiprobe.tc
+@@ -4,7 +4,7 @@
+ # requires: kprobe_events "Create/append/":README
+ 
+ # Choose 2 symbols for target
+-SYM1=_do_fork
++SYM1=kernel_clone
+ SYM2=do_exit
+ EVENT_NAME=kprobes/testevent
+ 
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+index b4d834675e59..c02ea50d63ea 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+@@ -86,15 +86,15 @@ esac
+ 
+ # multiprobe errors
+ if grep -q "Create/append/" README && grep -q "imm-value" README; then
+-echo 'p:kprobes/testevent _do_fork' > kprobe_events
++echo 'p:kprobes/testevent kernel_clone' > kprobe_events
+ check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
+ 
+ # Explicitly use printf "%s" to not interpret \1
+-printf "%s" 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
+-check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
+-check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
+-check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
+-check_error '^p:kprobes/testevent _do_fork abcd=\1'	# SAME_PROBE
++printf "%s" 'p:kprobes/testevent kernel_clone abcd=\1' > kprobe_events
++check_error 'p:kprobes/testevent kernel_clone ^bcd=\1'	# DIFF_ARG_TYPE
++check_error 'p:kprobes/testevent kernel_clone ^abcd=\1:u8'	# DIFF_ARG_TYPE
++check_error 'p:kprobes/testevent kernel_clone ^abcd=\"foo"'	# DIFF_ARG_TYPE
++check_error '^p:kprobes/testevent kernel_clone abcd=\1'	# SAME_PROBE
+ fi
+ 
+ exit 0
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc
+index 523fde6d1aa5..7ae492c204a4 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_args.tc
+@@ -4,14 +4,14 @@
+ # requires: kprobe_events
+ 
+ # Add new kretprobe event
+-echo 'r:testprobe2 _do_fork $retval' > kprobe_events
++echo 'r:testprobe2 kernel_clone $retval' > kprobe_events
+ grep testprobe2 kprobe_events | grep -q 'arg1=\$retval'
+ test -d events/kprobes/testprobe2
+ 
+ echo 1 > events/kprobes/testprobe2/enable
+ ( echo "forked")
+ 
+-cat trace | grep testprobe2 | grep -q '<- _do_fork'
++cat trace | grep testprobe2 | grep -q '<- kernel_clone'
+ 
+ echo 0 > events/kprobes/testprobe2/enable
+ echo '-:testprobe2' >> kprobe_events
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+index ff6c44adc8a0..c4093fc1a773 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+@@ -4,7 +4,7 @@
+ # requires: kprobe_events
+ 
+ ! grep -q 'myevent' kprobe_profile
+-echo p:myevent _do_fork > kprobe_events
++echo p:myevent kernel_clone > kprobe_events
+ grep -q 'myevent[[:space:]]*0[[:space:]]*0$' kprobe_profile
+ echo 1 > events/kprobes/myevent/enable
+ ( echo "forked" )
 -- 
 2.28.0
 
