@@ -2,26 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BD4248D21
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 19:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDCB248D6A
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 19:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728809AbgHRRfW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Aug 2020 13:35:22 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:52471 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728696AbgHRRej (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 13:34:39 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1k85VL-0003E9-Qj; Tue, 18 Aug 2020 17:34:35 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Christoph Hewllig <hch@infradead.org>,
+        id S1726670AbgHRRo6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Aug 2020 13:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726569AbgHRRo5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 13:44:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932EC061389;
+        Tue, 18 Aug 2020 10:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VUwmIR+lImU3NRAfKAiYvoX2F1rNIteoEgPghMUy3n4=; b=fICQlLgf7nqw1v5EVdw+y4UkgP
+        kbIROvywOoijsDOmGkmor5zGA36mtA9nORnPdRV0+PY6SgIHRyUiYvquWKJzwh5dVSuVFAFvX3DME
+        uAmwFhMRtuIsHO7AxjC/Hf6i4yUHlUCTV0VhFn4FHFVQ71s5gGsrDviphLM3xYp35OmWKPBpLVRcf
+        hwpTdFcUGW3d/jWbjCTyNWqqxGNmLCqcnEhJLRysG1hkTFskpa06/7toKpSoT4Zo3bffiyMFfe8De
+        fS6X/+bj0bRKlbATWH2OR/lk0NRD8TCNYrCLq21TKS0tsjdfMcrFa8oUinpiBxN298K5q3iSTGAud
+        JKE97/QA==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k85fD-0006aT-In; Tue, 18 Aug 2020 17:44:47 +0000
+Date:   Tue, 18 Aug 2020 18:44:47 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Christoph Hewllig <hch@infradead.org>,
         linux-kernel@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
+        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Tony Luck <tony.luck@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
@@ -46,44 +57,26 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
         kgdb-bugreport@lists.sourceforge.net,
-        linux-kselftest@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH 11/11] sched: remove _do_fork()
-Date:   Tue, 18 Aug 2020 19:34:11 +0200
-Message-Id: <20200818173411.404104-12-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
+Message-ID: <20200818174447.GV17456@casper.infradead.org>
 References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200818173411.404104-1-christian.brauner@ubuntu.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now that all callers of _do_fork() have been switched to kernel_clone() remove
-the _do_fork() helper.
+On Tue, Aug 18, 2020 at 07:34:00PM +0200, Christian Brauner wrote:
+> The only remaining function callable outside of kernel/fork.c is
+> _do_fork(). It doesn't really follow the naming of kernel-internal
+> syscall helpers as Christoph righly pointed out. Switch all callers and
+> references to kernel_clone() and remove _do_fork() once and for all.
 
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- include/linux/sched/task.h | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index d9ef07359c96..44a798bf21b4 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -84,10 +84,6 @@ extern void exit_files(struct task_struct *);
- extern void exit_itimers(struct signal_struct *);
- 
- extern int kernel_clone(struct kernel_clone_args *kargs);
--static inline long _do_fork(struct kernel_clone_args *kargs)
--{
--	return kernel_clone(kargs);
--}
- struct task_struct *fork_idle(int);
- struct mm_struct *copy_init_mm(void);
- extern pid_t kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
--- 
-2.28.0
-
+My only concern is around return type.  long, int, pid_t ... can we
+choose one and stick to it?  pid_t is probably the right return type
+within the kernel, despite the return type of clone3().  It'll save us
+some work if we ever go through the hassle of growing pid_t beyond 31-bit.
