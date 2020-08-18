@@ -2,105 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D629F2490A9
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 00:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A99249196
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 01:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgHRWSQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Aug 2020 18:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        id S1727062AbgHRXzE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Aug 2020 19:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbgHRWSO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 18:18:14 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDE3C061389;
-        Tue, 18 Aug 2020 15:18:12 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id h8so11038955lfp.9;
-        Tue, 18 Aug 2020 15:18:12 -0700 (PDT)
+        with ESMTP id S1726799AbgHRXzD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 19:55:03 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5560C061389;
+        Tue, 18 Aug 2020 16:55:03 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id 189so9851759pgg.13;
+        Tue, 18 Aug 2020 16:55:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nn5mkrGFBbPg90QSTX4ScoaPazdulb+v6hO8tmlQUhM=;
-        b=OIqydpEtkNgTroF3lnVBbcPUKQ2ogcmEFiN7wEqPDoyKdbDTrVZZ+NzClaB1tmtiGg
-         1q5dVw3gvA1HPNIt4f5Vr2bR4NBZwxXhiEUf3tzRwKt7NekpaA3/ibZvmA16+OG3grZ+
-         Y0pgD14ByceFmFxwkAMy97PtaHPZGmMkTHmHfX1qI8cguewQrhSEyNet//D8uLt3URbX
-         wtAIYHJxjbyMRdcrkRjXE+IjNA6JaY3Jp4v8SILylCVLQ416pwm5RG8VS/kkCIf9Vupf
-         N2rIlz5ZIsghwkVWwHdlgrBINrap6VQaSjRwMPYFZcqiCFlD1Cw4CyHiSO7wqpA8NX8m
-         GJbA==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=7422GZO6a07uIkKor7gPEwTDJ5nsCQ3Ry5yAt5O8lbE=;
+        b=gMyjMFHMZ82HKryOjvxwx+F/WntkodrlGmMyg6R7N0IHb5pHbZJ2k0ralLblXfYqL/
+         HQZjT2RKaUaN3Uk3JabTmTarIRkc3O68LG7LcQH8kYO86uTGmkxmC9Ytu/uttNCVZa2o
+         x3obkAAD8V+AhQ0gZu2rje3wjt0tugdGmVYAwn1DUd2a0Lt/pCFhkrAI/1sFTvK2+ZrH
+         8bsq4C+a5mGB7fkRfk8nDdyDoV7XhBrorbH+5b5BDCVx6zy1RK7cx4R2mmh8fIFE+Lba
+         qsiBqHi5nQQiyojMGEz1nD9G4jfH0RSejMBTfanRtuUDRIbO/WFS5JiKmxNHmj5fbCNB
+         fxow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nn5mkrGFBbPg90QSTX4ScoaPazdulb+v6hO8tmlQUhM=;
-        b=T08e/G4Rv7ZydfUv5SrjM5//sHT1keh1xSGWshvjQVB6krwsWrejAyXW7yR+ho3jpW
-         yhd6r9KlDJepdRrluYSvIgl4V834DWRsZF8urwaE8k7t91v8OT7+cGy0BMGCpYqOsWX4
-         JCLmRKdbIjJS4c3sc4qRNPeydcAAwVj7TDG4l1VGVFr87VMOiqwjdAA+xqTChMw7FZv3
-         G4r6ToJ6bLnG7KxSQ9VnwTsDtRz8CeUC4RNyVVt38bj03/w6vhWDDn4CRN7FAP0rl1S1
-         UG0yqhh+7uKd6iTNIWq1i7g5N1hRCGzrWd8ibHDp6gPSUj7RYsDHTBE3xPJzBAMAc8Sj
-         CAWA==
-X-Gm-Message-State: AOAM530wrsGT0b34kll89/8Jiujhg5U2J38dXPFZKi56bNHC4BJPRxIx
-        0p2gy8ivNPzL8wglXSdigCkat2Cx5/sphMQ/y8E=
-X-Google-Smtp-Source: ABdhPJyYNUN3v5scOCVMaoKuHu78eqvAibUFuUkJdpzA5rqp/I7KCAgyGHrlcUN+z5qLySo7/N7W852szcke7k/pYlA=
-X-Received: by 2002:a19:cb51:: with SMTP id b78mr10676996lfg.130.1597789091106;
- Tue, 18 Aug 2020 15:18:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=7422GZO6a07uIkKor7gPEwTDJ5nsCQ3Ry5yAt5O8lbE=;
+        b=M27Um82/BV7LZqfa0zQy7DHUJaWCqPzLMw0eiLEpM5tuAKWBZA3WW6WiFRjbKBQ0Rw
+         a+BEk1Hyl38TSuWxiQcEr+rmdHPH/o3jvFxkx/zqtD8msAOGYqDX1diiDEePYHgwp2+S
+         oR5rdqiRyVAwfHBOfVlAikeGc64BAHpPx9eGgKWLDLLImi7NgKrPg8MzXuL190fPBdOg
+         pXul0jSFE0DhTn3+najdYjmzjfzU9cDgX4kbdHk4YV5sF6IBlBcmApIo0OQ2MVIUrqln
+         Sgxxf6LjuHU3yRVuLKEJNCeBlPWwQYbdo6w/r70AbsR8cTeHjoa0ear/yy82TlUd/Scq
+         Jp1w==
+X-Gm-Message-State: AOAM532wljonu2vb9AHG4/YhAoqH8GMdseuSgJgSbwI3CfECxrV/c3Df
+        iAlk5GAwoQaFHORCpa5iDQJJempKtKA=
+X-Google-Smtp-Source: ABdhPJyzpeAN/fom5Hv0bXjaUwSL/42Sf1RXPTAqHPvb7BVJcMMUtDCYGB20BWOdQLzx7mJ5D5fnvg==
+X-Received: by 2002:a63:471b:: with SMTP id u27mr14757480pga.139.1597794903474;
+        Tue, 18 Aug 2020 16:55:03 -0700 (PDT)
+Received: from localhost (193-116-193-175.tpgi.com.au. [193.116.193.175])
+        by smtp.gmail.com with ESMTPSA id q12sm27030752pfg.135.2020.08.18.16.55.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2020 16:55:02 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 09:54:57 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
+ synchronisation with actual irq state
+To:     peterz@infradead.org
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+References: <20200723105615.1268126-1-npiggin@gmail.com>
+        <20200807111126.GI2674@hirez.programming.kicks-ass.net>
+        <1597220073.mbvcty6ghk.astroid@bobo.none>
+        <20200812103530.GL2674@hirez.programming.kicks-ass.net>
+        <1597735273.s0usqkrlsk.astroid@bobo.none>
+        <20200818154143.GT2674@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200818154143.GT2674@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20200818151634.14343-1-rppt@kernel.org> <20200818151634.14343-11-rppt@kernel.org>
-In-Reply-To: <20200818151634.14343-11-rppt@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 19 Aug 2020 00:18:00 +0200
-Message-ID: <CANiq72mnzTv7SphVxsYy++rAPdaKVVLGGHauxNLY5D4dzq3CPA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/17] memblock: reduce number of parameters in for_each_mem_range()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>, Baoquan He <bhe@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>, Daniel Axtens <dja@axtens.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        iommu@lists.linux-foundation.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-c6x-dev@linux-c6x.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
-        sparclinux@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1597793862.l8c4pmmzpq.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 5:19 PM Mike Rapoport <rppt@kernel.org> wrote:
->
->  .clang-format                          |  2 ++
+Excerpts from peterz@infradead.org's message of August 19, 2020 1:41 am:
+> On Tue, Aug 18, 2020 at 05:22:33PM +1000, Nicholas Piggin wrote:
+>> Excerpts from peterz@infradead.org's message of August 12, 2020 8:35 pm:
+>> > On Wed, Aug 12, 2020 at 06:18:28PM +1000, Nicholas Piggin wrote:
+>> >> Excerpts from peterz@infradead.org's message of August 7, 2020 9:11 p=
+m:
+>> >> >=20
+>> >> > What's wrong with something like this?
+>> >> >=20
+>> >> > AFAICT there's no reason to actually try and add IRQ tracing here, =
+it's
+>> >> > just a hand full of instructions at the most.
+>> >>=20
+>> >> Because we may want to use that in other places as well, so it would
+>> >> be nice to have tracing.
+>> >>=20
+>> >> Hmm... also, I thought NMI context was free to call local_irq_save/re=
+store
+>> >> anyway so the bug would still be there in those cases?
+>> >=20
+>> > NMI code has in_nmi() true, in which case the IRQ tracing is disabled
+>> > (except for x86 which has CONFIG_TRACE_IRQFLAGS_NMI).
+>> >=20
+>>=20
+>> That doesn't help. It doesn't fix the lockdep irq state going out of
+>> synch with the actual irq state. The code which triggered this with the
+>> special powerpc irq disable has in_nmi() true as well.
+>=20
+> Urgh, you're talking about using lockdep_assert_irqs*() from NMI
+> context?
+>=20
+> If not, I'm afraid I might've lost the plot a little on what exact
+> failure case we're talking about.
+>=20
 
-For the .clang-format bit:
+Hm, I may have been a bit confused actually. Since your Fix=20
+TRACE_IRQFLAGS vs NMIs patch it might now work.
 
-Acked-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+I'm worried powerpc disables trace irqs trace_hardirqs_off()
+before nmi_enter() might still be a problem, but not sure
+actually. Alexey did you end up re-testing with Peter's patch
+or current upstream?
 
-Cheers,
-Miguel
+Thanks,
+Nick
