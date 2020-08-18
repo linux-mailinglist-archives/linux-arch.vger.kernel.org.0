@@ -2,278 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2A524871F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 16:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB722488B1
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Aug 2020 17:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgHRORe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Aug 2020 10:17:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53688 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727786AbgHROR0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 18 Aug 2020 10:17:26 -0400
-Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1DF68207FF;
-        Tue, 18 Aug 2020 14:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597760245;
-        bh=oysYEavAzZfVG+QM9pIpE7mplr7QxKfY0kI4p0rAXl0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vgM/1d+3Sc9LN+ygqstQ1ab9HA/+wldJhx7mVvIkIxNY+T+GPBUAaeuECAsnHiXtt
-         zKL7FLfcc/vFMeAojwvfSCJ8XGggFsL1o3JSGfJkhMrPf1ch7uQEDGuNm7/IVfmZqO
-         79fXt0odeNH7hRYEr822bqPTQJxIDaIr8fe5mE/c=
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        id S1726823AbgHRPHp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Aug 2020 11:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbgHRPHo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Aug 2020 11:07:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C262C061389;
+        Tue, 18 Aug 2020 08:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=TYCkUvvfwzERhSHuzl+o/xwRoFEE9UiQMu2LCKTxT2c=; b=rAKScTQoURfEN9R47mu2vwzvW1
+        Qr92K5z88B2fMLXzcVaHIjsutHu31n+1t6NktU6dXrpb6qBvKGewRdDEu9YWxyaqPT3MGP2+amFeq
+        030HybeiDQAp9K8oNMiWpdSSP2KjuUDNq6z3GwFS1zWlgIdpB/YsfFYankS6FDpHeKTdEQUybqx+Y
+        WGyBZ4JzG9qSrcJJ5B1ZsacnV/Rsd2fIh9tQQ/re1f3qLvOpy3/D0PzzsiObpvCEz2QxnrYV91fdU
+        rklPsQUsoTct720dBy8ejRuBWjm4jiJMHilAS7Xntlh81xlBZYvhwK858mixM81kNlULt4cBAKwWb
+        WxUXdk+w==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k83D6-00020t-48; Tue, 18 Aug 2020 15:07:36 +0000
+Date:   Tue, 18 Aug 2020 16:07:36 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     linux-arch@vger.kernel.org
+Cc:     Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: [PATCH v4 6/6] mm: secretmem: add ability to reserve memory at boot
-Date:   Tue, 18 Aug 2020 17:15:54 +0300
-Message-Id: <20200818141554.13945-7-rppt@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200818141554.13945-1-rppt@kernel.org>
-References: <20200818141554.13945-1-rppt@kernel.org>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org
+Subject: Flushing transparent hugepages
+Message-ID: <20200818150736.GQ17456@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+If your arch does not support HAVE_ARCH_TRANSPARENT_HUGEPAGE, you can
+stop reading now.  Although maybe you're curious about adding support.
 
-Taking pages out from the direct map and bringing them back may create
-undesired fragmentation and usage of the smaller pages in the direct
-mapping of the physical memory.
+$ git grep -w HAVE_ARCH_TRANSPARENT_HUGEPAGE arch
+arch/Kconfig:config HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/arc/Kconfig:config HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/arm/Kconfig:config HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/arm64/Kconfig:     select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/mips/Kconfig:      select HAVE_ARCH_TRANSPARENT_HUGEPAGE if CPU_SUPPORTS_HUGEPAGES
+arch/powerpc/platforms/Kconfig.cputype: select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/s390/Kconfig:      select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/sparc/Kconfig:     select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+arch/x86/Kconfig:       select HAVE_ARCH_TRANSPARENT_HUGEPAGE
 
-This can be avoided if a significantly large area of the physical memory
-would be reserved for secretmem purposes at boot time.
+If your arch does not implement flush_dcache_page(), you can also
+stop reading.
 
-Add ability to reserve physical memory for secretmem at boot time using
-"secretmem" kernel parameter and then use that reserved memory as a global
-pool for secret memory needs.
+$ for i in arc arm arm64 mips powerpc s390 sparc x86; do git grep -l flush_dcache_page arch/$i/include; done
+arch/arc/include/asm/cacheflush.h
+arch/arm/include/asm/cacheflush.h
+arch/arm64/include/asm/cacheflush.h
+arch/mips/include/asm/cacheflush.h
+arch/powerpc/include/asm/cacheflush.h
+arch/sparc/include/asm/cacheflush_32.h
+arch/sparc/include/asm/cacheflush_64.h
+arch/sparc/include/asm/pgtable_64.h
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- mm/secretmem.c | 134 ++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 126 insertions(+), 8 deletions(-)
+OK, so we're down to arc, arm, arm64, mips, powerpc & sparc.  Hi!  ;-)
 
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index 333eb18fb483..54067ea62b2d 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -14,6 +14,7 @@
- #include <linux/pagemap.h>
- #include <linux/genalloc.h>
- #include <linux/syscalls.h>
-+#include <linux/memblock.h>
- #include <linux/pseudo_fs.h>
- #include <linux/set_memory.h>
- #include <linux/sched/signal.h>
-@@ -45,6 +46,39 @@ struct secretmem_ctx {
- 	unsigned int mode;
- };
- 
-+struct secretmem_pool {
-+	struct gen_pool *pool;
-+	unsigned long reserved_size;
-+	void *reserved;
-+};
-+
-+static struct secretmem_pool secretmem_pool;
-+
-+static struct page *secretmem_alloc_huge_page(gfp_t gfp)
-+{
-+	struct gen_pool *pool = secretmem_pool.pool;
-+	unsigned long addr = 0;
-+	struct page *page = NULL;
-+
-+	if (pool) {
-+		if (gen_pool_avail(pool) < PMD_SIZE)
-+			return NULL;
-+
-+		addr = gen_pool_alloc(pool, PMD_SIZE);
-+		if (!addr)
-+			return NULL;
-+
-+		page = virt_to_page(addr);
-+	} else {
-+		page = alloc_pages(gfp, PMD_PAGE_ORDER);
-+
-+		if (page)
-+			split_page(page, PMD_PAGE_ORDER);
-+	}
-+
-+	return page;
-+}
-+
- static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
- {
- 	unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-@@ -53,12 +87,11 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
- 	struct page *page;
- 	int err;
- 
--	page = alloc_pages(gfp, PMD_PAGE_ORDER);
-+	page = secretmem_alloc_huge_page(gfp);
- 	if (!page)
- 		return -ENOMEM;
- 
- 	addr = (unsigned long)page_address(page);
--	split_page(page, PMD_PAGE_ORDER);
- 
- 	err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
- 	if (err) {
-@@ -267,11 +300,13 @@ SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
- 	return err;
- }
- 
--static void secretmem_cleanup_chunk(struct gen_pool *pool,
--				    struct gen_pool_chunk *chunk, void *data)
-+static void secretmem_recycle_range(unsigned long start, unsigned long end)
-+{
-+	gen_pool_free(secretmem_pool.pool, start, PMD_SIZE);
-+}
-+
-+static void secretmem_release_range(unsigned long start, unsigned long end)
- {
--	unsigned long start = chunk->start_addr;
--	unsigned long end = chunk->end_addr;
- 	unsigned long nr_pages, addr;
- 
- 	nr_pages = (end - start + 1) / PAGE_SIZE;
-@@ -281,6 +316,18 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
- 		put_page(virt_to_page(addr));
- }
- 
-+static void secretmem_cleanup_chunk(struct gen_pool *pool,
-+				    struct gen_pool_chunk *chunk, void *data)
-+{
-+	unsigned long start = chunk->start_addr;
-+	unsigned long end = chunk->end_addr;
-+
-+	if (secretmem_pool.pool)
-+		secretmem_recycle_range(start, end);
-+	else
-+		secretmem_release_range(start, end);
-+}
-+
- static void secretmem_cleanup_pool(struct secretmem_ctx *ctx)
- {
- 	struct gen_pool *pool = ctx->pool;
-@@ -320,14 +367,85 @@ static struct file_system_type secretmem_fs = {
- 	.kill_sb	= kill_anon_super,
- };
- 
-+static int secretmem_reserved_mem_init(void)
-+{
-+	struct gen_pool *pool;
-+	struct page *page;
-+	void *addr;
-+	int err;
-+
-+	if (!secretmem_pool.reserved)
-+		return 0;
-+
-+	pool = gen_pool_create(PMD_SHIFT, NUMA_NO_NODE);
-+	if (!pool)
-+		return -ENOMEM;
-+
-+	err = gen_pool_add(pool, (unsigned long)secretmem_pool.reserved,
-+			   secretmem_pool.reserved_size, NUMA_NO_NODE);
-+	if (err)
-+		goto err_destroy_pool;
-+
-+	for (addr = secretmem_pool.reserved;
-+	     addr < secretmem_pool.reserved + secretmem_pool.reserved_size;
-+	     addr += PAGE_SIZE) {
-+		page = virt_to_page(addr);
-+		__ClearPageReserved(page);
-+		set_page_count(page, 1);
-+	}
-+
-+	secretmem_pool.pool = pool;
-+	page = virt_to_page(secretmem_pool.reserved);
-+	__kernel_map_pages(page, secretmem_pool.reserved_size / PAGE_SIZE, 0);
-+	return 0;
-+
-+err_destroy_pool:
-+	gen_pool_destroy(pool);
-+	return err;
-+}
-+
- static int secretmem_init(void)
- {
--	int ret = 0;
-+	int ret;
-+
-+	ret = secretmem_reserved_mem_init();
-+	if (ret)
-+		return ret;
- 
- 	secretmem_mnt = kern_mount(&secretmem_fs);
--	if (IS_ERR(secretmem_mnt))
-+	if (IS_ERR(secretmem_mnt)) {
-+		gen_pool_destroy(secretmem_pool.pool);
- 		ret = PTR_ERR(secretmem_mnt);
-+	}
- 
- 	return ret;
- }
- fs_initcall(secretmem_init);
-+
-+static int __init secretmem_setup(char *str)
-+{
-+	phys_addr_t align = PMD_SIZE;
-+	unsigned long reserved_size;
-+	void *reserved;
-+
-+	reserved_size = memparse(str, NULL);
-+	if (!reserved_size)
-+		return 0;
-+
-+	if (reserved_size * 2 > PUD_SIZE)
-+		align = PUD_SIZE;
-+
-+	reserved = memblock_alloc(reserved_size, align);
-+	if (!reserved) {
-+		pr_err("failed to reserve %lu bytes\n", secretmem_pool.reserved_size);
-+		return 0;
-+	}
-+
-+	secretmem_pool.reserved_size = reserved_size;
-+	secretmem_pool.reserved = reserved;
-+
-+	pr_info("reserved %luM\n", reserved_size >> 20);
-+
-+	return 1;
-+}
-+__setup("secretmem=", secretmem_setup);
--- 
-2.26.2
+I'm working on adding THP support for filesystems with storage backing
+and part of that is expanding the definition of THP to be any order
+(ie any power of two of PAGE_SIZE).  Now, shmem already has some calls
+to flush_dcache_page() for THPs, for example:
 
+        if (sgp != SGP_WRITE && !PageUptodate(page)) {
+                struct page *head = compound_head(page);
+                int i;
+
+                for (i = 0; i < compound_nr(head); i++) {
+                        clear_highpage(head + i);
+                        flush_dcache_page(head + i);
+                }
+                SetPageUptodate(head);
+        }
+
+where you'll be called once for each subpage.  But ... these are error
+paths, and I'm sure you all diligently test cache coherency scenarios
+of error paths in shmem ... right?
+
+For example, arm64 seems confused in this scenario:
+
+void flush_dcache_page(struct page *page)
+{
+        if (test_bit(PG_dcache_clean, &page->flags))
+                clear_bit(PG_dcache_clean, &page->flags);
+}
+
+...
+
+void __sync_icache_dcache(pte_t pte)
+{
+        struct page *page = pte_page(pte);
+
+        if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+                sync_icache_aliases(page_address(page), page_size(page));
+}
+
+So arm64 keeps track on a per-page basis which ones have been flushed.
+page_size() will return PAGE_SIZE if called on a tail page or regular
+page, but will return PAGE_SIZE << compound_order if called on a head
+page.  So this will either over-flush, or it's missing the opportunity
+to clear the bits on all the subpages which have now been flushed.
+
+PowerPC has special handling of hugetlbfs pages.  Well, that's what
+the config option says, but actually it handles THP as well.  If
+the config option is enabled.
+
+#ifdef CONFIG_HUGETLB_PAGE
+        if (PageCompound(page)) {
+                flush_dcache_icache_hugepage(page);
+                return;
+        }
+#endif
+
+By the way, THPs can be mapped askew -- that is, at an offset which
+means you can't use a PMD to map a PMD sized page.
+
+Anyway, we don't really have consensus between the various architectures
+on how to handle either THPs or hugetlb pages.  It's not contemplated
+in Documentation/core-api/cachetlb.rst so there's no real surprise
+we've diverged.
+
+What would you _like_ to see?  Would you rather flush_dcache_page()
+were called once for each subpage, or would you rather maintain
+the page-needs-flushing state once per compound page?  We could also
+introduce flush_dcache_thp() if some architectures would prefer it one
+way and one the other, although that brings into question what to do
+for hugetlbfs pages.
+
+It might not be a bad idea to centralise the handling of all this stuff
+somewhere.  Sounds like the kind of thing Arnd would like to do ;-) I'll
+settle for getting enough clear feedback about what the various arch
+maintainers want that I can write a documentation update for cachetlb.rst.
