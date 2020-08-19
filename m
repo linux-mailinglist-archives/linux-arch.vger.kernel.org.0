@@ -2,100 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D262A24A4B6
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 19:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6108A24A4FD
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 19:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726732AbgHSROW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 13:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726716AbgHSROT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 13:14:19 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9EDC061342
-        for <linux-arch@vger.kernel.org>; Wed, 19 Aug 2020 10:14:19 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id a14so18746119edx.7
-        for <linux-arch@vger.kernel.org>; Wed, 19 Aug 2020 10:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=lxWQpzEJBRxFWn4dOvs/9NY97u5lA3hOWcxGQWOxLjs=;
-        b=jVxm6/oUDida23iZYrjKJtAjmMhRD0e2p/PFTP5RagnlyLpe2G3kUYAPDI2Q4Bm22E
-         qZQBpZDzkoRg0Roy3eU3FzNjDQkT/W0zkOKehErGd8mufcZ9Q5tH2IQaXoslMMZfnpgO
-         vZykzKDr4SVqY9uDD1noPfutJV33VKlPTqXQC9P0Aw40i/uQB7fMKa5WFatVJODNjseU
-         777vyJYRFfU3ZOICebBV2T+dbcAorrFMxD85BHeSzJK4z7nUklQr1cmX7DeiWPLvhC0J
-         /wCteY/71o1AXJ610CoveefVw9Aec3bsVlJSi3YfqZRVBp96ljVlEqSrTERjIG9UwKjQ
-         wJcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=lxWQpzEJBRxFWn4dOvs/9NY97u5lA3hOWcxGQWOxLjs=;
-        b=b3Gw1wjWxx6pKHViHzYSnxWUSM2qpagakC2s+4JI2UCqnn+Hm61RszEYzBp31FnB7m
-         WN1w2O9mYSZ5+HXM+kkjc76AGAdqgfU1QY3H6AT8hkjA5hkIT4D5ARYP1gk6aAZPVJBD
-         XbE4UU2dGdoUm+avMt85QGS6bAtDP5zPjApDUKYRv/2lS5nh+nB87V6NqhKerK5cI8Ai
-         dO+AHExRKhBHnf+6r/EUrFnQBeA6lDbNUwN9wpAtULhLeRctkXT0wt33QANNOh7ZeTUD
-         jnLNqCtU1gHoXzo+DVEq2QLtjmKzeKmwLV1yTKGO+igfocxhnQUgs5YDgN+JFaIbMUsK
-         lQUA==
-X-Gm-Message-State: AOAM5308BEO9a5EC6VddP+YFEPSDXECzK7r3FwRSWFQFsGH7W1hYaTAo
-        /ALqi2hkMyy8ULeESUVNazwYFkWGZ5e7ESXKXsOdsQ==
-X-Google-Smtp-Source: ABdhPJwBq/IJpNmKU01Vbvw68YKifhG/5x5RhndnYLaMJW1Fx62abFTCNjPNM6I4B+T450H7iUk2pV1GiSXi5avskBg=
-X-Received: by 2002:a05:6402:38c:: with SMTP id o12mr26516518edv.271.1597857257546;
- Wed, 19 Aug 2020 10:14:17 -0700 (PDT)
-MIME-Version: 1.0
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Wed, 19 Aug 2020 10:14:03 -0700
-Message-ID: <CAP045Arc1Vdh+n2j2ELE3q7XfagLjyqXji9ZD0jqwVB-yuzq-g@mail.gmail.com>
-Subject: [REGRESSION] x86/entry: Tracer no longer has opportunity to change
- the syscall number at entry via orig_ax
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>
-Cc:     "Robert O'Callahan" <rocallahan@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1726609AbgHSReB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Aug 2020 13:34:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725939AbgHSReA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Aug 2020 13:34:00 -0400
+Received: from kernel.org (unknown [87.70.91.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E536206FA;
+        Wed, 19 Aug 2020 17:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597858440;
+        bh=1Kuiv8iGgm6SalVVkZfBiL4OHWxQAxShozxNk+zBolU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PfCq2RYoBnpI+rRZ0w6qSWuewp0KRf89Aalz44HYo9TFEhrDUQICW5QIJCrh8Ca0K
+         uLAW8PYxM/i8eVvlbksIuqNR9MKaOckhfOZhXePVk3EU37CkhLrBof1KFmHs22XZC0
+         sszvftR/cJX4BhW1GWf6wauiWhaZ3R/1Xv2rD11Y=
+Date:   Wed, 19 Aug 2020 20:33:47 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Subject: Re: [PATCH v4 6/6] mm: secretmem: add ability to reserve memory at
+ boot
+Message-ID: <20200819173347.GW752365@kernel.org>
+References: <20200818141554.13945-1-rppt@kernel.org>
+ <20200818141554.13945-7-rppt@kernel.org>
+ <03ec586d-c00c-c57e-3118-7186acb7b823@redhat.com>
+ <20200819115335.GU752365@kernel.org>
+ <10bf57a9-c3c2-e13c-ca50-e872b7a2db0c@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10bf57a9-c3c2-e13c-ca50-e872b7a2db0c@redhat.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tl;dr: after 27d6b4d14f5c3ab21c4aef87dd04055a2d7adf14 ptracer
-modifications to orig_ax in a syscall entry trace stop are not honored
-and this breaks our code.
+On Wed, Aug 19, 2020 at 02:10:43PM +0200, David Hildenbrand wrote:
+> On 19.08.20 13:53, Mike Rapoport wrote:
+> > On Wed, Aug 19, 2020 at 12:49:05PM +0200, David Hildenbrand wrote:
+> >> On 18.08.20 16:15, Mike Rapoport wrote:
+> >>> From: Mike Rapoport <rppt@linux.ibm.com>
+> >>>
+> >>> Taking pages out from the direct map and bringing them back may create
+> >>> undesired fragmentation and usage of the smaller pages in the direct
+> >>> mapping of the physical memory.
+> >>>
+> >>> This can be avoided if a significantly large area of the physical memory
+> >>> would be reserved for secretmem purposes at boot time.
+> >>>
+> >>> Add ability to reserve physical memory for secretmem at boot time using
+> >>> "secretmem" kernel parameter and then use that reserved memory as a global
+> >>> pool for secret memory needs.
+> >>
+> >> Wouldn't something like CMA be the better fit? Just wondering. Then, the
+> >> memory can actually be reused for something else while not needed.
+> > 
+> > The memory allocated as secret is removed from the direct map and the
+> > boot time reservation is intended to reduce direct map fragmentatioan
+> > and to avoid splitting 1G pages there. So with CMA I'd still need to
+> > allocate 1G chunks for this and once 1G page is dropped from the direct
+> > map it still cannot be reused for anything else until it is freed.
+> > 
+> > I could use CMA to do the boot time reservation, but doing the
+> > reservesion directly seemed simpler and more explicit to me.
+> 
+> Well, using CMA would give you the possibility to let the memory be used
+> for other purposes until you decide it's the right time to take it +
+> remove the direct mapping etc.
 
-rr, a userspace record and replay debugger[0], redirects syscalls of
-its ptracee through an in-process LD_PRELOAD-injected solib. To do
-this, it ptraces the tracee to a syscall entry event, and then, if the
-syscall instruction is not our redirected syscall instruction, it
-examines the tracee's code and pattern matches against a set of
-syscall invocations that it knows how to rewrite. If that succeeds, rr
-hijacks[1] the current syscall entry by setting orig_ax to something
-innocuous like SYS_gettid, runs the hijacked syscall, and then
-restores program state to before the syscall entry trace event and
-allows the tracee to execute forwards, through the newly patched code
-and into our injected solib.
+I still can't say I follow you here. If I reseve a CMA area as a pool
+for secret memory 1G pages, it is still reserved and it still cannot be
+used for other purposes, right?
 
-Before 27d6b4d14f5c3ab21c4aef87dd04055a2d7adf14 modifications to
-orig_ax were honored by x86's syscall_enter_trace[2]. The generic arch
-code however does not honor any modifications to the syscall number[3]
-(presumably because on most architectures syscall results clobber the
-first argument and not the syscall number, so there is no equivalent
-to orig_rax).
+> I wonder if a sane approach would be to require to allocate a pool
+> during boot and only take pages ever from that pool. That would avoid
+> spilling many unmovable pages all over the place, locally limiting them
+> to your area here.
 
-Note that the above is just one example of when rr changes the syscall
-number this way. This is done in many places in our code and rr is
-largely broken on 5.9-rc1 at the moment because of this bug.
+That's what I tried to implement. The pool reserved at boot time is in a
+way similar to booting with mem=X and then splitting the remaining
+memory between the VMs.
+In this case, the memory reserved at boot is never in the direct map and
+allocations from such pool will not cause fragmentation.
 
-- Kyle
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
 
-[0] https://rr-project.org/
-[1] https://github.com/mozilla/rr/blob/cd61ba22ccc05b426691312784674c0eb8e654ef/src/Task.cc#L872
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/entry/common.c?h=v5.8&id=bcf876870b95592b52519ed4aafcf9d95999bc9c#n204
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/entry/common.c?h=v5.8&id=27d6b4d14f5c3ab21c4aef87dd04055a2d7adf14#n44
+-- 
+Sincerely yours,
+Mike.
