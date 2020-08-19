@@ -2,104 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7440A249B96
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 13:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4D9249C02
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 13:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgHSLTI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 07:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727807AbgHSLTB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 07:19:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13242C061757;
-        Wed, 19 Aug 2020 04:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S3ViV7VOxKoiTfVgrvw4ZTEB3xmhm4rVfkGYugjh9Xc=; b=PqH95VsKVPNJwI5a/Er+qYg1YE
-        2cP0Ceuh2EDSbznFUi6KCJU7M7Tnu1YxtinWU5IogRZ5X49Svh2ING9dG/X8+rguc0s8CNSZJSVjz
-        sraZ7CGNbsDhWzRg8+UC6yH+tcPq9EXMZaDIgh2vnz9pMYTUAJGAn4dbA7FDtXtyG0dgROnOxjecF
-        HOVDUZCBr76yq9h8gCFemMaMo2+mPHghmOxYz2YkVf+ANSqWMa0srF34jYala3pRYzPD19EoNJfdq
-        Ood3xlpgoQ1+iBy6EacDpMR9Obz0ZXPuj8jDYzWyRwFWRGHSlTe43zBy51TCIlPCVr09ikGje2dIK
-        +jtFq6ig==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k8M7H-00015G-Od; Wed, 19 Aug 2020 11:18:51 +0000
-Date:   Wed, 19 Aug 2020 12:18:51 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     peterz@infradead.org, Christoph Hewllig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1727019AbgHSLnB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Aug 2020 07:43:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727120AbgHSLm5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Aug 2020 07:42:57 -0400
+Received: from kernel.org (unknown [87.70.91.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB23E206FA;
+        Wed, 19 Aug 2020 11:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597837376;
+        bh=oRLqxLOhAk2wnqABtg3LIfVpl96FyLYFzASr1U/ua+Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2Z9IophMNzk8pDJ8BdCg/mK2k2gQuqV8UM0qQAmx+Sn6zj919AK6cSjrUfOGKNQT4
+         FgdC+v6CR36y9JK0bGfz3O20UZlSub/rKj1DDNqRtiGiQklQFxbD8gym7lAVbdhBXm
+         bYUybp6KP1/X0bvM8WCYlmLMym+12jW5T0ZamYZo=
+Date:   Wed, 19 Aug 2020 14:42:44 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Kars de Jong <jongk@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
-Message-ID: <20200819111851.GY17456@casper.infradead.org>
-References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
- <20200818174447.GV17456@casper.infradead.org>
- <20200819074340.GW2674@hirez.programming.kicks-ass.net>
- <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Subject: Re: [PATCH v4 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20200819114244.GT752365@kernel.org>
+References: <20200818141554.13945-1-rppt@kernel.org>
+ <e82ca20e-a88e-d7ff-e99b-4189aac54f3a@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+In-Reply-To: <e82ca20e-a88e-d7ff-e99b-4189aac54f3a@redhat.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 10:45:56AM +0200, Christian Brauner wrote:
-> On Wed, Aug 19, 2020 at 09:43:40AM +0200, peterz@infradead.org wrote:
-> > On Tue, Aug 18, 2020 at 06:44:47PM +0100, Matthew Wilcox wrote:
-> > > On Tue, Aug 18, 2020 at 07:34:00PM +0200, Christian Brauner wrote:
-> > > > The only remaining function callable outside of kernel/fork.c is
-> > > > _do_fork(). It doesn't really follow the naming of kernel-internal
-> > > > syscall helpers as Christoph righly pointed out. Switch all callers and
-> > > > references to kernel_clone() and remove _do_fork() once and for all.
-> > > 
-> > > My only concern is around return type.  long, int, pid_t ... can we
-> > > choose one and stick to it?  pid_t is probably the right return type
-> > > within the kernel, despite the return type of clone3().  It'll save us
-> > > some work if we ever go through the hassle of growing pid_t beyond 31-bit.
+On Wed, Aug 19, 2020 at 12:47:54PM +0200, David Hildenbrand wrote:
+> On 18.08.20 16:15, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
 > > 
-> > We have at least the futex ABI restricting PID space to 30 bits.
+> > Hi,
+> > 
+> > This is an implementation of "secret" mappings backed by a file descriptor. 
+> > 
+> > v4 changes:
+> > * rebase on v5.9-rc1
+> > * Do not redefine PMD_PAGE_ORDER in fs/dax.c, thanks Kirill
+> > * Make secret mappings exclusive by default and only require flags to
+> >   memfd_secret() system call for uncached mappings, thanks again Kirill :)
+> > 
+> > v3 changes:
+> > * Squash kernel-parameters.txt update into the commit that added the
+> >   command line option.
+> > * Make uncached mode explicitly selectable by architectures. For now enable
+> >   it only on x86.
+> > 
+> > v2 changes:
+> > * Follow Michael's suggestion and name the new system call 'memfd_secret'
+> > * Add kernel-parameters documentation about the boot option
+> > * Fix i386-tinyconfig regression reported by the kbuild bot.
+> >   CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+> >   from one side and still make it available unconditionally on
+> >   architectures that support SET_DIRECT_MAP.
+> > 
+> > 
+> > The file descriptor backing secret memory mappings is created using a
+> > dedicated memfd_secret system call The desired protection mode for the
+> > memory is configured using flags parameter of the system call. The mmap()
+> > of the file descriptor created with memfd_secret() will create a "secret"
+> > memory mapping. The pages in that mapping will be marked as not present in
+> > the direct map and will have desired protection bits set in the user page
+> > table. For instance, current implementation allows uncached mappings.
+> > 
+> > Although normally Linux userspace mappings are protected from other users, 
+> > such secret mappings are useful for environments where a hostile tenant is
+> > trying to trick the kernel into giving them access to other tenants
+> > mappings.
+> > 
+> > Additionally, the secret mappings may be used as a mean to protect guest
+> > memory in a virtual machine host.
+> > 
 > 
-> Ok, looking into kernel/futex.c I see 
-> 
-> pid_t pid = uval & FUTEX_TID_MASK;
-> 
-> which is probably what this referes to and /proc/sys/kernel/threads-max
-> is restricted to FUTEX_TID_MASK.
-> 
-> Afaict, that doesn't block switching kernel_clone() to return pid_t. It
-> can't create anything > FUTEX_TID_MASK anyway without yelling EAGAIN at
-> userspace. But it means that _if_ we were to change the size of pid_t
-> we'd likely need a new futex API. 
+> Just a general question. I assume such pages (where the direct mapping
+> was changed) cannot get migrated - I can spot a simple alloc_page(). So
+> essentially a process can just allocate a whole bunch of memory that is
+> unmovable, correct? Is there any limit? Is it properly accounted towards
+> the process (memctl) ?
 
-Yes, there would be a lot of work to do to increase the size of pid_t.
-I'd just like to not do anything to make that harder _now_.  Stick to
-using pid_t within the kernel.
+The memory as accounted in the same way like with mlock(), so normal
+user won't be able to allocate more than RLIMIT_MEMLOCK.
+
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
+
+-- 
+Sincerely yours,
+Mike.
