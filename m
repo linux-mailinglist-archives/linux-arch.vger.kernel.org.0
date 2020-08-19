@@ -2,123 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DA824A34C
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 17:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961DC24A35D
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 17:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbgHSPj6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 11:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726894AbgHSPj5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 11:39:57 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B7EC061757;
-        Wed, 19 Aug 2020 08:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=A/NLDEqSKQO5M1WQObNymH18o4NlNdxjll2by5D8bbE=; b=iM2jo4Vkp8b1Brl9BuejvbdL4q
-        uyEe0Iygv7v92s+Gs5XNITaVQMbU+ie4eWP1lPmZsJroegcnyl5wqfRGY1bweEH1cH+NLqkOhjCs7
-        ihL+pVwi1DffiQyKENwc0G2/7+6VUVt5ihMWefbrvGSks18PYeyBXSM6XXdsiToUhza/SifSRn9/K
-        65swPPEhRGGab8qDuBogNkb76IGW313uWwSetAhxG+WPw0EdnM1WMQ8ghH6zi1Pc/Xyj7HlEUY+8I
-        hFV7ER+hErZgX+VFmlgEENeHALwZlA7S1SKEH3ew1MtMkOMme5SS7h745f//FCWrV6v2qnY89unTQ
-        YCHyzPRQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k8QBr-0007p3-8U; Wed, 19 Aug 2020 15:39:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7BACF3059C6;
-        Wed, 19 Aug 2020 17:39:49 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5FEE82BEB7F3D; Wed, 19 Aug 2020 17:39:49 +0200 (CEST)
-Date:   Wed, 19 Aug 2020 17:39:49 +0200
-From:   peterz@infradead.org
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 1/2] lockdep: improve current->(hard|soft)irqs_enabled
- synchronisation with actual irq state
-Message-ID: <20200819153949.GO35926@hirez.programming.kicks-ass.net>
-References: <20200723105615.1268126-1-npiggin@gmail.com>
- <20200807111126.GI2674@hirez.programming.kicks-ass.net>
- <1597220073.mbvcty6ghk.astroid@bobo.none>
- <20200812103530.GL2674@hirez.programming.kicks-ass.net>
- <1597735273.s0usqkrlsk.astroid@bobo.none>
- <20200818154143.GT2674@hirez.programming.kicks-ass.net>
- <1597793862.l8c4pmmzpq.astroid@bobo.none>
- <7fadb5ab-9869-396d-ff5d-c0adb6fc0b35@ozlabs.ru>
- <20200819153250.GF2674@hirez.programming.kicks-ass.net>
+        id S1728756AbgHSPl4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 19 Aug 2020 11:41:56 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:53695 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726899AbgHSPly (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Aug 2020 11:41:54 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-261-02K0BOUyNletrE0M2eR4fA-1; Wed, 19 Aug 2020 16:41:50 +0100
+X-MC-Unique: 02K0BOUyNletrE0M2eR4fA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 19 Aug 2020 16:41:48 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 19 Aug 2020 16:41:48 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        Christoph Hewllig <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Tony Luck <tony.luck@intel.com>,
+        "Fenghua Yu" <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Ley Foon Tan" <ley.foon.tan@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Stafford Horne" <shorne@gmail.com>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Tom Zanussi" <zanussi@kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "uclinux-h8-devel@lists.sourceforge.jp" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
+Thread-Topic: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
+Thread-Index: AQHWdjo738I4JRuBMEmE9DxJ3r/Mo6k/jYog
+Date:   Wed, 19 Aug 2020 15:41:48 +0000
+Message-ID: <df7f7e17a730405ea182ec778eec22e1@AcuMS.aculab.com>
+References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+        <20200818174447.GV17456@casper.infradead.org>
+        <20200819074340.GW2674@hirez.programming.kicks-ass.net>
+        <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+        <20200819111851.GY17456@casper.infradead.org>
+        <87a6yq222c.fsf@x220.int.ebiederm.org>
+        <20200819134629.mvd4nupme7q2hmtz@wittgenstein>
+ <87mu2qznlv.fsf@x220.int.ebiederm.org>
+In-Reply-To: <87mu2qznlv.fsf@x220.int.ebiederm.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200819153250.GF2674@hirez.programming.kicks-ass.net>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 05:32:50PM +0200, peterz@infradead.org wrote:
-> On Wed, Aug 19, 2020 at 08:39:13PM +1000, Alexey Kardashevskiy wrote:
+From: Eric W. Biederman
+> Sent: 19 August 2020 16:01
+...
+> >> Further the design decisions of pids keeps us densly using pids.  So I
+> >> expect it will be a while before we even come close to using 30 bits of
+> >> pid space.
+> >
+> > Also because it's simply annoying to have to type really large pid
+> > numbers on the shell. Yes yes, that's a very privileged
+> > developer-centric complaint but it matters when you have to do a quick
+> > kill -9. Chromebook users obviously won't care about how large their
+> > pids are for sure.
 > 
-> > > or current upstream?
-> > 
-> > The upstream 18445bf405cb (13 hours old) also shows the problem. Yours
-> > 1/2 still fixes it.
-> 
-> Afaict that just reduces the window.
-> 
-> Isn't the problem that:
-> 
-> arch/powerpc/kernel/exceptions-64e.S
-> 
-> 	START_EXCEPTION(perfmon);
-> 	NORMAL_EXCEPTION_PROLOG(0x260, BOOKE_INTERRUPT_PERFORMANCE_MONITOR,
-> 				PROLOG_ADDITION_NONE)
-> 	EXCEPTION_COMMON(0x260)
-> 	INTS_DISABLE
-> #	  RECONCILE_IRQ_STATE
-> #	    TRACE_DISABLE_INTS
-> #	      TRACE_WITH_FRAME_BUFFER(trace_hardirqs_off)
-> #
-> # but we haven't done nmi_enter() yet... whoopsy
-> 
-> 	CHECK_NAPPING()
-> 	addi	r3,r1,STACK_FRAME_OVERHEAD
-> 	bl	performance_monitor_exception
-> #	 perf_irq()
-> #          perf_event_interrupt
-> #	     __perf_event_interrupt
-> #	      nmi_enter()
-> 
-> 
-> 
-> That is, afaict your entry code is buggered.
+> Actually that is one of the reasons (possibly the primary reason) that
+> we have chosen to keep pid numbers dense.
 
-That is, patch 1/2 doesn't change the case:
+It also helps keep the ps output under 80 cols.
 
-	local_irq_enable()
-	  trace_hardirqs_on()
-	  <NMI>
-	    trace_hardirqs_off()
-	    ...
-	    if (regs_irqs_disabled(regs)) // false
-	      trace_hardirqs_on();
-	  </NMI>
-	  raw_local_irq_enable()
+> There may be fewer users of unix shells then their used to be, and we
+> may now have pidfds.  But until people stop using pids in shells it is a
+> very valid reason to keep them densly packed.
 
-Where local_irq_enable() has done trace_hardirqs_on() and the NMI hits
-and undoes it, but doesn't re-do it because the hardware state is still
-disabled.
+ISTM that the upper limit should be increased automatically
+when the number of allocated pids gets large enough that they
+are likely to run out (or get reused very quickly).
 
-What's supposed to happen is:
+Does linux have an O(1) (or do I mean o(1)) pid allocator?
+Or does it have to do a linear scan to find a gap??
 
-	<NMI>
-	  nmi_enter()
-	  trace_hardirqs_off() // no-op, because in_nmi() (or previously because lockdep_off())
-	  ...
-	</NMI>
+I made the NetBSD pid allocator/lookup use pid_array[pid & mask]
+then check the high bits matched (incremented on allocate).
+With a FIFO free list through the unused entries.
+Fairly easy to double the size and 'unzip' when getting full.
+And then allocate extra high bits to keep plenty of free
+values in circulation.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
