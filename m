@@ -2,187 +2,249 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5252F24A523
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 19:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B87624A6C3
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 21:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbgHSRpv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 13:45:51 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21129 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725804AbgHSRps (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Aug 2020 13:45:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597859146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=xUbZE1Tg4OP5GjmX4N68FcgSflfrrO9WffH/rsNjKzI=;
-        b=KHtvALRYXfiq6a/m2MtPIibsO8hSeu0kcL6kN2YFuF1hVUiEMTErEZ1G+4wzJkb+XYWdd2
-        HtRH6U6kzTPaC7HQVDlPzumiwculJbb4yi7ZFiwTxKOmRIxPY+cPSajJQyiAGwFMl+urw6
-        XPMwNoSqufLCIA/9hvMEFHFsGrCYFnE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-355-AIsJ-j7RNsSqGn3_62FTDw-1; Wed, 19 Aug 2020 13:45:43 -0400
-X-MC-Unique: AIsJ-j7RNsSqGn3_62FTDw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ECC242FD0F;
-        Wed, 19 Aug 2020 17:45:38 +0000 (UTC)
-Received: from [10.36.114.11] (ovpn-114-11.ams2.redhat.com [10.36.114.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 703505C89D;
-        Wed, 19 Aug 2020 17:45:30 +0000 (UTC)
-Subject: Re: [PATCH v4 6/6] mm: secretmem: add ability to reserve memory at
- boot
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-References: <20200818141554.13945-1-rppt@kernel.org>
- <20200818141554.13945-7-rppt@kernel.org>
- <03ec586d-c00c-c57e-3118-7186acb7b823@redhat.com>
- <20200819115335.GU752365@kernel.org>
- <10bf57a9-c3c2-e13c-ca50-e872b7a2db0c@redhat.com>
- <20200819173347.GW752365@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat GmbH
-Message-ID: <6c8b30fb-1b6c-d446-0b09-255b79468f7c@redhat.com>
-Date:   Wed, 19 Aug 2020 19:45:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726861AbgHSTSw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Aug 2020 15:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726723AbgHSTSt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 15:18:49 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE91C061757
+        for <linux-arch@vger.kernel.org>; Wed, 19 Aug 2020 12:18:49 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a14so22613618wra.5
+        for <linux-arch@vger.kernel.org>; Wed, 19 Aug 2020 12:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IkV7VhnsBdLN5xuM+4/Dxe2A0Bhih4c3yWE1VbJNFHA=;
+        b=eznmiXT/ntOWTcbnncE2n/WNhmHddQZEgFJUBCiShFAcFDlu9FzB3r2ycGBZ3UmF3N
+         PiinjnQH0SB4qCQRoV/7274AhJc9J9KY+TpaOFTg7ON6MmrpQtRVZdyNNPdw3JKckvVx
+         JoK+fssO/3zqRKD1Zplv74ZxQetjyp1iS4yCM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IkV7VhnsBdLN5xuM+4/Dxe2A0Bhih4c3yWE1VbJNFHA=;
+        b=Iya/OZpSh39PgJOE0jvcHfbwS0H/xPo/4E2XhndfUxiewrHryHGVw0lPC5av6C6Ph1
+         WmWdB25ZmPOu4H9A/uolC76wz5IEtctFUMPCm+pcjVR+pGvHW6Ygf4tZQMgqwxhf3wwy
+         k6BqQUprHZ+tqhrX9Qg3I44CmCGDCdJwHo15JWeQjzcVgpPWYjk2RkcsddHLaKP9Uv7L
+         esvXmWLlgfe7cMZmgc4rHvyK7+i6YFEws3g8+kjjhe2dSzvB4bw1jCiver/mQbeFeZJm
+         RkeC/uZ2vUrACG218tr01SQk6EDeMUF8LJSn0d8WACIHzGwkMSCJCgm7PlMITwA4om8U
+         29QA==
+X-Gm-Message-State: AOAM531ZRWSH0riL4qfcNKTXvxWEc6NXSUTcH85tP6y6oXdKk+5t7kiA
+        KYgTf0vveTXW5OvUFTJ89l59RU3AMEogsG0Hxa7S
+X-Google-Smtp-Source: ABdhPJwd8eZe43zhhxrKSyHk8/9Xy7z3Xl6wnyt0GLOGhtBxLf3mrLHEx+ftJjVR/96tWAd3U/iDbcJGcHrccbxH9fI=
+X-Received: by 2002:adf:f7c3:: with SMTP id a3mr25600526wrq.162.1597864727706;
+ Wed, 19 Aug 2020 12:18:47 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200819173347.GW752365@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+References: <20200814214725.28818-1-atish.patra@wdc.com> <20200814214725.28818-2-atish.patra@wdc.com>
+ <2dce83a8-bda4-7664-9661-4e0542eecd57@arm.com>
+In-Reply-To: <2dce83a8-bda4-7664-9661-4e0542eecd57@arm.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Wed, 19 Aug 2020 12:18:36 -0700
+Message-ID: <CAOnJCULbzjsefufgBgonBowgctEqeuLKixskD=5ph8-jUOmM+g@mail.gmail.com>
+Subject: Re: [RFC/RFT PATCH 1/6] numa: Move numa implementation to common code
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Atish Patra <atish.patra@wdc.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nick Hu <nickhu@andestech.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Ganapatrao Kulkarni <gkulkarni@cavium.com>,
+        Steven Price <steven.price@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zong Li <zong.li@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 19.08.20 19:33, Mike Rapoport wrote:
-> On Wed, Aug 19, 2020 at 02:10:43PM +0200, David Hildenbrand wrote:
->> On 19.08.20 13:53, Mike Rapoport wrote:
->>> On Wed, Aug 19, 2020 at 12:49:05PM +0200, David Hildenbrand wrote:
->>>> On 18.08.20 16:15, Mike Rapoport wrote:
->>>>> From: Mike Rapoport <rppt@linux.ibm.com>
->>>>>
->>>>> Taking pages out from the direct map and bringing them back may create
->>>>> undesired fragmentation and usage of the smaller pages in the direct
->>>>> mapping of the physical memory.
->>>>>
->>>>> This can be avoided if a significantly large area of the physical memory
->>>>> would be reserved for secretmem purposes at boot time.
->>>>>
->>>>> Add ability to reserve physical memory for secretmem at boot time using
->>>>> "secretmem" kernel parameter and then use that reserved memory as a global
->>>>> pool for secret memory needs.
->>>>
->>>> Wouldn't something like CMA be the better fit? Just wondering. Then, the
->>>> memory can actually be reused for something else while not needed.
->>>
->>> The memory allocated as secret is removed from the direct map and the
->>> boot time reservation is intended to reduce direct map fragmentatioan
->>> and to avoid splitting 1G pages there. So with CMA I'd still need to
->>> allocate 1G chunks for this and once 1G page is dropped from the direct
->>> map it still cannot be reused for anything else until it is freed.
->>>
->>> I could use CMA to do the boot time reservation, but doing the
->>> reservesion directly seemed simpler and more explicit to me.
->>
->> Well, using CMA would give you the possibility to let the memory be used
->> for other purposes until you decide it's the right time to take it +
->> remove the direct mapping etc.
-> 
-> I still can't say I follow you here. If I reseve a CMA area as a pool
-> for secret memory 1G pages, it is still reserved and it still cannot be
-> used for other purposes, right?
+On Tue, Aug 18, 2020 at 8:19 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+>
+>
+> On 08/15/2020 03:17 AM, Atish Patra wrote:
+> > ARM64 numa implementation is generic enough that RISC-V can reuse that
+> > implementation with very minor cosmetic changes. This will help both
+> > ARM64 and RISC-V in terms of maintanace and feature improvement
+> >
+> > Move the numa implementation code to common directory so that both ISAs
+> > can reuse this. This doesn't introduce any function changes for ARM64.
+> >
+> > Signed-off-by: Atish Patra <atish.patra@wdc.com>
+> > ---
+> >  arch/arm64/Kconfig                            |  1 +
+> >  arch/arm64/include/asm/numa.h                 | 45 +---------------
+> >  arch/arm64/mm/Makefile                        |  1 -
+> >  drivers/base/Kconfig                          |  6 +++
+> >  drivers/base/Makefile                         |  1 +
+> >  .../mm/numa.c => drivers/base/arch_numa.c     |  0
+> >  include/asm-generic/numa.h                    | 51 +++++++++++++++++++
+> >  7 files changed, 60 insertions(+), 45 deletions(-)
+> >  rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (100%)
+> >  create mode 100644 include/asm-generic/numa.h
+> >
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 6d232837cbee..955a0cf75b16 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -960,6 +960,7 @@ config HOTPLUG_CPU
+> >  # Common NUMA Features
+> >  config NUMA
+> >       bool "NUMA Memory Allocation and Scheduler Support"
+> > +     select GENERIC_ARCH_NUMA
+>
+> So this introduces a generic NUMA framework selectable with GENERIC_ARCH_NUMA.
+>
+> >       select ACPI_NUMA if ACPI
+> >       select OF_NUMA
+> >       help
+> > diff --git a/arch/arm64/include/asm/numa.h b/arch/arm64/include/asm/numa.h
+> > index 626ad01e83bf..8c8cf4297cc3 100644
+> > --- a/arch/arm64/include/asm/numa.h
+> > +++ b/arch/arm64/include/asm/numa.h
+> > @@ -3,49 +3,6 @@
+> >  #define __ASM_NUMA_H
+> >
+> >  #include <asm/topology.h>
+> > -
+> > -#ifdef CONFIG_NUMA
+> > -
+> > -#define NR_NODE_MEMBLKS              (MAX_NUMNODES * 2)
+> > -
+> > -int __node_distance(int from, int to);
+> > -#define node_distance(a, b) __node_distance(a, b)
+> > -
+> > -extern nodemask_t numa_nodes_parsed __initdata;
+> > -
+> > -extern bool numa_off;
+> > -
+> > -/* Mappings between node number and cpus on that node. */
+> > -extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
+> > -void numa_clear_node(unsigned int cpu);
+> > -
+> > -#ifdef CONFIG_DEBUG_PER_CPU_MAPS
+> > -const struct cpumask *cpumask_of_node(int node);
+> > -#else
+> > -/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
+> > -static inline const struct cpumask *cpumask_of_node(int node)
+> > -{
+> > -     return node_to_cpumask_map[node];
+> > -}
+> > -#endif
+> > -
+> > -void __init arm64_numa_init(void);
+> > -int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+> > -void __init numa_set_distance(int from, int to, int distance);
+> > -void __init numa_free_distance(void);
+> > -void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+> > -void numa_store_cpu_info(unsigned int cpu);
+> > -void numa_add_cpu(unsigned int cpu);
+> > -void numa_remove_cpu(unsigned int cpu);
+> > -
+> > -#else        /* CONFIG_NUMA */
+> > -
+> > -static inline void numa_store_cpu_info(unsigned int cpu) { }
+> > -static inline void numa_add_cpu(unsigned int cpu) { }
+> > -static inline void numa_remove_cpu(unsigned int cpu) { }
+> > -static inline void arm64_numa_init(void) { }
+> > -static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+> > -
+> > -#endif       /* CONFIG_NUMA */
+> > +#include <asm-generic/numa.h>
+> >
+> >  #endif       /* __ASM_NUMA_H */
+> > diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+> > index d91030f0ffee..928c308b044b 100644
+> > --- a/arch/arm64/mm/Makefile
+> > +++ b/arch/arm64/mm/Makefile
+> > @@ -6,7 +6,6 @@ obj-y                         := dma-mapping.o extable.o fault.o init.o \
+> >  obj-$(CONFIG_HUGETLB_PAGE)   += hugetlbpage.o
+> >  obj-$(CONFIG_PTDUMP_CORE)    += dump.o
+> >  obj-$(CONFIG_PTDUMP_DEBUGFS) += ptdump_debugfs.o
+> > -obj-$(CONFIG_NUMA)           += numa.o
+> >  obj-$(CONFIG_DEBUG_VIRTUAL)  += physaddr.o
+> >  KASAN_SANITIZE_physaddr.o    += n
+> >
+> > diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> > index 8d7001712062..73c2151de194 100644
+> > --- a/drivers/base/Kconfig
+> > +++ b/drivers/base/Kconfig
+> > @@ -210,4 +210,10 @@ config GENERIC_ARCH_TOPOLOGY
+> >         appropriate scaling, sysfs interface for reading capacity values at
+> >         runtime.
+> >
+> > +config GENERIC_ARCH_NUMA
+> > +     bool
+> > +     help
+> > +       Enable support for generic numa implementation. Currently, RISC-V
+> > +       and ARM64 uses it.
+> > +
+> >  endmenu
+> > diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> > index 157452080f3d..c3d02c644222 100644
+> > --- a/drivers/base/Makefile
+> > +++ b/drivers/base/Makefile
+> > @@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
+> >  obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+> >  obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
+> >  obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
+> > +obj-$(CONFIG_GENERIC_ARCH_NUMA) += arch_numa.o
+> >
+> >  obj-y                        += test/
+> >
+> > diff --git a/arch/arm64/mm/numa.c b/drivers/base/arch_numa.c
+> > similarity index 100%
+> > rename from arch/arm64/mm/numa.c
+> > rename to drivers/base/arch_numa.c
+>
+> drivers/base/ does not seem right place to host generic NUMA code.
 
-So, AFAIK, if you create a CMA pool it can be used for any MOVABLE
-allocations (similar to ZONE_MOVABLE) until you actually allocate CMA
-memory from that region. Other allocations on that are will then be
-migrated away (using alloc_contig_range()).
+I chose drivers/base because the common topology code is also present there.
+drivers/base/arch_topology.c under GENERIC_ARCH_TOPOLOGY
+The idea is to keep all common arch(at least between RISC-V & ARM64)
+related code at one place.
 
-For example, if you have a 1~GiB CMA area, you could allocate 4~MB pages
-from that CMA area on demand (removing the direct mapping, etc ..), and
-free when no longer needed (instantiating the direct mapping). The free
-memory in that area could used for MOVABLE allocations.
+> Probably it should be either mm/ or kernel/. The other question here
 
-Please let me know if I am missing something important.
+I am fine with mm/arch_numa.c as well if that is preferred over driver/base.
+
+> would be if existing arm64 NUMA implementation is sufficient enough
+> for generic NUMA. I would expect any platform selecting this config
+> should get some NUMA enabled, will be that be true with present code ?
+
+It is for RISC-V. Here is the RISC-V support patch (last patch in the series)
+
+http://lists.infradead.org/pipermail/linux-riscv/2020-August/001659.html
+
+> Otherwise it will be difficult to name it as GENERIC_ARCH_NUMA.
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Regards,
+Atish
