@@ -2,122 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5AA24A3E7
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 18:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B783A24A3FF
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 18:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgHSQWo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 12:22:44 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:58076 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726731AbgHSQWl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Aug 2020 12:22:41 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07JGJYrj024027;
-        Wed, 19 Aug 2020 09:22:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=SIEBDEqt+TndDR3Oy+gr+t//mT7+V83M7R6Yny4slA4=;
- b=ampZ/g+qX8BWqKuw717DyS1h/uNtYLJD3LkVfbrgZGh/q+ktw3FYLizulrfI02VqFYCY
- hp1uKwNhOmsG6JcfYhQzfsZfZDHg5jdMiFiOPLAde5PwGHG2vqklEkdv6+k2ki/aQFkt
- pFHa3gSnyxZLSIjzJcW+dIiryo1NMYvzzt7pL1DgISMFdi4CicrFZiPKPsXdr/hPr7Jb
- MIudtlYxyV612XKcKlIHkrvksR2eS5wSS3QjWkG8qwuvDsCJa4/k84YPJNHWXGPNCX9S
- cfEYz6SH0WL0y0BxwTsh3Ze1Y3Dsqgy1EqW1yiNeq11LmLKzcWL9AJVpwgFGrbvOX9zL 9Q== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3304fhrw4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 19 Aug 2020 09:22:32 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 19 Aug
- 2020 09:22:32 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 19 Aug
- 2020 09:22:31 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Aug 2020 09:22:31 -0700
-Received: from hyd1584.caveonetworks.com (unknown [10.29.37.82])
-        by maili.marvell.com (Postfix) with ESMTP id D39773F703F;
-        Wed, 19 Aug 2020 09:22:28 -0700 (PDT)
-From:   George Cherian <george.cherian@marvell.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-CC:     <bhelgaas@google.com>, <arnd@arndb.de>,
-        George Cherian <george.cherian@marvell.com>
-Subject: [PATCH] PCI: Add pci_iounmap
-Date:   Wed, 19 Aug 2020 21:52:08 +0530
-Message-ID: <20200819162208.1965707-1-george.cherian@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727014AbgHSQYc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Aug 2020 12:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727113AbgHSQYL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 12:24:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62D5C061343;
+        Wed, 19 Aug 2020 09:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0qj0NgMXE9N5E+k0q9ljNMUsiRWKFkmPnIi16FDMGEc=; b=HlZ9h/mQIGWHSczZdWzzLw8l+9
+        Jb7IErUxYlL78RPZ71SMSGS/HV3yVvuUiIK/YrwfyvTC10O8KcRT6VMnYVL0aU6CO/PcKoxUKjbEg
+        FMPh3GoEkEasFRBXmnoogUTGVM8X1nLXrNJ16FeiPqu6ZKF55STetGuo6F7oJDkb7OFe+PK4ovJbA
+        LbxobzPdOK8V+J3D2xXSgj1M/Gi/FLJ8k0qHIh30NkHE5oScUHkA9+e2lUTAXyQG8c7I3ipBoYqQG
+        U0zEH7NCWDF7DOH+DTnpfm8m7ACzQHtRlw8IFMlAy1bIPMlB4/FKC98szZaxVo3aceR5NEss3m70T
+        PvKLLcqw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k8Qsd-0004c3-7w; Wed, 19 Aug 2020 16:24:03 +0000
+Date:   Wed, 19 Aug 2020 17:24:03 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        Christoph Hewllig <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "uclinux-h8-devel@lists.sourceforge.jp" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
+Message-ID: <20200819162403.GF17456@casper.infradead.org>
+References: <20200818174447.GV17456@casper.infradead.org>
+ <20200819074340.GW2674@hirez.programming.kicks-ass.net>
+ <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+ <20200819111851.GY17456@casper.infradead.org>
+ <87a6yq222c.fsf@x220.int.ebiederm.org>
+ <20200819134629.mvd4nupme7q2hmtz@wittgenstein>
+ <87mu2qznlv.fsf@x220.int.ebiederm.org>
+ <df7f7e17a730405ea182ec778eec22e1@AcuMS.aculab.com>
+ <20200819154521.GE17456@casper.infradead.org>
+ <ee30fecfbd534c19a6bfd11d2c4b8263@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-19_09:2020-08-19,2020-08-19 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee30fecfbd534c19a6bfd11d2c4b8263@AcuMS.aculab.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In case if any architecture selects CONFIG_GENERIC_PCI_IOMAP and not
-CONFIG_GENERIC_IOMAP, then the pci_iounmap function is reduced to a NULL
-function. Due to this the managed release variants or even the explicit
-pci_iounmap calls doesn't really remove the mappings.
+On Wed, Aug 19, 2020 at 03:55:47PM +0000, David Laight wrote:
+> From: Matthew Wilcox
+> > Sent: 19 August 2020 16:45
+> > 
+> > On Wed, Aug 19, 2020 at 03:41:48PM +0000, David Laight wrote:
+> > > Does linux have an O(1) (or do I mean o(1)) pid allocator?
+> > > Or does it have to do a linear scan to find a gap??
+> > 
+> > O(log(n)).  It uses the IDR allocator, so 'n' in this case is the
+> > number of PIDs currently allocated, and it's log_64 rather than log_2
+> > (which makes no difference to O() but does make a bit of a difference
+> > to performance)
+> 
+> Still worse that O(1) - when that is just replacing a variable
+> with a value read out of an array.
+> Made pid lookup a trivial O(1) as well.
 
-This issue is seen on an arm64 based system. arm64 by default selects
-only CONFIG_GENERIC_PCI_IOMAP and not CONFIG_GENERIC_IOMAP from this
-'commit cb61f6769b88 ("ARM64: use GENERIC_PCI_IOMAP")'
+You'd be surprised.  We replaced the custom PID allocator with the
+generic IDR allocator a few years ago and got a pretty decent speedup.
 
-Simple bind/unbind test of any pci driver using pcim_iomap/pci_iomap,
-would lead to the following error message after long hour tests
-
-"allocation failed: out of vmalloc space - use vmalloc=<size> to
-increase size."
-
-Signed-off-by: George Cherian <george.cherian@marvell.com>
----
- include/asm-generic/io.h | 4 ++++
- lib/pci_iomap.c          | 9 +++++++++
- 2 files changed, 13 insertions(+)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index dabf8cb7203b..5986b37226b7 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -915,12 +915,16 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
- struct pci_dev;
- extern void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max);
- 
-+#ifdef CONFIG_GENERIC_PCI_IOMAP
-+extern void pci_iounmap(struct pci_dev *dev, void __iomem *p);
-+#else
- #ifndef pci_iounmap
- #define pci_iounmap pci_iounmap
- static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
- {
- }
- #endif
-+#endif /* CONFIG_GENERIC_PCI_IOMAP */
- #endif /* CONFIG_GENERIC_IOMAP */
- 
- /*
-diff --git a/lib/pci_iomap.c b/lib/pci_iomap.c
-index 2d3eb1cb73b8..36128af05e1c 100644
---- a/lib/pci_iomap.c
-+++ b/lib/pci_iomap.c
-@@ -134,4 +134,13 @@ void __iomem *pci_iomap_wc(struct pci_dev *dev, int bar, unsigned long maxlen)
- 	return pci_iomap_wc_range(dev, bar, 0, maxlen);
- }
- EXPORT_SYMBOL_GPL(pci_iomap_wc);
-+
-+#ifndef CONFIG_GENERIC_IOMAP
-+#define pci_iounmap pci_iounmap
-+void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
-+{
-+	iounmap(addr);
-+}
-+EXPORT_SYMBOL(pci_iounmap);
-+#endif
- #endif /* CONFIG_PCI */
--- 
-2.25.1
-
+If you think you can do better, then submit patches.  You have to support
+all the existing use cases, of course.
