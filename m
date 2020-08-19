@@ -2,30 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA08249CD1
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 13:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8836A249D5E
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 14:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728080AbgHSL4E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 07:56:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56344 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728259AbgHSLzJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:55:09 -0400
-Received: from kernel.org (unknown [87.70.91.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728133AbgHSMGK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Aug 2020 08:06:10 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40849 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728124AbgHSMFl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 19 Aug 2020 08:05:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597838739;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=NA3ECXSKW/DVOnspa0nEEYBrqs7/jKx+mt/YRot/1Uo=;
+        b=U9BTI18F5KQoRx4hWL9KOmmVCy1ETez2kjTTtzOHI+PpYnpl3Clb7XpTZ3uTOIfRIQRQ1R
+        VEW/qT3ujbj2YCPeFSCRG4em74QeEyoA+/K/r3yRFmY5ZT30xok6xyk40HWTOJpfZ4+a5r
+        byqbZibsQRu+AgcJjlnmMVzoI5rXugs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-178-TtM9FzzQOzuiNFjA1DxWNw-1; Wed, 19 Aug 2020 08:05:30 -0400
+X-MC-Unique: TtM9FzzQOzuiNFjA1DxWNw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7FB6322CB2;
-        Wed, 19 Aug 2020 11:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597838028;
-        bh=nB9SuwtUizzYREhBl09f96wwqfl+6v1Nki9XxEYxFmg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XzrjsD+88ReKpEKVPxcwBs0sO7/deF5YmgL8LgJvrSN6vKteBo3UksVlQ439kYefA
-         pqi62Er1Ztem1X6xeUf0PcjYSye7F9ZeTEP4gsLHxxhVLZS4GHJvJhgTJYf67ZgHza
-         yH2N2HWN3WZDusoyvsFWvEe6drqcLGHPLKWZz18o=
-Date:   Wed, 19 Aug 2020 14:53:35 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 233E0801ADD;
+        Wed, 19 Aug 2020 12:05:26 +0000 (UTC)
+Received: from [10.36.114.11] (ovpn-114-11.ams2.redhat.com [10.36.114.11])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4EDD8756C3;
+        Wed, 19 Aug 2020 12:05:19 +0000 (UTC)
+Subject: Re: [PATCH v4 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -53,254 +64,131 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
         linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: Re: [PATCH v4 6/6] mm: secretmem: add ability to reserve memory at
- boot
-Message-ID: <20200819115335.GU752365@kernel.org>
 References: <20200818141554.13945-1-rppt@kernel.org>
- <20200818141554.13945-7-rppt@kernel.org>
- <03ec586d-c00c-c57e-3118-7186acb7b823@redhat.com>
+ <e82ca20e-a88e-d7ff-e99b-4189aac54f3a@redhat.com>
+ <20200819114244.GT752365@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat GmbH
+Message-ID: <e5738841-c673-13d6-a632-a6413ec94c43@redhat.com>
+Date:   Wed, 19 Aug 2020 14:05:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03ec586d-c00c-c57e-3118-7186acb7b823@redhat.com>
+In-Reply-To: <20200819114244.GT752365@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 12:49:05PM +0200, David Hildenbrand wrote:
-> On 18.08.20 16:15, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > Taking pages out from the direct map and bringing them back may create
-> > undesired fragmentation and usage of the smaller pages in the direct
-> > mapping of the physical memory.
-> > 
-> > This can be avoided if a significantly large area of the physical memory
-> > would be reserved for secretmem purposes at boot time.
-> > 
-> > Add ability to reserve physical memory for secretmem at boot time using
-> > "secretmem" kernel parameter and then use that reserved memory as a global
-> > pool for secret memory needs.
+On 19.08.20 13:42, Mike Rapoport wrote:
+> On Wed, Aug 19, 2020 at 12:47:54PM +0200, David Hildenbrand wrote:
+>> On 18.08.20 16:15, Mike Rapoport wrote:
+>>> From: Mike Rapoport <rppt@linux.ibm.com>
+>>>
+>>> Hi,
+>>>
+>>> This is an implementation of "secret" mappings backed by a file descriptor. 
+>>>
+>>> v4 changes:
+>>> * rebase on v5.9-rc1
+>>> * Do not redefine PMD_PAGE_ORDER in fs/dax.c, thanks Kirill
+>>> * Make secret mappings exclusive by default and only require flags to
+>>>   memfd_secret() system call for uncached mappings, thanks again Kirill :)
+>>>
+>>> v3 changes:
+>>> * Squash kernel-parameters.txt update into the commit that added the
+>>>   command line option.
+>>> * Make uncached mode explicitly selectable by architectures. For now enable
+>>>   it only on x86.
+>>>
+>>> v2 changes:
+>>> * Follow Michael's suggestion and name the new system call 'memfd_secret'
+>>> * Add kernel-parameters documentation about the boot option
+>>> * Fix i386-tinyconfig regression reported by the kbuild bot.
+>>>   CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+>>>   from one side and still make it available unconditionally on
+>>>   architectures that support SET_DIRECT_MAP.
+>>>
+>>>
+>>> The file descriptor backing secret memory mappings is created using a
+>>> dedicated memfd_secret system call The desired protection mode for the
+>>> memory is configured using flags parameter of the system call. The mmap()
+>>> of the file descriptor created with memfd_secret() will create a "secret"
+>>> memory mapping. The pages in that mapping will be marked as not present in
+>>> the direct map and will have desired protection bits set in the user page
+>>> table. For instance, current implementation allows uncached mappings.
+>>>
+>>> Although normally Linux userspace mappings are protected from other users, 
+>>> such secret mappings are useful for environments where a hostile tenant is
+>>> trying to trick the kernel into giving them access to other tenants
+>>> mappings.
+>>>
+>>> Additionally, the secret mappings may be used as a mean to protect guest
+>>> memory in a virtual machine host.
+>>>
+>>
+>> Just a general question. I assume such pages (where the direct mapping
+>> was changed) cannot get migrated - I can spot a simple alloc_page(). So
+>> essentially a process can just allocate a whole bunch of memory that is
+>> unmovable, correct? Is there any limit? Is it properly accounted towards
+>> the process (memctl) ?
 > 
-> Wouldn't something like CMA be the better fit? Just wondering. Then, the
-> memory can actually be reused for something else while not needed.
+> The memory as accounted in the same way like with mlock(), so normal
+> user won't be able to allocate more than RLIMIT_MEMLOCK.
 
-The memory allocated as secret is removed from the direct map and the
-boot time reservation is intended to reduce direct map fragmentatioan
-and to avoid splitting 1G pages there. So with CMA I'd still need to
-allocate 1G chunks for this and once 1G page is dropped from the direct
-map it still cannot be reused for anything else until it is freed.
-
-I could use CMA to do the boot time reservation, but doing the
-reservesion directly seemed simpler and more explicit to me.
-
-
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> >  mm/secretmem.c | 134 ++++++++++++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 126 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/mm/secretmem.c b/mm/secretmem.c
-> > index 333eb18fb483..54067ea62b2d 100644
-> > --- a/mm/secretmem.c
-> > +++ b/mm/secretmem.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/pagemap.h>
-> >  #include <linux/genalloc.h>
-> >  #include <linux/syscalls.h>
-> > +#include <linux/memblock.h>
-> >  #include <linux/pseudo_fs.h>
-> >  #include <linux/set_memory.h>
-> >  #include <linux/sched/signal.h>
-> > @@ -45,6 +46,39 @@ struct secretmem_ctx {
-> >  	unsigned int mode;
-> >  };
-> >  
-> > +struct secretmem_pool {
-> > +	struct gen_pool *pool;
-> > +	unsigned long reserved_size;
-> > +	void *reserved;
-> > +};
-> > +
-> > +static struct secretmem_pool secretmem_pool;
-> > +
-> > +static struct page *secretmem_alloc_huge_page(gfp_t gfp)
-> > +{
-> > +	struct gen_pool *pool = secretmem_pool.pool;
-> > +	unsigned long addr = 0;
-> > +	struct page *page = NULL;
-> > +
-> > +	if (pool) {
-> > +		if (gen_pool_avail(pool) < PMD_SIZE)
-> > +			return NULL;
-> > +
-> > +		addr = gen_pool_alloc(pool, PMD_SIZE);
-> > +		if (!addr)
-> > +			return NULL;
-> > +
-> > +		page = virt_to_page(addr);
-> > +	} else {
-> > +		page = alloc_pages(gfp, PMD_PAGE_ORDER);
-> > +
-> > +		if (page)
-> > +			split_page(page, PMD_PAGE_ORDER);
-> > +	}
-> > +
-> > +	return page;
-> > +}
-> > +
-> >  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >  {
-> >  	unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-> > @@ -53,12 +87,11 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >  	struct page *page;
-> >  	int err;
-> >  
-> > -	page = alloc_pages(gfp, PMD_PAGE_ORDER);
-> > +	page = secretmem_alloc_huge_page(gfp);
-> >  	if (!page)
-> >  		return -ENOMEM;
-> >  
-> >  	addr = (unsigned long)page_address(page);
-> > -	split_page(page, PMD_PAGE_ORDER);
-> >  
-> >  	err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
-> >  	if (err) {
-> > @@ -267,11 +300,13 @@ SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
-> >  	return err;
-> >  }
-> >  
-> > -static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> > -				    struct gen_pool_chunk *chunk, void *data)
-> > +static void secretmem_recycle_range(unsigned long start, unsigned long end)
-> > +{
-> > +	gen_pool_free(secretmem_pool.pool, start, PMD_SIZE);
-> > +}
-> > +
-> > +static void secretmem_release_range(unsigned long start, unsigned long end)
-> >  {
-> > -	unsigned long start = chunk->start_addr;
-> > -	unsigned long end = chunk->end_addr;
-> >  	unsigned long nr_pages, addr;
-> >  
-> >  	nr_pages = (end - start + 1) / PAGE_SIZE;
-> > @@ -281,6 +316,18 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> >  		put_page(virt_to_page(addr));
-> >  }
-> >  
-> > +static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> > +				    struct gen_pool_chunk *chunk, void *data)
-> > +{
-> > +	unsigned long start = chunk->start_addr;
-> > +	unsigned long end = chunk->end_addr;
-> > +
-> > +	if (secretmem_pool.pool)
-> > +		secretmem_recycle_range(start, end);
-> > +	else
-> > +		secretmem_release_range(start, end);
-> > +}
-> > +
-> >  static void secretmem_cleanup_pool(struct secretmem_ctx *ctx)
-> >  {
-> >  	struct gen_pool *pool = ctx->pool;
-> > @@ -320,14 +367,85 @@ static struct file_system_type secretmem_fs = {
-> >  	.kill_sb	= kill_anon_super,
-> >  };
-> >  
-> > +static int secretmem_reserved_mem_init(void)
-> > +{
-> > +	struct gen_pool *pool;
-> > +	struct page *page;
-> > +	void *addr;
-> > +	int err;
-> > +
-> > +	if (!secretmem_pool.reserved)
-> > +		return 0;
-> > +
-> > +	pool = gen_pool_create(PMD_SHIFT, NUMA_NO_NODE);
-> > +	if (!pool)
-> > +		return -ENOMEM;
-> > +
-> > +	err = gen_pool_add(pool, (unsigned long)secretmem_pool.reserved,
-> > +			   secretmem_pool.reserved_size, NUMA_NO_NODE);
-> > +	if (err)
-> > +		goto err_destroy_pool;
-> > +
-> > +	for (addr = secretmem_pool.reserved;
-> > +	     addr < secretmem_pool.reserved + secretmem_pool.reserved_size;
-> > +	     addr += PAGE_SIZE) {
-> > +		page = virt_to_page(addr);
-> > +		__ClearPageReserved(page);
-> > +		set_page_count(page, 1);
-> > +	}
-> > +
-> > +	secretmem_pool.pool = pool;
-> > +	page = virt_to_page(secretmem_pool.reserved);
-> > +	__kernel_map_pages(page, secretmem_pool.reserved_size / PAGE_SIZE, 0);
-> > +	return 0;
-> > +
-> > +err_destroy_pool:
-> > +	gen_pool_destroy(pool);
-> > +	return err;
-> > +}
-> > +
-> >  static int secretmem_init(void)
-> >  {
-> > -	int ret = 0;
-> > +	int ret;
-> > +
-> > +	ret = secretmem_reserved_mem_init();
-> > +	if (ret)
-> > +		return ret;
-> >  
-> >  	secretmem_mnt = kern_mount(&secretmem_fs);
-> > -	if (IS_ERR(secretmem_mnt))
-> > +	if (IS_ERR(secretmem_mnt)) {
-> > +		gen_pool_destroy(secretmem_pool.pool);
-> >  		ret = PTR_ERR(secretmem_mnt);
-> > +	}
-> >  
-> >  	return ret;
-> >  }
-> >  fs_initcall(secretmem_init);
-> > +
-> > +static int __init secretmem_setup(char *str)
-> > +{
-> > +	phys_addr_t align = PMD_SIZE;
-> > +	unsigned long reserved_size;
-> > +	void *reserved;
-> > +
-> > +	reserved_size = memparse(str, NULL);
-> > +	if (!reserved_size)
-> > +		return 0;
-> > +
-> > +	if (reserved_size * 2 > PUD_SIZE)
-> > +		align = PUD_SIZE;
-> > +
-> > +	reserved = memblock_alloc(reserved_size, align);
-> > +	if (!reserved) {
-> > +		pr_err("failed to reserve %lu bytes\n", secretmem_pool.reserved_size);
-> > +		return 0;
-> > +	}
-> > +
-> > +	secretmem_pool.reserved_size = reserved_size;
-> > +	secretmem_pool.reserved = reserved;
-> > +
-> > +	pr_info("reserved %luM\n", reserved_size >> 20);
-> > +
-> > +	return 1;
-> > +}
-> > +__setup("secretmem=", secretmem_setup);
-> > 
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
+Okay, thanks. AFAIU the difference to mlock() is that the pages here are
+not movable, fragment memory, and limit compaction. Hm.
 
 -- 
-Sincerely yours,
-Mike.
+Thanks,
+
+David / dhildenb
+
