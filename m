@@ -2,56 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EBE24A237
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 16:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3000024A270
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Aug 2020 17:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728644AbgHSO6H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Aug 2020 10:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728312AbgHSO56 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 10:57:58 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE6CC061342
-        for <linux-arch@vger.kernel.org>; Wed, 19 Aug 2020 07:57:57 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id y3so21863871wrl.4
-        for <linux-arch@vger.kernel.org>; Wed, 19 Aug 2020 07:57:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gNx7n7webYaK+hMWxyNwV8aV+v87tKouMeg3PXkBAf4=;
-        b=n8MmBW8b3ksN9T8Gafo3ZMOc4bhTXtjR+GeS0Rvibq/PzoG8Ye3N53BDrp8svnlv1n
-         NCO6QXaVozSNJMjlnQ5OShKx2UtailwRjMYqmmmurY9gvYVamal0vEIVKsDhh8K+8W26
-         WPEmayEJ3i7jIMuYtQRfCZ/+8a4/zcqFTDJpsQffHWVTTjOiGoLEoP2XGxgbqsgf/DDj
-         g8kTBETSBr9PCC/YyD3BzuaZDEj4xbQidp8pcS2SN8qiHkb+Aa3m1UDHtXXnDy9A2zpf
-         s+zE/8aI9eShP/kv/B+r9e3vocR244XTBvjbPCq4/aLjlqFZ6LbVgGFYOeq7pX62hhHU
-         PKpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gNx7n7webYaK+hMWxyNwV8aV+v87tKouMeg3PXkBAf4=;
-        b=CKva04UP0btjwxO+dE1eXr92QtrygUhQYPmvZHQdU5lA8w+Zf4Z6xKRmz1BjYBVw81
-         qo5aCLSr42jBzOC8Yf7epP+l9BCB7lSGeekiwcr+Hl+CYPhe4FRgAao69olvWyrx5Z5L
-         0Iw9VGvVBTzZzN7+uS+82VowumE61SODPdfV06PsqLJ02POERRKEZYGdEnl1AQ8mjTK+
-         F3yejqvooRFsRAuiwHTmLw1qDLc3D2vY8mVkPaAKXirG2fmHSUI7nL/XgrcNXpPvn9mZ
-         un6H1U2osa2lEl7qL7M6My1RlZ36inogU3SUl7cThz+HKHPj4FwXmQdq4nCH9t8y4PF8
-         p04A==
-X-Gm-Message-State: AOAM5313y3S5kO3FSAXg4PcjbyQAaWAmdOqjTCTgfJf4F4iyfKXkOIH9
-        sFl2E9Vcf1nSs5QyqXu5N2R7cQ==
-X-Google-Smtp-Source: ABdhPJzdW54EsERHAQyBaPPEEG3Xqf5CZuQ5mXiSSV+v29L8rIqau0aRKvT5VQZe07WUqRDjP2geRQ==
-X-Received: by 2002:adf:f64f:: with SMTP id x15mr27108964wrp.180.1597849074997;
-        Wed, 19 Aug 2020 07:57:54 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id h5sm44726104wrc.97.2020.08.19.07.57.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 07:57:53 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 15:57:51 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
+        id S1728668AbgHSPF0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Aug 2020 11:05:26 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:52586 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728610AbgHSPFY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Aug 2020 11:05:24 -0400
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out01.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1k8PeB-008bgu-Nh; Wed, 19 Aug 2020 09:05:03 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1k8Pdz-0002ES-Gb; Wed, 19 Aug 2020 09:04:58 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
 To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
+Cc:     Matthew Wilcox <willy@infradead.org>, peterz@infradead.org,
+        Christoph Hewllig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Tony Luck <tony.luck@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
@@ -63,11 +39,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Steven Rostedt <rostedt@goodmis.org>,
         Stafford Horne <shorne@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Kars de Jong <jongk@linux-m68k.org>,
         Kees Cook <keescook@chromium.org>,
         Greentime Hu <green.hu@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Alexandre Chartre <alexandre.chartre@oracle.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -76,186 +50,129 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
         kgdb-bugreport@lists.sourceforge.net,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hewllig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Wessel <jason.wessel@windriver.com>
-Subject: Re: [PATCH v2 09/11] kgdbts: switch to kernel_clone()
-Message-ID: <20200819145751.uqblo3zh66nqnxmn@holly.lan>
-References: <20200819104655.436656-1-christian.brauner@ubuntu.com>
- <20200819104655.436656-10-christian.brauner@ubuntu.com>
+        linux-kselftest@vger.kernel.org
+References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+        <20200818174447.GV17456@casper.infradead.org>
+        <20200819074340.GW2674@hirez.programming.kicks-ass.net>
+        <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+        <20200819111851.GY17456@casper.infradead.org>
+        <87a6yq222c.fsf@x220.int.ebiederm.org>
+        <20200819134629.mvd4nupme7q2hmtz@wittgenstein>
+Date:   Wed, 19 Aug 2020 10:01:16 -0500
+In-Reply-To: <20200819134629.mvd4nupme7q2hmtz@wittgenstein> (Christian
+        Brauner's message of "Wed, 19 Aug 2020 15:46:29 +0200")
+Message-ID: <87mu2qznlv.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200819104655.436656-10-christian.brauner@ubuntu.com>
+Content-Type: text/plain
+X-XM-SPF: eid=1k8Pdz-0002ES-Gb;;;mid=<87mu2qznlv.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+7Z/n5uynSvWoygLfaQ9ENNpj25p3/XJs=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.2 required=8.0 tests=ALL_TRUSTED,BAYES_40,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,XMGppyBdWords,
+        XMNoVowels,XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.2682]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  2.5 XMGppyBdWords BODY: Gappy or l33t words
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 0; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.0 T_TooManySym_04 7+ unique symbols in subject
+        *  0.0 T_TooManySym_03 6+ unique symbols in subject
+X-Spam-DCC: ; sa06 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Christian Brauner <christian.brauner@ubuntu.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 6658 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 54 (0.8%), b_tie_ro: 52 (0.8%), parse: 4.4 (0.1%),
+         extract_message_metadata: 396 (5.9%), get_uri_detail_list: 51 (0.8%),
+        tests_pri_-1000: 298 (4.5%), tests_pri_-950: 2.0 (0.0%),
+        tests_pri_-900: 2.2 (0.0%), tests_pri_-90: 760 (11.4%), check_bayes:
+        758 (11.4%), b_tokenize: 400 (6.0%), b_tok_get_all: 107 (1.6%),
+        b_comp_prob: 6 (0.1%), b_tok_touch_all: 199 (3.0%), b_finish: 11
+        (0.2%), tests_pri_0: 4936 (74.1%), check_dkim_signature: 3.8 (0.1%),
+        check_dkim_adsp: 203 (3.0%), poll_dns_idle: 24 (0.4%), tests_pri_10:
+        24 (0.4%), tests_pri_500: 112 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 12:46:53PM +0200, Christian Brauner wrote:
-> The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
-> The latter adheres to naming conventions for kernel internal syscall helpers.
-> 
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jason Wessel <jason.wessel@windriver.com>
-> Cc: kgdb-bugreport@lists.sourceforge.net
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Christian Brauner <christian.brauner@ubuntu.com> writes:
 
-Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-Tested-by: Daniel Thompson <daniel.thompson@linaro.org>
+> On Wed, Aug 19, 2020 at 08:32:59AM -0500, Eric W. Biederman wrote:
+>> Matthew Wilcox <willy@infradead.org> writes:
+>> 
+>> > On Wed, Aug 19, 2020 at 10:45:56AM +0200, Christian Brauner wrote:
+>> >> On Wed, Aug 19, 2020 at 09:43:40AM +0200, peterz@infradead.org wrote:
+>> >> > On Tue, Aug 18, 2020 at 06:44:47PM +0100, Matthew Wilcox wrote:
+>> >> > > On Tue, Aug 18, 2020 at 07:34:00PM +0200, Christian Brauner wrote:
+>> >> > > > The only remaining function callable outside of kernel/fork.c is
+>> >> > > > _do_fork(). It doesn't really follow the naming of kernel-internal
+>> >> > > > syscall helpers as Christoph righly pointed out. Switch all callers and
+>> >> > > > references to kernel_clone() and remove _do_fork() once and for all.
+>> >> > > 
+>> >> > > My only concern is around return type.  long, int, pid_t ... can we
+>> >> > > choose one and stick to it?  pid_t is probably the right return type
+>> >> > > within the kernel, despite the return type of clone3().  It'll save us
+>> >> > > some work if we ever go through the hassle of growing pid_t beyond 31-bit.
+>> >> > 
+>> >> > We have at least the futex ABI restricting PID space to 30 bits.
+>> >> 
+>> >> Ok, looking into kernel/futex.c I see 
+>> >> 
+>> >> pid_t pid = uval & FUTEX_TID_MASK;
+>> >> 
+>> >> which is probably what this referes to and /proc/sys/kernel/threads-max
+>> >> is restricted to FUTEX_TID_MASK.
+>> >> 
+>> >> Afaict, that doesn't block switching kernel_clone() to return pid_t. It
+>> >> can't create anything > FUTEX_TID_MASK anyway without yelling EAGAIN at
+>> >> userspace. But it means that _if_ we were to change the size of pid_t
+>> >> we'd likely need a new futex API. 
+>> >
+>> > Yes, there would be a lot of work to do to increase the size of pid_t.
+>> > I'd just like to not do anything to make that harder _now_.  Stick to
+>> > using pid_t within the kernel.
+>> 
+>> Just so people are aware.  If you look in include/linux/threads.h you
+>> can see that the maximum value of PID_MAX_LIMIT limits pids to 22 bits.
+>> 
+>> Further the design decisions of pids keeps us densly using pids.  So I
+>> expect it will be a while before we even come close to using 30 bits of
+>> pid space.
+>
+> Also because it's simply annoying to have to type really large pid
+> numbers on the shell. Yes yes, that's a very privileged
+> developer-centric complaint but it matters when you have to do a quick
+> kill -9. Chromebook users obviously won't care about how large their
+> pids are for sure.
 
+Actually that is one of the reasons (possibly the primary reason) that
+we have chosen to keep pid numbers dense.
 
-Daniel.
+There may be fewer users of unix shells then their used to be, and we
+may now have pidfds.  But until people stop using pids in shells it is a
+very valid reason to keep them densly packed.
 
-> ---
-> /* v2 */
-> unchanged
-> ---
->  drivers/misc/kgdbts.c | 48 +++++++++++++++++++++----------------------
->  1 file changed, 24 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-> index d5d2af4d10e6..945701bce553 100644
-> --- a/drivers/misc/kgdbts.c
-> +++ b/drivers/misc/kgdbts.c
-> @@ -33,16 +33,16 @@
->   * You can also specify optional tests:
->   * N## = Go to sleep with interrupts of for ## seconds
->   *       to test the HW NMI watchdog
-> - * F## = Break at do_fork for ## iterations
-> + * F## = Break at kernel_clone for ## iterations
->   * S## = Break at sys_open for ## iterations
->   * I## = Run the single step test ## iterations
->   *
-> - * NOTE: that the do_fork and sys_open tests are mutually exclusive.
-> + * NOTE: that the kernel_clone and sys_open tests are mutually exclusive.
->   *
->   * To invoke the kgdb test suite from boot you use a kernel start
->   * argument as follows:
->   * 	kgdbts=V1 kgdbwait
-> - * Or if you wanted to perform the NMI test for 6 seconds and do_fork
-> + * Or if you wanted to perform the NMI test for 6 seconds and kernel_clone
->   * test for 100 forks, you could use:
->   * 	kgdbts=V1N6F100 kgdbwait
->   *
-> @@ -74,7 +74,7 @@
->   * echo kgdbts=V1S10000 > /sys/module/kgdbts/parameters/kgdbts
->   * fg # and hit control-c
->   * fg # and hit control-c
-> - * ## This tests break points on do_fork
-> + * ## This tests break points on kernel_clone
->   * while [ 1 ] ; do date > /dev/null ; done &
->   * while [ 1 ] ; do date > /dev/null ; done &
->   * echo kgdbts=V1F1000 > /sys/module/kgdbts/parameters/kgdbts
-> @@ -209,8 +209,8 @@ static unsigned long lookup_addr(char *arg)
->  		addr = (unsigned long)kgdbts_break_test;
->  	else if (!strcmp(arg, "sys_open"))
->  		addr = (unsigned long)do_sys_open;
-> -	else if (!strcmp(arg, "do_fork"))
-> -		addr = (unsigned long)_do_fork;
-> +	else if (!strcmp(arg, "kernel_clone"))
-> +		addr = (unsigned long)kernel_clone;
->  	else if (!strcmp(arg, "hw_break_val"))
->  		addr = (unsigned long)&hw_break_val;
->  	addr = (unsigned long) dereference_function_descriptor((void *)addr);
-> @@ -310,7 +310,7 @@ static int check_and_rewind_pc(char *put_str, char *arg)
->  
->  	if (arch_needs_sstep_emulation && sstep_addr &&
->  	    ip + offset == sstep_addr &&
-> -	    ((!strcmp(arg, "sys_open") || !strcmp(arg, "do_fork")))) {
-> +	    ((!strcmp(arg, "sys_open") || !strcmp(arg, "kernel_clone")))) {
->  		/* This is special case for emulated single step */
->  		v2printk("Emul: rewind hit single step bp\n");
->  		restart_from_top_after_write = 1;
-> @@ -596,19 +596,19 @@ static struct test_struct singlestep_break_test[] = {
->  };
->  
->  /*
-> - * Test for hitting a breakpoint at do_fork for what ever the number
-> + * Test for hitting a breakpoint at kernel_clone for what ever the number
->   * of iterations required by the variable repeat_test.
->   */
-> -static struct test_struct do_fork_test[] = {
-> +static struct test_struct do_kernel_clone_test[] = {
->  	{ "?", "S0*" }, /* Clear break points */
-> -	{ "do_fork", "OK", sw_break, }, /* set sw breakpoint */
-> +	{ "kernel_clone", "OK", sw_break, }, /* set sw breakpoint */
->  	{ "c", "T0*", NULL, get_thread_id_continue }, /* Continue */
-> -	{ "do_fork", "OK", sw_rem_break }, /*remove breakpoint */
-> -	{ "g", "do_fork", NULL, check_and_rewind_pc }, /* check location */
-> +	{ "kernel_clone", "OK", sw_rem_break }, /*remove breakpoint */
-> +	{ "g", "kernel_clone", NULL, check_and_rewind_pc }, /* check location */
->  	{ "write", "OK", write_regs, emul_reset }, /* Write registers */
->  	{ "s", "T0*", emul_sstep_get, emul_sstep_put }, /* Single step */
-> -	{ "g", "do_fork", NULL, check_single_step },
-> -	{ "do_fork", "OK", sw_break, }, /* set sw breakpoint */
-> +	{ "g", "kernel_clone", NULL, check_single_step },
-> +	{ "kernel_clone", "OK", sw_break, }, /* set sw breakpoint */
->  	{ "7", "T0*", skip_back_repeat_test }, /* Loop based on repeat_test */
->  	{ "D", "OK", NULL, final_ack_set }, /* detach and unregister I/O */
->  	{ "", "", get_cont_catch, put_cont_catch },
-> @@ -935,11 +935,11 @@ static void run_bad_read_test(void)
->  	kgdb_breakpoint();
->  }
->  
-> -static void run_do_fork_test(void)
-> +static void run_kernel_clone_test(void)
->  {
->  	init_simple_test();
-> -	ts.tst = do_fork_test;
-> -	ts.name = "do_fork_test";
-> +	ts.tst = do_kernel_clone_test;
-> +	ts.name = "do_kernel_clone_test";
->  	/* Activate test with initial breakpoint */
->  	kgdb_breakpoint();
->  }
-> @@ -967,7 +967,7 @@ static void run_singlestep_break_test(void)
->  static void kgdbts_run_tests(void)
->  {
->  	char *ptr;
-> -	int fork_test = 0;
-> +	int clone_test = 0;
->  	int do_sys_open_test = 0;
->  	int sstep_test = 1000;
->  	int nmi_sleep = 0;
-> @@ -981,7 +981,7 @@ static void kgdbts_run_tests(void)
->  
->  	ptr = strchr(config, 'F');
->  	if (ptr)
-> -		fork_test = simple_strtol(ptr + 1, NULL, 10);
-> +		clone_test = simple_strtol(ptr + 1, NULL, 10);
->  	ptr = strchr(config, 'S');
->  	if (ptr)
->  		do_sys_open_test = simple_strtol(ptr + 1, NULL, 10);
-> @@ -1025,16 +1025,16 @@ static void kgdbts_run_tests(void)
->  		run_nmi_sleep_test(nmi_sleep);
->  	}
->  
-> -	/* If the do_fork test is run it will be the last test that is
-> +	/* If the kernel_clone test is run it will be the last test that is
->  	 * executed because a kernel thread will be spawned at the very
->  	 * end to unregister the debug hooks.
->  	 */
-> -	if (fork_test) {
-> -		repeat_test = fork_test;
-> -		printk(KERN_INFO "kgdbts:RUN do_fork for %i breakpoints\n",
-> +	if (clone_test) {
-> +		repeat_test = clone_test;
-> +		printk(KERN_INFO "kgdbts:RUN kernel_clone for %i breakpoints\n",
->  			repeat_test);
->  		kthread_run(kgdbts_unreg_thread, NULL, "kgdbts_unreg");
-> -		run_do_fork_test();
-> +		run_kernel_clone_test();
->  		return;
->  	}
->  
-> -- 
-> 2.28.0
-> 
+> Tbf, related to discussions last year, systemd now actually raises the
+> default limit from ~33000 to 4194304. Which seems like an ok compromise.
+
+Intereseting.  I had not heard of that.  That seems a strange choice
+for systemd rather than a system administrator to make.  Of course any
+design decision that requires manual intervention to get large systems
+to work is probably a bad one. 
+
+Eric
