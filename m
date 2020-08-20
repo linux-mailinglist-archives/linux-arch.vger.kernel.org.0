@@ -2,125 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AD824AE39
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Aug 2020 07:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B74524C290
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Aug 2020 17:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725820AbgHTFD0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Aug 2020 01:03:26 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:57906 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725780AbgHTFDZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 20 Aug 2020 01:03:25 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07K50FEE015293;
-        Wed, 19 Aug 2020 22:03:19 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=uwgbRGsLu7TM3L7kScUPbHo+Zd1DkfFIByzJ2VIUTeQ=;
- b=KlfHUjej9R399YagK5RL/iVywco9xKfBzrbBBgbfinkZQ892HjoADoAEP5zbqNJNJBI+
- N8uxbJYdD/rqh1WecyUS6GlUdj1NEyqB3R9bTGknMXu7xiyWqXQTs2pFF/VtthaEBHYK
- FYLLRbphmevd05Dd7+D82xwQJYcnFK32PVfdWMS4iXl4ShF6HxycE1XG8EKZtQIxdDix
- 0mly4nl/8RndcqP0NcId//tP08A4h/6goXzZpB/B+SNucMKuRQnbao/u+nwO4F7+h/wy
- PrDFd5w5KIgHlCuhsOcnwvgd35TmBr/y+B6rE1FCxFNhC3We4OENHG0jP3xem9Y8XfLH NA== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 3304hhudxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 19 Aug 2020 22:03:19 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 19 Aug
- 2020 22:03:17 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Aug 2020 22:03:17 -0700
-Received: from hyd1584.caveonetworks.com (unknown [10.29.37.82])
-        by maili.marvell.com (Postfix) with ESMTP id 187863F7044;
-        Wed, 19 Aug 2020 22:03:14 -0700 (PDT)
-From:   George Cherian <george.cherian@marvell.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-CC:     <bhelgaas@google.com>, <arnd@arndb.de>,
-        George Cherian <george.cherian@marvell.com>
-Subject: [PATCHv2] PCI: Add pci_iounmap
-Date:   Thu, 20 Aug 2020 10:33:06 +0530
-Message-ID: <20200820050306.2015009-1-george.cherian@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        id S1729409AbgHTPwm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Aug 2020 11:52:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728809AbgHTPwk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 20 Aug 2020 11:52:40 -0400
+Received: from kernel.org (unknown [87.70.91.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 50D6F22D02;
+        Thu, 20 Aug 2020 15:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597938759;
+        bh=olFkF8WbsFuHtZd9ChmwDnMhq4dAB75kWwSK+0maCo0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rXdI/2i+uTIyui9Dqky2lOsnOB5jHumUoz9vyCWVksi+jCX/cin2X0NAhZkvzzrrA
+         kwB1mQk9tmImk5FV5Ln6HbAMWznc6VF7fXJ8iI6/UHeReZUV1SP7agq0ae+f8/MDDg
+         S/yXBOXnLzIrn/7Y0W5T1dTvbgWrpaeScrKjGVKk=
+Date:   Thu, 20 Aug 2020 18:52:28 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Subject: Re: [PATCH v4 6/6] mm: secretmem: add ability to reserve memory at
+ boot
+Message-ID: <20200820155228.GZ752365@kernel.org>
+References: <20200818141554.13945-1-rppt@kernel.org>
+ <20200818141554.13945-7-rppt@kernel.org>
+ <03ec586d-c00c-c57e-3118-7186acb7b823@redhat.com>
+ <20200819115335.GU752365@kernel.org>
+ <10bf57a9-c3c2-e13c-ca50-e872b7a2db0c@redhat.com>
+ <20200819173347.GW752365@kernel.org>
+ <6c8b30fb-1b6c-d446-0b09-255b79468f7c@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-19_13:2020-08-19,2020-08-19 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c8b30fb-1b6c-d446-0b09-255b79468f7c@redhat.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In case if any architecture selects CONFIG_GENERIC_PCI_IOMAP and not
-CONFIG_GENERIC_IOMAP, then the pci_iounmap function is reduced to a NULL
-function. Due to this the managed release variants or even the explicit
-pci_iounmap calls doesn't really remove the mappings.
+On Wed, Aug 19, 2020 at 07:45:29PM +0200, David Hildenbrand wrote:
+> On 19.08.20 19:33, Mike Rapoport wrote:
+> > On Wed, Aug 19, 2020 at 02:10:43PM +0200, David Hildenbrand wrote:
+> >> On 19.08.20 13:53, Mike Rapoport wrote:
+> >>> On Wed, Aug 19, 2020 at 12:49:05PM +0200, David Hildenbrand wrote:
+> >>>> On 18.08.20 16:15, Mike Rapoport wrote:
+> >>>>> From: Mike Rapoport <rppt@linux.ibm.com>
+> >>>>>
+> >>>>> Taking pages out from the direct map and bringing them back may create
+> >>>>> undesired fragmentation and usage of the smaller pages in the direct
+> >>>>> mapping of the physical memory.
+> >>>>>
+> >>>>> This can be avoided if a significantly large area of the physical memory
+> >>>>> would be reserved for secretmem purposes at boot time.
+> >>>>>
+> >>>>> Add ability to reserve physical memory for secretmem at boot time using
+> >>>>> "secretmem" kernel parameter and then use that reserved memory as a global
+> >>>>> pool for secret memory needs.
+> >>>>
+> >>>> Wouldn't something like CMA be the better fit? Just wondering. Then, the
+> >>>> memory can actually be reused for something else while not needed.
+> >>>
+> >>> The memory allocated as secret is removed from the direct map and the
+> >>> boot time reservation is intended to reduce direct map fragmentatioan
+> >>> and to avoid splitting 1G pages there. So with CMA I'd still need to
+> >>> allocate 1G chunks for this and once 1G page is dropped from the direct
+> >>> map it still cannot be reused for anything else until it is freed.
+> >>>
+> >>> I could use CMA to do the boot time reservation, but doing the
+> >>> reservesion directly seemed simpler and more explicit to me.
+> >>
+> >> Well, using CMA would give you the possibility to let the memory be used
+> >> for other purposes until you decide it's the right time to take it +
+> >> remove the direct mapping etc.
+> > 
+> > I still can't say I follow you here. If I reseve a CMA area as a pool
+> > for secret memory 1G pages, it is still reserved and it still cannot be
+> > used for other purposes, right?
+> 
+> So, AFAIK, if you create a CMA pool it can be used for any MOVABLE
+> allocations (similar to ZONE_MOVABLE) until you actually allocate CMA
+> memory from that region. Other allocations on that are will then be
+> migrated away (using alloc_contig_range()).
+> 
+> For example, if you have a 1~GiB CMA area, you could allocate 4~MB pages
+> from that CMA area on demand (removing the direct mapping, etc ..), and
+> free when no longer needed (instantiating the direct mapping). The free
+> memory in that area could used for MOVABLE allocations.
 
-This issue is seen on an arm64 based system. arm64 by default selects
-only CONFIG_GENERIC_PCI_IOMAP and not CONFIG_GENERIC_IOMAP from this
-'commit cb61f6769b88 ("ARM64: use GENERIC_PCI_IOMAP")'
+The boot time resrvation is intended to avoid splitting 1G pages in the
+direct map. Without the boot time reservation, we maintain a pool of 2M
+pages so the 1G pages are split and 2M pages remain unsplit.
 
-Simple bind/unbind test of any pci driver using pcim_iomap/pci_iomap,
-would lead to the following error message after long hour tests
+If I scale your example to match the requirement to avoid splitting 1G
+pages in the direct map, that would mean creating a CMA area of several
+tens of gigabytes and then doing cma_alloc() of 1G each time we need to
+refill the secretmem pool. 
 
-"allocation failed: out of vmalloc space - use vmalloc=<size> to
-increase size."
+It is quite probable that we won't be able to get 1G from CMA after the
+system worked for some time.
 
-Signed-off-by: George Cherian <george.cherian@marvell.com>
----
-* Changes from v1
-	- Fix the 0-day compilation error.
-	- Mark the lib/iomap pci_iounmap call as weak incase 
-	  if any architecture have there own implementation.
+With boot time reservation we won't need physcally contiguous 1G to
+satisfy smaller allocation requests for secretmem because we don't need
+to maintain 1G mappings in the secretmem pool.
 
- include/asm-generic/io.h |  4 ++++
- lib/pci_iomap.c          | 10 ++++++++++
- 2 files changed, 14 insertions(+)
+That said, I believe the addition of the boot time reservation, either
+direct or with CMA, can be added as an incrememntal patch after the
+"core" functionality is merged.
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index dabf8cb7203b..5986b37226b7 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -915,12 +915,16 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
- struct pci_dev;
- extern void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max);
- 
-+#ifdef CONFIG_GENERIC_PCI_IOMAP
-+extern void pci_iounmap(struct pci_dev *dev, void __iomem *p);
-+#else
- #ifndef pci_iounmap
- #define pci_iounmap pci_iounmap
- static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
- {
- }
- #endif
-+#endif /* CONFIG_GENERIC_PCI_IOMAP */
- #endif /* CONFIG_GENERIC_IOMAP */
- 
- /*
-diff --git a/lib/pci_iomap.c b/lib/pci_iomap.c
-index 2d3eb1cb73b8..ecd1eb3f6c25 100644
---- a/lib/pci_iomap.c
-+++ b/lib/pci_iomap.c
-@@ -134,4 +134,14 @@ void __iomem *pci_iomap_wc(struct pci_dev *dev, int bar, unsigned long maxlen)
- 	return pci_iomap_wc_range(dev, bar, 0, maxlen);
- }
- EXPORT_SYMBOL_GPL(pci_iomap_wc);
-+
-+#ifndef CONFIG_GENERIC_IOMAP
-+#define pci_iounmap pci_iounmap
-+void __weak pci_iounmap(struct pci_dev *dev, void __iomem *addr);
-+void __weak pci_iounmap(struct pci_dev *dev, void __iomem *addr)
-+{
-+	iounmap(addr);
-+}
-+EXPORT_SYMBOL(pci_iounmap);
-+#endif
- #endif /* CONFIG_PCI */
+> Please let me know if I am missing something important.
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
+
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
