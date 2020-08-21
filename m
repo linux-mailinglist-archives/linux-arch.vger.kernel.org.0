@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 869E224E154
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 21:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C9024E145
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 21:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbgHUTzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Aug 2020 15:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S1726825AbgHUTy1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Aug 2020 15:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726676AbgHUTyE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 15:54:04 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBA2C06179A
-        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 12:54:02 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 74so1561119pfx.13
-        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 12:54:02 -0700 (PDT)
+        with ESMTP id S1726736AbgHUTyG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 15:54:06 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7CEC061755
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 12:54:05 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id g15so1347955plj.6
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 12:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X7lCPABz4JNrayMBdAlXz/o0k5wzYACi9B/neD0BSpY=;
-        b=h4th2Gwty/g8Cg6oI4xBM2C9OsM+YtTMFNWMQxaSJxeMsiGbGHmjIpyPzRqnDYUohj
-         mZEWv+JTiMGCqWpGcvezka0JZwFqupIZBq+bYlxEMz2m2f5RPnDUM/esPBUqClXzhknr
-         KDHkGu/E7WUrNYpV0Two51F+fgNxBgpigGGNs=
+        bh=0UnndhLoIUPQilO6J2hBojAKmFC4OCA3zcUIp6ZOMro=;
+        b=Sh9vRY/SnIiq5Ijo9twGKuJvIro+2ScdJC7L8hqNb74wvpnUXW74552MBiBf5c9ho/
+         BOqwZzPM/KRTMkdU/ope8Bau3ipHQ8VZu0l4lmJP8/F6K4yUVcmPySQ5Ug2/EOEQUcoO
+         ZdMtW7Ylxl5Y+uUwL1z39akrMncft2tc4GNeQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X7lCPABz4JNrayMBdAlXz/o0k5wzYACi9B/neD0BSpY=;
-        b=Z4PzWBI/JgoOi0UkJ2p9ti/bMSNyrB6DQ/cCWVZdNi1n3zG3ZrTdsGITZyMkJBIVGu
-         OJerfTPgjhgDN3lN7PgphqN+AKUG+AIzxZT+M6s/pSSf3LUKylFr/BuB9t1G/1pGn/D4
-         F9BVjgWT3g8Ng/o/V+H/JK5sl5nTQYSqVEQOMZybc1sQ5IAiC18bUfSsv3OIr1MK/qtI
-         Q0TWt1lon22I4FpZQLQVCiAHC5yHh0nyttpKF8zQvbtp7m5Qc/zSpM2twLNHF4zIa3XA
-         9FethfaAd3AQzG575a9y2Wu+eWXj8AZU43s5YUKLRPiI0ekKjNloO9r1L9DsXF09GMeq
-         3izA==
-X-Gm-Message-State: AOAM531GGTNZQX4NHEn0qev2jztGgyE/ryobfPOj/fvGQqRrK1lNpSsW
-        wRTgXUv0zmnkGzmCM28JvJjuzLxjbevFJA==
-X-Google-Smtp-Source: ABdhPJxhC+bVf5xz8oKClettUbKDwzdI3ZXBGK3DWk9rxsSxl1YyINcFuh70sERopw/lGiEEpzQkVg==
-X-Received: by 2002:a63:cd46:: with SMTP id a6mr3322488pgj.267.1598039642059;
-        Fri, 21 Aug 2020 12:54:02 -0700 (PDT)
+        bh=0UnndhLoIUPQilO6J2hBojAKmFC4OCA3zcUIp6ZOMro=;
+        b=rrsHzXGRAQn5IEbMKnGkTe0RBolXav9xZ8jw+5sbH4hletJXCcC+G+lcD7lAaOsHdh
+         6aUfgf/bVJwMYILxLLv1eThbBIDR0An8mKjihLIDpyigIXytYxbgGcesnxoU6raqDwrs
+         J2b7r4k1fK1v9fHDPeNmTbnBovtduoaxlGt2PeSTOhPv8il62SXFHWXmCik8C+kondx/
+         EV0DedMueVIA7seb0Og+WY/EzXFOL4AAFt1cZOqiygvzNcgOAmsIA5cTwDKFXX8lMN4K
+         93t9mxYoArmN8yZm0cyxFjLSrvFHek6TvvjBVh9uFuSFA5vpPwmHM19NkbAF4YBlX01V
+         kz4A==
+X-Gm-Message-State: AOAM532uB/2u9DFxJ3baAQz4V4jqlEzSMCqDv5GY5e2DM9jTHKNU5R0j
+        eYR1mO/5y4Lx7abQhVGIve1KuQ==
+X-Google-Smtp-Source: ABdhPJwmCnmOTUQk1XKd+olibX9ZOXDXcitcUxjr93v5Do636rUlnfDVQTuwBKBQgeAByyk2C/5Y4Q==
+X-Received: by 2002:a17:90a:6787:: with SMTP id o7mr3611282pjj.76.1598039644813;
+        Fri, 21 Aug 2020 12:54:04 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l67sm3026438pga.41.2020.08.21.12.53.58
+        by smtp.gmail.com with ESMTPSA id e2sm3424685pfm.37.2020.08.21.12.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 12:53:59 -0700 (PDT)
+        Fri, 21 Aug 2020 12:54:02 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Ingo Molnar <mingo@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -62,9 +62,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 25/29] x86/build: Warn on orphan section placement
-Date:   Fri, 21 Aug 2020 12:43:06 -0700
-Message-Id: <20200821194310.3089815-26-keescook@chromium.org>
+Subject: [PATCH v6 26/29] x86/boot/compressed: Reorganize zero-size section asserts
+Date:   Fri, 21 Aug 2020 12:43:07 -0700
+Message-Id: <20200821194310.3089815-27-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200821194310.3089815-1-keescook@chromium.org>
 References: <20200821194310.3089815-1-keescook@chromium.org>
@@ -75,33 +75,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We don't want to depend on the linker's orphan section placement
-heuristics as these can vary between linkers, and may change between
-versions. All sections need to be explicitly handled in the linker script.
-
-Now that all sections are explicitly handled, enable orphan section
-warnings.
+For readability, move the zero-sized sections to the end after DISCARDS.
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/boot/compressed/vmlinux.lds.S | 44 +++++++++++++++-----------
+ 1 file changed, 26 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 4346ffb2e39f..ccacbf808552 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -209,6 +209,10 @@ ifdef CONFIG_X86_64
- LDFLAGS_vmlinux += -z max-page-size=0x200000
- endif
+diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
+index 3c2ee9a5bf43..ca544a16724b 100644
+--- a/arch/x86/boot/compressed/vmlinux.lds.S
++++ b/arch/x86/boot/compressed/vmlinux.lds.S
+@@ -42,19 +42,6 @@ SECTIONS
+ 		*(.rodata.*)
+ 		_erodata = . ;
+ 	}
+-	.rel.dyn : {
+-		*(.rel.*)
+-	}
+-	.rela.dyn : {
+-		*(.rela.*)
+-	}
+-	.got : {
+-		*(.got)
+-	}
+-	.got.plt : {
+-		*(.got.plt)
+-	}
+-
+ 	.data :	{
+ 		_data = . ;
+ 		*(.data)
+@@ -85,13 +72,34 @@ SECTIONS
+ 	ELF_DETAILS
  
-+# We never want expected sections to be placed heuristically by the
-+# linker. All sections should be explicitly named in the linker script.
-+LDFLAGS_vmlinux += --orphan-handling=warn
+ 	DISCARDS
+-}
+ 
+-ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
++	.got.plt (INFO) : {
++		*(.got.plt)
++	}
++	ASSERT(SIZEOF(.got.plt) == 0 ||
+ #ifdef CONFIG_X86_64
+-ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, "Unexpected GOT/PLT entries detected!")
++	       SIZEOF(.got.plt) == 0x18,
+ #else
+-ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0xc, "Unexpected GOT/PLT entries detected!")
++	       SIZEOF(.got.plt) == 0xc,
+ #endif
++	       "Unexpected GOT/PLT entries detected!")
 +
- archscripts: scripts_basic
- 	$(Q)$(MAKE) $(build)=arch/x86/tools relocs
++	/*
++	 * Sections that should stay zero sized, which is safer to
++	 * explicitly check instead of blindly discarding.
++	 */
++	.got : {
++		*(.got)
++	}
++	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
++
++	.rel.dyn : {
++		*(.rel.*)
++	}
++	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
  
+-ASSERT(SIZEOF(.rel.dyn) == 0 && SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations detected!")
++	.rela.dyn : {
++		*(.rela.*)
++	}
++	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
++}
 -- 
 2.25.1
 
