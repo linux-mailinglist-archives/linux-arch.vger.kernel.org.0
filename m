@@ -2,71 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B32CB24E1F6
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 22:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9873C24E29A
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 23:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725938AbgHUUPZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Aug 2020 16:15:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39124 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725831AbgHUUPY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 Aug 2020 16:15:24 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E7D820738;
-        Fri, 21 Aug 2020 20:15:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598040923;
-        bh=/T7D++jQJVYAEaRhehB6OXQudUAED1x+6RQtwjpgepM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oskdNenPwocChae4HFuF7bNEbcd6pqb+OlqWuz9XE4T4ExAobZJPQ+Vv46iy4oJdJ
-         oXZ5UgEOsQ9iMg+gIaCRVB3NH/LeXX5fSGqlllwM6nWkPLGW1EIkJD68mjCC8Opx/j
-         cXUc7Nleu7OIBwWugqQCCej8//v19BgSMb5VLM1Q=
-Date:   Fri, 21 Aug 2020 13:15:22 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Zefan Li <lizefan@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v6 06/12] powerpc: inline huge vmap supported functions
-Message-Id: <20200821131522.c819f9c5c1fc24d90244c6dd@linux-foundation.org>
-In-Reply-To: <20200821151216.1005117-7-npiggin@gmail.com>
-References: <20200821151216.1005117-1-npiggin@gmail.com>
-        <20200821151216.1005117-7-npiggin@gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726793AbgHUVVo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Aug 2020 17:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726457AbgHUVVh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 17:21:37 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B90FC061575
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 14:21:37 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id 17so1668989pfw.9
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 14:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7zxJLsKDKPmlEOdAqEaMs/th95WQoPa5KmWk+Z1DjV8=;
+        b=Z6d0JADM6ZgtFdmHVXm5tWDcsc0z+xRwVRI6J5P0qu7Wh8Wlh8hMqrvoVoPHscBSX5
+         BPn31oZ1h8KocB9ca3F8q5MQ2YsQ1iVfBeigGJPS6Yoy6p0Po4/KSMrywwADhAagcgS9
+         igh0vRz/eRmU7KOg9mT0Sb0Co7agth6mO4CkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7zxJLsKDKPmlEOdAqEaMs/th95WQoPa5KmWk+Z1DjV8=;
+        b=T3yskxuMwRhbI2I5kmPkoKvaWdu39rLAkJ3iEJtrbxP8hemCZuv40Sjnjw5gQhkj1U
+         Q5TeXVWz3emuszg/OzG6YdxYooz62TtUCmiTMvSyvZgWn/F8t/KSJluABPJ0UMUzcOJM
+         /rKRXCbP4KCjEVpYFtA5Ye7uJS3EFObXVuHNQ4jv6umNjQUp8wUFIxS1C+C0SvEhm8Cs
+         o/z9Q5CIKe5DaN3joGREUn64AMRu04boRqM6uoPy0onDfpZB2pp1OYhjUygCmSZvAwAm
+         Znf9qXWO6dklyjB8XstB8QaCKb7iUOMrFbH5QWjD/YqDLfMTTdjX0r+w0N7VpNoOpH9q
+         48cw==
+X-Gm-Message-State: AOAM532h1qIzEbFoDe8hw7AaQIQqTNisqyOTMUAxXNlAdBAPrvBbCvQV
+        9n/hvvLENe/cuUx9O1ivfkHwOA==
+X-Google-Smtp-Source: ABdhPJwlauw3d/VbXEWNPYofZtpxXF3lSoJiQEDnVGrlctpzlU0ciKIkShtT/G6ZiVpcxESPW34GqQ==
+X-Received: by 2002:a63:7550:: with SMTP id f16mr3613147pgn.118.1598044896892;
+        Fri, 21 Aug 2020 14:21:36 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m22sm2843446pja.36.2020.08.21.14.21.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2020 14:21:35 -0700 (PDT)
+Date:   Fri, 21 Aug 2020 14:21:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 27/29] x86/boot/compressed: Remove, discard, or assert
+ for unwanted sections
+Message-ID: <202008211421.47347CA42@keescook>
+References: <20200821194310.3089815-1-keescook@chromium.org>
+ <20200821194310.3089815-28-keescook@chromium.org>
+ <20200821200159.GC1475504@rani.riverdale.lan>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200821200159.GC1475504@rani.riverdale.lan>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 22 Aug 2020 01:12:10 +1000 Nicholas Piggin <npiggin@gmail.com> wrote:
+On Fri, Aug 21, 2020 at 04:01:59PM -0400, Arvind Sankar wrote:
+> On Fri, Aug 21, 2020 at 12:43:08PM -0700, Kees Cook wrote:
+> > In preparation for warning on orphan sections, stop the linker from
+> > generating the .eh_frame* sections, discard unwanted non-zero-sized
+> > generated sections, and enforce other expected-to-be-zero-sized sections
+> > (since discarding them might hide problems with them suddenly gaining
+> > unexpected entries).
+> > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> >  	.rel.dyn : {
+> > -		*(.rel.*)
+> > +		*(.rel.*) *(.rel_*)
+> >  	}
+> >  	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
+> >  
+> >  	.rela.dyn : {
+> > -		*(.rela.*)
+> > +		*(.rela.*) *(.rela_*)
+> >  	}
+> >  	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
+> >  }
+> > -- 
+> > 2.25.1
+> > 
+> 
+> When do you get .rela_?
 
->  #ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
-> -bool arch_vmap_p4d_supported(pgprot_t prot);
-> -bool arch_vmap_pud_supported(pgprot_t prot);
-> -bool arch_vmap_pmd_supported(pgprot_t prot);
-> +static inline bool arch_vmap_p4d_supported(pgprot_t prot)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline bool arch_vmap_pud_supported(pgprot_t prot)
-> +{
-> +	/* HPT does not cope with large pages in the vmalloc area */
-> +	return radix_enabled();
-> +}
-> +
-> +static inline bool arch_vmap_pmd_supported(pgprot_t prot)
-> +{
-> +	return radix_enabled();
-> +}
->  #endif
+i386 builds, IIRC. I can try to hunt that down if you want?
 
-Oh.  OK, whatever ;)
+-- 
+Kees Cook
