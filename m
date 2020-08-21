@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BAB24DEDF
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 19:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E0A24DF50
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 20:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725866AbgHURtI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Aug 2020 13:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
+        id S1726187AbgHUSTM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Aug 2020 14:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726176AbgHURtG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 13:49:06 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF63EC061574
-        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 10:49:05 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id u20so1441749pfn.0
-        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 10:49:05 -0700 (PDT)
+        with ESMTP id S1725781AbgHUSTJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 14:19:09 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFC8C061573
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 11:19:08 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id y6so1239973plk.10
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 11:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=/GMuE4utOPjO8y1lqv+OxzSdgWvuN+Qw8CbwkSqlnRQ=;
-        b=eCrDRDas+JgyG8vEvUBUgIPw2N0eqtQG+RYzV7XhtoynuOnlhuZrdDQKbyFFclHrPn
-         41Z9Xw1JtPUYek4ggdgXpKsZFiJa3q15fhr1kziwDYEDNpfhigdXs7VY5AbnexGH6F6H
-         IR7D2Fb0exwgeUNMSrGrEH3RoaO/zxNkwt0yE=
+        bh=1UNk1AGGEwhw+lM3t9AwUmUxfOaOF1KAPiPeob9V2WI=;
+        b=kMpbG4iRuCojoWkd9Kr7f3KqtxxxnZ10DzhhdpflsKagz8HB7it+PRVF5wN7+8u6I4
+         sqBh30VQTJPNbvblPyfm/F9b+BO+6jM1CyemdUgNWau96AHd6FqGN/+ea6xfBpWIWBKp
+         hsFaBfhftz0hmT5UiB/RyPDzi3o3unARrGvu4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/GMuE4utOPjO8y1lqv+OxzSdgWvuN+Qw8CbwkSqlnRQ=;
-        b=Vj2hiK8ImqYOU8d2XPWAwArDy/DFs8Vkfo7n8vYcKYLxMJI6yiON1p0OStpo5xaYey
-         NN60UMIsRZCMq3z8ki52vZ4AioaqpKvmaQrKo9cpTnRZDsPcWLYMEMlMACevS84yiYde
-         bwnhwFg3FSGDSOwqz37vgf7YqBhujzq7+J27WPPFd2ahcgcBLmgin7XwKQst0+mjzsv/
-         URDj+85H0VrrIciZ0xGPOC2o8qd6qJCEp+xycNSNq+xgf96K5Cfdgpa7RXXNg0h1EONn
-         Lq7P2hYRmaATsYBUWRQL82F0DAZn4Xb6orsNGbcElTSjWIC0XCp+j/YQB3b+g8KikT4R
-         ViLw==
-X-Gm-Message-State: AOAM530AjOqzr4CGcnBpxdVKvpcsXSIxCYFACjUydJfcRftDj1svTOzU
-        6BYXOMtuO85HU/RFKe8H15v5bA==
-X-Google-Smtp-Source: ABdhPJzUl78taPwahfjnA2wW/6wLLpPTFwhGbButfOHh+DcCELkk9TL4PVM8Ve4ZrX5sUSPgeYg/vQ==
-X-Received: by 2002:a63:cf03:: with SMTP id j3mr3144186pgg.14.1598032144842;
-        Fri, 21 Aug 2020 10:49:04 -0700 (PDT)
+        bh=1UNk1AGGEwhw+lM3t9AwUmUxfOaOF1KAPiPeob9V2WI=;
+        b=tPM79w6W/OFzmzANzfSnvWzy/6qUGZsKNncVSBU3P6NZX0BUd6pe3EOk0/hcK+iCDm
+         HWjx32gSZvAIrdkhezjL+l3PTbLSPdf+72xEeiYo4HJAybmflJG28O0KbGT7BY0jRGrX
+         s9iYFh2Rztt4zmATuFwIqxV9raSE5oFidz/GSqPTwM2N5+dIsGuNGkml3zDQg8+yz+ir
+         U9rqYraE+CJh0lWo6M37+/q8Yxv9wA/Wtg0PtYLQJKDH5T4bgi4OwCm9Q1Sat+sOZviX
+         vYIg0BA4n8c1muyR87a5+e2DdaPHersoXvzHtRgCixW+HO1iG4CJsQwFbJfLk2qIYR7q
+         MRRA==
+X-Gm-Message-State: AOAM531/DbL7/traTFJoIwPcTdPPIX8sQCljQC6mKtmFbyF0Rx9dVr1y
+        bjIEehWO4lACNNVJBTUx38Y2Sw==
+X-Google-Smtp-Source: ABdhPJzZTS1JRIXsH9Qe8ywfl5m5EX+fz/bw1Bxes5X8MeXUUxEITYki8dcePvVFwXnhyN1uHyj01g==
+X-Received: by 2002:a17:90a:c0f:: with SMTP id 15mr3438069pjs.193.1598033948161;
+        Fri, 21 Aug 2020 11:19:08 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c10sm3107533pfc.62.2020.08.21.10.49.03
+        by smtp.gmail.com with ESMTPSA id d13sm3316084pfq.118.2020.08.21.11.19.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 10:49:03 -0700 (PDT)
-Date:   Fri, 21 Aug 2020 10:49:02 -0700
+        Fri, 21 Aug 2020 11:19:07 -0700 (PDT)
+Date:   Fri, 21 Aug 2020 11:19:06 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Arvind Sankar <nivedita@alum.mit.edu>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -63,47 +63,51 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 29/36] x86/build: Enforce an empty .got.plt section
-Message-ID: <202008211047.9088D8571C@keescook>
+Subject: Re: [PATCH v5 32/36] x86/boot/compressed: Reorganize zero-size
+ section asserts
+Message-ID: <202008211113.F872C40ED@keescook>
 References: <20200731230820.1742553-1-keescook@chromium.org>
- <20200731230820.1742553-30-keescook@chromium.org>
- <20200801021248.GB2700342@rani.riverdale.lan>
+ <20200731230820.1742553-33-keescook@chromium.org>
+ <20200801014755.GA2700342@rani.riverdale.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200801021248.GB2700342@rani.riverdale.lan>
+In-Reply-To: <20200801014755.GA2700342@rani.riverdale.lan>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 10:12:48PM -0400, Arvind Sankar wrote:
-> On Fri, Jul 31, 2020 at 04:08:13PM -0700, Kees Cook wrote:
-> > The .got.plt section should always be zero (or filled only with the
-> > linker-generated lazy dispatch entry). Enforce this with an assert and
-> > mark the section as NOLOAD. This is more sensitive than just blindly
-> > discarding the section.
+On Fri, Jul 31, 2020 at 09:47:55PM -0400, Arvind Sankar wrote:
+> On Fri, Jul 31, 2020 at 04:08:16PM -0700, Kees Cook wrote:
+> > For readability, move the zero-sized sections to the end after DISCARDS
+> > and mark them NOLOAD for good measure.
 > > 
 > > Signed-off-by: Kees Cook <keescook@chromium.org>
 > > ---
-> >  arch/x86/kernel/vmlinux.lds.S | 14 +++++++++++++-
-> >  1 file changed, 13 insertions(+), 1 deletion(-)
+> >  arch/x86/boot/compressed/vmlinux.lds.S | 42 +++++++++++++++-----------
+> >  1 file changed, 25 insertions(+), 17 deletions(-)
 > > 
-> > diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> > index 0cc035cb15f1..7faffe7414d6 100644
-> > --- a/arch/x86/kernel/vmlinux.lds.S
-> > +++ b/arch/x86/kernel/vmlinux.lds.S
-> > @@ -414,8 +414,20 @@ SECTIONS
-> >  	ELF_DETAILS
-> >  
-> >  	DISCARDS
-> > -}
-> >  
-> > +	/*
-> > +	 * Make sure that the .got.plt is either completely empty or it
-> > +	 * contains only the lazy dispatch entries.
-> > +	 */
-> > +	.got.plt (NOLOAD) : { *(.got.plt) }
+> > diff --git a/arch/x86/boot/compressed/vmlinux.lds.S b/arch/x86/boot/compressed/vmlinux.lds.S
+> > index 3c2ee9a5bf43..42dea70a5091 100644
+> > --- a/arch/x86/boot/compressed/vmlinux.lds.S
+> > +++ b/arch/x86/boot/compressed/vmlinux.lds.S
+> > @@ -42,18 +42,16 @@ SECTIONS
+> >  		*(.rodata.*)
+> >  		_erodata = . ;
+> >  	}
+> > -	.rel.dyn : {
+> > -		*(.rel.*)
+> > -	}
+> > -	.rela.dyn : {
+> > -		*(.rela.*)
+> > -	}
+> > -	.got : {
+> > -		*(.got)
+> > -	}
+> >  	.got.plt : {
+> >  		*(.got.plt)
+> >  	}
 > > +	ASSERT(SIZEOF(.got.plt) == 0 ||
 > > +#ifdef CONFIG_X86_64
 > > +	       SIZEOF(.got.plt) == 0x18,
@@ -111,23 +115,55 @@ On Fri, Jul 31, 2020 at 10:12:48PM -0400, Arvind Sankar wrote:
 > > +	       SIZEOF(.got.plt) == 0xc,
 > > +#endif
 > > +	       "Unexpected GOT/PLT entries detected!")
-> > +}
 > >  
-> >  #ifdef CONFIG_X86_32
-> >  /*
+> >  	.data :	{
+> >  		_data = . ;
+> > @@ -85,13 +83,23 @@ SECTIONS
+> >  	ELF_DETAILS
+> >  
+> >  	DISCARDS
+> > -}
+> >  
+> > -ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+> > -#ifdef CONFIG_X86_64
+> > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18, "Unexpected GOT/PLT entries detected!")
+> > -#else
+> > -ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0xc, "Unexpected GOT/PLT entries detected!")
+> > -#endif
+> > +	/*
+> > +	 * Sections that should stay zero sized, which is safer to
+> > +	 * explicitly check instead of blindly discarding.
+> > +	 */
+> > +	.got (NOLOAD) : {
+> > +		*(.got)
+> > +	}
+> > +	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+> >  
+> > -ASSERT(SIZEOF(.rel.dyn) == 0 && SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations detected!")
+> > +	/* ld.lld does not like .rel* sections being made "NOLOAD". */
+> > +	.rel.dyn : {
+> > +		*(.rel.*)
+> > +	}
+> > +	ASSERT(SIZEOF(.rel.dyn) == 0, "Unexpected run-time relocations (.rel) detected!")
+> > +	.rela.dyn : {
+> > +		*(.rela.*)
+> > +	}
+> > +	ASSERT(SIZEOF(.rela.dyn) == 0, "Unexpected run-time relocations (.rela) detected!")
+> > +}
 > > -- 
 > > 2.25.1
 > > 
 > 
-> Is this actually needed? vmlinux is a position-dependent executable, and
-> it doesn't get linked with any shared libraries, so it should never have
-> a .got or .got.plt at all I think? Does it show up as an orphan without
-> this?
+> There's no point in marking zero-size sections NOLOAD -- if the ASSERT's
+> passed, they won't be present in the file at all anyway.
 
-Yup, I see this:
+That's a good point, yes. I will adjust this.
 
-/usr/bin/ld.bfd: warning: orphan section `.got.plt' from `arch/x86/kernel/head_64.o' being placed in section `.got.plt'
+> The only section for which there might be a point is .got.plt, which is
+> non-empty on 32-bit, and only if it is first moved to the end. That
+> saves a few bytes.
 
+Yeah, also this. :) I will try it.
 
 -- 
 Kees Cook
