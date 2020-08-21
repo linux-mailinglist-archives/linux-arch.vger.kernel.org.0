@@ -2,89 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0205224D541
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 14:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FF024D618
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 15:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgHUMoS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Aug 2020 08:44:18 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:31050 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbgHUMoR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 Aug 2020 08:44:17 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BY1Rd0Sbbz9v0RG;
-        Fri, 21 Aug 2020 14:44:13 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Q_TLAb2lp2QD; Fri, 21 Aug 2020 14:44:12 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BY1Rc5GVgz9v0RF;
-        Fri, 21 Aug 2020 14:44:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 260E78B8E1;
-        Fri, 21 Aug 2020 14:44:14 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id isIM-AjxvK5w; Fri, 21 Aug 2020 14:44:14 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 238988B8C5;
-        Fri, 21 Aug 2020 14:44:13 +0200 (CEST)
-Subject: Re: [PATCH v5 5/8] mm: HUGE_VMAP arch support cleanup
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>
-References: <20200821044427.736424-1-npiggin@gmail.com>
- <20200821044427.736424-6-npiggin@gmail.com>
- <9b67b892-9482-15dc-0c1e-c5d5a93a3c91@csgroup.eu>
- <1598006254.vcbwyiiw9l.astroid@bobo.none>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <2bd2e0a4-37bc-680d-1e11-f6f44204c317@csgroup.eu>
-Date:   Fri, 21 Aug 2020 14:43:58 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1728622AbgHUNbj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Aug 2020 09:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728454AbgHUNbd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 09:31:33 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AEAC061574
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 06:31:30 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id r2so1944856wrs.8
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 06:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=09U6vmSaahNdcLROs1sJRQMLO2jTllhKcJ+uh2MtTKA=;
+        b=FBhfxiepYWlS9uM4Bp3qtAyG46bdidayLJQHBxfbLueX+M3HuwfkeT558+nRQSbGQ4
+         WIkVB7yUWXC2eCaRIJYc9a46sTBZ1NQ87YdhCK4Kk7YUvpR4FWpISpOByJZ/KcL7WD9W
+         FnnokDVRdBqspIHoF/ghT0bvw9dXJK9uZLJKKLX3++cPmth+P3DTxEK7dchVqIzmC7/w
+         qESqZ7Ekkci69zw1SX0P7XlEJHyLp71EYw9mf3yxrtfwZQN2AVKie5IdT9vBStgJ3ipy
+         xWFmymgEZ+MbB5be3/p9NsdJln2lhDmi8cUI7UmvNIiDwlTSZprlboBjw6xYvbCGDtGk
+         6u7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=09U6vmSaahNdcLROs1sJRQMLO2jTllhKcJ+uh2MtTKA=;
+        b=qis80x/wUFN4aJI89+saFUUeCvj2WhQSb+E3DeCEfL+Rt45so8pXc8CNUjv2Wxj1/b
+         ho7Owaxxb5UQaWcZpyfw2DTOpXov9nqntVXjRhjx+cTBV+GnDNgcAMhxVWwCFzieDSp5
+         s15Lk+nR/HqIxr/MAEB48X8Yw/8tDbtBvtmB8x80ADWpFOGFdDUJlwuQCjmT1lb3qift
+         J9IwXrHd0GiF2XVd9pDe+USP1dsysALzI0bMO8TnY6Eky9QxCihmGVNkM1jwBLz9aZxT
+         awqE8IuKFUAKUWVB0zWSE5tLlw5YZM4Udk9dwCc7Y3mTCO8Kh4+u776nDyShOwOeFRhC
+         y7/Q==
+X-Gm-Message-State: AOAM532qHumfsxYg89b/Op261OtWO+szy98gDhPGOpyey3Rn5eD602qo
+        2yUZNRG/DqkZLJazbE6YKjv42Q==
+X-Google-Smtp-Source: ABdhPJxriNxDM/f9/YbCE9WsW7FeM36vohjb4MJ/IXB6Q5OW1j4S16rZa29+Vlc8vCz1eSzYWkhUIg==
+X-Received: by 2002:a5d:4a8d:: with SMTP id o13mr471970wrq.194.1598016687509;
+        Fri, 21 Aug 2020 06:31:27 -0700 (PDT)
+Received: from elver.google.com ([100.105.32.75])
+        by smtp.gmail.com with ESMTPSA id 15sm4796747wmo.33.2020.08.21.06.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2020 06:31:26 -0700 (PDT)
+Date:   Fri, 21 Aug 2020 15:31:20 +0200
+From:   Marco Elver <elver@google.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     albert.linde@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Albert van der Linde <alinde@google.com>
+Subject: Re: [PATCH 1/3] lib, include/linux: add usercopy failure capability
+Message-ID: <20200821133120.GA3145341@elver.google.com>
+References: <20200821104926.828511-1-alinde@google.com>
+ <20200821104926.828511-2-alinde@google.com>
+ <CACT4Y+ZeoUX39tBZs-DLoX0q5tC+skB56Cxf_SSpKiJdv3mMFg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1598006254.vcbwyiiw9l.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZeoUX39tBZs-DLoX0q5tC+skB56Cxf_SSpKiJdv3mMFg@mail.gmail.com>
+User-Agent: Mutt/1.14.4 (2020-06-18)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 21/08/2020 à 12:39, Nicholas Piggin a écrit :
-> Excerpts from Christophe Leroy's message of August 21, 2020 3:40 pm:
->>
->>
->> Le 21/08/2020 à 06:44, Nicholas Piggin a écrit :
->>> This changes the awkward approach where architectures provide init
->>> functions to determine which levels they can provide large mappings for,
->>> to one where the arch is queried for each call.
->>>
->>> This removes code and indirection, and allows constant-folding of dead
->>> code for unsupported levels.
->>
->> I think that in order to allow constant-folding of dead code for
->> unsupported levels, you must define arch_vmap_xxx_supported() as static
->> inline in a .h
->>
->> If you have them in .c files, you'll get calls to tiny functions that
->> will always return false, but will still be called and dead code won't
->> be eliminated. And performance wise, that's probably not optimal either.
+On Fri, Aug 21, 2020 at 01:51PM +0200, Dmitry Vyukov wrote:
+...
+> > +++ b/lib/fault-inject-usercopy.c
+> > @@ -0,0 +1,66 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +#include <linux/fault-inject.h>
+> > +#include <linux/fault-inject-usercopy.h>
+> > +#include <linux/random.h>
+> > +
+> > +static struct {
+> > +       struct fault_attr attr;
+> > +       u32 failsize;
+> > +} fail_usercopy = {
+> > +       .attr = FAULT_ATTR_INITIALIZER,
+> > +       .failsize = 0,
+> > +};
+> > +
+> > +static int __init setup_fail_usercopy(char *str)
+> > +{
+> > +       return setup_fault_attr(&fail_usercopy.attr, str);
+> > +}
+> > +__setup("fail_usercopy=", setup_fail_usercopy);
+> > +
+> > +#ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
+> > +
+> > +static int __init fail_usercopy_debugfs(void)
+> > +{
+> > +       umode_t mode = S_IFREG | 0600;
+> > +       struct dentry *dir;
+> > +
+> > +       dir = fault_create_debugfs_attr("fail_usercopy", NULL,
+> > +                                       &fail_usercopy.attr);
+> > +       if (IS_ERR(dir))
+> > +               return PTR_ERR(dir);
+> > +
+> > +       debugfs_create_u32("failsize", mode, dir,
+> > +                          &fail_usercopy.failsize);
 > 
-> Yeah that's true actually, I think I didn't find a good place to add
-> the prototypes in the arch code but I'll have another look and either
-> rewrite the changelog or remove it. Although this does get a step closer
-> at least.
-> 
+> Marco, what's the right way to annotate these concurrent accesses for KCSAN?
 
-linux/vmalloc.h includes asm/vmalloc.h
-Should it go there ?
+For debugfs variables that are accessed concurrently, the only
+non-data-racy option (currently) is to use debugfs_create_atomic_t() and
+make the variable an atomic_t.
 
-Christophe
+If it's read-mostly as is the case here, and given that atomic_read() is
+cheap (it maps to READ_ONCE on x86 and arm64), that'd be reasonable even
+if performance is a concern.
+
+> > +       return 0;
+> > +}
+> > +
+> > +late_initcall(fail_usercopy_debugfs);
+> > +
+> > +#endif /* CONFIG_FAULT_INJECTION_DEBUG_FS */
+> > +
+> > +/**
+> > + * should_fail_usercopy() - Failure code or amount of bytes not to copy.
+> > + * @n: Size of the original copy call.
+> > + *
+> > + * The general idea is to have a method which returns the amount of bytes not
+> > + * to copy, a failure to return, or 0 if the calling function should progress
+> > + * without a failure. E.g., copy_{to,from}_user should NOT copy the amount of
+> > + * bytes returned by should_fail_usercopy, returning this value (in addition
+> > + * to any bytes that could actually not be copied) or a failure.
+> > + *
+> > + * Return: one of:
+> > + * negative, failure to return;
+> > + * 0, progress normally;
+> > + * a number in ]0, n], the number of bytes not to copy.
+> > + *
+> > + */
+> > +long should_fail_usercopy(unsigned long n)
+> > +{
+> > +       if (should_fail(&fail_usercopy.attr, n)) {
+> > +               if (fail_usercopy.failsize > 0)
+> > +                       return fail_usercopy.failsize % (n + 1);
+
+If you wanted to retain the u32 in debugfs, you can mark this
+'data_race(fail_usercopy.failsize)' -- since what we're doing here is
+probabilistic anyway, reading a garbage value won't affect things much.
+
+Alternatively, just switch to atomic_t and it'll just be an
+atomic_read().
+
+Thanks,
+-- Marco
