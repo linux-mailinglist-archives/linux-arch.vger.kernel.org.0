@@ -2,167 +2,208 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FF024D618
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 15:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5E824D71E
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 16:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728622AbgHUNbj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Aug 2020 09:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S1726118AbgHUOPB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Aug 2020 10:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728454AbgHUNbd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 09:31:33 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AEAC061574
-        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 06:31:30 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id r2so1944856wrs.8
-        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 06:31:30 -0700 (PDT)
+        with ESMTP id S1725948AbgHUOO4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 10:14:56 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A7DC061573
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 07:14:55 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id m20so1553308eds.2
+        for <linux-arch@vger.kernel.org>; Fri, 21 Aug 2020 07:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=09U6vmSaahNdcLROs1sJRQMLO2jTllhKcJ+uh2MtTKA=;
-        b=FBhfxiepYWlS9uM4Bp3qtAyG46bdidayLJQHBxfbLueX+M3HuwfkeT558+nRQSbGQ4
-         WIkVB7yUWXC2eCaRIJYc9a46sTBZ1NQ87YdhCK4Kk7YUvpR4FWpISpOByJZ/KcL7WD9W
-         FnnokDVRdBqspIHoF/ghT0bvw9dXJK9uZLJKKLX3++cPmth+P3DTxEK7dchVqIzmC7/w
-         qESqZ7Ekkci69zw1SX0P7XlEJHyLp71EYw9mf3yxrtfwZQN2AVKie5IdT9vBStgJ3ipy
-         xWFmymgEZ+MbB5be3/p9NsdJln2lhDmi8cUI7UmvNIiDwlTSZprlboBjw6xYvbCGDtGk
-         6u7w==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=YstexqFUHqnza2So/pgz538X7yBx5mx6OedITJ2r3mk=;
+        b=A/y2VXoLE7vCV7oP5JvfcabUtuu1HuuAGpshB0ACFZz46mvd9raHoVgrY0Fyt0ERcD
+         8Ic5onvvCvXVu98GqbAkiy8LmEcrA7Vn9oCf/7fRiQzXyXI4eX7Bsio8afZqKhMx5Kqs
+         ddqmxLXX9b+0IOU/pEeksBi+HxFvTPFZF+XacFQa2G3Prigk9vuaJxTIN4pWWxNmjL1s
+         HSJ5u3yS8jSx90wI+QpUqyQw4ErFU1HR+MzGjkMC61HggnlCCCliUShgiyaVchnrYds7
+         PA93ZmwKWalEvmScaF/BvvznSxMAjajQ6V6RV7+LHeKcEzjhuDfD0s2uWBh5Vmace8xL
+         Eu0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=09U6vmSaahNdcLROs1sJRQMLO2jTllhKcJ+uh2MtTKA=;
-        b=qis80x/wUFN4aJI89+saFUUeCvj2WhQSb+E3DeCEfL+Rt45so8pXc8CNUjv2Wxj1/b
-         ho7Owaxxb5UQaWcZpyfw2DTOpXov9nqntVXjRhjx+cTBV+GnDNgcAMhxVWwCFzieDSp5
-         s15Lk+nR/HqIxr/MAEB48X8Yw/8tDbtBvtmB8x80ADWpFOGFdDUJlwuQCjmT1lb3qift
-         J9IwXrHd0GiF2XVd9pDe+USP1dsysALzI0bMO8TnY6Eky9QxCihmGVNkM1jwBLz9aZxT
-         awqE8IuKFUAKUWVB0zWSE5tLlw5YZM4Udk9dwCc7Y3mTCO8Kh4+u776nDyShOwOeFRhC
-         y7/Q==
-X-Gm-Message-State: AOAM532qHumfsxYg89b/Op261OtWO+szy98gDhPGOpyey3Rn5eD602qo
-        2yUZNRG/DqkZLJazbE6YKjv42Q==
-X-Google-Smtp-Source: ABdhPJxriNxDM/f9/YbCE9WsW7FeM36vohjb4MJ/IXB6Q5OW1j4S16rZa29+Vlc8vCz1eSzYWkhUIg==
-X-Received: by 2002:a5d:4a8d:: with SMTP id o13mr471970wrq.194.1598016687509;
-        Fri, 21 Aug 2020 06:31:27 -0700 (PDT)
-Received: from elver.google.com ([100.105.32.75])
-        by smtp.gmail.com with ESMTPSA id 15sm4796747wmo.33.2020.08.21.06.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 06:31:26 -0700 (PDT)
-Date:   Fri, 21 Aug 2020 15:31:20 +0200
-From:   Marco Elver <elver@google.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     albert.linde@gmail.com, Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Albert van der Linde <alinde@google.com>
-Subject: Re: [PATCH 1/3] lib, include/linux: add usercopy failure capability
-Message-ID: <20200821133120.GA3145341@elver.google.com>
-References: <20200821104926.828511-1-alinde@google.com>
- <20200821104926.828511-2-alinde@google.com>
- <CACT4Y+ZeoUX39tBZs-DLoX0q5tC+skB56Cxf_SSpKiJdv3mMFg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=YstexqFUHqnza2So/pgz538X7yBx5mx6OedITJ2r3mk=;
+        b=UE9LmasN/fte2/NKYV3oMAgoE32K21I4UHGoknKHhc6KqGgUSdQTTEyDw6IAymh4Zp
+         LXOIoyhnlA4nq8hjZTDMRATbXVf0WT8Rh6abkioGoNdF2+ygBrIboRebH8qZUas0IOog
+         5HO59GWMgkFh54jkfXCX2JfDORifrcoHg8/dRzc3SHxkk0i2m+X9v7gWqEJQfWmRaUhn
+         e17h/UAtd6AfdelZMrOyu1dYd3lbKmilpUW/LGrEmj+V2rx4af4CHwSlA1eGikeMWtVQ
+         oYlMRGrYFPSbHzHeWzp4Hj3+1o1i52aHzC2DvwU8P40AhqJpE4N/sl+oatLq4zm84xbX
+         3B8Q==
+X-Gm-Message-State: AOAM532HHxnBDRglmmMj6dvnF6phbDIti2QCPw0WVIR1ABrORPIFzEaL
+        ZfukK15MQpGekK0tS/Sdml4IiYTx5OHSNTnEtdo=
+X-Google-Smtp-Source: ABdhPJwZB1eO/fPioKOMSKGVn6q2740exFNnNjQBCcftCQ8lEF6XgO8ztWmFin0WJE+ECzMUL/evj43iJJ+Y1DB3wyg=
+X-Received: by 2002:aa7:c594:: with SMTP id g20mr2965955edq.146.1598019294095;
+ Fri, 21 Aug 2020 07:14:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+ZeoUX39tBZs-DLoX0q5tC+skB56Cxf_SSpKiJdv3mMFg@mail.gmail.com>
-User-Agent: Mutt/1.14.4 (2020-06-18)
+Received: by 2002:a54:2bd0:0:0:0:0:0 with HTTP; Fri, 21 Aug 2020 07:14:53
+ -0700 (PDT)
+From:   BRAZILIAN AMBASSY <brasemb.abidjaccitamaraty@gmail.com>
+Date:   Fri, 21 Aug 2020 15:14:53 +0100
+Message-ID: <CAJFpJsTwT1CVoN3bt9AYpduUaQwMc229wuv4nPwq-S_1NS6k7A@mail.gmail.com>
+Subject: PLEASE ENDEAVOR TO USE IT FOR THE ORPHANAGE CHILDREN.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 01:51PM +0200, Dmitry Vyukov wrote:
-...
-> > +++ b/lib/fault-inject-usercopy.c
-> > @@ -0,0 +1,66 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +#include <linux/fault-inject.h>
-> > +#include <linux/fault-inject-usercopy.h>
-> > +#include <linux/random.h>
-> > +
-> > +static struct {
-> > +       struct fault_attr attr;
-> > +       u32 failsize;
-> > +} fail_usercopy = {
-> > +       .attr = FAULT_ATTR_INITIALIZER,
-> > +       .failsize = 0,
-> > +};
-> > +
-> > +static int __init setup_fail_usercopy(char *str)
-> > +{
-> > +       return setup_fault_attr(&fail_usercopy.attr, str);
-> > +}
-> > +__setup("fail_usercopy=", setup_fail_usercopy);
-> > +
-> > +#ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
-> > +
-> > +static int __init fail_usercopy_debugfs(void)
-> > +{
-> > +       umode_t mode = S_IFREG | 0600;
-> > +       struct dentry *dir;
-> > +
-> > +       dir = fault_create_debugfs_attr("fail_usercopy", NULL,
-> > +                                       &fail_usercopy.attr);
-> > +       if (IS_ERR(dir))
-> > +               return PTR_ERR(dir);
-> > +
-> > +       debugfs_create_u32("failsize", mode, dir,
-> > +                          &fail_usercopy.failsize);
-> 
-> Marco, what's the right way to annotate these concurrent accesses for KCSAN?
+PLEASE ENDEAVOR TO USE IT FOR THE ORPHANAGE CHILDREN.
 
-For debugfs variables that are accessed concurrently, the only
-non-data-racy option (currently) is to use debugfs_create_atomic_t() and
-make the variable an atomic_t.
+As you read this, I don't want you to feel sorry for me, because, I
+believe everyone will die someday. My name is Mrs.Mariame Maham from
+Australia; I am 80 years old; I was married to late Mr.Andrin Maham, a
+contractor and diamond dealer for Thirty-two years before he died in
+the year 2018. I am suffering from a long-time cancer of the breast
+which also affected my brain. From all indication my condition is
+really deteriorating, and my doctors have courageously advised me that
+I may not live beyond the next two months; this is because the cancer
+stage has reached a critical stage.
 
-If it's read-mostly as is the case here, and given that atomic_read() is
-cheap (it maps to READ_ONCE on x86 and arm64), that'd be reasonable even
-if performance is a concern.
 
-> > +       return 0;
-> > +}
-> > +
-> > +late_initcall(fail_usercopy_debugfs);
-> > +
-> > +#endif /* CONFIG_FAULT_INJECTION_DEBUG_FS */
-> > +
-> > +/**
-> > + * should_fail_usercopy() - Failure code or amount of bytes not to copy.
-> > + * @n: Size of the original copy call.
-> > + *
-> > + * The general idea is to have a method which returns the amount of bytes not
-> > + * to copy, a failure to return, or 0 if the calling function should progress
-> > + * without a failure. E.g., copy_{to,from}_user should NOT copy the amount of
-> > + * bytes returned by should_fail_usercopy, returning this value (in addition
-> > + * to any bytes that could actually not be copied) or a failure.
-> > + *
-> > + * Return: one of:
-> > + * negative, failure to return;
-> > + * 0, progress normally;
-> > + * a number in ]0, n], the number of bytes not to copy.
-> > + *
-> > + */
-> > +long should_fail_usercopy(unsigned long n)
-> > +{
-> > +       if (should_fail(&fail_usercopy.attr, n)) {
-> > +               if (fail_usercopy.failsize > 0)
-> > +                       return fail_usercopy.failsize % (n + 1);
+I was brought up in a motherless baby's home, and was married to my
+late husband for twenty years without a child. My husband and I are
+true Christians, but unfortunately, my husband Died from Complications
+from Diabetes.
 
-If you wanted to retain the u32 in debugfs, you can mark this
-'data_race(fail_usercopy.failsize)' -- since what we're doing here is
-probabilistic anyway, reading a garbage value won't affect things much.
 
-Alternatively, just switch to atomic_t and it'll just be an
-atomic_read().
+Since the death of my husband I decided not to re-marry, when my late
+husband was alive, he deposited the sum of $2,500,000.00 Two million
+Five hundred thousand U.S Dollars, with a Bank in Abidjan - Cote D'
+Ivoire, where we spend our life together.
 
-Thanks,
--- Marco
+
+Presently, this money is still in their custody, and the management
+just wrote me as the Legitimate beneficiary to come forward to receive
+the money after keeping it for so long or rather issue a letter of
+authorization to somebody to receive it on my behalf since I cannot
+come over as a result of my illness, or they get it confiscated.
+
+Presently, I'm with my laptop in a hospital where I have been
+undergoing treatment. I have since lost my ability to talk and my
+doctors have told me that I have only a few months to live.
+
+It is my last wish to see that this money is invested in any
+organization of your choice and distributed each year among the
+charity organization, the poor and the motherless baby's home where I
+come from since i do not have any child that can inherit the fund.
+
+
+I want your good humanitarian, to also use this money to fund charity
+works, orphanages and homeless children. I must let you know that this
+was a very hard decision, but I had to take a bold step towards this
+issue because I have no further option. I hope you will help see me
+last wishes come true. As soon as I receive your reply, I shall give
+you the contact of the Bank. I will also issue you a letter of
+authority which will prove that you are the new beneficiary of my
+funds, and the documents concerning the deposit.
+
+Please assure me that you will act accordingly
+as I stated herein. Hope to hear from you Soonest.
+I am waiting your response.
+
+Yours in Christ,
+
+Mrs.Mariame Maham.
+
+Please contact me through my email for further details: mrsmahamm@protonmai=
+l.com
+
+
+
+
+
+
+
+
+
+
+
+Por favor, esforce-se para us=C3=A1-lo PARA CRIAN=C3=87AS DE ORFANATO.
+
+Enquanto voc=C3=AA l=C3=AA isto, n=C3=A3o quero que sinta pena de mim, porq=
+ue
+acredito que todo mundo morrer=C3=A1 um dia. Meu nome =C3=A9 Mrs.Mariame Ma=
+ham,
+da Austr=C3=A1lia; Tenho 80 anos; Fui casada com o falecido Sr. Andrin
+Maham, um empreiteiro e negociante de diamantes por trinta e dois anos
+antes de ele morrer em 2018. Estou sofrendo de um c=C3=A2ncer de mama de
+longa data que tamb=C3=A9m afetou meu c=C3=A9rebro. Ao que tudo indica, min=
+ha
+condi=C3=A7=C3=A3o est=C3=A1 realmente piorando, e meus m=C3=A9dicos corajo=
+samente me
+aconselharam que talvez eu n=C3=A3o viva al=C3=A9m dos pr=C3=B3ximos dois m=
+eses; isso
+ocorre porque o est=C3=A1gio do c=C3=A2ncer atingiu um est=C3=A1gio cr=C3=
+=ADtico.
+
+
+Fui criada em uma casa com um beb=C3=AA sem m=C3=A3e e fui casada com meu
+falecido marido por vinte anos sem filhos. Meu marido e eu somos
+crist=C3=A3os verdadeiros, mas, infelizmente, meu marido morreu de
+complica=C3=A7=C3=B5es de diabetes.
+
+
+Desde a morte do meu marido decidi n=C3=A3o voltar a casar, quando o meu
+falecido marido estava vivo, ele depositou a quantia de $ 2.500.000,00
+Dois milh=C3=B5es Quinhentos mil d=C3=B3lares americanos, num banco em Abid=
+jan -
+C=C3=B4te D 'Ivoire, onde passamos o nosso vida juntos.
+
+
+Atualmente, esse dinheiro ainda est=C3=A1 sob sua cust=C3=B3dia, e a
+administra=C3=A7=C3=A3o apenas me escreveu como o leg=C3=ADtimo benefici=C3=
+=A1rio para
+apresentar o recebimento do dinheiro ap=C3=B3s mant=C3=AA-lo por tanto temp=
+o ou,
+melhor, emitir uma carta de autoriza=C3=A7=C3=A3o para algu=C3=A9m receb=C3=
+=AA-lo em meu
+nome, j=C3=A1 que eu n=C3=A3o posso vir como resultado da minha doen=C3=A7a=
+, ou eles
+o confiscar=C3=A3o.
+
+Atualmente, estou com meu laptop em um hospital onde estou em
+tratamento. Desde ent=C3=A3o, perdi minha capacidade de falar e meus
+m=C3=A9dicos me disseram que tenho apenas alguns meses de vida.
+
+=C3=89 meu =C3=BAltimo desejo ver que esse dinheiro seja investido em qualq=
+uer
+organiza=C3=A7=C3=A3o de sua escolha e distribu=C3=ADdo anualmente entre a
+organiza=C3=A7=C3=A3o de caridade, os pobres e os =C3=B3rf=C3=A3os da casa =
+de onde venho,
+pois n=C3=A3o tenho nenhum filho que possa herdar o fundo .
+
+
+Quero que o seu bom humanit=C3=A1rio tamb=C3=A9m use esse dinheiro para
+financiar obras de caridade, orfanatos e crian=C3=A7as sem-teto. Devo
+inform=C3=A1-lo de que foi uma decis=C3=A3o muito dif=C3=ADcil, mas tive de=
+ dar um
+passo ousado em rela=C3=A7=C3=A3o a esse problema porque n=C3=A3o tenho out=
+ra op=C3=A7=C3=A3o.
+Eu espero que voc=C3=AA ajude a ver meus =C3=BAltimos desejos se tornando
+realidade. Assim que receber sua resposta, passarei o contato do
+Banco. Tamb=C3=A9m vou emitir uma carta de autoriza=C3=A7=C3=A3o que provar=
+=C3=A1 que voc=C3=AA
+=C3=A9 o novo benefici=C3=A1rio de meus fundos e os documentos relativos ao
+dep=C3=B3sito.
+
+Por favor, garanta que voc=C3=AA agir=C3=A1 de acordo
+como afirmei aqui. Espero ouvir de voc=C3=AA logo.
+Estou esperando sua resposta.
+
+Seu em Cristo,
+
+Mrs.Mariame Maham.
+
+Entre em contato comigo atrav=C3=A9s do meu e-mail para maiores detalhes:
+mrsmahamm@protonmail.com
