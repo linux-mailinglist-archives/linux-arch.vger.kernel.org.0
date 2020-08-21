@@ -2,109 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D1F24D0DC
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 10:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A275124D2E8
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Aug 2020 12:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgHUIwE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Aug 2020 04:52:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:56110 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727008AbgHUIwE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 21 Aug 2020 04:52:04 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDEF030E;
-        Fri, 21 Aug 2020 01:52:03 -0700 (PDT)
-Received: from [10.163.67.49] (unknown [10.163.67.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFDDB3F66B;
-        Fri, 21 Aug 2020 01:51:58 -0700 (PDT)
-Subject: Re: [PATCH v2 00/13] mm/debug_vm_pgtable fixes
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
+        id S1728458AbgHUKjs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Aug 2020 06:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728882AbgHUKjq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Aug 2020 06:39:46 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AFEC061385;
+        Fri, 21 Aug 2020 03:39:45 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id s14so701638plp.4;
+        Fri, 21 Aug 2020 03:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=Skacs7EXPHqa2+iszJrJANOJ0qE5l/8OmxgUeJzvuFY=;
+        b=ZfZ2d783cAo/vy9wrAfQVsV1+q70NFpvLIJ3BoYZINr9O786s+tQmwNqHeMpm5O7zn
+         OeHng3P+2eSSdKHvQGdxM7DrC0azCxER5jh3PrvGpqN7Y23q1rOPKa4kl+cS+exGEQ+Z
+         rneOhz224LM3Js++bPwmJxjiWKyl/+mUR0QxcWkYT53uwjOJQPi76kdkmmmfql4q2yMY
+         5YUESktvVqAOCKRFnyPxqZGjYlLBfiOpHGto3CNlAoCjHAG/xfT8PjUzoNr4Ksmu9UB0
+         xGlraVIm+bqntt9AYH09O9yJ7x/D67O5a06kMj6rouCJlv6ZT6YIlINaq/EDTR8J0FN5
+         /kLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=Skacs7EXPHqa2+iszJrJANOJ0qE5l/8OmxgUeJzvuFY=;
+        b=BYBmRaOH4NRfP1Gj1W76YjBMZ5GETa7md5Put1E8sf+GVNnmA98c8m+2c6TK/G7RmL
+         XdEbYzoo6KmNjSXbBZoKE7Sh8JUZL+/JUo2KjqksxuiVcu7TrmytDfUalM1Gk4i2j95E
+         JDEztAm2ldXFID1l68WVKEGnUmC8lxgF4am4d+hbOR8y8mOW/T9TB5mc974+2otOJSLT
+         U5RW2HVxUkxHWooASmiQfqrRkLCBzIsGf8p5+9PIbW3CcfeXKF3loEPwQSq3XYFcw3fF
+         kaXy/oFHwoLZgpaYJ9ZnUTH27qjxrhcVE2S4E2fTBmCEe8A4icOTUDfoCCD4GHXxUNFu
+         UW6w==
+X-Gm-Message-State: AOAM531dNUAyCMkZNvdU9g2zgePp1SJi9AMffj+5+121PTpRz1Sg0BfF
+        CoZESmU3SPLZ5QtRR1ByOiU=
+X-Google-Smtp-Source: ABdhPJzIJef66nd1vfnY7XWT91zvftzIW9FTEQh30rfVNzjQ0tbfwAFB3N+KRw14E+4Hqn6/KGT2Yw==
+X-Received: by 2002:a17:90a:fa92:: with SMTP id cu18mr1837292pjb.215.1598006385206;
+        Fri, 21 Aug 2020 03:39:45 -0700 (PDT)
+Received: from localhost (61-68-212-105.tpgi.com.au. [61.68.212.105])
+        by smtp.gmail.com with ESMTPSA id 193sm2120352pfu.169.2020.08.21.03.39.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2020 03:39:44 -0700 (PDT)
+Date:   Fri, 21 Aug 2020 20:39:39 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v5 5/8] mm: HUGE_VMAP arch support cleanup
+To:     Andrew Morton <akpm@linux-foundation.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20200819130107.478414-1-aneesh.kumar@linux.ibm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <52e9743e-fa2f-3fd2-f50e-2c6c38464b96@arm.com>
-Date:   Fri, 21 Aug 2020 14:21:27 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        linux-mm@kvack.org
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>
+References: <20200821044427.736424-1-npiggin@gmail.com>
+        <20200821044427.736424-6-npiggin@gmail.com>
+        <9b67b892-9482-15dc-0c1e-c5d5a93a3c91@csgroup.eu>
+In-Reply-To: <9b67b892-9482-15dc-0c1e-c5d5a93a3c91@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <20200819130107.478414-1-aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Message-Id: <1598006254.vcbwyiiw9l.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Excerpts from Christophe Leroy's message of August 21, 2020 3:40 pm:
+>=20
+>=20
+> Le 21/08/2020 =C3=A0 06:44, Nicholas Piggin a =C3=A9crit=C2=A0:
+>> This changes the awkward approach where architectures provide init
+>> functions to determine which levels they can provide large mappings for,
+>> to one where the arch is queried for each call.
+>>=20
+>> This removes code and indirection, and allows constant-folding of dead
+>> code for unsupported levels.
+>=20
+> I think that in order to allow constant-folding of dead code for=20
+> unsupported levels, you must define arch_vmap_xxx_supported() as static=20
+> inline in a .h
+>=20
+> If you have them in .c files, you'll get calls to tiny functions that=20
+> will always return false, but will still be called and dead code won't=20
+> be eliminated. And performance wise, that's probably not optimal either.
 
-On 08/19/2020 06:30 PM, Aneesh Kumar K.V wrote:
-> This patch series includes fixes for debug_vm_pgtable test code so that
-> they follow page table updates rules correctly. The first two patches introduce
-> changes w.r.t ppc64. The patches are included in this series for completeness. We can
-> merge them via ppc64 tree if required.
-> 
-> Hugetlb test is disabled on ppc64 because that needs larger change to satisfy
-> page table update rules.
-> 
-> Changes from V1:
-> * Address review feedback
-> * drop test specific pfn_pte and pfn_pmd.
-> * Update ppc64 page table helper to add _PAGE_PTE 
-> 
-> Aneesh Kumar K.V (13):
->   powerpc/mm: Add DEBUG_VM WARN for pmd_clear
->   powerpc/mm: Move setting pte specific flags to pfn_pte
->   mm/debug_vm_pgtable/ppc64: Avoid setting top bits in radom value
->   mm/debug_vm_pgtables/hugevmap: Use the arch helper to identify huge
->     vmap support.
->   mm/debug_vm_pgtable/savedwrite: Enable savedwrite test with
->     CONFIG_NUMA_BALANCING
->   mm/debug_vm_pgtable/THP: Mark the pte entry huge before using
->     set_pmd/pud_at
->   mm/debug_vm_pgtable/set_pte/pmd/pud: Don't use set_*_at to update an
->     existing pte entry
->   mm/debug_vm_pgtable/thp: Use page table depost/withdraw with THP
->   mm/debug_vm_pgtable/locks: Move non page table modifying test together
->   mm/debug_vm_pgtable/locks: Take correct page table lock
->   mm/debug_vm_pgtable/pmd_clear: Don't use pmd/pud_clear on pte entries
->   mm/debug_vm_pgtable/hugetlb: Disable hugetlb test on ppc64
->   mm/debug_vm_pgtable: populate a pte entry before fetching it
-> 
->  arch/powerpc/include/asm/book3s/64/pgtable.h |  29 +++-
->  arch/powerpc/include/asm/nohash/pgtable.h    |   5 -
->  arch/powerpc/mm/book3s64/pgtable.c           |   2 +-
->  arch/powerpc/mm/pgtable.c                    |   5 -
->  include/linux/io.h                           |  12 ++
->  mm/debug_vm_pgtable.c                        | 151 +++++++++++--------
->  6 files changed, 127 insertions(+), 77 deletions(-)
-> 
+Yeah that's true actually, I think I didn't find a good place to add
+the prototypes in the arch code but I'll have another look and either
+rewrite the changelog or remove it. Although this does get a step closer
+at least.
 
-Changes proposed here will impact other enabled platforms as well.
-Adding the following folks and mailing lists, and hoping to get a
-broader review and test coverage. Please do include them in the
-next iteration as well.
-
-+ linux-arm-kernel@lists.infradead.org
-+ linux-s390@vger.kernel.org
-+ linux-snps-arc@lists.infradead.org
-+ x86@kernel.org
-+ linux-arch@vger.kernel.org
-
-+ Gerald Schaefer <gerald.schaefer@de.ibm.com>
-+ Christophe Leroy <christophe.leroy@c-s.fr>
-+ Christophe Leroy <christophe.leroy@csgroup.eu>
-+ Vineet Gupta <vgupta@synopsys.com>
-+ Mike Rapoport <rppt@linux.ibm.com>
-+ Qian Cai <cai@lca.pw>
+Thanks,
+Nick
