@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A073250779
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Aug 2020 20:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261FD25077A
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Aug 2020 20:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgHXS2G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Aug 2020 14:28:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34096 "EHLO mail.kernel.org"
+        id S1726682AbgHXS2N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Aug 2020 14:28:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgHXS2F (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Aug 2020 14:28:05 -0400
+        id S1725780AbgHXS2H (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 Aug 2020 14:28:07 -0400
 Received: from localhost.localdomain (unknown [95.146.230.145])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C6F652074D;
-        Mon, 24 Aug 2020 18:28:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B41620FC3;
+        Mon, 24 Aug 2020 18:28:04 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -26,10 +26,11 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v8 01/28] arm64: mte: system register definitions
-Date:   Mon, 24 Aug 2020 19:27:31 +0100
-Message-Id: <20200824182758.27267-2-catalin.marinas@arm.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suzuki K Poulose <Suzuki.Poulose@arm.com>
+Subject: [PATCH v8 02/28] arm64: mte: Use Normal Tagged attributes for the linear map
+Date:   Mon, 24 Aug 2020 19:27:32 +0100
+Message-Id: <20200824182758.27267-3-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200824182758.27267-1-catalin.marinas@arm.com>
 References: <20200824182758.27267-1-catalin.marinas@arm.com>
@@ -40,199 +41,157 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Once user space is given access to tagged memory, the kernel must be
+able to clear/save/restore tags visible to the user. This is done via
+the linear mapping, therefore map it as such. The new MT_NORMAL_TAGGED
+index for MAIR_EL1 is initially mapped as Normal memory and later
+changed to Normal Tagged via the cpufeature infrastructure. From a
+mismatched attribute aliases perspective, the Tagged memory is
+considered a permission and it won't lead to undefined behaviour.
 
-Add Memory Tagging Extension system register definitions together with
-the relevant bitfields.
-
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
+Cc: Suzuki K Poulose <Suzuki.Poulose@arm.com>
 ---
 
 Notes:
-    v2:
-    - Added SET_PSTATE_TCO() macro.
+    v8:
+    - Defer the MAIR_EL1 initialisation to the patch introducing the
+      cpufeature checks.
+    - Remove the system_supports_mte() check in pgattr_change_is_safe()
+      since MT_NORMAL_TAGGED will be used even if MTE is not present (but
+      mapped to Normal Cacheable memory).
+    
+    v5:
+    - Move the clearing of the zero page since clear_page() to a later
+      patch.
+    
+    v3:
+    - Restrict the safe attribute change in pgattr_change_is_safe() only to
+      Normal to/from Normal-Tagged (old version allow any other type as long
+      as old or new was Normal(-Tagged)).
 
- arch/arm64/include/asm/kvm_arm.h     |  1 +
- arch/arm64/include/asm/sysreg.h      | 53 ++++++++++++++++++++++++++++
- arch/arm64/include/uapi/asm/ptrace.h |  1 +
- arch/arm64/kernel/ptrace.c           |  2 +-
- 4 files changed, 56 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/memory.h       |  1 +
+ arch/arm64/include/asm/pgtable-prot.h |  2 ++
+ arch/arm64/mm/dump.c                  |  4 ++++
+ arch/arm64/mm/mmu.c                   | 20 ++++++++++++++++++--
+ arch/arm64/mm/proc.S                  |  8 ++++++--
+ 5 files changed, 31 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-index 51c1d9918999..8a1cbfd544d6 100644
---- a/arch/arm64/include/asm/kvm_arm.h
-+++ b/arch/arm64/include/asm/kvm_arm.h
-@@ -12,6 +12,7 @@
- #include <asm/types.h>
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index afa722504bfd..1e0a78266410 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -133,6 +133,7 @@
+ #define MT_NORMAL_NC		3
+ #define MT_NORMAL		4
+ #define MT_NORMAL_WT		5
++#define MT_NORMAL_TAGGED	6
  
- /* Hyp Configuration Register (HCR) bits */
-+#define HCR_ATA		(UL(1) << 56)
- #define HCR_FWB		(UL(1) << 46)
- #define HCR_API		(UL(1) << 41)
- #define HCR_APK		(UL(1) << 40)
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 554a7e8ecb07..6fa9aa477e76 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -91,10 +91,12 @@
- #define PSTATE_PAN			pstate_field(0, 4)
- #define PSTATE_UAO			pstate_field(0, 3)
- #define PSTATE_SSBS			pstate_field(3, 1)
-+#define PSTATE_TCO			pstate_field(3, 4)
+ /*
+  * Memory types for Stage-2 translation
+diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+index 4d867c6446c4..afd8b9fc76f2 100644
+--- a/arch/arm64/include/asm/pgtable-prot.h
++++ b/arch/arm64/include/asm/pgtable-prot.h
+@@ -50,6 +50,7 @@ extern bool arm64_use_ng_mappings;
+ #define PROT_NORMAL_NC		(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL_NC))
+ #define PROT_NORMAL_WT		(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL_WT))
+ #define PROT_NORMAL		(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL))
++#define PROT_NORMAL_TAGGED	(PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL_TAGGED))
  
- #define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
- #define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
- #define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
-+#define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
+ #define PROT_SECT_DEVICE_nGnRE	(PROT_SECT_DEFAULT | PMD_SECT_PXN | PMD_SECT_UXN | PMD_ATTRINDX(MT_DEVICE_nGnRE))
+ #define PROT_SECT_NORMAL	(PROT_SECT_DEFAULT | PMD_SECT_PXN | PMD_SECT_UXN | PMD_ATTRINDX(MT_NORMAL))
+@@ -59,6 +60,7 @@ extern bool arm64_use_ng_mappings;
+ #define _HYP_PAGE_DEFAULT	_PAGE_DEFAULT
  
- #define __SYS_BARRIER_INSN(CRm, op2, Rt) \
- 	__emit_inst(0xd5000000 | sys_insn(0, 3, 3, (CRm), (op2)) | ((Rt) & 0x1f))
-@@ -181,6 +183,8 @@
- #define SYS_SCTLR_EL1			sys_reg(3, 0, 1, 0, 0)
- #define SYS_ACTLR_EL1			sys_reg(3, 0, 1, 0, 1)
- #define SYS_CPACR_EL1			sys_reg(3, 0, 1, 0, 2)
-+#define SYS_RGSR_EL1			sys_reg(3, 0, 1, 0, 5)
-+#define SYS_GCR_EL1			sys_reg(3, 0, 1, 0, 6)
+ #define PAGE_KERNEL		__pgprot(PROT_NORMAL)
++#define PAGE_KERNEL_TAGGED	__pgprot(PROT_NORMAL_TAGGED)
+ #define PAGE_KERNEL_RO		__pgprot((PROT_NORMAL & ~PTE_WRITE) | PTE_RDONLY)
+ #define PAGE_KERNEL_ROX		__pgprot((PROT_NORMAL & ~(PTE_WRITE | PTE_PXN)) | PTE_RDONLY)
+ #define PAGE_KERNEL_EXEC	__pgprot(PROT_NORMAL & ~PTE_PXN)
+diff --git a/arch/arm64/mm/dump.c b/arch/arm64/mm/dump.c
+index 0b8da1cc1c07..ba6d1d89f9b2 100644
+--- a/arch/arm64/mm/dump.c
++++ b/arch/arm64/mm/dump.c
+@@ -169,6 +169,10 @@ static const struct prot_bits pte_bits[] = {
+ 		.mask	= PTE_ATTRINDX_MASK,
+ 		.val	= PTE_ATTRINDX(MT_NORMAL),
+ 		.set	= "MEM/NORMAL",
++	}, {
++		.mask	= PTE_ATTRINDX_MASK,
++		.val	= PTE_ATTRINDX(MT_NORMAL_TAGGED),
++		.set	= "MEM/NORMAL-TAGGED",
+ 	}
+ };
  
- #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 75df62fea1b6..936c4762dadf 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -122,7 +122,7 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+ 	 * The following mapping attributes may be updated in live
+ 	 * kernel mappings without the need for break-before-make.
+ 	 */
+-	static const pteval_t mask = PTE_PXN | PTE_RDONLY | PTE_WRITE | PTE_NG;
++	pteval_t mask = PTE_PXN | PTE_RDONLY | PTE_WRITE | PTE_NG;
  
-@@ -218,6 +222,8 @@
- #define SYS_ERXADDR_EL1			sys_reg(3, 0, 5, 4, 3)
- #define SYS_ERXMISC0_EL1		sys_reg(3, 0, 5, 5, 0)
- #define SYS_ERXMISC1_EL1		sys_reg(3, 0, 5, 5, 1)
-+#define SYS_TFSR_EL1			sys_reg(3, 0, 5, 6, 0)
-+#define SYS_TFSRE0_EL1			sys_reg(3, 0, 5, 6, 1)
+ 	/* creating or taking down mappings is always safe */
+ 	if (old == 0 || new == 0)
+@@ -136,6 +136,17 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
+ 	if (old & ~new & PTE_NG)
+ 		return false;
  
- #define SYS_FAR_EL1			sys_reg(3, 0, 6, 0, 0)
- #define SYS_PAR_EL1			sys_reg(3, 0, 7, 4, 0)
-@@ -368,6 +374,7 @@
- 
- #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
- #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
-+#define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
- #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
- 
- #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
-@@ -460,6 +467,7 @@
- #define SYS_ESR_EL2			sys_reg(3, 4, 5, 2, 0)
- #define SYS_VSESR_EL2			sys_reg(3, 4, 5, 2, 3)
- #define SYS_FPEXC32_EL2			sys_reg(3, 4, 5, 3, 0)
-+#define SYS_TFSR_EL2			sys_reg(3, 4, 5, 6, 0)
- #define SYS_FAR_EL2			sys_reg(3, 4, 6, 0, 0)
- 
- #define SYS_VDISR_EL2			sys_reg(3, 4, 12, 1,  1)
-@@ -516,6 +524,7 @@
- #define SYS_AFSR0_EL12			sys_reg(3, 5, 5, 1, 0)
- #define SYS_AFSR1_EL12			sys_reg(3, 5, 5, 1, 1)
- #define SYS_ESR_EL12			sys_reg(3, 5, 5, 2, 0)
-+#define SYS_TFSR_EL12			sys_reg(3, 5, 5, 6, 0)
- #define SYS_FAR_EL12			sys_reg(3, 5, 6, 0, 0)
- #define SYS_MAIR_EL12			sys_reg(3, 5, 10, 2, 0)
- #define SYS_AMAIR_EL12			sys_reg(3, 5, 10, 3, 0)
-@@ -531,6 +540,15 @@
- 
- /* Common SCTLR_ELx flags. */
- #define SCTLR_ELx_DSSBS	(BIT(44))
-+#define SCTLR_ELx_ATA	(BIT(43))
++	/*
++	 * Changing the memory type between Normal and Normal-Tagged is safe
++	 * since Tagged is considered a permission attribute from the
++	 * mismatched attribute aliases perspective.
++	 */
++	if (((old & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL) ||
++	     (old & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL_TAGGED)) &&
++	    ((new & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL) ||
++	     (new & PTE_ATTRINDX_MASK) == PTE_ATTRINDX(MT_NORMAL_TAGGED)))
++		mask |= PTE_ATTRINDX_MASK;
 +
-+#define SCTLR_ELx_TCF_SHIFT	40
-+#define SCTLR_ELx_TCF_NONE	(UL(0x0) << SCTLR_ELx_TCF_SHIFT)
-+#define SCTLR_ELx_TCF_SYNC	(UL(0x1) << SCTLR_ELx_TCF_SHIFT)
-+#define SCTLR_ELx_TCF_ASYNC	(UL(0x2) << SCTLR_ELx_TCF_SHIFT)
-+#define SCTLR_ELx_TCF_MASK	(UL(0x3) << SCTLR_ELx_TCF_SHIFT)
-+
-+#define SCTLR_ELx_ITFSB	(BIT(37))
- #define SCTLR_ELx_ENIA	(BIT(31))
- #define SCTLR_ELx_ENIB	(BIT(30))
- #define SCTLR_ELx_ENDA	(BIT(27))
-@@ -559,6 +577,14 @@
+ 	return ((old ^ new) & ~mask) == 0;
+ }
+ 
+@@ -491,7 +502,12 @@ static void __init map_mem(pgd_t *pgdp)
+ 		if (memblock_is_nomap(reg))
+ 			continue;
+ 
+-		__map_memblock(pgdp, start, end, PAGE_KERNEL, flags);
++		/*
++		 * The linear map must allow allocation tags reading/writing
++		 * if MTE is present. Otherwise, it has the same attributes as
++		 * PAGE_KERNEL.
++		 */
++		__map_memblock(pgdp, start, end, PAGE_KERNEL_TAGGED, flags);
+ 	}
+ 
+ 	/*
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index 796e47a571e6..4817ed52e343 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -44,14 +44,18 @@
+ #define TCR_KASAN_FLAGS 0
  #endif
  
- /* SCTLR_EL1 specific flags. */
-+#define SCTLR_EL1_ATA0		(BIT(42))
-+
-+#define SCTLR_EL1_TCF0_SHIFT	38
-+#define SCTLR_EL1_TCF0_NONE	(UL(0x0) << SCTLR_EL1_TCF0_SHIFT)
-+#define SCTLR_EL1_TCF0_SYNC	(UL(0x1) << SCTLR_EL1_TCF0_SHIFT)
-+#define SCTLR_EL1_TCF0_ASYNC	(UL(0x2) << SCTLR_EL1_TCF0_SHIFT)
-+#define SCTLR_EL1_TCF0_MASK	(UL(0x3) << SCTLR_EL1_TCF0_SHIFT)
-+
- #define SCTLR_EL1_BT1		(BIT(36))
- #define SCTLR_EL1_BT0		(BIT(35))
- #define SCTLR_EL1_UCI		(BIT(26))
-@@ -595,6 +621,7 @@
- #define MAIR_ATTR_DEVICE_GRE		UL(0x0c)
- #define MAIR_ATTR_NORMAL_NC		UL(0x44)
- #define MAIR_ATTR_NORMAL_WT		UL(0xbb)
-+#define MAIR_ATTR_NORMAL_TAGGED		UL(0xf0)
- #define MAIR_ATTR_NORMAL		UL(0xff)
- #define MAIR_ATTR_MASK			UL(0xff)
+-/* Default MAIR_EL1 */
++/*
++ * Default MAIR_EL1. MT_NORMAL_TAGGED is initially mapped as Normal memory and
++ * changed during __cpu_setup to Normal Tagged if the system supports MTE.
++ */
+ #define MAIR_EL1_SET							\
+ 	(MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRnE, MT_DEVICE_nGnRnE) |	\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_DEVICE_nGnRE, MT_DEVICE_nGnRE) |	\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_DEVICE_GRE, MT_DEVICE_GRE) |		\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_NC, MT_NORMAL_NC) |		\
+ 	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL, MT_NORMAL) |			\
+-	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_WT, MT_NORMAL_WT))
++	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL_WT, MT_NORMAL_WT) |		\
++	 MAIR_ATTRIDX(MAIR_ATTR_NORMAL, MT_NORMAL_TAGGED))
  
-@@ -686,6 +713,10 @@
- #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
- #define ID_AA64PFR1_BT_BTI		0x1
- 
-+#define ID_AA64PFR1_MTE_NI		0x0
-+#define ID_AA64PFR1_MTE_EL0		0x1
-+#define ID_AA64PFR1_MTE			0x2
-+
- /* id_aa64zfr0 */
- #define ID_AA64ZFR0_F64MM_SHIFT		56
- #define ID_AA64ZFR0_F32MM_SHIFT		52
-@@ -920,6 +951,28 @@
- #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
- #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
- 
-+/* TCR EL1 Bit Definitions */
-+#define SYS_TCR_EL1_TCMA1	(BIT(58))
-+#define SYS_TCR_EL1_TCMA0	(BIT(57))
-+
-+/* GCR_EL1 Definitions */
-+#define SYS_GCR_EL1_RRND	(BIT(16))
-+#define SYS_GCR_EL1_EXCL_MASK	0xffffUL
-+
-+/* RGSR_EL1 Definitions */
-+#define SYS_RGSR_EL1_TAG_MASK	0xfUL
-+#define SYS_RGSR_EL1_SEED_SHIFT	8
-+#define SYS_RGSR_EL1_SEED_MASK	0xffffUL
-+
-+/* GMID_EL1 field definitions */
-+#define SYS_GMID_EL1_BS_SHIFT	0
-+#define SYS_GMID_EL1_BS_SIZE	4
-+
-+/* TFSR{,E0}_EL1 bit definitions */
-+#define SYS_TFSR_EL1_TF0_SHIFT	0
-+#define SYS_TFSR_EL1_TF1_SHIFT	1
-+#define SYS_TFSR_EL1_TF0	(UL(1) << SYS_TFSR_EL1_TF0_SHIFT)
-+#define SYS_TFSR_EL1_TF1	(UK(2) << SYS_TFSR_EL1_TF1_SHIFT)
- 
- /* Safe value for MPIDR_EL1: Bit31:RES1, Bit30:U:0, Bit24:MT:0 */
- #define SYS_MPIDR_SAFE_VAL	(BIT(31))
-diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
-index 42cbe34d95ce..06413d9f2341 100644
---- a/arch/arm64/include/uapi/asm/ptrace.h
-+++ b/arch/arm64/include/uapi/asm/ptrace.h
-@@ -51,6 +51,7 @@
- #define PSR_PAN_BIT	0x00400000
- #define PSR_UAO_BIT	0x00800000
- #define PSR_DIT_BIT	0x01000000
-+#define PSR_TCO_BIT	0x02000000
- #define PSR_V_BIT	0x10000000
- #define PSR_C_BIT	0x20000000
- #define PSR_Z_BIT	0x40000000
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index d8ebfd813e28..8942de814b72 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -1793,7 +1793,7 @@ void syscall_trace_exit(struct pt_regs *regs)
-  * We also reserve IL for the kernel; SS is handled dynamically.
-  */
- #define SPSR_EL1_AARCH64_RES0_BITS \
--	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 25) | GENMASK_ULL(23, 22) | \
-+	(GENMASK_ULL(63, 32) | GENMASK_ULL(27, 26) | GENMASK_ULL(23, 22) | \
- 	 GENMASK_ULL(20, 13) | GENMASK_ULL(5, 5))
- #define SPSR_EL1_AARCH32_RES0_BITS \
- 	(GENMASK_ULL(63, 32) | GENMASK_ULL(22, 22) | GENMASK_ULL(20, 20))
+ #ifdef CONFIG_CPU_PM
+ /**
