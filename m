@@ -2,137 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC12250859
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Aug 2020 20:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23CE25088B
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Aug 2020 20:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbgHXSpA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Aug 2020 14:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725963AbgHXSpA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Aug 2020 14:45:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E01C061573
-        for <linux-arch@vger.kernel.org>; Mon, 24 Aug 2020 11:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=ClVtnBCNL9jSDwJxwBsm6jujknMSQxdDeSZ1zzGivuk=; b=rxaN7eZhp4qz5YrulUzMYvj8V1
-        7td3jlTZIwn0xF0kCLC2oi8l3cFA3w+RupkeXySHMHUONyUjX0dtvav0V9TgDhefYgrnIBPO7BA/P
-        gfVDHAU4tLeYtS3XcBeHQIuQFZsLg9UE0IKebxWjryhJfmC544PSiBjnpw086neYyLOwefxRwgPMK
-        Ic5p05oF3gdJSKAwHlj1tmn7AFh47af7Vrnuewjgp+LoT+yiplB9iAAK2/Zn40lqS3UupNPCn67uS
-        XHulbgngKAx3DM1gsoUSy6f/lZo9oaKZS03X3hq1fdc7Fe4beYCT0o5kQsWkDzROnpvsxxkLlDD6N
-        UnBudtxg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kAHSi-00022u-EK; Mon, 24 Aug 2020 18:44:56 +0000
-Subject: Re: [PATCH v8 27/28] arm64: mte: Kconfig entry
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20200824182758.27267-1-catalin.marinas@arm.com>
- <20200824182758.27267-28-catalin.marinas@arm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <2e73f87b-f5fe-5ccf-1b5f-c916703356e0@infradead.org>
-Date:   Mon, 24 Aug 2020 11:44:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726673AbgHXSyt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Aug 2020 14:54:49 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:44979 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbgHXSys (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Aug 2020 14:54:48 -0400
+Received: from mail-qt1-f173.google.com ([209.85.160.173]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MoNMu-1kz3l80hKq-00opYx; Mon, 24 Aug 2020 20:54:46 +0200
+Received: by mail-qt1-f173.google.com with SMTP id 92so1608532qtb.6;
+        Mon, 24 Aug 2020 11:54:45 -0700 (PDT)
+X-Gm-Message-State: AOAM530Sw9XAS6eh/6Bc/mxp3dT9jsfY8uANLPNkEbpJC6LxRYGMsNgH
+        eaACAsCqP/1pYI7ylz8TGwT+MfUN2eSga6sDrv8=
+X-Google-Smtp-Source: ABdhPJxWBKCBtJZg7nLG3vXIdZFpSx+qr8JPd8D5R08h5RqUSqbkH8qTSGrOV5rDkZoZ134R/OrQyj0lwj9Wx9vY6dY=
+X-Received: by 2002:aed:33e7:: with SMTP id v94mr5942793qtd.18.1598295284718;
+ Mon, 24 Aug 2020 11:54:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200824182758.27267-28-catalin.marinas@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1598287583-71762-1-git-send-email-mikelley@microsoft.com> <1598287583-71762-6-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1598287583-71762-6-git-send-email-mikelley@microsoft.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 24 Aug 2020 20:54:28 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1hDBVembCd+6=ENUWYFz=72JBTFMrKYZ2aFd+_Q04F+g@mail.gmail.com>
+Message-ID: <CAK8P3a1hDBVembCd+6=ENUWYFz=72JBTFMrKYZ2aFd+_Q04F+g@mail.gmail.com>
+Subject: Re: [PATCH v7 05/10] arm64: hyperv: Add interrupt handlers for VMbus
+ and stimer
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>, wei.liu@kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9q/x3Ahld8KtMCc0YtDFU7o7FSwuMFmzSpqjkOeeBGCz4uhJLvj
+ rIOAU8u1JrRton9OJG4K8PrJCVCmcxxLdAD53+JI9LLX344ZgQkn0l5A8RzwGc3IqFlxIY7
+ ZRcKLV8DzJ9GaouXST/HIyVj2t+r0orVWqFVizQP5d8YtnU6o+I1m2BJonF20knYQTyTUis
+ I0yqbkQHACw6Rut5Cre6A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f0EUG/PVpFw=:r5JmOnE1KS9QdJf9FaRLqr
+ t2cv6uBFRjHM0tcA0sj3PNSgodKzc5y4agqj8piVvVzpJUgdfpaOioDu+xICSja3O7eNL8MRI
+ q6qgCQbeWGgyJ2NmbPwcDSYyYJRtqLw0GzFiueubgTWPCMRD1zJUzvsydwhYCRftAPTbp7hcj
+ TbSrcPOFDszW3BuNlXPDvTvOY4ZsPlT8CWDNd26NdokkBzRcuemMcAVZ4Kx48yIfbKlBJQu1s
+ dgbsTOfNYm+Vc0aGD6pL8n8RTpd6KdJhBbUl0bUnrmudr/ENR/xUTiltkcknD/OyBx/sleFDU
+ lmhWrYHMm8+JaY3XyzR+MSNEDGbmiPQi1xyb7MfM2LrvFL53HYxaRJdjEb92H9/8rBi4dx450
+ HPAfMlQbALoVDbkBltutf4sPQ2ryFdZdEhNpOpnu54TsEOKBepj50idC4MwNuYEJDLUf8n465
+ yVKZmnBA261hima0ocs+0+loUnuiEeJbB+FMx1SnidPeqtgw3IOicGlSssXbUwXll1Y/rb0cs
+ sZH7B4ExpoX8x+jxgzEcrfH4DslffxZmNBzHgnKk5vX9VP7EwgUbo2llFQaEkKGioUYmNzXjW
+ Z/39OyOm87aWqjKM8qHfsUWKXNAttay3XiEX6bCUUAw5vsLKQnG3f01B4vWZwZmJTBiOy0yEx
+ yvKZ9nLwE253wPtuQPRyTIACQe//r9IkD4DwRE6syaRmTzBOXOg2817xqBXoMnXhKZ+DGZmsI
+ B00FnBqsmnC2r+ilUz8PCDfozIPJV+tdhbU/BCuau2oit4o5mGxFNtUzk4Be1MT0S0V8LqO4H
+ DSsU9fVUl4gG2a65SE7yAuZr6y8pCm9n/f5cqeSFUgMXHbRj4FlBEvJSZm1yuwK5YphzKFMbR
+ RFfJaRODz8KI0L+71ehCLEU7SkCeUDrNxeSNL/Z0z6G09zAHSfuhEL93hQkCiUVWpt912cEkO
+ L06Tt0AaI41RHMR1sCfDc7eA0W3WehJXkAiwmkudgf6PE6Cy/kyeN
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On 8/24/20 11:27 AM, Catalin Marinas wrote:
-> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> 
-> Add Memory Tagging Extension support to the arm64 kbuild.
-> 
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
+On Mon, Aug 24, 2020 at 6:46 PM Michael Kelley <mikelley@microsoft.com> wrote:
+>
+> Add ARM64-specific code to set up and handle the interrupts
+> generated by Hyper-V for VMbus messages and for stimer expiration.
+>
+> This code is architecture dependent and is mostly driven by
+> architecture independent code in the VMbus driver and the
+> Hyper-V timer clocksource driver.
+>
+> This code is built only when CONFIG_HYPERV is enabled.
+>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 > ---
-> 
-> Notes:
->     v7:
->     - Binutils gained initial support for MTE in 2.32.0. However, a late
->       architecture addition (LDGM/STGM) is only supported in the newer
->       2.32.x and 2.33 versions. Change the AS_HAS_MTE option to also check
->       for stgm in addition to .arch armv8.5-a+memtag.
->     
->  arch/arm64/Kconfig | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 6d232837cbee..10cf81d70657 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1664,6 +1664,37 @@ config ARCH_RANDOM
->  	  provides a high bandwidth, cryptographically secure
->  	  hardware random number generator.
->  
-> +config ARM64_AS_HAS_MTE
-> +	# Binutils gained initial support for MTE in 2.32.0. However, a
-> +	# late architecture addition (LDGM/STGM) is only supported in
-> +	# the newer 2.32.x and 2.33 versions.
-> +	def_bool $(as-instr,.arch armv8.5-a+memtag\nstgm xzr$(comma)[x0])
+>  arch/arm64/hyperv/Makefile        |   2 +-
+>  arch/arm64/hyperv/mshyperv.c      | 133 ++++++++++++++++++++++++++++++++++++++
+>  arch/arm64/include/asm/mshyperv.h |  70 ++++++++++++++++++++
 
-Would you mind translating that for me?
-Yes, I read the v7 Notes, but that only helped a little bit.
+I still have the feeling that most of the code in arch/arm64/hyperv/ is
+misplaced: the only callers are loadable modules in drivers/hv/, and the
+code is not really part of the architecture but part of the platform.
 
+For the arm64 architecture, we have a rule that platform specific
+code belongs into device drivers rather than into the architecture
+code as we used to do in the linux-2.6 days for arch/arm/.
 
-> +
-> +config ARM64_MTE
-> +	bool "Memory Tagging Extension support"
-> +	default y
-> +	depends on ARM64_AS_HAS_MTE && ARM64_TAGGED_ADDR_ABI
-> +	select ARCH_USES_HIGH_VMA_FLAGS
-> +	help
-> +	  Memory Tagging (part of the ARMv8.5 Extensions) provides
-> +	  architectural support for run-time, always-on detection of
+I don't see hyperv being virtual rather than an SoC as a differentiator
+either; it's still just one of many platforms. If you look at
+arch/arm64/xen/, you can see that they have managed to get
+to a much simpler implementation in comparison.
 
-	                            runtime,
-as is used below.
+I'm not sure what the correct solution should be, but what I'd try to
+do here is to move every function that just considers the platform
+rather than the architecture somewhere into drivers/hv where it
+can be linked into the same modules as the existing files when
+building for arm64, while trying to keep architecture specific code
+in the header file where it can be included from those modules.
 
-> +	  various classes of memory error to aid with software debugging
-> +	  to eliminate vulnerabilities arising from memory-unsafe
-> +	  languages.
-> +
-> +	  This option enables the support for the Memory Tagging
-> +	  Extension at EL0 (i.e. for userspace).
-> +
-> +	  Selecting this option allows the feature to be detected at
-> +	  runtime. Any secondary CPU not implementing this feature will
-> +	  not be allowed a late bring-up.
-> +
-> +	  Userspace binaries that want to use this feature must
-> +	  explicitly opt in. The mechanism for the userspace is
-> +	  described in:
-> +
-> +	  Documentation/arm64/memory-tagging-extension.rst.
-> +
->  endmenu
->  
->  config ARM64_SVE
-> 
-
-thanks.
--- 
-~Randy
-
+      Arnd
