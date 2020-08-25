@@ -2,104 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7534125151A
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 11:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B3A2516E9
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 12:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgHYJPK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Aug 2020 05:15:10 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:23993 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729021AbgHYJPD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Aug 2020 05:15:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1598346900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=92i+0YUtQgEC4ia+7x4FHZS4hUNlAuigR1V4PDLFWpU=;
-        b=dXID83x2aRkxAWfQMPZWk/vI0Qh6hxbzpf47lTeb+tvwUuSj24TdgkBRIgaD3YGlKDHCvj
-        SX0gBQ3rs/KB+oGq+tV6STleCJU2EMW74zeeqTsUIgHcgFv0Gbs6KFrUuNrUir9FoGGTcZ
-        CrwCG66NpsxslHzCJrVNy5/sTPOAUQQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-493-qjGmojjQPt2LSoxrEMPg0A-1; Tue, 25 Aug 2020 05:14:56 -0400
-X-MC-Unique: qjGmojjQPt2LSoxrEMPg0A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1729458AbgHYKzA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 06:55:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53310 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728117AbgHYKy7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Aug 2020 06:54:59 -0400
+Received: from C02TF0J2HF1T.local (unknown [213.205.240.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C7438100746B;
-        Tue, 25 Aug 2020 09:14:52 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-112-37.ams2.redhat.com [10.36.112.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5353C808AB;
-        Tue, 25 Aug 2020 09:14:39 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Subject: Re: [PATCH v11 9/9] x86: Disallow vsyscall emulation when CET is enabled
-References: <20200825002645.3658-1-yu-cheng.yu@intel.com>
-        <20200825002645.3658-10-yu-cheng.yu@intel.com>
-        <CALCETrVXwUDu2m-XEd-_J03L=sricM4cMxQYVkdGRWZDjmMB2g@mail.gmail.com>
-Date:   Tue, 25 Aug 2020 11:14:37 +0200
-In-Reply-To: <CALCETrVXwUDu2m-XEd-_J03L=sricM4cMxQYVkdGRWZDjmMB2g@mail.gmail.com>
-        (Andy Lutomirski's message of "Mon, 24 Aug 2020 17:32:35 -0700")
-Message-ID: <87pn7f9jeq.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECA0F2068E;
+        Tue, 25 Aug 2020 10:54:53 +0000 (UTC)
+Date:   Tue, 25 Aug 2020 11:54:50 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suzuki K Poulose <Suzuki.Poulose@arm.com>
+Subject: Re: [PATCH v8 03/28] arm64: mte: CPU feature detection and initial
+ sysreg configuration
+Message-ID: <20200825105450.GA22233@C02TF0J2HF1T.local>
+References: <20200824182758.27267-1-catalin.marinas@arm.com>
+ <20200824182758.27267-4-catalin.marinas@arm.com>
+ <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Andy Lutomirski:
+On Tue, Aug 25, 2020 at 09:53:16AM +0100, Marc Zyngier wrote:
+> On 2020-08-24 19:27, Catalin Marinas wrote:
+> > diff --git a/arch/arm64/include/asm/kvm_arm.h
+> > b/arch/arm64/include/asm/kvm_arm.h
+> > index 8a1cbfd544d6..6c3b2fc922bb 100644
+> > --- a/arch/arm64/include/asm/kvm_arm.h
+> > +++ b/arch/arm64/include/asm/kvm_arm.h
+> > @@ -78,7 +78,7 @@
+> >  			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
+> >  			 HCR_FMO | HCR_IMO)
+> >  #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
+> > -#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK)
+> > +#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
+> >  #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
+> 
+> Why is HCR_ATA only set for nVHE? HCR_EL2.ATA seems to apply to both,
+> doesn't it?
 
-> On Mon, Aug 24, 2020 at 5:30 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->>
->> From: "H.J. Lu" <hjl.tools@gmail.com>
->>
->> Emulation of the legacy vsyscall page is required by some programs built
->> before 2013.  Newer programs after 2013 don't use it.  Disallow vsyscall
->> emulation when Control-flow Enforcement (CET) is enabled to enhance
->> security.
->
-> NAK.
->
-> By all means disable execute emulation if CET-IBT is enabled at the
-> time emulation is attempted, and maybe even disable the vsyscall page
-> entirely if you can magically tell that CET-IBT will be enabled when a
-> process starts, but you don't get to just disable it outright on a
-> CET-enabled kernel.
+We need HCR_EL2.ATA to be set when !VHE so that the host kernel can use
+MTE. That said, I think we need to turn it off when running a guest.
+Even if we hide the ID register, the guest may still attempt to enable
+tags on some memory that doesn't support it, leading to unpredictable
+behaviour (well, only if we expose device memory to guests directly;
+Steve's patches will deal with this but for now we just disable MTE in
+guests).
 
-Yeah, we definitely would have to revert/avoid this downstream.  People
-definitely want to run glibc-2.12-era workloads on current kernels.
-Thanks for catching it.
+With VHE, HCR_EL2.ATA only affects the guests, so it can stay off. The
+host's use of tags is controlled by SCTLR_EL1/EL2.ATA (i.e. HCR_EL2.ATA
+has no effect if E2H and TGE are both 1; qemu has a bug here which I
+discovered yesterday).
 
-Florian
+> > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> > index 077293b5115f..59b91f58efec 100644
+> > --- a/arch/arm64/kvm/sys_regs.c
+> > +++ b/arch/arm64/kvm/sys_regs.c
+> > @@ -1131,6 +1131,8 @@ static u64 read_id_reg(const struct kvm_vcpu
+> > *vcpu,
+> >  		if (!vcpu_has_sve(vcpu))
+> >  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+> >  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
+> > +	} else if (id == SYS_ID_AA64PFR1_EL1) {
+> > +		val &= ~(0xfUL << ID_AA64PFR1_MTE_SHIFT);
+> 
+> Hiding the capability is fine, but where is the handling of trapping
+> instructions done? They should result in an UNDEF being injected.
 
+They are a few new MTE-specific MSR/MRS which are trapped at EL2 but
+since KVM doesn't understand them yet, shouldn't it already inject
+undef back at EL1? That would be safer regardless of MTE support.
+
+-- 
+Catalin
