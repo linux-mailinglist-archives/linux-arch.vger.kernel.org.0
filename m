@@ -2,135 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4982A251A93
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 16:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE8B251B9B
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 16:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725998AbgHYOQP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Aug 2020 10:16:15 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:9286 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725893AbgHYOQP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:16:15 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BbWHt0vQ2z9tx1l;
-        Tue, 25 Aug 2020 16:16:10 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id pJ2ZT6WP1cSM; Tue, 25 Aug 2020 16:16:10 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BbWHs4Dvlz9txlt;
-        Tue, 25 Aug 2020 16:16:09 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 01BDA8B823;
-        Tue, 25 Aug 2020 16:16:08 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id PErXmI-tRVWl; Tue, 25 Aug 2020 16:16:07 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7380D8B820;
-        Tue, 25 Aug 2020 16:16:04 +0200 (CEST)
-Subject: Re: [PATCH v8 2/8] powerpc/vdso: Remove __kernel_datapage_offset and
- simplify __get_datapage()
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com
-Cc:     linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, luto@kernel.org, tglx@linutronix.de,
-        vincenzo.frascino@arm.com, linuxppc-dev@lists.ozlabs.org
-References: <cover.1588079622.git.christophe.leroy@c-s.fr>
- <0d2201efe3c7727f2acc718aefd7c5bb22c66c57.1588079622.git.christophe.leroy@c-s.fr>
- <87wo34tbas.fsf@mpe.ellerman.id.au>
- <2f9b7d02-9e2f-4724-2608-c5573f6507a2@csgroup.eu>
-Message-ID: <6862421a-5a14-2e38-b825-e39e6ad3d51d@csgroup.eu>
-Date:   Tue, 25 Aug 2020 16:15:26 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726713AbgHYO6F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 10:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726336AbgHYO6E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Aug 2020 10:58:04 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4061CC061574;
+        Tue, 25 Aug 2020 07:58:04 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id u128so7552687pfb.6;
+        Tue, 25 Aug 2020 07:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EV9ZwzCwV4Z9BNt841c3RBiIdIkv89NbNGG9BR4Vsvo=;
+        b=tQvGYTFufQJ5ANwInffuD4W0HHbHhK3UMnx7AkOXZ23wS9FDnOwTjxSUnuDU8w4+6H
+         WrzNpO/vv8kZIl9tBYikyi80TDvKRYoJRBF/EOhJ27PSG4SngR/Xuxnm4uoZDqEtmWBG
+         w9Q0ZzZ9TN1p9oEP0v5cNP2EC/Qk6ju4EZSTPIhwUvYV4CJIzVxROxF6yxMWRxEcdjR3
+         Wwb3UgbmDMVI5u10e62d1rDys9XDuhYY/OoRWEe7B70C4tjmS+HdaxNk2nUDyAKQCx1z
+         59brznER2AMWT2lF91xyUfS5EzwwaTvRDntW33H3IP4yPpmtQ1udSgwIFm7gpknoBzQ6
+         VDYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EV9ZwzCwV4Z9BNt841c3RBiIdIkv89NbNGG9BR4Vsvo=;
+        b=BtD7YGdTJUT2agGmnvXR8lfXoJjMV0/kJIHjtrC+5M3mHw3OStSb8wm2BskmgUB8G3
+         ejNwmKN5P6Hm1Qey8xgbp48plidW0TwIGJqsgnpekMuqezTZsKO0zM6WSEZTbXLUbybv
+         iMj0OBVVJ2TXQ+CmBcKk9593NgPGk6GAdUqiRl5Ffyx38L5fmzoE1OG4SNQ2EPpSTkFl
+         i8LuphpqHt17nJdXpGr1WNxkNGu8gRPtbOaL1vkJ32QV+jA1q0JM0diit7I+oKz1BnlN
+         j59I4R7Lug6tMaiMbUC8fwJvy+AoALTrTE+pTLFthydzQc0502CLOKb2JZkqiYP96v5+
+         gAQw==
+X-Gm-Message-State: AOAM533rqJ9iksNCfb1bOmojLvYnoxlcDLYxprRDgihjAwE8iLVnoQVs
+        mZuGH5yO1GMJ/gSa6NmN0lU=
+X-Google-Smtp-Source: ABdhPJxnK3YNImOtYVgHd5D3Y/G4BRiEKbLrVsJXP4BBfTIN6Zbw6lEUoA6/orOoc47WqA6yXSiVLw==
+X-Received: by 2002:a17:902:8bcc:: with SMTP id r12mr7892933plo.314.1598367483737;
+        Tue, 25 Aug 2020 07:58:03 -0700 (PDT)
+Received: from bobo.ozlabs.ibm.com (61-68-212-105.tpgi.com.au. [61.68.212.105])
+        by smtp.gmail.com with ESMTPSA id e29sm15755956pfj.92.2020.08.25.07.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 07:58:03 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Zefan Li <lizefan@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v7 00/12] huge vmalloc mappings
+Date:   Wed, 26 Aug 2020 00:57:41 +1000
+Message-Id: <20200825145753.529284-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <2f9b7d02-9e2f-4724-2608-c5573f6507a2@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+I think it's ready to go into -mm if it gets acks for the arch
+changes.
+
+Thanks,
+Nick
+
+Since v6:
+- Fixed a false positive warning introduced in patch 2, found by
+  kbuild test robot.
+
+Since v5:
+- Split arch changes out better and make the constant folding work
+- Avoid most of the 80 column wrap, fix a reference to lib/ioremap.c
+- Fix compile error on some archs
+
+Since v4:
+- Fixed an off-by-page-order bug in v4
+- Several minor cleanups.
+- Added page order to /proc/vmallocinfo
+- Added hugepage to alloc_large_system_hage output.
+- Made an architecture config option, powerpc only for now.
+
+Since v3:
+- Fixed an off-by-one bug in a loop
+- Fix !CONFIG_HAVE_ARCH_HUGE_VMAP build fail
+- Hopefully this time fix the arm64 vmap stack bug, thanks Jonathan
+  Cameron for debugging the cause of this (hopefully).
+
+Since v2:
+- Rebased on vmalloc cleanups, split series into simpler pieces.
+- Fixed several compile errors and warnings
+- Keep the page array and accounting in small page units because
+  struct vm_struct is an interface (this should fix x86 vmap stack debug
+  assert). [Thanks Zefan]
 
 
-Le 04/08/2020 à 13:17, Christophe Leroy a écrit :
-> 
-> 
-> On 07/16/2020 02:59 AM, Michael Ellerman wrote:
->> Christophe Leroy <christophe.leroy@c-s.fr> writes:
->>> The VDSO datapage and the text pages are always located immediately
->>> next to each other, so it can be hardcoded without an indirection
->>> through __kernel_datapage_offset
->>>
->>> In order to ease things, move the data page in front like other
->>> arches, that way there is no need to know the size of the library
->>> to locate the data page.
->>>
-[...]
+Nicholas Piggin (12):
+  mm/vmalloc: fix vmalloc_to_page for huge vmap mappings
+  mm: apply_to_pte_range warn and fail if a large pte is encountered
+  mm/vmalloc: rename vmap_*_range vmap_pages_*_range
+  mm/ioremap: rename ioremap_*_range to vmap_*_range
+  mm: HUGE_VMAP arch support cleanup
+  powerpc: inline huge vmap supported functions
+  arm64: inline huge vmap supported functions
+  x86: inline huge vmap supported functions
+  mm: Move vmap_range from mm/ioremap.c to mm/vmalloc.c
+  mm/vmalloc: add vmap_range_noflush variant
+  mm/vmalloc: Hugepage vmalloc mappings
+  powerpc/64s/radix: Enable huge vmalloc mappings
 
->>
->> I merged this but then realised it breaks the display of the vdso in 
->> /proc/self/maps.
->>
->> ie. the vdso vma gets no name:
->>
->>    # cat /proc/self/maps
+ .../admin-guide/kernel-parameters.txt         |   2 +
+ arch/Kconfig                                  |   4 +
+ arch/arm64/include/asm/vmalloc.h              |  25 +
+ arch/arm64/mm/mmu.c                           |  26 -
+ arch/powerpc/Kconfig                          |   1 +
+ arch/powerpc/include/asm/vmalloc.h            |  21 +
+ arch/powerpc/mm/book3s64/radix_pgtable.c      |  21 -
+ arch/x86/include/asm/vmalloc.h                |  23 +
+ arch/x86/mm/ioremap.c                         |  19 -
+ arch/x86/mm/pgtable.c                         |  13 -
+ include/linux/io.h                            |   9 -
+ include/linux/vmalloc.h                       |  10 +
+ init/main.c                                   |   1 -
+ mm/ioremap.c                                  | 225 +--------
+ mm/memory.c                                   |  60 ++-
+ mm/page_alloc.c                               |   5 +-
+ mm/vmalloc.c                                  | 443 +++++++++++++++---
+ 17 files changed, 515 insertions(+), 393 deletions(-)
 
-[...]
+-- 
+2.23.0
 
->>
->>
->> And it's also going to break the logic in arch_unmap() to detect if
->> we're unmapping (part of) the VDSO. And it will break arch_remap() too.
->>
->> And the logic to recognise the signal trampoline in
->> arch/powerpc/perf/callchain_*.c as well.
-> 
-> I don't think it breaks that one, because ->vdsobase is still the start 
-> of text.
-> 
->>
->> So I'm going to rebase and drop this for now.
->>
->> Basically we have a bunch of places that assume that vdso_base is == the
->> start of the VDSO vma, and also that the code starts there. So that will
->> need some work to tease out all those assumptions and make them work
->> with this change.
-> 
-> Ok, one day I need to look at it in more details and see how other 
-> architectures handle it etc ...
-> 
-
-I just sent out a series which switches powerpc to the new 
-_install_special_mapping() API, the one powerpc uses being deprecated 
-since commit a62c34bd2a8a ("x86, mm: Improve _install_special_mapping
-and fix x86 vdso naming")
-
-arch_remap() gets replaced by vdso_remap()
-
-For arch_unmap(), I'm wondering how/what other architectures do, because 
-powerpc seems to be the only one to erase the vdso context pointer when 
-unmapping the vdso. So far I updated it to take into account the pages 
-switch.
-
-Everything else is not impacted because our vdso_base is still the base 
-of the text and that's what those things (signal trampoline, callchain, 
-...) expect.
-
-Maybe we should change it to 'void *vdso' in the same way as other 
-architectures, as it is not anymore the exact vdso_base but the start of 
-VDSO text.
-
-Note that the series applies on top of the generic C VDSO implementation 
-series. However all but the last commit cleanly apply without that 
-series. As that last commit is just an afterwork cleanup, it can come in 
-a second step.
-
-Christophe
