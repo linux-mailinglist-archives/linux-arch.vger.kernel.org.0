@@ -2,36 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DCC250D2F
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 02:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCA0250D7E
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 02:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728504AbgHYAan (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Aug 2020 20:30:43 -0400
-Received: from mga01.intel.com ([192.55.52.88]:28753 "EHLO mga01.intel.com"
+        id S1728251AbgHYAcu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Aug 2020 20:32:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41516 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728493AbgHYAal (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Aug 2020 20:30:41 -0400
-IronPort-SDR: ETmAT1ntNHezUodsKD7XAV2LpICu/LpT1466kZAuiasOzkusvrtv4nKzxLtSsA1DJ9FtcbQKwN
- ps+IRviKGNgQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="174053294"
-X-IronPort-AV: E=Sophos;i="5.76,350,1592895600"; 
-   d="scan'208";a="174053294"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 17:30:38 -0700
-IronPort-SDR: lYjt4wcfMve2UloFv1ZVhYpn9TLEcoQGsrogMIRpRCyCUOWZ2cXw36gxsL2insLMn2J+uDtF9n
- 2Af6Rj+f0Ywg==
-X-IronPort-AV: E=Sophos;i="5.76,350,1592895600"; 
-   d="scan'208";a="443429341"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 17:30:37 -0700
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S1728435AbgHYAct (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 Aug 2020 20:32:49 -0400
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D509020882
+        for <linux-arch@vger.kernel.org>; Tue, 25 Aug 2020 00:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598315569;
+        bh=HzNRSUeUL6OriNoi411G8DjwqUuqi7JFl1V+hmvfPWg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uRWu1h/pRTe38+cnhWVoUjMTGyUxj4FX6LHXPmQOHohc0UiMAuVFXRFfGvQuUXiFU
+         x0m9GY1EjwLb2Vn/RymkjG2w7e8cfbzAb7e02+yOOlT1W3LXR000Pr7kw4RnV+6ZXj
+         WrQB1im2A7usG0ceNRnrso4/XUttJEJC2aZHtYTM=
+Received: by mail-wm1-f54.google.com with SMTP id x5so738800wmi.2
+        for <linux-arch@vger.kernel.org>; Mon, 24 Aug 2020 17:32:48 -0700 (PDT)
+X-Gm-Message-State: AOAM530nBie1OvQ0t0shDQEgJfucBoxQtzlFfImiu5SXVBvs/vqTqG1x
+        +W0a2xzqI3Xjc2HVTfCeiGZFM2CpnUl59jZebLk9IA==
+X-Google-Smtp-Source: ABdhPJyauPayFdftcuPZnq0MJTSphzvI2x0UgLNn081J3B9GZfktgEGZliAmuQJq8JPRJLx6kwBNbrs1VoFPRwDiqF4=
+X-Received: by 2002:a7b:ca48:: with SMTP id m8mr1581098wml.36.1598315567552;
+ Mon, 24 Aug 2020 17:32:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200825002645.3658-1-yu-cheng.yu@intel.com> <20200825002645.3658-10-yu-cheng.yu@intel.com>
+In-Reply-To: <20200825002645.3658-10-yu-cheng.yu@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 24 Aug 2020 17:32:35 -0700
+X-Gmail-Original-Message-ID: <CALCETrVXwUDu2m-XEd-_J03L=sricM4cMxQYVkdGRWZDjmMB2g@mail.gmail.com>
+Message-ID: <CALCETrVXwUDu2m-XEd-_J03L=sricM4cMxQYVkdGRWZDjmMB2g@mail.gmail.com>
+Subject: Re: [PATCH v11 9/9] x86: Disallow vsyscall emulation when CET is enabled
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
@@ -52,73 +67,25 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v11 9/9] x86: Disallow vsyscall emulation when CET is enabled
-Date:   Mon, 24 Aug 2020 17:26:44 -0700
-Message-Id: <20200825002645.3658-10-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200825002645.3658-1-yu-cheng.yu@intel.com>
-References: <20200825002645.3658-1-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+On Mon, Aug 24, 2020 at 5:30 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>
+> From: "H.J. Lu" <hjl.tools@gmail.com>
+>
+> Emulation of the legacy vsyscall page is required by some programs built
+> before 2013.  Newer programs after 2013 don't use it.  Disallow vsyscall
+> emulation when Control-flow Enforcement (CET) is enabled to enhance
+> security.
 
-Emulation of the legacy vsyscall page is required by some programs built
-before 2013.  Newer programs after 2013 don't use it.  Disallow vsyscall
-emulation when Control-flow Enforcement (CET) is enabled to enhance
-security.
+NAK.
 
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
----
- arch/x86/Kconfig | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 5bd6d6a10047..bbc68ecfae2b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1210,7 +1210,7 @@ config X86_ESPFIX64
- config X86_VSYSCALL_EMULATION
- 	bool "Enable vsyscall emulation" if EXPERT
- 	default y
--	depends on X86_64
-+	depends on X86_64 && !X86_INTEL_CET
- 	help
- 	 This enables emulation of the legacy vsyscall page.  Disabling
- 	 it is roughly equivalent to booting with vsyscall=none, except
-@@ -1225,6 +1225,8 @@ config X86_VSYSCALL_EMULATION
- 	 Disabling this option saves about 7K of kernel size and
- 	 possibly 4K of additional runtime pagetable memory.
- 
-+	 This option is disabled when Intel CET is enabled.
-+
- config X86_IOPL_IOPERM
- 	bool "IOPERM and IOPL Emulation"
- 	default y
-@@ -2361,7 +2363,7 @@ config COMPAT_VDSO
- 
- choice
- 	prompt "vsyscall table for legacy applications"
--	depends on X86_64
-+	depends on X86_64 && !X86_INTEL_CET
- 	default LEGACY_VSYSCALL_XONLY
- 	help
- 	  Legacy user code that does not know how to find the vDSO expects
-@@ -2378,6 +2380,8 @@ choice
- 
- 	  If unsure, select "Emulate execution only".
- 
-+	  This option is not enabled when Intel CET is enabled.
-+
- 	config LEGACY_VSYSCALL_EMULATE
- 		bool "Full emulation"
- 		help
--- 
-2.21.0
-
+By all means disable execute emulation if CET-IBT is enabled at the
+time emulation is attempted, and maybe even disable the vsyscall page
+entirely if you can magically tell that CET-IBT will be enabled when a
+process starts, but you don't get to just disable it outright on a
+CET-enabled kernel.
