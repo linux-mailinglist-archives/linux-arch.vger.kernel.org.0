@@ -2,189 +2,198 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6470E250FED
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 05:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994352514A0
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 10:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728577AbgHYDW7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Aug 2020 23:22:59 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34530 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728039AbgHYDW7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Aug 2020 23:22:59 -0400
-Received: from localhost.localdomain (unknown [222.209.10.89])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxauT3g0RfXqUNAA--.17408S3;
-        Tue, 25 Aug 2020 11:22:39 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     tsbogend@alpha.franken.de
-Cc:     akpm@linux-foundation.org, jiaxun.yang@flygoat.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        maobibo@loongson.cn, paulburton@kernel.org
-Subject: [PATCH] MIPS: make userspace mapping young by default
-Date:   Tue, 25 Aug 2020 11:20:39 +0800
-Message-Id: <20200825032039.21413-2-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200825032039.21413-1-huangpei@loongson.cn>
-References: <20200726083206.GE5032@alpha.franken.de>
- <20200825032039.21413-1-huangpei@loongson.cn>
-X-CM-TRANSID: AQAAf9AxauT3g0RfXqUNAA--.17408S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3XrWUGr1fKw45Jr4xCF4fGrg_yoWxtF4kpa
-        s7Cry8A3y3Xr13ZryfZwnrAw1rAwsIqFyjqwnrCa15X343Z34ktrsIkrZ2vrykWa92kw4U
-        Z3WUXr4rW3ya9rUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9ab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv
-        6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026x
-        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
-        JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
-        Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU5QYFtUUUUU==
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S1726015AbgHYIxU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 04:53:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45128 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725916AbgHYIxT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Aug 2020 04:53:19 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D67C42065F;
+        Tue, 25 Aug 2020 08:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598345599;
+        bh=qVtzvPt8utxsO0tcKG1A7vsPaEcIuMmBWjFifpCIBCk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UGw4fE3bO3bG0OD/6ngOZpNCwnpSNW1lWwt9CdFx/4xLXnKBbUzoGdelwmUa2k+4h
+         NbPndi7P0kyFKZ7ULQeKTuUEjXWxQzwemugWpvhd7DlH0Q5zNdxgLtb01zm1FMVzaK
+         aCiGznnDpvglZIab7NdenzVoQnWT7dLWdDRNjdbM=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1kAUhg-006TYE-R5; Tue, 25 Aug 2020 09:53:16 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 25 Aug 2020 09:53:16 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suzuki K Poulose <Suzuki.Poulose@arm.com>
+Subject: Re: [PATCH v8 03/28] arm64: mte: CPU feature detection and initial
+ sysreg configuration
+In-Reply-To: <20200824182758.27267-4-catalin.marinas@arm.com>
+References: <20200824182758.27267-1-catalin.marinas@arm.com>
+ <20200824182758.27267-4-catalin.marinas@arm.com>
+User-Agent: Roundcube Webmail/1.4.8
+Message-ID: <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, vincenzo.frascino@arm.com, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, will@kernel.org, Dave.Martin@arm.com, szabolcs.nagy@arm.com, kevin.brodsky@arm.com, andreyknvl@google.com, pcc@google.com, akpm@linux-foundation.org, Suzuki.Poulose@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds support for non-rixi, based on [1].
+On 2020-08-24 19:27, Catalin Marinas wrote:
+> From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> 
+> Add the cpufeature and hwcap entries to detect the presence of MTE. Any
+> secondary CPU not supporting the feature, if detected on the boot CPU,
+> will be parked.
+> 
+> Add the minimum SCTLR_EL1 and HCR_EL2 bits for enabling MTE. The Normal
+> Tagged memory type is configured in MAIR_EL1 before the MMU is enabled
+> in order to avoid disrupting other CPUs in the CnP domain.
+> 
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Suzuki K Poulose <Suzuki.Poulose@arm.com>
+> ---
+> 
+> Notes:
+>     v8:
+>     - Move the SCTLR_EL1, MAIR_EL1, GCR_EL1 and TFSR*_EL1 
+> initialisation to
+>       __cpu_setup before the MMU is enabled. While early MAIR_EL1 is
+>       desirable to avoid conflicting with other CPUs in a CnP domain 
+> the
+>       TFSR_EL1 and GCR_EL1 will only come in handy later when support 
+> for
+>       in-kernel MTE is added.
+> 
+>     v7:
+>     - Hide the MTE ID register field for guests until MTE gains support 
+> for KVM.
+> 
+>  arch/arm64/include/asm/cpucaps.h    |  3 ++-
+>  arch/arm64/include/asm/cpufeature.h |  6 ++++++
+>  arch/arm64/include/asm/hwcap.h      |  2 +-
+>  arch/arm64/include/asm/kvm_arm.h    |  2 +-
+>  arch/arm64/include/asm/sysreg.h     |  1 +
+>  arch/arm64/include/uapi/asm/hwcap.h |  2 +-
+>  arch/arm64/kernel/cpufeature.c      | 17 +++++++++++++++++
+>  arch/arm64/kernel/cpuinfo.c         |  2 +-
+>  arch/arm64/kvm/sys_regs.c           |  2 ++
+>  arch/arm64/mm/proc.S                | 24 ++++++++++++++++++++++++
+>  10 files changed, 56 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/cpucaps.h 
+> b/arch/arm64/include/asm/cpucaps.h
+> index 07b643a70710..1937653b05a3 100644
+> --- a/arch/arm64/include/asm/cpucaps.h
+> +++ b/arch/arm64/include/asm/cpucaps.h
+> @@ -64,7 +64,8 @@
+>  #define ARM64_BTI				54
+>  #define ARM64_HAS_ARMv8_4_TTL			55
+>  #define ARM64_HAS_TLB_RANGE			56
+> +#define ARM64_MTE				57
+> 
+> -#define ARM64_NCAPS				57
+> +#define ARM64_NCAPS				58
+> 
+>  #endif /* __ASM_CPUCAPS_H */
+> diff --git a/arch/arm64/include/asm/cpufeature.h
+> b/arch/arm64/include/asm/cpufeature.h
+> index 89b4f0142c28..680b5b36ddd5 100644
+> --- a/arch/arm64/include/asm/cpufeature.h
+> +++ b/arch/arm64/include/asm/cpufeature.h
+> @@ -681,6 +681,12 @@ static __always_inline bool
+> system_uses_irq_prio_masking(void)
+>  	       cpus_have_const_cap(ARM64_HAS_IRQ_PRIO_MASKING);
+>  }
+> 
+> +static inline bool system_supports_mte(void)
+> +{
+> +	return IS_ENABLED(CONFIG_ARM64_MTE) &&
+> +		cpus_have_const_cap(ARM64_MTE);
+> +}
+> +
+>  static inline bool system_has_prio_mask_debugging(void)
+>  {
+>  	return IS_ENABLED(CONFIG_ARM64_DEBUG_PRIORITY_MASKING) &&
+> diff --git a/arch/arm64/include/asm/hwcap.h 
+> b/arch/arm64/include/asm/hwcap.h
+> index 22f73fe09030..0d4a6741b6a5 100644
+> --- a/arch/arm64/include/asm/hwcap.h
+> +++ b/arch/arm64/include/asm/hwcap.h
+> @@ -95,7 +95,7 @@
+>  #define KERNEL_HWCAP_DGH		__khwcap2_feature(DGH)
+>  #define KERNEL_HWCAP_RNG		__khwcap2_feature(RNG)
+>  #define KERNEL_HWCAP_BTI		__khwcap2_feature(BTI)
+> -/* reserved for KERNEL_HWCAP_MTE	__khwcap2_feature(MTE) */
+> +#define KERNEL_HWCAP_MTE		__khwcap2_feature(MTE)
+> 
+>  /*
+>   * This yields a mask that user programs can use to figure out what
+> diff --git a/arch/arm64/include/asm/kvm_arm.h 
+> b/arch/arm64/include/asm/kvm_arm.h
+> index 8a1cbfd544d6..6c3b2fc922bb 100644
+> --- a/arch/arm64/include/asm/kvm_arm.h
+> +++ b/arch/arm64/include/asm/kvm_arm.h
+> @@ -78,7 +78,7 @@
+>  			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
+>  			 HCR_FMO | HCR_IMO)
+>  #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
+> -#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK)
+> +#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
+>  #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
 
-MIPS page fault path take 3 exception (1 tlb miss + 2 tlb invalid), but
-the second tlb invalid exception is just caused by __update_tlb from
-do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
-only take 1 tlb miss + 1 tlb invalid exceptions
+Why is HCR_ATA only set for nVHE? HCR_EL2.ATA seems to apply to both,
+doesn't it?
 
-[1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email-maobibo@loongson.cn/
+> 
+>  /* TCR_EL2 Registers bits */
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/include/asm/pgtable.h | 32 +++++++++++++++-----------------
- arch/mips/mm/cache.c            | 25 +++++++++++++------------
- mm/memory.c                     |  3 ---
- 3 files changed, 28 insertions(+), 32 deletions(-)
+[...]
 
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index dd7a0f552cac..aaafe3d6a0a1 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -25,22 +25,22 @@
- struct mm_struct;
- struct vm_area_struct;
- 
--#define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
--				 _page_cachable_default)
--#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
--				 _page_cachable_default)
--#define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
--				 _page_cachable_default)
--#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
--				 _page_cachable_default)
--#define PAGE_KERNEL	__pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
--				 _PAGE_GLOBAL | _page_cachable_default)
--#define PAGE_KERNEL_NC	__pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
--				 _PAGE_GLOBAL | _CACHE_CACHABLE_NONCOHERENT)
--#define PAGE_USERIO	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
--				 _page_cachable_default)
-+#define PAGE_NONE      __pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
-+                                _page_cachable_default)
-+#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
-+                                __READABLE | _page_cachable_default)
-+#define PAGE_COPY      __pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
-+                                __READABLE | _page_cachable_default)
-+#define PAGE_READONLY  __pgprot(_PAGE_PRESENT |  __READABLE | \
-+                                _page_cachable_default)
-+#define PAGE_KERNEL    __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
-+                                _PAGE_GLOBAL | _page_cachable_default)
-+#define PAGE_KERNEL_NC __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
-+                                _PAGE_GLOBAL | _CACHE_CACHABLE_NONCOHERENT)
-+#define PAGE_USERIO    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
-+                                _page_cachable_default)
- #define PAGE_KERNEL_UNCACHED __pgprot(_PAGE_PRESENT | __READABLE | \
--			__WRITEABLE | _PAGE_GLOBAL | _CACHE_UNCACHED)
-+                       __WRITEABLE | _PAGE_GLOBAL | _CACHE_UNCACHED)
- 
- /*
-  * If _PAGE_NO_EXEC is not defined, we can't do page protection for
-@@ -414,8 +414,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
- 	return pte;
- }
- 
--#define pte_sw_mkyoung	pte_mkyoung
--
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
- 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 3e81ba000096..ed75f2871aad 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -159,22 +159,23 @@ static inline void setup_protection_map(void)
- {
- 	if (cpu_has_rixi) {
- 		protection_map[0]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
-+		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
- 		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
--		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
-+		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
-+		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
- 
- 		protection_map[8]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
-+		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
- 		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
--		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--		protection_map[12] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[13] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
--		protection_map[14] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
--		protection_map[15] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
-+		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | __READABLE);
-+		protection_map[12]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[13]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
-+		protection_map[14]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
-+		protection_map[15]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
-+
- 
- 	} else {
- 		protection_map[0] = PAGE_NONE;
-diff --git a/mm/memory.c b/mm/memory.c
-index 602f4283122f..5100ab5bcf77 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2705,7 +2705,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		}
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
--		entry = pte_sw_mkyoung(entry);
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 		/*
- 		 * Clear the pte entry and flush it first, before updating the
-@@ -3386,7 +3385,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	__SetPageUptodate(page);
- 
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
- 
-@@ -3661,7 +3659,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
- 
- 	flush_icache_page(vma, page);
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	/* copy-on-write page */
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 077293b5115f..59b91f58efec 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -1131,6 +1131,8 @@ static u64 read_id_reg(const struct kvm_vcpu 
+> *vcpu,
+>  		if (!vcpu_has_sve(vcpu))
+>  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+>  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
+> +	} else if (id == SYS_ID_AA64PFR1_EL1) {
+> +		val &= ~(0xfUL << ID_AA64PFR1_MTE_SHIFT);
+
+Hiding the capability is fine, but where is the handling of trapping
+instructions done? They should result in an UNDEF being injected.
+
+Thanks,
+
+         M.
 -- 
-2.17.1
-
+Jazz is not dead. It just smells funny...
