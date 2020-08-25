@@ -2,87 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76022251728
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 13:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A936251939
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 15:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725893AbgHYLLJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Aug 2020 07:11:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58334 "EHLO mail.kernel.org"
+        id S1726843AbgHYNJ6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 09:09:58 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:12627 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728117AbgHYLLI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Aug 2020 07:11:08 -0400
-Received: from C02TF0J2HF1T.local (unknown [213.205.240.110])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61FEE20715;
-        Tue, 25 Aug 2020 11:11:03 +0000 (UTC)
-Date:   Tue, 25 Aug 2020 12:10:59 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v8 27/28] arm64: mte: Kconfig entry
-Message-ID: <20200825111059.GB22233@C02TF0J2HF1T.local>
-References: <20200824182758.27267-1-catalin.marinas@arm.com>
- <20200824182758.27267-28-catalin.marinas@arm.com>
- <2e73f87b-f5fe-5ccf-1b5f-c916703356e0@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e73f87b-f5fe-5ccf-1b5f-c916703356e0@infradead.org>
+        id S1726015AbgHYNJ6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Aug 2020 09:09:58 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4BbTqP3hfsz9tyVZ;
+        Tue, 25 Aug 2020 15:09:53 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 4N7Gp3heRtYd; Tue, 25 Aug 2020 15:09:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4BbTqP2YKzz9tyVY;
+        Tue, 25 Aug 2020 15:09:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BCA508B81B;
+        Tue, 25 Aug 2020 15:09:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 1OHwb6Dc6nev; Tue, 25 Aug 2020 15:09:54 +0200 (CEST)
+Received: from po17688vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 696118B81C;
+        Tue, 25 Aug 2020 15:09:54 +0200 (CEST)
+Received: by po17688vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id ED59365D37; Tue, 25 Aug 2020 13:09:53 +0000 (UTC)
+Message-Id: <cover.1598360789.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v11 0/5] powerpc: switch VDSO to C implementation
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
+        anton@ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        luto@kernel.org, linux-arch@vger.kernel.org
+Date:   Tue, 25 Aug 2020 13:09:53 +0000 (UTC)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 11:44:50AM -0700, Randy Dunlap wrote:
-> On 8/24/20 11:27 AM, Catalin Marinas wrote:
-> > index 6d232837cbee..10cf81d70657 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -1664,6 +1664,37 @@ config ARCH_RANDOM
-> >  	  provides a high bandwidth, cryptographically secure
-> >  	  hardware random number generator.
-> >  
-> > +config ARM64_AS_HAS_MTE
-> > +	# Binutils gained initial support for MTE in 2.32.0. However, a
-> > +	# late architecture addition (LDGM/STGM) is only supported in
-> > +	# the newer 2.32.x and 2.33 versions.
-> > +	def_bool $(as-instr,.arch armv8.5-a+memtag\nstgm xzr$(comma)[x0])
-> 
-> Would you mind translating that for me?
-> Yes, I read the v7 Notes, but that only helped a little bit.
+This is the tenth version of a series to switch powerpc VDSO to
+generic C implementation.
 
-The initial MTE support in binutils 2.32.0, testable above with ".arch
-armv8.5-a+memtag", was incomplete. Historically, I think it was based on
-a beta version of the architecture but before the final architecture
-release (ARMv8.5), MTE gained a couple of new instructions: STGM/LDGM.
+Changes in v11:
+- Rebased to today's powerpc/merge branch
+- Prototype of __arch_get_hw_counter() was modified in mainline (patch 2)
 
-Since there are binutils versions out there which don't understand STGM
-even though they claim to support .arch armv8.5-a+memtag, it's better
-for the above check to include the STGM instruction.
+Changes in v10 are:
+- Added a comment explaining the reason for the double stack frame
+- Moved back .cfi_register lr next to mflr
 
-I'll see if I can make the comment above clearer.
+Main changes in v9 are:
+- Dropped the patches which put the VDSO datapage in front of VDSO text in the mapping
+- Adds a second stack frame because the caller doesn't set one, at least on PPC64
+- Saving the TOC pointer on PPC64 (is that really needed ?)
 
-> > +	bool "Memory Tagging Extension support"
-> > +	default y
-> > +	depends on ARM64_AS_HAS_MTE && ARM64_TAGGED_ADDR_ABI
-> > +	select ARCH_USES_HIGH_VMA_FLAGS
-> > +	help
-> > +	  Memory Tagging (part of the ARMv8.5 Extensions) provides
-> > +	  architectural support for run-time, always-on detection of
-> 
-> 	                            runtime,
-> as is used below.
+This series applies on today's powerpc/merge branch.
 
-Thanks.
+See the last patches for details on changes and performance.
+
+Christophe Leroy (5):
+  powerpc/processor: Move cpu_relax() into asm/vdso/processor.h
+  powerpc/vdso: Prepare for switching VDSO to generic C implementation.
+  powerpc/vdso: Save and restore TOC pointer on PPC64
+  powerpc/vdso: Switch VDSO to generic C implementation.
+  powerpc/vdso: Provide __kernel_clock_gettime64() on vdso32
+
+ arch/powerpc/Kconfig                         |   2 +
+ arch/powerpc/include/asm/clocksource.h       |   7 +
+ arch/powerpc/include/asm/processor.h         |  13 +-
+ arch/powerpc/include/asm/vdso/clocksource.h  |   7 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h | 198 ++++++++++++
+ arch/powerpc/include/asm/vdso/processor.h    |  23 ++
+ arch/powerpc/include/asm/vdso/vsyscall.h     |  25 ++
+ arch/powerpc/include/asm/vdso_datapage.h     |  40 +--
+ arch/powerpc/kernel/asm-offsets.c            |  49 +--
+ arch/powerpc/kernel/time.c                   |  91 +-----
+ arch/powerpc/kernel/vdso.c                   |   5 +-
+ arch/powerpc/kernel/vdso32/Makefile          |  32 +-
+ arch/powerpc/kernel/vdso32/config-fake32.h   |  34 +++
+ arch/powerpc/kernel/vdso32/gettimeofday.S    | 300 +------------------
+ arch/powerpc/kernel/vdso32/vdso32.lds.S      |   1 +
+ arch/powerpc/kernel/vdso32/vgettimeofday.c   |  35 +++
+ arch/powerpc/kernel/vdso64/Makefile          |  23 +-
+ arch/powerpc/kernel/vdso64/gettimeofday.S    | 242 +--------------
+ arch/powerpc/kernel/vdso64/vgettimeofday.c   |  29 ++
+ 19 files changed, 454 insertions(+), 702 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/clocksource.h
+ create mode 100644 arch/powerpc/include/asm/vdso/clocksource.h
+ create mode 100644 arch/powerpc/include/asm/vdso/gettimeofday.h
+ create mode 100644 arch/powerpc/include/asm/vdso/processor.h
+ create mode 100644 arch/powerpc/include/asm/vdso/vsyscall.h
+ create mode 100644 arch/powerpc/kernel/vdso32/config-fake32.h
+ create mode 100644 arch/powerpc/kernel/vdso32/vgettimeofday.c
+ create mode 100644 arch/powerpc/kernel/vdso64/vgettimeofday.c
 
 -- 
-Catalin
+2.25.0
+
