@@ -2,97 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B3A2516E9
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 12:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76022251728
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 13:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729458AbgHYKzA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Aug 2020 06:55:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53310 "EHLO mail.kernel.org"
+        id S1725893AbgHYLLJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 07:11:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58334 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728117AbgHYKy7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Aug 2020 06:54:59 -0400
+        id S1728117AbgHYLLI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Aug 2020 07:11:08 -0400
 Received: from C02TF0J2HF1T.local (unknown [213.205.240.110])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ECA0F2068E;
-        Tue, 25 Aug 2020 10:54:53 +0000 (UTC)
-Date:   Tue, 25 Aug 2020 11:54:50 +0100
+        by mail.kernel.org (Postfix) with ESMTPSA id 61FEE20715;
+        Tue, 25 Aug 2020 11:11:03 +0000 (UTC)
+Date:   Tue, 25 Aug 2020 12:10:59 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
         Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suzuki K Poulose <Suzuki.Poulose@arm.com>
-Subject: Re: [PATCH v8 03/28] arm64: mte: CPU feature detection and initial
- sysreg configuration
-Message-ID: <20200825105450.GA22233@C02TF0J2HF1T.local>
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v8 27/28] arm64: mte: Kconfig entry
+Message-ID: <20200825111059.GB22233@C02TF0J2HF1T.local>
 References: <20200824182758.27267-1-catalin.marinas@arm.com>
- <20200824182758.27267-4-catalin.marinas@arm.com>
- <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
+ <20200824182758.27267-28-catalin.marinas@arm.com>
+ <2e73f87b-f5fe-5ccf-1b5f-c916703356e0@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
+In-Reply-To: <2e73f87b-f5fe-5ccf-1b5f-c916703356e0@infradead.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 09:53:16AM +0100, Marc Zyngier wrote:
-> On 2020-08-24 19:27, Catalin Marinas wrote:
-> > diff --git a/arch/arm64/include/asm/kvm_arm.h
-> > b/arch/arm64/include/asm/kvm_arm.h
-> > index 8a1cbfd544d6..6c3b2fc922bb 100644
-> > --- a/arch/arm64/include/asm/kvm_arm.h
-> > +++ b/arch/arm64/include/asm/kvm_arm.h
-> > @@ -78,7 +78,7 @@
-> >  			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
-> >  			 HCR_FMO | HCR_IMO)
-> >  #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
-> > -#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK)
-> > +#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
-> >  #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
+On Mon, Aug 24, 2020 at 11:44:50AM -0700, Randy Dunlap wrote:
+> On 8/24/20 11:27 AM, Catalin Marinas wrote:
+> > index 6d232837cbee..10cf81d70657 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -1664,6 +1664,37 @@ config ARCH_RANDOM
+> >  	  provides a high bandwidth, cryptographically secure
+> >  	  hardware random number generator.
+> >  
+> > +config ARM64_AS_HAS_MTE
+> > +	# Binutils gained initial support for MTE in 2.32.0. However, a
+> > +	# late architecture addition (LDGM/STGM) is only supported in
+> > +	# the newer 2.32.x and 2.33 versions.
+> > +	def_bool $(as-instr,.arch armv8.5-a+memtag\nstgm xzr$(comma)[x0])
 > 
-> Why is HCR_ATA only set for nVHE? HCR_EL2.ATA seems to apply to both,
-> doesn't it?
+> Would you mind translating that for me?
+> Yes, I read the v7 Notes, but that only helped a little bit.
 
-We need HCR_EL2.ATA to be set when !VHE so that the host kernel can use
-MTE. That said, I think we need to turn it off when running a guest.
-Even if we hide the ID register, the guest may still attempt to enable
-tags on some memory that doesn't support it, leading to unpredictable
-behaviour (well, only if we expose device memory to guests directly;
-Steve's patches will deal with this but for now we just disable MTE in
-guests).
+The initial MTE support in binutils 2.32.0, testable above with ".arch
+armv8.5-a+memtag", was incomplete. Historically, I think it was based on
+a beta version of the architecture but before the final architecture
+release (ARMv8.5), MTE gained a couple of new instructions: STGM/LDGM.
 
-With VHE, HCR_EL2.ATA only affects the guests, so it can stay off. The
-host's use of tags is controlled by SCTLR_EL1/EL2.ATA (i.e. HCR_EL2.ATA
-has no effect if E2H and TGE are both 1; qemu has a bug here which I
-discovered yesterday).
+Since there are binutils versions out there which don't understand STGM
+even though they claim to support .arch armv8.5-a+memtag, it's better
+for the above check to include the STGM instruction.
 
-> > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> > index 077293b5115f..59b91f58efec 100644
-> > --- a/arch/arm64/kvm/sys_regs.c
-> > +++ b/arch/arm64/kvm/sys_regs.c
-> > @@ -1131,6 +1131,8 @@ static u64 read_id_reg(const struct kvm_vcpu
-> > *vcpu,
-> >  		if (!vcpu_has_sve(vcpu))
-> >  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
-> >  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
-> > +	} else if (id == SYS_ID_AA64PFR1_EL1) {
-> > +		val &= ~(0xfUL << ID_AA64PFR1_MTE_SHIFT);
+I'll see if I can make the comment above clearer.
+
+> > +	bool "Memory Tagging Extension support"
+> > +	default y
+> > +	depends on ARM64_AS_HAS_MTE && ARM64_TAGGED_ADDR_ABI
+> > +	select ARCH_USES_HIGH_VMA_FLAGS
+> > +	help
+> > +	  Memory Tagging (part of the ARMv8.5 Extensions) provides
+> > +	  architectural support for run-time, always-on detection of
 > 
-> Hiding the capability is fine, but where is the handling of trapping
-> instructions done? They should result in an UNDEF being injected.
+> 	                            runtime,
+> as is used below.
 
-They are a few new MTE-specific MSR/MRS which are trapped at EL2 but
-since KVM doesn't understand them yet, shouldn't it already inject
-undef back at EL1? That would be safer regardless of MTE support.
+Thanks.
 
 -- 
 Catalin
