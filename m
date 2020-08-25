@@ -2,98 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C69F251563
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 11:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7534125151A
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 11:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729456AbgHYJa0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Aug 2020 05:30:26 -0400
-Received: from imap3.hz.codethink.co.uk ([176.9.8.87]:33956 "EHLO
-        imap3.hz.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728543AbgHYJa0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Aug 2020 05:30:26 -0400
-X-Greylist: delayed 2596 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Aug 2020 05:30:23 EDT
-Received: from cpc98990-stkp12-2-0-cust216.10-2.cable.virginm.net ([86.26.12.217] helo=[192.168.0.10])
-        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1kAUbe-0002Te-3f; Tue, 25 Aug 2020 09:47:02 +0100
-Subject: Re: [PATCH v7 10/10] Drivers: hv: Enable Hyper-V code to be built on
- ARM64
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>
-Cc:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, wei.liu@kernel.org,
-        vkuznets <vkuznets@redhat.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <1598287583-71762-1-git-send-email-mikelley@microsoft.com>
- <1598287583-71762-11-git-send-email-mikelley@microsoft.com>
- <CAMj1kXHKDD5+Na7t=bbkqo2OaiidmnJg+RqermV-2=exj-P77A@mail.gmail.com>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-Message-ID: <5e8af3c3-fe08-0a56-fe05-0527a6cae0dd@codethink.co.uk>
-Date:   Tue, 25 Aug 2020 09:47:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1729048AbgHYJPK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 05:15:10 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:23993 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729021AbgHYJPD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Aug 2020 05:15:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598346900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=92i+0YUtQgEC4ia+7x4FHZS4hUNlAuigR1V4PDLFWpU=;
+        b=dXID83x2aRkxAWfQMPZWk/vI0Qh6hxbzpf47lTeb+tvwUuSj24TdgkBRIgaD3YGlKDHCvj
+        SX0gBQ3rs/KB+oGq+tV6STleCJU2EMW74zeeqTsUIgHcgFv0Gbs6KFrUuNrUir9FoGGTcZ
+        CrwCG66NpsxslHzCJrVNy5/sTPOAUQQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-493-qjGmojjQPt2LSoxrEMPg0A-1; Tue, 25 Aug 2020 05:14:56 -0400
+X-MC-Unique: qjGmojjQPt2LSoxrEMPg0A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C7438100746B;
+        Tue, 25 Aug 2020 09:14:52 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-112-37.ams2.redhat.com [10.36.112.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5353C808AB;
+        Tue, 25 Aug 2020 09:14:39 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Subject: Re: [PATCH v11 9/9] x86: Disallow vsyscall emulation when CET is enabled
+References: <20200825002645.3658-1-yu-cheng.yu@intel.com>
+        <20200825002645.3658-10-yu-cheng.yu@intel.com>
+        <CALCETrVXwUDu2m-XEd-_J03L=sricM4cMxQYVkdGRWZDjmMB2g@mail.gmail.com>
+Date:   Tue, 25 Aug 2020 11:14:37 +0200
+In-Reply-To: <CALCETrVXwUDu2m-XEd-_J03L=sricM4cMxQYVkdGRWZDjmMB2g@mail.gmail.com>
+        (Andy Lutomirski's message of "Mon, 24 Aug 2020 17:32:35 -0700")
+Message-ID: <87pn7f9jeq.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <CAMj1kXHKDD5+Na7t=bbkqo2OaiidmnJg+RqermV-2=exj-P77A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 24/08/2020 18:24, Ard Biesheuvel wrote:
-> On Mon, 24 Aug 2020 at 18:48, Michael Kelley <mikelley@microsoft.com> wrote:
->>
->> Update drivers/hv/Kconfig so CONFIG_HYPERV can be selected on
->> ARM64, causing the Hyper-V specific code to be built.
->>
->> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
->> ---
->>   drivers/hv/Kconfig | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
->> index 79e5356..1113e49 100644
->> --- a/drivers/hv/Kconfig
->> +++ b/drivers/hv/Kconfig
->> @@ -4,7 +4,8 @@ menu "Microsoft Hyper-V guest support"
->>
->>   config HYPERV
->>          tristate "Microsoft Hyper-V client drivers"
->> -       depends on X86 && ACPI && X86_LOCAL_APIC && HYPERVISOR_GUEST
->> +       depends on ACPI && \
->> +                       ((X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) || ARM64)
->>          select PARAVIRT
->>          select X86_HV_CALLBACK_VECTOR
->>          help
-> 
-> Given the comment in a previous patch
-> 
-> +/*
-> + * All data structures defined in the TLFS that are shared between Hyper-V
-> + * and a guest VM use Little Endian byte ordering.  This matches the default
-> + * byte ordering of Linux running on ARM64, so no special handling is required.
-> + */
-> 
-> shouldn't this depend on !CONFIG_CPU_BIG_ENDIAN ?
+* Andy Lutomirski:
 
-or mark the data __le and have the appropriate accessor functions do
-the swapping.
+> On Mon, Aug 24, 2020 at 5:30 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>>
+>> From: "H.J. Lu" <hjl.tools@gmail.com>
+>>
+>> Emulation of the legacy vsyscall page is required by some programs built
+>> before 2013.  Newer programs after 2013 don't use it.  Disallow vsyscall
+>> emulation when Control-flow Enforcement (CET) is enabled to enhance
+>> security.
+>
+> NAK.
+>
+> By all means disable execute emulation if CET-IBT is enabled at the
+> time emulation is attempted, and maybe even disable the vsyscall page
+> entirely if you can magically tell that CET-IBT will be enabled when a
+> process starts, but you don't get to just disable it outright on a
+> CET-enabled kernel.
 
+Yeah, we definitely would have to revert/avoid this downstream.  People
+definitely want to run glibc-2.12-era workloads on current kernels.
+Thanks for catching it.
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+Florian
 
-https://www.codethink.co.uk/privacy.html
