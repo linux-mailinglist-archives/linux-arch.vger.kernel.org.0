@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26724250D70
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 02:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D5C250D1C
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 02:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbgHYAcX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Aug 2020 20:32:23 -0400
-Received: from mga17.intel.com ([192.55.52.151]:12299 "EHLO mga17.intel.com"
+        id S1728420AbgHYAaJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Aug 2020 20:30:09 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12300 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728334AbgHYA3v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 24 Aug 2020 20:29:51 -0400
-IronPort-SDR: ZeLeKEpSPQgBSSF/lUpvs5tyH6r2Ytgx8CdaDulTTAXyYEAyMq0GLRx2QdbOBNp/22XN1blMoo
- LLRuvoQx/0TQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="136075314"
+        id S1728344AbgHYAaH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 24 Aug 2020 20:30:07 -0400
+IronPort-SDR: gy/2WkXL3S9xB8z5ppgOS/JPQLsFCSybJFfuy2ckhi1jeH0yeD7X2SqvO7/dUhYGg3S0b4IAno
+ HeknaMxUj45A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="136075319"
 X-IronPort-AV: E=Sophos;i="5.76,350,1592895600"; 
-   d="scan'208";a="136075314"
+   d="scan'208";a="136075319"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 17:29:41 -0700
-IronPort-SDR: rSTwxk7XXewjizOXAq/AoJScn+WIy74vviqcj88Qqm3EojR+vV91fP/JA5UEbXfUF58n2LIyiC
- zSbPghq8DNPA==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 17:29:42 -0700
+IronPort-SDR: EE6oepsxvnikXsSwobPjqAW0f7gzd28tdP2eRsPg2VsJbjIn0NtBo5mOEBfJT5pT51HdyWWX1P
+ wBS5kbqd0ISg==
 X-IronPort-AV: E=Sophos;i="5.76,350,1592895600"; 
-   d="scan'208";a="474135014"
+   d="scan'208";a="474135022"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 17:29:41 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -52,12 +52,10 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v11 19/25] mm: Re-introduce do_mmap_pgoff()
-Date:   Mon, 24 Aug 2020 17:25:34 -0700
-Message-Id: <20200825002540.3351-20-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v11 20/25] x86/cet/shstk: User-mode shadow stack support
+Date:   Mon, 24 Aug 2020 17:25:35 -0700
+Message-Id: <20200825002540.3351-21-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200825002540.3351-1-yu-cheng.yu@intel.com>
 References: <20200825002540.3351-1-yu-cheng.yu@intel.com>
@@ -68,246 +66,376 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-There was no more caller passing vm_flags to do_mmap(), and vm_flags was
-removed from the function's input by:
-
-    commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
-
-There is a new user now.  Shadow stack allocation passes VM_SHSTK to
-do_mmap().  Re-introduce the vm_flags and do_mmap_pgoff().
+This patch adds basic shadow stack enabling/disabling routines.  A task's
+shadow stack is allocated from memory with VM_SHSTK flag and has a fixed
+size of min(RLIMIT_STACK, 4GB).
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: Peter Collingbourne <pcc@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: linux-mm@kvack.org
 ---
- fs/aio.c             |  6 +++---
- fs/hugetlbfs/inode.c |  2 +-
- include/linux/fs.h   |  2 +-
- include/linux/mm.h   | 12 +++++++++++-
- ipc/shm.c            |  2 +-
- mm/mmap.c            | 16 ++++++++--------
- mm/nommu.c           |  6 +++---
- mm/shmem.c           |  2 +-
- mm/util.c            |  4 ++--
- 9 files changed, 31 insertions(+), 21 deletions(-)
+v11:
+- Modify alloc_shstk() to take flags and pass to do_mmap().
+  This is to be used by an arch_prctl() introduced later.
 
-diff --git a/fs/aio.c b/fs/aio.c
-index 5736bff48e9e..91e7cc4a9f17 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -525,9 +525,9 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
- 		return -EINTR;
- 	}
+v10:
+- Change no_cet_shstk to no_user_shstk.
+- Limit shadow stack size to 4 GB, and round_up to PAGE_SIZE.
+- Replace checking shstk_enabled with shstk_size being zero.
+- WARN_ON_ONCE() when vm_munmap() fails.
+
+v9:
+- Change cpu_feature_enabled() to static_cpu_has().
+- Merge cet_disable_shstk to cet_disable_free_shstk.
+- Remove the empty slot at the top of the shadow stack, as it is not
+  needed.
+- Move do_mmap_locked() to alloc_shstk(), which is a static function.
+
+v6:
+- Create a function do_mmap_locked() for shadow stack allocation.
+
+v2:
+- Change noshstk to no_cet_shstk.
+
+ arch/x86/include/asm/cet.h                    |  26 ++++
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/processor.h              |   5 +
+ arch/x86/kernel/Makefile                      |   2 +
+ arch/x86/kernel/cet.c                         | 138 ++++++++++++++++++
+ arch/x86/kernel/cpu/common.c                  |  28 ++++
+ arch/x86/kernel/process.c                     |   1 +
+ .../arch/x86/include/asm/disabled-features.h  |   8 +-
+ 8 files changed, 214 insertions(+), 2 deletions(-)
+ create mode 100644 arch/x86/include/asm/cet.h
+ create mode 100644 arch/x86/kernel/cet.c
+
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+new file mode 100644
+index 000000000000..caac0687c8e4
+--- /dev/null
++++ b/arch/x86/include/asm/cet.h
+@@ -0,0 +1,26 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_CET_H
++#define _ASM_X86_CET_H
++
++#ifndef __ASSEMBLY__
++#include <linux/types.h>
++
++struct task_struct;
++/*
++ * Per-thread CET status
++ */
++struct cet_status {
++	unsigned long	shstk_base;
++	unsigned long	shstk_size;
++};
++
++#ifdef CONFIG_X86_INTEL_CET
++int cet_setup_shstk(void);
++void cet_disable_free_shstk(struct task_struct *p);
++#else
++static inline void cet_disable_free_shstk(struct task_struct *p) {}
++#endif
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* _ASM_X86_CET_H */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 4ea8584682f9..a0e1b24cfa02 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -56,6 +56,12 @@
+ # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
+ #endif
  
--	ctx->mmap_base = do_mmap(ctx->aio_ring_file, 0, ctx->mmap_size,
--				 PROT_READ | PROT_WRITE,
--				 MAP_SHARED, 0, &unused, NULL);
-+	ctx->mmap_base = do_mmap_pgoff(ctx->aio_ring_file, 0, ctx->mmap_size,
-+				       PROT_READ | PROT_WRITE,
-+				       MAP_SHARED, 0, &unused, NULL);
- 	mmap_write_unlock(mm);
- 	if (IS_ERR((void *)ctx->mmap_base)) {
- 		ctx->mmap_size = 0;
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index b5c109703daa..f936bcf02cce 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -140,7 +140,7 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
- 	 * already been checked by prepare_hugepage_range.  If you add
- 	 * any error returns here, do so after setting VM_HUGETLB, so
- 	 * is_vm_hugetlb_page tests below unmap_region go the right
--	 * way when do_mmap unwinds (may be important on powerpc
-+	 * way when do_mmap_pgoff unwinds (may be important on powerpc
- 	 * and ia64).
- 	 */
- 	vma->vm_flags |= VM_HUGETLB | VM_DONTEXPAND;
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e019ea2f1347..75a98288e7c5 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -538,7 +538,7 @@ static inline int mapping_mapped(struct address_space *mapping)
- 
++#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
++#define DISABLE_SHSTK	0
++#else
++#define DISABLE_SHSTK	(1<<(X86_FEATURE_SHSTK & 31))
++#endif
++
  /*
-  * Might pages of this file have been modified in userspace?
-- * Note that i_mmap_writable counts all VM_SHARED vmas: do_mmap
-+ * Note that i_mmap_writable counts all VM_SHARED vmas: do_mmap_pgoff
-  * marks vma as VM_SHARED if it is shared, and the file was opened for
-  * writing i.e. vma may be mprotected writable even if now readonly.
-  *
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index d437ce0c85ac..36b239aa5aa7 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2553,13 +2553,23 @@ extern unsigned long mmap_region(struct file *file, unsigned long addr,
- 	struct list_head *uf);
- extern unsigned long do_mmap(struct file *file, unsigned long addr,
- 	unsigned long len, unsigned long prot, unsigned long flags,
--	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
-+	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
-+	struct list_head *uf);
- extern int __do_munmap(struct mm_struct *, unsigned long, size_t,
- 		       struct list_head *uf, bool downgrade);
- extern int do_munmap(struct mm_struct *, unsigned long, size_t,
- 		     struct list_head *uf);
- extern int do_madvise(unsigned long start, size_t len_in, int behavior);
+  * Make sure to add features to the correct mask
+  */
+@@ -75,7 +81,7 @@
+ #define DISABLED_MASK13	0
+ #define DISABLED_MASK14	0
+ #define DISABLED_MASK15	0
+-#define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP)
++#define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP|DISABLE_SHSTK)
+ #define DISABLED_MASK17	0
+ #define DISABLED_MASK18	0
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 01acbd63cad8..8c874d6ce871 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -27,6 +27,7 @@ struct vm86;
+ #include <asm/unwind_hints.h>
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
++#include <asm/cet.h>
  
-+static inline unsigned long
-+do_mmap_pgoff(struct file *file, unsigned long addr,
-+	unsigned long len, unsigned long prot, unsigned long flags,
-+	unsigned long pgoff, unsigned long *populate,
-+	struct list_head *uf)
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+@@ -542,6 +543,10 @@ struct thread_struct {
+ 
+ 	unsigned int		sig_on_uaccess_err:1;
+ 
++#ifdef CONFIG_X86_INTEL_CET
++	struct cet_status	cet;
++#endif
++
+ 	/* Floating point and extended processor state */
+ 	struct fpu		fpu;
+ 	/*
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index e77261db2391..76f27f518266 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -145,6 +145,8 @@ obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
+ obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
+ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ 
++obj-$(CONFIG_X86_INTEL_CET)		+= cet.o
++
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+new file mode 100644
+index 000000000000..a1be8ccee1cc
+--- /dev/null
++++ b/arch/x86/kernel/cet.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * cet.c - Control-flow Enforcement (CET)
++ *
++ * Copyright (c) 2019, Intel Corporation.
++ * Yu-cheng Yu <yu-cheng.yu@intel.com>
++ */
++
++#include <linux/types.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <linux/sched/signal.h>
++#include <linux/compat.h>
++#include <asm/msr.h>
++#include <asm/user.h>
++#include <asm/fpu/internal.h>
++#include <asm/fpu/xstate.h>
++#include <asm/fpu/types.h>
++#include <asm/cet.h>
++
++static void start_update_msrs(void)
 +{
-+	return do_mmap(file, addr, len, prot, flags, 0, pgoff, populate, uf);
++	fpregs_lock();
++	if (test_thread_flag(TIF_NEED_FPU_LOAD))
++		__fpregs_load_activate();
 +}
 +
- #ifdef CONFIG_MMU
- extern int __mm_populate(unsigned long addr, unsigned long len,
- 			 int ignore_errors);
-diff --git a/ipc/shm.c b/ipc/shm.c
-index f1ed36e3ac9f..6cf24a5994ec 100644
---- a/ipc/shm.c
-+++ b/ipc/shm.c
-@@ -1556,7 +1556,7 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
- 			goto invalid;
- 	}
++static void end_update_msrs(void)
++{
++	fpregs_unlock();
++}
++
++static unsigned long cet_get_shstk_addr(void)
++{
++	struct fpu *fpu = &current->thread.fpu;
++	unsigned long ssp = 0;
++
++	fpregs_lock();
++
++	if (fpregs_state_valid(fpu, smp_processor_id())) {
++		rdmsrl(MSR_IA32_PL3_SSP, ssp);
++	} else {
++		struct cet_user_state *p;
++
++		p = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
++		if (p)
++			ssp = p->user_ssp;
++	}
++
++	fpregs_unlock();
++	return ssp;
++}
++
++static unsigned long alloc_shstk(unsigned long size, int flags)
++{
++	struct mm_struct *mm = current->mm;
++	unsigned long addr, populate;
++
++	/* VM_SHSTK requires MAP_ANONYMOUS, MAP_PRIVATE */
++	flags |= MAP_ANONYMOUS | MAP_PRIVATE;
++
++	mmap_write_lock(mm);
++	addr = do_mmap(NULL, 0, size, PROT_READ, flags, VM_SHSTK, 0,
++		       &populate, NULL);
++	mmap_write_unlock(mm);
++
++	if (populate)
++		mm_populate(addr, populate);
++
++	return addr;
++}
++
++int cet_setup_shstk(void)
++{
++	unsigned long addr, size;
++	struct cet_status *cet = &current->thread.cet;
++
++	if (!static_cpu_has(X86_FEATURE_SHSTK))
++		return -EOPNOTSUPP;
++
++	size = round_up(min(rlimit(RLIMIT_STACK), 1UL << 32), PAGE_SIZE);
++	addr = alloc_shstk(size, 0);
++
++	if (IS_ERR_VALUE(addr))
++		return PTR_ERR((void *)addr);
++
++	cet->shstk_base = addr;
++	cet->shstk_size = size;
++
++	start_update_msrs();
++	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
++	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
++	end_update_msrs();
++	return 0;
++}
++
++void cet_disable_free_shstk(struct task_struct *tsk)
++{
++	struct cet_status *cet = &tsk->thread.cet;
++
++	if (!static_cpu_has(X86_FEATURE_SHSTK) ||
++	    !cet->shstk_size || !cet->shstk_base)
++		return;
++
++	if (!tsk->mm || (tsk->mm != current->mm))
++		return;
++
++	if (tsk == current) {
++		u64 msr_val;
++
++		start_update_msrs();
++		rdmsrl(MSR_IA32_U_CET, msr_val);
++		wrmsrl(MSR_IA32_U_CET, msr_val & ~CET_SHSTK_EN);
++		wrmsrl(MSR_IA32_PL3_SSP, 0);
++		end_update_msrs();
++	}
++
++	while (1) {
++		int r;
++
++		r = vm_munmap(cet->shstk_base, cet->shstk_size);
++
++		/*
++		 * Retry if mmap_lock is not available.
++		 */
++		if (r == -EINTR) {
++			cond_resched();
++			continue;
++		}
++
++		WARN_ON_ONCE(r);
++		break;
++	}
++	cet->shstk_base = 0;
++	cet->shstk_size = 0;
++}
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index c5d6f17d9b9d..5f60ddaabc46 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -56,6 +56,7 @@
+ #include <asm/microcode_intel.h>
+ #include <asm/intel-family.h>
+ #include <asm/cpu_device_id.h>
++#include <asm/cet.h>
+ #include <asm/uv/uv.h>
  
--	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL);
-+	addr = do_mmap_pgoff(file, addr, size, prot, flags, 0, &populate, NULL);
- 	*raddr = addr;
- 	err = 0;
- 	if (IS_ERR_VALUE(addr))
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 574b3f273462..81d4a00092da 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1030,7 +1030,7 @@ static inline int is_mergeable_anon_vma(struct anon_vma *anon_vma1,
-  * anon_vmas, nor if same anon_vma is assigned but offsets incompatible.
-  *
-  * We don't check here for the merged mmap wrapping around the end of pagecache
-- * indices (16TB on ia32) because do_mmap() does not permit mmap's which
-+ * indices (16TB on ia32) because do_mmap_pgoff() does not permit mmap's which
-  * wrap, nor mmaps which cover the final page at index -1UL.
+ #include "cpu.h"
+@@ -509,6 +510,32 @@ static __init int setup_disable_pku(char *arg)
+ __setup("nopku", setup_disable_pku);
+ #endif /* CONFIG_X86_64 */
+ 
++static __always_inline void setup_cet(struct cpuinfo_x86 *c)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) &&
++	    !cpu_feature_enabled(X86_FEATURE_IBT))
++		return;
++
++	cr4_set_bits(X86_CR4_CET);
++}
++
++#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
++static __init int setup_disable_shstk(char *s)
++{
++	/* require an exact match without trailing characters */
++	if (s[0] != '\0')
++		return 0;
++
++	if (!boot_cpu_has(X86_FEATURE_SHSTK))
++		return 1;
++
++	setup_clear_cpu_cap(X86_FEATURE_SHSTK);
++	pr_info("x86: 'no_user_shstk' specified, disabling user Shadow Stack\n");
++	return 1;
++}
++__setup("no_user_shstk", setup_disable_shstk);
++#endif
++
+ /*
+  * Some CPU features depend on higher CPUID levels, which may not always
+  * be available due to CPUID level capping or broken virtualization
+@@ -1544,6 +1571,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ 
+ 	x86_init_rdrand(c);
+ 	setup_pku(c);
++	setup_cet(c);
+ 
+ 	/*
+ 	 * Clear/Set all flags overridden by options, need do it
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 994d8393f2f7..e41f1a468ee3 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -42,6 +42,7 @@
+ #include <asm/spec-ctrl.h>
+ #include <asm/io_bitmap.h>
+ #include <asm/proto.h>
++#include <asm/cet.h>
+ 
+ #include "process.h"
+ 
+diff --git a/tools/arch/x86/include/asm/disabled-features.h b/tools/arch/x86/include/asm/disabled-features.h
+index 4ea8584682f9..a0e1b24cfa02 100644
+--- a/tools/arch/x86/include/asm/disabled-features.h
++++ b/tools/arch/x86/include/asm/disabled-features.h
+@@ -56,6 +56,12 @@
+ # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
+ #endif
+ 
++#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
++#define DISABLE_SHSTK	0
++#else
++#define DISABLE_SHSTK	(1<<(X86_FEATURE_SHSTK & 31))
++#endif
++
+ /*
+  * Make sure to add features to the correct mask
   */
- static int
-@@ -1365,11 +1365,11 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
-  */
- unsigned long do_mmap(struct file *file, unsigned long addr,
- 			unsigned long len, unsigned long prot,
--			unsigned long flags, unsigned long pgoff,
--			unsigned long *populate, struct list_head *uf)
-+			unsigned long flags, vm_flags_t vm_flags,
-+			unsigned long pgoff, unsigned long *populate,
-+			struct list_head *uf)
- {
- 	struct mm_struct *mm = current->mm;
--	vm_flags_t vm_flags;
- 	int pkey = 0;
- 
- 	*populate = 0;
-@@ -1431,7 +1431,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 	 * to. we assume access permissions have been handled by the open
- 	 * of the memory object, so we don't do any here.
- 	 */
--	vm_flags = calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
-+	vm_flags |= calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
- 			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
- 
- 	if (flags & MAP_LOCKED)
-@@ -2233,7 +2233,7 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
- 		/*
- 		 * mmap_region() will call shmem_zero_setup() to create a file,
- 		 * so use shmem's get_unmapped_area in case it can be huge.
--		 * do_mmap() will clear pgoff, so match alignment.
-+		 * do_mmap_pgoff() will clear pgoff, so match alignment.
- 		 */
- 		pgoff = 0;
- 		get_area = shmem_get_unmapped_area;
-@@ -3006,7 +3006,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
- 	}
- 
- 	file = get_file(vma->vm_file);
--	ret = do_mmap(vma->vm_file, start, size,
-+	ret = do_mmap_pgoff(vma->vm_file, start, size,
- 			prot, flags, pgoff, &populate, NULL);
- 	fput(file);
- out:
-@@ -3226,7 +3226,7 @@ int insert_vm_struct(struct mm_struct *mm, struct vm_area_struct *vma)
- 	 * By setting it to reflect the virtual start address of the
- 	 * vma, merges and splits can happen in a seamless way, just
- 	 * using the existing file pgoff checks and manipulations.
--	 * Similarly in do_mmap and in do_brk.
-+	 * Similarly in do_mmap_pgoff and in do_brk.
- 	 */
- 	if (vma_is_anonymous(vma)) {
- 		BUG_ON(vma->anon_vma);
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 75a327149af1..71a4ea828f06 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -1078,6 +1078,7 @@ unsigned long do_mmap(struct file *file,
- 			unsigned long len,
- 			unsigned long prot,
- 			unsigned long flags,
-+			vm_flags_t vm_flags,
- 			unsigned long pgoff,
- 			unsigned long *populate,
- 			struct list_head *uf)
-@@ -1085,7 +1086,6 @@ unsigned long do_mmap(struct file *file,
- 	struct vm_area_struct *vma;
- 	struct vm_region *region;
- 	struct rb_node *rb;
--	vm_flags_t vm_flags;
- 	unsigned long capabilities, result;
- 	int ret;
- 
-@@ -1104,7 +1104,7 @@ unsigned long do_mmap(struct file *file,
- 
- 	/* we've determined that we can make the mapping, now translate what we
- 	 * now know into VMA flags */
--	vm_flags = determine_vm_flags(file, prot, flags, capabilities);
-+	vm_flags |= determine_vm_flags(file, prot, flags, capabilities);
- 
- 	/* we're going to need to record the mapping */
- 	region = kmem_cache_zalloc(vm_region_jar, GFP_KERNEL);
-@@ -1763,7 +1763,7 @@ EXPORT_SYMBOL_GPL(access_process_vm);
-  *
-  * Check the shared mappings on an inode on behalf of a shrinking truncate to
-  * make sure that any outstanding VMAs aren't broken and then shrink the
-- * vm_regions that extend beyond so that do_mmap() doesn't
-+ * vm_regions that extend beyond so that do_mmap_pgoff() doesn't
-  * automatically grant mappings that are too large.
-  */
- int nommu_shrink_inode_mappings(struct inode *inode, size_t size,
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 271548ca20f3..dea76ecc849b 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -4246,7 +4246,7 @@ EXPORT_SYMBOL_GPL(shmem_file_setup_with_mnt);
- 
- /**
-  * shmem_zero_setup - setup a shared anonymous mapping
-- * @vma: the vma to be mmapped is prepared by do_mmap
-+ * @vma: the vma to be mmapped is prepared by do_mmap_pgoff
-  */
- int shmem_zero_setup(struct vm_area_struct *vma)
- {
-diff --git a/mm/util.c b/mm/util.c
-index 5ef378a2a038..8d6280c05238 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -503,8 +503,8 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
- 	if (!ret) {
- 		if (mmap_write_lock_killable(mm))
- 			return -EINTR;
--		ret = do_mmap(file, addr, len, prot, flag, pgoff, &populate,
--			      &uf);
-+		ret = do_mmap_pgoff(file, addr, len, prot, flag, pgoff,
-+				    &populate, &uf);
- 		mmap_write_unlock(mm);
- 		userfaultfd_unmap_complete(mm, &uf);
- 		if (populate)
+@@ -75,7 +81,7 @@
+ #define DISABLED_MASK13	0
+ #define DISABLED_MASK14	0
+ #define DISABLED_MASK15	0
+-#define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP)
++#define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP|DISABLE_SHSTK)
+ #define DISABLED_MASK17	0
+ #define DISABLED_MASK18	0
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
 -- 
 2.21.0
 
