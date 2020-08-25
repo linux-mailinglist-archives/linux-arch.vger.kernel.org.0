@@ -2,116 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C65625193F
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 15:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68642251A39
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Aug 2020 15:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgHYNKM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Aug 2020 09:10:12 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:1694 "EHLO pegase1.c-s.fr"
+        id S1726186AbgHYNxu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Aug 2020 09:53:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727037AbgHYNKC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 25 Aug 2020 09:10:02 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BbTqV26QQz9tyVh;
-        Tue, 25 Aug 2020 15:09:58 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 5ZdoqaRg7J6E; Tue, 25 Aug 2020 15:09:58 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BbTqV0wwFz9tyVY;
-        Tue, 25 Aug 2020 15:09:58 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 91E588B812;
-        Tue, 25 Aug 2020 15:09:59 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id uqvT5x_W3ots; Tue, 25 Aug 2020 15:09:59 +0200 (CEST)
-Received: from po17688vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4FA3F8B81B;
-        Tue, 25 Aug 2020 15:09:59 +0200 (CEST)
-Received: by po17688vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 2F25565D37; Tue, 25 Aug 2020 13:09:59 +0000 (UTC)
-Message-Id: <a89a09146fc464a54e196d92f7a241cc88030e12.1598360789.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1598360789.git.christophe.leroy@csgroup.eu>
-References: <cover.1598360789.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v11 5/5] powerpc/vdso: Provide __kernel_clock_gettime64() on
- vdso32
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        anton@ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        luto@kernel.org, linux-arch@vger.kernel.org
-Date:   Tue, 25 Aug 2020 13:09:59 +0000 (UTC)
+        id S1726449AbgHYNxu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 25 Aug 2020 09:53:50 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 814ED20738;
+        Tue, 25 Aug 2020 13:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598363629;
+        bh=dg7cDSh3lmu70QYdEm2jRVJHyaupRiNoFaTejHvwkvQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=xquzrLu34R3/yVdi6EqBHGcQrSbBM/36qwGgxbE0w9p9pEgTvWEw58wFg7+xaxIS/
+         vu0/dhG7U6jQENM7pCsgvoZe2eZfw/MKTE+KopRl6513JpmeZK2GH38XTwiYUy4zn+
+         vLepNMRAYmA+/RzO5BbscQxFJc+G+QMpTzgHGCfg=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1kAZOW-006YOg-1I; Tue, 25 Aug 2020 14:53:48 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 25 Aug 2020 14:53:47 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suzuki K Poulose <Suzuki.Poulose@arm.com>
+Subject: Re: [PATCH v8 03/28] arm64: mte: CPU feature detection and initial
+ sysreg configuration
+In-Reply-To: <20200825105450.GA22233@C02TF0J2HF1T.local>
+References: <20200824182758.27267-1-catalin.marinas@arm.com>
+ <20200824182758.27267-4-catalin.marinas@arm.com>
+ <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
+ <20200825105450.GA22233@C02TF0J2HF1T.local>
+User-Agent: Roundcube Webmail/1.4.8
+Message-ID: <8ef4b3d5d860346e47f4238bdb0f2a91@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, vincenzo.frascino@arm.com, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, will@kernel.org, Dave.Martin@arm.com, szabolcs.nagy@arm.com, kevin.brodsky@arm.com, andreyknvl@google.com, pcc@google.com, akpm@linux-foundation.org, Suzuki.Poulose@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Provides __kernel_clock_gettime64() on vdso32. This is the
-64 bits version of __kernel_clock_gettime() which is
-y2038 compliant.
+On 2020-08-25 11:54, Catalin Marinas wrote:
+> On Tue, Aug 25, 2020 at 09:53:16AM +0100, Marc Zyngier wrote:
+>> On 2020-08-24 19:27, Catalin Marinas wrote:
+>> > diff --git a/arch/arm64/include/asm/kvm_arm.h
+>> > b/arch/arm64/include/asm/kvm_arm.h
+>> > index 8a1cbfd544d6..6c3b2fc922bb 100644
+>> > --- a/arch/arm64/include/asm/kvm_arm.h
+>> > +++ b/arch/arm64/include/asm/kvm_arm.h
+>> > @@ -78,7 +78,7 @@
+>> >  			 HCR_AMO | HCR_SWIO | HCR_TIDCP | HCR_RW | HCR_TLOR | \
+>> >  			 HCR_FMO | HCR_IMO)
+>> >  #define HCR_VIRT_EXCP_MASK (HCR_VSE | HCR_VI | HCR_VF)
+>> > -#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK)
+>> > +#define HCR_HOST_NVHE_FLAGS (HCR_RW | HCR_API | HCR_APK | HCR_ATA)
+>> >  #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
+>> 
+>> Why is HCR_ATA only set for nVHE? HCR_EL2.ATA seems to apply to both,
+>> doesn't it?
+> 
+> We need HCR_EL2.ATA to be set when !VHE so that the host kernel can use
+> MTE. That said, I think we need to turn it off when running a guest.
+> Even if we hide the ID register, the guest may still attempt to enable
+> tags on some memory that doesn't support it, leading to unpredictable
+> behaviour (well, only if we expose device memory to guests directly;
+> Steve's patches will deal with this but for now we just disable MTE in
+> guests).
+> 
+> With VHE, HCR_EL2.ATA only affects the guests, so it can stay off. The
+> host's use of tags is controlled by SCTLR_EL1/EL2.ATA (i.e. HCR_EL2.ATA
+> has no effect if E2H and TGE are both 1; qemu has a bug here which I
+> discovered yesterday).
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/vdso32/gettimeofday.S  | 9 +++++++++
- arch/powerpc/kernel/vdso32/vdso32.lds.S    | 1 +
- arch/powerpc/kernel/vdso32/vgettimeofday.c | 6 ++++++
- 3 files changed, 16 insertions(+)
+Ah, I missed that too.
 
-diff --git a/arch/powerpc/kernel/vdso32/gettimeofday.S b/arch/powerpc/kernel/vdso32/gettimeofday.S
-index fd7b01c51281..a6e29f880e0e 100644
---- a/arch/powerpc/kernel/vdso32/gettimeofday.S
-+++ b/arch/powerpc/kernel/vdso32/gettimeofday.S
-@@ -35,6 +35,15 @@ V_FUNCTION_BEGIN(__kernel_clock_gettime)
- 	cvdso_call __c_kernel_clock_gettime
- V_FUNCTION_END(__kernel_clock_gettime)
- 
-+/*
-+ * Exact prototype of clock_gettime64()
-+ *
-+ * int __kernel_clock_gettime64(clockid_t clock_id, struct __timespec64 *ts);
-+ *
-+ */
-+V_FUNCTION_BEGIN(__kernel_clock_gettime64)
-+	cvdso_call __c_kernel_clock_gettime64
-+V_FUNCTION_END(__kernel_clock_gettime64)
- 
- /*
-  * Exact prototype of clock_getres()
-diff --git a/arch/powerpc/kernel/vdso32/vdso32.lds.S b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-index 4c985467a668..582c5b046cc9 100644
---- a/arch/powerpc/kernel/vdso32/vdso32.lds.S
-+++ b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-@@ -148,6 +148,7 @@ VERSION
- #ifndef CONFIG_PPC_BOOK3S_601
- 		__kernel_gettimeofday;
- 		__kernel_clock_gettime;
-+		__kernel_clock_gettime64;
- 		__kernel_clock_getres;
- 		__kernel_time;
- 		__kernel_get_tbfreq;
-diff --git a/arch/powerpc/kernel/vdso32/vgettimeofday.c b/arch/powerpc/kernel/vdso32/vgettimeofday.c
-index 0b9ab4c22ef2..f7f71fecf4ed 100644
---- a/arch/powerpc/kernel/vdso32/vgettimeofday.c
-+++ b/arch/powerpc/kernel/vdso32/vgettimeofday.c
-@@ -11,6 +11,12 @@ int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
- 	return __cvdso_clock_gettime32_data(vd, clock, ts);
- }
- 
-+int __c_kernel_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts,
-+			       const struct vdso_data *vd)
-+{
-+	return __cvdso_clock_gettime_data(vd, clock, ts);
-+}
-+
- int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
- 			    const struct vdso_data *vd)
- {
+> 
+>> > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+>> > index 077293b5115f..59b91f58efec 100644
+>> > --- a/arch/arm64/kvm/sys_regs.c
+>> > +++ b/arch/arm64/kvm/sys_regs.c
+>> > @@ -1131,6 +1131,8 @@ static u64 read_id_reg(const struct kvm_vcpu
+>> > *vcpu,
+>> >  		if (!vcpu_has_sve(vcpu))
+>> >  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+>> >  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
+>> > +	} else if (id == SYS_ID_AA64PFR1_EL1) {
+>> > +		val &= ~(0xfUL << ID_AA64PFR1_MTE_SHIFT);
+>> 
+>> Hiding the capability is fine, but where is the handling of trapping
+>> instructions done? They should result in an UNDEF being injected.
+> 
+> They are a few new MTE-specific MSR/MRS which are trapped at EL2 but
+> since KVM doesn't understand them yet, shouldn't it already inject
+> undef back at EL1? That would be safer regardless of MTE support.
+
+An UNDEF will be injected, but not without spitting a nastygram in
+the kernel log (look at emulate_sys_reg()).
+
+The best course of action is to have an entry in the sysreg table
+that would explicitly do the handling.
+
+Thanks,
+
+         M.
 -- 
-2.25.0
-
+Jazz is not dead. It just smells funny...
