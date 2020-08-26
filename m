@@ -2,76 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E911C25339C
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 17:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB8B2534B0
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 18:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727062AbgHZP0h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Aug 2020 11:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S1727069AbgHZQUr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Aug 2020 12:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726947AbgHZP0g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 11:26:36 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9493CC061574;
-        Wed, 26 Aug 2020 08:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+kbSD2yR9v2pWhwpsyiZqxkY0BVg0p/LK9dRxQLDYOQ=; b=cDsq/X5VEuKMenCLWm0q6T9jFP
-        +BRjLwIXzwkTQriFPNTFD+XHjLROecLv6xlo2AVtE7RWIVb2VE6ZkUeVjQFEd6zQ0L6lltp/diJFI
-        JK9K1IesrNG+lmPgJ8muvGVY8OsfoVAEcDc+BOfNagSbl+R8y9FtRKqeg4lKS21IUN6xLZ5QpeK+I
-        cDXcvwgXjEq8PFwUBRJk5iZLmvobXSE62wlTXCunUYbd5mXv3DGAWZURMJlmDqTEdlYbJFSoxSwaR
-        qeSLkbYm9Ux/t8vAAJzoKeecBSAKQG6D+tusUuxDWthKo9W9jA/jMelcb2tf1E6Ka/YmWdVrB+9W7
-        ENW1KRRA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kAxJY-0004Pl-Tp; Wed, 26 Aug 2020 15:26:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8D7D9303A02;
-        Wed, 26 Aug 2020 17:26:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4B1FC2BFF50C3; Wed, 26 Aug 2020 17:26:12 +0200 (CEST)
-Date:   Wed, 26 Aug 2020 17:26:12 +0200
-From:   peterz@infradead.org
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 03/14] arm: kprobes: Use generic kretprobe trampoline
- handler
-Message-ID: <20200826152612.GX2674@hirez.programming.kicks-ass.net>
-References: <159844957216.510284.17683703701627367133.stgit@devnote2>
- <159844960343.510284.15315372011917043979.stgit@devnote2>
- <20200826140852.GG1362448@hirez.programming.kicks-ass.net>
- <20200826141025.GU35926@hirez.programming.kicks-ass.net>
- <20200827000405.60aa815dbb6f1417dc9da867@kernel.org>
+        with ESMTP id S1726971AbgHZQUq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 12:20:46 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D48C061574;
+        Wed, 26 Aug 2020 09:20:46 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id y6so1123226plk.10;
+        Wed, 26 Aug 2020 09:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=+gFxa6mV/dX1dFCBtC2xOtSeE1QQdKAWrajpPbfycck=;
+        b=lyXYghMrnRsy3FpCr4AoQmKaZJOTWa0XdSKtjtXFSo7t5sdVS6sNr77I+PEJ4Pa6qV
+         17ADvEsT5pTzYjNFWe/3G6MjBv53R8PPjmH4NERp+ePjdPORiMZbrfBBf4nWwLsi5VfU
+         qyPUMgn4gBD/EylLGvUscir654O7fAKUkB8+j9eAPnyAaa1mW4ERgUdIawCuy2vACsyl
+         xWFhU4cMmlM2AwuDpn471FIeZxCisuZM5za5fJVL9Bg9IO8BbN5qdK2x9PalDbwvg84i
+         PEUmxcYoWG0RGC86JMwTMdQAD85Q6+KwtCDL+h3Yc+2jgrW+ZksycWAahqMIX6tuBbtD
+         2gwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=+gFxa6mV/dX1dFCBtC2xOtSeE1QQdKAWrajpPbfycck=;
+        b=Bgg5uuuyAY9wqCN7qzcc+2WSHTTF4351FvZodFNSf1nEpVuQ+EsIvsUkmKU7K9eOAP
+         BSOEZf+4XiW1ITy7D26sFa2uXUAG4azzN+UuN3p/GpPI1feF+kIaZxa5Wxm43Yy0AnXa
+         UMSgcYBZHAzpITtaoFga4OY+lYX3kiMQbaOKjtQVsK9A+n3TaqjpaLvDAqh9Rf9ol32V
+         w59KNW6Nvpu2cHXcyvRAc+24xuFJ0PDGmMQ5HKDrzN0tS2W8hqHUT2V2wVRLYnT5CHJ0
+         Bd3WhGGnaZqXi7dlQbMRohDJtstgVw4MVEZn1y8KS65PEE78VWhlUx/MNhRCtoM+CCD/
+         kPWw==
+X-Gm-Message-State: AOAM532c+RcKY5d/kQbh5p+SZiQ5SSo1jKb0XGQILakHE4RQWShpKWvg
+        M4ATU6wxAde9ytI549O9GCg=
+X-Google-Smtp-Source: ABdhPJxduybij+lj3whYtH300CUDZDncU2wg5pWzfaYs4zZ6iQOFKaGFzZiG9cdh/d4Xs3xWY4c/Jw==
+X-Received: by 2002:a17:90a:f310:: with SMTP id ca16mr6782701pjb.120.1598458845724;
+        Wed, 26 Aug 2020 09:20:45 -0700 (PDT)
+Received: from localhost (61-68-212-105.tpgi.com.au. [61.68.212.105])
+        by smtp.gmail.com with ESMTPSA id c143sm3674575pfb.84.2020.08.26.09.20.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 09:20:44 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 02:20:39 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 05/23] arm64: use asm-generic/mmu_context.h for no-op
+ implementations
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Will Deacon <will@kernel.org>
+References: <20200826145249.745432-1-npiggin@gmail.com>
+        <20200826145249.745432-6-npiggin@gmail.com> <20200826152510.GB24545@gaia>
+In-Reply-To: <20200826152510.GB24545@gaia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200827000405.60aa815dbb6f1417dc9da867@kernel.org>
+Message-Id: <1598458759.6wa1mql9py.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 12:04:05AM +0900, Masami Hiramatsu wrote:
+Excerpts from Catalin Marinas's message of August 27, 2020 1:25 am:
+> On Thu, Aug 27, 2020 at 12:52:31AM +1000, Nicholas Piggin wrote:
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>=20
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+>=20
 
-> > Argh, I replied to the wrong variant, I mean the one that uses
-> > kernel_stack_pointer(regs).
-> 
-> Would you mean using kernel_stack_pointer() for the frame_pointer?
-> Some arch will be OK, but others can not get the framepointer by that.
-> (that is because the stack layout is different on the function prologue
-> and returned address, e.g. x86...)
+Thank you, I see I stupidly mis-rebased this patch too :( Sorry
+I'll fix that.
 
-Yeah, I noticed :/
-
-I was hoping to avoid some further duplication, but they're all sublty
-different.
+Thanks,
+Nick
