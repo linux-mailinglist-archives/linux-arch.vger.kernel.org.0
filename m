@@ -2,101 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 792E12530E4
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 16:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAEE2530EA
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 16:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgHZOHI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Aug 2020 10:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S1726845AbgHZOJW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Aug 2020 10:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730477AbgHZOGo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 10:06:44 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC19C06179B;
-        Wed, 26 Aug 2020 06:59:18 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t11so932765plr.5;
-        Wed, 26 Aug 2020 06:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=j6Uv5RjTZheoZG1YfQDcy1TspSIOLnzYmIYWVtUuEuo=;
-        b=CZQ5KFoKO9q5uJ/EwZfMmag4/nN9uPr+FfoxZDRG7giS7ouwVpR+YsRFZkimpYW0/O
-         3If9gqRqlqXOtKh+vBTSRdxLKOszwzbHjb0+8F6FophLYBh9VUNvlT4jKlYMR9h+jnwo
-         h4Xzh/P2pOXMp+9fifvK4RLonERZrUzCQs2Zi+Qegg4XOtKT3NaM3sYczrjUzDcHQ5kA
-         aODoBTnH68o7Ce7/IsAwowU4hFgsakMhANkESPO7mSsrk3jJ39dlEflGfo7438PIQGip
-         sT/tOy/fB/tFnsvifmWHbkrIsZT4oWR++jClH9iblTtpgR6MZZQBBWZ+PDOz5vYDH0qd
-         QSwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=j6Uv5RjTZheoZG1YfQDcy1TspSIOLnzYmIYWVtUuEuo=;
-        b=qjsd2ZqTFKOEMUgmBwWzqZSFoE0GALwLHrHCyJFGT5kqLP8YMyRgm6drSeuoq5mFZF
-         5pyoJo+2DCiWbrnpi6sF/oYE4Ga5Jk1dqiicp+zmnbqUqgnNM2b0esi2Nt87Qmj+tyqt
-         OHHDOS2NPKBvIsm9DhhcDc9H/vl0yUJpPi+SjRE4wJsfY1O89L9ufmwOiU9uku8CopdE
-         chF3OUKBP+SO/99C6FzgZPyzefnlLGYQnwu/1bxs/s137OkupoFS3IKbIPjIDWMnopvl
-         kF2d8yxlc2TlTN3RvXURXWDdFD4DJtCuVkdDIx3n2WBonTzHkt0PuzwJfCB1AP/O1m83
-         bpYA==
-X-Gm-Message-State: AOAM533Jgsca2s9mJf3eQ4afcTh0wStGmKrnS3Qnj2ywtkeNOaJoktGz
-        baoZXzALFJFa5J61BT5/JphcSMtMEIA=
-X-Google-Smtp-Source: ABdhPJxG86D/OE+V3vgMRPaY6avWnnT+Kp7k9+ye+aWzx0L/7bPIEQK+hdND7TfE9W+QJibYUhQvyg==
-X-Received: by 2002:a17:902:d697:: with SMTP id v23mr12180075ply.106.1598450357439;
-        Wed, 26 Aug 2020 06:59:17 -0700 (PDT)
-Received: from localhost (61-68-212-105.tpgi.com.au. [61.68.212.105])
-        by smtp.gmail.com with ESMTPSA id q82sm3411353pfc.139.2020.08.26.06.59.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 06:59:16 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 23:59:11 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 01/24] asm-generic: add generic versions of mmu context
- functions
-To:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <20200728033405.78469-1-npiggin@gmail.com>
-        <20200728033405.78469-2-npiggin@gmail.com>
-        <12ac3789-71a5-2756-6a9e-769302c7b3c6@synopsys.com>
-In-Reply-To: <12ac3789-71a5-2756-6a9e-769302c7b3c6@synopsys.com>
+        with ESMTP id S1726766AbgHZOJW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 10:09:22 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B855EC061574;
+        Wed, 26 Aug 2020 07:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sCuKJXsoVUftjxMjMCgzhnNkoywvdvw00UKnFJnBbtc=; b=kEgGCFJwHUE6qZhuZ6jKfBYJQU
+        FWr6K2fZ+qYnlQNIUH7HqQCgOiS7uYA9obXr2PTZjbrlJ3r+bHGgYXN8MvzVbNC4N47DsCxdHP+/S
+        9oHnGmaadcsWK8HDf5rFKrl8VZ6pDOFLzui8h9mua07287m74DVdfyFP7AgwJf6EK2O3Z6tFPTZar
+        VZwpucKk6XExR/XbaOKvSPwluDAYQWpfqF0HvmA3juhbwd86ARtXcbgg1QuqvABFB3zry8R+o5usH
+        yxVU/CVapqJ88CjtPgg/M3Ocnvya6DcMjazVi6UlJbvfrxiFiMZ5X7xlCxgctoyBURfMkqTCrkhUo
+        nX95P5FQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kAw6h-0003Az-CQ; Wed, 26 Aug 2020 14:08:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6AFD930015A;
+        Wed, 26 Aug 2020 16:08:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1AACD203A64CA; Wed, 26 Aug 2020 16:08:52 +0200 (CEST)
+Date:   Wed, 26 Aug 2020 16:08:52 +0200
+From:   peterz@infradead.org
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 03/14] arm: kprobes: Use generic kretprobe trampoline
+ handler
+Message-ID: <20200826140852.GG1362448@hirez.programming.kicks-ass.net>
+References: <159844957216.510284.17683703701627367133.stgit@devnote2>
+ <159844960343.510284.15315372011917043979.stgit@devnote2>
 MIME-Version: 1.0
-Message-Id: <1598448101.l98ljfhzbg.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <159844960343.510284.15315372011917043979.stgit@devnote2>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Vineet Gupta's message of July 28, 2020 2:01 pm:
-> On 7/27/20 8:33 PM, Nicholas Piggin wrote:
->> Many of these are no-ops on many architectures, so extend mmu_context.h
->> to cover MMU and NOMMU, and split the NOMMU bits out to nommu_context.h
->>=20
->=20
->> -static inline void switch_mm(struct mm_struct *prev,
->> -			struct mm_struct *next,
->> -			struct task_struct *tsk)
->> +/**
->> + * activate_mm - called after exec switches the current task to a new m=
-m, to switch to it
->> + * @prev_mm: previous mm of this task
->> + * @next_mm: new mm
->> + */
->> +#ifndef activate_mm
->> +static inline void activate_mm(struct mm_struct *prev_mm,
->> +			       struct mm_struct *next_mm)
->>  {
->> +	switch_mm(prev_mm, next_mm, current);
->>  }
->> +#endif
->=20
-> Is activate_mm() really needed now. It seems most arches have
->    activate_mm(p, n) -> switch_mm(p, n, NULL)
+On Wed, Aug 26, 2020 at 10:46:43PM +0900, Masami Hiramatsu wrote:
+>  static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+>  {
+> +	return (void *)kretprobe_trampoline_handler(regs,
+> +				(unsigned long)&kretprobe_trampoline,
+> +				regs->ARM_fp);
+>  }
 
-Alpha, nios2, parisc, s390, um, x86 have non-trivial differences,
-so it seems to be still needed.
-
-Thanks,
-Nick
+Does it make sense to have the generic code have a weak
+trampoline_handler() implemented like the above? It looks like a number
+of architectures have this trivial variant and it seems pointless to
+duplicate this.
