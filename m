@@ -2,36 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A19125283D
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 09:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E00252854
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 09:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgHZHPA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Aug 2020 03:15:00 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:37389 "EHLO
+        id S1726442AbgHZHTS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Aug 2020 03:19:18 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:53245 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726698AbgHZHO7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 03:14:59 -0400
-Received: from mail-qt1-f179.google.com ([209.85.160.179]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1Mk0a0-1kvBwf1TTs-00kRea; Wed, 26 Aug 2020 09:14:57 +0200
-Received: by mail-qt1-f179.google.com with SMTP id 92so718948qtb.6;
-        Wed, 26 Aug 2020 00:14:56 -0700 (PDT)
-X-Gm-Message-State: AOAM532NZ91CydDDFgF41edtRYot+cE0wnTAgd3Y3/XaQn75w/CnIHtT
-        twhhN+OsckwUc6veJjV+2eqjMFd0Yt9uKLRZqQ8=
-X-Google-Smtp-Source: ABdhPJwLuGjkmlnft754xbUklzGWtHhgTglHwx7onxQfpdw4FEOyMnyaABTTrq89Agj1YnTZDmfbHPSjkpJNT1I0q7s=
-X-Received: by 2002:ac8:688e:: with SMTP id m14mr12988809qtq.7.1598426095918;
- Wed, 26 Aug 2020 00:14:55 -0700 (PDT)
+        with ESMTP id S1726838AbgHZHTM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 03:19:12 -0400
+Received: from mail-qt1-f178.google.com ([209.85.160.178]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1N8XLj-1kgAEZ2Vxx-014RA6; Wed, 26 Aug 2020 09:19:10 +0200
+Received: by mail-qt1-f178.google.com with SMTP id p36so696958qtd.12;
+        Wed, 26 Aug 2020 00:19:10 -0700 (PDT)
+X-Gm-Message-State: AOAM533otbBT+1FDrSRwvz7Y7vZ+GY6/CGfE/HFvIQKMGPGWfVft24t1
+        MZ2DCoTJw3PV7r9j+G2Y3zqdW6Ihui9/7puns/4=
+X-Google-Smtp-Source: ABdhPJy5+Pw3cdGpC8Q6lMpkiPFPkzeHlCi3MRPq3Igp7X2iV4AcClzQkt1xJ/kMgSeokHBcS7+FuRVgiX+xM5QVGLc=
+X-Received: by 2002:ac8:4652:: with SMTP id f18mr12561128qto.142.1598426349178;
+ Wed, 26 Aug 2020 00:19:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <1598287583-71762-1-git-send-email-mikelley@microsoft.com>
- <1598287583-71762-6-git-send-email-mikelley@microsoft.com>
- <CAK8P3a1hDBVembCd+6=ENUWYFz=72JBTFMrKYZ2aFd+_Q04F+g@mail.gmail.com> <MW2PR2101MB105201EF9EB186AA9BF31A74D7570@MW2PR2101MB1052.namprd21.prod.outlook.com>
-In-Reply-To: <MW2PR2101MB105201EF9EB186AA9BF31A74D7570@MW2PR2101MB1052.namprd21.prod.outlook.com>
+ <1598287583-71762-8-git-send-email-mikelley@microsoft.com>
+ <CAK8P3a1NXVJON+apBZeVDdx_bqQmenab8srqJDWS_VFVpAncRA@mail.gmail.com> <MW2PR2101MB1052AD42CC4F9A71F87EFE95D7570@MW2PR2101MB1052.namprd21.prod.outlook.com>
+In-Reply-To: <MW2PR2101MB1052AD42CC4F9A71F87EFE95D7570@MW2PR2101MB1052.namprd21.prod.outlook.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 26 Aug 2020 09:14:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0bCf7Fe5Ex=AHUM49UuvNk0KEpXJ3jgWmULa2eDOWBKA@mail.gmail.com>
-Message-ID: <CAK8P3a0bCf7Fe5Ex=AHUM49UuvNk0KEpXJ3jgWmULa2eDOWBKA@mail.gmail.com>
-Subject: Re: [PATCH v7 05/10] arm64: hyperv: Add interrupt handlers for VMbus
- and stimer
+Date:   Wed, 26 Aug 2020 09:18:53 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3fzXuyamf=sokW59=Ln-ULBBGaSHxKwUeqxT_4sNrQqw@mail.gmail.com>
+Message-ID: <CAK8P3a3fzXuyamf=sokW59=Ln-ULBBGaSHxKwUeqxT_4sNrQqw@mail.gmail.com>
+Subject: Re: [PATCH v7 07/10] arm64: hyperv: Initialize hypervisor on boot
 To:     Michael Kelley <mikelley@microsoft.com>
 Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -49,79 +48,69 @@ Cc:     Will Deacon <will@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
         Sunil Muthuswamy <sunilmut@microsoft.com>,
         Boqun Feng <boqun.feng@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:CfQNSp9K2Sdd2RppPCh70mApHLnySRUQtQTPs+NNnr5FwrxVCng
- AGs3F+IWIItB3FT7rCqPXYb5XyGGoFDhSK+bnnEr60dbVKDCRHARjKlBpi9MGbX9vXdpJbU
- azeTOu7yxAaAs+27q0YE9uN75kTAtAWNeCuEW0hI9gtCn99zyIo1UbdlbrW44jnbuGDBVXK
- MznMJZzDDYN2Qs5DfuJng==
+X-Provags-ID: V03:K1:65Evus5OXX7pf1ZayKDZMzlfDj3azEij/JtxW0/w1BmxCL0q69d
+ 4icpFl1nuXRnjYL2OTsXz7uzqY44dVPZtI5sQUJYc9k5ValxBbw7nxts19K1sokrbaOC02K
+ VpISE+98YncBQbbWjaBD5yuK9d2cp6RIybUFfOSV3Hi82GqZe7okaBmzqRcqA6wT8UXGA1j
+ fPC8GwM37cYCBIzxQGxzQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xO0XMxW3dlA=:vjc8OvsMhX2drfQa3Dri8w
- oq47fIAjowurvD4ZZkt++2rnBezU79/Rzrl2CPXjVZ3RvhKchD4luPVKF0RsuCsaVJ6LQva0q
- FMy/z3NyQyst0i9tHN/MfHjMpU9mf1VBQTa7RmkhfUXTQpMuo1uP7j7itn3rCJE7ixmqjoSBy
- SNAGr8zxtJBQoorgvrwsjYaX0FVytV6ZQBlETXDbi3+qvQKDg+gYXlulRd9niBZ+pn5rlRgG0
- wLjz8LpwEjE1UqKkJX8X9sVaHsSURyNOe78N+KO7fwZjTY/o9UJSzHMZlYovb/eNEBE5LveLp
- +/n+C8IrI4FUR9Da86VkJSRKqTXynBnI1Rd6nLJ6Y6iJjbSFL3FssDtesh8y3osxThKWsiESz
- O5NpdHIhQx8YrMovHWylmbB/Iizpaj51h+RTcmYFNFcO4dwZ97+oRTTAKx80+kTPqMtueaqqa
- a4joAYmuzbQ9/0ZTfbEHecvdeXYS0Qs7k/ejk9em39qknATRFaEK4wfFvRoHUYVEpHby/p/Eq
- zNnYZ7z1KGc2Ti9bJCG6UFLhwQa0VvtYi4A/1qkwDECB3MjvpGKjmSwSbHztJVYnIk9sNQxXm
- Kzw5m5i40W0U8wwsHJUm3a1Q20GNdof1knYfMX77zXRJ4GMtaC2dUSnhaEFej7+YLdOrsEDK0
- +AbCRXHPoN/phSj6191B5V+/jUIxsXPmeD5SyMl4/l17XfjJYWw9KGZglpFmqTdf6JsDD4v1x
- YF9JL2OX7YX0nrJCDXmpF7mJVdihvVHe6fVmAFhTAJCbAO/ew/KCOtQ8Rh1vF5vmTzrxNfOyR
- 5OIftf6uZV5xVzlzAgOG5KJ5w8zn9McySso6Gi1tWQSTXJyaykpM+Gie0fGL2fKLPQ1HlJC
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nWKx0foQu/g=:cRHTW84q8SmQR80a+VBtT/
+ 2z0b38SfKjlkje1F/JUIwBZOtPEshpQnl+cs4zTJiXhgYz+kQoYI5cxgMsRGygMePld7UO40y
+ VeqZdcmYXrVOXaYtfWci1ZKfxEY0nzmdmHbWGmqF0CfwX/P7j3dg+F27V9yQDJaQu8GlH0Fui
+ 63PO9vGwn6HSoOYi653wfrTSjqqLmEOKmW731q2GQndpvaJ2LL/RobVxuZrma8MQuGsCaITJp
+ nz8sRFrnqGC/JyMNRTohpNmJrIDfG4qiJujya09GceRE4KuT5+wWiwDpOcR7LqePzYfzUhsvW
+ Lu02GwBy9sdoDbIYZ1yXnxJMBXMS7vIjs9LB9erL1c+U7cPrvT2cr8KmQ6t8abEmCWQlzP7Os
+ qOjUMTL8hLugDbFhvoJz+ismAnpUcfXonLucJ3ybJyb4/un6dUdktjQMfI7xy7d5joHrHZ3O4
+ /Fe9t84vCp1cL/YrNsqcCtKnx/MfwATqdtjZyONnqan4IvnsDecuKlhNKC082ROFCKlomiGq3
+ jodwVY6ZtFIHfA53gPCK0EjsgAWMtNAjusiJTMn0NW3nilZ4bE+OTbLcOfo6UUpKsvuMUCeLv
+ NX6F4V8awdH4qFS55Odp+Awzm3gP2VcnK5FjiarPPlTYUxhj+prxOiZ2k/rygUV3GgRq7wKHL
+ QwVmj6b+YXrVL9M7r2NVOc+KPzkQLy0ZobZJFWHf4MNtRUpzZMJ8f0mrm1cR+N6lxV6VHvKAQ
+ 0ychjMRfxN3lxiCx4DOgKhTD6mn4t4B/aX9nm95wNOLPndI5UYKDxjI1itAmY9oNp2gQMysk4
+ 1+XA0qKvLGE7EJCIEZ1fTBbWb44Ai1p5YUWQplN4/w+t3pjXa2whWPKWXic0dUbWdluUCwzH5
+ w3DEk2VoBUwDWyNu1BYSRQxLTNiZnECn0L0JnzSwXtKIUVy56jKq4lJEf8bHByyLCnSrOTNyP
+ AWTjXO2aCPXmaJ6Y2Fsdx9ohQyyK2mP32wUHqdY16TtG4vAoYyLcC
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 12:04 AM Michael Kelley <mikelley@microsoft.com> wrote:
-> From: Arnd Bergmann <arnd@arndb.de> Sent: Monday, August 24, 2020 11:54 AM
-
+On Tue, Aug 25, 2020 at 11:20 PM Michael Kelley <mikelley@microsoft.com> wrote:
+> From: Arnd Bergmann <arnd@arndb.de> Sent: Monday, August 24, 2020 11:34 AM
+> > On Mon, Aug 24, 2020 at 6:48 PM Michael Kelley <mikelley@microsoft.com> wrote:
 > >
-> > I'm not sure what the correct solution should be, but what I'd try to
-> > do here is to move every function that just considers the platform
-> > rather than the architecture somewhere into drivers/hv where it
-> > can be linked into the same modules as the existing files when
-> > building for arm64, while trying to keep architecture specific code
-> > in the header file where it can be included from those modules.
+> > I think this has come up before, and I still don't consider it an acceptable
+> > hack to hook platform initialization code into the timer code.
+> >
+> > Please split out the timer into a standalone driver in drivers/clocksource
+> > that can get reviewed by the clocksource maintainers.
 >
-> OK.  The concept of separating platform from architecture makes
-> sense to me.  The original separation of the Hyper-V code into
-> architecture independent portions and x86-specific portions could
-> use some tweaking now that we're dealing with n=2 architectures.  With
-> that tweaking, I can reduce the amount of Hyper-V code under arch/x86
-> and under arch/arm64.
->
-> On the flip side, the Hyper-V implementation on x86 and ARM64 has
-> differences that are semi-related to the architecture.  For example, on
-> x86 Hyper-V uses synthetic MSRs for a lot of guest-hypervisor setup, while
-> hypercalls are required on ARM64.  So I'm assuming those differences
-> will end up in code under arch/x86 and arch/arm64.
+> I see two related topics here.
 
-Yes, that absolutely makes sense.
+Agreed
 
-> Arguably, I could introduce a level of indirection (such as
-> CONFIG_HYPERV_USE_MSRS vs.
-> CONFIG_HYPERV_USE_HYPERCALLS) to distinguish the two behaviors.
-> The selection would be tied to the architecture, and then code in
-> drivers/hv can #ifdef the two cases.  But I wonder if getting code out of
-> arch/x86 and arch/arm64 is worth that additional messiness.
+>  First, the Hyper-V clocksource driver is
+> drivers/clocksource/hyperv_timer.c.  The code is architecture independent
+> and is used today on the x86 side and for ARM64 in this patch series.  A few
+> architecture specific calls are satisfied by code under arch/x86, and in this
+> patch series, under arch/arm64.  Is there some aspect of this driver that
+> needs reconsideration?  I just want to make sure to understand what you
+> are getting at.
 
-No, I think that would take it a little too far, and conflicts with the
-generic rule that code under drivers/* should be written to be portable
-even if can only run on a particular target platform.
+For the clocksource driver, I would like to see the arm64 specific bits
+(the code you add in arch/arm64 that are only relevant to this driver)
+moved out of arch/arm64 and into drivers/clocksource, in whatever
+form the clocksource maintainers prefer. I would suggest having a
+separate file that can get linked along with the architecture-independent
+part of that driver.
 
-> Looking at the Xen code in drivers/xen, it looks like a lot of the Xen functionality
-> is implemented in hypercalls that can be consistent across architectures,
-> though I was a bit surprised to see a dozen or so instances of #ifdef CONFIG_X86.
-> Xen also #ifdefs on PV vs. PVHVM, which may handle some architecture
-> differences implicitly.  But I'm assuming that doing #ifdef <architecture>
-> in the Hyper-V code in order to reduce code under arch/x86 or arch/arm64
-> is not the right way to go.
+> Second is the question of where/how to do Hyper-V specific initialization.
+> I agree that hanging it off the timer initialization isn't a great approach.
+> Should I add a Hyper-V specific initialization call at the appropriate point
+> in the ARM64 init sequence?  The x86 side has some structure for handling
+> multiple hypervisors, and the Hyper-V initialization code naturally plugs into
+> that structure.  I'm certainly open to suggestions on the best way to handle
+> it for ARM64.
 
-In general that is true, adding a lot of #ifdefs makes code less readable and
-harder to test. OTOH there are cases where a single #ifdef can be useful when
-it avoids adding a larger amount of complexity elsewhere. Many subsystems
-try to restrict the #ifdef checks to header files while keeping the
-drivers/* code
-free of them.
+Yes, that is where I was getting at. Maybe the x86 abstraction for handling
+multiple hypervisors can be lifted out of arch/x86/ into common code?
 
        Arnd
