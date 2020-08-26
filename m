@@ -2,60 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D2F253275
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 16:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0FE25323F
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 16:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728292AbgHZOxl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Aug 2020 10:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S1727991AbgHZOxt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Aug 2020 10:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728289AbgHZOxj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 10:53:39 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFACC061574;
-        Wed, 26 Aug 2020 07:53:39 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id k18so1105414pfp.7;
-        Wed, 26 Aug 2020 07:53:39 -0700 (PDT)
+        with ESMTP id S1728312AbgHZOxn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 10:53:43 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DD7C061574;
+        Wed, 26 Aug 2020 07:53:43 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ls14so976628pjb.3;
+        Wed, 26 Aug 2020 07:53:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TiWkNEwCCC0m6okc9WhV7jiLYdcUc3FOzWjygUNhbfY=;
-        b=rAKnJSzoYGEt2qz9xpeOoAPU5HEBAIcGp2QMXDNOmDMGvtSi8nEbdgdGX4IFZOiDiJ
-         YSulPWs0g0rFoIPZzuactbR2BzWo5KyJRQQUHVUOb6e/mDu+rYLgN/LRkGmT8cCqU89s
-         1gnriktuGcmVtyq5bcKKFpiJ1VRGhSGNgnd8mZJxfHm05adz9W8WQTN7fjs4ghDMr4Hi
-         lgafmjkMsR+S4+gktKITf8DascRPy8EvmLArXwgjenS1P8c+O3dBReOxcnW7/4hyOfEw
-         KWapPWgWXqrwefoxSsG9l0cwhzt8lPpewxhDXihJURChqO74oQEOhPh571wclGPTwXKJ
-         75RQ==
+        bh=xunuSn00ryI5QmLOCpDWIS49LIJoLf4dCD7QK4hOYao=;
+        b=n1rRwMLjwoSs4LMnp2N+dPHCvP8ljePkQj/xCp/WwnZs+JpamY1B7d4lso6oW9I8ro
+         0Y5ebFndVJ17LONT++8e8+yVXxoOHhaB3D4tbz+8ceizvL9vz6E0p1/uCf+1wh3tmUY4
+         8yNpnr+Qlq1FF5vbKD0jVX/+YkoYybKlfjRQO6ajtH55LyHwMMGuPmiHDuJbRXm+GtA8
+         hWAjFkP91086rmNtJy9BIhrgYEYZytiJO0un0JZJ0pc+Krt6HuEmGtCo4EWK9tx6fLAv
+         NU+FndmpzJ1sX4NnoyS/K5rZK5agwKhZTDYqHBPsFBsigc7z5nGlab7HrdCVMdudok54
+         wK2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TiWkNEwCCC0m6okc9WhV7jiLYdcUc3FOzWjygUNhbfY=;
-        b=Hv/xFeRDdOgvYTyXuzToNzoPBfYMJ6MKRhNzifPyjOZ6B4iDk9pLQlDYy9+VMTZrnY
-         jIusMUK6rOKEF/OM1UXhkiZz966KvlIGHXkIJWnTtUPGzaN9ecFMYrsS4jMKcPJfNxX+
-         6v/PfHvC87aVc1yX6jUssALs109PoV3Op6/PaTMne4XXWNOH/HievxcOBy1obbWSrasa
-         oZrQOCHPrRvt10te382/Eu8G1Zfcw8sc4zrmCinooTguf3AVYka5wegz5jN9ebrQbTO6
-         qAuTYvO8dWK0NxnIpxhdNVvSuohHll40CkIBG5O5dKt2y/tFf0a2k7RsP4nVDycoefzM
-         RE5Q==
-X-Gm-Message-State: AOAM5339Mevr62mKHzrWppIRSoQaMPXa+OPp7suVpDIn8YWdZIv9s4gM
-        ODYEyLxQsECG9ZA8GgDp4G2cTIdRNgM=
-X-Google-Smtp-Source: ABdhPJzrJJGcj7n7yPW1Wiv/Z390c4CVmxzbpAV27ojgXu7b+a5x8oR0g/bY1t7uSrfq0YKzDrAWsg==
-X-Received: by 2002:a63:747:: with SMTP id 68mr3027260pgh.90.1598453618734;
-        Wed, 26 Aug 2020 07:53:38 -0700 (PDT)
+        bh=xunuSn00ryI5QmLOCpDWIS49LIJoLf4dCD7QK4hOYao=;
+        b=me/2eYHoO5pYrW7XKmPjBpw4Uc9aWXSnKYdrjRIvb3LHmJ0AbwogdNwZgkDVgpyPLw
+         bZnPaCLn/M5mx619q8UQYH9U5hMED5e8Lk3euYdPaBDoLoIhBaz4H2BKdDfHrFVxhYiQ
+         0eemXOQpcsn1tDP+LeyClxlsuPRUmUso1L7bFDgGdlpj3/q+8SIIZ2R7g5LqSD5Za1H/
+         M9NdKJAhYYoogippM2K4DrHX9T0dkeiuA/o/F+WuLpAE2dWkM5FRVzEm4HQpXiytxq1L
+         PWt11dgxj6WfH2TW+YCbDgcDqCNh4MEn3WZaUd53mmDsCjAoZfx5Zi+FE9BVokztWKob
+         j19Q==
+X-Gm-Message-State: AOAM531ixWTjg9E85nfTC+fIXtV9QV4Tjp/YJ7QNoeBX5dqoHdySmQ4I
+        ILPOSuqvZz+0h5y1bv9Z7ekeY6q1baQ=
+X-Google-Smtp-Source: ABdhPJx36zSrgQ5+rUw7Uw0wSE2Zq6lUqBfvC6vMJYlTn5AKbamM0eiHzpvcIALtfEZJLDqM2W1XEg==
+X-Received: by 2002:a17:90a:24f:: with SMTP id t15mr6516825pje.227.1598453622555;
+        Wed, 26 Aug 2020 07:53:42 -0700 (PDT)
 Received: from bobo.ozlabs.ibm.com (61-68-212-105.tpgi.com.au. [61.68.212.105])
-        by smtp.gmail.com with ESMTPSA id r7sm3327140pfl.186.2020.08.26.07.53.35
+        by smtp.gmail.com with ESMTPSA id r7sm3327140pfl.186.2020.08.26.07.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 07:53:38 -0700 (PDT)
+        Wed, 26 Aug 2020 07:53:42 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-arch@vger.kernel.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v2 11/23] mips: use asm-generic/mmu_context.h for no-op implementations
-Date:   Thu, 27 Aug 2020 00:52:37 +1000
-Message-Id: <20200826145249.745432-12-npiggin@gmail.com>
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>
+Subject: [PATCH v2 12/23] nds32: use asm-generic/mmu_context.h for no-op implementations
+Date:   Thu, 27 Aug 2020 00:52:38 +1000
+Message-Id: <20200826145249.745432-13-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200826145249.745432-1-npiggin@gmail.com>
 References: <20200826145249.745432-1-npiggin@gmail.com>
@@ -66,59 +67,55 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
+Cc: Nick Hu <nickhu@andestech.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Vincent Chen <deanbo422@gmail.com>
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- arch/mips/include/asm/mmu_context.h | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ arch/nds32/include/asm/mmu_context.h | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/mips/include/asm/mmu_context.h b/arch/mips/include/asm/mmu_context.h
-index cddead91acd4..ed9f2d748f63 100644
---- a/arch/mips/include/asm/mmu_context.h
-+++ b/arch/mips/include/asm/mmu_context.h
-@@ -124,10 +124,6 @@ static inline void set_cpu_context(unsigned int cpu,
- #define cpu_asid(cpu, mm) \
- 	(cpu_context((cpu), (mm)) & cpu_asid_mask(&cpu_data[cpu]))
+diff --git a/arch/nds32/include/asm/mmu_context.h b/arch/nds32/include/asm/mmu_context.h
+index b8fd3d189fdc..c651bc8cacdc 100644
+--- a/arch/nds32/include/asm/mmu_context.h
++++ b/arch/nds32/include/asm/mmu_context.h
+@@ -9,6 +9,7 @@
+ #include <asm/proc-fns.h>
+ #include <asm-generic/mm_hooks.h>
+ 
++#define init_new_context init_new_context
+ static inline int
+ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ {
+@@ -16,8 +17,6 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ 	return 0;
+ }
+ 
+-#define destroy_context(mm)	do { } while(0)
+-
+ #define CID_BITS	9
+ extern spinlock_t cid_lock;
+ extern unsigned int cpu_last_cid;
+@@ -47,10 +46,6 @@ static inline void check_context(struct mm_struct *mm)
+ 		__new_context(mm);
+ }
  
 -static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
 -{
 -}
 -
- extern void get_new_mmu_context(struct mm_struct *mm);
- extern void check_mmu_context(struct mm_struct *mm);
- extern void check_switch_mmu_context(struct mm_struct *mm);
-@@ -136,6 +132,7 @@ extern void check_switch_mmu_context(struct mm_struct *mm);
-  * Initialize the context related info for a new mm_struct
-  * instance.
-  */
-+#define init_new_context init_new_context
- static inline int
- init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 			     struct task_struct *tsk)
  {
-@@ -180,14 +177,12 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-  * Destroy context related info for an mm_struct that is about
-  * to be put to rest.
-  */
-+#define destroy_context destroy_context
- static inline void destroy_context(struct mm_struct *mm)
- {
- 	dsemul_mm_cleanup(mm);
+@@ -62,7 +57,6 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	}
  }
  
--#define activate_mm(prev, next)	switch_mm(prev, next, current)
--#define deactivate_mm(tsk, mm)	do { } while (0)
--
- static inline void
- drop_mmu_context(struct mm_struct *mm)
- {
-@@ -237,4 +232,6 @@ drop_mmu_context(struct mm_struct *mm)
- 	local_irq_restore(flags);
- }
- 
+-#define deactivate_mm(tsk,mm)	do { } while (0)
+-#define activate_mm(prev,next)	switch_mm(prev, next, NULL)
 +#include <asm-generic/mmu_context.h>
-+
- #endif /* _ASM_MMU_CONTEXT_H */
+ 
+ #endif
 -- 
 2.23.0
 
