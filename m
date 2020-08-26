@@ -2,76 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 868CD2538F3
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Aug 2020 22:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C471C253A8F
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 01:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgHZUMl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Aug 2020 16:12:41 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:36345 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726784AbgHZUMl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 16:12:41 -0400
-Received: from mail-qk1-f173.google.com ([209.85.222.173]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MbAUg-1kmITn0iK0-00bdw3; Wed, 26 Aug 2020 22:12:39 +0200
-Received: by mail-qk1-f173.google.com with SMTP id u3so3440987qkd.9;
-        Wed, 26 Aug 2020 13:12:38 -0700 (PDT)
-X-Gm-Message-State: AOAM5317UekgUosnUoWFP7mlWCUCEydvVZR/6CF3e2uUkS/WnaEmGNwe
-        dZsSjErWYegXVl4YL4rdNGdTTQ2rNAxShpK+f1s=
-X-Google-Smtp-Source: ABdhPJxhc4alN5hdSxUDe7JMPS2m96WmDmutFJ3jt08/0N904t71Mio1+gRavVxjcvQwSOw7b+NsbxP4jRJgZhk8Yd0=
-X-Received: by 2002:a37:8405:: with SMTP id g5mr15405358qkd.286.1598472757982;
- Wed, 26 Aug 2020 13:12:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200826145249.745432-1-npiggin@gmail.com>
-In-Reply-To: <20200826145249.745432-1-npiggin@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 26 Aug 2020 22:12:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3MNKa3RhG6TUg59+yHvVEa3DLNyqpWSO1c_HLRLP_YRQ@mail.gmail.com>
-Message-ID: <CAK8P3a3MNKa3RhG6TUg59+yHvVEa3DLNyqpWSO1c_HLRLP_YRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/23] Use asm-generic for mmu_context no-op functions
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:wT87E8wdVK6j8liRYR2q8D1pbfFNMWA4alW5k0Jpk8WL7UMFy9B
- 9Vir2Vid0yZmedB8ASFUty3Swptv4umKmxND5+HMpST23Df5b9hD2j8BIkuqKsJQ9kVsqQ9
- DmlHXJMtuhZz5rYJwKWR59FKLrZmyiY6kZarwI+k6aSggU7gS9Vckz1uQg6YoC5bTY4EUWs
- F4Zk00AEEzw4aARKwX1oA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DS3C4dfbomA=:tYDr0mMAZbefkq/N+ocGKj
- 8iQmmEYU+SnMbiG3V0uuBcQgcMv7vkEd0+XmLdwBShtVrDX7sVEaX9dScXcR2NjtxESyUQW13
- FS26BrtsSMJ7DLfyK/jVcrlgol0z1Eiwl0/6UxWbtMoM1zMH1ZyUovLFCUZrwoX2RNws+QG+7
- 9iFl4Sj5AXyfWl75Tk6WiK1lnyI7b3yDEBn37g+IhT2i13EJQl2TAmAsPwy7l3nsZ/PE0Tlh/
- MmN38prxW3VYO32SsmBztCXLRQU41qw1lTpNUGmUmQwc9XxaiWC2gVbJwna3qoT8+IQxIM5ra
- Cx6WBzvhLTB7bFUJe4mnpB5yOhx8fBTWea4RSxeBpjNbLlQWycWRzW2o/D//95/Oyb+P+RWJb
- QBBvn6jb4s5TUK7EWY8FVkRgWTkziC15V3M4gVLPf9P5ExuKHzrtQBaW8pg2VVYHHShpdf0nx
- Hi0XmWYzb9I+es0N2DPU6rnKUK1VJSXoSraee1nNH5xJc9RxV1V5uLC8VJdvE4fXj/SfidxIU
- ZPmpq8OcBFbapK0PbAe+M8isSRE5u30g4H8/DaEhFtmqnmAOuufwe8FJ0OSniP8bgR3gwO3Fl
- rrB7YIhM19Aw4Oc4anwxDQ3BHVAXW1H2b+SJfrHwoOROpnBHUnDNjW0p/zyP4hucZV0FKuWto
- YFid3g5ICrZp9ZZSleaf/U993K/TU0iH4Vvtb7YInU0J8l4ScRanZTSP8ApwA7U5fI3860HnG
- gfM02JNodHu79CY3c3lXRxvcC45Fj7bhg65Ta1fyau1cw9SJPwGZAVwVO/ItccyYGjKJR4sm5
- UaSYUnu4G+DpHuBJNw7J6AzcLYlumtXof3GmSyde4RmFUNng66Dcbo6c+kDcto7bY+2IKzG
+        id S1726148AbgHZXE5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Aug 2020 19:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbgHZXE4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Aug 2020 19:04:56 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F23C061574
+        for <linux-arch@vger.kernel.org>; Wed, 26 Aug 2020 16:04:56 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id g1so1942202pgm.9
+        for <linux-arch@vger.kernel.org>; Wed, 26 Aug 2020 16:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=emKSUp3nMJDf6YlCyIrbjlqxOTOuxbCiHuWA2WLiJTA=;
+        b=VVR6FzqsCKKTDwvmPzHJGdzYwKsiXM5LElJdkyEycS6c8PRBzk/YvNqFW09Pe/85oS
+         lBZy30JPirAAfmZjsIs3DGBd3E6QGHblWJwFXzequYkP/Nr4hMpaamzC0dZBXAyCoPUP
+         L4HEotCYHlzilahe+XeozvesLJuKGSRFweJq5FZYyVvPFfQMlH43u87dsce8sMIKiJTf
+         JCVuDEMsxMWKl9jKjIckBz5SBd1jC0hG5IvD56pq4jp2fQvoVKaMmxGk+Cbgx0OmXrgy
+         DLPksyt3VlU1m0FAaVGcN4ffe5ISVP8fqbijsGE8I3mFqv0H5+7GNa7xwyg3JhIMF15Q
+         L+/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=emKSUp3nMJDf6YlCyIrbjlqxOTOuxbCiHuWA2WLiJTA=;
+        b=bhmWFfD59j6vyxjsjRnaENMvJxJGUWMVRcsuKGCdgw7RQYeSsEmNUr1mH45baVEIpW
+         FDJJAx3Vd+5dTdWpJKoP6j1QIIxjsI5RdtuKHM5oRRzUb4/6NDZG7OXd0TjVzU0COCzG
+         aasV4OOQDVOAhcC0PMIidDFghkTMIR4D6sBLM8XcYl9/1NFmPHyGzwvJ+F4lphzFRCbW
+         iQdQy9IA6+1OQV4Za7eajEWEUFCdzQ2b7yp5KyCksu89s5P4hjYONjTMCtDBJj2YNfoB
+         2MHfoUK20WBjPGyAk9YtnUvdADvX2qSI/33psBQrXo9ocj4G8WupB0HT1BanhWLn7RCl
+         cwuQ==
+X-Gm-Message-State: AOAM530MTGZulR8qyGbLk/BGITVFu9oU4togdsgUiX0PhkPD4hZi23kI
+        +yQE2BkEgothKK7Tl3NxrzhDTvhvvJDdCA==
+X-Google-Smtp-Source: ABdhPJyetZjoo6u6Lr44hDUQngV8PCD1zh2VcrJgJUNKLXuMi8Co8Bz27dLcebrrXDCqD2/1IUKABg==
+X-Received: by 2002:aa7:9467:: with SMTP id t7mr14128163pfq.64.1598483095862;
+        Wed, 26 Aug 2020 16:04:55 -0700 (PDT)
+Received: from VM-0-6-centos.localdomain ([119.28.90.140])
+        by smtp.gmail.com with ESMTPSA id x5sm248639pfj.1.2020.08.26.16.04.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Aug 2020 16:04:55 -0700 (PDT)
+From:   Chunguang Xu <brookxu.cn@gmail.com>
+X-Google-Original-From: Chunguang Xu <brookxu@tencent.com>
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org
+Subject: [PATCH 0/1] clean up the code related to ASSERT()
+Date:   Thu, 27 Aug 2020 07:04:52 +0800
+Message-Id: <2a79d3f5feb628ab318fcebe004e398b8124ce46.1598481550.git.brookxu@tencent.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 4:53 PM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> It would be nice to be able to modify mmu_context functions or add a
-> hook without updating all architectures, many of which will be no-ops.
->
-> The motivation for this series is a change to lazy mmu handling, but
-> this series stands on its own as a good cleanup whether or not we end
-> up making that change.
->
-> Arnd, is this something you could take through your asm-generic tree?
-> (assuming arch maintainers are okay with it)
+The kernel has not yet defined ASSERT(). Indeed, BUG() and WARN() are very
+clear and can cover most application scenarios. However, some applications
+require more debugging information and similar behavior to assert(), which
+cannot be directly provided by BUG() and WARN().
 
-Yes, I can definitely take this. The patches all look good to me, so
-feel free to add "Acked-by: Arnd Bergmann <arnd@arndb.de" if you
-like (not really needed if I merge them later though) and send me a
-pull request once you feel you have collected enough Ack from others.
+Therefore, many modules independently implement ASSERT(), and most of them
+are similar, but slightly different, such as:
 
-     Arnd
+ #define ASSERT(expr) \
+         if(!(expr)) { \
+                 printk( "\n" __FILE__ ":%d: Assertion " #expr " failed!\n",__LINE__); \
+                 panic(#expr); \
+         }
+
+ #define ASSERT(x)                                                       \
+ do {                                                                    \
+         if (!(x)) {                                                     \
+                 printk(KERN_EMERG "assertion failed %s: %d: %s\n",      \
+                        __FILE__, __LINE__, #x);                         \
+                 BUG();                                                  \
+         }                                                               \
+ } while (0)
+
+Some implementations are not optimal for instruction prediction, such as
+missing unlikely():
+
+ #define assert(expr) \
+         if(!(expr)) { \
+         printk( "Assertion failed! %s,%s,%s,line=%d\n",\
+         #expr,__FILE__,__func__,__LINE__); \
+         BUG(); \
+         }
+
+Some implementations have too little log content information, such as:
+
+ #define ASSERT(X)                                               \
+ do {                                                            \
+        if (unlikely(!(X))) {                                   \
+                printk(KERN_ERR "\n");                          \
+                printk(KERN_ERR "XXX: Assertion failed\n");     \
+                BUG();                                          \
+        }                                                       \
+ } while(0)
+
+As we have seen, This makes the code redundant and inconvenient to
+troubleshoot the system. Therefore, perhaps we need to define two
+wrappers for BUG() and WARN_ON(), provide the implementation of ASSERT(),
+simplifyy the code and facilitate problem analysis .
+
+Maybe I missed some information, but I think there is a need to clean
+up the code, maybe in other ways, and more discussion is needed here.
+If this approach is reasonable, I will clean up these codes later and
+issue related patches.
+-- 
+1.8.3.1
+
