@@ -2,114 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F6A25446E
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 13:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2774425449A
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 13:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728731AbgH0Ljw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 07:39:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50700 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728586AbgH0Lib (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Aug 2020 07:38:31 -0400
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DEA5222CB1;
-        Thu, 27 Aug 2020 11:37:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598528264;
-        bh=OxjpBA84KDi5ZWWyg3y0i/wou8N/yNawXlcHxpgAmK0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XyaNvZ+ZBRKlwzei3uUjiA1wRVxBbBADTab/rAYQVbxyvtQ87IcTxr8UKJjjhOqgI
-         GRl/0l2KQXScHbEdqTjwL91JBnaoCdlv6pll6d7qPHVn9M8xpNlwHVP5qr/1a2V6Vw
-         ynDcWUjkgMGxyW9TKQek5DDzZeB4Unnlm9FttT1Q=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
+        id S1728966AbgH0Lx4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 07:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728934AbgH0Lu6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 07:50:58 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56942C06123C;
+        Thu, 27 Aug 2020 04:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=awfRf66HgGbxCRr70kQw5NQ84A89ap4b1ms7NbzviQY=; b=MM43WGiCJfh+YM6OHLDNcC42DR
+        pCMfp7AylWwoKAKC2yUp9DqtyVcDCvZ294vX53tJH+ONZFQUEoUj+CsnNi9VL5zbnJCrGCLb3bgSv
+        /kY7uRJjUM0QaQHJH7VemyieIhcgfz4Bk/km3qYJg6n9d7k8rSpd1dRAjGEYgHLAL+4YJP1s4r5+0
+        VQlVZVpXrpqQEonTGOUxbutnU2mLfQcGbcWW8xsuUilR48V9yyEvvW2yEcEdmr4LwFnSOEO2Lr82Z
+        ElAvoFZbdnFEFKid73m8Jm54EhcyJH92Wudd/QC9ImfJPxq+eQYpDfw9fcL5Bbyvt2QnoJshuHXQj
+        G++v5ebA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kBGPC-0000TM-Ld; Thu, 27 Aug 2020 11:49:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 127FF301A66;
+        Thu, 27 Aug 2020 13:49:19 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C22922C1263AB; Thu, 27 Aug 2020 13:49:19 +0200 (CEST)
+Date:   Thu, 27 Aug 2020 13:49:19 +0200
+From:   peterz@infradead.org
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Eddy Wu <Eddy_Wu@trendmicro.com>,
+        x86@kernel.org, "David S . Miller" <davem@davemloft.net>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         linux-arch@vger.kernel.org
-Subject: [PATCH v2 14/15] kprobes: Remove NMI context check
-Date:   Thu, 27 Aug 2020 20:37:38 +0900
-Message-Id: <159852825822.707944.12873921829000019667.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <159852811819.707944.12798182250041968537.stgit@devnote2>
+Subject: Re: [PATCH v2 15/15] kprobes: Free kretprobe_instance with rcu
+ callback
+Message-ID: <20200827114919.GB2674@hirez.programming.kicks-ass.net>
 References: <159852811819.707944.12798182250041968537.stgit@devnote2>
-User-Agent: StGit/0.19
+ <159852826969.707944.15092569392287597887.stgit@devnote2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <159852826969.707944.15092569392287597887.stgit@devnote2>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since the commit 9b38cc704e84 ("kretprobe: Prevent triggering
-kretprobe from within kprobe_flush_task") sets a dummy current
-kprobe in the trampoline handler by kprobe_busy_begin/end(),
-it is not possible to run a kretprobe pre handler in kretprobe
-trampoline handler context even with the NMI. If the NMI interrupts
-a kretprobe_trampoline_handler() and it hits a kretprobe, the
-2nd kretprobe will detect recursion correctly and it will be
-skipped.
-This means we have almost no double-lock issue on kretprobes by NMI.
+On Thu, Aug 27, 2020 at 08:37:49PM +0900, Masami Hiramatsu wrote:
 
-The last one point is in cleanup_rp_inst() which also takes
-kretprobe_table_lock without setting up current kprobes.
-So adding kprobe_busy_begin/end() there allows us to remove
-in_nmi() check.
+> +void recycle_rp_inst(struct kretprobe_instance *ri)
 
-The above commit applies kprobe_busy_begin/end() on x86, but
-now all arch implementation are unified to generic one, we can
-safely remove the in_nmi() check from arch independent code.
-
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- kernel/kprobes.c |   16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index cbd2ad1af7b7..311033e4b8e4 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1359,7 +1359,8 @@ static void cleanup_rp_inst(struct kretprobe *rp)
- 	struct hlist_node *next;
- 	struct hlist_head *head;
- 
--	/* No race here */
-+	/* To avoid recursive kretprobe by NMI, set kprobe busy here */
-+	kprobe_busy_begin();
- 	for (hash = 0; hash < KPROBE_TABLE_SIZE; hash++) {
- 		kretprobe_table_lock(hash, &flags);
- 		head = &kretprobe_inst_table[hash];
-@@ -1369,6 +1370,8 @@ static void cleanup_rp_inst(struct kretprobe *rp)
- 		}
- 		kretprobe_table_unlock(hash, &flags);
- 	}
-+	kprobe_busy_end();
-+
- 	free_rp_inst(rp);
- }
- NOKPROBE_SYMBOL(cleanup_rp_inst);
-@@ -2038,17 +2041,6 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 	unsigned long hash, flags = 0;
- 	struct kretprobe_instance *ri;
- 
--	/*
--	 * To avoid deadlocks, prohibit return probing in NMI contexts,
--	 * just skip the probe and increase the (inexact) 'nmissed'
--	 * statistical counter, so that the user is informed that
--	 * something happened:
--	 */
--	if (unlikely(in_nmi())) {
--		rp->nmissed++;
--		return 0;
--	}
--
- 	/* TODO: consider to only swap the RA after the last pre_handler fired */
- 	hash = hash_ptr(current, KPROBE_HASH_BITS);
- 	raw_spin_lock_irqsave(&rp->lock, flags);
-
+Also note, that at this point there is no external caller of this
+function anymore.
