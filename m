@@ -2,126 +2,229 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7273325478D
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 16:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04CB2548FD
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 17:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727939AbgH0OvX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 10:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727954AbgH0N1e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 09:27:34 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682BEC061232;
-        Thu, 27 Aug 2020 06:26:50 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id h10so1282146ioq.6;
-        Thu, 27 Aug 2020 06:26:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z3rM/s09CyTTr9lsRuYlr+CDTRnp96lIqmXrR7O4ris=;
-        b=sDuPAMwyq2iaWGTIoS5gCuxEF7/8dQebiq2GQBQW3Ea8W+S5M4BxfTu8rNxQRsT2OE
-         qivotQ/CsKAGuQXSMZJALTIdsrJcmPAmtbxjl/afnsHDpUI2P7q1ujOsMGm4m1DBkQMm
-         o6MNSz4O+tSKLztWAovSUrtlbObut08eODM4+byTdb6EQdawaTGuyc+dbgMlxYkT7QlU
-         uE2pa4zzkiedG1liIbX434R3WSH/G+20TTjrooRvrv2GNXnYy1KS6b0jYQrksbv6nbXi
-         FDvt98BgQMeP9DrUtZEAmZ6SP/0Cfb2GSYl3BztAkv0kzjNEbg0BV0cM3rYXaxK6iMsZ
-         mtzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z3rM/s09CyTTr9lsRuYlr+CDTRnp96lIqmXrR7O4ris=;
-        b=oqYyBei6vR4B45WTvUOiYT0/3kZKoV8+77p2KvV7r3vrMejkQkDcRyMADW4Gdn7FJT
-         AzB/UrN0t0K4/lK8hTMc+3z6oWNyeNBVI7h5RGgbqUdmSTb219Z0E3pk2bV26NYHPv9z
-         fH3Ti75dIOShMKpHVZpShQLYh5so0un7S/iC2lY7mQE2he55cJwqn9UbrIx76cj/RJjD
-         fJiQ5v5+vaTqYYFYuESHMz5bgb82214gspNnFpRNfN0WxFPjF8O83aFTHcvshj+WoGjx
-         lFZnPRRjO5z5FRXixD8Iou1ttdIegRGVwlk1T6HCbTV4oTcm/TdleksD4XR0ztfKVgH1
-         SbPw==
-X-Gm-Message-State: AOAM531hjE9uztfEQR/41GEzqaji1itqVAmMr0nnwIQUo04c2ym000zW
-        W0EGfQyv2PPJXPJKpYGVzDszMKEDaaqc4bAfxZw=
-X-Google-Smtp-Source: ABdhPJyB3BGNlYSy6idrDHa0529fu+S4aI1rBmtXPi+OyTmClxS6ugobiVojUBykK3d7ZiXNOZaWep4R8pAyBk5UKR4=
-X-Received: by 2002:a05:6638:1690:: with SMTP id f16mr19670170jat.91.1598534807749;
- Thu, 27 Aug 2020 06:26:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200825002540.3351-1-yu-cheng.yu@intel.com> <20200825002540.3351-26-yu-cheng.yu@intel.com>
- <CALCETrVpLnZGfWWLpJO+aZ9aBbx5KGaCskejXiCXF1GtsFFoPg@mail.gmail.com>
- <2d253891-9393-44d0-35e0-4b9a2da23cec@intel.com> <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
- <73c2211f-8811-2d9f-1930-1c5035e6129c@intel.com> <af258a0e-56e9-3747-f765-dfe45ce76bba@intel.com>
- <ef7f9e24-f952-d78c-373e-85435f742688@intel.com> <20200826164604.GW6642@arm.com>
- <87ft892vvf.fsf@oldenburg2.str.redhat.com> <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
- <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com> <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
-In-Reply-To: <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Thu, 27 Aug 2020 06:26:11 -0700
-Message-ID: <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
-Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
- shadow stack
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Dave Martin <Dave.Martin@arm.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S1727111AbgH0PS3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 11:18:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726157AbgH0Lfe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Aug 2020 07:35:34 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F78320738;
+        Thu, 27 Aug 2020 11:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598528133;
+        bh=BQJgGx0WZxmBAOL4TvjzTRBHVFKglf3uZbHr3G4N01w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mWlBajFQU/x1YISr4rnZGrBesn7WDcSpzDexI2Ckd3qe2iGPPVjnE9X/5HDlaxM0m
+         InhPOl4T/IjoNHqOp2Ls8CKNE7LeI+O/vaxSQcSvkrfoRMiGGE8drNREa3AqigQ7XZ
+         6/AmhwBtCoDCLU7JEBb9VZh6MbhrBaZbKQWGxw1g=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v2 01/15] kprobes: Add generic kretprobe trampoline handler
+Date:   Thu, 27 Aug 2020 20:35:29 +0900
+Message-Id: <159852812960.707944.11813912369089948512.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <159852811819.707944.12798182250041968537.stgit@devnote2>
+References: <159852811819.707944.12798182250041968537.stgit@devnote2>
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 12:57 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 8/26/20 11:49 AM, Yu, Yu-cheng wrote:
-> >> I would expect things like Go and various JITs to call it directly.
-> >>
-> >> If we wanted to be fancy and add a potentially more widely useful
-> >> syscall, how about:
-> >>
-> >> mmap_special(void *addr, size_t length, int prot, int flags, int type);
-> >>
-> >> Where type is something like MMAP_SPECIAL_X86_SHSTK.  Fundamentally,
-> >> this is really just mmap() except that we want to map something a bit
-> >> magical, and we don't want to require opening a device node to do it.
-> >
-> > One benefit of MMAP_SPECIAL_* is there are more free bits than MAP_*.
-> > Does ARM have similar needs for memory mapping, Dave?
->
-> No idea.
->
-> But, mmap_special() is *basically* mmap2() with extra-big flags space.
-> I suspect it will grow some more uses on top of shadow stacks.  It could
-> have, for instance, been used to allocate MPX bounds tables.
+Add a generic kretprobe trampoline handler for unifying
+the all cloned /arch/* kretprobe trampoline handlers.
 
-There is no reason we can't use
+The generic kretprobe trampoline handler is based on the
+x86 implementation, because it is the latest implementation.
+It has frame pointer checking, kprobe_busy_begin/end and
+return address fixup for user handlers.
 
-long arch_prctl (int, unsigned long, unsigned long, unsigned long, ..);
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ include/linux/kprobes.h |   32 +++++++++++++--
+ kernel/kprobes.c        |  101 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 129 insertions(+), 4 deletions(-)
 
-for ARCH_X86_CET_MMAP_SHSTK.   We just need to use
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index 9be1bff4f586..46a7afcf5ec0 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -187,10 +187,38 @@ static inline int kprobes_built_in(void)
+ 	return 1;
+ }
+ 
++extern struct kprobe kprobe_busy;
++void kprobe_busy_begin(void);
++void kprobe_busy_end(void);
++
+ #ifdef CONFIG_KRETPROBES
+ extern void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				   struct pt_regs *regs);
+ extern int arch_trampoline_kprobe(struct kprobe *p);
++
++/* If the trampoline handler called from a kprobe, use this version */
++unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
++				unsigned long trampoline_address,
++				void *frame_pointer);
++
++static nokprobe_inline
++unsigned long kretprobe_trampoline_handler(struct pt_regs *regs,
++				unsigned long trampoline_address,
++				void *frame_pointer)
++{
++	unsigned long ret;
++	/*
++	 * Set a dummy kprobe for avoiding kretprobe recursion.
++	 * Since kretprobe never runs in kprobe handler, any kprobe must not
++	 * be running at this point.
++	 */
++	kprobe_busy_begin();
++	ret = __kretprobe_trampoline_handler(regs, trampoline_address, frame_pointer);
++	kprobe_busy_end();
++
++	return ret;
++}
++
+ #else /* CONFIG_KRETPROBES */
+ static inline void arch_prepare_kretprobe(struct kretprobe *rp,
+ 					struct pt_regs *regs)
+@@ -354,10 +382,6 @@ static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
+ 	return this_cpu_ptr(&kprobe_ctlblk);
+ }
+ 
+-extern struct kprobe kprobe_busy;
+-void kprobe_busy_begin(void);
+-void kprobe_busy_end(void);
+-
+ kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
+ int register_kprobe(struct kprobe *p);
+ void unregister_kprobe(struct kprobe *p);
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 287b263c9cb9..cbd2ad1af7b7 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1927,6 +1927,107 @@ unsigned long __weak arch_deref_entry_point(void *entry)
+ }
+ 
+ #ifdef CONFIG_KRETPROBES
++
++unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
++					unsigned long trampoline_address,
++					void *frame_pointer)
++{
++	struct kretprobe_instance *ri = NULL;
++	struct hlist_head *head, empty_rp;
++	struct hlist_node *tmp;
++	unsigned long flags, orig_ret_address = 0;
++	kprobe_opcode_t *correct_ret_addr = NULL;
++	bool skipped = false;
++
++	INIT_HLIST_HEAD(&empty_rp);
++	kretprobe_hash_lock(current, &head, &flags);
++
++	/*
++	 * It is possible to have multiple instances associated with a given
++	 * task either because multiple functions in the call path have
++	 * return probes installed on them, and/or more than one
++	 * return probe was registered for a target function.
++	 *
++	 * We can handle this because:
++	 *     - instances are always pushed into the head of the list
++	 *     - when multiple return probes are registered for the same
++	 *	 function, the (chronologically) first instance's ret_addr
++	 *	 will be the real return address, and all the rest will
++	 *	 point to kretprobe_trampoline.
++	 */
++	hlist_for_each_entry(ri, head, hlist) {
++		if (ri->task != current)
++			/* another task is sharing our hash bucket */
++			continue;
++		/*
++		 * Return probes must be pushed on this hash list correct
++		 * order (same as return order) so that it can be popped
++		 * correctly. However, if we find it is pushed it incorrect
++		 * order, this means we find a function which should not be
++		 * probed, because the wrong order entry is pushed on the
++		 * path of processing other kretprobe itself.
++		 */
++		if (ri->fp != frame_pointer) {
++			if (!skipped)
++				pr_warn("kretprobe is stacked incorrectly. Trying to fixup.\n");
++			skipped = true;
++			continue;
++		}
++
++		orig_ret_address = (unsigned long)ri->ret_addr;
++		if (skipped)
++			pr_warn("%ps must be blacklisted because of incorrect kretprobe order\n",
++				ri->rp->kp.addr);
++
++		if (orig_ret_address != trampoline_address)
++			/*
++			 * This is the real return address. Any other
++			 * instances associated with this task are for
++			 * other calls deeper on the call stack
++			 */
++			break;
++	}
++
++	kretprobe_assert(ri, orig_ret_address, trampoline_address);
++
++	correct_ret_addr = ri->ret_addr;
++	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
++		if (ri->task != current)
++			/* another task is sharing our hash bucket */
++			continue;
++		if (ri->fp != frame_pointer)
++			continue;
++
++		orig_ret_address = (unsigned long)ri->ret_addr;
++		if (ri->rp && ri->rp->handler) {
++			__this_cpu_write(current_kprobe, &ri->rp->kp);
++			ri->ret_addr = correct_ret_addr;
++			ri->rp->handler(ri, regs);
++			__this_cpu_write(current_kprobe, &kprobe_busy);
++		}
++
++		recycle_rp_inst(ri, &empty_rp);
++
++		if (orig_ret_address != trampoline_address)
++			/*
++			 * This is the real return address. Any other
++			 * instances associated with this task are for
++			 * other calls deeper on the call stack
++			 */
++			break;
++	}
++
++	kretprobe_hash_unlock(current, &flags);
++
++	hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
++		hlist_del(&ri->hlist);
++		kfree(ri);
++	}
++
++	return orig_ret_address;
++}
++NOKPROBE_SYMBOL(__kretprobe_trampoline_handler)
++
+ /*
+  * This kprobe pre_handler is registered with every kretprobe. When probe
+  * hits it will set up the return probe.
 
-syscall (SYS_arch_prctl, ARCH_X86_CET_MMAP_SHSTK, ...);
-
--- 
-H.J.
