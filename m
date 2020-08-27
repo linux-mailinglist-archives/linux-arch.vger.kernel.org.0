@@ -2,86 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738FE254A0D
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 17:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC54254A9B
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 18:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728048AbgH0P6H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 27 Aug 2020 11:58:07 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:20491 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726335AbgH0P6G (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Aug 2020 11:58:06 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-127-1uCyu8HkODWHTq8BSgI4eA-1; Thu, 27 Aug 2020 16:58:02 +0100
-X-MC-Unique: 1uCyu8HkODWHTq8BSgI4eA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 27 Aug 2020 16:58:02 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 27 Aug 2020 16:58:02 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 01/10] fs: don't allow kernel reads and writes without
- iter ops
-Thread-Topic: [PATCH 01/10] fs: don't allow kernel reads and writes without
- iter ops
-Thread-Index: AQHWfINAnoKBzQpz30W83mcBiLuV+KlMG9NA
-Date:   Thu, 27 Aug 2020 15:58:02 +0000
-Message-ID: <e5cb22d53c7c4ebea92443b8b6d86e88@AcuMS.aculab.com>
-References: <20200827150030.282762-1-hch@lst.de>
- <20200827150030.282762-2-hch@lst.de>
-In-Reply-To: <20200827150030.282762-2-hch@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        id S1727906AbgH0QV6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 12:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727095AbgH0QVa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 12:21:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0992FC061234;
+        Thu, 27 Aug 2020 09:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=R6WPMXHxuThDwBA5rNw60E2TTV+VwJYDfZXEOOsKtQI=; b=ayMbycB7vBUyHzQP5acpxK6STC
+        skWrZnEwpUFX1sVjA4L4PjiHUPRCCloxVl8W28NkjOyqN4fNkY0hy92/gYQLk4q7ItnvvOayCS6JF
+        Tk5c8Oh4pm9Ar1JX41LOGiJXOMrxUCXXrgw0c8umzjpqqL0gLeXDeeEWWjs7gnTED0z5f+kBsl+/v
+        /FdWp+IX37WBaw4UsDm3mfTCRuwAuV6TgoLJpB1dEbs5lZbYCp45EqmyQo4N+Xbwy2kaEuBiMt167
+        6hjPBjBlt1XAgbYFaCr5tfXfA6N0dMHxYU3Q1z7xXAdfPuqYSjpLEjRm92R15v/FlBLi5sw0SQSGx
+        OJkIMbYw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kBKe5-0001WR-A6; Thu, 27 Aug 2020 16:21:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B2197306099;
+        Thu, 27 Aug 2020 18:20:57 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 6E74B2C2868F1; Thu, 27 Aug 2020 18:20:57 +0200 (CEST)
+Message-ID: <20200827161237.889877377@infradead.org>
+User-Agent: quilt/0.66
+Date:   Thu, 27 Aug 2020 18:12:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     linux-kernel@vger.kernel.org, mhiramat@kernel.org
+Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org, peterz@infradead.org
+Subject: [RFC][PATCH 0/7] kprobes: Make kretprobes lockless
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 27 August 2020 16:00
-> 
-> Don't allow calling ->read or ->write with set_fs as a preparation for
-> killing off set_fs.  All the instances that we use kernel_read/write on
-> are using the iter ops already.
-> 
-> If a file has both the regular ->read/->write methods and the iter
-> variants those could have different semantics for messed up enough
-> drivers.  Also fails the kernel access to them in that case.
+Hi,
 
-Is there a real justification for that?
-For system calls supplying both methods makes sense to avoid
-the extra code paths for a simple read/write.
+These are on top of Masami's generic kretprobe handler patches (v1):
 
-Any one stupid enough to make them behave differently gets
-what they deserve.
+  https://lkml.kernel.org/r/159844957216.510284.17683703701627367133.stgit@devnote2
 
-	David
+They are very lightly tested, esp. the freelist stuff has basically only been
+translated to kernel C without much thinking (while attending LPC), all bugs
+are undoubted mine and not Cameron's.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Changelogs are terse or nonexistant :/
+
 
