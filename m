@@ -2,142 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E35254AFC
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 18:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819C5254B43
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 18:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgH0Qk7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 12:40:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48340 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726820AbgH0Qk7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Aug 2020 12:40:59 -0400
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EEE812087C;
-        Thu, 27 Aug 2020 16:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598546458;
-        bh=vsH/gmyUNk+CX8I+Mu9SytE2Mxci2rpQHxcNz0kXh3c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a3gCg1Liq5ZXYk+eZtmrcOwTzpMKDE4OmyPkn4GuAIF4RxIkyBUGJplxt/WkBnaAF
-         SodYZh00vBBqLVoyJ1FNkqHae83NzOV7+nlVzpEBT5MFpXMc+6OtEMUukCOMxCyTe5
-         A2IugSmpqybDaA5xbFutfWJ5t7cXwmzIEgwJtSN8=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        linux-arch@vger.kernel.org, guoren@kernel.org
-Subject: [PATCH v3 16/16] kprobes: Make local used functions static
-Date:   Fri, 28 Aug 2020 01:40:55 +0900
-Message-Id: <159854645522.736475.5296257647578367884.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <159854631442.736475.5062989489155389472.stgit@devnote2>
-References: <159854631442.736475.5062989489155389472.stgit@devnote2>
-User-Agent: StGit/0.19
+        id S1726147AbgH0Q42 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 12:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbgH0Q42 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 12:56:28 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF85C061264;
+        Thu, 27 Aug 2020 09:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SSi0PB6QbtM1yaYhFUwqIMkjIT1n3Q2GuDY4HbN7Kf0=; b=vEHF2QGsi2DpyHej0MA5sep7Ur
+        C1S7/f467o3G2ZmbX8x+/9E5sZAebKOacqzgM8MmipjMRGOOqDFepAB/D0jC5C5MdQqI0GAO41OCI
+        /19RpLSJmY1OZig5zNLCmElzmIPx0bQd/p9QESlVb+JMBBl5BmfuGJ1s0A6ul9tIwaNTwhBR3rtjR
+        nl/eKTc3ih3ot2uYnODMT2fiD1IZw0OOVBqUte38vQwJt451IYELo8Ei6XxJUe0aOWDvFlsiA6OLv
+        VfKkym3Iz3XRrAfHMFaiWjNn+pJMiGjTCIrOYXD7TBoRINzWXRXyxmKZcWJnxXgx4DJRoGQA8CUki
+        xkXwWD2g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kBLC3-00075E-NI; Thu, 27 Aug 2020 16:56:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 15792301A66;
+        Thu, 27 Aug 2020 18:56:05 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C21B52C42F07A; Thu, 27 Aug 2020 18:56:05 +0200 (CEST)
+Date:   Thu, 27 Aug 2020 18:56:05 +0200
+From:   peterz@infradead.org
+To:     Cameron <cameron@moodycamel.com>
+Cc:     linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        oleg@redhat.com, will@kernel.org, paulmck@kernel.org
+Subject: Re: [RFC][PATCH 6/7] freelist: Lock less freelist
+Message-ID: <20200827165605.GL1362448@hirez.programming.kicks-ass.net>
+References: <20200827161237.889877377@infradead.org>
+ <20200827161754.535381269@infradead.org>
+ <20200827163755.GK1362448@hirez.programming.kicks-ass.net>
+ <CAFCw3doX6KK5DwpG_OB331Mdw8uYeVqn8YPTjKh_a-m7ZB9+3A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFCw3doX6KK5DwpG_OB331Mdw8uYeVqn8YPTjKh_a-m7ZB9+3A@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since we unified the kretprobe trampoline handler from arch/* code,
-some functions and objects no need to be exported anymore.
+On Thu, Aug 27, 2020 at 12:49:20PM -0400, Cameron wrote:
+> For what it's worth, the freelist.h code seems to be a faithful adaptation
+> of my original blog post code. Didn't think it would end up in the Linux
+> kernel one day :-)
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- include/linux/kprobes.h |   15 ---------------
- kernel/kprobes.c        |   12 ++++++++----
- 2 files changed, 8 insertions(+), 19 deletions(-)
+Hehe, I ran into the traditional ABA problem for the lockless stack and
+asked google, your blog came up.
 
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index b4388abedecf..e2dbf5bb7560 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -190,7 +190,6 @@ static inline int kprobes_built_in(void)
- 	return 1;
- }
- 
--extern struct kprobe kprobe_busy;
- void kprobe_busy_begin(void);
- void kprobe_busy_end(void);
- 
-@@ -235,16 +234,6 @@ static inline int arch_trampoline_kprobe(struct kprobe *p)
- 
- extern struct kretprobe_blackpoint kretprobe_blacklist[];
- 
--static inline void kretprobe_assert(struct kretprobe_instance *ri,
--	unsigned long orig_ret_address, unsigned long trampoline_address)
--{
--	if (!orig_ret_address || (orig_ret_address == trampoline_address)) {
--		printk("kretprobe BUG!: Processing kretprobe %p @ %p\n",
--				ri->rp, ri->rp->kp.addr);
--		BUG();
--	}
--}
--
- #ifdef CONFIG_KPROBES_SANITY_TEST
- extern int init_test_probes(void);
- #else
-@@ -364,10 +353,6 @@ int arch_check_ftrace_location(struct kprobe *p);
- 
- /* Get the kprobe at this addr (if any) - called with preemption disabled */
- struct kprobe *get_kprobe(void *addr);
--void kretprobe_hash_lock(struct task_struct *tsk,
--			 struct hlist_head **head, unsigned long *flags);
--void kretprobe_hash_unlock(struct task_struct *tsk, unsigned long *flags);
--struct hlist_head * kretprobe_inst_table_head(struct task_struct *tsk);
- 
- /* kprobe_running() will just return the current_kprobe on this CPU */
- static inline struct kprobe *kprobe_running(void)
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index ce788574883b..55874dc1c182 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1239,7 +1239,7 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
- }
- NOKPROBE_SYMBOL(recycle_rp_inst);
- 
--void kretprobe_hash_lock(struct task_struct *tsk,
-+static void kretprobe_hash_lock(struct task_struct *tsk,
- 			 struct hlist_head **head, unsigned long *flags)
- __acquires(hlist_lock)
- {
-@@ -1261,7 +1261,7 @@ __acquires(hlist_lock)
- }
- NOKPROBE_SYMBOL(kretprobe_table_lock);
- 
--void kretprobe_hash_unlock(struct task_struct *tsk,
-+static void kretprobe_hash_unlock(struct task_struct *tsk,
- 			   unsigned long *flags)
- __releases(hlist_lock)
- {
-@@ -1282,7 +1282,7 @@ __releases(hlist_lock)
- }
- NOKPROBE_SYMBOL(kretprobe_table_unlock);
- 
--struct kprobe kprobe_busy = {
-+static struct kprobe kprobe_busy = {
- 	.addr = (void *) get_kprobe,
- };
- 
-@@ -1983,7 +1983,11 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 			break;
- 	}
- 
--	kretprobe_assert(ri, orig_ret_address, trampoline_address);
-+	if (!orig_ret_address || (orig_ret_address == trampoline_address)) {
-+		pr_err("kretprobe BUG!: Processing kretprobe %p @ %p\n",
-+				ri->rp, ri->rp->kp.addr);
-+		BUG();
-+	}
- 
- 	correct_ret_addr = ri->ret_addr;
- 	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
+I'll try and actually think about it a little when the current (virtual)
+conference is over.
 
+Are you Ok with the License I put on it, GPLv2 or BDS-2 ?
+
+> I'm just wondering if the assumption that "nodes are never freed until
+> after the free list is destroyed" will hold true in the intended use case?
+
+It does, the nodes are only deleted once the whole freelist object is
+discarded.
