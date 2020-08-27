@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4296925446B
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 13:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F6A25446E
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 13:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728550AbgH0Li7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 07:38:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50496 "EHLO mail.kernel.org"
+        id S1728731AbgH0Ljw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 07:39:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50700 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728442AbgH0LhW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Aug 2020 07:37:22 -0400
+        id S1728586AbgH0Lib (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Aug 2020 07:38:31 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2937C22CE3;
-        Thu, 27 Aug 2020 11:37:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DEA5222CB1;
+        Thu, 27 Aug 2020 11:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598528242;
-        bh=NDgTujQf40aEc0EizGnGw4M8AkJqzxUV0D0lyCYMSxE=;
+        s=default; t=1598528264;
+        bh=OxjpBA84KDi5ZWWyg3y0i/wou8N/yNawXlcHxpgAmK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zDxBjmB9/hfE+R0yjcK7NOkiEODqZz+6nBCgB/Cm3P/JNWnzoiAiI+TdwpWw/QAGb
-         MTejx0M9iJZj5zMasNNgFt5T4fwDl2H/1XSDXFyCXZX18lgP9IKFuJpjVgVxJyv1os
-         iQlhVAGiLM/HM6E94Je6FS6aGK+dk3dnIBTF6EQg=
+        b=XyaNvZ+ZBRKlwzei3uUjiA1wRVxBbBADTab/rAYQVbxyvtQ87IcTxr8UKJjjhOqgI
+         GRl/0l2KQXScHbEdqTjwL91JBnaoCdlv6pll6d7qPHVn9M8xpNlwHVP5qr/1a2V6Vw
+         ynDcWUjkgMGxyW9TKQek5DDzZeB4Unnlm9FttT1Q=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
@@ -32,9 +32,9 @@ Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         linux-arch@vger.kernel.org
-Subject: [PATCH v2 12/15] sh: kprobes: Use generic kretprobe trampoline handler
-Date:   Thu, 27 Aug 2020 20:37:18 +0900
-Message-Id: <159852823801.707944.8834191320512248625.stgit@devnote2>
+Subject: [PATCH v2 14/15] kprobes: Remove NMI context check
+Date:   Thu, 27 Aug 2020 20:37:38 +0900
+Message-Id: <159852825822.707944.12873921829000019667.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159852811819.707944.12798182250041968537.stgit@devnote2>
 References: <159852811819.707944.12798182250041968537.stgit@devnote2>
@@ -47,87 +47,69 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Since the commit 9b38cc704e84 ("kretprobe: Prevent triggering
+kretprobe from within kprobe_flush_task") sets a dummy current
+kprobe in the trampoline handler by kprobe_busy_begin/end(),
+it is not possible to run a kretprobe pre handler in kretprobe
+trampoline handler context even with the NMI. If the NMI interrupts
+a kretprobe_trampoline_handler() and it hits a kretprobe, the
+2nd kretprobe will detect recursion correctly and it will be
+skipped.
+This means we have almost no double-lock issue on kretprobes by NMI.
+
+The last one point is in cleanup_rp_inst() which also takes
+kretprobe_table_lock without setting up current kprobes.
+So adding kprobe_busy_begin/end() there allows us to remove
+in_nmi() check.
+
+The above commit applies kprobe_busy_begin/end() on x86, but
+now all arch implementation are unified to generic one, we can
+safely remove the in_nmi() check from arch independent code.
+
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/sh/kernel/kprobes.c |   59 +++-------------------------------------------
- 1 file changed, 4 insertions(+), 55 deletions(-)
+ kernel/kprobes.c |   16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/arch/sh/kernel/kprobes.c b/arch/sh/kernel/kprobes.c
-index 318296f48f1a..118927ab63af 100644
---- a/arch/sh/kernel/kprobes.c
-+++ b/arch/sh/kernel/kprobes.c
-@@ -204,6 +204,7 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
- 				      struct pt_regs *regs)
- {
- 	ri->ret_addr = (kprobe_opcode_t *) regs->pr;
-+	ri->fp = NULL;
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index cbd2ad1af7b7..311033e4b8e4 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1359,7 +1359,8 @@ static void cleanup_rp_inst(struct kretprobe *rp)
+ 	struct hlist_node *next;
+ 	struct hlist_head *head;
  
- 	/* Replace the return addr with trampoline addr */
- 	regs->pr = (unsigned long)kretprobe_trampoline;
-@@ -302,62 +303,10 @@ static void __used kretprobe_trampoline_holder(void)
-  */
- int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
- {
--	struct kretprobe_instance *ri = NULL;
--	struct hlist_head *head, empty_rp;
--	struct hlist_node *tmp;
--	unsigned long flags, orig_ret_address = 0;
--	unsigned long trampoline_address = (unsigned long)&kretprobe_trampoline;
-+	regs->pc = __kretprobe_trampoline_handler(regs,
-+			(unsigned long)&kretprobe_trampoline, NULL);
- 
--	INIT_HLIST_HEAD(&empty_rp);
--	kretprobe_hash_lock(current, &head, &flags);
--
--	/*
--	 * It is possible to have multiple instances associated with a given
--	 * task either because an multiple functions in the call path
--	 * have a return probe installed on them, and/or more then one return
--	 * return probe was registered for a target function.
--	 *
--	 * We can handle this because:
--	 *     - instances are always inserted at the head of the list
--	 *     - when multiple return probes are registered for the same
--	 *       function, the first instance's ret_addr will point to the
--	 *       real return address, and all the rest will point to
--	 *       kretprobe_trampoline
--	 */
--	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
--		if (ri->task != current)
--			/* another task is sharing our hash bucket */
--			continue;
--
--		if (ri->rp && ri->rp->handler) {
--			__this_cpu_write(current_kprobe, &ri->rp->kp);
--			ri->rp->handler(ri, regs);
--			__this_cpu_write(current_kprobe, NULL);
--		}
--
--		orig_ret_address = (unsigned long)ri->ret_addr;
--		recycle_rp_inst(ri, &empty_rp);
--
--		if (orig_ret_address != trampoline_address)
--			/*
--			 * This is the real return address. Any other
--			 * instances associated with this task are for
--			 * other calls deeper on the call stack
--			 */
--			break;
--	}
--
--	kretprobe_assert(ri, orig_ret_address, trampoline_address);
--
--	regs->pc = orig_ret_address;
--	kretprobe_hash_unlock(current, &flags);
--
--	hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
--		hlist_del(&ri->hlist);
--		kfree(ri);
--	}
--
--	return orig_ret_address;
-+	return 1;
+-	/* No race here */
++	/* To avoid recursive kretprobe by NMI, set kprobe busy here */
++	kprobe_busy_begin();
+ 	for (hash = 0; hash < KPROBE_TABLE_SIZE; hash++) {
+ 		kretprobe_table_lock(hash, &flags);
+ 		head = &kretprobe_inst_table[hash];
+@@ -1369,6 +1370,8 @@ static void cleanup_rp_inst(struct kretprobe *rp)
+ 		}
+ 		kretprobe_table_unlock(hash, &flags);
+ 	}
++	kprobe_busy_end();
++
+ 	free_rp_inst(rp);
  }
+ NOKPROBE_SYMBOL(cleanup_rp_inst);
+@@ -2038,17 +2041,6 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+ 	unsigned long hash, flags = 0;
+ 	struct kretprobe_instance *ri;
  
- static int __kprobes post_kprobe_handler(struct pt_regs *regs)
+-	/*
+-	 * To avoid deadlocks, prohibit return probing in NMI contexts,
+-	 * just skip the probe and increase the (inexact) 'nmissed'
+-	 * statistical counter, so that the user is informed that
+-	 * something happened:
+-	 */
+-	if (unlikely(in_nmi())) {
+-		rp->nmissed++;
+-		return 0;
+-	}
+-
+ 	/* TODO: consider to only swap the RA after the last pre_handler fired */
+ 	hash = hash_ptr(current, KPROBE_HASH_BITS);
+ 	raw_spin_lock_irqsave(&rp->lock, flags);
 
