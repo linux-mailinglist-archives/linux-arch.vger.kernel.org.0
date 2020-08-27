@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EAA25438B
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 12:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9129254386
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 12:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728851AbgH0KSu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 06:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S1728813AbgH0KSd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 06:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728594AbgH0KOe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 06:14:34 -0400
+        with ESMTP id S1728600AbgH0KOg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 06:14:36 -0400
 Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74138C06121B;
-        Thu, 27 Aug 2020 03:14:34 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ds1so2374176pjb.1;
-        Thu, 27 Aug 2020 03:14:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FD9C061264;
+        Thu, 27 Aug 2020 03:14:35 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id g6so2353032pjl.0;
+        Thu, 27 Aug 2020 03:14:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=hrftI+TQY3BCyjvYX8clZw8H0tJAk+80/vXHms6y9CA=;
-        b=M7A7WkzCQcVg/GGhHmxYZcIy+RN/B/9qjTxm5m5+XBmLPSV/y0c0InzrUl3+VbcSRA
-         IB/IgJI5NkfjGLqXNKb4nG6tOE4rAsSeiiLSNl4pv+yvP0KPCJpgjsXsl8oPZBBJJSMH
-         OzIoaATB2lZ4hZBoUPr3BHzodWYqeu8f+eSrTYLm1DZBY48h/bcYKIQ+UybB0M/W96x8
-         AZY14KSFu2Q7vzS2Q0oVF0INPs3tgBa7Ppnt9WGUuj1NQIf5svIoUuSUGukotsoRuCSt
-         xd52pdSVx+Hq8JtaucS70nHtUaf8aNW0Rd1w2FJsQ3EMgCi5k1O4MXzSyHeHnmrmyBcP
-         CRew==
+        bh=jvIU1C8xMP6WcFtiASQieWl9PBc0cM/X9m49AuYn3v4=;
+        b=MtGH5F6JVuriOopERqxIJ5MWmzdSYALg+MZ6zMjBHNh2fDEj517cH8RDOLSEqcruQA
+         qY5QhahgFbYY9ODI3OPGtHNJ35210kgCf8s3u7DlH8H+H7ESZWLLHDlshgShmeWK8oaL
+         KQ3tzOzV9Q9DCcBSH8cXt3VidkWUNn/tIkamDbELoWF2RgDIH56Ztzccofz36M4ZCS01
+         pBXJXSSAPLze+nvY2cEMVp9uBbwsM8/Ueo0HyRMjbsYwBjM8wYgJS51oBuEvKNjvwb10
+         aIRAegKJHO/a0bILMRSfC9Z3YapS1s3gxTxnZJLV41AZ2WJCKoskdjGxo6+sx3ufCpip
+         6RJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=hrftI+TQY3BCyjvYX8clZw8H0tJAk+80/vXHms6y9CA=;
-        b=jthk83aTqGR6I7jFlslc1LhTLbEOjeMfaGC3FiTYTm6AOBLlXyF1ba3X7n4vg2tNpw
-         oAQG6QGVD92wj46xQ5/eOyR9zdVnTSGNgOY3HKG2nZkXkTmf59OAkrVwX2A/jS52UjwL
-         6qo2FSJ270n4yx/L7hWB+vNVTAP+6RkLbozhchH4A6QTjSaONw+odN0Bsw88Ex10aNOF
-         I+7EsN4UM2qsX3BkNEPengCXItjVLEHx8b0OmTnqQSiXXfakhAEaQOTe8C/7armBiJEp
-         s+nADZeDheoTV9BDDWh4LXqx2E2gI1MYoTt4owV6mp/TRXqBm2nSUfg6sMfauTLr6ST/
-         LeHA==
-X-Gm-Message-State: AOAM531uWeXnvHb3QMGX8zRqj06eaavcYJevmhFAcgL0DOYFPgdt+o3X
-        YhUOhW6D/GrT3lqyPmiVUa0=
-X-Google-Smtp-Source: ABdhPJw9U4CjyHuq/wnj1EIt7+3PVAz+0j1BNU4DP9GXim1rn1yivbp9bMGniGiZm5wEfM5TwRbv+g==
-X-Received: by 2002:a17:90a:2c06:: with SMTP id m6mr10328110pjd.129.1598523274050;
-        Thu, 27 Aug 2020 03:14:34 -0700 (PDT)
+        bh=jvIU1C8xMP6WcFtiASQieWl9PBc0cM/X9m49AuYn3v4=;
+        b=lm1w+MaifO5xzzEtAPlsap2Xvh7vUJHJ5se3ofeHobmNenXoxUrvCrx6LuSMSRn+cW
+         M3sxXLtJ2fRektmdlRaGv/DBDLaAtqVnILWxkGd8d0DMLeWmUjI4o+gadZW/AdJL7o44
+         AM3j5+coKLJOA7dLoxitGAaZPKuo4FQi5dxz70KLLVbbMASxcjkzinsNZ1GZJ3sDMa3u
+         kgSQvaQizVXQ89keKwYyuheb5bkfOa1HLQRXXyzHQ5fscHKlQ9dzyHafXTLckAw6QDzs
+         a7dvz/ONHqagQzaWrw/2j8zmBHGRR4GTlEcG7oekJabHnmzzbp6N7nqlZFvW0+yQeark
+         eJkw==
+X-Gm-Message-State: AOAM531nUt+M87qlEsQ7Ri15SBhYk8aE6sawnpqKsu4Ysc28WWX/UU8g
+        MnxzaQhMV4bs5rV96QCZIe0=
+X-Google-Smtp-Source: ABdhPJyPSxYAT0eFZtjmdSmvlioTDc7oXqB5hls3x6WIv6TItYg3y+Yt3qlA/YngeKl/1ULKQ54/Rg==
+X-Received: by 2002:a17:90a:c688:: with SMTP id n8mr9827755pjt.7.1598523275403;
+        Thu, 27 Aug 2020 03:14:35 -0700 (PDT)
 Received: from VM-0-6-centos.localdomain ([119.28.90.140])
-        by smtp.gmail.com with ESMTPSA id t10sm2333434pfq.52.2020.08.27.03.14.32
+        by smtp.gmail.com with ESMTPSA id t10sm2333434pfq.52.2020.08.27.03.14.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Aug 2020 03:14:33 -0700 (PDT)
+        Thu, 27 Aug 2020 03:14:35 -0700 (PDT)
 From:   Chunguang Xu <brookxu.cn@gmail.com>
 X-Google-Original-From: Chunguang Xu <brookxu@tencent.com>
 To:     arnd@arndb.de
 Cc:     rppt@kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 02/23] ia64: use ASSERT_FAIL()/ASSERT_WARN() to cleanup some code
-Date:   Thu, 27 Aug 2020 18:14:07 +0800
-Message-Id: <e9bb45969e2975c3e4632ce84168711667f5126f.1598518912.git.brookxu@tencent.com>
+Subject: [PATCH 03/23] KVM: use ASSERT_FAIL()/ASSERT_WARN() to cleanup some code
+Date:   Thu, 27 Aug 2020 18:14:08 +0800
+Message-Id: <fac741b7bb9b93c30b5134eb9741bce344b9ef15.1598518912.git.brookxu@tencent.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <cover.1598518912.git.brookxu@tencent.com>
 References: <cover.1598518912.git.brookxu@tencent.com>
@@ -71,25 +71,28 @@ facilitating problem analysis.
 
 Signed-off-by: Chunguang Xu <brookxu@tencent.com>
 ---
- arch/ia64/hp/common/sba_iommu.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ arch/x86/kvm/ioapic.h | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/ia64/hp/common/sba_iommu.c b/arch/ia64/hp/common/sba_iommu.c
-index 656a488..335bf4a 100644
---- a/arch/ia64/hp/common/sba_iommu.c
-+++ b/arch/ia64/hp/common/sba_iommu.c
-@@ -138,11 +138,7 @@
- #endif
+diff --git a/arch/x86/kvm/ioapic.h b/arch/x86/kvm/ioapic.h
+index 6604017..aa0c61a 100644
+--- a/arch/x86/kvm/ioapic.h
++++ b/arch/x86/kvm/ioapic.h
+@@ -94,14 +94,7 @@ struct kvm_ioapic {
+ };
  
- #ifdef ASSERT_PDIR_SANITY
--#define ASSERT(expr) \
--        if(!(expr)) { \
--                printk( "\n" __FILE__ ":%d: Assertion " #expr " failed!\n",__LINE__); \
--                panic(#expr); \
--        }
-+#define ASSERT(expr) ASSERT_FAIL(expr)
+ #ifdef DEBUG
+-#define ASSERT(x)  							\
+-do {									\
+-	if (!(x)) {							\
+-		printk(KERN_EMERG "assertion failed %s: %d: %s\n",	\
+-		       __FILE__, __LINE__, #x);				\
+-		BUG();							\
+-	}								\
+-} while (0)
++#define ASSERT(x) ASSERT_FAIL(x)
  #else
- #define ASSERT(expr)
+ #define ASSERT(x) do { } while (0)
  #endif
 -- 
 1.8.3.1
