@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E114D254460
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 13:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F617254464
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Aug 2020 13:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgH0LgY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 07:36:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49376 "EHLO mail.kernel.org"
+        id S1728534AbgH0Lgt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 07:36:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49620 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728508AbgH0LfY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Aug 2020 07:35:24 -0400
+        id S1728567AbgH0Lfv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Aug 2020 07:35:51 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9FE0722B40;
-        Thu, 27 Aug 2020 11:35:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 59E0B2073A;
+        Thu, 27 Aug 2020 11:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598528124;
-        bh=dFaCtuuppbrD9PUodVjJhQzg/FVgaLSvUY9+chkC3vQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0q/xqTUwqCBVTSHCGZC8EQaC9mJL1umNzRZIgiXqZYnwmOgkvSf8URXxItL3vG1PT
-         oDgXHagGN6pPrkOP6fj/6UAdmWzpiAx+5gSnp0ZSj2gX4NdZgYEId+/rZYp4fAcS7A
-         vRJItWmRmOaRpWDUI+2S6uqAM0L0aYuVNDTDaajg=
+        s=default; t=1598528143;
+        bh=9Irw1T+WoacOLgUQZ9tgTmiTchNK9xM2KQJrv7RPSuw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=URtDuV8bsEXzcQqd7krOfPwm3d8e0S0yWQ+rur9HlPsk6o4Aar1yAegmDJ/E8nuk8
+         vL3fYI46EuNMjMjy3cdsQnk+nSL5RRKh0mRttImEAlmXVjJMsxCuu6A+KjdrmnHlL5
+         i9TmQfWawAU70Hs7DGrYnsgJXLxW2CL8Le5SVtQc=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
@@ -32,10 +32,12 @@ Cc:     Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         linux-arch@vger.kernel.org
-Subject: [PATCH v2 00/15] kprobes: Unify kretprobe trampoline handlers
-Date:   Thu, 27 Aug 2020 20:35:18 +0900
-Message-Id: <159852811819.707944.12798182250041968537.stgit@devnote2>
+Subject: [PATCH v2 02/15] x86/kprobes: Use generic kretprobe trampoline handler
+Date:   Thu, 27 Aug 2020 20:35:39 +0900
+Message-Id: <159852813892.707944.5626438427104503870.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <159852811819.707944.12798182250041968537.stgit@devnote2>
+References: <159852811819.707944.12798182250041968537.stgit@devnote2>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -45,63 +47,142 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-Here is the 2nd version of the series to unify the kretprobe trampoline handler
-implementation across all architectures which are currently kprobes supported.
-Previous version is here;
-
- https://lkml.kernel.org/r/159844957216.510284.17683703701627367133.stgit@devnote2
-
-This series removes the in_nmi() check from pre_kretprobe_handler() since we
-can avoid double-lock deadlock from NMI by kprobe_busy_begin/end().
-In this version, I also add a patch to use kfree_rcu() for freeing kretprobe
-instance objects so that we don't call kfree() in NMI context directly.
-
-The unified generic kretprobe trampoline handler is based on x86 code, which
-already support frame-pointer checker. The checker is enabled on arm and arm64
-too because I can test it. For other architecutres, currently the checker
-is not enabled. If someone wants to enable it, please set the correct
-frame pointer to ri->fp and pass it to kretprobe_trampoline_handler() as the
-3rd parameter, instead of NULL.
-
-Thank you,
-
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
+ arch/x86/kernel/kprobes/core.c |  109 +---------------------------------------
+ 1 file changed, 4 insertions(+), 105 deletions(-)
 
-Masami Hiramatsu (15):
-      kprobes: Add generic kretprobe trampoline handler
-      x86/kprobes: Use generic kretprobe trampoline handler
-      arm: kprobes: Use generic kretprobe trampoline handler
-      arm64: kprobes: Use generic kretprobe trampoline handler
-      arc: kprobes: Use generic kretprobe trampoline handler
-      csky: kprobes: Use generic kretprobe trampoline handler
-      ia64: kprobes: Use generic kretprobe trampoline handler
-      mips: kprobes: Use generic kretprobe trampoline handler
-      parisc: kprobes: Use generic kretprobe trampoline handler
-      powerpc: kprobes: Use generic kretprobe trampoline handler
-      s390: kprobes: Use generic kretprobe trampoline handler
-      sh: kprobes: Use generic kretprobe trampoline handler
-      sparc: kprobes: Use generic kretprobe trampoline handler
-      kprobes: Remove NMI context check
-      kprobes: Free kretprobe_instance with rcu callback
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index fdadc37d72af..7c6473a12cee 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -767,124 +767,23 @@ asm(
+ NOKPROBE_SYMBOL(kretprobe_trampoline);
+ STACK_FRAME_NON_STANDARD(kretprobe_trampoline);
+ 
++
+ /*
+  * Called from kretprobe_trampoline
+  */
+ __used __visible void *trampoline_handler(struct pt_regs *regs)
+ {
+-	struct kretprobe_instance *ri = NULL;
+-	struct hlist_head *head, empty_rp;
+-	struct hlist_node *tmp;
+-	unsigned long flags, orig_ret_address = 0;
+-	unsigned long trampoline_address = (unsigned long)&kretprobe_trampoline;
+-	kprobe_opcode_t *correct_ret_addr = NULL;
+-	void *frame_pointer;
+-	bool skipped = false;
+-
+-	/*
+-	 * Set a dummy kprobe for avoiding kretprobe recursion.
+-	 * Since kretprobe never run in kprobe handler, kprobe must not
+-	 * be running at this point.
+-	 */
+-	kprobe_busy_begin();
+-
+-	INIT_HLIST_HEAD(&empty_rp);
+-	kretprobe_hash_lock(current, &head, &flags);
+ 	/* fixup registers */
+ 	regs->cs = __KERNEL_CS;
+ #ifdef CONFIG_X86_32
+ 	regs->cs |= get_kernel_rpl();
+ 	regs->gs = 0;
+ #endif
+-	/* We use pt_regs->sp for return address holder. */
+-	frame_pointer = &regs->sp;
+-	regs->ip = trampoline_address;
++	regs->ip = (unsigned long)&kretprobe_trampoline;
+ 	regs->orig_ax = ~0UL;
+ 
+-	/*
+-	 * It is possible to have multiple instances associated with a given
+-	 * task either because multiple functions in the call path have
+-	 * return probes installed on them, and/or more than one
+-	 * return probe was registered for a target function.
+-	 *
+-	 * We can handle this because:
+-	 *     - instances are always pushed into the head of the list
+-	 *     - when multiple return probes are registered for the same
+-	 *	 function, the (chronologically) first instance's ret_addr
+-	 *	 will be the real return address, and all the rest will
+-	 *	 point to kretprobe_trampoline.
+-	 */
+-	hlist_for_each_entry(ri, head, hlist) {
+-		if (ri->task != current)
+-			/* another task is sharing our hash bucket */
+-			continue;
+-		/*
+-		 * Return probes must be pushed on this hash list correct
+-		 * order (same as return order) so that it can be popped
+-		 * correctly. However, if we find it is pushed it incorrect
+-		 * order, this means we find a function which should not be
+-		 * probed, because the wrong order entry is pushed on the
+-		 * path of processing other kretprobe itself.
+-		 */
+-		if (ri->fp != frame_pointer) {
+-			if (!skipped)
+-				pr_warn("kretprobe is stacked incorrectly. Trying to fixup.\n");
+-			skipped = true;
+-			continue;
+-		}
+-
+-		orig_ret_address = (unsigned long)ri->ret_addr;
+-		if (skipped)
+-			pr_warn("%ps must be blacklisted because of incorrect kretprobe order\n",
+-				ri->rp->kp.addr);
+-
+-		if (orig_ret_address != trampoline_address)
+-			/*
+-			 * This is the real return address. Any other
+-			 * instances associated with this task are for
+-			 * other calls deeper on the call stack
+-			 */
+-			break;
+-	}
+-
+-	kretprobe_assert(ri, orig_ret_address, trampoline_address);
+-
+-	correct_ret_addr = ri->ret_addr;
+-	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
+-		if (ri->task != current)
+-			/* another task is sharing our hash bucket */
+-			continue;
+-		if (ri->fp != frame_pointer)
+-			continue;
+-
+-		orig_ret_address = (unsigned long)ri->ret_addr;
+-		if (ri->rp && ri->rp->handler) {
+-			__this_cpu_write(current_kprobe, &ri->rp->kp);
+-			ri->ret_addr = correct_ret_addr;
+-			ri->rp->handler(ri, regs);
+-			__this_cpu_write(current_kprobe, &kprobe_busy);
+-		}
+-
+-		recycle_rp_inst(ri, &empty_rp);
+-
+-		if (orig_ret_address != trampoline_address)
+-			/*
+-			 * This is the real return address. Any other
+-			 * instances associated with this task are for
+-			 * other calls deeper on the call stack
+-			 */
+-			break;
+-	}
+-
+-	kretprobe_hash_unlock(current, &flags);
+-
+-	kprobe_busy_end();
+-
+-	hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
+-		hlist_del(&ri->hlist);
+-		kfree(ri);
+-	}
+-	return (void *)orig_ret_address;
++	return (void *)kretprobe_trampoline_handler(regs,
++			(unsigned long)&kretprobe_trampoline, &regs->sp);
+ }
+ NOKPROBE_SYMBOL(trampoline_handler);
+ 
 
-
- arch/arc/kernel/kprobes.c          |   55 +---------------
- arch/arm/probes/kprobes/core.c     |   79 +----------------------
- arch/arm64/kernel/probes/kprobes.c |   79 +----------------------
- arch/csky/kernel/probes/kprobes.c  |   78 +---------------------
- arch/ia64/kernel/kprobes.c         |   79 +----------------------
- arch/mips/kernel/kprobes.c         |   55 +---------------
- arch/parisc/kernel/kprobes.c       |   78 ++--------------------
- arch/powerpc/kernel/kprobes.c      |   55 +---------------
- arch/s390/kernel/kprobes.c         |   81 +----------------------
- arch/sh/kernel/kprobes.c           |   59 +----------------
- arch/sparc/kernel/kprobes.c        |   52 +--------------
- arch/x86/kernel/kprobes/core.c     |  109 +------------------------------
- include/linux/kprobes.h            |   35 +++++++++-
- kernel/kprobes.c                   |  126 +++++++++++++++++++++++++++++-------
- 14 files changed, 182 insertions(+), 838 deletions(-)
-
---
-Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
