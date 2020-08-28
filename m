@@ -2,149 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A522557FE
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 11:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DAF255820
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 12:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728269AbgH1JuM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 28 Aug 2020 05:50:12 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2708 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728218AbgH1JuM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Aug 2020 05:50:12 -0400
-Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id F3FFD3C63C4F4B09F077;
-        Fri, 28 Aug 2020 10:50:09 +0100 (IST)
-Received: from localhost (10.52.127.106) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Fri, 28 Aug
- 2020 10:50:05 +0100
-Date:   Fri, 28 Aug 2020 10:48:30 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Atish Patra <atish.patra@wdc.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Zong Li <zong.li@sifive.com>,
-        <linux-riscv@lists.infradead.org>, Will Deacon <will@kernel.org>,
-        <linux-arch@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        Ganapatrao Kulkarni <gkulkarni@cavium.com>,
-        Steven Price <steven.price@arm.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        id S1728362AbgH1KAg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 06:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728016AbgH1KAe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Aug 2020 06:00:34 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCE0C061264;
+        Fri, 28 Aug 2020 03:00:34 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 17so397981pfw.9;
+        Fri, 28 Aug 2020 03:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hTusVnD1ClA8mtLb09fp9NQDzSnVoJXOXrpjrekC98M=;
+        b=I8laPJoF5gq/Tx/yo6hHGNcnujKhq4w+OTtKVT+dhkE1mpMjlhx7SkoFUIwm36XWc0
+         CMKdSgQvRMqB5mbglvUzmti6RR/1pIeLzak+egHk0fGTFbObciEP/5YzzZ95YjwG96b1
+         r87VD6xFdBSiplVmoEnpiVUwATIxQ79dhCAlK/HqEciXnasv4yReH5uWTTBcya1bxHHI
+         q+5PZzBYEas2ktSEm9L47JY//7SoSkYVarDDWTS2Z5hEj47aU6Jhm1zYQ/DONWwDZDCT
+         o2EFr5ebo2ozIQnkYIm1NsQDYrnBAmIGVN4tnl6bli7pV+O6MSA1Y/ONeK0Snn55EbA/
+         HsMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hTusVnD1ClA8mtLb09fp9NQDzSnVoJXOXrpjrekC98M=;
+        b=dvTRuqrOKuwka9A3AKKos+dDXdZc3owowo0ctO+Xu3QEKu9bED7GCNW7THwxf0F3IH
+         qTIHIT9e5DzwqPNDX4P1C5Xgm6kfXR1z+sPu8hnC2gWgDTk3Iiu/Fgc3zmx3eEugeu6X
+         rlF0B0OgrYn/aBMNX2b2Gq2/uxgDKKF2cMpDIxhUlH66vP4esXISeYTj4qYFK97lpMu7
+         jj1SvHJJQQkqk26TrF2ZS9RneBDOcYGg6Ymt/PGb7/nmRNrbKnZ5LB1ltPJNME9yv1hT
+         wBoFWeukm2CIi7ArO48c6UDSVZ9Upt8jqjrQ3mERzApmvndx/6K4DDAn39pi6ZkaWgSy
+         CsmQ==
+X-Gm-Message-State: AOAM532B+Sel+VBqmodDhMYtRM4dS0sUcU3ER4VkbXPl9i9RELiP+ZY4
+        TV43/Pp/IkePYpI/7LWJNZY=
+X-Google-Smtp-Source: ABdhPJySkqUl0R+DKjCAETRrCLwUUvZBNU7lZcOeYY/aEtoZsU6VUskB25O9sStm08Vp5gP3u/2QEw==
+X-Received: by 2002:a63:d20e:: with SMTP id a14mr653429pgg.231.1598608832848;
+        Fri, 28 Aug 2020 03:00:32 -0700 (PDT)
+Received: from bobo.ozlabs.ibm.com (61-68-212-105.tpgi.com.au. [61.68.212.105])
+        by smtp.gmail.com with ESMTPSA id 78sm1068608pfv.200.2020.08.28.03.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2020 03:00:32 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [RFC/RFT PATCH 3/6] arm64, numa: Move pcibus_to_node definition
- to generic numa code
-Message-ID: <20200828104830.000007bf@Huawei.com>
-In-Reply-To: <20200814214725.28818-4-atish.patra@wdc.com>
-References: <20200814214725.28818-1-atish.patra@wdc.com>
-        <20200814214725.28818-4-atish.patra@wdc.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 0/4] more mm switching vs TLB shootdown and lazy tlb
+Date:   Fri, 28 Aug 2020 20:00:18 +1000
+Message-Id: <20200828100022.1099682-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.52.127.106]
-X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 14 Aug 2020 14:47:22 -0700
-Atish Patra <atish.patra@wdc.com> wrote:
+This is an attempt to fix a few different related issues around
+switching mm, TLB flushing, and lazy tlb mm handling.
 
-> pcibus_to_node is used only when numa is enabled and does not depend
-> on ISA. Thus, it can be moved the generic numa implementation.
-> 
-> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+This will require all architectures to eventually move to disabling
+irqs over activate_mm, but it's possible we could add another arch
+call after irqs are re-enabled for those few which can't do their
+entire activation with irqs disabled.
 
-From a more general unification point of view, there seem to
-be two ways architectures implement this.
-Either
+I'd like some feedback on the sparc/powerpc vs kthread_use_mm
+problem too.
 
-bus->sysdata.node
+Thanks,
+Nick
 
-Or as here.
-There are weird other options, but let us ignore those :)
+Nicholas Piggin (4):
+  mm: fix exec activate_mm vs TLB shootdown and lazy tlb switching race
+  powerpc: select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+  sparc64: remove mm_cpumask clearing to fix kthread_use_mm race
+  powerpc/64s/radix: Fix mm_cpumask trimming race vs kthread_use_mm
 
-That is going to take a bit of unwinding should we
-want to take this unification further and perhaps we want to think
-about doing this in pci generic code rather than here?
+ arch/Kconfig                           |  7 +++
+ arch/powerpc/Kconfig                   |  1 +
+ arch/powerpc/include/asm/mmu_context.h |  2 +-
+ arch/powerpc/include/asm/tlb.h         | 13 ------
+ arch/powerpc/mm/book3s64/radix_tlb.c   | 23 ++++++---
+ arch/sparc/kernel/smp_64.c             | 65 ++++++--------------------
+ fs/exec.c                              | 17 ++++++-
+ 7 files changed, 54 insertions(+), 74 deletions(-)
 
-Perhaps this is one we are better keeping architecture specific for
-now?
-
-+CC Bjorn and Linux-pci
-
-
-> ---
->  arch/arm64/kernel/pci.c  | 10 ----------
->  drivers/base/arch_numa.c | 11 +++++++++++
->  2 files changed, 11 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
-> index 1006ed2d7c60..07c122946c11 100644
-> --- a/arch/arm64/kernel/pci.c
-> +++ b/arch/arm64/kernel/pci.c
-> @@ -54,16 +54,6 @@ int raw_pci_write(unsigned int domain, unsigned int bus,
->  	return b->ops->write(b, devfn, reg, len, val);
->  }
->  
-> -#ifdef CONFIG_NUMA
-> -
-> -int pcibus_to_node(struct pci_bus *bus)
-> -{
-> -	return dev_to_node(&bus->dev);
-> -}
-> -EXPORT_SYMBOL(pcibus_to_node);
-> -
-> -#endif
-> -
->  #ifdef CONFIG_ACPI
->  
->  struct acpi_pci_generic_root_info {
-> diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-> index 83341c807240..4ab1b20a615d 100644
-> --- a/drivers/base/arch_numa.c
-> +++ b/drivers/base/arch_numa.c
-> @@ -11,6 +11,7 @@
->  #include <linux/acpi.h>
->  #include <linux/memblock.h>
->  #include <linux/module.h>
-> +#include <linux/pci.h>
->  #include <linux/of.h>
->  
->  #ifdef CONFIG_ARM64
-> @@ -60,6 +61,16 @@ EXPORT_SYMBOL(cpumask_of_node);
->  
->  #endif
->  
-> +#ifdef CONFIG_PCI
-> +
-> +int pcibus_to_node(struct pci_bus *bus)
-> +{
-> +	return dev_to_node(&bus->dev);
-> +}
-> +EXPORT_SYMBOL(pcibus_to_node);
-> +
-> +#endif
-> +
->  static void numa_update_cpu(unsigned int cpu, bool remove)
->  {
->  	int nid = cpu_to_node(cpu);
-
+-- 
+2.23.0
 
