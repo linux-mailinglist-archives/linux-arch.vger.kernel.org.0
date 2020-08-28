@@ -2,206 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D396B255C10
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 16:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9DD255C2D
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 16:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgH1OO1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 10:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        id S1726141AbgH1OTi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 10:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbgH1OOU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Aug 2020 10:14:20 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F63C061233;
-        Fri, 28 Aug 2020 07:14:18 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id q9so1082821wmj.2;
-        Fri, 28 Aug 2020 07:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sycAbAcK1rdW3N5HoDcjcIO5PVBl/0B4H7zbWTI4nyw=;
-        b=Z9FgIFFCv3YqPY7sQpiIUIYbZehaP6xmxmMsbB8/LjGrS8m1oUcW1R/Ip6E4p9D0wS
-         OLvfpi1MqJiMmDds7uRx8VEcn65CF5SvR9Ik+1YYS+GkrbSjvMCsdiJW8ssQLokCHLDR
-         TA56drkx2DV0uDvtCdkYrzSDLUJEanhNyc5dpza4IZx6OKr+2KMx92bpXBtsronWaJ7y
-         B5w+ZWa5//b6d6+yisi2jMK1dX5XmLYzGuhR4PBWvFulNlESw/YqWCUyXfrdDA1xwaUc
-         dErJWft7b/y44MM2WYc4eKT/hoCbF1nzH0FUKcHFpCfpxtHuOhVaCx5w7luyt9Bhq7Ud
-         o4wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sycAbAcK1rdW3N5HoDcjcIO5PVBl/0B4H7zbWTI4nyw=;
-        b=TvnfR5EFBYncvNIN0QRPr7MAI1sJTh46tC8P4CUNQfrK6XMoVEZneNwfFxJWmk8u6+
-         VzBXuc+asjdf6NmqDsU+VxRIELGrv++fA4QYMSOPwhfmIuqIdQGeGsWc/G0ctPF91NEF
-         O+Y8p+cYjtnvo0VWwQNQ56TM3HpINwE+hiVPYEcFqx87U5Ib0WJweAk6ShLbHpDW+yOl
-         HgAR3FCnfIB41ovnwZknupjUFULqvd3B1oC6alyO5d7R9UVw4DHhrQN7dmXQiYFoxNSt
-         xCIGlTNYM+h7974oecM1+pASh8bzOlzuTP6e6N3d9aM0MCHfx5vN2MvwK3wgExLd2YqT
-         7+Cg==
-X-Gm-Message-State: AOAM5326LwlkfiaOc2AcQLW94JIh816RcsN4gEtdq0qMb5LNbjB6CCMo
-        gLU5HPDgSLW3oBAeLp1eqNY=
-X-Google-Smtp-Source: ABdhPJwp+FcvL5lnhKDafDKCCaabbsOmowgmmteE2IHYeExQ7CTxo9gCSAS2LEXZpnLmHykMj2K0+A==
-X-Received: by 2002:a1c:a746:: with SMTP id q67mr1956344wme.128.1598624057520;
-        Fri, 28 Aug 2020 07:14:17 -0700 (PDT)
-Received: from alinde.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id t4sm2248235wre.30.2020.08.28.07.14.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2020 07:14:16 -0700 (PDT)
-From:   albert.linde@gmail.com
-X-Google-Original-From: alinde@google.com
-To:     akpm@linux-foundation.org, bp@alien8.de, mingo@redhat.com,
-        corbet@lwn.net, tglx@linutronix.de, arnd@arndb.de
-Cc:     akinobu.mita@gmail.com, hpa@zytor.com, viro@zeniv.linux.org.uk,
-        glider@google.com, andreyknvl@google.com, dvyukov@google.com,
-        elver@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, albert.linde@gmail.com,
-        Albert van der Linde <alinde@google.com>
-Subject: [PATCH v2 3/3] x86: add failure injection to get/put/clear_user
-Date:   Fri, 28 Aug 2020 14:13:44 +0000
-Message-Id: <20200828141344.2277088-4-alinde@google.com>
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-In-Reply-To: <20200828141344.2277088-1-alinde@google.com>
-References: <20200828141344.2277088-1-alinde@google.com>
+        with ESMTP id S1725857AbgH1OTe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Aug 2020 10:19:34 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D46CC061264;
+        Fri, 28 Aug 2020 07:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CgkzEyu0nU72gWHm4QE/GrxCk7mtJkJ1KRfoVj7KTxU=; b=qXErMp4MVkKtX8+yfaAqaWid7U
+        hp1ZkOY9TbMDQoNfoh50zxxhiXqksCVZymihPqoo3xdi9ufHVlPx1z2eeG0jJI79WkyvuhVAUvEVl
+        avjbStouRLh5Y+vQbOaTVKFm6dfezPizfn379Z5MINu4MDKHgURH5/1aPv/1ZvMBKRRimcRgWQ8sB
+        46rsc2KEFDoZ5J/NPy3w7ADlimjd+OF7gGJBTq0H1D621rD329L4O0NSG3o5fougcXt4nGQUIEBxw
+        F0m9k0e2LZdoUfcpu3tjtKGl2Na8KH/i5VsK6vCMLiEFAtbvoY1jVXWVloXeUHvZfbUAU20l7VPqu
+        f2UJG26Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kBfDr-0006yS-Qg; Fri, 28 Aug 2020 14:19:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 21F7C300238;
+        Fri, 28 Aug 2020 16:19:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C80752C5FDBE8; Fri, 28 Aug 2020 16:19:17 +0200 (CEST)
+Date:   Fri, 28 Aug 2020 16:19:17 +0200
+From:   peterz@infradead.org
+To:     "Eddy_Wu@trendmicro.com" <Eddy_Wu@trendmicro.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "anil.s.keshavamurthy@intel.com" <anil.s.keshavamurthy@intel.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "cameron@moodycamel.com" <cameron@moodycamel.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "paulmck@kernel.org" <paulmck@kernel.org>
+Subject: Re: [RFC][PATCH 3/7] kprobes: Remove kretprobe hash
+Message-ID: <20200828141917.GE1362448@hirez.programming.kicks-ass.net>
+References: <20200827161237.889877377@infradead.org>
+ <20200827161754.359432340@infradead.org>
+ <7df0a1af432040d9908517661c32dc34@trendmicro.com>
+ <20200828225113.9541a5f67a3bcb17c4ce930c@kernel.org>
+ <23d43cfb12c54a1fbc766ea313ecb5a6@trendmicro.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23d43cfb12c54a1fbc766ea313ecb5a6@trendmicro.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Albert van der Linde <alinde@google.com>
+On Fri, Aug 28, 2020 at 02:11:18PM +0000, Eddy_Wu@trendmicro.com wrote:
+> > From: Masami Hiramatsu <mhiramat@kernel.org>
+> >
+> > OK, schedule function will be the key. I guess the senario is..
+> >
+> > 1) kretporbe replace the return address with kretprobe_trampoline on task1's kernel stack
+> > 2) the task1 forks task2 before returning to the kretprobe_trampoline
+> > 3) while copying the process with the kernel stack, task2->kretprobe_instances.first = NULL
+> 
+> I think new process created by fork/clone uses a brand new kernel
+> stack? I thought only user stack are copied.  Otherwise any process
+> launch should crash in the same way
 
-To test fault-tolerance of user memory acceses in x86, add support for
-fault injection.
+I was under the same impression, we create a brand new stack-frame for
+the new task, this 'fake' frame we can schedule into.
 
-Make both put_user() and get_user() fail with -EFAULT, and clear_user()
-fail by not clearing any bytes.
-
-Signed-off-by: Albert van der Linde <alinde@google.com>
----
-v2:
- - no significant changes
----
- arch/x86/include/asm/uaccess.h | 68 +++++++++++++++++++---------------
- arch/x86/lib/usercopy_64.c     |  3 ++
- 2 files changed, 42 insertions(+), 29 deletions(-)
-
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index ecefaffd15d4..004eeee2199a 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -5,6 +5,7 @@
-  * User space memory access functions
-  */
- #include <linux/compiler.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/kasan-checks.h>
- #include <linux/string.h>
- #include <asm/asm.h>
-@@ -175,11 +176,16 @@ extern int __get_user_bad(void);
- 	register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);		\
- 	__chk_user_ptr(ptr);						\
- 	might_fault();							\
--	asm volatile("call __get_user_%P4"				\
--		     : "=a" (__ret_gu), "=r" (__val_gu),		\
-+	if (should_fail_usercopy()) {					\
-+		(x) = 0;						\
-+		__ret_gu = -EFAULT;					\
-+	} else {							\
-+		asm volatile("call __get_user_%P4"			\
-+			: "=a" (__ret_gu), "=r" (__val_gu),		\
- 			ASM_CALL_CONSTRAINT				\
--		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
--	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
-+			: "0" (ptr), "i" (sizeof(*(ptr))));		\
-+		(x) = (__force __typeof__(*(ptr))) __val_gu;		\
-+	}								\
- 	__builtin_expect(__ret_gu, 0);					\
- })
- 
-@@ -236,31 +242,35 @@ extern void __put_user_8(void);
-  *
-  * Return: zero on success, or -EFAULT on error.
-  */
--#define put_user(x, ptr)					\
--({								\
--	int __ret_pu;						\
--	__typeof__(*(ptr)) __pu_val;				\
--	__chk_user_ptr(ptr);					\
--	might_fault();						\
--	__pu_val = x;						\
--	switch (sizeof(*(ptr))) {				\
--	case 1:							\
--		__put_user_x(1, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	case 2:							\
--		__put_user_x(2, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	case 4:							\
--		__put_user_x(4, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	case 8:							\
--		__put_user_x8(__pu_val, ptr, __ret_pu);		\
--		break;						\
--	default:						\
--		__put_user_x(X, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	}							\
--	__builtin_expect(__ret_pu, 0);				\
-+#define put_user(x, ptr)						\
-+({									\
-+	int __ret_pu;							\
-+	__typeof__(*(ptr)) __pu_val;					\
-+	__chk_user_ptr(ptr);						\
-+	might_fault();							\
-+	__pu_val = x;							\
-+	if (should_fail_usercopy()) {					\
-+		__ret_pu = -EFAULT;					\
-+	} else {							\
-+		switch (sizeof(*(ptr))) {				\
-+		case 1:							\
-+			__put_user_x(1, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		case 2:							\
-+			__put_user_x(2, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		case 4:							\
-+			__put_user_x(4, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		case 8:							\
-+			__put_user_x8(__pu_val, ptr, __ret_pu);		\
-+			break;						\
-+		default:						\
-+			__put_user_x(X, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		}							\
-+	}								\
-+	__builtin_expect(__ret_pu, 0);					\
- })
- 
- #define __put_user_size(x, ptr, size, label)				\
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index b0dfac3d3df7..7747cda5780d 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -7,6 +7,7 @@
-  * Copyright 2002 Andi Kleen <ak@suse.de>
-  */
- #include <linux/export.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/uaccess.h>
- #include <linux/highmem.h>
- 
-@@ -50,6 +51,8 @@ EXPORT_SYMBOL(__clear_user);
- 
- unsigned long clear_user(void __user *to, unsigned long n)
- {
-+	if (should_fail_usercopy())
-+		return n;
- 	if (access_ok(to, n))
- 		return __clear_user(to, n);
- 	return n;
--- 
-2.28.0.402.g5ffc5be6b7-goog
-
+It either points to ret_from_fork() for new user tasks, or
+kthread_frame_init() for kernel threads.
