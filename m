@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E147255A2C
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7200255A28
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729386AbgH1Mbk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 08:31:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41280 "EHLO mail.kernel.org"
+        id S1729304AbgH1MbT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 08:31:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41438 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729323AbgH1MaY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Aug 2020 08:30:24 -0400
+        id S1729411AbgH1Maf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 08:30:35 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 924912078A;
-        Fri, 28 Aug 2020 12:30:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55D372086A;
+        Fri, 28 Aug 2020 12:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598617822;
-        bh=Kth7oA9/z7aIeMliiNAXh5jGQoUt0y1tn6bQxaHhE/Q=;
+        s=default; t=1598617833;
+        bh=u7jWEzjmTHQymX8r2x6fFv/1v1YPzQ31F/fYUsxwCy8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w+uNOPI/9fJWrLt+H3un1AytrLKfC84EZlMLEg6siKjV1i1Y1z6nLknHQZLc92DmN
-         S7xbbz5cg2Fl2KF/ajJZTMQT9JO/AoPPuVl/RziZFlSrrWk+yGlR5AzjmsKOYt/6xV
-         MyBytatlz2722CIQTcOJ0MdHmdeumpTzL6xSIGzU=
+        b=RKfbf51wrtP/U71ZTEtUp60C9zR2qXVPcuh/q0mNylCR/R93cfCIU27qAYp07d/eY
+         sZVaaEL+i1qZaON8Ryaih3VIkKkcBm6mjM9ns17cZUJeBa+LMomJLL5ioaDIxcsiXk
+         kx8F3SrSkdfnADrYVrRsmtFiiQB8NzPazzlbapto=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
@@ -30,9 +30,9 @@ Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
         anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
         cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
         paulmck@kernel.org, mhiramat@kernel.org
-Subject: [PATCH v4 20/23] [RFC] kprobes: Remove task scan for updating kretprobe_instance
-Date:   Fri, 28 Aug 2020 21:30:17 +0900
-Message-Id: <159861781740.992023.4956784710984854658.stgit@devnote2>
+Subject: [PATCH v4 21/23] asm-generic/atomic: Add try_cmpxchg() fallbacks
+Date:   Fri, 28 Aug 2020 21:30:28 +0900
+Message-Id: <159861782828.992023.16961291973798862888.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159861759775.992023.12553306821235086809.stgit@devnote2>
 References: <159861759775.992023.12553306821235086809.stgit@devnote2>
@@ -45,299 +45,742 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Remove task scan for updating kretprobe_instance->rp when unregistering
-kretprobe. Instead, this introduces the kretprobe_holder which is a
-kretprobe pointer holder with refcount. When we unregister the kretprobe,
-we update the pointer value in the holder which means this kretprobe
-is already removed. When the used kretprobe instance hits when the target
-function return, it will decrement the holder's refcount and if it is
-the last one, it will free the holder.
+From: Peter Zijlstra <peterz@infradead.org>
 
-Note that this may change the kprobes module-exported API for kretprobe
-handlers. If someone use out-of-tree kretprobe, they have to update
-the kretprobe handler to use get_kretprobe(ri) for accessing kretprobe
-data structure instead of ri->rp. Also, now we remove ri->task.
+Only x86 provides try_cmpxchg() outside of the atomic_t interfaces,
+provide generic fallbacks to create this interface from the widely
+available cmpxchg() function.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Will Deacon <will@kernel.org>
 ---
- include/linux/kprobes.h     |   17 ++++++
- kernel/kprobes.c            |  113 +++++++++++++------------------------------
- kernel/trace/trace_kprobe.c |    3 +
- 3 files changed, 51 insertions(+), 82 deletions(-)
+ arch/x86/include/asm/atomic.h             |    2 
+ arch/x86/include/asm/atomic64_64.h        |    2 
+ arch/x86/include/asm/cmpxchg.h            |    2 
+ include/asm-generic/atomic-instrumented.h |  216 +++++++++++++++++------------
+ include/linux/atomic-arch-fallback.h      |   90 +++++++++++-
+ include/linux/atomic-fallback.h           |   90 +++++++++++-
+ scripts/atomic/gen-atomic-fallback.sh     |   63 ++++++++
+ scripts/atomic/gen-atomic-instrumented.sh |   29 +++-
+ 8 files changed, 372 insertions(+), 122 deletions(-)
 
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index a30cccb07f21..d7cdae2d8f2e 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -27,6 +27,7 @@
- #include <linux/rcupdate.h>
- #include <linux/mutex.h>
- #include <linux/ftrace.h>
-+#include <linux/refcount.h>
- #include <asm/kprobes.h>
+diff --git a/arch/x86/include/asm/atomic.h b/arch/x86/include/asm/atomic.h
+index b6cac6e9bb70..f732741ad7c7 100644
+--- a/arch/x86/include/asm/atomic.h
++++ b/arch/x86/include/asm/atomic.h
+@@ -199,7 +199,7 @@ static __always_inline int arch_atomic_cmpxchg(atomic_t *v, int old, int new)
  
- #ifdef CONFIG_KPROBES
-@@ -144,6 +145,11 @@ static inline int kprobe_ftrace(struct kprobe *p)
-  * ignored, due to maxactive being too low.
-  *
-  */
-+struct kretprobe_holder {
-+	struct kretprobe	*rp;
-+	refcount_t		ref;
-+};
+ static __always_inline bool arch_atomic_try_cmpxchg(atomic_t *v, int *old, int new)
+ {
+-	return try_cmpxchg(&v->counter, old, new);
++	return arch_try_cmpxchg(&v->counter, old, new);
+ }
+ #define arch_atomic_try_cmpxchg arch_atomic_try_cmpxchg
+ 
+diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
+index 809bd010a751..7886d0578fc9 100644
+--- a/arch/x86/include/asm/atomic64_64.h
++++ b/arch/x86/include/asm/atomic64_64.h
+@@ -187,7 +187,7 @@ static inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 old, s64 new)
+ 
+ static __always_inline bool arch_atomic64_try_cmpxchg(atomic64_t *v, s64 *old, s64 new)
+ {
+-	return try_cmpxchg(&v->counter, old, new);
++	return arch_try_cmpxchg(&v->counter, old, new);
+ }
+ #define arch_atomic64_try_cmpxchg arch_atomic64_try_cmpxchg
+ 
+diff --git a/arch/x86/include/asm/cmpxchg.h b/arch/x86/include/asm/cmpxchg.h
+index a8bfac131256..4d4ec5cbdc51 100644
+--- a/arch/x86/include/asm/cmpxchg.h
++++ b/arch/x86/include/asm/cmpxchg.h
+@@ -221,7 +221,7 @@ extern void __add_wrong_size(void)
+ #define __try_cmpxchg(ptr, pold, new, size)				\
+ 	__raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+ 
+-#define try_cmpxchg(ptr, pold, new) 					\
++#define arch_try_cmpxchg(ptr, pold, new) 				\
+ 	__try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+ 
+ /*
+diff --git a/include/asm-generic/atomic-instrumented.h b/include/asm-generic/atomic-instrumented.h
+index 379986e40159..2cab3fdaae3b 100644
+--- a/include/asm-generic/atomic-instrumented.h
++++ b/include/asm-generic/atomic-instrumented.h
+@@ -1642,148 +1642,192 @@ atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #if !defined(arch_xchg_relaxed) || defined(arch_xchg)
+-#define xchg(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_xchg(__ai_ptr, __VA_ARGS__);				\
++#define xchg(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_xchg(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_xchg_acquire)
+-#define xchg_acquire(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_xchg_acquire(__ai_ptr, __VA_ARGS__);				\
++#define xchg_acquire(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_xchg_acquire(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_xchg_release)
+-#define xchg_release(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_xchg_release(__ai_ptr, __VA_ARGS__);				\
++#define xchg_release(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_xchg_relaxed)
+-#define xchg_relaxed(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_xchg_relaxed(__ai_ptr, __VA_ARGS__);				\
++#define xchg_relaxed(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_xchg_relaxed(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if !defined(arch_cmpxchg_relaxed) || defined(arch_cmpxchg)
+-#define cmpxchg(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_cmpxchg_acquire)
+-#define cmpxchg_acquire(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg_acquire(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_cmpxchg_release)
+-#define cmpxchg_release(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg_release(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg_release(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg_release(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_cmpxchg_relaxed)
+-#define cmpxchg_relaxed(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg_relaxed(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if !defined(arch_cmpxchg64_relaxed) || defined(arch_cmpxchg64)
+-#define cmpxchg64(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg64(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg64(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg64(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_cmpxchg64_acquire)
+-#define cmpxchg64_acquire(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg64_acquire(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg64_acquire(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg64_acquire(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_cmpxchg64_release)
+-#define cmpxchg64_release(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg64_release(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg64_release(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg64_release(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+ #if defined(arch_cmpxchg64_relaxed)
+-#define cmpxchg64_relaxed(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg64_relaxed(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
+ })
+ #endif
+ 
+-#define cmpxchg_local(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg_local(__ai_ptr, __VA_ARGS__);				\
++#if !defined(arch_try_cmpxchg_relaxed) || defined(arch_try_cmpxchg)
++#define try_cmpxchg(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++#endif
 +
- struct kretprobe {
- 	struct kprobe kp;
- 	kretprobe_handler_t handler;
-@@ -152,6 +158,7 @@ struct kretprobe {
- 	int nmissed;
- 	size_t data_size;
- 	struct hlist_head free_instances;
-+	struct kretprobe_holder *rph;
- 	raw_spinlock_t lock;
- };
++#if defined(arch_try_cmpxchg_acquire)
++#define try_cmpxchg_acquire(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++#endif
++
++#if defined(arch_try_cmpxchg_release)
++#define try_cmpxchg_release(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++#endif
++
++#if defined(arch_try_cmpxchg_relaxed)
++#define try_cmpxchg_relaxed(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++#endif
++
++#define cmpxchg_local(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg_local(__ai_ptr, __VA_ARGS__); \
+ })
  
-@@ -161,9 +168,8 @@ struct kretprobe_instance {
- 		struct hlist_node hlist;
- 		struct rcu_head rcu;
- 	};
--	struct kretprobe *rp;
-+	struct kretprobe_holder *rph;
- 	kprobe_opcode_t *ret_addr;
--	struct task_struct *task;
- 	void *fp;
- 	char data[];
- };
-@@ -222,6 +228,13 @@ unsigned long kretprobe_trampoline_handler(struct pt_regs *regs,
- 	return ret;
+-#define cmpxchg64_local(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg64_local(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
+ })
+ 
+-#define sync_cmpxchg(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr));		\
+-	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__);				\
++#define sync_cmpxchg(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
+ })
+ 
+-#define cmpxchg_double(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr));		\
+-	arch_cmpxchg_double(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg_double(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
++	arch_cmpxchg_double(__ai_ptr, __VA_ARGS__); \
+ })
+ 
+ 
+-#define cmpxchg_double_local(ptr, ...)						\
+-({									\
+-	typeof(ptr) __ai_ptr = (ptr);					\
+-	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr));		\
+-	arch_cmpxchg_double_local(__ai_ptr, __VA_ARGS__);				\
++#define cmpxchg_double_local(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
++	arch_cmpxchg_double_local(__ai_ptr, __VA_ARGS__); \
+ })
+ 
+ #endif /* _ASM_GENERIC_ATOMIC_INSTRUMENTED_H */
+-// 89bf97f3a7509b740845e51ddf31055b48a81f40
++// ff0fe7f81ee97f01f13bb78b0e3ce800bc56d9dd
+diff --git a/include/linux/atomic-arch-fallback.h b/include/linux/atomic-arch-fallback.h
+index bcb6aa27cfa6..a3dba31df01e 100644
+--- a/include/linux/atomic-arch-fallback.h
++++ b/include/linux/atomic-arch-fallback.h
+@@ -9,9 +9,9 @@
+ #include <linux/compiler.h>
+ 
+ #ifndef arch_xchg_relaxed
+-#define arch_xchg_relaxed		arch_xchg
+-#define arch_xchg_acquire		arch_xchg
+-#define arch_xchg_release		arch_xchg
++#define arch_xchg_acquire arch_xchg
++#define arch_xchg_release arch_xchg
++#define arch_xchg_relaxed arch_xchg
+ #else /* arch_xchg_relaxed */
+ 
+ #ifndef arch_xchg_acquire
+@@ -32,9 +32,9 @@
+ #endif /* arch_xchg_relaxed */
+ 
+ #ifndef arch_cmpxchg_relaxed
+-#define arch_cmpxchg_relaxed		arch_cmpxchg
+-#define arch_cmpxchg_acquire		arch_cmpxchg
+-#define arch_cmpxchg_release		arch_cmpxchg
++#define arch_cmpxchg_acquire arch_cmpxchg
++#define arch_cmpxchg_release arch_cmpxchg
++#define arch_cmpxchg_relaxed arch_cmpxchg
+ #else /* arch_cmpxchg_relaxed */
+ 
+ #ifndef arch_cmpxchg_acquire
+@@ -55,9 +55,9 @@
+ #endif /* arch_cmpxchg_relaxed */
+ 
+ #ifndef arch_cmpxchg64_relaxed
+-#define arch_cmpxchg64_relaxed		arch_cmpxchg64
+-#define arch_cmpxchg64_acquire		arch_cmpxchg64
+-#define arch_cmpxchg64_release		arch_cmpxchg64
++#define arch_cmpxchg64_acquire arch_cmpxchg64
++#define arch_cmpxchg64_release arch_cmpxchg64
++#define arch_cmpxchg64_relaxed arch_cmpxchg64
+ #else /* arch_cmpxchg64_relaxed */
+ 
+ #ifndef arch_cmpxchg64_acquire
+@@ -77,6 +77,76 @@
+ 
+ #endif /* arch_cmpxchg64_relaxed */
+ 
++#ifndef arch_try_cmpxchg_relaxed
++#ifdef arch_try_cmpxchg
++#define arch_try_cmpxchg_acquire arch_try_cmpxchg
++#define arch_try_cmpxchg_release arch_try_cmpxchg
++#define arch_try_cmpxchg_relaxed arch_try_cmpxchg
++#endif /* arch_try_cmpxchg */
++
++#ifndef arch_try_cmpxchg
++#define arch_try_cmpxchg(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg */
++
++#ifndef arch_try_cmpxchg_acquire
++#define arch_try_cmpxchg_acquire(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg_acquire((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg_acquire */
++
++#ifndef arch_try_cmpxchg_release
++#define arch_try_cmpxchg_release(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg_release((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg_release */
++
++#ifndef arch_try_cmpxchg_relaxed
++#define arch_try_cmpxchg_relaxed(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg_relaxed((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg_relaxed */
++
++#else /* arch_try_cmpxchg_relaxed */
++
++#ifndef arch_try_cmpxchg_acquire
++#define arch_try_cmpxchg_acquire(...) \
++	__atomic_op_acquire(arch_try_cmpxchg, __VA_ARGS__)
++#endif
++
++#ifndef arch_try_cmpxchg_release
++#define arch_try_cmpxchg_release(...) \
++	__atomic_op_release(arch_try_cmpxchg, __VA_ARGS__)
++#endif
++
++#ifndef arch_try_cmpxchg
++#define arch_try_cmpxchg(...) \
++	__atomic_op_fence(arch_try_cmpxchg, __VA_ARGS__)
++#endif
++
++#endif /* arch_try_cmpxchg_relaxed */
++
+ #ifndef arch_atomic_read_acquire
+ static __always_inline int
+ arch_atomic_read_acquire(const atomic_t *v)
+@@ -2288,4 +2358,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// 90cd26cfd69d2250303d654955a0cc12620fb91b
++// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
+diff --git a/include/linux/atomic-fallback.h b/include/linux/atomic-fallback.h
+index fd525c71d676..2a3f55d98be9 100644
+--- a/include/linux/atomic-fallback.h
++++ b/include/linux/atomic-fallback.h
+@@ -9,9 +9,9 @@
+ #include <linux/compiler.h>
+ 
+ #ifndef xchg_relaxed
+-#define xchg_relaxed		xchg
+-#define xchg_acquire		xchg
+-#define xchg_release		xchg
++#define xchg_acquire xchg
++#define xchg_release xchg
++#define xchg_relaxed xchg
+ #else /* xchg_relaxed */
+ 
+ #ifndef xchg_acquire
+@@ -32,9 +32,9 @@
+ #endif /* xchg_relaxed */
+ 
+ #ifndef cmpxchg_relaxed
+-#define cmpxchg_relaxed		cmpxchg
+-#define cmpxchg_acquire		cmpxchg
+-#define cmpxchg_release		cmpxchg
++#define cmpxchg_acquire cmpxchg
++#define cmpxchg_release cmpxchg
++#define cmpxchg_relaxed cmpxchg
+ #else /* cmpxchg_relaxed */
+ 
+ #ifndef cmpxchg_acquire
+@@ -55,9 +55,9 @@
+ #endif /* cmpxchg_relaxed */
+ 
+ #ifndef cmpxchg64_relaxed
+-#define cmpxchg64_relaxed		cmpxchg64
+-#define cmpxchg64_acquire		cmpxchg64
+-#define cmpxchg64_release		cmpxchg64
++#define cmpxchg64_acquire cmpxchg64
++#define cmpxchg64_release cmpxchg64
++#define cmpxchg64_relaxed cmpxchg64
+ #else /* cmpxchg64_relaxed */
+ 
+ #ifndef cmpxchg64_acquire
+@@ -77,6 +77,76 @@
+ 
+ #endif /* cmpxchg64_relaxed */
+ 
++#ifndef try_cmpxchg_relaxed
++#ifdef try_cmpxchg
++#define try_cmpxchg_acquire try_cmpxchg
++#define try_cmpxchg_release try_cmpxchg
++#define try_cmpxchg_relaxed try_cmpxchg
++#endif /* try_cmpxchg */
++
++#ifndef try_cmpxchg
++#define try_cmpxchg(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = cmpxchg((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* try_cmpxchg */
++
++#ifndef try_cmpxchg_acquire
++#define try_cmpxchg_acquire(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = cmpxchg_acquire((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* try_cmpxchg_acquire */
++
++#ifndef try_cmpxchg_release
++#define try_cmpxchg_release(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = cmpxchg_release((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* try_cmpxchg_release */
++
++#ifndef try_cmpxchg_relaxed
++#define try_cmpxchg_relaxed(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = cmpxchg_relaxed((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* try_cmpxchg_relaxed */
++
++#else /* try_cmpxchg_relaxed */
++
++#ifndef try_cmpxchg_acquire
++#define try_cmpxchg_acquire(...) \
++	__atomic_op_acquire(try_cmpxchg, __VA_ARGS__)
++#endif
++
++#ifndef try_cmpxchg_release
++#define try_cmpxchg_release(...) \
++	__atomic_op_release(try_cmpxchg, __VA_ARGS__)
++#endif
++
++#ifndef try_cmpxchg
++#define try_cmpxchg(...) \
++	__atomic_op_fence(try_cmpxchg, __VA_ARGS__)
++#endif
++
++#endif /* try_cmpxchg_relaxed */
++
+ #define arch_atomic_read atomic_read
+ #define arch_atomic_read_acquire atomic_read_acquire
+ 
+@@ -2522,4 +2592,4 @@ atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// 9d95b56f98d82a2a26c7b79ccdd0c47572d50a6f
++// d78e6c293c661c15188f0ec05bce45188c8d5892
+diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
+index 693dfa1de430..317a6cec76e1 100755
+--- a/scripts/atomic/gen-atomic-fallback.sh
++++ b/scripts/atomic/gen-atomic-fallback.sh
+@@ -144,15 +144,11 @@ gen_proto_order_variants()
+ 	printf "#endif /* ${basename}_relaxed */\n\n"
  }
  
-+static nokprobe_inline struct kretprobe *get_kretprobe(struct kretprobe_instance *ri)
-+{
-+	/* rph->rp can be updated by unregister_kretprobe() on other cpu */
-+	smp_rmb();
-+	return ri->rph->rp;
+-gen_xchg_fallbacks()
++gen_order_fallbacks()
+ {
+ 	local xchg="$1"; shift
++
+ cat <<EOF
+-#ifndef ${xchg}_relaxed
+-#define ${xchg}_relaxed		${xchg}
+-#define ${xchg}_acquire		${xchg}
+-#define ${xchg}_release		${xchg}
+-#else /* ${xchg}_relaxed */
+ 
+ #ifndef ${xchg}_acquire
+ #define ${xchg}_acquire(...) \\
+@@ -169,11 +165,62 @@ cat <<EOF
+ 	__atomic_op_fence(${xchg}, __VA_ARGS__)
+ #endif
+ 
+-#endif /* ${xchg}_relaxed */
++EOF
 +}
 +
- #else /* CONFIG_KRETPROBES */
- static inline void arch_prepare_kretprobe(struct kretprobe *rp,
- 					struct pt_regs *regs)
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 5904ce656ab7..95390eb130f4 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1214,9 +1214,19 @@ void kprobes_inc_nmissed_count(struct kprobe *p)
- }
- NOKPROBE_SYMBOL(kprobes_inc_nmissed_count);
- 
-+static void free_rp_inst_rcu(struct rcu_head *head)
++gen_xchg_fallbacks()
 +{
-+	struct kretprobe_instance *ri = container_of(head, struct kretprobe_instance, rcu);
++	local xchg="$1"; shift
++	printf "#ifndef ${xchg}_relaxed\n"
 +
-+	if (refcount_dec_and_test(&ri->rph->ref))
-+		kfree(ri->rph);
-+	kfree(ri);
++	gen_basic_fallbacks ${xchg}
++
++	printf "#else /* ${xchg}_relaxed */\n"
++
++	gen_order_fallbacks ${xchg}
++
++	printf "#endif /* ${xchg}_relaxed */\n\n"
 +}
-+NOKPROBE_SYMBOL(free_rp_inst_rcu);
 +
- static void recycle_rp_inst(struct kretprobe_instance *ri)
- {
--	struct kretprobe *rp = ri->rp;
-+	struct kretprobe *rp = get_kretprobe(ri);
++gen_try_cmpxchg_fallback()
++{
++	local order="$1"; shift;
++
++cat <<EOF
++#ifndef ${ARCH}try_cmpxchg${order}
++#define ${ARCH}try_cmpxchg${order}(_ptr, _oldp, _new) \\
++({ \\
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \\
++	___r = ${ARCH}cmpxchg${order}((_ptr), ___o, (_new)); \\
++	if (unlikely(___r != ___o)) \\
++		*___op = ___r; \\
++	likely(___r == ___o); \\
++})
++#endif /* ${ARCH}try_cmpxchg${order} */
  
- 	INIT_HLIST_NODE(&ri->hlist);
- 	if (likely(rp)) {
-@@ -1224,7 +1234,7 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
- 		hlist_add_head(&ri->hlist, &rp->free_instances);
- 		raw_spin_unlock(&rp->lock);
- 	} else
--		kfree_rcu(ri, rcu);
-+		call_rcu(&ri->rcu, free_rp_inst_rcu);
- }
- NOKPROBE_SYMBOL(recycle_rp_inst);
- 
-@@ -1283,83 +1293,20 @@ static inline void free_rp_inst(struct kretprobe *rp)
- {
- 	struct kretprobe_instance *ri;
- 	struct hlist_node *next;
-+	int count = 0;
- 
- 	hlist_for_each_entry_safe(ri, next, &rp->free_instances, hlist) {
- 		hlist_del(&ri->hlist);
- 		kfree(ri);
-+		count++;
- 	}
--}
--
--/* XXX all of this only exists because we have rp specific ri's */
--
--static bool __invalidate_rp_inst(struct task_struct *t, void *rp)
--{
--	struct llist_node *node = t->kretprobe_instances.first;
--	struct kretprobe_instance *ri;
--
--	while (node) {
--		ri = container_of(node, struct kretprobe_instance, llist);
--		node = node->next;
- 
--		if (ri->rp == rp)
--			ri->rp = NULL;
-+	if (refcount_sub_and_test(count, &rp->rph->ref)) {
-+		kfree(rp->rph);
-+		rp->rph = NULL;
- 	}
--
--	return true;
+ EOF
  }
  
--struct invl_rp_ipi {
--	struct task_struct *task;
--	void *rp;
--	bool done;
--};
--
--static void __invalidate_rp_ipi(void *arg)
--{
--	struct invl_rp_ipi *iri = arg;
--
--	if (iri->task == current)
--		iri->done = __invalidate_rp_inst(iri->task, iri->rp);
--}
--
--static void invalidate_rp_inst(struct task_struct *t, struct kretprobe *rp)
--{
--	struct invl_rp_ipi iri = {
--		.task = t,
--		.rp = rp,
--		.done = false
--	};
--
--	for (;;) {
--		if (try_invoke_on_locked_down_task(t, __invalidate_rp_inst, rp))
--			return;
--
--		smp_call_function_single(task_cpu(t), __invalidate_rp_ipi, &iri, 1);
--		if (iri.done)
--			return;
--	}
--}
--
--static void cleanup_rp_inst(struct kretprobe *rp)
--{
--	struct task_struct *p, *t;
--
--	/* To avoid recursive kretprobe by NMI, set kprobe busy here */
--	kprobe_busy_begin();
--	rcu_read_lock();
--	for_each_process_thread(p, t) {
--		if (!t->kretprobe_instances.first)
--			continue;
--
--		invalidate_rp_inst(t, rp);
--	}
--	rcu_read_unlock();
--	kprobe_busy_end();
--
--	free_rp_inst(rp);
--}
--NOKPROBE_SYMBOL(cleanup_rp_inst);
--
- /* Add the new probe to ap->list */
- static int add_new_kprobe(struct kprobe *ap, struct kprobe *p)
- {
-@@ -1922,6 +1869,7 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 	kprobe_opcode_t *correct_ret_addr = NULL;
- 	struct kretprobe_instance *ri = NULL;
- 	struct llist_node *first, *node;
-+	struct kretprobe *rp;
++gen_try_cmpxchg_fallbacks()
++{
++	printf "#ifndef ${ARCH}try_cmpxchg_relaxed\n"
++	printf "#ifdef ${ARCH}try_cmpxchg\n"
++
++	gen_basic_fallbacks "${ARCH}try_cmpxchg"
++
++	printf "#endif /* ${ARCH}try_cmpxchg */\n\n"
++
++	for order in "" "_acquire" "_release" "_relaxed"; do
++		gen_try_cmpxchg_fallback "${order}"
++	done
++
++	printf "#else /* ${ARCH}try_cmpxchg_relaxed */\n"
++
++	gen_order_fallbacks "${ARCH}try_cmpxchg"
++
++	printf "#endif /* ${ARCH}try_cmpxchg_relaxed */\n\n"
++}
++
+ cat << EOF
+ // SPDX-License-Identifier: GPL-2.0
  
- 	first = node = current->kretprobe_instances.first;
- 	while (node) {
-@@ -1951,12 +1899,13 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 	/* Run them..  */
- 	while (first) {
- 		ri = container_of(first, struct kretprobe_instance, llist);
-+		rp = get_kretprobe(ri);
- 		node = first->next;
+@@ -191,6 +238,8 @@ for xchg in "${ARCH}xchg" "${ARCH}cmpxchg" "${ARCH}cmpxchg64"; do
+ 	gen_xchg_fallbacks "${xchg}"
+ done
  
--		if (ri->rp && ri->rp->handler) {
--			__this_cpu_write(current_kprobe, &ri->rp->kp);
-+		if (rp && rp->handler) {
-+			__this_cpu_write(current_kprobe, &rp->kp);
- 			ri->ret_addr = correct_ret_addr;
--			ri->rp->handler(ri, regs);
-+			rp->handler(ri, regs);
- 			__this_cpu_write(current_kprobe, &kprobe_busy);
- 		}
++gen_try_cmpxchg_fallbacks
++
+ grep '^[a-z]' "$1" | while read name meta args; do
+ 	gen_proto "${meta}" "${name}" "${ARCH}" "atomic" "int" ${args}
+ done
+diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
+index 6afadf73da17..85dc25685c0d 100755
+--- a/scripts/atomic/gen-atomic-instrumented.sh
++++ b/scripts/atomic/gen-atomic-instrumented.sh
+@@ -103,14 +103,31 @@ gen_xchg()
+ 	local xchg="$1"; shift
+ 	local mult="$1"; shift
  
-@@ -1987,9 +1936,6 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 		hlist_del(&ri->hlist);
- 		raw_spin_unlock_irqrestore(&rp->lock, flags);
- 
--		ri->rp = rp;
--		ri->task = current;
--
- 		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
- 			raw_spin_lock_irqsave(&rp->lock, flags);
- 			hlist_add_head(&ri->hlist, &rp->free_instances);
-@@ -2063,16 +2009,21 @@ int register_kretprobe(struct kretprobe *rp)
- 	}
- 	raw_spin_lock_init(&rp->lock);
- 	INIT_HLIST_HEAD(&rp->free_instances);
-+	rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
-+	rp->rph->rp = rp;
- 	for (i = 0; i < rp->maxactive; i++) {
--		inst = kmalloc(sizeof(struct kretprobe_instance) +
-+		inst = kzalloc(sizeof(struct kretprobe_instance) +
- 			       rp->data_size, GFP_KERNEL);
- 		if (inst == NULL) {
-+			refcount_set(&rp->rph->ref, i);
- 			free_rp_inst(rp);
- 			return -ENOMEM;
- 		}
-+		inst->rph = rp->rph;
- 		INIT_HLIST_NODE(&inst->hlist);
- 		hlist_add_head(&inst->hlist, &rp->free_instances);
- 	}
-+	refcount_set(&rp->rph->ref, i);
- 
- 	rp->nmissed = 0;
- 	/* Establish function entry probe point */
-@@ -2114,16 +2065,20 @@ void unregister_kretprobes(struct kretprobe **rps, int num)
- 	if (num <= 0)
- 		return;
- 	mutex_lock(&kprobe_mutex);
--	for (i = 0; i < num; i++)
-+	for (i = 0; i < num; i++) {
- 		if (__unregister_kprobe_top(&rps[i]->kp) < 0)
- 			rps[i]->kp.addr = NULL;
-+		rps[i]->rph->rp = NULL;
-+	}
-+	/* Ensure the rph->rp updated after this */
-+	smp_wmb();
- 	mutex_unlock(&kprobe_mutex);
- 
- 	synchronize_rcu();
- 	for (i = 0; i < num; i++) {
- 		if (rps[i]->kp.addr) {
- 			__unregister_kprobe_bottom(&rps[i]->kp);
--			cleanup_rp_inst(rps[i]);
-+			free_rp_inst(rps[i]);
- 		}
- 	}
++	if [ "${xchg%${xchg#try_cmpxchg}}" = "try_cmpxchg" ] ; then
++
++cat <<EOF
++#define ${xchg}(ptr, oldp, ...) \\
++({ \\
++	typeof(ptr) __ai_ptr = (ptr); \\
++	typeof(oldp) __ai_oldp = (oldp); \\
++	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
++	instrument_atomic_write(__ai_oldp, ${mult}sizeof(*__ai_oldp)); \\
++	arch_${xchg}(__ai_ptr, __ai_oldp, __VA_ARGS__); \\
++})
++EOF
++
++	else
++
+ cat <<EOF
+-#define ${xchg}(ptr, ...)						\\
+-({									\\
+-	typeof(ptr) __ai_ptr = (ptr);					\\
+-	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr));		\\
+-	arch_${xchg}(__ai_ptr, __VA_ARGS__);				\\
++#define ${xchg}(ptr, ...) \\
++({ \\
++	typeof(ptr) __ai_ptr = (ptr); \\
++	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
++	arch_${xchg}(__ai_ptr, __VA_ARGS__); \\
+ })
+ EOF
++
++	fi
  }
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index aefb6065b508..07baf6f6cecc 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1714,7 +1714,8 @@ NOKPROBE_SYMBOL(kprobe_dispatcher);
- static int
- kretprobe_dispatcher(struct kretprobe_instance *ri, struct pt_regs *regs)
- {
--	struct trace_kprobe *tk = container_of(ri->rp, struct trace_kprobe, rp);
-+	struct kretprobe *rp = get_kretprobe(ri);
-+	struct trace_kprobe *tk = container_of(rp, struct trace_kprobe, rp);
  
- 	raw_cpu_inc(*tk->nhit);
+ gen_optional_xchg()
+@@ -160,7 +177,7 @@ grep '^[a-z]' "$1" | while read name meta args; do
+ 	gen_proto "${meta}" "${name}" "atomic64" "s64" ${args}
+ done
  
+-for xchg in "xchg" "cmpxchg" "cmpxchg64"; do
++for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg"; do
+ 	for order in "" "_acquire" "_release" "_relaxed"; do
+ 		gen_optional_xchg "${xchg}" "${order}"
+ 	done
 
