@@ -2,169 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE3A255A47
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16366255A55
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729336AbgH1Mev (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 08:34:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43174 "EHLO mail.kernel.org"
+        id S1729175AbgH1Mhg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 08:37:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729123AbgH1Meg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Aug 2020 08:34:36 -0400
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1729123AbgH1Mhe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 08:37:34 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B44FD21556;
-        Fri, 28 Aug 2020 12:34:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 05A5E2078A;
+        Fri, 28 Aug 2020 12:37:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598618076;
-        bh=+ZC7vfEqt3vatoNYBNCOkUx0FbTQCSqA61BSY3oIaYI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MP54G526OTSuUO0SMqEa41is5mB4meDtVm4ATTrscGCJ/0z90lrJGLApoqnNqFmKp
-         affosG+UNDAWfRzc9IGvtCNGIk6ijYdHFlKs6YfP8A3GA2h9obQAWHUWKHARzyi/rM
-         HQuYy4+FDdst0V8uP5kkQfFbeRySb3sLvgPHcRlU=
-Received: by mail-lf1-f51.google.com with SMTP id y17so620765lfa.8;
-        Fri, 28 Aug 2020 05:34:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532NWYPg0s483yyxWZJsTiX0q0+ffmr4yKOlY1GFrUktAFs0d6rg
-        RYMc1xJvo/prbxaAlkmZghwOYHXB7r+Dy9Z0rBM=
-X-Google-Smtp-Source: ABdhPJwPtXOMRGNu43110Ft0LpuiT1efN8BBGxHEgNOP5buSs9W1RComAIOA+C5bZ6vYzpGzogRfDZyoAT9knSKwSgY=
-X-Received: by 2002:ac2:4ecc:: with SMTP id p12mr713259lfr.212.1598618073917;
- Fri, 28 Aug 2020 05:34:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <159854631442.736475.5062989489155389472.stgit@devnote2> <159854636764.736475.9112286781925119117.stgit@devnote2>
-In-Reply-To: <159854636764.736475.9112286781925119117.stgit@devnote2>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 28 Aug 2020 20:34:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR5z87fb4ieOcrnMNT6GxSAhj99cf7draGVaHnk7G-pCQ@mail.gmail.com>
-Message-ID: <CAJF2gTR5z87fb4ieOcrnMNT6GxSAhj99cf7draGVaHnk7G-pCQ@mail.gmail.com>
-Subject: Re: [PATCH v3 06/16] csky: kprobes: Use generic kretprobe trampoline handler
+        s=default; t=1598618254;
+        bh=An3L22TmRcfX000BNuwZ5uCqAfiTYo6+waUJ67sacTs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WPZnpNBiLi0wM5wZ7/sn+ySRZgD7aZu6kpCcqhwPq2n/Raj0eBVT4ZQ/YSzplSzez
+         SJxMfc8nsyRgb0POzv8BmML2V4UYi6eIMcEBQLtssWVYu6crF1kUUOwhcOWk2gHUnP
+         KVt0K2rwi/qwTiY4SfRKhnEViF2S9pv/meN3HJxI=
+Date:   Fri, 28 Aug 2020 21:37:29 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, Eddy_Wu@trendmicro.com,
+        x86@kernel.org, davem@davemloft.net, rostedt@goodmis.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        linux-arch@vger.kernel.org, cameron@moodycamel.com,
+        oleg@redhat.com, will@kernel.org, paulmck@kernel.org
+Subject: Re: [PATCH v4 00/23] kprobes: Unify kretprobe trampoline handlers
+ and make kretprobe lockless
+Message-Id: <20200828213729.68bb199c02812e24c2ffe942@kernel.org>
+In-Reply-To: <159861759775.992023.12553306821235086809.stgit@devnote2>
+References: <159861759775.992023.12553306821235086809.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Looks more clear.
+On Fri, 28 Aug 2020 21:26:38 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Acked-by: Guo Ren <guoren@kernel.org>
+> Hi,
+> 
+> Here is the 4th version of the series to unify the kretprobe trampoline handler
+> and make kretprobe lockless.
+> 
+> Previous version is here;
+> 
+>  https://lkml.kernel.org/r/159854631442.736475.5062989489155389472.stgit@devnote2
+> 
+> In this version, I updated the generic trampoline handler a bit, merge 
+> the Peter's lockless patches(*), and add an RFC "remove task scan" patch
+> as [20/23].
+> 
+> (*) https://lkml.kernel.org/r/20200827161237.889877377@infradead.org
+> 
+> I ran some tests and ftracetest on x86-64. Mostly OK, but hit a BUG in the
+> trampoline handler once. I'm trying to reproduce it but not succeeded yet.
+> So this may need a careful review and tests.
 
-On Fri, Aug 28, 2020 at 12:39 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  arch/csky/kernel/probes/kprobes.c |   78 +------------------------------------
->  1 file changed, 3 insertions(+), 75 deletions(-)
->
-> diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-> index f0f733b7ac5a..a891fb422e76 100644
-> --- a/arch/csky/kernel/probes/kprobes.c
-> +++ b/arch/csky/kernel/probes/kprobes.c
-> @@ -404,87 +404,15 @@ int __init arch_populate_kprobe_blacklist(void)
->
->  void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
->  {
-> -       struct kretprobe_instance *ri = NULL;
-> -       struct hlist_head *head, empty_rp;
-> -       struct hlist_node *tmp;
-> -       unsigned long flags, orig_ret_address = 0;
-> -       unsigned long trampoline_address =
-> -               (unsigned long)&kretprobe_trampoline;
-> -       kprobe_opcode_t *correct_ret_addr = NULL;
-> -
-> -       INIT_HLIST_HEAD(&empty_rp);
-> -       kretprobe_hash_lock(current, &head, &flags);
-> -
-> -       /*
-> -        * It is possible to have multiple instances associated with a given
-> -        * task either because multiple functions in the call path have
-> -        * return probes installed on them, and/or more than one
-> -        * return probe was registered for a target function.
-> -        *
-> -        * We can handle this because:
-> -        *     - instances are always pushed into the head of the list
-> -        *     - when multiple return probes are registered for the same
-> -        *       function, the (chronologically) first instance's ret_addr
-> -        *       will be the real return address, and all the rest will
-> -        *       point to kretprobe_trampoline.
-> -        */
-> -       hlist_for_each_entry_safe(ri, tmp, head, hlist) {
-> -               if (ri->task != current)
-> -                       /* another task is sharing our hash bucket */
-> -                       continue;
-> -
-> -               orig_ret_address = (unsigned long)ri->ret_addr;
-> -
-> -               if (orig_ret_address != trampoline_address)
-> -                       /*
-> -                        * This is the real return address. Any other
-> -                        * instances associated with this task are for
-> -                        * other calls deeper on the call stack
-> -                        */
-> -                       break;
-> -       }
-> -
-> -       kretprobe_assert(ri, orig_ret_address, trampoline_address);
-> -
-> -       correct_ret_addr = ri->ret_addr;
-> -       hlist_for_each_entry_safe(ri, tmp, head, hlist) {
-> -               if (ri->task != current)
-> -                       /* another task is sharing our hash bucket */
-> -                       continue;
-> -
-> -               orig_ret_address = (unsigned long)ri->ret_addr;
-> -               if (ri->rp && ri->rp->handler) {
-> -                       __this_cpu_write(current_kprobe, &ri->rp->kp);
-> -                       get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
-> -                       ri->ret_addr = correct_ret_addr;
-> -                       ri->rp->handler(ri, regs);
-> -                       __this_cpu_write(current_kprobe, NULL);
-> -               }
-> -
-> -               recycle_rp_inst(ri, &empty_rp);
-> -
-> -               if (orig_ret_address != trampoline_address)
-> -                       /*
-> -                        * This is the real return address. Any other
-> -                        * instances associated with this task are for
-> -                        * other calls deeper on the call stack
-> -                        */
-> -                       break;
-> -       }
-> -
-> -       kretprobe_hash_unlock(current, &flags);
-> -
-> -       hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
-> -               hlist_del(&ri->hlist);
-> -               kfree(ri);
-> -       }
-> -       return (void *)orig_ret_address;
-> +       return (void *)kretprobe_trampoline_handler(regs,
-> +                       (unsigned long)&kretprobe_trampoline, NULL);
->  }
->
->  void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
->                                       struct pt_regs *regs)
->  {
->         ri->ret_addr = (kprobe_opcode_t *)regs->lr;
-> +       ri->fp = NULL;
->         regs->lr = (unsigned long) &kretprobe_trampoline;
->  }
->
->
+The series is also available on
+git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git lockless-kretprobe-v4
+
+Thank you,
 
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Masami Hiramatsu <mhiramat@kernel.org>
