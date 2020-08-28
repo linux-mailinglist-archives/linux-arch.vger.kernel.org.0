@@ -2,98 +2,266 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 227EF25576A
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 11:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2FE25577F
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 11:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbgH1JSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 05:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726010AbgH1JSh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Aug 2020 05:18:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CAAC061264;
-        Fri, 28 Aug 2020 02:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7oEiKFdKtw+fNVAzipGQKKCx4WxHDyWDHaSbCtVw8Hc=; b=SOTxbauG+aJgX2PjBxPuX6SqoA
-        DwnLiY9B69lbseA4S62pEIvcb0QBu6EnWogxEy6L0/9MMcWoGka8PI55opXYzY9ew+Dgsi0ttyjQr
-        /yzwyvQN4ZRaCr6/UmRlQomebL1qYBHoUmwhVb9LPP6Z/09JeZMAwHhevzIiUW7pRj2shkdGJaRnl
-        T+0kfenZcuT4GGJxamXZG4xJEOBXaiTi5wIzDVA3634O6E3//6fJMI8QB3rEBFWgJLkPWtxkTIC5L
-        gvh8J80hbXwFOCMwTJuf7CM0vfV4JLgFnpQHEXv4e955lb1UrKheek6WzMplDC/0wXHeSZmGYCap1
-        AClRaoKA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kBaWU-0006xd-Qo; Fri, 28 Aug 2020 09:18:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 15D28305C10;
-        Fri, 28 Aug 2020 11:18:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C34E52C56DB16; Fri, 28 Aug 2020 11:18:13 +0200 (CEST)
-Date:   Fri, 28 Aug 2020 11:18:13 +0200
-From:   peterz@infradead.org
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Eddy_Wu@trendmicro.com,
-        x86@kernel.org, davem@davemloft.net, rostedt@goodmis.org,
-        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        linux-arch@vger.kernel.org, cameron@moodycamel.com,
-        oleg@redhat.com, will@kernel.org, paulmck@kernel.org
-Subject: Re: [RFC][PATCH 7/7] kprobes: Replace rp->free_instance with freelist
-Message-ID: <20200828091813.GU1362448@hirez.programming.kicks-ass.net>
-References: <20200827161237.889877377@infradead.org>
- <20200827161754.594247581@infradead.org>
- <20200828084851.GQ1362448@hirez.programming.kicks-ass.net>
- <20200828181341.c1da066360c6085d48850e22@kernel.org>
+        id S1728554AbgH1JYO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 05:24:14 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2706 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728555AbgH1JYL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 05:24:11 -0400
+Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id E7216BF6519CB261C7E2;
+        Fri, 28 Aug 2020 10:24:09 +0100 (IST)
+Received: from localhost (10.52.127.106) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Fri, 28 Aug
+ 2020 10:24:08 +0100
+Date:   Fri, 28 Aug 2020 10:22:33 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Atish Patra <atish.patra@wdc.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Zong Li <zong.li@sifive.com>,
+        <linux-riscv@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arch@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        Ganapatrao Kulkarni <gkulkarni@cavium.com>,
+        Steven Price <steven.price@arm.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [RFC/RFT PATCH 1/6] numa: Move numa implementation to common
+ code
+Message-ID: <20200828102233.00006ef4@Huawei.com>
+In-Reply-To: <20200814214725.28818-2-atish.patra@wdc.com>
+References: <20200814214725.28818-1-atish.patra@wdc.com>
+        <20200814214725.28818-2-atish.patra@wdc.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200828181341.c1da066360c6085d48850e22@kernel.org>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.127.106]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 06:13:41PM +0900, Masami Hiramatsu wrote:
-> On Fri, 28 Aug 2020 10:48:51 +0200
-> peterz@infradead.org wrote:
-> 
-> > On Thu, Aug 27, 2020 at 06:12:44PM +0200, Peter Zijlstra wrote:
-> > >  struct kretprobe_instance {
-> > >  	union {
-> > > +		/*
-> > > +		 * Dodgy as heck, this relies on not clobbering freelist::refs.
-> > > +		 * llist: only clobbers freelist::next.
-> > > +		 * rcu: clobbers both, but only after rp::freelist is gone.
-> > > +		 */
-> > > +		struct freelist_node freelist;
-> > >  		struct llist_node llist;
-> > > -		struct hlist_node hlist;
-> > >  		struct rcu_head rcu;
-> > >  	};
-> > 
-> > Masami, make sure to make this something like:
-> > 
-> > 	union {
-> > 		struct freelist_node freelist;
-> > 		struct rcu_head rcu;
-> > 	};
-> > 	struct llist_node llist;
-> > 
-> > for v4, because after some sleep I'm fairly sure what I wrote above was
-> > broken.
-> > 
-> > We'll only use RCU once the freelist is gone, so sharing that storage
-> > should still be okay.
-> 
-> Hmm, would you mean there is a chance that an instance belongs to
-> both freelist and llist?
+On Fri, 14 Aug 2020 14:47:20 -0700
+Atish Patra <atish.patra@wdc.com> wrote:
 
-So the freelist->refs thing is supposed to pin freelist->next for
-concurrent usage, but if we instantly stick it on the
-current->kretprobe_instances llist while it's still elevated, we'll
-overwrite ->next, which would be bad.
+> ARM64 numa implementation is generic enough that RISC-V can reuse that
+> implementation with very minor cosmetic changes. This will help both
+> ARM64 and RISC-V in terms of maintanace and feature improvement
+> 
+> Move the numa implementation code to common directory so that both ISAs
+> can reuse this. This doesn't introduce any function changes for ARM64.
+> 
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+Hi Atish,
+
+One trivial question inline.  Otherwise subject to Anshuman's point about
+location, this looks fine to me.
+
+I'll run some sanity checks later.
+
+Jonathan
+> ---
+>  arch/arm64/Kconfig                            |  1 +
+>  arch/arm64/include/asm/numa.h                 | 45 +---------------
+>  arch/arm64/mm/Makefile                        |  1 -
+>  drivers/base/Kconfig                          |  6 +++
+>  drivers/base/Makefile                         |  1 +
+>  .../mm/numa.c => drivers/base/arch_numa.c     |  0
+>  include/asm-generic/numa.h                    | 51 +++++++++++++++++++
+>  7 files changed, 60 insertions(+), 45 deletions(-)
+>  rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (100%)
+>  create mode 100644 include/asm-generic/numa.h
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 6d232837cbee..955a0cf75b16 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -960,6 +960,7 @@ config HOTPLUG_CPU
+>  # Common NUMA Features
+>  config NUMA
+>  	bool "NUMA Memory Allocation and Scheduler Support"
+> +	select GENERIC_ARCH_NUMA
+>  	select ACPI_NUMA if ACPI
+>  	select OF_NUMA
+>  	help
+> diff --git a/arch/arm64/include/asm/numa.h b/arch/arm64/include/asm/numa.h
+> index 626ad01e83bf..8c8cf4297cc3 100644
+> --- a/arch/arm64/include/asm/numa.h
+> +++ b/arch/arm64/include/asm/numa.h
+> @@ -3,49 +3,6 @@
+>  #define __ASM_NUMA_H
+>  
+>  #include <asm/topology.h>
+> -
+> -#ifdef CONFIG_NUMA
+> -
+> -#define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
+> -
+> -int __node_distance(int from, int to);
+> -#define node_distance(a, b) __node_distance(a, b)
+> -
+> -extern nodemask_t numa_nodes_parsed __initdata;
+> -
+> -extern bool numa_off;
+> -
+> -/* Mappings between node number and cpus on that node. */
+> -extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
+> -void numa_clear_node(unsigned int cpu);
+> -
+> -#ifdef CONFIG_DEBUG_PER_CPU_MAPS
+> -const struct cpumask *cpumask_of_node(int node);
+> -#else
+> -/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
+> -static inline const struct cpumask *cpumask_of_node(int node)
+> -{
+> -	return node_to_cpumask_map[node];
+> -}
+> -#endif
+> -
+> -void __init arm64_numa_init(void);
+> -int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+> -void __init numa_set_distance(int from, int to, int distance);
+> -void __init numa_free_distance(void);
+> -void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+> -void numa_store_cpu_info(unsigned int cpu);
+> -void numa_add_cpu(unsigned int cpu);
+> -void numa_remove_cpu(unsigned int cpu);
+> -
+> -#else	/* CONFIG_NUMA */
+> -
+> -static inline void numa_store_cpu_info(unsigned int cpu) { }
+> -static inline void numa_add_cpu(unsigned int cpu) { }
+> -static inline void numa_remove_cpu(unsigned int cpu) { }
+> -static inline void arm64_numa_init(void) { }
+> -static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+> -
+> -#endif	/* CONFIG_NUMA */
+> +#include <asm-generic/numa.h>
+>  
+>  #endif	/* __ASM_NUMA_H */
+> diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+> index d91030f0ffee..928c308b044b 100644
+> --- a/arch/arm64/mm/Makefile
+> +++ b/arch/arm64/mm/Makefile
+> @@ -6,7 +6,6 @@ obj-y				:= dma-mapping.o extable.o fault.o init.o \
+>  obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
+>  obj-$(CONFIG_PTDUMP_CORE)	+= dump.o
+>  obj-$(CONFIG_PTDUMP_DEBUGFS)	+= ptdump_debugfs.o
+> -obj-$(CONFIG_NUMA)		+= numa.o
+>  obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
+>  KASAN_SANITIZE_physaddr.o	+= n
+>  
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 8d7001712062..73c2151de194 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -210,4 +210,10 @@ config GENERIC_ARCH_TOPOLOGY
+>  	  appropriate scaling, sysfs interface for reading capacity values at
+>  	  runtime.
+>  
+> +config GENERIC_ARCH_NUMA
+> +	bool
+> +	help
+> +	  Enable support for generic numa implementation. Currently, RISC-V
+> +	  and ARM64 uses it.
+> +
+>  endmenu
+> diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> index 157452080f3d..c3d02c644222 100644
+> --- a/drivers/base/Makefile
+> +++ b/drivers/base/Makefile
+> @@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
+>  obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
+>  obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
+> +obj-$(CONFIG_GENERIC_ARCH_NUMA) += arch_numa.o
+>  
+>  obj-y			+= test/
+>  
+> diff --git a/arch/arm64/mm/numa.c b/drivers/base/arch_numa.c
+> similarity index 100%
+> rename from arch/arm64/mm/numa.c
+> rename to drivers/base/arch_numa.c
+> diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
+> new file mode 100644
+> index 000000000000..0635c0724b7c
+> --- /dev/null
+> +++ b/include/asm-generic/numa.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_GENERIC_NUMA_H
+> +#define __ASM_GENERIC_NUMA_H
+> +
+> +#ifdef CONFIG_NUMA
+> +
+> +#define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
+> +
+> +int __node_distance(int from, int to);
+> +#define node_distance(a, b) __node_distance(a, b)
+> +
+> +extern nodemask_t numa_nodes_parsed __initdata;
+> +
+> +extern bool numa_off;
+> +
+> +/* Mappings between node number and cpus on that node. */
+> +extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
+> +void numa_clear_node(unsigned int cpu);
+> +
+> +#ifdef CONFIG_DEBUG_PER_CPU_MAPS
+> +const struct cpumask *cpumask_of_node(int node);
+> +#else
+> +/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
+> +static inline const struct cpumask *cpumask_of_node(int node)
+> +{
+> +	return node_to_cpumask_map[node];
+> +}
+> +#endif
+> +
+> +void __init arm64_numa_init(void);
+> +int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+> +void __init numa_set_distance(int from, int to, int distance);
+> +void __init numa_free_distance(void);
+> +void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+> +void numa_store_cpu_info(unsigned int cpu);
+> +void numa_add_cpu(unsigned int cpu);
+> +void numa_remove_cpu(unsigned int cpu);
+> +
+> +#else	/* CONFIG_NUMA */
+> +
+> +static inline void numa_store_cpu_info(unsigned int cpu) { }
+> +static inline void numa_add_cpu(unsigned int cpu) { }
+> +static inline void numa_remove_cpu(unsigned int cpu) { }
+> +static inline void arm64_numa_init(void) { }
+> +static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+> +
+> +#endif	/* CONFIG_NUMA */
+> +
+> +#include <asm/topology.h>
+
+Why the include here?
+
+> +
+> +#endif	/* __ASM_GENERIC_NUMA_H */
+
 
