@@ -2,114 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E94255F58
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 19:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51419255FDA
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 19:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgH1RGR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 13:06:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54750 "EHLO mail.kernel.org"
+        id S1726867AbgH1RjW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 13:39:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725814AbgH1RGP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Aug 2020 13:06:15 -0400
-Received: from gaia (unknown [46.69.195.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726794AbgH1RjT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 13:39:19 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67CC620776;
-        Fri, 28 Aug 2020 17:06:11 +0000 (UTC)
-Date:   Fri, 28 Aug 2020 18:06:08 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org,
-        Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: Flushing transparent hugepages
-Message-ID: <20200828170608.GJ3169@gaia>
-References: <20200818150736.GQ17456@casper.infradead.org>
- <20200818160815.GA16191@willie-the-truck>
+        by mail.kernel.org (Postfix) with ESMTPSA id 67E8821531
+        for <linux-arch@vger.kernel.org>; Fri, 28 Aug 2020 17:39:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598636358;
+        bh=nds4FCanqTVJv34u/NxVJCyvtJsI4h+1rVN+aRFYiGg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TyRrjGkegJtc5NUYxIc2CRRvLWWkqf3QVI21p9DZd3r+zXtNHhiTBFd3UlkrkLutM
+         m2gdFyeVpnX0PkMaqL510A5pXF7hkUeHvcLoBDY0+OUjfZznfyPRQlCtxAFsXLhhnV
+         xMSL/cxiwuYQZXZgTbn4Xr4D7RH+IXBRyvCTlYAE=
+Received: by mail-wm1-f45.google.com with SMTP id b79so146738wmb.4
+        for <linux-arch@vger.kernel.org>; Fri, 28 Aug 2020 10:39:18 -0700 (PDT)
+X-Gm-Message-State: AOAM532aZLVassEnOwOuyyj30Jh3qSKQzJS1QhUj9Wb/S9qX2/z82+R0
+        CnlJDGZ0HTOTs2VN2GjNJ81dJcFBxEQwQIHQaHShMw==
+X-Google-Smtp-Source: ABdhPJyhwm17L0OXGgBqLsRtUxnb+FTpBy4Z2839DwNgsYJBjPegOYm2k1/SJF+gcG8rpzzWXr5f2DuOidvrokSrcrI=
+X-Received: by 2002:a1c:7e02:: with SMTP id z2mr214706wmc.138.1598636356748;
+ Fri, 28 Aug 2020 10:39:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200818160815.GA16191@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <a770d45d-b147-a8c5-b7f8-30d668cbed84@intel.com>
+ <4BDFD364-798C-4537-A88E-F94F101F524B@amacapital.net> <CAMe9rOoTjSwRSPuqP6RKkDzPA_VPh5gVYRVFJ-ezAD4Et-FUng@mail.gmail.com>
+ <CALCETrW=-ahC7GUCCyX7nPjCHfG3tiyDespud2Z7UbB6yWWWAA@mail.gmail.com>
+ <CAMe9rOrt5hz6qsNAxPgdKCOhRcKKESv-D3rxdSfraeJ-LFHM4w@mail.gmail.com>
+ <87v9h3thj9.fsf@oldenburg2.str.redhat.com> <CAMe9rOr=BZw3GyXf0g6tAZnfa8NbamoyBoU9KqoxtHg9c2yZhw@mail.gmail.com>
+In-Reply-To: <CAMe9rOr=BZw3GyXf0g6tAZnfa8NbamoyBoU9KqoxtHg9c2yZhw@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 28 Aug 2020 10:39:05 -0700
+X-Gmail-Original-Message-ID: <CALCETrUUKb6oyBmB3CSeVy1xT7mcnV=BD2eipAnKUhma7K3qKw@mail.gmail.com>
+Message-ID: <CALCETrUUKb6oyBmB3CSeVy1xT7mcnV=BD2eipAnKUhma7K3qKw@mail.gmail.com>
+Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 05:08:16PM +0100, Will Deacon wrote:
-> On Tue, Aug 18, 2020 at 04:07:36PM +0100, Matthew Wilcox wrote:
-> > For example, arm64 seems confused in this scenario:
-> > 
-> > void flush_dcache_page(struct page *page)
-> > {
-> >         if (test_bit(PG_dcache_clean, &page->flags))
-> >                 clear_bit(PG_dcache_clean, &page->flags);
-> > }
-> > 
-> > ...
-> > 
-> > void __sync_icache_dcache(pte_t pte)
-> > {
-> >         struct page *page = pte_page(pte);
-> > 
-> >         if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> >                 sync_icache_aliases(page_address(page), page_size(page));
-> > }
-> > 
-> > So arm64 keeps track on a per-page basis which ones have been flushed.
-> > page_size() will return PAGE_SIZE if called on a tail page or regular
-> > page, but will return PAGE_SIZE << compound_order if called on a head
-> > page.  So this will either over-flush, or it's missing the opportunity
-> > to clear the bits on all the subpages which have now been flushed.
-> 
-> Hmm, that seems to go all the way back to 2014 as the result of a bug fix
-> in 923b8f5044da ("arm64: mm: Make icache synchronisation logic huge page
-> aware") which has a Reported-by Mark and a CC stable, suggesting something
-> _was_ going wrong at the time :/ Was there a point where the tail pages
-> could end up with PG_arch_1 uncleared on allocation?
+On Fri, Aug 28, 2020 at 4:38 AM H.J. Lu <hjl.tools@gmail.com> wrote:
+>
+> On Thu, Aug 27, 2020 at 11:24 PM Florian Weimer <fweimer@redhat.com> wrote:
+> >
+> > * H. J. Lu:
+> >
+> > > Can you think of ANY issues of passing more arguments to arch_prctl?
+> >
+> > On x32, the glibc arch_prctl system call wrapper only passes two
+> > arguments to the kernel, and applications have no way of detecting that.
+> > musl only passes two arguments on all architectures.  It happens to work
+> > anyway with default compiler flags, but that's an accident.
+>
+> In the current glibc, there is no arch_prctl wrapper for i386.  There are
+> arch_prctl wrappers with 2 arguments for x86-64 and x32.  But this isn't an
+> issue for glibc since glibc is both the provider and the user of the new
+> arch_prctl extension.  Besides,
+>
+> long syscall(long number, ...);
+>
+> is always available.
 
-In my experience, it's the other way around: you can end up with
-PG_arch_1 cleared in a tail page when the head one was set (splitting
-THP).
-
-> > What would you _like_ to see?  Would you rather flush_dcache_page()
-> > were called once for each subpage, or would you rather maintain
-> > the page-needs-flushing state once per compound page?  We could also
-> > introduce flush_dcache_thp() if some architectures would prefer it one
-> > way and one the other, although that brings into question what to do
-> > for hugetlbfs pages.
-> 
-> For arm64, we'd like to see PG_arch_1 preserved during huge page splitting
-> [1], but there was a worry that it might break x86 and s390. It's also not
-> clear to me that we can change __sync_icache_dcache() as it's called when
-> we're installing the entry in the page-table, so why would it be called
-> again for the tail pages?
-
-Indeed, __sync_icache_dcache() is called from set_pte_at() on the head
-page, though it could always iterate and flush the tail pages
-individually (I think we could have done this in commit 923b8f5044da).
-Currently I suspect it does some over-flushing if you use THP on
-executable pages (it's a no-op on non-exec pages).
-
-With MTE (arm64 memory tagging) I'm introducing a PG_arch_2 flag and
-losing this is more problematic as it can lead to clearing valid tags.
-In the subsequent patch [2], mte_sync_tags() (also called from
-set_pte_at()) checks the PG_arch_2 in each page of a compound one.
-
-My preference would be to treat both PG_arch_1 and _2 similarly.
-
-> [1] https://lore.kernel.org/linux-arch/20200703153718.16973-8-catalin.marinas@arm.com/
-
-[2] https://lore.kernel.org/linux-arch/20200703153718.16973-9-catalin.marinas@arm.com/
-
--- 
-Catalin
+Userspace is probably full of tools and libraries that contain tables
+of system calls and their signatures.  Think tracing, audit, container
+management, etc.  I don't know how they will react to the addition of
+new arguments.
