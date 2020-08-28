@@ -2,113 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DC6255292
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 03:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A302725529B
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 03:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgH1BeT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Aug 2020 21:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgH1BeQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Aug 2020 21:34:16 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A55C061264;
-        Thu, 27 Aug 2020 18:34:15 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id g26so8045099qka.3;
-        Thu, 27 Aug 2020 18:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gh2R5C2QjOQ666oc79uAj1kKwvvc0RN64Qt09/HynQs=;
-        b=co7X3hz5vvze5RP5XTWGnx8RUsuXrkVkgqO7xNh/JE+dHWA/TyQtSkXBWADzbyJadx
-         T0c+SXWIN8WI/21JNgiLb5HUWAqNkoP/mMff+f1r7RCKTh7JIK68q53N+1U9hXY3dQgS
-         uOeSLR1F8CG2K+7F9pk6zJdvemWnk6qekG7PYs5u31304PnesqQRIwY7ZRS69Ei993JT
-         7W5nBJYR5osmGyZRTBpaJmFk2JKIW3SZ3Gg7DOcgxhLehe90axbSX+sZUEU4hsgCPuMp
-         kV4/q3E5Q74NHPn5NDlvkWvBDoOeo9MA3WFaeXQEqb5fj6n8emRhN/WW0YrgGNN7y5Np
-         h7dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gh2R5C2QjOQ666oc79uAj1kKwvvc0RN64Qt09/HynQs=;
-        b=eunTECGZl8CUUbXxkV++F066OBYkV7xymbt4rHPBd6mcIHy532k41JBSatelNxU5GM
-         kW19P/8gcL32V5NqlSVniTrsl8nW22aQPbuSlrFID0cJVMI9Jdurs5jVY1SxiX7b74un
-         8Moai/AtD+K7gl+u28sVhNeQcgiBgkJGDlrq2ALtu79Hj5XTFouOHcsarJw1YN56x5af
-         +sM/Xwojetc6UHt+UCfnVwjHRF2wnBHpOOm9zoQi4UvsDWMTJmcac7zt89L6X1OPIXod
-         tCK7WgijTS3zF1/HFlLj1CYIiUcMBnBX21Qp4Gw5gqE9GGgLeMAMXhRArPNIAbrxnJTj
-         S/mw==
-X-Gm-Message-State: AOAM531+DgK4X+Rsk1yVc7P4bXaM7YLsuoQDSf8RuArmgQfD1fzmOWWd
-        P1zURITbLsl5Vl82dc+iVLI=
-X-Google-Smtp-Source: ABdhPJwC5dR8KjB6ukidKXYL8mRsVjbdUzD5dwALrHMiGFd9jRfI5DhafXvsggJAHmjFqo0qxA39+Q==
-X-Received: by 2002:a37:ed5:: with SMTP id 204mr3992627qko.405.1598578455012;
-        Thu, 27 Aug 2020 18:34:15 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id e63sm2658202qkf.29.2020.08.27.18.34.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Aug 2020 18:34:14 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 97CC527C0054;
-        Thu, 27 Aug 2020 21:34:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 27 Aug 2020 21:34:13 -0400
-X-ME-Sender: <xms:FF9IX9dS_Yp2ZKkBeec48r-YKN6-S--qSRVulVn_Zyn2_wLfPGRy2Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddviedggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepvdelieegudfggeevjefhjeevueevieetjeeikedvgfejfeduheefhffggedv
-    geejnecukfhppeehvddrudehhedrudduuddrjedunecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
-    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
-    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:FF9IX7OLc94TMsHppDsCijhN35_ysf4qSRH0uCHQa5KoZCcAJxhhfQ>
-    <xmx:FF9IX2ilGYE-rtewURniFTIyJRip-vph-QOZgNWzqnNgCLKZQTOsgg>
-    <xmx:FF9IX29JSvOOE1jnqVpx-dQ5J81i7I-6N_LcUN1IbgVGGAs3P5OYOA>
-    <xmx:FV9IX1EDrPt68M1TnRMiyrgxq7ko1fnQDd0tjVgaM0RXk02JpHCY6YX_ifQ>
-Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id BF1BE306005F;
-        Thu, 27 Aug 2020 21:34:11 -0400 (EDT)
-Date:   Fri, 28 Aug 2020 09:34:10 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Cameron <cameron@moodycamel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
-        oleg@redhat.com, will@kernel.org, paulmck@kernel.org
-Subject: Re: [RFC][PATCH 6/7] freelist: Lock less freelist
-Message-ID: <20200828013410.GA49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-References: <20200827161237.889877377@infradead.org>
- <20200827161754.535381269@infradead.org>
- <20200827190804.GA128237@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
- <CAFCw3do_4TrZSQ6kYQ7Y1RYTuD+PfXRyZFp7gSDs2oUXrBZGqQ@mail.gmail.com>
+        id S1728300AbgH1Bfj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Aug 2020 21:35:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59530 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728298AbgH1Bfi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 27 Aug 2020 21:35:38 -0400
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5049A21532
+        for <linux-arch@vger.kernel.org>; Fri, 28 Aug 2020 01:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598578537;
+        bh=tiwxfT4ZMLpMEWhyNE2BjdBuHmjGuQJ6mucgE6D9qkc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uRmcfm+eR0WIlwue7S9+eANKIDrpY5M+F5fBcTFGN90g2h81uyWfSVhceV5DbbGrg
+         /Oe5GG3/y3AnqLUHitHWCx3ciML13KjKruPDw0fiif4jRsXq3GE3Z+Zx6IsOfaqJNf
+         nVVeHjN2y0rW8BdIxt1ec8TPXeNOAQvJn+5LmDI4=
+Received: by mail-wm1-f47.google.com with SMTP id w2so6623969wmi.1
+        for <linux-arch@vger.kernel.org>; Thu, 27 Aug 2020 18:35:37 -0700 (PDT)
+X-Gm-Message-State: AOAM532otKj69F+Gmsqstp27mt9Pe2tlHA1NWtWMDceN86TEo2JHv2+M
+        kqx1Jzb7CdWABTlRb9EGLaZdkiRJeE/Sn4z+lns9Tg==
+X-Google-Smtp-Source: ABdhPJyYDWVWk+/eFi0FJX/LuTNS1lOPnideF7PaS5X0ejA+L68tTArSn1hMT49k/7qw7ckWeiQo1VUVs2+8b5+fEY8=
+X-Received: by 2002:a7b:c76e:: with SMTP id x14mr303768wmk.176.1598578535632;
+ Thu, 27 Aug 2020 18:35:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFCw3do_4TrZSQ6kYQ7Y1RYTuD+PfXRyZFp7gSDs2oUXrBZGqQ@mail.gmail.com>
+References: <a770d45d-b147-a8c5-b7f8-30d668cbed84@intel.com>
+ <4BDFD364-798C-4537-A88E-F94F101F524B@amacapital.net> <CAMe9rOoTjSwRSPuqP6RKkDzPA_VPh5gVYRVFJ-ezAD4Et-FUng@mail.gmail.com>
+In-Reply-To: <CAMe9rOoTjSwRSPuqP6RKkDzPA_VPh5gVYRVFJ-ezAD4Et-FUng@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 27 Aug 2020 18:35:22 -0700
+X-Gmail-Original-Message-ID: <CALCETrW=-ahC7GUCCyX7nPjCHfG3tiyDespud2Z7UbB6yWWWAA@mail.gmail.com>
+Message-ID: <CALCETrW=-ahC7GUCCyX7nPjCHfG3tiyDespud2Z7UbB6yWWWAA@mail.gmail.com>
+Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 03:57:22PM -0400, Cameron wrote:
-> On Thu, Aug 27, 2020 at 3:08 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> > So if try_cmpxchg_acquire() fails, we don't have ACQUIRE semantics on
-> > read of the new list->head, right? Then probably a
-> > smp_mb__after_atomic() is needed in that case?
-> 
-> Yes, there needs to be an acquire on the head after a failed cmpxchg;
-> does the atomic_fetch_add following that not have acquire semantics?
-> 
+On Thu, Aug 27, 2020 at 12:38 PM H.J. Lu <hjl.tools@gmail.com> wrote:
+>
+> On Thu, Aug 27, 2020 at 11:56 AM Andy Lutomirski <luto@amacapital.net> wr=
+ote:
+> >
+> >
+> >
+> > > On Aug 27, 2020, at 11:13 AM, Yu, Yu-cheng <yu-cheng.yu@intel.com> wr=
+ote:
+> > >
+> > > =EF=BB=BFOn 8/27/2020 6:36 AM, Florian Weimer wrote:
+> > >> * H. J. Lu:
+> > >>>> On Thu, Aug 27, 2020 at 6:19 AM Florian Weimer <fweimer@redhat.com=
+> wrote:
+> > >>>>>
+> > >>>>> * Dave Martin:
+> > >>>>>
+> > >>>>>> You're right that this has implications: for i386, libc probably=
+ pulls
+> > >>>>>> more arguments off the stack than are really there in some situa=
+tions.
+> > >>>>>> This isn't a new problem though.  There are already generic prct=
+ls with
+> > >>>>>> fewer than 4 args that are used on x86.
+> > >>>>>
+> > >>>>> As originally posted, glibc prctl would have to know that it has =
+to pull
+> > >>>>> an u64 argument off the argument list for ARCH_X86_CET_DISABLE.  =
+But
+> > >>>>> then the u64 argument is a problem for arch_prctl as well.
+> > >>>>>
+> > >>>
+> > >>> Argument of ARCH_X86_CET_DISABLE is int and passed in register.
+> > >> The commit message and the C source say otherwise, I think (not sure
+> > >> about the C source, not a kernel hacker).
+> > >
+> > > H.J. Lu suggested that we fix x86 arch_prctl() to take four arguments=
+, and then keep MMAP_SHSTK as an arch_prctl().  Because now the map flags a=
+nd size are all in registers, this also solves problems being pointed out e=
+arlier.  Without a wrapper, the shadow stack mmap call (from user space) wi=
+ll be:
+> > >
+> > > syscall(_NR_arch_prctl, ARCH_X86_CET_MMAP_SHSTK, size, MAP_32BIT).
+> >
+> > I admit I don=E2=80=99t see a show stopping technical reason we can=E2=
+=80=99t add arguments to an existing syscall, but I=E2=80=99m pretty sure i=
+t=E2=80=99s unprecedented, and it doesn=E2=80=99t seem like a good idea.
+>
+> prctl prototype is:
+>
+> extern int prctl (int __option, ...)
+>
+> and implemented in kernel as:
+>
+>       int prctl(int option, unsigned long arg2, unsigned long arg3,
+>                  unsigned long arg4, unsigned long arg5);
+>
+> Not all prctl operations take all 5 arguments.   It also applies
+> to arch_prctl.  It is quite normal for different operations of
+> arch_prctl to take different numbers of arguments.
 
-Yes, you're right, the atomic_fecth_add() following is a fully-ordered
-atomic, so could provide the necessary ACQUIRE semantics. I was missing
-that. Maybe a few words explaining this helps.
+If by "quite normal" you mean "does not happen", then I agree.
 
-Regards,
-Boqun
-
-> Cameron
+In any event, I will not have anything to do with a patch that changes
+an existing syscall signature unless Linus personally acks it.  So if
+you want to email him and linux-abi, be my guest.
