@@ -2,153 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9CD255EA2
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 18:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E94255F58
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 19:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725814AbgH1QPf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 12:15:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57898 "EHLO mail.kernel.org"
+        id S1726323AbgH1RGR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 13:06:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbgH1QPZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Aug 2020 12:15:25 -0400
-Received: from localhost (104.sub-72-107-126.myvzw.com [72.107.126.104])
+        id S1725814AbgH1RGP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 13:06:15 -0400
+Received: from gaia (unknown [46.69.195.127])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B7DFA208D5;
-        Fri, 28 Aug 2020 16:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598631325;
-        bh=WDy36I6Z4orTZPoGujoAX7lI0c2B80UVvjLy+uuLcNA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=XXzEkWMbwa7hJsKl3WWxYs9ZIzvl4XBfLjgS8Mijz+ElFIFxllHByPMzK3VHEqITH
-         1D4I/umOYAh/U5wOHQaoIwJATfekh83VfUHN8EJZaCCfchYknTM4ZCIMFUd0DL6dnq
-         F9ieOAP4skNybw+ZwBfOKkffDedrwcNXg5u8hBDU=
-Date:   Fri, 28 Aug 2020 11:15:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Atish Patra <atish.patra@wdc.com>, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Zong Li <zong.li@sifive.com>, linux-riscv@lists.infradead.org,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ganapatrao Kulkarni <gkulkarni@cavium.com>,
-        Steven Price <steven.price@arm.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 67CC620776;
+        Fri, 28 Aug 2020 17:06:11 +0000 (UTC)
+Date:   Fri, 28 Aug 2020 18:06:08 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org,
-        Nick Hu <nickhu@andestech.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [RFC/RFT PATCH 3/6] arm64, numa: Move pcibus_to_node definition
- to generic numa code
-Message-ID: <20200828161523.GA2158345@bjorn-Precision-5520>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: Flushing transparent hugepages
+Message-ID: <20200828170608.GJ3169@gaia>
+References: <20200818150736.GQ17456@casper.infradead.org>
+ <20200818160815.GA16191@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200828104830.000007bf@Huawei.com>
+In-Reply-To: <20200818160815.GA16191@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 10:48:30AM +0100, Jonathan Cameron wrote:
-> On Fri, 14 Aug 2020 14:47:22 -0700
-> Atish Patra <atish.patra@wdc.com> wrote:
-> 
-> > pcibus_to_node is used only when numa is enabled and does not depend
-> > on ISA. Thus, it can be moved the generic numa implementation.
+On Tue, Aug 18, 2020 at 05:08:16PM +0100, Will Deacon wrote:
+> On Tue, Aug 18, 2020 at 04:07:36PM +0100, Matthew Wilcox wrote:
+> > For example, arm64 seems confused in this scenario:
 > > 
-> > Signed-off-by: Atish Patra <atish.patra@wdc.com>
-> 
-> From a more general unification point of view, there seem to
-> be two ways architectures implement this.
-> Either
-> 
-> bus->sysdata.node
-> 
-> Or as here.
-> There are weird other options, but let us ignore those :)
-> 
-> That is going to take a bit of unwinding should we
-> want to take this unification further and perhaps we want to think
-> about doing this in pci generic code rather than here?
-> 
-> Perhaps this is one we are better keeping architecture specific for
-> now?
-> 
-> +CC Bjorn and Linux-pci
-> 
-> 
-> > ---
-> >  arch/arm64/kernel/pci.c  | 10 ----------
-> >  drivers/base/arch_numa.c | 11 +++++++++++
-> >  2 files changed, 11 insertions(+), 10 deletions(-)
+> > void flush_dcache_page(struct page *page)
+> > {
+> >         if (test_bit(PG_dcache_clean, &page->flags))
+> >                 clear_bit(PG_dcache_clean, &page->flags);
+> > }
 > > 
-> > diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
-> > index 1006ed2d7c60..07c122946c11 100644
-> > --- a/arch/arm64/kernel/pci.c
-> > +++ b/arch/arm64/kernel/pci.c
-> > @@ -54,16 +54,6 @@ int raw_pci_write(unsigned int domain, unsigned int bus,
-> >  	return b->ops->write(b, devfn, reg, len, val);
-> >  }
-> >  
-> > -#ifdef CONFIG_NUMA
-> > -
-> > -int pcibus_to_node(struct pci_bus *bus)
-> > -{
-> > -	return dev_to_node(&bus->dev);
-> > -}
-> > -EXPORT_SYMBOL(pcibus_to_node);
-> > -
-> > -#endif
-> > -
-> >  #ifdef CONFIG_ACPI
-> >  
-> >  struct acpi_pci_generic_root_info {
-> > diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-> > index 83341c807240..4ab1b20a615d 100644
-> > --- a/drivers/base/arch_numa.c
-> > +++ b/drivers/base/arch_numa.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/acpi.h>
-> >  #include <linux/memblock.h>
-> >  #include <linux/module.h>
-> > +#include <linux/pci.h>
-> >  #include <linux/of.h>
-> >  
-> >  #ifdef CONFIG_ARM64
-> > @@ -60,6 +61,16 @@ EXPORT_SYMBOL(cpumask_of_node);
-> >  
-> >  #endif
-> >  
-> > +#ifdef CONFIG_PCI
-> > +
-> > +int pcibus_to_node(struct pci_bus *bus)
-> > +{
-> > +	return dev_to_node(&bus->dev);
-> > +}
-> > +EXPORT_SYMBOL(pcibus_to_node);
-> > +
-> > +#endif
-
-I certainly agree that this should not be arch-specific, but I'm not
-really in favor of adding this PCI gunk in drivers/base.
-
-I think we can do better (eventually) by getting rid of
-pcibus_to_node() completely.  It's not used very much except by
-cpumask_of_pcibus(), which itself is hardly used at all.
-
-> >  static void numa_update_cpu(unsigned int cpu, bool remove)
-> >  {
-> >  	int nid = cpu_to_node(cpu);
+> > ...
+> > 
+> > void __sync_icache_dcache(pte_t pte)
+> > {
+> >         struct page *page = pte_page(pte);
+> > 
+> >         if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+> >                 sync_icache_aliases(page_address(page), page_size(page));
+> > }
+> > 
+> > So arm64 keeps track on a per-page basis which ones have been flushed.
+> > page_size() will return PAGE_SIZE if called on a tail page or regular
+> > page, but will return PAGE_SIZE << compound_order if called on a head
+> > page.  So this will either over-flush, or it's missing the opportunity
+> > to clear the bits on all the subpages which have now been flushed.
 > 
+> Hmm, that seems to go all the way back to 2014 as the result of a bug fix
+> in 923b8f5044da ("arm64: mm: Make icache synchronisation logic huge page
+> aware") which has a Reported-by Mark and a CC stable, suggesting something
+> _was_ going wrong at the time :/ Was there a point where the tail pages
+> could end up with PG_arch_1 uncleared on allocation?
+
+In my experience, it's the other way around: you can end up with
+PG_arch_1 cleared in a tail page when the head one was set (splitting
+THP).
+
+> > What would you _like_ to see?  Would you rather flush_dcache_page()
+> > were called once for each subpage, or would you rather maintain
+> > the page-needs-flushing state once per compound page?  We could also
+> > introduce flush_dcache_thp() if some architectures would prefer it one
+> > way and one the other, although that brings into question what to do
+> > for hugetlbfs pages.
 > 
+> For arm64, we'd like to see PG_arch_1 preserved during huge page splitting
+> [1], but there was a worry that it might break x86 and s390. It's also not
+> clear to me that we can change __sync_icache_dcache() as it's called when
+> we're installing the entry in the page-table, so why would it be called
+> again for the tail pages?
+
+Indeed, __sync_icache_dcache() is called from set_pte_at() on the head
+page, though it could always iterate and flush the tail pages
+individually (I think we could have done this in commit 923b8f5044da).
+Currently I suspect it does some over-flushing if you use THP on
+executable pages (it's a no-op on non-exec pages).
+
+With MTE (arm64 memory tagging) I'm introducing a PG_arch_2 flag and
+losing this is more problematic as it can lead to clearing valid tags.
+In the subsequent patch [2], mte_sync_tags() (also called from
+set_pte_at()) checks the PG_arch_2 in each page of a compound one.
+
+My preference would be to treat both PG_arch_1 and _2 similarly.
+
+> [1] https://lore.kernel.org/linux-arch/20200703153718.16973-8-catalin.marinas@arm.com/
+
+[2] https://lore.kernel.org/linux-arch/20200703153718.16973-9-catalin.marinas@arm.com/
+
+-- 
+Catalin
