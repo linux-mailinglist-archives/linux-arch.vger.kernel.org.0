@@ -2,112 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F92125597B
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 13:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FCA255A03
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729216AbgH1LjR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 07:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729268AbgH1LiM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Aug 2020 07:38:12 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D0EC061232;
-        Fri, 28 Aug 2020 04:38:05 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id t4so578325iln.1;
-        Fri, 28 Aug 2020 04:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YkhG0d/qOT3/PWJBg69FZnqsmWy5PRGz7aCU+rLDXxM=;
-        b=pjn/h9gD/HjPLZEqJAJsF2uf24PYQdDAWmiD1wPfNvudgPxGPyd4OzHlALIT+VSh5Y
-         T1zcvcf/2OMybRQ2gT7gBjFIjjRInfx9UkYnnINep6/pptBICO/GXDmFxw0v7PeiW4wu
-         XDkRvqRvF6dHqX/VMJ7Qse/4QKYNFSQJSGuTljEs4hS0CsaRzZHiJRn515VXp64VUyHo
-         mUROMmrauEJmNQQXeTDOGVVV/4ge7l3vFWlkNU5rIlNJrK6Y2W9Lp4B2rTeyXqaieX2Y
-         nXNYq1z4Vsdd0w5W3dTDzbIzp/Y2343ZT6F4T5GYEDa/0jKrQnYPkFGbTDr0W4yLGmCr
-         XMHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YkhG0d/qOT3/PWJBg69FZnqsmWy5PRGz7aCU+rLDXxM=;
-        b=qobOkPolgRwz6XBHweJZq2qYVObyAJizRjhB0srUoh08mGQ6mw6XjhawUF23MAYjs5
-         2ciKvZHkw0KAx3QEhUVpXDLBkN2TnPi8SiJF3fEzpnddEB/76DwmqPI3HEpRNeT2GwYh
-         G/ng4c1WqlJXJl81bxAjp0d+Qc7Tu/qiPrUpSyn8QuufkpBkjjs2FsCzUOsCFLuJ2eWV
-         Sw4LfBvEjtsu4Q9Eku/ajvNk8TvhB1McGb9f8NKrfDKPUmfMW9ptfjLZzySFaMwJxSVm
-         n6bjgLQx6Q/Q2xm2oe7HsxxnulIE3FRU+PJEMhaj8ouebE2yUw5JY/j1Iyi09rR3CWJd
-         3OeQ==
-X-Gm-Message-State: AOAM5301TYOwcegUa9vpG9udVlQ0j0FCyjE4GHzfdRMcnYSCJMplzXro
-        lA6EFoYg2kvoK1qyq+2P5huZi+kARj0MuxDyTLM=
-X-Google-Smtp-Source: ABdhPJwHi2iqfV/mS52ggNLcex3m9VMBQ2/QGNsUdS0LRP4Op+NbUqXOoljtmaRM1TqvP73cHCEfd4beFso+xHIV+0Y=
-X-Received: by 2002:a05:6e02:586:: with SMTP id c6mr1122698ils.13.1598614684703;
- Fri, 28 Aug 2020 04:38:04 -0700 (PDT)
+        id S1729155AbgH1M0q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 08:26:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39128 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729123AbgH1M0o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 08:26:44 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7217A20848;
+        Fri, 28 Aug 2020 12:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598617603;
+        bh=fsyyxShImPuae7reDlXKBt0RWFjPdM+Hf6cWqd3qjac=;
+        h=From:To:Cc:Subject:Date:From;
+        b=trILrrb4jSMaZjbV3sWvQwkgX87nG2rSG5LSUSZoJL3GHnUBnczUx20VHlQIU0gRx
+         mb+n3dKGSqlLVbVBva+wNpbZlWaqDeREAXJVnfGdtx3zMfOUZFthMjY+EoKKvD/NCE
+         tjnl3Yml+1wSGzhJFvM5wrEKrsVEZmYhJmUdrBr4=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org, mhiramat@kernel.org
+Subject: [PATCH v4 00/23] kprobes: Unify kretprobe trampoline handlers and make kretprobe lockless
+Date:   Fri, 28 Aug 2020 21:26:38 +0900
+Message-Id: <159861759775.992023.12553306821235086809.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <a770d45d-b147-a8c5-b7f8-30d668cbed84@intel.com>
- <4BDFD364-798C-4537-A88E-F94F101F524B@amacapital.net> <CAMe9rOoTjSwRSPuqP6RKkDzPA_VPh5gVYRVFJ-ezAD4Et-FUng@mail.gmail.com>
- <CALCETrW=-ahC7GUCCyX7nPjCHfG3tiyDespud2Z7UbB6yWWWAA@mail.gmail.com>
- <CAMe9rOrt5hz6qsNAxPgdKCOhRcKKESv-D3rxdSfraeJ-LFHM4w@mail.gmail.com> <87v9h3thj9.fsf@oldenburg2.str.redhat.com>
-In-Reply-To: <87v9h3thj9.fsf@oldenburg2.str.redhat.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Fri, 28 Aug 2020 04:37:28 -0700
-Message-ID: <CAMe9rOr=BZw3GyXf0g6tAZnfa8NbamoyBoU9KqoxtHg9c2yZhw@mail.gmail.com>
-Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
- shadow stack
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Dave Hansen <dave.hansen@intel.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 11:24 PM Florian Weimer <fweimer@redhat.com> wrote:
->
-> * H. J. Lu:
->
-> > Can you think of ANY issues of passing more arguments to arch_prctl?
->
-> On x32, the glibc arch_prctl system call wrapper only passes two
-> arguments to the kernel, and applications have no way of detecting that.
-> musl only passes two arguments on all architectures.  It happens to work
-> anyway with default compiler flags, but that's an accident.
+Hi,
 
-In the current glibc, there is no arch_prctl wrapper for i386.  There are
-arch_prctl wrappers with 2 arguments for x86-64 and x32.  But this isn't an
-issue for glibc since glibc is both the provider and the user of the new
-arch_prctl extension.  Besides,
+Here is the 4th version of the series to unify the kretprobe trampoline handler
+and make kretprobe lockless.
 
-long syscall(long number, ...);
+Previous version is here;
 
-is always available.
+ https://lkml.kernel.org/r/159854631442.736475.5062989489155389472.stgit@devnote2
 
--- 
-H.J.
+In this version, I updated the generic trampoline handler a bit, merge 
+the Peter's lockless patches(*), and add an RFC "remove task scan" patch
+as [20/23].
+
+(*) https://lkml.kernel.org/r/20200827161237.889877377@infradead.org
+
+I ran some tests and ftracetest on x86-64. Mostly OK, but hit a BUG in the
+trampoline handler once. I'm trying to reproduce it but not succeeded yet.
+So this may need a careful review and tests.
+
+I did something like:
+
+mount -t debugfs debug /sys/kernel/debug
+cd /sys/kernel/debug/tracing/
+echo r:event1 vfs_read >> kprobe_events
+echo r:event2 vfs_read %ax >> kprobe_events
+echo r:event3 rw_verify_area %ax >> kprobe_events
+echo 1 > events/kprobes/enable
+sleep 1
+less trace
+cat ../kprobes/list
+cd ~/linux/tools/testing/selftests/ftrace
+./ftracetest
+
+Then hits a BUG_ON at kernel/kprobes.c:1893 (no test executed, maybe
+it happened when removing kretprobes?)
+
+Thank you,
+
+---
+
+Masami Hiramatsu (17):
+      kprobes: Add generic kretprobe trampoline handler
+      x86/kprobes: Use generic kretprobe trampoline handler
+      arm: kprobes: Use generic kretprobe trampoline handler
+      arm64: kprobes: Use generic kretprobe trampoline handler
+      arc: kprobes: Use generic kretprobe trampoline handler
+      csky: kprobes: Use generic kretprobe trampoline handler
+      ia64: kprobes: Use generic kretprobe trampoline handler
+      mips: kprobes: Use generic kretprobe trampoline handler
+      parisc: kprobes: Use generic kretprobe trampoline handler
+      powerpc: kprobes: Use generic kretprobe trampoline handler
+      s390: kprobes: Use generic kretprobe trampoline handler
+      sh: kprobes: Use generic kretprobe trampoline handler
+      sparc: kprobes: Use generic kretprobe trampoline handler
+      kprobes: Remove NMI context check
+      kprobes: Free kretprobe_instance with rcu callback
+      kprobes: Make local used functions static
+      [RFC] kprobes: Remove task scan for updating kretprobe_instance
+
+Peter Zijlstra (6):
+      llist: Add nonatomic __llist_add()
+      sched: Fix try_invoke_on_locked_down_task() semantics
+      kprobes: Remove kretprobe hash
+      asm-generic/atomic: Add try_cmpxchg() fallbacks
+      freelist: Lock less freelist
+      kprobes: Replace rp->free_instance with freelist
+
+
+ arch/arc/kernel/kprobes.c                 |   54 ------
+ arch/arm/probes/kprobes/core.c            |   78 ---------
+ arch/arm64/kernel/probes/kprobes.c        |   78 ---------
+ arch/csky/kernel/probes/kprobes.c         |   77 --------
+ arch/ia64/kernel/kprobes.c                |   77 --------
+ arch/mips/kernel/kprobes.c                |   54 ------
+ arch/parisc/kernel/kprobes.c              |   76 --------
+ arch/powerpc/kernel/kprobes.c             |   53 ------
+ arch/s390/kernel/kprobes.c                |   79 ---------
+ arch/sh/kernel/kprobes.c                  |   58 ------
+ arch/sparc/kernel/kprobes.c               |   51 ------
+ arch/x86/include/asm/atomic.h             |    2 
+ arch/x86/include/asm/atomic64_64.h        |    2 
+ arch/x86/include/asm/cmpxchg.h            |    2 
+ arch/x86/kernel/kprobes/core.c            |  108 ------------
+ drivers/gpu/drm/i915/i915_request.c       |    6 -
+ include/asm-generic/atomic-instrumented.h |  216 ++++++++++++++----------
+ include/linux/atomic-arch-fallback.h      |   90 +++++++++-
+ include/linux/atomic-fallback.h           |   90 +++++++++-
+ include/linux/freelist.h                  |  129 ++++++++++++++
+ include/linux/kprobes.h                   |   73 +++++---
+ include/linux/llist.h                     |   15 ++
+ include/linux/sched.h                     |    4 
+ kernel/fork.c                             |    4 
+ kernel/kprobes.c                          |  263 +++++++++++++----------------
+ kernel/sched/core.c                       |    9 -
+ kernel/trace/trace_kprobe.c               |    3 
+ scripts/atomic/gen-atomic-fallback.sh     |   63 ++++++-
+ scripts/atomic/gen-atomic-instrumented.sh |   29 +++
+ 29 files changed, 729 insertions(+), 1114 deletions(-)
+ create mode 100644 include/linux/freelist.h
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
