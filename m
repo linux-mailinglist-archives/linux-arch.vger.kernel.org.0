@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6725255A36
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5B6255A26
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Aug 2020 14:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729408AbgH1Mc0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 08:32:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40212 "EHLO mail.kernel.org"
+        id S1729175AbgH1Maq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Aug 2020 08:30:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729350AbgH1M2o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 28 Aug 2020 08:28:44 -0400
+        id S1729410AbgH1M3v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 28 Aug 2020 08:29:51 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8E2972086A;
-        Fri, 28 Aug 2020 12:28:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D5F12086A;
+        Fri, 28 Aug 2020 12:29:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598617723;
-        bh=qOCb8yg++6HPR/APlaC3ZqJPZeT9Qyxcl+5zvzglIEo=;
+        s=default; t=1598617789;
+        bh=JCO/lXzUYdFJWlKazCE1J0QbFO+BF8f1YZINWJLpv0A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VE9GHbct2HGgGqpXU31fTQNMK4NvHZxtY1e4Ym/vuEbcV1Mbzzq7/JL2qYsmjfBGV
-         jBgKCBLxVo6rcfjjYASgLnE5jytnexMsrI+qCiBAvOg/d42MrxSuIEPrz9xyskd+/D
-         eCJwU8jdfAynGneZwMyVGBP/YkWqF12guTD7Ob6c=
+        b=jYr3eXjYnGs59WVQsPiU2JU2fTihwh1eB9pwsba1cCkRmVzTHjwZ8+A/CLiwtbKxL
+         7xU3517WjfWK9PRUS/Kay+BDI8mPXl0d5zpaPX+xZ4JMJ+7jX1SLd3W1vCkglBERV0
+         3rIRI09gr0GA2he8l52TCYT1RDB4Vod8E9nradno=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
@@ -30,9 +30,9 @@ Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
         anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
         cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
         paulmck@kernel.org, mhiramat@kernel.org
-Subject: [PATCH v4 11/23] s390: kprobes: Use generic kretprobe trampoline handler
-Date:   Fri, 28 Aug 2020 21:28:38 +0900
-Message-Id: <159861771828.992023.7286108946121402285.stgit@devnote2>
+Subject: [PATCH v4 17/23] llist: Add nonatomic __llist_add()
+Date:   Fri, 28 Aug 2020 21:29:44 +0900
+Message-Id: <159861778403.992023.16294174469836026964.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159861759775.992023.12553306821235086809.stgit@devnote2>
 References: <159861759775.992023.12553306821235086809.stgit@devnote2>
@@ -45,106 +45,62 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- arch/s390/kernel/kprobes.c |   79 +-------------------------------------------
- 1 file changed, 2 insertions(+), 77 deletions(-)
+From: Peter Zijlstra <peterz@infradead.org>
 
-diff --git a/arch/s390/kernel/kprobes.c b/arch/s390/kernel/kprobes.c
-index d2a71d872638..fc30e799bd84 100644
---- a/arch/s390/kernel/kprobes.c
-+++ b/arch/s390/kernel/kprobes.c
-@@ -228,6 +228,7 @@ NOKPROBE_SYMBOL(pop_kprobe);
- void arch_prepare_kretprobe(struct kretprobe_instance *ri, struct pt_regs *regs)
- {
- 	ri->ret_addr = (kprobe_opcode_t *) regs->gprs[14];
-+	ri->fp = NULL;
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ drivers/gpu/drm/i915/i915_request.c |    6 ------
+ include/linux/llist.h               |   15 +++++++++++++++
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+index 0b2fe55e6194..0e851b925c8c 100644
+--- a/drivers/gpu/drm/i915/i915_request.c
++++ b/drivers/gpu/drm/i915/i915_request.c
+@@ -357,12 +357,6 @@ void i915_request_retire_upto(struct i915_request *rq)
+ 	} while (i915_request_retire(tmp) && tmp != rq);
+ }
  
- 	/* Replace the return addr with trampoline addr */
- 	regs->gprs[14] = (unsigned long) &kretprobe_trampoline;
-@@ -331,83 +332,7 @@ static void __used kretprobe_trampoline_holder(void)
-  */
- static int trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+-static void __llist_add(struct llist_node *node, struct llist_head *head)
+-{
+-	node->next = head->first;
+-	head->first = node;
+-}
+-
+ static struct i915_request * const *
+ __engine_active(struct intel_engine_cs *engine)
  {
--	struct kretprobe_instance *ri;
--	struct hlist_head *head, empty_rp;
--	struct hlist_node *tmp;
--	unsigned long flags, orig_ret_address;
--	unsigned long trampoline_address;
--	kprobe_opcode_t *correct_ret_addr;
--
--	INIT_HLIST_HEAD(&empty_rp);
--	kretprobe_hash_lock(current, &head, &flags);
--
--	/*
--	 * It is possible to have multiple instances associated with a given
--	 * task either because an multiple functions in the call path
--	 * have a return probe installed on them, and/or more than one return
--	 * return probe was registered for a target function.
--	 *
--	 * We can handle this because:
--	 *     - instances are always inserted at the head of the list
--	 *     - when multiple return probes are registered for the same
--	 *	 function, the first instance's ret_addr will point to the
--	 *	 real return address, and all the rest will point to
--	 *	 kretprobe_trampoline
--	 */
--	ri = NULL;
--	orig_ret_address = 0;
--	correct_ret_addr = NULL;
--	trampoline_address = (unsigned long) &kretprobe_trampoline;
--	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
--		if (ri->task != current)
--			/* another task is sharing our hash bucket */
--			continue;
--
--		orig_ret_address = (unsigned long) ri->ret_addr;
--
--		if (orig_ret_address != trampoline_address)
--			/*
--			 * This is the real return address. Any other
--			 * instances associated with this task are for
--			 * other calls deeper on the call stack
--			 */
--			break;
--	}
--
--	kretprobe_assert(ri, orig_ret_address, trampoline_address);
--
--	correct_ret_addr = ri->ret_addr;
--	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
--		if (ri->task != current)
--			/* another task is sharing our hash bucket */
--			continue;
--
--		orig_ret_address = (unsigned long) ri->ret_addr;
--
--		if (ri->rp && ri->rp->handler) {
--			ri->ret_addr = correct_ret_addr;
--			ri->rp->handler(ri, regs);
--		}
--
--		recycle_rp_inst(ri, &empty_rp);
--
--		if (orig_ret_address != trampoline_address)
--			/*
--			 * This is the real return address. Any other
--			 * instances associated with this task are for
--			 * other calls deeper on the call stack
--			 */
--			break;
--	}
--
--	regs->psw.addr = orig_ret_address;
--
--	kretprobe_hash_unlock(current, &flags);
--
--	hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
--		hlist_del(&ri->hlist);
--		kfree(ri);
--	}
-+	regs->psw.addr = __kretprobe_trampoline_handler(regs, &kretprobe_trampoline, NULL);
- 	/*
- 	 * By returning a non-zero value, we are telling
- 	 * kprobe_handler() that we don't want the post_handler
+diff --git a/include/linux/llist.h b/include/linux/llist.h
+index 2e9c7215882b..c17893dcc591 100644
+--- a/include/linux/llist.h
++++ b/include/linux/llist.h
+@@ -197,6 +197,16 @@ static inline struct llist_node *llist_next(struct llist_node *node)
+ extern bool llist_add_batch(struct llist_node *new_first,
+ 			    struct llist_node *new_last,
+ 			    struct llist_head *head);
++
++static inline bool __llist_add_batch(struct llist_node *new_first,
++				     struct llist_node *new_last,
++				     struct llist_head *head)
++{
++	new_last->next = head->first;
++	head->first = new_first;
++	return new_last->next == NULL;
++}
++
+ /**
+  * llist_add - add a new entry
+  * @new:	new entry to be added
+@@ -209,6 +219,11 @@ static inline bool llist_add(struct llist_node *new, struct llist_head *head)
+ 	return llist_add_batch(new, new, head);
+ }
+ 
++static inline bool __llist_add(struct llist_node *new, struct llist_head *head)
++{
++	return __llist_add_batch(new, new, head);
++}
++
+ /**
+  * llist_del_all - delete all entries from lock-less list
+  * @head:	the head of lock-less list to delete all entries
 
