@@ -2,197 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 410032567BC
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB01F25696E
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 19:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728252AbgH2NEy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Aug 2020 09:04:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54806 "EHLO mail.kernel.org"
+        id S1728273AbgH2RbD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 13:31:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36314 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728217AbgH2NEB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 29 Aug 2020 09:04:01 -0400
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728139AbgH2RbD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 29 Aug 2020 13:31:03 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0EE5C20EDD;
-        Sat, 29 Aug 2020 13:03:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E9C4220757;
+        Sat, 29 Aug 2020 17:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598706241;
-        bh=bwUpSnsKqLmIuusutOsrTELxriYP7AHmwiKkNiMiQGE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZu2YxuxCLjpGP+RoPui/atSgSKLt/kLNly96FbCmfx+Ep8zO0wyvM2gM7/fEDxiP
-         D2UQmWchfusLpY9NepkQ9T2YpyMgH9HDSQsQ77ojulnuokSd2F18yINO7Iqm0x0sFN
-         /0J7yl60QMvGo2fo6260+QvXvbPTQs79+uJij20E=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
-        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
-        paulmck@kernel.org, mhiramat@kernel.org
-Subject: [PATCH v5 21/21] kprobes: Replace rp->free_instance with freelist
-Date:   Sat, 29 Aug 2020 22:03:56 +0900
-Message-Id: <159870623583.1229682.17472357584134058687.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <159870598914.1229682.15230803449082078353.stgit@devnote2>
-References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
-User-Agent: StGit/0.19
+        s=default; t=1598722261;
+        bh=MIejLqCcrs1VRg7ixEsu20TKbHNfmfOmpymgis+xDAs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=vrnNntjzOiZFvoYkZ0iQ4dzR5oKfwpzgI5nJ9G/vAV5m+TX0viJULfFgV2x2xy5eG
+         BWafutq7HG2YAtPUbP0YhJHJ4arzKJwJ618fzvyM9TCQelSoSebEZuN62wGRbT5mYb
+         BMgwyoEcP9NZBzr46+AUyX1/I854yqP3uc4f8TwQ=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id BD3773523112; Sat, 29 Aug 2020 10:31:00 -0700 (PDT)
+Date:   Sat, 29 Aug 2020 10:31:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     peterz@infradead.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, Eddy_Wu@trendmicro.com,
+        x86@kernel.org, davem@davemloft.net, rostedt@goodmis.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        linux-arch@vger.kernel.org, cameron@moodycamel.com,
+        oleg@redhat.com, will@kernel.org
+Subject: Re: [PATCH v4 18/23] sched: Fix try_invoke_on_locked_down_task()
+ semantics
+Message-ID: <20200829173100.GS2855@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <159861759775.992023.12553306821235086809.stgit@devnote2>
+ <159861779482.992023.8503137488052381952.stgit@devnote2>
+ <20200829110155.70c676520ad2cfef8374171d@kernel.org>
+ <20200829073049.GC2674@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200829073049.GC2674@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Sat, Aug 29, 2020 at 09:30:49AM +0200, peterz@infradead.org wrote:
+> On Sat, Aug 29, 2020 at 11:01:55AM +0900, Masami Hiramatsu wrote:
+> > On Fri, 28 Aug 2020 21:29:55 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > 
+> > > From: Peter Zijlstra <peterz@infradead.org>
+> > 
+> > In the next version I will drop this since I will merge the kretprobe_holder
+> > things into removing kretporbe hash patch.
+> > 
+> > However, this patch itself seems fixing a bug of commit 2beaf3280e57
+> > ("sched/core: Add function to sample state of locked-down task").
+> > Peter, could you push this separately?
+> 
+> Yeah, Paul and me have a slightly different version for that, this also
+> changes semantics we're still bickering over ;-)
+> 
+> But yes, I'll take care of it.
 
-Gets rid of rp->lock, and as a result kretprobes are now fully
-lockless.
+For whatever it is worth, I ended up back at your original patch with
+one change to the header comment, as shown below.  Does this work for you?
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- Changes
-  - [MH] expel the llist from anon union in kretprobe_instance
----
- include/linux/kprobes.h |    8 +++----
- kernel/kprobes.c        |   56 ++++++++++++++++++++---------------------------
- 2 files changed, 28 insertions(+), 36 deletions(-)
+							Thanx, Paul
 
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index f8f87a13345a..89ff0fc15286 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -28,6 +28,7 @@
- #include <linux/mutex.h>
- #include <linux/ftrace.h>
- #include <linux/refcount.h>
-+#include <linux/freelist.h>
- #include <asm/kprobes.h>
+------------------------------------------------------------------------
+
+commit 3f73a1137f8e999a606357064ebd914cf5f2c897
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Sat Aug 29 10:22:24 2020 -0700
+
+    sched/core: Allow try_invoke_on_locked_down_task() with irqs disabled
+    
+    The try_invoke_on_locked_down_task() function currently requires
+    that interrupts be enabled, but it is called with interrupts
+    disabled from rcu_print_task_stall(), resulting in an "IRQs not
+    enabled as expected" diagnostic.  This commit therefore updates
+    try_invoke_on_locked_down_task() to use raw_spin_lock_irqsave() instead
+    of raw_spin_lock_irq(), thus allowing use from either context.
+    
+    Link: https://lore.kernel.org/lkml/000000000000903d5805ab908fc4@google.com/
+    Reported-by: syzbot+cb3b69ae80afd6535b0e@syzkaller.appspotmail.com
+    Not-signed-off-by: Peter Zijlstra <peterz@infradead.org>
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 8471a0f..a814028 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2988,7 +2988,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
  
- #ifdef CONFIG_KPROBES
-@@ -157,17 +158,16 @@ struct kretprobe {
- 	int maxactive;
- 	int nmissed;
- 	size_t data_size;
--	struct hlist_head free_instances;
-+	struct freelist_head freelist;
- 	struct kretprobe_holder *rph;
--	raw_spinlock_t lock;
- };
- 
- struct kretprobe_instance {
- 	union {
--		struct llist_node llist;
--		struct hlist_node hlist;
-+		struct freelist_node freelist;
- 		struct rcu_head rcu;
- 	};
-+	struct llist_node llist;
- 	struct kretprobe_holder *rph;
- 	kprobe_opcode_t *ret_addr;
- 	void *fp;
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index bc65603fce00..af6551992b91 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1228,11 +1228,8 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
+ /**
+  * try_invoke_on_locked_down_task - Invoke a function on task in fixed state
+- * @p: Process for which the function is to be invoked.
++ * @p: Process for which the function is to be invoked, can be @current.
+  * @func: Function to invoke.
+  * @arg: Argument to function.
+  *
+@@ -3006,12 +3006,11 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+  */
+ bool try_invoke_on_locked_down_task(struct task_struct *p, bool (*func)(struct task_struct *t, void *arg), void *arg)
  {
- 	struct kretprobe *rp = get_kretprobe(ri);
+-	bool ret = false;
+ 	struct rq_flags rf;
++	bool ret = false;
+ 	struct rq *rq;
  
--	INIT_HLIST_NODE(&ri->hlist);
- 	if (likely(rp)) {
--		raw_spin_lock(&rp->lock);
--		hlist_add_head(&ri->hlist, &rp->free_instances);
--		raw_spin_unlock(&rp->lock);
-+		freelist_add(&ri->freelist, &rp->freelist);
- 	} else
- 		call_rcu(&ri->rcu, free_rp_inst_rcu);
- }
-@@ -1290,11 +1287,14 @@ NOKPROBE_SYMBOL(kprobe_flush_task);
- static inline void free_rp_inst(struct kretprobe *rp)
- {
- 	struct kretprobe_instance *ri;
--	struct hlist_node *next;
-+	struct freelist_node *node;
- 	int count = 0;
- 
--	hlist_for_each_entry_safe(ri, next, &rp->free_instances, hlist) {
--		hlist_del(&ri->hlist);
-+	node = rp->freelist.head;
-+	while (node) {
-+		ri = container_of(node, struct kretprobe_instance, freelist);
-+		node = node->next;
-+
- 		kfree(ri);
- 		count++;
- 	}
-@@ -1925,32 +1925,26 @@ NOKPROBE_SYMBOL(__kretprobe_trampoline_handler)
- static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- {
- 	struct kretprobe *rp = container_of(p, struct kretprobe, kp);
--	unsigned long flags = 0;
- 	struct kretprobe_instance *ri;
-+	struct freelist_node *fn;
- 
--	/* TODO: consider to only swap the RA after the last pre_handler fired */
--	raw_spin_lock_irqsave(&rp->lock, flags);
--	if (!hlist_empty(&rp->free_instances)) {
--		ri = hlist_entry(rp->free_instances.first,
--				struct kretprobe_instance, hlist);
--		hlist_del(&ri->hlist);
--		raw_spin_unlock_irqrestore(&rp->lock, flags);
--
--		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
--			raw_spin_lock_irqsave(&rp->lock, flags);
--			hlist_add_head(&ri->hlist, &rp->free_instances);
--			raw_spin_unlock_irqrestore(&rp->lock, flags);
--			return 0;
--		}
--
--		arch_prepare_kretprobe(ri, regs);
-+	fn = freelist_try_get(&rp->freelist);
-+	if (!fn) {
-+		rp->nmissed++;
-+		return 0;
-+	}
- 
--		__llist_add(&ri->llist, &current->kretprobe_instances);
-+	ri = container_of(fn, struct kretprobe_instance, freelist);
- 
--	} else {
--		rp->nmissed++;
--		raw_spin_unlock_irqrestore(&rp->lock, flags);
-+	if (rp->entry_handler && rp->entry_handler(ri, regs)) {
-+		freelist_add(&ri->freelist, &rp->freelist);
-+		return 0;
- 	}
-+
-+	arch_prepare_kretprobe(ri, regs);
-+
-+	__llist_add(&ri->llist, &current->kretprobe_instances);
-+
- 	return 0;
- }
- NOKPROBE_SYMBOL(pre_handler_kretprobe);
-@@ -2007,8 +2001,7 @@ int register_kretprobe(struct kretprobe *rp)
- 		rp->maxactive = num_possible_cpus();
- #endif
- 	}
--	raw_spin_lock_init(&rp->lock);
--	INIT_HLIST_HEAD(&rp->free_instances);
-+	rp->freelist.head = NULL;
- 	rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
- 	if (!rp->rph)
- 		return -ENOMEM;
-@@ -2023,8 +2016,7 @@ int register_kretprobe(struct kretprobe *rp)
- 			return -ENOMEM;
+-	lockdep_assert_irqs_enabled();
+-	raw_spin_lock_irq(&p->pi_lock);
++	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+ 	if (p->on_rq) {
+ 		rq = __task_rq_lock(p, &rf);
+ 		if (task_rq(p) == rq)
+@@ -3028,7 +3027,7 @@ bool try_invoke_on_locked_down_task(struct task_struct *p, bool (*func)(struct t
+ 				ret = func(p, arg);
  		}
- 		inst->rph = rp->rph;
--		INIT_HLIST_NODE(&inst->hlist);
--		hlist_add_head(&inst->hlist, &rp->free_instances);
-+		freelist_add(&inst->freelist, &rp->freelist);
  	}
- 	refcount_set(&rp->rph->ref, i);
+-	raw_spin_unlock_irq(&p->pi_lock);
++	raw_spin_unlock_irqrestore(&p->pi_lock, rf.flags);
+ 	return ret;
+ }
  
-
