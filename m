@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2492567C3
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BFF42567B6
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728101AbgH2NIH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Aug 2020 09:08:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54216 "EHLO mail.kernel.org"
+        id S1728220AbgH2NEQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 09:04:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54362 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728048AbgH2NDI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 29 Aug 2020 09:03:08 -0400
+        id S1728197AbgH2NDU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 29 Aug 2020 09:03:20 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B66D42076D;
-        Sat, 29 Aug 2020 13:03:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DAAFB207DA;
+        Sat, 29 Aug 2020 13:03:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598706187;
-        bh=bnvZNXRwKaNmMas2vL1Y0x/Ullhxy/ZdP57rONHv3+M=;
+        s=default; t=1598706199;
+        bh=9oQlGd1+Pkl4l313Q52v7ANZGwjXIwhw9+f/hm4+dQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G8vqDA/qHDmeBeEe3AYM39SPbnwobeSI12e9mBQBCuESA7nmcbNGowDQDQOYjFmCT
-         9/PlpVG+OmaIfvWkCI+y8UNlz27ph67dKFAib4BU1wZ1HqqYcQpHUqZEDHhE7n21Vo
-         KV7jzKiWEBeMHFQHFUKW7I4oQONc7GZ9mVf1cUaQ=
+        b=FYi+kcX5e1cc/3c0wTyXPe+nVMFsknk2fPhi9lfm2N9BXxlR49+BE2H4bATQmRquO
+         uPq1E8TqopvbjO4U/r7CPOxMvA1Yb80e2GpUllWvSYIuzjUVnMdiMkNwG4oeX8v22T
+         SlOhvnElBCXj+dFW9cKCYogk3dc1+4bwp4QyR7WM=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
@@ -30,9 +30,9 @@ Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
         anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
         cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
         paulmck@kernel.org, mhiramat@kernel.org
-Subject: [PATCH v5 16/21] kprobes: Make local used functions static
-Date:   Sat, 29 Aug 2020 22:03:02 +0900
-Message-Id: <159870618256.1229682.8692046612635810882.stgit@devnote2>
+Subject: [PATCH v5 17/21] llist: Add nonatomic __llist_add() and __llist_dell_all()
+Date:   Sat, 29 Aug 2020 22:03:13 +0900
+Message-Id: <159870619318.1229682.13027387548510028721.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159870598914.1229682.15230803449082078353.stgit@devnote2>
 References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
@@ -45,97 +45,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since we unified the kretprobe trampoline handler from arch/* code,
-some functions and objects no need to be exported anymore.
+From: Peter Zijlstra <peterz@infradead.org>
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- Changes in v4:
-   - Convert kretprobe_assert() into a BUG_ON().
----
- include/linux/kprobes.h |   15 ---------------
- kernel/kprobes.c        |    9 ++++-----
- 2 files changed, 4 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/i915/i915_request.c |    6 ------
+ include/linux/llist.h               |   23 +++++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 663be8debf25..9c880c8a4e80 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -190,7 +190,6 @@ static inline int kprobes_built_in(void)
- 	return 1;
+diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+index 0b2fe55e6194..0e851b925c8c 100644
+--- a/drivers/gpu/drm/i915/i915_request.c
++++ b/drivers/gpu/drm/i915/i915_request.c
+@@ -357,12 +357,6 @@ void i915_request_retire_upto(struct i915_request *rq)
+ 	} while (i915_request_retire(tmp) && tmp != rq);
  }
  
--extern struct kprobe kprobe_busy;
- void kprobe_busy_begin(void);
- void kprobe_busy_end(void);
- 
-@@ -235,16 +234,6 @@ static inline int arch_trampoline_kprobe(struct kprobe *p)
- 
- extern struct kretprobe_blackpoint kretprobe_blacklist[];
- 
--static inline void kretprobe_assert(struct kretprobe_instance *ri,
--	unsigned long orig_ret_address, unsigned long trampoline_address)
+-static void __llist_add(struct llist_node *node, struct llist_head *head)
 -{
--	if (!orig_ret_address || (orig_ret_address == trampoline_address)) {
--		printk("kretprobe BUG!: Processing kretprobe %p @ %p\n",
--				ri->rp, ri->rp->kp.addr);
--		BUG();
--	}
+-	node->next = head->first;
+-	head->first = node;
 -}
 -
- #ifdef CONFIG_KPROBES_SANITY_TEST
- extern int init_test_probes(void);
- #else
-@@ -364,10 +353,6 @@ int arch_check_ftrace_location(struct kprobe *p);
- 
- /* Get the kprobe at this addr (if any) - called with preemption disabled */
- struct kprobe *get_kprobe(void *addr);
--void kretprobe_hash_lock(struct task_struct *tsk,
--			 struct hlist_head **head, unsigned long *flags);
--void kretprobe_hash_unlock(struct task_struct *tsk, unsigned long *flags);
--struct hlist_head * kretprobe_inst_table_head(struct task_struct *tsk);
- 
- /* kprobe_running() will just return the current_kprobe on this CPU */
- static inline struct kprobe *kprobe_running(void)
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 0676868f1ac2..732a70163584 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1239,7 +1239,7 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
- }
- NOKPROBE_SYMBOL(recycle_rp_inst);
- 
--void kretprobe_hash_lock(struct task_struct *tsk,
-+static void kretprobe_hash_lock(struct task_struct *tsk,
- 			 struct hlist_head **head, unsigned long *flags)
- __acquires(hlist_lock)
+ static struct i915_request * const *
+ __engine_active(struct intel_engine_cs *engine)
  {
-@@ -1261,7 +1261,7 @@ __acquires(hlist_lock)
+diff --git a/include/linux/llist.h b/include/linux/llist.h
+index 2e9c7215882b..24f207b0190b 100644
+--- a/include/linux/llist.h
++++ b/include/linux/llist.h
+@@ -197,6 +197,16 @@ static inline struct llist_node *llist_next(struct llist_node *node)
+ extern bool llist_add_batch(struct llist_node *new_first,
+ 			    struct llist_node *new_last,
+ 			    struct llist_head *head);
++
++static inline bool __llist_add_batch(struct llist_node *new_first,
++				     struct llist_node *new_last,
++				     struct llist_head *head)
++{
++	new_last->next = head->first;
++	head->first = new_first;
++	return new_last->next == NULL;
++}
++
+ /**
+  * llist_add - add a new entry
+  * @new:	new entry to be added
+@@ -209,6 +219,11 @@ static inline bool llist_add(struct llist_node *new, struct llist_head *head)
+ 	return llist_add_batch(new, new, head);
  }
- NOKPROBE_SYMBOL(kretprobe_table_lock);
  
--void kretprobe_hash_unlock(struct task_struct *tsk,
-+static void kretprobe_hash_unlock(struct task_struct *tsk,
- 			   unsigned long *flags)
- __releases(hlist_lock)
- {
-@@ -1282,7 +1282,7 @@ __releases(hlist_lock)
++static inline bool __llist_add(struct llist_node *new, struct llist_head *head)
++{
++	return __llist_add_batch(new, new, head);
++}
++
+ /**
+  * llist_del_all - delete all entries from lock-less list
+  * @head:	the head of lock-less list to delete all entries
+@@ -222,6 +237,14 @@ static inline struct llist_node *llist_del_all(struct llist_head *head)
+ 	return xchg(&head->first, NULL);
  }
- NOKPROBE_SYMBOL(kretprobe_table_unlock);
  
--struct kprobe kprobe_busy = {
-+static struct kprobe kprobe_busy = {
- 	.addr = (void *) get_kprobe,
- };
++static inline struct llist_node *__llist_del_all(struct llist_head *head)
++{
++	struct llist_node *first = head->first;
++
++	head->first = NULL;
++	return first;
++}
++
+ extern struct llist_node *llist_del_first(struct llist_head *head);
  
-@@ -1983,8 +1983,7 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 			break;
- 	}
- 
--	kretprobe_assert(ri, (unsigned long)correct_ret_addr,
--			     (unsigned long)trampoline_address);
-+	BUG_ON(!correct_ret_addr || (correct_ret_addr == trampoline_address));
- 	last = ri;
- 
- 	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
+ struct llist_node *llist_reverse_order(struct llist_node *head);
 
