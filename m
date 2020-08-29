@@ -2,176 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABB325667B
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 11:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBBB2567A5
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726798AbgH2Jbp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Aug 2020 05:31:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33456 "EHLO mail.kernel.org"
+        id S1727783AbgH2NAC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 09:00:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51788 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726405AbgH2Jbo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 29 Aug 2020 05:31:44 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727772AbgH2M74 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 29 Aug 2020 08:59:56 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29A4320791;
-        Sat, 29 Aug 2020 09:31:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ACEEB2076D;
+        Sat, 29 Aug 2020 12:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598693503;
-        bh=mRFSDrdb3CJe2f+LAM7xJ8zLaomR+oMA2NdfHPPa/t0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0yxm7IYZjnpWoncFmotRWzVmXnF0Xg4sF5JIoCi82xNx/OASmYj1Az+HI5i87X4sl
-         IxxhQXmB2/34D3+Ma3jTxSNDJf5x8IgXSf0ERSyv1a/e9t+O2sX4gHr2Ozx2/nrK5f
-         vYnTsiFcyBN3248K09lO/ot/VYcAVmDXe37yQ6ww=
-Date:   Sat, 29 Aug 2020 18:31:39 +0900
+        s=default; t=1598705995;
+        bh=MheKn7qA17nkyGJRDoDSoWuRmPBTERY8iqno8hbFt8E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UowAGL4CfBhIGG/THwvG2Rju9UmIIkkUwf8rqsXSnUlMOfHdNCEmtkaKUEA3XuOOq
+         /n5draAtzGalbMEXI2rSNXp1pCY8X+GH8CDcbkJ3/lx+0Bhxixxq2l9xzZUKXRc3lN
+         PYGJiZnPxsaZihyNCZODDq2lMbk0T/VyytGv43I0=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eddy Wu <Eddy_Wu@trendmicro.com>, x86@kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3 06/16] csky: kprobes: Use generic kretprobe
- trampoline handler
-Message-Id: <20200829183139.9bf2877cf4f1a436b360c722@kernel.org>
-In-Reply-To: <CAJF2gTR5z87fb4ieOcrnMNT6GxSAhj99cf7draGVaHnk7G-pCQ@mail.gmail.com>
-References: <159854631442.736475.5062989489155389472.stgit@devnote2>
-        <159854636764.736475.9112286781925119117.stgit@devnote2>
-        <CAJF2gTR5z87fb4ieOcrnMNT6GxSAhj99cf7draGVaHnk7G-pCQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org, mhiramat@kernel.org
+Subject: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers and make kretprobe lockless
+Date:   Sat, 29 Aug 2020 21:59:49 +0900
+Message-Id: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 28 Aug 2020 20:34:22 +0800
-Guo Ren <guoren@kernel.org> wrote:
+Hi,
 
-> Looks more clear.
-> 
-> Acked-by: Guo Ren <guoren@kernel.org>
+Here is the 5th version of the series to unify the kretprobe trampoline handler
+and to make the kretprobe lockless. Thanks Peter for this work !!
 
-Thanks Guo! I'll add it to the next version.
+Previous version is here;
 
-> 
-> On Fri, Aug 28, 2020 at 12:39 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  arch/csky/kernel/probes/kprobes.c |   78 +------------------------------------
-> >  1 file changed, 3 insertions(+), 75 deletions(-)
-> >
-> > diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-> > index f0f733b7ac5a..a891fb422e76 100644
-> > --- a/arch/csky/kernel/probes/kprobes.c
-> > +++ b/arch/csky/kernel/probes/kprobes.c
-> > @@ -404,87 +404,15 @@ int __init arch_populate_kprobe_blacklist(void)
-> >
-> >  void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
-> >  {
-> > -       struct kretprobe_instance *ri = NULL;
-> > -       struct hlist_head *head, empty_rp;
-> > -       struct hlist_node *tmp;
-> > -       unsigned long flags, orig_ret_address = 0;
-> > -       unsigned long trampoline_address =
-> > -               (unsigned long)&kretprobe_trampoline;
-> > -       kprobe_opcode_t *correct_ret_addr = NULL;
-> > -
-> > -       INIT_HLIST_HEAD(&empty_rp);
-> > -       kretprobe_hash_lock(current, &head, &flags);
-> > -
-> > -       /*
-> > -        * It is possible to have multiple instances associated with a given
-> > -        * task either because multiple functions in the call path have
-> > -        * return probes installed on them, and/or more than one
-> > -        * return probe was registered for a target function.
-> > -        *
-> > -        * We can handle this because:
-> > -        *     - instances are always pushed into the head of the list
-> > -        *     - when multiple return probes are registered for the same
-> > -        *       function, the (chronologically) first instance's ret_addr
-> > -        *       will be the real return address, and all the rest will
-> > -        *       point to kretprobe_trampoline.
-> > -        */
-> > -       hlist_for_each_entry_safe(ri, tmp, head, hlist) {
-> > -               if (ri->task != current)
-> > -                       /* another task is sharing our hash bucket */
-> > -                       continue;
-> > -
-> > -               orig_ret_address = (unsigned long)ri->ret_addr;
-> > -
-> > -               if (orig_ret_address != trampoline_address)
-> > -                       /*
-> > -                        * This is the real return address. Any other
-> > -                        * instances associated with this task are for
-> > -                        * other calls deeper on the call stack
-> > -                        */
-> > -                       break;
-> > -       }
-> > -
-> > -       kretprobe_assert(ri, orig_ret_address, trampoline_address);
-> > -
-> > -       correct_ret_addr = ri->ret_addr;
-> > -       hlist_for_each_entry_safe(ri, tmp, head, hlist) {
-> > -               if (ri->task != current)
-> > -                       /* another task is sharing our hash bucket */
-> > -                       continue;
-> > -
-> > -               orig_ret_address = (unsigned long)ri->ret_addr;
-> > -               if (ri->rp && ri->rp->handler) {
-> > -                       __this_cpu_write(current_kprobe, &ri->rp->kp);
-> > -                       get_kprobe_ctlblk()->kprobe_status = KPROBE_HIT_ACTIVE;
-> > -                       ri->ret_addr = correct_ret_addr;
-> > -                       ri->rp->handler(ri, regs);
-> > -                       __this_cpu_write(current_kprobe, NULL);
-> > -               }
-> > -
-> > -               recycle_rp_inst(ri, &empty_rp);
-> > -
-> > -               if (orig_ret_address != trampoline_address)
-> > -                       /*
-> > -                        * This is the real return address. Any other
-> > -                        * instances associated with this task are for
-> > -                        * other calls deeper on the call stack
-> > -                        */
-> > -                       break;
-> > -       }
-> > -
-> > -       kretprobe_hash_unlock(current, &flags);
-> > -
-> > -       hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
-> > -               hlist_del(&ri->hlist);
-> > -               kfree(ri);
-> > -       }
-> > -       return (void *)orig_ret_address;
-> > +       return (void *)kretprobe_trampoline_handler(regs,
-> > +                       (unsigned long)&kretprobe_trampoline, NULL);
-> >  }
-> >
-> >  void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
-> >                                       struct pt_regs *regs)
-> >  {
-> >         ri->ret_addr = (kprobe_opcode_t *)regs->lr;
-> > +       ri->fp = NULL;
-> >         regs->lr = (unsigned long) &kretprobe_trampoline;
-> >  }
-> >
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
+ https://lkml.kernel.org/r/159861759775.992023.12553306821235086809.stgit@devnote2
+
+This version merges the remove-task-scan patch into remove kretprobe hash
+patch, fixes code according to the comments, and fixes a minor issues.
+
+This version is also available on
+git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git lockless-kretprobe-v5
+
+I ran smoke test and ftracetest on x86-64 and did build tests for x86-64, i386, arm,
+arm64, and mips.
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Thank you,
+
+---
+
+Masami Hiramatsu (16):
+      kprobes: Add generic kretprobe trampoline handler
+      x86/kprobes: Use generic kretprobe trampoline handler
+      arm: kprobes: Use generic kretprobe trampoline handler
+      arm64: kprobes: Use generic kretprobe trampoline handler
+      arc: kprobes: Use generic kretprobe trampoline handler
+      csky: kprobes: Use generic kretprobe trampoline handler
+      ia64: kprobes: Use generic kretprobe trampoline handler
+      mips: kprobes: Use generic kretprobe trampoline handler
+      parisc: kprobes: Use generic kretprobe trampoline handler
+      powerpc: kprobes: Use generic kretprobe trampoline handler
+      s390: kprobes: Use generic kretprobe trampoline handler
+      sh: kprobes: Use generic kretprobe trampoline handler
+      sparc: kprobes: Use generic kretprobe trampoline handler
+      kprobes: Remove NMI context check
+      kprobes: Free kretprobe_instance with rcu callback
+      kprobes: Make local used functions static
+
+Peter Zijlstra (5):
+      llist: Add nonatomic __llist_add() and __llist_dell_all()
+      kprobes: Remove kretprobe hash
+      asm-generic/atomic: Add try_cmpxchg() fallbacks
+      freelist: Lock less freelist
+      kprobes: Replace rp->free_instance with freelist
+
+
+ arch/arc/kernel/kprobes.c                 |   54 ------
+ arch/arm/probes/kprobes/core.c            |   78 ---------
+ arch/arm64/kernel/probes/kprobes.c        |   78 ---------
+ arch/csky/kernel/probes/kprobes.c         |   77 --------
+ arch/ia64/kernel/kprobes.c                |   77 --------
+ arch/mips/kernel/kprobes.c                |   54 ------
+ arch/parisc/kernel/kprobes.c              |   76 --------
+ arch/powerpc/kernel/kprobes.c             |   53 ------
+ arch/s390/kernel/kprobes.c                |   79 ---------
+ arch/sh/kernel/kprobes.c                  |   58 ------
+ arch/sparc/kernel/kprobes.c               |   51 ------
+ arch/x86/include/asm/atomic.h             |    2 
+ arch/x86/include/asm/atomic64_64.h        |    2 
+ arch/x86/include/asm/cmpxchg.h            |    2 
+ arch/x86/kernel/kprobes/core.c            |  108 ------------
+ drivers/gpu/drm/i915/i915_request.c       |    6 -
+ include/asm-generic/atomic-instrumented.h |  216 ++++++++++++++----------
+ include/linux/atomic-arch-fallback.h      |   90 +++++++++-
+ include/linux/atomic-fallback.h           |   90 +++++++++-
+ include/linux/freelist.h                  |  129 ++++++++++++++
+ include/linux/kprobes.h                   |   74 +++++---
+ include/linux/llist.h                     |   23 +++
+ include/linux/sched.h                     |    4 
+ kernel/fork.c                             |    4 
+ kernel/kprobes.c                          |  264 +++++++++++++----------------
+ kernel/trace/trace_kprobe.c               |    3 
+ scripts/atomic/gen-atomic-fallback.sh     |   63 ++++++-
+ scripts/atomic/gen-atomic-instrumented.sh |   29 +++
+ 28 files changed, 735 insertions(+), 1109 deletions(-)
+ create mode 100644 include/linux/freelist.h
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
