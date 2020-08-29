@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B082567BD
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410032567BC
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728253AbgH2NFE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Aug 2020 09:05:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54804 "EHLO mail.kernel.org"
+        id S1728252AbgH2NEy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 09:04:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728122AbgH2NEB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1728217AbgH2NEB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Sat, 29 Aug 2020 09:04:01 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98E5820E65;
-        Sat, 29 Aug 2020 13:03:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0EE5C20EDD;
+        Sat, 29 Aug 2020 13:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598706230;
-        bh=+Q2qs+5oSv+DDSatfvwe0sYEk5sx3ecNkoK1/NfZIcU=;
+        s=default; t=1598706241;
+        bh=bwUpSnsKqLmIuusutOsrTELxriYP7AHmwiKkNiMiQGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PbwQA0+fiBcwvPT+AQCSP6X+7bLk/4m8wt5Gb5gKMuypPnVer7yd+bzmyaKQCjPym
-         PksoV7txGuIrNh6JB3riDh+3b7mdETL1p25VZ+alC6ejNwZISLR4O7C3eKgC7wyFW/
-         PuZSjwusXbkoLscZvyP8XaKM8bvxS2nlN0meHAHw=
+        b=iZu2YxuxCLjpGP+RoPui/atSgSKLt/kLNly96FbCmfx+Ep8zO0wyvM2gM7/fEDxiP
+         D2UQmWchfusLpY9NepkQ9T2YpyMgH9HDSQsQ77ojulnuokSd2F18yINO7Iqm0x0sFN
+         /0J7yl60QMvGo2fo6260+QvXvbPTQs79+uJij20E=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
@@ -30,9 +30,9 @@ Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
         anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
         cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
         paulmck@kernel.org, mhiramat@kernel.org
-Subject: [PATCH v5 20/21] freelist: Lock less freelist
-Date:   Sat, 29 Aug 2020 22:03:46 +0900
-Message-Id: <159870622579.1229682.16729440870040944993.stgit@devnote2>
+Subject: [PATCH v5 21/21] kprobes: Replace rp->free_instance with freelist
+Date:   Sat, 29 Aug 2020 22:03:56 +0900
+Message-Id: <159870623583.1229682.17472357584134058687.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159870598914.1229682.15230803449082078353.stgit@devnote2>
 References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
@@ -47,148 +47,152 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-Cc: cameron@moodycamel.com
-Cc: oleg@redhat.com
-Cc: will@kernel.org
+Gets rid of rp->lock, and as a result kretprobes are now fully
+lockless.
+
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/freelist.h |  129 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 129 insertions(+)
- create mode 100644 include/linux/freelist.h
+ Changes
+  - [MH] expel the llist from anon union in kretprobe_instance
+---
+ include/linux/kprobes.h |    8 +++----
+ kernel/kprobes.c        |   56 ++++++++++++++++++++---------------------------
+ 2 files changed, 28 insertions(+), 36 deletions(-)
 
-diff --git a/include/linux/freelist.h b/include/linux/freelist.h
-new file mode 100644
-index 000000000000..fc1842b96469
---- /dev/null
-+++ b/include/linux/freelist.h
-@@ -0,0 +1,129 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+#ifndef FREELIST_H
-+#define FREELIST_H
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index f8f87a13345a..89ff0fc15286 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -28,6 +28,7 @@
+ #include <linux/mutex.h>
+ #include <linux/ftrace.h>
+ #include <linux/refcount.h>
++#include <linux/freelist.h>
+ #include <asm/kprobes.h>
+ 
+ #ifdef CONFIG_KPROBES
+@@ -157,17 +158,16 @@ struct kretprobe {
+ 	int maxactive;
+ 	int nmissed;
+ 	size_t data_size;
+-	struct hlist_head free_instances;
++	struct freelist_head freelist;
+ 	struct kretprobe_holder *rph;
+-	raw_spinlock_t lock;
+ };
+ 
+ struct kretprobe_instance {
+ 	union {
+-		struct llist_node llist;
+-		struct hlist_node hlist;
++		struct freelist_node freelist;
+ 		struct rcu_head rcu;
+ 	};
++	struct llist_node llist;
+ 	struct kretprobe_holder *rph;
+ 	kprobe_opcode_t *ret_addr;
+ 	void *fp;
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index bc65603fce00..af6551992b91 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1228,11 +1228,8 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
+ {
+ 	struct kretprobe *rp = get_kretprobe(ri);
+ 
+-	INIT_HLIST_NODE(&ri->hlist);
+ 	if (likely(rp)) {
+-		raw_spin_lock(&rp->lock);
+-		hlist_add_head(&ri->hlist, &rp->free_instances);
+-		raw_spin_unlock(&rp->lock);
++		freelist_add(&ri->freelist, &rp->freelist);
+ 	} else
+ 		call_rcu(&ri->rcu, free_rp_inst_rcu);
+ }
+@@ -1290,11 +1287,14 @@ NOKPROBE_SYMBOL(kprobe_flush_task);
+ static inline void free_rp_inst(struct kretprobe *rp)
+ {
+ 	struct kretprobe_instance *ri;
+-	struct hlist_node *next;
++	struct freelist_node *node;
+ 	int count = 0;
+ 
+-	hlist_for_each_entry_safe(ri, next, &rp->free_instances, hlist) {
+-		hlist_del(&ri->hlist);
++	node = rp->freelist.head;
++	while (node) {
++		ri = container_of(node, struct kretprobe_instance, freelist);
++		node = node->next;
 +
-+#include <linux/atomic.h>
-+
-+/*
-+ * Copyright: cameron@moodycamel.com
-+ *
-+ * A simple CAS-based lock-free free list. Not the fastest thing in the world
-+ * under heavy contention, but simple and correct (assuming nodes are never
-+ * freed until after the free list is destroyed), and fairly speedy under low
-+ * contention.
-+ *
-+ * Adapted from: https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists
-+ */
-+
-+struct freelist_node {
-+	atomic_t		refs;
-+	struct freelist_node	*next;
-+};
-+
-+struct freelist_head {
-+	struct freelist_node	*head;
-+};
-+
-+#define REFS_ON_FREELIST 0x80000000
-+#define REFS_MASK	 0x7FFFFFFF
-+
-+static inline void __freelist_add(struct freelist_node *node, struct freelist_head *list)
-+{
-+	/*
-+	 * Since the refcount is zero, and nobody can increase it once it's
-+	 * zero (except us, and we run only one copy of this method per node at
-+	 * a time, i.e. the single thread case), then we know we can safely
-+	 * change the next pointer of the node; however, once the refcount is
-+	 * back above zero, then other threads could increase it (happens under
-+	 * heavy contention, when the refcount goes to zero in between a load
-+	 * and a refcount increment of a node in try_get, then back up to
-+	 * something non-zero, then the refcount increment is done by the other
-+	 * thread) -- so if the CAS to add the node to the actual list fails,
-+	 * decrese the refcount and leave the add operation to the next thread
-+	 * who puts the refcount back to zero (which could be us, hence the
-+	 * loop).
-+	 */
-+	struct freelist_node *head = READ_ONCE(list->head);
-+
-+	for (;;) {
-+		WRITE_ONCE(node->next, head);
-+		atomic_set_release(&node->refs, 1);
-+
-+		if (!try_cmpxchg_release(&list->head, &head, node)) {
-+			/*
-+			 * Hmm, the add failed, but we can only try again when
-+			 * the refcount goes back to zero.
-+			 */
-+			if (atomic_fetch_add_release(REFS_ON_FREELIST - 1, &node->refs) == 1)
-+				continue;
-+		}
-+		return;
+ 		kfree(ri);
+ 		count++;
+ 	}
+@@ -1925,32 +1925,26 @@ NOKPROBE_SYMBOL(__kretprobe_trampoline_handler)
+ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+ {
+ 	struct kretprobe *rp = container_of(p, struct kretprobe, kp);
+-	unsigned long flags = 0;
+ 	struct kretprobe_instance *ri;
++	struct freelist_node *fn;
+ 
+-	/* TODO: consider to only swap the RA after the last pre_handler fired */
+-	raw_spin_lock_irqsave(&rp->lock, flags);
+-	if (!hlist_empty(&rp->free_instances)) {
+-		ri = hlist_entry(rp->free_instances.first,
+-				struct kretprobe_instance, hlist);
+-		hlist_del(&ri->hlist);
+-		raw_spin_unlock_irqrestore(&rp->lock, flags);
+-
+-		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
+-			raw_spin_lock_irqsave(&rp->lock, flags);
+-			hlist_add_head(&ri->hlist, &rp->free_instances);
+-			raw_spin_unlock_irqrestore(&rp->lock, flags);
+-			return 0;
+-		}
+-
+-		arch_prepare_kretprobe(ri, regs);
++	fn = freelist_try_get(&rp->freelist);
++	if (!fn) {
++		rp->nmissed++;
++		return 0;
 +	}
-+}
+ 
+-		__llist_add(&ri->llist, &current->kretprobe_instances);
++	ri = container_of(fn, struct kretprobe_instance, freelist);
+ 
+-	} else {
+-		rp->nmissed++;
+-		raw_spin_unlock_irqrestore(&rp->lock, flags);
++	if (rp->entry_handler && rp->entry_handler(ri, regs)) {
++		freelist_add(&ri->freelist, &rp->freelist);
++		return 0;
+ 	}
 +
-+static inline void freelist_add(struct freelist_node *node, struct freelist_head *list)
-+{
-+	/*
-+	 * We know that the should-be-on-freelist bit is 0 at this point, so
-+	 * it's safe to set it using a fetch_add.
-+	 */
-+	if (!atomic_fetch_add_release(REFS_ON_FREELIST, &node->refs)) {
-+		/*
-+		 * Oh look! We were the last ones referencing this node, and we
-+		 * know we want to add it to the free list, so let's do it!
-+		 */
-+		__freelist_add(node, list);
-+	}
-+}
++	arch_prepare_kretprobe(ri, regs);
 +
-+static inline struct freelist_node *freelist_try_get(struct freelist_head *list)
-+{
-+	struct freelist_node *prev, *next, *head = smp_load_acquire(&list->head);
-+	unsigned int refs;
++	__llist_add(&ri->llist, &current->kretprobe_instances);
 +
-+	while (head) {
-+		prev = head;
-+		refs = atomic_read(&head->refs);
-+		if ((refs & REFS_MASK) == 0 ||
-+		    !atomic_try_cmpxchg_acquire(&head->refs, &refs, refs+1)) {
-+			head = smp_load_acquire(&list->head);
-+			continue;
-+		}
-+
-+		/*
-+		 * Good, reference count has been incremented (it wasn't at
-+		 * zero), which means we can read the next and not worry about
-+		 * it changing between now and the time we do the CAS.
-+		 */
-+		next = READ_ONCE(head->next);
-+		if (try_cmpxchg_acquire(&list->head, &head, next)) {
-+			/*
-+			 * Yay, got the node. This means it was on the list,
-+			 * which means should-be-on-freelist must be false no
-+			 * matter the refcount (because nobody else knows it's
-+			 * been taken off yet, it can't have been put back on).
-+			 */
-+			WARN_ON_ONCE(atomic_read(&head->refs) & REFS_ON_FREELIST);
-+
-+			/*
-+			 * Decrease refcount twice, once for our ref, and once
-+			 * for the list's ref.
-+			 */
-+			atomic_fetch_add(-2, &head->refs);
-+
-+			return head;
-+		}
-+
-+		/*
-+		 * OK, the head must have changed on us, but we still need to decrement
-+		 * the refcount we increased.
-+		 */
-+		refs = atomic_fetch_add(-1, &prev->refs);
-+		if (refs == REFS_ON_FREELIST + 1)
-+			__freelist_add(prev, list);
-+	}
-+
-+	return NULL;
-+}
-+
-+#endif /* FREELIST_H */
+ 	return 0;
+ }
+ NOKPROBE_SYMBOL(pre_handler_kretprobe);
+@@ -2007,8 +2001,7 @@ int register_kretprobe(struct kretprobe *rp)
+ 		rp->maxactive = num_possible_cpus();
+ #endif
+ 	}
+-	raw_spin_lock_init(&rp->lock);
+-	INIT_HLIST_HEAD(&rp->free_instances);
++	rp->freelist.head = NULL;
+ 	rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
+ 	if (!rp->rph)
+ 		return -ENOMEM;
+@@ -2023,8 +2016,7 @@ int register_kretprobe(struct kretprobe *rp)
+ 			return -ENOMEM;
+ 		}
+ 		inst->rph = rp->rph;
+-		INIT_HLIST_NODE(&inst->hlist);
+-		hlist_add_head(&inst->hlist, &rp->free_instances);
++		freelist_add(&inst->freelist, &rp->freelist);
+ 	}
+ 	refcount_set(&rp->rph->ref, i);
+ 
 
