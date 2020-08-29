@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 018CA2567B9
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2492567C3
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 15:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbgH2NEJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Aug 2020 09:04:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54134 "EHLO mail.kernel.org"
+        id S1728101AbgH2NIH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 09:08:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728202AbgH2NC5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 29 Aug 2020 09:02:57 -0400
+        id S1728048AbgH2NDI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 29 Aug 2020 09:03:08 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1568A207BB;
-        Sat, 29 Aug 2020 13:02:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B66D42076D;
+        Sat, 29 Aug 2020 13:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598706177;
-        bh=c6aHLTXA8+bAd28taNJRYdsVPrpGYfT7NmXPwefOwaM=;
+        s=default; t=1598706187;
+        bh=bnvZNXRwKaNmMas2vL1Y0x/Ullhxy/ZdP57rONHv3+M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KgE/K2IvGetKfhiPHtBF5TEJ5O1PhpzIPFaNqbEUnylRIrcZ4Ph0T+Am5Mb1Gtq/4
-         TN6Sr+iuAwh4IQI9Y8KcF52S4PLYt8in1VWh3KJG4M0csoyimH6sK6F/GfVpncoSlH
-         k9wozdni+m/lR48n+Bb3oIpEzU6FMLXw9D0oN9Bk=
+        b=G8vqDA/qHDmeBeEe3AYM39SPbnwobeSI12e9mBQBCuESA7nmcbNGowDQDQOYjFmCT
+         9/PlpVG+OmaIfvWkCI+y8UNlz27ph67dKFAib4BU1wZ1HqqYcQpHUqZEDHhE7n21Vo
+         KV7jzKiWEBeMHFQHFUKW7I4oQONc7GZ9mVf1cUaQ=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
@@ -30,9 +30,9 @@ Cc:     Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
         anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
         cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
         paulmck@kernel.org, mhiramat@kernel.org
-Subject: [PATCH v5 15/21] kprobes: Free kretprobe_instance with rcu callback
-Date:   Sat, 29 Aug 2020 22:02:47 +0900
-Message-Id: <159870616685.1229682.11978742048709542226.stgit@devnote2>
+Subject: [PATCH v5 16/21] kprobes: Make local used functions static
+Date:   Sat, 29 Aug 2020 22:03:02 +0900
+Message-Id: <159870618256.1229682.8692046612635810882.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159870598914.1229682.15230803449082078353.stgit@devnote2>
 References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
@@ -45,133 +45,97 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Free kretprobe_instance with rcu callback instead of directly
-freeing the object in the kretprobe handler context.
-
-This will make kretprobe run safer in NMI context.
+Since we unified the kretprobe trampoline handler from arch/* code,
+some functions and objects no need to be exported anymore.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- Changes in v3:
-   - Stick the rcu_head with hlist_node in kretprobe_instance
-   - Make recycle_rp_inst() static
+ Changes in v4:
+   - Convert kretprobe_assert() into a BUG_ON().
 ---
- include/linux/kprobes.h |    6 ++++--
- kernel/kprobes.c        |   25 ++++++-------------------
- 2 files changed, 10 insertions(+), 21 deletions(-)
+ include/linux/kprobes.h |   15 ---------------
+ kernel/kprobes.c        |    9 ++++-----
+ 2 files changed, 4 insertions(+), 20 deletions(-)
 
 diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index c6a913e608b7..663be8debf25 100644
+index 663be8debf25..9c880c8a4e80 100644
 --- a/include/linux/kprobes.h
 +++ b/include/linux/kprobes.h
-@@ -156,7 +156,10 @@ struct kretprobe {
- };
+@@ -190,7 +190,6 @@ static inline int kprobes_built_in(void)
+ 	return 1;
+ }
  
- struct kretprobe_instance {
--	struct hlist_node hlist;
-+	union {
-+		struct hlist_node hlist;
-+		struct rcu_head rcu;
-+	};
- 	struct kretprobe *rp;
- 	kprobe_opcode_t *ret_addr;
- 	struct task_struct *task;
-@@ -395,7 +398,6 @@ int register_kretprobes(struct kretprobe **rps, int num);
- void unregister_kretprobes(struct kretprobe **rps, int num);
+-extern struct kprobe kprobe_busy;
+ void kprobe_busy_begin(void);
+ void kprobe_busy_end(void);
  
- void kprobe_flush_task(struct task_struct *tk);
--void recycle_rp_inst(struct kretprobe_instance *ri, struct hlist_head *head);
+@@ -235,16 +234,6 @@ static inline int arch_trampoline_kprobe(struct kprobe *p)
  
- int disable_kprobe(struct kprobe *kp);
- int enable_kprobe(struct kprobe *kp);
+ extern struct kretprobe_blackpoint kretprobe_blacklist[];
+ 
+-static inline void kretprobe_assert(struct kretprobe_instance *ri,
+-	unsigned long orig_ret_address, unsigned long trampoline_address)
+-{
+-	if (!orig_ret_address || (orig_ret_address == trampoline_address)) {
+-		printk("kretprobe BUG!: Processing kretprobe %p @ %p\n",
+-				ri->rp, ri->rp->kp.addr);
+-		BUG();
+-	}
+-}
+-
+ #ifdef CONFIG_KPROBES_SANITY_TEST
+ extern int init_test_probes(void);
+ #else
+@@ -364,10 +353,6 @@ int arch_check_ftrace_location(struct kprobe *p);
+ 
+ /* Get the kprobe at this addr (if any) - called with preemption disabled */
+ struct kprobe *get_kprobe(void *addr);
+-void kretprobe_hash_lock(struct task_struct *tsk,
+-			 struct hlist_head **head, unsigned long *flags);
+-void kretprobe_hash_unlock(struct task_struct *tsk, unsigned long *flags);
+-struct hlist_head * kretprobe_inst_table_head(struct task_struct *tsk);
+ 
+ /* kprobe_running() will just return the current_kprobe on this CPU */
+ static inline struct kprobe *kprobe_running(void)
 diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 211138225fa5..0676868f1ac2 100644
+index 0676868f1ac2..732a70163584 100644
 --- a/kernel/kprobes.c
 +++ b/kernel/kprobes.c
-@@ -1223,8 +1223,7 @@ void kprobes_inc_nmissed_count(struct kprobe *p)
- }
- NOKPROBE_SYMBOL(kprobes_inc_nmissed_count);
- 
--void recycle_rp_inst(struct kretprobe_instance *ri,
--		     struct hlist_head *head)
-+static void recycle_rp_inst(struct kretprobe_instance *ri)
- {
- 	struct kretprobe *rp = ri->rp;
- 
-@@ -1236,8 +1235,7 @@ void recycle_rp_inst(struct kretprobe_instance *ri,
- 		hlist_add_head(&ri->hlist, &rp->free_instances);
- 		raw_spin_unlock(&rp->lock);
- 	} else
--		/* Unregistering */
--		hlist_add_head(&ri->hlist, head);
-+		kfree_rcu(ri, rcu);
+@@ -1239,7 +1239,7 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
  }
  NOKPROBE_SYMBOL(recycle_rp_inst);
  
-@@ -1313,7 +1311,7 @@ void kprobe_busy_end(void)
- void kprobe_flush_task(struct task_struct *tk)
+-void kretprobe_hash_lock(struct task_struct *tsk,
++static void kretprobe_hash_lock(struct task_struct *tsk,
+ 			 struct hlist_head **head, unsigned long *flags)
+ __acquires(hlist_lock)
  {
- 	struct kretprobe_instance *ri;
--	struct hlist_head *head, empty_rp;
-+	struct hlist_head *head;
- 	struct hlist_node *tmp;
- 	unsigned long hash, flags = 0;
- 
-@@ -1323,19 +1321,14 @@ void kprobe_flush_task(struct task_struct *tk)
- 
- 	kprobe_busy_begin();
- 
--	INIT_HLIST_HEAD(&empty_rp);
- 	hash = hash_ptr(tk, KPROBE_HASH_BITS);
- 	head = &kretprobe_inst_table[hash];
- 	kretprobe_table_lock(hash, &flags);
- 	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
- 		if (ri->task == tk)
--			recycle_rp_inst(ri, &empty_rp);
-+			recycle_rp_inst(ri);
- 	}
- 	kretprobe_table_unlock(hash, &flags);
--	hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
--		hlist_del(&ri->hlist);
--		kfree(ri);
--	}
- 
- 	kprobe_busy_end();
+@@ -1261,7 +1261,7 @@ __acquires(hlist_lock)
  }
-@@ -1936,13 +1929,12 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 					     void *frame_pointer)
+ NOKPROBE_SYMBOL(kretprobe_table_lock);
+ 
+-void kretprobe_hash_unlock(struct task_struct *tsk,
++static void kretprobe_hash_unlock(struct task_struct *tsk,
+ 			   unsigned long *flags)
+ __releases(hlist_lock)
  {
- 	struct kretprobe_instance *ri = NULL, *last = NULL;
--	struct hlist_head *head, empty_rp;
-+	struct hlist_head *head;
- 	struct hlist_node *tmp;
- 	unsigned long flags;
- 	kprobe_opcode_t *correct_ret_addr = NULL;
- 	bool skipped = false;
+@@ -1282,7 +1282,7 @@ __releases(hlist_lock)
+ }
+ NOKPROBE_SYMBOL(kretprobe_table_unlock);
  
--	INIT_HLIST_HEAD(&empty_rp);
- 	kretprobe_hash_lock(current, &head, &flags);
+-struct kprobe kprobe_busy = {
++static struct kprobe kprobe_busy = {
+ 	.addr = (void *) get_kprobe,
+ };
  
- 	/*
-@@ -2011,7 +2003,7 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 			__this_cpu_write(current_kprobe, prev);
- 		}
- 
--		recycle_rp_inst(ri, &empty_rp);
-+		recycle_rp_inst(ri);
- 
- 		if (ri == last)
+@@ -1983,8 +1983,7 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
  			break;
-@@ -2019,11 +2011,6 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
+ 	}
  
- 	kretprobe_hash_unlock(current, &flags);
+-	kretprobe_assert(ri, (unsigned long)correct_ret_addr,
+-			     (unsigned long)trampoline_address);
++	BUG_ON(!correct_ret_addr || (correct_ret_addr == trampoline_address));
+ 	last = ri;
  
--	hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
--		hlist_del(&ri->hlist);
--		kfree(ri);
--	}
--
- 	return (unsigned long)correct_ret_addr;
- }
- NOKPROBE_SYMBOL(__kretprobe_trampoline_handler)
+ 	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
 
