@@ -2,75 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA63925659F
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 09:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768B22565BE
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 10:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbgH2HbW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Aug 2020 03:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S1726748AbgH2II3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 04:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726056AbgH2HbW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Aug 2020 03:31:22 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A625EC061236;
-        Sat, 29 Aug 2020 00:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=279k8AeqOLCTopTeV5uu2VZ9asceYdrmtuKPOqaG8bc=; b=UmsTEw1411nVBcjgUuowDWKFWB
-        WzoGCd6PpoQ0VqtNDI9zgVFZlPal6fRAnjhyoYuEywtutKkTG4HsKIwVYweMS+Nf5Pk3dCbivo2k8
-        01lln/IP2BqFsaahqVZC7VqMynPiLJyDsTqPZFa1Yz4I4bK3BaorIAiWu1m7eUhgKodFH/gOuIFbu
-        6BG6U/eixy02pdpk9QH7XDBZKfdYokq/5IjzuTsXMyCPTKqtVP1thTOjjVckRwVOKCh+WOLNEpRQa
-        mm1GDtaIgkeUXrXGlgaJKz0x8oJbzPi0S8dKH2C1v3lcLkWaGsc6f62H56diwpZTNgsFwJTM4ePvm
-        80tX+HRQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kBvKA-0002GY-CU; Sat, 29 Aug 2020 07:30:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 561A43011F0;
-        Sat, 29 Aug 2020 09:30:49 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 150A722B8F169; Sat, 29 Aug 2020 09:30:49 +0200 (CEST)
-Date:   Sat, 29 Aug 2020 09:30:49 +0200
-From:   peterz@infradead.org
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Eddy_Wu@trendmicro.com,
-        x86@kernel.org, davem@davemloft.net, rostedt@goodmis.org,
-        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        linux-arch@vger.kernel.org, cameron@moodycamel.com,
-        oleg@redhat.com, will@kernel.org, paulmck@kernel.org
-Subject: Re: [PATCH v4 18/23] sched: Fix try_invoke_on_locked_down_task()
- semantics
-Message-ID: <20200829073049.GC2674@hirez.programming.kicks-ass.net>
-References: <159861759775.992023.12553306821235086809.stgit@devnote2>
- <159861779482.992023.8503137488052381952.stgit@devnote2>
- <20200829110155.70c676520ad2cfef8374171d@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200829110155.70c676520ad2cfef8374171d@kernel.org>
+        with ESMTP id S1726105AbgH2II0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Aug 2020 04:08:26 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158E2C061236;
+        Sat, 29 Aug 2020 01:08:25 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id u1so1139324edi.4;
+        Sat, 29 Aug 2020 01:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=dcPTzvRLlTI6xHLAGh4Hges33sLkvHOakU2B8m2O5A0=;
+        b=Xqlny0HUc0wfxwPg0SfcOh/WgfmTxE4M5qk14Gm3NE2zP2qd/Tf1yok4QAbkhwyhrF
+         tZfDjjduoPcOkVP9Wo1jVA1VeK1qOoVfVkf1YD7AQ4dy7A1DcwFwU+ESVaHS04CDS2q3
+         S0F6LVA7WD7zvAYXN1SJNnJMmCGjM3p7NU7TcdgK3Iq94EgYJEafjQ/zyGbmECUqyu99
+         u7UKB6BNJZew/jc+82oKjy/c2ikV3Xq7gA3QMAKsKne+4MdwetD6+MNevGSVMFFiAfd+
+         644Sem6hrCY1S/s3BY7s1dTdjCu52mwnUWTjc+H8mVhYHBoaTBu3sjHaC4NeYaAmat11
+         md0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=dcPTzvRLlTI6xHLAGh4Hges33sLkvHOakU2B8m2O5A0=;
+        b=OAqKbS+kV1rQAbBlHw8CliVFJUYQUKqJYMWK5DxsmzmV6lWJxlsieE4xKR7PTg9H3p
+         eflUjMMoUGhLIXJh+Tpc/t2n8YAu1Y/Vuh5BxaW9pew7Ico5bJr7hn4Te9NMeCvY11md
+         bjai5S5PXqJ0/sAL/PpUtQWOYdW3q9wI26/E76tA0hB3K0UBklXg4tsberrXKcpsyVNe
+         J9YL6gmN3fUXndcd30moPjyP7d9/hBCSmet7ZzE33VtHDGkWnrVhGgtOaioJQerBw7xn
+         3iwA0I/zjH6gHnTDFAPpXreJxxsmTRSfanM2ZQuwN5ld9xHmQCiIX3zBtgIQ0dUnYbfW
+         PmCg==
+X-Gm-Message-State: AOAM531kLu+O5/MgMgNSrpcKc/66776JaI95WgRpkZKkE1dWxM5FxDEp
+        MXJb6w+OPwlKqvSXQ8ff7YN5Tc9sSTw=
+X-Google-Smtp-Source: ABdhPJzfhiMfW/vnm5JpeZVezG9+LQnLYvD8MdVgxYlQrAHxPABkr/TWWSMe4T5wsCJPdyXj+54VqQ==
+X-Received: by 2002:a05:6402:b32:: with SMTP id bo18mr2511762edb.201.1598688504620;
+        Sat, 29 Aug 2020 01:08:24 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:2450:10d2:194d:f90b:b3a9:1300:5b1a])
+        by smtp.gmail.com with ESMTPSA id h25sm1568923ejq.12.2020.08.29.01.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Aug 2020 01:08:23 -0700 (PDT)
+From:   SeongJae Park <sj38.park@gmail.com>
+X-Google-Original-From: SeongJae Park <sjpark@amazon.de>
+To:     paulmck@kernel.org, corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sjpark@amazon.de>
+Subject: [PATCH 0/3] memory-barriers: Apply missed changes
+Date:   Sat, 29 Aug 2020 10:08:13 +0200
+Message-Id: <20200829080816.1440-1-sjpark@amazon.de>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 11:01:55AM +0900, Masami Hiramatsu wrote:
-> On Fri, 28 Aug 2020 21:29:55 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
-> > From: Peter Zijlstra <peterz@infradead.org>
-> 
-> In the next version I will drop this since I will merge the kretprobe_holder
-> things into removing kretporbe hash patch.
-> 
-> However, this patch itself seems fixing a bug of commit 2beaf3280e57
-> ("sched/core: Add function to sample state of locked-down task").
-> Peter, could you push this separately?
+This patchset applies missed changes that should land in the
+memory-barriers.txt and its Korean translation.
 
-Yeah, Paul and me have a slightly different version for that, this also
-changes semantics we're still bickering over ;-)
+The patches are based on v5.9-rc2.
 
-But yes, I'll take care of it.
+SeongJae Park (3):
+  docs/memory-barriers.txt: Fix references for DMA*.txt files
+  docs/memory-barriers.txt/kokr: Remove remaining references to mmiowb()
+  dics/memory-barriers.txt/kokr: Allow architecture to override the
+    flush barrier
+
+ Documentation/memory-barriers.txt             |  8 ++---
+ .../translations/ko_KR/memory-barriers.txt    | 32 ++++++++++++-------
+ 2 files changed, 24 insertions(+), 16 deletions(-)
+
+-- 
+2.17.1
+
