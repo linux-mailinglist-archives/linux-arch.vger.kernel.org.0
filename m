@@ -2,108 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6E9256445
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 05:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA63925659F
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Aug 2020 09:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbgH2DFj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Aug 2020 23:05:39 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:34751 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgH2DFh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Aug 2020 23:05:37 -0400
-Received: by mail-io1-f67.google.com with SMTP id w20so1049606iom.1;
-        Fri, 28 Aug 2020 20:05:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l7xUaI995Ekm5CK+TxZkIt4YFPavrrAEtoUbXr4ArNs=;
-        b=SKfbW6mLkCNVeg3PyztUiSMc+4CdpetkAQHV5x6BnYhm5YYGHdn9RM7TvNEPD/rvAj
-         d5s6ODnlYwfQxYwbhjq2HoeRRmjF/Ze5/n/1sV4It4bD7gONXIIvKAF16fBVLxd8WIwp
-         51qsQUNPYR0NhqY0/1qkrGj1sBRCNQTfeQTRWs4pIvNM6xYumWNd0/2jy2ygd2c59/Fn
-         E8B7N1W+U4Dhnr2Vzb5HfMFXLBOuIpCop+mNtV/xllHTg92jK23SY/Zxlu3cA4bqaf7T
-         85StxZz+FujzDeTAWKKg/Zqu5WIr8VQzo5hiaDvYFXMtnUbtSPYBXCgk1V74UhQTriep
-         dI/g==
-X-Gm-Message-State: AOAM533HaFhSftmSeF6BfoU56THUlRkwlRz77enVx3xPbQv2w5L3ABfh
-        qqPjsjTL4pZIHFX5h8dfFNJUqd/ZPjJyQIAnprU=
-X-Google-Smtp-Source: ABdhPJzhcslFhvjF32ufDTHkrVrtYDJvqRTYpjO7neI9C50BVG2K5GbfCakoYCM66vEYHeDebELfRjxAztiULqm+WyY=
-X-Received: by 2002:a02:840f:: with SMTP id k15mr3841034jah.100.1598670336665;
- Fri, 28 Aug 2020 20:05:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200827161237.889877377@infradead.org> <20200827161754.535381269@infradead.org>
- <20200828144650.GF28468@redhat.com> <20200828152946.GG1362448@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200828152946.GG1362448@hirez.programming.kicks-ass.net>
-From:   Cameron <cameron@moodycamel.com>
-Date:   Fri, 28 Aug 2020 23:05:20 -0400
-Message-ID: <CAFCw3dq=L_MYkw-oDgf1Yowc1w0VWkuducnPEZrF9df8s1cvUA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 6/7] freelist: Lock less freelist
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>, Eddy_Wu@trendmicro.com,
+        id S1726083AbgH2HbW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Aug 2020 03:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726056AbgH2HbW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Aug 2020 03:31:22 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A625EC061236;
+        Sat, 29 Aug 2020 00:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=279k8AeqOLCTopTeV5uu2VZ9asceYdrmtuKPOqaG8bc=; b=UmsTEw1411nVBcjgUuowDWKFWB
+        WzoGCd6PpoQ0VqtNDI9zgVFZlPal6fRAnjhyoYuEywtutKkTG4HsKIwVYweMS+Nf5Pk3dCbivo2k8
+        01lln/IP2BqFsaahqVZC7VqMynPiLJyDsTqPZFa1Yz4I4bK3BaorIAiWu1m7eUhgKodFH/gOuIFbu
+        6BG6U/eixy02pdpk9QH7XDBZKfdYokq/5IjzuTsXMyCPTKqtVP1thTOjjVckRwVOKCh+WOLNEpRQa
+        mm1GDtaIgkeUXrXGlgaJKz0x8oJbzPi0S8dKH2C1v3lcLkWaGsc6f62H56diwpZTNgsFwJTM4ePvm
+        80tX+HRQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kBvKA-0002GY-CU; Sat, 29 Aug 2020 07:30:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 561A43011F0;
+        Sat, 29 Aug 2020 09:30:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 150A722B8F169; Sat, 29 Aug 2020 09:30:49 +0200 (CEST)
+Date:   Sat, 29 Aug 2020 09:30:49 +0200
+From:   peterz@infradead.org
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Eddy_Wu@trendmicro.com,
         x86@kernel.org, davem@davemloft.net, rostedt@goodmis.org,
         naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        linux-arch@vger.kernel.org, will@kernel.org, paulmck@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-arch@vger.kernel.org, cameron@moodycamel.com,
+        oleg@redhat.com, will@kernel.org, paulmck@kernel.org
+Subject: Re: [PATCH v4 18/23] sched: Fix try_invoke_on_locked_down_task()
+ semantics
+Message-ID: <20200829073049.GC2674@hirez.programming.kicks-ass.net>
+References: <159861759775.992023.12553306821235086809.stgit@devnote2>
+ <159861779482.992023.8503137488052381952.stgit@devnote2>
+ <20200829110155.70c676520ad2cfef8374171d@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200829110155.70c676520ad2cfef8374171d@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> I'm curious whether it is correct to just set the prev->refs to zero and return
-> @prev? So that it can remove an unneeded "add()&get()" pair (although in
-> an unlikely branch) and __freelist_add() can be folded into freelist_add()
-> for tidier code.
+On Sat, Aug 29, 2020 at 11:01:55AM +0900, Masami Hiramatsu wrote:
+> On Fri, 28 Aug 2020 21:29:55 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > From: Peter Zijlstra <peterz@infradead.org>
+> 
+> In the next version I will drop this since I will merge the kretprobe_holder
+> things into removing kretporbe hash patch.
+> 
+> However, this patch itself seems fixing a bug of commit 2beaf3280e57
+> ("sched/core: Add function to sample state of locked-down task").
+> Peter, could you push this separately?
 
-That is a very good question. I believe it would be correct, yes, and
-would certainly simplify the code. The reference count is zero, so
-nobody can increment it again, and REFS_ON_FREELIST is set (the
-should-be-on-freelist flag), so instead of adding it to the freelist
-to be removed later, it can be returned directly.
+Yeah, Paul and me have a slightly different version for that, this also
+changes semantics we're still bickering over ;-)
 
-> On Fri, Aug 28, 2020 at 04:46:52PM +0200, Oleg Nesterov wrote:
-> > 129 lines! And I spent more than 2 hours trying to understand these
-> > 129 lines ;) looks correct...
-
-Hahaha. Sorry about that. Some of the most mind-bending code I've ever
-written. :-)
-
-> > +                     /*
-> > +                      * Hmm, the add failed, but we can only try again when
-> > +                      * the refcount goes back to zero.
-> > +                      */
-> > +                     if (atomic_fetch_add_release(REFS_ON_FREELIST - 1, &node->refs) == 1)
-> > +                             continue;
-> Do we really need _release ? Why can't atomic_fetch_add_relaxed() work?
-
-The release is to synchronize with the acquire in the compare-exchange
-of try_get. However, I think you're right, between the previous
-release-write to the refs and that point, there are no memory effects
-that need to be synchronized, and so it could be safely replaced with
-a relaxed operation.
-
-> Cosmetic, but why not atomic_fetch_dec() ?
-
-This is just one of my idiosyncrasies. I prefer exclusively using
-atomic add, I find it easier to read. Feel free to change them all to
-subs!
-
-Cameron
-
-
-> >
-> > Do we the barriers implied by _fetch_? Why can't atomic_sub(2, refs) work?
->
-> I think we can, the original has std::memory_order_relaxed here. So I
-> should've used atomic_fetch_add_relaxed() but since we don't use the
-> return value, atomic_sub() would work just fine too.
->
-> > > +           /*
-> > > +            * OK, the head must have changed on us, but we still need to decrement
-> > > +            * the refcount we increased.
-> > > +            */
-> > > +           refs = atomic_fetch_add(-1, &prev->refs);
-> >
-> > Cosmetic, but why not atomic_fetch_dec() ?
->
-> The original had that, I didn't want to risk more bugs by 'improving'
-> things. But yes, that can definitely become dec().
+But yes, I'll take care of it.
