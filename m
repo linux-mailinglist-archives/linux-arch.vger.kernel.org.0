@@ -2,37 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E47CB2580E9
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 20:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2A32580E0
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 20:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729858AbgHaSUy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Aug 2020 14:20:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56522 "EHLO mail.kernel.org"
+        id S1729856AbgHaSUx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 14:20:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56538 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729815AbgHaSUm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 31 Aug 2020 14:20:42 -0400
+        id S1727058AbgHaSUn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 31 Aug 2020 14:20:43 -0400
 Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4CA1A2151B;
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C6D721534;
         Mon, 31 Aug 2020 18:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1598898040;
-        bh=NvxnLZkeYu8mWA5mpd7xJmjVtK2JI3StW0VwmlFwbTs=;
+        bh=GbUimKU7zvAKgZNGhX7IhIWdtWnZAJxe/ynYeOUWm6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GBjHwpTY55uLpKaWhJwQuEehPygCMyllxzlGlnbQsdHgUzh7ZyLY2Xt6FeKrxr0yG
-         93XiLN589oufpl+t6oJEGNt7e1z3jraevr6i0q4NFZkXN1dU7xvWCOjQNkcEcajEB3
-         ZKdxqVGZdtZw/AVrQyQNgqw90fazNjNUjLeKNvWc=
+        b=BjethCLNeYitW8NGP4mj8U3pGzV50+cDY3HLj1Rkbtfjer4wPgO3I9q5DfsmpsOrB
+         pr6BKMxxSmIIeeF3liP01+ZkdclQQeeMwV9knYQecXHtCmXtxSQX61kdw11ZdPp/gt
+         eTFDMgU8MsnKA+aQvSOp8W5AmO5Xk2t7fmnKot9o=
 From:   paulmck@kernel.org
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH kcsan 4/9] tools/memory-model: Improve litmus-test documentation
-Date:   Mon, 31 Aug 2020 11:20:32 -0700
-Message-Id: <20200831182037.2034-4-paulmck@kernel.org>
+        akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>
+Subject: [PATCH kcsan 5/9] tools/memory-model: Add a simple entry point document
+Date:   Mon, 31 Aug 2020 11:20:33 -0700
+Message-Id: <20200831182037.2034-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20200831182012.GA1965@paulmck-ThinkPad-P72>
 References: <20200831182012.GA1965@paulmck-ThinkPad-P72>
@@ -43,1299 +44,338 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-The current LKMM documentation says very little about litmus tests, and
-worse yet directs people to the herd7 documentation for more information.
-Now, the herd7 documentation is quite voluminous and educational,
-but it is intended for people creating and modifying memory models,
-not those attempting to use them.
+Current LKMM documentation assumes that the reader already understands
+concurrency in the Linux kernel, which won't necessarily always be the
+case.  This commit supplies a simple.txt file that provides a starting
+point for someone who is new to concurrency in the Linux kernel.
+That said, this file might also useful as a reminder to experienced
+developers of simpler approaches to dealing with concurrency.
 
-This commit therefore updates README and creates a litmus-tests.txt
-file that gives an overview of litmus-test format and describes ways of
-modeling various special cases, illustrated with numerous examples.
-
-[ paulmck: Add Alan Stern feedback. ]
-[ paulmck: Apply Dave Chinner feedback. ]
-[ paulmck: Apply Andrii Nakryiko feedback. ]
-[ paulmck: Apply Johannes Weiner feedback. ]
-Link: https://lwn.net/Articles/827180/
-Reported-by: Dave Chinner <david@fromorbit.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: Link: https://lwn.net/Articles/827180/
+[ paulmck: Apply feedback from Joel Fernandes. ]
+Co-developed-by: Dave Chinner <dchinner@redhat.com>
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+Co-developed-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/memory-model/Documentation/litmus-tests.txt | 1070 +++++++++++++++++++++
- tools/memory-model/README                         |  155 +--
- 2 files changed, 1108 insertions(+), 117 deletions(-)
- create mode 100644 tools/memory-model/Documentation/litmus-tests.txt
+ tools/memory-model/Documentation/litmus-tests.txt |   8 +-
+ tools/memory-model/Documentation/simple.txt       | 271 ++++++++++++++++++++++
+ tools/memory-model/README                         |   5 +
+ 3 files changed, 282 insertions(+), 2 deletions(-)
+ create mode 100644 tools/memory-model/Documentation/simple.txt
 
 diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
-new file mode 100644
-index 0000000..289a38d
---- /dev/null
+index 289a38d..2f840dc 100644
+--- a/tools/memory-model/Documentation/litmus-tests.txt
 +++ b/tools/memory-model/Documentation/litmus-tests.txt
-@@ -0,0 +1,1070 @@
-+Linux-Kernel Memory Model Litmus Tests
+@@ -726,8 +726,12 @@ P0()'s line 10 initializes "x" to the value 1 then line 11 links to "x"
+ from "y", replacing "z".
+ 
+ P1()'s line 20 loads a pointer from "y", and line 21 dereferences that
+-pointer.  The RCU read-side critical section spanning lines 19-22 is
+-just for show in this example.
++pointer.  The RCU read-side critical section spanning lines 19-22 is just
++for show in this example.  Note that the address used for line 21's load
++depends on (in this case, "is exactly the same as") the value loaded by
++line 20.  This is an example of what is called an "address dependency".
++This particular address dependency extends from the load on line 20 to the
++load on line 21.  Address dependencies provide a weak form of ordering.
+ 
+ Running this test results in the following:
+ 
+diff --git a/tools/memory-model/Documentation/simple.txt b/tools/memory-model/Documentation/simple.txt
+new file mode 100644
+index 0000000..81e1a0e
+--- /dev/null
++++ b/tools/memory-model/Documentation/simple.txt
+@@ -0,0 +1,271 @@
++This document provides options for those wishing to keep their
++memory-ordering lives simple, as is necessary for those whose domain
++is complex.  After all, there are bugs other than memory-ordering bugs,
++and the time spent gaining memory-ordering knowledge is not available
++for gaining domain knowledge.  Furthermore Linux-kernel memory model
++(LKMM) is quite complex, with subtle differences in code often having
++dramatic effects on correctness.
++
++The options near the beginning of this list are quite simple.  The idea
++is not that kernel hackers don't already know about them, but rather
++that they might need the occasional reminder.
++
++Please note that this is a generic guide, and that specific subsystems
++will often have special requirements or idioms.  For example, developers
++of MMIO-based device drivers will often need to use mb(), rmb(), and
++wmb(), and therefore might find smp_mb(), smp_rmb(), and smp_wmb()
++to be more natural than smp_load_acquire() and smp_store_release().
++On the other hand, those coming in from other environments will likely
++be more familiar with these last two.
++
++
++Single-threaded code
++====================
++
++In single-threaded code, there is no reordering, at least assuming
++that your toolchain and hardware are working correctly.  In addition,
++it is generally a mistake to assume your code will only run in a single
++threaded context as the kernel can enter the same code path on multiple
++CPUs at the same time.  One important exception is a function that makes
++no external data references.
++
++In the general case, you will need to take explicit steps to ensure that
++your code really is executed within a single thread that does not access
++shared variables.  A simple way to achieve this is to define a global lock
++that you acquire at the beginning of your code and release at the end,
++taking care to ensure that all references to your code's shared data are
++also carried out under that same lock.  Because only one thread can hold
++this lock at a given time, your code will be executed single-threaded.
++This approach is called "code locking".
++
++Code locking can severely limit both performance and scalability, so it
++should be used with caution, and only on code paths that execute rarely.
++After all, a huge amount of effort was required to remove the Linux
++kernel's old "Big Kernel Lock", so let's please be very careful about
++adding new "little kernel locks".
++
++One of the advantages of locking is that, in happy contrast with the
++year 1981, almost all kernel developers are very familiar with locking.
++The Linux kernel's lockdep (CONFIG_PROVE_LOCKING=y) is very helpful with
++the formerly feared deadlock scenarios.
++
++Please use the standard locking primitives provided by the kernel rather
++than rolling your own.  For one thing, the standard primitives interact
++properly with lockdep.  For another thing, these primitives have been
++tuned to deal better with high contention.  And for one final thing, it is
++surprisingly hard to correctly code production-quality lock acquisition
++and release functions.  After all, even simple non-production-quality
++locking functions must carefully prevent both the CPU and the compiler
++from moving code in either direction across the locking function.
++
++Despite the scalability limitations of single-threaded code, RCU
++takes this approach for much of its grace-period processing and also
++for early-boot operation.  The reason RCU is able to scale despite
++single-threaded grace-period processing is use of batching, where all
++updates that accumulated during one grace period are handled by the
++next one.  In other words, slowing down grace-period processing makes
++it more efficient.  Nor is RCU unique:  Similar batching optimizations
++are used in many I/O operations.
++
++
++Packaged code
++=============
++
++Even if performance and scalability concerns prevent your code from
++being completely single-threaded, it is often possible to use library
++functions that handle the concurrency nearly or entirely on their own.
++This approach delegates any LKMM worries to the library maintainer.
++
++In the kernel, what is the "library"?  Quite a bit.  It includes the
++contents of the lib/ directory, much of the include/linux/ directory along
++with a lot of other heavily used APIs.  But heavily used examples include
++the list macros (for example, include/linux/{,rcu}list.h), workqueues,
++smp_call_function(), and the various hash tables and search trees.
++
++
++Data locking
++============
++
++With code locking, we use single-threaded code execution to guarantee
++serialized access to the data that the code is accessing.  However,
++we can also achieve this by instead associating the lock with specific
++instances of the data structures.  This creates a "critical section"
++in the code execution that will execute as though it is single threaded.
++By placing all the accesses and modifications to a shared data structure
++inside a critical section, we ensure that the execution context that
++holds the lock has exclusive access to the shared data.
++
++The poster boy for this approach is the hash table, where placing a lock
++in each hash bucket allows operations on different buckets to proceed
++concurrently.  This works because the buckets do not overlap with each
++other, so that an operation on one bucket does not interfere with any
++other bucket.
++
++As the number of buckets increases, data locking scales naturally.
++In particular, if the amount of data increases with the number of CPUs,
++increasing the number of buckets as the number of CPUs increase results
++in a naturally scalable data structure.
++
++
++Per-CPU processing
++==================
++
++Partitioning processing and data over CPUs allows each CPU to take
++a single-threaded approach while providing excellent performance and
++scalability.  Of course, there is no free lunch:  The dark side of this
++excellence is substantially increased memory footprint.
++
++In addition, it is sometimes necessary to occasionally update some global
++view of this processing and data, in which case something like locking
++must be used to protect this global view.  This is the approach taken
++by the percpu_counter infrastructure. In many cases, there are already
++generic/library variants of commonly used per-cpu constructs available.
++Please use them rather than rolling your own.
++
++RCU uses DEFINE_PER_CPU*() declaration to create a number of per-CPU
++data sets.  For example, each CPU does private quiescent-state processing
++within its instance of the per-CPU rcu_data structure, and then uses data
++locking to report quiescent states up the grace-period combining tree.
++
++
++Packaged primitives: Sequence locking
++=====================================
++
++Lockless programming is considered by many to be more difficult than
++lock-based programming, but there are a few lockless design patterns that
++have been built out into an API.  One of these APIs is sequence locking.
++Although this APIs can be used in extremely complex ways, there are simple
++and effective ways of using it that avoid the need to pay attention to
++memory ordering.
++
++The basic keep-things-simple rule for sequence locking is "do not write
++in read-side code".  Yes, you can do writes from within sequence-locking
++readers, but it won't be so simple.  For example, such writes will be
++lockless and should be idempotent.
++
++For more sophisticated use cases, LKMM can guide you, including use
++cases involving combining sequence locking with other synchronization
++primitives.  (LKMM does not yet know about sequence locking, so it is
++currently necessary to open-code it in your litmus tests.)
++
++Additional information may be found in include/linux/seqlock.h.
++
++Packaged primitives: RCU
++========================
++
++Another lockless design pattern that has been baked into an API
++is RCU.  The Linux kernel makes sophisticated use of RCU, but the
++keep-things-simple rules for RCU are "do not write in read-side code"
++and "do not update anything that is visible to and accessed by readers",
++and "protect updates with locking".
++
++These rules are illustrated by the functions foo_update_a() and
++foo_get_a() shown in Documentation/RCU/whatisRCU.rst.  Additional
++RCU usage patterns maybe found in Documentation/RCU and in the
++source code.
++
++
++Packaged primitives: Atomic operations
 +======================================
 +
-+This file describes the LKMM litmus-test format by example, describes
-+some tricks and traps, and finally outlines LKMM's limitations.  Earlier
-+versions of this material appeared in a number of LWN articles, including:
-+
-+https://lwn.net/Articles/720550/
-+	A formal kernel memory-ordering model (part 2)
-+https://lwn.net/Articles/608550/
-+	Axiomatic validation of memory barriers and atomic instructions
-+https://lwn.net/Articles/470681/
-+	Validating Memory Barriers and Atomic Instructions
-+
-+This document presents information in decreasing order of applicability,
-+so that, where possible, the information that has proven more commonly
-+useful is shown near the beginning.
-+
-+For information on installing LKMM, including the underlying "herd7"
-+tool, please see tools/memory-model/README.
-+
-+
-+Copy-Pasta
-+==========
-+
-+As with other software, it is often better (if less macho) to adapt an
-+existing litmus test than it is to create one from scratch.  A number
-+of litmus tests may be found in the kernel source tree:
-+
-+	tools/memory-model/litmus-tests/
-+	Documentation/litmus-tests/
-+
-+Several thousand more example litmus tests are available on github
-+and kernel.org:
-+
-+	https://github.com/paulmckrcu/litmus
-+	https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/perfbook.git/tree/CodeSamples/formal/herd
-+	https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/perfbook.git/tree/CodeSamples/formal/litmus
-+
-+The -l and -L arguments to "git grep" can be quite helpful in identifying
-+existing litmus tests that are similar to the one you need.  But even if
-+you start with an existing litmus test, it is still helpful to have a
-+good understanding of the litmus-test format.
-+
-+
-+Examples and Format
-+===================
-+
-+This section describes the overall format of litmus tests, starting
-+with a small example of the message-passing pattern and moving on to
-+more complex examples that illustrate explicit initialization and LKMM's
-+minimalistic set of flow-control statements.
-+
-+
-+Message-Passing Example
-+-----------------------
-+
-+This section gives an overview of the format of a litmus test using an
-+example based on the common message-passing use case.  This use case
-+appears often in the Linux kernel.  For example, a flag (modeled by "y"
-+below) indicates that a buffer (modeled by "x" below) is now completely
-+filled in and ready for use.  It would be very bad if the consumer saw the
-+flag set, but, due to memory misordering, saw old values in the buffer.
-+
-+This example asks whether smp_store_release() and smp_load_acquire()
-+suffices to avoid this bad outcome:
-+
-+ 1 C MP+pooncerelease+poacquireonce
-+ 2
-+ 3 {}
-+ 4
-+ 5 P0(int *x, int *y)
-+ 6 {
-+ 7   WRITE_ONCE(*x, 1);
-+ 8   smp_store_release(y, 1);
-+ 9 }
-+10
-+11 P1(int *x, int *y)
-+12 {
-+13   int r0;
-+14   int r1;
-+15
-+16   r0 = smp_load_acquire(y);
-+17   r1 = READ_ONCE(*x);
-+18 }
-+19
-+20 exists (1:r0=1 /\ 1:r1=0)
-+
-+Line 1 starts with "C", which identifies this file as being in the
-+LKMM C-language format (which, as we will see, is a small fragment
-+of the full C language).  The remainder of line 1 is the name of
-+the test, which by convention is the filename with the ".litmus"
-+suffix stripped.  In this case, the actual test may be found in
-+tools/memory-model/litmus-tests/MP+pooncerelease+poacquireonce.litmus
-+in the Linux-kernel source tree.
-+
-+Mechanically generated litmus tests will often have an optional
-+double-quoted comment string on the second line.  Such strings are ignored
-+when running the test.  Yes, you can add your own comments to litmus
-+tests, but this is a bit involved due to the use of multiple parsers.
-+For now, you can use C-language comments in the C code, and these comments
-+may be in either the "/* */" or the "//" style.  A later section will
-+cover the full litmus-test commenting story.
-+
-+Line 3 is the initialization section.  Because the default initialization
-+to zero suffices for this test, the "{}" syntax is used, which mean the
-+initialization section is empty.  Litmus tests requiring non-default
-+initialization must have non-empty initialization sections, as in the
-+example that will be presented later in this document.
-+
-+Lines 5-9 show the first process and lines 11-18 the second process.  Each
-+process corresponds to a Linux-kernel task (or kthread, workqueue, thread,
-+and so on; LKMM discussions often use these terms interchangeably).
-+The name of the first process is "P0" and that of the second "P1".
-+You can name your processes anything you like as long as the names consist
-+of a single "P" followed by a number, and as long as the numbers are
-+consecutive starting with zero.  This can actually be quite helpful,
-+for example, a .litmus file matching "^P1(" but not matching "^P2("
-+must contain a two-process litmus test.
-+
-+The argument list for each function are pointers to the global variables
-+used by that function.  Unlike normal C-language function parameters, the
-+names are significant.  The fact that both P0() and P1() have a formal
-+parameter named "x" means that these two processes are working with the
-+same global variable, also named "x".  So the "int *x, int *y" on P0()
-+and P1() mean that both processes are working with two shared global
-+variables, "x" and "y".  Global variables are always passed to processes
-+by reference, hence "P0(int *x, int *y)", but *never* "P0(int x, int y)".
-+
-+P0() has no local variables, but P1() has two of them named "r0" and "r1".
-+These names may be freely chosen, but for historical reasons stemming from
-+other litmus-test formats, it is conventional to use names consisting of
-+"r" followed by a number as shown here.  A common bug in litmus tests
-+is forgetting to add a global variable to a process's parameter list.
-+This will sometimes result in an error message, but can also cause the
-+intended global to instead be silently treated as an undeclared local
-+variable.
-+
-+Each process's code is similar to Linux-kernel C, as can be seen on lines
-+7-8 and 13-17.  This code may use many of the Linux kernel's atomic
-+operations, some of its exclusive-lock functions, and some of its RCU
-+and SRCU functions.  An approximate list of the currently supported
-+functions may be found in the linux-kernel.def file.
-+
-+The P0() process does "WRITE_ONCE(*x, 1)" on line 7.  Because "x" is a
-+pointer in P0()'s parameter list, this does an unordered store to global
-+variable "x".  Line 8 does "smp_store_release(y, 1)", and because "y"
-+is also in P0()'s parameter list, this does a release store to global
-+variable "y".
-+
-+The P1() process declares two local variables on lines 13 and 14.
-+Line 16 does "r0 = smp_load_acquire(y)" which does an acquire load
-+from global variable "y" into local variable "r0".  Line 17 does a
-+"r1 = READ_ONCE(*x)", which does an unordered load from "*x" into local
-+variable "r1".  Both "x" and "y" are in P1()'s parameter list, so both
-+reference the same global variables that are used by P0().
-+
-+Line 20 is the "exists" assertion expression to evaluate the final state.
-+This final state is evaluated after the dust has settled: both processes
-+have completed and all of their memory references and memory barriers
-+have propagated to all parts of the system.  The references to the local
-+variables "r0" and "r1" in line 24 must be prefixed with "1:" to specify
-+which process they are local to.
-+
-+Note that the assertion expression is written in the litmus-test
-+language rather than in C.  For example, single "=" is an equality
-+operator rather than an assignment.  The "/\" character combination means
-+"and".  Similarly, "\/" stands for "or".  Both of these are ASCII-art
-+representations of the corresponding mathematical symbols.  Finally,
-+"~" stands for "logical not", which is "!" in C, and not to be confused
-+with the C-language "~" operator which instead stands for "bitwise not".
-+Parentheses may be used to override precedence.
-+
-+The "exists" assertion on line 20 is satisfied if the consumer sees the
-+flag ("y") set but the buffer ("x") as not yet filled in, that is, if P1()
-+loaded a value from "x" that was equal to 1 but loaded a value from "y"
-+that was still equal to zero.
-+
-+This example can be checked by running the following command, which
-+absolutely must be run from the tools/memory-model directory and from
-+this directory only:
-+
-+herd7 -conf linux-kernel.cfg litmus-tests/MP+pooncerelease+poacquireonce.litmus
-+
-+The output is the result of something similar to a full state-space
-+search, and is as follows:
-+
-+ 1 Test MP+pooncerelease+poacquireonce Allowed
-+ 2 States 3
-+ 3 1:r0=0; 1:r1=0;
-+ 4 1:r0=0; 1:r1=1;
-+ 5 1:r0=1; 1:r1=1;
-+ 6 No
-+ 7 Witnesses
-+ 8 Positive: 0 Negative: 3
-+ 9 Condition exists (1:r0=1 /\ 1:r1=0)
-+10 Observation MP+pooncerelease+poacquireonce Never 0 3
-+11 Time MP+pooncerelease+poacquireonce 0.00
-+12 Hash=579aaa14d8c35a39429b02e698241d09
-+
-+The most pertinent line is line 10, which contains "Never 0 3", which
-+indicates that the bad result flagged by the "exists" clause never
-+happens.  This line might instead say "Sometimes" to indicate that the
-+bad result happened in some but not all executions, or it might say
-+"Always" to indicate that the bad result happened in all executions.
-+(The herd7 tool doesn't judge, so it is only an LKMM convention that the
-+"exists" clause indicates a bad result.  To see this, invert the "exists"
-+clause's condition and run the test.)  The numbers ("0 3") at the end
-+of this line indicate the number of end states satisfying the "exists"
-+clause (0) and the number not not satisfying that clause (3).
-+
-+Another important part of this output is shown in lines 2-5, repeated here:
-+
-+ 2 States 3
-+ 3 1:r0=0; 1:r1=0;
-+ 4 1:r0=0; 1:r1=1;
-+ 5 1:r0=1; 1:r1=1;
-+
-+Line 2 gives the total number of end states, and each of lines 3-5 list
-+one of these states, with the first ("1:r0=0; 1:r1=0;") indicating that
-+both of P1()'s loads returned the value "0".  As expected, given the
-+"Never" on line 10, the state flagged by the "exists" clause is not
-+listed.  This full list of states can be helpful when debugging a new
-+litmus test.
-+
-+The rest of the output is not normally needed, either due to irrelevance
-+or due to being redundant with the lines discussed above.  However, the
-+following paragraph lists them for the benefit of readers possessed of
-+an insatiable curiosity.  Other readers should feel free to skip ahead.
-+
-+Line 1 echos the test name, along with the "Test" and "Allowed".  Line 6's
-+"No" says that the "exists" clause was not satisfied by any execution,
-+and as such it has the same meaning as line 10's "Never".  Line 7 is a
-+lead-in to line 8's "Positive: 0 Negative: 3", which lists the number
-+of end states satisfying and not satisfying the "exists" clause, just
-+like the two numbers at the end of line 10.  Line 9 repeats the "exists"
-+clause so that you don't have to look it up in the litmus-test file.
-+The number at the end of line 11 (which begins with "Time") gives the
-+time in seconds required to analyze the litmus test.  Small tests such
-+as this one complete in a few milliseconds, so "0.00" is quite common.
-+Line 12 gives a hash of the contents for the litmus-test file, and is used
-+by tooling that manages litmus tests and their output.  This tooling is
-+used by people modifying LKMM itself, and among other things lets such
-+people know which of the several thousand relevant litmus tests were
-+affected by a given change to LKMM.
-+
-+
-+Initialization
-+--------------
-+
-+The previous example relied on the default zero initialization for
-+"x" and "y", but a similar litmus test could instead initialize them
-+to some other value:
-+
-+ 1 C MP+pooncerelease+poacquireonce
-+ 2
-+ 3 {
-+ 4   x=42;
-+ 5   y=42;
-+ 6 }
-+ 7
-+ 8 P0(int *x, int *y)
-+ 9 {
-+10   WRITE_ONCE(*x, 1);
-+11   smp_store_release(y, 1);
-+12 }
-+13
-+14 P1(int *x, int *y)
-+15 {
-+16   int r0;
-+17   int r1;
-+18
-+19   r0 = smp_load_acquire(y);
-+20   r1 = READ_ONCE(*x);
-+21 }
-+22
-+23 exists (1:r0=1 /\ 1:r1=42)
-+
-+Lines 3-6 now initialize both "x" and "y" to the value 42.  This also
-+means that the "exists" clause on line 23 must change "1:r1=0" to
-+"1:r1=42".
-+
-+Running the test gives the same overall result as before, but with the
-+value 42 appearing in place of the value zero:
-+
-+ 1 Test MP+pooncerelease+poacquireonce Allowed
-+ 2 States 3
-+ 3 1:r0=1; 1:r1=1;
-+ 4 1:r0=42; 1:r1=1;
-+ 5 1:r0=42; 1:r1=42;
-+ 6 No
-+ 7 Witnesses
-+ 8 Positive: 0 Negative: 3
-+ 9 Condition exists (1:r0=1 /\ 1:r1=42)
-+10 Observation MP+pooncerelease+poacquireonce Never 0 3
-+11 Time MP+pooncerelease+poacquireonce 0.02
-+12 Hash=ab9a9b7940a75a792266be279a980156
-+
-+It is tempting to avoid the open-coded repetitions of the value "42"
-+by defining another global variable "initval=42" and replacing all
-+occurrences of "42" with "initval".  This will not, repeat *not*,
-+initialize "x" and "y" to 42, but instead to the address of "initval"
-+(try it!).  See the section below on linked lists to learn more about
-+why this approach to initialization can be useful.
-+
-+
-+Control Structures
-+------------------
-+
-+LKMM supports the C-language "if" statement, which allows modeling of
-+conditional branches.  In LKMM, conditional branches can affect ordering,
-+but only if you are *very* careful (compilers are surprisingly able
-+to optimize away conditional branches).  The following example shows
-+the "load buffering" (LB) use case that is used in the Linux kernel to
-+synchronize between ring-buffer producers and consumers.  In the example
-+below, P0() is one side checking to see if an operation may proceed and
-+P1() is the other side completing its update.
-+
-+ 1 C LB+fencembonceonce+ctrlonceonce
-+ 2
-+ 3 {}
-+ 4
-+ 5 P0(int *x, int *y)
-+ 6 {
-+ 7   int r0;
-+ 8
-+ 9   r0 = READ_ONCE(*x);
-+10   if (r0)
-+11     WRITE_ONCE(*y, 1);
-+12 }
-+13
-+14 P1(int *x, int *y)
-+15 {
-+16   int r0;
-+17
-+18   r0 = READ_ONCE(*y);
-+19   smp_mb();
-+20   WRITE_ONCE(*x, 1);
-+21 }
-+22
-+23 exists (0:r0=1 /\ 1:r0=1)
-+
-+P1()'s "if" statement on line 10 works as expected, so that line 11 is
-+executed only if line 9 loads a non-zero value from "x".  Because P1()'s
-+write of "1" to "x" happens only after P1()'s read from "y", one would
-+hope that the "exists" clause cannot be satisfied.  LKMM agrees:
-+
-+ 1 Test LB+fencembonceonce+ctrlonceonce Allowed
-+ 2 States 2
-+ 3 0:r0=0; 1:r0=0;
-+ 4 0:r0=1; 1:r0=0;
-+ 5 No
-+ 6 Witnesses
-+ 7 Positive: 0 Negative: 2
-+ 8 Condition exists (0:r0=1 /\ 1:r0=1)
-+ 9 Observation LB+fencembonceonce+ctrlonceonce Never 0 2
-+10 Time LB+fencembonceonce+ctrlonceonce 0.00
-+11 Hash=e5260556f6de495fd39b556d1b831c3b
-+
-+However, there is no "while" statement due to the fact that full
-+state-space search has some difficulty with iteration.  However, there
-+are tricks that may be used to handle some special cases, which are
-+discussed below.  In addition, loop-unrolling tricks may be applied,
-+albeit sparingly.
-+
-+
-+Tricks and Traps
-+================
-+
-+This section covers extracting debug output from herd7, emulating
-+spin loops, handling trivial linked lists, adding comments to litmus tests,
-+emulating call_rcu(), and finally tricks to improve herd7 performance
-+in order to better handle large litmus tests.
-+
-+
-+Debug Output
-+------------
-+
-+By default, the herd7 state output includes all variables mentioned
-+in the "exists" clause.  But sometimes debugging efforts are greatly
-+aided by the values of other variables.  Consider this litmus test
-+(tools/memory-order/litmus-tests/SB+rfionceonce-poonceonces.litmus but
-+slightly modified), which probes an obscure corner of hardware memory
-+ordering:
-+
-+ 1 C SB+rfionceonce-poonceonces
-+ 2
-+ 3 {}
-+ 4
-+ 5 P0(int *x, int *y)
-+ 6 {
-+ 7   int r1;
-+ 8   int r2;
-+ 9
-+10   WRITE_ONCE(*x, 1);
-+11   r1 = READ_ONCE(*x);
-+12   r2 = READ_ONCE(*y);
-+13 }
-+14
-+15 P1(int *x, int *y)
-+16 {
-+17   int r3;
-+18   int r4;
-+19
-+20   WRITE_ONCE(*y, 1);
-+21   r3 = READ_ONCE(*y);
-+22   r4 = READ_ONCE(*x);
-+23 }
-+24
-+25 exists (0:r2=0 /\ 1:r4=0)
-+
-+The herd7 output is as follows:
-+
-+ 1 Test SB+rfionceonce-poonceonces Allowed
-+ 2 States 4
-+ 3 0:r2=0; 1:r4=0;
-+ 4 0:r2=0; 1:r4=1;
-+ 5 0:r2=1; 1:r4=0;
-+ 6 0:r2=1; 1:r4=1;
-+ 7 Ok
-+ 8 Witnesses
-+ 9 Positive: 1 Negative: 3
-+10 Condition exists (0:r2=0 /\ 1:r4=0)
-+11 Observation SB+rfionceonce-poonceonces Sometimes 1 3
-+12 Time SB+rfionceonce-poonceonces 0.01
-+13 Hash=c7f30fe0faebb7d565405d55b7318ada
-+
-+(This output indicates that CPUs are permitted to "snoop their own
-+store buffers", which all of Linux's CPU families other than s390 will
-+happily do.  Such snooping results in disagreement among CPUs on the
-+order of stores from different CPUs, which is rarely an issue.)
-+
-+But the herd7 output shows only the two variables mentioned in the
-+"exists" clause.  Someone modifying this test might wish to know the
-+values of "x", "y", "0:r1", and "0:r3" as well.  The "locations"
-+statement on line 25 shows how to cause herd7 to display additional
-+variables:
-+
-+ 1 C SB+rfionceonce-poonceonces
-+ 2
-+ 3 {}
-+ 4
-+ 5 P0(int *x, int *y)
-+ 6 {
-+ 7   int r1;
-+ 8   int r2;
-+ 9
-+10   WRITE_ONCE(*x, 1);
-+11   r1 = READ_ONCE(*x);
-+12   r2 = READ_ONCE(*y);
-+13 }
-+14
-+15 P1(int *x, int *y)
-+16 {
-+17   int r3;
-+18   int r4;
-+19
-+20   WRITE_ONCE(*y, 1);
-+21   r3 = READ_ONCE(*y);
-+22   r4 = READ_ONCE(*x);
-+23 }
-+24
-+25 locations [0:r1; 1:r3; x; y]
-+26 exists (0:r2=0 /\ 1:r4=0)
-+
-+The herd7 output then displays the values of all the variables:
-+
-+ 1 Test SB+rfionceonce-poonceonces Allowed
-+ 2 States 4
-+ 3 0:r1=1; 0:r2=0; 1:r3=1; 1:r4=0; x=1; y=1;
-+ 4 0:r1=1; 0:r2=0; 1:r3=1; 1:r4=1; x=1; y=1;
-+ 5 0:r1=1; 0:r2=1; 1:r3=1; 1:r4=0; x=1; y=1;
-+ 6 0:r1=1; 0:r2=1; 1:r3=1; 1:r4=1; x=1; y=1;
-+ 7 Ok
-+ 8 Witnesses
-+ 9 Positive: 1 Negative: 3
-+10 Condition exists (0:r2=0 /\ 1:r4=0)
-+11 Observation SB+rfionceonce-poonceonces Sometimes 1 3
-+12 Time SB+rfionceonce-poonceonces 0.01
-+13 Hash=40de8418c4b395388f6501cafd1ed38d
-+
-+What if you would like to know the value of a particular global variable
-+at some particular point in a given process's execution?  One approach
-+is to use a READ_ONCE() to load that global variable into a new local
-+variable, then add that local variable to the "locations" clause.
-+But be careful:  In some litmus tests, adding a READ_ONCE() will change
-+the outcome!  For one example, please see the C-READ_ONCE.litmus and
-+C-READ_ONCE-omitted.litmus tests located here:
-+
-+	https://github.com/paulmckrcu/litmus/blob/master/manual/kernel/
-+
-+
-+Spin Loops
-+----------
-+
-+The analysis carried out by herd7 explores full state space, which is
-+at best of exponential time complexity.  Adding processes and increasing
-+the amount of code in a give process can greatly increase execution time.
-+Potentially infinite loops, such as those used to wait for locks to
-+become available, are clearly problematic.
-+
-+Fortunately, it is possible to avoid state-space explosion by specially
-+modeling such loops.  For example, the following litmus tests emulates
-+locking using xchg_acquire(), but instead of enclosing xchg_acquire()
-+in a spin loop, it instead excludes executions that fail to acquire the
-+lock using a herd7 "filter" clause.  Note that for exclusive locking, you
-+are better off using the spin_lock() and spin_unlock() that LKMM directly
-+models, if for no other reason that these are much faster.  However, the
-+techniques illustrated in this section can be used for other purposes,
-+such as emulating reader-writer locking, which LKMM does not yet model.
-+
-+ 1 C C-SB+l-o-o-u+l-o-o-u-X
-+ 2
-+ 3 {
-+ 4 }
-+ 5
-+ 6 P0(int *sl, int *x0, int *x1)
-+ 7 {
-+ 8   int r2;
-+ 9   int r1;
-+10
-+11   r2 = xchg_acquire(sl, 1);
-+12   WRITE_ONCE(*x0, 1);
-+13   r1 = READ_ONCE(*x1);
-+14   smp_store_release(sl, 0);
-+15 }
-+16
-+17 P1(int *sl, int *x0, int *x1)
-+18 {
-+19   int r2;
-+20   int r1;
-+21
-+22   r2 = xchg_acquire(sl, 1);
-+23   WRITE_ONCE(*x1, 1);
-+24   r1 = READ_ONCE(*x0);
-+25   smp_store_release(sl, 0);
-+26 }
-+27
-+28 filter (0:r2=0 /\ 1:r2=0)
-+29 exists (0:r1=0 /\ 1:r1=0)
-+
-+This litmus test may be found here:
-+
-+https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/perfbook.git/tree/CodeSamples/formal/herd/C-SB+l-o-o-u+l-o-o-u-X.litmus
-+
-+This test uses two global variables, "x1" and "x2", and also emulates a
-+single global spinlock named "sl".  This spinlock is held by whichever
-+process changes the value of "sl" from "0" to "1", and is released when
-+that process sets "sl" back to "0".  P0()'s lock acquisition is emulated
-+on line 11 using xchg_acquire(), which unconditionally stores the value
-+"1" to "sl" and stores either "0" or "1" to "r2", depending on whether
-+the lock acquisition was successful or unsuccessful (due to "sl" already
-+having the value "1"), respectively.  P1() operates in a similar manner.
-+
-+Rather unconventionally, execution appears to proceed to the critical
-+section on lines 12 and 13 in either case.  Line 14 then uses an
-+smp_store_release() to store zero to "sl", thus emulating lock release.
-+
-+The case where xchg_acquire() fails to acquire the lock is handled by
-+the "filter" clause on line 28, which tells herd7 to keep only those
-+executions in which both "0:r2" and "1:r2" are zero, that is to pay
-+attention only to those executions in which both locks are actually
-+acquired.  Thus, the bogus executions that would execute the critical
-+sections are discarded and any effects that they might have had are
-+ignored.  Note well that the "filter" clause keeps those executions
-+for which its expression is satisfied, that is, for which the expression
-+evaluates to true.  In other words, the "filter" clause says what to
-+keep, not what to discard.
-+
-+The result of running this test is as follows:
-+
-+ 1 Test C-SB+l-o-o-u+l-o-o-u-X Allowed
-+ 2 States 2
-+ 3 0:r1=0; 1:r1=1;
-+ 4 0:r1=1; 1:r1=0;
-+ 5 No
-+ 6 Witnesses
-+ 7 Positive: 0 Negative: 2
-+ 8 Condition exists (0:r1=0 /\ 1:r1=0)
-+ 9 Observation C-SB+l-o-o-u+l-o-o-u-X Never 0 2
-+10 Time C-SB+l-o-o-u+l-o-o-u-X 0.03
-+
-+The "Never" on line 9 indicates that this use of xchg_acquire() and
-+smp_store_release() really does correctly emulate locking.
-+
-+Why doesn't the litmus test take the simpler approach of using a spin loop
-+to handle failed spinlock acquisitions, like the kernel does?  The key
-+insight behind this litmus test is that spin loops have no effect on the
-+possible "exists"-clause outcomes of program execution in the absence
-+of deadlock.  In other words, given a high-quality lock-acquisition
-+primitive in a deadlock-free program running on high-quality hardware,
-+each lock acquisition will eventually succeed.  Because herd7 already
-+explores the full state space, the length of time required to actually
-+acquire the lock does not matter.  After all, herd7 already models all
-+possible durations of the xchg_acquire() statements.
-+
-+Why not just add the "filter" clause to the "exists" clause, thus
-+avoiding the "filter" clause entirely?  This does work, but is slower.
-+The reason that the "filter" clause is faster is that (in the common case)
-+herd7 knows to abandon an execution as soon as the "filter" expression
-+fails to be satisfied.  In contrast, the "exists" clause is evaluated
-+only at the end of time, thus requiring herd7 to waste time on bogus
-+executions in which both critical sections proceed concurrently.  In
-+addition, some LKMM users like the separation of concerns provided by
-+using the both the "filter" and "exists" clauses.
-+
-+Readers lacking a pathological interest in odd corner cases should feel
-+free to skip the remainder of this section.
-+
-+But what if the litmus test were to temporarily set "0:r2" to a non-zero
-+value?  Wouldn't that cause herd7 to abandon the execution prematurely
-+due to an early mismatch of the "filter" clause?
-+
-+Why not just try it?  Line 4 of the following modified litmus test
-+introduces a new global variable "x2" that is initialized to "1".  Line 23
-+of P1() reads that variable into "1:r2" to force an early mismatch with
-+the "filter" clause.  Line 24 does a known-true "if" condition to avoid
-+and static analysis that herd7 might do.  Finally the "exists" clause
-+on line 32 is updated to a condition that is alway satisfied at the end
-+of the test.
-+
-+ 1 C C-SB+l-o-o-u+l-o-o-u-X
-+ 2
-+ 3 {
-+ 4   x2=1;
-+ 5 }
-+ 6
-+ 7 P0(int *sl, int *x0, int *x1)
-+ 8 {
-+ 9   int r2;
-+10   int r1;
-+11
-+12   r2 = xchg_acquire(sl, 1);
-+13   WRITE_ONCE(*x0, 1);
-+14   r1 = READ_ONCE(*x1);
-+15   smp_store_release(sl, 0);
-+16 }
-+17
-+18 P1(int *sl, int *x0, int *x1, int *x2)
-+19 {
-+20   int r2;
-+21   int r1;
-+22
-+23   r2 = READ_ONCE(*x2);
-+24   if (r2)
-+25     r2 = xchg_acquire(sl, 1);
-+26   WRITE_ONCE(*x1, 1);
-+27   r1 = READ_ONCE(*x0);
-+28   smp_store_release(sl, 0);
-+29 }
-+30
-+31 filter (0:r2=0 /\ 1:r2=0)
-+32 exists (x1=1)
-+
-+If the "filter" clause were to check each variable at each point in the
-+execution, running this litmus test would display no executions because
-+all executions would be filtered out at line 23.  However, the output
-+is instead as follows:
-+
-+ 1 Test C-SB+l-o-o-u+l-o-o-u-X Allowed
-+ 2 States 1
-+ 3 x1=1;
-+ 4 Ok
-+ 5 Witnesses
-+ 6 Positive: 2 Negative: 0
-+ 7 Condition exists (x1=1)
-+ 8 Observation C-SB+l-o-o-u+l-o-o-u-X Always 2 0
-+ 9 Time C-SB+l-o-o-u+l-o-o-u-X 0.04
-+10 Hash=080bc508da7f291e122c6de76c0088e3
-+
-+Line 3 shows that there is one execution that did not get filtered out,
-+so the "filter" clause is evaluated only on the last assignment to
-+the variables that it checks.  In this case, the "filter" clause is a
-+disjunction, so it might be evaluated twice, once at the final (and only)
-+assignment to "0:r2" and once at the final assignment to "1:r2".
-+
-+
-+Linked Lists
-+------------
-+
-+LKMM can handle linked lists, but only linked lists in which each node
-+contains nothing except a pointer to the next node in the list.  This is
-+of course quite restrictive, but there is nevertheless quite a bit that
-+can be done within these confines, as can be seen in the litmus test
-+at tools/memory-model/litmus-tests/MP+onceassign+derefonce.litmus:
-+
-+ 1 C MP+onceassign+derefonce
-+ 2
-+ 3 {
-+ 4 y=z;
-+ 5 z=0;
-+ 6 }
-+ 7
-+ 8 P0(int *x, int **y)
-+ 9 {
-+10   WRITE_ONCE(*x, 1);
-+11   rcu_assign_pointer(*y, x);
-+12 }
-+13
-+14 P1(int *x, int **y)
-+15 {
-+16   int *r0;
-+17   int r1;
-+18
-+19   rcu_read_lock();
-+20   r0 = rcu_dereference(*y);
-+21   r1 = READ_ONCE(*r0);
-+22   rcu_read_unlock();
-+23 }
-+24
-+25 exists (1:r0=x /\ 1:r1=0)
-+
-+Line 4's "y=z" may seem odd, given that "z" has not yet been initialized.
-+But "y=z" does not set the value of "y" to that of "z", but instead
-+sets the value of "y" to the *address* of "z".  Lines 4 and 5 therefore
-+create a simple linked list, with "y" pointing to "z" and "z" having a
-+NULL pointer.  A much longer linked list could be created if desired,
-+and circular singly linked lists can also be created and manipulated.
-+
-+The "exists" clause works the same way, with the "1:r0=x" comparing P1()'s
-+"r0" not to the value of "x", but again to its address.  This term of the
-+"exists" clause therefore tests whether line 20's load from "y" saw the
-+value stored by line 11, which is in fact what is required in this case.
-+
-+P0()'s line 10 initializes "x" to the value 1 then line 11 links to "x"
-+from "y", replacing "z".
-+
-+P1()'s line 20 loads a pointer from "y", and line 21 dereferences that
-+pointer.  The RCU read-side critical section spanning lines 19-22 is
-+just for show in this example.
-+
-+Running this test results in the following:
-+
-+ 1 Test MP+onceassign+derefonce Allowed
-+ 2 States 2
-+ 3 1:r0=x; 1:r1=1;
-+ 4 1:r0=z; 1:r1=0;
-+ 5 No
-+ 6 Witnesses
-+ 7 Positive: 0 Negative: 2
-+ 8 Condition exists (1:r0=x /\ 1:r1=0)
-+ 9 Observation MP+onceassign+derefonce Never 0 2
-+10 Time MP+onceassign+derefonce 0.00
-+11 Hash=49ef7a741563570102448a256a0c8568
-+
-+The only possible outcomes feature P1() loading a pointer to "z"
-+(which contains zero) on the one hand and P1() loading a pointer to "x"
-+(which contains the value one) on the other.  This should be reassuring
-+because it says that RCU readers cannot see the old preinitialization
-+values when accessing a newly inserted list node.  This undesirable
-+scenario is flagged by the "exists" clause, and would occur if P1()
-+loaded a pointer to "x", but obtained the pre-initialization value of
-+zero after dereferencing that pointer.
-+
-+
-+Comments
-+--------
-+
-+Different portions of a litmus test are processed by different parsers,
-+which has the charming effect of requiring different comment syntax in
-+different portions of the litmus test.  The C-syntax portions use
-+C-language comments (either "/* */" or "//"), while the other portions
-+use Ocaml comments "(* *)".
-+
-+The following litmus test illustrates the comment style corresponding
-+to each syntactic unit of the test:
-+
-+ 1 C MP+onceassign+derefonce (* A *)
-+ 2
-+ 3 (* B *)
-+ 4
-+ 5 {
-+ 6 y=z; (* C *)
-+ 7 z=0;
-+ 8 } // D
-+ 9
-+10 // E
-+11
-+12 P0(int *x, int **y) // F
-+13 {
-+14   WRITE_ONCE(*x, 1);  // G
-+15   rcu_assign_pointer(*y, x);
-+16 }
-+17
-+18 // H
-+19
-+20 P1(int *x, int **y)
-+21 {
-+22   int *r0;
-+23   int r1;
-+24
-+25   rcu_read_lock();
-+26   r0 = rcu_dereference(*y);
-+27   r1 = READ_ONCE(*r0);
-+28   rcu_read_unlock();
-+29 }
-+30
-+31 // I
-+32
-+33 exists (* J *) (1:r0=x /\ (* K *) 1:r1=0) (* L *)
-+
-+In short, use C-language comments in the C code and Ocaml comments in
-+the rest of the litmus test.
-+
-+On the other hand, if you prefer C-style comments everywhere, the
-+C preprocessor is your friend.
-+
-+
-+Asynchronous RCU Grace Periods
-+------------------------------
-+
-+The following litmus test is derived from the example show in
-+Documentation/litmus-tests/rcu/RCU+sync+free.litmus, but converted to
-+emulate call_rcu():
-+
-+ 1 C RCU+sync+free
-+ 2
-+ 3 {
-+ 4 int x = 1;
-+ 5 int *y = &x;
-+ 6 int z = 1;
-+ 7 }
-+ 8
-+ 9 P0(int *x, int *z, int **y)
-+10 {
-+11   int *r0;
-+12   int r1;
-+13
-+14   rcu_read_lock();
-+15   r0 = rcu_dereference(*y);
-+16   r1 = READ_ONCE(*r0);
-+17   rcu_read_unlock();
-+18 }
-+19
-+20 P1(int *z, int **y, int *c)
-+21 {
-+22   rcu_assign_pointer(*y, z);
-+23   smp_store_release(*c, 1); // Emulate call_rcu().
-+24 }
-+25
-+26 P2(int *x, int *z, int **y, int *c)
-+27 {
-+28   int r0;
-+29
-+30   r0 = smp_load_acquire(*c); // Note call_rcu() request.
-+31   synchronize_rcu(); // Wait one grace period.
-+32   WRITE_ONCE(*x, 0); // Emulate the RCU callback.
-+33 }
-+34
-+35 filter (2:r0=1) (* Reject too-early starts. *)
-+36 exists (0:r0=x /\ 0:r1=0)
-+
-+Lines 4-6 initialize a linked list headed by "y" that initially contains
-+"x".  In addition, "z" is pre-initialized to prepare for P1(), which
-+will replace "x" with "z" in this list.
-+
-+P0() on lines 9-18 enters an RCU read-side critical section, loads the
-+list header "y" and dereferences it, leaving the node in "0:r0" and
-+the node's value in "0:r1".
-+
-+P1() on lines 20-24 updates the list header to instead reference "z",
-+then emulates call_rcu() by doing a release store into "c".
-+
-+P2() on lines 27-33 emulates the behind-the-scenes effect of doing a
-+call_rcu().  Line 30 first does an acquire load from "c", then line 31
-+waits for an RCU grace period to elapse, and finally line 32 emulates
-+the RCU callback, which in turn emulates a call to kfree().
-+
-+Of course, it is possible for P2() to start too soon, so that the
-+value of "2:r0" is zero rather than the required value of "1".
-+The "filter" clause on line 35 handles this possibility, rejecting
-+all executions in which "2:r0" is not equal to the value "1".
-+
-+
-+Performance
-+-----------
-+
-+LKMM's exploration of the full state-space can be extremely helpful,
-+but it does not come for free.  The price is exponential computational
-+complexity in terms of the number of processes, the average number
-+of statements in each process, and the total number of stores in the
-+litmus test.
-+
-+So it is best to start small and then work up.  Where possible, break
-+your code down into small pieces each representing a core concurrency
-+requirement.
-+
-+That said, herd7 is quite fast.  On an unprepossessing x86 laptop, it
-+was able to analyze the following 10-process RCU litmus test in about
-+six seconds.
-+
-+https://github.com/paulmckrcu/litmus/blob/master/auto/C-RW-R+RW-R+RW-G+RW-G+RW-G+RW-G+RW-R+RW-R+RW-R+RW-R.litmus
-+
-+One way to make herd7 run faster is to use the "-speedcheck true" option.
-+This option prevents herd7 from generating all possible end states,
-+instead causing it to focus solely on whether or not the "exists"
-+clause can be satisfied.  With this option, herd7 evaluates the above
-+litmus test in about 300 milliseconds, for more than an order of magnitude
-+improvement in performance.
-+
-+Larger 16-process litmus tests that would normally consume 15 minutes
-+of time complete in about 40 seconds with this option.  To be fair,
-+you do get an extra 65,535 states when you leave off the "-speedcheck
-+true" option.
-+
-+https://github.com/paulmckrcu/litmus/blob/master/auto/C-RW-R+RW-R+RW-G+RW-G+RW-G+RW-G+RW-R+RW-R+RW-R+RW-R+RW-G+RW-G+RW-G+RW-G+RW-R+RW-R.litmus
-+
-+Nevertheless, litmus-test analysis really is of exponential complexity,
-+whether with or without "-speedcheck true".  Increasing by just three
-+processes to a 19-process litmus test requires 2 hours and 40 minutes
-+without, and about 8 minutes with "-speedcheck true".  Each of these
-+results represent roughly an order of magnitude slowdown compared to the
-+16-process litmus test.  Again, to be fair, the multi-hour run explores
-+no fewer than 524,287 additional states compared to the shorter one.
-+
-+https://github.com/paulmckrcu/litmus/blob/master/auto/C-RW-R+RW-R+RW-G+RW-G+RW-G+RW-G+RW-R+RW-R+RW-R+RW-R+RW-R+RW-R+RW-G+RW-G+RW-G+RW-G+RW-R+RW-R+RW-R.litmus
-+
-+If you don't like command-line arguments, you can obtain a similar speedup
-+by adding a "filter" clause with exactly the same expression as your
-+"exists" clause.
-+
-+However, please note that seeing the full set of states can be extremely
-+helpful when developing and debugging litmus tests.
-+
-+
-+LIMITATIONS
-+===========
-+
-+Limitations of the Linux-kernel memory model (LKMM) include:
-+
-+1.	Compiler optimizations are not accurately modeled.  Of course,
-+	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
-+	ability to optimize, but under some circumstances it is possible
-+	for the compiler to undermine the memory model.  For more
-+	information, see Documentation/explanation.txt (in particular,
-+	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
-+	sections).
-+
-+	Note that this limitation in turn limits LKMM's ability to
-+	accurately model address, control, and data dependencies.
-+	For example, if the compiler can deduce the value of some variable
-+	carrying a dependency, then the compiler can break that dependency
-+	by substituting a constant of that value.
-+
-+2.	Multiple access sizes for a single variable are not supported,
-+	and neither are misaligned or partially overlapping accesses.
-+
-+3.	Exceptions and interrupts are not modeled.  In some cases,
-+	this limitation can be overcome by modeling the interrupt or
-+	exception with an additional process.
-+
-+4.	I/O such as MMIO or DMA is not supported.
-+
-+5.	Self-modifying code (such as that found in the kernel's
-+	alternatives mechanism, function tracer, Berkeley Packet Filter
-+	JIT compiler, and module loader) is not supported.
-+
-+6.	Complete modeling of all variants of atomic read-modify-write
-+	operations, locking primitives, and RCU is not provided.
-+	For example, call_rcu() and rcu_barrier() are not supported.
-+	However, a substantial amount of support is provided for these
-+	operations, as shown in the linux-kernel.def file.
-+
-+	Here are specific limitations:
-+
-+	a.	When rcu_assign_pointer() is passed NULL, the Linux
-+		kernel provides no ordering, but LKMM models this
-+		case as a store release.
-+
-+	b.	The "unless" RMW operations are not currently modeled:
-+		atomic_long_add_unless(), atomic_inc_unless_negative(),
-+		and atomic_dec_unless_positive().  These can be emulated
-+		in litmus tests, for example, by using atomic_cmpxchg().
-+
-+		One exception of this limitation is atomic_add_unless(),
-+		which is provided directly by herd7 (so no corresponding
-+		definition in linux-kernel.def).  atomic_add_unless() is
-+		modeled by herd7 therefore it can be used in litmus tests.
-+
-+	c.	The call_rcu() function is not modeled.  As was shown above,
-+		it can be emulated in litmus tests by adding another
-+		process that invokes synchronize_rcu() and the body of the
-+		callback function, with (for example) a release-acquire
-+		from the site of the emulated call_rcu() to the beginning
-+		of the additional process.
-+
-+	d.	The rcu_barrier() function is not modeled.  It can be
-+		emulated in litmus tests emulating call_rcu() via
-+		(for example) a release-acquire from the end of each
-+		additional call_rcu() process to the site of the
-+		emulated rcu-barrier().
-+
-+	e.	Although sleepable RCU (SRCU) is now modeled, there
-+		are some subtle differences between its semantics and
-+		those in the Linux kernel.  For example, the kernel
-+		might interpret the following sequence as two partially
-+		overlapping SRCU read-side critical sections:
-+
-+			 1  r1 = srcu_read_lock(&my_srcu);
-+			 2  do_something_1();
-+			 3  r2 = srcu_read_lock(&my_srcu);
-+			 4  do_something_2();
-+			 5  srcu_read_unlock(&my_srcu, r1);
-+			 6  do_something_3();
-+			 7  srcu_read_unlock(&my_srcu, r2);
-+
-+		In contrast, LKMM will interpret this as a nested pair of
-+		SRCU read-side critical sections, with the outer critical
-+		section spanning lines 1-7 and the inner critical section
-+		spanning lines 3-5.
-+
-+		This difference would be more of a concern had anyone
-+		identified a reasonable use case for partially overlapping
-+		SRCU read-side critical sections.  For more information
-+		on the trickiness of such overlapping, please see:
-+		https://paulmck.livejournal.com/40593.html
-+
-+	f.	Reader-writer locking is not modeled.  It can be
-+		emulated in litmus tests using atomic read-modify-write
-+		operations.
-+
-+The fragment of the C language supported by these litmus tests is quite
-+limited and in some ways non-standard:
-+
-+1.	There is no automatic C-preprocessor pass.  You can of course
-+	run it manually, if you choose.
-+
-+2.	There is no way to create functions other than the Pn() functions
-+	that model the concurrent processes.
-+
-+3.	The Pn() functions' formal parameters must be pointers to the
-+	global shared variables.  Nothing can be passed by value into
-+	these functions.
-+
-+4.	The only functions that can be invoked are those built directly
-+	into herd7 or that are defined in the linux-kernel.def file.
-+
-+5.	The "switch", "do", "for", "while", and "goto" C statements are
-+	not supported.	The "switch" statement can be emulated by the
-+	"if" statement.  The "do", "for", and "while" statements can
-+	often be emulated by manually unrolling the loop, or perhaps by
-+	enlisting the aid of the C preprocessor to minimize the resulting
-+	code duplication.  Some uses of "goto" can be emulated by "if",
-+	and some others by unrolling.
-+
-+6.	Although you can use a wide variety of types in litmus-test
-+	variable declarations, and especially in global-variable
-+	declarations, the "herd7" tool understands only int and
-+	pointer types.	There is no support for floating-point types,
-+	enumerations, characters, strings, arrays, or structures.
-+
-+7.	Parsing of variable declarations is very loose, with almost no
-+	type checking.
-+
-+8.	Initializers differ from their C-language counterparts.
-+	For example, when an initializer contains the name of a shared
-+	variable, that name denotes a pointer to that variable, not
-+	the current value of that variable.  For example, "int x = y"
-+	is interpreted the way "int x = &y" would be in C.
-+
-+9.	Dynamic memory allocation is not supported, although this can
-+	be worked around in some cases by supplying multiple statically
-+	allocated variables.
-+
-+Some of these limitations may be overcome in the future, but others are
-+more likely to be addressed by incorporating the Linux-kernel memory model
-+into other tools.
-+
-+Finally, please note that LKMM is subject to change as hardware, use cases,
-+and compilers evolve.
++Back in the day, the Linux kernel had three types of atomic operations:
++
++1.	Initialization and read-out, such as atomic_set() and atomic_read().
++
++2.	Operations that did not return a value and provided no ordering,
++	such as atomic_inc() and atomic_dec().
++
++3.	Operations that returned a value and provided full ordering, such as
++	atomic_add_return() and atomic_dec_and_test().  Note that some
++	value-returning operations provide full ordering only conditionally.
++	For example, cmpxchg() provides ordering only upon success.
++
++More recent kernels have operations that return a value but do not
++provide full ordering.  These are flagged with either a _relaxed()
++suffix (providing no ordering), or an _acquire() or _release() suffix
++(providing limited ordering).
++
++Additional information may be found in these files:
++
++Documentation/atomic_t.txt
++Documentation/atomic_bitops.txt
++Documentation/core-api/atomic_ops.rst
++Documentation/core-api/refcount-vs-atomic.rst
++
++Reading code using these primitives is often also quite helpful.
++
++
++Lockless, fully ordered
++=======================
++
++When using locking, there often comes a time when it is necessary
++to access some variable or another without holding the data lock
++that serializes access to that variable.
++
++If you want to keep things simple, use the initialization and read-out
++operations from the previous section only when there are no racing
++accesses.  Otherwise, use only fully ordered operations when accessing
++or modifying the variable.  This approach guarantees that code prior
++to a given access to that variable will be seen by all CPUs has having
++happened before any code following any later access to that same variable.
++
++Please note that per-CPU functions are not atomic operations and
++hence they do not provide any ordering guarantees at all.
++
++If the lockless accesses are frequently executed reads that are used
++only for heuristics, or if they are frequently executed writes that
++are used only for statistics, please see the next section.
++
++
++Lockless statistics and heuristics
++==================================
++
++Unordered primitives such as atomic_read(), atomic_set(), READ_ONCE(), and
++WRITE_ONCE() can safely be used in some cases.  These primitives provide
++no ordering, but they do prevent the compiler from carrying out a number
++of destructive optimizations (for which please see the next section).
++One example use for these primitives is statistics, such as per-CPU
++counters exemplified by the rt_cache_stat structure's routing-cache
++statistics counters.  Another example use case is heuristics, such as
++the jiffies_till_first_fqs and jiffies_till_next_fqs kernel parameters
++controlling how often RCU scans for idle CPUs.
++
++But be careful.  "Unordered" really does mean "unordered".  It is all
++too easy to assume ordering, and this assumption must be avoided when
++using these primitives.
++
++
++Don't let the compiler trip you up
++==================================
++
++It can be quite tempting to use plain C-language accesses for lockless
++loads from and stores to shared variables.  Although this is both
++possible and quite common in the Linux kernel, it does require a
++surprising amount of analysis, care, and knowledge about the compiler.
++Yes, some decades ago it was not unfair to consider a C compiler to be
++an assembler with added syntax and better portability, but the advent of
++sophisticated optimizing compilers mean that those days are long gone.
++Today's optimizing compilers can profoundly rewrite your code during the
++translation process, and have long been ready, willing, and able to do so.
++
++Therefore, if you really need to use C-language assignments instead of
++READ_ONCE(), WRITE_ONCE(), and so on, you will need to have a very good
++understanding of both the C standard and your compiler.  Here are some
++introductory references and some tooling to start you on this noble quest:
++
++Who's afraid of a big bad optimizing compiler?
++	https://lwn.net/Articles/793253/
++Calibrating your fear of big bad optimizing compilers
++	https://lwn.net/Articles/799218/
++Concurrency bugs should fear the big bad data-race detector (part 1)
++	https://lwn.net/Articles/816850/
++Concurrency bugs should fear the big bad data-race detector (part 2)
++	https://lwn.net/Articles/816854/
++
++
++More complex use cases
++======================
++
++If the alternatives above do not do what you need, please look at the
++recipes-pairs.txt file to peel off the next layer of the memory-ordering
++onion.
 diff --git a/tools/memory-model/README b/tools/memory-model/README
-index ecb7385..d2e03c4 100644
+index d2e03c4..c8144d4 100644
 --- a/tools/memory-model/README
 +++ b/tools/memory-model/README
-@@ -63,10 +63,32 @@ BASIC USAGE: HERD7
- ==================
+@@ -177,6 +177,11 @@ Documentation/recipes.txt
+ Documentation/references.txt
+ 	Provides background reading.
  
- The memory model is used, in conjunction with "herd7", to exhaustively
--explore the state space of small litmus tests.
-+explore the state space of small litmus tests.  Documentation describing
-+the format, features, capabilities and limitations of these litmus
-+tests is available in tools/memory-model/Documentation/litmus-tests.txt.
- 
--For example, to run SB+fencembonceonces.litmus against the memory model:
-+Example litmus tests may be found in the Linux-kernel source tree:
- 
-+	tools/memory-model/litmus-tests/
-+	Documentation/litmus-tests/
++Documentation/simple.txt
++	Starting point for someone new to Linux-kernel concurrency.
++	And also for those needing a reminder of the simpler approaches
++	to concurrency!
 +
-+Several thousand more example litmus tests are available here:
-+
-+	https://github.com/paulmckrcu/litmus
-+	https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/perfbook.git/tree/CodeSamples/formal/herd
-+	https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/perfbook.git/tree/CodeSamples/formal/litmus
-+
-+Documentation describing litmus tests and now to use them may be found
-+here:
-+
-+	tools/memory-model/Documentation/litmus-tests.txt
-+
-+The remainder of this section uses the SB+fencembonceonces.litmus test
-+located in the tools/memory-model directory.
-+
-+To run SB+fencembonceonces.litmus against the memory model:
-+
-+  $ cd $LINUX_SOURCE_TREE/tools/memory-model
-   $ herd7 -conf linux-kernel.cfg litmus-tests/SB+fencembonceonces.litmus
- 
- Here is the corresponding output:
-@@ -87,7 +109,11 @@ Here is the corresponding output:
- The "Positive: 0 Negative: 3" and the "Never 0 3" each indicate that
- this litmus test's "exists" clause can not be satisfied.
- 
--See "herd7 -help" or "herdtools7/doc/" for more information.
-+See "herd7 -help" or "herdtools7/doc/" for more information on running the
-+tool itself, but please be aware that this documentation is intended for
-+people who work on the memory model itself, that is, people making changes
-+to the tools/memory-model/linux-kernel.* files.  It is not intended for
-+people focusing on writing, understanding, and running LKMM litmus tests.
- 
- 
- =====================
-@@ -124,7 +150,11 @@ that during two million trials, the state specified in this litmus
- test's "exists" clause was not reached.
- 
- And, as with "herd7", please see "klitmus7 -help" or "herdtools7/doc/"
--for more information.
-+for more information.  And again, please be aware that this documentation
-+is intended for people who work on the memory model itself, that is,
-+people making changes to the tools/memory-model/linux-kernel.* files.
-+It is not intended for people focusing on writing, understanding, and
-+running LKMM litmus tests.
- 
- 
- ====================
-@@ -137,6 +167,10 @@ Documentation/cheatsheet.txt
- Documentation/explanation.txt
- 	Describes the memory model in detail.
- 
-+Documentation/litmus-tests.txt
-+	Describes the format, features, capabilities, and limitations
-+	of the litmus tests that LKMM can evaluate.
-+
- Documentation/recipes.txt
- 	Lists common memory-ordering patterns.
- 
-@@ -187,116 +221,3 @@ README
- 	This file.
- 
- scripts	Various scripts, see scripts/README.
--
--
--===========
--LIMITATIONS
--===========
--
--The Linux-kernel memory model (LKMM) has the following limitations:
--
--1.	Compiler optimizations are not accurately modeled.  Of course,
--	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
--	ability to optimize, but under some circumstances it is possible
--	for the compiler to undermine the memory model.  For more
--	information, see Documentation/explanation.txt (in particular,
--	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
--	sections).
--
--	Note that this limitation in turn limits LKMM's ability to
--	accurately model address, control, and data dependencies.
--	For example, if the compiler can deduce the value of some variable
--	carrying a dependency, then the compiler can break that dependency
--	by substituting a constant of that value.
--
--2.	Multiple access sizes for a single variable are not supported,
--	and neither are misaligned or partially overlapping accesses.
--
--3.	Exceptions and interrupts are not modeled.  In some cases,
--	this limitation can be overcome by modeling the interrupt or
--	exception with an additional process.
--
--4.	I/O such as MMIO or DMA is not supported.
--
--5.	Self-modifying code (such as that found in the kernel's
--	alternatives mechanism, function tracer, Berkeley Packet Filter
--	JIT compiler, and module loader) is not supported.
--
--6.	Complete modeling of all variants of atomic read-modify-write
--	operations, locking primitives, and RCU is not provided.
--	For example, call_rcu() and rcu_barrier() are not supported.
--	However, a substantial amount of support is provided for these
--	operations, as shown in the linux-kernel.def file.
--
--	a.	When rcu_assign_pointer() is passed NULL, the Linux
--		kernel provides no ordering, but LKMM models this
--		case as a store release.
--
--	b.	The "unless" RMW operations are not currently modeled:
--		atomic_long_add_unless(), atomic_inc_unless_negative(),
--		and atomic_dec_unless_positive().  These can be emulated
--		in litmus tests, for example, by using atomic_cmpxchg().
--
--		One exception of this limitation is atomic_add_unless(),
--		which is provided directly by herd7 (so no corresponding
--		definition in linux-kernel.def).  atomic_add_unless() is
--		modeled by herd7 therefore it can be used in litmus tests.
--
--	c.	The call_rcu() function is not modeled.  It can be
--		emulated in litmus tests by adding another process that
--		invokes synchronize_rcu() and the body of the callback
--		function, with (for example) a release-acquire from
--		the site of the emulated call_rcu() to the beginning
--		of the additional process.
--
--	d.	The rcu_barrier() function is not modeled.  It can be
--		emulated in litmus tests emulating call_rcu() via
--		(for example) a release-acquire from the end of each
--		additional call_rcu() process to the site of the
--		emulated rcu-barrier().
--
--	e.	Although sleepable RCU (SRCU) is now modeled, there
--		are some subtle differences between its semantics and
--		those in the Linux kernel.  For example, the kernel
--		might interpret the following sequence as two partially
--		overlapping SRCU read-side critical sections:
--
--			 1  r1 = srcu_read_lock(&my_srcu);
--			 2  do_something_1();
--			 3  r2 = srcu_read_lock(&my_srcu);
--			 4  do_something_2();
--			 5  srcu_read_unlock(&my_srcu, r1);
--			 6  do_something_3();
--			 7  srcu_read_unlock(&my_srcu, r2);
--
--		In contrast, LKMM will interpret this as a nested pair of
--		SRCU read-side critical sections, with the outer critical
--		section spanning lines 1-7 and the inner critical section
--		spanning lines 3-5.
--
--		This difference would be more of a concern had anyone
--		identified a reasonable use case for partially overlapping
--		SRCU read-side critical sections.  For more information,
--		please see: https://paulmck.livejournal.com/40593.html
--
--	f.	Reader-writer locking is not modeled.  It can be
--		emulated in litmus tests using atomic read-modify-write
--		operations.
--
--The "herd7" tool has some additional limitations of its own, apart from
--the memory model:
--
--1.	Non-trivial data structures such as arrays or structures are
--	not supported.	However, pointers are supported, allowing trivial
--	linked lists to be constructed.
--
--2.	Dynamic memory allocation is not supported, although this can
--	be worked around in some cases by supplying multiple statically
--	allocated variables.
--
--Some of these limitations may be overcome in the future, but others are
--more likely to be addressed by incorporating the Linux-kernel memory model
--into other tools.
--
--Finally, please note that LKMM is subject to change as hardware, use cases,
--and compilers evolve.
+ linux-kernel.bell
+ 	Categorizes the relevant instructions, including memory
+ 	references, memory barriers, atomic read-modify-write operations,
 -- 
 2.9.5
 
