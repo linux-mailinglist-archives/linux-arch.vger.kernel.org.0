@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51940257F70
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 19:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C434B257F75
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 19:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728959AbgHaRRr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Aug 2020 13:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S1728990AbgHaRRt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 13:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727981AbgHaRRp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 13:17:45 -0400
+        with ESMTP id S1728979AbgHaRRr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 13:17:47 -0400
 Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD6EC061575;
-        Mon, 31 Aug 2020 10:17:44 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id s13so237955wmh.4;
-        Mon, 31 Aug 2020 10:17:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB152C061755;
+        Mon, 31 Aug 2020 10:17:45 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id c19so431598wmd.1;
+        Mon, 31 Aug 2020 10:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1lKywOCgewMULshQ1fhTD1es/WXjCpb90ZcpjghYAz8=;
-        b=A5e0XHXEa6iOT1oHt4hMz5PKSs4KoGTwOQaika020CjIZSHDKPl0UwL0/Ma3cAaIYv
-         zOtAOwXgCgAb/PrNpxueysMx+6Ag+LsI5mHeW3nsDiqS2muvijWSQjksagTw7uaPByx7
-         bgKxIXXIc00TeI2NkdMM9depTcfWH7dMCZHzbPnOV3d/xzIO4L2fR0aykTRuiqQuR6If
-         oCIFp2JJLFkaozMrHYVe/qpB0D9Vc69YhsbMdqjVQwDH6DOJiBLciFVXqPegf1g+bT9D
-         zu+QG6+IEEHP8ptLLaxVWViI8yhZW6huWtT2sF7ZIPdoMv7K8cZB9XclDjv81DfX5Mhk
-         YJaQ==
+        bh=+nbsjObGEQTbldxK9r/J/0l54hz3WdGBb4kWLFeHtdc=;
+        b=Dx+2ufm2r6fK25HiX1RMSlUidv/QGw4uPXaRL6i7mexd7xL0hFBtLS4EzMQG/CdwnX
+         x5s36sbIxBMaW8rvJpgD6ehhu4M0Ybr/5/AaXA0kF5cg4HM7/WlpKO1JH0ev9HC/LADp
+         0F3SOaec49UEeOhrG6gEgcVi9/AwZQYvjekESTbiyFRE4o8MovAfgBIq+8QeDrt5N83h
+         f0YFqIgUCtneqXL3gFoZZMw7mGFctnnF/VkA5hcKx0vKM5cLmFcqGdtyA/geyvNIeuDo
+         HxRMdyh9i3Pzz6MhpAgG/Djl40XS3SI6hyO0C9aoRubn1AckHFClT2LKA88X7GUR2Oes
+         gFiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1lKywOCgewMULshQ1fhTD1es/WXjCpb90ZcpjghYAz8=;
-        b=q+q4XiT7UsuL1jJcY7s46Iz7qcuQZDTVQQilhk4HFy6AgPXq2RoD9vY72M9EYSlUBg
-         h0w6k4EXaZN/olZSZJIdoA9IcuqFBfnBmiub/d2tkvEFkLLbh75SscaHppoLC4CDEMsD
-         zwaw5YvxqJG2aWUMg5AGfthFqRa4Qx/1SdvM8/wxoLgNKTUN4fgHph9Uc08eQgDC9b9d
-         Ev2NZRH76d0VtbpMKDFU9KKbB7cgrfmvwVeeHD5TytKcC31/d23bMKcbMQn2VtIDLs3l
-         /euxbGWL2ji7Z9IgaastrCLQCu8lqbq7tywZ1pTVB2DS5T73J6xYwcFonVlmpv1bFok4
-         hQhQ==
-X-Gm-Message-State: AOAM532C4taq6rhZSibtI5h9eoC9VnXP8grWzlH0+OF05qHf4z2IMIo/
-        aiH9XDhkhocwuOPAPIXQapjJHC1d4DddBQ==
-X-Google-Smtp-Source: ABdhPJw1cDEdHjEdwMUef/8wVVYAcrcnABkSqmhqYrykvqv+pOw0EDMk3f3tFp6KNQ173N8Hg30flw==
-X-Received: by 2002:a7b:c342:: with SMTP id l2mr295155wmj.153.1598894263651;
-        Mon, 31 Aug 2020 10:17:43 -0700 (PDT)
+        bh=+nbsjObGEQTbldxK9r/J/0l54hz3WdGBb4kWLFeHtdc=;
+        b=CoulpLwwyOBdEhijhMKLmP1QAEi988NWvhD0GCFeJy2bmUEdyVJeIpjW5v/8ZUXaKI
+         /rLmTVja5CpxsidKO0oDqGMv61ELctn/4NRqve5Fp6ql9FEKfgbXu446v1qD0TPo/py6
+         cJCbGOHLXRgamJvqFRfPQUwFdOvgD3niaI5G2m9zlup96Ux+vMMozur1MBw36zCptGhH
+         R6SY3EhgK8XNPwW0VzHH27wC5tCSWqAyf+eZ8aX2yCahrEtBwqgS00yL9phLolKfo3i+
+         spPYtZcXnO7ujBMrtZvU5ms5FsYnhdsS6VCHVnHnW3+t3QKZBD4EIcmpDJ2IFpSRe1yk
+         59ZA==
+X-Gm-Message-State: AOAM532y6mw9mzJs8zkhUdEPeo3fDVRfsp3l7U0iAhGms/8jwsZJuy5P
+        F6DIxdYp+qzeL8bqaKi3OKY=
+X-Google-Smtp-Source: ABdhPJwKFzt8ldI9tB15Yc56sc4C4H6P4uAMd8lRcJSd25uy/2Qxgs23epbBzGXYfbc0jBfBs1/gEQ==
+X-Received: by 2002:a1c:415:: with SMTP id 21mr285439wme.183.1598894264450;
+        Mon, 31 Aug 2020 10:17:44 -0700 (PDT)
 Received: from alinde.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id w15sm840978wro.46.2020.08.31.10.17.42
+        by smtp.gmail.com with ESMTPSA id w15sm840978wro.46.2020.08.31.10.17.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 31 Aug 2020 10:17:43 -0700 (PDT)
 From:   albert.linde@gmail.com
@@ -58,9 +58,9 @@ Cc:     akinobu.mita@gmail.com, hpa@zytor.com, viro@zeniv.linux.org.uk,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         x86@kernel.org, albert.linde@gmail.com,
         Albert van der Linde <alinde@google.com>
-Subject: [PATCH v3 2/3] lib, uaccess: add failure injection to usercopy functions
-Date:   Mon, 31 Aug 2020 17:17:32 +0000
-Message-Id: <20200831171733.955393-3-alinde@google.com>
+Subject: [PATCH v3 3/3] x86: add failure injection to get/put/clear_user
+Date:   Mon, 31 Aug 2020 17:17:33 +0000
+Message-Id: <20200831171733.955393-4-alinde@google.com>
 X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
 In-Reply-To: <20200831171733.955393-1-alinde@google.com>
 References: <20200831171733.955393-1-alinde@google.com>
@@ -73,165 +73,141 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Albert van der Linde <alinde@google.com>
 
-To test fault-tolerance of user memory access functions, introduce fault
-injection to usercopy functions.
+To test fault-tolerance of user memory acceses in x86, add support for
+fault injection.
 
-If a failure is expected return either -EFAULT or the total amount of
-bytes that were not copied.
+Make both put_user() and get_user() fail with -EFAULT, and clear_user()
+fail by not clearing any bytes.
 
 Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
 Reviewed-by: Alexander Potapenko <glider@google.com>
 Signed-off-by: Albert van der Linde <alinde@google.com>
 ---
 v2:
- - removed partial failures
+ - no significant changes
 
 v3:
- - adressed comments from Peter Zijlstra (fixed ordering with might_fault())
+ - no changes
 ---
- include/linux/uaccess.h | 11 ++++++++++-
- lib/iov_iter.c          |  5 +++++
- lib/strncpy_from_user.c |  3 +++
- lib/usercopy.c          |  5 ++++-
- 4 files changed, 22 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/uaccess.h | 68 +++++++++++++++++++---------------
+ arch/x86/lib/usercopy_64.c     |  3 ++
+ 2 files changed, 42 insertions(+), 29 deletions(-)
 
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 94b285411659..e3968727e993 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -2,6 +2,7 @@
- #ifndef __LINUX_UACCESS_H__
- #define __LINUX_UACCESS_H__
- 
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/instrumented.h>
- #include <linux/sched.h>
- #include <linux/thread_info.h>
-@@ -83,6 +84,8 @@ static __always_inline __must_check unsigned long
- __copy_from_user(void *to, const void __user *from, unsigned long n)
- {
- 	might_fault();
-+	if (should_fail_usercopy())
-+		return n;
- 	instrument_copy_from_user(to, from, n);
- 	check_object_size(to, n, false);
- 	return raw_copy_from_user(to, from, n);
-@@ -104,6 +107,8 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
- static __always_inline __must_check unsigned long
- __copy_to_user_inatomic(void __user *to, const void *from, unsigned long n)
- {
-+	if (should_fail_usercopy())
-+		return n;
- 	instrument_copy_to_user(to, from, n);
- 	check_object_size(from, n, true);
- 	return raw_copy_to_user(to, from, n);
-@@ -113,6 +118,8 @@ static __always_inline __must_check unsigned long
- __copy_to_user(void __user *to, const void *from, unsigned long n)
- {
- 	might_fault();
-+	if (should_fail_usercopy())
-+		return n;
- 	instrument_copy_to_user(to, from, n);
- 	check_object_size(from, n, true);
- 	return raw_copy_to_user(to, from, n);
-@@ -124,7 +131,7 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
- {
- 	unsigned long res = n;
- 	might_fault();
--	if (likely(access_ok(from, n))) {
-+	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
- 		instrument_copy_from_user(to, from, n);
- 		res = raw_copy_from_user(to, from, n);
- 	}
-@@ -142,6 +149,8 @@ static inline __must_check unsigned long
- _copy_to_user(void __user *to, const void *from, unsigned long n)
- {
- 	might_fault();
-+	if (should_fail_usercopy())
-+		return n;
- 	if (access_ok(to, n)) {
- 		instrument_copy_to_user(to, from, n);
- 		n = raw_copy_to_user(to, from, n);
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 5e40786c8f12..eeac08855b24 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -2,6 +2,7 @@
- #include <crypto/hash.h>
- #include <linux/export.h>
- #include <linux/bvec.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/uio.h>
- #include <linux/pagemap.h>
- #include <linux/slab.h>
-@@ -139,6 +140,8 @@
- 
- static int copyout(void __user *to, const void *from, size_t n)
- {
-+	if (should_fail_usercopy())
-+		return n;
- 	if (access_ok(to, n)) {
- 		instrument_copy_to_user(to, from, n);
- 		n = raw_copy_to_user(to, from, n);
-@@ -148,6 +151,8 @@ static int copyout(void __user *to, const void *from, size_t n)
- 
- static int copyin(void *to, const void __user *from, size_t n)
- {
-+	if (should_fail_usercopy())
-+		return n;
- 	if (access_ok(from, n)) {
- 		instrument_copy_from_user(to, from, n);
- 		n = raw_copy_from_user(to, from, n);
-diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
-index 34696a348864..e6d5fcc2cdf3 100644
---- a/lib/strncpy_from_user.c
-+++ b/lib/strncpy_from_user.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index ecefaffd15d4..004eeee2199a 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -5,6 +5,7 @@
+  * User space memory access functions
+  */
  #include <linux/compiler.h>
- #include <linux/export.h>
 +#include <linux/fault-inject-usercopy.h>
  #include <linux/kasan-checks.h>
- #include <linux/thread_info.h>
- #include <linux/uaccess.h>
-@@ -99,6 +100,8 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
- 	unsigned long max_addr, src_addr;
+ #include <linux/string.h>
+ #include <asm/asm.h>
+@@ -175,11 +176,16 @@ extern int __get_user_bad(void);
+ 	register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);		\
+ 	__chk_user_ptr(ptr);						\
+ 	might_fault();							\
+-	asm volatile("call __get_user_%P4"				\
+-		     : "=a" (__ret_gu), "=r" (__val_gu),		\
++	if (should_fail_usercopy()) {					\
++		(x) = 0;						\
++		__ret_gu = -EFAULT;					\
++	} else {							\
++		asm volatile("call __get_user_%P4"			\
++			: "=a" (__ret_gu), "=r" (__val_gu),		\
+ 			ASM_CALL_CONSTRAINT				\
+-		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
+-	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
++			: "0" (ptr), "i" (sizeof(*(ptr))));		\
++		(x) = (__force __typeof__(*(ptr))) __val_gu;		\
++	}								\
+ 	__builtin_expect(__ret_gu, 0);					\
+ })
  
- 	might_fault();
-+	if (should_fail_usercopy())
-+		return -EFAULT;
- 	if (unlikely(count <= 0))
- 		return 0;
+@@ -236,31 +242,35 @@ extern void __put_user_8(void);
+  *
+  * Return: zero on success, or -EFAULT on error.
+  */
+-#define put_user(x, ptr)					\
+-({								\
+-	int __ret_pu;						\
+-	__typeof__(*(ptr)) __pu_val;				\
+-	__chk_user_ptr(ptr);					\
+-	might_fault();						\
+-	__pu_val = x;						\
+-	switch (sizeof(*(ptr))) {				\
+-	case 1:							\
+-		__put_user_x(1, __pu_val, ptr, __ret_pu);	\
+-		break;						\
+-	case 2:							\
+-		__put_user_x(2, __pu_val, ptr, __ret_pu);	\
+-		break;						\
+-	case 4:							\
+-		__put_user_x(4, __pu_val, ptr, __ret_pu);	\
+-		break;						\
+-	case 8:							\
+-		__put_user_x8(__pu_val, ptr, __ret_pu);		\
+-		break;						\
+-	default:						\
+-		__put_user_x(X, __pu_val, ptr, __ret_pu);	\
+-		break;						\
+-	}							\
+-	__builtin_expect(__ret_pu, 0);				\
++#define put_user(x, ptr)						\
++({									\
++	int __ret_pu;							\
++	__typeof__(*(ptr)) __pu_val;					\
++	__chk_user_ptr(ptr);						\
++	might_fault();							\
++	__pu_val = x;							\
++	if (should_fail_usercopy()) {					\
++		__ret_pu = -EFAULT;					\
++	} else {							\
++		switch (sizeof(*(ptr))) {				\
++		case 1:							\
++			__put_user_x(1, __pu_val, ptr, __ret_pu);	\
++			break;						\
++		case 2:							\
++			__put_user_x(2, __pu_val, ptr, __ret_pu);	\
++			break;						\
++		case 4:							\
++			__put_user_x(4, __pu_val, ptr, __ret_pu);	\
++			break;						\
++		case 8:							\
++			__put_user_x8(__pu_val, ptr, __ret_pu);		\
++			break;						\
++		default:						\
++			__put_user_x(X, __pu_val, ptr, __ret_pu);	\
++			break;						\
++		}							\
++	}								\
++	__builtin_expect(__ret_pu, 0);					\
+ })
  
-diff --git a/lib/usercopy.c b/lib/usercopy.c
-index b26509f112f9..7413dd300516 100644
---- a/lib/usercopy.c
-+++ b/lib/usercopy.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/bitops.h>
+ #define __put_user_size(x, ptr, size, label)				\
+diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
+index b0dfac3d3df7..7747cda5780d 100644
+--- a/arch/x86/lib/usercopy_64.c
++++ b/arch/x86/lib/usercopy_64.c
+@@ -7,6 +7,7 @@
+  * Copyright 2002 Andi Kleen <ak@suse.de>
+  */
+ #include <linux/export.h>
 +#include <linux/fault-inject-usercopy.h>
- #include <linux/instrumented.h>
  #include <linux/uaccess.h>
+ #include <linux/highmem.h>
  
-@@ -10,7 +11,7 @@ unsigned long _copy_from_user(void *to, const void __user *from, unsigned long n
+@@ -50,6 +51,8 @@ EXPORT_SYMBOL(__clear_user);
+ 
+ unsigned long clear_user(void __user *to, unsigned long n)
  {
- 	unsigned long res = n;
- 	might_fault();
--	if (likely(access_ok(from, n))) {
-+	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
- 		instrument_copy_from_user(to, from, n);
- 		res = raw_copy_from_user(to, from, n);
- 	}
-@@ -25,6 +26,8 @@ EXPORT_SYMBOL(_copy_from_user);
- unsigned long _copy_to_user(void __user *to, const void *from, unsigned long n)
- {
- 	might_fault();
 +	if (should_fail_usercopy())
 +		return n;
- 	if (likely(access_ok(to, n))) {
- 		instrument_copy_to_user(to, from, n);
- 		n = raw_copy_to_user(to, from, n);
+ 	if (access_ok(to, n))
+ 		return __clear_user(to, n);
+ 	return n;
 -- 
 2.28.0.402.g5ffc5be6b7-goog
 
