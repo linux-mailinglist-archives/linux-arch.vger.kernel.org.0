@@ -2,99 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30747257183
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 03:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68F0257A67
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 15:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgHaBZs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Aug 2020 21:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
+        id S1727941AbgHaN3m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 09:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726454AbgHaBZr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Aug 2020 21:25:47 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92420C061573;
-        Sun, 30 Aug 2020 18:25:46 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id y6so2277340plt.3;
-        Sun, 30 Aug 2020 18:25:46 -0700 (PDT)
+        with ESMTP id S1726939AbgHaN1J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 09:27:09 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19665C0619E7
+        for <linux-arch@vger.kernel.org>; Mon, 31 Aug 2020 06:26:29 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id e11so6668770ljn.6
+        for <linux-arch@vger.kernel.org>; Mon, 31 Aug 2020 06:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=eARx1NqbK9cEMSTK0kovkIRCeTmjYLrGl8JwZL49msc=;
-        b=AMICkpYpQtfwYuM5YfzmKI/2S9Dy7iamVYX274pCkmLkM020DzLO/KECFWB0LrrYRA
-         EHvm2gwJNKHGFSM3G1i5kLcG6PSFldnFM3tHw5B6GDChDXhjmI99A6t7UQnerBn0+njY
-         yCjTCAyPvSArL44z50DFQxOXq/8d3d7yUHKkoylWkVDmYRRT/wYyRWxwP9Dd9LfFukU2
-         ET9jTGnrgi+N09mEZVeUECtMglYsdQDVn5Gv7BcQg8KEZEWtCJEdqbhvjQO+kIqOk4Fc
-         qG0ef/Oqzc6xSoMqmyj82eKigo0G/7wiERd2/zdTZYPqPa5FrEUN42l/MvQxC32emVyf
-         jj2Q==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
+        b=GvS5ONqONS+SkRITeLOYK+nEKqeftr2e4zlw8iOljUdVaT4ei8mXK/eMe5gdebbxul
+         qejaiESAwrQo/TwRSbsV2RgWo1cR2hwlUx3zHZP6xDZHfKXln6WrMjydy1j5UDKStApO
+         83k6OMYB/O4HA/D4ksOUSzU9ZpUpEqmaButNQtqR6C29H3+mAHSKCbPlI067sUdB20EE
+         ixBTW9S1A2kyuIbzfdQN/JSL5cc/RZ+/MNHv7Yis6pX8HuuJNUwic97zwHx5MU4x4PUn
+         9VwFvJUStfi4hRDyGGDy0ijlpU3bNrs4tLAIT0WFfsT49jK8zJO72eI6R18XAB60K+Uk
+         aflg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=eARx1NqbK9cEMSTK0kovkIRCeTmjYLrGl8JwZL49msc=;
-        b=JY88aT06G9DvEIMR3wZmGKmLU9kGvQ/zVq6sqedB8hIzUmiz4HBm0A1EFGIj0SJYoO
-         Xu5Nni58JoeXboritelDWICdhPsqBkKbGbGFMzv5zPXKkfBstCEImzESXavK8tH+qUrT
-         h9On/zvg3yGpDkLdD7wgwdy4aUKklC2UDpA0xFoldzZHFxVEJycqNvpONN7PpJIIHU5K
-         P29wug7QxsCUQM+9gdU11VN9U69zI/Ncz9AyDvkPMsSIA1LtZGvS1MtjaEv3Ephoy4jE
-         IEj5ieYNahNr3BUQwgWnFBvqWnsO4ekfqe3jr41g6GtylhryVp8f0EgsdhEmaUqyns13
-         V6Yg==
-X-Gm-Message-State: AOAM533wXy73VhhrD9hnTiyIrcuw4l4E9q6RMMLTQOMK9mFFchaqGQ+D
-        HP2wvApcxOdIF1igEynA7vM=
-X-Google-Smtp-Source: ABdhPJx/37k6JWKk7f4bhAcf3BKShVBZljvH6AJ/SamaTx0TBqUROompCQBrZqrwy1BdpiHRWFV0kQ==
-X-Received: by 2002:a17:90b:4b89:: with SMTP id lr9mr8718820pjb.126.1598837145608;
-        Sun, 30 Aug 2020 18:25:45 -0700 (PDT)
-Received: from localhost ([203.185.249.227])
-        by smtp.gmail.com with ESMTPSA id d1sm5201193pjs.17.2020.08.30.18.25.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 18:25:45 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 11:25:39 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 1/4] mm: fix exec activate_mm vs TLB shootdown and lazy
- tlb switching race
-To:     peterz@infradead.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org
-References: <20200828100022.1099682-1-npiggin@gmail.com>
-        <20200828100022.1099682-2-npiggin@gmail.com>
-        <20200828111525.GX1362448@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200828111525.GX1362448@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
+        b=J31uUxprfHUWjGWZYDhoSW10aBL/YnZDJ7hKknIKIOeHYYLcyFOQCNXy9KT7C9K4rM
+         qLCtZRmVxDFpYJc2I3TdNmD3DI166if2G97ZFTfcTJ3Kc4PBy2amOJmWgWvPaEF3jCE+
+         383AGgpGRtFicJ7YDtu/do+GHb7hRd/49Ah82GezL8bcB/0b9EbFxGy8kz+/B/ocOGx2
+         Trurqt81F03ENxy6/Cr3mbUbk1yfgphFB4YhIHKMxhDjjBfFXPVRHf4kbHZn5fWb7aIN
+         zL9CZft7jVWD0QkwrB82+FTFh4/X7ByFSiMusN/vpxOn7G2ITCZ1CkgTSeg/7/KFmvs9
+         JSGg==
+X-Gm-Message-State: AOAM533c5dI/opJ+fEi8II257Sz0FFdvvMmijiyGFMul/R9FbveYIEVw
+        Jd9B9Qo1Cb3TF9J2xZvCdkuWds0T6H+mD44Kdgk=
+X-Google-Smtp-Source: ABdhPJx5h73UdWdmqN0ZXklbmHxhGiANR3jS4fz3EetfufGWkyufJh3oSK0WTBZL+72KPBBqNF1EE+YcTj5isQyt2i4=
+X-Received: by 2002:a2e:5316:: with SMTP id h22mr714236ljb.167.1598880387154;
+ Mon, 31 Aug 2020 06:26:27 -0700 (PDT)
 MIME-Version: 1.0
-Message-Id: <1598836589.75k5wmftvn.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Reply-To: marie_avis12@yahoo.com
+Received: by 2002:a2e:9817:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 06:26:26
+ -0700 (PDT)
+From:   Miss Maris Avis <marie.avis11@gmail.com>
+Date:   Mon, 31 Aug 2020 13:26:26 +0000
+X-Google-Sender-Auth: aulnVZG-1gSOcZsrnz7-vOB6QCo
+Message-ID: <CADTVshPC=1cJsw0xvUiUZDDBg3VVdBcHJ+pk-zuvR4tycntngg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from peterz@infradead.org's message of August 28, 2020 9:15 pm:
-> On Fri, Aug 28, 2020 at 08:00:19PM +1000, Nicholas Piggin wrote:
->=20
->> Closing this race only requires interrupts to be disabled while ->mm
->> and ->active_mm are being switched, but the TLB problem requires also
->> holding interrupts off over activate_mm. Unfortunately not all archs
->> can do that yet, e.g., arm defers the switch if irqs are disabled and
->> expects finish_arch_post_lock_switch() to be called to complete the
->> flush; um takes a blocking lock in activate_mm().
->=20
-> ARM at least has activate_mm() :=3D switch_mm(), so it could be made to
-> work.
->
+My Dear,
 
-Yeah, so long as that post_lock_switch switch did the right thing with
-respect to its TLB flushing. It should do because arm doesn't seem to
-check ->mm or ->active_mm (and if it was broken, the scheduler context
-switch would be suspect too). I don't think the fix would be hard, just
-that I don't have a good way to test it and qemu isn't great for testing
-this kind of thing.
+My name is Miss Marie Avis the only daughter of Mr. Gabriel Avis, my
+Father was dealing in Cocoa and Timber in this country before his
+death,  It is my pleasure to contact you for a business venture which
+I intend to establish in your country. Though I have not met with you
+before but I believe one has to risk confiding before you can succeed
+sometimes in life.
 
-um too I think could probably defer that lock until after interrupts are
-enabled again. I might throw a bunch of arch conversion patches over the
-wall if this gets merged and try to move things along.
+I can confide in you for my brighter future since you are a human
+being like me. There is this huge amount of Ten Million five hundred
+thousand United States dollars. ($10.500.000.00) which my late Father
+kept for me in a suspense account with one of the bank here in Abidjan
+Cote d'Ivoire before he was assassinated by unknown persons, Now I
+have decided to invest these money in your country or anywhere safe
+enough for me.
 
-Thanks,
-Nick
+I want you to help me claim this fund from the bank and have it
+transfer into your personal account in your country for investment
+purposes in your country in these areas:
+
+1). Telecommunication
+2). The transport Industry
+3). Five Star Hotel
+4). Tourism
+5). Real Estate
+
+If you can be of assistance to me I will be pleased to offer you 20%
+of the total fund.
+
+I await your soonest response.
+
+Respectfully yours,
+Miss Marie Evis
+Tel: +225597438528
