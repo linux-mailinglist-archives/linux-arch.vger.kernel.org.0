@@ -2,82 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF86257DEA
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 17:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2C1257E99
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 18:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728177AbgHaPt1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Aug 2020 11:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S1728445AbgHaQWY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 12:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728116AbgHaPtX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 11:49:23 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46234C061755
-        for <linux-arch@vger.kernel.org>; Mon, 31 Aug 2020 08:49:21 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id a17so5593809wrn.6
-        for <linux-arch@vger.kernel.org>; Mon, 31 Aug 2020 08:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V1d2XOGj4/mQm0XIjmCNV1oewYnJg6EZTFcc9J+2cbQ=;
-        b=REVuEsg2CiN/qtSP5ghWobHHXBx5sr9ZVE7C/NuSXKhV/Xd7Pgzyr4SVn563uQXjGI
-         Eq5XEDoSWa0svg/5eG6tnrbMJgXXZoPwGMXyG5sbV2Km3PHMCETnnzx8qcNwyPs1khSq
-         cRcnMTckV8XPo0ktVdWLdXr2ct9RSKYAiE0xufkCrESiMa4TJBNJmTLn6Fdy8dFiglUs
-         O37bIvopoXLB7N36Owu79jonpk31lWDBrDWtmm+NOnUo89VmO/RngjUCO4Wc35VV9fMu
-         OPBpxB5pQxZE9lYtu6VREchdX5ne11FFpN15mkX3yDP8vGmORrv8G57zWMROdPY4i9W4
-         Zqpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V1d2XOGj4/mQm0XIjmCNV1oewYnJg6EZTFcc9J+2cbQ=;
-        b=epShq7+glY3jdNmYLlWGEWVmY0bqwy0j6OS0h3XTzRykHoQZBoPQQdpElFmZNzEA1B
-         29ivS3GcBmx0mdwyUmf1DtkalXAnxWk7eE6lLjR9KBkB4ETT+MnDumBdgbyStN5TOKp2
-         Mf/1grCbUumEYw2CLMzdS1/xlXhr8/oTf4W9AUZ8fD1lrMR8Shgw5cLIS+0pSwtKE0Gz
-         uyq+TnwlHCPhf0+sGjka99od9tFFVXj7tLdH9igGcD9H5Aq1he7e/QDhiO7TdecXWPiZ
-         WNLIl5ViRTfrzIDHmjhzUVSk7O3XURLBWoF5Rtp4x/qeXPzraW1PBilIZ5tywsdm24Hr
-         Z1VQ==
-X-Gm-Message-State: AOAM532gXH5WfXLrcTfNSbnZp4lzK+Ix2nCWh/GlAwU0bBxixiU0+X/I
-        kCtxd6QBPA5qYP84DRsOUprXxl5XwydS2INVC+auaQ==
-X-Google-Smtp-Source: ABdhPJxLWPETNyPnCiyjTDBC8XYVpbEbjCWK79OLmZWLx/OGDa49T6VAmNNs0loEizDKgyAsCush7FlOkIpOBlpST30=
-X-Received: by 2002:adf:f101:: with SMTP id r1mr2234529wro.314.1598888960087;
- Mon, 31 Aug 2020 08:49:20 -0700 (PDT)
+        with ESMTP id S1727991AbgHaQWU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 12:22:20 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5359EC061755;
+        Mon, 31 Aug 2020 09:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nXWPA5uglIyw8NOR1fui+EZFOlSP7Ta11J/zRDiIoHQ=; b=r0z/QkjZivPkrJCb7f+L9zwh5f
+        4IIa7un7mz+f/CQjuSWhwrAdcZMXXoHqcR6Phcf/CP76ypP+QG9wiTuVUfQXopIFdiGp0jtGoZt8/
+        6m2Eh9A1MvSTxBCbsCqMHE741aRCdqNxiwjIaDorsX+5hViH7DeqxTsiYWT4JaNomcOSEZWXQ7j8X
+        fS3G/Rtd5dxtEV3Yv8oPU1A5fSI46Ku4JIcQsV4Kmg77QypKwMh7Ah2sYYPQcZZsj7gFXewTa3auv
+        Ci0WctbP67UG57shPTjLezNWGZGM5IpgDY6d+ybCtPfiNBMMaiHYppvaqS0WXOJzdf3JKL5UO87pN
+        N8it1++w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kCmZ6-0006jC-IA; Mon, 31 Aug 2020 16:21:52 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 97F91300F7A;
+        Mon, 31 Aug 2020 18:21:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 81A8B203A64B1; Mon, 31 Aug 2020 18:21:50 +0200 (CEST)
+Date:   Mon, 31 Aug 2020 18:21:50 +0200
+From:   peterz@infradead.org
+To:     albert.linde@gmail.com
+Cc:     akpm@linux-foundation.org, bp@alien8.de, mingo@redhat.com,
+        corbet@lwn.net, tglx@linutronix.de, arnd@arndb.de,
+        akinobu.mita@gmail.com, hpa@zytor.com, viro@zeniv.linux.org.uk,
+        glider@google.com, andreyknvl@google.com, dvyukov@google.com,
+        elver@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org, Albert van der Linde <alinde@google.com>
+Subject: Re: [PATCH v2 2/3] lib, uaccess: add failure injection to usercopy
+ functions
+Message-ID: <20200831162150.GR1362448@hirez.programming.kicks-ass.net>
+References: <20200828141344.2277088-1-alinde@google.com>
+ <20200828141344.2277088-3-alinde@google.com>
 MIME-Version: 1.0
-References: <20200828141344.2277088-1-alinde@google.com> <CAC5umyiNw7FA__Y3HZ1UEG8Y6uQDgAWHTJpOVf7okERzpCjnRg@mail.gmail.com>
-In-Reply-To: <CAC5umyiNw7FA__Y3HZ1UEG8Y6uQDgAWHTJpOVf7okERzpCjnRg@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 31 Aug 2020 17:49:08 +0200
-Message-ID: <CAG_fn=XDTWYbxb1Hy1p0hdOtOejZPWvDXfitysK7wUOsPAE_XQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] add fault injection to user memory access
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     Albert Linde <albert.linde@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Albert van der Linde <alinde@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200828141344.2277088-3-alinde@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> This series looks good to me.
+On Fri, Aug 28, 2020 at 02:13:43PM +0000, albert.linde@gmail.com wrote:
+> @@ -82,6 +83,8 @@ __copy_from_user_inatomic(void *to, const void __user *from, unsigned long n)
+>  static __always_inline __must_check unsigned long
+>  __copy_from_user(void *to, const void __user *from, unsigned long n)
+>  {
+> +	if (should_fail_usercopy())
+> +		return n;
+>  	might_fault();
+>  	instrument_copy_from_user(to, from, n);
+>  	check_object_size(to, n, false);
 
-Great!
+> @@ -124,7 +131,7 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
+>  {
+>  	unsigned long res = n;
+>  	might_fault();
+> -	if (likely(access_ok(from, n))) {
+> +	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
+>  		instrument_copy_from_user(to, from, n);
+>  		res = raw_copy_from_user(to, from, n);
+>  	}
 
-Which tree do fault injection patches normally go to?
-
-> Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
-
-Reviewed-by: Alexander Potapenko <glider@google.com>
+You're inconsistent with your order against might_fault() throughout the
+patch. After is the right place.
