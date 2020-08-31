@@ -2,612 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C62122580E7
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 20:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5945925811E
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 20:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729854AbgHaSUx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Aug 2020 14:20:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729826AbgHaSUn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 31 Aug 2020 14:20:43 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A85D421527;
-        Mon, 31 Aug 2020 18:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598898041;
-        bh=heC54HJZJRhKoXK7S58uiKiSEON3T0nWjfDpYeIt8jI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kqINwVWtK/QKH4YfjDPOyDf6dOf13nPtE7H1HOCS5+1M4Hi6JV6kYz3pxibagNJE+
-         +sqGrfGUNJA3/6BMi+KnAoczPsAz7AsOWXFd4P6KtjOCEE0B0Dt5n3UuGgRhoRSSbG
-         YUVpb7c3c2+41B15D0RmKkMnHpBgNkGb+dR6Eea8=
-From:   paulmck@kernel.org
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@fb.com, mingo@kernel.org
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH kcsan 9/9] tools/memory-model:  Document locking corner cases
-Date:   Mon, 31 Aug 2020 11:20:37 -0700
-Message-Id: <20200831182037.2034-9-paulmck@kernel.org>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20200831182012.GA1965@paulmck-ThinkPad-P72>
-References: <20200831182012.GA1965@paulmck-ThinkPad-P72>
+        id S1729308AbgHaScG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 14:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729236AbgHaScE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 14:32:04 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FC5C061755
+        for <linux-arch@vger.kernel.org>; Mon, 31 Aug 2020 11:32:03 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id k15so6888688wrn.10
+        for <linux-arch@vger.kernel.org>; Mon, 31 Aug 2020 11:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/ZFV5OhR4lC3CDEKGvIih7tt3e4EfiSPTJ9kPq158BY=;
+        b=EZ/RE6qqu7G3Fmz+/u860xOlABVaOjwocu5TV+Fm2IKH/e3MSwCnOs0xn6rj2d/XCn
+         tUvXRBNRF5hzeybcQFsw4FU0nRsyeSAhJhlKMezhnBPlRZ0vO+QjrwVYltyAIHXEASIM
+         gl5nRHoU6KFYbot0g/RQRWfzKiv66HkuZdYRhwYwc9wMALevbBJLBlWV11TeiRR6CWzJ
+         CwY3p7gXBFmX6D9imEXLEem6tmuzEpUvo6qjySDEH3Ps2N0cp5oKulIZIVX45D6Cz+lt
+         40Odn+lv8PATf/Iv+Xk299AFYMNXtG8fplExOQXl+jkRxbBhv0ezzrBbscFtxlZ2C646
+         S3Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/ZFV5OhR4lC3CDEKGvIih7tt3e4EfiSPTJ9kPq158BY=;
+        b=hIxk6h/0MJOBpomyKVX8PsmHXtl5zty8wMbFm5pb7aQ5KY9hgY3QUAiNzIrb7b8mBF
+         FQeW6poTnujml5CsKIIkpsL3SVFCezzNSbAVk4qMXLoMxTzxEn+zvGZGYykPr5jHAHFX
+         OKtHedt0kaLq5C96/CyueCQKv+xtE01HKbzDjfBeg1B+uwNA8oPkdhVkcwLHIIXnqn+E
+         AdsrVY+QaHP+iSorSokS0IqKiuP/+itrfsRqA7pVOZCWwJzisu8L+hRMdWx84lj+w9Lt
+         J7bwXWYFFWrJ05tdTFwkVlqSCc7hHqaVmZP+2Q7nmjmC63jRYQ8Pqd/oKa4J/3wAMuFc
+         AP/w==
+X-Gm-Message-State: AOAM532ijGyr75UCu1LsiHMqhAotfbi+JPW0F0rLu7gMeC0rsCcoAQA+
+        WjIjntHOOCORYW7qFyN2PWW9iyHlQ6WgdsLbLyJx8Q==
+X-Google-Smtp-Source: ABdhPJz0BghDHQACx6mv+1qWTLE4jnnjQtAR2MSFlnYkFTJB+1+N6USPsX0n6iz6zIpOuLimAK8t9xOGDautZX4xDWk=
+X-Received: by 2002:adf:db52:: with SMTP id f18mr2708925wrj.397.1598898722363;
+ Mon, 31 Aug 2020 11:32:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200828141344.2277088-1-alinde@google.com> <CAC5umyiNw7FA__Y3HZ1UEG8Y6uQDgAWHTJpOVf7okERzpCjnRg@mail.gmail.com>
+ <CAG_fn=XDTWYbxb1Hy1p0hdOtOejZPWvDXfitysK7wUOsPAE_XQ@mail.gmail.com> <CAC5umyhmZmM4+FVDsyDzaUOpFsqd=RTopEpFuuMgnpQ+rzb1ZQ@mail.gmail.com>
+In-Reply-To: <CAC5umyhmZmM4+FVDsyDzaUOpFsqd=RTopEpFuuMgnpQ+rzb1ZQ@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 31 Aug 2020 20:31:51 +0200
+Message-ID: <CAG_fn=WK8P5ytLtPAzW1FswTz1OcTkfyB4pmUYJWWmjWYAm21Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] add fault injection to user memory access
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     Albert Linde <albert.linde@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>, linux-doc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Albert van der Linde <alinde@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+Hi Andrew,
 
-Most Linux-kernel uses of locking are straightforward, but there are
-corner-case uses that rely on less well-known aspects of the lock and
-unlock primitives.  This commit therefore adds a locking.txt and litmus
-tests in Documentation/litmus-tests/locking to explain these corner-case
-uses.
+On Mon, Aug 31, 2020 at 6:27 PM Akinobu Mita <akinobu.mita@gmail.com> wrote=
+:
+>
+> Andrew,
+>
+> Could you take a look at this series, and consider taking in -mm tree?
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- .../litmus-tests/locking/DCL-broken.litmus         |  55 ++++
- .../litmus-tests/locking/DCL-fixed.litmus          |  56 ++++
- .../litmus-tests/locking/RM-broken.litmus          |  42 +++
- Documentation/litmus-tests/locking/RM-fixed.litmus |  42 +++
- tools/memory-model/Documentation/locking.txt       | 320 +++++++++++++++++++++
- 5 files changed, 515 insertions(+)
- create mode 100644 Documentation/litmus-tests/locking/DCL-broken.litmus
- create mode 100644 Documentation/litmus-tests/locking/DCL-fixed.litmus
- create mode 100644 Documentation/litmus-tests/locking/RM-broken.litmus
- create mode 100644 Documentation/litmus-tests/locking/RM-fixed.litmus
- create mode 100644 tools/memory-model/Documentation/locking.txt
+Please consider picking v3 patches that address Peter's comments instead.
 
-diff --git a/Documentation/litmus-tests/locking/DCL-broken.litmus b/Documentation/litmus-tests/locking/DCL-broken.litmus
-new file mode 100644
-index 0000000..cfaa25f
---- /dev/null
-+++ b/Documentation/litmus-tests/locking/DCL-broken.litmus
-@@ -0,0 +1,55 @@
-+C DCL-broken
-+
-+(*
-+ * Result: Sometimes
-+ *
-+ * This litmus test demonstrates more than just locking is required to
-+ * correctly implement double-checked locking.
-+ *)
-+
-+{
-+	int flag;
-+	int data;
-+	int lck;
-+}
-+
-+P0(int *flag, int *data, int *lck)
-+{
-+	int r0;
-+	int r1;
-+	int r2;
-+
-+	r0 = READ_ONCE(*flag);
-+	if (r0 == 0) {
-+		spin_lock(lck);
-+		r1 = READ_ONCE(*flag);
-+		if (r1 == 0) {
-+			WRITE_ONCE(*data, 1);
-+			WRITE_ONCE(*flag, 1);
-+		}
-+		spin_unlock(lck);
-+	}
-+	r2 = READ_ONCE(*data);
-+}
-+
-+P1(int *flag, int *data, int *lck)
-+{
-+	int r0;
-+	int r1;
-+	int r2;
-+
-+	r0 = READ_ONCE(*flag);
-+	if (r0 == 0) {
-+		spin_lock(lck);
-+		r1 = READ_ONCE(*flag);
-+		if (r1 == 0) {
-+			WRITE_ONCE(*data, 1);
-+			WRITE_ONCE(*flag, 1);
-+		}
-+		spin_unlock(lck);
-+	}
-+	r2 = READ_ONCE(*data);
-+}
-+
-+locations [flag;data;lck;0:r0;0:r1;1:r0;1:r1]
-+exists (0:r2=0 \/ 1:r2=0)
-diff --git a/Documentation/litmus-tests/locking/DCL-fixed.litmus b/Documentation/litmus-tests/locking/DCL-fixed.litmus
-new file mode 100644
-index 0000000..579d6c2
---- /dev/null
-+++ b/Documentation/litmus-tests/locking/DCL-fixed.litmus
-@@ -0,0 +1,56 @@
-+C DCL-fixed
-+
-+(*
-+ * Result: Never
-+ *
-+ * This litmus test demonstrates that double-checked locking can be
-+ * reliable given proper use of smp_load_acquire() and smp_store_release()
-+ * in addition to the locking.
-+ *)
-+
-+{
-+	int flag;
-+	int data;
-+	int lck;
-+}
-+
-+P0(int *flag, int *data, int *lck)
-+{
-+	int r0;
-+	int r1;
-+	int r2;
-+
-+	r0 = smp_load_acquire(flag);
-+	if (r0 == 0) {
-+		spin_lock(lck);
-+		r1 = READ_ONCE(*flag);
-+		if (r1 == 0) {
-+			WRITE_ONCE(*data, 1);
-+			smp_store_release(flag, 1);
-+		}
-+		spin_unlock(lck);
-+	}
-+	r2 = READ_ONCE(*data);
-+}
-+
-+P1(int *flag, int *data, int *lck)
-+{
-+	int r0;
-+	int r1;
-+	int r2;
-+
-+	r0 = smp_load_acquire(flag);
-+	if (r0 == 0) {
-+		spin_lock(lck);
-+		r1 = READ_ONCE(*flag);
-+		if (r1 == 0) {
-+			WRITE_ONCE(*data, 1);
-+			smp_store_release(flag, 1);
-+		}
-+		spin_unlock(lck);
-+	}
-+	r2 = READ_ONCE(*data);
-+}
-+
-+locations [flag;data;lck;0:r0;0:r1;1:r0;1:r1]
-+exists (0:r2=0 \/ 1:r2=0)
-diff --git a/Documentation/litmus-tests/locking/RM-broken.litmus b/Documentation/litmus-tests/locking/RM-broken.litmus
-new file mode 100644
-index 0000000..c586ae4
---- /dev/null
-+++ b/Documentation/litmus-tests/locking/RM-broken.litmus
-@@ -0,0 +1,42 @@
-+C RM-broken
-+
-+(*
-+ * Result: DEADLOCK
-+ *
-+ * This litmus test demonstrates that the old "roach motel" approach
-+ * to locking, where code can be freely moved into critical sections,
-+ * cannot be used in the Linux kernel.
-+ *)
-+
-+{
-+	int lck;
-+	int x;
-+	int y;
-+}
-+
-+P0(int *x, int *y, int *lck)
-+{
-+	int r2;
-+
-+	spin_lock(lck);
-+	r2 = atomic_inc_return(y);
-+	WRITE_ONCE(*x, 1);
-+	spin_unlock(lck);
-+}
-+
-+P1(int *x, int *y, int *lck)
-+{
-+	int r0;
-+	int r1;
-+	int r2;
-+
-+	spin_lock(lck);
-+	r0 = READ_ONCE(*x);
-+	r1 = READ_ONCE(*x);
-+	r2 = atomic_inc_return(y);
-+	spin_unlock(lck);
-+}
-+
-+locations [x;lck;0:r2;1:r0;1:r1;1:r2]
-+filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+exists (1:r2=1)
-diff --git a/Documentation/litmus-tests/locking/RM-fixed.litmus b/Documentation/litmus-tests/locking/RM-fixed.litmus
-new file mode 100644
-index 0000000..6728567
---- /dev/null
-+++ b/Documentation/litmus-tests/locking/RM-fixed.litmus
-@@ -0,0 +1,42 @@
-+C RM-fixed
-+
-+(*
-+ * Result: Never
-+ *
-+ * This litmus test demonstrates that the old "roach motel" approach
-+ * to locking, where code can be freely moved into critical sections,
-+ * cannot be used in the Linux kernel.
-+ *)
-+
-+{
-+	int lck;
-+	int x;
-+	int y;
-+}
-+
-+P0(int *x, int *y, int *lck)
-+{
-+	int r2;
-+
-+	spin_lock(lck);
-+	r2 = atomic_inc_return(y);
-+	WRITE_ONCE(*x, 1);
-+	spin_unlock(lck);
-+}
-+
-+P1(int *x, int *y, int *lck)
-+{
-+	int r0;
-+	int r1;
-+	int r2;
-+
-+	r0 = READ_ONCE(*x);
-+	r1 = READ_ONCE(*x);
-+	spin_lock(lck);
-+	r2 = atomic_inc_return(y);
-+	spin_unlock(lck);
-+}
-+
-+locations [x;lck;0:r2;1:r0;1:r1;1:r2]
-+filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+exists (1:r2=1)
-diff --git a/tools/memory-model/Documentation/locking.txt b/tools/memory-model/Documentation/locking.txt
-new file mode 100644
-index 0000000..a6ad6aa
---- /dev/null
-+++ b/tools/memory-model/Documentation/locking.txt
-@@ -0,0 +1,320 @@
-+Locking
-+=======
-+
-+Locking is well-known and the common use cases are straightforward: Any
-+CPU holding a given lock sees any changes previously seen or made by any
-+CPU before it previously released that same lock.  This last sentence
-+is the only part of this document that most developers will need to read.
-+
-+However, developers who would like to also access lock-protected shared
-+variables outside of their corresponding locks should continue reading.
-+
-+
-+Locking and Prior Accesses
-+--------------------------
-+
-+The basic rule of locking is worth repeating:
-+
-+	Any CPU holding a given lock sees any changes previously seen
-+	or made by any CPU before it previously released that same lock.
-+
-+Note that this statement is a bit stronger than "Any CPU holding a
-+given lock sees all changes made by any CPU during the time that CPU was
-+previously holding this same lock".  For example, consider the following
-+pair of code fragments:
-+
-+	/* See MP+polocks.litmus. */
-+	void CPU0(void)
-+	{
-+		WRITE_ONCE(x, 1);
-+		spin_lock(&mylock);
-+		WRITE_ONCE(y, 1);
-+		spin_unlock(&mylock);
-+	}
-+
-+	void CPU1(void)
-+	{
-+		spin_lock(&mylock);
-+		r0 = READ_ONCE(y);
-+		spin_unlock(&mylock);
-+		r1 = READ_ONCE(x);
-+	}
-+
-+The basic rule guarantees that if CPU0() acquires mylock before CPU1(),
-+then both r0 and r1 must be set to the value 1.  This also has the
-+consequence that if the final value of r0 is equal to 1, then the final
-+value of r1 must also be equal to 1.  In contrast, the weaker rule would
-+say nothing about the final value of r1.
-+
-+
-+Locking and Subsequent Accesses
-+-------------------------------
-+
-+The converse to the basic rule also holds:  Any CPU holding a given
-+lock will not see any changes that will be made by any CPU after it
-+subsequently acquires this same lock.  This converse statement is
-+illustrated by the following litmus test:
-+
-+	/* See MP+porevlocks.litmus. */
-+	void CPU0(void)
-+	{
-+		r0 = READ_ONCE(y);
-+		spin_lock(&mylock);
-+		r1 = READ_ONCE(x);
-+		spin_unlock(&mylock);
-+	}
-+
-+	void CPU1(void)
-+	{
-+		spin_lock(&mylock);
-+		WRITE_ONCE(x, 1);
-+		spin_unlock(&mylock);
-+		WRITE_ONCE(y, 1);
-+	}
-+
-+This converse to the basic rule guarantees that if CPU0() acquires
-+mylock before CPU1(), then both r0 and r1 must be set to the value 0.
-+This also has the consequence that if the final value of r1 is equal
-+to 0, then the final value of r0 must also be equal to 0.  In contrast,
-+the weaker rule would say nothing about the final value of r0.
-+
-+These examples show only a single pair of CPUs, but the effects of the
-+locking basic rule extend across multiple acquisitions of a given lock
-+across multiple CPUs.
-+
-+
-+Double-Checked Locking
-+----------------------
-+
-+It is well known that more than just a lock is required to make
-+double-checked locking work correctly,  This litmus test illustrates
-+one incorrect approach:
-+
-+	/* See Documentation/litmus-tests/locking/DCL-broken.litmus. */
-+	P0(int *flag, int *data, int *lck)
-+	{
-+		int r0;
-+		int r1;
-+		int r2;
-+
-+		r0 = READ_ONCE(*flag);
-+		if (r0 == 0) {
-+			spin_lock(lck);
-+			r1 = READ_ONCE(*flag);
-+			if (r1 == 0) {
-+				WRITE_ONCE(*data, 1);
-+				WRITE_ONCE(*flag, 1);
-+			}
-+			spin_unlock(lck);
-+		}
-+		r2 = READ_ONCE(*data);
-+	}
-+	/* P1() is the exactly the same as P0(). */
-+
-+There are two problems.  First, there is no ordering between the first
-+READ_ONCE() of "flag" and the READ_ONCE() of "data".  Second, there is
-+no ordering between the two WRITE_ONCE() calls.  It should therefore be
-+no surprise that "r2" can be zero, and a quick herd7 run confirms this.
-+
-+One way to fix this is to use smp_load_acquire() and smp_store_release()
-+as shown in this corrected version:
-+
-+	/* See Documentation/litmus-tests/locking/DCL-fixed.litmus. */
-+	P0(int *flag, int *data, int *lck)
-+	{
-+		int r0;
-+		int r1;
-+		int r2;
-+
-+		r0 = smp_load_acquire(flag);
-+		if (r0 == 0) {
-+			spin_lock(lck);
-+			r1 = READ_ONCE(*flag);
-+			if (r1 == 0) {
-+				WRITE_ONCE(*data, 1);
-+				smp_store_release(flag, 1);
-+			}
-+			spin_unlock(lck);
-+		}
-+		r2 = READ_ONCE(*data);
-+	}
-+	/* P1() is the exactly the same as P0(). */
-+
-+The smp_load_acquire() guarantees that its load from "flags" will
-+be ordered before the READ_ONCE() from data, thus solving the first
-+problem.  The smp_store_release() guarantees that its store will be
-+ordered after the WRITE_ONCE() to "data", solving the second problem.
-+The smp_store_release() pairs with the smp_load_acquire(), thus ensuring
-+that the ordering provided by each actually takes effect.  Again, a
-+quick herd7 run confirms this.
-+
-+In short, if you access a lock-protected variable without holding the
-+corresponding lock, you will need to provide additional ordering, in
-+this case, via the smp_load_acquire() and the smp_store_release().
-+
-+
-+Ordering Provided by a Lock to CPUs Not Holding That Lock
-+---------------------------------------------------------
-+
-+It is not necessarily the case that accesses ordered by locking will be
-+seen as ordered by CPUs not holding that lock.  Consider this example:
-+
-+	/* See Z6.0+pooncelock+pooncelock+pombonce.litmus. */
-+	void CPU0(void)
-+	{
-+		spin_lock(&mylock);
-+		WRITE_ONCE(x, 1);
-+		WRITE_ONCE(y, 1);
-+		spin_unlock(&mylock);
-+	}
-+
-+	void CPU1(void)
-+	{
-+		spin_lock(&mylock);
-+		r0 = READ_ONCE(y);
-+		WRITE_ONCE(z, 1);
-+		spin_unlock(&mylock);
-+	}
-+
-+	void CPU2(void)
-+	{
-+		WRITE_ONCE(z, 2);
-+		smp_mb();
-+		r1 = READ_ONCE(x);
-+	}
-+
-+Counter-intuitive though it might be, it is quite possible to have
-+the final value of r0 be 1, the final value of z be 2, and the final
-+value of r1 be 0.  The reason for this surprising outcome is that CPU2()
-+never acquired the lock, and thus did not fully benefit from the lock's
-+ordering properties.
-+
-+Ordering can be extended to CPUs not holding the lock by careful use
-+of smp_mb__after_spinlock():
-+
-+	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
-+	void CPU0(void)
-+	{
-+		spin_lock(&mylock);
-+		WRITE_ONCE(x, 1);
-+		WRITE_ONCE(y, 1);
-+		spin_unlock(&mylock);
-+	}
-+
-+	void CPU1(void)
-+	{
-+		spin_lock(&mylock);
-+		smp_mb__after_spinlock();
-+		r0 = READ_ONCE(y);
-+		WRITE_ONCE(z, 1);
-+		spin_unlock(&mylock);
-+	}
-+
-+	void CPU2(void)
-+	{
-+		WRITE_ONCE(z, 2);
-+		smp_mb();
-+		r1 = READ_ONCE(x);
-+	}
-+
-+This addition of smp_mb__after_spinlock() strengthens the lock
-+acquisition sufficiently to rule out the counter-intuitive outcome.
-+In other words, the addition of the smp_mb__after_spinlock() prohibits
-+the counter-intuitive result where the final value of r0 is 1, the final
-+value of z is 2, and the final value of r1 is 0.
-+
-+
-+No Roach-Motel Locking!
-+-----------------------
-+
-+This example requires familiarity with the herd7 "filter" clause, so
-+please read up on that topic in litmus-tests.txt.
-+
-+It is tempting to allow memory-reference instructions to be pulled
-+into a critical section, but this cannot be allowed in the general case.
-+For example, consider a spin loop preceding a lock-based critical section.
-+Now, herd7 does not model spin loops, but we can emulate one with two
-+loads, with a "filter" clause to constrain the first to return the
-+initial value and the second to return the updated value, as shown below:
-+
-+	/* See Documentation/litmus-tests/locking/RM-fixed.litmus. */
-+	P0(int *x, int *y, int *lck)
-+	{
-+		int r2;
-+
-+		spin_lock(lck);
-+		r2 = atomic_inc_return(y);
-+		WRITE_ONCE(*x, 1);
-+		spin_unlock(lck);
-+	}
-+
-+	P1(int *x, int *y, int *lck)
-+	{
-+		int r0;
-+		int r1;
-+		int r2;
-+
-+		r0 = READ_ONCE(*x);
-+		r1 = READ_ONCE(*x);
-+		spin_lock(lck);
-+		r2 = atomic_inc_return(y);
-+		spin_unlock(lck);
-+	}
-+
-+	filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+	exists (1:r2=1)
-+
-+The variable "x" is the control variable for the emulated spin loop.
-+P0() sets it to "1" while holding the lock, and P1() emulates the
-+spin loop by reading it twice, first into "1:r0" (which should get the
-+initial value "0") and then into "1:r1" (which should get the updated
-+value "1").
-+
-+The purpose of the variable "y" is to reject deadlocked executions.
-+Only those executions where the final value of "y" have avoided deadlock.
-+
-+The "filter" clause takes all this into account, constraining "y" to
-+equal "2", "1:r0" to equal "0", and "1:r1" to equal 1.
-+
-+Then the "exists" clause checks to see if P1() acquired its lock first,
-+which should not happen given the filter clause because P0() updates
-+"x" while holding the lock.  And herd7 confirms this.
-+
-+But suppose that the compiler was permitted to reorder the spin loop
-+into P1()'s critical section, like this:
-+
-+	/* See Documentation/litmus-tests/locking/RM-broken.litmus. */
-+	P0(int *x, int *y, int *lck)
-+	{
-+		int r2;
-+
-+		spin_lock(lck);
-+		r2 = atomic_inc_return(y);
-+		WRITE_ONCE(*x, 1);
-+		spin_unlock(lck);
-+	}
-+
-+	P1(int *x, int *y, int *lck)
-+	{
-+		int r0;
-+		int r1;
-+		int r2;
-+
-+		spin_lock(lck);
-+		r0 = READ_ONCE(*x);
-+		r1 = READ_ONCE(*x);
-+		r2 = atomic_inc_return(y);
-+		spin_unlock(lck);
-+	}
-+
-+	locations [x;lck;0:r2;1:r0;1:r1;1:r2]
-+	filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+	exists (1:r2=1)
-+
-+If "1:r0" is equal to "0", "1:r1" can never equal "1" because P0()
-+cannot update "x" while P1() holds the lock.  And herd7 confirms this,
-+showing zero executions matching the "filter" criteria.
-+
-+And this is why Linux-kernel lock and unlock primitives must prevent
-+code from entering critical sections.  It is not sufficient to only
-+prevnt code from leaving them.
--- 
-2.9.5
+>
+> 2020=E5=B9=B49=E6=9C=881=E6=97=A5(=E7=81=AB) 0:49 Alexander Potapenko <gl=
+ider@google.com>:
+> >
+> > > This series looks good to me.
+> >
+> > Great!
+> >
+> > Which tree do fault injection patches normally go to?
+> >
+> > > Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
+> >
+> > Reviewed-by: Alexander Potapenko <glider@google.com>
 
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
