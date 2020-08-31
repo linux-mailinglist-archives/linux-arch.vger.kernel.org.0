@@ -2,212 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C434B257F75
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 19:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DBA258087
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 20:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728990AbgHaRRt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Aug 2020 13:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S1729131AbgHaSPH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 14:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728979AbgHaRRr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 13:17:47 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB152C061755;
-        Mon, 31 Aug 2020 10:17:45 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id c19so431598wmd.1;
-        Mon, 31 Aug 2020 10:17:45 -0700 (PDT)
+        with ESMTP id S1727058AbgHaSPG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 14:15:06 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F697C061573;
+        Mon, 31 Aug 2020 11:15:06 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z25so4293649iol.10;
+        Mon, 31 Aug 2020 11:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+nbsjObGEQTbldxK9r/J/0l54hz3WdGBb4kWLFeHtdc=;
-        b=Dx+2ufm2r6fK25HiX1RMSlUidv/QGw4uPXaRL6i7mexd7xL0hFBtLS4EzMQG/CdwnX
-         x5s36sbIxBMaW8rvJpgD6ehhu4M0Ybr/5/AaXA0kF5cg4HM7/WlpKO1JH0ev9HC/LADp
-         0F3SOaec49UEeOhrG6gEgcVi9/AwZQYvjekESTbiyFRE4o8MovAfgBIq+8QeDrt5N83h
-         f0YFqIgUCtneqXL3gFoZZMw7mGFctnnF/VkA5hcKx0vKM5cLmFcqGdtyA/geyvNIeuDo
-         HxRMdyh9i3Pzz6MhpAgG/Djl40XS3SI6hyO0C9aoRubn1AckHFClT2LKA88X7GUR2Oes
-         gFiQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2gSAPrDjVFU9gx8jAU0bnZ1hQWEfjuAFbMKOLGx6XL4=;
+        b=dJV28rHReMIEvJ1D3zsEscE+DsFUT1m/nULxUyByVga8DkFPnloOowvZvym7qghYpN
+         Y7dNsaJ/aSlrx+Oo8e5K4bJqr0FySaidW2HFo4HqwGB9NP2etFNV4mMGCKWZy4/1tjzs
+         Xj4SnLWQWOGQOg2Kv9GgCIgjHmzz/Ic4Azk+72s+KpFI3/v/b6luB7Xgdv3dexK19aQE
+         AiVY6wXxcZuis0xXHMVC2Gx7dR/wlIGH46Wv7IgVwSoEgSKLFfp8thPlFfpKmFLlNyEV
+         nRG4A+87hfEMLDWf9oPtg7Y0l9BusVF+kD5u7sAIewO3d9Nyjr79TmLAAEecAo88pvSq
+         ZGBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+nbsjObGEQTbldxK9r/J/0l54hz3WdGBb4kWLFeHtdc=;
-        b=CoulpLwwyOBdEhijhMKLmP1QAEi988NWvhD0GCFeJy2bmUEdyVJeIpjW5v/8ZUXaKI
-         /rLmTVja5CpxsidKO0oDqGMv61ELctn/4NRqve5Fp6ql9FEKfgbXu446v1qD0TPo/py6
-         cJCbGOHLXRgamJvqFRfPQUwFdOvgD3niaI5G2m9zlup96Ux+vMMozur1MBw36zCptGhH
-         R6SY3EhgK8XNPwW0VzHH27wC5tCSWqAyf+eZ8aX2yCahrEtBwqgS00yL9phLolKfo3i+
-         spPYtZcXnO7ujBMrtZvU5ms5FsYnhdsS6VCHVnHnW3+t3QKZBD4EIcmpDJ2IFpSRe1yk
-         59ZA==
-X-Gm-Message-State: AOAM532y6mw9mzJs8zkhUdEPeo3fDVRfsp3l7U0iAhGms/8jwsZJuy5P
-        F6DIxdYp+qzeL8bqaKi3OKY=
-X-Google-Smtp-Source: ABdhPJwKFzt8ldI9tB15Yc56sc4C4H6P4uAMd8lRcJSd25uy/2Qxgs23epbBzGXYfbc0jBfBs1/gEQ==
-X-Received: by 2002:a1c:415:: with SMTP id 21mr285439wme.183.1598894264450;
-        Mon, 31 Aug 2020 10:17:44 -0700 (PDT)
-Received: from alinde.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id w15sm840978wro.46.2020.08.31.10.17.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2020 10:17:43 -0700 (PDT)
-From:   albert.linde@gmail.com
-X-Google-Original-From: alinde@google.com
-To:     akpm@linux-foundation.org, bp@alien8.de, mingo@redhat.com,
-        corbet@lwn.net, tglx@linutronix.de, arnd@arndb.de,
-        peterz@infradead.org
-Cc:     akinobu.mita@gmail.com, hpa@zytor.com, viro@zeniv.linux.org.uk,
-        glider@google.com, andreyknvl@google.com, dvyukov@google.com,
-        elver@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, albert.linde@gmail.com,
-        Albert van der Linde <alinde@google.com>
-Subject: [PATCH v3 3/3] x86: add failure injection to get/put/clear_user
-Date:   Mon, 31 Aug 2020 17:17:33 +0000
-Message-Id: <20200831171733.955393-4-alinde@google.com>
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-In-Reply-To: <20200831171733.955393-1-alinde@google.com>
-References: <20200831171733.955393-1-alinde@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2gSAPrDjVFU9gx8jAU0bnZ1hQWEfjuAFbMKOLGx6XL4=;
+        b=PTx9mA1voBFg/3BoAbDDeLTxYHZFJC9/Lw/RHcfi71hbe/qCk3rC2Rq34OdBI2S5Dc
+         x8nTS7kY68HBHfM/uSDFcOhCEHxm89GSZcDQVLwDggCieiJp5HSDr4GowzAVhfACIbrH
+         GmZlpGBPzAN/w3R4q6yYtwZYNCQTk3462++m4ivd+yoYcCNiZvWCjOA4ssG6zC9RJr4L
+         JGWK2jAzI4SIF7Doj058mvezmt3Xz7dP8UOiNcKRCmCHBllY+lDHSiSH8E6YWdo+Txb5
+         gO6dJzLCOKori7+R/ivAv8gc9wjY+2LfT2PX2QVUdG1J/+fU236I3iteYI1tojHA/Dnp
+         E4tg==
+X-Gm-Message-State: AOAM532xfC6jAsaKbIXJNoool1aeAAONXh5kOzFmHBKzY+VJOSVeqtFW
+        M1C9eQHaGXbbky5HnqVZMYcapOllzRPVQ+MbsbI=
+X-Google-Smtp-Source: ABdhPJxBmDDdCWGh2NgUQ30pW7bEjobvVj0+2EvkprhMPzz2SKBdzcFEdOUrVUHnQ64VGFYe65ZWSRQKGUIj3Mojae0=
+X-Received: by 2002:a05:6602:2b13:: with SMTP id p19mr2343159iov.30.1598897705770;
+ Mon, 31 Aug 2020 11:15:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <30b491ad-a7e1-f7b5-26b8-2cfffc81a080@huawei.com>
+In-Reply-To: <30b491ad-a7e1-f7b5-26b8-2cfffc81a080@huawei.com>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Mon, 31 Aug 2020 11:15:00 -0700
+Message-ID: <CAAH8bW_p3LJPgOoJgUHt6O0run+LB2RbjnAVpeLn_KCAZKNR+A@mail.gmail.com>
+Subject: Re: [Question] About SECCOMP issue for ILP32
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     bobo.shaobowang@huawei.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Alexander Graf <agraf@suse.de>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andreas Schwab <schwab@suse.de>,
+        Andrew Pinski <pinskia@gmail.com>,
+        Bamvor Zhangjian <bamv2005@gmail.com>,
+        Chris Metcalf <cmetcalf@mellanox.com>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        James Hogan <james.hogan@imgtec.com>,
+        James Morse <james.morse@arm.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        Lin Yongting <linyongting@huawei.com>,
+        Manuel Montezelo <manuel.montezelo@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
+        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
+        Steve Ellcey <sellcey@caviumnetworks.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "yury.norov@gmail.com" <yury.norov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Albert van der Linde <alinde@google.com>
+On Mon, Aug 31, 2020 at 5:48 AM Xiongfeng Wang
+<wangxiongfeng2@huawei.com> wrote:
+>
+> Hi Yury,
+>
 
-To test fault-tolerance of user memory acceses in x86, add support for
-fault injection.
+Hi Xiongfeng,
 
-Make both put_user() and get_user() fail with -EFAULT, and clear_user()
-fail by not clearing any bytes.
+[restore CC list]
 
-Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Signed-off-by: Albert van der Linde <alinde@google.com>
----
-v2:
- - no significant changes
+Haven't seen this before. What kernel / glibc / ltp do you use?
 
-v3:
- - no changes
----
- arch/x86/include/asm/uaccess.h | 68 +++++++++++++++++++---------------
- arch/x86/lib/usercopy_64.c     |  3 ++
- 2 files changed, 42 insertions(+), 29 deletions(-)
+> We were testing the ILP32 feature and came accross a problem. Very apperaciate
+> it if you could give us some help !
+>
+> We compile the LTP testsuite with '-mabi=ilp32' and run it on a machine with
+> kernel and glibc applied with ILP32 patches. But we failed on one testcase,
+> prctl04. It print the following error info.
+> 'prctl04.c:199: FAIL: SECCOMP_MODE_STRICT doesn't permit read(2) write(2) and
+> _exit(2)'
+>
+> The testcase is like below, syscall 'prctl' followed by a syscall 'write'.
+> prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT);
+> SAFE_WRITE(1, fd, "a", 1);
+>
+> When we execute syscall 'write', we receive a SIGKILL. It's not as expected.
+> We track the kernel and found out it is because we failed the syscall_whitelist
+> check in '__secure_computing_strict'. Because flag 'TIF_32BIT_AARCH64' is set,
+> we falls into the 'in_compat_syscall()' branch. We compare the parameter
+> 'this_syscall' with return value of 'get_compat_model_syscalls()'
+> The syscall number of '__NR_write' for ilp32 application is 64, but it is 4 for
+> 'model_syscalls_32' returned from 'get_compat_model_syscalls()'
+> So '__secure_computing_strict' retuned with 'do_exit(SIGKILL)'. We have a
+> modification like below, but I am not sure if it correct or not.
+>
+> --- a/kernel/seccomp.c
+> +++ b/kernel/seccomp.c
+> @@ -618,7 +618,7 @@ static void __secure_computing_strict(int this_syscall)
+>  {
+>         const int *syscall_whitelist = mode1_syscalls;
+>  #ifdef CONFIG_COMPAT
+> -       if (in_compat_syscall())
+> +       if (is_a32_compat_task())
+>                 syscall_whitelist = get_compat_mode1_syscalls();
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index ecefaffd15d4..004eeee2199a 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -5,6 +5,7 @@
-  * User space memory access functions
-  */
- #include <linux/compiler.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/kasan-checks.h>
- #include <linux/string.h>
- #include <asm/asm.h>
-@@ -175,11 +176,16 @@ extern int __get_user_bad(void);
- 	register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);		\
- 	__chk_user_ptr(ptr);						\
- 	might_fault();							\
--	asm volatile("call __get_user_%P4"				\
--		     : "=a" (__ret_gu), "=r" (__val_gu),		\
-+	if (should_fail_usercopy()) {					\
-+		(x) = 0;						\
-+		__ret_gu = -EFAULT;					\
-+	} else {							\
-+		asm volatile("call __get_user_%P4"			\
-+			: "=a" (__ret_gu), "=r" (__val_gu),		\
- 			ASM_CALL_CONSTRAINT				\
--		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
--	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
-+			: "0" (ptr), "i" (sizeof(*(ptr))));		\
-+		(x) = (__force __typeof__(*(ptr))) __val_gu;		\
-+	}								\
- 	__builtin_expect(__ret_gu, 0);					\
- })
- 
-@@ -236,31 +242,35 @@ extern void __put_user_8(void);
-  *
-  * Return: zero on success, or -EFAULT on error.
-  */
--#define put_user(x, ptr)					\
--({								\
--	int __ret_pu;						\
--	__typeof__(*(ptr)) __pu_val;				\
--	__chk_user_ptr(ptr);					\
--	might_fault();						\
--	__pu_val = x;						\
--	switch (sizeof(*(ptr))) {				\
--	case 1:							\
--		__put_user_x(1, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	case 2:							\
--		__put_user_x(2, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	case 4:							\
--		__put_user_x(4, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	case 8:							\
--		__put_user_x8(__pu_val, ptr, __ret_pu);		\
--		break;						\
--	default:						\
--		__put_user_x(X, __pu_val, ptr, __ret_pu);	\
--		break;						\
--	}							\
--	__builtin_expect(__ret_pu, 0);				\
-+#define put_user(x, ptr)						\
-+({									\
-+	int __ret_pu;							\
-+	__typeof__(*(ptr)) __pu_val;					\
-+	__chk_user_ptr(ptr);						\
-+	might_fault();							\
-+	__pu_val = x;							\
-+	if (should_fail_usercopy()) {					\
-+		__ret_pu = -EFAULT;					\
-+	} else {							\
-+		switch (sizeof(*(ptr))) {				\
-+		case 1:							\
-+			__put_user_x(1, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		case 2:							\
-+			__put_user_x(2, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		case 4:							\
-+			__put_user_x(4, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		case 8:							\
-+			__put_user_x8(__pu_val, ptr, __ret_pu);		\
-+			break;						\
-+		default:						\
-+			__put_user_x(X, __pu_val, ptr, __ret_pu);	\
-+			break;						\
-+		}							\
-+	}								\
-+	__builtin_expect(__ret_pu, 0);					\
- })
- 
- #define __put_user_size(x, ptr, size, label)				\
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index b0dfac3d3df7..7747cda5780d 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -7,6 +7,7 @@
-  * Copyright 2002 Andi Kleen <ak@suse.de>
-  */
- #include <linux/export.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/uaccess.h>
- #include <linux/highmem.h>
- 
-@@ -50,6 +51,8 @@ EXPORT_SYMBOL(__clear_user);
- 
- unsigned long clear_user(void __user *to, unsigned long n)
- {
-+	if (should_fail_usercopy())
-+		return n;
- 	if (access_ok(to, n))
- 		return __clear_user(to, n);
- 	return n;
--- 
-2.28.0.402.g5ffc5be6b7-goog
+It calls the arch function from generic code. It may break build for
+other arches.
+This also looks dangerous because it treats ILP32 execution as non-compat.
 
+The right approach would be implementing arch-specific
+get_compat_mode1_syscalls()
+in arch/arm64/include/asm/seccomp.h that returns an appropriate table.
+Refer MIPS
+code for this: arch/mips/include/asm/seccomp.h
+
+Thanks,
+Yury
+
+>  #endif
+>         do {
+>
+>
+> Thanks,
+> Xiongfeng
+>
