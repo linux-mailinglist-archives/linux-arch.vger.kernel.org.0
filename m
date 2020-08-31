@@ -2,88 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8F7257B4A
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 16:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB31A257D80
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Aug 2020 17:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgHaOaF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Aug 2020 10:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S1729098AbgHaPiV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Aug 2020 11:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726968AbgHaOaF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 10:30:05 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4330C061573;
-        Mon, 31 Aug 2020 07:30:04 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id m22so8745658eje.10;
-        Mon, 31 Aug 2020 07:30:04 -0700 (PDT)
+        with ESMTP id S1728885AbgHaPhz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Aug 2020 11:37:55 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A48C061573;
+        Mon, 31 Aug 2020 08:37:53 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id g13so6372009ioo.9;
+        Mon, 31 Aug 2020 08:37:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GsUtzJFOnvjviCxW2IjbStQvBGLGUPcyBXj6Cdtywt8=;
-        b=J6Ke5RC+m3g1nSBnNqPyMtumBUnXEruJri8HNZkz86liYmnV2q0HRxyDgJeF+6v9T9
-         4n4azliF11Ez2eEObZXMmtHD0FmbHx+7N9posUPy/zlOozzyLtbSvOE+nM60IREfw7FW
-         vI8Gg+dpC5KuXnXLBPmhXTFIaGsIG/vw9uq17gZ2ErjTWF89qH0PxVDrj201wh911bSK
-         QQlUSKnj6SwHECIMTl8fYRlABaTQX2wDevBhlW07ycZX5nIRg8jFqJI/x/9Uvo1P3EAC
-         tJ2KDKRGz7qplxNHR0+T3l4czwNFQZl2Pp3D4j7Rk71sQZxqBcsYhJIdqd69xMR/8wXp
-         5UAQ==
+         :cc;
+        bh=eKhPg2peu0bzgNag4eCqNzrqsBROFucfPoSefuXeaw4=;
+        b=s8V6n0xALCLBzggML/oL2yBo0b4sDJ8Fn3DqT0kDfs/UOSNjzu72iqpAcc/jOJMKfr
+         A/X2ov0QZLPmxbLfzmr20VzbN4QpLVcB8/ifn3Hnv709YWR2nhhjTxPG24HCRl5kcDT/
+         vk5JoQYRHzNAmuWsYm7HmliEhq5ubgdI3t/2C8Ogm/yL+V7S3MJLBZ323Oq5Vt2/D3DB
+         OKh8Y2eauBBIl0MR/puj5LHTeekB602eHpsIHDKNxTijC2Ktrupnf9uOB+L0aFc+bCT8
+         3JIMkJ1d0l9l6M/R9X1Keodws4gRxelxxxJlBKkosrBYvuZneLQIHkRn4f6Sx1K7ePq5
+         lAzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GsUtzJFOnvjviCxW2IjbStQvBGLGUPcyBXj6Cdtywt8=;
-        b=UgszEvaSTc994HsML/7lUajcAQpTxvV+MKScjOzpvF5qi4JNVpBfwXCjkdjpxMaknf
-         AjuwVutjY63+oSnjuwjuUYLiujZS2ov9vHtXu5U5mvw+IclJy+IVLWGWijZoPRRUvmBk
-         zGTDSi0i3fqItnD70tSvkHC1HD9FQcZvrS/r9LLu1LGM4Tv4DpYSdOW1fov1D/p30e4c
-         wq0QO6/bOIU1ecQILzLAhUM+2+Z1Qe3OOPjQ484sffBIg2rwgqGUVm03gQYpEHBjkfvr
-         016TnaBPhwf9cqNbaXIfCUOfDbJAOJ6+jm9Hh2Vq+HqGcg3EZ2z/Rkzr3zCUK678gWbg
-         FXeg==
-X-Gm-Message-State: AOAM530L6AHIr0gch2yl1HbLYQW+eBbnUpASIlJ5kKBqAbmkNrw0HNuk
-        kjbMDuQ7xVWQw1xxXZ1Faef+8YS9QWF5pLdl65A=
-X-Google-Smtp-Source: ABdhPJyjPMgqhNVhFiUA4I3hTIZTzHOuaM4kG5ojHStRHxESukNTTW1UGb+Q1yubT4UmTTT2wlJTEVjFJ92AR9+xRdY=
-X-Received: by 2002:a17:906:656:: with SMTP id t22mr1363085ejb.392.1598884203426;
- Mon, 31 Aug 2020 07:30:03 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=eKhPg2peu0bzgNag4eCqNzrqsBROFucfPoSefuXeaw4=;
+        b=n1hODbegBkoUw54XoTSBBzD8QeRjRpSzlSTgUW38Mf6oZqjwMEJ74kw1fIxS7vsUmx
+         vP8XWMBisTR6kulnH6kj7xaQUEep2NHs3OI8PM008MxWbPpmuaXt44LfafJ8ycHQhWCW
+         JMUOR1yWkJ29ewRsiEHNJbY16UnsRBuOHefZXMW1MGnfsJQo4U+zcGGTeKnNJwrCQDI+
+         ajKoqwkV+mplbVqKxFZkhveLjcneOwhVaiSqMO7JWvfilR4XH/D3xa2G7usQmlKtRagx
+         LqXkEsfivxDP4L6/UcJovCMZQgmtLumXt5kKaVmWomixFhDV/Z1YfG1d39XYwF1Q/HGV
+         747A==
+X-Gm-Message-State: AOAM531kkzl5xMwZTiz4q7MrG5DST0qLn5gcdRhvMGz/FcFeLAxMBmvy
+        ziI5isq7HNOOO9E5nn9vqApOOTkD08i+BzmH3vM=
+X-Google-Smtp-Source: ABdhPJwNBcqnCmmfCXu/qtgS8DcU6uT+FMOssh+c39rLoFbOIo6hVA6Vu3hW/p2ti6dlo5FyhXDcPgG1rpZIIDrEP2o=
+X-Received: by 2002:a5d:80c6:: with SMTP id h6mr1735767ior.2.1598888272759;
+ Mon, 31 Aug 2020 08:37:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200828141344.2277088-1-alinde@google.com>
-In-Reply-To: <20200828141344.2277088-1-alinde@google.com>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Mon, 31 Aug 2020 23:29:52 +0900
-Message-ID: <CAC5umyiNw7FA__Y3HZ1UEG8Y6uQDgAWHTJpOVf7okERzpCjnRg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] add fault injection to user memory access
-To:     albert.linde@gmail.com
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bp@alien8.de,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
+References: <cover.1593243079.git.syednwaris@gmail.com> <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
+In-Reply-To: <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Mon, 31 Aug 2020 21:07:41 +0530
+Message-ID: <CACG_h5oW1o9JTngqUi7X2u4mrfjcjA5D9Kz-r6TmBw3orRQ63A@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] Introduce the for_each_set_clump macro
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, glider@google.com,
-        andreyknvl@google.com, Dmitry Vyukov <dvyukov@google.com>,
-        elver@google.com, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>, x86@kernel.org,
-        Albert van der Linde <alinde@google.com>
+        Robert Richter <rrichter@marvell.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-2020=E5=B9=B48=E6=9C=8828=E6=97=A5(=E9=87=91) 23:14 <albert.linde@gmail.com=
->:
+On Thu, Jul 16, 2020 at 6:19 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> From: Albert van der Linde <alinde@google.com>
+> Hi Syed,
 >
-> The goal of this series is to improve testing of fault-tolerance in
-> usages of user memory access functions, by adding support for fault
-> injection.
+> sorry for taking so long. I was on vacation and a bit snowed
+> under by work.
 >
-> The first patch adds failure injection capability for usercopy
-> functions. The second changes usercopy functions to use this new failure
-> capability (copy_from_user, ...). The third patch adds
-> get/put/clear_user failures to x86.
+> On Sat, Jun 27, 2020 at 10:10 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> > Since this patchset primarily affects GPIO drivers, would you like
+> > to pick it up through your GPIO tree?
+>
+> I have applied the patches to an immutable branch and pushed
+> to kernelorg for testing (autobuilders will play with it I hope).
+>
+> If all works fine I will merge this into my devel branch for v5.9.
+>
+> It would be desirable if Andrew gave his explicit ACK on it too.
+>
+> Yours,
+> Linus Walleij
 
-This series looks good to me.
+Hi Linus,
 
-Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
+As a reminder, I would like to point out about the
+'for_each_set_clump' patchset. If it's alright and if anything is
+needed to take it further so that it is finally accepted.
+
+Regards
+Syed Nayyar Waris
