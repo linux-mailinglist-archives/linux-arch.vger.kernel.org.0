@@ -2,134 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDB0259FA2
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 22:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A5C25A1D8
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 01:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgIAULN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 16:11:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:39835 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728224AbgIAULL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 16:11:11 -0400
-Received: (qmail 600595 invoked by uid 1000); 1 Sep 2020 16:11:10 -0400
-Date:   Tue, 1 Sep 2020 16:11:10 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@fb.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: [PATCH kcsan 9/9] tools/memory-model:  Document locking corner
- cases
-Message-ID: <20200901201110.GB599114@rowland.harvard.edu>
-References: <20200831182012.GA1965@paulmck-ThinkPad-P72>
- <20200831182037.2034-9-paulmck@kernel.org>
- <20200831201701.GB558270@rowland.harvard.edu>
- <20200831214738.GE2855@paulmck-ThinkPad-P72>
- <20200901014504.GB571008@rowland.harvard.edu>
- <20200901170421.GF29330@paulmck-ThinkPad-P72>
+        id S1726285AbgIAXSJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 19:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726064AbgIAXSI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 19:18:08 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7A4C061244
+        for <linux-arch@vger.kernel.org>; Tue,  1 Sep 2020 16:18:08 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id y6so1341278plt.3
+        for <linux-arch@vger.kernel.org>; Tue, 01 Sep 2020 16:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4iyrZMhsm50EAs3g2KnI7xhSNv02uS5mIc/bNi5tMhA=;
+        b=h1W3rhK11Ac2ULHxITQVWk+mYa5KEEodEYvcXH6ZBK0sVGUcKUNSYh5WpmAqVdJ4uM
+         laH+r/2+ofVbyxPYxM/BYCZTO3d1jcstILzzhKlZMC4jxxBsADHZmsJZMYMsDLc0Xqts
+         f/ywKAW1F2cWVr+Ovsyf3pu5q6m5rdIcz38XA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4iyrZMhsm50EAs3g2KnI7xhSNv02uS5mIc/bNi5tMhA=;
+        b=qelXVFDw6tDfFX+PA4Cw9syb/q5sFpJVWQQwBMxqX1/+DfR/dLaiTnmPnH+ptOx89U
+         uOeRgdIAKsNrO5gnln/h6ZAeKMUH4SPdI16okHP7HVbLApr9e4rNuQArAwnGuT9xS/6J
+         CH1EoWipAaM0S4FqLygoksvLn7AsZ/4L7ZBjnXNFH880aLo/Uk+Z5t4yR3GKkjRPhT2l
+         sIp3jMqbfBCbQStU+l9BF+8sU7J598MsylQzScNmE1r/+5sXqafw3gJBlgFsP7915Ijz
+         pereTeyrxrT4bceKtEZF7MkTZWxQUAaanFHbUJ9L3oPn8IJv5tGgWzAHAtyw/hKPNG+d
+         fSeg==
+X-Gm-Message-State: AOAM532xS/YKUudjUbdst6FIwg4KUTGqA/e+mgU1wblwCMqW/VQ+T8tr
+        noLk0vuoQxiYp0PYFx+SB7NUzg==
+X-Google-Smtp-Source: ABdhPJygBwAH2kY44WcP2KmDZ++JT1L7dvXf2P1Gp3pBp8hQP0G/2rd4h4BS1PltNzQUpbBUJyzvFQ==
+X-Received: by 2002:a17:902:7404:: with SMTP id g4mr2271545pll.176.1599002287789;
+        Tue, 01 Sep 2020 16:18:07 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l22sm3506944pfc.27.2020.09.01.16.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 16:18:06 -0700 (PDT)
+Date:   Tue, 1 Sep 2020 16:18:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 00/29] Warn on orphan section placement
+Message-ID: <202009011616.E6DC7D54EF@keescook>
+References: <20200821194310.3089815-1-keescook@chromium.org>
+ <202008311240.9F94A39@keescook>
+ <20200901071133.GA3577996@gmail.com>
+ <20200901075937.GA3602433@gmail.com>
+ <20200901081647.GB3602433@gmail.com>
+ <202009010816.80F4692@keescook>
+ <CAKwvOdnn3wxYdJomvnveyD_njwRku3fABWT_bS92duihhywLJQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901170421.GF29330@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAKwvOdnn3wxYdJomvnveyD_njwRku3fABWT_bS92duihhywLJQ@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 10:04:21AM -0700, Paul E. McKenney wrote:
-> On Mon, Aug 31, 2020 at 09:45:04PM -0400, Alan Stern wrote:
-
-> > The question is, what are you trying to accomplish in this section?  Are 
-> > you trying to demonstrate that it isn't safe to allow arbitrary code to 
-> > leak into a critical section?  If so then you don't need to present an 
-> > LKMM litmus test to make the point; the example I gave here will do 
-> > quite as well.  Perhaps even better, since it doesn't drag in all sorts 
-> > of extraneous concepts like limitations of litmus tests or how to 
-> > emulate a spin loop.
-> > 
-> > On the other hand, if your goal is to show how to construct a litmus 
-> > test that will model a particular C language test case (such as the one 
-> > I gave), then the text does a reasonable job -- although I do think it 
-> > could be clarified somewhat.  For instance, it wouldn't hurt to include 
-> > the real C code before giving the corresponding litmus test, so that the 
-> > reader will have a clear idea of what you're trying to model.
+On Tue, Sep 01, 2020 at 11:02:02AM -0700, Nick Desaulniers wrote:
+> On Tue, Sep 1, 2020 at 8:17 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Tue, Sep 01, 2020 at 10:16:47AM +0200, Ingo Molnar wrote:
+> > > > This is with:
+> > > >
+> > > >   GNU ld version 2.25-17.fc23
+> >
+> > (At best, this is from 2015 ... but yes, min binutils in 2.23.)
 > 
-> Makes sense.  I can apply this at some point, but I would welcome a patch
-> from you, which I would be happy to fold in with your Codeveloped-by.
+> Ah, crap! Indeed arch/powerpc/Makefile wraps this in ld-option.
 
-I don't have time to work on these documents now.  Maybe later on.  They 
-do need some serious editing.  (You could try reading through them 
-carefully yourself; I'm sure you'd find a lot of things to fix up.)
+Yeah, I totally missed that too. :)
 
-Incidentally, your patch bomb from yesterday was the first time I had 
-seen these things (except for the litmus-test format document).
+> Uh oh, the ppc vdso uses cc-ldoption which was removed! (I think by
+> me; let me send patches)  How is that not an error?  Yes, guilty,
+> officer.
+> commit 055efab3120b ("kbuild: drop support for cc-ldoption").
+> Did I not know how to use grep, or?  No, it is
+> commit f2af201002a8 ("powerpc/build: vdso linker warning for orphan sections")
+> that is wrong.
 
-> > Just what you want to achieve here is not clear from the context.
-> 
-> People who have internalized the "roach motel" model of locking
-> (https://www.cs.umd.edu/~pugh/java/memoryModel/BidirectionalMemoryBarrier.html)
-> need their internalization adjusted.
+Eek, yeah, the vdso needs fixing; whoops. Lucky for my series, I only need
+ld-option! ;)
 
-Shucks, if you only want to show that letting arbitrary code (i.e., 
-branches) migrate into a critical section is unsafe, all you need is 
-this uniprocessor example:
+(Doing test builds now...)
 
-	P0(int *sl)
-	{
-		goto Skip;
-		spin_lock(sl);
-		spin_unlock(sl);
-	Skip:
-		spin_lock(sl);
-		spin_unlock(sl);
-	}
-
-This does nothing but runs fine.  Letting the branch move into the first 
-critical section gives:
-
-	P0(int *sl)
-	{
-		spin_lock(sl);
-		goto Skip;
-		spin_unlock(sl);
-	Skip:
-		spin_lock(sl);
-		spin_unlock(sl);
-	}
-
-which self-deadlocks 100% of the time.  You don't need to know anything 
-about memory models or concurrency to understand this.
-
-On the other hand, if you want to show that letting memory accesses leak 
-into a critical section is unsafe then you need a different example: 
-spin loops won't do it.
-
-> > Besides, the example is in any case a straw man.  The text starts out 
-> > saying "It is tempting to allow memory-reference instructions to be 
-> > pulled into a critical section", but then the example pulls an entire 
-> > spin loop inside -- not just the memory references but also the 
-> > conditional branch instruction at the bottom of the loop!  I can't 
-> > imagine anyone would think it was safe to allow branches to leak into a 
-> > critical section, particularly when doing so would break a control 
-> > dependency (as it does here).
-> 
-> Most people outside of a few within the Linux kernel community and within
-> the various hardware memory-ordering communities don't know that control
-> dependencies even exist, so could not be expected to see any danger
-> in rather thoroughly folding, spindling, or otherwise mutilating them,
-> let alone pulling them into a lock-based critical section.  And many in
-> the various toolchain communities see dependencies of any sort as an
-> impediment to performance that should be broken wherever and whenever
-> possible.
-> 
-> That said, a less prejudicial introduction to this example might be good.
-> What did you have in mind?
-
-Again, it depends on what example is intended to accomplish (which you 
-still haven't said explicitly).  Whatever it is, I don't think the 
-current text is a good way to do it.
-
-Alan
+-- 
+Kees Cook
