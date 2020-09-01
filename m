@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDB4259ECD
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 20:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3AB259ED9
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 20:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729352AbgIASxL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 14:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S1731245AbgIAS5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 14:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731240AbgIASxD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 14:53:03 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E489C061247
-        for <linux-arch@vger.kernel.org>; Tue,  1 Sep 2020 11:53:02 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id w7so1343138pfi.4
-        for <linux-arch@vger.kernel.org>; Tue, 01 Sep 2020 11:53:02 -0700 (PDT)
+        with ESMTP id S1730661AbgIAS5j (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 14:57:39 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5335C061244
+        for <linux-arch@vger.kernel.org>; Tue,  1 Sep 2020 11:57:39 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ds1so1089871pjb.1
+        for <linux-arch@vger.kernel.org>; Tue, 01 Sep 2020 11:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=DW1zJLlrp+b/X5DsaUJywWHpm9f8YdypCEJotWWzal8=;
-        b=iu/mivdeQ6AWpfUigREEipYqDA+JBPragzl35o9Nu9ycwxuP1pT/n/GUj28IBjGlJy
-         tASUZD6UQpFduus8RxIUHnWDo/ii2QxBTb8+/rddFmc7Q2BvQtdvriL4oOcAbvX3fTik
-         a3CX0t1k/eCXUbO98m4G5hAHF2rr9hmEGAwHw=
+        bh=myAjLsXJJ5WrIyplttBLOJrb3cYFWSnfDJgomMmHBsY=;
+        b=ebiQOl0HdWb1qsZ8K4nAaddfFhbr3U7deevLOcXXTD6OLvfKSnSROhSsCjgZ7mCdSU
+         KEk3JPhKcmdeA0QtKKnHHoNdav2XUrlVbf6RKDK+ixxHf+lELn4fBRXQcE7RzE2wmQCF
+         jhg7c/3b8g07wxtC6uK6VnR8kOyuLPgRU1LbY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=DW1zJLlrp+b/X5DsaUJywWHpm9f8YdypCEJotWWzal8=;
-        b=E1JTHOL1n+Sn5ebUP81L9D2zmvz6A/UzDKoCZj59TtZRV8C4+LcT4LlAOvkkVZu9y2
-         WDoQVqi/Gi0lE9IA1Zkd5FxnEw3vKM4+PQZ5PjrKJNzAASSpDzdMWbrbpUjK3bY4e1DC
-         xuqtJ1+Rsh1gaXAq4YR+6FhpJZSyM07inWwBpq1u78vxY7pcX2EHgU4twV8mAUlTC63Z
-         HE2WuJqA0uqco5pGCFXhzxPfpTjZFcwroHjeMP7YM6K7NutLyXbG+X/sYKLHZ7ooF5hb
-         bge3x6SpaY70tDOQav/EkT45tv5J7HY7tRUPy5yAz4YGFFrcHF/M1UTcxpc0eqRinyro
-         zG7A==
-X-Gm-Message-State: AOAM530q8JzLjdEQyaF7aaQ51H6pRuJlnrA0H3n5EjNDYHrmaut9LZ4j
-        EHXtjAdp/UwVbiVTx32nBbF23A==
-X-Google-Smtp-Source: ABdhPJw/YsKunmr1Z0dpXo1/zK3rMUMV+IlY1oP54bh4p+BaEO8LJP6shIZse5erSoELJy0YDj4+Gg==
-X-Received: by 2002:a65:4187:: with SMTP id a7mr2642045pgq.102.1598986382061;
-        Tue, 01 Sep 2020 11:53:02 -0700 (PDT)
+        bh=myAjLsXJJ5WrIyplttBLOJrb3cYFWSnfDJgomMmHBsY=;
+        b=jcId3QkZBG7zuENMKN0yMefndAxECpiTEhQVYS8U6bVjcQXCOM1/WrfWN7IJ9Qh3jt
+         s9XhvZfJ0SYRihYONgwflmig9ca/7JsgGPKrqcbxk8TetucYC3rz/8mQDA31L+1r7Mvz
+         +aAiRtE3vNTGIc94JuvwxP0FUx2sp/cyKEwWlK0utwOyiQ4NU8sGaOLZtHGsjw6QSURM
+         jBpiL6Gs7Hbyp3be1PdJICf+ojpXcc4HqozGhTOqrPrrdhsDBFSX5jXYLdznUnnq7mro
+         JpU9IuI7v8vbpBTMKiCqafKqZT3GGx6ugWnTevhm6SpGPcn/ai3e3n74IiOJ09iiKJ9B
+         d3DA==
+X-Gm-Message-State: AOAM532LvpmrTAEa1BSuEQZuzkMIP8oDXMcZ+TDGfSSF/TKwpMe9wVzk
+        q1JynVxzZpt/PSaM5PoLBAdEqpV+CXyhgQ==
+X-Google-Smtp-Source: ABdhPJxM7CI6ObOTA/dAnpNqk4c7bPseM/evKd+pRwbVQYq3IOIRkOFgQb1ors7cvRWIw5JowuZv0w==
+X-Received: by 2002:a17:90a:450d:: with SMTP id u13mr2718413pjg.99.1598986659307;
+        Tue, 01 Sep 2020 11:57:39 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m19sm2192249pjq.18.2020.09.01.11.53.00
+        by smtp.gmail.com with ESMTPSA id b10sm1613877pff.85.2020.09.01.11.57.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 11:53:01 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 11:52:59 -0700
+        Tue, 01 Sep 2020 11:57:38 -0700 (PDT)
+Date:   Tue, 1 Sep 2020 11:57:37 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -57,7 +57,7 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Subject: Re: [PATCH 05/10] lkdtm: disable set_fs-based tests for
  !CONFIG_SET_FS
-Message-ID: <202009011152.335EE467@keescook>
+Message-ID: <202009011156.0F49882@keescook>
 References: <20200827150030.282762-1-hch@lst.de>
  <20200827150030.282762-6-hch@lst.de>
  <CAHk-=wipbWD66sU7etETXwDW5NRsU2vnbDpXXQ5i94hiTcawyw@mail.gmail.com>
@@ -88,7 +88,8 @@ On Sat, Aug 29, 2020 at 11:24:06AM +0200, Christoph Hellwig wrote:
 > 
 > Sure fine with me unless Kees screams.
 
-If we don't have set_fs, we don't need the tests. :)
+To clarify: if any of x86, arm64, arm, powerpc, riscv, and s390 are
+using set_fs(), I want to keep this test. "ugly" is fine in lkdtm. :)
 
 -- 
 Kees Cook
