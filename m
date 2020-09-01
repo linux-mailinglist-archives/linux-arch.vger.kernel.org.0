@@ -2,109 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44774259009
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 16:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3327B259017
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 16:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727950AbgIAOPL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 10:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S1728282AbgIAOQd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 10:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727865AbgIALt0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 07:49:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACD9C06125F;
-        Tue,  1 Sep 2020 04:48:04 -0700 (PDT)
-Date:   Tue, 01 Sep 2020 11:47:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1598960880;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7TF5bffiWAtpwidWPHVFUAUsl9G1rNNk8HDTdIk9Zc8=;
-        b=Wxn4BsDgMiaUqZXOUMySyb+eX8zXhNWuNCqked+7Arzb+1dryuQ6rYt/iBQPAWIhTTjZ+u
-        udECah+aIJ/Xk4glN7HPbbDMLNbQuZhleuvrK+BdjKRyGWTOkyXANwTdnxw3NZeab5OtV2
-        /0ptOyQYcf+y2Z30o+EMcFrfXFUN5p+ICBaUI6O1xVq6JeJmiixbILvE9R2Y6kzZzi6ACi
-        uaC6xb3u9RGnDknTA0QCo5hdCGuk4NTFO0nQCR28ciCHzq4+/xy6XnKQ3cWPjU0Xybv3fI
-        7mBySEvVwCFJb3HycoQjSZVnCE8nzffCRI8zTAvpAcpmQdTqCCxMVJTLIF1Ugw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1598960880;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7TF5bffiWAtpwidWPHVFUAUsl9G1rNNk8HDTdIk9Zc8=;
-        b=i9+Jf1zj+gmAnvKliv4krRKO8ak6SLcJj2K3O/M0lkx28IrN7uNRWiJj6GybK8uIrp4H1P
-        eNtBdsww2zbHiIAQ==
-From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: core/build] vmlinux.lds.h: Add .symtab, .strtab, and .shstrtab
- to ELF_DETAILS
-Cc:     Fangrui Song <maskray@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>, linux-arch@vger.kernel.org,
-        x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-In-Reply-To: <20200821194310.3089815-6-keescook@chromium.org>
-References: <20200821194310.3089815-6-keescook@chromium.org>
+        with ESMTP id S1728237AbgIAOP5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 10:15:57 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07615C06125F;
+        Tue,  1 Sep 2020 07:15:57 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ls14so673987pjb.3;
+        Tue, 01 Sep 2020 07:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ypq4V2n6hl0lHX9y7DtLS7ZcrqEPUBbxsLMtFlrStVc=;
+        b=dbCIVvEzwJuO+omKZYGl30Jm5UXT6FFIqT47ktoREvEjVKZpwSdT69hMlvg9PQwQTB
+         mihJpL+5DkDOOetBf+zFTpyVQwWusTQRnbfIEJFcWW/xufoyBvc96pPwyonS9uDO3hC7
+         UqU7+RTGCP5VYQTurJ4gv5xZx7OFv1ZNE8QVXUbXBIt+4EGknUwjyClJ2vW3fmCJ/5dN
+         cnC3XBy8kpEArVpfpSMgPkUUVLVBMjEv0vf/4VDXr0xzgW6qowREjyPH69ksazjSqQac
+         xMuvOnpQwhE/S5FZkTD3LPeL49fFgNQfzKIJGovNvaAA3UrTdMfv3xsrJ9+ATYugLsLX
+         kRjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ypq4V2n6hl0lHX9y7DtLS7ZcrqEPUBbxsLMtFlrStVc=;
+        b=rzMkbnKQNRiKPv8itphEeZ4gaRowIhsFobzqMlRz0HE5SVbqim4BxjDl5xeC0xqMpQ
+         +Vvh6FonDgygLxivExq9xI/rYuLi5IYRm2qc2hi7r0Eu02xKMmowTAn9ljuyxPYle6Bl
+         VRwyNyykpggXwI0KDcFOj9l2D5GGaVzperCdp11+LSWmxwSXzjFCvFgy5DolscPdutPz
+         /MGlsoq+eQN3k33a++Mo6dO+AL/8bz+oz7YhM06woKd/3tFjKmTOHavUlgjFm6Sx28Qn
+         ODrEoESxE9ongV6q61F0tItljjEhO61SU4Tm06hdpdkbe9HdODMorz/N7E1BQpWwTvfT
+         0J1w==
+X-Gm-Message-State: AOAM532Ps3kScN4HsBvuygEV+cgGWndt9NzsCYPU2jJMykOSv7hXAtOX
+        gorCoITCStlGd4WcROle2xappgfvu5Q=
+X-Google-Smtp-Source: ABdhPJyO0woqavVhMdTRr3W6I7mhJVIY/BQdP03aVwxP6SXaAUdSR9MeoyVKLSK/fY6DFmxiP+ZOjA==
+X-Received: by 2002:a17:902:7e86:: with SMTP id z6mr1573791pla.316.1598969756406;
+        Tue, 01 Sep 2020 07:15:56 -0700 (PDT)
+Received: from bobo.ibm.com ([203.185.249.227])
+        by smtp.gmail.com with ESMTPSA id w9sm2212816pgg.76.2020.09.01.07.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 07:15:55 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-arch@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org
+Subject: [PATCH v3 02/23] alpha: use asm-generic/mmu_context.h for no-op implementations
+Date:   Wed,  2 Sep 2020 00:15:18 +1000
+Message-Id: <20200901141539.1757549-3-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200901141539.1757549-1-npiggin@gmail.com>
+References: <20200901141539.1757549-1-npiggin@gmail.com>
 MIME-Version: 1.0
-Message-ID: <159896087977.20229.5184709626139315991.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following commit has been merged into the core/build branch of tip:
-
-Commit-ID:     a840c4de569f610bc5ee043b613c35b779d23186
-Gitweb:        https://git.kernel.org/tip/a840c4de569f610bc5ee043b613c35b779d23186
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Fri, 21 Aug 2020 12:42:46 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 01 Sep 2020 09:50:35 +02:00
-
-vmlinux.lds.h: Add .symtab, .strtab, and .shstrtab to ELF_DETAILS
-
-When linking vmlinux with LLD, the synthetic sections .symtab, .strtab,
-and .shstrtab are listed as orphaned. Add them to the ELF_DETAILS section
-so there will be no warnings when --orphan-handling=warn is used more
-widely. (They are added above comment as it is the more common
-order[1].)
-
-ld.lld: warning: <internal>:(.symtab) is being placed in '.symtab'
-ld.lld: warning: <internal>:(.shstrtab) is being placed in '.shstrtab'
-ld.lld: warning: <internal>:(.strtab) is being placed in '.strtab'
-
-[1] https://lore.kernel.org/lkml/20200622224928.o2a7jkq33guxfci4@google.com/
-
-Reported-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Cc: linux-arch@vger.kernel.org
-Link: https://lore.kernel.org/r/20200821194310.3089815-6-keescook@chromium.org
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: linux-alpha@vger.kernel.org
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- include/asm-generic/vmlinux.lds.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index cadcbc3..98d013d 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -823,7 +823,10 @@
+Please ack or nack if you object to this being mered via
+Arnd's tree.
+
+ arch/alpha/include/asm/mmu_context.h | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/arch/alpha/include/asm/mmu_context.h b/arch/alpha/include/asm/mmu_context.h
+index 6d7d9bc1b4b8..4eea7c616992 100644
+--- a/arch/alpha/include/asm/mmu_context.h
++++ b/arch/alpha/include/asm/mmu_context.h
+@@ -214,8 +214,6 @@ ev4_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
+ 	tbiap();
+ }
  
- /* Required sections not related to debugging. */
- #define ELF_DETAILS							\
--		.comment 0 : { *(.comment) }
-+		.comment 0 : { *(.comment) }				\
-+		.symtab 0 : { *(.symtab) }				\
-+		.strtab 0 : { *(.strtab) }				\
-+		.shstrtab 0 : { *(.shstrtab) }
+-#define deactivate_mm(tsk,mm)	do { } while (0)
+-
+ #ifdef CONFIG_ALPHA_GENERIC
+ # define switch_mm(a,b,c)	alpha_mv.mv_switch_mm((a),(b),(c))
+ # define activate_mm(x,y)	alpha_mv.mv_activate_mm((x),(y))
+@@ -229,6 +227,7 @@ ev4_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
+ # endif
+ #endif
  
- #ifdef CONFIG_GENERIC_BUG
- #define BUG_TABLE							\
++#define init_new_context init_new_context
+ static inline int
+ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ {
+@@ -242,12 +241,7 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ 	return 0;
+ }
+ 
+-extern inline void
+-destroy_context(struct mm_struct *mm)
+-{
+-	/* Nothing to do.  */
+-}
+-
++#define enter_lazy_tlb enter_lazy_tlb
+ static inline void
+ enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
+ {
+@@ -255,6 +249,8 @@ enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
+ 	  = ((unsigned long)mm->pgd - IDENT_ADDR) >> PAGE_SHIFT;
+ }
+ 
++#include <asm-generic/mmu_context.h>
++
+ #ifdef __MMU_EXTERN_INLINE
+ #undef __EXTERN_INLINE
+ #undef __MMU_EXTERN_INLINE
+-- 
+2.23.0
+
