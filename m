@@ -2,201 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 094E7258D89
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 13:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA15258DDC
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 14:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgIALmq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 07:42:46 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:54224 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727051AbgIALl4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Sep 2020 07:41:56 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id D2EBBA84ABBB3ABEA869;
-        Tue,  1 Sep 2020 19:41:03 +0800 (CST)
-Received: from [127.0.0.1] (10.174.178.16) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 1 Sep 2020
- 19:40:56 +0800
-Subject: Re: [Question] About SECCOMP issue for ILP32
-To:     Yury Norov <yury.norov@gmail.com>
-CC:     <bobo.shaobowang@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Adam Borowski <kilobyte@angband.pl>,
-        "Alexander Graf" <agraf@suse.de>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Andreas Schwab <schwab@suse.de>,
-        Andrew Pinski <pinskia@gmail.com>,
-        Bamvor Zhangjian <bamv2005@gmail.com>,
-        Chris Metcalf <cmetcalf@mellanox.com>,
-        "Christoph Muellner" <christoph.muellner@theobroma-systems.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Florian Weimer" <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Heiko Carstens" <heiko.carstens@de.ibm.com>,
-        James Hogan <james.hogan@imgtec.com>,
-        James Morse <james.morse@arm.com>,
-        Joseph Myers <joseph@codesourcery.com>,
-        Lin Yongting <linyongting@huawei.com>,
-        Manuel Montezelo <manuel.montezelo@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Martin Schwidefsky" <schwidefsky@de.ibm.com>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-        Nathan_Lynch <Nathan_Lynch@mentor.com>,
-        "Philipp Tomsich" <philipp.tomsich@theobroma-systems.com>,
-        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
-        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
-        Steve Ellcey <sellcey@caviumnetworks.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>
-References: <30b491ad-a7e1-f7b5-26b8-2cfffc81a080@huawei.com>
- <CAAH8bW_p3LJPgOoJgUHt6O0run+LB2RbjnAVpeLn_KCAZKNR+A@mail.gmail.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <695fc573-25ce-b2e5-e61c-140d9ee241e2@huawei.com>
-Date:   Tue, 1 Sep 2020 19:40:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727954AbgIAMFe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 08:05:34 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33643 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728058AbgIAMAz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Sep 2020 08:00:55 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bgly111gqz9sVS;
+        Tue,  1 Sep 2020 22:00:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1598961626;
+        bh=bNF75aZajY8dqH+S8STH5rR/AlZdtT5JXvFy8iAsGMo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=E17/BDja+BGxSe7whyBgQehfG9HYsbuS0N2b54qlT+T+cAB2KLGOtAxvb2OGmXrJA
+         bQthxgUNnHzp89QxLQQSNbrAwruCWESMzbhoRX5MjYqIdlS0OzA7TZ5ghxvom32cqH
+         nNAKwDeHIiQzirC92lmv6+7QMv0TEFTnqrQr4bGJ7XPvz9xuTp+rfsdQNeaA4qEPxN
+         m/yr7Odq5uA4LxkxOZ5RkVFmkUaTt3fxyUix1Y2acOTlY09WsqhDpqGJtmna8Vmr1q
+         BNj5ShKytxaGa3uyCI9wd1wZir0Dt1ZRWrQhpejLoWhQPRsYGYE4GkQPBxfdNU9ha0
+         Kq0RR7TEYO5PA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>, linux-mm@kvack.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 4/4] powerpc/64s/radix: Fix mm_cpumask trimming race vs kthread_use_mm
+In-Reply-To: <20200828100022.1099682-5-npiggin@gmail.com>
+References: <20200828100022.1099682-1-npiggin@gmail.com> <20200828100022.1099682-5-npiggin@gmail.com>
+Date:   Tue, 01 Sep 2020 22:00:20 +1000
+Message-ID: <87pn751zcb.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <CAAH8bW_p3LJPgOoJgUHt6O0run+LB2RbjnAVpeLn_KCAZKNR+A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.16]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Nicholas Piggin <npiggin@gmail.com> writes:
+> Commit 0cef77c7798a7 ("powerpc/64s/radix: flush remote CPUs out of
+> single-threaded mm_cpumask") added a mechanism to trim the mm_cpumask of
+> a process under certain conditions. One of the assumptions is that
+> mm_users would not be incremented via a reference outside the process
+> context with mmget_not_zero() then go on to kthread_use_mm() via that
+> reference.
+>
+> That invariant was broken by io_uring code (see previous sparc64 fix),
+> but I'll point Fixes: to the original powerpc commit because we are
+> changing that assumption going forward, so this will make backports
+> match up.
+>
+> Fix this by no longer relying on that assumption, but by having each CPU
+> check the mm is not being used, and clearing their own bit from the mask
+> if it's okay. This fix relies on commit 38cf307c1f20 ("mm: fix
+> kthread_use_mm() vs TLB invalidate") to disable irqs over the mm switch,
+> and ARCH_WANT_IRQS_OFF_ACTIVATE_MM to be enabled.
 
+You could use:
 
-On 2020/9/1 2:15, Yury Norov wrote:
-> On Mon, Aug 31, 2020 at 5:48 AM Xiongfeng Wang
-> <wangxiongfeng2@huawei.com> wrote:
->>
->> Hi Yury,
->>
-> 
-> Hi Xiongfeng,
-> 
-> [restore CC list]
-> 
-> Haven't seen this before. What kernel / glibc / ltp do you use?
+Depends-on: 38cf307c1f20 ("mm: fix kthread_use_mm() vs TLB invalidate")
 
-The kernel version is 4.19. I applied the ILP32 patches from
-https://github.com/norov/linux.git. The glibc version is 2.28 and I applyed the
-ILP32 patches.
-The ltp testsuite is from https://github.com/linux-test-project/ltp. I build it
-with '-mabi=ilp32'.
+> Fixes: 0cef77c7798a7 ("powerpc/64s/radix: flush remote CPUs out of single-threaded mm_cpumask")
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> ---
+>  arch/powerpc/include/asm/tlb.h       | 13 -------------
+>  arch/powerpc/mm/book3s64/radix_tlb.c | 23 ++++++++++++++++-------
+>  2 files changed, 16 insertions(+), 20 deletions(-)
 
-> 
->> We were testing the ILP32 feature and came accross a problem. Very apperaciate
->> it if you could give us some help !
->>
->> We compile the LTP testsuite with '-mabi=ilp32' and run it on a machine with
->> kernel and glibc applied with ILP32 patches. But we failed on one testcase,
->> prctl04. It print the following error info.
->> 'prctl04.c:199: FAIL: SECCOMP_MODE_STRICT doesn't permit read(2) write(2) and
->> _exit(2)'
->>
->> The testcase is like below, syscall 'prctl' followed by a syscall 'write'.
->> prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT);
->> SAFE_WRITE(1, fd, "a", 1);
->>
->> When we execute syscall 'write', we receive a SIGKILL. It's not as expected.
->> We track the kernel and found out it is because we failed the syscall_whitelist
->> check in '__secure_computing_strict'. Because flag 'TIF_32BIT_AARCH64' is set,
->> we falls into the 'in_compat_syscall()' branch. We compare the parameter
->> 'this_syscall' with return value of 'get_compat_model_syscalls()'
->> The syscall number of '__NR_write' for ilp32 application is 64, but it is 4 for
->> 'model_syscalls_32' returned from 'get_compat_model_syscalls()'
->> So '__secure_computing_strict' retuned with 'do_exit(SIGKILL)'. We have a
->> modification like below, but I am not sure if it correct or not.
->>
->> --- a/kernel/seccomp.c
->> +++ b/kernel/seccomp.c
->> @@ -618,7 +618,7 @@ static void __secure_computing_strict(int this_syscall)
->>  {
->>         const int *syscall_whitelist = mode1_syscalls;
->>  #ifdef CONFIG_COMPAT
->> -       if (in_compat_syscall())
->> +       if (is_a32_compat_task())
->>                 syscall_whitelist = get_compat_mode1_syscalls();
-> 
-> It calls the arch function from generic code. It may break build for
-> other arches.
-> This also looks dangerous because it treats ILP32 execution as non-compat.
-> 
-> The right approach would be implementing arch-specific
-> get_compat_mode1_syscalls()
-> in arch/arm64/include/asm/seccomp.h that returns an appropriate table.
-> Refer MIPS
-> code for this: arch/mips/include/asm/seccomp.h
+One minor nit below if you're respinning anyway.
 
-Thanks for your advice. Thanks a lot.
-I have written another version according to your advice.
+You know this stuff better than me, but I still reviewed it and it seems
+good to me.
 
---- a/arch/arm64/include/asm/seccomp.h
-+++ b/arch/arm64/include/asm/seccomp.h
-@@ -20,6 +20,36 @@
- #define __NR_seccomp_sigreturn_32      __NR_compat_rt_sigreturn
- #endif /* CONFIG_COMPAT */
+Reviewed-by: Michael Ellerman <mpe@ellerman.id.au>
 
-+#ifdef CONFIG_COMPAT
-+#ifndef __COMPAT_SYSCALL_NR
-+
-+static inline const int *get_compat_mode1_syscalls(void)
-+{
-+#ifdef CONFIG_AARCH32_EL0
-+       static const int mode1_syscalls_a32[] = {
-+               __NR_compat_read, __NR_compat_write,
-+               __NR_compat_read, __NR_compat_sigreturn,
-+               0, /* null terminated */
-+       };
-+#endif
-+       static const int mode1_syscalls_ilp32[] = {
-+               __NR_read, __NR_write,
-+               __NR_exit, __NR_rt_sigreturn,
-+               0, /* null terminated */
-+       };
-+
-+       if (is_ilp32_compat_task())
-+               return mode1_syscalls_ilp32;
-+#ifdef CONFIG_AARCH32_EL0
-+       return mode1_syscalls_a32;
-+#endif
-+}
-+
-+#define get_compat_mode1_syscalls get_compat_mode1_syscalls
-+
-+#endif
-+#endif
-+
- #include <asm-generic/seccomp.h>
+> diff --git a/arch/powerpc/include/asm/tlb.h b/arch/powerpc/include/asm/tlb.h
+> index fbc6f3002f23..d97f061fecac 100644
+> --- a/arch/powerpc/include/asm/tlb.h
+> +++ b/arch/powerpc/include/asm/tlb.h
+> @@ -66,19 +66,6 @@ static inline int mm_is_thread_local(struct mm_struct *mm)
+>  		return false;
+>  	return cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm));
+>  }
+> -static inline void mm_reset_thread_local(struct mm_struct *mm)
+> -{
+> -	WARN_ON(atomic_read(&mm->context.copros) > 0);
+> -	/*
+> -	 * It's possible for mm_access to take a reference on mm_users to
+> -	 * access the remote mm from another thread, but it's not allowed
+> -	 * to set mm_cpumask, so mm_users may be > 1 here.
+> -	 */
+> -	WARN_ON(current->mm != mm);
+> -	atomic_set(&mm->context.active_cpus, 1);
+> -	cpumask_clear(mm_cpumask(mm));
+> -	cpumask_set_cpu(smp_processor_id(), mm_cpumask(mm));
+> -}
+>  #else /* CONFIG_PPC_BOOK3S_64 */
+>  static inline int mm_is_thread_local(struct mm_struct *mm)
+>  {
+> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+> index 0d233763441f..a421a0e3f930 100644
+> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
+> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+> @@ -645,19 +645,29 @@ static void do_exit_flush_lazy_tlb(void *arg)
+>  	struct mm_struct *mm = arg;
+>  	unsigned long pid = mm->context.id;
+>  
+> +	/*
+> +	 * A kthread could have done a mmget_not_zero() after the flushing CPU
+> +	 * checked mm_users == 1, and be in the process of kthread_use_mm when
+                                ^
+                                in mm_is_singlethreaded()
 
- #endif /* _ASM_SECCOMP_H */
+Adding that reference would help join the dots for a new reader I think.
 
+cheers
 
-Thanks,
-Xiongfeng
-
-> 
-> Thanks,
-> Yury
-> 
->>  #endif
->>         do {
->>
->>
->> Thanks,
->> Xiongfeng
->>
-> 
-> .
-> 
-
+> +	 * interrupted here. In that case, current->mm will be set to mm,
+> +	 * because kthread_use_mm() setting ->mm and switching to the mm is
+> +	 * done with interrupts off.
+> +	 */
+>  	if (current->mm == mm)
+> -		return; /* Local CPU */
+> +		goto out_flush;
+>  
+>  	if (current->active_mm == mm) {
+> -		/*
+> -		 * Must be a kernel thread because sender is single-threaded.
+> -		 */
+> -		BUG_ON(current->mm);
+> +		WARN_ON_ONCE(current->mm != NULL);
+> +		/* Is a kernel thread and is using mm as the lazy tlb */
+>  		mmgrab(&init_mm);
+> -		switch_mm(mm, &init_mm, current);
+>  		current->active_mm = &init_mm;
+> +		switch_mm_irqs_off(mm, &init_mm, current);
+>  		mmdrop(mm);
+>  	}
+> +
+> +	atomic_dec(&mm->context.active_cpus);
+> +	cpumask_clear_cpu(smp_processor_id(), mm_cpumask(mm));
+> +
+> +out_flush:
+>  	_tlbiel_pid(pid, RIC_FLUSH_ALL);
+>  }
+>  
+> @@ -672,7 +682,6 @@ static void exit_flush_lazy_tlbs(struct mm_struct *mm)
+>  	 */
+>  	smp_call_function_many(mm_cpumask(mm), do_exit_flush_lazy_tlb,
+>  				(void *)mm, 1);
+> -	mm_reset_thread_local(mm);
+>  }
+>  
+>  void radix__flush_tlb_mm(struct mm_struct *mm)
