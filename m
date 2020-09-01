@@ -2,69 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCCE258891
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 08:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC482588AF
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 09:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgIAGyc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 02:54:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45346 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726006AbgIAGyb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Sep 2020 02:54:31 -0400
-Received: from kernel.org (unknown [87.70.91.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CAA4E2087D;
-        Tue,  1 Sep 2020 06:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598943271;
-        bh=NVmhxz3quM6Qr+ee/JkOEjpslKF1E6DzA+56ugDqG9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t9Y31Vy9OQ4upleKjlqFdKlJK15KKX0SeJMrIzpOD+h6YlgofD7l0DMfSRLJ3VJky
-         nrx3MQjQHGExn3IlWT0UpeVebNfTu7czSbvy817AI5ED9IboS07XLdgA4yy7spNWwP
-         DDlnAwt6zWXRDvjtlRUnCMDswWZXlDSzXZawiaLk=
-Date:   Tue, 1 Sep 2020 09:54:25 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 00/23] Use asm-generic for mmu_context no-op functions
-Message-ID: <20200901065425.GE432455@kernel.org>
-References: <20200826145249.745432-1-npiggin@gmail.com>
- <20200830101837.GB423750@kernel.org>
- <1598940942.o1fbygdcvl.astroid@bobo.none>
+        id S1726941AbgIAHEC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 03:04:02 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:37875 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726122AbgIAHEA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 03:04:00 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 37so304916oto.4;
+        Tue, 01 Sep 2020 00:03:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v+UCqMpoxNkc8HR8b48PCCPouXs4GQ+iFq6WKu3/gPA=;
+        b=HckLls99BmQHfpV4zTbZRYJd4QNX0Ujw2QGAhBeQMLlHzXOaHXIIrU9r8EdF1Lr54C
+         c727ScohG9M+ZeRidtTHE+DEuOFDpYRr8FrDUOXYfXviX6smdKWwDVVfLKC9HCYD6fsg
+         2zwGKJUKMjEeGYLPovTAS0UyHF5SeDsFZQayLzfvD2pMRtVroaMsPSJqFpWXWUMrnK7p
+         aUO+i+d2wGXqN261zbu9/KH6tTBkAJBftwlW0U/Ps3XLamBxSaYfp02ijeC7LT2Awgfb
+         c93/pJCJq6XxCNSsswc7OnvHIUiXgKSUl27gg1YQOkksd5TaIgzD0BoBkHDd/SEP2RtA
+         geNA==
+X-Gm-Message-State: AOAM533mp0Lo2GJj3p7zozeo/CuoUIoXI/VzWHnDCtp1NAWsMB2SP1qO
+        6U34SaEzXXX9M26CB4AFxllrbLbT7ryDkg2Ge7m67LDTa/4=
+X-Google-Smtp-Source: ABdhPJw+W75f7LvhKPJmBkANHigTowv41ATseQQVo1zrxnPwXtFSjat/hlrHbRc7rhVmMPWs0LwXP4Ln8wspP9PRVow=
+X-Received: by 2002:a9d:32e5:: with SMTP id u92mr373423otb.107.1598943839340;
+ Tue, 01 Sep 2020 00:03:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1598940942.o1fbygdcvl.astroid@bobo.none>
+References: <20200826145249.745432-1-npiggin@gmail.com> <20200826145249.745432-10-npiggin@gmail.com>
+ <CAMuHMdX5qo+2XpEm5QNbuwWRn508Ewee9rHYtmCBadj0x=3VnA@mail.gmail.com> <1598941313.t5y1w43jgl.astroid@bobo.none>
+In-Reply-To: <1598941313.t5y1w43jgl.astroid@bobo.none>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 1 Sep 2020 09:03:48 +0200
+Message-ID: <CAMuHMdWfACYhp8434GOx0qx2oHSBTX3Tq+=gtqNtYahnP-t1JQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/23] m68k: use asm-generic/mmu_context.h for no-op implementations
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 04:17:00PM +1000, Nicholas Piggin wrote:
-> Excerpts from Mike Rapoport's message of August 30, 2020 8:18 pm:
-> > On Thu, Aug 27, 2020 at 12:52:26AM +1000, Nicholas Piggin wrote:
-> >> It would be nice to be able to modify mmu_context functions or add a
-> >> hook without updating all architectures, many of which will be no-ops.
-> >> 
-> >> The motivation for this series is a change to lazy mmu handling, but
-> >> this series stands on its own as a good cleanup whether or not we end
-> >> up making that change.
-> > 
-> > I really like this series, I just have some small comments in reply to
-> > patch 1, otherwise feel free to add
-> > 
-> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> I can't see your comments in reply to patch 1.
+Hi Nick,
 
-Hmm, apparently I forgot to hit "Send"... 
+On Tue, Sep 1, 2020 at 8:23 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+> Excerpts from Geert Uytterhoeven's message of August 27, 2020 7:33 pm:
+> > On Wed, Aug 26, 2020 at 4:53 PM Nicholas Piggin <npiggin@gmail.com> wrote:
+> >> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> >> Cc: linux-m68k@lists.linux-m68k.org
+> >> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> >
+> > With the below fixed:
+> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> >
+> >> --- a/arch/m68k/include/asm/mmu_context.h
+> >> +++ b/arch/m68k/include/asm/mmu_context.h
+> >> @@ -79,19 +76,6 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+> >>         set_context(tsk->mm->context, next->pgd);
+> >>  }
+> >>
+> >> -/*
+> >> - * After we have set current->mm to a new value, this activates
+> >> - * the context for the new mm so we see the new mappings.
+> >> - */
+> >> -static inline void activate_mm(struct mm_struct *active_mm,
+> >> -       struct mm_struct *mm)
+> >> -{
+> >> -       get_mmu_context(mm);
+> >> -       set_context(mm->context, mm->pgd);
+> >> -}
+> >
+> > Assumed switch_mm() in [PATCH v2 01/23] is revived with the above body.
+>
+> I'm not sure what you mean here. We can remove this because it's a copy
+> of switch_mm above, and that's what the new header defaults to if you
+> don't provide an active_mm.
 
-> Thanks,
-> Nick
-> 
+IC.  I thought it started relying on <asm-generic/mmu_context.h> for this,
+where you removed switch_mm().
+
+Seems I missed the definition above.
+
+> Patch 1 should not have changed that, it should only affect the nommu
+> architectures (and actually didn't touch m68k because it was not using
+> the asm-generic/mmu_context.h header).
+
+OK. Sorry for the noise.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Sincerely yours,
-Mike.
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
