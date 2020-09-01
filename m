@@ -2,132 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA0A258994
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 09:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F7325899A
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 09:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgIAHui (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 03:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726078AbgIAHud (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 03:50:33 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E55C061244;
-        Tue,  1 Sep 2020 00:50:33 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u20so348849pfn.0;
-        Tue, 01 Sep 2020 00:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=jx4ijV48pwkIXlEWTCV3kDv1viRliVSaJ9ejxp3xhoM=;
-        b=Gu+J64Tks9uYyPaMRIQ/8V2pHoO5Lffox20RipKXlRjHDaPSkNEA9w/P9gzP7tuiXC
-         pqFcnhhXZHsX6nGtN/2hA+LrfaCqvjyhkaMz+JsgD8pvANzp+gZpwrMlINQf3wKGWLoi
-         RLl6DdPsasJ8DfrRa3440bJk1+NyvyXYJHyOH1VIUF2mTmtRFopcolxtdJFRV06xeC03
-         e+1WzE3ACXeKt2eqqaee4n3luLhIUXd2Ury98fv7hy5SO7K5VMeoK/vhITl3WUAEOlxy
-         KSDsVXYY/RBz6VHjcUD7DoDCk001RSF2ObOP3LSXqfol9qzhEECJszREEsFEzSypJxqp
-         XQsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=jx4ijV48pwkIXlEWTCV3kDv1viRliVSaJ9ejxp3xhoM=;
-        b=KA4RFrbgfdtrYtOgWTGydN2Ekk9GW7r6Let1QBV+JawC4yonQxxI7AmqAp9tWri3EK
-         C5Ew2DjUx5sV+tol3F3aKe9BcXcO6vYLq0eSBsdkBooqVIEoJFWGQQTb2Xzr/Pd/Vqdr
-         npGyO1gglgcS+Kl4MofzUBISIA0YyU9Gkqi2+i69EXSVm6PrXJGzMWi57aWBPE7RPLL4
-         Az0luwsDqvi25h/msUsTriFjbUfcm+0fkJrgNLDXPetgReAn2kadtqgw51MqLkqlPjGP
-         oMM7Jx3vxekyeQGq5KJM466s/QiXy3zDlfRzbtv+GT4/xU0LHXdWpOPB16mZnKI+iD/2
-         S4Xw==
-X-Gm-Message-State: AOAM531zWHfFynOslqaaQ5jNOq+qWcx3+Vr07uZcfMyW92FazuH21Lux
-        T+O6flFvmDvu2cJrR1EqQes=
-X-Google-Smtp-Source: ABdhPJySDrdLwU7jnwyr/UTlWsUOS+xFQepQCqThWcvpUucdNdxugC+OL2ioqTY/JTHWg9DOYbezpg==
-X-Received: by 2002:a63:4c57:: with SMTP id m23mr439797pgl.77.1598946631169;
-        Tue, 01 Sep 2020 00:50:31 -0700 (PDT)
-Received: from localhost ([203.185.249.227])
-        by smtp.gmail.com with ESMTPSA id s1sm1171322pgh.47.2020.09.01.00.50.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 00:50:30 -0700 (PDT)
-Date:   Tue, 01 Sep 2020 17:50:24 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 09/23] m68k: use asm-generic/mmu_context.h for no-op
- implementations
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux MM <linux-mm@kvack.org>
-References: <20200826145249.745432-1-npiggin@gmail.com>
-        <20200826145249.745432-10-npiggin@gmail.com>
-        <CAMuHMdX5qo+2XpEm5QNbuwWRn508Ewee9rHYtmCBadj0x=3VnA@mail.gmail.com>
-        <1598941313.t5y1w43jgl.astroid@bobo.none>
-        <CAMuHMdWfACYhp8434GOx0qx2oHSBTX3Tq+=gtqNtYahnP-t1JQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdWfACYhp8434GOx0qx2oHSBTX3Tq+=gtqNtYahnP-t1JQ@mail.gmail.com>
+        id S1726204AbgIAHva (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 03:51:30 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:41099 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726050AbgIAHva (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Sep 2020 03:51:30 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4BgfQj5ZqZz9v4j1;
+        Tue,  1 Sep 2020 09:51:25 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id otG6xobMGX17; Tue,  1 Sep 2020 09:51:25 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4BgfQj4hHYz9v1SD;
+        Tue,  1 Sep 2020 09:51:25 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A99F68B774;
+        Tue,  1 Sep 2020 09:51:26 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 0bfitLpUFTsu; Tue,  1 Sep 2020 09:51:26 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C8C8D8B75E;
+        Tue,  1 Sep 2020 09:51:25 +0200 (CEST)
+Subject: Re: [PATCH v3 08/13] mm/debug_vm_pgtable/thp: Use page table
+ depost/withdraw with THP
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, x86@kernel.org,
+        linux-arch@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
+References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
+ <20200827080438.315345-9-aneesh.kumar@linux.ibm.com>
+ <e7877a8d-b433-0cb4-50a7-631de0022c24@arm.com>
+ <9beaaf93-b2dd-6d56-7737-9f022760f246@linux.ibm.com>
+ <d80a91c3-0edf-7e2f-8101-2d37a371f4bd@csgroup.eu>
+ <2fb4ac88-d417-2bdd-3c56-a816c356636a@linux.ibm.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <5d25b02a-887a-432e-7ecd-cc5cbcea9b02@csgroup.eu>
+Date:   Tue, 1 Sep 2020 09:51:22 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Message-Id: <1598945161.7wv2e8mu4h.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <2fb4ac88-d417-2bdd-3c56-a816c356636a@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Geert Uytterhoeven's message of September 1, 2020 5:03 pm:
-> Hi Nick,
->=20
-> On Tue, Sep 1, 2020 at 8:23 AM Nicholas Piggin <npiggin@gmail.com> wrote:
->> Excerpts from Geert Uytterhoeven's message of August 27, 2020 7:33 pm:
->> > On Wed, Aug 26, 2020 at 4:53 PM Nicholas Piggin <npiggin@gmail.com> wr=
-ote:
->> >> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->> >> Cc: linux-m68k@lists.linux-m68k.org
->> >> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> >
->> > With the below fixed:
->> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
->> >
->> >> --- a/arch/m68k/include/asm/mmu_context.h
->> >> +++ b/arch/m68k/include/asm/mmu_context.h
->> >> @@ -79,19 +76,6 @@ static inline void switch_mm(struct mm_struct *pre=
-v, struct mm_struct *next,
->> >>         set_context(tsk->mm->context, next->pgd);
->> >>  }
->> >>
->> >> -/*
->> >> - * After we have set current->mm to a new value, this activates
->> >> - * the context for the new mm so we see the new mappings.
->> >> - */
->> >> -static inline void activate_mm(struct mm_struct *active_mm,
->> >> -       struct mm_struct *mm)
->> >> -{
->> >> -       get_mmu_context(mm);
->> >> -       set_context(mm->context, mm->pgd);
->> >> -}
->> >
->> > Assumed switch_mm() in [PATCH v2 01/23] is revived with the above body=
-.
+
+
+Le 01/09/2020 à 09:40, Aneesh Kumar K.V a écrit :
+> On 9/1/20 12:20 PM, Christophe Leroy wrote:
 >>
->> I'm not sure what you mean here. We can remove this because it's a copy
->> of switch_mm above, and that's what the new header defaults to if you
->> don't provide an active_mm.
->=20
-> IC.  I thought it started relying on <asm-generic/mmu_context.h> for this=
-,
-> where you removed switch_mm().
->=20
-> Seems I missed the definition above.
+>>
+>> Le 01/09/2020 à 08:25, Aneesh Kumar K.V a écrit :
+>>> On 9/1/20 8:52 AM, Anshuman Khandual wrote:
+>>>>
+>>>>
+>>>>
+>>>> There is a checkpatch.pl warning here.
+>>>>
+>>>> WARNING: Possible unwrapped commit description (prefer a maximum 75 
+>>>> chars per line)
+>>>> #7:
+>>>> Architectures like ppc64 use deposited page table while updating the 
+>>>> huge pte
+>>>>
+>>>> total: 0 errors, 1 warnings, 40 lines checked
+>>>>
+>>>
+>>> I will ignore all these, because they are not really important IMHO.
+>>>
+>>
+>> When doing a git log in a 80 chars terminal window, having wrapping 
+>> lines is not really convenient. It should be easy to avoid it.
+>>
+> 
+> We have been ignoring that for a long time  isn't it?
+> 
+> For example ppc64 checkpatch already had
+> --max-line-length=90
+> 
+> 
+> There was also recent discussion whether 80 character limit is valid any 
+> more. But I do keep it restricted to 80 character where ever it is 
+> easy/make sense.
+> 
 
-It's supposed to all build incrementally, I'll try to make sure it's
-right...
+Here we are not talking about the code, but the commit log.
 
->=20
->> Patch 1 should not have changed that, it should only affect the nommu
->> architectures (and actually didn't touch m68k because it was not using
->> the asm-generic/mmu_context.h header).
->=20
-> OK. Sorry for the noise.
+As far as I know, the discussions about 80 character lines, 90 lines in 
+powerpc etc ... is for the code.
 
-No problem thanks for looking at it.
+We still aim at keeping lines not longer than 75 chars in the commit log.
 
-Thanks,
-Nick
+Christophe
+
+Christophe
