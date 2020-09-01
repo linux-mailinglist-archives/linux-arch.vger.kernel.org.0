@@ -2,138 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 317C1259BF1
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 19:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC189259B97
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 19:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732475AbgIARIy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 13:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729439AbgIAPSA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 11:18:00 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9456C061244
-        for <linux-arch@vger.kernel.org>; Tue,  1 Sep 2020 08:17:57 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s10so233777plp.1
-        for <linux-arch@vger.kernel.org>; Tue, 01 Sep 2020 08:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jN9lhIYk+vgw0Ck0cVCcWxfdMAHspCt08b10OTqq50Y=;
-        b=QNwyUWGqs9owKFllSjci/t28I81jLcjvgiBtzPpNMRmB+M2e4JBvG3SftYAgE8DETw
-         A5b6HYulpcZeseDvZnxy5DImevpZ81cF8dcEq9K+/+/1l71Pmted5STlCijieeHbus5d
-         vU2UHyXJC6TyBYorxv12caOk04LJayZkpsHkE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jN9lhIYk+vgw0Ck0cVCcWxfdMAHspCt08b10OTqq50Y=;
-        b=TatT4iK0E2tMOXaHGaVpW0CHIefwQtr3BpjA7ZUsgIsp1p8jFuhhZpb+6ei+W68NNV
-         gC+CXkTgeU+l9sW1PnzkwwxUjEwNuHsFYb8KR3XxLsS+Sftm4yKqX8iqEoGuSImLNn2Z
-         wY6h5ARZmCbuE4GiLsNE6RVyW3Bxb3PCTTKlxyampKP8455FYXNBfMUGtgmv3kybSTZd
-         sUIxGk9i4dxqDOxv7ppp5Rt86x2mFFLAsMM9MX151hkhB5Pip6R/Hap4o69cQOmoi1AA
-         6y+H+Xaebab8PwbXKPzBpShSH2V9QQwp6SiW4qAZb3M2PZSznlY03v5vk55oAowXoaFs
-         M7cA==
-X-Gm-Message-State: AOAM533D2xZr+8Qsc1MfijEKfsaE9C0epY/EtfDI0yaLNDJV1L7fOB0/
-        mFjKqmu07Lu7cbwLiB1eLQKo8g==
-X-Google-Smtp-Source: ABdhPJzj6yhyG4RDEF44EWGGFa00f7t2qp0yXpcOrOBamPDLCZ2Fwy8Mo8dB/mLaqQdQJtP1wf76Hg==
-X-Received: by 2002:a17:90a:8a0d:: with SMTP id w13mr2008556pjn.218.1598973476573;
-        Tue, 01 Sep 2020 08:17:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a12sm2324629pfr.217.2020.09.01.08.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 08:17:55 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 08:17:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/29] Warn on orphan section placement
-Message-ID: <202009010816.80F4692@keescook>
-References: <20200821194310.3089815-1-keescook@chromium.org>
- <202008311240.9F94A39@keescook>
- <20200901071133.GA3577996@gmail.com>
- <20200901075937.GA3602433@gmail.com>
- <20200901081647.GB3602433@gmail.com>
+        id S1728405AbgIARE0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 13:04:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728354AbgIAREY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Sep 2020 13:04:24 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6018E206FA;
+        Tue,  1 Sep 2020 17:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598979861;
+        bh=LM0ZlQMq+116FxcurgkDhzTV7jHjOc0VMnH67syAMUQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Z112+wpOmHZYDF5q2YSpWCIrvYLUOuuPlvm2AUn1IFORq7sAlh9G0pNLthwMK0910
+         gL4m4deu8dWoMmcLR8/W/O4Bih0lEGbIUJn/kzR0yKkn9JiaLira3RW0tStd8P0thD
+         Q9oawRnaRslbUECyBzZfs32mFe4m9aEoX26mHscg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 332C835226A5; Tue,  1 Sep 2020 10:04:21 -0700 (PDT)
+Date:   Tue, 1 Sep 2020 10:04:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: [PATCH kcsan 9/9] tools/memory-model:  Document locking corner
+ cases
+Message-ID: <20200901170421.GF29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200831182012.GA1965@paulmck-ThinkPad-P72>
+ <20200831182037.2034-9-paulmck@kernel.org>
+ <20200831201701.GB558270@rowland.harvard.edu>
+ <20200831214738.GE2855@paulmck-ThinkPad-P72>
+ <20200901014504.GB571008@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901081647.GB3602433@gmail.com>
+In-Reply-To: <20200901014504.GB571008@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 10:16:47AM +0200, Ingo Molnar wrote:
+On Mon, Aug 31, 2020 at 09:45:04PM -0400, Alan Stern wrote:
+> On Mon, Aug 31, 2020 at 02:47:38PM -0700, Paul E. McKenney wrote:
+> > On Mon, Aug 31, 2020 at 04:17:01PM -0400, Alan Stern wrote:
 > 
-> * Ingo Molnar <mingo@kernel.org> wrote:
-> 
-> > 
-> > * Ingo Molnar <mingo@kernel.org> wrote:
-> > 
+> > > Is this discussion perhaps overkill?
 > > > 
-> > > * Kees Cook <keescook@chromium.org> wrote:
+> > > Let's put it this way: Suppose we have the following code:
 > > > 
-> > > > On Fri, Aug 21, 2020 at 12:42:41PM -0700, Kees Cook wrote:
-> > > > > Hi Ingo,
-> > > > > 
-> > > > > Based on my testing, this is ready to go. I've reviewed the feedback on
-> > > > > v5 and made a few small changes, noted below.
-> > > > 
-> > > > If no one objects, I'll pop this into my tree for -next. I'd prefer it
-> > > > go via -tip though! :)
-> > > > 
-> > > > Thanks!
+> > > 	P0(int *x, int *lck)
+> > > 	{
+> > > 		spin_lock(lck);
+> > > 		WRITE_ONCE(*x, 1);
+> > > 		do_something();
+> > > 		spin_unlock(lck);
+> > > 	}
 > > > 
-> > > I'll pick it up today, it all looks very good now!
+> > > 	P1(int *x, int *lck)
+> > > 	{
+> > > 		while (READ_ONCE(*x) == 0)
+> > > 			;
+> > > 		spin_lock(lck);
+> > > 		do_something_else();
+> > > 		spin_unlock(lck);
+> > > 	}
+> > > 
+> > > It's obvious that this test won't deadlock.  But if P1 is changed to:
+> > > 
+> > > 	P1(int *x, int *lck)
+> > > 	{
+> > > 		spin_lock(lck);
+> > > 		while (READ_ONCE(*x) == 0)
+> > > 			;
+> > > 		do_something_else();
+> > > 		spin_unlock(lck);
+> > > 	}
+> > > 
+> > > then it's equally obvious that the test can deadlock.  No need for
+> > > fancy memory models or litmus tests or anything else.
 > > 
-> > One thing I found in testing is that it doesn't handler older LD 
-> > versions well enough:
+> > For people like you and me, who have been thinking about memory ordering
+> > for longer than either of us care to admit, this level of exposition is
+> > most definitely -way- overkill!!!
 > > 
-> >   ld: unrecognized option '--orphan-handling=warn'
-
-Oh! Uhm, yikes. Thanks for noticing this.
-
-> > Could we just detect the availability of this flag, and emit a warning 
-> > if it doesn't exist but otherwise not abort the build?
-
-Yeah, I'll respin those patches.
-
-> > This is with:
+> > But I have had people be very happy and grateful that I explained this to
+> > them at this level of detail.  Yes, I started parallel programming before
+> > some of them were born, but they are definitely within our target audience
+> > for this particular document.  And it is not just Linux kernel hackers
+> > who need this level of detail.  A roughly similar transactional-memory
+> > scenario proved to be so non-obvious to any number of noted researchers
+> > that Blundell, Lewis, and Martin needed to feature it in this paper:
+> > https://ieeexplore.ieee.org/abstract/document/4069174
+> > (Alternative source: https://repository.upenn.edu/cgi/viewcontent.cgi?article=1344&context=cis_papers)
 > > 
-> >   GNU ld version 2.25-17.fc23
-
-(At best, this is from 2015 ... but yes, min binutils in 2.23.)
-
+> > Please note that I am -not- advocating making (say) explanation.txt or
+> > recipes.txt more newbie-accessible than they already are.  After all,
+> > the point of the README file in that same directory is to direct people
+> > to the documentation files that are the best fit for them, and both
+> > explanation.txt and recipes.txt contain advanced material, and thus
+> > require similarly advanced prerequisites.
+> > 
+> > Seem reasonable, or am I missing your point?
 > 
-> I've resolved this for now by not applying the 5 patches that add the 
-> actual orphan section warnings:
+> The question is, what are you trying to accomplish in this section?  Are 
+> you trying to demonstrate that it isn't safe to allow arbitrary code to 
+> leak into a critical section?  If so then you don't need to present an 
+> LKMM litmus test to make the point; the example I gave here will do 
+> quite as well.  Perhaps even better, since it doesn't drag in all sorts 
+> of extraneous concepts like limitations of litmus tests or how to 
+> emulate a spin loop.
 > 
->   arm64/build: Warn on orphan section placement
->   arm/build: Warn on orphan section placement
->   arm/boot: Warn on orphan section placement
->   x86/build: Warn on orphan section placement
->   x86/boot/compressed: Warn on orphan section placement
-> 
-> The new asserts plus the actual fixes/enhancements are enough changes 
-> to test for now in any case. :-)
+> On the other hand, if your goal is to show how to construct a litmus 
+> test that will model a particular C language test case (such as the one 
+> I gave), then the text does a reasonable job -- although I do think it 
+> could be clarified somewhat.  For instance, it wouldn't hurt to include 
+> the real C code before giving the corresponding litmus test, so that the 
+> reader will have a clear idea of what you're trying to model.
 
-Yup! I'll respin the enabling patches. Thanks again!
+Makes sense.  I can apply this at some point, but I would welcome a patch
+from you, which I would be happy to fold in with your Codeveloped-by.
 
--- 
-Kees Cook
+> Just what you want to achieve here is not clear from the context.
+
+People who have internalized the "roach motel" model of locking
+(https://www.cs.umd.edu/~pugh/java/memoryModel/BidirectionalMemoryBarrier.html)
+need their internalization adjusted.
+
+> Besides, the example is in any case a straw man.  The text starts out 
+> saying "It is tempting to allow memory-reference instructions to be 
+> pulled into a critical section", but then the example pulls an entire 
+> spin loop inside -- not just the memory references but also the 
+> conditional branch instruction at the bottom of the loop!  I can't 
+> imagine anyone would think it was safe to allow branches to leak into a 
+> critical section, particularly when doing so would break a control 
+> dependency (as it does here).
+
+Most people outside of a few within the Linux kernel community and within
+the various hardware memory-ordering communities don't know that control
+dependencies even exist, so could not be expected to see any danger
+in rather thoroughly folding, spindling, or otherwise mutilating them,
+let alone pulling them into a lock-based critical section.  And many in
+the various toolchain communities see dependencies of any sort as an
+impediment to performance that should be broken wherever and whenever
+possible.
+
+That said, a less prejudicial introduction to this example might be good.
+What did you have in mind?
+
+							Thanx, Paul
