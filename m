@@ -2,64 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D22202587ED
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 08:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF132587F1
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 08:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgIAGP2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 02:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        id S1726012AbgIAGRI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 02:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726006AbgIAGP1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 02:15:27 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6544C0612A3;
-        Mon, 31 Aug 2020 23:15:27 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id p37so141964pgl.3;
-        Mon, 31 Aug 2020 23:15:27 -0700 (PDT)
+        with ESMTP id S1726006AbgIAGRH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 02:17:07 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCC9C0612AC;
+        Mon, 31 Aug 2020 23:17:06 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id i13so112095pjv.0;
+        Mon, 31 Aug 2020 23:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=Sd4E4Z/MpNGbX5x3P4fOAUXrOsysWLUN6bwhYnFl+mQ=;
-        b=nMoXu3Qo0+bs7gWrd8KAo4W2329cg+qL8/bEFl0PfjVHqSlGk2dsJJAg+NE6/N6ELI
-         hSuqy6tqBU8SE///Fe37mgUETOeba7abQGH52wDw0CJ/aaC+65AbgLG0Y1+nNkOkuGz+
-         m81/nmW3phJTX7yThOEzxrvPdXE1GBe1hCelxjihF5a9XEAwycy8N2oJhf3v2hAEeqF4
-         5VD2bEK96UHgA9zLnJq3GoVWVeOx/kvHNFDGOhDjwo863j1KWcPaVj1u79bW0InuTMsu
-         Ub6xOhPmQ1D4tEXJDRaqzkyBy+N9eE7GnSzrL9RF/vuj9J3Jt5S2fbQoVbAfOqFEs0Wf
-         hFzQ==
+        bh=2o88tY7J6w8zextq4qiLo5rGRfZeNcDDNXs+s2Cv/7g=;
+        b=C5JXwJSiEttn0wluZnl7vWYcpSzDIrWO4CJrQHS9m6eRw5flJjAL60Th1U53fSc6Vm
+         9F8Vbmjk9AtZ8BX1PKLErIDevNovCtOrZ5tNirWF9X2bYRml0NRv9cWsDS+nI9zh5Upe
+         bjZ7GfulZzDg+BL3ub4VqdGfqnUaDnlfIeYE5B5/ZJkR3038fVChfQW8e4bfwhFMCd6b
+         r3TrYWqRHvw0j1FBd/3JWVYG9mZ7GlKIB2ybkPGQEDYBEGfx2JNiPHnYF8cfBbeQ49Ro
+         KkOAf2Ydk2CcSf4r/XDiK2uAZ+so9r4b1pYQjHhjUR6XnvjKYI0Smi+wni8kMcPWyiJa
+         VAVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=Sd4E4Z/MpNGbX5x3P4fOAUXrOsysWLUN6bwhYnFl+mQ=;
-        b=NEd5Lc9rq00zDUeXmug2fo0KzJwgjxBdkGhzAkSMNJ7xO2HKf4Nl0M4S2wf1Uek0Ao
-         pWiCLSdig+ea333j9NINHoy3tTxhQ0rBmVzLs3Cyl3JFvywXn1bNSFO1GhsVReZoVM+A
-         MdyVPf6Qg55MrAXB1qB9IC+Jbsi7Im4jYejL+hCLBS6L/usuQ3wYs/RcovACQ01DrlRr
-         LE+5j1Z12/s5NjbnSwwvFYVsWhuVpnakR6G5RYNZW/hXTxrIZrBMfKCwcxIdLgpQSCL8
-         JAyGzYiHXILKj4E3JtVY1v9ISKxaWdLlMpiTuDiuYCTbo9GKbkT4olQtjogExCOs04t4
-         eY4w==
-X-Gm-Message-State: AOAM532jzMGDYNKTBCZN69Z96NiLKowB4UI9b+YWH2oPWk1vdF78XzTr
-        XiESoFdNXpP9wBI49HNSHs17vqPr7fk=
-X-Google-Smtp-Source: ABdhPJzfAPJ+0iytHhGYqTIBnKfvcUDOg4PLgFVUaWo9Zvzz9AEdNSibHf3+lDy936GiI3w6YIzM5w==
-X-Received: by 2002:a63:595a:: with SMTP id j26mr208330pgm.406.1598940927149;
-        Mon, 31 Aug 2020 23:15:27 -0700 (PDT)
+        bh=2o88tY7J6w8zextq4qiLo5rGRfZeNcDDNXs+s2Cv/7g=;
+        b=GoQNKz0xerd2tCv/MDGKlM/t5RPTgQF14N6cnYbimU8u3h5OyuHIzHFaSqKy7T13RE
+         UD7aQAg+gEEOndUCz8FganKz3sNTStiq9+OawjAgwE8LK9ZNpZA+KMLiMlkFUWGjAL/s
+         FSE+aTjPlzbWrtK7QyMCnwM86BtcK3pCqmTBdjPtdkKLuT0LhnJOx1cf1Xf6pqyT67Oc
+         6kv5kn2GfIs7EPh5mR8kY3klo/e/aboMY2QvqHIx7egdvVB4GES/IrLFi73wwygD4dSS
+         oXUXTySAfWTgmD5pz9Gf13pBqnCn5Klc95+3jtSMT0cdQ8AA02g0sMkh8j62Jj4cPcfW
+         0YVA==
+X-Gm-Message-State: AOAM532FYLqbW/QK5Fli3xzF9nMfgZ4c98vToUNgebd1crDoBi1SOjvT
+        IMX8mlggTb0xDq5b+KejIlsglJ8CrBo=
+X-Google-Smtp-Source: ABdhPJwimDjXGqDUTGorUJk5RKuAeUTUHlriv+xqEennIpezTOJocleqS5z31PE/+eNhK2Zuecj2Qw==
+X-Received: by 2002:a17:90a:5609:: with SMTP id r9mr109290pjf.194.1598941026511;
+        Mon, 31 Aug 2020 23:17:06 -0700 (PDT)
 Received: from localhost ([203.185.249.227])
-        by smtp.gmail.com with ESMTPSA id r33sm580518pgm.75.2020.08.31.23.15.25
+        by smtp.gmail.com with ESMTPSA id j12sm228691pjd.44.2020.08.31.23.17.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2020 23:15:26 -0700 (PDT)
-Date:   Tue, 01 Sep 2020 16:15:21 +1000
+        Mon, 31 Aug 2020 23:17:06 -0700 (PDT)
+Date:   Tue, 01 Sep 2020 16:17:00 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 10/23] microblaze: use asm-generic/mmu_context.h for
- no-op implementations
-To:     linux-arch@vger.kernel.org, Michal Simek <monstr@monstr.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Michal Simek <michal.simek@xilinx.com>
+Subject: Re: [PATCH v2 00/23] Use asm-generic for mmu_context no-op functions
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 References: <20200826145249.745432-1-npiggin@gmail.com>
-        <20200826145249.745432-11-npiggin@gmail.com>
-        <4d2bdc87-f39c-3737-0aa8-b2efe7b2d93e@monstr.eu>
-In-Reply-To: <4d2bdc87-f39c-3737-0aa8-b2efe7b2d93e@monstr.eu>
+        <20200830101837.GB423750@kernel.org>
+In-Reply-To: <20200830101837.GB423750@kernel.org>
 MIME-Version: 1.0
-Message-Id: <1598940875.v2bbea400c.astroid@bobo.none>
+Message-Id: <1598940942.o1fbygdcvl.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
@@ -67,84 +65,22 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Michal Simek's message of September 1, 2020 12:15 am:
->=20
->=20
-> On 26. 08. 20 16:52, Nicholas Piggin wrote:
->> Cc: Michal Simek <monstr@monstr.eu>
->> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> ---
->>  arch/microblaze/include/asm/mmu_context_mm.h | 8 ++++----
->>  arch/microblaze/include/asm/processor.h      | 3 ---
->>  2 files changed, 4 insertions(+), 7 deletions(-)
+Excerpts from Mike Rapoport's message of August 30, 2020 8:18 pm:
+> On Thu, Aug 27, 2020 at 12:52:26AM +1000, Nicholas Piggin wrote:
+>> It would be nice to be able to modify mmu_context functions or add a
+>> hook without updating all architectures, many of which will be no-ops.
 >>=20
->> diff --git a/arch/microblaze/include/asm/mmu_context_mm.h b/arch/microbl=
-aze/include/asm/mmu_context_mm.h
->> index a1c7dd48454c..c2c77f708455 100644
->> --- a/arch/microblaze/include/asm/mmu_context_mm.h
->> +++ b/arch/microblaze/include/asm/mmu_context_mm.h
->> @@ -33,10 +33,6 @@
->>     to represent all kernel pages as shared among all contexts.
->>   */
->> =20
->> -static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_str=
-uct *tsk)
->> -{
->> -}
->> -
->>  # define NO_CONTEXT	256
->>  # define LAST_CONTEXT	255
->>  # define FIRST_CONTEXT	1
->> @@ -105,6 +101,7 @@ static inline void get_mmu_context(struct mm_struct =
-*mm)
->>  /*
->>   * We're finished using the context for an address space.
->>   */
->> +#define destroy_context destroy_context
->>  static inline void destroy_context(struct mm_struct *mm)
->>  {
->>  	if (mm->context !=3D NO_CONTEXT) {
->> @@ -126,6 +123,7 @@ static inline void switch_mm(struct mm_struct *prev,=
- struct mm_struct *next,
->>   * After we have set current->mm to a new value, this activates
->>   * the context for the new mm so we see the new mappings.
->>   */
->> +#define activate_mm activate_mm
->>  static inline void activate_mm(struct mm_struct *active_mm,
->>  			struct mm_struct *mm)
->>  {
->> @@ -136,5 +134,7 @@ static inline void activate_mm(struct mm_struct *act=
-ive_mm,
->> =20
->>  extern void mmu_context_init(void);
->> =20
->> +#include <asm-generic/mmu_context.h>
->> +
->>  # endif /* __KERNEL__ */
->>  #endif /* _ASM_MICROBLAZE_MMU_CONTEXT_H */
->> diff --git a/arch/microblaze/include/asm/processor.h b/arch/microblaze/i=
-nclude/asm/processor.h
->> index 1ff5a82b76b6..616211871a6e 100644
->> --- a/arch/microblaze/include/asm/processor.h
->> +++ b/arch/microblaze/include/asm/processor.h
->> @@ -122,9 +122,6 @@ unsigned long get_wchan(struct task_struct *p);
->>  #  define KSTK_EIP(task)	(task_pc(task))
->>  #  define KSTK_ESP(task)	(task_sp(task))
->> =20
->> -/* FIXME */
->> -#  define deactivate_mm(tsk, mm)	do { } while (0)
->> -
->>  #  define STACK_TOP	TASK_SIZE
->>  #  define STACK_TOP_MAX	STACK_TOP
->> =20
->>=20
+>> The motivation for this series is a change to lazy mmu handling, but
+>> this series stands on its own as a good cleanup whether or not we end
+>> up making that change.
 >=20
-> I am fine with the patch but I pretty much don't like that commit
-> message is empty and there is only subject.
-> With fixing that you can add my:
-> Acked-by: Michal Simek <monstr@monstr.eu>
+> I really like this series, I just have some small comments in reply to
+> patch 1, otherwise feel free to add
+>=20
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Thanks for the review, will do. Any suggestion for a useful commit message?
+I can't see your comments in reply to patch 1.
 
 Thanks,
 Nick
+
