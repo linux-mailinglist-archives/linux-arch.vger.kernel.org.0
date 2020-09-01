@@ -2,111 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3681725898C
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 09:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA0A258994
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 09:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbgIAHqo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 03:46:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:37960 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726050AbgIAHqm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Sep 2020 03:46:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A67F51FB;
-        Tue,  1 Sep 2020 00:46:41 -0700 (PDT)
-Received: from [10.163.69.134] (unknown [10.163.69.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 587ED3F71F;
-        Tue,  1 Sep 2020 00:46:37 -0700 (PDT)
-Subject: Re: [PATCH v3 03/13] mm/debug_vm_pgtable/ppc64: Avoid setting top
- bits in radom value
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
-References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
- <20200827080438.315345-4-aneesh.kumar@linux.ibm.com>
- <3a0b0101-e6ec-26c5-e104-5b0bb95c3e51@arm.com>
- <1a8abe92-032b-f60f-1df1-52bb409b35a3@linux.ibm.com>
- <75771782-734b-69f6-4a07-2d3542458319@arm.com>
- <e5d32d12-d904-ed8c-8963-d43d2c3744d9@linux.ibm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <c371e316-7533-62c7-a1c6-9b6745d8d1ea@arm.com>
-Date:   Tue, 1 Sep 2020 13:16:05 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726050AbgIAHui (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 03:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbgIAHud (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 03:50:33 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E55C061244;
+        Tue,  1 Sep 2020 00:50:33 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id u20so348849pfn.0;
+        Tue, 01 Sep 2020 00:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=jx4ijV48pwkIXlEWTCV3kDv1viRliVSaJ9ejxp3xhoM=;
+        b=Gu+J64Tks9uYyPaMRIQ/8V2pHoO5Lffox20RipKXlRjHDaPSkNEA9w/P9gzP7tuiXC
+         pqFcnhhXZHsX6nGtN/2hA+LrfaCqvjyhkaMz+JsgD8pvANzp+gZpwrMlINQf3wKGWLoi
+         RLl6DdPsasJ8DfrRa3440bJk1+NyvyXYJHyOH1VIUF2mTmtRFopcolxtdJFRV06xeC03
+         e+1WzE3ACXeKt2eqqaee4n3luLhIUXd2Ury98fv7hy5SO7K5VMeoK/vhITl3WUAEOlxy
+         KSDsVXYY/RBz6VHjcUD7DoDCk001RSF2ObOP3LSXqfol9qzhEECJszREEsFEzSypJxqp
+         XQsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=jx4ijV48pwkIXlEWTCV3kDv1viRliVSaJ9ejxp3xhoM=;
+        b=KA4RFrbgfdtrYtOgWTGydN2Ekk9GW7r6Let1QBV+JawC4yonQxxI7AmqAp9tWri3EK
+         C5Ew2DjUx5sV+tol3F3aKe9BcXcO6vYLq0eSBsdkBooqVIEoJFWGQQTb2Xzr/Pd/Vqdr
+         npGyO1gglgcS+Kl4MofzUBISIA0YyU9Gkqi2+i69EXSVm6PrXJGzMWi57aWBPE7RPLL4
+         Az0luwsDqvi25h/msUsTriFjbUfcm+0fkJrgNLDXPetgReAn2kadtqgw51MqLkqlPjGP
+         oMM7Jx3vxekyeQGq5KJM466s/QiXy3zDlfRzbtv+GT4/xU0LHXdWpOPB16mZnKI+iD/2
+         S4Xw==
+X-Gm-Message-State: AOAM531zWHfFynOslqaaQ5jNOq+qWcx3+Vr07uZcfMyW92FazuH21Lux
+        T+O6flFvmDvu2cJrR1EqQes=
+X-Google-Smtp-Source: ABdhPJySDrdLwU7jnwyr/UTlWsUOS+xFQepQCqThWcvpUucdNdxugC+OL2ioqTY/JTHWg9DOYbezpg==
+X-Received: by 2002:a63:4c57:: with SMTP id m23mr439797pgl.77.1598946631169;
+        Tue, 01 Sep 2020 00:50:31 -0700 (PDT)
+Received: from localhost ([203.185.249.227])
+        by smtp.gmail.com with ESMTPSA id s1sm1171322pgh.47.2020.09.01.00.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 00:50:30 -0700 (PDT)
+Date:   Tue, 01 Sep 2020 17:50:24 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 09/23] m68k: use asm-generic/mmu_context.h for no-op
+ implementations
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux MM <linux-mm@kvack.org>
+References: <20200826145249.745432-1-npiggin@gmail.com>
+        <20200826145249.745432-10-npiggin@gmail.com>
+        <CAMuHMdX5qo+2XpEm5QNbuwWRn508Ewee9rHYtmCBadj0x=3VnA@mail.gmail.com>
+        <1598941313.t5y1w43jgl.astroid@bobo.none>
+        <CAMuHMdWfACYhp8434GOx0qx2oHSBTX3Tq+=gtqNtYahnP-t1JQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWfACYhp8434GOx0qx2oHSBTX3Tq+=gtqNtYahnP-t1JQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <e5d32d12-d904-ed8c-8963-d43d2c3744d9@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Message-Id: <1598945161.7wv2e8mu4h.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Excerpts from Geert Uytterhoeven's message of September 1, 2020 5:03 pm:
+> Hi Nick,
+>=20
+> On Tue, Sep 1, 2020 at 8:23 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+>> Excerpts from Geert Uytterhoeven's message of August 27, 2020 7:33 pm:
+>> > On Wed, Aug 26, 2020 at 4:53 PM Nicholas Piggin <npiggin@gmail.com> wr=
+ote:
+>> >> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+>> >> Cc: linux-m68k@lists.linux-m68k.org
+>> >> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> >
+>> > With the below fixed:
+>> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>> >
+>> >> --- a/arch/m68k/include/asm/mmu_context.h
+>> >> +++ b/arch/m68k/include/asm/mmu_context.h
+>> >> @@ -79,19 +76,6 @@ static inline void switch_mm(struct mm_struct *pre=
+v, struct mm_struct *next,
+>> >>         set_context(tsk->mm->context, next->pgd);
+>> >>  }
+>> >>
+>> >> -/*
+>> >> - * After we have set current->mm to a new value, this activates
+>> >> - * the context for the new mm so we see the new mappings.
+>> >> - */
+>> >> -static inline void activate_mm(struct mm_struct *active_mm,
+>> >> -       struct mm_struct *mm)
+>> >> -{
+>> >> -       get_mmu_context(mm);
+>> >> -       set_context(mm->context, mm->pgd);
+>> >> -}
+>> >
+>> > Assumed switch_mm() in [PATCH v2 01/23] is revived with the above body=
+.
+>>
+>> I'm not sure what you mean here. We can remove this because it's a copy
+>> of switch_mm above, and that's what the new header defaults to if you
+>> don't provide an active_mm.
+>=20
+> IC.  I thought it started relying on <asm-generic/mmu_context.h> for this=
+,
+> where you removed switch_mm().
+>=20
+> Seems I missed the definition above.
 
+It's supposed to all build incrementally, I'll try to make sure it's
+right...
 
-On 09/01/2020 01:06 PM, Aneesh Kumar K.V wrote:
-> On 9/1/20 1:02 PM, Anshuman Khandual wrote:
->>
->>
->> On 09/01/2020 11:51 AM, Aneesh Kumar K.V wrote:
->>> On 9/1/20 8:45 AM, Anshuman Khandual wrote:
->>>>
->>>>
->>>> On 08/27/2020 01:34 PM, Aneesh Kumar K.V wrote:
->>>>> ppc64 use bit 62 to indicate a pte entry (_PAGE_PTE). Avoid setting that bit in
->>>>> random value.
->>>>>
->>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>>>> ---
->>>>>    mm/debug_vm_pgtable.c | 13 ++++++++++---
->>>>>    1 file changed, 10 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
->>>>> index 086309fb9b6f..bbf9df0e64c6 100644
->>>>> --- a/mm/debug_vm_pgtable.c
->>>>> +++ b/mm/debug_vm_pgtable.c
->>>>> @@ -44,10 +44,17 @@
->>>>>     * entry type. But these bits might affect the ability to clear entries with
->>>>>     * pxx_clear() because of how dynamic page table folding works on s390. So
->>>>>     * while loading up the entries do not change the lower 4 bits. It does not
->>>>> - * have affect any other platform.
->>>>> + * have affect any other platform. Also avoid the 62nd bit on ppc64 that is
->>>>> + * used to mark a pte entry.
->>>>>     */
->>>>> -#define S390_MASK_BITS    4
->>>>> -#define RANDOM_ORVALUE    GENMASK(BITS_PER_LONG - 1, S390_MASK_BITS)
->>>>> +#define S390_SKIP_MASK        GENMASK(3, 0)
->>>>> +#ifdef CONFIG_PPC_BOOK3S_64
->>>>> +#define PPC64_SKIP_MASK        GENMASK(62, 62)
->>>>> +#else
->>>>> +#define PPC64_SKIP_MASK        0x0
->>>>> +#endif
->>>>
->>>> Please drop the #ifdef CONFIG_PPC_BOOK3S_64 here. We already accommodate skip
->>>> bits for a s390 platform requirement and can also do so for ppc64 as well. As
->>>> mentioned before, please avoid adding any platform specific constructs in the
->>>> test.
->>>>
->>>
->>>
->>> that is needed so that it can be built on 32 bit architectures.I did face build errors with arch-linux
->>
->> Could not (#if __BITS_PER_LONG == 32) be used instead or something like
->> that. But should be a generic conditional check identifying 32 bit arch
->> not anything platform specific.
->>
-> 
-> that _PAGE_PTE bit is pretty much specific to PPC BOOK3S_64.  Not sure why other architectures need to bothered about ignoring bit 62.
+>=20
+>> Patch 1 should not have changed that, it should only affect the nommu
+>> architectures (and actually didn't touch m68k because it was not using
+>> the asm-generic/mmu_context.h header).
+>=20
+> OK. Sorry for the noise.
 
-Thats okay as long it does not adversely affect other architectures, ignoring
-some more bits is acceptable. Like existing S390_MASK_BITS gets ignored on all
-other platforms even if it is a s390 specific constraint. Not having platform
-specific #ifdef here, is essential.
+No problem thanks for looking at it.
+
+Thanks,
+Nick
