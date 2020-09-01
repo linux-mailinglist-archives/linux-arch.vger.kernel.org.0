@@ -2,115 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A94258695
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 06:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22202587ED
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 08:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbgIAEDn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 00:03:43 -0400
-Received: from foss.arm.com ([217.140.110.172]:36382 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725930AbgIAEDm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Sep 2020 00:03:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C839430E;
-        Mon, 31 Aug 2020 21:03:41 -0700 (PDT)
-Received: from [10.163.69.171] (unknown [10.163.69.171])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7EAD3F68F;
-        Mon, 31 Aug 2020 21:03:36 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH v3 12/13] mm/debug_vm_pgtable/hugetlb: Disable hugetlb
- test on ppc64
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
-References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
- <20200827080438.315345-13-aneesh.kumar@linux.ibm.com>
-Message-ID: <6191e77f-c3b7-21ea-6dbd-eecc09735923@arm.com>
-Date:   Tue, 1 Sep 2020 09:33:04 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726012AbgIAGP2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 02:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726006AbgIAGP1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 02:15:27 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6544C0612A3;
+        Mon, 31 Aug 2020 23:15:27 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id p37so141964pgl.3;
+        Mon, 31 Aug 2020 23:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=Sd4E4Z/MpNGbX5x3P4fOAUXrOsysWLUN6bwhYnFl+mQ=;
+        b=nMoXu3Qo0+bs7gWrd8KAo4W2329cg+qL8/bEFl0PfjVHqSlGk2dsJJAg+NE6/N6ELI
+         hSuqy6tqBU8SE///Fe37mgUETOeba7abQGH52wDw0CJ/aaC+65AbgLG0Y1+nNkOkuGz+
+         m81/nmW3phJTX7yThOEzxrvPdXE1GBe1hCelxjihF5a9XEAwycy8N2oJhf3v2hAEeqF4
+         5VD2bEK96UHgA9zLnJq3GoVWVeOx/kvHNFDGOhDjwo863j1KWcPaVj1u79bW0InuTMsu
+         Ub6xOhPmQ1D4tEXJDRaqzkyBy+N9eE7GnSzrL9RF/vuj9J3Jt5S2fbQoVbAfOqFEs0Wf
+         hFzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=Sd4E4Z/MpNGbX5x3P4fOAUXrOsysWLUN6bwhYnFl+mQ=;
+        b=NEd5Lc9rq00zDUeXmug2fo0KzJwgjxBdkGhzAkSMNJ7xO2HKf4Nl0M4S2wf1Uek0Ao
+         pWiCLSdig+ea333j9NINHoy3tTxhQ0rBmVzLs3Cyl3JFvywXn1bNSFO1GhsVReZoVM+A
+         MdyVPf6Qg55MrAXB1qB9IC+Jbsi7Im4jYejL+hCLBS6L/usuQ3wYs/RcovACQ01DrlRr
+         LE+5j1Z12/s5NjbnSwwvFYVsWhuVpnakR6G5RYNZW/hXTxrIZrBMfKCwcxIdLgpQSCL8
+         JAyGzYiHXILKj4E3JtVY1v9ISKxaWdLlMpiTuDiuYCTbo9GKbkT4olQtjogExCOs04t4
+         eY4w==
+X-Gm-Message-State: AOAM532jzMGDYNKTBCZN69Z96NiLKowB4UI9b+YWH2oPWk1vdF78XzTr
+        XiESoFdNXpP9wBI49HNSHs17vqPr7fk=
+X-Google-Smtp-Source: ABdhPJzfAPJ+0iytHhGYqTIBnKfvcUDOg4PLgFVUaWo9Zvzz9AEdNSibHf3+lDy936GiI3w6YIzM5w==
+X-Received: by 2002:a63:595a:: with SMTP id j26mr208330pgm.406.1598940927149;
+        Mon, 31 Aug 2020 23:15:27 -0700 (PDT)
+Received: from localhost ([203.185.249.227])
+        by smtp.gmail.com with ESMTPSA id r33sm580518pgm.75.2020.08.31.23.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2020 23:15:26 -0700 (PDT)
+Date:   Tue, 01 Sep 2020 16:15:21 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 10/23] microblaze: use asm-generic/mmu_context.h for
+ no-op implementations
+To:     linux-arch@vger.kernel.org, Michal Simek <monstr@monstr.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Michal Simek <michal.simek@xilinx.com>
+References: <20200826145249.745432-1-npiggin@gmail.com>
+        <20200826145249.745432-11-npiggin@gmail.com>
+        <4d2bdc87-f39c-3737-0aa8-b2efe7b2d93e@monstr.eu>
+In-Reply-To: <4d2bdc87-f39c-3737-0aa8-b2efe7b2d93e@monstr.eu>
 MIME-Version: 1.0
-In-Reply-To: <20200827080438.315345-13-aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Message-Id: <1598940875.v2bbea400c.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Excerpts from Michal Simek's message of September 1, 2020 12:15 am:
+>=20
+>=20
+> On 26. 08. 20 16:52, Nicholas Piggin wrote:
+>> Cc: Michal Simek <monstr@monstr.eu>
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> ---
+>>  arch/microblaze/include/asm/mmu_context_mm.h | 8 ++++----
+>>  arch/microblaze/include/asm/processor.h      | 3 ---
+>>  2 files changed, 4 insertions(+), 7 deletions(-)
+>>=20
+>> diff --git a/arch/microblaze/include/asm/mmu_context_mm.h b/arch/microbl=
+aze/include/asm/mmu_context_mm.h
+>> index a1c7dd48454c..c2c77f708455 100644
+>> --- a/arch/microblaze/include/asm/mmu_context_mm.h
+>> +++ b/arch/microblaze/include/asm/mmu_context_mm.h
+>> @@ -33,10 +33,6 @@
+>>     to represent all kernel pages as shared among all contexts.
+>>   */
+>> =20
+>> -static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_str=
+uct *tsk)
+>> -{
+>> -}
+>> -
+>>  # define NO_CONTEXT	256
+>>  # define LAST_CONTEXT	255
+>>  # define FIRST_CONTEXT	1
+>> @@ -105,6 +101,7 @@ static inline void get_mmu_context(struct mm_struct =
+*mm)
+>>  /*
+>>   * We're finished using the context for an address space.
+>>   */
+>> +#define destroy_context destroy_context
+>>  static inline void destroy_context(struct mm_struct *mm)
+>>  {
+>>  	if (mm->context !=3D NO_CONTEXT) {
+>> @@ -126,6 +123,7 @@ static inline void switch_mm(struct mm_struct *prev,=
+ struct mm_struct *next,
+>>   * After we have set current->mm to a new value, this activates
+>>   * the context for the new mm so we see the new mappings.
+>>   */
+>> +#define activate_mm activate_mm
+>>  static inline void activate_mm(struct mm_struct *active_mm,
+>>  			struct mm_struct *mm)
+>>  {
+>> @@ -136,5 +134,7 @@ static inline void activate_mm(struct mm_struct *act=
+ive_mm,
+>> =20
+>>  extern void mmu_context_init(void);
+>> =20
+>> +#include <asm-generic/mmu_context.h>
+>> +
+>>  # endif /* __KERNEL__ */
+>>  #endif /* _ASM_MICROBLAZE_MMU_CONTEXT_H */
+>> diff --git a/arch/microblaze/include/asm/processor.h b/arch/microblaze/i=
+nclude/asm/processor.h
+>> index 1ff5a82b76b6..616211871a6e 100644
+>> --- a/arch/microblaze/include/asm/processor.h
+>> +++ b/arch/microblaze/include/asm/processor.h
+>> @@ -122,9 +122,6 @@ unsigned long get_wchan(struct task_struct *p);
+>>  #  define KSTK_EIP(task)	(task_pc(task))
+>>  #  define KSTK_ESP(task)	(task_sp(task))
+>> =20
+>> -/* FIXME */
+>> -#  define deactivate_mm(tsk, mm)	do { } while (0)
+>> -
+>>  #  define STACK_TOP	TASK_SIZE
+>>  #  define STACK_TOP_MAX	STACK_TOP
+>> =20
+>>=20
+>=20
+> I am fine with the patch but I pretty much don't like that commit
+> message is empty and there is only subject.
+> With fixing that you can add my:
+> Acked-by: Michal Simek <monstr@monstr.eu>
 
+Thanks for the review, will do. Any suggestion for a useful commit message?
 
-On 08/27/2020 01:34 PM, Aneesh Kumar K.V wrote:
-> The seems to be missing quite a lot of details w.r.t allocating
-> the correct pgtable_t page (huge_pte_alloc()), holding the right
-> lock (huge_pte_lock()) etc. The vma used is also not a hugetlb VMA.
-> 
-> ppc64 do have runtime checks within CONFIG_DEBUG_VM for most of these.
-> Hence disable the test on ppc64.
-
-Would really like this to get resolved in an uniform and better way
-instead, i.e a modified hugetlb_advanced_tests() which works on all
-platforms including ppc64.
-
-In absence of a modified version, I do realize the situation here,
-where DEBUG_VM_PGTABLE test either runs on ppc64 or just completely
-remove hugetlb_advanced_tests() from other platforms as well.
-
-> 
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  mm/debug_vm_pgtable.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-> index a188b6e4e37e..21329c7d672f 100644
-> --- a/mm/debug_vm_pgtable.c
-> +++ b/mm/debug_vm_pgtable.c
-> @@ -813,6 +813,7 @@ static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot)
->  #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
->  }
->  
-> +#ifndef CONFIG_PPC_BOOK3S_64
->  static void __init hugetlb_advanced_tests(struct mm_struct *mm,
->  					  struct vm_area_struct *vma,
->  					  pte_t *ptep, unsigned long pfn,
-> @@ -855,6 +856,7 @@ static void __init hugetlb_advanced_tests(struct mm_struct *mm,
->  	pte = huge_ptep_get(ptep);
->  	WARN_ON(!(huge_pte_write(pte) && huge_pte_dirty(pte)));
->  }
-> +#endif
-
-In the worst case if we could not get a new hugetlb_advanced_tests() test
-that works on all platforms, this might be the last fallback option. In
-which case, it will require a proper comment section with a "FIXME: ",
-explaining the current situation (and that #ifdef is temporary in nature)
-and a hugetlb_advanced_tests() stub when CONFIG_PPC_BOOK3S_64 is enabled.
-
->  #else  /* !CONFIG_HUGETLB_PAGE */
->  static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot) { }
->  static void __init hugetlb_advanced_tests(struct mm_struct *mm,
-> @@ -1065,7 +1067,9 @@ static int __init debug_vm_pgtable(void)
->  	pud_populate_tests(mm, pudp, saved_pmdp);
->  	spin_unlock(ptl);
->  
-> +#ifndef CONFIG_PPC_BOOK3S_64
->  	hugetlb_advanced_tests(mm, vma, ptep, pte_aligned, vaddr, prot);
-> +#endif
-
-#ifdef will not be required here as there would be a stub definition
-for hugetlb_advanced_tests() when CONFIG_PPC_BOOK3S_64 is enabled.
-
->  
->  	spin_lock(&mm->page_table_lock);
->  	p4d_clear_tests(mm, p4dp);
-> 
-
-But again, we should really try and avoid taking this path.
+Thanks,
+Nick
