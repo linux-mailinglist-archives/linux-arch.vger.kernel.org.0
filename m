@@ -2,134 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E8A259D4C
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 19:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D35D259D72
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 19:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728969AbgIARil (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 13:38:41 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:25999 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728297AbgIARik (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 13:38:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1598981918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7AZRZCQ50VQO4CE1EbIlyq9iRI2To5Z5oSxTCQ9Kvv0=;
-        b=DdHVFVP0vYcwBzSEjuf7IQaFPkQCacKHaTmnDTi9bWEuusCcyp50hAnD5f+ARQ5C8i/qWR
-        ZDq31AU4qQ4wdBMKzmhFB6GVo9qbL4uIlSK89EA/4VsPuWtIg5cM0T2RgQhNRh/XEWpj3T
-        w56KTo8yag+4L3kyAttUucahRX1RfHA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-60-kN1KjVNCOh-KAjeBdqpYvA-1; Tue, 01 Sep 2020 13:38:34 -0400
-X-MC-Unique: kN1KjVNCOh-KAjeBdqpYvA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C1B7D873112;
-        Tue,  1 Sep 2020 17:38:31 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-74.rdu2.redhat.com [10.10.118.74])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CE5175D9CD;
-        Tue,  1 Sep 2020 17:38:29 +0000 (UTC)
-Subject: Re: [PATCH v10 3/5] locking/qspinlock: Introduce CNA into the slow
- path of qspinlock
-To:     Alex Kogan <alex.kogan@oracle.com>
-Cc:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
-        will.deacon@arm.com, arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com,
-        steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-References: <20200403205930.1707-1-alex.kogan@oracle.com>
- <20200403205930.1707-4-alex.kogan@oracle.com>
- <a4bf9541-1996-3ba2-dfe5-e734c652ac86@redhat.com>
- <08E77224-563F-49C7-9E7F-BD98E4FD121D@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <84fdb30e-387d-7bc1-e1f9-fa57cd9a32c9@redhat.com>
-Date:   Tue, 1 Sep 2020 13:38:29 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729034AbgIARmd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 13:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbgIARmc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 13:42:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B4CC061244;
+        Tue,  1 Sep 2020 10:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b2ed4kKOHBE6qB3WmU3cuZU1WUsaY/IfPchrSUMqTzk=; b=vkH+jqkaaXHPFcoC+6AYwSwZ55
+        cL8pberSXUZvGfrHlSm5svroGmEItBMRukBfiGAyGWzzsFs2JlIoJET0AjGynUvzoRuuD9EsFwXSO
+        rpu2LLzH/Z3ELTKczZYrEsmmrKwgkIGFF07QI0osyEqvGqt2ry2oIIUALpo7x08P3iueFHzVT6YIC
+        pYcxWLqVVwPXrNAHNRJREfFmnbq9QvS2rv6Yoaw088D4/II4Uk7hMNZOVagL8M+s/W/u/VlaA4JdW
+        aH5bnGd4XpvLHTLqX3ShGe32/Fc/7Kkn2Kf1JYKxSTTApeUToFe9GoqbqrR8NBt2Xhc9I3rGIr/M2
+        MWobY3sg==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kDAIS-0005Yb-9R; Tue, 01 Sep 2020 17:42:16 +0000
+Date:   Tue, 1 Sep 2020 18:42:16 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: remove the last set_fs() in common code, and remove it for x86
+ and powerpc v2
+Message-ID: <20200901174216.GT14765@casper.infradead.org>
+References: <20200827150030.282762-1-hch@lst.de>
+ <a8bb0319-0928-4687-9e9c-777c5860dbdd@csgroup.eu>
+ <20200901172512.GI1236603@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <08E77224-563F-49C7-9E7F-BD98E4FD121D@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200901172512.GI1236603@ZenIV.linux.org.uk>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/31/20 5:39 PM, Alex Kogan wrote:
->> On Jul 28, 2020, at 4:00 PM, Waiman Long <longman@redhat.com> wrote:
->>
->> On 4/3/20 4:59 PM, Alex Kogan wrote:
->>> In CNA, spinning threads are organized in two queues, a primary queue for
->>> threads running on the same node as the current lock holder, and a
->>> secondary queue for threads running on other nodes. After acquiring the
->>> MCS lock and before acquiring the spinlock, the lock holder scans the
->>> primary queue looking for a thread running on the same node (pre-scan). If
->>> found (call it thread T), all threads in the primary queue between the
->>> current lock holder and T are moved to the end of the secondary queue.
->>> If such T is not found, we make another scan of the primary queue when
->>> unlocking the MCS lock (post-scan), starting at the position where
->>> pre-scan stopped. If both scans fail to find such T, the MCS lock is
->>> passed to the first thread in the secondary queue. If the secondary queue
->>> is empty, the lock is passed to the next thread in the primary queue.
->>> For more details, see https://urldefense.com/v3/__https://arxiv.org/abs/1810.05600__;!!GqivPVa7Brio!OaieLQ3MMZThgxr-Of8i9dbN5CwG8mXSIBJ_sUofhAXcs43IWL2x-stO-XKLEebn$ .
->>>
->>> Note that this variant of CNA may introduce starvation by continuously
->>> passing the lock to threads running on the same node. This issue
->>> will be addressed later in the series.
->>>
->>> Enabling CNA is controlled via a new configuration option
->>> (NUMA_AWARE_SPINLOCKS). By default, the CNA variant is patched in at the
->>> boot time only if we run on a multi-node machine in native environment and
->>> the new config is enabled. (For the time being, the patching requires
->>> CONFIG_PARAVIRT_SPINLOCKS to be enabled as well. However, this should be
->>> resolved once static_call() is available.) This default behavior can be
->>> overridden with the new kernel boot command-line option
->>> "numa_spinlock=on/off" (default is "auto").
->>>
->>> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
->>> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
->>> Reviewed-by: Waiman Long <longman@redhat.com>
->>> ---
->> There is also a concern that the worst case latency for a lock transfer can be close to O(n) which can be quite large for large SMP systems. I have a patch on top that modifies the current behavior to limit the number of node scans after the lock is freed.
-> I understand the concern. While your patch addresses it, I am afraid it makes
-> the code somewhat more complex, and duplicates some of the slow path
-> functionality (e.g., the spin loop until the lock value changes to a certain
-> value).
->
-> Let me suggest a different idea for gradually restructuring the main queue
-> that has some similarity to the way you suggested to handle prioritized waiters.
-> Basically, instead of scanning the entire chain of main queue waiters,
-> we can check only the next waiter and, if present and it runs on a different
-> node, move it to the secondary queue. In addition, to maintain the preference
-> for a certain numa node ID, we set the numa node of the next-next waiter,
-> if present, to that of the current lock holder. This is the part similar to the
-> way you suggested to handle prioritized waiters.
->
-> This way, the worst case complexity of cna_order_queue() decreases from O(n)
-> down to O(1), as we always “scan" only one waiter. And as before, we change
-> the preference (and flush the secondary queue) after X handovers (or after
-> Y ms, as in your in other patch).
->
-> I attach the patch that applies on top of your patch for prioritized nodes
-> (0006), but does not include your patch 0007 (time based threshold),
-> which I will integrate into the series in the next revision.
->
-> Please, let me know what you think.
->
-That is an interesting idea. I don't have any fundamental objection to 
-that. I just wonder how it will impact the kind of performance test that 
-you ran before. It would be nice to see the performance impact with that 
-change.
+On Tue, Sep 01, 2020 at 06:25:12PM +0100, Al Viro wrote:
+> On Tue, Sep 01, 2020 at 07:13:00PM +0200, Christophe Leroy wrote:
+> 
+> >     10.92%  dd       [kernel.kallsyms]  [k] iov_iter_zero
+> 
+> Interesting...  Could you get an instruction-level profile inside iov_iter_zero(),
+> along with the disassembly of that sucker?
 
-Cheers,
-Longman
+Also, does [1] make any difference?  Probably not since it's translating
+O flags into IOCB flags instead of RWF flags into IOCB flags.  I wonder
+if there's a useful trick we can play here ... something like:
 
+static inline int iocb_flags(struct file *file)
+{
+        int res = 0;
+	if (likely(!file->f_flags & O_APPEND | O_DIRECT | O_DSYNC | __O_SYNC)) && !IS_SYNC(file->f_mapping->host))
+		return res;
+        if (file->f_flags & O_APPEND)
+                res |= IOCB_APPEND;
+        if (file->f_flags & O_DIRECT)
+                res |= IOCB_DIRECT;
+        if ((file->f_flags & O_DSYNC) || IS_SYNC(file->f_mapping->host))
+                res |= IOCB_DSYNC;
+        if (file->f_flags & __O_SYNC)
+                res |= IOCB_SYNC;
+        return res;
+}
+
+Can we do something like force O_DSYNC to be set if the inode IS_SYNC()
+at the time of open?  Or is setting the sync bit on the inode required
+to affect currently-open files?
+
+[1] https://lore.kernel.org/linux-fsdevel/95de7ce4-9254-39f1-304f-4455f66bf0f4@kernel.dk/ 
