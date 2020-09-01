@@ -2,127 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A30E259020
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 16:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A5425913D
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 16:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727946AbgIAORf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 10:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S1728235AbgIAOsd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 10:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgIAOQd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 10:16:33 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F4CC06125C;
-        Tue,  1 Sep 2020 07:16:31 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id b124so847218pfg.13;
-        Tue, 01 Sep 2020 07:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=T7hl6/jzH9JaCJmjBLvvza5EUcXtSUI/1TemyK+HC9o=;
-        b=pNUM33L87/n3oMvM1sognLh5DCDBRm6ZHKqDFXRM9BZJCR6vzswELgtbDPSBnfrTVF
-         W9OB4D7886nLFTuXJnoHU14ASpJG3zm5zKpFFxpfxeW/6JIfgoge8+p1byr6gTf3m3z7
-         yCANr114qi38F/fThOZja3tYGmqXbyvtaSeFHfqRcvmNIkgmtg6PSUi6ak6DJnLjNVT3
-         neYukQkFNkzifFFXKRE8VdR5S2Albh+rTn6gJVNW5SVe/oV7nFKvbhfsAjjCDPahKEOO
-         QbdngNHv7o6geqrV5yyQhDX0jg0iO8wmpF/MX5OLsURm2XnAlIjPQhnEU9ohYiHpVtnt
-         sLMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T7hl6/jzH9JaCJmjBLvvza5EUcXtSUI/1TemyK+HC9o=;
-        b=PP9L82r4lBhay63I54b5vcjxEvp680dBHmSGa13c8h73RosO3+j4+Z5+meLfc5exKS
-         cPgg4C7iwiE2vlVc4d08NnDI96TtusDufjZpKofsA/0jIIRo7Iwff/ww/ErRrmViRY5f
-         g4RjUFcxLS77/165Xb/Qx0Atkh6W5TCUKvGxpMqZxrvRSigdVliE+0zhStXVoxo+1WbA
-         l9FYmPpPCxWutsX79BiAOKVX+DjXPu7udun3j74lNYVnida9yBh47X1tI2MXbhioMBKj
-         kpaWEzmsAiSsKHRQh0OJzbTUvbyYLEpuekACRJ8w4wEZHFeUu8B2XR/VpRzGys6PQxRk
-         LF8w==
-X-Gm-Message-State: AOAM531mVzlvnKh9QkgI5JZ+cq6UPWRfkTc3A8THW2Dyl1MZ6UZ6IK3u
-        HPQuYgR/vzQJTjFJTlGf3M5IjPkHrYs=
-X-Google-Smtp-Source: ABdhPJzMGurkU7OEkWAj30u5pzoBQBXN7lJH9ysmj05h8xZeAsFILA7j+WaGXQ2T4NFEf2hyfqF7ag==
-X-Received: by 2002:a62:6887:: with SMTP id d129mr2000651pfc.279.1598969790530;
-        Tue, 01 Sep 2020 07:16:30 -0700 (PDT)
-Received: from bobo.ibm.com ([203.185.249.227])
-        by smtp.gmail.com with ESMTPSA id w9sm2212816pgg.76.2020.09.01.07.16.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 07:16:30 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-arch@vger.kernel.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v3 11/23] mips: use asm-generic/mmu_context.h for no-op implementations
-Date:   Wed,  2 Sep 2020 00:15:27 +1000
-Message-Id: <20200901141539.1757549-12-npiggin@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200901141539.1757549-1-npiggin@gmail.com>
-References: <20200901141539.1757549-1-npiggin@gmail.com>
+        with ESMTP id S1727861AbgIALt0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 07:49:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF156C06125C;
+        Tue,  1 Sep 2020 04:48:04 -0700 (PDT)
+Date:   Tue, 01 Sep 2020 11:47:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1598960880;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SxqMQ1TSEqyEQ+IxBxu5S9u4JXQU8ctP1bgVHjyFv1k=;
+        b=pHFKC5o6R3n4l494bx3212BoYQSmadU6PdLDwU6dAHfLoiUENWYGBNgVKs6bTRymSpJlQb
+        YVTvXcI11Ug/OXYM7RL7rsxTJXGkPwoKVF2mY6RORrinA5cI12+3K0j891DEd7JPe20wAv
+        WNnTf6HjtKg29eG6W+xwUy+Hb1DMJ1M6OugGQ1X0NjBJ50EY/JmzttD3I4+3UBs1IIlFRi
+        EkT1hsqyFtKpGfTbGezlPVKfFIOxotAlrRz8peSsXgnG8ttF3w80LkyfUD7lXFY54yBe3+
+        1bFZdtrzfi14+rZY/6+gb+kfzQb2k00An76WGBkbUMBZObKHSnVJYHtA8RihXQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1598960880;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SxqMQ1TSEqyEQ+IxBxu5S9u4JXQU8ctP1bgVHjyFv1k=;
+        b=pZw3XDBEcWLZrfHzVGeT7UR3O9cpTk17enXsS0xz//gHKalFOdP0QPR3lLbFaTaRb1wRcS
+        K3BhpQZQhwnFPlBg==
+From:   "tip-bot2 for Nick Desaulniers" <tip-bot2@linutronix.de>
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/build] vmlinux.lds.h: Add PGO and AutoFDO input sections
+Cc:     Jian Cai <jiancai@google.com>, maskray@google.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Luis Lozano <llozano@google.com>,
+        Manoj Gupta <manojgupta@google.com>,
+        linux-arch@vger.kernel.org, stable@vger.kernel.org,
+        x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+In-Reply-To: <20200821194310.3089815-7-keescook@chromium.org>
+References: <20200821194310.3089815-7-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <159896087937.20229.4955362311782724603.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+The following commit has been merged into the core/build branch of tip:
+
+Commit-ID:     eff8728fe69880d3f7983bec3fb6cea4c306261f
+Gitweb:        https://git.kernel.org/tip/eff8728fe69880d3f7983bec3fb6cea4c30=
+6261f
+Author:        Nick Desaulniers <ndesaulniers@google.com>
+AuthorDate:    Fri, 21 Aug 2020 12:42:47 -07:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 01 Sep 2020 09:50:35 +02:00
+
+vmlinux.lds.h: Add PGO and AutoFDO input sections
+
+Basically, consider .text.{hot|unlikely|unknown}.* part of .text, too.
+
+When compiling with profiling information (collected via PGO
+instrumentations or AutoFDO sampling), Clang will separate code into
+.text.hot, .text.unlikely, or .text.unknown sections based on profiling
+information. After D79600 (clang-11), these sections will have a
+trailing `.` suffix, ie.  .text.hot., .text.unlikely., .text.unknown..
+
+When using -ffunction-sections together with profiling infomation,
+either explicitly (FGKASLR) or implicitly (LTO), code may be placed in
+sections following the convention:
+.text.hot.<foo>, .text.unlikely.<bar>, .text.unknown.<baz>
+where <foo>, <bar>, and <baz> are functions.  (This produces one section
+per function; we generally try to merge these all back via linker script
+so that we don't have 50k sections).
+
+For the above cases, we need to teach our linker scripts that such
+sections might exist and that we'd explicitly like them grouped
+together, otherwise we can wind up with code outside of the
+_stext/_etext boundaries that might not be mapped properly for some
+architectures, resulting in boot failures.
+
+If the linker script is not told about possible input sections, then
+where the section is placed as output is a heuristic-laiden mess that's
+non-portable between linkers (ie. BFD and LLD), and has resulted in many
+hard to debug bugs.  Kees Cook is working on cleaning this up by adding
+--orphan-handling=3Dwarn linker flag used in ARCH=3Dpowerpc to additional
+architectures. In the case of linker scripts, borrowing from the Zen of
+Python: explicit is better than implicit.
+
+Also, ld.bfd's internal linker script considers .text.hot AND
+.text.hot.* to be part of .text, as well as .text.unlikely and
+.text.unlikely.*. I didn't see support for .text.unknown.*, and didn't
+see Clang producing such code in our kernel builds, but I see code in
+LLVM that can produce such section names if profiling information is
+missing. That may point to a larger issue with generating or collecting
+profiles, but I would much rather be safe and explicit than have to
+debug yet another issue related to orphan section placement.
+
+Reported-by: Jian Cai <jiancai@google.com>
+Suggested-by: F=C4=81ng-ru=C3=AC S=C3=B2ng <maskray@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Luis Lozano <llozano@google.com>
+Tested-by: Manoj Gupta <manojgupta@google.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Cc: linux-arch@vger.kernel.org
+Cc: stable@vger.kernel.org
+Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommitdiff;h=3Dadd=
+44f8d5c5c05e08b11e033127a744d61c26aee
+Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommitdiff;h=3D1de=
+778ed23ce7492c523d5850c6c6dbb34152655
+Link: https://reviews.llvm.org/D79600
+Link: https://bugs.chromium.org/p/chromium/issues/detail?id=3D1084760
+Link: https://lore.kernel.org/r/20200821194310.3089815-7-keescook@chromium.org
+
+Debugged-by: Luis Lozano <llozano@google.com>
 ---
+ include/asm-generic/vmlinux.lds.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Please ack or nack if you object to this being mered via
-Arnd's tree.
-
- arch/mips/include/asm/mmu_context.h | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/include/asm/mmu_context.h b/arch/mips/include/asm/mmu_context.h
-index cddead91acd4..ed9f2d748f63 100644
---- a/arch/mips/include/asm/mmu_context.h
-+++ b/arch/mips/include/asm/mmu_context.h
-@@ -124,10 +124,6 @@ static inline void set_cpu_context(unsigned int cpu,
- #define cpu_asid(cpu, mm) \
- 	(cpu_context((cpu), (mm)) & cpu_asid_mask(&cpu_data[cpu]))
- 
--static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
--{
--}
--
- extern void get_new_mmu_context(struct mm_struct *mm);
- extern void check_mmu_context(struct mm_struct *mm);
- extern void check_switch_mmu_context(struct mm_struct *mm);
-@@ -136,6 +132,7 @@ extern void check_switch_mmu_context(struct mm_struct *mm);
-  * Initialize the context related info for a new mm_struct
-  * instance.
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.=
+lds.h
+index 98d013d..91dcfb9 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -581,7 +581,10 @@
   */
-+#define init_new_context init_new_context
- static inline int
- init_new_context(struct task_struct *tsk, struct mm_struct *mm)
- {
-@@ -180,14 +177,12 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-  * Destroy context related info for an mm_struct that is about
-  * to be put to rest.
-  */
-+#define destroy_context destroy_context
- static inline void destroy_context(struct mm_struct *mm)
- {
- 	dsemul_mm_cleanup(mm);
- }
- 
--#define activate_mm(prev, next)	switch_mm(prev, next, current)
--#define deactivate_mm(tsk, mm)	do { } while (0)
--
- static inline void
- drop_mmu_context(struct mm_struct *mm)
- {
-@@ -237,4 +232,6 @@ drop_mmu_context(struct mm_struct *mm)
- 	local_irq_restore(flags);
- }
- 
-+#include <asm-generic/mmu_context.h>
-+
- #endif /* _ASM_MMU_CONTEXT_H */
--- 
-2.23.0
-
+ #define TEXT_TEXT							\
+ 		ALIGN_FUNCTION();					\
+-		*(.text.hot TEXT_MAIN .text.fixup .text.unlikely)	\
++		*(.text.hot .text.hot.*)				\
++		*(TEXT_MAIN .text.fixup)				\
++		*(.text.unlikely .text.unlikely.*)			\
++		*(.text.unknown .text.unknown.*)			\
+ 		NOINSTR_TEXT						\
+ 		*(.text..refcount)					\
+ 		*(.ref.text)						\
