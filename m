@@ -2,59 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A222590D1
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 16:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4F32590C7
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 16:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728536AbgIAOje (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 10:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S1728400AbgIAOik (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 10:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727872AbgIAORm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 10:17:42 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6789CC06121A;
-        Tue,  1 Sep 2020 07:17:08 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id j11so594120plk.9;
-        Tue, 01 Sep 2020 07:17:08 -0700 (PDT)
+        with ESMTP id S1727930AbgIAORr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 10:17:47 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08673C061231;
+        Tue,  1 Sep 2020 07:17:12 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id o16so694381pjr.2;
+        Tue, 01 Sep 2020 07:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=logZjoG5Aka5uBmK80AuCdh5o6UuSDKs79nfaNTTOaw=;
-        b=HQu5Fv4C4UoSmrbjuziOapFF10KA+RQNesnat24CDhKtp+EaxHPoL0yaABBLA4VseX
-         WaGqI8GcgcXCoIDq3vY4fY1Tr/76AO3buT3pnHIj/lLEG73T2kwzVJtocvLsVUK2H91d
-         Y7162dEqcfij+2mP32Ljy4N36bqL372dR/9rzzVuK5U2E0QOUIpOe+CyTkM4SD6u+X6/
-         2OUaHe9MCdh/nvcKwlIoSCxuZHpgspfPTirZPdD1RjiFJLh7aHhWtwxnes3A8PcdSsbf
-         uyWUmDMHGoiYM0j5QcJn7PIaMHP0BdPA+wGfOkFex1Gb/6I6VKURNeCtSJNonR0uqvbo
-         j8IA==
+        bh=oMyHyW/ibxSh5eYl/5ny2xFFH4uUfgxHccMgqoyeGgg=;
+        b=m0wh+6ZWCvB6xY6mobQfA84EWeAOgcj+P2/sh51P0HP2QNZuoPLB4itoOJee1tInOQ
+         GEjtY/zF2RIFEOTODiaE5O0lp9WTjMayA7dEE5eEQK4pNP0kPNTmHVr0qkB6H27MwLNO
+         z+uwXWhwY4Bwnt0Y3roqq7rEOguaD1PSqR/vm24XMbtevgG/+2iY0oiKw6hkKQPT9taQ
+         xXBkZClMgTlN+miUmXc5YALkeb7wSWbpxv0YaydGGIDZMj4VYVAvMvLfhZGKyxP4BQ6r
+         Z+lbaCG+pJU7taGtqg9nJn7HkrrxnEpANuQO8vDFWIHah5Moa86nBAIdDRDVvK8hX/fz
+         WfEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=logZjoG5Aka5uBmK80AuCdh5o6UuSDKs79nfaNTTOaw=;
-        b=VOCizEKBwqiYmJdr8wVdw/2xl7NC5PJUVGxBtrclmoQDfqxEKTRboZP2Q9J6UDSLoj
-         vTeOVVkZeZXPeDUDLt1cWVrq3G7+e0Aya77FdItAdLwyfPVKtbZVdC8KnmFplbg14ko/
-         e5XsVxVJVHMdAblcHTMP2R3WBItCBcmbwISGTVYn/1xr5VlK9o8NPX5AJou2VOPzXymI
-         lUGbbXh2KR8VdjLPrd5LaA7Jc6vg4Au44Mmko01m5OX2Ef9HBX9anEqHhnA43yxXPzja
-         U09eqJSevm/nVmFw2uiXJBWXE2Zm7xs8SwBbAlFLvAqj75Q836imTAOyN/B8SHSK3+Dl
-         I26g==
-X-Gm-Message-State: AOAM533JZDQBgckWhmJibzMkcCfID2J2XfkzoLQ0BloeNtGsz+JRhGlh
-        TGsBzd0H2tDiGCnbBRXDDdDqeh0OPTo=
-X-Google-Smtp-Source: ABdhPJzQTGwzDyOFh9C1LgX+8EX+CeYkOkzlMY/Z9U1HiGXP7P3RibIekHepWjyHD++l0OigZGr5aQ==
-X-Received: by 2002:a17:902:b20e:: with SMTP id t14mr1622424plr.58.1598969827058;
-        Tue, 01 Sep 2020 07:17:07 -0700 (PDT)
+        bh=oMyHyW/ibxSh5eYl/5ny2xFFH4uUfgxHccMgqoyeGgg=;
+        b=C7VzlcJ7K4InC424A8TXgt9MKGydVLfBvd4Dy2lyAY0gfWLc0t9oPyPQIXUHe7w4bQ
+         8tBTHdaJkN+hVi0Om8M//lkNBnq3rHC0MNyvNg3pTiWqsRhMYqlQaZdlHDDi+3qVn5hB
+         4HaBbW1Gs2kNGdaXGRzK+IPamqAtpkmb8AiOGoxI/XHj5n42cCHu2lfxa/TyoHDuDIgM
+         n3uhF+7Y5mhSJga+G+KkduKmPoSHPFqQIL4pnxB6jC0dML5L48/Fwlzt+lXbbMvQTyn1
+         oxRovwQTUGBhHPc4Z1vmF05rFlqOYxchDWvf6llD0D7eYFcFgwRmdA+4MDkpTD+WSA3Y
+         YB6Q==
+X-Gm-Message-State: AOAM533ngEJm6AOx8N9Ee8TVL8JGbmIhocgOcTmH986Lm6ZKPW/V8rh0
+        5Ixq/QDem6+dsxQuXzkyO5hgdigYwQs=
+X-Google-Smtp-Source: ABdhPJzbcFQsPm7Juj1VJ+J7JhZyyCQaH2ESZtwRm7LnWnuXUzY2Z/dW/q488h9lXB+CpPnMrTeagA==
+X-Received: by 2002:a17:90b:1284:: with SMTP id fw4mr1652373pjb.205.1598969831450;
+        Tue, 01 Sep 2020 07:17:11 -0700 (PDT)
 Received: from bobo.ibm.com ([203.185.249.227])
-        by smtp.gmail.com with ESMTPSA id w9sm2212816pgg.76.2020.09.01.07.17.03
+        by smtp.gmail.com with ESMTPSA id w9sm2212816pgg.76.2020.09.01.07.17.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 07:17:06 -0700 (PDT)
+        Tue, 01 Sep 2020 07:17:11 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-arch@vger.kernel.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
-Subject: [PATCH v3 20/23] sparc: use asm-generic/mmu_context.h for no-op implementations
-Date:   Wed,  2 Sep 2020 00:15:36 +1000
-Message-Id: <20200901141539.1757549-21-npiggin@gmail.com>
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um@lists.infradead.org
+Subject: [PATCH v3 21/23] um: use asm-generic/mmu_context.h for no-op implementations
+Date:   Wed,  2 Sep 2020 00:15:37 +1000
+Message-Id: <20200901141539.1757549-22-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200901141539.1757549-1-npiggin@gmail.com>
 References: <20200901141539.1757549-1-npiggin@gmail.com>
@@ -65,100 +68,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: linux-um@lists.infradead.org
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
 
 Please ack or nack if you object to this being mered via
 Arnd's tree.
 
- arch/sparc/include/asm/mmu_context_32.h | 10 ++++------
- arch/sparc/include/asm/mmu_context_64.h | 10 +++++-----
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ arch/um/include/asm/mmu_context.h | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/arch/sparc/include/asm/mmu_context_32.h b/arch/sparc/include/asm/mmu_context_32.h
-index 7ddcb8badf70..509043f81560 100644
---- a/arch/sparc/include/asm/mmu_context_32.h
-+++ b/arch/sparc/include/asm/mmu_context_32.h
-@@ -6,13 +6,10 @@
- 
- #include <asm-generic/mm_hooks.h>
- 
--static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
--{
--}
--
- /* Initialize a new mmu context.  This is invoked when a new
-  * address space instance (unique or shared) is instantiated.
+diff --git a/arch/um/include/asm/mmu_context.h b/arch/um/include/asm/mmu_context.h
+index 17ddd4edf875..f8a100770691 100644
+--- a/arch/um/include/asm/mmu_context.h
++++ b/arch/um/include/asm/mmu_context.h
+@@ -37,10 +37,9 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
+  * end asm-generic/mm_hooks.h functions
   */
-+#define init_new_context init_new_context
- int init_new_context(struct task_struct *tsk, struct mm_struct *mm);
- 
- /* Destroy a dead context.  This occurs when mmput drops the
-@@ -20,17 +17,18 @@ int init_new_context(struct task_struct *tsk, struct mm_struct *mm);
-  * all the page tables have been flushed.  Our job is to destroy
-  * any remaining processor-specific state.
-  */
-+#define destroy_context destroy_context
- void destroy_context(struct mm_struct *mm);
- 
- /* Switch the current MM context. */
- void switch_mm(struct mm_struct *old_mm, struct mm_struct *mm,
- 	       struct task_struct *tsk);
  
 -#define deactivate_mm(tsk,mm)	do { } while (0)
 -
- /* Activate a new MM instance for the current task. */
- #define activate_mm(active_mm, mm) switch_mm((active_mm), (mm), NULL)
+ extern void force_flush_all(void);
  
-+#include <asm-generic/mmu_context.h>
-+
- #endif /* !(__ASSEMBLY__) */
- 
- #endif /* !(__SPARC_MMU_CONTEXT_H) */
-diff --git a/arch/sparc/include/asm/mmu_context_64.h b/arch/sparc/include/asm/mmu_context_64.h
-index 312fcee8df2b..7a8380c63aab 100644
---- a/arch/sparc/include/asm/mmu_context_64.h
-+++ b/arch/sparc/include/asm/mmu_context_64.h
-@@ -16,17 +16,16 @@
- #include <asm-generic/mm_hooks.h>
- #include <asm/percpu.h>
- 
--static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
--{
--}
--
- extern spinlock_t ctx_alloc_lock;
- extern unsigned long tlb_context_cache;
- extern unsigned long mmu_context_bmap[];
- 
- DECLARE_PER_CPU(struct mm_struct *, per_cpu_secondary_mm);
- void get_new_mmu_context(struct mm_struct *mm);
-+
-+#define init_new_context init_new_context
- int init_new_context(struct task_struct *tsk, struct mm_struct *mm);
-+#define destroy_context destroy_context
- void destroy_context(struct mm_struct *mm);
- 
- void __tsb_context_switch(unsigned long pgd_pa,
-@@ -136,7 +135,6 @@ static inline void switch_mm(struct mm_struct *old_mm, struct mm_struct *mm, str
- 	spin_unlock_irqrestore(&mm->context.lock, flags);
- }
- 
--#define deactivate_mm(tsk,mm)	do { } while (0)
- #define activate_mm(active_mm, mm) switch_mm(active_mm, mm, NULL)
- 
- #define  __HAVE_ARCH_START_CONTEXT_SWITCH
-@@ -187,6 +185,8 @@ static inline void finish_arch_post_lock_switch(void)
++#define activate_mm activate_mm
+ static inline void activate_mm(struct mm_struct *old, struct mm_struct *new)
+ {
+ 	/*
+@@ -66,13 +65,12 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
  	}
  }
  
+-static inline void enter_lazy_tlb(struct mm_struct *mm, 
+-				  struct task_struct *tsk)
+-{
+-}
+-
++#define init_new_context init_new_context
+ extern int init_new_context(struct task_struct *task, struct mm_struct *mm);
+ 
++#define destroy_context destroy_context
+ extern void destroy_context(struct mm_struct *mm);
+ 
 +#include <asm-generic/mmu_context.h>
 +
- #endif /* !(__ASSEMBLY__) */
- 
- #endif /* !(__SPARC64_MMU_CONTEXT_H) */
+ #endif
 -- 
 2.23.0
 
