@@ -2,205 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A01259DD7
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 20:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CDE259DE3
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 20:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728571AbgIASFy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 14:05:54 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:36466 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726377AbgIASFw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Sep 2020 14:05:52 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 081I5chn004983;
-        Tue, 1 Sep 2020 11:05:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pfpt0220; bh=S0RGQHBf4JE3KRy7FfsZIHeQHiJC9E8CDFbIsjrItQk=;
- b=JnTOo1gIrnWvrdLLfimktEpoJ0X6aQ8IpnK2RjTbCg/R73TSIzKq3Ds5gKTF0eu6VKu9
- hO7MOLnZXZtfFu1EuODdPc4P9TAECTZ0E9XrFoPxw9t3UI7BxxNMfPJwmDz2L7MoVUQe
- SzFy3xLKHCHF97CNsym3OT6ujJN7ryyJ+ckI1EX/80UABLVza55RZ7EEvVNSgEiImFZO
- Ph5OHGz2e2N8gGxSYdDpTZYo61ekvKliunnxaXGhcw86Zq0inRds5geQ5HqUSxVbp6IT
- 75NqmIDwdHFiok2S6wJeyBTJZC7dHNco27fXRpBX4pDGbgomgfl4+hugqa4aG0wwnSdp aA== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 337phq1tqe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 01 Sep 2020 11:05:38 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Sep
- 2020 11:05:37 -0700
-Received: from SC-EXCH02.marvell.com (10.93.176.82) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Sep
- 2020 11:05:36 -0700
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (104.47.38.50) by
- SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Tue, 1 Sep 2020 11:05:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Puksweb41G7n648/eGOhytFj/GVP6MeStqvZRWfxNCZwZ4n4GV0hBq4ZcQQxz7C05Pct6tgihRCqBuPIKzNtWfIl+7NHLXcBihNRMfwsXnVNzXETxF6PbJsR+w/XYI8NSCz6TPZga42fIqCxK4DK9rYABhi89Nibq9fcwh6j3ea01Dl8Sxq/WBhEsZh8oK8ak5ubErivsJdlNMV7wAaYp8If1Lr664HUW5tVtxxIVwMl4EsjJsu9KDptmL0EaeQsWMWcnW1xqCF/Nn+LiFEGq3n5j2saePakEn03VJ01pC78YQev2dWbJNBJM2bGdK1tuwHQdElO7DszruTFBali0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S0RGQHBf4JE3KRy7FfsZIHeQHiJC9E8CDFbIsjrItQk=;
- b=USXdfdabg7R+fMF/Vu98ihgIczJDdXCmKSWDSw4PWgMXicRTTAbXFNXzZJfO7Nv/qXVr/venbl6F65odBjYbPO78mHhue7ClRfkc1AvPsGWXw0BZeq0f7eX+5LvzsZQVltIBhofZQoob7/x43w7yr+m3+IRdfV+yV2tqeH5L8NcCUWiU1yQhek2udstDEggddP2XCJzX9CVbJThKp1qsvLgj+q3M5dy/PsrllcqEPOKWK1zHIGGq9Bb86jw+Z9tlXdho+PaP1QRwF7RaDJ5YS/Gn2lF92K8ssYA4HQUknq2Hxhda/n96PQwhVxDhn6wuDJU+/E1ret3SQG4vWA59eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S0RGQHBf4JE3KRy7FfsZIHeQHiJC9E8CDFbIsjrItQk=;
- b=eEZgt12J8oVek65NQ8VSE7JM5HJBkVVFtjtz2Ybu1lJbofLWI1d/+/f8BS027tI7ORces5O/JNQWv7Rl98lYXy+QpOAvum4TTis4qa9xN3/UyWZzRqBMSV3ZRxeTzXah0Tawg6ziZm9zoZ9O4fvo7V+OMhRrh3kexKikEuvNE7k=
-Received: from BYAPR18MB2679.namprd18.prod.outlook.com (2603:10b6:a03:13c::10)
- by BYAPR18MB2454.namprd18.prod.outlook.com (2603:10b6:a03:13a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Tue, 1 Sep
- 2020 18:05:34 +0000
-Received: from BYAPR18MB2679.namprd18.prod.outlook.com
- ([fe80::2ded:ad90:8fc1:5c9e]) by BYAPR18MB2679.namprd18.prod.outlook.com
- ([fe80::2ded:ad90:8fc1:5c9e%4]) with mapi id 15.20.3326.025; Tue, 1 Sep 2020
- 18:05:34 +0000
-From:   George Cherian <gcherian@marvell.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "mst@redhat.com" <mst@redhat.com>
-Subject: Re: Re: [PATCH v3] PCI: Add pci_iounmap
-Thread-Topic: Re: [PATCH v3] PCI: Add pci_iounmap
-Thread-Index: AdaAiO3VCaJd0VKpQqmpZfC3xBhX9w==
-Date:   Tue, 1 Sep 2020 18:05:34 +0000
-Message-ID: <BYAPR18MB2679AAA983C2AF3CD399ABD8C52E0@BYAPR18MB2679.namprd18.prod.outlook.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: huawei.com; dkim=none (message not signed)
- header.d=none;huawei.com; dmarc=none action=none header.from=marvell.com;
-x-originating-ip: [49.207.219.223]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 280e0dd3-0935-482a-488b-08d84ea19f79
-x-ms-traffictypediagnostic: BYAPR18MB2454:
-x-microsoft-antispam-prvs: <BYAPR18MB2454558431E34397441BC2B0C52E0@BYAPR18MB2454.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1122;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mWTM3zJrlJtvdaPM0z3L8fzkeT6kSbKJvOnICO6LuuaU4y4XT4j9d9ocAf55H44HZsvWn4uLuN7m2zs53a8dK72lH+OZcMm95vE++YPs/sf3PkyCAvs+qjx0POFKef9FPW2jXrwA3j/Ine5KkCu2+yfmqSjXtBgNjJ99hf1IufK9NLDHQRU8YaY7ZB/VZtlEZUMlRdiv07c2/bHKGv2RI3mhGLfhjJFIZn0to0KYOL2lV5Bi8MmQOnzuD5uIOsw9PUVfvSfS65bZBD7guFFmzoS98gHh+6sMmaVLYSwuWy4WHSGGeih5daR1iXcnkeWR94Parst7lmZR7t8cwUzKhA9Vcrud1MHYz1awDO+NzT3aQ7mgpIphGFhK2YoTq9nntbR6gvM9k/uks6qvu+i5iw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR18MB2679.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(136003)(366004)(396003)(9686003)(7696005)(53546011)(966005)(6506007)(8936002)(33656002)(55016002)(316002)(55236004)(54906003)(110136005)(478600001)(86362001)(2906002)(5660300002)(52536014)(186003)(66556008)(66946007)(64756008)(66446008)(66476007)(26005)(83380400001)(76116006)(19627235002)(4326008)(8676002)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: rauwkxRcw/nHZ49jT3rab6GYbTiSX75JXHIDTatvJO6HeJJkKG1nf5oLLyFT023fON8KLKMmuQtJo9iRQGY/BxBSXuQJGteD6hlv8x7dBO5spj9Go9SFyy2tmTOwrAZDTnscpq0cm+jGH7JpiAT9HBouTopKolLcQG4mbLXAO/Xe9YRRRuirtcUKlNZ/YwexrIXkyUvYifc/aQ9c2ry0Uye9huo3LNuw0T/6Kaf8IyXJGNk8zLxadHX/fW1aRHNR8+g1sYkVRcr9S9MtQ6XOcfS9x1ZzZEe6TLaY40HXyvtgKL5DPp2aAj7qOza+9gPUGxZJb5wi+ti+wEqfA37GZHTyYOXBPAIF67ddqno09yYaxP2YWZpJKilsrNCU1SUCEYqfuvPXVSIuvKwM3l7jAGbpQKStY66rfQFDZ6C1cJOLMJ/NGzFglJ4z5b+B34xKFOK2ZWW9X42AEX3MXhjL2ta/LDK6UzJq9UbAh8KfND0A6pF8Tm6zraCkm1YWHgWfGCUfwKsQvny85OGnQmHGXj1M0YmfFB64QmA+tqKiCwjHH0syl2vOrNp62uPF1DE045N6QJRqs86SuZplENpO9iKnu0OcV39SUm/LNLmgdTH4O7t9bwVbouZ5reuEk4lc+W0wf2zCnQJZIFY4F1CC9Q==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1729526AbgIASLm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 14:11:42 -0400
+Received: from mga11.intel.com ([192.55.52.93]:64009 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726377AbgIASLl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Sep 2020 14:11:41 -0400
+IronPort-SDR: pyb1UTA7YQrED807E2mO0Oj962rUapGJYQ2yC67d6yAUs4F+1zuiifAu2dQHYA00xIKKjo34T3
+ 1rzmp2Db3NZQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="154751471"
+X-IronPort-AV: E=Sophos;i="5.76,379,1592895600"; 
+   d="scan'208";a="154751471"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 11:11:39 -0700
+IronPort-SDR: U9Za4Fsprnn24UWgzswsDS3jgMDfq4GjY2CkedkkCRDY31krR7oOGKyx9lKCG8Pc9lJkNVr+uQ
+ OXMdfSgp5/bw==
+X-IronPort-AV: E=Sophos;i="5.76,379,1592895600"; 
+   d="scan'208";a="301533104"
+Received: from jcervan1-mobl1.amr.corp.intel.com (HELO [10.212.146.17]) ([10.212.146.17])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 11:11:38 -0700
+Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+To:     Andy Lutomirski <luto@kernel.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     Dave Martin <Dave.Martin@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
+ <73c2211f-8811-2d9f-1930-1c5035e6129c@intel.com>
+ <af258a0e-56e9-3747-f765-dfe45ce76bba@intel.com>
+ <ef7f9e24-f952-d78c-373e-85435f742688@intel.com>
+ <20200826164604.GW6642@arm.com> <87ft892vvf.fsf@oldenburg2.str.redhat.com>
+ <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
+ <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com>
+ <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
+ <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
+ <20200901102758.GY6642@arm.com>
+ <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
+ <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
+Date:   Tue, 1 Sep 2020 11:11:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR18MB2679.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 280e0dd3-0935-482a-488b-08d84ea19f79
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2020 18:05:34.3403
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jsongXW69TcfopnoWm/srVaS1GnS1FLUo862e2uPcYzVqo1EDK0lnleYTjyptgyqOrzcGcpkFAoNiEO8ihUAsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2454
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-01_10:2020-09-01,2020-09-01 signatures=0
+In-Reply-To: <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Yang,
+On 9/1/20 10:45 AM, Andy Lutomirski wrote:
+>>> For arm64 (and sparc etc.) we continue to use the regular mmap/mprotect
+>>> family of calls.  One or two additional arch-specific mmap flags are
+>>> sufficient for now.
+>>>
+>>> Is x86 definitely not going to fit within those calls?
+>> That can work for x86.  Andy, what if we create PROT_SHSTK, which can
+>> been seen only from the user.  Once in kernel, it is translated to
+>> VM_SHSTK.  One question for mremap/mprotect is, do we allow a normal
+>> data area to become shadow stack?
+> I'm unconvinced that we want to use a somewhat precious PROT_ or VM_
+> bit for this.  Using a flag bit makes sense if we expect anyone to
+> ever map an fd or similar as a shadow stack, but that seems a bit odd
+> in the first place.  To me, it seems more logical for a shadow stack
+> to be a special sort of mapping with a special vm_ops, not a normal
+> mapping with a special flag set.  Although I realize that we want
+> shadow stacks to work like anonymous memory with respect to fork().
+> Dave?
 
-> -----Original Message-----
-> From: Yang Yingliang <yangyingliang@huawei.com>
-> Sent: Tuesday, September 1, 2020 6:59 PM
-> To: George Cherian <gcherian@marvell.com>; linux-kernel@vger.kernel.org;
-> linux-arch@vger.kernel.org; linux-pci@vger.kernel.org
-> Cc: kbuild-all@lists.01.org; bhelgaas@google.com; arnd@arndb.de;
-> mst@redhat.com
-> Subject: Re: [PATCH v3] PCI: Add pci_iounmap
->=20
->=20
->
->=20
-> On 2020/8/25 9:25, kernel test robot wrote:
-> > Hi George,
-> >
-> > I love your patch! Yet something to improve:
-> >
-> > [auto build test ERROR on pci/next]
-> > [also build test ERROR on linux/master linus/master asm-generic/master
-> > v5.9-rc2 next-20200824] [If your patch is applied to the wrong git tree=
-,
-> kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__git-
-> 2Dscm.com_doc
-> > s_git-2Dformat-2Dpatch&d=3DDwIC-
-> g&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DTjMsEFPc7di
-> >
-> rkF6u2D3eSIS0cA8FeYpzRkkMzr4aCbk&m=3DdvtRkwC273FmalEZE_KonLRWrIV
-> WLSWfG61
-> > NWTWG5LI&s=3DycW6SZOVRuKAm3YwdhyAuSh22oPuengSMVuv-
-> EwaUew&e=3D ]
-> >
-> > url:    https://urldefense.proofpoint.com/v2/url?u=3Dhttps-
-> 3A__github.com_0day-2Dci_linux_commits_George-2DCherian_PCI-2DAdd-
-> 2Dpci-5Fiounmap_20200824-2D212149&d=3DDwIC-
-> g&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DTjMsEFPc7dirkF6u2D3eSIS0cA8FeYpzRkk
-> Mzr4aCbk&m=3DdvtRkwC273FmalEZE_KonLRWrIVWLSWfG61NWTWG5LI&s=3D6c
-> UOYHeDOBZ0HaFc2z-vaDgDmbIK4LCBRt9kNkn1sto&e=3D
-> > base:   https://urldefense.proofpoint.com/v2/url?u=3Dhttps-
-> 3A__git.kernel.org_pub_scm_linux_kernel_git_helgaas_pci.git&d=3DDwIC-
-> g&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DTjMsEFPc7dirkF6u2D3eSIS0cA8FeYpzRkk
-> Mzr4aCbk&m=3DdvtRkwC273FmalEZE_KonLRWrIVWLSWfG61NWTWG5LI&s=3Dh-
-> TMyLlEdAwew-u52q4dgWBUMgm0ys-xKzvOO86e1Lw&e=3D  next
-> > config: powerpc-allyesconfig (attached as .config)
-> > compiler: powerpc64-linux-gcc (GCC) 9.3.0 reproduce (this is a W=3D1
-> > build):
-> >          wget https://urldefense.proofpoint.com/v2/url?u=3Dhttps-
-> 3A__raw.githubusercontent.com_intel_lkp-
-> 2Dtests_master_sbin_make.cross&d=3DDwIC-
-> g&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DTjMsEFPc7dirkF6u2D3eSIS0cA8FeYpzRkk
-> Mzr4aCbk&m=3DdvtRkwC273FmalEZE_KonLRWrIVWLSWfG61NWTWG5LI&s=3Daz
-> QcL0MQmPpr9UfvyBSSdQiu1UbjJgFrzNJOtcZ_--E&e=3D  -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # save the attached .config to linux build tree
-> >          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0
-> > make.cross ARCH=3Dpowerpc
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >     powerpc64-linux-ld: lib/pci_iomap.o: in function `__crc_pci_iounmap=
-':
-> >>> (.rodata+0x10): multiple definition of `__crc_pci_iounmap';
-> >>> lib/iomap.o:(.rodata+0x68): first defined here
-> EXPORT_SYMBOL(pci_iounmap) in lib/iomap.c need be removed.
-I really don't think that is the way to fix this. I have also seen your oth=
-er patch=20
-in which iomap being moved out of lib/iomap.c to header file.
+I actually don't like the idea of *creating* mappings much.
 
-There was a reason for moving iomap and its variants to a lib since most of
-the arch's implementation of map was similar. Whereas the unmap had multipl=
-e=20
-implementation per arch's. So, the lib/iomap never implemented the generic =
-unmap.
+I think the pkey model has worked out pretty well where we separate
+creating the mapping from doing something *to* it, like changing
+protections.  For instance, it would be nice if we could preserve things
+like using hugetlbfs or heck even doing KSM for shadow stacks.
 
-I see either of the following solution.
-a. Have an arm64 specific implementation for the unmap function.
-Or
-b. something on the lines of v2[1], which accommodates all the arch's but h=
-as the #ifdef
-for which Bjorn raised his concerns.
+If we're *creating* mappings, we've pretty much ruled out things like
+hugetlbfs.
 
-Bjorn, any comments?
+Something like mprotect_shstk() would allow an implementation today that
+only works on anonymous memory *and* sets up a special vm_ops.  But, the
+same exact ABI could do wonky stuff in the future if we decided we
+wanted to do shadow stacks on DAX or hugetlbfs or whatever.
 
-Regards
--George
-
-[1] - https://lkml.org/lkml/2020/8/20/28
+I don't really like the idea of PROT_SHSTK those are plumbed into a
+bunch of interfaces.  But, I also can't deny that it seems to be working
+fine for the arm64 folks.
