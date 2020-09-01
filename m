@@ -2,89 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7B258881
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 08:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCCE258891
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Sep 2020 08:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgIAGvJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Sep 2020 02:51:09 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:39153 "EHLO pegase1.c-s.fr"
+        id S1726044AbgIAGyc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Sep 2020 02:54:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726406AbgIAGvI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Sep 2020 02:51:08 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4Bgd553xHtz9txw9;
-        Tue,  1 Sep 2020 08:51:05 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id Rn8oc928E3D7; Tue,  1 Sep 2020 08:51:05 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Bgd552r2nz9txww;
-        Tue,  1 Sep 2020 08:51:05 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 514358B774;
-        Tue,  1 Sep 2020 08:51:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Pc-EGvx7jn7B; Tue,  1 Sep 2020 08:51:06 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6B8028B75E;
-        Tue,  1 Sep 2020 08:51:05 +0200 (CEST)
-Subject: Re: [PATCH v3 08/13] mm/debug_vm_pgtable/thp: Use page table
- depost/withdraw with THP
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
-References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
- <20200827080438.315345-9-aneesh.kumar@linux.ibm.com>
- <e7877a8d-b433-0cb4-50a7-631de0022c24@arm.com>
- <9beaaf93-b2dd-6d56-7737-9f022760f246@linux.ibm.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <d80a91c3-0edf-7e2f-8101-2d37a371f4bd@csgroup.eu>
-Date:   Tue, 1 Sep 2020 08:50:56 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726006AbgIAGyb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Sep 2020 02:54:31 -0400
+Received: from kernel.org (unknown [87.70.91.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CAA4E2087D;
+        Tue,  1 Sep 2020 06:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598943271;
+        bh=NVmhxz3quM6Qr+ee/JkOEjpslKF1E6DzA+56ugDqG9k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t9Y31Vy9OQ4upleKjlqFdKlJK15KKX0SeJMrIzpOD+h6YlgofD7l0DMfSRLJ3VJky
+         nrx3MQjQHGExn3IlWT0UpeVebNfTu7czSbvy817AI5ED9IboS07XLdgA4yy7spNWwP
+         DDlnAwt6zWXRDvjtlRUnCMDswWZXlDSzXZawiaLk=
+Date:   Tue, 1 Sep 2020 09:54:25 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 00/23] Use asm-generic for mmu_context no-op functions
+Message-ID: <20200901065425.GE432455@kernel.org>
+References: <20200826145249.745432-1-npiggin@gmail.com>
+ <20200830101837.GB423750@kernel.org>
+ <1598940942.o1fbygdcvl.astroid@bobo.none>
 MIME-Version: 1.0
-In-Reply-To: <9beaaf93-b2dd-6d56-7737-9f022760f246@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598940942.o1fbygdcvl.astroid@bobo.none>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-Le 01/09/2020 à 08:25, Aneesh Kumar K.V a écrit :
-> On 9/1/20 8:52 AM, Anshuman Khandual wrote:
->>
->>
->>
->> There is a checkpatch.pl warning here.
->>
->> WARNING: Possible unwrapped commit description (prefer a maximum 75 
->> chars per line)
->> #7:
->> Architectures like ppc64 use deposited page table while updating the 
->> huge pte
->>
->> total: 0 errors, 1 warnings, 40 lines checked
->>
+On Tue, Sep 01, 2020 at 04:17:00PM +1000, Nicholas Piggin wrote:
+> Excerpts from Mike Rapoport's message of August 30, 2020 8:18 pm:
+> > On Thu, Aug 27, 2020 at 12:52:26AM +1000, Nicholas Piggin wrote:
+> >> It would be nice to be able to modify mmu_context functions or add a
+> >> hook without updating all architectures, many of which will be no-ops.
+> >> 
+> >> The motivation for this series is a change to lazy mmu handling, but
+> >> this series stands on its own as a good cleanup whether or not we end
+> >> up making that change.
+> > 
+> > I really like this series, I just have some small comments in reply to
+> > patch 1, otherwise feel free to add
+> > 
+> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> I will ignore all these, because they are not really important IMHO.
+> I can't see your comments in reply to patch 1.
+
+Hmm, apparently I forgot to hit "Send"... 
+
+> Thanks,
+> Nick
 > 
 
-When doing a git log in a 80 chars terminal window, having wrapping 
-lines is not really convenient. It should be easy to avoid it.
-
-Christophe
+-- 
+Sincerely yours,
+Mike.
