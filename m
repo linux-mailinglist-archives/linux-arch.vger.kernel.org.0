@@ -2,211 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DD725A4A6
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 06:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE45C25A56B
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 08:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbgIBEjy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 00:39:54 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45120 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726144AbgIBEjw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 00:39:52 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0823WoJu151620;
-        Tue, 1 Sep 2020 23:58:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=NRMxz31et6UNTlJA7+QKz+EOKxjkgpK3zxuT1c6AiN4=;
- b=Lez2m5b261V98rccfFzz0hwukbPMRg+fN6kpKMbUHKhoQx6ijiHRiHmZ5z7/SjEtQYIa
- Lotrl01VlG6KIIbqDAQ7eQdCrJOOgn91SVwSSQlK5kFFNRjIMAZNWSM/vApHas8Z9ypp
- 10pujNky2D9tyeDZU3GnQEWmrjm+UHgynRi/sxhWndiLR3n7XeJS2janOBgaT4V/Ej2/
- Pc0QBGcQ7iWfP2rkuvEOGs1JstKp4ovpzGwSsrXpvndrk6Mdj7sRawxwtUiUzmwi0EJJ
- GLPdrHJ8Icf+KFWxCy0l6WwIhLdzvgmQENJQJY5Fg7mQYua1prtkWi4IzFlATglVucEl Ng== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33a3dern4m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Sep 2020 23:58:17 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0823vMJ3016533;
-        Wed, 2 Sep 2020 03:58:15 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 337e9h2k3j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 03:58:14 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0823wCjS30998800
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Sep 2020 03:58:12 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7544EA404D;
-        Wed,  2 Sep 2020 03:58:12 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89808A4055;
-        Wed,  2 Sep 2020 03:58:09 +0000 (GMT)
-Received: from [9.199.61.124] (unknown [9.199.61.124])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Sep 2020 03:58:09 +0000 (GMT)
-Subject: Re: [PATCH v3 13/13] mm/debug_vm_pgtable: populate a pte entry before
- fetching it
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
-References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
- <20200827080438.315345-14-aneesh.kumar@linux.ibm.com>
- <edc68223-7f8a-13df-68eb-9682f585adb8@arm.com>
- <abef1791-8779-6b34-3178-3bf3ab36d42b@linux.ibm.com>
- <e3140b44-993e-aa4b-130d-ee2230eff2b5@arm.com>
- <7ef7c302-e7e6-570e-3100-5dd1bf9551be@linux.ibm.com>
- <4ba15b8f-ac90-17ec-9b95-0451e2a38e98@arm.com>
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Message-ID: <7de344c3-26ea-be34-4435-8842360ed565@linux.ibm.com>
-Date:   Wed, 2 Sep 2020 09:28:08 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726212AbgIBGNd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 02:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbgIBGNb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 02:13:31 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0720BC061244
+        for <linux-arch@vger.kernel.org>; Tue,  1 Sep 2020 23:13:25 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id e11so2403628wme.0
+        for <linux-arch@vger.kernel.org>; Tue, 01 Sep 2020 23:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iqd3bsowREDTYEVeGZ9VhDsWWfsaRpNMJIu5Ds4gx2g=;
+        b=B9faO6hTm/56+u5sVOL4bax36f9/sfr3W32Ww28aFIYXNDYuDoksgXIi4hhSRsr1Gj
+         kuaF4StDHIpnbWyABPexzyRmGWsMuKHSfEpy/oRxo/nSMF6SCaOOZ6elPQ6c7RlXmJSA
+         BfPbJ9l4p+0f33mPgp9yQrXZXShRnhNyh4httqSa7abhNR4XuMnR7tn8yJVtemXFuyEN
+         m6li2ctvqvvSaIZn7IK3r9fy+tD9duq0YEKO7XNtxsFfF8eAV4sX03ag/uulyvUsDj98
+         otrFVEl5MM46mee7asZZJlFi5ueP0tZSgw3LEkQloGgrLQuADKh/VBqtZvRdryugYZAq
+         ghQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iqd3bsowREDTYEVeGZ9VhDsWWfsaRpNMJIu5Ds4gx2g=;
+        b=UjfKQXSoGEjigj4QCgsxMI0c+KIhcl/Vot4TYg12mSGwgw2hJwogCnkhsXOJ4fcmnL
+         FWDmIeZ8M6fL5W5EhlXibWKCna8X8o8qJnJE8ugOVNNXb3KvT0ENnkvo7t/+Nxf+tzV/
+         18HQTgkPVq/Re46HVCEMCYVbsY2uncp4k2VueLLbNElkciE8qPtO6dXgG7+DWWg3HoxD
+         ACyJB/EJCvzsB7s4KL9yABD2R9BqRvB9/HrfHhESfPmQ8wPGbldpQqwB/qFas9sNjVNs
+         qk2Gc7a7Yr6HOA1t/W/nn9an5oQWKNRc2XW/GWZ6yM87OqF7QhrL4cM+4aTAa22n+srY
+         fexw==
+X-Gm-Message-State: AOAM530IxLZYMk0hILUXwO/lzd9IvXYH8FPqaFXFWKng9T8DT2VoLQuZ
+        NEOf7QYIF4uPygE/SKfooxMZuQ==
+X-Google-Smtp-Source: ABdhPJwL7FLejXtrVwUqdEuOpsyykxM3LSW2wkJ07/4cgh9fxFaaYW7lbo9BIfgItLZBNajZ4glP6A==
+X-Received: by 2002:a1c:ed15:: with SMTP id l21mr4951241wmh.37.1599027202216;
+        Tue, 01 Sep 2020 23:13:22 -0700 (PDT)
+Received: from elver.google.com ([100.105.32.75])
+        by smtp.gmail.com with ESMTPSA id z9sm4988328wmg.46.2020.09.01.23.13.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 23:13:21 -0700 (PDT)
+Date:   Wed, 2 Sep 2020 08:13:15 +0200
+From:   Marco Elver <elver@google.com>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, kernel-team@fb.com, mingo@kernel.org,
+        andreyknvl@google.com, glider@google.com, dvyukov@google.com,
+        cai@lca.pw, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Axtens <dja@axtens.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH kcsan 18/19] bitops, kcsan: Partially revert
+ instrumentation for non-atomic bitops
+Message-ID: <20200902061315.GA1167979@elver.google.com>
+References: <20200831181715.GA1530@paulmck-ThinkPad-P72>
+ <20200831181805.1833-18-paulmck@kernel.org>
+ <20200902033006.GB49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
 MIME-Version: 1.0
-In-Reply-To: <4ba15b8f-ac90-17ec-9b95-0451e2a38e98@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-02_02:2020-09-01,2020-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 mlxscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009020028
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200902033006.GB49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+User-Agent: Mutt/1.14.4 (2020-06-18)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/2/20 9:19 AM, Anshuman Khandual wrote:
+On Wed, Sep 02, 2020 at 11:30AM +0800, Boqun Feng wrote:
+> Hi Paul and Marco,
 > 
+> The whole update patchset looks good to me, just one question out of
+> curiosity fo this one, please see below:
 > 
-> On 09/01/2020 03:28 PM, Aneesh Kumar K.V wrote:
->> On 9/1/20 1:08 PM, Anshuman Khandual wrote:
->>>
->>>
->>> On 09/01/2020 12:07 PM, Aneesh Kumar K.V wrote:
->>>> On 9/1/20 8:55 AM, Anshuman Khandual wrote:
->>>>>
->>>>>
->>>>> On 08/27/2020 01:34 PM, Aneesh Kumar K.V wrote:
->>>>>> pte_clear_tests operate on an existing pte entry. Make sure that is not a none
->>>>>> pte entry.
->>>>>>
->>>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>>>>> ---
->>>>>>     mm/debug_vm_pgtable.c | 6 ++++--
->>>>>>     1 file changed, 4 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
->>>>>> index 21329c7d672f..8527ebb75f2c 100644
->>>>>> --- a/mm/debug_vm_pgtable.c
->>>>>> +++ b/mm/debug_vm_pgtable.c
->>>>>> @@ -546,7 +546,7 @@ static void __init pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp,
->>>>>>     static void __init pte_clear_tests(struct mm_struct *mm, pte_t *ptep,
->>>>>>                        unsigned long vaddr)
->>>>>>     {
->>>>>> -    pte_t pte = ptep_get(ptep);
->>>>>> +    pte_t pte =  ptep_get_and_clear(mm, vaddr, ptep);
->>>>>
->>>>> Seems like ptep_get_and_clear() here just clears the entry in preparation
->>>>> for a following set_pte_at() which otherwise would have been a problem on
->>>>> ppc64 as you had pointed out earlier i.e set_pte_at() should not update an
->>>>> existing valid entry. So the commit message here is bit misleading.
->>>>>
->>>>
->>>> and also fetch the pte value which is used further.
->>>>
->>>>
->>>>>>           pr_debug("Validating PTE clear\n");
->>>>>>         pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
->>>>>> @@ -944,7 +944,7 @@ static int __init debug_vm_pgtable(void)
->>>>>>         p4d_t *p4dp, *saved_p4dp;
->>>>>>         pud_t *pudp, *saved_pudp;
->>>>>>         pmd_t *pmdp, *saved_pmdp, pmd;
->>>>>> -    pte_t *ptep;
->>>>>> +    pte_t *ptep, pte;
->>>>>>         pgtable_t saved_ptep;
->>>>>>         pgprot_t prot, protnone;
->>>>>>         phys_addr_t paddr;
->>>>>> @@ -1049,6 +1049,8 @@ static int __init debug_vm_pgtable(void)
->>>>>>          */
->>>>>>           ptep = pte_alloc_map_lock(mm, pmdp, vaddr, &ptl);
->>>>>> +    pte = pfn_pte(pte_aligned, prot);
->>>>>> +    set_pte_at(mm, vaddr, ptep, pte);
->>>>>
->>>>> Not here, creating and populating an entry must be done in respective
->>>>> test functions itself. Besides, this seems bit redundant as well. The
->>>>> test pte_clear_tests() with the above change added, already
->>>>>
->>>>> - Clears the PTEP entry with ptep_get_and_clear()
->>>>
->>>> and fetch the old value set previously.
->>>
->>> In that case, please move above two lines i.e
->>>
->>> pte = pfn_pte(pte_aligned, prot);
->>> set_pte_at(mm, vaddr, ptep, pte);
->>>
->>> from debug_vm_pgtable() to pte_clear_tests() and update it's arguments
->>> as required.
->>>
->>
->> Frankly, I don't understand what these tests are testing. It all looks like some random clear and set.
+> On Mon, Aug 31, 2020 at 11:18:04AM -0700, paulmck@kernel.org wrote:
+> > From: Marco Elver <elver@google.com>
+> > 
+> > Previous to the change to distinguish read-write accesses, when
+> > CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=y is set, KCSAN would consider
+> > the non-atomic bitops as atomic. We want to partially revert to this
+> > behaviour, but with one important distinction: report racing
+> > modifications, since lost bits due to non-atomicity are certainly
+> > possible.
+> > 
+> > Given the operations here only modify a single bit, assuming
+> > non-atomicity of the writer is sufficient may be reasonable for certain
+> > usage (and follows the permissible nature of the "assume plain writes
+> > atomic" rule). In other words:
+> > 
+> > 	1. We want non-atomic read-modify-write races to be reported;
+> > 	   this is accomplished by kcsan_check_read(), where any
+> > 	   concurrent write (atomic or not) will generate a report.
+> > 
+> > 	2. We do not want to report races with marked readers, but -do-
+> > 	   want to report races with unmarked readers; this is
+> > 	   accomplished by the instrument_write() ("assume atomic
+> > 	   write" with Kconfig option set).
+> > 
 > 
-> The idea here is to have some value with some randomness preferably, in
-> a given PTEP before attempting to clear the entry, in order to make sure
-> that pte_clear() is indeed clearing something of non-zero value.
-> 
->>
->> static void __init pte_clear_tests(struct mm_struct *mm, pte_t *ptep,
->>                     unsigned long vaddr, unsigned long pfn,
->>                     pgprot_t prot)
->> {
->>
->>      pte_t pte = pfn_pte(pfn, prot);
->>      set_pte_at(mm, vaddr, ptep, pte);
->>
->>      pte =  ptep_get_and_clear(mm, vaddr, ptep);
-> 
-> Looking at this again, this preceding pfn_pte() followed by set_pte_at()
-> is not really required. Its reasonable to start with what ever was there
-> in the PTEP as a seed value which anyway gets added with RANDOM_ORVALUE.
-> s/ptep_get/ptep_get_and_clear is sufficient to take care of the powerpc
-> set_pte_at() constraint.
-> 
+> Is there any code in kernel using the above assumption (i.e.
+> non-atomicity of the writer is sufficient)? IOW, have you observed
+> anything bad (e.g. an anoying false positive) after applying the
+> read_write changes but without this patch?
 
-But the way test is written we had none pte before. That is why I added 
-that set_pte_at to put something there. With none pte the below sequence 
-fails.
+We were looking for an answer to:
 
-	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
-	set_pte_at(mm, vaddr, ptep, pte);
+	https://lkml.kernel.org/r/20200810124516.GM17456@casper.infradead.org
 
+Initially we thought using atomic bitops might be required, but after a
+longer offline discussion realized that simply marking the reader in
+this case, but retaining the non-atomic bitop is probably all that's
+needed.
 
-because nobody is marking a _PAGE_PTE there.
+The version of KCSAN that found the above was still using KCSAN from
+Linux 5.8, but we realized with the changed read-write instrumentation
+to bitops in this series, we'd regress and still report the race even if
+the reader was marked. To avoid this with the default KCSAN config, we
+determined that we need the patch here.
 
-	pte_t pte = pfn_pte(pfn, prot);
+The bitops are indeed a bit more special, because for both the atomic
+and non-atomic bitops we *can* reason about the generated code (since we
+control it, although not sure about the asm-generic ones), and that
+makes reasoning about accesses racing with non-atomic bitops more
+feasible. At least that's our rationale for deciding that reverting
+non-atomic bitops treatment to it's more relaxed version is ok.
 
-	pr_debug("Validating PTE clear\n");
-	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
-	set_pte_at(mm, vaddr, ptep, pte);
-	barrier();
-	pte_clear(mm, vaddr, ptep);
-	pte = ptep_get(ptep);
-	WARN_ON(!pte_none(pte));
-
-will that work for you?
-
--aneesh
+Thanks,
+-- Marco
