@@ -2,49 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B2025A768
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 10:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC38825A79A
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 10:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbgIBIKT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 04:10:19 -0400
-Received: from verein.lst.de ([213.95.11.211]:58232 "EHLO verein.lst.de"
+        id S1726247AbgIBISD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 04:18:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38686 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbgIBIKS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Sep 2020 04:10:18 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3CF9067373; Wed,  2 Sep 2020 10:10:04 +0200 (CEST)
-Date:   Wed, 2 Sep 2020 10:10:03 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: remove the last set_fs() in common code, and remove it for x86
- and powerpc v2
-Message-ID: <20200902081003.GB26677@lst.de>
-References: <20200827150030.282762-1-hch@lst.de> <a8bb0319-0928-4687-9e9c-777c5860dbdd@csgroup.eu> <20200901172512.GI1236603@ZenIV.linux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200901172512.GI1236603@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1726130AbgIBISC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Sep 2020 04:18:02 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60C932084C;
+        Wed,  2 Sep 2020 08:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599034682;
+        bh=qdQyUMNUhAH9maeN6ovzgNf69ci5TtGdr1dfZzvLgdA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EStQ3aZ2B9NdDnStmYfSTp4NUc7ccT/Lbg+egmiKIWRUKvK+dbk6N+ELmZLhaRlcx
+         UYwnP7Oc7HlMGkqo5sYfTVjc0sJj9yRGsTZavaX5FCxqfOahLiFxbViVz3lHQWo+56
+         NwhOJn9sRsy4+dLeR1EH/LJh72i9fiKMagAYlkYM=
+Date:   Wed, 2 Sep 2020 17:17:55 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     peterz@infradead.org
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org
+Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
+ and make kretprobe lockless
+Message-Id: <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
+In-Reply-To: <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+        <20200901190808.GK29142@worktop.programming.kicks-ass.net>
+        <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
+        <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 06:25:12PM +0100, Al Viro wrote:
-> On Tue, Sep 01, 2020 at 07:13:00PM +0200, Christophe Leroy wrote:
-> 
-> >     10.92%  dd       [kernel.kallsyms]  [k] iov_iter_zero
-> 
-> Interesting...  Could you get an instruction-level profile inside iov_iter_zero(),
-> along with the disassembly of that sucker?
+On Wed, 2 Sep 2020 09:02:26 +0200
+peterz@infradead.org wrote:
 
-So the interesting thing here is with that none of these code paths
-should have changed at all, and the biggest items on the profile look
-the same modulo some minor reordering.
+> On Wed, Sep 02, 2020 at 09:37:39AM +0900, Masami Hiramatsu wrote:
+> > On Tue, 1 Sep 2020 21:08:08 +0200
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > > On Sat, Aug 29, 2020 at 09:59:49PM +0900, Masami Hiramatsu wrote:
+> > > > Masami Hiramatsu (16):
+> > > >       kprobes: Add generic kretprobe trampoline handler
+> > > >       x86/kprobes: Use generic kretprobe trampoline handler
+> > > >       arm: kprobes: Use generic kretprobe trampoline handler
+> > > >       arm64: kprobes: Use generic kretprobe trampoline handler
+> > > >       arc: kprobes: Use generic kretprobe trampoline handler
+> > > >       csky: kprobes: Use generic kretprobe trampoline handler
+> > > >       ia64: kprobes: Use generic kretprobe trampoline handler
+> > > >       mips: kprobes: Use generic kretprobe trampoline handler
+> > > >       parisc: kprobes: Use generic kretprobe trampoline handler
+> > > >       powerpc: kprobes: Use generic kretprobe trampoline handler
+> > > >       s390: kprobes: Use generic kretprobe trampoline handler
+> > > >       sh: kprobes: Use generic kretprobe trampoline handler
+> > > >       sparc: kprobes: Use generic kretprobe trampoline handler
+> > > >       kprobes: Remove NMI context check
+> > > >       kprobes: Free kretprobe_instance with rcu callback
+> > > >       kprobes: Make local used functions static
+> > > > 
+> > > > Peter Zijlstra (5):
+> > > >       llist: Add nonatomic __llist_add() and __llist_dell_all()
+> > > >       kprobes: Remove kretprobe hash
+> > > >       asm-generic/atomic: Add try_cmpxchg() fallbacks
+> > > >       freelist: Lock less freelist
+> > > >       kprobes: Replace rp->free_instance with freelist
+> > > 
+> > > This looks good to me, do you want me to merge them through -tip? If so,
+> > > do we want to try and get them in this release still?
+> > 
+> > Yes, thanks. For the kretprobe missing issue, we will need the first half
+> > (up to "kprobes: Remove NMI context check"), so we can split the series
+> > if someone think the lockless is still immature.
+> 
+> Ok, but then lockdep will yell at you if you have that enabled and run
+> the unoptimized things.
+
+Oh, does it warn for all spinlock things in kprobes if it is unoptimized?
+Hmm, it has to be noted in the documentation.
+
+Thank you,
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
