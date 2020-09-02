@@ -2,147 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEA425A8B3
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 11:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8844E25A8E6
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 11:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbgIBJgs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 05:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        id S1726742AbgIBJs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 05:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726124AbgIBJgr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 05:36:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7FFC061244;
-        Wed,  2 Sep 2020 02:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CVKEqJ8VyRUxV18RMo+VlglQJ7cxy86dcBr7cGPxf7Y=; b=m5yZH7JL8dt+/qaFKkqSkHCry4
-        pWPuDkOH4lEEQIGy6PkdEl2zH4iSODB+w69Ktxi/JQdBqbiMOeY97fRfrKqosnwimzLCIQh4e8GkZ
-        luum03hjmwT1uYHLsKB7T4qrNMsbSY3EvnStY4kIvdIwYOv4nOtIBCfNEZyhxwM9mpSsA+d+nIFlY
-        jRHyOq0uUHQX4ZShGk2QAUUAh93kD7zrxmWd8ISYKR0oocjVwR9uJ9UycvNJEha9ODECfEQf9pxVV
-        ChN36dgeYob5bsQ6gZDdVr1VYD06wr917Xro7usDZTiEwSuPd91dz0+Wvjkl8kS/9i0QhOomRDk3g
-        VJZ6bMxw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kDPBf-0006nb-Nh; Wed, 02 Sep 2020 09:36:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B06F63003E5;
-        Wed,  2 Sep 2020 11:36:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 66A1323D3D729; Wed,  2 Sep 2020 11:36:13 +0200 (CEST)
-Date:   Wed, 2 Sep 2020 11:36:13 +0200
-From:   peterz@infradead.org
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
-        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
-        paulmck@kernel.org
-Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
- and make kretprobe lockless
-Message-ID: <20200902093613.GY1362448@hirez.programming.kicks-ass.net>
-References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
- <20200901190808.GK29142@worktop.programming.kicks-ass.net>
- <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
- <20200902070226.GG2674@hirez.programming.kicks-ass.net>
- <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
+        with ESMTP id S1726400AbgIBJs4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 05:48:56 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2D6C061244;
+        Wed,  2 Sep 2020 02:48:54 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id d19so2266523pgl.10;
+        Wed, 02 Sep 2020 02:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=ux3HYVB/twlQxBcSTqnhWPU2AHJs+FvCx+/z5WDVFJA=;
+        b=QLpYc9FBvtf6jo9nK102wCzMR9/mge0/dioBMTh/v1a4B+JEU/RenX7oalAr56yIZn
+         Vw2hcZQ5uRDbXZFueRaM8oVZPG0YRCw31NJIVVC4EIoPjBwdHPXQoxAirsz12JdleEpZ
+         c/LNuVRZKxnX+Ok5jSv8Dcx6PdpAzitK30c4CJKUg1abwFyWXck4hjp03VMhAKbrEOO0
+         sskujutTj9SZak6W74eCKFWdUgCPpAq3ZYu69/1UgqYEdSjJQwo/yto74hobN8h2uuqY
+         iJvsu8wROTb6Do/xdyM4sruaXLKl48VhMRHt69NLg1fHzE/D/k1rMJ6pMfQNXYwaCPRF
+         VQKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=ux3HYVB/twlQxBcSTqnhWPU2AHJs+FvCx+/z5WDVFJA=;
+        b=Z9JW96R4ZX5sQZmsfQ/UCKBZt9BD0jpRMkqPWro9iI9OrWwer0CP99YsVcg6ENfxU3
+         zW7BjXko4IdSn8v0bpwY/NhRYjDapoddNaytQVwvujo+8UJaAlS4j7nPbRhjTGY0Pezf
+         y7qBUD0LYpkKmNCgXD3jffVnCsWyahD4q7/1jWjzsi5Fl5upTdYaVa9kvELXLwd15tLI
+         ws/xu+lyQ3DJsjwmc+4NH1jvuKUjjP+xw0/CK0hSEsN299C3gNADRRnQatKZecf4j63d
+         zSKEeR3n+kwDAghXqbylTworeGsi5hmjYap6cBf///TglB7YD9MhCeDnHhqFS+X2Y30H
+         gaEw==
+X-Gm-Message-State: AOAM532VhmCzxkwr+sHkG0FhMC89WgabHnZBhZlt+ZY+/iIp53eV6F8Z
+        4lppBDoeqTKuVwxD1Pw1w3CEv+PCmN0=
+X-Google-Smtp-Source: ABdhPJw2Gdu85lsEOOBHC+PCTNvx970ucNEWXKOugZTaqo6EkmkDIuAOpg0ck/tyA4uRQCobvrmPXg==
+X-Received: by 2002:a63:a08:: with SMTP id 8mr1218714pgk.300.1599040134303;
+        Wed, 02 Sep 2020 02:48:54 -0700 (PDT)
+Received: from localhost ([203.185.249.227])
+        by smtp.gmail.com with ESMTPSA id q201sm4899665pfq.80.2020.09.02.02.48.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2020 02:48:53 -0700 (PDT)
+Date:   Wed, 02 Sep 2020 19:48:48 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 4/4] powerpc/64s/radix: Fix mm_cpumask trimming race vs
+ kthread_use_mm
+To:     linux-mm@kvack.org, Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20200828100022.1099682-1-npiggin@gmail.com>
+        <20200828100022.1099682-5-npiggin@gmail.com>
+        <87pn751zcb.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87pn751zcb.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
+Message-Id: <1599040088.z7acx6fvvf.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 05:17:55PM +0900, Masami Hiramatsu wrote:
+Excerpts from Michael Ellerman's message of September 1, 2020 10:00 pm:
+> Nicholas Piggin <npiggin@gmail.com> writes:
+>> Commit 0cef77c7798a7 ("powerpc/64s/radix: flush remote CPUs out of
+>> single-threaded mm_cpumask") added a mechanism to trim the mm_cpumask of
+>> a process under certain conditions. One of the assumptions is that
+>> mm_users would not be incremented via a reference outside the process
+>> context with mmget_not_zero() then go on to kthread_use_mm() via that
+>> reference.
+>>
+>> That invariant was broken by io_uring code (see previous sparc64 fix),
+>> but I'll point Fixes: to the original powerpc commit because we are
+>> changing that assumption going forward, so this will make backports
+>> match up.
+>>
+>> Fix this by no longer relying on that assumption, but by having each CPU
+>> check the mm is not being used, and clearing their own bit from the mask
+>> if it's okay. This fix relies on commit 38cf307c1f20 ("mm: fix
+>> kthread_use_mm() vs TLB invalidate") to disable irqs over the mm switch,
+>> and ARCH_WANT_IRQS_OFF_ACTIVATE_MM to be enabled.
+>=20
+> You could use:
+>=20
+> Depends-on: 38cf307c1f20 ("mm: fix kthread_use_mm() vs TLB invalidate")
 
-> > Ok, but then lockdep will yell at you if you have that enabled and run
-> > the unoptimized things.
-> 
-> Oh, does it warn for all spinlock things in kprobes if it is unoptimized?
-> Hmm, it has to be noted in the documentation.
+Good idea I wil.
 
-Lockdep will warn about spinlocks used in NMI context that are also used
-outside NMI context.
+>> Fixes: 0cef77c7798a7 ("powerpc/64s/radix: flush remote CPUs out of singl=
+e-threaded mm_cpumask")
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> ---
+>>  arch/powerpc/include/asm/tlb.h       | 13 -------------
+>>  arch/powerpc/mm/book3s64/radix_tlb.c | 23 ++++++++++++++++-------
+>>  2 files changed, 16 insertions(+), 20 deletions(-)
+>=20
+> One minor nit below if you're respinning anyway.
+>=20
+> You know this stuff better than me, but I still reviewed it and it seems
+> good to me.
+>=20
+> Reviewed-by: Michael Ellerman <mpe@ellerman.id.au>
 
-Now, for the kretprobe that kprobe_busy flag prevents the actual
-recursion self-deadlock, but lockdep isn't smart enough to see that.
+Thanks.
 
-One way around this might be to use SINGLE_DEPTH_NESTING for locks when
-we use them from INT3 context. That way they'll have a different class
-and lockdep will not see the recursion.
+>=20
+>> diff --git a/arch/powerpc/include/asm/tlb.h b/arch/powerpc/include/asm/t=
+lb.h
+>> index fbc6f3002f23..d97f061fecac 100644
+>> --- a/arch/powerpc/include/asm/tlb.h
+>> +++ b/arch/powerpc/include/asm/tlb.h
+>> @@ -66,19 +66,6 @@ static inline int mm_is_thread_local(struct mm_struct=
+ *mm)
+>>  		return false;
+>>  	return cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm));
+>>  }
+>> -static inline void mm_reset_thread_local(struct mm_struct *mm)
+>> -{
+>> -	WARN_ON(atomic_read(&mm->context.copros) > 0);
+>> -	/*
+>> -	 * It's possible for mm_access to take a reference on mm_users to
+>> -	 * access the remote mm from another thread, but it's not allowed
+>> -	 * to set mm_cpumask, so mm_users may be > 1 here.
+>> -	 */
+>> -	WARN_ON(current->mm !=3D mm);
+>> -	atomic_set(&mm->context.active_cpus, 1);
+>> -	cpumask_clear(mm_cpumask(mm));
+>> -	cpumask_set_cpu(smp_processor_id(), mm_cpumask(mm));
+>> -}
+>>  #else /* CONFIG_PPC_BOOK3S_64 */
+>>  static inline int mm_is_thread_local(struct mm_struct *mm)
+>>  {
+>> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book=
+3s64/radix_tlb.c
+>> index 0d233763441f..a421a0e3f930 100644
+>> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
+>> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+>> @@ -645,19 +645,29 @@ static void do_exit_flush_lazy_tlb(void *arg)
+>>  	struct mm_struct *mm =3D arg;
+>>  	unsigned long pid =3D mm->context.id;
+>> =20
+>> +	/*
+>> +	 * A kthread could have done a mmget_not_zero() after the flushing CPU
+>> +	 * checked mm_users =3D=3D 1, and be in the process of kthread_use_mm =
+when
+>                                 ^
+>                                 in mm_is_singlethreaded()
+>=20
+> Adding that reference would help join the dots for a new reader I think.
 
-pre_handler_kretprobe() is always called from INT3, right?
+Yes you're right I can change that.
 
-Something like the below might then work...
-
----
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 287b263c9cb9..b78f4fe08e86 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1255,11 +1255,11 @@ __acquires(hlist_lock)
- NOKPROBE_SYMBOL(kretprobe_hash_lock);
- 
- static void kretprobe_table_lock(unsigned long hash,
--				 unsigned long *flags)
-+				 unsigned long *flags, int nesting)
- __acquires(hlist_lock)
- {
- 	raw_spinlock_t *hlist_lock = kretprobe_table_lock_ptr(hash);
--	raw_spin_lock_irqsave(hlist_lock, *flags);
-+	raw_spin_lock_irqsave_nested(hlist_lock, *flags, nesting);
- }
- NOKPROBE_SYMBOL(kretprobe_table_lock);
- 
-@@ -1326,7 +1326,7 @@ void kprobe_flush_task(struct task_struct *tk)
- 	INIT_HLIST_HEAD(&empty_rp);
- 	hash = hash_ptr(tk, KPROBE_HASH_BITS);
- 	head = &kretprobe_inst_table[hash];
--	kretprobe_table_lock(hash, &flags);
-+	kretprobe_table_lock(hash, &flags, 0);
- 	hlist_for_each_entry_safe(ri, tmp, head, hlist) {
- 		if (ri->task == tk)
- 			recycle_rp_inst(ri, &empty_rp);
-@@ -1361,7 +1361,7 @@ static void cleanup_rp_inst(struct kretprobe *rp)
- 
- 	/* No race here */
- 	for (hash = 0; hash < KPROBE_TABLE_SIZE; hash++) {
--		kretprobe_table_lock(hash, &flags);
-+		kretprobe_table_lock(hash, &flags, 0);
- 		head = &kretprobe_inst_table[hash];
- 		hlist_for_each_entry_safe(ri, next, head, hlist) {
- 			if (ri->rp == rp)
-@@ -1950,7 +1950,7 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 
- 	/* TODO: consider to only swap the RA after the last pre_handler fired */
- 	hash = hash_ptr(current, KPROBE_HASH_BITS);
--	raw_spin_lock_irqsave(&rp->lock, flags);
-+	raw_spin_lock_irqsave_nested(&rp->lock, flags, SINGLE_DEPTH_NESTING);
- 	if (!hlist_empty(&rp->free_instances)) {
- 		ri = hlist_entry(rp->free_instances.first,
- 				struct kretprobe_instance, hlist);
-@@ -1961,7 +1961,7 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 		ri->task = current;
- 
- 		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
--			raw_spin_lock_irqsave(&rp->lock, flags);
-+			raw_spin_lock_irqsave_nested(&rp->lock, flags, SINGLE_DEPTH_NESTING);
- 			hlist_add_head(&ri->hlist, &rp->free_instances);
- 			raw_spin_unlock_irqrestore(&rp->lock, flags);
- 			return 0;
-@@ -1971,7 +1971,7 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- 
- 		/* XXX(hch): why is there no hlist_move_head? */
- 		INIT_HLIST_NODE(&ri->hlist);
--		kretprobe_table_lock(hash, &flags);
-+		kretprobe_table_lock(hash, &flags, SINGLE_DEPTH_NESTING);
- 		hlist_add_head(&ri->hlist, &kretprobe_inst_table[hash]);
- 		kretprobe_table_unlock(hash, &flags);
- 	} else {
+Thanks,
+Nick
