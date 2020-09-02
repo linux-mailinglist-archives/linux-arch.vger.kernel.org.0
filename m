@@ -2,134 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE45C25A56B
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 08:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CB925A570
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 08:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbgIBGNd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 02:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgIBGNb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 02:13:31 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0720BC061244
-        for <linux-arch@vger.kernel.org>; Tue,  1 Sep 2020 23:13:25 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id e11so2403628wme.0
-        for <linux-arch@vger.kernel.org>; Tue, 01 Sep 2020 23:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iqd3bsowREDTYEVeGZ9VhDsWWfsaRpNMJIu5Ds4gx2g=;
-        b=B9faO6hTm/56+u5sVOL4bax36f9/sfr3W32Ww28aFIYXNDYuDoksgXIi4hhSRsr1Gj
-         kuaF4StDHIpnbWyABPexzyRmGWsMuKHSfEpy/oRxo/nSMF6SCaOOZ6elPQ6c7RlXmJSA
-         BfPbJ9l4p+0f33mPgp9yQrXZXShRnhNyh4httqSa7abhNR4XuMnR7tn8yJVtemXFuyEN
-         m6li2ctvqvvSaIZn7IK3r9fy+tD9duq0YEKO7XNtxsFfF8eAV4sX03ag/uulyvUsDj98
-         otrFVEl5MM46mee7asZZJlFi5ueP0tZSgw3LEkQloGgrLQuADKh/VBqtZvRdryugYZAq
-         ghQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iqd3bsowREDTYEVeGZ9VhDsWWfsaRpNMJIu5Ds4gx2g=;
-        b=UjfKQXSoGEjigj4QCgsxMI0c+KIhcl/Vot4TYg12mSGwgw2hJwogCnkhsXOJ4fcmnL
-         FWDmIeZ8M6fL5W5EhlXibWKCna8X8o8qJnJE8ugOVNNXb3KvT0ENnkvo7t/+Nxf+tzV/
-         18HQTgkPVq/Re46HVCEMCYVbsY2uncp4k2VueLLbNElkciE8qPtO6dXgG7+DWWg3HoxD
-         ACyJB/EJCvzsB7s4KL9yABD2R9BqRvB9/HrfHhESfPmQ8wPGbldpQqwB/qFas9sNjVNs
-         qk2Gc7a7Yr6HOA1t/W/nn9an5oQWKNRc2XW/GWZ6yM87OqF7QhrL4cM+4aTAa22n+srY
-         fexw==
-X-Gm-Message-State: AOAM530IxLZYMk0hILUXwO/lzd9IvXYH8FPqaFXFWKng9T8DT2VoLQuZ
-        NEOf7QYIF4uPygE/SKfooxMZuQ==
-X-Google-Smtp-Source: ABdhPJwL7FLejXtrVwUqdEuOpsyykxM3LSW2wkJ07/4cgh9fxFaaYW7lbo9BIfgItLZBNajZ4glP6A==
-X-Received: by 2002:a1c:ed15:: with SMTP id l21mr4951241wmh.37.1599027202216;
-        Tue, 01 Sep 2020 23:13:22 -0700 (PDT)
-Received: from elver.google.com ([100.105.32.75])
-        by smtp.gmail.com with ESMTPSA id z9sm4988328wmg.46.2020.09.01.23.13.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 23:13:21 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 08:13:15 +0200
-From:   Marco Elver <elver@google.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, kernel-team@fb.com, mingo@kernel.org,
-        andreyknvl@google.com, glider@google.com, dvyukov@google.com,
-        cai@lca.pw, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Axtens <dja@axtens.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH kcsan 18/19] bitops, kcsan: Partially revert
- instrumentation for non-atomic bitops
-Message-ID: <20200902061315.GA1167979@elver.google.com>
-References: <20200831181715.GA1530@paulmck-ThinkPad-P72>
- <20200831181805.1833-18-paulmck@kernel.org>
- <20200902033006.GB49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+        id S1726510AbgIBGPZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 02:15:25 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:50693 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726144AbgIBGPY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Sep 2020 02:15:24 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4BhDFM1jjKz9tyTH;
+        Wed,  2 Sep 2020 08:15:19 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 3We4wFWomQ2D; Wed,  2 Sep 2020 08:15:19 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4BhDFM0fQQz9tyTG;
+        Wed,  2 Sep 2020 08:15:19 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 111128B788;
+        Wed,  2 Sep 2020 08:15:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id bC4OSETSJupy; Wed,  2 Sep 2020 08:15:19 +0200 (CEST)
+Received: from [10.25.210.31] (unknown [10.25.210.31])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C01518B784;
+        Wed,  2 Sep 2020 08:15:19 +0200 (CEST)
+Subject: Re: [PATCH 10/10] powerpc: remove address space overrides using
+ set_fs()
+To:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+References: <20200827150030.282762-1-hch@lst.de>
+ <20200827150030.282762-11-hch@lst.de>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <8974838a-a0b1-1806-4a3a-e983deda67ca@csgroup.eu>
+Date:   Wed, 2 Sep 2020 08:15:12 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902033006.GB49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-User-Agent: Mutt/1.14.4 (2020-06-18)
+In-Reply-To: <20200827150030.282762-11-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 11:30AM +0800, Boqun Feng wrote:
-> Hi Paul and Marco,
+
+
+Le 27/08/2020 à 17:00, Christoph Hellwig a écrit :
+> Stop providing the possibility to override the address space using
+> set_fs() now that there is no need for that any more.
 > 
-> The whole update patchset looks good to me, just one question out of
-> curiosity fo this one, please see below:
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   arch/powerpc/Kconfig                   |  1 -
+>   arch/powerpc/include/asm/processor.h   |  7 ---
+>   arch/powerpc/include/asm/thread_info.h |  5 +--
+>   arch/powerpc/include/asm/uaccess.h     | 62 ++++++++------------------
+>   arch/powerpc/kernel/signal.c           |  3 --
+>   arch/powerpc/lib/sstep.c               |  6 +--
+>   6 files changed, 22 insertions(+), 62 deletions(-)
 > 
-> On Mon, Aug 31, 2020 at 11:18:04AM -0700, paulmck@kernel.org wrote:
-> > From: Marco Elver <elver@google.com>
-> > 
-> > Previous to the change to distinguish read-write accesses, when
-> > CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC=y is set, KCSAN would consider
-> > the non-atomic bitops as atomic. We want to partially revert to this
-> > behaviour, but with one important distinction: report racing
-> > modifications, since lost bits due to non-atomicity are certainly
-> > possible.
-> > 
-> > Given the operations here only modify a single bit, assuming
-> > non-atomicity of the writer is sufficient may be reasonable for certain
-> > usage (and follows the permissible nature of the "assume plain writes
-> > atomic" rule). In other words:
-> > 
-> > 	1. We want non-atomic read-modify-write races to be reported;
-> > 	   this is accomplished by kcsan_check_read(), where any
-> > 	   concurrent write (atomic or not) will generate a report.
-> > 
-> > 	2. We do not want to report races with marked readers, but -do-
-> > 	   want to report races with unmarked readers; this is
-> > 	   accomplished by the instrument_write() ("assume atomic
-> > 	   write" with Kconfig option set).
-> > 
-> 
-> Is there any code in kernel using the above assumption (i.e.
-> non-atomicity of the writer is sufficient)? IOW, have you observed
-> anything bad (e.g. an anoying false positive) after applying the
-> read_write changes but without this patch?
+> diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
+> index 7fe3531ad36a77..39727537d39701 100644
+> --- a/arch/powerpc/include/asm/uaccess.h
+> +++ b/arch/powerpc/include/asm/uaccess.h
+> @@ -8,62 +8,36 @@
+>   #include <asm/extable.h>
+>   #include <asm/kup.h>
+>   
+> -/*
+> - * The fs value determines whether argument validity checking should be
+> - * performed or not.  If get_fs() == USER_DS, checking is performed, with
+> - * get_fs() == KERNEL_DS, checking is bypassed.
+> - *
+> - * For historical reasons, these macros are grossly misnamed.
+> - *
+> - * The fs/ds values are now the highest legal address in the "segment".
+> - * This simplifies the checking in the routines below.
+> - */
+> -
+> -#define MAKE_MM_SEG(s)  ((mm_segment_t) { (s) })
+> -
+> -#define KERNEL_DS	MAKE_MM_SEG(~0UL)
+>   #ifdef __powerpc64__
+>   /* We use TASK_SIZE_USER64 as TASK_SIZE is not constant */
+> -#define USER_DS		MAKE_MM_SEG(TASK_SIZE_USER64 - 1)
+> -#else
+> -#define USER_DS		MAKE_MM_SEG(TASK_SIZE - 1)
+> -#endif
+> -
+> -#define get_fs()	(current->thread.addr_limit)
+> +#define TASK_SIZE_MAX		TASK_SIZE_USER64
+>   
+> -static inline void set_fs(mm_segment_t fs)
+> +static inline bool __access_ok(unsigned long addr, unsigned long size)
+>   {
+> -	current->thread.addr_limit = fs;
+> -	/* On user-mode return check addr_limit (fs) is correct */
+> -	set_thread_flag(TIF_FSCHECK);
+> +	if (addr >= TASK_SIZE_MAX)
+> +		return false;
+> +	/*
+> +	 * This check is sufficient because there is a large enough gap between
+> +	 * user addresses and the kernel addresses.
+> +	 */
+> +	return size <= TASK_SIZE_MAX;
+>   }
+> -
+> -#define uaccess_kernel() (get_fs().seg == KERNEL_DS.seg)
+> -#define user_addr_max()	(get_fs().seg)
+> -
+> -#ifdef __powerpc64__
+> -/*
+> - * This check is sufficient because there is a large enough
+> - * gap between user addresses and the kernel addresses
+> - */
+> -#define __access_ok(addr, size, segment)	\
+> -	(((addr) <= (segment).seg) && ((size) <= (segment).seg))
+> -
+>   #else
+> +#define TASK_SIZE_MAX		TASK_SIZE
+>   
+> -static inline int __access_ok(unsigned long addr, unsigned long size,
+> -			mm_segment_t seg)
+> +static inline bool __access_ok(unsigned long addr, unsigned long size)
+>   {
+> -	if (addr > seg.seg)
+> -		return 0;
+> -	return (size == 0 || size - 1 <= seg.seg - addr);
+> +	if (addr >= TASK_SIZE_MAX)
+> +		return false;
+> +	if (size == 0)
+> +		return false;
 
-We were looking for an answer to:
+__access_ok() was returning true when size == 0 up to now. Any reason to 
+return false now ?
 
-	https://lkml.kernel.org/r/20200810124516.GM17456@casper.infradead.org
+> +	return size <= TASK_SIZE_MAX - addr;
+>   }
+> -
+> -#endif
+> +#endif /* __powerpc64__ */
+>   
+>   #define access_ok(addr, size)		\
+>   	(__chk_user_ptr(addr),		\
+> -	 __access_ok((__force unsigned long)(addr), (size), get_fs()))
+> +	 __access_ok((unsigned long)(addr), (size)))
+>   
+>   /*
+>    * These are the main single-value transfer routines.  They automatically
 
-Initially we thought using atomic bitops might be required, but after a
-longer offline discussion realized that simply marking the reader in
-this case, but retaining the non-atomic bitop is probably all that's
-needed.
-
-The version of KCSAN that found the above was still using KCSAN from
-Linux 5.8, but we realized with the changed read-write instrumentation
-to bitops in this series, we'd regress and still report the race even if
-the reader was marked. To avoid this with the default KCSAN config, we
-determined that we need the patch here.
-
-The bitops are indeed a bit more special, because for both the atomic
-and non-atomic bitops we *can* reason about the generated code (since we
-control it, although not sure about the asm-generic ones), and that
-makes reasoning about accesses racing with non-atomic bitops more
-feasible. At least that's our rationale for deciding that reverting
-non-atomic bitops treatment to it's more relaxed version is ok.
-
-Thanks,
--- Marco
+Christophe
