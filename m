@@ -2,76 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 317BF25AB60
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 14:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86CC25ABC9
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 15:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgIBMrj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 08:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgIBMrh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 08:47:37 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D75C061244;
-        Wed,  2 Sep 2020 05:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=R5emDCN9N+tW0SHI20K3hMIZd+UDNfkLh7iRsInsea8=; b=B7mS5Yxdq0lOp/JdxuBG2tf0d5
-        c/h+WDVvE7ES/O7GnGA8tH4moh+pjEdRhSrwSzMxz4ufJKcMC0CfwcaK3mEH1TMqYtnjvJKuuFLXY
-        8yBXXwZfaXkugcfom75sM2ogbzidgzxx1i9gAPt1peE33bhXpp2amdmUlCFfbT2Rh46nyNuZctJBj
-        /W69r8SQ2N/M2a7VedMWmqVeMLupoWzcm0MxyS2kXb7zPS7BLFE1FZ0gEwE23nf5miRRSdT60Vqlv
-        QGsKbcqUP1oArmBTq43iLXi+rK6aPBJvFtLO5NQlm3CoQKx/r7Xukhzyb4xpaltHN5kvmOaT7gZRr
-        XpX6oIAQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kDSAh-0003qC-3I; Wed, 02 Sep 2020 12:47:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 893843011C6;
-        Wed,  2 Sep 2020 14:47:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7979F23D3D72C; Wed,  2 Sep 2020 14:47:25 +0200 (CEST)
-Date:   Wed, 2 Sep 2020 14:47:25 +0200
-From:   peterz@infradead.org
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
-        stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: [PATCH kcsan 6/9] tools/memory-model: Expand the cheatsheet.txt
- notion of relaxed
-Message-ID: <20200902124725.GF1362448@hirez.programming.kicks-ass.net>
-References: <20200831182012.GA1965@paulmck-ThinkPad-P72>
- <20200831182037.2034-6-paulmck@kernel.org>
- <20200902035448.GC49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
- <20200902101412.GC1362448@hirez.programming.kicks-ass.net>
- <20200902123715.GD49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+        id S1726654AbgIBNKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 09:10:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:37626 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727906AbgIBNG6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Sep 2020 09:06:58 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80F24D6E;
+        Wed,  2 Sep 2020 06:06:29 -0700 (PDT)
+Received: from [192.168.0.130] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1730D3F68F;
+        Wed,  2 Sep 2020 06:06:23 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH v3 12/13] mm/debug_vm_pgtable/hugetlb: Disable hugetlb
+ test on ppc64
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, x86@kernel.org,
+        linux-arch@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
+References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
+ <20200827080438.315345-13-aneesh.kumar@linux.ibm.com>
+ <6191e77f-c3b7-21ea-6dbd-eecc09735923@arm.com>
+ <68f90b44-b830-58be-3c21-424fee05da37@linux.ibm.com>
+Message-ID: <a76a180b-650c-c868-7a52-593afe97eab3@arm.com>
+Date:   Wed, 2 Sep 2020 18:35:50 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902123715.GD49492@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+In-Reply-To: <68f90b44-b830-58be-3c21-424fee05da37@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 08:37:15PM +0800, Boqun Feng wrote:
-> On Wed, Sep 02, 2020 at 12:14:12PM +0200, peterz@infradead.org wrote:
 
-> > > To be accurate, atomic_set() doesn't return any value, so it cannot be
-> > > ordered against DR and DW ;-)
-> > 
-> > Surely DW is valid for any store.
-> > 
+
+On 09/01/2020 12:00 PM, Aneesh Kumar K.V wrote:
+> On 9/1/20 9:33 AM, Anshuman Khandual wrote:
+>>
+>>
+>> On 08/27/2020 01:34 PM, Aneesh Kumar K.V wrote:
+>>> The seems to be missing quite a lot of details w.r.t allocating
+>>> the correct pgtable_t page (huge_pte_alloc()), holding the right
+>>> lock (huge_pte_lock()) etc. The vma used is also not a hugetlb VMA.
+>>>
+>>> ppc64 do have runtime checks within CONFIG_DEBUG_VM for most of these.
+>>> Hence disable the test on ppc64.
+>>
+>> Would really like this to get resolved in an uniform and better way
+>> instead, i.e a modified hugetlb_advanced_tests() which works on all
+>> platforms including ppc64.
+>>
+>> In absence of a modified version, I do realize the situation here,
+>> where DEBUG_VM_PGTABLE test either runs on ppc64 or just completely
+>> remove hugetlb_advanced_tests() from other platforms as well.
+>>
+>>>
+>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>> ---
+>>>   mm/debug_vm_pgtable.c | 4 ++++
+>>>   1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+>>> index a188b6e4e37e..21329c7d672f 100644
+>>> --- a/mm/debug_vm_pgtable.c
+>>> +++ b/mm/debug_vm_pgtable.c
+>>> @@ -813,6 +813,7 @@ static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot)
+>>>   #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
+>>>   }
+>>>   +#ifndef CONFIG_PPC_BOOK3S_64
+>>>   static void __init hugetlb_advanced_tests(struct mm_struct *mm,
+>>>                         struct vm_area_struct *vma,
+>>>                         pte_t *ptep, unsigned long pfn,
+>>> @@ -855,6 +856,7 @@ static void __init hugetlb_advanced_tests(struct mm_struct *mm,
+>>>       pte = huge_ptep_get(ptep);
+>>>       WARN_ON(!(huge_pte_write(pte) && huge_pte_dirty(pte)));
+>>>   }
+>>> +#endif
+>>
+>> In the worst case if we could not get a new hugetlb_advanced_tests() test
+>> that works on all platforms, this might be the last fallback option. In
+>> which case, it will require a proper comment section with a "FIXME: ",
+>> explaining the current situation (and that #ifdef is temporary in nature)
+>> and a hugetlb_advanced_tests() stub when CONFIG_PPC_BOOK3S_64 is enabled.
+>>
+>>>   #else  /* !CONFIG_HUGETLB_PAGE */
+>>>   static void __init hugetlb_basic_tests(unsigned long pfn, pgprot_t prot) { }
+>>>   static void __init hugetlb_advanced_tests(struct mm_struct *mm,
+>>> @@ -1065,7 +1067,9 @@ static int __init debug_vm_pgtable(void)
+>>>       pud_populate_tests(mm, pudp, saved_pmdp);
+>>>       spin_unlock(ptl);
+>>>   +#ifndef CONFIG_PPC_BOOK3S_64
+>>>       hugetlb_advanced_tests(mm, vma, ptep, pte_aligned, vaddr, prot);
+>>> +#endif
+>>
 > 
-> IIUC, the DW colomn stands for whether the corresponding operation (in
-> this case, it's atomic_set()) is ordered any write that depends on this
-> operation. I don't think there is a write->write dependency, so DW for
-> atomic_set() should not be Y, just as the DW for WRITE_ONCE().
+> I actually wanted to add #ifdef BROKEN. That test is completely broken. Infact I would suggest to remove that test completely.
+> 
+> 
+> 
+>> #ifdef will not be required here as there would be a stub definition
+>> for hugetlb_advanced_tests() when CONFIG_PPC_BOOK3S_64 is enabled.
+>>
+>>>         spin_lock(&mm->page_table_lock);
+>>>       p4d_clear_tests(mm, p4dp);
+>>>
+>>
+>> But again, we should really try and avoid taking this path.
+>>
+> 
+> To be frank i am kind of frustrated with how this patch series is being looked at. We pushed a completely broken test to upstream and right now we have a code in upstream that crash when booted on ppc64. My attempt has been to make progress here and you definitely seems to be not in agreement to that.
+> 
 
-Ah, just shows I can't read I suppose ;-) I thought we were talking of
-the other side of the depency.
+I am afraid, this does not accurately represent the situation.
+
+- The second set patch series got merged in it's V5 after accommodating almost
+  all reviews and objections during previous discussion cycles. For a complete
+  development log, please refer https://patchwork.kernel.org/cover/11658627/.
+
+- The series has been repeatedly tested on arm64 and x86 platforms for multiple
+  configurations but build tested on all other enabled platforms. I have always
+  been dependent on voluntary help from folks on the list to get this tested on
+  other enabled platforms as I dont have access to such systems. Always assumed
+  that is the way to go for anything which runs on multiple platforms. So, am I
+  expected to test on platforms that I dont have access to ? But I am ready to
+  be corrected here, if the community protocol is not what I have always assumed
+  it to be.
+
+- Each and every version of the series had appropriately copied all the enabled
+  platform's mailing list. Also, I had explicitly asked for volunteers to test
+  this out on platforms apart from x86 and arm64. We had positive response from
+  all platforms i.e arc, s390, ppc32 but except for ppc64.
+
+  https://patchwork.kernel.org/cover/11644771/
+  https://patchwork.kernel.org/cover/11603713/
+
+- The development cycle provided sufficient time window for any detailed review
+  and test. I have always been willing to address almost all the issues brought
+  forward during these discussions. From past experience on this test, there is
+  an inherent need to understand platform specific details while trying to come
+  up with something generic enough that works on all platforms. It necessitates
+  participation from relevant folks to enable this test on a given platform. We
+  were able to enable this on arm64, x86, arc, s390, powerpc following a similar
+  model.
+
+- I have to disagree here that the concerned test i.e hugetlb_advanced_tests()
+  is completely broken. As mentioned before, the idea here has always been to
+  emulate enough MM objects, so that a given page table helper could be tested.
+  hugetlb_advanced_tests() seems to be insufficient on ppc64 platform causing it
+  to crash, which is not the case on other platforms. But it is not perfect and
+  can be improved upon. Given the constraints i.e limited emulation of objects,
+  the test tries to do the right thing. Calling it broken is not an appropriate
+  description.
+
+> At this point I am tempted to suggest we remove the DEBUG_VM_PGTABLE support on ppc64 because AFAIU it doesn't add any value.
+
+Now that this has been proposed [1], along with it any possible urgency factor
+out of the way, we could review the proposal with a more long term view making
+sure that it improves existing tests and benefits all enabled platforms. Will
+look forward to it.
+
+[1] https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20200901094423.100149-1-aneesh.kumar@linux.ibm.com/
+
+- Anshuman
