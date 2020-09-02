@@ -2,250 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6455925B637
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 23:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5CE25B65A
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 00:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgIBV5m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 17:57:42 -0400
-Received: from mga07.intel.com ([134.134.136.100]:33188 "EHLO mga07.intel.com"
+        id S1726528AbgIBWNc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 18:13:32 -0400
+Received: from mga09.intel.com ([134.134.136.24]:15764 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726298AbgIBV5m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Sep 2020 17:57:42 -0400
-IronPort-SDR: XqungJ6xIv6rFQ1xdJmMet2Nl9FKBDrNsKjj0EwrfaBi8PBAG2TQ5Vam/m9WM9oKXIYCrpOS72
- 4rU4dsPD3mUg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="221699473"
+        id S1726226AbgIBWNa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Sep 2020 18:13:30 -0400
+IronPort-SDR: Cw4HrZqAfJn0bMSeXoQPGS1A19oJnDKVdQnjpYwdty5RF4TquWsOUz5B9KGzSM79P12pVA7+6t
+ j88yFRZZ0Ubg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="158474574"
 X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="221699473"
+   d="scan'208";a="158474574"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 14:57:37 -0700
-IronPort-SDR: pwb6+Hl8axUG3ObQU4OFdo5XyPdO8HbGIYqbV15SU70A/OotLG1fNAOK5kjqXgBWiDUgKGuqbF
- 219DL+1v+J/Q==
-X-ExtLoop1: 1
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 15:13:30 -0700
+IronPort-SDR: asXQxrAHQY0ypQlzQMhOK9cXZfQZ5oauEEPyWryjVwDA5T6xwunenQzQ456ke4dBZXqTrLZvQt
+ oJ/uKNqXBEfA==
 X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="502284947"
-Received: from lkp-server02.sh.intel.com (HELO eb469fda2af7) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Sep 2020 14:57:36 -0700
-Received: from kbuild by eb469fda2af7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kDal5-0000Gl-El; Wed, 02 Sep 2020 21:57:35 +0000
-Date:   Thu, 03 Sep 2020 05:56:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:asm-generic] BUILD SUCCESS
- 6886f9d49aaae6855e830ec35d69c114d121e4a9
-Message-ID: <5f501518.8WApeZKTPiWZ7oCk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="315258943"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.147.104]) ([10.209.147.104])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 15:13:28 -0700
+Subject: Re: [PATCH v11 6/9] x86/cet: Add PTRACE interface for CET
+To:     Jann Horn <jannh@google.com>
+Cc:     the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <20200825002645.3658-1-yu-cheng.yu@intel.com>
+ <20200825002645.3658-7-yu-cheng.yu@intel.com>
+ <CAG48ez21a_afHJrRQeweuHu8c+fxJ+VN1dezD18UOtZA5q-Shg@mail.gmail.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
+Date:   Wed, 2 Sep 2020 15:13:28 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <CAG48ez21a_afHJrRQeweuHu8c+fxJ+VN1dezD18UOtZA5q-Shg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic
-branch HEAD: 6886f9d49aaae6855e830ec35d69c114d121e4a9  asm-generic/sembuf: Update architecture related information in comment
+On 9/2/2020 1:03 PM, Jann Horn wrote:
+> On Tue, Aug 25, 2020 at 2:30 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>> Add REGSET_CET64/REGSET_CET32 to get/set CET MSRs:
+>>
+>>      IA32_U_CET (user-mode CET settings) and
+>>      IA32_PL3_SSP (user-mode Shadow Stack)
+> [...]
+>> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> [...]
+>> +int cetregs_get(struct task_struct *target, const struct user_regset *regset,
+>> +               struct membuf to)
+>> +{
+>> +       struct fpu *fpu = &target->thread.fpu;
+>> +       struct cet_user_state *cetregs;
+>> +
+>> +       if (!boot_cpu_has(X86_FEATURE_SHSTK))
+>> +               return -ENODEV;
+>> +
+>> +       fpu__prepare_read(fpu);
+>> +       cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
+>> +       if (!cetregs)
+>> +               return -EFAULT;
+> 
+> Can this branch ever be hit without a kernel bug? If yes, I think
+> -EFAULT is probably a weird error code to choose here. If no, this
+> should probably use WARN_ON(). Same thing in cetregs_set().
+> 
 
-elapsed time: 720m
+When a thread is not CET-enabled, its CET state does not exist.  I 
+looked at EFAULT, and it means "Bad address".  Maybe this can be ENODEV, 
+which means "No such device"?
 
-configs tested: 185
-configs skipped: 16
+[...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>> @@ -1284,6 +1293,13 @@ static struct user_regset x86_32_regsets[] __ro_after_init = {
+> [...]
+>> +       [REGSET_CET32] = {
+>> +               .core_note_type = NT_X86_CET,
+>> +               .n = sizeof(struct cet_user_state) / sizeof(u64),
+>> +               .size = sizeof(u64), .align = sizeof(u64),
+>> +               .active = cetregs_active, .regset_get = cetregs_get,
+>> +               .set = cetregs_set
+>> +       },
+>>   };
+> 
+> Why are there different identifiers for 32-bit CET and 64-bit CET when
+> they operate on the same structs and have the same handlers? If
+> there's a good reason for that, the commit message should probably
+> point that out.
+> 
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         shannon_defconfig
-arm                     eseries_pxa_defconfig
-arm                      footbridge_defconfig
-sh                            migor_defconfig
-x86_64                           alldefconfig
-arm                     davinci_all_defconfig
-arm                      pxa255-idp_defconfig
-sh                           sh2007_defconfig
-mips                           ci20_defconfig
-xtensa                    xip_kc705_defconfig
-arc                 nsimosci_hs_smp_defconfig
-m68k                        mvme147_defconfig
-openrisc                 simple_smp_defconfig
-ia64                        generic_defconfig
-sparc                            alldefconfig
-arm                     am200epdkit_defconfig
-m68k                                defconfig
-s390                       zfcpdump_defconfig
-arm                             pxa_defconfig
-arm                          gemini_defconfig
-microblaze                    nommu_defconfig
-sh                           se7206_defconfig
-sh                         microdev_defconfig
-i386                                defconfig
-ia64                            zx1_defconfig
-sh                              ul2_defconfig
-xtensa                generic_kc705_defconfig
-arm                         bcm2835_defconfig
-x86_64                              defconfig
-m68k                            mac_defconfig
-arm                           efm32_defconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                       omap2plus_defconfig
-arm                             mxs_defconfig
-arm                             rpc_defconfig
-mips                           rs90_defconfig
-arm                        keystone_defconfig
-arm                           h5000_defconfig
-arm                           sunxi_defconfig
-sh                           se7721_defconfig
-arm                            lart_defconfig
-arm                         mv78xx0_defconfig
-arm                         s3c2410_defconfig
-arm                              alldefconfig
-mips                           ip28_defconfig
-openrisc                         alldefconfig
-arm                          iop32x_defconfig
-sh                        sh7785lcr_defconfig
-sh                          kfr2r09_defconfig
-c6x                                 defconfig
-arm                       aspeed_g5_defconfig
-m68k                        stmark2_defconfig
-xtensa                         virt_defconfig
-mips                         tb0219_defconfig
-arm                          moxart_defconfig
-arm                        magician_defconfig
-powerpc                 linkstation_defconfig
-mips                malta_qemu_32r6_defconfig
-sh                        apsh4ad0a_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                       netwinder_defconfig
-sh                            hp6xx_defconfig
-arm                            qcom_defconfig
-mips                          rm200_defconfig
-arc                         haps_hs_defconfig
-powerpc                      ppc64e_defconfig
-arm                          ixp4xx_defconfig
-mips                         cobalt_defconfig
-m68k                        m5307c3_defconfig
-arm                         s5pv210_defconfig
-arm                             ezx_defconfig
-arm                            mps2_defconfig
-mips                        workpad_defconfig
-c6x                        evmc6457_defconfig
-h8300                            alldefconfig
-powerpc                       maple_defconfig
-arm                          simpad_defconfig
-sh                          rsk7201_defconfig
-arm                         nhk8815_defconfig
-powerpc                  mpc885_ads_defconfig
-mips                      pic32mzda_defconfig
-mips                       capcella_defconfig
-alpha                               defconfig
-sh                           se7724_defconfig
-microblaze                      mmu_defconfig
-riscv                          rv32_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-x86_64               randconfig-a004-20200901
-x86_64               randconfig-a006-20200901
-x86_64               randconfig-a003-20200901
-x86_64               randconfig-a005-20200901
-x86_64               randconfig-a001-20200901
-x86_64               randconfig-a002-20200901
-i386                 randconfig-a004-20200902
-i386                 randconfig-a005-20200902
-i386                 randconfig-a006-20200902
-i386                 randconfig-a002-20200902
-i386                 randconfig-a001-20200902
-i386                 randconfig-a003-20200902
-i386                 randconfig-a004-20200901
-i386                 randconfig-a005-20200901
-i386                 randconfig-a006-20200901
-i386                 randconfig-a002-20200901
-i386                 randconfig-a001-20200901
-i386                 randconfig-a003-20200901
-x86_64               randconfig-a013-20200902
-x86_64               randconfig-a016-20200902
-x86_64               randconfig-a011-20200902
-x86_64               randconfig-a012-20200902
-x86_64               randconfig-a015-20200902
-x86_64               randconfig-a014-20200902
-i386                 randconfig-a016-20200902
-i386                 randconfig-a015-20200902
-i386                 randconfig-a011-20200902
-i386                 randconfig-a013-20200902
-i386                 randconfig-a014-20200902
-i386                 randconfig-a012-20200902
-i386                 randconfig-a016-20200901
-i386                 randconfig-a015-20200901
-i386                 randconfig-a011-20200901
-i386                 randconfig-a013-20200901
-i386                 randconfig-a014-20200901
-i386                 randconfig-a012-20200901
-i386                 randconfig-a016-20200903
-i386                 randconfig-a015-20200903
-i386                 randconfig-a011-20200903
-i386                 randconfig-a013-20200903
-i386                 randconfig-a014-20200903
-i386                 randconfig-a012-20200903
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Yes, the reason for two regsets is that fill_note_info() does not expect 
+any holes in a regsets.  I will put this in the commit log.
 
-clang tested configs:
-x86_64               randconfig-a004-20200902
-x86_64               randconfig-a006-20200902
-x86_64               randconfig-a003-20200902
-x86_64               randconfig-a005-20200902
-x86_64               randconfig-a001-20200902
-x86_64               randconfig-a002-20200902
-x86_64               randconfig-a013-20200901
-x86_64               randconfig-a016-20200901
-x86_64               randconfig-a011-20200901
-x86_64               randconfig-a012-20200901
-x86_64               randconfig-a015-20200901
-x86_64               randconfig-a014-20200901
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Yu-cheng
