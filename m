@@ -2,274 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7F725AC61
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 15:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D2D25AC2D
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 15:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727865AbgIBNxe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 09:53:34 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48170 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727776AbgIBNx3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 09:53:29 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 082D32D5082651;
-        Wed, 2 Sep 2020 09:20:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=AWgBI/YrhXkEmm+Qf+fcD6e36zb+RyfY/AO6JpSkQRw=;
- b=U4YUbjRSaR+rCFG6DWCiDZuk/wIngA6teRubXBrZBoevSyZ37Id/JCC/4T+/x231ms86
- WBDJ/aeSIJyMMb8xMqjKERxGsqRJGY9BUj5xhqSL1PbAEcTpOR1DVj0MkHj7Y8wTiPgz
- FMj9ge2U8MROOxRqpC3qVNMupp4wulx0D5sEQbOJsiMohAtOj2PBXVWzwMgCQX0pji7I
- psezDLC67scKFixndTBhlh60moFAktujDfbFpkNnpDrGExDpDuaaNpKuR9qkmAWGPBxb
- LdXwpJxaKGw65RET5iW9/3yJWvItzSwGqxteRGuR4rE8LGz4ANiPc1WjMogHo5XURh7R jg== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33ab64j3qq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 09:20:19 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 082DDB6F025854;
-        Wed, 2 Sep 2020 13:20:19 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma05wdc.us.ibm.com with ESMTP id 337en9g3df-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 13:20:19 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 082DKI7d56099310
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Sep 2020 13:20:19 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5777124052;
-        Wed,  2 Sep 2020 13:20:17 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2426B124053;
-        Wed,  2 Sep 2020 13:20:13 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.199.61.124])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Sep 2020 13:20:12 +0000 (GMT)
-X-Mailer: emacs 27.1 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Mike Rapoport <rppt@linux.ibm.com>, Qian Cai <cai@lca.pw>
-Subject: Re: [PATCH v3 12/13] mm/debug_vm_pgtable/hugetlb: Disable hugetlb
- test on ppc64
-In-Reply-To: <a76a180b-650c-c868-7a52-593afe97eab3@arm.com>
-References: <20200827080438.315345-1-aneesh.kumar@linux.ibm.com>
- <20200827080438.315345-13-aneesh.kumar@linux.ibm.com>
- <6191e77f-c3b7-21ea-6dbd-eecc09735923@arm.com>
- <68f90b44-b830-58be-3c21-424fee05da37@linux.ibm.com>
- <a76a180b-650c-c868-7a52-593afe97eab3@arm.com>
-Date:   Wed, 02 Sep 2020 18:50:09 +0530
-Message-ID: <873640e2nq.fsf@linux.ibm.com>
+        id S1727819AbgIBNng (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 09:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727794AbgIBNnX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 09:43:23 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FA0C06125C;
+        Wed,  2 Sep 2020 06:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=N5weILa9p2I3E5pwg6IDJSdAHD9ouxJHQ24m98aMNso=; b=X6G591MxEwqrhHW8xjSjoQhjy5
+        w+QWnbZEPjQ1vJoOYSWtRE5564LUaXhU27JMzP0i6ZkpKdAWDCAAa83yF8fRhHmvCFBW5MCXfe2Qw
+        TYyhTyfI8IvfXbhjPT7Ni+p8obeZ0+24ec14n/7TTb7Og5aT8C/ognpPJy8sKXPVBPRFPrkCyufrH
+        v16lnl1WBS5QSgB6UBCiSKh1+a4U0ALBbfQkn13P0yCgJ9uz4IH9Eh8DVtEE37J6uex8ivP4sWtC+
+        VL7AeN2+x28P1UHDPs5N3trC031XZq8VJuS2wPoqzAI4FNfHyO9jrB/mZ83fttcAU23pyoLFwKjzk
+        gw978Cwg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kDT2M-0003E1-Bh; Wed, 02 Sep 2020 13:42:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1030A3003E5;
+        Wed,  2 Sep 2020 15:42:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BD77029A82C1F; Wed,  2 Sep 2020 15:42:52 +0200 (CEST)
+Date:   Wed, 2 Sep 2020 15:42:52 +0200
+From:   peterz@infradead.org
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org
+Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
+ and make kretprobe lockless
+Message-ID: <20200902134252.GH1362448@hirez.programming.kicks-ass.net>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+ <20200901190808.GK29142@worktop.programming.kicks-ass.net>
+ <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
+ <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+ <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
+ <20200902093613.GY1362448@hirez.programming.kicks-ass.net>
+ <20200902221926.f5cae5b4ad00b8d8f9ad99c7@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-02_09:2020-09-02,2020-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 suspectscore=0 impostorscore=0 phishscore=0
- adultscore=0 spamscore=0 clxscore=1015 mlxscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009020118
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200902221926.f5cae5b4ad00b8d8f9ad99c7@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Anshuman Khandual <anshuman.khandual@arm.com> writes:
+On Wed, Sep 02, 2020 at 10:19:26PM +0900, Masami Hiramatsu wrote:
+> On Wed, 2 Sep 2020 11:36:13 +0200
+> peterz@infradead.org wrote:
+> 
+> > On Wed, Sep 02, 2020 at 05:17:55PM +0900, Masami Hiramatsu wrote:
+> > 
+> > > > Ok, but then lockdep will yell at you if you have that enabled and run
+> > > > the unoptimized things.
+> > > 
+> > > Oh, does it warn for all spinlock things in kprobes if it is unoptimized?
+> > > Hmm, it has to be noted in the documentation.
+> > 
+> > Lockdep will warn about spinlocks used in NMI context that are also used
+> > outside NMI context.
+> 
+> OK, but raw_spin_lock_irqsave() will not involve lockdep, correct?
 
-> On 09/01/2020 12:00 PM, Aneesh Kumar K.V wrote:
->> On 9/1/20 9:33 AM, Anshuman Khandual wrote:
->>>
->>>
->>> On 08/27/2020 01:34 PM, Aneesh Kumar K.V wrote:
->>>> The seems to be missing quite a lot of details w.r.t allocating
->>>> the correct pgtable_t page (huge_pte_alloc()), holding the right
->>>> lock (huge_pte_lock()) etc. The vma used is also not a hugetlb VMA.
->>>>
->>>> ppc64 do have runtime checks within CONFIG_DEBUG_VM for most of these.
->>>> Hence disable the test on ppc64.
->>>
->>> Would really like this to get resolved in an uniform and better way
->>> instead, i.e a modified hugetlb_advanced_tests() which works on all
->>> platforms including ppc64.
->>>
->>> In absence of a modified version, I do realize the situation here,
->>> where DEBUG_VM_PGTABLE test either runs on ppc64 or just completely
->>> remove hugetlb_advanced_tests() from other platforms as well.
->>>
->>>>
->>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>>> ---
->>>> =C2=A0 mm/debug_vm_pgtable.c | 4 ++++
->>>> =C2=A0 1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
->>>> index a188b6e4e37e..21329c7d672f 100644
->>>> --- a/mm/debug_vm_pgtable.c
->>>> +++ b/mm/debug_vm_pgtable.c
->>>> @@ -813,6 +813,7 @@ static void __init hugetlb_basic_tests(unsigned lo=
-ng pfn, pgprot_t prot)
->>>> =C2=A0 #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
->>>> =C2=A0 }
->>>> =C2=A0 +#ifndef CONFIG_PPC_BOOK3S_64
->>>> =C2=A0 static void __init hugetlb_advanced_tests(struct mm_struct *mm,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struc=
-t vm_area_struct *vma,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pte_t=
- *ptep, unsigned long pfn,
->>>> @@ -855,6 +856,7 @@ static void __init hugetlb_advanced_tests(struct m=
-m_struct *mm,
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pte =3D huge_ptep_get(ptep);
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 WARN_ON(!(huge_pte_write(pte) && huge_p=
-te_dirty(pte)));
->>>> =C2=A0 }
->>>> +#endif
->>>
->>> In the worst case if we could not get a new hugetlb_advanced_tests() te=
-st
->>> that works on all platforms, this might be the last fallback option. In
->>> which case, it will require a proper comment section with a "FIXME: ",
->>> explaining the current situation (and that #ifdef is temporary in natur=
-e)
->>> and a hugetlb_advanced_tests() stub when CONFIG_PPC_BOOK3S_64 is enable=
-d.
->>>
->>>> =C2=A0 #else=C2=A0 /* !CONFIG_HUGETLB_PAGE */
->>>> =C2=A0 static void __init hugetlb_basic_tests(unsigned long pfn, pgpro=
-t_t prot) { }
->>>> =C2=A0 static void __init hugetlb_advanced_tests(struct mm_struct *mm,
->>>> @@ -1065,7 +1067,9 @@ static int __init debug_vm_pgtable(void)
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pud_populate_tests(mm, pudp, saved_pmdp=
-);
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_unlock(ptl);
->>>> =C2=A0 +#ifndef CONFIG_PPC_BOOK3S_64
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hugetlb_advanced_tests(mm, vma, ptep, p=
-te_aligned, vaddr, prot);
->>>> +#endif
->>>
->>=20
->> I actually wanted to add #ifdef BROKEN. That test is completely broken. =
-Infact I would suggest to remove that test completely.
->>=20
->>=20
->>=20
->>> #ifdef will not be required here as there would be a stub definition
->>> for hugetlb_advanced_tests() when CONFIG_PPC_BOOK3S_64 is enabled.
->>>
->>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_lock(&mm->page_table_lock);
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 p4d_clear_tests(mm, p4dp);
->>>>
->>>
->>> But again, we should really try and avoid taking this path.
->>>
->>=20
->> To be frank i am kind of frustrated with how this patch series is being =
-looked at. We pushed a completely broken test to upstream and right now we =
-have a code in upstream that crash when booted on ppc64. My attempt has bee=
-n to make progress here and you definitely seems to be not in agreement to =
-that.
->>=20
->
-> I am afraid, this does not accurately represent the situation.
->
-> - The second set patch series got merged in it's V5 after accommodating a=
-lmost
->   all reviews and objections during previous discussion cycles. For a com=
-plete
->   development log, please refer https://patchwork.kernel.org/cover/116586=
-27/.
->
-> - The series has been repeatedly tested on arm64 and x86 platforms for mu=
-ltiple
->   configurations but build tested on all other enabled platforms. I have =
-always
->   been dependent on voluntary help from folks on the list to get this tes=
-ted on
->   other enabled platforms as I dont have access to such systems. Always a=
-ssumed
->   that is the way to go for anything which runs on multiple platforms. So=
-, am I
->   expected to test on platforms that I dont have access to ? But I am rea=
-dy to
->   be corrected here, if the community protocol is not what I have always =
-assumed
->   it to be.
->
-> - Each and every version of the series had appropriately copied all the e=
-nabled
->   platform's mailing list. Also, I had explicitly asked for volunteers to=
- test
->   this out on platforms apart from x86 and arm64. We had positive respons=
-e from
->   all platforms i.e arc, s390, ppc32 but except for ppc64.
->
->   https://patchwork.kernel.org/cover/11644771/
->   https://patchwork.kernel.org/cover/11603713/
->
-> - The development cycle provided sufficient time window for any detailed =
-review
->   and test. I have always been willing to address almost all the issues b=
-rought
->   forward during these discussions. From past experience on this test, th=
-ere is
->   an inherent need to understand platform specific details while trying t=
-o come
->   up with something generic enough that works on all platforms. It necess=
-itates
->   participation from relevant folks to enable this test on a given platfo=
-rm. We
->   were able to enable this on arm64, x86, arc, s390, powerpc following a =
-similar
->   model.
->
-> - I have to disagree here that the concerned test i.e hugetlb_advanced_te=
-sts()
->   is completely broken. As mentioned before, the idea here has always bee=
-n to
->   emulate enough MM objects, so that a given page table helper could be t=
-ested.
->   hugetlb_advanced_tests() seems to be insufficient on ppc64 platform cau=
-sing it
->   to crash, which is not the case on other platforms. But it is not perfe=
-ct and
->   can be improved upon. Given the constraints i.e limited emulation of ob=
-jects,
->   the test tries to do the right thing. Calling it broken is not an appro=
-priate
->   description.
->
+It will. The distinction between spin_lock and raw_spin_lock is only
+that raw_spin_lock stays a spinlock on PREEMPT_RT, while spin_lock will
+turn into a (PI) mutex in that case.
 
+But both will call into lockdep. Unlike local_irq_disable() and
+raw_local_irq_disable(), where the latter will not. Yes your prefixes
+are a mess :/
 
-None of the fixes done here are specific to ppc64. I am not sure why you
-keep suggesting ppc64 specific issues. One should not do page table
-updates without holding locks. A hugetlb pte updates expect a vma marked
-hugetlb.
+> > Now, for the kretprobe that kprobe_busy flag prevents the actual
+> > recursion self-deadlock, but lockdep isn't smart enough to see that.
+> > 
+> > One way around this might be to use SINGLE_DEPTH_NESTING for locks when
+> > we use them from INT3 context. That way they'll have a different class
+> > and lockdep will not see the recursion.
+> 
+> Hmm, so lockdep warns only when it detects the spinlock in NMI context,
+> and int3 is now always NMI, thus all spinlock (except raw_spinlock?)
+> in kprobe handlers should get warned, right?
+> I have tested this series up to [16/21] with optprobe disabled, but
+> I haven't see the lockdep warnings.
 
-As explained in the patch, I see very little value in a bunch of tests
-like this and the only reason I started to fix this up is because of
-multiple crash reports on ppc64.
+There's a bug, that might make it miss it. I have a patch. I'll send it
+shortly.
 
-Considering the hugetlb tests require much larger change and as it is
-currently written is broken, I wanted to remove that test and let you
-come up with a proper test. But since you had it "working", I disabled
-this only on ppc64.
+> > pre_handler_kretprobe() is always called from INT3, right?
+> 
+> No, not always, it can be called from optprobe (same as original code
+> context) or ftrace handler.
+> But if you set 0 to /proc/sys/debug/kprobe_optimization, and compile
+> the kernel without function tracer, it should always be called from
+> INT3.
 
-But you keep suggesting that the hugetlb test need to be fixed as part
-of the patch series review. I don't have enough motivation to fix that,
-because I don't see much value in a bunch of tests like these. As shown
-already these tests already reported success till now without even
-following any page table update rules.
-
--aneesh
+D'oh, ofcourse! Arguably I should make the optprobe context NMI like
+too.. but that's for another day.
