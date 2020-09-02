@@ -2,114 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D2D25AC2D
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 15:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7F525AC70
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Sep 2020 16:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgIBNng (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 09:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727794AbgIBNnX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 09:43:23 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FA0C06125C;
-        Wed,  2 Sep 2020 06:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=N5weILa9p2I3E5pwg6IDJSdAHD9ouxJHQ24m98aMNso=; b=X6G591MxEwqrhHW8xjSjoQhjy5
-        w+QWnbZEPjQ1vJoOYSWtRE5564LUaXhU27JMzP0i6ZkpKdAWDCAAa83yF8fRhHmvCFBW5MCXfe2Qw
-        TYyhTyfI8IvfXbhjPT7Ni+p8obeZ0+24ec14n/7TTb7Og5aT8C/ognpPJy8sKXPVBPRFPrkCyufrH
-        v16lnl1WBS5QSgB6UBCiSKh1+a4U0ALBbfQkn13P0yCgJ9uz4IH9Eh8DVtEE37J6uex8ivP4sWtC+
-        VL7AeN2+x28P1UHDPs5N3trC031XZq8VJuS2wPoqzAI4FNfHyO9jrB/mZ83fttcAU23pyoLFwKjzk
-        gw978Cwg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kDT2M-0003E1-Bh; Wed, 02 Sep 2020 13:42:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1030A3003E5;
-        Wed,  2 Sep 2020 15:42:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BD77029A82C1F; Wed,  2 Sep 2020 15:42:52 +0200 (CEST)
-Date:   Wed, 2 Sep 2020 15:42:52 +0200
-From:   peterz@infradead.org
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
-        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
-        paulmck@kernel.org
-Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
- and make kretprobe lockless
-Message-ID: <20200902134252.GH1362448@hirez.programming.kicks-ass.net>
-References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
- <20200901190808.GK29142@worktop.programming.kicks-ass.net>
- <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
- <20200902070226.GG2674@hirez.programming.kicks-ass.net>
- <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
- <20200902093613.GY1362448@hirez.programming.kicks-ass.net>
- <20200902221926.f5cae5b4ad00b8d8f9ad99c7@kernel.org>
+        id S1727099AbgIBOAE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 10:00:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:38552 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727025AbgIBN6l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Sep 2020 09:58:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D830231B;
+        Wed,  2 Sep 2020 06:58:40 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24EBA3F71F;
+        Wed,  2 Sep 2020 06:58:37 -0700 (PDT)
+Date:   Wed, 2 Sep 2020 14:58:35 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+Message-ID: <20200902135832.GD6642@arm.com>
+References: <20200826164604.GW6642@arm.com>
+ <87ft892vvf.fsf@oldenburg2.str.redhat.com>
+ <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
+ <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com>
+ <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
+ <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
+ <20200901102758.GY6642@arm.com>
+ <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
+ <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
+ <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200902221926.f5cae5b4ad00b8d8f9ad99c7@kernel.org>
+In-Reply-To: <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 10:19:26PM +0900, Masami Hiramatsu wrote:
-> On Wed, 2 Sep 2020 11:36:13 +0200
-> peterz@infradead.org wrote:
+On Tue, Sep 01, 2020 at 11:11:37AM -0700, Dave Hansen wrote:
+> On 9/1/20 10:45 AM, Andy Lutomirski wrote:
+> >>> For arm64 (and sparc etc.) we continue to use the regular mmap/mprotect
+> >>> family of calls.  One or two additional arch-specific mmap flags are
+> >>> sufficient for now.
+> >>>
+> >>> Is x86 definitely not going to fit within those calls?
+> >> That can work for x86.  Andy, what if we create PROT_SHSTK, which can
+> >> been seen only from the user.  Once in kernel, it is translated to
+> >> VM_SHSTK.  One question for mremap/mprotect is, do we allow a normal
+> >> data area to become shadow stack?
+> > I'm unconvinced that we want to use a somewhat precious PROT_ or VM_
+> > bit for this.  Using a flag bit makes sense if we expect anyone to
+> > ever map an fd or similar as a shadow stack, but that seems a bit odd
+> > in the first place.  To me, it seems more logical for a shadow stack
+> > to be a special sort of mapping with a special vm_ops, not a normal
+> > mapping with a special flag set.  Although I realize that we want
+> > shadow stacks to work like anonymous memory with respect to fork().
+> > Dave?
 > 
-> > On Wed, Sep 02, 2020 at 05:17:55PM +0900, Masami Hiramatsu wrote:
-> > 
-> > > > Ok, but then lockdep will yell at you if you have that enabled and run
-> > > > the unoptimized things.
-> > > 
-> > > Oh, does it warn for all spinlock things in kprobes if it is unoptimized?
-> > > Hmm, it has to be noted in the documentation.
-> > 
-> > Lockdep will warn about spinlocks used in NMI context that are also used
-> > outside NMI context.
+> I actually don't like the idea of *creating* mappings much.
 > 
-> OK, but raw_spin_lock_irqsave() will not involve lockdep, correct?
-
-It will. The distinction between spin_lock and raw_spin_lock is only
-that raw_spin_lock stays a spinlock on PREEMPT_RT, while spin_lock will
-turn into a (PI) mutex in that case.
-
-But both will call into lockdep. Unlike local_irq_disable() and
-raw_local_irq_disable(), where the latter will not. Yes your prefixes
-are a mess :/
-
-> > Now, for the kretprobe that kprobe_busy flag prevents the actual
-> > recursion self-deadlock, but lockdep isn't smart enough to see that.
-> > 
-> > One way around this might be to use SINGLE_DEPTH_NESTING for locks when
-> > we use them from INT3 context. That way they'll have a different class
-> > and lockdep will not see the recursion.
+> I think the pkey model has worked out pretty well where we separate
+> creating the mapping from doing something *to* it, like changing
+> protections.  For instance, it would be nice if we could preserve things
+> like using hugetlbfs or heck even doing KSM for shadow stacks.
 > 
-> Hmm, so lockdep warns only when it detects the spinlock in NMI context,
-> and int3 is now always NMI, thus all spinlock (except raw_spinlock?)
-> in kprobe handlers should get warned, right?
-> I have tested this series up to [16/21] with optprobe disabled, but
-> I haven't see the lockdep warnings.
-
-There's a bug, that might make it miss it. I have a patch. I'll send it
-shortly.
-
-> > pre_handler_kretprobe() is always called from INT3, right?
+> If we're *creating* mappings, we've pretty much ruled out things like
+> hugetlbfs.
 > 
-> No, not always, it can be called from optprobe (same as original code
-> context) or ftrace handler.
-> But if you set 0 to /proc/sys/debug/kprobe_optimization, and compile
-> the kernel without function tracer, it should always be called from
-> INT3.
+> Something like mprotect_shstk() would allow an implementation today that
+> only works on anonymous memory *and* sets up a special vm_ops.  But, the
+> same exact ABI could do wonky stuff in the future if we decided we
+> wanted to do shadow stacks on DAX or hugetlbfs or whatever.
+> 
+> I don't really like the idea of PROT_SHSTK those are plumbed into a
+> bunch of interfaces.  But, I also can't deny that it seems to be working
+> fine for the arm64 folks.
 
-D'oh, ofcourse! Arguably I should make the optprobe context NMI like
-too.. but that's for another day.
+Note, there are some rough edges, such as what happens when someone
+calls mprotect() on memory marked with PROT_BTI.  Unless the caller
+knows whether PROT_BTI should be set for that page, the flag may get
+unintentionally cleared.  Since the flag only applies to text pages
+though, it's not _that_ much of a concern.  Software that deals with
+writable text pages is also usually involved in generating the code and
+so will know about PROT_BTI.  That's was the theory anyway.
+
+In the longer term, it might be preferable to have a mprotect2() that
+can leave some flags unmodified, and that doesn't silently ignore
+unknown flags (at least one of mmap or mprotect does; I don't recall
+which).  We attempt didn't go this far, for now.
+
+For arm64 it seemed fairly natural for the BTI flag to be a PROT_ flag,
+but I don't know enough detail about x86 shstk to know whether it's a
+natural fit there.
+
+Cheers
+---Dave
