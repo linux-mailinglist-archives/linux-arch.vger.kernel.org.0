@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6103F25CCB8
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 23:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD2E25CCC4
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 23:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729315AbgICVuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 17:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S1728684AbgICVvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 17:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726679AbgICVuG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 17:50:06 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA92C061245
-        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 14:50:06 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 7so3163076pgm.11
-        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 14:50:06 -0700 (PDT)
+        with ESMTP id S1728975AbgICVvN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 17:51:13 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03118C061244
+        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 14:51:13 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id k15so2203517pji.3
+        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 14:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=9OR6JT/gDQkiw7Q3Fa+IeISt3W9FIEoweyBz21QtHYY=;
-        b=SlD5lTtnmNwlNoqmJOqtx2+Yt4N1mjRl+6MJSYVsMfoK7/Vte9rczahAFAqHnyUmuV
-         Sh7rwOVbBxjFQ8McJgNgBYopu598rgZcDcsmsFDuQmlnFjiaMgVEzupYqeqjeeE3eUEq
-         lRP6kFMGcXoyupiZ9023vt2rn4Dd4rd9u4Z74=
+        bh=qXpu71ctdlh3mEQbznjWlLLlQUw5P2bBw2F3vq4Wzjo=;
+        b=ZyZZKeIpcpI80+hejxzxlgql178wdYHMLgxxEcNsZP5DgNheiVVnTG3N+eHQ6nQdTA
+         Niu4Mm24mQzd8zXiPCHvu1WgPl9pvcZLM7dK+CVMgSnMSoSLzj6aaeKFz4fN5yjD378D
+         otR7uM4FcmoQ6MxJYzFRJSwnOdQ8bNb3OFeq4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9OR6JT/gDQkiw7Q3Fa+IeISt3W9FIEoweyBz21QtHYY=;
-        b=YMnCS838xcF02Wu/YLQppiKKUKhcz5jAICvXYOameJm5wB57k2MiVCB3qooXthGlM8
-         sUpF6sa7ZDJfusY4bEcZSKOSCgYx86gqv4y/eirY3GnkBmqzDItn/AyOXCMKwy6hE6u7
-         XZPg/iE0oCjCvumsv4njLlSb3gmMlSWBYTbsxPb/O+ssIAa/74oQqFOd2xZTOb9KtPOw
-         Z2lt53FUe3BH5v8vfr1AmblGnm6J6Wer3p9e7Sf8o2kVKS5Sen7iD1t7RJ4R1fvjUqCR
-         5k9zDrKNpsvZ3gKUCy9P1GsbDnjFJHPjs1IrG/nda/w8QIk/7xkbaDkss90zJWsa3ueS
-         hzEg==
-X-Gm-Message-State: AOAM532KVDHJ+qBNrLGE0/Gv3wXk0Wo55RDkfwADAkI/wcWpShLIsr3K
-        1m5I05nlDmPS2o59McBDbfnsyg==
-X-Google-Smtp-Source: ABdhPJzv22i9c6AyREMh2qsXkXGwLuQNiCYhEpeSxCHuz3ZxEVmXaBNaH/fkJhsoZ2M5HPXWMnRolQ==
-X-Received: by 2002:a65:648c:: with SMTP id e12mr4696062pgv.57.1599169805900;
-        Thu, 03 Sep 2020 14:50:05 -0700 (PDT)
+        bh=qXpu71ctdlh3mEQbznjWlLLlQUw5P2bBw2F3vq4Wzjo=;
+        b=f9c1PMK3PRnlV3mkk6Oqm6NVPMk7Z6t4/TNESQex5KOKncNmBcwWVD0vqLIehIWyWL
+         hDzSJ4SV1ouL9XU+//9Vl4Ez658mfm1LoCqFu5NCtVQZ4YcPMDF0aHcLDTn/QrKE6anq
+         IAeWQaBV/eKQMgrG+jVbsQpYUFuKFTLZKcuHDA8jB9p0oymq5ED/Bzt0WeKbvmd9Su9g
+         b1//rh9eI4IKBXDhhx/SpuzKCjotqTMqDSxILA1fs21i5CSQpTNjUm9JEP9W3YFHwdIg
+         c3d7VCwXza7lw9ZRuU5kk5VLJEzy+1RDMkW3zzOMciN04zNpRRuZLOGTwJbHX91fNe6I
+         GpUQ==
+X-Gm-Message-State: AOAM5339X2R02jigBxMXSjrKCTSl0/694zfc8WI08gzcvuMn3w1P1yn6
+        UkPlD5Ce308zw5yjqwWhUV7LZA==
+X-Google-Smtp-Source: ABdhPJykQhA773Y/RsqqBh6IkXbjxUAGr+2WNPNkmamwrqnCASrzuPNLdRBsNJk4iZWq6CDQhSD6fA==
+X-Received: by 2002:a17:90a:950a:: with SMTP id t10mr5013648pjo.107.1599169872611;
+        Thu, 03 Sep 2020 14:51:12 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s198sm3628323pgc.4.2020.09.03.14.50.04
+        by smtp.gmail.com with ESMTPSA id h15sm3019108pfo.23.2020.09.03.14.51.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 14:50:04 -0700 (PDT)
-Date:   Thu, 3 Sep 2020 14:50:03 -0700
+        Thu, 03 Sep 2020 14:51:11 -0700 (PDT)
+Date:   Thu, 3 Sep 2020 14:51:10 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -58,34 +58,34 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, Luca Stefani <luca.stefani.ge1@gmail.com>
-Subject: Re: [PATCH v2 04/28] RAS/CEC: Fix cec_init() prototype
-Message-ID: <202009031449.287535C@keescook>
+        x86@kernel.org
+Subject: Re: [PATCH v2 05/28] objtool: Add a pass for generating __mcount_loc
+Message-ID: <202009031450.31C71DB@keescook>
 References: <20200624203200.78870-1-samitolvanen@google.com>
  <20200903203053.3411268-1-samitolvanen@google.com>
- <20200903203053.3411268-5-samitolvanen@google.com>
+ <20200903203053.3411268-6-samitolvanen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200903203053.3411268-5-samitolvanen@google.com>
+In-Reply-To: <20200903203053.3411268-6-samitolvanen@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 01:30:29PM -0700, Sami Tolvanen wrote:
-> From: Luca Stefani <luca.stefani.ge1@gmail.com>
+On Thu, Sep 03, 2020 at 01:30:30PM -0700, Sami Tolvanen wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
 > 
-> late_initcall() expects a function that returns an integer. Update the
-> function signature to match.
+> Add the --mcount option for generating __mcount_loc sections
+> needed for dynamic ftrace. Using this pass requires the kernel to
+> be compiled with -mfentry and CC_USING_NOP_MCOUNT to be defined
+> in Makefile.
 > 
->  [ bp: Massage commit message into proper sentences. ]
-> 
-> Fixes: 9554bfe403nd ("x86/mce: Convert the CEC to use the MCE notifier")
-> Signed-off-by: Luca Stefani <luca.stefani.ge1@gmail.com>
+> Link: https://lore.kernel.org/lkml/20200625200235.GQ4781@hirez.programming.kicks-ass.net/
+> Signed-off-by: Peter Zijlstra <peterz@infradead.org>
 
-I don't see this in -next yet (next-20200903), but given Boris's SoB, I
-suspect it just hasn't snuck it's way there from -tip. Regardless:
+Hmm, I'm not sure why this hasn't gotten picked up yet. Is this expected
+to go through -tip or something else?
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
