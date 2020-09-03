@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E6A25CB2E
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 22:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAE425CB27
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 22:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729466AbgICUiu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1729212AbgICUiu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Thu, 3 Sep 2020 16:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729459AbgICUb3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 16:31:29 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5D3C0619C0
-        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 13:31:09 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id q131so2279829qke.22
+        with ESMTP id S1729466AbgICUbb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 16:31:31 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CB4C0619C2
+        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 13:31:10 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id q131so2279880qke.22
         for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 13:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=wK1JwNZBEF40N5fcic2drFAc7pvy5JBQESDnmBr5608=;
-        b=b5tk49KKD8j0uO3HReOPELDX6rYUucGnG4IzHyDxn6fDckayxGEUatWRFd27ufwbN3
-         LjHaKo6hawTTCLkFq/jB8M9122OZSHcLgzaa1kZ5TFxETy4pPx2LsDP8oo9eOYjDXBz7
-         gNpyQkQIvkYvnL5+EjfoeJN95WFjivWmiIbSp2qvJ03cyGsJSq1lYlWvaFOZhIdNaq+5
-         j6+vcEESIOZXWOu6Is/sHhbycCztGA5Mt6Pgiu+Wg6bUXf3c+poWdfZZ6+6srlaCIaFO
-         pcBRWSF8ZbXrir1GVg/PkMsK2/dchsv3U7ph0bwwq2vz87O6fqdiQ1ehoBzkWoRkVWQL
-         mL3Q==
+        bh=/qNzjrcyr5XKcvklD+GZQa7NZ7u6sAXpUN3H65DCv0U=;
+        b=Zsq/hG7XAc4mwLU8SBGtWoXCI16CctA7+BH9jQ5VxbO2BJLbC+6FgawBmmjPDrNYD8
+         kYLK4S5KB9WCwaWGEcaOIDi92B0t9YROgAR/TDbV9fyw9yUJywcMexGdaF/1Iwzs87ZN
+         NRQu9/IzlFlx6ERBgUteP3jl1xRfP2aHL3vambh4FSyiWOPQ6kASPXKbYhq6mT/8+sQT
+         7HGqm6vlRwjCG/BIjNDm/J4yDrq8EuBzLQ4kU3eF1t1Td0NzBQonQSn7fXs/MlQq/w9q
+         bJE+U0yfjLtcw9rAdKYYQuiPZeaAtpfle/Ztssg3jka5z8KkzkRqxF5j/+zMpJAKxxfR
+         InPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=wK1JwNZBEF40N5fcic2drFAc7pvy5JBQESDnmBr5608=;
-        b=WT7+1RIGuRO20E/ULHLTr70/RIp+Ihv04IJg4nHRH8JVX7GiFw74lqvVT3qZ4U4OX8
-         vVxg+VwIxlVjQoFRMzahGAaqkhLxmAW/72ecgr3bk1qvtRnmG47LpersLh5Rc9ObGvog
-         /dvuQzCc63WwoaERPrPqR54/Hjux8SEwce8X9ciJSg5IPHfCXIw90Mh52AqO0ZzyrYpJ
-         Fq0Dn1fgSwZ4exOg2h0MzK/JXxKWgcWWcB31mK3zq7y/ugKziIq57vJXlWGgeiFUy+8W
-         HnUBY6dwrwkfryYcOp9UbakpGtHG6pm0P4sTx6ai33CfwkHNfi/dQC0p5538lo3wdnl4
-         PGow==
-X-Gm-Message-State: AOAM533Tgrt5gtWMZXF0YGohghMoiU9NgloT9avP3ilATgP2Io61GR+c
-        M70QUf1NFwF5VjAlrC2pp/sSpKEbDATTmWRZl/s=
-X-Google-Smtp-Source: ABdhPJz4POZjDvj1G4FCKsXnFupG7AWZGi6zga2my5XWqYNc1MAqG6z13ElXHTlIUNSUYKf3wk2VH6yuqmwJK87vTpw=
+        bh=/qNzjrcyr5XKcvklD+GZQa7NZ7u6sAXpUN3H65DCv0U=;
+        b=MbNYfXLcmtJpZVgTWdkouVbTkJevA3nGLBGx6D+QTVr9svtf9g2gpNBiMK/O5fJzM2
+         /wuRBKXvv+6UYx0H3WkowITTRWGHPY11QOdtLf53mcxiVP2NymY3+RKpgPw9u8Hy+V8z
+         O56ir8qMcB633r0u2pw5EmEVimaYLNurYKQBZsQiAYzeQAE1VCP4m3LaXWM2Bb5fboD0
+         TaQnMMU8Dsx5n5zBP+a45M+GGTnzSpvJmPIRf+jzlkvT4MOwWzCQYpi/mGbe8sXhkc3o
+         AXjnm52qCK+WIuWhoa/9xdkgWIxIl9Q/NsfES0Yu3HN5A7NJL048XosaPJkrBAETOpao
+         d2mg==
+X-Gm-Message-State: AOAM532TattmkkHMgrHVtx6gXpWz1Rlg77V/H7ChCMNVHNHUDYY3Ju9d
+        Fqk+yp5+kxNC1ji0fj2xdffiCeuNgqbMwoEjyYM=
+X-Google-Smtp-Source: ABdhPJyLRS5zhOlsTPIghggsBo02eHCvGWDIp2OJgb326kojzCylZPPrFhxZrtPlMoRBECX9OwEwfr6KBZ+bjrldyC0=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
- (user=samitolvanen job=sendgmr) by 2002:a0c:f982:: with SMTP id
- t2mr3575617qvn.5.1599165067207; Thu, 03 Sep 2020 13:31:07 -0700 (PDT)
-Date:   Thu,  3 Sep 2020 13:30:31 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a0c:ca87:: with SMTP id
+ a7mr4619179qvk.17.1599165069140; Thu, 03 Sep 2020 13:31:09 -0700 (PDT)
+Date:   Thu,  3 Sep 2020 13:30:32 -0700
 In-Reply-To: <20200903203053.3411268-1-samitolvanen@google.com>
-Message-Id: <20200903203053.3411268-7-samitolvanen@google.com>
+Message-Id: <20200903203053.3411268-8-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20200624203200.78870-1-samitolvanen@google.com> <20200903203053.3411268-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.28.0.526.ge36021eeef-goog
-Subject: [PATCH v2 06/28] objtool: Don't autodetect vmlinux.o
+Subject: [PATCH v2 07/28] kbuild: add support for objtool mcount
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Will Deacon <will@kernel.org>
@@ -71,54 +71,130 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With LTO, we run objtool on vmlinux.o, but don't want noinstr
-validation. This change requires --vmlinux to be passed to objtool
-explicitly.
+This change adds build support for using objtool to generate
+__mcount_loc sections.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- scripts/link-vmlinux.sh       |  2 +-
- tools/objtool/builtin-check.c | 10 +---------
- 2 files changed, 2 insertions(+), 10 deletions(-)
+ Makefile               | 38 ++++++++++++++++++++++++++++++--------
+ kernel/trace/Kconfig   |  5 +++++
+ scripts/Makefile.build |  9 +++++----
+ 3 files changed, 40 insertions(+), 12 deletions(-)
 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index e6e2d9e5ff48..372c3719f94c 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -64,7 +64,7 @@ objtool_link()
- 	local objtoolopt;
+diff --git a/Makefile b/Makefile
+index ff5e0731d26d..a9dae26c93b5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -859,17 +859,34 @@ ifdef CONFIG_HAVE_FENTRY
+   ifeq ($(call cc-option-yn, -mfentry),y)
+     CC_FLAGS_FTRACE	+= -mfentry
+     CC_FLAGS_USING	+= -DCC_USING_FENTRY
++    export CC_USING_FENTRY := 1
+   endif
+ endif
+ export CC_FLAGS_FTRACE
+-KBUILD_CFLAGS	+= $(CC_FLAGS_FTRACE) $(CC_FLAGS_USING)
+-KBUILD_AFLAGS	+= $(CC_FLAGS_USING)
+ ifdef CONFIG_DYNAMIC_FTRACE
+-	ifdef CONFIG_HAVE_C_RECORDMCOUNT
+-		BUILD_C_RECORDMCOUNT := y
+-		export BUILD_C_RECORDMCOUNT
+-	endif
++  ifndef CC_USING_RECORD_MCOUNT
++  ifndef CC_USING_PATCHABLE_FUNCTION_ENTRY
++    # use objtool or recordmcount to generate mcount tables
++    ifdef CONFIG_HAVE_OBJTOOL_MCOUNT
++      ifdef CC_USING_FENTRY
++        USE_OBJTOOL_MCOUNT := y
++        CC_FLAGS_USING += -DCC_USING_NOP_MCOUNT
++        export USE_OBJTOOL_MCOUNT
++      endif
++    endif
++    ifndef USE_OBJTOOL_MCOUNT
++      USE_RECORDMCOUNT := y
++      export USE_RECORDMCOUNT
++      ifdef CONFIG_HAVE_C_RECORDMCOUNT
++        BUILD_C_RECORDMCOUNT := y
++        export BUILD_C_RECORDMCOUNT
++      endif
++    endif
++  endif
++  endif
+ endif
++KBUILD_CFLAGS	+= $(CC_FLAGS_FTRACE) $(CC_FLAGS_USING)
++KBUILD_AFLAGS	+= $(CC_FLAGS_USING)
+ endif
  
- 	if [ -n "${CONFIG_VMLINUX_VALIDATION}" ]; then
--		objtoolopt="check"
-+		objtoolopt="check --vmlinux"
- 		if [ -z "${CONFIG_FRAME_POINTER}" ]; then
- 			objtoolopt="${objtoolopt} --no-fp"
- 		fi
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 71595cf4946d..eaa06eb18690 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -41,18 +41,10 @@ const struct option check_options[] = {
+ # We trigger additional mismatches with less inlining
+@@ -1218,11 +1235,16 @@ uapi-asm-generic:
+ PHONY += prepare-objtool prepare-resolve_btfids
+ prepare-objtool: $(objtool_target)
+ ifeq ($(SKIP_STACK_VALIDATION),1)
++objtool-lib-prompt := "please install libelf-dev, libelf-devel or elfutils-libelf-devel"
++ifdef USE_OBJTOOL_MCOUNT
++	@echo "error: Cannot generate __mcount_loc for CONFIG_DYNAMIC_FTRACE=y, $(objtool-lib-prompt)" >&2
++	@false
++endif
+ ifdef CONFIG_UNWINDER_ORC
+-	@echo "error: Cannot generate ORC metadata for CONFIG_UNWINDER_ORC=y, please install libelf-dev, libelf-devel or elfutils-libelf-devel" >&2
++	@echo "error: Cannot generate ORC metadata for CONFIG_UNWINDER_ORC=y, $(objtool-lib-prompt)" >&2
+ 	@false
+ else
+-	@echo "warning: Cannot use CONFIG_STACK_VALIDATION=y, please install libelf-dev, libelf-devel or elfutils-libelf-devel" >&2
++	@echo "warning: Cannot use CONFIG_STACK_VALIDATION=y, $(objtool-lib-prompt)" >&2
+ endif
+ endif
  
- int cmd_check(int argc, const char **argv)
- {
--	const char *objname, *s;
--
- 	argc = parse_options(argc, argv, check_options, check_usage, 0);
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index a4020c0b4508..b510af5b216c 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -56,6 +56,11 @@ config HAVE_C_RECORDMCOUNT
+ 	help
+ 	  C version of recordmcount available?
  
- 	if (argc != 1)
- 		usage_with_options(check_usage, check_options);
++config HAVE_OBJTOOL_MCOUNT
++	bool
++	help
++	  Arch supports objtool --mcount
++
+ config TRACER_MAX_TRACE
+ 	bool
  
--	objname = argv[0];
--
--	s = strstr(objname, "vmlinux.o");
--	if (s && !s[9])
--		vmlinux = true;
--
--	return check(objname, false);
-+	return check(argv[0], false);
- }
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index a467b9323442..6ecf30c70ced 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -178,8 +178,7 @@ cmd_modversions_c =								\
+ 	fi
+ endif
+ 
+-ifdef CONFIG_FTRACE_MCOUNT_RECORD
+-ifndef CC_USING_RECORD_MCOUNT
++ifdef USE_RECORDMCOUNT
+ # compiler will not generate __mcount_loc use recordmcount or recordmcount.pl
+ ifdef BUILD_C_RECORDMCOUNT
+ ifeq ("$(origin RECORDMCOUNT_WARN)", "command line")
+@@ -206,8 +205,7 @@ recordmcount_source := $(srctree)/scripts/recordmcount.pl
+ endif # BUILD_C_RECORDMCOUNT
+ cmd_record_mcount = $(if $(findstring $(strip $(CC_FLAGS_FTRACE)),$(_c_flags)),	\
+ 	$(sub_cmd_record_mcount))
+-endif # CC_USING_RECORD_MCOUNT
+-endif # CONFIG_FTRACE_MCOUNT_RECORD
++endif # USE_RECORDMCOUNT
+ 
+ ifdef CONFIG_STACK_VALIDATION
+ ifneq ($(SKIP_STACK_VALIDATION),1)
+@@ -230,6 +228,9 @@ endif
+ ifdef CONFIG_X86_SMAP
+   objtool_args += --uaccess
+ endif
++ifdef USE_OBJTOOL_MCOUNT
++  objtool_args += --mcount
++endif
+ 
+ # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+ # 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
 -- 
 2.28.0.402.g5ffc5be6b7-goog
 
