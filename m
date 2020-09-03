@@ -2,103 +2,201 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C104E25C850
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 19:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DFE25CB57
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 22:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728677AbgICR7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 13:59:18 -0400
-Received: from mga18.intel.com ([134.134.136.126]:1301 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726327AbgICR7R (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Sep 2020 13:59:17 -0400
-IronPort-SDR: Zey8bhnXoWmUpAaat3pVpAK6f3SZOPQBi8xZwhy83WX+eZ99nSpcrQVUuI5IJ8uZmy+pQ3cntM
- 26sdud4xUmZg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="145329662"
-X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
-   d="scan'208";a="145329662"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 10:59:16 -0700
-IronPort-SDR: X6hOgUBXuT53zGBETVRIl8Y3udPYgeOjMvy4EgfTvR+oR8iOyOvL0gprGjnPMNJMYyxw+50upa
- fFrRD+sU+TdQ==
-X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
-   d="scan'208";a="334548855"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.173.133]) ([10.209.173.133])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 10:59:15 -0700
-Subject: Re: [PATCH v11 6/9] x86/cet: Add PTRACE interface for CET
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Jann Horn <jannh@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+        id S1729042AbgICUk7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 16:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729315AbgICUa4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 16:30:56 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EB3C061251
+        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 13:30:55 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id q21so2207787qvf.22
+        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 13:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=nGr4msUS0dEW75ogQM/nhSlm97UUOCMWXorkodmMp40=;
+        b=h0+Pz1CszWOumbWEcLmAC3O2sDpreVbpYTU/LLeX71N9riUhico9+tp5lrxUEUaJUq
+         9/9jya3977ohpQ/UFatz+tG09iq0m7MVC3DPVvg75x+pJc1eEY0ZcnS0k1+FD0W4xfb0
+         0s+GpFY0ECMdosU7iEgPv+ytcGRd+QAMRWGomwTGMAF/oKYGdOMzrdSAXUCcyTbSDzPs
+         dbV5UeBXLgGB51pRx1q2svY0VUeB76G3YYFH4HGDmwpMrISfVfQK8Ou5NlhZ+ph++gno
+         1f2227PbyNuZ6U1XezgTQhhRcqLNB/aPe/L1HXGAltrVeTWBZQOgom9iMWye5PZNH9er
+         DUZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=nGr4msUS0dEW75ogQM/nhSlm97UUOCMWXorkodmMp40=;
+        b=av/baZpkxO4uoJ3BFHTYVzEJmDck6tpFkncWqEMUoYS7J68gekmIE8nHke58MU4fRU
+         4sdnKasx/vWTytZcZ8aG6sguhzv7t58CaL0ewEX5Nqghmm6u4UVWPhusl6MMOlEWId4T
+         qifWtx6rGr29/CPoUe8C9Bef/fr6EvHqgVmscXQWMjofoVjN6rOkMItT8otWfpyUUrl0
+         n3DN2OnigQ0S8At8iIIkLptFEHUwvsX/EZGTfVSDCsCHHzazOfIJl4qyjWsQFPD5AxXC
+         DTjZ8Q2GnJ0bAb59ZyLvMKCW0vJgdVJiR2yFQ45bibfRTIBxRxf9GxG4YwIsFcwkt6ee
+         wD3g==
+X-Gm-Message-State: AOAM533eO5mpiIjwNuL1X03a3ojGdf0xjYDa1hVsxKx8/5d64CKswtu7
+        DkiRsV+r9ReIZPxMYHBZVjZpYAoshLI/RAH1a5U=
+X-Google-Smtp-Source: ABdhPJxH0RX0szKuHKPur3enUKVPJmiZ5UDvXRtv8sxJrR42cHWJcizyyc12gG2V+M5Plv1Dslq7MnG2DtQcSDaz1iU=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
+ (user=samitolvanen job=sendgmr) by 2002:a0c:d803:: with SMTP id
+ h3mr3572282qvj.0.1599165054814; Thu, 03 Sep 2020 13:30:54 -0700 (PDT)
+Date:   Thu,  3 Sep 2020 13:30:25 -0700
+In-Reply-To: <20200624203200.78870-1-samitolvanen@google.com>
+Message-Id: <20200903203053.3411268-1-samitolvanen@google.com>
+Mime-Version: 1.0
+References: <20200624203200.78870-1-samitolvanen@google.com>
+X-Mailer: git-send-email 2.28.0.526.ge36021eeef-goog
+Subject: [PATCH v2 00/28] Add support for Clang LTO
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-References: <46e42e5e-0bca-5f3f-efc9-5ab15827cc0b@intel.com>
- <40BC093A-F430-4DCC-8DC0-2BA90A6FC3FA@amacapital.net>
- <b3809dd7-8566-0517-2389-8089475135b7@intel.com>
- <88261152-2de1-fe8d-7ab0-acb108e97e04@intel.com>
- <1b51d89c-c7de-2032-df23-e138d1369ffa@intel.com>
- <CALCETrUq3xiHV2xOZV-FD_de_P_TL-Bs91XT+F+79psBfigCSg@mail.gmail.com>
- <21491d05-6306-0a6f-58a7-8bf29feae8c7@intel.com>
- <CALCETrXJkXXDF=tdu3KBHgzDO+E-HhqMk9Ttixgk4WX_PLPDJw@mail.gmail.com>
- <8fcde9bb-284f-f089-96d3-702f501a6258@intel.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <2a58982b-8a69-1280-86ec-d0b70ede4453@intel.com>
-Date:   Thu, 3 Sep 2020 10:59:14 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <8fcde9bb-284f-f089-96d3-702f501a6258@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/3/2020 9:42 AM, Dave Hansen wrote:
-> On 9/3/20 9:32 AM, Andy Lutomirski wrote:
->>> Taking the config register out of the init state is illogical, as is
->>> writing to SSP while the config register is in its init state.
->> What's so special about the INIT state?  It's optimized by XSAVES, but
->> it's just a number, right?  So taking the register out of the INIT
->> state is kind of like saying "gdb wanted to set xmm0 to (0,0,0,1), but
->> it was in the INIT state to begin with", right?
-> 
-> Yeah, that's a good point.  The init state shouldn't be special, as the
-> hardware is within its right to choose not to use the init optimization
-> at any time.
-> 
-Then, I would suggest changing get_xsave_addr() to return non-null for 
-the INIT state case.  For the other two cases, it still returns NULL. 
-But this also requires any write to INIT states to set xstate_bv bits 
-properly.  This would be a pitfall for any code addition later on.
+This patch series adds support for building x86_64 and arm64 kernels
+with Clang's Link Time Optimization (LTO).
 
-Looking at this another way.  Would it be better for the debugger to get 
-an error and then to set the MSR directly first (vs. changing the XSAVES 
-INIT state first)?
+In addition to performance, the primary motivation for LTO is
+to allow Clang's Control-Flow Integrity (CFI) to be used in the
+kernel. Google has shipped millions of Pixel devices running three
+major kernel versions with LTO+CFI since 2018.
+
+Most of the patches are build system changes for handling LLVM
+bitcode, which Clang produces with LTO instead of ELF object files,
+postponing ELF processing until a later stage, and ensuring initcall
+ordering.
+
+Note that patches 1-4 are not directly related to LTO, but are
+needed to compile LTO kernels with ToT Clang, so I'm including them
+in the series for your convenience:
+
+ - Patches 1-3 are required for building the kernel with ToT Clang,
+   and IAS, and patch 4 is needed to build allmodconfig with LTO.
+
+ - Patches 3-4 are already in linux-next, but not yet in 5.9-rc.
+
+---
+Changes in v2:
+
+  - Fixed -Wmissing-prototypes warnings with W=1.
+
+  - Dropped cc-option from -fsplit-lto-unit and added .thinlto-cache
+    scrubbing to make distclean.
+
+  - Added a comment about Clang >=11 being required.
+
+  - Added a patch to disable LTO for the arm64 KVM nVHE code.
+
+  - Disabled objtool's noinstr validation with LTO unless enabled.
+
+  - Included Peter's proposed objtool mcount patch in the series
+    and replaced recordmcount with the objtool pass to avoid
+    whitelisting relocations that are not calls.
+
+  - Updated several commit messages with better explanations.
+
+
+Arvind Sankar (2):
+  x86/boot/compressed: Disable relocation relaxation
+  x86/asm: Replace __force_order with memory clobber
+
+Luca Stefani (1):
+  RAS/CEC: Fix cec_init() prototype
+
+Nick Desaulniers (1):
+  lib/string.c: implement stpcpy
+
+Peter Zijlstra (1):
+  objtool: Add a pass for generating __mcount_loc
+
+Sami Tolvanen (23):
+  objtool: Don't autodetect vmlinux.o
+  kbuild: add support for objtool mcount
+  x86, build: use objtool mcount
+  kbuild: add support for Clang LTO
+  kbuild: lto: fix module versioning
+  kbuild: lto: postpone objtool
+  kbuild: lto: limit inlining
+  kbuild: lto: merge module sections
+  kbuild: lto: remove duplicate dependencies from .mod files
+  init: lto: ensure initcall ordering
+  init: lto: fix PREL32 relocations
+  PCI: Fix PREL32 relocations for LTO
+  modpost: lto: strip .lto from module names
+  scripts/mod: disable LTO for empty.c
+  efi/libstub: disable LTO
+  drivers/misc/lkdtm: disable LTO for rodata.o
+  arm64: export CC_USING_PATCHABLE_FUNCTION_ENTRY
+  arm64: vdso: disable LTO
+  KVM: arm64: disable LTO for the nVHE directory
+  arm64: allow LTO_CLANG and THINLTO to be selected
+  x86, vdso: disable LTO only for vDSO
+  x86, relocs: Ignore L4_PAGE_OFFSET relocations
+  x86, build: allow LTO_CLANG and THINLTO to be selected
+
+ .gitignore                            |   1 +
+ Makefile                              |  65 ++++++-
+ arch/Kconfig                          |  67 +++++++
+ arch/arm64/Kconfig                    |   2 +
+ arch/arm64/Makefile                   |   1 +
+ arch/arm64/kernel/vdso/Makefile       |   4 +-
+ arch/arm64/kvm/hyp/nvhe/Makefile      |   4 +-
+ arch/x86/Kconfig                      |   3 +
+ arch/x86/Makefile                     |   5 +
+ arch/x86/boot/compressed/Makefile     |   2 +
+ arch/x86/boot/compressed/pgtable_64.c |   9 -
+ arch/x86/entry/vdso/Makefile          |   5 +-
+ arch/x86/include/asm/special_insns.h  |  28 +--
+ arch/x86/kernel/cpu/common.c          |   4 +-
+ arch/x86/tools/relocs.c               |   1 +
+ drivers/firmware/efi/libstub/Makefile |   2 +
+ drivers/misc/lkdtm/Makefile           |   1 +
+ drivers/ras/cec.c                     |   9 +-
+ include/asm-generic/vmlinux.lds.h     |  11 +-
+ include/linux/init.h                  |  79 +++++++-
+ include/linux/pci.h                   |  19 +-
+ kernel/trace/Kconfig                  |   5 +
+ lib/string.c                          |  24 +++
+ scripts/Makefile.build                |  55 +++++-
+ scripts/Makefile.lib                  |   6 +-
+ scripts/Makefile.modfinal             |  31 ++-
+ scripts/Makefile.modpost              |  26 ++-
+ scripts/generate_initcall_order.pl    | 270 ++++++++++++++++++++++++++
+ scripts/link-vmlinux.sh               |  94 ++++++++-
+ scripts/mod/Makefile                  |   1 +
+ scripts/mod/modpost.c                 |  16 +-
+ scripts/mod/modpost.h                 |   9 +
+ scripts/mod/sumversion.c              |   6 +-
+ scripts/module-lto.lds                |  26 +++
+ tools/objtool/builtin-check.c         |  13 +-
+ tools/objtool/builtin.h               |   2 +-
+ tools/objtool/check.c                 |  83 ++++++++
+ tools/objtool/check.h                 |   1 +
+ tools/objtool/objtool.h               |   1 +
+ 39 files changed, 883 insertions(+), 108 deletions(-)
+ create mode 100755 scripts/generate_initcall_order.pl
+ create mode 100644 scripts/module-lto.lds
+
+
+base-commit: e28f0104343d0c132fa37f479870c9e43355fee4
+-- 
+2.28.0.402.g5ffc5be6b7-goog
+
