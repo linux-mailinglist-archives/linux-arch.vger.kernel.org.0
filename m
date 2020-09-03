@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C8525CC8A
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 23:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0D425CC94
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 23:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729167AbgICVov (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 17:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S1729315AbgICVp5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 17:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728037AbgICVop (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 17:44:45 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D021C061246
-        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 14:44:44 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id u13so3184066pgh.1
-        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 14:44:44 -0700 (PDT)
+        with ESMTP id S1728129AbgICVp4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 17:45:56 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCC5C061246
+        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 14:45:56 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id o20so3388885pfp.11
+        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 14:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Wkni4eXx9E7Yx63VN0+vnviLhaoHNM+yB8xZjp7w5hM=;
-        b=O5o59mUdRprA27/bBNjMETG5FChmb/k7jW6G/CEqPxqkNExuhCDFNEGkwkwsAAOk9B
-         S/ND1TkN2Kb21Yt+dermQ1eJzMamhppfZcA/5BLAHvK0xooF6lH1S7/GgEK+o+mFn5sC
-         Q+9Q6xNOHekU+wFfZY8e2e5GVn6y3TV0ytjI0=
+        bh=88UAUo6RYF27MUEaYZE9R7HTuO6mGUyasahfv8EZhB8=;
+        b=EFlB8L3484X2NUQ2w9kQvBk3L+1RDvCzNz+1QFX1Nm3dCNte5YHScmXG1pqmo0J2+E
+         C6Clco3P/dWY6iT/m+OtQJLLVltMdhY68a4RYVvEYy7d7wz05uOxuTBRrPhAf9vZulwq
+         OT1t8R0KPmtqqUOLIMHdbCPWYgvYCgeGDAsFI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Wkni4eXx9E7Yx63VN0+vnviLhaoHNM+yB8xZjp7w5hM=;
-        b=fsetS/2WSj7mTqzb1l1wfBM8UTTrxRHT+3tdOHei3BLXiOVMj/t0VP9IbvbbWGlYvk
-         wMQZzzdVlW7fvNePJIokC0BX/2v7GtgW1ERGycKsBbyPx0eMRkT1E+GYhMN/W53AVhrh
-         ZnZKYBzwfFbWaT93cn1k13lsyZKaX5bSEmkHPUhE/rCvDjb3JuccLqfl0koJu5HWr7Bq
-         7+viHr5j6U/AVLwpzV2RDFAcC/o18bJXFn3Si/0rkFb4myfdVYlF/gS02c98X6leqXZU
-         na9skg3h+ircdbtqUCC2kqQ9+WZXxzJsEMjthiOmwC3rD0X+r7DAeZ0mj4Pzvls7KJv6
-         lvsQ==
-X-Gm-Message-State: AOAM530ugGc4SnpswpDTc/Aehp9Z4JxXrsOrliAKzcNbfPIjYVcuIjI+
-        Fk58kgHWT/pGB0u0PIlxOqNtVQ==
-X-Google-Smtp-Source: ABdhPJzAv2fIwHx5fjsh6FyQ4DUXacQqnpd1HrcO3mYGfEva7Q9zQka0PVlCAE3Ap8Ww7DWt19mfFg==
-X-Received: by 2002:a62:1809:: with SMTP id 9mr5726960pfy.217.1599169483379;
-        Thu, 03 Sep 2020 14:44:43 -0700 (PDT)
+        bh=88UAUo6RYF27MUEaYZE9R7HTuO6mGUyasahfv8EZhB8=;
+        b=Er/5VciUg1a99pvtjoDFDpoXSTSPJon70ZchwEt67dNV/IUtx+1taFRvQu4AOiXXhd
+         uCJYmaz1k7sovDmb9KDY76KXDYhadRwhqvkGaNkl8hSQWGiSNReKUqcQQ0KTH7vEVLpa
+         eIrjN8a8MNzQ+1P5jQdeFEGDsuDgG2sTi1UewrnfxCcuTpUB4GO1Rk5nJehc/0VyXvUk
+         EbqThWckMoZxjEVSVvyJ500hIeVOexo4TOH4FXfJRU0hPRFMRnUx6wL+oh8+xugs0lW/
+         ynRApnEEJKnXd675tC1aXuyHoQY3oo75FXIzF0uOHKwJgK0O8v7e7rFv1bRT2ySc9JHn
+         J6cw==
+X-Gm-Message-State: AOAM531Htr1iLXrOamGXubvIl8IuJesO6Iw9+c8BrY93TuFH43zxhZYX
+        m8a8Den6JlE7J6xDo/TxnXHOxg==
+X-Google-Smtp-Source: ABdhPJyg0lgZlgBi8/Irq6grlvy58EaMpaSg/pdagWK+0tWzLnV3KOczUO8JKY6Ln9M1KxRZgEWLVw==
+X-Received: by 2002:a17:902:7b83:: with SMTP id w3mr6022860pll.28.1599169555661;
+        Thu, 03 Sep 2020 14:45:55 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d77sm4259177pfd.121.2020.09.03.14.44.41
+        by smtp.gmail.com with ESMTPSA id t20sm4165589pgj.27.2020.09.03.14.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 14:44:42 -0700 (PDT)
-Date:   Thu, 3 Sep 2020 14:44:41 -0700
+        Thu, 03 Sep 2020 14:45:54 -0700 (PDT)
+Date:   Thu, 3 Sep 2020 14:45:54 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -59,76 +59,59 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
         x86@kernel.org, Arvind Sankar <nivedita@alum.mit.edu>
-Subject: Re: [PATCH v2 01/28] x86/boot/compressed: Disable relocation
- relaxation
-Message-ID: <202009031444.F2ECA89E@keescook>
+Subject: Re: [PATCH v2 02/28] x86/asm: Replace __force_order with memory
+ clobber
+Message-ID: <202009031445.807B55E@keescook>
 References: <20200624203200.78870-1-samitolvanen@google.com>
  <20200903203053.3411268-1-samitolvanen@google.com>
- <20200903203053.3411268-2-samitolvanen@google.com>
+ <20200903203053.3411268-3-samitolvanen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200903203053.3411268-2-samitolvanen@google.com>
+In-Reply-To: <20200903203053.3411268-3-samitolvanen@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 01:30:26PM -0700, Sami Tolvanen wrote:
+On Thu, Sep 03, 2020 at 01:30:27PM -0700, Sami Tolvanen wrote:
 > From: Arvind Sankar <nivedita@alum.mit.edu>
 > 
-> The x86-64 psABI [0] specifies special relocation types
-> (R_X86_64_[REX_]GOTPCRELX) for indirection through the Global Offset
-> Table, semantically equivalent to R_X86_64_GOTPCREL, which the linker
-> can take advantage of for optimization (relaxation) at link time. This
-> is supported by LLD and binutils versions 2.26 onwards.
+> The CRn accessor functions use __force_order as a dummy operand to
+> prevent the compiler from reordering CRn reads/writes with respect to
+> each other.
 > 
-> The compressed kernel is position-independent code, however, when using
-> LLD or binutils versions before 2.27, it must be linked without the -pie
-> option. In this case, the linker may optimize certain instructions into
-> a non-position-independent form, by converting foo@GOTPCREL(%rip) to $foo.
+> The fact that the asm is volatile should be enough to prevent this:
+> volatile asm statements should be executed in program order. However GCC
+> 4.9.x and 5.x have a bug that might result in reordering. This was fixed
+> in 8.1, 7.3 and 6.5. Versions prior to these, including 5.x and 4.9.x,
+> may reorder volatile asm statements with respect to each other.
 > 
-> This potential issue has been present with LLD and binutils-2.26 for a
-> long time, but it has never manifested itself before now:
-> - LLD and binutils-2.26 only relax
-> 	movq	foo@GOTPCREL(%rip), %reg
->   to
-> 	leaq	foo(%rip), %reg
->   which is still position-independent, rather than
-> 	mov	$foo, %reg
->   which is permitted by the psABI when -pie is not enabled.
-> - gcc happens to only generate GOTPCREL relocations on mov instructions.
-> - clang does generate GOTPCREL relocations on non-mov instructions, but
->   when building the compressed kernel, it uses its integrated assembler
->   (due to the redefinition of KBUILD_CFLAGS dropping -no-integrated-as),
->   which has so far defaulted to not generating the GOTPCRELX
->   relocations.
+> There are some issues with __force_order as implemented:
+> - It is used only as an input operand for the write functions, and hence
+>   doesn't do anything additional to prevent reordering writes.
+> - It allows memory accesses to be cached/reordered across write
+>   functions, but CRn writes affect the semantics of memory accesses, so
+>   this could be dangerous.
+> - __force_order is not actually defined in the kernel proper, but the
+>   LLVM toolchain can in some cases require a definition: LLVM (as well
+>   as GCC 4.9) requires it for PIE code, which is why the compressed
+>   kernel has a definition, but also the clang integrated assembler may
+>   consider the address of __force_order to be significant, resulting in
+>   a reference that requires a definition.
 > 
-> Nick Desaulniers reports [1,2]:
->   A recent change [3] to a default value of configuration variable
->   (ENABLE_X86_RELAX_RELOCATIONS OFF -> ON) in LLVM now causes Clang's
->   integrated assembler to emit R_X86_64_GOTPCRELX/R_X86_64_REX_GOTPCRELX
->   relocations. LLD will relax instructions with these relocations based
->   on whether the image is being linked as position independent or not.
->   When not, then LLD will relax these instructions to use absolute
->   addressing mode (R_RELAX_GOT_PC_NOPIC). This causes kernels built with
->   Clang and linked with LLD to fail to boot.
+> Fix this by:
+> - Using a memory clobber for the write functions to additionally prevent
+>   caching/reordering memory accesses across CRn writes.
+> - Using a dummy input operand with an arbitrary constant address for the
+>   read functions, instead of a global variable. This will prevent reads
+>   from being reordered across writes, while allowing memory loads to be
+>   cached/reordered across CRn reads, which should be safe.
 > 
-> Patch series [4] is a solution to allow the compressed kernel to be
-> linked with -pie unconditionally, but even if merged is unlikely to be
-> backported. As a simple solution that can be applied to stable as well,
-> prevent the assembler from generating the relaxed relocation types using
-> the -mrelax-relocations=no option. For ease of backporting, do this
-> unconditionally.
-> 
-> [0] https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/linker-optimization.tex#L65
-> [1] https://lore.kernel.org/lkml/20200807194100.3570838-1-ndesaulniers@google.com/
-> [2] https://github.com/ClangBuiltLinux/linux/issues/1121
-> [3] https://reviews.llvm.org/rGc41a18cf61790fc898dcda1055c3efbf442c14c0
-> [4] https://lore.kernel.org/lkml/20200731202738.2577854-1-nivedita@alum.mit.edu/
-> 
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
 > Signed-off-by: Arvind Sankar <nivedita@alum.mit.edu>
+
+In the primary thread for this patch I sent a Reviewed tag, but for good
+measure, here it is again:
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
