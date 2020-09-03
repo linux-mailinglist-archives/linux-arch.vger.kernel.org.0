@@ -2,144 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0AC25C630
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 18:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9805B25C631
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 18:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728254AbgICQIf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 12:08:35 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:8836 "EHLO pegase1.c-s.fr"
+        id S1728145AbgICQJE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 12:09:04 -0400
+Received: from mga12.intel.com ([192.55.52.136]:42295 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727786AbgICQIc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Sep 2020 12:08:32 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4Bj5MH5XfvzB09ZM;
-        Thu,  3 Sep 2020 18:08:27 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id AhUkCQsrRXgc; Thu,  3 Sep 2020 18:08:27 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Bj5MH4CVtzB09ZK;
-        Thu,  3 Sep 2020 18:08:27 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 73D218B806;
-        Thu,  3 Sep 2020 18:08:28 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 5YzyNRM3vKXH; Thu,  3 Sep 2020 18:08:28 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id ECB968B803;
-        Thu,  3 Sep 2020 18:08:20 +0200 (CEST)
-Subject: Re: [PATCH 14/14] powerpc: remove address space overrides using
- set_fs()
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        linux-arch@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Alexey Dobriyan <adobriyan@gmail.com>
-References: <20200903142242.925828-1-hch@lst.de>
- <20200903142242.925828-15-hch@lst.de>
- <e7d2d231-5658-a4d3-0495-2af62f34aa34@csgroup.eu>
- <20200903154909.GA23023@lst.de> <20200903155644.GA23521@lst.de>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <7b895389-3da8-f634-4a13-82e533398ec5@csgroup.eu>
-Date:   Thu, 3 Sep 2020 18:03:56 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+        id S1727786AbgICQJE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 3 Sep 2020 12:09:04 -0400
+IronPort-SDR: 1NhuyrsD94GV8ZMw89w7t0V1xuNWB8VuXgSJVnoettkb83VcOdd55dOpGtC+ZON/LuG7CYlF6c
+ b7y8ofnHa3Fw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="137127466"
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="137127466"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 09:09:03 -0700
+IronPort-SDR: +C92qNo6vPQliFbZvRVoLeCI4c58RtTTyJZLqSfKqMdZx/NGqhVaiuZEkTHCzNP6ihEpbCixYB
+ VQvGXEsgZUUQ==
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="503116307"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.173.133]) ([10.209.173.133])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 09:09:01 -0700
+Subject: Re: [PATCH v11 6/9] x86/cet: Add PTRACE interface for CET
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@amacapital.net>
+Cc:     Jann Horn <jannh@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <46e42e5e-0bca-5f3f-efc9-5ab15827cc0b@intel.com>
+ <40BC093A-F430-4DCC-8DC0-2BA90A6FC3FA@amacapital.net>
+ <b3809dd7-8566-0517-2389-8089475135b7@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <88261152-2de1-fe8d-7ab0-acb108e97e04@intel.com>
+Date:   Thu, 3 Sep 2020 09:09:01 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200903155644.GA23521@lst.de>
+In-Reply-To: <b3809dd7-8566-0517-2389-8089475135b7@intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 9/3/2020 7:26 AM, Dave Hansen wrote:
+> On 9/2/20 9:35 PM, Andy Lutomirski wrote:
+>>>>>>> +       fpu__prepare_read(fpu);
+>>>>>>> +       cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
+>>>>>>> +       if (!cetregs)
+>>>>>>> +               return -EFAULT;
+>>>>>> Can this branch ever be hit without a kernel bug? If yes, I think
+>>>>>> -EFAULT is probably a weird error code to choose here. If no, this
+>>>>>> should probably use WARN_ON(). Same thing in cetregs_set().
+>>>>> When a thread is not CET-enabled, its CET state does not exist.  I looked at EFAULT, and it means "Bad address".  Maybe this can be ENODEV, which means "No such device"?
+>> Having read the code, I’m unconvinced. It looks like a get_xsave_addr() failure means “state not saved; task sees INIT state”.  So *maybe* it’s reasonable -ENODEV this, but I’m not really convinced. I tend to think we should return the actual INIT state and that we should permit writes and handle them correctly.
+> 
+> PTRACE is asking for access to the values in the *registers*, not for
+> the value in the kernel XSAVE buffer.  We just happen to only have the
+> kernel XSAVE buffer around.
 
+When get_xsave_addr() returns NULL, there are three possibilities:
+- XSAVE is not enabled or not supported;
+- The kernel does not support the requested feature;
+- The requested feature is in INIT state.
 
-Le 03/09/2020 à 17:56, Christoph Hellwig a écrit :
-> On Thu, Sep 03, 2020 at 05:49:09PM +0200, Christoph Hellwig wrote:
->> On Thu, Sep 03, 2020 at 05:43:25PM +0200, Christophe Leroy wrote:
->>>
->>>
->>> Le 03/09/2020 à 16:22, Christoph Hellwig a écrit :
->>>> Stop providing the possibility to override the address space using
->>>> set_fs() now that there is no need for that any more.
->>>>
->>>> Signed-off-by: Christoph Hellwig <hch@lst.de>
->>>> ---
->>>
->>>
->>>>    -static inline int __access_ok(unsigned long addr, unsigned long size,
->>>> -			mm_segment_t seg)
->>>> +static inline bool __access_ok(unsigned long addr, unsigned long size)
->>>>    {
->>>> -	if (addr > seg.seg)
->>>> -		return 0;
->>>> -	return (size == 0 || size - 1 <= seg.seg - addr);
->>>> +	if (addr >= TASK_SIZE_MAX)
->>>> +		return false;
->>>> +	return size == 0 || size <= TASK_SIZE_MAX - addr;
->>>>    }
->>>
->>> You don't need to test size == 0 anymore. It used to be necessary because
->>> of the 'size - 1', as size is unsigned.
->>>
->>> Now you can directly do
->>>
->>> 	return size <= TASK_SIZE_MAX - addr;
->>>
->>> If size is 0, this will always be true (because you already know that addr
->>> is not >= TASK_SIZE_MAX
->>
->> True.  What do you think of Linus' comment about always using the
->> ppc32 version on ppc64 as well with this?
-
-I have nothing against it. That's only adding a substract, all args are 
-already in registers so that will be in the noise for a modern CPU.
+If the debugger is going to write an MSR, only in the third case would 
+this make a slight sense.  For example, if the system has CET enabled, 
+but the task does not have CET enabled, and GDB is writing to a CET MSR. 
+  But still, this is strange to me.
 
 > 
-> i.e. something like this folded in:
-> 
-> diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
-> index 5363f7fc6dd06c..be070254e50943 100644
-> --- a/arch/powerpc/include/asm/uaccess.h
-> +++ b/arch/powerpc/include/asm/uaccess.h
-> @@ -11,26 +11,14 @@
->   #ifdef __powerpc64__
->   /* We use TASK_SIZE_USER64 as TASK_SIZE is not constant */
->   #define TASK_SIZE_MAX		TASK_SIZE_USER64
-> -
-> -/*
-> - * This check is sufficient because there is a large enough gap between user
-> - * addresses and the kernel addresses.
-> - */
-> -static inline bool __access_ok(unsigned long addr, unsigned long size)
-> -{
-> -	return addr < TASK_SIZE_MAX && size < TASK_SIZE_MAX;
-> -}
-> -
->   #else
->   #define TASK_SIZE_MAX		TASK_SIZE
-> +#endif
->   
->   static inline bool __access_ok(unsigned long addr, unsigned long size)
->   {
-> -	if (addr >= TASK_SIZE_MAX)
-> -		return false;
-> -	return size == 0 || size <= TASK_SIZE_MAX - addr;
-> +	return addr < TASK_SIZE_MAX && size <= TASK_SIZE_MAX - addr;
->   }
-> -#endif /* __powerpc64__ */
->   
->   #define access_ok(addr, size)		\
->   	(__chk_user_ptr(addr),		\
+> If we want to really support PTRACE we have to allow the registers to be
+> get/set, regardless of what state they are in, INIT state or not.  So,
+> yeah I agree with Andy.
 > 
 
+GDB does not have a WRMSR mechanism.  If GDB is going to write an MSR, 
+it will call arch_prctl or an assembly routine in memory.
 
-Christophe
+Yu-cheng
