@@ -2,96 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7131725BAA9
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 07:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F7425BB66
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 09:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgICF5R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 01:57:17 -0400
-Received: from brightrain.aerifal.cx ([216.12.86.13]:49140 "EHLO
-        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725919AbgICF5Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 01:57:16 -0400
-Date:   Thu, 3 Sep 2020 01:57:15 -0400
-From:   Rich Felker <dalias@libc.org>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org
-Subject: Re: [PATCH v3 19/23] sh: use asm-generic/mmu_context.h for no-op
- implementations
-Message-ID: <20200903055715.GY3265@brightrain.aerifal.cx>
-References: <20200901141539.1757549-1-npiggin@gmail.com>
- <20200901141539.1757549-20-npiggin@gmail.com>
+        id S1726528AbgICHLt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 03:11:49 -0400
+Received: from verein.lst.de ([213.95.11.211]:36619 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725919AbgICHLt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 3 Sep 2020 03:11:49 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0164568BEB; Thu,  3 Sep 2020 09:11:44 +0200 (CEST)
+Date:   Thu, 3 Sep 2020 09:11:44 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/10] powerpc: remove address space overrides using
+ set_fs()
+Message-ID: <20200903071144.GA19247@lst.de>
+References: <20200827150030.282762-1-hch@lst.de> <20200827150030.282762-11-hch@lst.de> <8974838a-a0b1-1806-4a3a-e983deda67ca@csgroup.eu> <20200902123646.GA31184@lst.de> <d78cb4be-48a9-a7c5-d9d1-d04d2a02b4c6@csgroup.eu> <CAHk-=wiDCcxuHgENo3UtdFi2QW9B7yXvNpG5CtF=A6bc6PTTgA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901141539.1757549-20-npiggin@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <CAHk-=wiDCcxuHgENo3UtdFi2QW9B7yXvNpG5CtF=A6bc6PTTgA@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 12:15:35AM +1000, Nicholas Piggin wrote:
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: linux-sh@vger.kernel.org
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> ---
-> 
-> Please ack or nack if you object to this being mered via
-> Arnd's tree.
+On Wed, Sep 02, 2020 at 11:02:22AM -0700, Linus Torvalds wrote:
+> I don't see why this change would make any difference.
 
-Acked-by: Rich Felker <dalias@libc.org>
+Me neither, but while looking at a different project I did spot places
+that actually do an access_ok with len 0, that's why I wanted him to
+try.
 
-> 
->  arch/sh/include/asm/mmu_context.h    | 5 ++---
->  arch/sh/include/asm/mmu_context_32.h | 9 ---------
->  2 files changed, 2 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/sh/include/asm/mmu_context.h b/arch/sh/include/asm/mmu_context.h
-> index 461b1304580b..78eef4e7d5df 100644
-> --- a/arch/sh/include/asm/mmu_context.h
-> +++ b/arch/sh/include/asm/mmu_context.h
-> @@ -84,6 +84,7 @@ static inline void get_mmu_context(struct mm_struct *mm, unsigned int cpu)
->   * Initialize the context related info for a new mm_struct
->   * instance.
->   */
-> +#define init_new_context init_new_context
->  static inline int init_new_context(struct task_struct *tsk,
->  				   struct mm_struct *mm)
->  {
-> @@ -120,9 +121,7 @@ static inline void switch_mm(struct mm_struct *prev,
->  			activate_context(next, cpu);
->  }
->  
-> -#define activate_mm(prev, next)		switch_mm((prev),(next),NULL)
-> -#define deactivate_mm(tsk,mm)		do { } while (0)
-> -#define enter_lazy_tlb(mm,tsk)		do { } while (0)
-> +#include <asm-generic/mmu_context.h>
->  
->  #else
->  
-> diff --git a/arch/sh/include/asm/mmu_context_32.h b/arch/sh/include/asm/mmu_context_32.h
-> index 71bf12ef1f65..bc5034fa6249 100644
-> --- a/arch/sh/include/asm/mmu_context_32.h
-> +++ b/arch/sh/include/asm/mmu_context_32.h
-> @@ -2,15 +2,6 @@
->  #ifndef __ASM_SH_MMU_CONTEXT_32_H
->  #define __ASM_SH_MMU_CONTEXT_32_H
->  
-> -/*
-> - * Destroy context related info for an mm_struct that is about
-> - * to be put to rest.
-> - */
-> -static inline void destroy_context(struct mm_struct *mm)
-> -{
-> -	/* Do nothing */
-> -}
-> -
->  #ifdef CONFIG_CPU_HAS_PTEAEX
->  static inline void set_asid(unsigned long asid)
->  {
-> -- 
-> 2.23.0
+That being said: Christophe are these number stables?  Do you get
+similar numbers with multiple runs?
+
+> And btw, why do the 32-bit and 64-bit checks even differ? It's not
+> like the extra (single) instruction should even matter. I think the
+> main reason is that the simpler 64-bit case could stay as a macro
+> (because it only uses "addr" and "size" once), but honestly, that
+> "simplification" doesn't help when you then need to have that #ifdef
+> for the 32-bit case and an inline function anyway.
+
+I'll have to leave that to the powerpc folks.  The intent was to not
+change the behavior (and I even fucked that up for the the size == 0
+case).
+
+> However, I suspect a bigger reason for the actual performance
+> degradation would be the patch that makes things use "write_iter()"
+> for writing, even when a simpler "write()" exists.
+
+Except that we do not actually have such a patch.  For normal user
+writes we only use ->write_iter if ->write is not present.  But what
+shows up in the profile is that /dev/zero only has a read_iter op and
+not a normal read.  I've added a patch below that implements a normal
+read which might help a tad with this workload, but should not be part
+of a regression.
+
+Also Christophe:  can you bisect which patch starts this?  Is it really
+this last patch in the series?
+
+---
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index abd4ffdc8cdebc..1dc99ab158457a 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -726,6 +726,27 @@ static ssize_t read_iter_zero(struct kiocb *iocb, struct iov_iter *iter)
+ 	return written;
+ }
+ 
++static ssize_t read_zero(struct file *file, char __user *buf,
++			 size_t count, loff_t *ppos)
++{
++	size_t cleared = 0;
++
++	while (count) {
++		size_t chunk = min_t(size_t, count, PAGE_SIZE);
++
++		if (clear_user(buf + cleared, chunk))
++			return cleared ? cleared : -EFAULT;
++		cleared += chunk;
++		count -= chunk;
++
++		if (signal_pending(current))
++			return cleared ? cleared : -ERESTARTSYS;
++		cond_resched();
++	}
++
++	return cleared;
++}
++
+ static int mmap_zero(struct file *file, struct vm_area_struct *vma)
+ {
+ #ifndef CONFIG_MMU
+@@ -921,6 +942,7 @@ static const struct file_operations zero_fops = {
+ 	.llseek		= zero_lseek,
+ 	.write		= write_zero,
+ 	.read_iter	= read_iter_zero,
++	.read		= read_zero,
+ 	.write_iter	= write_iter_zero,
+ 	.mmap		= mmap_zero,
+ 	.get_unmapped_area = get_unmapped_area_zero,
