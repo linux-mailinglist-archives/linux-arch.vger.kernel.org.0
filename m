@@ -2,225 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E2025C279
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 16:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755AB25C28E
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 16:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729306AbgICO0P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 10:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729271AbgICOYg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 10:24:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0466C06123F;
-        Thu,  3 Sep 2020 07:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=glRx1e+2K28c137CnQcnREE32Krzi32mzQeiUOb4p8k=; b=aXm8ada5czGlZeEedfKGmsycdu
-        XFy77fTL6a7UVpeZ5XjCNDyNL1ym6/11MKlvDcgii10R7629AQHAVCkS1pGwSTGRKAJaWkw9LRvVF
-        3JSzd4hQb6IDMc6kLI8zVGFbH+Lmkx9TwN07Xr/fV64EzjAO4ABTibJ83Uw29e0dbrGs2LbZedqvb
-        E8L6It2nFiIxyBiDcKt9cU59Qp6Q8YAEQmxWAQW02CvAeC7oFJnRoWJDoze120xNiGkiCqg84AoPh
-        qpjFDVcO28oUIXPgpopWgoQ9ldSmsPzP3JAuBajxqnl6TjEfHRBKOYSm8K16fkeoOmXevyEP4yp7W
-        IG/giTfg==;
-Received: from [2001:4bb8:184:af1:c70:4a89:bc61:2] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kDq8c-0004bL-6R; Thu, 03 Sep 2020 14:22:54 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        id S1729301AbgICO2J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 10:28:09 -0400
+Received: from mga18.intel.com ([134.134.136.126]:44987 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729343AbgICO1B (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:27:01 -0400
+IronPort-SDR: ieTJP0ba9vKyhaPpTycNXPGdYgxH+Xoxcm5WiRXAQ18q7Nn88STN/gmL/jRtsFPiGTONKgJK/5
+ QUh4D2RS7Oow==
+X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="145274696"
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="145274696"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 07:26:59 -0700
+IronPort-SDR: GBtStz2sZiaoRRPyakQnVVI6aA1XF5h+b63oOQ6DF0pvr9tPf5gpUkg1pU1WzeQSmfz5By5QEL
+ eutbJCobqW+g==
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="446922586"
+Received: from jhoh-mobl2.amr.corp.intel.com (HELO [10.212.33.96]) ([10.212.33.96])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 07:26:57 -0700
+Subject: Re: [PATCH v11 6/9] x86/cet: Add PTRACE interface for CET
+To:     Andy Lutomirski <luto@amacapital.net>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     Jann Horn <jannh@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 08/14] test_bitmap: remove user bitmap tests
-Date:   Thu,  3 Sep 2020 16:22:36 +0200
-Message-Id: <20200903142242.925828-9-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200903142242.925828-1-hch@lst.de>
-References: <20200903142242.925828-1-hch@lst.de>
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <46e42e5e-0bca-5f3f-efc9-5ab15827cc0b@intel.com>
+ <40BC093A-F430-4DCC-8DC0-2BA90A6FC3FA@amacapital.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <b3809dd7-8566-0517-2389-8089475135b7@intel.com>
+Date:   Thu, 3 Sep 2020 07:26:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <40BC093A-F430-4DCC-8DC0-2BA90A6FC3FA@amacapital.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We can't run the tests for userspace bitmap parsing if set_fs() doesn't
-exist, and it is about to go away for x86, powerpc with other major
-architectures to follow.
+On 9/2/20 9:35 PM, Andy Lutomirski wrote:
+>>>>>> +       fpu__prepare_read(fpu);
+>>>>>> +       cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
+>>>>>> +       if (!cetregs)
+>>>>>> +               return -EFAULT;
+>>>>> Can this branch ever be hit without a kernel bug? If yes, I think
+>>>>> -EFAULT is probably a weird error code to choose here. If no, this
+>>>>> should probably use WARN_ON(). Same thing in cetregs_set().
+>>>> When a thread is not CET-enabled, its CET state does not exist.  I looked at EFAULT, and it means "Bad address".  Maybe this can be ENODEV, which means "No such device"?
+> Having read the code, I’m unconvinced. It looks like a get_xsave_addr() failure means “state not saved; task sees INIT state”.  So *maybe* it’s reasonable -ENODEV this, but I’m not really convinced. I tend to think we should return the actual INIT state and that we should permit writes and handle them correctly.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- lib/test_bitmap.c | 91 +++++++++++------------------------------------
- 1 file changed, 21 insertions(+), 70 deletions(-)
+PTRACE is asking for access to the values in the *registers*, not for
+the value in the kernel XSAVE buffer.  We just happen to only have the
+kernel XSAVE buffer around.
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index df903c53952bb9..4425a1dd4ef1c7 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -354,50 +354,37 @@ static const struct test_bitmap_parselist parselist_tests[] __initconst = {
- 
- };
- 
--static void __init __test_bitmap_parselist(int is_user)
-+static void __init test_bitmap_parselist(void)
- {
- 	int i;
- 	int err;
- 	ktime_t time;
- 	DECLARE_BITMAP(bmap, 2048);
--	char *mode = is_user ? "_user"  : "";
- 
- 	for (i = 0; i < ARRAY_SIZE(parselist_tests); i++) {
- #define ptest parselist_tests[i]
- 
--		if (is_user) {
--			mm_segment_t orig_fs = get_fs();
--			size_t len = strlen(ptest.in);
--
--			set_fs(KERNEL_DS);
--			time = ktime_get();
--			err = bitmap_parselist_user((__force const char __user *)ptest.in, len,
--						    bmap, ptest.nbits);
--			time = ktime_get() - time;
--			set_fs(orig_fs);
--		} else {
--			time = ktime_get();
--			err = bitmap_parselist(ptest.in, bmap, ptest.nbits);
--			time = ktime_get() - time;
--		}
-+		time = ktime_get();
-+		err = bitmap_parselist(ptest.in, bmap, ptest.nbits);
-+		time = ktime_get() - time;
- 
- 		if (err != ptest.errno) {
--			pr_err("parselist%s: %d: input is %s, errno is %d, expected %d\n",
--					mode, i, ptest.in, err, ptest.errno);
-+			pr_err("parselist: %d: input is %s, errno is %d, expected %d\n",
-+					i, ptest.in, err, ptest.errno);
- 			continue;
- 		}
- 
- 		if (!err && ptest.expected
- 			 && !__bitmap_equal(bmap, ptest.expected, ptest.nbits)) {
--			pr_err("parselist%s: %d: input is %s, result is 0x%lx, expected 0x%lx\n",
--					mode, i, ptest.in, bmap[0],
-+			pr_err("parselist: %d: input is %s, result is 0x%lx, expected 0x%lx\n",
-+					i, ptest.in, bmap[0],
- 					*ptest.expected);
- 			continue;
- 		}
- 
- 		if (ptest.flags & PARSE_TIME)
--			pr_err("parselist%s: %d: input is '%s' OK, Time: %llu\n",
--					mode, i, ptest.in, time);
-+			pr_err("parselist: %d: input is '%s' OK, Time: %llu\n",
-+					i, ptest.in, time);
- 
- #undef ptest
- 	}
-@@ -443,75 +430,41 @@ static const struct test_bitmap_parselist parse_tests[] __initconst = {
- #undef step
- };
- 
--static void __init __test_bitmap_parse(int is_user)
-+static void __init test_bitmap_parse(void)
- {
- 	int i;
- 	int err;
- 	ktime_t time;
- 	DECLARE_BITMAP(bmap, 2048);
--	char *mode = is_user ? "_user"  : "";
- 
- 	for (i = 0; i < ARRAY_SIZE(parse_tests); i++) {
- 		struct test_bitmap_parselist test = parse_tests[i];
-+		size_t len = test.flags & NO_LEN ? UINT_MAX : strlen(test.in);
- 
--		if (is_user) {
--			size_t len = strlen(test.in);
--			mm_segment_t orig_fs = get_fs();
--
--			set_fs(KERNEL_DS);
--			time = ktime_get();
--			err = bitmap_parse_user((__force const char __user *)test.in, len,
--						bmap, test.nbits);
--			time = ktime_get() - time;
--			set_fs(orig_fs);
--		} else {
--			size_t len = test.flags & NO_LEN ?
--				UINT_MAX : strlen(test.in);
--			time = ktime_get();
--			err = bitmap_parse(test.in, len, bmap, test.nbits);
--			time = ktime_get() - time;
--		}
-+		time = ktime_get();
-+		err = bitmap_parse(test.in, len, bmap, test.nbits);
-+		time = ktime_get() - time;
- 
- 		if (err != test.errno) {
--			pr_err("parse%s: %d: input is %s, errno is %d, expected %d\n",
--					mode, i, test.in, err, test.errno);
-+			pr_err("parse: %d: input is %s, errno is %d, expected %d\n",
-+					i, test.in, err, test.errno);
- 			continue;
- 		}
- 
- 		if (!err && test.expected
- 			 && !__bitmap_equal(bmap, test.expected, test.nbits)) {
--			pr_err("parse%s: %d: input is %s, result is 0x%lx, expected 0x%lx\n",
--					mode, i, test.in, bmap[0],
-+			pr_err("parse: %d: input is %s, result is 0x%lx, expected 0x%lx\n",
-+					i, test.in, bmap[0],
- 					*test.expected);
- 			continue;
- 		}
- 
- 		if (test.flags & PARSE_TIME)
--			pr_err("parse%s: %d: input is '%s' OK, Time: %llu\n",
--					mode, i, test.in, time);
-+			pr_err("parse: %d: input is '%s' OK, Time: %llu\n",
-+					i, test.in, time);
- 	}
- }
- 
--static void __init test_bitmap_parselist(void)
--{
--	__test_bitmap_parselist(0);
--}
--
--static void __init test_bitmap_parselist_user(void)
--{
--	__test_bitmap_parselist(1);
--}
--
--static void __init test_bitmap_parse(void)
--{
--	__test_bitmap_parse(0);
--}
--
--static void __init test_bitmap_parse_user(void)
--{
--	__test_bitmap_parse(1);
--}
--
- #define EXP1_IN_BITS	(sizeof(exp1) * 8)
- 
- static void __init test_bitmap_arr32(void)
-@@ -675,9 +628,7 @@ static void __init selftest(void)
- 	test_replace();
- 	test_bitmap_arr32();
- 	test_bitmap_parse();
--	test_bitmap_parse_user();
- 	test_bitmap_parselist();
--	test_bitmap_parselist_user();
- 	test_mem_optimisations();
- 	test_for_each_set_clump8();
- 	test_bitmap_cut();
--- 
-2.28.0
-
+If we want to really support PTRACE we have to allow the registers to be
+get/set, regardless of what state they are in, INIT state or not.  So,
+yeah I agree with Andy.
