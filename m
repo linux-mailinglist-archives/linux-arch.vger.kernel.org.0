@@ -2,57 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D30125CD3B
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 00:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46E625CD38
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 00:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbgICWMK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Sep 2020 18:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S1728309AbgICWMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Sep 2020 18:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728775AbgICWMH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 18:12:07 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B44C061247
-        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 15:12:07 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id j11so6036740ejk.0
-        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 15:12:07 -0700 (PDT)
+        with ESMTP id S1728037AbgICWL5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Sep 2020 18:11:57 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D5BC061246
+        for <linux-arch@vger.kernel.org>; Thu,  3 Sep 2020 15:11:56 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id z19so1279552pfn.8
+        for <linux-arch@vger.kernel.org>; Thu, 03 Sep 2020 15:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BwuEtmyXe7F2cR0q4/BzPn1A0ke23BiGgvDQhdo0WMU=;
-        b=bCIKEXnTf0ca1JmAwAE+LZOTcE2dN/TiK90vOBcdOhHh/Eb1NLoFw7SGFvV4u1q4yd
-         NSCanRXVgtM0tLCAM/3prxemS1L+tmFwrVZgjePvUDD44B5oCHIVMnvMHwsYfaBSh/Yc
-         ffmoIuI333/SJsY+DmYpMd9pJN4WUM6UZUH4iyAU5CMWkI/ub98PWyrdm/IgFhN66cyb
-         KAJCdgJvjtjPtzH0nHOK8Q44XszFzrAF+OGkeCpJsCVm4vUIQ5GYCIXnLOQe2wb/sK6A
-         t28MQcHuz/Eyk+V8/eVV05WMiL8r79f3UOiZYAKgfKK5uep6TWKRy9tUGQI9YxjCiAu1
-         jxnA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5FkC7ZydcYZ7OvnDcVYU3cxvw/A+RLXuwzidT1u3ktE=;
+        b=IGPy3Ev8EutCuQb4lwsTx1VAvqIeOIRFD7wLuyvXGTSAxwz8hL6v0K8f8IQ9Y+H11S
+         fKbqKBL1KVGfL9CLfKWhp972pCQiDMPENIKcZYhRYuBh/NJ5d1xhg8qEzMWhJmjTO78y
+         hpDI1nGkw9U2lPKfWpYJ5VKAyDFTBSuj0ip0o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BwuEtmyXe7F2cR0q4/BzPn1A0ke23BiGgvDQhdo0WMU=;
-        b=Ovu6zSBlMn8A5DEkVWNO/S7OHJdEcM1rihcxGIHL+rOclajA9UkoXh3kcT60c5VhQR
-         oMWLlU6oI/pxZmlK3CZjn+Jv9GYxYww4Z1as2z4dQb7NYtFYjURK100Y6mOvw2kF2qNy
-         3bkHSmNegWx3W+I0eICwh9uSfhOk7tJ+sMQzkZgFnrQeEgrSVSh6DdpKoikV+yyKw/0+
-         mGA+sVfgn8YnK/U+3kEP72F29pZFpUapiCHgzW8z5PTOgNxrf3jZqCt3FKC3RWZwh1wh
-         DkrhWzY9dXchOTJhQb4JMm4Pu5lBAq9YJbv23iAe/pMn7z8PA8wea4vO+Q0AGkLV1KKu
-         5rQA==
-X-Gm-Message-State: AOAM531RTBGirHqBIXQw4zdV0yh22lDbbWODblfTs8eBtp0o6hVHXa+/
-        pcSusbyNPzE9xImsZ2NyJxkWkhfnLzgIVf2wUfz0oQ==
-X-Google-Smtp-Source: ABdhPJzTTihf74kYnNBBzSlXexZpmKM7vZMRAKfIQLzvqwFNAx6uvnwDBIQzEJ98cMtCA2J/JaapvP+XgOC8JK4Jyhw=
-X-Received: by 2002:a17:906:7492:: with SMTP id e18mr4301672ejl.375.1599171125797;
- Thu, 03 Sep 2020 15:12:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200903203053.3411268-1-samitolvanen@google.com> <20200903203053.3411268-9-samitolvanen@google.com>
- <202009031456.C058EC4@keescook>
-In-Reply-To: <202009031456.C058EC4@keescook>
-From:   Sami Tolvanen <samitolvanen@google.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5FkC7ZydcYZ7OvnDcVYU3cxvw/A+RLXuwzidT1u3ktE=;
+        b=IY0Sb/1X8RDMsYmsn1TlE2Fpk3BBeqt08QKzjCK4s2GEc9skDIDB+frTzvzni5H4wh
+         AxBAoJmF9BGyYd1LsgqceqmZiXPbo0jFEditVDaoIU455vzoTbn7qxrWuxn076F56YYL
+         aZeTBwA+xsaPVCgB9KmhWzMtfwQXC9GZFbBLXmBXMnHMEYqjnyuIL6MR4nceghxGjaVe
+         EJzolXeEprsrm21z2UOr9KxpeHrDQwe4EDmRt9KLOzLiaVrCgaF/Veh0bsTViI6Piq3A
+         v6CQ5IJGiCRmKDOyBJOZU31iXtADABulJKroEmBS0BRSp6J16DCWQz+F5AaIom8SKY63
+         YFoA==
+X-Gm-Message-State: AOAM531d/SNBHSiPOJdjjHouZotKD1D3DXMMWZVBmLaDarTyrvPW8q5u
+        01vhF7+kryMfv+a2KDMp5CJYgg==
+X-Google-Smtp-Source: ABdhPJxNUt7QAkJJr6DVIatL2r/ZHjflOqWAAtFiZXIMzyxOBsAVSA+Y4d6vSRQM4txHS5CM9PwpZQ==
+X-Received: by 2002:a17:902:d702:: with SMTP id w2mr6057532ply.53.1599171116270;
+        Thu, 03 Sep 2020 15:11:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a6sm3721602pgt.70.2020.09.03.15.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2020 15:11:55 -0700 (PDT)
 Date:   Thu, 3 Sep 2020 15:11:54 -0700
-Message-ID: <CABCJKufxq2b0854MBA_Kkb0B1k5D1Z431a=m=w2zoOVUh2c==Q@mail.gmail.com>
-Subject: Re: [PATCH v2 08/28] x86, build: use objtool mcount
-To:     Kees Cook <keescook@chromium.org>
+From:   Kees Cook <keescook@chromium.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -60,47 +54,40 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 10/28] kbuild: lto: fix module versioning
+Message-ID: <202009031510.32523E45EC@keescook>
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200903203053.3411268-1-samitolvanen@google.com>
+ <20200903203053.3411268-11-samitolvanen@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903203053.3411268-11-samitolvanen@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 3, 2020 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Sep 03, 2020 at 01:30:33PM -0700, Sami Tolvanen wrote:
-> > Select HAVE_OBJTOOL_MCOUNT if STACK_VALIDATION is selected to use
-> > objtool to generate __mcount_loc sections for dynamic ftrace with
-> > Clang and gcc <5.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
->
-> Am I right to understand that this fixes mcount for Clang generally
-> (i.e. it's not _strictly_ related to LTO, though LTO depends on this
-> change)?
+On Thu, Sep 03, 2020 at 01:30:35PM -0700, Sami Tolvanen wrote:
+> With CONFIG_MODVERSIONS, version information is linked into each
+> compilation unit that exports symbols. With LTO, we cannot use this
+> method as all C code is compiled into LLVM bitcode instead. This
+> change collects symbol versions into .symversions files and merges
+> them in link-vmlinux.sh where they are all linked into vmlinux.o at
+> the same time.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-No, this works fine with Clang when LTO is disabled, because
-recordmcount ignores files named "ftrace.o". However, with LTO, we
-process vmlinux.o instead, so we need a different method of ignoring
-__fentry__ relocations that are not calls.
+The only thought I have here is I wonder if this change could be made
+universally instead of gating on LTO? (i.e. is it noticeably slower to
+do it this way under non-LTO?)
 
-In v1, I used a function attribute to whitelist functions that refer
-to __fentry__, but as Peter pointed out back then, objtool already
-knows where the call sites are, so using it to generate __mcount_loc
-is cleaner.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> And does this mean mcount was working for gcc < 5?
-
-Yes. I should have been clearer in the commit message. The reason I
-mentioned gcc <5 is that later gcc versions support -mrecord-mcount,
-which means they don't need an external tool for generating
-__mcount_loc anymore.
-
-Sami
+-- 
+Kees Cook
