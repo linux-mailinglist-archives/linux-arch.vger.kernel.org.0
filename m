@@ -2,120 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B73F25B7A0
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 02:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B045625B857
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 03:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgICAe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 20:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726994AbgICAeW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 20:34:22 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37973C061246
-        for <linux-arch@vger.kernel.org>; Wed,  2 Sep 2020 17:34:21 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id i26so1188499ejb.12
-        for <linux-arch@vger.kernel.org>; Wed, 02 Sep 2020 17:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zuE9S2kX3yBdAXx6VDq5nZON6IsB7oZg0hs9UuY921M=;
-        b=tIkG82mnDBNJywHLRaI6/zVNwcstLoIiktcOv/j/drukTe3Yyf8awFxGW8oN7DprMj
-         /nBjEF6hZNuvXxJvt99XuFKiiKoQaLXsnOU1IBa1RWC5BfCawHRiB9URI5005NpDX6xs
-         L5pO6G6KT/PwCl6jgRVxuSsy80FZ3M+y1beOsg72cbOVQkMFozp03IbLPQm3197YaODp
-         j0tABAaAuD4XEAUNNNpGNZsVAkglNMIs7s3ZL5q3AcE827mQrUOf11oKHpzGuqSqYqjw
-         MS5Dlac5YTP4IPqx2IgZcTW3WaTfLmK8pVI+og5WhZ5rgXi+NbEF/kFwqQ0pGpEzW+nt
-         qu/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zuE9S2kX3yBdAXx6VDq5nZON6IsB7oZg0hs9UuY921M=;
-        b=FziupIRxYOYNQDy+rIj5ZuGRkzmRNjQVHQR1zvk/e64K2SdZll2Xq0tX/ka0iXMmGi
-         r1qmVfWWkghoNL1SFFjBiyZx7ne561hhbwanGqmM0qhwxbucObjoOD8TEhMPDh1eHSZl
-         RVB9ykIeqzLxk2lLPJebiT/t6dChxw0rkpXZIOe4U0GJOKCPz6i+gGY1Vjxcegz5OLMU
-         y2VI5hWh67Yd1zYKsot67FfRKLIzbtEuJy5u2HcpVFs+3ebz9ps+fNkINJjPxuUVOds0
-         rE1zyEQLssqbPbWh49Aax4UBEGiJ0fM6/WwlTa8jhsmvlzN4M7LujywR9Rhz7UJTuVin
-         aBzw==
-X-Gm-Message-State: AOAM531b9HBWOwQ4DZjyDR6AhJbX6BMClibb/IpbIYbKHvFuTuoL+/gV
-        Fn52GJqT/jtuEz+9sr1D3tKzmPSBg9u+6CBgMvpz4g==
-X-Google-Smtp-Source: ABdhPJxdALR4cm0WRdFm1nV86J6GOCE81MxM9fhMvtNjRqZTT/V2g4OhtuHQC3P0OGbQ/uCHIDae7gU9e8mz5iXDE4M=
-X-Received: by 2002:a17:907:94cf:: with SMTP id dn15mr747386ejc.114.1599093259495;
- Wed, 02 Sep 2020 17:34:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200825002645.3658-1-yu-cheng.yu@intel.com> <20200825002645.3658-7-yu-cheng.yu@intel.com>
- <CAG48ez21a_afHJrRQeweuHu8c+fxJ+VN1dezD18UOtZA5q-Shg@mail.gmail.com> <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
-In-Reply-To: <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 3 Sep 2020 02:33:53 +0200
-Message-ID: <CAG48ez2_8BwG5xnwevniVODAM7oHWxGSY7zyg8gdKcWbzZ9YNQ@mail.gmail.com>
-Subject: Re: [PATCH v11 6/9] x86/cet: Add PTRACE interface for CET
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726526AbgICBkC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 21:40:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42726 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726177AbgICBkB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Sep 2020 21:40:01 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1AF720665;
+        Thu,  3 Sep 2020 01:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599097200;
+        bh=MgYu88uIRM8lHPCIdiU6D2AiMr9bGOj93dXzi799BuA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oNUa/IclUYmhYkvH/rPLSR52iMCn9ao43eTETSu+ASmKo6FTW2wo2Ujgu3qVwTqJk
+         6WXMHmjSrvmIJfLJFqKDkoxPS08rErmwwbmDMOwmMW3auA2lKP3463rZtxXQCLoVeg
+         AdjTwCoKAu7cjMoFLPLsVyUucTITkRM8oK3jSnFc=
+Date:   Thu, 3 Sep 2020 10:39:54 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     peterz@infradead.org
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org, systemtap@sourceware.org
+Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
+ and make kretprobe lockless
+Message-Id: <20200903103954.68f0c97da57b3679169ce3a7@kernel.org>
+In-Reply-To: <20200902134252.GH1362448@hirez.programming.kicks-ass.net>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+        <20200901190808.GK29142@worktop.programming.kicks-ass.net>
+        <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
+        <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+        <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
+        <20200902093613.GY1362448@hirez.programming.kicks-ass.net>
+        <20200902221926.f5cae5b4ad00b8d8f9ad99c7@kernel.org>
+        <20200902134252.GH1362448@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 3, 2020 at 12:13 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
-> On 9/2/2020 1:03 PM, Jann Horn wrote:
-> > On Tue, Aug 25, 2020 at 2:30 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
-> >> Add REGSET_CET64/REGSET_CET32 to get/set CET MSRs:
-> >>
-> >>      IA32_U_CET (user-mode CET settings) and
-> >>      IA32_PL3_SSP (user-mode Shadow Stack)
-> > [...]
-> >> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-> > [...]
-> >> +int cetregs_get(struct task_struct *target, const struct user_regset *regset,
-> >> +               struct membuf to)
-> >> +{
-> >> +       struct fpu *fpu = &target->thread.fpu;
-> >> +       struct cet_user_state *cetregs;
-> >> +
-> >> +       if (!boot_cpu_has(X86_FEATURE_SHSTK))
-> >> +               return -ENODEV;
-> >> +
-> >> +       fpu__prepare_read(fpu);
-> >> +       cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
-> >> +       if (!cetregs)
-> >> +               return -EFAULT;
-> >
-> > Can this branch ever be hit without a kernel bug? If yes, I think
-> > -EFAULT is probably a weird error code to choose here. If no, this
-> > should probably use WARN_ON(). Same thing in cetregs_set().
-> >
->
-> When a thread is not CET-enabled, its CET state does not exist.  I
-> looked at EFAULT, and it means "Bad address".  Maybe this can be ENODEV,
-> which means "No such device"?
+On Wed, 2 Sep 2020 15:42:52 +0200
+peterz@infradead.org wrote:
 
-Yeah, I guess ENODEV might fit reasonably well.
+> On Wed, Sep 02, 2020 at 10:19:26PM +0900, Masami Hiramatsu wrote:
+> > On Wed, 2 Sep 2020 11:36:13 +0200
+> > peterz@infradead.org wrote:
+> > 
+> > > On Wed, Sep 02, 2020 at 05:17:55PM +0900, Masami Hiramatsu wrote:
+> > > 
+> > > > > Ok, but then lockdep will yell at you if you have that enabled and run
+> > > > > the unoptimized things.
+> > > > 
+> > > > Oh, does it warn for all spinlock things in kprobes if it is unoptimized?
+> > > > Hmm, it has to be noted in the documentation.
+> > > 
+> > > Lockdep will warn about spinlocks used in NMI context that are also used
+> > > outside NMI context.
+> > 
+> > OK, but raw_spin_lock_irqsave() will not involve lockdep, correct?
+> 
+> It will. The distinction between spin_lock and raw_spin_lock is only
+> that raw_spin_lock stays a spinlock on PREEMPT_RT, while spin_lock will
+> turn into a (PI) mutex in that case.
+> 
+> But both will call into lockdep. Unlike local_irq_disable() and
+> raw_local_irq_disable(), where the latter will not. Yes your prefixes
+> are a mess :/
+
+Yeah, that's really confusing...
+
+> > > Now, for the kretprobe that kprobe_busy flag prevents the actual
+> > > recursion self-deadlock, but lockdep isn't smart enough to see that.
+> > > 
+> > > One way around this might be to use SINGLE_DEPTH_NESTING for locks when
+> > > we use them from INT3 context. That way they'll have a different class
+> > > and lockdep will not see the recursion.
+> > 
+> > Hmm, so lockdep warns only when it detects the spinlock in NMI context,
+> > and int3 is now always NMI, thus all spinlock (except raw_spinlock?)
+> > in kprobe handlers should get warned, right?
+> > I have tested this series up to [16/21] with optprobe disabled, but
+> > I haven't see the lockdep warnings.
+> 
+> There's a bug, that might make it miss it. I have a patch. I'll send it
+> shortly.
+
+OK, I've confirmed that the lockdep warns on kretprobe from INT3
+with your fix. Of course make it lockless then warning is gone.
+But even without the lockless patch, this warning can be false-positive
+because we prohibit nested kprobe call, right?
+
+If the kprobe user handler uses a spinlock, the spinlock is used
+only in that handler (and in the context between kprobe_busy_begin/end),
+it will be safe since the spinlock is not nested.
+But if the spinlock is shared with other context, it will be dangerous
+because it can be interrupted by NMI (including INT3). This also applied
+to the function which is called from kprobe user handlers, thus user
+has to take care of it.
+BTW, what would you think about setting NMI count between kprobe_busy_begin/end?
+
+> 
+> > > pre_handler_kretprobe() is always called from INT3, right?
+> > 
+> > No, not always, it can be called from optprobe (same as original code
+> > context) or ftrace handler.
+> > But if you set 0 to /proc/sys/debug/kprobe_optimization, and compile
+> > the kernel without function tracer, it should always be called from
+> > INT3.
+> 
+> D'oh, ofcourse! Arguably I should make the optprobe context NMI like
+> too.. but that's for another day.
+
+Hmm, we still have kprobe-on-ftrace. Would you consider we will
+make it NMI like too? (and what the ftrace does for this)
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
