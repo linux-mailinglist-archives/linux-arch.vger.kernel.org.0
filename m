@@ -2,61 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952AA25B769
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 01:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B73F25B7A0
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Sep 2020 02:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgIBXuh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Sep 2020 19:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S1727088AbgICAe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Sep 2020 20:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbgIBXuh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 19:50:37 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF386C061245
-        for <linux-arch@vger.kernel.org>; Wed,  2 Sep 2020 16:50:36 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id t9so678569pfq.8
-        for <linux-arch@vger.kernel.org>; Wed, 02 Sep 2020 16:50:36 -0700 (PDT)
+        with ESMTP id S1726994AbgICAeW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Sep 2020 20:34:22 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37973C061246
+        for <linux-arch@vger.kernel.org>; Wed,  2 Sep 2020 17:34:21 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id i26so1188499ejb.12
+        for <linux-arch@vger.kernel.org>; Wed, 02 Sep 2020 17:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=52j/Kh79WBTwfCoci6XyBRUD0B5MrM8lpRUZ53T6r6c=;
-        b=is7KTIIg8tnyCVnXfRHW1zqu9WguvoK7VRQR0tcUVAhWNNnMt0afpmuqoSXKKDOqQ2
-         lOAO+TSk5rH+E7grKoBSNXbOHUuujEINvuG0qGnZKYpTmhU6vdxg5CRkRTu1rYsU8etp
-         18pwy0I0t8kxPw8tKuAkCYqCzyVFtBHogFDkbnP3g71YES9KWo4Llyc8PmixfyY9wyTq
-         771YhdsEiYuR47KHutTFgf8C9HN9WcWKl23JavtyLkVdK2crr9obWC7v51eS1llbQ2Wv
-         ZuPHC6zfpgTgxSwa+hRNbyOb+chRDJPOp8Co0swB/PVLeYptrdTFdIwobjnPq+6zfp9Z
-         QJQQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zuE9S2kX3yBdAXx6VDq5nZON6IsB7oZg0hs9UuY921M=;
+        b=tIkG82mnDBNJywHLRaI6/zVNwcstLoIiktcOv/j/drukTe3Yyf8awFxGW8oN7DprMj
+         /nBjEF6hZNuvXxJvt99XuFKiiKoQaLXsnOU1IBa1RWC5BfCawHRiB9URI5005NpDX6xs
+         L5pO6G6KT/PwCl6jgRVxuSsy80FZ3M+y1beOsg72cbOVQkMFozp03IbLPQm3197YaODp
+         j0tABAaAuD4XEAUNNNpGNZsVAkglNMIs7s3ZL5q3AcE827mQrUOf11oKHpzGuqSqYqjw
+         MS5Dlac5YTP4IPqx2IgZcTW3WaTfLmK8pVI+og5WhZ5rgXi+NbEF/kFwqQ0pGpEzW+nt
+         qu/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=52j/Kh79WBTwfCoci6XyBRUD0B5MrM8lpRUZ53T6r6c=;
-        b=duxlBbCCmbiJb3WzIK5z5XdfcEjbPpjucxD0vBP+MTdnDgzlqlg0n4yteVL07yMsI/
-         OlNi1DuCeezWOgMLM2KlWSb0lprZK1oR1xc1Q5PhcGmJtxcdOIbPsxeYOqPZ4F1EVOna
-         y/Pav+dAgJiDwM+B65kn9DKO1O1JHYS0YnWn1w4uSrIrNhLhTEgR7UyqyjsxTbElGAJs
-         UwaoBeIASr7wWlF84pqitg56wNXQN/mXuMXK6jawjI8ASqEZ58TZBx4kTGiRPQ95PYCo
-         Ozl5TGvcr9VRQHE3A4jkYp9HClOSQ4T1zYxyXuCqq04yprRIQIAoZMPyqZOmQpP3PtfX
-         +RRw==
-X-Gm-Message-State: AOAM533zbojL5vOJmREPsscVqZEmDo++sUSTBzBQFahSy33/4XkYO9/B
-        9qWkkzXKOui7Zko5B977zDPEzw==
-X-Google-Smtp-Source: ABdhPJzcvbgMHad+9bJRLvEwY0z3UAPXv89W/kGnXTDgXpqQW7lWsFy98cFptbURQTTLl+POUxJDqw==
-X-Received: by 2002:aa7:9f50:: with SMTP id h16mr849195pfr.178.1599090635689;
-        Wed, 02 Sep 2020 16:50:35 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:2197:2a30:2ff8:e80a? ([2601:646:c200:1ef2:2197:2a30:2ff8:e80a])
-        by smtp.gmail.com with ESMTPSA id o15sm427033pgi.74.2020.09.02.16.50.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2020 16:50:34 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zuE9S2kX3yBdAXx6VDq5nZON6IsB7oZg0hs9UuY921M=;
+        b=FziupIRxYOYNQDy+rIj5ZuGRkzmRNjQVHQR1zvk/e64K2SdZll2Xq0tX/ka0iXMmGi
+         r1qmVfWWkghoNL1SFFjBiyZx7ne561hhbwanGqmM0qhwxbucObjoOD8TEhMPDh1eHSZl
+         RVB9ykIeqzLxk2lLPJebiT/t6dChxw0rkpXZIOe4U0GJOKCPz6i+gGY1Vjxcegz5OLMU
+         y2VI5hWh67Yd1zYKsot67FfRKLIzbtEuJy5u2HcpVFs+3ebz9ps+fNkINJjPxuUVOds0
+         rE1zyEQLssqbPbWh49Aax4UBEGiJ0fM6/WwlTa8jhsmvlzN4M7LujywR9Rhz7UJTuVin
+         aBzw==
+X-Gm-Message-State: AOAM531b9HBWOwQ4DZjyDR6AhJbX6BMClibb/IpbIYbKHvFuTuoL+/gV
+        Fn52GJqT/jtuEz+9sr1D3tKzmPSBg9u+6CBgMvpz4g==
+X-Google-Smtp-Source: ABdhPJxdALR4cm0WRdFm1nV86J6GOCE81MxM9fhMvtNjRqZTT/V2g4OhtuHQC3P0OGbQ/uCHIDae7gU9e8mz5iXDE4M=
+X-Received: by 2002:a17:907:94cf:: with SMTP id dn15mr747386ejc.114.1599093259495;
+ Wed, 02 Sep 2020 17:34:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200825002645.3658-1-yu-cheng.yu@intel.com> <20200825002645.3658-7-yu-cheng.yu@intel.com>
+ <CAG48ez21a_afHJrRQeweuHu8c+fxJ+VN1dezD18UOtZA5q-Shg@mail.gmail.com> <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
+In-Reply-To: <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 3 Sep 2020 02:33:53 +0200
+Message-ID: <CAG48ez2_8BwG5xnwevniVODAM7oHWxGSY7zyg8gdKcWbzZ9YNQ@mail.gmail.com>
 Subject: Re: [PATCH v11 6/9] x86/cet: Add PTRACE interface for CET
-Date:   Wed, 2 Sep 2020 16:50:32 -0700
-Message-Id: <A7775E11-8837-4727-921A-C88566FA01AF@amacapital.net>
-References: <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
-Cc:     Jann Horn <jannh@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -83,74 +79,43 @@ Cc:     Jann Horn <jannh@google.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-In-Reply-To: <9be5356c-ec51-4541-89e5-05a1727a09a8@intel.com>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-X-Mailer: iPhone Mail (17G80)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Sep 3, 2020 at 12:13 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
+> On 9/2/2020 1:03 PM, Jann Horn wrote:
+> > On Tue, Aug 25, 2020 at 2:30 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+> >> Add REGSET_CET64/REGSET_CET32 to get/set CET MSRs:
+> >>
+> >>      IA32_U_CET (user-mode CET settings) and
+> >>      IA32_PL3_SSP (user-mode Shadow Stack)
+> > [...]
+> >> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> > [...]
+> >> +int cetregs_get(struct task_struct *target, const struct user_regset *regset,
+> >> +               struct membuf to)
+> >> +{
+> >> +       struct fpu *fpu = &target->thread.fpu;
+> >> +       struct cet_user_state *cetregs;
+> >> +
+> >> +       if (!boot_cpu_has(X86_FEATURE_SHSTK))
+> >> +               return -ENODEV;
+> >> +
+> >> +       fpu__prepare_read(fpu);
+> >> +       cetregs = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
+> >> +       if (!cetregs)
+> >> +               return -EFAULT;
+> >
+> > Can this branch ever be hit without a kernel bug? If yes, I think
+> > -EFAULT is probably a weird error code to choose here. If no, this
+> > should probably use WARN_ON(). Same thing in cetregs_set().
+> >
+>
+> When a thread is not CET-enabled, its CET state does not exist.  I
+> looked at EFAULT, and it means "Bad address".  Maybe this can be ENODEV,
+> which means "No such device"?
 
-
-> On Sep 2, 2020, at 3:13 PM, Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
->=20
-> =EF=BB=BFOn 9/2/2020 1:03 PM, Jann Horn wrote:
->>> On Tue, Aug 25, 2020 at 2:30 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrot=
-e:
->>> Add REGSET_CET64/REGSET_CET32 to get/set CET MSRs:
->>>=20
->>>     IA32_U_CET (user-mode CET settings) and
->>>     IA32_PL3_SSP (user-mode Shadow Stack)
->> [...]
->>> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c=
-
->> [...]
->>> +int cetregs_get(struct task_struct *target, const struct user_regset *r=
-egset,
->>> +               struct membuf to)
->>> +{
->>> +       struct fpu *fpu =3D &target->thread.fpu;
->>> +       struct cet_user_state *cetregs;
->>> +
->>> +       if (!boot_cpu_has(X86_FEATURE_SHSTK))
->>> +               return -ENODEV;
->>> +
->>> +       fpu__prepare_read(fpu);
->>> +       cetregs =3D get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER)=
-;
->>> +       if (!cetregs)
->>> +               return -EFAULT;
->> Can this branch ever be hit without a kernel bug? If yes, I think
->> -EFAULT is probably a weird error code to choose here. If no, this
->> should probably use WARN_ON(). Same thing in cetregs_set().
->=20
-> When a thread is not CET-enabled, its CET state does not exist.  I looked a=
-t EFAULT, and it means "Bad address".  Maybe this can be ENODEV, which means=
- "No such device"?
->=20
-> [...]
->=20
->>> @@ -1284,6 +1293,13 @@ static struct user_regset x86_32_regsets[] __ro_a=
-fter_init =3D {
->> [...]
->>> +       [REGSET_CET32] =3D {
->>> +               .core_note_type =3D NT_X86_CET,
->>> +               .n =3D sizeof(struct cet_user_state) / sizeof(u64),
->>> +               .size =3D sizeof(u64), .align =3D sizeof(u64),
->>> +               .active =3D cetregs_active, .regset_get =3D cetregs_get,=
-
->>> +               .set =3D cetregs_set
->>> +       },
->>>  };
->> Why are there different identifiers for 32-bit CET and 64-bit CET when
->> they operate on the same structs and have the same handlers? If
->> there's a good reason for that, the commit message should probably
->> point that out.
->=20
-> Yes, the reason for two regsets is that fill_note_info() does not expect a=
-ny holes in a regsets.  I will put this in the commit log.
->=20
->=20
-
-Perhaps we could fix that instead?=
+Yeah, I guess ENODEV might fit reasonably well.
