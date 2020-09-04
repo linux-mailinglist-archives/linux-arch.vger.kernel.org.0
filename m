@@ -2,120 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA4225E172
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 20:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C9325E189
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 20:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726208AbgIDSUs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Sep 2020 14:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S1726221AbgIDSnK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Sep 2020 14:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726458AbgIDSUr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Sep 2020 14:20:47 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6DEC061245
-        for <linux-arch@vger.kernel.org>; Fri,  4 Sep 2020 11:20:45 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id c3so1273580plz.5
-        for <linux-arch@vger.kernel.org>; Fri, 04 Sep 2020 11:20:45 -0700 (PDT)
+        with ESMTP id S1726133AbgIDSnI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Sep 2020 14:43:08 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5181CC061246
+        for <linux-arch@vger.kernel.org>; Fri,  4 Sep 2020 11:43:06 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id e11so9155504ljn.6
+        for <linux-arch@vger.kernel.org>; Fri, 04 Sep 2020 11:43:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HGsb6HyUfkAH720RyRI2xnBGVpFj14UXqV80lfeeAHQ=;
-        b=Il3Jp+GbZKeQBVyig5AB6ptKPeBzRng/54pElXbWFgDDwVZtfonwW/fIvn12LwA16M
-         q+/RGW9N8udNPgZyH15iLM+vRSiGyHrin+pGX1aElmkbmidG8ekkDrYXabwm5ci/epUm
-         czoHI1JGeVOuHvY1/0vF8Z8gvengMt1dzX9XM=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zGVkw+VA7Ozv3hFmklGnXOESB94iioBKwZC/vClHWhs=;
+        b=OrfWsLi5zsx7qv2p1cK4X32zmscuCKlgmthoMdeY0cg3rmZpFdM3J9SvTCb9h5NnO9
+         l0B0liyZtyXuNnV2gWB/4L3fr4ZoZu9bcbKCQOsRIl87cavO0SjGkvX9fTqXGzvbc3Rk
+         8ry1Oj9UgjhZbRiLcVNkm18IHcMLIsEb6rQfY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HGsb6HyUfkAH720RyRI2xnBGVpFj14UXqV80lfeeAHQ=;
-        b=jBO+15pnLxen5291j7EMw1x9y60FGLosFW9fKGQLIdUjcxB023aR2ot4Gb61EYahtx
-         vQEwOQcRJ71vHhbyemjlpQAjzUuvbOEyRm5x0i7ihinfax9G3shQW/OCI5kV4D3/Az9+
-         jDOVIT1ek5ImQbwh+TuqAyOd/W1QP5jAWgDqeYfuRaREPzAyLaAGXRe+2r2QhG/um6np
-         TxZ7ZI8nXH1/eVhXC3PvAeCrBLWzcwzf4tz6KL/NdAJJEGTwKbn1IMhF+a0UPwV51wXK
-         4maB5B3a0L1cBIPPIfEBLSoq8S2dxb38NUjOFvbFMVOvgEgoXX2Hl6Y2FzBaNIGcCD2O
-         ZzRg==
-X-Gm-Message-State: AOAM5301JeSQrYECPLC8af0Gloa7dTbwq8ySl2gcwlf2albRQafs6nA+
-        jXuIGdQhfs/G2BsM+t8C9byJjw==
-X-Google-Smtp-Source: ABdhPJw3OHa/KfnDP1eX5u9yPnVXyHpsyvjqvNAIiJCIEcH0n6a9Xn4DsL9UahB90tHSeMz9ICNHhA==
-X-Received: by 2002:a17:902:bc44:: with SMTP id t4mr8920312plz.77.1599243645065;
-        Fri, 04 Sep 2020 11:20:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id gm3sm5689028pjb.31.2020.09.04.11.20.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 11:20:44 -0700 (PDT)
-Date:   Fri, 4 Sep 2020 11:20:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 0/5] Warn on orphan section placement
-Message-ID: <202009041117.5EAC7C242@keescook>
-References: <20200902025347.2504702-1-keescook@chromium.org>
- <CAKwvOd=r8X1UeBRgYMcjUoQX_nbOEbXCQYGX6n7kMnJhGXis=Q@mail.gmail.com>
- <20200904055825.GA2779622@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zGVkw+VA7Ozv3hFmklGnXOESB94iioBKwZC/vClHWhs=;
+        b=TG1GzY+2f1arOgSXhc4DJSQn3JLfMP1Qpr5Ce9l2FdsGEWZ+5uaH9axat5OnVl5Uz/
+         3T50e9g/Svx+qpxMhfmL9Rs2142cDwNoC6/cVBaRMe++3HUTVJ7K3yMqyc7yBQVc8Z6I
+         RfcDAlaLOs0Lp1EpnC1aLWyqec8qMbQD97kLnDN0ngViVhII7h+2LXbpLsw3dLoe54ft
+         +YSJ3Izygo6yaF9YRFfymLM1Q2fwSD1rjEvQuwWvOpDG8M/PcGpMUBaX4DR23uxBkfhZ
+         MjJgcEC+d6TIFn/ODzd1LrGGCJPHCim8p66X0cC9GcfCr9aZZs25T9UXVAalsujHRlqF
+         bTXg==
+X-Gm-Message-State: AOAM532RB4Ybw5vutoxt79MHl/WPfxvwt93EeA/fQPbNF+ydxLvTKWV7
+        O1Rs91R/3MvtpM5XVQ5XqsParOzkuI78HA==
+X-Google-Smtp-Source: ABdhPJz5XwpnrN+MIyb+kAJUtMdhIA/56NvHtqRh+/RIllEgjzZlJ0NfUD7zeG2rY47uIp9FHq6o4g==
+X-Received: by 2002:a2e:885a:: with SMTP id z26mr4282217ljj.139.1599244980312;
+        Fri, 04 Sep 2020 11:43:00 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id q7sm1440980lfr.16.2020.09.04.11.42.58
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2020 11:42:59 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id w3so9129163ljo.5
+        for <linux-arch@vger.kernel.org>; Fri, 04 Sep 2020 11:42:58 -0700 (PDT)
+X-Received: by 2002:a2e:84d6:: with SMTP id q22mr3675523ljh.70.1599244978377;
+ Fri, 04 Sep 2020 11:42:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904055825.GA2779622@gmail.com>
+References: <20200903142242.925828-1-hch@lst.de> <20200904060024.GA2779810@gmail.com>
+ <20200904175823.GA500051@localhost.localdomain>
+In-Reply-To: <20200904175823.GA500051@localhost.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 4 Sep 2020 11:42:42 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjUUBnp9JSK+u8gYQ-RpMZxgd3UfvpihCPA_vSN_8G8Mg@mail.gmail.com>
+Message-ID: <CAHk-=wjUUBnp9JSK+u8gYQ-RpMZxgd3UfvpihCPA_vSN_8G8Mg@mail.gmail.com>
+Subject: Re: remove the last set_fs() in common code, and remove it for x86
+ and powerpc v3
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Ingo Molnar <mingo@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 07:58:25AM +0200, Ingo Molnar wrote:
-> 
-> * Nick Desaulniers <ndesaulniers@google.com> wrote:
-> 
-> > On Tue, Sep 1, 2020 at 7:53 PM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > Hi Ingo,
-> > >
-> > > The ever-shortening series. ;) Here is "v7", which is just the remaining
-> > > Makefile changes to enable orphan section warnings, now updated to
-> > > include ld-option calls.
-> > >
-> > > Thanks for getting this all into -tip!
-> > 
-> > For the series,
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > 
-> > As the recent ppc vdso boogaloo exposed, what about the vdsos?
-> > * arch/x86/entry/vdso/Makefile
-> > * arch/arm/vdso/Makefile
-> > * arch/arm64/kernel/vdso/Makefile
-> > * arch/arm64/kernel/vdso32/Makefile
-> 
-> Kees, will these patches DTRT for the vDSO builds? I will be unable to test 
-> these patches on that old system until tomorrow the earliest.
+On Fri, Sep 4, 2020 at 10:58 AM Alexey Dobriyan <adobriyan@gmail.com> wrote:
+>
+> set_fs() is older than some kernel hackers!
+>
+>         $ cd linux-0.11/
+>         $ find . -type f -name '*.h' | xargs grep -e set_fs -w -n -A3
 
-I would like to see VDSO done next, but it's entirely separate from
-this series. This series only touches the core kernel build (i.e. via the
-interactions with scripts/link-vmlinux.sh) or the boot stubs. So there
-is no impact on VDSO linking.
+Oh, it's older than that. It was there (as set_fs) in 0.10, and may
+even predate that. But sadly, I don't have tar-balls for 0.02 and
+0.03, so can't check.
 
-> I'm keeping these latest changes in WIP.core/build for now.
+The actual use of %fs as the user space segment is already there in
+0.01, but there was no 'set_fs()'. That was a simpler and more direct
+time, and "get_fs()" looked like this back then:
 
-They should be safe to land in -next, which is important so we can shake
-out any other sneaky sections that all our existing testing hasn't
-found. :)
+  #define _fs() ({ \
+  register unsigned short __res; \
+  __asm__("mov %%fs,%%ax":"=a" (__res):); \
+  __res;})
 
--- 
-Kees Cook
+and all the setting was basically part of the kernel entry asm and. Lovely.
+
+                 Linus
