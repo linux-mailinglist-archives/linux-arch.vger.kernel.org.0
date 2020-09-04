@@ -2,84 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAB025D449
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 11:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF0F25D528
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 11:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729824AbgIDJJH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Sep 2020 05:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S1729318AbgIDJcH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Sep 2020 05:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729712AbgIDJJH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Sep 2020 05:09:07 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4072C061244;
-        Fri,  4 Sep 2020 02:09:06 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id d189so5853299oig.12;
-        Fri, 04 Sep 2020 02:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=B1F8lj9Fqbo8dezZg1rybU9KGFv88k33ECwbjR1JZPg=;
-        b=uerSpXIeuW8egdvhrBOxgSI4H2+MkV6nfqmwsSTgZe47kr+R4dT9esdHyC+dIzFWew
-         7S+NReQ4tqsuASIVsTid6SoMhFv18Dm09UPS/qI9ygjssIKXTsOtlwtyAblWnz+QXIgA
-         XQQyxE3czHKcKJKUZ38sgdUxKt0maQcuOKpyq2SZKMU/7x+b94LGhX1XcsxaCNmnRvOl
-         nPRurPAzNxzekagJqkvPL+Ofo0aliDeqFYpMz7bAYCg64CVXz5kDbgHqmkKjkI2jPB7P
-         rZSI8t3k4BggoJ7slMx/Y6IRXo20nj5bsW+eHMiIiwKCsAiMbBD1Pc5EydUQO1BwRsTd
-         /ISQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=B1F8lj9Fqbo8dezZg1rybU9KGFv88k33ECwbjR1JZPg=;
-        b=hDJeq65df35qgD4FQYh0zEhWQoIqjat9i0QriidCX/U4spyF7DXMowGyh1X5cV8qCO
-         cQUZUltl1Yac+V9y6df6SkLLg6Acmo4XKgjXC7z3/yR4EOVhuAk+GLxj0gyBQFH3dVxK
-         HMLI2KotD96rimjZpVZlqQlwB+Et7JorzYZsTpVYryIv3UuMAS9aiUaNQFlAjl01Ix1O
-         Re9HV9wTzLDA5TSAQJvPAUD1z+ICb4cMfnDf06/zwEg5JFRT/M1AIoQfcV6kZDGdMGq/
-         wOGWofsN4q+pH1AAo93O9gP7bvuJN+HWFjW6dmrjsqQr9Ul2csN7xHP+WGsnKovqB5CT
-         jhdg==
-X-Gm-Message-State: AOAM531Ygq3CSqrHYGb5iSHUnh7wdvvaJRYuzvf82zuBqTPKdd8zjoE1
-        iAvtxNkgnXemrH+AaBgXVVH0OuyRMHmroeHePeY=
-X-Google-Smtp-Source: ABdhPJzj5BSTE3f88vS3BroKAd3o5SJIpsD68NdbolonePhBudgEeFDjp+JjeTdgozVDGzH6QYZ+34EfW5ujOYGl078=
-X-Received: by 2002:aca:d409:: with SMTP id l9mr4407752oig.70.1599210545701;
- Fri, 04 Sep 2020 02:09:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200903203053.3411268-1-samitolvanen@google.com> <20200904085520.GN2674@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200904085520.GN2674@hirez.programming.kicks-ass.net>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 4 Sep 2020 11:08:54 +0200
-Message-ID: <CA+icZUVzWZZ=CCKEWiwsaMXM2Xy1F1NLNRS_2D15NeNZUGqquA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/28] Add support for Clang LTO
-To:     peterz@infradead.org
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        with ESMTP id S1730031AbgIDJb2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Sep 2020 05:31:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE16C061245;
+        Fri,  4 Sep 2020 02:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AmeBKqJuZ2TYIisYso2pvDzyPT9l4D3l0ti74pdTg0Q=; b=X6cu6bl5JfSrh+TTxe5dm2zPRs
+        AiQRbmkSz8bxctpcVVoJUTd01rMGXmOZD1xc0lycH34bN7CSlyCqLAmrwqwCvYEoUSY+xKfGld4VF
+        JCRTmA9yOGr8HSQxXZZp0fcn1pu0evfCQDOhepKW7Fvx2z1bnS0GryJLJoZGx3ZlwXYUUOxjPfb7o
+        kNuyepr5MwWnzwadfXwDZlwm4lYlcJEpHE5ups2L1YChLhEQMmrIhMWEID06+tzQcEqI7jmdr7sob
+        gpJDg9cOQ61U1G3nEJzIW6pFYKekrsm8QtKX7dNM5NR2hG8PpFQEbMW+z/TGELU/RTLT1iNbZlPUN
+        SqJu+eqw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kE83m-0006Ta-7X; Fri, 04 Sep 2020 09:31:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EA057305C11;
+        Fri,  4 Sep 2020 11:31:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D727B214D7E3D; Fri,  4 Sep 2020 11:31:04 +0200 (CEST)
+Date:   Fri, 4 Sep 2020 11:31:04 +0200
+From:   peterz@infradead.org
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Will Deacon <will@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v2 05/28] objtool: Add a pass for generating __mcount_loc
+Message-ID: <20200904093104.GH1362448@hirez.programming.kicks-ass.net>
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200903203053.3411268-1-samitolvanen@google.com>
+ <20200903203053.3411268-6-samitolvanen@google.com>
+ <202009031450.31C71DB@keescook>
+ <CABCJKueF1RbpOKHsA8yS_yMujzHi8dzAVz8APwpMJyMTTGhmDA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKueF1RbpOKHsA8yS_yMujzHi8dzAVz8APwpMJyMTTGhmDA@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 4, 2020 at 10:55 AM <peterz@infradead.org> wrote:
->
->
-> Please don't nest series!
->
-> Start a new thread for every posting.
->
+On Thu, Sep 03, 2020 at 03:03:30PM -0700, Sami Tolvanen wrote:
+> On Thu, Sep 3, 2020 at 2:51 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Sep 03, 2020 at 01:30:30PM -0700, Sami Tolvanen wrote:
+> > > From: Peter Zijlstra <peterz@infradead.org>
+> > >
+> > > Add the --mcount option for generating __mcount_loc sections
+> > > needed for dynamic ftrace. Using this pass requires the kernel to
+> > > be compiled with -mfentry and CC_USING_NOP_MCOUNT to be defined
+> > > in Makefile.
+> > >
+> > > Link: https://lore.kernel.org/lkml/20200625200235.GQ4781@hirez.programming.kicks-ass.net/
+> > > Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+> >
+> > Hmm, I'm not sure why this hasn't gotten picked up yet. Is this expected
+> > to go through -tip or something else?
+> 
+> Note that I picked up this patch from Peter's original email, to which
+> I included a link in the commit message, but it wasn't officially
+> submitted as a patch. However, the previous discussion seems to have
+> died, so I included the patch in this series, as it cleanly solves the
+> problem of whitelisting non-call references to __fentry__. I was
+> hoping for Peter and Steven to comment on how they prefer to proceed
+> here.
 
-You are right Peter, my apologies.
-
-- Sedat -
+Right; so I'm obviously fine with this patch and I suppose I can pick it
+(and the next) into tip/objtool/core, provided Steve is okay with this
+approach.
