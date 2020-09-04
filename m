@@ -2,20 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411D125D64B
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 12:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1EB25D669
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 12:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729946AbgIDKc6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Sep 2020 06:32:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51650 "EHLO mail.kernel.org"
+        id S1730116AbgIDKfx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Sep 2020 06:35:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730203AbgIDKbV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1730137AbgIDKbV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Fri, 4 Sep 2020 06:31:21 -0400
 Received: from localhost.localdomain (unknown [46.69.195.48])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C09E920C09;
-        Fri,  4 Sep 2020 10:30:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A1502145D;
+        Fri,  4 Sep 2020 10:30:50 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
@@ -26,11 +26,10 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Price <steven.price@arm.com>
-Subject: [PATCH v9 07/29] mm: Add PG_arch_2 page flag
-Date:   Fri,  4 Sep 2020 11:30:07 +0100
-Message-Id: <20200904103029.32083-8-catalin.marinas@arm.com>
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v9 08/29] mm: Preserve the PG_arch_2 flag in __split_huge_page_tail()
+Date:   Fri,  4 Sep 2020 11:30:08 +0100
+Message-Id: <20200904103029.32083-9-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200904103029.32083-1-catalin.marinas@arm.com>
 References: <20200904103029.32083-1-catalin.marinas@arm.com>
@@ -41,118 +40,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Steven Price <steven.price@arm.com>
+When a huge page is split into normal pages, part of the head page flags
+are transferred to the tail pages. However, the PG_arch_* flags are not
+part of the preserved set.
 
-For arm64 MTE support it is necessary to be able to mark pages that
-contain user space visible tags that will need to be saved/restored e.g.
-when swapped out.
+PG_arch_2 is used by the arm64 MTE support to mark pages that have valid
+tags. The absence of such flag would cause the arm64 set_pte_at() to
+clear the tags in order to avoid stale tags exposed to user or the
+swapping out hooks to ignore the tags. Not preserving PG_arch_2 on huge
+page splitting leads to tag corruption in the tail pages.
 
-To support this add a new arch specific flag (PG_arch_2). This flag is
-only available on 64-bit architectures due to the limited number of
-spare page flags on the 32-bit ones.
+Preserve the newly added PG_arch_2 flag in __split_huge_page_tail().
 
-Signed-off-by: Steven Price <steven.price@arm.com>
-[catalin.marinas@arm.com: use CONFIG_64BIT for guarding this new flag]
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
 
 Notes:
-    v6:
-    - Using CONFIG_64BIT instead of a new CONFIG_ARCH_USES_PG_ARCH_2 option.
+    v7:
+    - Only preserve PG_arch_2 in __split_huge_page_tail(). The PG_arch_1
+      flag will be discussed separately as it may potentially impact s390
+      and x86.
     
-    New in v4.
+    New in v6.
 
- fs/proc/page.c                    | 3 +++
- include/linux/kernel-page-flags.h | 1 +
- include/linux/page-flags.h        | 3 +++
- include/trace/events/mmflags.h    | 9 ++++++++-
- tools/vm/page-types.c             | 2 ++
- 5 files changed, 17 insertions(+), 1 deletion(-)
+ mm/huge_memory.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/proc/page.c b/fs/proc/page.c
-index f909243d4a66..9f1077d94cde 100644
---- a/fs/proc/page.c
-+++ b/fs/proc/page.c
-@@ -217,6 +217,9 @@ u64 stable_page_flags(struct page *page)
- 	u |= kpf_copy_bit(k, KPF_PRIVATE_2,	PG_private_2);
- 	u |= kpf_copy_bit(k, KPF_OWNER_PRIVATE,	PG_owner_priv_1);
- 	u |= kpf_copy_bit(k, KPF_ARCH,		PG_arch_1);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 2ccff8472cd4..1a5773c95f53 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2337,6 +2337,9 @@ static void __split_huge_page_tail(struct page *head, int tail,
+ 			 (1L << PG_workingset) |
+ 			 (1L << PG_locked) |
+ 			 (1L << PG_unevictable) |
 +#ifdef CONFIG_64BIT
-+	u |= kpf_copy_bit(k, KPF_ARCH_2,	PG_arch_2);
++			 (1L << PG_arch_2) |
 +#endif
+ 			 (1L << PG_dirty)));
  
- 	return u;
- };
-diff --git a/include/linux/kernel-page-flags.h b/include/linux/kernel-page-flags.h
-index abd20ef93c98..eee1877a354e 100644
---- a/include/linux/kernel-page-flags.h
-+++ b/include/linux/kernel-page-flags.h
-@@ -17,5 +17,6 @@
- #define KPF_ARCH		38
- #define KPF_UNCACHED		39
- #define KPF_SOFTDIRTY		40
-+#define KPF_ARCH_2		41
- 
- #endif /* LINUX_KERNEL_PAGE_FLAGS_H */
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 6be1aa559b1e..276140c94f4a 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -135,6 +135,9 @@ enum pageflags {
- #if defined(CONFIG_IDLE_PAGE_TRACKING) && defined(CONFIG_64BIT)
- 	PG_young,
- 	PG_idle,
-+#endif
-+#ifdef CONFIG_64BIT
-+	PG_arch_2,
- #endif
- 	__NR_PAGEFLAGS,
- 
-diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
-index 5fb752034386..67018d367b9f 100644
---- a/include/trace/events/mmflags.h
-+++ b/include/trace/events/mmflags.h
-@@ -79,6 +79,12 @@
- #define IF_HAVE_PG_IDLE(flag,string)
- #endif
- 
-+#ifdef CONFIG_64BIT
-+#define IF_HAVE_PG_ARCH_2(flag,string) ,{1UL << flag, string}
-+#else
-+#define IF_HAVE_PG_ARCH_2(flag,string)
-+#endif
-+
- #define __def_pageflag_names						\
- 	{1UL << PG_locked,		"locked"	},		\
- 	{1UL << PG_waiters,		"waiters"	},		\
-@@ -105,7 +111,8 @@ IF_HAVE_PG_MLOCK(PG_mlocked,		"mlocked"	)		\
- IF_HAVE_PG_UNCACHED(PG_uncached,	"uncached"	)		\
- IF_HAVE_PG_HWPOISON(PG_hwpoison,	"hwpoison"	)		\
- IF_HAVE_PG_IDLE(PG_young,		"young"		)		\
--IF_HAVE_PG_IDLE(PG_idle,		"idle"		)
-+IF_HAVE_PG_IDLE(PG_idle,		"idle"		)		\
-+IF_HAVE_PG_ARCH_2(PG_arch_2,		"arch_2"	)
- 
- #define show_page_flags(flags)						\
- 	(flags) ? __print_flags(flags, "|",				\
-diff --git a/tools/vm/page-types.c b/tools/vm/page-types.c
-index 58c0eab71bca..0517c744b04e 100644
---- a/tools/vm/page-types.c
-+++ b/tools/vm/page-types.c
-@@ -78,6 +78,7 @@
- #define KPF_ARCH		38
- #define KPF_UNCACHED		39
- #define KPF_SOFTDIRTY		40
-+#define KPF_ARCH_2		41
- 
- /* [48-] take some arbitrary free slots for expanding overloaded flags
-  * not part of kernel API
-@@ -135,6 +136,7 @@ static const char * const page_flag_names[] = {
- 	[KPF_ARCH]		= "h:arch",
- 	[KPF_UNCACHED]		= "c:uncached",
- 	[KPF_SOFTDIRTY]		= "f:softdirty",
-+	[KPF_ARCH_2]		= "H:arch_2",
- 
- 	[KPF_READAHEAD]		= "I:readahead",
- 	[KPF_SLOB_FREE]		= "P:slob_free",
+ 	/* ->mapping in first tail page is compound_mapcount */
