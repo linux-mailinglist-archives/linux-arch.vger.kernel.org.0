@@ -2,156 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC2625D5B6
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 12:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E6625D678
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 12:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728658AbgIDKKn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Sep 2020 06:10:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41800 "EHLO mail.kernel.org"
+        id S1730073AbgIDKhe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Sep 2020 06:37:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50962 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbgIDKKn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 4 Sep 2020 06:10:43 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730043AbgIDKad (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 4 Sep 2020 06:30:33 -0400
+Received: from localhost.localdomain (unknown [46.69.195.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6522D206D4;
-        Fri,  4 Sep 2020 10:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599214242;
-        bh=Iglnk7utwYjnaeEpyW3RYyUwfqjkaWTMLTJ/sOFzZV4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o+cGOChxoZsVZhIFYOHnHWJvffa2+doBVS3MKM7rWxt+YTeEEoB1iukqAjob7LqVG
-         uKdsFalbmBWPfh8/YU6zrhHyVi2q4Ysa4OBFxqPvcLnWMwoZS4QsAESPdHjR0u6png
-         WOJ2dggU9c2ZV00SvjtkHrwrB6RTutxx9djjw/+M=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1kE8g4-0098AJ-Qa; Fri, 04 Sep 2020 11:10:40 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 04 Sep 2020 11:10:40 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 02596206D4;
+        Fri,  4 Sep 2020 10:30:30 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
         Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suzuki K Poulose <Suzuki.Poulose@arm.com>
-Subject: Re: [PATCH v8 03/28] arm64: mte: CPU feature detection and initial
- sysreg configuration
-In-Reply-To: <20200826170826.GC24545@gaia>
-References: <20200824182758.27267-1-catalin.marinas@arm.com>
- <20200824182758.27267-4-catalin.marinas@arm.com>
- <61bba3c1948651a5221b87f2dfa2872f@kernel.org>
- <20200825105450.GA22233@C02TF0J2HF1T.local>
- <8ef4b3d5d860346e47f4238bdb0f2a91@kernel.org> <20200826170826.GC24545@gaia>
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <220424c4145ac4093c47531e8819a070@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, vincenzo.frascino@arm.com, linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, will@kernel.org, Dave.Martin@arm.com, szabolcs.nagy@arm.com, kevin.brodsky@arm.com, andreyknvl@google.com, pcc@google.com, akpm@linux-foundation.org, Suzuki.Poulose@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v9 00/29] arm64: Memory Tagging Extension user-space support
+Date:   Fri,  4 Sep 2020 11:30:00 +0100
+Message-Id: <20200904103029.32083-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-08-26 18:08, Catalin Marinas wrote:
-> On Tue, Aug 25, 2020 at 02:53:47PM +0100, Marc Zyngier wrote:
->> On 2020-08-25 11:54, Catalin Marinas wrote:
->> > On Tue, Aug 25, 2020 at 09:53:16AM +0100, Marc Zyngier wrote:
->> > > On 2020-08-24 19:27, Catalin Marinas wrote:
->> > > > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
->> > > > index 077293b5115f..59b91f58efec 100644
->> > > > --- a/arch/arm64/kvm/sys_regs.c
->> > > > +++ b/arch/arm64/kvm/sys_regs.c
->> > > > @@ -1131,6 +1131,8 @@ static u64 read_id_reg(const struct kvm_vcpu
->> > > > *vcpu,
->> > > >  		if (!vcpu_has_sve(vcpu))
->> > > >  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
->> > > >  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
->> > > > +	} else if (id == SYS_ID_AA64PFR1_EL1) {
->> > > > +		val &= ~(0xfUL << ID_AA64PFR1_MTE_SHIFT);
->> > >
->> > > Hiding the capability is fine, but where is the handling of trapping
->> > > instructions done? They should result in an UNDEF being injected.
->> >
->> > They are a few new MTE-specific MSR/MRS which are trapped at EL2 but
->> > since KVM doesn't understand them yet, shouldn't it already inject
->> > undef back at EL1? That would be safer regardless of MTE support.
->> 
->> An UNDEF will be injected, but not without spitting a nastygram in
->> the kernel log (look at emulate_sys_reg()).
->> 
->> The best course of action is to have an entry in the sysreg table
->> that would explicitly do the handling.
-> 
-> Something like below. I'll put them in a separate patch, to be reverted
-> when we get proper MTE support in KVM.
-> 
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 59b91f58efec..c7d5d1bae044 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -1384,6 +1384,13 @@ static bool access_ccsidr(struct kvm_vcpu
-> *vcpu, struct sys_reg_params *p,
->  	return true;
->  }
-> 
-> +static bool access_mte_regs(struct kvm_vcpu *vcpu, struct 
-> sys_reg_params *p,
-> +			    const struct sys_reg_desc *r)
-> +{
-> +	kvm_inject_undefined(vcpu);
-> +	return false;
-> +}
-> +
->  /* sys_reg_desc initialiser for known cpufeature ID registers */
->  #define ID_SANITISED(name) {			\
->  	SYS_DESC(SYS_##name),			\
-> @@ -1549,6 +1556,10 @@ static const struct sys_reg_desc sys_reg_descs[] 
-> = {
->  	{ SYS_DESC(SYS_SCTLR_EL1), access_vm_reg, reset_val, SCTLR_EL1, 
-> 0x00C50078 },
->  	{ SYS_DESC(SYS_ACTLR_EL1), access_actlr, reset_actlr, ACTLR_EL1 },
->  	{ SYS_DESC(SYS_CPACR_EL1), NULL, reset_val, CPACR_EL1, 0 },
-> +
-> +	{ SYS_DESC(SYS_RGSR_EL1), access_mte_regs },
-> +	{ SYS_DESC(SYS_GCR_EL1), access_mte_regs },
-> +
->  	{ SYS_DESC(SYS_ZCR_EL1), NULL, reset_val, ZCR_EL1, 0, .visibility =
-> sve_visibility },
->  	{ SYS_DESC(SYS_TTBR0_EL1), access_vm_reg, reset_unknown, TTBR0_EL1 },
->  	{ SYS_DESC(SYS_TTBR1_EL1), access_vm_reg, reset_unknown, TTBR1_EL1 },
-> @@ -1573,6 +1584,9 @@ static const struct sys_reg_desc sys_reg_descs[] 
-> = {
->  	{ SYS_DESC(SYS_ERXMISC0_EL1), trap_raz_wi },
->  	{ SYS_DESC(SYS_ERXMISC1_EL1), trap_raz_wi },
-> 
-> +	{ SYS_DESC(SYS_TFSR_EL1), access_mte_regs },
-> +	{ SYS_DESC(SYS_TFSRE0_EL1), access_mte_regs },
-> +
->  	{ SYS_DESC(SYS_FAR_EL1), access_vm_reg, reset_unknown, FAR_EL1 },
->  	{ SYS_DESC(SYS_PAR_EL1), NULL, reset_unknown, PAR_EL1 },
+That's version 9 of the MTE user-space support (version 8 here [1]). The
+series is also available on this branch:
 
-Yup, looks good.
+  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux for-next/mte
 
-> (still testing, it takes ages to boot a VM inside inside FVP)
+The patches below are missing some acks. If there are any objections,
+please let me know (acks would be appreciated). I plan to queue them
+together with the rest of the MTE series.
 
-You aren't allowed to moan about it until you have tried that with NV! 
-;-)
+mm:
 
-Thanks,
+  [PATCH v7 07/29] mm: Add PG_arch_2 page flag
+  [PATCH v7 08/29] mm: Preserve the PG_arch_2 flag in __split_huge_page_tail()
+  [PATCH v7 13/29] mm: Introduce arch_calc_vm_flag_bits()
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+fs:
+  
+  [PATCH v7 24/29] fs: Handle intra-page faults in copy_mount_options()
+
+arm64 KVM (small new addition in v9):
+
+  [PATCH v9 04/29] arm64: kvm: mte: Hide the MTE CPUID information from the guests
+
+There have been no further ABI changes and aiming for a 5.10 merge.
+Minor changes in this version:
+
+- Added a separate patch for arm64 KVM which hides the CPUID information
+  and injects an undef exception in the guest if it accesses any of the
+  MTE system registers.
+
+- Slight improvement to the CONFIG_ARM64_AS_HAS_MTE comment.
+
+- Rebased onto v5.9-rc3.
+
+[1] https://lkml.kernel.org/r/20200824182758.27267-1-catalin.marinas@arm.com
+
+Thanks.
+
+Catalin Marinas (17):
+  arm64: mte: Use Normal Tagged attributes for the linear map
+  arm64: kvm: mte: Hide the MTE CPUID information from the guests
+  mm: Preserve the PG_arch_2 flag in __split_huge_page_tail()
+  arm64: mte: Clear the tags when a page is mapped in user-space with
+    PROT_MTE
+  arm64: Avoid unnecessary clear_user_page() indirection
+  arm64: mte: Tags-aware aware memcmp_pages() implementation
+  arm64: mte: Add PROT_MTE support to mmap() and mprotect()
+  mm: Introduce arch_validate_flags()
+  arm64: mte: Validate the PROT_MTE request via arch_validate_flags()
+  mm: Allow arm64 mmap(PROT_MTE) on RAM-based files
+  arm64: mte: Allow user control of the tag check mode via prctl()
+  arm64: mte: Allow user control of the generated random tags via
+    prctl()
+  arm64: mte: Restore the GCR_EL1 register after a suspend
+  arm64: mte: Allow {set,get}_tagged_addr_ctrl() on non-current tasks
+  arm64: mte: ptrace: Add PTRACE_{PEEK,POKE}MTETAGS support
+  arm64: mte: ptrace: Add NT_ARM_TAGGED_ADDR_CTRL regset
+  fs: Handle intra-page faults in copy_mount_options()
+
+Kevin Brodsky (1):
+  mm: Introduce arch_calc_vm_flag_bits()
+
+Steven Price (4):
+  mm: Add PG_arch_2 page flag
+  mm: Add arch hooks for saving/restoring tags
+  arm64: mte: Enable swap of tagged pages
+  arm64: mte: Save tags when hibernating
+
+Vincenzo Frascino (7):
+  arm64: mte: system register definitions
+  arm64: mte: CPU feature detection and initial sysreg configuration
+  arm64: mte: Add specific SIGSEGV codes
+  arm64: mte: Handle synchronous and asynchronous tag check faults
+  arm64: mte: Tags-aware copy_{user_,}highpage() implementations
+  arm64: mte: Kconfig entry
+  arm64: mte: Add Memory Tagging Extension documentation
+
+ Documentation/arm64/cpu-feature-registers.rst |   2 +
+ Documentation/arm64/elf_hwcaps.rst            |   4 +
+ Documentation/arm64/index.rst                 |   1 +
+ .../arm64/memory-tagging-extension.rst        | 305 ++++++++++++++++
+ arch/arm64/Kconfig                            |  33 ++
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |   6 +
+ arch/arm64/include/asm/hwcap.h                |   2 +-
+ arch/arm64/include/asm/kvm_arm.h              |   3 +-
+ arch/arm64/include/asm/memory.h               |  17 +-
+ arch/arm64/include/asm/mman.h                 |  56 ++-
+ arch/arm64/include/asm/mte.h                  |  86 +++++
+ arch/arm64/include/asm/page.h                 |  19 +-
+ arch/arm64/include/asm/pgtable-prot.h         |   2 +
+ arch/arm64/include/asm/pgtable.h              |  46 ++-
+ arch/arm64/include/asm/processor.h            |  12 +-
+ arch/arm64/include/asm/sysreg.h               |  61 ++++
+ arch/arm64/include/asm/thread_info.h          |   4 +-
+ arch/arm64/include/uapi/asm/hwcap.h           |   2 +-
+ arch/arm64/include/uapi/asm/mman.h            |   1 +
+ arch/arm64/include/uapi/asm/ptrace.h          |   4 +
+ arch/arm64/kernel/Makefile                    |   1 +
+ arch/arm64/kernel/cpufeature.c                |  35 ++
+ arch/arm64/kernel/cpuinfo.c                   |   2 +-
+ arch/arm64/kernel/entry.S                     |  37 ++
+ arch/arm64/kernel/hibernate.c                 | 118 ++++++
+ arch/arm64/kernel/mte.c                       | 336 ++++++++++++++++++
+ arch/arm64/kernel/process.c                   |  48 ++-
+ arch/arm64/kernel/ptrace.c                    |  51 ++-
+ arch/arm64/kernel/signal.c                    |   9 +
+ arch/arm64/kernel/suspend.c                   |   4 +
+ arch/arm64/kernel/syscall.c                   |  10 +
+ arch/arm64/kvm/sys_regs.c                     |  16 +
+ arch/arm64/lib/Makefile                       |   2 +
+ arch/arm64/lib/mte.S                          | 151 ++++++++
+ arch/arm64/mm/Makefile                        |   1 +
+ arch/arm64/mm/copypage.c                      |  25 +-
+ arch/arm64/mm/dump.c                          |   4 +
+ arch/arm64/mm/fault.c                         |   9 +-
+ arch/arm64/mm/mmu.c                           |  20 +-
+ arch/arm64/mm/mteswap.c                       |  83 +++++
+ arch/arm64/mm/proc.S                          |  32 +-
+ arch/x86/kernel/signal_compat.c               |   2 +-
+ fs/namespace.c                                |  25 +-
+ fs/proc/page.c                                |   3 +
+ fs/proc/task_mmu.c                            |   4 +
+ include/linux/kernel-page-flags.h             |   1 +
+ include/linux/mm.h                            |   8 +
+ include/linux/mman.h                          |  23 +-
+ include/linux/page-flags.h                    |   3 +
+ include/linux/pgtable.h                       |  28 ++
+ include/trace/events/mmflags.h                |   9 +-
+ include/uapi/asm-generic/siginfo.h            |   4 +-
+ include/uapi/linux/elf.h                      |   1 +
+ include/uapi/linux/prctl.h                    |   9 +
+ mm/huge_memory.c                              |   3 +
+ mm/mmap.c                                     |   9 +
+ mm/mprotect.c                                 |   6 +
+ mm/page_io.c                                  |  10 +
+ mm/shmem.c                                    |   9 +
+ mm/swapfile.c                                 |   2 +
+ mm/util.c                                     |   2 +-
+ tools/vm/page-types.c                         |   2 +
+ 63 files changed, 1764 insertions(+), 62 deletions(-)
+ create mode 100644 Documentation/arm64/memory-tagging-extension.rst
+ create mode 100644 arch/arm64/include/asm/mte.h
+ create mode 100644 arch/arm64/kernel/mte.c
+ create mode 100644 arch/arm64/lib/mte.S
+ create mode 100644 arch/arm64/mm/mteswap.c
+
