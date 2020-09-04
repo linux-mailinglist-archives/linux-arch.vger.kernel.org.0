@@ -2,100 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C9325E189
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 20:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84CE25E239
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Sep 2020 21:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbgIDSnK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Sep 2020 14:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726133AbgIDSnI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Sep 2020 14:43:08 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5181CC061246
-        for <linux-arch@vger.kernel.org>; Fri,  4 Sep 2020 11:43:06 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id e11so9155504ljn.6
-        for <linux-arch@vger.kernel.org>; Fri, 04 Sep 2020 11:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zGVkw+VA7Ozv3hFmklGnXOESB94iioBKwZC/vClHWhs=;
-        b=OrfWsLi5zsx7qv2p1cK4X32zmscuCKlgmthoMdeY0cg3rmZpFdM3J9SvTCb9h5NnO9
-         l0B0liyZtyXuNnV2gWB/4L3fr4ZoZu9bcbKCQOsRIl87cavO0SjGkvX9fTqXGzvbc3Rk
-         8ry1Oj9UgjhZbRiLcVNkm18IHcMLIsEb6rQfY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zGVkw+VA7Ozv3hFmklGnXOESB94iioBKwZC/vClHWhs=;
-        b=TG1GzY+2f1arOgSXhc4DJSQn3JLfMP1Qpr5Ce9l2FdsGEWZ+5uaH9axat5OnVl5Uz/
-         3T50e9g/Svx+qpxMhfmL9Rs2142cDwNoC6/cVBaRMe++3HUTVJ7K3yMqyc7yBQVc8Z6I
-         RfcDAlaLOs0Lp1EpnC1aLWyqec8qMbQD97kLnDN0ngViVhII7h+2LXbpLsw3dLoe54ft
-         +YSJ3Izygo6yaF9YRFfymLM1Q2fwSD1rjEvQuwWvOpDG8M/PcGpMUBaX4DR23uxBkfhZ
-         MjJgcEC+d6TIFn/ODzd1LrGGCJPHCim8p66X0cC9GcfCr9aZZs25T9UXVAalsujHRlqF
-         bTXg==
-X-Gm-Message-State: AOAM532RB4Ybw5vutoxt79MHl/WPfxvwt93EeA/fQPbNF+ydxLvTKWV7
-        O1Rs91R/3MvtpM5XVQ5XqsParOzkuI78HA==
-X-Google-Smtp-Source: ABdhPJz5XwpnrN+MIyb+kAJUtMdhIA/56NvHtqRh+/RIllEgjzZlJ0NfUD7zeG2rY47uIp9FHq6o4g==
-X-Received: by 2002:a2e:885a:: with SMTP id z26mr4282217ljj.139.1599244980312;
-        Fri, 04 Sep 2020 11:43:00 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id q7sm1440980lfr.16.2020.09.04.11.42.58
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2020 11:42:59 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id w3so9129163ljo.5
-        for <linux-arch@vger.kernel.org>; Fri, 04 Sep 2020 11:42:58 -0700 (PDT)
-X-Received: by 2002:a2e:84d6:: with SMTP id q22mr3675523ljh.70.1599244978377;
- Fri, 04 Sep 2020 11:42:58 -0700 (PDT)
+        id S1726791AbgIDTw3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Sep 2020 15:52:29 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:53619 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726621AbgIDTw3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Sep 2020 15:52:29 -0400
+Received: (qmail 701042 invoked by uid 1000); 4 Sep 2020 15:52:28 -0400
+Date:   Fri, 4 Sep 2020 15:52:28 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: [PATCH kcsan 9/9] tools/memory-model:  Document locking corner
+ cases
+Message-ID: <20200904195228.GB699781@rowland.harvard.edu>
+References: <20200831182012.GA1965@paulmck-ThinkPad-P72>
+ <20200831182037.2034-9-paulmck@kernel.org>
+ <20200831201701.GB558270@rowland.harvard.edu>
+ <20200831214738.GE2855@paulmck-ThinkPad-P72>
+ <20200901014504.GB571008@rowland.harvard.edu>
+ <20200901170421.GF29330@paulmck-ThinkPad-P72>
+ <20200901201110.GB599114@rowland.harvard.edu>
+ <20200903234507.GA24261@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-References: <20200903142242.925828-1-hch@lst.de> <20200904060024.GA2779810@gmail.com>
- <20200904175823.GA500051@localhost.localdomain>
-In-Reply-To: <20200904175823.GA500051@localhost.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 4 Sep 2020 11:42:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjUUBnp9JSK+u8gYQ-RpMZxgd3UfvpihCPA_vSN_8G8Mg@mail.gmail.com>
-Message-ID: <CAHk-=wjUUBnp9JSK+u8gYQ-RpMZxgd3UfvpihCPA_vSN_8G8Mg@mail.gmail.com>
-Subject: Re: remove the last set_fs() in common code, and remove it for x86
- and powerpc v3
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Ingo Molnar <mingo@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903234507.GA24261@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 4, 2020 at 10:58 AM Alexey Dobriyan <adobriyan@gmail.com> wrote:
->
-> set_fs() is older than some kernel hackers!
->
->         $ cd linux-0.11/
->         $ find . -type f -name '*.h' | xargs grep -e set_fs -w -n -A3
+On Thu, Sep 03, 2020 at 04:45:07PM -0700, Paul E. McKenney wrote:
 
-Oh, it's older than that. It was there (as set_fs) in 0.10, and may
-even predate that. But sadly, I don't have tar-balls for 0.02 and
-0.03, so can't check.
+> The hope was to have a good version of them completed some weeks ago,
+> but life intervened.
+> 
+> My current thought is to move these three patches out of my queue for
+> v5.10 to try again in v5.11:
+> 
+> 0b8c06b75ea1 ("tools/memory-model: Add a simple entry point document")
+> dc372dc0dc89 ("tools/memory-model: Move Documentation description to Documentation/README")
+> 0d9aaf8df7cb ("tools/memory-model: Document categories of ordering primitives")
+> 35dd5f6d17a0 ("tools/memory-model:  Document locking corner cases")
+> 
+> These would remain in my v5.10 queue:
+> 
+> 1e44e6e82e7b ("Replace HTTP links with HTTPS ones: LKMM")
+> cc9628b45c9f ("tools/memory-model: Update recipes.txt prime_numbers.c path")
+> 984f272be9d7 ("tools/memory-model: Improve litmus-test documentation")
+> 7c22cf3b731f ("tools/memory-model: Expand the cheatsheet.txt notion of relaxed")
+> 	(But with the updates from the other thread.)
+> 
+> Does that work?  If not, what would?
 
-The actual use of %fs as the user space segment is already there in
-0.01, but there was no 'set_fs()'. That was a simpler and more direct
-time, and "get_fs()" looked like this back then:
+That sounds reasonable.
 
-  #define _fs() ({ \
-  register unsigned short __res; \
-  __asm__("mov %%fs,%%ax":"=a" (__res):); \
-  __res;})
+> > > > Just what you want to achieve here is not clear from the context.
+> > > 
+> > > People who have internalized the "roach motel" model of locking
+> > > (https://www.cs.umd.edu/~pugh/java/memoryModel/BidirectionalMemoryBarrier.html)
+> > > need their internalization adjusted.
+> > 
+> > Shucks, if you only want to show that letting arbitrary code (i.e., 
+> > branches) migrate into a critical section is unsafe, all you need is 
+> > this uniprocessor example:
+> > 
+> > 	P0(int *sl)
+> > 	{
+> > 		goto Skip;
+> > 		spin_lock(sl);
+> > 		spin_unlock(sl);
+> > 	Skip:
+> > 		spin_lock(sl);
+> > 		spin_unlock(sl);
+> > 	}
+> > 
+> > This does nothing but runs fine.  Letting the branch move into the first 
+> > critical section gives:
+> > 
+> > 	P0(int *sl)
+> > 	{
+> > 		spin_lock(sl);
+> > 		goto Skip;
+> > 		spin_unlock(sl);
+> > 	Skip:
+> > 		spin_lock(sl);
+> > 		spin_unlock(sl);
+> > 	}
+> > 
+> > which self-deadlocks 100% of the time.  You don't need to know anything 
+> > about memory models or concurrency to understand this.
+> 
+> Although your example does an excellent job of illustrating the general
+> point about branches, I am not convinced that it would be seen as
+> demonstrating the dangers of moving an entire loop into a critical
+> section.
 
-and all the setting was basically part of the kernel entry asm and. Lovely.
+All right, how about this?
 
-                 Linus
+	P0(int *sl)
+	{
+		while (spin_is_locked(sl))
+			cpu_relax();
+		spin_lock(sl);
+		spin_unlock(sl);
+	}
+
+Runs normally, even if other threads are doing unknown locking and 
+unlocking at the same time.  But:
+
+	P0(int *sl)
+	{
+		spin_lock(sl);
+		while (spin_is_locked(sl))
+			cpu_relax();
+		spin_unlock(sl);
+	}
+
+always goes into an infinite loop.
+
+> > On the other hand, if you want to show that letting memory accesses leak 
+> > into a critical section is unsafe then you need a different example: 
+> > spin loops won't do it.
+> 
+> I am not immediately coming up with an example that is broken by leaking
+> isolated memory accesses into a critical section.  I will give it some
+> more thought.
+
+It may turn out to be a hard challenge.  As far as I know, there are no 
+such examples, unless you want to count something like this:
+
+	spin_lock(sl);
+	spin_unlock(sl);
+	spin_lock(sl);
+	spin_unlock(sl);
+
+transformed to:
+
+	spin_lock(sl);
+	spin_lock(sl);
+	spin_unlock(sl);
+	spin_unlock(sl);
+
+You could view this transformation as moving the second spin_lock up 
+into the first critical section (obviously dangerous since spin_lock 
+involves a loop), or as moving the first spin_unlock down into the 
+second critical section (not so obvious since spin_unlock is just a 
+memory access).
+
+Okay, so let's restrict ourselves to memory accesses and loops that 
+don't touch the spinlock variable itself.  Then we would need something 
+more similar to the original example, like this:
+
+	P0(spin_lock *sl, int *x)
+	{
+		while (READ_ONCE(x) == 0)
+			cpu_relax();
+		spin_lock(sl);
+		spin_unlock(sl);
+	}
+
+	P1(spin_lock *sl, int *x)
+	{
+		spin_lock(sl);
+		WRITE_ONCE(x, 1);
+		spin_unlock(sl);
+	}
+
+This will always run to completion.  But if the loop in P0 is moved into 
+the critical section, the test may never end.  Again, you don't need 
+fancy memory models to understand this; you just need to know that 
+critical sections are mutually exclusive.
+
+But if this example didn't have a loop, allowing the memory access to 
+leak into the critical section would be fine.
+
+Alan
