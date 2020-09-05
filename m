@@ -2,49 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3838A25E5F2
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Sep 2020 09:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA84425E6E5
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Sep 2020 12:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbgIEHRj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Sep 2020 03:17:39 -0400
-Received: from verein.lst.de ([213.95.11.211]:43947 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725818AbgIEHRj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 5 Sep 2020 03:17:39 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B982C68BEB; Sat,  5 Sep 2020 09:17:35 +0200 (CEST)
-Date:   Sat, 5 Sep 2020 09:17:35 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        id S1726660AbgIEKOH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Sep 2020 06:14:07 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:33724 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726372AbgIEKOH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Sep 2020 06:14:07 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-188-1wY7cX1qPuWY8qP59j56kw-1; Sat, 05 Sep 2020 11:13:52 +0100
+X-MC-Unique: 1wY7cX1qPuWY8qP59j56kw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Sat, 5 Sep 2020 11:13:52 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Sat, 5 Sep 2020 11:13:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
+        'Alexey Dobriyan' <adobriyan@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Kees Cook <keescook@chromium.org>,
+        "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: remove set_fs for riscv
-Message-ID: <20200905071735.GB13228@lst.de>
-References: <20200904165216.1799796-1-hch@lst.de> <CAK8P3a3t8a0gD2HsoPsMi7whtNb7BdzPN6-oo6ABnqkbQJoBfA@mail.gmail.com>
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: RE: remove the last set_fs() in common code, and remove it for x86
+ and powerpc v3
+Thread-Topic: remove the last set_fs() in common code, and remove it for x86
+ and powerpc v3
+Thread-Index: AQHWguUCiBf1LDvZDEmt0ea9xeMo3alY9jkQgACcEACAAEEf8A==
+Date:   Sat, 5 Sep 2020 10:13:51 +0000
+Message-ID: <b9c82e868b7b4dbb97d2bb11de825887@AcuMS.aculab.com>
+References: <20200903142242.925828-1-hch@lst.de>
+ <20200904060024.GA2779810@gmail.com>
+ <20200904175823.GA500051@localhost.localdomain>
+ <63f3c9342a784a0890b3b641a71a8aa1@AcuMS.aculab.com>
+ <4500d8d9-7318-4505-6086-2d2dc41f3866@csgroup.eu>
+In-Reply-To: <4500d8d9-7318-4505-6086-2d2dc41f3866@csgroup.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3t8a0gD2HsoPsMi7whtNb7BdzPN6-oo6ABnqkbQJoBfA@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+Content-Language: en-US
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 08:15:03PM +0200, Arnd Bergmann wrote:
-> Is there a bigger plan for the rest? I can probably have a look at the Arm
-> OABI code if nobody else working on that yet.
+RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAwNSBTZXB0ZW1iZXIgMjAyMCAwODoxNg0K
+PiANCj4gTGUgMDQvMDkvMjAyMCDDoCAyMzowMSwgRGF2aWQgTGFpZ2h0IGEgw6ljcml0wqA6DQo+
+ID4gRnJvbTogQWxleGV5IERvYnJpeWFuDQo+ID4+IFNlbnQ6IDA0IFNlcHRlbWJlciAyMDIwIDE4
+OjU4DQouLi4NCj4gPiBXaGF0IGlzIHRoaXMgc3RyYW5nZSAlZnMgcmVnaXN0ZXIgeW91IGFyZSB0
+YWxraW5nIGFib3V0Lg0KPiA+IEZpZ3VyZSAyLTQgb25seSBoYXMgQ1MsIERTLCBTUyBhbmQgRVMu
+DQo+ID4NCj4gDQo+IEludGVsIGFkZGVkIHJlZ2lzdGVycyBGUyBhbmQgR1MgaW4gdGhlIGkzODYN
+Cg0KSSBrbm93LCBJJ3ZlIGdvdCBib3RoIHRoZSAnaUFQWCAyODYgUHJvZ3JhbW1lcidzIFJlZmVy
+ZW5jZSBNYW51YWwnDQphbmQgdGhlICc4MDM4NiBQcm9ncmFtbWVyJ3MgUmVmZXJlbmNlIE1hbnVh
+bCcgb24gbXkgc2hlbGYuDQoNCkkgZG9uJ3QgaGF2ZSB0aGUgODA4OCBib29rIHRob3VnaCAtIHdo
+aWNoIEkgdXNlZCBpbiAxOTgyLg0KDQpUaGUgb2xkIGJvb2tzIGFyZSBhIGxvdCBlYXNpZXIgdG8g
+cmVhZCBpZiwgZm9yIGluc3RhbmNlLA0KeW91IGFyZSB0cnlpbmcgdG8gd29yayBvdXQgaG93IHRv
+IGJhY2sgYW5kIGZvcnRoIHRvIHJlYWwgbW9kZQ0KdG8gZG8gYmlvcyBjYWxscy4NCg0KCURhdmlk
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 
-m68knommu seems mostly trivial and not interact much with m68k/mmu,
-so that woud be my next target.  All the other seems to share more
-code for the mmu and nommu case, so they'd have to be done per arch.
-
-arm would be my first target because it is used widespread, and its
-current set_fs implemenetation is very strange.  But given thar you
-help maintaining arm SOCs and probably know the arch code much better
-than I do I'd be more than happy to leave that to you.
