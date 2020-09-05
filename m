@@ -2,162 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 342CC25EA58
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Sep 2020 22:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF05A25EB8E
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Sep 2020 00:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728323AbgIEUSa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Sep 2020 16:18:30 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:52079 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727875AbgIEUSZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Sep 2020 16:18:25 -0400
-X-Greylist: delayed 110455 seconds by postgrey-1.27 at vger.kernel.org; Sat, 05 Sep 2020 16:18:23 EDT
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 085KIAXe008998;
-        Sun, 6 Sep 2020 05:18:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 085KIAXe008998
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1599337091;
-        bh=AM99QzFxxKGBKlEOzZ//FGYuWqlVjObjhMrW0TXZ1vI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=2mT3GBG1wE8G/yhfLSiGJrSIlfMwrbNAUJKfC8gZ3etoILU0Zt8SumIhqPwfSULnc
-         NiTXPP6y+jVKTSdF52qblNj8+Erwe44OAi3+JvNj3bnz1xnxKFq7ODs67zco8o0vN/
-         3TsC6sQGntZygvez3VSOoQd+9TJdtVBzKLn31Tii+GMykpZKux2BYRxCt7WzqItnhf
-         gQF8087kfcTGYy6+HQH8Nm7HxU9Soano2FeVeXwfbVYa1sktzUe5OKbi1/IDSFfoRv
-         AQGmR5q2uh4wolJFo7NXbJsHPQOtZZYon5wxO3OEc6anfYAFK6QTSLvUTvWKMtN4DG
-         SLh9BXK/ERc5Q==
-X-Nifty-SrcIP: [209.85.210.179]
-Received: by mail-pf1-f179.google.com with SMTP id k15so6467835pfc.12;
-        Sat, 05 Sep 2020 13:18:11 -0700 (PDT)
-X-Gm-Message-State: AOAM533M+KOq3mFmd0jb1/ESVUCxpW0tDyvpKFOIZgBluRINYk59EXaY
-        RAVvkRAEokIuKgEPToF2gs+W40wYJInEP73EgFA=
-X-Google-Smtp-Source: ABdhPJyNsnmMbyAG66fOWmKiovR25YJyERnRLtPM25a82Zl3RS3nL26piTxmNQ2uNI60/yqc3rOaDVz5VEX2fwwCiOI=
-X-Received: by 2002:a62:8007:0:b029:13c:1611:6533 with SMTP id
- j7-20020a6280070000b029013c16116533mr12182097pfd.5.1599337089871; Sat, 05 Sep
- 2020 13:18:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200903203053.3411268-1-samitolvanen@google.com> <20200903203053.3411268-10-samitolvanen@google.com>
-In-Reply-To: <20200903203053.3411268-10-samitolvanen@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 6 Sep 2020 05:17:32 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASTtxJ7OCMM_KxmaoSL3CDfTY-65Pu=-MYkMo7iz-_NOQ@mail.gmail.com>
-Message-ID: <CAK7LNASTtxJ7OCMM_KxmaoSL3CDfTY-65Pu=-MYkMo7iz-_NOQ@mail.gmail.com>
-Subject: Re: [PATCH v2 09/28] kbuild: add support for Clang LTO
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        id S1728505AbgIEWso (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Sep 2020 18:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728103AbgIEWsn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Sep 2020 18:48:43 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47227C061244;
+        Sat,  5 Sep 2020 15:48:42 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id n10so7512097qtv.3;
+        Sat, 05 Sep 2020 15:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dYL37oonxahMiERY6M7bI0fQzZLAfl7INM1zulnY34U=;
+        b=i2sjWJ41j0LCW9MSNR1r+BVTos+aNU/sQNRWMGLG3Xma5GsC0JJOMnRi2RFJtAuqeZ
+         0lHzhBvxAsBMOF3NMXNMwQD+MuIZx5VzzycZN/qia173TCug2EPrmCp/1flJHsFHFloR
+         3VwMI8lSCupizstJ9n/tk5eH9GL5wojfKV9z2jtfNZI2gEbcRbZlgndrrSdimkuu3NM1
+         I50PNYQ9ZRV5w6K1nEe5yUUyjb+54T0D1PA3Cyds+//mrHOpI0X1ugO2t6yIT4THAprZ
+         PEySoMqWEQwDcQTH3SGaEir1HOXMu+jm+kXFGkB+kxz9Qk3oB/KbAa6ykOY2+TF9iqFW
+         JmZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=dYL37oonxahMiERY6M7bI0fQzZLAfl7INM1zulnY34U=;
+        b=QnwAFk0CzywhDdZCTVa/+JbDIw6qTFDrx0zcZcfuG9PNe0v1prSs+zDHlGTS8ib/Cy
+         unyfaUHpi8TNoPR6v/cPBCSNPEK75aocpHFgmRO8KW8r6bojukmH9A9LLkjFyN23LVzj
+         es/Er+Slgg+N6uNkkVCALL/b9N2ivYbgvFdb0/TPtVojNkiqMO2qMCJLRKMCf6XJaDSJ
+         LV9GtzXUNFfenGChalHT+uh12c5eCQrXHi+nsDr6vYkDWricqcU8yqteU+rR9mk1WkB/
+         g9CMROa6Tdg68FJKyruB+fl6OOLdta4fy6AWph+wHbNH5NvxJvVPnPgakcWL5OGcpXq8
+         xhHA==
+X-Gm-Message-State: AOAM533oSOXN+wjvzlBVtvuWgoQCsu1rtCD4Z0AyIEJxE5pT9SSYTJqx
+        xs382JY9+oe9u4m8hWqdyHo=
+X-Google-Smtp-Source: ABdhPJzozlDPhyXr6JOZFagjTaiEP3QCjS39SNNHLMhx0wYBQR2VlcAzn6ysX8qJ/+qxrT46u/KrJA==
+X-Received: by 2002:ac8:fbb:: with SMTP id b56mr14999497qtk.307.1599346118622;
+        Sat, 05 Sep 2020 15:48:38 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id d16sm8184604qte.19.2020.09.05.15.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Sep 2020 15:48:38 -0700 (PDT)
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Sat, 5 Sep 2020 18:48:35 -0400
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/5] x86/build: Warn on orphan section placement
+Message-ID: <20200905224835.GA1500331@rani.riverdale.lan>
+References: <20200902025347.2504702-1-keescook@chromium.org>
+ <20200902025347.2504702-5-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200902025347.2504702-5-keescook@chromium.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 4, 2020 at 5:31 AM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> This change adds build system support for Clang's Link Time
-> Optimization (LTO). With -flto, instead of ELF object files, Clang
-> produces LLVM bitcode, which is compiled into native code at link
-> time, allowing the final binary to be optimized globally. For more
-> details, see:
->
->   https://llvm.org/docs/LinkTimeOptimization.html
->
-> The Kconfig option CONFIG_LTO_CLANG is implemented as a choice,
-> which defaults to LTO being disabled. To use LTO, the architecture
-> must select ARCH_SUPPORTS_LTO_CLANG and support:
->
->   - compiling with Clang,
->   - compiling inline assembly with Clang's integrated assembler,
->   - and linking with LLD.
->
-> While using full LTO results in the best runtime performance, the
-> compilation is not scalable in time or memory. CONFIG_THINLTO
-> enables ThinLTO, which allows parallel optimization and faster
-> incremental builds. ThinLTO is used by default if the architecture
-> also selects ARCH_SUPPORTS_THINLTO:
->
->   https://clang.llvm.org/docs/ThinLTO.html
->
-> To enable LTO, LLVM tools must be used to handle bitcode files. The
-> easiest way is to pass the LLVM=1 option to make:
->
->   $ make LLVM=1 defconfig
->   $ scripts/config -e LTO_CLANG
->   $ make LLVM=1
->
-> Alternatively, at least the following LLVM tools must be used:
->
->   CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
->
-> To prepare for LTO support with other compilers, common parts are
-> gated behind the CONFIG_LTO option, and LTO can be disabled for
-> specific files by filtering out CC_FLAGS_LTO.
->
-> Note that support for DYNAMIC_FTRACE and MODVERSIONS are added in
-> follow-up patches.
->
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+On Tue, Sep 01, 2020 at 07:53:46PM -0700, Kees Cook wrote:
+> We don't want to depend on the linker's orphan section placement
+> heuristics as these can vary between linkers, and may change between
+> versions. All sections need to be explicitly handled in the linker script.
+> 
+> Now that all sections are explicitly handled, enable orphan section
+> warnings.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  Makefile                          | 18 +++++++-
->  arch/Kconfig                      | 68 +++++++++++++++++++++++++++++++
->  include/asm-generic/vmlinux.lds.h | 11 +++--
->  scripts/Makefile.build            |  9 +++-
->  scripts/Makefile.modfinal         |  9 +++-
->  scripts/Makefile.modpost          | 24 ++++++++++-
->  scripts/link-vmlinux.sh           | 32 +++++++++++----
->  7 files changed, 154 insertions(+), 17 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index a9dae26c93b5..dd49eaea7c25 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -909,6 +909,22 @@ KBUILD_CFLAGS      += $(CC_FLAGS_SCS)
->  export CC_FLAGS_SCS
+>  arch/x86/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 4346ffb2e39f..154259f18b8b 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -209,6 +209,10 @@ ifdef CONFIG_X86_64
+>  LDFLAGS_vmlinux += -z max-page-size=0x200000
 >  endif
->
-> +ifdef CONFIG_LTO_CLANG
-> +ifdef CONFIG_THINLTO
-> +CC_FLAGS_LTO_CLANG := -flto=thin -fsplit-lto-unit
-> +KBUILD_LDFLAGS += --thinlto-cache-dir=.thinlto-cache
-> +else
-> +CC_FLAGS_LTO_CLANG := -flto
-> +endif
-> +CC_FLAGS_LTO_CLANG += -fvisibility=default
-> +endif
+>  
+> +# We never want expected sections to be placed heuristically by the
+> +# linker. All sections should be explicitly named in the linker script.
+> +LDFLAGS_vmlinux += $(call ld-option, --orphan-handling=warn)
 > +
-> +ifdef CONFIG_LTO
-> +CC_FLAGS_LTO   := $(CC_FLAGS_LTO_CLANG)
+>  archscripts: scripts_basic
+>  	$(Q)$(MAKE) $(build)=arch/x86/tools relocs
+>  
+> -- 
+> 2.25.1
+> 
 
+With LLVM=1 and GCOV_KERNEL/GCOV_PROFILE_ALL enabled, there are
+.eh_frame sections created. I see that KASAN and KCSAN currently discard
+them. Does GCOV actually need them or should it also discard?
 
-$(CC_FLAGS_LTO_CLANG) is not used elsewhere.
-
-Why didn't you add the flags to CC_FLAGS_LTO
-directly?
-
-Will it be useful if LTO_GCC is supported ?
-
-
-
-> +KBUILD_CFLAGS  += $(CC_FLAGS_LTO)
-> +export CC_FLAGS_LTO
-> +endif
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Thanks.
