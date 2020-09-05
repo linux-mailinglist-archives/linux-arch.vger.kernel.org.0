@@ -2,83 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA84425E6E5
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Sep 2020 12:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B9525E77F
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Sep 2020 14:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbgIEKOH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Sep 2020 06:14:07 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:33724 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726372AbgIEKOH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Sep 2020 06:14:07 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-188-1wY7cX1qPuWY8qP59j56kw-1; Sat, 05 Sep 2020 11:13:52 +0100
-X-MC-Unique: 1wY7cX1qPuWY8qP59j56kw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sat, 5 Sep 2020 11:13:52 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sat, 5 Sep 2020 11:13:52 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        'Alexey Dobriyan' <adobriyan@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Kees Cook <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: RE: remove the last set_fs() in common code, and remove it for x86
- and powerpc v3
-Thread-Topic: remove the last set_fs() in common code, and remove it for x86
- and powerpc v3
-Thread-Index: AQHWguUCiBf1LDvZDEmt0ea9xeMo3alY9jkQgACcEACAAEEf8A==
-Date:   Sat, 5 Sep 2020 10:13:51 +0000
-Message-ID: <b9c82e868b7b4dbb97d2bb11de825887@AcuMS.aculab.com>
-References: <20200903142242.925828-1-hch@lst.de>
- <20200904060024.GA2779810@gmail.com>
- <20200904175823.GA500051@localhost.localdomain>
- <63f3c9342a784a0890b3b641a71a8aa1@AcuMS.aculab.com>
- <4500d8d9-7318-4505-6086-2d2dc41f3866@csgroup.eu>
-In-Reply-To: <4500d8d9-7318-4505-6086-2d2dc41f3866@csgroup.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728565AbgIEMRh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Sep 2020 08:17:37 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:47703 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726597AbgIEMRf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Sep 2020 08:17:35 -0400
+Received: from mail-qt1-f172.google.com ([209.85.160.172]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MG9wg-1kMIV72Ozc-00Gce2; Sat, 05 Sep 2020 14:17:33 +0200
+Received: by mail-qt1-f172.google.com with SMTP id p65so6809967qtd.2;
+        Sat, 05 Sep 2020 05:17:33 -0700 (PDT)
+X-Gm-Message-State: AOAM531L3wcOG0kKI10+IDOrURHX6jGF8freQX4aXxv/KULJ02fKf7eu
+        Ex9Z9Ut68cOnsf9l+XZ53FM+o58jgR2KV0/BMG8=
+X-Google-Smtp-Source: ABdhPJztDqES+QOFNh8+jrK8cS2H3Wi+J6JBSp+Ig7JDd7R2GNL+D5UroPOmdx4gswuUtuIWyBP2UGRMtOCxTAirt/s=
+X-Received: by 2002:ac8:5144:: with SMTP id h4mr1539656qtn.18.1599308252303;
+ Sat, 05 Sep 2020 05:17:32 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-Content-Language: en-US
+References: <20200904165216.1799796-1-hch@lst.de> <CAK8P3a3t8a0gD2HsoPsMi7whtNb7BdzPN6-oo6ABnqkbQJoBfA@mail.gmail.com>
+ <20200905071735.GB13228@lst.de>
+In-Reply-To: <20200905071735.GB13228@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 5 Sep 2020 14:17:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a13Xs7-oknJJ0D7HU1+g3fOcaNDr0YgrN-cdv78G5fqiA@mail.gmail.com>
+Message-ID: <CAK8P3a13Xs7-oknJJ0D7HU1+g3fOcaNDr0YgrN-cdv78G5fqiA@mail.gmail.com>
+Subject: Re: remove set_fs for riscv
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:6PjKPuS+5BTBM2o0gbhr40Ls2hOMMTWoos5pqGvQpmmH4OYdXBM
+ WLQ+sw4psu3/bkiIeFO2QUI4/5NbBqr1ThvoS06BF2nDB/7tyAObsDShC37CdWBAV/taEJG
+ n7EzbPUTQADrfEP2oKaFiopiEpZ73s6xmgH6W/0LdqaBUULby60n6PlpqdPT8bkU8tI8p1A
+ pwzrHchuzyrlP/a2/brbQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2gEpzGA8Uk8=:+RyuJEb/ZbgqQEOGG+IiU2
+ 2LxzggBstvz6WFTA7kPKi7mp61nCtyh/1fFPweMh4Z7PeGbZX7z8kSY9hedXYz91rP3tm0Aum
+ HE1PbAejKBxSjLZr4QBtJS5bK3uLCXNzIiK4+5pMzLs6Ts4LYtX+5xLVAaZoaVPHrBzQkaUzs
+ wBWnIwk7/xLLDNjADf0JMddP/QVPGnKagTpMC02PRQa/ZnRLIKyIPcWlXQZtseUxns/2aGD7u
+ pYWCFZ/VZPPyj445pE70jNS3ShyVUw2lm9vG5LtLcwYCh27t1Z68NhN+jIOgGam2ZgUkVNRjT
+ 9cyzozIXrl/WQdT1k6bDrKmE3kKCVaqiJ/yzVzcEFYrl8tFGWMAbhZY+ChkYxYYglC9grAIc8
+ mOyvpzU/TQ/mD+O266ZIMrKKlMEZ6KE/7SlkkOiz+Poizl4lS7uVhTE8unELTipmqYvBv9g/u
+ LpwZ1QrK32lUDfP5X09ekBKtnyNaKkeTeTTK0wJmruwxi4RKD+7PRtMvXF3L3lTI9uO8azjGZ
+ MK7aVr77kkNtdbo4W5AhtsWgpOybn7MAqriK3CcoCshh07h+Et4YowKymn3MYnwbwjEXLYilO
+ 8nHQvfwDxDSqsiT3DUoWhAJ/eK9gApLHIkQAXE9ac+f+9s7Nwof2DlMFGEyQXNRcTFswk/F0D
+ yC0LM2L7oM+d5vLBZ13eJ4073trm+4z66iQW+J4jj3GxH5QRStZgWx38tjevS97Fc1uauF+c/
+ HiqefEaCLMWDjRrbZ3mugu5XSduZmAX4s2URyIw5HZJndOJs9ucr5XFPvOiOPGKRX6MmAu/CX
+ Ho3/Ez9MmOJzQKCZqk819Oq7uF3+WLkcZqsMNZRtWXtLoUh5EY4hXaUg/DED/D0TNDgO4Se
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAwNSBTZXB0ZW1iZXIgMjAyMCAwODoxNg0K
-PiANCj4gTGUgMDQvMDkvMjAyMCDDoCAyMzowMSwgRGF2aWQgTGFpZ2h0IGEgw6ljcml0wqA6DQo+
-ID4gRnJvbTogQWxleGV5IERvYnJpeWFuDQo+ID4+IFNlbnQ6IDA0IFNlcHRlbWJlciAyMDIwIDE4
-OjU4DQouLi4NCj4gPiBXaGF0IGlzIHRoaXMgc3RyYW5nZSAlZnMgcmVnaXN0ZXIgeW91IGFyZSB0
-YWxraW5nIGFib3V0Lg0KPiA+IEZpZ3VyZSAyLTQgb25seSBoYXMgQ1MsIERTLCBTUyBhbmQgRVMu
-DQo+ID4NCj4gDQo+IEludGVsIGFkZGVkIHJlZ2lzdGVycyBGUyBhbmQgR1MgaW4gdGhlIGkzODYN
-Cg0KSSBrbm93LCBJJ3ZlIGdvdCBib3RoIHRoZSAnaUFQWCAyODYgUHJvZ3JhbW1lcidzIFJlZmVy
-ZW5jZSBNYW51YWwnDQphbmQgdGhlICc4MDM4NiBQcm9ncmFtbWVyJ3MgUmVmZXJlbmNlIE1hbnVh
-bCcgb24gbXkgc2hlbGYuDQoNCkkgZG9uJ3QgaGF2ZSB0aGUgODA4OCBib29rIHRob3VnaCAtIHdo
-aWNoIEkgdXNlZCBpbiAxOTgyLg0KDQpUaGUgb2xkIGJvb2tzIGFyZSBhIGxvdCBlYXNpZXIgdG8g
-cmVhZCBpZiwgZm9yIGluc3RhbmNlLA0KeW91IGFyZSB0cnlpbmcgdG8gd29yayBvdXQgaG93IHRv
-IGJhY2sgYW5kIGZvcnRoIHRvIHJlYWwgbW9kZQ0KdG8gZG8gYmlvcyBjYWxscy4NCg0KCURhdmlk
-DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
-YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
-IChXYWxlcykNCg==
+On Sat, Sep 5, 2020 at 9:17 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Fri, Sep 04, 2020 at 08:15:03PM +0200, Arnd Bergmann wrote:
+> > Is there a bigger plan for the rest? I can probably have a look at the Arm
+> > OABI code if nobody else working on that yet.
+>
+> m68knommu seems mostly trivial and not interact much with m68k/mmu,
+> so that woud be my next target.  All the other seems to share more
+> code for the mmu and nommu case, so they'd have to be done per arch.
 
+Ok.
+
+> arm would be my first target because it is used widespread, and its
+> current set_fs implemenetation is very strange.  But given thar you
+> help maintaining arm SOCs and probably know the arch code much better
+> than I do I'd be more than happy to leave that to you.
+
+I would start with the syscall wrapper code that just needs a simple
+set of changes to pass the arguments on as kernel pointers instead
+of fake user pointers.
+
+I'm also not too familiar with the domain handling on older Arm cores,
+which I think is the main difference to other architectures. On modern
+Armv6+, the set_fs() call is just an assignment to current_thread_info()->
+addr_limit like on other architectures, whereas Armv5 and older
+rely on special load/store instructions to perform get_user/put_user
+as an unprivileged access. Removing set_fs() should allow to clean
+that up nicely, but I'd worry about introducing regressions in the
+process, and will probably stop short of that cleanup.
+
+     Arnd
