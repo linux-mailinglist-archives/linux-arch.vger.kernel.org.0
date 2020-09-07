@@ -2,101 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE0D25FC75
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Sep 2020 16:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD5525FD0D
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Sep 2020 17:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730116AbgIGO7j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Sep 2020 10:59:39 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:52217 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730066AbgIGO7a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Sep 2020 10:59:30 -0400
-Received: from mail-qv1-f41.google.com ([209.85.219.41]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MvbJw-1kVJnJ0F6M-00sd6v; Mon, 07 Sep 2020 16:59:15 +0200
-Received: by mail-qv1-f41.google.com with SMTP id cv8so6437570qvb.12;
-        Mon, 07 Sep 2020 07:59:14 -0700 (PDT)
-X-Gm-Message-State: AOAM5303Aw8zwrEiN6wbMgq60Z+UeFPpXVnEnxjwC3H+IYLa0laaBb4l
-        lGnj8zQ9Yq0PhnZzsiUnN3iL7bfE6j3nEbI0mEQ=
-X-Google-Smtp-Source: ABdhPJxK1PtMWzEME0I00NTfpJLnk7HuwRPMEDH7xtuIg967ceNyZJazvdlwZ8DAo/8dECMPk3V86IWyRilTpXPzPg8=
-X-Received: by 2002:a0c:e892:: with SMTP id b18mr18804075qvo.4.1599490753860;
- Mon, 07 Sep 2020 07:59:13 -0700 (PDT)
+        id S1730086AbgIGP1l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Sep 2020 11:27:41 -0400
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:22974 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730072AbgIGP1G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Sep 2020 11:27:06 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 087FQVpa001816;
+        Tue, 8 Sep 2020 00:26:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 087FQVpa001816
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1599492392;
+        bh=IR6uGigyFtGDGIA+2OM5ZSYgDCjCsPA/08OP3wwPpmI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HF6kxwrZWb/RyvWw0lecR13yfGnI7g+SVYuZ3GDrpLhjeQQBDFe3oweHMbptemm66
+         SshCNN/29Q2UvC9TLvqIwjxGc087kf+LNwwYemZ9X8N179UEkHP+whZYbBQFKBslQI
+         QLRVSs1kmDEgwP5nA60GQLqD2M/mdvIvnBM0aTB/FKDPseKBNZcIq2a2D/0zPSmgKn
+         AEmqSmPA7h2X4LFcI6QPvPonC70Ag3cB7mKCBtL8/C97R4MKbM4UHwkDKT0yrD5ghL
+         Zfzv833opPYiVtdnMgBuia+Ds748+7ZOS+r2vFL3fF0+vwlBvikfS9mHMkE8AAJya3
+         YQxpECBRYEZSg==
+X-Nifty-SrcIP: [209.85.210.173]
+Received: by mail-pf1-f173.google.com with SMTP id c196so3310350pfc.0;
+        Mon, 07 Sep 2020 08:26:32 -0700 (PDT)
+X-Gm-Message-State: AOAM531MQ94vq0bcadHaJu4h2pPF2hphNSNWiiobu5yZjv8EZaE3aG5O
+        IChk22lQWldIeRKUdl3bBFeMVCfULHqrTixZCzY=
+X-Google-Smtp-Source: ABdhPJzWMpKJKkob3tKKbsRMggvPdqUmZIz53kyp4B311hdgI26YjoFRx5atEqEpQRhRX5rjh34sk2xeMQI+Eblelz8=
+X-Received: by 2002:a62:e116:: with SMTP id q22mr9587524pfh.179.1599492391141;
+ Mon, 07 Sep 2020 08:26:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200904165216.1799796-1-hch@lst.de> <CAK8P3a3t8a0gD2HsoPsMi7whtNb7BdzPN6-oo6ABnqkbQJoBfA@mail.gmail.com>
- <20200905071735.GB13228@lst.de> <CAK8P3a3BN-Afy4Gj+mGjxiKODUBZwjh+XRbXqQKV-uEhyhOTfA@mail.gmail.com>
- <20200907060356.GA18655@lst.de>
-In-Reply-To: <20200907060356.GA18655@lst.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 7 Sep 2020 16:58:57 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a22X84VVX=WwrQoqgThuhs55P9z+rYoG=kzbJCmJLJb8Q@mail.gmail.com>
-Message-ID: <CAK8P3a22X84VVX=WwrQoqgThuhs55P9z+rYoG=kzbJCmJLJb8Q@mail.gmail.com>
-Subject: Re: remove set_fs for riscv
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200903203053.3411268-1-samitolvanen@google.com> <20200903203053.3411268-14-samitolvanen@google.com>
+In-Reply-To: <20200903203053.3411268-14-samitolvanen@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 8 Sep 2020 00:25:54 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARnh-7a8Lq-y2u72cnk2uxSuWxjaZ8Y-JHCYu5gwt7Ekg@mail.gmail.com>
+Message-ID: <CAK7LNARnh-7a8Lq-y2u72cnk2uxSuWxjaZ8Y-JHCYu5gwt7Ekg@mail.gmail.com>
+Subject: Re: [PATCH v2 13/28] kbuild: lto: merge module sections
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Russell King <rmk@arm.linux.org.uk>
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:MpHuRRnIlDGyisIWkrrnggB7EpmlguB++P2XWvEgZlq2hPXhw6x
- 09V150d9+qUN0RxMK9BSU+WHRO7+lqM5tfYBCPlpk2GrJANFlWkmgCnqmukvdshsd6mov0O
- Rv6/wAXn5FspfePeEBrFP0x0j0skVvsKJ7sLQlUN6flhNaVEpwr0OV7HTiNS2uj1AF1dXSc
- zK4/yUJH1SXunzztqKK7Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jHRPJ+HvdNs=:7ERbVbdo3nq5sJDNMrnkOi
- JLgHJzh2QwS4SeejvpFJr3ItdRGmsG60XtoybqFMiLtPsHpL+IeTHA1A0tbUEDKjbO4LdeFOe
- MBHgKFSokPxUzTcS3YZYE1eOslPU/v3Rwf/SqvV86LQHZvr8pGgQtkQOabjujrTnAppaP9vc+
- 6Mjx5FnMjkikknIRtNe1G/B//pq+or1G114RGm27YAbxd5PM71UZtV5hbRCp7+Hp5PtZD39vg
- RTws6TNEgdQEVQnaJRtpsQoxQ6kQ5ild4sEradrBbD/kzsdXqpqUss9sqfaeqFFfFlYHlkwmU
- cTITBo861lojJ/Xfa6rGBwnkj2mQR3EmIs42Bf16o+yG4OwQzQdHqs8b44bsmbztKhOS80AET
- q3HRoGJT8irpx+sDQer+OjtN8/ZkuD8Ve8q/v8DWDauwuBMwWuYkzyn9XV4WPqk+/sEPEW0fK
- NM81snU9zIWM5z6L5Aj0YEOs1SNedrNFEB2LaBbuREyJkuIR1SEZHenRkUk6PgbCx9bnplEih
- ofct3xo8jEvN/e7kLClBLcTdqHIQNSlKCvaXcZ7sCgh9H4UnyQlC4inPoWLFm8+AtohtSw3i1
- rsrHhwahOrJd0RlJ0F70z0GQyn+iwX0sjSPEGKpBXF/z1Qzcuk4Xbo1IzKVZGjqSplZ4t5o80
- CaGPAph8hTL6tGiCIJWjqSr9yuvgbQjChAUct0Dtjso52NfVGLE7/S1r9Jt1nUeggpywh6+qk
- LoM9hmSUnLn72ILAiV/uTCvUx293ypmiUxG0v40IlvaYrpVECa+5OBOzv1ORgAvLpbCGjXYxS
- FHmINsXUChXOO9HxZ0jcI28RNPgt5OAr9x79th5uzMZOSi/zWzb76eRFXpkJ7zBtAM1zm4pU5
- jFItJnY+cVzkT3U5pcZakjOA1owQ/D6yvNQWxIoDwH/wWcBw5NdtXLBmpklQo3bvExvqXG8oq
- ckmpoo70uZnUv7BZMoIp+eAPO76+0pm4yNXQlijssXYfdBq0Z+kaN
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 7, 2020 at 8:03 AM Christoph Hellwig <hch@lst.de> wrote:
+On Fri, Sep 4, 2020 at 5:31 AM Sami Tolvanen <samitolvanen@google.com> wrote:
 >
-> On Mon, Sep 07, 2020 at 12:14:59AM +0200, Arnd Bergmann wrote:
-> > I've had a first pass at this now, see
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=arm-kill-set_fs
-> >
-> > There are a couple of things in there that ended up uglier than I was
-> > hoping for, and it's completely untested beyond compilation. Is this
-> > roughly what you had in mind? I can do some testing then and post
-> > it to the Arm mailing list.
+> LLD always splits sections with LTO, which increases module sizes. This
+> change adds a linker script that merges the split sections in the final
+> module.
 >
-> Looks sensible.  The OABI hacks a are a little ugly, but so would be
-> every other alternative.
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  Makefile               |  2 ++
+>  scripts/module-lto.lds | 26 ++++++++++++++++++++++++++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 scripts/module-lto.lds
+>
+> diff --git a/Makefile b/Makefile
+> index c69e07bd506a..bb82a4323f1d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -921,6 +921,8 @@ CC_FLAGS_LTO_CLANG += -fvisibility=default
+>  # Limit inlining across translation units to reduce binary size
+>  LD_FLAGS_LTO_CLANG := -mllvm -import-instr-limit=5
+>  KBUILD_LDFLAGS += $(LD_FLAGS_LTO_CLANG)
+> +
+> +KBUILD_LDS_MODULE += $(srctree)/scripts/module-lto.lds
+>  endif
+>
+>  ifdef CONFIG_LTO
+> diff --git a/scripts/module-lto.lds b/scripts/module-lto.lds
+> new file mode 100644
+> index 000000000000..cbb11dc3639a
+> --- /dev/null
+> +++ b/scripts/module-lto.lds
+> @@ -0,0 +1,26 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * With CONFIG_LTO_CLANG, LLD always enables -fdata-sections and
+> + * -ffunction-sections, which increases the size of the final module.
+> + * Merge the split sections in the final binary.
+> + */
+> +SECTIONS {
+> +       __patchable_function_entries : { *(__patchable_function_entries) }
+> +
+> +       .bss : {
+> +               *(.bss .bss.[0-9a-zA-Z_]*)
+> +               *(.bss..L*)
+> +       }
+> +
+> +       .data : {
+> +               *(.data .data.[0-9a-zA-Z_]*)
+> +               *(.data..L*)
+> +       }
+> +
+> +       .rodata : {
+> +               *(.rodata .rodata.[0-9a-zA-Z_]*)
+> +               *(.rodata..L*)
+> +       }
+> +
+> +       .text : { *(.text .text.[0-9a-zA-Z_]*) }
+> +}
+> --
+> 2.28.0.402.g5ffc5be6b7-goog
+>
 
-Ok, thanks for taking a look. I've now managed to run the patched
-kernel with OABI user space and tested the modified syscalls with
-LTP. The 0-day bot found a regression that I have fixed.
 
-I'll send out the series for review next.
+After I apply https://patchwork.kernel.org/patch/11757323/,
+is it possible to do like this ?
 
-> Note that you don't need to add a TASK_SIZE_MAX definition to arm if you
-> base it on my series as that provides a default one.
 
-I've rebased on that patch now and taken out those definitions.
+#ifdef CONFIG_LTO
+SECTIONS {
+     ...
+};
+#endif
 
-> I also think with these changes arm/nommu should be able to use
-> UACCESS_MEMCPY.
+in scripts/module.lds.S
 
-Probably yes, but I'd leave the current version for now. The Arm
-implementation already supports combinations of range check
-and domain settings, with the NOMMU targets using neither, but
-sharing the same implementation as the others.
 
-      Arnd
+-- 
+Best Regards
+Masahiro Yamada
