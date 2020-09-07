@@ -2,112 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A244525FD61
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Sep 2020 17:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC75B25FD44
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Sep 2020 17:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730136AbgIGPij (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Sep 2020 11:38:39 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:52977 "EHLO
+        id S1730107AbgIGPjS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Sep 2020 11:39:18 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:56055 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730107AbgIGPh1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Sep 2020 11:37:27 -0400
+        with ESMTP id S1730072AbgIGPil (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Sep 2020 11:38:41 -0400
 Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
  (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MQMmF-1jtUy03FLN-00MIv2; Mon, 07 Sep 2020 17:37:13 +0200
+ 1MBltK-1kPFtF1hMq-00CCY9; Mon, 07 Sep 2020 17:37:29 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Christoph Hellwig <hch@lst.de>, Russell King <rmk@arm.linux.org.uk>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linus.walleij@linaro.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 0/9] ARM: remove set_fs callers and implementation
-Date:   Mon,  7 Sep 2020 17:36:41 +0200
-Message-Id: <20200907153701.2981205-1-arnd@arndb.de>
+        linus.walleij@linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/9] mm/maccess: fix unaligned copy_{from,to}_kernel_nofault
+Date:   Mon,  7 Sep 2020 17:36:42 +0200
+Message-Id: <20200907153701.2981205-2-arnd@arndb.de>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200907153701.2981205-1-arnd@arndb.de>
+References: <20200907153701.2981205-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:VjRIHVKsrJ2cp1DZW/WWar2/93OzLGw+aSFBTMZna85P5K77sAZ
- Xch35nM3blzVomWJfJD7n6iXwAEm8E3HwandaTb2+6zBSlwd2VeBUH0fqENpQrUh0XtfTfD
- qfbOFRC61hirr7cOpMwF9FBayHhHu8B/OOTAIN6DrhaoGavRLobM+MTxqFg9mYvIyrsQcDq
- kSKFtTEpMK0s/MdO16Cww==
+X-Provags-ID: V03:K1:31/POUWQp1frtERuDjS9nzjZRuMNBQ7Hl3VxeiobYDrtzHzJ2GM
+ 9wXwMRq/o9LvfehtVxWSMILv/LQI5+kUntODj1eCkVxeCYq5Lrz/gGasQFrjKx+LO0h/Qf6
+ pjokHD1+IYoLYtmU2LohgFAguxtZa3LdkAiQyIOU8lZ6+niqwzeZQNVYkR+L7T4UuZdL8Zf
+ gsLsiO7j5MDIewk++Z/ow==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ndcJ4md6HKs=:k8lJJzPq5Q6bCc/q2u0d/F
- gOihSTsr/6SWTxmx92Lqbx6XJ0C8SqnQaEKKMCdZipxiRx6pDNivu2OSYx4pMUqyXtyfPEyDv
- a3mZq77kVBEBmnxZgwt6qPIaangNt2U0H7WelIhHbvdOareFCKqc1y0Lrhob7/FwUwi6JimyP
- pYcHqzyZ0QE2ninttJEXc523JmcGvUiwJFSXUgW6uEBn7e+x+RqQjgyAFiRIgdXoe29Sgm0A1
- Vlu0qRlraIXFOzWYuqGdcoilXiJG8O6pAI6MflhHbVI57HHQ2+fdKhHJzx+Fy3BaMadwM5LmI
- c3YQFGJc9T0BGZWjrrOvZiBinPmrdcUaIpEpZJCWFPJi3y3KiPunrfCYK+zgGCqK31MUhaQ2o
- lrVVat8P5A/lycgKPZhAy9ah/ACyIJcrB4VjS9NPS7OrT76q6fsSfQtCsKWZ6Ez0I7MHy7oeL
- wh+ZAEig2auAChonuKGjg5n+a37AZWw8D3GzwUATHwXqgQHqiXdLRP480NT8okpx9RYMMSaiw
- zxXd5wJo6STcvilW/xQv17QEhfmdHeD5/bBVc/logNrrB6ELLkaJ+ExWid1aaSQIMZOy+A/4W
- h8hpT9uUZZ0+8AbEn3VqplebZDQuP/pjDN2n9aM5v1sbpO+FJnf8UkF9Aqq2hXvL0dsEiC/pq
- 3xF7DWf8d20TCwjAxPeDcyMDDAXeno1JtEhRVaNEVBHqC43mTqtWIJHNFAAgle/Qt0mU8v52b
- LWAKqRWaF5awi9zIMgGvMN4Up0FNcRYj6KrkhnJ0Mp7mBcBbLOHmjkTCyC5lVRZ5NK/OsEQZ3
- +gkKrgZF+JQuGPT90Ylv+P3Px6XS7DQfYX527LIkEbErHEr4KwksdTq46L4E7UN/9R8XNB2
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aItepcr89DA=:aiAcRLMkq0gHgO7TDTGkcb
+ uZEMfKxb/i/P9Ubbqltgx+eWjZotocAHZ6qMJ6MtcmtFoSW/uCpn3Zs8e9ruuMRzn1XGLJk1g
+ oxfQ/Gw5UpJhnV0SR73Ld0iVUA5Q2M8lo9SD/j1cf5y9wQ4iJ34KKpBZLkzGMwnuxYe6/X3rV
+ DEylejz1mpw7B4lGzkTN891jykp3fRJHx9pw4/CsgeTQntVMBFyMzmNurX9MOXelYvtdc2jLu
+ e8acewZxxgXxvvSrl2kVxbyg5PfHhc7ShUvPVErZFaQxlDipp4PvwR0eHB/2kEiS3NZc/27hU
+ SFjh94GcA8w+/n4sEnYYDCAaML4bjRvTkWKQf4nGnepuRWYswuBcf4xNhSFdk8KsWQnXt65D8
+ UNfjEVJCc0Wd16VxUE1hDSX4TzHlhoRwgaKJH6PudhgLkDQqCwVLjewc4cc+5gFX+cjhbphQo
+ P/Er+fCNyKiuGLgO7cMIr0z/FXBjHXiK2OCJE5dVyaBJqusIvJblWEaKBKkSa5c70fTkBd3GH
+ OG0LoaYDZ3mK/Yy4y66vHYgs8tf3Y/heXTXtFaRgcctWAYHLcvBj7rQX/PhFCnuhepHUC0GbE
+ WUrtPFQfdltMfXembr86ptRtpjfcfwKhLVZ23UA3kIxcDrGRjet8CxNdQ+oTD3X/jLx0JTVf0
+ folBd4CNWLTkLl6F+jFElPI9kgbia3Vqr3sMU8qOTKzdHw7kl5z93oUwI0fIPhuwMCi7xGOkm
+ gnWLik9otETPdKt4WZxfP++KnRgPaaIVeGb3qjiOv2I5lk1qWl/AaISjzVPgpqAvCXJyYkOtc
+ zovMuSd2ZTY1/lfXKqRhtcE0uDKI5q7wwwW+/00cUI/XyCFxTYGFzh6EryfpzIvgexCu69y
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christoph, Russell,
+On machines such as ARMv5 that trap unaligned accesses, these
+two functions can be slow when each access needs to be emulated,
+or they might not work at all.
 
-As promised, here is my series to remove set_fs() from arch/arm based
-on the architecture-independent patches.
+Change them so that each loop is only used when both the src
+and dst pointers are naturally aligned.
 
-I have tested the oabi-compat changes using the LTP tests for the three
-modified syscalls using an Armv7 kernel and a Debian 5 OABI user space,
-and I have lightly tested the get_kernel_nofault infrastructure by
-loading the test_lockup.ko module after setting CONFIG_DEBUG_SPINLOCK.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ mm/maccess.c | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
-Let me know if there is a more thorough test I should try.
-
-Overall there is a bit of ugliness getting introduced in the oabi compat
-code and for adding another code path for TUSER(). If anyone has a better
-idea, I can try out a different way.
-
-I assume these patches can go through Al's tree along with the
-corresponding changes for other architectures, once Russell is happy
-with them.
-
-Please review.
-
-     Arnd
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=arm-kill-set_fs
-
-Arnd Bergmann (9):
-  mm/maccess: fix unaligned copy_{from,to}_kernel_nofault
-  ARM: traps: use get_kernel_nofault instead of set_fs()
-  ARM: oabi-compat: add epoll_pwait handler
-  ARM: syscall: always store thread_info->syscall
-  ARM: oabi-compat: rework epoll_wait/epoll_pwait emulation
-  ARM: oabi-compat: rework sys_semtimedop emulation
-  ARM: oabi-compat: rework fcntl64() emulation
-  ARM: uaccess: add __{get,put}_kernel_nofault
-  ARM: uaccess: remove set_fs() implementation
-
- arch/arm/Kconfig                   |   1 -
- arch/arm/include/asm/ptrace.h      |   1 -
- arch/arm/include/asm/syscall.h     |  14 +++
- arch/arm/include/asm/thread_info.h |   4 -
- arch/arm/include/asm/uaccess-asm.h |   6 -
- arch/arm/include/asm/uaccess.h     | 169 ++++++++++++++-------------
- arch/arm/kernel/asm-offsets.c      |   3 +-
- arch/arm/kernel/entry-common.S     |  16 +--
- arch/arm/kernel/process.c          |   7 +-
- arch/arm/kernel/ptrace.c           |   4 +-
- arch/arm/kernel/signal.c           |   8 --
- arch/arm/kernel/sys_oabi-compat.c  | 180 ++++++++++++++++-------------
- arch/arm/kernel/traps.c            |  69 +++++------
- arch/arm/lib/copy_from_user.S      |   3 +-
- arch/arm/lib/copy_to_user.S        |   3 +-
- arch/arm/tools/syscall.tbl         |   2 +-
- fs/eventpoll.c                     |   5 +-
- include/linux/eventpoll.h          |  16 +++
- include/linux/syscalls.h           |   2 +
- ipc/sem.c                          |  84 +++++++++-----
- mm/maccess.c                       |  28 ++++-
- 21 files changed, 338 insertions(+), 287 deletions(-)
-
+diff --git a/mm/maccess.c b/mm/maccess.c
+index 3bd70405f2d8..d3f1a1f0b1c1 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -24,13 +24,21 @@ bool __weak copy_from_kernel_nofault_allowed(const void *unsafe_src,
+ 
+ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
+ {
++	unsigned long align = 0;
++
++	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
++		align = (unsigned long)dst | (unsigned long)src;
++
+ 	if (!copy_from_kernel_nofault_allowed(src, size))
+ 		return -ERANGE;
+ 
+ 	pagefault_disable();
+-	copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
+-	copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
+-	copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
++	if (!(align & 7))
++		copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
++	if (!(align & 3))
++		copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
++	if (!(align & 1))
++		copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
+ 	copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
+ 	pagefault_enable();
+ 	return 0;
+@@ -50,10 +58,18 @@ EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
+ 
+ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
+ {
++	unsigned long align = 0;
++
++	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
++		align = (unsigned long)dst | (unsigned long)src;
++
+ 	pagefault_disable();
+-	copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
+-	copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
+-	copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
++	if (!(align & 7))
++		copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
++	if (!(align & 3))
++		copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
++	if (!(align & 1))
++		copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
+ 	copy_to_kernel_nofault_loop(dst, src, size, u8, Efault);
+ 	pagefault_enable();
+ 	return 0;
 -- 
 2.27.0
 
