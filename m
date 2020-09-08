@@ -2,122 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44091262194
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 22:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CED32621B1
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 23:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730161AbgIHU4l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 16:56:41 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:48199 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730067AbgIHU4i (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 16:56:38 -0400
-Received: from mail-qt1-f182.google.com ([209.85.160.182]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MNbtD-1jv3QV27kh-00P7vm; Tue, 08 Sep 2020 22:56:36 +0200
-Received: by mail-qt1-f182.google.com with SMTP id y11so310649qtn.9;
-        Tue, 08 Sep 2020 13:56:36 -0700 (PDT)
-X-Gm-Message-State: AOAM531ldlojCKnKAwLQ24gQISKK4G7TWR3/GMzc7tHxusKf4pKC95Vk
-        ftZeSB4wfPlosy0ynS5vYU3ScinZlkfb5XT/qgc=
-X-Google-Smtp-Source: ABdhPJw01K4SmzGcD/b5sCr5TVIohl7CD4hX2My20XCnkE0ssRILx71GeRB7UxQ0ChxMfJ5jNEb1Xhh9GXXfgpFYgXA=
-X-Received: by 2002:aed:2414:: with SMTP id r20mr314758qtc.304.1599598594985;
- Tue, 08 Sep 2020 13:56:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200907153701.2981205-1-arnd@arndb.de> <20200907153701.2981205-6-arnd@arndb.de>
- <20200908062002.GD13930@lst.de>
-In-Reply-To: <20200908062002.GD13930@lst.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 8 Sep 2020 22:56:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a30Ezn9MhN6YG+c_eCedo=HGp2-uUN6fC218f96TBFK=Q@mail.gmail.com>
-Message-ID: <CAK8P3a30Ezn9MhN6YG+c_eCedo=HGp2-uUN6fC218f96TBFK=Q@mail.gmail.com>
-Subject: Re: [PATCH 5/9] ARM: oabi-compat: rework epoll_wait/epoll_pwait emulation
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Russell King <rmk@arm.linux.org.uk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux- <kernel@vger.kernel.org>,
+        id S1730179AbgIHVIC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 17:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728954AbgIHVH4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 17:07:56 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F22EC061757
+        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 14:07:56 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id o68so330393pfg.2
+        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 14:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Wm1YZJP5IHcZuymW2XEKoD0pUveQe7CoNm7r9bi/W1k=;
+        b=a7GjBHohAGSJ4PnMwooOuv5ACDnGE0C26cMuDHZo5+wvUiXv0xO8J2AUkV5JHb2FOP
+         ldjjgjbqwFWCWq9Zw5W0LDK9PPh+xyYdY8hA2Wm743DJYsOoYFFThh9hJZBSdXRUCfFd
+         cvOqVo7OMhMtAPX/2sp6Mz72uNjnDoYA9p//eZpjffoGYl/RG2xg8YzDi7C2OcRP5Eml
+         H1IcomixFJ6jH0HEQSWDpcx4jVmZUZKnlbr7q8YvW0FORqPMCHn3losN4VKggIRBYbX6
+         PtF8QxirnS7Espc0n9SSG2KH2rmz6/CIoNi2jCnfqCKNNgM5GJGJNXvMfd4DY5Oii+fR
+         uTRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Wm1YZJP5IHcZuymW2XEKoD0pUveQe7CoNm7r9bi/W1k=;
+        b=qTLTiUh/fFBh6C/WhfpDKjQ839pNav64ixHK/aJELr1qxqmfs1U1jbiDLTdGJnnGeI
+         5QayqvdsSr7C/C0E1UyUvQC16LIZCsRJxXVemOqK+jfdeXd8kRLkVCpIxCUiRT/WAC/5
+         s2rRtVACvD8q6YLN1/14yHWXR8Mvh1gUlJGE9ndELCnEmv0weCE7m9MeOWBuX0lwiYKb
+         tS6ZqrVjuCEYkeJqN8/lQMh/vjwjpOQhCMDgJj6vg1WlFgfneEhMFNyHn/jAr7pxWp6E
+         +rUzFDTlVqvZDpjuDW71jggIsY7mZxOkzeMf6atg2JWZAP4P0kj2LDlQt4mD2Uk9DjOY
+         4Y7Q==
+X-Gm-Message-State: AOAM530+1ZmuDBrY6ddLy0y4Wb43OMODDWpeUm3N/Bitl1KqEQB+HnKG
+        okj85zdg1gIolL7ifbbWLLZLEg==
+X-Google-Smtp-Source: ABdhPJz6/bLvTnKJTjhD++qFUgr8FkqyQitq4tmijOh19Mp/UXDDqyF/xILPr1db4moWKg5d5d7hXA==
+X-Received: by 2002:a17:902:c38a:: with SMTP id g10mr511116plg.23.1599599275319;
+        Tue, 08 Sep 2020 14:07:55 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
+        by smtp.gmail.com with ESMTPSA id m188sm323916pfd.56.2020.09.08.14.07.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 14:07:54 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 14:07:48 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ONFItD4L9ZUfs9c7cyDdLEcuWb4tDmr1dxAFxBmlvQBgCY+AyBQ
- 5yGSNs4HcpwVXao6W8rKb/wo5lHk9sJbaBaAfKu5QOfmlkdNU9s6H/Fxvyf6/zlZlgm+6x4
- 7sWLlUIXP+Y+4lL7FIOvAUEa9CSUbtRv8UQHr+Aq3qrcpgslls4Zz7TuaRttakGwoVBeobp
- SzdOKPKVLMh57itI2U2sg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Amv1wSt9wms=:C2yWf5pqS1J9wAPWLAOJ7j
- HhNwC4qRElRzIhaA+gd5scasCJXkPld8HiJ2TSEzEO+4Dp/GHK1Eypfu9Vy6BybgIzyd7bG7N
- cegJjIW4JPs5rf5rCE0QGgvDaxcXJIisxn5T/3IXCediq6LRceDzetvkx/5bEnpFR9M3GkMnK
- wTPaJSOJqlfed1H2/oVVjwVY0lOZxGeIqOBlCXZh+sbbi4V0AUm0sgBUcoQMon+Jce1wKeJiK
- tRGtvRy4dzY/ERLhqYbSZ/NTkONkqymgra/Qxn/3JeewSw0ysFhCUcX5LIZ8SleK4HhdziLOI
- O5PvGeVmO1s8MGJMUONT/LdTqEdNB50R8NQy/ayko39jvAsQ/PWnkaRarutKCpm9u8WNC9EgH
- Tz7WBdIA5JTOAk+e4jyhxzC0PMa+iL9BSR96ej0joNhju1DDIWEp7HR/EVitVBsWyrRRc6oVC
- iZXzSmGR2tMYqohqopENFWD5m4HLI6OdLf4ijbdjo6Y6P/PU2Dm4NZ3PInxD2UC3JxjVs/KMV
- v+L+TpevMIRFiLPJpbe5MwusY5KpfZ6rI1XEAmfGVyGBqVJ4T22Dx9KDwxVeAYFIKVSLrGUxz
- ANVdU87H21c/aaEBJnBbvmYOVQPKwh2O89Xnp1frGYti+Ack2YiFxpXdpwPs4wYrs7tAjqY7g
- yBt7G+0ibJyVmymcDIAuk0caY2Y2l6XxJ9FuLW8y+2nKUlD5i/V2ri/Aj7E9sbWmT5IjUu+oM
- FJzrxU2kTN27lh8KVxZIQfpbg/rLRFtQ0XKVdyC+libWL+LcIgPmIP+rk2SJGi/LMEiNT3vP2
- St6zRYGlHJ94IXl1rq5pHefT0zoBNZVL/rffsL/xVBujOv+7T0d8iIDfnK0WFA27SvDbLQn
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v2 13/28] kbuild: lto: merge module sections
+Message-ID: <20200908210748.GB1060586@google.com>
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200903203053.3411268-1-samitolvanen@google.com>
+ <20200903203053.3411268-14-samitolvanen@google.com>
+ <CAK7LNARnh-7a8Lq-y2u72cnk2uxSuWxjaZ8Y-JHCYu5gwt7Ekg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNARnh-7a8Lq-y2u72cnk2uxSuWxjaZ8Y-JHCYu5gwt7Ekg@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 8, 2020 at 8:20 AM Christoph Hellwig <hch@lst.de> wrote:
-> > @@ -264,68 +266,24 @@ asmlinkage long sys_oabi_epoll_ctl(int epfd, int op, int fd,
-> >       return do_epoll_ctl(epfd, op, fd, &kernel, false);
-> >  }
+On Tue, Sep 08, 2020 at 12:25:54AM +0900, Masahiro Yamada wrote:
+> On Fri, Sep 4, 2020 at 5:31 AM Sami Tolvanen <samitolvanen@google.com> wrote:
 > >
-> > -static long do_oabi_epoll_wait(int epfd, struct oabi_epoll_event __user *events,
-> > -                            int maxevents, int timeout)
-> > +struct epoll_event __user *
-> > +epoll_put_uevent(__poll_t revents, __u64 data, struct epoll_event __user *uevent)
-> >  {
-> > +     if (in_oabi_syscall()) {
-> > +             struct oabi_epoll_event *oevent = (void __user *)uevent;
+> > LLD always splits sections with LTO, which increases module sizes. This
+> > change adds a linker script that merges the split sections in the final
+> > module.
 > >
-> > +             if (__put_user(revents, &oevent->events) ||
-> > +                 __put_user(data, &oevent->data))
-> > +                     return NULL;
+> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > ---
+> >  Makefile               |  2 ++
+> >  scripts/module-lto.lds | 26 ++++++++++++++++++++++++++
+> >  2 files changed, 28 insertions(+)
+> >  create mode 100644 scripts/module-lto.lds
 > >
-> > +             return (void __user *)uevent+1;
+> > diff --git a/Makefile b/Makefile
+> > index c69e07bd506a..bb82a4323f1d 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -921,6 +921,8 @@ CC_FLAGS_LTO_CLANG += -fvisibility=default
+> >  # Limit inlining across translation units to reduce binary size
+> >  LD_FLAGS_LTO_CLANG := -mllvm -import-instr-limit=5
+> >  KBUILD_LDFLAGS += $(LD_FLAGS_LTO_CLANG)
+> > +
+> > +KBUILD_LDS_MODULE += $(srctree)/scripts/module-lto.lds
+> >  endif
+> >
+> >  ifdef CONFIG_LTO
+> > diff --git a/scripts/module-lto.lds b/scripts/module-lto.lds
+> > new file mode 100644
+> > index 000000000000..cbb11dc3639a
+> > --- /dev/null
+> > +++ b/scripts/module-lto.lds
+> > @@ -0,0 +1,26 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * With CONFIG_LTO_CLANG, LLD always enables -fdata-sections and
+> > + * -ffunction-sections, which increases the size of the final module.
+> > + * Merge the split sections in the final binary.
+> > + */
+> > +SECTIONS {
+> > +       __patchable_function_entries : { *(__patchable_function_entries) }
+> > +
+> > +       .bss : {
+> > +               *(.bss .bss.[0-9a-zA-Z_]*)
+> > +               *(.bss..L*)
+> > +       }
+> > +
+> > +       .data : {
+> > +               *(.data .data.[0-9a-zA-Z_]*)
+> > +               *(.data..L*)
+> > +       }
+> > +
+> > +       .rodata : {
+> > +               *(.rodata .rodata.[0-9a-zA-Z_]*)
+> > +               *(.rodata..L*)
+> > +       }
+> > +
+> > +       .text : { *(.text .text.[0-9a-zA-Z_]*) }
+> > +}
+> > --
+> > 2.28.0.402.g5ffc5be6b7-goog
+> >
+> 
+> 
+> After I apply https://patchwork.kernel.org/patch/11757323/,
+> is it possible to do like this ?
+> 
+> 
+> #ifdef CONFIG_LTO
+> SECTIONS {
+>      ...
+> };
+> #endif
+> 
+> in scripts/module.lds.S
 
-FWIW, this line needs to be
+Yes, that should work. I'll change this in v3 after your change is
+applied.
 
-         return (void __user *)(oevent+1);
-
-It turns out that while I thought I had tested this already, my earlier
-tests were on the EABI Debian 5 instead of the OABI version of the
-same distro. I reproduced it both ways now and LTP successfully
-found that bug ;-)
-
-> I wonder if we'd be better off doing the in_oabi_syscall() branch in
-> the common code.  E.g. rename in_oabi_syscall to in_legacy_syscall and
-> stub it out for all other architectures.  Then just do
->
->         if (in_oabi_syscall()
->                 legacy_syscall_foo_bit();
->         else
->                 normal_syscall_foo_bit();
->
-> in common code, where so far only arm provides
-> legacy_syscall_foo_bit().
-
-I tried out different ways, the first one I had was with an #ifdef in the
-C code that I did not like much.
-
-Moving the different code path into common code would avoid that
-#ifdef but also put the rather obscure oabi-compat code into a
-much more prominent location. I'd prefer to keep it out of there
-as much as possible and hope we don't need to do this anywhere
-else. x86-32 has some similar issues with struct layout, but that
-already goes through the normal compat layer on 64-bit kernels.
-
-> Tons of long lines again in this patch..
-
-Fixed now.
-
-       Arnd
+Sami
