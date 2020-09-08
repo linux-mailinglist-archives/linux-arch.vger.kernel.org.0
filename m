@@ -2,132 +2,194 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C29E2617D1
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 19:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64D9261755
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 19:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731734AbgIHRmM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 13:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S1731354AbgIHRbY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 13:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731670AbgIHQOE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 12:14:04 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D5BC061233
-        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 06:26:13 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id f142so15156367qke.13
-        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 06:26:13 -0700 (PDT)
+        with ESMTP id S1731955AbgIHRao (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 13:30:44 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3E3C061756
+        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 10:30:44 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 7so20010pgm.11
+        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 10:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
+        d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=0Bd9eUG3DnE6D+neFj9R3QfT/oWxBp+wzdY7i+GsBSw=;
-        b=Lf6G5poVVU9DTO5y/Kk8H2Ke1/yuvwq44QRfLlgtzVksH3W4CflZYO6N1CS6Gkgf+O
-         36N3+8wD9pObYI1CMdwZYMYRu7HbXVUKEFPJ2AjNcK9X3BID5PsppQaFjSnqxa7JtCNT
-         aY2EX4mu669m3AJgX7WT/I/zIn+qpP2LPn3ueNiUgo8NZRJ/0OvY6GqXffz02hp9ASt6
-         Kw7kagCQ12/ztkbDpZvauMGFhf/ti5rup7TXyfyR2MZlnoY6C7+c78nhZr2bXok7Z+TB
-         z94051jMYxpI6fAzrkfx1CYHrWeWBF5AFFZLbShjEyTsCM8ydvp1pulj0ri7yDSPS5ma
-         HXGQ==
+        bh=/5WUqOjLHPAdLAI0MKh9zhuMyV7IC1nlysZjintZ/W0=;
+        b=AzIN32ulFSn0Cg8a7U6pqoMQp2nPeaRLHJAx4wWGA8CJaevtEmegxP/Z/uIxm/mEpu
+         QVOrS/Ir/CxKvGymkWaSrXUyeKbbg65sx4q09ssmoAXIt6bm8jV1LH45TsyB5/QvO6Qe
+         pSg9MqH9AVTpVpXvwoaCFmKjx/m6VIWugbAKBCS/XL0KnFFDPP0JrCP80TKO4jQk1l8S
+         wZd7N9m2+fYup3wy0GHLd7qSFjvCk9cqS0RN9Ik5g/nfu3wKrjCUUWhivmYZDrkqWnnn
+         OxFDZvlGFT0EA/qrpHwZR1QXKjTo0BlWMq5+aAWrCKqvUbyJyaxDNVHcgxbFAvzgGEAS
+         e78g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=0Bd9eUG3DnE6D+neFj9R3QfT/oWxBp+wzdY7i+GsBSw=;
-        b=dwv37qdy9fZkYgAvXNKUgceM0JLrw33PEeCq7KYw0BsUNMRCUbSGjiGK3+MFPRGHEA
-         /uHs5B7eJvMoriY09uNjAMQITEjQeJ9VxE3PXEFuNniT6oowO9RB71HrB9FpOR9Wk4/E
-         PwhLqgrzuBtLgX2qPqizAbecqp57HDIgS7frSU/PxZmknMWhQgH8tz9wKLAMaNw6FAkW
-         XxwpSeqw4B2x18RFmo0oJVns0Z3iySAqn9cLUrChAJS08Va7/IWXkvyEHfJubi2zRfD4
-         //31u/KPlekny0lpq2ds05UegJCOSDyzOMpntbU/jcRwp1TcMvv8roI87mFsQ8Gs0iag
-         Le5A==
-X-Gm-Message-State: AOAM531pIS6vLO5mnB48XvUx2MtEpvvZB7LSQWYPQ233QCWqn6O5LkMd
-        6YpTRxgRy/VV8WIKFDPg1pEruQ==
-X-Google-Smtp-Source: ABdhPJytassnqIHgDUzIEWSN+bwEo6szoZotvnjMoppJpA+RAkN2BANjzTq153kTDs5DZf5N4KZr1w==
-X-Received: by 2002:a05:620a:6d9:: with SMTP id 25mr18567qky.269.1599571572011;
-        Tue, 08 Sep 2020 06:26:12 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id j8sm14658360qth.90.2020.09.08.06.26.10
+        bh=/5WUqOjLHPAdLAI0MKh9zhuMyV7IC1nlysZjintZ/W0=;
+        b=CpHr6b8lUNvNYHv7Hhy70q11m2yj0rCllBoNu3DmEPYKZMztPb3eFKUQUM/j4oyV5Q
+         eODGfHMCSFaDV7CtR+ZYESkQSu7H1uTN+6iF823klgcDSIwwN4SaayfNAqGBnpLC/G2Q
+         ix/pg1MWhVH/8V3zREIhGlDfx/gD0UK7HiMeIOPWumaRV4qUpUt69hAj1zAGjvYi5j4B
+         bsJxvmZUTykVlYdFKM/kEyK/tiqNK/z2XDjxw6rovtPZMdPNsTrC6eyvGs/s1/Ho7RO+
+         KpzW29S1wDt+yyazTg6HFsbpQW+jOIqe+JCoy4z6TpbCoFrk3CtEPd3WxxznHJU5uGd8
+         jqDA==
+X-Gm-Message-State: AOAM532ZtgAxjaTDvu0CpsNwvppKAmtXa836I17IYo1p2Zz9rVBvw6BL
+        o4ph3ld+9U3zqy4/VdGpFPuQfQ==
+X-Google-Smtp-Source: ABdhPJzOBlE39s5MhGzUGu96iQjHpMxBRxzAFujrD+zw10TmjrKYdMPOuT7bZ60x6uln4rayX4+T8w==
+X-Received: by 2002:a63:ca0c:: with SMTP id n12mr18009749pgi.209.1599586243396;
+        Tue, 08 Sep 2020 10:30:43 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
+        by smtp.gmail.com with ESMTPSA id w185sm60365pfc.36.2020.09.08.10.30.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 06:26:11 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kFddS-002zaX-9j; Tue, 08 Sep 2020 10:26:10 -0300
-Date:   Tue, 8 Sep 2020 10:26:10 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Tue, 08 Sep 2020 10:30:42 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 10:30:36 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH v2 2/3] mm: make pXd_addr_end() functions page-table
- entry aware
-Message-ID: <20200908132610.GB87483@ziepe.ca>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
+Subject: Re: [PATCH v2 09/28] kbuild: add support for Clang LTO
+Message-ID: <20200908173036.GD2743468@google.com>
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200903203053.3411268-1-samitolvanen@google.com>
+ <20200903203053.3411268-10-samitolvanen@google.com>
+ <CAK7LNAR7SbBPz06s5Gf2d+zry+Px1=jcUrC9c=_zQiCJLttY3A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
+In-Reply-To: <CAK7LNAR7SbBPz06s5Gf2d+zry+Px1=jcUrC9c=_zQiCJLttY3A@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 08:00:57PM +0200, Gerald Schaefer wrote:
-> From: Alexander Gordeev <agordeev@linux.ibm.com>
+On Tue, Sep 08, 2020 at 12:30:14AM +0900, Masahiro Yamada wrote:
+> On Fri, Sep 4, 2020 at 5:31 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> >
+> > This change adds build system support for Clang's Link Time
+> > Optimization (LTO). With -flto, instead of ELF object files, Clang
+> > produces LLVM bitcode, which is compiled into native code at link
+> > time, allowing the final binary to be optimized globally. For more
+> > details, see:
+> >
+> >   https://llvm.org/docs/LinkTimeOptimization.html
+> >
+> > The Kconfig option CONFIG_LTO_CLANG is implemented as a choice,
+> > which defaults to LTO being disabled. To use LTO, the architecture
+> > must select ARCH_SUPPORTS_LTO_CLANG and support:
+> >
+> >   - compiling with Clang,
+> >   - compiling inline assembly with Clang's integrated assembler,
+> >   - and linking with LLD.
+> >
+> > While using full LTO results in the best runtime performance, the
+> > compilation is not scalable in time or memory. CONFIG_THINLTO
+> > enables ThinLTO, which allows parallel optimization and faster
+> > incremental builds. ThinLTO is used by default if the architecture
+> > also selects ARCH_SUPPORTS_THINLTO:
+> >
+> >   https://clang.llvm.org/docs/ThinLTO.html
+> >
+> > To enable LTO, LLVM tools must be used to handle bitcode files. The
+> > easiest way is to pass the LLVM=1 option to make:
+> >
+> >   $ make LLVM=1 defconfig
+> >   $ scripts/config -e LTO_CLANG
+> >   $ make LLVM=1
+> >
+> > Alternatively, at least the following LLVM tools must be used:
+> >
+> >   CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
+> >
+> > To prepare for LTO support with other compilers, common parts are
+> > gated behind the CONFIG_LTO option, and LTO can be disabled for
+> > specific files by filtering out CC_FLAGS_LTO.
+> >
+> > Note that support for DYNAMIC_FTRACE and MODVERSIONS are added in
+> > follow-up patches.
+> >
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > ---
+> >  Makefile                          | 18 +++++++-
+> >  arch/Kconfig                      | 68 +++++++++++++++++++++++++++++++
+> >  include/asm-generic/vmlinux.lds.h | 11 +++--
+> >  scripts/Makefile.build            |  9 +++-
+> >  scripts/Makefile.modfinal         |  9 +++-
+> >  scripts/Makefile.modpost          | 24 ++++++++++-
+> >  scripts/link-vmlinux.sh           | 32 +++++++++++----
+> >  7 files changed, 154 insertions(+), 17 deletions(-)
 > 
-> Unlike all other page-table abstractions pXd_addr_end() do not take
-> into account a particular table entry in which context the functions
-> are called. On architectures with dynamic page-tables folding that
-> might lead to lack of necessary information that is difficult to
-> obtain other than from the table entry itself. That already led to
-> a subtle memory corruption issue on s390.
 > 
-> By letting pXd_addr_end() functions know about the page-table entry
-> we allow archs not only make extra checks, but also optimizations.
 > 
-> As result of this change the pXd_addr_end_folded() functions used
-> in gup_fast traversal code become unnecessary and get replaced with
-> universal pXd_addr_end() variants.
+> >  #define TEXT_MAIN .text
+> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > index 6ecf30c70ced..a5f4b5d407e6 100644
+> > --- a/scripts/Makefile.build
+> > +++ b/scripts/Makefile.build
+> > @@ -111,7 +111,7 @@ endif
+> >  # ---------------------------------------------------------------------------
+> >
+> >  quiet_cmd_cc_s_c = CC $(quiet_modtag)  $@
+> > -      cmd_cc_s_c = $(CC) $(filter-out $(DEBUG_CFLAGS), $(c_flags)) $(DISABLE_LTO) -fverbose-asm -S -o $@ $<
+> > +      cmd_cc_s_c = $(CC) $(filter-out $(DEBUG_CFLAGS) $(CC_FLAGS_LTO), $(c_flags)) -fverbose-asm -S -o $@ $<
+> >
+> >  $(obj)/%.s: $(src)/%.c FORCE
+> >         $(call if_changed_dep,cc_s_c)
+> > @@ -428,8 +428,15 @@ $(obj)/lib.a: $(lib-y) FORCE
+> >  # Do not replace $(filter %.o,^) with $(real-prereqs). When a single object
+> >  # module is turned into a multi object module, $^ will contain header file
+> >  # dependencies recorded in the .*.cmd file.
+> > +ifdef CONFIG_LTO_CLANG
+> > +quiet_cmd_link_multi-m = AR [M]  $@
+> > +cmd_link_multi-m =                                             \
+> > +       rm -f $@;                                               \
+> > +       $(AR) rcsTP$(KBUILD_ARFLAGS) $@ $(filter %.o,$^)
 > 
-> The arch-specific updates not only add dereferencing of page-table
-> entry pointers, but also small changes to the code flow to make those
-> dereferences possible, at least for x86 and powerpc. Also for arm64,
-> but in way that should not have any impact.
 > 
-> So, even though the dereferenced page-table entries are not used on
-> archs other than s390, and are optimized out by the compiler, there
-> is a small change in kernel size and this is what bloat-o-meter reports:
+> KBUILD_ARFLAGS no longer exists in the mainline.
+> (commit 13dc8c029cabf52ba95f60c56eb104d4d95d5889)
 
-This looks pretty clean and straightfoward, only
-__munlock_pagevec_fill() had any real increased complexity.
+Thanks, I'll drop this in the next version.
 
-Thanks,
-Jason
+> > +ifdef CONFIG_LTO_CLANG
+> > +# With CONFIG_LTO_CLANG, .o files might be LLVM bitcode,
+> 
+> or, .o files might be even thin archives.
+
+Right, and with LTO the thin archive might also point to a mix of bitcode
+and ELF to further complicate things.
+
+> For example,
+> 
+> $ file net/ipv6/netfilter/nf_defrag_ipv6.o
+> net/ipv6/netfilter/nf_defrag_ipv6.o: thin archive with 6 symbol entries
+> 
+> 
+> Now we have 3 possibilities for .o files:
+> 
+>   - ELF  (real .o)
+>   - LLVM bitcode (.bc)
+>   - Thin archive (.a)
+> 
+> 
+> Let me discuss how to proceed with this...
+
+Did you have something in mind to make this cleaner?
+
+Sami
