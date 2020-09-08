@@ -2,62 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC47261E8D
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 21:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29A4261DED
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 21:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730811AbgIHTws (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 15:52:48 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24326 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730587AbgIHPsM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 11:48:12 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088E5HaY155667;
-        Tue, 8 Sep 2020 10:16:07 -0400
+        id S1731688AbgIHTnk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 15:43:40 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49038 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730833AbgIHPvu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 11:51:50 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088FmxJI086290;
+        Tue, 8 Sep 2020 11:49:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
  subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=JMbH8samJLb5sy2XzpgZzo3gwfoR4Or5sHtVMIqHhLs=;
- b=NJ3URzpdswVooPaI2LHOaXu6ju+Ngmf2INx7IYktjmTAF583iqpKuti7BeOKDXf5dvjb
- DFU6oNAIttt5W97m8sP5q85mhtK8i+n1ItawNxhKl5O2wjjq4k9mXoPw5SqlXxavUX61
- DbY/EivnZmwZCJBJpbRxTSf59ig7WVFjsDjsZEQGKPiRyE8MJKsL2Z3Am3we93opJ+Lg
- jn3JNhFff4CDPtZ//sFEUOiYHH8m3x+zIMXGVLVBJKTIpwCGjvScInnPzqoa6ADDieUI
- XzPpVgnJ/wbqjo+1fcfB9iO+uJ5ZVGEMnbTIksPgteUtaZ/IE90vq4p07FXbR5xH1s/v Vg== 
+ in-reply-to; s=pp1; bh=x24BGm+Fgj3ZmsKuCsewlqbYqVJ7sKXiAIAB+WpCSQQ=;
+ b=o9fodx6aD+G5ovOeGdx+fReCygo8F9juW4hJnKEQD/cPODCcYnB/bESRUSSg0txDwJ3T
+ s3+8p48PIEQWOvgrXNsEgEOlEzy9WhCb+NqT4vAKVPisD+cU5b/bX7skoEK8XLbP+Y2/
+ z4thcEr1pcmoVBsucNvfM7/C+irxyK4o0Mp5+etHK2oTpTvs2PA5zNNYd/qI0Cb/fq4r
+ 9yKNDycsJ40VLR6idpwh8cvjjexSVGQm/V5bFxNG58QYlfmrKN9+JGS+EOXURr3eSM2O
+ 1S2JxrYWDL29kHIrcM4vKfxAe9F4fONUsRq7PHz468Oh8/bKKjjJy4VhxIp+qO9wdxci Nw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb5wh4vq-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33earbnp3s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 10:16:06 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088E5rqF157526;
-        Tue, 8 Sep 2020 10:16:06 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb5wh4sn-1
+        Tue, 08 Sep 2020 11:49:09 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088Fn8gU087247;
+        Tue, 8 Sep 2020 11:49:08 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33earbnp29-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 10:16:06 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088EDg8b007449;
-        Tue, 8 Sep 2020 14:16:01 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 33cm5hhqvk-1
+        Tue, 08 Sep 2020 11:49:08 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088FlvUq015855;
+        Tue, 8 Sep 2020 15:49:05 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 33dxdr0ryw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 14:16:01 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088EFwKF37814660
+        Tue, 08 Sep 2020 15:49:05 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088Fn2TJ55312698
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Sep 2020 14:15:58 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1FB7CA4069;
-        Tue,  8 Sep 2020 14:15:58 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7DB9EA406D;
-        Tue,  8 Sep 2020 14:15:56 +0000 (GMT)
+        Tue, 8 Sep 2020 15:49:02 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B866C52050;
+        Tue,  8 Sep 2020 15:49:02 +0000 (GMT)
 Received: from oc3871087118.ibm.com (unknown [9.145.58.21])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  8 Sep 2020 14:15:56 +0000 (GMT)
-Date:   Tue, 8 Sep 2020 16:15:55 +0200
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 3B0BF52054;
+        Tue,  8 Sep 2020 15:49:01 +0000 (GMT)
+Date:   Tue, 8 Sep 2020 17:48:59 +0200
 From:   Alexander Gordeev <agordeev@linux.ibm.com>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -87,114 +83,59 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>
-Subject: Re: [RFC PATCH v2 2/3] mm: make pXd_addr_end() functions page-table
- entry aware
-Message-ID: <20200908141554.GA20558@oc3871087118.ibm.com>
+Subject: Re: [RFC PATCH v2 3/3] mm: make generic pXd_addr_end() macros inline
+ functions
+Message-ID: <20200908154859.GA11583@oc3871087118.ibm.com>
 References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
- <31dfb3ed-a0cc-3024-d389-ab9bd19e881f@csgroup.eu>
- <20200908074638.GA19099@oc3871087118.ibm.com>
- <5d4f5546-afd0-0b8f-664d-700ae346b9ec@csgroup.eu>
+ <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
+ <4c101685-5b29-dace-9dd2-b6f0ae193a9c@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5d4f5546-afd0-0b8f-664d-700ae346b9ec@csgroup.eu>
+In-Reply-To: <4c101685-5b29-dace-9dd2-b6f0ae193a9c@csgroup.eu>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-08_07:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009080133
+ definitions=2020-09-08_08:2020-09-08,2020-09-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 impostorscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009080143
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 10:16:49AM +0200, Christophe Leroy wrote:
-> >Yes, and also two more sources :/
-> >	arch/powerpc/mm/kasan/8xx.c
-> >	arch/powerpc/mm/kasan/kasan_init_32.c
-> >
-> >But these two are not quite obvious wrt pgd_addr_end() used
-> >while traversing pmds. Could you please clarify a bit?
-> >
-> >
-> >diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
-> >index 2784224..89c5053 100644
-> >--- a/arch/powerpc/mm/kasan/8xx.c
-> >+++ b/arch/powerpc/mm/kasan/8xx.c
-> >@@ -15,8 +15,8 @@
-> >  	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd += 2, block += SZ_8M) {
-> >  		pte_basic_t *new;
-> >-		k_next = pgd_addr_end(k_cur, k_end);
-> >-		k_next = pgd_addr_end(k_next, k_end);
-> >+		k_next = pmd_addr_end(k_cur, k_end);
-> >+		k_next = pmd_addr_end(k_next, k_end);
+On Tue, Sep 08, 2020 at 07:19:38AM +0200, Christophe Leroy wrote:
+
+[...]
+
+> >diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> >index 67ebc22cf83d..d9e7d16c2263 100644
+> >--- a/include/linux/pgtable.h
+> >+++ b/include/linux/pgtable.h
+> >@@ -656,31 +656,35 @@ static inline int arch_unmap_one(struct mm_struct *mm,
+> >   */
+> >  #ifndef pgd_addr_end
+> >-#define pgd_addr_end(pgd, addr, end)					\
+> >-({	unsigned long __boundary = ((addr) + PGDIR_SIZE) & PGDIR_MASK;	\
+> >-	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
+> >-})
+> >+#define pgd_addr_end pgd_addr_end
 > 
-> No, I don't think so.
-> On powerpc32 we have only two levels, so pgd and pmd are more or
-> less the same.
-> But pmd_addr_end() as defined in include/asm-generic/pgtable-nopmd.h
-> is a no-op, so I don't think it will work.
-> 
-> It is likely that this function should iterate on pgd, then you get
-> pmd = pmd_offset(pud_offset(p4d_offset(pgd)));
+> I think that #define is pointless, usually there is no such #define
+> for the default case.
 
-It looks like the code iterates over single pmd table while using
-pgd_addr_end() only to skip all the middle levels and bail out
-from the loop.
+Default pgd_addr_end() gets overriden on s390 (arch/s390/include/asm/pgtable.h):
 
-I would be wary for switching from pmds to pgds, since we are
-trying to minimize impact (especially functional) and the
-rework does not seem that obvious.
+#define pgd_addr_end pgd_addr_end
+static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
+{
+	return rste_addr_end_folded(pgd_val(pgd), addr, end);
+}
 
-Assuming pmd and pgd are the same would actually such approach
-work for now?
-
-diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
-index 2784224..94466cc 100644
---- a/arch/powerpc/mm/kasan/8xx.c
-+++ b/arch/powerpc/mm/kasan/8xx.c
-@@ -15,8 +15,8 @@
- 	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd += 2, block += SZ_8M) {
- 		pte_basic_t *new;
- 
--		k_next = pgd_addr_end(k_cur, k_end);
--		k_next = pgd_addr_end(k_next, k_end);
-+		k_next = pgd_addr_end(__pgd(pmd_val(*pmd)), k_cur, k_end);
-+		k_next = pgd_addr_end(__pgd(pmd_val(*(pmd + 1))), k_next, k_end);
- 		if ((void *)pmd_page_vaddr(*pmd) != kasan_early_shadow_pte)
- 			continue;
- 
-diff --git a/arch/powerpc/mm/kasan/kasan_init_32.c b/arch/powerpc/mm/kasan/kasan_init_32.c
-index fb29404..c0bcd64 100644
---- a/arch/powerpc/mm/kasan/kasan_init_32.c
-+++ b/arch/powerpc/mm/kasan/kasan_init_32.c
-@@ -38,7 +38,7 @@ int __init kasan_init_shadow_page_tables(unsigned long k_start, unsigned long k_
- 	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd++) {
- 		pte_t *new;
- 
--		k_next = pgd_addr_end(k_cur, k_end);
-+		k_next = pgd_addr_end(__pgd(pmd_val(*pmd)), k_cur, k_end);
- 		if ((void *)pmd_page_vaddr(*pmd) != kasan_early_shadow_pte)
- 			continue;
- 
-@@ -196,7 +196,7 @@ void __init kasan_early_init(void)
- 	kasan_populate_pte(kasan_early_shadow_pte, PAGE_KERNEL);
- 
- 	do {
--		next = pgd_addr_end(addr, end);
-+		next = pgd_addr_end(__pgd(pmd_val(*pmd)), addr, end);
- 		pmd_populate_kernel(&init_mm, pmd, kasan_early_shadow_pte);
- 	} while (pmd++, addr = next, addr != end);
- 
-
-Alternatively we could pass invalid pgd to keep the code structure
-intact, but that of course is less nice.
-
-Thanks!
-
-> Christophe
+> >+static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
+> >+{	unsigned long __boundary = (addr + PGDIR_SIZE) & PGDIR_MASK;
+> >+	return (__boundary - 1 < end - 1) ? __boundary : end;
+> >+}
