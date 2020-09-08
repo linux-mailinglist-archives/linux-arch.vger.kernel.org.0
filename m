@@ -2,57 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F29A4261DED
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2995B261FBE
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 22:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731688AbgIHTnk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 15:43:40 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49038 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730833AbgIHPvu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 11:51:50 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088FmxJI086290;
-        Tue, 8 Sep 2020 11:49:09 -0400
+        id S1730340AbgIHUGO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 16:06:14 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28832 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730302AbgIHPVk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 11:21:40 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088E2kAB193410;
+        Tue, 8 Sep 2020 10:25:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
  subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=x24BGm+Fgj3ZmsKuCsewlqbYqVJ7sKXiAIAB+WpCSQQ=;
- b=o9fodx6aD+G5ovOeGdx+fReCygo8F9juW4hJnKEQD/cPODCcYnB/bESRUSSg0txDwJ3T
- s3+8p48PIEQWOvgrXNsEgEOlEzy9WhCb+NqT4vAKVPisD+cU5b/bX7skoEK8XLbP+Y2/
- z4thcEr1pcmoVBsucNvfM7/C+irxyK4o0Mp5+etHK2oTpTvs2PA5zNNYd/qI0Cb/fq4r
- 9yKNDycsJ40VLR6idpwh8cvjjexSVGQm/V5bFxNG58QYlfmrKN9+JGS+EOXURr3eSM2O
- 1S2JxrYWDL29kHIrcM4vKfxAe9F4fONUsRq7PHz468Oh8/bKKjjJy4VhxIp+qO9wdxci Nw== 
+ in-reply-to; s=pp1; bh=x4Jffv0uhOxMnzQ2dJkXMe8lryLf2Vv6NR5aexBXTbM=;
+ b=J7C9HIbsK9YGAOgACeooFH+UVe1aBgntuVegvy+W6cSnCeKK40/okhY6953A0WKMa2sZ
+ lt2aIcurXIbtf3oxmKVDAZ/vBtwjjFE17E/v+fhZ+kStYXO6uAMz3hfkRsvq2JyaD+6a
+ ONkP2+eK2PEba3urt5mzNWHUjT93A/EVyypf96uH5RPbJjWGKUFif5DuAG0YW/efMYVt
+ apTJRC8h5k/l64tiI8OmZ/zVnwkdYwAwfqfOSsDXkOG7nMOQq8XV5KlZu5pgRNYiM/TH
+ gTfjiwpdez5W24QPH3SvVYU2DPKK/n8Q9COlkZMKkt0UkKnbADxbJxmmUs3DxUD/wFJU 6Q== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33earbnp3s-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33e9ma4fff-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 11:49:09 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088Fn8gU087247;
-        Tue, 8 Sep 2020 11:49:08 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33earbnp29-1
+        Tue, 08 Sep 2020 10:25:41 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088E3g1E196268;
+        Tue, 8 Sep 2020 10:25:40 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33e9ma4fbx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 11:49:08 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088FlvUq015855;
-        Tue, 8 Sep 2020 15:49:05 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 33dxdr0ryw-1
+        Tue, 08 Sep 2020 10:25:40 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088EPaNB024340;
+        Tue, 8 Sep 2020 14:25:36 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 33e5gmr7g6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 15:49:05 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088Fn2TJ55312698
+        Tue, 08 Sep 2020 14:25:36 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088EO0HG21889504
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Sep 2020 15:49:02 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B866C52050;
-        Tue,  8 Sep 2020 15:49:02 +0000 (GMT)
+        Tue, 8 Sep 2020 14:24:00 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69ADBAE053;
+        Tue,  8 Sep 2020 14:25:33 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC167AE04D;
+        Tue,  8 Sep 2020 14:25:31 +0000 (GMT)
 Received: from oc3871087118.ibm.com (unknown [9.145.58.21])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 3B0BF52054;
-        Tue,  8 Sep 2020 15:49:01 +0000 (GMT)
-Date:   Tue, 8 Sep 2020 17:48:59 +0200
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  8 Sep 2020 14:25:31 +0000 (GMT)
+Date:   Tue, 8 Sep 2020 16:25:30 +0200
 From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
 Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>,
@@ -83,59 +87,79 @@ Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>
-Subject: Re: [RFC PATCH v2 3/3] mm: make generic pXd_addr_end() macros inline
- functions
-Message-ID: <20200908154859.GA11583@oc3871087118.ibm.com>
+Subject: Re: [RFC PATCH v2 2/3] mm: make pXd_addr_end() functions page-table
+ entry aware
+Message-ID: <20200908142529.GB20558@oc3871087118.ibm.com>
 References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
- <4c101685-5b29-dace-9dd2-b6f0ae193a9c@csgroup.eu>
+ <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
+ <31dfb3ed-a0cc-3024-d389-ab9bd19e881f@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4c101685-5b29-dace-9dd2-b6f0ae193a9c@csgroup.eu>
+In-Reply-To: <31dfb3ed-a0cc-3024-d389-ab9bd19e881f@csgroup.eu>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-08_08:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 impostorscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009080143
+ definitions=2020-09-08_07:2020-09-08,2020-09-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 phishscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009080133
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 07:19:38AM +0200, Christophe Leroy wrote:
-
+On Tue, Sep 08, 2020 at 07:14:38AM +0200, Christophe Leroy wrote:
 [...]
+> You forgot arch/powerpc/mm/book3s64/subpage_prot.c it seems.
 
-> >diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> >index 67ebc22cf83d..d9e7d16c2263 100644
-> >--- a/include/linux/pgtable.h
-> >+++ b/include/linux/pgtable.h
-> >@@ -656,31 +656,35 @@ static inline int arch_unmap_one(struct mm_struct *mm,
-> >   */
-> >  #ifndef pgd_addr_end
-> >-#define pgd_addr_end(pgd, addr, end)					\
-> >-({	unsigned long __boundary = ((addr) + PGDIR_SIZE) & PGDIR_MASK;	\
-> >-	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
-> >-})
-> >+#define pgd_addr_end pgd_addr_end
-> 
-> I think that #define is pointless, usually there is no such #define
-> for the default case.
+If this one would be okay?
 
-Default pgd_addr_end() gets overriden on s390 (arch/s390/include/asm/pgtable.h):
+diff --git a/arch/powerpc/mm/book3s64/subpage_prot.c b/arch/powerpc/mm/book3s64/subpage_prot.c
+index 60c6ea16..3690d22 100644
+--- a/arch/powerpc/mm/book3s64/subpage_prot.c
++++ b/arch/powerpc/mm/book3s64/subpage_prot.c
+@@ -88,6 +88,7 @@ static void hpte_flush_range(struct mm_struct *mm, unsigned long addr,
+ static void subpage_prot_clear(unsigned long addr, unsigned long len)
+ {
+ 	struct mm_struct *mm = current->mm;
++	pmd_t *pmd = pmd_off(mm, addr);
+ 	struct subpage_prot_table *spt;
+ 	u32 **spm, *spp;
+ 	unsigned long i;
+@@ -103,8 +104,8 @@ static void subpage_prot_clear(unsigned long addr, unsigned long len)
+ 	limit = addr + len;
+ 	if (limit > spt->maxaddr)
+ 		limit = spt->maxaddr;
+-	for (; addr < limit; addr = next) {
+-		next = pmd_addr_end(addr, limit);
++	for (; addr < limit; addr = next, pmd++) {
++		next = pmd_addr_end(*pmd, addr, limit);
+ 		if (addr < 0x100000000UL) {
+ 			spm = spt->low_prot;
+ 		} else {
+@@ -191,6 +192,7 @@ static void subpage_mark_vma_nohuge(struct mm_struct *mm, unsigned long addr,
+ 		unsigned long, len, u32 __user *, map)
+ {
+ 	struct mm_struct *mm = current->mm;
++	pmd_t *pmd = pmd_off(mm, addr);
+ 	struct subpage_prot_table *spt;
+ 	u32 **spm, *spp;
+ 	unsigned long i;
+@@ -236,8 +238,8 @@ static void subpage_mark_vma_nohuge(struct mm_struct *mm, unsigned long addr,
+ 	}
+ 
+ 	subpage_mark_vma_nohuge(mm, addr, len);
+-	for (limit = addr + len; addr < limit; addr = next) {
+-		next = pmd_addr_end(addr, limit);
++	for (limit = addr + len; addr < limit; addr = next, pmd++) {
++		next = pmd_addr_end(*pmd, addr, limit);
+ 		err = -ENOMEM;
+ 		if (addr < 0x100000000UL) {
+ 			spm = spt->low_prot;
 
-#define pgd_addr_end pgd_addr_end
-static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
-{
-	return rste_addr_end_folded(pgd_val(pgd), addr, end);
-}
+Thanks!
 
-> >+static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
-> >+{	unsigned long __boundary = (addr + PGDIR_SIZE) & PGDIR_MASK;
-> >+	return (__boundary - 1 < end - 1) ? __boundary : end;
-> >+}
+> Christophe
