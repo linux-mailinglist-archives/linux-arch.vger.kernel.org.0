@@ -2,137 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41929261619
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 19:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04CD261670
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 19:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731844AbgIHRDN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 13:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S1731957AbgIHRLC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 13:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732056AbgIHRDD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 13:03:03 -0400
+        with ESMTP id S1731952AbgIHRK7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 13:10:59 -0400
 Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCD2C061757
-        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 10:03:03 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id w7so11479922pfi.4
-        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 10:03:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99896C061757
+        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 10:10:59 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id k15so11469752pfc.12
+        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 10:10:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TS+pFAf+gXvyICCIZ7exDi0/Gxg54q8UJXDvRO7l168=;
-        b=pKJ8j7uKJcb7uVWaQ5j/SnvkaAx4KCY55KCie8OQaygCpy1OPF8cDgeNH1qrPaLMvG
-         8srfgOOgbosqJmTceeQvjWZChA+6j/LEIRcay7cMsXtBzLKxqoBwUcyD/WziBOgMhTht
-         H95mhfOyXrIvUmREbH1YWzNRx8qhfoLUnK6vxg72nBJz4Zsryt8ZJJ5SgRHKxhMkN6NG
-         dtOewrVFqRwrzOeM6o0lzzlRd9V3/io+BfvvategCuZpFKOLhdC7d/WJPglYjH7skxA9
-         mFBhEsZ3kh8WuUPDicHPjHktAGiGpoaEUWzf67bzqCSOGx192KG66jA3O0NwWTFIar6q
-         WtYA==
+        bh=+LDeT2lt9SUcFTCT7BGDtz2er/OFG3MBH42fF3G6h68=;
+        b=EDOnxu3/tWXDEbO6aDonCpKCXjFECgrh/c5YRnWtoQ+SHvbswr+J9cGbiv4XUvNfrd
+         Em65A52BYE3J8f195qPDI06udLHV8qdKzyftN/XsuICT3JOpkkrJjXA8SwRBW6SJFwIJ
+         EzxA2KlhnfS8sc+kRLjxSmT8aJqg9Kgl+vhsMjNmF1fUU2hFGI+XhHju5+YlFt8CwMyV
+         icqzwB0Hg81zggur22jiAbr8aGH6mP0aCauFgvoMG6dJURct0IpkkJdXcpVm7v0ecqQb
+         mRk0w7ZSMxbIICPrnpndkBSn/Os7FI8G732QR5xMmeo6/XrIMdRBOK6LfscZl2uqp309
+         p9Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=TS+pFAf+gXvyICCIZ7exDi0/Gxg54q8UJXDvRO7l168=;
-        b=di8XSSDHMJHp/zUAeJks0k147r0m8aw5yIWilyMnH4rKJv2ZVny8h5DCbyOrKpRAGa
-         iJbLNsWXOJXzImNtpHfgkiGfVmxxsJkprWSnMJr8XrndFs5gzVG6ispTkKNJSBT9+rUd
-         yI1Lq3NH2suGEZSvBs4oDr3rECfv9HTiS4x86IbEzBPZ/EBPYmCRgXsM0xc4njHezhGd
-         ZhnqUju5jvDJJuD6p81FiTl9QtrLPxHgmdKUPF1jEntTOG7RSYe7SaS9a/rzWHL++xS1
-         tSXALA4GC1KLdE6wArws5O7S4/mE3nEwRwOk3zS1aVtqsXibBUPGoHbe2fD7s5kiy7XT
-         TXoQ==
-X-Gm-Message-State: AOAM533Wl74n8knwoqsOGWDvpVh+H1L89RURj6iv2rBug6jS7EZoj+c2
-        4Qjep3jyj9vDTeNPYirSRcDueQ==
-X-Google-Smtp-Source: ABdhPJypTa9m8baYyH7KtZLmA6Dhp5bWpLPg7YpbRm1G9HK65/WnGTkmsSsfgelDtI+oA1WrmQRR/g==
-X-Received: by 2002:a17:902:d714:b029:d0:cbe1:e738 with SMTP id w20-20020a170902d714b02900d0cbe1e738mr2106530ply.19.1599584582581;
-        Tue, 08 Sep 2020 10:03:02 -0700 (PDT)
+        bh=+LDeT2lt9SUcFTCT7BGDtz2er/OFG3MBH42fF3G6h68=;
+        b=cN+rMETYER35gaXOYa3lxyQMxQeSHXwOc1DeIeVp9OwvY35/JHmV4BH2hONSKSLJdb
+         FSGtMSmX41jzX+PoWivz/D5vBOeRb0vEHy+WcI1cIsBr/afcB0RcM9Azm78ovuMM25cJ
+         NsLGuestyvjvDXQUACD4GWJnSA7+bpurDOxwq5OMMmrrJtoIYdgylSImN5jPvJ/0B1T1
+         GlXKLYfGna6Z4OgxCcJ7vQpEtflqJU0FnHiTuR8ed+Q2i+rIgG78rmrcE4JIxp9g2UXI
+         i9RqnAMbiOGKgQpQwkmIfpQKbB7dCXIf5wTeeJXrZZLLSbgjwJr8TGChzwGPnmNWnGJA
+         Dbrg==
+X-Gm-Message-State: AOAM533oVG1gI6TJScocAzfrdn1rSt/8O5qXEWB8Ts63jalmtPQ0paJe
+        k4qnZhTZqSbg0mWWVs0mu7kFxEC4NqaXrQ==
+X-Google-Smtp-Source: ABdhPJzypUk2kaMSsozZWu2eOHXNN4ZkXvherqbpQHodcqeZRg4Fd5ulTMlytF6eoxCVBPUWtIX41g==
+X-Received: by 2002:a62:3812:0:b029:13e:d13d:a062 with SMTP id f18-20020a6238120000b029013ed13da062mr30916pfa.40.1599585058742;
+        Tue, 08 Sep 2020 10:10:58 -0700 (PDT)
 Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
-        by smtp.gmail.com with ESMTPSA id t15sm19413909pfl.175.2020.09.08.10.03.01
+        by smtp.gmail.com with ESMTPSA id l141sm25676pfd.47.2020.09.08.10.10.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 10:03:01 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 10:02:56 -0700
+        Tue, 08 Sep 2020 10:10:57 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 10:10:52 -0700
 From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
 Subject: Re: [PATCH v2 09/28] kbuild: add support for Clang LTO
-Message-ID: <20200908170256.GA2743468@google.com>
+Message-ID: <20200908171052.GB2743468@google.com>
 References: <20200624203200.78870-1-samitolvanen@google.com>
  <20200903203053.3411268-1-samitolvanen@google.com>
  <20200903203053.3411268-10-samitolvanen@google.com>
- <202009031504.07098D6F8@keescook>
+ <CAK7LNAQ40LGvfjca9DASXjyUgRbjFNDWZXgFtMXJ54Xmi6vwkg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202009031504.07098D6F8@keescook>
+In-Reply-To: <CAK7LNAQ40LGvfjca9DASXjyUgRbjFNDWZXgFtMXJ54Xmi6vwkg@mail.gmail.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 03:08:59PM -0700, Kees Cook wrote:
-> On Thu, Sep 03, 2020 at 01:30:34PM -0700, Sami Tolvanen wrote:
+On Sun, Sep 06, 2020 at 04:36:32AM +0900, Masahiro Yamada wrote:
+> On Fri, Sep 4, 2020 at 5:31 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> >
 > > This change adds build system support for Clang's Link Time
 > > Optimization (LTO). With -flto, instead of ELF object files, Clang
 > > produces LLVM bitcode, which is compiled into native code at link
 > > time, allowing the final binary to be optimized globally. For more
 > > details, see:
-> > 
+> >
 > >   https://llvm.org/docs/LinkTimeOptimization.html
-> > 
+> >
 > > The Kconfig option CONFIG_LTO_CLANG is implemented as a choice,
-> > which defaults to LTO being disabled. To use LTO, the architecture
-> > must select ARCH_SUPPORTS_LTO_CLANG and support:
-> > 
-> >   - compiling with Clang,
-> >   - compiling inline assembly with Clang's integrated assembler,
-> >   - and linking with LLD.
-> > 
-> > While using full LTO results in the best runtime performance, the
-> > compilation is not scalable in time or memory. CONFIG_THINLTO
-> > enables ThinLTO, which allows parallel optimization and faster
-> > incremental builds. ThinLTO is used by default if the architecture
-> > also selects ARCH_SUPPORTS_THINLTO:
-> > 
-> >   https://clang.llvm.org/docs/ThinLTO.html
-> > 
-> > To enable LTO, LLVM tools must be used to handle bitcode files. The
-> > easiest way is to pass the LLVM=1 option to make:
-> > 
-> >   $ make LLVM=1 defconfig
-> >   $ scripts/config -e LTO_CLANG
-> >   $ make LLVM=1
-> > 
-> > Alternatively, at least the following LLVM tools must be used:
-> > 
-> >   CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
-> > 
-> > To prepare for LTO support with other compilers, common parts are
-> > gated behind the CONFIG_LTO option, and LTO can be disabled for
-> > specific files by filtering out CC_FLAGS_LTO.
-> > 
-> > Note that support for DYNAMIC_FTRACE and MODVERSIONS are added in
-> > follow-up patches.
-> > 
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > which defaults to LTO being disabled.
 > 
-> I remain crazy excited about being able to use this in upstream. :)
+> What is the reason for doing this in a choice?
+> To turn off LTO_CLANG for compile-testing?
 > 
-> The only suggestion I have here, if it might help with clarity, would be
-> to remove DISABLE_LTO globally as a separate patch, since it's entirely
-> unused in the kernel right now. This series removes it as it goes, which
-> I think is fine, but it might cause some reviewers to ponder "what's
-> this DISABLE_LTO thing? Don't we need that?" without realizing currently
-> unused in the kernel.
+> I would rather want to give LTO_CLANG more chances
+> to be enabled/tested.
 
-Sure, that makes sense. I'll add a patch to remove DISABLE_LTO treewide
-in v3.
+It's a choice to prevent LTO from being enabled by default with
+allyesconfig and allmodconfig. It would take hours to build these even on a
+fast computer, and probably days on older hardware.
+
+> > +ifdef CONFIG_LTO_CLANG
+> > +ifdef CONFIG_THINLTO
+> > +CC_FLAGS_LTO_CLANG := -flto=thin -fsplit-lto-unit
+> > +KBUILD_LDFLAGS += --thinlto-cache-dir=.thinlto-cache
+> 
+> 
+> I think this would break external module builds
+> because it would create cache files in the
+> kernel source tree.
+> 
+> External module builds should never ever touch
+> the kernel tree, which is usually located under
+> the read-only /usr/src/ in distros.
+> 
+> 
+> .thinlto-cache should be created in the module tree
+> when it is built with M=.
+
+Thanks for pointing this out, I'll fix the path in v3.
+
+> >  # Directories & files removed with 'make distclean'
+> > -DISTCLEAN_FILES += tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS
+> > +DISTCLEAN_FILES += tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS .thinlto-cache
+> 
+> 
+> 
+> This was suggested in v1, but I could not understand
+> why doing this in distclean was appropriate.
+> 
+> Is keeping cache files of kernel objects
+> useful for external module builds?
+
+No, the cache only speeds up incremental kernel builds.
+
+> Also, please clean up .thinlto-cache for external module builds.
+
+Ack.
 
 Sami
