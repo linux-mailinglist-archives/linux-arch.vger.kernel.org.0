@@ -2,170 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CA7261695
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 19:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F4F2616D9
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 19:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728360AbgIHROf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 13:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728164AbgIHROS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 13:14:18 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3125C061756
-        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 10:14:18 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id o16so56487pjr.2
-        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 10:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/gCc+KLpNK9ExlVMZwWTulckz89Pa9STYRhLISVmRXE=;
-        b=l8TFfPPi8zCMxO4dQ+cL2mPjwdbrYknGcvJ3S7KeMVYr2Q/H76gUGB/4DPzblBc4wL
-         Z/kVUs7HQzPp6jHkL4co16aB0o/g9Ki0Ci0aIB0eJoVFKyQw8ebfadzXTbu4V+oR00+P
-         Y0GX8EGtn/TLhA7swJKiiBEOKxyP30iGgiknVXfiRggge5Bv6Ynx3A+1F897oXDNaoVR
-         kVH5X1H8mEjwr96L9W1aE7R55Kb7ZR5yUxkKFHGYbtAPNMDgXY7WU4juuRBrpC4IgkSf
-         Q6Y88UZSHorH9uaE9yPAgcDEGg9XIEKFsGjNzLTMMT0/0Jx0dHHH+2sXVL5BjPJrknNp
-         m0mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/gCc+KLpNK9ExlVMZwWTulckz89Pa9STYRhLISVmRXE=;
-        b=KcuYAXJ7vlSGSE405neEIGrVnr/GQFCz60TJTzPRlFR8vYmkdEVAvu6g8y8bW31sTZ
-         t2WitNyDmTUtZ5pgwNRZfv4kDTnlnkLMNmB374hVPUnWg208V58V244FetTLaic9Nx0L
-         J7aHQKmcKNXoReNpNBRZLYC1HOpUzJIR2+hvk4KZKi46swfjRpfFcIrCLKszJePUY9yG
-         RbHccK1V5ExtdUaMur4UVYic4SLTvFKins8F2FQY/YyLopmJCDxRAuouVqv5wzZRUjHd
-         zdnwyb27k5Ug3bM7KMTe1IubRQH1AKkHZEXvM1qTLo5ShP6KiKc/N6bqFTtuRKw/tzTn
-         SnIQ==
-X-Gm-Message-State: AOAM531vCNTiyonPu0RU+3FE/oBAAHzWfe/Y8R08ZnfvYeYTvnyn65mH
-        flYc2Q4zrbl7Xj8eGTkwVxcrjg==
-X-Google-Smtp-Source: ABdhPJwIjKawnMHTj/rRnXjnjsmCJjseMt/B3KoD/9OR2ojGQkPMO3BFzGgdcfjb98S269z1QHdN5g==
-X-Received: by 2002:a17:90a:ea0c:: with SMTP id w12mr105528pjy.65.1599585257422;
-        Tue, 08 Sep 2020 10:14:17 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
-        by smtp.gmail.com with ESMTPSA id z18sm9322pfn.186.2020.09.08.10.14.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 10:14:16 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 10:14:11 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
+        id S1731785AbgIHRUk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 13:20:40 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:26611 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728643AbgIHRUd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Sep 2020 13:20:33 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4BmBk46RHRz9txPY;
+        Tue,  8 Sep 2020 19:20:28 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id YAOBL0_HRwVU; Tue,  8 Sep 2020 19:20:28 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4BmBk45P4rz9txPb;
+        Tue,  8 Sep 2020 19:20:28 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 83AF88B7BE;
+        Tue,  8 Sep 2020 19:20:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id rrT5wpXHgDDS; Tue,  8 Sep 2020 19:20:30 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D57098B7C7;
+        Tue,  8 Sep 2020 19:20:28 +0200 (CEST)
+Subject: Re: [RFC PATCH v2 3/3] mm: make generic pXd_addr_end() macros inline
+ functions
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-mm <linux-mm@kvack.org>, Paul Mackerras <paulus@samba.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
-Subject: Re: [PATCH v2 09/28] kbuild: add support for Clang LTO
-Message-ID: <20200908171411.GC2743468@google.com>
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200903203053.3411268-1-samitolvanen@google.com>
- <20200903203053.3411268-10-samitolvanen@google.com>
- <CAK7LNASTtxJ7OCMM_KxmaoSL3CDfTY-65Pu=-MYkMo7iz-_NOQ@mail.gmail.com>
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Richard Weinberger <richard@nod.at>,
+        linux-x86 <x86@kernel.org>, Russell King <linux@armlinux.org.uk>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jeff Dike <jdike@addtoit.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm <linux-arm-kernel@lists.infradead.org>,
+        linux-power <linuxppc-dev@lists.ozlabs.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
+ <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
+ <4c101685-5b29-dace-9dd2-b6f0ae193a9c@csgroup.eu>
+ <20200908154859.GA11583@oc3871087118.ibm.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <af04f078-4991-6260-8bd5-9d9601105d76@csgroup.eu>
+Date:   Tue, 8 Sep 2020 19:20:20 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNASTtxJ7OCMM_KxmaoSL3CDfTY-65Pu=-MYkMo7iz-_NOQ@mail.gmail.com>
+In-Reply-To: <20200908154859.GA11583@oc3871087118.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 06, 2020 at 05:17:32AM +0900, Masahiro Yamada wrote:
-> On Fri, Sep 4, 2020 at 5:31 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > This change adds build system support for Clang's Link Time
-> > Optimization (LTO). With -flto, instead of ELF object files, Clang
-> > produces LLVM bitcode, which is compiled into native code at link
-> > time, allowing the final binary to be optimized globally. For more
-> > details, see:
-> >
-> >   https://llvm.org/docs/LinkTimeOptimization.html
-> >
-> > The Kconfig option CONFIG_LTO_CLANG is implemented as a choice,
-> > which defaults to LTO being disabled. To use LTO, the architecture
-> > must select ARCH_SUPPORTS_LTO_CLANG and support:
-> >
-> >   - compiling with Clang,
-> >   - compiling inline assembly with Clang's integrated assembler,
-> >   - and linking with LLD.
-> >
-> > While using full LTO results in the best runtime performance, the
-> > compilation is not scalable in time or memory. CONFIG_THINLTO
-> > enables ThinLTO, which allows parallel optimization and faster
-> > incremental builds. ThinLTO is used by default if the architecture
-> > also selects ARCH_SUPPORTS_THINLTO:
-> >
-> >   https://clang.llvm.org/docs/ThinLTO.html
-> >
-> > To enable LTO, LLVM tools must be used to handle bitcode files. The
-> > easiest way is to pass the LLVM=1 option to make:
-> >
-> >   $ make LLVM=1 defconfig
-> >   $ scripts/config -e LTO_CLANG
-> >   $ make LLVM=1
-> >
-> > Alternatively, at least the following LLVM tools must be used:
-> >
-> >   CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
-> >
-> > To prepare for LTO support with other compilers, common parts are
-> > gated behind the CONFIG_LTO option, and LTO can be disabled for
-> > specific files by filtering out CC_FLAGS_LTO.
-> >
-> > Note that support for DYNAMIC_FTRACE and MODVERSIONS are added in
-> > follow-up patches.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  Makefile                          | 18 +++++++-
-> >  arch/Kconfig                      | 68 +++++++++++++++++++++++++++++++
-> >  include/asm-generic/vmlinux.lds.h | 11 +++--
-> >  scripts/Makefile.build            |  9 +++-
-> >  scripts/Makefile.modfinal         |  9 +++-
-> >  scripts/Makefile.modpost          | 24 ++++++++++-
-> >  scripts/link-vmlinux.sh           | 32 +++++++++++----
-> >  7 files changed, 154 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index a9dae26c93b5..dd49eaea7c25 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -909,6 +909,22 @@ KBUILD_CFLAGS      += $(CC_FLAGS_SCS)
-> >  export CC_FLAGS_SCS
-> >  endif
-> >
-> > +ifdef CONFIG_LTO_CLANG
-> > +ifdef CONFIG_THINLTO
-> > +CC_FLAGS_LTO_CLANG := -flto=thin -fsplit-lto-unit
-> > +KBUILD_LDFLAGS += --thinlto-cache-dir=.thinlto-cache
-> > +else
-> > +CC_FLAGS_LTO_CLANG := -flto
-> > +endif
-> > +CC_FLAGS_LTO_CLANG += -fvisibility=default
-> > +endif
-> > +
-> > +ifdef CONFIG_LTO
-> > +CC_FLAGS_LTO   := $(CC_FLAGS_LTO_CLANG)
-> 
-> 
-> $(CC_FLAGS_LTO_CLANG) is not used elsewhere.
-> 
-> Why didn't you add the flags to CC_FLAGS_LTO
-> directly?
-> 
-> Will it be useful if LTO_GCC is supported ?
 
-The idea was to allow compiler-specific LTO flags to be filtered out
-separately if needed, but you're right, this is not really necessary
-right now. I'll drop CC_FLAGS_LTO_CLANG in v3.
 
-Sami
+Le 08/09/2020 à 17:48, Alexander Gordeev a écrit :
+> On Tue, Sep 08, 2020 at 07:19:38AM +0200, Christophe Leroy wrote:
+> 
+> [...]
+> 
+>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+>>> index 67ebc22cf83d..d9e7d16c2263 100644
+>>> --- a/include/linux/pgtable.h
+>>> +++ b/include/linux/pgtable.h
+>>> @@ -656,31 +656,35 @@ static inline int arch_unmap_one(struct mm_struct *mm,
+>>>    */
+>>>   #ifndef pgd_addr_end
+>>> -#define pgd_addr_end(pgd, addr, end)					\
+>>> -({	unsigned long __boundary = ((addr) + PGDIR_SIZE) & PGDIR_MASK;	\
+>>> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
+>>> -})
+>>> +#define pgd_addr_end pgd_addr_end
+>>
+>> I think that #define is pointless, usually there is no such #define
+>> for the default case.
+> 
+> Default pgd_addr_end() gets overriden on s390 (arch/s390/include/asm/pgtable.h):
+> 
+> #define pgd_addr_end pgd_addr_end
+> static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
+> {
+> 	return rste_addr_end_folded(pgd_val(pgd), addr, end);
+> }
+
+Yes, there in s390 the #define is needed to hit the #ifndef pgd_addr_end 
+that's in include/linux/pgtable.h
+
+But in include/linux/pgtable.h, there is no need of an #define 
+pgd_addr_end pgd_addr_end I think
+
+> 
+>>> +static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
+>>> +{	unsigned long __boundary = (addr + PGDIR_SIZE) & PGDIR_MASK;
+>>> +	return (__boundary - 1 < end - 1) ? __boundary : end;
+>>> +}
+
+
+Christophe
