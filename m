@@ -2,161 +2,222 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 579D0260576
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Sep 2020 22:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB4026089B
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 04:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729184AbgIGUQG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Sep 2020 16:16:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38550 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728834AbgIGUQF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 7 Sep 2020 16:16:05 -0400
-Received: from kernel.org (unknown [87.71.73.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BEEA721556;
-        Mon,  7 Sep 2020 20:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599509764;
-        bh=RAEHj8xYfuFWI4Y+q/aFyLQ3Y81fPmwq73CuPlLtuLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=He38jwjTrF8JsybKdtpkafn6I41PVh9VCu45Rcex2vcAXxwQSXaRmFllsBPIYZ+VL
-         vZjgVN2gASyM9VlZJ8s1FxZ73kaEMYdfXeCRo2+tYgHnkcL0pV9msWK3FqjY2+hfQ4
-         WUxdkaZyDiiR1eOPP4BI2bi8sU1hW+gyy5K8utdc=
-Date:   Mon, 7 Sep 2020 23:15:47 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        id S1728250AbgIHCR1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Sep 2020 22:17:27 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:37068 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728158AbgIHCRZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Sep 2020 22:17:25 -0400
+Received: from localhost.localdomain (unknown [182.149.160.36])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP9+Z6VZfw+0SAA--.23406S2;
+        Tue, 08 Sep 2020 10:17:04 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH v2 3/3] mm: make generic pXd_addr_end() macros inline
- functions
-Message-ID: <20200907201547.GD1976319@kernel.org>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH v2] MIPS: make userspace mapping young by default
+Date:   Tue,  8 Sep 2020 10:16:47 +0800
+Message-Id: <20200908021647.21907-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAf9DxP9+Z6VZfw+0SAA--.23406S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKryxWr1DXr4DKry3JF48tFb_yoW3Zw13pa
+        s7Cry8A3yaqr13AryxZrnrAw1rAwsIqFyjqwnrCa15Xa43Z34ktrsxKFZavrykWa92kw48
+        Z3WUXr4ru3y29rUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUO_MaUUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+MIPS page fault path take 3 exceptions (1 TLB Miss + 2 TLB Invalid), but
+the second TLB Invalid exception is just triggered by __update_tlb from
+do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
+only take 1 TLB Miss + 1 TLB Invalid exceptions
 
-Some style comments below.
+This version removes pte_sw_mkyoung without polluting MM code and makes
+page fault delay of MIPS on par with other architecture and covers both
+no-RIXI and RIXI MIPS CPUS
 
-On Mon, Sep 07, 2020 at 08:00:58PM +0200, Gerald Schaefer wrote:
-> From: Alexander Gordeev <agordeev@linux.ibm.com>
-> 
-> Since pXd_addr_end() macros take pXd page-table entry as a
-> parameter it makes sense to check the entry type on compile.
-> Even though most archs do not make use of page-table entries
-> in pXd_addr_end() calls, checking the type in traversal code
-> paths could help to avoid subtle bugs.
-> 
-> Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-> Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> ---
->  include/linux/pgtable.h | 36 ++++++++++++++++++++----------------
->  1 file changed, 20 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index 67ebc22cf83d..d9e7d16c2263 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -656,31 +656,35 @@ static inline int arch_unmap_one(struct mm_struct *mm,
->   */
->  
->  #ifndef pgd_addr_end
-> -#define pgd_addr_end(pgd, addr, end)					\
-> -({	unsigned long __boundary = ((addr) + PGDIR_SIZE) & PGDIR_MASK;	\
-> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
-> -})
-> +#define pgd_addr_end pgd_addr_end
-> +static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
-> +{	unsigned long __boundary = (addr + PGDIR_SIZE) & PGDIR_MASK;
+[1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email
+-maobibo@loongson.cn/
 
-The code should be on a separate line from the curly brace.
-Besides, since this is not a macro anymore, I think it would be nicer to
-use 'boundary' without underscores.
-This applies to the changes below as well.
+Co-developed-by: Huang Pei <huangpei@loongson.cn>
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+Co-developed-by: Bibo Mao <maobibo@loonson.cn>
+---
+V2:
+- remove unused asm-generic definition of pte_sw_mkyoung following Mao's
+advice
+---
+ arch/mips/include/asm/pgtable.h | 32 +++++++++++++++-----------------
+ arch/mips/mm/cache.c            | 25 +++++++++++++------------
+ include/linux/pgtable.h         |  8 --------
+ mm/memory.c                     |  3 ---
+ 4 files changed, 28 insertions(+), 40 deletions(-)
 
-> +	return (__boundary - 1 < end - 1) ? __boundary : end;
-> +}
->  #endif
->  
->  #ifndef p4d_addr_end
-> -#define p4d_addr_end(p4d, addr, end)					\
-> -({	unsigned long __boundary = ((addr) + P4D_SIZE) & P4D_MASK;	\
-> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
-> -})
-> +#define p4d_addr_end p4d_addr_end
-> +static inline unsigned long p4d_addr_end(p4d_t p4d, unsigned long addr, unsigned long end)
-> +{	unsigned long __boundary = (addr + P4D_SIZE) & P4D_MASK;
-> +	return (__boundary - 1 < end - 1) ? __boundary : end;
-> +}
->  #endif
->  
->  #ifndef pud_addr_end
-> -#define pud_addr_end(pud, addr, end)					\
-> -({	unsigned long __boundary = ((addr) + PUD_SIZE) & PUD_MASK;	\
-> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
-> -})
-> +#define pud_addr_end pud_addr_end
-> +static inline unsigned long pud_addr_end(pud_t pud, unsigned long addr, unsigned long end)
-> +{	unsigned long __boundary = (addr + PUD_SIZE) & PUD_MASK;
-> +	return (__boundary - 1 < end - 1) ? __boundary : end;
-> +}
->  #endif
->  
->  #ifndef pmd_addr_end
-> -#define pmd_addr_end(pmd, addr, end)					\
-> -({	unsigned long __boundary = ((addr) + PMD_SIZE) & PMD_MASK;	\
-> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
-> -})
-> +#define pmd_addr_end pmd_addr_end
-> +static inline unsigned long pmd_addr_end(pmd_t pmd, unsigned long addr, unsigned long end)
-> +{	unsigned long __boundary = (addr + PMD_SIZE) & PMD_MASK;
-> +	return (__boundary - 1 < end - 1) ? __boundary : end;
-> +}
->  #endif
->  
->  /*
-> -- 
-> 2.17.1
-> 
-
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index dd7a0f552cac..aaafe3d6a0a1 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -25,22 +25,22 @@
+ struct mm_struct;
+ struct vm_area_struct;
+ 
+-#define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
+-				 _page_cachable_default)
+-#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+-				 _page_cachable_default)
+-#define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
+-				 _page_cachable_default)
+-#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
+-				 _page_cachable_default)
+-#define PAGE_KERNEL	__pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
+-				 _PAGE_GLOBAL | _page_cachable_default)
+-#define PAGE_KERNEL_NC	__pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
+-				 _PAGE_GLOBAL | _CACHE_CACHABLE_NONCOHERENT)
+-#define PAGE_USERIO	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+-				 _page_cachable_default)
++#define PAGE_NONE      __pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
++                                _page_cachable_default)
++#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
++                                __READABLE | _page_cachable_default)
++#define PAGE_COPY      __pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
++                                __READABLE | _page_cachable_default)
++#define PAGE_READONLY  __pgprot(_PAGE_PRESENT |  __READABLE | \
++                                _page_cachable_default)
++#define PAGE_KERNEL    __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
++                                _PAGE_GLOBAL | _page_cachable_default)
++#define PAGE_KERNEL_NC __pgprot(_PAGE_PRESENT | __READABLE | __WRITEABLE | \
++                                _PAGE_GLOBAL | _CACHE_CACHABLE_NONCOHERENT)
++#define PAGE_USERIO    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
++                                _page_cachable_default)
+ #define PAGE_KERNEL_UNCACHED __pgprot(_PAGE_PRESENT | __READABLE | \
+-			__WRITEABLE | _PAGE_GLOBAL | _CACHE_UNCACHED)
++                       __WRITEABLE | _PAGE_GLOBAL | _CACHE_UNCACHED)
+ 
+ /*
+  * If _PAGE_NO_EXEC is not defined, we can't do page protection for
+@@ -414,8 +414,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	return pte;
+ }
+ 
+-#define pte_sw_mkyoung	pte_mkyoung
+-
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
+ 
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index 3e81ba000096..ed75f2871aad 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -159,22 +159,23 @@ static inline void setup_protection_map(void)
+ {
+ 	if (cpu_has_rixi) {
+ 		protection_map[0]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
++		protection_map[1]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
+ 		protection_map[2]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
+-		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT);
++		protection_map[3]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
++		protection_map[4]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
++		protection_map[5]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
++		protection_map[6]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
++		protection_map[7]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
+ 
+ 		protection_map[8]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC);
++		protection_map[9]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
+ 		protection_map[10] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
+-		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-		protection_map[12] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[13] = __pgprot(_page_cachable_default | _PAGE_PRESENT);
+-		protection_map[14] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
+-		protection_map[15] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_WRITE);
++		protection_map[11] = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | __READABLE);
++		protection_map[12]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
++		protection_map[13]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | __READABLE);
++		protection_map[14]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
++		protection_map[15]  = __pgprot(_page_cachable_default | _PAGE_PRESENT | _PAGE_NO_EXEC | __READABLE);
++
+ 
+ 	} else {
+ 		protection_map[0] = PAGE_NONE;
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index e8cbc2e795d5..ef9c5fa8673e 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -377,14 +377,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
+  * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+  * where software maintains page access bit.
+  */
+-#ifndef pte_sw_mkyoung
+-static inline pte_t pte_sw_mkyoung(pte_t pte)
+-{
+-	return pte;
+-}
+-#define pte_sw_mkyoung	pte_sw_mkyoung
+-#endif
+-
+ #ifndef pte_savedwrite
+ #define pte_savedwrite pte_write
+ #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index 602f4283122f..5100ab5bcf77 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2705,7 +2705,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+-		entry = pte_sw_mkyoung(entry);
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 		/*
+ 		 * Clear the pte entry and flush it first, before updating the
+@@ -3386,7 +3385,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 	__SetPageUptodate(page);
+ 
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (vma->vm_flags & VM_WRITE)
+ 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 
+@@ -3661,7 +3659,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
+ 
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 	/* copy-on-write page */
 -- 
-Sincerely yours,
-Mike.
+2.17.1
+
