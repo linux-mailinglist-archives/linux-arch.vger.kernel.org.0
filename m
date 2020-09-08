@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EEF2609DE
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 07:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76222609E4
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 07:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728565AbgIHFOw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 01:14:52 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:1177 "EHLO pegase1.c-s.fr"
+        id S1728474AbgIHFTu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 01:19:50 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:8843 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725938AbgIHFOw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Sep 2020 01:14:52 -0400
+        id S1726387AbgIHFTu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Sep 2020 01:19:50 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4Bltcl5vwGz9tyfC;
-        Tue,  8 Sep 2020 07:14:47 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4BltkT4qvvz9tyfH;
+        Tue,  8 Sep 2020 07:19:45 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id CHegWz2Zqd7i; Tue,  8 Sep 2020 07:14:47 +0200 (CEST)
+        with ESMTP id mF_Z1FlHMh_F; Tue,  8 Sep 2020 07:19:45 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Bltcl4S93z9tyfB;
-        Tue,  8 Sep 2020 07:14:47 +0200 (CEST)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4BltkT3c0Rz9tyfG;
+        Tue,  8 Sep 2020 07:19:45 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4FA238B78F;
-        Tue,  8 Sep 2020 07:14:48 +0200 (CEST)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 48B608B793;
+        Tue,  8 Sep 2020 07:19:46 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id p7u0ZX_PNhu5; Tue,  8 Sep 2020 07:14:48 +0200 (CEST)
+        with ESMTP id G7-bMta_Fa-y; Tue,  8 Sep 2020 07:19:46 +0200 (CEST)
 Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E7EF18B768;
-        Tue,  8 Sep 2020 07:14:45 +0200 (CEST)
-Subject: Re: [RFC PATCH v2 2/3] mm: make pXd_addr_end() functions page-table
- entry aware
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0B4918B768;
+        Tue,  8 Sep 2020 07:19:44 +0200 (CEST)
+Subject: Re: [RFC PATCH v2 3/3] mm: make generic pXd_addr_end() macros inline
+ functions
 To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>
@@ -65,14 +65,14 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>
 References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
+ <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <31dfb3ed-a0cc-3024-d389-ab9bd19e881f@csgroup.eu>
-Date:   Tue, 8 Sep 2020 07:14:38 +0200
+Message-ID: <4c101685-5b29-dace-9dd2-b6f0ae193a9c@csgroup.eu>
+Date:   Tue, 8 Sep 2020 07:19:38 +0200
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
+In-Reply-To: <20200907180058.64880-4-gerald.schaefer@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: fr
 Content-Transfer-Encoding: 8bit
@@ -86,66 +86,90 @@ X-Mailing-List: linux-arch@vger.kernel.org
 Le 07/09/2020 à 20:00, Gerald Schaefer a écrit :
 > From: Alexander Gordeev <agordeev@linux.ibm.com>
 > 
-> Unlike all other page-table abstractions pXd_addr_end() do not take
-> into account a particular table entry in which context the functions
-> are called. On architectures with dynamic page-tables folding that
-> might lead to lack of necessary information that is difficult to
-> obtain other than from the table entry itself. That already led to
-> a subtle memory corruption issue on s390.
-> 
-> By letting pXd_addr_end() functions know about the page-table entry
-> we allow archs not only make extra checks, but also optimizations.
-> 
-> As result of this change the pXd_addr_end_folded() functions used
-> in gup_fast traversal code become unnecessary and get replaced with
-> universal pXd_addr_end() variants.
-> 
-> The arch-specific updates not only add dereferencing of page-table
-> entry pointers, but also small changes to the code flow to make those
-> dereferences possible, at least for x86 and powerpc. Also for arm64,
-> but in way that should not have any impact.
-> 
-
-[...]
-
+> Since pXd_addr_end() macros take pXd page-table entry as a
+> parameter it makes sense to check the entry type on compile.
+> Even though most archs do not make use of page-table entries
+> in pXd_addr_end() calls, checking the type in traversal code
+> paths could help to avoid subtle bugs.
 > 
 > Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 > Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 > ---
->   arch/arm/include/asm/pgtable-2level.h    |  2 +-
->   arch/arm/mm/idmap.c                      |  6 ++--
->   arch/arm/mm/mmu.c                        |  8 ++---
->   arch/arm64/kernel/hibernate.c            | 16 ++++++----
->   arch/arm64/kvm/mmu.c                     | 16 +++++-----
->   arch/arm64/mm/kasan_init.c               |  8 ++---
->   arch/arm64/mm/mmu.c                      | 25 +++++++--------
->   arch/powerpc/mm/book3s64/radix_pgtable.c |  7 ++---
->   arch/powerpc/mm/hugetlbpage.c            |  6 ++--
+>   include/linux/pgtable.h | 36 ++++++++++++++++++++----------------
+>   1 file changed, 20 insertions(+), 16 deletions(-)
+> 
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index 67ebc22cf83d..d9e7d16c2263 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -656,31 +656,35 @@ static inline int arch_unmap_one(struct mm_struct *mm,
+>    */
+>   
+>   #ifndef pgd_addr_end
+> -#define pgd_addr_end(pgd, addr, end)					\
+> -({	unsigned long __boundary = ((addr) + PGDIR_SIZE) & PGDIR_MASK;	\
+> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
+> -})
+> +#define pgd_addr_end pgd_addr_end
 
-You forgot arch/powerpc/mm/book3s64/subpage_prot.c it seems.
+I think that #define is pointless, usually there is no such #define for 
+the default case.
 
->   arch/s390/include/asm/pgtable.h          |  8 ++---
->   arch/s390/mm/page-states.c               |  8 ++---
->   arch/s390/mm/pageattr.c                  |  8 ++---
->   arch/s390/mm/vmem.c                      |  8 ++---
->   arch/sparc/mm/hugetlbpage.c              |  6 ++--
->   arch/um/kernel/tlb.c                     |  8 ++---
->   arch/x86/mm/init_64.c                    | 15 ++++-----
->   arch/x86/mm/kasan_init_64.c              | 16 +++++-----
->   include/asm-generic/pgtable-nop4d.h      |  2 +-
->   include/asm-generic/pgtable-nopmd.h      |  2 +-
->   include/asm-generic/pgtable-nopud.h      |  2 +-
->   include/linux/pgtable.h                  | 26 ++++-----------
->   mm/gup.c                                 |  8 ++---
->   mm/ioremap.c                             |  8 ++---
->   mm/kasan/init.c                          | 17 +++++-----
->   mm/madvise.c                             |  4 +--
->   mm/memory.c                              | 40 ++++++++++++------------
->   mm/mlock.c                               | 18 ++++++++---
->   mm/mprotect.c                            |  8 ++---
->   mm/pagewalk.c                            |  8 ++---
->   mm/swapfile.c                            |  8 ++---
->   mm/vmalloc.c                             | 16 +++++-----
->   31 files changed, 165 insertions(+), 173 deletions(-)
+> +static inline unsigned long pgd_addr_end(pgd_t pgd, unsigned long addr, unsigned long end)
+> +{	unsigned long __boundary = (addr + PGDIR_SIZE) & PGDIR_MASK;
+> +	return (__boundary - 1 < end - 1) ? __boundary : end;
+> +}
 
-Christophe
+Please use the standard layout, ie entry { and exit } alone on their 
+line, and space between local vars declaration and the rest.
+
+Also remove the leading __ in front of var names as it's not needed once 
+it is not macros anymore.
+
+f_name()
+{
+	some_local_var;
+
+	do_something();
+}
+
+>   #endif
+>   
+>   #ifndef p4d_addr_end
+> -#define p4d_addr_end(p4d, addr, end)					\
+> -({	unsigned long __boundary = ((addr) + P4D_SIZE) & P4D_MASK;	\
+> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
+> -})
+> +#define p4d_addr_end p4d_addr_end
+> +static inline unsigned long p4d_addr_end(p4d_t p4d, unsigned long addr, unsigned long end)
+> +{	unsigned long __boundary = (addr + P4D_SIZE) & P4D_MASK;
+> +	return (__boundary - 1 < end - 1) ? __boundary : end;
+> +}
+>   #endif
+>   
+>   #ifndef pud_addr_end
+> -#define pud_addr_end(pud, addr, end)					\
+> -({	unsigned long __boundary = ((addr) + PUD_SIZE) & PUD_MASK;	\
+> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
+> -})
+> +#define pud_addr_end pud_addr_end
+> +static inline unsigned long pud_addr_end(pud_t pud, unsigned long addr, unsigned long end)
+> +{	unsigned long __boundary = (addr + PUD_SIZE) & PUD_MASK;
+> +	return (__boundary - 1 < end - 1) ? __boundary : end;
+> +}
+>   #endif
+>   
+>   #ifndef pmd_addr_end
+> -#define pmd_addr_end(pmd, addr, end)					\
+> -({	unsigned long __boundary = ((addr) + PMD_SIZE) & PMD_MASK;	\
+> -	(__boundary - 1 < (end) - 1)? __boundary: (end);		\
+> -})
+> +#define pmd_addr_end pmd_addr_end
+> +static inline unsigned long pmd_addr_end(pmd_t pmd, unsigned long addr, unsigned long end)
+> +{	unsigned long __boundary = (addr + PMD_SIZE) & PMD_MASK;
+> +	return (__boundary - 1 < end - 1) ? __boundary : end;
+> +}
+>   #endif
+>   
+>   /*
+> 
