@@ -2,66 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8A8261D04
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 21:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC47261E8D
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 21:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731223AbgIHT3y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 15:29:54 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30968 "EHLO
+        id S1730811AbgIHTws (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 15:52:48 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24326 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731024AbgIHP7O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 11:59:14 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088DXjY1185320;
-        Tue, 8 Sep 2020 09:39:07 -0400
+        by vger.kernel.org with ESMTP id S1730587AbgIHPsM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 11:48:12 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088E5HaY155667;
+        Tue, 8 Sep 2020 10:16:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=XDC5FoG+KgqujaeAyg7l2gVOSzxylPnVZ4pvoUk44a4=;
- b=VYO3+yMyhC4rNfbvQWVAf5wbndHjAv0y1eUtuG+dUlXfVqTQtsPZvyeD2EVRCQwQQ0wd
- TutpfKWEHZoLzIbERiftaWVuVc99voCzqPxTVSB9+YrYy6euMilc2SV3S3+AUJEHZzl6
- ihNPJWVkh4bcuARr0D/TtoyzkoaOoqOBTZlZVuvvVdBSZExlgcWLsmWBRCtCcScknnJM
- Ep2A/5wcBkn7cJ6Ezi1btOwR/nf4YJeQRUpzhpfg8FcOd6UTG4U015Ax4tass/gg39oy
- Rm1FvI1JyI2tuzS/qT18SDIuFSSSLeaq3wUR+ugqzw10JLi+rfH7iOYXdexSkPJLZ3eI rw== 
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=JMbH8samJLb5sy2XzpgZzo3gwfoR4Or5sHtVMIqHhLs=;
+ b=NJ3URzpdswVooPaI2LHOaXu6ju+Ngmf2INx7IYktjmTAF583iqpKuti7BeOKDXf5dvjb
+ DFU6oNAIttt5W97m8sP5q85mhtK8i+n1ItawNxhKl5O2wjjq4k9mXoPw5SqlXxavUX61
+ DbY/EivnZmwZCJBJpbRxTSf59ig7WVFjsDjsZEQGKPiRyE8MJKsL2Z3Am3we93opJ+Lg
+ jn3JNhFff4CDPtZ//sFEUOiYHH8m3x+zIMXGVLVBJKTIpwCGjvScInnPzqoa6ADDieUI
+ XzPpVgnJ/wbqjo+1fcfB9iO+uJ5ZVGEMnbTIksPgteUtaZ/IE90vq4p07FXbR5xH1s/v Vg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33e9scu0a2-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb5wh4vq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 09:39:07 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088DXs8j186234;
-        Tue, 8 Sep 2020 09:39:06 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33e9scu08p-1
+        Tue, 08 Sep 2020 10:16:06 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088E5rqF157526;
+        Tue, 8 Sep 2020 10:16:06 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb5wh4sn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 09:39:06 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088DapAZ028999;
-        Tue, 8 Sep 2020 13:39:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 33c2a8a4s6-1
+        Tue, 08 Sep 2020 10:16:06 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088EDg8b007449;
+        Tue, 8 Sep 2020 14:16:01 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 33cm5hhqvk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 13:39:03 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088Dd0lD38535586
+        Tue, 08 Sep 2020 14:16:01 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088EFwKF37814660
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Sep 2020 13:39:00 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5967852051;
-        Tue,  8 Sep 2020 13:39:00 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.25.197])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 260485204F;
-        Tue,  8 Sep 2020 13:38:59 +0000 (GMT)
-Date:   Tue, 8 Sep 2020 15:38:57 +0200
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+        Tue, 8 Sep 2020 14:15:58 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1FB7CA4069;
+        Tue,  8 Sep 2020 14:15:58 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DB9EA406D;
+        Tue,  8 Sep 2020 14:15:56 +0000 (GMT)
+Received: from oc3871087118.ibm.com (unknown [9.145.58.21])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  8 Sep 2020 14:15:56 +0000 (GMT)
+Date:   Tue, 8 Sep 2020 16:15:55 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         linux-mm <linux-mm@kvack.org>, Paul Mackerras <paulus@samba.org>,
         linux-sparc <sparclinux@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Will Deacon <will@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -69,6 +71,7 @@ Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Richard Weinberger <richard@nod.at>,
         linux-x86 <x86@kernel.org>, Russell King <linux@armlinux.org.uk>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Andrey Ryabinin <aryabinin@virtuozzo.com>,
@@ -84,111 +87,114 @@ Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Mike Rapoport <rppt@kernel.org>
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
- folding
-Message-ID: <20200908153857.08d09581@thinkpad>
-In-Reply-To: <96b80926-cf5b-1afa-9b7a-949a2188e61f@csgroup.eu>
+Subject: Re: [RFC PATCH v2 2/3] mm: make pXd_addr_end() functions page-table
+ entry aware
+Message-ID: <20200908141554.GA20558@oc3871087118.ibm.com>
 References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
-        <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
-        <82fbe8f9-f199-5fc2-4168-eb43ad0b0346@csgroup.eu>
-        <70a3dcb5-5ed1-6efa-6158-d0573d6927da@de.ibm.com>
-        <96b80926-cf5b-1afa-9b7a-949a2188e61f@csgroup.eu>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
+ <31dfb3ed-a0cc-3024-d389-ab9bd19e881f@csgroup.eu>
+ <20200908074638.GA19099@oc3871087118.ibm.com>
+ <5d4f5546-afd0-0b8f-664d-700ae346b9ec@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d4f5546-afd0-0b8f-664d-700ae346b9ec@csgroup.eu>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-08_07:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 clxscore=1011 adultscore=0
- malwarescore=0 spamscore=0 mlxscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009080128
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009080133
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 8 Sep 2020 14:40:10 +0200
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+On Tue, Sep 08, 2020 at 10:16:49AM +0200, Christophe Leroy wrote:
+> >Yes, and also two more sources :/
+> >	arch/powerpc/mm/kasan/8xx.c
+> >	arch/powerpc/mm/kasan/kasan_init_32.c
+> >
+> >But these two are not quite obvious wrt pgd_addr_end() used
+> >while traversing pmds. Could you please clarify a bit?
+> >
+> >
+> >diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
+> >index 2784224..89c5053 100644
+> >--- a/arch/powerpc/mm/kasan/8xx.c
+> >+++ b/arch/powerpc/mm/kasan/8xx.c
+> >@@ -15,8 +15,8 @@
+> >  	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd += 2, block += SZ_8M) {
+> >  		pte_basic_t *new;
+> >-		k_next = pgd_addr_end(k_cur, k_end);
+> >-		k_next = pgd_addr_end(k_next, k_end);
+> >+		k_next = pmd_addr_end(k_cur, k_end);
+> >+		k_next = pmd_addr_end(k_next, k_end);
+> 
+> No, I don't think so.
+> On powerpc32 we have only two levels, so pgd and pmd are more or
+> less the same.
+> But pmd_addr_end() as defined in include/asm-generic/pgtable-nopmd.h
+> is a no-op, so I don't think it will work.
+> 
+> It is likely that this function should iterate on pgd, then you get
+> pmd = pmd_offset(pud_offset(p4d_offset(pgd)));
 
->=20
->=20
-> Le 08/09/2020 =C3=A0 14:09, Christian Borntraeger a =C3=A9crit=C2=A0:
-> >=20
-> >=20
-> > On 08.09.20 07:06, Christophe Leroy wrote:
-> >>
-> >>
-> >> Le 07/09/2020 =C3=A0 20:00, Gerald Schaefer a =C3=A9crit=C2=A0:
-> >>> From: Alexander Gordeev <agordeev@linux.ibm.com>
-> >>>
-> >>> Commit 1a42010cdc26 ("s390/mm: convert to the generic get_user_pages_=
-fast
-> >>> code") introduced a subtle but severe bug on s390 with gup_fast, due =
-to
-> >>> dynamic page table folding.
-> >>>
-> >>> The question "What would it require for the generic code to work for =
-s390"
-> >>> has already been discussed here
-> >>> https://lkml.kernel.org/r/20190418100218.0a4afd51@mschwideX1
-> >>> and ended with a promising approach here
-> >>> https://lkml.kernel.org/r/20190419153307.4f2911b5@mschwideX1
-> >>> which in the end unfortunately didn't quite work completely.
-> >>>
-> >>> We tried to mimic static level folding by changing pgd_offset to alwa=
-ys
-> >>> calculate top level page table offset, and do nothing in folded pXd_o=
-ffset.
-> >>> What has been overlooked is that PxD_SIZE/MASK and thus pXd_addr_end =
-do
-> >>> not reflect this dynamic behaviour, and still act like static 5-level
-> >>> page tables.
-> >>>
-> >>
-> >> [...]
-> >>
-> >>>
-> >>> Fix this by introducing new pXd_addr_end_folded helpers, which take an
-> >>> additional pXd entry value parameter, that can be used on s390
-> >>> to determine the correct page table level and return corresponding
-> >>> end / boundary. With that, the pointer iteration will always
-> >>> happen in gup_pgd_range for s390. No change for other architectures
-> >>> introduced.
-> >>
-> >> Not sure pXd_addr_end_folded() is the best understandable name, alltho=
-ugh I don't have any alternative suggestion at the moment.
-> >> Maybe could be something like pXd_addr_end_fixup() as it will disappea=
-r in the next patch, or pXd_addr_end_gup() ?
-> >>
-> >> Also, if it happens to be acceptable to get patch 2 in stable, I think=
- you should switch patch 1 and patch 2 to avoid the step through pXd_addr_e=
-nd_folded()
-> >=20
-> > given that this fixes a data corruption issue, wouldnt it be the best t=
-o go forward
-> > with this patch ASAP and then handle the other patches on top with all =
-the time that
-> > we need?
->=20
-> I have no strong opinion on this, but I feel rather tricky to have to=20
-> change generic part of GUP to use a new fonction then revert that change=
-=20
-> in the following patch, just because you want the first patch in stable=20
-> and not the second one.
->=20
-> Regardless, I was wondering, why do we need a reference to the pXd at=20
-> all when calling pXd_addr_end() ?
->=20
-> Couldn't S390 retrieve the pXd by using the pXd_offset() dance with the=20
-> passed addr ?
+It looks like the code iterates over single pmd table while using
+pgd_addr_end() only to skip all the middle levels and bail out
+from the loop.
 
-Apart from performance impact when re-doing that what has already been
-done by the caller, I think we would also break the READ_ONCE semantics.
-After all, the pXd_offset() would also require some pXd pointer input,
-which we don't have. So we would need to start over again from mm->pgd.
+I would be wary for switching from pmds to pgds, since we are
+trying to minimize impact (especially functional) and the
+rework does not seem that obvious.
 
-Also, it seems to be more in line with other primitives that take
-a pXd value or pointer.
+Assuming pmd and pgd are the same would actually such approach
+work for now?
+
+diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
+index 2784224..94466cc 100644
+--- a/arch/powerpc/mm/kasan/8xx.c
++++ b/arch/powerpc/mm/kasan/8xx.c
+@@ -15,8 +15,8 @@
+ 	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd += 2, block += SZ_8M) {
+ 		pte_basic_t *new;
+ 
+-		k_next = pgd_addr_end(k_cur, k_end);
+-		k_next = pgd_addr_end(k_next, k_end);
++		k_next = pgd_addr_end(__pgd(pmd_val(*pmd)), k_cur, k_end);
++		k_next = pgd_addr_end(__pgd(pmd_val(*(pmd + 1))), k_next, k_end);
+ 		if ((void *)pmd_page_vaddr(*pmd) != kasan_early_shadow_pte)
+ 			continue;
+ 
+diff --git a/arch/powerpc/mm/kasan/kasan_init_32.c b/arch/powerpc/mm/kasan/kasan_init_32.c
+index fb29404..c0bcd64 100644
+--- a/arch/powerpc/mm/kasan/kasan_init_32.c
++++ b/arch/powerpc/mm/kasan/kasan_init_32.c
+@@ -38,7 +38,7 @@ int __init kasan_init_shadow_page_tables(unsigned long k_start, unsigned long k_
+ 	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd++) {
+ 		pte_t *new;
+ 
+-		k_next = pgd_addr_end(k_cur, k_end);
++		k_next = pgd_addr_end(__pgd(pmd_val(*pmd)), k_cur, k_end);
+ 		if ((void *)pmd_page_vaddr(*pmd) != kasan_early_shadow_pte)
+ 			continue;
+ 
+@@ -196,7 +196,7 @@ void __init kasan_early_init(void)
+ 	kasan_populate_pte(kasan_early_shadow_pte, PAGE_KERNEL);
+ 
+ 	do {
+-		next = pgd_addr_end(addr, end);
++		next = pgd_addr_end(__pgd(pmd_val(*pmd)), addr, end);
+ 		pmd_populate_kernel(&init_mm, pmd, kasan_early_shadow_pte);
+ 	} while (pmd++, addr = next, addr != end);
+ 
+
+Alternatively we could pass invalid pgd to keep the code structure
+intact, but that of course is less nice.
+
+Thanks!
+
+> Christophe
