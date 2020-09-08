@@ -2,125 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D182619B2
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 20:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881F9261A5D
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Sep 2020 20:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728507AbgIHSZ2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Sep 2020 14:25:28 -0400
-Received: from mga04.intel.com ([192.55.52.120]:51499 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726642AbgIHSZZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Sep 2020 14:25:25 -0400
-IronPort-SDR: dG5By9HBXXJoXUGErJ6k/+2MyMDAkdGFigq6MHw5IC1d4AaGwY/WhuE+YiEFL0JTzYmNp+z0O0
- rSqFh8q/Su1g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="155602347"
-X-IronPort-AV: E=Sophos;i="5.76,406,1592895600"; 
-   d="scan'208";a="155602347"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 11:25:23 -0700
-IronPort-SDR: bTS1USQJwqhUAqTZ1mXCWmgKPD1f8ak2tiuGhfZUz3y/kZrFWzwSTM0whGUwwHvZRrXPondA26
- 9gLrCKJRf3PA==
-X-IronPort-AV: E=Sophos;i="5.76,406,1592895600"; 
-   d="scan'208";a="448891489"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.111.239]) ([10.209.111.239])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 11:25:21 -0700
-Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
- shadow stack
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Dave Martin <Dave.Martin@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S1731838AbgIHSeu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Sep 2020 14:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731756AbgIHScn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Sep 2020 14:32:43 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744B3C061757
+        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 11:23:15 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id l126so4638455pfd.5
+        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 11:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mfB0S2TmcGDxX8xZkZ/chTU0dmPHOOO8nuKSmYrB2mM=;
+        b=Oo/DQrZCB0KIovn2oIQvAUWTptWqamehVi+n9pOLZRf1yPmAlsDgequytTa8T71Hfc
+         MnZ8qfVQW2q6h/Gb3s3xMzJv0ALrHyHScJJ+WdbP6brRxtmNudTvVWKGbUjfoC5KHF4b
+         uGSGjTSSevWadA70wvgbB72exIK9HnLgQdo9pBIgjKkAOXHzO50M1u7BZGl1okDbUiqz
+         czRJlEsh6kR0+ujAUZ5GoU2okMRHEd7MJeAWIce5U7hvYLvI/36yTxGrED/UXTfJN1Pp
+         +8kHwWJ0fqPNtnwRBmLuZUKXP2wEoOXwXAgDcmvidR+BlAhYV4QFIECLoW9snCOd1lTW
+         zkcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mfB0S2TmcGDxX8xZkZ/chTU0dmPHOOO8nuKSmYrB2mM=;
+        b=NiACYESQL6XF3D8oNrc0SG+hYFEGk5JuoXTx7bN8vU7/P6G+U+FzuQ6yy9Vla72p3D
+         tFsBaFLxcNyHe7BnIL1mK+gwpkMKesn8oHRA9b4K4v+lj76BGVCz4xPEFNkq4Kfq7XOe
+         0FWwZt2gp2sI20l5FuwY7++r8W2uSL2vVWpztawOLBx2vLMLyx4E+eUOthIi8GoFFzuh
+         yYd1AXUMKEv808iy2BWyCn90CLupsbwAoIQTgx8R6ZfubyFsFDUwkTjdDQ5P5NRp9s8I
+         AVvsWqsWhJDhCobzS+WXUtj/PP/cw1Z6pKUI+fqfeFUmbvHiZybFiNk7DYQpZiunVcU4
+         EPgw==
+X-Gm-Message-State: AOAM530hShSoriAAL5iY3SV287//wjCO1h+QL2tD62THvaZxEfbHxwFb
+        lgwl3+5I3lSD1ZlcdZILLTLjew==
+X-Google-Smtp-Source: ABdhPJwprY99iDi73Le2vnSOxXHnK9OCb6eXlfe519dNjZDsp0xdQH72w/MWOHjt+KXl9278n5yCtw==
+X-Received: by 2002:a17:902:10f:: with SMTP id 15mr24890192plb.121.1599589394447;
+        Tue, 08 Sep 2020 11:23:14 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
+        by smtp.gmail.com with ESMTPSA id h11sm108910pfe.185.2020.09.08.11.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 11:23:13 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 11:23:08 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-References: <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
- <73c2211f-8811-2d9f-1930-1c5035e6129c@intel.com>
- <af258a0e-56e9-3747-f765-dfe45ce76bba@intel.com>
- <ef7f9e24-f952-d78c-373e-85435f742688@intel.com>
- <20200826164604.GW6642@arm.com> <87ft892vvf.fsf@oldenburg2.str.redhat.com>
- <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
- <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com>
- <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
- <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
- <20200901102758.GY6642@arm.com>
- <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
- <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
- <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
- <46dffdfd-92f8-0f05-6164-945f217b0958@intel.com>
- <ed929729-4677-3d3b-6bfd-b379af9272b8@intel.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <6e1e22a5-1b7f-2783-351e-c8ed2d4893b8@intel.com>
-Date:   Tue, 8 Sep 2020 11:25:20 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 10/28] kbuild: lto: fix module versioning
+Message-ID: <20200908182308.GA1227805@google.com>
+References: <20200624203200.78870-1-samitolvanen@google.com>
+ <20200903203053.3411268-1-samitolvanen@google.com>
+ <20200903203053.3411268-11-samitolvanen@google.com>
+ <202009031510.32523E45EC@keescook>
 MIME-Version: 1.0
-In-Reply-To: <ed929729-4677-3d3b-6bfd-b379af9272b8@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202009031510.32523E45EC@keescook>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/8/2020 10:57 AM, Dave Hansen wrote:
-> On 9/8/20 10:50 AM, Yu, Yu-cheng wrote:
->> What about this:
->>
->> - Do not add any new syscall or arch_prctl for creating a new shadow stack.
->>
->> - Add a new arch_prctl that can turn an anonymous mapping to a shadow
->> stack mapping.
->>
->> This allows the application to do whatever is necessary.  It can even
->> allow GDB or JIT code to create or fix a call stack.
+On Thu, Sep 03, 2020 at 03:11:54PM -0700, Kees Cook wrote:
+> On Thu, Sep 03, 2020 at 01:30:35PM -0700, Sami Tolvanen wrote:
+> > With CONFIG_MODVERSIONS, version information is linked into each
+> > compilation unit that exports symbols. With LTO, we cannot use this
+> > method as all C code is compiled into LLVM bitcode instead. This
+> > change collects symbol versions into .symversions files and merges
+> > them in link-vmlinux.sh where they are all linked into vmlinux.o at
+> > the same time.
+> > 
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > 
-> Fine with me.  But, it's going to effectively be
-> 
-> 	arch_prctl(PR_CONVERT_TO_SHS..., addr, len);
-> 
-> when it could just as easily be:
-> 
-> 	madvise(addr, len, MADV_SHSTK...);
-> 
-> Or a new syscall.  The only question in my mind is whether we want to do
-> something generic that we can use for other similar things in the
-> future, like:
-> 
-> 	madvise2(addr, len, flags, MADV2_SHSTK...);
-> 
-> I don't really feel strongly about it, though.  Could you please share
-> your logic on why you want a prctl() as opposed to a whole new syscall?
-> 
+> The only thought I have here is I wonder if this change could be made
+> universally instead of gating on LTO? (i.e. is it noticeably slower to
+> do it this way under non-LTO?)
 
-A new syscall is more intrusive, I think.  When creating a new shadow 
-stack, the kernel also installs a restore token on the top of the new 
-shadow stack, and it is somewhat x86-specific.  So far no other arch's 
-need this.
+I don't think it's noticeably slower, but keeping the version information
+in object files when possible is cleaner, in my opinion.
 
-Yes, madvise is better if the kernel only needs to change the mapping. 
-The application itself can create the restore token before calling 
-madvise().
+Sami
