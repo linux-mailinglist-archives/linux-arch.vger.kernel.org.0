@@ -2,212 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD85D2639B7
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 04:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB23D263A8D
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 04:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730434AbgIJCAz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Sep 2020 22:00:55 -0400
-Received: from condef-04.nifty.com ([202.248.20.69]:62436 "EHLO
-        condef-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729802AbgIJBse (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Sep 2020 21:48:34 -0400
-X-Greylist: delayed 791 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Sep 2020 21:48:33 EDT
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-04.nifty.com with ESMTP id 08A1J0mu023902;
-        Thu, 10 Sep 2020 10:19:00 +0900
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 08A1IhTb013561;
-        Thu, 10 Sep 2020 10:18:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 08A1IhTb013561
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1599700724;
-        bh=x2qUAAqVWiePSrCzfI1IEP4eafAB9yee8r8ckQho/u8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WGjr5LVsquWsgfjbUw8zsVNV+eA8G4HhcuX7mJ53BwE1QXEJLWsiBBR8lguwcOerT
-         d71o9nfLv7ija30NHqQedE2CfJD68H7zHtYLQdmNLNYavfgBOdGEVAam0QzLlPx5Q2
-         6EJvPCcYrNNyDZNKB0TNqWiS2LuxTF6IL0ttSnkDcBELKjgx7TEBTYnWbGAc/tZbYZ
-         ZMn59+M37cpTDQVmqeXbYfFIZ/VUmlVU6FP4rP8nFvJoOjs3HFc/LbGKo4YdWIQOK6
-         KSbHxjj2F61Imz4LpNo5mWBjeXerF0bjYZRmNxbsHsNpkA4wxyCBw0p6bFOn5d+i5j
-         eYvVVaetEFYKg==
-X-Nifty-SrcIP: [209.85.215.169]
-Received: by mail-pg1-f169.google.com with SMTP id g29so3356898pgl.2;
-        Wed, 09 Sep 2020 18:18:43 -0700 (PDT)
-X-Gm-Message-State: AOAM530F73TwB0Fmzr4rQbsyBv8w417djTI0Bd+yBGyIznSW6IwvbMEQ
-        aqn88/qrsnbMbTZ6JBfWJ29DykE++eZe+uEIKeE=
-X-Google-Smtp-Source: ABdhPJw3+uiV59rG6EDJ8QWqM7TRK95TtkCpF/iAWICblIOjIFopt/zBNTTyCv+Bm880c1rm+ZI8WQaujb2+mHAsSEI=
-X-Received: by 2002:a63:f546:: with SMTP id e6mr2466312pgk.7.1599700722672;
- Wed, 09 Sep 2020 18:18:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200903203053.3411268-1-samitolvanen@google.com> <CAK7LNASDUkyJMDD0a5K_HT=1q5NEc6dcN4=FUb330yK0BCKcTw@mail.gmail.com>
- <20200908234643.GF1060586@google.com>
-In-Reply-To: <20200908234643.GF1060586@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 10 Sep 2020 10:18:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR9zzP0ZU3b__PZv8gRtKrwz6-8GE1zG5UyFx1wDpOBzQ@mail.gmail.com>
-Message-ID: <CAK7LNAR9zzP0ZU3b__PZv8gRtKrwz6-8GE1zG5UyFx1wDpOBzQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/28] Add support for Clang LTO
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        id S1730596AbgIJCeB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Sep 2020 22:34:01 -0400
+Received: from mga06.intel.com ([134.134.136.31]:15314 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730760AbgIJCWt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Sep 2020 22:22:49 -0400
+IronPort-SDR: FHvfqVu/9grH6dsuyuNpnE7maoL6zq4Sn9ajX95JR47dKJZ7vN1tLWCh1qcwf0ijDJdSRkoj7N
+ ud6mbMAe8B4g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9739"; a="219997824"
+X-IronPort-AV: E=Sophos;i="5.76,411,1592895600"; 
+   d="scan'208";a="219997824"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 16:46:02 -0700
+IronPort-SDR: mn+6z1txUnM20cyC1uC/43VSqPtFs7oZN20YoAzttVEqZ0/5B8qxGmJol8TF5pH4EnxDuguv/u
+ qhB2+FKWVvbA==
+X-IronPort-AV: E=Sophos;i="5.76,411,1592895600"; 
+   d="scan'208";a="304681357"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.243.130]) ([10.212.243.130])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 16:46:00 -0700
+Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Dave Martin <Dave.Martin@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
+ <87ft892vvf.fsf@oldenburg2.str.redhat.com>
+ <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
+ <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com>
+ <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
+ <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
+ <20200901102758.GY6642@arm.com>
+ <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
+ <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
+ <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
+ <46dffdfd-92f8-0f05-6164-945f217b0958@intel.com>
+ <ed929729-4677-3d3b-6bfd-b379af9272b8@intel.com>
+ <6e1e22a5-1b7f-2783-351e-c8ed2d4893b8@intel.com>
+ <5979c58d-a6e3-d14d-df92-72cdeb97298d@intel.com>
+ <ab1a3344-60f4-9b9d-81d4-e6538fdcafcf@intel.com>
+ <08c91835-8486-9da5-a7d1-75e716fc5d36@intel.com>
+ <a881837d-c844-30e8-a614-8b92be814ef6@intel.com>
+ <cbec8861-8722-ec31-2c02-1cfed20255eb@intel.com>
+ <b3379d26-d8a7-deb7-59f1-c994bb297dcb@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <fe6774f4-2554-9c0c-f1b8-110bb9398324@intel.com>
+Date:   Wed, 9 Sep 2020 16:45:59 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <b3379d26-d8a7-deb7-59f1-c994bb297dcb@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 8:46 AM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> On Sun, Sep 06, 2020 at 09:24:38AM +0900, Masahiro Yamada wrote:
-> > On Fri, Sep 4, 2020 at 5:30 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> > >
-> > > This patch series adds support for building x86_64 and arm64 kernels
-> > > with Clang's Link Time Optimization (LTO).
-> > >
-> > > In addition to performance, the primary motivation for LTO is
-> > > to allow Clang's Control-Flow Integrity (CFI) to be used in the
-> > > kernel. Google has shipped millions of Pixel devices running three
-> > > major kernel versions with LTO+CFI since 2018.
-> > >
-> > > Most of the patches are build system changes for handling LLVM
-> > > bitcode, which Clang produces with LTO instead of ELF object files,
-> > > postponing ELF processing until a later stage, and ensuring initcall
-> > > ordering.
-> > >
-> > > Note that patches 1-4 are not directly related to LTO, but are
-> > > needed to compile LTO kernels with ToT Clang, so I'm including them
-> > > in the series for your convenience:
-> > >
-> > >  - Patches 1-3 are required for building the kernel with ToT Clang,
-> > >    and IAS, and patch 4 is needed to build allmodconfig with LTO.
-> > >
-> > >  - Patches 3-4 are already in linux-next, but not yet in 5.9-rc.
-> > >
-> >
-> >
-> > I still do not understand how this patch set works.
-> > (only me?)
-> >
-> > Please let me ask fundamental questions.
-> >
-> >
-> >
-> > I applied this series on top of Linus' tree,
-> > and compiled for ARCH=arm64.
-> >
-> > I compared the kernel size with/without LTO.
-> >
-> >
-> >
-> > [1] No LTO  (arm64 defconfig, CONFIG_LTO_NONE)
-> >
-> > $ llvm-size   vmlinux
-> >    text    data     bss     dec     hex filename
-> > 15848692 10099449 493060 26441201 19375f1 vmlinux
-> >
-> >
-> >
-> > [2] Clang LTO  (arm64 defconfig + CONFIG_LTO_CLANG)
-> >
-> > $ llvm-size   vmlinux
-> >    text    data     bss     dec     hex filename
-> > 15906864 10197445 490804 26595113 195cf29 vmlinux
-> >
-> >
-> > I compared the size of raw binary, arch/arm64/boot/Image.
-> > Its size increased too.
-> >
-> >
-> >
-> > So, in my experiment, enabling CONFIG_LTO_CLANG
-> > increases the kernel size.
-> > Is this correct?
->
-> Yes. LTO does produce larger binaries, mostly due to function
-> inlining between translation units, I believe. The compiler people
-> can probably give you a more detailed answer here. Without -mllvm
-> -import-instr-limit, the binaries would be even larger.
->
-> > One more thing, could you teach me
-> > how Clang LTO optimizes the code against
-> > relocatable objects?
-> >
-> >
-> >
-> > When I learned Clang LTO first, I read this document:
-> > https://llvm.org/docs/LinkTimeOptimization.html
-> >
-> > It is easy to confirm the final executable
-> > does not contain foo2, foo3...
-> >
-> >
-> >
-> > In contrast to userspace programs,
-> > kernel modules are basically relocatable objects.
-> >
-> > Does Clang drop unused symbols from relocatable objects?
-> > If so, how?
->
-> I don't think the compiler can legally drop global symbols from
-> relocatable objects, but it can rename and possibly even drop static
-> functions.
+On 9/9/2020 4:29 PM, Dave Hansen wrote:
+> On 9/9/20 4:25 PM, Yu, Yu-cheng wrote:
+>> On 9/9/2020 4:11 PM, Dave Hansen wrote:
+>>> On 9/9/20 4:07 PM, Yu, Yu-cheng wrote:
+>>>> What if a writable mapping is passed to madvise(MADV_SHSTK)?  Should
+>>>> that be rejected?
+>>>
+>>> It doesn't matter to me.  Even if it's readable, it _stops_ being even
+>>> directly readable after it's a shadow stack, right?  I don't think
+>>> writes are special in any way.  If anything, we *want* it to be writable
+>>> because that indicates that it can be written to, and we will want to
+>>> write to it soon.
+>>>
+>> But in a PROT_WRITE mapping, all the pte's have _PAGE_BIT_RW set.  To
+>> change them to shadow stack, we need to clear that bit from the pte's.
+>> That will be like mprotect_fixup()/change_protection_range().
+> 
+> The page table hardware bits don't matter.  The user-visible protection
+> effects matter.
+> 
+> For instance, we have PROT_EXEC, which *CLEARS* a hardware NX PTE bit.
+> The PROT_ permissions are independent of the hardware.
 
+Same for shadow stack here.  We consider shadow stack "writable", but we 
+want to clear _PAGE_BIT_RW, which is set for the PTEs of the other type 
+of "writable" mapping.  To change a writable data mapping to a writable 
+shadow stack mapping, we need to call change_protection_range().
 
-Compilers can drop static functions without LTO.
-Rather, it is a compiler warning
-(-Wunused-function), so the code should be cleaned up.
-
-
-
-> This is why we need global wrappers for initcalls, for
-> example, to have stable symbol names.
->
-> Sami
-
-
-
-At first, I thought the motivation of LTO
-was to remove unused global symbols, and
-to perform further optimization.
-
-
-It is true for userspace programs.
-In fact, the example of
-https://llvm.org/docs/LinkTimeOptimization.html
-produces a smaller binary.
-
-
-In contrast, this patch set produces a bigger kernel
-because LTO cannot remove any unused symbol.
-
-So, I do not understand what the benefit is.
-
-
-Is inlining beneficial?
-I am not sure.
-
-
-Documentation/process/coding-style.rst
-"15) The inline disease"
-mentions that inlining is not always
-a good thing.
-
-
-As a whole, I still do not understand
-the motivation of this patch set.
-
-
--- 
-Best Regards
-Masahiro Yamada
+> 
+> I don't think the interface should be influenced at *all* by what whacko
+> PTE bit combinations we have to set to get the behavior.
+> 
