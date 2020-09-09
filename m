@@ -2,202 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACBB262A89
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Sep 2020 10:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B85D262D12
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Sep 2020 12:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729296AbgIIIiw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Sep 2020 04:38:52 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:13756 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725826AbgIIIio (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Sep 2020 04:38:44 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4Bmb5S0y0Yz9v0ZM;
-        Wed,  9 Sep 2020 10:38:36 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id AVJJBZqZz_Lj; Wed,  9 Sep 2020 10:38:36 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4Bmb5R6sd6z9v0ZL;
-        Wed,  9 Sep 2020 10:38:35 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1B5318B7DC;
-        Wed,  9 Sep 2020 10:38:37 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id c2KpwQPUfYWM; Wed,  9 Sep 2020 10:38:36 +0200 (CEST)
-Received: from [10.0.2.15] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5593A8B7D4;
-        Wed,  9 Sep 2020 10:38:35 +0200 (CEST)
-Subject: Re: [RFC PATCH v2 2/3] mm: make pXd_addr_end() functions
- page-table entry aware
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-mm <linux-mm@kvack.org>, Paul Mackerras <paulus@samba.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-x86 <x86@kernel.org>, Russell King <linux@armlinux.org.uk>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S1729521AbgIIK2T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Sep 2020 06:28:19 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38180 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729251AbgIIK1z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Sep 2020 06:27:55 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089A2ZCv195896;
+        Wed, 9 Sep 2020 06:27:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=YEpZ1XyTfdUWIVWwW3Ff4Nf6q12vIx7sVHOKBnj6u8g=;
+ b=RrZs/nyXQlGRttvQhgHGbvKfOEZGoDCilws/V+4CwBDa44UhPDRAaxyY3jjivUF5MXjG
+ /UTt3JbpYT1z3iOXfBkMc33Sr+MyuWVhywIJ5++70gLu30j1DNFnGFTkYTOsBvbHh+ZN
+ 0wCqUQanHg1LW8vapxWNSBS+1HIuPCcCbB2vPLvrdHu3UbJXE/8r9zioC+W9NHh/C8aU
+ +oHiIpos0DStadvKQ2TywX3i+81CE0v2IS3MUWD/JbzFVMdPjqSGiO1y8eUZndBYtDEm
+ 9PCrsfziZ8+CtnCa06ouY37h/5vB9ImP2vPO2tbvtt/5te/dVS7V2qaIXjfXbyRq2Mp+ Uw== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33evv38y7q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Sep 2020 06:27:07 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089ADJ3t012978;
+        Wed, 9 Sep 2020 10:27:06 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03wdc.us.ibm.com with ESMTP id 33cebutt38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Sep 2020 10:27:06 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089AR6iG60686618
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Sep 2020 10:27:06 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF3336E050;
+        Wed,  9 Sep 2020 10:27:05 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E60D6E04E;
+        Wed,  9 Sep 2020 10:27:01 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.85.93.29])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Sep 2020 10:27:00 +0000 (GMT)
+X-Mailer: emacs 27.1 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        Paul Mackerras <paulus@samba.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jeff Dike <jdike@addtoit.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>
-In-Reply-To: <20200908141554.GA20558@oc3871087118.ibm.com>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
-         <20200907180058.64880-3-gerald.schaefer@linux.ibm.com>
-         <31dfb3ed-a0cc-3024-d389-ab9bd19e881f@csgroup.eu>
-         <20200908074638.GA19099@oc3871087118.ibm.com>
-         <5d4f5546-afd0-0b8f-664d-700ae346b9ec@csgroup.eu>
-         <20200908141554.GA20558@oc3871087118.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Organization: CS Group France
-Date:   Wed, 09 Sep 2020 08:38:31 +0000
-Message-ID: <1599640711.14692.1.camel@po17688vm.idsi0.si.c-s.fr>
-Mime-Version: 1.0
-X-Mailer: Evolution 2.32.3 (2.32.3-37.el6) 
-Content-Transfer-Encoding: 7bit
+        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        Will Deacon <will@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: Flushing transparent hugepages
+In-Reply-To: <20200818150736.GQ17456@casper.infradead.org>
+References: <20200818150736.GQ17456@casper.infradead.org>
+Date:   Wed, 09 Sep 2020 15:56:58 +0530
+Message-ID: <87tuw74559.fsf@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-09_03:2020-09-08,2020-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=521 adultscore=0
+ mlxscore=0 suspectscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1011 priorityscore=1501 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009090085
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2020-09-08 at 16:15 +0200, Alexander Gordeev wrote:
-> On Tue, Sep 08, 2020 at 10:16:49AM +0200, Christophe Leroy wrote:
-> > >Yes, and also two more sources :/
-> > >	arch/powerpc/mm/kasan/8xx.c
-> > >	arch/powerpc/mm/kasan/kasan_init_32.c
-> > >
-> > >But these two are not quite obvious wrt pgd_addr_end() used
-> > >while traversing pmds. Could you please clarify a bit?
-> > >
-> > >
-> > >diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
-> > >index 2784224..89c5053 100644
-> > >--- a/arch/powerpc/mm/kasan/8xx.c
-> > >+++ b/arch/powerpc/mm/kasan/8xx.c
-> > >@@ -15,8 +15,8 @@
-> > >  	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd += 2, block += SZ_8M) {
-> > >  		pte_basic_t *new;
-> > >-		k_next = pgd_addr_end(k_cur, k_end);
-> > >-		k_next = pgd_addr_end(k_next, k_end);
-> > >+		k_next = pmd_addr_end(k_cur, k_end);
-> > >+		k_next = pmd_addr_end(k_next, k_end);
-> > 
-> > No, I don't think so.
-> > On powerpc32 we have only two levels, so pgd and pmd are more or
-> > less the same.
-> > But pmd_addr_end() as defined in include/asm-generic/pgtable-nopmd.h
-> > is a no-op, so I don't think it will work.
-> > 
-> > It is likely that this function should iterate on pgd, then you get
-> > pmd = pmd_offset(pud_offset(p4d_offset(pgd)));
-> 
-> It looks like the code iterates over single pmd table while using
-> pgd_addr_end() only to skip all the middle levels and bail out
-> from the loop.
-> 
-> I would be wary for switching from pmds to pgds, since we are
-> trying to minimize impact (especially functional) and the
-> rework does not seem that obvious.
-> 
+Matthew Wilcox <willy@infradead.org> writes:
 
-I've just tested the following change, it works and should fix the
-oddity:
+> PowerPC has special handling of hugetlbfs pages.  Well, that's what
+> the config option says, but actually it handles THP as well.  If
+> the config option is enabled.
+>
+> #ifdef CONFIG_HUGETLB_PAGE
+>         if (PageCompound(page)) {
+>                 flush_dcache_icache_hugepage(page);
+>                 return;
+>         }
+> #endif
 
-diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
-index 2784224054f8..8e53ddf57b84 100644
---- a/arch/powerpc/mm/kasan/8xx.c
-+++ b/arch/powerpc/mm/kasan/8xx.c
-@@ -9,11 +9,12 @@
- static int __init
- kasan_init_shadow_8M(unsigned long k_start, unsigned long k_end, void
-*block)
- {
--	pmd_t *pmd = pmd_off_k(k_start);
-+	pgd_t *pgd = pgd_offset_k(k_start);
- 	unsigned long k_cur, k_next;
- 
--	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd += 2, block
-+= SZ_8M) {
-+	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pgd += 2, block
-+= SZ_8M) {
- 		pte_basic_t *new;
-+		pmd_t *pmd = pmd_offset(pud_offset(p4d_offset(pgd, k_cur), k_cur),
-k_cur);
- 
- 		k_next = pgd_addr_end(k_cur, k_end);
- 		k_next = pgd_addr_end(k_next, k_end);
-diff --git a/arch/powerpc/mm/kasan/kasan_init_32.c
-b/arch/powerpc/mm/kasan/kasan_init_32.c
-index fb294046e00e..e5f524fa71a7 100644
---- a/arch/powerpc/mm/kasan/kasan_init_32.c
-+++ b/arch/powerpc/mm/kasan/kasan_init_32.c
-@@ -30,13 +30,12 @@ static void __init kasan_populate_pte(pte_t *ptep,
-pgprot_t prot)
- 
- int __init kasan_init_shadow_page_tables(unsigned long k_start,
-unsigned long k_end)
- {
--	pmd_t *pmd;
-+	pgd_t *pgd = pgd_offset_k(k_start);
- 	unsigned long k_cur, k_next;
- 
--	pmd = pmd_off_k(k_start);
--
--	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pmd++) {
-+	for (k_cur = k_start; k_cur != k_end; k_cur = k_next, pgd++) {
- 		pte_t *new;
-+		pmd_t *pmd = pmd_offset(pud_offset(p4d_offset(pgd, k_cur), k_cur),
-k_cur);
- 
- 		k_next = pgd_addr_end(k_cur, k_end);
- 		if ((void *)pmd_page_vaddr(*pmd) != kasan_early_shadow_pte)
-@@ -189,16 +188,18 @@ void __init kasan_early_init(void)
- 	unsigned long addr = KASAN_SHADOW_START;
- 	unsigned long end = KASAN_SHADOW_END;
- 	unsigned long next;
--	pmd_t *pmd = pmd_off_k(addr);
-+	pgd_t *pgd = pgd_offset_k(addr);
- 
- 	BUILD_BUG_ON(KASAN_SHADOW_START & ~PGDIR_MASK);
- 
- 	kasan_populate_pte(kasan_early_shadow_pte, PAGE_KERNEL);
- 
- 	do {
-+		pmd_t *pmd = pmd_offset(pud_offset(p4d_offset(pgd, addr), addr),
-addr);
-+
- 		next = pgd_addr_end(addr, end);
- 		pmd_populate_kernel(&init_mm, pmd, kasan_early_shadow_pte);
--	} while (pmd++, addr = next, addr != end);
-+	} while (pgd++, addr = next, addr != end);
- 
- 	if (early_mmu_has_feature(MMU_FTR_HPTE_TABLE))
- 		kasan_early_hash_table();
----
-Christophe
+I do have a change posted sometime back to avoid that confusion.
+http://patchwork.ozlabs.org/project/linuxppc-dev/patch/20200320103256.229365-1-aneesh.kumar@linux.ibm.com/
 
+But IIUC we use the head page flags (PG_arch_1) to track whether we need
+the flush or not.
+
+>
+> By the way, THPs can be mapped askew -- that is, at an offset which
+> means you can't use a PMD to map a PMD sized page.
+>
+> Anyway, we don't really have consensus between the various architectures
+> on how to handle either THPs or hugetlb pages.  It's not contemplated
+> in Documentation/core-api/cachetlb.rst so there's no real surprise
+> we've diverged.
+>
+> What would you _like_ to see?  Would you rather flush_dcache_page()
+> were called once for each subpage, or would you rather maintain
+> the page-needs-flushing state once per compound page?  We could also
+> introduce flush_dcache_thp() if some architectures would prefer it one
+> way and one the other, although that brings into question what to do
+> for hugetlbfs pages.
+>
+> It might not be a bad idea to centralise the handling of all this stuff
+> somewhere.  Sounds like the kind of thing Arnd would like to do ;-) I'll
+> settle for getting enough clear feedback about what the various arch
+> maintainers want that I can write a documentation update for cachetlb.rst.
