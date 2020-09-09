@@ -2,135 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE72263172
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Sep 2020 18:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE83263199
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Sep 2020 18:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730950AbgIIQNh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Sep 2020 12:13:37 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64112 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730885AbgIIQN0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Sep 2020 12:13:26 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089G3hGt094150;
-        Wed, 9 Sep 2020 12:12:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=l58yEDHShi5ObMeKXd9i1HaDyPqzpve8oVA61+yeocE=;
- b=MkLV2iGRLrJMnX5uAc0U1tKsI6PtfCpTFLq0ne+qlZoGDxasR0vpXy0ZPQFv53fQioKS
- Njkr3bSJU9cSed7Dznmbo9BmJczRYk4RfUadU7jKzxZzmlvIbclW1mWXcF38rx/3YBHD
- DHGFzRfbHRhULHpR4pMwew+G5+a7cM4wQ8S6KHO0/Vn8+p0qPD1IaNDa27Ys8fdQ7ayu
- mkAPh04ADJ9xzS/1izjRTf5b07VXHfPvqzONbas5SsWm0Wr8YBUObSz63a3/j7CZP7rT
- EXGtrBqSj1ncxxjLbt/3Wb6mGFGOd2DCOaIuQKq8Kp7HtL1bzAl06aqbqtEuMqwEMpQZ BA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33eyv56ynt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 12:12:20 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 089G4E1s096945;
-        Wed, 9 Sep 2020 12:12:19 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33eyv56yn1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 12:12:19 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089GA6XD019174;
-        Wed, 9 Sep 2020 16:12:17 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 33e5gmrvyy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 16:12:17 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089GCEnm26673490
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Sep 2020 16:12:14 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23E2111C054;
-        Wed,  9 Sep 2020 16:12:14 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E726D11C052;
-        Wed,  9 Sep 2020 16:12:12 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.79.102])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed,  9 Sep 2020 16:12:12 +0000 (GMT)
-Date:   Wed, 9 Sep 2020 18:12:11 +0200
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-mm <linux-mm@kvack.org>, Paul Mackerras <paulus@samba.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
+        id S1730701AbgIIQUq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Sep 2020 12:20:46 -0400
+Received: from mga06.intel.com ([134.134.136.31]:26950 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730624AbgIIQUJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Sep 2020 12:20:09 -0400
+IronPort-SDR: B7ewl9K7/t9aOWLUtiAbfNtOst+V1OZHTadeUqohz5HRb3wMEXhQSEFg/CXh2zuzZ95Evrw6ns
+ W5yDF3cFdJfw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9739"; a="219920314"
+X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
+   d="scan'208";a="219920314"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 09:18:51 -0700
+IronPort-SDR: whJDqYr6G1dIgALOmpoIa+XQCaHefozrQXoBR3bKKkFeWJPkdK457AzdyiI12+qDeq6dMMZGKa
+ C85mSU78iwlw==
+X-IronPort-AV: E=Sophos;i="5.76,409,1592895600"; 
+   d="scan'208";a="304554647"
+Received: from pbhangod-mobl.amr.corp.intel.com (HELO [10.213.170.146]) ([10.213.170.146])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 09:18:47 -0700
+Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
+ folding
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-x86 <x86@kernel.org>, Russell King <linux@armlinux.org.uk>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Mike Rapoport <rppt@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        John Hubbard <jhubbard@nvidia.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Jeff Dike <jdike@addtoit.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
+        Richard Weinberger <richard@nod.at>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        linux-x86 <x86@kernel.org>,
         linux-arm <linux-arm-kernel@lists.infradead.org>,
         linux-power <linuxppc-dev@lists.ozlabs.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 0/3] mm/gup: fix gup_fast with dynamic page table
- folding
-Message-ID: <20200909181211.1cad8d28@thinkpad>
-In-Reply-To: <20200908193650.1c1511d0@thinkpad>
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
 References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
-        <20200907201256.GC1976319@kernel.org>
-        <9bde9857-fdfd-e384-ea27-a14e5a06f1e6@csgroup.eu>
-        <20200908193650.1c1511d0@thinkpad>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
+ <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
+ <20200909142904.00b72921@thinkpad>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
+Date:   Wed, 9 Sep 2020 09:18:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-09_09:2020-09-09,2020-09-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090139
+In-Reply-To: <20200909142904.00b72921@thinkpad>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 8 Sep 2020 19:36:50 +0200
-Gerald Schaefer <gerald.schaefer@linux.ibm.com> wrote:
+On 9/9/20 5:29 AM, Gerald Schaefer wrote:
+> This only works well as long there are real pagetable pointers involved,
+> that can also be used for iteration. For gup_fast, or any other future
+> pagetable walkers using the READ_ONCE logic w/o lock, that is not true.
+> There are pointers involved to local pXd values on the stack, because of
+> the READ_ONCE logic, and our middle-level iteration will suddenly iterate
+> over such stack pointers instead of pagetable pointers.
 
-[..]
-> 
-> It seems now that the generalization is very well accepted so far,
-> apart from some apparent issues on arm. Also, merging 2 + 3 and
-> putting them first seems to be acceptable, so we could do that for
-> v3, if there are no objections.
-> 
-> Of course, we first need to address the few remaining issues for
-> arm(32?), which do look quite confusing to me so far. BTW, sorry for
-> the compile error with patch 3, I guess we did the cross-compile only
-> for 1 + 2 applied, to see the bloat-o-meter changes. But I guess
-> patch 3 already proved its usefulness by that :-)
+By "There are pointers involved to local pXd values on the stack", did
+you mean "locate" instead of "local"?  That sentence confused me.
 
-Umm, replace "arm" with "power", sorry. No issues on arm so far, but
-also no ack I think.
+Which code is it, exactly that allocates these troublesome on-stack pXd
+values, btw?
 
-Thanks to Christophe for the power change, and to Mike for volunteering
-for some cross compilation and cross-arch testing. Will send v3 with
-merged and re-ordered patches after some more testing.
+> This will be addressed by making the pXd_addr_end() dynamic, for which
+> we need to see the pXd value in order to determine its level / type.
+
+Thanks for the explanation!
