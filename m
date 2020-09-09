@@ -2,100 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C4C262691
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Sep 2020 06:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE272626BF
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Sep 2020 07:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgIIE7h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Sep 2020 00:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgIIE7b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Sep 2020 00:59:31 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BF7C061756
-        for <linux-arch@vger.kernel.org>; Tue,  8 Sep 2020 21:59:30 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id n14so1088056pff.6
-        for <linux-arch@vger.kernel.org>; Tue, 08 Sep 2020 21:59:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aMuaqipRQnYeqRzhZrGBU6gZzBaakoxqT2EsHc4LAkw=;
-        b=tpgF9Rnjs582RVO60tHFuThNeDv8r1D7N4z/7UTKHgifa+meHjtSqF6MmXDAlaZiRY
-         nqqGXLS2Xx7cWbQmv2Tsmxav1QwUJevwRHbW/8KUyfLigIRgRiFxMOMkdVqiiwNzxsYx
-         HZv8VX4R32LJJljOL4S9tDoE7X7QugRVxE6gWmn/rNX4xGHSm34XkIKVGyFUcnqj/rVJ
-         MZCqNIjU3Xb7c67+Vd+6NMkgv0My+pdYPoAV1fN2XSlFAnJcs7acyWbru7ghUBDihK+n
-         HA3KkD9a8MMJ3mptyenmxRBX4VAJkBNGBzhWly1gBbZAze1ERi77A0PrZNZBUWYQavE1
-         4llg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=aMuaqipRQnYeqRzhZrGBU6gZzBaakoxqT2EsHc4LAkw=;
-        b=hQ4qojM3/msGwnont1aLtu7H8J/V8Ioo4s9xPLMDDTM1EO5c/1Ozr3tZD0BGpvFkMr
-         5gs9gRhBNvoYtA38pipPRbwU8WA12HvMDTF1zOtlSl1LNeJTpzrRbN/kAadJwnBnl2Ql
-         8x6x4d4zid0tnshD7IO1efAVMp7/AqBdJaoU0IV+ltXkdzFFv62/AjHHUM1aiTYAov3y
-         jLfANMn0QnFF8szNUINS7tPyRZUWbvIvX9MWk3WkUMlF3R0jA4RnhKsxts43/PmLpxmR
-         MBaucEHHcbC81bXp/NUy8dZLuRUvvE5DhFbSPTilh++zTSeP4zTIS/3D0x5SIHisrIBu
-         uuiw==
-X-Gm-Message-State: AOAM533VM8SzQHWndAkt6hiDU+C7sH+DcAJiwy90V1c3Nd2Juq6KVcOh
-        c6os3/019TLMPm54tIXAMikkVw==
-X-Google-Smtp-Source: ABdhPJxDDE5ivT8UmvibDFe7q7gQD1F1no9tzfg8hTFhxtCkA6fy7IjVUDNFMcPuNzrxEIhllR0ZfQ==
-X-Received: by 2002:aa7:8e85:: with SMTP id a5mr1997808pfr.96.1599627570285;
-        Tue, 08 Sep 2020 21:59:30 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id e17sm1043445pff.6.2020.09.08.21.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 21:59:29 -0700 (PDT)
-Date:   Tue, 08 Sep 2020 21:59:29 -0700 (PDT)
-X-Google-Original-Date: Tue, 08 Sep 2020 21:58:57 PDT (-0700)
-Subject:     Re: remove set_fs for riscv v2
-In-Reply-To: <20200907055825.1917151-1-hch@lst.de>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>, viro@zeniv.linux.org.uk,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Christoph Hellwig <hch@lst.de>
-Message-ID: <mhng-5fa86587-c404-420e-a4c0-43d197d1cd27@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1725826AbgIIF2r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Sep 2020 01:28:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725772AbgIIF2q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Sep 2020 01:28:46 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 869E121D40;
+        Wed,  9 Sep 2020 05:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599629326;
+        bh=ml6WI+Chx2VJC/Q73iCBAJoy55Yh6p7fbppRzEQTBhQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B4giaAfOriZRBNC2lbcDSpoIwM/1GVMsqQBTbOjvVW9ErO+HeEoYALGkVU0qYQw0I
+         m1hLqkFj/kqDO6K8NT3Stto6lzJcLuJfbKgjpYpR2WhISL23lCL2VNetFpqdueMtZy
+         6tpBZ1kKewFKC8hmcsoy5WvW72NXnf6Uan2MMOnI=
+Date:   Wed, 9 Sep 2020 14:28:40 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     peterz@infradead.org, Ingo Molnar <mingo@kernel.org>,
+        linux-kernel@vger.kernel.org, Eddy_Wu@trendmicro.com,
+        x86@kernel.org, davem@davemloft.net, rostedt@goodmis.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        linux-arch@vger.kernel.org, cameron@moodycamel.com,
+        oleg@redhat.com, will@kernel.org, paulmck@kernel.org,
+        systemtap@sourceware.org
+Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
+ and make kretprobe lockless
+Message-Id: <20200909142840.b2245ae2f8325f042a3bc546@kernel.org>
+In-Reply-To: <20200909000923.54cca4fb530904c57e8ff529@kernel.org>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+        <20200901190808.GK29142@worktop.programming.kicks-ass.net>
+        <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
+        <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+        <20200902171755.b126672093a3c5d1b3a62a4f@kernel.org>
+        <20200902093613.GY1362448@hirez.programming.kicks-ass.net>
+        <20200902221926.f5cae5b4ad00b8d8f9ad99c7@kernel.org>
+        <20200902134252.GH1362448@hirez.programming.kicks-ass.net>
+        <20200903103954.68f0c97da57b3679169ce3a7@kernel.org>
+        <20200908103736.GP1362448@hirez.programming.kicks-ass.net>
+        <20200909000923.54cca4fb530904c57e8ff529@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, 06 Sep 2020 22:58:17 PDT (-0700), Christoph Hellwig wrote:
-> Hi all,
->
-> this series converts riscv to the new set_fs less world and is on top of this
-> branch:
->
->     https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git/log/?h=base.set_fs
->
-> The first four patches are general improvements and enablement for all nommu
-> ports, and might make sense to merge through the above base branch.
+On Wed, 9 Sep 2020 00:09:23 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Seems like it to me.  These won't work without the SET_FS code so I'm OK if you
-guys want to keep them all together.  Otherwise I think I'd need to wait until
-the SET_FS stuff gets merged before taking any of these, which would be a bit
-of a headache.
+> > > Of course make it lockless then warning is gone.
+> > > But even without the lockless patch, this warning can be false-positive
+> > > because we prohibit nested kprobe call, right?
+> > 
+> > Yes, because the actual nesting is avoided by kprobe_busy, but lockdep
+> > can't tell. Lockdep sees a regular lock user and an in-nmi lock user and
+> > figures that's a bad combination.
 
-Thanks!
+Hmm, what about introducing new LOCK_USED_KPROBE bit, which will be set
+if the lock is accessed when the current_kprobe is set (including kprobe_busy)?
+This means it is in the kprobe user-handler context. If we access the lock always
+in the kprobes context, it is never nested.
 
-> Changes since v1:
->  - implement __get_user_fn and __put_user_fn for the UACCESS_MEMCPY case
->    and remove the small constant size optimizations in raw_copy_from_user
->    and raw_copy_to_user
->  - reshuffle the patch order a little
->
-> Diffstat
->  arch/riscv/Kconfig                   |    2
->  arch/riscv/include/asm/thread_info.h |    6 -
->  arch/riscv/include/asm/uaccess.h     |  177 +++++++++++++++++------------------
->  arch/riscv/kernel/process.c          |    1
->  arch/riscv/lib/Makefile              |    2
->  include/asm-generic/uaccess.h        |  109 +++++++++++++--------
->  include/linux/uaccess.h              |    4
->  7 files changed, 166 insertions(+), 135 deletions(-)
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
