@@ -2,164 +2,214 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B12D826428F
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 11:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C8526431F
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 12:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730067AbgIJJks (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 05:40:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42054 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728207AbgIJJkm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Sep 2020 05:40:42 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08A9Vt6b119469;
-        Thu, 10 Sep 2020 05:39:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=41BJsvawiBO1ghr06VQIrffJCPHY4UzVo4fvKE+7RMs=;
- b=JnI3+HuSFQICzixnbEr3lD/KU407bMni7V5mL/H47oPLaomhPs6t57kI2sBNlnitleWU
- Ljv2tAQ6Y00VBu0RV7fJV/uOYIaFn2+L3EVF73PBzpDn0xMhXi4S9uZF+n3tyogr9cL8
- ytPNf7pxi3XLZLzrvhLCPhCFdXv9qVuX2Is4ueWpwdN5VmTvJ7ZPUFIC/eAC2eqsGvRz
- 0ArbCVZIdHdWjs4nUhCUUciXheJ/YGqiDnhHtZPbG7C2gBZK+PQzRO1oEWokDf3RJaPK
- qEdPrU10FoZR5nshuEVIEbRP9lZ8x2Pm0AWZdo3HKCBJEvEDjwjaM3Kk9J6p8hBlCJ8m ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33fg9ejw18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 05:39:36 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08A9WV5v121274;
-        Thu, 10 Sep 2020 05:39:35 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33fg9ejvxx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 05:39:35 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08A9c3QB011125;
-        Thu, 10 Sep 2020 09:39:32 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 33c2a81b0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 09:39:32 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08A9dTSv34800078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Sep 2020 09:39:29 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EE38AE04D;
-        Thu, 10 Sep 2020 09:39:29 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7BD21AE053;
-        Thu, 10 Sep 2020 09:39:27 +0000 (GMT)
-Received: from oc3871087118.ibm.com (unknown [9.145.67.15])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 10 Sep 2020 09:39:27 +0000 (GMT)
-Date:   Thu, 10 Sep 2020 11:39:25 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
+        id S1729781AbgIJKBF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 06:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730567AbgIJJzB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 05:55:01 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04566C061799
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 02:55:01 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id z9so5170221wmk.1
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 02:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kBmlII5Vo//A9yPEJvnx3pKLF3xO4ua5qFTJHSq3g7w=;
+        b=Mp48Y5o3UTjqc7GRbcTi2cjvv51nFGNvyAA5DE1UfeTL1TMGbjAHc4RUbolyjBcq78
+         jLfYRxESN0S1R7j1vveSLWJeMYK+nJX28JhMyTmyicQtPHsq5swlYfpyW+55u5AoImfZ
+         oBxeH5Lbwxs2v/dztAijetFrho1Wx6bVj+Oc/dkvUXrE5TyUZWh0epgiUpxiOto85MsG
+         hTEOT+NcLacuqmR7JmXxY+IDVmr5voQ/ECTLxZvFSYbuWjRg4MsOVEUUgTnqbsR0HMQb
+         V0et67mMhX/LXsQcKVGVYQwUkRusWYFa/RLbGrMSils0/fDIHW0nT7CA22W1u9F3htI4
+         NkqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kBmlII5Vo//A9yPEJvnx3pKLF3xO4ua5qFTJHSq3g7w=;
+        b=pcPk/Mzt4J5ZTurs46v6G5GfZ5OMzo8PnRkatOSwtmwm3qzMn+vA32vEmvKmXYyOoo
+         sGzJkNH2+dYF+jc/EPXo2lLz7jD1RQncXVpIXjqsEyOv43mMQEJK2Qvzs/KpAeyOanGu
+         PTS1uAy37iRTsC6EwCNVqjwstCT2Xr4tAIK4zjlo5bTBT4QjduV0fR1K+1kBK17zOjvk
+         uwePTzXb2Rh1anOn/VL66obAmyNQYDcieNKGyw1kNjXJ2q2xh5vg9LyZIP/rz9CpORyX
+         HnjWQMVf8JF4ZFLpyl0VakYHiy+bN9NI/FxszJZ3KtMQZf2hEMkkWDd0W12DT1O1T8pO
+         1Jiw==
+X-Gm-Message-State: AOAM531UKU3pt2WgCZgeufllClcB5GxzfL/rs5ypkO88Mq1h+pUZcFap
+        qG9CXV9uHKY3kjSP3tYCKQIVQw==
+X-Google-Smtp-Source: ABdhPJxw2J4g1tLxlXhkthydaDC7Hl8eCBStOVqNL7T4xvp4Dg/q8If7FlfLMGbTnCUpJcon0gm14g==
+X-Received: by 2002:a7b:c14d:: with SMTP id z13mr7474778wmi.19.1599731699416;
+        Thu, 10 Sep 2020 02:54:59 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:109:4a0f:cfff:fe4a:6363])
+        by smtp.gmail.com with ESMTPSA id b76sm2975511wme.45.2020.09.10.02.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 02:54:58 -0700 (PDT)
+Date:   Thu, 10 Sep 2020 10:54:54 +0100
+From:   Andrew Scull <ascull@google.com>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Will Deacon <will@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
- folding
-Message-ID: <20200910093925.GB29166@oc3871087118.ibm.com>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
- <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
- <20200909142904.00b72921@thinkpad>
- <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
- <20200909192534.442f8984@thinkpad>
- <20200909180324.GI87483@ziepe.ca>
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 02/10] kvm: arm64: Partially link nVHE hyp code,
+ simplify HYPCOPY
+Message-ID: <20200910095454.GB93664@google.com>
+References: <20200903091712.46456-1-dbrazdil@google.com>
+ <20200903091712.46456-3-dbrazdil@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200909180324.GI87483@ziepe.ca>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-10_01:2020-09-10,2020-09-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 mlxscore=0 suspectscore=0 clxscore=1011 adultscore=0
- spamscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009100085
+In-Reply-To: <20200903091712.46456-3-dbrazdil@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 03:03:24PM -0300, Jason Gunthorpe wrote:
-> On Wed, Sep 09, 2020 at 07:25:34PM +0200, Gerald Schaefer wrote:
-> > I actually had to draw myself a picture to get some hold of
-> > this, or rather a walk-through with a certain pud-crossing
-> > range in a folded 3-level scenario. Not sure if I would have
-> > understood my explanation above w/o that, but I hope you can
-> > make some sense out of it. Or draw yourself a picture :-)
+On Thu, Sep 03, 2020 at 11:17:04AM +0200, 'David Brazdil' via kernel-team wrote:
+> Previous series introduced custom build rules for nVHE hyp code, using
+> objcopy to prefix ELF section and symbol names to separate nVHE code
+> into its own "namespace". This approach was limited by the expressiveness
+> of objcopy's command line interface, eg. missing support for wildcards.
 > 
-> What I don't understand is how does anything work with S390 today?
+> Improve the build rules by partially linking all '.hyp.o' files and
+> prefixing their ELF section names using a linker script. Continue using
+> objcopy for prefixing ELF symbol names.
 > 
-> If the fix is only to change pxx_addr_end() then than generic code
-> like mm/pagewalk.c will iterate over a *different list* of page table
-> entries. 
+> One immediate advantage of this approach is that all subsections
+> matching a pattern can be merged into a single prefixed section, eg.
+> .text and .text.* can be linked into a single '.hyp.text'. This removes
+> the need for -fno-reorder-functions on GCC and will be useful in the
+> future too: LTO builds use .text subsections, compilers routinely
+> generate .rodata subsections, etc.
+
+This certaintly feels like a more robust and controlled approach to the
+sections now that we have an explicit list of those that are allowed.
+
+> Partially linking all hyp code into a single object file also makes it
+> easier to analyze.
 > 
-> It's choice of entries to look at is entirely driven by pxx_addr_end().
+> Signed-off-by: David Brazdil <dbrazdil@google.com>
+> ---
+>  arch/arm64/kvm/hyp/nvhe/Makefile  | 56 ++++++++++++++++---------------
+>  arch/arm64/kvm/hyp/nvhe/hyp.lds.S | 14 ++++++++
+>  2 files changed, 43 insertions(+), 27 deletions(-)
+>  create mode 100644 arch/arm64/kvm/hyp/nvhe/hyp.lds.S
 > 
-> Which suggest to me that mm/pagewalk.c also doesn't work properly
-> today on S390 and this issue is not really about stack variables?
+> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+> index aef76487edc2..1b2fbb19f3e8 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> @@ -10,40 +10,42 @@ obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o
+>  obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
+>  	 ../fpsimd.o ../hyp-entry.o
+>  
+> -obj-y := $(patsubst %.o,%.hyp.o,$(obj-y))
+> -extra-y := $(patsubst %.hyp.o,%.hyp.tmp.o,$(obj-y))
+> +##
+> +## Build rules for compiling nVHE hyp code
+> +## Output of this folder is `hyp.o`, a partially linked object file containing
+> +## all nVHE hyp code and data.
+> +##
+>  
+> -$(obj)/%.hyp.tmp.o: $(src)/%.c FORCE
+> +hyp-obj := $(patsubst %.o,%.hyp.o,$(obj-y))
+> +obj-y := hyp.o
+> +extra-y := $(hyp-obj) hyp.tmp.o hyp.lds
+> +
+> +# 1) Compile all source files to `.hyp.o` object files. The file extension
+> +#    avoids file name clashes for files shared with VHE.
+
+Very much a nit, but possibly .nvhe.o or .kvm_nvhe.o would make the
+intended distinction more obvious and line up with the prefix being
+applied to the symbols.
+
+> +$(obj)/%.hyp.o: $(src)/%.c FORCE
+>  	$(call if_changed_rule,cc_o_c)
+> -$(obj)/%.hyp.tmp.o: $(src)/%.S FORCE
+> +$(obj)/%.hyp.o: $(src)/%.S FORCE
+>  	$(call if_changed_rule,as_o_S)
+> -$(obj)/%.hyp.o: $(obj)/%.hyp.tmp.o FORCE
+> -	$(call if_changed,hypcopy)
+>  
+> -# Disable reordering functions by GCC (enabled at -O2).
+> -# This pass puts functions into '.text.*' sections to aid the linker
+> -# in optimizing ELF layout. See HYPCOPY comment below for more info.
+> -ccflags-y += $(call cc-option,-fno-reorder-functions)
+> +# 2) Compile linker script.
+> +$(obj)/hyp.lds: $(src)/hyp.lds.S FORCE
+> +	$(call if_changed_dep,cpp_lds_S)
+> +
+> +# 3) Partially link all '.hyp.o' files and apply the linker script.
+> +#    Prefixes names of ELF sections with '.hyp', eg. '.hyp.text'.
+> +LDFLAGS_hyp.tmp.o := -r -T $(obj)/hyp.lds
+> +$(obj)/hyp.tmp.o: $(addprefix $(obj)/,$(hyp-obj)) $(obj)/hyp.lds FORCE
+> +	$(call if_changed,ld)
+> +
+> +# 4) Produce the final 'hyp.o', ready to be linked into 'vmlinux'.
+> +#    Prefixes names of ELF symbols with '__kvm_nvhe_'.
+> +$(obj)/hyp.o: $(obj)/hyp.tmp.o FORCE
+> +	$(call if_changed,hypcopy)
+>  
+>  # The HYPCOPY command uses `objcopy` to prefix all ELF symbol names
+> -# and relevant ELF section names to avoid clashes with VHE code/data.
+> -#
+> -# Hyp code is assumed to be in the '.text' section of the input object
+> -# files (with the exception of specialized sections such as
+> -# '.hyp.idmap.text'). This assumption may be broken by a compiler that
+> -# divides code into sections like '.text.unlikely' so as to optimize
+> -# ELF layout. HYPCOPY checks that no such sections exist in the input
+> -# using `objdump`, otherwise they would be linked together with other
+> -# kernel code and not memory-mapped correctly at runtime.
+> +# to avoid clashes with VHE code/data.
+>  quiet_cmd_hypcopy = HYPCOPY $@
+> -      cmd_hypcopy =							\
+> -	if $(OBJDUMP) -h $< | grep -F '.text.'; then			\
+> -		echo "$@: function reordering not supported in nVHE hyp code" >&2; \
+> -		/bin/false;						\
+> -	fi;								\
+> -	$(OBJCOPY) --prefix-symbols=__kvm_nvhe_				\
+> -		   --rename-section=.text=.hyp.text			\
+> -		   $< $@
+> +      cmd_hypcopy = $(OBJCOPY) --prefix-symbols=__kvm_nvhe_ $< $@
+>  
+>  # Remove ftrace and Shadow Call Stack CFLAGS.
+>  # This is equivalent to the 'notrace' and '__noscs' annotations.
+> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp.lds.S b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
+> new file mode 100644
+> index 000000000000..aaa0ce133a32
+> --- /dev/null
+> +++ b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Linker script used during partial linking of nVHE EL2 object files.
+> + * Written by David Brazdil <dbrazdil@google.com>
+> + */
+
+Should this file have the standard copyright line?
+
+> +
+> +/*
+> + * Defines an ELF hyp section from input section @NAME and its subsections.
+> + */
+> +#define HYP_SECTION(NAME) .hyp##NAME : { *(NAME NAME##.[0-9a-zA-Z_]*) }
+> +
+> +SECTIONS {
+> +	HYP_SECTION(.text)
+> +}
+> -- 
+> 2.28.0.402.g5ffc5be6b7-goog
 > 
-> Fundamentally if pXX_offset() and pXX_addr_end() must be consistent
-> together, if pXX_offset() is folded then pXX_addr_end() must cause a
-> single iteration of that level.
-
-Your observation is correct.
-
-Another way to describe the problem is existing pXd_addr_end helpers
-could be applied to mismatching levels on s390 (e.g p4d_addr_end
-applied to pud or pgd_addr_end applied to p4d). As you noticed,
-all *_pXd_range iterators could be called with address ranges that
-exceed single pXd table.
-
-However, when it happens with pointers to real page tables (passed to
-*_pXd_range iterators) we still operate on valid tables, which just
-(lucky for us) happened to be folded. Thus we still reference correct
-table entries.
-
-It is only gup_fast case that exposes the issue. It hits because
-pointers to stack copies are passed to gup_pXd_range iterators, not
-pointers to real page tables itself.
-
-As Gerald mentioned, it is very difficult to explain in a clear way.
-Hopefully, one could make sense ot of it.
-
-> Jason
+> -- 
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> 
