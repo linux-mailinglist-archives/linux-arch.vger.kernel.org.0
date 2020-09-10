@@ -2,232 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9F0264F76
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 21:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBF0264F7C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 21:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbgIJToP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 15:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731332AbgIJPdi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 11:33:38 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5443AC061364
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 08:17:23 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id m15so1072653pls.8
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 08:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tPQ89cuIIRpR65Gxj5ecjevE7KdkPR+rkFKg2EWJ1Wo=;
-        b=DChiCwzeZGIWq9/ed/gKC6HSdKRqhEs7Cl7tIqKCGERK9KOYJoH5HR7PeRQFbOp0ZQ
-         khZeS1vnyB3+LRhvPvqPzg1++dxbQ65OlIG3+zElXCaofAPycZykfEboSqoECnwgYkc8
-         MjBJnNXFCtUW2Ff6DrHl+sxDflI9XbnpK+uT5XCk1aFiT5HbdZScO79bQK/bPprVs9ke
-         AKI0Gc5Gmjyb5KEUqFWbhTCjq+hID3NQ5SFYjD5nGdby6rdJDucAdfiBRYrvqN5RUvSp
-         a/e3IDc7KLOgC5+PLCtG+ltNKm9AU2kQQzP0O8rhwbvaICVCr6rc7DiwJMJDGG5odV8E
-         t8+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tPQ89cuIIRpR65Gxj5ecjevE7KdkPR+rkFKg2EWJ1Wo=;
-        b=DHRI5cOiwUUZVw+TH2cuF5j8XgqHTi5orwWIVMpUSyHBw96AZIHhPX6dY9lHH2P7Bc
-         a5UWX8JBiDhu6JZ8jPK3tRbrSHajB3NhKq0s5RTneRpvYVkbH0oBRQ2TaibJrE5t7Hqa
-         Rfi3euEcTUNwKSyBKaNNfWBpOIKvEjQ0CrtFjFMcOB7JfNUSMGpON7rM+0sk3KPvfXNm
-         FamsnljlQlR8UdlmFIkS7h/dVy+olUZXPXqNw0qcCuh/xrU+hhQd/EVFjICtPSnwXTux
-         Bwt4bEQ8dt08r28pSjHJVbwrnJ0WDv9ymg5RG4OgK1mNHCmKHp1QwlaMNYHM2ZhCqvOp
-         vpwg==
-X-Gm-Message-State: AOAM5333k1O2La2wCC+g43u2sB5hKubFsUwTIOpBIWqMG3LX+SGm3uMn
-        gZdWccCNSP4fd8DKPFVbfhfT8A==
-X-Google-Smtp-Source: ABdhPJzN/GMDnhYVZz/m1t04YSzXdezukOM0X0fLu2KC5nqmbsead/T/1/lyPGlr1z5YJ1TUoUk/HA==
-X-Received: by 2002:a17:90b:1915:: with SMTP id mp21mr407790pjb.116.1599751042106;
-        Thu, 10 Sep 2020 08:17:22 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
-        by smtp.gmail.com with ESMTPSA id z23sm5241512pgv.57.2020.09.10.08.17.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 08:17:20 -0700 (PDT)
-Date:   Thu, 10 Sep 2020 08:17:15 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        id S1731311AbgIJPcy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 10 Sep 2020 11:32:54 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:31657 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731244AbgIJPcQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Sep 2020 11:32:16 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-276-Rr3yeOHPPMud0l-oIQnsyA-1; Thu, 10 Sep 2020 16:31:54 +0100
+X-MC-Unique: Rr3yeOHPPMud0l-oIQnsyA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 10 Sep 2020 16:31:53 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 10 Sep 2020 16:31:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Segher Boessenkool' <segher@kernel.crashing.org>
+CC:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
+        'Linus Torvalds' <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
-Subject: Re: [PATCH v2 00/28] Add support for Clang LTO
-Message-ID: <20200910151715.GB2041735@google.com>
-References: <20200624203200.78870-1-samitolvanen@google.com>
- <20200903203053.3411268-1-samitolvanen@google.com>
- <CAK7LNASDUkyJMDD0a5K_HT=1q5NEc6dcN4=FUb330yK0BCKcTw@mail.gmail.com>
- <20200908234643.GF1060586@google.com>
- <CAK7LNAR9zzP0ZU3b__PZv8gRtKrwz6-8GE1zG5UyFx1wDpOBzQ@mail.gmail.com>
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: RE: remove the last set_fs() in common code, and remove it for x86
+ and powerpc v3
+Thread-Topic: remove the last set_fs() in common code, and remove it for x86
+ and powerpc v3
+Thread-Index: AQHWhvDyD2c/lZfV3kC0Ftay5UVebqlhgjnw///zuACAABnIEIAAOoMggAAi9ACAABJI8A==
+Date:   Thu, 10 Sep 2020 15:31:53 +0000
+Message-ID: <18fdbaeacba349a0a8bf7568f709e991@AcuMS.aculab.com>
+References: <20200903142242.925828-1-hch@lst.de>
+ <20200903142803.GM1236603@ZenIV.linux.org.uk>
+ <CAHk-=wgQNyeHxXfckd1WtiYnoDZP1Y_kD-tJKqWSksRoDZT=Aw@mail.gmail.com>
+ <20200909184001.GB28786@gate.crashing.org>
+ <CAHk-=whu19Du_rZ-zBtGsXAB-Qo7NtoJjQjd-Sa9OB5u1Cq_Zw@mail.gmail.com>
+ <3beb8b019e4a4f7b81fdb1bc68bd1e2d@AcuMS.aculab.com>
+ <186a62fc-042c-d6ab-e7dc-e61b18945498@csgroup.eu>
+ <59a64e9a210847b59f70f9bd2d02b5c3@AcuMS.aculab.com>
+ <5050b43687c84515a49b345174a98822@AcuMS.aculab.com>
+ <20200910152030.GJ28786@gate.crashing.org>
+In-Reply-To: <20200910152030.GJ28786@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAR9zzP0ZU3b__PZv8gRtKrwz6-8GE1zG5UyFx1wDpOBzQ@mail.gmail.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 10:18:05AM +0900, Masahiro Yamada wrote:
-> On Wed, Sep 9, 2020 at 8:46 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > On Sun, Sep 06, 2020 at 09:24:38AM +0900, Masahiro Yamada wrote:
-> > > On Fri, Sep 4, 2020 at 5:30 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> > > >
-> > > > This patch series adds support for building x86_64 and arm64 kernels
-> > > > with Clang's Link Time Optimization (LTO).
-> > > >
-> > > > In addition to performance, the primary motivation for LTO is
-> > > > to allow Clang's Control-Flow Integrity (CFI) to be used in the
-> > > > kernel. Google has shipped millions of Pixel devices running three
-> > > > major kernel versions with LTO+CFI since 2018.
-> > > >
-> > > > Most of the patches are build system changes for handling LLVM
-> > > > bitcode, which Clang produces with LTO instead of ELF object files,
-> > > > postponing ELF processing until a later stage, and ensuring initcall
-> > > > ordering.
-> > > >
-> > > > Note that patches 1-4 are not directly related to LTO, but are
-> > > > needed to compile LTO kernels with ToT Clang, so I'm including them
-> > > > in the series for your convenience:
-> > > >
-> > > >  - Patches 1-3 are required for building the kernel with ToT Clang,
-> > > >    and IAS, and patch 4 is needed to build allmodconfig with LTO.
-> > > >
-> > > >  - Patches 3-4 are already in linux-next, but not yet in 5.9-rc.
-> > > >
-> > >
-> > >
-> > > I still do not understand how this patch set works.
-> > > (only me?)
-> > >
-> > > Please let me ask fundamental questions.
-> > >
-> > >
-> > >
-> > > I applied this series on top of Linus' tree,
-> > > and compiled for ARCH=arm64.
-> > >
-> > > I compared the kernel size with/without LTO.
-> > >
-> > >
-> > >
-> > > [1] No LTO  (arm64 defconfig, CONFIG_LTO_NONE)
-> > >
-> > > $ llvm-size   vmlinux
-> > >    text    data     bss     dec     hex filename
-> > > 15848692 10099449 493060 26441201 19375f1 vmlinux
-> > >
-> > >
-> > >
-> > > [2] Clang LTO  (arm64 defconfig + CONFIG_LTO_CLANG)
-> > >
-> > > $ llvm-size   vmlinux
-> > >    text    data     bss     dec     hex filename
-> > > 15906864 10197445 490804 26595113 195cf29 vmlinux
-> > >
-> > >
-> > > I compared the size of raw binary, arch/arm64/boot/Image.
-> > > Its size increased too.
-> > >
-> > >
-> > >
-> > > So, in my experiment, enabling CONFIG_LTO_CLANG
-> > > increases the kernel size.
-> > > Is this correct?
-> >
-> > Yes. LTO does produce larger binaries, mostly due to function
-> > inlining between translation units, I believe. The compiler people
-> > can probably give you a more detailed answer here. Without -mllvm
-> > -import-instr-limit, the binaries would be even larger.
-> >
-> > > One more thing, could you teach me
-> > > how Clang LTO optimizes the code against
-> > > relocatable objects?
-> > >
-> > >
-> > >
-> > > When I learned Clang LTO first, I read this document:
-> > > https://llvm.org/docs/LinkTimeOptimization.html
-> > >
-> > > It is easy to confirm the final executable
-> > > does not contain foo2, foo3...
-> > >
-> > >
-> > >
-> > > In contrast to userspace programs,
-> > > kernel modules are basically relocatable objects.
-> > >
-> > > Does Clang drop unused symbols from relocatable objects?
-> > > If so, how?
-> >
-> > I don't think the compiler can legally drop global symbols from
-> > relocatable objects, but it can rename and possibly even drop static
-> > functions.
-> 
-> 
-> Compilers can drop static functions without LTO.
-> Rather, it is a compiler warning
-> (-Wunused-function), so the code should be cleaned up.
-> 
-> 
-> 
-> > This is why we need global wrappers for initcalls, for
-> > example, to have stable symbol names.
-> >
-> > Sami
-> 
-> 
-> 
-> At first, I thought the motivation of LTO
-> was to remove unused global symbols, and
-> to perform further optimization.
-> 
-> 
-> It is true for userspace programs.
-> In fact, the example of
-> https://llvm.org/docs/LinkTimeOptimization.html
-> produces a smaller binary.
-> 
-> 
-> In contrast, this patch set produces a bigger kernel
-> because LTO cannot remove any unused symbol.
-> 
-> So, I do not understand what the benefit is.
-> 
-> 
-> Is inlining beneficial?
-> I am not sure.
-> 
-> 
-> Documentation/process/coding-style.rst
-> "15) The inline disease"
-> mentions that inlining is not always
-> a good thing.
-> 
-> 
-> As a whole, I still do not understand
-> the motivation of this patch set.
 
-Clang produces faster code with LTO even if unused functions are not
-removed, and I'm not sure how many unused globals there really are in
-the kernel that aren't exported for modules. However, as I mentioned in
-the cover letter, we also need LTO for Control-Flow Integrity (CFI),
-which we have used in Pixel kernels for a couple of years now, and plan
-to use in more Android devices in future:
 
-  https://clang.llvm.org/docs/ControlFlowIntegrity.html
+> -----Original Message-----
+> From: Segher Boessenkool <segher@kernel.crashing.org>
+> Sent: 10 September 2020 16:21
+> To: David Laight <David.Laight@ACULAB.COM>
+> Cc: 'Christophe Leroy' <christophe.leroy@csgroup.eu>; 'Linus Torvalds' <torvalds@linux-
+> foundation.org>; linux-arch <linux-arch@vger.kernel.org>; Kees Cook <keescook@chromium.org>; the
+> arch/x86 maintainers <x86@kernel.org>; Nick Desaulniers <ndesaulniers@google.com>; Linux Kernel
+> Mailing List <linux-kernel@vger.kernel.org>; Alexey Dobriyan <adobriyan@gmail.com>; Luis Chamberlain
+> <mcgrof@kernel.org>; Al Viro <viro@zeniv.linux.org.uk>; linux-fsdevel <linux-fsdevel@vger.kernel.org>;
+> linuxppc-dev <linuxppc-dev@lists.ozlabs.org>; Christoph Hellwig <hch@lst.de>
+> Subject: Re: remove the last set_fs() in common code, and remove it for x86 and powerpc v3
+> 
+> On Thu, Sep 10, 2020 at 12:26:53PM +0000, David Laight wrote:
+> > Actually this is pretty sound:
+> > 	__label__ label;
+> > 	register int eax asm ("eax");
+> > 	// Ensure eax can't be reloaded from anywhere
+> > 	// In particular it can't be reloaded after the asm goto line
+> > 	asm volatile ("" : "=r" (eax));
+> 
+> This asm is fine.  It says it writes the "eax" variable, which lives in
+> the eax register *in that asm* (so *not* guaranteed after it!).
+> 
+> > 	// Provided gcc doesn't save eax here...
+> > 	asm volatile goto ("xxxxx" ::: "eax" : label);
+> 
+> So this is incorrect.
 
-Sami
+From the other email:
+
+> It is neither input nor output operand here!  Only *then* is a local
+> register asm guaranteed to be in the given reg: as input or output to an
+> inline asm.
+
+Ok, so adding '"r" (eax)' to the input section helps a bit.
+
+> > 	// ... and reload the saved value here.
+> > 	// The input value here will be that modified by the 'asm goto'.
+> > 	// Since this modifies eax it can't be moved before the 'asm goto'.
+> > 	asm volatile ("" : "+r" (eax));
+> > 	// So here eax must contain the value set by the "xxxxx" instructions.
+> 
+> No, the register eax will contain the value of the eax variable.  In the
+> asm; it might well be there before or after the asm as well, but none of
+> that is guaranteed.
+
+Perhaps not 'guaranteed', but very unlikely to be wrong.
+It doesn't give gcc much scope for not generating the desired code.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
