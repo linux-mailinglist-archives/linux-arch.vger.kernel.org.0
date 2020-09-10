@@ -2,145 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9998264F03
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 21:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29162264F8E
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 21:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbgIJTcy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 15:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S1726662AbgIJTqW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 15:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728022AbgIJTc2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 15:32:28 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D89C061573
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:32:24 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id y11so4234250lfl.5
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:32:24 -0700 (PDT)
+        with ESMTP id S1726932AbgIJTpr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 15:45:47 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F81BC061757
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:45:47 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g29so4857597pgl.2
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nTbGWidANXm2pjjCI9iaMQBY/df45EdumvXop+9a4ao=;
-        b=gkhGKJWFcLTHyB5x5aFfN6rnXH8dCRqQWjJKd9NZmHZK/NC/oX0q6HVDmBmeekhRv6
-         GTPYMsgUuX5KTeHU91CyIJtiMizZNYrRnX9QG0ENhdKweAOaB0W4mGxVSrji+PC28UP6
-         VshPJp7YLq+DwXcjz/A/kXWDuc/ae+MhCxRmA=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kT3st5L2W/yGrskNA7hV4WTKcp+VzTZ5Pgaqe30vqT8=;
+        b=eC6xHFZebGzDOu2iJFlC4sYhGBsPBPtk9a7oklICzLNlEMzSAdGnasLCc1rhvVduzw
+         WWGkAB927UqclP1++HPY0zndFIqCAsSEoCB33GsJW1zgx9zdnqi9fNwkG+wGtFEr+T3z
+         bUYjH1Oc2jBMRnj0f0FQ3tH0tHQIOzzYF+914=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nTbGWidANXm2pjjCI9iaMQBY/df45EdumvXop+9a4ao=;
-        b=g8R84oCulzBYdXC8eSjt9DV9JwLFiIPEfpJ/Q814Y/Jl6Co3B73b1StOr3tcAFQx6q
-         BpmN/75h+Zyf9cRvf8t93iSy3nJqJATj9mA4BOZyszeprPX+d8oBurXDs8nLCD0ZZom5
-         zqTy5SZpAwVTTqpn7XFS7FXEexiqDN2ToVF9M+4Puvg50tcWSJCywWWJuX+kUbBrz8E+
-         L77KO57IA/mlDXQKOeCAywlJblPd9ijJlrUfERF5T02qMGCKjAQLTCkDltrnxPy9cY+5
-         Mfst/vEI2LzLi9diESV0q3bbElTpf7+NdRWEbNguBojgj5CRRfGrhn7a8C0Lt413NgIJ
-         BBUA==
-X-Gm-Message-State: AOAM533qYm4rDiBqxOWm/2m4TPtxjrqfutPvQf0PZyVxVNuQbotr6ZVW
-        aF1epvxeIS+MGILqxpHmviKaxOacujJ1mA==
-X-Google-Smtp-Source: ABdhPJwr9zRbbiig75etqqdqGiOv+gP6zTTLTwbrdVPkKDJygAKjd4s6noOGtJmTnC42L+xJ7qpy7A==
-X-Received: by 2002:a19:480c:: with SMTP id v12mr4868991lfa.195.1599766342667;
-        Thu, 10 Sep 2020 12:32:22 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id b11sm1545636lfo.66.2020.09.10.12.32.21
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2020 12:32:22 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id b19so9665494lji.11
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:32:21 -0700 (PDT)
-X-Received: by 2002:a2e:7819:: with SMTP id t25mr5043564ljc.371.1599766341582;
- Thu, 10 Sep 2020 12:32:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-2-gerald.schaefer@linux.ibm.com> <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
- <20200909142904.00b72921@thinkpad> <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
- <20200909192534.442f8984@thinkpad> <20200909180324.GI87483@ziepe.ca>
- <20200910093925.GB29166@oc3871087118.ibm.com> <CAHk-=wh4SuNvThq1nBiqk0N-fW6NsY5w=VawC=rJs7ekmjAhjA@mail.gmail.com>
- <20200910181319.GO87483@ziepe.ca> <CAHk-=wh3SjOE2r4WCfagL5Zq4Oj4Jsu1=1jTTi2GxGDTxP-J0Q@mail.gmail.com>
- <20200910211010.46d064a7@thinkpad>
-In-Reply-To: <20200910211010.46d064a7@thinkpad>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 10 Sep 2020 12:32:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg3ggXU98Mnv-ss-hEcvUNc9vCtgSRc7GpcGfvyOw_h3g@mail.gmail.com>
-Message-ID: <CAHk-=wg3ggXU98Mnv-ss-hEcvUNc9vCtgSRc7GpcGfvyOw_h3g@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table folding
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kT3st5L2W/yGrskNA7hV4WTKcp+VzTZ5Pgaqe30vqT8=;
+        b=QAFl9r3DQiPkswxUTGkL7Trqk9L8h65h66zMWdwwnSfcFznT6EhgwrTuZ4Yb74uOJT
+         +T7yRZbD/VNt5Mz/6TDyNEn1VY7eruImJEAcq/fSjlOV5o/WRRx64t/Zhc+lblLo5bv9
+         uX71etnU6h5Zpo4DXrX2KZW3fq+TNOMSGzc2URTBz+WFAj/yodXB8Xp1+trUDeh25Psw
+         yuAmwRSFLJKgxrMOIeuUBmvleJ9jcOo0ABkBXtUWpreMI4MF5wAQwAVmZBV2Sdc8sRMc
+         2PnsqJ7jlH1cPKXKKzCY8DSLnIFcCkXoOjylJ7rH+Pmr/AxPzj4dnCdUZFVXWIEK+LHB
+         qE3w==
+X-Gm-Message-State: AOAM531KE28Wb2AGMBjhH6YKaOHWF8Mj/FzCKYVQ7jvEJ6MH10NiRi+n
+        NLMOZj+VW/pdcI/lM3nfONg6xg==
+X-Google-Smtp-Source: ABdhPJwWpKs77i2Pw4YhFhAT5cZe6s0qx17kIVE+as0BWVJNc55TKLnEBagdP5cQWEjWPugWxrbACw==
+X-Received: by 2002:aa7:858e:: with SMTP id w14mr2753410pfn.95.1599767146631;
+        Thu, 10 Sep 2020 12:45:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l79sm2905776pfd.210.2020.09.10.12.45.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 12:45:45 -0700 (PDT)
+Date:   Thu, 10 Sep 2020 12:45:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-ia64@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-arch@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>, Jeff Dike <jdike@addtoit.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-um@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, Tony Luck <tony.luck@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] kbuild: preprocess module linker script
+Message-ID: <202009101245.493610D05@keescook>
+References: <20200904133122.133071-1-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200904133122.133071-1-masahiroy@kernel.org>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 12:11 PM Gerald Schaefer
-<gerald.schaefer@linux.ibm.com> wrote:
->
-> That sounds a lot like the pXd_offset_orig() from Martins first approach
-> in this thread:
-> https://lore.kernel.org/linuxppc-dev/20190418100218.0a4afd51@mschwideX1/
+On Fri, Sep 04, 2020 at 10:31:21PM +0900, Masahiro Yamada wrote:
+> There was a request to preprocess the module linker script like we do
+> for the vmlinux one (https://lkml.org/lkml/2020/8/21/512).
+> 
+> The difference between vmlinux.lds and module.lds is that the latter
+> is needed for external module builds, thus must be cleaned up by
+> 'make mrproper' instead of 'make clean' (also, it must be created by
+> 'make modules_prepare').
+> 
+> You cannot put it in arch/*/kernel/ because 'make clean' descends into
+> it. I moved arch/*/kernel/module.lds to arch/*/include/asm/module.lds.h,
+> which is included from scripts/module.lds.S.
+> 
+> scripts/module.lds is fine because 'make clean' keeps all the build
+> artifacts under scripts/.
+> 
+> You can add arch-specific sections in <asm/module.lds.h>.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I have to admit to finding that name horrible, but aside from that, yes.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-I don't think "pXd_offset_orig()" makes any sense as a name. Yes,
-"orig" may make sense as the variable name (as in "this was the
-original value we read"), but a function name should describe what it
-*does*, not what the arguments are.
-
-Plus "original" doesn't make sense to me anyway, since we're not
-modifying it. To me, "original" means that there's a final version
-too, which this interface in no way implies. It's just "this is the
-value we already read".
-
-("orig" does make some sense in that fault path - because by
-definition we *are* going to modify the page table entry, that's the
-whole point of the fault - we need to do something to not keep
-faulting. But here, we're not at all necessarily modifying the page
-table contents, we're just following them and readign the values once)
-
-Of course, I don't know what a better name would be to describe what
-is actually going on, I'm just explaining why I hate that naming.
-
-*Maybe* something like just "pXd_offset_value()" together with a
-comment explaining that it's given the upper pXd pointer _and_ the
-value behind it, and it needs to return the next level offset? I
-dunno. "value" doesn't really seem horribly descriptive either, but at
-least it doesn't feel actively misleading to me.
-
-Yeah, I get hung up on naming sometimes. I don't tend to care much
-about private local variables ("i" is a perfectly fine variable name),
-but these kinds of somewhat subtle cross-architecture definitions I
-feel matter.
-
-               Linus
+-- 
+Kees Cook
