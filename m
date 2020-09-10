@@ -2,100 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB29263F82
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 10:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8097E2640FD
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 11:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbgIJIQu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 04:16:50 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:46071 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729779AbgIJION (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Sep 2020 04:14:13 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4BnBVJ36t0z9txjs;
-        Thu, 10 Sep 2020 10:13:44 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id mLdPjtz4MI3T; Thu, 10 Sep 2020 10:13:44 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4BnBVJ24wQz9txjr;
-        Thu, 10 Sep 2020 10:13:44 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5C4A28B820;
-        Thu, 10 Sep 2020 10:13:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id yqpTmoCr2JC9; Thu, 10 Sep 2020 10:13:45 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 71AD28B81D;
-        Thu, 10 Sep 2020 10:13:43 +0200 (CEST)
-Subject: Re: remove the last set_fs() in common code, and remove it for x86
- and powerpc v3
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>
-References: <20200903142242.925828-1-hch@lst.de>
- <20200903142803.GM1236603@ZenIV.linux.org.uk>
- <CAHk-=wgQNyeHxXfckd1WtiYnoDZP1Y_kD-tJKqWSksRoDZT=Aw@mail.gmail.com>
- <20200909184001.GB28786@gate.crashing.org>
- <CAHk-=whu19Du_rZ-zBtGsXAB-Qo7NtoJjQjd-Sa9OB5u1Cq_Zw@mail.gmail.com>
- <3beb8b019e4a4f7b81fdb1bc68bd1e2d@AcuMS.aculab.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <186a62fc-042c-d6ab-e7dc-e61b18945498@csgroup.eu>
-Date:   Thu, 10 Sep 2020 10:13:42 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726600AbgIJJLi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 05:11:38 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:47860 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727830AbgIJJLb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Sep 2020 05:11:31 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 8D79DF8AE19BE641BC5F;
+        Thu, 10 Sep 2020 17:11:26 +0800 (CST)
+Received: from huawei.com (10.175.104.175) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Thu, 10 Sep 2020
+ 17:11:19 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <arnd@arndb.de>
+CC:     <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] locking/atomic/bitops: Fix some wrong param names in comments
+Date:   Thu, 10 Sep 2020 05:10:04 -0400
+Message-ID: <20200910091004.8921-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-In-Reply-To: <3beb8b019e4a4f7b81fdb1bc68bd1e2d@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.175]
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Correct the wrong param name @addr to @p.
 
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ include/asm-generic/bitops/lock.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Le 10/09/2020 à 10:04, David Laight a écrit :
-> From: Linus Torvalds
->> Sent: 09 September 2020 22:34
->> On Wed, Sep 9, 2020 at 11:42 AM Segher Boessenkool
->> <segher@kernel.crashing.org> wrote:
->>>
->>> It will not work like this in GCC, no.  The LLVM people know about that.
->>> I do not know why they insist on pushing this, being incompatible and
->>> everything.
->>
->> Umm. Since they'd be the ones supporting this, *gcc* would be the
->> incompatible one, not clang.
-> 
-> I had an 'interesting' idea.
-> 
-> Can you use a local asm register variable as an input and output to
-> an 'asm volatile goto' statement?
-> 
-> Well you can - but is it guaranteed to work :-)
-> 
+diff --git a/include/asm-generic/bitops/lock.h b/include/asm-generic/bitops/lock.h
+index 3ae021368f48..cdd4fde2dacc 100644
+--- a/include/asm-generic/bitops/lock.h
++++ b/include/asm-generic/bitops/lock.h
+@@ -9,7 +9,7 @@
+ /**
+  * test_and_set_bit_lock - Set a bit and return its old value, for lock
+  * @nr: Bit to set
+- * @addr: Address to count from
++ * @p: Address to count from
+  *
+  * This operation is atomic and provides acquire barrier semantics if
+  * the returned value is 0.
+@@ -33,7 +33,7 @@ static inline int test_and_set_bit_lock(unsigned int nr,
+ /**
+  * clear_bit_unlock - Clear a bit in memory, for unlock
+  * @nr: the bit to set
+- * @addr: the address to start counting from
++ * @p: the address to start counting from
+  *
+  * This operation is atomic and provides release barrier semantics.
+  */
+@@ -46,7 +46,7 @@ static inline void clear_bit_unlock(unsigned int nr, volatile unsigned long *p)
+ /**
+  * __clear_bit_unlock - Clear a bit in memory, for unlock
+  * @nr: the bit to set
+- * @addr: the address to start counting from
++ * @p: the address to start counting from
+  *
+  * A weaker form of clear_bit_unlock() as used by __bit_lock_unlock(). If all
+  * the bits in the word are protected by this lock some archs can use weaker
+@@ -69,7 +69,7 @@ static inline void __clear_bit_unlock(unsigned int nr,
+  * clear_bit_unlock_is_negative_byte - Clear a bit in memory and test if bottom
+  *                                     byte is negative, for unlock.
+  * @nr: the bit to clear
+- * @addr: the address to start counting from
++ * @p: the address to start counting from
+  *
+  * This is a bit of a one-trick-pony for the filemap code, which clears
+  * PG_locked and tests PG_waiters,
+-- 
+2.19.1
 
-With gcc at least it should work according to 
-https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html
-
-They even explicitely tell: "The only supported use for this feature is 
-to specify registers for input and output operands when calling Extended 
-asm "
-
-Christophe
