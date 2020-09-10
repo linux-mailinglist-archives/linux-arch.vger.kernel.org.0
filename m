@@ -2,109 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29162264F8E
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 21:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3462652C4
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 23:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726662AbgIJTqW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 15:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726932AbgIJTpr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 15:45:47 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F81BC061757
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:45:47 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id g29so4857597pgl.2
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 12:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kT3st5L2W/yGrskNA7hV4WTKcp+VzTZ5Pgaqe30vqT8=;
-        b=eC6xHFZebGzDOu2iJFlC4sYhGBsPBPtk9a7oklICzLNlEMzSAdGnasLCc1rhvVduzw
-         WWGkAB927UqclP1++HPY0zndFIqCAsSEoCB33GsJW1zgx9zdnqi9fNwkG+wGtFEr+T3z
-         bUYjH1Oc2jBMRnj0f0FQ3tH0tHQIOzzYF+914=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kT3st5L2W/yGrskNA7hV4WTKcp+VzTZ5Pgaqe30vqT8=;
-        b=QAFl9r3DQiPkswxUTGkL7Trqk9L8h65h66zMWdwwnSfcFznT6EhgwrTuZ4Yb74uOJT
-         +T7yRZbD/VNt5Mz/6TDyNEn1VY7eruImJEAcq/fSjlOV5o/WRRx64t/Zhc+lblLo5bv9
-         uX71etnU6h5Zpo4DXrX2KZW3fq+TNOMSGzc2URTBz+WFAj/yodXB8Xp1+trUDeh25Psw
-         yuAmwRSFLJKgxrMOIeuUBmvleJ9jcOo0ABkBXtUWpreMI4MF5wAQwAVmZBV2Sdc8sRMc
-         2PnsqJ7jlH1cPKXKKzCY8DSLnIFcCkXoOjylJ7rH+Pmr/AxPzj4dnCdUZFVXWIEK+LHB
-         qE3w==
-X-Gm-Message-State: AOAM531KE28Wb2AGMBjhH6YKaOHWF8Mj/FzCKYVQ7jvEJ6MH10NiRi+n
-        NLMOZj+VW/pdcI/lM3nfONg6xg==
-X-Google-Smtp-Source: ABdhPJwWpKs77i2Pw4YhFhAT5cZe6s0qx17kIVE+as0BWVJNc55TKLnEBagdP5cQWEjWPugWxrbACw==
-X-Received: by 2002:aa7:858e:: with SMTP id w14mr2753410pfn.95.1599767146631;
-        Thu, 10 Sep 2020 12:45:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l79sm2905776pfd.210.2020.09.10.12.45.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 12:45:45 -0700 (PDT)
-Date:   Thu, 10 Sep 2020 12:45:44 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-ia64@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-arch@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
+        id S1725996AbgIJVXg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 17:23:36 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14255 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728254AbgIJVWw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 17:22:52 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f5a99180000>; Thu, 10 Sep 2020 14:22:32 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 10 Sep 2020 14:22:45 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 10 Sep 2020 14:22:45 -0700
+Received: from [10.2.54.52] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Sep
+ 2020 21:22:37 +0000
+Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
+ folding
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>, Jeff Dike <jdike@addtoit.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-um@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, Tony Luck <tony.luck@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] kbuild: preprocess module linker script
-Message-ID: <202009101245.493610D05@keescook>
-References: <20200904133122.133071-1-masahiroy@kernel.org>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        linux-x86 <x86@kernel.org>,
+        linux-arm <linux-arm-kernel@lists.infradead.org>,
+        linux-power <linuxppc-dev@lists.ozlabs.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
+ <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
+ <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
+ <20200909142904.00b72921@thinkpad>
+ <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
+ <20200909192534.442f8984@thinkpad> <20200909180324.GI87483@ziepe.ca>
+ <20200910093925.GB29166@oc3871087118.ibm.com>
+ <CAHk-=wh4SuNvThq1nBiqk0N-fW6NsY5w=VawC=rJs7ekmjAhjA@mail.gmail.com>
+ <20200910181319.GO87483@ziepe.ca>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <0c9bcb54-914b-e582-dd6d-3861267b6c94@nvidia.com>
+Date:   Thu, 10 Sep 2020 14:22:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904133122.133071-1-masahiroy@kernel.org>
+In-Reply-To: <20200910181319.GO87483@ziepe.ca>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1599772952; bh=KgUwNS6Q+E8fqoYsN87vU1D8tqx/ffcZtMThZuyBhrY=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=iyiND7wWuYHj8PeTvg/XtmrYveZZgQlXRnTEfuRaqVXA6x8uYqDCj3nrByA0pX5cI
+         5pEdOff/AUuhqRtuvklooFd8NslrApTnPUOi4JcmLIL68MhkbQJc9AX9wpzPo47t5P
+         WonYZKJQ7qlOSxr7z0+3iwfyQPcDStoEMZWR2//x0MYBmno68OCeOHSxdecN4/r9lr
+         Jbhl/MI+cwSAsj1DIol///tYiiv7Ue7ZlwRJ+mqssEw4A5AmoU61blAy2i3+rfNZd4
+         /0vhPiQoPG2wWvgPHKrzc4/jcDRLgdPpH3xb6nJhrSWHQnnGiRHTVHuGyPppzkiMo2
+         pXOZNwCZ5mRKQ==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 10:31:21PM +0900, Masahiro Yamada wrote:
-> There was a request to preprocess the module linker script like we do
-> for the vmlinux one (https://lkml.org/lkml/2020/8/21/512).
+On 9/10/20 11:13 AM, Jason Gunthorpe wrote:
+> On Thu, Sep 10, 2020 at 10:35:38AM -0700, Linus Torvalds wrote:
+>> On Thu, Sep 10, 2020 at 2:40 AM Alexander Gordeev
+>> <agordeev@linux.ibm.com> wrote:
+>>>
+>>> It is only gup_fast case that exposes the issue. It hits because
+>>> pointers to stack copies are passed to gup_pXd_range iterators, not
+>>> pointers to real page tables itself.
+>>
+>> Can we possibly change fast-gup to not do the stack copies?
+>>
+>> I'd actually rather do something like that, than the "addr_end" thing.
 > 
-> The difference between vmlinux.lds and module.lds is that the latter
-> is needed for external module builds, thus must be cleaned up by
-> 'make mrproper' instead of 'make clean' (also, it must be created by
-> 'make modules_prepare').
+>> As you say, none of the other page table walking code does what the
+>> GUP code does, and I don't think it's required.
 > 
-> You cannot put it in arch/*/kernel/ because 'make clean' descends into
-> it. I moved arch/*/kernel/module.lds to arch/*/include/asm/module.lds.h,
-> which is included from scripts/module.lds.S.
+> As I understand it, the requirement is because fast-gup walks without
+> the page table spinlock, or mmap_sem held so it must READ_ONCE the
+> *pXX.
 > 
-> scripts/module.lds is fine because 'make clean' keeps all the build
-> artifacts under scripts/.
+> It then checks that it is a valid page table pointer, then calls
+> pXX_offset().
 > 
-> You can add arch-specific sections in <asm/module.lds.h>.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> The arch implementation of pXX_offset() derefs again the passed pXX
+> pointer. So it defeats the READ_ONCE and the 2nd load could observe
+> something that is no longer a page table pointer and crash.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Just to be clear, though, that makes it sound a little wilder and
+reckless than it really is, right?
 
+Because actually, the page tables cannot be freed while gup_fast is
+walking them, due to either IPI blocking during the walk, or the moral
+equivalent (MMU_GATHER_RCU_TABLE_FREE) for non-IPI architectures. So the
+pages tables can *change* underneath gup_fast, and for example pages can
+be unmapped. But they remain valid page tables, it's just that their
+contents are unstable. Even if pXd_none()==true.
+
+Or am I way off here, and it really is possible (aside from the current
+s390 situation) to observe something that "is no longer a page table"?
+
+
+thanks,
 -- 
-Kees Cook
+John Hubbard
+NVIDIA
