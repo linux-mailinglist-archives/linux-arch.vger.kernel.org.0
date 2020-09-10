@@ -2,161 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFBC264706
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 15:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929092647D2
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 16:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730434AbgIJN3f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 09:29:35 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47814 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730889AbgIJN2u (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Sep 2020 09:28:50 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08AD94Eo037586;
-        Thu, 10 Sep 2020 09:28:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=QtnNxGocXqrzxtXmh+zLwW3RigR1FCEkXLBN5xsO/Y4=;
- b=AxLsjwHIqfhbwB3BlU3gQerUcgHBbiiujRjuEGnjixXIOpKn0sd0QNxwU/pdnG/FOmdm
- 8t+i8v20g0JTEsQ8HE/C9qq+EJpqIuMXS+uEKpHRi/b0/7pCht5fq1XCcXcHXW8BTK2s
- PQT2DcPYGyiyFV7kr62kvhUJPBAUBbf9gI4N3lJNwfILIVDVAvigsgF14nfZxu0uUyxt
- oVBvSmFHpcWk2pB8cgUr7J/n6gkgcF1KAI1tvrzXNCInY46LR+vMUfnPHIzLamCI8scl
- whX6wQsS7WfN6HaWVWfwRxe8yCOQFG1rloDtKfqoiAIKn4Hf7Zg0xN9kZC1PsB2JXiAJ Dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33fms90naw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 09:28:12 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08ADA9wC048915;
-        Thu, 10 Sep 2020 09:28:11 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33fms90n9e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 09:28:11 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08ADS9ZL026002;
-        Thu, 10 Sep 2020 13:28:09 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06fra.de.ibm.com with ESMTP id 33e5gmsj7p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Sep 2020 13:28:09 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08ADS5Qk31260946
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Sep 2020 13:28:06 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDCEA11C04A;
-        Thu, 10 Sep 2020 13:28:05 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C79811C050;
-        Thu, 10 Sep 2020 13:28:04 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.93.242])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Thu, 10 Sep 2020 13:28:04 +0000 (GMT)
-Date:   Thu, 10 Sep 2020 15:28:03 +0200
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
+        id S1731021AbgIJOQU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 10:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731126AbgIJOK6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 10:10:58 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48B2C061345
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 07:07:45 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id q9so183595wmj.2
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 07:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QJ5xEB2z11c85j6v+J4UJJ6T/KCHaYAOj5sVJT9cY58=;
+        b=cYL3QKW0nMiKASGS3CJTqYRW4EJhwjV95TkNT0tAhERyHlIVcKujnsUZ992Tgt805x
+         3uuPEFEzZ6VgoEVJunPO22PvL1THHkv0rx45qgLJ5V4frgzv84ZS4X4awVwGcqp6sl2v
+         zR1Fglj6zs5XzvZseqGJun2dk9bpkq3nUYWLNEEqA+T0eMTr23JSl7M9K0Ok+jnduwEj
+         /eZHnRWGDiVRXE8KK+upeUUGtW6Y/g7j8relgaZTHwu0oIF4TJHUCIUCUAvmS6x/EDXI
+         nevfOC1kp/P7s7F8psEC35HXkrbOLNy0uO6x8SSD50eVqa4iYCMPePAxogexL4gtbNlP
+         ESIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QJ5xEB2z11c85j6v+J4UJJ6T/KCHaYAOj5sVJT9cY58=;
+        b=D093uj0Hm8r8ZjX4fYDTn8qAnxPKftuGF5L8Kqf72nYaNN8M6gohI/4NHf+jRqSp1e
+         cwRX1m+f4r58oV/vQ1lG+UiCj8DUydQqPIfcyuaU8WupVT1kADd2/9KARFCfvtCp7CXu
+         8YkYV7cBv2roVOUe3yErY3L2MTCqiTXqEZTly5aa8X4lD469xujeYRHdIy6LE7s1sI67
+         S6S0HxWK/FiuXVRbhhwV4GEu6KZAlssZwyvTJgP/ElA8NVdTuzjYuw7FRWW3yOqF+jwT
+         IYyhJQStdFxf91udss9xXdwkV7dnSEc98anYsqQrETUYzBooIxRatxEfL0XhIAHkVlJP
+         cFJw==
+X-Gm-Message-State: AOAM533u42sePwRR1Mnm46viZESZWNJuyr7cSQ3oM01RXXwtE5wMl8ml
+        7OQWTy+gcPCp6HCrVt8KWbA1Ow==
+X-Google-Smtp-Source: ABdhPJxlhCOonhA/QUW6OuXk1EjfpUKr/GIkLwPXiWKB30qBaOqPGDH5pFin00r8M+FnE6NxmcHIbg==
+X-Received: by 2002:a05:600c:21c4:: with SMTP id x4mr149856wmj.107.1599746864225;
+        Thu, 10 Sep 2020 07:07:44 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:109:4a0f:cfff:fe4a:6363])
+        by smtp.gmail.com with ESMTPSA id v128sm3801248wme.2.2020.09.10.07.07.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 07:07:43 -0700 (PDT)
+Date:   Thu, 10 Sep 2020 15:07:38 +0100
+From:   Andrew Scull <ascull@google.com>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Will Deacon <will@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
- folding
-Message-ID: <20200910152803.1a930afc@thinkpad>
-In-Reply-To: <20200910130233.GK87483@ziepe.ca>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
-        <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
-        <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
-        <20200909142904.00b72921@thinkpad>
-        <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
-        <20200909192534.442f8984@thinkpad>
-        <20200909180324.GI87483@ziepe.ca>
-        <20200910093925.GB29166@oc3871087118.ibm.com>
-        <20200910130233.GK87483@ziepe.ca>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 10/10] kvm: arm64: Remove unnecessary hyp mappings
+Message-ID: <20200910140738.GE93664@google.com>
+References: <20200903091712.46456-1-dbrazdil@google.com>
+ <20200903091712.46456-11-dbrazdil@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-10_03:2020-09-10,2020-09-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
- malwarescore=0 phishscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009100120
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903091712.46456-11-dbrazdil@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 10 Sep 2020 10:02:33 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
+On Thu, Sep 03, 2020 at 11:17:12AM +0200, 'David Brazdil' via kernel-team wrote:
+> With all nVHE per-CPU variables being part of the hyp per-CPU region,
+> mapping them individual is not necessary any longer. They are mapped to hyp
+> as part of the overall per-CPU region.
+> 
+> Signed-off-by: David Brazdil <dbrazdil@google.com>
 
-> On Thu, Sep 10, 2020 at 11:39:25AM +0200, Alexander Gordeev wrote:
-> 
-> > As Gerald mentioned, it is very difficult to explain in a clear way.
-> > Hopefully, one could make sense ot of it.  
-> 
-> I would say the page table API requires this invariant:
-> 
->         pud = pud_offset(p4d, addr);
->         do {
-> 		WARN_ON(pud != pud_offset(p4d, addr);
->                 next = pud_addr_end(addr, end);
->         } while (pud++, addr = next, addr != end);
-> 
-> ie pud++ is supposed to be a shortcut for 
->   pud_offset(p4d, next)
-> 
-> While S390 does not follow this. Fixing addr_end brings it into
-> alignment by preventing pud++ from happening.
-> 
-> The only currently known side effect is that gup_fast crashes, but it
-> sure is an unexpected thing.
+Acked-by: Andrew Scull<ascull@google.com>
 
-It only is unexpected in a "top-level folding" world, see my other reply.
-Consider it an optimization, which was possible because of how our dynamic
-folding works, and e.g. because we can determine the correct pagetable
-level from a pXd value in pXd_offset.
+> ---
+>  arch/arm64/include/asm/kvm_mmu.h | 25 +++++++------------------
+>  arch/arm64/kvm/arm.c             | 17 +----------------
+>  2 files changed, 8 insertions(+), 34 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+> index 9db93da35606..bbe9df76ff42 100644
+> --- a/arch/arm64/include/asm/kvm_mmu.h
+> +++ b/arch/arm64/include/asm/kvm_mmu.h
+> @@ -531,28 +531,17 @@ static inline int kvm_map_vectors(void)
+>  DECLARE_PER_CPU_READ_MOSTLY(u64, arm64_ssbd_callback_required);
+>  DECLARE_KVM_NVHE_PER_CPU(u64, arm64_ssbd_callback_required);
+>  
+> -static inline int hyp_init_aux_data(void)
+> +static inline void hyp_init_aux_data(void)
+>  {
+> -	int cpu, err;
+> +	int cpu;
+>  
+> -	for_each_possible_cpu(cpu) {
+> -		u64 *ptr;
+> -
+> -		ptr = per_cpu_ptr_nvhe(arm64_ssbd_callback_required, cpu);
+> -		err = create_hyp_mappings(ptr, ptr + 1, PAGE_HYP);
+> -		if (err)
+> -			return err;
+> -
+> -		/* Copy value from kernel to hyp. */
+> -		*ptr = per_cpu(arm64_ssbd_callback_required, cpu);
+> -	}
+> -	return 0;
+> +	/* Copy arm64_ssbd_callback_required values from kernel to hyp. */
+> +	for_each_possible_cpu(cpu)
+> +		*(per_cpu_ptr_nvhe(arm64_ssbd_callback_required, cpu)) =
+> +			per_cpu(arm64_ssbd_callback_required, cpu);
 
-> This suggests another fix, which is to say that pud++ is undefined and
-> pud_offset() must always be called, but I think that would cause worse
-> codegen on all other archs.
+Careful with breaking allocations across lines, that seems to be taboo
+in this subsystem.
 
-There really is nothing to fix for s390 outside of gup_fast, or other
-potential future READ_ONCE pagetable walkers. We do take the side-effect
-of the generic change on all other pagetable walkers for s390, but it
-really is rather a slight degradation than a fix.
+>  }
+>  #else
+> -static inline int hyp_init_aux_data(void)
+> -{
+> -	return 0;
+> -}
+> +static inline void hyp_init_aux_data(void) {}
+>  #endif
+>  
+>  #define kvm_phys_to_vttbr(addr)		phys_to_ttbr(addr)
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index df7d133056ce..dfe1baa5bbb7 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1631,22 +1631,7 @@ static int init_hyp_mode(void)
+>  		}
+>  	}
+>  
+> -	for_each_possible_cpu(cpu) {
+> -		kvm_host_data_t *cpu_data;
+> -
+> -		cpu_data = per_cpu_ptr_hyp(kvm_host_data, cpu);
+> -		err = create_hyp_mappings(cpu_data, cpu_data + 1, PAGE_HYP);
+> -
+> -		if (err) {
+> -			kvm_err("Cannot map host CPU state: %d\n", err);
+> -			goto out_err;
+> -		}
+> -	}
+> -
+> -	err = hyp_init_aux_data();
+> -	if (err)
+> -		kvm_err("Cannot map host auxiliary data: %d\n", err);
+> -
+> +	hyp_init_aux_data();
+>  	return 0;
+>  
+>  out_err:
+> -- 
+> 2.28.0.402.g5ffc5be6b7-goog
+> 
+> -- 
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> 
