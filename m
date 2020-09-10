@@ -2,107 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D55A264601
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 14:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A5726462D
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 14:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730477AbgIJM3Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 08:29:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:55136 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730654AbgIJM1H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:27:07 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-242-gUIwh0VwNUeXA06T7Iw4zQ-1; Thu, 10 Sep 2020 13:26:54 +0100
-X-MC-Unique: gUIwh0VwNUeXA06T7Iw4zQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 10 Sep 2020 13:26:53 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 10 Sep 2020 13:26:53 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-CC:     linux-arch <linux-arch@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: RE: remove the last set_fs() in common code, and remove it for x86
- and powerpc v3
-Thread-Topic: remove the last set_fs() in common code, and remove it for x86
- and powerpc v3
-Thread-Index: AQHWhvDyD2c/lZfV3kC0Ftay5UVebqlhgjnw///zuACAABnIEIAAOoMg
-Date:   Thu, 10 Sep 2020 12:26:53 +0000
-Message-ID: <5050b43687c84515a49b345174a98822@AcuMS.aculab.com>
-References: <20200903142242.925828-1-hch@lst.de>
- <20200903142803.GM1236603@ZenIV.linux.org.uk>
- <CAHk-=wgQNyeHxXfckd1WtiYnoDZP1Y_kD-tJKqWSksRoDZT=Aw@mail.gmail.com>
- <20200909184001.GB28786@gate.crashing.org>
- <CAHk-=whu19Du_rZ-zBtGsXAB-Qo7NtoJjQjd-Sa9OB5u1Cq_Zw@mail.gmail.com>
- <3beb8b019e4a4f7b81fdb1bc68bd1e2d@AcuMS.aculab.com>
- <186a62fc-042c-d6ab-e7dc-e61b18945498@csgroup.eu>
- <59a64e9a210847b59f70f9bd2d02b5c3@AcuMS.aculab.com>
-In-Reply-To: <59a64e9a210847b59f70f9bd2d02b5c3@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1730688AbgIJMi7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 08:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730619AbgIJMfJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 08:35:09 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6238C061573
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 05:34:58 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a17so6516109wrn.6
+        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 05:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ou9injEFK3ynx6TLorApjrz9C+IV+NUJDgRb4FiGCd0=;
+        b=JpErupGX9fulmYZvxtdV0U32w7X1pxyfApvEkhWK8zhYuxW1uI+EqU5Fjv9BaF9H/V
+         YurieurqjypG7BJAUBnBCH5arbZ3tVER2qmEt+rAqI4sfn3j4bXg9iz0fRz0pKoPNL3y
+         YSW2fRVwWb6wg82ODMDH5pUFWZ0GjjH48pGAH5EmstenSokAdTz7Xt7zn4OgIwRIR4l9
+         0fLwBGV8McXKD8aluzhihwYePyApjjulnhMvLjwOH3WO1/cwpNtD7nu9TdVZ4OCMjA8S
+         c9CQIJkAS0fQVUjZIlIZtaLGjr0eQHoBc0Ml2c5fY6fYDFZIe4MRDXrAX2YVoKmv1DK0
+         bwYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ou9injEFK3ynx6TLorApjrz9C+IV+NUJDgRb4FiGCd0=;
+        b=KbO4SwVAALobF/kL4LmF+ItoAw2ZMOSkJF0bpACDW5fqWr2vKZ6dOw8Zmffcm+TmWv
+         aO85oxVgOK7mNGnYregf/LRqNN702JMcpBW/nhCKhJ+NGGsP9Q0tpRYex749ezeLoRpZ
+         S5RRCoOREoZ8iM1YViYyR7By/qZMOBIAXsR5Vz07vGlKqhWq0kIVbsELUSowQZ/uOxOH
+         AGg5lHvgApafP7U1aifyl4ppUoDj0nCVe5HMyIyiJsxutsOrnR6ceIXWJEOWRLuh04sY
+         rpr64U4+6svafhBlVF8S8L0qOvlt+sSs9xMH4FvqwMbSqvfjM5oU5Jllcl7MkIUUj9yy
+         6Asg==
+X-Gm-Message-State: AOAM533om9VDe/YyumrY6/WZbqFw4eB0bAZwr0bwhWbG8RYStiD2JZzH
+        ijUM5kmwt4VlUICG3thvk/0d7Q==
+X-Google-Smtp-Source: ABdhPJzW0hcZaP/tw8LsHLMPTKiwkkYHFromXeW07uLdryNq4J0OhAM1tb62eb6pB/v/hKExJM8Mhg==
+X-Received: by 2002:a5d:6886:: with SMTP id h6mr9066135wru.374.1599741297317;
+        Thu, 10 Sep 2020 05:34:57 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:109:4a0f:cfff:fe4a:6363])
+        by smtp.gmail.com with ESMTPSA id n21sm3532461wmi.21.2020.09.10.05.34.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 05:34:56 -0700 (PDT)
+Date:   Thu, 10 Sep 2020 13:34:52 +0100
+From:   Andrew Scull <ascull@google.com>
+To:     David Brazdil <dbrazdil@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 04/10] kvm: arm64: Remove hyp_adr/ldr_this_cpu
+Message-ID: <20200910123452.GD93664@google.com>
+References: <20200903091712.46456-1-dbrazdil@google.com>
+ <20200903091712.46456-5-dbrazdil@google.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903091712.46456-5-dbrazdil@google.com>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDEwIFNlcHRlbWJlciAyMDIwIDEwOjI2DQouLi4N
-Cj4gPiA+IEkgaGFkIGFuICdpbnRlcmVzdGluZycgaWRlYS4NCj4gPiA+DQo+ID4gPiBDYW4geW91
-IHVzZSBhIGxvY2FsIGFzbSByZWdpc3RlciB2YXJpYWJsZSBhcyBhbiBpbnB1dCBhbmQgb3V0cHV0
-IHRvDQo+ID4gPiBhbiAnYXNtIHZvbGF0aWxlIGdvdG8nIHN0YXRlbWVudD8NCj4gPiA+DQo+ID4g
-PiBXZWxsIHlvdSBjYW4gLSBidXQgaXMgaXQgZ3VhcmFudGVlZCB0byB3b3JrIDotKQ0KPiA+ID4N
-Cj4gPg0KPiA+IFdpdGggZ2NjIGF0IGxlYXN0IGl0IHNob3VsZCB3b3JrIGFjY29yZGluZyB0bw0K
-PiA+IGh0dHBzOi8vZ2NjLmdudS5vcmcvb25saW5lZG9jcy9nY2MvTG9jYWwtUmVnaXN0ZXItVmFy
-aWFibGVzLmh0bWwNCj4gPg0KPiA+IFRoZXkgZXZlbiBleHBsaWNpdGVseSB0ZWxsOiAiVGhlIG9u
-bHkgc3VwcG9ydGVkIHVzZSBmb3IgdGhpcyBmZWF0dXJlIGlzDQo+ID4gdG8gc3BlY2lmeSByZWdp
-c3RlcnMgZm9yIGlucHV0IGFuZCBvdXRwdXQgb3BlcmFuZHMgd2hlbiBjYWxsaW5nIEV4dGVuZGVk
-DQo+ID4gYXNtICINCj4gDQo+IEEgcXVpY2sgdGVzdCBpc24ndCBnb29kLi4uLg0KPiANCj4gaW50
-IGJhcihjaGFyICp6KQ0KPiB7DQo+ICAgICAgICAgX19sYWJlbF9fIGxhYmVsOw0KPiAgICAgICAg
-IHJlZ2lzdGVyIGludCBlYXggYXNtICgiZWF4IikgPSA2Ow0KPiAgICAgICAgIGFzbSB2b2xhdGls
-ZSBnb3RvICgiIG1vdiAkMSwgJSVlYXgiIDo6OiAiZWF4IiA6IGxhYmVsKTsNCj4gbGFiZWw6DQo+
-ICAgICAgICAgcmV0dXJuIGVheDsNCj4gfQ0KPiANCj4gMDAwMDAwMDAwMDAwMDA0MCA8YmFyPjoN
-Cj4gICA0MDogICBiOCAwMSAwMCAwMCAwMCAgICAgICAgICBtb3YgICAgJDB4MSwlZWF4DQo+ICAg
-NDU6ICAgYjggMDYgMDAgMDAgMDAgICAgICAgICAgbW92ICAgICQweDYsJWVheA0KPiAgIDRhOiAg
-IGMzICAgICAgICAgICAgICAgICAgICAgIHJldHENCj4gDQo+IGFsdGhvdWdoIGFkZGluZzoNCj4g
-ICAgICAgICBhc20gdm9sYXRpbGUgKCIiIDogIityIiAoZWF4KSk7DQo+IGVpdGhlciBzaWRlIG9m
-IHRoZSAnYXNtIHZvbGF0aWxlIGdvdG8nIGRvZXMgZml4IGl0Lg0KDQpBY3R1YWxseSB0aGlzIGlz
-IHByZXR0eSBzb3VuZDoNCglfX2xhYmVsX18gbGFiZWw7DQoJcmVnaXN0ZXIgaW50IGVheCBhc20g
-KCJlYXgiKTsNCgkvLyBFbnN1cmUgZWF4IGNhbid0IGJlIHJlbG9hZGVkIGZyb20gYW55d2hlcmUN
-CgkvLyBJbiBwYXJ0aWN1bGFyIGl0IGNhbid0IGJlIHJlbG9hZGVkIGFmdGVyIHRoZSBhc20gZ290
-byBsaW5lDQoJYXNtIHZvbGF0aWxlICgiIiA6ICI9ciIgKGVheCkpOw0KCS8vIFByb3ZpZGVkIGdj
-YyBkb2Vzbid0IHNhdmUgZWF4IGhlcmUuLi4NCglhc20gdm9sYXRpbGUgZ290byAoInh4eHh4IiA6
-OjogImVheCIgOiBsYWJlbCk7DQoJLy8gLi4uIGFuZCByZWxvYWQgdGhlIHNhdmVkIHZhbHVlIGhl
-cmUuDQoJLy8gVGhlIGlucHV0IHZhbHVlIGhlcmUgd2lsbCBiZSB0aGF0IG1vZGlmaWVkIGJ5IHRo
-ZSAnYXNtIGdvdG8nLg0KCS8vIFNpbmNlIHRoaXMgbW9kaWZpZXMgZWF4IGl0IGNhbid0IGJlIG1v
-dmVkIGJlZm9yZSB0aGUgJ2FzbSBnb3RvJy4NCglhc20gdm9sYXRpbGUgKCIiIDogIityIiAoZWF4
-KSk7DQoJLy8gU28gaGVyZSBlYXggbXVzdCBjb250YWluIHRoZSB2YWx1ZSBzZXQgYnkgdGhlICJ4
-eHh4eCIgaW5zdHJ1Y3Rpb25zLg0KDQogICAgRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
-IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
-UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Thu, Sep 03, 2020 at 11:17:06AM +0200, 'David Brazdil' via kernel-team wrote:
+> The hyp_adr/ldr_this_cpu helpers were introduced for use in hyp code
+> because they always needed to use TPIDR_EL2 for base, while
+> adr/ldr_this_cpu from kernel proper would select between TPIDR_EL2 and
+> _EL1 based on VHE/nVHE.
+> 
+> Simplify this now that the nVHE hyp mode case can be handled using the
+> __KVM_NVHE_HYPERVISOR__ macro. VHE selects _EL2 with alternatives.
+> 
+> Signed-off-by: David Brazdil <dbrazdil@google.com>
+
+Acked-by: Andrew Scull <ascull@google.com>
+
+> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+> index 54d181177656..b392a977efb6 100644
+> --- a/arch/arm64/include/asm/assembler.h
+> +++ b/arch/arm64/include/asm/assembler.h
+> @@ -218,6 +218,21 @@ lr	.req	x30		// link register
+>  	str	\src, [\tmp, :lo12:\sym]
+>  	.endm
+>  
+> +	/*
+> +	 * @dst: destination register (32 or 64 bit wide)
+> +	 */
+> +	.macro	this_cpu_offset, dst
+> +#ifdef __KVM_NVHE_HYPERVISOR__
+> +	mrs	\dst, tpidr_el2
+
+Another part that might also apply to __KVM_VHE_HYPERVISOR__.
+
+> +#else
+> +alternative_if_not ARM64_HAS_VIRT_HOST_EXTN
+> +	mrs	\dst, tpidr_el1
+> +alternative_else
+> +	mrs	\dst, tpidr_el2
+> +alternative_endif
+> +#endif
+> +	.endm
+
 
