@@ -2,143 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3462652C4
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 23:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1486F26549C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Sep 2020 23:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbgIJVXg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 17:23:36 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14255 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728254AbgIJVWw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 17:22:52 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f5a99180000>; Thu, 10 Sep 2020 14:22:32 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 10 Sep 2020 14:22:45 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 10 Sep 2020 14:22:45 -0700
-Received: from [10.2.54.52] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Sep
- 2020 21:22:37 +0000
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
- folding
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
- <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
- <20200909142904.00b72921@thinkpad>
- <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
- <20200909192534.442f8984@thinkpad> <20200909180324.GI87483@ziepe.ca>
- <20200910093925.GB29166@oc3871087118.ibm.com>
- <CAHk-=wh4SuNvThq1nBiqk0N-fW6NsY5w=VawC=rJs7ekmjAhjA@mail.gmail.com>
- <20200910181319.GO87483@ziepe.ca>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <0c9bcb54-914b-e582-dd6d-3861267b6c94@nvidia.com>
-Date:   Thu, 10 Sep 2020 14:22:37 -0700
+        id S1725308AbgIJV6r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 17:58:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:33474 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730278AbgIJLNe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Sep 2020 07:13:34 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A46231B;
+        Thu, 10 Sep 2020 04:12:38 -0700 (PDT)
+Received: from [192.168.1.179] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 879433F68F;
+        Thu, 10 Sep 2020 04:12:36 -0700 (PDT)
+Subject: Re: [PATCH v9 09/29] arm64: mte: Clear the tags when a page is mapped
+ in user-space with PROT_MTE
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20200904103029.32083-1-catalin.marinas@arm.com>
+ <20200904103029.32083-10-catalin.marinas@arm.com>
+ <5c2ebe16-2ac9-6cff-3456-6d8ac96b5fb7@arm.com> <20200910105258.GA4030@gaia>
+From:   Steven Price <steven.price@arm.com>
+Message-ID: <19137fdc-64c6-a5c2-d6f6-ebcf4f553816@arm.com>
+Date:   Thu, 10 Sep 2020 12:12:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200910181319.GO87483@ziepe.ca>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+In-Reply-To: <20200910105258.GA4030@gaia>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1599772952; bh=KgUwNS6Q+E8fqoYsN87vU1D8tqx/ffcZtMThZuyBhrY=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=iyiND7wWuYHj8PeTvg/XtmrYveZZgQlXRnTEfuRaqVXA6x8uYqDCj3nrByA0pX5cI
-         5pEdOff/AUuhqRtuvklooFd8NslrApTnPUOi4JcmLIL68MhkbQJc9AX9wpzPo47t5P
-         WonYZKJQ7qlOSxr7z0+3iwfyQPcDStoEMZWR2//x0MYBmno68OCeOHSxdecN4/r9lr
-         Jbhl/MI+cwSAsj1DIol///tYiiv7Ue7ZlwRJ+mqssEw4A5AmoU61blAy2i3+rfNZd4
-         /0vhPiQoPG2wWvgPHKrzc4/jcDRLgdPpH3xb6nJhrSWHQnnGiRHTVHuGyPppzkiMo2
-         pXOZNwCZ5mRKQ==
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/10/20 11:13 AM, Jason Gunthorpe wrote:
-> On Thu, Sep 10, 2020 at 10:35:38AM -0700, Linus Torvalds wrote:
->> On Thu, Sep 10, 2020 at 2:40 AM Alexander Gordeev
->> <agordeev@linux.ibm.com> wrote:
->>>
->>> It is only gup_fast case that exposes the issue. It hits because
->>> pointers to stack copies are passed to gup_pXd_range iterators, not
->>> pointers to real page tables itself.
+On 10/09/2020 11:52, Catalin Marinas wrote:
+> On Thu, Sep 10, 2020 at 11:23:33AM +0100, Steven Price wrote:
+>> On 04/09/2020 11:30, Catalin Marinas wrote:
+>>> --- /dev/null
+>>> +++ b/arch/arm64/lib/mte.S
+>>> @@ -0,0 +1,34 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>>> +/*
+>>> + * Copyright (C) 2020 ARM Ltd.
+>>> + */
+>>> +#include <linux/linkage.h>
+>>> +
+>>> +#include <asm/assembler.h>
+>>> +#include <asm/sysreg.h>
+>>> +
+>>> +	.arch	armv8.5-a+memtag
+>>> +
+>>> +/*
+>>> + * multitag_transfer_size - set \reg to the block size that is accessed by the
+>>> + * LDGM/STGM instructions.
+>>> + */
+>>> +	.macro	multitag_transfer_size, reg, tmp
+>>> +	mrs_s	\reg, SYS_GMID_EL1
+>>> +	ubfx	\reg, \reg, #SYS_GMID_EL1_BS_SHIFT, #SYS_GMID_EL1_BS_SIZE
+>>> +	mov	\tmp, #4
+>>> +	lsl	\reg, \tmp, \reg
+>>> +	.endm
+>>> +
+>>> +/*
+>>> + * Clear the tags in a page
+>>> + *   x0 - address of the page to be cleared
+>>> + */
+>>> +SYM_FUNC_START(mte_clear_page_tags)
+>>> +	multitag_transfer_size x1, x2
+>>> +1:	stgm	xzr, [x0]
+>>> +	add	x0, x0, x1
+>>> +	tst	x0, #(PAGE_SIZE - 1)
+>>> +	b.ne	1b
+>>> +	ret
+>>> +SYM_FUNC_END(mte_clear_page_tags)
 >>
->> Can we possibly change fast-gup to not do the stack copies?
->>
->> I'd actually rather do something like that, than the "addr_end" thing.
+>> Could the value of SYS_GMID_EL1 vary between CPUs and do we therefore need a
+>> preempt_disable() around mte_clear_page_tags() (and other functions in later
+>> patches)?
 > 
->> As you say, none of the other page table walking code does what the
->> GUP code does, and I don't think it's required.
-> 
-> As I understand it, the requirement is because fast-gup walks without
-> the page table spinlock, or mmap_sem held so it must READ_ONCE the
-> *pXX.
-> 
-> It then checks that it is a valid page table pointer, then calls
-> pXX_offset().
-> 
-> The arch implementation of pXX_offset() derefs again the passed pXX
-> pointer. So it defeats the READ_ONCE and the 2nd load could observe
-> something that is no longer a page table pointer and crash.
+> If they differ, disabling preemption here is not sufficient. We'd have
+> to trap the GMID_EL1 access at EL2 as well and emulate it (we do this
+> for CTR_EL0 in dcache_line_size).
 
-Just to be clear, though, that makes it sound a little wilder and
-reckless than it really is, right?
+Hmm, good point. It's actually not possible to properly emulate this - 
+EL2 can trap GMID_EL1 to provide a different (presumably smaller) size, 
+but LDGM/STGM will still read/store the number of tags of the underlying 
+hardware. While simple loops like we've got at the moment won't care 
+(we'll just end up doing useless work), it won't be architecturally 
+correct. The guest can always deduce the underlying value. So I think we 
+can safely consider this broken hardware.
 
-Because actually, the page tables cannot be freed while gup_fast is
-walking them, due to either IPI blocking during the walk, or the moral
-equivalent (MMU_GATHER_RCU_TABLE_FREE) for non-IPI architectures. So the
-pages tables can *change* underneath gup_fast, and for example pages can
-be unmapped. But they remain valid page tables, it's just that their
-contents are unstable. Even if pXd_none()==true.
+> I don't want to proactively implement this just in case we'll have
+> broken hardware (I feel a bit more optimistic today ;)).
 
-Or am I way off here, and it really is possible (aside from the current
-s390 situation) to observe something that "is no longer a page table"?
+Given the above I think if we do have broken hardware the only sane 
+thing to do would be to provide a way of overriding 
+multitag_transfer_size to return the smallest size of all CPUs. Which 
+works well enough for the uses we've currently got.
 
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+Steve
