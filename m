@@ -2,123 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F5B2664CA
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Sep 2020 18:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5699266871
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Sep 2020 20:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726228AbgIKQqD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Sep 2020 12:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S1725855AbgIKS6k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Sep 2020 14:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbgIKQp6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Sep 2020 12:45:58 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F62FC061573
-        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 09:45:54 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id k25so13005693ljk.0
-        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 09:45:54 -0700 (PDT)
+        with ESMTP id S1725849AbgIKS6e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Sep 2020 14:58:34 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B78C061573
+        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 11:58:33 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id v15so7288958pgh.6
+        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 11:58:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ymUunqCLw2vPuQ1VbXcUDi5LPgcqHOLwtMhV+h1hP00=;
-        b=LzixW8IE64pueJHPc4pkVfB4hu8uL7V9KR6+6qOQDiBrSui1M4vSI9xeqysgklBESL
-         0IQ4jxvW89dAuyt0txhLnLuupNLcl3TzUTNbKM8yk1mUHFyRH5GgOM7DPBaXlmnovHXl
-         RwxBgeTE5qnMUevVAeinQ8lEe8Rzs7ehh51xA=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZXmHidgwtnTnxCDrTuOclLLnDmLj/yLMTWxKoHjkjfQ=;
+        b=ZrOejeHoXLixXlu6m7vIPESK+fObNaFjZbYZb6BuPccGC8RhiVx86JFf69d/MMrQh3
+         c5GLEicnmJy6bM1/V0UBllGrc6/ouavLYqSLeTsNsbiwto675zmuU7WPI4+tQ1SjuaIh
+         xmSrh1si1mjT6qM2CdlptrXbP8DIJUI+A8S8M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ymUunqCLw2vPuQ1VbXcUDi5LPgcqHOLwtMhV+h1hP00=;
-        b=J9GBBv0fKe7cYdfs4rt39TIf7knQCaRrn0VzGGhzZbPO1TuAkfKyzwZgnx0cASWcbh
-         PuQNfropL0pHhOUV75n4YTdqxDhtxwXFO787OYSiwSlETOmxeOWQ+1ksr5NEq3V4fR2T
-         Ey5nGxu5fItt5RJGf9YYwfn7dWWYnRXcQ02V3/Y6ML5ADp1pdps4rJBfbrC6EhE9Ocuq
-         UoPjOnMxO4PViprhoD9XLxj7egvxYQajDrLAd+m+IudF79fb2xB38D0dl1adNltPN1oA
-         vEkhgXj5ExPYUuzs4ozff+uNb/TFnxvh3R/xZ2SFnCer3FHdDAls8FRMGXQ6VzWFCWmp
-         +5SQ==
-X-Gm-Message-State: AOAM530t5n8GAki0EN/eQOSI7294QkBSC2VfmmCUANo5BvCJ3x76yu/t
-        zJoHYVTl6URdtG/KqqMt3gM4zGm/a2QB3Q==
-X-Google-Smtp-Source: ABdhPJzq2cF739ArdJMFV0xOGIcwCWIHLG4Kg0nsRpKdJ6y79u3qmOeBcGObA/TuOxg5OYXI4PTrUQ==
-X-Received: by 2002:a2e:e1a:: with SMTP id 26mr1005548ljo.377.1599842752105;
-        Fri, 11 Sep 2020 09:45:52 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id b22sm144850lff.183.2020.09.11.09.45.50
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2020 09:45:50 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id y2so6481743lfy.10
-        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 09:45:50 -0700 (PDT)
-X-Received: by 2002:ac2:5594:: with SMTP id v20mr585120lfg.344.1599842749970;
- Fri, 11 Sep 2020 09:45:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
- <20200909142904.00b72921@thinkpad> <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
- <20200909192534.442f8984@thinkpad> <20200909180324.GI87483@ziepe.ca>
- <20200910093925.GB29166@oc3871087118.ibm.com> <CAHk-=wh4SuNvThq1nBiqk0N-fW6NsY5w=VawC=rJs7ekmjAhjA@mail.gmail.com>
- <20200910181319.GO87483@ziepe.ca> <0c9bcb54-914b-e582-dd6d-3861267b6c94@nvidia.com>
- <20200910221116.GQ87483@ziepe.ca> <20200911121955.GA10250@oc3871087118.ibm.com>
-In-Reply-To: <20200911121955.GA10250@oc3871087118.ibm.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 11 Sep 2020 09:45:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiiEUD_XvNnXysYsKiT4B3SajWbZ4VKY3jYk-17EEaaiA@mail.gmail.com>
-Message-ID: <CAHk-=wiiEUD_XvNnXysYsKiT4B3SajWbZ4VKY3jYk-17EEaaiA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table folding
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZXmHidgwtnTnxCDrTuOclLLnDmLj/yLMTWxKoHjkjfQ=;
+        b=DOPwOCJ0yjxDe9m5ft3mPIhCzZEak0CnwVeS+2lmJjOdpoh8jrQUkxju5rAQRikTpg
+         rJJyTcAQpekx2VN9QZxbbHwfCZVuaEoTSddiVXRWBK4yVLNRTzZdpje2oisNBlGW3JNT
+         Aw0hWmMlW4WfK9gHoVwePaQU+nnb0thgys/UaqV8Ty7LgepSREijlV36Ln1+vfFp6WJL
+         ZexWjG89JojQ5F5zhsutn1RL2JpcpuR7ygpHFwgdmDwvL2KCu6LHhw86OpDuKqxYcYGG
+         4iueVx36uxjoZdzKGUpHOWQnQ6Cq6XIul59NATAmpaa1GHuk44FyPYefBzTu3FuktM0t
+         Kfug==
+X-Gm-Message-State: AOAM5305yMP304MrQUdG7rYUbou5HfrJ7krz9N+s9R25s/EBFwZTwcdp
+        XU8TdaCmHCTI9PTomoMan7a4PA==
+X-Google-Smtp-Source: ABdhPJx1HHzPM4LUXPoNomXjYpginIkBVFSvmj1qsqnJ/hNQ+buyCEi68fmII7HiPctkjBg2DoUsgw==
+X-Received: by 2002:a63:fd51:: with SMTP id m17mr2779530pgj.210.1599850713261;
+        Fri, 11 Sep 2020 11:58:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 124sm2920285pfd.132.2020.09.11.11.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 11:58:31 -0700 (PDT)
+Date:   Fri, 11 Sep 2020 11:58:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Robert O'Callahan <rocallahan@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Rutland <mark.rutland@arm.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kyle Huey <me@kylehuey.com>
+Subject: Re: [REGRESSION] x86/entry: Tracer no longer has opportunity to
+ change the syscall number at entry via orig_ax
+Message-ID: <202009111156.660A7C2978@keescook>
+References: <CAP045Arc1Vdh+n2j2ELE3q7XfagLjyqXji9ZD0jqwVB-yuzq-g@mail.gmail.com>
+ <87blj6ifo8.fsf@nanos.tec.linutronix.de>
+ <87a6xzrr89.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6xzrr89.fsf@mpe.ellerman.id.au>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 5:20 AM Alexander Gordeev
-<agordeev@linux.ibm.com> wrote:
->
-> What if the entry is still pud_present, but got remapped after
-> READ_ONCE(*pudp)? IOW, it is still valid, but points elsewhere?
+On Wed, Sep 09, 2020 at 11:53:42PM +1000, Michael Ellerman wrote:
+> Hi Thomas,
+> 
+> Sorry if this was discussed already somewhere, but I didn't see anything ...
+> 
+> Thomas Gleixner <tglx@linutronix.de> writes:
+> > On Wed, Aug 19 2020 at 10:14, Kyle Huey wrote:
+> >> tl;dr: after 27d6b4d14f5c3ab21c4aef87dd04055a2d7adf14 ptracer
+> >> modifications to orig_ax in a syscall entry trace stop are not honored
+> >> and this breaks our code.
+> ...
+> > diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> > index 9852e0d62d95..fcae019158ca 100644
+> > --- a/kernel/entry/common.c
+> > +++ b/kernel/entry/common.c
+> > @@ -65,7 +65,8 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+> 
+> Adding context:
+> 
+> 	/* Do seccomp after ptrace, to catch any tracer changes. */
+> 	if (ti_work & _TIF_SECCOMP) {
+> 		ret = __secure_computing(NULL);
+> 		if (ret == -1L)
+> 			return ret;
+> 	}
+> 
+> 	if (unlikely(ti_work & _TIF_SYSCALL_TRACEPOINT))
+> 		trace_sys_enter(regs, syscall);
+> 
+> >  	syscall_enter_audit(regs, syscall);
+> >  
+> > -	return ret ? : syscall;
+> > +	/* The above might have changed the syscall number */
+> > +	return ret ? : syscall_get_nr(current, regs);
+> >  }
+> >  
+> >  noinstr long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall)
+> 
+> I noticed if the syscall number is changed by seccomp/ptrace, the
+> original syscall number is still passed to trace_sys_enter() and audit.
+> 
+> The old code used regs->orig_ax, so any change to the syscall number
+> would be seen by the tracepoint and audit.
 
-That can't happen.
+Ah! That's no good.
 
-The GUP walk doesn't hold any locks, but it *is* done with interrupts
-disabled, and anybody who is modifying the page tables needs to do the
-TLB flush, and/or RCU-free them.
+> I can observe the difference between v5.8 and mainline, using the
+> raw_syscall trace event and running the seccomp_bpf selftest which turns
+> a getpid (39) into a getppid (110).
+> 
+> With v5.8 we see getppid on entry and exit:
+> 
+>      seccomp_bpf-1307  [000] .... 22974.874393: sys_enter: NR 110 (7ffff22c46e0, 40a350, 4, fffffffffffff7ab, 7fa6ee0d4010, 0)
+>      seccomp_bpf-1307  [000] .N.. 22974.874401: sys_exit: NR 110 = 1304
+> 
+> Whereas on mainline we see an enter for getpid and an exit for getppid:
+> 
+>      seccomp_bpf-1030  [000] ....    21.806766: sys_enter: NR 39 (7ffe2f6d1ad0, 40a350, 7ffe2f6d1ad0, 0, 0, 407299)
+>      seccomp_bpf-1030  [000] ....    21.806767: sys_exit: NR 110 = 1027
+> 
+> 
+> I don't know audit that well, but I think it saves the syscall number on
+> entry eg. in __audit_syscall_entry(). So it will record the wrong
+> syscall happening in this case I think.
+> 
+> Seems like we should reload the syscall number before calling
+> trace_sys_enter() & audit ?
 
-The interrupt disable means that on architectures where the TLB flush
-involves an IPI, it will be delayed until afterwards, but it also acts
-as a big RCU read lock hammer.
+Agreed. I wonder what the best way to build a regression test for this
+is... hmmm.
 
-So the page tables can get modified under us, but the old pages won't
-be released and re-used.
-
-                Linus
+-- 
+Kees Cook
