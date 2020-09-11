@@ -2,144 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BD7265571
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Sep 2020 01:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D57265702
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Sep 2020 04:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725536AbgIJXVN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 19:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725308AbgIJXVK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Sep 2020 19:21:10 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E05C061756
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 16:21:09 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id ef16so4237585qvb.8
-        for <linux-arch@vger.kernel.org>; Thu, 10 Sep 2020 16:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fIHL0Rq33O5ozDdBNb92cfl0GBqGdNKvR/YdlpxGcAc=;
-        b=ek3aEVh6EDZv0MY4CyKrIOtcGg9hcQrcK0LNTKZQKq5D36Q4OOful56d1fLsdvbySj
-         gIxGsvrf3KCS0cBe2Cddj6sjM6xxgr+gzrdl7qNDkNuApsUa7CiM5w7gHpJiiyXmHOM7
-         z0Fmkdon1hMn3l1idV0bhKgpCa6PUJSq4CW7y6g23Ml8DO+r/mDIQI9+zVDERUCtr5L5
-         WJuVfXkINtgWDQegahH+XHGH+cQJScV2EOHwfsx92Xl2/qRCRlsZDeCmHgB5ogwUgrhe
-         yUNj2pRXsNm4WiFcUh2LoLVRUAZ5EBB0j8EQP9F4uwiM1oP8TqSobCs8onyBplaZNq9X
-         j4og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fIHL0Rq33O5ozDdBNb92cfl0GBqGdNKvR/YdlpxGcAc=;
-        b=YUi49sVAVCzLXwgPaRco52M91KUTfhtZNvEQRheUbDphukun02bPkbto2qjsEb7zrR
-         iRPEgh2lcDZHOH/GmS9NzLuK6LFiLJ0+LjKI3V0YsFQuKS56h9YL+O4VApJQA/qsahHd
-         6/rnrn569oiprlSLxwkovHgpR0E+Lbx9htGf7lCHyUlA0X706iRS9lR+4DTCh8G7ZqTl
-         IvG94Vtfx8WXLC/t1n4BHcaLEIM03M3M5jv0IezniBxCyEBFLO4DupFTCkJ5qFUmDBt6
-         E2mXls/Xd9ulXk3puensCN8+0eYh4QmtOB3oKS6E8pbvW6kQY0yv8ALdGdMqntv0W2JK
-         hUkw==
-X-Gm-Message-State: AOAM5308yS12/xcONvWwD7+LSCB+BC/MNfpnOik47sZLNQoppqRFOZvR
-        U7TErCvBCGSDVREhfOkU5GuPQA==
-X-Google-Smtp-Source: ABdhPJwWb13ftCj9Nx7W+uTucDyXl8x3WeSQXroWv7fkEgHTFAhsxe/mYAzhjXYKGK+4OJt2xnAqTg==
-X-Received: by 2002:a05:6214:954:: with SMTP id dn20mr10867015qvb.122.1599780068776;
-        Thu, 10 Sep 2020 16:21:08 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id m36sm289969qtd.10.2020.09.10.16.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 16:21:07 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kGVsI-004SPL-RD; Thu, 10 Sep 2020 20:21:06 -0300
-Date:   Thu, 10 Sep 2020 20:21:06 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-x86 <x86@kernel.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
- folding
-Message-ID: <20200910232106.GR87483@ziepe.ca>
-References: <20200907180058.64880-1-gerald.schaefer@linux.ibm.com>
- <20200907180058.64880-2-gerald.schaefer@linux.ibm.com>
- <0dbc6ec8-45ea-0853-4856-2bc1e661a5a5@intel.com>
- <20200909142904.00b72921@thinkpad>
- <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
- <20200909192534.442f8984@thinkpad>
- <20200909180324.GI87483@ziepe.ca>
- <20200910093925.GB29166@oc3871087118.ibm.com>
- <20200910130233.GK87483@ziepe.ca>
- <20200910195749.795232d1@thinkpad>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910195749.795232d1@thinkpad>
+        id S1725306AbgIKCc3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Sep 2020 22:32:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56526 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725300AbgIKCc2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 10 Sep 2020 22:32:28 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 68E912076D;
+        Fri, 11 Sep 2020 02:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599791547;
+        bh=IUL5OQwZa62OvjvVS0R3VD/aOHjG9tQGX5GRhNLFpXM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=absEeOvZztRG5uP9WyhWKZxVKzxXe6g9+CYGBlXcAOkEzNhQ3M830/55K5qulQcbc
+         mKizYOE9yqDci5nrIXzOlloC9nrMu4XU386QuDqlvtnGTxQ4EjlrJhjCFotcqGS1Eg
+         FMkNmMASu/+W+umyEu33CvBiXZ0xnzP9prmtF6Xo=
+Date:   Fri, 11 Sep 2020 11:32:21 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     peterz@infradead.org
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
+        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org
+Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
+ and make kretprobe lockless
+Message-Id: <20200911113221.97c92a356d4b9090106b512b@kernel.org>
+In-Reply-To: <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+        <20200901190808.GK29142@worktop.programming.kicks-ass.net>
+        <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
+        <20200902070226.GG2674@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 07:57:49PM +0200, Gerald Schaefer wrote:
-> On Thu, 10 Sep 2020 10:02:33 -0300
-> Jason Gunthorpe <jgg@ziepe.ca> wrote:
+Hi Peter and Ingo,
+
+On Wed, 2 Sep 2020 09:02:26 +0200
+peterz@infradead.org wrote:
+
+> On Wed, Sep 02, 2020 at 09:37:39AM +0900, Masami Hiramatsu wrote:
+> > On Tue, 1 Sep 2020 21:08:08 +0200
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > > On Sat, Aug 29, 2020 at 09:59:49PM +0900, Masami Hiramatsu wrote:
+> > > > Masami Hiramatsu (16):
+> > > >       kprobes: Add generic kretprobe trampoline handler
+> > > >       x86/kprobes: Use generic kretprobe trampoline handler
+> > > >       arm: kprobes: Use generic kretprobe trampoline handler
+> > > >       arm64: kprobes: Use generic kretprobe trampoline handler
+> > > >       arc: kprobes: Use generic kretprobe trampoline handler
+> > > >       csky: kprobes: Use generic kretprobe trampoline handler
+> > > >       ia64: kprobes: Use generic kretprobe trampoline handler
+> > > >       mips: kprobes: Use generic kretprobe trampoline handler
+> > > >       parisc: kprobes: Use generic kretprobe trampoline handler
+> > > >       powerpc: kprobes: Use generic kretprobe trampoline handler
+> > > >       s390: kprobes: Use generic kretprobe trampoline handler
+> > > >       sh: kprobes: Use generic kretprobe trampoline handler
+> > > >       sparc: kprobes: Use generic kretprobe trampoline handler
+> > > >       kprobes: Remove NMI context check
+> > > >       kprobes: Free kretprobe_instance with rcu callback
+> > > >       kprobes: Make local used functions static
+> > > > 
+> > > > Peter Zijlstra (5):
+> > > >       llist: Add nonatomic __llist_add() and __llist_dell_all()
+> > > >       kprobes: Remove kretprobe hash
+> > > >       asm-generic/atomic: Add try_cmpxchg() fallbacks
+> > > >       freelist: Lock less freelist
+> > > >       kprobes: Replace rp->free_instance with freelist
+> > > 
+> > > This looks good to me, do you want me to merge them through -tip? If so,
+> > > do we want to try and get them in this release still?
+> > 
+> > Yes, thanks. For the kretprobe missing issue, we will need the first half
+> > (up to "kprobes: Remove NMI context check"), so we can split the series
+> > if someone think the lockless is still immature.
 > 
-> > On Thu, Sep 10, 2020 at 11:39:25AM +0200, Alexander Gordeev wrote:
-> > 
-> > > As Gerald mentioned, it is very difficult to explain in a clear way.
-> > > Hopefully, one could make sense ot of it.
-> > 
-> > I would say the page table API requires this invariant:
-> > 
-> >         pud = pud_offset(p4d, addr);
-> >         do {
-> > 		WARN_ON(pud != pud_offset(p4d, addr);
-> >                 next = pud_addr_end(addr, end);
-> >         } while (pud++, addr = next, addr != end);
-> > 
-> > ie pud++ is supposed to be a shortcut for 
-> >   pud_offset(p4d, next)
-> > 
+> Ok, but then lockdep will yell at you if you have that enabled and run
+> the unoptimized things.
 > 
-> Hmm, IIUC, all architectures with static folding will simply return
-> the passed-in p4d pointer for pud_offset(p4d, addr), for 3-level
-> pagetables.
+> > > Ingo, opinions? This basically fixes a regression cauesd by
+> > > 
+> > >   0d00449c7a28 ("x86: Replace ist_enter() with nmi_enter()")
 
-It is probably moot now, but since other arch's don't crash they also
-return pud_addr_end() == end so the loop only does one iteration.
+So what would you think of this? I saw the unification part of this series
+on the tip/master, but lockless part is not there. This might still keep
+lockdep to warn on kretprobes if we disable CONFIG_FUNCTION_TRACER and
+optprobe.
 
-ie pud == pud_offset(p4d, addr) for all iterations as the pud++ never
-happens.
+If we make the kretprobe lockless, we will remove all locks from in-kernel
+kprobe handlers. So at least upstream user will be happy.
 
-Which is what this addr_end patch does for s390..
+Or, do we fix lockdep warning on the spinlocks in kprobe handlers first?
 
-Jason
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
