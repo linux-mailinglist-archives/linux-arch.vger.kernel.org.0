@@ -2,113 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D57265702
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Sep 2020 04:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A3E265A21
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Sep 2020 09:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725306AbgIKCc3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Sep 2020 22:32:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56526 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725300AbgIKCc2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Sep 2020 22:32:28 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        id S1725710AbgIKHLN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Sep 2020 03:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbgIKHLK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Sep 2020 03:11:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD37C061573;
+        Fri, 11 Sep 2020 00:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l8KDsrY39924ACHw1Sx+CBM/Dlp985coTimHrE9LjSo=; b=PPlUR0zbTWPpH3hH0mqS5h+JtM
+        R5WAVd9k68mxD195MB+izkmVzegbgPHsNwoqeWstbxpVQHOwYZt738fosFRddXnq7lM9LjNVOpgvf
+        aHBt9Xv5geb9jIoXqmdd2+LCOdR3Esazwp6p1vrYqwcM7XgZhLdCU6BK8TWb6jDTqASDjRgb+LMkw
+        DZdWCVrkMw1VSc3l/jkU1F4485cXb4zGr0GCfbJ1jWedoC3gMPDoeS5Iuj5/Hkwqs1iQJynSYBvtG
+        y2Ljxas1gnPytmadt8Wy0oXAjuDpumpxpJONTdFo6plfIvfIwYgF99B3FDj1nFhOuVH/V2PMbPGxF
+        mMa23LxQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kGdBn-00017e-8d; Fri, 11 Sep 2020 07:09:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 68E912076D;
-        Fri, 11 Sep 2020 02:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599791547;
-        bh=IUL5OQwZa62OvjvVS0R3VD/aOHjG9tQGX5GRhNLFpXM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=absEeOvZztRG5uP9WyhWKZxVKzxXe6g9+CYGBlXcAOkEzNhQ3M830/55K5qulQcbc
-         mKizYOE9yqDci5nrIXzOlloC9nrMu4XU386QuDqlvtnGTxQ4EjlrJhjCFotcqGS1Eg
-         FMkNmMASu/+W+umyEu33CvBiXZ0xnzP9prmtF6Xo=
-Date:   Fri, 11 Sep 2020 11:32:21 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     peterz@infradead.org
-Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-        Eddy_Wu@trendmicro.com, x86@kernel.org, davem@davemloft.net,
-        rostedt@goodmis.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
-        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
-        paulmck@kernel.org
-Subject: Re: [PATCH v5 00/21] kprobes: Unify kretprobe trampoline handlers
- and make kretprobe lockless
-Message-Id: <20200911113221.97c92a356d4b9090106b512b@kernel.org>
-In-Reply-To: <20200902070226.GG2674@hirez.programming.kicks-ass.net>
-References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
-        <20200901190808.GK29142@worktop.programming.kicks-ass.net>
-        <20200902093739.8bd13603380951eaddbcd8a5@kernel.org>
-        <20200902070226.GG2674@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E745E3003D8;
+        Fri, 11 Sep 2020 09:09:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A72E82C2AEBC1; Fri, 11 Sep 2020 09:09:39 +0200 (CEST)
+Date:   Fri, 11 Sep 2020 09:09:39 +0200
+From:   peterz@infradead.org
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Mike Rapoport <rppt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        linux-x86 <x86@kernel.org>,
+        linux-arm <linux-arm-kernel@lists.infradead.org>,
+        linux-power <linuxppc-dev@lists.ozlabs.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 1/3] mm/gup: fix gup_fast with dynamic page table
+ folding
+Message-ID: <20200911070939.GB1362448@hirez.programming.kicks-ass.net>
+References: <aacad1b7-f121-44a5-f01d-385cb0f6351e@intel.com>
+ <20200909192534.442f8984@thinkpad>
+ <20200909180324.GI87483@ziepe.ca>
+ <20200910093925.GB29166@oc3871087118.ibm.com>
+ <CAHk-=wh4SuNvThq1nBiqk0N-fW6NsY5w=VawC=rJs7ekmjAhjA@mail.gmail.com>
+ <20200910181319.GO87483@ziepe.ca>
+ <CAHk-=wh3SjOE2r4WCfagL5Zq4Oj4Jsu1=1jTTi2GxGDTxP-J0Q@mail.gmail.com>
+ <20200910211010.46d064a7@thinkpad>
+ <CAHk-=wg3ggXU98Mnv-ss-hEcvUNc9vCtgSRc7GpcGfvyOw_h3g@mail.gmail.com>
+ <20200910215921.GP87483@ziepe.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200910215921.GP87483@ziepe.ca>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Peter and Ingo,
+On Thu, Sep 10, 2020 at 06:59:21PM -0300, Jason Gunthorpe wrote:
+> So, I suggest pXX_offset_unlocked()
 
-On Wed, 2 Sep 2020 09:02:26 +0200
-peterz@infradead.org wrote:
+Urgh, no. Elsewhere in gup _unlocked() means it will take the lock
+itself (get_user_pages_unlocked()) -- although often it seems to mean
+the lock is already held (git grep _unlocked and marvel).
 
-> On Wed, Sep 02, 2020 at 09:37:39AM +0900, Masami Hiramatsu wrote:
-> > On Tue, 1 Sep 2020 21:08:08 +0200
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > > On Sat, Aug 29, 2020 at 09:59:49PM +0900, Masami Hiramatsu wrote:
-> > > > Masami Hiramatsu (16):
-> > > >       kprobes: Add generic kretprobe trampoline handler
-> > > >       x86/kprobes: Use generic kretprobe trampoline handler
-> > > >       arm: kprobes: Use generic kretprobe trampoline handler
-> > > >       arm64: kprobes: Use generic kretprobe trampoline handler
-> > > >       arc: kprobes: Use generic kretprobe trampoline handler
-> > > >       csky: kprobes: Use generic kretprobe trampoline handler
-> > > >       ia64: kprobes: Use generic kretprobe trampoline handler
-> > > >       mips: kprobes: Use generic kretprobe trampoline handler
-> > > >       parisc: kprobes: Use generic kretprobe trampoline handler
-> > > >       powerpc: kprobes: Use generic kretprobe trampoline handler
-> > > >       s390: kprobes: Use generic kretprobe trampoline handler
-> > > >       sh: kprobes: Use generic kretprobe trampoline handler
-> > > >       sparc: kprobes: Use generic kretprobe trampoline handler
-> > > >       kprobes: Remove NMI context check
-> > > >       kprobes: Free kretprobe_instance with rcu callback
-> > > >       kprobes: Make local used functions static
-> > > > 
-> > > > Peter Zijlstra (5):
-> > > >       llist: Add nonatomic __llist_add() and __llist_dell_all()
-> > > >       kprobes: Remove kretprobe hash
-> > > >       asm-generic/atomic: Add try_cmpxchg() fallbacks
-> > > >       freelist: Lock less freelist
-> > > >       kprobes: Replace rp->free_instance with freelist
-> > > 
-> > > This looks good to me, do you want me to merge them through -tip? If so,
-> > > do we want to try and get them in this release still?
-> > 
-> > Yes, thanks. For the kretprobe missing issue, we will need the first half
-> > (up to "kprobes: Remove NMI context check"), so we can split the series
-> > if someone think the lockless is still immature.
-> 
-> Ok, but then lockdep will yell at you if you have that enabled and run
-> the unoptimized things.
-> 
-> > > Ingo, opinions? This basically fixes a regression cauesd by
-> > > 
-> > >   0d00449c7a28 ("x86: Replace ist_enter() with nmi_enter()")
-
-So what would you think of this? I saw the unification part of this series
-on the tip/master, but lockless part is not there. This might still keep
-lockdep to warn on kretprobes if we disable CONFIG_FUNCTION_TRACER and
-optprobe.
-
-If we make the kretprobe lockless, we will remove all locks from in-kernel
-kprobe handlers. So at least upstream user will be happy.
-
-Or, do we fix lockdep warning on the spinlocks in kprobe handlers first?
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+What we want is _lockless().
