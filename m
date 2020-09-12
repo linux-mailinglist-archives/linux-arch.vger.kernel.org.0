@@ -2,198 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB17D267647
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Sep 2020 01:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FC32676B2
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Sep 2020 02:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbgIKXAX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Sep 2020 19:00:23 -0400
-Received: from mga07.intel.com ([134.134.136.100]:19245 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725907AbgIKXAP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 11 Sep 2020 19:00:15 -0400
-IronPort-SDR: UKkKOmgGpwMUJ6WBfHgD93QuWKLpz7l94fKsWOP3h20gNoOfA1LbR3HpcMKQAApC1+RvGvQXI1
- Gf3bV+xc4khg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9741"; a="223055368"
-X-IronPort-AV: E=Sophos;i="5.76,418,1592895600"; 
-   d="scan'208";a="223055368"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2020 16:00:08 -0700
-IronPort-SDR: gjV2IAbCK+5QITdKA7WMzvCSEvXaQlPGUyhAEFA6sASH1O/4f91fTEIulHtiP+5a5tzCktpG0d
- lV5zvsXShGGQ==
-X-IronPort-AV: E=Sophos;i="5.76,418,1592895600"; 
-   d="scan'208";a="481500091"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2020 16:00:07 -0700
-Message-ID: <a1efc4330a3beff10671949eddbba96f8cde96da.camel@intel.com>
-Subject: Re: [PATCH v11 25/25] x86/cet/shstk: Add arch_prctl functions for
- shadow stack
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Dave Martin <Dave.Martin@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S1725857AbgILAK4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Sep 2020 20:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725824AbgILAKz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Sep 2020 20:10:55 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72880C061573
+        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 17:10:55 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id md22so3254173pjb.0
+        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 17:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ptEAU1Xnng1x4phMWyVZ560k80eHq758Hzhoynkaycc=;
+        b=X9GwGioE/sKlB0N60NGjN7QVepFxUFBUgG8XStPDYy6zg1BVuEqovR/eJ6oHvaTG/6
+         iaHvt0uhANQpifz3K87589CfbzpkWkab4jtrLcxwJ4YXZngIB4byQpCfgPUtJz6wcWio
+         6cE79xeS3xd/Wr+C5QTZg6Oc33JTJ4EaRmDWk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ptEAU1Xnng1x4phMWyVZ560k80eHq758Hzhoynkaycc=;
+        b=G+YvB3GB+JtXojfd9Dpb0Jb1T7veX2DAh1ybVjEC+28C1VvH7f03CU5+jezQ9JibyV
+         G5SuIxCh3k/VOn1pxS6oLOEQxyRDxRUAH68JgYnyM2lftBt5yxoGUqMf0pc/SvvtFUic
+         kNVlSH+0F82NN8J81KHTlhpB7KjAv3Jj4VWxn7535mQ7o7ySALcvxsiYAsxepW7nqAkB
+         rGryXGvFjVfFZ4doNv3JZDMTMomqiWjaAiYIxS/CeBDJq1ZpLGnuE7U01ZTuO0p3ULvH
+         zllg1eftYZHiqbf84ylUbp70Aiinbggoqt8R0WeB0NOvwTH6zSC7yaRJtedMQOOQdYPU
+         Bp5g==
+X-Gm-Message-State: AOAM530fklpvRoAjuAKRxDiiH8JyDuD2tpSRxHB2duZ7oGZiCrgG45Vl
+        /re+rjv0JHe56nUTtx34PMLX3Q==
+X-Google-Smtp-Source: ABdhPJyh4lfB9JNG/vzpZH+PDZ3Lh1qXXu4Qj1pA+d2IYVrAkYtb65TxuiV74KkGkwUeM4NLNt1Kew==
+X-Received: by 2002:a17:90a:46cd:: with SMTP id x13mr4417827pjg.101.1599869454586;
+        Fri, 11 Sep 2020 17:10:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b15sm3155923pft.84.2020.09.11.17.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 17:10:53 -0700 (PDT)
+Date:   Fri, 11 Sep 2020 17:10:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Robert O'Callahan <rocallahan@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-Date:   Fri, 11 Sep 2020 15:59:56 -0700
-In-Reply-To: <b3379d26-d8a7-deb7-59f1-c994bb297dcb@intel.com>
-References: <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
-         <20200826164604.GW6642@arm.com> <87ft892vvf.fsf@oldenburg2.str.redhat.com>
-         <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
-         <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com>
-         <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
-         <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
-         <20200901102758.GY6642@arm.com>
-         <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
-         <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
-         <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
-         <46dffdfd-92f8-0f05-6164-945f217b0958@intel.com>
-         <ed929729-4677-3d3b-6bfd-b379af9272b8@intel.com>
-         <6e1e22a5-1b7f-2783-351e-c8ed2d4893b8@intel.com>
-         <5979c58d-a6e3-d14d-df92-72cdeb97298d@intel.com>
-         <ab1a3344-60f4-9b9d-81d4-e6538fdcafcf@intel.com>
-         <08c91835-8486-9da5-a7d1-75e716fc5d36@intel.com>
-         <a881837d-c844-30e8-a614-8b92be814ef6@intel.com>
-         <cbec8861-8722-ec31-2c02-1cfed20255eb@intel.com>
-         <b3379d26-d8a7-deb7-59f1-c994bb297dcb@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        Mark Rutland <mark.rutland@arm.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kyle Huey <me@kylehuey.com>
+Subject: Re: [REGRESSION] x86/entry: Tracer no longer has opportunity to
+ change the syscall number at entry via orig_ax
+Message-ID: <202009111609.61E7875B3@keescook>
+References: <CAP045Arc1Vdh+n2j2ELE3q7XfagLjyqXji9ZD0jqwVB-yuzq-g@mail.gmail.com>
+ <87blj6ifo8.fsf@nanos.tec.linutronix.de>
+ <87a6xzrr89.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6xzrr89.fsf@mpe.ellerman.id.au>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2020-09-09 at 16:29 -0700, Dave Hansen wrote:
-> On 9/9/20 4:25 PM, Yu, Yu-cheng wrote:
-> > On 9/9/2020 4:11 PM, Dave Hansen wrote:
-> > > On 9/9/20 4:07 PM, Yu, Yu-cheng wrote:
-> > > > What if a writable mapping is passed to madvise(MADV_SHSTK)?  Should
-> > > > that be rejected?
-> > > 
-> > > It doesn't matter to me.  Even if it's readable, it _stops_ being even
-> > > directly readable after it's a shadow stack, right?  I don't think
-> > > writes are special in any way.  If anything, we *want* it to be writable
-> > > because that indicates that it can be written to, and we will want to
-> > > write to it soon.
-> > > 
-> > But in a PROT_WRITE mapping, all the pte's have _PAGE_BIT_RW set.  To
-> > change them to shadow stack, we need to clear that bit from the pte's.
-> > That will be like mprotect_fixup()/change_protection_range().
+On Wed, Sep 09, 2020 at 11:53:42PM +1000, Michael Ellerman wrote:
+> I can observe the difference between v5.8 and mainline, using the
+> raw_syscall trace event and running the seccomp_bpf selftest which turns
+> a getpid (39) into a getppid (110).
 > 
-> The page table hardware bits don't matter.  The user-visible protection
-> effects matter.
+> With v5.8 we see getppid on entry and exit:
 > 
-> For instance, we have PROT_EXEC, which *CLEARS* a hardware NX PTE bit.
-> The PROT_ permissions are independent of the hardware.
+>      seccomp_bpf-1307  [000] .... 22974.874393: sys_enter: NR 110 (7ffff22c46e0, 40a350, 4, fffffffffffff7ab, 7fa6ee0d4010, 0)
+>      seccomp_bpf-1307  [000] .N.. 22974.874401: sys_exit: NR 110 = 1304
 > 
-> I don't think the interface should be influenced at *all* by what whacko
-> PTE bit combinations we have to set to get the behavior.
+> Whereas on mainline we see an enter for getpid and an exit for getppid:
+> 
+>      seccomp_bpf-1030  [000] ....    21.806766: sys_enter: NR 39 (7ffe2f6d1ad0, 40a350, 7ffe2f6d1ad0, 0, 0, 407299)
+>      seccomp_bpf-1030  [000] ....    21.806767: sys_exit: NR 110 = 1027
 
-Here are the changes if we take the mprotect(PROT_SHSTK) approach.
-Any comments/suggestions?
+For my own notes, this is how I reproduced it:
 
----
- arch/x86/include/uapi/asm/mman.h | 26 +++++++++++++++++++++++++-
- mm/mprotect.c                    | 11 +++++++++++
- 2 files changed, 36 insertions(+), 1 deletion(-)
+# ./perf-$VER record -e raw_syscalls:sys_enter -e raw_syscalls:sys_exit &
+# ./seccomp_bpf
+# fg
+ctrl-c
+# ./perf-$VER script | grep seccomp_bpf | awk '{print $7}' | sort | uniq -c > $VER.log
+*repeat*
+# diff -u old.log new.log
+...
 
-diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-index d4a8d0424bfb..024f006fcfe8 100644
---- a/arch/x86/include/uapi/asm/mman.h
-+++ b/arch/x86/include/uapi/asm/mman.h
-@@ -4,6 +4,8 @@
- 
- #define MAP_32BIT	0x40		/* only give out 32bit addresses */
- 
-+#define PROT_SHSTK	0x10		/* shadow stack pages */
-+
- #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
- /*
-  * Take the 4 protection key bits out of the vma->vm_flags
-@@ -19,13 +21,35 @@
- 		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
- 		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
- 
--#define arch_calc_vm_prot_bits(prot, key) (		\
-+#define pkey_vm_prot_bits(prot, key) (			\
- 		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
- 		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
- 		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
- 		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
-+#else
-+#define pkey_vm_prot_bits(prot, key)
- #endif
- 
-+#define shstk_vm_prot_bits(prot) ( \
-+		(static_cpu_has(X86_FEATURE_SHSTK) && (prot & PROT_SHSTK)) ? \
-+		VM_SHSTK : 0)
-+
-+#define arch_calc_vm_prot_bits(prot, key) \
-+		(pkey_vm_prot_bits(prot, key) | shstk_vm_prot_bits(prot))
-+
- #include <asm-generic/mman.h>
- 
-+static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
-+{
-+	unsigned long supported = PROT_READ | PROT_EXEC | PROT_SEM;
-+
-+	if (static_cpu_has(X86_FEATURE_SHSTK) && (prot & PROT_SHSTK))
-+		supported |= PROT_SHSTK;
-+	else
-+		supported |= PROT_WRITE;
-+
-+	return (prot & ~supported) == 0;
-+}
-+#define arch_validate_prot arch_validate_prot
-+
- #endif /* _ASM_X86_MMAN_H */
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index a8edbcb3af99..520bd8caa005 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -571,6 +571,17 @@ static int do_mprotect_pkey(unsigned long start, size_t
-len,
- 				goto out;
- 		}
- 	}
-+
-+	/*
-+	 * Only anonymous mapping is suitable for shadow stack.
-+	 */
-+	if (prot & PROT_SHSTK) {
-+		if (vma->vm_file) {
-+			error = -EINVAL;
-+			goto out;
-+		}
-+	}
-+
- 	if (start > vma->vm_start)
- 		prev = vma;
- 
+(Is there an easier way to get those results?)
+
+I will go see if I can figure out the best way to correct this.
+
 -- 
-
+Kees Cook
