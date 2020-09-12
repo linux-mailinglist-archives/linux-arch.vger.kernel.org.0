@@ -2,108 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FC32676B2
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Sep 2020 02:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744F226770D
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Sep 2020 03:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725857AbgILAK4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Sep 2020 20:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725824AbgILAKz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Sep 2020 20:10:55 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72880C061573
-        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 17:10:55 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id md22so3254173pjb.0
-        for <linux-arch@vger.kernel.org>; Fri, 11 Sep 2020 17:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ptEAU1Xnng1x4phMWyVZ560k80eHq758Hzhoynkaycc=;
-        b=X9GwGioE/sKlB0N60NGjN7QVepFxUFBUgG8XStPDYy6zg1BVuEqovR/eJ6oHvaTG/6
-         iaHvt0uhANQpifz3K87589CfbzpkWkab4jtrLcxwJ4YXZngIB4byQpCfgPUtJz6wcWio
-         6cE79xeS3xd/Wr+C5QTZg6Oc33JTJ4EaRmDWk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ptEAU1Xnng1x4phMWyVZ560k80eHq758Hzhoynkaycc=;
-        b=G+YvB3GB+JtXojfd9Dpb0Jb1T7veX2DAh1ybVjEC+28C1VvH7f03CU5+jezQ9JibyV
-         G5SuIxCh3k/VOn1pxS6oLOEQxyRDxRUAH68JgYnyM2lftBt5yxoGUqMf0pc/SvvtFUic
-         kNVlSH+0F82NN8J81KHTlhpB7KjAv3Jj4VWxn7535mQ7o7ySALcvxsiYAsxepW7nqAkB
-         rGryXGvFjVfFZ4doNv3JZDMTMomqiWjaAiYIxS/CeBDJq1ZpLGnuE7U01ZTuO0p3ULvH
-         zllg1eftYZHiqbf84ylUbp70Aiinbggoqt8R0WeB0NOvwTH6zSC7yaRJtedMQOOQdYPU
-         Bp5g==
-X-Gm-Message-State: AOAM530fklpvRoAjuAKRxDiiH8JyDuD2tpSRxHB2duZ7oGZiCrgG45Vl
-        /re+rjv0JHe56nUTtx34PMLX3Q==
-X-Google-Smtp-Source: ABdhPJyh4lfB9JNG/vzpZH+PDZ3Lh1qXXu4Qj1pA+d2IYVrAkYtb65TxuiV74KkGkwUeM4NLNt1Kew==
-X-Received: by 2002:a17:90a:46cd:: with SMTP id x13mr4417827pjg.101.1599869454586;
-        Fri, 11 Sep 2020 17:10:54 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b15sm3155923pft.84.2020.09.11.17.10.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2020 17:10:53 -0700 (PDT)
-Date:   Fri, 11 Sep 2020 17:10:52 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Robert O'Callahan <rocallahan@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        id S1725747AbgILBeq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Sep 2020 21:34:46 -0400
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:13347 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725648AbgILBep (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Sep 2020 21:34:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1599874486; x=1631410486;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=i2IoWykb7HuBzS5tSv/XkodyucYzXuuq1LC24xxJfzE=;
+  b=MXYSmVSqFyQqh2s9bSwOob2T56JrY/AZRshAt6C5cGrgUMprFwXoPuC6
+   ZUkRQjLLosrRGZynV2qMhCdiferwO2mz94zlGQSjwLDv6x5D91i4mE8P7
+   JpC0WOnKv7DBNtE328Ls4Oamj2KvHI4ea95OZvzhaFzCeLNvRIzv6o/lL
+   k65e54xESuWXS+vIs2CiJDn1sj3SVlnDucA8lPpkNgl1MqqJJKRkbiru9
+   9VUItaszdnovs3DVENr9qH+YexlILBru5Ai69UCNx7odnB7c2bmmwjosx
+   LEnCI6TQsoFA7zXHqmm8v48qjLdickhoEYfUQVWDmzchCdziUCWUcDucA
+   Q==;
+IronPort-SDR: llayjaIceSywu6qdGg9qiznT0rnktLQeCMPWrdeM95a3gzhyYFSkKy4Ucl12GG4AcHEDxEsmyv
+ COoioRpzFb7dpEfPdV0qND/6FVq174UkkJ0SMHLt6DlO2ni/y1qpydtzeteAjb5OwE0NVdZxV0
+ 1dOYqtHQVSpypk4ZFiuK6os4weBGw8bTBI3pDj+e1twfbvPQOq0RV3jDXZRC5e8Q/9NX/66gUd
+ uplBTKEOKa+7QOUqrVpUWGS9pxTFy98TKQ+Pc3jCixZem82mDH03lpZ1jcDoagUhxBC3uqYtAZ
+ n8M=
+X-IronPort-AV: E=Sophos;i="5.76,418,1592841600"; 
+   d="scan'208";a="147177944"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 12 Sep 2020 09:34:46 +0800
+IronPort-SDR: HLQv8Uct4vn23nRbQfCpCiQqBw8MSu8MjmnXLxsXbH6AqQnFE1AyNMrkXm6yYApGGQGezxMp4k
+ DEYvLw59ZORg==
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2020 18:21:59 -0700
+IronPort-SDR: qY7VYxrseh/RhlJyz0RffEAYIQCptuw4PxQZLocbWF4FJBaQ1dwdimjIbbFKG27t6x/UoB0VY3
+ Phe+TTHjGIXA==
+WDCIronportException: Internal
+Received: from unknown (HELO jedi-01.hgst.com) ([10.86.59.229])
+  by uls-op-cesaip02.wdc.com with ESMTP; 11 Sep 2020 18:34:44 -0700
+From:   Atish Patra <atish.patra@wdc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atish.patra@wdc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Anup Patel <anup@brainfault.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kyle Huey <me@kylehuey.com>
-Subject: Re: [REGRESSION] x86/entry: Tracer no longer has opportunity to
- change the syscall number at entry via orig_ax
-Message-ID: <202009111609.61E7875B3@keescook>
-References: <CAP045Arc1Vdh+n2j2ELE3q7XfagLjyqXji9ZD0jqwVB-yuzq-g@mail.gmail.com>
- <87blj6ifo8.fsf@nanos.tec.linutronix.de>
- <87a6xzrr89.fsf@mpe.ellerman.id.au>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jia He <justin.he@arm.com>, linux-arch@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Mike Rapoport <rppt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [RFC/RFT PATCH v2 0/5] Unify NUMA implementation between ARM64 & RISC-V
+Date:   Fri, 11 Sep 2020 18:34:36 -0700
+Message-Id: <20200912013441.9730-1-atish.patra@wdc.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a6xzrr89.fsf@mpe.ellerman.id.au>
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 11:53:42PM +1000, Michael Ellerman wrote:
-> I can observe the difference between v5.8 and mainline, using the
-> raw_syscall trace event and running the seccomp_bpf selftest which turns
-> a getpid (39) into a getppid (110).
-> 
-> With v5.8 we see getppid on entry and exit:
-> 
->      seccomp_bpf-1307  [000] .... 22974.874393: sys_enter: NR 110 (7ffff22c46e0, 40a350, 4, fffffffffffff7ab, 7fa6ee0d4010, 0)
->      seccomp_bpf-1307  [000] .N.. 22974.874401: sys_exit: NR 110 = 1304
-> 
-> Whereas on mainline we see an enter for getpid and an exit for getppid:
-> 
->      seccomp_bpf-1030  [000] ....    21.806766: sys_enter: NR 39 (7ffe2f6d1ad0, 40a350, 7ffe2f6d1ad0, 0, 0, 407299)
->      seccomp_bpf-1030  [000] ....    21.806767: sys_exit: NR 110 = 1027
+This series attempts to move the ARM64 numa implementation to common
+code so that RISC-V can leverage that as well instead of reimplementing
+it again.
 
-For my own notes, this is how I reproduced it:
+RISC-V specific bits are based on initial work done by Greentime Hu [1] but
+modified to reuse the common implementation to avoid duplication.
 
-# ./perf-$VER record -e raw_syscalls:sys_enter -e raw_syscalls:sys_exit &
-# ./seccomp_bpf
-# fg
-ctrl-c
-# ./perf-$VER script | grep seccomp_bpf | awk '{print $7}' | sort | uniq -c > $VER.log
-*repeat*
-# diff -u old.log new.log
-...
+[1] https://lkml.org/lkml/2020/1/10/233
 
-(Is there an easier way to get those results?)
+This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
+It would be great if somebody can test it on numa capable ARM64 hardware platforms.
+This patch series doesn't modify the maintainers list for the common code (arch_numa)
+as I am not sure if somebody from ARM64 community or Greg should take up the
+maintainership. Ganapatrao was the original author of the arm64 version.
+I would be happy to update that in the next revision once it is decided.
 
-I will go see if I can figure out the best way to correct this.
+# numactl --hardware
+available: 2 nodes (0-1)
+node 0 cpus: 0 1 2 3
+node 0 size: 486 MB
+node 0 free: 470 MB
+node 1 cpus: 4 5 6 7
+node 1 size: 424 MB
+node 1 free: 408 MB
+node distances:
+node   0   1 
+  0:  10  20 
+  1:  20  10 
+# numactl -show
+policy: default
+preferred node: current
+physcpubind: 0 1 2 3 4 5 6 7 
+cpubind: 0 1 
+nodebind: 0 1 
+membind: 0 1 
 
--- 
-Kees Cook
+For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
+to test the patches in Qemu and 2 socket OmniXtend FPGA.
+
+https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
+
+The patches are also available at
+
+https://github.com/atishp04/linux/tree/5.10_numa_unified_v2
+
+There may be some minor conflicts with Mike's cleanup series [2] depending on the
+order in which these two series are being accepted. I can rebase on top his series
+if required.
+
+[2] https://lkml.org/lkml/2020/8/18/754
+
+Atish Patra (4):
+numa: Move numa implementation to common code
+arm64, numa: Change the numa init function name to be generic
+riscv: Separate memory init from paging init
+riscv: Add numa support for riscv64 platform
+
+Greentime Hu (1):
+riscv: Add support pte_protnone and pmd_protnone if
+CONFIG_NUMA_BALANCING
+
+arch/arm64/Kconfig                            |  1 +
+arch/arm64/include/asm/numa.h                 | 45 +----------------
+arch/arm64/kernel/acpi_numa.c                 | 13 -----
+arch/arm64/mm/Makefile                        |  1 -
+arch/arm64/mm/init.c                          |  4 +-
+arch/riscv/Kconfig                            | 31 +++++++++++-
+arch/riscv/include/asm/mmzone.h               | 13 +++++
+arch/riscv/include/asm/numa.h                 |  8 +++
+arch/riscv/include/asm/pci.h                  | 14 ++++++
+arch/riscv/include/asm/pgtable.h              | 21 ++++++++
+arch/riscv/kernel/setup.c                     | 11 ++++-
+arch/riscv/kernel/smpboot.c                   | 12 ++++-
+arch/riscv/mm/init.c                          | 10 +++-
+drivers/base/Kconfig                          |  6 +++
+drivers/base/Makefile                         |  1 +
+.../mm/numa.c => drivers/base/arch_numa.c     | 29 +++++++++--
+include/asm-generic/numa.h                    | 49 +++++++++++++++++++
+17 files changed, 200 insertions(+), 69 deletions(-)
+create mode 100644 arch/riscv/include/asm/mmzone.h
+create mode 100644 arch/riscv/include/asm/numa.h
+rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
+create mode 100644 include/asm-generic/numa.h
+
+--
+2.24.0
+
