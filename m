@@ -2,192 +2,255 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0178268BD5
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 15:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED2D268D6A
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 16:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgINNKQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Sep 2020 09:10:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36748 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726407AbgINNJp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 14 Sep 2020 09:09:45 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7AF03206B2;
-        Mon, 14 Sep 2020 13:09:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600088984;
-        bh=enr+iyTv6u2XzskZFJ5qT83Kq/MSJgsJ+u1/0SVC2DE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HJEzeySpEP9Li+pydqi15kb1u831aaAa+xIym6H9E2N3vCvslGr2iwd+P8M1q2/KV
-         oSZObq1fkwLf0vFtUgCRsKaEc92nsIxzoi2BG5AQAEfuEj1PR858lINKG6gctQ6lsa
-         BjSmPK+oikK1hmXW8zjoRAQ2wZdbtaPoD7suvK/g=
-Date:   Mon, 14 Sep 2020 14:09:38 +0100
-From:   Will Deacon <will@kernel.org>
-To:     David Brazdil <dbrazdil@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
+        id S1726709AbgINOWu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Sep 2020 10:22:50 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2817 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726772AbgINOWr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 14 Sep 2020 10:22:47 -0400
+Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 12434ADA93495CC8BBE9;
+        Mon, 14 Sep 2020 15:22:41 +0100 (IST)
+Received: from localhost (10.52.126.156) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 14 Sep
+ 2020 15:22:40 +0100
+Date:   Mon, 14 Sep 2020 15:21:03 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Atish Patra <atish.patra@wdc.com>
+CC:     <linux-kernel@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Anup Patel <anup@brainfault.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 02/10] kvm: arm64: Partially link nVHE hyp code,
- simplify HYPCOPY
-Message-ID: <20200914130937.GC24441@willie-the-truck>
-References: <20200903091712.46456-1-dbrazdil@google.com>
- <20200903091712.46456-3-dbrazdil@google.com>
+        "David Hildenbrand" <david@redhat.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jia He <justin.he@arm.com>, <linux-arch@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        "Mike Rapoport" <rppt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>
+Subject: Re: [RFC/RFT PATCH v2 1/5] numa: Move numa implementation to common
+ code
+Message-ID: <20200914152103.000062e3@Huawei.com>
+In-Reply-To: <20200912013441.9730-2-atish.patra@wdc.com>
+References: <20200912013441.9730-1-atish.patra@wdc.com>
+        <20200912013441.9730-2-atish.patra@wdc.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200903091712.46456-3-dbrazdil@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.126.156]
+X-ClientProxiedBy: lhreml717-chm.china.huawei.com (10.201.108.68) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 11:17:04AM +0200, David Brazdil wrote:
-> Previous series introduced custom build rules for nVHE hyp code, using
-> objcopy to prefix ELF section and symbol names to separate nVHE code
-> into its own "namespace". This approach was limited by the expressiveness
-> of objcopy's command line interface, eg. missing support for wildcards.
+On Fri, 11 Sep 2020 18:34:37 -0700
+Atish Patra <atish.patra@wdc.com> wrote:
 
-nit: "Previous series" isn't a lot of use here or in the git log. You can
-just say something like:
-
-  "Relying on objcopy to prefix the ELF section names of the nVHE hyp code
-   is brittle and prevents us from using wildcards to match specific
-   section names."
-
-and then go on to explain what the change is doing (see
-Documentation/process/submitting-patches.rst for more help here)
-
-Also, given that this is independent of the other patches, please can you
-move it right to the start of the series? I'm a bit worried about the
-potential for regressions given the changes to the way in which we link,
-so the sooner we can get this patch some more exposure, the better.
-
-> Improve the build rules by partially linking all '.hyp.o' files and
-> prefixing their ELF section names using a linker script. Continue using
-> objcopy for prefixing ELF symbol names.
+> ARM64 numa implementation is generic enough that RISC-V can reuse that
+> implementation with very minor cosmetic changes. This will help both
+> ARM64 and RISC-V in terms of maintanace and feature improvement
 > 
-> One immediate advantage of this approach is that all subsections
-> matching a pattern can be merged into a single prefixed section, eg.
-> .text and .text.* can be linked into a single '.hyp.text'. This removes
-> the need for -fno-reorder-functions on GCC and will be useful in the
-> future too: LTO builds use .text subsections, compilers routinely
-> generate .rodata subsections, etc.
+> Move the numa implementation code to common directory so that both ISAs
+> can reuse this. This doesn't introduce any function changes for ARM64.
 > 
-> Partially linking all hyp code into a single object file also makes it
-> easier to analyze.
-> 
-> Signed-off-by: David Brazdil <dbrazdil@google.com>
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+Looks good to me.
+
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
->  arch/arm64/kvm/hyp/nvhe/Makefile  | 56 ++++++++++++++++---------------
->  arch/arm64/kvm/hyp/nvhe/hyp.lds.S | 14 ++++++++
->  2 files changed, 43 insertions(+), 27 deletions(-)
->  create mode 100644 arch/arm64/kvm/hyp/nvhe/hyp.lds.S
+>  arch/arm64/Kconfig                            |  1 +
+>  arch/arm64/include/asm/numa.h                 | 45 +----------------
+>  arch/arm64/mm/Makefile                        |  1 -
+>  drivers/base/Kconfig                          |  6 +++
+>  drivers/base/Makefile                         |  1 +
+>  .../mm/numa.c => drivers/base/arch_numa.c     |  0
+>  include/asm-generic/numa.h                    | 49 +++++++++++++++++++
+>  7 files changed, 58 insertions(+), 45 deletions(-)
+>  rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (100%)
+>  create mode 100644 include/asm-generic/numa.h
 > 
-> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-> index aef76487edc2..1b2fbb19f3e8 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
-> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-> @@ -10,40 +10,42 @@ obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o
->  obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
->  	 ../fpsimd.o ../hyp-entry.o
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 6d232837cbee..955a0cf75b16 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -960,6 +960,7 @@ config HOTPLUG_CPU
+>  # Common NUMA Features
+>  config NUMA
+>  	bool "NUMA Memory Allocation and Scheduler Support"
+> +	select GENERIC_ARCH_NUMA
+>  	select ACPI_NUMA if ACPI
+>  	select OF_NUMA
+>  	help
+> diff --git a/arch/arm64/include/asm/numa.h b/arch/arm64/include/asm/numa.h
+> index 626ad01e83bf..8c8cf4297cc3 100644
+> --- a/arch/arm64/include/asm/numa.h
+> +++ b/arch/arm64/include/asm/numa.h
+> @@ -3,49 +3,6 @@
+>  #define __ASM_NUMA_H
 >  
-> -obj-y := $(patsubst %.o,%.hyp.o,$(obj-y))
-> -extra-y := $(patsubst %.hyp.o,%.hyp.tmp.o,$(obj-y))
-> +##
-> +## Build rules for compiling nVHE hyp code
-> +## Output of this folder is `hyp.o`, a partially linked object file containing
-> +## all nVHE hyp code and data.
-> +##
+>  #include <asm/topology.h>
+> -
+> -#ifdef CONFIG_NUMA
+> -
+> -#define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
+> -
+> -int __node_distance(int from, int to);
+> -#define node_distance(a, b) __node_distance(a, b)
+> -
+> -extern nodemask_t numa_nodes_parsed __initdata;
+> -
+> -extern bool numa_off;
+> -
+> -/* Mappings between node number and cpus on that node. */
+> -extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
+> -void numa_clear_node(unsigned int cpu);
+> -
+> -#ifdef CONFIG_DEBUG_PER_CPU_MAPS
+> -const struct cpumask *cpumask_of_node(int node);
+> -#else
+> -/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
+> -static inline const struct cpumask *cpumask_of_node(int node)
+> -{
+> -	return node_to_cpumask_map[node];
+> -}
+> -#endif
+> -
+> -void __init arm64_numa_init(void);
+> -int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+> -void __init numa_set_distance(int from, int to, int distance);
+> -void __init numa_free_distance(void);
+> -void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+> -void numa_store_cpu_info(unsigned int cpu);
+> -void numa_add_cpu(unsigned int cpu);
+> -void numa_remove_cpu(unsigned int cpu);
+> -
+> -#else	/* CONFIG_NUMA */
+> -
+> -static inline void numa_store_cpu_info(unsigned int cpu) { }
+> -static inline void numa_add_cpu(unsigned int cpu) { }
+> -static inline void numa_remove_cpu(unsigned int cpu) { }
+> -static inline void arm64_numa_init(void) { }
+> -static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+> -
+> -#endif	/* CONFIG_NUMA */
+> +#include <asm-generic/numa.h>
 >  
-> -$(obj)/%.hyp.tmp.o: $(src)/%.c FORCE
-> +hyp-obj := $(patsubst %.o,%.hyp.o,$(obj-y))
-> +obj-y := hyp.o
-> +extra-y := $(hyp-obj) hyp.tmp.o hyp.lds
+>  #endif	/* __ASM_NUMA_H */
+> diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
+> index d91030f0ffee..928c308b044b 100644
+> --- a/arch/arm64/mm/Makefile
+> +++ b/arch/arm64/mm/Makefile
+> @@ -6,7 +6,6 @@ obj-y				:= dma-mapping.o extable.o fault.o init.o \
+>  obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
+>  obj-$(CONFIG_PTDUMP_CORE)	+= dump.o
+>  obj-$(CONFIG_PTDUMP_DEBUGFS)	+= ptdump_debugfs.o
+> -obj-$(CONFIG_NUMA)		+= numa.o
+>  obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
+>  KASAN_SANITIZE_physaddr.o	+= n
+>  
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 8d7001712062..c5956c8845cc 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -210,4 +210,10 @@ config GENERIC_ARCH_TOPOLOGY
+>  	  appropriate scaling, sysfs interface for reading capacity values at
+>  	  runtime.
+>  
+> +config GENERIC_ARCH_NUMA
+> +	bool
+> +	help
+> +	  Enable support for generic NUMA implementation. Currently, RISC-V
+> +	  and ARM64 uses it.
 > +
-> +# 1) Compile all source files to `.hyp.o` object files. The file extension
-> +#    avoids file name clashes for files shared with VHE.
-> +$(obj)/%.hyp.o: $(src)/%.c FORCE
->  	$(call if_changed_rule,cc_o_c)
-> -$(obj)/%.hyp.tmp.o: $(src)/%.S FORCE
-> +$(obj)/%.hyp.o: $(src)/%.S FORCE
->  	$(call if_changed_rule,as_o_S)
-> -$(obj)/%.hyp.o: $(obj)/%.hyp.tmp.o FORCE
-> -	$(call if_changed,hypcopy)
+>  endmenu
+> diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> index 157452080f3d..c3d02c644222 100644
+> --- a/drivers/base/Makefile
+> +++ b/drivers/base/Makefile
+> @@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
+>  obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
+>  obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
+> +obj-$(CONFIG_GENERIC_ARCH_NUMA) += arch_numa.o
 >  
-> -# Disable reordering functions by GCC (enabled at -O2).
-> -# This pass puts functions into '.text.*' sections to aid the linker
-> -# in optimizing ELF layout. See HYPCOPY comment below for more info.
-> -ccflags-y += $(call cc-option,-fno-reorder-functions)
-> +# 2) Compile linker script.
-> +$(obj)/hyp.lds: $(src)/hyp.lds.S FORCE
-> +	$(call if_changed_dep,cpp_lds_S)
-
-Why is it not sufficient just to list the linker script as a target, like
-we do for vmlinux.lds in extra-y?
-
-> +# 3) Partially link all '.hyp.o' files and apply the linker script.
-> +#    Prefixes names of ELF sections with '.hyp', eg. '.hyp.text'.
-> +LDFLAGS_hyp.tmp.o := -r -T $(obj)/hyp.lds
-> +$(obj)/hyp.tmp.o: $(addprefix $(obj)/,$(hyp-obj)) $(obj)/hyp.lds FORCE
-> +	$(call if_changed,ld)
-> +
-> +# 4) Produce the final 'hyp.o', ready to be linked into 'vmlinux'.
-> +#    Prefixes names of ELF symbols with '__kvm_nvhe_'.
-> +$(obj)/hyp.o: $(obj)/hyp.tmp.o FORCE
-> +	$(call if_changed,hypcopy)
+>  obj-y			+= test/
 >  
->  # The HYPCOPY command uses `objcopy` to prefix all ELF symbol names
-> -# and relevant ELF section names to avoid clashes with VHE code/data.
-> -#
-> -# Hyp code is assumed to be in the '.text' section of the input object
-> -# files (with the exception of specialized sections such as
-> -# '.hyp.idmap.text'). This assumption may be broken by a compiler that
-> -# divides code into sections like '.text.unlikely' so as to optimize
-> -# ELF layout. HYPCOPY checks that no such sections exist in the input
-> -# using `objdump`, otherwise they would be linked together with other
-> -# kernel code and not memory-mapped correctly at runtime.
-> +# to avoid clashes with VHE code/data.
->  quiet_cmd_hypcopy = HYPCOPY $@
-> -      cmd_hypcopy =							\
-> -	if $(OBJDUMP) -h $< | grep -F '.text.'; then			\
-> -		echo "$@: function reordering not supported in nVHE hyp code" >&2; \
-> -		/bin/false;						\
-> -	fi;								\
-> -	$(OBJCOPY) --prefix-symbols=__kvm_nvhe_				\
-> -		   --rename-section=.text=.hyp.text			\
-> -		   $< $@
-> +      cmd_hypcopy = $(OBJCOPY) --prefix-symbols=__kvm_nvhe_ $< $@
->  
->  # Remove ftrace and Shadow Call Stack CFLAGS.
->  # This is equivalent to the 'notrace' and '__noscs' annotations.
-> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp.lds.S b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
+> diff --git a/arch/arm64/mm/numa.c b/drivers/base/arch_numa.c
+> similarity index 100%
+> rename from arch/arm64/mm/numa.c
+> rename to drivers/base/arch_numa.c
+> diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
 > new file mode 100644
-> index 000000000000..aaa0ce133a32
+> index 000000000000..2718d5a6ff03
 > --- /dev/null
-> +++ b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-> @@ -0,0 +1,14 @@
+> +++ b/include/asm-generic/numa.h
+> @@ -0,0 +1,49 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Linker script used during partial linking of nVHE EL2 object files.
-> + * Written by David Brazdil <dbrazdil@google.com>
-> + */
+> +#ifndef __ASM_GENERIC_NUMA_H
+> +#define __ASM_GENERIC_NUMA_H
 > +
-> +/*
-> + * Defines an ELF hyp section from input section @NAME and its subsections.
-> + */
-> +#define HYP_SECTION(NAME) .hyp##NAME : { *(NAME NAME##.[0-9a-zA-Z_]*) }
+> +#ifdef CONFIG_NUMA
+> +
+> +#define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
+> +
+> +int __node_distance(int from, int to);
+> +#define node_distance(a, b) __node_distance(a, b)
+> +
+> +extern nodemask_t numa_nodes_parsed __initdata;
+> +
+> +extern bool numa_off;
+> +
+> +/* Mappings between node number and cpus on that node. */
+> +extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
+> +void numa_clear_node(unsigned int cpu);
+> +
+> +#ifdef CONFIG_DEBUG_PER_CPU_MAPS
+> +const struct cpumask *cpumask_of_node(int node);
+> +#else
+> +/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
+> +static inline const struct cpumask *cpumask_of_node(int node)
+> +{
+> +	return node_to_cpumask_map[node];
+> +}
+> +#endif
+> +
+> +void __init arm64_numa_init(void);
+> +int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+> +void __init numa_set_distance(int from, int to, int distance);
+> +void __init numa_free_distance(void);
+> +void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+> +void numa_store_cpu_info(unsigned int cpu);
+> +void numa_add_cpu(unsigned int cpu);
+> +void numa_remove_cpu(unsigned int cpu);
+> +
+> +#else	/* CONFIG_NUMA */
+> +
+> +static inline void numa_store_cpu_info(unsigned int cpu) { }
+> +static inline void numa_add_cpu(unsigned int cpu) { }
+> +static inline void numa_remove_cpu(unsigned int cpu) { }
+> +static inline void arm64_numa_init(void) { }
+> +static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+> +
+> +#endif	/* CONFIG_NUMA */
+> +
+> +#endif	/* __ASM_GENERIC_NUMA_H */
 
-Is 'NAME##.*' likely to cause a problem here?
 
-Will
