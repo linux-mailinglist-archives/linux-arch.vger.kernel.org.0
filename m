@@ -2,257 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D15A2693B5
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 19:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A362694E3
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 20:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726039AbgINRkv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Sep 2020 13:40:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52902 "EHLO mail.kernel.org"
+        id S1725999AbgINSbT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Sep 2020 14:31:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726044AbgINRkj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 14 Sep 2020 13:40:39 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726023AbgINSbQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:31:16 -0400
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4C1220732;
-        Mon, 14 Sep 2020 17:40:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 924EA221E5
+        for <linux-arch@vger.kernel.org>; Mon, 14 Sep 2020 18:31:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600105215;
-        bh=if6Es0VsB8MaG8QejheWTTYU8BkRC0QntRBGhvtidoM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LQwm0vYOwRa7KiiLyHjdP5hGoS85NhaSFbL460dFopmIRGmfiHT9zPxoVMwNXL+uN
-         1lehAo3GZ6IPLVD/5VMtLvd6+rKR+3YEXCXzdx1Oj9Pwn4obsLfGYMrVllqkg4Ozam
-         YHtIERNA5xYGuoqCtHn5QMr6IjWaQQGnN8X0dzmo=
-Date:   Mon, 14 Sep 2020 18:40:09 +0100
-From:   Will Deacon <will@kernel.org>
-To:     David Brazdil <dbrazdil@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 00/10] Independent per-CPU data section for nVHE
-Message-ID: <20200914174008.GA25238@willie-the-truck>
-References: <20200903091712.46456-1-dbrazdil@google.com>
+        s=default; t=1600108274;
+        bh=TWMzqZoZNralDEd5I14l94VOUCKWS0bUz/b6Q4OWmsg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=D4P7AEngB+S1f31yQcalYo1zCNFyveknGKD9Hj70JfD4ABuAiXlotcEedmXFm7ic5
+         hyF+FdjUZ/Pv8vmvFKWoUUv8UKd7aD5CEBujLlrbWQz6oxj49Y/+V5ZJ8vRVNdjlUU
+         Hf9ohxCwkyBAIRMBxwyvi8S9wNjMHJEHhe3JffZo=
+Received: by mail-wr1-f46.google.com with SMTP id e16so720309wrm.2
+        for <linux-arch@vger.kernel.org>; Mon, 14 Sep 2020 11:31:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531BgJQtrHJUU/6O7APZrA6nE9gv/nLUthkk5A/8r62UG4uR4XJU
+        jdCepfPojPPqzVxxAthF19SXFheXfgGUzWaBOpM7Sg==
+X-Google-Smtp-Source: ABdhPJzMOb3y0FnJul9OcJh57QbJ0oJTgC7Zp8nhwEEKBKBm7cEIBddAZgePqa+NXgC52VXRnjm9D5o/WjTt/jkVxNo=
+X-Received: by 2002:a5d:5111:: with SMTP id s17mr17179124wrt.70.1600108272961;
+ Mon, 14 Sep 2020 11:31:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200903091712.46456-1-dbrazdil@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
+ <CALCETrVeNA0Kt2rW0CRCVo1JE0CKaBxu9KrJiyqUA8LPraY=7g@mail.gmail.com>
+ <0e9996bc-4c1b-cc99-9616-c721b546f857@intel.com> <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
+ <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
+ <20200901102758.GY6642@arm.com> <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
+ <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
+ <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com> <46dffdfd-92f8-0f05-6164-945f217b0958@intel.com>
+ <ed929729-4677-3d3b-6bfd-b379af9272b8@intel.com> <6e1e22a5-1b7f-2783-351e-c8ed2d4893b8@intel.com>
+ <5979c58d-a6e3-d14d-df92-72cdeb97298d@intel.com> <ab1a3344-60f4-9b9d-81d4-e6538fdcafcf@intel.com>
+ <08c91835-8486-9da5-a7d1-75e716fc5d36@intel.com> <a881837d-c844-30e8-a614-8b92be814ef6@intel.com>
+ <cbec8861-8722-ec31-2c02-1cfed20255eb@intel.com> <b3379d26-d8a7-deb7-59f1-c994bb297dcb@intel.com>
+ <a1efc4330a3beff10671949eddbba96f8cde96da.camel@intel.com> <41aa5e8f-ad88-2934-6d10-6a78fcbe019b@intel.com>
+In-Reply-To: <41aa5e8f-ad88-2934-6d10-6a78fcbe019b@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 14 Sep 2020 11:31:01 -0700
+X-Gmail-Original-Message-ID: <CALCETrX5qJAZBe9sHL6+HFvre-bbo+us1==q9KHNCyRrzaUsjw@mail.gmail.com>
+Message-ID: <CALCETrX5qJAZBe9sHL6+HFvre-bbo+us1==q9KHNCyRrzaUsjw@mail.gmail.com>
+Subject: Re: [NEEDS-REVIEW] Re: [PATCH v11 25/25] x86/cet/shstk: Add
+ arch_prctl functions for shadow stack
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi David,
+> On Sep 14, 2020, at 7:50 AM, Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> =EF=BB=BFOn 9/11/20 3:59 PM, Yu-cheng Yu wrote:
+> ...
+>> Here are the changes if we take the mprotect(PROT_SHSTK) approach.
+>> Any comments/suggestions?
+>
+> I still don't like it. :)
+>
+> I'll also be much happier when there's a proper changelog to accompany
+> this which also spells out the alternatives any why they suck so much.
+>
 
-On Thu, Sep 03, 2020 at 11:17:02AM +0200, David Brazdil wrote:
-> Introduce '.hyp.data..percpu' as part of ongoing effort to make nVHE
-> hyp code self-contained and independent of the rest of the kernel.
-> 
-> The series builds on top of the "Split off nVHE hyp code" series which
-> used objcopy to rename '.text' to '.hyp.text' and prefix all ELF
-> symbols with '__kvm_nvhe' for all object files under kvm/hyp/nvhe.
+Let=E2=80=99s take a step back here. Ignoring the precise API, what exactly=
+ is
+a shadow stack from the perspective of a Linux user program?
 
-I've been playing around with this series this afternoon, trying to see
-if we can reduce the coupling between the nVHE code and the core code. I've
-ended up with the diff below on top of your series, but I think it actually
-removes the need to change the core code at all. The idea is to collapse
-the percpu sections during prelink, and then we can just deal with the
-resulting data section a bit like we do for .hyp.text already.
+The simplest answer is that it=E2=80=99s just memory that happens to have
+certain protections.  This enables all kinds of shenanigans.  A
+program could map a memfd twice, once as shadow stack and once as
+non-shadow-stack, and change its control flow.  Similarly, a program
+could mprotect its shadow stack, modify it, and mprotect it back.  In
+some threat models, though could be seen as a WRSS bypass.  (Although
+if an attacker can coerce a process to call mprotect(), the game is
+likely mostly over anyway.)
 
-Have I missed something critical?
+But we could be more restrictive, or perhaps we could allow user code
+to opt into more restrictions.  For example, we could have shadow
+stacks be special memory that cannot be written from usermode by any
+means other than ptrace() and friends, WRSS, and actual shadow stack
+usage.
 
-Cheers,
+What is the goal?
 
-Will
-
---->8
-
-diff --git a/arch/arm64/include/asm/hyp_image.h b/arch/arm64/include/asm/hyp_image.h
-new file mode 100644
-index 000000000000..40bbf2ddb50f
---- /dev/null
-+++ b/arch/arm64/include/asm/hyp_image.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __ASM_HYP_IMAGE_H
-+#define __ASM_HYP_IMAGE_H
-+
-+/*
-+ * KVM nVHE code has its own symbol namespace prefixed with __kvm_nvhe_, to
-+ * separate it from the kernel proper.
-+ */
-+#define kvm_nvhe_sym(sym)	__kvm_nvhe_##sym
-+
-+#ifdef LINKER_SCRIPT
-+/*
-+ * Defines an ELF hyp section from input section @NAME and its subsections.
-+ */
-+#define HYP_SECTION(NAME)	.hyp ## NAME : { *(NAME NAME ## .*) }
-+#define KVM_NVHE_ALIAS(sym)	kvm_nvhe_sym(sym) = sym;
-+#endif	/* LINKER_SCRIPT */
-+
-+#endif	/* __ASM_HYP_IMAGE_H */
-diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-index c87111c25d9e..e0e1e404f6eb 100644
---- a/arch/arm64/include/asm/kvm_asm.h
-+++ b/arch/arm64/include/asm/kvm_asm.h
-@@ -7,6 +7,7 @@
- #ifndef __ARM_KVM_ASM_H__
- #define __ARM_KVM_ASM_H__
- 
-+#include <asm/hyp_image.h>
- #include <asm/virt.h>
- 
- #define	VCPU_WORKAROUND_2_FLAG_SHIFT	0
-@@ -42,13 +43,6 @@
- 
- #include <linux/mm.h>
- 
--/*
-- * Translate name of a symbol defined in nVHE hyp to the name seen
-- * by kernel proper. All nVHE symbols are prefixed by the build system
-- * to avoid clashes with the VHE variants.
-- */
--#define kvm_nvhe_sym(sym)	__kvm_nvhe_##sym
--
- #define DECLARE_KVM_VHE_SYM(sym)	extern char sym[]
- #define DECLARE_KVM_NVHE_SYM(sym)	extern char kvm_nvhe_sym(sym)[]
- 
-diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
-index 21307e2db3fc..f16205300dbc 100644
---- a/arch/arm64/kernel/image-vars.h
-+++ b/arch/arm64/kernel/image-vars.h
-@@ -54,15 +54,11 @@ __efistub__ctype		= _ctype;
- #ifdef CONFIG_KVM
- 
- /*
-- * KVM nVHE code has its own symbol namespace prefixed with __kvm_nvhe_, to
-- * separate it from the kernel proper. The following symbols are legally
-- * accessed by it, therefore provide aliases to make them linkable.
-- * Do not include symbols which may not be safely accessed under hypervisor
-- * memory mappings.
-+ * The following symbols are legally accessed by the KVM nVHE code, therefore
-+ * provide aliases to make them linkable. Do not include symbols which may not
-+ * be safely accessed under hypervisor memory mappings.
-  */
- 
--#define KVM_NVHE_ALIAS(sym) __kvm_nvhe_##sym = sym;
--
- /* Alternative callbacks for init-time patching of nVHE hyp code. */
- KVM_NVHE_ALIAS(arm64_enable_wa2_handling);
- KVM_NVHE_ALIAS(kvm_patch_vector_branch);
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index 5904a4de9f40..c06e6860adfd 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -9,27 +9,37 @@
- 
- #include <asm-generic/vmlinux.lds.h>
- #include <asm/cache.h>
-+#include <asm/hyp_image.h>
- #include <asm/kernel-pgtable.h>
- #include <asm/memory.h>
- #include <asm/page.h>
- 
- #include "image.h"
- 
--#define __CONCAT3(x, y, z) x ## y ## z
--#define CONCAT3(x, y, z) __CONCAT3(x, y, z)
--
- OUTPUT_ARCH(aarch64)
- ENTRY(_text)
- 
- jiffies = jiffies_64;
- 
--
-+#ifdef CONFIG_KVM
- #define HYPERVISOR_EXTABLE					\
- 	. = ALIGN(SZ_8);					\
- 	__start___kvm_ex_table = .;				\
- 	*(__kvm_ex_table)					\
- 	__stop___kvm_ex_table = .;
- 
-+#define HYPERVISOR_PERCPU_SECTION			\
-+	. = ALIGN(PAGE_SIZE);				\
-+	.hyp.data..percpu : {				\
-+		kvm_nvhe_sym(__per_cpu_start) = .;	\
-+		*(.hyp.data..percpu)			\
-+		kvm_nvhe_sym(__per_cpu_end) = .;	\
-+	}
-+#else
-+#define HYPERVISOR_EXTABLE
-+#define HYPERVISOR_PERCPU_SECTION
-+#endif
-+
- #define HYPERVISOR_TEXT					\
- 	/*						\
- 	 * Align to 4 KB so that			\
-@@ -193,13 +203,7 @@ SECTIONS
- 	}
- 
- 	PERCPU_SECTION(L1_CACHE_BYTES)
--
--	/* KVM nVHE per-cpu section */
--	#undef PERCPU_SECTION_NAME
--	#undef PERCPU_SYMBOL_NAME
--	#define PERCPU_SECTION_NAME(suffix)	CONCAT3(.hyp, PERCPU_SECTION_BASE_NAME, suffix)
--	#define PERCPU_SYMBOL_NAME(name)	__kvm_nvhe_ ## name
--	PERCPU_SECTION(L1_CACHE_BYTES)
-+	HYPERVISOR_PERCPU_SECTION
- 
- 	.rela.dyn : ALIGN(8) {
- 		*(.rela .rela*)
-diff --git a/arch/arm64/kvm/hyp/nvhe/.gitignore b/arch/arm64/kvm/hyp/nvhe/.gitignore
-new file mode 100644
-index 000000000000..695d73d0249e
---- /dev/null
-+++ b/arch/arm64/kvm/hyp/nvhe/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+hyp.lds
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index 1b2fbb19f3e8..decc2373aa6c 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -33,8 +33,8 @@ $(obj)/hyp.lds: $(src)/hyp.lds.S FORCE
- 
- # 3) Partially link all '.hyp.o' files and apply the linker script.
- #    Prefixes names of ELF sections with '.hyp', eg. '.hyp.text'.
--LDFLAGS_hyp.tmp.o := -r -T $(obj)/hyp.lds
--$(obj)/hyp.tmp.o: $(addprefix $(obj)/,$(hyp-obj)) $(obj)/hyp.lds FORCE
-+LDFLAGS_hyp.tmp.o := -r -T
-+$(obj)/hyp.tmp.o: $(obj)/hyp.lds $(addprefix $(obj)/,$(hyp-obj)) FORCE
- 	$(call if_changed,ld)
- 
- # 4) Produce the final 'hyp.o', ready to be linked into 'vmlinux'.
-diff --git a/arch/arm64/kvm/hyp/nvhe/hyp.lds.S b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-index 7d8c3fa004f4..8121f2a6aedf 100644
---- a/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-+++ b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-@@ -4,16 +4,9 @@
-  * Written by David Brazdil <dbrazdil@google.com>
-  */
- 
--/*
-- * Defines an ELF hyp section from input section @NAME and its subsections.
-- */
--#define HYP_SECTION(NAME) .hyp##NAME : { *(NAME NAME##.[0-9a-zA-Z_]*) }
-+#include <asm/hyp_image.h>
- 
- SECTIONS {
- 	HYP_SECTION(.text)
- 	HYP_SECTION(.data..percpu)
--	HYP_SECTION(.data..percpu..first)
--	HYP_SECTION(.data..percpu..page_aligned)
--	HYP_SECTION(.data..percpu..read_mostly)
--	HYP_SECTION(.data..percpu..shared_aligned)
- }
+No matter what we do, the effects of calling vfork() are going to be a
+bit odd with SHSTK enabled.  I suppose we could disallow this, but
+that seems likely to cause its own issues.
