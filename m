@@ -2,85 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEDB2680BC
-	for <lists+linux-arch@lfdr.de>; Sun, 13 Sep 2020 20:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A304C26825A
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 03:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgIMS12 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 13 Sep 2020 14:27:28 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:57550 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbgIMS11 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Sep 2020 14:27:27 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1600021644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oMJtr2JqN0kiR0GwnxtFMazq99OS4VS1oSm7b6RaJJI=;
-        b=JApFJsFIE09rG1/wKIq7C2ldW8nsOc/YlZnAzu4PoH4i5Vg5OTQ/Qq7BDop274ufYS4FvX
-        KzZmUMcW1rjmi4dXDRQSSD6wD9+Qe+Scdxe5wMKqyxbc1B4jl2xoqT1I+7IhZAXMbANwn2
-        V7hjNH8p84vVU4kWWLqlnZgGoYbktmvS4YSt9O/g+z0JUS+rpyu27zahpqJiaH2w/JYjKX
-        62prwzOJfBS+4DX1bqQtRtcQWFNz5wfBEkZfLl49lHFkWWWCdO18BObk+a+noXUYufIalc
-        r08KwpToXkToo2X+gemB6+YohtIODK7oWoMMiCZ7qXIsqgPRu77CnP3h4jns3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1600021644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oMJtr2JqN0kiR0GwnxtFMazq99OS4VS1oSm7b6RaJJI=;
-        b=javeHOqMh8camHOqoHhky7mRCIFcwAQJ4n5f0CfBB7PyTjmoQFv9Qlwb1Za3nHcZjcAdkD
-        0al/trQBmpGRaACw==
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Robert O'Callahan <rocallahan@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kyle Huey <me@kylehuey.com>
-Subject: Re: [REGRESSION] x86/entry: Tracer no longer has opportunity to change the syscall number at entry via orig_ax
-In-Reply-To: <87d02qqfxy.fsf@mpe.ellerman.id.au>
-References: <CAP045Arc1Vdh+n2j2ELE3q7XfagLjyqXji9ZD0jqwVB-yuzq-g@mail.gmail.com> <87blj6ifo8.fsf@nanos.tec.linutronix.de> <87a6xzrr89.fsf@mpe.ellerman.id.au> <202009111609.61E7875B3@keescook> <87d02qqfxy.fsf@mpe.ellerman.id.au>
-Date:   Sun, 13 Sep 2020 20:27:23 +0200
-Message-ID: <87o8m98rck.fsf@nanos.tec.linutronix.de>
+        id S1725980AbgINBta (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 13 Sep 2020 21:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbgINBt3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Sep 2020 21:49:29 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44621C06174A;
+        Sun, 13 Sep 2020 18:49:29 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id f2so8220967pgd.3;
+        Sun, 13 Sep 2020 18:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=0YS1663L1LzUAznqusfmielYY5IT6EGMpzPyhkJQ7Pg=;
+        b=aS3VNXRCtipQcZRfa7a6tudxDiYKqA3Gz4zlK0itlhG5MYkd7dKfMhgG66FijWEGr9
+         3UlITHtVnMKV0DVKAbn6lIlDUqudRyx4IyO56SZIMUzWc2aBS1/BEmV2V+xiaj2cQR+O
+         ukFK6q0B5Jy8GpBSiwxjCHtLienaCXw1ZM6QdSSeapYEqDGArJPsmGRm4paHAOwmwHUy
+         WGXG/VdqDl8MttghiU9rPXRPkVc8zjklfrg6xPU53bhCj3ncH9dWLybh6zGby3JL5wvy
+         QYYyB/Iuvsr9oYWqhSeIBYsvbDI6rJJAhy+Gn2i8V0fxU7hvQ1F0OPQLMSamcylcGJbz
+         kfkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=0YS1663L1LzUAznqusfmielYY5IT6EGMpzPyhkJQ7Pg=;
+        b=HcGhsQXl7k++CRp5kQIZSs9DQeEcdNtWE28b2T9j3KtB01PHtU0eDrDtCPoezBcN88
+         3OvzWdq6ZSDqIBKEbr7KL+SrMjbh40LmvraRxNUuLxmK5hkxbzKybVgzLxh1613UYOnM
+         N5olGNrfxuHr3+BLqxe/nVJBCSHVC28vAuLPI5DfyBIYlIkxEMnRFQD9BWhbwpZpSEYF
+         HQvrzEqNyaJ/+qdyYSdXx4kpn+PATWIDP++LCYoEIY4botDvOVQRgFcRf2VRYqScPmsR
+         7rvkssoq3g4qzGqmfhW5TrA8lj3Taj/qBqmbQ12pMawqEHGZYQ3M/1ZlQOscqiSIPGCK
+         Mb6g==
+X-Gm-Message-State: AOAM5320w9NcFhPdMf4Ufr42pEujfgpSzPF5JSCOUQ61tJqICQBb5pnZ
+        qmWdjxHEZrBcXHu12j3ZEEE=
+X-Google-Smtp-Source: ABdhPJyubYTjN2Pj9IUYo2h8nl7y9PDk3yWqMleRixdLIZRvEKOz9/fk4Z+JpCcJeQBq5RQaO2aFhA==
+X-Received: by 2002:a63:1016:: with SMTP id f22mr9291708pgl.226.1600048168254;
+        Sun, 13 Sep 2020 18:49:28 -0700 (PDT)
+Received: from localhost ([203.185.249.227])
+        by smtp.gmail.com with ESMTPSA id u14sm8442698pfm.80.2020.09.13.18.49.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Sep 2020 18:49:27 -0700 (PDT)
+Date:   Mon, 14 Sep 2020 11:49:22 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v7 05/12] mm: HUGE_VMAP arch support cleanup
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Tang Yizhou <tangyizhou@huawei.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Zefan Li <lizefan@huawei.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+References: <20200825145753.529284-1-npiggin@gmail.com>
+        <20200825145753.529284-6-npiggin@gmail.com>
+        <534a0d5e-3a6f-c8e5-38f9-7e24662acb31@huawei.com>
+In-Reply-To: <534a0d5e-3a6f-c8e5-38f9-7e24662acb31@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-Id: <1600048125.6soarrvq20.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 13 2020 at 17:44, Michael Ellerman wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index 18683598edbc..901361e2f8ea 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -60,13 +60,15 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
->                         return ret;
->         }
->  
-> +       syscall = syscall_get_nr(current, regs);
-> +
->         if (unlikely(ti_work & _TIF_SYSCALL_TRACEPOINT))
->                 trace_sys_enter(regs, syscall);
->  
->         syscall_enter_audit(regs, syscall);
->  
->         /* The above might have changed the syscall number */
-> -       return ret ? : syscall_get_nr(current, regs);
-> +       return ret ? : syscall;
->  }
+Excerpts from Tang Yizhou's message of September 11, 2020 8:36 pm:
+> On 2020/8/25 22:57, Nicholas Piggin wrote:
+>> -int __init arch_ioremap_pud_supported(void)
+>> +bool arch_vmap_pud_supported(pgprot_t prot);
+>>  {
+>>  	/*
+>>  	 * Only 4k granule supports level 1 block mappings.
+>> @@ -1319,9 +1319,9 @@ int __init arch_ioremap_pud_supported(void)
+>>  	       !IS_ENABLED(CONFIG_PTDUMP_DEBUGFS);
+>>  }
+>=20
+> There is a compilation error because of the redundant semicolon at arch_v=
+map_pud_supported().
 
-Yup, this looks right. Can you please send a proper patch?
+Huh thanks, I didn't see that for some reason.
+
+I'll fix it up and re-send.
 
 Thanks,
+Nick
 
-        tglx
