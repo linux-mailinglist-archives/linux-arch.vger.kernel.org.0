@@ -2,109 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2432695FD
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 22:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3362696E9
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Sep 2020 22:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725989AbgINUEK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Sep 2020 16:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725953AbgINUEJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Sep 2020 16:04:09 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8397DC06178A
-        for <linux-arch@vger.kernel.org>; Mon, 14 Sep 2020 13:04:09 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id u3so451281pjr.3
-        for <linux-arch@vger.kernel.org>; Mon, 14 Sep 2020 13:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ajhHJz1gbeguv7fK0Au1e3qVDEqjerkQfY+fM8vzCCM=;
-        b=CdEu6eSd17f/rk+wfAgK/BrqcVAQIAIBjP+4xk9dVA6ehCXoX8DmYKL0CAhajwAIMG
-         my1lgEZzRYjb0bDJCpWwQtRx85YChWHge3kcwzvvRT3QOFQ0mP60F+tJVzsyeRM0SNiT
-         /zvcEr86RGaB+T9OplOmrOoW5XSMoRS2MYKc8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ajhHJz1gbeguv7fK0Au1e3qVDEqjerkQfY+fM8vzCCM=;
-        b=ByQ8xQo0GPMsb1bSXJcq9ZwqiMKQFAAz61ou5WSn+VvAaiIC3btz4yUkuwVjDcltK5
-         k4rtorcnjaG8IA2X1VLf54BilVPVhaEqXueQA9z3dqEJzaqrwJHWuzLMNz0wHnq78KVS
-         604BK57kfnDLko+kVXkLXPcvNGBXd0+YUD63wxf01RCq7KntXa8I6RUbp0hqK8qBX4Ll
-         TXWqN2Xk/juFrlgrIHZHklm2286sWZTVYCpJ53TuzUTOg89beXvsYRL8x7/b+E9saQAq
-         fkfita1VYJjkj95n6CwW+gP+qMAnZlZOGopfKUYfFMU31Uz8WCPC06zwjUr76EOSfzt9
-         32Dg==
-X-Gm-Message-State: AOAM531zQVnkBqdQFlKRm33jV+Fb6ZgH3eNKN790eF0nejTdsYMUTHf8
-        XUbwyBPbRItqpOXi79GYi1JvqA==
-X-Google-Smtp-Source: ABdhPJw3YjGHWrvjXN7tCQLQdNHZkCPff5W+k6kJgt9qjZ+YtqW3xrMBKUir8djUXs8pTT88pQs2fA==
-X-Received: by 2002:a17:90a:df0b:: with SMTP id gp11mr925413pjb.64.1600113848920;
-        Mon, 14 Sep 2020 13:04:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i9sm11461663pfq.53.2020.09.14.13.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 13:04:08 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 13:04:06 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Robert O'Callahan <rocallahan@gmail.com>,
+        id S1726091AbgINUo4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Sep 2020 16:44:56 -0400
+Received: from mga18.intel.com ([134.134.136.126]:37837 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725984AbgINUoz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 14 Sep 2020 16:44:55 -0400
+IronPort-SDR: 6nrcm9dSy+DO/jvdZmLKmHnbZys6BAG4RBu3iA68hckXf0bv8JIsargF5GyFyh7NcAW2OqeA4U
+ NbxM7z0VeD1w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="146898430"
+X-IronPort-AV: E=Sophos;i="5.76,427,1592895600"; 
+   d="scan'208";a="146898430"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2020 13:44:54 -0700
+IronPort-SDR: AkVfmk+B+R2AS1BdaSnCKau8ZPqZEqz9QQUtghb9wnE8lfT5XErlNWR4JSyOEhO3efMA9qoWq9
+ vHE3455/G5aw==
+X-IronPort-AV: E=Sophos;i="5.76,427,1592895600"; 
+   d="scan'208";a="506491218"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.244.74]) ([10.212.244.74])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2020 13:44:51 -0700
+Subject: Re: [NEEDS-REVIEW] Re: [PATCH v11 25/25] x86/cet/shstk: Add
+ arch_prctl functions for shadow stack
+To:     Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Martin <Dave.Martin@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kyle Huey <me@kylehuey.com>
-Subject: Re: [REGRESSION] x86/entry: Tracer no longer has opportunity to
- change the syscall number at entry via orig_ax
-Message-ID: <202009141303.08B39E5783@keescook>
-References: <CAP045Arc1Vdh+n2j2ELE3q7XfagLjyqXji9ZD0jqwVB-yuzq-g@mail.gmail.com>
- <87blj6ifo8.fsf@nanos.tec.linutronix.de>
- <87a6xzrr89.fsf@mpe.ellerman.id.au>
- <202009111609.61E7875B3@keescook>
- <87d02qqfxy.fsf@mpe.ellerman.id.au>
- <87o8m98rck.fsf@nanos.tec.linutronix.de>
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+References: <086c73d8-9b06-f074-e315-9964eb666db9@intel.com>
+ <4f2dfefc-b55e-bf73-f254-7d95f9c67e5c@intel.com>
+ <CAMe9rOqt9kbqERC8U1+K-LiDyNYuuuz3TX++DChrRJwr5ajt6Q@mail.gmail.com>
+ <20200901102758.GY6642@arm.com>
+ <c91bbad8-9e45-724b-4526-fe3674310c57@intel.com>
+ <CALCETrWJQgtO_tP1pEaDYYsFgkZ=fOxhyTRE50THcxYoHyTTwg@mail.gmail.com>
+ <32005d57-e51a-7c7f-4e86-612c2ff067f3@intel.com>
+ <46dffdfd-92f8-0f05-6164-945f217b0958@intel.com>
+ <ed929729-4677-3d3b-6bfd-b379af9272b8@intel.com>
+ <6e1e22a5-1b7f-2783-351e-c8ed2d4893b8@intel.com>
+ <5979c58d-a6e3-d14d-df92-72cdeb97298d@intel.com>
+ <ab1a3344-60f4-9b9d-81d4-e6538fdcafcf@intel.com>
+ <08c91835-8486-9da5-a7d1-75e716fc5d36@intel.com>
+ <a881837d-c844-30e8-a614-8b92be814ef6@intel.com>
+ <cbec8861-8722-ec31-2c02-1cfed20255eb@intel.com>
+ <b3379d26-d8a7-deb7-59f1-c994bb297dcb@intel.com>
+ <a1efc4330a3beff10671949eddbba96f8cde96da.camel@intel.com>
+ <41aa5e8f-ad88-2934-6d10-6a78fcbe019b@intel.com>
+ <CALCETrX5qJAZBe9sHL6+HFvre-bbo+us1==q9KHNCyRrzaUsjw@mail.gmail.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <2d86fa40-3676-62b1-1571-90074ca65971@intel.com>
+Date:   Mon, 14 Sep 2020 13:44:50 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o8m98rck.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <CALCETrX5qJAZBe9sHL6+HFvre-bbo+us1==q9KHNCyRrzaUsjw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 13, 2020 at 08:27:23PM +0200, Thomas Gleixner wrote:
-> On Sun, Sep 13 2020 at 17:44, Michael Ellerman wrote:
-> > Kees Cook <keescook@chromium.org> writes:
-> > diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> > index 18683598edbc..901361e2f8ea 100644
-> > --- a/kernel/entry/common.c
-> > +++ b/kernel/entry/common.c
-> > @@ -60,13 +60,15 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
-> >                         return ret;
-> >         }
-> >  
-> > +       syscall = syscall_get_nr(current, regs);
-> > +
-> >         if (unlikely(ti_work & _TIF_SYSCALL_TRACEPOINT))
-> >                 trace_sys_enter(regs, syscall);
-> >  
-> >         syscall_enter_audit(regs, syscall);
-> >  
-> >         /* The above might have changed the syscall number */
-> > -       return ret ? : syscall_get_nr(current, regs);
-> > +       return ret ? : syscall;
-> >  }
+On 9/14/2020 11:31 AM, Andy Lutomirski wrote:
+>> On Sep 14, 2020, at 7:50 AM, Dave Hansen <dave.hansen@intel.com> wrote:
+>>
+>> ﻿On 9/11/20 3:59 PM, Yu-cheng Yu wrote:
+>> ...
+>>> Here are the changes if we take the mprotect(PROT_SHSTK) approach.
+>>> Any comments/suggestions?
+>>
+>> I still don't like it. :)
+>>
+>> I'll also be much happier when there's a proper changelog to accompany
+>> this which also spells out the alternatives any why they suck so much.
+>>
 > 
-> Yup, this looks right. Can you please send a proper patch?
+> Let’s take a step back here. Ignoring the precise API, what exactly is
+> a shadow stack from the perspective of a Linux user program?
+> 
+> The simplest answer is that it’s just memory that happens to have
+> certain protections.  This enables all kinds of shenanigans.  A
+> program could map a memfd twice, once as shadow stack and once as
+> non-shadow-stack, and change its control flow.  Similarly, a program
+> could mprotect its shadow stack, modify it, and mprotect it back.  In
 
-I already did on Friday:
-https://lore.kernel.org/lkml/20200912005826.586171-1-keescook@chromium.org/
+What if we do the following:
 
--- 
-Kees Cook
+- If the mapping has VM_SHARED, it cannot be turned to shadow stack. 
+Shadow stack cannot be shared anyway.
+
+- Only allow an anonymous mapping to be converted to shadow stack, but 
+not the other way.
+
+> some threat models, though could be seen as a WRSS bypass.  (Although
+> if an attacker can coerce a process to call mprotect(), the game is
+> likely mostly over anyway.)
+> 
+> But we could be more restrictive, or perhaps we could allow user code
+> to opt into more restrictions.  For example, we could have shadow
+> stacks be special memory that cannot be written from usermode by any
+> means other than ptrace() and friends, WRSS, and actual shadow stack
+> usage.
+> 
+> What is the goal?
+
+There primary goal is to allocate/mmap a shadow stack from user space.
+
+> 
+> No matter what we do, the effects of calling vfork() are going to be a
+> bit odd with SHSTK enabled.  I suppose we could disallow this, but
+> that seems likely to cause its own issues.
+> 
+
+Do you mean vfork() has issues with call/return?  That is taken care of 
+in GLIBC.  Or do you mean it has issues with mprotect(PROT_SHSTK)?
