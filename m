@@ -2,266 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4970726AB91
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Sep 2020 20:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F7026AC9D
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Sep 2020 20:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727901AbgIOSLV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Sep 2020 14:11:21 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:42810 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727934AbgIOSJQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Sep 2020 14:09:16 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FHwnx2078388;
-        Tue, 15 Sep 2020 18:07:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=xSmDvkQkMYEWD7WRdYuNVEN2qfEEyomzGbWMzSTkEsw=;
- b=ZSb2CmhktBSZTNFLJKcKY+Jk3juA6JFLokE5btJ3XUl/B87Ye0+XBmb+PcqAeYO/85pZ
- aTr8cugz8k+vCewg0w8iQXSxwVkzQPCoQImlwZH913Ubcrksq/GZIsJL0/CPJKXKBvTA
- n5w7rWqgUGjJ2ihB27+mt4Iy5FXY9OtZJ12jIgW0szAUC8vGNd6rl24N7wE61vlprjLa
- bz+AuQm4Jwsaup+y5DXYJUNfyXNlh4/6A4xeuVwRfK9Y8PAPIOot8uAJW0yMmDfsAsPg
- a+0ixEPl6okQr0yUnInx1JjzhjaZutstrbj2Ah8+WfKQMRDTf4Oq0xGbKpFaS98Jqi47 Uw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 33gp9m6r06-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Sep 2020 18:07:55 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FI5p1C062230;
-        Tue, 15 Sep 2020 18:05:55 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 33hm310msy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 18:05:54 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FI5oYW000920;
-        Tue, 15 Sep 2020 18:05:50 GMT
-Received: from neelam.us.oracle.com (/10.152.128.16)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 15 Sep 2020 18:05:50 +0000
-From:   Alex Kogan <alex.kogan@oracle.com>
-To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
-        will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
-        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
-        jglauber@marvell.com
-Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        alex.kogan@oracle.com, dave.dice@oracle.com
-Subject: [PATCH v11 4/5] locking/qspinlock: Introduce starvation avoidance into CNA
-Date:   Tue, 15 Sep 2020 14:05:34 -0400
-Message-Id: <20200915180535.2975060-5-alex.kogan@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200915180535.2975060-1-alex.kogan@oracle.com>
-References: <20200915180535.2975060-1-alex.kogan@oracle.com>
+        id S1727686AbgIOSyP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Sep 2020 14:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727813AbgIORXk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Sep 2020 13:23:40 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786FFC061352
+        for <linux-arch@vger.kernel.org>; Tue, 15 Sep 2020 10:14:22 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id j2so4920790ioj.7
+        for <linux-arch@vger.kernel.org>; Tue, 15 Sep 2020 10:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jT9s1JAVx2W5cNkDMrd7bWYf1jbIzkRTHh6c6VRDMuY=;
+        b=gdIp7xtBO/MSpEb9o8jN2IyQr26hmZe4Y1Inos4WGDR9JaBIQIi1PU3JIQChI0g3d7
+         LNCuIXI9NjrLEa4Z7VzoHoYibkJTvYYNe4XMxYvI8Key8Lz+Dn5TOJoG3OirB4lNf/0v
+         CZwnoRL2aTjSfXTMe2vCnRhhGcF5/px2guqwjtyoY+pY4/WqMrRsa3daDkNGpvajy3Os
+         F5adkpgafrtJqtA1mdt1vlIxNc/cvIEHgPvBIGAHbOJRmRqdTTGQSyxSLDdT0bWH+lVs
+         aoX0hyxrh/WWLqV3qXKOZbrIk4oQpUdoGJ5imOxIC9ur6GCE2cmivVAVgws5orQ0743v
+         GgWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jT9s1JAVx2W5cNkDMrd7bWYf1jbIzkRTHh6c6VRDMuY=;
+        b=olpPi+Ee0b+z7+6Qp6gt+OaQqbMaoSgCiXAZmd6Pyi/qBY799358sPAiCk7pm70Fup
+         LnX4oosbwAdsgH1uIUSsghfN9J420VC1mygLPTuZ3a0VzI0otQx1ZHnFs45/mJR3tPNt
+         KITIeXujGc0nR4wGVvHVneHk8L8AqJuSY8mrNtBXWcUx3LtdNiBKS7okbWR2kWQ1uStY
+         UoEd7IAZ/tgrD3feTGist8X5G/PPinanJgOMxw+Zs7BK7tshcEh2GWMgQqx5rT0gx5z4
+         9N0beY5km4ofd6poKmOTfyvDT8ez2vNMUJ0KQMymqtNjvjsgIJm8RYn9smI02o2gRZe0
+         Fh9w==
+X-Gm-Message-State: AOAM533kdF5t1/GfMeXcu0MbwkLg6Ahy1MUFabI2m5nJ9rAZ8qPDH0oE
+        oOVD4OKKiqRpX/b0qUgMKpKrNBOvNBXddzdP
+X-Google-Smtp-Source: ABdhPJzPmldAEg1RI32WpLRYJaop5kMVcEE7x7cIiRQrPffUZq0WsPOosFaK5gGj43Fd4thLTpOr6w==
+X-Received: by 2002:a5e:9916:: with SMTP id t22mr16004622ioj.163.1600190061826;
+        Tue, 15 Sep 2020 10:14:21 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id z2sm4640548ilz.37.2020.09.15.10.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 10:14:21 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1kIEX6-006Vzt-2h; Tue, 15 Sep 2020 14:14:20 -0300
+Date:   Tue, 15 Sep 2020 14:14:20 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Vasily Gorbik <gor@linux.ibm.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Mike Rapoport <rppt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        linux-x86 <x86@kernel.org>,
+        linux-arm <linux-arm-kernel@lists.infradead.org>,
+        linux-power <linuxppc-dev@lists.ozlabs.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [PATCH v2] mm/gup: fix gup_fast with dynamic page table folding
+Message-ID: <20200915171420.GK1221970@ziepe.ca>
+References: <20200911200511.GC1221970@ziepe.ca>
+ <patch.git-943f1e5dcff2.your-ad-here.call-01599856292-ext-8676@work.hours>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009150146
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009150145
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <patch.git-943f1e5dcff2.your-ad-here.call-01599856292-ext-8676@work.hours>
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Keep track of the time the thread at the head of the secondary queue
-has been waiting, and force inter-node handoff once this time passes
-a preset threshold. The default value for the threshold (10ms) can be
-overridden with the new kernel boot command-line option
-"numa_spinlock_threshold". The ms value is translated internally to the
-nearest rounded-up jiffies.
+On Fri, Sep 11, 2020 at 10:36:43PM +0200, Vasily Gorbik wrote:
+> Currently to make sure that every page table entry is read just once
+> gup_fast walks perform READ_ONCE and pass pXd value down to the next
+> gup_pXd_range function by value e.g.:
+> 
+> static int gup_pud_range(p4d_t p4d, unsigned long addr, unsigned long end,
+>                          unsigned int flags, struct page **pages, int *nr)
+> ...
+>         pudp = pud_offset(&p4d, addr);
+> 
+> This function passes a reference on that local value copy to pXd_offset,
+> and might get the very same pointer in return. This happens when the
+> level is folded (on most arches), and that pointer should not be iterated.
+> 
+> On s390 due to the fact that each task might have different 5,4 or
+> 3-level address translation and hence different levels folded the logic
+> is more complex and non-iteratable pointer to a local copy leads to
+> severe problems.
+> 
+> Here is an example of what happens with gup_fast on s390, for a task
+> with 3-levels paging, crossing a 2 GB pud boundary:
+> 
+> // addr = 0x1007ffff000, end = 0x10080001000
+> static int gup_pud_range(p4d_t p4d, unsigned long addr, unsigned long end,
+>                          unsigned int flags, struct page **pages, int *nr)
+> {
+>         unsigned long next;
+>         pud_t *pudp;
+> 
+>         // pud_offset returns &p4d itself (a pointer to a value on stack)
+>         pudp = pud_offset(&p4d, addr);
+>         do {
+>                 // on second iteratation reading "random" stack value
+>                 pud_t pud = READ_ONCE(*pudp);
+> 
+>                 // next = 0x10080000000, due to PUD_SIZE/MASK != PGDIR_SIZE/MASK on s390
+>                 next = pud_addr_end(addr, end);
+>                 ...
+>         } while (pudp++, addr = next, addr != end); // pudp++ iterating over stack
+> 
+>         return 1;
+> }
+> 
+> This happens since s390 moved to common gup code with
+> commit d1874a0c2805 ("s390/mm: make the pxd_offset functions more robust")
+> and commit 1a42010cdc26 ("s390/mm: convert to the generic
+> get_user_pages_fast code"). s390 tried to mimic static level folding by
+> changing pXd_offset primitives to always calculate top level page table
+> offset in pgd_offset and just return the value passed when pXd_offset
+> has to act as folded.
+> 
+> What is crucial for gup_fast and what has been overlooked is
+> that PxD_SIZE/MASK and thus pXd_addr_end should also change
+> correspondingly. And the latter is not possible with dynamic folding.
+> 
+> To fix the issue in addition to pXd values pass original
+> pXdp pointers down to gup_pXd_range functions. And introduce
+> pXd_offset_lockless helpers, which take an additional pXd
+> entry value parameter. This has already been discussed in
+> https://lkml.kernel.org/r/20190418100218.0a4afd51@mschwideX1
+> 
+> Cc: <stable@vger.kernel.org> # 5.2+
+> Fixes: 1a42010cdc26 ("s390/mm: convert to the generic get_user_pages_fast code")
+> Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
+> Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+> ---
+> v2: added brackets &pgd -> &(pgd)
 
-Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
-Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
-Reviewed-by: Waiman Long <longman@redhat.com>
----
- .../admin-guide/kernel-parameters.txt         |  9 ++
- kernel/locking/qspinlock_cna.h                | 95 ++++++++++++++++---
- 2 files changed, 92 insertions(+), 12 deletions(-)
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 51ce050f8701..73ab23a47b97 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3363,6 +3363,15 @@
- 			Not specifying this option is equivalent to
- 			numa_spinlock=auto.
- 
-+	numa_spinlock_threshold=	[NUMA, PV_OPS]
-+			Set the time threshold in milliseconds for the
-+			number of intra-node lock hand-offs before the
-+			NUMA-aware spinlock is forced to be passed to
-+			a thread on another NUMA node.	Valid values
-+			are in the [1..100] range. Smaller values result
-+			in a more fair, but less performant spinlock,
-+			and vice versa. The default value is 10.
-+
- 	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
- 			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
- 			Some features depend on CPU0. Known dependencies are:
-diff --git a/kernel/locking/qspinlock_cna.h b/kernel/locking/qspinlock_cna.h
-index 590402ad69ef..d3e27549c769 100644
---- a/kernel/locking/qspinlock_cna.h
-+++ b/kernel/locking/qspinlock_cna.h
-@@ -37,6 +37,12 @@
-  * gradually filter the primary queue, leaving only waiters running on the same
-  * preferred NUMA node.
-  *
-+ * We change the NUMA node preference after a waiter at the head of the
-+ * secondary queue spins for a certain amount of time (10ms, by default).
-+ * We do that by flushing the secondary queue into the head of the primary queue,
-+ * effectively changing the preference to the NUMA node of the waiter at the head
-+ * of the secondary queue at the time of the flush.
-+ *
-  * For more details, see https://arxiv.org/abs/1810.05600.
-  *
-  * Authors: Alex Kogan <alex.kogan@oracle.com>
-@@ -49,13 +55,33 @@ struct cna_node {
- 	u16			real_numa_node;
- 	u32			encoded_tail;	/* self */
- 	u32			partial_order;	/* enum val */
-+	s32			start_time;
- };
- 
- enum {
- 	LOCAL_WAITER_FOUND,
- 	LOCAL_WAITER_NOT_FOUND,
-+	FLUSH_SECONDARY_QUEUE
- };
- 
-+/*
-+ * Controls the threshold time in ms (default = 10) for intra-node lock
-+ * hand-offs before the NUMA-aware variant of spinlock is forced to be
-+ * passed to a thread on another NUMA node. The default setting can be
-+ * changed with the "numa_spinlock_threshold" boot option.
-+ */
-+#define MSECS_TO_JIFFIES(m)	\
-+	(((m) + (MSEC_PER_SEC / HZ) - 1) / (MSEC_PER_SEC / HZ))
-+static int intra_node_handoff_threshold __ro_after_init = MSECS_TO_JIFFIES(10);
-+
-+static inline bool intra_node_threshold_reached(struct cna_node *cn)
-+{
-+	s32 current_time = (s32)jiffies;
-+	s32 threshold = cn->start_time + intra_node_handoff_threshold;
-+
-+	return current_time - threshold > 0;
-+}
-+
- static void __init cna_init_nodes_per_cpu(unsigned int cpu)
- {
- 	struct mcs_spinlock *base = per_cpu_ptr(&qnodes[0].mcs, cpu);
-@@ -98,6 +124,7 @@ static __always_inline void cna_init_node(struct mcs_spinlock *node)
- 	struct cna_node *cn = (struct cna_node *)node;
- 
- 	cn->numa_node = cn->real_numa_node;
-+	cn->start_time = 0;
- }
- 
- /*
-@@ -197,8 +224,15 @@ static void cna_splice_next(struct mcs_spinlock *node,
- 
- 	/* stick `next` on the secondary queue tail */
- 	if (node->locked <= 1) { /* if secondary queue is empty */
-+		struct cna_node *cn = (struct cna_node *)node;
-+
- 		/* create secondary queue */
- 		next->next = next;
-+
-+		cn->start_time = (s32)jiffies;
-+		/* make sure start_time != 0 iff secondary queue is not empty */
-+		if (!cn->start_time)
-+			cn->start_time = 1;
- 	} else {
- 		/* add to the tail of the secondary queue */
- 		struct mcs_spinlock *tail_2nd = decode_tail(node->locked);
-@@ -249,11 +283,15 @@ static __always_inline u32 cna_wait_head_or_lock(struct qspinlock *lock,
- {
- 	struct cna_node *cn = (struct cna_node *)node;
- 
--	/*
--	 * Try and put the time otherwise spent spin waiting on
--	 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
--	 */
--	cn->partial_order = cna_order_queue(node);
-+	if (!cn->start_time || !intra_node_threshold_reached(cn)) {
-+		/*
-+		 * Try and put the time otherwise spent spin waiting on
-+		 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
-+		 */
-+		cn->partial_order = cna_order_queue(node);
-+	} else {
-+		cn->partial_order = FLUSH_SECONDARY_QUEUE;
-+	}
- 
- 	return 0; /* we lied; we didn't wait, go do so now */
- }
-@@ -276,13 +314,29 @@ static inline void cna_lock_handoff(struct mcs_spinlock *node,
- 	 */
- 	WARN_ON(partial_order == LOCAL_WAITER_NOT_FOUND);
- 
--	/*
--	 * We found a local waiter; reload @next in case it was changed by
--	 * cna_order_queue().
--	 */
--	next = node->next;
--	if (node->locked > 1)
--		val = node->locked;	/* preseve secondary queue */
-+	if (partial_order == LOCAL_WAITER_FOUND) {
-+		/*
-+		 * We found a local waiter; reload @next in case it
-+		 * was changed by cna_order_queue().
-+		 */
-+		next = node->next;
-+		if (node->locked > 1) {
-+			val = node->locked;     /* preseve secondary queue */
-+			((struct cna_node *)next)->start_time = cn->start_time;
-+		}
-+	} else {
-+		WARN_ON(partial_order != FLUSH_SECONDARY_QUEUE);
-+		/*
-+		 * We decided to flush the secondary queue;
-+		 * this can only happen if that queue is not empty.
-+		 */
-+		WARN_ON(node->locked <= 1);
-+		/*
-+		 * Splice the secondary queue onto the primary queue and pass the lock
-+		 * to the longest waiting remote waiter.
-+		 */
-+		next = cna_splice_head(NULL, 0, node, next);
-+	}
- 
- 	arch_mcs_lock_handoff(&next->locked, val);
- }
-@@ -334,3 +388,20 @@ void __init cna_configure_spin_lock_slowpath(void)
- 
- 	pr_info("Enabling CNA spinlock\n");
- }
-+
-+static int __init numa_spinlock_threshold_setup(char *str)
-+{
-+	int param;
-+
-+	if (get_option(&str, &param)) {
-+		/* valid value is between 1 and 100 */
-+		if (param <= 0 || param > 100)
-+			return 0;
-+
-+		intra_node_handoff_threshold = msecs_to_jiffies(param);
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+__setup("numa_spinlock_threshold=", numa_spinlock_threshold_setup);
--- 
-2.21.1 (Apple Git-122.3)
-
+Regards,
+Jason
