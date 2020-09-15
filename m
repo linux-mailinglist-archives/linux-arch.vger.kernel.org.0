@@ -2,153 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 789C826AE4A
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Sep 2020 21:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A913B26AE56
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Sep 2020 22:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgIOT6c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Sep 2020 15:58:32 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:43642 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727859AbgIOT6O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Sep 2020 15:58:14 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1600199857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WUf3cR8tRBv7eifn3bYRJqwOE06JyVH+YNcuAlhPEzY=;
-        b=R4Zt8iBiRf9a+cl1bV87aTb7PzjrsY9fDXMhiBS8K2ot+081OXV43gzpJxoKPhJ+bG/r3d
-        IZ+XMelmwH6I1/IeBzA0fsbvOLaK8KTaPACawTHUg6jjadOJqPR3b3oHieYk1VWz6/0oQm
-        160PfMvRl4sOXnVT35YSXZOTlM61qgXSYzZSMF7oaVHQZW8+sX+YqTW5CPNn3M/4wDy6pz
-        FqyKA3YK/qnHJa+/v8mb9TXFlw3YCbBIJGJZD6NGKFvRIxsCkXAfwQ3qqvw+SkHnN/x3SA
-        Xr1GzKJIli+LvQNZjFraeH3J5TJIjCZBBRyHcln921IMOu/pI6tJi9qyOaIRUA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1600199857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WUf3cR8tRBv7eifn3bYRJqwOE06JyVH+YNcuAlhPEzY=;
-        b=GHgvirbCN6gxc0oKsh65B0tX+BLegnUGJa5AhDfyLfEqCZ+BxU1R9tgqcRPDwCSIqCwX9J
-        bXubW9jdXnVc0gCA==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-In-Reply-To: <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
-References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com> <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com> <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
-Date:   Tue, 15 Sep 2020 21:57:37 +0200
-Message-ID: <87y2la4xu6.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1727832AbgIOUBu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Sep 2020 16:01:50 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:56142 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727842AbgIOT6w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Sep 2020 15:58:52 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FJsnUt102248;
+        Tue, 15 Sep 2020 19:58:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to;
+ s=corp-2020-01-29; bh=v0NKh7M5wU1FAUkHEpWeQ8Ylp8QhhcGBMw8R9tj3QoA=;
+ b=kZaeigrORs4TQ6y0QKiuUNom/gnVff8yEJmJ6p/nVzbEBDK7pAYql+qrEoTBNOGkMjTJ
+ ffZTFoS/LqDp7FMhioJG1ata4NzDqLtGm9FHmVvZc+cgZk3glnB32eSBHP1AICFkLptr
+ L7s7EN10dL/n4SQcfrEXcVBdxw/SfTM+k/I9MybXsU+0bl/SSHHOT8RssfRQYtv9P7Ge
+ lu9JZ6xrC+JsfcRiYIvYcFYQRco1cu4GjI3hCc6nYc2kt7KwblYqL1C9BQd/MzDOkL03
+ r0uRE8gXv4S7SqvuQOHXeLRIOmmGDW1xfZy13KdIYGqUAAcXEoVT4Qb7Bms1Nvy6kgD0 BQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33gp9m7a0b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Sep 2020 19:58:12 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FJsgpV103786;
+        Tue, 15 Sep 2020 19:58:09 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 33h88yxey7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Sep 2020 19:58:08 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08FJvx3s027051;
+        Tue, 15 Sep 2020 19:58:00 GMT
+Received: from dhcp-10-39-206-109.vpn.oracle.com (/10.39.206.109)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 15 Sep 2020 19:57:59 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v11 4/5] locking/qspinlock: Introduce starvation avoidance
+ into CNA
+From:   Alex Kogan <alex.kogan@oracle.com>
+In-Reply-To: <8019917d-5e8e-e03d-583c-6809dee7a5c2@infradead.org>
+Date:   Tue, 15 Sep 2020 15:57:55 -0400
+Cc:     linux@armlinux.org.uk, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, longman@redhat.com,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, guohanjun@huawei.com,
+        jglauber@marvell.com, steven.sistare@oracle.com,
+        daniel.m.jordan@oracle.com, dave.dice@oracle.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5FC23678-02D3-444B-B5AF-74E210026185@oracle.com>
+References: <20200915180535.2975060-1-alex.kogan@oracle.com>
+ <20200915180535.2975060-5-alex.kogan@oracle.com>
+ <8019917d-5e8e-e03d-583c-6809dee7a5c2@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ suspectscore=3 mlxscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150154
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 suspectscore=3 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150154
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 15 2020 at 10:35, Linus Torvalds wrote:
-> On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> OTOH, having a working 'preemptible()' or maybe better named
->> 'can_schedule()' check makes tons of sense to make decisions about
->> allocation modes or other things.
->
-> No. I think that those kinds of decisions about actual behavior are
-> always simply fundamentally wrong.
->
-> Note that this is very different from having warnings about invalid
-> use. THAT is correct. It may not warn in all configurations, but that
-> doesn't matter: what matters is that it warns in common enough
-> configurations that developers will catch it.
 
-You wish. I just found a 7 year old bug in a 10G network driver which
-surely would have been found if people would enable debug configs and
-not just run the crap on their PREEMPT_NONE, all debug off kernel. And
-that driver is not subject to bitrot, it gets regular bug fixes from
-people who seem to care (distro folks).
 
-> So having a warning in "might_sleep()" that doesn't always trigger,
-> because you have a limited configuration that can't even detect the
-> situation, that's fine and dandy and intentional.
+> On Sep 15, 2020, at 3:24 PM, Randy Dunlap <rdunlap@infradead.org> =
+wrote:
+>=20
+> Hi,
+>=20
+> Entries in the kernel-parameters.txt file should be kept in =
+alphabetical order
+> mostly (there are a few exceptions where related options are kept =
+together).
+>=20
+>=20
+>=20
+> On 9/15/20 11:05 AM, Alex Kogan wrote:
+>> Keep track of the time the thread at the head of the secondary queue
+>> has been waiting, and force inter-node handoff once this time passes
+>> a preset threshold. The default value for the threshold (10ms) can be
+>> overridden with the new kernel boot command-line option
+>> "numa_spinlock_threshold". The ms value is translated internally to =
+the
+>> nearest rounded-up jiffies.
+>>=20
+>> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
+>> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
+>> Reviewed-by: Waiman Long <longman@redhat.com>
+>> ---
+>> .../admin-guide/kernel-parameters.txt         |  9 ++
+>> kernel/locking/qspinlock_cna.h                | 95 =
+++++++++++++++++---
+>> 2 files changed, 92 insertions(+), 12 deletions(-)
+>>=20
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt =
+b/Documentation/admin-guide/kernel-parameters.txt
+>> index 51ce050f8701..73ab23a47b97 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -3363,6 +3363,15 @@
+>> 			Not specifying this option is equivalent to
+>> 			numa_spinlock=3Dauto.
+>>=20
+>> +	numa_spinlock_threshold=3D	[NUMA, PV_OPS]
+>> +			Set the time threshold in milliseconds for the
+>> +			number of intra-node lock hand-offs before the
+>> +			NUMA-aware spinlock is forced to be passed to
+>> +			a thread on another NUMA node.	Valid values
+>> +			are in the [1..100] range. Smaller values result
+>> +			in a more fair, but less performant spinlock,
+>> +			and vice versa. The default value is 10.
+>> +
+>> 	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
+>> 			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
+>> 			Some features depend on CPU0. Known dependencies =
+are:
+>=20
+>=20
+> This new entry and numa_spinlock from patch 3/5 should go between =
+these other 2 NUMA entries:
+>=20
+> 	numa_balancing=3D	[KNL,X86] Enable or disable automatic =
+NUMA balancing.
+> 			Allowed values are enable and disable
+>=20
+> 	numa_zonelist_order=3D [KNL, BOOT] Select zonelist order for =
+NUMA.
+> 			'node', 'default' can be specified
+> 			This can be set from sysctl after boot.
+> 			See Documentation/admin-guide/sysctl/vm.rst for =
+details.
+Will fix that, thanks.
 
-and lets people get away with their crap.
+>=20
+>=20
+> Oooh, that cpu0_hotplug entry is way out of place.  I'll send a patch =
+for that.
+Sounds good.
 
-> But having code like
->
->        if (can_schedule())
->            .. do something different ..
->
-> is fundamentally complete and utter garbage.
->
-> It's one thing if you test for "am I in hardware interrupt context".
-> Those tests aren't great either, but at least they make sense.
-
-They make sense in limited situations like exception handlers and such
-which really have to know from which context an exception was raised.
-
-But with the above reasoning such checks do not make sense in any other
-general code. 'in hard interrupt context' is just another context where
-you can't do stuff which you can do when in preemptible task context.
-
-Most tests are way broader than a single context. in_interrupt() is true
-for hard interrupt, soft interrupt delivery and all BH disabled
-contexts, which is completely ill defined.
-
-> But a driver - or some library routine - making a difference based on
-> some nebulous "can I schedule" is fundamentally and basically WRONG.
->
-> If some code changes behavior, it needs to be explicit to the *caller*
-> of that code.
-
-I'm fine with that, but then we have to be consequent and ban _all_ of
-these and not just declare can_schedule() to be a bad one.
-
-Thanks,
-
-        tglx
+=E2=80=94 Alex=
