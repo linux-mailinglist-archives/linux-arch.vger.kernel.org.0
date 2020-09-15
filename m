@@ -2,72 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C8826A6EE
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Sep 2020 16:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D219326A972
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Sep 2020 18:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbgIOOSu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Sep 2020 10:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbgIOORz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Sep 2020 10:17:55 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8BCC061223;
-        Tue, 15 Sep 2020 07:15:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VAFP2+lHvsV1SPJ5crPA3cULhiQoRhi403/H/7JF2+8=; b=QR2hMiotY714HixEB18KO4UMkA
-        dsT/mYwU5lOtboVpU9HPkIUwXQl1fjqq2TkMtIp/eolnn0tdunOBGHvtS2J+tqZECpTXEZYXP9qo+
-        dv4cJ2UfqvDb7FW3A1dKdum8o+v4hovMfAcqknVms0cyPD1S6VhFKHeHHqifn124i0TEPhEO1GVWj
-        jEZnfquFDd97jHMreoDhubWvfLR1Zp3VEXbi06WxXW6OempRGF5ubBTujfEiVJWQL7/WzBHe36+8r
-        mnN+YhqrYxB//1UNxJQtxXjIxF5R0i2hBqTumFxM4cNGpLUWEdjLVPMb8ZpQRq86LV4btHypzNp5o
-        OSs+c7Gw==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kIBjQ-00051X-Ac; Tue, 15 Sep 2020 14:14:52 +0000
-Date:   Tue, 15 Sep 2020 15:14:52 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, linux-pci@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        George Cherian <george.cherian@marvell.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 1/2] sparc32: Move ioremap/iounmap declaration before
- asm-generic/io.h include
-Message-ID: <20200915141452.GA19202@infradead.org>
-References: <20200915093203.16934-1-lorenzo.pieralisi@arm.com>
- <20200915093203.16934-2-lorenzo.pieralisi@arm.com>
+        id S1727503AbgIOQPQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Sep 2020 12:15:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56778 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727587AbgIOQLK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Sep 2020 12:11:10 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A5369206BE;
+        Tue, 15 Sep 2020 16:10:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600186258;
+        bh=h8FrMLmRYTR7EG3ov+53gJbd++NMD57LcgsrZ+W8Sok=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sO86BqljD5TTUSf3Do5Tr23UIE8zY6Bz1UDtpNwChPTIbD5+keIeFFrqnf8XsRJr0
+         ojiIAWWGP4t8b9bz6D3u0TyrwIrYQfCa/vsL1qeBTtNKTpMduZ7SEC4jTL9i3luICh
+         OrDt1j8SFI8DM7C/qo2V0n/aLixXUHY994PZbfUw=
+Date:   Tue, 15 Sep 2020 17:10:48 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um@lists.infradead.org, Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [patch 06/13] locking/bitspinlock: Clenaup PREEMPT_COUNT
+ leftovers
+Message-ID: <20200915161047.GA26745@willie-the-truck>
+References: <20200914204209.256266093@linutronix.de>
+ <20200914204441.579902354@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915093203.16934-2-lorenzo.pieralisi@arm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200914204441.579902354@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> diff --git a/arch/sparc/include/asm/io_32.h b/arch/sparc/include/asm/io_32.h
-> index 9a52d9506f80..042201c79ad1 100644
-> --- a/arch/sparc/include/asm/io_32.h
-> +++ b/arch/sparc/include/asm/io_32.h
-> @@ -11,6 +11,16 @@
->  #define memcpy_fromio(d,s,sz) _memcpy_fromio(d,s,sz)
->  #define memcpy_toio(d,s,sz)   _memcpy_toio(d,s,sz)
->  
-> +#ifdef __KERNEL__
-> +
-> +/*
-> + * Bus number may be embedded in the higher bits of the physical address.
-> + * This is why we have no bus number argument to ioremap().
-> + */
-> +void __iomem *ioremap(phys_addr_t offset, size_t size);
-> +void iounmap(volatile void __iomem *addr);
-> +#endif
+On Mon, Sep 14, 2020 at 10:42:15PM +0200, Thomas Gleixner wrote:
+> CONFIG_PREEMPT_COUNT is now unconditionally enabled and will be
+> removed. Cleanup the leftovers before doing so.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  include/linux/bit_spinlock.h |    4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> --- a/include/linux/bit_spinlock.h
+> +++ b/include/linux/bit_spinlock.h
+> @@ -90,10 +90,8 @@ static inline int bit_spin_is_locked(int
+>  {
+>  #if defined(CONFIG_SMP) || defined(CONFIG_DEBUG_SPINLOCK)
+>  	return test_bit(bitnum, addr);
+> -#elif defined CONFIG_PREEMPT_COUNT
+> -	return preempt_count();
+>  #else
+> -	return 1;
+> +	return preempt_count();
+>  #endif
 
-No need for an __KERNEL__ in non-uapi headers.
+Acked-by: Will Deacon <will@kernel.org>
+
+Will
