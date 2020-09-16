@@ -2,122 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFA826CC13
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 22:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0246E26CC75
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 22:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbgIPUjB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 16:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726830AbgIPRHz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 13:07:55 -0400
-X-Greylist: delayed 347 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Sep 2020 06:49:29 PDT
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [IPv6:2001:1600:3:17::42af])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F6AC0073DC
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 06:49:28 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Bs1Vt66Xxzlhp2Z;
-        Wed, 16 Sep 2020 15:42:30 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Bs1Vr3lT6zlh8TV;
-        Wed, 16 Sep 2020 15:42:28 +0200 (CEST)
-Subject: Re: [PATCH v20 05/12] LSM: Infrastructure management of the
- superblock
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Kees Cook <keescook@chromium.org>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        id S1728542AbgIPUoE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 16:44:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58414 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728562AbgIPUoC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 16 Sep 2020 16:44:02 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5FF7621D7D;
+        Wed, 16 Sep 2020 20:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600289039;
+        bh=MM/OYkhIqW+q1jlzGplM7TRGk23CKIsPg/gtHCbpw/s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ePzv3fwWqslNC9hLhuqpPOyt/s8elqT4skklSXCKPyGt5+DSX45Mij1jR0UQAfYSu
+         rlP0OmdNpXpvof5fQPOx2SpQZrxcPIGOMObx61mSVBfXvuGrzip0wCyXdOZekUurt/
+         goh6RQLFx9+QF+bnlf7qV2Wg9jJz35j9g42ob9HA=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 14CC43522BA0; Wed, 16 Sep 2020 13:43:59 -0700 (PDT)
+Date:   Wed, 16 Sep 2020 13:43:59 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
         Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
         Richard Weinberger <richard@nod.at>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        X86 ML <x86@kernel.org>
-References: <20200802215903.91936-1-mic@digikod.net>
- <20200802215903.91936-6-mic@digikod.net>
- <779c290b-45f5-b86c-c573-2edb4004105d@tycho.nsa.gov>
- <03f522c0-414c-434b-a0d1-57c3b17fa67f@digikod.net>
- <CAEjxPJ7POnxKy=5w-iQkKhjftxf2-=UuvA6D8EmhUPJyS1F6qg@mail.gmail.com>
- <CAEjxPJ7ARJO57MBW66=xsBzMMRb=9uLgqocK5eskHCaiVMx7Vw@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <49fa967e-d60f-bd52-6fe3-c04fe56e20f6@digikod.net>
-Date:   Wed, 16 Sep 2020 15:42:28 +0200
-User-Agent: 
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+Message-ID: <20200916204359.GB29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200914204209.256266093@linutronix.de>
+ <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+ <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+ <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEjxPJ7ARJO57MBW66=xsBzMMRb=9uLgqocK5eskHCaiVMx7Vw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-On 04/09/2020 16:06, Stephen Smalley wrote:
-> On Thu, Aug 13, 2020 at 2:39 PM Stephen Smalley
-> <stephen.smalley.work@gmail.com> wrote:
->>
->> On Thu, Aug 13, 2020 at 10:17 AM Mickaël Salaün <mic@digikod.net> wrote:
->>>
->>>
->>> On 12/08/2020 21:16, Stephen Smalley wrote:
->>>> On 8/2/20 5:58 PM, Mickaël Salaün wrote:
->>>>> From: Casey Schaufler <casey@schaufler-ca.com>
->>>>>
->>>>> Move management of the superblock->sb_security blob out
->>>>> of the individual security modules and into the security
->>>>> infrastructure. Instead of allocating the blobs from within
->>>>> the modules the modules tell the infrastructure how much
->>>>> space is required, and the space is allocated there.
->>>>>
->>>>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->>>>> Reviewed-by: Kees Cook <keescook@chromium.org>
->>>>> Reviewed-by: John Johansen <john.johansen@canonical.com>
->>>>> Reviewed-by: Stephen Smalley <sds@tycho.nsa.gov>
->>>>> Reviewed-by: Mickaël Salaün <mic@digikod.net>
->>>>> Link:
->>>>> https://lore.kernel.org/r/20190829232935.7099-2-casey@schaufler-ca.com
->>>>> ---
->>>>>
->>>>> Changes since v17:
->>>>> * Rebase the original LSM stacking patch from v5.3 to v5.7: I fixed some
->>>>>    diff conflicts caused by code moves and function renames in
->>>>>    selinux/include/objsec.h and selinux/hooks.c .  I checked that it
->>>>>    builds but I didn't test the changes for SELinux nor SMACK.
->>>>
->>>> You shouldn't retain Signed-off-by and Reviewed-by lines from an earlier
->>>> patch if you made non-trivial changes to it (even more so if you didn't
->>>> test them).
->>>
->>> I think I made trivial changes according to the original patch. But
->>> without reply from other people with Signed-off-by or Reviewed-by
->>> (Casey, Kees, John), I'll remove them. I guess you don't want your
->>> Reviewed-by to be kept, so I'll remove it, except if you want to review
->>> this patch (or the modified part).
->>
->> At the very least your Reviewed-by line is wrong - yours should be
->> Signed-off-by because the patch went through you and you modified it.
->> I'll try to take a look as time permits but FYI you should this
->> address (already updated in MAINTAINERS) going forward.
+On Wed, Sep 16, 2020 at 11:32:00AM -0700, Linus Torvalds wrote:
+> On Wed, Sep 16, 2020 at 8:29 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > All fair, but some of us need to write code that must handle being
+> > invoked from a wide variety of contexts.
 > 
-> I finally got around to reviewing your updated patch.  You can drop
-> the old line and add:
-> Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Note that I think that core functionality is different from random drivers.
 > 
+> Of course core code can (and will) look at things like
+> 
+>         if (in_interrupt())
+>             .. schedule work asynchronously ..
+> 
+> because core code ends up being called from odd places, and code like
+> that is expected to have understanding of the rules it plays with.
+> 
+> But something like RCU is a very different beast from some "walk the
+> scatter-gather list" code.
+> 
+> RCU does its work in the background, and works with lots of different
+> things. And it's so core and used everywhere that it knows about these
+> things. I mean, we literally have special code explicitly to let RCU
+> know "we entered kernel context now".
+> 
+> But something like a driver list walking thing should not be doing
+> different things behind peoples back depending on whether they hold
+> spinlocks or not. It should either just work regardless, or there
+> should be a flag (or special interface) for the "you're being called
+> in a crtitical region".
+> 
+> Because dynamically changing behavior really is very confusing.
 
-Thanks! I'll send a new series soon.
+Whew!  I feel much better now.  ;-)
+
+							Thanx, Paul
