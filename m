@@ -2,87 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D4126C8CC
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F17C26C7A7
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727623AbgIPS5s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 14:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S1727975AbgIPSc1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 14:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727222AbgIPRxL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 13:53:11 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0822DC08EE13
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 06:35:08 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id a17so6954786wrn.6
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 06:35:07 -0700 (PDT)
+        with ESMTP id S1727850AbgIPScW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 14:32:22 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415D2C061756
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:32:21 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id w11so8083948lfn.2
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:32:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Y0GHMsQrfoNkF8hoL5Nxc0+CH+Sz1FlZ4J0DpK8dO70=;
-        b=OpOeI24LEAE+oDQATH8MdVWdt4mZNQ4qh1Hc0omlnt7RwHiPRKvJrLL01717FgPnnb
-         1t+n+B6+mnQxwsOhc5OfAHt9THe5P9ok+08CnWZwgPJLemA4xraL3S0LRRaUFrd0nuU7
-         yRKZjwxGHu2Xcb4i1Mdyqj+a2bvB9eJzXsEOa3kbquHPZTCRLg6PiXODmEUA6N/ezqtH
-         WrdIqnvo6yMjPIgfbcKtYQzcIktY+hY7v3S3aaNBZGh1xFeC7rDf3IQUoCoKX+3JD4qH
-         ShFWfgA8F0+G1Or4c6EbK0e67x7FvsJI33FROdF/TI1M6+2DETeMlQ74rxZgNY5SadWE
-         gcLg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oa2KOKBruJIa8JzwEuXDvn8lq/AyW8Gh05WzKpjKQjk=;
+        b=UEueMUHZ3w1bML4TffC03SPtwmMbG26ZS04QoHTBFtkbazq0zj1LMx+FyboyvzzASg
+         nydFo8G58LEHhfHuiZfy7mbpmIDsIlzAJfeeTzYG6VJXbIqW/NS9VqvGKvKAt1o7QE3H
+         aEBuUY03yHBMaYNPFFjhHL22z9bGvgl38mViw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y0GHMsQrfoNkF8hoL5Nxc0+CH+Sz1FlZ4J0DpK8dO70=;
-        b=cvTOpdpKChEr9aritsRKwVLc5uIshU9C+/bHgx50UGcL5x13A/dw8pAA9KWQkyDpPi
-         gdqVrurx+n5mwRPeNlV6RETk+qIuS+OB+sXzbkx0CDwXorXEFgxgeTj9cHV27TajKSTs
-         v43Z1zKHJl0tFTLZ/U/nuWJa3FS8GpwA3UnE2vfQTRYMp6EZmX/Uc0PFJem3SEH1PV4f
-         4b0bXRtec8ev5BPJZHvLT6Wo8l5xgySisMnGeGrrHKGYQMV7Fh03MF2Wbrs9WSi2jXsc
-         LiwkhDNFuQqBCUjm6DvqXbocc4bfn2PTMNHGYdVorUzutAubsaVOEv5QSb0k1iyeKCzz
-         fYwg==
-X-Gm-Message-State: AOAM533gLHNAawx36ZRnjhvlVrx5aZee+uraWiRs+93yK4/KbgtBhg6o
-        LgvGBAtVFIvhMB85ecoUguR57w==
-X-Google-Smtp-Source: ABdhPJxj1njKOkMy/uGBtiswR54WhjIWwVc4v6yTTlieFUIM6NmtAP4wvPkgHYBaLSDHrvMxwMPqPg==
-X-Received: by 2002:a5d:45cc:: with SMTP id b12mr4416951wrs.395.1600263306480;
-        Wed, 16 Sep 2020 06:35:06 -0700 (PDT)
-Received: from google.com ([2a01:4b00:8523:2d03:e49d:f6be:d31b:ad3c])
-        by smtp.gmail.com with ESMTPSA id v9sm37780715wrv.35.2020.09.16.06.35.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 06:35:05 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 14:35:04 +0100
-From:   David Brazdil <dbrazdil@google.com>
-To:     Andrew Scull <ascull@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Dennis Zhou <dennis@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 10/10] kvm: arm64: Remove unnecessary hyp mappings
-Message-ID: <20200916133504.7v5j7y5ccajw2a7s@google.com>
-References: <20200903091712.46456-1-dbrazdil@google.com>
- <20200903091712.46456-11-dbrazdil@google.com>
- <20200910140738.GE93664@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oa2KOKBruJIa8JzwEuXDvn8lq/AyW8Gh05WzKpjKQjk=;
+        b=J0ec1+jaEn0+svJ32KT1kdqPYcEu0aX6JpnuqMoHVk2mUGdnXMl+zyFurlf0u7Mi62
+         O4fXWvZyBzxFGeF8nS/5GTCe5zYmwp3HazRueLDlRMZoy0LmyfwNMWVP+J01Z+aRwBGX
+         wb+kXQOJJrzuvqIn6fVZe2f7Ri84gFnm4HaroaFRvfxgj+WFpbvYJat0j8PTC50WPIdQ
+         hhunQ1h9MD+KKOE++0NoalwNb2mcVSQU5+cNZsbrZAO4DBxRFKI5d2qPBGKSyKjAc3AF
+         gS81+pljcPmiPNulaiyUO4feNJ//kwtY6RzuHC/gCKUv59zCWag42kqI6iOaX8+qEP2f
+         C8YA==
+X-Gm-Message-State: AOAM5311xahovGHRHLvuRyWlGwf17+SGpUKtxw384yK44U8OE+fBu9dR
+        SyhLhwy4A67w9a06WV5vlRzRazysGkipww==
+X-Google-Smtp-Source: ABdhPJzWZhePuW95l0glliDft1YmPe01PQpul3GChmBOdSrUVqtE0wk00YAP9cDhcpXn0beXh8RySA==
+X-Received: by 2002:ac2:4d10:: with SMTP id r16mr7814238lfi.58.1600281139232;
+        Wed, 16 Sep 2020 11:32:19 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id e24sm5535070ljg.33.2020.09.16.11.32.17
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2020 11:32:17 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id z17so8009351lfi.12
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:32:17 -0700 (PDT)
+X-Received: by 2002:a19:e00a:: with SMTP id x10mr9071213lfg.603.1600281136741;
+ Wed, 16 Sep 2020 11:32:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910140738.GE93664@google.com>
+References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+ <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com> <20200916152956.GV29330@paulmck-ThinkPad-P72>
+In-Reply-To: <20200916152956.GV29330@paulmck-ThinkPad-P72>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 16 Sep 2020 11:32:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
+Message-ID: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> > +	for_each_possible_cpu(cpu)
-> > +		*(per_cpu_ptr_nvhe(arm64_ssbd_callback_required, cpu)) =
-> > +			per_cpu(arm64_ssbd_callback_required, cpu);
-> 
-> Careful with breaking allocations across lines, that seems to be taboo
-> in this subsystem.
+On Wed, Sep 16, 2020 at 8:29 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> All fair, but some of us need to write code that must handle being
+> invoked from a wide variety of contexts.
 
-Happy to put the `ptr` var back. Sorry *embarrassed emoji*.
+Note that I think that core functionality is different from random drivers.
 
-Thanks for reviewing,
-David
+Of course core code can (and will) look at things like
+
+        if (in_interrupt())
+            .. schedule work asynchronously ..
+
+because core code ends up being called from odd places, and code like
+that is expected to have understanding of the rules it plays with.
+
+But something like RCU is a very different beast from some "walk the
+scatter-gather list" code.
+
+RCU does its work in the background, and works with lots of different
+things. And it's so core and used everywhere that it knows about these
+things. I mean, we literally have special code explicitly to let RCU
+know "we entered kernel context now".
+
+But something like a driver list walking thing should not be doing
+different things behind peoples back depending on whether they hold
+spinlocks or not. It should either just work regardless, or there
+should be a flag (or special interface) for the "you're being called
+in a crtitical region".
+
+Because dynamically changing behavior really is very confusing.
+
+               Linus
