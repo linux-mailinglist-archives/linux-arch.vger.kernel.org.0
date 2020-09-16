@@ -2,34 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F4726C764
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996ED26C76F
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbgIPSZn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 14:25:43 -0400
-Received: from foss.arm.com ([217.140.110.172]:35102 "EHLO foss.arm.com"
+        id S1728022AbgIPS0c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 14:26:32 -0400
+Received: from foss.arm.com ([217.140.110.172]:35104 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727995AbgIPSZl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1727996AbgIPSZl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 16 Sep 2020 14:25:41 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22A711476;
-        Wed, 16 Sep 2020 04:07:12 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DAC7E1477;
+        Wed, 16 Sep 2020 04:07:14 -0700 (PDT)
 Received: from red-moon.arm.com (unknown [10.57.6.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 850D53F68F;
-        Wed, 16 Sep 2020 04:07:09 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 646A23F68F;
+        Wed, 16 Sep 2020 04:07:12 -0700 (PDT)
 From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "David S. Miller" <davem@davemloft.net>, linux-pci@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        George Cherian <george.cherian@marvell.com>,
+        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        George Cherian <george.cherian@marvell.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH v2 2/3] sparc32: Move ioremap/iounmap declaration before asm-generic/io.h include
-Date:   Wed, 16 Sep 2020 12:06:57 +0100
-Message-Id: <93e2f23cda474a92a4708d4c50c9c359426a2162.1600254147.git.lorenzo.pieralisi@arm.com>
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH v2 3/3] asm-generic/io.h: Fix !CONFIG_GENERIC_IOMAP pci_iounmap() implementation
+Date:   Wed, 16 Sep 2020 12:06:58 +0100
+Message-Id: <a9daf8d8444d0ebd00bc6d64e336ec49dbb50784.1600254147.git.lorenzo.pieralisi@arm.com>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <cover.1600254147.git.lorenzo.pieralisi@arm.com>
 References: <20200915093203.16934-1-lorenzo.pieralisi@arm.com> <cover.1600254147.git.lorenzo.pieralisi@arm.com>
@@ -40,46 +41,102 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Move the ioremap/iounmap declaration before asm-generic/io.h is
-included so that it is visible within it.
+For arches that do not select CONFIG_GENERIC_IOMAP, the current
+pci_iounmap() function does nothing causing obvious memory leaks
+for mapped regions that are backed by MMIO physical space.
 
+In order to detect if a mapped pointer is IO vs MMIO, a check must made
+available to the pci_iounmap() function so that it can actually detect
+whether the pointer has to be unmapped.
+
+In configurations where CONFIG_HAS_IOPORT_MAP && !CONFIG_GENERIC_IOMAP,
+a mapped port is detected using an ioport_map() stub defined in
+asm-generic/io.h.
+
+Use the same logic to implement a stub (ie __pci_ioport_unmap()) that
+detects if the passed in pointer in pci_iounmap() is IO vs MMIO to
+iounmap conditionally and call it in pci_iounmap() fixing the issue.
+
+Leave __pci_ioport_unmap() as a NOP for all other config options.
+
+Reported-by: George Cherian <george.cherian@marvell.com>
+Link: https://lore.kernel.org/lkml/20200905024811.74701-1-yangyingliang@huawei.com
+Link: https://lore.kernel.org/lkml/20200824132046.3114383-1-george.cherian@marvell.com
 Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: George Cherian <george.cherian@marvell.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
 ---
- arch/sparc/include/asm/io_32.h | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ include/asm-generic/io.h | 39 +++++++++++++++++++++++++++------------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
-diff --git a/arch/sparc/include/asm/io_32.h b/arch/sparc/include/asm/io_32.h
-index 8179958e3ce1..549f0a72280d 100644
---- a/arch/sparc/include/asm/io_32.h
-+++ b/arch/sparc/include/asm/io_32.h
-@@ -11,6 +11,13 @@
- #define memcpy_fromio(d,s,sz) _memcpy_fromio(d,s,sz)
- #define memcpy_toio(d,s,sz)   _memcpy_toio(d,s,sz)
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index dabf8cb7203b..9ea83d80eb6f 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -911,18 +911,6 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
+ #include <linux/vmalloc.h>
+ #define __io_virt(x) ((void __force *)(x))
  
-+/*
-+ * Bus number may be embedded in the higher bits of the physical address.
-+ * This is why we have no bus number argument to ioremap().
-+ */
-+void __iomem *ioremap(phys_addr_t offset, size_t size);
-+void iounmap(volatile void __iomem *addr);
-+
- #include <asm-generic/io.h>
- 
- static inline void _memset_io(volatile void __iomem *dst,
-@@ -121,12 +128,6 @@ static inline void sbus_memcpy_toio(volatile void __iomem *dst,
- 	}
+-#ifndef CONFIG_GENERIC_IOMAP
+-struct pci_dev;
+-extern void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max);
+-
+-#ifndef pci_iounmap
+-#define pci_iounmap pci_iounmap
+-static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
+-{
+-}
+-#endif
+-#endif /* CONFIG_GENERIC_IOMAP */
+-
+ /*
+  * Change virtual addresses to physical addresses and vv.
+  * These are pretty trivial
+@@ -1016,6 +1004,16 @@ static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
+ 	port &= IO_SPACE_LIMIT;
+ 	return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
  }
++#define __pci_ioport_unmap __pci_ioport_unmap
++static inline void __pci_ioport_unmap(void __iomem *p)
++{
++	uintptr_t start = (uintptr_t) PCI_IOBASE;
++	uintptr_t addr = (uintptr_t) p;
++
++	if (addr >= start && addr < start + IO_SPACE_LIMIT)
++		return;
++	iounmap(p);
++}
+ #endif
  
--/*
-- * Bus number may be embedded in the higher bits of the physical address.
-- * This is why we have no bus number argument to ioremap().
-- */
--void __iomem *ioremap(phys_addr_t offset, size_t size);
--void iounmap(volatile void __iomem *addr);
- /* Create a virtual mapping cookie for an IO port range */
- void __iomem *ioport_map(unsigned long port, unsigned int nr);
- void ioport_unmap(void __iomem *);
+ #ifndef ioport_unmap
+@@ -1030,6 +1028,23 @@ extern void ioport_unmap(void __iomem *p);
+ #endif /* CONFIG_GENERIC_IOMAP */
+ #endif /* CONFIG_HAS_IOPORT_MAP */
+ 
++#ifndef CONFIG_GENERIC_IOMAP
++struct pci_dev;
++extern void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max);
++
++#ifndef __pci_ioport_unmap
++static inline void __pci_ioport_unmap(void __iomem *p) {}
++#endif
++
++#ifndef pci_iounmap
++#define pci_iounmap pci_iounmap
++static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
++{
++	__pci_ioport_unmap(p);
++}
++#endif
++#endif /* CONFIG_GENERIC_IOMAP */
++
+ /*
+  * Convert a virtual cached pointer to an uncached pointer
+  */
 -- 
 2.26.1
 
