@@ -2,187 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AA426B914
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 02:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDAA26BA46
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 04:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbgIPA4w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Sep 2020 20:56:52 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:59886 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726228AbgIOLRH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Sep 2020 07:17:07 -0400
+        id S1726169AbgIPCk2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Sep 2020 22:40:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21942 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726159AbgIPCkX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 15 Sep 2020 22:40:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600168624;
+        s=mimecast20190719; t=1600224021;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=woQDJzqYhg7fywcaDyz/edYf2Kcu8mkUs5XrNK4Tz2w=;
-        b=QCmGfzH//GpsDhvv4Oy36yKkzJJ0+fH9rLyILNe0wq3pItmcP2GfEalEvOR7gNKpZwc05T
-        PRBR979h9RWBYEnBAGAEtPdXjuU3yjVmFkQGXmBADRlId5TDcuPwkyPzms/wSjN0FHBqYu
-        QDElLGexgdi/mmxt80fIe+Xj8jUMEdM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-372--WwrTO0aNwSVjSoigoYj5w-1; Tue, 15 Sep 2020 07:17:02 -0400
-X-MC-Unique: -WwrTO0aNwSVjSoigoYj5w-1
-Received: by mail-wr1-f69.google.com with SMTP id l9so1082373wrq.20
-        for <linux-arch@vger.kernel.org>; Tue, 15 Sep 2020 04:17:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=woQDJzqYhg7fywcaDyz/edYf2Kcu8mkUs5XrNK4Tz2w=;
-        b=DbDro13M52EX5C6NIilhCJNCSN1Q7s7W5Kh0RMVsFkfZKKrbDd4kz0QNqGYnxBOxQu
-         XbnYw7BOoINH4bdGsZdUD+O/33NuwhVzVL2u+BKKSYGnam6T3IqSq9kXIwwpTyIfTJ7a
-         wCbeVzmnrwApclo2/ZU1A3y9dlXyY/VDKmiJbEZApsbEhUXTkQWGNC2UjMUf0W4TLcI5
-         QlVUiRoV3hMrIeirzpmqw5K2NPvPGa9b+AYtMVSSIxPJCEiLW2LedfCylWt7hxWfvZHV
-         ANJoIT1kzJnfliJr720oAkSzY0+iPy+zlRbnQ69ECRb3hX7HHjeK7vKDViAtUAzgdZr8
-         KqXA==
-X-Gm-Message-State: AOAM530nLIGHgvK5lvHLdkVw3S9Hj8dN9oUAi4fE0LN/+kGqS5fT9iLX
-        zl9fdynY9eVizF6a1qfzV3bsBgF1EzGFbs7AG58Az3rOgA7VMghMf+EiTU6RyF3tAYfFevQ8Qp2
-        IUcJari2raMF7dX8JV0Bzog==
-X-Received: by 2002:adf:e58b:: with SMTP id l11mr22315900wrm.210.1600168621432;
-        Tue, 15 Sep 2020 04:17:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy1+xzFGs26g7aJCk9FSSsiFCpkMroz/Chp7v9K3IdFtvipyWWejeB5dTWSLfG+tS8/srkFkQ==
-X-Received: by 2002:adf:e58b:: with SMTP id l11mr22315875wrm.210.1600168621197;
-        Tue, 15 Sep 2020 04:17:01 -0700 (PDT)
-Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id w21sm25728597wmk.34.2020.09.15.04.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 04:17:00 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
-Cc:     virtualization@lists.linux-foundation.org,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Nuno Das Neves <nudasnev@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list\:GENERIC INCLUDE\/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH RFC v1 13/18] asm-generic/hyperv: introduce hv_device_id and auxiliary structures
-In-Reply-To: <20200914115928.83184-5-wei.liu@kernel.org>
-References: <20200914112802.80611-1-wei.liu@kernel.org> <20200914115928.83184-5-wei.liu@kernel.org>
-Date:   Tue, 15 Sep 2020 13:16:59 +0200
-Message-ID: <87k0wvjnmc.fsf@vitty.brq.redhat.com>
+        bh=ASyeTVwuUEeU8l0NdXBbwtEToG7x1iFYHSQxl0OiJ2Y=;
+        b=Wgr+FMy8V3SlxFb4ssVKhZgVPHaJaXF7PYBy4JLoCP9Fj/S3AujI8+qEIixFzLw1ufOuhz
+        QtO+C6BNWbF9YzQX1e0ZcrkJyHh/5veIycTEYQBETqVshYF//zauDh8gu7YLn5mip02m/o
+        WgXADXC8CIah4RLgJDla8IUL8wfFkFE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-72-W2XbK7WnMsugWgXerJZpbw-1; Tue, 15 Sep 2020 22:40:17 -0400
+X-MC-Unique: W2XbK7WnMsugWgXerJZpbw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21313425D1;
+        Wed, 16 Sep 2020 02:40:15 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-113-115.rdu2.redhat.com [10.10.113.115])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DE4B25FC16;
+        Wed, 16 Sep 2020 02:40:11 +0000 (UTC)
+Subject: Re: [PATCH v11 3/5] locking/qspinlock: Introduce CNA into the slow
+ path of qspinlock
+To:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
+        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
+        arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        guohanjun@huawei.com, jglauber@marvell.com
+Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
+        dave.dice@oracle.com
+References: <20200915180535.2975060-1-alex.kogan@oracle.com>
+ <20200915180535.2975060-4-alex.kogan@oracle.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <05a65878-d24c-0f8e-c271-24ebc729d7e3@redhat.com>
+Date:   Tue, 15 Sep 2020 22:40:11 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200915180535.2975060-4-alex.kogan@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Wei Liu <wei.liu@kernel.org> writes:
-
-> We will need to identify the device we want Microsoft Hypervisor to
-> manipulate.  Introduce the data structures for that purpose.
+On 9/15/20 2:05 PM, Alex Kogan wrote:
+> In CNA, spinning threads are organized in two queues, a primary queue for
+> threads running on the same node as the current lock holder, and a
+> secondary queue for threads running on other nodes. After acquiring the
+> MCS lock and before acquiring the spinlock, the MCS lock
+> holder checks whether the next waiter in the primary queue (if exists) is
+> running on the same NUMA node. If it is not, that waiter is detached from
+> the main queue and moved into the tail of the secondary queue. This way,
+> we gradually filter the primary queue, leaving only waiters running on
+> the same preferred NUMA node. For more details, see
+> https://arxiv.org/abs/1810.05600.
 >
-> They will be used in a later patch.
+> Note that this variant of CNA may introduce starvation by continuously
+> passing the lock between waiters in the main queue. This issue will be
+> addressed later in the series.
 >
-> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-> Co-Developed-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-> Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> Enabling CNA is controlled via a new configuration option
+> (NUMA_AWARE_SPINLOCKS). By default, the CNA variant is patched in at the
+> boot time only if we run on a multi-node machine in native environment and
+> the new config is enabled. (For the time being, the patching requires
+> CONFIG_PARAVIRT_SPINLOCKS to be enabled as well. However, this should be
+> resolved once static_call() is available.) This default behavior can be
+> overridden with the new kernel boot command-line option
+> "numa_spinlock=on/off" (default is "auto").
+>
+> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
+> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
+> Reviewed-by: Waiman Long <longman@redhat.com>
 > ---
->  include/asm-generic/hyperv-tlfs.h | 79 +++++++++++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
+>   .../admin-guide/kernel-parameters.txt         |  10 +
+>   arch/x86/Kconfig                              |  20 ++
+>   arch/x86/include/asm/qspinlock.h              |   4 +
+>   arch/x86/kernel/alternative.c                 |   4 +
+>   kernel/locking/mcs_spinlock.h                 |   2 +-
+>   kernel/locking/qspinlock.c                    |  42 ++-
+>   kernel/locking/qspinlock_cna.h                | 336 ++++++++++++++++++
+>   7 files changed, 413 insertions(+), 5 deletions(-)
+>   create mode 100644 kernel/locking/qspinlock_cna.h
 >
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index 83945ada5a50..faf892ce152d 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -612,4 +612,83 @@ struct hv_set_vp_registers_input {
->  	} element[];
->  } __packed;
->  
-> +enum hv_device_type {
-> +	HV_DEVICE_TYPE_LOGICAL = 0,
-> +	HV_DEVICE_TYPE_PCI = 1,
-> +	HV_DEVICE_TYPE_IOAPIC = 2,
-> +	HV_DEVICE_TYPE_ACPI = 3,
-> +};
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a1068742a6df..51ce050f8701 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3353,6 +3353,16 @@
+>   
+>   	nox2apic	[X86-64,APIC] Do not enable x2APIC mode.
+>   
+> +	numa_spinlock=	[NUMA, PV_OPS] Select the NUMA-aware variant
+> +			of spinlock. The options are:
+> +			auto - Enable this variant if running on a multi-node
+> +			machine in native environment.
+> +			on  - Unconditionally enable this variant.
+> +			off - Unconditionally disable this variant.
 > +
-> +typedef u16 hv_pci_rid;
-> +typedef u16 hv_pci_segment;
-> +typedef u64 hv_logical_device_id;
-> +union hv_pci_bdf {
-> +	u16 as_uint16;
+> +			Not specifying this option is equivalent to
+> +			numa_spinlock=auto.
 > +
-> +	struct {
-> +		u8 function:3;
-> +		u8 device:5;
-> +		u8 bus;
-> +	};
-> +} __packed;
-> +
-> +union hv_pci_bus_range {
-> +	u16 as_uint16;
-> +
-> +	struct {
-> +		u8 subordinate_bus;
-> +		u8 secondary_bus;
-> +	};
-> +} __packed;
-> +
-> +union hv_device_id {
-> +	u64 as_uint64;
-> +
-> +	struct {
-> +		u64 :62;
-> +		u64 device_type:2;
-> +	};
-> +
-> +	// HV_DEVICE_TYPE_LOGICAL
+>   	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
+>   			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
+>   			Some features depend on CPU0. Known dependencies are:
 
-Nit: please no '//' comments.
+You will have to move down this hunk according to alphabetic order. 
+Other than that this patch looks good to me.
 
-> +	struct {
-> +		u64 id:62;
-> +		u64 device_type:2;
-> +	} logical;
-> +
-> +	// HV_DEVICE_TYPE_PCI
-> +	struct {
-> +		union {
-> +			hv_pci_rid rid;
-> +			union hv_pci_bdf bdf;
-> +		};
-> +
-> +		hv_pci_segment segment;
-> +		union hv_pci_bus_range shadow_bus_range;
-> +
-> +		u16 phantom_function_bits:2;
-> +		u16 source_shadow:1;
-> +
-> +		u16 rsvdz0:11;
-> +		u16 device_type:2;
-> +	} pci;
-> +
-> +	// HV_DEVICE_TYPE_IOAPIC
-> +	struct {
-> +		u8 ioapic_id;
-> +		u8 rsvdz0;
-> +		u16 rsvdz1;
-> +		u16 rsvdz2;
-> +
-> +		u16 rsvdz3:14;
-> +		u16 device_type:2;
-> +	} ioapic;
-> +
-> +	// HV_DEVICE_TYPE_ACPI
-> +	struct {
-> +		u32 input_mapping_base;
-> +		u32 input_mapping_count:30;
-> +		u32 device_type:2;
-> +	} acpi;
-> +} __packed;
-> +
->  #endif
-
--- 
-Vitaly
+Cheers,
+Longman
 
