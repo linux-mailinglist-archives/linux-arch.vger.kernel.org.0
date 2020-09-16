@@ -2,136 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA85F26C7D9
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0CF26C873
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbgIPSfm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728202AbgIPSfL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 14:35:11 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2AAC061756
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:35:10 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id k25so6832591ljk.0
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AxuwlCpSO8TsaLIcauC4aS5tgqsK9SeD3UYfP7DN7g0=;
-        b=ZKGyeh6DjOj0P0poUJri2yvAXd4omTbSKkycPwhZ3i+69eOgCicq7HjntIxGCUS9d/
-         zNZFDIECDK4GwkaKDrKuGgCWjAAnhqqHdcPPPF/38HaA25t0OpynH7kdnV1WYZaxFMxz
-         W50ov+r+RFsylVih7TsRScGj6r7RgJSz63qJs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AxuwlCpSO8TsaLIcauC4aS5tgqsK9SeD3UYfP7DN7g0=;
-        b=m2Di4hgKzjUxAh3roiChthEza92WvZLZubltRLODYba9kf+3Prd3xsnGF1Svd00/e4
-         hFRJrDm9rvzYbLaldNzR/D8PkYFQb0Jc+eBt3LkcJ7348Tz+1srj+d6Lu0QK8KWidNiO
-         vGDmyRQ0uBBUM3OMMwFN3IxzpJOv/xF5KI2uzw70x9GnjgTnV4AQvoigQthhlCdaOs9X
-         HEfrzQxvOOSjwsHpk9lOg58iGAqOksqMjN6Ft+9lUxyPMI5/4c8hnZfvC+yzZvofHtJ+
-         S9sqFoutu4MOpIFd9ZohxGMkpssaAoRvKGOX7EP89RHGpvSH67Sz1+MnLpzQzQ40CEs0
-         FjPQ==
-X-Gm-Message-State: AOAM533wemda/h1L4MNHKlsWWIPrDaMhkm16x1pudPXWLdfK596G1k14
-        +3MSDlghegUU08/tF3smLQ2QDrqDhhkWOQ==
-X-Google-Smtp-Source: ABdhPJydG2XVc2TAuiqSs1j730PZN2h2IWOYqJ2BOq6Rm0qNsgC+4Mbtoet0+8jnNw7+AhOiaQJXZw==
-X-Received: by 2002:a2e:8182:: with SMTP id e2mr8664110ljg.142.1600281308752;
-        Wed, 16 Sep 2020 11:35:08 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id j20sm4771198lfe.252.2020.09.16.11.35.07
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2020 11:35:07 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id m5so8049338lfp.7
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:35:07 -0700 (PDT)
-X-Received: by 2002:a19:521a:: with SMTP id m26mr9002648lfb.133.1600281306776;
- Wed, 16 Sep 2020 11:35:06 -0700 (PDT)
+        id S1727950AbgIPStr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 14:49:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728169AbgIPStk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 16 Sep 2020 14:49:40 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C94E22211
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 18:49:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600282179;
+        bh=16sTH0SegakzZKBjY8U3FsytaAxRFzwi1y28PIc8vKg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Qatkcq3nv+S9pPj+P3JFSXG9oKzt2ivfBeSNtIFNuwDO8ZBcYBS3134yWRyvjTXiQ
+         4L7IXkhOodRGI+KFpKt3pj2oao09DdAJWwhNU7tUkWacyJbacCR2xaFA2YuokWC5fS
+         mD3KTRcCOuu+Cqd3yKSH66vZQHQDEZkKLTJ91ngA=
+Received: by mail-ed1-f45.google.com with SMTP id l17so7493076edq.12
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:49:39 -0700 (PDT)
+X-Gm-Message-State: AOAM5320aKQsI58P26Y4++AFL9gkmfcCGBxG2+v8dUM1ehvyk74P8Y6X
+        MpnfxVyTFfruhHtlZnlFjdGP7H2q67PbcGczd5EYOA==
+X-Google-Smtp-Source: ABdhPJwUX3bHQLCL84qG4wIC/JlN+nYNkgmXwAB8lo/1k8NF8oo4sGXt7L/6GSwGvTFkR4oICcgx71syaFhCR+ehMOk=
+X-Received: by 2002:a5d:5111:: with SMTP id s17mr28001448wrt.70.1600282177590;
+ Wed, 16 Sep 2020 11:49:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
- <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
- <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
- <87y2la4xu6.fsf@nanos.tec.linutronix.de>
-In-Reply-To: <87y2la4xu6.fsf@nanos.tec.linutronix.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Sep 2020 11:34:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whvULv3M2dQzPra1W-uGiX=_6Z_YeGnRDodbtXgJpihWA@mail.gmail.com>
-Message-ID: <CAHk-=whvULv3M2dQzPra1W-uGiX=_6Z_YeGnRDodbtXgJpihWA@mail.gmail.com>
-Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Ingo Molnar <mingo@kernel.org>,
+References: <20200916072842.3502-1-rppt@kernel.org>
+In-Reply-To: <20200916072842.3502-1-rppt@kernel.org>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 16 Sep 2020 11:49:25 -0700
+X-Gmail-Original-Message-ID: <CALCETrV6nFQ4tzhxKPSnK+Ec=U8ojY0k_-G2EqEG-WMGT4TkUw@mail.gmail.com>
+Message-ID: <CALCETrV6nFQ4tzhxKPSnK+Ec=U8ojY0k_-G2EqEG-WMGT4TkUw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-riscv@lists.infradead.org, X86 ML <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 12:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Wed, Sep 16, 2020 at 12:28 AM Mike Rapoport <rppt@kernel.org> wrote:
 >
-> You wish. I just found a 7 year old bug in a 10G network driver which
-> surely would have been found if people would enable debug configs and
-> not just run the crap on their PREEMPT_NONE, all debug off kernel. And
-> that driver is not subject to bitrot, it gets regular bug fixes from
-> people who seem to care (distro folks).
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> Hi,
+>
+> This is an implementation of "secret" mappings backed by a file descriptor.
+> I've dropped the boot time reservation patch for now as it is not strictly
+> required for the basic usage and can be easily added later either with or
+> without CMA.
+>
+> v5 changes:
+> * rebase on v5.9-rc5
+> * drop boot time memory reservation patch
+>
+> v4 changes:
+> * rebase on v5.9-rc1
+> * Do not redefine PMD_PAGE_ORDER in fs/dax.c, thanks Kirill
+> * Make secret mappings exclusive by default and only require flags to
+>   memfd_secret() system call for uncached mappings, thanks again Kirill :)
+>
+> v3 changes:
+> * Squash kernel-parameters.txt update into the commit that added the
+>   command line option.
+> * Make uncached mode explicitly selectable by architectures. For now enable
+>   it only on x86.
+>
+> v2 changes:
+> * Follow Michael's suggestion and name the new system call 'memfd_secret'
+> * Add kernel-parameters documentation about the boot option
+> * Fix i386-tinyconfig regression reported by the kbuild bot.
+>   CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+>   from one side and still make it available unconditionally on
+>   architectures that support SET_DIRECT_MAP.
+>
+> The file descriptor backing secret memory mappings is created using a
+> dedicated memfd_secret system call The desired protection mode for the
+> memory is configured using flags parameter of the system call. The mmap()
+> of the file descriptor created with memfd_secret() will create a "secret"
+> memory mapping. The pages in that mapping will be marked as not present in
+> the direct map and will have desired protection bits set in the user page
+> table. For instance, current implementation allows uncached mappings.
 
-That driver clearly cannot be very well maintained. All the distro
-kernels have the basic debug checks in place, afaik.
+I still have serious concerns with uncached mappings.  I'm not saying
+I can't be convinced, but I'm not currently convinced that we should
+allow user code to create UC mappings on x86.
 
-Is it some wonderful "enterprise hardware" garbage again that only
-gets used in special data centers?
-
-Becasue the "enterprise" people really are special. Very much in the
-"short bus" special kind of way. The fact that they have fooled so
-much of the industry into thinking that they are the competent and
-serious people is a disgrace.
-
-              Linus
+--Andy
