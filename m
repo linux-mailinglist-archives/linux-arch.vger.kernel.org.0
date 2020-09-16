@@ -2,140 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFB926CD88
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 23:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7855726CDE1
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 23:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726405AbgIPVAr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 17:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S1726576AbgIPVF7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 17:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgIPQaY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 12:30:24 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB029C0A3BDD
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 05:24:15 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id g4so6717566wrs.5
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 05:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yWmAHcgT2wDa3AHqlJ16t/WowuUKj+5oH128IS3to+s=;
-        b=ecyvxJA9SssekdAOtuviJ13pOnV2clLGkWhiOWO+2yrKD8LW/yxDkjFG3CzSaKPwdz
-         lO4l8QLk4EjgOwdsycDk3JkggZLdyWLIjx79hY9n3+KYGB1WQIAQ4FECAlbZPLNNzst2
-         +V8xxssKHQL+hxHT661evNUe9qi63Lr5THWvEXVzmU8ys481d4Icv0X7UrGAWcX3Y6R6
-         TW53J0GJUqSsZ/FtTU9WDgV3l69ZLSMQ+ne9CePfgEfWy5GDf3/fHWWq15NCFehU95v3
-         AHJkB5O7SLJY0IhMVow1YeZiDiMLuOOGL8aCTq8O7o0OtK/8YUEzsxMcZLk6TNgC2ruT
-         WwzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yWmAHcgT2wDa3AHqlJ16t/WowuUKj+5oH128IS3to+s=;
-        b=Ag61WGfBSHev7MF74aZHBXmVKYpmzNVwUUVKcC+Lr/5LiF+YseiMgBu8yPOPcmhqn9
-         4dEUm8tdMm9bZxCLiIkhxWvVUBjY0Ay6qQMzBHXGrvcXjhs0H/mawsill819o9pUzhDW
-         jFVMqst+C3nP91U1ZX+EMHHthVXwjRPcRN/sJrIm1fuIYADBIk3xaCTcMRUREx5nCHF0
-         nrhw/7oHzFdCDhIMsrpryImHMQKJb0XzKzFdJTYUqJIKQMcoGjrJB4AcxqoSU2koMHne
-         w9uxCKodY+1YV9KCha8NquI7vd5HOWj3zOeTf0H89TMFS9ZQT1MEU3fYNn3cWXtf4KDW
-         +0CQ==
-X-Gm-Message-State: AOAM530tfEm6+z/rKnHH6dNh8nraJBda0NfmLJsk9xFe3/fF9SUDwTVu
-        xk1zDdjRYY7L6yoyXtb6vH38dA==
-X-Google-Smtp-Source: ABdhPJyN8ng2AKyfXE308SyYBOpK5+vw1l709E5yQIVxjKXFjVd61eroffH5kXqXdkXmnXUZ3JvTow==
-X-Received: by 2002:adf:9b8b:: with SMTP id d11mr19383508wrc.71.1600259054273;
-        Wed, 16 Sep 2020 05:24:14 -0700 (PDT)
-Received: from google.com ([2a01:4b00:8523:2d03:e49d:f6be:d31b:ad3c])
-        by smtp.gmail.com with ESMTPSA id j26sm2567165wrc.79.2020.09.16.05.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 05:24:13 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 13:24:12 +0100
-From:   David Brazdil <dbrazdil@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
+        with ESMTP id S1726444AbgIPQOy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 12:14:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A26C02C295;
+        Wed, 16 Sep 2020 08:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=2L8WeVvRo1osqjjhclSBTpn136Oyr6chq2WMPl65EcM=; b=sha7upVR0ozVlTJFDWdFS4KUrg
+        Dlh504xPkCjJ6bcnR0tgQmZYiIutQK/G0ONBD+iomCp+zVQ82oPYqYPfOa29q6UCwl36D+BB9FNFs
+        pSeTBdPEiVQz6llxOwpNLZRraxMD45Yt9agHPf8ceWEhufE5EkURg5LtEm+1DjoRnfjJ/WOFs5+4j
+        BadKgeBe/qwlbda6A6xYg/rSWFAOIGOJ/+qKGuMxZNBtCJ1ZUglDN7/DVuOWKZv/bNRIhqme65n0j
+        CV7jlQDHwCcs1yfZz07j2hPdh6zbICLmsA3R4X5f+JNoZnWPrhrt60ytieQyxK1LeEjJ519udtgbv
+        hAy+S0yQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kIZqU-0000qm-87; Wed, 16 Sep 2020 15:59:46 +0000
+Subject: Re: [PATCH v5 3/5] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-arch@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 00/10] Independent per-CPU data section for nVHE
-Message-ID: <20200916122412.elxfxbdygvmdgrj5@google.com>
-References: <20200903091712.46456-1-dbrazdil@google.com>
- <20200914174008.GA25238@willie-the-truck>
- <20200916115404.rhv4dkyjz35e4x25@google.com>
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+References: <20200916073539.3552-1-rppt@kernel.org>
+ <20200916073539.3552-4-rppt@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6319035d-73db-4b4d-3fa7-aaa11d3843a0@infradead.org>
+Date:   Wed, 16 Sep 2020 08:59:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916115404.rhv4dkyjz35e4x25@google.com>
+In-Reply-To: <20200916073539.3552-4-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> I was also wondering about another approach - using the PERCPU_SECTION macro
-> unchanged in the hyp linker script. It would lay out a single .data..percpu and
-> we would then prefix it with .hyp and the symbols with __kvm_nvhe_ as with
-> everything else. WDYT? Haven't tried that yet, could be a naive idea. 
+Hi Mike,
 
-Seems to work. Can't use PERCPU_SECTION directly because then we couldn't
-rename it in the same linker script, but if we just unwrap that one layer
-we can use PERCPU_INPUT. No global macro changes needed.
 
-Let me know what you think.
+On 9/16/20 12:35 AM, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/Kconfig                   |   7 +
+>  arch/x86/Kconfig               |   1 +
+>  include/uapi/linux/magic.h     |   1 +
+>  include/uapi/linux/secretmem.h |   8 +
+>  kernel/sys_ni.c                |   2 +
+>  mm/Kconfig                     |   4 +
+>  mm/Makefile                    |   1 +
+>  mm/secretmem.c                 | 264 +++++++++++++++++++++++++++++++++
+>  8 files changed, 288 insertions(+)
+>  create mode 100644 include/uapi/linux/secretmem.h
+>  create mode 100644 mm/secretmem.c
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index af14a567b493..8d161bd4142d 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -975,6 +975,13 @@ config HAVE_SPARSE_SYSCALL_NR
+>  config ARCH_HAS_VDSO_DATA
+>  	bool
+>  
+> +config HAVE_SECRETMEM_UNCACHED
+> +       bool
+> +       help
+> +          An architecture can select this if its semantics of non-cached
+> +          mappings can be used to prevent speculative loads and it is
+> +          useful for secret protection.
 
-------8<------
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index 5904a4de9f40..9e6bf21268f1 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -195,11 +195,9 @@ SECTIONS
-        PERCPU_SECTION(L1_CACHE_BYTES)
+Please use tabs instead of spaces for indentation.
 
-        /* KVM nVHE per-cpu section */
--       #undef PERCPU_SECTION_NAME
--       #undef PERCPU_SYMBOL_NAME
--       #define PERCPU_SECTION_NAME(suffix)     CONCAT3(.hyp, PERCPU_SECTION_BASE_NAME, suffix)
--       #define PERCPU_SYMBOL_NAME(name)        __kvm_nvhe_ ## name
--       PERCPU_SECTION(L1_CACHE_BYTES)
-+       . = ALIGN(PAGE_SIZE);
-+       .hyp.data..percpu : { *(.hyp.data..percpu) }
-+       . = ALIGN(PAGE_SIZE);
+> +
+>  source "kernel/gcov/Kconfig"
+>  
+>  source "scripts/gcc-plugins/Kconfig"
 
-        .rela.dyn : ALIGN(8) {
-                *(.rela .rela*)
-diff --git a/arch/arm64/kvm/hyp/nvhe/hyp.lds.S b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-index 7d8c3fa004f4..1d8e4f7edc29 100644
---- a/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-+++ b/arch/arm64/kvm/hyp/nvhe/hyp.lds.S
-@@ -4,6 +4,10 @@
-  * Written by David Brazdil <dbrazdil@google.com>
-  */
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 6c974888f86f..70cfc20d7caa 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -868,4 +868,8 @@ config ARCH_HAS_HUGEPD
+>  config MAPPING_DIRTY_HELPERS
+>          bool
+>  
+> +config SECRETMEM
+> +        def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
 
-+#include <asm-generic/vmlinux.lds.h>
-+#include <asm/cache.h>
-+#include <asm/memory.h>
-+
- /*
-  * Defines an ELF hyp section from input section @NAME and its subsections.
-  */
-@@ -11,9 +15,9 @@
+Use tab above for indentation.
 
- SECTIONS {
-        HYP_SECTION(.text)
--       HYP_SECTION(.data..percpu)
--       HYP_SECTION(.data..percpu..first)
--       HYP_SECTION(.data..percpu..page_aligned)
--       HYP_SECTION(.data..percpu..read_mostly)
--       HYP_SECTION(.data..percpu..shared_aligned)
-+
-+       .hyp..data..percpu : {
-+               __per_cpu_load = .;
-+               PERCPU_INPUT(L1_CACHE_BYTES)
-+       }
- }
------8<------
+> +	select GENERIC_ALLOCATOR
+> +
+>  endmenu
 
-David
+
+thanks.
+-- 
+~Randy
+
