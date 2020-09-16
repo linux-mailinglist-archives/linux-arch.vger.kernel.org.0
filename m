@@ -2,282 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0577A26BE31
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 09:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A4826BE37
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 09:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726502AbgIPHgo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 03:36:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59832 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726139AbgIPHgm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 16 Sep 2020 03:36:42 -0400
-Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 614CA21D1B;
-        Wed, 16 Sep 2020 07:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600241801;
-        bh=WhzbYykGEvD2MN2aBUiN3Z1Mz8DuLtx59Czs9udyUQw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nv/fw1m6gMNrgV5VjDR1+8WSju4kO+OcRNM87PsDWuxNATCEQwLD1mdQ4lDOoOcdh
-         ml08RaCwmjKv6IaZARTSazkOA2dXROelA4hZhS0rJ06Ob7hjcl1wsrLmHxBZx1MREK
-         wP/G/0cpiEhhPluSrO4aUXGzYCRU/C1wf+QcYq88=
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: [PATCH v5 5/5] mm: secretmem: use PMD-size pages to amortize direct map fragmentation
-Date:   Wed, 16 Sep 2020 10:35:39 +0300
-Message-Id: <20200916073539.3552-6-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200916073539.3552-1-rppt@kernel.org>
-References: <20200916073539.3552-1-rppt@kernel.org>
+        id S1726291AbgIPHhc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 03:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgIPHhb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 03:37:31 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C05C061788
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 00:37:30 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id a2so5760546otr.11
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 00:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ir83kA7yZmatKHQpy7nyYwdfudWOyhH141WksSrpLpI=;
+        b=Wbmy2wm4Y3Z7IHj2WQgnSxJHvWaqiIYxvJrRLzN5yosJdstiBZVZo9gvc44pSE/nA1
+         P9hDpmjXczq2zLOkqvx/WHir/QasP1J2aBD5X+7FKjnP91s5nxsyqJv2jhU8PZzNRGRF
+         pjrrhaFUmLe21mq1kggp9iTxwlhfZdVWViCcQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ir83kA7yZmatKHQpy7nyYwdfudWOyhH141WksSrpLpI=;
+        b=PtZnybIm2sHbN2vw0a89BXeivhMejzeXKWt81WGrjsUPlP4bt8ftNh1OU3bCH8Jaho
+         nPLw+qWqbhW2wmo57SzKJPvjFVqXM9KiIKG1rNSTPQcIBZ4P8ZzkApgWfIM+y3bAjdJB
+         ub5uzcgIr3zd37uN8VCAfoZ3Ld0DVX0pFGpFEcjHVzGcvP8y8oS8oQ6nQPcn+2zw3FEb
+         q/+9qp6JAPpCOnjJGk+QAgCgHqxdFqRGPcO+jA2Sk5i9ZEaq8ZmNJc251a0p+smUkJN+
+         SSuYZYZqdSJzVbBbPAWJUOlFcWLOH4B1iI8DlXdxcBv1hFCyKlkHeJFwY8ZqC03neeet
+         0Pcw==
+X-Gm-Message-State: AOAM532PSoKJ71yQgIgGmHfeymIPpmIN9IMuI71HqMZZuMoTkE09RElm
+        bWtydnjnCi12oBxH+FRaMLtSuHSc5WffRT+vuALF0g==
+X-Google-Smtp-Source: ABdhPJwGl0rb2zlMJB/+T8+6pHD/ce/ZZx4zrU0sObZFxXtLXBpNIcPMMRDqJU2JyoR0WPCWkLBmcTGbfcRbBMPy77o=
+X-Received: by 2002:a05:6830:14d9:: with SMTP id t25mr16390529otq.188.1600241849077;
+ Wed, 16 Sep 2020 00:37:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+In-Reply-To: <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Wed, 16 Sep 2020 09:37:17 +0200
+Message-ID: <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On Tue, Sep 15, 2020 at 7:35 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > OTOH, having a working 'preemptible()' or maybe better named
+> > 'can_schedule()' check makes tons of sense to make decisions about
+> > allocation modes or other things.
+>
+> No. I think that those kinds of decisions about actual behavior are
+> always simply fundamentally wrong.
+>
+> Note that this is very different from having warnings about invalid
+> use. THAT is correct. It may not warn in all configurations, but that
+> doesn't matter: what matters is that it warns in common enough
+> configurations that developers will catch it.
+>
+> So having a warning in "might_sleep()" that doesn't always trigger,
+> because you have a limited configuration that can't even detect the
+> situation, that's fine and dandy and intentional.
+>
+> But having code like
+>
+>        if (can_schedule())
+>            .. do something different ..
+>
+> is fundamentally complete and utter garbage.
+>
+> It's one thing if you test for "am I in hardware interrupt context".
+> Those tests aren't great either, but at least they make sense.
+>
+> But a driver - or some library routine - making a difference based on
+> some nebulous "can I schedule" is fundamentally and basically WRONG.
+>
+> If some code changes behavior, it needs to be explicit to the *caller*
+> of that code.
+>
+> So this is why GFP_ATOMIC is fine, but "if (!can_schedule())
+> do_something_atomic()" is pure shite.
+>
+> And I am not IN THE LEAST interested in trying to help people doing
+> pure shite. We need to fix them. Like the crypto code is getting
+> fixed.
 
-Removing a PAGE_SIZE page from the direct map every time such page is
-allocated for a secret memory mapping will cause severe fragmentation of
-the direct map. This fragmentation can be reduced by using PMD-size pages
-as a pool for small pages for secret memory mappings.
+Just figured I'll throw my +1 in from reading too many (gpu) drivers.
+Code that tries to cleverly adjust its behaviour depending upon the
+context it's running in is harder to understand and blows up in more
+interesting ways. We still have drm_can_sleep() and it's mostly just
+used for debug code, and I've largely ended up just deleting
+everything that used it because when you're driver is blowing up the
+last thing you want is to realize your debug code and output can't be
+relied upon. Or worse, that the only Oops you have is the one in the
+debug code, because the real one scrolled away - the original idea
+behind drm_can_sleep was to make all the modeset code work
+automagically both in normal ioctl/kworker context and in the panic
+handlers or kgdb callbacks. Wishful thinking at best.
 
-Add a gen_pool per secretmem inode and lazily populate this pool with
-PMD-size pages.
+Also at least for me that extends to everything, e.g. I much prefer
+explicit spin_lock and spin_lock_irq vs magic spin_lock_irqsave for
+locks shared with interrupt handlers, since the former two gives me
+clear information from which contexts such function can be called.
+Other end is the memalloc_no*_save/restore functions, where I recently
+made a real big fool of myself because I didn't realize how much that
+impacts everything that's run within - suddenly "GFP_KERNEL for small
+stuff never fails" is wrong everywhere.
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- mm/secretmem.c | 107 ++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 88 insertions(+), 19 deletions(-)
-
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index 3293f761076e..333eb18fb483 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -12,6 +12,7 @@
- #include <linux/bitops.h>
- #include <linux/printk.h>
- #include <linux/pagemap.h>
-+#include <linux/genalloc.h>
- #include <linux/syscalls.h>
- #include <linux/pseudo_fs.h>
- #include <linux/set_memory.h>
-@@ -40,24 +41,66 @@
- #define SECRETMEM_FLAGS_MASK	SECRETMEM_MODE_MASK
- 
- struct secretmem_ctx {
-+	struct gen_pool *pool;
- 	unsigned int mode;
- };
- 
--static struct page *secretmem_alloc_page(gfp_t gfp)
-+static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
- {
--	/*
--	 * FIXME: use a cache of large pages to reduce the direct map
--	 * fragmentation
--	 */
--	return alloc_page(gfp);
-+	unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-+	struct gen_pool *pool = ctx->pool;
-+	unsigned long addr;
-+	struct page *page;
-+	int err;
-+
-+	page = alloc_pages(gfp, PMD_PAGE_ORDER);
-+	if (!page)
-+		return -ENOMEM;
-+
-+	addr = (unsigned long)page_address(page);
-+	split_page(page, PMD_PAGE_ORDER);
-+
-+	err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
-+	if (err) {
-+		__free_pages(page, PMD_PAGE_ORDER);
-+		return err;
-+	}
-+
-+	__kernel_map_pages(page, nr_pages, 0);
-+
-+	return 0;
-+}
-+
-+static struct page *secretmem_alloc_page(struct secretmem_ctx *ctx,
-+					 gfp_t gfp)
-+{
-+	struct gen_pool *pool = ctx->pool;
-+	unsigned long addr;
-+	struct page *page;
-+	int err;
-+
-+	if (gen_pool_avail(pool) < PAGE_SIZE) {
-+		err = secretmem_pool_increase(ctx, gfp);
-+		if (err)
-+			return NULL;
-+	}
-+
-+	addr = gen_pool_alloc(pool, PAGE_SIZE);
-+	if (!addr)
-+		return NULL;
-+
-+	page = virt_to_page(addr);
-+	get_page(page);
-+
-+	return page;
- }
- 
- static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- {
-+	struct secretmem_ctx *ctx = vmf->vma->vm_file->private_data;
- 	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
- 	struct inode *inode = file_inode(vmf->vma->vm_file);
- 	pgoff_t offset = vmf->pgoff;
--	unsigned long addr;
- 	struct page *page;
- 	int ret = 0;
- 
-@@ -66,7 +109,7 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- 
- 	page = find_get_entry(mapping, offset);
- 	if (!page) {
--		page = secretmem_alloc_page(vmf->gfp_mask);
-+		page = secretmem_alloc_page(ctx, vmf->gfp_mask);
- 		if (!page)
- 			return vmf_error(-ENOMEM);
- 
-@@ -74,14 +117,8 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- 		if (unlikely(ret))
- 			goto err_put_page;
- 
--		ret = set_direct_map_invalid_noflush(page);
--		if (ret)
--			goto err_del_page_cache;
--
--		addr = (unsigned long)page_address(page);
--		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
--
- 		__SetPageUptodate(page);
-+		set_page_private(page, (unsigned long)ctx);
- 
- 		ret = VM_FAULT_LOCKED;
- 	}
-@@ -89,8 +126,6 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- 	vmf->page = page;
- 	return ret;
- 
--err_del_page_cache:
--	delete_from_page_cache(page);
- err_put_page:
- 	put_page(page);
- 	return vmf_error(ret);
-@@ -138,7 +173,11 @@ static int secretmem_migratepage(struct address_space *mapping,
- 
- static void secretmem_freepage(struct page *page)
- {
--	set_direct_map_default_noflush(page);
-+	unsigned long addr = (unsigned long)page_address(page);
-+	struct secretmem_ctx *ctx = (struct secretmem_ctx *)page_private(page);
-+	struct gen_pool *pool = ctx->pool;
-+
-+	gen_pool_free(pool, addr, PAGE_SIZE);
- }
- 
- static const struct address_space_operations secretmem_aops = {
-@@ -163,13 +202,18 @@ static struct file *secretmem_file_create(unsigned long flags)
- 	if (!ctx)
- 		goto err_free_inode;
- 
-+	ctx->pool = gen_pool_create(PAGE_SHIFT, NUMA_NO_NODE);
-+	if (!ctx->pool)
-+		goto err_free_ctx;
-+
- 	file = alloc_file_pseudo(inode, secretmem_mnt, "secretmem",
- 				 O_RDWR, &secretmem_fops);
- 	if (IS_ERR(file))
--		goto err_free_ctx;
-+		goto err_free_pool;
- 
- 	mapping_set_unevictable(inode->i_mapping);
- 
-+	inode->i_private = ctx;
- 	inode->i_mapping->private_data = ctx;
- 	inode->i_mapping->a_ops = &secretmem_aops;
- 
-@@ -183,6 +227,8 @@ static struct file *secretmem_file_create(unsigned long flags)
- 
- 	return file;
- 
-+err_free_pool:
-+	gen_pool_destroy(ctx->pool);
- err_free_ctx:
- 	kfree(ctx);
- err_free_inode:
-@@ -221,11 +267,34 @@ SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
- 	return err;
- }
- 
-+static void secretmem_cleanup_chunk(struct gen_pool *pool,
-+				    struct gen_pool_chunk *chunk, void *data)
-+{
-+	unsigned long start = chunk->start_addr;
-+	unsigned long end = chunk->end_addr;
-+	unsigned long nr_pages, addr;
-+
-+	nr_pages = (end - start + 1) / PAGE_SIZE;
-+	__kernel_map_pages(virt_to_page(start), nr_pages, 1);
-+
-+	for (addr = start; addr < end; addr += PAGE_SIZE)
-+		put_page(virt_to_page(addr));
-+}
-+
-+static void secretmem_cleanup_pool(struct secretmem_ctx *ctx)
-+{
-+	struct gen_pool *pool = ctx->pool;
-+
-+	gen_pool_for_each_chunk(pool, secretmem_cleanup_chunk, ctx);
-+	gen_pool_destroy(pool);
-+}
-+
- static void secretmem_evict_inode(struct inode *inode)
- {
- 	struct secretmem_ctx *ctx = inode->i_private;
- 
- 	truncate_inode_pages_final(&inode->i_data);
-+	secretmem_cleanup_pool(ctx);
- 	clear_inode(inode);
- 	kfree(ctx);
- }
+It's all great for debugging and sanity checks (and we run with all
+that stuff enabled in our CI), but really semantic changes depending
+upon magic context checks freak my out :-)
+-Daniel
 -- 
-2.28.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
