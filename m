@@ -2,68 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F17C26C7A7
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA85F26C7D9
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 20:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgIPSc1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Sep 2020 14:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S1728210AbgIPSfm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 14:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727850AbgIPScW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 14:32:22 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415D2C061756
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:32:21 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id w11so8083948lfn.2
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:32:21 -0700 (PDT)
+        with ESMTP id S1728202AbgIPSfL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Sep 2020 14:35:11 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2AAC061756
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:35:10 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id k25so6832591ljk.0
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oa2KOKBruJIa8JzwEuXDvn8lq/AyW8Gh05WzKpjKQjk=;
-        b=UEueMUHZ3w1bML4TffC03SPtwmMbG26ZS04QoHTBFtkbazq0zj1LMx+FyboyvzzASg
-         nydFo8G58LEHhfHuiZfy7mbpmIDsIlzAJfeeTzYG6VJXbIqW/NS9VqvGKvKAt1o7QE3H
-         aEBuUY03yHBMaYNPFFjhHL22z9bGvgl38mViw=
+        bh=AxuwlCpSO8TsaLIcauC4aS5tgqsK9SeD3UYfP7DN7g0=;
+        b=ZKGyeh6DjOj0P0poUJri2yvAXd4omTbSKkycPwhZ3i+69eOgCicq7HjntIxGCUS9d/
+         zNZFDIECDK4GwkaKDrKuGgCWjAAnhqqHdcPPPF/38HaA25t0OpynH7kdnV1WYZaxFMxz
+         W50ov+r+RFsylVih7TsRScGj6r7RgJSz63qJs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oa2KOKBruJIa8JzwEuXDvn8lq/AyW8Gh05WzKpjKQjk=;
-        b=J0ec1+jaEn0+svJ32KT1kdqPYcEu0aX6JpnuqMoHVk2mUGdnXMl+zyFurlf0u7Mi62
-         O4fXWvZyBzxFGeF8nS/5GTCe5zYmwp3HazRueLDlRMZoy0LmyfwNMWVP+J01Z+aRwBGX
-         wb+kXQOJJrzuvqIn6fVZe2f7Ri84gFnm4HaroaFRvfxgj+WFpbvYJat0j8PTC50WPIdQ
-         hhunQ1h9MD+KKOE++0NoalwNb2mcVSQU5+cNZsbrZAO4DBxRFKI5d2qPBGKSyKjAc3AF
-         gS81+pljcPmiPNulaiyUO4feNJ//kwtY6RzuHC/gCKUv59zCWag42kqI6iOaX8+qEP2f
-         C8YA==
-X-Gm-Message-State: AOAM5311xahovGHRHLvuRyWlGwf17+SGpUKtxw384yK44U8OE+fBu9dR
-        SyhLhwy4A67w9a06WV5vlRzRazysGkipww==
-X-Google-Smtp-Source: ABdhPJzWZhePuW95l0glliDft1YmPe01PQpul3GChmBOdSrUVqtE0wk00YAP9cDhcpXn0beXh8RySA==
-X-Received: by 2002:ac2:4d10:: with SMTP id r16mr7814238lfi.58.1600281139232;
-        Wed, 16 Sep 2020 11:32:19 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id e24sm5535070ljg.33.2020.09.16.11.32.17
+        bh=AxuwlCpSO8TsaLIcauC4aS5tgqsK9SeD3UYfP7DN7g0=;
+        b=m2Di4hgKzjUxAh3roiChthEza92WvZLZubltRLODYba9kf+3Prd3xsnGF1Svd00/e4
+         hFRJrDm9rvzYbLaldNzR/D8PkYFQb0Jc+eBt3LkcJ7348Tz+1srj+d6Lu0QK8KWidNiO
+         vGDmyRQ0uBBUM3OMMwFN3IxzpJOv/xF5KI2uzw70x9GnjgTnV4AQvoigQthhlCdaOs9X
+         HEfrzQxvOOSjwsHpk9lOg58iGAqOksqMjN6Ft+9lUxyPMI5/4c8hnZfvC+yzZvofHtJ+
+         S9sqFoutu4MOpIFd9ZohxGMkpssaAoRvKGOX7EP89RHGpvSH67Sz1+MnLpzQzQ40CEs0
+         FjPQ==
+X-Gm-Message-State: AOAM533wemda/h1L4MNHKlsWWIPrDaMhkm16x1pudPXWLdfK596G1k14
+        +3MSDlghegUU08/tF3smLQ2QDrqDhhkWOQ==
+X-Google-Smtp-Source: ABdhPJydG2XVc2TAuiqSs1j730PZN2h2IWOYqJ2BOq6Rm0qNsgC+4Mbtoet0+8jnNw7+AhOiaQJXZw==
+X-Received: by 2002:a2e:8182:: with SMTP id e2mr8664110ljg.142.1600281308752;
+        Wed, 16 Sep 2020 11:35:08 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id j20sm4771198lfe.252.2020.09.16.11.35.07
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2020 11:32:17 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id z17so8009351lfi.12
-        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:32:17 -0700 (PDT)
-X-Received: by 2002:a19:e00a:: with SMTP id x10mr9071213lfg.603.1600281136741;
- Wed, 16 Sep 2020 11:32:16 -0700 (PDT)
+        Wed, 16 Sep 2020 11:35:07 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id m5so8049338lfp.7
+        for <linux-arch@vger.kernel.org>; Wed, 16 Sep 2020 11:35:07 -0700 (PDT)
+X-Received: by 2002:a19:521a:: with SMTP id m26mr9002648lfb.133.1600281306776;
+ Wed, 16 Sep 2020 11:35:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
  <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
  <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
- <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com> <20200916152956.GV29330@paulmck-ThinkPad-P72>
-In-Reply-To: <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <87y2la4xu6.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87y2la4xu6.fsf@nanos.tec.linutronix.de>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Sep 2020 11:32:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
-Message-ID: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
+Date:   Wed, 16 Sep 2020 11:34:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whvULv3M2dQzPra1W-uGiX=_6Z_YeGnRDodbtXgJpihWA@mail.gmail.com>
+Message-ID: <CAHk-=whvULv3M2dQzPra1W-uGiX=_6Z_YeGnRDodbtXgJpihWA@mail.gmail.com>
 Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -101,8 +99,10 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Josh Triplett <josh@joshtriplett.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
@@ -115,35 +115,23 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 8:29 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Tue, Sep 15, 2020 at 12:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> All fair, but some of us need to write code that must handle being
-> invoked from a wide variety of contexts.
+> You wish. I just found a 7 year old bug in a 10G network driver which
+> surely would have been found if people would enable debug configs and
+> not just run the crap on their PREEMPT_NONE, all debug off kernel. And
+> that driver is not subject to bitrot, it gets regular bug fixes from
+> people who seem to care (distro folks).
 
-Note that I think that core functionality is different from random drivers.
+That driver clearly cannot be very well maintained. All the distro
+kernels have the basic debug checks in place, afaik.
 
-Of course core code can (and will) look at things like
+Is it some wonderful "enterprise hardware" garbage again that only
+gets used in special data centers?
 
-        if (in_interrupt())
-            .. schedule work asynchronously ..
+Becasue the "enterprise" people really are special. Very much in the
+"short bus" special kind of way. The fact that they have fooled so
+much of the industry into thinking that they are the competent and
+serious people is a disgrace.
 
-because core code ends up being called from odd places, and code like
-that is expected to have understanding of the rules it plays with.
-
-But something like RCU is a very different beast from some "walk the
-scatter-gather list" code.
-
-RCU does its work in the background, and works with lots of different
-things. And it's so core and used everywhere that it knows about these
-things. I mean, we literally have special code explicitly to let RCU
-know "we entered kernel context now".
-
-But something like a driver list walking thing should not be doing
-different things behind peoples back depending on whether they hold
-spinlocks or not. It should either just work regardless, or there
-should be a flag (or special interface) for the "you're being called
-in a crtitical region".
-
-Because dynamically changing behavior really is very confusing.
-
-               Linus
+              Linus
