@@ -2,188 +2,184 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 196E426BA8F
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 05:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF79E26BDF0
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Sep 2020 09:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726093AbgIPDNM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Sep 2020 23:13:12 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:39331 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726140AbgIPDNL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 15 Sep 2020 23:13:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600225989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7zzn+D/zO+vxG92X/ztZuyi5D19ExpWVl0Ma3JmS6+Y=;
-        b=iBA+DFbAp/Q/QEnUyrgKUu80RFng5HTXMNcxFCQlsn9cJ4w8mnREDYEcLlQW9W+9mt7AWn
-        AL3vfpoA5KrSXwaY7cWkfzvvkVsaRbLtFRD9yo4EJiQlYVj04yGEkGtY3tuNpf9CFLOQ/L
-        XdmG+j9I+zOSDXnaVdevzSNEUISzNZg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-595-TmN-0tXWMUOJ4U1Pfi9p-w-1; Tue, 15 Sep 2020 23:13:05 -0400
-X-MC-Unique: TmN-0tXWMUOJ4U1Pfi9p-w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726381AbgIPH26 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Sep 2020 03:28:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54656 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726359AbgIPH26 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 16 Sep 2020 03:28:58 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0C8C71021D27;
-        Wed, 16 Sep 2020 03:13:03 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-113-115.rdu2.redhat.com [10.10.113.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D48519C71;
-        Wed, 16 Sep 2020 03:13:00 +0000 (UTC)
-Subject: Re: [PATCH v11 4/5] locking/qspinlock: Introduce starvation avoidance
- into CNA
-To:     Alex Kogan <alex.kogan@oracle.com>, linux@armlinux.org.uk,
-        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
-        arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        guohanjun@huawei.com, jglauber@marvell.com
-Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
-        dave.dice@oracle.com
-References: <20200915180535.2975060-1-alex.kogan@oracle.com>
- <20200915180535.2975060-5-alex.kogan@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <424bb6c1-aef8-e81f-49bc-6710b245d633@redhat.com>
-Date:   Tue, 15 Sep 2020 23:13:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        by mail.kernel.org (Postfix) with ESMTPSA id DE27F20771;
+        Wed, 16 Sep 2020 07:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600241337;
+        bh=2pPFIyfq0HjxH/I1nQKf+tcVT9qAd8yS6QngBOEx7EM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F0h5DWgUhvU5XLcsYtcxIKA1Q3wQfwVGd3nw0B8mU624p9XWkw6wiW7p1Zuz/xTRZ
+         O9KcB9xE81T9A1Gvj+KtDQXmGmJhd84/x+WIU0x3WwcVe459cy+13EBlfQ+CQkNRJM
+         twHYIljA0tJ22HO3pmMbhJOKF/hh5PkILOigTe2g=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Subject: [PATCH v5 0/5] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Wed, 16 Sep 2020 10:28:37 +0300
+Message-Id: <20200916072842.3502-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200915180535.2975060-5-alex.kogan@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
 Sender: linux-arch-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/15/20 2:05 PM, Alex Kogan wrote:
-> Keep track of the time the thread at the head of the secondary queue
-> has been waiting, and force inter-node handoff once this time passes
-> a preset threshold. The default value for the threshold (10ms) can be
-> overridden with the new kernel boot command-line option
-> "numa_spinlock_threshold". The ms value is translated internally to the
-> nearest rounded-up jiffies.
->
-> Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
-> Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
-> Reviewed-by: Waiman Long <longman@redhat.com>
-> ---
->   .../admin-guide/kernel-parameters.txt         |  9 ++
->   kernel/locking/qspinlock_cna.h                | 95 ++++++++++++++++---
->   2 files changed, 92 insertions(+), 12 deletions(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 51ce050f8701..73ab23a47b97 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3363,6 +3363,15 @@
->   			Not specifying this option is equivalent to
->   			numa_spinlock=auto.
->   
-> +	numa_spinlock_threshold=	[NUMA, PV_OPS]
-> +			Set the time threshold in milliseconds for the
-> +			number of intra-node lock hand-offs before the
-> +			NUMA-aware spinlock is forced to be passed to
-> +			a thread on another NUMA node.	Valid values
-> +			are in the [1..100] range. Smaller values result
-> +			in a more fair, but less performant spinlock,
-> +			and vice versa. The default value is 10.
-> +
->   	cpu0_hotplug	[X86] Turn on CPU0 hotplug feature when
->   			CONFIG_BOOTPARAM_HOTPLUG_CPU0 is off.
->   			Some features depend on CPU0. Known dependencies are:
-> diff --git a/kernel/locking/qspinlock_cna.h b/kernel/locking/qspinlock_cna.h
-> index 590402ad69ef..d3e27549c769 100644
-> --- a/kernel/locking/qspinlock_cna.h
-> +++ b/kernel/locking/qspinlock_cna.h
-> @@ -37,6 +37,12 @@
->    * gradually filter the primary queue, leaving only waiters running on the same
->    * preferred NUMA node.
->    *
-> + * We change the NUMA node preference after a waiter at the head of the
-> + * secondary queue spins for a certain amount of time (10ms, by default).
-> + * We do that by flushing the secondary queue into the head of the primary queue,
-> + * effectively changing the preference to the NUMA node of the waiter at the head
-> + * of the secondary queue at the time of the flush.
-> + *
->    * For more details, see https://arxiv.org/abs/1810.05600.
->    *
->    * Authors: Alex Kogan <alex.kogan@oracle.com>
-> @@ -49,13 +55,33 @@ struct cna_node {
->   	u16			real_numa_node;
->   	u32			encoded_tail;	/* self */
->   	u32			partial_order;	/* enum val */
-> +	s32			start_time;
->   };
->   
->   enum {
->   	LOCAL_WAITER_FOUND,
->   	LOCAL_WAITER_NOT_FOUND,
-> +	FLUSH_SECONDARY_QUEUE
->   };
->   
-> +/*
-> + * Controls the threshold time in ms (default = 10) for intra-node lock
-> + * hand-offs before the NUMA-aware variant of spinlock is forced to be
-> + * passed to a thread on another NUMA node. The default setting can be
-> + * changed with the "numa_spinlock_threshold" boot option.
-> + */
-> +#define MSECS_TO_JIFFIES(m)	\
-> +	(((m) + (MSEC_PER_SEC / HZ) - 1) / (MSEC_PER_SEC / HZ))
-> +static int intra_node_handoff_threshold __ro_after_init = MSECS_TO_JIFFIES(10);
-> +
-> +static inline bool intra_node_threshold_reached(struct cna_node *cn)
-> +{
-> +	s32 current_time = (s32)jiffies;
-> +	s32 threshold = cn->start_time + intra_node_handoff_threshold;
-> +
-> +	return current_time - threshold > 0;
-> +}
-> +
->   static void __init cna_init_nodes_per_cpu(unsigned int cpu)
->   {
->   	struct mcs_spinlock *base = per_cpu_ptr(&qnodes[0].mcs, cpu);
-> @@ -98,6 +124,7 @@ static __always_inline void cna_init_node(struct mcs_spinlock *node)
->   	struct cna_node *cn = (struct cna_node *)node;
->   
->   	cn->numa_node = cn->real_numa_node;
-> +	cn->start_time = 0;
->   }
->   
->   /*
-> @@ -197,8 +224,15 @@ static void cna_splice_next(struct mcs_spinlock *node,
->   
->   	/* stick `next` on the secondary queue tail */
->   	if (node->locked <= 1) { /* if secondary queue is empty */
-> +		struct cna_node *cn = (struct cna_node *)node;
-> +
->   		/* create secondary queue */
->   		next->next = next;
-> +
-> +		cn->start_time = (s32)jiffies;
-> +		/* make sure start_time != 0 iff secondary queue is not empty */
-> +		if (!cn->start_time)
-> +			cn->start_time = 1;
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-My version of the patch set the end_time while yours set the start_time. 
-The differences are
+Hi,
 
-1) When the node time is 0, yours will reduce the jiffies count by 1. My 
-version will increase it by 1.
-2) The intra_node_handoff_threshold is accessed here in my version when 
-setting the end time while yours will access it in 
-intra_node_threshold_reached().
+This is an implementation of "secret" mappings backed by a file descriptor. 
+I've dropped the boot time reservation patch for now as it is not strictly
+required for the basic usage and can be easily added later either with or
+without CMA.
 
-It is largely a matter of preference, but I am just curious about what 
-you think about the advantage of doing it this way.
+v5 changes:
+* rebase on v5.9-rc5
+* drop boot time memory reservation patch
 
-Cheers,
-Longman
+v4 changes:
+* rebase on v5.9-rc1
+* Do not redefine PMD_PAGE_ORDER in fs/dax.c, thanks Kirill
+* Make secret mappings exclusive by default and only require flags to
+  memfd_secret() system call for uncached mappings, thanks again Kirill :)
+
+v3 changes:
+* Squash kernel-parameters.txt update into the commit that added the
+  command line option.
+* Make uncached mode explicitly selectable by architectures. For now enable
+  it only on x86.
+
+v2 changes:
+* Follow Michael's suggestion and name the new system call 'memfd_secret'
+* Add kernel-parameters documentation about the boot option
+* Fix i386-tinyconfig regression reported by the kbuild bot.
+  CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+  from one side and still make it available unconditionally on
+  architectures that support SET_DIRECT_MAP.
+
+The file descriptor backing secret memory mappings is created using a
+dedicated memfd_secret system call The desired protection mode for the
+memory is configured using flags parameter of the system call. The mmap()
+of the file descriptor created with memfd_secret() will create a "secret"
+memory mapping. The pages in that mapping will be marked as not present in
+the direct map and will have desired protection bits set in the user page
+table. For instance, current implementation allows uncached mappings.
+
+Although normally Linux userspace mappings are protected from other users, 
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
+
+Additionally, the secret mappings may be used as a mean to protect guest
+memory in a virtual machine host.
+
+For demonstration of secret memory usage we've created a userspace library
+[1] that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
+
+I've hesitated whether to continue to use new flags to memfd_create() or to
+add a new system call and I've decided to use a new system call after I've
+started to look into man pages update. There would have been two completely
+independent descriptions and I think it would have been very confusing.
+
+Hiding secret memory mappings behind an anonymous file allows (ab)use of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
+
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
+
+As the fragmentation of the direct map was one of the major concerns raised
+during the previous postings, I've added an amortizing cache of PMD-size
+pages to each file descriptor that is used as an allocation pool for the
+secret memory areas.
+
+v4: https://lore.kernel.org/lkml/20200818141554.13945-1-rppt@kernel.org
+v3: https://lore.kernel.org/lkml/20200804095035.18778-1-rppt@kernel.org
+v2: https://lore.kernel.org/lkml/20200727162935.31714-1-rppt@kernel.org
+v1: https://lore.kernel.org/lkml/20200720092435.17469-1-rppt@kernel.org/
+rfc-v2: https://lore.kernel.org/lkml/20200706172051.19465-1-rppt@kernel.org/
+rfc-v1: https://lore.kernel.org/lkml/20200130162340.GA14232@rapoport-lnx/
+
+
+Mike Rapoport (5):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  mm: introduce memfd_secret system call to create "secret" memory areas
+  arch, mm: wire up memfd_secret system call were relevant
+  mm: secretmem: use PMD-size pages to amortize direct map fragmentation
+
+ arch/Kconfig                           |   7 +
+ arch/arm64/include/asm/unistd.h        |   2 +-
+ arch/arm64/include/asm/unistd32.h      |   2 +
+ arch/arm64/include/uapi/asm/unistd.h   |   1 +
+ arch/riscv/include/asm/unistd.h        |   1 +
+ arch/x86/Kconfig                       |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+ fs/dax.c                               |  11 +-
+ include/linux/pgtable.h                |   3 +
+ include/linux/syscalls.h               |   1 +
+ include/uapi/asm-generic/unistd.h      |   7 +-
+ include/uapi/linux/magic.h             |   1 +
+ include/uapi/linux/secretmem.h         |   8 +
+ kernel/sys_ni.c                        |   2 +
+ mm/Kconfig                             |   4 +
+ mm/Makefile                            |   1 +
+ mm/internal.h                          |   3 +
+ mm/mmap.c                              |   5 +-
+ mm/secretmem.c                         | 333 +++++++++++++++++++++++++
+ 20 files changed, 383 insertions(+), 12 deletions(-)
+ create mode 100644 include/uapi/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+
+-- 
+2.28.0
 
