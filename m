@@ -2,135 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5F826DD3C
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 15:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC3C26DD6F
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 16:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727169AbgIQNzu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Sep 2020 09:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727124AbgIQNzn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Sep 2020 09:55:43 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0836BC061355;
-        Thu, 17 Sep 2020 06:54:52 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id bg9so1176299plb.2;
-        Thu, 17 Sep 2020 06:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z/K2/i+JXYfZZ5+5bldYLcF42Djb0mZAX58S+kRtJsc=;
-        b=bogrH/LctRcjD61IXqaLFLgVpKP+15hGGQXFU1QPJO7NgISDGzRw5nzT8CIMhDNiTP
-         ms0m5q0u9jD64WUXmiHzpxULDThbLR7ZBw7SiwFrFDib+wI8IQMLWXgD8Miyh8FicD2r
-         Y/Ks2Fla9mIdyxJ2UPyzLc0SzOf26vVpk9FTZO8gAyrgEidVwpvl2G3H0LZOftwTdvx9
-         doeY7DZD+4RaTROc4prYRIdRQ3eJx9ONJ9gf5GUo9W+LdGyEABBo/bwUYKg8R2cPGOuw
-         Qzm9GIbZXexGEbmCGixOj79XM6bYXy4uCCPwqG1pJrnRJk/AWPCav3NWRVKLBm7RxNuP
-         +SXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=z/K2/i+JXYfZZ5+5bldYLcF42Djb0mZAX58S+kRtJsc=;
-        b=QtzQTtRQ+hmTGHCMWqek4xPfG/ILevmp6C7uHb6mRva3urFs/dTgboN9/JWBgSIH0y
-         FNfKsdgmI3hooziQdR/NdEujOPIL+N81leEYiBoNkqsd9PU3JKCl0oKhbpUzOIpZ9gwb
-         YKaMM+hvUkPf1WE3lWTg2vE7IHixdHffNYnDqVXKOqY6/OmOHHW48ylRe17T37727t7R
-         c4PNmlIjDOtG2r1G/F0C3xnqRPtlcEmyiosrH97ce6NCFRBWVTc4c4TV3gT5UPpE6uBH
-         XhT4kBf3syIr6k3iPCwMvYW/1oH1wbh7vdYllEtn1dIZbLtghXAmZfGyG2QtvMMvnvLU
-         FFiw==
-X-Gm-Message-State: AOAM530HopFXU/vXFoicRYy7uHR/NdpnSXJy+WiJfb7cZVJg3PwzSsOL
-        zWLDxknHNyYpVhoiXj38qi8=
-X-Google-Smtp-Source: ABdhPJxD4C2VPYadg84rIRzWLwt5+D0NW021aBQl3wpvrfSQ6SWd5wfgq05PgBpyp3lINoW2ttqL2w==
-X-Received: by 2002:a17:90a:8c88:: with SMTP id b8mr8528564pjo.118.1600350891625;
-        Thu, 17 Sep 2020 06:54:51 -0700 (PDT)
-Received: from localhost.localdomain ([2001:470:e92d:10:6ca9:b613:f248:49fa])
-        by smtp.gmail.com with ESMTPSA id a12sm17896994pgm.79.2020.09.17.06.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 06:54:51 -0700 (PDT)
-From:   Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Stable <stable@vger.kernel.org>,
-        Rosen Penev <rosenp@gmail.com>
-Subject: [PATCH v3] powerpc: fix EDEADLOCK redefinition error in uapi/asm/errno.h
-Date:   Thu, 17 Sep 2020 06:54:37 -0700
-Message-Id: <20200917135437.1238787-1-Tony.Ambardar@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200917000757.1232850-1-Tony.Ambardar@gmail.com>
-References: <20200917000757.1232850-1-Tony.Ambardar@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727323AbgIQOEG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Sep 2020 10:04:06 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:30338 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727286AbgIQOBR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Sep 2020 10:01:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600351273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qjkdQTJ/VBG7ZFMg5Nhpzya4K81fiyu8UjZya2led1Q=;
+        b=P7P98apD63PK9c281fpQlkp6qgDtTLOK4YDZyoTdDVMBX/0Lr6MPZr9XQW/zrK1zg2FvIA
+        yN+8e7OKGhMgw+qMml9VELZA1e6wBM7L6kb6ioPy+0s3koPSDJh5j2mrnHujN7QJtUGkgk
+        2GwHY8EF3O9GFLk6QZRaxirgYlvS5/A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-579-Q_ysnWYENLK5sfwraF7T4g-1; Thu, 17 Sep 2020 09:27:41 -0400
+X-MC-Unique: Q_ysnWYENLK5sfwraF7T4g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC33956B35;
+        Thu, 17 Sep 2020 13:27:35 +0000 (UTC)
+Received: from ovpn-66-148.rdu2.redhat.com (ovpn-66-148.rdu2.redhat.com [10.10.66.148])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 17FB860BEC;
+        Thu, 17 Sep 2020 13:27:28 +0000 (UTC)
+Message-ID: <5d97da4d86db258fdc9b20be3c12588089e17da2.camel@redhat.com>
+Subject: Re: [PATCH v5 0/5] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+From:   Qian Cai <cai@redhat.com>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org
+Date:   Thu, 17 Sep 2020 09:27:27 -0400
+In-Reply-To: <20200916073539.3552-1-rppt@kernel.org>
+References: <20200916073539.3552-1-rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A few archs like powerpc have different errno.h values for macros
-EDEADLOCK and EDEADLK. In code including both libc and linux versions of
-errno.h, this can result in multiple definitions of EDEADLOCK in the
-include chain. Definitions to the same value (e.g. seen with mips) do
-not raise warnings, but on powerpc there are redefinitions changing the
-value, which raise warnings and errors (if using "-Werror").
+On Wed, 2020-09-16 at 10:35 +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Hi,
+> 
+> This is an implementation of "secret" mappings backed by a file descriptor. 
+> I've dropped the boot time reservation patch for now as it is not strictly
+> required for the basic usage and can be easily added later either with or
+> without CMA.
 
-Guard against these redefinitions to avoid build errors like the following,
-first seen cross-compiling libbpf v5.8.9 for powerpc using GCC 8.4.0 with
-musl 1.1.24:
+On powerpc: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.config
 
-  In file included from ../../arch/powerpc/include/uapi/asm/errno.h:5,
-                   from ../../include/linux/err.h:8,
-                   from libbpf.c:29:
-  ../../include/uapi/asm-generic/errno.h:40: error: "EDEADLOCK" redefined [-Werror]
-   #define EDEADLOCK EDEADLK
+There is a compiling warning from the today's linux-next:
 
-  In file included from toolchain-powerpc_8540_gcc-8.4.0_musl/include/errno.h:10,
-                   from libbpf.c:26:
-  toolchain-powerpc_8540_gcc-8.4.0_musl/include/bits/errno.h:58: note: this is the location of the previous definition
-   #define EDEADLOCK       58
-
-  cc1: all warnings being treated as errors
-
-CC: Stable <stable@vger.kernel.org>
-Reported-by: Rosen Penev <rosenp@gmail.com>
-Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
----
-v1 -> v2:
- * clean up commit description formatting
-
-v2 -> v3: (per Michael Ellerman)
- * drop indeterminate 'Fixes' tags, request stable backports instead 
----
- arch/powerpc/include/uapi/asm/errno.h       | 1 +
- tools/arch/powerpc/include/uapi/asm/errno.h | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/arch/powerpc/include/uapi/asm/errno.h b/arch/powerpc/include/uapi/asm/errno.h
-index cc79856896a1..4ba87de32be0 100644
---- a/arch/powerpc/include/uapi/asm/errno.h
-+++ b/arch/powerpc/include/uapi/asm/errno.h
-@@ -2,6 +2,7 @@
- #ifndef _ASM_POWERPC_ERRNO_H
- #define _ASM_POWERPC_ERRNO_H
- 
-+#undef	EDEADLOCK
- #include <asm-generic/errno.h>
- 
- #undef	EDEADLOCK
-diff --git a/tools/arch/powerpc/include/uapi/asm/errno.h b/tools/arch/powerpc/include/uapi/asm/errno.h
-index cc79856896a1..4ba87de32be0 100644
---- a/tools/arch/powerpc/include/uapi/asm/errno.h
-+++ b/tools/arch/powerpc/include/uapi/asm/errno.h
-@@ -2,6 +2,7 @@
- #ifndef _ASM_POWERPC_ERRNO_H
- #define _ASM_POWERPC_ERRNO_H
- 
-+#undef	EDEADLOCK
- #include <asm-generic/errno.h>
- 
- #undef	EDEADLOCK
--- 
-2.25.1
+<stdin>:1532:2: warning: #warning syscall memfd_secret not implemented [-Wcpp]
 
