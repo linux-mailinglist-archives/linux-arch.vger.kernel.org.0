@@ -2,89 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4196226D752
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 11:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5537426D7D6
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 11:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgIQJCi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Sep 2020 05:02:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47224 "EHLO mail.kernel.org"
+        id S1726200AbgIQJkU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Sep 2020 05:40:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:43330 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726333AbgIQJCf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 17 Sep 2020 05:02:35 -0400
-Received: from gaia (unknown [31.124.44.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B24B820770;
-        Thu, 17 Sep 2020 09:02:32 +0000 (UTC)
-Date:   Thu, 17 Sep 2020 10:02:30 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        libc-alpha@sourceware.org
-Subject: Re: [PATCH v9 29/29] arm64: mte: Add Memory Tagging Extension
- documentation
-Message-ID: <20200917090229.GA10662@gaia>
-References: <20200904103029.32083-1-catalin.marinas@arm.com>
- <20200904103029.32083-30-catalin.marinas@arm.com>
- <20200917081107.GA29031@willie-the-truck>
+        id S1726180AbgIQJkU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 17 Sep 2020 05:40:20 -0400
+X-Greylist: delayed 633 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 05:40:19 EDT
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F40A101E;
+        Thu, 17 Sep 2020 02:29:46 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7C733F718;
+        Thu, 17 Sep 2020 02:29:44 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 10:29:39 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        George Cherian <george.cherian@marvell.com>,
+        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v2 3/3] asm-generic/io.h: Fix !CONFIG_GENERIC_IOMAP
+ pci_iounmap() implementation
+Message-ID: <20200917092939.GA1629@e121166-lin.cambridge.arm.com>
+References: <20200915093203.16934-1-lorenzo.pieralisi@arm.com>
+ <cover.1600254147.git.lorenzo.pieralisi@arm.com>
+ <a9daf8d8444d0ebd00bc6d64e336ec49dbb50784.1600254147.git.lorenzo.pieralisi@arm.com>
+ <20200916145111.GB3122@gaia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200917081107.GA29031@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200916145111.GB3122@gaia>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 09:11:08AM +0100, Will Deacon wrote:
-> On Fri, Sep 04, 2020 at 11:30:29AM +0100, Catalin Marinas wrote:
-> > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+On Wed, Sep 16, 2020 at 03:51:11PM +0100, Catalin Marinas wrote:
+> On Wed, Sep 16, 2020 at 12:06:58PM +0100, Lorenzo Pieralisi wrote:
+> > For arches that do not select CONFIG_GENERIC_IOMAP, the current
+> > pci_iounmap() function does nothing causing obvious memory leaks
+> > for mapped regions that are backed by MMIO physical space.
 > > 
-> > Memory Tagging Extension (part of the ARMv8.5 Extensions) provides
-> > a mechanism to detect the sources of memory related errors which
-> > may be vulnerable to exploitation, including bounds violations,
-> > use-after-free, use-after-return, use-out-of-scope and use before
-> > initialization errors.
+> > In order to detect if a mapped pointer is IO vs MMIO, a check must made
+> > available to the pci_iounmap() function so that it can actually detect
+> > whether the pointer has to be unmapped.
 > > 
-> > Add Memory Tagging Extension documentation for the arm64 linux
-> > kernel support.
+> > In configurations where CONFIG_HAS_IOPORT_MAP && !CONFIG_GENERIC_IOMAP,
+> > a mapped port is detected using an ioport_map() stub defined in
+> > asm-generic/io.h.
 > > 
-> > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
+> > Use the same logic to implement a stub (ie __pci_ioport_unmap()) that
+> > detects if the passed in pointer in pci_iounmap() is IO vs MMIO to
+> > iounmap conditionally and call it in pci_iounmap() fixing the issue.
+> > 
+> > Leave __pci_ioport_unmap() as a NOP for all other config options.
+> > 
+> > Reported-by: George Cherian <george.cherian@marvell.com>
+> > Link: https://lore.kernel.org/lkml/20200905024811.74701-1-yangyingliang@huawei.com
+> > Link: https://lore.kernel.org/lkml/20200824132046.3114383-1-george.cherian@marvell.com
+> > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: George Cherian <george.cherian@marvell.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Yang Yingliang <yangyingliang@huawei.com>
+> > ---
+> >  include/asm-generic/io.h | 39 +++++++++++++++++++++++++++------------
+> >  1 file changed, 27 insertions(+), 12 deletions(-)
 > 
-> I'm taking this to mean that Szabolcs is happy with the proposed ABI --
-> please shout if that's not the case!
+> This works for me. The only question I have is whether pci_iomap.h is
+> better than io.h for __pci_ioport_unmap(). These headers are really
+> confusing.
 
-I think Szabolcs is still on holiday. To summarise the past threads,
-AFAICT he's happy with this per-thread control ABI but the discussion
-went on whether to expand it in the future (with a new bit) to
-synchronise the tag checking mode across all threads of a process. This
-adds some complications for the kernel as it needs an IPI to the other
-CPUs to set SCTLR_EL1 and it's also racy with multiple threads
-requesting different modes.
+Yes they are, in total honesty there is much more to do to make them
+sane, this patch is just a band-aid.
 
-Now, in the glibc land, if the tag check mode is controlled via
-environment variables, the dynamic loader can set this at process start
-while still in single-threaded mode and not touch it at run-time. The
-MTE checking can still be enabled at run-time, per mapped memory range
-via the PROT_MTE flag. This approach doesn't require any additional
-changes to the current patches. But it's for Szabolcs to confirm once
-he's back.
+I thought about moving this stuff into pci_iomap.h, though that
+file is included _independently_ from io.h from some arches so
+I tried to keep everything in io.h to minimize disruption.
 
-> Wasn't there a man page kicking around too? Would be good to see that
-> go upstream (to the manpages project, of course).
+We can merge this patch - since it is a fix after all - and then I can
+try to improve the whole pci_iounmap() includes.
 
-Dave started writing one for the tagged address ABI, not sure where that
-is. For the MTE additions, we are waiting for the ABI to be upstreamed.
+> Either way:
+> 
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
--- 
-Catalin
+Thanks a lot. I'd appreciate a tested-by from the George as he is
+the one who reported the problem.
+
+Lorenzo
