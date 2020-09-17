@@ -2,82 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F149926DF58
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 17:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA6726E0A6
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 18:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727879AbgIQPOX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Sep 2020 11:14:23 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:52283 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727464AbgIQPLv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Sep 2020 11:11:51 -0400
-X-Greylist: delayed 316 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 11:11:46 EDT
-Received: from mail-qk1-f176.google.com ([209.85.222.176]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MPosX-1k4oS230h1-00MvZo; Thu, 17 Sep 2020 17:06:09 +0200
-Received: by mail-qk1-f176.google.com with SMTP id o16so2503067qkj.10;
-        Thu, 17 Sep 2020 08:06:09 -0700 (PDT)
-X-Gm-Message-State: AOAM530uPMI73zvlf6p4VX51VC/BBLDZoBNraF9NJ/JlDTmUnz6m6ALE
-        oEGjREXJVWOi4OkqHEVTxCdOspb43VVHvatQv3g=
-X-Google-Smtp-Source: ABdhPJzKte3sE0w3grmNzAcZz6I6dO+iCU7vaqRU7ZPNRSPiGZWy3ZkwDFx390y2hVXA2c946+2P8Nzpm+An38NI1VY=
-X-Received: by 2002:a05:620a:15a7:: with SMTP id f7mr26786546qkk.3.1600355168294;
- Thu, 17 Sep 2020 08:06:08 -0700 (PDT)
+        id S1728302AbgIQQ0B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Sep 2020 12:26:01 -0400
+Received: from foss.arm.com ([217.140.110.172]:48810 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728496AbgIQQZZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 17 Sep 2020 12:25:25 -0400
+X-Greylist: delayed 561 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 12:25:25 EDT
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76B0D11D4;
+        Thu, 17 Sep 2020 09:15:57 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AAA243F68F;
+        Thu, 17 Sep 2020 09:15:55 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 17:15:53 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v9 29/29] arm64: mte: Add Memory Tagging Extension
+ documentation
+Message-ID: <20200917161550.GA6642@arm.com>
+References: <20200904103029.32083-1-catalin.marinas@arm.com>
+ <20200904103029.32083-30-catalin.marinas@arm.com>
+ <20200917081107.GA29031@willie-the-truck>
+ <20200917090229.GA10662@gaia>
 MIME-Version: 1.0
-References: <20200917074159.2442167-1-hch@lst.de> <20200917074159.2442167-2-hch@lst.de>
-In-Reply-To: <20200917074159.2442167-2-hch@lst.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 17 Sep 2020 17:05:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3+qdbGzWdi=PNL+goHDK9M=Y65p=UYTW=ze8PuN=KS_A@mail.gmail.com>
-Message-ID: <CAK8P3a3+qdbGzWdi=PNL+goHDK9M=Y65p=UYTW=ze8PuN=KS_A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] compat: lift compat_s64 and compat_u64 to <asm-generic/compat.h>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        Jan Kara <jack@suse.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:+kyRdoGXMGcCoFFC2gvTHjAv7SkQshfKd/Um6FcFTo8Qn+GeSAo
- oOAy5+6t8LQKXIpKs71bAw8AFw1iRKGHN4lAgIB/YCjlUvC3ry9a12LGmsIgZXijB88vNd7
- RbvBybC/W3/2cfui3Zl+iCXmnDwD8g/kcU2HZWGsBl+i//lF/oKRbrADyjo5NLZBqNue5jw
- ZOgV5f4oO1PvcgSPMJ+9g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mOo9i8sIh1k=:PP27u5MgpCHKe0ejjq6zOJ
- 0Nqw0ZPKfl0F+SPI/M5VW+dBb6I6ebHhsM9So4z/ZvX57wnLp9fKEbzjf/bWN7NGtqSSu/d1v
- MiigtWR0aB4zNJhFwMAuDsZhUamdRahHBIUUr/SzxrjZ/pv7YLo3r2c4ijxl713YWTSYK2gwH
- CeRC3k85gjAHlc39g4k5Bau4Ylbe6SQGEaKvB2hCQd2Dp5uaUbIb4n4X5vExa/0kUFNAS65Zn
- 2fL3JCRQx0THOZb7A4rut2OIRRM41H4Bgzp9vS9HA8gxhiEFdIsM3+s9GTNA/b4T6b2W3MpKu
- Ajy5ODzpgZTStxLsyQfZ/1zYXhJXGzlmnrrDyLrS2faQV0Szgmy/+tBfH2C6CBP2ET/3zp2bs
- vffioUiYscYw7YFnULPfe4MBsGYvhtUK3vc9G00JF/4mlB+2KhqAwscm5kO0CmLxrjoTD/B49
- ZEwnZVKLuBGzrc0QOh3aMV5+SZKkTvaj5/m0Ihi3RkM2BjoExyQIQ8PVq27Qrj2/JjbxC/DUM
- sUDAEUhjqi1lOwNufa9xxwPvIqM44lr+OZnKSpn4sPeJocQP2QXK42eLUrVYokDnFhnudU89y
- oR5MCqhOY65ICgLGcyXanPy5aYJY63hS/dg2Z50RYPOBqaFPbRnBOZOiSo/GSiSr60lsv825x
- DULdu07eJN5Q+TTCJoHzZPpL8jD6ppRc4+hVWcKz5IGgO7ONJ1OCEd6y7smPFQbGB9AcE5ztd
- D4HRTod+4j2tX5Hye9EhyBraDmWBuSfTkSQOReX00jcdI8duhECo9wjqOoC1OG0cv22wWYgLt
- QmdDXADF0ZhDq+Nm/lOlZcd9RndVAEi17pS3PINIiI0gBwSgZp+GAn6KNSGo+ZppPNGh0toit
- hjTcIs2lUofrt2UkoCjW5MkzRrwxfyx0vt9xK7yGgrlIFDxQnoOSSI3cEfvaaDZz11UkJLQwy
- Y4KwUiTZB2KpxG2+/XajqtTBBjwT/ChWQjbMreSKNuWKeb508+WUL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200917090229.GA10662@gaia>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 9:46 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> lift the compat_s64 and compat_u64 definitions into common code using the
-> COMPAT_FOR_U64_ALIGNMENT symbol for the x86 special case.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/arm64/include/asm/compat.h   | 2 --
->  arch/mips/include/asm/compat.h    | 2 --
->  arch/parisc/include/asm/compat.h  | 2 --
->  arch/powerpc/include/asm/compat.h | 2 --
->  arch/s390/include/asm/compat.h    | 2 --
->  arch/sparc/include/asm/compat.h   | 3 +--
->  arch/x86/include/asm/compat.h     | 2 --
->  include/asm-generic/compat.h      | 8 ++++++++
->  8 files changed, 9 insertions(+), 14 deletions(-)
+On Thu, Sep 17, 2020 at 10:02:30AM +0100, Catalin Marinas wrote:
+> On Thu, Sep 17, 2020 at 09:11:08AM +0100, Will Deacon wrote:
+> > On Fri, Sep 04, 2020 at 11:30:29AM +0100, Catalin Marinas wrote:
+> > > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > > 
+> > > Memory Tagging Extension (part of the ARMv8.5 Extensions) provides
+> > > a mechanism to detect the sources of memory related errors which
+> > > may be vulnerable to exploitation, including bounds violations,
+> > > use-after-free, use-after-return, use-out-of-scope and use before
+> > > initialization errors.
+> > > 
+> > > Add Memory Tagging Extension documentation for the arm64 linux
+> > > kernel support.
+> > > 
+> > > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > > Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
+> > 
+> > I'm taking this to mean that Szabolcs is happy with the proposed ABI --
+> > please shout if that's not the case!
+> 
+> I think Szabolcs is still on holiday. To summarise the past threads,
+> AFAICT he's happy with this per-thread control ABI but the discussion
+> went on whether to expand it in the future (with a new bit) to
+> synchronise the tag checking mode across all threads of a process. This
+> adds some complications for the kernel as it needs an IPI to the other
+> CPUs to set SCTLR_EL1 and it's also racy with multiple threads
+> requesting different modes.
+> 
+> Now, in the glibc land, if the tag check mode is controlled via
+> environment variables, the dynamic loader can set this at process start
+> while still in single-threaded mode and not touch it at run-time. The
+> MTE checking can still be enabled at run-time, per mapped memory range
+> via the PROT_MTE flag. This approach doesn't require any additional
+> changes to the current patches. But it's for Szabolcs to confirm once
+> he's back.
+> 
+> > Wasn't there a man page kicking around too? Would be good to see that
+> > go upstream (to the manpages project, of course).
+> 
+> Dave started writing one for the tagged address ABI, not sure where that
+> is. For the MTE additions, we are waiting for the ABI to be upstreamed.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+The tagged address ABI control stuff is upstream in the man-pages-5.08
+release.
+
+I don't think anyone drafted anything for MTE yet.  Do we consider the
+MTE ABI to be sufficiently stable now for it to be worth starting
+drafting something?
+
+Cheers
+---Dave
