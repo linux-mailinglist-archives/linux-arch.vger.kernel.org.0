@@ -2,67 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 167C026DDA1
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 16:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9CE26DDF6
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Sep 2020 16:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgIQN5D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Sep 2020 09:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727062AbgIQNzN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Sep 2020 09:55:13 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472ABC061353;
-        Thu, 17 Sep 2020 06:42:42 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id h4so2214905ioe.5;
-        Thu, 17 Sep 2020 06:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ji5GyYOvkMw4A9qgT2Zx0fOgOYQE3g778wmyg/8KNsE=;
-        b=FoBoQ2eWWaQlmHLUSQrSGBJQvfqmTrE91MLBNHkkSttrMmFMW751RMcyckIjdgvXH9
-         T7UloJt3DDXAuNWbVsqOOatZ/HvC9EPzk+8zITnxgNr6ZOOp/7u3GaUkbNFGVMz5qekr
-         Rffu08s2K1M40aGA+o9jsE71v0AuEb+h/gMlvYGmbCl0/rZLt1M7P/+97MpKwi0eRo9Q
-         //nbsXLu8KrnT0OzESfrNKhBEbRpQhEYIirF7h6bXFrAsFwsryFLYEEhVrk9OEXqD9vG
-         U2wZ+boWaqwX0LfsIAkWzddk7B8uT5+Jo6tqoKHSQYGXmPJSto2HO5MkUCXz6Z2wzFSm
-         oVrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ji5GyYOvkMw4A9qgT2Zx0fOgOYQE3g778wmyg/8KNsE=;
-        b=E+4sMDmFQ1XfXRyL5EnLW8nB1v5Nsv2Zk7LyABdcqTpRTI+NVZLRuDZTIZ+s0lEJMD
-         I8Rwk9jrqkIJ3nzV0zGVHGBkIbQEiwMnIuXhmtyZ4uP6J3E4Yi2dV6+EBkEYaJzaIcQ9
-         egGFvOBRcV/+E9CCc+xLAwFzKVlmkdLwYZqpAZK9DIVNKmRfEu0isdU5B4xom4mdhcA8
-         kMKn4NPA9Tyj0xVqsOO8bOZpoQyZTCBHHvkzDOEgPb2ysLCDgHW5OXJrl96NMkyNVifr
-         obm44/M++Xv1Zpit+WHIImf6N4feSpj19lI0ahUyAFEGP+l5yqnjl5RRSKc9IngRUee1
-         1zxw==
-X-Gm-Message-State: AOAM533FBL3GQM8d/LE8x0oSU1S6F5RlJ1tEcmGs/Vjqj1MY8FExtC6o
-        L+TH6epPMYOw43DlFiIicp5xmHbNGTKKKSdjcvc=
-X-Google-Smtp-Source: ABdhPJwUgU/1gEY/ot9lktlSpJ9NTKG5x6liAdHqoHrzceWdJd3GeH6DCgxrHl9kcpJQf6UAYXH7TbXuZZcRhwzghbg=
-X-Received: by 2002:a05:6638:cdc:: with SMTP id e28mr26553830jak.100.1600350161575;
- Thu, 17 Sep 2020 06:42:41 -0700 (PDT)
+        id S1727182AbgIQOM1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Sep 2020 10:12:27 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:53259 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727338AbgIQOLY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Sep 2020 10:11:24 -0400
+X-Greylist: delayed 396 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 10:11:22 EDT
+Received: from mail-qk1-f172.google.com ([209.85.222.172]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MzQbw-1kezk02V1c-00vT3E; Thu, 17 Sep 2020 16:01:44 +0200
+Received: by mail-qk1-f172.google.com with SMTP id w12so2272381qki.6;
+        Thu, 17 Sep 2020 07:01:44 -0700 (PDT)
+X-Gm-Message-State: AOAM5304ot5kHZJGBuPfXXyEVYJz8pFJs/lOsn8EqzaW5hHUtHPcAlhv
+        G51303jxTG3cAMoantkRutHn42/6JqqP4xjlvjk=
+X-Google-Smtp-Source: ABdhPJypvKt5K6vsRgjllHkNp0imyN+bOqaU9zpMG48JdwZ9KbFYFADzd403hy36sDpE2nZf6WeaV+/92apRwmmxTPo=
+X-Received: by 2002:a37:a495:: with SMTP id n143mr28117696qke.394.1600351303235;
+ Thu, 17 Sep 2020 07:01:43 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200916074214.995128-1-Tony.Ambardar@gmail.com>
  <20200917000757.1232850-1-Tony.Ambardar@gmail.com> <87363gpqhz.fsf@mpe.ellerman.id.au>
 In-Reply-To: <87363gpqhz.fsf@mpe.ellerman.id.au>
-From:   Tony Ambardar <tony.ambardar@gmail.com>
-Date:   Thu, 17 Sep 2020 06:42:29 -0700
-Message-ID: <CAPGftE-zSi=7mdf9dCGyn5Dio3fpbTuKT+qKQRvDd-1pGgCb5g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 17 Sep 2020 16:01:27 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3FVoDzNb1TOA6cRQDdEc+st7KkBL70t0FeStEziQG4+A@mail.gmail.com>
+Message-ID: <CAK8P3a3FVoDzNb1TOA6cRQDdEc+st7KkBL70t0FeStEziQG4+A@mail.gmail.com>
 Subject: Re: [PATCH v2] powerpc: fix EDEADLOCK redefinition error in uapi/asm/errno.h
 To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+Cc:     Tony Ambardar <tony.ambardar@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Rosen Penev <rosenp@gmail.com>,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Rosen Penev <rosenp@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:BiDI7RSugMs1bexsxNS7YdcLk/DPBsz4XJ9rjWVFJysPhzJ6DqT
+ 2XQbp5EiiavA/xv3Yb1leIcOlkzG1yJV/ShPE6IGfIIqfGHbgZ8UDvALmjcNVvJvBza0wtC
+ YNGjeYLC+LX8QDbxbTuk3g6R1N55bR8nMJZp997Qjl7gckYG0HrUKYD8Mau5dvuL6z4zm7e
+ 8fzVYGR6nqAnUv4z4Ac+Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:OiyOedjSjEE=:kPQxdXO/jYk+i7pGOq+NOs
+ 8iBpb46yH7KUPvnmxE48dZZ6h9ntMxYgASzNzDIS78c95nZkGrhBcfqrZFKAlnanMeB/6T5sb
+ 1K838KThHOXS9Tkz7NGxHANEUrHUnuXuQxVG8oYWY3Q6RRhr6bO2vHaAUvKaTtc7vLZsJ/gcG
+ DH7Hg0rSy4YUZx+u3esU/BuNzP8w3MTRIVcX84c4Oz1awHe5kheWcw+ZEwXjoj7Bl/whbMnTr
+ tHynzRcu3zUs5qSEbhwHSsRR6xEuQ+pR2vVKr2gTaUuX1qhZiEp51YmM9QonAb6F9kRdivWae
+ rv4TFkHhICzJzafoRfdcomlctOy010EsRtECtBMCyLEILkPwtTAz9LrTeXj5KKLwSQSNlWVvE
+ 4qMHT0rEwYJovG1Cbs934v+BlZIiH/z19D5FnZl1Njspon87n+oIjlBOJKuoMJgJoiiN1zi6+
+ s9SWURInct36SwarZ9xOylGKZxprzwO2/DTxUOk0vswFJwpOze6qknmwAu6CGXh0m0uYV5SOl
+ lejU7G778zSvllGPGASW/6L8UUyV31kZncqlYGzV60YKMQhumjz0lEfV88L/jybqfQll+TfKa
+ zbkwgOMDN+OiT011b+VI9Z9Hku8J3TVS792YmWkG/fB2daVHx8G9X0eFegK+ESmiIsMTyZwsT
+ I/oHZjKsEvAuo2w/fYQQbaWQFTsqYWshuF9QOcikoIhtfz6d2K7/NlrwmO6mV6VHX92rPEu8W
+ +4sWHHAZp24Cof3U8w2G0y98vNhOF5kymYr3ko4M0PLr6H9rAEiLpCkXMarurBiAuxkiOhqeC
+ KD6k1NBw9RvYkEbfUofAVgwsXdg5CSyA3mw7kANq0lRqrjEvz1DPZXwLEY5Ygl9lX8mCQ02
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 17 Sep 2020 at 04:55, Michael Ellerman <mpe@ellerman.id.au> wrote:
+On Thu, Sep 17, 2020 at 1:55 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
 >
 > [ Cc += linux-arch & Arnd ]
 >
@@ -72,8 +72,6 @@ On Thu, 17 Sep 2020 at 04:55, Michael Ellerman <mpe@ellerman.id.au> wrote:
 > I've Cc'ed linux-arch and Arnd who look after the asm-generic headers,
 > which this is slightly related to, just in case.
 >
-I agree with the caution and would welcome any other insights.
-
 > One minor comment below.
 >
 > Tony Ambardar <tony.ambardar@gmail.com> writes:
@@ -120,48 +118,23 @@ I agree with the caution and would welcome any other insights.
 >
 > So we should probably drop the Fixes tags and just Cc: stable, that
 > means please backport it as far back as possible.
->
-Yes, you're right. Those two commits were simply where I stopped tracing back
-the long chain. I'll drop them as you suggest and request a backport instead in
-the next version of the patch.
 
-Thanks for your feedback!
-> cheers
->
->
-> > Reported-by: Rosen Penev <rosenp@gmail.com>
-> > Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
-> > ---
-> > v1 -> v2:
-> >  * clean up commit description formatting
-> > ---
-> >  arch/powerpc/include/uapi/asm/errno.h       | 1 +
-> >  tools/arch/powerpc/include/uapi/asm/errno.h | 1 +
-> >  2 files changed, 2 insertions(+)
-> >
-> > diff --git a/arch/powerpc/include/uapi/asm/errno.h b/arch/powerpc/include/uapi/asm/errno.h
-> > index cc79856896a1..4ba87de32be0 100644
-> > --- a/arch/powerpc/include/uapi/asm/errno.h
-> > +++ b/arch/powerpc/include/uapi/asm/errno.h
-> > @@ -2,6 +2,7 @@
-> >  #ifndef _ASM_POWERPC_ERRNO_H
-> >  #define _ASM_POWERPC_ERRNO_H
-> >
-> > +#undef       EDEADLOCK
-> >  #include <asm-generic/errno.h>
-> >
-> >  #undef       EDEADLOCK
-> > diff --git a/tools/arch/powerpc/include/uapi/asm/errno.h b/tools/arch/powerpc/include/uapi/asm/errno.h
-> > index cc79856896a1..4ba87de32be0 100644
-> > --- a/tools/arch/powerpc/include/uapi/asm/errno.h
-> > +++ b/tools/arch/powerpc/include/uapi/asm/errno.h
-> > @@ -2,6 +2,7 @@
-> >  #ifndef _ASM_POWERPC_ERRNO_H
-> >  #define _ASM_POWERPC_ERRNO_H
-> >
-> > +#undef       EDEADLOCK
-> >  #include <asm-generic/errno.h>
-> >
-> >  #undef       EDEADLOCK
-> > --
-> > 2.25.1
+I can see that the two numbers (35 and 58) were consistent across
+multiple architectures (i386, m68k, ppc32) up to linux-2.0.1, while
+other architectures had two unique numbers (alpha, mips, sparc)
+at the time, and sparc had BSD and Solaris compatible numbers
+in addition.
+
+In linux-2.0.2, alpha and i386 got changed to use 35 for both,
+but the other architectures remained unchanged. All later
+architectures followed x86 in using the same number for both.
+
+I foudn a message about tcl breaking at compile time when
+it changed:
+http://lkml.iu.edu/hypermail/linux/kernel/9607.3/0500.html
+
+The errno man page says they are supposed to be synonyms,
+and glibc defines it that way, while musl uses the numbers
+from the kernel.
+
+        Arnd
