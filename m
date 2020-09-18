@@ -2,123 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C96027059C
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 21:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E801A2705DC
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 21:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgIRTdJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 15:33:09 -0400
-Received: from mga18.intel.com ([134.134.136.126]:42713 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbgIRTdI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Sep 2020 15:33:08 -0400
-IronPort-SDR: 4Jdaa5zBqlNpurRffkxbkYKgANtHStfssw7f7vlvDfb/ohC+VmLHBOLIB4MuZj2w9y6QytT4CD
- zMQu7jxKyPGg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9748"; a="147767516"
-X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="147767516"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 12:33:02 -0700
-IronPort-SDR: JoS40OUIYFiXsmR7tmmkOnU8epFjfFhTgeTIT/YU+l3n5Pnnp6wLB53CJNIzHfePCS9jOL/tnI
- 0EhZ3stzUgjA==
-X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="509007393"
-Received: from eliommar-mobl.amr.corp.intel.com (HELO [10.212.109.123]) ([10.212.109.123])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 12:32:58 -0700
-Subject: Re: [PATCH v12 8/8] x86: Disallow vsyscall emulation when CET is
- enabled
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-References: <20200918192312.25978-1-yu-cheng.yu@intel.com>
- <20200918192312.25978-9-yu-cheng.yu@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzShEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gPGRhdmVAc3I3MS5uZXQ+wsF7BBMBAgAlAhsDBgsJCAcDAgYVCAIJ
- CgsEFgIDAQIeAQIXgAUCTo3k0QIZAQAKCRBoNZUwcMmSsMO2D/421Xg8pimb9mPzM5N7khT0
- 2MCnaGssU1T59YPE25kYdx2HntwdO0JA27Wn9xx5zYijOe6B21ufrvsyv42auCO85+oFJWfE
- K2R/IpLle09GDx5tcEmMAHX6KSxpHmGuJmUPibHVbfep2aCh9lKaDqQR07gXXWK5/yU1Dx0r
- VVFRaHTasp9fZ9AmY4K9/BSA3VkQ8v3OrxNty3OdsrmTTzO91YszpdbjjEFZK53zXy6tUD2d
- e1i0kBBS6NLAAsqEtneplz88T/v7MpLmpY30N9gQU3QyRC50jJ7LU9RazMjUQY1WohVsR56d
- ORqFxS8ChhyJs7BI34vQusYHDTp6PnZHUppb9WIzjeWlC7Jc8lSBDlEWodmqQQgp5+6AfhTD
- kDv1a+W5+ncq+Uo63WHRiCPuyt4di4/0zo28RVcjtzlGBZtmz2EIC3vUfmoZbO/Gn6EKbYAn
- rzz3iU/JWV8DwQ+sZSGu0HmvYMt6t5SmqWQo/hyHtA7uF5Wxtu1lCgolSQw4t49ZuOyOnQi5
- f8R3nE7lpVCSF1TT+h8kMvFPv3VG7KunyjHr3sEptYxQs4VRxqeirSuyBv1TyxT+LdTm6j4a
- mulOWf+YtFRAgIYyyN5YOepDEBv4LUM8Tz98lZiNMlFyRMNrsLV6Pv6SxhrMxbT6TNVS5D+6
- UorTLotDZKp5+M7BTQRUY85qARAAsgMW71BIXRgxjYNCYQ3Xs8k3TfAvQRbHccky50h99TUY
- sqdULbsb3KhmY29raw1bgmyM0a4DGS1YKN7qazCDsdQlxIJp9t2YYdBKXVRzPCCsfWe1dK/q
- 66UVhRPP8EGZ4CmFYuPTxqGY+dGRInxCeap/xzbKdvmPm01Iw3YFjAE4PQ4hTMr/H76KoDbD
- cq62U50oKC83ca/PRRh2QqEqACvIH4BR7jueAZSPEDnzwxvVgzyeuhwqHY05QRK/wsKuhq7s
- UuYtmN92Fasbxbw2tbVLZfoidklikvZAmotg0dwcFTjSRGEg0Gr3p/xBzJWNavFZZ95Rj7Et
- db0lCt0HDSY5q4GMR+SrFbH+jzUY/ZqfGdZCBqo0cdPPp58krVgtIGR+ja2Mkva6ah94/oQN
- lnCOw3udS+Eb/aRcM6detZr7XOngvxsWolBrhwTQFT9D2NH6ryAuvKd6yyAFt3/e7r+HHtkU
- kOy27D7IpjngqP+b4EumELI/NxPgIqT69PQmo9IZaI/oRaKorYnDaZrMXViqDrFdD37XELwQ
- gmLoSm2VfbOYY7fap/AhPOgOYOSqg3/Nxcapv71yoBzRRxOc4FxmZ65mn+q3rEM27yRztBW9
- AnCKIc66T2i92HqXCw6AgoBJRjBkI3QnEkPgohQkZdAb8o9WGVKpfmZKbYBo4pEAEQEAAcLB
- XwQYAQIACQUCVGPOagIbDAAKCRBoNZUwcMmSsJeCEACCh7P/aaOLKWQxcnw47p4phIVR6pVL
- e4IEdR7Jf7ZL00s3vKSNT+nRqdl1ugJx9Ymsp8kXKMk9GSfmZpuMQB9c6io1qZc6nW/3TtvK
- pNGz7KPPtaDzvKA4S5tfrWPnDr7n15AU5vsIZvgMjU42gkbemkjJwP0B1RkifIK60yQqAAlT
- YZ14P0dIPdIPIlfEPiAWcg5BtLQU4Wg3cNQdpWrCJ1E3m/RIlXy/2Y3YOVVohfSy+4kvvYU3
- lXUdPb04UPw4VWwjcVZPg7cgR7Izion61bGHqVqURgSALt2yvHl7cr68NYoFkzbNsGsye9ft
- M9ozM23JSgMkRylPSXTeh5JIK9pz2+etco3AfLCKtaRVysjvpysukmWMTrx8QnI5Nn5MOlJj
- 1Ov4/50JY9pXzgIDVSrgy6LYSMc4vKZ3QfCY7ipLRORyalFDF3j5AGCMRENJjHPD6O7bl3Xo
- 4DzMID+8eucbXxKiNEbs21IqBZbbKdY1GkcEGTE7AnkA3Y6YB7I/j9mQ3hCgm5muJuhM/2Fr
- OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
- ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
- z5cecg==
-Message-ID: <f02b511d-1d48-6dea-d2e6-84d58e21e6cd@intel.com>
-Date:   Fri, 18 Sep 2020 12:32:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726262AbgIRT7L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 15:59:11 -0400
+Received: from mout.kundenserver.de ([212.227.126.187]:59551 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726253AbgIRT7K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 15:59:10 -0400
+Received: from mail-qv1-f53.google.com ([209.85.219.53]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1M7aqD-1kOa8H2TiH-0081tZ; Fri, 18 Sep 2020 21:59:08 +0200
+Received: by mail-qv1-f53.google.com with SMTP id j3so3588296qvi.7;
+        Fri, 18 Sep 2020 12:59:08 -0700 (PDT)
+X-Gm-Message-State: AOAM530ZeA+inWt9/NUkL62YrpIHKAwi+jcnZKhF3N9L3B/PbdVnsya/
+        oi0z+HavLMw4yRHXwDKid3mKo/SHozliPNXw794=
+X-Google-Smtp-Source: ABdhPJytBHBh/fQMXo7+68dbrxEABzvlGs5A0AsCoE1YgJGiTA+FdkuyePsZid8ag08tntnusNEq5NJL9EnWegFjyH8=
+X-Received: by 2002:a0c:b902:: with SMTP id u2mr33843869qvf.7.1600459147303;
+ Fri, 18 Sep 2020 12:59:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200918192312.25978-9-yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200915093203.16934-1-lorenzo.pieralisi@arm.com>
+ <cover.1600254147.git.lorenzo.pieralisi@arm.com> <20200918114508.GA20110@e121166-lin.cambridge.arm.com>
+In-Reply-To: <20200918114508.GA20110@e121166-lin.cambridge.arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 18 Sep 2020 21:58:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1f9Qj+yhMB4QaAu36ZUQ1p6oKHm2MZQ3zU31q6xmymGA@mail.gmail.com>
+Message-ID: <CAK8P3a1f9Qj+yhMB4QaAu36ZUQ1p6oKHm2MZQ3zU31q6xmymGA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Fix pci_iounmap() on !CONFIG_GENERIC_IOMAP
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        George Cherian <george.cherian@marvell.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:VRIHA3kLYuVnqBOmVjZxDHpU5iuxIlHABaeAykjpWRJG87XIlvQ
+ nzm3sJNPdfFThXmkqyLysreEc+3FT/n9/9a3iFPzE1VldoYL3pSVbI7xm1N5t0Ntdj2H3E5
+ 0wns+4uby2aVC8sMbV7XixaW/OoRhu52L49WST1aoWuqFsS75RJmLdKhgUHKZ4FxiCNF5oG
+ IDiSkaNIyG8J5Sglb2QTQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sGyc9ZK48K0=:MgR91tZDwpTRSSaUl5QwuW
+ w7NJlzbSeEqaw1gKql7IuPwyNTolfpxmJnzLD+kD6jG27ciar1zrqhU4B+qMayu7h82FWbZuj
+ qyy4qh9fJdjSGWQYIJmFZUDhi0LiZafpDYE0uSQH3iUfVrfoSyTj4QZUZ2ixbSlQxe46nBKl1
+ YwSiLMC6CxU1SQFzNLaXZpV3vX0u8aa1JaACYzKyY8jX40J9RSb34ZvKcb4/XwwA2McF12O25
+ vBoSilcB0ynE8LGYTPu5yvGmZ2ettPn152/sEwjIHLrqwB5G99W3tM/ZV9Y7f/eetDjUTn1WM
+ MjnE0qyfvsWJ99AKefuOpqhtTrnxmdVFUEzGnif2H2FBGhem//UViQhLaEmzkakIxp5M5KWB8
+ LwvoRSg4lwxc5lx6yP7FZoGfb9OPPVvEvCCr1b02mWiqo99uRTIqfatDXoL33U3eZZHYNXWQa
+ q6ApbB2LOjGq2vXAHjaRdR+vA4frdNzk1nLikZvpKxDPqRs8UY87kRmzxojd+KCqHznclxjmq
+ iEdOKYfQWHJsjDDLWMqnWX1ezXcNtmqNiDVPjCm80J++O8c5PfWsCFz15S8CT2Tof28M5VeZh
+ Wtn4DYEEi0aKbE2WU6t+jkg5idcgqz10aSPCnvwUq5i8/rrexesjJ8Kjh32C/Z9LMFAeV3t1n
+ mEDPp/ucOB6kGTGY4boICZpP2ghp4lqOrj63nrmqYLUQ6jR4zz4ff9Z8WyubjGtlA+IUR2Pjq
+ yvpC9n8swLV2z+lVd0A/hlN6cpp/qaBs3Ez0ccHvClombF27bt2yVQQpb6ePRaQFG+V5HMYnA
+ gc+Zj337DEaXH0oShl2TKT/dZYbSoqjylcy8HzbE5SaJEWS+lyFc7rdYrzbytwIto5oL/pF
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/18/20 12:23 PM, Yu-cheng Yu wrote:
-> Emulation of the legacy vsyscall page is required by some programs
-> built before 2013.  Newer programs after 2013 don't use it.
-> Disable vsyscall emulation when Control-flow Enforcement (CET) is
-> enabled to enhance security.
+On Fri, Sep 18, 2020 at 1:45 PM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
+> >
+> > Lorenzo Pieralisi (3):
+> >   sparc32: Remove useless io_32.h __KERNEL__ preprocessor guard
+> >   sparc32: Move ioremap/iounmap declaration before asm-generic/io.h
+> >     include
+> >   asm-generic/io.h: Fix !CONFIG_GENERIC_IOMAP pci_iounmap()
+> >     implementation
+> >
+> >  arch/sparc/include/asm/io_32.h | 17 ++++++---------
+> >  include/asm-generic/io.h       | 39 +++++++++++++++++++++++-----------
+> >  2 files changed, 34 insertions(+), 22 deletions(-)
+>
+> Arnd, David, Bjorn,
+>
+> I have got review/test tags, is it OK if we merge this series please ?
+>
+> Can we pull it in the PCI tree or you want it to go via a different
+> route upstream ?
+>
+> Please let me know.
 
-How does this "enhance security"?
+Going through the PCI tree sounds good to me, but I can
+take it through the asm-generic tree if Bjorn doesn't want to
+pick it up there.
 
-What is the connection between vsyscall emulation and CET?
+       Arnd
