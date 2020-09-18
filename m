@@ -2,605 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F51326FE68
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 15:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D2626FEF9
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 15:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbgIRNZ4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 09:25:56 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:57539 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726709AbgIRNZz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 09:25:55 -0400
-Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MZSJa-1jwjJY2ZGQ-00WUcO; Fri, 18 Sep 2020 15:24:54 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        kexec@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 4/4] mm: remove compat numa syscalls
-Date:   Fri, 18 Sep 2020 15:24:39 +0200
-Message-Id: <20200918132439.1475479-5-arnd@arndb.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200918132439.1475479-1-arnd@arndb.de>
-References: <20200918132439.1475479-1-arnd@arndb.de>
+        id S1726584AbgIRNoX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 09:44:23 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:5308 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725955AbgIRNoV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 09:44:21 -0400
+X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Sep 2020 09:44:17 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1600436660; x=1631972660;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=3fxeMydRj5LITwpOTJ8/5qGWnkDlQFvKc/JWPdaDvPg=;
+  b=knz3cvFZmu6aWoNx7lAksSxiCckqB28xQnxk+03HHiVndotMc2HP6KDB
+   L1ZWAJZOTYqk2PVmrTorPQ9/vFiCYcbAKu1vt/8iBiaZk8Hpl1z7qZY66
+   CxaCx65gKdHdIaTiENy6aMpypF93Hzypb129npz5CyZud/HoFgdtBXHzs
+   YfTgO0xNpKTl7RYqEXyF7UC6KORe9D2BUWI7dpLnB3E2A6vkrWDeiHITT
+   J97gVW3TqRjT79hPFPdk1kGLnAbMRPGgaqIYcVq1XJ0m+b7K6O2tLyFRN
+   JvLVNGxK9qfkUel1CqvT+P1i3bxIgN8b5o7sy1L9V0PtUDMUTDB0RUFDR
+   Q==;
+IronPort-SDR: CPLMGknDk2ZgueAKF8+r7NJjRrHOsMekEBPp4J/ivWXsRpgzeWBwzpohEgC2YUnvo1QxaIoRDR
+ AJNJY9J8UD4tqRTJH49nQx65Qe6gGNRaDrbSW2MW4h1YoKeSiGbCkjoKEoY6psHL7D2UgFTIjS
+ pzmy/0f1jpIzkBRaOJ27hPSoaqc4RXXCQTDqIZhTAY+isqw+VbJN4OG1hGKRMcymITix8hG17n
+ ulMGOmqFK9d961odT2W55IvxcEAXN0ZX3qXKXIiRyLGlp9jsxNApIKJIHaAXb6nfKZtZ/x08dG
+ c78=
+X-IronPort-AV: E=Sophos;i="5.77,274,1596470400"; 
+   d="scan'208";a="257396423"
+Received: from mail-bl2nam02lp2059.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) ([104.47.38.59])
+  by ob1.hgst.iphmx.com with ESMTP; 18 Sep 2020 21:37:07 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iLygZ3AenipCl8s0sqzldZbz19KiqKMdsmpj+wu9yzA3XdkHF4kdg0VImaygY89jRn182FQlARrs61ma8dOO6qoEmXGzTpoUu+U8s4NBeaP2WdDmZ6Q7ONm7tFJv2Q0P7BEVpRl0MLsHR8FvBmC3ljfpJZhVcMsO8CERC0Jn8GDrKI1uOwcDKfQomWIV317IL9AsvCzbjvTkWfZpFyTcANlD9w9fP2tZ8xKdePUoXqZ/d6qFDF+vSlbbfVlyKTGGKpOfgIFAMw2rv0yImQkyOHlHiYRXO4eGwgxxJSeB0NvwNyZLspttLZWNBwLBnP2bNDzGr9S2RkDgSwrzGS1h3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3fxeMydRj5LITwpOTJ8/5qGWnkDlQFvKc/JWPdaDvPg=;
+ b=TXeSn6r2MjGNBlh4C8XMQ/U3HnMqb61iZIq6LH1YOYF20DVnCWeJ4jr+V7jE2/CBC9C7rJCIg16zpuX8ZjyXPAiV6QoXBMwrj2q6w2uewAuwudGgqMMxqQJ3q7kZajMOoIH2ckfVHde+wPN2npjxIuNFuEkhtJNCPogKnShNLFP5NX/ZKb7CNnKa5U5US41CiUowavm5vsLYTv+hSf6XIA5sr00pMHnWgbkEmWLi6DI81XXXBtfd00KY0C243Ewz2cAdOheyRF0RLshNfMe5r/AlcR2JlV01soARfpLkA/vnfbQPr9xlc52z8H31CqB3IB/bcEpwHXu9Kcb7oS3JTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3fxeMydRj5LITwpOTJ8/5qGWnkDlQFvKc/JWPdaDvPg=;
+ b=qKi5FalZqOEFK4w7rb6IGXToAGpRjdZVDXpyEI/VKxNnbdE6py64DiRwMegLmbFr7vmaaiyV0ymMyPOdUs43z6p5lIx6vfCFM0qEnzcjrNxq4x30HVAqCCesK8zvyOUMYGHsQATJV91a1L3Q+nIFotJ7Vap9rYUGwgIAGyr/0Xw=
+Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
+ (2603:10b6:803:47::21) by SN6PR04MB5325.namprd04.prod.outlook.com
+ (2603:10b6:805:fb::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.13; Fri, 18 Sep
+ 2020 13:37:05 +0000
+Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
+ ([fe80::457e:5fe9:2ae3:e738]) by SN4PR0401MB3598.namprd04.prod.outlook.com
+ ([fe80::457e:5fe9:2ae3:e738%7]) with mapi id 15.20.3370.019; Fri, 18 Sep 2020
+ 13:37:05 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH 2/9] compat.h: fix a spelling error in <linux/compat.h>
+Thread-Topic: [PATCH 2/9] compat.h: fix a spelling error in <linux/compat.h>
+Thread-Index: AQHWjbn0TGOYh/gcrkCo+5T+LyMUNA==
+Date:   Fri, 18 Sep 2020 13:37:05 +0000
+Message-ID: <SN4PR0401MB3598AEEC9EC17DC78DABE66E9B3F0@SN4PR0401MB3598.namprd04.prod.outlook.com>
+References: <20200918124533.3487701-1-hch@lst.de>
+ <20200918124533.3487701-3-hch@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: lst.de; dkim=none (message not signed)
+ header.d=none;lst.de; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [2001:a62:1460:3d01:8d9e:cb93:a2df:3de3]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: a7055d35-151c-42c1-a3ca-08d85bd7eee4
+x-ms-traffictypediagnostic: SN6PR04MB5325:
+x-microsoft-antispam-prvs: <SN6PR04MB532504408AA7CB391A1C35979B3F0@SN6PR04MB5325.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:2449;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sW7O8iy/is8rzBYp3C+pEE1DT1YuUxj4GKzMvIgRa08BemS+/vQ/dkkQQPFinWi+mjyAZsK+AobvbKF9ksjI2uX1omQbzprpH5xOd3aZ1MCuVO9OI0cX+G6t9FKWCutM30I+/6QXVvIXgHS9ETzoG9TlNAb0zJdITBSoC4lvJKUFz0bc5NClo1SdmHZ7IWS6rB2U7f9se7TkrcCtwS/YTMN8u5aZKyJM2x5A77wB4OxVR1Lar7IAiexdUTvgOC0ve+LlMkQe7GlI7wnFLvi7lN2BxVwtzYNngGl0eo8gN4sbvdoKanTc1WCbYiooE8Ag
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0401MB3598.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(396003)(376002)(136003)(39860400002)(52536014)(8936002)(110136005)(54906003)(91956017)(66946007)(76116006)(8676002)(316002)(66556008)(64756008)(66446008)(66476007)(9686003)(5660300002)(55016002)(186003)(86362001)(7696005)(33656002)(4326008)(71200400001)(2906002)(7416002)(558084003)(478600001)(53546011)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: +4s7mIR9sli1EuC4tBkNBWdTq8BmORqoiZ9VRJdHaRNDvJ71NGpgl3/MABc7lWzZO1Xj9EJyZtQoMTX4VADCXg294C8mGwQHnLdnZu/bhxORLzBInmdOCsaL8aX6QLX0azcjcZj14APp+ORMrtsjpmAu4cw+wunmpPRrLH39BtypYte/df48R8ssiYg/djEiTi9IuF70jvoqxu96Xzk3ay7eZF76Agw0pmNyu6V5p39iICfBUQZCEJAasDUxhMC6tUbm9th7wG0nnG0AuU9kEd3TlNSO9RqET/lNaLYpf7cr94Jco27qpMvDDgwxYxp69hrTAl3uqECd/Q3og++YuAOG6Lzq1JMaeXJEU4MdLG5PpmzsXYMemy/bEeDi8bb6NpvSiX9RHcKMRFa/guA205H3HlF6BT3B5fNozrf/Pm4f3rSR+/c0Zys7ystZKXvLz+IP0kjcOCIE1ELGmIa1jqHPezFV/lyYPG7Ij3ssjYTj88stWATwkm23OJnBIKe/6klzb2SpfL3DekexxrOmHyquT1djWn/GhQyb6WotrfD0cO2Rxf+j8TPhiKyE98d5RiSPJkNJsJFK2CwphDZuU5mughX6alHxpgB9DnIEEULOXMkqEae8mFpoFEIoiNDXweHH6OsyIE3vONoRCnEBupVnBDkunxZQ7HpS0NOiibNcz2pOJ64eJPpdpVY23Yk5uyr0BotCoisyWaFiuJq1yA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:gt/7jsO6Dyc7gK/yTYzO/EzJHFGXs7sJiuscLV4ApT8xDDd6BR9
- xkkLva8DnSsQvWGb64r6qawIdmrfuB5+sKA110qc4oiSR8/Y6hylhbEkpgD4lc2pELQUjnj
- PA9xWGNhRTO1GsOrmMNTC5oYCbourfPp8nbKfeoIWh/BgYYTKJ+R0Y1r9uFyUYusROoolCF
- 1EyLfEwuv80mNrLk1y5aw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+N3o/UDh+UI=:gwlToYMW+N7V6XU9d1iNWb
- Qw5R4Sj5ufDtOMMLbew7YTjtBbHhTjfCVRgp3UYfdgvWeFhJYEXy6cwcuCH7XuEJCPLA20HWE
- E6ZwAfnRHiG4oTXvzyr++KNZhy5sm5AQQdzB6oON1guBXTOGxT7jmDBGZWMwMqad8HzyyaY30
- DLp+/bVvdsWrFx7PFkeA6qYJHapRLsXib4lOcdSJWD2kT3IgtHL+Rjsg7bs1VbYXe2UkpeC+d
- LB9zj97Oh2gNBy+jQWjRcAASd2EkA8mIKXCj/TmcZpKp6h46EJF9T+KV14ucfFgmRqbtklIX5
- yefY+ZcR9l5OlAvQLmuAxalbipHQ5yvl7B9K1zX85Hk5/dcZGoKGyJgVc7+C0fWtgIpR8aYl9
- n2WtttPZy7EnbJf1juCTiBvi4b8JisgiI197//DCiqpgcgyovNzFBJpGOKEtL3b45Tb/dA0Rp
- im+KfSdjjGlOWOLyi20lawtfpok0RSfOPTqfGueesiaYYA0qoRPQN06PfxyRjPxU1xQ6tC6cx
- KEGbLVJ85A7SB/RxI2NK9hdcHTjdTjhvLEzqOk4mrcY3ye7wMlr8MUcCrseXaMO4Mn5F6Uccb
- K+PJp56yH1CMp+gCQwA52ShcOi6XyY1H3043DYFITBx5UAXNg/59vlq5+lP8VNjS9YilzR+oF
- 5PfxPVNyVbmwWxd5fhKoe+1OAB8mCathrxGbygZgdh7Ufx4Q2NSNmjRYbKSYgIw78wjqSLD1c
- RTOtF7Q5eLkG2LZT9ZYd5sUPnmxYS+rc2Cc6sB8eToQJ+/lgMD+9YRvdqFrYkYOXWF+Ja7Vvk
- WI47Jq6IWHAtU0+Kq16pLXmLCWkXs6SAj4LVxpH+XWg8sJ2XiPNz5NeryXiFlWjYlJU4QPZ
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0401MB3598.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7055d35-151c-42c1-a3ca-08d85bd7eee4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Sep 2020 13:37:05.5213
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5Txd1p36uuGkQs9WEN/G0+DUIyGNPxaMxNayRc9hOeqSRFG9dtxxpSZX+AJhfrs74ZJ2tBecEIIGTxwIgPLEubl21SzBOHz0tbKUc7oAkd8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB5325
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The compat implementations for mbind, get_mempolicy, set_mempolicy
-and migrate_pages are just there to handle the subtly different
-layout of bitmaps on 32-bit hosts.
-
-The compat implementation however lacks some of the checks that
-are present in the native one, in particular for checking that
-the extra bits are all zero when user space has a larger mask
-size than the kernel. Worse, those extra bits do not get cleared
-when copying in or out of the kernel, which can lead to incorrect
-data as well.
-
-Unify the implementation to handle the compat bitmap layout directly
-in the get_nodes() and copy_nodes_to_user() helpers.  Splitting out
-the get_bitmap() helper from get_nodes() also helps readability of the
-native case.
-
-On x86, two additional problems are addressed by this: compat tasks can
-pass a bitmap at the end of a mapping, causing a fault when reading
-across the page boundary for a 64-bit word. x32 tasks might also run
-into problems with get_mempolicy corrupting data when an odd number of
-32-bit words gets passed.
-
-On parisc the migrate_pages() system call apparently had the wrong
-calling convention, as big-endian architectures expect the words
-inside of a bitmap to be swapped. This is not a problem though
-since parisc has no NUMA support.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm64/include/asm/unistd32.h         |   8 +-
- arch/mips/kernel/syscalls/syscall_n32.tbl |   8 +-
- arch/mips/kernel/syscalls/syscall_o32.tbl |   8 +-
- arch/parisc/kernel/syscalls/syscall.tbl   |   6 +-
- arch/powerpc/kernel/syscalls/syscall.tbl  |   8 +-
- arch/s390/kernel/syscalls/syscall.tbl     |   8 +-
- arch/sparc/kernel/syscalls/syscall.tbl    |   8 +-
- arch/x86/entry/syscalls/syscall_32.tbl    |   2 +-
- include/linux/compat.h                    |  15 --
- include/uapi/asm-generic/unistd.h         |   8 +-
- kernel/kexec.c                            |   6 +-
- kernel/sys_ni.c                           |   4 -
- mm/mempolicy.c                            | 193 +++++-----------------
- 13 files changed, 79 insertions(+), 203 deletions(-)
-
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index af793775ba98..31479f7120a0 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -649,11 +649,11 @@ __SYSCALL(__NR_inotify_add_watch, sys_inotify_add_watch)
- #define __NR_inotify_rm_watch 318
- __SYSCALL(__NR_inotify_rm_watch, sys_inotify_rm_watch)
- #define __NR_mbind 319
--__SYSCALL(__NR_mbind, compat_sys_mbind)
-+__SYSCALL(__NR_mbind, sys_mbind)
- #define __NR_get_mempolicy 320
--__SYSCALL(__NR_get_mempolicy, compat_sys_get_mempolicy)
-+__SYSCALL(__NR_get_mempolicy, sys_get_mempolicy)
- #define __NR_set_mempolicy 321
--__SYSCALL(__NR_set_mempolicy, compat_sys_set_mempolicy)
-+__SYSCALL(__NR_set_mempolicy, sys_set_mempolicy)
- #define __NR_openat 322
- __SYSCALL(__NR_openat, compat_sys_openat)
- #define __NR_mkdirat 323
-@@ -811,7 +811,7 @@ __SYSCALL(__NR_rseq, sys_rseq)
- #define __NR_io_pgetevents 399
- __SYSCALL(__NR_io_pgetevents, compat_sys_io_pgetevents)
- #define __NR_migrate_pages 400
--__SYSCALL(__NR_migrate_pages, compat_sys_migrate_pages)
-+__SYSCALL(__NR_migrate_pages, sys_migrate_pages)
- #define __NR_kexec_file_load 401
- __SYSCALL(__NR_kexec_file_load, sys_kexec_file_load)
- /* 402 is unused */
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index 7fa1ca45e44c..15fda882d07e 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -239,9 +239,9 @@
- 228	n32	clock_nanosleep			sys_clock_nanosleep_time32
- 229	n32	tgkill				sys_tgkill
- 230	n32	utimes				sys_utimes_time32
--231	n32	mbind				compat_sys_mbind
--232	n32	get_mempolicy			compat_sys_get_mempolicy
--233	n32	set_mempolicy			compat_sys_set_mempolicy
-+231	n32	mbind				sys_mbind
-+232	n32	get_mempolicy			sys_get_mempolicy
-+233	n32	set_mempolicy			sys_set_mempolicy
- 234	n32	mq_open				compat_sys_mq_open
- 235	n32	mq_unlink			sys_mq_unlink
- 236	n32	mq_timedsend			sys_mq_timedsend_time32
-@@ -258,7 +258,7 @@
- 247	n32	inotify_init			sys_inotify_init
- 248	n32	inotify_add_watch		sys_inotify_add_watch
- 249	n32	inotify_rm_watch		sys_inotify_rm_watch
--250	n32	migrate_pages			compat_sys_migrate_pages
-+250	n32	migrate_pages			sys_migrate_pages
- 251	n32	openat				sys_openat
- 252	n32	mkdirat				sys_mkdirat
- 253	n32	mknodat				sys_mknodat
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index 194c7fbeedf7..6591388a9d88 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -279,9 +279,9 @@
- 265	o32	clock_nanosleep			sys_clock_nanosleep_time32
- 266	o32	tgkill				sys_tgkill
- 267	o32	utimes				sys_utimes_time32
--268	o32	mbind				sys_mbind			compat_sys_mbind
--269	o32	get_mempolicy			sys_get_mempolicy		compat_sys_get_mempolicy
--270	o32	set_mempolicy			sys_set_mempolicy		compat_sys_set_mempolicy
-+268	o32	mbind				sys_mbind
-+269	o32	get_mempolicy			sys_get_mempolicy
-+270	o32	set_mempolicy			sys_set_mempolicy
- 271	o32	mq_open				sys_mq_open			compat_sys_mq_open
- 272	o32	mq_unlink			sys_mq_unlink
- 273	o32	mq_timedsend			sys_mq_timedsend_time32
-@@ -298,7 +298,7 @@
- 284	o32	inotify_init			sys_inotify_init
- 285	o32	inotify_add_watch		sys_inotify_add_watch
- 286	o32	inotify_rm_watch		sys_inotify_rm_watch
--287	o32	migrate_pages			sys_migrate_pages		compat_sys_migrate_pages
-+287	o32	migrate_pages			sys_migrate_pages
- 288	o32	openat				sys_openat			compat_sys_openat
- 289	o32	mkdirat				sys_mkdirat
- 290	o32	mknodat				sys_mknodat
-diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index 5c17edaffe70..30f3c0146abf 100644
---- a/arch/parisc/kernel/syscalls/syscall.tbl
-+++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -292,9 +292,9 @@
- 258	32	clock_nanosleep		sys_clock_nanosleep_time32
- 258	64	clock_nanosleep		sys_clock_nanosleep
- 259	common	tgkill			sys_tgkill
--260	common	mbind			sys_mbind			compat_sys_mbind
--261	common	get_mempolicy		sys_get_mempolicy		compat_sys_get_mempolicy
--262	common	set_mempolicy		sys_set_mempolicy		compat_sys_set_mempolicy
-+260	common	mbind			sys_mbind
-+261	common	get_mempolicy		sys_get_mempolicy
-+262	common	set_mempolicy		sys_set_mempolicy
- # 263 was vserver
- 264	common	add_key			sys_add_key
- 265	common	request_key		sys_request_key
-diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index 04fb42d7b377..4f5216320721 100644
---- a/arch/powerpc/kernel/syscalls/syscall.tbl
-+++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -338,10 +338,10 @@
- 256	64	sys_debug_setcontext		sys_ni_syscall
- 256	spu	sys_debug_setcontext		sys_ni_syscall
- # 257 reserved for vserver
--258	nospu	migrate_pages			sys_migrate_pages		compat_sys_migrate_pages
--259	nospu	mbind				sys_mbind			compat_sys_mbind
--260	nospu	get_mempolicy			sys_get_mempolicy		compat_sys_get_mempolicy
--261	nospu	set_mempolicy			sys_set_mempolicy		compat_sys_set_mempolicy
-+258	nospu	migrate_pages			sys_migrate_pages
-+259	nospu	mbind				sys_mbind
-+260	nospu	get_mempolicy			sys_get_mempolicy
-+261	nospu	set_mempolicy			sys_set_mempolicy
- 262	nospu	mq_open				sys_mq_open			compat_sys_mq_open
- 263	nospu	mq_unlink			sys_mq_unlink
- 264	32	mq_timedsend			sys_mq_timedsend_time32
-diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index 3197965d45e9..70c0b830d14f 100644
---- a/arch/s390/kernel/syscalls/syscall.tbl
-+++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -274,9 +274,9 @@
- 265  common	statfs64		sys_statfs64			compat_sys_statfs64
- 266  common	fstatfs64		sys_fstatfs64			compat_sys_fstatfs64
- 267  common	remap_file_pages	sys_remap_file_pages		sys_remap_file_pages
--268  common	mbind			sys_mbind			compat_sys_mbind
--269  common	get_mempolicy		sys_get_mempolicy		compat_sys_get_mempolicy
--270  common	set_mempolicy		sys_set_mempolicy		compat_sys_set_mempolicy
-+268  common	mbind			sys_mbind			sys_mbind
-+269  common	get_mempolicy		sys_get_mempolicy		sys_get_mempolicy
-+270  common	set_mempolicy		sys_set_mempolicy		sys_set_mempolicy
- 271  common	mq_open			sys_mq_open			compat_sys_mq_open
- 272  common	mq_unlink		sys_mq_unlink			sys_mq_unlink
- 273  common	mq_timedsend		sys_mq_timedsend		sys_mq_timedsend_time32
-@@ -293,7 +293,7 @@
- 284  common	inotify_init		sys_inotify_init		sys_inotify_init
- 285  common	inotify_add_watch	sys_inotify_add_watch		sys_inotify_add_watch
- 286  common	inotify_rm_watch	sys_inotify_rm_watch		sys_inotify_rm_watch
--287  common	migrate_pages		sys_migrate_pages		compat_sys_migrate_pages
-+287  common	migrate_pages		sys_migrate_pages		sys_migrate_pages
- 288  common	openat			sys_openat			compat_sys_openat
- 289  common	mkdirat			sys_mkdirat			sys_mkdirat
- 290  common	mknodat			sys_mknodat			sys_mknodat
-diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index e36ac364e61a..50ff839a2661 100644
---- a/arch/sparc/kernel/syscalls/syscall.tbl
-+++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -365,10 +365,10 @@
- 299	common	unshare			sys_unshare
- 300	common	set_robust_list		sys_set_robust_list		compat_sys_set_robust_list
- 301	common	get_robust_list		sys_get_robust_list		compat_sys_get_robust_list
--302	common	migrate_pages		sys_migrate_pages		compat_sys_migrate_pages
--303	common	mbind			sys_mbind			compat_sys_mbind
--304	common	get_mempolicy		sys_get_mempolicy		compat_sys_get_mempolicy
--305	common	set_mempolicy		sys_set_mempolicy		compat_sys_set_mempolicy
-+302	common	migrate_pages		sys_migrate_pages
-+303	common	mbind			sys_mbind
-+304	common	get_mempolicy		sys_get_mempolicy
-+305	common	set_mempolicy		sys_set_mempolicy
- 306	common	kexec_load		sys_kexec_load			sys_kexec_load
- 307	common	move_pages		sys_move_pages
- 308	common	getcpu			sys_getcpu
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index b3263b8b2eae..d07c3fbd4697 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -286,7 +286,7 @@
- 272	i386	fadvise64_64		sys_ia32_fadvise64_64
- 273	i386	vserver
- 274	i386	mbind			sys_mbind
--275	i386	get_mempolicy		sys_get_mempolicy		compat_sys_get_mempolicy
-+275	i386	get_mempolicy		sys_get_mempolicy
- 276	i386	set_mempolicy		sys_set_mempolicy
- 277	i386	mq_open			sys_mq_open			compat_sys_mq_open
- 278	i386	mq_unlink		sys_mq_unlink
-diff --git a/include/linux/compat.h b/include/linux/compat.h
-index db1d7ac2c9e0..be06367b336c 100644
---- a/include/linux/compat.h
-+++ b/include/linux/compat.h
-@@ -749,21 +749,6 @@ asmlinkage long compat_sys_execve(const char __user *filename, const compat_uptr
- /* mm/fadvise.c: No generic prototype for fadvise64_64 */
- 
- /* mm/, CONFIG_MMU only */
--asmlinkage long compat_sys_mbind(compat_ulong_t start, compat_ulong_t len,
--				 compat_ulong_t mode,
--				 compat_ulong_t __user *nmask,
--				 compat_ulong_t maxnode, compat_ulong_t flags);
--asmlinkage long compat_sys_get_mempolicy(int __user *policy,
--					 compat_ulong_t __user *nmask,
--					 compat_ulong_t maxnode,
--					 compat_ulong_t addr,
--					 compat_ulong_t flags);
--asmlinkage long compat_sys_set_mempolicy(int mode, compat_ulong_t __user *nmask,
--					 compat_ulong_t maxnode);
--asmlinkage long compat_sys_migrate_pages(compat_pid_t pid,
--		compat_ulong_t maxnode, const compat_ulong_t __user *old_nodes,
--		const compat_ulong_t __user *new_nodes);
--
- asmlinkage long compat_sys_rt_tgsigqueueinfo(compat_pid_t tgid,
- 					compat_pid_t pid, int sig,
- 					struct compat_siginfo __user *uinfo);
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 4da51702fb21..4e31f9b68a8f 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -673,13 +673,13 @@ __SYSCALL(__NR_madvise, sys_madvise)
- #define __NR_remap_file_pages 234
- __SYSCALL(__NR_remap_file_pages, sys_remap_file_pages)
- #define __NR_mbind 235
--__SC_COMP(__NR_mbind, sys_mbind, compat_sys_mbind)
-+__SYSCALL(__NR_mbind, sys_mbind)
- #define __NR_get_mempolicy 236
--__SC_COMP(__NR_get_mempolicy, sys_get_mempolicy, compat_sys_get_mempolicy)
-+__SYSCALL(__NR_get_mempolicy, sys_get_mempolicy)
- #define __NR_set_mempolicy 237
--__SC_COMP(__NR_set_mempolicy, sys_set_mempolicy, compat_sys_set_mempolicy)
-+__SYSCALL(__NR_set_mempolicy, sys_set_mempolicy)
- #define __NR_migrate_pages 238
--__SC_COMP(__NR_migrate_pages, sys_migrate_pages, compat_sys_migrate_pages)
-+__SYSCALL(__NR_migrate_pages, sys_migrate_pages)
- #define __NR_move_pages 239
- __SYSCALL(__NR_move_pages, sys_move_pages)
- #endif
-diff --git a/kernel/kexec.c b/kernel/kexec.c
-index 1ef7d3dc906f..0fecf2370be1 100644
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -30,11 +30,13 @@ static int copy_user_segment_list(struct kimage *image,
- 	image->nr_segments = nr_segments;
- 	segment_bytes = nr_segments * sizeof(*segments);
- 	if (in_compat_syscall()) {
--		struct compat_kexec_segment __user *cs = (void __user *)segments;
-+		struct compat_kexec_segment __user *cs;
- 		struct compat_kexec_segment segment;
- 		int i;
-+
-+		cs = (struct compat_kexec_segment __user *)segments;
- 		for (i=0; i< nr_segments; i++) {
--			copy_from_user(&segment, &cs[i], sizeof(segment));
-+			ret = copy_from_user(&segment, &cs[i], sizeof(segment));
- 			if (ret)
- 				break;
- 
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index 783a24ceee88..0850111f888e 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -282,13 +282,9 @@ COND_SYSCALL(mincore);
- COND_SYSCALL(madvise);
- COND_SYSCALL(remap_file_pages);
- COND_SYSCALL(mbind);
--COND_SYSCALL_COMPAT(mbind);
- COND_SYSCALL(get_mempolicy);
--COND_SYSCALL_COMPAT(get_mempolicy);
- COND_SYSCALL(set_mempolicy);
--COND_SYSCALL_COMPAT(set_mempolicy);
- COND_SYSCALL(migrate_pages);
--COND_SYSCALL_COMPAT(migrate_pages);
- COND_SYSCALL(move_pages);
- 
- COND_SYSCALL(perf_event_open);
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index eddbe4e56c73..2e1b90143b2c 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -1374,16 +1374,30 @@ static long do_mbind(unsigned long start, unsigned long len,
- /*
-  * User space interface with variable sized bitmaps for nodelists.
-  */
-+static int get_bitmap(unsigned long *mask, const unsigned long __user *nmask,
-+		      unsigned long maxnode)
-+{
-+	unsigned long nlongs = BITS_TO_LONGS(maxnode);
-+	int ret;
-+
-+	if (in_compat_syscall())
-+		ret = compat_get_bitmap(mask, (void __user *)nmask, maxnode);
-+	else
-+		ret = copy_from_user(mask, nmask, nlongs*sizeof(unsigned long));
-+
-+	if (ret)
-+		return -EFAULT;
-+
-+	if (maxnode % BITS_PER_LONG)
-+		mask[nlongs-1] &= (1UL << (maxnode % BITS_PER_LONG)) - 1;
-+
-+	return 0;
-+}
- 
- /* Copy a node mask from user space. */
- static int get_nodes(nodemask_t *nodes, const unsigned long __user *nmask,
- 		     unsigned long maxnode)
- {
--	unsigned long k;
--	unsigned long t;
--	unsigned long nlongs;
--	unsigned long endmask;
--
- 	--maxnode;
- 	nodes_clear(*nodes);
- 	if (maxnode == 0 || !nmask)
-@@ -1391,49 +1405,29 @@ static int get_nodes(nodemask_t *nodes, const unsigned long __user *nmask,
- 	if (maxnode > PAGE_SIZE*BITS_PER_BYTE)
- 		return -EINVAL;
- 
--	nlongs = BITS_TO_LONGS(maxnode);
--	if ((maxnode % BITS_PER_LONG) == 0)
--		endmask = ~0UL;
--	else
--		endmask = (1UL << (maxnode % BITS_PER_LONG)) - 1;
--
- 	/*
- 	 * When the user specified more nodes than supported just check
--	 * if the non supported part is all zero.
--	 *
--	 * If maxnode have more longs than MAX_NUMNODES, check
--	 * the bits in that area first. And then go through to
--	 * check the rest bits which equal or bigger than MAX_NUMNODES.
--	 * Otherwise, just check bits [MAX_NUMNODES, maxnode).
-+	 * if the non supported part is all zero, one word at a time,
-+	 * starting at the end.
- 	 */
--	if (nlongs > BITS_TO_LONGS(MAX_NUMNODES)) {
--		for (k = BITS_TO_LONGS(MAX_NUMNODES); k < nlongs; k++) {
--			if (get_user(t, nmask + k))
--				return -EFAULT;
--			if (k == nlongs - 1) {
--				if (t & endmask)
--					return -EINVAL;
--			} else if (t)
--				return -EINVAL;
--		}
--		nlongs = BITS_TO_LONGS(MAX_NUMNODES);
--		endmask = ~0UL;
--	}
--
--	if (maxnode > MAX_NUMNODES && MAX_NUMNODES % BITS_PER_LONG != 0) {
--		unsigned long valid_mask = endmask;
-+	while (maxnode > MAX_NUMNODES) {
-+		unsigned long bits = min_t(unsigned long, maxnode, BITS_PER_LONG);
-+		unsigned long t;
- 
--		valid_mask &= ~((1UL << (MAX_NUMNODES % BITS_PER_LONG)) - 1);
--		if (get_user(t, nmask + nlongs - 1))
-+		if (get_bitmap(&t, &nmask[maxnode / BITS_PER_LONG], bits))
- 			return -EFAULT;
--		if (t & valid_mask)
-+
-+		if (maxnode - bits >= MAX_NUMNODES) {
-+			maxnode -= bits;
-+		} else {
-+			maxnode = MAX_NUMNODES;
-+			t &= ~((1UL << (MAX_NUMNODES % BITS_PER_LONG)) - 1);
-+		}
-+		if (t)
- 			return -EINVAL;
- 	}
- 
--	if (copy_from_user(nodes_addr(*nodes), nmask, nlongs*sizeof(unsigned long)))
--		return -EFAULT;
--	nodes_addr(*nodes)[nlongs-1] &= endmask;
--	return 0;
-+	return get_bitmap(nodes_addr(*nodes), nmask, maxnode);
- }
- 
- /* Copy a kernel node mask to user space */
-@@ -1442,6 +1436,10 @@ static int copy_nodes_to_user(unsigned long __user *mask, unsigned long maxnode,
- {
- 	unsigned long copy = ALIGN(maxnode-1, 64) / 8;
- 	unsigned int nbytes = BITS_TO_LONGS(nr_node_ids) * sizeof(long);
-+	bool compat = in_compat_syscall();
-+
-+	if (compat)
-+		nbytes = BITS_TO_COMPAT_LONGS(nr_node_ids) * sizeof(compat_long_t);
- 
- 	if (copy > nbytes) {
- 		if (copy > PAGE_SIZE)
-@@ -1450,6 +1448,11 @@ static int copy_nodes_to_user(unsigned long __user *mask, unsigned long maxnode,
- 			return -EFAULT;
- 		copy = nbytes;
- 	}
-+
-+	if (compat)
-+		return compat_put_bitmap((compat_ulong_t __user *)mask,
-+					 nodes_addr(*nodes), maxnode);
-+
- 	return copy_to_user(mask, nodes_addr(*nodes), copy) ? -EFAULT : 0;
- }
- 
-@@ -1641,116 +1644,6 @@ SYSCALL_DEFINE5(get_mempolicy, int __user *, policy,
- 	return kernel_get_mempolicy(policy, nmask, maxnode, addr, flags);
- }
- 
--#ifdef CONFIG_COMPAT
--
--COMPAT_SYSCALL_DEFINE5(get_mempolicy, int __user *, policy,
--		       compat_ulong_t __user *, nmask,
--		       compat_ulong_t, maxnode,
--		       compat_ulong_t, addr, compat_ulong_t, flags)
--{
--	long err;
--	unsigned long __user *nm = NULL;
--	unsigned long nr_bits, alloc_size;
--	DECLARE_BITMAP(bm, MAX_NUMNODES);
--
--	nr_bits = min_t(unsigned long, maxnode-1, nr_node_ids);
--	alloc_size = ALIGN(nr_bits, BITS_PER_LONG) / 8;
--
--	if (nmask)
--		nm = compat_alloc_user_space(alloc_size);
--
--	err = kernel_get_mempolicy(policy, nm, nr_bits+1, addr, flags);
--
--	if (!err && nmask) {
--		unsigned long copy_size;
--		copy_size = min_t(unsigned long, sizeof(bm), alloc_size);
--		err = copy_from_user(bm, nm, copy_size);
--		/* ensure entire bitmap is zeroed */
--		err |= clear_user(nmask, ALIGN(maxnode-1, 8) / 8);
--		err |= compat_put_bitmap(nmask, bm, nr_bits);
--	}
--
--	return err;
--}
--
--COMPAT_SYSCALL_DEFINE3(set_mempolicy, int, mode, compat_ulong_t __user *, nmask,
--		       compat_ulong_t, maxnode)
--{
--	unsigned long __user *nm = NULL;
--	unsigned long nr_bits, alloc_size;
--	DECLARE_BITMAP(bm, MAX_NUMNODES);
--
--	nr_bits = min_t(unsigned long, maxnode-1, MAX_NUMNODES);
--	alloc_size = ALIGN(nr_bits, BITS_PER_LONG) / 8;
--
--	if (nmask) {
--		if (compat_get_bitmap(bm, nmask, nr_bits))
--			return -EFAULT;
--		nm = compat_alloc_user_space(alloc_size);
--		if (copy_to_user(nm, bm, alloc_size))
--			return -EFAULT;
--	}
--
--	return kernel_set_mempolicy(mode, nm, nr_bits+1);
--}
--
--COMPAT_SYSCALL_DEFINE6(mbind, compat_ulong_t, start, compat_ulong_t, len,
--		       compat_ulong_t, mode, compat_ulong_t __user *, nmask,
--		       compat_ulong_t, maxnode, compat_ulong_t, flags)
--{
--	unsigned long __user *nm = NULL;
--	unsigned long nr_bits, alloc_size;
--	nodemask_t bm;
--
--	nr_bits = min_t(unsigned long, maxnode-1, MAX_NUMNODES);
--	alloc_size = ALIGN(nr_bits, BITS_PER_LONG) / 8;
--
--	if (nmask) {
--		if (compat_get_bitmap(nodes_addr(bm), nmask, nr_bits))
--			return -EFAULT;
--		nm = compat_alloc_user_space(alloc_size);
--		if (copy_to_user(nm, nodes_addr(bm), alloc_size))
--			return -EFAULT;
--	}
--
--	return kernel_mbind(start, len, mode, nm, nr_bits+1, flags);
--}
--
--COMPAT_SYSCALL_DEFINE4(migrate_pages, compat_pid_t, pid,
--		       compat_ulong_t, maxnode,
--		       const compat_ulong_t __user *, old_nodes,
--		       const compat_ulong_t __user *, new_nodes)
--{
--	unsigned long __user *old = NULL;
--	unsigned long __user *new = NULL;
--	nodemask_t tmp_mask;
--	unsigned long nr_bits;
--	unsigned long size;
--
--	nr_bits = min_t(unsigned long, maxnode - 1, MAX_NUMNODES);
--	size = ALIGN(nr_bits, BITS_PER_LONG) / 8;
--	if (old_nodes) {
--		if (compat_get_bitmap(nodes_addr(tmp_mask), old_nodes, nr_bits))
--			return -EFAULT;
--		old = compat_alloc_user_space(new_nodes ? size * 2 : size);
--		if (new_nodes)
--			new = old + size / sizeof(unsigned long);
--		if (copy_to_user(old, nodes_addr(tmp_mask), size))
--			return -EFAULT;
--	}
--	if (new_nodes) {
--		if (compat_get_bitmap(nodes_addr(tmp_mask), new_nodes, nr_bits))
--			return -EFAULT;
--		if (new == NULL)
--			new = compat_alloc_user_space(size);
--		if (copy_to_user(new, nodes_addr(tmp_mask), size))
--			return -EFAULT;
--	}
--	return kernel_migrate_pages(pid, nr_bits + 1, old, new);
--}
--
--#endif /* CONFIG_COMPAT */
--
- bool vma_migratable(struct vm_area_struct *vma)
- {
- 	if (vma->vm_flags & (VM_IO | VM_PFNMAP))
--- 
-2.27.0
-
+On 18/09/2020 14:48, Christoph Hellwig wrote:=0A=
+> We only have not compat_sys_readv64v2 syscall, only a=0A=
+We have no?=0A=
