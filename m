@@ -2,92 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC7326FCA5
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 14:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F2926FCCF
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 14:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbgIRMgm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 08:36:42 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:39563 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726154AbgIRMgl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 08:36:41 -0400
-Received: from mail-qt1-f174.google.com ([209.85.160.174]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MHnZQ-1kEI5W0sgo-00EwgF; Fri, 18 Sep 2020 14:36:40 +0200
-Received: by mail-qt1-f174.google.com with SMTP id c18so4778666qtw.5;
-        Fri, 18 Sep 2020 05:36:39 -0700 (PDT)
-X-Gm-Message-State: AOAM531P0vWhxtgLTyK/ASRNZLNtY2deNYX1PrkvlZCh/JM48cL9Dvn6
-        T18/2j/SPvdHteGseUUOwrA0KNaOt5vmJGNzI50=
-X-Google-Smtp-Source: ABdhPJzHuJZ/kDocyLlLrnh1ExNrKpMLkiEpPLdi9PahWckRQnAPVIMevhGijaQB/J930L15teODRXzI8m5Cr7Nw24M=
-X-Received: by 2002:aed:2ce5:: with SMTP id g92mr19928608qtd.204.1600432598903;
- Fri, 18 Sep 2020 05:36:38 -0700 (PDT)
+        id S1726609AbgIRMpr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 08:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbgIRMpr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 08:45:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36099C061756;
+        Fri, 18 Sep 2020 05:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=V3X+nIZPxUoB2BOajjqXji1hFeXgDyeXoEcOBeTEcjY=; b=vJlif4ODGlFSaA/X96y95TBxaJ
+        n1vQfWDy9aeQQz/QfN88AtyhJjnDQw4iBBxB3dOINUYSWIDVuarqzmR0pZ51u4RNdWq3xd56/l+oR
+        5GEDqjcn7bBB3CNVKgHN2a9wCcAG8SVe7T2vZu1M3dI0BtwzjwiuqLtNf9Jp3kLrAw46KAsyjal9/
+        QoDWN5trBS3vHnHgnjwv02AJsET1D7F4cR807vr6jIEUKZP+oBkLuggklbUB1OR5q/LzveCjsdCRd
+        XkzH7AWVhPje1BKWsGUA6phSyo6a5kaSlGjDsD4kHaEc69ADj0ykAyKUBp48wXzsnb2cVPD/Usdlf
+        ivQpFJ1w==;
+Received: from [80.122.85.238] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kJFle-0008SE-9Z; Fri, 18 Sep 2020 12:45:36 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: let import_iovec deal with compat_iovecs as well
+Date:   Fri, 18 Sep 2020 14:45:24 +0200
+Message-Id: <20200918124533.3487701-1-hch@lst.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20200907153701.2981205-1-arnd@arndb.de> <20200907153701.2981205-3-arnd@arndb.de>
- <20200908061528.GB13930@lst.de> <CAK8P3a22EiD-uMZQaBpHQYyy=MJ_7J-ih=6CtgH_9RXT6OOYvg@mail.gmail.com>
- <20200918074203.GU1551@shell.armlinux.org.uk>
-In-Reply-To: <20200918074203.GU1551@shell.armlinux.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 18 Sep 2020 14:36:23 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0HhfcM+bovy2pA4omhC5w6POqvf2Yx61_hQSwika2AEA@mail.gmail.com>
-Message-ID: <CAK8P3a0HhfcM+bovy2pA4omhC5w6POqvf2Yx61_hQSwika2AEA@mail.gmail.com>
-Subject: Re: [PATCH 2/9] ARM: traps: use get_kernel_nofault instead of set_fs()
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux- <kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:uQ1rd98AYHFYnsPXe5sEe/Tx2b86dN9VTdMt61Zxci4xR1f6u9Q
- Jc23I9AKuaf4UPWMeRYcxl0y/tYsKix6NuDCa1AJsfZpOD0PCpSow/tBshCWbiIFTN9yGH7
- 7qxsVPFnmaCs1Cf4cDvIk0Cb0CFCNeQWP2S27bXdNG4xvlQLRYPDfj/6YC2Dxu/bNOA3kXk
- vNDDT7JNV3birPxddl8KQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tPEtwy/3JPA=:EazmA3FpyPiDwBxPKg+o3Z
- JesvTBW0cDHRKN0QRoNwGwxkwA8EhckldC2H6hUH12TEH/mkTXBoEur1LIWWmjL1+iaJeAfVx
- mFSt9UE8nZoC9ocVSOJD88GyNbPUPJ0VZCSaRP76v3w/3EB95HCaWeLmW3+IBtm7NonCL8+qK
- e95OeX0c2JB47/Pkw704dF5g8vwH/MwuCh5it/MDoiGHBInauCMeW9EAkH5LUI4z8wj3AvsxG
- zxyzri8LI/LpejNNc9DYBHJeuauNVnHsjEkYX82pbB2RQqNqbQGaLns0IzCVr8OBhq/OpyInD
- dVIoH52N+wC8G5JGHxGbu/RwK3hVRCU5fS0tUAR86ULsF/jQAeD5PBIIc/M7qycmW2PHUIFgA
- VRJczQ9WiS0AmhYSwJ9Ox67HdjiC6Hh7XPxTgAxED1VqX2ytDdJ8DkLMmm25iN5YddIkkhj/y
- zmMsfhFb0G64V5Z9nQ0hGxeiuIVlu6A4RTmJYTpT5njc6LWJUXae8wMF0AbClZFO4XFQs7dCc
- BNYqWikmJ/w7gGO6VlWQFiNXTPv7Sa3Lk6lA2cQTtJiTgdpS8P0WnZ8LrPc9E2+xASr/Npuya
- smsRCLxqdynTNS7kWwnQFF3/1vl55GzkI8aCZj3bIqYVKriUVckPlVnln6K2WKuGnq29L0ZEt
- 7MXWgLiIxtwdkk0WAIJdr/3lhwv67UtlYnR14bM+pyixV/21LPrEmgc+Xi9b47qPQD8IfKZMM
- eyDFWiFRRTqEQzhJ+uT4P1UGVwD4avKaPDUeuRdg5wWRZ9FVQ89Y+WKdK5R3ys0oR7zXyhJcx
- vjcMJpoQJK79Ab/i7yh5VWJJhrQS2hgcMlvttXrGKb+nwZPTdKlCEBWNvP7PTjyx+OlCc86
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 9:42 AM Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Thu, Sep 17, 2020 at 07:29:37PM +0200, Arnd Bergmann wrote:
-> > On Tue, Sep 8, 2020 at 8:15 AM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > I looked through the history now and the only code path I could
-> > find that would arrive here this way is from bad_mode(), indicating
-> > that there is probably a hardware bug or the contents of *regs are
-> > corrupted.
->
-> Yes, that's correct.  It isn't something entirely theoretical, although
-> we never see it now, it used to happen in the distant past due to saved
-> regs corruption.  If bad_mode() ever gets called, all bets are off and
-> we're irrecoverably crashing.
->
-> Note that in that case, while user_mode(regs) may return true or false,
-> regs->ARM_sp and regs->ARM_lr are always the SVC mode stack and return
-> address after regs has been stacked, and not the expected values for
-> the parent context (which we have most likely long since destroyed.)
+Hi Al,
 
-Ok, I have rewritten the patch and my changelog text accordingly, sending
-an updated version now.
+this series changes import_iovec to transparently deal with comat iovec
+structures, and then cleanups up a lot of code dupliation.  But to get
+there it first has to fix the pre-existing bug that io_uring compat
+contexts don't trigger the in_compat_syscall() check.  This has so far
+been relatively harmless as very little code callable from io_uring used
+the check, and even that code that could be called usually wasn't.
 
-Thanks,
-
-      Arnd
+Diffstat
+ arch/arm64/include/asm/unistd32.h                  |   10 
+ arch/mips/kernel/syscalls/syscall_n32.tbl          |   10 
+ arch/mips/kernel/syscalls/syscall_o32.tbl          |   10 
+ arch/parisc/kernel/syscalls/syscall.tbl            |   10 
+ arch/powerpc/kernel/syscalls/syscall.tbl           |   10 
+ arch/s390/kernel/syscalls/syscall.tbl              |   10 
+ arch/sparc/include/asm/compat.h                    |    3 
+ arch/sparc/kernel/syscalls/syscall.tbl             |   10 
+ arch/x86/entry/syscall_x32.c                       |    5 
+ arch/x86/entry/syscalls/syscall_32.tbl             |   10 
+ arch/x86/entry/syscalls/syscall_64.tbl             |   10 
+ arch/x86/include/asm/compat.h                      |    2 
+ block/scsi_ioctl.c                                 |   12 
+ drivers/scsi/sg.c                                  |    9 
+ fs/aio.c                                           |   38 --
+ fs/io_uring.c                                      |   21 -
+ fs/read_write.c                                    |  307 ++++-----------------
+ fs/splice.c                                        |   57 ---
+ include/linux/compat.h                             |   29 -
+ include/linux/fs.h                                 |    7 
+ include/linux/sched.h                              |    1 
+ include/linux/uio.h                                |    7 
+ include/uapi/asm-generic/unistd.h                  |   12 
+ lib/iov_iter.c                                     |   30 --
+ mm/process_vm_access.c                             |   69 ----
+ net/compat.c                                       |    4 
+ security/keys/compat.c                             |   37 --
+ security/keys/internal.h                           |    5 
+ security/keys/keyctl.c                             |    2 
+ tools/include/uapi/asm-generic/unistd.h            |   12 
+ tools/perf/arch/powerpc/entry/syscalls/syscall.tbl |   10 
+ tools/perf/arch/s390/entry/syscalls/syscall.tbl    |   10 
+ tools/perf/arch/x86/entry/syscalls/syscall_64.tbl  |   10 
+ 33 files changed, 207 insertions(+), 582 deletions(-)
