@@ -2,26 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E694270813
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 23:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80243270822
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 23:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgIRVXC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 17:23:02 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:34998 "EHLO
+        id S1726305AbgIRVYG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 17:24:06 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:35150 "EHLO
         jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgIRVXC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 17:23:02 -0400
+        with ESMTP id S1726307AbgIRVYG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 17:24:06 -0400
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0590D1C0B78; Fri, 18 Sep 2020 23:22:59 +0200 (CEST)
-Date:   Fri, 18 Sep 2020 23:22:58 +0200
+        id CE3731C0B78; Fri, 18 Sep 2020 23:24:03 +0200 (CEST)
+Date:   Fri, 18 Sep 2020 23:24:03 +0200
 From:   Pavel Machek <pavel@ucw.cz>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
@@ -30,90 +35,83 @@ Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Oleg Nesterov <oleg@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-Subject: Re: [PATCH v12 8/8] x86: Disallow vsyscall emulation when CET is
- enabled
-Message-ID: <20200918212258.GD4304@duo.ucw.cz>
+Subject: Re: [PATCH v12 1/8] x86/cet/ibt: Add Kconfig option for user-mode
+ Indirect Branch Tracking
+Message-ID: <20200918212403.GE4304@duo.ucw.cz>
 References: <20200918192312.25978-1-yu-cheng.yu@intel.com>
- <20200918192312.25978-9-yu-cheng.yu@intel.com>
- <f02b511d-1d48-6dea-d2e6-84d58e21e6cd@intel.com>
- <20200918210026.GC4304@duo.ucw.cz>
- <862eef02-eba2-e13f-ed67-f915f749ebca@intel.com>
+ <20200918192312.25978-2-yu-cheng.yu@intel.com>
+ <ce2524cc-081b-aec9-177a-11c7431cb20d@infradead.org>
+ <20200918205933.GB4304@duo.ucw.cz>
+ <CAMe9rOo0+SBPtN7yb8_-h0dRAoOXkad8wi9d-EiWAfgFSedXjQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="NklN7DEeGtkPCoo3"
+        protocol="application/pgp-signature"; boundary="cPi+lWm09sJ+d57q"
 Content-Disposition: inline
-In-Reply-To: <862eef02-eba2-e13f-ed67-f915f749ebca@intel.com>
+In-Reply-To: <CAMe9rOo0+SBPtN7yb8_-h0dRAoOXkad8wi9d-EiWAfgFSedXjQ@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---NklN7DEeGtkPCoo3
+--cPi+lWm09sJ+d57q
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri 2020-09-18 14:21:10, Yu, Yu-cheng wrote:
-> On 9/18/2020 2:00 PM, Pavel Machek wrote:
-> > On Fri 2020-09-18 12:32:57, Dave Hansen wrote:
-> > > On 9/18/20 12:23 PM, Yu-cheng Yu wrote:
-> > > > Emulation of the legacy vsyscall page is required by some programs
-> > > > built before 2013.  Newer programs after 2013 don't use it.
-> > > > Disable vsyscall emulation when Control-flow Enforcement (CET) is
-> > > > enabled to enhance security.
-> > >=20
-> > > How does this "enhance security"?
-> > >=20
-> > > What is the connection between vsyscall emulation and CET?
-> >=20
-> > Boom.
-> >=20
-> > We don't break compatibility by default, and you should not tell
-> > people to enable CET by default if you plan to do this.
->=20
-> I would revise the wording if there is another version.  What this patch
-> does is:
->=20
-> If an application is compiled for CET and the system supports it, then the
-> application cannot do vsyscall emulation.  Earlier we allow the emulation,
-> and had a patch that fixes the shadow stack and endbr for the emulation
-> code.  Since newer programs mostly do no do the emulation, we changed the
-> patch do block it when attempted.
->=20
-> This patch would not block any legacy applications or any applications on
-> older machines.
+Hi!
 
-Aha, makes sense, sorry for the noise.
+> > > > +   help
+> > > > +     Indirect Branch Tracking (IBT) provides protection against
+> > > > +     CALL-/JMP-oriented programming attacks.  It is active when
+> > > > +     the kernel has this feature enabled, and the processor and
+> > > > +     the application support it.  When this feature is enabled,
+> > > > +     legacy non-IBT applications continue to work, but without
+> > > > +     IBT protection.
+> > > > +
+> > > > +     If unsure, say y
+> > >
+> > >         If unsure, say y.
+> >
+> > Actually, it would be "If unsure, say Y.", to be consistent with the
+> > rest of the Kconfig.
+> >
+> > But I wonder if Yes by default is good idea. Only very new CPUs will
+> > support this, right? Are they even available at the market? Should the
+> > help text say "if your CPU is Whatever Lake or newer, ...." :-) ?
+> >
+>=20
+> CET enabled kernel runs on all x86-64 processors.  All my machines
+> are running the same CET enabled kernel binary.
 
-Best regards,
+I believe that.
+
+But enabling CET in kernel is useless on Core 2 Duo machine, right?
+
 									Pavel
-
 --=20
 (english) http://www.livejournal.com/~pavelmachek
 (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
 g.html
 
---NklN7DEeGtkPCoo3
+--cPi+lWm09sJ+d57q
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2UlMgAKCRAw5/Bqldv6
-8vVFAJ41iKxZD+QTSRHZvYWU+1CsdoJREgCcCLoiJeApvT43KAk2xvBWtw06jWU=
-=Yah9
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2UlcwAKCRAw5/Bqldv6
+8r0mAJ9JcTHq3hoeh6afJxFoVECsAnMbOACfVq6tEmAU2T5ovnJ0hthFdEAfoN4=
+=kXk6
 -----END PGP SIGNATURE-----
 
---NklN7DEeGtkPCoo3--
+--cPi+lWm09sJ+d57q--
