@@ -2,133 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04790270827
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 23:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F741270835
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 23:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726187AbgIRVZP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 17:25:15 -0400
-Received: from mga02.intel.com ([134.134.136.20]:40168 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726118AbgIRVZP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Sep 2020 17:25:15 -0400
-IronPort-SDR: yOilVnswrj4ux1IPD2errlg1fU9PLGNc+Ym7Zqg4NDtf/+THt4vHat+sgAxggV65Be1MMk0VBq
- UQXnyTk48WSg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9748"; a="147719056"
-X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="147719056"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 14:25:15 -0700
-IronPort-SDR: ZiAjpg9H+lTWiWwlbjyUOoATbibiuL2QEtEgXKwIohCa+6zltUvTvc3s1u8mlpNXGGhxxqAhG7
- J6PuvaHWSUyQ==
-X-IronPort-AV: E=Sophos;i="5.77,274,1596524400"; 
-   d="scan'208";a="381051638"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.0.248]) ([10.212.0.248])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2020 14:25:13 -0700
-Subject: Re: [PATCH v12 1/8] x86/cet/ibt: Add Kconfig option for user-mode
- Indirect Branch Tracking
-To:     Pavel Machek <pavel@ucw.cz>, Randy Dunlap <rdunlap@infradead.org>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
+        id S1726311AbgIRV1h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 17:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726252AbgIRV1h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 17:27:37 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8C4C0613CE
+        for <linux-arch@vger.kernel.org>; Fri, 18 Sep 2020 14:27:37 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id r19so3663850pls.1
+        for <linux-arch@vger.kernel.org>; Fri, 18 Sep 2020 14:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oyniRHLrev38PACfE6ROOUQ+EtF7xvXESn3D/FnfQhc=;
+        b=Gd/q8cwdBNkyNhv65cXruSk7HmCBZyI0NM7/ouCTg5QPQHOOZqp4RghCLzMgzPGftR
+         JznBjuFSKtHMubNl4QKBoWync+IMmD9ROTiROxQcWGORDHNeeJVuAmzGTG0krZ6EZ2uK
+         mjIm+rW2vxoQGJLpOdD9TRJhgE5O7gUyhRSpQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oyniRHLrev38PACfE6ROOUQ+EtF7xvXESn3D/FnfQhc=;
+        b=YNeN3ug3L2uesB6mqSmpp7og8jdOpd4AF2FSPAuzdS8NMFhQrjbFvOJm7JNHvkuOdL
+         ly8aCExjKFDqnpnWTIS5knX42tIb9TvPnBKVQitvhbf5wilDqIOwsDc4KDWVXNFp7lTJ
+         U6MWw9BrH8jsbe92BlAScAgXq9kaAdv6jKs154y7O4wMqD9NWVlU8E5UroaVcMbDwm4A
+         IjnTqFMrvQlBfoirGS+g7JGGSh3d4AwpSmSxFwlaDgRnqko+QLF4yNKdL5WytHweU5GB
+         JfUfKIGpMchB4/qsCkFMmoI/FmIaPY8sOoe49ZTXYI+Q7xmp2subd3xeMNL0ntGwjwfA
+         I83g==
+X-Gm-Message-State: AOAM533pSGmBV4Oytvl/wR8Vbanfq8FnosVGO/Js4mMGahKQY/ZfosWk
+        90YpquxRqTCXTFIZ14t0neGSRQ==
+X-Google-Smtp-Source: ABdhPJwQRHrvTU2iqmtduKsBEnDA5AQ9wnRrMouN20yhgYE7G4D0CEMvV1m3BHMubfbdZMtqWREQzQ==
+X-Received: by 2002:a17:90b:50e:: with SMTP id r14mr14380487pjz.230.1600464457018;
+        Fri, 18 Sep 2020 14:27:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i17sm4098269pfa.29.2020.09.18.14.27.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2020 14:27:35 -0700 (PDT)
+Date:   Fri, 18 Sep 2020 14:27:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-References: <20200918192312.25978-1-yu-cheng.yu@intel.com>
- <20200918192312.25978-2-yu-cheng.yu@intel.com>
- <ce2524cc-081b-aec9-177a-11c7431cb20d@infradead.org>
- <20200918205933.GB4304@duo.ucw.cz>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <019b5e45-b116-7f3d-f1f2-3680afbd676c@intel.com>
-Date:   Fri, 18 Sep 2020 14:25:12 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v3 13/30] kbuild: lto: postpone objtool
+Message-ID: <202009181427.86DE61B@keescook>
+References: <20200918201436.2932360-1-samitolvanen@google.com>
+ <20200918201436.2932360-14-samitolvanen@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20200918205933.GB4304@duo.ucw.cz>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200918201436.2932360-14-samitolvanen@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/18/2020 1:59 PM, Pavel Machek wrote:
-> On Fri 2020-09-18 13:24:13, Randy Dunlap wrote:
->> Hi,
->>
->> If you do another version of this:
->>
->> On 9/18/20 12:23 PM, Yu-cheng Yu wrote:
->>> Introduce Kconfig option X86_INTEL_BRANCH_TRACKING_USER.
->>>
->>> Indirect Branch Tracking (IBT) provides protection against CALL-/JMP-
->>> oriented programming attacks.  It is active when the kernel has this
->>> feature enabled, and the processor and the application support it.
->>> When this feature is enabled, legacy non-IBT applications continue to
->>> work, but without IBT protection.
->>>
->>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->>> ---
->>> v10:
->>> - Change build-time CET check to config depends on.
->>>
->>>   arch/x86/Kconfig | 16 ++++++++++++++++
->>>   1 file changed, 16 insertions(+)
->>>
->>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->>> index 6b6dad011763..b047e0a8d1c2 100644
->>> --- a/arch/x86/Kconfig
->>> +++ b/arch/x86/Kconfig
->>> @@ -1963,6 +1963,22 @@ config X86_INTEL_SHADOW_STACK_USER
->>>   
->>>   	  If unsure, say y.
->>>   
->>> +config X86_INTEL_BRANCH_TRACKING_USER
->>> +	prompt "Intel Indirect Branch Tracking for user-mode"
->>> +	def_bool n
->>> +	depends on CPU_SUP_INTEL && X86_64
->>> +	depends on $(cc-option,-fcf-protection)
->>> +	select X86_INTEL_CET
->>> +	help
->>> +	  Indirect Branch Tracking (IBT) provides protection against
->>> +	  CALL-/JMP-oriented programming attacks.  It is active when
->>> +	  the kernel has this feature enabled, and the processor and
->>> +	  the application support it.  When this feature is enabled,
->>> +	  legacy non-IBT applications continue to work, but without
->>> +	  IBT protection.
->>> +
->>> +	  If unsure, say y
->>
->> 	  If unsure, say y.
+On Fri, Sep 18, 2020 at 01:14:19PM -0700, Sami Tolvanen wrote:
+> With LTO, LLVM bitcode won't be compiled into native code until
+> modpost_link, or modfinal for modules. This change postpones calls
+> to objtool until after these steps, and moves objtool_args to
+> Makefile.lib, so the arguments can be reused in Makefile.modfinal.
 > 
-> Actually, it would be "If unsure, say Y.", to be consistent with the
-> rest of the Kconfig.
-> 
-> But I wonder if Yes by default is good idea. Only very new CPUs will
-> support this, right? Are they even available at the market? Should the
-> help text say "if your CPU is Whatever Lake or newer, ...." :-) ?
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-I will revise the wording if there is another version.  But a 
-CET-capable kernel can run on legacy systems.  We have been testing that 
-combination.
+Thanks for reorganizing this!
 
-Yu-cheng
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
