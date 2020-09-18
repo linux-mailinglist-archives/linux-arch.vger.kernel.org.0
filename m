@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C813226FE63
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 15:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4783726FE66
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 15:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgIRNZh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 09:25:37 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:41303 "EHLO
+        id S1726759AbgIRNZu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 09:25:50 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:36885 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726697AbgIRNZe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 09:25:34 -0400
+        with ESMTP id S1726489AbgIRNZu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 09:25:50 -0400
 Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
  (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1N9cDF-1kVVpo4405-015YFr; Fri, 18 Sep 2020 15:24:54 +0200
+ 1MElhb-1kHqXN1DP1-00GKmP; Fri, 18 Sep 2020 15:24:54 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Christoph Hellwig <hch@infradead.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -22,41 +22,39 @@ To:     Christoph Hellwig <hch@infradead.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         kexec@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 2/4] kexec: remove compat_sys_kexec_load syscall
-Date:   Fri, 18 Sep 2020 15:24:37 +0200
-Message-Id: <20200918132439.1475479-3-arnd@arndb.de>
+Subject: [PATCH 3/4] mm: remove compat_sys_move_pages
+Date:   Fri, 18 Sep 2020 15:24:38 +0200
+Message-Id: <20200918132439.1475479-4-arnd@arndb.de>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200918132439.1475479-1-arnd@arndb.de>
 References: <20200918132439.1475479-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:NJV12PC5uxHD6FHaymSw/m+fKF3lrpRL0+xIfBJY/upUA40WgzH
- KmBGGRhf7ViI9Js6Mz/Ot3F/q2M7IJhHX1WV3zAX6FWE9LWgPs1gS0xpPr6z4xwpyJC0cn0
- 2C2PNchxF3SJx831h49joBkUjqGichrslId8sn11FcMO5FePhsWZRcLVtoixpZbddz6WtM7
- wt7TzDPzR0wbaZUPMKfmg==
+X-Provags-ID: V03:K1:9HBh2SGDIfLC4kmRog36Y+2yXnwhwLlSN+68IM3LicqoJ2Cu8sf
+ W0NpvqEO54w82dFe5AF83L/33zph8GAZnIMeRuUny2o26krprnWYWdeUfWh5lJwYll90U1+
+ 94mW4y6xZYIqPboRTyA1JP9wiAcGHjn2O1lMfESTnYgDMETmvLLbFnyep7nOLsiE1vA+16+
+ UBD2hsKIblvZJuQkVA0uA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:I0GYqFxUFmE=:e3A+aS5+r/jNowggCIDS5c
- iuFnpSLvFrK81QG8B9kJMKmx2NbMNGItr5LhwSMucubx5qDFfCMF2uaajF8o/wDY0k9kqQ/s5
- 7bEUFAoA//NAheNzPoweE9VNRhCh6Ntbz35P8dNaZiU680WT0RoWJJ+TLwx3RvPlCXOrS89ri
- hN3DnnYoX4/WR4ITEDovHshVn+QB6N/Ttgvtz2Z9LlyF8G4gP9vR0rIJeb3hjJhKkxQU8Rv7D
- A0lxQEwfBgaUdLo7+9EW/y1SbNT7ZxVWRl4iyvyYOmIxoKXF5TC4Fwk8dEBCAxoPeHh1az5c1
- MZwv+3SOoPetG35mef/4pcziWRY+PNU66y7baQpVJHHLUMKU0tTFHvLU2Gn3L43e9r+k5+1Cx
- jDNsZ4S1SuT7nIXNt8xHKxsHf/N09/m2lMBNPAc1QBExSVylLh37vpNv0iufAG9RyLjuIHU5u
- Ms3AMjTnNkLBVVw3bS2zmnrShVT0Kgt6d0i4Ik60XytFsvLWexuFEdE7QeAhW0UgLi6xODrxD
- XJlEkxGikHJs/paqraDf7ygs5Og1v2yaPtivaHsKLfpX7eR+NgxIRHpBxnO52b+qjRS4zky9I
- b3EOorUJ3MSl3DpEC0DiAk+n6VFUkNmmrQQagdhjRm5qR7sw07QI4nvUdWgeS8g5WSsBJTEqw
- TgQ81sr3rklYxymsWlFoq6fUlUVkvNp8NaM/bm1uXwkVRm7aq9eTsYCYiiMI3B1jRia6Yhd1y
- McJgYa5z1ZlbsTD8hHKFMMiCD0tInDKEeOh1t4D0ka9goDZLeJyQKvVKzjheLYGYYPwQ7zH5h
- 2dn/1h98zQh2VN5K3sb9bp24OicLYaJ+v4EAwTK9vbcUrBgWIR/0W/AjDTHQVHGhdvI5A1D
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pa3xb1PHRU8=:t3VwuX9k+/JPY8JW/7f2Bm
+ 9TEBunUl0/0tQn5GJTYXG1ZLByIZ2k3pypgna49HKnBOTQ84UFIkoj7eOQNXxA+mSoU6Wgdgz
+ Gng4c3HjxN9xMBge8iEdalCuy8+F1sSPSZDcGhcA5oTwXBisBplyHv4VGzsBVeL3b6lFDKYXt
+ 9RJS2f2x2YDDSLsya0HDpBJb+cNLsC8o7uXd+LxZNFVj2S80dKUsleNFHEJ9xCkesN0nygH6z
+ U4osjyv6+lEkV7FxpBYQzbbnGw4qM8UjcVXpuSWL+clCnttOfabWHYqEHmU01JJADx0JUXaBz
+ O0EegbbDEWnnFHxHGPWdMaMzuhXp+aFlPZIKwgu+/dGGLL2SVzGnW43s8Cmp5j3OmS8Hl612l
+ BhcYs+D5jqLCoSHWNjlrmLEudIyaTr+VQy4t3ySjYCUQcq49PaQMI8TInC7/q1ot4DsWr3yse
+ X49QjCkRPYDAwTCG81w42FhORJQ1sX98je2dfXd13OY1haT4dSgCZihCygUdwF/q1+at+EYxv
+ 8QLUN20zo19eyu38eOZaCn6dwDTUroHN/pSpABUXJaXtUDgMFCyS+fMR8QFae3E+tUdAsEYMq
+ p0Up8JbY3sZe82HhaLF0agHNw/9rWz1MKpGRNjftWpEzj9esF9KILJEyI1s1a+4ztE7swxOnM
+ XCGuJZJlnXhD/jBQiwXMz2NrArbNjGk4xUpMevALl21m+G0Mwtn2STY7fAQaFJJljFNOajPCv
+ tHjrM9lvbotq+8vozF2XfNAvwrPk6cL9AD0fwhjy/iYaLNeTYRdeyvLNKvtAy6YThdsTnuJjW
+ erb86GUbd7wo2EUFLV+3HqNClhQ/qB0CYFZeSbAht/BeegyI+WGK9xqcqRF/tG9L41BjViu
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The compat version of sys_kexec_load() uses compat_alloc_user_space to
-convert the user-provided arguments into the native format.
-
-Move the conversion into the regular implementation with
-an in_compat_syscall() check to simplify it and avoid the
+The compat move_pages() implementation uses compat_alloc_user_space()
+for converting the pointer array. Moving the compat handling into
+the function itself is a bit simpler and lets us avoid the
 compat_alloc_user_space() call.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
@@ -70,248 +68,240 @@ Signed-off-by: Arnd Bergmann <arnd@arndb.de>
  arch/sparc/kernel/syscalls/syscall.tbl    |  2 +-
  arch/x86/entry/syscalls/syscall_32.tbl    |  2 +-
  arch/x86/entry/syscalls/syscall_64.tbl    |  2 +-
- include/linux/compat.h                    |  6 --
+ include/linux/compat.h                    |  5 ---
  include/uapi/asm-generic/unistd.h         |  2 +-
- kernel/kexec.c                            | 75 ++++++-----------------
- 12 files changed, 29 insertions(+), 72 deletions(-)
+ kernel/sys_ni.c                           |  1 -
+ mm/migrate.c                              | 45 +++++++++++------------
+ 13 files changed, 32 insertions(+), 39 deletions(-)
 
 diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 734860ac7cf9..b6517df74037 100644
+index b6517df74037..af793775ba98 100644
 --- a/arch/arm64/include/asm/unistd32.h
 +++ b/arch/arm64/include/asm/unistd32.h
-@@ -705,7 +705,7 @@ __SYSCALL(__NR_getcpu, sys_getcpu)
+@@ -699,7 +699,7 @@ __SYSCALL(__NR_tee, sys_tee)
+ #define __NR_vmsplice 343
+ __SYSCALL(__NR_vmsplice, compat_sys_vmsplice)
+ #define __NR_move_pages 344
+-__SYSCALL(__NR_move_pages, compat_sys_move_pages)
++__SYSCALL(__NR_move_pages, sys_move_pages)
+ #define __NR_getcpu 345
+ __SYSCALL(__NR_getcpu, sys_getcpu)
  #define __NR_epoll_pwait 346
- __SYSCALL(__NR_epoll_pwait, compat_sys_epoll_pwait)
- #define __NR_kexec_load 347
--__SYSCALL(__NR_kexec_load, compat_sys_kexec_load)
-+__SYSCALL(__NR_kexec_load, sys_kexec_load)
- #define __NR_utimensat 348
- __SYSCALL(__NR_utimensat, sys_utimensat_time32)
- #define __NR_signalfd 349
 diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index f9df9edb67a4..ad157aab4c09 100644
+index ad157aab4c09..7fa1ca45e44c 100644
 --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
 +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -282,7 +282,7 @@
- 271	n32	move_pages			compat_sys_move_pages
+@@ -279,7 +279,7 @@
+ 268	n32	sync_file_range			sys_sync_file_range
+ 269	n32	tee				sys_tee
+ 270	n32	vmsplice			compat_sys_vmsplice
+-271	n32	move_pages			compat_sys_move_pages
++271	n32	move_pages			sys_move_pages
  272	n32	set_robust_list			compat_sys_set_robust_list
  273	n32	get_robust_list			compat_sys_get_robust_list
--274	n32	kexec_load			compat_sys_kexec_load
-+274	n32	kexec_load			sys_kexec_load
- 275	n32	getcpu				sys_getcpu
- 276	n32	epoll_pwait			compat_sys_epoll_pwait
- 277	n32	ioprio_set			sys_ioprio_set
+ 274	n32	kexec_load			sys_kexec_load
 diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index 195b43cf27c8..57baf6c8008f 100644
+index 57baf6c8008f..194c7fbeedf7 100644
 --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
 +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -322,7 +322,7 @@
- 308	o32	move_pages			sys_move_pages			compat_sys_move_pages
+@@ -319,7 +319,7 @@
+ 305	o32	sync_file_range			sys_sync_file_range		sys32_sync_file_range
+ 306	o32	tee				sys_tee
+ 307	o32	vmsplice			sys_vmsplice			compat_sys_vmsplice
+-308	o32	move_pages			sys_move_pages			compat_sys_move_pages
++308	o32	move_pages			sys_move_pages
  309	o32	set_robust_list			sys_set_robust_list		compat_sys_set_robust_list
  310	o32	get_robust_list			sys_get_robust_list		compat_sys_get_robust_list
--311	o32	kexec_load			sys_kexec_load			compat_sys_kexec_load
-+311	o32	kexec_load			sys_kexec_load
- 312	o32	getcpu				sys_getcpu
- 313	o32	epoll_pwait			sys_epoll_pwait			compat_sys_epoll_pwait
- 314	o32	ioprio_set			sys_ioprio_set
+ 311	o32	kexec_load			sys_kexec_load
 diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index def64d221cd4..778bf166d7bd 100644
+index 778bf166d7bd..5c17edaffe70 100644
 --- a/arch/parisc/kernel/syscalls/syscall.tbl
 +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -336,7 +336,7 @@
+@@ -331,7 +331,7 @@
+ 292	64	sync_file_range		sys_sync_file_range
+ 293	common	tee			sys_tee
+ 294	common	vmsplice		sys_vmsplice			compat_sys_vmsplice
+-295	common	move_pages		sys_move_pages			compat_sys_move_pages
++295	common	move_pages		sys_move_pages
+ 296	common	getcpu			sys_getcpu
  297	common	epoll_pwait		sys_epoll_pwait			compat_sys_epoll_pwait
  298	common	statfs64		sys_statfs64			compat_sys_statfs64
- 299	common	fstatfs64		sys_fstatfs64			compat_sys_fstatfs64
--300	common	kexec_load		sys_kexec_load			compat_sys_kexec_load
-+300	common	kexec_load		sys_kexec_load
- 301	32	utimensat		sys_utimensat_time32
- 301	64	utimensat		sys_utimensat
- 302	common	signalfd		sys_signalfd			compat_sys_signalfd
 diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index c2d737ff2e7b..f128ba8b9a71 100644
+index f128ba8b9a71..04fb42d7b377 100644
 --- a/arch/powerpc/kernel/syscalls/syscall.tbl
 +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -350,7 +350,7 @@
- 265	64	mq_timedreceive			sys_mq_timedreceive
- 266	nospu	mq_notify			sys_mq_notify			compat_sys_mq_notify
- 267	nospu	mq_getsetattr			sys_mq_getsetattr		compat_sys_mq_getsetattr
--268	nospu	kexec_load			sys_kexec_load			compat_sys_kexec_load
-+268	nospu	kexec_load			sys_kexec_load
- 269	nospu	add_key				sys_add_key
- 270	nospu	request_key			sys_request_key
- 271	nospu	keyctl				sys_keyctl			compat_sys_keyctl
+@@ -389,7 +389,7 @@
+ 298	common	faccessat			sys_faccessat
+ 299	common	get_robust_list			sys_get_robust_list		compat_sys_get_robust_list
+ 300	common	set_robust_list			sys_set_robust_list		compat_sys_set_robust_list
+-301	common	move_pages			sys_move_pages			compat_sys_move_pages
++301	common	move_pages			sys_move_pages
+ 302	common	getcpu				sys_getcpu
+ 303	nospu	epoll_pwait			sys_epoll_pwait			compat_sys_epoll_pwait
+ 304	32	utimensat			sys_utimensat_time32
 diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index 10456bc936fb..d45952058be2 100644
+index d45952058be2..3197965d45e9 100644
 --- a/arch/s390/kernel/syscalls/syscall.tbl
 +++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -283,7 +283,7 @@
- 274  common	mq_timedreceive		sys_mq_timedreceive		sys_mq_timedreceive_time32
- 275  common	mq_notify		sys_mq_notify			compat_sys_mq_notify
- 276  common	mq_getsetattr		sys_mq_getsetattr		compat_sys_mq_getsetattr
--277  common	kexec_load		sys_kexec_load			compat_sys_kexec_load
-+277  common	kexec_load		sys_kexec_load			sys_kexec_load
- 278  common	add_key			sys_add_key			sys_add_key
- 279  common	request_key		sys_request_key			sys_request_key
- 280  common	keyctl			sys_keyctl			compat_sys_keyctl
+@@ -317,7 +317,7 @@
+ 307  common	sync_file_range		sys_sync_file_range		compat_sys_s390_sync_file_range
+ 308  common	tee			sys_tee				sys_tee
+ 309  common	vmsplice		sys_vmsplice			compat_sys_vmsplice
+-310  common	move_pages		sys_move_pages			compat_sys_move_pages
++310  common	move_pages		sys_move_pages
+ 311  common	getcpu			sys_getcpu			sys_getcpu
+ 312  common	epoll_pwait		sys_epoll_pwait			compat_sys_epoll_pwait
+ 313  common	utimes			sys_utimes			sys_utimes_time32
 diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index 4af114e84f20..a46edcdd950d 100644
+index a46edcdd950d..e36ac364e61a 100644
 --- a/arch/sparc/kernel/syscalls/syscall.tbl
 +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -369,7 +369,7 @@
- 303	common	mbind			sys_mbind			compat_sys_mbind
+@@ -370,7 +370,7 @@
  304	common	get_mempolicy		sys_get_mempolicy		compat_sys_get_mempolicy
  305	common	set_mempolicy		sys_set_mempolicy		compat_sys_set_mempolicy
--306	common	kexec_load		sys_kexec_load			compat_sys_kexec_load
-+306	common	kexec_load		sys_kexec_load			sys_kexec_load
- 307	common	move_pages		sys_move_pages			compat_sys_move_pages
+ 306	common	kexec_load		sys_kexec_load			sys_kexec_load
+-307	common	move_pages		sys_move_pages			compat_sys_move_pages
++307	common	move_pages		sys_move_pages
  308	common	getcpu			sys_getcpu
  309	common	epoll_pwait		sys_epoll_pwait			compat_sys_epoll_pwait
+ 310	32	utimensat		sys_utimensat_time32
 diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 3db3d8823dc8..7e4140b78aad 100644
+index 7e4140b78aad..b3263b8b2eae 100644
 --- a/arch/x86/entry/syscalls/syscall_32.tbl
 +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -294,7 +294,7 @@
- 280	i386	mq_timedreceive		sys_mq_timedreceive_time32
- 281	i386	mq_notify		sys_mq_notify			compat_sys_mq_notify
- 282	i386	mq_getsetattr		sys_mq_getsetattr		compat_sys_mq_getsetattr
--283	i386	kexec_load		sys_kexec_load			compat_sys_kexec_load
-+283	i386	kexec_load		sys_kexec_load			sys_kexec_load
- 284	i386	waitid			sys_waitid			compat_sys_waitid
- # 285 sys_setaltroot
- 286	i386	add_key			sys_add_key
+@@ -328,7 +328,7 @@
+ 314	i386	sync_file_range		sys_ia32_sync_file_range
+ 315	i386	tee			sys_tee
+ 316	i386	vmsplice		sys_vmsplice			compat_sys_vmsplice
+-317	i386	move_pages		sys_move_pages			compat_sys_move_pages
++317	i386	move_pages		sys_move_pages
+ 318	i386	getcpu			sys_getcpu
+ 319	i386	epoll_pwait		sys_epoll_pwait
+ 320	i386	utimensat		sys_utimensat_time32
 diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index f30d6ae9a688..9986f5f08278 100644
+index 9986f5f08278..4a997a0cbf47 100644
 --- a/arch/x86/entry/syscalls/syscall_64.tbl
 +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -384,7 +384,7 @@
- 525	x32	sigaltstack		compat_sys_sigaltstack
- 526	x32	timer_create		compat_sys_timer_create
- 527	x32	mq_notify		compat_sys_mq_notify
--528	x32	kexec_load		compat_sys_kexec_load
-+528	x32	kexec_load		sys_kexec_load
- 529	x32	waitid			compat_sys_waitid
+@@ -389,7 +389,7 @@
  530	x32	set_robust_list		compat_sys_set_robust_list
  531	x32	get_robust_list		compat_sys_get_robust_list
+ 532	x32	vmsplice		compat_sys_vmsplice
+-533	x32	move_pages		compat_sys_move_pages
++533	x32	move_pages		sys_move_pages
+ 534	x32	preadv			compat_sys_preadv64
+ 535	x32	pwritev			compat_sys_pwritev64
+ 536	x32	rt_tgsigqueueinfo	compat_sys_rt_tgsigqueueinfo
 diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 3d96a841bd49..a7a5a0ff59ef 100644
+index a7a5a0ff59ef..db1d7ac2c9e0 100644
 --- a/include/linux/compat.h
 +++ b/include/linux/compat.h
-@@ -643,12 +643,6 @@ asmlinkage long compat_sys_setitimer(int which,
- 				     struct old_itimerval32 __user *in,
- 				     struct old_itimerval32 __user *out);
+@@ -763,11 +763,6 @@ asmlinkage long compat_sys_set_mempolicy(int mode, compat_ulong_t __user *nmask,
+ asmlinkage long compat_sys_migrate_pages(compat_pid_t pid,
+ 		compat_ulong_t maxnode, const compat_ulong_t __user *old_nodes,
+ 		const compat_ulong_t __user *new_nodes);
+-asmlinkage long compat_sys_move_pages(pid_t pid, compat_ulong_t nr_pages,
+-				      __u32 __user *pages,
+-				      const int __user *nodes,
+-				      int __user *status,
+-				      int flags);
  
--/* kernel/kexec.c */
--asmlinkage long compat_sys_kexec_load(compat_ulong_t entry,
--				      compat_ulong_t nr_segments,
--				      struct compat_kexec_segment __user *,
--				      compat_ulong_t flags);
--
- /* kernel/posix-timers.c */
- asmlinkage long compat_sys_timer_create(clockid_t which_clock,
- 			struct compat_sigevent __user *timer_event_spec,
+ asmlinkage long compat_sys_rt_tgsigqueueinfo(compat_pid_t tgid,
+ 					compat_pid_t pid, int sig,
 diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 995b36c2ea7d..83f1fc7fd3d7 100644
+index 83f1fc7fd3d7..4da51702fb21 100644
 --- a/include/uapi/asm-generic/unistd.h
 +++ b/include/uapi/asm-generic/unistd.h
-@@ -342,7 +342,7 @@ __SC_COMP(__NR_setitimer, sys_setitimer, compat_sys_setitimer)
+@@ -681,7 +681,7 @@ __SC_COMP(__NR_set_mempolicy, sys_set_mempolicy, compat_sys_set_mempolicy)
+ #define __NR_migrate_pages 238
+ __SC_COMP(__NR_migrate_pages, sys_migrate_pages, compat_sys_migrate_pages)
+ #define __NR_move_pages 239
+-__SC_COMP(__NR_move_pages, sys_move_pages, compat_sys_move_pages)
++__SYSCALL(__NR_move_pages, sys_move_pages)
+ #endif
  
- /* kernel/kexec.c */
- #define __NR_kexec_load 104
--__SC_COMP(__NR_kexec_load, sys_kexec_load, compat_sys_kexec_load)
-+__SYSCALL(__NR_kexec_load, sys_kexec_load)
+ #define __NR_rt_tgsigqueueinfo 240
+diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+index c925d1e1777e..783a24ceee88 100644
+--- a/kernel/sys_ni.c
++++ b/kernel/sys_ni.c
+@@ -290,7 +290,6 @@ COND_SYSCALL_COMPAT(set_mempolicy);
+ COND_SYSCALL(migrate_pages);
+ COND_SYSCALL_COMPAT(migrate_pages);
+ COND_SYSCALL(move_pages);
+-COND_SYSCALL_COMPAT(move_pages);
  
- /* kernel/module.c */
- #define __NR_init_module 105
-diff --git a/kernel/kexec.c b/kernel/kexec.c
-index f977786fe498..1ef7d3dc906f 100644
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -29,7 +29,25 @@ static int copy_user_segment_list(struct kimage *image,
- 	/* Read in the segments */
- 	image->nr_segments = nr_segments;
- 	segment_bytes = nr_segments * sizeof(*segments);
--	ret = copy_from_user(image->segment, segments, segment_bytes);
-+	if (in_compat_syscall()) {
-+		struct compat_kexec_segment __user *cs = (void __user *)segments;
-+		struct compat_kexec_segment segment;
-+		int i;
-+		for (i=0; i< nr_segments; i++) {
-+			copy_from_user(&segment, &cs[i], sizeof(segment));
-+			if (ret)
-+				break;
-+
-+			image->segment[i] = (struct kexec_segment) {
-+				.buf   = compat_ptr(segment.buf),
-+				.bufsz = segment.bufsz,
-+				.mem   = segment.mem,
-+				.memsz = segment.memsz,
-+			};
-+		}
-+	} else {
-+		ret = copy_from_user(image->segment, segments, segment_bytes);
-+	}
- 	if (ret)
- 		ret = -EFAULT;
- 
-@@ -264,58 +282,3 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
- 
- 	return result;
+ COND_SYSCALL(perf_event_open);
+ COND_SYSCALL(accept4);
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 34a842a8eb6a..e9dfbde5f12c 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1835,6 +1835,27 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
+ 	mmap_read_unlock(mm);
  }
--
+ 
++static int put_pages_array(const void __user *chunk_pages[],
++			   const void __user * __user *pages,
++			   unsigned long chunk_nr)
++{
++	compat_uptr_t __user *pages32 = (compat_uptr_t __user *)pages;
++	compat_uptr_t p;
++	int i;
++
++	if (!in_compat_syscall())
++		return copy_from_user(chunk_pages, pages,
++				      chunk_nr * sizeof(*chunk_pages));
++
++	for (i = 0; i < chunk_nr; i++) {
++		if (get_user(p, pages32 + i))
++			return -EFAULT;
++		chunk_pages[i] = compat_ptr(p);
++	}
++
++	return 0;
++}
++
+ /*
+  * Determine the nodes of a user array of pages and store it in
+  * a user array of status.
+@@ -1854,7 +1875,7 @@ static int do_pages_stat(struct mm_struct *mm, unsigned long nr_pages,
+ 		if (chunk_nr > DO_PAGES_STAT_CHUNK_NR)
+ 			chunk_nr = DO_PAGES_STAT_CHUNK_NR;
+ 
+-		if (copy_from_user(chunk_pages, pages, chunk_nr * sizeof(*chunk_pages)))
++		if (put_pages_array(chunk_pages, pages, chunk_nr))
+ 			break;
+ 
+ 		do_pages_stat_array(mm, chunk_nr, chunk_pages, chunk_status);
+@@ -1943,28 +1964,6 @@ SYSCALL_DEFINE6(move_pages, pid_t, pid, unsigned long, nr_pages,
+ 	return kernel_move_pages(pid, nr_pages, pages, nodes, status, flags);
+ }
+ 
 -#ifdef CONFIG_COMPAT
--COMPAT_SYSCALL_DEFINE4(kexec_load, compat_ulong_t, entry,
--		       compat_ulong_t, nr_segments,
--		       struct compat_kexec_segment __user *, segments,
--		       compat_ulong_t, flags)
+-COMPAT_SYSCALL_DEFINE6(move_pages, pid_t, pid, compat_ulong_t, nr_pages,
+-		       compat_uptr_t __user *, pages32,
+-		       const int __user *, nodes,
+-		       int __user *, status,
+-		       int, flags)
 -{
--	struct compat_kexec_segment in;
--	struct kexec_segment out, __user *ksegments;
--	unsigned long i, result;
+-	const void __user * __user *pages;
+-	int i;
 -
--	result = kexec_load_check(nr_segments, flags);
--	if (result)
--		return result;
+-	pages = compat_alloc_user_space(nr_pages * sizeof(void *));
+-	for (i = 0; i < nr_pages; i++) {
+-		compat_uptr_t p;
 -
--	/* Don't allow clients that don't understand the native
--	 * architecture to do anything.
--	 */
--	if ((flags & KEXEC_ARCH_MASK) == KEXEC_ARCH_DEFAULT)
--		return -EINVAL;
--
--	ksegments = compat_alloc_user_space(nr_segments * sizeof(out));
--	for (i = 0; i < nr_segments; i++) {
--		result = copy_from_user(&in, &segments[i], sizeof(in));
--		if (result)
--			return -EFAULT;
--
--		out.buf   = compat_ptr(in.buf);
--		out.bufsz = in.bufsz;
--		out.mem   = in.mem;
--		out.memsz = in.memsz;
--
--		result = copy_to_user(&ksegments[i], &out, sizeof(out));
--		if (result)
+-		if (get_user(p, pages32 + i) ||
+-			put_user(compat_ptr(p), pages + i))
 -			return -EFAULT;
 -	}
--
--	/* Because we write directly to the reserved memory
--	 * region when loading crash kernels we need a mutex here to
--	 * prevent multiple crash  kernels from attempting to load
--	 * simultaneously, and to prevent a crash kernel from loading
--	 * over the top of a in use crash kernel.
--	 *
--	 * KISS: always take the mutex.
--	 */
--	if (!mutex_trylock(&kexec_mutex))
--		return -EBUSY;
--
--	result = do_kexec_load(entry, nr_segments, ksegments, flags);
--
--	mutex_unlock(&kexec_mutex);
--
--	return result;
+-	return kernel_move_pages(pid, nr_pages, pages, nodes, status, flags);
 -}
--#endif
+-#endif /* CONFIG_COMPAT */
+-
+ #ifdef CONFIG_NUMA_BALANCING
+ /*
+  * Returns true if this is a safe migration target node for misplaced NUMA
 -- 
 2.27.0
 
