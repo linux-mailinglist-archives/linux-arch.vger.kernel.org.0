@@ -2,119 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D10226FD5C
+	by mail.lfdr.de (Postfix) with ESMTP id 9F27D26FD5D
 	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 14:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbgIRMri (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726828AbgIRMri (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 18 Sep 2020 08:47:38 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:55965 "EHLO
+Received: from mout.kundenserver.de ([212.227.126.134]:51665 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727003AbgIRMq4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 08:46:56 -0400
+        with ESMTP id S1726392AbgIRMrA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 08:47:00 -0400
 Received: from threadripper.lan ([149.172.98.151]) by mrelayeu.kundenserver.de
  (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1Mr8zO-1knLTA2coI-00oGkp; Fri, 18 Sep 2020 14:46:34 +0200
+ 1MTRAS-1jtycg3laG-00Ti0L; Fri, 18 Sep 2020 14:46:34 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Christoph Hellwig <hch@infradead.org>,
         Russell King <linux@armlinux.org.uk>,
         Alexander Viro <viro@zeniv.linux.org.uk>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 1/9] mm/maccess: fix unaligned copy_{from,to}_kernel_nofault
-Date:   Fri, 18 Sep 2020 14:46:16 +0200
-Message-Id: <20200918124624.1469673-2-arnd@arndb.de>
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2 2/9] ARM: traps: use get_kernel_nofault instead of set_fs()
+Date:   Fri, 18 Sep 2020 14:46:17 +0200
+Message-Id: <20200918124624.1469673-3-arnd@arndb.de>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200918124624.1469673-1-arnd@arndb.de>
 References: <20200918124624.1469673-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:aM+IxhTWQ8zLEy6I5xMM14Ev05fAqzi2N6KWBwjGmrTs5WlEUtT
- h3d/Ek0+MD7Kg+UFacJgz6oWfZKeIYwr4MM2bOz3usLS6zOvlxqXzO+j1mOgipiLpoWR2SD
- 5K6CrFeWW5//N3cy9JMAg2AO19WmtU3iNg006du/rVt/cP2Aa1dqQ0+GdFtoh+I1fO8EW4r
- aTvEWserNBkjpzkGWOOuQ==
+X-Provags-ID: V03:K1:Gy/6r3hP6+Xw0VZ1kPuBOfmudRbDMtnh6jF154kk+qnOsu9JUCQ
+ cQK0bo1hDNYXTK9JI2Na6UKfmHCGL9OWP+7LGyS/kOe6Uc9yJbO9xExzSioQ0OF5BPd/C1V
+ nmlIEcSh3DpIrVLDUZebSlnT9QnSnvqCMQd9I2RYk49O2SSMFV8/sb0VnF6GCOz06mOntBv
+ vtRVwI+wzeyGhICf15/8w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t7msc0UXfsQ=:yaYfo6Eb6GxlQw0v2fCfgT
- qfpkjhEkog+a5swVrJWRLI0F60ZAoQa+U72qb8Dm4gq3x2tUgEn4wddszH62L6tjKGbUgg0ma
- vv2qlf2F5gMIXlIEKTRPr7MP0E7h658vOczUAtSP9ULseis7pnmHdXl5mY1o8bv6x2h+moCol
- pUZKxC2avRCwspOZYSqaWOJqTaecq5Kp5j38nJIpwfH7GepL4JmeElY6K+prcigvu2b/KGzLt
- rzR8UxhOt3ILMlL4zIcQ83t35YaRRce7iFh29RIWWV5RGuo7GS2sPr0Xqm0NCLNd5xsJirFmH
- d6q07QmGQzg9HIkWjyEz6ochFwmR8Bbds6hT8jb+LYefWbdMwlEaG3yebGqvR2AbSgrAGySGx
- bwgquAH3VI8ifEi31v601nWLoPohbfUDjLLvxZP/ud2cPnJFir3ntvThVPvaxEhpFrZJbvimP
- u2wy7qe9bqtokp4OHIx5D8mqu0XpgDYFq//rCsYqg+1jifdcfcSomDujlg45g0eM9fgCXDG68
- Gn54qF2GMix5PSMOWWE+IQxHzRQXj5GUghUjAG/wxM2JD+juq6t9ul7AJKeotoue5gtBfVEJe
- 92lmPtwB87ccXhEbD6OrywRci3W5jl3s6YwNIgsv6XQU7/UjOa7Gz4fpNDIm5dktfQwfjFUXv
- nayGdJc/vWr86qx+LItPMChsRCRpcyHqxxA/esHHJeCeyohXYCseWppKuP/1f2hAAkq8BIGy4
- Uj337rpz5iNoUmGJU2x/XjiYqPziCVKKhjYFv6Tg/SL4BO0pV6d8l2eBrFUJiVpY6GlcjXKdz
- 3yxbq0G6dBJ/N50FfWidrUtiDKawO2xbzBq8KoqXgMPql3f1q2P6a17UKjqNjxNFnjrnBkd
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DMblnyBKhY4=:9xYkhBDiYrvF2PKMOZ5/jd
+ 7itoiVV6ScsHcK8wPs3xmfxSSrugMrRfii48gNLwyhVjnLhHsCHeIToONufxWhSJtWjqp50Rd
+ dIhEumG+L/4r73Q7OyhK/FrDYOmZctzBbZbyaVJ4wQqNud37Mn9XLeJ8YXD11XGCYC0p6i9Ge
+ aOPWKJtnHknCvEXZxHrj6X8nCWU097zi0wIqq8hmcU+urPAHVQ7Y29zGk/ELMlP4oGdhPlU52
+ 6I+dJDkdUkKfntHzL5sCVutRX7EueaRKoTpxc2faPKlwJQxnGn7NyNFxjeypshD9UPmkv0qIz
+ uylSZc/nektnaiR3D6IRhQZJMwJDykBoIe8C3jk0bbNnCInQBu4lL/0wQ2RHfnusS4U0glwC8
+ SD2DQohnsrGmHMGnbqEnN7XTejaUW+b9phi85MVOtGtIEuN4980eeaFVIsMTkklxbhhq3oHCf
+ L/0jbGnUehzANInlLiBFQiyHWJ6O4vsTWFpWso1N3zvn1ePT3/CLrnhkUTYZrdnoAHZ+GQAbH
+ 3ZfCZ13w4NlZrcq9AiIZ93tkymhgVfkaxx4TATAiRc5BNr+tkMSj0wWdKy4ArwL6Sk95+LKBK
+ GxcEz1kzhIFPShl/11Yi7N2GGdiN0cZntPvNNU8dwnwdzcSzUnJS8OjxdNgYRBjR8O6eyP7Cr
+ dlsU4otbC8UOXe3bQ6WT2de5wyXNscPVST3gquGhFq+RSacYFwmiUJq4YwmSjeapSR6o3uXck
+ zD+Ip58BziCarZCj5aMUGzFfn/jRUcoejVakvpvdBJ3pK87EOfqMQYxnulXte+co+uheW/4yI
+ FNjRnYXt1zm6T5mNTFcR7DRZP8334b7k9fdnpA8MGg/BI710j6z9SMcAT4z3EUHAhn6bPeJ
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On machines such as ARMv5 that trap unaligned accesses, these
-two functions can be slow when each access needs to be emulated,
-or they might not work at all.
+ARM uses set_fs() and __get_user() to allow the stack dumping code to
+access possibly invalid pointers carefully. These can be changed to the
+simpler get_kernel_nofault(), and allow the eventual removal of set_fs().
 
-Change them so that each loop is only used when both the src
-and dst pointers are naturally aligned.
+dump_instr() will print either kernel or user space pointers,
+depending on how it was called. For dump_mem(), I assume we are only
+interested in kernel pointers, and the only time that this is called
+with user_mode(regs)==true is when the regs themselves are unreliable
+as a result of the condition that caused the trap.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- mm/maccess.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ arch/arm/kernel/traps.c | 47 ++++++++++++++---------------------------
+ 1 file changed, 16 insertions(+), 31 deletions(-)
 
-diff --git a/mm/maccess.c b/mm/maccess.c
-index 3bd70405f2d8..d3f1a1f0b1c1 100644
---- a/mm/maccess.c
-+++ b/mm/maccess.c
-@@ -24,13 +24,21 @@ bool __weak copy_from_kernel_nofault_allowed(const void *unsafe_src,
- 
- long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
+diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+index 17d5a785df28..c3964a283b63 100644
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -122,17 +122,8 @@ static void dump_mem(const char *lvl, const char *str, unsigned long bottom,
+ 		     unsigned long top)
  {
-+	unsigned long align = 0;
-+
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
-+		align = (unsigned long)dst | (unsigned long)src;
-+
- 	if (!copy_from_kernel_nofault_allowed(src, size))
- 		return -ERANGE;
+ 	unsigned long first;
+-	mm_segment_t fs;
+ 	int i;
  
- 	pagefault_disable();
--	copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
--	copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
--	copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
-+	if (!(align & 7))
-+		copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
-+	if (!(align & 3))
-+		copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
-+	if (!(align & 1))
-+		copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
- 	copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
- 	pagefault_enable();
- 	return 0;
-@@ -50,10 +58,18 @@ EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
+-	/*
+-	 * We need to switch to kernel mode so that we can use __get_user
+-	 * to safely read from kernel space.  Note that we now dump the
+-	 * code first, just in case the backtrace kills us.
+-	 */
+-	fs = get_fs();
+-	set_fs(KERNEL_DS);
+-
+ 	printk("%s%s(0x%08lx to 0x%08lx)\n", lvl, str, bottom, top);
  
- long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
+ 	for (first = bottom & ~31; first < top; first += 32) {
+@@ -145,7 +136,7 @@ static void dump_mem(const char *lvl, const char *str, unsigned long bottom,
+ 		for (p = first, i = 0; i < 8 && p < top; i++, p += 4) {
+ 			if (p >= bottom && p < top) {
+ 				unsigned long val;
+-				if (__get_user(val, (unsigned long *)p) == 0)
++				if (get_kernel_nofault(val, (unsigned long *)p))
+ 					sprintf(str + i * 9, " %08lx", val);
+ 				else
+ 					sprintf(str + i * 9, " ????????");
+@@ -153,11 +144,9 @@ static void dump_mem(const char *lvl, const char *str, unsigned long bottom,
+ 		}
+ 		printk("%s%04lx:%s\n", lvl, first & 0xffff, str);
+ 	}
+-
+-	set_fs(fs);
+ }
+ 
+-static void __dump_instr(const char *lvl, struct pt_regs *regs)
++static void dump_instr(const char *lvl, struct pt_regs *regs)
  {
-+	unsigned long align = 0;
-+
-+	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
-+		align = (unsigned long)dst | (unsigned long)src;
-+
- 	pagefault_disable();
--	copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
--	copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
--	copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
-+	if (!(align & 7))
-+		copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
-+	if (!(align & 3))
-+		copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
-+	if (!(align & 1))
-+		copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
- 	copy_to_kernel_nofault_loop(dst, src, size, u8, Efault);
- 	pagefault_enable();
- 	return 0;
+ 	unsigned long addr = instruction_pointer(regs);
+ 	const int thumb = thumb_mode(regs);
+@@ -173,10 +162,20 @@ static void __dump_instr(const char *lvl, struct pt_regs *regs)
+ 	for (i = -4; i < 1 + !!thumb; i++) {
+ 		unsigned int val, bad;
+ 
+-		if (thumb)
+-			bad = get_user(val, &((u16 *)addr)[i]);
+-		else
+-			bad = get_user(val, &((u32 *)addr)[i]);
++		if (!user_mode(regs)) {
++			if (thumb) {
++				u16 val16;
++				bad = get_kernel_nofault(val16, &((u16 *)addr)[i]);
++				val = val16;
++			} else {
++				bad = get_kernel_nofault(val, &((u32 *)addr)[i]);
++			}
++		} else {
++			if (thumb)
++				bad = get_user(val, &((u16 *)addr)[i]);
++			else
++				bad = get_user(val, &((u32 *)addr)[i]);
++		}
+ 
+ 		if (!bad)
+ 			p += sprintf(p, i == 0 ? "(%0*x) " : "%0*x ",
+@@ -189,20 +188,6 @@ static void __dump_instr(const char *lvl, struct pt_regs *regs)
+ 	printk("%sCode: %s\n", lvl, str);
+ }
+ 
+-static void dump_instr(const char *lvl, struct pt_regs *regs)
+-{
+-	mm_segment_t fs;
+-
+-	if (!user_mode(regs)) {
+-		fs = get_fs();
+-		set_fs(KERNEL_DS);
+-		__dump_instr(lvl, regs);
+-		set_fs(fs);
+-	} else {
+-		__dump_instr(lvl, regs);
+-	}
+-}
+-
+ #ifdef CONFIG_ARM_UNWIND
+ static inline void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 				  const char *loglvl)
 -- 
 2.27.0
 
