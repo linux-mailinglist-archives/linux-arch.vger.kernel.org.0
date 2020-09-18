@@ -2,80 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05E226FC58
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 14:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC7326FCA5
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Sep 2020 14:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgIRMSu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 08:18:50 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:57113 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726064AbgIRMSu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 18 Sep 2020 08:18:50 -0400
-X-Greylist: delayed 87808 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Sep 2020 08:18:48 EDT
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BtCYK40Jjz9sT5;
-        Fri, 18 Sep 2020 22:18:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1600431526;
-        bh=eZsLlZGMKeQkS+03FKo604w9V86XaFWLGzm8pTD5+uI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mDA5YloOUUj1YlrkqhB+NWmP7C+oK2/lEb51pnY0pmK1q+xi+YZdJF9hhzLw5ssGQ
-         5vsW8B/AbgZLkyYtLDnDusK8tTY7tnBUCe4RArSx6pTDEhm9wVpRd05HuuBAxdlGzv
-         q3xStD52WpU801nnx+2eiKW4wL9M2IuTDP8yKJJiHVgJnP29Wlvxjc2hG4FL9b8n+V
-         EQCPIKrQRI/VIOiFlLt9gv3zsRcuTbu8sqKgEppJ2TKcEsreQ6q172d2ktOnyrkxW7
-         JeHMrR3RHMLBvdj9QS6Ee3N4/3EwF9bulqzLN+rYEgbu8Mga9FBrr/HEdUT7ehUqmg
-         U/rIeVSqeMwbQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nicholas Piggin <npiggin@gmail.com>, peterz@infradead.org
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-arch@vger.kernel.org,
-        "linux-mm \@ kvack . org" <linux-mm@kvack.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Hansen <dave.hansen@intel.com>,
-        sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v2 1/4] mm: fix exec activate_mm vs TLB shootdown and lazy tlb switching race
-In-Reply-To: <1600137586.nypnz3sbcl.astroid@bobo.none>
-References: <20200914045219.3736466-1-npiggin@gmail.com> <20200914045219.3736466-2-npiggin@gmail.com> <20200914105617.GP1362448@hirez.programming.kicks-ass.net> <1600137586.nypnz3sbcl.astroid@bobo.none>
-Date:   Fri, 18 Sep 2020 22:18:44 +1000
-Message-ID: <87a6xn6zx7.fsf@mpe.ellerman.id.au>
+        id S1726192AbgIRMgm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 08:36:42 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:39563 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726154AbgIRMgl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 08:36:41 -0400
+Received: from mail-qt1-f174.google.com ([209.85.160.174]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MHnZQ-1kEI5W0sgo-00EwgF; Fri, 18 Sep 2020 14:36:40 +0200
+Received: by mail-qt1-f174.google.com with SMTP id c18so4778666qtw.5;
+        Fri, 18 Sep 2020 05:36:39 -0700 (PDT)
+X-Gm-Message-State: AOAM531P0vWhxtgLTyK/ASRNZLNtY2deNYX1PrkvlZCh/JM48cL9Dvn6
+        T18/2j/SPvdHteGseUUOwrA0KNaOt5vmJGNzI50=
+X-Google-Smtp-Source: ABdhPJzHuJZ/kDocyLlLrnh1ExNrKpMLkiEpPLdi9PahWckRQnAPVIMevhGijaQB/J930L15teODRXzI8m5Cr7Nw24M=
+X-Received: by 2002:aed:2ce5:: with SMTP id g92mr19928608qtd.204.1600432598903;
+ Fri, 18 Sep 2020 05:36:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200907153701.2981205-1-arnd@arndb.de> <20200907153701.2981205-3-arnd@arndb.de>
+ <20200908061528.GB13930@lst.de> <CAK8P3a22EiD-uMZQaBpHQYyy=MJ_7J-ih=6CtgH_9RXT6OOYvg@mail.gmail.com>
+ <20200918074203.GU1551@shell.armlinux.org.uk>
+In-Reply-To: <20200918074203.GU1551@shell.armlinux.org.uk>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 18 Sep 2020 14:36:23 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0HhfcM+bovy2pA4omhC5w6POqvf2Yx61_hQSwika2AEA@mail.gmail.com>
+Message-ID: <CAK8P3a0HhfcM+bovy2pA4omhC5w6POqvf2Yx61_hQSwika2AEA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] ARM: traps: use get_kernel_nofault instead of set_fs()
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux- <kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:uQ1rd98AYHFYnsPXe5sEe/Tx2b86dN9VTdMt61Zxci4xR1f6u9Q
+ Jc23I9AKuaf4UPWMeRYcxl0y/tYsKix6NuDCa1AJsfZpOD0PCpSow/tBshCWbiIFTN9yGH7
+ 7qxsVPFnmaCs1Cf4cDvIk0Cb0CFCNeQWP2S27bXdNG4xvlQLRYPDfj/6YC2Dxu/bNOA3kXk
+ vNDDT7JNV3birPxddl8KQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tPEtwy/3JPA=:EazmA3FpyPiDwBxPKg+o3Z
+ JesvTBW0cDHRKN0QRoNwGwxkwA8EhckldC2H6hUH12TEH/mkTXBoEur1LIWWmjL1+iaJeAfVx
+ mFSt9UE8nZoC9ocVSOJD88GyNbPUPJ0VZCSaRP76v3w/3EB95HCaWeLmW3+IBtm7NonCL8+qK
+ e95OeX0c2JB47/Pkw704dF5g8vwH/MwuCh5it/MDoiGHBInauCMeW9EAkH5LUI4z8wj3AvsxG
+ zxyzri8LI/LpejNNc9DYBHJeuauNVnHsjEkYX82pbB2RQqNqbQGaLns0IzCVr8OBhq/OpyInD
+ dVIoH52N+wC8G5JGHxGbu/RwK3hVRCU5fS0tUAR86ULsF/jQAeD5PBIIc/M7qycmW2PHUIFgA
+ VRJczQ9WiS0AmhYSwJ9Ox67HdjiC6Hh7XPxTgAxED1VqX2ytDdJ8DkLMmm25iN5YddIkkhj/y
+ zmMsfhFb0G64V5Z9nQ0hGxeiuIVlu6A4RTmJYTpT5njc6LWJUXae8wMF0AbClZFO4XFQs7dCc
+ BNYqWikmJ/w7gGO6VlWQFiNXTPv7Sa3Lk6lA2cQTtJiTgdpS8P0WnZ8LrPc9E2+xASr/Npuya
+ smsRCLxqdynTNS7kWwnQFF3/1vl55GzkI8aCZj3bIqYVKriUVckPlVnln6K2WKuGnq29L0ZEt
+ 7MXWgLiIxtwdkk0WAIJdr/3lhwv67UtlYnR14bM+pyixV/21LPrEmgc+Xi9b47qPQD8IfKZMM
+ eyDFWiFRRTqEQzhJ+uT4P1UGVwD4avKaPDUeuRdg5wWRZ9FVQ89Y+WKdK5R3ys0oR7zXyhJcx
+ vjcMJpoQJK79Ab/i7yh5VWJJhrQS2hgcMlvttXrGKb+nwZPTdKlCEBWNvP7PTjyx+OlCc86
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Nicholas Piggin <npiggin@gmail.com> writes:
-> Excerpts from peterz@infradead.org's message of September 14, 2020 8:56 pm:
->> On Mon, Sep 14, 2020 at 02:52:16PM +1000, Nicholas Piggin wrote:
->>> Reading and modifying current->mm and current->active_mm and switching
->>> mm should be done with irqs off, to prevent races seeing an intermediate
->>> state.
-...
->>> 
->>> This is a bit ugly, but in the interest of fixing the bug and backporting
->>> before all architectures are converted this is a compromise.
->>> 
->>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> 
->> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> 
->> I'm thinking we want this selected on x86 as well. Andy?
+On Fri, Sep 18, 2020 at 9:42 AM Russell King - ARM Linux admin
+<linux@armlinux.org.uk> wrote:
 >
-> Thanks for the ack. The plan was to take it through the powerpc tree,
-> but if you'd want x86 to select it, maybe a topic branch?
+> On Thu, Sep 17, 2020 at 07:29:37PM +0200, Arnd Bergmann wrote:
+> > On Tue, Sep 8, 2020 at 8:15 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > I looked through the history now and the only code path I could
+> > find that would arrive here this way is from bad_mode(), indicating
+> > that there is probably a hardware bug or the contents of *regs are
+> > corrupted.
+>
+> Yes, that's correct.  It isn't something entirely theoretical, although
+> we never see it now, it used to happen in the distant past due to saved
+> regs corruption.  If bad_mode() ever gets called, all bets are off and
+> we're irrecoverably crashing.
+>
+> Note that in that case, while user_mode(regs) may return true or false,
+> regs->ARM_sp and regs->ARM_lr are always the SVC mode stack and return
+> address after regs has been stacked, and not the expected values for
+> the parent context (which we have most likely long since destroyed.)
 
-I've put this series in a topic branch based on v5.9-rc2:
+Ok, I have rewritten the patch and my changelog text accordingly, sending
+an updated version now.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/irqs-off-activate-mm
+Thanks,
 
-I plan to merge it into the powerpc/next tree for v5.10, but if anyone
-else wants to merge it that's fine too.
-
-cheers
+      Arnd
