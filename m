@@ -2,24 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 921DF2708B5
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Sep 2020 00:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F33F27095A
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Sep 2020 02:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgIRWEA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Sep 2020 18:04:00 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:38744 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726154AbgIRWEA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Sep 2020 18:04:00 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 8146F1C0B78; Sat, 19 Sep 2020 00:03:55 +0200 (CEST)
-Date:   Sat, 19 Sep 2020 00:03:55 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S1726130AbgISAME (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Sep 2020 20:12:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51962 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726054AbgISAME (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Sep 2020 20:12:04 -0400
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5674D22208
+        for <linux-arch@vger.kernel.org>; Sat, 19 Sep 2020 00:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600474323;
+        bh=etjZlYYd1IIPDO1NfKNkztbf4goZGkm6DYQVvva74MI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=L7h6oG+UCIlVAj7i6PyxRQf7m9hC/1jmn3wsGAiTRhuPMAOQbzjvfwU1eUsohup7x
+         nsEMlDfmILL1Qv9F7HCx4sxrvxUj9AqhKo2z0RWVDQolq2dDHte4dIn/vts80Gz3rj
+         iLjVZ1Ydk2VK8jPEt1IyztAW9dwtHXaJ1tj9YxRE=
+Received: by mail-wm1-f43.google.com with SMTP id q9so6795863wmj.2
+        for <linux-arch@vger.kernel.org>; Fri, 18 Sep 2020 17:12:03 -0700 (PDT)
+X-Gm-Message-State: AOAM531HEYQLEUcJ1tdQLSlE7REe0BcJr+Sd7oSWbSlav9JFQkMotMWd
+        KrL9KloTHS302BCTapNocbLgjea81Rz+Ax3J4wpxjQ==
+X-Google-Smtp-Source: ABdhPJxmOMUD3oJeWUBWSi+Yvq5YFeJEC+DLVGlDfJl03Mlbg5VJuyOxaSuU065pkOCJwFJ0EmxFOn3UVUdyN4X8nu8=
+X-Received: by 2002:a05:600c:4104:: with SMTP id j4mr17372943wmi.36.1600474321906;
+ Fri, 18 Sep 2020 17:12:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200918192312.25978-1-yu-cheng.yu@intel.com> <20200918192312.25978-9-yu-cheng.yu@intel.com>
+In-Reply-To: <20200918192312.25978-9-yu-cheng.yu@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 18 Sep 2020 17:11:50 -0700
+X-Gmail-Original-Message-ID: <CALCETrXfixDGJhf0yPw-OckjEdeF2SbYjWFm8VbLriiP0Krhrg@mail.gmail.com>
+Message-ID: <CALCETrXfixDGJhf0yPw-OckjEdeF2SbYjWFm8VbLriiP0Krhrg@mail.gmail.com>
+Subject: Re: [PATCH v12 8/8] x86: Disallow vsyscall emulation when CET is enabled
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -35,144 +55,67 @@ Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>
-Subject: Re: [PATCH v12 1/8] x86/cet/ibt: Add Kconfig option for user-mode
- Indirect Branch Tracking
-Message-ID: <20200918220355.GC7443@duo.ucw.cz>
-References: <20200918192312.25978-1-yu-cheng.yu@intel.com>
- <20200918192312.25978-2-yu-cheng.yu@intel.com>
- <ce2524cc-081b-aec9-177a-11c7431cb20d@infradead.org>
- <20200918205933.GB4304@duo.ucw.cz>
- <019b5e45-b116-7f3d-f1f2-3680afbd676c@intel.com>
- <20200918214020.GF4304@duo.ucw.cz>
- <CAMe9rOrmq-7mZkp=O+wRRX+wGa=1dopUhXRbCJBJQUdGA3N=7w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="xesSdrSSBC0PokLI"
-Content-Disposition: inline
-In-Reply-To: <CAMe9rOrmq-7mZkp=O+wRRX+wGa=1dopUhXRbCJBJQUdGA3N=7w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Sep 18, 2020 at 12:23 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>
+> Emulation of the legacy vsyscall page is required by some programs
+> built before 2013.  Newer programs after 2013 don't use it.
+> Disable vsyscall emulation when Control-flow Enforcement (CET) is
+> enabled to enhance security.
+>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> ---
+> v12:
+> - Disable vsyscall emulation only when it is attempted (vs. at compile time).
+>
+>  arch/x86/entry/vsyscall/vsyscall_64.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
+> index 44c33103a955..3196e963e365 100644
+> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
+> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+> @@ -150,6 +150,15 @@ bool emulate_vsyscall(unsigned long error_code,
+>
+>         WARN_ON_ONCE(address != regs->ip);
+>
+> +#ifdef CONFIG_X86_INTEL_CET
+> +       if (current->thread.cet.shstk_size ||
+> +           current->thread.cet.ibt_enabled) {
+> +               warn_bad_vsyscall(KERN_INFO, regs,
+> +                                 "vsyscall attempted with cet enabled");
+> +               return false;
+> +       }
 
---xesSdrSSBC0PokLI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nope, try again.  Having IBT on does *not* mean that every library in
+the process knows that we have indirect branch tracking.  The legacy
+bitmap exists for a reason.  Also, I want a way to flag programs as
+not using the vsyscall page, but that flag should not be called CET.
+And a process with vsyscalls off should not be able to read the
+vsyscall page, and /proc/self/maps should be correct.
 
-On Fri 2020-09-18 14:46:12, H.J. Lu wrote:
-> On Fri, Sep 18, 2020 at 2:40 PM Pavel Machek <pavel@ucw.cz> wrote:
-> >
-> > On Fri 2020-09-18 14:25:12, Yu, Yu-cheng wrote:
-> > > On 9/18/2020 1:59 PM, Pavel Machek wrote:
-> > > > On Fri 2020-09-18 13:24:13, Randy Dunlap wrote:
-> > > > > Hi,
-> > > > >
-> > > > > If you do another version of this:
-> > > > >
-> > > > > On 9/18/20 12:23 PM, Yu-cheng Yu wrote:
-> > > > > > Introduce Kconfig option X86_INTEL_BRANCH_TRACKING_USER.
-> > > > > >
-> > > > > > Indirect Branch Tracking (IBT) provides protection against CALL=
--/JMP-
-> > > > > > oriented programming attacks.  It is active when the kernel has=
- this
-> > > > > > feature enabled, and the processor and the application support =
-it.
-> > > > > > When this feature is enabled, legacy non-IBT applications conti=
-nue to
-> > > > > > work, but without IBT protection.
-> > > > > >
-> > > > > > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> > > > > > ---
-> > > > > > v10:
-> > > > > > - Change build-time CET check to config depends on.
-> > > > > >
-> > > > > >   arch/x86/Kconfig | 16 ++++++++++++++++
-> > > > > >   1 file changed, 16 insertions(+)
-> > > > > >
-> > > > > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > > > > > index 6b6dad011763..b047e0a8d1c2 100644
-> > > > > > --- a/arch/x86/Kconfig
-> > > > > > +++ b/arch/x86/Kconfig
-> > > > > > @@ -1963,6 +1963,22 @@ config X86_INTEL_SHADOW_STACK_USER
-> > > > > >           If unsure, say y.
-> > > > > > +config X86_INTEL_BRANCH_TRACKING_USER
-> > > > > > +       prompt "Intel Indirect Branch Tracking for user-mode"
-> > > > > > +       def_bool n
-> > > > > > +       depends on CPU_SUP_INTEL && X86_64
-> > > > > > +       depends on $(cc-option,-fcf-protection)
-> > > > > > +       select X86_INTEL_CET
-> > > > > > +       help
-> > > > > > +         Indirect Branch Tracking (IBT) provides protection ag=
-ainst
-> > > > > > +         CALL-/JMP-oriented programming attacks.  It is active=
- when
-> > > > > > +         the kernel has this feature enabled, and the processo=
-r and
-> > > > > > +         the application support it.  When this feature is ena=
-bled,
-> > > > > > +         legacy non-IBT applications continue to work, but wit=
-hout
-> > > > > > +         IBT protection.
-> > > > > > +
-> > > > > > +         If unsure, say y
-> > > > >
-> > > > >     If unsure, say y.
-> > > >
-> > > > Actually, it would be "If unsure, say Y.", to be consistent with the
-> > > > rest of the Kconfig.
-> > > >
-> > > > But I wonder if Yes by default is good idea. Only very new CPUs will
-> > > > support this, right? Are they even available at the market? Should =
-the
-> > > > help text say "if your CPU is Whatever Lake or newer, ...." :-) ?
-> > >
-> > > I will revise the wording if there is another version.  But a CET-cap=
-able
-> > > kernel can run on legacy systems.  We have been testing that combinat=
-ion.
-> >
-> > Yes, but enabling CET is unneccessary overhead on older systems. And
-> > Kconfig is great place to explain that.
-> >
->=20
-> I can't tell any visible CET kernel overhead on my non-CET machines.
+So you have some choices:
 
-I assume you are not a troll but you sound a bit like one.
+1. Drop this patch and make it work.
 
-Please list kernel size before and after enabling
-X86_INTEL_CET option(s).
+2. Add a real per-process vsyscall control.  Either make it depend on
+vsyscall=xonly and wire it up correctly or actually make it work
+correctly with vsyscall=emulate.
 
-That's the overhead I'm talking about, and that's why Kconfig should
-explain what machines this is useful on.
-
-Best regards,
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---xesSdrSSBC0PokLI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2UuywAKCRAw5/Bqldv6
-8tNJAJ9zzAqfN0aeU1k6gJtk7OBI9HGT+gCffaWJMFOfRANSTM5cDlxOOo23LTw=
-=3UMg
------END PGP SIGNATURE-----
-
---xesSdrSSBC0PokLI--
+NAK to any hacks in this space.  Do it right or don't do it at all.
