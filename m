@@ -2,122 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5A3271024
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Sep 2020 21:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9CF271090
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Sep 2020 23:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgISTNV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 19 Sep 2020 15:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbgISTNV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Sep 2020 15:13:21 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90249C0613CE
-        for <linux-arch@vger.kernel.org>; Sat, 19 Sep 2020 12:13:20 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id b22so9706599lfs.13
-        for <linux-arch@vger.kernel.org>; Sat, 19 Sep 2020 12:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=10sVGN8u2TwfCpnAq/jp4iLrESxL2PzGGvVZbBHI37U=;
-        b=SNvzyY/D28nrQ/9in1B6Dzi002SQEpeIWQ8e1hzmI9hVRDCDcHjzeJE8AlbYJKjj8B
-         G7NnpY7h0luEeygyoDxqLDk2AWGbQCdyloo3Y9XIxWLvxZdXjZ/NeK2kaD/mL0YWoior
-         T+0jhpZUK76WT2Sz7na41qAPiBNog2OUpnoIA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=10sVGN8u2TwfCpnAq/jp4iLrESxL2PzGGvVZbBHI37U=;
-        b=AZjdftpGGbcVt4c0Rw9A8ULJBriHfrHcHs3URwwQdKTn76Z9gMehVH/wlqaZ2rTOXJ
-         IoA1a89HHnXAT6GAVOmDhOIwWefg2t4AwFcYWR/1ScvFiRl+KfIcuqSAhEOt8+dRAAZS
-         SjMOwX0Onr8DlsaInD3ouRV9Wp8nk/Kw2RejRycIIDpaLR9qlbXjKv1ZcGXRWFgsK9I9
-         EeXUf/M1eKg1hB0fg6mRZE/ptFsCPZExkJQEH8JSWu0EvU+BqM9F3hAAvOnaV9dgD6Gm
-         7cZsOnuC9Wk3fjnGuXtNPZubdBoM8Qac3xnhRcI4rm6rYxUXpn3DzDB+zWLW+vX57WPs
-         xu0w==
-X-Gm-Message-State: AOAM530Ie6loc5f9nnOfFqMUCuQHZ1OWqUfQqgbvhc7IARO+Qepqrf4c
-        4kAFvx/GzDt6Kr2P3Y1W+ridLNtZJ6HGOA==
-X-Google-Smtp-Source: ABdhPJzqC4N2M+0u0t302UD2kKZw+m+Hrd+fIaXa6u9HH0tVFT2B80d134gr2brqlhVOdIF/ArYGuQ==
-X-Received: by 2002:a19:514:: with SMTP id 20mr11065461lff.512.1600542798666;
-        Sat, 19 Sep 2020 12:13:18 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id v12sm1409541ljc.43.2020.09.19.12.13.18
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Sep 2020 12:13:18 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id w11so9775849lfn.2
-        for <linux-arch@vger.kernel.org>; Sat, 19 Sep 2020 12:13:18 -0700 (PDT)
-X-Received: by 2002:a19:8907:: with SMTP id l7mr12464193lfd.105.1600542797553;
- Sat, 19 Sep 2020 12:13:17 -0700 (PDT)
+        id S1726598AbgISVQc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 19 Sep 2020 17:16:32 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:35227 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726528AbgISVQc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Sep 2020 17:16:32 -0400
+Received: from mail-qk1-f169.google.com ([209.85.222.169]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MKbc4-1k3BIm3TWm-00L0SP; Sat, 19 Sep 2020 23:16:29 +0200
+Received: by mail-qk1-f169.google.com with SMTP id v123so10707353qkd.9;
+        Sat, 19 Sep 2020 14:16:27 -0700 (PDT)
+X-Gm-Message-State: AOAM531+emzl8B3DqL41Bk83MYXpOUqzqfDVocNDlNc7kY058mjTM2a4
+        CmAubHAtnd4y0KjZA2ijcOrze8TZs8thcCm6Bsc=
+X-Google-Smtp-Source: ABdhPJzEvevcaGdjT3rDawI+GUfFFyk1d/TYHLiGAQUL5WydIguceSQ8UIqVNU/fh2JOVxE549L743HO0rSqi5ww2Ew=
+X-Received: by 2002:a37:5d8:: with SMTP id 207mr40303905qkf.352.1600550186478;
+ Sat, 19 Sep 2020 14:16:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
- <20200919173906.GQ32101@casper.infradead.org>
-In-Reply-To: <20200919173906.GQ32101@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 19 Sep 2020 12:13:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgyVxGaYkL71DhHgmyU=tE=4rEHgAkOYRq=1-9+q_adAw@mail.gmail.com>
-Message-ID: <CAHk-=wgyVxGaYkL71DhHgmyU=tE=4rEHgAkOYRq=1-9+q_adAw@mail.gmail.com>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
+References: <20200918124533.3487701-1-hch@lst.de> <20200918124533.3487701-2-hch@lst.de>
+ <20200918134012.GY3421308@ZenIV.linux.org.uk> <20200918134406.GA17064@lst.de>
+ <20200918135822.GZ3421308@ZenIV.linux.org.uk> <20200918151615.GA23432@lst.de> <CALCETrW=BzodXeTAjSvpCoUQoL+MKaKPEeSTRWnB=-C9jMotbQ@mail.gmail.com>
+In-Reply-To: <CALCETrW=BzodXeTAjSvpCoUQoL+MKaKPEeSTRWnB=-C9jMotbQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 19 Sep 2020 23:16:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Mi+1yttyGk4k7HxRVrMtmFqJewouVhynqUL0PJycmog@mail.gmail.com>
+Message-ID: <CAK8P3a2Mi+1yttyGk4k7HxRVrMtmFqJewouVhynqUL0PJycmog@mail.gmail.com>
+Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Howells <dhowells@redhat.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Network Development <netdev@vger.kernel.org>,
+        keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:wnNAt0YQaQqE+S7E2jXWhut4vc34wb69sEYYMS2LRgo37wnXoFa
+ U5jNY34Mhb6zCLv7UZrXPhqOwTPEKPsdRpRBIsvUzI4lCW8zNqTUwVGGBSMe9Sn/rqP+0Hc
+ ZE2V2uxGuYnfv74AcslE8K94pghU8VDghg11No6WQ4CDmZQjGTkgwAwxRTd79ToUMk2jbhY
+ GAHuppk5TR0x8YjxOHq4w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sCszT6SAIfU=:EMbLDFo/4IQYxLPBQi+idh
+ b6TytVGhby0fIjgUjRLtGhNalYCQqk0iEjqjSgeP94XpxR9jGaqDAi1Y0Gb7/bSKG2rXCgoHb
+ Z80PODNcCqbXF9+DPY1M/dBSDA5WoqExxfMy34LEfOCijEHlQC1fgWoKJN+l9eS0XzuFzSLOQ
+ yPa4Q5en6gDbFGquLyeS0PP9fr9c0co9EcOvX0Un9vPckFT23e2cxKfuzJ8WVC4zFscR8dA3L
+ MTJ7XiQLdddcaDSNzS+2SC4v2pUdXTjHjSTdTWboqKbPnr16LNoZ11YSxAOXZN8UghZLxs8p2
+ RuTiyjItuzhEhNkPbbQmJJ9+aHAcQgVHg6Jy2nKsUA+d54zxL2f4XolSOVcKSktt/a+pggVYn
+ 36dCvpjFvkbouzb/D9GOvY3Rs6Yu7rFIjjy9Nz0bxaox2iRB9lswOkbrQBfEuDbBizwWp4xLO
+ nVphyraUcdFX0eqhlEICFjqe5GFTy3hHDfNgnadgMIIY1j0vBUXzZqcPXlp3ja1EmtwumlpGK
+ K+VcW/HaKszRxVibxSKg8aObdVYiYIkK2uXoxcQ2jUHetnZlWR7bifWQmPrRndlCG1xY3sYd0
+ Nq7pPhdm9mNCuy5pmZITSDP2d3RpX92bo14P6qA7ms9a3PTfrrOC9HjQAiBXlpjn5cMHGU331
+ 1Cu0H/rzXbq2dK8QgF+X0qIkU/IcqX5nN/ZsuRF6BWFDJRQoGTDVB2qIa8xk/AZVSsGFMZ9Sz
+ XtuObu2/qhC1DdRkg3oWrPs1udblQvJZH9D911HFE7TrE9cCuc/X+ezFIwxec/yr2ZvhSl/fX
+ WyPaO4XwWbnjQeuaaWmPic1FLY0vdTePBjBHJjlO7kq3bre409ZX7yzUcZ4eezydOp4oRcd
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 10:39 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> My concern with that is people might use kmap() and then pass the address
-> to a different task.  So we need to audit the current users of kmap()
-> and convert any that do that into using vmap() instead.
+On Sat, Sep 19, 2020 at 6:21 PM Andy Lutomirski <luto@kernel.org> wrote:
+> On Fri, Sep 18, 2020 at 8:16 AM Christoph Hellwig <hch@lst.de> wrote:
+> > On Fri, Sep 18, 2020 at 02:58:22PM +0100, Al Viro wrote:
+> > > Said that, why not provide a variant that would take an explicit
+> > > "is it compat" argument and use it there?  And have the normal
+> > > one pass in_compat_syscall() to that...
+> >
+> > That would help to not introduce a regression with this series yes.
+> > But it wouldn't fix existing bugs when io_uring is used to access
+> > read or write methods that use in_compat_syscall().  One example that
+> > I recently ran into is drivers/scsi/sg.c.
 
-Ahh. Yes, I guess they might do that. It sounds strange, but not
-entirely crazy - I could imagine some "PIO thread" that does IO to a
-page that has been set up by somebody else using kmap(). Or similar.
+Ah, so reading /dev/input/event* would suffer from the same issue,
+and that one would in fact be broken by your patch in the hypothetical
+case that someone tried to use io_uring to read /dev/input/event on x32...
 
-                Linus
+For reference, I checked the socket timestamp handling that has a
+number of corner cases with time32/time64 formats in compat mode,
+but none of those appear to be affected by the problem.
+
+> Aside from the potentially nasty use of per-task variables, one thing
+> I don't like about PF_FORCE_COMPAT is that it's one-way.  If we're
+> going to have a generic mechanism for this, shouldn't we allow a full
+> override of the syscall arch instead of just allowing forcing compat
+> so that a compat syscall can do a non-compat operation?
+
+The only reason it's needed here is that the caller is in a kernel
+thread rather than a system call. Are there any possible scenarios
+where one would actually need the opposite?
+
+       Arnd
