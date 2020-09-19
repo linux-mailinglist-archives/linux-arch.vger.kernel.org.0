@@ -2,59 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3975270FD7
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Sep 2020 19:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9725D270FDB
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Sep 2020 19:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgISRjh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 19 Sep 2020 13:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S1726463AbgISRp4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 19 Sep 2020 13:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726449AbgISRjg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Sep 2020 13:39:36 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C110C0613CE
-        for <linux-arch@vger.kernel.org>; Sat, 19 Sep 2020 10:39:36 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id k133so671506pgc.7
-        for <linux-arch@vger.kernel.org>; Sat, 19 Sep 2020 10:39:36 -0700 (PDT)
+        with ESMTP id S1726449AbgISRp4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Sep 2020 13:45:56 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186C6C0613CE;
+        Sat, 19 Sep 2020 10:45:56 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id v8so3976484iom.6;
+        Sat, 19 Sep 2020 10:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=VX3X8B9i2JuVY8GKzUZczdeUGgzu+mz4I4B7H1L1Mi4=;
-        b=yNPYVlEt8KLUpDj0nIzrfQfQyOdEE2/k8kLlUB7RQ5n6+/jDfT84IduqimvSwqUnN+
-         O8cF1Vj9icMa6rtMohIfNPMBvBf+j5VOOL/nVKGeLwQaWHmre9d1e1eyeGjPlO0i185k
-         19M+FaJ2tfK5IgYz44rWxcBDCTmpp0Z3ZkuYLoAJ7sEpVZWAkov/AWsGiTkdIM78GAWZ
-         2SydI0qut+RoG6GfTRienTfRUllaANJil5Y4kTZKmgGH3olgwZI6GM0CUjDKWTHCvMx5
-         O22OBQlNd7hvBXTdnCIrUc+v+PA4zcggLM3FBA+YKoFQ9LtbqGzxxsi8TrAMrtNnfamF
-         lVPA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aqIvwdnOSjAHddCU85P/HSWVpvwA3NGs8Q6mRONCYtU=;
+        b=tNG/7qgfSv3KJKzY+MtjBYmgHCdp8UBgqNItDe5F7FDIKPe9kRM9dYX/wgxXsNeKo8
+         hvT7jE5V1Z2gTTVHOX9IbUL0r3c+bFPouhMS8i0S2Hww2xsCe5QUx8/3hWfvFbLyYkhM
+         Zae2R0aP+aMy8+LWGHImo5PHglLppa7IT4FZbWFEGn/vetxq4vLC8MOPaN8blQqjCBqY
+         urMyvw6jy5CONCdw/aKWal0YXgq0H2g1qUBUo9OLGICTcy7ANwD8JqNteW5w7WKfYARV
+         CS6LRAFQoUr8/66nYQScOHKrJ37vlpX/p5EOjhSTfM2i9DmebqlqqMvFwu8r1y04VDM3
+         sCpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=VX3X8B9i2JuVY8GKzUZczdeUGgzu+mz4I4B7H1L1Mi4=;
-        b=eI8zVR2ks7M+UMzVzXHxUeK+19khAuysv8tpkAB5RmaSSejg3LwdkN0Xj9iETacQiX
-         IRnNZoVwdFx7FI1eZ8CYl7bohpqyg8gn7yKck0yP1XA6634k8hUQ62IYRqAwfgKIgctu
-         VhoRbNPuHi6wkzUzdvQLsb9od77jKV5ZD32hA/MMyOrcikX+20RRCehbASP0+RrZn2FF
-         LKkklUOZYpIyWQvsGOFC1BNFS79ue0VjmZu3mcwe8ilDjMT3Uw8knw4i5McxVmf0CCGN
-         RlKDbib4dfcTqylDOURnx7lpG+juTnedQVDsXoJwbFMLnfz40gRJWNZpLEe+MEI35Dt0
-         GPtw==
-X-Gm-Message-State: AOAM5305IaDV9Z66LGj5e8OerrwoM8ACSaXsaCFpQlZJssBmtXOGD7rV
-        zqKmSlwlhcdVG0PjScSLIo0aqQ==
-X-Google-Smtp-Source: ABdhPJzr4nh4gV3U14vwhAcEwgphaAXOoSwKdUFhR57nYwWZfIBDT/DgQ4ly48zPilrTYeeOHRF+VQ==
-X-Received: by 2002:a63:725d:: with SMTP id c29mr8480027pgn.234.1600537175557;
-        Sat, 19 Sep 2020 10:39:35 -0700 (PDT)
-Received: from localhost.localdomain ([2601:646:c200:1ef2:384f:efa4:98e3:a556])
-        by smtp.gmail.com with ESMTPSA id o19sm7291347pfp.64.2020.09.19.10.39.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Sep 2020 10:39:34 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aqIvwdnOSjAHddCU85P/HSWVpvwA3NGs8Q6mRONCYtU=;
+        b=bScuHlT6NtQOSBcFOeKPr8Nk1dfFY0Sxx6AQHbnonEdvfaKZizCZNs/WyIKle0Y8Cq
+         Ly3LGcLOgEWnvEtYaCcrPn+CCq5UtseVqyFIeogm7X7cKJ6jNPrfFJMSBThC3ohViCzr
+         uMxqq7dRYutt/l4onHL4SzzdSr3TyyOICkwET3uSA6Z7RedRdfPiH/Xw9KaWtsn7OVcZ
+         0q3OrWkN3ixkny40HaqjQQL7yTTlO8rnaXh0xxXnVrqu9bXW5s+DHUKxxM4Sgf3579W0
+         NwdW3n3XdT1JSuMeeStdMlDHPb0//vdxk8y2kI5MTjHGeQ9c6Rhup/NQ/wejo/OrW6GT
+         BUFA==
+X-Gm-Message-State: AOAM533oTo7ILI+RwimIUSpknrOq0LZWRfbsuCIskLnrUIos/vWOxkFr
+        d9b9yAFD/wW+z0GcI7sVTloOjP2RS02ylw+L6g==
+X-Google-Smtp-Source: ABdhPJy/+swOxx+O/gjUkATrtV+0W+I/532k4HwgKzgpB8LaS3UpaasFbGc1h4Q07NmdRoupikU1hHQEg5Ygt1lOBVI=
+X-Received: by 2002:a6b:6c0c:: with SMTP id a12mr24437450ioh.40.1600537554347;
+ Sat, 19 Sep 2020 10:45:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200918132439.1475479-1-arnd@arndb.de> <20200918132439.1475479-2-arnd@arndb.de>
+ <20200919053514.GI30063@infradead.org> <CALCETrVDqHG2chDsLWBHF39SXh6vjzE_xcEs+AWgOg5531BLuQ@mail.gmail.com>
+ <85F32523-4E9E-443A-A150-10A9E5EB0CE3@zytor.com>
+In-Reply-To: <85F32523-4E9E-443A-A150-10A9E5EB0CE3@zytor.com>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Sat, 19 Sep 2020 13:45:43 -0400
+Message-ID: <CAMzpN2jircsR81ZLdq7r3UTVrM9Bp-PL7h=V+k5B93oJx26G-w@mail.gmail.com>
 Subject: Re: [PATCH 1/4] x86: add __X32_COND_SYSCALL() macro
-Date:   Sat, 19 Sep 2020 10:39:32 -0700
-Message-Id: <027BAF5D-1473-4A35-8A58-D80315D52073@amacapital.net>
-References: <85F32523-4E9E-443A-A150-10A9E5EB0CE3@zytor.com>
+To:     "H. Peter Anvin" <hpa@zytor.com>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Christoph Hellwig <hch@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -67,54 +65,49 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Linux-MM <linux-mm@kvack.org>, kexec@lists.infradead.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>, Brian Gerst <brgerst@gmail.com>
-In-Reply-To: <85F32523-4E9E-443A-A150-10A9E5EB0CE3@zytor.com>
-To:     hpa@zytor.com
-X-Mailer: iPhone Mail (18A373)
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+An alternative to the patch I proposed earlier would be to use aliases
+with the __x32_ prefix for the common syscalls.
 
-> On Sep 19, 2020, at 10:14 AM, hpa@zytor.com wrote:
->=20
-> =EF=BB=BFOn September 19, 2020 9:23:22 AM PDT, Andy Lutomirski <luto@kerne=
-l.org> wrote:
->>> On Fri, Sep 18, 2020 at 10:35 PM Christoph Hellwig <hch@infradead.org>
->>> wrote:
->>>=20
->>> On Fri, Sep 18, 2020 at 03:24:36PM +0200, Arnd Bergmann wrote:
->>>> sys_move_pages() is an optional syscall, and once we remove
->>>> the compat version of it in favor of the native one with an
->>>> in_compat_syscall() check, the x32 syscall table refers to
->>>> a __x32_sys_move_pages symbol that may not exist when the
->>>> syscall is disabled.
->>>>=20
->>>> Change the COND_SYSCALL() definition on x86 to also include
->>>> the redirection for x32.
->>>>=20
->>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>>=20
->>> Adding the x86 maintainers and Brian Gerst.  Brian proposed another
->>> problem to the mess that most of the compat syscall handlers used by
->>> x32 here:
->>>=20
->>>   https://lkml.org/lkml/2020/6/16/664
->>>=20
->>> hpa didn't particularly like it, but with your and my pending series
->>> we'll soon use more native than compat syscalls for x32, so something
->>> will need to change..
->>=20
->> I'm fine with either solution.
->=20
-> My main objection was naming. x64 is a widely used synonym for x86-64, and=
- so that is confusing.
->=20
->=20
+--
+Brian Gerst
 
-The way I deal with the syscall wrappers is that I assume the naming makes n=
-o sense whatsoever, and I go from there. With this perspective, the patches a=
-re neither an improvement nor a worsening of the current situation.
-
-(Similarly, the last column of the tables is useless garbage.  My last attem=
-pt to fix that stalled.)=
+On Sat, Sep 19, 2020 at 1:14 PM <hpa@zytor.com> wrote:
+>
+> On September 19, 2020 9:23:22 AM PDT, Andy Lutomirski <luto@kernel.org> wrote:
+> >On Fri, Sep 18, 2020 at 10:35 PM Christoph Hellwig <hch@infradead.org>
+> >wrote:
+> >>
+> >> On Fri, Sep 18, 2020 at 03:24:36PM +0200, Arnd Bergmann wrote:
+> >> > sys_move_pages() is an optional syscall, and once we remove
+> >> > the compat version of it in favor of the native one with an
+> >> > in_compat_syscall() check, the x32 syscall table refers to
+> >> > a __x32_sys_move_pages symbol that may not exist when the
+> >> > syscall is disabled.
+> >> >
+> >> > Change the COND_SYSCALL() definition on x86 to also include
+> >> > the redirection for x32.
+> >> >
+> >> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> >>
+> >> Adding the x86 maintainers and Brian Gerst.  Brian proposed another
+> >> problem to the mess that most of the compat syscall handlers used by
+> >> x32 here:
+> >>
+> >>    https://lkml.org/lkml/2020/6/16/664
+> >>
+> >> hpa didn't particularly like it, but with your and my pending series
+> >> we'll soon use more native than compat syscalls for x32, so something
+> >> will need to change..
+> >
+> >I'm fine with either solution.
+>
+> My main objection was naming. x64 is a widely used synonym for x86-64, and so that is confusing.
+>
+> --
+> Sent from my Android device with K-9 Mail. Please excuse my brevity.
