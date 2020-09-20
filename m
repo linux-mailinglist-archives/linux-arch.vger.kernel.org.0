@@ -2,129 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD11271691
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Sep 2020 20:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992172716AD
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Sep 2020 20:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbgITSEQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Sep 2020 14:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S1726109AbgITSIB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Sep 2020 14:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgITSEQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Sep 2020 14:04:16 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E5CC061755
-        for <linux-arch@vger.kernel.org>; Sun, 20 Sep 2020 11:04:15 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id w1so10724307edr.3
-        for <linux-arch@vger.kernel.org>; Sun, 20 Sep 2020 11:04:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=10vFh59zX+qrXR+btNd9keaZllR85H50W0pZVqW9mvg=;
-        b=aTcZkpnkgiAVVoqRXBCAnYw8B8YS7QD0nmh7mtbe8Dtb85AdAYIiPcbXVjdrb/fbX9
-         3yTs920flMKnlnbAGz7q1CYoJs0994Dvfor1DakKOqSDUOemiqgeakXoqfK/+swxI5fB
-         0DUfGVYXrHTR7XO61iz2Eybc+W0Ekg5v+dkh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=10vFh59zX+qrXR+btNd9keaZllR85H50W0pZVqW9mvg=;
-        b=jAbquRw3/+attr8nuvA9Hp/MEYuk7XzM/dqy+tSgS+JwkjWAz8WoEko+SNXZ1LhRtG
-         JYvQdzoAxEjaueYYdi09jc+o5AJtQ+vOy3i/Ko2ftCxlR5BEtK2Yrzc4PDR19h2/jfeG
-         RxQ+jN5eafOdjNSVDxJ+lM2lBoFkeFzUwKrahEREz8jXKpMbzN5WgNxSLx1Hm8JNO0ga
-         3XUUNo7rcizNmqFJmvYldn4zX4cmKPadwU0bShiJL+PmaYh0cC6QcdH1EtUAe0IbaHzw
-         nNvVFbXr4f0u09wWmCE31rzoZeaoUf4YjJ77i9IOOC7Cr4fY1Ogm8oxtx27nLs6HNsaa
-         AI8g==
-X-Gm-Message-State: AOAM533bH0mYDu393Y9E5ZgQOt7+jGJ1tfj0FoczjzKvTiagk6By+qxQ
-        JITvVOD4JoexrwKj+owqtQwWnEzxVOK0JQ==
-X-Google-Smtp-Source: ABdhPJwbn7uU2Oj5wZwpJc5hpIMKefDXJd4Y+KCsYalM+4fv6vBl59AASbEw8DVwCAC7tIgo+GXTQA==
-X-Received: by 2002:a50:f102:: with SMTP id w2mr49804467edl.63.1600625054134;
-        Sun, 20 Sep 2020 11:04:14 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id j15sm7075376ejs.5.2020.09.20.11.04.13
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2020 11:04:13 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id p9so14675184ejf.6
-        for <linux-arch@vger.kernel.org>; Sun, 20 Sep 2020 11:04:13 -0700 (PDT)
-X-Received: by 2002:ac2:4ec7:: with SMTP id p7mr12591149lfr.352.1600624746105;
- Sun, 20 Sep 2020 10:59:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
- <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
- <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 20 Sep 2020 10:58:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh_iVgA3H7CVvAzDoYC1gC1AKbLmv_mCeUnVxg79_9y8A@mail.gmail.com>
-Message-ID: <CAHk-=wh_iVgA3H7CVvAzDoYC1gC1AKbLmv_mCeUnVxg79_9y8A@mail.gmail.com>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
+        with ESMTP id S1726043AbgITSIB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Sep 2020 14:08:01 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470E0C061755;
+        Sun, 20 Sep 2020 11:08:01 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kK3kU-002bOQ-WD; Sun, 20 Sep 2020 18:07:43 +0000
+Date:   Sun, 20 Sep 2020 19:07:42 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
+Message-ID: <20200920180742.GN3421308@ZenIV.linux.org.uk>
+References: <20200918124533.3487701-1-hch@lst.de>
+ <20200918124533.3487701-2-hch@lst.de>
+ <20200920151510.GS32101@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200920151510.GS32101@casper.infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 20, 2020 at 10:42 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Yeah, that looks much easier to explain. Ack.
+On Sun, Sep 20, 2020 at 04:15:10PM +0100, Matthew Wilcox wrote:
+> On Fri, Sep 18, 2020 at 02:45:25PM +0200, Christoph Hellwig wrote:
+> > Add a flag to force processing a syscall as a compat syscall.  This is
+> > required so that in_compat_syscall() works for I/O submitted by io_uring
+> > helper threads on behalf of compat syscalls.
+> 
+> Al doesn't like this much, but my suggestion is to introduce two new
+> opcodes -- IORING_OP_READV32 and IORING_OP_WRITEV32.  The compat code
+> can translate IORING_OP_READV to IORING_OP_READV32 and then the core
+> code can know what that user pointer is pointing to.
 
-Btw, one thing that might be a good idea at least initially is to add
-a check for p->kmap_ctrl.idx being zero at fork, exit and maybe
-syscall return time (but that last one may be too cumbersome to really
-worry about).
+Let's separate two issues:
+	1) compat syscalls want 32bit iovecs.  Nothing to do with the
+drivers, dealt with just fine.
+	2) a few drivers are really fucked in head.  They use different
+*DATA* layouts for reads/writes, depending upon the calling process.
+IOW, if you fork/exec a 32bit binary and your stdin is one of those,
+reads from stdin in parent and child will yield different data layouts.
+On the same struct file.
+	That's what Christoph worries about (/dev/sg he'd mentioned is
+one of those).
 
-The kmap_atomic() interface basically has a lot of coverage for leaked
-as part of all the "might_sleep()" checks sprinkled around,  The new
-kmap_temporary/local/whatever wouldn't have that kind of incidental
-debug checking, and any leaked kmap indexes would be rather hard to
-debug (much) later when they cause index overflows or whatever.
+	IMO we should simply have that dozen or so of pathological files
+marked with FMODE_SHITTY_ABI; it's not about how they'd been opened -
+it describes the userland ABI provided by those.  And it's cast in stone.
 
-                Linus
+	Any in_compat_syscall() in ->read()/->write() instances is an ABI
+bug, plain and simple.  Some are unfixable for compatibility reasons, but
+any new caller like that should be a big red flag.
+
+	How we import iovec array is none of the drivers' concern; we do
+not need to mess with in_compat_syscall() reporting the matching value,
+etc. for that.  It's about the instances that want in_compat_syscall() to
+decide between the 32bit and 64bit data layouts.  And I believe that
+we should simply have them marked as such and rejected by io_uring.  With
+any new occurences getting slapped down hard.
+
+	Current list of those turds:
+/dev/sg (pointer-chasing, generally insane)
+/sys/firmware/efi/vars/*/raw_var (fucked binary structure)
+/sys/firmware/efi/vars/new_var (fucked binary structure)
+/sys/firmware/efi/vars/del_var (fucked binary structure)
+/dev/uhid	(pointer-chasing for one obsolete command)
+/dev/input/event* (timestamps)
+/dev/uinput (timestamps)
+/proc/bus/input/devices (fucked bitmap-to-text representation)
+/sys/class/input/*/capabilities/* (fucked bitmap-to-text representation)
