@@ -2,114 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9255027161E
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Sep 2020 18:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC7427164B
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Sep 2020 19:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726427AbgITQ74 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Sep 2020 12:59:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726454AbgITQ7v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 20 Sep 2020 12:59:51 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72A082376F
-        for <linux-arch@vger.kernel.org>; Sun, 20 Sep 2020 16:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600621190;
-        bh=x0CbGoy7QDKeuRiDyZ0r+bpumnscmCVOPI/85NlktW8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gJKTktW4SZM9Nk5DOVt1OrRoD5xvcMTHGvsORGcnvvYrrRwkT7FctEN7F9OgfkMkf
-         go8qh4j37RWcESJvMJRLehEaF3oKhwPYJJdJDts/+toGi7k1LIglAiuuVrdC6I4+Xp
-         /LzZmxNyVgp/8l8nI8i/3m9FhkW6jCz/eC4EQY4Q=
-Received: by mail-wm1-f49.google.com with SMTP id z9so10231131wmk.1
-        for <linux-arch@vger.kernel.org>; Sun, 20 Sep 2020 09:59:50 -0700 (PDT)
-X-Gm-Message-State: AOAM533lhU+SK1PUePcZkvkgWEtxkVoiNUqeQRReaZw1iehpghzPzKZD
-        6Zt3cDwuSn20DHY7FMsjO4LGVz8HB4BWoYACjMIImA==
-X-Google-Smtp-Source: ABdhPJwqhOCovrDdCcRZECZNQYs8Sx/d9wwPnQKSY4d4VjHeXmP8XzKxWrTfmcwJ7rQVtp7oa0fbaMUpJAjukisl/1Y=
-X-Received: by 2002:a1c:7e15:: with SMTP id z21mr25730921wmc.21.1600621188572;
- Sun, 20 Sep 2020 09:59:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200919224122.GJ3421308@ZenIV.linux.org.uk> <36CF3DE7-7B4B-41FD-9818-FDF8A5B440FB@amacapital.net>
- <20200919232411.GK3421308@ZenIV.linux.org.uk> <CALCETrViwOdFia_aX4p4riE8aqop1zoOqVfiQtSAZEzheC+Ozg@mail.gmail.com>
- <20200920025745.GL3421308@ZenIV.linux.org.uk>
-In-Reply-To: <20200920025745.GL3421308@ZenIV.linux.org.uk>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Sun, 20 Sep 2020 09:59:36 -0700
-X-Gmail-Original-Message-ID: <CALCETrWj1i-oyfA1rCXsNqdJddK6Vwm=W31YEf=k-OMBTC0vHw@mail.gmail.com>
-Message-ID: <CALCETrWj1i-oyfA1rCXsNqdJddK6Vwm=W31YEf=k-OMBTC0vHw@mail.gmail.com>
-Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Andy Lutomirski <luto@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        id S1726037AbgITRYx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Sep 2020 13:24:53 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:46734 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbgITRYx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Sep 2020 13:24:53 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600622689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ELUNMLCQYXoHQWzGjHTiBi/GvrgBrzUdsStDgdETjPA=;
+        b=tzqY9X8fLvmtivfsbNK0pUu8YiUj7NKf7+bQzIN33nK/SwghNMa2rz52k7m9LEaGnDxB4p
+        5uJRP8jzSGhdLLpPzoF07YS1dppzeAHFuaRXBxkQ6eQFewoBrpPutv3yBGdR9YKqd5UnMc
+        Lfw64Wh81l4jTzfijbUVM/G1PeB+l9wpVjsRPd3Xz3aQUHw9+Bu78ZLn5k1aNaH9Pkc5ms
+        Lg9Dct8esi3AxOTl0URAWW4pIL6LMaz6yDqISWtV082sZby+eUJYHhPHZSuxMGdcllbxYl
+        qQ/7nvxbGePtOn6SDA8Bi+zAxXBj+TvBWAwr7ALWt4wsGLJLJU/NhQ4k2+3KDg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600622689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ELUNMLCQYXoHQWzGjHTiBi/GvrgBrzUdsStDgdETjPA=;
+        b=Ajg419VRwVNBaCnESvnWBGYX1dQ8DDFprO3wwe5+UvEno+/XgboH3A5bxhtY6hr785JAXL
+        VPGuKWoChMzzg9BQ==
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list\:GENERIC INCLUDE\/A..." <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>, X86 ML <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <20200920082353.GG438822@phenom.ffwll.local>
+References: <20200919091751.011116649@linutronix.de> <CAKMK7uHTVJL2jGtCg61zG=myiF1BSk+yDdRYikcm-Mq_1TQWMQ@mail.gmail.com> <CAKMK7uENFDANQKebS_H0bhHeQRijrp1aVHQqyZPute3KBZ+fVQ@mail.gmail.com> <87pn6hc6g1.fsf@nanos.tec.linutronix.de> <20200920082353.GG438822@phenom.ffwll.local>
+Date:   Sun, 20 Sep 2020 19:24:49 +0200
+Message-ID: <87h7rscqe6.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 7:57 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Sat, Sep 19, 2020 at 05:14:41PM -0700, Andy Lutomirski wrote:
->
-> > > 2) have you counted the syscalls that do and do not need that?
-> >
-> > No.
->
-> Might be illuminating...
->
-> > > 3) how many of those realistically *can* be unified with their
-> > > compat counterparts?  [hint: ioctl(2) cannot]
-> >
-> > There would be no requirement to unify anything.  The idea is that
-> > we'd get rid of all the global state flags.
->
-> _What_ global state flags?  When you have separate SYSCALL_DEFINE3(ioctl...)
-> and COMPAT_SYSCALL_DEFINE3(ioctl...), there's no flags at all, global or
-> local.  They only come into the play when you try to share the same function
-> for both, right on the top level.
+On Sun, Sep 20 2020 at 10:23, Daniel Vetter wrote:
 
-...
+> On Sun, Sep 20, 2020 at 08:23:26AM +0200, Thomas Gleixner wrote:
+>> On Sat, Sep 19 2020 at 12:37, Daniel Vetter wrote:
+>> > On Sat, Sep 19, 2020 at 12:35 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+>> >> I think it should be the case, but I want to double check: Will
+>> >> copy_*_user be allowed within a kmap_temporary section? This would
+>> >> allow us to ditch an absolute pile of slowpaths.
+>> >
+>> > (coffee just kicked in) copy_*_user is ofc allowed, but if you hit a
+>> > page fault you get a short read/write. This looks like it would remove
+>> > the need to handle these in a slowpath, since page faults can now be
+>> > served in this new kmap_temporary sections. But this sounds too good
+>> > to be true, so I'm wondering what I'm missing.
+>> 
+>> In principle we could allow pagefaults, but not with the currently
+>> proposed interface which can be called from any context. Obviously if
+>> called from atomic context it can't handle user page faults.
+>  
+> Yeah that's clear, but does the implemention need to disable pagefaults
+> unconditionally?
 
->
-> > For ioctl, we'd have a new file_operation:
-> >
-> > long ioctl(struct file *, unsigned int, unsigned long, enum syscall_arch);
-> >
-> > I'm not saying this is easy, but I think it's possible and the result
-> > would be more obviously correct than what we have now.
->
-> No, it would not.  Seriously, from time to time a bit of RTFS before grand
-> proposals turns out to be useful.
+As I wrote in the other reply it's not required and the final interface
+will neither disable preemption nor pagefaults (except for the atomic
+wrapper around it).
 
-As one example, look at __sys_setsockopt().  It's called for the
-native and compat versions, and it contains an in_compat_syscall()
-check.  (This particularly check looks dubious to me, but that's
-another story.)  If this were to be done with equivalent semantics
-without a separate COMPAT_DEFINE_SYSCALL and without
-in_compat_syscall(), there would need to be some indication as to
-whether this is compat or native setsockopt.  There are other
-setsockopt implementations in the net stack with more
-legitimate-seeming uses of in_compat_syscall() that would need some
-other mechanism if in_compat_syscall() were to go away.
+Thanks,
 
-setsockopt is (I hope!) out of scope for io_uring, but the situation
-isn't fundamentally different from read and write.
+        tglx
