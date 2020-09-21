@@ -2,147 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61293271D2C
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 10:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05990271E7C
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 11:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726444AbgIUIIB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Sep 2020 04:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgIUIH6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 04:07:58 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7EC0613D2;
-        Mon, 21 Sep 2020 01:07:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BvxrN6CR4z9sRf;
-        Mon, 21 Sep 2020 18:07:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600675674;
-        bh=iaBdLJOvxyJXfcUEqmY+3Nksf5Jf9xHCFLBtVdF2GM8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K5wKwexmDJAci9TTwYRSQ0w9PM5CiPqAwagC2tcao/hBigyuoMxG1C8D0UmTRvwbU
-         EhPScTRFe/siLj3BjXiyv9uIFmQY0S4UmOdPSVysuZGSDahrfPB83W3uawREPQpzd0
-         kHld44CU++GsPbN3dC1XVd4QoBpM6Lgj+V1kNNdSetTvjN8TgT8QvRc6F00jrjsQD6
-         lDVtnrJaxh5Jw5LEvG/jpEkcuTha5XPYFINClW5XVtzMcKkHT38c4BYivb3A3RLDRr
-         JaS6Iuw/LnkzJSYvM742RWyWBJTrmzSqPEqXAqPcsYg8niNwEgDNwWig1CMgfOS4OB
-         vkx4v/7kdkZQQ==
-Date:   Mon, 21 Sep 2020 18:07:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Qian Cai <cai@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
+        id S1726444AbgIUJDN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Sep 2020 05:03:13 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2896 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726435AbgIUJDN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 21 Sep 2020 05:03:13 -0400
+Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 46539BE2DF49309FE3B4;
+        Mon, 21 Sep 2020 10:03:11 +0100 (IST)
+Received: from localhost (10.52.121.13) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 21 Sep
+ 2020 10:03:10 +0100
+Date:   Mon, 21 Sep 2020 10:01:31 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Atish Patra <atish.patra@wdc.com>
+CC:     <linux-kernel@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Anup Patel <anup@brainfault.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-arch@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        "Mike Rapoport" <rppt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH v5 0/5] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20200921180748.4f88028d@canb.auug.org.au>
-In-Reply-To: <fdd0240c187f974fccc553acea895f638d5e822a.camel@redhat.com>
-References: <20200916073539.3552-1-rppt@kernel.org>
-        <5d97da4d86db258fdc9b20be3c12588089e17da2.camel@redhat.com>
-        <fdd0240c187f974fccc553acea895f638d5e822a.camel@redhat.com>
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RFT PATCH v3 2/5] arm64, numa: Change the numa init functions
+ name to be generic
+Message-ID: <20200921100131.00005238@Huawei.com>
+In-Reply-To: <20200918201140.3172284-3-atish.patra@wdc.com>
+References: <20200918201140.3172284-1-atish.patra@wdc.com>
+        <20200918201140.3172284-3-atish.patra@wdc.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qIGimAfxVKTvCJ+PllFC0A/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.121.13]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/qIGimAfxVKTvCJ+PllFC0A/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 18 Sep 2020 13:11:37 -0700
+Atish Patra <atish.patra@wdc.com> wrote:
 
-Hi all,
+> As we are using generic numa implementation code, modify the acpi & numa
+> init functions name to indicate that generic implementation.
+> 
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
 
-On Fri, 18 Sep 2020 14:25:15 -0400 Qian Cai <cai@redhat.com> wrote:
->
-> On Thu, 2020-09-17 at 09:27 -0400, Qian Cai wrote:
-> > On Wed, 2020-09-16 at 10:35 +0300, Mike Rapoport wrote: =20
-> > > From: Mike Rapoport <rppt@linux.ibm.com>
-> > >=20
-> > > This is an implementation of "secret" mappings backed by a file descr=
-iptor.=20
-> > > I've dropped the boot time reservation patch for now as it is not str=
-ictly
-> > > required for the basic usage and can be easily added later either wit=
-h or
-> > > without CMA. =20
-> >=20
-> > On powerpc: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.co=
-nfig
-> >=20
-> > There is a compiling warning from the today's linux-next:
-> >=20
-> > <stdin>:1532:2: warning: #warning syscall memfd_secret not implemented =
-[-Wcpp] =20
->=20
-> This should silence the warning:
->=20
-> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-> index a18b47695f55..b7609958ee36 100755
-> --- a/scripts/checksyscalls.sh
-> +++ b/scripts/checksyscalls.sh
-> @@ -40,6 +40,10 @@ cat << EOF
->  #define __IGNORE_setrlimit	/* setrlimit */
->  #endif
-> =20
-> +#ifndef __ARCH_WANT_MEMFD_SECRET
-> +#define __IGNORE_memfd_secret
+Other than the double include of linux/acpi.h below this looks good to me.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  arch/arm64/kernel/acpi_numa.c | 13 -------------
+>  arch/arm64/mm/init.c          |  4 ++--
+>  drivers/base/arch_numa.c      | 31 +++++++++++++++++++++++++++----
+>  include/asm-generic/numa.h    |  4 ++--
+>  4 files changed, 31 insertions(+), 21 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+> index 7ff800045434..96502ff92af5 100644
+> --- a/arch/arm64/kernel/acpi_numa.c
+> +++ b/arch/arm64/kernel/acpi_numa.c
+> @@ -117,16 +117,3 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
+>  
+>  	node_set(node, numa_nodes_parsed);
+>  }
+> -
+> -int __init arm64_acpi_numa_init(void)
+> -{
+> -	int ret;
+> -
+> -	ret = acpi_numa_init();
+> -	if (ret) {
+> -		pr_info("Failed to initialise from firmware\n");
+> -		return ret;
+> -	}
+> -
+> -	return srat_disabled() ? -EINVAL : 0;
+> -}
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 481d22c32a2e..93b660229e1d 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -418,10 +418,10 @@ void __init bootmem_init(void)
+>  	max_pfn = max_low_pfn = max;
+>  	min_low_pfn = min;
+>  
+> -	arm64_numa_init();
+> +	arch_numa_init();
+>  
+>  	/*
+> -	 * must be done after arm64_numa_init() which calls numa_init() to
+> +	 * must be done after arch_numa_init() which calls numa_init() to
+>  	 * initialize node_online_map that gets used in hugetlb_cma_reserve()
+>  	 * while allocating required CMA size across online nodes.
+>  	 */
+> diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
+> index 73f8b49d485c..1649c90a3bc5 100644
+> --- a/drivers/base/arch_numa.c
+> +++ b/drivers/base/arch_numa.c
+> @@ -13,7 +13,9 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  
+> -#include <asm/acpi.h>
+> +#ifdef CONFIG_ACPI_NUMA
+> +#include <linux/acpi.h>
+> +#endif
+
+Why do we need this ifdef stuff here?
+In particular acpi_disabled is defined in that header
+in the !CONFIG_ACPI case so seems like we should include it always.
+
+Also given we've just moved arch/arm64/numa.c to become this file,
+it has an include of that header a few lines off the top of this diff anyway.
+
+So I think you can just drop the additional include here.
+
+
+>  #include <asm/sections.h>
+>  
+>  struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
+> @@ -444,16 +446,37 @@ static int __init dummy_numa_init(void)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_ACPI_NUMA
+> +static int __init arch_acpi_numa_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = acpi_numa_init();
+> +	if (ret) {
+> +		pr_info("Failed to initialise from firmware\n");
+> +		return ret;
+> +	}
+> +
+> +	return srat_disabled() ? -EINVAL : 0;
+> +}
+> +#else
+> +static int __init arch_acpi_numa_init(void)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
 > +#endif
 > +
->  /* Missing flags argument */
->  #define __IGNORE_renameat	/* renameat2 */
->=20
+>  /**
+> - * arm64_numa_init() - Initialize NUMA
+> + * arch_numa_init() - Initialize NUMA
+>   *
+>   * Try each configured NUMA initialization method until one succeeds. The
+>   * last fallback is dummy single node config encomapssing whole memory.
+>   */
+> -void __init arm64_numa_init(void)
+> +void __init arch_numa_init(void)
+>  {
+>  	if (!numa_off) {
+> -		if (!acpi_disabled && !numa_init(arm64_acpi_numa_init))
+> +		if (!acpi_disabled && !numa_init(arch_acpi_numa_init))
+>  			return;
+>  		if (acpi_disabled && !numa_init(of_numa_init))
+>  			return;
+> diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
+> index 2718d5a6ff03..e7962db4ba44 100644
+> --- a/include/asm-generic/numa.h
+> +++ b/include/asm-generic/numa.h
+> @@ -27,7 +27,7 @@ static inline const struct cpumask *cpumask_of_node(int node)
+>  }
+>  #endif
+>  
+> -void __init arm64_numa_init(void);
+> +void __init arch_numa_init(void);
+>  int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+>  void __init numa_set_distance(int from, int to, int distance);
+>  void __init numa_free_distance(void);
+> @@ -41,7 +41,7 @@ void numa_remove_cpu(unsigned int cpu);
+>  static inline void numa_store_cpu_info(unsigned int cpu) { }
+>  static inline void numa_add_cpu(unsigned int cpu) { }
+>  static inline void numa_remove_cpu(unsigned int cpu) { }
+> -static inline void arm64_numa_init(void) { }
+> +static inline void arch_numa_init(void) { }
+>  static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+>  
+>  #endif	/* CONFIG_NUMA */
 
-Added to linux-next today.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/qIGimAfxVKTvCJ+PllFC0A/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9oX1QACgkQAVBC80lX
-0GwVfQgAho6bGSHnGAjI0IiMmFRLcHM+KMH0XiVgh9bvUjVASl1mVgeIe7v//Oef
-uyH9zCWyUFof0EnaT4f5uZctC2pe/qvb7BsEdaSlLUSz4X8J1xLWfdYbdJHMvtYR
-WnrFHwGCmEtpImNTTZtXcdDZeliVgq41XGd/h1Z59o6givzPYTtIK59LlOOcZj3y
-KIY0ELXUPauFOINBbfRzs0xlB6upYfVrHUdh9/glsrY4wVcEfPhjgFVAk+Ua/4/E
-/ksLJ+WeUZxJ/2SOPL5Vm23vZvmSE0fD4krBBiANbBiKShRgJRU21uc/ulEdHh5E
-qZjQA6jjcKFGbIbi78Sb6LxIzI/mKQ==
-=OfZk
------END PGP SIGNATURE-----
-
---Sig_/qIGimAfxVKTvCJ+PllFC0A/--
