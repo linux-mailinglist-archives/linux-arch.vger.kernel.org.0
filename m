@@ -2,131 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039EB272BB6
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 18:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FD2272BF2
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 18:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727323AbgIUQWa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Sep 2020 12:22:30 -0400
-Received: from mga02.intel.com ([134.134.136.20]:36798 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726419AbgIUQW3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 21 Sep 2020 12:22:29 -0400
-IronPort-SDR: WAODNz+AWg2Fv1qgtS+4SfBx2nYuI6MWYQRyP3bsZ7tj77dLTudoIB7CoTTrUlXTS1nvPJoRVC
- b8iThqVFPTkA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="148077072"
-X-IronPort-AV: E=Sophos;i="5.77,287,1596524400"; 
-   d="scan'208";a="148077072"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 09:22:27 -0700
-IronPort-SDR: DzeCj1CYXt5zm0Njvv2xtnUdYaZZmhzsBjJGNA1e7sXxqTd/uptwCH02FfBaxY46EttPZoUWgv
- pQwlJ5MOClew==
-X-IronPort-AV: E=Sophos;i="5.77,287,1596524400"; 
-   d="scan'208";a="348153605"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.102.78]) ([10.212.102.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 09:22:26 -0700
-Subject: Re: [PATCH v12 8/8] x86: Disallow vsyscall emulation when CET is
- enabled
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>
-References: <20200918192312.25978-1-yu-cheng.yu@intel.com>
- <20200918192312.25978-9-yu-cheng.yu@intel.com>
- <CALCETrXfixDGJhf0yPw-OckjEdeF2SbYjWFm8VbLriiP0Krhrg@mail.gmail.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <c96c98ec-d72a-81a3-06e2-2040f3ece33a@intel.com>
-Date:   Mon, 21 Sep 2020 09:22:25 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1727557AbgIUQZT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Sep 2020 12:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728165AbgIUQZK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 12:25:10 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E09AC0613CF
+        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 09:25:10 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id w3so11623204ljo.5
+        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 09:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LbpMl5lO0+qWgp9uAKdYj5ux1bx38Si35gqGXl7ChFs=;
+        b=a2Cw4ka1cjcNejUhLUZAAjSLNoYelCoyZSpmQCatftbiLw5qTc+pZIam7CQ+bzySoC
+         gGOBNlZFILF1rbb13VR5vHbBB6o7IPhfhEtjuIQ55GiefDbPErJYqMNF7ag3KHBM9T1M
+         Z1SXFFsw84dXXtq0Bg7SO0KF3jcdxFjvGihOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LbpMl5lO0+qWgp9uAKdYj5ux1bx38Si35gqGXl7ChFs=;
+        b=BtH/3+2ZpkQeLW2Owj4NmkYg+oUj55+1EERtX0hkchV+jkwK4nGpQ1Ck0lDLQh8dqC
+         rHdjdzaaalmTVSbvNbbcfIclMAbWN4kcbfcCd0Vdpt1gxp1dg9jRAXHacAk48kqR01DM
+         oK1cObwwFkwRIiYo3gxc7VHUbG939JKFFuaqAxhpQChhS3uZmToojn6o5S13I62WV2gm
+         dOV3iE99mi5HdPsW+OW4Tc+IAhoGVT6HLgkpaW2KG9WLsLO9kSIAIjYkTFEFjRhmpNcr
+         1YKPDuGLrRnT+SxLUjooVkyzvbhn3ty3IohXGZnptgpuX4dd0q/bfPBo6QZJWmSC7gRo
+         y6Zg==
+X-Gm-Message-State: AOAM5327TiaAaRXDpMYZCgCKFGPETEi9FDOcpsGLHzVZ0Ernoj0cJ41G
+        3jP6o7rwDuyMt31v0ty9CHtt4ZH+f54BtA==
+X-Google-Smtp-Source: ABdhPJxvRU6kxg+SwKIXeJJOaju2lgebPzaRjUkC9X5kgWu+eZIppkSbDxNbU0elqP8gZYucBCf1AQ==
+X-Received: by 2002:a2e:8011:: with SMTP id j17mr170397ljg.444.1600705508558;
+        Mon, 21 Sep 2020 09:25:08 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id u17sm2696097lfi.2.2020.09.21.09.25.02
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2020 09:25:02 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id k25so11646470ljk.0
+        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 09:25:02 -0700 (PDT)
+X-Received: by 2002:a2e:994a:: with SMTP id r10mr154392ljj.102.1600705501870;
+ Mon, 21 Sep 2020 09:25:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CALCETrXfixDGJhf0yPw-OckjEdeF2SbYjWFm8VbLriiP0Krhrg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+ <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
+ <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+ <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Sep 2020 09:24:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+Message-ID: <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/18/2020 5:11 PM, Andy Lutomirski wrote:
-> On Fri, Sep 18, 2020 at 12:23 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->>
->> Emulation of the legacy vsyscall page is required by some programs
->> built before 2013.  Newer programs after 2013 don't use it.
->> Disable vsyscall emulation when Control-flow Enforcement (CET) is
->> enabled to enhance security.
->>
->> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> ---
->> v12:
->> - Disable vsyscall emulation only when it is attempted (vs. at compile time).
->>
->>   arch/x86/entry/vsyscall/vsyscall_64.c | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
->> index 44c33103a955..3196e963e365 100644
->> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
->> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
->> @@ -150,6 +150,15 @@ bool emulate_vsyscall(unsigned long error_code,
->>
->>          WARN_ON_ONCE(address != regs->ip);
->>
->> +#ifdef CONFIG_X86_INTEL_CET
->> +       if (current->thread.cet.shstk_size ||
->> +           current->thread.cet.ibt_enabled) {
->> +               warn_bad_vsyscall(KERN_INFO, regs,
->> +                                 "vsyscall attempted with cet enabled");
->> +               return false;
->> +       }
-> 
-> Nope, try again.  Having IBT on does *not* mean that every library in
-> the process knows that we have indirect branch tracking.  The legacy
-> bitmap exists for a reason.  Also, I want a way to flag programs as
-> not using the vsyscall page, but that flag should not be called CET.
-> And a process with vsyscalls off should not be able to read the
-> vsyscall page, and /proc/self/maps should be correct.
-> 
-> So you have some choices:
-> 
-> 1. Drop this patch and make it work.
-> 
-> 2. Add a real per-process vsyscall control.  Either make it depend on
-> vsyscall=xonly and wire it up correctly or actually make it work
-> correctly with vsyscall=emulate.
-> 
-> NAK to any hacks in this space.  Do it right or don't do it at all.
-> 
+On Mon, Sep 21, 2020 at 12:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> If a task is migrated to a different CPU then the mapping address will
+> change which will explode in colourful ways.
 
-We can drop this patch, and bring back the previous patch that fixes up 
-shadow stack and ibt.  That makes vsyscall emulation work correctly, and 
-does not force the application to do anything different from what is 
-working now.  I will post the previous patch as a reply to this thread 
-so that people can make comments on it.
+Heh.
 
-Yu-cheng
+Right you are.
+
+Maybe we really *could* call this new kmap functionality something
+like "kmap_percpu()" (or maybe "local" is good enough), and make it
+act like your RT code does for spinlocks - not disable preemption, but
+only disabling CPU migration.
+
+That would probably be good enough for a lot of users that don't want
+to expose excessive latencies, but where it's really not a huge deal
+to say "stick to this CPU for a short while".
+
+The crypto code certainly sounds like one such case.
+
+             Linus
