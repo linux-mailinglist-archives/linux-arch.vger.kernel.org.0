@@ -2,168 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAC5272ABC
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 17:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DCA272AC3
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 17:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727030AbgIUPv3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Sep 2020 11:51:29 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2907 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726883AbgIUPv3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 21 Sep 2020 11:51:29 -0400
-Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id B4E22E4553585E499F4E;
-        Mon, 21 Sep 2020 16:51:27 +0100 (IST)
-Received: from localhost (10.52.127.185) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 21 Sep
- 2020 16:51:26 +0100
-Date:   Mon, 21 Sep 2020 16:49:47 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Atish Patra <atish.patra@wdc.com>
-CC:     <linux-kernel@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Anup Patel <anup@brainfault.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "David Hildenbrand" <david@redhat.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arch@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFT PATCH v3 0/5] Unify NUMA implementation between ARM64 &
- RISC-V
-Message-ID: <20200921164947.000048e1@Huawei.com>
-In-Reply-To: <20200918201140.3172284-1-atish.patra@wdc.com>
-References: <20200918201140.3172284-1-atish.patra@wdc.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S1727219AbgIUPxv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Sep 2020 11:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726810AbgIUPxv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 11:53:51 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CF6C0613D0
+        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 08:53:51 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id kk9so12090pjb.2
+        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 08:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fn5z5p0KWkT8F7kdqXLtUSD00/eNhULjEnaQyt7HO3c=;
+        b=wS3DJbGh/toEWGHMWfIYAyfl62a2xPnkTm7cNhPym3mzQxK28qL+kZCrSZggBSROXa
+         NIIsRsLPprRNfrNxq/O7SgGIAQv+11RPoBUmYfVay0H+wQrvpSFqZGCCwczoE0PI3NwM
+         BajK6bGuvdWSOxCULPkkElyJinqDQbfrg3BX4qxe0nSoLtxoqCUZ4DYY8jlgM9XNnsxV
+         m952IZLwDFx/YDBae5MI6BosCFQlIVPnADU67SRlbPRPa3XZPP99q/tE/mqTrWmaFUGB
+         Cr7PUOGoUwpYEL9jPXyQWHhnShzEybRi2A7whxiV331Jx4G8BVdc/1kDmDMbH8AHeYn9
+         IaBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fn5z5p0KWkT8F7kdqXLtUSD00/eNhULjEnaQyt7HO3c=;
+        b=ngcf7Dg4l4xjTFaHBHjyFxrVSu8SImdYTpYrefx0oURYnSY9EPwuDn0kdocRUwBBQS
+         YhFbb2UFAZG3K0H8j9kJfnlgWwDA90AEaKlVjzyfxzPLWmfQHxNm9a0GBPVYmnlfwP/y
+         l+s5PXxGUI9PqsaY4MKTYfmwZmsmKsQAjR6gBvXTR7Wg/wpRQ0VbbkF4Y6VEbAiLahpl
+         8xgtzIlojk3GvgMLUF3fhckOuc5yU/k3Ov8xPnhNHvECE2rOBdwEtFmI7sQV8kxzfsGa
+         LUTKh70h3L+L9lJ+WXUd0p/zwaR0HZ4gAPz+BTYwXVwN/lDardsk/xRHfk8jX81eYJt2
+         MJKA==
+X-Gm-Message-State: AOAM533deWYKayDW+48G+I1NSOYBgM9lA0Oe5WwMy+gEI86XPs4CK7xW
+        p+t9acVYgxN33IQV+adFs2FD4/ZA02l3PDs/lOA6Qf3QcuU=
+X-Google-Smtp-Source: ABdhPJxEx7C1NCFiroHZ1htfv1qkh42nY8oGzcnOH06wOhFq2SsYUT8w4mdvW5J7C4BtXsEWH+72M+TnlFjXmM5sSRs=
+X-Received: by 2002:a17:90b:889:: with SMTP id bj9mr28426pjb.101.1600703630255;
+ Mon, 21 Sep 2020 08:53:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.127.185]
-X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+References: <20200918201436.2932360-1-samitolvanen@google.com> <20200918201436.2932360-4-samitolvanen@google.com>
+In-Reply-To: <20200918201436.2932360-4-samitolvanen@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 21 Sep 2020 08:53:39 -0700
+Message-ID: <CAKwvOdk7pR5dK0ynxPOWHVYVWLMF1CUn6c=_GvpF-80YHNhQEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/30] x86/boot/compressed: Disable relocation relaxation
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 18 Sep 2020 13:11:35 -0700
-Atish Patra <atish.patra@wdc.com> wrote:
+It looks like this just hit mainline over the weekend. FWIW. EOM.
 
-> This series attempts to move the ARM64 numa implementation to common
-> code so that RISC-V can leverage that as well instead of reimplementing
-> it again.
-> 
-> RISC-V specific bits are based on initial work done by Greentime Hu [1] but
-> modified to reuse the common implementation to avoid duplication.
-> 
-> [1] https://lkml.org/lkml/2020/1/10/233
-> 
-> This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
-> It would be great if somebody can test it on numa capable ARM64 hardware platforms.
-> This patch series doesn't modify the maintainers list for the common code (arch_numa)
-> as I am not sure if somebody from ARM64 community or Greg should take up the
-> maintainership. Ganapatrao was the original author of the arm64 version.
-> I would be happy to update that in the next revision once it is decided.
-
-Was fairly sure this set was a noop on arm64 ACPI systems, but ran a quick
-sanity check on a 2 socket kunpeng920 and everything came up as normal
-(4 nodes, around 250G a node) 
-
-Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-For patches 1 and 2.  Doesn't seem relevant to the rest :)
-
-> 
-> # numactl --hardware
-> available: 2 nodes (0-1)
-> node 0 cpus: 0 1 2 3
-> node 0 size: 486 MB
-> node 0 free: 470 MB
-> node 1 cpus: 4 5 6 7
-> node 1 size: 424 MB
-> node 1 free: 408 MB
-> node distances:
-> node   0   1 
->   0:  10  20 
->   1:  20  10 
-> # numactl -show
-> policy: default
-> preferred node: current
-> physcpubind: 0 1 2 3 4 5 6 7 
-> cpubind: 0 1 
-> nodebind: 0 1 
-> membind: 0 1 
-> 
-> For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
-> to test the patches in Qemu and 2 socket OmniXtend FPGA.
-> 
-> https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
-> 
-> The patches are also available at
-> 
-> https://github.com/atishp04/linux/tree/5.10_numa_unified_v3
-> 
-> There may be some minor conflicts with Mike's cleanup series [2] depending on the
-> order in which these two series are being accepted. I can rebase on top his series
-> if required.
-> 
-> [2] https://lkml.org/lkml/2020/8/18/754
-> 
-> Changes from v2->v3:
-> 1. Added Acked-by/Reviewed-by tags.
-> 2. Replaced asm/acpi.h with linux/acpi.h
-> 3. Defined arch_acpi_numa_init as static.
-> 
-> Changes from v1->v2:
-> 1. Replaced ARM64 specific compile time protection with ACPI specific ones.
-> 2. Dropped common pcibus_to_node changes. Added required changes in RISC-V. 
-> 3. Fixed few typos.
-> 
-> Atish Patra (4):
-> numa: Move numa implementation to common code
-> arm64, numa: Change the numa init functions name to be generic
-> riscv: Separate memory init from paging init
-> riscv: Add numa support for riscv64 platform
-> 
-> Greentime Hu (1):
-> riscv: Add support pte_protnone and pmd_protnone if
-> CONFIG_NUMA_BALANCING
-> 
-> arch/arm64/Kconfig                            |  1 +
-> arch/arm64/include/asm/numa.h                 | 45 +----------------
-> arch/arm64/kernel/acpi_numa.c                 | 13 -----
-> arch/arm64/mm/Makefile                        |  1 -
-> arch/arm64/mm/init.c                          |  4 +-
-> arch/riscv/Kconfig                            | 31 +++++++++++-
-> arch/riscv/include/asm/mmzone.h               | 13 +++++
-> arch/riscv/include/asm/numa.h                 |  8 +++
-> arch/riscv/include/asm/pci.h                  | 14 ++++++
-> arch/riscv/include/asm/pgtable.h              | 21 ++++++++
-> arch/riscv/kernel/setup.c                     | 11 ++++-
-> arch/riscv/kernel/smpboot.c                   | 12 ++++-
-> arch/riscv/mm/init.c                          | 10 +++-
-> drivers/base/Kconfig                          |  6 +++
-> drivers/base/Makefile                         |  1 +
-> .../mm/numa.c => drivers/base/arch_numa.c     | 31 ++++++++++--
-> include/asm-generic/numa.h                    | 49 +++++++++++++++++++
-> 17 files changed, 201 insertions(+), 70 deletions(-)
-> create mode 100644 arch/riscv/include/asm/mmzone.h
-> create mode 100644 arch/riscv/include/asm/numa.h
-> rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
-> create mode 100644 include/asm-generic/numa.h
-> 
+On Fri, Sep 18, 2020 at 1:14 PM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> From: Arvind Sankar <nivedita@alum.mit.edu>
+>
+> The x86-64 psABI [0] specifies special relocation types
+> (R_X86_64_[REX_]GOTPCRELX) for indirection through the Global Offset
+> Table, semantically equivalent to R_X86_64_GOTPCREL, which the linker
+> can take advantage of for optimization (relaxation) at link time. This
+> is supported by LLD and binutils versions 2.26 onwards.
+>
+> The compressed kernel is position-independent code, however, when using
+> LLD or binutils versions before 2.27, it must be linked without the -pie
+> option. In this case, the linker may optimize certain instructions into
+> a non-position-independent form, by converting foo@GOTPCREL(%rip) to $foo.
+>
+> This potential issue has been present with LLD and binutils-2.26 for a
+> long time, but it has never manifested itself before now:
+> - LLD and binutils-2.26 only relax
+>         movq    foo@GOTPCREL(%rip), %reg
+>   to
+>         leaq    foo(%rip), %reg
+>   which is still position-independent, rather than
+>         mov     $foo, %reg
+>   which is permitted by the psABI when -pie is not enabled.
+> - gcc happens to only generate GOTPCREL relocations on mov instructions.
+> - clang does generate GOTPCREL relocations on non-mov instructions, but
+>   when building the compressed kernel, it uses its integrated assembler
+>   (due to the redefinition of KBUILD_CFLAGS dropping -no-integrated-as),
+>   which has so far defaulted to not generating the GOTPCRELX
+>   relocations.
+>
+> Nick Desaulniers reports [1,2]:
+>   A recent change [3] to a default value of configuration variable
+>   (ENABLE_X86_RELAX_RELOCATIONS OFF -> ON) in LLVM now causes Clang's
+>   integrated assembler to emit R_X86_64_GOTPCRELX/R_X86_64_REX_GOTPCRELX
+>   relocations. LLD will relax instructions with these relocations based
+>   on whether the image is being linked as position independent or not.
+>   When not, then LLD will relax these instructions to use absolute
+>   addressing mode (R_RELAX_GOT_PC_NOPIC). This causes kernels built with
+>   Clang and linked with LLD to fail to boot.
+>
+> Patch series [4] is a solution to allow the compressed kernel to be
+> linked with -pie unconditionally, but even if merged is unlikely to be
+> backported. As a simple solution that can be applied to stable as well,
+> prevent the assembler from generating the relaxed relocation types using
+> the -mrelax-relocations=no option. For ease of backporting, do this
+> unconditionally.
+>
+> [0] https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/linker-optimization.tex#L65
+> [1] https://lore.kernel.org/lkml/20200807194100.3570838-1-ndesaulniers@google.com/
+> [2] https://github.com/ClangBuiltLinux/linux/issues/1121
+> [3] https://reviews.llvm.org/rGc41a18cf61790fc898dcda1055c3efbf442c14c0
+> [4] https://lore.kernel.org/lkml/20200731202738.2577854-1-nivedita@alum.mit.edu/
+>
+> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Arvind Sankar <nivedita@alum.mit.edu>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  arch/x86/boot/compressed/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 3962f592633d..ff7894f39e0e 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -43,6 +43,8 @@ KBUILD_CFLAGS += -Wno-pointer-sign
+>  KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+>  KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+>  KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+> +# Disable relocation relaxation in case the link is not PIE.
+> +KBUILD_CFLAGS += $(call as-option,-Wa$(comma)-mrelax-relocations=no)
+>
+>  KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
+>  GCOV_PROFILE := n
 > --
-> 2.25.1
-> 
+> 2.28.0.681.g6f77f65b4e-goog
+>
 
 
+-- 
+Thanks,
+~Nick Desaulniers
