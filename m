@@ -2,821 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6183A272CAA
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 18:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2697272CBB
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 18:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbgIUQeD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Sep 2020 12:34:03 -0400
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:53620 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728650AbgIUQdq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 12:33:46 -0400
-X-Greylist: delayed 1921 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 12:33:43 EDT
-Received: from tun252.jain.kot-begemot.co.uk ([192.168.18.6] helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1kKOG1-0001UF-SZ; Mon, 21 Sep 2020 16:01:39 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1kKOFz-0002zR-2j; Mon, 21 Sep 2020 17:01:37 +0100
-Subject: Re: [RFC v5 01/21] um: split build in kernel and host parts
-To:     Hajime Tazaki <thehajime@gmail.com>, linux-um@lists.infradead.org
-Cc:     linux-arch@vger.kernel.org,
-        Octavian Purdila <tavi.purdila@gmail.com>,
-        Octavian Purdila <tavi@cs.pub.ro>,
-        Akira Moroo <retrage01@gmail.com>,
-        linux-kernel-library@freelists.org
-References: <cover.1593697069.git.thehajime@gmail.com>
- <e47e88ce3001e0c74492a26194b047529213657e.1593697069.git.thehajime@gmail.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <83f3f02f-ee37-5200-ab24-b35a4ad0e3b7@cambridgegreys.com>
-Date:   Mon, 21 Sep 2020 17:01:34 +0100
+        id S1728757AbgIUQea (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Sep 2020 12:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728743AbgIUQeY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 12:34:24 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48478C061755;
+        Mon, 21 Sep 2020 09:34:24 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id s12so13471886wrw.11;
+        Mon, 21 Sep 2020 09:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EwqPNPGMMD7jZugkeGHNPUgslTiWGHPwKe5jmVOjgzM=;
+        b=k92Hm9Mq3cOSa6Iizgmb6g6eu0cp6tsC9vlUcHnDr+eyGjc7d8tl2cs1waeU/5Jc5C
+         Q19QEIe7IVgC0bmZqsnVPpjkxCRrfygcpzN2r1jaEept+UU8xAsxxyIVXEOUheDlJXSg
+         bQAhTXCNlOp7GDwSrMTlBElKFLqBIjfYcpk0KUwx1okVESBvRGqQYCNXPzMlScBwikhA
+         X+aygAa+449GxfoLPkswgJKbNrEOKnEVSJQajPG8RkHqI40wXDNjcKYn33I2ih60EuMa
+         J2ObDOyD8s7HGrYunUCQj11JoFL1rOu7R6quKlOKfMGhTkI6wIB1/Oe04WOodzJquTej
+         jnNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=EwqPNPGMMD7jZugkeGHNPUgslTiWGHPwKe5jmVOjgzM=;
+        b=LWIC3FnrMzEkVNcJX/lgIclraMbGK5YK/i+Yfww4qrCz1IvWH1Ydsrc3uyde9v491V
+         1wlSmvGDGBYZ6uzSlJVstiD12swy2kX00UXT5EKZ9k3ETMjaikjhuqm3EEqDOnv0vkN8
+         tN3Od4cwHbJbfhSILDkaDylOCjTa0kIqiyZcT/IRPNcfxgiCmQMP3wVYCfZz79x/f0Hy
+         1CBafMaB9JP4hN0ZlDapeUJbjfKOShyVSq15W6jaGWz1G0LT4RXbepzX2btNyhr4UDeP
+         1KsaGuSM+ztNX2oGZOfm9DFi/f3LzNAD/vLsOw4dNR749i5oPqD4y5GBa2BJKYU1sf8m
+         4pJw==
+X-Gm-Message-State: AOAM530Lq6OEYBXtGA1gWKbiGFySt6sV18AVTbzD2YPK9gY2ftS/8CzB
+        BFQW+0y5KR80acW7PkBKSFXILlQgz1Klfg==
+X-Google-Smtp-Source: ABdhPJxD3vBKkJ0SpjXPgN8gXctt48HUZS+njjzoFRpi+BFSe0pOOK6itnWY3TleSHxiKn4AbMBMMQ==
+X-Received: by 2002:adf:c404:: with SMTP id v4mr599178wrf.17.1600706062651;
+        Mon, 21 Sep 2020 09:34:22 -0700 (PDT)
+Received: from [192.168.43.240] ([5.100.192.97])
+        by smtp.gmail.com with ESMTPSA id r14sm21193916wrn.56.2020.09.21.09.34.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2020 09:34:22 -0700 (PDT)
+Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Arnd Bergmann' <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Howells <dhowells@redhat.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-aio <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+References: <20200918124533.3487701-1-hch@lst.de>
+ <20200918124533.3487701-2-hch@lst.de>
+ <20200920151510.GS32101@casper.infradead.org>
+ <20200920180742.GN3421308@ZenIV.linux.org.uk>
+ <20200920190159.GT32101@casper.infradead.org>
+ <20200920191031.GQ3421308@ZenIV.linux.org.uk>
+ <20200920192259.GU32101@casper.infradead.org>
+ <CALCETrXVtBkxNJcMxf9myaKT9snHKbCWUenKHGRfp8AOtORBPg@mail.gmail.com>
+ <CAK8P3a37BRFj_qg61gP2oVrjJzBrZ58y1vggeTk_5n55Ou5U2Q@mail.gmail.com>
+ <8363d874e503470f8caa201e85e9fbd4@AcuMS.aculab.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+Autocrypt: addr=asml.silence@gmail.com; prefer-encrypt=mutual; keydata=
+ mQINBFmKBOQBEAC76ZFxLAKpDw0bKQ8CEiYJRGn8MHTUhURL02/7n1t0HkKQx2K1fCXClbps
+ bdwSHrhOWdW61pmfMbDYbTj6ZvGRvhoLWfGkzujB2wjNcbNTXIoOzJEGISHaPf6E2IQx1ik9
+ 6uqVkK1OMb7qRvKH0i7HYP4WJzYbEWVyLiAxUj611mC9tgd73oqZ2pLYzGTqF2j6a/obaqha
+ +hXuWTvpDQXqcOZJXIW43atprH03G1tQs7VwR21Q1eq6Yvy2ESLdc38EqCszBfQRMmKy+cfp
+ W3U9Mb1w0L680pXrONcnlDBCN7/sghGeMHjGKfNANjPc+0hzz3rApPxpoE7HC1uRiwC4et83
+ CKnncH1l7zgeBT9Oa3qEiBlaa1ZCBqrA4dY+z5fWJYjMpwI1SNp37RtF8fKXbKQg+JuUjAa9
+ Y6oXeyEvDHMyJYMcinl6xCqCBAXPHnHmawkMMgjr3BBRzODmMr+CPVvnYe7BFYfoajzqzq+h
+ EyXSl3aBf0IDPTqSUrhbmjj5OEOYgRW5p+mdYtY1cXeK8copmd+fd/eTkghok5li58AojCba
+ jRjp7zVOLOjDlpxxiKhuFmpV4yWNh5JJaTbwCRSd04sCcDNlJj+TehTr+o1QiORzc2t+N5iJ
+ NbILft19Izdn8U39T5oWiynqa1qCLgbuFtnYx1HlUq/HvAm+kwARAQABtDFQYXZlbCBCZWd1
+ bmtvdiAoc2lsZW5jZSkgPGFzbWwuc2lsZW5jZUBnbWFpbC5jb20+iQJOBBMBCAA4FiEE+6Ju
+ PTjTbx479o3OWt5b1Glr+6UFAlmKBOQCGwMFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQ
+ Wt5b1Glr+6WxZA//QueaKHzgdnOikJ7NA/Vq8FmhRlwgtP0+E+w93kL+ZGLzS/cUCIjn2f4Q
+ Mcutj2Neg0CcYPX3b2nJiKr5Vn0rjJ/suiaOa1h1KzyNTOmxnsqE5fmxOf6C6x+NKE18I5Jy
+ xzLQoktbdDVA7JfB1itt6iWSNoOTVcvFyvfe5ggy6FSCcP+m1RlR58XxVLH+qlAvxxOeEr/e
+ aQfUzrs7gqdSd9zQGEZo0jtuBiB7k98t9y0oC9Jz0PJdvaj1NZUgtXG9pEtww3LdeXP/TkFl
+ HBSxVflzeoFaj4UAuy8+uve7ya/ECNCc8kk0VYaEjoVrzJcYdKP583iRhOLlZA6HEmn/+Gh9
+ 4orG67HNiJlbFiW3whxGizWsrtFNLsSP1YrEReYk9j1SoUHHzsu+ZtNfKuHIhK0sU07G1OPN
+ 2rDLlzUWR9Jc22INAkhVHOogOcc5ajMGhgWcBJMLCoi219HlX69LIDu3Y34uIg9QPZIC2jwr
+ 24W0kxmK6avJr7+n4o8m6sOJvhlumSp5TSNhRiKvAHB1I2JB8Q1yZCIPzx+w1ALxuoWiCdwV
+ M/azguU42R17IuBzK0S3hPjXpEi2sK/k4pEPnHVUv9Cu09HCNnd6BRfFGjo8M9kZvw360gC1
+ reeMdqGjwQ68o9x0R7NBRrtUOh48TDLXCANAg97wjPoy37dQE7e5Ag0EWYoE5AEQAMWS+aBV
+ IJtCjwtfCOV98NamFpDEjBMrCAfLm7wZlmXy5I6o7nzzCxEw06P2rhzp1hIqkaab1kHySU7g
+ dkpjmQ7Jjlrf6KdMP87mC/Hx4+zgVCkTQCKkIxNE76Ff3O9uTvkWCspSh9J0qPYyCaVta2D1
+ Sq5HZ8WFcap71iVO1f2/FEHKJNz/YTSOS/W7dxJdXl2eoj3gYX2UZNfoaVv8OXKaWslZlgqN
+ jSg9wsTv1K73AnQKt4fFhscN9YFxhtgD/SQuOldE5Ws4UlJoaFX/yCoJL3ky2kC0WFngzwRF
+ Yo6u/KON/o28yyP+alYRMBrN0Dm60FuVSIFafSqXoJTIjSZ6olbEoT0u17Rag8BxnxryMrgR
+ dkccq272MaSS0eOC9K2rtvxzddohRFPcy/8bkX+t2iukTDz75KSTKO+chce62Xxdg62dpkZX
+ xK+HeDCZ7gRNZvAbDETr6XI63hPKi891GeZqvqQVYR8e+V2725w+H1iv3THiB1tx4L2bXZDI
+ DtMKQ5D2RvCHNdPNcZeldEoJwKoA60yg6tuUquvsLvfCwtrmVI2rL2djYxRfGNmFMrUDN1Xq
+ F3xozA91q3iZd9OYi9G+M/OA01husBdcIzj1hu0aL+MGg4Gqk6XwjoSxVd4YT41kTU7Kk+/I
+ 5/Nf+i88ULt6HanBYcY/+Daeo/XFABEBAAGJAjYEGAEIACAWIQT7om49ONNvHjv2jc5a3lvU
+ aWv7pQUCWYoE5AIbDAAKCRBa3lvUaWv7pfmcEACKTRQ28b1y5ztKuLdLr79+T+LwZKHjX++P
+ 4wKjEOECCcB6KCv3hP+J2GCXDOPZvdg/ZYZafqP68Yy8AZqkfa4qPYHmIdpODtRzZSL48kM8
+ LRzV8Rl7J3ItvzdBRxf4T/Zseu5U6ELiQdCUkPGsJcPIJkgPjO2ROG/ZtYa9DvnShNWPlp+R
+ uPwPccEQPWO/NP4fJl2zwC6byjljZhW5kxYswGMLBwb5cDUZAisIukyAa8Xshdan6C2RZcNs
+ rB3L7vsg/R8UCehxOH0C+NypG2GqjVejNZsc7bgV49EOVltS+GmGyY+moIzxsuLmT93rqyII
+ 5rSbbcTLe6KBYcs24XEoo49Zm9oDA3jYvNpeYD8rDcnNbuZh9kTgBwFN41JHOPv0W2FEEWqe
+ JsCwQdcOQ56rtezdCJUYmRAt3BsfjN3Jn3N6rpodi4Dkdli8HylM5iq4ooeb5VkQ7UZxbCWt
+ UVMKkOCdFhutRmYp0mbv2e87IK4erwNHQRkHUkzbsuym8RVpAZbLzLPIYK/J3RTErL6Z99N2
+ m3J6pjwSJY/zNwuFPs9zGEnRO4g0BUbwGdbuvDzaq6/3OJLKohr5eLXNU3JkT+3HezydWm3W
+ OPhauth7W0db74Qd49HXK0xe/aPrK+Cp+kU1HRactyNtF8jZQbhMCC8vMGukZtWaAwpjWiiH bA==
+Message-ID: <7fc71d22-e213-b050-75fe-b45adc6bf0d8@gmail.com>
+Date:   Mon, 21 Sep 2020 19:31:49 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <e47e88ce3001e0c74492a26194b047529213657e.1593697069.git.thehajime@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <8363d874e503470f8caa201e85e9fbd4@AcuMS.aculab.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 21/09/2020 00:13, David Laight wrote:
+> From: Arnd Bergmann
+>> Sent: 20 September 2020 21:49
+>>
+>> On Sun, Sep 20, 2020 at 9:28 PM Andy Lutomirski <luto@kernel.org> wrote:
+>>> On Sun, Sep 20, 2020 at 12:23 PM Matthew Wilcox <willy@infradead.org> wrote:
+>>>>
+>>>> On Sun, Sep 20, 2020 at 08:10:31PM +0100, Al Viro wrote:
+>>>>> IMO it's much saner to mark those and refuse to touch them from io_uring...
+>>>>
+>>>> Simpler solution is to remove io_uring from the 32-bit syscall list.
+>>>> If you're a 32-bit process, you don't get to use io_uring.  Would
+>>>> any real users actually care about that?
+>>>
+>>> We could go one step farther and declare that we're done adding *any*
+>>> new compat syscalls :)
+>>
+>> Would you also stop adding system calls to native 32-bit systems then?
+>>
+>> On memory constrained systems (less than 2GB a.t.m.), there is still a
+>> strong demand for running 32-bit user space, but all of the recent Arm
+>> cores (after Cortex-A55) dropped the ability to run 32-bit kernels, so
+>> that compat mode may eventually become the primary way to run
+>> Linux on cheap embedded systems.
+>>
+>> I don't think there is any chance we can realistically take away io_uring
+>> from the 32-bit ABI any more now.
+> 
+> Can't it just run requests from 32bit apps in a kernel thread that has
+> the 'in_compat_syscall' flag set?
+> Not that i recall seeing the code where it saves the 'compat' nature
+> of any requests.
+> 
+> It is already completely f*cked if you try to pass the command ring
+> to a child process - it uses the wrong 'mm'.
 
+And how so? io_uring uses mm of a submitter. The exception is SQPOLL
+mode, but it requires CAP_SYS_ADMIN or CAP_SYS_NICE anyway.
 
-On 02/07/2020 15:06, Hajime Tazaki wrote:
-> From: Octavian Purdila <tavi@cs.pub.ro>
+> I suspect there are some really horrid security holes in that area.
 > 
-> This patch splits the UML build in two parts: a kernel part that
-> generates a relocatable object (linux.o) and a host build part that
-> links the relocatable object into an executable.
+> 	David.
 > 
-> This allows us to simplify the linker script since we can now remove
-> the host bits (e.g. .rel sections). It also gives us greater
-> flexibility since it will be much easier to support other
-> architectures and OSes if we use the standard linker script.
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 > 
-> The host build part has been implemented in tools/um so that we can
-> reuse the available host build infrastructure.
-> 
-> The patch also changes the UML build invocation, if before
-> 
->   $ make ARCH=um defconfig
->   $ make ARCH=um
-> 
-> was generating the executable now this only generates the relocatable
-> object.
-> 
-> To fully build UML use:
-> 
->   $ make -C tools/um
-> 
-> which will generate tools/lkl/linux as the UML executable. To
-> statically compiled UML use:
-> 
->   $ make -C tools/lkl UML_STATIC=y
-> 
-> Signed-off-by: Octavian Purdila <tavi@cs.pub.ro>
-> Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-> ---
->   arch/um/Kconfig                  |  12 +--
->   arch/um/Makefile                 |  14 ++-
->   arch/um/include/asm/common.lds.S |  99 ------------------
->   arch/um/kernel/dyn.lds.S         | 171 -------------------------------
->   arch/um/kernel/uml.lds.S         | 115 ---------------------
->   arch/um/kernel/vmlinux.lds.S     |  91 ++++++++++++++--
->   scripts/link-vmlinux.sh          |  42 +++-----
->   tools/um/Makefile                |  72 +++++++++++++
->   tools/um/Targets                 |   4 +
->   tools/um/uml/Build               |   0
->   10 files changed, 184 insertions(+), 436 deletions(-)
->   delete mode 100644 arch/um/include/asm/common.lds.S
->   delete mode 100644 arch/um/kernel/dyn.lds.S
->   delete mode 100644 arch/um/kernel/uml.lds.S
->   create mode 100644 tools/um/Makefile
->   create mode 100644 tools/um/Targets
->   create mode 100644 tools/um/uml/Build
-> 
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index 96ab7026b037..a0a9fd3ab96c 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -20,6 +20,7 @@ config UML
->   	select GENERIC_CLOCKEVENTS
->   	select HAVE_GCC_PLUGINS
->   	select TTY # Needed for line.c
-> +	select MODULE_REL_CRCS if MODVERSIONS
->   
->   config MMU
->   	bool
-> @@ -79,17 +80,6 @@ config STATIC_LINK
->   	  NOTE: This option is incompatible with some networking features which
->   	  depend on features that require being dynamically loaded (like NSS).
->   
-> -config LD_SCRIPT_STATIC
-> -	bool
-> -	default y
-> -	depends on STATIC_LINK
-> -
-> -config LD_SCRIPT_DYN
-> -	bool
-> -	default y
-> -	depends on !LD_SCRIPT_STATIC
-> -	select MODULE_REL_CRCS if MODVERSIONS
-> -
->   config HOSTFS
->   	tristate "Host filesystem"
->   	help
-> diff --git a/arch/um/Makefile b/arch/um/Makefile
-> index 275f5ffdf6f0..c952ddefcc1c 100644
-> --- a/arch/um/Makefile
-> +++ b/arch/um/Makefile
-> @@ -95,14 +95,20 @@ KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/include \
->   KERNEL_DEFINES = $(strip -Derrno=kernel_errno -Dsigprocmask=kernel_sigprocmask \
->   			 -Dmktime=kernel_mktime $(ARCH_KERNEL_DEFINES))
->   KBUILD_CFLAGS += $(KERNEL_DEFINES)
-> +LDFLAGS_vmlinux += -r
->   
-> -PHONY += linux
-> +PHONY += linux.o
->   
-> -all: linux
-> +all: linux.o
->   
-> -linux: vmlinux
-> +linux.o: vmlinux
->   	@echo '  LINK $@'
-> -	$(Q)ln -f $< $@
-> +	$(Q)$(OBJCOPY) -R .eh_frame $< $@
-> +
-> +install: linux.o
-> +	@echo "  INSTALL $(INSTALL_PATH)/lib/$<"
-> +	@mkdir -p $(INSTALL_PATH)/lib/
-> +	@cp $< $(INSTALL_PATH)/lib/
->   
->   define archhelp
->     echo '* linux		- Binary kernel image (./linux) - for backward'
-> diff --git a/arch/um/include/asm/common.lds.S b/arch/um/include/asm/common.lds.S
-> deleted file mode 100644
-> index eca6c452a41b..000000000000
-> --- a/arch/um/include/asm/common.lds.S
-> +++ /dev/null
-> @@ -1,99 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -#include <asm-generic/vmlinux.lds.h>
-> -
-> -  .fini      : { *(.fini)    } =0x9090
-> -  _etext = .;
-> -  PROVIDE (etext = .);
-> -
-> -  . = ALIGN(4096);
-> -  _sdata = .;
-> -  PROVIDE (sdata = .);
-> -
-> -  RO_DATA(4096)
-> -
-> -  .unprotected : { *(.unprotected) }
-> -  . = ALIGN(4096);
-> -  PROVIDE (_unprotected_end = .);
-> -
-> -  . = ALIGN(4096);
-> -  EXCEPTION_TABLE(0)
-> -
-> -  BUG_TABLE
-> -
-> -  .uml.setup.init : {
-> -	__uml_setup_start = .;
-> -	*(.uml.setup.init)
-> -	__uml_setup_end = .;
-> -  }
-> -	
-> -  .uml.help.init : {
-> -	__uml_help_start = .;
-> -	*(.uml.help.init)
-> -	__uml_help_end = .;
-> -  }
-> -	
-> -  .uml.postsetup.init : {
-> -	__uml_postsetup_start = .;
-> -	*(.uml.postsetup.init)
-> -	__uml_postsetup_end = .;
-> -  }
-> -	
-> -  .init.setup : {
-> -	INIT_SETUP(0)
-> -  }
-> -
-> -  PERCPU_SECTION(32)
-> -	
-> -  .initcall.init : {
-> -	INIT_CALLS
-> -  }
-> -
-> -  .con_initcall.init : {
-> -	CON_INITCALL
-> -  }
-> -
-> -  .exitcall : {
-> -	__exitcall_begin = .;
-> -	*(.exitcall.exit)
-> -	__exitcall_end = .;
-> -  }
-> -
-> -  .uml.exitcall : {
-> -	__uml_exitcall_begin = .;
-> -	*(.uml.exitcall.exit)
-> -	__uml_exitcall_end = .;
-> -  }
-> -
-> -  . = ALIGN(4);
-> -  .altinstructions : {
-> -	__alt_instructions = .;
-> -	*(.altinstructions)
-> -	__alt_instructions_end = .;
-> -  }
-> -  .altinstr_replacement : { *(.altinstr_replacement) }
-> -  /* .exit.text is discard at runtime, not link time, to deal with references
-> -     from .altinstructions and .eh_frame */
-> -  .exit.text : { EXIT_TEXT }
-> -  .exit.data : { *(.exit.data) }
-> -
-> -  .preinit_array : {
-> -	__preinit_array_start = .;
-> -	*(.preinit_array)
-> -	__preinit_array_end = .;
-> -  }
-> -  .init_array : {
-> -	__init_array_start = .;
-> -	*(.init_array)
-> -	__init_array_end = .;
-> -  }
-> -  .fini_array : {
-> -	__fini_array_start = .;
-> -	*(.fini_array)
-> -	__fini_array_end = .;
-> -  }
-> -
-> -   . = ALIGN(4096);
-> -  .init.ramfs : {
-> -	INIT_RAM_FS
-> -  }
-> -
-> diff --git a/arch/um/kernel/dyn.lds.S b/arch/um/kernel/dyn.lds.S
-> deleted file mode 100644
-> index f5001481010c..000000000000
-> --- a/arch/um/kernel/dyn.lds.S
-> +++ /dev/null
-> @@ -1,171 +0,0 @@
-> -#include <asm/vmlinux.lds.h>
-> -#include <asm/page.h>
-> -
-> -OUTPUT_FORMAT(ELF_FORMAT)
-> -OUTPUT_ARCH(ELF_ARCH)
-> -ENTRY(_start)
-> -jiffies = jiffies_64;
-> -
-> -SECTIONS
-> -{
-> -  PROVIDE (__executable_start = START);
-> -  . = START + SIZEOF_HEADERS;
-> -  .interp         : { *(.interp) }
-> -  __binary_start = .;
-> -  . = ALIGN(4096);		/* Init code and data */
-> -  _text = .;
-> -  INIT_TEXT_SECTION(PAGE_SIZE)
-> -
-> -  . = ALIGN(PAGE_SIZE);
-> -
-> -  /* Read-only sections, merged into text segment: */
-> -  .hash           : { *(.hash) }
-> -  .gnu.hash       : { *(.gnu.hash) }
-> -  .dynsym         : { *(.dynsym) }
-> -  .dynstr         : { *(.dynstr) }
-> -  .gnu.version    : { *(.gnu.version) }
-> -  .gnu.version_d  : { *(.gnu.version_d) }
-> -  .gnu.version_r  : { *(.gnu.version_r) }
-> -  .rel.init       : { *(.rel.init) }
-> -  .rela.init      : { *(.rela.init) }
-> -  .rel.text       : { *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*) }
-> -  .rela.text      : { *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*) }
-> -  .rel.fini       : { *(.rel.fini) }
-> -  .rela.fini      : { *(.rela.fini) }
-> -  .rel.rodata     : { *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*) }
-> -  .rela.rodata    : { *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*) }
-> -  .rel.data       : { *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*) }
-> -  .rela.data      : { *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*) }
-> -  .rel.tdata	  : { *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*) }
-> -  .rela.tdata	  : { *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*) }
-> -  .rel.tbss	  : { *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*) }
-> -  .rela.tbss	  : { *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*) }
-> -  .rel.ctors      : { *(.rel.ctors) }
-> -  .rela.ctors     : { *(.rela.ctors) }
-> -  .rel.dtors      : { *(.rel.dtors) }
-> -  .rela.dtors     : { *(.rela.dtors) }
-> -  .rel.got        : { *(.rel.got) }
-> -  .rela.got       : { *(.rela.got) }
-> -  .rel.bss        : { *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*) }
-> -  .rela.bss       : { *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*) }
-> -  .rel.plt : {
-> -	*(.rel.plt)
-> -	PROVIDE_HIDDEN(__rel_iplt_start = .);
-> -	*(.rel.iplt)
-> -	PROVIDE_HIDDEN(__rel_iplt_end = .);
-> -  }
-> -  .rela.plt : {
-> -	*(.rela.plt)
-> -	PROVIDE_HIDDEN(__rela_iplt_start = .);
-> -	*(.rela.iplt)
-> -	PROVIDE_HIDDEN(__rela_iplt_end = .);
-> -  }
-> -  .init           : {
-> -    KEEP (*(.init))
-> -  } =0x90909090
-> -  .plt            : { *(.plt) }
-> -  .text           : {
-> -    _stext = .;
-> -    TEXT_TEXT
-> -    SCHED_TEXT
-> -    CPUIDLE_TEXT
-> -    LOCK_TEXT
-> -    IRQENTRY_TEXT
-> -    SOFTIRQENTRY_TEXT
-> -    *(.fixup)
-> -    *(.stub .text.* .gnu.linkonce.t.*)
-> -    /* .gnu.warning sections are handled specially by elf32.em.  */
-> -    *(.gnu.warning)
-> -
-> -    . = ALIGN(PAGE_SIZE);
-> -  } =0x90909090
-> -  . = ALIGN(PAGE_SIZE);
-> -  .syscall_stub : {
-> -	__syscall_stub_start = .;
-> -	*(.__syscall_stub*)
-> -	__syscall_stub_end = .;
-> -  }
-> -  .fini           : {
-> -    KEEP (*(.fini))
-> -  } =0x90909090
-> -
-> -  .kstrtab : { *(.kstrtab) }
-> -
-> -  #include <asm/common.lds.S>
-> -
-> -  __init_begin = .;
-> -  init.data : { INIT_DATA }
-> -  __init_end = .;
-> -
-> -  /* Ensure the __preinit_array_start label is properly aligned.  We
-> -     could instead move the label definition inside the section, but
-> -     the linker would then create the section even if it turns out to
-> -     be empty, which isn't pretty.  */
-> -  . = ALIGN(32 / 8);
-> -  .preinit_array     : { *(.preinit_array) }
-> -  .init_array     : { *(.init_array) }
-> -  .fini_array     : { *(.fini_array) }
-> -  .data           : {
-> -    INIT_TASK_DATA(KERNEL_STACK_SIZE)
-> -    . = ALIGN(KERNEL_STACK_SIZE);
-> -    *(.data..init_irqstack)
-> -    DATA_DATA
-> -    *(.data.* .gnu.linkonce.d.*)
-> -    SORT(CONSTRUCTORS)
-> -  }
-> -  .data1          : { *(.data1) }
-> -  .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
-> -  .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
-> -  .eh_frame       : { KEEP (*(.eh_frame)) }
-> -  .gcc_except_table   : { *(.gcc_except_table) }
-> -  .dynamic        : { *(.dynamic) }
-> -  .ctors          : {
-> -    /* gcc uses crtbegin.o to find the start of
-> -       the constructors, so we make sure it is
-> -       first.  Because this is a wildcard, it
-> -       doesn't matter if the user does not
-> -       actually link against crtbegin.o; the
-> -       linker won't look for a file to match a
-> -       wildcard.  The wildcard also means that it
-> -       doesn't matter which directory crtbegin.o
-> -       is in.  */
-> -    KEEP (*crtbegin.o(.ctors))
-> -    /* We don't want to include the .ctor section from
-> -       from the crtend.o file until after the sorted ctors.
-> -       The .ctor section from the crtend file contains the
-> -       end of ctors marker and it must be last */
-> -    KEEP (*(EXCLUDE_FILE (*crtend.o ) .ctors))
-> -    KEEP (*(SORT(.ctors.*)))
-> -    KEEP (*(.ctors))
-> -  }
-> -  .dtors          : {
-> -    KEEP (*crtbegin.o(.dtors))
-> -    KEEP (*(EXCLUDE_FILE (*crtend.o ) .dtors))
-> -    KEEP (*(SORT(.dtors.*)))
-> -    KEEP (*(.dtors))
-> -  }
-> -  .jcr            : { KEEP (*(.jcr)) }
-> -  .got            : { *(.got.plt) *(.got) }
-> -  _edata = .;
-> -  PROVIDE (edata = .);
-> -  .bss            : {
-> -   __bss_start = .;
-> -   *(.dynbss)
-> -   *(.bss .bss.* .gnu.linkonce.b.*)
-> -   *(COMMON)
-> -   /* Align here to ensure that the .bss section occupies space up to
-> -      _end.  Align after .bss to ensure correct alignment even if the
-> -      .bss section disappears because there are no input sections.  */
-> -   . = ALIGN(32 / 8);
-> -  . = ALIGN(32 / 8);
-> -  }
-> -   __bss_stop = .;
-> -  _end = .;
-> -  PROVIDE (end = .);
-> -
-> -  STABS_DEBUG
-> -
-> -  DWARF_DEBUG
-> -
-> -  DISCARDS
-> -}
-> diff --git a/arch/um/kernel/uml.lds.S b/arch/um/kernel/uml.lds.S
-> deleted file mode 100644
-> index 3b6dab3d4501..000000000000
-> --- a/arch/um/kernel/uml.lds.S
-> +++ /dev/null
-> @@ -1,115 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -#include <asm/vmlinux.lds.h>
-> -#include <asm/page.h>
-> -
-> -OUTPUT_FORMAT(ELF_FORMAT)
-> -OUTPUT_ARCH(ELF_ARCH)
-> -ENTRY(_start)
-> -jiffies = jiffies_64;
-> -
-> -SECTIONS
-> -{
-> -  /* This must contain the right address - not quite the default ELF one.*/
-> -  PROVIDE (__executable_start = START);
-> -  /* Static binaries stick stuff here, like the sigreturn trampoline,
-> -   * invisibly to objdump.  So, just make __binary_start equal to the very
-> -   * beginning of the executable, and if there are unmapped pages after this,
-> -   * they are forever unusable.
-> -   */
-> -  __binary_start = START;
-> -
-> -  . = START + SIZEOF_HEADERS;
-> -  . = ALIGN(PAGE_SIZE);
-> -
-> -  _text = .;
-> -  INIT_TEXT_SECTION(0)
-> -
-> -  .text      :
-> -  {
-> -    _stext = .;
-> -    TEXT_TEXT
-> -    SCHED_TEXT
-> -    CPUIDLE_TEXT
-> -    LOCK_TEXT
-> -    IRQENTRY_TEXT
-> -    SOFTIRQENTRY_TEXT
-> -    *(.fixup)
-> -    /* .gnu.warning sections are handled specially by elf32.em.  */
-> -    *(.gnu.warning)
-> -    *(.gnu.linkonce.t*)
-> -  }
-> -
-> -  . = ALIGN(PAGE_SIZE);
-> -  .syscall_stub : {
-> -	__syscall_stub_start = .;
-> -	*(.__syscall_stub*)
-> -	__syscall_stub_end = .;
-> -  }
-> -
-> -  /*
-> -   * These are needed even in a static link, even if they wind up being empty.
-> -   * Newer glibc needs these __rel{,a}_iplt_{start,end} symbols.
-> -   */
-> -  .rel.plt : {
-> -	*(.rel.plt)
-> -	PROVIDE_HIDDEN(__rel_iplt_start = .);
-> -	*(.rel.iplt)
-> -	PROVIDE_HIDDEN(__rel_iplt_end = .);
-> -  }
-> -  .rela.plt : {
-> -	*(.rela.plt)
-> -	PROVIDE_HIDDEN(__rela_iplt_start = .);
-> -	*(.rela.iplt)
-> -	PROVIDE_HIDDEN(__rela_iplt_end = .);
-> -  }
-> -
-> -  #include <asm/common.lds.S>
-> -
-> -  __init_begin = .;
-> -  init.data : { INIT_DATA }
-> -  __init_end = .;
-> -
-> -  .data    :
-> -  {
-> -    INIT_TASK_DATA(KERNEL_STACK_SIZE)
-> -    . = ALIGN(KERNEL_STACK_SIZE);
-> -    *(.data..init_irqstack)
-> -    DATA_DATA
-> -    *(.gnu.linkonce.d*)
-> -    CONSTRUCTORS
-> -  }
-> -  .data1   : { *(.data1) }
-> -  .ctors         :
-> -  {
-> -    *(.ctors)
-> -  }
-> -  .dtors         :
-> -  {
-> -    *(.dtors)
-> -  }
-> -
-> -  .got           : { *(.got.plt) *(.got) }
-> -  .dynamic       : { *(.dynamic) }
-> -  .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
-> -  .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
-> -  /* We want the small data sections together, so single-instruction offsets
-> -     can access them all, and initialized data all before uninitialized, so
-> -     we can shorten the on-disk segment size.  */
-> -  .sdata     : { *(.sdata) }
-> -  _edata  =  .;
-> -  PROVIDE (edata = .);
-> -  . = ALIGN(PAGE_SIZE);
-> -  __bss_start = .;
-> -  PROVIDE(_bss_start = .);
-> -  SBSS(0)
-> -  BSS(0)
-> -   __bss_stop = .;
-> -  _end = .;
-> -  PROVIDE (end = .);
-> -
-> -  STABS_DEBUG
-> -
-> -  DWARF_DEBUG
-> -
-> -  DISCARDS
-> -}
-> diff --git a/arch/um/kernel/vmlinux.lds.S b/arch/um/kernel/vmlinux.lds.S
-> index 16e49bfa2b42..aaedd66772fa 100644
-> --- a/arch/um/kernel/vmlinux.lds.S
-> +++ b/arch/um/kernel/vmlinux.lds.S
-> @@ -1,8 +1,87 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <asm/vmlinux.lds.h>
-> +#include <asm/thread_info.h>
-> +#include <asm/page.h>
-> +#include <asm/thread_info.h>
-> +#include <asm/cache.h>
-> +#include <linux/export.h>
->   
-> -KERNEL_STACK_SIZE = 4096 * (1 << CONFIG_KERNEL_STACK_ORDER);
-> +OUTPUT_FORMAT(ELF_FORMAT)
-> +jiffies = jiffies_64;
->   
-> -#ifdef CONFIG_LD_SCRIPT_STATIC
-> -#include "uml.lds.S"
-> -#else
-> -#include "dyn.lds.S"
-> -#endif
-> +
-> +SECTIONS
-> +{
-> +	__init_begin = . ;
-> +	HEAD_TEXT_SECTION
-> +	INIT_TEXT_SECTION(PAGE_SIZE)
-> +	INIT_DATA_SECTION(16)
-> +	PERCPU_SECTION(L1_CACHE_BYTES)
-> +	__init_end = . ;
-> +
-> +	_stext = . ;
-> +	_text = . ;
-> +	.text : ALIGN(THREAD_SIZE)
-> +	{
-> +		__binary_start = . ;
-> +		TEXT_TEXT
-> +		SCHED_TEXT
-> +		LOCK_TEXT
-> +		CPUIDLE_TEXT
-> +		IRQENTRY_TEXT
-> +		SOFTIRQENTRY_TEXT
-> +	}
-> +	_etext = . ;
-> +
-> +	.syscall_stub : ALIGN(PAGE_SIZE)
-> +	{
-> +		__syscall_stub_start = .;
-> +		*(.__syscall_stub*)
-> +		__syscall_stub_end = .;
-> +	}
-> +
-> +	_sdata = . ;
-> +	RO_DATA(PAGE_SIZE)
-> +	RW_DATA(L1_CACHE_BYTES, PAGE_SIZE, THREAD_SIZE)
-> +	.data : ALIGN(THREAD_SIZE)  { }
-> +
-> +	EXCEPTION_TABLE(16)
-> +
-> +	.uml.init_irqstack : ALIGN(THREAD_SIZE) {
-> +		*(.data..init_irqstack)
-> +	}
-> +
-> +	.uml.setup.init : ALIGN(8) {
-> +		__uml_setup_start = .;
-> +		*(.uml.setup.init)
-> +		__uml_setup_end = .;
-> +	}
-> +
-> +	.uml.help.init : ALIGN(8)  {
-> +		__uml_help_start = .;
-> +		*(.uml.help.init)
-> +		__uml_help_end = .;
-> +	}
-> +
-> +	.uml.postsetup.init : ALIGN(8) {
-> +		__uml_postsetup_start = .;
-> +		*(.uml.postsetup.init)
-> +		__uml_postsetup_end = .;
-> +	}
-> +
-> +	.uml.exitcall : ALIGN(8) {
-> +		__uml_exitcall_begin = .;
-> +		*(.uml.exitcall.exit)
-> +		__uml_exitcall_end = .;
-> +	}
-> +	_edata = . ;
-> +
-> +	BSS_SECTION(0, 0, 0)
-> +	_end = . ;
-> +
-> +	STABS_DEBUG
-> +
-> +	DWARF_DEBUG
-> +
-> +	DISCARDS
-> +}
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index d09ab4afbda4..0bbb626ace81 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -75,36 +75,18 @@ vmlinux_link()
->   		strip_debug=-Wl,--strip-debug
->   	fi
->   
-> -	if [ "${SRCARCH}" != "um" ]; then
-> -		objects="--whole-archive			\
-> -			${KBUILD_VMLINUX_OBJS}			\
-> -			--no-whole-archive			\
-> -			--start-group				\
-> -			${KBUILD_VMLINUX_LIBS}			\
-> -			--end-group				\
-> -			${@}"
-> -
-> -		${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
-> -			${strip_debug#-Wl,}			\
-> -			-o ${output}				\
-> -			-T ${lds} ${objects}
-> -	else
-> -		objects="-Wl,--whole-archive			\
-> -			${KBUILD_VMLINUX_OBJS}			\
-> -			-Wl,--no-whole-archive			\
-> -			-Wl,--start-group			\
-> -			${KBUILD_VMLINUX_LIBS}			\
-> -			-Wl,--end-group				\
-> -			${@}"
-> -
-> -		${CC} ${CFLAGS_vmlinux}				\
-> -			${strip_debug}				\
-> -			-o ${output}				\
-> -			-Wl,-T,${lds}				\
-> -			${objects}				\
-> -			-lutil -lrt -lpthread
-> -		rm -f linux
-> -	fi
-> +	objects="--whole-archive			\
-> +		${KBUILD_VMLINUX_OBJS}			\
-> +		--no-whole-archive			\
-> +		--start-group				\
-> +		${KBUILD_VMLINUX_LIBS}			\
-> +		--end-group				\
-> +		${@}"
-> +
-> +	${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
-> +		${strip_debug#-Wl,}			\
-> +		-o ${output}				\
-> +		-T ${lds} ${objects}
->   }
->   
->   # generate .BTF typeinfo from DWARF debuginfo
-> diff --git a/tools/um/Makefile b/tools/um/Makefile
-> new file mode 100644
-> index 000000000000..a63466ef7ef5
-> --- /dev/null
-> +++ b/tools/um/Makefile
-> @@ -0,0 +1,72 @@
-> +# Do not use make's built-in rules
-> +# (this improves performance and avoids hard-to-debug behaviour);
-> +# also do not print "Entering directory..." messages from make
-> +.SUFFIXES:
-> +MAKEFLAGS += -r --no-print-directory
-> +
-> +KCONFIG?=defconfig
-> +
-> +ifneq ($(silent),1)
-> +  ifneq ($(V),1)
-> +	QUIET_AUTOCONF       = @echo '  AUTOCONF '$@;
-> +	Q = @
-> +  endif
-> +endif
-> +
-> +PREFIX   := /usr
-> +
-> +ifeq (,$(srctree))
-> +  srctree := $(patsubst %/,%,$(dir $(shell pwd)))
-> +  srctree := $(patsubst %/,%,$(dir $(srctree)))
-> +endif
-> +export srctree
-> +
-> +-include ../scripts/Makefile.include
-> +
-> +# OUTPUT fixup should be *after* include ../scripts/Makefile.include
-> +ifneq ($(OUTPUT),)
-> +  OUTPUT := $(OUTPUT)/tools/um/
-> +else
-> +  OUTPUT := $(CURDIR)/
-> +endif
-> +export OUTPUT
-> +export objtree := $(OUTPUT)/../..
-> +
-> +
-> +all:
-> +
-> +export CFLAGS += -I$(OUTPUT)/include -Iinclude -Wall -g -O2 -Wextra -fPIC \
-> +	 -Wno-unused-parameter \
-> +	 -Wno-missing-field-initializers -fno-strict-aliasing
-> +
-> +-include Targets
-> +
-> +TARGETS := $(progs-y:%=$(OUTPUT)%)
-> +TARGETS += $(libs-y:%=$(OUTPUT)%)
-> +all: $(TARGETS)
-> +
-> +# rule to build linux.o
-> +$(OUTPUT)lib/linux.o:
-> +	$(Q)CFLAGS= $(MAKE) -C ../.. ARCH=um $(KOPT) $(KCONFIG)
-> +	$(Q)CFLAGS= $(MAKE) -C ../.. ARCH=um $(KOPT) install INSTALL_PATH=$(OUTPUT)
-> +
-> +$(OUTPUT)liblinux.a: $(OUTPUT)lib/linux.o $(OUTPUT)uml/liblinux-in.o
-> +	$(QUIET_AR)$(AR) -rc $@ $^
-> +
-> +# rule to link programs
-> +$(OUTPUT)%: $(OUTPUT)%-in.o $(OUTPUT)liblinux.a
-> +	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$(notdir $*)-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$(notdir $*)-y)
-> +
-> +$(OUTPUT)%-in.o: FORCE
-> +	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(patsubst %/,%,$(dir $*)) obj=$(notdir $*)
-> +
-> +clean:
-> +	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
-> +	 -delete -o -name '\.*.d' -delete
-> +	$(call QUIET_CLEAN, liblinux.a)$(RM) $(OUTPUT)/liblinux.a
-> +	$(call QUIET_CLEAN, $(TARGETS))$(RM) $(TARGETS)
-> +
-> +FORCE: ;
-> +.PHONY: all clean FORCE
-> +.IGNORE: clean
-> +.NOTPARALLEL : lib/linux.o
-> diff --git a/tools/um/Targets b/tools/um/Targets
-> new file mode 100644
-> index 000000000000..a4711f1ef422
-> --- /dev/null
-> +++ b/tools/um/Targets
-> @@ -0,0 +1,4 @@
-> +progs-y += uml/linux
-> +LDLIBS_linux-y := -lrt -lpthread -lutil
-> +LDFLAGS_linux-y := -no-pie -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
-> +LDFLAGS_linux-$(UML_STATIC) += -static
-> diff --git a/tools/um/uml/Build b/tools/um/uml/Build
-> new file mode 100644
-> index 000000000000..e69de29bb2d1
-> 
-
-Hi Hajime, hi Octavian,
-
-I am going to have a bit more time to look at UML now. Can you rebase/update the patch versus the latest kernel so I can look at it.
-
-It does not apply at present.
-
-Thanks in advance,
 
 -- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+Pavel Begunkov
