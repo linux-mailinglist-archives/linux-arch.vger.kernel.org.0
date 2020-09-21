@@ -2,113 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AB4273251
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 20:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B5F2732B1
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 21:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727382AbgIUS6c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Sep 2020 14:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S1727286AbgIUTVc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Sep 2020 15:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727197AbgIUS6c (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 14:58:32 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCACC0613D1
-        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 11:58:31 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id lo4so19239925ejb.8
-        for <linux-arch@vger.kernel.org>; Mon, 21 Sep 2020 11:58:31 -0700 (PDT)
+        with ESMTP id S1726810AbgIUTVb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 15:21:31 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C495DC061755;
+        Mon, 21 Sep 2020 12:21:31 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id v60so11062850ybi.10;
+        Mon, 21 Sep 2020 12:21:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rrEufNVuY5dCBzinzTyZLnRAK6NDit4k748EnZ9ZGyU=;
-        b=VwM6SxPchzpHYvDq5MuGqptnfOCO+2u8UOZQsUHmvXP+yQTF+Z7wlraeVtjd/s9jlB
-         wV193ZvJeoHSX0mG5NaEp1P+oe7FoNjVRmUSb2Z+JinKsMwFIqn+MpalsijQarctvj4U
-         FH4y6mRhga1p9JKtJgLYS2O01gvN0JoRMzpIJ8sTPjHm+K3XvxLJoxyawOroxTt3ewXo
-         2erVwwtPxW6qCdmd6A02Wa5wSMbzwpQ/xA7DOELk4+u1Yv0Dw6Gb0gPjk1AInJx+Npb8
-         9g541oYiyMOVYQWN0p1s+dSK+qehJVoUb8ZcAzai39YkrQsAMRZIWHvBa3cE/5jkadoT
-         Dtig==
+        bh=6zOCyCAt5dSOUkjchfsL4+jShYSEXRJ8JxFzICLYSbc=;
+        b=pUpEP6yzD4/KTspsufCfL+5j4vpzNWbIAyOommBjdlGk8bO3hD6g26YI+MUwsybCuH
+         Ou37eMjLXcZ+oluFV9m8E1Nbmka1h+6N6FzjPmCLCbL8zWF++x4h9mhJZOiIib0HCrGn
+         k/S5pDZsZ8rDAS0I0ksHGrnIlOWOWHLTdKjjDdKUJH+Ggy5B29qgQGyOg6giyCB562pf
+         0ArISdAwGbNW1dsXbGF9Zq0OYqbflDs+dZY39cAI+bZGautQRuAVIE8IKeczJvN63jcO
+         prkGJb1FkAJ2iWqASkuqryb0aKNaGK3BLG1tUlWPQQ084uu0AasbZCyymMid7NwCWj09
+         jxtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rrEufNVuY5dCBzinzTyZLnRAK6NDit4k748EnZ9ZGyU=;
-        b=c7qohU8WOHKlAScEWq53jzvE/bUtsVszhmP9bwvjdi6F8xgoRVJsN8QiB5DlVNGarJ
-         bNY0OzgqcpkxkYTDiVEvDlDSllLZJXvPkyKB901IzMiagDFjvZg7mVgeshxnFgko+zuJ
-         a7b1GiWvZ+rIGHGvNDNIScFZnj1c4yqNCuii5hNs8eUn9OhmM5DJprrrxNMmU02xIGdK
-         ouAB+s3pgbusSyPMhgU1kyRcsu9XSEPkizLWcHZgjOfak4qFU4J0hFGGmwO8s6aLkgu8
-         Md445tABhl7TNBaptN5BlJxgYPjpihdxt0lBVLQ0IhWXQ2aKMW5q3n17CN3UGtE9AK84
-         u+GQ==
-X-Gm-Message-State: AOAM530uZ9BazWVhM1PsHs22ktl/vvULLvpTDrnnSTtddVs6gPrxGRfN
-        m9rfQXcuWmjwtNjhop+sUl8tfD7ex4+gfGxx+LIezw==
-X-Google-Smtp-Source: ABdhPJwAs9ksH6re9qMXbI2fsKP5Ghj4mOoCzkBFQS+BQszgLy1pqKFO8fFSdMFWe7XQ/UpW1tcdUlWla4BBqoqymc8=
-X-Received: by 2002:a17:906:ecf1:: with SMTP id qt17mr960026ejb.158.1600714709946;
- Mon, 21 Sep 2020 11:58:29 -0700 (PDT)
+        bh=6zOCyCAt5dSOUkjchfsL4+jShYSEXRJ8JxFzICLYSbc=;
+        b=M/rarK9kiN/JNI+FWA9W3+JzbrmaB/BNC5TLSOSZa5NukCBjI6FsfLOCrEa61HlxWD
+         pJmhYsinrFngk0TWioNHwDRJJlBk69zwabxpTwHKznSFsaXo/8qlCzHNqI4MPXYyld8U
+         Y0YgkoVeNfB/lgXkzf93/y8zkL21tdtafTGKaifcHrIV1BgiXcxR7x5DmrfqoXS1DKdq
+         wQfz4YFoHc9hWcwNxbafXa5nnFJFVGXbhlxXvd5nkrGr+At36I81g5WyeOx3ENuoRRRU
+         RY7FrBmy8CnNzRB4AFiwXWl/JCs3VdAggBeGXR5lesrZauw3TB5H1Fz3TyzwNU95kpTg
+         q+eQ==
+X-Gm-Message-State: AOAM5328UCQETWBlH+s2y3gy4gcmBgYxEy+WUrdqr3T7EQJHrQk2ZREp
+        0McFkMnwZ3bnKoIu+kQi18batbVPo0k0/b0cmGc=
+X-Google-Smtp-Source: ABdhPJzJsoyyEBkjBbzm0q/P9QGohlj9SxcCOn8bXiYSJZoi5o4o+1xUCF0+DrxVvnG/77aOROeFOjfsFfO4K/IilR0=
+X-Received: by 2002:a25:33c4:: with SMTP id z187mr1850240ybz.27.1600716090971;
+ Mon, 21 Sep 2020 12:21:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200918201436.2932360-1-samitolvanen@google.com>
- <20200918201436.2932360-14-samitolvanen@google.com> <202009181427.86DE61B@keescook>
-In-Reply-To: <202009181427.86DE61B@keescook>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Mon, 21 Sep 2020 11:58:19 -0700
-Message-ID: <CABCJKuf5pKqEDaAKix5CaUmv92M5HOAB-psdNg=awF7BDZ+yvA@mail.gmail.com>
-Subject: Re: [PATCH v3 13/30] kbuild: lto: postpone objtool
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org,
-        X86 ML <x86@kernel.org>
+References: <cover.1600417359.git.Tony.Ambardar@gmail.com> <b38db205a66238f70823039a8c531535864eaac5.1600417359.git.Tony.Ambardar@gmail.com>
+In-Reply-To: <b38db205a66238f70823039a8c531535864eaac5.1600417359.git.Tony.Ambardar@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 21 Sep 2020 12:21:20 -0700
+Message-ID: <CAEf4BzYzVzWEePW6H=2NXY1egeYn4VFVWpnP9EZgqKd+ckZLeg@mail.gmail.com>
+Subject: Re: [PATCH bpf v1 1/3] bpf: fix sysfs export of empty BTF section
+To:     Tony Ambardar <tony.ambardar@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Nick and 0-day bot both let me know that there's a typo in this patch,
-which I'll fix in v4:
-
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index f7daa59ff14f..00d7baaf7949 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -223,7 +223,7 @@ dtc_cpp_flags  = -Wp,-MMD,$(depfile).pre.tmp
--nostdinc                    \
- objtool_args =                                                         \
-        $(if $(CONFIG_UNWINDER_ORC),orc generate,check)                 \
-        $(if $(part-of-module), --module,)                              \
--       $(if $(CONFIG_FRAME_POINTER), --no-fp,)                         \
-+       $(if $(CONFIG_FRAME_POINTER),, --no-fp)                         \
-        $(if $(CONFIG_GCOV_KERNEL), --no-unreachable,)                  \
-        $(if $(CONFIG_RETPOLINE), --retpoline,)                         \
-        $(if $(CONFIG_X86_SMAP), --uaccess,)                            \
-
-Sami
-
-On Fri, Sep 18, 2020 at 2:27 PM Kees Cook <keescook@chromium.org> wrote:
+On Sat, Sep 19, 2020 at 10:05 PM Tony Ambardar <tony.ambardar@gmail.com> wrote:
 >
-> On Fri, Sep 18, 2020 at 01:14:19PM -0700, Sami Tolvanen wrote:
-> > With LTO, LLVM bitcode won't be compiled into native code until
-> > modpost_link, or modfinal for modules. This change postpones calls
-> > to objtool until after these steps, and moves objtool_args to
-> > Makefile.lib, so the arguments can be reused in Makefile.modfinal.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> If BTF data is missing or removed from the ELF section it is still exported
+> via sysfs as a zero-length file:
 >
-> Thanks for reorganizing this!
+>   root@OpenWrt:/# ls -l /sys/kernel/btf/vmlinux
+>   -r--r--r--    1 root    root    0 Jul 18 02:59 /sys/kernel/btf/vmlinux
 >
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Moreover, reads from this file succeed and leak kernel data:
+>
+>   root@OpenWrt:/# hexdump -C /sys/kernel/btf/vmlinux|head -10
+>   000000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
+>   *
+>   000cc0 00 00 00 00 00 00 00 00 00 00 00 00 80 83 b0 80 |................|
+>   000cd0 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
+>   000ce0 00 00 00 00 00 00 00 00 00 00 00 00 57 ac 6e 9d |............W.n.|
+>   000cf0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
+>   *
+>   002650 00 00 00 00 00 00 00 10 00 00 00 01 00 00 00 01 |................|
+>   002660 80 82 9a c4 80 85 97 80 81 a9 51 68 00 00 00 02 |..........Qh....|
+>   002670 80 25 44 dc 80 85 97 80 81 a9 50 24 81 ab c4 60 |.%D.......P$...`|
+>
+> This situation was first observed with kernel 5.4.x, cross-compiled for a
+> MIPS target system. Fix by adding a sanity-check for export of zero-length
+> data sections.
+>
+> Fixes: 341dfcf8d78e ("btf: expose BTF info through sysfs")
+>
+> Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+> ---
+
+Apparently sysfs infrastructure doesn't validate read position and
+size when bin_attribute's size is 0, and just expects read callback to
+handle such situation explicitly. Preventing sysfs entry from
+registering seems like a good solution. Thanks!
+
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+
+>  kernel/bpf/sysfs_btf.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+> index 3b495773de5a..11b3380887fa 100644
+> --- a/kernel/bpf/sysfs_btf.c
+> +++ b/kernel/bpf/sysfs_btf.c
+> @@ -30,15 +30,15 @@ static struct kobject *btf_kobj;
+>
+>  static int __init btf_vmlinux_init(void)
+>  {
+> -       if (!__start_BTF)
+> +       bin_attr_btf_vmlinux.size = __stop_BTF - __start_BTF;
+> +
+> +       if (!__start_BTF || bin_attr_btf_vmlinux.size == 0)
+>                 return 0;
+>
+>         btf_kobj = kobject_create_and_add("btf", kernel_kobj);
+>         if (!btf_kobj)
+>                 return -ENOMEM;
+>
+> -       bin_attr_btf_vmlinux.size = __stop_BTF - __start_BTF;
+> -
+>         return sysfs_create_bin_file(btf_kobj, &bin_attr_btf_vmlinux);
+>  }
 >
 > --
-> Kees Cook
+> 2.25.1
 >
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/202009181427.86DE61B%40keescook.
