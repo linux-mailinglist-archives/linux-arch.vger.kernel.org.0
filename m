@@ -2,36 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 066EA271AE6
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 08:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BF2271C2A
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Sep 2020 09:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbgIUG2Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Sep 2020 02:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S1726402AbgIUHjr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Sep 2020 03:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726384AbgIUG2Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 02:28:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6BC061755;
-        Sun, 20 Sep 2020 23:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Tci2tqg3leIbmrKKmdytiLIb3svt+yq3AUhipK0JnoY=; b=eHeD509SDxyAiHGiTwo9U9RK6O
-        BdV0ol0+bUl0JcuR4cH5K4iJppCvrjMC+FXmd1lF9otzHdHbgaqWCPBbYEVccspM4hNb0ELFrDX41
-        s330N9PwkKFmY1+L4xtZqC6TuuZXPpHTsXwNy2mxRh6hHZxeOvX7QA3hIrIh11xqjXXtgY0KOrH1g
-        TAa/FH4UUQzLwOqDXwmFk20iXdkTE1C5bNJ47X+kA8GBuFsMKdIwnr8VE2F05aYZUn3BWrCVUA/8S
-        mbIk+BpzsIVAf7vJcwgjD0vdvWTXz3H9YwI8DG/vud/142FwM17JAPgxfqgTAucNSaDR8ooXWbNYe
-        L6UrCpkA==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kKFJD-0000eG-TH; Mon, 21 Sep 2020 06:28:19 +0000
-Date:   Mon, 21 Sep 2020 07:28:19 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Paul McKenney <paulmck@kernel.org>, x86@kernel.org,
+        with ESMTP id S1726244AbgIUHjo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Sep 2020 03:39:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECCAC061755;
+        Mon, 21 Sep 2020 00:39:44 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600673980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvyp0RounB/4LwU0Wfnprorn1wbUFCaaQDFAPWZa1lY=;
+        b=gMaSuZ51Lbc6QPkc00DoVI0ZeYFw1anwmwmCpCgA9mSAGscjICMP76VBc9c5LYYHJhtr1V
+        szZo7+Ww9dytWz1dbrc8RA2obQDOH1QUnyfZvjgPqxmDJsiP27s/hsVMbOD0Zjwlv+ber/
+        qWGRVkhYTPW2tTmS4pYTCoYSiT9DI/ZTsnsQ80U+VCocs0lPSE8nq5758cGblIbk8SVdnx
+        hPCPSLtdjkL9+573S5HhFCgk6FFXO/026nXOGnu4ti8sxk/fC+L2RQhONm/U5tVeg66C+O
+        R0NLgGerMKEFgnb0uRm7Ot+c09xW+a47s/CiEhYERktxgUfSN56PQvvbENyzPg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600673980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wvyp0RounB/4LwU0Wfnprorn1wbUFCaaQDFAPWZa1lY=;
+        b=xr4r44czYL0yv7MaHM0svfQR/cc+aXpFFvMpVd1kcucOlLs0NXid+7U1RRYcOhbAYMYtxi
+        ganiHIU1DBLF2YCA==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -58,9 +65,10 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
@@ -68,65 +76,48 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
-Subject: Re: [patch RFC 02/15] highmem: Provide generic variant of
- kmap_atomic*
-Message-ID: <20200921062819.GB32081@infradead.org>
-References: <20200919091751.011116649@linutronix.de>
- <20200919092615.990731525@linutronix.de>
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+Date:   Mon, 21 Sep 2020 09:39:39 +0200
+Message-ID: <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200919092615.990731525@linutronix.de>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> +# ifndef ARCH_NEEDS_KMAP_HIGH_GET
-> +static inline void *arch_kmap_temporary_high_get(struct page *page)
-> +{
-> +	return NULL;
-> +}
-> +# endif
+On Sun, Sep 20 2020 at 10:42, Linus Torvalds wrote:
+> On Sun, Sep 20, 2020 at 10:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> I think the more obvious solution is to split the whole exercise:
+>>
+>>   schedule()
+>>      prepare_switch()
+>>         unmap()
+>>
+>>     switch_to()
+>>
+>>     finish_switch()
+>>         map()
+>
+> Yeah, that looks much easier to explain. Ack.
 
-Turn this into a macro and use #ifndef on the symbol name?
+So far so good, but Peter Z. just pointed out to me that I completely
+missed the fact that this cannot work.
 
-> +static inline void __kunmap_atomic(void *addr)
-> +{
-> +	kumap_atomic_indexed(addr);
-> +}
-> +
-> +
-> +#endif /* CONFIG_KMAP_ATOMIC_GENERIC */
+If a task is migrated to a different CPU then the mapping address will
+change which will explode in colourful ways.
 
-Stange double empty line above the endif.
+On RT kernels this works because we ping the task to the CPU via
+migrate_disable(). On a !RT kernel migrate_disable() maps to
+preempt_disable() which brings us back to square one.
 
-> -#define kunmap_atomic(addr)                                     \
-> -do {                                                            \
-> -	BUILD_BUG_ON(__same_type((addr), struct page *));       \
-> -	kunmap_atomic_high(addr);                                  \
-> -	pagefault_enable();                                     \
-> -	preempt_enable();                                       \
-> -} while (0)
-> -
-> +#define kunmap_atomic(addr)						\
-> +	do {								\
-> +		BUILD_BUG_ON(__same_type((addr), struct page *));	\
-> +		__kunmap_atomic(addr);					\
-> +		preempt_enable();					\
-> +	} while (0)
+/me goes back to the drawing board.
 
-Why the strange re-indent to a form that is much less common and less
-readable?
+Thanks,
 
-> +void *kmap_atomic_pfn_prot(unsigned long pfn, pgprot_t prot)
-> +{
-> +	pagefault_disable();
-> +	return __kmap_atomic_pfn_prot(pfn, prot);
-> +}
-> +EXPORT_SYMBOL(kmap_atomic_pfn_prot);
-
-The existing kmap_atomic_pfn & co implementation is EXPORT_SYMBOL_GPL,
-and this stuff should preferably stay that way.
+        tglx
