@@ -2,146 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4878F274669
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Sep 2020 18:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749E1274705
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Sep 2020 18:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgIVQUO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Sep 2020 12:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726634AbgIVQUN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Sep 2020 12:20:13 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3386C0613D0
-        for <linux-arch@vger.kernel.org>; Tue, 22 Sep 2020 09:20:13 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id x22so8094826pfo.12
-        for <linux-arch@vger.kernel.org>; Tue, 22 Sep 2020 09:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=OuYZ36WnxwIp9b6camA1INonBCd7PS5F7n5lbvDtQoE=;
-        b=vkrTbtOH4vHnR/84aYqVDHrQ5AGvI5gJZ+epaaRbPDginNWZ7IQOaHp0KiQGLoRIqK
-         lCtpCBfEppwh5xdm5Fg2E09yGBsQ1omUh0FsVnB0AGbc0KabsZevsMs5kdugIv8CVE5/
-         WA4g4A2X6yhuybhLsZ26G3b/9jK9koGpq3H8xumPWJXJrnSzbLUYbfDR++IgN0bKoBQq
-         n0DG/oDelKPnE35WpGCvEELD66Jz17cs7lC56sr6mITihQA1DVJ1mt9BGhniHUyWF6Lh
-         zzYPOu4uBf4nQ34xtWqSlA6XpnJ8NFviCNNpjE2H0nhrpatshwJ5hPmeTiRqtrX3VMpc
-         QmhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=OuYZ36WnxwIp9b6camA1INonBCd7PS5F7n5lbvDtQoE=;
-        b=PSNjQsiDNLWOMT5/cQnAJZ9fByEgkwrI2JsyOC8JfUK1uGfVErFb3vFxP+Z43cdH3C
-         qu+J4Iv93s0TSz3cHCF0k5w25IfbjjmNynJoAyzM4terGrhk9szJsDLQqbXJK5wzggX2
-         zNPfD+tawO7Qz6cToNAnLfj0SQSXsSO/uHfptcRQ6+bIZT59XEVpu7ElwV2ZVSaTS1i5
-         aLNljjo+oZFF51qgNJWWYtyl7F+nljygaF/1Nx7AJX2ixVtKw7rhbes6OpvB8a4Lxcgf
-         NWJvdVmTwZS9wI64rrr/o+ZeJGSShyKSm86m7Ys9LZL5IRcNPtkP7+SFkxuKyeLglANj
-         T29w==
-X-Gm-Message-State: AOAM530eZoSZUKQB3uefZ2SszjqA+er3j+PTbEvnY12bLK+R/HHs72Rq
-        Mlra20b/s62oDL3PJmqF//sxmw==
-X-Google-Smtp-Source: ABdhPJzVdW+N5Ufbpna8vjsXyt2h2YPelrT15cDlhJa791IGnC+04vroQZTdEBrKNKjccVmTF6OthA==
-X-Received: by 2002:a17:902:fe88:b029:d2:2a16:254 with SMTP id x8-20020a170902fe88b02900d22a160254mr5598643plm.23.1600791613205;
-        Tue, 22 Sep 2020 09:20:13 -0700 (PDT)
-Received: from localhost.localdomain ([2601:646:c200:1ef2:f4bd:fe2:85ed:ea92])
-        by smtp.gmail.com with ESMTPSA id gk14sm2982522pjb.41.2020.09.22.09.20.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2020 09:20:12 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-Date:   Tue, 22 Sep 2020 09:20:07 -0700
-Message-Id: <446566DF-ECBC-449C-92A1-A7D5AEBE9935@amacapital.net>
-References: <CAK8P3a39jN+t2hhLg0oKZnbYATQXmYE2-Z1JkmFyc1EPdg1HXw@mail.gmail.com>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        id S1726573AbgIVQzf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Sep 2020 12:55:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38446 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726563AbgIVQzf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 22 Sep 2020 12:55:35 -0400
+Received: from gaia (unknown [31.124.44.166])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 332952071A;
+        Tue, 22 Sep 2020 16:55:32 +0000 (UTC)
+Date:   Tue, 22 Sep 2020 17:55:29 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, Dave P Martin <Dave.Martin@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Peter Collingbourne <pcc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>
-In-Reply-To: <CAK8P3a39jN+t2hhLg0oKZnbYATQXmYE2-Z1JkmFyc1EPdg1HXw@mail.gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-X-Mailer: iPhone Mail (18A373)
+        libc-alpha@sourceware.org
+Subject: Re: [PATCH v9 29/29] arm64: mte: Add Memory Tagging Extension
+ documentation
+Message-ID: <20200922165529.GH15643@gaia>
+References: <20200904103029.32083-1-catalin.marinas@arm.com>
+ <20200904103029.32083-30-catalin.marinas@arm.com>
+ <20200917081107.GA29031@willie-the-truck>
+ <20200917090229.GA10662@gaia>
+ <20200922155248.GA16385@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200922155248.GA16385@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Szabolcs,
 
+On Tue, Sep 22, 2020 at 04:52:49PM +0100, Szabolcs Nagy wrote:
+> The 09/17/2020 10:02, Catalin Marinas wrote:
+> > On Thu, Sep 17, 2020 at 09:11:08AM +0100, Will Deacon wrote:
+> > > On Fri, Sep 04, 2020 at 11:30:29AM +0100, Catalin Marinas wrote:
+> > > > From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ...
+> > > > Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
+> > > 
+> > > I'm taking this to mean that Szabolcs is happy with the proposed ABI --
+> > > please shout if that's not the case!
+> > 
+> > I think Szabolcs is still on holiday. To summarise the past threads,
+> > AFAICT he's happy with this per-thread control ABI but the discussion
+> > went on whether to expand it in the future (with a new bit) to
+> > synchronise the tag checking mode across all threads of a process. This
+> > adds some complications for the kernel as it needs an IPI to the other
+> > CPUs to set SCTLR_EL1 and it's also racy with multiple threads
+> > requesting different modes.
+> > 
+> > Now, in the glibc land, if the tag check mode is controlled via
+> > environment variables, the dynamic loader can set this at process start
+> > while still in single-threaded mode and not touch it at run-time. The
+> > MTE checking can still be enabled at run-time, per mapped memory range
+> > via the PROT_MTE flag. This approach doesn't require any additional
+> > changes to the current patches. But it's for Szabolcs to confirm once
+> > he's back.
+> 
+> my thinking now is that for PROT_MTE use outside of libc we will need
+> a way to enable tag checks early so user code does not have to worry
+> about tag check settings across threads (coordinating the setting at
+> runtime seems problematic, same for the irg exclusion set).
 
-> On Sep 22, 2020, at 2:01 AM, Arnd Bergmann <arnd@arndb.de> wrote:
->=20
-> =EF=BB=BFOn Tue, Sep 22, 2020 at 9:59 AM Pavel Begunkov <asml.silence@gmai=
-l.com> wrote:
->>> On 22/09/2020 10:23, Arnd Bergmann wrote:
->>> On Tue, Sep 22, 2020 at 8:32 AM Pavel Begunkov <asml.silence@gmail.com> w=
-rote:
->>>> On 22/09/2020 03:58, Andy Lutomirski wrote:
->>>>> On Mon, Sep 21, 2020 at 5:24 PM Pavel Begunkov <asml.silence@gmail.com=
-> wrote:
->>>>> I may be looking at a different kernel than you, but aren't you
->>>>> preventing creating an io_uring regardless of whether SQPOLL is
->>>>> requested?
->>>>=20
->>>> I diffed a not-saved file on a sleepy head, thanks for noticing.
->>>> As you said, there should be an SQPOLL check.
->>>>=20
->>>> ...
->>>> if (ctx->compat && (p->flags & IORING_SETUP_SQPOLL))
->>>>        goto err;
->>>=20
->>> Wouldn't that mean that now 32-bit containers behave differently
->>> between compat and native execution?
->>>=20
->>> I think if you want to prevent 32-bit applications from using SQPOLL,
->>> it needs to be done the same way on both to be consistent:
->>=20
->> The intention was to disable only compat not native 32-bit.
->=20
-> I'm not following why that would be considered a valid option,
-> as that clearly breaks existing users that update from a 32-bit
-> kernel to a 64-bit one.
->=20
-> Taking away the features from users that are still on 32-bit kernels
-> already seems questionable to me, but being inconsistent
-> about it seems much worse, in particular when the regression
-> is on the upgrade path.
->=20
->>> Can we expect all existing and future user space to have a sane
->>> fallback when IORING_SETUP_SQPOLL fails?
->>=20
->> SQPOLL has a few differences with non-SQPOLL modes, but it's easy
->> to convert between them. Anyway, SQPOLL is a privileged special
->> case that's here for performance/latency reasons, I don't think
->> there will be any non-accidental users of it.
->=20
-> Ok, so the behavior of 32-bit tasks would be the same as running
-> the same application as unprivileged 64-bit tasks, with applications
-> already having to implement that fallback, right?
->=20
->=20
+Yeah, such settings are better set at process start time.
 
-I don=E2=80=99t have any real preference wrt SQPOLL, and it may be that we h=
-ave a problem even without SQPOLL when IO gets punted without one of the fix=
-es discussed.
+We can explore synchronising across threads with an additional PR_* flag
+but given the interaction with stack tagging and other potential races,
+it will need better coordination with user space and agree on which
+settings can be changed (e.g. exclusion mask may not be allowed).
+However, at this point, I don't see a strong case for such ABI addition
+as long as the application starts with some sane defaults, potentially
+driven by the user.
 
-But banning the mismatched io_uring and io_uring_enter seems like it may be w=
-orthwhile regardless.=
+> if we add a kernel level opt-in mechanism for tag checks later (e.g.
+> elf marking) or if the settings are exclusively owned by early libc
+> code then i think the proposed abi is ok (this is our current
+> agreement and works as long as no late runtime change is needed to the
+> settings).
+
+In the Android case, run-time changes to the tag checking mode I think
+are expected (usually via signal handlers), though per-thread.
+
+> i'm now wondering about the default tag check mode: it may be better
+> to enable sync tag checks in the kernel. it's not clear to me what
+> would break with that. this is probably late to discuss now and libc
+> would need ways to override the default no matter what, but i'd like
+> to know if somebody sees problems or risks with unconditional sync tag
+> checks turned on (sorry i don't remember if we went through this
+> before). i assume it would have no effect on a process that never uses
+> PROT_MTE.
+
+I don't think it helps much. We already have a requirement that to be
+able to pass tagged pointers to kernel syscalls, the user needs a
+prctl(PR_TAGGED_ADDR_ENABLE) call (code already in mainline). Using
+PROT_MTE without tagged pointers won't be of much use. So if we are to
+set different tag check defaults, we should also enable the tagged addr
+ABI automatically.
+
+That said, I still have a preference for MTE and tagged addr ABI to be
+explicitly requested by the (human) user either via environment
+variables or marked in an ELF note as "safe with/using tags". Given the
+recent mremap() issue we caused in glibc, I'm worried that other things
+may break with enabling the tagged addr ABI everywhere.
+
+Another aspect is that sync mode by default in a distro where glibc is
+MTE-aware will lead to performance regressions. That's another case in
+favour of the user explicitly asking for tag checking.
+
+Anyway, I'm open to having a debate on changing the defaults.
+
+-- 
+Catalin
