@@ -2,128 +2,210 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 226B7273DEA
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Sep 2020 11:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BB22740D6
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Sep 2020 13:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbgIVJB4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Sep 2020 05:01:56 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:48239 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbgIVJBz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Sep 2020 05:01:55 -0400
-Received: from mail-qk1-f174.google.com ([209.85.222.174]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M8QJq-1kP1tX30wS-004R66; Tue, 22 Sep 2020 11:01:51 +0200
-Received: by mail-qk1-f174.google.com with SMTP id 16so18290762qkf.4;
-        Tue, 22 Sep 2020 02:01:50 -0700 (PDT)
-X-Gm-Message-State: AOAM531+93v+0pc6Wi7zIypNe7Vgpz/NCT5EEwScNq/ES31+DcqqIzIF
-        wjBHiQJRNRN0efUxhQeFDvY1TrHFTG/Dy6uuW7w=
-X-Google-Smtp-Source: ABdhPJyRqkNrv5vljO58DCgwZZgH8gYzn8Pg1f10DkzXAekHvwLoBvZT9T4MCMOwP2QMtNaCPo1tGJEV8E4gZYbkeUE=
-X-Received: by 2002:ae9:c30d:: with SMTP id n13mr3794670qkg.138.1600765309262;
- Tue, 22 Sep 2020 02:01:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAK8P3a2Mi+1yttyGk4k7HxRVrMtmFqJewouVhynqUL0PJycmog@mail.gmail.com>
- <D0791499-1190-4C3F-A984-0A313ECA81C7@amacapital.net> <563138b5-7073-74bc-f0c5-b2bad6277e87@gmail.com>
- <486c92d0-0f2e-bd61-1ab8-302524af5e08@gmail.com> <CALCETrW3rwGsgfLNnu_0JAcL5jvrPVTLTWM3JpbB5P9Hye6Fdw@mail.gmail.com>
- <d5c6736a-2cb4-4e22-78da-a667bda5c05a@gmail.com> <CALCETrUEC81va8-fuUXG1uA5rbKxnKDYsDOXC70_HtKD4LAeAg@mail.gmail.com>
- <e0a1b4d1-ff47-18d1-d535-c62812cb3105@gmail.com> <CAK8P3a2-6JNS38EbZcLrk=cTT526oP=Rf0aoqWNSJ-k4XTYehQ@mail.gmail.com>
- <f25b4708-eba6-78d6-03f9-5bfb04e07627@gmail.com>
-In-Reply-To: <f25b4708-eba6-78d6-03f9-5bfb04e07627@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Sep 2020 11:01:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a39jN+t2hhLg0oKZnbYATQXmYE2-Z1JkmFyc1EPdg1HXw@mail.gmail.com>
-Message-ID: <CAK8P3a39jN+t2hhLg0oKZnbYATQXmYE2-Z1JkmFyc1EPdg1HXw@mail.gmail.com>
-Subject: Re: [PATCH 1/9] kernel: add a PF_FORCE_COMPAT flag
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        id S1726573AbgIVLaz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Sep 2020 07:30:55 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2910 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726454AbgIVLay (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 22 Sep 2020 07:30:54 -0400
+Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id E76C7428A485CBA319EF;
+        Tue, 22 Sep 2020 12:30:52 +0100 (IST)
+Received: from localhost (10.52.121.155) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1913.5; Tue, 22 Sep
+ 2020 12:30:52 +0100
+Date:   Tue, 22 Sep 2020 12:29:12 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Atish Patra <atishp@atishpatra.org>
+CC:     David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Zong Li <zong.li@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "Will Deacon" <will@kernel.org>, <linux-arch@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Steven Price" <steven.price@arm.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:8U3QhqUgQssKpQivIurx1QhO0HcizCTbv9FM2dYjR7qI/BYtgBT
- aXnBt+gH3i7BkW4ORLrCt4H46/pNjWBK/mpqCyumcjcVfj1/zotel3weBob9uElfz3DwR7K
- SD73O72POJ3pwjD8gWBnHZGyAwt1MpkpQv9XkBHvto4Q+XAgPzYoa4EjGe8Z/x39gDR9cGO
- QujCKw+EEJbaSeenNDMzw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lxgMs8VhhiM=:l+UfaADbxVKseh338rQzK0
- QfABKRk1uOM8j+TCS6sCwMVp7ftwkOoJIGxGdG6L6VzI7cEX/MhwRXSQNk8YlDVPqekFAwqsJ
- K748wMagnWb5anQxTXdEkOBo0uWtUSAEwztEdQ2OBKdjwEG1J6pIlrCcDyitdMMoAz861eF0u
- z2iEwNTG7KaprxuPyh3LpnSFr4t9fNgbzFOS7H+wEZEnC9CeAWNx5wP0L6sE37HsEVzBj0klw
- rCdMwj/xQX550kfGtz5Tst5P+5qFFcpSycGh7yxzuA7IfUTo0Jtcxxq8Nsoy2hdLMsRB5AeEU
- hTJ1KV0t+ZNP/UDzzsqu7H5kqZnJRYF/Z8Ji6rftWofkhI6uKJJ8Cfjq8tWrO/UeP3XIf9v2i
- DQj5nXdMHge7GHqPvPrsVFMyAkUL1J4r8j1ePLIXjlpNWnjVBfzHviGfTGbMYidP8nHyfMUv4
- hEG02hwSHv9Zn7QmlN72PGM4XbtnD7nIM85CCGS+B86CUtmOfBWj5gRwwocYygk0Mfzi0STau
- 9lBglupWtfGYz14JMgT+7eEGaMn3WNy19TESYPhKMsyiDYRSSu38/SERTgtuUQo8ptjsjNOMw
- hMWuBgTKGkOX+0SeCUD2zOGOi/+ubpkvRVlttuUSAIEUl1xdqDzZNS6siOVdInCDtDO3VcOwL
- tz/kxsgWRCy7enDEmiF8nZGkmBV+bcNr8kAHKqyZDkcgcSxHstfrPlSvQ8eU70sysdob1c6pH
- o6m1IdiLADPf36SBZ2b/E1EXaXU5wEKpga7xW5vj4MkINkTWIONy6jvzXbTYJ5RaLNmyXl2Xq
- CcmZaAJaQnOwp55YtAfNvehwZlUtix7GjXWpSVDKul5QTnf8MdHSUm66q7etTCD1nugbL5krf
- nX96T+FtWTicJ8P6Rd2wiUyg+fLf10H8SOm4BOpcrhYne4qDBpHCkC3Wl4ydqivn66oeOEyJ9
- sHgF+76xRs7ep05tWnMmeiHdPlcAupShCEbkpfyQnpooyIq1sTbAL
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [RFT PATCH v3 0/5] Unify NUMA implementation between ARM64 &
+ RISC-V
+Message-ID: <20200922122912.00004bcb@Huawei.com>
+In-Reply-To: <CAOnJCU+mg13P609kut2cK9igmyepOvDc4kU-EzXsdjde7D_RpQ@mail.gmail.com>
+References: <20200918201140.3172284-1-atish.patra@wdc.com>
+        <20200921164947.000048e1@Huawei.com>
+        <CAOnJCU+mg13P609kut2cK9igmyepOvDc4kU-EzXsdjde7D_RpQ@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.52.121.155]
+X-ClientProxiedBy: lhreml706-chm.china.huawei.com (10.201.108.55) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 9:59 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
-> On 22/09/2020 10:23, Arnd Bergmann wrote:
-> > On Tue, Sep 22, 2020 at 8:32 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
-> >> On 22/09/2020 03:58, Andy Lutomirski wrote:
-> >>> On Mon, Sep 21, 2020 at 5:24 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
-> >>> I may be looking at a different kernel than you, but aren't you
-> >>> preventing creating an io_uring regardless of whether SQPOLL is
-> >>> requested?
-> >>
-> >> I diffed a not-saved file on a sleepy head, thanks for noticing.
-> >> As you said, there should be an SQPOLL check.
-> >>
-> >> ...
-> >> if (ctx->compat && (p->flags & IORING_SETUP_SQPOLL))
-> >>         goto err;
+On Mon, 21 Sep 2020 17:08:32 -0700
+Atish Patra <atishp@atishpatra.org> wrote:
+
+> On Mon, Sep 21, 2020 at 8:51 AM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
 > >
-> > Wouldn't that mean that now 32-bit containers behave differently
-> > between compat and native execution?
+> > On Fri, 18 Sep 2020 13:11:35 -0700
+> > Atish Patra <atish.patra@wdc.com> wrote:
+> >  
+> > > This series attempts to move the ARM64 numa implementation to common
+> > > code so that RISC-V can leverage that as well instead of reimplementing
+> > > it again.
+> > >
+> > > RISC-V specific bits are based on initial work done by Greentime Hu [1] but
+> > > modified to reuse the common implementation to avoid duplication.
+> > >
+> > > [1] https://lkml.org/lkml/2020/1/10/233
+> > >
+> > > This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
+> > > It would be great if somebody can test it on numa capable ARM64 hardware platforms.
+> > > This patch series doesn't modify the maintainers list for the common code (arch_numa)
+> > > as I am not sure if somebody from ARM64 community or Greg should take up the
+> > > maintainership. Ganapatrao was the original author of the arm64 version.
+> > > I would be happy to update that in the next revision once it is decided.  
+> >  
+> 
+> Any thoughts on the maintenanership of this code ?
+
+Currently it is a trivial enough bit of code, I'd not be too worried
+as long as it doesn't fall through the cracks.  Changes that directory are going
+to need a GregKH Ack so unlikely anything will get missed.
+
+If you feel a specific entry is needed in MAINTAINERS go for it.
+Feel free to stick me down as a reviewer and I'll keep an eye on
+it from ARM64 side of things.
+
+Thanks,
+
+Jonathan
+
+
+> 
+> > Was fairly sure this set was a noop on arm64 ACPI systems, but ran a quick
+> > sanity check on a 2 socket kunpeng920 and everything came up as normal
+> > (4 nodes, around 250G a node)
 > >
-> > I think if you want to prevent 32-bit applications from using SQPOLL,
-> > it needs to be done the same way on both to be consistent:
->
-> The intention was to disable only compat not native 32-bit.
+> > Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > For patches 1 and 2.  Doesn't seem relevant to the rest :)
+> >  
+> 
+> Thanks a lot!
+> 
+> > >
+> > > # numactl --hardware
+> > > available: 2 nodes (0-1)
+> > > node 0 cpus: 0 1 2 3
+> > > node 0 size: 486 MB
+> > > node 0 free: 470 MB
+> > > node 1 cpus: 4 5 6 7
+> > > node 1 size: 424 MB
+> > > node 1 free: 408 MB
+> > > node distances:
+> > > node   0   1
+> > >   0:  10  20
+> > >   1:  20  10
+> > > # numactl -show
+> > > policy: default
+> > > preferred node: current
+> > > physcpubind: 0 1 2 3 4 5 6 7
+> > > cpubind: 0 1
+> > > nodebind: 0 1
+> > > membind: 0 1
+> > >
+> > > For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
+> > > to test the patches in Qemu and 2 socket OmniXtend FPGA.
+> > >
+> > > https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
+> > >
+> > > The patches are also available at
+> > >
+> > > https://github.com/atishp04/linux/tree/5.10_numa_unified_v3
+> > >
+> > > There may be some minor conflicts with Mike's cleanup series [2] depending on the
+> > > order in which these two series are being accepted. I can rebase on top his series
+> > > if required.
+> > >
+> > > [2] https://lkml.org/lkml/2020/8/18/754
+> > >
+> > > Changes from v2->v3:
+> > > 1. Added Acked-by/Reviewed-by tags.
+> > > 2. Replaced asm/acpi.h with linux/acpi.h
+> > > 3. Defined arch_acpi_numa_init as static.
+> > >
+> > > Changes from v1->v2:
+> > > 1. Replaced ARM64 specific compile time protection with ACPI specific ones.
+> > > 2. Dropped common pcibus_to_node changes. Added required changes in RISC-V.
+> > > 3. Fixed few typos.
+> > >
+> > > Atish Patra (4):
+> > > numa: Move numa implementation to common code
+> > > arm64, numa: Change the numa init functions name to be generic
+> > > riscv: Separate memory init from paging init
+> > > riscv: Add numa support for riscv64 platform
+> > >
+> > > Greentime Hu (1):
+> > > riscv: Add support pte_protnone and pmd_protnone if
+> > > CONFIG_NUMA_BALANCING
+> > >
+> > > arch/arm64/Kconfig                            |  1 +
+> > > arch/arm64/include/asm/numa.h                 | 45 +----------------
+> > > arch/arm64/kernel/acpi_numa.c                 | 13 -----
+> > > arch/arm64/mm/Makefile                        |  1 -
+> > > arch/arm64/mm/init.c                          |  4 +-
+> > > arch/riscv/Kconfig                            | 31 +++++++++++-
+> > > arch/riscv/include/asm/mmzone.h               | 13 +++++
+> > > arch/riscv/include/asm/numa.h                 |  8 +++
+> > > arch/riscv/include/asm/pci.h                  | 14 ++++++
+> > > arch/riscv/include/asm/pgtable.h              | 21 ++++++++
+> > > arch/riscv/kernel/setup.c                     | 11 ++++-
+> > > arch/riscv/kernel/smpboot.c                   | 12 ++++-
+> > > arch/riscv/mm/init.c                          | 10 +++-
+> > > drivers/base/Kconfig                          |  6 +++
+> > > drivers/base/Makefile                         |  1 +
+> > > .../mm/numa.c => drivers/base/arch_numa.c     | 31 ++++++++++--
+> > > include/asm-generic/numa.h                    | 49 +++++++++++++++++++
+> > > 17 files changed, 201 insertions(+), 70 deletions(-)
+> > > create mode 100644 arch/riscv/include/asm/mmzone.h
+> > > create mode 100644 arch/riscv/include/asm/numa.h
+> > > rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
+> > > create mode 100644 include/asm-generic/numa.h
+> > >
+> > > --
+> > > 2.25.1
+> > >  
+> >
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv  
+> 
+> 
+> 
 
-I'm not following why that would be considered a valid option,
-as that clearly breaks existing users that update from a 32-bit
-kernel to a 64-bit one.
 
-Taking away the features from users that are still on 32-bit kernels
-already seems questionable to me, but being inconsistent
-about it seems much worse, in particular when the regression
-is on the upgrade path.
-
-> > Can we expect all existing and future user space to have a sane
-> > fallback when IORING_SETUP_SQPOLL fails?
->
-> SQPOLL has a few differences with non-SQPOLL modes, but it's easy
-> to convert between them. Anyway, SQPOLL is a privileged special
-> case that's here for performance/latency reasons, I don't think
-> there will be any non-accidental users of it.
-
-Ok, so the behavior of 32-bit tasks would be the same as running
-the same application as unprivileged 64-bit tasks, with applications
-already having to implement that fallback, right?
-
-      Arnd
