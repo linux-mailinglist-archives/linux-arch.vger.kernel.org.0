@@ -2,110 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62363275ED8
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 19:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11967275F06
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 19:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726714AbgIWRkT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Sep 2020 13:40:19 -0400
-Received: from mga01.intel.com ([192.55.52.88]:57506 "EHLO mga01.intel.com"
+        id S1726674AbgIWRqP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Sep 2020 13:46:15 -0400
+Received: from verein.lst.de ([213.95.11.211]:49388 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726706AbgIWRkT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Sep 2020 13:40:19 -0400
-IronPort-SDR: qWFXvjDakOmlQVX79lzTDLSBuvt2oZ+Yc7WrhEjrpXqB8FMnn7HHitDs+jBjn/b6z1mV3hit1e
- Kk4/lvpG23BQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9753"; a="179057001"
-X-IronPort-AV: E=Sophos;i="5.77,293,1596524400"; 
-   d="scan'208";a="179057001"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 10:40:18 -0700
-IronPort-SDR: HF6l80Vl4GPB6WBckXE/1zi6edCdb0E0SoZ0b2AIqsy1uPUzAKQS8Xx8vNJW5nsqHkQEO/idC8
- xMkCI9K6Mq7w==
-X-IronPort-AV: E=Sophos;i="5.77,293,1596524400"; 
-   d="scan'208";a="309993016"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.14.213])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 10:40:12 -0700
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     arjan@linux.intel.com, linux-kernel@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arch@vger.kernel.org
-Subject: [PATCH v5 04/10] x86: Make sure _etext includes function sections
-Date:   Wed, 23 Sep 2020 10:38:58 -0700
-Message-Id: <20200923173905.11219-5-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200923173905.11219-1-kristen@linux.intel.com>
-References: <20200923173905.11219-1-kristen@linux.intel.com>
+        id S1726130AbgIWRqP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Sep 2020 13:46:15 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 5EA266736F; Wed, 23 Sep 2020 19:46:09 +0200 (CEST)
+Date:   Wed, 23 Sep 2020 19:46:09 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-aio@kvack.org, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 5/9] fs: remove various compat readv/writev helpers
+Message-ID: <20200923174609.GA24379@lst.de>
+References: <20200923060547.16903-1-hch@lst.de> <20200923060547.16903-6-hch@lst.de> <20200923142549.GK3421308@ZenIV.linux.org.uk> <20200923143251.GA14062@lst.de> <20200923145901.GN3421308@ZenIV.linux.org.uk> <20200923163831.GO3421308@ZenIV.linux.org.uk> <20200923170527.GQ3421308@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923170527.GQ3421308@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When using -ffunction-sections to place each function in
-it's own text section so it can be randomized at load time, the
-linker considers these .text.* sections "orphaned sections", and
-will place them after the first similar section (.text). In order
-to accurately represent the end of the text section and the
-orphaned sections, _etext must be moved so that it is after both
-.text and .text.* The text size must also be calculated to
-include .text AND .text.*
+On Wed, Sep 23, 2020 at 06:05:27PM +0100, Al Viro wrote:
+> On Wed, Sep 23, 2020 at 05:38:31PM +0100, Al Viro wrote:
+> > On Wed, Sep 23, 2020 at 03:59:01PM +0100, Al Viro wrote:
+> > 
+> > > > That's a very good question.  But it does not just compile but actually
+> > > > works.  Probably because all the syscall wrappers mean that we don't
+> > > > actually generate the normal names.  I just tried this:
+> > > > 
+> > > > --- a/include/linux/syscalls.h
+> > > > +++ b/include/linux/syscalls.h
+> > > > @@ -468,7 +468,7 @@ asmlinkage long sys_lseek(unsigned int fd, off_t offset,
+> > > >  asmlinkage long sys_read(unsigned int fd, char __user *buf, size_t count);
+> > > >  asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+> > > >                             size_t count);
+> > > > -asmlinkage long sys_readv(unsigned long fd,
+> > > > +asmlinkage long sys_readv(void *fd,
+> > > > 
+> > > > for fun, and the compiler doesn't care either..
+> > > 
+> > > Try to build it for sparc or ppc...
+> > 
+> > FWIW, declarations in syscalls.h used to serve 4 purposes:
+> > 	1) syscall table initializers needed symbols declared
+> > 	2) direct calls needed the same
+> > 	3) catching mismatches between the declarations and definitions
+> > 	4) centralized list of all syscalls
+> > 
+> > (2) has been (thankfully) reduced for some time; in any case, ksys_... is
+> > used for the remaining ones.
+> > 
+> > (1) and (3) are served by syscalls.h in architectures other than x86, arm64
+> > and s390.  On those 3 (1) is done otherwise (near the syscall table initializer)
+> > and (3) is not done at all.
+> > 
+> > I wonder if we should do something like
+> > 
+> > SYSCALL_DECLARE3(readv, unsigned long, fd, const struct iovec __user *, vec,
+> > 		 unsigned long, vlen);
+> > in syscalls.h instead, and not under that ifdef.
+> > 
+> > Let it expand to declaration of sys_...() in generic case and, on x86, into
+> > __do_sys_...() and __ia32_sys_...()/__x64_sys_...(), with types matching
+> > what SYSCALL_DEFINE ends up using.
+> > 
+> > Similar macro would cover compat_sys_...() declarations.  That would
+> > restore mismatch checking for x86 and friends.  AFAICS, the cost wouldn't
+> > be terribly high - cpp would have more to chew through in syscalls.h,
+> > but it shouldn't be all that costly.  Famous last words, of course...
+> > 
+> > Does anybody see fundamental problems with that?
+> 
+> Just to make it clear - I do not propose to fold that into this series;
+> there we just need to keep those declarations in sync with fs/read_write.c
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- arch/x86/kernel/vmlinux.lds.S     | 17 +++++++++++++++--
- include/asm-generic/vmlinux.lds.h |  2 +-
- 2 files changed, 16 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 9a03e5b23135..b0718eef283f 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -146,9 +146,22 @@ SECTIONS
- #endif
- 	} :text =0xcccc
- 
--	/* End of text section, which should occupy whole number of pages */
--	_etext = .;
-+	/*
-+	 * -ffunction-sections creates .text.* sections, which are considered
-+	 * "orphan sections" and added after the first similar section (.text).
-+	 * Placing this ALIGN statement before _etext causes the address of
-+	 * _etext to be below that of all the .text.* orphaned sections
-+	 */
- 	. = ALIGN(PAGE_SIZE);
-+	_etext = .;
-+
-+	/*
-+	 * the size of the .text section is used to calculate the address
-+	 * range for orc lookups. If we just use SIZEOF(.text), we will
-+	 * miss all the .text.* sections. Calculate the size using _etext
-+	 * and _stext and save the value for later.
-+	 */
-+	text_size = _etext - _stext;
- 
- 	X86_ALIGN_RODATA_BEGIN
- 	RO_DATA(PAGE_SIZE)
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index afd5cdf79a3a..6f7239e033e8 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -863,7 +863,7 @@
- 	. = ALIGN(4);							\
- 	.orc_lookup : AT(ADDR(.orc_lookup) - LOAD_OFFSET) {		\
- 		orc_lookup = .;						\
--		. += (((SIZEOF(.text) + LOOKUP_BLOCK_SIZE - 1) /	\
-+		. += (((text_size + LOOKUP_BLOCK_SIZE - 1) /	\
- 			LOOKUP_BLOCK_SIZE) + 1) * 4;			\
- 		orc_lookup_end = .;					\
- 	}
--- 
-2.20.1
-
+Agreed.  The above idea generally sounds sane to me.
