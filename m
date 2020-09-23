@@ -2,101 +2,178 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11E276314
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 23:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A34276335
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 23:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726702AbgIWVaa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Sep 2020 17:30:30 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:21665 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726665AbgIWVaa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Sep 2020 17:30:30 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-222-k0JZSzTkPJOZPjS-rTcoJw-1; Wed, 23 Sep 2020 22:30:26 +0100
-X-MC-Unique: k0JZSzTkPJOZPjS-rTcoJw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 23 Sep 2020 22:30:25 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 23 Sep 2020 22:30:25 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Al Viro <viro@zeniv.linux.org.uk>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Networking <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Subject: RE: [PATCH 5/9] fs: remove various compat readv/writev helpers
-Thread-Topic: [PATCH 5/9] fs: remove various compat readv/writev helpers
-Thread-Index: AQHWkdnPrERbulCBlEyrFz5+sRsKWql2urog
-Date:   Wed, 23 Sep 2020 21:30:25 +0000
-Message-ID: <2e11ea867c644c5d96f8e4930e5c730d@AcuMS.aculab.com>
-References: <20200923060547.16903-1-hch@lst.de>
- <20200923060547.16903-6-hch@lst.de>
- <20200923142549.GK3421308@ZenIV.linux.org.uk> <20200923143251.GA14062@lst.de>
- <20200923145901.GN3421308@ZenIV.linux.org.uk>
- <20200923163831.GO3421308@ZenIV.linux.org.uk>
- <CAK8P3a3nkLUOkR+jwz2_2LcYTUTqdVf8JOtZqKWbtEDotNhFZA@mail.gmail.com>
-In-Reply-To: <CAK8P3a3nkLUOkR+jwz2_2LcYTUTqdVf8JOtZqKWbtEDotNhFZA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726680AbgIWVe6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Sep 2020 17:34:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56316 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726638AbgIWVe6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 23 Sep 2020 17:34:58 -0400
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D54FB238E5
+        for <linux-arch@vger.kernel.org>; Wed, 23 Sep 2020 21:34:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600896897;
+        bh=K3EiV2+i9l9fYhhP6vZIZ7TO6ZkrF/uEBL+okHQVlPQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ujf5QnyE9ozyeO63lNVfcHgSuZWq4kLYhNj8yCH/l/GxggbLRqaHjG3tfyGsNwkAs
+         /3eDOzWcZTh8f3gCOD8zu+ZTETyzg7Pd20RNC1LvCr9fRAu1YUJpj1QQUzQkr4di7N
+         BAI02qlhlOGufa1Q/1PBd0f89tJvj4m4oXfajmTs=
+Received: by mail-wr1-f44.google.com with SMTP id w5so1535198wrp.8
+        for <linux-arch@vger.kernel.org>; Wed, 23 Sep 2020 14:34:56 -0700 (PDT)
+X-Gm-Message-State: AOAM5325KjLNPTKrhFBZHgQaUZMLmhzMohAE47CpQnD6uCV5tu5EZnkU
+        PkIutGCrCrQeX8LOYcwiHkKaoY7GHCfDrl8207xU+w==
+X-Google-Smtp-Source: ABdhPJyfQsGZbyi4V01pz1OVEaeeFMqLVS6c+RfyIwko8Czk8CD8ZGTZnfdpdZtjBo1QLuIeZl5Z60Sb9PZVsHax7bU=
+X-Received: by 2002:adf:a3c3:: with SMTP id m3mr1646948wrb.70.1600896895213;
+ Wed, 23 Sep 2020 14:34:55 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-Content-Language: en-US
+References: <20200918192312.25978-1-yu-cheng.yu@intel.com> <20200918192312.25978-9-yu-cheng.yu@intel.com>
+ <CALCETrXfixDGJhf0yPw-OckjEdeF2SbYjWFm8VbLriiP0Krhrg@mail.gmail.com>
+ <c96c98ec-d72a-81a3-06e2-2040f3ece33a@intel.com> <24718de58ab7bc6d7288c58d3567ad802eeb6542.camel@intel.com>
+ <CALCETrWssUxxfhPPJZgPOmpaQcf4o9qCe1j-P7yiPyZVV+O8ZQ@mail.gmail.com> <b3defc91-1e8e-d0d5-2ac3-3861a7e3355c@intel.com>
+In-Reply-To: <b3defc91-1e8e-d0d5-2ac3-3861a7e3355c@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 23 Sep 2020 14:34:43 -0700
+X-Gmail-Original-Message-ID: <CALCETrUVUqK6_bjFNSmOjnWVNscwfWmMa6Bt9fQrpFa5m3xNwA@mail.gmail.com>
+Message-ID: <CALCETrUVUqK6_bjFNSmOjnWVNscwfWmMa6Bt9fQrpFa5m3xNwA@mail.gmail.com>
+Subject: Re: [PATCH v12 8/8] x86: Disallow vsyscall emulation when CET is enabled
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMyBTZXB0ZW1iZXIgMjAyMCAxOTo0Ng0KLi4u
-DQo+IFJlZ2FyZGxlc3Mgb2YgdGhhdCwgYW5vdGhlciBhZHZhbnRhZ2Ugb2YgaGF2aW5nIHRoZSBT
-WVNDQUxMX0RFQ0xBUkV4KCkNCj4gd291bGQgYmUgdGhlIGFiaWxpdHkgdG8gaW5jbHVkZSB0aGF0
-IGhlYWRlciBmaWxlIGZyb20gZWxzZXdoZXJlIHdpdGggYSBkaWZmZXJlbnQNCj4gbWFjcm8gZGVm
-aW5pdGlvbiB0byBjcmVhdGUgYSBtYWNoaW5lLXJlYWRhYmxlIHZlcnNpb24gb2YgdGhlIGludGVy
-ZmFjZSB3aGVuDQo+IGNvbWJpbmVkIHdpdGggdGhlIHN5c2NhbGwudGJsIGZpbGVzLiBUaGlzIGNv
-dWxkIGJlIHVzZWQgdG8gY3JlYXRlIGEgdXNlcg0KPiBzcGFjZSBzdHViIGZvciBjYWxsaW5nIGlu
-dG8gdGhlIGxvdy1sZXZlbCBzeXNjYWxsIHJlZ2FyZGxlc3Mgb2YgdGhlDQo+IGxpYmMgaW50ZXJm
-YWNlcywNCj4gb3IgZm9yIHN5bmNocm9uaXppbmcgdGhlIGludGVyZmFjZXMgd2l0aCBzdHJhY2Us
-IHFlbXUtdXNlciwgb3IgYW55dGhpbmcgdGhhdA0KPiBuZWVkcyB0byBkZWFsIHdpdGggdGhlIGxv
-dy1sZXZlbCBpbnRlcmZhY2UuDQoNCkEgc2ltaWxhciAndHJpY2snICh0aGF0IHByb2JhYmx5IHdv
-bid0IHdvcmsgaGVyZSkgaXMgdG8gcGFzcw0KdGhlIG5hbWUgb2YgYSAjZGVmaW5lIGZ1bmN0aW9u
-IGFzIGEgcGFyYW1ldGVyIHRvIGFub3RoZXIgZGVmaW5lLg0KVXNlZnVsIGZvciBkZWZpbmluZyBj
-b25zdGFudHMgYW5kIGVycm9yIHN0cmluZ3MgdG9nZXRoZXIuIGVnOg0KI2RlZmluZSBUUkFGRklD
-X0xJR0hUUyh4KSBcDQoJeChSRUQsIDAsICJSZWQiKSBcDQoJeChZRUxMT1csIDEsICJZZWxsb3cp
-IFwNCgl4KEdSRUVOLCAyLCAiR1JFRU4pDQoNCllvdSBjYW4gdGhlbiBkbyB0aGluZyBsaWtlOg0K
-I2RlZmluZSB4KHRva2VuLCB2YWx1ZSwgc3RyaW5nKSB0b2tlbiA9IHZhbHVlLA0KZW51bSB7VFJB
-RkZJQ19MSUdIVFMoeCkgTlVNX0xJR0hUU307DQojdW5kZWYgeA0KI2RlZmluZSB4KHRva2VuLCB2
-YWx1ZSwgc3RyaW5nKSBbdmFsdWVdID0gc3RyaW5nLA0KY29uc3QgY2hhciAqY29sb3Vyc1tdID0g
-e1RSQUZGSUNfTElHSFRTKHgpfTsNCiN1bmRlZiB4DQp0byBpbml0aWFsaXNlIGNvbnN0YW50cyBh
-bmQgYSBuYW1lIHRhYmxlIHRoYXQgYXJlIGFsd2F5cyBpbiBzeW5jLg0KDQpJdCBpcyBhbHNvIGEg
-Z29vZCB3YXkgdG8gZ2VuZXJhdGUgc291cmNlIGxpbmVzIHRoYXQgYXJlIG92ZXIgMU1CLg0KDQoJ
-RGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
-dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
-OTczODYgKFdhbGVzKQ0K
+On Tue, Sep 22, 2020 at 10:46 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
+>
+> On 9/21/2020 4:48 PM, Andy Lutomirski wrote:
+> > On Mon, Sep 21, 2020 at 3:37 PM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+> >>
+> >> On Mon, 2020-09-21 at 09:22 -0700, Yu, Yu-cheng wrote:
+>
+> [...]
+>
+> >>
+> >> Here is the patch:
+> >>
+> >> ------
+> >>
+> >>  From dfdee39c795ee5dcee2c77f6ba344a61f4d8124b Mon Sep 17 00:00:00 2001
+> >> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> >> Date: Thu, 29 Nov 2018 14:15:38 -0800
+> >> Subject: [PATCH 34/43] x86/vsyscall/64: Fixup Shadow Stack and Indirect Branch
+> >>   Tracking for vsyscall emulation
+> >>
+> >> Vsyscall entry points are effectively branch targets.  Mark them with
+> >> ENDBR64 opcodes.  When emulating the RET instruction, unwind the shadow
+> >> stack and reset IBT state machine.
+> >>
+> >> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> >> ---
+> >>   arch/x86/entry/vsyscall/vsyscall_64.c     | 29 +++++++++++++++++++++++
+> >>   arch/x86/entry/vsyscall/vsyscall_emu_64.S |  9 +++++++
+> >>   arch/x86/entry/vsyscall/vsyscall_trace.h  |  1 +
+> >>   3 files changed, 39 insertions(+)
+> >>
+> >> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> b/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> index 44c33103a955..0131c9f7f9c5 100644
+> >> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> @@ -38,6 +38,9 @@
+> >>   #include <asm/fixmap.h>
+> >>   #include <asm/traps.h>
+> >>   #include <asm/paravirt.h>
+> >> +#include <asm/fpu/xstate.h>
+> >> +#include <asm/fpu/types.h>
+> >> +#include <asm/fpu/internal.h>
+> >>
+> >>   #define CREATE_TRACE_POINTS
+> >>   #include "vsyscall_trace.h"
+> >> @@ -286,6 +289,32 @@ bool emulate_vsyscall(unsigned long error_code,
+> >>          /* Emulate a ret instruction. */
+> >>          regs->ip = caller;
+> >>          regs->sp += 8;
+> >> +
+> >> +       if (current->thread.cet.shstk_size ||
+> >> +           current->thread.cet.ibt_enabled) {
+> >> +               u64 r;
+> >> +
+> >> +               fpregs_lock();
+> >> +               if (test_thread_flag(TIF_NEED_FPU_LOAD))
+> >> +                       __fpregs_load_activate();
+> >
+> > Wouldn't this be nicer if you operated on the memory image, not the registers?
+>
+> Do you mean writing to the XSAVES area?
 
+Yes.
+
+>
+> >
+> >> +
+> >> +#ifdef CONFIG_X86_INTEL_BRANCH_TRACKING_USER
+> >> +               /* Fixup branch tracking */
+> >> +               if (current->thread.cet.ibt_enabled) {
+> >> +                       rdmsrl(MSR_IA32_U_CET, r);
+> >> +                       wrmsrl(MSR_IA32_U_CET, r & ~CET_WAIT_ENDBR);
+> >> +               }
+> >> +#endif
+> >
+> > Seems reasonable on first glance.
+> >
+> >> +
+> >> +#ifdef CONFIG_X86_INTEL_SHADOW_STACK_USER
+> >> +               /* Unwind shadow stack. */
+> >> +               if (current->thread.cet.shstk_size) {
+> >> +                       rdmsrl(MSR_IA32_PL3_SSP, r);
+> >> +                       wrmsrl(MSR_IA32_PL3_SSP, r + 8);
+> >> +               }
+> >> +#endif
+> >
+> > What happens if the result is noncanonical?  A quick skim of the SDM
+> > didn't find anything.  This latter issue goes away if you operate on
+> > the memory image, though -- writing a bogus value is just fine, since
+> > the FP restore will handle it.
+> >
+>
+> At this point, the MSR's value can still be valid or is already saved to
+> memory.  If we are going to write to memory, then the MSR must be saved
+> first.  So I chose to do __fpregs_load_activate() and write the MSR.
+>
+> Maybe we can check the address before writing it to the MSR?
+
+Performance is almost irrelevant here, and the writing-to-XSAVES-area
+approach should have the benefit that the exception handling and
+signaling happens for free.
