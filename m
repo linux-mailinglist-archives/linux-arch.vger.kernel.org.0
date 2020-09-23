@@ -2,101 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 439F0276175
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 21:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D7127629D
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 22:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgIWTxJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Sep 2020 15:53:09 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:49141 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726199AbgIWTxJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Sep 2020 15:53:09 -0400
-Received: from mail-qk1-f175.google.com ([209.85.222.175]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mof1D-1knLhY1WDR-00p1Cg; Wed, 23 Sep 2020 21:53:05 +0200
-Received: by mail-qk1-f175.google.com with SMTP id c62so1009747qke.1;
-        Wed, 23 Sep 2020 12:53:03 -0700 (PDT)
-X-Gm-Message-State: AOAM530ZlfmksSqecWKDQ3DFtZU062m1eW50TJHuAOM1NehNCZNSs1hi
-        XGsSJeH6U+rOX7g6WJ5h3KiEI72zgD5M/7gTGgc=
-X-Google-Smtp-Source: ABdhPJw80vxbxwT0bQ4Vkw0aE+k6Uuv2/dRNGRP/PGmAg2m3M1syddgA8VQgAKVqDM0S7SkWa6ZTkZVQ5JNt1c0Eq1g=
-X-Received: by 2002:a37:5d8:: with SMTP id 207mr1587539qkf.352.1600890783036;
- Wed, 23 Sep 2020 12:53:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200923060547.16903-1-hch@lst.de> <20200923060547.16903-6-hch@lst.de>
- <20200923142549.GK3421308@ZenIV.linux.org.uk> <20200923143251.GA14062@lst.de>
- <20200923145901.GN3421308@ZenIV.linux.org.uk> <20200923163831.GO3421308@ZenIV.linux.org.uk>
- <CAK8P3a3nkLUOkR+jwz2_2LcYTUTqdVf8JOtZqKWbtEDotNhFZA@mail.gmail.com> <20200923194755.GR3421308@ZenIV.linux.org.uk>
-In-Reply-To: <20200923194755.GR3421308@ZenIV.linux.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Sep 2020 21:52:47 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1VPh0ufiUMbcRuj9wrpqojzQ_8mO68Vjc8yzLGxVNkpw@mail.gmail.com>
-Message-ID: <CAK8P3a1VPh0ufiUMbcRuj9wrpqojzQ_8mO68Vjc8yzLGxVNkpw@mail.gmail.com>
-Subject: Re: [PATCH 5/9] fs: remove various compat readv/writev helpers
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Howells <dhowells@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>, io-uring@vger.kernel.org,
+        id S1726572AbgIWUz5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Sep 2020 16:55:57 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:40710 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgIWUz5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Sep 2020 16:55:57 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600894555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l2WJ9VY/ovlOeTamqA6hSSk6rkurGuhlcvh+V81qWPQ=;
+        b=KMxSh7B9yWMw8PeMibjvvc2K7UOxI4lmPORR16F3qgfamXgPw6W2rNezAEQwEe6OJiYe4H
+        KA1VFmz3v9+AAAyGKXqh0V2F00BcNrhxAyYwtww9hIJko06aHPQ0Qs+ySI2L/J2EXxUy++
+        CvEgXKPNZfLsjh7NP0EX4EMRBspJVLGoRpGEZGVn28aSQB2FMNShRbroRGx95X5g5CH1z2
+        Jmfoo6OzXyLS27oCCIOZJaxYLXmXXqVHJpj66p+awnyn1l9VeiLy2JKTO40uT7ro90AvQj
+        BedSnC4tHLgo1VR7G3ERu+f8FeVmrMFkGCEBOb66xrRWFUbPXEpMUqIwQ2qEcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600894555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l2WJ9VY/ovlOeTamqA6hSSk6rkurGuhlcvh+V81qWPQ=;
+        b=2urhFSWhq3UaaqI7581rYD0LbsWTkSa2pjmt+peY735+/10gUPHibCgr+piKbh9Xsfbp65
+        bVJ9t3cFY/BDWVBQ==
+To:     Steven Rostedt <rostedt@goodmis.org>, peterz@infradead.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>,
-        Networking <netdev@vger.kernel.org>, keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:FcOmYEc7S70x327+yC5nQPBEM0rt3a6h0aY4XmvYdCQO/8YHm6L
- kQ4zWoMsMiqUpkNCuPq40vpPiey/pLiaKIbN7QkQudHxc4Jh3awCIgTkZ9zYNjIGusQwsP4
- 1f1B0nElrTF0UDKdAoVLxWVksyAkcP1rgW6OWMr1s5U6Ho/SuN3wPdE/qoJwLEFRspiRqUj
- yq6+or7yQpPXAv/J1caXQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WeZ7mFq3nUo=:ejU75HdVaJwErPbl07WyY/
- SzJqUDCrQEJB1WeBXC2y8Ssm/xYmjapzEBN2ahXTydur/hOzj69Kg2Qzgtoc3VNc8XFmw919o
- ESSsgSfQzPzPrlX3MgopJwOnkQ3I4bvWzTa2ZlS7YrZa/AyhvFw4gd4FCpGxRi6WmPfp76f1e
- myF7aStZTXsarPDA2STRNrZOIUYyDueuimX9V2S7rv5BW/onorUna7NOsEwkE7aU0mJt+v0Hl
- HIA6IfIR05QbpoKPI/OpdgJEact/NAJX3zC1ZJXh62ABmy+E/nnChSTV1nsGJIXjNhCuBVdFk
- bQBjXBaT8FGfl83RztO1RmQ3bqsqk8ku9XIaqGrmQ9i5OX6DAQHK7c30Vm+EMZDuan5IKUoxh
- cYHDHFlB37P7T0CXow6euG48MwQQRXwNWG94LigYmIKrGfCNIQ4DHyCeRw1+68wkbtADxLVH8
- CB0nRpMe7rUrmHGpqYNqt8wLM0pJKHM0tsjdDP650XCTmpPS3/NlStYy3mgCJIW9hqkuS7w7A
- GkIBYy2IUu1bbRxzL8ypcn4Cp96IkenTf/tXQXtLAggbQEk+CIKr/QP9S6AMOum8srwv1+VKM
- ORMh1sY7JkDqzxIAYpvgHUPA1mej8HF4555mPWMlPk7ICBIsJDcaGzkmlBgB6B23rbiKuCCsr
- iyC89P2nxjFi+GzaaYFHYRrz399DxPlViaNhzrAVJsWX0gM3VD02wi37/y8AW5K3d0vI6p/7f
- DV1q85DyULmO6ez5MisWBBUBROpFlvx1IghlxiINd/QvCa5H+comengpnbWjgMe/VluZszkB9
- P0Qk+w+vd9NiE3WeN+I42nTS8gMPYeMp7/0S9Nib8gESVnNDFc2shVtY2bhFcaVX6Tkq2thRH
- 4RYELGgsPV/p/jHf0yA1sgT5WRYlN6txBoLIeSX9HQ3uUovY6j9F6HIzPfzzcZCcKlkVPUElJ
- DqEhYfcAAh7V0lJVm7vBtu55QYk5+o4wTMvTEFkCyMYNWNypOQGY7
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <20200923115251.7cc63a7e@oasis.local.home>
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com> <87a6xjd1dw.fsf@nanos.tec.linutronix.de> <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com> <87sgbbaq0y.fsf@nanos.tec.linutronix.de> <20200923084032.GU1362448@hirez.programming.kicks-ass.net> <20200923115251.7cc63a7e@oasis.local.home>
+Date:   Wed, 23 Sep 2020 22:55:54 +0200
+Message-ID: <874kno9pr9.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 9:48 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> FWIW, after playing with that for a while...  Do we really want the
-> compat_sys_...() declarations to live in linux/compat.h?  Most of
-> the users of that file don't want those; why not move them to
-> linux/syscalls.h?
+On Wed, Sep 23 2020 at 11:52, Steven Rostedt wrote:
+> On Wed, 23 Sep 2020 10:40:32 +0200
+> peterz@infradead.org wrote:
+>
+>> However, with migrate_disable() we can have each task preempted in a
+>> migrate_disable() region, worse we can stack them all on the _same_ CPU
+>> (super ridiculous odds, sure). And then we end up only able to run one
+>> task, with the rest of the CPUs picking their nose.
+>
+> What if we just made migrate_disable() a local_lock() available for !RT?
+>
+> I mean make it a priority inheritance PER CPU lock.
+>
+> That is, no two tasks could do a migrate_disable() on the same CPU? If
+> one task does a migrate_disable() and then gets preempted and the
+> preempting task does a migrate_disable() on the same CPU, it will block
+> and wait for the first task to do a migrate_enable().
+>
+> No two tasks on the same CPU could enter the migrate_disable() section
+> simultaneously, just like no two tasks could enter a preempt_disable()
+> section.
+>
+> In essence, we just allow local_lock() to be used for both RT and !RT.
+>
+> Perhaps make migrate_disable() an anonymous local_lock()?
+>
+> This should lower the SHC in theory, if you can't have stacked migrate
+> disables on the same CPU.
 
-Sure, let's do that. The trend overall is to integrate the compat stuff
-more closely into where the native implementation lives, so this
-would just follow that trend.
+I'm pretty sure this ends up in locking hell pretty fast and aside of
+that it's not working for scenarios like:
 
-I think with Christoph's latest patches, about half of them are
-going away as well.
+     kmap_local();
+       migrate_disable();
+       ...
 
-> Reason: there's a lot more users of linux/compat.h than those of
-> linux/syscalls.h - it's pulled by everything in the networking stack,
-> for starters...
+     copy_from_user()
+        -> #PF
+           -> schedule()
 
-Right, the network headers pull in almost everything else through
-multiple indirect inclusions, anything we can do to reduce that
-helps.
+which brought us into that discussion in the first place. You would stop
+any other migrate disable user from running until the page fault is
+resolved...
 
-     Arnd
+Thanks,
+
+        tglx
