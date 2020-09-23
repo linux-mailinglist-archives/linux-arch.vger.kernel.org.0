@@ -2,116 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE12275C68
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 17:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410CA275DA5
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Sep 2020 18:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbgIWPxE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Sep 2020 11:53:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbgIWPxD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 23 Sep 2020 11:53:03 -0400
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 492262223E;
-        Wed, 23 Sep 2020 15:52:54 +0000 (UTC)
-Date:   Wed, 23 Sep 2020 11:52:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     peterz@infradead.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-Message-ID: <20200923115251.7cc63a7e@oasis.local.home>
-In-Reply-To: <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
-References: <20200919091751.011116649@linutronix.de>
-        <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
-        <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
-        <87k0wode9a.fsf@nanos.tec.linutronix.de>
-        <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
-        <87eemwcpnq.fsf@nanos.tec.linutronix.de>
-        <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-        <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
-        <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
-        <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
-        <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726515AbgIWQin (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Sep 2020 12:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726419AbgIWQin (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Sep 2020 12:38:43 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33F6C0613CE;
+        Wed, 23 Sep 2020 09:38:42 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kL7mp-004f4D-Mx; Wed, 23 Sep 2020 16:38:31 +0000
+Date:   Wed, 23 Sep 2020 17:38:31 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-aio@kvack.org, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 5/9] fs: remove various compat readv/writev helpers
+Message-ID: <20200923163831.GO3421308@ZenIV.linux.org.uk>
+References: <20200923060547.16903-1-hch@lst.de>
+ <20200923060547.16903-6-hch@lst.de>
+ <20200923142549.GK3421308@ZenIV.linux.org.uk>
+ <20200923143251.GA14062@lst.de>
+ <20200923145901.GN3421308@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200923145901.GN3421308@ZenIV.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 23 Sep 2020 10:40:32 +0200
-peterz@infradead.org wrote:
+On Wed, Sep 23, 2020 at 03:59:01PM +0100, Al Viro wrote:
 
-> However, with migrate_disable() we can have each task preempted in a
-> migrate_disable() region, worse we can stack them all on the _same_ CPU
-> (super ridiculous odds, sure). And then we end up only able to run one
-> task, with the rest of the CPUs picking their nose.
+> > That's a very good question.  But it does not just compile but actually
+> > works.  Probably because all the syscall wrappers mean that we don't
+> > actually generate the normal names.  I just tried this:
+> > 
+> > --- a/include/linux/syscalls.h
+> > +++ b/include/linux/syscalls.h
+> > @@ -468,7 +468,7 @@ asmlinkage long sys_lseek(unsigned int fd, off_t offset,
+> >  asmlinkage long sys_read(unsigned int fd, char __user *buf, size_t count);
+> >  asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+> >                             size_t count);
+> > -asmlinkage long sys_readv(unsigned long fd,
+> > +asmlinkage long sys_readv(void *fd,
+> > 
+> > for fun, and the compiler doesn't care either..
+> 
+> Try to build it for sparc or ppc...
 
-What if we just made migrate_disable() a local_lock() available for !RT?
+FWIW, declarations in syscalls.h used to serve 4 purposes:
+	1) syscall table initializers needed symbols declared
+	2) direct calls needed the same
+	3) catching mismatches between the declarations and definitions
+	4) centralized list of all syscalls
 
-I mean make it a priority inheritance PER CPU lock.
+(2) has been (thankfully) reduced for some time; in any case, ksys_... is
+used for the remaining ones.
 
-That is, no two tasks could do a migrate_disable() on the same CPU? If
-one task does a migrate_disable() and then gets preempted and the
-preempting task does a migrate_disable() on the same CPU, it will block
-and wait for the first task to do a migrate_enable().
+(1) and (3) are served by syscalls.h in architectures other than x86, arm64
+and s390.  On those 3 (1) is done otherwise (near the syscall table initializer)
+and (3) is not done at all.
 
-No two tasks on the same CPU could enter the migrate_disable() section
-simultaneously, just like no two tasks could enter a preempt_disable()
-section.
+I wonder if we should do something like
 
-In essence, we just allow local_lock() to be used for both RT and !RT.
+SYSCALL_DECLARE3(readv, unsigned long, fd, const struct iovec __user *, vec,
+		 unsigned long, vlen);
+in syscalls.h instead, and not under that ifdef.
 
-Perhaps make migrate_disable() an anonymous local_lock()?
+Let it expand to declaration of sys_...() in generic case and, on x86, into
+__do_sys_...() and __ia32_sys_...()/__x64_sys_...(), with types matching
+what SYSCALL_DEFINE ends up using.
 
-This should lower the SHC in theory, if you can't have stacked migrate
-disables on the same CPU.
+Similar macro would cover compat_sys_...() declarations.  That would
+restore mismatch checking for x86 and friends.  AFAICS, the cost wouldn't
+be terribly high - cpp would have more to chew through in syscalls.h,
+but it shouldn't be all that costly.  Famous last words, of course...
 
--- Steve
+Does anybody see fundamental problems with that?
