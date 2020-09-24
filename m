@@ -2,62 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F61276A53
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 09:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B5F276A57
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 09:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727160AbgIXHOk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Sep 2020 03:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S1727004AbgIXHOq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Sep 2020 03:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727031AbgIXHOj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 03:14:39 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A5CC0613CE
-        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 00:14:39 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id d13so1350990pgl.6
-        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 00:14:39 -0700 (PDT)
+        with ESMTP id S1726929AbgIXHOp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 03:14:45 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F73C0613CE
+        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 00:14:45 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id md22so3879244pjb.0
+        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 00:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ux6BIm5/rJSpjWcuZxKCIwp0MrSLeyKL6rWTSIGyLyg=;
-        b=WtO/UiL/zz4M8ysG/wBE+QP2vtWwNvlayy9W4Xt1Xk9ZKr36gU4V6bVUIXrG3hvBS2
-         afq7yUqRvk9NKC56VGiOxe46UWu3YEPgJBUcZpLmj55ULEovrvPk9G6HTTpmV2A+HL5V
-         14vqCGyxls2v6V5P4A/ZCjkp0kundR0PIMGuNrfkMiOmb59qUcL7xDTfLiqUIdLHv4w3
-         gAEswgmqwW1IkiLjSrucycQybScELl0jZGqZL1Tt2AA2JngL7njO9Q5W+6/JNlm4R9hs
-         tysBVB1oRFlHyx7+lI8Z+zVu7Spoc19YsI1kk1rXAkmMbcJsgVE3bD7+ZvrHyRnJjGeb
-         c7Zw==
+        bh=uaZaINJO8RTX0sihp8PXPyj8BsV/dJ4sIfFZwNQgCoc=;
+        b=C41INqRQL9wXKNEMfa2Cq9gnH6tyU2aaAcWC397Yxc+X4rbSPPDuT66/6sfi0KWWiT
+         AV3W/hiYgfEi7XEvgRLQHFGN+ClX5VSYAGb+czXbF0QvJFcUcEy8uC8efnlgsJxn6QwE
+         wExB+u9FVWDObRSI8l6Yn6/IWedlC0TTpsCC/yHTLrr9ayV5jt/FiPRL0YbuzkF3zp/9
+         z7A1A/C+OQeVCNntpiqOrcndO4LluVX7E/gAthh1z6+i8ZgFHrCTPYuJ7cHctzeIz1Kl
+         maTHGbAbHeMgLeIg1DQRmAwQU1GCGzRdTqETNRbZMscyGlhpQ3VWu8JlIzBcZVG4nsij
+         Hlqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ux6BIm5/rJSpjWcuZxKCIwp0MrSLeyKL6rWTSIGyLyg=;
-        b=sZeJs58sPBGxr3D0G5wahqg6omCt8/Wbfz8Ip2oA14reebZoSNhJJDX0WgGLvBEZ6+
-         TmscYOvB5H0YWsjc3TqtP1KghXdIeczDXLyjE18hvAOM/vKY+q079VmP/Shwp4rHEQWn
-         dwgcgeWxo7hcleWvc0jOU80YQ1Q8BV6a04Q2TLlk1Q/l+27dS/bOM/viRrArPQSo3fPy
-         vHAzca4XyBvdWk2+qnPPE1TkEeY3pAzU4yPSj4Q5SnfBrJSbkwYk4+2ZKjBM8XspV60W
-         Vk+Q5wHXBMdhSB6UHY2vLZGqpwkdhNyG9UgbB9URhBQszm+v2YaQNVEWweQkz7LEbMGq
-         9KCA==
-X-Gm-Message-State: AOAM532Ht3DjFsoES7yGi1yYzDtX3/R8Ypw/D4cwLZsX0y3ZFaxaKbWY
-        gSZIGObp2z7WrxR5IgSIuE0=
-X-Google-Smtp-Source: ABdhPJyQ4zr142YUwOvfs73T/SmyGr/3TkkxuGXP7bAaMT5m/1RvLOe1H4VGMDWeqOBTjEbE+Pcwsg==
-X-Received: by 2002:a62:6490:0:b029:13f:c196:bb77 with SMTP id y138-20020a6264900000b029013fc196bb77mr3255458pfb.14.1600931679391;
-        Thu, 24 Sep 2020 00:14:39 -0700 (PDT)
+        bh=uaZaINJO8RTX0sihp8PXPyj8BsV/dJ4sIfFZwNQgCoc=;
+        b=ilYK7AhSI9iQDwH0WFJcQLpJ/RZitC6CWP/VDgBQmxLiYQG7p4XehkAJbPQ9LgK3cw
+         pivhXwTynaLUvHJvD4W3Km2MSaYHzGltP+B/WVv/eX3MQUyhFgQrlQrrMrnlNE/l4TIO
+         9+8SjnpttATwMrNPYLvhysctPuD/h5w69KYqZH5tFHDNemz/bjU9/OaEmfRGIqNQJBG1
+         rLls1jWyULmL1E+EEA50YNIfzN27kQfThx1dPTOJxsgUD8JAqnTIubsZ6OQjqAyh1/rr
+         jaagjYkuhWlQKPu/EDjbZ1Rf/0ZIqE19sO8SnLdw1bRWGNSRi3ERsMN2FCuTLg72/0yb
+         tNhQ==
+X-Gm-Message-State: AOAM533CnOBpIuzdBF4UuCbd4r+f1XlAfSAFCbX3VeBr9AnVlzCihzQ9
+        kOpfk7z/AFJphjgyFlP6xeY=
+X-Google-Smtp-Source: ABdhPJzq28mbtDOOoVJ8ZaXyYQry4wEm+ND0PGC2ggHIOU4euhMPSKxxXqQqIPUN5c589bjLvrdp5A==
+X-Received: by 2002:a17:902:ba8c:b029:d1:e5e7:be6a with SMTP id k12-20020a170902ba8cb02900d1e5e7be6amr3375156pls.68.1600931685359;
+        Thu, 24 Sep 2020 00:14:45 -0700 (PDT)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id q21sm1823229pgt.48.2020.09.24.00.14.38
+        by smtp.gmail.com with ESMTPSA id v8sm1950402pgg.58.2020.09.24.00.14.44
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 24 Sep 2020 00:14:38 -0700 (PDT)
+        Thu, 24 Sep 2020 00:14:44 -0700 (PDT)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id D9E782037C207B; Thu, 24 Sep 2020 16:14:35 +0900 (JST)
+        id 0CC762037C2080; Thu, 24 Sep 2020 16:14:43 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com
 Cc:     tavi.purdila@gmail.com, retrage01@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         Hajime Tazaki <thehajime@gmail.com>
-Subject: [RFC v6 06/21] scritps: um: suppress warnings if SRCARCH=um
-Date:   Thu, 24 Sep 2020 16:12:46 +0900
-Message-Id: <de27555d492b9797b41a4a98c278b8421cd643d2.1600922528.git.thehajime@gmail.com>
+Subject: [RFC v6 07/21] um: extend arch_switch_to for alternate SUBARCH
+Date:   Thu, 24 Sep 2020 16:12:47 +0900
+Message-Id: <4a3090dbb622a5892739573441bbc12a1a849330.1600922528.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1600922528.git.thehajime@gmail.com>
 References: <cover.1600922528.git.thehajime@gmail.com>
@@ -67,31 +67,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This commit fixes numbers of warning messages about leaked CONFIG
-options.  nommu mode of UML requires copies of kernel headers to offer
-syscall-like API for the library users.  Thus, the warnings are to be
-avoided to function this exposure of API.
+This commit introduces additional argument of previous task when
+context switch happens.  New SUBARCH can use the new information to
+switch tasks in a subarch-specific manner.
+
+The patch is particularly required by nommu mode implemented as a
+SUBARCH of UML.
 
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 ---
- scripts/headers_install.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/um/kernel/process.c  | 6 +++---
+ arch/x86/um/ptrace_32.c   | 2 +-
+ arch/x86/um/syscalls_64.c | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/scripts/headers_install.sh b/scripts/headers_install.sh
-index dd554bd436cc..8890a0147012 100755
---- a/scripts/headers_install.sh
-+++ b/scripts/headers_install.sh
-@@ -93,6 +93,10 @@ include/uapi/linux/pktcdvd.h:CONFIG_CDROM_PKTCDVD_WCACHE
+diff --git a/arch/um/kernel/process.c b/arch/um/kernel/process.c
+index 26b5e243d3fc..87a8cfa228ca 100644
+--- a/arch/um/kernel/process.c
++++ b/arch/um/kernel/process.c
+@@ -80,7 +80,7 @@ static inline void set_current(struct task_struct *task)
+ 		{ external_pid(), task });
+ }
  
- for c in $configs
- do
-+	if [ "$SRCARCH" = "um" ] ; then
-+		break
-+	fi
-+
- 	leak_error=1
+-extern void arch_switch_to(struct task_struct *to);
++extern void arch_switch_to(struct task_struct *from, struct task_struct *to);
  
- 	for ignore in $config_leak_ignores
+ void *__switch_to(struct task_struct *from, struct task_struct *to)
+ {
+@@ -88,7 +88,7 @@ void *__switch_to(struct task_struct *from, struct task_struct *to)
+ 	set_current(to);
+ 
+ 	switch_threads(&from->thread.switch_buf, &to->thread.switch_buf);
+-	arch_switch_to(current);
++	arch_switch_to(from, to);
+ 
+ 	return current->thread.prev_sched;
+ }
+@@ -145,7 +145,7 @@ void fork_handler(void)
+ 	 * arch_switch_to isn't needed. We could want to apply this to
+ 	 * improve performance. -bb
+ 	 */
+-	arch_switch_to(current);
++	arch_switch_to(NULL, current);
+ 
+ 	current->thread.prev_sched = NULL;
+ 
+diff --git a/arch/x86/um/ptrace_32.c b/arch/x86/um/ptrace_32.c
+index 2497bac56066..0f184710d4ca 100644
+--- a/arch/x86/um/ptrace_32.c
++++ b/arch/x86/um/ptrace_32.c
+@@ -11,7 +11,7 @@
+ 
+ extern int arch_switch_tls(struct task_struct *to);
+ 
+-void arch_switch_to(struct task_struct *to)
++void arch_switch_to(struct task_struct *from, struct task_struct *to)
+ {
+ 	int err = arch_switch_tls(to);
+ 	if (!err)
+diff --git a/arch/x86/um/syscalls_64.c b/arch/x86/um/syscalls_64.c
+index 58f51667e2e4..2ef9474d2bd2 100644
+--- a/arch/x86/um/syscalls_64.c
++++ b/arch/x86/um/syscalls_64.c
+@@ -80,7 +80,7 @@ SYSCALL_DEFINE2(arch_prctl, int, option, unsigned long, arg2)
+ 	return arch_prctl(current, option, (unsigned long __user *) arg2);
+ }
+ 
+-void arch_switch_to(struct task_struct *to)
++void arch_switch_to(struct task_struct *from, struct task_struct *to)
+ {
+ 	if ((to->thread.arch.fs == 0) || (to->mm == NULL))
+ 		return;
 -- 
 2.21.0 (Apple Git-122.2)
 
