@@ -2,120 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AE027735C
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 15:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D147E27746D
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 16:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgIXN7k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Sep 2020 09:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S1728166AbgIXOz4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Sep 2020 10:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727736AbgIXN7f (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 09:59:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A6DC0613CE;
-        Thu, 24 Sep 2020 06:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MOgC9OGGeZJDv1+n6/wlwMjXb8lCrwqJ2Nw3weXr+Qc=; b=JsDPpGvHCaRJKTjEp4jfBvIc6f
-        pXZLbwXBu5W8wOQFQmAslu3rcVo3QzDGQFkjChuW6FIVMUFcn9IGZif/AfN2U01WzpkVAz+KFjobU
-        0jWaSlW3Xn2GQ84V721qkLjzWf+wjf87oufz3kW5JH8rWv+6T3T3JVoKiDNY9dD7MOcGuNMH2PZBs
-        SnzOi2M6Zof+/P1qbt2Khez267c1eK7X/9CbdBAMVey/kVf/aLifYALWXQaU/QkCvZXO+P5xD/kVr
-        VMyquwF/LWZfEYgUe0JzptxCjKKCYhp2fTxOVreYNbgMOT1pBTJrHrmgCpfvBdVmz9xgyChNoHSwP
-        aldNLPLA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kLRlA-0003sC-Q7; Thu, 24 Sep 2020 13:58:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 671203007CD;
-        Thu, 24 Sep 2020 15:58:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 51F872010B5FA; Thu, 24 Sep 2020 15:58:05 +0200 (CEST)
-Date:   Thu, 24 Sep 2020 15:58:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-Message-ID: <20200924135805.GN2628@hirez.programming.kicks-ass.net>
-References: <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
- <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
- <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
- <20200923115251.7cc63a7e@oasis.local.home>
- <874kno9pr9.fsf@nanos.tec.linutronix.de>
- <20200923171234.0001402d@oasis.local.home>
- <871riracgf.fsf@nanos.tec.linutronix.de>
- <20200924083241.314f2102@gandalf.local.home>
- <20200924124241.GK2628@hirez.programming.kicks-ass.net>
- <20200924095138.5318d242@oasis.local.home>
+        with ESMTP id S1728126AbgIXOz4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 10:55:56 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EC7C0613CE;
+        Thu, 24 Sep 2020 07:55:56 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id d4so3810136wmd.5;
+        Thu, 24 Sep 2020 07:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:subject:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cxvl2MAleQcMTiG0WSrWtQ8ZVgZ+BIbKryf5RRhV2Ew=;
+        b=UF9OPLc72qF28w6y+ivkNrmXc5fop6lS4sjwHWDd9rzAFwH/YxcaJyc57rdANGsIN4
+         rYSEqsboWQ/6Rad3EEZAYH6sJkptJizRO8lNfWk6XYA0XKnfcTxYON3ug44BYQg9EMER
+         pVgAFcgLfPn4DVLiJ3Hib3T01PXbwRe+Vojn0wE3Yok5pMEIejrXlJffXDd6qKuKAg44
+         VtKof8h0scpGdPAcmiLAwTnzsODA8lRMiZPWSwQRsP90h1aLFuABF5VbrFI/sWnrFX0b
+         uEmRRAQsmZaOnouVl0mGoQ3uar4fcGrE+qSzboc3C0J0BGGDyYXkJ66tiP5wIrQLNFZH
+         wH4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:subject:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cxvl2MAleQcMTiG0WSrWtQ8ZVgZ+BIbKryf5RRhV2Ew=;
+        b=hTSqDBFuxLwaGxifgFSmpvbzTdTEM9PeZVn3VLkeG9V7YuGflMyrf2/22YvEnmaECP
+         LOwE8IDY20r1fyOvlnnI+xIRcvzMa/H59XFnwvo5yfKlE2hXTgkydzy2A9JSLtMBoZS6
+         Z1cb0nUjKWkOCVFXvTSveieyyT0WgiZA2xIAmcLePmgz+wJ31wdFtG3bHnii98flaA9V
+         AmB4cbxuMzri1VYIiaqEZrfKhhtiT7gtYwZ+r5Zph0QJsTiUx+EHRmDqAeG5R/H7wU3K
+         DLk1NB36E2eWK6ngBIPMjSxGEo79x0jzRYSJSadmmlXH9SMjhtIXZI9UdqshQ4AmtFut
+         yhSA==
+X-Gm-Message-State: AOAM530WYbpEYFUTx96mjoHRc1qwS2+CZtSQVLgCdF2LD2E17WwLzX2z
+        5dZl4wdsVFF5DO2rTkZBpz0=
+X-Google-Smtp-Source: ABdhPJwA7ld5rBdiNBafXko+QQDLwn3uoHLR26xm9fJkwIdPYX0Ec6468qIEwFlntmVrZ1YEq/Neew==
+X-Received: by 2002:a1c:4b17:: with SMTP id y23mr5136571wma.162.1600959354790;
+        Thu, 24 Sep 2020 07:55:54 -0700 (PDT)
+Received: from [192.168.1.143] ([170.253.60.68])
+        by smtp.gmail.com with ESMTPSA id h76sm4156994wme.10.2020.09.24.07.55.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2020 07:55:54 -0700 (PDT)
+To:     rppt@kernel.org
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, bp@alien8.de,
+        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        elena.reshetova@intel.com, hpa@zytor.com, idan.yaniv@ibm.com,
+        jejb@linux.ibm.com, kirill@shutemov.name,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-mm@kvack.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, luto@kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, mtk.manpages@gmail.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, peterz@infradead.org,
+        rppt@linux.ibm.com, shuah@kernel.org, tglx@linutronix.de,
+        tycho@tycho.ws, viro@zeniv.linux.org.uk, will@kernel.org,
+        willy@infradead.org, x86@kernel.org
+References: <20200924133513.1589-1-rppt@kernel.org>
+Subject: Re: [PATCH] man2: new page describing memfd_secret() system call
+From:   Alejandro Colomar <colomar.6.4.3@gmail.com>
+Message-ID: <efb6d051-2104-af26-bfb0-995f4716feb2@gmail.com>
+Date:   Thu, 24 Sep 2020 16:55:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200924095138.5318d242@oasis.local.home>
+In-Reply-To: <20200924133513.1589-1-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 24, 2020 at 09:51:38AM -0400, Steven Rostedt wrote:
+* Mike Rapoport:
+ > +.PP
+ > +.IR Note :
+ > +There is no glibc wrapper for this system call; see NOTES.
 
-> > It turns out, that getting selected for pull-balance is exactly that
-> > condition, and clearly a migrate_disable() task cannot be pulled, but we
-> > can use that signal to try and pull away the running task that's in the
-> > way.
-> 
-> Unless of course that running task is in a migrate disable section
-> itself ;-)
+You added a reference to NOTES, but then in notes there is nothing about 
+it.  I guess you wanted to add the following to NOTES (taken from 
+membarrier.2):
 
-See my ramblings here:
+.PP
+Glibc does not provide a wrapper for this system call; call it using
+.BR syscall (2).
 
-  https://lkml.kernel.org/r/20200924082717.GA1362448@hirez.programming.kicks-ass.net
+Cheers,
 
-My plan was to have the migrate_enable() of the running task trigger the
-migration in that case.
-
+Alex
