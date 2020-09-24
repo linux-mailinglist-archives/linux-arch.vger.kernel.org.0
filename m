@@ -2,140 +2,517 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BB02769D7
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 08:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86911276A3C
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 09:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbgIXG5z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Sep 2020 02:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S1727031AbgIXHNa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Sep 2020 03:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbgIXG5y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 02:57:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E880C0613CE;
-        Wed, 23 Sep 2020 23:57:54 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1600930672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5rTYnFSI7MvYdctqS1tc/c91OuHk2uQv9NNDSCQ04XQ=;
-        b=ToSaPZLxQ2AH6wpji2/x8TcisM3A51I/7u6foK9kSTrf7OV6+B/sYvPqQhMtEJrg0N9zIx
-        Cxs2etUyPDaehZQCOzhxH7PpvSyJSfy+zT5nw6FTVB78t6JNp7mDPmryw8BrJtWSznRbjf
-        8WXrnLC1goQovtz1OVkxeDIie+039a2C5Ao2dLue3fpVFSN5R/cBi6m5tXzS9aMxE6UJwX
-        Uwp2HtahcdV3lHGQhtB2rKe1baF/Au/D2y5x0sKC4vrpIL/XuoPxLZOPdKWgIlvAl5aFPa
-        sm2IQ31/n393ddHyPDhkeJ4Ev5cXAXShQDmJK93cRSzGvYG6PFna1CfbOLLbSA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1600930672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5rTYnFSI7MvYdctqS1tc/c91OuHk2uQv9NNDSCQ04XQ=;
-        b=EvF/NhfcVha3UwOSEREyL46c1SondfygAd7QtbHcK6NXwedthX3cPGyjT7D4JChbCJd2jo
-        pNgVY6bwfByW4sDA==
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     peterz@infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
-In-Reply-To: <20200923171234.0001402d@oasis.local.home>
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com> <87a6xjd1dw.fsf@nanos.tec.linutronix.de> <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com> <87sgbbaq0y.fsf@nanos.tec.linutronix.de> <20200923084032.GU1362448@hirez.programming.kicks-ass.net> <20200923115251.7cc63a7e@oasis.local.home> <874kno9pr9.fsf@nanos.tec.linutronix.de> <20200923171234.0001402d@oasis.local.home>
-Date:   Thu, 24 Sep 2020 08:57:52 +0200
-Message-ID: <871riracgf.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S1727030AbgIXHN3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 03:13:29 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27A8C0613CE
+        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 00:13:29 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 5so1351211pgf.5
+        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 00:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=k2SjE4KCPZ0k7lUOPoLm1VTPVGSC2bazcivP9ubX5GA=;
+        b=R2LqVY0Q/dh4GxfTEZUEsk+MKusrwpNlO3UVXzwzPaGAWbCakk100Fk4aLsRVdKrud
+         oHvILFyGdfEyQ9Y630IYPgI/AM2mWX+vOgXzLp/pV+ZZFo/NeSMFcKyqH37LRm5ulC5M
+         17k5ssOjxCnAov1Ax7e1byEN92aB2ExFBrtHQj9futVGeNEuqYsHmx4z9iyY5BCluHgr
+         9UvonJhWqbeWp4dY+wXkIK5r0CidFOEU5SB5lgMt3O8LGre3x8qMjBdbY52Ajhk31Xkv
+         uOi3T/aECgWgVoVAwH29pDefhSSqHVgeL+xsI/Yowf/EGZWFW3RGyoT86OuhpAYkz05W
+         HKPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=k2SjE4KCPZ0k7lUOPoLm1VTPVGSC2bazcivP9ubX5GA=;
+        b=ZREO45uPEEf6bLyWrqvaGC6mZ4dqz8GpRniL18prfIOuNoE9n8CymdkHqrVy5Fzfrx
+         9Vc1E7sqpXcL/3Xdos0aMPBQB10gaJQkL+TpG+sFGi3GHEvKnuk2W9lMN8hORAAguyN/
+         v4SBs8iFRTqumpoUUk8WX7zHqdbJIxcAzDswfCgEKDteFb3SErLcb+5xKbKTNC+XM6fS
+         FDTYIaC0Itr4aZUdJ6er+aC9/zEK3hPXnqvwwLcmC3E+u4L9BYqB2aJjjzIm5OlRferj
+         9/wP6LNJQ6e8gcnsspfaUtAQj9O/hHhFW/uDyxT1jw0oOqOvegz5RjvbPzmRYqwouM29
+         yBNw==
+X-Gm-Message-State: AOAM530lbB7EZ6qBGujgQYvFj8pZW0kBkRlgP1tJtPgkdhvirsDC8vDA
+        OXJVoPMdDUtCDKM0v1o3ZJw=
+X-Google-Smtp-Source: ABdhPJyMDXAfKRhSytSJiGOfM/8PelmftcxpOtu77hQel7lvxuh+P31sxi0hpbDjEPr/SCaIh+Pxdg==
+X-Received: by 2002:a63:f744:: with SMTP id f4mr2881779pgk.34.1600931608825;
+        Thu, 24 Sep 2020 00:13:28 -0700 (PDT)
+Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id x6sm1390969pjp.25.2020.09.24.00.13.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 24 Sep 2020 00:13:28 -0700 (PDT)
+Received: by earth-mac.local (Postfix, from userid 501)
+        id D70442037C2027; Thu, 24 Sep 2020 16:13:25 +0900 (JST)
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com
+Cc:     tavi.purdila@gmail.com, retrage01@gmail.com,
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        Hajime Tazaki <thehajime@gmail.com>
+Subject: [RFC v6 00/21] Unifying LKL into UML
+Date:   Thu, 24 Sep 2020 16:12:40 +0900
+Message-Id: <cover.1600922528.git.thehajime@gmail.com>
+X-Mailer: git-send-email 2.20.1 (Apple Git-117)
+In-Reply-To: <cover.1593697069.git.thehajime@gmail.com>
+References: <cover.1593697069.git.thehajime@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 23 2020 at 17:12, Steven Rostedt wrote:
-> On Wed, 23 Sep 2020 22:55:54 +0200
-> Then scratch the idea of having anonymous local_lock() and just bring
-> local_lock in directly? Then have a kmap local lock, which would only
-> block those that need to do a kmap.
+This is another spin of the unification of LKL into UML.  Based on the
+discussion of v4 patchset, we have tried to address issue raised and
+rewrote the patchset from scratch.  The summary is listed in the
+changelog below.
 
-That's still going to end up in lock ordering nightmares and you lose
-the ability to use kmap_local from arbitrary contexts which was again
-one of the goals of this exercise.
+Although there are still bugs in the patchset, we'd like to ask your
+opinions on the design we changed.
 
-Aside of that you're imposing reentrancy protections on something which
-does not need it in the first place.
+The milestone section is also updated: this patchset is for the
+milestone 1, though the common init API is still not implemented yet.
 
-> Now as for migration disabled nesting, at least now we would have
-> groupings of this, and perhaps the theorists can handle that. I mean,
-> how is this much different that having a bunch of tasks blocked on a
-> mutex with the owner is pinned on a CPU?
->
-> migrate_disable() is a BKL of pinning affinity.
 
-No. That's just wrong. preempt disable is a concurrency control,
-i.e. protecting against reentrancy on a given CPU. But it's a cpu global
-protection which means that it's not protecting a specific code path.
+Changes in rfc v6:
+- rebase with the current linus tree
 
-Contrary to preempt disable, migrate disable is not protecting against
-reentrancy on a given CPU. It's a temporary restriction to the scheduler
-on placement.
+Changes in rfc v5:
+- rewrite whole patchset from scratch
+- move arch-dependent code of arch/um and arch/x86/um to tools/um
+ - mainly code under os-Linux/ involved
+ - introduce 2-stage build (kernel, and host-dependent parts)
+ - clean up vmlinux.lds.S
+- put LKL-specific implementations as a SUBARCH under arch/um/nommu
+- introduce !CONFIG_MMU in arch/um
+- use struct arch_thread and arch_switch_to() for subarch-specific
+  thread implementation
+- integrate with the IRQ infrastructure of UML
+- tested with block device drivers (ubd) for the proof
 
-The fact that disabling preemption implicitely disables migration does
-not make them semantically equivalent.
+Changes in rfc v4: (https://lwn.net/Articles/816276/)
+- Rebase on the current uml/master branch
+- Fix IRQ handling (bug fix)
+- drop a patch for CONFIG_GENERIC_ATOMIC64 (comment by Peter Zijlstra)
+- implement vector net driver for UMMODE_LIB (comment by Anton)
+- clean up uapi headers to avoid duplicates
+- clean up IRQ handling code (comment by Anton)
+- fix error handling in test code (comments by David Disseldorp)
 
-> If we only have local_lock() available (even on !RT), then it makes
-> the blocking in groups. At least this way you could grep for all the
-> different local_locks in the system and plug that into the algorithm
-> for WCS, just like one would with a bunch of mutexes.
+Changes in rfc v3:
+- use UML drivers (net, block) from LKL programs
+- drop virtio device implementations
+- drop mingw32 (Windows) host
+- drop android (arm/aarch64) host
+- drop FreeBSD (x86_64) host
+- drop LD_PRELOAD (hijack) support
+- update milestone
 
-You cannot do that on RT at all where migrate disable is substituting
-preempt disable in spin and rw locks. The result would be the same as
-with a !RT kernel just with horribly bad performance.
+rfc v2:
+- use UMMODE instead of SUBARCH to switch UML or LKL
+- tools/lkl directory is still there. I confirmed we can move under arch/um
+  (e.g., arch/um/lkl/hosts).  I will move it IF this is preferable.
+- drop several patches involved non-uml directory
+- drop several patches which are not required
+- refine commit logs
+- document updated
 
-That means the stacking problem has to be solved anyway.
 
-So why on earth do you want to create yet another special duct tape case
-for kamp_local() which proliferates inconsistency instead of aiming for
-consistency accross all preemption models?
 
-Thanks,
 
-        tglx
+LKL (Linux Kernel Library) is aiming to allow reusing the Linux kernel code
+as extensively as possible with minimal effort and reduced maintenance
+overhead.
+
+Examples of how LKL can be used are: creating userspace applications
+(running on Linux and other operating systems) that can read or write Linux
+filesystems or can use the Linux networking stack, creating kernel drivers
+for other operating systems that can read Linux filesystems, bootloaders
+support for reading/writing Linux filesystems, etc.
+
+With LKL, the kernel code is compiled into an object file that can be
+directly linked by applications. The API offered by LKL is based on the
+Linux system call interface.
+
+LKL is originally implemented as an architecture port in arch/lkl, but this
+series of commits tries to integrate this into arch/um as one of the mode
+of UML.  This was discussed during RFC email of LKL (*1).
+
+The latest LKL version can be found at https://github.com/lkl/linux
+
+Milestone
+=========
+This patches is a first step toward upstreaming *library mode* of Linux kernel,
+but we think we need to have several steps toward our goal, describing in the
+below.
+
+
+Milestone 1: LKL lib on top of UML
+ * Kernel - Host build split
+ -  Build UML as a relocatable object using the UML's kernel linker script.
+ -  Move the ptrace and other well isolated os code out of arch/um to
+    tools/um
+ -  Use standard host toolchain to create a static library stripped of
+    the ptrace code. Use standard host toolchain to build the main UML
+    executable.
+ -  Add library init API that creates the UML kernel process and starts
+    UML.
+ * System calls APIs
+ -  Add new system call interface based on UML's irq facility.
+ -  Use the LKL scripts to export the required headers to create system
+    calls APIs that use the UML system calls infrastructure.
+ -  Keep the underlying host and driver operations (threads, irqs, etc.)
+    as they are now in UML.
+ * Boot test
+ -  Port the LKL boot test to verify that we are able to programatically
+    issue system calls.
+
+Milestone 2: add virtio disk support
+ * Export asm/io.h operations to host/os. Create IO access operations
+   and redirect them to weak os_ variants that use the current UML
+   implementation.
+ * Add the LKL IO access layer including generic virtio handling and the
+   virtio block device code.
+ * Port LKL disk test and disk apps (lklfuse, fs2tar, cptofs)
+
+Milestone 3: new arch ports
+  * Abstract the system call / IRQ mode the move the implementation to host
+  * Abstract the thread model and move the implementation to host
+  * Add LKL thread model and LKL ports
+
+
+Building LKL the host library and LKL applications
+==================================================
+
+% cd tools/um
+% make
+
+will build LKL as a object file, it will install it in tools/um/lib together
+with the headers files in tools/um/include then will build the host library,
+tests and a few of application examples:
+
+* tests/boot - a simple applications that uses LKL and exercises the basic
+  LKL APIs
+
+% make run-tests
+
+should run the above `tests/boot` and `tests/net-test` and report errors if
+there are any.
+
+Supported hosts
+===============
+
+Currently LKL supports Linux userspace applications. New hosts can be added
+relatively easy if the host supports gcc and GNU ld. Previous versions of
+LKL supported Windows kernel and Haiku kernel hosts, and we also have WIP
+patches with rump-hypercall interface, used in UEFI, as well as macOS
+userspace (part of POSIX).
+
+There is also musl-libc port for LKL, which might be interested in for some
+folks.
+
+
+Further readings about LKL
+=========================
+
+- Discussion in github LKL issue
+https://github.com/lkl/linux/issues/304
+
+- LKL (an article)
+https://www.researchgate.net/profile/Nicolae_Tapus2/publication/224164682_LKL_The_Linux_kernel_library/links/02bfe50fd921ab4f7c000000.pdf
+
+*1 RFC email to LKML (back in 2015)
+https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1012277.html
+
+
+Please review the following changes for suitability for inclusion. If you have
+any objections or suggestions for improvement, please respond to the patches. If
+you agree with the changes, please provide your Acked-by.
+
+The following changes since commit 805c6d3c19210c90c109107d189744e960eae025:
+
+  Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs (2020-09-22 15:08:41 -0700)
+
+are available in the Git repository at:
+
+  git://github.com/thehajime/linux b7b911105ecec6fd84f59e56d3a2c1789002bcbd
+  https://github.com/thehajime/linux/tree/uml-lkl-5.9rc6-v6
+
+Hajime Tazaki (18):
+  um: move arch/um/os-Linux dir to tools/um/uml
+  um: move arch/x86/um/os-Linux to tools/um/uml/
+  scritps: um: suppress warnings if SRCARCH=um
+  um: extend arch_switch_to for alternate SUBARCH
+  um: add nommu mode for UML library mode
+  um: nommu: host interface
+  um: nommu: memory handling
+  um: nommu: kernel thread support
+  um: nommu: system call interface and application API
+  um: nommu: basic console support
+  um: nommu: initialization and cleanup
+  um: nommu: integrate with irq infrastructure of UML
+  um: nommu: plug in the build system
+  um: host: add nommu build for ARCH=um
+  um: host: add utilities functions
+  um: host: posix host operations
+  um: host: add test programs
+  um: nommu: add block device support of UML
+
+Octavian Purdila (3):
+  um: split build in kernel and host parts
+  um: add os init and exit calls
+  um: host: implement os_initcalls and os_exitcalls
+
+ arch/um/Kconfig                               |  29 +-
+ arch/um/Makefile                              |  25 +-
+ arch/um/drivers/Makefile                      |  10 +-
+ .../um/{os-Linux => }/drivers/ethertap_kern.c |   0
+ arch/um/{os-Linux => }/drivers/tuntap_kern.c  |   0
+ arch/um/include/asm/common.lds.S              |  99 ----
+ arch/um/include/asm/host_ops.h                |   9 +
+ arch/um/include/asm/mmu.h                     |   3 +
+ arch/um/include/asm/mmu_context.h             |   8 +
+ arch/um/include/asm/page.h                    |  15 +
+ arch/um/include/asm/pgtable.h                 |  27 +
+ arch/um/include/asm/thread_info.h             |  24 +
+ arch/um/include/asm/uaccess.h                 |   6 +
+ arch/um/include/asm/xor.h                     |   3 +-
+ arch/um/include/shared/as-layout.h            |   1 +
+ .../drivers => include/shared}/etap.h         |   0
+ arch/um/include/shared/init.h                 |  19 +-
+ arch/um/include/shared/os.h                   |   1 +
+ .../drivers => include/shared}/tuntap.h       |   0
+ arch/um/include/uapi/asm/Kbuild               |   2 +
+ arch/um/kernel/Makefile                       |  12 +-
+ arch/um/kernel/dyn.lds.S                      | 171 -------
+ arch/um/kernel/irq.c                          |  13 +
+ arch/um/kernel/process.c                      |  14 +-
+ arch/um/kernel/reboot.c                       |   5 +
+ arch/um/kernel/time.c                         |   2 +
+ arch/um/kernel/um_arch.c                      |  16 +
+ arch/um/kernel/uml.lds.S                      | 115 -----
+ arch/um/kernel/vmlinux.lds.S                  |  91 +++-
+ arch/um/nommu/Makefile                        |   1 +
+ arch/um/nommu/Makefile.um                     |  18 +
+ arch/um/nommu/include/asm/Kbuild              |   6 +
+ arch/um/nommu/include/asm/archparam.h         |   1 +
+ arch/um/nommu/include/asm/atomic.h            |  11 +
+ arch/um/nommu/include/asm/atomic64.h          | 114 +++++
+ arch/um/nommu/include/asm/bitsperlong.h       |  12 +
+ arch/um/nommu/include/asm/byteorder.h         |   7 +
+ arch/um/nommu/include/asm/cpu.h               |  16 +
+ arch/um/nommu/include/asm/elf.h               |  15 +
+ arch/um/nommu/include/asm/mm_context.h        |   8 +
+ arch/um/nommu/include/asm/processor.h         |  46 ++
+ arch/um/nommu/include/asm/ptrace.h            |  21 +
+ arch/um/nommu/include/asm/sched.h             |  23 +
+ arch/um/nommu/include/asm/segment.h           |   9 +
+ arch/um/nommu/include/asm/syscall_wrapper.h   |  57 +++
+ arch/um/nommu/include/asm/syscalls.h          |  15 +
+ arch/um/nommu/include/uapi/asm/Kbuild         |   4 +
+ arch/um/nommu/include/uapi/asm/bitsperlong.h  |  11 +
+ arch/um/nommu/include/uapi/asm/byteorder.h    |  11 +
+ arch/um/nommu/include/uapi/asm/host_ops.h     | 122 +++++
+ arch/um/nommu/include/uapi/asm/sigcontext.h   |  12 +
+ arch/um/nommu/include/uapi/asm/syscalls.h     | 287 +++++++++++
+ arch/um/nommu/include/uapi/asm/unistd.h       |  17 +
+ arch/um/nommu/um/Kconfig                      |  45 ++
+ arch/um/nommu/um/Makefile                     |   4 +
+ arch/um/nommu/um/bootmem.c                    |  86 ++++
+ arch/um/nommu/um/console.c                    |  42 ++
+ arch/um/nommu/um/cpu.c                        | 247 ++++++++++
+ arch/um/nommu/um/delay.c                      |  31 ++
+ arch/um/nommu/um/setup.c                      | 179 +++++++
+ arch/um/nommu/um/shared/sysdep/archsetjmp.h   |  13 +
+ arch/um/nommu/um/shared/sysdep/faultinfo.h    |   8 +
+ .../nommu/um/shared/sysdep/kernel-offsets.h   |  12 +
+ arch/um/nommu/um/shared/sysdep/mcontext.h     |   9 +
+ arch/um/nommu/um/shared/sysdep/ptrace.h       |  42 ++
+ arch/um/nommu/um/shared/sysdep/ptrace_user.h  |   7 +
+ arch/um/nommu/um/syscalls.c                   | 199 ++++++++
+ arch/um/nommu/um/threads.c                    | 261 ++++++++++
+ arch/um/nommu/um/unimplemented.c              |  70 +++
+ arch/um/nommu/um/user_constants.h             |  13 +
+ arch/um/os-Linux/Makefile                     |  19 -
+ arch/um/os-Linux/drivers/Makefile             |  13 -
+ arch/um/scripts/headers_install.py            | 197 ++++++++
+ arch/x86/um/Makefile                          |   2 +-
+ arch/x86/um/os-Linux/Makefile                 |  13 -
+ arch/x86/um/ptrace_32.c                       |   2 +-
+ arch/x86/um/syscalls_64.c                     |   2 +-
+ scripts/headers_install.sh                    |   4 +
+ scripts/link-vmlinux.sh                       |  42 +-
+ tools/um/Makefile                             |  82 ++++
+ tools/um/Targets                              |  13 +
+ tools/um/include/lkl.h                        | 357 ++++++++++++++
+ tools/um/include/lkl_host.h                   |  27 +
+ tools/um/lib/Build                            |   7 +
+ tools/um/lib/fs.c                             | 461 ++++++++++++++++++
+ tools/um/lib/jmp_buf.c                        |  14 +
+ tools/um/lib/jmp_buf.h                        |   8 +
+ tools/um/lib/posix-host.c                     | 293 +++++++++++
+ tools/um/lib/utils.c                          | 213 ++++++++
+ tools/um/tests/Build                          |   2 +
+ tools/um/tests/boot.c                         | 393 +++++++++++++++
+ tools/um/tests/boot.sh                        |   9 +
+ tools/um/tests/cla.c                          | 159 ++++++
+ tools/um/tests/cla.h                          |  33 ++
+ tools/um/tests/disk.c                         | 168 +++++++
+ tools/um/tests/disk.sh                        |  70 +++
+ tools/um/tests/run.py                         | 174 +++++++
+ tools/um/tests/tap13.py                       | 209 ++++++++
+ tools/um/tests/test.c                         | 126 +++++
+ tools/um/tests/test.h                         |  72 +++
+ tools/um/tests/test.sh                        | 181 +++++++
+ tools/um/uml/Build                            |  57 +++
+ tools/um/uml/drivers/Build                    |  10 +
+ .../um/uml}/drivers/ethertap_user.c           |   0
+ .../um/uml}/drivers/tuntap_user.c             |   0
+ {arch/um/os-Linux => tools/um/uml}/elf_aux.c  |   0
+ {arch/um/os-Linux => tools/um/uml}/execvp.c   |   4 -
+ {arch/um/os-Linux => tools/um/uml}/file.c     |   0
+ {arch/um/os-Linux => tools/um/uml}/helper.c   |   0
+ {arch/um/os-Linux => tools/um/uml}/irq.c      |   0
+ {arch/um/os-Linux => tools/um/uml}/main.c     |   0
+ {arch/um/os-Linux => tools/um/uml}/mem.c      |   0
+ tools/um/uml/nommu/Build                      |   1 +
+ tools/um/uml/nommu/registers.c                |  21 +
+ tools/um/uml/nommu/unimplemented.c            |  21 +
+ {arch/um/os-Linux => tools/um/uml}/process.c  |   2 +
+ .../um/os-Linux => tools/um/uml}/registers.c  |   0
+ {arch/um/os-Linux => tools/um/uml}/sigio.c    |   0
+ {arch/um/os-Linux => tools/um/uml}/signal.c   |  12 +-
+ .../skas/Makefile => tools/um/uml/skas/Build  |   6 +-
+ {arch/um/os-Linux => tools/um/uml}/skas/mem.c |   0
+ .../os-Linux => tools/um/uml}/skas/process.c  |   3 +-
+ {arch/um/os-Linux => tools/um/uml}/start_up.c |   0
+ {arch/um/os-Linux => tools/um/uml}/time.c     |   0
+ {arch/um/os-Linux => tools/um/uml}/tty.c      |   0
+ {arch/um/os-Linux => tools/um/uml}/umid.c     |   0
+ .../um/os-Linux => tools/um/uml}/user_syms.c  |   1 +
+ {arch/um/os-Linux => tools/um/uml}/util.c     |  26 +
+ tools/um/uml/x86/Build                        |  11 +
+ .../os-Linux => tools/um/uml/x86}/mcontext.c  |   0
+ .../um/os-Linux => tools/um/uml/x86}/prctl.c  |   0
+ .../os-Linux => tools/um/uml/x86}/registers.c |   0
+ .../os-Linux => tools/um/uml/x86}/task_size.c |   0
+ .../um/os-Linux => tools/um/uml/x86}/tls.c    |   0
+ 134 files changed, 5850 insertions(+), 522 deletions(-)
+ rename arch/um/{os-Linux => }/drivers/ethertap_kern.c (100%)
+ rename arch/um/{os-Linux => }/drivers/tuntap_kern.c (100%)
+ delete mode 100644 arch/um/include/asm/common.lds.S
+ create mode 100644 arch/um/include/asm/host_ops.h
+ rename arch/um/{os-Linux/drivers => include/shared}/etap.h (100%)
+ rename arch/um/{os-Linux/drivers => include/shared}/tuntap.h (100%)
+ create mode 100644 arch/um/include/uapi/asm/Kbuild
+ delete mode 100644 arch/um/kernel/dyn.lds.S
+ delete mode 100644 arch/um/kernel/uml.lds.S
+ create mode 100644 arch/um/nommu/Makefile
+ create mode 100644 arch/um/nommu/Makefile.um
+ create mode 100644 arch/um/nommu/include/asm/Kbuild
+ create mode 100644 arch/um/nommu/include/asm/archparam.h
+ create mode 100644 arch/um/nommu/include/asm/atomic.h
+ create mode 100644 arch/um/nommu/include/asm/atomic64.h
+ create mode 100644 arch/um/nommu/include/asm/bitsperlong.h
+ create mode 100644 arch/um/nommu/include/asm/byteorder.h
+ create mode 100644 arch/um/nommu/include/asm/cpu.h
+ create mode 100644 arch/um/nommu/include/asm/elf.h
+ create mode 100644 arch/um/nommu/include/asm/mm_context.h
+ create mode 100644 arch/um/nommu/include/asm/processor.h
+ create mode 100644 arch/um/nommu/include/asm/ptrace.h
+ create mode 100644 arch/um/nommu/include/asm/sched.h
+ create mode 100644 arch/um/nommu/include/asm/segment.h
+ create mode 100644 arch/um/nommu/include/asm/syscall_wrapper.h
+ create mode 100644 arch/um/nommu/include/asm/syscalls.h
+ create mode 100644 arch/um/nommu/include/uapi/asm/Kbuild
+ create mode 100644 arch/um/nommu/include/uapi/asm/bitsperlong.h
+ create mode 100644 arch/um/nommu/include/uapi/asm/byteorder.h
+ create mode 100644 arch/um/nommu/include/uapi/asm/host_ops.h
+ create mode 100644 arch/um/nommu/include/uapi/asm/sigcontext.h
+ create mode 100644 arch/um/nommu/include/uapi/asm/syscalls.h
+ create mode 100644 arch/um/nommu/include/uapi/asm/unistd.h
+ create mode 100644 arch/um/nommu/um/Kconfig
+ create mode 100644 arch/um/nommu/um/Makefile
+ create mode 100644 arch/um/nommu/um/bootmem.c
+ create mode 100644 arch/um/nommu/um/console.c
+ create mode 100644 arch/um/nommu/um/cpu.c
+ create mode 100644 arch/um/nommu/um/delay.c
+ create mode 100644 arch/um/nommu/um/setup.c
+ create mode 100644 arch/um/nommu/um/shared/sysdep/archsetjmp.h
+ create mode 100644 arch/um/nommu/um/shared/sysdep/faultinfo.h
+ create mode 100644 arch/um/nommu/um/shared/sysdep/kernel-offsets.h
+ create mode 100644 arch/um/nommu/um/shared/sysdep/mcontext.h
+ create mode 100644 arch/um/nommu/um/shared/sysdep/ptrace.h
+ create mode 100644 arch/um/nommu/um/shared/sysdep/ptrace_user.h
+ create mode 100644 arch/um/nommu/um/syscalls.c
+ create mode 100644 arch/um/nommu/um/threads.c
+ create mode 100644 arch/um/nommu/um/unimplemented.c
+ create mode 100644 arch/um/nommu/um/user_constants.h
+ delete mode 100644 arch/um/os-Linux/Makefile
+ delete mode 100644 arch/um/os-Linux/drivers/Makefile
+ create mode 100755 arch/um/scripts/headers_install.py
+ delete mode 100644 arch/x86/um/os-Linux/Makefile
+ create mode 100644 tools/um/Makefile
+ create mode 100644 tools/um/Targets
+ create mode 100644 tools/um/include/lkl.h
+ create mode 100644 tools/um/include/lkl_host.h
+ create mode 100644 tools/um/lib/Build
+ create mode 100644 tools/um/lib/fs.c
+ create mode 100644 tools/um/lib/jmp_buf.c
+ create mode 100644 tools/um/lib/jmp_buf.h
+ create mode 100644 tools/um/lib/posix-host.c
+ create mode 100644 tools/um/lib/utils.c
+ create mode 100644 tools/um/tests/Build
+ create mode 100644 tools/um/tests/boot.c
+ create mode 100755 tools/um/tests/boot.sh
+ create mode 100644 tools/um/tests/cla.c
+ create mode 100644 tools/um/tests/cla.h
+ create mode 100644 tools/um/tests/disk.c
+ create mode 100755 tools/um/tests/disk.sh
+ create mode 100755 tools/um/tests/run.py
+ create mode 100644 tools/um/tests/tap13.py
+ create mode 100644 tools/um/tests/test.c
+ create mode 100644 tools/um/tests/test.h
+ create mode 100644 tools/um/tests/test.sh
+ create mode 100644 tools/um/uml/Build
+ create mode 100644 tools/um/uml/drivers/Build
+ rename {arch/um/os-Linux => tools/um/uml}/drivers/ethertap_user.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/drivers/tuntap_user.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/elf_aux.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/execvp.c (98%)
+ rename {arch/um/os-Linux => tools/um/uml}/file.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/helper.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/irq.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/main.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/mem.c (100%)
+ create mode 100644 tools/um/uml/nommu/Build
+ create mode 100644 tools/um/uml/nommu/registers.c
+ create mode 100644 tools/um/uml/nommu/unimplemented.c
+ rename {arch/um/os-Linux => tools/um/uml}/process.c (99%)
+ rename {arch/um/os-Linux => tools/um/uml}/registers.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/sigio.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/signal.c (96%)
+ rename arch/um/os-Linux/skas/Makefile => tools/um/uml/skas/Build (56%)
+ rename {arch/um/os-Linux => tools/um/uml}/skas/mem.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/skas/process.c (99%)
+ rename {arch/um/os-Linux => tools/um/uml}/start_up.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/time.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/tty.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/umid.c (100%)
+ rename {arch/um/os-Linux => tools/um/uml}/user_syms.c (99%)
+ rename {arch/um/os-Linux => tools/um/uml}/util.c (89%)
+ create mode 100644 tools/um/uml/x86/Build
+ rename {arch/x86/um/os-Linux => tools/um/uml/x86}/mcontext.c (100%)
+ rename {arch/x86/um/os-Linux => tools/um/uml/x86}/prctl.c (100%)
+ rename {arch/x86/um/os-Linux => tools/um/uml/x86}/registers.c (100%)
+ rename {arch/x86/um/os-Linux => tools/um/uml/x86}/task_size.c (100%)
+ rename {arch/x86/um/os-Linux => tools/um/uml/x86}/tls.c (100%)
+
+-- 
+2.21.0 (Apple Git-122.2)
+
