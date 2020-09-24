@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9B1276ADD
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 09:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6832276AE7
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 09:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgIXHd6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Sep 2020 03:33:58 -0400
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:60530 "EHLO
+        id S1727091AbgIXHhN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Sep 2020 03:37:13 -0400
+Received: from ivanoab7.miniserver.com ([37.128.132.42]:60548 "EHLO
         www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726896AbgIXHd6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 03:33:58 -0400
+        with ESMTP id S1727112AbgIXHhG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 03:37:06 -0400
 Received: from tun252.jain.kot-begemot.co.uk ([192.168.18.6] helo=jain.kot-begemot.co.uk)
         by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1kLLlI-0004YX-Ga; Thu, 24 Sep 2020 07:33:53 +0000
+        id 1kLLoM-0004Z3-Eu; Thu, 24 Sep 2020 07:37:03 +0000
 Received: from jain.kot-begemot.co.uk ([192.168.3.3])
         by jain.kot-begemot.co.uk with esmtp (Exim 4.92)
         (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1kLLlF-0000a3-Ke; Thu, 24 Sep 2020 08:33:52 +0100
+        id 1kLLoK-000191-19; Thu, 24 Sep 2020 08:37:02 +0100
 Subject: Re: [RFC v6 01/21] um: split build in kernel and host parts
 To:     Hajime Tazaki <thehajime@gmail.com>, linux-um@lists.infradead.org,
         jdike@addtoit.com, richard@nod.at
@@ -29,8 +29,8 @@ Cc:     tavi.purdila@gmail.com, retrage01@gmail.com,
 References: <cover.1600922528.git.thehajime@gmail.com>
  <034e4235086fceb43659c679770b7088e974f5d7.1600922528.git.thehajime@gmail.com>
 From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <738c23cc-7c19-90b8-c0d3-1a56ad3fb3e3@cambridgegreys.com>
-Date:   Thu, 24 Sep 2020 08:33:49 +0100
+Message-ID: <db162a9f-f9b0-dde3-4bda-b2993f5dc7c9@cambridgegreys.com>
+Date:   Thu, 24 Sep 2020 08:36:59 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
@@ -70,7 +70,22 @@ On 24/09/2020 08:12, Hajime Tazaki wrote:
 > was generating the executable now this only generates the relocatable
 > object.
 
-This will break packaging in all distributions. We need to figure out an alternative way which is backward compatible with their builds.
+It also fails now.
+
+
+ERROR: modpost: "memmove" [drivers/net/slip/slhc.ko] undefined!
+ERROR: modpost: "memset" [drivers/net/ppp/ppp_generic.ko] undefined!
+ERROR: modpost: "memset" [drivers/net/tun.ko] undefined!
+ERROR: modpost: "memmove" [drivers/block/loop.ko] undefined!
+ERROR: modpost: "memset" [drivers/block/loop.ko] undefined!
+ERROR: modpost: "memset" [fs/autofs/autofs4.ko] undefined!
+ERROR: modpost: "memset" [fs/isofs/isofs.ko] undefined!
+ERROR: modpost: "memset" [fs/binfmt_misc.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:111: Module.symvers] Error 1
+make[1]: *** Deleting file 'Module.symvers'
+make: *** [Makefile:1388: modules] Error 2
+make: *** Waiting for unfinished jobs....
+
 
 > 
 > To fully build UML use:
