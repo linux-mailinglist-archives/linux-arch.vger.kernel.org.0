@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23103276B88
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 10:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AE0276BC2
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 10:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727187AbgIXIOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Sep 2020 04:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        id S1727046AbgIXI0L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Sep 2020 04:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727180AbgIXIOB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 04:14:01 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76756C0613CE
-        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 01:14:00 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id m15so1266729pls.8
-        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 01:14:00 -0700 (PDT)
+        with ESMTP id S1726979AbgIXI0L (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 04:26:11 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADABC0613CE
+        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 01:26:10 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b124so1418616pfg.13
+        for <linux-arch@vger.kernel.org>; Thu, 24 Sep 2020 01:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=en8sGGmyJilvBY+qMGqyoqkKEIRYdoMiO41mtlatIM0=;
-        b=Wjg/hxdX8cz8PwAyYN2kfSMNZvL7TOVFpmKaP3RlCItRGq8UFwXqPOxte0Amll75j2
-         wGEeL310rynPnONkrMJpl2WvV5wIGsZs+WODCBQdWvkfLQZlC+79x24Dv+HKw4so1h8z
-         KQOSjputB3cqbWjYSnOZIkwvjcKlr8f84ztR4ybY/fJ+EQSsvnuflA9A2T56t5UFBLv7
-         1tDta0OBaTLk5dFfRGvSlQebYzI0YcTIACJ1QXMJPSDFkJofRRNW5fj18DD2i0my7Pil
-         V2kaVMaqUnISY6P58jVQOLsshVPXOTlvz63JToUMJfjeULRGCwI/tR749VNNLds52he3
-         ou9w==
+        bh=8v+fh7RoSuroabj/wS3Bntvgriqb5h1BqOOCbFWBb3Y=;
+        b=UMy/5ZVpdUyJ4lBhPg8eDTeGsTubd3POdMTTCPcCFJLrz5FTnN6hpLNFAUVM2bgtOX
+         IFQf8TA4rwrMIPcMajCXNuL+Ig/JNRN15VeNEyxFM26RaoxdqBO/gU7MdrLbz/S43su9
+         4S5oqAv61ku8DZR7NmyiP61C8tZnH+JKWQ1CKm6yZrGLDAuA3QSjJeYG/NNScxd2dpEp
+         AOJFIVx1sqvqBda4DkRWS43+8wTBOT/eZUk2UctbdnTlyoufYX1RJmgIn0Ntkim7dWjp
+         Ibr2ErKy8EVMYo6RukNSu0CU4OcyBxIJytqFLIqYkIB6NQZNb/p2U49PZzH6bZAG7ZSp
+         MLpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=en8sGGmyJilvBY+qMGqyoqkKEIRYdoMiO41mtlatIM0=;
-        b=iVFJPrOH//Hb9ZnHJDmkNnC+UR3nNV4vdHWVCfYjz9sCtf+95KdeqznBNFLCvSErgw
-         plfJxpHFvRfyHuDc7stKonymqxq1cunzBrY+gQ7yYPKdT7VfMhZQoqqekQhxv0hhiPNJ
-         IlBWvmqf4jzxrLxMRUbAUqobEvBH/ICGeHZnjA2bcCtIJ6HFqZOQ3zHzTpYD3BaaDSAB
-         2edIYmV5AMza2XoHDOibmEnco6uiD9o7sw73E7DBrcYAVn2d9Y3UDVNfeniWLCPkUHg8
-         XtR1rSv3rfkj5RTgfFHMDPUVLwXlG8kytSS5W2GYeSafnID2jCTDul99IH/SCgE7phgM
-         TRAA==
-X-Gm-Message-State: AOAM5304r+iCclWUGGqiaMZNPVXD8RnFK7mbymAxyIyOutdtOfdrNinx
-        Klwe2tyhOOiaKoK42ZeS28hI4iRHXd/FnA==
-X-Google-Smtp-Source: ABdhPJwjPCOKmhCLsYIntzrTrykmR3xt1z4oWds0taOl/u6AW1b1WSj3tivYw8zFZF1+O63LzkpYwA==
-X-Received: by 2002:a17:902:50d:b029:d1:9bc8:18fe with SMTP id 13-20020a170902050db02900d19bc818femr3518800plf.16.1600935239521;
-        Thu, 24 Sep 2020 01:13:59 -0700 (PDT)
+        bh=8v+fh7RoSuroabj/wS3Bntvgriqb5h1BqOOCbFWBb3Y=;
+        b=VMfVgyeeVILmx4fYJH9ZBQnBPgLfTQrfZm6omVieLX1KF1d04vp9CwvFnIwTWhOE/N
+         L/Ybybu6CHAU6fK0zJTinCje0/9vq94jDrcNVJVywvnv3Uoocvj1XfhtK3CgJlJ7kv6s
+         kietk+Z/uGY0azcm6ibQRGBCfTDXpMVgPmhW/+S4BpsRLxagPs7IkptMjw41X/E8uTSw
+         e4Ibf1ZrfUuSNZ2jTVPNSGCgollYGO6fT4T4WSEpWdki8HaHFlSlC624yPH8an9rzthn
+         2a4WYFCwQZehWDJc2Ny4oxAQO5+z+Ai2beVTH6mD6wnDY0tXD4YuEK7jujojNI/E11Wa
+         0/wA==
+X-Gm-Message-State: AOAM532fGzfClCYUDNaMBc50LKhJRygwlSOljBQZElnXNTNMgPpwX84m
+        8KcBM7C77Nlpuy/pS93adiI=
+X-Google-Smtp-Source: ABdhPJzY3uAiYtA4LfrX2NA1I1SshSYh1OS5jFu+t6tIvyfeWGFxeYqRFKVjW34g5zTls/k2sPrXxQ==
+X-Received: by 2002:a63:e802:: with SMTP id s2mr3067448pgh.350.1600935970281;
+        Thu, 24 Sep 2020 01:26:10 -0700 (PDT)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id n9sm1908863pfu.163.2020.09.24.01.13.55
+        by smtp.gmail.com with ESMTPSA id bt13sm1671051pjb.23.2020.09.24.01.26.07
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 24 Sep 2020 01:13:58 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 17:13:48 +0900
-Message-ID: <m2imc37fsz.wl-thehajime@gmail.com>
+        Thu, 24 Sep 2020 01:26:09 -0700 (PDT)
+Date:   Thu, 24 Sep 2020 17:26:03 +0900
+Message-ID: <m2h7rn7f8k.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     anton.ivanov@cambridgegreys.com
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
@@ -56,10 +56,10 @@ Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         tavi@cs.pub.ro
 Subject: Re: [RFC v6 01/21] um: split build in kernel and host parts
-In-Reply-To: <db162a9f-f9b0-dde3-4bda-b2993f5dc7c9@cambridgegreys.com>
+In-Reply-To: <738c23cc-7c19-90b8-c0d3-1a56ad3fb3e3@cambridgegreys.com>
 References: <cover.1600922528.git.thehajime@gmail.com>
         <034e4235086fceb43659c679770b7088e974f5d7.1600922528.git.thehajime@gmail.com>
-        <db162a9f-f9b0-dde3-4bda-b2993f5dc7c9@cambridgegreys.com>
+        <738c23cc-7c19-90b8-c0d3-1a56ad3fb3e3@cambridgegreys.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,9 +68,12 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Thu, 24 Sep 2020 16:36:59 +0900,
+On Thu, 24 Sep 2020 16:33:49 +0900,
 Anton Ivanov wrote:
 
+> > The host build part has been implemented in tools/um so that we can
+> > reuse the available host build infrastructure.
+> > 
 > > The patch also changes the UML build invocation, if before
 > > 
 > >   $ make ARCH=um defconfig
@@ -79,26 +82,10 @@ Anton Ivanov wrote:
 > > was generating the executable now this only generates the relocatable
 > > object.
 > 
-> It also fails now.
-> 
-> 
-> ERROR: modpost: "memmove" [drivers/net/slip/slhc.ko] undefined!
-> ERROR: modpost: "memset" [drivers/net/ppp/ppp_generic.ko] undefined!
-> ERROR: modpost: "memset" [drivers/net/tun.ko] undefined!
-> ERROR: modpost: "memmove" [drivers/block/loop.ko] undefined!
-> ERROR: modpost: "memset" [drivers/block/loop.ko] undefined!
-> ERROR: modpost: "memset" [fs/autofs/autofs4.ko] undefined!
-> ERROR: modpost: "memset" [fs/isofs/isofs.ko] undefined!
-> ERROR: modpost: "memset" [fs/binfmt_misc.ko] undefined!
-> make[1]: *** [scripts/Makefile.modpost:111: Module.symvers] Error 1
-> make[1]: *** Deleting file 'Module.symvers'
-> make: *** [Makefile:1388: modules] Error 2
-> make: *** Waiting for unfinished jobs....
+> This will break packaging in all distributions. We need to figure out an alternative way which is backward compatible with their builds.
 
-
-Thanks for the review, I found this is a regression of patch 03/21,
-364a2fc126e5 um: move arch/um/os-Linux dir to tools/um/uml
-
-I will try to find a fix.
+Hmm, I understand the situation.
+We may have to put additional steps after generating the relocatable
+object in arch/um/Makefile.
 
 -- Hajime
