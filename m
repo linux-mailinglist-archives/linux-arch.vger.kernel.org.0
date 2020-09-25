@@ -2,56 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC11278009
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 07:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527702780CF
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 08:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbgIYFxv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 25 Sep 2020 01:53:51 -0400
-Received: from mail.hlgd.gob.ec ([181.112.154.212]:56746 "EHLO
-        mail.hlgd.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgIYFxv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Sep 2020 01:53:51 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hlgd.gob.ec (Postfix) with ESMTP id 713B834C7CEB;
-        Thu, 24 Sep 2020 22:34:54 -0500 (-05)
-Received: from mail.hlgd.gob.ec ([127.0.0.1])
-        by localhost (mail.hlgd.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id XITady9usWBG; Thu, 24 Sep 2020 22:34:54 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hlgd.gob.ec (Postfix) with ESMTP id 7985834C7C5D;
-        Thu, 24 Sep 2020 22:34:33 -0500 (-05)
-X-Virus-Scanned: amavisd-new at hlgd.gob.ec
-Received: from mail.hlgd.gob.ec ([127.0.0.1])
-        by localhost (mail.hlgd.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BtaOcK6MLvOL; Thu, 24 Sep 2020 22:34:33 -0500 (-05)
-Received: from [10.123.39.92] (unknown [105.12.6.205])
-        by mail.hlgd.gob.ec (Postfix) with ESMTPSA id CC3B734C7747;
-        Thu, 24 Sep 2020 22:33:17 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727063AbgIYGnP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 02:43:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726990AbgIYGnP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Sep 2020 02:43:15 -0400
+Received: from kernel.org (unknown [87.71.73.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 648B621D91;
+        Fri, 25 Sep 2020 06:43:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601016194;
+        bh=w9IKlZIfJMsHxegJ+VLXCONApnJkHjt/WLrJovIxo84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gp4/PTjOTCt6wK+y6cBEuicvnrMX77A7MiRNbWPoUrNLDFWXc7dXI8MhLKiFWXqsv
+         W10CVzH2Sh5bikH6aMEPT2GD6WMerz6IjUQAM+CvT/52Z2l6KeVLCZlvbVQ+NG092g
+         JDBOaIbH10dUGBs84yFpT+eEft/TvzNhegpH41cU=
+Date:   Fri, 25 Sep 2020 09:42:57 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20200925064257.GX2142832@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924193428.6642e0cc3436bb67ddf8024a@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: spende von 2,000,000 euro
-To:     Recipients <vanessa.ramirez@hlgd.gob.ec>
-From:   ''Tayeb souami'' <vanessa.ramirez@hlgd.gob.ec>
-Date:   Fri, 25 Sep 2020 05:33:08 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20200925033317.CC3B734C7747@mail.hlgd.gob.ec>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200924193428.6642e0cc3436bb67ddf8024a@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Sep 24, 2020 at 07:34:28PM -0700, Andrew Morton wrote:
+> On Thu, 24 Sep 2020 16:28:58 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > Hi,
+> > 
+> > This is an implementation of "secret" mappings backed by a file descriptor. 
+> > I've dropped the boot time reservation patch for now as it is not strictly
+> > required for the basic usage and can be easily added later either with or
+> > without CMA.
+> > 
+> > ...
+> > 
+> > The file descriptor backing secret memory mappings is created using a
+> > dedicated memfd_secret system call The desired protection mode for the
+> > memory is configured using flags parameter of the system call. The mmap()
+> > of the file descriptor created with memfd_secret() will create a "secret"
+> > memory mapping. The pages in that mapping will be marked as not present in
+> > the direct map and will have desired protection bits set in the user page
+> > table. For instance, current implementation allows uncached mappings.
+> > 
+> > Although normally Linux userspace mappings are protected from other users, 
+> > such secret mappings are useful for environments where a hostile tenant is
+> > trying to trick the kernel into giving them access to other tenants
+> > mappings.
+> > 
+> > Additionally, the secret mappings may be used as a mean to protect guest
+> > memory in a virtual machine host.
+> > 
+> > For demonstration of secret memory usage we've created a userspace library
+> > [1] that does two things: the first is act as a preloader for openssl to
+> 
+> I can find no [1].
 
-Hallo mein lieber Freund
-Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
+Oops, sorry. It's
 
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/secret-memory-preloader.git/
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+> I'm not a fan of the enumerated footnote thing.  Why not inline the url
+> right here so readers don't need to jump around?
+> 
+> 
 
-Bitte kontaktieren Sie mich über diese E-Mail: Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-Herr Tayeb Souami
+-- 
+Sincerely yours,
+Mike.
