@@ -2,216 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056E5278C37
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 17:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D455278C17
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 17:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729159AbgIYPM1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Sep 2020 11:12:27 -0400
-Received: from mga04.intel.com ([192.55.52.120]:18685 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728487AbgIYPM1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 25 Sep 2020 11:12:27 -0400
-IronPort-SDR: kubREooG0rEYqaTGxHRZQzTC/zynmWfmrNRYdk/xqZJ6mb/vuzXnXME76tItFFGbFdrccdK9DJ
- E1HO0vZpE28w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="158942349"
-X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
-   d="scan'208";a="158942349"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:57:30 -0700
-IronPort-SDR: MR86CdIhQuuL8dldgPZoImheQXatUVenuFAE0lvdaMHi1mvUBOAYCUhMxdCZC9QRFUlYKgMsxi
- RqWyu8YvGGjg==
-X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
-   d="scan'208";a="487499254"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:57:29 -0700
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1729239AbgIYPH0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 11:07:26 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50581 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729152AbgIYPGW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Sep 2020 11:06:22 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Sep 2020 11:06:20 EDT
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6C28D580762;
+        Fri, 25 Sep 2020 10:57:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 25 Sep 2020 10:57:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=tBfuOWmQyjKgArCfu4khNo2TUG7
+        Jq21FgCLcBIcnmPM=; b=OofIQppgkot+WhAGmGPKk5hZgjNlpN1ZlHwJkZhHUT7
+        KzQ9a4UKLvBtvt6IoY28ep/w/+2zSquvjNGRBmkSersamyUPK4mq6bGc213GAiGs
+        6eeA6co4G2jngyV6y9+g8szoci4GiiwwXywXX2pXq0HGjzmMhlmRWxQ85LK/DlDy
+        irsPbph5wkukocpS6KgwRtiTKpYoXd3eKdxCN9qwKIkQcRRXIio+zFQ2SjqkppTg
+        SNQPkGiduZegcLFBIHP5gJ/Op/FSZLeDDXJiOr9hfVgoldvcVMrRECA9TV6Wq7zO
+        8FAbll8jR/Sd8TZyP6RpX6gZdv/A69N8+b8xGORjw1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=tBfuOW
+        mQyjKgArCfu4khNo2TUG7Jq21FgCLcBIcnmPM=; b=O2AlydY1ltQyDVNghirgyE
+        d0O51zrG8EUimzMadviff/NiqC0auMDDpsNj82EjtYhLCHLnvp4ul7cmJcKB4oic
+        8GyaGwvleCXSsdBrsydeqkvzbq2T7kD4/ki04+EPu9S3o67WbG3C4srDADzAbfLV
+        SaqsEs/JPQPxAl+TMoyLW00k6FlCJFMhhZSC9xeH5+0jlcUcku9NsJuXufMDdzoq
+        zdAtNnQpSuuO9acwwrKLSyqcC1vJ24Bg4hY3bq8wGRJsi/GvmWV6uSzubM/akmk0
+        XCtdH3b4xnADHi4BE95Cgt9gxaWKV/9k1KSsSHPJtWhz0FVMgsaL4L1E5bop9FyA
+        ==
+X-ME-Sender: <xms:UwVuXzT2_EVK-X89sY8bB0QEc5kSSYKtd5Y6-1axvefCEYWOlYSnYA>
+    <xme:UwVuX0yozWkEYrLjnjNMdRGhiQbd_yK2RWC7ovDaSPkcaNL6mvOJ2S11sWTDI9fTG
+    93ab4J4YjRsXoIH6_s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddtgdekudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghhohcu
+    tehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrfgrth
+    htvghrnhepgeekfeejgeektdejgfefudelkeeuteejgefhhfeugffffeelheegieefvdfg
+    tefhnecukfhppedukeegrdduieejrddvtddruddvjeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:UwVuX41INdcWU29T0AMGhJaB3HJIGlhdpwpZMI-KwyruwPc6EXwYOw>
+    <xmx:UwVuXzD-ve1UN48X78PrtetY1smAql28prAO4tEFqGl7ymEh84gqxQ>
+    <xmx:UwVuX8geyBzOSq6I0Ijh-k5-hQ3NuL4eld4Pjyi37IJqiLjeZx6tRA>
+    <xmx:VQVuX1Bsar3AUsWBYtFGXXzyHoYMRcAzPxIbRAmmT678sqzqCjgIfI7lyA7qd_3J>
+Received: from cisco (184-167-020-127.res.spectrum.com [184.167.20.127])
+        by mail.messagingengine.com (Postfix) with ESMTPA id B8B0B328005D;
+        Fri, 25 Sep 2020 10:57:18 -0400 (EDT)
+Date:   Fri, 25 Sep 2020 08:57:17 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v13 24/26] x86/cet/shstk: Handle thread shadow stack
-Date:   Fri, 25 Sep 2020 07:56:47 -0700
-Message-Id: <20200925145649.5438-25-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200925145649.5438-1-yu-cheng.yu@intel.com>
-References: <20200925145649.5438-1-yu-cheng.yu@intel.com>
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200925145717.GA284424@cisco>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
+ <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
+ <20200925095029.GX2628@hirez.programming.kicks-ass.net>
+ <20200925103114.GA7407@C02TD0UTHF1T.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200925103114.GA7407@C02TD0UTHF1T.local>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The kernel allocates (and frees on thread exit) a new shadow stack for a
-pthread child.
+On Fri, Sep 25, 2020 at 11:31:14AM +0100, Mark Rutland wrote:
+> Hi,
+> 
+> Sorry to come to this so late; I've been meaning to provide feedback on
+> this for a while but have been indisposed for a bit due to an injury.
+> 
+> On Fri, Sep 25, 2020 at 11:50:29AM +0200, Peter Zijlstra wrote:
+> > On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
+> > > On 25.09.20 09:41, Peter Zijlstra wrote:
+> > > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> > > >> From: Mike Rapoport <rppt@linux.ibm.com>
+> > > >>
+> > > >> Removing a PAGE_SIZE page from the direct map every time such page is
+> > > >> allocated for a secret memory mapping will cause severe fragmentation of
+> > > >> the direct map. This fragmentation can be reduced by using PMD-size pages
+> > > >> as a pool for small pages for secret memory mappings.
+> > > >>
+> > > >> Add a gen_pool per secretmem inode and lazily populate this pool with
+> > > >> PMD-size pages.
+> > > > 
+> > > > What's the actual efficacy of this? Since the pmd is per inode, all I
+> > > > need is a lot of inodes and we're in business to destroy the directmap,
+> > > > no?
+> > > > 
+> > > > Afaict there's no privs needed to use this, all a process needs is to
+> > > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+> > > > page will utterly destroy the direct map.
+> > > > 
+> > > > I really don't like this, at all.
+> > > 
+> > > As I expressed earlier, I would prefer allowing allocation of secretmem
+> > > only from a previously defined CMA area. This would physically locally
+> > > limit the pain.
+> > 
+> > Given that this thing doesn't have a migrate hook, that seems like an
+> > eminently reasonable contraint. Because not only will it mess up the
+> > directmap, it will also destroy the ability of the page-allocator /
+> > compaction to re-form high order blocks by sprinkling holes throughout.
+> > 
+> > Also, this is all very close to XPFO, yet I don't see that mentioned
+> > anywhere.
+> 
+> Agreed. I think if we really need something like this, something between
+> XPFO and DEBUG_PAGEALLOC would be generally better, since:
 
-    It is possible for the kernel to complete the clone syscall and set the
-    child's shadow stack pointer to NULL and let the child thread allocate
-    a shadow stack for itself.  There are two issues in this approach: It
-    is not compatible with existing code that does inline syscall and it
-    cannot handle signals before the child can successfully allocate a
-    shadow stack.
+Perhaps we can brainstorm on this? XPFO has mostly been abandoned
+because there's no good/safe way to make it faster. There was work on
+eliminating TLB flushes, but that waters down the protection. When I
+was last thinking about it in anger, it just seemed like it was
+destined to be slow, especially on $large_num_cores machines, since
+you have to flush everyone else's map too.
 
-A 64-bit shadow stack has a size of min(RLIMIT_STACK, 4 GB).  A compat-mode
-thread shadow stack has a size of 1/4 min(RLIMIT_STACK, 4 GB).  This allows
-more threads to run in a 32-bit address space.
+I think the idea of "opt in to XPFO" is mostly attractive because then
+people only have to pay the slowness cost for memory they really care
+about. But if there's some way to make XPFO, or some alternative
+design, that may be better.
 
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
----
-v10:
-- Limit shadow stack size to 4 GB.
-
- arch/x86/include/asm/cet.h         |  3 ++
- arch/x86/include/asm/mmu_context.h |  3 ++
- arch/x86/kernel/cet.c              | 44 ++++++++++++++++++++++++++++++
- arch/x86/kernel/process.c          |  7 +++++
- 4 files changed, 57 insertions(+)
-
-diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index 73435856ce54..ec4b5e62d0ce 100644
---- a/arch/x86/include/asm/cet.h
-+++ b/arch/x86/include/asm/cet.h
-@@ -18,12 +18,15 @@ struct cet_status {
- 
- #ifdef CONFIG_X86_CET
- int cet_setup_shstk(void);
-+int cet_setup_thread_shstk(struct task_struct *p, unsigned long clone_flags);
- void cet_disable_shstk(void);
- void cet_free_shstk(struct task_struct *p);
- int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp);
- void cet_restore_signal(struct sc_ext *sc);
- int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
- #else
-+static inline int cet_setup_thread_shstk(struct task_struct *p,
-+					 unsigned long clone_flags) { return 0; }
- static inline void cet_disable_shstk(void) {}
- static inline void cet_free_shstk(struct task_struct *p) {}
- static inline void cet_restore_signal(struct sc_ext *sc) { return; }
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index d98016b83755..ceb593e405e1 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -11,6 +11,7 @@
- 
- #include <asm/tlbflush.h>
- #include <asm/paravirt.h>
-+#include <asm/cet.h>
- #include <asm/debugreg.h>
- 
- extern atomic64_t last_mm_ctx_id;
-@@ -142,6 +143,8 @@ do {						\
- #else
- #define deactivate_mm(tsk, mm)			\
- do {						\
-+	if (!tsk->vfork_done)			\
-+		cet_free_shstk(tsk);		\
- 	load_gs_index(0);			\
- 	loadsegment(fs, 0);			\
- } while (0)
-diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-index 51ddd17aee8f..b285c726bb88 100644
---- a/arch/x86/kernel/cet.c
-+++ b/arch/x86/kernel/cet.c
-@@ -172,6 +172,50 @@ int cet_setup_shstk(void)
- 	return 0;
- }
- 
-+int cet_setup_thread_shstk(struct task_struct *tsk, unsigned long clone_flags)
-+{
-+	unsigned long addr, size;
-+	struct cet_user_state *state;
-+	struct cet_status *cet = &tsk->thread.cet;
-+
-+	if (!cet->shstk_size)
-+		return 0;
-+
-+	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
-+		return 0;
-+
-+	state = get_xsave_addr(&tsk->thread.fpu.state.xsave,
-+			       XFEATURE_CET_USER);
-+
-+	if (!state)
-+		return -EINVAL;
-+
-+	/* Cap shadow stack size to 4 GB */
-+	size = min(rlimit(RLIMIT_STACK), 1UL << 32);
-+
-+	/*
-+	 * Compat-mode pthreads share a limited address space.
-+	 * If each function call takes an average of four slots
-+	 * stack space, we need 1/4 of stack size for shadow stack.
-+	 */
-+	if (in_compat_syscall())
-+		size /= 4;
-+	size = round_up(size, PAGE_SIZE);
-+	addr = alloc_shstk(size, 0);
-+
-+	if (IS_ERR_VALUE(addr)) {
-+		cet->shstk_base = 0;
-+		cet->shstk_size = 0;
-+		return PTR_ERR((void *)addr);
-+	}
-+
-+	fpu__prepare_write(&tsk->thread.fpu);
-+	state->user_ssp = (u64)(addr + size);
-+	cet->shstk_base = addr;
-+	cet->shstk_size = size;
-+	return 0;
-+}
-+
- void cet_disable_shstk(void)
- {
- 	struct cet_status *cet = &current->thread.cet;
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index ff3b44d6740b..67632ba893b7 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -110,6 +110,7 @@ void exit_thread(struct task_struct *tsk)
- 
- 	free_vm86(t);
- 
-+	cet_free_shstk(tsk);
- 	fpu__drop(fpu);
- }
- 
-@@ -182,6 +183,12 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 	if (clone_flags & CLONE_SETTLS)
- 		ret = set_new_tls(p, tls);
- 
-+#ifdef CONFIG_X86_64
-+	/* Allocate a new shadow stack for pthread */
-+	if (!ret)
-+		ret = cet_setup_thread_shstk(p, clone_flags);
-+#endif
-+
- 	if (!ret && unlikely(test_tsk_thread_flag(current, TIF_IO_BITMAP)))
- 		io_bitmap_share(p);
- 
--- 
-2.21.0
-
+Tycho
