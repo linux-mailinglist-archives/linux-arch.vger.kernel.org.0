@@ -2,88 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24DE277A36
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Sep 2020 22:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036C4277DF9
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 04:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbgIXU3w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Sep 2020 16:29:52 -0400
-Received: from [125.140.134.231] ([125.140.134.231]:59260 "EHLO
-        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726281AbgIXU3w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Sep 2020 16:29:52 -0400
-Received: from User ([185.191.231.247]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
-         Fri, 25 Sep 2020 05:26:31 +0900
-Reply-To: <samthong5555@yahoo.com>
-From:   "SAM THONG" <samthong5555@gmail.com>
-Subject: Business Acquisition 1
-Date:   Thu, 24 Sep 2020 13:26:31 -0700
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+        id S1726764AbgIYCec (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Sep 2020 22:34:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726448AbgIYCec (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 24 Sep 2020 22:34:32 -0400
+Received: from X1 (unknown [104.245.68.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6CF7620888;
+        Fri, 25 Sep 2020 02:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601001271;
+        bh=Smg4DQZKLT8m1LXboOjRbYbEEA4933QtuIJr9GOx1d4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t2Am+bOL7aQc+oLElXbYFnp8Y1wlGgthaRTiSGvzkHwzblFnwyTLhHkGuKwh6cPPK
+         dGNyh6ea1G8zhcYz+2jZ/HAlJJzZS2Hb5uMncrKXCFHO9WgB/ShnWeWBcyoD4aVexB
+         fTMs8EfOHnI33GKShzqA790tDOYNu8QPGgMsLH84=
+Date:   Thu, 24 Sep 2020 19:34:28 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-Id: <20200924193428.6642e0cc3436bb67ddf8024a@linux-foundation.org>
+In-Reply-To: <20200924132904.1391-1-rppt@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <WIN-DAONO245HJFyjE200e70a04@WIN-DAONO245HJF>
-X-OriginalArrivalTime: 24 Sep 2020 20:26:31.0413 (UTC) FILETIME=[FD36BA50:01D692B0]
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, 24 Sep 2020 16:28:58 +0300 Mike Rapoport <rppt@kernel.org> wrote:
 
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Hi,
+> 
+> This is an implementation of "secret" mappings backed by a file descriptor. 
+> I've dropped the boot time reservation patch for now as it is not strictly
+> required for the basic usage and can be easily added later either with or
+> without CMA.
+> 
+> ...
+> 
+> The file descriptor backing secret memory mappings is created using a
+> dedicated memfd_secret system call The desired protection mode for the
+> memory is configured using flags parameter of the system call. The mmap()
+> of the file descriptor created with memfd_secret() will create a "secret"
+> memory mapping. The pages in that mapping will be marked as not present in
+> the direct map and will have desired protection bits set in the user page
+> table. For instance, current implementation allows uncached mappings.
+> 
+> Although normally Linux userspace mappings are protected from other users, 
+> such secret mappings are useful for environments where a hostile tenant is
+> trying to trick the kernel into giving them access to other tenants
+> mappings.
+> 
+> Additionally, the secret mappings may be used as a mean to protect guest
+> memory in a virtual machine host.
+> 
+> For demonstration of secret memory usage we've created a userspace library
+> [1] that does two things: the first is act as a preloader for openssl to
 
-Dear sir
+I can find no [1].
 
-Our underwriter company is seeking the attention of genuine and reliable persons, companies
-
-who are indeed in need of funds as investment capital or business expansion in form of a
-
-direct loan to partner with us and benefit in our new Loan and Project funding programs.
-
-
-
-We offer flexible loans and funding for various projects at very affordable low interest
-
-rate of 3% annually for a period of 1-15 years on Non collateral loan/funding . We offer
-
-loan/funding from a minimum of Euro ? / USD$ 1 Million to Euro ? / USD$ 1 Billion. Max,
-
-depending on the nature of business/project.
-
-We are currently funding for:-
-
-
-
-* Starting up a Franchise
-
-* Business Acquisition
-
-* Business Expansion
-
-* Commercial Real Estate purchase
-
-* Consultancy and Contract Execution, Marine , ETC.
-
-
-
-Kindly get in touch for further details and procedure. samthong5555@yahoo.com 
-
-
-
-Respectfully,
-
-
-SAM THONG
-
-
-
-
-
-
-
-	
-
+I'm not a fan of the enumerated footnote thing.  Why not inline the url
+right here so readers don't need to jump around?
 
 
