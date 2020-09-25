@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46147278B83
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 16:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89327278B7D
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 16:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbgIYO6R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Sep 2020 10:58:17 -0400
+        id S1729157AbgIYO6Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 10:58:16 -0400
 Received: from mga07.intel.com ([134.134.136.100]:47916 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729121AbgIYO6O (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1729123AbgIYO6O (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Fri, 25 Sep 2020 10:58:14 -0400
-IronPort-SDR: Oe46mJDGs+3qY9GgVe5mGiqMh5b6dSsZW6RaJzuvRb0MjiOecPx3Ycr1SyUF4osjozSt6BNT1i
- KS53JoKwvprA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="225704476"
+IronPort-SDR: MrXJ7xGY8+7ECUF0FjZFGr/TEL082SvcJdOiJZUsErwWsUlW6lZ+3F5783LT4MXxClGJUtoOVP
+ 62hwNZ7FctYQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="225704482"
 X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
-   d="scan'208";a="225704476"
+   d="scan'208";a="225704482"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:58:13 -0700
-IronPort-SDR: dZdetEM4DRg4Hr3m0uJ4dfSizhMqgJIu94nv7NFPov8SDaS6Butg10uJnfPMdKSCpqlxx8PNcf
- FomTkBPzAl2g==
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:58:14 -0700
+IronPort-SDR: dfbruIsKSdLkIzJd2sNrV54uUbD038MUuLRSp0Cl1fv5L55B1OtnAuoPQEM4ZkLFx7Fcd8WGtj
+ 9ug7hOcugZ5g==
 X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
-   d="scan'208";a="512916957"
+   d="scan'208";a="512916962"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:58:13 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -54,9 +54,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v13 1/8] x86/cet/ibt: Add Kconfig option for user-mode Indirect Branch Tracking
-Date:   Fri, 25 Sep 2020 07:57:57 -0700
-Message-Id: <20200925145804.5821-2-yu-cheng.yu@intel.com>
+Subject: [PATCH v13 2/8] x86/cet/ibt: User-mode Indirect Branch Tracking support
+Date:   Fri, 25 Sep 2020 07:57:58 -0700
+Message-Id: <20200925145804.5821-3-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200925145804.5821-1-yu-cheng.yu@intel.com>
 References: <20200925145804.5821-1-yu-cheng.yu@intel.com>
@@ -66,56 +66,176 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce Kconfig option X86_BRANCH_TRACKING_USER.
-
-Indirect Branch Tracking (IBT) provides protection against CALL-/JMP-
-oriented programming attacks.  It is active when the kernel has this
-feature enabled, and the processor and the application support it.
-When this feature is enabled, legacy non-IBT applications continue to
-work, but without IBT protection.
+Introduce user-mode Indirect Branch Tracking (IBT) support.  Update setup
+routines to include IBT.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
-v13:
-- Update help text, and change default to N.
-- Change X86_INTEL_* to X86_*.
-
 v10:
-- Change build-time CET check to config depends on.
+- Change no_cet_ibt to no_user_ibt.
 
- arch/x86/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+v9:
+- Change cpu_feature_enabled() to static_cpu_has().
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4b28a0ce4594..15c7f2606c9d 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1966,6 +1966,25 @@ config X86_SHADOW_STACK_USER
+v2:
+- Change noibt to no_cet_ibt.
+
+ arch/x86/include/asm/cet.h                    |  3 ++
+ arch/x86/include/asm/disabled-features.h      |  8 ++++-
+ arch/x86/kernel/cet.c                         | 33 +++++++++++++++++++
+ arch/x86/kernel/cpu/common.c                  | 17 ++++++++++
+ .../arch/x86/include/asm/disabled-features.h  |  8 ++++-
+ 5 files changed, 67 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+index 16870e5bc8eb..3a1cba579cb2 100644
+--- a/arch/x86/include/asm/cet.h
++++ b/arch/x86/include/asm/cet.h
+@@ -15,6 +15,7 @@ struct cet_status {
+ 	unsigned long	shstk_base;
+ 	unsigned long	shstk_size;
+ 	unsigned int	locked:1;
++	unsigned int	ibt_enabled:1;
+ };
  
- 	  If unsure, say N.
+ #ifdef CONFIG_X86_CET
+@@ -26,6 +27,8 @@ void cet_free_shstk(struct task_struct *p);
+ int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp);
+ void cet_restore_signal(struct sc_ext *sc);
+ int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
++int cet_setup_ibt(void);
++void cet_disable_ibt(void);
+ #else
+ static inline int prctl_cet(int option, u64 arg2) { return -EINVAL; }
+ static inline int cet_setup_thread_shstk(struct task_struct *p,
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index edac76ed75e7..e7096a1e2698 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -62,6 +62,12 @@
+ #define DISABLE_SHSTK	(1<<(X86_FEATURE_SHSTK & 31))
+ #endif
  
-+config X86_BRANCH_TRACKING_USER
-+	prompt "Intel Indirect Branch Tracking for user-mode"
-+	def_bool n
-+	depends on CPU_SUP_INTEL && X86_64
-+	depends on $(cc-option,-fcf-protection)
-+	select X86_CET
-+	help
-+	  Indirect Branch Tracking (IBT) provides protection against
-+	  CALL-/JMP-oriented programming attacks.  It is active when
-+	  the kernel has this feature enabled, and the processor and
-+	  the application support it.  When this feature is enabled,
-+	  legacy non-IBT applications continue to work, but without
-+	  IBT protection.
-+	  Support for this feature is only known to be present on
-+	  processors released in 2020 or later.  CET features are also
-+	  known to increase kernel text size by 3.7 KB.
++#ifdef CONFIG_X86_BRANCH_TRACKING_USER
++#define DISABLE_IBT	0
++#else
++#define DISABLE_IBT	(1<<(X86_FEATURE_IBT & 31))
++#endif
 +
-+	  If unsure, say N.
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -83,7 +89,7 @@
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP|DISABLE_SHSTK)
+ #define DISABLED_MASK17	0
+-#define DISABLED_MASK18	0
++#define DISABLED_MASK18	(DISABLE_IBT)
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
+ 
+ #endif /* _ASM_X86_DISABLED_FEATURES_H */
+diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+index b285c726bb88..e95fadb264f7 100644
+--- a/arch/x86/kernel/cet.c
++++ b/arch/x86/kernel/cet.c
+@@ -13,6 +13,8 @@
+ #include <linux/uaccess.h>
+ #include <linux/sched/signal.h>
+ #include <linux/compat.h>
++#include <linux/vmalloc.h>
++#include <linux/bitops.h>
+ #include <asm/msr.h>
+ #include <asm/user.h>
+ #include <asm/fpu/internal.h>
+@@ -341,3 +343,34 @@ int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
+ 
+ 	return 0;
+ }
 +
- config EFI
- 	bool "EFI runtime service support"
- 	depends on ACPI
++int cet_setup_ibt(void)
++{
++	u64 msr_val;
++
++	if (!static_cpu_has(X86_FEATURE_IBT))
++		return -EOPNOTSUPP;
++
++	start_update_msrs();
++	rdmsrl(MSR_IA32_U_CET, msr_val);
++	msr_val |= (CET_ENDBR_EN | CET_NO_TRACK_EN);
++	wrmsrl(MSR_IA32_U_CET, msr_val);
++	end_update_msrs();
++	current->thread.cet.ibt_enabled = 1;
++	return 0;
++}
++
++void cet_disable_ibt(void)
++{
++	u64 msr_val;
++
++	if (!static_cpu_has(X86_FEATURE_IBT))
++		return;
++
++	start_update_msrs();
++	rdmsrl(MSR_IA32_U_CET, msr_val);
++	msr_val &= CET_SHSTK_EN;
++	wrmsrl(MSR_IA32_U_CET, msr_val);
++	end_update_msrs();
++	current->thread.cet.ibt_enabled = 0;
++}
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 084480f975aa..909b4160a2d2 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -536,6 +536,23 @@ static __init int setup_disable_shstk(char *s)
+ __setup("no_user_shstk", setup_disable_shstk);
+ #endif
+ 
++#ifdef CONFIG_X86_BRANCH_TRACKING_USER
++static __init int setup_disable_ibt(char *s)
++{
++	/* require an exact match without trailing characters */
++	if (s[0] != '\0')
++		return 0;
++
++	if (!boot_cpu_has(X86_FEATURE_IBT))
++		return 1;
++
++	setup_clear_cpu_cap(X86_FEATURE_IBT);
++	pr_info("x86: 'no_user_ibt' specified, disabling user Branch Tracking\n");
++	return 1;
++}
++__setup("no_user_ibt", setup_disable_ibt);
++#endif
++
+ /*
+  * Some CPU features depend on higher CPUID levels, which may not always
+  * be available due to CPUID level capping or broken virtualization
+diff --git a/tools/arch/x86/include/asm/disabled-features.h b/tools/arch/x86/include/asm/disabled-features.h
+index edac76ed75e7..e7096a1e2698 100644
+--- a/tools/arch/x86/include/asm/disabled-features.h
++++ b/tools/arch/x86/include/asm/disabled-features.h
+@@ -62,6 +62,12 @@
+ #define DISABLE_SHSTK	(1<<(X86_FEATURE_SHSTK & 31))
+ #endif
+ 
++#ifdef CONFIG_X86_BRANCH_TRACKING_USER
++#define DISABLE_IBT	0
++#else
++#define DISABLE_IBT	(1<<(X86_FEATURE_IBT & 31))
++#endif
++
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -83,7 +89,7 @@
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP|DISABLE_SHSTK)
+ #define DISABLED_MASK17	0
+-#define DISABLED_MASK18	0
++#define DISABLED_MASK18	(DISABLE_IBT)
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
+ 
+ #endif /* _ASM_X86_DISABLED_FEATURES_H */
 -- 
 2.21.0
 
