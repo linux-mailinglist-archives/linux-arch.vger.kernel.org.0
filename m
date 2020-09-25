@@ -2,31 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 527702780CF
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 08:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2048A2781D7
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 09:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgIYGnP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Sep 2020 02:43:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33466 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726990AbgIYGnP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 25 Sep 2020 02:43:15 -0400
-Received: from kernel.org (unknown [87.71.73.56])
+        id S1727463AbgIYHmB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 03:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727068AbgIYHl7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Sep 2020 03:41:59 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F9C0613CE;
+        Fri, 25 Sep 2020 00:41:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bEXaXvm5X4dVutGWrM3SYTUTdFiVFeL65RE2m3et63M=; b=AqV8/Bz0cSC83Rc4UodMLetV/b
+        H4Q0vcq/B2nX6a/1NGaWGgPy9xNSn1LvND0PyUTXFyVQQDT5oLPB4R8c7F6DSJkAKF4WKQIGFUdkp
+        udYIlykogxqOjzXHo0dTH45OCQejslQx2zAkvYqsHkMfv2CW07yzU8ffQkFQ4Dd7EdxOV3+i8mUKa
+        njAOTD+HbtsvbRxCq0XxlyIIOyW7fVHnik1sUzOd/1V41Nkhyz5aKi+ibCKKW9+5ewaVOy4aE5Mzo
+        VDZRWpKNxXaa+GC031A6g07PAtFVpr0wW25aGZhIH14Nqkbd8hTliMwkhW/hIGQa2kxzNPWzmWLq7
+        ov9vR0rA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kLiMF-0003cu-I3; Fri, 25 Sep 2020 07:41:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 648B621D91;
-        Fri, 25 Sep 2020 06:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601016194;
-        bh=w9IKlZIfJMsHxegJ+VLXCONApnJkHjt/WLrJovIxo84=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gp4/PTjOTCt6wK+y6cBEuicvnrMX77A7MiRNbWPoUrNLDFWXc7dXI8MhLKiFWXqsv
-         W10CVzH2Sh5bikH6aMEPT2GD6WMerz6IjUQAM+CvT/52Z2l6KeVLCZlvbVQ+NG092g
-         JDBOaIbH10dUGBs84yFpT+eEft/TvzNhegpH41cU=
-Date:   Fri, 25 Sep 2020 09:42:57 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59EEE302753;
+        Fri, 25 Sep 2020 09:41:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B942B20104626; Fri, 25 Sep 2020 09:41:25 +0200 (CEST)
+Date:   Fri, 25 Sep 2020 09:41:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -45,7 +57,6 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
         Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
@@ -54,63 +65,40 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org
-Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20200925064257.GX2142832@kernel.org>
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
 References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924193428.6642e0cc3436bb67ddf8024a@linux-foundation.org>
+ <20200924132904.1391-6-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200924193428.6642e0cc3436bb67ddf8024a@linux-foundation.org>
+In-Reply-To: <20200924132904.1391-6-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 24, 2020 at 07:34:28PM -0700, Andrew Morton wrote:
-> On Thu, 24 Sep 2020 16:28:58 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > Hi,
-> > 
-> > This is an implementation of "secret" mappings backed by a file descriptor. 
-> > I've dropped the boot time reservation patch for now as it is not strictly
-> > required for the basic usage and can be easily added later either with or
-> > without CMA.
-> > 
-> > ...
-> > 
-> > The file descriptor backing secret memory mappings is created using a
-> > dedicated memfd_secret system call The desired protection mode for the
-> > memory is configured using flags parameter of the system call. The mmap()
-> > of the file descriptor created with memfd_secret() will create a "secret"
-> > memory mapping. The pages in that mapping will be marked as not present in
-> > the direct map and will have desired protection bits set in the user page
-> > table. For instance, current implementation allows uncached mappings.
-> > 
-> > Although normally Linux userspace mappings are protected from other users, 
-> > such secret mappings are useful for environments where a hostile tenant is
-> > trying to trick the kernel into giving them access to other tenants
-> > mappings.
-> > 
-> > Additionally, the secret mappings may be used as a mean to protect guest
-> > memory in a virtual machine host.
-> > 
-> > For demonstration of secret memory usage we've created a userspace library
-> > [1] that does two things: the first is act as a preloader for openssl to
+> Removing a PAGE_SIZE page from the direct map every time such page is
+> allocated for a secret memory mapping will cause severe fragmentation of
+> the direct map. This fragmentation can be reduced by using PMD-size pages
+> as a pool for small pages for secret memory mappings.
 > 
-> I can find no [1].
+> Add a gen_pool per secretmem inode and lazily populate this pool with
+> PMD-size pages.
 
-Oops, sorry. It's
+What's the actual efficacy of this? Since the pmd is per inode, all I
+need is a lot of inodes and we're in business to destroy the directmap,
+no?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jejb/secret-memory-preloader.git/
+Afaict there's no privs needed to use this, all a process needs is to
+stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+page will utterly destroy the direct map.
 
-> I'm not a fan of the enumerated footnote thing.  Why not inline the url
-> right here so readers don't need to jump around?
-> 
-> 
+I really don't like this, at all.
 
--- 
-Sincerely yours,
-Mike.
+IIRC Kirill looked at merging the directmap. I think he ran into
+performance issues there, but we really need something like that before
+something like this lands.
