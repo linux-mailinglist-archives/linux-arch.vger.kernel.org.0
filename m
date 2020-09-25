@@ -2,152 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F69278519
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 12:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4463F2786A3
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 14:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727151AbgIYKba (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Sep 2020 06:31:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:41500 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727044AbgIYKba (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 25 Sep 2020 06:31:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1AE91045;
-        Fri, 25 Sep 2020 03:31:28 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.16.138])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1DFE3F718;
-        Fri, 25 Sep 2020 03:31:21 -0700 (PDT)
-Date:   Fri, 25 Sep 2020 11:31:14 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20200925103114.GA7407@C02TD0UTHF1T.local>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924132904.1391-6-rppt@kernel.org>
- <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
- <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
- <20200925095029.GX2628@hirez.programming.kicks-ass.net>
+        id S1726368AbgIYMFC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 08:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728121AbgIYMFB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Sep 2020 08:05:01 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53011C0613CE
+        for <linux-arch@vger.kernel.org>; Fri, 25 Sep 2020 05:05:01 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id c8so2232319edv.5
+        for <linux-arch@vger.kernel.org>; Fri, 25 Sep 2020 05:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5lD39euqnLLWALUOK+cga3/qrcq4Set5HCzS7aBLz9o=;
+        b=TVk1aXYpVcukI07aLqVJJWZrNa+XHiGzuM4MPvew+RiTDmGFM7mkD6xbpf2RQHdZYB
+         Ds5lvFIYU6LkfnGvdvx305dEwyrg03LVHVwTpclD6F+yFOB6993TY7196ynHoYq41bvZ
+         7F93UV7AmqnPutSjw4dSNauAZoRxRp/as8GX5ENjomZh28LqG3F1l4o3BRDVrncGCgj7
+         w4PgV0EjDqUAkqTrMhdP0PW8uG4ehrFibFSmEkdgDoW9yaGk+r6ZnPRnQAiRDMqaLgBs
+         Pk3gQSxEkSYtBUTZgEFrv0Xeg3mtgJAaUvaT9mJmvg5ioEyIIan4eBctcq1U+K/cfxoR
+         o0Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5lD39euqnLLWALUOK+cga3/qrcq4Set5HCzS7aBLz9o=;
+        b=OW1PvS7isgna/+axrViV0IYFXuiGfpmIdC9F48w8QeGBDTUbKTpOAvHoJvsM16NUUO
+         ZHn55MeQnNBeZTXpYO7Ji+1kGx11Mf89sGBitx1GXLkRYPBt3An2Xq70bXdXANpAhKDX
+         eJcw6+GDAtZNc1luBApbyfQl0MS1TskaMhYxan4ZfKSxFWvVk9SVf65xztCHrATTW4FF
+         4vrYoJJNfevd5KIELgz/dPbCVYrfuMIN8TyjgZ1phOA7zyLKlq6UEnmR4r3ZIH6koh7v
+         97sDO0O5liHvPYKNiq9L1pdOwI365YVrUCuK1a61wc/ZqXQxm0HKrsmUyNleqg8jVrIW
+         G8ZQ==
+X-Gm-Message-State: AOAM531X6HUDMFNRD5qMnLqqjzTn+zupscBqd5xSNQ/gsRDtcd8inHHq
+        3hiUQwA5RAze/BZgOk8iqfFc/eIzgbIYlGe2cLAvTPdAs/4jAA==
+X-Google-Smtp-Source: ABdhPJwnpgM4iJn7rtxPcWjcDmQz1UPAaRjv3Dk26Q3B+gd19EHfI3IK5gjkFNdZBXFCS0l0CkQjzQ0mEgrdDl8lUGw=
+X-Received: by 2002:a05:6402:ca7:: with SMTP id cn7mr885045edb.143.1601035499792;
+ Fri, 25 Sep 2020 05:04:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925095029.GX2628@hirez.programming.kicks-ass.net>
+Received: by 2002:a17:906:bc4b:0:0:0:0 with HTTP; Fri, 25 Sep 2020 05:04:59
+ -0700 (PDT)
+Reply-To: nascointt@hotmail.com
+From:   Nayef Abu Sakran <larryamaechi558@gmail.com>
+Date:   Fri, 25 Sep 2020 13:04:59 +0100
+Message-ID: <CALHLwjX+_yboL5x_xAVTtXEwuJCDrExXZa5kz1Mc3bA3r6xEXA@mail.gmail.com>
+Subject: HI GD DAY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-Sorry to come to this so late; I've been meaning to provide feedback on
-this for a while but have been indisposed for a bit due to an injury.
-
-On Fri, Sep 25, 2020 at 11:50:29AM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
-> > On 25.09.20 09:41, Peter Zijlstra wrote:
-> > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
-> > >> From: Mike Rapoport <rppt@linux.ibm.com>
-> > >>
-> > >> Removing a PAGE_SIZE page from the direct map every time such page is
-> > >> allocated for a secret memory mapping will cause severe fragmentation of
-> > >> the direct map. This fragmentation can be reduced by using PMD-size pages
-> > >> as a pool for small pages for secret memory mappings.
-> > >>
-> > >> Add a gen_pool per secretmem inode and lazily populate this pool with
-> > >> PMD-size pages.
-> > > 
-> > > What's the actual efficacy of this? Since the pmd is per inode, all I
-> > > need is a lot of inodes and we're in business to destroy the directmap,
-> > > no?
-> > > 
-> > > Afaict there's no privs needed to use this, all a process needs is to
-> > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
-> > > page will utterly destroy the direct map.
-> > > 
-> > > I really don't like this, at all.
-> > 
-> > As I expressed earlier, I would prefer allowing allocation of secretmem
-> > only from a previously defined CMA area. This would physically locally
-> > limit the pain.
-> 
-> Given that this thing doesn't have a migrate hook, that seems like an
-> eminently reasonable contraint. Because not only will it mess up the
-> directmap, it will also destroy the ability of the page-allocator /
-> compaction to re-form high order blocks by sprinkling holes throughout.
-> 
-> Also, this is all very close to XPFO, yet I don't see that mentioned
-> anywhere.
-
-Agreed. I think if we really need something like this, something between
-XPFO and DEBUG_PAGEALLOC would be generally better, since:
-
-* Secretmem puts userspace in charge of kernel internals (AFAICT without
-  any ulimits?), so that seems like an avenue for malicious or buggy
-  userspace to exploit and trigger DoS, etc. The other approaches leave
-  the kernel in charge at all times, and it's a system-level choice
-  which is easier to reason about and test.
-
-* Secretmem interaction with existing ABIs is unclear. Should uaccess
-  primitives work for secretmem? If so, this means that it's not valid
-  to transform direct uaccesses in syscalls etc into accesses via the
-  linear/direct map. If not, how do we prevent syscalls? The other
-  approaches are clear that this should always work, but the kernel
-  should avoid mappings wherever possible.
-
-* The uncached option doesn't work in a number of situations, such as
-  systems which are purely cache coherent at all times, or where the
-  hypervisor has overridden attributes. The kernel cannot even know that
-  whther this works as intended. On its own this doens't solve a
-  particular problem, and I think this is a solution looking for a
-  problem.
-
-... and fundamentally, this seems like a "more security, please" option
-that is going to be abused, since everyone wants security, regardless of
-how we say it *should* be used. The few use-cases that may make sense
-(e.g. protection of ketys and/or crypto secrrets), aren't going to be
-able to rely on this (since e.g. other uses may depelete memory pools),
-so this is going to be best-effort. With all that in mind, I struggle to
-beleive that this is going to be worth the maintenance cost (e.g. with
-any issues arising from uaccess, IO, etc).
-
-Overall, I would prefer to not see this syscall in the kernel.
-
-> Further still, it has this HAVE_SECRETMEM_UNCACHED nonsense which is
-> completely unused. I'm not at all sure exposing UNCACHED to random
-> userspace is a sane idea.
-
-I agree the uncached stuff should be removed. It is at best misleading
-since the kernel can't guarantee it does what it says, I think it's
-liable to lead to issues in future (e.g. since it can cause memory
-operations to raise different exceptions relative to what they can
-today), and as above it seems like a solution looking for a problem.
-
-Thanks,
-Mark.
+Did you received the mail i send to you?
