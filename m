@@ -2,64 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 453272789CA
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 15:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2596E278A5D
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 16:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728353AbgIYNkZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Sep 2020 09:40:25 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:38487 "EHLO
+        id S1727290AbgIYOIw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 10:08:52 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:42823 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727982AbgIYNkZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Sep 2020 09:40:25 -0400
-Received: from mail-qk1-f169.google.com ([209.85.222.169]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MC3L9-1k9PMr07Gn-00CRU1; Fri, 25 Sep 2020 15:40:24 +0200
-Received: by mail-qk1-f169.google.com with SMTP id w12so2764989qki.6;
-        Fri, 25 Sep 2020 06:40:23 -0700 (PDT)
-X-Gm-Message-State: AOAM530500acsNwYCXug3/z+Zgh9+yPg2H/ioFdnWAyRBY4V5WQErZzU
-        HEqRXjSJK8zb36/LNeaKAIwQPmQnzCkjDKH9yto=
-X-Google-Smtp-Source: ABdhPJxIzKAUN9mD09+7O4OymSuZ1I/pDmcOEjpPUHVj02syVVQTEeh8QmLOAxe8V/n/N1LP9j4emlnxenewjYHzGJQ=
-X-Received: by 2002:a05:620a:15a7:: with SMTP id f7mr12935qkk.3.1601041222779;
- Fri, 25 Sep 2020 06:40:22 -0700 (PDT)
+        with ESMTP id S1726990AbgIYOIw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Sep 2020 10:08:52 -0400
+Received: from mail-qk1-f171.google.com ([209.85.222.171]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MF39S-1kF9UQ1WmW-00FT5c; Fri, 25 Sep 2020 16:08:50 +0200
+Received: by mail-qk1-f171.google.com with SMTP id o5so2815289qke.12;
+        Fri, 25 Sep 2020 07:08:50 -0700 (PDT)
+X-Gm-Message-State: AOAM5334Fo4YdJ6Nt9saVK04WZDwEdrYKtgC5zUHBPcNzjECZf5LYT/4
+        76jTHpoJ4OnOre74IousOAui3inMTUizBzE1uKY=
+X-Google-Smtp-Source: ABdhPJyQJNrHwxmkVsXimz0oF76gP4lvp54BaArHPydGBupMZdO/Llk2RLPlSSrUMgxUBOdKl5ChKrJidt7yrr6I+Kw=
+X-Received: by 2002:a05:620a:15a7:: with SMTP id f7mr135330qkk.3.1601042929071;
+ Fri, 25 Sep 2020 07:08:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200918124624.1469673-1-arnd@arndb.de> <20200919052715.GF30063@infradead.org>
-In-Reply-To: <20200919052715.GF30063@infradead.org>
+References: <20200918124624.1469673-1-arnd@arndb.de> <20200919081906.GV1551@shell.armlinux.org.uk>
+In-Reply-To: <20200919081906.GV1551@shell.armlinux.org.uk>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Sep 2020 15:40:06 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1LM8SXbzcVv1B05fdmxBZ-PA+P4m4oP1Dgc4JmR2CGMw@mail.gmail.com>
-Message-ID: <CAK8P3a1LM8SXbzcVv1B05fdmxBZ-PA+P4m4oP1Dgc4JmR2CGMw@mail.gmail.com>
+Date:   Fri, 25 Sep 2020 16:08:31 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1k9Ms8EBD-KxsGWY8LxzWqLh-E6ZaemcTMeYoRKBaQUg@mail.gmail.com>
+Message-ID: <CAK8P3a1k9Ms8EBD-KxsGWY8LxzWqLh-E6ZaemcTMeYoRKBaQUg@mail.gmail.com>
 Subject: Re: [PATCH v2 0/9] ARM: remove set_fs callers and implementation
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3NzBN9prIQYrQLxyTiAZ2qekukyha8zMOOKFTefaoN8A4cWDskU
- LvRVk2YSWJUK5ahJIHR2B7rnCU78KMisNA1U+rTagdpd9peGNaqHqHCkRwRwpCiJ9Tci10m
- 2CRQfikVzGKPTSxf+u+NGDRgVrFHdEt7bDNkLHdNPM0W26v4+rNQADfIdn5u2RJ7azhmXrV
- wKtVOCtdXtquaSPB7JA1A==
+X-Provags-ID: V03:K1:VREt9jpSAxN+6ZCKg1q3IbF75qPcjf7Y5WulEmvvT0hIK5uYjdW
+ Q399hLi/C8k1Qbou/nCIFLcwM9U1H8lUWC+bM+CGKdQjFPmx1pU/QB6+dT3MK3fNJ7pbF/c
+ ZJhCTMr6S2BWN5WP0zCMRbmq2iD/6HGgJPuLlVR8gOR5GlqSr68hU/1RqFOD1zypBS2EICN
+ qOCOFd9SH4rbyy8vv23ag==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b5RuZM+XTM4=:RUDc48Wx0DH6fMnrXUFe53
- Ifc4CzYsoWg2OCRivZd71czdBfbSdMsmpym9w7syzpV8JDeSv7YPHoJPuRSoooeRcqzRZmDDq
- 6VqdAdXExajOI7565jIWc+DsLUHMzF8IYzAHzfnZqB/p7ksIlMtya6ne2/Z9m0cMFbEmgZudZ
- LfWJ6CQmpu4B7oycrYF7UVue1z5Ztknl+96h1kD5UiTPNF0cq4qVagSyHzGwvLQuO9P5nzwtO
- 9K1wpu1qpvhu2xyQTVcHb9Q2oLSwJR1SNfs6zOTh0TfiLOAspmIXiqEzTq+TEcXnQzUNFRPyc
- CexaTEiyWUx7SFKYQcCV28/jEvTYm150H1P85aaB5K8Xgqos6tyyie887c6Usn9JtWG+/egLS
- lBdmSx1PF/wD30yUiDFWo8nXH1EBKMPL9rGRxusPKCRvL7mkFdbmnbfBmBhER3ZIv9/cntzai
- w33xWqzK9PM9ZPitW3TbgHhu6WlV5ow4CYvuFoSmU1YcwSrFvDZPuvrH5ovCyxmRf5nuAqiud
- PovdlNefEjsWbmJRUL626Jkkv3H73zELEzk1hJP6ETDYHNdZyppYgFTAVN0BK/9ACLMZAE2uU
- 5lXm1FrqkAczFZSLlUjm6byvUQmAb8aEe4lIp5OAb05+HkW9G+QX2RETs4XGmwiAHzNkPhYdc
- t7TKenHf63/bmC+w2OsVu6/toOLXrQs5o/tQ6/h6frZ1ikZdEW4OmtB6SF1k25P60Q0aqUN2w
- QSP6S9SYYyJkJlQELTJBGw2AYdSETNJOZDzLFreXzyNPCCg8RLInGZ68qmF1vCNV1BOTO5RMN
- dufYlE9dZiNsN6lmtdAFOIgJfdUMNL6UqwqNdZea5WIkly7Dj1+uQFn9ux++y2EPFU4nMMu
+X-UI-Out-Filterresults: notjunk:1;V03:K0:m8mNu48NKGs=:yCgL2qXu2cKejMmSweAnI6
+ WogDfsQGw1hh/YdPHBtk61gwsuAE+CtU6xLVb2uCYR8DSdj0/21RI0AcjfN3mHNSFDs6pgpdP
+ 8mrv5p4CrexoTDrXk6JAWFt11NV4BeUp41fCQiTWsoiomm8RhfSSgqQk2oDsWBep3b/DHFZPe
+ yzFJp+GBx8DTPhOxkheIRBSgJOr1771MnyecVSoyYdVX1u0xTXZFLdXaHSjrTYnZApfO/e+Q3
+ 8JebLg/VvyBevBdKDbGdzSPzZHLvq7rUu9otDXwMZtniKt8DAG0WYlP+HLpLjGidPERPLaRl6
+ Y+jJZICrMPqWuoJVqZxfuXg6uyBd3wdbNRAYtbncbF3GGqXWGe+JoBrN4yWhAWKLbVEpMMMkU
+ ZhwJAXMqNS5Hl3it+2u39hzA+1gBsVL5rFmykzQFT22OmT6ziJjL055Cf0JOYIV9RZMyqbUoZ
+ 6DgmZMPdXcj6Z09JhwTS6urPITC/fbQxdrn/4hXutRTPBOiEXXfcWJh50paqet74xVB15eznK
+ iQBL3XoH6m1hKD5VQzuG8SK+TEnB/jERMGHXhBQdq36Vbtr4pEHGBLC0L+3JhZrJuVhrRLxrg
+ 7IJIacvGNmu25yLvec5gy5J07plBgimsko/Hrm6ciLSU8E3whO5r/wH2SFoN6GnzNYFkGCF1F
+ wAvMnHxcaSnN7WdpYvmc7XIeSGj6/JPzn61fuXStHjRtuEIOdu97d2J2r4gldEihkSIsUIaJ0
+ fmJCBXg63f+NxE+rmLk0ju1rREncsXy64ga58zdZDyIjQAXeUUZA706aqqNJRA3v7xEhbgRzV
+ 6OfVtOTQJ89OqFcuYHbAZlebSwpKhJ2r2v65Qo9yBQOIZ0tRmyJweSrJ7MFm0v7JQTNEPd7lx
+ C+L5NxfE8korTDCLFAPl8cVFsxw7avH86w9yQh41SICfV5gaARgDWo3bN9pkkj/esVw34X9qS
+ TodH/AKDza6DVFSywUyjMynwNdRs0mKUeMXaxDdMzaN/+ueQdipI5
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 7:27 AM Christoph Hellwig <hch@infradead.org> wrote:
+On Sat, Sep 19, 2020 at 10:19 AM Russell King - ARM Linux admin
+<linux@armlinux.org.uk> wrote:
 >
 > On Fri, Sep 18, 2020 at 02:46:15PM +0200, Arnd Bergmann wrote:
 > > Hi Christoph, Russell,
@@ -72,18 +75,54 @@ On Sat, Sep 19, 2020 at 7:27 AM Christoph Hellwig <hch@infradead.org> wrote:
 > > and I have lightly tested the get_kernel_nofault infrastructure by
 > > loading the test_lockup.ko module after setting CONFIG_DEBUG_SPINLOCK.
 >
-> What is the base line?  Just the base.set_fs branch in Als tree, or do
-> you need anything from my RISC-V series?
+> I'm not too keen on always saving the syscall number, but for the gain
+> of getting rid of set_fs() I think it's worth it. However...
+>
+> I think there are some things to check - what value do you end up
+> with as the first number in /proc/self/syscall when you do:
+>
+> strace cat /proc/self/syscall
+>
+> ?
 
-I imported these additional patches from you:
+> It should be 3, not 0x900003. I suspect you're getting the latter
+> with these changes.  IIRC, task_thread_info(task)->syscall needs to
+> be the value _without_ the offset, otherwise tracing will break.
 
-e0d17576790e quota: simplify the quotactl compat handling
-b0f8a0c4046f compat: add a compat_need_64bit_alignment_fixup() helper
-ed8af9335e19 compat: lift compat_s64 and compat_u64 to <asm-generic/compat.h>
-ce526c75bbe2 uaccess: provide a generic TASK_SIZE_MAX definition
+It seems broken in different ways, depending on the combination
+of kernel and userland:
 
-I think I only actually needed the last one of those for the Arm
-patches, the other ones are dependencies for my other patches
-I have on the same branch.
+1. EABI armv5-versatile kernel, EABI Debian 5:
+$ cat /proc/self/syscall
+0 0x1500000000003 0x1500000000400 0x1500000000400 0x60000013c7800480
+0xc0008668c0112f8c 0xc0112d14c68e1f68 0xbeab06f8 0xb6e80d4c
+$ strace -f cat /proc/self/syscall
+execve("/bin/cat", ["cat", "/proc/self/syscall"], [/* 16 vars */]) =
+-1 EINTR (Interrupted system call)
+dup(2)                                  = -1 EINTR (Interrupted system call)
+write(2, "strace: exec: Interrupted system "..., 38) = -1 EINTR
+(Interrupted system call)
+exit_group(1)                           = ?
 
-      Arnd
+2. EABI kernel, OABI Debian 5:
+$ cat /proc/self/syscall
+3 0x1500000000003 0x13ccc00000400 0x1500000000400 0x60000013c7800480
+0xc0008de0c0112f8c 0xc0112d14c7313f68 0xbeed27d0 0xb6eab324
+$ strace cat /proc/self/syscall
+execve("/bin/cat", ["cat", "/proc/self/syscall"], [/* 16 vars */]) = -1090648236
+--- SIGILL (Illegal instruction) @ 0 (0) ---
++++ killed by SIGILL +++
+
+3. OABI kernel, OABI Debian 5:
+ cat /proc/self/syscall
+9437187 0x1500000000003 0x13ccc00000400 0x1500000000400 0x100060000013
+0x15000c72cff6c 0xc72cfe9000000000 0xbece27d0 0xb6f2f324
+$ strace cat /proc/self/syscall
+execve("/bin/cat", ["cat", "/proc/self/syscall"], [/* 16 vars */]) = -1095141548
+--- SIGILL (Illegal instruction) @ 0 (0) ---
++++ killed by SIGILL +++
+
+I suspect the OABI strace in Debian is broken since it crashes on
+both kernels. I'll look into fixing the output without strace first then.
+
+       Arnd
