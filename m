@@ -2,127 +2,270 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2596E278A5D
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 16:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99B5278B67
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Sep 2020 16:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727290AbgIYOIw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Sep 2020 10:08:52 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:42823 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726990AbgIYOIw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Sep 2020 10:08:52 -0400
-Received: from mail-qk1-f171.google.com ([209.85.222.171]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MF39S-1kF9UQ1WmW-00FT5c; Fri, 25 Sep 2020 16:08:50 +0200
-Received: by mail-qk1-f171.google.com with SMTP id o5so2815289qke.12;
-        Fri, 25 Sep 2020 07:08:50 -0700 (PDT)
-X-Gm-Message-State: AOAM5334Fo4YdJ6Nt9saVK04WZDwEdrYKtgC5zUHBPcNzjECZf5LYT/4
-        76jTHpoJ4OnOre74IousOAui3inMTUizBzE1uKY=
-X-Google-Smtp-Source: ABdhPJyQJNrHwxmkVsXimz0oF76gP4lvp54BaArHPydGBupMZdO/Llk2RLPlSSrUMgxUBOdKl5ChKrJidt7yrr6I+Kw=
-X-Received: by 2002:a05:620a:15a7:: with SMTP id f7mr135330qkk.3.1601042929071;
- Fri, 25 Sep 2020 07:08:49 -0700 (PDT)
+        id S1729015AbgIYO5c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Sep 2020 10:57:32 -0400
+Received: from mga04.intel.com ([192.55.52.120]:17319 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728974AbgIYO5c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 25 Sep 2020 10:57:32 -0400
+IronPort-SDR: e4qfbc6nnLP6n3SeQO3If/MfjA5Co/X74DS9erhyR4+ilZ3KRW+W3rD8yQ3NG9j338T1UTqHB4
+ 2eu54+7V13xw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="158942246"
+X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
+   d="scan'208";a="158942246"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:57:14 -0700
+IronPort-SDR: Er0JJcz2MKSigqT+baqkcjHmkETdh31Gm4Br8Y4f7TQT0ghLjTZJWwynNHKfguqa0AgEJBXoOA
+ Y8IPA7NEUiqw==
+X-IronPort-AV: E=Sophos;i="5.77,302,1596524400"; 
+   d="scan'208";a="487499128"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 07:57:13 -0700
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v13 01/26] Documentation/x86: Add CET description
+Date:   Fri, 25 Sep 2020 07:56:24 -0700
+Message-Id: <20200925145649.5438-2-yu-cheng.yu@intel.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20200925145649.5438-1-yu-cheng.yu@intel.com>
+References: <20200925145649.5438-1-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-References: <20200918124624.1469673-1-arnd@arndb.de> <20200919081906.GV1551@shell.armlinux.org.uk>
-In-Reply-To: <20200919081906.GV1551@shell.armlinux.org.uk>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Sep 2020 16:08:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1k9Ms8EBD-KxsGWY8LxzWqLh-E6ZaemcTMeYoRKBaQUg@mail.gmail.com>
-Message-ID: <CAK8P3a1k9Ms8EBD-KxsGWY8LxzWqLh-E6ZaemcTMeYoRKBaQUg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] ARM: remove set_fs callers and implementation
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VREt9jpSAxN+6ZCKg1q3IbF75qPcjf7Y5WulEmvvT0hIK5uYjdW
- Q399hLi/C8k1Qbou/nCIFLcwM9U1H8lUWC+bM+CGKdQjFPmx1pU/QB6+dT3MK3fNJ7pbF/c
- ZJhCTMr6S2BWN5WP0zCMRbmq2iD/6HGgJPuLlVR8gOR5GlqSr68hU/1RqFOD1zypBS2EICN
- qOCOFd9SH4rbyy8vv23ag==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:m8mNu48NKGs=:yCgL2qXu2cKejMmSweAnI6
- WogDfsQGw1hh/YdPHBtk61gwsuAE+CtU6xLVb2uCYR8DSdj0/21RI0AcjfN3mHNSFDs6pgpdP
- 8mrv5p4CrexoTDrXk6JAWFt11NV4BeUp41fCQiTWsoiomm8RhfSSgqQk2oDsWBep3b/DHFZPe
- yzFJp+GBx8DTPhOxkheIRBSgJOr1771MnyecVSoyYdVX1u0xTXZFLdXaHSjrTYnZApfO/e+Q3
- 8JebLg/VvyBevBdKDbGdzSPzZHLvq7rUu9otDXwMZtniKt8DAG0WYlP+HLpLjGidPERPLaRl6
- Y+jJZICrMPqWuoJVqZxfuXg6uyBd3wdbNRAYtbncbF3GGqXWGe+JoBrN4yWhAWKLbVEpMMMkU
- ZhwJAXMqNS5Hl3it+2u39hzA+1gBsVL5rFmykzQFT22OmT6ziJjL055Cf0JOYIV9RZMyqbUoZ
- 6DgmZMPdXcj6Z09JhwTS6urPITC/fbQxdrn/4hXutRTPBOiEXXfcWJh50paqet74xVB15eznK
- iQBL3XoH6m1hKD5VQzuG8SK+TEnB/jERMGHXhBQdq36Vbtr4pEHGBLC0L+3JhZrJuVhrRLxrg
- 7IJIacvGNmu25yLvec5gy5J07plBgimsko/Hrm6ciLSU8E3whO5r/wH2SFoN6GnzNYFkGCF1F
- wAvMnHxcaSnN7WdpYvmc7XIeSGj6/JPzn61fuXStHjRtuEIOdu97d2J2r4gldEihkSIsUIaJ0
- fmJCBXg63f+NxE+rmLk0ju1rREncsXy64ga58zdZDyIjQAXeUUZA706aqqNJRA3v7xEhbgRzV
- 6OfVtOTQJ89OqFcuYHbAZlebSwpKhJ2r2v65Qo9yBQOIZ0tRmyJweSrJ7MFm0v7JQTNEPd7lx
- C+L5NxfE8korTDCLFAPl8cVFsxw7avH86w9yQh41SICfV5gaARgDWo3bN9pkkj/esVw34X9qS
- TodH/AKDza6DVFSywUyjMynwNdRs0mKUeMXaxDdMzaN/+ueQdipI5
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 10:19 AM Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Fri, Sep 18, 2020 at 02:46:15PM +0200, Arnd Bergmann wrote:
-> > Hi Christoph, Russell,
-> >
-> > Here is an updated series for removing set_fs() from arch/arm,
-> > based on the previous feedback.
-> >
-> > I have tested the oabi-compat changes using the LTP tests for the three
-> > modified syscalls using an Armv7 kernel and a Debian 5 OABI user space,
-> > and I have lightly tested the get_kernel_nofault infrastructure by
-> > loading the test_lockup.ko module after setting CONFIG_DEBUG_SPINLOCK.
->
-> I'm not too keen on always saving the syscall number, but for the gain
-> of getting rid of set_fs() I think it's worth it. However...
->
-> I think there are some things to check - what value do you end up
-> with as the first number in /proc/self/syscall when you do:
->
-> strace cat /proc/self/syscall
->
-> ?
+Explain no_user_shstk/no_user_ibt kernel parameters, and introduce a new
+document on Control-flow Enforcement Technology (CET).
 
-> It should be 3, not 0x900003. I suspect you're getting the latter
-> with these changes.  IIRC, task_thread_info(task)->syscall needs to
-> be the value _without_ the offset, otherwise tracing will break.
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+v13:
+- Change X86_INTEL_* to X86_*.
 
-It seems broken in different ways, depending on the combination
-of kernel and userland:
+v12:
+- Remove ARCH_X86_CET_MMAP_SHSTK information.
 
-1. EABI armv5-versatile kernel, EABI Debian 5:
-$ cat /proc/self/syscall
-0 0x1500000000003 0x1500000000400 0x1500000000400 0x60000013c7800480
-0xc0008668c0112f8c 0xc0112d14c68e1f68 0xbeab06f8 0xb6e80d4c
-$ strace -f cat /proc/self/syscall
-execve("/bin/cat", ["cat", "/proc/self/syscall"], [/* 16 vars */]) =
--1 EINTR (Interrupted system call)
-dup(2)                                  = -1 EINTR (Interrupted system call)
-write(2, "strace: exec: Interrupted system "..., 38) = -1 EINTR
-(Interrupted system call)
-exit_group(1)                           = ?
+v11:
+- Add back GLIBC tunables information.
+- Add ARCH_X86_CET_MMAP_SHSTK information.
 
-2. EABI kernel, OABI Debian 5:
-$ cat /proc/self/syscall
-3 0x1500000000003 0x13ccc00000400 0x1500000000400 0x60000013c7800480
-0xc0008de0c0112f8c 0xc0112d14c7313f68 0xbeed27d0 0xb6eab324
-$ strace cat /proc/self/syscall
-execve("/bin/cat", ["cat", "/proc/self/syscall"], [/* 16 vars */]) = -1090648236
---- SIGILL (Illegal instruction) @ 0 (0) ---
-+++ killed by SIGILL +++
+v10:
+- Change no_cet_shstk and no_cet_ibt to no_user_shstk and no_user_ibt.
+- Remove the opcode section, as it is already in the Intel SDM.
+- Remove sections related to GLIBC implementation.
+- Remove shadow stack memory management section, as it is already in the
+  code comments.
+- Remove legacy bitmap related information, as it is not supported now.
+- Fix arch_ioctl() related text.
+- Change SHSTK, IBT to plain English.
 
-3. OABI kernel, OABI Debian 5:
- cat /proc/self/syscall
-9437187 0x1500000000003 0x13ccc00000400 0x1500000000400 0x100060000013
-0x15000c72cff6c 0xc72cfe9000000000 0xbece27d0 0xb6f2f324
-$ strace cat /proc/self/syscall
-execve("/bin/cat", ["cat", "/proc/self/syscall"], [/* 16 vars */]) = -1095141548
---- SIGILL (Illegal instruction) @ 0 (0) ---
-+++ killed by SIGILL +++
+ .../admin-guide/kernel-parameters.txt         |   6 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/intel_cet.rst               | 133 ++++++++++++++++++
+ 3 files changed, 140 insertions(+)
+ create mode 100644 Documentation/x86/intel_cet.rst
 
-I suspect the OABI strace in Debian is broken since it crashes on
-both kernels. I'll look into fixing the output without strace first then.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a1068742a6df..7c7124a6a7ac 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3164,6 +3164,12 @@
+ 			noexec=on: enable non-executable mappings (default)
+ 			noexec=off: disable non-executable mappings
+ 
++	no_user_shstk	[X86-64] Disable Shadow Stack for user-mode
++			applications
++
++	no_user_ibt	[X86-64] Disable Indirect Branch Tracking for user-mode
++			applications
++
+ 	nosmap		[X86,PPC]
+ 			Disable SMAP (Supervisor Mode Access Prevention)
+ 			even if it is supported by processor.
+diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+index 265d9e9a093b..2aef972a868d 100644
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@ -19,6 +19,7 @@ x86-specific Documentation
+    tlb
+    mtrr
+    pat
++   intel_cet
+    intel-iommu
+    intel_txt
+    amd-memory-encryption
+diff --git a/Documentation/x86/intel_cet.rst b/Documentation/x86/intel_cet.rst
+new file mode 100644
+index 000000000000..c9ebb3d9dd00
+--- /dev/null
++++ b/Documentation/x86/intel_cet.rst
+@@ -0,0 +1,133 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================================
++Control-flow Enforcement Technology (CET)
++=========================================
++
++[1] Overview
++============
++
++Control-flow Enforcement Technology (CET) is an Intel processor feature
++that provides protection against return/jump-oriented programming (ROP)
++attacks.  It can be set up to protect both applications and the kernel.
++Only user-mode protection is implemented in the 64-bit kernel, including
++support for running legacy 32-bit applications.
++
++CET introduces Shadow Stack and Indirect Branch Tracking.  Shadow stack is
++a secondary stack allocated from memory and cannot be directly modified by
++applications.  When executing a CALL, the processor pushes the return
++address to both the normal stack and the shadow stack.  Upon function
++return, the processor pops the shadow stack copy and compares it to the
++normal stack copy.  If the two differ, the processor raises a control-
++protection fault.  Indirect branch tracking verifies indirect CALL/JMP
++targets are intended as marked by the compiler with 'ENDBR' opcodes.
++
++There are two kernel configuration options:
++
++    X86_SHADOW_STACK_USER, and
++    X86_BRANCH_TRACKING_USER.
++
++These need to be enabled to build a CET-enabled kernel, and Binutils v2.31
++and GCC v8.1 or later are required to build a CET kernel.  To build a CET-
++enabled application, GLIBC v2.28 or later is also required.
++
++There are two command-line options for disabling CET features::
++
++    no_user_shstk - disables user shadow stack, and
++    no_user_ibt   - disables user indirect branch tracking.
++
++At run time, /proc/cpuinfo shows CET features if the processor supports
++CET.
++
++[2] Application Enabling
++========================
++
++An application's CET capability is marked in its ELF header and can be
++verified from the following command output, in the NT_GNU_PROPERTY_TYPE_0
++field:
++
++    readelf -n <application>
++
++If an application supports CET and is statically linked, it will run with
++CET protection.  If the application needs any shared libraries, the loader
++checks all dependencies and enables CET when all requirements are met.
++
++[3] Backward Compatibility
++==========================
++
++GLIBC provides a few tunables for backward compatibility.
++
++GLIBC_TUNABLES=glibc.tune.hwcaps=-SHSTK,-IBT
++    Turn off SHSTK/IBT for the current shell.
++
++GLIBC_TUNABLES=glibc.tune.x86_shstk=<on, permissive>
++    This controls how dlopen() handles SHSTK legacy libraries::
++
++        on         - continue with SHSTK enabled;
++        permissive - continue with SHSTK off.
++
++[4] CET arch_prctl()'s
++======================
++
++Several arch_prctl()'s have been added for CET:
++
++arch_prctl(ARCH_X86_CET_STATUS, u64 *addr)
++    Return CET feature status.
++
++    The parameter 'addr' is a pointer to a user buffer.
++    On returning to the caller, the kernel fills the following
++    information::
++
++        *addr       = shadow stack/indirect branch tracking status
++        *(addr + 1) = shadow stack base address
++        *(addr + 2) = shadow stack size
++
++arch_prctl(ARCH_X86_CET_DISABLE, unsigned int features)
++    Disable shadow stack and/or indirect branch tracking as specified in
++    'features'.  Return -EPERM if CET is locked.
++
++arch_prctl(ARCH_X86_CET_LOCK)
++    Lock in all CET features.  They cannot be turned off afterwards.
++
++Note:
++  There is no CET-enabling arch_prctl function.  By design, CET is enabled
++  automatically if the binary and the system can support it.
++
++[5] The implementation of the Shadow Stack
++==========================================
++
++Shadow Stack size
++-----------------
++
++A task's shadow stack is allocated from memory to a fixed size of
++MIN(RLIMIT_STACK, 4 GB).  In other words, the shadow stack is allocated to
++the maximum size of the normal stack, but capped to 4 GB.  However,
++a compat-mode application's address space is smaller, each of its thread's
++shadow stack size is MIN(1/4 RLIMIT_STACK, 4 GB).
++
++Signal
++------
++
++The main program and its signal handlers use the same shadow stack.
++Because the shadow stack stores only return addresses, a large shadow
++stack covers the condition that both the program stack and the signal
++alternate stack run out.
++
++The kernel creates a restore token for the shadow stack restoring address
++and verifies that token when restoring from the signal handler.
++
++Fork
++----
++
++The shadow stack's vma has VM_SHSTK flag set; its PTEs are required to be
++read-only and dirty.  When a shadow stack PTE is not RO and dirty, a
++shadow access triggers a page fault with the shadow stack access bit set
++in the page fault error code.
++
++When a task forks a child, its shadow stack PTEs are copied and both the
++parent's and the child's shadow stack PTEs are cleared of the dirty bit.
++Upon the next shadow stack access, the resulting shadow stack page fault
++is handled by page copy/re-use.
++
++When a pthread child is created, the kernel allocates a new shadow stack
++for the new thread.
+-- 
+2.21.0
 
-       Arnd
