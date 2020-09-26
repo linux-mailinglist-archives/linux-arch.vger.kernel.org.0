@@ -2,80 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8EB279C0C
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 21:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F60B279C94
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 23:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729291AbgIZTOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Sep 2020 15:14:01 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:38719 "EHLO
+        id S1726559AbgIZVKY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Sep 2020 17:10:24 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:40967 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbgIZTOA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 15:14:00 -0400
-Received: from mail-qv1-f50.google.com ([209.85.219.50]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1N1xdf-1kSYBC1Dqb-012Cya; Sat, 26 Sep 2020 21:13:59 +0200
-Received: by mail-qv1-f50.google.com with SMTP id h1so3284205qvo.9;
-        Sat, 26 Sep 2020 12:13:59 -0700 (PDT)
-X-Gm-Message-State: AOAM530X/lzfhlYVcWnmHyzRydXSdu9ITssq83uUy4GcMxz3aGPdAtSB
-        bmnp6rP5K+s/d2a5A0qP64/zL95uNlYmdPsE7YM=
-X-Google-Smtp-Source: ABdhPJw/iwukTKg1GclSKE6lTSTpb5ucr5JoCxFL+sd07zV4NOrukIDXbARQdfOrxI+K+AB97dYshpN6f6+rdDPzfHs=
-X-Received: by 2002:a05:6214:1873:: with SMTP id eh19mr4898917qvb.16.1601147638094;
- Sat, 26 Sep 2020 12:13:58 -0700 (PDT)
+        with ESMTP id S1726462AbgIZVKY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 17:10:24 -0400
+Received: from mail-qt1-f170.google.com ([209.85.160.170]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1M7JnA-1kNNuk21PQ-007pcF; Sat, 26 Sep 2020 23:10:22 +0200
+Received: by mail-qt1-f170.google.com with SMTP id o21so4785684qtp.2;
+        Sat, 26 Sep 2020 14:10:22 -0700 (PDT)
+X-Gm-Message-State: AOAM530vJob0lWmjC3JkXaHmXEoUpyapswP3ZNglEVELpK4tdz69O9NM
+        y6V0XHeL9PzTfToCyf9rHBmjvcn8n+0/LJhxTgI=
+X-Google-Smtp-Source: ABdhPJwDvlcajU+PF+fBlH/TL4sfEgn4CddfjWtp5EuFd2UBtqo7vjS2hC6ft8mwmLl/Kat4R/mEqJDY8LjXNk3pBI0=
+X-Received: by 2002:aed:2ce5:: with SMTP id g92mr5933813qtd.204.1601154621203;
+ Sat, 26 Sep 2020 14:10:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200922043752.GA29151@lst.de> <mhng-9b0b114e-a104-40b7-b4f5-ad64dbbbd5bd@palmerdabbelt-glaptop1>
-In-Reply-To: <mhng-9b0b114e-a104-40b7-b4f5-ad64dbbbd5bd@palmerdabbelt-glaptop1>
+References: <20200918132439.1475479-1-arnd@arndb.de> <20200918132439.1475479-3-arnd@arndb.de>
+ <20200919053716.GJ30063@infradead.org>
+In-Reply-To: <20200919053716.GJ30063@infradead.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 26 Sep 2020 21:13:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3ONxXm_MWKn9BSswtLH3etVwOUh52NYoXpj032=WP0gw@mail.gmail.com>
-Message-ID: <CAK8P3a3ONxXm_MWKn9BSswtLH3etVwOUh52NYoXpj032=WP0gw@mail.gmail.com>
-Subject: Re: remove set_fs for riscv v2
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+Date:   Sat, 26 Sep 2020 23:10:05 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a27R1dSWXRJiLwpA-q6KLC8KVy=BXnXqif072kL+JcdPg@mail.gmail.com>
+Message-ID: <CAK8P3a27R1dSWXRJiLwpA-q6KLC8KVy=BXnXqif072kL+JcdPg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kexec: remove compat_sys_kexec_load syscall
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, kexec@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:7T/lcr5em1kZ8igH32FcKnwNwzeBB/ovgz7Ywqz/KeBUqtRMkwU
- XkQtgCAqFTwN0V7Xtta5u+YJsih8TGD9QmE0A4uzu6rxSCOv35PgT/TRp+syTLEF59lICr8
- 491wdRXvS2zcd9RhuQA58aQiGAdQs2bZwe7FpFTnQONanS8svvo/QJXIwkQuSoF58akot2E
- p2nezZXyGkQcFtZ8VGzmA==
+X-Provags-ID: V03:K1:c7FZC9Mxmbxn/z4+QDybPTKnAVTd6LCxoZ9lR50F8qBLlTSBCG+
+ wsvxZhWBVd/vS2sSEIS3lzG0Ynr26pBmaW3PIKiRvQNSNhuI5MQzV4r14DOmXB5xciIku/B
+ ijyK+BwfBLXgslRt4jDlyikmJWcsQjHZWPRTWHi1Y9cpzOUJFJA6QyAuVDjGSEXSfB17G3z
+ VhM6lw6a8lTZS4jPK1GtA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:amXl3hVfAds=:1uGQyARomwmRq5d4XA0F78
- nZSRETyJh014qZvfI+3+z0TtEtnbCUoP2ZGHSBR11k8qsBInDnDwJvSn2Ud/ZbU7H1dyzUMMb
- +ppXcFuUNuGkSc1Zf5fZ9uMNLu/ET84Fau4XZNudUvyPAAnnTjCACkTuYYP27PsCQM6vDjMZA
- 81xbcPo98G5bGx+r5i3knJxHM/6veiNuMNSM7/d+uEJVq87Lb7GGHNUdqkjya52cHOqhSFsuQ
- lv92kVsqdt4KG463XaCXWRI+3HJiHC0MtxFzcDeTXIGs1nLPRIfoWPZvLEKCQMJtauMM73hBM
- p1TYNwfOc/osLlPCCWLo5ouoVoKhZH5J9lbU+KtM4w8i5SAmIKDWWvvjL5OzWndX5+0LxRRMT
- IENo0WnvJGZvir2BTGPVqnshiSLyF3k/0IUBBlQvBEoKQ1sa07Zr33V6mB+3d9K+KDqVDbkSS
- CVoEMdmChSpfmEV9CEjxW2RafG2vcc8+Jhm8q3HtwxzKxlFsUwwahaXwlv2IvQJUQIq/HpJ94
- FmcO5I9sfoIg97Eof4x6iXncS1Lrnj9s2ux9y92V6E1zeaKwkIft/d46c3HfIlqME1Kp4cETf
- 2b2vuyY33ZeZQcbD+edjwk2gKOD+QnOmkxstp7O9Rtr+XRArFtjhMB6AUvVhlGD4ktZ6i+f1m
- UUwdLtMzJql7N4kHEaB3tUcb09ulmYObou9LN69ZTPxbTVunzMy4wVjHfqtuJ8nFhaizQ2wuf
- 5Xh+QMNBjZLIav55vd0PWwZTzUh41Po9zWcNXospLW9+qaEmnEB3A8zlJanIBxJleZHnQpZ/i
- 241Qg+z8nsjVb6DZJxC4GZxCh55cvAAjsZSq6dAWi4d3AkoHtQJloCWa+X/xu1PxUy+PdOhpF
- Ot3oPlIeDNezNxi8UGT0FURqUt9G8TqIqvYDhGjItw2yLZsBz6NH7hiyxo3GSY1WBTOZ+fHDB
- UUiXCicpo11GxYoWLNw/qelJ0QiZxkSKke7HXpCF/vNFutR4cW36c
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SQuYEY75IrY=:OQpUlVra8YrSy11+bVYrhl
+ 9PO8TT6Qb0ezP2ngJnF2UsJgxNGMNX9OGtCuYWk5au3fHLIoA1BZiIV/zXtP3SpJpuU2GWL9h
+ uM0XO6h5dHWmK0OlUNE2rzLLhwyH++QhZzy1PAYG+SS3CrP2/CoRrTnX1rQdqDqizrffVlOwv
+ wu8rOv2HgWTQTHUVfHEfK4k1C9cQvRuIPsTqkLNEbwV2ULi0pe9GYx3+nK/IKYEj/Wc+BXktb
+ V9QJONX11nB0vs3I0ZvOmzOk/IYldA0WrRmM7dEPVKm3nrYA5LBjBL5GQ7D2hBC7q2BCtlz+k
+ qzBDR+DRUTabpy968+215ixdBxHMzO3SoamV2Kur9QZA4NEZPz6+8JO2jHtP2kI7trxv2jsm8
+ 8UJzDQFzYi4ju79jIlqINucjDQ/oLjLJjOJt7mrkSzD9qieSuWQ7DaWR1tUJEhKkkp+nw7gfh
+ 27upJOQGgDgbV76BBj6RZ5h1hF6Tbn6o9DbvTPw6c/GzcsA9+J7jYD+BXXbD8ZNxzbOWiVfJX
+ bqtGfaY2lqRktBcUyQmQvWNDWEns7HQP5K1Xue0tPFojip2pmYvF+umV84Zeqwmzj99c+PYg6
+ oEIFZYkzRgF1Yo1I/fgTxW1iE9r04Eu2xeRuEjDEn+qNtGmYhsMFBcAGt1HI5IbJM2e16iYhj
+ vz40CqJ47yTeIMulTILJSuZoJDwJOAsQycbpL1Nr/ke2S362MqNydcBZwaNHxHQeH0UBAzhHR
+ 5YGFdqfJzFa9xDJAxpfbEGSTaHm0D13rg9A9jCr5PlSbG5v3uYzWS1BQviAC6H4gOwD67x43y
+ wF2b5dNxVbpSeJ3iMdxKwJV8gJz+I0iIyY4CrGWtKxgZ3E34zywcbOW3wSG84rnOLWEcuVc
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 7:50 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> I'm OK taking it, but there's a few things I'd like to sort out.  IIRC I put it
-> on a temporary branch over here
->
->     https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-remove_set_fs
->
-> under the assumption it might get lost otherwise, but let me know if that's not
-> what you were looking for.
->
-> Arnd: Are you OK with the asm-generic stuff?  I couldn't find anything in my
-> mail history, so sorry if I just missed it.
+On Sat, Sep 19, 2020 at 7:37 AM Christoph Hellwig <hch@infradead.org> wrote:
 
-For some reason I had missed that __copy_from_user() change earlier,
-but I had a closer look now and this is all very good, feel free to
-add an
+> > +             struct compat_kexec_segment __user *cs = (void __user *)segments;
+> > +             struct compat_kexec_segment segment;
+> > +             int i;
+> > +             for (i=0; i< nr_segments; i++) {
+>
+> Missing empty line after the variable declarations and really strange
+> indentation.
+>
+> > +                     copy_from_user(&segment, &cs[i], sizeof(segment));
+>
+> Missing return value check.
+>
+> > +                     if (ret)
+> > +                             break;
+> > +
+> > +                     image->segment[i] = (struct kexec_segment) {
+> > +                             .buf   = compat_ptr(segment.buf),
+> > +                             .bufsz = segment.bufsz,
+> > +                             .mem   = segment.mem,
+> > +                             .memsz = segment.memsz,
+> > +                     };
+> > +             }
+>
+> I'd split the whole compat handling into a helper, and I'd probably
+> use the unsafe_get/put user to optimize it a little more.
+>
+> > +     } else {
+> > +             ret = copy_from_user(image->segment, segments, segment_bytes);
+> > +     }
+> >       if (ret)
+> >               ret = -EFAULT;
+>
+> Why not just
+>
+>                 if (copy_from_user(image->segment, segments, segment_bytes))
+>                         ret = -EFAULT;
+>
+> ?
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Addressed all of these now, thanks for the suggestions!
 
-       Arnd
+I had already fixed the missing error handling after the kbuild bot
+pointed that out. The separate function does improve the error
+handling.
+
+I ended up not using unsafe_get/put since I find the copy_from_user
+based loop more readable and it should lead to smaller object code in
+most cases as well. kexec is not performance critical, so readability
+seems more important here.
+
+      Arnd
