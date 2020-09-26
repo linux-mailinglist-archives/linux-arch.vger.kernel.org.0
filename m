@@ -2,131 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB27D279BE0
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 20:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8EB279C0C
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 21:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729291AbgIZSaW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Sep 2020 14:30:22 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:54531 "EHLO
+        id S1729291AbgIZTOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Sep 2020 15:14:01 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:38719 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbgIZSaW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 14:30:22 -0400
-Received: from mail-qk1-f170.google.com ([209.85.222.170]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MwfrG-1kfQla49WM-00y9N4; Sat, 26 Sep 2020 20:30:21 +0200
-Received: by mail-qk1-f170.google.com with SMTP id c2so6392128qkf.10;
-        Sat, 26 Sep 2020 11:30:20 -0700 (PDT)
-X-Gm-Message-State: AOAM532Qsl4VE9mUjz0EAjEdFAbTz+qSWXpK9rjmhKmA5kFJaQ66dGiK
-        +2m6QXJB9IqPqR7XylfT3YoeAgSm7jUrw5FeD+8=
-X-Google-Smtp-Source: ABdhPJwCDr8g+GQISXGwNaC9OvKKW7eMeA3fyHA5nqFJbGySKsf2kM84dVn3Zi7lVXofFxzjg00nZbrxbqxgBaA40NE=
-X-Received: by 2002:a37:a495:: with SMTP id n143mr5509549qke.394.1601145019643;
- Sat, 26 Sep 2020 11:30:19 -0700 (PDT)
+        with ESMTP id S1726183AbgIZTOA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 15:14:00 -0400
+Received: from mail-qv1-f50.google.com ([209.85.219.50]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1N1xdf-1kSYBC1Dqb-012Cya; Sat, 26 Sep 2020 21:13:59 +0200
+Received: by mail-qv1-f50.google.com with SMTP id h1so3284205qvo.9;
+        Sat, 26 Sep 2020 12:13:59 -0700 (PDT)
+X-Gm-Message-State: AOAM530X/lzfhlYVcWnmHyzRydXSdu9ITssq83uUy4GcMxz3aGPdAtSB
+        bmnp6rP5K+s/d2a5A0qP64/zL95uNlYmdPsE7YM=
+X-Google-Smtp-Source: ABdhPJw/iwukTKg1GclSKE6lTSTpb5ucr5JoCxFL+sd07zV4NOrukIDXbARQdfOrxI+K+AB97dYshpN6f6+rdDPzfHs=
+X-Received: by 2002:a05:6214:1873:: with SMTP id eh19mr4898917qvb.16.1601147638094;
+ Sat, 26 Sep 2020 12:13:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200918124624.1469673-1-arnd@arndb.de> <20200918124624.1469673-6-arnd@arndb.de>
- <20200919053233.GH30063@infradead.org>
-In-Reply-To: <20200919053233.GH30063@infradead.org>
+References: <20200922043752.GA29151@lst.de> <mhng-9b0b114e-a104-40b7-b4f5-ad64dbbbd5bd@palmerdabbelt-glaptop1>
+In-Reply-To: <mhng-9b0b114e-a104-40b7-b4f5-ad64dbbbd5bd@palmerdabbelt-glaptop1>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 26 Sep 2020 20:30:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2nZ_Uzq0ivB7vnR620kHb-onYdqMnWnf6KQjZq8gEdpQ@mail.gmail.com>
-Message-ID: <CAK8P3a2nZ_Uzq0ivB7vnR620kHb-onYdqMnWnf6KQjZq8gEdpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] ARM: oabi-compat: rework epoll_wait/epoll_pwait emulation
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+Date:   Sat, 26 Sep 2020 21:13:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3ONxXm_MWKn9BSswtLH3etVwOUh52NYoXpj032=WP0gw@mail.gmail.com>
+Message-ID: <CAK8P3a3ONxXm_MWKn9BSswtLH3etVwOUh52NYoXpj032=WP0gw@mail.gmail.com>
+Subject: Re: remove set_fs for riscv v2
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:itz1Z/+zneyK/vzKeHy3vawQiKcxzQYzshytX3qgS5jgK2MyA9Z
- UbiupdvXBQXXBQOuZub17rBpAyxUdoFzSbqpLWrpfA6re3lvEovD9SA3az+fW/UY/UEhws3
- VfONz4A2tSksvkBD7X3vqdA64VbihP1AvoT0I9Z3moGdzfTCVJR++FJCelUj5VDRS85sC97
- s2wi4KbAyPygIdkzmX2Og==
+X-Provags-ID: V03:K1:7T/lcr5em1kZ8igH32FcKnwNwzeBB/ovgz7Ywqz/KeBUqtRMkwU
+ XkQtgCAqFTwN0V7Xtta5u+YJsih8TGD9QmE0A4uzu6rxSCOv35PgT/TRp+syTLEF59lICr8
+ 491wdRXvS2zcd9RhuQA58aQiGAdQs2bZwe7FpFTnQONanS8svvo/QJXIwkQuSoF58akot2E
+ p2nezZXyGkQcFtZ8VGzmA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ton0hDNBsuk=:NlQ19Fis5wi/rczH3Yu2eq
- ogrIfu8ShtfkQJUDkaj9yIKfQYq79qBbKFkkbg0d/JbMpOkE8lEaLFtfwAOudWMjR6NwhpgOX
- 1WzQNM6lGHBSXIrUzXTCBzKGXS/KtDoeim/h9bq2djcCY55WgPGmal4oNDpmCIuZiKWzpgeoC
- eR71WPuuLELBgDUpe40aOtOuws5tUn/KLqYXEGYVl2VXoRBXGKEsyriipDUNTZkwVGs7UrOhU
- HUgkEdrUTmhtDEKUxBIC43KsVjHkRJx9t91LoPc2yo0a8BOyKWRHVTBM32/1yYqVWUVFyYQru
- u2OZDCmF8K3O8ZyjeCQrHNFwJB/L9gxSQIyV5gyxmVQAF89sxT0DbFYgBaUyMnXD500u1k6Li
- Gxg4qE7Y1s1+j54wAcO+5JNNt3Q++MOeQ0s9kg8zFwC6gY1Lz4xJdnaIUPkibCVEdcQ1MdiN8
- eONwb4SdLa2h2r3xGj2z+zPkcvzZWtHp3tD3a+euhAZweV4Ab1583uQ8quhDMmFxE5B4YEOpV
- 7jM6rNBQK9X+yc2oUrehqPjOAUTlisIH6S/RX1rG7minj6y2Av5fQwL3laBlCTlo185nzDAu7
- wHo1Wb9nIfAwpqkPldlq3ggz6YHX4j+X7DHpGPJF5e1S3fRP+Gx0zLqBIAJGNqWInppxf+2bS
- jng4kaSbrgy3uOH0+ecAmmuK3cTBAgBNgP9KlfC2O5WL9KmfyxIpy/Ii3DCPWu/SOOUxInkOm
- D+9UAInrAn3d2SmhPz12ydKfDLhiDe0IPl0fMqlvn7a5ww2r1XQ0plE+cuiMbwEpA1y/pISQu
- Gvpj28uLMy74HklBaEVVDLUBxsYDiKaU2m9y9gl/+S+WIT/F9Jms81GAliDjD24uHVJEGMQ
+X-UI-Out-Filterresults: notjunk:1;V03:K0:amXl3hVfAds=:1uGQyARomwmRq5d4XA0F78
+ nZSRETyJh014qZvfI+3+z0TtEtnbCUoP2ZGHSBR11k8qsBInDnDwJvSn2Ud/ZbU7H1dyzUMMb
+ +ppXcFuUNuGkSc1Zf5fZ9uMNLu/ET84Fau4XZNudUvyPAAnnTjCACkTuYYP27PsCQM6vDjMZA
+ 81xbcPo98G5bGx+r5i3knJxHM/6veiNuMNSM7/d+uEJVq87Lb7GGHNUdqkjya52cHOqhSFsuQ
+ lv92kVsqdt4KG463XaCXWRI+3HJiHC0MtxFzcDeTXIGs1nLPRIfoWPZvLEKCQMJtauMM73hBM
+ p1TYNwfOc/osLlPCCWLo5ouoVoKhZH5J9lbU+KtM4w8i5SAmIKDWWvvjL5OzWndX5+0LxRRMT
+ IENo0WnvJGZvir2BTGPVqnshiSLyF3k/0IUBBlQvBEoKQ1sa07Zr33V6mB+3d9K+KDqVDbkSS
+ CVoEMdmChSpfmEV9CEjxW2RafG2vcc8+Jhm8q3HtwxzKxlFsUwwahaXwlv2IvQJUQIq/HpJ94
+ FmcO5I9sfoIg97Eof4x6iXncS1Lrnj9s2ux9y92V6E1zeaKwkIft/d46c3HfIlqME1Kp4cETf
+ 2b2vuyY33ZeZQcbD+edjwk2gKOD+QnOmkxstp7O9Rtr+XRArFtjhMB6AUvVhlGD4ktZ6i+f1m
+ UUwdLtMzJql7N4kHEaB3tUcb09ulmYObou9LN69ZTPxbTVunzMy4wVjHfqtuJ8nFhaizQ2wuf
+ 5Xh+QMNBjZLIav55vd0PWwZTzUh41Po9zWcNXospLW9+qaEmnEB3A8zlJanIBxJleZHnQpZ/i
+ 241Qg+z8nsjVb6DZJxC4GZxCh55cvAAjsZSq6dAWi4d3AkoHtQJloCWa+X/xu1PxUy+PdOhpF
+ Ot3oPlIeDNezNxi8UGT0FURqUt9G8TqIqvYDhGjItw2yLZsBz6NH7hiyxo3GSY1WBTOZ+fHDB
+ UUiXCicpo11GxYoWLNw/qelJ0QiZxkSKke7HXpCF/vNFutR4cW36c
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 7:32 AM Christoph Hellwig <hch@infradead.org> wrote:
+On Sat, Sep 26, 2020 at 7:50 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> I'm OK taking it, but there's a few things I'd like to sort out.  IIRC I put it
+> on a temporary branch over here
 >
-> > index 855aa7cc9b8e..156880943c16 100644
-> > --- a/arch/arm/include/asm/syscall.h
-> > +++ b/arch/arm/include/asm/syscall.h
-> > @@ -28,6 +28,17 @@ static inline int syscall_get_nr(struct task_struct *task,
-> >       return task_thread_info(task)->syscall & ~__NR_OABI_SYSCALL_BASE;
-> >  }
-> >
-> > +static inline bool __in_oabi_syscall(struct task_struct *task)
-> > +{
-> > +     return IS_ENABLED(CONFIG_OABI_COMPAT) &&
-> > +             (task_thread_info(task)->syscall & __NR_OABI_SYSCALL_BASE);
-> > +}
-> > +
-> > +static inline bool in_oabi_syscall(void)
-> > +{
-> > +     return __in_oabi_syscall(current);
-> > +}
-> > +
+>     https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-remove_set_fs
 >
-> Maybe split these infrastructure additions into a separate helper?
-
-Sorry, I'm not following what you mean by this. Both of the above
-are pretty minimal helpers already, in what way could they be split
-further?
-
-> So after you argued for this variant I still have minor nitpicks:
+> under the assumption it might get lost otherwise, but let me know if that's not
+> what you were looking for.
 >
-> I alway find positive ifdefs better where possible, e.g.
->
-> #if defined(CONFIG_ARM) && defined(CONFIG_OABI_COMPAT)
-> external declaration here
-> #else
-> the real thing
-> #endif
+> Arnd: Are you OK with the asm-generic stuff?  I couldn't find anything in my
+> mail history, so sorry if I just missed it.
 
-Ok.
+For some reason I had missed that __copy_from_user() change earlier,
+but I had a closer look now and this is all very good, feel free to
+add an
 
-> but I still find the fact that the native case goes into the arch
-> helper a little weird.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Would you prefer something like this:
-
-static inline struct epoll_event __user *
-epoll_put_uevent(__poll_t revents, __u64 data,
-                 struct epoll_event __user *uevent)
-{
-#if defined(CONFIG_ARM) && defined(CONFIG_OABI_COMPAT)
-        /* ARM OABI has an incompatible struct layout and needs a
-special handler */
-        extern struct epoll_event __user *
-        epoll_oabi_put_uevent(__poll_t revents, __u64 data,
-                              struct epoll_event __user *uevent);
-
-        if (in_oabi_syscall())
-                return epoll_oabi_put_uevent(revents, data, uevent);
-#endif
-        if (__put_user(revents, &uevent->events) ||
-            __put_user(data, &uevent->data))
-                return NULL;
-
-        return uevent+1;
-}
-
-That would keep the native case in one place, but also mix in
-more architecture specific stuff into the common source location,
-which again seems worse to me.
-
-     Arnd
+       Arnd
