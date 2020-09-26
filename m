@@ -2,99 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6468E279B9F
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 19:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB27D279BE0
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 20:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729963AbgIZRu4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Sep 2020 13:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729883AbgIZRuz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 13:50:55 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F318C0613CE
-        for <linux-arch@vger.kernel.org>; Sat, 26 Sep 2020 10:50:54 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d13so4958235pgl.6
-        for <linux-arch@vger.kernel.org>; Sat, 26 Sep 2020 10:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hTdWakHiHp9Vlr0UcT3ntAxXSZRAAFha6FtskJko8Jw=;
-        b=YTQoH/ZPZdj0DZHE9slEFw8q8+yyJ9RzJbYifN3Ucgx/DTLM0FjB9VMp0WUnu8Fo4+
-         PepP4szgSee/u9o/rZUz5w4EdvFNwMgZMo9tc36/8AbqiOwDHt9YGDBlUppMgJpBfzYg
-         7AYr35Btmhq6fY/v1TxRh+eJI7r5vi/cmmXxwRzbSJABMWSkAqD6IFTaIS0HEHgp/Cfp
-         tN55uKlV211JLSUPzCQU+lJ1q5hf4iMfO9eE6wAPjJetSUryuCCuOG3Th3Cb8D67Ylgp
-         a08soHTvJAjhcXT3/C8o9EBOgZnEWPcMYHNgcsfXBIcjjylqjvM7KtPG4MQeXrBGk9Iq
-         +Eeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=hTdWakHiHp9Vlr0UcT3ntAxXSZRAAFha6FtskJko8Jw=;
-        b=OHI8q1N8/HRgESanfpXn9wvPwQ8ScXQNC7EgMFZo8dxAz3hI1EZFQP+VIkThIFUVS8
-         OXHQYZn49CWK8ku9iCN70SYIH15051itVhYHZGmu07SSnXSf3AcnXRB3rf7/ynlTNa/2
-         m6/4L1kk7HKSqRzTbwWkCmy/whUXhE9wiAdip1VpDnn57LPffQiSux+HCy8dOlR22lGz
-         wAl5WdnXT1nDlygqNaJ8+9M/dI9wF0jQ3BsXhrNGxIf+0a4YXRdTYAU5IcunuSBHwm2b
-         cXAuGto5LlB8YZqbAEtTqZGd2JIivoEXHhTQ0tEiBHkaBRT1VMvHZzMF6HRjOflhgq0P
-         A83g==
-X-Gm-Message-State: AOAM532SnGvvsZJbcdZWSCPHUUM5DPo5qemTEXVMbwssDLNf5Slvkkfh
-        CQvC7Tx+MNmUZvVwGinQqtVMiJNANReCWrcx
-X-Google-Smtp-Source: ABdhPJzfmrgaHodK6b5xlg8OXYJn9Q34MTXKO9hZBFMHRHq1Kp+6jQlqwc2rhCTpfcPOuGwpd2mh7A==
-X-Received: by 2002:a63:6306:: with SMTP id x6mr3566849pgb.161.1601142653517;
-        Sat, 26 Sep 2020 10:50:53 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id v10sm2328987pjf.34.2020.09.26.10.50.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2020 10:50:52 -0700 (PDT)
-Date:   Sat, 26 Sep 2020 10:50:52 -0700 (PDT)
-X-Google-Original-Date: Sat, 26 Sep 2020 10:50:51 PDT (-0700)
-Subject:     Re: remove set_fs for riscv v2
-In-Reply-To: <20200922043752.GA29151@lst.de>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Christoph Hellwig <hch@lst.de>, viro@zeniv.linux.org.uk,
-        Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-9b0b114e-a104-40b7-b4f5-ad64dbbbd5bd@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1729291AbgIZSaW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Sep 2020 14:30:22 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:54531 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbgIZSaW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 14:30:22 -0400
+Received: from mail-qk1-f170.google.com ([209.85.222.170]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MwfrG-1kfQla49WM-00y9N4; Sat, 26 Sep 2020 20:30:21 +0200
+Received: by mail-qk1-f170.google.com with SMTP id c2so6392128qkf.10;
+        Sat, 26 Sep 2020 11:30:20 -0700 (PDT)
+X-Gm-Message-State: AOAM532Qsl4VE9mUjz0EAjEdFAbTz+qSWXpK9rjmhKmA5kFJaQ66dGiK
+        +2m6QXJB9IqPqR7XylfT3YoeAgSm7jUrw5FeD+8=
+X-Google-Smtp-Source: ABdhPJwCDr8g+GQISXGwNaC9OvKKW7eMeA3fyHA5nqFJbGySKsf2kM84dVn3Zi7lVXofFxzjg00nZbrxbqxgBaA40NE=
+X-Received: by 2002:a37:a495:: with SMTP id n143mr5509549qke.394.1601145019643;
+ Sat, 26 Sep 2020 11:30:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200918124624.1469673-1-arnd@arndb.de> <20200918124624.1469673-6-arnd@arndb.de>
+ <20200919053233.GH30063@infradead.org>
+In-Reply-To: <20200919053233.GH30063@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 26 Sep 2020 20:30:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2nZ_Uzq0ivB7vnR620kHb-onYdqMnWnf6KQjZq8gEdpQ@mail.gmail.com>
+Message-ID: <CAK8P3a2nZ_Uzq0ivB7vnR620kHb-onYdqMnWnf6KQjZq8gEdpQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] ARM: oabi-compat: rework epoll_wait/epoll_pwait emulation
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:itz1Z/+zneyK/vzKeHy3vawQiKcxzQYzshytX3qgS5jgK2MyA9Z
+ UbiupdvXBQXXBQOuZub17rBpAyxUdoFzSbqpLWrpfA6re3lvEovD9SA3az+fW/UY/UEhws3
+ VfONz4A2tSksvkBD7X3vqdA64VbihP1AvoT0I9Z3moGdzfTCVJR++FJCelUj5VDRS85sC97
+ s2wi4KbAyPygIdkzmX2Og==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ton0hDNBsuk=:NlQ19Fis5wi/rczH3Yu2eq
+ ogrIfu8ShtfkQJUDkaj9yIKfQYq79qBbKFkkbg0d/JbMpOkE8lEaLFtfwAOudWMjR6NwhpgOX
+ 1WzQNM6lGHBSXIrUzXTCBzKGXS/KtDoeim/h9bq2djcCY55WgPGmal4oNDpmCIuZiKWzpgeoC
+ eR71WPuuLELBgDUpe40aOtOuws5tUn/KLqYXEGYVl2VXoRBXGKEsyriipDUNTZkwVGs7UrOhU
+ HUgkEdrUTmhtDEKUxBIC43KsVjHkRJx9t91LoPc2yo0a8BOyKWRHVTBM32/1yYqVWUVFyYQru
+ u2OZDCmF8K3O8ZyjeCQrHNFwJB/L9gxSQIyV5gyxmVQAF89sxT0DbFYgBaUyMnXD500u1k6Li
+ Gxg4qE7Y1s1+j54wAcO+5JNNt3Q++MOeQ0s9kg8zFwC6gY1Lz4xJdnaIUPkibCVEdcQ1MdiN8
+ eONwb4SdLa2h2r3xGj2z+zPkcvzZWtHp3tD3a+euhAZweV4Ab1583uQ8quhDMmFxE5B4YEOpV
+ 7jM6rNBQK9X+yc2oUrehqPjOAUTlisIH6S/RX1rG7minj6y2Av5fQwL3laBlCTlo185nzDAu7
+ wHo1Wb9nIfAwpqkPldlq3ggz6YHX4j+X7DHpGPJF5e1S3fRP+Gx0zLqBIAJGNqWInppxf+2bS
+ jng4kaSbrgy3uOH0+ecAmmuK3cTBAgBNgP9KlfC2O5WL9KmfyxIpy/Ii3DCPWu/SOOUxInkOm
+ D+9UAInrAn3d2SmhPz12ydKfDLhiDe0IPl0fMqlvn7a5ww2r1XQ0plE+cuiMbwEpA1y/pISQu
+ Gvpj28uLMy74HklBaEVVDLUBxsYDiKaU2m9y9gl/+S+WIT/F9Jms81GAliDjD24uHVJEGMQ
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 21 Sep 2020 21:37:52 PDT (-0700), Christoph Hellwig wrote:
-> Given tht we've not made much progress with the common branch,
-> are you fine just picking this up through the riscv tree for 5.10?
+On Sat, Sep 19, 2020 at 7:32 AM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> I'll defer other architectures that depend on the common changes to
-> 5.11 then.
+> > index 855aa7cc9b8e..156880943c16 100644
+> > --- a/arch/arm/include/asm/syscall.h
+> > +++ b/arch/arm/include/asm/syscall.h
+> > @@ -28,6 +28,17 @@ static inline int syscall_get_nr(struct task_struct *task,
+> >       return task_thread_info(task)->syscall & ~__NR_OABI_SYSCALL_BASE;
+> >  }
+> >
+> > +static inline bool __in_oabi_syscall(struct task_struct *task)
+> > +{
+> > +     return IS_ENABLED(CONFIG_OABI_COMPAT) &&
+> > +             (task_thread_info(task)->syscall & __NR_OABI_SYSCALL_BASE);
+> > +}
+> > +
+> > +static inline bool in_oabi_syscall(void)
+> > +{
+> > +     return __in_oabi_syscall(current);
+> > +}
+> > +
+>
+> Maybe split these infrastructure additions into a separate helper?
 
-I'm OK taking it, but there's a few things I'd like to sort out.  IIRC I put it
-on a temporary branch over here
+Sorry, I'm not following what you mean by this. Both of the above
+are pretty minimal helpers already, in what way could they be split
+further?
 
-    https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-remove_set_fs
+> So after you argued for this variant I still have minor nitpicks:
+>
+> I alway find positive ifdefs better where possible, e.g.
+>
+> #if defined(CONFIG_ARM) && defined(CONFIG_OABI_COMPAT)
+> external declaration here
+> #else
+> the real thing
+> #endif
 
-under the assumption it might get lost otherwise, but let me know if that's not
-what you were looking for.
+Ok.
 
-Arnd: Are you OK with the asm-generic stuff?  I couldn't find anything in my
-mail history, so sorry if I just missed it.
+> but I still find the fact that the native case goes into the arch
+> helper a little weird.
 
-Al: IIRC the plan here was to have me merge in a feature branch with this
-stuff, but it'd have to be based on your for-next as there are some
-dependencies over there.  I see 5ae4998b5d6f ("powerpc: remove address space
-overrides using set_fs()") in vfs/for-next so I think we should be OK, but let
-me know if I'm doing something wrong.
+Would you prefer something like this:
 
-> On Wed, Sep 09, 2020 at 08:55:15AM +0200, Christoph Hellwig wrote:
->> now that we've sorted out a remaining issue base.set_fs should not
->> be rebased any more, so you could pull it into the riscv tree or a topic
->> branch.
->>
->> The first four patch should go into base.set_fs, though.  Arnd, can you
->> re-review the updated patches?
-> ---end quoted text---
+static inline struct epoll_event __user *
+epoll_put_uevent(__poll_t revents, __u64 data,
+                 struct epoll_event __user *uevent)
+{
+#if defined(CONFIG_ARM) && defined(CONFIG_OABI_COMPAT)
+        /* ARM OABI has an incompatible struct layout and needs a
+special handler */
+        extern struct epoll_event __user *
+        epoll_oabi_put_uevent(__poll_t revents, __u64 data,
+                              struct epoll_event __user *uevent);
+
+        if (in_oabi_syscall())
+                return epoll_oabi_put_uevent(revents, data, uevent);
+#endif
+        if (__put_user(revents, &uevent->events) ||
+            __put_user(data, &uevent->data))
+                return NULL;
+
+        return uevent+1;
+}
+
+That would keep the native case in one place, but also mix in
+more architecture specific stuff into the common source location,
+which again seems worse to me.
+
+     Arnd
