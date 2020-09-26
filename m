@@ -2,121 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF87B279A56
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 17:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6468E279B9F
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Sep 2020 19:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgIZPVs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Sep 2020 11:21:48 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:46731 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725208AbgIZPVs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 11:21:48 -0400
-Received: from mail-qt1-f176.google.com ([209.85.160.176]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MF3U0-1kFbO613Pc-00FPq7; Sat, 26 Sep 2020 17:21:46 +0200
-Received: by mail-qt1-f176.google.com with SMTP id g3so4789034qtq.10;
-        Sat, 26 Sep 2020 08:21:45 -0700 (PDT)
-X-Gm-Message-State: AOAM533d79cxbgXIsayT6PSAuxCKuFW83NIrpDAd16+e5uCPTIODoPZs
-        g9JefNnmnCfL0AKg1HYBUsvqyBICvlEfqPLWaZs=
-X-Google-Smtp-Source: ABdhPJzhhuU4Qjx8HuF0NAIPjTlcDnIE/zYRakYWeCOK+DeEFjsGcCAX1OrxiRvWxcnqtBK6Fiytjj76wV0F+2OJne8=
-X-Received: by 2002:aed:2414:: with SMTP id r20mr4939375qtc.304.1601133705038;
- Sat, 26 Sep 2020 08:21:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200918132439.1475479-1-arnd@arndb.de> <20200918132439.1475479-4-arnd@arndb.de>
- <20200919053807.GK30063@infradead.org>
-In-Reply-To: <20200919053807.GK30063@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 26 Sep 2020 17:21:29 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a15GEGL8AnxTYZxD_EeGb7__v=iy6rTfCTNq2jmsQe9fQ@mail.gmail.com>
-Message-ID: <CAK8P3a15GEGL8AnxTYZxD_EeGb7__v=iy6rTfCTNq2jmsQe9fQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] mm: remove compat_sys_move_pages
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, kexec@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:KVXfAnkhrAtApTZq7lgk8gNfG/j8L7eQ9Pmlq/r+fW+yLH7BfZl
- CKUjxn+uimjTYgcEgLk4YYOFtvO+PomwzTXXDalcCZuXZ+0nTXhHewvG2UL5EirUJq7sAlI
- R2gzN+XdtEObx/dr+klo8i1omBylTgmyCvl8Nlnofqe2xO5C4a6Yh++Ig1a5rgd8PQ5nhHx
- su0JvKjLDq6ddczdLxk9A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qo8WD57aOQA=:spANsabPq/6dUBbWKRIwaQ
- lz2wd4dNV2/MMRpMsHOTRrsSl2FgDKdzKqzFMWVfZbVMenuRuAfPH+QD+e4uWQfvQlThJotE6
- E4mx1fflOIQYEfg54TABF9XOnw347EnzH/uwXwihNAki5zFR1tHqFP2+jXfTWtQnm/RKLPe/U
- X7YysNR4f3EUoSy5L6k32LFXeLWJvmlP0aBmkDV7/+B05J4wgOsPDHwU5jmQkx2fiUTnxPgie
- qYYO6DDNbqXDrOOIJAExn6BG3XzV5OtTf56Dma0GQfPd77vS3nQ4Gx8lqgpehoCI7f1GachS4
- DkYQsnldBYoRUnQ+/x708GYlA8tA7ZDzwZRByH3nQW3a4CiAKOrXzL40I0I80uzDT+Nj5hEIR
- 7Y8Q+Vs8NtSta0K4VCOHsm4mchG0SIkmIvA19mmrtKwnPwIABQMGJPqw41NfMh3sIN4KqV/hA
- g6u3R6w/VcZvei0BXo98WxZjSKJ7NR8D2oBLiZ2XuWyfl8RxnMAmBvSX7p+fQWKwSeMrDzeiD
- X3UnqZcKD9YeqKRXFya1+4o3TbMlYj6kS22DP6Me1FskhIYv2Yoxj9I/Dji7q2SVgzaUGDDZZ
- zymBo2hDGaCQLbLZBwlyUyQwi2tH1Vgf2tt5DATa6vG6kYOh6NDTM2V987BzzvP28+jQLPg0b
- 0WY3N/P/hZmsLKqrY8BFaVqc6xOvI17MkYT65yajM/EOAsEhNg8mTLqtTjmkQFt2u9PBrpBAa
- EwABFcEnmF8quFFtihLlrp2PI3Opp0xQW9kfuY4Ps8Y+EPY5cjAYhkPEVW4y/gyrutiS5DmFB
- 9TIJ+jcdcu4+8zb7k0/cTeyiu956ngR7RvNbKw4NhVqCl/F9O/i0tvEv8e/6BimT2kfOuB6KF
- pvGZec/Vd8jwwVO3hcdVNRdh7+ofHisg31o2vpgmACd6ybXzpM8krDJUygqmTfYKjsTsvhHdy
- qhSJ2HGV9OombXt043a3H4Dtr5Ys0zUsMhZ5DomvDtHsZoCYnadEu
+        id S1729963AbgIZRu4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Sep 2020 13:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729883AbgIZRuz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Sep 2020 13:50:55 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F318C0613CE
+        for <linux-arch@vger.kernel.org>; Sat, 26 Sep 2020 10:50:54 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d13so4958235pgl.6
+        for <linux-arch@vger.kernel.org>; Sat, 26 Sep 2020 10:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hTdWakHiHp9Vlr0UcT3ntAxXSZRAAFha6FtskJko8Jw=;
+        b=YTQoH/ZPZdj0DZHE9slEFw8q8+yyJ9RzJbYifN3Ucgx/DTLM0FjB9VMp0WUnu8Fo4+
+         PepP4szgSee/u9o/rZUz5w4EdvFNwMgZMo9tc36/8AbqiOwDHt9YGDBlUppMgJpBfzYg
+         7AYr35Btmhq6fY/v1TxRh+eJI7r5vi/cmmXxwRzbSJABMWSkAqD6IFTaIS0HEHgp/Cfp
+         tN55uKlV211JLSUPzCQU+lJ1q5hf4iMfO9eE6wAPjJetSUryuCCuOG3Th3Cb8D67Ylgp
+         a08soHTvJAjhcXT3/C8o9EBOgZnEWPcMYHNgcsfXBIcjjylqjvM7KtPG4MQeXrBGk9Iq
+         +Eeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=hTdWakHiHp9Vlr0UcT3ntAxXSZRAAFha6FtskJko8Jw=;
+        b=OHI8q1N8/HRgESanfpXn9wvPwQ8ScXQNC7EgMFZo8dxAz3hI1EZFQP+VIkThIFUVS8
+         OXHQYZn49CWK8ku9iCN70SYIH15051itVhYHZGmu07SSnXSf3AcnXRB3rf7/ynlTNa/2
+         m6/4L1kk7HKSqRzTbwWkCmy/whUXhE9wiAdip1VpDnn57LPffQiSux+HCy8dOlR22lGz
+         wAl5WdnXT1nDlygqNaJ8+9M/dI9wF0jQ3BsXhrNGxIf+0a4YXRdTYAU5IcunuSBHwm2b
+         cXAuGto5LlB8YZqbAEtTqZGd2JIivoEXHhTQ0tEiBHkaBRT1VMvHZzMF6HRjOflhgq0P
+         A83g==
+X-Gm-Message-State: AOAM532SnGvvsZJbcdZWSCPHUUM5DPo5qemTEXVMbwssDLNf5Slvkkfh
+        CQvC7Tx+MNmUZvVwGinQqtVMiJNANReCWrcx
+X-Google-Smtp-Source: ABdhPJzfmrgaHodK6b5xlg8OXYJn9Q34MTXKO9hZBFMHRHq1Kp+6jQlqwc2rhCTpfcPOuGwpd2mh7A==
+X-Received: by 2002:a63:6306:: with SMTP id x6mr3566849pgb.161.1601142653517;
+        Sat, 26 Sep 2020 10:50:53 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id v10sm2328987pjf.34.2020.09.26.10.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2020 10:50:52 -0700 (PDT)
+Date:   Sat, 26 Sep 2020 10:50:52 -0700 (PDT)
+X-Google-Original-Date: Sat, 26 Sep 2020 10:50:51 PDT (-0700)
+Subject:     Re: remove set_fs for riscv v2
+In-Reply-To: <20200922043752.GA29151@lst.de>
+CC:     Christoph Hellwig <hch@lst.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Christoph Hellwig <hch@lst.de>, viro@zeniv.linux.org.uk,
+        Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-9b0b114e-a104-40b7-b4f5-ad64dbbbd5bd@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 7:38 AM Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, 21 Sep 2020 21:37:52 PDT (-0700), Christoph Hellwig wrote:
+> Given tht we've not made much progress with the common branch,
+> are you fine just picking this up through the riscv tree for 5.10?
 >
-> I'd just keep the native version inline and have the compat one in
-> a helper, but that is just a minor detail.
+> I'll defer other architectures that depend on the common changes to
+> 5.11 then.
 
-Folded in this change:
+I'm OK taking it, but there's a few things I'd like to sort out.  IIRC I put it
+on a temporary branch over here
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index e9dfbde5f12c..d3fa3f4bf653 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1835,18 +1835,14 @@ static void do_pages_stat_array(struct
-mm_struct *mm, unsigned long nr_pages,
-        mmap_read_unlock(mm);
- }
+    https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-remove_set_fs
 
--static int put_pages_array(const void __user *chunk_pages[],
--                          const void __user * __user *pages,
--                          unsigned long chunk_nr)
-+static int put_compat_pages_array(const void __user *chunk_pages[],
-+                                 const void __user * __user *pages,
-+                                 unsigned long chunk_nr)
- {
-        compat_uptr_t __user *pages32 = (compat_uptr_t __user *)pages;
-        compat_uptr_t p;
-        int i;
+under the assumption it might get lost otherwise, but let me know if that's not
+what you were looking for.
 
--       if (!in_compat_syscall())
--               return copy_from_user(chunk_pages, pages,
--                                     chunk_nr * sizeof(*chunk_pages));
--
-        for (i = 0; i < chunk_nr; i++) {
-                if (get_user(p, pages32 + i))
-                        return -EFAULT;
-@@ -1875,8 +1871,15 @@ static int do_pages_stat(struct mm_struct *mm,
-unsigned long nr_pages,
-                if (chunk_nr > DO_PAGES_STAT_CHUNK_NR)
-                        chunk_nr = DO_PAGES_STAT_CHUNK_NR;
+Arnd: Are you OK with the asm-generic stuff?  I couldn't find anything in my
+mail history, so sorry if I just missed it.
 
--               if (put_pages_array(chunk_pages, pages, chunk_nr))
--                       break;
-+               if (in_compat_syscall()) {
-+                       if (put_compat_pages_array(chunk_pages, pages,
-+                                                  chunk_nr))
-+                               break;
-+               } else {
-+                       if (copy_from_user(chunk_pages, pages,
-+                                     chunk_nr * sizeof(*chunk_pages)))
-+                               break;
-+               }
+Al: IIRC the plan here was to have me merge in a feature branch with this
+stuff, but it'd have to be based on your for-next as there are some
+dependencies over there.  I see 5ae4998b5d6f ("powerpc: remove address space
+overrides using set_fs()") in vfs/for-next so I think we should be OK, but let
+me know if I'm doing something wrong.
 
-                do_pages_stat_array(mm, chunk_nr, chunk_pages, chunk_status);
-
-It does make the separation cleaner but it's also more code, which is
-why I had it in the combined function before.
-
-      Arnd
+> On Wed, Sep 09, 2020 at 08:55:15AM +0200, Christoph Hellwig wrote:
+>> now that we've sorted out a remaining issue base.set_fs should not
+>> be rebased any more, so you could pull it into the riscv tree or a topic
+>> branch.
+>>
+>> The first four patch should go into base.set_fs, though.  Arnd, can you
+>> re-review the updated patches?
+> ---end quoted text---
