@@ -2,132 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6F727B085
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Sep 2020 17:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD9B27B087
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Sep 2020 17:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgI1PIH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Sep 2020 11:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S1726466AbgI1PI5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Sep 2020 11:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726409AbgI1PIH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Sep 2020 11:08:07 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF68AC061755;
-        Mon, 28 Sep 2020 08:08:06 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y15so1530643wmi.0;
-        Mon, 28 Sep 2020 08:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FXLhKYSWU/M1fd9MJuFy2+oKcbRHytB3lb3XoxsRGQs=;
-        b=dvDAoZ7WCYZ1ogO3zg4WvzNFS0WjYAH1ZHeo6qgZIzcTG/0QGchSs9u42gOKTVFVjm
-         Y93vm1Br97WyTt1/wl05iOzkkWca2FuIlXQcE3uiqb4bBP7eh7ABEdTasPuY/1VV2qSx
-         dz71BgGogHAqaEwGHlAM+fuxZrrRKFsFSw4aeAg6WF347xZHqrnRY+vrnZOZeczTdQvU
-         hYfVdYM3LyBiCNEgIQ9oVsH9v16OBILG4lnKoMIciT5AOF+3cgdbulradJzkNtgz9HmU
-         1CTxrnh72o6XGGKNWV/bRCqZrSsuxnm9eJnTBHZsjbQ49FHF2LXKHw8A1AEvOLEAhZOn
-         E02w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FXLhKYSWU/M1fd9MJuFy2+oKcbRHytB3lb3XoxsRGQs=;
-        b=aYYRTbe8ruvzYUAwJ4liwUrvk80NfX23AXUXZNzOtpX5kqmznuxhbCjz/yKL6XynEg
-         bogunBnt39XxKdP0bgsCkM899ffc5wLat8b7X+58PD6jcTtlaUY+XO85QLoo0acz9Sqw
-         z7Zy9Dz0Ecy3VW3jgBlonh2MKnn+3xTtry7fK2BgJHQd68m4QL8R4lcwCxE4NQNA3NCZ
-         M+zboQTfizyd+z4kFHVG+aSgc/JLpfw8B3l4k/QPelKc/ZxV1ev2xYYcT8A3QfV3v7Cd
-         hXFKTaOKuXzEBOL4m20AFCTtN4TsTVDzUqK5e1WH7kFcHSAxSvmfhZ0ggNv9O98BFu4e
-         4tEA==
-X-Gm-Message-State: AOAM533XVzMWcXg0zvAcAZYIgUAfk/cAE7b4U9hHkP3a91yVl6wRmU1K
-        rS5LEtbMf9GORv23h+XMmZc=
-X-Google-Smtp-Source: ABdhPJwMqkizpfBHet4wCWb7GnvT4E/YNIH70bH6x5YTVoHc7ARnloVVYrAp/weuNGJZwyWj4yxKaw==
-X-Received: by 2002:a05:600c:2f8f:: with SMTP id t15mr2173398wmn.41.1601305685437;
-        Mon, 28 Sep 2020 08:08:05 -0700 (PDT)
-Received: from ?IPv6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id 189sm1622730wmb.3.2020.09.28.08.08.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2020 08:08:04 -0700 (PDT)
-Subject: Re: [PATCH v8 2/8] powerpc/vdso: Remove __kernel_datapage_offset and
- simplify __get_datapage()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com,
+        with ESMTP id S1726409AbgI1PI4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Sep 2020 11:08:56 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626D3C061755;
+        Mon, 28 Sep 2020 08:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=aXHFqZ/iIOl43JouJBSLzJCCTkwZFEF5WcEtiJ8pWb8=; b=X8DOi0UPNDcRsS5RSWaxdhuXP
+        5gTeWi+Nlet8LvJngBT8VHH5pxraI92zDVEfZebt0AogrHsTLx1eSDJ4uOkpyz3cDGQv3BsN8h0f7
+        AdIvPVXuccNLR7KD7rZOCEH1xhcomS0FKW1jLd20yVrFQbvLdP/weqaCDKxVrPvGqqoWETzUNMLBQ
+        cpElFlfiAQXBkxGHvnbpN3jajz8aZjWLEqNs96OSflJa6/HoV4vs7Abvutx5nVNp6eOJ+rJQYW9uq
+        3mEQg0ErWo0WndcTBOQblYxdsfNfl4GfAvS5OE0QJYcuzzvtRa5l5TUfwTuRgmuT5fnRV2TuByS0C
+        uJ+jbMU6w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39410)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1kMulh-00006I-UJ; Mon, 28 Sep 2020 16:08:46 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1kMulf-0000Bj-BN; Mon, 28 Sep 2020 16:08:43 +0100
+Date:   Mon, 28 Sep 2020 16:08:43 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1588079622.git.christophe.leroy@c-s.fr>
- <0d2201efe3c7727f2acc718aefd7c5bb22c66c57.1588079622.git.christophe.leroy@c-s.fr>
- <87wo34tbas.fsf@mpe.ellerman.id.au>
- <2f9b7d02-9e2f-4724-2608-c5573f6507a2@csgroup.eu>
- <6862421a-5a14-2e38-b825-e39e6ad3d51d@csgroup.eu>
- <87imd5h5kb.fsf@mpe.ellerman.id.au>
- <CAJwJo6ZANqYkSHbQ+3b+Fi_VT80MtrzEV5yreQAWx-L8j8x2zA@mail.gmail.com>
- <87a6yf34aj.fsf@mpe.ellerman.id.au> <20200921112638.GC2139@willie-the-truck>
- <ad72ffd3-a552-cc98-7545-d30285fd5219@csgroup.eu>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Message-ID: <542145eb-7d90-0444-867e-c9cbb6bdd8e3@gmail.com>
-Date:   Mon, 28 Sep 2020 16:08:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/9] ARM: syscall: always store thread_info->syscall
+Message-ID: <20200928150843.GB1551@shell.armlinux.org.uk>
+References: <20200907153701.2981205-1-arnd@arndb.de>
+ <20200907153701.2981205-5-arnd@arndb.de>
+ <CACRpkdYkL2=gkBvbHO514rnppLdHgsXwi0==6Ovq43kSZqEvUQ@mail.gmail.com>
+ <CAK8P3a0BZ-zdk+RB5ODcVs2z-Y6xmLCp57uzivUGWRcoeH2fQQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ad72ffd3-a552-cc98-7545-d30285fd5219@csgroup.eu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0BZ-zdk+RB5ODcVs2z-Y6xmLCp57uzivUGWRcoeH2fQQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/27/20 8:43 AM, Christophe Leroy wrote:
+On Mon, Sep 28, 2020 at 02:42:43PM +0200, Arnd Bergmann wrote:
+> > I need some idea how this numberspace is managed in order to
+> > understand the code so I can review it, I guess it all makes perfect
+> > sense but I need some background here.
 > 
-> 
-> Le 21/09/2020 à 13:26, Will Deacon a écrit :
->> On Fri, Aug 28, 2020 at 12:14:28PM +1000, Michael Ellerman wrote:
->>> Dmitry Safonov <0x7f454c46@gmail.com> writes:
-[..]
->>>> I'll cook a patch for vm_special_mapping if you don't mind :-)
->>>
->>> That would be great, thanks!
->>
->> I lost track of this one. Is there a patch kicking around to resolve
->> this,
->> or is the segfault expected behaviour?
->>
-> 
-> IIUC dmitry said he will cook a patch. I have not seen any patch yet.
+> I also had never understood this part before, and I'm still not
+> sure where the 0x900000 actually comes from, though my best
+> guess is that this was intended as a an OS specific number space,
+> with '9' being assigned to Linux (similar to the way Itanium and
+> MIPS do with their respective offsets). By the time EABI got added,
+> this was apparently no longer considered helpful.
 
-Yes, sorry about the delay - I was a bit busy with xfrm patches.
+It is an OS specific number space, originally designed to allow
+RISC OS programs to be run under Linux.  There was indeed such a
+project, but that died and the code ripped out. EABI, by using
+SWI 0 - or more accurately, not reading the SWI opcode, trampled
+over the ability for RISC OS programs to be run under Linux.
 
-I'll send patches for .close() this week, working on them now.
-
-> AFAIKS, among the architectures having VDSO sigreturn trampolines, only
-> SH, X86 and POWERPC provide alternative trampoline on stack when VDSO is
-> not there.
-> 
-> All other architectures just having a VDSO don't expect VDSO to not be
-> mapped.
-> 
-> As far as nowadays stacks are mapped non-executable, getting a segfaut
-> is expected behaviour. However, I think we should really make it
-> cleaner. Today it segfaults because it is still pointing to the VDSO
-> trampoline that has been unmapped. But should the user map some other
-> code at the same address, we'll run in the weed on signal return instead
-> of segfaulting.
-
-+1.
-
-> So VDSO unmapping should really be properly managed, the reference
-> should be properly cleared in order to segfault in a controllable manner.
-> 
-> Only powerpc has a hook to properly clear the VDSO pointer when VDSO is
-> unmapped.
-
-Thanks,
-         Dmitry
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
