@@ -2,47 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3EB27B363
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Sep 2020 19:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D332F27B4F7
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Sep 2020 21:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgI1Rh6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Sep 2020 13:37:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47566 "EHLO mail.kernel.org"
+        id S1726558AbgI1TEc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Sep 2020 15:04:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27306 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726504AbgI1Rh5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 28 Sep 2020 13:37:57 -0400
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF42E21941
-        for <linux-arch@vger.kernel.org>; Mon, 28 Sep 2020 17:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601314677;
-        bh=NigSMLyumIm9ggwTyG5LDnbruxmBhHyjdEZJ9Az6pxk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BWf0gF/1Q2N2DRi0WitlGM15dK3OoCFj7ovB6s6ZXn5zi2NKs3faVDgZTWbQcnGc0
-         cGifc3fJghySiXTrJ7GmiKOHhCYNGczgcFgzS1ey7Yzx4wfjeZSNbAhghZBhCql8PV
-         XM6gRGQYTk2QBxa7BidHfDlS6u3mAqGTqwZNQJ1I=
-Received: by mail-wm1-f48.google.com with SMTP id b79so1992213wmb.4
-        for <linux-arch@vger.kernel.org>; Mon, 28 Sep 2020 10:37:56 -0700 (PDT)
-X-Gm-Message-State: AOAM53079ATajOECvBiOn5IqYLrduoFYuJCmXQNXuNO0usRRLhikdelY
-        HvI5mSgjj3ky9o2A4MOtUEzq6S49j8I7n5a5nU2sXA==
-X-Google-Smtp-Source: ABdhPJz8+wjcR1Xd7cJT/xzMQ5Y823qmYExTDDQnf50+Oxufxdq2wRFjnFMC9Lbm2uLY6O2u6ua5c+9MahX9wVjYQZA=
-X-Received: by 2002:a1c:740c:: with SMTP id p12mr291853wmc.176.1601314675297;
- Mon, 28 Sep 2020 10:37:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <d0e4077e-129f-6823-dcea-a101ef626e8c@intel.com>
- <99B32E59-CFF2-4756-89BD-AEA0021F355F@amacapital.net> <d9099183dadde8fe675e1b10e589d13b0d46831f.camel@intel.com>
-In-Reply-To: <d9099183dadde8fe675e1b10e589d13b0d46831f.camel@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Mon, 28 Sep 2020 10:37:42 -0700
-X-Gmail-Original-Message-ID: <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
-Message-ID: <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
+        id S1726310AbgI1TEc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 28 Sep 2020 15:04:32 -0400
+IronPort-SDR: Db4LpqT5s5y8ANUINDsZFMGI8JsRKk2jHRGBHJHMD7qgLQeXcX/LgJ3Kv6VTmwxi8FKAS30X+B
+ wmKEtlMnT87g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="162104913"
+X-IronPort-AV: E=Sophos;i="5.77,315,1596524400"; 
+   d="scan'208";a="162104913"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 12:04:27 -0700
+IronPort-SDR: XmEAeOL/Im4mDpKC+6Gmdg8kzbb4nmZMIW/ZRA58CEKjr+/4kaCzRdQbwBHUEtZbZVXRnSYZiQ
+ S9D+NDksRl4Q==
+X-IronPort-AV: E=Sophos;i="5.77,315,1596524400"; 
+   d="scan'208";a="338299546"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.43.157]) ([10.212.43.157])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 12:04:25 -0700
 Subject: Re: [PATCH v13 8/8] x86/vsyscall/64: Fixup Shadow Stack and Indirect
  Branch Tracking for vsyscall emulation
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -70,60 +57,92 @@ Cc:     Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <d0e4077e-129f-6823-dcea-a101ef626e8c@intel.com>
+ <99B32E59-CFF2-4756-89BD-AEA0021F355F@amacapital.net>
+ <d9099183dadde8fe675e1b10e589d13b0d46831f.camel@intel.com>
+ <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <054bd574-1566-2be4-b542-884500b7319d@intel.com>
+Date:   Mon, 28 Sep 2020 12:04:24 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 9:59 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->
-> On Fri, 2020-09-25 at 09:51 -0700, Andy Lutomirski wrote:
-> > > On Sep 25, 2020, at 9:48 AM, Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
-> +
-> +               cet = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
-> +               if (!cet) {
-> +                       /*
-> +                        * This is an unlikely case where the task is
-> +                        * CET-enabled, but CET xstate is in INIT.
-> +                        */
-> +                       WARN_ONCE(1, "CET is enabled, but no xstates");
+On 9/28/2020 10:37 AM, Andy Lutomirski wrote:
+> On Mon, Sep 28, 2020 at 9:59 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>>
+>> On Fri, 2020-09-25 at 09:51 -0700, Andy Lutomirski wrote:
+>>>> On Sep 25, 2020, at 9:48 AM, Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
+>> +
+>> +               cet = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
+>> +               if (!cet) {
+>> +                       /*
+>> +                        * This is an unlikely case where the task is
+>> +                        * CET-enabled, but CET xstate is in INIT.
+>> +                        */
+>> +                       WARN_ONCE(1, "CET is enabled, but no xstates");
+> 
+> "unlikely" doesn't really cover this.
+> 
+>> +                       fpregs_unlock();
+>> +                       goto sigsegv;
+>> +               }
+>> +
+>> +               if (cet->user_ssp && ((cet->user_ssp + 8) < TASK_SIZE_MAX))
+>> +                       cet->user_ssp += 8;
+> 
+> This looks buggy.  The condition should be "if SHSTK is on, then add 8
+> to user_ssp".  If the result is noncanonical, then some appropriate
+> exception should be generated, probably by the FPU restore code -- see
+> below.  You should be checking the SHSTK_EN bit, not SSP.
 
-"unlikely" doesn't really cover this.
+The code now checks if shadow stack is on (yes, it should check SHSTK_EN 
+bit, I will fix it.), then adds 8 to user_ssp.  If the result is 
+canonical, then it sets the corresponding xstate.
 
-> +                       fpregs_unlock();
-> +                       goto sigsegv;
-> +               }
-> +
-> +               if (cet->user_ssp && ((cet->user_ssp + 8) < TASK_SIZE_MAX))
-> +                       cet->user_ssp += 8;
+If the resulting address is not canonical, the kernel does not know what 
+the address should be either.  I think the best action to take is doing 
+nothing about the shadow stack pointer, and let the application return 
+and get a control protection fault.  The application should have not got 
+into such situation in the first place; if it does, it should fault.
 
-This looks buggy.  The condition should be "if SHSTK is on, then add 8
-to user_ssp".  If the result is noncanonical, then some appropriate
-exception should be generated, probably by the FPU restore code -- see
-below.  You should be checking the SHSTK_EN bit, not SSP.
+> 
+> Also, can you point me to where any of these canonicality rules are
+> documented in the SDM?  I looked and I can't find them.
 
-Also, can you point me to where any of these canonicality rules are
-documented in the SDM?  I looked and I can't find them.
+The SDM is not very explicit.  It should have been.
 
+> 
+> This reminds me: this code in extable.c needs to change.
+> 
+> __visible bool ex_handler_fprestore(const struct exception_table_entry *fixup,
+>                                      struct pt_regs *regs, int trapnr,
+>                                      unsigned long error_code,
+>                                      unsigned long fault_addr)
+> {
+>          regs->ip = ex_fixup_addr(fixup);
+> 
+>          WARN_ONCE(1, "Bad FPU state detected at %pB, reinitializing
+> FPU registers.",
+>                    (void *)instruction_pointer(regs));
+> 
+>          __copy_kernel_to_fpregs(&init_fpstate, -1);
+> 
+> Now that we have supervisor states like CET, this is buggy.  This
+> should do something intelligent like initializing all the *user* state
+> and trying again.  If that succeeds, a signal should be sent rather
+> than just corrupting the task.  And if it fails, then perhaps some
+> actual intelligence is needed.  We certainly should not just disable
+> CET because something is wrong with the CET MSRs.
+> 
 
-This reminds me: this code in extable.c needs to change.
+Yes, but it needs more thought.  Maybe a separate patch and more discussion?
 
-__visible bool ex_handler_fprestore(const struct exception_table_entry *fixup,
-                                    struct pt_regs *regs, int trapnr,
-                                    unsigned long error_code,
-                                    unsigned long fault_addr)
-{
-        regs->ip = ex_fixup_addr(fixup);
-
-        WARN_ONCE(1, "Bad FPU state detected at %pB, reinitializing
-FPU registers.",
-                  (void *)instruction_pointer(regs));
-
-        __copy_kernel_to_fpregs(&init_fpstate, -1);
-
-Now that we have supervisor states like CET, this is buggy.  This
-should do something intelligent like initializing all the *user* state
-and trying again.  If that succeeds, a signal should be sent rather
-than just corrupting the task.  And if it fails, then perhaps some
-actual intelligence is needed.  We certainly should not just disable
-CET because something is wrong with the CET MSRs.
+Yu-cheng
