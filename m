@@ -2,107 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6335280197
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 16:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1DE28038E
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 18:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732207AbgJAOrf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 10:47:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35258 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732020AbgJAOrf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 1 Oct 2020 10:47:35 -0400
-Received: from localhost (fla63-h02-176-172-189-251.dsl.sta.abo.bbox.fr [176.172.189.251])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F27AF207DE;
-        Thu,  1 Oct 2020 14:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601563654;
-        bh=i8gkPOTOaQ0+zyvFuAkWNLjAJL2goMrnBIOZltkQ8Ck=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AZLGzuFNTPMn09I0z3LQqB6nzf+J1qT4KmkpA1/2qQMnhaYS05nYkxwEHglBaBKuK
-         OD4eWHWTOmOuR6j18ekhqESCIE/U4IteqNC3m2p98CQYXbpth1LrOuqwP+CvdoDQ2N
-         vjlq3eoDrlemL6LFh9S2r7IqXrpMviURP4YvS3WE=
-Date:   Thu, 1 Oct 2020 16:47:31 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v4 11/13] task_isolation: net: don't flush backlog on
- CPUs running isolated tasks
-Message-ID: <20201001144731.GC6595@lothringen>
-References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com>
- <01470cf1f1a2e79e46a87bb5a8a4780a1c3cc740.camel@marvell.com>
+        id S1732046AbgJAQJP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 1 Oct 2020 12:09:15 -0400
+Received: from [213.141.164.120] ([213.141.164.120]:31495 "EHLO mail.galam.tv"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1732026AbgJAQJP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 1 Oct 2020 12:09:15 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.galam.tv (Postfix) with ESMTP id 50789C6CB908;
+        Mon, 28 Sep 2020 18:45:20 +0600 (+06)
+Received: from mail.galam.tv ([127.0.0.1])
+        by localhost (mail.galam.tv [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id N-KEMZwmYYBZ; Mon, 28 Sep 2020 18:45:20 +0600 (+06)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.galam.tv (Postfix) with ESMTP id C69AFC6CB909;
+        Mon, 28 Sep 2020 15:46:17 +0600 (+06)
+X-Virus-Scanned: amavisd-new at mail.galam.tv
+Received: from mail.galam.tv ([127.0.0.1])
+        by localhost (mail.galam.tv [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1b0XbGQ-9UP0; Mon, 28 Sep 2020 15:46:17 +0600 (+06)
+Received: from [167.114.24.164] (unknown [10.1.0.23])
+        by mail.galam.tv (Postfix) with ESMTP id BBF87C6CBCEB;
+        Mon, 28 Sep 2020 13:41:43 +0600 (+06)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <01470cf1f1a2e79e46a87bb5a8a4780a1c3cc740.camel@marvell.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Greetings  
+To:     Recipients <shaffayaz57@gmail.com>
+From:   "Shaffiq Ayaz" <shaffayaz57@gmail.com>
+Date:   Mon, 28 Sep 2020 00:43:24 -0700
+Reply-To: shaffayaz570@gmail.com
+Message-Id: <20200928074143.BBF87C6CBCEB@mail.galam.tv>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 02:58:24PM +0000, Alex Belits wrote:
-> From: Yuri Norov <ynorov@marvell.com>
-> 
-> If CPU runs isolated task, there's no any backlog on it, and
-> so we don't need to flush it.
+Greetings,
 
-What guarantees that we have no backlog on it?
+I am the investment sourcing manager to an international business/project financier based in Bahrain.  We have huge funds available for immediate investment on any Viable Start Up or Existing business/project that requires funding.
 
-> Currently flush_all_backlogs()
-> enqueues corresponding work on all CPUs including ones that run
-> isolated tasks. It leads to breaking task isolation for nothing.
-> 
-> In this patch, backlog flushing is enqueued only on non-isolated CPUs.
-> 
-> Signed-off-by: Yuri Norov <ynorov@marvell.com>
-> [abelits@marvell.com: use safe task_isolation_on_cpu() implementation]
-> Signed-off-by: Alex Belits <abelits@marvell.com>
-> ---
->  net/core/dev.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 90b59fc50dc9..83a282f7453d 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -74,6 +74,7 @@
->  #include <linux/cpu.h>
->  #include <linux/types.h>
->  #include <linux/kernel.h>
-> +#include <linux/isolation.h>
->  #include <linux/hash.h>
->  #include <linux/slab.h>
->  #include <linux/sched.h>
-> @@ -5624,9 +5625,13 @@ static void flush_all_backlogs(void)
->  
->  	get_online_cpus();
->  
-> -	for_each_online_cpu(cpu)
-> +	smp_rmb();
+Currently we are sourcing for opportunities for our review and consideration and would be delighted to discuss further.
 
-What is it ordering?
+Please feel free to contact us.
 
-> +	for_each_online_cpu(cpu) {
-> +		if (task_isolation_on_cpu(cpu))
-> +			continue;
->  		queue_work_on(cpu, system_highpri_wq,
->  			      per_cpu_ptr(&flush_works, cpu));
-> +	}
->  
->  	for_each_online_cpu(cpu)
->  		flush_work(per_cpu_ptr(&flush_works, cpu));
+Regards,
 
-Thanks.
+Shaffiq Ayaz
