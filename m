@@ -2,147 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D332F27B4F7
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Sep 2020 21:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2833427BC95
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 07:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgI1TEc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Sep 2020 15:04:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:27306 "EHLO mga03.intel.com"
+        id S1727331AbgI2FzF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Sep 2020 01:55:05 -0400
+Received: from mga01.intel.com ([192.55.52.88]:61546 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726310AbgI1TEc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 28 Sep 2020 15:04:32 -0400
-IronPort-SDR: Db4LpqT5s5y8ANUINDsZFMGI8JsRKk2jHRGBHJHMD7qgLQeXcX/LgJ3Kv6VTmwxi8FKAS30X+B
- wmKEtlMnT87g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="162104913"
-X-IronPort-AV: E=Sophos;i="5.77,315,1596524400"; 
-   d="scan'208";a="162104913"
+        id S1725355AbgI2FzF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 29 Sep 2020 01:55:05 -0400
+IronPort-SDR: t0pSNbRhJHaQ9yYpAppY7kdL892TmrOfdqGBm1bIkZEgdtZronCb/RhYfSe1YlX2HnmX6NWPX+
+ L+gBcWUXXuNA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="180270377"
+X-IronPort-AV: E=Sophos;i="5.77,317,1596524400"; 
+   d="scan'208";a="180270377"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 12:04:27 -0700
-IronPort-SDR: XmEAeOL/Im4mDpKC+6Gmdg8kzbb4nmZMIW/ZRA58CEKjr+/4kaCzRdQbwBHUEtZbZVXRnSYZiQ
- S9D+NDksRl4Q==
-X-IronPort-AV: E=Sophos;i="5.77,315,1596524400"; 
-   d="scan'208";a="338299546"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.43.157]) ([10.212.43.157])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 12:04:25 -0700
-Subject: Re: [PATCH v13 8/8] x86/vsyscall/64: Fixup Shadow Stack and Indirect
- Branch Tracking for vsyscall emulation
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <d0e4077e-129f-6823-dcea-a101ef626e8c@intel.com>
- <99B32E59-CFF2-4756-89BD-AEA0021F355F@amacapital.net>
- <d9099183dadde8fe675e1b10e589d13b0d46831f.camel@intel.com>
- <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <054bd574-1566-2be4-b542-884500b7319d@intel.com>
-Date:   Mon, 28 Sep 2020 12:04:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 21:58:56 -0700
+IronPort-SDR: MTa3SG/D44iPy0JwazIs4vYf6q4sqQXDHzSUKL55ywUxjojUAHVckBJLYiTCfwbvERNG4JggIG
+ lQ0mmaWesEtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,317,1596524400"; 
+   d="scan'208";a="307614587"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2020 21:58:55 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 28 Sep 2020 21:58:54 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Mon, 28 Sep 2020 21:58:54 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.1713.5; Mon, 28 Sep 2020 21:58:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cjk+TjRFFzrQVZP8/NQqAuTdBvNyVCNKraSHHBOXgS7Jr8314m9q6gf/1kSny7UgDvIPTwNLlhA6aJ3IaU8ZKL6cNNrIDQETGm4ln0Z3VBdqNXUAjGD2K7jckaYQ5TOREnRWPsvTZENdUSGoIJ4gakMYQxdFmWExiKneE5euY9hoFOhRivoa7Infe3Afj/GyVuvlrdEHsQ1W64U2qbPAyyoc68HailuVnp+tVyHVZhC1fFobNzEn3Ab+gP0LtfgsLw9lhHAVypqB+lJU87RuRYuIw8MPQXRxY75HCkzf82KeKHwIhEiD5gKM7bDnosxctfDeN5iXNnKS7SRRfbjgrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FUsklQmapfplnqf1yTcJidXuvWTsT7CgEvKfdT9uYGA=;
+ b=Yo3WbhvaZyeUOlSYy6/LeB8v7qWxBpxXv1nlOx4h8+M5NxzrST0pP54laPmmf9XVDzS6zCGgusYntb6hvenQNoyCYBedXo5YkZDTNKe1hkpsUA+caIZGGuB+GEb68qneDVOiHPxkdRuInma79ixhjkE2STdUqbbnRIokk6azsjZsMhgpGJlm9HVqMQI1BdVG5V1NK5SUq7A6P5flWabkHR3S1NdMNSHxeILJsx+pHV6OuuB7pF55ml/jQPFiDxNNlFQqQ5JM2uVl11sIolXjcyNADdFY/mSTEsr353aX8qz3olUUEyv8UDBJukHZhYDOrm7mFnQpF97xodFJbPmClQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FUsklQmapfplnqf1yTcJidXuvWTsT7CgEvKfdT9uYGA=;
+ b=jEE2yb6RnQ0rsQ9qDKcMYvr/aBP5IoS3W6zJ8EuQy4gulLXEIFXDj82054aAg54qBKUZyECehLlNfWmEZF36bHOeMMlAXfNMLXpZ/n9chorIBzMpIxsQw5+lFBoAtLRVwimT4LVTvMdKGVOxGXw4rbJTJf3lj/ow/BTQvLxJ74Y=
+Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
+ by SA0PR11MB4653.namprd11.prod.outlook.com (2603:10b6:806:94::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22; Tue, 29 Sep
+ 2020 04:58:44 +0000
+Received: from SN6PR11MB3184.namprd11.prod.outlook.com
+ ([fe80::b901:8e07:4340:6704]) by SN6PR11MB3184.namprd11.prod.outlook.com
+ ([fe80::b901:8e07:4340:6704%7]) with mapi id 15.20.3412.029; Tue, 29 Sep 2020
+ 04:58:44 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "rppt@kernel.org" <rppt@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+CC:     "tycho@tycho.ws" <tycho@tycho.ws>,
+        "david@redhat.com" <david@redhat.com>,
+        "cl@linux.com" <cl@linux.com>, "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "idan.yaniv@ibm.com" <idan.yaniv@ibm.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-nvdimm@lists.01.org" <linux-nvdimm@lists.01.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+Subject: Re: [PATCH v6 3/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Thread-Topic: [PATCH v6 3/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Thread-Index: AQHWlh00WOVRjW6Kw0OmwswTJieWmg==
+Date:   Tue, 29 Sep 2020 04:58:44 +0000
+Message-ID: <d466e1f13ff615332fe1f513f6c1d763db28bd9a.camel@intel.com>
+References: <20200924132904.1391-1-rppt@kernel.org>
+         <20200924132904.1391-4-rppt@kernel.org>
+In-Reply-To: <20200924132904.1391-4-rppt@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.30.1 (3.30.1-1.fc29) 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.55.55.43]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f70bc009-fad6-405a-8e4d-08d8643457cd
+x-ms-traffictypediagnostic: SA0PR11MB4653:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <SA0PR11MB4653F3AF8D931E8B3292D667C9320@SA0PR11MB4653.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ieS4qv3igJqVq2uNt8hS2k67axxhLmQpSmyH4p/UhJwfou7k9DeSxTNFgFcZlnjNXNBMA6P2MLM9paGd+6AJcLBwAI1LeqPtFqG83RPIPUiL3OB4uDE/RYQARLa+BPcvje3Kw++No46etp7OUi1bN3DJijZEBPbruuqh/eH7tquAnQogNbIRK1irozw17BH6RXIkJlIY6kql/wSavqO9h22SfkFejG9U4Qb0LcOrizbvhCL+Hw9iXN69n2E76JdQjcfNKxVeEijTRbHeK2zBCE1VDHk5B777G73nJ6I07P0V3/DQPTagPN75esUsU7FEiMyHbTUw/FeClE0pcEQ8LHSvIWMke6S8Yl2ClKSas5+v00NZ9N4cBqqj3ziG6FSjGsiGDzFOfw1xFVnH28GcZo+sbbogI4h3MRV/T8Dbc3M=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(366004)(396003)(136003)(7406005)(316002)(66446008)(4326008)(64756008)(186003)(5660300002)(66476007)(66556008)(6512007)(6486002)(8936002)(26005)(91956017)(76116006)(66946007)(8676002)(86362001)(36756003)(83380400001)(110136005)(7416002)(6506007)(2906002)(478600001)(71200400001)(2616005)(54906003)(219293001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: RxwwA1BEh2ArsB3KR0Moev6U8/fZwfr8YodkyCbo1nSTSbC3k2hqil6A7vXde1YZGqgwqG0OnuBn/XSfKLUeFRbHFXziVwc/57IA4IE2iFNh/1U+YRGE6ZWFWJ0o9lJIE9FCJ58Vh0h6Tg4Mh0VWth/UrvqgkjcsYBY2hI7PIeu/sMOvsQqJkmOAvNno4QeIYZUPyfq6mtaddTP0wjeEG51ws5/L0YuTmTizeH+LBrmy6GnxdMo/uFjp7jlYn2uVo9JI6mFgxSGbKC+tPl1jMB15kE8pbOcjIpcA0/0SBeUZsfEukKryQv8VvPm61qrHj29la/xPD7RWjeSlywFBy820BJBsz+tQ3JjgbesYr3WnpCFMLjmIQMTYBFVbvARNut0SmOE7iDjp3m9VJ42uD4gIa2Rl4malMnc76DZhXDzhvbXQgN+5IeIfAMDJKgc7vBlnI8TVXeADuRQZ7vt2ZJDJVnBq0tQt7mytDphUgP+zBu79/3SV4raAm6IMyxM+iaZaYafqhv0Qmg7ZY6Fr7ERxwLvhr2nK9cznuw2x7Su/JMGvuNcpPDvef237krn4qOQORCXM3V31YueNAw0UpZIDEXFIz9ezmDrdPA9yGjPqjiMnga2pbWmA6dgiNGJBt7KUxWQ0q3XYF19KSJxZ4Q==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9FEAF26BDE791E4CAE434527DF482AD0@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f70bc009-fad6-405a-8e4d-08d8643457cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2020 04:58:44.4152
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: etO50W/t3kxQxurmTtPYdwh2lIDsJCMEOsAsZgbyH0b+f4mv2fltU/sZqL5BUysy+feywqIiVmJEnSrFbZ2N2W7WcYwG47lolWQLnvPYgCI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4653
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/28/2020 10:37 AM, Andy Lutomirski wrote:
-> On Mon, Sep 28, 2020 at 9:59 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->>
->> On Fri, 2020-09-25 at 09:51 -0700, Andy Lutomirski wrote:
->>>> On Sep 25, 2020, at 9:48 AM, Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
->> +
->> +               cet = get_xsave_addr(&fpu->state.xsave, XFEATURE_CET_USER);
->> +               if (!cet) {
->> +                       /*
->> +                        * This is an unlikely case where the task is
->> +                        * CET-enabled, but CET xstate is in INIT.
->> +                        */
->> +                       WARN_ONCE(1, "CET is enabled, but no xstates");
-> 
-> "unlikely" doesn't really cover this.
-> 
->> +                       fpregs_unlock();
->> +                       goto sigsegv;
->> +               }
->> +
->> +               if (cet->user_ssp && ((cet->user_ssp + 8) < TASK_SIZE_MAX))
->> +                       cet->user_ssp += 8;
-> 
-> This looks buggy.  The condition should be "if SHSTK is on, then add 8
-> to user_ssp".  If the result is noncanonical, then some appropriate
-> exception should be generated, probably by the FPU restore code -- see
-> below.  You should be checking the SHSTK_EN bit, not SSP.
-
-The code now checks if shadow stack is on (yes, it should check SHSTK_EN 
-bit, I will fix it.), then adds 8 to user_ssp.  If the result is 
-canonical, then it sets the corresponding xstate.
-
-If the resulting address is not canonical, the kernel does not know what 
-the address should be either.  I think the best action to take is doing 
-nothing about the shadow stack pointer, and let the application return 
-and get a control protection fault.  The application should have not got 
-into such situation in the first place; if it does, it should fault.
-
-> 
-> Also, can you point me to where any of these canonicality rules are
-> documented in the SDM?  I looked and I can't find them.
-
-The SDM is not very explicit.  It should have been.
-
-> 
-> This reminds me: this code in extable.c needs to change.
-> 
-> __visible bool ex_handler_fprestore(const struct exception_table_entry *fixup,
->                                      struct pt_regs *regs, int trapnr,
->                                      unsigned long error_code,
->                                      unsigned long fault_addr)
-> {
->          regs->ip = ex_fixup_addr(fixup);
-> 
->          WARN_ONCE(1, "Bad FPU state detected at %pB, reinitializing
-> FPU registers.",
->                    (void *)instruction_pointer(regs));
-> 
->          __copy_kernel_to_fpregs(&init_fpstate, -1);
-> 
-> Now that we have supervisor states like CET, this is buggy.  This
-> should do something intelligent like initializing all the *user* state
-> and trying again.  If that succeeds, a signal should be sent rather
-> than just corrupting the task.  And if it fails, then perhaps some
-> actual intelligence is needed.  We certainly should not just disable
-> CET because something is wrong with the CET MSRs.
-> 
-
-Yes, but it needs more thought.  Maybe a separate patch and more discussion?
-
-Yu-cheng
+T24gVGh1LCAyMDIwLTA5LTI0IGF0IDE2OjI5ICswMzAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
+PiBJbnRyb2R1Y2UgIm1lbWZkX3NlY3JldCIgc3lzdGVtIGNhbGwgd2l0aCB0aGUgYWJpbGl0eSB0
+byBjcmVhdGUNCj4gbWVtb3J5DQo+IGFyZWFzIHZpc2libGUgb25seSBpbiB0aGUgY29udGV4dCBv
+ZiB0aGUgb3duaW5nIHByb2Nlc3MgYW5kIG5vdA0KPiBtYXBwZWQgbm90DQo+IG9ubHkgdG8gb3Ro
+ZXIgcHJvY2Vzc2VzIGJ1dCBpbiB0aGUga2VybmVsIHBhZ2UgdGFibGVzIGFzIHdlbGwuDQo+IA0K
+PiBUaGUgdXNlciB3aWxsIGNyZWF0ZSBhIGZpbGUgZGVzY3JpcHRvciB1c2luZyB0aGUgbWVtZmRf
+c2VjcmV0KCkNCj4gc3lzdGVtIGNhbGwNCj4gd2hlcmUgZmxhZ3Mgc3VwcGxpZWQgYXMgYSBwYXJh
+bWV0ZXIgdG8gdGhpcyBzeXN0ZW0gY2FsbCB3aWxsIGRlZmluZQ0KPiB0aGUNCj4gZGVzaXJlZCBw
+cm90ZWN0aW9uIG1vZGUgZm9yIHRoZSBtZW1vcnkgYXNzb2NpYXRlZCB3aXRoIHRoYXQgZmlsZQ0K
+PiBkZXNjcmlwdG9yLg0KPiANCj4gIEN1cnJlbnRseSB0aGVyZSBhcmUgdHdvIHByb3RlY3Rpb24g
+bW9kZXM6DQo+IA0KPiAqIGV4Y2x1c2l2ZSAtIHRoZSBtZW1vcnkgYXJlYSBpcyB1bm1hcHBlZCBm
+cm9tIHRoZSBrZXJuZWwgZGlyZWN0IG1hcA0KPiBhbmQgaXQNCj4gICAgICAgICAgICAgICBpcyBw
+cmVzZW50IG9ubHkgaW4gdGhlIHBhZ2UgdGFibGVzIG9mIHRoZSBvd25pbmcgbW0uDQoNClNlZW1z
+IGxpa2UgdGhlcmUgd2VyZSBzb21lIGNvbmNlcm5zIHJhaXNlZCBhcm91bmQgZGlyZWN0IG1hcA0K
+ZWZmaWNpZW5jeSwgYnV0IGluIGNhc2UgeW91IGFyZSBnb2luZyB0byByZXdvcmsgdGhpcy4uLmhv
+dyBkb2VzIHRoaXMNCm1lbW9yeSB3b3JrIGZvciB0aGUgZXhpc3Rpbmcga2VybmVsIGZ1bmN0aW9u
+YWxpdHkgdGhhdCBkb2VzIHRoaW5ncyBsaWtlDQp0aGlzPw0KDQpnZXRfdXNlcl9wYWdlcygsICZw
+YWdlKTsNCnB0ciA9IGttYXAocGFnZSk7DQpmb28gPSAqcHRyOw0KDQpOb3Qgc3VyZSBpZiBJJ20g
+bWlzc2luZyBzb21ldGhpbmcsIGJ1dCBJIHRoaW5rIGFwcHMgY291bGQgY2F1c2UgdGhlDQprZXJu
+ZWwgdG8gYWNjZXNzIGEgbm90LXByZXNlbnQgcGFnZSBhbmQgb29wcy4NCg==
