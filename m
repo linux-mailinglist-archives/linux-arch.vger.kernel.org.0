@@ -2,147 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5823027D1EC
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 16:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445B127D1FF
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 16:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730159AbgI2OyJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Sep 2020 10:54:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33862 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728937AbgI2OyH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Sep 2020 10:54:07 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1601391245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IgDvWNQP8iyuHEvr4G441L71BKSYFJPWhAP8LkzWJfg=;
-        b=eoKKMBN7CEGS/O8wpnxX5YX5p7R/6oj0pmjByAZssa/tlgDzObwBIbhZXkZHaNf3yxFnjs
-        /xxRgUM/x4iZ6RwvlYDvqSTGjNG6UgIhlOVv1JFsk77ppGGHvo3dx1IKn0uI5+hjhXkchS
-        /V0QnFBKAlwY5qjuSlhyF3uziX8+a1k=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CB7CAAD0F;
-        Tue, 29 Sep 2020 14:54:04 +0000 (UTC)
-Date:   Tue, 29 Sep 2020 16:54:03 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ben Segall <bsegall@google.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-hexagon@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Brian Cain <bcain@codeaurora.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mel Gorman <mgorman@suse.de>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        linux-xtensa@linux-xtensa.org, Shuah Khan <shuah@kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>, rcu@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        id S1728599AbgI2O7I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Sep 2020 10:59:08 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15448 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728983AbgI2O7I (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 29 Sep 2020 10:59:08 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08TEX8Dk016644;
+        Tue, 29 Sep 2020 10:58:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=esolzCLlTJEPeG6627hqWcv24P1GZzdpl1qowU+wiLA=;
+ b=blMtUQ0t676Kma0/HQZ4K/xoewmRDbmMiDMRnwolwrmq0eLOO33nC1gr7BcmfqJPr3D8
+ CAT+0MSu9Y3Qk/0cpLy/GrEB3baPQAqeZn/cDZ+0OzKo9mBcl0vbT4rmFchwut7ISJZa
+ fQgwNK2lYd0i9yMnEMSnP+9Nas/BZi8HF3lyzkkbDrkqn4tFr9pKd/hKdrfFOA1TSMgO
+ pS5DkH/PhjoJX7uRIwwAILmTZkQPX7TRM58d7bIbB/W6ZcsatSCovsvRZn1NgL9uJ401
+ i5FM8ACSbSwRW44M2mQITd/5mjlEjlpe2ef7k+aNtYa/W79pxqU4aKM6ljbZGNT19oPG Og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33v6mts9cd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Sep 2020 10:58:25 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08TEXjtF019149;
+        Tue, 29 Sep 2020 10:58:24 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33v6mts9b8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Sep 2020 10:58:24 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08TEmKSF023163;
+        Tue, 29 Sep 2020 14:58:22 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 33v6mgr0yg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Sep 2020 14:58:21 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08TEwJVb28836272
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Sep 2020 14:58:19 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7078D11C058;
+        Tue, 29 Sep 2020 14:58:19 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17C1711C06E;
+        Tue, 29 Sep 2020 14:58:15 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.79.47])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 29 Sep 2020 14:58:14 +0000 (GMT)
+Date:   Tue, 29 Sep 2020 17:58:13 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-Message-ID: <20200929145403.GE2277@dhcp22.suse.cz>
-References: <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
- <87bli75t7v.fsf@nanos.tec.linutronix.de>
- <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
- <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
- <20200916152956.GV29330@paulmck-ThinkPad-P72>
- <CAKMK7uGFyfhEyt=jmdk2jDO-hq0_Pf0ck+cKSELHjr2U3rPuYQ@mail.gmail.com>
- <20200916205840.GD29330@paulmck-ThinkPad-P72>
- <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
- <20200929081938.GC22035@dhcp22.suse.cz>
- <20200929090003.GG438822@phenom.ffwll.local>
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200929145813.GA3226834@linux.ibm.com>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
+ <20200929130529.GE2142832@kernel.org>
+ <20200929141216.GO2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200929090003.GG438822@phenom.ffwll.local>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200929141216.GO2628@hirez.programming.kicks-ass.net>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-29_07:2020-09-29,2020-09-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1011 mlxlogscore=999
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009290129
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue 29-09-20 11:00:03, Daniel Vetter wrote:
-> On Tue, Sep 29, 2020 at 10:19:38AM +0200, Michal Hocko wrote:
-> > On Wed 16-09-20 23:43:02, Daniel Vetter wrote:
-> > > I can
-> > > then figure out whether it's better to risk not spotting issues with
-> > > call_rcu vs slapping a memalloc_noio_save/restore around all these
-> > > critical section which force-degrades any allocation to GFP_ATOMIC at
+On Tue, Sep 29, 2020 at 04:12:16PM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 29, 2020 at 04:05:29PM +0300, Mike Rapoport wrote:
+> > On Fri, Sep 25, 2020 at 09:41:25AM +0200, Peter Zijlstra wrote:
+> > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > > 
+> > > > Removing a PAGE_SIZE page from the direct map every time such page is
+> > > > allocated for a secret memory mapping will cause severe fragmentation of
+> > > > the direct map. This fragmentation can be reduced by using PMD-size pages
+> > > > as a pool for small pages for secret memory mappings.
+> > > > 
+> > > > Add a gen_pool per secretmem inode and lazily populate this pool with
+> > > > PMD-size pages.
+> > > 
+> > > What's the actual efficacy of this? Since the pmd is per inode, all I
+> > > need is a lot of inodes and we're in business to destroy the directmap,
+> > > no?
+> > > 
+> > > Afaict there's no privs needed to use this, all a process needs is to
+> > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+> > > page will utterly destroy the direct map.
 > > 
-> > did you mean memalloc_noreclaim_* here?
+> > This indeed will cause 1G pages in the direct map to be split into 2M
+> > chunks, but I disagree with 'destroy' term here. Citing the cover letter
+> > of an earlier version of this series:
 > 
-> Yeah I picked the wrong one of that family of functions.
-> 
-> > > most, but has the risk that we run into code that assumes "GFP_KERNEL
-> > > never fails for small stuff" and has a decidedly less tested fallback
-> > > path than rcu code.
-> > 
-> > Even if the above then please note that memalloc_noreclaim_* or
-> > PF_MEMALLOC should be used with an extreme care. Essentially only for
-> > internal memory reclaimers. It grants access to _all_ the available
-> > memory so any abuse can be detrimental to the overall system operation.
-> > Allocation failure in this mode means that we are out of memory and any
-> > code relying on such an allocation has to carefuly consider failure.
-> > This is not a random allocation mode.
-> 
-> Agreed, that's why I don't like having these kind of automagic critical
-> sections. It's a bit a shotgun approach. Paul said that the code would
-> handle failures, but the problem is that it applies everywhere.
+> It will drop them down to 4k pages. Given enough inodes, and allocating
+> only a single sekrit page per pmd, we'll shatter the directmap into 4k.
 
-Ohh, in the ideal world we wouldn't need anything like that. But then
-the reality fires:
-* PF_MEMALLOC (resp memalloc_noreclaim_* for that matter) is primarily used
-  to make sure that allocations from inside the memory reclaim - yeah that
-  happens - will not recurse.
-* PF_MEMALLOC_NO{FS,IO} (resp memalloc_no{fs,io}*) are used to mark no
-  fs/io reclaim recursion critical sections because controling that for
-  each allocation inside fs transaction (or other sensitive) or IO
-  contexts turned out to be unmaintainable and people simply fallen into
-  using NOFS/NOIO unconditionally which is causing reclaim imbalance
-  problems.
-* PF_MEMALLOC_NOCMA (resp memalloc_nocma*) is used for long term pinning
-  when CMA pages cannot be pinned because that would break the CMA
-  guarantees. Communicating this to all potential allocations during
-  pinning is simply unfeasible.
+Why? Secretmem allocates PMD-size page per inode and uses it as a pool
+of 4K pages for that inode. This way it ensures that
+__kernel_map_pages() is always called on PMD boundaries.
 
-So you are absolutely right that these critical sections with side
-effects on all allocations are far from ideal from the API point of view
-but they are mostly mirroring a demand for functionality which is
-_practically_ impossible to achieve with our current code base. Not that
-we couldn't get back to drawing board and come up with a saner thing and
-rework the world...
 -- 
-Michal Hocko
-SUSE Labs
+Sincerely yours,
+Mike.
