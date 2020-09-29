@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE2327BF20
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 10:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675B627BF2E
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 10:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725554AbgI2IUM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Sep 2020 04:20:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60682 "EHLO mx2.suse.de"
+        id S1727700AbgI2IV0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Sep 2020 04:21:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33218 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727403AbgI2IUM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Sep 2020 04:20:12 -0400
+        id S1727653AbgI2IVY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 29 Sep 2020 04:21:24 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1601367609;
+        t=1601367682;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
         bh=KFyfyEQCS1dcCR4BhfL+zwiQ3CuzyAy4x23tr+VkzjE=;
-        b=pr56FUr28WzVjlye8ocfuUATkeSwhUXvbjPgGkEbab2FCVC+0BKyl8PhOHOFpR/zRWD2YJ
-        XkENxEAzZ+xaNySUfCCAfperdR1yK017PGgjlx8BHtiTSBrVceVD6B+fvb12QX9yuBiWP6
-        UV9FaMEAQthXh0P6zC/B1D/pMFgxjZ8=
+        b=kYjuvZ+ilRICWeNF3tv+sX4B6qR0l26SNFX+2yuqmAbG6VZsVdy+/ab4DWFA/2mAPMzvho
+        sWiMi4hR4DtnoNBd3zA9aScladT2LR3g7zk3zp4xXinjBQFShKRtNv5abZ+aKM+mJdoLfs
+        LfJPGyvdVLHOxuKwI+4KWXzshc3e4XY=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 981CFB2AE;
-        Tue, 29 Sep 2020 08:20:09 +0000 (UTC)
-Date:   Tue, 29 Sep 2020 10:20:08 +0200
+        by mx2.suse.de (Postfix) with ESMTP id 4162CACA3;
+        Tue, 29 Sep 2020 08:21:22 +0000 (UTC)
+Date:   Tue, 29 Sep 2020 10:21:21 +0200
 From:   Michal Hocko <mhocko@suse.com>
 To:     Daniel Vetter <daniel@ffwll.ch>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
@@ -88,6 +88,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
