@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2821927BF10
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 10:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC4527BF18
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 10:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725765AbgI2ITp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Sep 2020 04:19:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59520 "EHLO mx2.suse.de"
+        id S1727637AbgI2ITx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Sep 2020 04:19:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59722 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725550AbgI2ITo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Sep 2020 04:19:44 -0400
+        id S1727403AbgI2ITv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 29 Sep 2020 04:19:51 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1601367582;
+        t=1601367589;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
         bh=KFyfyEQCS1dcCR4BhfL+zwiQ3CuzyAy4x23tr+VkzjE=;
-        b=SSpMjosSL8o4OPVa55QL9wIlM8PHwJpdBy+0T8Zs2+GxBxG6YA9l00PJ9Y66qcHmMfGLv9
-        u+g+tcEvJ7RxAvAP57LRStfEelxtPsdHOGOgFzbQCNh9qQZDiKdnSarvXzcr1YnPqWmMjI
-        wdLRjalKNBbwgyGfH1Q3bT+vgMo4axA=
+        b=WFaQTV+kmp2Dcf4ETP9+6ZNrPfy9q5pMDECagrCQ3MjluCnYeqMkFTw/YcJHGz2iksDQw9
+        srvpAmlMUEz2D9SjbkwSKNyTXnnl0c+U97e7qNgFVE9O8k3lMFBfs0YlvFJAzRLJyf+n+C
+        wZ5d1Zkp/fxHdHhoVK5syk5dxSgYigs=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 3E86BADD8;
-        Tue, 29 Sep 2020 08:19:42 +0000 (UTC)
-Date:   Tue, 29 Sep 2020 10:19:38 +0200
+        by mx2.suse.de (Postfix) with ESMTP id C7EE3B29F;
+        Tue, 29 Sep 2020 08:19:48 +0000 (UTC)
+Date:   Tue, 29 Sep 2020 10:19:48 +0200
 From:   Michal Hocko <mhocko@suse.com>
 To:     Daniel Vetter <daniel@ffwll.ch>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
