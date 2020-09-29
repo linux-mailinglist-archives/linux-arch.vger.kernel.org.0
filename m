@@ -2,130 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1475927CE76
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 15:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398C227CE81
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 15:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728470AbgI2NHp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Sep 2020 09:07:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49550 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728241AbgI2NHo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Sep 2020 09:07:44 -0400
-Received: from kernel.org (unknown [87.71.73.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3D11420848;
-        Tue, 29 Sep 2020 13:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601384863;
-        bh=UZ0iM96aIv5qmIGrHFQ3nNuGd8q14qoW3IN+2hfXGCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ff4cS6H09wsob6fG8dvSzyj1LvUQfBbkOpFxI0sSdU98FA9rPjkXt2iow0J8KbiXE
-         zb+Di1ti/4IJRmKz0SOIT14xl6TtZOwVL/UB+NG+rI/tt+P8xz5F0/dp4cG22+QEa+
-         PIvBVdUoENxn2sQrb9B2BEdjgzVtwRerxkMIPhoA=
-Date:   Tue, 29 Sep 2020 16:07:23 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>,
+        id S1729260AbgI2NHw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Sep 2020 09:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728241AbgI2NHs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Sep 2020 09:07:48 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74D9C061755;
+        Tue, 29 Sep 2020 06:07:47 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id r8so3416846qtp.13;
+        Tue, 29 Sep 2020 06:07:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7vpidMw0HWxX/6cx3RBRN6x4KkgYNc8nMb6h2YX3QMA=;
+        b=uEFvEhv19wQsEcRNHH6yVD1084qfg6Pj4nrTxmDW0UfBKThyXC18qxVI0Sr278NBFp
+         QhMyZBoNnJN7CcikqikkkmTGVvJu44iJ86pcbmzHUb0zw/d3tE8iwjAxY7iN41XusioE
+         Z57maCFo9jO8ZWrtvghGSX7hiF31oVLxYeAbHQ1Dhs+deEqirh3Jc76s+fd2KSP4x/Uv
+         5C++V86gALFO/pFhV7lfesfFdDatOdN7S0rs2QTqLkThT71ExAupq6lgjUfn8P1fK3aq
+         VasjDadv3sGj9HvjQy322Fqsh3apvisLeqWDA6xlJ2T4iabQJu+ziVeunbzp5/skRIxF
+         cqCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7vpidMw0HWxX/6cx3RBRN6x4KkgYNc8nMb6h2YX3QMA=;
+        b=SA9Lax6BETozMKj8Ge0oMAzioWsRVMM0FDhOSULXsJhDUjPZ6q1uE3pAo+tTRmitdo
+         GV4JVTpqqZjN9XUjK475Tmr1N02bpeJ73K6Umyr7xsi8LVK4EnID2FUua2FohF4hCni9
+         cZVer1eYJA0T4Li4r06DBhGp6aXAzX0a+eWo/MzHSAexFENX/tPZIlqqGoaQ7saQItIt
+         A/BVjqhqcndw8Zf9gW82X3VzoHh0gtWaqpFvgi8Z2olOaFh0JcOBbqFx10nfDKcUVYEh
+         tDmPHJrbGbPYjExS2/IVZklgS3SCmOdxlajWeqRnkxpZxBbXrafycfR8MXo6FTrK5LxM
+         Egqw==
+X-Gm-Message-State: AOAM531U/XO4E03yOehS20Nk6raq7YuAxV8FFvWo9ppr5B+xA5Yp8krN
+        q4sok2Md6RtBIjA5XefwigI=
+X-Google-Smtp-Source: ABdhPJxaE8lTwuOySLwhCQ/9B/ylIcnWpBoFn/x+SwnEU4LMZQcbJzXzO3M60w/YptS92AuCQ3o57w==
+X-Received: by 2002:aed:35b2:: with SMTP id c47mr2950755qte.95.1601384866843;
+        Tue, 29 Sep 2020 06:07:46 -0700 (PDT)
+Received: from shinobu (072-189-064-225.res.spectrum.com. [72.189.64.225])
+        by smtp.gmail.com with ESMTPSA id w94sm5147990qte.93.2020.09.29.06.07.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 06:07:46 -0700 (PDT)
+Date:   Tue, 29 Sep 2020 09:07:43 -0400
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Syed Nayyar Waris <syednwaris@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20200929130723.GH2142832@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924132904.1391-6-rppt@kernel.org>
- <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
- <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
- <20200925095029.GX2628@hirez.programming.kicks-ass.net>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-arch@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v9 0/4] Introduce the for_each_set_clump macro
+Message-ID: <20200929130743.GB4458@shinobu>
+References: <cover.1593243079.git.syednwaris@gmail.com>
+ <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
+ <20200911225417.GA5286@shinobu>
+ <CACRpkdah+k-EyhF8bNRkvw4bFDiai9dYo3ph9wsumo_v3U-U0g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5I6of5zJg18YgZEa"
 Content-Disposition: inline
-In-Reply-To: <20200925095029.GX2628@hirez.programming.kicks-ass.net>
+In-Reply-To: <CACRpkdah+k-EyhF8bNRkvw4bFDiai9dYo3ph9wsumo_v3U-U0g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:50:29AM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
-> > On 25.09.20 09:41, Peter Zijlstra wrote:
-> > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
-> > >> From: Mike Rapoport <rppt@linux.ibm.com>
-> > >>
-> > >> Removing a PAGE_SIZE page from the direct map every time such page is
-> > >> allocated for a secret memory mapping will cause severe fragmentation of
-> > >> the direct map. This fragmentation can be reduced by using PMD-size pages
-> > >> as a pool for small pages for secret memory mappings.
-> > >>
-> > >> Add a gen_pool per secretmem inode and lazily populate this pool with
-> > >> PMD-size pages.
-> > > 
-> > > What's the actual efficacy of this? Since the pmd is per inode, all I
-> > > need is a lot of inodes and we're in business to destroy the directmap,
-> > > no?
-> > > 
-> > > Afaict there's no privs needed to use this, all a process needs is to
-> > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
-> > > page will utterly destroy the direct map.
-> > > 
-> > > I really don't like this, at all.
-> > 
-> > As I expressed earlier, I would prefer allowing allocation of secretmem
-> > only from a previously defined CMA area. This would physically locally
-> > limit the pain.
-> 
-> Given that this thing doesn't have a migrate hook, that seems like an
-> eminently reasonable contraint. Because not only will it mess up the
-> directmap, it will also destroy the ability of the page-allocator /
-> compaction to re-form high order blocks by sprinkling holes throughout.
-> 
-> Also, this is all very close to XPFO, yet I don't see that mentioned
-> anywhere.
 
-It's close to XPFO in the sense it removes pages from the kernel page
-table. But unlike XPFO memfd_secret() does not mean allowing access to
-these pages in the kernel until they are freed by the user. And, unlike
-XPFO, it does not require TLB flushing all over the place.
+--5I6of5zJg18YgZEa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Further still, it has this HAVE_SECRETMEM_UNCACHED nonsense which is
-> completely unused. I'm not at all sure exposing UNCACHED to random
-> userspace is a sane idea.
+On Tue, Sep 29, 2020 at 02:45:18PM +0200, Linus Walleij wrote:
+> On Sat, Sep 12, 2020 at 12:54 AM William Breathitt Gray
+> <vilhelm.gray@gmail.com> wrote:
+> > On Thu, Jul 16, 2020 at 02:49:35PM +0200, Linus Walleij wrote:
+> > > Hi Syed,
+> > >
+> > > sorry for taking so long. I was on vacation and a bit snowed
+> > > under by work.
+> > >
+> > > On Sat, Jun 27, 2020 at 10:10 AM Syed Nayyar Waris <syednwaris@gmail.=
+com> wrote:
+> > >
+> > > > Since this patchset primarily affects GPIO drivers, would you like
+> > > > to pick it up through your GPIO tree?
+> > >
+> > > I have applied the patches to an immutable branch and pushed
+> > > to kernelorg for testing (autobuilders will play with it I hope).
+> > >
+> > > If all works fine I will merge this into my devel branch for v5.9.
+> > >
+> > > It would be desirable if Andrew gave his explicit ACK on it too.
+> > >
+> > > Yours,
+> > > Linus Walleij
+> >
+> > Hi Linus,
+> >
+> > What's the name of the branch with these patches on kernelorg; I'm
+> > having trouble finding it?
+> >
+> > Btw, I'm CCing Andrew as well here because I notice him missing from the
+> > CC list earlier for this patchset.
+>=20
+> IIRC there were complaints from the zeroday build robot so I
+> dropped the branch and I am still waiting for a fixed up patch
+> series.
+>=20
+> Yours,
+> Linus Walleij
 
-The uncached mappings were originally proposed as a mean "... to prevent
-or considerably restrict speculation on such pages" [1] as a comment to
-my initial proposal to use mmap(MAP_EXCLUSIVE).
+My apologies, I wasn't aware a build error was reported. I'll be happy
+to help address the issue with Syed, but I can't seem to find a copy of
+the message on <https://lkml.org/lkml/2020/6/27/107> or my email logs.
+Do you have a link available to the zeroday build log?
 
-I've added the ability to create uncached mappings into the fd-based
-implementation of the exclusive mappings as it is indeed can reduce
-availability of side channels and the implementation was quite straight
-forward.
+Thanks,
 
-[1] https://lore.kernel.org/linux-mm/2236FBA76BA1254E88B949DDB74E612BA4EEC0CE@IRSMSX102.ger.corp.intel.com/
+William Breathitt Gray
 
--- 
-Sincerely yours,
-Mike.
+--5I6of5zJg18YgZEa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAl9zMZ8ACgkQhvpINdm7
+VJJhJBAAne4+TuZ5ye+zKdwxECRHf9+8DEOtmN37vuRuxtlFqmGEngLWRwKNmzhF
+8wwqSulCWUT32f7vjozpkEiT06bcV+zHcmkRu5xb/Bo8KIkc/7F1YQeVH5KxkUn+
+u0mmZBnjEWc8oBBjSBArc2XqMRVTnATMlViSbs/Ilax7/d0S6Ywlm3GlioGPJp+E
+uj5X8AUEi7Zhtsz3VT2lxNQN20BsyhwY16DnU8n69D4XIeF09vGu7htqsU05a2NW
+DtO5MVf9uUH6c637WiTBnwor2SgsR1/5OBZzSdXqu5Gqq43Ol+8s8cUvF1Gr64g/
+lKFULCcFfyrj2hSLJrfjkOW6qd1NxsHAWwvSMyGWfM7b7laTaWPV5jHjZuS2Wu7w
+lRZdp4N5XibtDSWUxt2Pi6NgnV9C6lgv5Fz4fX/Dd927E/WMcF3q46QutRXT8Mab
+z2Z4PEs+RR4A2E5cJv/qRxPID3ZzEINx+LLs1koor9F8av9ve4LH3cy6aQ7k3O7L
+jk1cg48c2GSLMH5bDfgJ6xhW7vNvBzjp0SaFlZl6DYiFq7HNISMzIsIXi0t8Yi2t
+/FIXL/xih9BzeX3+MDEcgyfJhwh+btrerBF544kHkI61QLaxHLaSvU0Iy/qHmkGg
+43o+XzQZeWHrZ/rt4FgDYG+oGL0pJVKVg5C9cQyZUTY+F/ROTeY=
+=9zS3
+-----END PGP SIGNATURE-----
+
+--5I6of5zJg18YgZEa--
