@@ -2,147 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD89727D122
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 16:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5823027D1EC
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Sep 2020 16:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729313AbgI2ObQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Sep 2020 10:31:16 -0400
-Received: from mga03.intel.com ([134.134.136.65]:61873 "EHLO mga03.intel.com"
+        id S1730159AbgI2OyJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Sep 2020 10:54:09 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33862 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725554AbgI2ObQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Sep 2020 10:31:16 -0400
-IronPort-SDR: nLAl7FGuzkPej9weIPtfmCXRdg2i8DT3HTGXBDhrkEinZFVR6T672Bk1ofWfDBgcfjgJffC7df
- HkxPgMXlIMuw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="162267044"
-X-IronPort-AV: E=Sophos;i="5.77,318,1596524400"; 
-   d="scan'208";a="162267044"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 07:31:11 -0700
-IronPort-SDR: KrMLHqm4vAIyh2wEols3UDgP/wgJVmEBxPrskh3CBl5CkdoeOD2dSYZ5qMX5xKeD8mdL9Iu4pj
- NMHmcT11ayaQ==
-X-IronPort-AV: E=Sophos;i="5.77,318,1596524400"; 
-   d="scan'208";a="324690295"
-Received: from balumahx-mobl.amr.corp.intel.com (HELO [10.212.138.118]) ([10.212.138.118])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 07:31:08 -0700
-Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
- direct map fragmentation
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        id S1728937AbgI2OyH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 29 Sep 2020 10:54:07 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1601391245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IgDvWNQP8iyuHEvr4G441L71BKSYFJPWhAP8LkzWJfg=;
+        b=eoKKMBN7CEGS/O8wpnxX5YX5p7R/6oj0pmjByAZssa/tlgDzObwBIbhZXkZHaNf3yxFnjs
+        /xxRgUM/x4iZ6RwvlYDvqSTGjNG6UgIhlOVv1JFsk77ppGGHvo3dx1IKn0uI5+hjhXkchS
+        /V0QnFBKAlwY5qjuSlhyF3uziX8+a1k=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id CB7CAAD0F;
+        Tue, 29 Sep 2020 14:54:04 +0000 (UTC)
+Date:   Tue, 29 Sep 2020 16:54:03 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ben Segall <bsegall@google.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-hexagon@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Brian Cain <bcain@codeaurora.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Airlie <airlied@linux.ie>,
         Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mel Gorman <mgorman@suse.de>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        linux-xtensa@linux-xtensa.org, Shuah Khan <shuah@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>, rcu@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924132904.1391-6-rppt@kernel.org>
- <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
- <20200929130529.GE2142832@kernel.org>
- <20200929141216.GO2628@hirez.programming.kicks-ass.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <4f6ad8a8-88aa-54ab-697e-1f44634ad2fb@intel.com>
-Date:   Tue, 29 Sep 2020 07:31:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+Message-ID: <20200929145403.GE2277@dhcp22.suse.cz>
+References: <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+ <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+ <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <CAKMK7uGFyfhEyt=jmdk2jDO-hq0_Pf0ck+cKSELHjr2U3rPuYQ@mail.gmail.com>
+ <20200916205840.GD29330@paulmck-ThinkPad-P72>
+ <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+ <20200929081938.GC22035@dhcp22.suse.cz>
+ <20200929090003.GG438822@phenom.ffwll.local>
 MIME-Version: 1.0
-In-Reply-To: <20200929141216.GO2628@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200929090003.GG438822@phenom.ffwll.local>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/29/20 7:12 AM, Peter Zijlstra wrote:
->>                              |  1G    |  2M    |  4K
->>        ----------------------+--------+--------+---------
->>   ssd, mitigations=on	| 308.75 | 317.37 | 314.9
->>   ssd, mitigations=off	| 305.25 | 295.32 | 304.92
->>   ram, mitigations=on	| 301.58 | 322.49 | 306.54
->>   ram, mitigations=off	| 299.32 | 288.44 | 310.65
-> These results lack error data, but assuming the reults are significant,
-> then this very much makes a case for 1G mappings. 5s on a kernel builds
-> is pretty good.
+On Tue 29-09-20 11:00:03, Daniel Vetter wrote:
+> On Tue, Sep 29, 2020 at 10:19:38AM +0200, Michal Hocko wrote:
+> > On Wed 16-09-20 23:43:02, Daniel Vetter wrote:
+> > > I can
+> > > then figure out whether it's better to risk not spotting issues with
+> > > call_rcu vs slapping a memalloc_noio_save/restore around all these
+> > > critical section which force-degrades any allocation to GFP_ATOMIC at
+> > 
+> > did you mean memalloc_noreclaim_* here?
+> 
+> Yeah I picked the wrong one of that family of functions.
+> 
+> > > most, but has the risk that we run into code that assumes "GFP_KERNEL
+> > > never fails for small stuff" and has a decidedly less tested fallback
+> > > path than rcu code.
+> > 
+> > Even if the above then please note that memalloc_noreclaim_* or
+> > PF_MEMALLOC should be used with an extreme care. Essentially only for
+> > internal memory reclaimers. It grants access to _all_ the available
+> > memory so any abuse can be detrimental to the overall system operation.
+> > Allocation failure in this mode means that we are out of memory and any
+> > code relying on such an allocation has to carefuly consider failure.
+> > This is not a random allocation mode.
+> 
+> Agreed, that's why I don't like having these kind of automagic critical
+> sections. It's a bit a shotgun approach. Paul said that the code would
+> handle failures, but the problem is that it applies everywhere.
 
-Is something like secretmem all or nothing?
+Ohh, in the ideal world we wouldn't need anything like that. But then
+the reality fires:
+* PF_MEMALLOC (resp memalloc_noreclaim_* for that matter) is primarily used
+  to make sure that allocations from inside the memory reclaim - yeah that
+  happens - will not recurse.
+* PF_MEMALLOC_NO{FS,IO} (resp memalloc_no{fs,io}*) are used to mark no
+  fs/io reclaim recursion critical sections because controling that for
+  each allocation inside fs transaction (or other sensitive) or IO
+  contexts turned out to be unmaintainable and people simply fallen into
+  using NOFS/NOIO unconditionally which is causing reclaim imbalance
+  problems.
+* PF_MEMALLOC_NOCMA (resp memalloc_nocma*) is used for long term pinning
+  when CMA pages cannot be pinned because that would break the CMA
+  guarantees. Communicating this to all potential allocations during
+  pinning is simply unfeasible.
 
-This seems like a similar situation to the side-channel mitigations.  We
-know what the most "secure" thing to do is.  But, folks also disagree
-about how much pain that security is worth.
-
-That seems to indicate we're never going to come up with a
-one-size-fits-all solution to this.  Apps are going to have to live
-without secretmem being around if they want to run on old kernels
-anyway, so it seems like something we should be able to enable or
-disable without ABI concerns.
-
-Do we just include it, but disable it by default so it doesn't eat
-performance?  But, allow it to be reenabled by the folks who generally
-prioritize hardening over performance, like Chromebooks for instance.
+So you are absolutely right that these critical sections with side
+effects on all allocations are far from ideal from the API point of view
+but they are mostly mirroring a demand for functionality which is
+_practically_ impossible to achieve with our current code base. Not that
+we couldn't get back to drawing board and come up with a saner thing and
+rework the world...
+-- 
+Michal Hocko
+SUSE Labs
