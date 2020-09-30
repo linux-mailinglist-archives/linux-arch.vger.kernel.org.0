@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D7627E454
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Sep 2020 10:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7AB27E45D
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Sep 2020 10:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729032AbgI3I4V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Sep 2020 04:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
+        id S1729067AbgI3I4W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Sep 2020 04:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728399AbgI3I4L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Sep 2020 04:56:11 -0400
+        with ESMTP id S1728723AbgI3I4K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Sep 2020 04:56:10 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EDDC0613D2;
-        Wed, 30 Sep 2020 01:56:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19362C0613D1;
+        Wed, 30 Sep 2020 01:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=M/VB7RvUTqS7x6MU8faY6GolcBOVninwR3B54x3JU50=; b=JoVeTh8YB//F+evVVlupMsVdR/
-        8lD0UcXPlZXeEGa30mLglM4b9PE5IWaFUvLbOJmbmICt7B/F/sRMpXMJ5i53QhV49/cMoysKiK0Ro
-        yyqI6gsyosaoVkiI1bG4lCqNhf7HnwLzSBwBGyBaVvzhCP/Jr6OL4ehojSqROB+vWRxhLbFu6A2m4
-        3oTFzZjaH1PPAUPCnWjLEflk2zVIyLyuV4irHTFbErKafNmN7h4kEzWVwm2irTScRNoRHC0bj/RS4
-        OV4pM6s+NV4oRUPMwSBLdsjbrMUycUpExitGwd6l/hnDoHol5I1ol7avH+wWdMgoqrl3XiIhfAP7Z
-        FFWV+NLg==;
+        bh=A5sHIFEBr9P1ebcVO7vFVBeN+9hMK43tFHinn/WC28Y=; b=U7+DOgnE6fHC6YVkVl/3vG169n
+        3AuHqpuzJxeCOsFN72gjyLiQCqRZ1orNmik4ljZDXXMl7ctpSZSEwlV+zq8ZPznTS/AbMMxAzBpaZ
+        GfPzPDaiWXA1vqvyII0w2qoBZrOrutRaztqCzWn8w4DLn7WJXPGYMd0tRbhGHPKV+VowhGJHaneRa
+        yqjjIzI1azgqpuC9RsZCBdk95fk2vtr6OjE8hg5ANPoXyvKyf3xD+ZDRJvBtDoGO8Hd2urbpF5h/j
+        eHiqlmtt5OxGAORpHcjKIKPIrepIl0x2j4/9gtkorK/WsvuvsdFo1hbUzS+8xFnZIYfpMVD2Lorh0
+        gkmsBihQ==;
 Received: from [2001:4bb8:180:7b62:c70:4a89:bc61:4] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNXu5-0003tA-AQ; Wed, 30 Sep 2020 08:56:01 +0000
+        id 1kNXu6-0003te-MN; Wed, 30 Sep 2020 08:56:03 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     iommu@lists.linux-foundation.org
 Cc:     Russell King <linux@armlinux.org.uk>, Sekhar Nori <nsekhar@ti.com>,
@@ -34,9 +34,9 @@ Cc:     Russell King <linux@armlinux.org.uk>, Sekhar Nori <nsekhar@ti.com>,
         Robin Murphy <robin.murphy@arm.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH 6/9] dma-mapping: remove <asm/dma-contiguous.h>
-Date:   Wed, 30 Sep 2020 10:55:45 +0200
-Message-Id: <20200930085548.920261-7-hch@lst.de>
+Subject: [PATCH 7/9] dma-mapping: move dma-debug.h to kernel/dma/
+Date:   Wed, 30 Sep 2020 10:55:46 +0200
+Message-Id: <20200930085548.920261-8-hch@lst.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200930085548.920261-1-hch@lst.de>
 References: <20200930085548.920261-1-hch@lst.de>
@@ -47,119 +47,303 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Just provide a weak default definition of dma_contiguous_early_fixup and
-let arm override it.
+Most of dma-debug.h is not required by anything outside of kernel/dma.
+Move the four declarations needed by dma-mappin.h or dma-ops providers
+into dma-mapping.h and dma-map-ops.h, and move the remainder of the
+file to kernel/dma/debug.h.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- arch/arm/include/asm/dma-contiguous.h | 15 ---------------
- arch/arm/mm/dma-mapping.c             |  1 -
- include/asm-generic/Kbuild            |  1 -
- include/asm-generic/dma-contiguous.h  | 10 ----------
- include/linux/dma-map-ops.h           |  2 ++
- kernel/dma/contiguous.c               |  6 +++++-
- 6 files changed, 7 insertions(+), 28 deletions(-)
- delete mode 100644 arch/arm/include/asm/dma-contiguous.h
- delete mode 100644 include/asm-generic/dma-contiguous.h
+ arch/arm/include/asm/dma-iommu.h              |  1 -
+ arch/arm/include/asm/dma-mapping.h            |  1 -
+ arch/microblaze/kernel/dma.c                  |  1 -
+ arch/sh/drivers/pci/pci.c                     |  1 -
+ arch/x86/include/asm/dma-mapping.h            |  1 -
+ arch/x86/kernel/pci-dma.c                     |  1 -
+ drivers/pci/pci-driver.c                      |  1 +
+ include/linux/dma-map-ops.h                   | 12 +++++
+ include/linux/dma-mapping.h                   | 16 ++++++-
+ kernel/dma/debug.c                            |  5 +--
+ .../linux/dma-debug.h => kernel/dma/debug.h   | 44 ++-----------------
+ kernel/dma/mapping.c                          |  1 +
+ mm/memory.c                                   |  1 -
+ 13 files changed, 34 insertions(+), 52 deletions(-)
+ rename include/linux/dma-debug.h => kernel/dma/debug.h (81%)
 
-diff --git a/arch/arm/include/asm/dma-contiguous.h b/arch/arm/include/asm/dma-contiguous.h
-deleted file mode 100644
-index d785187a6f8ac1..00000000000000
---- a/arch/arm/include/asm/dma-contiguous.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef ASMARM_DMA_CONTIGUOUS_H
--#define ASMARM_DMA_CONTIGUOUS_H
--
--#ifdef __KERNEL__
--#ifdef CONFIG_DMA_CMA
--
--#include <linux/types.h>
--
--void dma_contiguous_early_fixup(phys_addr_t base, unsigned long size);
--
--#endif
--#endif
--
--#endif
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index 154c24cec94c74..911fc6ea26071e 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -34,7 +34,6 @@
- #include <asm/dma-iommu.h>
- #include <asm/mach/map.h>
- #include <asm/system_info.h>
--#include <asm/dma-contiguous.h>
- #include <xen/swiotlb-xen.h>
+diff --git a/arch/arm/include/asm/dma-iommu.h b/arch/arm/include/asm/dma-iommu.h
+index 86405cc81385c8..fe9ef6f79e9cfe 100644
+--- a/arch/arm/include/asm/dma-iommu.h
++++ b/arch/arm/include/asm/dma-iommu.h
+@@ -6,7 +6,6 @@
  
- #include "dma.h"
-diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-index 74b0612601dd1b..62ebdc731ee239 100644
---- a/include/asm-generic/Kbuild
-+++ b/include/asm-generic/Kbuild
-@@ -16,7 +16,6 @@ mandatory-y += current.h
- mandatory-y += delay.h
- mandatory-y += device.h
- mandatory-y += div64.h
--mandatory-y += dma-contiguous.h
- mandatory-y += dma-mapping.h
- mandatory-y += dma.h
- mandatory-y += emergency-restart.h
-diff --git a/include/asm-generic/dma-contiguous.h b/include/asm-generic/dma-contiguous.h
-deleted file mode 100644
-index f24b0f9a4f05b6..00000000000000
---- a/include/asm-generic/dma-contiguous.h
-+++ /dev/null
-@@ -1,10 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _ASM_GENERIC_DMA_CONTIGUOUS_H
--#define _ASM_GENERIC_DMA_CONTIGUOUS_H
--
--#include <linux/types.h>
--
--static inline void
--dma_contiguous_early_fixup(phys_addr_t base, unsigned long size) { }
--
--#endif
+ #include <linux/mm_types.h>
+ #include <linux/scatterlist.h>
+-#include <linux/dma-debug.h>
+ #include <linux/kref.h>
+ 
+ struct dma_iommu_mapping {
+diff --git a/arch/arm/include/asm/dma-mapping.h b/arch/arm/include/asm/dma-mapping.h
+index 0a1a536368c3a4..77082246a5e121 100644
+--- a/arch/arm/include/asm/dma-mapping.h
++++ b/arch/arm/include/asm/dma-mapping.h
+@@ -6,7 +6,6 @@
+ 
+ #include <linux/mm_types.h>
+ #include <linux/scatterlist.h>
+-#include <linux/dma-debug.h>
+ 
+ #include <xen/xen.h>
+ #include <asm/xen/hypervisor.h>
+diff --git a/arch/microblaze/kernel/dma.c b/arch/microblaze/kernel/dma.c
+index d7bebd04247b72..a564863db06e98 100644
+--- a/arch/microblaze/kernel/dma.c
++++ b/arch/microblaze/kernel/dma.c
+@@ -10,7 +10,6 @@
+ #include <linux/device.h>
+ #include <linux/dma-noncoherent.h>
+ #include <linux/gfp.h>
+-#include <linux/dma-debug.h>
+ #include <linux/export.h>
+ #include <linux/bug.h>
+ #include <asm/cacheflush.h>
+diff --git a/arch/sh/drivers/pci/pci.c b/arch/sh/drivers/pci/pci.c
+index 6ab0b7377f6634..a3903304f33faa 100644
+--- a/arch/sh/drivers/pci/pci.c
++++ b/arch/sh/drivers/pci/pci.c
+@@ -13,7 +13,6 @@
+ #include <linux/pci.h>
+ #include <linux/init.h>
+ #include <linux/types.h>
+-#include <linux/dma-debug.h>
+ #include <linux/io.h>
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
+diff --git a/arch/x86/include/asm/dma-mapping.h b/arch/x86/include/asm/dma-mapping.h
+index e0c380b3ec1407..bb1654fe0ce74c 100644
+--- a/arch/x86/include/asm/dma-mapping.h
++++ b/arch/x86/include/asm/dma-mapping.h
+@@ -8,7 +8,6 @@
+  */
+ 
+ #include <linux/scatterlist.h>
+-#include <linux/dma-debug.h>
+ #include <asm/io.h>
+ #include <asm/swiotlb.h>
+ 
+diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
+index 4892dd043d414c..de234e7a8962eb 100644
+--- a/arch/x86/kernel/pci-dma.c
++++ b/arch/x86/kernel/pci-dma.c
+@@ -1,7 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/dma-map-ops.h>
+ #include <linux/dma-direct.h>
+-#include <linux/dma-debug.h>
+ #include <linux/iommu.h>
+ #include <linux/dmar.h>
+ #include <linux/export.h>
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 449466f71040d2..d1b7169c068403 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -19,6 +19,7 @@
+ #include <linux/kexec.h>
+ #include <linux/of_device.h>
+ #include <linux/acpi.h>
++#include <linux/dma-map-ops.h>
+ #include "pci.h"
+ #include "pcie/portdrv.h"
+ 
 diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index 474fc81bd4921c..7912f5d00ed950 100644
+index 7912f5d00ed950..9891def42da71f 100644
 --- a/include/linux/dma-map-ops.h
 +++ b/include/linux/dma-map-ops.h
-@@ -116,6 +116,8 @@ bool dma_release_from_contiguous(struct device *dev, struct page *pages,
- 				 int count);
- struct page *dma_alloc_contiguous(struct device *dev, size_t size, gfp_t gfp);
- void dma_free_contiguous(struct device *dev, struct page *page, size_t size);
-+
-+void dma_contiguous_early_fixup(phys_addr_t base, unsigned long size);
- #else /* CONFIG_DMA_CMA */
- static inline struct cma *dev_get_cma_area(struct device *dev)
- {
-diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
-index 6bfb763fff6fca..a2ee330a3749ec 100644
---- a/kernel/dma/contiguous.c
-+++ b/kernel/dma/contiguous.c
-@@ -44,7 +44,6 @@
- #endif
- 
- #include <asm/page.h>
--#include <asm/dma-contiguous.h>
- 
- #include <linux/memblock.h>
- #include <linux/err.h>
-@@ -212,6 +211,11 @@ void __init dma_contiguous_reserve(phys_addr_t limit)
- 	}
+@@ -220,6 +220,18 @@ static inline void arch_teardown_dma_ops(struct device *dev)
  }
+ #endif /* CONFIG_ARCH_HAS_TEARDOWN_DMA_OPS */
  
-+void __weak
-+dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
++#ifdef CONFIG_DMA_API_DEBUG
++void dma_debug_add_bus(struct bus_type *bus);
++void debug_dma_dump_mappings(struct device *dev);
++#else
++static inline void dma_debug_add_bus(struct bus_type *bus)
 +{
 +}
++static inline void debug_dma_dump_mappings(struct device *dev)
++{
++}
++#endif /* CONFIG_DMA_API_DEBUG */
 +
- /**
-  * dma_contiguous_reserve_area() - reserve custom contiguous area
-  * @size: Size of the reserved area (in bytes),
+ extern const struct dma_map_ops dma_dummy_ops;
+ 
+ #endif /* _LINUX_DMA_MAP_OPS_H */
+diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
+index 9591cd482d7c2d..3f029afdc9dc6a 100644
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -6,7 +6,6 @@
+ #include <linux/string.h>
+ #include <linux/device.h>
+ #include <linux/err.h>
+-#include <linux/dma-debug.h>
+ #include <linux/dma-direction.h>
+ #include <linux/scatterlist.h>
+ #include <linux/bug.h>
+@@ -76,6 +75,21 @@
+ 
+ #define DMA_BIT_MASK(n)	(((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+ 
++#ifdef CONFIG_DMA_API_DEBUG
++void debug_dma_mapping_error(struct device *dev, dma_addr_t dma_addr);
++void debug_dma_map_single(struct device *dev, const void *addr,
++		unsigned long len);
++#else
++static inline void debug_dma_mapping_error(struct device *dev,
++		dma_addr_t dma_addr)
++{
++}
++static inline void debug_dma_map_single(struct device *dev, const void *addr,
++		unsigned long len)
++{
++}
++#endif /* CONFIG_DMA_API_DEBUG */
++
+ #ifdef CONFIG_HAS_DMA
+ static inline int dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
+ {
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+index 4211800d9f3e4d..14de1271463fd0 100644
+--- a/kernel/dma/debug.c
++++ b/kernel/dma/debug.c
+@@ -9,10 +9,9 @@
+ 
+ #include <linux/sched/task_stack.h>
+ #include <linux/scatterlist.h>
+-#include <linux/dma-mapping.h>
++#include <linux/dma-map-ops.h>
+ #include <linux/sched/task.h>
+ #include <linux/stacktrace.h>
+-#include <linux/dma-debug.h>
+ #include <linux/spinlock.h>
+ #include <linux/vmalloc.h>
+ #include <linux/debugfs.h>
+@@ -24,8 +23,8 @@
+ #include <linux/ctype.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
+-
+ #include <asm/sections.h>
++#include "debug.h"
+ 
+ #define HASH_SIZE       16384ULL
+ #define HASH_FN_SHIFT   13
+diff --git a/include/linux/dma-debug.h b/kernel/dma/debug.h
+similarity index 81%
+rename from include/linux/dma-debug.h
+rename to kernel/dma/debug.h
+index 7b3b04ba60f32a..83643b3010b2fc 100644
+--- a/include/linux/dma-debug.h
++++ b/kernel/dma/debug.h
+@@ -5,28 +5,14 @@
+  * Author: Joerg Roedel <joerg.roedel@amd.com>
+  */
+ 
+-#ifndef __DMA_DEBUG_H
+-#define __DMA_DEBUG_H
+-
+-#include <linux/types.h>
+-
+-struct device;
+-struct scatterlist;
+-struct bus_type;
++#ifndef _KERNEL_DMA_DEBUG_H
++#define _KERNEL_DMA_DEBUG_H
+ 
+ #ifdef CONFIG_DMA_API_DEBUG
+-
+-extern void dma_debug_add_bus(struct bus_type *bus);
+-
+-extern void debug_dma_map_single(struct device *dev, const void *addr,
+-				 unsigned long len);
+-
+ extern void debug_dma_map_page(struct device *dev, struct page *page,
+ 			       size_t offset, size_t size,
+ 			       int direction, dma_addr_t dma_addr);
+ 
+-extern void debug_dma_mapping_error(struct device *dev, dma_addr_t dma_addr);
+-
+ extern void debug_dma_unmap_page(struct device *dev, dma_addr_t addr,
+ 				 size_t size, int direction);
+ 
+@@ -64,31 +50,13 @@ extern void debug_dma_sync_sg_for_cpu(struct device *dev,
+ extern void debug_dma_sync_sg_for_device(struct device *dev,
+ 					 struct scatterlist *sg,
+ 					 int nelems, int direction);
+-
+-extern void debug_dma_dump_mappings(struct device *dev);
+-
+ #else /* CONFIG_DMA_API_DEBUG */
+-
+-static inline void dma_debug_add_bus(struct bus_type *bus)
+-{
+-}
+-
+-static inline void debug_dma_map_single(struct device *dev, const void *addr,
+-					unsigned long len)
+-{
+-}
+-
+ static inline void debug_dma_map_page(struct device *dev, struct page *page,
+ 				      size_t offset, size_t size,
+ 				      int direction, dma_addr_t dma_addr)
+ {
+ }
+ 
+-static inline void debug_dma_mapping_error(struct device *dev,
+-					  dma_addr_t dma_addr)
+-{
+-}
+-
+ static inline void debug_dma_unmap_page(struct device *dev, dma_addr_t addr,
+ 					size_t size, int direction)
+ {
+@@ -150,11 +118,5 @@ static inline void debug_dma_sync_sg_for_device(struct device *dev,
+ 						int nelems, int direction)
+ {
+ }
+-
+-static inline void debug_dma_dump_mappings(struct device *dev)
+-{
+-}
+-
+ #endif /* CONFIG_DMA_API_DEBUG */
+-
+-#endif /* __DMA_DEBUG_H */
++#endif /* _KERNEL_DMA_DEBUG_H */
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 2e13e6d3903fa0..335ba183e0956a 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -14,6 +14,7 @@
+ #include <linux/of_device.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
++#include "debug.h"
+ 
+ /*
+  * Managed DMA API
+diff --git a/mm/memory.c b/mm/memory.c
+index f3eb5597590232..7e4e8b81a73823 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -65,7 +65,6 @@
+ #include <linux/gfp.h>
+ #include <linux/migrate.h>
+ #include <linux/string.h>
+-#include <linux/dma-debug.h>
+ #include <linux/debugfs.h>
+ #include <linux/userfaultfd_k.h>
+ #include <linux/dax.h>
 -- 
 2.28.0
 
