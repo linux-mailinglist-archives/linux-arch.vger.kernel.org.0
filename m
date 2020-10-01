@@ -2,71 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA2028003E
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 15:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F50D28008E
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 15:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732099AbgJANgo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 09:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731993AbgJANgo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Oct 2020 09:36:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64148C0613D0;
-        Thu,  1 Oct 2020 06:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fKHBx2l1x20GN0S3b+jTfen0uwxhiVfe2eiMSbpdaJc=; b=rkoYrYmb5/6jzedCCWXFLJn1Js
-        Su3dhZ5KWDv1MASUxHWIyi0HHPm/ePgWAlqmlPl7vX0YAy66AJdPY+/xm0WAUYoRmEBX+mO+6T8+V
-        Icj9pc59qTGH/yoN90T+98J5m6GdmDo4o+YQ6Qcwfvu5StJC1CMj+dZsOTyf/c9HP8WlPBGOb+o0Q
-        6D9yVgyZ+6MFyhrDwUasgeNYH4HtwuVAWOPmdotfUbYA/8kLlXOVNla6GYLXq1AzitcCts/t+cL5h
-        IEg2Eshs26M+j10DrIY85wx56KguUB9k4rNB/xtXHnDIekBqXSRpUNU87NEPTQuVilHGV1nifj4NB
-        bclif4ew==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNyko-0004ix-3E; Thu, 01 Oct 2020 13:36:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S1732099AbgJAN4n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Oct 2020 09:56:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48826 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732018AbgJAN4n (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 1 Oct 2020 09:56:43 -0400
+Received: from localhost (fla63-h02-176-172-189-251.dsl.sta.abo.bbox.fr [176.172.189.251])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 436ED300446;
-        Thu,  1 Oct 2020 15:36:12 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 30D1F203DC1C6; Thu,  1 Oct 2020 15:36:12 +0200 (CEST)
-Date:   Thu, 1 Oct 2020 15:36:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, jthierry@redhat.com, jpoimboe@redhat.com
-Subject: Re: [PATCH v4 04/29] objtool: Add a pass for generating __mcount_loc
-Message-ID: <20201001133612.GQ2628@hirez.programming.kicks-ass.net>
-References: <20200929214631.3516445-1-samitolvanen@google.com>
- <20200929214631.3516445-5-samitolvanen@google.com>
- <alpine.LSU.2.21.2010011504340.6689@pobox.suse.cz>
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B5A720872;
+        Thu,  1 Oct 2020 13:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601560602;
+        bh=o6qC8bC+K4scG1XPUArlJlnEglhhA7NyUzceP6nkYdI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MXeH6FmIoCrfau0W+WEVxQ2VRPiAykZjm2GMGlUsh12yFePp1P8OfDU9y4YF/flEM
+         MSbl46cqF3QyJirMrdBjRZAVUJJcW7N6F4JPKxVSba6zbSRfU/L6n5//FXQ6rFK+vI
+         RnXQMZb6DOSyo1ig6sI67GlpHT7Y41BHNna95WqI=
+Date:   Thu, 1 Oct 2020 15:56:40 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Alex Belits <abelits@marvell.com>
+Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 03/13] task_isolation: userspace hard isolation from
+ kernel
+Message-ID: <20201001135640.GA1748@lothringen>
+References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com>
+ <b18546567a2ed61073ae86f2d9945257ab285dfa.camel@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2010011504340.6689@pobox.suse.cz>
+In-Reply-To: <b18546567a2ed61073ae86f2d9945257ab285dfa.camel@marvell.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 03:17:07PM +0200, Miroslav Benes wrote:
+On Wed, Jul 22, 2020 at 02:49:49PM +0000, Alex Belits wrote:
+> +/*
+> + * Description of the last two tasks that ran isolated on a given CPU.
+> + * This is intended only for messages about isolation breaking. We
+> + * don't want any references to actual task while accessing this from
+> + * CPU that caused isolation breaking -- we know nothing about timing
+> + * and don't want to use locking or RCU.
+> + */
+> +struct isol_task_desc {
+> +	atomic_t curr_index;
+> +	atomic_t curr_index_wr;
+> +	bool	warned[2];
+> +	pid_t	pid[2];
+> +	pid_t	tgid[2];
+> +	char	comm[2][TASK_COMM_LEN];
+> +};
+> +static DEFINE_PER_CPU(struct isol_task_desc, isol_task_descs);
 
-> I also wonder about making 'mcount' command separate from 'check'. Similar 
-> to what is 'orc' now. But that could be done later.
+So that's quite a huge patch that would have needed to be split up.
+Especially this tracing engine.
 
-I'm not convinced more commands make sense. That only begets us the
-problem of having to run multiple commands.
+Speaking of which, I agree with Thomas that it's unnecessary. It's too much
+code and complexity. We can use the existing trace events and perform the
+analysis from userspace to find the source of the disturbance.
+
+Thanks.
+
