@@ -2,196 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9E527F8C6
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 06:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEF027FB2C
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 10:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725892AbgJAEvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 00:51:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47294 "EHLO mail.kernel.org"
+        id S1726992AbgJAIOs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Oct 2020 04:14:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37804 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgJAEvQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 1 Oct 2020 00:51:16 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        id S1725894AbgJAIOs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 1 Oct 2020 04:14:48 -0400
+Received: from kernel.org (unknown [87.71.73.56])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5774C20888;
-        Thu,  1 Oct 2020 04:51:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E72520BED;
+        Thu,  1 Oct 2020 08:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601527876;
-        bh=56/NQXRekQLOxrrnodOwJGve66GHBxBkrytoG7ugbkQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=SeT3a9SJpC9BMG3NGpQ5tQ/pFaRtUShyb1SwtCjw5l6cXhqf7vY7SiyG0nvUirv82
-         ZzTmbhHwCBm/rstQWGS+e/WmBsRF8A2G58sYRFitkJcf8evDDo0u9b0J+Z89OrTWDu
-         zcxsJq39pycx8yBD05ziTVZtHLopIu/dQ2LlWWi0=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 23B6A3522A7F; Wed, 30 Sep 2020 21:51:16 -0700 (PDT)
-Date:   Wed, 30 Sep 2020 21:51:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Litmus test for question from Al Viro
-Message-ID: <20201001045116.GA5014@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
+        s=default; t=1601540087;
+        bh=OQ5Rl7mvGEVxEAedAezsC2iYk6ORsvLvfeXsvmSGzK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k835WoUyIOxQs1vszUiMSjhhSn11jUXQ4TGNaslDPJ9EKG6CIPIx1unOuP857BqXd
+         F1ArPeyz1k6Gs5CuzXCCFTlGWQZkxC6BH30SPuw/qvNv/yezU2G1NGKT7Dtwd3B07I
+         0dXT3c8NBDcUtoxf2jYtr1TPrqgIIGcfASC6m31I=
+Date:   Thu, 1 Oct 2020 11:14:30 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20201001081430.GA3537283@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
+ <20200929130529.GE2142832@kernel.org>
+ <20200929141216.GO2628@hirez.programming.kicks-ass.net>
+ <20200929145813.GA3226834@linux.ibm.com>
+ <20200929151552.GS2628@hirez.programming.kicks-ass.net>
+ <20200930102745.GC3226834@linux.ibm.com>
+ <20200930150928.GR20115@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200930150928.GR20115@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello!
+On Wed, Sep 30, 2020 at 04:09:28PM +0100, Matthew Wilcox wrote:
+> On Wed, Sep 30, 2020 at 01:27:45PM +0300, Mike Rapoport wrote:
+> > On Tue, Sep 29, 2020 at 05:15:52PM +0200, Peter Zijlstra wrote:
+> > > On Tue, Sep 29, 2020 at 05:58:13PM +0300, Mike Rapoport wrote:
+> > > > On Tue, Sep 29, 2020 at 04:12:16PM +0200, Peter Zijlstra wrote:
+> > > 
+> > > > > It will drop them down to 4k pages. Given enough inodes, and allocating
+> > > > > only a single sekrit page per pmd, we'll shatter the directmap into 4k.
+> > > > 
+> > > > Why? Secretmem allocates PMD-size page per inode and uses it as a pool
+> > > > of 4K pages for that inode. This way it ensures that
+> > > > __kernel_map_pages() is always called on PMD boundaries.
+> > > 
+> > > Oh, you unmap the 2m page upfront? I read it like you did the unmap at
+> > > the sekrit page alloc, not the pool alloc side of things.
+> > > 
+> > > Then yes, but then you're wasting gobs of memory. Basically you can pin
+> > > 2M per inode while only accounting a single page.
+> > 
+> > Right, quite like THP :)
+> 
+> Huh?  THP accounts every page it allocates.  If you allocate 2MB,
+> it accounts 512 pages.
 
-Al Viro posted the following query:
+I meant that secremem allocates 2M in advance like THP and not that it
+similar because only page is accounted.
+Anyway, the intention was to account the entrire 2M chunk (512 pages),
+so I'll recheck the accounting and I'll fix it if I missed something.
 
-------------------------------------------------------------------------
+> And THP are reclaimable by vmscan, this is obviously not.
 
-<viro> fun question regarding barriers, if you have time for that
-<viro>         V->A = V->B = 1;
-<viro>
-<viro> CPU1:
-<viro>         to_free = NULL
-<viro>         spin_lock(&LOCK)
-<viro>         if (!smp_load_acquire(&V->B))
-<viro>                 to_free = V
-<viro>         V->A = 0
-<viro>         spin_unlock(&LOCK)
-<viro>         kfree(to_free)
-<viro>
-<viro> CPU2:
-<viro>         to_free = V;
-<viro>         if (READ_ONCE(V->A)) {
-<viro>                 spin_lock(&LOCK)
-<viro>                 if (V->A)
-<viro>                         to_free = NULL
-<viro>                 smp_store_release(&V->B, 0);
-<viro>                 spin_unlock(&LOCK)
-<viro>         }
-<viro>         kfree(to_free);
-<viro> 1) is it guaranteed that V will be freed exactly once and that
-	  no accesses to *V will happen after freeing it?
-<viro> 2) do we need smp_store_release() there?  I.e. will anything
-	  break if it's replaced with plain V->B = 0?
+True, this is more like mlock in that sense.
 
-------------------------------------------------------------------------
-
-Of course herd7 supports neither structures nor arrays, but I was
-crazy enough to try individual variables with made-up address and data
-dependencies.  This litmus test must also detect use-after-free bugs,
-but a simple variable should be able to do that.  So here is a
-prototype:
-
-------------------------------------------------------------------------
-
-C C-viro-2020.09.29a
-
-{
-	int a = 1;
-	int b = 1;
-	int v = 1;
-}
-
-
-P0(int *a, int *b, int *v, spinlock_t *l)
-{
-	int r0;
-	int r1;
-	int r2 = 2;
-	int r8;
-	int r9a = 2;
-	int r9b = 2;
-
-	r0 = 0;
-	spin_lock(l);
-	r9a = READ_ONCE(*v); // Use after free?
-	r8 = r9a - r9a; // Restore address dependency
-	r8 = b + r8;
-	r1 = smp_load_acquire(r8);
-	if (r1 == 0)
-		r0 = 1;
-	r9b = READ_ONCE(*v); // Use after free?
-	WRITE_ONCE(*a, r9b - r9b); // Use data dependency
-	spin_unlock(l);
-	if (r0) {
-		r2 = READ_ONCE(*v);
-		WRITE_ONCE(*v, 0); /* kfree(). */
-	}
-}
-
-P1(int *a, int *b, int *v, spinlock_t *l)
-{
-	int r0;
-	int r1;
-	int r1a;
-	int r2 = 2;
-	int r8;
-	int r9a = 2;
-	int r9b = 2;
-	int r9c = 2;
-
-	r0 = READ_ONCE(*v);
-	r9a = r0; // Use after free?
-	r8 = r9a - r9a; // Restore address dependency
-	r8 = a + r8;
-	r1 = READ_ONCE(*r8);
-	if (r1) {
-		spin_lock(l);
-		r9b = READ_ONCE(*v); // Use after free?
-		r8 = r9b - r9b; // Restore address dependency
-		r8 = a + r8;
-		r1a = READ_ONCE(*r8);
-		if (r1a)
-			r0 = 0;
-		r9c = READ_ONCE(*v); // Use after free?
-		smp_store_release(b, r9c - rc9); // Use data dependency
-		spin_unlock(l);
-	}
-	if (r0) {
-		r2 = READ_ONCE(*v);
-		WRITE_ONCE(*v, 0); /* kfree(). */
-	}
-}
-
-locations [a;b;v;0:r1;0:r8;1:r1;1:r8]
-exists (0:r0=1:r0 \/ (* Both or neither did kfree(). *)
-	v=1 \/ (* Neither did kfree, redundant check. *)
-	0:r2=0 \/ 1:r2=0 \/  (* Both did kfree, redundant check. *)
-	0:r9a=0 \/ 0:r9b=0 \/ 1:r9a=0 \/ (* CPU1 use after free. *)
-	1:r9b=0 \/ 1:r9c=0) (* CPU2 use after free. *)
-
-------------------------------------------------------------------------
-
-This "exists" clause is satisfied:
-
-------------------------------------------------------------------------
-
-$ herd7 -conf linux-kernel.cfg ~/paper/scalability/LWNLinuxMM/litmus/manual/kernel/C-viro-2020.09.29a.litmus
-Test C-viro-2020.09.29a Allowed
-States 5
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=0; 0:r9b=0; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=0; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=0; 1:r1=1; 1:r2=2; 1:r8=a; 1:r9a=1; 1:r9b=1; 1:r9c=1; a=0; b=1; v=1;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=1; 1:r1=1; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=1; 1:r9c=1; a=0; b=1; v=0;
-Ok
-Witnesses
-Positive: 3 Negative: 2
-Condition exists (0:r0=1:r0 \/ v=1 \/ 0:r2=0 \/ 1:r2=0 \/ 0:r9a=0 \/ 0:r9b=0 \/ 1:r9a=0 \/ 1:r9b=0 \/ 1:r9c=0)
-Observation C-viro-2020.09.29a Sometimes 3 2
-Time C-viro-2020.09.29a 14.33
-Hash=89f74abff4de682ee0bea8ee6dd53134
-
-------------------------------------------------------------------------
-
-So did we end up with herd7 not respecting "fake" dependencies like
-those shown above, or have I just messed up the translation from Al's
-example to the litmus test?  (Given one thing and another over the past
-couple of days, my guess would be that I just messed up the translation,
-especially given that I don't see a reference to fake dependencies in
-the documentation, but I figured that I should ask.)
-
-							Thanx, Paul
+-- 
+Sincerely yours,
+Mike.
