@@ -2,370 +2,251 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EECC280969
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 23:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F352F2809D4
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Oct 2020 00:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgJAVav (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 17:30:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45642 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726626AbgJAVau (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 1 Oct 2020 17:30:50 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E48E620796;
-        Thu,  1 Oct 2020 21:30:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601587848;
-        bh=f4Nb2NYx6X2yxypHJc/DaT7ek5uyvHKo6KzogQYi/n8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TFanxDMEj5c96O6NFTE7Iag++hH8PCxLhwrqT82F1jXrIRL+ry6dZ6bVFZINTeTXA
-         GOUq7Mml4bIXKNW/GVhPYPc0OfcSmLZutGxxaLUw5NwK/2NZEAxYAP+hkidJYSismT
-         Iy6IPLqCxQR8SFuunHxM0Kl7wXSXBApSqDH1nHrw=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id AB1153522B33; Thu,  1 Oct 2020 14:30:48 -0700 (PDT)
-Date:   Thu, 1 Oct 2020 14:30:48 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: Litmus test for question from Al Viro
-Message-ID: <20201001213048.GF29330@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20201001045116.GA5014@paulmck-ThinkPad-P72>
- <20201001161529.GA251468@rowland.harvard.edu>
+        id S1727124AbgJAWCn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Oct 2020 18:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727053AbgJAWCm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Oct 2020 18:02:42 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AE4C0613E2
+        for <linux-arch@vger.kernel.org>; Thu,  1 Oct 2020 15:02:42 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id c5so7819855ilk.11
+        for <linux-arch@vger.kernel.org>; Thu, 01 Oct 2020 15:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7L7K8C/1mZIVHV/yJEj8lKlJqviWDQigWaxJX7/IdHc=;
+        b=r37dZxzJZDMlxnOGWQ0REeugaWE+DNvx1t/53cR5oKf5wiit+zmGKwz9MHRMnSeMyb
+         QByHvKKhmIAGF67naFtzmx0LTOB4BB6UI0xerTngQw7Sq6Ctegj+pvcjneDRLq4Xwfyi
+         w5H5UGpFcnggm/C7BJpE2W0ynaK9YDn7RIwcs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7L7K8C/1mZIVHV/yJEj8lKlJqviWDQigWaxJX7/IdHc=;
+        b=iGrSgwpt570ytZffhk5jgSYSctVmLF86erB/oLSuwmLW0hkNyQLnWP3hcZBNKMgmUB
+         52R6JuCCaHXbOZAaU304BwfhCu/vskioyMROZsOzS0MKaoKp2aO8TasLlXJxZiqMSL6/
+         b31OyKMU+WtvQjSSYa9BsXRwth+2v8/yy0lsjTJV1Vu5r+SjjQS//vxhSPK77xPr/KBJ
+         a4Ux4Lu1T5aCugl/L3l5YD5kHaG5NKr1z1DzL0FFtZNtdA7ILxmXL5xYHMEF9AHusW4C
+         3ZrwM2yE1qHrCk3emlR81UAyfQtHDgeVS5CLZUAOrno0Z5t/U5UpUDqdXjHHvo1O6tSK
+         HbOQ==
+X-Gm-Message-State: AOAM531sLL+ADKZYF3mpEUC5/HP14UU1CjHAvkEUJJ3az9mnjMCDGo62
+        7g1IyOV+SjjXfYsGkYJtiwicbk9C1R+O7TDEkJVu
+X-Google-Smtp-Source: ABdhPJy+h7aS2d6ce7vQoMadNRVQ5lCvPyOl9bI6y3UkxMXpJ0ZfXX8vRMMSY43BXQ1oBWzcQfG7mFy2xUCI5cY56HA=
+X-Received: by 2002:a92:ad11:: with SMTP id w17mr4445282ilh.77.1601589761726;
+ Thu, 01 Oct 2020 15:02:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201001161529.GA251468@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200918201140.3172284-1-atish.patra@wdc.com> <20200921164947.000048e1@Huawei.com>
+ <CAOnJCU+mg13P609kut2cK9igmyepOvDc4kU-EzXsdjde7D_RpQ@mail.gmail.com>
+ <20200922122912.00004bcb@Huawei.com> <CAOnJCULdRR1JOkZq6aHW3Xv6ZHo8edOAU-3gf1zxNqQdioek9w@mail.gmail.com>
+In-Reply-To: <CAOnJCULdRR1JOkZq6aHW3Xv6ZHo8edOAU-3gf1zxNqQdioek9w@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 1 Oct 2020 15:02:30 -0700
+Message-ID: <CAOnJCUKkJrqAfnmeSKXiVKMZUucydEQ63mpFRpuBQHX7-joJkg@mail.gmail.com>
+Subject: Re: [RFT PATCH v3 0/5] Unify NUMA implementation between ARM64 & RISC-V
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Zong Li <zong.li@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Anup Patel <anup@brainfault.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 12:15:29PM -0400, Alan Stern wrote:
-> On Wed, Sep 30, 2020 at 09:51:16PM -0700, Paul E. McKenney wrote:
-> > Hello!
-> > 
-> > Al Viro posted the following query:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > <viro> fun question regarding barriers, if you have time for that
-> > <viro>         V->A = V->B = 1;
-> > <viro>
-> > <viro> CPU1:
-> > <viro>         to_free = NULL
-> > <viro>         spin_lock(&LOCK)
-> > <viro>         if (!smp_load_acquire(&V->B))
-> > <viro>                 to_free = V
-> > <viro>         V->A = 0
-> > <viro>         spin_unlock(&LOCK)
-> > <viro>         kfree(to_free)
-> > <viro>
-> > <viro> CPU2:
-> > <viro>         to_free = V;
-> > <viro>         if (READ_ONCE(V->A)) {
-> > <viro>                 spin_lock(&LOCK)
-> > <viro>                 if (V->A)
-> > <viro>                         to_free = NULL
-> > <viro>                 smp_store_release(&V->B, 0);
-> > <viro>                 spin_unlock(&LOCK)
-> > <viro>         }
-> > <viro>         kfree(to_free);
-> > <viro> 1) is it guaranteed that V will be freed exactly once and that
-> > 	  no accesses to *V will happen after freeing it?
-> > <viro> 2) do we need smp_store_release() there?  I.e. will anything
-> > 	  break if it's replaced with plain V->B = 0?
-> 
-> Here are my answers to Al's questions:
-> 
-> 1) It is guaranteed that V will be freed exactly once.  It is not 
-> guaranteed that no accesses to *V will occur after it is freed, because 
-> the test contains a data race.  CPU1's plain "V->A = 0" write races with 
-> CPU2's READ_ONCE; if the plain write were replaced with 
-> "WRITE_ONCE(V->A, 0)" then the guarantee would hold.  Equally well, 
-> CPU1's smp_load_acquire could be replaced with a plain read while the 
-> plain write is replaced with smp_store_release.
-> 
-> 2) The smp_store_release in CPU2 is not needed.  Replacing it with a 
-> plain V->B = 0 will not break anything.
-> 
-> Analysis: Apart from the kfree calls themselves, the only access to a 
-> shared variable outside of a critical section is CPU2's READ_ONCE of 
-> V->A.  So let's consider two possibilities:
-> 
-> 1: The READ_ONCE returns 0.  Then CPU2 doesn't execute its critical 
-> section and does kfree(V).  However, the fact that the READ_ONCE got 0 
-> means that CPU1 has already entered its critical section, has already 
-> written to V->A (but with a plain write!) and therefore has already seen 
-> V->B = 1 (because of the smp_load_acquire), and therefore will not free 
-> V.  This case shows that the ordering we require is for CPU1 to read 
-> V->B before it writes V->A.  The ordering can be enforced by using 
-> either a load-acquire (as in the litmus test) or a store-release.
-> 
-> 2: The READ_ONCE returns 1.  Then CPU2 does execute its critical 
-> section, and we can simply treat this case the same as if the critical 
-> section was executed unconditionally.  Whichever CPU runs its critical 
-> section second will free V, and the other CPU won't try to access V 
-> after leaving its own critical section (and thus won't access V after it 
-> has been freed).
-> 
-> > ------------------------------------------------------------------------
-> > 
-> > Of course herd7 supports neither structures nor arrays, but I was
-> > crazy enough to try individual variables with made-up address and data
-> > dependencies.  This litmus test must also detect use-after-free bugs,
-> > but a simple variable should be able to do that.  So here is a
-> > prototype:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > C C-viro-2020.09.29a
-> > 
-> > {
-> > 	int a = 1;
-> > 	int b = 1;
-> > 	int v = 1;
-> > }
-> 
-> Not the way I would have done it, but okay.  I would have modeled the 
-> kfree by setting a and b both to some sentinel value.
+On Tue, Sep 22, 2020 at 2:04 PM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Tue, Sep 22, 2020 at 4:30 AM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
+> >
+> > On Mon, 21 Sep 2020 17:08:32 -0700
+> > Atish Patra <atishp@atishpatra.org> wrote:
+> >
+> > > On Mon, Sep 21, 2020 at 8:51 AM Jonathan Cameron
+> > > <Jonathan.Cameron@huawei.com> wrote:
+> > > >
+> > > > On Fri, 18 Sep 2020 13:11:35 -0700
+> > > > Atish Patra <atish.patra@wdc.com> wrote:
+> > > >
+> > > > > This series attempts to move the ARM64 numa implementation to common
+> > > > > code so that RISC-V can leverage that as well instead of reimplementing
+> > > > > it again.
+> > > > >
+> > > > > RISC-V specific bits are based on initial work done by Greentime Hu [1] but
+> > > > > modified to reuse the common implementation to avoid duplication.
+> > > > >
+> > > > > [1] https://lkml.org/lkml/2020/1/10/233
+> > > > >
+> > > > > This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
+> > > > > It would be great if somebody can test it on numa capable ARM64 hardware platforms.
+> > > > > This patch series doesn't modify the maintainers list for the common code (arch_numa)
+> > > > > as I am not sure if somebody from ARM64 community or Greg should take up the
+> > > > > maintainership. Ganapatrao was the original author of the arm64 version.
+> > > > > I would be happy to update that in the next revision once it is decided.
+> > > >
+> > >
+> > > Any thoughts on the maintenanership of this code ?
+> >
+> > Currently it is a trivial enough bit of code, I'd not be too worried
+> > as long as it doesn't fall through the cracks.  Changes that directory are going
+> > to need a GregKH Ack so unlikely anything will get missed.
+> >
+>
+> Yeah. I am fine with the current structure. I just wanted to confirm that
+> everybody is on board with that.
+>
+> > If you feel a specific entry is needed in MAINTAINERS go for it.
+> > Feel free to stick me down as a reviewer and I'll keep an eye on
+> > it from ARM64 side of things.
+> >
+>
+> I will not add any specific entry in MAINTAINERS unless somebody
+> complains about it.
+>
+>
+> > Thanks,
+> >
+> > Jonathan
+> >
+> >
+> > >
+> > > > Was fairly sure this set was a noop on arm64 ACPI systems, but ran a quick
+> > > > sanity check on a 2 socket kunpeng920 and everything came up as normal
+> > > > (4 nodes, around 250G a node)
+> > > >
+> > > > Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > For patches 1 and 2.  Doesn't seem relevant to the rest :)
+> > > >
+> > >
+> > > Thanks a lot!
+> > >
+> > > > >
+> > > > > # numactl --hardware
+> > > > > available: 2 nodes (0-1)
+> > > > > node 0 cpus: 0 1 2 3
+> > > > > node 0 size: 486 MB
+> > > > > node 0 free: 470 MB
+> > > > > node 1 cpus: 4 5 6 7
+> > > > > node 1 size: 424 MB
+> > > > > node 1 free: 408 MB
+> > > > > node distances:
+> > > > > node   0   1
+> > > > >   0:  10  20
+> > > > >   1:  20  10
+> > > > > # numactl -show
+> > > > > policy: default
+> > > > > preferred node: current
+> > > > > physcpubind: 0 1 2 3 4 5 6 7
+> > > > > cpubind: 0 1
+> > > > > nodebind: 0 1
+> > > > > membind: 0 1
+> > > > >
+> > > > > For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
+> > > > > to test the patches in Qemu and 2 socket OmniXtend FPGA.
+> > > > >
+> > > > > https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
+> > > > >
+> > > > > The patches are also available at
+> > > > >
+> > > > > https://github.com/atishp04/linux/tree/5.10_numa_unified_v3
+> > > > >
+> > > > > There may be some minor conflicts with Mike's cleanup series [2] depending on the
+> > > > > order in which these two series are being accepted. I can rebase on top his series
+> > > > > if required.
+> > > > >
+> > > > > [2] https://lkml.org/lkml/2020/8/18/754
+> > > > >
+> > > > > Changes from v2->v3:
+> > > > > 1. Added Acked-by/Reviewed-by tags.
+> > > > > 2. Replaced asm/acpi.h with linux/acpi.h
+> > > > > 3. Defined arch_acpi_numa_init as static.
+> > > > >
+> > > > > Changes from v1->v2:
+> > > > > 1. Replaced ARM64 specific compile time protection with ACPI specific ones.
+> > > > > 2. Dropped common pcibus_to_node changes. Added required changes in RISC-V.
+> > > > > 3. Fixed few typos.
+> > > > >
+> > > > > Atish Patra (4):
+> > > > > numa: Move numa implementation to common code
+> > > > > arm64, numa: Change the numa init functions name to be generic
+> > > > > riscv: Separate memory init from paging init
+> > > > > riscv: Add numa support for riscv64 platform
+> > > > >
+> > > > > Greentime Hu (1):
+> > > > > riscv: Add support pte_protnone and pmd_protnone if
+> > > > > CONFIG_NUMA_BALANCING
+> > > > >
+> > > > > arch/arm64/Kconfig                            |  1 +
+> > > > > arch/arm64/include/asm/numa.h                 | 45 +----------------
+> > > > > arch/arm64/kernel/acpi_numa.c                 | 13 -----
+> > > > > arch/arm64/mm/Makefile                        |  1 -
+> > > > > arch/arm64/mm/init.c                          |  4 +-
+> > > > > arch/riscv/Kconfig                            | 31 +++++++++++-
+> > > > > arch/riscv/include/asm/mmzone.h               | 13 +++++
+> > > > > arch/riscv/include/asm/numa.h                 |  8 +++
+> > > > > arch/riscv/include/asm/pci.h                  | 14 ++++++
+> > > > > arch/riscv/include/asm/pgtable.h              | 21 ++++++++
+> > > > > arch/riscv/kernel/setup.c                     | 11 ++++-
+> > > > > arch/riscv/kernel/smpboot.c                   | 12 ++++-
+> > > > > arch/riscv/mm/init.c                          | 10 +++-
+> > > > > drivers/base/Kconfig                          |  6 +++
+> > > > > drivers/base/Makefile                         |  1 +
+> > > > > .../mm/numa.c => drivers/base/arch_numa.c     | 31 ++++++++++--
+> > > > > include/asm-generic/numa.h                    | 49 +++++++++++++++++++
+> > > > > 17 files changed, 201 insertions(+), 70 deletions(-)
+> > > > > create mode 100644 arch/riscv/include/asm/mmzone.h
+> > > > > create mode 100644 arch/riscv/include/asm/numa.h
+> > > > > rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
+> > > > > create mode 100644 include/asm-generic/numa.h
+> > > > >
+> > > > > --
+> > > > > 2.25.1
+> > > > >
+> > > >
+> > > >
+> > > >
+> > > > _______________________________________________
+> > > > linux-riscv mailing list
+> > > > linux-riscv@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > >
+> > >
+> > >
+> >
+> >
+>
+>
+> --
+> Regards,
+> Atish
 
-Might be well worth pursuing!  But how would you model the address
-dependencies in that approach?
+I am planning to send a v4 with a small fix Jonathan pointed out.
+Any more comments/concerns that I can address before that?
+Otherwise, can we get it queued for the next merge window?
 
-> > P0(int *a, int *b, int *v, spinlock_t *l)
-> > {
-> > 	int r0;
-> > 	int r1;
-> > 	int r2 = 2;
-> > 	int r8;
-> > 	int r9a = 2;
-> > 	int r9b = 2;
-> > 
-> > 	r0 = 0;
-> > 	spin_lock(l);
-> > 	r9a = READ_ONCE(*v); // Use after free?
-> > 	r8 = r9a - r9a; // Restore address dependency
-> > 	r8 = b + r8;
-> > 	r1 = smp_load_acquire(r8);
-> > 	if (r1 == 0)
-> > 		r0 = 1;
-> > 	r9b = READ_ONCE(*v); // Use after free?
-> > 	WRITE_ONCE(*a, r9b - r9b); // Use data dependency
-> > 	spin_unlock(l);
-> > 	if (r0) {
-> > 		r2 = READ_ONCE(*v);
-> > 		WRITE_ONCE(*v, 0); /* kfree(). */
-> > 	}
-> > }
-> > 
-> > P1(int *a, int *b, int *v, spinlock_t *l)
-> > {
-> > 	int r0;
-> > 	int r1;
-> > 	int r1a;
-> > 	int r2 = 2;
-> > 	int r8;
-> > 	int r9a = 2;
-> > 	int r9b = 2;
-> > 	int r9c = 2;
-> > 
-> > 	r0 = READ_ONCE(*v);
-> > 	r9a = r0; // Use after free?
-> 
-> Wrong.  This should be:
-> 
-> 	r0 = 1;
-> 	r9a = READ_ONCE(*v);
-
-Thank you!  I was definitely suffering from a severe case of Programmer's
-Blindness.  Fixed!
-
-> > 	r8 = r9a - r9a; // Restore address dependency
-> > 	r8 = a + r8;
-> > 	r1 = READ_ONCE(*r8);
-> > 	if (r1) {
-> > 		spin_lock(l);
-> > 		r9b = READ_ONCE(*v); // Use after free?
-> > 		r8 = r9b - r9b; // Restore address dependency
-> > 		r8 = a + r8;
-> > 		r1a = READ_ONCE(*r8);
-> > 		if (r1a)
-> > 			r0 = 0;
-> > 		r9c = READ_ONCE(*v); // Use after free?
-> > 		smp_store_release(b, r9c - rc9); // Use data dependency
-> > 		spin_unlock(l);
-> > 	}
-> > 	if (r0) {
-> > 		r2 = READ_ONCE(*v);
-> > 		WRITE_ONCE(*v, 0); /* kfree(). */
-> > 	}
-> > }
-> > 
-> > locations [a;b;v;0:r1;0:r8;1:r1;1:r8]
-> > exists (0:r0=1:r0 \/ (* Both or neither did kfree(). *)
-> > 	v=1 \/ (* Neither did kfree, redundant check. *)
-> > 	0:r2=0 \/ 1:r2=0 \/  (* Both did kfree, redundant check. *)
-> > 	0:r9a=0 \/ 0:r9b=0 \/ 1:r9a=0 \/ (* CPU1 use after free. *)
-> > 	1:r9b=0 \/ 1:r9c=0) (* CPU2 use after free. *)
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > This "exists" clause is satisfied:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > $ herd7 -conf linux-kernel.cfg ~/paper/scalability/LWNLinuxMM/litmus/manual/kernel/C-viro-2020.09.29a.litmus
-> > Test C-viro-2020.09.29a Allowed
-> > States 5
-> > 0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=0; 0:r9b=0; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-> > 0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=0; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-> > 0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=0; 1:r1=1; 1:r2=2; 1:r8=a; 1:r9a=1; 1:r9b=1; 1:r9c=1; a=0; b=1; v=1;
-> 
-> The values for this case don't make sense.  I haven't checked the other 
-> four cases.  Printing a graph of the relations for this case (the only 
-> state with v=1 at the end) might help.
-> 
-> > 0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-> > 0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=1; 1:r1=1; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=1; 1:r9c=1; a=0; b=1; v=0;
-> > Ok
-> > Witnesses
-> > Positive: 3 Negative: 2
-> > Condition exists (0:r0=1:r0 \/ v=1 \/ 0:r2=0 \/ 1:r2=0 \/ 0:r9a=0 \/ 0:r9b=0 \/ 1:r9a=0 \/ 1:r9b=0 \/ 1:r9c=0)
-> > Observation C-viro-2020.09.29a Sometimes 3 2
-> > Time C-viro-2020.09.29a 14.33
-> > Hash=89f74abff4de682ee0bea8ee6dd53134
-> 
-> Why didn't this flag the data race?
-
-Because I turned Al's simple assignments into *_ONCE() or better.
-In doing this, I was following the default KCSAN settings which
-(for better or worse) forgive the stores from data races.
-
-> > ------------------------------------------------------------------------
-> > 
-> > So did we end up with herd7 not respecting "fake" dependencies like
-> > those shown above, or have I just messed up the translation from Al's
-> > example to the litmus test?  (Given one thing and another over the past
-> > couple of days, my guess would be that I just messed up the translation,
-> > especially given that I don't see a reference to fake dependencies in
-> > the documentation, but I figured that I should ask.)
-> 
-> What do you get if you fix up the litmus test?
-
-With your suggested change and using simple assignments where Al
-indicated them:
-
-------------------------------------------------------------------------
-
-$ herd7 -conf linux-kernel.cfg ~/paper/scalability/LWNLinuxMM/litmus/manual/kernel/C-viro-2020.09.29a.litmus
-Test C-viro-2020.09.29a Allowed
-States 5
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=0; 0:r9b=0; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=0; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=0; 1:r1=1; 1:r2=2; 1:r8=a; 1:r9a=1; 1:r9b=1; 1:r9c=1; a=0; b=1; v=1;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=1; 1:r1=0; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=2; 1:r9c=2; a=0; b=1; v=0;
-0:r0=0; 0:r1=1; 0:r2=2; 0:r8=b; 0:r9a=1; 0:r9b=1; 1:r0=1; 1:r1=1; 1:r2=1; 1:r8=a; 1:r9a=1; 1:r9b=1; 1:r9c=1; a=0; b=1; v=0;
-Ok
-Witnesses
-Positive: 3 Negative: 2
-Flag data-race
-Condition exists (0:r0=1:r0 \/ v=1 \/ 0:r2=0 \/ 1:r2=0 \/ 0:r9a=0 \/ 0:r9b=0 \/ 1:r9a=0 \/ 1:r9b=0 \/ 1:r9c=0)
-Observation C-viro-2020.09.29a Sometimes 3 2
-Time C-viro-2020.09.29a 17.95
-Hash=14ded51102b668bc38b790e8c3692227
-
-------------------------------------------------------------------------
-
-So still "Sometimes", but the "Flag data-race" you expected is there.
-
-I posted the updated litmus test below.  Additional or other thoughts?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-C C-viro-2020.09.29a
-
-{
-	int a = 1;
-	int b = 1;
-	int v = 1;
-}
-
-
-P0(int *a, int *b, int *v, spinlock_t *l)
-{
-	int r0;
-	int r1;
-	int r2 = 2;
-	int r8;
-	int r9a = 2;
-	int r9b = 2;
-
-	r0 = 0;
-	spin_lock(l);
-	r9a = READ_ONCE(*v); // Use after free?
-	r8 = r9a - r9a; // Restore address dependency
-	r8 = b + r8;
-	r1 = smp_load_acquire(r8);
-	if (r1 == 0)
-		r0 = 1;
-	r9b = READ_ONCE(*v); // Use after free?
-	// WRITE_ONCE(*a, r9b - r9b); // Use data dependency
-	*a = r9b - r9b; // Use data dependency
-	spin_unlock(l);
-	if (r0) {
-		r2 = READ_ONCE(*v);
-		WRITE_ONCE(*v, 0); /* kfree(). */
-	}
-}
-
-P1(int *a, int *b, int *v, spinlock_t *l)
-{
-	int r0;
-	int r1;
-	int r1a;
-	int r2 = 2;
-	int r8;
-	int r9a = 2;
-	int r9b = 2;
-	int r9c = 2;
-
-	r0 = 1;
-	r9a = READ_ONCE(*v); // Use after free?
-	r8 = r9a - r9a; // Restore address dependency
-	r8 = a + r8;
-	r1 = READ_ONCE(*r8);
-	if (r1) {
-		spin_lock(l);
-		r9b = READ_ONCE(*v); // Use after free?
-		r8 = r9b - r9b; // Restore address dependency
-		r8 = a + r8;
-		// r1a = READ_ONCE(*r8);
-		r1a = *r8;
-		if (r1a)
-			r0 = 0;
-		r9c = READ_ONCE(*v); // Use after free?
-		smp_store_release(b, r9c - rc9); // Use data dependency
-		spin_unlock(l);
-	}
-	if (r0) {
-		r2 = READ_ONCE(*v);
-		WRITE_ONCE(*v, 0); /* kfree(). */
-	}
-}
-
-locations [a;b;v;0:r1;0:r8;1:r1;1:r8]
-exists (0:r0=1:r0 \/ (* Both or neither did kfree(). *)
-	v=1 \/ (* Neither did kfree, redundant check. *)
-	0:r2=0 \/ 1:r2=0 \/  (* Both did kfree, redundant check. *)
-	0:r9a=0 \/ 0:r9b=0 \/ 1:r9a=0 \/ (* CPU1 use after free. *)
-	1:r9b=0 \/ 1:r9c=0) (* CPU2 use after free. *)
+-- 
+Regards,
+Atish
