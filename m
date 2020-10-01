@@ -2,83 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA88C280154
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 16:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F53280178
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 16:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732452AbgJAOdb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 10:33:31 -0400
-Received: from mail-oo1-f68.google.com ([209.85.161.68]:41740 "EHLO
-        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732020AbgJAOdb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Oct 2020 10:33:31 -0400
-Received: by mail-oo1-f68.google.com with SMTP id t3so1519427ook.8;
-        Thu, 01 Oct 2020 07:33:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NklUCDIMExUICy4FN/gh63Vm3SmGzKI/5Dwr1ozJ1xo=;
-        b=Uye2+7mYqgX89ErfbrN19Ywi5H8ep5QlB475QIIkeLx+4MtiZnluCT8Ayj5oMDuah/
-         X3VI3p/1xoRqc90ue14+uRGHnU5T+CSbBpMNCSFUONviMRdPluG6VhyZ6t0ziOVpQWf5
-         5qCqbSFAajrV5sYt0fdIrqEMgWlg4/MjNQmuL64DscaMXWLG3LY+K0QN2ALwTqxXrvqy
-         GCoRbjPuzRTBi4AYoed1PjP6LlxxLSB+ML80CitU301Z2aeickSJi3B6oQf6v4euVWP5
-         SkhFJMXhoRNuSlZ5MdR9ZBkO768iwigMNOj0Vh1UBc+6Auk0tdurJFS9V1RyzA7gvUNm
-         BP5Q==
-X-Gm-Message-State: AOAM533Hwl06GCV8x1+z+TBM6dt/UsBDrObdk66WFuJF8qPyGRaf2r67
-        A05UQ3DCgg1cCo29Sksj4ewRms3+EF2z
-X-Google-Smtp-Source: ABdhPJwtom5klA/Ap8NrMcL34dnJEga9NT+pmkNy471CG5ehIqBT2YW5RiioY1ZL73r4Gt8Hdb3wCQ==
-X-Received: by 2002:a4a:95f1:: with SMTP id p46mr5633028ooi.93.1601562808922;
-        Thu, 01 Oct 2020 07:33:28 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g7sm1204483otk.56.2020.10.01.07.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2020 07:33:28 -0700 (PDT)
-Received: (nullmailer pid 695955 invoked by uid 1000);
-        Thu, 01 Oct 2020 14:33:22 -0000
-Date:   Thu, 1 Oct 2020 09:33:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Stephen Hemminger <sthemmin@microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        virtualization@lists.linux-foundation.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Nuno Das Neves <nudasnev@microsoft.com>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Vineeth Pillai <viremana@linux.microsoft.com>
-Subject: Re: [PATCH RFC v1 12/18] asm-generic/hyperv: update
- hv_interrupt_entry
-Message-ID: <20201001143322.GA695896@bogus>
-References: <20200914112802.80611-1-wei.liu@kernel.org>
- <20200914115928.83184-4-wei.liu@kernel.org>
+        id S1732207AbgJAOk4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Oct 2020 10:40:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57484 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732020AbgJAOkz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 1 Oct 2020 10:40:55 -0400
+Received: from localhost (fla63-h02-176-172-189-251.dsl.sta.abo.bbox.fr [176.172.189.251])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1EAA20780;
+        Thu,  1 Oct 2020 14:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601563255;
+        bh=DhY0IbX8UQYySEuqd6kJGsABVcgsf2XJo61neYj6iVo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O/ZBWi78hPtqwdVSIbY+TWkDscWVTruDQBqStBOGnT7e3MLHlds9c04L+sw7/cR00
+         wKD5yk9vWLUR0g2enFwY8Oe+xu94OWyMYPnHGjkTdYEt/ybCkVId/EB7jaxqN2Ruxm
+         S+YC8oQanUYpQVJcvT8ZLAmjC9SR480rBNdwAxVg=
+Date:   Thu, 1 Oct 2020 16:40:52 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Alex Belits <abelits@marvell.com>
+Cc:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 03/13] task_isolation: userspace hard isolation from
+ kernel
+Message-ID: <20201001144052.GA6595@lothringen>
+References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com>
+ <b18546567a2ed61073ae86f2d9945257ab285dfa.camel@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200914115928.83184-4-wei.liu@kernel.org>
+In-Reply-To: <b18546567a2ed61073ae86f2d9945257ab285dfa.camel@marvell.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 14 Sep 2020 11:59:21 +0000, Wei Liu wrote:
-> We will soon use the same structure to handle IO-APIC interrupts as
-> well. Introduce an enum to identify the source and a data structure for
-> IO-APIC RTE.
-> 
-> While at it, update pci-hyperv.c to use the enum.
-> 
-> No functional change.
-> 
-> Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> ---
->  drivers/pci/controller/pci-hyperv.c |  2 +-
->  include/asm-generic/hyperv-tlfs.h   | 36 +++++++++++++++++++++++++++--
->  2 files changed, 35 insertions(+), 3 deletions(-)
-> 
+On Wed, Jul 22, 2020 at 02:49:49PM +0000, Alex Belits wrote:
+> +/**
+> + * task_isolation_kernel_enter() - clear low-level task isolation flag
+> + *
+> + * This should be called immediately after entering kernel.
+> + */
+> +static inline void task_isolation_kernel_enter(void)
+> +{
+> +	unsigned long flags;
+> +
+> +	/*
+> +	 * This function runs on a CPU that ran isolated task.
+> +	 *
+> +	 * We don't want this CPU running code from the rest of kernel
+> +	 * until other CPUs know that it is no longer isolated.
+> +	 * When CPU is running isolated task until this point anything
+> +	 * that causes an interrupt on this CPU must end up calling this
+> +	 * before touching the rest of kernel. That is, this function or
+> +	 * fast_task_isolation_cpu_cleanup() or stop_isolation() calling
+> +	 * it. If any interrupt, including scheduling timer, arrives, it
+> +	 * will still end up here early after entering kernel.
+> +	 * From this point interrupts are disabled until all CPUs will see
+> +	 * that this CPU is no longer running isolated task.
+> +	 *
+> +	 * See also fast_task_isolation_cpu_cleanup().
+> +	 */
+> +	smp_rmb();
 
-Acked-by: Rob Herring <robh@kernel.org>
+I'm a bit confused what this read memory barrier is ordering. Also against
+what it pairs.
+
+> +	if((this_cpu_read(ll_isol_flags) & FLAG_LL_TASK_ISOLATION) == 0)
+> +		return;
+> +
+> +	local_irq_save(flags);
+> +
+> +	/* Clear low-level flags */
+> +	this_cpu_write(ll_isol_flags, 0);
+> +
+> +	/*
+> +	 * If something happened that requires a barrier that would
+> +	 * otherwise be called from remote CPUs by CPU kick procedure,
+> +	 * this barrier runs instead of it. After this barrier, CPU
+> +	 * kick procedure would see the updated ll_isol_flags, so it
+> +	 * will run its own IPI to trigger a barrier.
+> +	 */
+> +	smp_mb();
+> +	/*
+> +	 * Synchronize instructions -- this CPU was not kicked while
+> +	 * in isolated mode, so it might require synchronization.
+> +	 * There might be an IPI if kick procedure happened and
+> +	 * ll_isol_flags was already updated while it assembled a CPU
+> +	 * mask. However if this did not happen, synchronize everything
+> +	 * here.
+> +	 */
+> +	instr_sync();
+
+It's the first time I meet an instruction barrier. I should get information
+about that but what is it ordering here?
+
+> +	local_irq_restore(flags);
+> +}
+
+Thanks.
