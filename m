@@ -2,139 +2,178 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B4B280108
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 16:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83914280104
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Oct 2020 16:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732539AbgJAONn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 10:13:43 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:50239 "EHLO
+        id S1732473AbgJAONM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Oct 2020 10:13:12 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:60355 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732413AbgJAONH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Oct 2020 10:13:07 -0400
+        with ESMTP id S1732380AbgJAONK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Oct 2020 10:13:10 -0400
 Received: from threadripper.lan ([46.223.126.90]) by mrelayeu.kundenserver.de
  (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MvbJw-1kepec1eTe-00shEs; Thu, 01 Oct 2020 16:12:52 +0200
+ 1M2fHt-1kPNAh308t-0049t9; Thu, 01 Oct 2020 16:12:52 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
 To:     Russell King <linux@armlinux.org.uk>,
         Christoph Hellwig <hch@lst.de>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>, stable@vger.kernel.org
-Subject: [PATCH v3 03/10] ARM: oabi-compat: add epoll_pwait handler
-Date:   Thu,  1 Oct 2020 16:12:26 +0200
-Message-Id: <20201001141233.119343-4-arnd@arndb.de>
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v3 04/10] ARM: syscall: always store thread_info->syscall
+Date:   Thu,  1 Oct 2020 16:12:27 +0200
+Message-Id: <20201001141233.119343-5-arnd@arndb.de>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201001141233.119343-1-arnd@arndb.de>
 References: <20201001141233.119343-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:cWWCYuRJriYKt0llInUlGsi6sGZrKAuOlwaggzj3/coCoUzqfLK
- tdhpTdf+H1PnSpU5qTRkfZCY1eCG1Cjc26hA5rHMOatSmHap4G/tHtXis84Mc+nDdeUaSjS
- PlQBkFWU32fdiDbaBtMFwdhbryJMvp4bYkfA1tB83+ywMKEBtsP41yb1F5scXxc27obsYYl
- e2PBjElmQm1a2yMG97plw==
+X-Provags-ID: V03:K1:JdmTWg1P4Ite9iAXVekvbKrwOeo3zfmqvIUPmBGn+poLbujFLTV
+ 2SgE+hM5gZQIFpNPMD3oP2bmSfMYjV3uPhcNDB3Zsd703BBEuGl9FCny5XBsupWcCJC6dZq
+ 0pBNxlWVJpncndUy6cI4qi4jYZO1+EeN48k0Ux7HAAuoFhjskkN5Hc0E3oxzbbRrELPLzpE
+ CSX9YYxA0ixVWmUc+/nZg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1EcS5jnnr5c=:1nhTSp9Le4lI6Ga8UCr5JX
- ipyTMFNr/ZP7v+X4Nv+sXpevyJjaGWoU3bmRuRFg41lsTEICDGn80l+k1ld6seKph2+6q2K5+
- bO9Kc4cwSs6KYjZ2k+XxJ8v7ThMQVqKLjWaNHd082KwpwKaqm2WD9OXB8PR6eB3VTG+U/fmci
- wYYlfW46pyc0F1RJGW2RW/0iud2hoOZQzFOnO3aEiv50e0+HSV+6mDhAT4d10Sc2elBtgfUnt
- i2JW60cF6AVPW4UpsI8PQ07ly1/EOe0NJ82Br6fqWl1Ts5OLWf6GJgpu0YngvC0VGa1anEcud
- IbX43EodVT/85TdzRFpvawl586wog/J/ico+QQrz9/hJppRGHWcxGqDqpeM4/eQQZL+2ehdSL
- WzQdmIeYblZCXeIWmpdvOzcoDPyx+eVnsv8Gjct0G5ibU6JD8129XNJe0FiqeEPNGwaBEolQ4
- 8FoffRKSXJ6obHkMZMlyPhjCVM+39A/2ljYk2fGfFlED5YbHhB4ktz0ctaDgehZ+BdIS71d/y
- crzTKNN7I5YHtfReJWyjg4LgFpgoMI3LppDnAwXFmLQAn6d3V1m9z+7jVrPEi9jY9BETXXmP1
- u+17FAEZ+ICVJXW97PTALiByF5UQsDzfn68gPV+d2ihUq6WAqDN5k4h1ZNoz0BJfRoOKRWBO2
- 8vQObH3r/eEbkG47hp/76MVrYdp6B2VCvkXOTJVnp092ZbDmiHVv1VhuOPC2uOZBZLJdVWjOH
- +I7iC88PjghCZ/dX7e5ii0Lb5R7ZGFkt/WIAIwHGg+6lLckIAehVXLBmB3Q1Sc99unfuBq6PJ
- VHM/WoRyYYZ6w/XYDjLofdAonNAqxxzrfRwkIbNE/A9okryX3sbushKiYtKaRXzdQV77VmV
+X-UI-Out-Filterresults: notjunk:1;V03:K0:b+AJ6TOvCp0=:YXq7XKKBW6rBTVGiaDz4uP
+ V9bs8W1xoR+KsgMIVJEN70mXfM+j7JFe9Pmob5gCOjug3IRXJTr0tslI/oVkbJwO/LUXZlx5w
+ d3vF/k2pFPG3epdAXvPmmPREw2LDPGQUoxZr6vc0xfcAzjJ9IyvpnxnVE5Sj96NjS8PZTOdJO
+ gm4FGzpt/nRta/OfmNk0UBaWatCKhzGKwkSUdLHlamzQu0N6/lcTnd4GNZGLF2YCGAqip83SZ
+ ym/XuqiPHUsoQR3IgDEH/1BKVUOB++oGq2d0tqtYUfKyPE+ICnR0gSO6pVynbkslF7zxzu6Hr
+ oY071Py+VrHRwa6vy+XoLKzCPxBx3pC9ZocG3Y91EV2sMKzCww9Tnqio7eRSUgeVl9kJ2aipw
+ OBHPofD535M+mzZHR2cButM3UgBJtCLZJgevTTBFD+BO0Upuie5CA+dP8UC2RwUUjK2SLRllL
+ e7djj9rLqMx+XimMNh+F7uW8E6F4TqIa1w8bs/Nej2TxKzlJB13dg23RqDqNwo4q3BNq/2l9o
+ IAcVNCjZRBxe8NCHfYKp2rUL1arUXUemCJ+KrwNy2WHWC9sMbCCQZdgn17GXUukFavvkCX5Ty
+ pUrIg/791zN2UHXgjnVOXKYQr34GFPMk4Prosqy7ZzjYdhC/EZbMOKEU1jNZ2dGF7JIyW7jGD
+ ME/TUXPQiZkqWBhkNeBBNmGiYuWhAAP8c+hdqEWoxdQ+1p9h/kTP6+kxgAfF2KjQIlzBNF0zI
+ HqioUMGEJnlIxZ6ekVGvWXoeklbonfyLuiSA6lS/hoF9ziE77pch7z24+cXR/SHp3a5lTP6HA
+ fX6BgyW6RufWHpXdA/N6arAOJhWmmx0Si6MIN/u6mw8HbY9jb2vsPSrm4KAWAjOgFmC1qlH
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The epoll_wait() syscall has a special version for OABI compat
-mode to convert the arguments to the EABI structure layout
-of the kernel. However, the later epoll_pwait() syscall was
-added in arch/arm in linux-2.6.32 without this conversion.
+The system call number is used in a a couple of places, in particular
+ptrace, seccomp and /proc/<pid>/syscall.
 
-Use the same kind of handler for both.
+The last one apparently never worked reliably on ARM for tasks
+that are not currently getting traced.
 
-Fixes: 369842658a36 ("ARM: 5677/1: ARM support for TIF_RESTORE_SIGMASK/pselect6/ppoll/epoll_pwait")
-Cc: stable@vger.kernel.org
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Storing the syscall number in the normal entry path makes it work,
+as well as allowing us to see if the current system call is for
+OABI compat mode, which is the next thing I want to hook into.
+
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/kernel/sys_oabi-compat.c | 37 ++++++++++++++++++++++++++++---
- arch/arm/tools/syscall.tbl        |  2 +-
- 2 files changed, 35 insertions(+), 4 deletions(-)
+ arch/arm/include/asm/syscall.h | 5 ++++-
+ arch/arm/kernel/asm-offsets.c  | 1 +
+ arch/arm/kernel/entry-common.S | 8 ++++++--
+ arch/arm/kernel/ptrace.c       | 9 +++++----
+ 4 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm/kernel/sys_oabi-compat.c b/arch/arm/kernel/sys_oabi-compat.c
-index 0203e545bbc8..a2b1ae01e5bf 100644
---- a/arch/arm/kernel/sys_oabi-compat.c
-+++ b/arch/arm/kernel/sys_oabi-compat.c
-@@ -264,9 +264,8 @@ asmlinkage long sys_oabi_epoll_ctl(int epfd, int op, int fd,
- 	return do_epoll_ctl(epfd, op, fd, &kernel, false);
- }
- 
--asmlinkage long sys_oabi_epoll_wait(int epfd,
--				    struct oabi_epoll_event __user *events,
--				    int maxevents, int timeout)
-+static long do_oabi_epoll_wait(int epfd, struct oabi_epoll_event __user *events,
-+			       int maxevents, int timeout)
+diff --git a/arch/arm/include/asm/syscall.h b/arch/arm/include/asm/syscall.h
+index fd02761ba06c..89898497edd6 100644
+--- a/arch/arm/include/asm/syscall.h
++++ b/arch/arm/include/asm/syscall.h
+@@ -22,7 +22,10 @@ extern const unsigned long sys_call_table[];
+ static inline int syscall_get_nr(struct task_struct *task,
+ 				 struct pt_regs *regs)
  {
- 	struct epoll_event *kbuf;
- 	struct oabi_epoll_event e;
-@@ -299,6 +298,38 @@ asmlinkage long sys_oabi_epoll_wait(int epfd,
- 	return err ? -EFAULT : ret;
+-	return task_thread_info(task)->syscall;
++	if (IS_ENABLED(CONFIG_AEABI) && !IS_ENABLED(CONFIG_OABI_COMPAT))
++		return task_thread_info(task)->syscall;
++
++	return task_thread_info(task)->syscall & ~__NR_OABI_SYSCALL_BASE;
  }
  
-+SYSCALL_DEFINE4(oabi_epoll_wait, int, epfd,
-+		struct oabi_epoll_event __user *, events,
-+		int, maxevents, int, timeout)
-+{
-+	return do_oabi_epoll_wait(epfd, events, maxevents, timeout);
-+}
-+
-+/*
-+ * Implement the event wait interface for the eventpoll file. It is the kernel
-+ * part of the user space epoll_pwait(2).
-+ */
-+SYSCALL_DEFINE6(oabi_epoll_pwait, int, epfd,
-+		struct oabi_epoll_event __user *, events, int, maxevents,
-+		int, timeout, const sigset_t __user *, sigmask,
-+		size_t, sigsetsize)
-+{
-+	int error;
-+
-+	/*
-+	 * If the caller wants a certain signal mask to be set during the wait,
-+	 * we apply it here.
-+	 */
-+	error = set_user_sigmask(sigmask, sigsetsize);
-+	if (error)
-+		return error;
-+
-+	error = do_oabi_epoll_wait(epfd, events, maxevents, timeout);
-+	restore_saved_sigmask_unless(error == -EINTR);
-+
-+	return error;
-+}
-+
- struct oabi_sembuf {
- 	unsigned short	sem_num;
- 	short		sem_op;
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index 171077cbf419..39a24bee7df8 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -360,7 +360,7 @@
- 343	common	vmsplice		sys_vmsplice
- 344	common	move_pages		sys_move_pages
- 345	common	getcpu			sys_getcpu
--346	common	epoll_pwait		sys_epoll_pwait
-+346	common	epoll_pwait		sys_epoll_pwait		sys_oabi_epoll_pwait
- 347	common	kexec_load		sys_kexec_load
- 348	common	utimensat		sys_utimensat_time32
- 349	common	signalfd		sys_signalfd
+ static inline void syscall_rollback(struct task_struct *task,
+diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
+index a1570c8bab25..97af6735172b 100644
+--- a/arch/arm/kernel/asm-offsets.c
++++ b/arch/arm/kernel/asm-offsets.c
+@@ -46,6 +46,7 @@ int main(void)
+   DEFINE(TI_CPU,		offsetof(struct thread_info, cpu));
+   DEFINE(TI_CPU_DOMAIN,		offsetof(struct thread_info, cpu_domain));
+   DEFINE(TI_CPU_SAVE,		offsetof(struct thread_info, cpu_context));
++  DEFINE(TI_SYSCALL,		offsetof(struct thread_info, syscall));
+   DEFINE(TI_USED_CP,		offsetof(struct thread_info, used_cp));
+   DEFINE(TI_TP_VALUE,		offsetof(struct thread_info, tp_value));
+   DEFINE(TI_FPSTATE,		offsetof(struct thread_info, fpstate));
+diff --git a/arch/arm/kernel/entry-common.S b/arch/arm/kernel/entry-common.S
+index 271cb8a1eba1..9a76467bbb47 100644
+--- a/arch/arm/kernel/entry-common.S
++++ b/arch/arm/kernel/entry-common.S
+@@ -223,6 +223,7 @@ ENTRY(vector_swi)
+ 	/* saved_psr and saved_pc are now dead */
+ 
+ 	uaccess_disable tbl
++	get_thread_info tsk
+ 
+ 	adr	tbl, sys_call_table		@ load syscall table pointer
+ 
+@@ -234,13 +235,17 @@ ENTRY(vector_swi)
+ 	 * get the old ABI syscall table address.
+ 	 */
+ 	bics	r10, r10, #0xff000000
++	strne	r10, [tsk, #TI_SYSCALL]
++	streq	scno, [tsk, #TI_SYSCALL]
+ 	eorne	scno, r10, #__NR_OABI_SYSCALL_BASE
+ 	ldrne	tbl, =sys_oabi_call_table
+ #elif !defined(CONFIG_AEABI)
+ 	bic	scno, scno, #0xff000000		@ mask off SWI op-code
++	str	scno, [tsk, #TI_SYSCALL]
+ 	eor	scno, scno, #__NR_SYSCALL_BASE	@ check OS number
++#else
++	str	scno, [tsk, #TI_SYSCALL]
+ #endif
+-	get_thread_info tsk
+ 	/*
+ 	 * Reload the registers that may have been corrupted on entry to
+ 	 * the syscall assembly (by tracing or context tracking.)
+@@ -285,7 +290,6 @@ ENDPROC(vector_swi)
+ 	 * context switches, and waiting for our parent to respond.
+ 	 */
+ __sys_trace:
+-	mov	r1, scno
+ 	add	r0, sp, #S_OFF
+ 	bl	syscall_trace_enter
+ 	mov	scno, r0
+diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
+index 2771e682220b..683edb8b627d 100644
+--- a/arch/arm/kernel/ptrace.c
++++ b/arch/arm/kernel/ptrace.c
+@@ -25,6 +25,7 @@
+ #include <linux/tracehook.h>
+ #include <linux/unistd.h>
+ 
++#include <asm/syscall.h>
+ #include <asm/traps.h>
+ 
+ #define CREATE_TRACE_POINTS
+@@ -885,9 +886,9 @@ static void tracehook_report_syscall(struct pt_regs *regs,
+ 	regs->ARM_ip = ip;
+ }
+ 
+-asmlinkage int syscall_trace_enter(struct pt_regs *regs, int scno)
++asmlinkage int syscall_trace_enter(struct pt_regs *regs)
+ {
+-	current_thread_info()->syscall = scno;
++	int scno;
+ 
+ 	if (test_thread_flag(TIF_SYSCALL_TRACE))
+ 		tracehook_report_syscall(regs, PTRACE_SYSCALL_ENTER);
+@@ -898,11 +899,11 @@ asmlinkage int syscall_trace_enter(struct pt_regs *regs, int scno)
+ 		return -1;
+ #else
+ 	/* XXX: remove this once OABI gets fixed */
+-	secure_computing_strict(current_thread_info()->syscall);
++	secure_computing_strict(syscall_get_nr(current, regs));
+ #endif
+ 
+ 	/* Tracer or seccomp may have changed syscall. */
+-	scno = current_thread_info()->syscall;
++	scno = syscall_get_nr(current, regs);
+ 
+ 	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+ 		trace_sys_enter(regs, scno);
 -- 
 2.27.0
 
