@@ -2,107 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D2E2812D6
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Oct 2020 14:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122B02814C1
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Oct 2020 16:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgJBMfT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Oct 2020 08:35:19 -0400
-Received: from elvis.franken.de ([193.175.24.41]:39975 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725964AbgJBMfT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 2 Oct 2020 08:35:19 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1kOKHI-0003Ro-00; Fri, 02 Oct 2020 14:35:12 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0FFA5C109A; Fri,  2 Oct 2020 14:35:03 +0200 (CEST)
-Date:   Fri, 2 Oct 2020 14:35:03 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: Re: [PATCH V3] MIPS: make userspace mapping young by default
-Message-ID: <20201002123502.GA11098@alpha.franken.de>
-References: <20200919074731.22372-1-huangpei@loongson.cn>
+        id S2388004AbgJBONY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Oct 2020 10:13:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47898 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726090AbgJBONX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Oct 2020 10:13:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601648002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T8R1XgQI7k4cK5q1LMAze0lbj0we9wkSuLhijnQjdY4=;
+        b=b+3b8K7u2drGN0KmGLzAYxNJ9Ag53zLPy+A1ccgWOLpNj2EpMwsOdYLGu+AAdIfoRy886u
+        FAp6EM6ol6Unj1vQc9VDi8iL5QbmJewK+21Hcp2FbUrKZoojTTpWaSO8ZL2kgkNfIGSnO+
+        6f3YN28IozZPhIQJNxuMN77TVkH/dcI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-46-KaOFE74rOgejG5g4BEKn6g-1; Fri, 02 Oct 2020 10:13:18 -0400
+X-MC-Unique: KaOFE74rOgejG5g4BEKn6g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4C952801ADA;
+        Fri,  2 Oct 2020 14:13:16 +0000 (UTC)
+Received: from treble (ovpn-114-202.rdu2.redhat.com [10.10.114.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3550E81C5B;
+        Fri,  2 Oct 2020 14:13:07 +0000 (UTC)
+Date:   Fri, 2 Oct 2020 09:13:03 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, jthierry@redhat.com
+Subject: Re: [PATCH v4 04/29] objtool: Add a pass for generating __mcount_loc
+Message-ID: <20201002141303.hyl72to37wudoi66@treble>
+References: <20200929214631.3516445-1-samitolvanen@google.com>
+ <20200929214631.3516445-5-samitolvanen@google.com>
+ <alpine.LSU.2.21.2010011504340.6689@pobox.suse.cz>
+ <20201001133612.GQ2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200919074731.22372-1-huangpei@loongson.cn>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20201001133612.GQ2628@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 03:47:31PM +0800, Huang Pei wrote:
-> MIPS page fault path take 3 exceptions (1 TLB Miss + 2 TLB Invalid), but
-> the second TLB Invalid exception is just triggered by __update_tlb from
-> do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
-> only take 1 TLB Miss + 1 TLB Invalid exceptions
+On Thu, Oct 01, 2020 at 03:36:12PM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 01, 2020 at 03:17:07PM +0200, Miroslav Benes wrote:
 > 
-> This version removes pte_sw_mkyoung without polluting MM code and makes
-> page fault delay of MIPS on par with other architecture and covers both
-> no-RIXI and RIXI MIPS CPUS
+> > I also wonder about making 'mcount' command separate from 'check'. Similar 
+> > to what is 'orc' now. But that could be done later.
 > 
-> [1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email
-> -maobibo@loongson.cn/
-> ---
-> V3:
-> - reformat with whitespace cleaned up following Thomas's advice
-> V2:
-> - remove unused asm-generic definition of pte_sw_mkyoung following Mao's
-> advice
-> ---
-> Co-developed-by: Huang Pei <huangpei@loongson.cn>
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> Co-developed-by: Bibo Mao <maobibo@loonson.cn>
-> ---
->  arch/mips/include/asm/pgtable.h | 10 ++++------
->  arch/mips/mm/cache.c            | 25 +++++++++++++------------
->  include/linux/pgtable.h         |  8 --------
->  mm/memory.c                     |  3 ---
->  4 files changed, 17 insertions(+), 29 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-> index dd7a0f552cac..931fb35730f0 100644
-> --- a/arch/mips/include/asm/pgtable.h
-> +++ b/arch/mips/include/asm/pgtable.h
-> @@ -27,11 +27,11 @@ struct vm_area_struct;
->  
->  #define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
->  				 _page_cachable_default)
-> -#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
-> -				 _page_cachable_default)
-> +#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
-> +				 __READABLE | _page_cachable_default)
+> I'm not convinced more commands make sense. That only begets us the
+> problem of having to run multiple commands.
 
-you are still doing a white space changes here. 
+Agreed, it gets hairy when we need to combine things.  I think "orc" as
+a separate subcommand was a mistake.
 
->  #define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
-> -				 _page_cachable_default)
-> -#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
-> +				 __READABLE | _page_cachable_default)
-> +#define PAGE_READONLY	__pgprot(_PAGE_PRESENT |  __READABLE | \
+We should change to something like
 
-I've grepped for usage of PAGE_SHARED and PAGE_READONLY and found
-arch/mips/kvm/mmu.c and arch/mips/kernel/vdso.c. I wonder
-
-1. Is this usage correct or should we use protection_map[X] ?
-2. Are this still correct after the change in this patch ?
-
-Right now I'm in favour to fist clean up asm/pgtable.h to get rid
-of all unneeded PAGE_XXX defines and make mm/cache.c rixi part
-more readable before applying this patch.
-
-Thomas.
+  objtool run [--check] [--orc] [--mcount]
+  objtool dump [--orc] [--mcount]
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Josh
+
