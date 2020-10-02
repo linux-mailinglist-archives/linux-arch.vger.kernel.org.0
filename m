@@ -2,102 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3124280C37
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Oct 2020 04:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D2E2812D6
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Oct 2020 14:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387498AbgJBCHB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Oct 2020 22:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733275AbgJBCHA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Oct 2020 22:07:00 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACC2C0613D0
-        for <linux-arch@vger.kernel.org>; Thu,  1 Oct 2020 19:07:00 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id e23so367760vsk.2
-        for <linux-arch@vger.kernel.org>; Thu, 01 Oct 2020 19:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vT94c58c5RJpPi7b9HKxloC1mNQH0vp26xTTILK9X5s=;
-        b=SyWPxJQjF1pyN0tV9nljtIiQi7IAU4ykxGKYZ+Ngd0KIBmRApBv8Lys4YpoYU593S3
-         R/81CTJRQli3fwWhMot/+N4MW2z9TutEevFLsPxdQT04VEDJf3EcDb7TxTqPw16raYmL
-         O185M4iVi+3hsx1y5CvCknDPjkmzzw/9oxohxNKfqhyfWVgIu2chMpy4PROp5XBAYtfw
-         FhfullWI5DsudxJwmWVhfm3K5WnYqpDGnYdwOeDSZPIpIYNezYXrtPq++798LoUDLvAf
-         jsLd/mLSMkpNOeJC2ZXc4XqQD5T+2H2J74a1Im5Bjz83C+9BqVudzCgo4FUKJFYPsFIw
-         L07w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vT94c58c5RJpPi7b9HKxloC1mNQH0vp26xTTILK9X5s=;
-        b=W8Z2QugCAwEzjOK0n1ll2b/bMU1DGqDYX9vkdCpLihhTl6H8OM13iVwXgh6aOqc1qx
-         gd27xwODZl5sZN+fw2KcXySZgPWP3/YA1ii80ADfmfPxcPMN6dfQdgQnBB23rIom0a9D
-         EMVG7cJ4Vy76Rx8pDeUS1ajbziTsUJwo0FV4EZloO40O+um8DfMdqk/lY/amxXY1yQpV
-         rCz+7iTQTqTXzjc2tqu5usxh48EkZIgTiYtBKptxGI6oEKRoSQjP980p2eDV4HkMQv3T
-         xBKta0XYA8RoBQGsnyhVsHf/mUN8PtZSleV2FJyFx3ig1lQ3DUPC/iRc4RM2RmDF1mau
-         F3vQ==
-X-Gm-Message-State: AOAM532IrVR2lGR+FW1O8e4YNvYqSvOHlzJKeG0aotPMnWEPhEPyfBFf
-        g2MAQg5tIBBiNODr8Ruj0taJtpCFsqoIpiihcZo62w==
-X-Google-Smtp-Source: ABdhPJxoSqWOWqkgye3JYdbsMetKDhjeqdmku/0TOcCNaVVCZlRIiJXTsWsPQC2qA8YecqG4ck2fb88Uv71SNqE97IM=
-X-Received: by 2002:a67:e83:: with SMTP id 125mr124303vso.22.1601604419476;
- Thu, 01 Oct 2020 19:06:59 -0700 (PDT)
+        id S1726017AbgJBMfT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Oct 2020 08:35:19 -0400
+Received: from elvis.franken.de ([193.175.24.41]:39975 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725964AbgJBMfT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 2 Oct 2020 08:35:19 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kOKHI-0003Ro-00; Fri, 02 Oct 2020 14:35:12 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 0FFA5C109A; Fri,  2 Oct 2020 14:35:03 +0200 (CEST)
+Date:   Fri, 2 Oct 2020 14:35:03 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH V3] MIPS: make userspace mapping young by default
+Message-ID: <20201002123502.GA11098@alpha.franken.de>
+References: <20200919074731.22372-1-huangpei@loongson.cn>
 MIME-Version: 1.0
-References: <20200925145649.5438-1-yu-cheng.yu@intel.com> <20200925145649.5438-20-yu-cheng.yu@intel.com>
-In-Reply-To: <20200925145649.5438-20-yu-cheng.yu@intel.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Thu, 1 Oct 2020 19:06:48 -0700
-Message-ID: <CAMn1gO4cxSt8-8qVbAei0jPErTtARdsEY4js6Fi=kzozAuE3yQ@mail.gmail.com>
-Subject: Re: [PATCH v13 19/26] mm: Re-introduce do_mmap_pgoff()
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200919074731.22372-1-huangpei@loongson.cn>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 7:57 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->
-> There was no more caller passing vm_flags to do_mmap(), and vm_flags was
-> removed from the function's input by:
->
->     commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
->
-> There is a new user now.  Shadow stack allocation passes VM_SHSTK to
-> do_mmap().  Re-introduce the vm_flags and do_mmap_pgoff().
+On Sat, Sep 19, 2020 at 03:47:31PM +0800, Huang Pei wrote:
+> MIPS page fault path take 3 exceptions (1 TLB Miss + 2 TLB Invalid), but
+> the second TLB Invalid exception is just triggered by __update_tlb from
+> do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
+> only take 1 TLB Miss + 1 TLB Invalid exceptions
+> 
+> This version removes pte_sw_mkyoung without polluting MM code and makes
+> page fault delay of MIPS on par with other architecture and covers both
+> no-RIXI and RIXI MIPS CPUS
+> 
+> [1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email
+> -maobibo@loongson.cn/
+> ---
+> V3:
+> - reformat with whitespace cleaned up following Thomas's advice
+> V2:
+> - remove unused asm-generic definition of pte_sw_mkyoung following Mao's
+> advice
+> ---
+> Co-developed-by: Huang Pei <huangpei@loongson.cn>
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> Co-developed-by: Bibo Mao <maobibo@loonson.cn>
+> ---
+>  arch/mips/include/asm/pgtable.h | 10 ++++------
+>  arch/mips/mm/cache.c            | 25 +++++++++++++------------
+>  include/linux/pgtable.h         |  8 --------
+>  mm/memory.c                     |  3 ---
+>  4 files changed, 17 insertions(+), 29 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index dd7a0f552cac..931fb35730f0 100644
+> --- a/arch/mips/include/asm/pgtable.h
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -27,11 +27,11 @@ struct vm_area_struct;
+>  
+>  #define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
+>  				 _page_cachable_default)
+> -#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> -				 _page_cachable_default)
+> +#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> +				 __READABLE | _page_cachable_default)
 
-I would prefer to change the callers to pass the additional 0 argument
-instead of bringing the wrapper function back, but if we're going to
-bring it back then we should fix the naming (both functions take a
-pgoff argument, so the previous name do_mmap_pgoff() was just plain
-confusing).
+you are still doing a white space changes here. 
 
-Peter
+>  #define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
+> -				 _page_cachable_default)
+> -#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
+> +				 __READABLE | _page_cachable_default)
+> +#define PAGE_READONLY	__pgprot(_PAGE_PRESENT |  __READABLE | \
+
+I've grepped for usage of PAGE_SHARED and PAGE_READONLY and found
+arch/mips/kvm/mmu.c and arch/mips/kernel/vdso.c. I wonder
+
+1. Is this usage correct or should we use protection_map[X] ?
+2. Are this still correct after the change in this patch ?
+
+Right now I'm in favour to fist clean up asm/pgtable.h to get rid
+of all unneeded PAGE_XXX defines and make mm/cache.c rixi part
+more readable before applying this patch.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
