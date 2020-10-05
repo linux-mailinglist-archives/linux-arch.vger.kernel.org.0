@@ -2,103 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C382836D4
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 15:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C38A283720
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 15:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgJENpk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Oct 2020 09:45:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:47844 "EHLO foss.arm.com"
+        id S1726057AbgJEN7q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Oct 2020 09:59:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725936AbgJENpk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 5 Oct 2020 09:45:40 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96F92106F;
-        Mon,  5 Oct 2020 06:45:39 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B6933F70D;
-        Mon,  5 Oct 2020 06:45:37 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 14:45:34 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
-        x86@kernel.org, len.brown@intel.com, dave.hansen@intel.com,
-        hjl.tools@gmail.com, mpe@ellerman.id.au, tony.luck@intel.com,
-        ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
-Message-ID: <20201005134534.GT6642@arm.com>
-References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+        id S1726017AbgJEN7q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 5 Oct 2020 09:59:46 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 24CBB207BC;
+        Mon,  5 Oct 2020 13:59:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601906386;
+        bh=sRoRo8A4Y2/smESa5LnWt0wUfm835pdpnaNhpMiyvSI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Nx+/jHpZKjx8zUibPb3mTL/R6G6SJjWDpGw2qZ6LWujqbgEG1oo7vhEqPMz2Eg2Wd
+         vnP69DC3k/roVTFDC8GeVqqujPsE5M22U+6LVujr5E26DOsRy6yrV4HQ4XmqfsHVb5
+         NC2V1CYaJ/AN04SuCV26IWKtTT7J/W8QeS0qk3LU=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id E2624352301E; Mon,  5 Oct 2020 06:59:45 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 06:59:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: Litmus test for question from Al Viro
+Message-ID: <20201005135945.GU29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201001045116.GA5014@paulmck-ThinkPad-P72>
+ <20201001161529.GA251468@rowland.harvard.edu>
+ <20201001213048.GF29330@paulmck-ThinkPad-P72>
+ <20201003132212.GB318272@rowland.harvard.edu>
+ <20201004233146.GP29330@paulmck-ThinkPad-P72>
+ <5cf6b793978e4cd8ae10344336c13adb@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200929205746.6763-1-chang.seok.bae@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <5cf6b793978e4cd8ae10344336c13adb@AcuMS.aculab.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 01:57:42PM -0700, Chang S. Bae wrote:
-> During signal entry, the kernel pushes data onto the normal userspace
-> stack. On x86, the data pushed onto the user stack includes XSAVE state,
-> which has grown over time as new features and larger registers have been
-> added to the architecture.
+On Mon, Oct 05, 2020 at 08:36:51AM +0000, David Laight wrote:
+> From: Paul E. McKenney
+> > Sent: 05 October 2020 00:32
+> ...
+> >     manual/kernel: Add a litmus test with a hidden dependency
+> > 
+> >     This commit adds a litmus test that has a data dependency that can be
+> >     hidden by control flow.  In this test, both the taken and the not-taken
+> >     branches of an "if" statement must be accounted for in order to properly
+> >     analyze the litmus test.  But herd7 looks only at individual executions
+> >     in isolation, so fails to see the dependency.
+> > 
+> >     Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > diff --git a/manual/kernel/crypto-control-data.litmus b/manual/kernel/crypto-control-data.litmus
+> > new file mode 100644
+> > index 0000000..6baecf9
+> > --- /dev/null
+> > +++ b/manual/kernel/crypto-control-data.litmus
+> > @@ -0,0 +1,31 @@
+> > +C crypto-control-data
+> > +(*
+> > + * LB plus crypto-control-data plus data
+> > + *
+> > + * Result: Sometimes
+> > + *
+> > + * This is an example of OOTA and we would like it to be forbidden.
+> > + * The WRITE_ONCE in P0 is both data-dependent and (at the hardware level)
+> > + * control-dependent on the preceding READ_ONCE.  But the dependencies are
+> > + * hidden by the form of the conditional control construct, hence the
+> > + * name "crypto-control-data".  The memory model doesn't recognize them.
+> > + *)
+> > +
+> > +{}
+> > +
+> > +P0(int *x, int *y)
+> > +{
+> > +	int r1;
+> > +
+> > +	r1 = 1;
+> > +	if (READ_ONCE(*x) == 0)
+> > +		r1 = 0;
+> > +	WRITE_ONCE(*y, r1);
+> > +}
 > 
-> MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
-> typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
-> compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
-> constant indicates to userspace how much data the kernel expects to push on
-> the user stack, [2][3].
+> Hmmm.... the compiler will semi-randomly transform that to/from:
+> 	if (READ_ONCE(*x) == 0)
+> 		r1 = 0;
+> 	else
+> 		r1 = 1;
+> and
+> 	r1 = READ_ONCE(*x) != 0;
 > 
-> However, this constant is much too small and does not reflect recent
-> additions to the architecture. For instance, when AVX-512 states are in
-> use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
+> Both of which (probably) get correctly detected as a write to *y
+> that is dependant on *x - so is 'problematic' with P1() which
+> does the opposite assignment.
 > 
-> The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
-> cause user stack overflow when delivering a signal.
-> 
-> In this series, we suggest a couple of things:
-> 1. Provide a variable minimum stack size to userspace, as a similar
->    approach to [5]
-> 2. Avoid using a too-small alternate stack
+> Which does rather imply that hurd is a bit broken.
 
-I can't comment on the x86 specifics, but the approach followed in this
-series does seem consistent with the way arm64 populates
-AT_MINSIGSTKSZ.
+I agree that herd7 does not match all compilers, but the intent was
+always to approximate them.  There has been some research work towards
+the goal of accurately modeling all possible compiler optimizations,
+and it gets extremely complex, and thus computationally infeasible,
+very quickly.  And we do need herd7 to stay strictly in the realm of
+the computationally feasible.
 
-I need to dig up my glibc hacks for providing a sysconf interface to
-this...
+Hence, any use of control dependencies should follow up with something
+like klitmus7 (as Joel Fernandes did earlier in this thread) or KCSAN.
+These tools have their own limitations, for example, using a specific
+compiler rather than saying something about all possible compilers, but
+they do reflect what a specific real toolchain actually does.  They are
+also execution based, so have only some probability of finding problems.
+In contrast, herd7 does the moral equivalent of a full state-space search.
 
-Cheers
----Dave
+It would be nice to be able to say that we have one tools that does
+everything, but that might be a long way down the road.
 
-> 
-> [1]: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/bits/sigstack.h;h=b9dca794da093dc4d41d39db9851d444e1b54d9b;hb=HEAD
-> [2]: https://www.gnu.org/software/libc/manual/html_node/Signal-Stack.html
-> [3]: https://man7.org/linux/man-pages/man2/sigaltstack.2.html
-> [4]: https://bugzilla.kernel.org/show_bug.cgi?id=153531
-> [5]: https://blog.linuxplumbersconf.org/2017/ocw/system/presentations/4671/original/plumbers-dm-2017.pdf
-> 
-> Chang S. Bae (4):
->   x86/signal: Introduce helpers to get the maximum signal frame size
->   x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
->   x86/signal: Prevent an alternate stack overflow before a signal
->     delivery
->   selftest/x86/signal: Include test cases for validating sigaltstack
-> 
->  arch/x86/ia32/ia32_signal.c               |  11 +-
->  arch/x86/include/asm/elf.h                |   4 +
->  arch/x86/include/asm/fpu/signal.h         |   2 +
->  arch/x86/include/asm/sigframe.h           |  25 +++++
->  arch/x86/include/uapi/asm/auxvec.h        |   6 +-
->  arch/x86/kernel/cpu/common.c              |   3 +
->  arch/x86/kernel/fpu/signal.c              |  20 ++++
->  arch/x86/kernel/signal.c                  |  66 +++++++++++-
->  tools/testing/selftests/x86/Makefile      |   2 +-
->  tools/testing/selftests/x86/sigaltstack.c | 126 ++++++++++++++++++++++
->  10 files changed, 258 insertions(+), 7 deletions(-)
->  create mode 100644 tools/testing/selftests/x86/sigaltstack.c
-> 
-> --
-> 2.17.1
-> 
+							Thanx, Paul
