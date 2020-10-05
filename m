@@ -2,92 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FCB283363
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 11:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D4E2836C1
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 15:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbgJEJfq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Oct 2020 05:35:46 -0400
-Received: from mga12.intel.com ([192.55.52.136]:50803 "EHLO mga12.intel.com"
+        id S1726032AbgJENmg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Oct 2020 09:42:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:47766 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725996AbgJEJfq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 5 Oct 2020 05:35:46 -0400
-IronPort-SDR: qQ9DiyjycTSqqTnDHuTj9pZgHTVrQTFqcQ90az9JCKGFP3HnbBR84e26vl2rYHDMnCVeDsWJnN
- MTbWKoHJkemg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9764"; a="142755581"
-X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
-   d="scan'208";a="142755581"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 02:35:45 -0700
-IronPort-SDR: bz6AhyrVwio06dKoiKbmdtFKhE2a4F1NB0oI4T/AlXgityM+kZs4N5M4uC8ldNGgSXZN7v/RIv
- 5yGORhHys56Q==
-X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
-   d="scan'208";a="516663355"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 02:35:44 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1kPMuA-004aFA-Vi; Mon, 05 Oct 2020 12:35:38 +0300
-Date:   Mon, 5 Oct 2020 12:35:38 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 1/4] bitops: Introduce the for_each_set_clump macro
-Message-ID: <20201005093538.GM3956970@smile.fi.intel.com>
-References: <cover.1601679791.git.syednwaris@gmail.com>
- <dcd0580812ebae079e6f5035b990b195ccc6b709.1601679791.git.syednwaris@gmail.com>
- <CAHp75VcoGAjrPa7rcORsaDXZLb-n+U3hG0k6O+weMVYweSPVxg@mail.gmail.com>
- <CACG_h5pianK4DRL5YeuSuN0gv6Jvcndc=_wLCL4QgmZyR=bOMw@mail.gmail.com>
- <CAHp75VdC+eH0ScksdAVp==HnDMTMY3vVUZM5NZy6mfVSR0YoLA@mail.gmail.com>
- <20201003125626.GA3732@shinobu>
- <CAHp75VdfGCnoyOEn9-c0O4cx7t8GRTH+Ux_gYiRvZeOnDyQryg@mail.gmail.com>
- <CACG_h5roN0dKGYMcZ3BXNzSMAWdU06mAx8NrpuomaubSRfdm-A@mail.gmail.com>
+        id S1725932AbgJENmg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 5 Oct 2020 09:42:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBBC4106F;
+        Mon,  5 Oct 2020 06:42:35 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE8B43F70D;
+        Mon,  5 Oct 2020 06:42:33 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 14:42:30 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
+        x86@kernel.org, len.brown@intel.com, dave.hansen@intel.com,
+        hjl.tools@gmail.com, mpe@ellerman.id.au, tony.luck@intel.com,
+        ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] x86/signal: Introduce helpers to get the maximum
+ signal frame size
+Message-ID: <20201005134230.GS6642@arm.com>
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+ <20200929205746.6763-2-chang.seok.bae@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACG_h5roN0dKGYMcZ3BXNzSMAWdU06mAx8NrpuomaubSRfdm-A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200929205746.6763-2-chang.seok.bae@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 03, 2020 at 08:38:14PM +0530, Syed Nayyar Waris wrote:
-> On Sat, Oct 3, 2020 at 6:32 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Sat, Oct 3, 2020 at 3:56 PM William Breathitt Gray
-> > <vilhelm.gray@gmail.com> wrote:
-> > > On Sat, Oct 03, 2020 at 03:45:04PM +0300, Andy Shevchenko wrote:
-> > > > On Sat, Oct 3, 2020 at 2:37 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> > > > > On Sat, Oct 3, 2020 at 2:14 PM Andy Shevchenko
-> > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > On Sat, Oct 3, 2020 at 2:51 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-
-...
-
-> > > > > > > +               map[index] &= ~BITMAP_FIRST_WORD_MASK(start);
-> > > > > > > +               map[index] |= value << offset;
-> > > >
-> > > > Side note: I would prefer + 0 here and there, but it's up to you.
+On Tue, Sep 29, 2020 at 01:57:43PM -0700, Chang S. Bae wrote:
+> Signal frames do not have a fixed format and can vary in size when a number
+> of things change: support XSAVE features, 32 vs. 64-bit apps. Add the code
+> to support a runtime method for userspace to dynamically discover how large
+> a signal stack needs to be.
 > 
-> Andy what do you mean by the above statement, can you please clarify?
-> Can you please elaborate on the above statement.
+> Introduce a new variable, max_frame_size, and helper functions for the
+> calculation to be used in a new user interface. Set max_frame_size to a
+> system-wide worst-case value, instead of storing multiple app-specific
+> values.
+> 
+> Locate the body of the helper function -- fpu__get_fpstate_sigframe_size()
+> in fpu/signal.c for its relevance.
+> 
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  arch/x86/include/asm/fpu/signal.h |  2 ++
+>  arch/x86/include/asm/sigframe.h   | 23 ++++++++++++++++
+>  arch/x86/kernel/cpu/common.c      |  3 +++
+>  arch/x86/kernel/fpu/signal.c      | 20 ++++++++++++++
+>  arch/x86/kernel/signal.c          | 45 +++++++++++++++++++++++++++++++
+>  5 files changed, 93 insertions(+)
 
-Sure. I meant something like
+[...]
 
-               map[index + 0] &= ~BITMAP_FIRST_WORD_MASK(start);
-               map[index + 0] |= value << offset;
+> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> index be0d7d4152ec..239a0b23a4b0 100644
+> --- a/arch/x86/kernel/signal.c
+> +++ b/arch/x86/kernel/signal.c
+> @@ -663,6 +663,51 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * The FP state frame contains an XSAVE buffer which must be 64-byte aligned.
+> + * If a signal frame starts at an unaligned address, extra space is required.
+> + * This is the max alignment padding, conservatively.
+> + */
+> +#define MAX_XSAVE_PADDING	63UL
+> +
+> +/*
+> + * The frame data is composed of the following areas and laid out as:
+> + *
+> + * -------------------------
+> + * | alignment padding     |
+> + * -------------------------
+> + * | (f)xsave frame        |
+> + * -------------------------
+> + * | fsave header          |
+> + * -------------------------
+> + * | siginfo + ucontext    |
+> + * -------------------------
+> + */
+> +
+> +/* max_frame_size tells userspace the worst case signal stack size. */
+> +static unsigned long __ro_after_init max_frame_size;
+> +
+> +void __init init_sigframe_size(void)
+> +{
+> +	/*
+> +	 * Use the largest of possible structure formats. This might
+> +	 * slightly oversize the frame for 64-bit apps.
+> +	 */
+> +
+> +	if (IS_ENABLED(CONFIG_X86_32) ||
+> +	    IS_ENABLED(CONFIG_IA32_EMULATION))
+> +		max_frame_size = max((unsigned long)SIZEOF_sigframe_ia32,
+> +				     (unsigned long)SIZEOF_rt_sigframe_ia32);
+> +
+> +	if (IS_ENABLED(CONFIG_X86_X32_ABI))
+> +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe_x32);
+> +
+> +	if (IS_ENABLED(CONFIG_X86_64))
+> +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe);
+> +
+> +	max_frame_size += fpu__get_fpstate_sigframe_size() + MAX_XSAVE_PADDING;
 
-> > > > > > > +               map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + nbits);
-> > > > > > > +               map[index + 1] |= (value >> space);
+For arm64, we round the worst-case padding up by one.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I can't remember the full rationale for this, but it at least seemed a
+bit weird to report a size that is not a multiple of the alignment.
 
+I'm can't think of a clear argument as to why it really matters, though.
 
+[...]
+
+Cheers
+---Dave
