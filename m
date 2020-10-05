@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D4E2836C1
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 15:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C382836D4
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 15:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbgJENmg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Oct 2020 09:42:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:47766 "EHLO foss.arm.com"
+        id S1726138AbgJENpk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Oct 2020 09:45:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:47844 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725932AbgJENmg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 5 Oct 2020 09:42:36 -0400
+        id S1725936AbgJENpk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 5 Oct 2020 09:45:40 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBBC4106F;
-        Mon,  5 Oct 2020 06:42:35 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96F92106F;
+        Mon,  5 Oct 2020 06:45:39 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE8B43F70D;
-        Mon,  5 Oct 2020 06:42:33 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 14:42:30 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B6933F70D;
+        Mon,  5 Oct 2020 06:45:37 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 14:45:34 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     "Chang S. Bae" <chang.seok.bae@intel.com>
 Cc:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
@@ -26,108 +26,79 @@ Cc:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
         ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
         linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] x86/signal: Introduce helpers to get the maximum
- signal frame size
-Message-ID: <20201005134230.GS6642@arm.com>
+Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
+Message-ID: <20201005134534.GT6642@arm.com>
 References: <20200929205746.6763-1-chang.seok.bae@intel.com>
- <20200929205746.6763-2-chang.seok.bae@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200929205746.6763-2-chang.seok.bae@intel.com>
+In-Reply-To: <20200929205746.6763-1-chang.seok.bae@intel.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 01:57:43PM -0700, Chang S. Bae wrote:
-> Signal frames do not have a fixed format and can vary in size when a number
-> of things change: support XSAVE features, 32 vs. 64-bit apps. Add the code
-> to support a runtime method for userspace to dynamically discover how large
-> a signal stack needs to be.
+On Tue, Sep 29, 2020 at 01:57:42PM -0700, Chang S. Bae wrote:
+> During signal entry, the kernel pushes data onto the normal userspace
+> stack. On x86, the data pushed onto the user stack includes XSAVE state,
+> which has grown over time as new features and larger registers have been
+> added to the architecture.
 > 
-> Introduce a new variable, max_frame_size, and helper functions for the
-> calculation to be used in a new user interface. Set max_frame_size to a
-> system-wide worst-case value, instead of storing multiple app-specific
-> values.
+> MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
+> typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
+> compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
+> constant indicates to userspace how much data the kernel expects to push on
+> the user stack, [2][3].
 > 
-> Locate the body of the helper function -- fpu__get_fpstate_sigframe_size()
-> in fpu/signal.c for its relevance.
+> However, this constant is much too small and does not reflect recent
+> additions to the architecture. For instance, when AVX-512 states are in
+> use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
 > 
-> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  arch/x86/include/asm/fpu/signal.h |  2 ++
->  arch/x86/include/asm/sigframe.h   | 23 ++++++++++++++++
->  arch/x86/kernel/cpu/common.c      |  3 +++
->  arch/x86/kernel/fpu/signal.c      | 20 ++++++++++++++
->  arch/x86/kernel/signal.c          | 45 +++++++++++++++++++++++++++++++
->  5 files changed, 93 insertions(+)
+> The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
+> cause user stack overflow when delivering a signal.
+> 
+> In this series, we suggest a couple of things:
+> 1. Provide a variable minimum stack size to userspace, as a similar
+>    approach to [5]
+> 2. Avoid using a too-small alternate stack
 
-[...]
+I can't comment on the x86 specifics, but the approach followed in this
+series does seem consistent with the way arm64 populates
+AT_MINSIGSTKSZ.
 
-> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-> index be0d7d4152ec..239a0b23a4b0 100644
-> --- a/arch/x86/kernel/signal.c
-> +++ b/arch/x86/kernel/signal.c
-> @@ -663,6 +663,51 @@ SYSCALL_DEFINE0(rt_sigreturn)
->  	return 0;
->  }
->  
-> +/*
-> + * The FP state frame contains an XSAVE buffer which must be 64-byte aligned.
-> + * If a signal frame starts at an unaligned address, extra space is required.
-> + * This is the max alignment padding, conservatively.
-> + */
-> +#define MAX_XSAVE_PADDING	63UL
-> +
-> +/*
-> + * The frame data is composed of the following areas and laid out as:
-> + *
-> + * -------------------------
-> + * | alignment padding     |
-> + * -------------------------
-> + * | (f)xsave frame        |
-> + * -------------------------
-> + * | fsave header          |
-> + * -------------------------
-> + * | siginfo + ucontext    |
-> + * -------------------------
-> + */
-> +
-> +/* max_frame_size tells userspace the worst case signal stack size. */
-> +static unsigned long __ro_after_init max_frame_size;
-> +
-> +void __init init_sigframe_size(void)
-> +{
-> +	/*
-> +	 * Use the largest of possible structure formats. This might
-> +	 * slightly oversize the frame for 64-bit apps.
-> +	 */
-> +
-> +	if (IS_ENABLED(CONFIG_X86_32) ||
-> +	    IS_ENABLED(CONFIG_IA32_EMULATION))
-> +		max_frame_size = max((unsigned long)SIZEOF_sigframe_ia32,
-> +				     (unsigned long)SIZEOF_rt_sigframe_ia32);
-> +
-> +	if (IS_ENABLED(CONFIG_X86_X32_ABI))
-> +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe_x32);
-> +
-> +	if (IS_ENABLED(CONFIG_X86_64))
-> +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe);
-> +
-> +	max_frame_size += fpu__get_fpstate_sigframe_size() + MAX_XSAVE_PADDING;
-
-For arm64, we round the worst-case padding up by one.
-
-I can't remember the full rationale for this, but it at least seemed a
-bit weird to report a size that is not a multiple of the alignment.
-
-I'm can't think of a clear argument as to why it really matters, though.
-
-[...]
+I need to dig up my glibc hacks for providing a sysconf interface to
+this...
 
 Cheers
 ---Dave
+
+> 
+> [1]: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/bits/sigstack.h;h=b9dca794da093dc4d41d39db9851d444e1b54d9b;hb=HEAD
+> [2]: https://www.gnu.org/software/libc/manual/html_node/Signal-Stack.html
+> [3]: https://man7.org/linux/man-pages/man2/sigaltstack.2.html
+> [4]: https://bugzilla.kernel.org/show_bug.cgi?id=153531
+> [5]: https://blog.linuxplumbersconf.org/2017/ocw/system/presentations/4671/original/plumbers-dm-2017.pdf
+> 
+> Chang S. Bae (4):
+>   x86/signal: Introduce helpers to get the maximum signal frame size
+>   x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
+>   x86/signal: Prevent an alternate stack overflow before a signal
+>     delivery
+>   selftest/x86/signal: Include test cases for validating sigaltstack
+> 
+>  arch/x86/ia32/ia32_signal.c               |  11 +-
+>  arch/x86/include/asm/elf.h                |   4 +
+>  arch/x86/include/asm/fpu/signal.h         |   2 +
+>  arch/x86/include/asm/sigframe.h           |  25 +++++
+>  arch/x86/include/uapi/asm/auxvec.h        |   6 +-
+>  arch/x86/kernel/cpu/common.c              |   3 +
+>  arch/x86/kernel/fpu/signal.c              |  20 ++++
+>  arch/x86/kernel/signal.c                  |  66 +++++++++++-
+>  tools/testing/selftests/x86/Makefile      |   2 +-
+>  tools/testing/selftests/x86/sigaltstack.c | 126 ++++++++++++++++++++++
+>  10 files changed, 258 insertions(+), 7 deletions(-)
+>  create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+> 
+> --
+> 2.17.1
+> 
