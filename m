@@ -2,116 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38907284202
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Oct 2020 23:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B175A284337
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 02:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729750AbgJEVRp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Oct 2020 17:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbgJEVRo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Oct 2020 17:17:44 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C250C0613CE;
-        Mon,  5 Oct 2020 14:17:43 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id m11so4503492otk.13;
-        Mon, 05 Oct 2020 14:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hyrdjCdnHrdnldaqzFTSI9iGwYW5D1gYzC8h8Hdh80E=;
-        b=hFgY9RJ2qsAss5wIW2AxUadyOfAnf6CQjsgCVefWPsCZqqELm7merCDWGa1rybmzr6
-         8w/zsCZT2umo8TaaFDLvQJELkr6QJQO8W/QpUSXjtQiI2LdLFz6qOD21uPf1FAWIhvyu
-         IsiMJRbHlKpm2YrTfdHLzBa4NGXolkXO7iA4cGG5dSUnxV9KEusz2DjMbPW/+Y4HGuLH
-         0m6D059Odxk7jRY8v+1edojV4DH1kVJO5vuV5FSQle4DK0/szSJ5Euq4ZJ4BYD8Wny7s
-         5KZ90jwQ/4IbVzEhHegzBagh8JdzK3hH09kJjNV0LREIe2P8XSOeuPX+oLvzipE0rUaY
-         4W2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hyrdjCdnHrdnldaqzFTSI9iGwYW5D1gYzC8h8Hdh80E=;
-        b=lz+Hz/2GjVao67DboC/ZGFiGO55cyUlQOD/dr72Ws2AxwYz0mI5nwJWukDHoLghvQQ
-         2KqiKiDav2ZwFybXj9JVp1V1ceD/cxyJPT1ulENgBQ45Nh2AEt1axeHtwgjBzI6rKavp
-         OoL5zyDVDGHukM5Qcf8NH4EzsetsMAzFd+jbLQHG/466x+ucfHDAHm597+bXQH010uDb
-         pzWAl8VTluTFT6i8i8TCAkoYzKebUYy/bw6KTSgX7liICvKvjPKS9lVewFaWLc4anhrr
-         WyURgkmMREaDIhZlwVCcxkTyWFi9ormrWwNDZ6ZPzlCTI994+4M1G9e5tfWfIgi6rQKs
-         UBHA==
-X-Gm-Message-State: AOAM530yxDqWT1C7Umy4K5HkTogRYHsiRdHbJxNzfMkvsY3mTRRMpcSO
-        sQN5G2/cpqAHsuEIdIwsAPuz4zI6o/9QU8abqhU=
-X-Google-Smtp-Source: ABdhPJwsw1a1+5vVblSv5qH5DSnI+PjKy8oR+ovdmUsJkjIp8Zb5VId6ArhnL/Vpg4zMKTCYJeDQKOpsUSVTyu76Klw=
-X-Received: by 2002:a9d:5545:: with SMTP id h5mr807618oti.269.1601932662759;
- Mon, 05 Oct 2020 14:17:42 -0700 (PDT)
+        id S1725870AbgJFAR5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Oct 2020 20:17:57 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:18352 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbgJFAR5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Oct 2020 20:17:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1601943476; x=1633479476;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QAwKU8lAOts2CUnPA+WBIUI5CpZVX/yVSp78aPQvNQI=;
+  b=EDxSkxFnMiaP2QAJDRxq738IKUlrxi8GF8ixzN8ajONqHdLh3uPcEFCj
+   Sd3VBPAAkYqq2LvX5RMqLyxbV0BasdUffOdfgViS9eZXyLoRQGCt9OjKs
+   5SY+ouh2LZOwstz/CcrwXfpsxI9LrhJ73sR4Pr648hDrVDQzplVQAkelp
+   AIfxfOlpCXzPi/Gxtrj0NF/r4WMSGK0V1bxO+IXK8E0m8cObciES+rork
+   STJHYHAmBpi8vkvJ5H3j6izxZ0bEcJk9zU9ogRyDUXHK5x4DzOTx7Ydt2
+   AWgevJ3NbTaNScKmme/AFSedXha+zE/uJ36AUR6ad8jieZlezqw5iPAd9
+   g==;
+IronPort-SDR: Mh2S0aqrPpRr76sU2XIuAOO/AHAyrWWm4PVVafGsxAHZwHozeDhBHRteAmB8uKwmmmrEs8EpCI
+ S7FGK0Dapx2TmawPhCvf4bzKNYmc1lBdAxeoitVkEe4KutUUZ+bZc3WVWXVx4WEQ+BSrJxkKtt
+ VCWg+F+YmLR78MOOQadcHOs8Qghlz2sAbiAsMMxpLOlBUEXVFybxh3UeHti47Wxpn63WX6dzwe
+ NP7Pl1PRl8wTcYivAL3virhY8NprdzaWk8gn4y68BMpWtI9fwGlJM3afn65MBkQwwJbzeC8IFi
+ oJ8=
+X-IronPort-AV: E=Sophos;i="5.77,341,1596470400"; 
+   d="scan'208";a="149023388"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2020 08:17:56 +0800
+IronPort-SDR: CuOLyGCnNjyKViZWrZPzXqFgImQKvokKVllYPnPp/rsiSBArv7eIzmuhJeO6zcu1KPtLviTYAL
+ b4zXC1CWvg/Q==
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 17:03:48 -0700
+IronPort-SDR: Neg4gQXFt16GausLnkBfK7NTrO7uOhLbWHdiEHDf+HDtgOth4FjfITodd3H2Qum9/EAwzsM5gp
+ ULdHQ5pTY/EA==
+WDCIronportException: Internal
+Received: from b9f8262.ad.shared (HELO jedi-01.hgst.com) ([10.86.59.253])
+  by uls-op-cesaip01.wdc.com with ESMTP; 05 Oct 2020 17:17:55 -0700
+From:   Atish Patra <atish.patra@wdc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atish.patra@wdc.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Anup Patel <anup@brainfault.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jia He <justin.he@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 0/5] Unify NUMA implementation between ARM64 & RISC-V
+Date:   Mon,  5 Oct 2020 17:17:47 -0700
+Message-Id: <20201006001752.248564-1-atish.patra@wdc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20200929205746.6763-1-chang.seok.bae@intel.com> <20201005134534.GT6642@arm.com>
-In-Reply-To: <20201005134534.GT6642@arm.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Mon, 5 Oct 2020 14:17:06 -0700
-Message-ID: <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Tony Luck <tony.luck@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 5, 2020 at 6:45 AM Dave Martin <Dave.Martin@arm.com> wrote:
->
-> On Tue, Sep 29, 2020 at 01:57:42PM -0700, Chang S. Bae wrote:
-> > During signal entry, the kernel pushes data onto the normal userspace
-> > stack. On x86, the data pushed onto the user stack includes XSAVE state,
-> > which has grown over time as new features and larger registers have been
-> > added to the architecture.
-> >
-> > MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
-> > typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
-> > compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
-> > constant indicates to userspace how much data the kernel expects to push on
-> > the user stack, [2][3].
-> >
-> > However, this constant is much too small and does not reflect recent
-> > additions to the architecture. For instance, when AVX-512 states are in
-> > use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
-> >
-> > The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
-> > cause user stack overflow when delivering a signal.
-> >
-> > In this series, we suggest a couple of things:
-> > 1. Provide a variable minimum stack size to userspace, as a similar
-> >    approach to [5]
-> > 2. Avoid using a too-small alternate stack
->
-> I can't comment on the x86 specifics, but the approach followed in this
-> series does seem consistent with the way arm64 populates
-> AT_MINSIGSTKSZ.
->
-> I need to dig up my glibc hacks for providing a sysconf interface to
-> this...
+This series attempts to move the ARM64 numa implementation to common
+code so that RISC-V can leverage that as well instead of reimplementing
+it again.
 
-Here is my proposal for glibc:
+RISC-V specific bits are based on initial work done by Greentime Hu [1] but
+modified to reuse the common implementation to avoid duplication.
 
-https://sourceware.org/pipermail/libc-alpha/2020-September/118098.html
+[1] https://lkml.org/lkml/2020/1/10/233
 
-1. Define SIGSTKSZ and MINSIGSTKSZ to 64KB.
-2. Add _SC_RSVD_SIG_STACK_SIZE for signal stack size reserved by the kernel.
-3. Deprecate SIGSTKSZ and MINSIGSTKSZ if _SC_RSVD_SIG_STACK_SIZE
-is in use.
+This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
+It would be great if somebody can test it on numa capable ARM64 hardware platforms.
+This patch series doesn't modify the maintainers list for the common code (arch_numa)
+as I am not sure if somebody from ARM64 community or Greg should take up the
+maintainership. Ganapatrao was the original author of the arm64 version.
+I would be happy to update that in the next revision once it is decided.
 
+# numactl --hardware
+available: 2 nodes (0-1)
+node 0 cpus: 0 1 2 3
+node 0 size: 486 MB
+node 0 free: 470 MB
+node 1 cpus: 4 5 6 7
+node 1 size: 424 MB
+node 1 free: 408 MB
+node distances:
+node   0   1 
+  0:  10  20 
+  1:  20  10 
+# numactl -show
+policy: default
+preferred node: current
+physcpubind: 0 1 2 3 4 5 6 7 
+cpubind: 0 1 
+nodebind: 0 1 
+membind: 0 1 
 
--- 
-H.J.
+The patches are also available at
+https://github.com/atishp04/linux/tree/5.10_numa_unified_v4
+
+For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
+https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
+
+Testing:
+RISC-V:
+Tested in Qemu and 2 socket OmniXtend FPGA.
+
+ARM64:
+2 socket kunpeng920 (4 nodes around 250G a node)
+Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+There may be some minor conflicts with Mike's cleanup series [2] depending on the
+order in which these two series are being accepted. I can rebase on top his series
+if required.
+
+[2] https://lkml.org/lkml/2020/8/18/754
+
+Changes from v3->v4:
+1. Removed redundant duplicate header.
+2. Added Reviewed-by tags.
+
+Changes from v2->v3:
+1. Added Acked-by/Reviewed-by tags.
+2. Replaced asm/acpi.h with linux/acpi.h
+3. Defined arch_acpi_numa_init as static.
+
+Changes from v1->v2:
+1. Replaced ARM64 specific compile time protection with ACPI specific ones.
+2. Dropped common pcibus_to_node changes. Added required changes in RISC-V. 
+3. Fixed few typos.
+
+Atish Patra (4):
+numa: Move numa implementation to common code
+arm64, numa: Change the numa init functions name to be generic
+riscv: Separate memory init from paging init
+riscv: Add numa support for riscv64 platform
+
+Greentime Hu (1):
+riscv: Add support pte_protnone and pmd_protnone if
+CONFIG_NUMA_BALANCING
+
+arch/arm64/Kconfig                            |  1 +
+arch/arm64/include/asm/numa.h                 | 45 +----------------
+arch/arm64/kernel/acpi_numa.c                 | 13 -----
+arch/arm64/mm/Makefile                        |  1 -
+arch/arm64/mm/init.c                          |  4 +-
+arch/riscv/Kconfig                            | 31 +++++++++++-
+arch/riscv/include/asm/mmzone.h               | 13 +++++
+arch/riscv/include/asm/numa.h                 |  8 +++
+arch/riscv/include/asm/pci.h                  | 14 ++++++
+arch/riscv/include/asm/pgtable.h              | 21 ++++++++
+arch/riscv/kernel/setup.c                     | 11 ++++-
+arch/riscv/kernel/smpboot.c                   | 12 ++++-
+arch/riscv/mm/init.c                          | 10 +++-
+drivers/base/Kconfig                          |  6 +++
+drivers/base/Makefile                         |  1 +
+.../mm/numa.c => drivers/base/arch_numa.c     | 30 ++++++++++--
+include/asm-generic/numa.h                    | 49 +++++++++++++++++++
+17 files changed, 199 insertions(+), 71 deletions(-)
+create mode 100644 arch/riscv/include/asm/mmzone.h
+create mode 100644 arch/riscv/include/asm/numa.h
+rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
+create mode 100644 include/asm-generic/numa.h
+
+--
+2.25.1
+
