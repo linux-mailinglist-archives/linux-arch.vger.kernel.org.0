@@ -2,133 +2,190 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4647E284AD0
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 13:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A10E284B78
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 14:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgJFL0o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Oct 2020 07:26:44 -0400
-Received: from mga17.intel.com ([192.55.52.151]:15831 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJFL0o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 6 Oct 2020 07:26:44 -0400
-IronPort-SDR: bJoaSJxzNRq/GyiiDnkmLuaBE7jywuLDROT9PXFQ2oJEZM3lmkq/R8HLDSQjII9sZmqB7PA/hM
- ZYGi2TsqMGhQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9765"; a="144359212"
-X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
-   d="scan'208";a="144359212"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 04:26:44 -0700
-IronPort-SDR: eWViaGj6rPWvahSYh8gVy4qS0yigTBvcTVl1GfMEgjDifJ8y9AQy9oqXBA2gwc2MQKdtUsrtIk
- KFLGLG14FIrA==
-X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
-   d="scan'208";a="518237515"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 04:26:42 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kPl8D-0007J8-6r; Tue, 06 Oct 2020 14:27:45 +0300
-Date:   Tue, 6 Oct 2020 14:27:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     linus.walleij@linaro.org, akpm@linux-foundation.org,
-        vilhelm.gray@gmail.com, arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 1/4] bitops: Introduce the for_each_set_clump macro
-Message-ID: <20201006112745.GG4077@smile.fi.intel.com>
-References: <cover.1601974764.git.syednwaris@gmail.com>
- <33de236870f7d3cf56a55d747e4574cdd2b9686a.1601974764.git.syednwaris@gmail.com>
+        id S1726566AbgJFMNG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Oct 2020 08:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726214AbgJFMNF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Oct 2020 08:13:05 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE103C061755;
+        Tue,  6 Oct 2020 05:13:05 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id a2so12024519otr.11;
+        Tue, 06 Oct 2020 05:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NWRcIl4H7NR5wjNYHStWtcM865vMj76wc7Y4EJHzHWk=;
+        b=j5h77Rg+bo8N17QG5m2Osa23XPWOy513mVqvsiAeGawdiKxyfR2h+pt1FC7xBOZfvB
+         bBeH98WXUFpJPjfwjf1NS/+a402MQo15R893F8B8VYWt87BYnmsEEN4FikHbFK+tHwWw
+         LmVbOLvMxQkUjRhS1OXw8gkCXStNqBBT2iVsr3GOVq6WgCr4GGJ08JAt+M2d4O8QhVvp
+         wUQW+KwKutgy57+Fp/oAjAj6oeBtkorLUeASyvLzJ50duvae3P84Zw3Bw7ZBxa1LqAlu
+         JXhiHNqwGJ8LoRG/lugNFm/VaAHlb2nGlTvdXZv/V5PfRbSlFcdQ0ciT3Jbn8MIzOYB4
+         xKJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWRcIl4H7NR5wjNYHStWtcM865vMj76wc7Y4EJHzHWk=;
+        b=Mtla4oH3nLJdZLsrENKV1807wHDWySz12+/aRv085bT+VrqgNgEb+H0KpH4bphj/nb
+         yVdBmnN9vRIAOKAb9cYNpbDywv05Gggl14j9je6P3zgKEqgbfcfp0NbjyFhILhZyCbA8
+         tvK0jdhAYlAEkCHGnajoprR84h/KY0YqPl1FEce5pnXCXhdJ/E2WUWGL2L86TlvwzVhy
+         /lm1p2mltyGIgzo9qBYROE1pUcxw8tzRlir1HxsAvJ1z4pKvFLvH9TqHSNYI75nExrgw
+         4pLAMGbE2E6OwPYbtb1upEa+IEMWukknOVpxBtaJUOmwHGoPecI1QxSdYw8J3PQmh7F1
+         nLOA==
+X-Gm-Message-State: AOAM533lrVXRaWwzqSvDt2Pw+XNZCnp2RUueUmE9U/iMPutbJd6XTSWJ
+        9yW5vNVKxqRckU58MwbowzA8USq1btuQwgd1ZIY=
+X-Google-Smtp-Source: ABdhPJwjE+8Vth572W+dNh6A8WM0UhDVuIqFRfy1nr1NrlLlFhSLdMEmG9Fhy30SKKlKIoIyIuRGQqzFANhVi6gsMbc=
+X-Received: by 2002:a9d:6498:: with SMTP id g24mr2742514otl.179.1601986385044;
+ Tue, 06 Oct 2020 05:13:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33de236870f7d3cf56a55d747e4574cdd2b9686a.1601974764.git.syednwaris@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+ <20201005134534.GT6642@arm.com> <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
+ <20201006092532.GU6642@arm.com>
+In-Reply-To: <20201006092532.GU6642@arm.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Tue, 6 Oct 2020 05:12:29 -0700
+Message-ID: <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Tony Luck <tony.luck@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 02:52:16PM +0530, Syed Nayyar Waris wrote:
-> This macro iterates for each group of bits (clump) with set bits,
-> within a bitmap memory region. For each iteration, "start" is set to
-> the bit offset of the found clump, while the respective clump value is
-> stored to the location pointed by "clump". Additionally, the
-> bitmap_get_value() and bitmap_set_value() functions are introduced to
-> respectively get and set a value of n-bits in a bitmap memory region.
-> The n-bits can have any size less than or equal to BITS_PER_LONG.
-> Moreover, during setting value of n-bit in bitmap, if a situation arise
-> that the width of next n-bit is exceeding the word boundary, then it
-> will divide itself such that some portion of it is stored in that word,
-> while the remaining portion is stored in the next higher word. Similar
-> situation occurs while retrieving the value from bitmap.
+On Tue, Oct 6, 2020 at 2:25 AM Dave Martin <Dave.Martin@arm.com> wrote:
+>
+> On Mon, Oct 05, 2020 at 10:17:06PM +0100, H.J. Lu wrote:
+> > On Mon, Oct 5, 2020 at 6:45 AM Dave Martin <Dave.Martin@arm.com> wrote:
+> > >
+> > > On Tue, Sep 29, 2020 at 01:57:42PM -0700, Chang S. Bae wrote:
+> > > > During signal entry, the kernel pushes data onto the normal userspace
+> > > > stack. On x86, the data pushed onto the user stack includes XSAVE state,
+> > > > which has grown over time as new features and larger registers have been
+> > > > added to the architecture.
+> > > >
+> > > > MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
+> > > > typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
+> > > > compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
+> > > > constant indicates to userspace how much data the kernel expects to push on
+> > > > the user stack, [2][3].
+> > > >
+> > > > However, this constant is much too small and does not reflect recent
+> > > > additions to the architecture. For instance, when AVX-512 states are in
+> > > > use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
+> > > >
+> > > > The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
+> > > > cause user stack overflow when delivering a signal.
+> > > >
+> > > > In this series, we suggest a couple of things:
+> > > > 1. Provide a variable minimum stack size to userspace, as a similar
+> > > >    approach to [5]
+> > > > 2. Avoid using a too-small alternate stack
+> > >
+> > > I can't comment on the x86 specifics, but the approach followed in this
+> > > series does seem consistent with the way arm64 populates
+> > > AT_MINSIGSTKSZ.
+> > >
+> > > I need to dig up my glibc hacks for providing a sysconf interface to
+> > > this...
+> >
+> > Here is my proposal for glibc:
+> >
+> > https://sourceware.org/pipermail/libc-alpha/2020-September/118098.html
+>
+> Thanks for the link.
+>
+> Are there patches yet?  I already had some hacks in the works, but I can
+> drop them if there's something already out there.
 
-...
+I am working on it.
 
-> @@ -75,7 +75,11 @@
->   *  bitmap_from_arr32(dst, buf, nbits)          Copy nbits from u32[] buf to dst
->   *  bitmap_to_arr32(buf, src, nbits)            Copy nbits from buf to u32[] dst
->   *  bitmap_get_value8(map, start)               Get 8bit value from map at start
-> + *  bitmap_get_value(map, start, nbits)		Get bit value of size
-> + *						'nbits' from map at start
->   *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
-> + *  bitmap_set_value(map, value, start, nbits)	Set bit value of size 'nbits'
-> + *						of map at start
+>
+> > 1. Define SIGSTKSZ and MINSIGSTKSZ to 64KB.
+>
+> Can we do this?  IIUC, this is an ABI break and carries the risk of
+> buffer overruns.
+>
+> The reason for not simply increasing the kernel's MINSIGSTKSZ #define
+> (apart from the fact that it is rarely used, due to glibc's shadowing
+> definitions) was that userspace binaries will have baked in the old
+> value of the constant and may be making assumptions about it.
+>
+> For example, the type (char [MINSIGSTKSZ]) changes if this #define
+> changes.  This could be a problem if an newly built library tries to
+> memcpy() or dump such an object defined by and old binary.
+> Bounds-checking and the stack sizes passed to things like sigaltstack()
+> and makecontext() could similarly go wrong.
 
-Formatting here is done with solely spaces, no TABs.
+With my original proposal:
 
-...
+https://sourceware.org/pipermail/libc-alpha/2020-September/118028.html
 
-> +/**
-> + * bitmap_get_value - get a value of n-bits from the memory region
-> + * @map: address to the bitmap memory region
-> + * @start: bit offset of the n-bit value
-> + * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
+char [MINSIGSTKSZ] won't compile.  The feedback is to increase the
+constants:
 
+https://sourceware.org/pipermail/libc-alpha/2020-September/118092.html
 
-> + *	nbits less than 1 or more than BITS_PER_LONG causes undefined behaviour.
+>
+> > 2. Add _SC_RSVD_SIG_STACK_SIZE for signal stack size reserved by the kernel.
+>
+> How about "_SC_MINSIGSTKSZ"?  This was my initial choice since only the
+> discovery method is changing.  The meaning of the value is exactly the
+> same as before.
+>
+> If we are going to rename it though, it could make sense to go for
+> something more directly descriptive, say, "_SC_SIGNAL_FRAME_SIZE".
+>
+> The trouble with including "STKSZ" is that is sounds like a
+> recommendation for your stack size.  While the signal frame size is
+> relevant to picking a stack size, it's not the only thing to
+> consider.
 
-Please, detach this from field description and move to a main description.
+The problem is that AT_MINSIGSTKSZ is the signal frame size used by
+kernel.   The minimum stack size for a signal handler is more likely
+AT_MINSIGSTKSZ + 1.5KB unless AT_MINSIGSTKSZ returns the signal
+frame size used by kernel + 6KB for user application.
 
-> + *
-> + * Returns value of nbits located at the @start bit offset within the @map
-> + * memory region.
-> + */
+>
+> Also, do we need a _SC_SIGSTKSZ constant, or should the entire concept
+> of a "recommended stack size" be abandoned?  glibc can at least make a
+> slightly more informed guess about suitable stack sizes than the kernel
+> (and glibc already has to guess anyway, in order to determine the
+> default thread stack size).
 
-...
+Glibc should try to deduct signal frame size if AT_MINSIGSTKSZ isn't
+available.
 
-> +		return (map[index] >> offset) & GENMASK(nbits - 1, 0);
+>
+> > 3. Deprecate SIGSTKSZ and MINSIGSTKSZ if _SC_RSVD_SIG_STACK_SIZE
+> > is in use.
+>
+> Great if we can do it.  I was concerned that this might be
+> controversial.
+>
+> Would this just be a recommendation, or can we enforce it somehow?
 
-Have you considered to use rather BIT{_ULL}(nbits) - 1?
-It maybe better for code generation.
-
-...
-
-> +/**
-> + * bitmap_set_value - set n-bit value within a memory region
-> + * @map: address to the bitmap memory region
-> + * @value: value of nbits
-> + * @start: bit offset of the n-bit value
-> + * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
-
-> + *	nbits less than 1 or more than BITS_PER_LONG causes undefined behaviour.
-
-Please, detach this from field description and move to a main description.
-
-> + */
-
-...
-
-> +	value &= GENMASK(nbits - 1, 0);
-
-Ditto.
-
-> +		map[index] &= ~(GENMASK(nbits + offset - 1, offset));
-
-Last time I checked such GENMASK) use, it gave a lot of code when
-GENMASK(nbits - 1, 0) << offset works much better, but see also above.
+It is just an idea.  We need to move away from constant SIGSTKSZ and
+MINSIGSTKSZ.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+H.J.
