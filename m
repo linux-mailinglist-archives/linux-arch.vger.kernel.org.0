@@ -2,62 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A03F284EB6
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 17:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2C4284EEA
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 17:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbgJFPSk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Oct 2020 11:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbgJFPSk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Oct 2020 11:18:40 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C69FC061755;
-        Tue,  6 Oct 2020 08:18:40 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id a2so12583143otr.11;
-        Tue, 06 Oct 2020 08:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mNYcg9hxr14aaYVmvZavpGME4UeG7txQeJXvqnwWn64=;
-        b=TAjbHorRstCBXA0+2JFvZFReFCaFvJO4E82N9vQDwtaJVrt4Nt9paNZ14nxE1LBiOu
-         rlIp1RTR4zjUd5r4tzwEpXnm9YWg/z4PeUOvXhpoR6ii6lyhGuh6GTcvJsFcj+IqajEw
-         fEUeokhlz9Yf8LRK0dGLw1VqEmOFLcTCLtk6hPhp1KCg+0E/vrNTedQLim6bus0psiu6
-         I4kPIbAE/ZMfHkdF+4zKX02wYObivUP69poZ8Z7Xr9J9hpCmw8YGIk885GX7HFuvVkwB
-         1Mcr/tj5zcI+OjlO31DQilY6unIIDN+KMHfHFZme7d4PQGFqTwSKj4sv96bglO3ymC2p
-         vMGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mNYcg9hxr14aaYVmvZavpGME4UeG7txQeJXvqnwWn64=;
-        b=Hm5OOKyofWp/ROH7h81Ad6mc75GUnTrstRcZZx65Ub6ma0XM8yUqiGYZK97EgFdFmc
-         eR5xC6O+ocpdIEiDiLw2dVdiFMsxVS66SOU3zwDXm9CbCMqdW2iJz7UbBFVA9hl9kRHj
-         +VImvn6DhyLA1ugENBxf9smz4RQVO/P6AtN0qZuuWq+aXYlkHqbmOp52lk8OcOkfyM+2
-         5FrmFrLWIUlfv2up54A/ENYn0fquHCWKJ1x4b63AhfDl8SHIIuKBfHCSaKh6detiKrVr
-         z1QCdw1wdTdb4ITYi7Qv30p5KIcCpJnQdEPZ43+vE0lAfLPyNWoVh1bT/q9DOj52je6+
-         6qoA==
-X-Gm-Message-State: AOAM5332kdjCsIraGk1TPcEIjtzZJeDstHqYBgX+/tMM3KKA80PD3lof
-        GNWBKF+8DA7fXn40/BJtWzBh5tj2si2XFhLdt6s=
-X-Google-Smtp-Source: ABdhPJxSyZHGAaauqT+xLrRkWrRSNX5OvNACi38JkM5Qv6Vhp0Hnnse52bc9a7Oi9TvOiS4cS1hg4rTAkPXnCQ5j25M=
-X-Received: by 2002:a9d:335:: with SMTP id 50mr3089362otv.90.1601997519336;
- Tue, 06 Oct 2020 08:18:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200929205746.6763-1-chang.seok.bae@intel.com>
- <20201005134534.GT6642@arm.com> <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
- <20201006092532.GU6642@arm.com> <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
-In-Reply-To: <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Tue, 6 Oct 2020 08:18:03 -0700
-Message-ID: <CAMe9rOreJzDZxh8HDDRBvOVZ0Zp_UuoZsenhynh1jjxNNsgTKw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
-To:     Dave Martin <Dave.Martin@arm.com>
+        id S1726329AbgJFPZ7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Oct 2020 11:25:59 -0400
+Received: from foss.arm.com ([217.140.110.172]:50220 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726137AbgJFPZ7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Oct 2020 11:25:59 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD173113E;
+        Tue,  6 Oct 2020 08:25:58 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE6833F71F;
+        Tue,  6 Oct 2020 08:25:56 -0700 (PDT)
+Date:   Tue, 6 Oct 2020 16:25:54 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
 Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
         Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Len Brown <len.brown@intel.com>,
         Dave Hansen <dave.hansen@intel.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -67,13 +34,23 @@ Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
+Message-ID: <20201006152553.GY6642@arm.com>
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+ <20201005134534.GT6642@arm.com>
+ <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
+ <20201006092532.GU6642@arm.com>
+ <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 5:12 AM H.J. Lu <hjl.tools@gmail.com> wrote:
->
+On Tue, Oct 06, 2020 at 05:12:29AM -0700, H.J. Lu wrote:
 > On Tue, Oct 6, 2020 at 2:25 AM Dave Martin <Dave.Martin@arm.com> wrote:
 > >
 > > On Mon, Oct 05, 2020 at 10:17:06PM +0100, H.J. Lu wrote:
@@ -118,9 +95,13 @@ On Tue, Oct 6, 2020 at 5:12 AM H.J. Lu <hjl.tools@gmail.com> wrote:
 > >
 > > Are there patches yet?  I already had some hacks in the works, but I can
 > > drop them if there's something already out there.
->
+> 
 > I am working on it.
->
+
+OK.  I may post something for discussion, but I'm happy for it to be
+superseded by someone (i.e., other than me) who actually knows what
+they're doing...
+
 > >
 > > > 1. Define SIGSTKSZ and MINSIGSTKSZ to 64KB.
 > >
@@ -137,17 +118,39 @@ On Tue, Oct 6, 2020 at 5:12 AM H.J. Lu <hjl.tools@gmail.com> wrote:
 > > memcpy() or dump such an object defined by and old binary.
 > > Bounds-checking and the stack sizes passed to things like sigaltstack()
 > > and makecontext() could similarly go wrong.
->
+> 
 > With my original proposal:
->
+> 
 > https://sourceware.org/pipermail/libc-alpha/2020-September/118028.html
->
+> 
 > char [MINSIGSTKSZ] won't compile.  The feedback is to increase the
 > constants:
->
+> 
 > https://sourceware.org/pipermail/libc-alpha/2020-September/118092.html
->
-> >
+
+Ah, I see.  But both still API and ABI breaks; moreover, declaraing an
+array with size based on (MIN)SIGSTKSZ is not just reasonable, but the
+obvious thing to do with this constant in many simple cases.  Such usage
+is widespread, see:
+
+ * https://codesearch.debian.net/search?q=%5BSIGSTKSZ%5D&literal=1
+
+
+Your two approaches seem to trade off two different sources of buffer
+overruns: undersized stacks versus ABI breaks across library boundaries.
+
+Since undersized stack is by far the more familiar problem and we at
+least have guard regions to help detect overruns, I'd vote to keep
+MINSIGSTKSZ and SIGSTKSZ as-is, at least for now.
+
+Or are people reporting real stack overruns on x86 today?
+
+
+For arm64, we made large vectors on SVE opt-in, so that oversized signal
+frames are not seen by default.  Would somethine similar be feasible on
+x86?
+
+
 > > > 2. Add _SC_RSVD_SIG_STACK_SIZE for signal stack size reserved by the kernel.
 > >
 > > How about "_SC_MINSIGSTKSZ"?  This was my initial choice since only the
@@ -161,23 +164,39 @@ On Tue, Oct 6, 2020 at 5:12 AM H.J. Lu <hjl.tools@gmail.com> wrote:
 > > recommendation for your stack size.  While the signal frame size is
 > > relevant to picking a stack size, it's not the only thing to
 > > consider.
->
+> 
 > The problem is that AT_MINSIGSTKSZ is the signal frame size used by
 > kernel.   The minimum stack size for a signal handler is more likely
 > AT_MINSIGSTKSZ + 1.5KB unless AT_MINSIGSTKSZ returns the signal
 > frame size used by kernel + 6KB for user application.
->
-> >
+
+Ack; to be correct, you also need to take into account which signals may
+be unmasked while running on this stack, and the stack requirements of
+all their handlers.  Unfortunately, that's hard :(
+
+What's your view on my naming suggesions?
+
+
 > > Also, do we need a _SC_SIGSTKSZ constant, or should the entire concept
 > > of a "recommended stack size" be abandoned?  glibc can at least make a
 > > slightly more informed guess about suitable stack sizes than the kernel
 > > (and glibc already has to guess anyway, in order to determine the
 > > default thread stack size).
->
+> 
 > Glibc should try to deduct signal frame size if AT_MINSIGSTKSZ isn't
 > available.
->
-> >
+
+In my code, I generate _SC_SIGSTKSZ as the equivalent of
+
+	max(sysconf(_SC_MINSIGSTKSZ) * 4, SIGSTKSZ)
+
+which is >= the legacy value, and broadly reperesentative of the
+relationship between MINSIGSTKSZ and SIGSTKSZ on most arches.
+
+
+What do you think?
+
+
 > > > 3. Deprecate SIGSTKSZ and MINSIGSTKSZ if _SC_RSVD_SIG_STACK_SIZE
 > > > is in use.
 > >
@@ -185,17 +204,11 @@ On Tue, Oct 6, 2020 at 5:12 AM H.J. Lu <hjl.tools@gmail.com> wrote:
 > > controversial.
 > >
 > > Would this just be a recommendation, or can we enforce it somehow?
->
+> 
 > It is just an idea.  We need to move away from constant SIGSTKSZ and
 > MINSIGSTKSZ.
->
 
-Here is the glibc patch:
+Totally agree with that.
 
-https://gitlab.com/x86-glibc/glibc/-/commits/users/hjl/AT_MINSIGSTKSZ
-
-AT_MINSIGSTKSZ should return the signal frame size used by kernel + 6KB
-for user application.
-
--- 
-H.J.
+Cheers
+---Dave
