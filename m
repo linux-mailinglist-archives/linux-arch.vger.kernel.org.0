@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63196284339
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 02:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E08C28433E
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 02:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgJFASA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Oct 2020 20:18:00 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:18352 "EHLO
+        id S1726849AbgJFASI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Oct 2020 20:18:08 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:24246 "EHLO
         esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725865AbgJFAR6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Oct 2020 20:17:58 -0400
+        with ESMTP id S1725861AbgJFASA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Oct 2020 20:18:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1601943477; x=1633479477;
+  t=1601943479; x=1633479479;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BCeALvxSw7TkRBorsKB9HZiBElTOz/5Cfmc9covNeMs=;
-  b=pAWXJNB+yrSuP5BvSu7PEBY+8VwV1PlYSHEYC09MK0S821Lpk0iak5Uc
-   zDNtD3U68nBV8jMFUOw0oKaWZet/Vx8mjO0DAeSFuxzZezmnAXNWDvp78
-   j9WrYIfUhYBIbmtwnZJfU573cwG9IRN34Oq7GY6dUc58CZwwDMUz5PlbH
-   CiwLs3uQ+eZInuuBpl9mTWeKHTA4KyD5OkG09eBlosssXg7qtCasIuAGe
-   Vb9dYGRtneVBpTEddp/YlJJSbWh4SKeXegnmqarRQSXRleI0N6HsikjZ2
-   VxYchnQWvzRIyYb1KoiTwfCs28a7h2Klz2pNT0//BME6/3lR19e/8/lmr
-   g==;
-IronPort-SDR: lMm782WF4JTi5165xwAPkF9zDOR50WO4x5HEfsaaFs6r0H/K9ftaw2StaR279/33oPwvhYdStc
- pvsMWtlyG3W0ruYBg9fG/yZ/KtvNJThpnsDjy6W5dchuTa+Hs4TR+vQt+FmQG6qjbGXyKeNPOE
- kHakatPOI5tOZKThWCkpwCypbIz1XkMnb5RzQwPFRf/g4QHLbmXTZ7hId0nZBRogp7h4SYlFew
- 76HLfYvSXjaFKrJ78jqrVtPm/DedCLP7PZNCIhZPy0MWU37q3gurJ6rktw6pvnaBbUp96Av0BX
- lWo=
+  bh=jfrlgXznAUc7CfJc5sdSM/Hlx3h6V83dfBBFaAjyQXg=;
+  b=FCa6Lfa+nOEzmxt/q9li0gY2HVcaPCudr9PhTK55CXhcubkE3sDFsgLt
+   RNhY1aGBABu7lKntTEiQ4ZkKM1+EGUaHlUUkLN+dBHgRGNgZvnWzjbhHT
+   fTm9FwZ3atXHxV628xb6EGSFymQxrx1OabsTSCWFiiWSJ+YNXGNOym2iO
+   z23oFLMbdCfKQT2e6/qMTzGNNYPh5nbhYDFB5/79GpU/M3G9X7aqlPUEB
+   aiTt35AAIyLciq2p4ddRUqEHcDR4CtMOrG1tKJlaakjPju1VHHku/j77/
+   z47L9DG5AeNSqxgXwyNMhljORcXC+ADuh80z6zpzmTArawlqtlJk5Dsis
+   Q==;
+IronPort-SDR: a2VWf5S4jVofRYba/X4gOvgOKS9OzzImhj3neKzp4q1OV4496W4alQ6FYAaxjkbIQm9HLmvsDg
+ LeMhbqWeqDofL1wMZfHFpEX9PfqNf+t4gBFxbl+CGUKY2ztZwyAk5ifdC/N5m9YNgY7bT1WU+C
+ rW0r/uyEIZKh99Stdc6oMrkVrLspCxJQBnKfOB/0A5vMsph/sRVyJFJMdBtBEi+IKnU+hQ+bP5
+ brr60H4+rSpDJUItx5UhR+qvj5bJYHJPryoQrjMLamEKxwONTDEuFunfUVkJ+dqafdUi1aqSk+
+ Cwk=
 X-IronPort-AV: E=Sophos;i="5.77,341,1596470400"; 
-   d="scan'208";a="149023392"
+   d="scan'208";a="149023395"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2020 08:17:57 +0800
-IronPort-SDR: BXMPj7SX7ur42V1hP+P0SY9AjinsCJSAu7RMX9ttsXicsREMPOb4/3OcnmJFch+PmypOOwHADk
- NTQBOryyR2fw==
+  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2020 08:17:58 +0800
+IronPort-SDR: xAkRGxaf5OMZBwrbJRrBYvDtmyrsk4SorODV6jhc3WMiOOS5iBLNwFZHOvv49y4fJPfOZT/Kn9
+ UWA5EVSC8pjg==
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 17:03:49 -0700
-IronPort-SDR: uqPXfCgpo2ff2kfyH+CSANlb9Q5TFZMGqvAa9v2FYGcVamLPuRkMhOBK55p7yvpOkrwHvARqyv
- wnw1X/YO2uNw==
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 17:03:50 -0700
+IronPort-SDR: E9y87SoW9Zy1q10ZwSTIl1B/6F0q/o9ZwnaI3zF+SSqC1S0WPF6vC59m4/JceurnRxcJWNVi1O
+ WwUbQuSG8mRg==
 WDCIronportException: Internal
 Received: from b9f8262.ad.shared (HELO jedi-01.hgst.com) ([10.86.59.253])
-  by uls-op-cesaip01.wdc.com with ESMTP; 05 Oct 2020 17:17:56 -0700
+  by uls-op-cesaip01.wdc.com with ESMTP; 05 Oct 2020 17:17:57 -0700
 From:   Atish Patra <atish.patra@wdc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atish.patra@wdc.com>,
@@ -66,9 +66,9 @@ Cc:     Atish Patra <atish.patra@wdc.com>,
         Steven Price <steven.price@arm.com>,
         Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 1/5] numa: Move numa implementation to common code
-Date:   Mon,  5 Oct 2020 17:17:48 -0700
-Message-Id: <20201006001752.248564-2-atish.patra@wdc.com>
+Subject: [PATCH v4 2/5] arm64, numa: Change the numa init functions name to be generic
+Date:   Mon,  5 Oct 2020 17:17:49 -0700
+Message-Id: <20201006001752.248564-3-atish.patra@wdc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201006001752.248564-1-atish.patra@wdc.com>
 References: <20201006001752.248564-1-atish.patra@wdc.com>
@@ -78,193 +78,133 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ARM64 numa implementation is generic enough that RISC-V can reuse that
-implementation with very minor cosmetic changes. This will help both
-ARM64 and RISC-V in terms of maintanace and feature improvement
-
-Move the numa implementation code to common directory so that both ISAs
-can reuse this. This doesn't introduce any function changes for ARM64.
+As we are using generic numa implementation code, modify the acpi & numa
+init functions name to indicate that generic implementation.
 
 Signed-off-by: Atish Patra <atish.patra@wdc.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- arch/arm64/Kconfig                            |  1 +
- arch/arm64/include/asm/numa.h                 | 45 +----------------
- arch/arm64/mm/Makefile                        |  1 -
- drivers/base/Kconfig                          |  6 +++
- drivers/base/Makefile                         |  1 +
- .../mm/numa.c => drivers/base/arch_numa.c     |  0
- include/asm-generic/numa.h                    | 49 +++++++++++++++++++
- 7 files changed, 58 insertions(+), 45 deletions(-)
- rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (100%)
- create mode 100644 include/asm-generic/numa.h
+ arch/arm64/kernel/acpi_numa.c | 13 -------------
+ arch/arm64/mm/init.c          |  4 ++--
+ drivers/base/arch_numa.c      | 30 +++++++++++++++++++++++++-----
+ include/asm-generic/numa.h    |  4 ++--
+ 4 files changed, 29 insertions(+), 22 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 6d232837cbee..955a0cf75b16 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -960,6 +960,7 @@ config HOTPLUG_CPU
- # Common NUMA Features
- config NUMA
- 	bool "NUMA Memory Allocation and Scheduler Support"
-+	select GENERIC_ARCH_NUMA
- 	select ACPI_NUMA if ACPI
- 	select OF_NUMA
- 	help
-diff --git a/arch/arm64/include/asm/numa.h b/arch/arm64/include/asm/numa.h
-index 626ad01e83bf..8c8cf4297cc3 100644
---- a/arch/arm64/include/asm/numa.h
-+++ b/arch/arm64/include/asm/numa.h
-@@ -3,49 +3,6 @@
- #define __ASM_NUMA_H
+diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+index 7ff800045434..96502ff92af5 100644
+--- a/arch/arm64/kernel/acpi_numa.c
++++ b/arch/arm64/kernel/acpi_numa.c
+@@ -117,16 +117,3 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
  
- #include <asm/topology.h>
+ 	node_set(node, numa_nodes_parsed);
+ }
 -
--#ifdef CONFIG_NUMA
--
--#define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
--
--int __node_distance(int from, int to);
--#define node_distance(a, b) __node_distance(a, b)
--
--extern nodemask_t numa_nodes_parsed __initdata;
--
--extern bool numa_off;
--
--/* Mappings between node number and cpus on that node. */
--extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
--void numa_clear_node(unsigned int cpu);
--
--#ifdef CONFIG_DEBUG_PER_CPU_MAPS
--const struct cpumask *cpumask_of_node(int node);
--#else
--/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
--static inline const struct cpumask *cpumask_of_node(int node)
+-int __init arm64_acpi_numa_init(void)
 -{
--	return node_to_cpumask_map[node];
+-	int ret;
+-
+-	ret = acpi_numa_init();
+-	if (ret) {
+-		pr_info("Failed to initialise from firmware\n");
+-		return ret;
+-	}
+-
+-	return srat_disabled() ? -EINVAL : 0;
 -}
--#endif
--
--void __init arm64_numa_init(void);
--int __init numa_add_memblk(int nodeid, u64 start, u64 end);
--void __init numa_set_distance(int from, int to, int distance);
--void __init numa_free_distance(void);
--void __init early_map_cpu_to_node(unsigned int cpu, int nid);
--void numa_store_cpu_info(unsigned int cpu);
--void numa_add_cpu(unsigned int cpu);
--void numa_remove_cpu(unsigned int cpu);
--
--#else	/* CONFIG_NUMA */
--
--static inline void numa_store_cpu_info(unsigned int cpu) { }
--static inline void numa_add_cpu(unsigned int cpu) { }
--static inline void numa_remove_cpu(unsigned int cpu) { }
--static inline void arm64_numa_init(void) { }
--static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
--
--#endif	/* CONFIG_NUMA */
-+#include <asm-generic/numa.h>
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 481d22c32a2e..93b660229e1d 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -418,10 +418,10 @@ void __init bootmem_init(void)
+ 	max_pfn = max_low_pfn = max;
+ 	min_low_pfn = min;
  
- #endif	/* __ASM_NUMA_H */
-diff --git a/arch/arm64/mm/Makefile b/arch/arm64/mm/Makefile
-index d91030f0ffee..928c308b044b 100644
---- a/arch/arm64/mm/Makefile
-+++ b/arch/arm64/mm/Makefile
-@@ -6,7 +6,6 @@ obj-y				:= dma-mapping.o extable.o fault.o init.o \
- obj-$(CONFIG_HUGETLB_PAGE)	+= hugetlbpage.o
- obj-$(CONFIG_PTDUMP_CORE)	+= dump.o
- obj-$(CONFIG_PTDUMP_DEBUGFS)	+= ptdump_debugfs.o
--obj-$(CONFIG_NUMA)		+= numa.o
- obj-$(CONFIG_DEBUG_VIRTUAL)	+= physaddr.o
- KASAN_SANITIZE_physaddr.o	+= n
+-	arm64_numa_init();
++	arch_numa_init();
  
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index 8d7001712062..c5956c8845cc 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -210,4 +210,10 @@ config GENERIC_ARCH_TOPOLOGY
- 	  appropriate scaling, sysfs interface for reading capacity values at
- 	  runtime.
+ 	/*
+-	 * must be done after arm64_numa_init() which calls numa_init() to
++	 * must be done after arch_numa_init() which calls numa_init() to
+ 	 * initialize node_online_map that gets used in hugetlb_cma_reserve()
+ 	 * while allocating required CMA size across online nodes.
+ 	 */
+diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
+index 73f8b49d485c..74b4f2ddad70 100644
+--- a/drivers/base/arch_numa.c
++++ b/drivers/base/arch_numa.c
+@@ -13,7 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
  
-+config GENERIC_ARCH_NUMA
-+	bool
-+	help
-+	  Enable support for generic NUMA implementation. Currently, RISC-V
-+	  and ARM64 uses it.
-+
- endmenu
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index 157452080f3d..c3d02c644222 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
- obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
- obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
- obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
-+obj-$(CONFIG_GENERIC_ARCH_NUMA) += arch_numa.o
+-#include <asm/acpi.h>
+ #include <asm/sections.h>
  
- obj-y			+= test/
+ struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
+@@ -444,16 +443,37 @@ static int __init dummy_numa_init(void)
+ 	return 0;
+ }
  
-diff --git a/arch/arm64/mm/numa.c b/drivers/base/arch_numa.c
-similarity index 100%
-rename from arch/arm64/mm/numa.c
-rename to drivers/base/arch_numa.c
-diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
-new file mode 100644
-index 000000000000..2718d5a6ff03
---- /dev/null
-+++ b/include/asm-generic/numa.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_GENERIC_NUMA_H
-+#define __ASM_GENERIC_NUMA_H
-+
-+#ifdef CONFIG_NUMA
-+
-+#define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
-+
-+int __node_distance(int from, int to);
-+#define node_distance(a, b) __node_distance(a, b)
-+
-+extern nodemask_t numa_nodes_parsed __initdata;
-+
-+extern bool numa_off;
-+
-+/* Mappings between node number and cpus on that node. */
-+extern cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
-+void numa_clear_node(unsigned int cpu);
-+
-+#ifdef CONFIG_DEBUG_PER_CPU_MAPS
-+const struct cpumask *cpumask_of_node(int node);
-+#else
-+/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
-+static inline const struct cpumask *cpumask_of_node(int node)
++#ifdef CONFIG_ACPI_NUMA
++static int __init arch_acpi_numa_init(void)
 +{
-+	return node_to_cpumask_map[node];
++	int ret;
++
++	ret = acpi_numa_init();
++	if (ret) {
++		pr_info("Failed to initialise from firmware\n");
++		return ret;
++	}
++
++	return srat_disabled() ? -EINVAL : 0;
 +}
++#else
++static int __init arch_acpi_numa_init(void)
++{
++	return -EOPNOTSUPP;
++}
++
 +#endif
 +
-+void __init arm64_numa_init(void);
-+int __init numa_add_memblk(int nodeid, u64 start, u64 end);
-+void __init numa_set_distance(int from, int to, int distance);
-+void __init numa_free_distance(void);
-+void __init early_map_cpu_to_node(unsigned int cpu, int nid);
-+void numa_store_cpu_info(unsigned int cpu);
-+void numa_add_cpu(unsigned int cpu);
-+void numa_remove_cpu(unsigned int cpu);
-+
-+#else	/* CONFIG_NUMA */
-+
-+static inline void numa_store_cpu_info(unsigned int cpu) { }
-+static inline void numa_add_cpu(unsigned int cpu) { }
-+static inline void numa_remove_cpu(unsigned int cpu) { }
-+static inline void arm64_numa_init(void) { }
-+static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
-+
-+#endif	/* CONFIG_NUMA */
-+
-+#endif	/* __ASM_GENERIC_NUMA_H */
+ /**
+- * arm64_numa_init() - Initialize NUMA
++ * arch_numa_init() - Initialize NUMA
+  *
+  * Try each configured NUMA initialization method until one succeeds. The
+- * last fallback is dummy single node config encomapssing whole memory.
++ * last fallback is dummy single node config encompassing whole memory.
+  */
+-void __init arm64_numa_init(void)
++void __init arch_numa_init(void)
+ {
+ 	if (!numa_off) {
+-		if (!acpi_disabled && !numa_init(arm64_acpi_numa_init))
++		if (!acpi_disabled && !numa_init(arch_acpi_numa_init))
+ 			return;
+ 		if (acpi_disabled && !numa_init(of_numa_init))
+ 			return;
+diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
+index 2718d5a6ff03..e7962db4ba44 100644
+--- a/include/asm-generic/numa.h
++++ b/include/asm-generic/numa.h
+@@ -27,7 +27,7 @@ static inline const struct cpumask *cpumask_of_node(int node)
+ }
+ #endif
+ 
+-void __init arm64_numa_init(void);
++void __init arch_numa_init(void);
+ int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+ void __init numa_set_distance(int from, int to, int distance);
+ void __init numa_free_distance(void);
+@@ -41,7 +41,7 @@ void numa_remove_cpu(unsigned int cpu);
+ static inline void numa_store_cpu_info(unsigned int cpu) { }
+ static inline void numa_add_cpu(unsigned int cpu) { }
+ static inline void numa_remove_cpu(unsigned int cpu) { }
+-static inline void arm64_numa_init(void) { }
++static inline void arch_numa_init(void) { }
+ static inline void early_map_cpu_to_node(unsigned int cpu, int nid) { }
+ 
+ #endif	/* CONFIG_NUMA */
 -- 
 2.25.1
 
