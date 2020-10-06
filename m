@@ -2,116 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B899285187
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 20:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D3D28519B
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 20:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbgJFSVR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Oct 2020 14:21:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33262 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726766AbgJFSVO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Oct 2020 14:21:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602008472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vLEPMopDgwBeHhoD6xTsXdWXnyecjzlObkKeapKxZb8=;
-        b=eHiaDzJaVsMiz82SCK6dcdxPawvH54nFGwmFXNaMANM0DCWJxc6WqFVuZLTrqTmr3WT3Hx
-        Txv7rs9e01U19hh1R1r5ZIE6zM1lxZ652Bi6pDVc/oATeXNxqI0UewP6EhGFxsDlN4lkpu
-        a8nkGzh12N0ksjo4HShRJtNtyjRpouc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-461-alcayjT3P7G1iHsDj3bAkg-1; Tue, 06 Oct 2020 14:21:08 -0400
-X-MC-Unique: alcayjT3P7G1iHsDj3bAkg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 777FF64088;
-        Tue,  6 Oct 2020 18:21:05 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-113-154.ams2.redhat.com [10.36.113.154])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2F4F60BFA;
-        Tue,  6 Oct 2020 18:21:01 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Dave Martin via Libc-alpha <libc-alpha@sourceware.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        id S1726803AbgJFSbA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Oct 2020 14:31:00 -0400
+Received: from mga18.intel.com ([134.134.136.126]:60738 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725906AbgJFSa7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 6 Oct 2020 14:30:59 -0400
+IronPort-SDR: iL7HmIKyMR2j6VCKl4T8qij9Uxa+RdQnZuQJYZAJ4ebr5ZxxVZkVCSUXPYxI/rBbFApZzxg5m1
+ ZJFoHQnVb/lg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9765"; a="152390417"
+X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
+   d="scan'208";a="152390417"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 11:30:44 -0700
+IronPort-SDR: yJnOzM6JGUtNv3jxt5BfWpEVwPSVAWeJM5xLIt5aoybCmh3I63jJKlBLDREG5M/jngRsqOUS2G
+ 9piXHZZTlVjQ==
+X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
+   d="scan'208";a="342427114"
+Received: from bdchartr-mobl3.amr.corp.intel.com (HELO [10.212.48.222]) ([10.212.48.222])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 11:30:40 -0700
+Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Tony Luck <tony.luck@intel.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@kernel.org>
-Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
+        LKML <linux-kernel@vger.kernel.org>
 References: <20200929205746.6763-1-chang.seok.bae@intel.com>
-        <20201005134534.GT6642@arm.com>
-        <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
-        <20201006092532.GU6642@arm.com>
-        <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
-        <20201006152553.GY6642@arm.com>
-        <7663eff0-6c94-f6bf-f3e2-93ede50e75ed@intel.com>
-        <20201006170020.GB6642@arm.com>
-Date:   Tue, 06 Oct 2020 20:21:00 +0200
-In-Reply-To: <20201006170020.GB6642@arm.com> (Dave Martin via Libc-alpha's
-        message of "Tue, 6 Oct 2020 18:00:21 +0100")
-Message-ID: <87362rp65v.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ <20201005134534.GT6642@arm.com>
+ <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
+ <20201006092532.GU6642@arm.com>
+ <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
+ <20201006152553.GY6642@arm.com>
+ <7663eff0-6c94-f6bf-f3e2-93ede50e75ed@intel.com>
+ <20201006170020.GB6642@arm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <3545e3f3-a716-5e82-bd24-450eb74b4563@intel.com>
+Date:   Tue, 6 Oct 2020 11:30:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <20201006170020.GB6642@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Dave Martin via Libc-alpha:
-
+On 10/6/20 10:00 AM, Dave Martin wrote:
 > On Tue, Oct 06, 2020 at 08:33:47AM -0700, Dave Hansen wrote:
 >> On 10/6/20 8:25 AM, Dave Martin wrote:
->> > Or are people reporting real stack overruns on x86 today?
->> 
+>>> Or are people reporting real stack overruns on x86 today?
 >> We have real overruns.  We have ~2800 bytes of XSAVE (regisiter) state
 >> mostly from AVX-512, and a 2048 byte MINSIGSTKSZ.
->
 > Right.  Out of interest, do you believe that's a direct consequence of
 > the larger kernel-generated signal frame, or does the expansion of
 > userspace stack frames play a role too?
 
-I must say that I do not quite understand this question.
+The kernel-generated signal frame is entirely responsible for the ~2800
+bytes that I'm talking about.
 
-32 64-*byte* registers simply need 2048 bytes of storage space worst
-case, there is really no way around that.
-
-> In practice software just assumes SIGSTKSZ and then ignores the problem
-> until / unless an actual stack overflow is seen.
->
-> There's probably a lot of software out there whose stack is
-> theoretically too small even without AVX-512 etc. in the mix, especially
-> when considering the possibility of nested signals...
-
-That is certainly true.  We have seen problems with ntpd, which
-requested a 16 KiB stack, at a time when there were various deductions
-from the stack size, and since the glibc dynamic loader also uses XSAVE,
-ntpd exceeded the remaining stack space.  But in this case, we just
-fudged the stack size computation in pthread_create and made it less
-likely that the dynamic loader was activated, which largely worked
-around this particular problem.  For MINSIGSTKSZ, we just don't have
-this option because it's simply too small in the first place.
-
-I don't immediately recall a bug due to SIGSTKSZ being too small.  The
-test cases I wrote for this were all artificial, to raise awareness of
-this issue (applications treating these as recommended values, rather
-than minimum value to avoid immediately sigaltstack/phtread_create
-failures, same issue with PTHREAD_STACK_MIN).
-
-Thanks,
-Florian
--- 
-Red Hat GmbH, https://de.redhat.com/ , Registered seat: Grasbrunn,
-Commercial register: Amtsgericht Muenchen, HRB 153243,
-Managing Directors: Charles Cachera, Brian Klemm, Laurie Krebs, Michael O'Neill
-
+I'm sure there are some systems where userspace plays a role, but those
+are much less of a worry at the moment, since the kernel-induced
+overflows mean an instant crash that userspace has no recourse for.
