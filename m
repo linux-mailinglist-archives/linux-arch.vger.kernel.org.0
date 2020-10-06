@@ -2,176 +2,325 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C48C285072
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 19:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F48285119
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Oct 2020 19:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgJFRF0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Oct 2020 13:05:26 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:32787 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725925AbgJFRF0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Oct 2020 13:05:26 -0400
-Received: (qmail 424304 invoked by uid 1000); 6 Oct 2020 13:05:25 -0400
-Date:   Tue, 6 Oct 2020 13:05:25 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: Bug in herd7 [Was: Re: Litmus test for question from Al Viro]
-Message-ID: <20201006170525.GA423499@rowland.harvard.edu>
-References: <20201003132212.GB318272@rowland.harvard.edu>
- <045c643f-6a70-dfdf-2b1e-f369a667f709@gmail.com>
- <20201003171338.GA323226@rowland.harvard.edu>
- <20201005151557.4bcxumreoekgwmsa@yquem.inria.fr>
- <20201005155310.GH376584@rowland.harvard.edu>
- <20201005165223.GB29330@paulmck-ThinkPad-P72>
- <20201005181949.GA387079@rowland.harvard.edu>
- <20201005191801.GF29330@paulmck-ThinkPad-P72>
- <20201005194834.GB389867@rowland.harvard.edu>
- <20201006163954.GM29330@paulmck-ThinkPad-P72>
+        id S1726497AbgJFRow (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Oct 2020 13:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725925AbgJFRow (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Oct 2020 13:44:52 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0277CC061755;
+        Tue,  6 Oct 2020 10:44:52 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id c13so13475215oiy.6;
+        Tue, 06 Oct 2020 10:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5CHexhTprJ0qEb5DVB67viXTjD/KAevcdzCnR+h0CcA=;
+        b=YKjnObh54eqifRRl7MDgZQLaNn8oWoOEDxHsmX5HNYemSWSrvfJFjvCFVENLS4u6e7
+         nVJYlQsvL5ao0eU1DRX/HQGzqMXPjbKbzPkd7MquO+SUVmheeu7GjUFtnXkfrK9Yj9Zp
+         S7MlgoFS9ofKj2eN6MB0sZVBpcZMfW+QTUCPYYiONlxNse79svMjZyKzLbPNhrVmnF+X
+         KViBzOMihnJzx8N0V4nJpQOy0/kqVYD8wi3ynhskYd4CxvD85+2tK5p5y+gGdouDcoYh
+         hCzHOJ0XjcDrbeJiWJ+QSm7ul+ygjQsA1c9r+nXGNuNH//8GCrQim96FgFV+c4QhEF4K
+         qO9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5CHexhTprJ0qEb5DVB67viXTjD/KAevcdzCnR+h0CcA=;
+        b=geHaJiu0Gb9PFruJ2KLnldD8YatzM43Dode5uvMdvyICe8FifYJnFwVsn8TX8gUpB5
+         NUqn31pZwc/ucPzDBe79WVstG2ZlIrdckzu1I6vWetFKkN0WGXEJYNrifn/OjuMH2aN7
+         oL4EDFZeWg2sIq4BiyVVSv1roNWvhEt1tqz/4I3Hv9PAAxr2rlSw7wPV2OiLhMOh8znK
+         4FrjhOdM/hXODWK6mGxPbKHRcEcp2DCDJlAY/ZAtURl2ms5EFqT1y9bBWSq4+frIEZae
+         ZyJpoMMq9KfEvmWCElGvw1qkeIHuU4tA1PJhgL5xWuO1rqsXHGlyLEMEJtayFbK3YvZ7
+         U99Q==
+X-Gm-Message-State: AOAM530mbcsPdx3hKL/diqGR3SN47/M2V/Vn4hv6/V7Mvjz3tWYSxPqY
+        SeivirywsnnpusCnQroFb55Jv+eubqm4DPTegSA=
+X-Google-Smtp-Source: ABdhPJyOya+H/KYIaJTwo4cfdD8KNV2AZjQC0ABMFnjZoQy0IjNOdoVvuu9ne4h/bfNF+vZeuleJcrKHE3uYMcGSyJg=
+X-Received: by 2002:aca:5605:: with SMTP id k5mr3303500oib.25.1602006291103;
+ Tue, 06 Oct 2020 10:44:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201006163954.GM29330@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+ <20201005134534.GT6642@arm.com> <CAMe9rOpZm43aDG3UJeaioU32zSYdTxQ=ZyZuSS4u0zjbs9RoKw@mail.gmail.com>
+ <20201006092532.GU6642@arm.com> <CAMe9rOq_nKa6xjHju3kVZephTiO+jEW3PqxgAhU9+RdLTo-jgg@mail.gmail.com>
+ <20201006152553.GY6642@arm.com> <CAMe9rOpQiPUZMjysPqtyFfmGDtfRapUvzfMOk7X14xZFSQ66Aw@mail.gmail.com>
+ <20201006165520.GA6642@arm.com>
+In-Reply-To: <20201006165520.GA6642@arm.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Tue, 6 Oct 2020 10:44:14 -0700
+Message-ID: <CAMe9rOoY5T61uYCXMcEaKxL7NURDpACJ+0rF47HFmosYOvA2aA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] x86: Improve Minimum Alternate Stack Size
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Tony Luck <tony.luck@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 09:39:54AM -0700, Paul E. McKenney wrote:
-> On Mon, Oct 05, 2020 at 03:48:34PM -0400, Alan Stern wrote:
-> > On Mon, Oct 05, 2020 at 12:18:01PM -0700, Paul E. McKenney wrote:
-> > > Aside from naming and comment, how about my adding the following?
-> > > 
-> > > 							Thanx, Paul
-> > > 
-> > > ------------------------------------------------------------------------
-> > > 
-> > > C crypto-control-data-1
-> > 
-> > Let's call it something more along the lines of 
-> > dependencies-in-nested-expressions.  Maybe you can think of something a 
-> > little more succinct, but that's the general idea of the test.
-> > 
-> > > (*
-> > >  * LB plus crypto-mb-data plus data.
-> > 
-> > The actual pattern is LB+mb+data.
-> > 
-> > >  *
-> > >  * Result: Never
-> > >  *
-> > >  * This is an example of OOTA and we would like it to be forbidden.
-> > >  * If you want herd7 to get the right answer, you must use herdtools
-> > >  * 0f3f8188a326 (" [herd] Fix dependency definition") or later.
-> > 
-> > Versions of herd7 prior to commit 0f3f8188a326 ("[herd] Fix dependency 
-> > definition") recognize data dependencies only when they flow through an 
-> > intermediate local variable.  Since the dependency in P1 doesn't, those
-> > versions get the wrong answer for this test.
-> > 
-> > >  *)
-> > > 
-> > > {}
-> > > 
-> > > P0(int *x, int *y)
-> > > {
-> > > 	int r1;
-> > > 
-> > > 	r1 = READ_ONCE(*x);
-> > > 	smp_mb();
-> > > 	WRITE_ONCE(*y, r1);
-> > > }
-> > > 
-> > > P1(int *x, int *y)
-> > > {
-> > > 	int r2;
-> > 
-> > No need for r2.
-> 
-> Thank you for looking this over!
-> 
-> Like this, then?
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> commit 51898676302d8ebc93856209f7c587f1ac0fdd11
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Tue Oct 6 09:38:37 2020 -0700
-> 
->     manual/kernel: Add LB+mb+data litmus test
->     
->     Versions of herd7 prior to commit 0f3f8188a326 ("[herd] Fix dependency
->     definition") recognize data dependencies only when they flow through an
->     intermediate local variable.  Since the dependency in P1 doesn't, those
->     versions get the wrong answer for this test.
+On Tue, Oct 6, 2020 at 9:55 AM Dave Martin <Dave.Martin@arm.com> wrote:
+>
+> On Tue, Oct 06, 2020 at 08:34:06AM -0700, H.J. Lu wrote:
+> > On Tue, Oct 6, 2020 at 8:25 AM Dave Martin <Dave.Martin@arm.com> wrote:
+> > >
+> > > On Tue, Oct 06, 2020 at 05:12:29AM -0700, H.J. Lu wrote:
+> > > > On Tue, Oct 6, 2020 at 2:25 AM Dave Martin <Dave.Martin@arm.com> wrote:
+> > > > >
+> > > > > On Mon, Oct 05, 2020 at 10:17:06PM +0100, H.J. Lu wrote:
+> > > > > > On Mon, Oct 5, 2020 at 6:45 AM Dave Martin <Dave.Martin@arm.com> wrote:
+> > > > > > >
+> > > > > > > On Tue, Sep 29, 2020 at 01:57:42PM -0700, Chang S. Bae wrote:
+> > > > > > > > During signal entry, the kernel pushes data onto the normal userspace
+> > > > > > > > stack. On x86, the data pushed onto the user stack includes XSAVE state,
+> > > > > > > > which has grown over time as new features and larger registers have been
+> > > > > > > > added to the architecture.
+> > > > > > > >
+> > > > > > > > MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
+> > > > > > > > typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
+> > > > > > > > compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
+> > > > > > > > constant indicates to userspace how much data the kernel expects to push on
+> > > > > > > > the user stack, [2][3].
+> > > > > > > >
+> > > > > > > > However, this constant is much too small and does not reflect recent
+> > > > > > > > additions to the architecture. For instance, when AVX-512 states are in
+> > > > > > > > use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
+> > > > > > > >
+> > > > > > > > The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
+> > > > > > > > cause user stack overflow when delivering a signal.
+> > > > > > > >
+> > > > > > > > In this series, we suggest a couple of things:
+> > > > > > > > 1. Provide a variable minimum stack size to userspace, as a similar
+> > > > > > > >    approach to [5]
+> > > > > > > > 2. Avoid using a too-small alternate stack
+> > > > > > >
+> > > > > > > I can't comment on the x86 specifics, but the approach followed in this
+> > > > > > > series does seem consistent with the way arm64 populates
+> > > > > > > AT_MINSIGSTKSZ.
+> > > > > > >
+> > > > > > > I need to dig up my glibc hacks for providing a sysconf interface to
+> > > > > > > this...
+> > > > > >
+> > > > > > Here is my proposal for glibc:
+> > > > > >
+> > > > > > https://sourceware.org/pipermail/libc-alpha/2020-September/118098.html
+> > > > >
+> > > > > Thanks for the link.
+> > > > >
+> > > > > Are there patches yet?  I already had some hacks in the works, but I can
+> > > > > drop them if there's something already out there.
+> > > >
+> > > > I am working on it.
+> > >
+> > > OK.  I may post something for discussion, but I'm happy for it to be
+> > > superseded by someone (i.e., other than me) who actually knows what
+> > > they're doing...
+> >
+> > Please see my previous email for my glibc patch:
+> >
+> > https://gitlab.com/x86-glibc/glibc/-/commits/users/hjl/AT_MINSIGSTKSZ
+> >
+> > > > >
+> > > > > > 1. Define SIGSTKSZ and MINSIGSTKSZ to 64KB.
+> > > > >
+> > > > > Can we do this?  IIUC, this is an ABI break and carries the risk of
+> > > > > buffer overruns.
+> > > > >
+> > > > > The reason for not simply increasing the kernel's MINSIGSTKSZ #define
+> > > > > (apart from the fact that it is rarely used, due to glibc's shadowing
+> > > > > definitions) was that userspace binaries will have baked in the old
+> > > > > value of the constant and may be making assumptions about it.
+> > > > >
+> > > > > For example, the type (char [MINSIGSTKSZ]) changes if this #define
+> > > > > changes.  This could be a problem if an newly built library tries to
+> > > > > memcpy() or dump such an object defined by and old binary.
+> > > > > Bounds-checking and the stack sizes passed to things like sigaltstack()
+> > > > > and makecontext() could similarly go wrong.
+> > > >
+> > > > With my original proposal:
+> > > >
+> > > > https://sourceware.org/pipermail/libc-alpha/2020-September/118028.html
+> > > >
+> > > > char [MINSIGSTKSZ] won't compile.  The feedback is to increase the
+> > > > constants:
+> > > >
+> > > > https://sourceware.org/pipermail/libc-alpha/2020-September/118092.html
+> > >
+> > > Ah, I see.  But both still API and ABI breaks; moreover, declaraing an
+> > > array with size based on (MIN)SIGSTKSZ is not just reasonable, but the
+> > > obvious thing to do with this constant in many simple cases.  Such usage
+> > > is widespread, see:
+> > >
+> > >  * https://codesearch.debian.net/search?q=%5BSIGSTKSZ%5D&literal=1
+> > >
+> > >
+> > > Your two approaches seem to trade off two different sources of buffer
+> > > overruns: undersized stacks versus ABI breaks across library boundaries.
+> >
+> > We can't get everything we want.
+> >
+> > > Since undersized stack is by far the more familiar problem and we at
+> > > least have guard regions to help detect overruns, I'd vote to keep
+> > > MINSIGSTKSZ and SIGSTKSZ as-is, at least for now.
+> >
+> > Agree.
+> >
+> > > Or are people reporting real stack overruns on x86 today?
+> >
+> > I hope so.
+> >
+> > >
+> > > For arm64, we made large vectors on SVE opt-in, so that oversized signal
+> > > frames are not seen by default.  Would somethine similar be feasible on
+> > > x86?
+> > >
+> > >
+> > > > > > 2. Add _SC_RSVD_SIG_STACK_SIZE for signal stack size reserved by the kernel.
+> > > > >
+> > > > > How about "_SC_MINSIGSTKSZ"?  This was my initial choice since only the
+> > > > > discovery method is changing.  The meaning of the value is exactly the
+> > > > > same as before.
+> > > > >
+> > > > > If we are going to rename it though, it could make sense to go for
+> > > > > something more directly descriptive, say, "_SC_SIGNAL_FRAME_SIZE".
+> > > > >
+> > > > > The trouble with including "STKSZ" is that is sounds like a
+> > > > > recommendation for your stack size.  While the signal frame size is
+> > > > > relevant to picking a stack size, it's not the only thing to
+> > > > > consider.
+> > > >
+> > > > The problem is that AT_MINSIGSTKSZ is the signal frame size used by
+> > > > kernel.   The minimum stack size for a signal handler is more likely
+> > > > AT_MINSIGSTKSZ + 1.5KB unless AT_MINSIGSTKSZ returns the signal
+> > > > frame size used by kernel + 6KB for user application.
+> > >
+> > > Ack; to be correct, you also need to take into account which signals may
+> > > be unmasked while running on this stack, and the stack requirements of
+> > > all their handlers.  Unfortunately, that's hard :(
+> > >
+> > > What's your view on my naming suggesions?
+> >
+> > I used _SC_MINSIGSTKSZ:
+> >
+> > https://gitlab.com/x86-glibc/glibc/-/commit/73ca53bfbc1c105bc579f55f15af011a07fcded9
+>
+> Apologies, I missed that.
+>
+> Otherwise, the changes look much as I would expect, except for the
+> "6K for user program" thing.  This is strictly not included in the
+> legacy MINSIGSTKSZ.
+>
+> >
+> > >
+> > > > > Also, do we need a _SC_SIGSTKSZ constant, or should the entire concept
+> > > > > of a "recommended stack size" be abandoned?  glibc can at least make a
+> > > > > slightly more informed guess about suitable stack sizes than the kernel
+> > > > > (and glibc already has to guess anyway, in order to determine the
+> > > > > default thread stack size).
+> > > >
+> > > > Glibc should try to deduct signal frame size if AT_MINSIGSTKSZ isn't
+> > > > available.
+> > >
+> > > In my code, I generate _SC_SIGSTKSZ as the equivalent of
+> > >
+> > >         max(sysconf(_SC_MINSIGSTKSZ) * 4, SIGSTKSZ)
+> > >
+> > > which is >= the legacy value, and broadly reperesentative of the
+> > > relationship between MINSIGSTKSZ and SIGSTKSZ on most arches.
+> > >
+> > >
+> > > What do you think?
+> >
+> > sysconf(_SC_MINSIGSTKSZ) should be usable ASIS for most cases.
+>
+> Why, though?
+>
+> MINSIGSTKSZ is not specified to be usable as-is for any case whatsoever.
+>
+>
+> Software that calculates its own needs to know the actual system values,
+> not estimates based on guesses about how much stack a typical program
+> might need if it were recompiled for x86.
+>
+> This doesn't mean we can't have a generic suggested value that's suitable
+> for common scenarios (like SIGSTKSZ), but if we do then I think it
+> should be a separate constant.
 
-Shouldn't the commit message be different from the actual contents of 
-the update?  It's supposed to explain why the update was made, not just 
-say what it does.  How about this:
+I updated my glibc patch to add both _SC_MINSIGSTKSZ and _SC_SIGSTKSZ.
+_SC_MINSIGSTKSZ is  the minimum signal stack size from AT_MINSIGSTKSZ,
+which is the signal frame size used by kernel, and _SC_SIGSTKSZ is the value
+of sysconf (_SC_MINSIGSTKSZ) + 6KB for user application.
 
-Test whether herd7 can detect a data dependency when there is no 
-intermediate local variable, as in WRITE_ONCE(*x, READ_ONCE(*y)).  
-Commit 0f3f8188a326 fixed an oversight which caused such dependencies 
-to be missed.
+>
+> > > > > > 3. Deprecate SIGSTKSZ and MINSIGSTKSZ if _SC_RSVD_SIG_STACK_SIZE
+> > > > > > is in use.
+> > > > >
+> > > > > Great if we can do it.  I was concerned that this might be
+> > > > > controversial.
+> > > > >
+> > > > > Would this just be a recommendation, or can we enforce it somehow?
+> > > >
+> > > > It is just an idea.  We need to move away from constant SIGSTKSZ and
+> > > > MINSIGSTKSZ.
+> > >
+> > > Totally agree with that.
+> > >
+> >
+> > With my glibc patch, -D_SC_MINSIGSTKSZ_SOURCE will fail to compile
+> > if the source assumes constant SIGSTKSZ or MINSIGSTKSZ.
+>
+> Ah yes, I see.  That's a sensible precaution.
+>
+> Is it accepted in general that defining different feature test macros
+> can lead to ABI incompatibilities?
+>
+> I have thought that building a shared library with _GNU_SOURCE (say)
+> doesn't mean that a program that loads that library must also be built
+> with _GNU_SOURCE.  For one thing, that's hard to police.
+>
+>
+> However, there are already combinations that could break, e.g., mixing
+> -D_FILE_OFFSET_BITS=64 with -D_FILE_OFFSET_BITS=32 would be broken if
+> this define changes off_t.
+>
+>
+> So, maybe having _SC_MINSIGSTKSZ_SOURCE break things in this way is an
+> acceptable compromise.  Interfaces that depend on the value of
+> MINSIGSTKSZ or SIGSTKSZ are possible, but probably rare in practice --
+> I don't know of a specific example.
+>
 
->     Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> diff --git a/manual/kernel/C-LB+mb+data.litmus b/manual/kernel/C-LB+mb+data.litmus
-> new file mode 100644
-> index 0000000..673eec9
-> --- /dev/null
-> +++ b/manual/kernel/C-LB+mb+data.litmus
-> @@ -0,0 +1,29 @@
-> +C LB+mb+data.litmus
+I changed it to _SC_SIGSTKSZ_SOURCE:
 
-Do you normally put ".litmus" at the end of test names?  I leave it out, 
-including it only in the filename.
+https://gitlab.com/x86-glibc/glibc/-/commit/41d5e6b31025721590f12d5aa543eb0bc53ce263
 
-> +(*
-> + * LB plus crypto-mb-data plus data.
+#ifdef __USE_SC_SIGSTKSZ
+# include <unistd.h>
+/* Minimum stack size for a signal handler: sysconf (SC_SIGSTKSZ).  */
+# undef MINSIGSTKSZ
+# define MINSIGSTKSZ sysconf (_SC_SIGSTKSZ)
+/* System default stack size for a signal handler: MINSIGSTKSZ.  */
+# undef SIGSTKSZ
+# define SIGSTKSZ MINSIGSTKSZ
+#endif
 
-As I said earlier, the actual pattern is LB+mb+data.  There's nothing 
-"crypto" about this litmus test (for example, no control dependencies).
+Compilation will fail if the source assumes constant MINSIGSTKSZ or
+SIGSTKSZ.
 
-Besides, it hardly seems worthwhile making the first comment line a 
-repeat of the test name immediately above it.  Just leave it out.
-
-> + *
-> + * Result: Never
-> + *
-> + * Versions of herd7 prior to commit 0f3f8188a326 ("[herd] Fix dependency
-> + * definition") recognize data dependencies only when they flow through
-> + * an intermediate local variable.  Since the dependency in P1 doesn't,
-> + * those versions get the wrong answer for this test.
-> + *)
-> +
-> +{}
-> +
-> +P0(int *x, int *y)
-> +{
-> +	int r1;
-> +
-> +	r1 = READ_ONCE(*x);
-> +	smp_mb();
-> +	WRITE_ONCE(*y, r1);
-> +}
-> +
-> +P1(int *x, int *y)
-> +{
-> +	WRITE_ONCE(*x, READ_ONCE(*y));
-> +}
-> +
-> +exists (0:r1=1)
-
-Otherwise okay.
-
-Alan
+-- 
+H.J.
