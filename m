@@ -2,88 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC955285AA0
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Oct 2020 10:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BC1285C62
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Oct 2020 12:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbgJGIjC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Oct 2020 04:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726323AbgJGIjC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Oct 2020 04:39:02 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B4FC0613D2
-        for <linux-arch@vger.kernel.org>; Wed,  7 Oct 2020 01:39:01 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id c21so1103227ljn.13
-        for <linux-arch@vger.kernel.org>; Wed, 07 Oct 2020 01:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X/CTq+Ii8YYGlsTBxUkE2J0PCQyVRe5tUNmSX2DD4CQ=;
-        b=oabYzbNjgTaVHV+r00t+tDC3+0dTVNdSOlaClGlLs21doOxTmPumwNt3J/PkkGf08q
-         AuTGo3ooXnG8RuZTGgQpKB9FdetN3mL1Hlip1qsF2GcSA+HVQcA59+6ijyu6vBbcyv75
-         LLm1YOI2EQWx76WQnPl1FiJzLTj3vsOZviWUxDWncuaZNgc7QSLT3eJ54Aa1XYamj88V
-         kRZ+L37Qg/FL6BKZVr0mlNd84XvttjbjA9uD0FYsK3qswfe5rLYw031s5NPeFLo5GeDO
-         JuwiwUkRVnUCvtqxvY9msYtYN/q5jUr7/1Upj9uA0u1OAid16UB1ZvLy5NYZHkQfsFxG
-         /H/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X/CTq+Ii8YYGlsTBxUkE2J0PCQyVRe5tUNmSX2DD4CQ=;
-        b=Hd2HDMd0QBck9fRLmJVcm5P+XZlVZYWxpqvIWdsRZDYyp11WrwPwXg3jb/YmB0HcOO
-         pTcbWrjPdhmu6WLT8+0cFzHIyiz8OFR1oQ1ED8p7s3YtwtaQ94SjCLVFjp23BYh16vsW
-         Hj4rdBEzVIJ8stoLuvvxk1W/+lgQgKSkB8hTfq+xboK/KmwPsX7YRm45JuMoDuytG6wl
-         UMXF8p8hsYoKkh8F/560SDtguLUzjen/CdKj/2W37BuvbFvb/BcqNRd0Dp8yzpteTYPc
-         ZIGqYqfx2wGUcPMKzr5y2amRWATCj+AkWqKTYJb++ych7ab4ob8PNZkJ2kZ6sFcciRNF
-         SGng==
-X-Gm-Message-State: AOAM531iQRbRUjQOgnhZ5Bl+yj7HUEpEtxlVJNJcfUic6D8T3BQeJxnk
-        5/BkLcGEMAxtfM6wEySztgmRYDrXQ8fFdOgbOUnfFw==
-X-Google-Smtp-Source: ABdhPJwvN/74UnKNYnZMEj9q7ob1QqvcR1emufgQbxmGvJ46Tg35bsCOcA3ioK4zL1xqdnw0xgR10qrV/kaLqGO/M3E=
-X-Received: by 2002:a2e:9b0c:: with SMTP id u12mr717572lji.338.1602059939987;
- Wed, 07 Oct 2020 01:38:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1601974764.git.syednwaris@gmail.com>
-In-Reply-To: <cover.1601974764.git.syednwaris@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 7 Oct 2020 10:38:49 +0200
-Message-ID: <CACRpkdZcfR8Vyavpi4xM1zJab6SgapGBYqK9GR2mp-xh=LuVsw@mail.gmail.com>
-Subject: Re: [PATCH v11 0/4] Introduce the for_each_set_clump macro
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "(Exiting) Amit Kucheria" <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        id S1727623AbgJGKGF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Oct 2020 06:06:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:41114 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727014AbgJGKGE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:06:04 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00865113E;
+        Wed,  7 Oct 2020 03:06:04 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 032763F71F;
+        Wed,  7 Oct 2020 03:06:01 -0700 (PDT)
+Date:   Wed, 7 Oct 2020 11:05:59 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Cc:     "mingo@kernel.org" <mingo@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@suse.de" <bp@suse.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
+Subject: Re: [RFC PATCH 1/4] x86/signal: Introduce helpers to get the maximum
+ signal frame size
+Message-ID: <20201007100558.GE6642@arm.com>
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+ <20200929205746.6763-2-chang.seok.bae@intel.com>
+ <20201005134230.GS6642@arm.com>
+ <74ca7e8a61f051eadc895cf8b29e591cc3d0f548.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74ca7e8a61f051eadc895cf8b29e591cc3d0f548.camel@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 11:20 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+On Tue, Oct 06, 2020 at 05:45:24PM +0000, Bae, Chang Seok wrote:
+> On Mon, 2020-10-05 at 14:42 +0100, Dave Martin wrote:
+> > On Tue, Sep 29, 2020 at 01:57:43PM -0700, Chang S. Bae wrote:
+> > > 
+> > > +/*
+> > > + * The FP state frame contains an XSAVE buffer which must be 64-byte aligned.
+> > > + * If a signal frame starts at an unaligned address, extra space is required.
+> > > + * This is the max alignment padding, conservatively.
+> > > + */
+> > > +#define MAX_XSAVE_PADDING	63UL
+> > > +
+> > > +/*
+> > > + * The frame data is composed of the following areas and laid out as:
+> > > + *
+> > > + * -------------------------
+> > > + * | alignment padding     |
+> > > + * -------------------------
+> > > + * | (f)xsave frame        |
+> > > + * -------------------------
+> > > + * | fsave header          |
+> > > + * -------------------------
+> > > + * | siginfo + ucontext    |
+> > > + * -------------------------
+> > > + */
+> > > +
+> > > +/* max_frame_size tells userspace the worst case signal stack size. */
+> > > +static unsigned long __ro_after_init max_frame_size;
+> > > +
+> > > +void __init init_sigframe_size(void)
+> > > +{
+> > > +	/*
+> > > +	 * Use the largest of possible structure formats. This might
+> > > +	 * slightly oversize the frame for 64-bit apps.
+> > > +	 */
+> > > +
+> > > +	if (IS_ENABLED(CONFIG_X86_32) ||
+> > > +	    IS_ENABLED(CONFIG_IA32_EMULATION))
+> > > +		max_frame_size = max((unsigned long)SIZEOF_sigframe_ia32,
+> > > +				     (unsigned long)SIZEOF_rt_sigframe_ia32);
+> > > +
+> > > +	if (IS_ENABLED(CONFIG_X86_X32_ABI))
+> > > +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe_x32);
+> > > +
+> > > +	if (IS_ENABLED(CONFIG_X86_64))
+> > > +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe);
+> > > +
+> > > +	max_frame_size += fpu__get_fpstate_sigframe_size() + MAX_XSAVE_PADDING;
+> > 
+> > For arm64, we round the worst-case padding up by one.
+> > 
+> 
+> Yeah, I saw that. The ARM code adds the max padding, too:
+> 
+> 	signal_minsigstksz = sigframe_size(&user) +
+> 		round_up(sizeof(struct frame_record), 16) +
+> 		16; /* max alignment padding */
+> 
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/signal.c#n973
+> 
+> > I can't remember the full rationale for this, but it at least seemed a
+> > bit weird to report a size that is not a multiple of the alignment.
+> > 
+> 
+> Because the last state size of XSAVE may not be 64B aligned, the (reported)
+> sum of xstate size here does not guarantee 64B alignment.
+> 
+> > I'm can't think of a clear argument as to why it really matters, though.
+> 
+> We care about the start of XSAVE buffer for the XSAVE instructions, to be
+> 64B-aligned.
 
-> Since this patchset primarily affects GPIO drivers, would you like
-> to pick it up through your GPIO tree?
+Ah, I see.  That makes sense.
 
-Definitely will, once we are finished!
+For arm64, there is no additional alignment padding inside the frame,
+only the padding inserted after the frame to ensure that the base
+address is 16-byte aligned.
 
-I see Andy still has comments and we need more iterations.
-That is fine, because we are not in any hurry. Just keep posting
-it!
+However, I wonder whether people will tend to assume that AT_MINSIGSTKSZ
+is a sensible (if minimal) amount of stack to allocate.  Allocating an
+odd number of bytes, or any amount that isn't a multiple of the
+architecture's preferred (or mandated) stack alignment probably doesn't
+make sense.
 
-Let's merge this for v5.11 when we are finished with it.
+AArch64 has a mandatory stack alignment of 16 bytes; I'm not sure about
+x86.
 
-Yours,
-Linus Walleij
+Cheers
+---Dave
