@@ -2,81 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C41B286831
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Oct 2020 21:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2A3286872
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Oct 2020 21:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgJGTX6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Oct 2020 15:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728092AbgJGTX6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Oct 2020 15:23:58 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241E9C061755
-        for <linux-arch@vger.kernel.org>; Wed,  7 Oct 2020 12:23:58 -0700 (PDT)
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1kQF2W-0019Ex-Uk; Wed, 07 Oct 2020 21:23:53 +0200
-Message-ID: <11f40c1a85a118d8207a6f05fc574164a01af3a9.camel@sipsolutions.net>
-Subject: Re: [RFC v7 20/21] um: host: add test programs
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Hajime Tazaki <thehajime@gmail.com>, linux-um@lists.infradead.org,
-        jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com
-Cc:     tavi.purdila@gmail.com, linux-kernel-library@freelists.org,
-        linux-arch@vger.kernel.org, retrage01@gmail.com
-Date:   Wed, 07 Oct 2020 21:23:51 +0200
-In-Reply-To: <363dceeefe1c468adca17cec0b7ba4fad7c76ef3.1601960644.git.thehajime@gmail.com>
-References: <cover.1601960644.git.thehajime@gmail.com>
-         <363dceeefe1c468adca17cec0b7ba4fad7c76ef3.1601960644.git.thehajime@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1728392AbgJGTkv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Oct 2020 15:40:51 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:43061 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728186AbgJGTkv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Oct 2020 15:40:51 -0400
+Received: (qmail 470110 invoked by uid 1000); 7 Oct 2020 15:40:50 -0400
+Date:   Wed, 7 Oct 2020 15:40:50 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        dlustig@nvidia.com, joel@joelfernandes.org,
+        viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: Bug in herd7 [Was: Re: Litmus test for question from Al Viro]
+Message-ID: <20201007194050.GC468921@rowland.harvard.edu>
+References: <20201003171338.GA323226@rowland.harvard.edu>
+ <20201005151557.4bcxumreoekgwmsa@yquem.inria.fr>
+ <20201005155310.GH376584@rowland.harvard.edu>
+ <20201005165223.GB29330@paulmck-ThinkPad-P72>
+ <20201005181949.GA387079@rowland.harvard.edu>
+ <20201005191801.GF29330@paulmck-ThinkPad-P72>
+ <20201005194834.GB389867@rowland.harvard.edu>
+ <20201006163954.GM29330@paulmck-ThinkPad-P72>
+ <20201006170525.GA423499@rowland.harvard.edu>
+ <20201007175040.GQ29330@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201007175040.GQ29330@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
+On Wed, Oct 07, 2020 at 10:50:40AM -0700, Paul E. McKenney wrote:
+> And here is the updated version.
 > 
-> +LKL_TEST_CALL(getpid, lkl_sys_getpid, 1)
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit b7cd60d4b41ad56b32b36b978488f509c4f7e228
+> Author: Alan Stern <stern@rowland.harvard.edu>
+> Date:   Tue Oct 6 09:38:37 2020 -0700
+> 
+>     manual/kernel: Add LB+mb+data litmus test
 
-Could that be unified with KUNIT somehow?
+Let's change this to:
 
-> +++ b/tools/um/tests/run.py
-> @@ -0,0 +1,172 @@
-> +#!/usr/bin/env python
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# This program is free software; you can redistribute it and/or modify
-> +# it under the terms of the GNU General Public License as published by
-> +# the Free Software Foundation; version 2 of the License
-> +#
-> +# Author: Octavian Purdila <tavi@cs.pub.ro>
-> +#
+      manual/kernel: Add LB data dependency test with no intermediate variable
+
+Without that extra qualification, people reading just the title would
+wonder why we need a simple LB litmus test in the archive.
+
+>     
+>     Test whether herd7 can detect a data dependency when there is no
+>     intermediate local variable, as in WRITE_ONCE(*x, READ_ONCE(*y)).
+>     Commit 0f3f8188a326 in herdtools fixed an oversight which caused such
+>     dependencies to be missed.
+>     
+>     Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> 
+> diff --git a/manual/kernel/C-LB+mb+data.litmus b/manual/kernel/C-LB+mb+data.litmus
+> new file mode 100644
+> index 0000000..0cf9a7a
+> --- /dev/null
+> +++ b/manual/kernel/C-LB+mb+data.litmus
+> @@ -0,0 +1,27 @@
+> +C LB+mb+data
+> +(*
+> + * Result: Never
+> + *
+> + * Test whether herd7 can detect a data dependency when there is no
+> + * intermediate local variable, as in WRITE_ONCE(*x, READ_ONCE(*y)).
+> + * Commit 0f3f8188a326 in herdtools fixed an oversight which caused such
+> + * dependencies to be missed.
+
+You changed this comment!  It should have remained the way it was:
+
++ * Versions of herd7 prior to commit 0f3f8188a326 ("[herd] Fix dependency
++ * definition") recognize data dependencies only when they flow through
++ * an intermediate local variable.  Since the dependency in P1 doesn't,
++ * those versions get the wrong answer for this test.
+
+> + *)
 > +
-> +from __future__ import print_function
+> +{}
 > +
-> +import argparse
-> +import os
-> +import subprocess
-> +import sys
-> +import tap13
-
-ok, I see now, you're doing something with TAP (test anything
-protocol)...
-
-Hmm. I must say I'm not a fan of adding a whole testing framework to the
-kernel like that, even if it's pretty simple.
-
-> +import xml.etree.ElementTree as ET
+> +P0(int *x, int *y)
+> +{
+> +	int r1;
 > +
-> +from junit_xml import TestSuite, TestCase
+> +	r1 = READ_ONCE(*x);
+> +	smp_mb();
+> +	WRITE_ONCE(*y, r1);
+> +}
+> +
+> +P1(int *x, int *y)
+> +{
+> +	WRITE_ONCE(*x, READ_ONCE(*y));
+> +}
+> +
+> +exists (0:r1=1)
 
-yuck
-
-Let's see if you can use KUNIT instead. Anything beyond that doesn't
-really need to live in the kernel, IMHO.
-
-johanens
-
+Alan
