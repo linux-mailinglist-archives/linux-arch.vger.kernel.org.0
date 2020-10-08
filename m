@@ -2,84 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A11287BA1
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 20:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5617A287BBD
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 20:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728690AbgJHSWm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 14:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbgJHSWm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 14:22:42 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E86C061755
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 11:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=FiPnDThNoLXX1zlhDJEgZkR9/Wj0N97KtfaVAawxLWM=; b=KUA+ih560K7n+C58xiu/WUHLLk
-        fXkqLtLpjYkIHzX7fwkOO4ZXdKqYaXm7QGF1XU28sr8ujzmzdLIH6iRyZ2m3EH9LXPTsOKW/UBfhi
-        iHRG7ggPw5Pvg46PFLrTRahf5Sle7he6foNTBxZnwEW8GNj9ETNIwa4+WTphrKEe53SuNJSpSlZ3n
-        SYZVzV2EfhkC2qdK0voDwCr7Jkvj7FpOZH9zynh7/EtJz96+8UA/U9lKGSvucFWrC/TLk6CuQdanf
-        IAw9dU5NGBggs5RU790+R8S5kiLIL9XaE1IqeqtxpNgx2ob5UUa69g76QqFWjoXqQu2U3EqbjAlmP
-        LnLRB9ww==;
-Received: from [2601:1c0:6280:3f0::2c9a]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kQaYp-0005gm-Pp; Thu, 08 Oct 2020 18:22:40 +0000
-Subject: Re: [RFC PATCH 2/3] arm64: Add support for asymmetric AArch32 EL0
- configurations
-To:     Qais Yousef <qais.yousef@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     Morten Rasmussen <morten.rasmussen@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-3-qais.yousef@arm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5e1fe1a9-4ebc-bd20-701e-844d5c16dd42@infradead.org>
-Date:   Thu, 8 Oct 2020 11:22:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728988AbgJHScl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 14:32:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47786 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728464AbgJHScl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 8 Oct 2020 14:32:41 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 773602145D;
+        Thu,  8 Oct 2020 18:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602181960;
+        bh=/8fOwt/Qn5xe/dYjyUSsAHEDn2T/gSBbNJtdJH0G9q0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=rekAvmMoqxdT8aLb8t4dTGfslNnoBg1qFhMCXA01qhfaDg8SGWsipwsjh447JaX7j
+         wKltTDgCHKyhF1P+kUuW/sRiNOsWA4C7KSpQlgffnL0FXnC0JQISmDYI4xFWEaV8yL
+         XnABhduU0dwhBjnixh+VVmUnHom1Yw0jSc/nuy88=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 1231235228D5; Thu,  8 Oct 2020 11:32:39 -0700 (PDT)
+Date:   Thu, 8 Oct 2020 11:32:39 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        dlustig@nvidia.com, joel@joelfernandes.org,
+        viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: Bug in herd7 [Was: Re: Litmus test for question from Al Viro]
+Message-ID: <20201008183239.GZ29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201005191801.GF29330@paulmck-ThinkPad-P72>
+ <20201005194834.GB389867@rowland.harvard.edu>
+ <20201006163954.GM29330@paulmck-ThinkPad-P72>
+ <20201006170525.GA423499@rowland.harvard.edu>
+ <20201007175040.GQ29330@paulmck-ThinkPad-P72>
+ <20201007194050.GC468921@rowland.harvard.edu>
+ <20201007223851.GV29330@paulmck-ThinkPad-P72>
+ <20201008022537.GA480405@rowland.harvard.edu>
+ <20201008025025.GX29330@paulmck-ThinkPad-P72>
+ <20201008140148.GA495091@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <20201008181641.32767-3-qais.yousef@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201008140148.GA495091@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/8/20 11:16 AM, Qais Yousef wrote:
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 6d232837cbee..591853504dc4 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1868,6 +1868,20 @@ config DMI
->  
->  endmenu
->  
-> +config ASYMMETRIC_AARCH32
-> +	bool "Allow support for asymmetric AArch32 support"
+On Thu, Oct 08, 2020 at 10:01:48AM -0400, Alan Stern wrote:
+> On Wed, Oct 07, 2020 at 07:50:25PM -0700, Paul E. McKenney wrote:
+> > There are some distractions at the moment.
+> > 
+> > Please see below.  If this is not exactly correct, I will use "git rm"
+> > and let you submit the patch as you wish.
+> > 
+> > 						Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > commit dc0119c24b64f9d541b94ba5d17eec0cbc265bfa
+> > Author: Alan Stern <stern@rowland.harvard.edu>
+> > Date:   Tue Oct 6 09:38:37 2020 -0700
+> > 
+> >     manual/kernel: Add LB data dependency test with no intermediate variable
+> >     
+> >     Test whether herd7 can detect a data dependency when there is no
+> >     intermediate local variable, as in WRITE_ONCE(*x, READ_ONCE(*y)).
+> >     Commit 0f3f8188a326 in herdtools fixed an oversight which caused such
+> >     dependencies to be missed.
+> >     
+> >     Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > 
+> > diff --git a/manual/kernel/C-LB+mb+data.litmus b/manual/kernel/C-LB+mb+data.litmus
+> > new file mode 100644
+> > index 0000000..e9e24e0
+> > --- /dev/null
+> > +++ b/manual/kernel/C-LB+mb+data.litmus
+> > @@ -0,0 +1,27 @@
+> > +C LB+mb+data
+> > +(*
+> > + * Result: Never
+> > + *
+> > + * Versions of herd7 prior to commit 0f3f8188a326 ("[herd] Fix dependency
+> > + * definition") recognize data dependencies only when they flow through
+> > + * an intermediate local variable.  Since the dependency in P1 doesn't,
+> > + * those versions get the wrong answer for this test.
+> > + *)
+> > +
+> > +{}
+> > +
+> > +P0(int *x, int *y)
+> > +{
+> > +	int r1;
+> > +
+> > +	r1 = READ_ONCE(*x);
+> > +	smp_mb();
+> > +	WRITE_ONCE(*y, r1);
+> > +}
+> > +
+> > +P1(int *x, int *y)
+> > +{
+> > +	WRITE_ONCE(*x, READ_ONCE(*y));
+> > +}
+> > +
+> > +exists (0:r1=1)
+> 
+> Okay, that's exactly what it should be.  :-)
 
-Please drop one "support" or reword the prompt string.
+Whew!!!  ;-)
 
-> +	depends on COMPAT && EXPERT
-> +	help
-> +	  Enable this option to allow support for asymmetric AArch32 EL0
-> +	  CPU configurations. Once the AArch32 EL0 support is detected
-> +	  on a CPU, the feature is made available to user space to allow
-> +	  the execution of 32-bit (compat) applications. If the affinity
-> +	  of the 32-bit application contains a non-AArch32 capable CPU
-> +	  or the last AArch32 capable CPU is offlined, the application
-> +	  will be killed.
-> +
-> +	  If unsure say N.
-
-
--- 
-~Randy
-
+							Thanx, Paul
