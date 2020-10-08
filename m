@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A93F287B5B
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 20:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418B7287B5E
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 20:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729176AbgJHSHv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 14:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S1731152AbgJHSLJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 14:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728868AbgJHSHu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 14:07:50 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581DFC061755
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 11:07:50 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id a15so6760466ljk.2
-        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 11:07:50 -0700 (PDT)
+        with ESMTP id S1729316AbgJHSLJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 14:11:09 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CC8C061755
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 11:11:07 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id c21so6738119ljn.13
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 11:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TKk/VT0Zv8qI3D7sbgRhgfSvVf+aeJ/ZPwzBQu8xm0A=;
-        b=a9j1ZivYk1raQuIq5O2uIkdBWyL1W6C2/LIcIUuQJSA9o1uITQT4BQHzhv6vrdgiWq
-         EdlKwzlw+O6i//LU9krzqM0vvemf49ttQPqpuc3V1RTMBCJ30TKmd39wKDHt5JLtWCMk
-         VjsAZ6iXZnk59UXD8jZ23t939m+4h6dkPsm+SsAWpG9+OjcxxIn0JeFF7R5TphH8PWg3
-         rqN8gdoo0unZnATgwbuJ2Md891rUNYncteRH7/+x2p5ykNxNvKCu8FpA2U05bmMbW0Od
-         WQ46HLAzHyJcLCjLWHScGzllIgmQq3I2D8XYxtZCSJSzjl/ft4URk+7zuKG0AWEulrdE
-         3fOQ==
+        bh=rjD1KSncOo5Ri0vBNockhBjSkP42whD/zdmrAhwOhk8=;
+        b=uoJfnZrSZJcQ8iw2fadisI6MQAcc2NzqWTgGTXoayQScwTTp/YIATi4QApVhYnjNaZ
+         ToJJVqYETbCS75r6Tw5GhXfGbtOJxefSB05hxbxdB3ONQQkL8WSHJS+D4YCvPt9lbKRY
+         PbsKUS4xOU6vCW7ztNMXLvEVDkcWd3GqtuOseMAP0NCgckKzJHTacu4xSrkcZj2j+nHH
+         Cf7TmXyhco7dp37xP30Ucm3zYZldE2iiaZKCpQgPT13kiVEA723qlH9sLJyVVn1Q73Yi
+         06Q3XGE8ZA0ltVdi5YZOx7O/wbpYFKLmm1U4qq81BS+Unv3zhZmQvxAA30nx6wcliSR6
+         7m2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TKk/VT0Zv8qI3D7sbgRhgfSvVf+aeJ/ZPwzBQu8xm0A=;
-        b=qaJE23QlpHM+xVQnl4c+RtZCaxqxgJbydvDvbsZd7rposgjcky4vA9tBazMH2GOa/E
-         6JqBP9LaWvCxqMDmRHjHQbWyiGQrI9U+S/RK2P1tRtkGfkyZfnolI4QpWzzYkUWFHIu1
-         C2VyFmLACUR0+LlbNDb6e6I4dTwjVerRwuiTaMwKo7vXUGtjZUn7EReb51tr7fERO0Jh
-         VmSG342NJtUYD4afK8QngrXAlN2eYBSpuwuhDbeUMpms1fEwPWXzHeIyZimb2eSBTpje
-         TxhEBGA3LqZJOFAbZrnamG4B55qWt5dhXNlV3n2mGAjR1xuz1dgAerhaPIhXkxWZSofz
-         wfcA==
-X-Gm-Message-State: AOAM530Hd9g/GZ16ZPLZSerAkkyx59C7UCl+J4TiGIUx8tQg9sYbuACV
-        nJ6R8fmFk6dHZAfAM4ml8/svHYYkW4A8WJK/g5epppYAULkcDREL
-X-Google-Smtp-Source: ABdhPJwCbujWGHcvkO8AMl/N6HR2u7EbpsYf2/phtokuOA7kQ25RSBHoY31hC8vemcHRrsr8NJFH1UL0vJ0DiX64AI8=
-X-Received: by 2002:a2e:a58c:: with SMTP id m12mr4091353ljp.378.1602180468715;
- Thu, 08 Oct 2020 11:07:48 -0700 (PDT)
+        bh=rjD1KSncOo5Ri0vBNockhBjSkP42whD/zdmrAhwOhk8=;
+        b=B7x5Uh1PxW1buif/dCva3FEz3xdkaNB/NvyD+j+sxHp8IYrtOhQnX/ImAQrCTycxSN
+         uIdSpPVjSdwi1PKKxsl942DPodlH9P9XwrGu4I6xn5fdjogmuVht1DfPVV+jCKW5YGoq
+         2vIV5ZcHCPpKEEL8JKCAIbzslkkBQG1iYlHsJOizxh9VZI05vbXIDVeprYAQMDVPUlNs
+         nMg6A/CVx15eSTh/ICSEJ5jE6ZxZVk/Ozy6SlbQPU7etGI6hiIb6OYYWYEShC9kh5w5Q
+         9hS/5DTO1n1c/hV31xgjj07ceXWzN6fCboezh6KMnMyxwVWGOfdB5TmWTQ+V501pQCHZ
+         zw7A==
+X-Gm-Message-State: AOAM533/INDvjn/WEYJLi+jiq2QEswLJZRmF/ZJ5HN+3aunLaNlm0509
+        X26jDCDumJwgqrzf7xhn+r/gcZdrt+9jB95Chek=
+X-Google-Smtp-Source: ABdhPJwzOl6v1x3ZIcO8BtdUVBgGbMHYbtp6mIMDyCiwl5xecBdQq1eIiT/ksaWtiRKHQtn/jVhDgA5SmRW8+q1bHaA=
+X-Received: by 2002:a2e:2e19:: with SMTP id u25mr3495193lju.349.1602180665852;
+ Thu, 08 Oct 2020 11:11:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1601960644.git.thehajime@gmail.com> <de40a235d95ad582dae11741e272a5cf300384f2.1601960644.git.thehajime@gmail.com>
- <486e080e64056189b5309bbcaec2ebf235d501a0.camel@sipsolutions.net>
-In-Reply-To: <486e080e64056189b5309bbcaec2ebf235d501a0.camel@sipsolutions.net>
+References: <cover.1601960644.git.thehajime@gmail.com> <9494c2558406a8fd2938fef0c470dd640b7835ed.1601960644.git.thehajime@gmail.com>
+ <0563db2b81f44028515e19b8edeb50e1cf29d922.camel@sipsolutions.net>
+In-Reply-To: <0563db2b81f44028515e19b8edeb50e1cf29d922.camel@sipsolutions.net>
 From:   Octavian Purdila <tavi.purdila@gmail.com>
-Date:   Thu, 8 Oct 2020 21:07:38 +0300
-Message-ID: <CAMoF9u3Kn8CXtzOHookc-hi3djZgPdMA+-j5DUSiR0B=KjVHRA@mail.gmail.com>
-Subject: Re: [RFC v7 10/21] um: nommu: memory handling
+Date:   Thu, 8 Oct 2020 21:10:55 +0300
+Message-ID: <CAMoF9u2zohNEtqYxEPNZBkW_XJvnAWo3OHtVo3jva8+c94Lksg@mail.gmail.com>
+Subject: Re: [RFC v7 09/21] um: nommu: host interface
 To:     Johannes Berg <johannes@sipsolutions.net>
 Cc:     Hajime Tazaki <thehajime@gmail.com>,
         linux-um <linux-um@lists.infradead.org>, jdike@addtoit.com,
@@ -64,30 +64,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 6:47 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+On Wed, Oct 7, 2020 at 6:45 PM Johannes Berg <johannes@sipsolutions.net> wrote:
 >
 > On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
+> > This patch introduces the host operations that define the interface
+> > between the LKL and the host. These operations must be provided either
+> > by a host library or by the application itself.
 > >
-> >   * These operations must be provided by a host library or by the application
-> >   * itself.
-> >   *
-> > + * @mem_alloc - allocate memory
-> > + * @mem_free - free memory
-> > + *
 >
-> Actual kernel-doc would be nicer.
+> I kinda find patches like this very pointless ... you see nothing, and
+> can't really say anything. Maybe add the infra with the first user?
 >
-
-Thank you, we will make sure to use the proper kernel doc throughout
-all patches for the next patch series
-
-> > +     empty_zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> > +     memset((void *)empty_zero_page, 0, PAGE_SIZE);
-> > +
-> > +     {
-> > +             unsigned long zones_size[MAX_NR_ZONES] = {0, };
+> > +/* Defined in {posix,nt}-host.c */
 >
-> Hmm, what's with the extra scope?
+> That doesn't exist either yet ...
 >
 
-Will clean it up in the next patch series, thank you.
+Noted, we will fix it in the next patch series.
