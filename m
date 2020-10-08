@@ -2,146 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4FE286CEE
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 04:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E302E286D2B
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 05:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbgJHCu0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Oct 2020 22:50:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37324 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726181AbgJHCu0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 7 Oct 2020 22:50:26 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7205B20B1F;
-        Thu,  8 Oct 2020 02:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602125425;
-        bh=Ahw4XLG+COp/KABA/mlzHjKniQAn5iQQc/XMo8kcOX8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ttD6FM2U6VGQHB9QCE/BLTv3zJOnTF3kqkH8ha3/pMMawZbzd7xC7Gb8qNmbJ9Z8v
-         X6EY31gCjbdLK6+Q/TjGkO0lmgFT96TYNePIcb5rie66mgvUTMr275pbgGHbXxekAv
-         YN44yCjiBcg6RtmF2duTLZSaEvIeSA42dnVNcCc0=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3A2183523039; Wed,  7 Oct 2020 19:50:25 -0700 (PDT)
-Date:   Wed, 7 Oct 2020 19:50:25 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: Bug in herd7 [Was: Re: Litmus test for question from Al Viro]
-Message-ID: <20201008025025.GX29330@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20201005165223.GB29330@paulmck-ThinkPad-P72>
- <20201005181949.GA387079@rowland.harvard.edu>
- <20201005191801.GF29330@paulmck-ThinkPad-P72>
- <20201005194834.GB389867@rowland.harvard.edu>
- <20201006163954.GM29330@paulmck-ThinkPad-P72>
- <20201006170525.GA423499@rowland.harvard.edu>
- <20201007175040.GQ29330@paulmck-ThinkPad-P72>
- <20201007194050.GC468921@rowland.harvard.edu>
- <20201007223851.GV29330@paulmck-ThinkPad-P72>
- <20201008022537.GA480405@rowland.harvard.edu>
+        id S1727605AbgJHDbF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Oct 2020 23:31:05 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:59028 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727449AbgJHDbF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 7 Oct 2020 23:31:05 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.192])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWuTkh35f4UEbAA--.39703S2;
+        Thu, 08 Oct 2020 11:30:46 +0800 (CST)
+Date:   Thu, 8 Oct 2020 11:30:43 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH V3] MIPS: make userspace mapping young by default
+Message-ID: <20201008033043.x2fyc354ivjqyfe3@ambrosehua-HP-xw6600-Workstation>
+References: <20200919074731.22372-1-huangpei@loongson.cn>
+ <20201002123502.GA11098@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201008022537.GA480405@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201002123502.GA11098@alpha.franken.de>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9AxWuTkh35f4UEbAA--.39703S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryUJw18XF1DtrWrAryUtrb_yoW5ur48pa
+        s7CF10kr4jqr13ArWfAwnFyr1rJws3KF4vgF93Zw1rZa4av3s5Jrn5KFZ3ZryDXFZ2kFW8
+        urW5WF15WrsIvrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JU-miiUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 07, 2020 at 10:25:37PM -0400, Alan Stern wrote:
-> On Wed, Oct 07, 2020 at 03:38:51PM -0700, Paul E. McKenney wrote:
-> > On Wed, Oct 07, 2020 at 03:40:50PM -0400, Alan Stern wrote:
-> > > On Wed, Oct 07, 2020 at 10:50:40AM -0700, Paul E. McKenney wrote:
-> > > > And here is the updated version.
-> > > > 
-> > > > 							Thanx, Paul
-> > > > 
-> > > > ------------------------------------------------------------------------
-> > > > 
-> > > > commit b7cd60d4b41ad56b32b36b978488f509c4f7e228
-> > > > Author: Alan Stern <stern@rowland.harvard.edu>
-> > > > Date:   Tue Oct 6 09:38:37 2020 -0700
-> > > > 
-> > > >     manual/kernel: Add LB+mb+data litmus test
-> > > 
-> > > Let's change this to:
-> > > 
-> > >       manual/kernel: Add LB data dependency test with no intermediate variable
-> > > 
-> > > Without that extra qualification, people reading just the title would
-> > > wonder why we need a simple LB litmus test in the archive.
-> 
-> > I might get this right sooner or later.  You never know.
+On Fri, Oct 02, 2020 at 02:35:03PM +0200, Thomas Bogendoerfer wrote:
+Hi, 
+> On Sat, Sep 19, 2020 at 03:47:31PM +0800, Huang Pei wrote:
+> > MIPS page fault path take 3 exceptions (1 TLB Miss + 2 TLB Invalid), but
+> > the second TLB Invalid exception is just triggered by __update_tlb from
+> > do_page_fault writing tlb without _PAGE_VALID set. With this patch, it
+> > only take 1 TLB Miss + 1 TLB Invalid exceptions
 > > 
-> > Like this?
+> > This version removes pte_sw_mkyoung without polluting MM code and makes
+> > page fault delay of MIPS on par with other architecture and covers both
+> > no-RIXI and RIXI MIPS CPUS
 > > 
-> > 							Thanx, Paul
+> > [1]: https://lkml.kernel.org/lkml/1591416169-26666-1-git-send-email
+> > -maobibo@loongson.cn/
+> > ---
+> > V3:
+> > - reformat with whitespace cleaned up following Thomas's advice
+> > V2:
+> > - remove unused asm-generic definition of pte_sw_mkyoung following Mao's
+> > advice
+> > ---
+> > Co-developed-by: Huang Pei <huangpei@loongson.cn>
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > Co-developed-by: Bibo Mao <maobibo@loonson.cn>
+> > ---
+> >  arch/mips/include/asm/pgtable.h | 10 ++++------
+> >  arch/mips/mm/cache.c            | 25 +++++++++++++------------
+> >  include/linux/pgtable.h         |  8 --------
+> >  mm/memory.c                     |  3 ---
+> >  4 files changed, 17 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> > index dd7a0f552cac..931fb35730f0 100644
+> > --- a/arch/mips/include/asm/pgtable.h
+> > +++ b/arch/mips/include/asm/pgtable.h
+> > @@ -27,11 +27,11 @@ struct vm_area_struct;
+> >  
+> >  #define PAGE_NONE	__pgprot(_PAGE_PRESENT | _PAGE_NO_READ | \
+> >  				 _page_cachable_default)
+> > -#define PAGE_SHARED	__pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> > -				 _page_cachable_default)
+> > +#define PAGE_SHARED    __pgprot(_PAGE_PRESENT | _PAGE_WRITE | \
+> > +				 __READABLE | _page_cachable_default)
 > 
-> Paul, I think you must need new reading glasses.  You completely missed 
-> the text above.
+> you are still doing a white space changes here. 
+> 
+> >  #define PAGE_COPY	__pgprot(_PAGE_PRESENT | _PAGE_NO_EXEC | \
+> > -				 _page_cachable_default)
+> > -#define PAGE_READONLY	__pgprot(_PAGE_PRESENT | \
+> > +				 __READABLE | _page_cachable_default)
+> > +#define PAGE_READONLY	__pgprot(_PAGE_PRESENT |  __READABLE | \
+> 
+sorry, my bad
+> I've grepped for usage of PAGE_SHARED and PAGE_READONLY and found
+> arch/mips/kvm/mmu.c and arch/mips/kernel/vdso.c. I wonder
+> 
+for arch/mips/kvm/mmu.c, the comment says:
+...
+	/* Also set valid and dirty, so refill handler doesn't have to */
+	*ptep = pte_mkyoung(pte_mkdirty(pfn_pte(pfn, PAGE_SHARED)));
+...
+the net effect is the same, dirty and valid, so I think it is ok;
 
-There are some distractions at the moment.
+for arch/mips/kernel/vdso.c, both mappings are kernel mapping, which
+means the physical memory(or io memory) is already allocated and will not
+be reclaimed by kernel.
+       
+> 1. Is this usage correct or should we use protection_map[X] ?
+> 2. Are this still correct after the change in this patch ?
+> 
+> Right now I'm in favour to fist clean up asm/pgtable.h to get rid
+> of all unneeded PAGE_XXX defines and make mm/cache.c rixi part
+> more readable before applying this patch.
+>
+I think we can clean up rixi part of mm/cache.c after this patch, or
+within V4;
 
-Please see below.  If this is not exactly correct, I will use "git rm"
-and let you submit the patch as you wish.
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit dc0119c24b64f9d541b94ba5d17eec0cbc265bfa
-Author: Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue Oct 6 09:38:37 2020 -0700
-
-    manual/kernel: Add LB data dependency test with no intermediate variable
-    
-    Test whether herd7 can detect a data dependency when there is no
-    intermediate local variable, as in WRITE_ONCE(*x, READ_ONCE(*y)).
-    Commit 0f3f8188a326 in herdtools fixed an oversight which caused such
-    dependencies to be missed.
-    
-    Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/manual/kernel/C-LB+mb+data.litmus b/manual/kernel/C-LB+mb+data.litmus
-new file mode 100644
-index 0000000..e9e24e0
---- /dev/null
-+++ b/manual/kernel/C-LB+mb+data.litmus
-@@ -0,0 +1,27 @@
-+C LB+mb+data
-+(*
-+ * Result: Never
-+ *
-+ * Versions of herd7 prior to commit 0f3f8188a326 ("[herd] Fix dependency
-+ * definition") recognize data dependencies only when they flow through
-+ * an intermediate local variable.  Since the dependency in P1 doesn't,
-+ * those versions get the wrong answer for this test.
-+ *)
-+
-+{}
-+
-+P0(int *x, int *y)
-+{
-+	int r1;
-+
-+	r1 = READ_ONCE(*x);
-+	smp_mb();
-+	WRITE_ONCE(*y, r1);
-+}
-+
-+P1(int *x, int *y)
-+{
-+	WRITE_ONCE(*x, READ_ONCE(*y));
-+}
-+
-+exists (0:r1=1)
