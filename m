@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F565287526
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 15:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C889E28752A
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 15:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbgJHNRG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 09:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S1729756AbgJHNSR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 09:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725845AbgJHNRG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 09:17:06 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7917C061755
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 06:17:05 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id o9so2735862plx.10
-        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 06:17:05 -0700 (PDT)
+        with ESMTP id S1726293AbgJHNSR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 09:18:17 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F847C061755
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 06:18:16 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id n14so3980009pff.6
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 06:18:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=eokUzQcCVs9a3jekI6tx8fHPMuzZIi6G0r8PCkjXJ9g=;
-        b=BKqs587jEuom28UHHUZt8WZ851jeJfoqYqo9lQrxOkbmuhVtecFUk74C6jl0Mx3hYz
-         aOPz3g3FhpmZXhNAUXCDFLY6DwGHegM/Ow627sBibD3T5zJkqo16/dDMyrSrkR8ssBMv
-         KSJcAXfK2dWbPeSQVvsuUd3g8FN1iMpoYPHQ6DT4eTJ0Vv6uJgL52CBdEGxhswneEMa6
-         Cckjjj+hrqXTsyvNTs5I1fKoHcomE1stm+LvlHrkeKKthh5dg4DD/N1YtfFa0l960J5g
-         81OM7BBebdjzYkT6hxNbvcwAkpach8WNF/cc34t8f+h2LOjsABtrMvXsNfbQjAlQ6wDX
-         1luQ==
+        bh=Y6/NSr1zLG3YbcTmQY3H9sPeZxK2xqopsbQmsWgxwcE=;
+        b=ZAzy8O9tKzFhTJ4OBsjx185F9X+UQT7MhkS25qm+zXxGH+aRDABYoEL7I54v32S5C3
+         OTaW+4nmPPZX0Xgf8Gw8Ot9adm0N+/MahliHmzqd2KceKcQv2Ty0l25MR5OCQMUh8dQP
+         y3OGksY/Eujyb39xxlScfYEv3WhUkOg9igV9mgef21tWYB3krosBp54QDNknn+HhSTYR
+         ZrXlJOt3FHbsHoa31OwTkxewne8qR91VSmL6akzuciDp45r/9z0tw4wVNCZGRwzge0Ax
+         xhjuieZIAtcDCVnnLspWXFqxBv+ZKTvmNiG5UjlXGRfhcYxItRDlW9p4e7a4i90wpX7M
+         vnTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=eokUzQcCVs9a3jekI6tx8fHPMuzZIi6G0r8PCkjXJ9g=;
-        b=mhPpUiOEg7H2R/hcEAVMtS6ytIxrdFlrgEeqidPCInJMymgBHxIlTWi8vSItyPh4xa
-         Xtm0yWDT+on0rTK5qjHKLLIbByBqKSkVoaX2V03fumRqUSSOhXmdR+A0F8lFIrRc5WY/
-         2eSGCtUbtsaE+7rATgPQK7437Bj23z3sXU8PzhQ/h0kEEwGzAOR5btB5UR68RAVq1x36
-         IcxKNE2HZN3dLH8hwWKMPka2/djWAoYaJ6vdxxw3Cm16Z0SK4nfEe8tRjynkYQmzrVUB
-         B+ID6itm8CxcA1/i8YdLlhZtXSUxatumYAoKpT8e4nzBekrkuv3t3nZMZpZvq8o2qfk+
-         MY/w==
-X-Gm-Message-State: AOAM5332MlzaVA0KthtDMdZPnuZrfb+ikiJDZvWb96r7baqeW7GPPbjI
-        UiOlwlSw1sfCdonFqKg7HcA=
-X-Google-Smtp-Source: ABdhPJwXrmO76hrTmbEsOGhK96BFIF+Jhm7aVhWQYAD5msf5Ia1NaV+5i6CZNRNmHGBHM7FN9q/d2Q==
-X-Received: by 2002:a17:902:6b45:b029:d3:df34:3222 with SMTP id g5-20020a1709026b45b02900d3df343222mr7606136plt.68.1602163025203;
-        Thu, 08 Oct 2020 06:17:05 -0700 (PDT)
+        bh=Y6/NSr1zLG3YbcTmQY3H9sPeZxK2xqopsbQmsWgxwcE=;
+        b=ho77gUMfQLUrBlg9n8vBHdxxQJqsq/TUq5tWatZR7qOEsoiT3hxKgFZhG+SnFLQLC7
+         WsTh2ZxFe4Iwv1ZZ2BzHl1D8irKI6DSMLgGqDxVQ15bxyMXvKbAcv/jnu1HbXJ5U1NGp
+         8orAKp28rauO6NNrVU8d7r7r07sCsCWe0/o5/SobIoUQa6DpPfiTukYvkSEH5mIQELa7
+         KsaZRA/3B7cvrfztbqF2+LDiJTmYFv7GpAO64g/hSc1k5aGCL9qyZbAM9t24OqnahCRr
+         ZvTQecppliwq8KenjxYfktjuco4Tuzpd9xXU7fDWXcHzZRjTJWqn+ceYdzREWnaOVBie
+         igmQ==
+X-Gm-Message-State: AOAM532MjNXxxU7dMPOVJg/i0e7S5gsN3SPIhprI8K14FRdvwe4VDSbe
+        lLKBRbO7pnR688qLYEyxjYE=
+X-Google-Smtp-Source: ABdhPJzpE5qnubRD4rjuWocK944LVtnJh2IXK6nBvKDZl1XH5aM3PTKpT55idDtQbkpMmmsIHSdZHQ==
+X-Received: by 2002:a17:90a:46c2:: with SMTP id x2mr8266920pjg.60.1602163095840;
+        Thu, 08 Oct 2020 06:18:15 -0700 (PDT)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id c12sm7172296pgd.57.2020.10.08.06.17.01
+        by smtp.gmail.com with ESMTPSA id n12sm7098919pgk.20.2020.10.08.06.18.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Oct 2020 06:17:04 -0700 (PDT)
-Date:   Thu, 08 Oct 2020 22:16:55 +0900
-Message-ID: <m2wo00503c.wl-thehajime@gmail.com>
+        Thu, 08 Oct 2020 06:18:14 -0700 (PDT)
+Date:   Thu, 08 Oct 2020 22:18:10 +0900
+Message-ID: <m2v9fk5019.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         tavi@cs.pub.ro, retrage01@gmail.com
-Subject: Re: [RFC v7 04/21] um: host: implement os_initcalls and os_exitcalls
-In-Reply-To: <255740d56676f005fc01e1a76959fef80ad68ef5.camel@sipsolutions.net>
+Subject: Re: [RFC v7 02/21] um: add os init and exit calls
+In-Reply-To: <0817bfdee3ee28ae8b94251ed559cf4e844a5ea4.camel@sipsolutions.net>
 References: <cover.1601960644.git.thehajime@gmail.com>
-        <d3bfb0e0e4300bb5191ae51918dd0795de343dc2.1601960644.git.thehajime@gmail.com>
-        <255740d56676f005fc01e1a76959fef80ad68ef5.camel@sipsolutions.net>
+        <184f5b2c6a0c399edf519d27989519a35ab90700.1601960644.git.thehajime@gmail.com>
+        <0817bfdee3ee28ae8b94251ed559cf4e844a5ea4.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,51 +68,41 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Thu, 08 Oct 2020 00:22:18 +0900,
+On Thu, 08 Oct 2020 00:13:02 +0900,
 Johannes Berg wrote:
 > 
 > On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
+> > 
+> > -#define __define_initcall(level,fn) \
+> > -	static initcall_t __initcall_##fn __used \
+> > -	__attribute__((__section__(".initcall" level ".init"))) = fn
+> > -
+> > -/* Userspace initcalls shouldn't depend on anything in the kernel, so we'll
+> > - * make them run first.
+> > - */
+> > -#define __initcall(fn) __define_initcall("1", fn)
+> > +#undef __uml_exit_call
+> > +#define __uml_exit_call		__used __section(os_exitcalls)
 > 
-> > Note that this patch should be merged with "um: move arch/um/os-Linux
-> > dir to tools/um" but for now it is separate to make the review easier.
+> Doesn't that break calling of sigio_cleanup and remove_umid_dir?
+
+Without the patch 04/21 um: host: implement os_initcalls and
+os_exitcalls, yes you're right.
+
+> After all,
 > 
-> Not a fan of that, I must say ...
-
-Now I found that this patch should be together with the patch 02/21
-um: add os init and exit calls.  I will do that from next time.
-
-> > +extern void (*__start_os_exitcalls)(void);
-> > +extern void (*__stop_os_exitcalls)(void);
-> > +
-> > +void os_exitcalls(void)
+> > +void __weak os_exitcalls(void)
 > > +{
-> > +	exitcall_t *call;
-> > +
-> > +	call = &__stop_os_exitcalls;
-> > +	while (--call >= &__start_os_exitcalls)
-> > +		(*call)();
-> 
-> You should check for and skip NULL pointers, there always are alignment
-> issues with automatic section filling like this, more so with clang than
-> gcc.
-
-Understand, I'll fix it.
-
 > > +}
-> > +
-> > +extern int (*__start_os_initcalls)(void);
-> > +extern int (*__stop_os_initcalls)(void);
-> > +
-> > +int os_initcalls(void)
-> > +{
-> > +	initcall_t *call;
-> > +
-> > +	call = &__stop_os_initcalls;
-> > +	while (--call >= &__start_os_initcalls)
-> > +		(*call)();
 > 
-> Same here.
+> This does nothing so far.
+> 
+> Also, why the __weak?
 
-Okay.
+The intention is to define os_exitcalls() under tools/um so that the
+actual exitcalls is located in different ELF sections (we defined
+multiple __uml_exit_call for __UM_HOST__ and ! __UM_HOST__).  Thus
+uml_cleanup() must see the symbol but give the place where actual
+function is defined at tools/um.  Thus, this is __weak symbol-ed.
 
 -- Hajime
