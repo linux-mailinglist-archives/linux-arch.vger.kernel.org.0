@@ -2,63 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C427D2873D8
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 14:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2372873DE
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 14:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725852AbgJHMMs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 08:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S1729635AbgJHMNu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 08:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgJHMMs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 08:12:48 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C770C061755
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 05:12:48 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id b26so3838429pff.3
-        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 05:12:48 -0700 (PDT)
+        with ESMTP id S1725871AbgJHMNu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 08:13:50 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BAEC061755
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 05:13:49 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id r10so4116157pgb.10
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 05:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=avG2U10/AnQ/HuFS35BR605fPu8n7fRYwK0Lc55PWYs=;
-        b=guONkQ30Axu0+l9tWpZfm1B/X9K6/3AUThWhxSAZyl0M/ZMXdhNYFIAa33/Pq1K4zf
-         IYjw2f7jd8eKzo29oNWlUzFhz9FaIfzaDCh/ZNeRKA0Sv8cjNk9UPrXUhrrm/XxRsOYM
-         Co7ox/5N9SGRGaRYLIvJkV5Rbi4SKd2622xOgxaQGwjnRDtYdyXm5MACMJtgrCArDky8
-         qaktfNvuCJygYsMFQXzsk8Y786aUB66a2oVH4R3YmEmrs8B5a0wCU68v6+Wvs0QmqWe7
-         ghWTZcA665CjWvYrdxcDEyFcvmqteqjYcuxEjrGohlB/5A4lWMwTuQGNocvOJtZJw5G8
-         nckQ==
+        bh=E4i4TAbPbSHDVJHnFcTQOnENpeJVidGjACENiuA3KpI=;
+        b=EYpxaTDnluu560c3mXtaHt+EgtwB7dausx5V9mfWsFggtEDnx1hFNYJsx0ShAsH7LB
+         a5XX6cZmtRsTMa6oDEQeLZtgUyi+d8bJs59ZpmnlDiHQt/XkakQKEdSA93juk67Ad24v
+         IWYGbtoRkNpWQhtaIGowxnd5s86U/nP/eXSy7rlX3BZvxHsAZimE5L8wBNUz2AlP9zJ3
+         REc/BIJ60CoEIDW7qOhEEH38mSw9NOMJmuK92c55UmIKpiY7ISF4YnCBiGDvPsU8UPOe
+         4KJC8XJ35wcgsYtr7WiT00ljTpTDqqnsIqxWaKtDurT2aYoqCaENJVRO3bIzLlcmP3lM
+         9RYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=avG2U10/AnQ/HuFS35BR605fPu8n7fRYwK0Lc55PWYs=;
-        b=Q+HrZmKewrfGQJ9jYT3L/G/nxXEDiKtwzUBOq6Y3ZyvL5xFfngXvcQyk703RrDKGkB
-         K0OSpCbvYSDgQ3nGxN7PzVjuqVV4nHsH/5b2fmUO3hUTm+jNTg7vjeNASGzijCQTZYn+
-         uhvAwTUns0ZU3LqiPUtNPf3HKoJavy3TtHNkubxUoW65soNehImE6/vPR9lIoNQSIZnJ
-         bAWgr5uyT3QBfoa6ogwQWVIVlXoS+ZaHpFRaDZr3iv91gUezwI2yML+pPc4HjaEFG17I
-         eC8DgNherXnskQ/7wTxXRHra7FmYJTvySWvwLPWjlEhNpGg+DfR7roUrSVYTBRqlPGxf
-         0W2w==
-X-Gm-Message-State: AOAM532EdrrpTnAtZHYjbzFNfj8AXjwkxyDAYZGrYwAuYP5WGrAYxeN2
-        RTj+fHKXqUgp4jeUHNahfiM=
-X-Google-Smtp-Source: ABdhPJxQTQQ9ly+1xY6CKeBmVNmt8NlpvuEj/3zpLPeCsggIovvJYH72ZpZiorxwSB73RrCdLzMhlA==
-X-Received: by 2002:a65:6487:: with SMTP id e7mr6916581pgv.409.1602159167577;
-        Thu, 08 Oct 2020 05:12:47 -0700 (PDT)
+        bh=E4i4TAbPbSHDVJHnFcTQOnENpeJVidGjACENiuA3KpI=;
+        b=iuo718fOnYIzUW3esJKLOhj34xQ+RHCX7fA+6Rz2NYRZ5ZOdDgYHiscCRNeg2l+nEX
+         7Fn9LQyWfbYelxUuU18/F/6Gwf5xL0IzSwhsU5e1VZx/52mDv+UU/1j2/5RuQrIHIcqs
+         4ez2znPZzm2JIb3mHqxIqqV62WmyTaBebhOk30yQ3L0V70Db8Jg8pT8EdL5dPvyhXbNx
+         mjnlv1mb2R0vvaiE965hAw4xph688ojvuJqepmvCC93cwnYX6C6i71yUe+0GQEIErqij
+         7Vc2rwQfoFiOeNhOsK5IZDSpUKlxMk8YAhNSbAM2unZVEIb6WtkDktG7WZVYsHo1/V9H
+         +FcA==
+X-Gm-Message-State: AOAM532voi4ctgdriH+PD1XLkEUSRADEeYRnMeBnU0fkkmUWHVSOu+8D
+        5ceEpOZW/RolScX/Vwexbhw=
+X-Google-Smtp-Source: ABdhPJzv5GDUu3ksFlm5eoeeSfMNOwegfMq+FtCNfe0GOoHoOU1JTTux2UN60ZYrMw3Huvl6HVDbDg==
+X-Received: by 2002:a17:90a:9f91:: with SMTP id o17mr8038435pjp.228.1602159228365;
+        Thu, 08 Oct 2020 05:13:48 -0700 (PDT)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id bx22sm7036569pjb.40.2020.10.08.05.12.44
+        by smtp.gmail.com with ESMTPSA id t9sm7086583pfc.205.2020.10.08.05.13.45
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Oct 2020 05:12:46 -0700 (PDT)
-Date:   Thu, 08 Oct 2020 21:12:40 +0900
-Message-ID: <m2362o6hmv.wl-thehajime@gmail.com>
+        Thu, 08 Oct 2020 05:13:47 -0700 (PDT)
+Date:   Thu, 08 Oct 2020 21:13:43 +0900
+Message-ID: <m21ri86hl4.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     anton.ivanov@cambridgegreys.com
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         tavi.purdila@gmail.com, linux-kernel-library@freelists.org,
         linux-arch@vger.kernel.org, retrage01@gmail.com
-Subject: Re: [RFC v7 00/21] Unifying LKL into UML
-In-Reply-To: <1ba41b09-6bdb-2fb7-5696-7db429e0a6a5@cambridgegreys.com>
-References: <cover.1600922528.git.thehajime@gmail.com>
-        <cover.1601960644.git.thehajime@gmail.com>
-        <1ba41b09-6bdb-2fb7-5696-7db429e0a6a5@cambridgegreys.com>
+Subject: Re: [RFC v7 21/21] um: nommu: add block device support of UML
+In-Reply-To: <ac66cd8b-3bb1-5846-aa75-fc91c1149e91@cambridgegreys.com>
+References: <cover.1601960644.git.thehajime@gmail.com>
+        <a8686efcbad3c445d3e5bde054c04a58877915f1.1601960644.git.thehajime@gmail.com>
+        <ac66cd8b-3bb1-5846-aa75-fc91c1149e91@cambridgegreys.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -67,54 +67,47 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Hello Anton,
-
-On Wed, 07 Oct 2020 22:30:03 +0900,
+On Wed, 07 Oct 2020 23:17:31 +0900,
 Anton Ivanov wrote:
+
+> > diff --git a/arch/um/nommu/um/Kconfig b/arch/um/nommu/um/Kconfig
+> > index 20b3eaccb6f0..c6a3f472fe75 100644
+> > --- a/arch/um/nommu/um/Kconfig
+> > +++ b/arch/um/nommu/um/Kconfig
+> > @@ -4,6 +4,10 @@ config UML_NOMMU
+> >   	select UACCESS_MEMCPY
+> >   	select ARCH_THREAD_STACK_ALLOCATOR
+> >   	select ARCH_HAS_SYSCALL_WRAPPER
+> > +	select VFAT_FS
+> > +	select NLS_CODEPAGE_437
+> > +	select NLS_ISO8859_1
+> > +	select BTRFS_FS
+> >     config 64BIT
+> >   	bool
+> > @@ -35,3 +39,7 @@ config STACKTRACE_SUPPORT
+> >   config PRINTK_TIME
+> >   	bool
+> >   	default y
+> > +
+> > +config RAID6_PQ_BENCHMARK
+> > +	bool
+> > +	default n
 > 
-> 
-> On 06/10/2020 10:44, Hajime Tazaki wrote:
-> > This is another spin of the unification of LKL into UML.  Based on the
-> > discussion of v4 patchset, we have tried to address issue raised and
-> > rewrote the patchset from scratch.  The summary is listed in the
-> > changelog below.
-> > 
-> > Although there are still bugs in the patchset, we'd like to ask your
-> > opinions on the design we changed.
-> > 
-> > The milestone section is also updated: this patchset is for the
-> > milestone 1, though the common init API is still not implemented yet.
-> > 
-> > 
-> > Changes in rfc v7:
-> > - preserve `make ARCH=um` syntax to build UML
-> > - introduce `make ARCH=um UMMODE=library` to build library mode
-> > - fix undefined symbols issue during modpost
-> > - clean up makefiles (arch/um, tools/um)
-> 
-> Hi Hajime, hi Tavi,
-> 
-> Our starting point should be that it does not break the existing build. It still does.
+> Why are we touching this? I thought this is already defined in lib/Kconfig?
 
-I agree with the starting point.
+With the scheduler which LKL implements, it has the same issue with
+what time-travel=inf-cpu has when CONFIG_BTRFS_FS is enable.  I tried
+to follow the way of the commit d65197a (below), but if I added
+"depends on !RAID6_PQ_BENCHMARK" to config UMMODE_LIB, I got "error:
+recursive dependency detected!".
 
-> If I build a "stock configuration" UML after applying the patchset
-> the resulting vmlinux is not executable.
+https://github.com/thehajime/linux/commit/d65197ad52494bed3b5e64708281b8295f76c391#diff-c170aa964ad412630a2b5addf306ff14
 
-Ah, I confirmed the issue.
-I was only trying to make the `linux` binary compatible, not vmlinux.
+Thus, to avoid this situation, I did the above additional config
+RAID6_PQ_BENCHMARK just for UMMODE_LIB.
 
-Because vmlinux is now build as a relocatable object, this is
-something we need to figure out if we wish to keep vmlinux executable.
-
-Do you think we should make vmlinux executable even if we have the
-file linux executable ? If yes, we will work on this to fix the issue.
-
-> On the positive side, it builds cleanly now. I will try to go
-> through the rest of the patchset later today and see if there is
-> anything else that needs fixing before we do the next version.
-
-thanks for your time.
+I plan to rework on Kconfig (UMMODE_LIB and !MMU) and will figure out
+more appropriate way.
 
 -- Hajime
 
