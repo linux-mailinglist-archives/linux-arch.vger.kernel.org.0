@@ -2,102 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DCE287C5E
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 21:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD97287C94
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 21:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728702AbgJHTTQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 15:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S1726834AbgJHTjb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 15:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbgJHTTQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 15:19:16 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A729C0613D2
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 12:19:16 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id d24so3994603ljg.10
-        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 12:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iLobhkDgMpUWz2pJORCgop3syUH7fcgMKrUPVgxHAdI=;
-        b=hmXnbzPKpSgjWs9M2fRi5hEgC+fwO6C1/Jc+P0qlXOlpvBCDiKPiG4xNu6ezw/60jl
-         Zvc3kYbG0dADcUDP5O/JojvRVuE0myuouvllwYlaUmWD59PlL2ikvH+enAS39VkIJOAe
-         1D5N4EDZB2eC7BKNS28AktA5ezAYxTztmf6tI/L5idZ2KkZ33spPxPo3aiMpVIn3PzD5
-         RSQnX83DqjPXT2ZTpC3pRHB62W5U+S5WOQ80T50d4jA96kQIh7ZdKeRkQ++vq3batz1p
-         s5Q52bMA41mrY8TliVD1fnQIPZFGC/VVWRFeUxzzEn/ALNM0Udxve3XINkKY/6TH1GrV
-         f9Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iLobhkDgMpUWz2pJORCgop3syUH7fcgMKrUPVgxHAdI=;
-        b=iSVEGdjBhEnN9wohyF7gYlNee0FdO6N7lIlLLN7apHzlmnGYU3PZPdfJUQAe2mCj3s
-         xcxc6UUxCxjOf3knn/HDHwEoRchbfnMI9C6vMjpmJteV5SlYDK5pkxEakmPs6n/XwhPz
-         684u1DmJ0RvSwG3XxGmKEqOmi9tkE1UAme71SFdN1JZMBFPbqUuYbWsA+6hIVkZAim70
-         +JRz0mHoRPox4ladVau5rFHPT/yo9ykLDQkacrO897MSyV6b2yUO01ixjgXShK8zlE+o
-         vs2VNfqa1BlTHNM83OdrnkIajFGDoMPKRFZWM7kXe8gBgZQtw7/hlXMkdX5N06wTB7jO
-         dJ3Q==
-X-Gm-Message-State: AOAM532x/inxGBaeMWkji8asbhCFPlUXKNInEgTOwO4z/MCOiUN19Ggu
-        /1bsWWGV0sP/OdhkOObdr7M6bc3K7YFbOgYHueU=
-X-Google-Smtp-Source: ABdhPJxoWhxrcz6ZKWp7UW4JH0rzAtd9i8iDjW6KV+3kOWjgaoq93s+wMxuFJWSoH629L8ybJLVp+1mC/xgSQyBVm9s=
-X-Received: by 2002:a2e:6816:: with SMTP id c22mr4164363lja.200.1602184754450;
- Thu, 08 Oct 2020 12:19:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1601960644.git.thehajime@gmail.com> <7a39c85a38658227d3daf6443babb7733d1a1ff4.1601960644.git.thehajime@gmail.com>
- <27868819-fbd7-9eec-0520-d2fb9b6bf4a6@cambridgegreys.com> <6d8dd929722e419894824a07792ac8c5b2659de9.camel@sipsolutions.net>
- <3f0aab8f38971360240e1e04bd6b90a8dcadec86.camel@sipsolutions.net>
- <2f3c3a54-7d68-6dc9-a65a-37fb4599b194@cambridgegreys.com> <m2zh4w517g.wl-thehajime@gmail.com>
-In-Reply-To: <m2zh4w517g.wl-thehajime@gmail.com>
-From:   Octavian Purdila <tavi.purdila@gmail.com>
-Date:   Thu, 8 Oct 2020 22:19:03 +0300
-Message-ID: <CAMoF9u3cGYDj8dmZfu559n2HcOPGc_twXk=z32mavO9hPufkFg@mail.gmail.com>
-Subject: Re: [RFC v7 18/21] um: host: add utilities functions
-To:     Hajime Tazaki <thehajime@gmail.com>
-Cc:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
+        with ESMTP id S1726165AbgJHTjb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 15:39:31 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90971C0613D2
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 12:39:31 -0700 (PDT)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1kQbl1-001pSU-OB; Thu, 08 Oct 2020 21:39:19 +0200
+Message-ID: <38aee48aceda961fa7418b42f3f2055b8799cf9b.camel@sipsolutions.net>
+Subject: Re: [RFC v7 11/21] um: nommu: kernel thread support
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Octavian Purdila <tavi.purdila@gmail.com>
+Cc:     Hajime Tazaki <thehajime@gmail.com>,
         linux-um <linux-um@lists.infradead.org>, jdike@addtoit.com,
         Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         linux-kernel-library <linux-kernel-library@freelists.org>,
-        Akira Moroo <retrage01@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>
+        linux-arch <linux-arch@vger.kernel.org>,
+        Akira Moroo <retrage01@gmail.com>
+Date:   Thu, 08 Oct 2020 21:39:18 +0200
+In-Reply-To: <CAMoF9u3n-FyumX0S7vbjN-e+fWNe6k8aLeR-_BVJa7sR7qcFHg@mail.gmail.com> (sfid-20201008_205441_262054_E9F47409)
+References: <cover.1601960644.git.thehajime@gmail.com>
+         <ff2087f4983a2b93abef0a4ad31c1309f71ea52d.1601960644.git.thehajime@gmail.com>
+         <295bff3f6ddc941dbf3933e8e310ad641da3ce01.camel@sipsolutions.net>
+         <CAMoF9u3n-FyumX0S7vbjN-e+fWNe6k8aLeR-_BVJa7sR7qcFHg@mail.gmail.com>
+         (sfid-20201008_205441_262054_E9F47409)
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 8, 2020 at 3:52 PM Hajime Tazaki <thehajime@gmail.com> wrote:
->
->
-> On Thu, 08 Oct 2020 00:10:23 +0900,
-> Anton Ivanov wrote:
-> >
-> >
-> > On 07/10/2020 16:03, Johannes Berg wrote:
-> > > On Wed, 2020-10-07 at 17:02 +0200, Johannes Berg wrote:
-> > >> On Wed, 2020-10-07 at 15:53 +0100, Anton Ivanov wrote:
-> > >>> These are actually different on different architectures. These look
-> > >>> like the x86 values.
->
-> Those variables are based on tools/um/include/lkl/asm-generic/errno.h,
-> which is generated from include/uapi/asm-generic/errno.h, which LKL
-> kernel eats for its values.
->
-> This is the part of patch 12/21.
->
-> > >>> IMHO a kernel strerror() would be the right way of dealing with this
-> > >>> in the long term (i understand that we cannot call the platform one,
-> > >>> because it may be different from the internal Linux errors). It will
-> > >>> be useful in a lot of other places.
-> > >>>
-> > >>> If we leave it as is, we need to make this arch specific at some
-> > >>> point.
->
-> So, this particular code does not contain arch specific part I
-> believe.
-> # Tavi, correct me if I'm wrong.
->
+On Thu, 2020-10-08 at 21:54 +0300, Octavian Purdila wrote:
+> On Wed, Oct 7, 2020 at 9:57 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+> > On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
+> > > nommu mode does not support user processes
+> > 
+> > I find this really confusing. I'm not sure why you ended up calling this
+> > "nommu mode", but there *are* (still) (other) nommu arches, and they
+> > *do* support userspace processes.
+> > 
+> > Isn't this really just "LKL mode" or something like that?
+> > 
+> 
+> This is a very good point, while some other patches make sense in the
+> nommu mode, this one does not - it is rather needed because of the
+> "library mode".
+> 
+> Not sure what we can do other than creating a new "library mode" in
+> addition to the "nommu mode". Any suggestions?
 
-I think Anton was saying that we should do it properly with C99 to
-avoid potential issues with changes in configuration and I agree that
-is the way to go.
+Well there's no "nommu mode" in UML other than what you're doing here,
+so as I said on some other patch, it sort of makes sense to have "LKL ==
+NOMMU", but the equation doesn't make sense everywhere, since it's not
+fundamentally NOMMU that drives the need for things (like here no
+userspace, elsewhere the ifdefs, etc.), but LKL-mode.
+
+So I don't think it would be *in addition* to "nommu mode" since such a
+thing doesn't exist on UML (only on other architectures), but mostly be
+a rename of "nommu mode" to "lkl mode" or so?
+
+Don't really have any other suggestions, or maybe I'm not understanding
+your question right.
+
+> > IOW, why isn't this just
+> > 
+> > void lkl_sem_free(struct lkl_sem *sem);
+> > void lkl_sem_up(struct lkl_sem *sem);
+> > ...
+> > 
+> > and then posix-host.c just includes the header file and implements those
+> > functions?
+> > 
+> > I don't see any reason for this to be allowed to have multiple variants
+> > linked and then picking them at runtime?
+> > 
+> 
+> We could try that and see how it goes. This was baked liked this long
+> time ago, when we wanted to support Windows and there was no proper
+> support for weak functions in mingw for PE/COFF (it still not
+> supported but at least we do have a few patches that fix that).
+
+You've required weak functions elsewhere, but in this case you don't
+even need them since you don't need things to link without an
+implementation? At least I don't see why you'd want to be able to link a
+binary that doesn't have an implementation of the ops required to run?
+
+> > Yeah, what? That's an incomprehensible piece of code. At least add
+> > comments, if it _really_ is necessary?
+> > 
+> 
+> Yeah, sorry about that. We missed adding a bunch of comments in the
+> commit message. It got this complicated because of optimizations to
+> avoid context switching between the native thread running the
+> application and the kernel thread running the system call or interrupt
+> handler.
+> 
+> Maybe we should revert to the initial simpler implementation for now
+> and add it later?
+
+Perhaps? Not really sure. Could the optimisations be added in steps so
+they're something that can be explained/followed? If not, well, perhaps
+to ease review for now it'd make sense to start simpler, but I guess
+eventually it'd still want some better explanation of what's going on.
+
+johannes
+
