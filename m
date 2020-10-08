@@ -2,25 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D12EC287C96
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 21:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A91287C9E
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 21:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgJHTkz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 15:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S1728612AbgJHTqb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 15:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbgJHTkz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 15:40:55 -0400
+        with ESMTP id S1726499AbgJHTqb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 15:46:31 -0400
 Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F6FC0613D2
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 12:40:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BCBC0613D2
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 12:46:30 -0700 (PDT)
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
         (Exim 4.94)
         (envelope-from <johannes@sipsolutions.net>)
-        id 1kQbmL-001pV8-Ix; Thu, 08 Oct 2020 21:40:41 +0200
-Message-ID: <43b15253faaaa96f5b874adbaf227d9927b00969.camel@sipsolutions.net>
-Subject: Re: [RFC v7 12/21] um: nommu: system call interface and application
- API
+        id 1kQbrq-001peL-Ue; Thu, 08 Oct 2020 21:46:23 +0200
+Message-ID: <1b271e1bca9852bebc2d67c6aada25f7ce1a7240.camel@sipsolutions.net>
+Subject: Re: [RFC v7 03/21] um: move arch/um/os-Linux dir to tools/um/uml
 From:   Johannes Berg <johannes@sipsolutions.net>
 To:     Octavian Purdila <tavi.purdila@gmail.com>
 Cc:     Hajime Tazaki <thehajime@gmail.com>,
@@ -30,13 +29,13 @@ Cc:     Hajime Tazaki <thehajime@gmail.com>,
         linux-kernel-library <linux-kernel-library@freelists.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Akira Moroo <retrage01@gmail.com>
-Date:   Thu, 08 Oct 2020 21:40:40 +0200
-In-Reply-To: <CAMoF9u0m+qQzNS5mG90MiOVqgOPmbDKTs-p03PLKL0vyT_16fw@mail.gmail.com> (sfid-20201008_210323_970294_4B316DB6)
+Date:   Thu, 08 Oct 2020 21:46:21 +0200
+In-Reply-To: <CAMoF9u1XX6gJpPfUh-6hmh1RNosn+=GUf75FQsMoxacrP=f7jg@mail.gmail.com> (sfid-20201008_194829_816847_03792A65)
 References: <cover.1601960644.git.thehajime@gmail.com>
-         <03cee062a2841e3597ae181f1903d21394651f62.1601960644.git.thehajime@gmail.com>
-         <8ff2e602fca71fb7244c178017959cc8d153fbfd.camel@sipsolutions.net>
-         <CAMoF9u0m+qQzNS5mG90MiOVqgOPmbDKTs-p03PLKL0vyT_16fw@mail.gmail.com>
-         (sfid-20201008_210323_970294_4B316DB6)
+         <d5df1b8807384a00f96e4b02d41a37183fad5562.1601960644.git.thehajime@gmail.com>
+         <0ed761fbe77f9858244ee2ffbf3e700d7df78418.camel@sipsolutions.net>
+         <CAMoF9u1XX6gJpPfUh-6hmh1RNosn+=GUf75FQsMoxacrP=f7jg@mail.gmail.com>
+         (sfid-20201008_194829_816847_03792A65)
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
@@ -45,36 +44,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 2020-10-08 at 22:03 +0300, Octavian Purdila wrote:
-> On Wed, Oct 7, 2020 at 10:05 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+On Thu, 2020-10-08 at 20:48 +0300, Octavian Purdila wrote:
+
 > > On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
-> > > +++ b/arch/um/nommu/include/uapi/asm/syscalls.h
-> > > @@ -0,0 +1,287 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > > This patch moves underlying OS dependent part under arch/um to tools/um
+> > > directory so that arch/um code does not need to build host build
+> > > facilities (e.g., libc).
 > > 
-> > That doesn't really make sense - if you use LKL you're linking Linux, so
-> > you can't use this "WITH Linux-syscall-note"?
+> > Hmm. On the one hand, that build separation seems sensible, but on the
+> > other hand this stuff *does* fundamentally belong to arch/um/, and it's
+> > not a "tool" like basically everything else there that is a pure
+> > userspace application to run *inside* the kernel, not *part of* it.
 > > 
-> > > +#ifndef __UM_NOMMU_UAPI_SYSCALLS_H
-> > > +#define __UM_NOMMU_UAPI_SYSCALLS_H
-> > 
-> > [snip]
-> > 
-> > This file really worries me, it includes half the world and (re)defines
-> > the other half ... How is this ever going to be maintained?
+> > For that reason, I don't really like this much.
 > > 
 > 
-> There are not that many definitions here, just the ones that were
-> never defined in uapi headers. And, AFAIK, new code that exposes
-> structures and data types should always go  into uapi headers and not
-> directly in glibc, etc. So once we fix the old stuff, it should be
-> fine?
+> I see the os_*() calls as dependencies that the kernel uses. Sort of
+> like calls into the hypervisor or firmware.
 
-Yeah, not really sure. Not all of this is really old stuff, e.g. keyring
-things were here I noticed.
+Right.
 
-But since it's userspace API I guess the changes of it breaking are
-fairly small anyway, so maybe I just shouldn't worry about it :)
+> The current UML build is already partially split. USER_OBJS build with
+> a different rule set than the rest of the kernel objects.
+
+Yes, that's true.
+
+> IMHO this
+> change just makes this more clear and streamlined, especially with
+> regard to linking.
+
+Well, maybe? But I actually tend to see this less as a question of
+(technical) convenience but semantics, and the tools are just not
+*meant* to be things that build a kernel, they're things to be used
+inside that kernel.
+
+I dunno. Maybe the technical convenience should win, but OTOH the
+"contortions" that UML build goes through with USER_OBJS don't really
+seem bad enough to merit breaking the notion of what tools are?
+
+> We are using the same build system as the rest of the stuff in tools.
+> Since it is building programs and libraries and not part of the kernel
+> binary build, it is using a slightly different infrastructure, which
+> is detailed in tools/build/Documentation/Build.txt
+
+OK, thanks for the pointer, I hadn't seen that before.
+
+> The reason for picking tools was that it already has the
+> infrastructure to build programs and shared libraries and the fact
+> that it is the only place in the kernel source tree where code is not
+> built directly into the kernel binary.
+
+Yeah, but all of UML/LKL _is_ eventually built into the kernel binary
+(or library as it may be). Which is in a way exactly my objection.
+
+You're looking at it the other way around I think - it seems that you're
+thinking the kernel binary is the vmlinux.a, and that's what the
+kernel's build system worries about; then the "vmlinux.so" (library
+mode) or "linux" (standalone mode - perhaps that's a good name?) is the
+eventual 'tool' that we build, using the previously built vmlinux.a.
+
+But that really isn't how standalone mode works, and IMHO it also
+doesn't match what tools are today.
 
 johannes
 
