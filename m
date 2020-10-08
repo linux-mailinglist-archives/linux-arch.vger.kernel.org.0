@@ -2,107 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB143287486
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 14:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA5A28748D
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 14:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729769AbgJHMuO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 08:50:14 -0400
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:39846 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729722AbgJHMuO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 08:50:14 -0400
-Received: from tun252.jain.kot-begemot.co.uk ([192.168.18.6] helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1kQVN4-0006ht-Tj; Thu, 08 Oct 2020 12:50:11 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1kQVN2-0000rM-Pa; Thu, 08 Oct 2020 13:50:10 +0100
-Subject: Re: [RFC v7 00/21] Unifying LKL into UML
-To:     Hajime Tazaki <thehajime@gmail.com>
-Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
-        tavi.purdila@gmail.com, linux-kernel-library@freelists.org,
-        linux-arch@vger.kernel.org, retrage01@gmail.com
-References: <cover.1600922528.git.thehajime@gmail.com>
- <cover.1601960644.git.thehajime@gmail.com>
- <1ba41b09-6bdb-2fb7-5696-7db429e0a6a5@cambridgegreys.com>
- <m2362o6hmv.wl-thehajime@gmail.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <003d0714-3bb6-dc02-ba3d-0237f8c5f40c@cambridgegreys.com>
-Date:   Thu, 8 Oct 2020 13:50:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <m2362o6hmv.wl-thehajime@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Score: -1.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
+        id S1730112AbgJHMw6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 08:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729722AbgJHMw5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 08:52:57 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9518C061755
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 05:52:57 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id n9so4201023pgf.9
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 05:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=RJe9LFXNtER/IOrNMooaftE91+H07BwPeBTcEDJvIdA=;
+        b=FMkLyebMkzMWBBJLMa9hcgd+7THovbNFFPQHfJ9IQHAdBYQGSnhIVK8lm09h8YbYnx
+         YepV1/rJ6bTCBXJXTKf9a2rP6Glht3KXWo36JPkkW1qt8U8qkAO5U35rV8EcQeDAVUWa
+         FjrNucUBJ2IjwZvvhbQf1QIASozntgQHKoUhDcKhoYQ0gK7T/l+wY2a5/JLgZ7e8myuK
+         7rdVIgmhiHCR9WIdJ1yh18Yypg/q1RoMdcY4D7l87a4uYIrnGUzZkUzi8aA1IQbtCTrA
+         jnYCsZokp2acmiq1Jw72vmLIuYLa47Yk4UWtkT2vlXxeue1FHMXj26fG/dZXYc9eEXBY
+         9pXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=RJe9LFXNtER/IOrNMooaftE91+H07BwPeBTcEDJvIdA=;
+        b=izHUezW0f5BVY8uHZoQg6EfFVY7u5pcKWMd814b19QW+ZQOXJ6BRHaIKiIn1H5OYfk
+         /wTvZjUwFL7CDFvUriM5V19PrJHgtdgXZp8V3mjFjUosb+8oWbHx0vWH/bF5EdeCGL14
+         9VeyKMN4iZFKMUYHoUEzUINtZiSB6KZkPrNFCsO7xZ6vWlUud67RtlHhocScumWbSxUx
+         E0Fpmiz3QxgAnTY8yQWojKezkWmhng+jqfo1SZO1nDRik1+7hXOA7fdIt02PrsJWSd6B
+         GDUxuTkgqiNFKegbwE3zjpLWtRO17nK4HN8k/qLrhAzWcLhIMuveAcgAxIsqJXxzKJgr
+         Q4eg==
+X-Gm-Message-State: AOAM531KJxIPHjgJqGYzusLpod11+HDFXPk0rAWzZMaTKMgUN66DolGu
+        Sz4hpB+PBBU7GymDXIuKiaw=
+X-Google-Smtp-Source: ABdhPJxdtunYOWVkrOCw+rpGprETOwSRVEvBIcnAmlHyNtuMk1St4f7/EcLk38UtwkJ0N3yBQrLN7A==
+X-Received: by 2002:a63:524a:: with SMTP id s10mr7465747pgl.40.1602161576815;
+        Thu, 08 Oct 2020 05:52:56 -0700 (PDT)
+Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id gp8sm6834266pjb.3.2020.10.08.05.52.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 08 Oct 2020 05:52:56 -0700 (PDT)
+Date:   Thu, 08 Oct 2020 21:52:51 +0900
+Message-ID: <m2zh4w517g.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     anton.ivanov@cambridgegreys.com
+Cc:     johannes@sipsolutions.net, linux-um@lists.infradead.org,
+        jdike@addtoit.com, richard@nod.at, tavi.purdila@gmail.com,
+        linux-kernel-library@freelists.org, retrage01@gmail.com,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC v7 18/21] um: host: add utilities functions
+In-Reply-To: <2f3c3a54-7d68-6dc9-a65a-37fb4599b194@cambridgegreys.com>
+References: <cover.1601960644.git.thehajime@gmail.com>
+        <7a39c85a38658227d3daf6443babb7733d1a1ff4.1601960644.git.thehajime@gmail.com>
+        <27868819-fbd7-9eec-0520-d2fb9b6bf4a6@cambridgegreys.com>
+        <6d8dd929722e419894824a07792ac8c5b2659de9.camel@sipsolutions.net>
+        <3f0aab8f38971360240e1e04bd6b90a8dcadec86.camel@sipsolutions.net>
+        <2f3c3a54-7d68-6dc9-a65a-37fb4599b194@cambridgegreys.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On 08/10/2020 13:12, Hajime Tazaki wrote:
-> Hello Anton,
->
-> On Wed, 07 Oct 2020 22:30:03 +0900,
-> Anton Ivanov wrote:
->>
->> On 06/10/2020 10:44, Hajime Tazaki wrote:
->>> This is another spin of the unification of LKL into UML.  Based on the
->>> discussion of v4 patchset, we have tried to address issue raised and
->>> rewrote the patchset from scratch.  The summary is listed in the
->>> changelog below.
->>>
->>> Although there are still bugs in the patchset, we'd like to ask your
->>> opinions on the design we changed.
->>>
->>> The milestone section is also updated: this patchset is for the
->>> milestone 1, though the common init API is still not implemented yet.
->>>
->>>
->>> Changes in rfc v7:
->>> - preserve `make ARCH=um` syntax to build UML
->>> - introduce `make ARCH=um UMMODE=library` to build library mode
->>> - fix undefined symbols issue during modpost
->>> - clean up makefiles (arch/um, tools/um)
->> Hi Hajime, hi Tavi,
->>
->> Our starting point should be that it does not break the existing build. It still does.
-> I agree with the starting point.
->
->> If I build a "stock configuration" UML after applying the patchset
->> the resulting vmlinux is not executable.
-> Ah, I confirmed the issue.
-> I was only trying to make the `linux` binary compatible, not vmlinux.
->
-> Because vmlinux is now build as a relocatable object, this is
-> something we need to figure out if we wish to keep vmlinux executable.
->
-> Do you think we should make vmlinux executable even if we have the
-> file linux executable ? If yes, we will work on this to fix the issue.
+On Thu, 08 Oct 2020 00:10:23 +0900,
+Anton Ivanov wrote:
+> 
+> 
+> On 07/10/2020 16:03, Johannes Berg wrote:
+> > On Wed, 2020-10-07 at 17:02 +0200, Johannes Berg wrote:
+> >> On Wed, 2020-10-07 at 15:53 +0100, Anton Ivanov wrote:
+> >>> These are actually different on different architectures. These look
+> >>> like the x86 values.
 
-In my opinion, any relocatable objects, etc should be clearly named - either .o, .so, etc depending on what they are. We should not try to reuse any of the existing files for a different purpose.
+Those variables are based on tools/um/include/lkl/asm-generic/errno.h,
+which is generated from include/uapi/asm-generic/errno.h, which LKL
+kernel eats for its values.
 
-I also agree with Johannes that we are not using the tools/ directory for its intended purpose.
+This is the part of patch 12/21.
 
-We are not trying to build a tool. We are trying to build a sub-architecture. IMHO, the build should use a subdirectory under arch/um.
+> >>> IMHO a kernel strerror() would be the right way of dealing with this
+> >>> in the long term (i understand that we cannot call the platform one,
+> >>> because it may be different from the internal Linux errors). It will
+> >>> be useful in a lot of other places.
+> >>> 
+> >>> If we leave it as is, we need to make this arch specific at some
+> >>> point.
 
->> On the positive side, it builds cleanly now. I will try to go
->> through the rest of the patchset later today and see if there is
->> anything else that needs fixing before we do the next version.
-> thanks for your time.
->
-> -- Hajime
->
->
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+So, this particular code does not contain arch specific part I
+believe.
+# Tavi, correct me if I'm wrong.
 
+> >>>> +
+> >>>> +static const char * const lkl_err_strings[] = {
+> >>>> +	"Success",
+> >>>> +	"Operation not permitted",
+> >> Might be possible to more or less address this (except for arch-specific
+> >> errors that don't always exist) but using C99 initializers?
+> >> 
+> >> [0] = "Success",
+> >> [EPERM] = "Operation not permitted",
+> >> ..
+> > But, on the other hand, is it needed at all? I don't think the kernel
+> > ever prints out the actual string ...
+> 
+> I can see the use case for a library in a multi-arch environment (which IMHO is the intended use case). It saves the user the effort of digging into the build and figuring out what does this error mean today :)
+> 
+> It is nice to have :)
+> 
+> If we will have it, however, it should be done as you suggested - C99 or some other way where it maps correctly to actual underlying error codes as they may end up being different depending on build config.
+
+So, this is not for the error values which underlying host generates,
+but the ones kernel generates.  And the values should be tied with
+uapi/asm-generic/errno.h.
+
+One possible failure that I can see is if
+uapi/asm-generic/errno{-base}.h are changed.  In that case, yes, the
+way Johannes proposed would be the right way to handle.  The outlook
+would be with the prefix and errno name (as follows).
+
+ [0] = "Success",
+ [LKL_EPERM] = "Operation not permitted",
+
+-- Hajime
