@@ -2,67 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0245A287491
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 14:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F565287526
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Oct 2020 15:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730137AbgJHMxI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 08:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S1725882AbgJHNRG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 09:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730113AbgJHMxI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 08:53:08 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91240C061755
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 05:53:06 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id n9so4201334pgf.9
-        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 05:53:06 -0700 (PDT)
+        with ESMTP id S1725845AbgJHNRG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 09:17:06 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7917C061755
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 06:17:05 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id o9so2735862plx.10
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 06:17:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=RJe9LFXNtER/IOrNMooaftE91+H07BwPeBTcEDJvIdA=;
-        b=esLrePzFwSEQgGn8UQR33lmWA27wtJF2YeONLwN3JWzINHoUZ9mvMFANKQXrT11afd
-         ddaWnE+U4c5onuwo3mmkR0CDeBBSxon4huQMiz946hOjxkB+ImFPUrMX+n+IYLlXL4US
-         21z++AbnRVIBE+OK4c6LGDLksww5FlF6w8dNJxfXmANSvnpUtmWH/8pokT0r6OKTqOZA
-         jLu0UD3l7xu+zFLnGtNW1uF8834nQh7gxPH+naYO+SA4Vr1dOH6HWSApkw4sqfuqITGt
-         hfV6d9MlNBJ8HHAyZdZ/jPWVl8mmuaj1OjCyuyf8p3qG4BzpHEPX9FCBbEvhPRXxFgib
-         Tymg==
+        bh=eokUzQcCVs9a3jekI6tx8fHPMuzZIi6G0r8PCkjXJ9g=;
+        b=BKqs587jEuom28UHHUZt8WZ851jeJfoqYqo9lQrxOkbmuhVtecFUk74C6jl0Mx3hYz
+         aOPz3g3FhpmZXhNAUXCDFLY6DwGHegM/Ow627sBibD3T5zJkqo16/dDMyrSrkR8ssBMv
+         KSJcAXfK2dWbPeSQVvsuUd3g8FN1iMpoYPHQ6DT4eTJ0Vv6uJgL52CBdEGxhswneEMa6
+         Cckjjj+hrqXTsyvNTs5I1fKoHcomE1stm+LvlHrkeKKthh5dg4DD/N1YtfFa0l960J5g
+         81OM7BBebdjzYkT6hxNbvcwAkpach8WNF/cc34t8f+h2LOjsABtrMvXsNfbQjAlQ6wDX
+         1luQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=RJe9LFXNtER/IOrNMooaftE91+H07BwPeBTcEDJvIdA=;
-        b=PJBI+pz2CNnImh5rkyLeLgiVOtDn/HsDL8Y/zbuPL92Pty4vMPz6vUCpby3oNkK0mZ
-         8ECBrq8sLChOKxTGZGWvJ94f5XHCpeyMjoL/FVTIs4cTfsB5xvbsg7Jq9oZG1TvSmDDa
-         lLT2ftiMEmeO+ABssiTDrMtHYVkovVrhVroI8ixXwUlp5mdHrRJxmM3qDJoes7SHtuEg
-         tuDd1DASPQSSjjMGCSj+Mk6uwJ6YutdCrkgYWz7HryWMCV+QIWYIxZd9BBtQECI1zbuH
-         /ODVCGm2c5OTrBFpHmjEcBc2/HuD3ge6cSXJ+BAV4owC6K88HeVuegRbIJQ7vMb9o2an
-         U6KQ==
-X-Gm-Message-State: AOAM532f0qTCPXovj6Iq+unml+3pS/hfZ8v1GhcRQrpURyVMQMwIBmMr
-        XazV0eH6aqS9g+t3ko6UR/g=
-X-Google-Smtp-Source: ABdhPJzJz9kssyboQkxTLuiQX+eMv4sU1CV8A52af5IkA5ou6U2AzITJSTu+ckQDBCdwg+en3OCgzA==
-X-Received: by 2002:a63:e001:: with SMTP id e1mr7113866pgh.279.1602161585975;
-        Thu, 08 Oct 2020 05:53:05 -0700 (PDT)
+        bh=eokUzQcCVs9a3jekI6tx8fHPMuzZIi6G0r8PCkjXJ9g=;
+        b=mhPpUiOEg7H2R/hcEAVMtS6ytIxrdFlrgEeqidPCInJMymgBHxIlTWi8vSItyPh4xa
+         Xtm0yWDT+on0rTK5qjHKLLIbByBqKSkVoaX2V03fumRqUSSOhXmdR+A0F8lFIrRc5WY/
+         2eSGCtUbtsaE+7rATgPQK7437Bj23z3sXU8PzhQ/h0kEEwGzAOR5btB5UR68RAVq1x36
+         IcxKNE2HZN3dLH8hwWKMPka2/djWAoYaJ6vdxxw3Cm16Z0SK4nfEe8tRjynkYQmzrVUB
+         B+ID6itm8CxcA1/i8YdLlhZtXSUxatumYAoKpT8e4nzBekrkuv3t3nZMZpZvq8o2qfk+
+         MY/w==
+X-Gm-Message-State: AOAM5332MlzaVA0KthtDMdZPnuZrfb+ikiJDZvWb96r7baqeW7GPPbjI
+        UiOlwlSw1sfCdonFqKg7HcA=
+X-Google-Smtp-Source: ABdhPJwXrmO76hrTmbEsOGhK96BFIF+Jhm7aVhWQYAD5msf5Ia1NaV+5i6CZNRNmHGBHM7FN9q/d2Q==
+X-Received: by 2002:a17:902:6b45:b029:d3:df34:3222 with SMTP id g5-20020a1709026b45b02900d3df343222mr7606136plt.68.1602163025203;
+        Thu, 08 Oct 2020 06:17:05 -0700 (PDT)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id h9sm6784963pfc.28.2020.10.08.05.53.02
+        by smtp.gmail.com with ESMTPSA id c12sm7172296pgd.57.2020.10.08.06.17.01
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Oct 2020 05:53:05 -0700 (PDT)
-Date:   Thu, 08 Oct 2020 21:53:00 +0900
-Message-ID: <m2y2kg5177.wl-thehajime@gmail.com>
+        Thu, 08 Oct 2020 06:17:04 -0700 (PDT)
+Date:   Thu, 08 Oct 2020 22:16:55 +0900
+Message-ID: <m2wo00503c.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
-To:     anton.ivanov@cambridgegreys.com
-Cc:     johannes@sipsolutions.net, linux-um@lists.infradead.org,
-        jdike@addtoit.com, richard@nod.at, tavi.purdila@gmail.com,
-        linux-kernel-library@freelists.org, retrage01@gmail.com,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC v7 18/21] um: host: add utilities functions
-In-Reply-To: <2f3c3a54-7d68-6dc9-a65a-37fb4599b194@cambridgegreys.com>
+To:     johannes@sipsolutions.net
+Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        tavi@cs.pub.ro, retrage01@gmail.com
+Subject: Re: [RFC v7 04/21] um: host: implement os_initcalls and os_exitcalls
+In-Reply-To: <255740d56676f005fc01e1a76959fef80ad68ef5.camel@sipsolutions.net>
 References: <cover.1601960644.git.thehajime@gmail.com>
-        <7a39c85a38658227d3daf6443babb7733d1a1ff4.1601960644.git.thehajime@gmail.com>
-        <27868819-fbd7-9eec-0520-d2fb9b6bf4a6@cambridgegreys.com>
-        <6d8dd929722e419894824a07792ac8c5b2659de9.camel@sipsolutions.net>
-        <3f0aab8f38971360240e1e04bd6b90a8dcadec86.camel@sipsolutions.net>
-        <2f3c3a54-7d68-6dc9-a65a-37fb4599b194@cambridgegreys.com>
+        <d3bfb0e0e4300bb5191ae51918dd0795de343dc2.1601960644.git.thehajime@gmail.com>
+        <255740d56676f005fc01e1a76959fef80ad68ef5.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -71,63 +68,51 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Thu, 08 Oct 2020 00:10:23 +0900,
-Anton Ivanov wrote:
+On Thu, 08 Oct 2020 00:22:18 +0900,
+Johannes Berg wrote:
 > 
+> On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
 > 
-> On 07/10/2020 16:03, Johannes Berg wrote:
-> > On Wed, 2020-10-07 at 17:02 +0200, Johannes Berg wrote:
-> >> On Wed, 2020-10-07 at 15:53 +0100, Anton Ivanov wrote:
-> >>> These are actually different on different architectures. These look
-> >>> like the x86 values.
-
-Those variables are based on tools/um/include/lkl/asm-generic/errno.h,
-which is generated from include/uapi/asm-generic/errno.h, which LKL
-kernel eats for its values.
-
-This is the part of patch 12/21.
-
-> >>> IMHO a kernel strerror() would be the right way of dealing with this
-> >>> in the long term (i understand that we cannot call the platform one,
-> >>> because it may be different from the internal Linux errors). It will
-> >>> be useful in a lot of other places.
-> >>> 
-> >>> If we leave it as is, we need to make this arch specific at some
-> >>> point.
-
-So, this particular code does not contain arch specific part I
-believe.
-# Tavi, correct me if I'm wrong.
-
-> >>>> +
-> >>>> +static const char * const lkl_err_strings[] = {
-> >>>> +	"Success",
-> >>>> +	"Operation not permitted",
-> >> Might be possible to more or less address this (except for arch-specific
-> >> errors that don't always exist) but using C99 initializers?
-> >> 
-> >> [0] = "Success",
-> >> [EPERM] = "Operation not permitted",
-> >> ..
-> > But, on the other hand, is it needed at all? I don't think the kernel
-> > ever prints out the actual string ...
+> > Note that this patch should be merged with "um: move arch/um/os-Linux
+> > dir to tools/um" but for now it is separate to make the review easier.
 > 
-> I can see the use case for a library in a multi-arch environment (which IMHO is the intended use case). It saves the user the effort of digging into the build and figuring out what does this error mean today :)
+> Not a fan of that, I must say ...
+
+Now I found that this patch should be together with the patch 02/21
+um: add os init and exit calls.  I will do that from next time.
+
+> > +extern void (*__start_os_exitcalls)(void);
+> > +extern void (*__stop_os_exitcalls)(void);
+> > +
+> > +void os_exitcalls(void)
+> > +{
+> > +	exitcall_t *call;
+> > +
+> > +	call = &__stop_os_exitcalls;
+> > +	while (--call >= &__start_os_exitcalls)
+> > +		(*call)();
 > 
-> It is nice to have :)
+> You should check for and skip NULL pointers, there always are alignment
+> issues with automatic section filling like this, more so with clang than
+> gcc.
+
+Understand, I'll fix it.
+
+> > +}
+> > +
+> > +extern int (*__start_os_initcalls)(void);
+> > +extern int (*__stop_os_initcalls)(void);
+> > +
+> > +int os_initcalls(void)
+> > +{
+> > +	initcall_t *call;
+> > +
+> > +	call = &__stop_os_initcalls;
+> > +	while (--call >= &__start_os_initcalls)
+> > +		(*call)();
 > 
-> If we will have it, however, it should be done as you suggested - C99 or some other way where it maps correctly to actual underlying error codes as they may end up being different depending on build config.
+> Same here.
 
-So, this is not for the error values which underlying host generates,
-but the ones kernel generates.  And the values should be tied with
-uapi/asm-generic/errno.h.
-
-One possible failure that I can see is if
-uapi/asm-generic/errno{-base}.h are changed.  In that case, yes, the
-way Johannes proposed would be the right way to handle.  The outlook
-would be with the prefix and errno name (as follows).
-
- [0] = "Success",
- [LKL_EPERM] = "Operation not permitted",
+Okay.
 
 -- Hajime
