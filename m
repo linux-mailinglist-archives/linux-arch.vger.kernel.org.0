@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0440A287FD9
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 03:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6B1287FFC
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 03:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727327AbgJIBNo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Oct 2020 21:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S1725979AbgJIBYa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Oct 2020 21:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725997AbgJIBNo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 21:13:44 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B74C0613D2
-        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 18:13:42 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id r10so5792941pgb.10
-        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 18:13:42 -0700 (PDT)
+        with ESMTP id S1725857AbgJIBYa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Oct 2020 21:24:30 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C86EC0613D2
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 18:24:30 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 34so5799412pgo.13
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 18:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:message-id:from:to:cc:subject:in-reply-to:references
          :user-agent:mime-version;
-        bh=TEoBCSzY9uFYFy6tWWNr+nuw0LH099Qgb9F4FTOrTYw=;
-        b=VqsWlCobYz4ZYmNjiQoP94R6mWnpXBeXcndhGhSx1zPGDMci64/N2y2C4TO3tgoHsE
-         3rWMgYJgVDDAmQepv5/MGdz5g3/TEFuAbm1M/e5mo7uXSUHQzig1mpoWU66Pimca//6C
-         lLTRnnaxKDcPQDxmDiZckTYC1W+vR+5fKycM1mWeUgCtZz6qoZepfIyJzpPbRYDgBtxq
-         qSFULwP/wb9skRdFvjJVRZsSu2dKa3Faz+RKt2qJ8i0Mm+jTF6ie5A0x8eLBXr8MmVIJ
-         SdxHUhd14tAb5Uzv8zGvpnIG8dZnBcs1u/CkMro82anAtpc5GCpMY6Y2BlvLchDMf8KM
-         HELw==
+        bh=r5a9Ez3pDwOZVBKI14NgkfuVO94y1JvO4+uEj27LNzI=;
+        b=hhOYy8KjgYS8nGUfou5UEH+/rjxPf37tRJPPipSOLWiidQz6/a4+edWvNTQJJZkHhE
+         AsvYElpB65J5e5LmkwLrgdYeo4PJmTYl9xacOuipsa0wNxZ9lVXGwldS5ENeiA6jF9WU
+         NBPha4fgbreE8z3S/1Q24HzjvAImOCkrOh+B3ZYGCKFbUiav9E1oxs29nZ6lTN50yeKq
+         dTntd3j/xCPS/gsJXBn/g6CtDWbZ5ADxaGh/qIdPy+5uHE2BbzjDXokPvQ5egqRLqm05
+         Y/Gq9KXVXfMGIS1tk9rCRxh38NgoIPf761cRr08exIQwvw/BDA4TAXwMvKMYyStY19fU
+         9IyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
          :references:user-agent:mime-version;
-        bh=TEoBCSzY9uFYFy6tWWNr+nuw0LH099Qgb9F4FTOrTYw=;
-        b=Ayn69E9yNAIFDEVUlW2vVWvA0r4m1bJoVmSRIj9WU4lfpMCMB0u0FNMY6zYh14whqA
-         cNCOPrQLXJJVBk2p1v7BBqkm/o6Xy8g+RNEHHFn1tQF1YDLWv17yZ1M3yt6S0AaEVZXP
-         KiornvYBUsyRTDqdhRHMvuz9cw6DP3RNUWllbDYafDM3PibrrXEwuX4RaChxuY9SCfgY
-         IS4OVp7yrsPNGm2CuFSZ618FDAtzItd9TfNhowxvgZAeY1oXYAMvVJFSybrYPSsZ/iIc
-         d7Hy78WcBhQjLg1NCnj0yrvTlYejvykE+FTVdT5kVX8FDsfeo4/SGaXHLZI4DG3GvmvV
-         uTcw==
-X-Gm-Message-State: AOAM531nxCBJqpiP772pUXq1gdboEIltnQHeWHWmyaHK8Y+wosOxneEk
-        72ueWb2VrnuxzKww7p6x31Y=
-X-Google-Smtp-Source: ABdhPJxioFL1U2aO0fQ8Bny8U4DnTi76pqDa9pFKeVF6cViZiTdEj/bPY8s/utdw+udf4NWHAfBX7Q==
-X-Received: by 2002:a63:2d05:: with SMTP id t5mr1401449pgt.178.1602206022228;
-        Thu, 08 Oct 2020 18:13:42 -0700 (PDT)
+        bh=r5a9Ez3pDwOZVBKI14NgkfuVO94y1JvO4+uEj27LNzI=;
+        b=QYlXzasiyIoIMt2CdWuw8j6mNSMN2wa31irBFX2aTGDwB84LPCtwBFqOLkshprfziN
+         nDhO7Nk/cbCGM839SNyLCwOknoRILByL2Tj5Rdjiu/iiBcxB8/pYz8Vy/R+CJf5Kt2B5
+         uN9nz8zpcve69EZaap4ZXMNzpEH+OjgN+PkbnDFuPHfbO8wdaAPfFQed2x0JJec8OhbP
+         U4gQWhIopZ7R+mX+6Y9jnhAKYs3/TqMfsavdKwJhgZtmVUAR0EFKtA9YHkNXd6r4ytRd
+         90Jt1eRJhXKXAG1tLDNGzLGZFknOEMhg1YC+yYugWsz90TTaOenU3MkLvHxi+hPofjSP
+         p09w==
+X-Gm-Message-State: AOAM530p+5WPvh+yWPfbWjEA/9x7YnUruzs9pKJNa3eZzW7DjCv54j99
+        W04eWJOrR6NROjdpYQNgWCo=
+X-Google-Smtp-Source: ABdhPJy1CvPYVtvrQVvJyDSYUCuHzFMAv5eeZZnb9DaQ8rT+RldPbjHkd2Ql4xWYZ/Y/wX/16NWYfg==
+X-Received: by 2002:aa7:8249:0:b029:142:2501:39dd with SMTP id e9-20020aa782490000b0290142250139ddmr9923948pfn.44.1602206669750;
+        Thu, 08 Oct 2020 18:24:29 -0700 (PDT)
 Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id i126sm8888666pfc.48.2020.10.08.18.13.39
+        by smtp.gmail.com with ESMTPSA id v20sm185719pjh.5.2020.10.08.18.24.26
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Oct 2020 18:13:41 -0700 (PDT)
-Date:   Fri, 09 Oct 2020 10:13:37 +0900
-Message-ID: <m2tuv442wu.wl-thehajime@gmail.com>
+        Thu, 08 Oct 2020 18:24:29 -0700 (PDT)
+Date:   Fri, 09 Oct 2020 10:24:09 +0900
+Message-ID: <m2sgao42fa.wl-thehajime@gmail.com>
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     johannes@sipsolutions.net
 Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
         retrage01@gmail.com
-Subject: Re: [RFC v7 06/21] scritps: um: suppress warnings if SRCARCH=um
-In-Reply-To: <5caf34d16a0f2816b47cd8712ca7d59e9733a815.camel@sipsolutions.net>
+Subject: Re: [RFC v7 07/21] um: extend arch_switch_to for alternate SUBARCH
+In-Reply-To: <5502f24bcdc07372fbc5ee86c700770038b041c4.camel@sipsolutions.net>
 References: <cover.1601960644.git.thehajime@gmail.com>
-        <e994b27b4732a21a571cf09bd5071f583d85dd89.1601960644.git.thehajime@gmail.com>
-        <5caf34d16a0f2816b47cd8712ca7d59e9733a815.camel@sipsolutions.net>
+        <d4a65be8d05d945885f53bc168fd85f08e72adf1.1601960644.git.thehajime@gmail.com>
+        <5502f24bcdc07372fbc5ee86c700770038b041c4.camel@sipsolutions.net>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,33 +68,26 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On Thu, 08 Oct 2020 00:24:17 +0900,
+On Thu, 08 Oct 2020 00:25:06 +0900,
 Johannes Berg wrote:
 > 
 > On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
-> > This commit fixes numbers of warning messages about leaked CONFIG
-> > options.
+> > This commit introduces additional argument of previous task when
+> > context switch happens.  New SUBARCH can use the new information to
+> > switch tasks in a subarch-specific manner.
+> > 
+> > The patch is particularly required by nommu mode implemented as a
+> > SUBARCH of UML.
 > 
-> No it doesn't ... it suppresses them, not a fan at all.
+> Would probably be good to already say why here?
 
-Agree to rewrite the description.
+Agree.
 
-> > nommu mode of UML requires copies of kernel headers to offer
-> > syscall-like API for the library users.  Thus, the warnings are to be
-> > avoided to function this exposure of API.
-> 
-> I don't see that here, so maybe make that part of the patch where it
-> actually happens, with a big comment,
+The patch is particularly required by nommu mode because it uses
+previous task information to control the previous thread (e.g., down
+semaphore, terminate thread, clean up thread flags).
 
-Although I didn't, this patch should Cc the maintainer of
-./scripts/headers_install.sh.  I thought this should be as a separate
-one, but I can Cc (in the commit message) to the commit that actual
-build happens if that helps to understand.
-
-> and maybe only when actually building for NOMMU/LKL?
-
-The standalone UML doesn't use the headers_install.sh script (AFAIK),
-so I think this would be okay.
+Something like this ?
 
 -- Hajime
 
