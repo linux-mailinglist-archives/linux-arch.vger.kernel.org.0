@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F41289100
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 20:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2185C2890E8
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 20:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388063AbgJISeW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 14:34:22 -0400
-Received: from mga14.intel.com ([192.55.52.115]:9540 "EHLO mga14.intel.com"
+        id S2390514AbgJISdf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 14:33:35 -0400
+Received: from mga14.intel.com ([192.55.52.115]:9542 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390456AbgJISdR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 14:33:17 -0400
-IronPort-SDR: 4gNbZU3ub++F01tbdWcc3+woE0HreFxcIDPk17v1vYklb/d7hO19KQW/a72DJWME19WDpNqyOg
- C6rKBmcV8Cnw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="164736610"
+        id S2390458AbgJISdS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 14:33:18 -0400
+IronPort-SDR: VRIM4OMgckU2idhe4W+/ZgQ8FpywGtV9sWJjaG+otAuQqj7ItEf2vcOlAYGb+k3soYOn0cSnKv
+ +x4HYeS5HuRQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="164736611"
 X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="164736610"
+   d="scan'208";a="164736611"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:33:16 -0700
-IronPort-SDR: IARO35AcYk38TmDCxmOKPwD2ixcVHHNOUoGtIntfM4Mm/tL2anWftfI5OwbNplfJWs/3G7DZlk
- +IAIuQ5KOAWw==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:33:17 -0700
+IronPort-SDR: tRMScDw6017/sGeIsvjQRZxKrFLwxT2cE6sr+LpNl5j3pVHHVDKr9M7regoka0veSrVGLaTwF5
+ 5+s0caKylyYQ==
 X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="529031150"
+   d="scan'208";a="529031153"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:33:15 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:33:16 -0700
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -53,17 +53,10 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Subject: [PATCH v14 09/26] drm/i915/gvt: Change _PAGE_DIRTY to _PAGE_DIRTY_BITS
-Date:   Fri,  9 Oct 2020 11:32:13 -0700
-Message-Id: <20201009183230.26717-10-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v14 10/26] x86/mm: Update pte_modify for _PAGE_COW
+Date:   Fri,  9 Oct 2020 11:32:14 -0700
+Message-Id: <20201009183230.26717-11-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201009183230.26717-1-yu-cheng.yu@intel.com>
 References: <20201009183230.26717-1-yu-cheng.yu@intel.com>
@@ -73,35 +66,85 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-After the introduction of _PAGE_COW, a modified page's PTE can have either
-_PAGE_DIRTY_HW or _PAGE_COW.  Change _PAGE_DIRTY to _PAGE_DIRTY_BITS.
+Pte_modify() changes a PTE to 'newprot'.  It doesn't use the pte_*()
+helpers that a previous patch fixed up, so we need a new site.
+
+Introduce fixup_dirty_pte() to set the dirty bits based on _PAGE_RW, and
+apply the same changes to pmd_modify().
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-Cc: Zhi Wang <zhi.a.wang@intel.com>
----
- drivers/gpu/drm/i915/gvt/gtt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-index a3a4305eda01..dd0ab28cfe7d 100644
---- a/drivers/gpu/drm/i915/gvt/gtt.c
-+++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -1207,7 +1207,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
- 	}
+v14:
+- Update fixup_dirty_pte() and fixup_dirty_pmd() with
+  cpu_feature_enabled(X86_FEATURE_SHSTK).
+
+v10:
+- Replace _PAGE_CHG_MASK approach with fixup functions.
+---
+ arch/x86/include/asm/pgtable.h | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index ac4ed814be96..8d4c09831e67 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -727,6 +727,21 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
  
- 	/* Clear dirty field. */
--	se->val64 &= ~_PAGE_DIRTY;
-+	se->val64 &= ~_PAGE_DIRTY_BITS;
+ static inline u64 flip_protnone_guard(u64 oldval, u64 val, u64 mask);
  
- 	ops->clear_pse(se);
- 	ops->clear_ips(se);
++static inline pteval_t fixup_dirty_pte(pteval_t pteval)
++{
++	pte_t pte = __pte(pteval);
++
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && pte_dirty(pte)) {
++		pte = pte_mkclean(pte);
++
++		if (pte_flags(pte) & _PAGE_RW)
++			pte = pte_set_flags(pte, _PAGE_DIRTY_HW);
++		else
++			pte = pte_set_flags(pte, _PAGE_COW);
++	}
++	return pte_val(pte);
++}
++
+ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ {
+ 	pteval_t val = pte_val(pte), oldval = val;
+@@ -737,16 +752,34 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ 	 */
+ 	val &= _PAGE_CHG_MASK;
+ 	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
++	val = fixup_dirty_pte(val);
+ 	val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
+ 	return __pte(val);
+ }
+ 
++static inline int pmd_write(pmd_t pmd);
++static inline pmdval_t fixup_dirty_pmd(pmdval_t pmdval)
++{
++	pmd_t pmd = __pmd(pmdval);
++
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && pmd_dirty(pmd)) {
++		pmd = pmd_mkclean(pmd);
++
++		if (pmd_flags(pmd) & _PAGE_RW)
++			pmd = pmd_set_flags(pmd, _PAGE_DIRTY_HW);
++		else
++			pmd = pmd_set_flags(pmd, _PAGE_COW);
++	}
++	return pmd_val(pmd);
++}
++
+ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+ {
+ 	pmdval_t val = pmd_val(pmd), oldval = val;
+ 
+ 	val &= _HPAGE_CHG_MASK;
+ 	val |= check_pgprot(newprot) & ~_HPAGE_CHG_MASK;
++	val = fixup_dirty_pmd(val);
+ 	val = flip_protnone_guard(oldval, val, PHYSICAL_PMD_PAGE_MASK);
+ 	return __pmd(val);
+ }
 -- 
 2.21.0
 
