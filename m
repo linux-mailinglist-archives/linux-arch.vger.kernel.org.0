@@ -2,132 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D6428858B
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 10:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8042885F0
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 11:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732712AbgJIIvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 04:51:02 -0400
-Received: from foss.arm.com ([217.140.110.172]:45126 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730726AbgJIIvB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 04:51:01 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E707D6E;
-        Fri,  9 Oct 2020 01:51:01 -0700 (PDT)
-Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE0393F66B;
-        Fri,  9 Oct 2020 01:50:59 -0700 (PDT)
-Date:   Fri, 9 Oct 2020 10:50:57 +0200
-From:   Morten Rasmussen <morten.rasmussen@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arch@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1731521AbgJIJ0G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 05:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731509AbgJIJ0G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Oct 2020 05:26:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9F1C0613D2
+        for <linux-arch@vger.kernel.org>; Fri,  9 Oct 2020 02:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JNGNyWioD2qy2twOLu4S3eTj6REIroIWKQfPbqNIF/w=; b=cwKNd47XGQ3mYFqgcBeM2C8YGo
+        ZA0nEJJrKMg0yGkgSVrbrB3lpsnEHvHlCPGVD1xFg2Bcb7ftEFvTCtK9OKI1QxbFiynmZRXOgce6q
+        psYrpVvpjHNmXLXC23wnFKn96vuZHqdXO+lU3m3Mg+xu5bHeXEWWwNcbJW59171RTCt+YZ2HsWiO9
+        ECve1uP6HxAw7vrLMbnUfET0Cr6SWmmzgr9Et0mvViUOIcW1xNDA/6dE2WXyerwL1637FtlPZ918b
+        FayNUZXR6XiooY5X/OqDSH5jPeAFaH+kxziFe3rVfJvC22ngH1I7BXZ10xozSRnc0pASwP2e+aOEu
+        k5DFiMXg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kQof1-0003iJ-TU; Fri, 09 Oct 2020 09:26:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73EC9301A42;
+        Fri,  9 Oct 2020 11:25:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5C16229E7878A; Fri,  9 Oct 2020 11:25:59 +0200 (CEST)
+Date:   Fri, 9 Oct 2020 11:25:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Morten Rasmussen <morten.rasmussen@arm.com>
+Cc:     Qais Yousef <qais.yousef@arm.com>, linux-arch@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Qais Yousef <qais.yousef@arm.com>,
         linux-arm-kernel@lists.infradead.org
 Subject: Re: [RFC PATCH 3/3] arm64: Handle AArch32 tasks running on non
  AArch32 cpu
-Message-ID: <20201009085057.GB8004@e123083-lin>
+Message-ID: <20201009092559.GE2628@hirez.programming.kicks-ass.net>
 References: <20201008181641.32767-1-qais.yousef@arm.com>
  <20201008181641.32767-4-qais.yousef@arm.com>
  <20201009072943.GD2628@hirez.programming.kicks-ass.net>
  <20201009081312.GA8004@e123083-lin>
- <20201009083146.GA29594@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009083146.GA29594@willie-the-truck>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201009081312.GA8004@e123083-lin>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 09:31:47AM +0100, Will Deacon wrote:
-> On Fri, Oct 09, 2020 at 10:13:12AM +0200, Morten Rasmussen wrote:
-> > On Fri, Oct 09, 2020 at 09:29:43AM +0200, Peter Zijlstra wrote:
-> > > On Thu, Oct 08, 2020 at 07:16:41PM +0100, Qais Yousef wrote:
-> > > > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> > > > index cf94cc248fbe..7e97f1589f33 100644
-> > > > --- a/arch/arm64/kernel/signal.c
-> > > > +++ b/arch/arm64/kernel/signal.c
-> > > > @@ -908,13 +908,28 @@ static void do_signal(struct pt_regs *regs)
-> > > >  	restore_saved_sigmask();
-> > > >  }
-> > > >  
-> > > > +static void set_32bit_cpus_allowed(void)
-> > > >  {
-> > > > +	cpumask_var_t cpus_allowed;
-> > > > +	int ret = 0;
-> > > > +
-> > > > +	if (cpumask_subset(current->cpus_ptr, &aarch32_el0_mask))
-> > > > +		return;
-> > > > +
-> > > >  	/*
-> > > > +	 * On asym aarch32 systems, if the task has invalid cpus in its mask,
-> > > > +	 * we try to fix it by removing the invalid ones.
-> > > >  	 */
-> > > > +	if (!alloc_cpumask_var(&cpus_allowed, GFP_ATOMIC)) {
-> > > > +		ret = -ENOMEM;
-> > > > +	} else {
-> > > > +		cpumask_and(cpus_allowed, current->cpus_ptr, &aarch32_el0_mask);
-> > > > +		ret = set_cpus_allowed_ptr(current, cpus_allowed);
-> > > > +		free_cpumask_var(cpus_allowed);
-> > > > +	}
-> > > > +
-> > > > +	if (ret) {
-> > > > +		pr_warn_once("Failed to fixup affinity of running 32-bit task\n");
-> > > >  		force_sig(SIGKILL);
-> > > >  	}
-> > > >  }
-> > > 
-> > > Yeah, no. Not going to happen.
-> > > 
-> > > Fundamentally, you're not supposed to change the userspace provided
-> > > affinity mask. If we want to do something like this, we'll have to teach
-> > > the scheduler about this second mask such that it can compute an
-> > > effective mask as the intersection between the 'feature' and user mask.
-> > 
-> > I agree that we shouldn't mess wit the user-space mask directly. Would it
-> > be unthinkable to go down the route of maintaining a new mask which is
-> > the intersection of the feature mask (controlled and updated by arch
-> > code) and the user-space mask?
-> > 
-> > It shouldn't add overhead in the scheduler as it would use the
-> > intersection mask instead of the user-space mask, the main complexity
-> > would be around making sure the intersection mask is updated correctly
-> > (cpusets, hotplug, ...).
-> > 
-> > Like the above tweak, this won't help if the intersection mask is empty,
-> > task will still get killed but it will allow tasks to survive
-> > user-space masks including some non-compatible CPUs. If we want to
-> > prevent task killing in all cases (ignoring hotplug) it gets more ugly
-> > as we would have to ignore the user-space mask in some cases.
-> 
-> Honestly, I don't understand why we're trying to hide this asymmetry from
-> userspace by playing games with affinity masks in the kernel. Userspace
-> is likely to want to move things about _anyway_ because even amongst the
-> 32-bit capable cores, you may well have different clock frequencies to
-> contend with.
+On Fri, Oct 09, 2020 at 10:13:12AM +0200, Morten Rasmussen wrote:
+> On Fri, Oct 09, 2020 at 09:29:43AM +0200, Peter Zijlstra wrote:
 
-I agree it doesn't make sense to hide the asymmetry. The only argument I
-see for tweaking the affinity is to be more friendly in case user-space
-is unaware.
-
-> So I'd be *much* happier to let the schesduler do its thing, and if one
-> of these 32-bit tasks ends up on a core that can't deal with it, then
-> tough, it gets killed. Give userspace the information it needs to avoid
-> that happening in the first place, rather than implicitly limit the mask.
+> > Fundamentally, you're not supposed to change the userspace provided
+> > affinity mask. If we want to do something like this, we'll have to teach
+> > the scheduler about this second mask such that it can compute an
+> > effective mask as the intersection between the 'feature' and user mask.
 > 
-> That way, the kernel support really boils down to two parts:
+> I agree that we shouldn't mess wit the user-space mask directly. Would it
+> be unthinkable to go down the route of maintaining a new mask which is
+> the intersection of the feature mask (controlled and updated by arch
+> code) and the user-space mask?
 > 
->   1. Remove the sanity checks we have to prevent 32-bit applications running
->      on asymmetric systems
-> 
->   2. Tell userspace about the problem
+> It shouldn't add overhead in the scheduler as it would use the
+> intersection mask instead of the user-space mask, the main complexity
+> would be around making sure the intersection mask is updated correctly
+> (cpusets, hotplug, ...).
 
-I'm fine with that. We just have to accept that existing unaware
-user-space(s) may see tasks getting killed if they use task affinity.
+IFF we _need_ to go there, then yes that was the plan, compose the
+intersection when either the (arch) feature(set) mask or the userspace
+mask changes.
 
-Morten
