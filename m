@@ -2,320 +2,284 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20D1288EE8
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 18:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC48E289032
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 19:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389701AbgJIQai (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 12:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389471AbgJIQai (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Oct 2020 12:30:38 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29409C0613D2;
-        Fri,  9 Oct 2020 09:30:38 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id c5so9666724ilr.9;
-        Fri, 09 Oct 2020 09:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=2Gc2VbZdU1IXiw57R85Qt4LavpkHTDXOYsNp+15DYcg=;
-        b=hEJDk5aBM0OyqBiz/S2cVXzsuVix3FYn+kcS8O/nMkNrXwfPu3otjRaoP9O72rYi1n
-         VjYgucLsJp3Z0hR/a2uaU9ns3nc7w4a7XUDetwg855x7SSC1DCcnd4EuUhQ8JwrBIpux
-         s5MK022NgE0jxmvV9srK5hu5hnQSALf/i/ahx+83zw85cza0K01ntWXWSsjiEWgsaL+F
-         LCVUVda2u45vCa63xSh7XUKzTMLwA/RY9xZ7HLgC18IHAvuO7h7GmXOuV1rPbw01inLF
-         75zwGqlQi0C/qZRRfmtw3sj/uucK+NkR6M9+b6Grz2pok1SOVBvXn5qCWkT6jYv5rCc3
-         qTSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=2Gc2VbZdU1IXiw57R85Qt4LavpkHTDXOYsNp+15DYcg=;
-        b=dFKvrWJvyx9I4jKPP7IjpK+OpdpnG8IZGJLPDorwy9/Q3Y6yr/wYQeX5PLjtmHRVrv
-         epdIOkbERUV3XadSS8RPTyrfSk5O2ciukPUbmhU0HMZBhesFuYjBj0IYAKx6zbqU3zSP
-         urOXorrXIdZhqVKkK0qL3YOg89/67TOXVo6mwWGhugJt+PcvAkifmP8iDMiDcCdtoKfF
-         GMxNBMQ8vImtPMExQEehQYga0Gx3TbqhSWZ0T+Cp1eNCh+6pQH5on1QbSnwGhKWcGMlP
-         2pokPcyLb3EGIl4kpWeszG/fvoLNSiGefnZCizH+nKZI4TTtrg1G7cgvCcU9wyWfrimx
-         xw/Q==
-X-Gm-Message-State: AOAM530HwV5fDglmnqQssyKG+N1WC8+iAMLc3CJQ7P7VA1YI+FsPmxlF
-        Ldhfkw48VC7LpQntHpNrA+4ybSW9raTb3D0Mli4=
-X-Google-Smtp-Source: ABdhPJwBFeZdsljqopYTCCei86vRF8PIXqbXb7fERVj0i5Cq3wzs1MXDtB1itEnSoiXD6rCUYCsGvFHBayZUFIR0ZXw=
-X-Received: by 2002:a92:7f05:: with SMTP id a5mr11486123ild.112.1602261037165;
- Fri, 09 Oct 2020 09:30:37 -0700 (PDT)
+        id S2387791AbgJIRnG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 13:43:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39174 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733006AbgJIRmo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 13:42:44 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B043A22227
+        for <linux-arch@vger.kernel.org>; Fri,  9 Oct 2020 17:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602265364;
+        bh=gUOFuwn0cjC/he11EKalMfxi4MeQUBOwGoQDNcWNbT8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vUhERsT7oViNCbN1yktcMSLrq2UoiL+noUEm/Nye3+FW9gP3EmlaS86YkwsSmaEix
+         VKEv0b99m6WYBTuDlZn2jRkrcKSPZWQCkuG0rlY9WIYSzqWA12nvkNsx/DBwy+Z+Qu
+         294/O/M6pWO1Cn6Y2Yz1mQFSimhCMSQLopcfyo3Q=
+Received: by mail-wr1-f54.google.com with SMTP id i1so5021955wro.1
+        for <linux-arch@vger.kernel.org>; Fri, 09 Oct 2020 10:42:43 -0700 (PDT)
+X-Gm-Message-State: AOAM532h/SCLw46lhYE2+3UTF6spPK/6iWCinjwqSWGV3T1txzvyMo1K
+        eFLcaqHE5jTPb/lKtqLItK72NsmdwI0BhpzSbz5WPw==
+X-Google-Smtp-Source: ABdhPJzf70K4oYcxfMAjLVRVkzKqNGakkCA08giq0JSBoVJW1VDse/vwgNbdxjH+Vx69hTz8VQgAVnajSUf1U4ZTUOo=
+X-Received: by 2002:a5d:5281:: with SMTP id c1mr16067721wrv.184.1602265362208;
+ Fri, 09 Oct 2020 10:42:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201009161338.657380-1-samitolvanen@google.com>
-In-Reply-To: <20201009161338.657380-1-samitolvanen@google.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 9 Oct 2020 18:30:24 +0200
-Message-ID: <CA+icZUVWdRWfhPhPy79Hpjmqbfw+n8xsgMKv_RU+hoh1bphXdg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/29] Add support for Clang LTO
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+References: <d0e4077e-129f-6823-dcea-a101ef626e8c@intel.com>
+ <99B32E59-CFF2-4756-89BD-AEA0021F355F@amacapital.net> <d9099183dadde8fe675e1b10e589d13b0d46831f.camel@intel.com>
+ <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
+ <b8797fcd-9d70-5749-2277-ef61f2e1be1f@intel.com> <CALCETrWvWAxEuyteLaPmmu-r5LcWdh_DuW4JAOh3pVD4skWoBQ@mail.gmail.com>
+ <CALCETrVvob1dbdWSvaB0ZK1kJ19o9ZKy=U3tFifwOR++_xk=zA@mail.gmail.com>
+ <dd4310bd-a76b-cf19-4f12-0b52d7bc483d@intel.com> <CALCETrXgde6yHTKw1Njnxp9cANp6Ee8bmG9C2X4e-Fz0ZZCuBw@mail.gmail.com>
+ <CAMe9rOonjX-b46sJ3AYSJZV84d=oU6-KhScnk5vksVqoLgQ90A@mail.gmail.com>
+ <CALCETrWoGXDDEvy10LoYVY6c_tkpMVABhCy+8pse9Rw8L9L=5A@mail.gmail.com>
+ <79d1e67d-2394-1ce6-3bad-cce24ba792bd@intel.com> <CALCETrU-pjSFBGBROukA8dtSUmft9E1j86oS16Lw0Oz1yzv8Gw@mail.gmail.com>
+ <ac8da604-3dff-ddb2-f530-2a256da3618d@intel.com>
+In-Reply-To: <ac8da604-3dff-ddb2-f530-2a256da3618d@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 9 Oct 2020 10:42:30 -0700
+X-Gmail-Original-Message-ID: <CALCETrWhdM4NOhvzhNyChV9FaiBTjrQwzN+neMnY0FtHDforZQ@mail.gmail.com>
+Message-ID: <CALCETrWhdM4NOhvzhNyChV9FaiBTjrQwzN+neMnY0FtHDforZQ@mail.gmail.com>
+Subject: Re: [PATCH v13 8/8] x86/vsyscall/64: Fixup Shadow Stack and Indirect
+ Branch Tracking for vsyscall emulation
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 6:13 PM 'Sami Tolvanen' via Clang Built Linux
-<clang-built-linux@googlegroups.com> wrote:
+On Tue, Oct 6, 2020 at 12:09 PM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
 >
-> This patch series adds support for building x86_64 and arm64 kernels
-> with Clang's Link Time Optimization (LTO).
+> On 10/1/2020 10:26 AM, Andy Lutomirski wrote:
+> > On Thu, Oct 1, 2020 at 9:51 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
+> >>
+> >> On 9/30/2020 6:10 PM, Andy Lutomirski wrote:
+> >>> On Wed, Sep 30, 2020 at 6:01 PM H.J. Lu <hjl.tools@gmail.com> wrote:
+> >>>>
+> >>>> On Wed, Sep 30, 2020 at 4:44 PM Andy Lutomirski <luto@kernel.org> wrote:
+> >>
+> >> [...]
+> >>
+> >>>>>>>>>     From 09803e66dca38d7784e32687d0693550948199ed Mon Sep 17 00:00:00 2001
+> >>>>>>>>> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> >>>>>>>>> Date: Thu, 29 Nov 2018 14:15:38 -0800
+> >>>>>>>>> Subject: [PATCH v13 8/8] x86/vsyscall/64: Fixup Shadow Stack and
+> >>>>>>>>> Indirect Branch
+> >>>>>>>>>      Tracking for vsyscall emulation
+> >>>>>>>>>
+> >>>>>>>>> Vsyscall entry points are effectively branch targets.  Mark them with
+> >>>>>>>>> ENDBR64 opcodes.  When emulating the RET instruction, unwind shadow stack
+> >>>>>>>>> and reset IBT state machine.
+> >>>>>>>>>
+> >>>>>>>>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 >
-> In addition to performance, the primary motivation for LTO is
-> to allow Clang's Control-Flow Integrity (CFI) to be used in the
-> kernel. Google has shipped millions of Pixel devices running three
-> major kernel versions with LTO+CFI since 2018.
+> [...]
 >
-> Most of the patches are build system changes for handling LLVM
-> bitcode, which Clang produces with LTO instead of ELF object files,
-> postponing ELF processing until a later stage, and ensuring initcall
-> ordering.
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> For what it's worth, I think there is an alternative.  If you all
+> >>>>>>> (userspace people, etc) can come up with a credible way for a user
+> >>>>>>> program to statically declare that it doesn't need vsyscalls, then we
+> >>>>>>> could make SHSTK depend on *that*, and we could avoid this mess.  This
+> >>>>>>> breaks orthogonality, but it's probably a decent outcome.
+> >>>>>>>
+> >>>>>>
+> >>>>>> Would an arch_prctl(DISABLE_VSYSCALL) work?  The kernel then sets a
+> >>>>>> thread flag, and in emulate_vsyscall(), checks the flag.
+> >>>>>>
+> >>>>>> When CET is enabled, ld-linux will do DISABLE_VSYSCALL.
+> >>>>>>
+> >>>>>> How is that?
+> >>>>>
+> >>>>> Backwards, no?  Presumably vsyscall needs to be disabled before or
+> >>>>> concurrently with CET being enabled, not after.
+> >>>>>
+> >>>>> I think the solution of making vsyscall emulation work correctly with
+> >>>>> CET is going to be better and possibly more straightforward.
+> >>>>>
+> >>>>
+> >>>> We can do
+> >>>>
+> >>>> 1. Add ARCH_X86_DISABLE_VSYSCALL to disable the vsyscall page.
+> >>>> 2. If CPU supports CET and the program is CET enabled:
+> >>>>       a. Disable the vsyscall page.
+> >>>>       b. Pass control to user.
+> >>>>       c. Enable the vsyscall page when ARCH_X86_CET_DISABLE is called.
+> >>>>
+> >>>> So when control is passed from kernel to user, the vsyscall page is
+> >>>> disabled if the program
+> >>>> is CET enabled.
+> >>>
+> >>> Let me say this one more time:
+> >>>
+> >>> If we have a per-process vsyscall disable control and a per-process
+> >>> CET control, we are going to keep those settings orthogonal.  I'm
+> >>> willing to entertain an option in which enabling SHSTK without also
+> >>> disabling vsyscalls is disallowed, We are *not* going to have any CET
+> >>> flags magically disable vsyscalls, though, and we are not going to
+> >>> have a situation where disabling vsyscalls on process startup requires
+> >>> enabling SHSTK.
+> >>>
+> >>> Any possible static vsyscall controls (and CET controls, for that
+> >>> matter) also need to come with some explanation of whether they are
+> >>> properties set on the ELF loader, the ELF program being loaded, or
+> >>> both.  And this explanation needs to cover what happens when old
+> >>> binaries link against new libc versions and vice versa.  A new
+> >>> CET-enabled binary linked against old libc running on a new kernel
+> >>> that is expected to work on a non-CET CPU MUST work on a CET CPU, too.
+> >>>
+> >>> Right now, literally the only thing preventing vsyscall emulation from
+> >>> coexisting with SHSTK is that the implementation eeds work.
+> >>>
+> >>> So your proposal is rejected.  Sorry.
+> >>>
+> >> I think, even with shadow stack/ibt enabled, we can still allow XONLY
+> >> without too much mess.
+> >>
+> >> What about this?
+> >>
+> >> Thanks,
+> >> Yu-cheng
+> >>
+> >> ======
+> >>
+> >> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> b/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> index 8b0b32ac7791..d39da0a15521 100644
+> >> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+> >> @@ -48,16 +48,16 @@
+> >>    static enum { EMULATE, XONLY, NONE } vsyscall_mode __ro_after_init =
+> >>    #ifdef CONFIG_LEGACY_VSYSCALL_NONE
+> >>           NONE;
+> >> -#elif defined(CONFIG_LEGACY_VSYSCALL_XONLY)
+> >> +#elif defined(CONFIG_LEGACY_VSYSCALL_XONLY) || defined(CONFIG_X86_CET)
+> >>           XONLY;
+> >> -#else
+> >> +#else
+> >>           EMULATE;
+> >>    #endif
+> >
+> > I don't get it.
+> >
+> > First, you can't do any of this based on config -- it must be runtime.
+> >
+> > Second, and more importantly, I don't see how XONLY helps at all.  The
+> > (non-executable) text that's exposed to user code in EMULATE mode is
+> > trivial to get right with CET -- your code already handles it.  It's
+> > the emulation code (that runs identically in EMULATE and XONLY mode)
+> > that's tricky.
+> >
 >
-> Note that this version is based on tip/master to reduce the number
-> of prerequisite patches, and to make it easier to manage changes to
-> objtool. Patch 1 is from Masahiro's kbuild tree, and while it's not
-> directly related to LTO, it makes the module linker script changes
-> cleaner.
+> Hi,
 >
-> Furthermore, patches 2-6 include Peter's patch for generating
-> __mcount_loc with objtool, and build system changes to enable it on
-> x86. With these patches, we no longer need to annotate functions
-> that have non-call references to __fentry__ with LTO, which greatly
-> simplifies supporting dynamic ftrace.
->
-> You can also pull this series from
->
->   https://github.com/samitolvanen/linux.git lto-v5
->
-> ---
-> Changes in v5:
->
->   - Rebased on top of tip/master.
->
+> There has been some ambiguity in my previous proposals.  To make things
+> clear, I created a patch for arch_prctl(VSYSCALL_CTL), which controls
+> the TIF_VSYSCALL_DISABLE flag.  It is entirely orthogonal to shadow
+> stack or IBT.  On top of the patch, we can do SET_PERSONALITY2() to
+> disable vsyscall, e.g.
 
-What are the plans to get this into mainline?
-Linux v5.10 :-) too early - needs more review/testing?
+NAK.  Let me try explaining again.
 
-Will clang-cfi be based on this, too?
+>
+> ======
+> diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
+> index 0e1be2a13359..c730ff00bc62 100644
+> --- a/arch/x86/include/asm/elf.h
+> +++ b/arch/x86/include/asm/elf.h
+> @@ -394,6 +394,19 @@ struct arch_elf_state {
+>         .gnu_property = 0,      \
+>   }
+>
+> +#define SET_PERSONALITY2(ex, state)                            \
+> +do {                                                           \
+> +       unsigned int has_cet;                                   \
+> +                                                               \
+> +       has_cet = GNU_PROPERTY_X86_FEATURE_1_SHSTK |            \
+> +                 GNU_PROPERTY_X86_FEATURE_1_IBT;               \
+> +                                                               \
+> +       if ((state)->gnu_property & has_cet)                    \
+> +               set_thread_flag(TIF_VSYSCALL_DISABLE);          \
+> +                                                               \
+> +       SET_PERSONALITY(ex);                                    \
+> +} while (0)
+> +
 
->   - Changed the command line for objtool to use --vmlinux --duplicate
->     to disable warnings about retpoline thunks and to fix .orc_unwind
->     generation for vmlinux.o.
->
->   - Added --noinstr flag to objtool, so we can use --vmlinux without
->     also enabling noinstr validation.
->
->   - Disabled objtool's unreachable instruction warnings with LTO to
->     disable false positives for the int3 padding in vmlinux.o.
->
->   - Added ANNOTATE_RETPOLINE_SAFE annotations to the indirect jumps
->     in x86 assembly code to fix objtool warnings with retpoline.
->
->   - Fixed modpost warnings about missing version information with
->     CONFIG_MODVERSIONS.
->
->   - Included Makefile.lib into Makefile.modpost for ld_flags. Thanks
->     to Sedat for pointing this out.
->
+This is not what "orthogonal" means.  If the bits were orthogonal, the
+logic would be:
 
-That was a long way to detect this as I had very big Debian Linux
-debug packages generated with CONFIG_DEBUG_INFO_COMPRESSED=y.
+if (gnu_property & DISABLE_VSYSCALL)
+  disable vsyscall;
+if (gnu_property & SHSTK)
+  enable SHSTK;
+if (gnu_property & IBT);
+  enable IBT;
 
-Thanks for v5 of clang-lto.
+and, if necessarily (although I still think it would be preferable not
+to do this):
 
-- Sedat -
+if ((gnu_property & (DISABLE_VSYSCALL | SHSTK)) == SHSTK)
+  return -EINVAL;
 
-[1] https://github.com/ClangBuiltLinux/linux/issues/1086#issuecomment-705754002
+As far as I'm concerned, you have two choices:
 
->   - Updated the help text for ThinLTO to better explain the trade-offs.
+a) Make SHSTK work *correctly* with vsyscall emulation.
+
+b) Add a high quality mechanism to disable vsyscall emulation and make
+SHSTK depend on that.
+
+As far as I'm concerned, (a) is preferable.  Ideally we'd get (a)
+*and* a high quality vsyscall emulation disable mechanism with no
+dependencies.
+
+
+> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c
+> b/arch/x86/entry/vsyscall/vsyscall_64.c
+> index 44c33103a955..fe8f3db6d21b 100644
+> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
+> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+> @@ -127,6 +127,9 @@ bool emulate_vsyscall(unsigned long error_code,
+>         long ret;
+>         unsigned long orig_dx;
 >
->   - Updated commit messages with better explanations.
->
-> Changes in v4:
->
->   - Fixed a typo in Makefile.lib to correctly pass --no-fp to objtool.
->
->   - Moved ftrace configs related to generating __mcount_loc to Kconfig,
->     so they are available also in Makefile.modfinal.
->
->   - Dropped two prerequisite patches that were merged to Linus' tree.
->
-> Changes in v3:
->
->   - Added a separate patch to remove the unused DISABLE_LTO treewide,
->     as filtering out CC_FLAGS_LTO instead is preferred.
->
->   - Updated the Kconfig help to explain why LTO is behind a choice
->     and disabled by default.
->
->   - Dropped CC_FLAGS_LTO_CLANG, compiler-specific LTO flags are now
->     appended directly to CC_FLAGS_LTO.
->
->   - Updated $(AR) flags as KBUILD_ARFLAGS was removed earlier.
->
->   - Fixed ThinLTO cache handling for external module builds.
->
->   - Rebased on top of Masahiro's patch for preprocessing modules.lds,
->     and moved the contents of module-lto.lds to modules.lds.S.
->
->   - Moved objtool_args to Makefile.lib to avoid duplication of the
->     command line parameters in Makefile.modfinal.
->
->   - Clarified in the commit message for the initcall ordering patch
->     that the initcall order remains the same as without LTO.
->
->   - Changed link-vmlinux.sh to use jobserver-exec to control the
->     number of jobs started by generate_initcall_ordering.pl.
->
->   - Dropped the x86/relocs patch to whitelist L4_PAGE_OFFSET as it's
->     no longer needed with ToT kernel.
->
->   - Disabled LTO for arch/x86/power/cpu.c to work around a Clang bug
->     with stack protector attributes.
->
-> Changes in v2:
->
->   - Fixed -Wmissing-prototypes warnings with W=1.
->
->   - Dropped cc-option from -fsplit-lto-unit and added .thinlto-cache
->     scrubbing to make distclean.
->
->   - Added a comment about Clang >=11 being required.
->
->   - Added a patch to disable LTO for the arm64 KVM nVHE code.
->
->   - Disabled objtool's noinstr validation with LTO unless enabled.
->
->   - Included Peter's proposed objtool mcount patch in the series
->     and replaced recordmcount with the objtool pass to avoid
->     whitelisting relocations that are not calls.
->
->   - Updated several commit messages with better explanations.
->
->
-> Masahiro Yamada (1):
->   kbuild: preprocess module linker script
->
-> Peter Zijlstra (1):
->   objtool: Add a pass for generating __mcount_loc
->
-> Sami Tolvanen (27):
->   objtool: Don't autodetect vmlinux.o
->   tracing: move function tracer options to Kconfig
->   tracing: add support for objtool mcount
->   x86, build: use objtool mcount
->   treewide: remove DISABLE_LTO
->   kbuild: add support for Clang LTO
->   kbuild: lto: fix module versioning
->   objtool: Split noinstr validation from --vmlinux
->   kbuild: lto: postpone objtool
->   kbuild: lto: limit inlining
->   kbuild: lto: merge module sections
->   kbuild: lto: remove duplicate dependencies from .mod files
->   init: lto: ensure initcall ordering
->   init: lto: fix PREL32 relocations
->   PCI: Fix PREL32 relocations for LTO
->   modpost: lto: strip .lto from module names
->   scripts/mod: disable LTO for empty.c
->   efi/libstub: disable LTO
->   drivers/misc/lkdtm: disable LTO for rodata.o
->   arm64: vdso: disable LTO
->   KVM: arm64: disable LTO for the nVHE directory
->   arm64: disable recordmcount with DYNAMIC_FTRACE_WITH_REGS
->   arm64: allow LTO_CLANG and THINLTO to be selected
->   x86/asm: annotate indirect jumps
->   x86, vdso: disable LTO only for vDSO
->   x86, cpu: disable LTO for cpu.c
->   x86, build: allow LTO_CLANG and THINLTO to be selected
->
->  .gitignore                                    |   1 +
->  Makefile                                      |  68 +++--
->  arch/Kconfig                                  |  74 +++++
->  arch/arm/Makefile                             |   4 -
->  .../module.lds => include/asm/module.lds.h}   |   2 +
->  arch/arm64/Kconfig                            |   4 +
->  arch/arm64/Makefile                           |   4 -
->  .../module.lds => include/asm/module.lds.h}   |   2 +
->  arch/arm64/kernel/vdso/Makefile               |   4 +-
->  arch/arm64/kvm/hyp/nvhe/Makefile              |   4 +-
->  arch/ia64/Makefile                            |   1 -
->  .../{module.lds => include/asm/module.lds.h}  |   0
->  arch/m68k/Makefile                            |   1 -
->  .../module.lds => include/asm/module.lds.h}   |   0
->  arch/powerpc/Makefile                         |   1 -
->  .../module.lds => include/asm/module.lds.h}   |   0
->  arch/riscv/Makefile                           |   3 -
->  .../module.lds => include/asm/module.lds.h}   |   3 +-
->  arch/sparc/vdso/Makefile                      |   2 -
->  arch/um/include/asm/Kbuild                    |   1 +
->  arch/x86/Kconfig                              |   3 +
->  arch/x86/Makefile                             |   5 +
->  arch/x86/entry/vdso/Makefile                  |   5 +-
->  arch/x86/kernel/acpi/wakeup_64.S              |   2 +
->  arch/x86/platform/pvh/head.S                  |   2 +
->  arch/x86/power/Makefile                       |   4 +
->  arch/x86/power/hibernate_asm_64.S             |   3 +
->  drivers/firmware/efi/libstub/Makefile         |   2 +
->  drivers/misc/lkdtm/Makefile                   |   1 +
->  include/asm-generic/Kbuild                    |   1 +
->  include/asm-generic/module.lds.h              |  10 +
->  include/asm-generic/vmlinux.lds.h             |  11 +-
->  include/linux/init.h                          |  79 ++++-
->  include/linux/pci.h                           |  19 +-
->  kernel/Makefile                               |   3 -
->  kernel/trace/Kconfig                          |  29 ++
->  scripts/.gitignore                            |   1 +
->  scripts/Makefile                              |   3 +
->  scripts/Makefile.build                        |  69 +++--
->  scripts/Makefile.lib                          |  17 +-
->  scripts/Makefile.modfinal                     |  29 +-
->  scripts/Makefile.modpost                      |  25 +-
->  scripts/generate_initcall_order.pl            | 270 ++++++++++++++++++
->  scripts/link-vmlinux.sh                       |  98 ++++++-
->  scripts/mod/Makefile                          |   1 +
->  scripts/mod/modpost.c                         |  16 +-
->  scripts/mod/modpost.h                         |   9 +
->  scripts/mod/sumversion.c                      |   6 +-
->  scripts/{module-common.lds => module.lds.S}   |  31 ++
->  scripts/package/builddeb                      |   2 +-
->  tools/objtool/builtin-check.c                 |  10 +-
->  tools/objtool/check.c                         |  84 +++++-
->  tools/objtool/include/objtool/builtin.h       |   2 +-
->  tools/objtool/include/objtool/check.h         |   1 +
->  tools/objtool/include/objtool/objtool.h       |   1 +
->  tools/objtool/objtool.c                       |   1 +
->  56 files changed, 903 insertions(+), 131 deletions(-)
->  rename arch/arm/{kernel/module.lds => include/asm/module.lds.h} (72%)
->  rename arch/arm64/{kernel/module.lds => include/asm/module.lds.h} (76%)
->  rename arch/ia64/{module.lds => include/asm/module.lds.h} (100%)
->  rename arch/m68k/{kernel/module.lds => include/asm/module.lds.h} (100%)
->  rename arch/powerpc/{kernel/module.lds => include/asm/module.lds.h} (100%)
->  rename arch/riscv/{kernel/module.lds => include/asm/module.lds.h} (84%)
->  create mode 100644 include/asm-generic/module.lds.h
->  create mode 100755 scripts/generate_initcall_order.pl
->  rename scripts/{module-common.lds => module.lds.S} (59%)
->
->
-> base-commit: 80396d76da65fc8b82581c0260c25a6aa0a495a3
-> --
-> 2.28.0.1011.ga647a8990f-goog
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20201009161338.657380-1-samitolvanen%40google.com.
+> +       if (test_thread_flag(TIF_VSYSCALL_DISABLE))
+> +               return false;
+> +
+
+This needs to be per-mm, not per-thread.  There's a patch floating
+around that gets us about a quarter of the way there.  I'm not
+convinced that CET should wait for this to finish.
