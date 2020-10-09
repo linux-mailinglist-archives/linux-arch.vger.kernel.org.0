@@ -2,32 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFE4288570
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 10:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C0728858A
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 10:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732555AbgJIIkO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 04:40:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49272 "EHLO mail.kernel.org"
+        id S1732496AbgJIIu6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 04:50:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52044 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729347AbgJIIkO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 04:40:14 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        id S1730726AbgJIIu6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 04:50:58 -0400
+Received: from gaia (unknown [95.149.105.49])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C3A12087D;
-        Fri,  9 Oct 2020 08:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602232812;
-        bh=3FnNRrdFZy8dpkVRh9duQr65KKRLcp5XuZqmODbiGFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DMeSUc9JZDrvNMltlX3QyR/dLxuPDyT2wQ+MEhojEqCyMgsTc5n3+Gi3/7Eh3bQis
-         XZtZdASUjMV37MkDMtvIXGfeAnmy1MeFniAk617NWFq4v/O0+lbL2KBSdBliNIT5yQ
-         jcyk1TQItgRC5flgX9F2GhlE2kG2sMHvb2/ropu4=
-Date:   Fri, 9 Oct 2020 09:40:07 +0100
-From:   Will Deacon <will@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id EE2F522273;
+        Fri,  9 Oct 2020 08:50:55 +0000 (UTC)
+Date:   Fri, 9 Oct 2020 09:50:53 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+Cc:     Qais Yousef <qais.yousef@arm.com>, Will Deacon <will@kernel.org>,
         Marc Zyngier <maz@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
@@ -35,7 +27,7 @@ Cc:     Qais Yousef <qais.yousef@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
 Subject: Re: [RFC PATCH 2/3] arm64: Add support for asymmetric AArch32 EL0
  configurations
-Message-ID: <20201009084007.GB29594@willie-the-truck>
+Message-ID: <20201009085053.GB23638@gaia>
 References: <20201008181641.32767-1-qais.yousef@arm.com>
  <20201008181641.32767-3-qais.yousef@arm.com>
  <20201009061356.GA120580@kroah.com>
@@ -50,47 +42,6 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Oct 09, 2020 at 08:13:56AM +0200, Greg Kroah-Hartman wrote:
 > On Thu, Oct 08, 2020 at 07:16:40PM +0100, Qais Yousef wrote:
-> > When the CONFIG_ASYMMETRIC_AARCH32 option is enabled (EXPERT), the type
-> > of the ARM64_HAS_32BIT_EL0 capability becomes WEAK_LOCAL_CPU_FEATURE.
-> > The kernel will now return true for system_supports_32bit_el0() and
-> > checks 32-bit tasks are affined to AArch32 capable CPUs only in
-> > do_notify_resume(). If the affinity contains a non-capable AArch32 CPU,
-> > the tasks will get SIGKILLed. If the last CPU supporting 32-bit is
-> > offlined, the kernel will SIGKILL any scheduled 32-bit tasks (the
-> > alternative is to prevent offlining through a new .cpu_disable feature
-> > entry).
-> > 
-> > In addition to the relaxation of the ARM64_HAS_32BIT_EL0 capability,
-> > this patch factors out the 32-bit cpuinfo and features setting into
-> > separate functions: __cpuinfo_store_cpu_32bit(),
-> > init_cpu_32bit_features(). The cpuinfo of the booting CPU
-> > (boot_cpu_data) is now updated on the first 32-bit capable CPU even if
-> > it is a secondary one. The ID_AA64PFR0_EL0_64BIT_ONLY feature is relaxed
-> > to FTR_NONSTRICT and FTR_HIGHER_SAFE when the asymmetric AArch32 support
-> > is enabled. The compat_elf_hwcaps are only verified for the
-> > AArch32-capable CPUs to still allow hotplugging AArch64-only CPUs.
-> > 
-> > Make sure that KVM never sees the asymmetric 32bit system. Guest can
-> > still ignore ID registers and force run 32bit at EL0.
-> > 
-> > Co-developed-by: Qais Yousef <qais.yousef@arm.com>
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> >  arch/arm64/Kconfig                   | 14 ++++++
-> >  arch/arm64/include/asm/cpu.h         |  2 +
-> >  arch/arm64/include/asm/cpucaps.h     |  3 +-
-> >  arch/arm64/include/asm/cpufeature.h  | 20 +++++++-
-> >  arch/arm64/include/asm/thread_info.h |  5 +-
-> >  arch/arm64/kernel/cpufeature.c       | 66 +++++++++++++++-----------
-> >  arch/arm64/kernel/cpuinfo.c          | 71 ++++++++++++++++++----------
-> >  arch/arm64/kernel/process.c          | 17 +++++++
-> >  arch/arm64/kernel/signal.c           | 18 +++++++
-> >  arch/arm64/kvm/arm.c                 |  5 +-
-> >  arch/arm64/kvm/guest.c               |  2 +-
-> >  arch/arm64/kvm/sys_regs.c            | 14 +++++-
-> >  12 files changed, 176 insertions(+), 61 deletions(-)
-> > 
 > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
 > > index 6d232837cbee..591853504dc4 100644
 > > --- a/arch/arm64/Kconfig
@@ -105,14 +56,89 @@ On Fri, Oct 09, 2020 at 08:13:56AM +0200, Greg Kroah-Hartman wrote:
 > 
 > Why EXPERT?  You don't want this able to be enabled by anyone?
 
-TBH, I'd be inclined to drop the Kconfig option altogether. We're not
-looking at a lot of code here, so all it does is further fragment the
-build testing we get from CI (or it just ends up being enabled all of the
-time).
+Exactly ;). Anyway, depending on how user-friendly the feature becomes
+(like the kernel transparently handling task placement), we may drop
+this condition or replace it with a command line option. By default
+current kernels block ELF32 processes on such platform.
 
-A cmdline option, on the other hand, makes a tonne of sense to me, as it
-acts as an "opt-in" that the distribution is ready to handle the madness
-(because userspace will need to care about this even with the scheduler
-hacks proposed here).
+> > +	help
+> > +	  Enable this option to allow support for asymmetric AArch32 EL0
+> > +	  CPU configurations. Once the AArch32 EL0 support is detected
+> > +	  on a CPU, the feature is made available to user space to allow
+> > +	  the execution of 32-bit (compat) applications. If the affinity
+> > +	  of the 32-bit application contains a non-AArch32 capable CPU
+> > +	  or the last AArch32 capable CPU is offlined, the application
+> > +	  will be killed.
+> > +
+> > +	  If unsure say N.
+> > +
+> >  config SYSVIPC_COMPAT
+> >  	def_bool y
+> >  	depends on COMPAT && SYSVIPC
+> > diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
+> > index 7faae6ff3ab4..c920fa45e502 100644
+> > --- a/arch/arm64/include/asm/cpu.h
+> > +++ b/arch/arm64/include/asm/cpu.h
+> > @@ -15,6 +15,7 @@
+> >  struct cpuinfo_arm64 {
+> >  	struct cpu	cpu;
+> >  	struct kobject	kobj;
+> > +	bool		aarch32_valid;
+> 
+> Do you mean to cause holes in this structure?  :)
 
-Will
+No matter where you put it, there's still a hole (could move the hole at
+the end though), unless we make it a 32-bit value.
+
+Thinking about this, since we only check it on the boot_cpu_data
+structure, we could probably make it a stand-alone variable or drop it
+altogether (see below).
+
+> Isn't "valid" the common thing?  Do you now have to explicitly enable
+> this everywhere instead of just dealing with the uncommon case of this
+> cpu variant?
+
+We have a whole infrastructure for dealing with asymmetric features and
+in most cases we only want the common functionality. The CPUID register
+fields across all CPUs are normally sanitised to the lowest common
+value. For some secondary CPU feature not matching the boot CPU we taint
+the kernel.
+
+In the original patch (that ended up on some Google gerrit), we relaxed
+the 32-bit support checking so that the sanitised register contains the
+highest value. However, if booting on a (big) CPU that did not have
+32-bit, the kernel would end up tainted. The reason for aarch32_valid
+was to delay populating the boot CPU information until a secondary CPU
+comes up with 32-bit support and subsequently avoid the tainting.
+
+With a last minute change (yesterday), we reverted the sanitised 32-bit
+support field to the lowest value and introduced a new feature check
+that's enabled when at least one of the CPUs has 32-bit support (we do
+something similar for errata detection). With this in place, I think the
+aarch32_valid setting/checking and delayed boot_cpu_data update can go.
+
+> I don't see this information being exported to userspace anywhere.  I
+> know Intel has submitted a patch to export this "type" of thing to the
+> cpu sysfs directories, can you do the same thing here?
+> 
+> Otherwise, how is userspace supposed to know where to place programs
+> that are 32bit?
+
+In this series, we tried to avoid this by introducing an automatic
+affinity setting/hacking (patch 3). So it's entirely transparent to the
+user, it doesn't need to explicitly ask for specific task placement.
+
+Given that Peter is against overriding the user cpumask and that a void
+intersection between the 32-bit cpumask and the user one would lead to
+SIGKILL, we probably have to expose the information somewhere. Currently
+we have the midr_el1 register exposed in sysfs and this tells the
+specific CPU implementation. It doesn't, however, state whether 32-bit
+is supported unless one checks the specifications. I'd prefer to extend
+the current arm64 sysfs cpu interface to include the rest of the id_*
+registers, unless we find a way to create a common interface with what
+the x86 guys are doing. But I'm slightly doubtful that we can find a
+common interface. While 32-bit is common across other architectures, we
+may want this for other features which don't have any correspondent.
+
+-- 
+Catalin
