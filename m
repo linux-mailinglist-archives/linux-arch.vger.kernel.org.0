@@ -2,85 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75382289B9A
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Oct 2020 00:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2BC289C2E
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Oct 2020 01:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389892AbgJIWGg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 18:06:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59996 "EHLO mail.kernel.org"
+        id S1727035AbgJIXmg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 19:42:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34914 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389431AbgJIWGg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 18:06:36 -0400
-Received: from sol.localdomain (172-10-235-113.lightspeed.sntcca.sbcglobal.net [172.10.235.113])
+        id S1727814AbgJIXka (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 19:40:30 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3638622258;
-        Fri,  9 Oct 2020 22:06:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602281195;
-        bh=BSdsYnSsWQ2YK6s+0hwikbexRRTi6RzXd6Oify0LIKU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FggwccN5I5AZiuE+Vm843foxykXLgY3+2Ve5JGwMxqNB3E+xShPYydixbERiidVVi
-         QW9J0tz5mlsoo600M7a+WgeVErDk1b1VMW5mDMvhyrS14K46mLfNtrpVvaVMMeP9LF
-         2DCRbted8w1IYRD5exRfS6+MpJtndCuG5tnmVNDU=
-Date:   Fri, 9 Oct 2020 15:06:33 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 51D7A2222E;
+        Fri,  9 Oct 2020 23:38:44 +0000 (UTC)
+Date:   Fri, 9 Oct 2020 19:38:38 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 05/14] fs: don't allow kernel reads and writes without
- iter ops
-Message-ID: <20201009220633.GA1122@sol.localdomain>
-References: <20200903142242.925828-1-hch@lst.de>
- <20200903142242.925828-6-hch@lst.de>
- <20201001223852.GA855@sol.localdomain>
- <20201001224051.GI3421308@ZenIV.linux.org.uk>
- <CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v5 00/29] Add support for Clang LTO
+Message-ID: <20201009193759.13043836@oasis.local.home>
+In-Reply-To: <20201009210548.GB1448445@google.com>
+References: <20201009161338.657380-1-samitolvanen@google.com>
+        <20201009153512.1546446a@gandalf.local.home>
+        <20201009210548.GB1448445@google.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 09:27:09AM -0700, Linus Torvalds wrote:
-> On Thu, Oct 1, 2020 at 3:41 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Better
-> >         loff_t dummy = 0;
-> > ...
-> >                 wr = __kernel_write(file, data, bytes, &dummy);
-> 
-> No, just fix __kernel_write() to work correctly.
-> 
-> The fact is, NULL _is_ the right pointer for ppos these days.
-> 
-> That commit by Christoph is buggy: it replaces new_sync_write() with a
-> buggy open-coded version.
-> 
-> Notice how new_sync_write does
-> 
->         kiocb.ki_pos = (ppos ? *ppos : 0);
-> ,,,
->         if (ret > 0 && ppos)
->                 *ppos = kiocb.ki_pos;
-> 
-> but the open-coded version doesn't.
-> 
-> So just fix that in linux-next. The *last* thing we want is to have
-> different semantics for the "same" kernel functions.
+On Fri, 9 Oct 2020 14:05:48 -0700
+Sami Tolvanen <samitolvanen@google.com> wrote:
 
-It's a bit unintuitive that ppos=NULL means "use pos 0", not "use file->f_pos".
+> Ah yes, X86_DECODER_SELFTEST seems to be broken in tip/master. If you
+> prefer, I have these patches on top of mainline here:
+> 
+>   https://github.com/samitolvanen/linux/tree/clang-lto
+> 
+> Testing your config with LTO on this tree, it does build and boot for
+> me, although I saw a couple of new objtool warnings, and with LLVM=1,
+> one warning from llvm-objdump.
 
-Anyway, it works.  The important thing is, this is still broken in linux-next...
+Thanks, I disabled X86_DECODER_SELFTEST and it now builds.
 
-- Eric
+I forced the objdump mcount logic with the below patch, which produces:
+
+CONFIG_FTRACE_MCOUNT_RECORD=y
+CONFIG_FTRACE_MCOUNT_USE_OBJTOOL=y
+
+But I don't see the __mcount_loc sections being created.
+
+I applied patches 1 - 6.
+
+-- Steve
+
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 89263210ab26..3042619e21b7 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -606,7 +606,7 @@ config FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+ 
+ config FTRACE_MCOUNT_USE_CC
+ 	def_bool y
+-	depends on $(cc-option,-mrecord-mcount)
++	depends on $(cc-option,-mrecord-mcount1)
+ 	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+ 	depends on FTRACE_MCOUNT_RECORD
+ 
