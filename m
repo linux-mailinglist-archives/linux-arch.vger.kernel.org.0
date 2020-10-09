@@ -2,150 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A312884F7
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 10:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8452884FA
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 10:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732455AbgJIIMz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 04:12:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39570 "EHLO mail.kernel.org"
+        id S1732501AbgJIINV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 04:13:21 -0400
+Received: from foss.arm.com ([217.140.110.172]:44276 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732337AbgJIIMy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 04:12:54 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 659EE2222C;
-        Fri,  9 Oct 2020 08:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602231173;
-        bh=OOZE/OubbAUXFk9LwOjk4/f69GK6LyH2hA25/MLV+rE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pEfiOlgHo15H2FnKlrJIfLDnErA/nRvfAcD2Ze789rgq7+jutJQwHwjZuTP6ysP/q
-         pf0NSfGyl3NuEsq0efRZFr2R+j+z0Dr7hf4LaAT412Ds76gkVwsmHempD7eFEnMv8+
-         yz171nv3slIsKkTyzwNzov9A9gBjU8cLxMmpK8UM=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1kQnWF-000wZ0-Da; Fri, 09 Oct 2020 09:12:51 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 09 Oct 2020 09:12:51 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
+        id S1732463AbgJIINU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 04:13:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08B28D6E;
+        Fri,  9 Oct 2020 01:13:20 -0700 (PDT)
+Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A83613F70D;
+        Fri,  9 Oct 2020 01:13:18 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 10:13:12 +0200
+From:   Morten Rasmussen <morten.rasmussen@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Qais Yousef <qais.yousef@arm.com>, linux-arch@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] arm64: kvm: Handle Asymmetric AArch32 systems
-In-Reply-To: <20201008181641.32767-2-qais.yousef@arm.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH 3/3] arm64: Handle AArch32 tasks running on non
+ AArch32 cpu
+Message-ID: <20201009081312.GA8004@e123083-lin>
 References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-2-qais.yousef@arm.com>
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <7c058d22dce84ec7636863c1486b11d1@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: qais.yousef@arm.com, catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, morten.rasmussen@arm.com, gregkh@linuxfoundation.org, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20201008181641.32767-4-qais.yousef@arm.com>
+ <20201009072943.GD2628@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201009072943.GD2628@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-10-08 19:16, Qais Yousef wrote:
-> On a system without uniform support for AArch32 at EL0, it is possible
-> for the guest to force run AArch32 at EL0 and potentially cause an
-> illegal exception if running on the wrong core.
+On Fri, Oct 09, 2020 at 09:29:43AM +0200, Peter Zijlstra wrote:
+> On Thu, Oct 08, 2020 at 07:16:41PM +0100, Qais Yousef wrote:
+> > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> > index cf94cc248fbe..7e97f1589f33 100644
+> > --- a/arch/arm64/kernel/signal.c
+> > +++ b/arch/arm64/kernel/signal.c
+> > @@ -908,13 +908,28 @@ static void do_signal(struct pt_regs *regs)
+> >  	restore_saved_sigmask();
+> >  }
+> >  
+> > +static void set_32bit_cpus_allowed(void)
+> >  {
+> > +	cpumask_var_t cpus_allowed;
+> > +	int ret = 0;
+> > +
+> > +	if (cpumask_subset(current->cpus_ptr, &aarch32_el0_mask))
+> > +		return;
+> > +
+> >  	/*
+> > +	 * On asym aarch32 systems, if the task has invalid cpus in its mask,
+> > +	 * we try to fix it by removing the invalid ones.
+> >  	 */
+> > +	if (!alloc_cpumask_var(&cpus_allowed, GFP_ATOMIC)) {
+> > +		ret = -ENOMEM;
+> > +	} else {
+> > +		cpumask_and(cpus_allowed, current->cpus_ptr, &aarch32_el0_mask);
+> > +		ret = set_cpus_allowed_ptr(current, cpus_allowed);
+> > +		free_cpumask_var(cpus_allowed);
+> > +	}
+> > +
+> > +	if (ret) {
+> > +		pr_warn_once("Failed to fixup affinity of running 32-bit task\n");
+> >  		force_sig(SIGKILL);
+> >  	}
+> >  }
 > 
-> Add an extra check to catch if the guest ever does that and prevent it
-> from running again, treating it as ARM_EXCEPTION_IL.
+> Yeah, no. Not going to happen.
 > 
-> We try to catch this misbehavior as early as possible and not rely on
-> PSTATE.IL to occur.
+> Fundamentally, you're not supposed to change the userspace provided
+> affinity mask. If we want to do something like this, we'll have to teach
+> the scheduler about this second mask such that it can compute an
+> effective mask as the intersection between the 'feature' and user mask.
 
-nit: PSTATE.IL doesn't "occur". It is an "Illegal Exception Return" that
-can happen.
+I agree that we shouldn't mess wit the user-space mask directly. Would it
+be unthinkable to go down the route of maintaining a new mask which is
+the intersection of the feature mask (controlled and updated by arch
+code) and the user-space mask?
 
-> 
-> Tested on Juno by instrumenting the host to:
-> 
-> 	* Fake asym aarch32.
-> 	* Comment out hiding of ID registers from the guest.
-> 
-> Any attempt to run 32bit app in the guest will produce such error on
-> qemu:
-> 
-> 	# ./test
-> 	error: kvm run failed Invalid argument
-> 	R00=ffff0fff R01=ffffffff R02=00000000 R03=00087968
-> 	R04=000874b8 R05=ffd70b24 R06=ffd70b2c R07=00000055
-> 	R08=00000000 R09=00000000 R10=00000000 R11=00000000
-> 	R12=0000001c R13=ffd6f974 R14=0001ff64 R15=ffff0fe0
-> 	PSR=a0000010 N-C- A usr32
-> 
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  arch/arm64/kvm/arm.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index b588c3b5c2f0..22ff3373d855 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -644,6 +644,11 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->  	struct kvm_run *run = vcpu->run;
->  	int ret;
-> 
-> +	if (!system_supports_32bit_el0() && vcpu_mode_is_32bit(vcpu)) {
-> +		kvm_err("Illegal AArch32 mode at EL0, can't run.");
+It shouldn't add overhead in the scheduler as it would use the
+intersection mask instead of the user-space mask, the main complexity
+would be around making sure the intersection mask is updated correctly
+(cpusets, hotplug, ...).
 
-No, we don't scream on the console in an uncontrolled way based on
-illegal user input (yes, the VM *is* userspace).
+Like the above tweak, this won't help if the intersection mask is empty,
+task will still get killed but it will allow tasks to survive
+user-space masks including some non-compatible CPUs. If we want to
+prevent task killing in all cases (ignoring hotplug) it gets more ugly
+as we would have to ignore the user-space mask in some cases.
 
-Furthermore, you seem to deal with the same problem *twice*. See below.
-
-> +		return -ENOEXEC;
-> +	}
-> +
->  	if (unlikely(!kvm_vcpu_initialized(vcpu)))
->  		return -ENOEXEC;
-> 
-> @@ -804,6 +809,17 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
-> 
->  		preempt_enable();
-> 
-> +		/*
-> +		 * For asym aarch32 systems we present a 64bit only system to
-> +		 * the guest. But in case it managed somehow to escape that and
-> +		 * enter 32bit mode, catch that and prevent it from running
-> +		 * again.
-
-The guest didn't *escape* anything. It merely used the CPU as designed.
-The fact that the hypervisor cannot prevent the guest from using AArch32
-is an architectural defect.
-
-> +		 */
-> +		if (!system_supports_32bit_el0() && vcpu_mode_is_32bit(vcpu)) {
-> +			kvm_err("Detected illegal AArch32 mode at EL0, exiting.");
-
-Same remark as above. Userspace has access to PSTATE and can work out
-the issue by itself.
-
-> +			ret = ARM_EXCEPTION_IL;
-
-This will cause the thread to return to userspace after having done a
-vcpu_put(). So why don't you just mark the vcpu as uninitialized before
-returning to userspace? It already is in an illegal state, and the only
-reasonable thing userspace can do is to reset it.
-
-This way, we keep the horror in a single place, and force userspace to
-take action if it really wants to recover the guest.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Morten
