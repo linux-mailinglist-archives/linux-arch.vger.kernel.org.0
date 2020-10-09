@@ -2,83 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD1628915D
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 20:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC67289A03
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 22:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733210AbgJISqD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 14:46:03 -0400
-Received: from mga18.intel.com ([134.134.136.126]:37132 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733158AbgJISqC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 14:46:02 -0400
-IronPort-SDR: yL82bDgPlvx9EN1afWlXFmSqoL5x0UPYU+AfYsohR5xzWA2GjKZr9VDQV1TayFA4Fxi7dkdPPw
- xed68LnoOEzg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="153357419"
-X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="153357419"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:46:02 -0700
-IronPort-SDR: v9ctDbEJnb131BoSbsG2ulagMX1ZVIM6P3tuUY80jAVTeETj8I4jbzTof24plAtIKF4+/rVOF0
- 4N+nggCUD+TA==
-X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="312638982"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.244.2]) ([10.212.244.2])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:46:00 -0700
-Subject: Re: [PATCH v14 00/26] Control-flow Enforcement: Shadow Stack
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S2390940AbgJIUut (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 16:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390883AbgJIUus (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Oct 2020 16:50:48 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE8DC0613D2
+        for <linux-arch@vger.kernel.org>; Fri,  9 Oct 2020 13:50:48 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id x13so5231431pfa.9
+        for <linux-arch@vger.kernel.org>; Fri, 09 Oct 2020 13:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wTcVu4oETJELTBTO9Qx9E6QynJ2qRr0RMhI6Lss/kRo=;
+        b=KqYQl09nzQc++fy4ixa3glsFIZci442nzrDG0fcwmUtpLC5GdJDecIntJaTr9BnU+k
+         mHQV/FbLDSsp3LtFLsRl7T/zeVjv8Twr5lMP3mtNmGjMAycuhVQeNy6SxCfwNFW224a7
+         0aTYXNZMa+jC7UhkQneYNe71rwlQlYDitPklTa97BhEb1m7+mN8rfc5c/j9aVJULK1tK
+         kXqyUbQ8e7mPIF4Q1d2YHCkekuQkecmqoGoo0ONdt2lmrDHm6ydQldiw4prAm7vbUqOP
+         n+GwBtayqaO7D2OKGp8MP+pmirMixqou37jYYe5EkC/YvLWRQkL0zC9bekBaZ8qVYuhi
+         m9ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wTcVu4oETJELTBTO9Qx9E6QynJ2qRr0RMhI6Lss/kRo=;
+        b=UNglNySyR/cTbNOrn54Fvb1wRw6ZMC2oCD8q07EgPTf3ZlhmylgKLRQMnOFnzAgt7D
+         YpMGGGchGiLTPf0YMfArM5TGW47AGKYtGzpAnhLCWwZVH1kgbwcj14BA6PmX6lTs2S4S
+         sAnUMGfVGfOJC5UzM2+/nXMzQ/51mZGHzxsFXxuQHh6b916s1nZZFMkWvha21D9Ws07U
+         rQidcwL4ImyqdPlZ+S/htuLdZCZR/DIZYKPDGQkktiIjm1k3h+N9KO/cd03/YPwkkxWJ
+         racRST3wJrQXAFT+2L5yG8zVIjsj7XEuu4Ttf9PovjPyGwkzrp37JSUug4d+NG8AYDX1
+         fv6Q==
+X-Gm-Message-State: AOAM530JGFilDQANaR4u3LsrmuBsCU50QOEghqbOuSMVbC/Hml0Al5gF
+        UuQDcVFnXCMe2ITr+ilPnK7Sbw==
+X-Google-Smtp-Source: ABdhPJxVwMwto7ILPuyT8ZZD/+7fv8lOOoXOE+RyXcVgFRqpvoLioQmgYU/5kPeWbujatJFVPXtviQ==
+X-Received: by 2002:a17:90b:19c9:: with SMTP id nm9mr6551747pjb.6.1602276647984;
+        Fri, 09 Oct 2020 13:50:47 -0700 (PDT)
+Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
+        by smtp.gmail.com with ESMTPSA id n4sm10981225pgv.89.2020.10.09.13.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 13:50:47 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 13:50:41 -0700
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20201009183230.26717-1-yu-cheng.yu@intel.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <357f8260-f548-89b8-a03f-e8b08f3ffbdd@intel.com>
-Date:   Fri, 9 Oct 2020 11:45:59 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v5 00/29] Add support for Clang LTO
+Message-ID: <20201009205041.GA1448445@google.com>
+References: <20201009161338.657380-1-samitolvanen@google.com>
+ <CA+icZUVWdRWfhPhPy79Hpjmqbfw+n8xsgMKv_RU+hoh1bphXdg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201009183230.26717-1-yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUVWdRWfhPhPy79Hpjmqbfw+n8xsgMKv_RU+hoh1bphXdg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/9/2020 11:32 AM, Yu-cheng Yu wrote:
-> Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-> return/jump-oriented programming attacks.  Details are in "Intel 64 and
-> IA-32 Architectures Software Developer's Manual" [1].
+On Fri, Oct 09, 2020 at 06:30:24PM +0200, Sedat Dilek wrote:
+> Will clang-cfi be based on this, too?
 
-[...]
+At least until the prerequisite patches are merged into mainline. In the
+meanwhile, I have a CFI tree based on this series here:
 
-Hi,
+  https://github.com/samitolvanen/linux/tree/tip/clang-lto
 
-The series did not get send out completely.  Please ignore it.
-I apologize for the noise, and will send it again later.
-
-Yu-cheng
-
+Sami
