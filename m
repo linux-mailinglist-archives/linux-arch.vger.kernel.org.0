@@ -2,81 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AA8288613
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 11:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55947288616
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 11:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733157AbgJIJjx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 05:39:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:46158 "EHLO foss.arm.com"
+        id S1733159AbgJIJkD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 05:40:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728014AbgJIJjw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 05:39:52 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12BEED6E;
-        Fri,  9 Oct 2020 02:39:52 -0700 (PDT)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D177F3F66B;
-        Fri,  9 Oct 2020 02:39:50 -0700 (PDT)
-Date:   Fri, 9 Oct 2020 10:39:48 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-arch@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1728014AbgJIJkD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 05:40:03 -0400
+Received: from gaia (unknown [95.149.105.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B8ACA22258;
+        Fri,  9 Oct 2020 09:40:00 +0000 (UTC)
+Date:   Fri, 9 Oct 2020 10:39:58 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH 3/3] arm64: Handle AArch32 tasks running on non
- AArch32 cpu
-Message-ID: <20201009093948.jqaw5oepotggrev5@e107158-lin.cambridge.arm.com>
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] arm64: Add support for asymmetric AArch32 EL0
+ configurations
+Message-ID: <20201009093957.GD23638@gaia>
 References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-4-qais.yousef@arm.com>
- <20201009072943.GD2628@hirez.programming.kicks-ass.net>
- <20201009081312.GA8004@e123083-lin>
- <20201009092559.GE2628@hirez.programming.kicks-ass.net>
+ <20201008181641.32767-3-qais.yousef@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009092559.GE2628@hirez.programming.kicks-ass.net>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20201008181641.32767-3-qais.yousef@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/09/20 11:25, Peter Zijlstra wrote:
-> On Fri, Oct 09, 2020 at 10:13:12AM +0200, Morten Rasmussen wrote:
-> > On Fri, Oct 09, 2020 at 09:29:43AM +0200, Peter Zijlstra wrote:
-> 
-> > > Fundamentally, you're not supposed to change the userspace provided
-> > > affinity mask. If we want to do something like this, we'll have to teach
-> > > the scheduler about this second mask such that it can compute an
-> > > effective mask as the intersection between the 'feature' and user mask.
-> > 
-> > I agree that we shouldn't mess wit the user-space mask directly. Would it
-> > be unthinkable to go down the route of maintaining a new mask which is
-> > the intersection of the feature mask (controlled and updated by arch
-> > code) and the user-space mask?
-> > 
-> > It shouldn't add overhead in the scheduler as it would use the
-> > intersection mask instead of the user-space mask, the main complexity
-> > would be around making sure the intersection mask is updated correctly
-> > (cpusets, hotplug, ...).
-> 
-> IFF we _need_ to go there, then yes that was the plan, compose the
-> intersection when either the (arch) feature(set) mask or the userspace
-> mask changes.
+On Thu, Oct 08, 2020 at 07:16:40PM +0100, Qais Yousef wrote:
+> diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
+> index 7faae6ff3ab4..c920fa45e502 100644
+> --- a/arch/arm64/include/asm/cpu.h
+> +++ b/arch/arm64/include/asm/cpu.h
+> @@ -15,6 +15,7 @@
+>  struct cpuinfo_arm64 {
+>  	struct cpu	cpu;
+>  	struct kobject	kobj;
+> +	bool		aarch32_valid;
 
-On such systems these tasks are only valid to run on a subset of cpus. It makes
-a lot of sense to me if we want to go down that route to fixup the affinity
-when a task is spawned and make sure sched_setaffinity() never allows it to go
-outside this range. The tasks can't physically run on those cpus, so I don't
-see us breaking user-space affinity here. Just reflecting the reality.
+As I replied to Greg, I think we can drop this field entirely. But, of
+course, please check that the kernel doesn't get tainted if booting on a
+non-32-bit capable CPU.
 
-Only if it moved to a cpuset with no intersection it would be killed. Which
-I think is the behavior anyway today.
+>  void cpuinfo_store_cpu(void)
+>  {
+>  	struct cpuinfo_arm64 *info = this_cpu_ptr(&cpu_data);
+>  	__cpuinfo_store_cpu(info);
+> +	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
+> +		__cpuinfo_store_cpu_32bit(info);
+> +	/*
+> +	 * With asymmetric AArch32 support, populate the boot CPU information
+> +	 * on the first 32-bit capable secondary CPU if the primary one
+> +	 * skipped this step.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_ASYMMETRIC_AARCH32) &&
+> +	    !boot_cpu_data.aarch32_valid &&
+> +	    id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
+> +		__cpuinfo_store_cpu_32bit(&boot_cpu_data);
+> +		init_cpu_32bit_features(&boot_cpu_data);
+> +	}
 
-Thanks
+Same here, we can probably drop the boot_cpu_data update here.
 
---
-Qais Yousef
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 077293b5115f..0b9aaee1df59 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -1131,6 +1131,16 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu,
+>  		if (!vcpu_has_sve(vcpu))
+>  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+>  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
+> +
+> +		if (!system_supports_sym_32bit_el0()) {
+> +			/*
+> +			 * We could be running on asym aarch32 system.
+> +			 * Override to present a aarch64 only system.
+> +			 */
+> +			val &= ~(0xfUL << ID_AA64PFR0_EL0_SHIFT);
+> +			val |= (ID_AA64PFR0_EL0_64BIT_ONLY << ID_AA64PFR0_EL0_SHIFT);
+> +		}
+
+With the sanitised registers using the lowest value of this field, I
+think we no longer need this explicit masking.
+
+-- 
+Catalin
