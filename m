@@ -2,168 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 068262888DB
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 14:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78F1288902
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 14:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733281AbgJIMee (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 08:34:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47364 "EHLO mail.kernel.org"
+        id S1729081AbgJIMkc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 08:40:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49510 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733276AbgJIMee (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 08:34:34 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        id S1725852AbgJIMkb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 08:40:31 -0400
+Received: from gaia (unknown [95.149.105.49])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 57621222B9;
-        Fri,  9 Oct 2020 12:34:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602246873;
-        bh=6wvQDemS1Nv4dK4+35ZHEiiOtDoRhAF4hdYiwj35z9A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=df3+TMYwanDj5dtf5xjz4t66/6zMxC10hbA9r6L3+MnSwr527BlhL0MtVxcnrvXgo
-         nFmaGAE65irod1HjXlo0PuNBO1S1VVDj0WMC+F0y+lZUYKs4jfJJJ6erPD1r2g/OGH
-         uxyNlGbqFKG8vJonvn3EY+rQf45V9zTNbUISdk3M=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1kQrbT-00108l-AD; Fri, 09 Oct 2020 13:34:31 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 09 Oct 2020 13:34:31 +0100
-From:   Marc Zyngier <maz@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 6701222284;
+        Fri,  9 Oct 2020 12:40:29 +0000 (UTC)
+Date:   Fri, 9 Oct 2020 13:40:26 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+Cc:     Will Deacon <will@kernel.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] arm64: kvm: Handle Asymmetric AArch32 systems
-In-Reply-To: <20201009095857.cq3bmmobxeq3tm5z@e107158-lin.cambridge.arm.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH 3/3] arm64: Handle AArch32 tasks running on non
+ AArch32 cpu
+Message-ID: <20201009124025.GH23638@gaia>
 References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-2-qais.yousef@arm.com>
- <7c058d22dce84ec7636863c1486b11d1@kernel.org>
- <20201009095857.cq3bmmobxeq3tm5z@e107158-lin.cambridge.arm.com>
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <63e379d1399b5c898828f6802ce3dca5@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: qais.yousef@arm.com, catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, morten.rasmussen@arm.com, gregkh@linuxfoundation.org, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20201008181641.32767-4-qais.yousef@arm.com>
+ <20201009072943.GD2628@hirez.programming.kicks-ass.net>
+ <20201009081312.GA8004@e123083-lin>
+ <20201009083146.GA29594@willie-the-truck>
+ <20201009093340.GC23638@gaia>
+ <20201009113155.to5euj6sekmwt7lg@e107158-lin.cambridge.arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201009113155.to5euj6sekmwt7lg@e107158-lin.cambridge.arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-10-09 10:58, Qais Yousef wrote:
-
-[...]
-
->> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->> > index b588c3b5c2f0..22ff3373d855 100644
->> > --- a/arch/arm64/kvm/arm.c
->> > +++ b/arch/arm64/kvm/arm.c
->> > @@ -644,6 +644,11 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->> >  	struct kvm_run *run = vcpu->run;
->> >  	int ret;
->> >
->> > +	if (!system_supports_32bit_el0() && vcpu_mode_is_32bit(vcpu)) {
->> > +		kvm_err("Illegal AArch32 mode at EL0, can't run.");
->> 
->> No, we don't scream on the console in an uncontrolled way based on
->> illegal user input (yes, the VM *is* userspace).
+On Fri, Oct 09, 2020 at 12:31:56PM +0100, Qais Yousef wrote:
+> On 10/09/20 10:33, Catalin Marinas wrote:
+> > On Fri, Oct 09, 2020 at 09:31:47AM +0100, Will Deacon wrote:
+> > > Honestly, I don't understand why we're trying to hide this asymmetry from
+> > > userspace by playing games with affinity masks in the kernel. Userspace
+> > > is likely to want to move things about _anyway_ because even amongst the
+> > > 32-bit capable cores, you may well have different clock frequencies to
+> > > contend with.
+> > > 
+> > > So I'd be *much* happier to let the schesduler do its thing, and if one
+> > > of these 32-bit tasks ends up on a core that can't deal with it, then
+> > > tough, it gets killed. Give userspace the information it needs to avoid
+> > > that happening in the first place, rather than implicitly limit the mask.
+> > > 
+> > > That way, the kernel support really boils down to two parts:
+> > > 
+> > >   1. Remove the sanity checks we have to prevent 32-bit applications running
+> > >      on asymmetric systems
+> > > 
+> > >   2. Tell userspace about the problem
+> > 
+> > This works for me as well as long as it is default off with a knob to
+> > turn it on. I'd prefer a sysctl (which can be driven from the command
+> > line in recent kernels IIRC) so that one can play with it a run-time.
+> > This way it's also a userspace choice and not an admin or whoever
+> > controls the cmdline (well, that's rather theoretical since the target
+> > is Android).
 > 
-> It seemed kind to print a good reason of what just happened.
+> I like the cmdline option more. It implies a custom bootloader and user space
+> are required to enable this. Which in return implies they can write their own
+> custom driver to manage exporting this info to user-space. Reliefing us from
+> maintaining any ABI in mainline kernel.
 
-I'm afraid it only serves as an instrument to spam the console. 
-Userspace
-gave you an illegal state, you respond with an error. The error is, on
-its own, descriptive enough. In general, we only print on the console
-when KVM is faced with an internal error of some sort. That's not the
-case here.
+Regardless of whether it's cmdline or sysctl, I'm strongly opposed to
+custom drivers for exposing this information to user. It leads to
+custom incompatible ABIs scattered around.
 
-> 
->> 
->> Furthermore, you seem to deal with the same problem *twice*. See 
->> below.
-> 
-> It's done below because we could loop back into the guest again, so we 
-> force an
-> exit then. Here to make sure if the VMM ignores the error value we 
-> returned
-> earlier it can't force its way back in again.
+Note that user can already check the MIDR_EL1 value if it knows which
+CPU type and revision has 32-bit support.
 
-Which we already handle if you do what I hinted at below.
-
->> 
->> > +		return -ENOEXEC;
->> > +	}
->> > +
->> >  	if (unlikely(!kvm_vcpu_initialized(vcpu)))
->> >  		return -ENOEXEC;
->> >
->> > @@ -804,6 +809,17 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->> >
->> >  		preempt_enable();
->> >
->> > +		/*
->> > +		 * For asym aarch32 systems we present a 64bit only system to
->> > +		 * the guest. But in case it managed somehow to escape that and
->> > +		 * enter 32bit mode, catch that and prevent it from running
->> > +		 * again.
->> 
->> The guest didn't *escape* anything. It merely used the CPU as 
->> designed.
->> The fact that the hypervisor cannot prevent the guest from using 
->> AArch32
->> is an architectural defect.
-> 
-> Happy to change the wording if you tell me what you prefer :-)
-
-"The ARMv8 architecture doesn't give the hypervisor a mechanism to 
-prevent
-  a guest from dropping to AArch32 EL0 if implemented by the CPU. If we 
-spot
-  the guest in such state and that we decided it wasn't supposed to do so
-  (like with the asymmetric AArch32 case), return to userspace with a 
-fatal
-  error."
-
-> 
->> 
->> > +		 */
->> > +		if (!system_supports_32bit_el0() && vcpu_mode_is_32bit(vcpu)) {
->> > +			kvm_err("Detected illegal AArch32 mode at EL0, exiting.");
->> 
->> Same remark as above. Userspace has access to PSTATE and can work out
->> the issue by itself.
-> 
-> Okay.
-> 
->> 
->> > +			ret = ARM_EXCEPTION_IL;
->> 
->> This will cause the thread to return to userspace after having done a
->> vcpu_put(). So why don't you just mark the vcpu as uninitialized 
->> before
->> returning to userspace? It already is in an illegal state, and the 
->> only
->> reasonable thing userspace can do is to reset it.
-> 
-> Because I probably didn't navigate my way correctly around the code. 
-> Mind
-> expanding how to mark the vcpu as uninitialized? I have tried 2 ways
-> in that effect but they were really horrible, so will abstain from 
-> sharing :-)
-
-You can try setting vcpu->arch.target to -1, which is already caught by
-kvm_vcpu_initialized() right at the top of this function. This will
-prevent any reentry unless the VMM issues a KVM_ARM_VCPU_INIT ioctl.
-
-         M.
 -- 
-Jazz is not dead. It just smells funny...
+Catalin
