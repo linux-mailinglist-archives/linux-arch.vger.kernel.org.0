@@ -2,70 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC48E289032
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 19:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67371289127
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 20:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387791AbgJIRnG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 13:43:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39174 "EHLO mail.kernel.org"
+        id S2390656AbgJISe5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 14:34:57 -0400
+Received: from mga14.intel.com ([192.55.52.115]:9530 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733006AbgJIRmo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 13:42:44 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B043A22227
-        for <linux-arch@vger.kernel.org>; Fri,  9 Oct 2020 17:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602265364;
-        bh=gUOFuwn0cjC/he11EKalMfxi4MeQUBOwGoQDNcWNbT8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vUhERsT7oViNCbN1yktcMSLrq2UoiL+noUEm/Nye3+FW9gP3EmlaS86YkwsSmaEix
-         VKEv0b99m6WYBTuDlZn2jRkrcKSPZWQCkuG0rlY9WIYSzqWA12nvkNsx/DBwy+Z+Qu
-         294/O/M6pWO1Cn6Y2Yz1mQFSimhCMSQLopcfyo3Q=
-Received: by mail-wr1-f54.google.com with SMTP id i1so5021955wro.1
-        for <linux-arch@vger.kernel.org>; Fri, 09 Oct 2020 10:42:43 -0700 (PDT)
-X-Gm-Message-State: AOAM532h/SCLw46lhYE2+3UTF6spPK/6iWCinjwqSWGV3T1txzvyMo1K
-        eFLcaqHE5jTPb/lKtqLItK72NsmdwI0BhpzSbz5WPw==
-X-Google-Smtp-Source: ABdhPJzf70K4oYcxfMAjLVRVkzKqNGakkCA08giq0JSBoVJW1VDse/vwgNbdxjH+Vx69hTz8VQgAVnajSUf1U4ZTUOo=
-X-Received: by 2002:a5d:5281:: with SMTP id c1mr16067721wrv.184.1602265362208;
- Fri, 09 Oct 2020 10:42:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <d0e4077e-129f-6823-dcea-a101ef626e8c@intel.com>
- <99B32E59-CFF2-4756-89BD-AEA0021F355F@amacapital.net> <d9099183dadde8fe675e1b10e589d13b0d46831f.camel@intel.com>
- <CALCETrWuhPE3A7eWC=ERJa7i7jLtsXnfu04PKUFJ-Gybro+p=Q@mail.gmail.com>
- <b8797fcd-9d70-5749-2277-ef61f2e1be1f@intel.com> <CALCETrWvWAxEuyteLaPmmu-r5LcWdh_DuW4JAOh3pVD4skWoBQ@mail.gmail.com>
- <CALCETrVvob1dbdWSvaB0ZK1kJ19o9ZKy=U3tFifwOR++_xk=zA@mail.gmail.com>
- <dd4310bd-a76b-cf19-4f12-0b52d7bc483d@intel.com> <CALCETrXgde6yHTKw1Njnxp9cANp6Ee8bmG9C2X4e-Fz0ZZCuBw@mail.gmail.com>
- <CAMe9rOonjX-b46sJ3AYSJZV84d=oU6-KhScnk5vksVqoLgQ90A@mail.gmail.com>
- <CALCETrWoGXDDEvy10LoYVY6c_tkpMVABhCy+8pse9Rw8L9L=5A@mail.gmail.com>
- <79d1e67d-2394-1ce6-3bad-cce24ba792bd@intel.com> <CALCETrU-pjSFBGBROukA8dtSUmft9E1j86oS16Lw0Oz1yzv8Gw@mail.gmail.com>
- <ac8da604-3dff-ddb2-f530-2a256da3618d@intel.com>
-In-Reply-To: <ac8da604-3dff-ddb2-f530-2a256da3618d@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 9 Oct 2020 10:42:30 -0700
-X-Gmail-Original-Message-ID: <CALCETrWhdM4NOhvzhNyChV9FaiBTjrQwzN+neMnY0FtHDforZQ@mail.gmail.com>
-Message-ID: <CALCETrWhdM4NOhvzhNyChV9FaiBTjrQwzN+neMnY0FtHDforZQ@mail.gmail.com>
-Subject: Re: [PATCH v13 8/8] x86/vsyscall/64: Fixup Shadow Stack and Indirect
- Branch Tracking for vsyscall emulation
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        id S2390446AbgJISdK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 14:33:10 -0400
+IronPort-SDR: tCcbZX0PvO72U3UdPteOInQLwLcgqAXYy7xaOpOMbY2/N3J9T3I0QVQ/IWC6XtY0jPRfxZaat0
+ 9gAVzMXggcog==
+X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="164736590"
+X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
+   d="scan'208";a="164736590"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:33:09 -0700
+IronPort-SDR: L4nEe6MfFalOadmTx1c82MEW+8PaJb2fpTBXvwhkhRIYhREZ/veysVpDHQIjZ0n/S4f8GE/zFW
+ WY6+Oa3M9GWg==
+X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
+   d="scan'208";a="529031101"
+Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 11:33:08 -0700
+From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
+To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
@@ -77,209 +53,169 @@ Cc:     Andy Lutomirski <luto@kernel.org>, "H.J. Lu" <hjl.tools@gmail.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v14 00/26] Control-flow Enforcement: Shadow Stack
+Date:   Fri,  9 Oct 2020 11:32:04 -0700
+Message-Id: <20201009183230.26717-1-yu-cheng.yu@intel.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 12:09 PM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
->
-> On 10/1/2020 10:26 AM, Andy Lutomirski wrote:
-> > On Thu, Oct 1, 2020 at 9:51 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
-> >>
-> >> On 9/30/2020 6:10 PM, Andy Lutomirski wrote:
-> >>> On Wed, Sep 30, 2020 at 6:01 PM H.J. Lu <hjl.tools@gmail.com> wrote:
-> >>>>
-> >>>> On Wed, Sep 30, 2020 at 4:44 PM Andy Lutomirski <luto@kernel.org> wrote:
-> >>
-> >> [...]
-> >>
-> >>>>>>>>>     From 09803e66dca38d7784e32687d0693550948199ed Mon Sep 17 00:00:00 2001
-> >>>>>>>>> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> >>>>>>>>> Date: Thu, 29 Nov 2018 14:15:38 -0800
-> >>>>>>>>> Subject: [PATCH v13 8/8] x86/vsyscall/64: Fixup Shadow Stack and
-> >>>>>>>>> Indirect Branch
-> >>>>>>>>>      Tracking for vsyscall emulation
-> >>>>>>>>>
-> >>>>>>>>> Vsyscall entry points are effectively branch targets.  Mark them with
-> >>>>>>>>> ENDBR64 opcodes.  When emulating the RET instruction, unwind shadow stack
-> >>>>>>>>> and reset IBT state machine.
-> >>>>>>>>>
-> >>>>>>>>> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->
-> [...]
->
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> For what it's worth, I think there is an alternative.  If you all
-> >>>>>>> (userspace people, etc) can come up with a credible way for a user
-> >>>>>>> program to statically declare that it doesn't need vsyscalls, then we
-> >>>>>>> could make SHSTK depend on *that*, and we could avoid this mess.  This
-> >>>>>>> breaks orthogonality, but it's probably a decent outcome.
-> >>>>>>>
-> >>>>>>
-> >>>>>> Would an arch_prctl(DISABLE_VSYSCALL) work?  The kernel then sets a
-> >>>>>> thread flag, and in emulate_vsyscall(), checks the flag.
-> >>>>>>
-> >>>>>> When CET is enabled, ld-linux will do DISABLE_VSYSCALL.
-> >>>>>>
-> >>>>>> How is that?
-> >>>>>
-> >>>>> Backwards, no?  Presumably vsyscall needs to be disabled before or
-> >>>>> concurrently with CET being enabled, not after.
-> >>>>>
-> >>>>> I think the solution of making vsyscall emulation work correctly with
-> >>>>> CET is going to be better and possibly more straightforward.
-> >>>>>
-> >>>>
-> >>>> We can do
-> >>>>
-> >>>> 1. Add ARCH_X86_DISABLE_VSYSCALL to disable the vsyscall page.
-> >>>> 2. If CPU supports CET and the program is CET enabled:
-> >>>>       a. Disable the vsyscall page.
-> >>>>       b. Pass control to user.
-> >>>>       c. Enable the vsyscall page when ARCH_X86_CET_DISABLE is called.
-> >>>>
-> >>>> So when control is passed from kernel to user, the vsyscall page is
-> >>>> disabled if the program
-> >>>> is CET enabled.
-> >>>
-> >>> Let me say this one more time:
-> >>>
-> >>> If we have a per-process vsyscall disable control and a per-process
-> >>> CET control, we are going to keep those settings orthogonal.  I'm
-> >>> willing to entertain an option in which enabling SHSTK without also
-> >>> disabling vsyscalls is disallowed, We are *not* going to have any CET
-> >>> flags magically disable vsyscalls, though, and we are not going to
-> >>> have a situation where disabling vsyscalls on process startup requires
-> >>> enabling SHSTK.
-> >>>
-> >>> Any possible static vsyscall controls (and CET controls, for that
-> >>> matter) also need to come with some explanation of whether they are
-> >>> properties set on the ELF loader, the ELF program being loaded, or
-> >>> both.  And this explanation needs to cover what happens when old
-> >>> binaries link against new libc versions and vice versa.  A new
-> >>> CET-enabled binary linked against old libc running on a new kernel
-> >>> that is expected to work on a non-CET CPU MUST work on a CET CPU, too.
-> >>>
-> >>> Right now, literally the only thing preventing vsyscall emulation from
-> >>> coexisting with SHSTK is that the implementation eeds work.
-> >>>
-> >>> So your proposal is rejected.  Sorry.
-> >>>
-> >> I think, even with shadow stack/ibt enabled, we can still allow XONLY
-> >> without too much mess.
-> >>
-> >> What about this?
-> >>
-> >> Thanks,
-> >> Yu-cheng
-> >>
-> >> ======
-> >>
-> >> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c
-> >> b/arch/x86/entry/vsyscall/vsyscall_64.c
-> >> index 8b0b32ac7791..d39da0a15521 100644
-> >> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
-> >> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-> >> @@ -48,16 +48,16 @@
-> >>    static enum { EMULATE, XONLY, NONE } vsyscall_mode __ro_after_init =
-> >>    #ifdef CONFIG_LEGACY_VSYSCALL_NONE
-> >>           NONE;
-> >> -#elif defined(CONFIG_LEGACY_VSYSCALL_XONLY)
-> >> +#elif defined(CONFIG_LEGACY_VSYSCALL_XONLY) || defined(CONFIG_X86_CET)
-> >>           XONLY;
-> >> -#else
-> >> +#else
-> >>           EMULATE;
-> >>    #endif
-> >
-> > I don't get it.
-> >
-> > First, you can't do any of this based on config -- it must be runtime.
-> >
-> > Second, and more importantly, I don't see how XONLY helps at all.  The
-> > (non-executable) text that's exposed to user code in EMULATE mode is
-> > trivial to get right with CET -- your code already handles it.  It's
-> > the emulation code (that runs identically in EMULATE and XONLY mode)
-> > that's tricky.
-> >
->
-> Hi,
->
-> There has been some ambiguity in my previous proposals.  To make things
-> clear, I created a patch for arch_prctl(VSYSCALL_CTL), which controls
-> the TIF_VSYSCALL_DISABLE flag.  It is entirely orthogonal to shadow
-> stack or IBT.  On top of the patch, we can do SET_PERSONALITY2() to
-> disable vsyscall, e.g.
+Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+return/jump-oriented programming attacks.  Details are in "Intel 64 and
+IA-32 Architectures Software Developer's Manual" [1].
 
-NAK.  Let me try explaining again.
+CET can protect applications and the kernel.  This series enables only
+application-level protection, and has three parts:
 
->
-> ======
-> diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-> index 0e1be2a13359..c730ff00bc62 100644
-> --- a/arch/x86/include/asm/elf.h
-> +++ b/arch/x86/include/asm/elf.h
-> @@ -394,6 +394,19 @@ struct arch_elf_state {
->         .gnu_property = 0,      \
->   }
->
-> +#define SET_PERSONALITY2(ex, state)                            \
-> +do {                                                           \
-> +       unsigned int has_cet;                                   \
-> +                                                               \
-> +       has_cet = GNU_PROPERTY_X86_FEATURE_1_SHSTK |            \
-> +                 GNU_PROPERTY_X86_FEATURE_1_IBT;               \
-> +                                                               \
-> +       if ((state)->gnu_property & has_cet)                    \
-> +               set_thread_flag(TIF_VSYSCALL_DISABLE);          \
-> +                                                               \
-> +       SET_PERSONALITY(ex);                                    \
-> +} while (0)
-> +
+  - Shadow stack [2],
+  - Indirect branch tracking [3], and
+  - Selftests [4].
 
-This is not what "orthogonal" means.  If the bits were orthogonal, the
-logic would be:
+I have run tests on these patches for quite some time, and they have been
+very stable.  Linux distributions with CET are available now, and Intel
+processors with CET are becoming available.  It would be nice if CET
+support can be accepted into the kernel.  I will be working to address any
+issues should they come up.
 
-if (gnu_property & DISABLE_VSYSCALL)
-  disable vsyscall;
-if (gnu_property & SHSTK)
-  enable SHSTK;
-if (gnu_property & IBT);
-  enable IBT;
+Changes in v14:
+- Update patch #10, add cpu_feature_enabled() to fixup_dirty_*.
+- Update patch #19, instead of re-introducing do_mmap_pgoff(), make all
+  callers of the wrapper pass a zero vm_flags.
+- Update patch #26, move checking vm_flags into arch_validate_prot();
+  check the task's shadow stack status, instead of static_cpu_has().
 
-and, if necessarily (although I still think it would be preferable not
-to do this):
+[1] Intel 64 and IA-32 Architectures Software Developer's Manual:
 
-if ((gnu_property & (DISABLE_VSYSCALL | SHSTK)) == SHSTK)
-  return -EINVAL;
+    https://software.intel.com/en-us/download/intel-64-and-ia-32-
+    architectures-sdm-combined-volumes-1-2a-2b-2c-2d-3a-3b-3c-3d-and-4
 
-As far as I'm concerned, you have two choices:
+[2] CET Shadow Stack patches v13:
 
-a) Make SHSTK work *correctly* with vsyscall emulation.
+    https://lkml.kernel.org/r/20200925145649.5438-2-yu-cheng.yu@intel.com/
 
-b) Add a high quality mechanism to disable vsyscall emulation and make
-SHSTK depend on that.
+[3] Indirect Branch Tracking patches v13.
 
-As far as I'm concerned, (a) is preferable.  Ideally we'd get (a)
-*and* a high quality vsyscall emulation disable mechanism with no
-dependencies.
+    https://lkml.kernel.org/r/20200925145804.5821-1-yu-cheng.yu@intel.com/
 
+[4] I am holding off the selftests changes and working to get Acked-by's.
+    The earlier version of the selftests patches:
 
-> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c
-> b/arch/x86/entry/vsyscall/vsyscall_64.c
-> index 44c33103a955..fe8f3db6d21b 100644
-> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
-> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-> @@ -127,6 +127,9 @@ bool emulate_vsyscall(unsigned long error_code,
->         long ret;
->         unsigned long orig_dx;
->
-> +       if (test_thread_flag(TIF_VSYSCALL_DISABLE))
-> +               return false;
-> +
+    https://lkml.kernel.org/r/20200521211720.20236-1-yu-cheng.yu@intel.com/
 
-This needs to be per-mm, not per-thread.  There's a patch floating
-around that gets us about a quarter of the way there.  I'm not
-convinced that CET should wait for this to finish.
+[5] The kernel ptrace patch is tested with an Intel-internal updated GDB.
+    I am holding off the kernel ptrace patch to re-test it with my earlier
+    patch for fixing regset holes.
+
+Yu-cheng Yu (26):
+  Documentation/x86: Add CET description
+  x86/cpufeatures: Add CET CPU feature flags for Control-flow
+    Enforcement Technology (CET)
+  x86/fpu/xstate: Introduce CET MSR XSAVES supervisor states
+  x86/cet: Add control-protection fault handler
+  x86/cet/shstk: Add Kconfig option for user-mode Shadow Stack
+  x86/mm: Change _PAGE_DIRTY to _PAGE_DIRTY_HW
+  x86/mm: Remove _PAGE_DIRTY_HW from kernel RO pages
+  x86/mm: Introduce _PAGE_COW
+  drm/i915/gvt: Change _PAGE_DIRTY to _PAGE_DIRTY_BITS
+  x86/mm: Update pte_modify for _PAGE_COW
+  x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for
+    transition from _PAGE_DIRTY_HW to _PAGE_COW
+  mm: Introduce VM_SHSTK for shadow stack memory
+  x86/mm: Shadow Stack page fault error checking
+  x86/mm: Update maybe_mkwrite() for shadow stack
+  mm: Fixup places that call pte_mkwrite() directly
+  mm: Add guard pages around a shadow stack.
+  mm/mmap: Add shadow stack pages to memory accounting
+  mm: Update can_follow_write_pte() for shadow stack
+  mm: Re-introduce vm_flags to do_mmap()
+  x86/cet/shstk: User-mode shadow stack support
+  x86/cet/shstk: Handle signals for shadow stack
+  binfmt_elf: Define GNU_PROPERTY_X86_FEATURE_1_AND properties
+  ELF: Introduce arch_setup_elf_property()
+  x86/cet/shstk: Handle thread shadow stack
+  x86/cet/shstk: Add arch_prctl functions for shadow stack
+  mm: Introduce PROT_SHSTK for shadow stack
+
+ .../admin-guide/kernel-parameters.txt         |   6 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/intel_cet.rst               | 133 +++++++
+ arch/arm64/include/asm/elf.h                  |   5 +
+ arch/x86/Kconfig                              |  39 ++
+ arch/x86/ia32/ia32_signal.c                   |  17 +
+ arch/x86/include/asm/cet.h                    |  42 +++
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/elf.h                    |  13 +
+ arch/x86/include/asm/fpu/internal.h           |  10 +
+ arch/x86/include/asm/fpu/types.h              |  23 +-
+ arch/x86/include/asm/fpu/xstate.h             |   5 +-
+ arch/x86/include/asm/idtentry.h               |   4 +
+ arch/x86/include/asm/mman.h                   |  83 +++++
+ arch/x86/include/asm/mmu_context.h            |   3 +
+ arch/x86/include/asm/msr-index.h              |  20 +
+ arch/x86/include/asm/pgtable.h                | 209 ++++++++++-
+ arch/x86/include/asm/pgtable_types.h          |  58 ++-
+ arch/x86/include/asm/processor.h              |  15 +
+ arch/x86/include/asm/special_insns.h          |  32 ++
+ arch/x86/include/asm/traps.h                  |   2 +
+ arch/x86/include/uapi/asm/mman.h              |  28 +-
+ arch/x86/include/uapi/asm/prctl.h             |   4 +
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/include/uapi/asm/sigcontext.h        |   9 +
+ arch/x86/kernel/Makefile                      |   2 +
+ arch/x86/kernel/cet.c                         | 343 ++++++++++++++++++
+ arch/x86/kernel/cet_prctl.c                   |  68 ++++
+ arch/x86/kernel/cpu/common.c                  |  28 ++
+ arch/x86/kernel/cpu/cpuid-deps.c              |   2 +
+ arch/x86/kernel/fpu/signal.c                  | 100 +++++
+ arch/x86/kernel/fpu/xstate.c                  |  28 +-
+ arch/x86/kernel/idt.c                         |   4 +
+ arch/x86/kernel/process.c                     |  14 +-
+ arch/x86/kernel/process_64.c                  |  32 ++
+ arch/x86/kernel/relocate_kernel_64.S          |   2 +-
+ arch/x86/kernel/signal.c                      |  10 +
+ arch/x86/kernel/signal_compat.c               |   2 +-
+ arch/x86/kernel/traps.c                       |  59 +++
+ arch/x86/kvm/vmx/vmx.c                        |   2 +-
+ arch/x86/mm/fault.c                           |  19 +
+ arch/x86/mm/mmap.c                            |   2 +
+ arch/x86/mm/pat/set_memory.c                  |   2 +-
+ arch/x86/mm/pgtable.c                         |  25 ++
+ drivers/gpu/drm/i915/gvt/gtt.c                |   2 +-
+ fs/aio.c                                      |   2 +-
+ fs/binfmt_elf.c                               |   4 +
+ fs/proc/task_mmu.c                            |   3 +
+ include/linux/elf.h                           |   6 +
+ include/linux/mm.h                            |  38 +-
+ include/linux/pgtable.h                       |  35 ++
+ include/uapi/asm-generic/siginfo.h            |   3 +-
+ include/uapi/linux/elf.h                      |   9 +
+ ipc/shm.c                                     |   2 +-
+ mm/gup.c                                      |   8 +-
+ mm/huge_memory.c                              |  10 +-
+ mm/memory.c                                   |   5 +-
+ mm/migrate.c                                  |   3 +-
+ mm/mmap.c                                     |  23 +-
+ mm/mprotect.c                                 |   2 +-
+ mm/nommu.c                                    |   4 +-
+ mm/util.c                                     |   2 +-
+ scripts/as-x86_64-has-shadow-stack.sh         |   4 +
+ tools/arch/x86/include/asm/cpufeatures.h      |   2 +
+ .../arch/x86/include/asm/disabled-features.h  |   8 +-
+ tools/arch/x86/include/asm/msr-index.h        |  20 +
+ tools/arch/x86/include/uapi/asm/prctl.h       |   4 +
+ 68 files changed, 1624 insertions(+), 92 deletions(-)
+ create mode 100644 Documentation/x86/intel_cet.rst
+ create mode 100644 arch/x86/include/asm/cet.h
+ create mode 100644 arch/x86/include/asm/mman.h
+ create mode 100644 arch/x86/kernel/cet.c
+ create mode 100644 arch/x86/kernel/cet_prctl.c
+ create mode 100755 scripts/as-x86_64-has-shadow-stack.sh
+
+-- 
+2.21.0
+
