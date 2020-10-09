@@ -2,142 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD762881FE
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 08:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EFD288212
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Oct 2020 08:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730364AbgJIGOA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 02:14:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57044 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730323AbgJIGN7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 9 Oct 2020 02:13:59 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CE3121527;
-        Fri,  9 Oct 2020 06:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602224039;
-        bh=BpBCyZtqZokE3MkM9aNGAmttL9r/254fEF1BvkawdrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QTMvjHeVPdr5ffAAySVPXLlAS3AEd+rahcbf+nkgtnKqT93zCxSMUHRTXhQGEP4aG
-         tZK+qjonRfA8mPMqlgxQnCPjU4LALz38mQhDNXsBDsTcMWjQ68yqFHYLaIV5OMI5C8
-         Jz3aexXqVTtDxaskaX14J94d3ghCMbiaX5iQQi+8=
-Date:   Fri, 9 Oct 2020 08:13:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 2/3] arm64: Add support for asymmetric AArch32 EL0
- configurations
-Message-ID: <20201009061356.GA120580@kroah.com>
-References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-3-qais.yousef@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201008181641.32767-3-qais.yousef@arm.com>
+        id S1731434AbgJIGYm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 02:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726326AbgJIGYl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Oct 2020 02:24:41 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DDBC0613D2
+        for <linux-arch@vger.kernel.org>; Thu,  8 Oct 2020 23:24:41 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 7so6349869pgm.11
+        for <linux-arch@vger.kernel.org>; Thu, 08 Oct 2020 23:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=YBJuu5G/rb9XgKJQRZ8/wvRbx6mhBYn8Qt1wj04sDNU=;
+        b=lACkmBtO4YXamtRx+AxadUVbOFvVtldrm7UoaOaSB1ZH+J5z5lH+ZVgGEATmM1U0C2
+         i4OXm7HHNf/ISlkCJYlfdi3ZD7hbY9Z3BhuG0FH0nXBqtaFKfMmz7+ncbpZsSy3dIgk0
+         NuRooEzAMEsr2cq1sk8vS2BMZIDR6DEHjOBwsatanuEJA4d4hfC59ULASn5oacya8Fb+
+         33C/vhvqHbdc00NO94nIaWrs4gyvjHpuk8B2NhsSeilLSEkEKOps80apPaYvavlsLuuB
+         e8pYOd/qZADcUuBOlDNtUyksDFMB5F6Hu+PgWeWSZC1iLSpuvTxdlV5dsosLogdrH2Yh
+         tfIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=YBJuu5G/rb9XgKJQRZ8/wvRbx6mhBYn8Qt1wj04sDNU=;
+        b=iRK01YccdpQUQhq8uLOwnaFRfxKio/RBF+UujpW276POOlQ/RS1q8touphIX/M7hEN
+         Q97GVPT9FXrD87xufbdZuFUXfJv1UzSOaP87/JW1CRBFF1N7RqSCeum9S4C8Y2SaMy1W
+         pvBxIfXjc1+5Vk2XP9Ba1MNZXDAkpR/IA7Hmu+bi3S6JEYDxpJBhtkF5RRVc8LDPc5Nn
+         qhZF2KkNrMi85BiDVH+UdyMD7wFCR+YoLZB7g4ZGcoQ33YHn1gZgoZ4l72UP6AXEyrAB
+         FErn9qX38ECUHtRJmV/c3Ko31X5h2DfzpQvLIWfU2kP5YC1gpEeXg+iBQ5fdieyYbemE
+         MBgw==
+X-Gm-Message-State: AOAM530n8MVwLi27MzWRTbvUkcoZqGaYuGqwMkpDlP9l9iX912ieUAF3
+        K+bBWSnKQQdE4x8owpIAPm20pyI40mA=
+X-Google-Smtp-Source: ABdhPJyOchSV01kQX4jY2bv438EZ2cxtRS/ujARH81fADMDQJtqISfgZR9VD8CwLiBECed7Yw9dbDw==
+X-Received: by 2002:a17:90a:348e:: with SMTP id p14mr2904856pjb.75.1602224681051;
+        Thu, 08 Oct 2020 23:24:41 -0700 (PDT)
+Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id k9sm8635815pfc.96.2020.10.08.23.24.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 08 Oct 2020 23:24:40 -0700 (PDT)
+Date:   Fri, 09 Oct 2020 15:24:32 +0900
+Message-ID: <m2mu0v5333.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     johannes@sipsolutions.net
+Cc:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, tavi.purdila@gmail.com,
+        linux-kernel-library@freelists.org, retrage01@gmail.com,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC v7 20/21] um: host: add test programs
+In-Reply-To: <11f40c1a85a118d8207a6f05fc574164a01af3a9.camel@sipsolutions.net>
+References: <cover.1601960644.git.thehajime@gmail.com>
+        <363dceeefe1c468adca17cec0b7ba4fad7c76ef3.1601960644.git.thehajime@gmail.com>
+        <11f40c1a85a118d8207a6f05fc574164a01af3a9.camel@sipsolutions.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 07:16:40PM +0100, Qais Yousef wrote:
-> When the CONFIG_ASYMMETRIC_AARCH32 option is enabled (EXPERT), the type
-> of the ARM64_HAS_32BIT_EL0 capability becomes WEAK_LOCAL_CPU_FEATURE.
-> The kernel will now return true for system_supports_32bit_el0() and
-> checks 32-bit tasks are affined to AArch32 capable CPUs only in
-> do_notify_resume(). If the affinity contains a non-capable AArch32 CPU,
-> the tasks will get SIGKILLed. If the last CPU supporting 32-bit is
-> offlined, the kernel will SIGKILL any scheduled 32-bit tasks (the
-> alternative is to prevent offlining through a new .cpu_disable feature
-> entry).
+
+On Thu, 08 Oct 2020 04:23:51 +0900,
+Johannes Berg wrote:
 > 
-> In addition to the relaxation of the ARM64_HAS_32BIT_EL0 capability,
-> this patch factors out the 32-bit cpuinfo and features setting into
-> separate functions: __cpuinfo_store_cpu_32bit(),
-> init_cpu_32bit_features(). The cpuinfo of the booting CPU
-> (boot_cpu_data) is now updated on the first 32-bit capable CPU even if
-> it is a secondary one. The ID_AA64PFR0_EL0_64BIT_ONLY feature is relaxed
-> to FTR_NONSTRICT and FTR_HIGHER_SAFE when the asymmetric AArch32 support
-> is enabled. The compat_elf_hwcaps are only verified for the
-> AArch32-capable CPUs to still allow hotplugging AArch64-only CPUs.
+> On Tue, 2020-10-06 at 18:44 +0900, Hajime Tazaki wrote:
+> > 
+> > +LKL_TEST_CALL(getpid, lkl_sys_getpid, 1)
 > 
-> Make sure that KVM never sees the asymmetric 32bit system. Guest can
-> still ignore ID registers and force run 32bit at EL0.
+> Could that be unified with KUNIT somehow?
 > 
-> Co-developed-by: Qais Yousef <qais.yousef@arm.com>
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  arch/arm64/Kconfig                   | 14 ++++++
->  arch/arm64/include/asm/cpu.h         |  2 +
->  arch/arm64/include/asm/cpucaps.h     |  3 +-
->  arch/arm64/include/asm/cpufeature.h  | 20 +++++++-
->  arch/arm64/include/asm/thread_info.h |  5 +-
->  arch/arm64/kernel/cpufeature.c       | 66 +++++++++++++++-----------
->  arch/arm64/kernel/cpuinfo.c          | 71 ++++++++++++++++++----------
->  arch/arm64/kernel/process.c          | 17 +++++++
->  arch/arm64/kernel/signal.c           | 18 +++++++
->  arch/arm64/kvm/arm.c                 |  5 +-
->  arch/arm64/kvm/guest.c               |  2 +-
->  arch/arm64/kvm/sys_regs.c            | 14 +++++-
->  12 files changed, 176 insertions(+), 61 deletions(-)
+> > +++ b/tools/um/tests/run.py
+> > @@ -0,0 +1,172 @@
+> > +#!/usr/bin/env python
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +#
+> > +# This program is free software; you can redistribute it and/or modify
+> > +# it under the terms of the GNU General Public License as published by
+> > +# the Free Software Foundation; version 2 of the License
+> > +#
+> > +# Author: Octavian Purdila <tavi@cs.pub.ro>
+> > +#
+> > +
+> > +from __future__ import print_function
+> > +
+> > +import argparse
+> > +import os
+> > +import subprocess
+> > +import sys
+> > +import tap13
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 6d232837cbee..591853504dc4 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1868,6 +1868,20 @@ config DMI
->  
->  endmenu
->  
-> +config ASYMMETRIC_AARCH32
-> +	bool "Allow support for asymmetric AArch32 support"
-> +	depends on COMPAT && EXPERT
+> ok, I see now, you're doing something with TAP (test anything
+> protocol)...
+> 
+> Hmm. I must say I'm not a fan of adding a whole testing framework to the
+> kernel like that, even if it's pretty simple.
+> 
+> > +import xml.etree.ElementTree as ET
+> > +
+> > +from junit_xml import TestSuite, TestCase
+> 
+> yuck
+> 
+> Let's see if you can use KUNIT instead. Anything beyond that doesn't
+> really need to live in the kernel, IMHO.
 
-Why EXPERT?  You don't want this able to be enabled by anyone?
+I see the point.
+I'm gonna play with kunit to check if it's doable.
 
-> +	help
-> +	  Enable this option to allow support for asymmetric AArch32 EL0
-> +	  CPU configurations. Once the AArch32 EL0 support is detected
-> +	  on a CPU, the feature is made available to user space to allow
-> +	  the execution of 32-bit (compat) applications. If the affinity
-> +	  of the 32-bit application contains a non-AArch32 capable CPU
-> +	  or the last AArch32 capable CPU is offlined, the application
-> +	  will be killed.
-> +
-> +	  If unsure say N.
-> +
->  config SYSVIPC_COMPAT
->  	def_bool y
->  	depends on COMPAT && SYSVIPC
-> diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
-> index 7faae6ff3ab4..c920fa45e502 100644
-> --- a/arch/arm64/include/asm/cpu.h
-> +++ b/arch/arm64/include/asm/cpu.h
-> @@ -15,6 +15,7 @@
->  struct cpuinfo_arm64 {
->  	struct cpu	cpu;
->  	struct kobject	kobj;
-> +	bool		aarch32_valid;
-
-Do you mean to cause holes in this structure?  :)
-
-Isn't "valid" the common thing?  Do you now have to explicitly enable
-this everywhere instead of just dealing with the uncommon case of this
-cpu variant?
-
-I don't see this information being exported to userspace anywhere.  I
-know Intel has submitted a patch to export this "type" of thing to the
-cpu sysfs directories, can you do the same thing here?
-
-Otherwise, how is userspace supposed to know where to place programs
-that are 32bit?
-
-thanks,
-
-greg k-h
+Thanks,
+-- Hajime
