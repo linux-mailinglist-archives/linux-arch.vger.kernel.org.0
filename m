@@ -2,106 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEC7289D61
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Oct 2020 04:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED45C289D78
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Oct 2020 04:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729975AbgJJCK4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Oct 2020 22:10:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:29475 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729983AbgJJBzh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Oct 2020 21:55:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602294931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZEq+9RUNCLcUowlY3rNV2I+fdNX5VdqF7iThjTKHAYU=;
-        b=Zsjr9QjSBcUNNd4xyMv3oCnmSdfItWDhAMRt+KF2IX+ynuZS0ifDJQIVc+ZaTRu04e010n
-        wf59G1JjISYuLbp+QQD59WYIb/li4NhgrMcUoPbFzx/i6q3yEyeUTVL/4S6i1U3C8MfNvo
-        PJ5R656jxEmWLQ/GEMf2Zu+JjjKyOLo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-66-iD51xsXWOkmoDtx0CE8sLQ-1; Fri, 09 Oct 2020 21:55:27 -0400
-X-MC-Unique: iD51xsXWOkmoDtx0CE8sLQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1729923AbgJJCZk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Oct 2020 22:25:40 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55867 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729929AbgJJCDF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 9 Oct 2020 22:03:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9583C1005513;
-        Sat, 10 Oct 2020 01:55:25 +0000 (UTC)
-Received: from shell-el7.hosts.prod.upshift.rdu2.redhat.com (shell-el7.hosts.prod.upshift.rdu2.redhat.com [10.0.15.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F36285D9FC;
-        Sat, 10 Oct 2020 01:55:24 +0000 (UTC)
-Received: by shell-el7.hosts.prod.upshift.rdu2.redhat.com (Postfix, from userid 2518)
-        id 888946000432; Sat, 10 Oct 2020 01:55:24 +0000 (UTC)
-Date:   Sat, 10 Oct 2020 01:55:24 +0000
-From:   Alexander Viro <aviro@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Alexander Viro <aviro@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C7Sr70VJfz9sSn;
+        Sat, 10 Oct 2020 13:02:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1602295351;
+        bh=RiinYVDjJ86lX4CNtxFBjSdehdzMMJDshahbJ1KMzOg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q9aOlvzBgO2GMz5IEgKig+U3t/dlCaldOJjjOQlphDRaYEHkxsvs8Jz4m5F6G/R+/
+         5M17rjM/eYQXr6eI+DbMfbQQplOPvhjtbt5P4IrdMe+UMf/vBsI1ZlIQrrfIeNVH3z
+         IAFIfAN1XXZyDqVKS5m2EEpyS24XbohrzhhDmco1a+EwW4IZf7MtqgHACzMJxChsAz
+         c4utfnuoEnGorMaz5hJwGjQyD+ouL9Fe7IAbuxVZi3D2fa/kSTxreD3ij5qsazz1mo
+         NPVRxWcrqh9jAZev3lmURU7wn8KelxSDY4V2LZUlnA1NMrDPtnnDnlIbno04Tb+0wL
+         L3rdqVPIlCk5Q==
+Date:   Sat, 10 Oct 2020 13:02:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 05/14] fs: don't allow kernel reads and writes without
- iter ops
-Message-ID: <20201010015524.GB101464@shell-el7.hosts.prod.upshift.rdu2.redhat.com>
-References: <20200903142242.925828-1-hch@lst.de>
- <20200903142242.925828-6-hch@lst.de>
- <20201001223852.GA855@sol.localdomain>
- <20201001224051.GI3421308@ZenIV.linux.org.uk>
- <CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com>
- <20201009220633.GA1122@sol.localdomain>
- <CAHk-=whcEzYjkqdpZciHh+iAdUttvfWZYoiHiF67XuTXB1YJLw@mail.gmail.com>
- <20201010011919.GC1122@sol.localdomain>
- <CAHk-=wigvcmp-jcgoNCbx45W7j3=0jA320CfpskwuoEjefM7nQ@mail.gmail.com>
+        Linux-MM <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 00/23] Use asm-generic for mmu_context no-op
+ functions
+Message-ID: <20201010130230.69e5c1a5@canb.auug.org.au>
+In-Reply-To: <CAK8P3a1XqhV+7OVgWhGg3az4Y+_6V-mCjcJ1dBenwD+ZUaaT9g@mail.gmail.com>
+References: <20200901141539.1757549-1-npiggin@gmail.com>
+        <159965079776.3591084.10754647036857628984.b4-ty@arndb.de>
+        <CAK8P3a1XqhV+7OVgWhGg3az4Y+_6V-mCjcJ1dBenwD+ZUaaT9g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wigvcmp-jcgoNCbx45W7j3=0jA320CfpskwuoEjefM7nQ@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: multipart/signed; boundary="Sig_/yzH.L4Tfh.m3v5j11Jxarnb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 06:29:13PM -0700, Linus Torvalds wrote:
-> On Fri, Oct 9, 2020 at 6:19 PM Eric Biggers <ebiggers@kernel.org> wrote:
+--Sig_/yzH.L4Tfh.m3v5j11Jxarnb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Arnd,
+
+On Fri, 9 Oct 2020 16:01:22 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Sep 9, 2020 at 1:27 PM Arnd Bergmann <arnd@arndb.de> wrote:
 > >
-> > Okay, that makes more sense.  So the patchset from Matthew
-> > https://lkml.kernel.org/linux-fsdevel/20201003025534.21045-1-willy@infradead.org/T/#u
-> > isn't what you had in mind.
-> 
-> No.
-> 
-> That first patch makes sense - it's just the "ppos can be NULL" patch.
-> 
-> But as mentioned, NULL isn't "shorthand for zero". It's just "pipes
-> don't _have_ a pos, trying to pass in some explicit position is
-> crazy".
-> 
-> So no, the other patches in that set are a bit odd, I think.
-> 
-> SOME of them look potentially fine - the bpfilter one seems to be
-> valid, for example, because it's literally about reading/writing a
-> pipe. And maybe the sysctl one is similarly sensible - I didn't check
-> the context of that one.
+> > On Wed, 2 Sep 2020 00:15:16 +1000, Nicholas Piggin wrote: =20
+> > > It would be nice to be able to modify mmu_context functions or add a
+> > > hook without updating all architectures, many of which will be no-ops.
+> > >
+> > > The motivation for this series is a change to lazy mmu handling, but
+> > > this series stands on its own as a good cleanup whether or not we end
+> > > up making that change.
+> > >
+> > > [...] =20
+> >
+> > Applied to asm-generic, thanks! =20
+>=20
+> Hi Nick,
+>=20
+> I just noticed a fatal mistake I made when pushing it to the branch on
+> kernel.org: I used to have both a 'master' and an 'asm-generic' branch
+> in asm-generic.git but tried to remove the 'master' one as there is not
+> really any point in having two.
+>=20
+> Unfortunately I forgot to check which one of the two was part of
+> linux-next, and it was the other one, so none of the patches I picked
+> up ever saw any wider testing aside from the 0day bot building it
+> (successfully).
+>=20
+> Are there other changes that depend on this? If not, I would
+> just wait until -rc1 and then either push the branch correctly or
+> rebase the patches on that first, to avoid pushing something that
+> did not see the necessary testing.
 
-FWIW, I hadn't pushed that branch out (or merged it into #for-next yet);
-for one thing, uml part (mconsole) is simply broken, for another...
-IMO ##5--8 are asking for kernel_pread() and if you look at binfmt_elf.c,
-you'll see elf_read() being pretty much that.  acct.c, keys and usermode
-parts are asking for kernel_pwrite() as well.
+If it is useful enough (or important enough), then put in in your
+linux-next included branch, but don't ask Linus to merge it until the
+second week of the merge window ... no worse than some other stuff I
+see :-(
 
-I've got stuck looking through the drivers/target stuff - it would've
-been another kernel_pwrite() candidate, but it smells like its use of
-filp_open() is really asking for trouble, starting with symlink attacks.
-Not sure - I'm not familiar with the area, but...
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/yzH.L4Tfh.m3v5j11Jxarnb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+BFjYACgkQAVBC80lX
+0GxhkwgAoRZOvmcp7V4S8zFT6NGWaKJhO/x2JhvSqFL8TMGmO5ZKmcB59f/wrl+4
+EQOc9lyUYPmIV6mEBAtySWKfyCzEK7HJpKeAG+yyJ2QaJLW2UClQuCQ+nUXyNljb
+iNaG2rsPhYf/ytr/eZ6EpcO5P6oh0wvmlDT4bfSI5urCPmYt5bOh2RYZ2ch4/2CH
+l9YUSVK+q8Hk9sMmY+0Fw/AAa8IsyXculJ/t5gAj6rew/cxD7nz7OHmkPRNg4CK3
+gHW7CqlIvbu9Pjl3j9HqIaLXMb+wgiQaQCUdMlwRf3Ba646SpfnCNkp5tqNx5uuT
+Z77xpUbwxYgABdlVLOPAgN5jGdzczQ==
+=cicz
+-----END PGP SIGNATURE-----
+
+--Sig_/yzH.L4Tfh.m3v5j11Jxarnb--
