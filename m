@@ -2,80 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BD828B04D
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 10:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551DC28B225
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 12:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgJLIba (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 04:31:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56330 "EHLO mail.kernel.org"
+        id S1729534AbgJLKW3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 06:22:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:35562 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726335AbgJLIba (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 12 Oct 2020 04:31:30 -0400
-Received: from willie-the-truck (unknown [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E228120714;
-        Mon, 12 Oct 2020 08:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602491487;
-        bh=S0GqfGRh8/Tl7HdVRLMI52r7qak2HNoCB3IVK6Zs4T4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FAGXtskDnU07QyUMOPdISrDHNwNMMZNEFc9kmIocOb5BS1ggUldHn150u5QE6XaTM
-         TVeCby8WdrzZLI+/xIob9CoWuJsvJlykjpSdQ3zHOkkoakk83y4AGlrSMjgHyLWypR
-         gQcCEbKimhtCql8PcZKHCdCEuxPXmulvNhE+OJes=
-Date:   Mon, 12 Oct 2020 09:31:16 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1729529AbgJLKW3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 12 Oct 2020 06:22:29 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E9E831B;
+        Mon, 12 Oct 2020 03:22:28 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EC173F719;
+        Mon, 12 Oct 2020 03:22:27 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 11:22:24 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v5 25/29] arm64: allow LTO_CLANG and THINLTO to be
- selected
-Message-ID: <20201012083116.GA785@willie-the-truck>
-References: <20201009161338.657380-1-samitolvanen@google.com>
- <20201009161338.657380-26-samitolvanen@google.com>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] arm64: Add support for asymmetric AArch32 EL0
+ configurations
+Message-ID: <20201012102224.jwwwbejmgq7hj373@e107158-lin.cambridge.arm.com>
+References: <20201008181641.32767-1-qais.yousef@arm.com>
+ <20201008181641.32767-3-qais.yousef@arm.com>
+ <5e1fe1a9-4ebc-bd20-701e-844d5c16dd42@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201009161338.657380-26-samitolvanen@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5e1fe1a9-4ebc-bd20-701e-844d5c16dd42@infradead.org>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 09:13:34AM -0700, Sami Tolvanen wrote:
-> Allow CONFIG_LTO_CLANG and CONFIG_THINLTO to be enabled.
+On 10/08/20 11:22, Randy Dunlap wrote:
+> On 10/8/20 11:16 AM, Qais Yousef wrote:
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index 6d232837cbee..591853504dc4 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -1868,6 +1868,20 @@ config DMI
+> >  
+> >  endmenu
+> >  
+> > +config ASYMMETRIC_AARCH32
+> > +	bool "Allow support for asymmetric AArch32 support"
 > 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/arm64/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
+> Please drop one "support" or reword the prompt string.
+
+Thanks Randy. It now reads
+
+	"Allow support for asymmetric AArch32 systems"
+
+Cheers
+
+--
+Qais Yousef
+
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index ad522b021f35..7016d193864f 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -72,6 +72,8 @@ config ARM64
->  	select ARCH_USE_SYM_ANNOTATIONS
->  	select ARCH_SUPPORTS_MEMORY_FAILURE
->  	select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK
-> +	select ARCH_SUPPORTS_LTO_CLANG
-> +	select ARCH_SUPPORTS_THINLTO
-
-Please don't enable this for arm64 until we have the dependency stuff sorted
-out. I posted patches [1] for this before, but I think they should be part
-of this series as they don't make sense on their own.
-
-Will
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=rwonce/read-barrier-depends
+> > +	depends on COMPAT && EXPERT
+> > +	help
+> > +	  Enable this option to allow support for asymmetric AArch32 EL0
+> > +	  CPU configurations. Once the AArch32 EL0 support is detected
+> > +	  on a CPU, the feature is made available to user space to allow
+> > +	  the execution of 32-bit (compat) applications. If the affinity
+> > +	  of the 32-bit application contains a non-AArch32 capable CPU
+> > +	  or the last AArch32 capable CPU is offlined, the application
+> > +	  will be killed.
+> > +
+> > +	  If unsure say N.
+> 
+> 
+> -- 
+> ~Randy
+> 
