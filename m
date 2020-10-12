@@ -2,121 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C1428B4E6
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 14:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D8128B626
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 15:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729782AbgJLMqq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 08:46:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:43540 "EHLO foss.arm.com"
+        id S1729726AbgJLN0p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 09:26:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:45998 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729761AbgJLMqq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 12 Oct 2020 08:46:46 -0400
+        id S1727505AbgJLN0p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 12 Oct 2020 09:26:45 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E9D1D6E;
-        Mon, 12 Oct 2020 05:46:44 -0700 (PDT)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59A293F66B;
-        Mon, 12 Oct 2020 05:46:43 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 13:46:41 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 2/3] arm64: Add support for asymmetric AArch32 EL0
- configurations
-Message-ID: <20201012124640.wnjqhbhknaova35a@e107158-lin.cambridge.arm.com>
-References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-3-qais.yousef@arm.com>
- <20201009093957.GD23638@gaia>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03B1BD6E;
+        Mon, 12 Oct 2020 06:26:44 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 051B93F66B;
+        Mon, 12 Oct 2020 06:26:41 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 14:26:39 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Cc:     "mingo@kernel.org" <mingo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@suse.de" <bp@suse.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
+Subject: Re: [RFC PATCH 1/4] x86/signal: Introduce helpers to get the maximum
+ signal frame size
+Message-ID: <20201012132638.GC32292@arm.com>
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
+ <20200929205746.6763-2-chang.seok.bae@intel.com>
+ <20201005134230.GS6642@arm.com>
+ <74ca7e8a61f051eadc895cf8b29e591cc3d0f548.camel@intel.com>
+ <20201007100558.GE6642@arm.com>
+ <20ae46ae9b74036723ff7b9f731374f78536dc88.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009093957.GD23638@gaia>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20ae46ae9b74036723ff7b9f731374f78536dc88.camel@intel.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/09/20 10:39, Catalin Marinas wrote:
-> On Thu, Oct 08, 2020 at 07:16:40PM +0100, Qais Yousef wrote:
-> > diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
-> > index 7faae6ff3ab4..c920fa45e502 100644
-> > --- a/arch/arm64/include/asm/cpu.h
-> > +++ b/arch/arm64/include/asm/cpu.h
-> > @@ -15,6 +15,7 @@
-> >  struct cpuinfo_arm64 {
-> >  	struct cpu	cpu;
-> >  	struct kobject	kobj;
-> > +	bool		aarch32_valid;
+On Thu, Oct 08, 2020 at 10:43:50PM +0000, Bae, Chang Seok wrote:
+> On Wed, 2020-10-07 at 11:05 +0100, Dave Martin wrote:
+> > On Tue, Oct 06, 2020 at 05:45:24PM +0000, Bae, Chang Seok wrote:
+> > > On Mon, 2020-10-05 at 14:42 +0100, Dave Martin wrote:
+> > > > On Tue, Sep 29, 2020 at 01:57:43PM -0700, Chang S. Bae wrote:
+> > > > > 
+> > > > > +/*
+> > > > > + * The FP state frame contains an XSAVE buffer which must be 64-byte aligned.
+> > > > > + * If a signal frame starts at an unaligned address, extra space is required.
+> > > > > + * This is the max alignment padding, conservatively.
+> > > > > + */
+> > > > > +#define MAX_XSAVE_PADDING	63UL
+> > > > > +
+> > > > > +/*
+> > > > > + * The frame data is composed of the following areas and laid out as:
+> > > > > + *
+> > > > > + * -------------------------
+> > > > > + * | alignment padding     |
+> > > > > + * -------------------------
+> > > > > + * | (f)xsave frame        |
+> > > > > + * -------------------------
+> > > > > + * | fsave header          |
+> > > > > + * -------------------------
+> > > > > + * | siginfo + ucontext    |
+> > > > > + * -------------------------
+> > > > > + */
+> > > > > +
+> > > > > +/* max_frame_size tells userspace the worst case signal stack size. */
+> > > > > +static unsigned long __ro_after_init max_frame_size;
+> > > > > +
+> > > > > +void __init init_sigframe_size(void)
+> > > > > +{
+> > > > > +	/*
+> > > > > +	 * Use the largest of possible structure formats. This might
+> > > > > +	 * slightly oversize the frame for 64-bit apps.
+> > > > > +	 */
+> > > > > +
+> > > > > +	if (IS_ENABLED(CONFIG_X86_32) ||
+> > > > > +	    IS_ENABLED(CONFIG_IA32_EMULATION))
+> > > > > +		max_frame_size = max((unsigned long)SIZEOF_sigframe_ia32,
+> > > > > +				     (unsigned long)SIZEOF_rt_sigframe_ia32);
+> > > > > +
+> > > > > +	if (IS_ENABLED(CONFIG_X86_X32_ABI))
+> > > > > +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe_x32);
+> > > > > +
+> > > > > +	if (IS_ENABLED(CONFIG_X86_64))
+> > > > > +		max_frame_size = max(max_frame_size, (unsigned long)SIZEOF_rt_sigframe);
+> > > > > +
+> > > > > +	max_frame_size += fpu__get_fpstate_sigframe_size() + MAX_XSAVE_PADDING;
+> > > > 
+> > > > For arm64, we round the worst-case padding up by one.
+> > > > 
+> > > 
+> > > Yeah, I saw that. The ARM code adds the max padding, too:
+> > > 
+> > > 	signal_minsigstksz = sigframe_size(&user) +
+> > > 		round_up(sizeof(struct frame_record), 16) +
+> > > 		16; /* max alignment padding */
+> > > 
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/signal.c#n973
+> > > 
+> > > > I can't remember the full rationale for this, but it at least seemed a
+> > > > bit weird to report a size that is not a multiple of the alignment.
+> > > > 
+> > > 
+> > > Because the last state size of XSAVE may not be 64B aligned, the (reported)
+> > > sum of xstate size here does not guarantee 64B alignment.
+> > > 
+> > > > I'm can't think of a clear argument as to why it really matters, though.
+> > > 
+> > > We care about the start of XSAVE buffer for the XSAVE instructions, to be
+> > > 64B-aligned.
+> > 
+> > Ah, I see.  That makes sense.
+> > 
+> > For arm64, there is no additional alignment padding inside the frame,
+> > only the padding inserted after the frame to ensure that the base
+> > address is 16-byte aligned.
+> > 
+> > However, I wonder whether people will tend to assume that AT_MINSIGSTKSZ
+> > is a sensible (if minimal) amount of stack to allocate.  Allocating an
+> > odd number of bytes, or any amount that isn't a multiple of the
+> > architecture's preferred (or mandated) stack alignment probably doesn't
+> > make sense.
+> > 
+> > AArch64 has a mandatory stack alignment of 16 bytes; I'm not sure about
+> > x86.
 > 
-> As I replied to Greg, I think we can drop this field entirely. But, of
-> course, please check that the kernel doesn't get tainted if booting on a
-> non-32-bit capable CPU.
-
-Faking asymmetry on Juno where CPU0 (boot CPU) is not 32bit capable
-
-	dmesg | grep -i taint
-
-returns nothing.
-
+> The x86 ABI looks to require 16-byte alignment (for both 32-/64-bit modes).
+> FWIW, the 32-bit ABI got changed from 4-byte alignement.
 > 
-> >  void cpuinfo_store_cpu(void)
-> >  {
-> >  	struct cpuinfo_arm64 *info = this_cpu_ptr(&cpu_data);
-> >  	__cpuinfo_store_cpu(info);
-> > +	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
-> > +		__cpuinfo_store_cpu_32bit(info);
-
- >>>>>>>
-
-> > +	/*
-> > +	 * With asymmetric AArch32 support, populate the boot CPU information
-> > +	 * on the first 32-bit capable secondary CPU if the primary one
-> > +	 * skipped this step.
-> > +	 */
-> > +	if (IS_ENABLED(CONFIG_ASYMMETRIC_AARCH32) &&
-> > +	    !boot_cpu_data.aarch32_valid &&
-> > +	    id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0)) {
-> > +		__cpuinfo_store_cpu_32bit(&boot_cpu_data);
-> > +		init_cpu_32bit_features(&boot_cpu_data);
-> > +	}
-
-<<<<<<<
-
+> Thank you for brining up the point. Ack. The kernel is expected to return a
+> 16-byte aligned size. I made this change after a discussion with H.J.:
 > 
-> Same here, we can probably drop the boot_cpu_data update here.
+> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> index c042236ef52e..52815d7c08fb 100644
+> --- a/arch/x86/kernel/signal.c
+> +++ b/arch/x86/kernel/signal.c
+> @@ -212,6 +212,11 @@ do {							
+> 		\
+>   * Set up a signal frame.
+>   */
+>  
+> +/* x86 ABI requires 16-byte alignment */
+> +#define FRAME_ALIGNMENT	16UL
+> +
+> +#define MAX_FRAME_PADDING	FRAME_ALIGNMENT - 1
+> +
 
-Removed the block above.
+You might want () here, to avoid future surpsises.
 
-> 
-> > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> > index 077293b5115f..0b9aaee1df59 100644
-> > --- a/arch/arm64/kvm/sys_regs.c
-> > +++ b/arch/arm64/kvm/sys_regs.c
-> > @@ -1131,6 +1131,16 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu,
-> >  		if (!vcpu_has_sve(vcpu))
-> >  			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
-> >  		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
-> > +
-> > +		if (!system_supports_sym_32bit_el0()) {
-> > +			/*
-> > +			 * We could be running on asym aarch32 system.
-> > +			 * Override to present a aarch64 only system.
-> > +			 */
-> > +			val &= ~(0xfUL << ID_AA64PFR0_EL0_SHIFT);
-> > +			val |= (ID_AA64PFR0_EL0_64BIT_ONLY << ID_AA64PFR0_EL0_SHIFT);
-> > +		}
-> 
-> With the sanitised registers using the lowest value of this field, I
-> think we no longer need this explicit masking.
+>  /*
+>   * Determine which stack to use..
+>   */
+> @@ -222,9 +227,9 @@ static unsigned long align_sigframe(unsigned long sp)
+>  	 * Align the stack pointer according to the i386 ABI,
+>  	 * i.e. so that on function entry ((sp + 4) & 15) == 0.
+>  	 */
+> -	sp = ((sp + 4) & -16ul) - 4;
+> +	sp = ((sp + 4) & -FRAME_ALIGNMENT) - 4;
+>  #else /* !CONFIG_X86_32 */
+> -	sp = round_down(sp, 16) - 8;
+> +	sp = round_down(sp, FRAME_ALIGNMENT) - 8;
+>  #endif
+>  	return sp;
+>  }
+> @@ -404,7 +409,7 @@ static int __setup_rt_frame(int sig, struct ksignal
+> *ksig,
+>  	unsafe_put_sigcontext(&frame->uc.uc_mcontext, fp, regs, set,
+> Efault);
+>  	unsafe_put_sigmask(set, frame, Efault);
+>  	user_access_end();
+> -	
+> +
+>  	if (copy_siginfo_to_user(&frame->info, &ksig->info))
+>  		return -EFAULT;
+>  
+> @@ -685,6 +690,8 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>   * -------------------------
+>   * | fsave header          |
+>   * -------------------------
+> + * | alignment padding     |
+> + * -------------------------
+>   * | siginfo + ucontext    |
+>   * -------------------------
+>   */
+> @@ -710,7 +717,12 @@ void __init init_sigframe_size(void)
+>  	if (IS_ENABLED(CONFIG_X86_64))
+>  		max_frame_size = max(max_frame_size, (unsigned
+> long)SIZEOF_rt_sigframe);
+>  
+> +	max_frame_size += MAX_FRAME_PADDING;
+> +
+>  	max_frame_size += fpu__get_fpstate_sigframe_size() +
+> MAX_XSAVE_PADDING;
+> +
+> +	/* Userspace expects an aligned size. */
+> +	max_frame_size = round_up(max_frame_size, FRAME_ALIGNMENT);
+>  }
 
-Indeed. Removed.
+[...]
 
-Thanks
+Seems reasonable, I guess.
 
---
-Qais Yousef
+(I won't comment on the x86 ABI specifics.)
+
+Cheers
+---Dave
