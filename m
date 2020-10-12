@@ -2,56 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C06F28C1CA
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 21:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1742628C261
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 22:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgJLT6N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 15:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726648AbgJLT6M (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 15:58:12 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C49EC0613D0;
-        Mon, 12 Oct 2020 12:58:12 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id l2so19609538lfk.0;
-        Mon, 12 Oct 2020 12:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UH3UXpfvrUNTYADvYPs2GrdsYjSWIaxmja32HFZoz98=;
-        b=PA275n58J7f37URqrBTUoDFA89FhZekXMQ21Bb7CQwst5nv71BJD2xlKXU/N4lIIiV
-         jD4DySJRjyBOq4YQn0WI3E0mUp0Hmn4gOhn9H6QF7AXOBQ4phxqKQ972lRqkScQ0EKLI
-         gH6RzWc/8RAhqpfngv8vqC2HRT9xy5FVSEkCbBbqlKE0gw1o9NhLpqwrraZe5xEzhAH3
-         uSru8TSSKGaHVLPXRIBlhgZNAeHbamAfNqWsJkPj7Os/Y/dEfbHQUpNRjRkb/rHYu+dx
-         huYMlfq3W/itydIJk3pPuNhHylfpKvs4lFoVhuykm44AwS59wSt0OTLzzExVSn/rIdOX
-         4Rxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UH3UXpfvrUNTYADvYPs2GrdsYjSWIaxmja32HFZoz98=;
-        b=dvEBjJUqVafqUOnAKq1lu2aCOvQnzi+L5U6SnPqmArbsqx++lmY4fv97QEA80meVrn
-         3HfypylpkMynoNHp2bVIWUpngYlMBBWIJicFlSE4d2ESxEfJSEIFQddRNzhJHrSDdiDA
-         U/U2zk3maTqIARDw0AKL+/qwnOmdW4r/tqMX1WEOXDEFbTTAn8nWvo1lafH4Oh9vsv+F
-         XzGqW1MMuZHN+B2+dv7TAYZKr5RmKPWlrAtQXyRkebaS7ND1KIA11C4MyBEma79SQI1+
-         euB4X4LG6dWNkspzgjPPapqxJg3RKJ0INfwpvQFkA+X1DN9bLdkq5T0LATz0e9zrAna3
-         rlnw==
-X-Gm-Message-State: AOAM530Tl4yoNFq0kQ5PKOkUbpfRc6RwaKAK1j671eOL48t2dyixKiH9
-        XjGwSylQdCWZz9BbVkYIeJE=
-X-Google-Smtp-Source: ABdhPJxlvyqilgdH1o27x6VJAY1YQ0TW4Ua3qooVBz9Izd6zA7hKwEZCPS860qjC1oNhpf1U3Oe5dQ==
-X-Received: by 2002:a19:c6cc:: with SMTP id w195mr1542377lff.24.1602532690551;
-        Mon, 12 Oct 2020 12:58:10 -0700 (PDT)
-Received: from grain.localdomain ([5.18.102.224])
-        by smtp.gmail.com with ESMTPSA id m11sm649927lfa.112.2020.10.12.12.58.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 12:58:09 -0700 (PDT)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 3417A1A032A; Mon, 12 Oct 2020 22:58:08 +0300 (MSK)
-Date:   Mon, 12 Oct 2020 22:58:08 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S1729256AbgJLUaB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 16:30:01 -0400
+Received: from mga18.intel.com ([134.134.136.126]:31318 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728392AbgJLUaB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 12 Oct 2020 16:30:01 -0400
+IronPort-SDR: FgyIRCx2kFq6mOo2jW7M0DM+o4ZM7PkL0CedglDPnfHKE44Pf0DZNTVYiH6VZT5EhRWx9S4Hro
+ /RRpgol7FWMQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="153631193"
+X-IronPort-AV: E=Sophos;i="5.77,367,1596524400"; 
+   d="scan'208";a="153631193"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 13:29:59 -0700
+IronPort-SDR: Q3TMmJJfFdzOben8LhYKlvy2Lf9ifmccyfK46qxXdTv68g+iC/y3Dbe8lzuVbqqJFOCGX9WdEK
+ BE8Pg6hROcLw==
+X-IronPort-AV: E=Sophos;i="5.77,367,1596524400"; 
+   d="scan'208";a="356739364"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.167.7]) ([10.209.167.7])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 13:29:58 -0700
+Subject: Re: [PATCH v14 1/7] x86/cet/ibt: Add Kconfig option for user-mode
+ Indirect Branch Tracking
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -77,48 +54,44 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v14 03/26] x86/fpu/xstate: Introduce CET MSR XSAVES
- supervisor states
-Message-ID: <20201012195808.GD14048@grain>
-References: <20201012153850.26996-1-yu-cheng.yu@intel.com>
- <20201012153850.26996-4-yu-cheng.yu@intel.com>
+References: <20201012154530.28382-1-yu-cheng.yu@intel.com>
+ <20201012154530.28382-2-yu-cheng.yu@intel.com> <20201012191511.GC14048@grain>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <c1bb9728-95a8-2fc2-6a28-ea37f2b50e7b@intel.com>
+Date:   Mon, 12 Oct 2020 13:29:57 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201012153850.26996-4-yu-cheng.yu@intel.com>
-User-Agent: Mutt/1.14.6 (2020-07-11)
+In-Reply-To: <20201012191511.GC14048@grain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 08:38:27AM -0700, Yu-cheng Yu wrote:
-...
->  /*
->   * x86-64 Task Priority Register, CR8
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index 038e19c0019e..705fd9b94e31 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -38,6 +38,9 @@ static const char *xfeature_names[] =
->  	"Processor Trace (unused)"	,
->  	"Protection Keys User registers",
->  	"unknown xstate feature"	,
-> +	"Control-flow User registers"	,
-> +	"Control-flow Kernel registers"	,
-> +	"unknown xstate feature"	,
->  };
->  
->  static short xsave_cpuid_features[] __initdata = {
-> @@ -51,6 +54,9 @@ static short xsave_cpuid_features[] __initdata = {
->  	X86_FEATURE_AVX512F,
->  	X86_FEATURE_INTEL_PT,
->  	X86_FEATURE_PKU,
-> +	-1,		   /* Unused */
-> +	X86_FEATURE_SHSTK, /* XFEATURE_CET_USER */
-> +	X86_FEATURE_SHSTK, /* XFEATURE_CET_KERNEL */
->  };
+On 10/12/2020 12:15 PM, Cyrill Gorcunov wrote:
+> On Mon, Oct 12, 2020 at 08:45:24AM -0700, Yu-cheng Yu wrote:
+> ...
+>> +	  the application support it.  When this feature is enabled,
+>> +	  legacy non-IBT applications continue to work, but without
+>> +	  IBT protection.
+>> +	  Support for this feature is only known to be present on
+>> +	  processors released in 2020 or later.  CET features are also
+>> +	  known to increase kernel text size by 3.7 KB.
+> 
+> It seems the last sentence is redundant - new features always bloat
+> the kernel code and precise size may differ depending on compiler
+> and options. Surely this can be patched on top.
+> 
 
-Why do you need "-1" here in the array? The only 1:1 mapping is between
-the names itselves and values, not indices of arrays so i don't understand
-why we need this unused value. Sorry if it is a dumb questions and
-been discussed already.
+This was added after some discussion in v12 about kernel text size [1]. 
+I think these few extra words can help people who have older machines 
+and want to save some space.  Yes, like you said, if later we don't want 
+this sentence, I will be happy to add a patch to remove it.  Thanks for 
+the feedback.
+
+Yu-cheng
+
+[1] 
+https://lore.kernel.org/linux-api/5e0a4005-45e3-3e88-e6e0-4ec31aad7eb9@intel.com/
