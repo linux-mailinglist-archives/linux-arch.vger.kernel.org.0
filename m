@@ -2,104 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA2928C14D
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 21:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1296F28C170
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 21:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730833AbgJLTPQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 15:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S2389379AbgJLT0o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 15:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729890AbgJLTPQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 15:15:16 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025EDC0613D0;
-        Mon, 12 Oct 2020 12:15:16 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id c21so1531115ljj.0;
-        Mon, 12 Oct 2020 12:15:15 -0700 (PDT)
+        with ESMTP id S2388289AbgJLT0o (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 15:26:44 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA0BC0613D0
+        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 12:26:44 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id f4so13324206qta.12
+        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 12:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HoEgSi7W4gHD9lScysoMmzA283msUCELsQqu811nuNc=;
-        b=Ql1melcRhvWByESFg5O9z6kB9ZaejNEcoZdrPtWcHm5Eb+e5dEy98OHoHK4KMI2qvs
-         BQbhmbBhTukGkR6Q48H5ZM27KZKnMeP2hVXC0TSoA+qQvkm9o8wE/+LF1rVnj/ar4xAF
-         Qror7GlA7bJ2bzmz2QWfUBs8yBTTNxkCL0HpPmUzKqOhaDoa6qRTCjs8xGcriqroLZAR
-         V76TOINy7/Wulmj/k/4QrmvLbA9NzyHoH/vyZUqRMQ8pMYwL1LPGHQswhd0jwVv+3eSy
-         bVo9G1b4xp9hb1TemZo1b/eBszcC0Kc+o3gaCGKztpcU+AG/e+dFRg+PlwYmkACn1S5I
-         Tc/Q==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=6mP0WzDtsUG1tMreO+ygRTccxYSe5bEz62DcBptZem0=;
+        b=MospMFqK9viW/4h5N0M3zamKwAi/hBgz1Ky/5OVOqWMSuSdjKgqs190LOY1ClYLOlP
+         thNA6jREhGmMs3Yj5I1NrQfzrBPSpijY0E4mMu1rM2wZKedP5CNorNxCpK/ybXgaGce/
+         Po/4XSyR4bmF8MwczBsNPs4pfG4+QMIQZvjiCyy/3ON1lYWJ0oAP4OWM29nLVAkFg9Gc
+         /zucgxf6Sdvysi8K3lUt76sh9qUNgtLzMJuYj9W2VrCbiYOy0Ul0ihvRzs8stHvq3kgB
+         QLdoyEbRbeu4o9FJiOP03C4IGP/FVUruraGX31mTSVewN+yvZDz5GtnkqER1QIGkinc1
+         vy6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HoEgSi7W4gHD9lScysoMmzA283msUCELsQqu811nuNc=;
-        b=aXSorLj5P5Qttjb+8kuZec5RXrWs7tpcmpze1LHcSvgQA3vmcsKdbwv3ICpGzzMOpU
-         3gFGTXfi7g3Qw0+6AZ86DdpcBs5sNZWReopECJQrfpR7lFj3OI9Q945TlCGbK0IkwJ56
-         Dxr4XMcRJKrIVwApcTRTasT8+vhvCVf/JYTisnxLFxXqrH6SSp6HtPRy+df8Io58PnYL
-         J2Gev2CMqubZX4r++Hu8kScE9ndXojGRqMifxDeCa1cFQrRhC+7MXQiQBI9NovGDJL9N
-         a7TFITLXHxsrBB/26mYuLdhAA6Yd8t65h5cvSFAPqA/R3341bXvtcni2E9OXNrZZBokT
-         r7Uw==
-X-Gm-Message-State: AOAM531YOwRbKrJJCPWvXnjSys2ZQNXfsPAappc5QDMBbUpWgwBDX0aO
-        LYIpbZGG79zfV/34xqvezyI=
-X-Google-Smtp-Source: ABdhPJyunP+sr/B3JWabN71d6meVGuLl7M/RSAPI9eowpJdSxaoXQ/4ExdCfDtrOaJiRLT2GklJNOQ==
-X-Received: by 2002:a2e:a41a:: with SMTP id p26mr3102963ljn.126.1602530114236;
-        Mon, 12 Oct 2020 12:15:14 -0700 (PDT)
-Received: from grain.localdomain ([5.18.102.224])
-        by smtp.gmail.com with ESMTPSA id q27sm1092814lfd.261.2020.10.12.12.15.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 12:15:13 -0700 (PDT)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 0C3381A032A; Mon, 12 Oct 2020 22:15:11 +0300 (MSK)
-Date:   Mon, 12 Oct 2020 22:15:11 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v14 1/7] x86/cet/ibt: Add Kconfig option for user-mode
- Indirect Branch Tracking
-Message-ID: <20201012191511.GC14048@grain>
-References: <20201012154530.28382-1-yu-cheng.yu@intel.com>
- <20201012154530.28382-2-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201012154530.28382-2-yu-cheng.yu@intel.com>
-User-Agent: Mutt/1.14.6 (2020-07-11)
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=6mP0WzDtsUG1tMreO+ygRTccxYSe5bEz62DcBptZem0=;
+        b=hzS1YmDPr6HBX+XUdkdbcu2KPxZiswRdymsXu7WCFTqa33SICa7fjiiKgmEr33PDQI
+         u7aaaQJ4c0sm2CmDJ97agcwHgCeMg/mSfcOPsO55EWwfhdme7gXYWfDEBiekK38W1Yyt
+         BCSHSfQdvEs1jvEoqQn4qMijCDgwgNdi7YttYPTJd38UjcBJd++/6nMyKpf+1b9dXB0A
+         /XcRVws00X23HkVbSBUf6Xv86jJUX5n7keuKXVaAqRKrYhQKYl/CY8fxbQjvo2PxQ3GY
+         Q82CoqNAiXXx+9nDXtZzoZ9JpzFspSTFi7GypGdAPw26C49SxfDWuF+AWfXom3tB03hp
+         CZ5A==
+X-Gm-Message-State: AOAM5337j4VlIBN6A91BaeWRzWHc1JysfoBiVeXcCDGXiwn1oflnL0Sb
+        Iz3gEh7GGfl+s7W6FB4HPTDyv1hcTbUBJNC9P2o=
+X-Google-Smtp-Source: ABdhPJzO5rgYO7IUVxVdKCLFmtK2xJSlit9snPEbirs1qP+osmOW+Nv8pB+q9bo4QGLyVayUEBfaXYyIDJltFqADB3g=
+Sender: "ndesaulniers via sendgmr" 
+        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:4d25])
+ (user=ndesaulniers job=sendgmr) by 2002:ad4:43c6:: with SMTP id
+ o6mr17448365qvs.35.1602530803332; Mon, 12 Oct 2020 12:26:43 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 12:26:37 -0700
+In-Reply-To: <20201012141032.6333-1-cai@redhat.com>
+Message-Id: <20201012192637.309661-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+References: <20201012141032.6333-1-cai@redhat.com>
+X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
+Subject: Re: [PATCH -next] arm64: Fix redefinition of init_new_context()
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     cai@redhat.com
+Cc:     arnd@arndb.de, catalin.marinas@arm.com, jean-philippe@linaro.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        npiggin@gmail.com, sfr@canb.auug.org.au, will@kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 08:45:24AM -0700, Yu-cheng Yu wrote:
-...
-> +	  the application support it.  When this feature is enabled,
-> +	  legacy non-IBT applications continue to work, but without
-> +	  IBT protection.
-> +	  Support for this feature is only known to be present on
-> +	  processors released in 2020 or later.  CET features are also
-> +	  known to increase kernel text size by 3.7 KB.
+Our CI went red for -next on arm64 due to c870baeede75. Thanks for sending a
+fix.
 
-It seems the last sentence is redundant - new features always bloat
-the kernel code and precise size may differ depending on compiler
-and options. Surely this can be patched on top.
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+https://lore.kernel.org/linux-next/20201012141032.6333-1-cai@redhat.com/
