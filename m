@@ -2,72 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1296F28C170
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 21:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C06F28C1CA
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 21:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389379AbgJLT0o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 15:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S1728968AbgJLT6N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 15:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388289AbgJLT0o (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 15:26:44 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA0BC0613D0
-        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 12:26:44 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id f4so13324206qta.12
-        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 12:26:44 -0700 (PDT)
+        with ESMTP id S1726648AbgJLT6M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 15:58:12 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C49EC0613D0;
+        Mon, 12 Oct 2020 12:58:12 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id l2so19609538lfk.0;
+        Mon, 12 Oct 2020 12:58:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=6mP0WzDtsUG1tMreO+ygRTccxYSe5bEz62DcBptZem0=;
-        b=MospMFqK9viW/4h5N0M3zamKwAi/hBgz1Ky/5OVOqWMSuSdjKgqs190LOY1ClYLOlP
-         thNA6jREhGmMs3Yj5I1NrQfzrBPSpijY0E4mMu1rM2wZKedP5CNorNxCpK/ybXgaGce/
-         Po/4XSyR4bmF8MwczBsNPs4pfG4+QMIQZvjiCyy/3ON1lYWJ0oAP4OWM29nLVAkFg9Gc
-         /zucgxf6Sdvysi8K3lUt76sh9qUNgtLzMJuYj9W2VrCbiYOy0Ul0ihvRzs8stHvq3kgB
-         QLdoyEbRbeu4o9FJiOP03C4IGP/FVUruraGX31mTSVewN+yvZDz5GtnkqER1QIGkinc1
-         vy6g==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UH3UXpfvrUNTYADvYPs2GrdsYjSWIaxmja32HFZoz98=;
+        b=PA275n58J7f37URqrBTUoDFA89FhZekXMQ21Bb7CQwst5nv71BJD2xlKXU/N4lIIiV
+         jD4DySJRjyBOq4YQn0WI3E0mUp0Hmn4gOhn9H6QF7AXOBQ4phxqKQ972lRqkScQ0EKLI
+         gH6RzWc/8RAhqpfngv8vqC2HRT9xy5FVSEkCbBbqlKE0gw1o9NhLpqwrraZe5xEzhAH3
+         uSru8TSSKGaHVLPXRIBlhgZNAeHbamAfNqWsJkPj7Os/Y/dEfbHQUpNRjRkb/rHYu+dx
+         huYMlfq3W/itydIJk3pPuNhHylfpKvs4lFoVhuykm44AwS59wSt0OTLzzExVSn/rIdOX
+         4Rxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=6mP0WzDtsUG1tMreO+ygRTccxYSe5bEz62DcBptZem0=;
-        b=hzS1YmDPr6HBX+XUdkdbcu2KPxZiswRdymsXu7WCFTqa33SICa7fjiiKgmEr33PDQI
-         u7aaaQJ4c0sm2CmDJ97agcwHgCeMg/mSfcOPsO55EWwfhdme7gXYWfDEBiekK38W1Yyt
-         BCSHSfQdvEs1jvEoqQn4qMijCDgwgNdi7YttYPTJd38UjcBJd++/6nMyKpf+1b9dXB0A
-         /XcRVws00X23HkVbSBUf6Xv86jJUX5n7keuKXVaAqRKrYhQKYl/CY8fxbQjvo2PxQ3GY
-         Q82CoqNAiXXx+9nDXtZzoZ9JpzFspSTFi7GypGdAPw26C49SxfDWuF+AWfXom3tB03hp
-         CZ5A==
-X-Gm-Message-State: AOAM5337j4VlIBN6A91BaeWRzWHc1JysfoBiVeXcCDGXiwn1oflnL0Sb
-        Iz3gEh7GGfl+s7W6FB4HPTDyv1hcTbUBJNC9P2o=
-X-Google-Smtp-Source: ABdhPJzO5rgYO7IUVxVdKCLFmtK2xJSlit9snPEbirs1qP+osmOW+Nv8pB+q9bo4QGLyVayUEBfaXYyIDJltFqADB3g=
-Sender: "ndesaulniers via sendgmr" 
-        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:4d25])
- (user=ndesaulniers job=sendgmr) by 2002:ad4:43c6:: with SMTP id
- o6mr17448365qvs.35.1602530803332; Mon, 12 Oct 2020 12:26:43 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 12:26:37 -0700
-In-Reply-To: <20201012141032.6333-1-cai@redhat.com>
-Message-Id: <20201012192637.309661-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <20201012141032.6333-1-cai@redhat.com>
-X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: Re: [PATCH -next] arm64: Fix redefinition of init_new_context()
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     cai@redhat.com
-Cc:     arnd@arndb.de, catalin.marinas@arm.com, jean-philippe@linaro.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        npiggin@gmail.com, sfr@canb.auug.org.au, will@kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UH3UXpfvrUNTYADvYPs2GrdsYjSWIaxmja32HFZoz98=;
+        b=dvEBjJUqVafqUOnAKq1lu2aCOvQnzi+L5U6SnPqmArbsqx++lmY4fv97QEA80meVrn
+         3HfypylpkMynoNHp2bVIWUpngYlMBBWIJicFlSE4d2ESxEfJSEIFQddRNzhJHrSDdiDA
+         U/U2zk3maTqIARDw0AKL+/qwnOmdW4r/tqMX1WEOXDEFbTTAn8nWvo1lafH4Oh9vsv+F
+         XzGqW1MMuZHN+B2+dv7TAYZKr5RmKPWlrAtQXyRkebaS7ND1KIA11C4MyBEma79SQI1+
+         euB4X4LG6dWNkspzgjPPapqxJg3RKJ0INfwpvQFkA+X1DN9bLdkq5T0LATz0e9zrAna3
+         rlnw==
+X-Gm-Message-State: AOAM530Tl4yoNFq0kQ5PKOkUbpfRc6RwaKAK1j671eOL48t2dyixKiH9
+        XjGwSylQdCWZz9BbVkYIeJE=
+X-Google-Smtp-Source: ABdhPJxlvyqilgdH1o27x6VJAY1YQ0TW4Ua3qooVBz9Izd6zA7hKwEZCPS860qjC1oNhpf1U3Oe5dQ==
+X-Received: by 2002:a19:c6cc:: with SMTP id w195mr1542377lff.24.1602532690551;
+        Mon, 12 Oct 2020 12:58:10 -0700 (PDT)
+Received: from grain.localdomain ([5.18.102.224])
+        by smtp.gmail.com with ESMTPSA id m11sm649927lfa.112.2020.10.12.12.58.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2020 12:58:09 -0700 (PDT)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id 3417A1A032A; Mon, 12 Oct 2020 22:58:08 +0300 (MSK)
+Date:   Mon, 12 Oct 2020 22:58:08 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v14 03/26] x86/fpu/xstate: Introduce CET MSR XSAVES
+ supervisor states
+Message-ID: <20201012195808.GD14048@grain>
+References: <20201012153850.26996-1-yu-cheng.yu@intel.com>
+ <20201012153850.26996-4-yu-cheng.yu@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201012153850.26996-4-yu-cheng.yu@intel.com>
+User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Our CI went red for -next on arm64 due to c870baeede75. Thanks for sending a
-fix.
+On Mon, Oct 12, 2020 at 08:38:27AM -0700, Yu-cheng Yu wrote:
+...
+>  /*
+>   * x86-64 Task Priority Register, CR8
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index 038e19c0019e..705fd9b94e31 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -38,6 +38,9 @@ static const char *xfeature_names[] =
+>  	"Processor Trace (unused)"	,
+>  	"Protection Keys User registers",
+>  	"unknown xstate feature"	,
+> +	"Control-flow User registers"	,
+> +	"Control-flow Kernel registers"	,
+> +	"unknown xstate feature"	,
+>  };
+>  
+>  static short xsave_cpuid_features[] __initdata = {
+> @@ -51,6 +54,9 @@ static short xsave_cpuid_features[] __initdata = {
+>  	X86_FEATURE_AVX512F,
+>  	X86_FEATURE_INTEL_PT,
+>  	X86_FEATURE_PKU,
+> +	-1,		   /* Unused */
+> +	X86_FEATURE_SHSTK, /* XFEATURE_CET_USER */
+> +	X86_FEATURE_SHSTK, /* XFEATURE_CET_KERNEL */
+>  };
 
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-https://lore.kernel.org/linux-next/20201012141032.6333-1-cai@redhat.com/
+Why do you need "-1" here in the array? The only 1:1 mapping is between
+the names itselves and values, not indices of arrays so i don't understand
+why we need this unused value. Sorry if it is a dumb questions and
+been discussed already.
