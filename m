@@ -2,107 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A99B828C2E6
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 22:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CA828C340
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Oct 2020 22:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730814AbgJLUpJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 16:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730807AbgJLUpC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 16:45:02 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB30C0613D6
-        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 13:45:00 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id t18so9325104plo.1
-        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 13:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/je9IGonHzFsuF/SNifo0ZcXgtv4yeAu6zOR0qhli4g=;
-        b=iBvAVUobGLxYChgzQDFIjdgKitAhC2jHTTevcSYvj7umuQsfw68FrsiS588nddPL9n
-         rvr2pXp07ZQWqM/LOhZO8EaapVG+BSzu0jORrfEH3ohPyD3qyDxXqnlKu5B0F1SooZd2
-         mIgofFGRcvthuFUyb4XxZSLu96zkfV5bLY9hc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/je9IGonHzFsuF/SNifo0ZcXgtv4yeAu6zOR0qhli4g=;
-        b=d9k7g6CMNySxzktPveMdyKZ3WQJUFrOeFg5OY9y+NHZdhQmClZ5UeIFJyFNQvO6hf/
-         NGYsHJKxy5ow39jRsyVcTHF+yAn6zQTkLKuqzwQB1tu/Hbn/FXQ7jS8s/X6zLVQsXWpE
-         Gq6raOXPbpWpKW39sg7Y+YEqHW2LS9vELaptQbz+5JbyqStuzCDkt9XEZgPqYq0yQuFC
-         NfwHWdn8hOk1SkxDneo+G/MiCL3AnTBezwmbzdB+L0bj7yXo01BGceT4EbkeSoJuEChX
-         3fQIaVynYoLPDSW92WjvfA7fStncYTy5jHYbvaxbpQ116P6cmjQZwcPn4UUHEkOmHLc7
-         3fmQ==
-X-Gm-Message-State: AOAM532QPxt4wVgdMsq3pVFEtn0cjOidur6Zu7jp6hhW8Dy3Y2vV/iY7
-        YxUAJhU/2wIDTB1IaU9WRyp5ZDxjlTK39A==
-X-Google-Smtp-Source: ABdhPJxf12qi2TvIPdMo3b44hzG/IVxwKW/VadUKNptF9UK+YkxRipHLl4jP/u0pgN9HY2DkPgijnw==
-X-Received: by 2002:a17:902:cd07:b029:d3:9be0:2679 with SMTP id g7-20020a170902cd07b02900d39be02679mr25530237ply.68.1602535499967;
-        Mon, 12 Oct 2020 13:44:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v20sm16032300pjh.5.2020.10.12.13.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 13:44:58 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 13:44:56 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        id S1729260AbgJLUsp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 16:48:45 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32797 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726567AbgJLUsp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 12 Oct 2020 16:48:45 -0400
+IronPort-SDR: Ga9jL4XqRZoF/1D1vPbHZsHj3CpAhD1MgNQqMX+Mylk6bSQjbiKpXtgx504ddlcc0SLEVcLG2d
+ aHJWxQBJQKZQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="153633359"
+X-IronPort-AV: E=Sophos;i="5.77,367,1596524400"; 
+   d="scan'208";a="153633359"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 13:48:44 -0700
+IronPort-SDR: H1g1CQHMtcwO1nWWiBZcdHpuTzPfruHJRRdh25uJeXaBoAYCtJIBhg3KVBUEXVaTG53rphSmVx
+ fgUHljXAvRCA==
+X-IronPort-AV: E=Sophos;i="5.77,367,1596524400"; 
+   d="scan'208";a="356745959"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.167.7]) ([10.209.167.7])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 13:48:43 -0700
+Subject: Re: [PATCH v14 03/26] x86/fpu/xstate: Introduce CET MSR XSAVES
+ supervisor states
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v5 25/29] arm64: allow LTO_CLANG and THINLTO to be
- selected
-Message-ID: <202010121344.53780D8CD2@keescook>
-References: <20201009161338.657380-1-samitolvanen@google.com>
- <20201009161338.657380-26-samitolvanen@google.com>
- <20201012083116.GA785@willie-the-truck>
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20201012153850.26996-1-yu-cheng.yu@intel.com>
+ <20201012153850.26996-4-yu-cheng.yu@intel.com> <20201012195808.GD14048@grain>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <b98933fd-e424-1a14-6591-7ba598ab90c6@intel.com>
+Date:   Mon, 12 Oct 2020 13:48:42 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201012083116.GA785@willie-the-truck>
+In-Reply-To: <20201012195808.GD14048@grain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 09:31:16AM +0100, Will Deacon wrote:
-> On Fri, Oct 09, 2020 at 09:13:34AM -0700, Sami Tolvanen wrote:
-> > Allow CONFIG_LTO_CLANG and CONFIG_THINLTO to be enabled.
-> > 
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  arch/arm64/Kconfig | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index ad522b021f35..7016d193864f 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -72,6 +72,8 @@ config ARM64
-> >  	select ARCH_USE_SYM_ANNOTATIONS
-> >  	select ARCH_SUPPORTS_MEMORY_FAILURE
-> >  	select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK
-> > +	select ARCH_SUPPORTS_LTO_CLANG
-> > +	select ARCH_SUPPORTS_THINLTO
+On 10/12/2020 12:58 PM, Cyrill Gorcunov wrote:
+> On Mon, Oct 12, 2020 at 08:38:27AM -0700, Yu-cheng Yu wrote:
+> ...
+>>   /*
+>>    * x86-64 Task Priority Register, CR8
+>> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+>> index 038e19c0019e..705fd9b94e31 100644
+>> --- a/arch/x86/kernel/fpu/xstate.c
+>> +++ b/arch/x86/kernel/fpu/xstate.c
+>> @@ -38,6 +38,9 @@ static const char *xfeature_names[] =
+>>   	"Processor Trace (unused)"	,
+>>   	"Protection Keys User registers",
+>>   	"unknown xstate feature"	,
+>> +	"Control-flow User registers"	,
+>> +	"Control-flow Kernel registers"	,
+>> +	"unknown xstate feature"	,
+>>   };
+>>   
+>>   static short xsave_cpuid_features[] __initdata = {
+>> @@ -51,6 +54,9 @@ static short xsave_cpuid_features[] __initdata = {
+>>   	X86_FEATURE_AVX512F,
+>>   	X86_FEATURE_INTEL_PT,
+>>   	X86_FEATURE_PKU,
+>> +	-1,		   /* Unused */
+>> +	X86_FEATURE_SHSTK, /* XFEATURE_CET_USER */
+>> +	X86_FEATURE_SHSTK, /* XFEATURE_CET_KERNEL */
+>>   };
 > 
-> Please don't enable this for arm64 until we have the dependency stuff sorted
-> out. I posted patches [1] for this before, but I think they should be part
-> of this series as they don't make sense on their own.
+> Why do you need "-1" here in the array? The only 1:1 mapping is between
+> the names itselves and values, not indices of arrays so i don't understand
+> why we need this unused value. Sorry if it is a dumb questions and
+> been discussed already.
+> 
 
-Oh, hm. We've been trying to trim down this series, since it's already
-quite large. Why can't [1] land first? It would make this easier to deal
-with, IMO.
+The indices are used indirectly in fpu__init_system_xstate() to set bits 
+in xfeatures_mask_all, i.e.
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=rwonce/read-barrier-depends
+xfeatures_mask_all &= ~BIT_ULL(i).
 
--- 
-Kees Cook
+So they need to match the xstate feature bits.
+
+Yu-cheng
