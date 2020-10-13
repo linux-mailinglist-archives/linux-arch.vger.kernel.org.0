@@ -2,58 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFAD28C63E
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 02:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3455128C647
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 02:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727753AbgJMAe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Oct 2020 20:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S1727745AbgJMAe1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Oct 2020 20:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727740AbgJMAdl (ORCPT
+        with ESMTP id S1727739AbgJMAdl (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Oct 2020 20:33:41 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA452C0613BD
-        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 17:32:59 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id g24so13845732pfo.1
-        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 17:32:59 -0700 (PDT)
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F63EC0613D0
+        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 17:33:02 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id i2so734537qkk.0
+        for <linux-arch@vger.kernel.org>; Mon, 12 Oct 2020 17:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=s78GraQfKANUm9dTCmVzo29Dpzl6ui3oK0KuklmHT+M=;
-        b=UStis3hbnwPX4GBdlrEziRJNAuXpozGmmfM1jjzsAsE8VSqd0cbY6odMaz39IA0Ojw
-         whXL6/eJ7EeqBedFDwaT3w5Q+1TV0rdJwA3Y3y9puXLwfjf7F0qnCIboZUysC1WDMVid
-         4Nj43Y1l6hIv3BvqtYvKlA+3y+Qx5yGdBGC7iek7d9zIgRpsjTFpfGg7cM3b7K4jNPc3
-         C+tUthfv3AI4pSRMqj3k+jNvTZwQ0NPU9oBd39SNZPMR7BGOFp7+kKDm9ZAbYc3IAGak
-         ZWMXtsvozkuOgmM9rpB2qjGh1x8II7JaobE2C/HaxwERoWZW6ZWfuMc4skxi/3WZYGIY
-         484A==
+        bh=NB4DqWz6+fIfMXcokXEeMggmgfFph8OJ/Hk6TSxy9cU=;
+        b=H1F377i8eGQAU/5A0yi1yr0c33hGgdU8XEV9saDmRDeYR0tkVsNxEXUclpv1KfQaU0
+         /n56cozTapbGtfIzzZr2zkFu0QiAzdA/2U4pijKUqmCNtwJLZOHMOhyYpo/RVj3+a9up
+         uw03RRjDJUEA07AI3ycjej51uqULrxQxMDVvJUyMWGW9h09GHasuDmPYx3/m4etV9s4F
+         /8ifejQyz9wBUEc+H89uj/k7/XI3IN0cqCEm+8nY+wRoA6LNkaf8a9R7Z2OdYi/ddy5V
+         vh/iycwgiqqL8SNRUxcnX4VZEMdDFUCQ+T9Ak4gRDlRzIex36WiXpUQpVsXw+Sm3BVXa
+         op1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=s78GraQfKANUm9dTCmVzo29Dpzl6ui3oK0KuklmHT+M=;
-        b=GGsKYHFCIyt5XwCeu0G0E2Cpyau2OO7jbLfYeNXeZuDeEdqI8EN2KoRkm5I7992G1i
-         vFTBWVOTj1ES9U0TFgthPamdRBPz7GxplU5vq6FKopa/CGvCiVMqcI2tTpCCuBAFJvPJ
-         IE2nsz8CYGqJC7a1RqLTwWh17Vgy0jkFJgG8RDCiHUKz8MMVQ4+V8FE/zdkr42YqHJnG
-         ZGmb56QrZeGeZXqJq2LADpUOmzB98kt/xgjZhvY/facea7IZMfgZqsjnewK9s4LczXi3
-         hndd2gSBB7Td12jsOGS3dSjJvsRKyym/7vAWWKzJGLqWyZy32SfZVHCerKhpgI+ew61o
-         k1dA==
-X-Gm-Message-State: AOAM531QWmumpWllE4oN/VkawJMSUfDojhoy/57Tqk2MPpMwkWZ28/KF
-        ek5cFRujmPwbJpzvXYiFry+mu7wYjs/ANDxBmeA=
-X-Google-Smtp-Source: ABdhPJys+9GAtwDLSAFaJoF/SaTJzh0YT4ITojDPzI8BvdeCNUSIWeGX02fenqn9RcJYa4C5XTo/mbLq+dmrOimZhu8=
+        bh=NB4DqWz6+fIfMXcokXEeMggmgfFph8OJ/Hk6TSxy9cU=;
+        b=Z4TeM8oBMY9DFyt+kgoruPFi4SlzutRVxiGEL476G/yHFWjLsGMPcaN1lj7/tIdcZ3
+         99qk80+l3YSECr3raH8QPhJzYUy/G3gOXESvghOcet+SZhLZ9A1BMMNg/Q1djPQXCZDw
+         vzCGO7X334DQ1uXmJTuND51YI4Z5abPraIxE+IRXJucLqcXFuOPThbsoD7QU5VsbtNvt
+         XoAci/Qho1/oWYUoj4gdlY2rszbczsH/SoTzF4bte15CzCqNw1drITTLvQyrg7/o0w4h
+         RpkMyifjhQiCki443w1+tXXUvqJMr1TtYCYGjFQZDuMqU6MfcmHZ7/q0ajIaGa48iddE
+         Zdaw==
+X-Gm-Message-State: AOAM5305GU79KVzPkxfsEzEapf4W+c7u85izIfxXL+xlWpvnZJ08bJSi
+        TDjKWdyeeWqatoRbO+K90+ovJTpelCWzTj+/pyo=
+X-Google-Smtp-Source: ABdhPJwqkp+cAjUgpQ/a4zy6+yRRoWJAx7zl3+DhKe/ksIEW9MuPzDjzs69jj4tiiYYaOThbc4htLgXeM88lIlTIveg=
 Sender: "samitolvanen via sendgmr" 
         <samitolvanen@samitolvanen1.mtv.corp.google.com>
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
- (user=samitolvanen job=sendgmr) by 2002:a17:902:b40a:b029:d4:e1c7:db59 with
- SMTP id x10-20020a170902b40ab02900d4e1c7db59mr157311plr.85.1602549179447;
- Mon, 12 Oct 2020 17:32:59 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 17:32:02 -0700
+ (user=samitolvanen job=sendgmr) by 2002:ad4:59cf:: with SMTP id
+ el15mr14045430qvb.17.1602549181397; Mon, 12 Oct 2020 17:33:01 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 17:32:03 -0700
 In-Reply-To: <20201013003203.4168817-1-samitolvanen@google.com>
-Message-Id: <20201013003203.4168817-25-samitolvanen@google.com>
+Message-Id: <20201013003203.4168817-26-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20201013003203.4168817-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [PATCH v6 24/25] x86, cpu: disable LTO for cpu.c
+Subject: [PATCH v6 25/25] x86, build: allow LTO_CLANG and THINLTO to be selected
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
@@ -73,32 +72,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Clang incorrectly inlines functions with differing stack protector
-attributes, which breaks __restore_processor_state() that relies on
-stack protector being disabled. This change disables LTO for cpu.c
-to work aroung the bug.
+Pass code model and stack alignment to the linker as these are
+not stored in LLVM bitcode, and allow both CONFIG_LTO_CLANG and
+CONFIG_THINLTO to be selected.
 
-Link: https://bugs.llvm.org/show_bug.cgi?id=47479
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/power/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/Kconfig  | 2 ++
+ arch/x86/Makefile | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/arch/x86/power/Makefile b/arch/x86/power/Makefile
-index 6907b523e856..5f711a441623 100644
---- a/arch/x86/power/Makefile
-+++ b/arch/x86/power/Makefile
-@@ -5,5 +5,9 @@ OBJECT_FILES_NON_STANDARD_hibernate_asm_$(BITS).o := y
- # itself be stack-protected
- CFLAGS_cpu.o	:= -fno-stack-protector
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6d67646153bc..c579d7000b67 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -92,6 +92,8 @@ config X86
+ 	select ARCH_SUPPORTS_ACPI
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
++	select ARCH_SUPPORTS_LTO_CLANG		if X86_64
++	select ARCH_SUPPORTS_THINLTO		if X86_64
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 154259f18b8b..774a7debb27c 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -173,6 +173,11 @@ ifeq ($(ACCUMULATE_OUTGOING_ARGS), 1)
+ 	KBUILD_CFLAGS += $(call cc-option,-maccumulate-outgoing-args,)
+ endif
  
-+# Clang may incorrectly inline functions with stack protector enabled into
-+# __restore_processor_state(): https://bugs.llvm.org/show_bug.cgi?id=47479
-+CFLAGS_REMOVE_cpu.o := $(CC_FLAGS_LTO)
++ifdef CONFIG_LTO_CLANG
++KBUILD_LDFLAGS	+= -plugin-opt=-code-model=kernel \
++		   -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
++endif
 +
- obj-$(CONFIG_PM_SLEEP)		+= cpu.o
- obj-$(CONFIG_HIBERNATION)	+= hibernate_$(BITS).o hibernate_asm_$(BITS).o hibernate.o
+ # Workaround for a gcc prelease that unfortunately was shipped in a suse release
+ KBUILD_CFLAGS += -Wno-sign-compare
+ #
 -- 
 2.28.0.1011.ga647a8990f-goog
 
