@@ -2,69 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFE428CE14
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 14:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76EB28D028
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 16:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgJMMQX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Oct 2020 08:16:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:59036 "EHLO foss.arm.com"
+        id S2387608AbgJMOX1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Oct 2020 10:23:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:60784 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727794AbgJMMQS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Oct 2020 08:16:18 -0400
+        id S2387516AbgJMOX1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 13 Oct 2020 10:23:27 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F9391FB;
-        Tue, 13 Oct 2020 05:16:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9839531B;
+        Tue, 13 Oct 2020 07:23:26 -0700 (PDT)
 Received: from e107158-lin (unknown [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F3B43F719;
-        Tue, 13 Oct 2020 05:16:16 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 13:16:13 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 620473F66B;
+        Tue, 13 Oct 2020 07:23:25 -0700 (PDT)
+Date:   Tue, 13 Oct 2020 15:23:22 +0100
 From:   Qais Yousef <qais.yousef@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     James Morse <james.morse@arm.com>, linux-arch@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH 1/3] arm64: kvm: Handle Asymmetric AArch32 systems
-Message-ID: <20201013121613.qd7l5djaguletjgv@e107158-lin>
-References: <20201008181641.32767-2-qais.yousef@arm.com>
- <7c058d22dce84ec7636863c1486b11d1@kernel.org>
- <20201009095857.cq3bmmobxeq3tm5z@e107158-lin.cambridge.arm.com>
- <63e379d1399b5c898828f6802ce3dca5@kernel.org>
- <20201009124817.i7u53qrntvu7l5zq@e107158-lin.cambridge.arm.com>
- <54379ee1-97b1-699b-9500-655164f2e083@arm.com>
- <8cdbcf81bae94f4b030e2906191d80af@kernel.org>
- <13eb5d05-9eaf-7640-cd44-cfd7f8820257@arm.com>
- <20201013115953.gepxn5dbzrk6x6ec@e107158-lin>
- <20fba6976710e00dc32164bf8af26164@kernel.org>
+Subject: Re: [RFC PATCH 3/3] arm64: Handle AArch32 tasks running on non
+ AArch32 cpu
+Message-ID: <20201013142322.kldwvdnr2zjbia6e@e107158-lin>
+References: <20201008181641.32767-1-qais.yousef@arm.com>
+ <20201008181641.32767-4-qais.yousef@arm.com>
+ <20201009072943.GD2628@hirez.programming.kicks-ass.net>
+ <20201009081312.GA8004@e123083-lin>
+ <20201009083146.GA29594@willie-the-truck>
+ <20201009093340.GC23638@gaia>
+ <20201009113155.to5euj6sekmwt7lg@e107158-lin.cambridge.arm.com>
+ <20201009124025.GH23638@gaia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20fba6976710e00dc32164bf8af26164@kernel.org>
+In-Reply-To: <20201009124025.GH23638@gaia>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/13/20 13:09, Marc Zyngier wrote:
-> On 2020-10-13 12:59, Qais Yousef wrote:
-> > Thanks both.
+On 10/09/20 13:40, Catalin Marinas wrote:
+> On Fri, Oct 09, 2020 at 12:31:56PM +0100, Qais Yousef wrote:
+> > On 10/09/20 10:33, Catalin Marinas wrote:
+> > > On Fri, Oct 09, 2020 at 09:31:47AM +0100, Will Deacon wrote:
+> > > > Honestly, I don't understand why we're trying to hide this asymmetry from
+> > > > userspace by playing games with affinity masks in the kernel. Userspace
+> > > > is likely to want to move things about _anyway_ because even amongst the
+> > > > 32-bit capable cores, you may well have different clock frequencies to
+> > > > contend with.
+> > > > 
+> > > > So I'd be *much* happier to let the schesduler do its thing, and if one
+> > > > of these 32-bit tasks ends up on a core that can't deal with it, then
+> > > > tough, it gets killed. Give userspace the information it needs to avoid
+> > > > that happening in the first place, rather than implicitly limit the mask.
+> > > > 
+> > > > That way, the kernel support really boils down to two parts:
+> > > > 
+> > > >   1. Remove the sanity checks we have to prevent 32-bit applications running
+> > > >      on asymmetric systems
+> > > > 
+> > > >   2. Tell userspace about the problem
+> > > 
+> > > This works for me as well as long as it is default off with a knob to
+> > > turn it on. I'd prefer a sysctl (which can be driven from the command
+> > > line in recent kernels IIRC) so that one can play with it a run-time.
+> > > This way it's also a userspace choice and not an admin or whoever
+> > > controls the cmdline (well, that's rather theoretical since the target
+> > > is Android).
 > > 
-> > So using the vcpu->arch.target = -1 is the best way forward. In my
-> > experiments
-> > when I did that I considered calling kvm_reset_vcpu() too, does it make
-> > sense
-> > to force the reset here too? Or too heavy handed?
+> > I like the cmdline option more. It implies a custom bootloader and user space
+> > are required to enable this. Which in return implies they can write their own
+> > custom driver to manage exporting this info to user-space. Reliefing us from
+> > maintaining any ABI in mainline kernel.
 > 
-> No, userspace should know about it and take action if it wants too.
-> Trying to fix it behind the scenes is setting expectations, which
-> I'd really like to avoid.
+> Regardless of whether it's cmdline or sysctl, I'm strongly opposed to
+> custom drivers for exposing this information to user. It leads to
+> custom incompatible ABIs scattered around.
 
-Cool I thought so but I wanted to hear it directly :-)
+Yeah I see what you mean.
 
-Thanks!
+So for now I'll remove the Kconfig dependency and replace it with a sysctl
+instead such that system_supports_asym_32bit_el0() only returns true if the
+system is asym AND the sysctl is true.
+
+Thanks
 
 --
 Qais Yousef
+
+> Note that user can already check the MIDR_EL1 value if it knows which
+> CPU type and revision has 32-bit support.
+> 
+> -- 
+> Catalin
