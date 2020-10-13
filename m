@@ -2,101 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C76EB28D028
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 16:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0206B28D24A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 18:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387608AbgJMOX1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Oct 2020 10:23:27 -0400
-Received: from foss.arm.com ([217.140.110.172]:60784 "EHLO foss.arm.com"
+        id S1727148AbgJMQdz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Oct 2020 12:33:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387516AbgJMOX1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Oct 2020 10:23:27 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9839531B;
-        Tue, 13 Oct 2020 07:23:26 -0700 (PDT)
-Received: from e107158-lin (unknown [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 620473F66B;
-        Tue, 13 Oct 2020 07:23:25 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 15:23:22 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
+        id S1726120AbgJMQdz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 13 Oct 2020 12:33:55 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AA59252A0;
+        Tue, 13 Oct 2020 16:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602606834;
+        bh=7hRcmCxHpd8KknNwfV3ePJpOrQ+Pc1Ly5aJ34DD3pqI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XTwEJeZDHDZ5iVBjLiXPEpI7R4yiZlvWyE0FVEswlrnRwHKi5OJ2sbv7mbqm/Bazz
+         LAao1Wid9Ky3Kh2tMrLBOMzbbtY6cztVseNiXDpRvXmAyo5uEKML0Rf3tngqiI0TAq
+         i12/tq68YFuP+N/+wkR3IqVJo44/GzM+JGHeuzhg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 337EF3522A36; Tue, 13 Oct 2020 09:33:54 -0700 (PDT)
+Date:   Tue, 13 Oct 2020 09:33:54 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-arch@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH 3/3] arm64: Handle AArch32 tasks running on non
- AArch32 cpu
-Message-ID: <20201013142322.kldwvdnr2zjbia6e@e107158-lin>
-References: <20201008181641.32767-1-qais.yousef@arm.com>
- <20201008181641.32767-4-qais.yousef@arm.com>
- <20201009072943.GD2628@hirez.programming.kicks-ass.net>
- <20201009081312.GA8004@e123083-lin>
- <20201009083146.GA29594@willie-the-truck>
- <20201009093340.GC23638@gaia>
- <20201009113155.to5euj6sekmwt7lg@e107158-lin.cambridge.arm.com>
- <20201009124025.GH23638@gaia>
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/24] tools: docs: memory-model: fix references for
+ some files
+Message-ID: <20201013163354.GO3249@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <cover.1602590106.git.mchehab+huawei@kernel.org>
+ <44baab3643aeefdb68f1682d89672fad44aa2c67.1602590106.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009124025.GH23638@gaia>
+In-Reply-To: <44baab3643aeefdb68f1682d89672fad44aa2c67.1602590106.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/09/20 13:40, Catalin Marinas wrote:
-> On Fri, Oct 09, 2020 at 12:31:56PM +0100, Qais Yousef wrote:
-> > On 10/09/20 10:33, Catalin Marinas wrote:
-> > > On Fri, Oct 09, 2020 at 09:31:47AM +0100, Will Deacon wrote:
-> > > > Honestly, I don't understand why we're trying to hide this asymmetry from
-> > > > userspace by playing games with affinity masks in the kernel. Userspace
-> > > > is likely to want to move things about _anyway_ because even amongst the
-> > > > 32-bit capable cores, you may well have different clock frequencies to
-> > > > contend with.
-> > > > 
-> > > > So I'd be *much* happier to let the schesduler do its thing, and if one
-> > > > of these 32-bit tasks ends up on a core that can't deal with it, then
-> > > > tough, it gets killed. Give userspace the information it needs to avoid
-> > > > that happening in the first place, rather than implicitly limit the mask.
-> > > > 
-> > > > That way, the kernel support really boils down to two parts:
-> > > > 
-> > > >   1. Remove the sanity checks we have to prevent 32-bit applications running
-> > > >      on asymmetric systems
-> > > > 
-> > > >   2. Tell userspace about the problem
-> > > 
-> > > This works for me as well as long as it is default off with a knob to
-> > > turn it on. I'd prefer a sysctl (which can be driven from the command
-> > > line in recent kernels IIRC) so that one can play with it a run-time.
-> > > This way it's also a userspace choice and not an admin or whoever
-> > > controls the cmdline (well, that's rather theoretical since the target
-> > > is Android).
-> > 
-> > I like the cmdline option more. It implies a custom bootloader and user space
-> > are required to enable this. Which in return implies they can write their own
-> > custom driver to manage exporting this info to user-space. Reliefing us from
-> > maintaining any ABI in mainline kernel.
+On Tue, Oct 13, 2020 at 02:14:29PM +0200, Mauro Carvalho Chehab wrote:
+> - The sysfs.txt file was converted to ReST and renamed;
+> - The control-dependencies.txt is not at
+>   Documentation/control-dependencies.txt. As it is at the
+>   same dir as the README file, which mentions it, just
+>   remove Documentation/.
 > 
-> Regardless of whether it's cmdline or sysctl, I'm strongly opposed to
-> custom drivers for exposing this information to user. It leads to
-> custom incompatible ABIs scattered around.
-
-Yeah I see what you mean.
-
-So for now I'll remove the Kconfig dependency and replace it with a sysctl
-instead such that system_supports_asym_32bit_el0() only returns true if the
-system is asym AND the sysctl is true.
-
-Thanks
-
---
-Qais Yousef
-
-> Note that user can already check the MIDR_EL1 value if it knows which
-> CPU type and revision has 32-bit support.
+> With that, ./scripts/documentation-file-ref-check script
+> is now happy again for files under tools/.
 > 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+Queued for review and testing, likely target v5.11.
+
+							Thanx, Paul
+
+> ---
+>  tools/memory-model/Documentation/README       | 2 +-
+>  tools/memory-model/Documentation/ordering.txt | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
+> index 16177aaa9752..004969992bac 100644
+> --- a/tools/memory-model/Documentation/README
+> +++ b/tools/memory-model/Documentation/README
+> @@ -55,7 +55,7 @@ README
+>  Documentation/cheatsheet.txt
+>  	Quick-reference guide to the Linux-kernel memory model.
+>  
+> -Documentation/control-dependencies.txt
+> +control-dependencies.txt
+>  	A guide to preventing compiler optimizations from destroying
+>  	your control dependencies.
+>  
+> diff --git a/tools/memory-model/Documentation/ordering.txt b/tools/memory-model/Documentation/ordering.txt
+> index 3d020bed8585..629b19ae64a6 100644
+> --- a/tools/memory-model/Documentation/ordering.txt
+> +++ b/tools/memory-model/Documentation/ordering.txt
+> @@ -346,7 +346,7 @@ o	Accessing RCU-protected pointers via rcu_dereference()
+>  
+>  	If there is any significant processing of the pointer value
+>  	between the rcu_dereference() that returned it and a later
+> -	dereference(), please read Documentation/RCU/rcu_dereference.txt.
+> +	dereference(), please read Documentation/RCU/rcu_dereference.rst.
+>  
+>  It can also be quite helpful to review uses in the Linux kernel.
+>  
 > -- 
-> Catalin
+> 2.26.2
+> 
