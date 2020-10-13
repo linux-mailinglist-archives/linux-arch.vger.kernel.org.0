@@ -2,102 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4025228CE11
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 14:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFE428CE14
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Oct 2020 14:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbgJMMQR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Oct 2020 08:16:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41266 "EHLO mail.kernel.org"
+        id S1726476AbgJMMQX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Oct 2020 08:16:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:59036 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726984AbgJMMO5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Oct 2020 08:14:57 -0400
-Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 20FF722267;
-        Tue, 13 Oct 2020 12:14:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602591295;
-        bh=+icd9iFPfE9J69QdGJrm2iSgwufEUYZ3m5WGuFBDVpQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LDw8yCvtLiM/RembAAMMAuxGs0XaIYzWjgBMGQ9wHi2ZCAclrmvx/cqKwdiy11z0y
-         wazBRry5r9/H1DvO0P8BBnfq3QSGt6FFwyKKf+ym2OasG4UswI4dzp+luJb6cw0sHg
-         JCCH0x5Vd0eKeo9TIt22OwhnNdkcqqsHb3hbiqKo=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kSJCe-006Cnt-NS; Tue, 13 Oct 2020 14:14:52 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/24] tools: docs: memory-model: fix references for some files
-Date:   Tue, 13 Oct 2020 14:14:29 +0200
-Message-Id: <44baab3643aeefdb68f1682d89672fad44aa2c67.1602590106.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1602590106.git.mchehab+huawei@kernel.org>
-References: <cover.1602590106.git.mchehab+huawei@kernel.org>
+        id S1727794AbgJMMQS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 13 Oct 2020 08:16:18 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F9391FB;
+        Tue, 13 Oct 2020 05:16:17 -0700 (PDT)
+Received: from e107158-lin (unknown [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F3B43F719;
+        Tue, 13 Oct 2020 05:16:16 -0700 (PDT)
+Date:   Tue, 13 Oct 2020 13:16:13 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>, linux-arch@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH 1/3] arm64: kvm: Handle Asymmetric AArch32 systems
+Message-ID: <20201013121613.qd7l5djaguletjgv@e107158-lin>
+References: <20201008181641.32767-2-qais.yousef@arm.com>
+ <7c058d22dce84ec7636863c1486b11d1@kernel.org>
+ <20201009095857.cq3bmmobxeq3tm5z@e107158-lin.cambridge.arm.com>
+ <63e379d1399b5c898828f6802ce3dca5@kernel.org>
+ <20201009124817.i7u53qrntvu7l5zq@e107158-lin.cambridge.arm.com>
+ <54379ee1-97b1-699b-9500-655164f2e083@arm.com>
+ <8cdbcf81bae94f4b030e2906191d80af@kernel.org>
+ <13eb5d05-9eaf-7640-cd44-cfd7f8820257@arm.com>
+ <20201013115953.gepxn5dbzrk6x6ec@e107158-lin>
+ <20fba6976710e00dc32164bf8af26164@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20fba6976710e00dc32164bf8af26164@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-- The sysfs.txt file was converted to ReST and renamed;
-- The control-dependencies.txt is not at
-  Documentation/control-dependencies.txt. As it is at the
-  same dir as the README file, which mentions it, just
-  remove Documentation/.
+On 10/13/20 13:09, Marc Zyngier wrote:
+> On 2020-10-13 12:59, Qais Yousef wrote:
+> > Thanks both.
+> > 
+> > So using the vcpu->arch.target = -1 is the best way forward. In my
+> > experiments
+> > when I did that I considered calling kvm_reset_vcpu() too, does it make
+> > sense
+> > to force the reset here too? Or too heavy handed?
+> 
+> No, userspace should know about it and take action if it wants too.
+> Trying to fix it behind the scenes is setting expectations, which
+> I'd really like to avoid.
 
-With that, ./scripts/documentation-file-ref-check script
-is now happy again for files under tools/.
+Cool I thought so but I wanted to hear it directly :-)
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/memory-model/Documentation/README       | 2 +-
- tools/memory-model/Documentation/ordering.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
-index 16177aaa9752..004969992bac 100644
---- a/tools/memory-model/Documentation/README
-+++ b/tools/memory-model/Documentation/README
-@@ -55,7 +55,7 @@ README
- Documentation/cheatsheet.txt
- 	Quick-reference guide to the Linux-kernel memory model.
- 
--Documentation/control-dependencies.txt
-+control-dependencies.txt
- 	A guide to preventing compiler optimizations from destroying
- 	your control dependencies.
- 
-diff --git a/tools/memory-model/Documentation/ordering.txt b/tools/memory-model/Documentation/ordering.txt
-index 3d020bed8585..629b19ae64a6 100644
---- a/tools/memory-model/Documentation/ordering.txt
-+++ b/tools/memory-model/Documentation/ordering.txt
-@@ -346,7 +346,7 @@ o	Accessing RCU-protected pointers via rcu_dereference()
- 
- 	If there is any significant processing of the pointer value
- 	between the rcu_dereference() that returned it and a later
--	dereference(), please read Documentation/RCU/rcu_dereference.txt.
-+	dereference(), please read Documentation/RCU/rcu_dereference.rst.
- 
- It can also be quite helpful to review uses in the Linux kernel.
- 
--- 
-2.26.2
-
+--
+Qais Yousef
