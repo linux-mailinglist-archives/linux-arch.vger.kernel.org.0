@@ -2,193 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F58C28DBA4
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 10:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D00028E1FA
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 16:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbgJNIdq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 04:33:46 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:42440 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727766AbgJNIdn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 04:33:43 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09E8Sbj1079320;
-        Wed, 14 Oct 2020 08:33:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=N2brVn+1Poo0Ren9oK0iyu9Zpo2iIS7LndLrg9tk4Ck=;
- b=V73J0TZqdhEaSF8XOaRaygnrm/IXGHIMihqMhoHp3gnoxah4MR3DZeaJO9o/J/648bIV
- oA7UeGBG4mZY14zXCa5jZNZcr5U6asLtkQ8BGa24PpFKnGlsFT+hcla8x7SZ0N00wmav
- 1sRqVlnPZ6fPj9qFi1ocDvJBpl4oRkbm+v3J0fzL+Ecy257b++hP4OxFtTeLIQ1oL6kM
- HqiqzwoE2863wunhBjFnyTtzFBslp4hM2bKstlOHvptWK+DCtEV6tBaZYcpfDKcC43SS
- KLbusJwGPY1VeACMbidIVIy9A/DAQUSQnBXzuIVnTVRf80Sq5j4CbwBGu9yQyWGc/U1d BA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 343pajvt6t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Oct 2020 08:33:21 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09E8Tg3N125760;
-        Wed, 14 Oct 2020 08:33:21 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 343php850t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Oct 2020 08:33:21 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09E8XE39000426;
-        Wed, 14 Oct 2020 08:33:14 GMT
-Received: from monad.ca.oracle.com (/10.156.74.184)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 14 Oct 2020 01:33:13 -0700
-From:   Ankur Arora <ankur.a.arora@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     kirill@shutemov.name, mhocko@kernel.org,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
-        Ankur Arora <ankur.a.arora@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-arch@vger.kernel.org
-Subject: [PATCH 5/8] x86/clear_page: add clear_page_uncached()
-Date:   Wed, 14 Oct 2020 01:32:56 -0700
-Message-Id: <20201014083300.19077-6-ankur.a.arora@oracle.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201014083300.19077-1-ankur.a.arora@oracle.com>
-References: <20201014083300.19077-1-ankur.a.arora@oracle.com>
+        id S1727332AbgJNOOI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 10:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727023AbgJNOOI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 10:14:08 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DEAC061755;
+        Wed, 14 Oct 2020 07:14:08 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id j8so1820254pjy.5;
+        Wed, 14 Oct 2020 07:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=69069AnehaVf3UnSZwNG1/x2dVHK2fJGYXosNGLirqA=;
+        b=tPQ9t0LVAjdXlrRg8FlQwBDOUkZpALEmpbMxXBjfr5wAr9LYMa9Uam1636/b8zhDXL
+         8b1l5zaeo7D5wrgmZUQBpBJFiV1zb/c6F02lPDDFml5Dedkp0chOBTDBRFBoRJQLGsFN
+         1/1lnzG40gcoB8upIsgAl65cpOEo2zUTMrqIoZnu4rSiQAOnn6KRbXRHJgWHERRNEoGQ
+         TqGFhtyUUiA4/2wqM8E14cI6UNIXLO1W1dbP23Zekc5G2QpwU7nG3Ii/Y/ZFiZIH+NW3
+         wVQgVoLyawsOsEKwYjIzXsXzFkE8m/3KdobzUvlWHCcobHVrOIygQhoLX/AUWn6vy1mN
+         co8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=69069AnehaVf3UnSZwNG1/x2dVHK2fJGYXosNGLirqA=;
+        b=r1Oqi8vM7kwb9vGd5ZEfyQZGw3cFw1KtNi8lzjoICKezEEMXXIvKlDaXBQinzEq+YU
+         O9GQvJ+zTeJsywq1s/b5KP/s1i1PcrZaCN4psACaL+X8L4JtmG3AgD+7pAasWe7oZTVW
+         WUeHQJiJ+THc6zxIbJQu0sj5ashOoDssxe1qIBfgld2nZEor9UQAKA6DZAfMmoyzakH0
+         Bq0/yTr7nWsZczZJOihEUTex7bSZKqH5YTn1yo7jiE7Ea/K+agTP0krHEf7A5UFV3m99
+         YJSlBeeojOdh4Ac7GeYrLUDX8RzRecwOBhIhhDo5urEucE8/8Y2ipHH00Uuq4sntxxVk
+         /Gig==
+X-Gm-Message-State: AOAM531fxD90Vp+h7o2In9Wj/kfS9HomnDUMJIbr9scGg8pWeb3V2LZg
+        x1DBuJAMTYpzlmbEYoOfG7w=
+X-Google-Smtp-Source: ABdhPJwlSk9NJC9q/BbL/TeawLocBTV2wGEM3Q5doa1fGqW4pcUFHwvWxzrPHTj759w63AA03MH2Qw==
+X-Received: by 2002:a17:90a:ca95:: with SMTP id y21mr3724437pjt.68.1602684847425;
+        Wed, 14 Oct 2020 07:14:07 -0700 (PDT)
+Received: from [192.168.11.3] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id m13sm3695976pfd.65.2020.10.14.07.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2020 07:14:06 -0700 (PDT)
+Subject: Re: [PATCH v2 02/24] tools: docs: memory-model: fix references for
+ some files
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <cover.1602590106.git.mchehab+huawei@kernel.org>
+ <44baab3643aeefdb68f1682d89672fad44aa2c67.1602590106.git.mchehab+huawei@kernel.org>
+ <20201013163354.GO3249@paulmck-ThinkPad-P72>
+ <20201013163836.GC670875@rowland.harvard.edu>
+ <20201014015840.GR3249@paulmck-ThinkPad-P72>
+ <20201014095603.0d899da7@coco.lan>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <aaeeba66-48be-0354-8f1c-261b361ae17f@gmail.com>
+Date:   Wed, 14 Oct 2020 23:14:00 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9773 signatures=668681
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010140061
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9773 signatures=668681
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 clxscore=1011 malwarescore=0
- adultscore=0 lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010140061
+In-Reply-To: <20201014095603.0d899da7@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Define clear_page_uncached() as an alternative_call() to clear_page_nt()
-if the CPU sets X86_FEATURE_NT_GOOD and fallback to clear_page() if it
-doesn't.
+On Wed, 14 Oct 2020 09:56:03 +0200, Mauro Carvalho Chehab wrote:
+> Em Tue, 13 Oct 2020 18:58:40 -0700
+> "Paul E. McKenney" <paulmck@kernel.org> escreveu:
+> 
+>> On Tue, Oct 13, 2020 at 12:38:36PM -0400, Alan Stern wrote:
+>>> On Tue, Oct 13, 2020 at 09:33:54AM -0700, Paul E. McKenney wrote:  
+>>>> On Tue, Oct 13, 2020 at 02:14:29PM +0200, Mauro Carvalho Chehab wrote:  
+>>>>> - The sysfs.txt file was converted to ReST and renamed;
+>>>>> - The control-dependencies.txt is not at
+>>>>>   Documentation/control-dependencies.txt. As it is at the
+>>>>>   same dir as the README file, which mentions it, just
+>>>>>   remove Documentation/.
+>>>>>
+>>>>> With that, ./scripts/documentation-file-ref-check script
+>>>>> is now happy again for files under tools/.
+>>>>>
+>>>>> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
+>>>>
+>>>> Queued for review and testing, likely target v5.11.  
+>>>
+>>> Instead of changing the path in the README reference, shouldn't 
+>>> tools/memory-model/control-dependencies.txt be moved to its proper 
+>>> position in .../Documentation?  
+>>
+>> You are of course quite right.  My thought is to let Mauro go ahead,
+>> given his short deadline.  We can then make this "git mv" change once
+>> v5.10-rc1 comes out, given that it should have Mauro's patches.  I have
+>> added a reminder to my calendar.
+> 
+> Sounds like a plan to me.
+> 
+> 
+> If it helps on 5.11 plans, converting this file to ReST format is quite
+> trivial: it just needs to use "::" for C/asm code literal blocks, and 
+> to replace "(*) " by something that matches ReST syntax for lists,
+> like "(#) " or just "* ":
+> 
+> 	https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#bullet-lists
+> 
+> See enclosed.
 
-Similarly define clear_page_uncached_flush() which provides an SFENCE
-if the CPU sets X86_FEATURE_NT_GOOD.
+I'm afraid conversion of LKMM documents to ReST is unlikely to happen
+any time soon.
+It should wait until such time comes when the auto markup tools become
+clever enough and .rst files looks exactly the same as plain .txt files.
 
-Also, add the glue interface clear_user_highpage_uncached().
+Am I asking too much? :-)
 
-Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
----
- arch/x86/include/asm/page.h    |  6 ++++++
- arch/x86/include/asm/page_32.h |  9 +++++++++
- arch/x86/include/asm/page_64.h | 14 ++++++++++++++
- include/asm-generic/page.h     |  3 +++
- include/linux/highmem.h        | 10 ++++++++++
- 5 files changed, 42 insertions(+)
+        Thanks, Akira
 
-diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
-index 7555b48803a8..ca0aa379ac7f 100644
---- a/arch/x86/include/asm/page.h
-+++ b/arch/x86/include/asm/page.h
-@@ -28,6 +28,12 @@ static inline void clear_user_page(void *page, unsigned long vaddr,
- 	clear_page(page);
- }
- 
-+static inline void clear_user_page_uncached(void *page, unsigned long vaddr,
-+					    struct page *pg)
-+{
-+	clear_page_uncached(page);
-+}
-+
- static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
- 				  struct page *topage)
- {
-diff --git a/arch/x86/include/asm/page_32.h b/arch/x86/include/asm/page_32.h
-index 94dbd51df58f..7a03a274a9a4 100644
---- a/arch/x86/include/asm/page_32.h
-+++ b/arch/x86/include/asm/page_32.h
-@@ -39,6 +39,15 @@ static inline void clear_page(void *page)
- 	memset(page, 0, PAGE_SIZE);
- }
- 
-+static inline void clear_page_uncached(void *page)
-+{
-+	clear_page(page);
-+}
-+
-+static inline void clear_page_uncached_flush(void)
-+{
-+}
-+
- static inline void copy_page(void *to, void *from)
- {
- 	memcpy(to, from, PAGE_SIZE);
-diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
-index bde3c2785ec4..5897075e77dd 100644
---- a/arch/x86/include/asm/page_64.h
-+++ b/arch/x86/include/asm/page_64.h
-@@ -55,6 +55,20 @@ static inline void clear_page(void *page)
- 			   : "cc", "memory", "rax", "rcx");
- }
- 
-+static inline void clear_page_uncached(void *page)
-+{
-+	alternative_call(clear_page,
-+			 clear_page_nt, X86_FEATURE_NT_GOOD,
-+			 "=D" (page),
-+			 "0" (page)
-+			 : "cc", "memory", "rax", "rcx");
-+}
-+
-+static inline void clear_page_uncached_flush(void)
-+{
-+	alternative("", "sfence", X86_FEATURE_NT_GOOD);
-+}
-+
- void copy_page(void *to, void *from);
- 
- #endif	/* !__ASSEMBLY__ */
-diff --git a/include/asm-generic/page.h b/include/asm-generic/page.h
-index fe801f01625e..60235a0cf24a 100644
---- a/include/asm-generic/page.h
-+++ b/include/asm-generic/page.h
-@@ -26,6 +26,9 @@
- #ifndef __ASSEMBLY__
- 
- #define clear_page(page)	memset((page), 0, PAGE_SIZE)
-+#define clear_page_uncached(page)	clear_page(page)
-+#define clear_page_uncached_flush()	do { } while (0)
-+
- #define copy_page(to,from)	memcpy((to), (from), PAGE_SIZE)
- 
- #define clear_user_page(page, vaddr, pg)	clear_page(page)
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 14e6202ce47f..f842593e2474 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -232,6 +232,16 @@ static inline void clear_user_highpage(struct page *page, unsigned long vaddr)
- }
- #endif
- 
-+#ifndef clear_user_highpage_uncached
-+static inline void clear_user_highpage_uncached(struct page *page, unsigned long vaddr)
-+{
-+	void *addr = kmap_atomic(page);
-+
-+	clear_user_page_uncached(addr, vaddr, page);
-+	kunmap_atomic(addr);
-+}
-+#endif
-+
- #ifndef __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE
- /**
-  * __alloc_zeroed_user_highpage - Allocate a zeroed HIGHMEM page for a VMA with caller-specified movable GFP flags
--- 
-2.9.3
+> 
+> Thanks,
+> Mauro
+> 
+> [PATCH] convert control-dependencies.rst to ReST
+> 
 
+[snip]
