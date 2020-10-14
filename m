@@ -2,79 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 298A328E6AF
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 20:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5564128E6CE
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 20:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388755AbgJNSwQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 14:52:16 -0400
-Received: from smtp-42ad.mail.infomaniak.ch ([84.16.66.173]:54727 "EHLO
-        smtp-42ad.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730272AbgJNSwO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 14 Oct 2020 14:52:14 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CBM3H4S3vzlhGlF;
-        Wed, 14 Oct 2020 20:52:11 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CBM3F37gyzlh8TJ;
-        Wed, 14 Oct 2020 20:52:09 +0200 (CEST)
-Subject: Re: [PATCH v21 07/12] landlock: Support filesystem access-control
-To:     James Morris <jmorris@namei.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Richard Weinberger <richard@nod.at>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
+        id S2390253AbgJNS5V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 14:57:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45656 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389489AbgJNS5V (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Oct 2020 14:57:21 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 974EB20691;
+        Wed, 14 Oct 2020 18:57:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602701840;
+        bh=jFQXOQDUpjT6qesgdMyQFKwEbBCv/SGOxAeads27y1I=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=uufeQWbi++CzSAbfjFeE8arW5VSfn63QlFfD+6AAVjcPn0ZrEKvm0FDOVWFBP5qKu
+         Qx+Lj9UjyLtzyQE1huslAmaMcCSGQOapisG8gISkjKxFSV8kEaXeXkyLvQ0kksbrTF
+         V2RkmlzvDZLJtvcgVLFJd3kvQDdXTUKvRi4qGC9E=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 2EFD13522892; Wed, 14 Oct 2020 11:57:20 -0700 (PDT)
+Date:   Wed, 14 Oct 2020 11:57:20 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201008153103.1155388-1-mic@digikod.net>
- <20201008153103.1155388-8-mic@digikod.net>
- <alpine.LRH.2.21.2010150504360.26012@namei.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <77ea263c-4200-eb74-24b2-9a8155aff9b5@digikod.net>
-Date:   Wed, 14 Oct 2020 20:52:08 +0200
-User-Agent: 
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/24] tools: docs: memory-model: fix references for
+ some files
+Message-ID: <20201014185720.GA28761@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <cover.1602590106.git.mchehab+huawei@kernel.org>
+ <44baab3643aeefdb68f1682d89672fad44aa2c67.1602590106.git.mchehab+huawei@kernel.org>
+ <20201013163354.GO3249@paulmck-ThinkPad-P72>
+ <20201013163836.GC670875@rowland.harvard.edu>
+ <20201014015840.GR3249@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.2010150504360.26012@namei.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014015840.GR3249@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-On 14/10/2020 20:07, James Morris wrote:
-> On Thu, 8 Oct 2020, Mickaël Salaün wrote:
+On Tue, Oct 13, 2020 at 06:58:40PM -0700, Paul E. McKenney wrote:
+> On Tue, Oct 13, 2020 at 12:38:36PM -0400, Alan Stern wrote:
+> > On Tue, Oct 13, 2020 at 09:33:54AM -0700, Paul E. McKenney wrote:
+> > > On Tue, Oct 13, 2020 at 02:14:29PM +0200, Mauro Carvalho Chehab wrote:
+> > > > - The sysfs.txt file was converted to ReST and renamed;
+> > > > - The control-dependencies.txt is not at
+> > > >   Documentation/control-dependencies.txt. As it is at the
+> > > >   same dir as the README file, which mentions it, just
+> > > >   remove Documentation/.
+> > > > 
+> > > > With that, ./scripts/documentation-file-ref-check script
+> > > > is now happy again for files under tools/.
+> > > > 
+> > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > > 
+> > > Queued for review and testing, likely target v5.11.
+> > 
+> > Instead of changing the path in the README reference, shouldn't 
+> > tools/memory-model/control-dependencies.txt be moved to its proper 
+> > position in .../Documentation?
 > 
->> +config ARCH_EPHEMERAL_STATES
->> +	def_bool n
->> +	help
->> +	  An arch should select this symbol if it does not keep an internal kernel
->> +	  state for kernel objects such as inodes, but instead relies on something
->> +	  else (e.g. the host kernel for an UML kernel).
->> +
-> 
-> This is used to disable Landlock for UML, correct?
+> You are of course quite right.  My thought is to let Mauro go ahead,
+> given his short deadline.  We can then make this "git mv" change once
+> v5.10-rc1 comes out, given that it should have Mauro's patches.  I have
+> added a reminder to my calendar.
 
-Yes
+Except that I cannot find a commit where control-dependencies.txt is
+in tools/memory-model.  And this file is not yet in mainline, but
+only in -rcu and -next.  In both places, it is here:
 
-> I wonder if it could be 
-> more specific: "ephemeral states" is a very broad term.
-> 
-> How about something like ARCH_OWN_INODES ?
+	tools/memory-model/Documentation/control-dependencies.txt
 
-Sounds good. We may need add new ones (e.g. for network socket, UID,
-etc.) in the future though.
+Mauro, to what commit in what tree are you applying this patch?
+
+							Thanx, Paul
