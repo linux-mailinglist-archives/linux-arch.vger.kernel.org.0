@@ -2,87 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF2828D828
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 03:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACDF28DB00
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 10:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgJNB6l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Oct 2020 21:58:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55284 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725874AbgJNB6l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 13 Oct 2020 21:58:41 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F0C721D7F;
-        Wed, 14 Oct 2020 01:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602640720;
-        bh=gsQXg/Wr/5qYlMS+P7kGnf949bK69OfahNw1f6kbQn0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=zXiI++IfkMkVnClheHjnLnr8M7OJtmmt3kckkVfr5t+aCUbVnldusWFt7GWUWEhsJ
-         ScIVUlvbp2RY5bmXCpWpBmSabId2HAYMWriDZBOZc81eNi2hsejhRUpUCFdZNFBbRV
-         BASo2ZuLHbPvKnd1Xr9kzNLYcKuzZORI/5gY3qus=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 5725335229EE; Tue, 13 Oct 2020 18:58:40 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 18:58:40 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/24] tools: docs: memory-model: fix references for
- some files
-Message-ID: <20201014015840.GR3249@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <cover.1602590106.git.mchehab+huawei@kernel.org>
- <44baab3643aeefdb68f1682d89672fad44aa2c67.1602590106.git.mchehab+huawei@kernel.org>
- <20201013163354.GO3249@paulmck-ThinkPad-P72>
- <20201013163836.GC670875@rowland.harvard.edu>
+        id S1728955AbgJNITe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 04:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727767AbgJNITd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 04:19:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88B9C04586A;
+        Tue, 13 Oct 2020 22:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Zj/mSELh0gkQiJzxNFapB7VTFgX/SPaMVeSie4q6aLI=; b=OMo7hmfNufPo6rVhRGuQHzLQ0b
+        1VAPwm7au3dwZhP2U8KCBzhdLGuGCJg4Y6BujKWfQq2J1qHSQizXWY3eydQmN9Z/I4vBdS6zYKs5j
+        8G4vo2y4z0B+BuZzAKnFd/zlkgAkwf4/KGUd29HlOFzuWZb9K09Z7harllEIKARBJ+lNl3gcIyJwx
+        IgDSWugwC2Wi8bsLi3iEMqOtFQSkJCi/2zicQQg/+6U0CE8rkkSKMimmb2xrSDPfAVVBj7aqg8wnj
+        QMZqWCmfY9u5oHJiUeflNjGtB6dSKh1s54zSdXMn8V4HVtnycq0plQXp5B1021lCYA4/A3ZxNhsFb
+        Ml0gOVXw==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kSZgx-0005RW-Py; Wed, 14 Oct 2020 05:51:15 +0000
+Date:   Wed, 14 Oct 2020 06:51:15 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Alexander Viro <aviro@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 05/14] fs: don't allow kernel reads and writes without
+ iter ops
+Message-ID: <20201014055115.GA19844@infradead.org>
+References: <20200903142242.925828-1-hch@lst.de>
+ <20200903142242.925828-6-hch@lst.de>
+ <20201001223852.GA855@sol.localdomain>
+ <20201001224051.GI3421308@ZenIV.linux.org.uk>
+ <CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com>
+ <20201009220633.GA1122@sol.localdomain>
+ <CAHk-=whcEzYjkqdpZciHh+iAdUttvfWZYoiHiF67XuTXB1YJLw@mail.gmail.com>
+ <20201010011919.GC1122@sol.localdomain>
+ <CAHk-=wigvcmp-jcgoNCbx45W7j3=0jA320CfpskwuoEjefM7nQ@mail.gmail.com>
+ <20201010015524.GB101464@shell-el7.hosts.prod.upshift.rdu2.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201013163836.GC670875@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201010015524.GB101464@shell-el7.hosts.prod.upshift.rdu2.redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 12:38:36PM -0400, Alan Stern wrote:
-> On Tue, Oct 13, 2020 at 09:33:54AM -0700, Paul E. McKenney wrote:
-> > On Tue, Oct 13, 2020 at 02:14:29PM +0200, Mauro Carvalho Chehab wrote:
-> > > - The sysfs.txt file was converted to ReST and renamed;
-> > > - The control-dependencies.txt is not at
-> > >   Documentation/control-dependencies.txt. As it is at the
-> > >   same dir as the README file, which mentions it, just
-> > >   remove Documentation/.
-> > > 
-> > > With that, ./scripts/documentation-file-ref-check script
-> > > is now happy again for files under tools/.
-> > > 
-> > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > 
-> > Queued for review and testing, likely target v5.11.
+On Sat, Oct 10, 2020 at 01:55:24AM +0000, Alexander Viro wrote:
+> FWIW, I hadn't pushed that branch out (or merged it into #for-next yet);
+> for one thing, uml part (mconsole) is simply broken, for another...
+> IMO ##5--8 are asking for kernel_pread() and if you look at binfmt_elf.c,
+> you'll see elf_read() being pretty much that.  acct.c, keys and usermode
+> parts are asking for kernel_pwrite() as well.
 > 
-> Instead of changing the path in the README reference, shouldn't 
-> tools/memory-model/control-dependencies.txt be moved to its proper 
-> position in .../Documentation?
+> I've got stuck looking through the drivers/target stuff - it would've
+> been another kernel_pwrite() candidate, but it smells like its use of
+> filp_open() is really asking for trouble, starting with symlink attacks.
+> Not sure - I'm not familiar with the area, but...
 
-You are of course quite right.  My thought is to let Mauro go ahead,
-given his short deadline.  We can then make this "git mv" change once
-v5.10-rc1 comes out, given that it should have Mauro's patches.  I have
-added a reminder to my calendar.
-
-							Thanx, Paul
+Can you just pull in the minimal fix so that the branch gets fixed
+for this merge window?  All the cleanups can come later.
