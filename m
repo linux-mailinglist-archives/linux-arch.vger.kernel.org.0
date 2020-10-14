@@ -2,118 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA7128E9DA
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 03:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1CA28E9D6
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 03:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388173AbgJOBUD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 21:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47392 "EHLO
+        id S2388226AbgJOBTj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 21:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388102AbgJOBTi (ORCPT
+        with ESMTP id S2388133AbgJOBTi (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 21:19:38 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8AEC05BD33
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:50:31 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id e10so732862pfj.1
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:50:31 -0700 (PDT)
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9FCC05BD3A
+        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:51:21 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id d24so1101823ljg.10
+        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3VrWtG2Nzyu2csFSOGvGre3/3hIZgGNscPNIfDNpl2k=;
-        b=hr4N6hwj+08gozMcwrEdmSN1/DHjJ1wV/rjoECw8Rb2Lo+XQgEYgDpitXER6aen3HX
-         eXkJa61f3G1/5SOO7jrmjCFOzgysn3m/odJ4K0c9h+p6mhA72fUnwN1sijYXM89+e5/y
-         E6EY2141rat0DkfG+cb3u9htDo0fyWs7u+jCA=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r6oBIo6NMPMfLWaK5KgxYK4Ufg4k2ubTwgmyCFt3P0g=;
+        b=NGV+3tygGODZy3py0l471EDO3cAhaCKm/0oH+GnoAnl8uVT08bj08gcxgVjtxWV8Tq
+         Bed7WTMDPptLmWYRwNNDJfe+ozsotmCMfsUYGxxJdsub/va6psKbBlDpWECbhy12PwLh
+         i1CkPu58C5kDeyvD9pLBgOx+0mzgUNJvq+gN4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3VrWtG2Nzyu2csFSOGvGre3/3hIZgGNscPNIfDNpl2k=;
-        b=WjuCIMTIDSr4+2tMtHC+PgSIIpqDrq9Iz4l+yz4H7UEhhrf38qRdn/ApxhR31qugp5
-         qYFqSP82IgBcNzepv0ywFfTRt34on8Wg7bFekaLYMSV407cYK70ihO8j9zJszrnq4Uy9
-         7/iY2OWevQ8+pMNl9YEeQEB21jhT/djc0uMic20VRDe/nWo8KWsPV5NB/P2NFaAjmhyg
-         tWwoAmq6wSX8XwJrQSNgHhWA1dw2wd8z+3inMvxLrLi7F8y8pIBNGHrFLi3N9cRh0KFg
-         cnNByP8LZNOEsOFCmX1VGfEoj3Nk7ou6xYbL3IJzf0YkxUA+Py1oarcxY6N9k/mKIBak
-         mc+w==
-X-Gm-Message-State: AOAM532whBeTj9lsQALBjph89dk4sqbG7VQPAUX5OxkExWPurWMBIZV4
-        gXK2NUVVfEroaxcLSRCROuFC3g==
-X-Google-Smtp-Source: ABdhPJy3mXoDsP85zSkY2lnijaDX4p6o9n8i+9WfyCkbfe3bfD5GCGw8G2jBei5i1UDoglc5TJDPQA==
-X-Received: by 2002:a62:1856:0:b029:155:1718:91a3 with SMTP id 83-20020a6218560000b0290155171891a3mr1359345pfy.66.1602715830672;
-        Wed, 14 Oct 2020 15:50:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 143sm704359pfw.13.2020.10.14.15.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 15:50:29 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 15:50:28 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 14/25] kbuild: lto: remove duplicate dependencies from
- .mod files
-Message-ID: <202010141549.412F2BF0@keescook>
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-15-samitolvanen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r6oBIo6NMPMfLWaK5KgxYK4Ufg4k2ubTwgmyCFt3P0g=;
+        b=Z7PWjRIkNWN0iC0K0Lh6l/8y8sxTHyVwx9x/QXDPXpRW/z+WTv65kbkjyaKtIE/G+P
+         4y1Z2rbrZhICRlAqT7mCTjUcbIlfL9a8Gp80bRXfa9QoqvK6FLLBAgALfn2CkN+ccdm2
+         KYsF1BDpvctZI3F4d2W2lX9+t4Jl8uDMMr92BROzXiyHmwIk1nq33nYa8T8QBieK1pvm
+         iB4Ra5MUYwW1goUSyX6btbW+LXf7mzk/kqtntyPCJbx93dPJX18UjI0bwGZTM9XU7cIK
+         5hig1rxBtEshBWSFxCJmTEIHTVF/2un1XUOIMpU4/ZsmsOHQ9OjrbiB71dT0Gz7dx/iK
+         HVnA==
+X-Gm-Message-State: AOAM533aEiQdvmcolDaOUDtCooBKfw/JO+nzONMNl/Y3goVBNBMSWm8i
+        TwWC2OigErlyHLpWKwSXL6w3qsfLvCGzMw==
+X-Google-Smtp-Source: ABdhPJwJcPi7L1jAQyJVPoXXs0rRwOFvokEdtCPgojXELj9Jucq2mduXTZe2Gbxkbb/wNbSICK6XpA==
+X-Received: by 2002:a2e:90d4:: with SMTP id o20mr124830ljg.291.1602715879297;
+        Wed, 14 Oct 2020 15:51:19 -0700 (PDT)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id k21sm429319ljb.43.2020.10.14.15.51.17
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2020 15:51:17 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id y16so1168918ljk.1
+        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:51:17 -0700 (PDT)
+X-Received: by 2002:a2e:8815:: with SMTP id x21mr156315ljh.312.1602715877030;
+ Wed, 14 Oct 2020 15:51:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201013003203.4168817-15-samitolvanen@google.com>
+References: <20200724012512.GK2786714@ZenIV.linux.org.uk> <20200724012546.302155-1-viro@ZenIV.linux.org.uk>
+ <20200724012546.302155-20-viro@ZenIV.linux.org.uk> <20201014222650.GA390346@zx2c4.com>
+In-Reply-To: <20201014222650.GA390346@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 14 Oct 2020 15:51:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgTrpV=mT_EZF1BbWxqezrFJRJcaDtuM58qXMXk9=iaZA@mail.gmail.com>
+Message-ID: <CAHk-=wgTrpV=mT_EZF1BbWxqezrFJRJcaDtuM58qXMXk9=iaZA@mail.gmail.com>
+Subject: Re: [PATCH v2 20/20] ppc: propagate the calling conventions change
+ down to csum_partial_copy_generic()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 05:31:52PM -0700, Sami Tolvanen wrote:
-> With LTO, llvm-nm prints out symbols for each archive member
-> separately, which results in a lot of duplicate dependencies in the
-> .mod file when CONFIG_TRIM_UNUSED_SYMS is enabled. When a module
-> consists of several compilation units, the output can exceed the
-> default xargs command size limit and split the dependency list to
-> multiple lines, which results in used symbols getting trimmed.
-> 
-> This change removes duplicate dependencies, which will reduce the
-> probability of this happening and makes .mod files smaller and
-> easier to read.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+On Wed, Oct 14, 2020 at 3:27 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> This patch is causing crashes in WireGuard's CI over at
+> https://www.wireguard.com/build-status/ . Apparently sending a simple
+> network packet winds up triggering refcount_t's warn-on-saturate code. I
 
-Hi Masahiro,
+Ouch.
 
-This appears to be a general improvement as well. This looks like it can
-land without depending on the rest of the series.
+The C parts look fairly straightforward, and I don't see how they
+could cause that odd refcount issue.
 
--Kees
+So I assume it's the low-level asm code conversion that is buggy. And
+it's apparently the 32-bit conversion, since your ppc64 status looks
+fine.
 
-> ---
->  scripts/Makefile.build | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index ab0ddf4884fd..96d6c9e18901 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -266,7 +266,7 @@ endef
->  
->  # List module undefined symbols (or empty line if not enabled)
->  ifdef CONFIG_TRIM_UNUSED_KSYMS
-> -cmd_undef_syms = $(NM) $< | sed -n 's/^  *U //p' | xargs echo
-> +cmd_undef_syms = $(NM) $< | sed -n 's/^  *U //p' | sort -u | xargs echo
->  else
->  cmd_undef_syms = echo
->  endif
-> -- 
-> 2.28.0.1011.ga647a8990f-goog
-> 
+I think it's this instruction:
 
--- 
-Kees Cook
+        addi    r1,r1,16
+
+that should be removed from the function exit, because Al removed the
+
+-       stwu    r1,-16(r1)
+
+on function entry.
+
+So I think you end up with a corrupt stack pointer and basically
+random behavior.
+
+Mind trying that? (This is obviously all in
+arch/powerpc/lib/checksum_32.S, the csum_partial_copy_generic()
+function).
+
+               Linus
