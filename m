@@ -2,95 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB28C28E80F
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 22:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C29528E823
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Oct 2020 22:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389220AbgJNUrJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 16:47:09 -0400
-Received: from namei.org ([65.99.196.166]:35652 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387909AbgJNUrJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 14 Oct 2020 16:47:09 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 09EKkLrU004034;
-        Wed, 14 Oct 2020 20:46:21 GMT
-Date:   Thu, 15 Oct 2020 07:46:21 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     linux-kernel@vger.kernel.org,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Richard Weinberger <richard@nod.at>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        id S2389144AbgJNU43 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 16:56:29 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:60652 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387573AbgJNU43 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 16:56:29 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09EKsKUh005403;
+        Wed, 14 Oct 2020 20:56:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=2dHm09Cd/t0EY1pFGezYnD8/lE5PJwJ2i8unZaqVKkw=;
+ b=MuanJBZWoZVWBkFAYPnavkgtao047Y/tIwxSOlrITqcuNtNrilkva0w4zlao5qpjJxNO
+ wxhqPOE1jzBdzhShh9zLyGBBtqTHbnCT6j8JEFApLFDXncxLcJr/JF9lwarXdDgi4WT4
+ CrA8m4JNPMQnfZd/llCDS/Wm7IP4E2UtiFsvk7yiy3zEVC0GVoZ2CZYhoHMCZ8zTbNNc
+ zIabnreO8UggVCicu2PntN4YAr8y1LANyZSJdbGSzXq4/8MKWCoxn83upAPz7UmoKeT7
+ wTszyg2WFygjXZa1/Gh4LK6cm6cygPABXQmvDly0lFM2gQRDRnaCecc7ZUtsq6t9nn4h ng== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 3434wksru3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Oct 2020 20:56:11 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09EKnZiO079912;
+        Wed, 14 Oct 2020 20:54:10 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 344by46q0x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Oct 2020 20:54:10 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09EKs2fJ006933;
+        Wed, 14 Oct 2020 20:54:02 GMT
+Received: from [10.159.149.68] (/10.159.149.68)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 14 Oct 2020 13:54:02 -0700
+Subject: Re: [PATCH 5/8] x86/clear_page: add clear_page_uncached()
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v21 07/12] landlock: Support filesystem access-control
-In-Reply-To: <b311a2a6-5290-5c50-3a9c-4d5b54b6b406@digikod.net>
-Message-ID: <alpine.LRH.2.21.2010150746120.4000@namei.org>
-References: <20201008153103.1155388-1-mic@digikod.net> <20201008153103.1155388-8-mic@digikod.net> <alpine.LRH.2.21.2010150504360.26012@namei.org> <77ea263c-4200-eb74-24b2-9a8155aff9b5@digikod.net> <b311a2a6-5290-5c50-3a9c-4d5b54b6b406@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <20201014083300.19077-1-ankur.a.arora@oracle.com>
+ <20201014083300.19077-6-ankur.a.arora@oracle.com>
+ <CALCETrVKLv5DPByFcj7E5SBbv4mFt7mGQ9j-HU7G5u_aPGCYsQ@mail.gmail.com>
+From:   Ankur Arora <ankur.a.arora@oracle.com>
+Message-ID: <047e8a34-65cb-ce46-bfe2-014a43b61560@oracle.com>
+Date:   Wed, 14 Oct 2020 13:54:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-1392177967-1602708383=:4000"
+In-Reply-To: <CALCETrVKLv5DPByFcj7E5SBbv4mFt7mGQ9j-HU7G5u_aPGCYsQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9774 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=928 spamscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010140146
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9774 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 clxscore=1011
+ spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=949
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010140147
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---1665246916-1392177967-1602708383=:4000
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 14 Oct 2020, Mickaël Salaün wrote:
-
+On 2020-10-14 8:45 a.m., Andy Lutomirski wrote:
+> On Wed, Oct 14, 2020 at 1:33 AM Ankur Arora <ankur.a.arora@oracle.com> wrote:
+>>
+>> Define clear_page_uncached() as an alternative_call() to clear_page_nt()
+>> if the CPU sets X86_FEATURE_NT_GOOD and fallback to clear_page() if it
+>> doesn't.
+>>
+>> Similarly define clear_page_uncached_flush() which provides an SFENCE
+>> if the CPU sets X86_FEATURE_NT_GOOD.
 > 
-> On 14/10/2020 20:52, Mickaël Salaün wrote:
-> > 
-> > On 14/10/2020 20:07, James Morris wrote:
-> >> On Thu, 8 Oct 2020, Mickaël Salaün wrote:
-> >>
-> >>> +config ARCH_EPHEMERAL_STATES
-> >>> +	def_bool n
-> >>> +	help
-> >>> +	  An arch should select this symbol if it does not keep an internal kernel
-> >>> +	  state for kernel objects such as inodes, but instead relies on something
-> >>> +	  else (e.g. the host kernel for an UML kernel).
-> >>> +
-> >>
-> >> This is used to disable Landlock for UML, correct?
-> > 
-> > Yes
-> > 
-> >> I wonder if it could be 
-> >> more specific: "ephemeral states" is a very broad term.
-> >>
-> >> How about something like ARCH_OWN_INODES ?
-> > 
-> > Sounds good. We may need add new ones (e.g. for network socket, UID,
-> > etc.) in the future though.
-> > 
+> As long as you keep "NT" or "MOVNTI" in the names and keep functions
+> in arch/x86, I think it's reasonable to expect that callers understand
+> that MOVNTI has bizarre memory ordering rules.  But once you give
+> something a generic name like "clear_page_uncached" and stick it in
+> generic code, I think the semantics should be more obvious.
 > 
-> Because UML is the exception here, it would be more convenient to keep
-> the inverted semantic. What about ARCH_NO_OWN_INODES or
-> ARCH_EPHEMERAL_INODES?
+> How about:
+> 
+> clear_page_uncached_unordered() or clear_page_uncached_incoherent()
+> 
+> and
+> 
+> flush_after_clear_page_uncached()
+> 
+> After all, a naive reader might expect "uncached" to imply "caches are
+> off and this is coherent with everything".  And the results of getting
+> this wrong will be subtle and possibly hard-to-reproduce corruption.
+Yeah, these are a lot more obvious. Thanks. Will fix.
 
-The latter seems good.
+Ankur
 
--- 
-James Morris
-<jmorris@namei.org>
-
---1665246916-1392177967-1602708383=:4000--
+>
+> --Andy
+> 
