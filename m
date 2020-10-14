@@ -2,138 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B52A28E9F1
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 03:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910E128E90E
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 01:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388549AbgJOBYz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 21:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732081AbgJOBYj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 21:24:39 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CBEC051117
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:58:14 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id a1so651008pjd.1
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 15:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WUVth3Yi/0Gf6s7eybXLKtt4uMjJ4xi70yGGSwDkLw0=;
-        b=R63EBTH6+0dTkzS267+O24BYdxnurWecDwGpDuhGH5wyKY0Pg8ynHUH/iEecP4Gnho
-         RfNGPWH3YDit4Wmb0luYZWOyRplddz6hFIgmHH4CLhIZt4IyCFh8a/BvWIZDZQnBcGoK
-         FZBeYg7LPlk+kUu4N8sYcxncY/8J8OqwbusLI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WUVth3Yi/0Gf6s7eybXLKtt4uMjJ4xi70yGGSwDkLw0=;
-        b=RsJY+wFJwZV3OoIHiqFyRp5a/uByk06+NVAs9XoUyNPfZ4qBQn86T989xxUxkxZ8QY
-         Q1u1QL75ghxV6En4DBTQNkO6a0+rB3wUwLJFa3lcW289UgLuFGBHAd8p9iQNBQH6gxYI
-         V/fgQDTRucOM5RIaq4ertIXqO84ETJIxtUaP8XY930gxQZBxS1imimm1RbcMpZH9RSUc
-         Nls8GDj9s7kUdErg0xAGLcIvD5DNFxxcXYCU+f7i9vQkDm2F0YeMtr83lqOPW0pyEoDo
-         bJAcZMEogdUx4q4CGHKGC3BsBXJeUJUdYf03u+mzZTSw7E9KaTRwL9C/PNmXA7Y4xeEf
-         a08A==
-X-Gm-Message-State: AOAM530VTll2YqdCPmpk0uXEpA5BcPiwvUnB4LNDHyGnZb17jVEfz8U3
-        /vJcSPcV+aWosMFwW3z8OFIYGQ==
-X-Google-Smtp-Source: ABdhPJzHdqdE46WrFZlw8R7S7F1x+3bND/WLRTw47I4euXQao8J+1ZC4KoSJiwuZcz/FXnt7OEBn6A==
-X-Received: by 2002:a17:902:59da:b029:d4:c71a:357a with SMTP id d26-20020a17090259dab02900d4c71a357amr1496188plj.38.1602716293981;
-        Wed, 14 Oct 2020 15:58:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g14sm715510pfo.17.2020.10.14.15.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 15:58:13 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 15:58:12 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 17/25] PCI: Fix PREL32 relocations for LTO
-Message-ID: <202010141556.DC58D913@keescook>
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-18-samitolvanen@google.com>
+        id S1731068AbgJNXCc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 19:02:32 -0400
+Received: from mail.zx2c4.com ([192.95.5.64]:42481 "EHLO mail.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731265AbgJNXCS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 14 Oct 2020 19:02:18 -0400
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 075e12dc;
+        Wed, 14 Oct 2020 22:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=from:to:cc
+        :subject:date:message-id:in-reply-to:references:mime-version
+        :content-transfer-encoding; s=mail; bh=EPozuoj+BDm/fNTp6nmCgRrnb
+        EI=; b=gYz9PJ4B7EuU6vk6qPqdAddg4bDnwzOOhB6j96pC1QC6JhgGVLnYQz//V
+        MCUGHyzXTkEynX7iFMjllnvi0ui1qLCCbWWq0E6/JfxIbFUmwx85fYInWLGTU2x8
+        uGMPSFB6nnmKrmWU585OZjOG9jA9TOlN56cqtPJG6LWOlxlD0RJsWYdrar/f8hVM
+        1zTcSfx+0yvy532DRFJMpXnnpv6TJp4EZ5C+x36/7kFXFanjjCpD+5ol4Sh/8jd6
+        aj0bz65xTT3as0O4g2fOyDLcEbpkGSKn1Fh7X1lw7JrRZdsIiBt2eJ0C13DqlPUO
+        kF+2z+5Ug6eHBHfoQXEPlMCqc9wZA==
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 992bda79 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 14 Oct 2020 22:28:40 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] powerpc32: don't adjust unmoved stack pointer in csum_partial_copy_generic() epilogue
+Date:   Thu, 15 Oct 2020 01:02:09 +0200
+Message-Id: <20201014230209.427011-1-Jason@zx2c4.com>
+In-Reply-To: <20201014222650.GA390346@zx2c4.com>
+References: <20201014222650.GA390346@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201013003203.4168817-18-samitolvanen@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 05:31:55PM -0700, Sami Tolvanen wrote:
-> With Clang's Link Time Optimization (LTO), the compiler can rename
-> static functions to avoid global naming collisions. As PCI fixup
-> functions are typically static, renaming can break references
-> to them in inline assembly. This change adds a global stub to
-> DECLARE_PCI_FIXUP_SECTION to fix the issue when PREL32 relocations
-> are used.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+A recent change to the checksum code removed usage of some extra
+arguments, alongside with storage on the stack for those, and the stack
+pointer no longer needed to be adjusted in the function prologue. But, a
+left over subtraction wasn't removed in the function epilogue, causing
+the function to return with the stack pointer moved 16 bytes away from
+where it should have. This corrupted local state and lead to weird
+crashes. This commit simply removes the leftover instruction from the
+epilogue.
 
-Another independent patch! :) Bjorn, since you've already Acked this
-patch, would be be willing to pick it up for your tree?
+Fixes: 70d65cd555c5 ("ppc: propagate the calling conventions change down to csum_partial_copy_generic()")
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/powerpc/lib/checksum_32.S | 1 -
+ 1 file changed, 1 deletion(-)
 
--Kees
-
-> ---
->  include/linux/pci.h | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 835530605c0d..4e64421981c7 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1909,19 +1909,28 @@ enum pci_fixup_pass {
->  };
->  
->  #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-> -#define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
-> -				    class_shift, hook)			\
-> -	__ADDRESSABLE(hook)						\
-> +#define ___DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
-> +				    class_shift, hook, stub)		\
-> +	void stub(struct pci_dev *dev);					\
-> +	void stub(struct pci_dev *dev)					\
-> +	{ 								\
-> +		hook(dev); 						\
-> +	}								\
->  	asm(".section "	#sec ", \"a\"				\n"	\
->  	    ".balign	16					\n"	\
->  	    ".short "	#vendor ", " #device "			\n"	\
->  	    ".long "	#class ", " #class_shift "		\n"	\
-> -	    ".long "	#hook " - .				\n"	\
-> +	    ".long "	#stub " - .				\n"	\
->  	    ".previous						\n");
-> +
-> +#define __DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
-> +				  class_shift, hook, stub)		\
-> +	___DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
-> +				  class_shift, hook, stub)
->  #define DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
->  				  class_shift, hook)			\
->  	__DECLARE_PCI_FIXUP_SECTION(sec, name, vendor, device, class,	\
-> -				  class_shift, hook)
-> +				  class_shift, hook, __UNIQUE_ID(hook))
->  #else
->  /* Anonymous variables would be nice... */
->  #define DECLARE_PCI_FIXUP_SECTION(section, name, vendor, device, class,	\
-> -- 
-> 2.28.0.1011.ga647a8990f-goog
-> 
-
+diff --git a/arch/powerpc/lib/checksum_32.S b/arch/powerpc/lib/checksum_32.S
+index ec5cd2dede35..27d9070617df 100644
+--- a/arch/powerpc/lib/checksum_32.S
++++ b/arch/powerpc/lib/checksum_32.S
+@@ -236,7 +236,6 @@ _GLOBAL(csum_partial_copy_generic)
+ 	slwi	r0,r0,8
+ 	adde	r12,r12,r0
+ 66:	addze	r3,r12
+-	addi	r1,r1,16
+ 	beqlr+	cr7
+ 	rlwinm	r3,r3,8,0,31	/* odd destination address: rotate one byte */
+ 	blr
 -- 
-Kees Cook
+2.28.0
+
