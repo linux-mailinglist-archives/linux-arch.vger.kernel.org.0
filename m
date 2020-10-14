@@ -2,72 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF2428EA35
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 03:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92BE28EA60
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 03:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732306AbgJOBey (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 21:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S2389011AbgJOBk1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 14 Oct 2020 21:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732277AbgJOBeh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 21:34:37 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25E7C051128
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 16:05:44 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id h6so1340621lfj.3
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 16:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qlFvy8eyL04DCdB/CZCNzYgQ2J2bwqnrawGVF61K2Q4=;
-        b=T4nkPbcrfWVzlUXPa2RR1CJimGsiGY65KGzNi9VNP62ZmKbMbTcQk0jIvKba4mQWTj
-         Ql2R8WvQdFrPo1ebURmmR+z4SRbFVplsZde363RW7Z/ZsuQgnaSQ9O2JbS+GUN+LzQRD
-         3lLLweu8MvSfGCWs26YQ2AN9k47D9sYkCWPjI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qlFvy8eyL04DCdB/CZCNzYgQ2J2bwqnrawGVF61K2Q4=;
-        b=j/61OWpKhpk8koV1nHlt7FX8+giE7YkmMuRPqN151Texry0JoBr0sk4bPlPwTEOCyY
-         v8wIIlitGPui0XoqjtmY1DQ+GZf+7xCBU96GxooK02MzhtiEztsepvYh/4AdI8j0Iqmw
-         W7k15la/6bgdVIB8R8hVJ46sMXRgUhiaJJ96srVD4PeDI1JkCuQSLvMHTPa9NlB05FiB
-         BPLYint+BSPaQSezSS8igJKCJkMYl8Wpitpr03yMAZJhrHHcK3NmEK0ygtoxujsjdj5T
-         k9oXFaHWLKES4NmApoVQuZjaJkTsUnkdBzvyRQz8PBA97Hh9SLHkOE9PiIJ64LipPzL8
-         CClg==
-X-Gm-Message-State: AOAM532fAXxSN5B8ShzIkSR2upURpiXBzMafE11W5M+Y9fNTLT1j3tYl
-        WU25em9QgZYnnBhc6y46mCMp7JjMIrunNQ==
-X-Google-Smtp-Source: ABdhPJx6RC5qksmatktH0S7SWfsZM2VSBXO5EaE8Fxvd6zvnOXXiyhPccS8MA28NTCClSYhGJIGYww==
-X-Received: by 2002:a19:593:: with SMTP id 141mr103874lff.144.1602716743020;
-        Wed, 14 Oct 2020 16:05:43 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id z141sm269031lfc.192.2020.10.14.16.05.42
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Oct 2020 16:05:42 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id h20so1139786lji.9
-        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 16:05:42 -0700 (PDT)
-X-Received: by 2002:a2e:8815:: with SMTP id x21mr173561ljh.312.1602716741597;
- Wed, 14 Oct 2020 16:05:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201014222650.GA390346@zx2c4.com> <20201014230209.427011-1-Jason@zx2c4.com>
-In-Reply-To: <20201014230209.427011-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 14 Oct 2020 16:05:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whgDWFJiioE+C=_JOQvEtcw3CVXPq7wDGHDhV8hFrFCnw@mail.gmail.com>
-Message-ID: <CAHk-=whgDWFJiioE+C=_JOQvEtcw3CVXPq7wDGHDhV8hFrFCnw@mail.gmail.com>
-Subject: Re: [PATCH] powerpc32: don't adjust unmoved stack pointer in
- csum_partial_copy_generic() epilogue
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        with ESMTP id S2389067AbgJOBjh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 21:39:37 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650D0C05113A;
+        Wed, 14 Oct 2020 16:12:13 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kSpwI-000OHX-VT; Wed, 14 Oct 2020 23:12:11 +0000
+Date:   Thu, 15 Oct 2020 00:12:10 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 20/20] ppc: propagate the calling conventions change
+ down to csum_partial_copy_generic()
+Message-ID: <20201014231210.GM3576660@ZenIV.linux.org.uk>
+References: <20200724012512.GK2786714@ZenIV.linux.org.uk>
+ <20200724012546.302155-1-viro@ZenIV.linux.org.uk>
+ <20200724012546.302155-20-viro@ZenIV.linux.org.uk>
+ <20201014222650.GA390346@zx2c4.com>
+ <CAHk-=wgTrpV=mT_EZF1BbWxqezrFJRJcaDtuM58qXMXk9=iaZA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgTrpV=mT_EZF1BbWxqezrFJRJcaDtuM58qXMXk9=iaZA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thanks - applied and pushed out.
+On Wed, Oct 14, 2020 at 03:51:00PM -0700, Linus Torvalds wrote:
+> On Wed, Oct 14, 2020 at 3:27 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > This patch is causing crashes in WireGuard's CI over at
+> > https://www.wireguard.com/build-status/ . Apparently sending a simple
+> > network packet winds up triggering refcount_t's warn-on-saturate code. I
+> 
+> Ouch.
+> 
+> The C parts look fairly straightforward, and I don't see how they
+> could cause that odd refcount issue.
+> 
+> So I assume it's the low-level asm code conversion that is buggy. And
+> it's apparently the 32-bit conversion, since your ppc64 status looks
+> fine.
+> 
+> I think it's this instruction:
+> 
+>         addi    r1,r1,16
+> 
+> that should be removed from the function exit, because Al removed the
+> 
+> -       stwu    r1,-16(r1)
+> 
+> on function entry.
+> 
+> So I think you end up with a corrupt stack pointer and basically
+> random behavior.
 
-             Linus
+Gyahh...  ACK, and I really wonder how the hell has it managed to avoid
+crashing on testing.
+
+Mea culpa, folks.
