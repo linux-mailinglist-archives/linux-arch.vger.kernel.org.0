@@ -2,91 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1427028FA3E
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 22:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4749628FA94
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 23:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732671AbgJOUj4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Oct 2020 16:39:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25842 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732544AbgJOUj4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 15 Oct 2020 16:39:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602794395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=drNAM9RnP6kYRtro33MBF8DkJ/VVjdpQLGpKNAKGMr0=;
-        b=XQE1vKY169zUJHe8PpMOjjo8nT2H7ZQLtKK61ZasL6GD5Ad29IzcFP73xH9D4gtd49yydv
-        94vWPhfqXFGRh6Nt0cX62L4aW5woTAaQ9BzhOY73j2Q3pkMFHQdYtt+aM/evrdr7PHqj46
-        aY+XdFzFgaECSAI22RFL2znS0Wf4yVg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-238-RnX1X4qvPkWYUnhEN4Iw2A-1; Thu, 15 Oct 2020 16:39:51 -0400
-X-MC-Unique: RnX1X4qvPkWYUnhEN4Iw2A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 07DC2107466A;
-        Thu, 15 Oct 2020 20:39:49 +0000 (UTC)
-Received: from treble (ovpn-115-218.rdu2.redhat.com [10.10.115.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 036CA6EF72;
-        Thu, 15 Oct 2020 20:39:44 +0000 (UTC)
-Date:   Thu, 15 Oct 2020 15:39:42 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jann Horn <jannh@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-Message-ID: <20201015203942.f3kwcohcwwa6lagd@treble>
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-23-samitolvanen@google.com>
- <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
- <20201015102216.GB2611@hirez.programming.kicks-ass.net>
+        id S1729804AbgJOVVM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Oct 2020 17:21:12 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37264 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729788AbgJOVVL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Oct 2020 17:21:11 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FL9sgf108414;
+        Thu, 15 Oct 2020 21:20:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=FV6I0fsZyPX8snT2xhDk1zWcNw8UiciM8erCRzN6Udo=;
+ b=UdL45CHPPOXDZ4zEFtc3Q/95eR77q0866gQGri1DzwdjlNd24SbdmOlguedwVWaTTCN0
+ MFQLMyYBoEpoE32Drz7s/kHLIoSt1DAy53Sn7DnIkdoPt6ZEafnvjo7uGev5InylXvu+
+ 3fkUWycsHofjpjERriR4m1C01w7P3fjrPyQ2bax2nLFmFXXcBWHJDxH46R/E0FWWIEg0
+ a4DIWx9TkQ2mFI7zZAdLHqnVbUIrhViQRFaMyGrxo9btO2b5wWI5PN/0GKOeJ7HdAVRG
+ VgB562Dhgvt5zkRkwh78wE9mkvCxQ36uaSIfDy2T6FKagxGTQbx7zNWUbaWVfroDV8N5 WQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 343vaencsn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Oct 2020 21:20:52 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FLBMm9119076;
+        Thu, 15 Oct 2020 21:20:51 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 343pv2bq13-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Oct 2020 21:20:51 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09FLKdb5010307;
+        Thu, 15 Oct 2020 21:20:39 GMT
+Received: from [192.168.0.108] (/70.36.60.91)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 15 Oct 2020 14:20:38 -0700
+Subject: Re: [PATCH 5/8] x86/clear_page: add clear_page_uncached()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, X86 ML <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <20201014195823.GC18196@zn.tnic>
+ <22E29783-F1F5-43DA-B35F-D75FB247475D@amacapital.net>
+ <20201014211214.GD18196@zn.tnic>
+ <3de58840-1f4c-566b-3a66-46d57475820c@oracle.com>
+ <20201015103535.GC11838@zn.tnic>
+From:   Ankur Arora <ankur.a.arora@oracle.com>
+Message-ID: <593f3b75-678c-1cd4-a7f0-55257dc84caf@oracle.com>
+Date:   Thu, 15 Oct 2020 14:20:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201015102216.GB2611@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20201015103535.GC11838@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ adultscore=0 suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010150141
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+ mlxscore=0 suspectscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010150141
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 12:22:16PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 15, 2020 at 01:23:41AM +0200, Jann Horn wrote:
+On 2020-10-15 3:35 a.m., Borislav Petkov wrote:
+> On Wed, Oct 14, 2020 at 08:37:44PM -0700, Ankur Arora wrote:
+>> I don't disagree but I think the selection of cached/uncached route should
+>> be made where we have enough context available to be able to choose to do
+>> this.
+>>
+>> This could be for example, done in mm_populate() or gup where if say the
+>> extent is larger than LLC-size, it takes the uncached path.
 > 
-> > It would probably be good to keep LTO and non-LTO builds in sync about
-> > which files are subjected to objtool checks. So either you should be
-> > removing the OBJECT_FILES_NON_STANDARD annotations for anything that
-> > is linked into the main kernel (which would be a nice cleanup, if that
-> > is possible), 
+> Are there examples where we don't know the size?
+
+The case I was thinking of was that clear_huge_page() or faultin_page() would
+know the size to a page unit, while the higher level function would know the
+whole extent and could optimize differently based on that.
+
+Thanks
+Ankur
+
 > 
-> This, I've had to do that for a number of files already for the limited
-> vmlinux.o passes we needed for noinstr validation.
-
-Getting rid of OBJECT_FILES_NON_STANDARD is indeed the end goal, though
-I'm not sure how practical that will be for some of the weirder edge
-case.
-
-On a related note, I have some old crypto cleanups which need dusting
-off.
-
--- 
-Josh
-
