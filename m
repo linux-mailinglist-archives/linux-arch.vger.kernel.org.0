@@ -2,123 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AA628EBA8
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 05:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C50128EC74
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 06:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387867AbgJODiL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 14 Oct 2020 23:38:11 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:57902 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387414AbgJODiL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 14 Oct 2020 23:38:11 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09F3V1VA164274;
-        Thu, 15 Oct 2020 03:37:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=TdkRaI1K2emwA4ULWa95up2TNJiDjREeVjcHKnTnlc8=;
- b=Pao98oSADgnAZP4FqoZcmL520aM6F8URtxqADMzzibOeJu+0eMdV3tlmakSkxiSUJW8a
- gVgTQyf5XgUqxCnE3afABhc8rdXc/wdAb4efSpga6qsrIMi/iQacxA18I3nUhJJVs54l
- vJosugKlU/sgJpC3flxW7Z9CWUBfesGrbKztvMsret6XYq/Z1vRz2me1yxdDFogWVKak
- W9DzHtSElGx6ZbwjwBtFlr0kDV3HZsv6d++0eLCX2psVaUxd3Sltrmud7+3G1eKy2LnD
- tsLRzTBtPO/hMjSBL9oPStfCpo2EeFgGjU8/RNlS5mkfDOLLyCG0Rhb3H9sfloufUgWo 1w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 343vaegxm3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Oct 2020 03:37:52 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09F3TwkV122677;
-        Thu, 15 Oct 2020 03:37:51 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 343phqfj42-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Oct 2020 03:37:51 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09F3bmcK019734;
-        Thu, 15 Oct 2020 03:37:48 GMT
-Received: from [192.168.0.108] (/70.36.60.91)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 14 Oct 2020 20:37:48 -0700
-Subject: Re: [PATCH 5/8] x86/clear_page: add clear_page_uncached()
-To:     Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@amacapital.net>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-References: <20201014195823.GC18196@zn.tnic>
- <22E29783-F1F5-43DA-B35F-D75FB247475D@amacapital.net>
- <20201014211214.GD18196@zn.tnic>
-From:   Ankur Arora <ankur.a.arora@oracle.com>
-Message-ID: <3de58840-1f4c-566b-3a66-46d57475820c@oracle.com>
-Date:   Wed, 14 Oct 2020 20:37:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1728819AbgJOExv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Oct 2020 00:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726535AbgJOExv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Oct 2020 00:53:51 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75696C0613D2
+        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 21:53:51 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d23so927194pll.7
+        for <linux-arch@vger.kernel.org>; Wed, 14 Oct 2020 21:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WnT7VxOT22lB70S274n8jv3DY8IooahSVVXzJOT5Npo=;
+        b=ErrZa3fPnuCZhR9OKjBG0KwI9Dy24n9g1z/rXD+KQJT6GVNwvzKJ/zcljR37vCMyqU
+         udTVtqjX0T9o8HnDCwYanc81u4uNT5ni0xwqQU4VGEYbfroj6bLhLGL5ONCbioSV9MwN
+         IzEQoyGCYEVxE0XCOgEdc3CYSRrS+uuPeJSLcY2v5oxUUe/+/jukunvhp9/MDwy4gWwv
+         uSeqpZwdbnL67KJIqUBykeqKpL3c9ctQ8IUzN9bKSequgA7hJmBeobS4QeukTr29Ee4o
+         ZiLMZqMQ0pmJSgTL0sMu34/4S7XhdEv6u/W7M1FDkmSs3akxSPuVSNGxNqqvVLYsAN4J
+         DqBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WnT7VxOT22lB70S274n8jv3DY8IooahSVVXzJOT5Npo=;
+        b=gc6DtczSzV3SoVSIs4ZuOsDzztVTJS449cDbHMoG4lz2kBSxUkt83OfcFR8lKStXbF
+         tq2ISd4nHQTNGfwxqx1tx7+iUKGwGOCMEOlEyt7BIedhV9Ol3I/8d0lscSZdLMa5fADu
+         /jbKizHSKNIVUwBngQ49F1lolabUkZdehID7I3puLQhIB42PKk6AkaBh8u4o0ffrjwwR
+         qZywg/1e+gNDMLR+aMCd0vyxVnI0wWiRQAyLcS9RZeqqPwESdhh0oCP4WQfQ9wkY/2vW
+         yfrVWnqSudfI6vPIS1M+TUH8Ao9DeuO1otKX9/KNzCizwXKO7Lqgs3S8yUeFOc5VHwVL
+         Az9Q==
+X-Gm-Message-State: AOAM533luJ/rgCsWpcTbkLesB1WqV2dnA5O5fCFuJ/ymL3E4fPnOTjhn
+        SspkyOubH5Xo6Gopu+y+/dsKxbKzdF5SWwcdiy1N0w==
+X-Google-Smtp-Source: ABdhPJyY9a0giGK+FW30vhQv1gy/nWuAfpUG4NgMwHxz1j3magMSXSe1Cvfc7EDaUkMYxwdgCJlw14xz0QZShNEivgk=
+X-Received: by 2002:a17:90a:8002:: with SMTP id b2mr2638763pjn.47.1602737630777;
+ Wed, 14 Oct 2020 21:53:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201014211214.GD18196@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9774 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150025
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9774 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 clxscore=1015
- impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- mlxscore=0 suspectscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150025
+References: <20201005025720.2599682-1-keescook@chromium.org> <202010141603.49EA0CE@keescook>
+In-Reply-To: <202010141603.49EA0CE@keescook>
+From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+Date:   Wed, 14 Oct 2020 21:53:39 -0700
+Message-ID: <CAFP8O3LvTkqUK3rp9Q17fmyN+xApZXA8Cs=MNvxrZ3SDCDRX3A@mail.gmail.com>
+Subject: Re: [PATCH v2] vmlinux.lds.h: Keep .ctors.* with .ctors
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-10-14 2:12 p.m., Borislav Petkov wrote:
-> On Wed, Oct 14, 2020 at 02:07:30PM -0700, Andy Lutomirski wrote:
->> I assume it’s for a little optimization of clearing more than one
->> page per SFENCE.
->>
->> In any event, based on the benchmark data upthread, we only want to do
->> NT clears when they’re rather large, so this shouldn’t be just an
->> alternative. I assume this is because a page or two will fit in cache
->> and, for most uses that allocate zeroed pages, we prefer cache-hot
->> pages. When clearing 1G, on the other hand, cache-hot is impossible
->> and we prefer the improved bandwidth and less cache trashing of NT
->> clears.
-> 
-> Yeah, use case makes sense but people won't know what to use. At the
-> time I was experimenting with this crap, I remember Linus saying that
-> that selection should be made based on the size of the area cleared, so
-> users should not have to know the difference.
-I don't disagree but I think the selection of cached/uncached route should
-be made where we have enough context available to be able to choose to do
-this.
+On Wed, Oct 14, 2020 at 4:04 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Sun, Oct 04, 2020 at 07:57:20PM -0700, Kees Cook wrote:
+> > Under some circumstances, the compiler generates .ctors.* sections. This
+> > is seen doing a cross compile of x86_64 from a powerpc64el host:
+> >
+> > x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/trace_clock.o' being
+> > placed in section `.ctors.65435'
+> > x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/ftrace.o' being
+> > placed in section `.ctors.65435'
+> > x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/ring_buffer.o' being
+> > placed in section `.ctors.65435'
+> >
+> > Include these orphans along with the regular .ctors section.
+> >
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Fixes: 83109d5d5fba ("x86/build: Warn on orphan section placement")
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+>
+> Ping -- please take this for tip/urgent, otherwise we're drowning sfr in
+> warnings. :)
+>
+> -Kees
+>
+> > ---
+> > v2: brown paper bag version: fix whitespace for proper backslash alignment
+> > ---
+> >  include/asm-generic/vmlinux.lds.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> > index 5430febd34be..b83c00c63997 100644
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -684,6 +684,7 @@
+> >  #ifdef CONFIG_CONSTRUCTORS
+> >  #define KERNEL_CTORS()       . = ALIGN(8);                      \
+> >                       __ctors_start = .;                 \
+> > +                     KEEP(*(SORT(.ctors.*)))            \
+> >                       KEEP(*(.ctors))                    \
+> >                       KEEP(*(SORT(.init_array.*)))       \
+> >                       KEEP(*(.init_array))               \
+> > --
+> > 2.25.1
+> >
+>
+> --
+> Kees Cook
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/202010141603.49EA0CE%40keescook.
 
-This could be for example, done in mm_populate() or gup where if say the
-extent is larger than LLC-size, it takes the uncached path.
+I think it would be great to figure out why these .ctors.* .dtors.*
+are generated.
+~GCC 4.7 switched to default to .init_array/.fini_array if libc
+supports it. I have some refactoring in this area of Clang as well
+(e.g. https://reviews.llvm.org/D71393)
 
-> 
-> Which perhaps is the only sane use case I see for this.
-> 
->> Perhaps SFENCE is so fast that this is a silly optimization, though,
->> and we don’t lose anything measurable by SFENCEing once per page.
-> 
-> Yes, I'd like to see real use cases showing improvement from this, not
-> just microbenchmarks.
-Sure will add.
-
-Thanks
-Ankur
-
-> 
+And I am not sure SORT(.init_array.*) or SORT(.ctors.*) will work. The
+correct construct is SORT_BY_INIT_PRIORITY(.init_array.*)
