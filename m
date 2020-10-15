@@ -2,118 +2,184 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1111228FABD
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 23:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EBB28FB58
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Oct 2020 00:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730160AbgJOVk3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Oct 2020 17:40:29 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:47218 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729626AbgJOVk3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Oct 2020 17:40:29 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FLSx7r181800;
-        Thu, 15 Oct 2020 21:40:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=A6pBae+uYiLsONLgce5yhTsLSTyZbn0WHCE5Ci0Sshk=;
- b=DJARA0rLF5hVYpDSE/cxv0FmPX3U7ZsoOPpQjmFk/iLXuuVgXpYvFu6F/DGjfxZ2N+o2
- aTlgzxHPeOxSca5/E5RChG+3nhV8+8n6Hz9SRatNHeFpSQFlByLkQojb2hjmBlJrHAei
- 9glfIEcLVp9JI9jp+XXkJpgWj8UpyfNn8nvCkn0udMQGITlNRoo4jdfBGb0Ah1m2OI+o
- F90QMy8Ha+uA1dzU4Na3t1a0BS3ve14wUyWRa2ZAIp+L0r9k4Bt+3OkGWBbvbRQVRHkC
- rYvePQMtrHBzDzSO3CS1Spadh0gh5uyl26GARvH1OryXHRrShLL0cXbglfPVKqYA3veI yQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2130.oracle.com with ESMTP id 346g8gm9nk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Oct 2020 21:40:13 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FLUdcs035389;
-        Thu, 15 Oct 2020 21:40:12 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 343pw0wxya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Oct 2020 21:40:11 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09FLe8li020524;
-        Thu, 15 Oct 2020 21:40:08 GMT
-Received: from [192.168.0.108] (/70.36.60.91)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 15 Oct 2020 14:40:08 -0700
-Subject: Re: [PATCH 5/8] x86/clear_page: add clear_page_uncached()
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-References: <20201014195823.GC18196@zn.tnic>
- <22E29783-F1F5-43DA-B35F-D75FB247475D@amacapital.net>
- <50286c32-2869-cbd5-b178-0ad0c13584ea@oracle.com>
- <20201015104047.GD11838@zn.tnic>
-From:   Ankur Arora <ankur.a.arora@oracle.com>
-Message-ID: <06032ba0-057e-3f56-c1bf-59373ae74e88@oracle.com>
-Date:   Thu, 15 Oct 2020 14:40:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1732226AbgJOWxR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Oct 2020 18:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731828AbgJOWxR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Oct 2020 18:53:17 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F68C061755;
+        Thu, 15 Oct 2020 15:53:17 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id t18so356261ilo.12;
+        Thu, 15 Oct 2020 15:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jFQtaxU4YUQNvbnqPeUAScf/xR6LM2zPZihZfrq6QrY=;
+        b=U655etZm+uaA0qNlVHA6zGPJdrQfeVf1LMdkzKJmwIXq5IQ5KH9idqK8R3cSf3vzyd
+         UM1uh2G2EjwGTZEOqP+7JbdPGP+HGw+uYQa5RLKV5+RbTsWE+NMqvIvCGHzdk/CXMiHB
+         M3Y7a+NathuX6h70CY1KtCCQpWXx9fpYfZ3hEpxG2Swp94ZwUHOwld+CTnpZZ0prILod
+         LzdkX37VJZiAo5ShXp8aEuIRDf6Ub6S3mkChRDTdPG710AOO8n0lesgl/Vao/xm2JIef
+         hg+4FsfwB3cSgf/CT+/mu/M83eGPn7p9Moh8BOn8xxwtbTI80EcVyECNc2Dw5cbhMMDt
+         AIcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jFQtaxU4YUQNvbnqPeUAScf/xR6LM2zPZihZfrq6QrY=;
+        b=CQLflPoL9KyS9ZtEwTsllog60Nn1SfgaCj+9gGSu+FBAE3iH1uvK2V4CHNgXkF9OMW
+         lOvexjQboJHt+0YY2f/0GjpfHy3bIg/CjIx7Pw+ZKkAI5AAUomVWiJj24qAJD+z6++O+
+         Xuyox/U7vBDQdZpFywVjqot72ctoRuqFgudLqJAnyXthdW7dl4j0fz+pbAOJ8MashHpv
+         p4grT7izh+EQ140IC960dWZOTCptCN0vcIfZjNG0Gr/Vca2a1NHgftqM74WNgYr7K3lV
+         4lVMQk31+TEJWdulvwEbR0NihiwFvurUR+wKs8hoczX0ZrDmCl+Pme0pnSSzXN04Gw0R
+         J9Ow==
+X-Gm-Message-State: AOAM530ez0E6p1VU7/utvYMJGYeajl2E01boduHOgynmt7Iz+h77bAxv
+        fpc0lrfjFhvxUNPi/d2pC3lmcO7uiQ0UDkd+pmAx7Vemwss=
+X-Google-Smtp-Source: ABdhPJyzlS0eGSXgzAREEgAtyv//yvyCHgB5cEz7Myw4qlwyHN9TDbpmrskpw5XBd86AhgXAe80XzmDtTRrBprGcsx0=
+X-Received: by 2002:a92:de0f:: with SMTP id x15mr631190ilm.164.1602802396528;
+ Thu, 15 Oct 2020 15:53:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201015104047.GD11838@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150142
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 clxscore=1015 spamscore=0 adultscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150142
+References: <cover.1601974764.git.syednwaris@gmail.com> <33de236870f7d3cf56a55d747e4574cdd2b9686a.1601974764.git.syednwaris@gmail.com>
+ <20201006112745.GG4077@smile.fi.intel.com>
+In-Reply-To: <20201006112745.GG4077@smile.fi.intel.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Fri, 16 Oct 2020 04:23:05 +0530
+Message-ID: <CACG_h5pYL+HbJpPcCTp=dR8rDbm07RsRDaX8Uc0HYc2LG--w_Q@mail.gmail.com>
+Subject: Re: [PATCH v11 1/4] bitops: Introduce the for_each_set_clump macro
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-10-15 3:40 a.m., Borislav Petkov wrote:
-> On Wed, Oct 14, 2020 at 08:21:57PM -0700, Ankur Arora wrote:
->> Also, if we did extend clear_page() to take the page-size as parameter
->> we still might not have enough information (ex. a 4K or a 2MB page that
->> clear_page() sees could be part of a GUP of a much larger extent) to
->> decide whether to go uncached or not.
-> 
-> clear_page* assumes 4K. All of the lowlevel asm variants do. So adding
-> the size there won't bring you a whole lot.
-> 
-> So you'd need to devise this whole thing differently. Perhaps have a
-> clear_pages() helper which decides based on size what to do: uncached
-> clearing or the clear_page() as is now in a loop.
+On Tue, Oct 6, 2020 at 4:56 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Tue, Oct 06, 2020 at 02:52:16PM +0530, Syed Nayyar Waris wrote:
+> > This macro iterates for each group of bits (clump) with set bits,
+> > within a bitmap memory region. For each iteration, "start" is set to
+> > the bit offset of the found clump, while the respective clump value is
+> > stored to the location pointed by "clump". Additionally, the
+> > bitmap_get_value() and bitmap_set_value() functions are introduced to
+> > respectively get and set a value of n-bits in a bitmap memory region.
+> > The n-bits can have any size less than or equal to BITS_PER_LONG.
+> > Moreover, during setting value of n-bit in bitmap, if a situation arise
+> > that the width of next n-bit is exceeding the word boundary, then it
+> > will divide itself such that some portion of it is stored in that word,
+> > while the remaining portion is stored in the next higher word. Similar
+> > situation occurs while retrieving the value from bitmap.
+>
+> ...
+>
+> > @@ -75,7 +75,11 @@
+> >   *  bitmap_from_arr32(dst, buf, nbits)          Copy nbits from u32[] buf to dst
+> >   *  bitmap_to_arr32(buf, src, nbits)            Copy nbits from buf to u32[] dst
+> >   *  bitmap_get_value8(map, start)               Get 8bit value from map at start
+> > + *  bitmap_get_value(map, start, nbits)              Get bit value of size
+> > + *                                           'nbits' from map at start
+> >   *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
+> > + *  bitmap_set_value(map, value, start, nbits)       Set bit value of size 'nbits'
+> > + *                                           of map at start
+>
+> Formatting here is done with solely spaces, no TABs.
 
-I think that'll work well for GB pages, where the clear_pages() helper
-has enough information to make a decision.
+Okay. Done
 
-But, unless I'm missing something, I'm not sure how that would work for
-say, a 1GB mm_populate() using 4K pages. The clear_page() (or clear_pages())
-in that case would only see the 4K size.
+>
+> ...
+>
+> > +/**
+> > + * bitmap_get_value - get a value of n-bits from the memory region
+> > + * @map: address to the bitmap memory region
+> > + * @start: bit offset of the n-bit value
+> > + * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
+>
+>
+> > + *   nbits less than 1 or more than BITS_PER_LONG causes undefined behaviour.
+>
+> Please, detach this from field description and move to a main description.
 
-But let me think about this more (and look at the callsites as you suggest.)
+Okay. Done.
+>
+> > + *
+> > + * Returns value of nbits located at the @start bit offset within the @map
+> > + * memory region.
+> > + */
+>
+> ...
+>
+> > +             return (map[index] >> offset) & GENMASK(nbits - 1, 0);
+>
+> Have you considered to use rather BIT{_ULL}(nbits) - 1?
+> It maybe better for code generation.
 
-> 
-> Looking at the callsites would give you a better idea I'd say.
-Thanks, yeah that's a good idea. Let me go do that.
+Yes I have considered using BIT{_ULL} in earlier versions of patchset.
+It has a problem:
 
-Ankur
+This macro when used in both bitmap_get_value and
+bitmap_set_value functions, it will give unexpected results when nbits or clump
+size is BITS_PER_LONG (32 or 64 depending on arch).
 
-> 
-> Thx.
-> 
+Actually when nbits (clump size) is 64 (BITS_PER_LONG is 64, for example),
+(BIT(nbits) - 1)
+gives a value of zero and when this zero is ANDed with any value, it
+makes it full zero. This is unexpected, and incorrect calculation occurs.
+
+What actually happens is in the macro expansion of BIT(64), that is 1
+<< 64, the '1' overflows from leftmost bit position (most significant
+bit) and re-enters at the rightmost bit position (least significant
+bit), therefore 1 << 64 becomes '0x1', and when another '1' is
+subtracted from this, the final result becomes 0.
+
+This is undefined behavior in the C standard (section 6.5.7 in the N1124)
+
+>
+> ...
+>
+> > +/**
+> > + * bitmap_set_value - set n-bit value within a memory region
+> > + * @map: address to the bitmap memory region
+> > + * @value: value of nbits
+> > + * @start: bit offset of the n-bit value
+> > + * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
+>
+> > + *   nbits less than 1 or more than BITS_PER_LONG causes undefined behaviour.
+>
+> Please, detach this from field description and move to a main description.
+
+Okay. Done
+
+>
+> > + */
+>
+> ...
+>
+> > +     value &= GENMASK(nbits - 1, 0);
+>
+> Ditto.
+>
+> > +             map[index] &= ~(GENMASK(nbits + offset - 1, offset));
+>
+> Last time I checked such GENMASK) use, it gave a lot of code when
+> GENMASK(nbits - 1, 0) << offset works much better, but see also above.
+
+Yes I have incorporated your suggestion to use the '<<' operator. Thank You.
+
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
