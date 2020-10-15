@@ -2,99 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D0028EEDA
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 10:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00BB28F01B
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Oct 2020 12:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388358AbgJOI6G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Oct 2020 04:58:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35902 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388315AbgJOI6G (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 15 Oct 2020 04:58:06 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        id S2389294AbgJOKWo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Oct 2020 06:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389271AbgJOKWo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Oct 2020 06:22:44 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA8BC061755;
+        Thu, 15 Oct 2020 03:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rmt+w86dS/ArDl7p6coE3p1FQiRlDnETDOF85EAeo80=; b=H7urFq9tcKjVEHrGlgs6qqhDf4
+        oQMvOJQ0ykGC0OUWm6j6P40c2ClfoS4N1iUdDzI7NszgLIB2YI4qMJ892z90AJsTn11EvwW+MtOVh
+        ddVXM7uYTIl+ahd+gEQFvcaxfyuaPnkbEsTt/vmXLtStZfCQlSfc+oQ9GKbTIbh1QtEndZUFKS8iQ
+        RG2CeCNJ8oLWOZ1j2VOtlC36cNeboOcj3IpHWd0dVqImsYZOp+GtYIoL4M+5SqxrBrt55upHkAlVA
+        rdh+0h6U56l/Lqn5r2zQ2t0WOc1/OVeHC7M8/6/Im8NyIi7W3dDDZL1d8iqegaLUsqXcJBsUpBLPv
+        pDxD+k8g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kT0Oo-0006aX-4e; Thu, 15 Oct 2020 10:22:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 544BC20BED;
-        Thu, 15 Oct 2020 08:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602752285;
-        bh=r1iinCCdcy2yWWZxUcnTvEcHKoN+v6ic5MXXjcnieUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yF5dndaxHAxJiVqKekVPJj4nnIzubOXjnKN1J7dLGJ/SHgxS5fppzyIHrctB6tJO8
-         3eDXomZzXHnEFCBNc7Xv+rS3jMLbzAfRaH4uN6GNCCiXpdmHaDDsOHLi/OI9J86aQk
-         bth54DNQBV4aWrhKOvPyncP7sV4C7+i4N0c3e91A=
-Date:   Thu, 15 Oct 2020 09:57:59 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Dave Martin <Dave.Martin@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arch@vger.kernel.org, libc-alpha@sourceware.org,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v9 29/29] arm64: mte: Add Memory Tagging Extension
- documentation
-Message-ID: <20201015085759.GA4790@willie-the-truck>
-References: <20200904103029.32083-1-catalin.marinas@arm.com>
- <20200904103029.32083-30-catalin.marinas@arm.com>
- <20200917081107.GA29031@willie-the-truck>
- <20200917090229.GA10662@gaia>
- <20200917161550.GA6642@arm.com>
- <20200918083046.GA30709@willie-the-truck>
- <CAMn1gO76z7eLcuYg_PuWPCq7_N5p29518EGy-FdY9AvyY0fDgw@mail.gmail.com>
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 835C0300DAE;
+        Thu, 15 Oct 2020 12:22:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6F7A9235F4457; Thu, 15 Oct 2020 12:22:16 +0200 (CEST)
+Date:   Thu, 15 Oct 2020 12:22:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild@vger.kernel.org,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
+Message-ID: <20201015102216.GB2611@hirez.programming.kicks-ass.net>
+References: <20201013003203.4168817-1-samitolvanen@google.com>
+ <20201013003203.4168817-23-samitolvanen@google.com>
+ <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMn1gO76z7eLcuYg_PuWPCq7_N5p29518EGy-FdY9AvyY0fDgw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 04:43:23PM -0700, Peter Collingbourne wrote:
-> On Fri, Sep 18, 2020 at 1:30 AM Will Deacon <will@kernel.org> wrote:
-> > I think so, yes. I'm hoping to queue it for 5.10, once I have an Ack from
-> > the Android tools side on the per-thread ABI.
-> 
-> Our main requirement on the Android side is to provide an API for
-> changing the tag checking mode in all threads in a process while
-> multiple threads are running. I think we've been able to accomplish
-> this [1] by using a libc private real-time signal which is sent to all
-> threads. The implementation has been tested on FVP via the included
-> unit tests. The code has also been tested on real hardware in a
-> multi-threaded app process (of course we don't have MTE-enabled
-> hardware, so the implementation was tested on hardware by hacking it
-> to disable the tagged address ABI instead of changing the tag checking
-> mode, and then verifying via ptrace(PTRACE_GETREGSET) that the tagged
-> address ABI was disabled in all threads).
-> 
-> That being said, as with any code at the nexus of concurrency and
-> POSIX signals, the implementation is quite tricky so I would say it
-> falls more into the category of "no obvious problems" than "obviously
-> no problems". It also relies on changes to the implementations of
-> pthread APIs so it wouldn't catch threads created directly via clone()
-> rather than via pthread_create(). I think we would be able to ignore
-> such threads on Android without causing compatibility issues because
-> we can require the process to not create threads via clone() before
-> calling the function. I imagine this may not necessarily work for
-> other libcs like glibc, though, but as I understand it glibc has no
-> plan to offer such an API.
-> 
-> I feel confident enough in the kernel API though that I think that
-> it's reasonable as a starting point at least, and that if a problem
-> with the API is discovered I would expect it to be fixable by adding
-> new APIs, so:
-> 
-> Acked-by: Peter Collingbourne <pcc@google.com>
+On Thu, Oct 15, 2020 at 01:23:41AM +0200, Jann Horn wrote:
 
-Thanks, Peter. This series has already landed upstream, so I'm unable to
-add your Ack now, but the text above is very helpful.
+> It would probably be good to keep LTO and non-LTO builds in sync about
+> which files are subjected to objtool checks. So either you should be
+> removing the OBJECT_FILES_NON_STANDARD annotations for anything that
+> is linked into the main kernel (which would be a nice cleanup, if that
+> is possible), 
 
-Cheers,
-
-Will
-
-> [1] https://android-review.googlesource.com/c/platform/bionic/+/1427377
+This, I've had to do that for a number of files already for the limited
+vmlinux.o passes we needed for noinstr validation.
