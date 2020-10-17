@@ -2,104 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E062912C6
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Oct 2020 17:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9362912DD
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Oct 2020 18:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436600AbgJQPz1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Oct 2020 11:55:27 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:53101 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436599AbgJQPz1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 17 Oct 2020 11:55:27 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4CD6zs339Vz9v4h3;
-        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id MhA9Gwx4xqNd; Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4CD6zs1qBZz9v4h1;
-        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id F21C48B778;
-        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id wtrs88iciF0T; Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
-Received: from po17688vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD8BD8B75E;
-        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
-Received: by po17688vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 77B5866461; Sat, 17 Oct 2020 15:55:21 +0000 (UTC)
-Message-Id: <96c6172d619c51acc5c1c4884b80785c59af4102.1602949927.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH] asm-generic: Force inlining of get_order() to work around
- gcc10 poor decision
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arch@vger.kernel.org
-Date:   Sat, 17 Oct 2020 15:55:21 +0000 (UTC)
+        id S2438140AbgJQQIX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Oct 2020 12:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438126AbgJQQIW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Oct 2020 12:08:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A960C061755;
+        Sat, 17 Oct 2020 09:08:21 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1602950898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qr/OgZjBzWF53qclusfF/MAUFz1VUdG8p5+rV3CeWNQ=;
+        b=lWnissTyc8NlH5A1JHkJdOeIe6rxp8KSBW0FvpzopLg72wY2GaJGiNn3DhxHaqyPtX4/VS
+        CJ+rWgPhKQIEx3ch2BII+B2QDg079gPqxsznNXp4cW2stI35Q/upjC0efcVWGvS9aeTRDx
+        6DBWQvZtgbe1QbVCl/9A42JSKWnysSWKEJj6Sxmb1v7OP6RxTH8JOVOHcAs+OW+DB5YYbb
+        NRvqaBeIuMvKLDcBXPu4zuTaCM1u3hop1UwTdbngoFsTR+ozM3To221EEyxq0ZDXW65bhG
+        MLySwv6CQMciRIErN8UhhZgNanXqBplaqGfdbFdwZJvZS/2O6YFCCZ4pElXyiQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1602950898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qr/OgZjBzWF53qclusfF/MAUFz1VUdG8p5+rV3CeWNQ=;
+        b=LkZRl4Cx55lMFJ1la+G1dY6Xr1/9hGPhFCQBTLsptNbRtGiGZzGf2MZ0aYM3CUULctW7QJ
+        QWO6sNuLSF8aVIDw==
+To:     Alex Belits <abelits@marvell.com>,
+        "nitesh\@redhat.com" <nitesh@redhat.com>,
+        "frederic\@kernel.org" <frederic@kernel.org>
+Cc:     "mingo\@kernel.org" <mingo@kernel.org>,
+        "davem\@davemloft.net" <davem@davemloft.net>,
+        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rostedt\@goodmis.org" <rostedt@goodmis.org>,
+        "peterz\@infradead.org" <peterz@infradead.org>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "catalin.marinas\@arm.com" <catalin.marinas@arm.com>,
+        "will\@kernel.org" <will@kernel.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel\@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH v4 03/13] task_isolation: userspace hard isolation from kernel
+In-Reply-To: <91b8301b0888bf9e5ff7711c3b49d21beddf569a.camel@marvell.com>
+References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com> <b18546567a2ed61073ae86f2d9945257ab285dfa.camel@marvell.com> <20201001135640.GA1748@lothringen> <7e54b3c5e0d4c91eb64f2dd1583dd687bc34757e.camel@marvell.com> <20201004231404.GA66364@lothringen> <d0289bb9-cc10-9e64-f8ac-b4d252b424b8@redhat.com> <91b8301b0888bf9e5ff7711c3b49d21beddf569a.camel@marvell.com>
+Date:   Sat, 17 Oct 2020 18:08:18 +0200
+Message-ID: <87r1pwj0nh.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When building mpc885_ads_defconfig with gcc 10.1,
-the function get_order() appears 50 times in vmlinux:
+On Sat, Oct 17 2020 at 01:08, Alex Belits wrote:
+> On Mon, 2020-10-05 at 14:52 -0400, Nitesh Narayan Lal wrote:
+>> On 10/4/20 7:14 PM, Frederic Weisbecker wrote:
+> I think that the goal of "finding source of disturbance" interface is
+> different from what can be accomplished by tracing in two ways:
+>
+> 1. "Source of disturbance" should provide some useful information about
+> category of event and it cause as opposed to determining all precise
+> details about things being called that resulted or could result in
+> disturbance. It should not depend on the user's knowledge about
+> details
 
-[linux]# ppc-linux-objdump -x vmlinux | grep get_order | wc -l
-50
+Tracepoints already give you selectively useful information.
 
-[linux]# size vmlinux
-   text	   data	    bss	    dec	    hex	filename
-3842620	 675624	 135160	4653404	 47015c	vmlinux
+> of implementations, it should provide some definite answer of what
+> happened (with whatever amount of details can be given in a generic
+> mechanism) even if the user has no idea how those things happen and
+> what part of kernel is responsible for either causing or processing
+> them. Then if the user needs further details, they can be obtained with
+> tracing.
 
-In the old days, marking a function 'static inline' was forcing
-GCC to inline, but since commit ac7c3e4ff401 ("compiler: enable
-CONFIG_OPTIMIZE_INLINING forcibly") GCC may decide to not inline
-a function.
+It's just a matter of defining the tracepoint at the right place.
 
-It looks like GCC 10 is taking poor decisions on this.
+> 2. It should be usable as a runtime error handling mechanism, so the
+> information it provides should be suitable for application use and
+> logging. It should be usable when applications are running on a system
+> in production, and no specific tracing or monitoring mechanism can be
+> in use.
 
-get_order() compiles into the following tiny function,
-occupying 20 bytes of text.
+That's a strawman really. There is absolutely no reason why a specific
+set of tracepoints cannot be enabled on a production system.
 
-0000007c <get_order>:
-  7c:   38 63 ff ff     addi    r3,r3,-1
-  80:   54 63 a3 3e     rlwinm  r3,r3,20,12,31
-  84:   7c 63 00 34     cntlzw  r3,r3
-  88:   20 63 00 20     subfic  r3,r3,32
-  8c:   4e 80 00 20     blr
+Your tracker is a monitoring mechanism, just a different flavour.  By
+your logic above it cannot be enabled on a production system either.
 
-By forcing get_order() to be __always_inline, the size of text is
-reduced by 1940 bytes, that is almost twice the space occupied by
-50 times get_order()
+Also you can enable tracepoints from a control application, consume, log
+and act upon them. It's not any different from opening some magic
+isolation tracker interface. There are even multiple ways to do that
+including libraries.
 
-[linux-powerpc]# size vmlinux
-   text	   data	    bss	    dec	    hex	filename
-3840680	 675588	 135176	4651444	 46f9b4	vmlinux
+> If, say, thousands of devices are controlling neutrino detectors on an
+> ocean floor, and in a month of work one of them got one isolation
+> breaking event, it should be able to report that isolation was broken
+> by an interrupt from a network interface, so the users will be able to
+> track it down to some userspace application reconfiguring those
+> interrupts.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/asm-generic/getorder.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tracing can do that and it can do it selectively on the isolated
+CPUs. It's just a matter of proper configuration and usage.
 
-diff --git a/include/asm-generic/getorder.h b/include/asm-generic/getorder.h
-index e9f20b813a69..f2979e3a96b6 100644
---- a/include/asm-generic/getorder.h
-+++ b/include/asm-generic/getorder.h
-@@ -26,7 +26,7 @@
-  *
-  * The result is undefined if the size is 0.
-  */
--static inline __attribute_const__ int get_order(unsigned long size)
-+static __always_inline __attribute_const__ int get_order(unsigned long size)
- {
- 	if (__builtin_constant_p(size)) {
- 		if (!size)
--- 
-2.25.0
+> It will be a good idea to make such mechanism optional and suitable for
+> tracking things on conditions other than "always enabled" and "enabled
+> with task isolation".
 
+Tracing already provides that. Tracepoints are individually controlled
+and filtered.
+
+> However in my opinion, there should be something in kernel entry
+> procedure that, if enabled, prepared something to be filled by the
+> cause data, and we know at least one such situation when this kernel
+> entry procedure should be triggered -- when task isolation is on.
+
+A tracepoint will gather that information for you.
+
+task isolation is not special, it's just yet another way to configure
+and use a system and tracepoints provide everything you need with the
+bonus that you can gather more correlated information when you need it.
+
+In fact tracing and tracepoints have replaced all specialized trackers
+which were in the kernel before tracing was available. We're not going
+to add a new one just because.
+
+If there is anything which you find that tracing and tracepoints cannot
+provide then the obvious solution is to extend that infrastructure so it
+can serve your usecase.
+
+Thanks,
+
+        tglx
