@@ -2,108 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 456DE290F4A
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Oct 2020 07:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E062912C6
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Oct 2020 17:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406783AbgJQFeT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Oct 2020 01:34:19 -0400
-Received: from condef-07.nifty.com ([202.248.20.72]:29575 "EHLO
-        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392694AbgJQFeT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Oct 2020 01:34:19 -0400
-X-Greylist: delayed 445 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Oct 2020 01:34:17 EDT
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-07.nifty.com with ESMTP id 09H1l3wP011554;
-        Sat, 17 Oct 2020 10:47:03 +0900
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 09H1kmka028705;
-        Sat, 17 Oct 2020 10:46:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 09H1kmka028705
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1602899209;
-        bh=/0ovXshOhxLJmlzp2NpX2ArKIwhaV5c9daLvgg85jsg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=0stKPxzpCuJojIl84Bap+GcFlN95iCk5b1y2Ur4dn5CdBNku5y5qT9INLgCiIwZbR
-         u659+Dn0zDhJhfB00RQrtwl+GiV+V3Fc0z2w1nJQCnnCFIr3kdOXTCHnjUUdbmQWVX
-         MeVRXjDPKXXlLt5HQpZqGtPC4zi5Bc0I69hTqKExGEOKVHgflFjMSqgfS95N/yRwdw
-         3HSTGv73eD9p3poujLcVuwZTjCTUcUx/6XOHFj4eUTvk7kwCfYwPrPQ5RCZCsCKl8W
-         ShFHdzRceMHi71f7Ynv4a6eTuTsHkRS66eSRjfdBS8bt/oD9kKSwq4sdlQLYtaEhMS
-         sV4o2EHMMXyvQ==
-X-Nifty-SrcIP: [209.85.216.47]
-Received: by mail-pj1-f47.google.com with SMTP id j8so2445957pjy.5;
-        Fri, 16 Oct 2020 18:46:48 -0700 (PDT)
-X-Gm-Message-State: AOAM53029u4e0L72SlQ7fFqcaf2+fYVaIh0XIsIEoWzXqjSYjbrKtj6v
-        5we8vt/HB83sSqh91N2BiOn+zn7EMNVU79MNwYc=
-X-Google-Smtp-Source: ABdhPJwnDvT6VOCCvby8Z+dRxKHlAcETSIANPUgxy4yeQxdCEUHUrDGlLwfVIqt5UgjHFKL6uGwJ8RIXqDyJ0U/afPU=
-X-Received: by 2002:a17:90a:aa91:: with SMTP id l17mr6700984pjq.198.1602899207791;
- Fri, 16 Oct 2020 18:46:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-8-samitolvanen@google.com> <202010141541.E689442E@keescook>
-In-Reply-To: <202010141541.E689442E@keescook>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 17 Oct 2020 10:46:10 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASCaf2s94L1xYENYDYp07sTWxpnr4V_SKXfDFQKBB5drA@mail.gmail.com>
-Message-ID: <CAK7LNASCaf2s94L1xYENYDYp07sTWxpnr4V_SKXfDFQKBB5drA@mail.gmail.com>
-Subject: Re: [PATCH v6 07/25] treewide: remove DISABLE_LTO
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2436600AbgJQPz1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Oct 2020 11:55:27 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:53101 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2436599AbgJQPz1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 17 Oct 2020 11:55:27 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4CD6zs339Vz9v4h3;
+        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id MhA9Gwx4xqNd; Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4CD6zs1qBZz9v4h1;
+        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F21C48B778;
+        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id wtrs88iciF0T; Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
+Received: from po17688vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD8BD8B75E;
+        Sat, 17 Oct 2020 17:55:21 +0200 (CEST)
+Received: by po17688vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 77B5866461; Sat, 17 Oct 2020 15:55:21 +0000 (UTC)
+Message-Id: <96c6172d619c51acc5c1c4884b80785c59af4102.1602949927.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH] asm-generic: Force inlining of get_order() to work around
+ gcc10 poor decision
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arch@vger.kernel.org
+Date:   Sat, 17 Oct 2020 15:55:21 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 7:43 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Oct 12, 2020 at 05:31:45PM -0700, Sami Tolvanen wrote:
-> > This change removes all instances of DISABLE_LTO from
-> > Makefiles, as they are currently unused, and the preferred
-> > method of disabling LTO is to filter out the flags instead.
-> >
-> > Suggested-by: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> Hi Masahiro,
->
-> Since this is independent of anything else and could be seen as a
-> general cleanup, can this patch be taken into your tree, just to
-> separate it from the list of dependencies for this series?
->
-> -Kees
->
-> --
-> Kees Cook
+When building mpc885_ads_defconfig with gcc 10.1,
+the function get_order() appears 50 times in vmlinux:
 
+[linux]# ppc-linux-objdump -x vmlinux | grep get_order | wc -l
+50
 
+[linux]# size vmlinux
+   text	   data	    bss	    dec	    hex	filename
+3842620	 675624	 135160	4653404	 47015c	vmlinux
 
-Yes, this is stale code because GCC LTO was not pulled.
+In the old days, marking a function 'static inline' was forcing
+GCC to inline, but since commit ac7c3e4ff401 ("compiler: enable
+CONFIG_OPTIMIZE_INLINING forcibly") GCC may decide to not inline
+a function.
 
-Applied to linux-kbuild.
+It looks like GCC 10 is taking poor decisions on this.
 
-I added the following historical background.
+get_order() compiles into the following tiny function,
+occupying 20 bytes of text.
 
+0000007c <get_order>:
+  7c:   38 63 ff ff     addi    r3,r3,-1
+  80:   54 63 a3 3e     rlwinm  r3,r3,20,12,31
+  84:   7c 63 00 34     cntlzw  r3,r3
+  88:   20 63 00 20     subfic  r3,r3,32
+  8c:   4e 80 00 20     blr
 
+By forcing get_order() to be __always_inline, the size of text is
+reduced by 1940 bytes, that is almost twice the space occupied by
+50 times get_order()
 
-Note added by Masahiro Yamada:
-DISABLE_LTO was added as preparation for GCC LTO, but GCC LTO was
-not pulled into the mainline. (https://lkml.org/lkml/2014/4/8/272)
+[linux-powerpc]# size vmlinux
+   text	   data	    bss	    dec	    hex	filename
+3840680	 675588	 135176	4651444	 46f9b4	vmlinux
 
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ include/asm-generic/getorder.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
+diff --git a/include/asm-generic/getorder.h b/include/asm-generic/getorder.h
+index e9f20b813a69..f2979e3a96b6 100644
+--- a/include/asm-generic/getorder.h
++++ b/include/asm-generic/getorder.h
+@@ -26,7 +26,7 @@
+  *
+  * The result is undefined if the size is 0.
+  */
+-static inline __attribute_const__ int get_order(unsigned long size)
++static __always_inline __attribute_const__ int get_order(unsigned long size)
+ {
+ 	if (__builtin_constant_p(size)) {
+ 		if (!size)
 -- 
-Best Regards
-Masahiro Yamada
+2.25.0
+
