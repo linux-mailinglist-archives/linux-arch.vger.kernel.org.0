@@ -2,90 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C4729415D
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Oct 2020 19:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B40294285
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Oct 2020 20:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395404AbgJTRYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Oct 2020 13:24:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395393AbgJTRYT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 20 Oct 2020 13:24:19 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2437754AbgJTSwi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Oct 2020 14:52:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23849 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2437731AbgJTSwf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 20 Oct 2020 14:52:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603219953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oyUoHsRQhW9Pp4iIO9savPkdYtOE6vEjDDEEmlMww18=;
+        b=KRf3NvWHkK2GE7nXgomITyNOOrR7WuvachroMvY5YU5nP+WSwLX8FqQ46zzbOF1EH8RNct
+        fc/gMptPgis+R1LRcfOazl6ugjpbCXppnc+B5yHujXsvsbiQ3WvXs8QkljAyZg+le2eVBF
+        DVqksy0pPDl8OFLG7UUS/2znGUWj/Fc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-213-K36-fE2_MKaUTN0-WM3Zrg-1; Tue, 20 Oct 2020 14:52:29 -0400
+X-MC-Unique: K36-fE2_MKaUTN0-WM3Zrg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 432CA22249;
-        Tue, 20 Oct 2020 17:24:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603214658;
-        bh=DLOV96T1YAajXeFM85FxC+biug7p9KERA9RpgNy4x2s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kO017b/Y9Z0AmqHgHYhKHLA7oiilB8TKq0BuxXhnKqTDXHTVV9zbakmLO0ZlAsoj4
-         Jl7JJ+drc5DUcbWyrGyDqZ4moB6gMhXZOtzvK1pzVX3h8GYTw7Q9GYk7PpSTAK6seP
-         15YPqupbXFS1HU7mu/y6I4524h19vfwpGwX6pd90=
-Date:   Tue, 20 Oct 2020 10:24:15 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Po-Yu Chuang <ratbert@faraday-tech.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, paulmck@kernel.org
-Subject: Re: [PATCH] net: ftgmac100: Fix missing TX-poll issue
-Message-ID: <20201020102415.52b51895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <3ebaa814fe21eb7b4b25a2c9455a34434e0207d6.camel@kernel.crashing.org>
-References: <20201019073908.32262-1-dylan_hung@aspeedtech.com>
-        <CACPK8Xfn+Gn0PHCfhX-vgLTA6e2=RT+D+fnLF67_1j1iwqh7yg@mail.gmail.com>
-        <20201019120040.3152ea0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <1a02e57b6b7d425a19dc59f84091c38ca4edcf47.camel@kernel.crashing.org>
-        <20201019195723.41a5591f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <3ebaa814fe21eb7b4b25a2c9455a34434e0207d6.camel@kernel.crashing.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9055257050;
+        Tue, 20 Oct 2020 18:52:26 +0000 (UTC)
+Received: from treble (ovpn-120-130.rdu2.redhat.com [10.10.120.130])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C7FC65B4B3;
+        Tue, 20 Oct 2020 18:52:20 +0000 (UTC)
+Date:   Tue, 20 Oct 2020 13:52:17 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
+Message-ID: <20201020185217.ilg6w5l7ujau2246@treble>
+References: <20201013003203.4168817-1-samitolvanen@google.com>
+ <20201013003203.4168817-23-samitolvanen@google.com>
+ <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
+ <20201015102216.GB2611@hirez.programming.kicks-ass.net>
+ <20201015203942.f3kwcohcwwa6lagd@treble>
+ <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 20 Oct 2020 17:15:42 +1100 Benjamin Herrenschmidt wrote:
-> On Mon, 2020-10-19 at 19:57 -0700, Jakub Kicinski wrote:
-> > > I suspect the problem is that the HW (and yes this would be a HW bug)
-> > > doesn't order the CPU -> memory and the CPU -> MMIO path.
-> > > 
-> > > What I think happens is that the store to txde0 is potentially still in
-> > > a buffer somewhere on its way to memory, gets bypassed by the store to
-> > > MMIO, causing the MAC to try to read the descriptor, and getting the
-> > > "old" data from memory.  
-> > 
-> > I see, but in general this sort of a problem should be resolved by
-> > adding an appropriate memory barrier. And in fact such barrier should
-> > (these days) be implied by a writel (I'm not 100% clear on why this
-> > driver uses iowrite, and if it matters).  
+On Tue, Oct 20, 2020 at 09:45:06AM -0700, Sami Tolvanen wrote:
+> On Thu, Oct 15, 2020 at 1:39 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> >
+> > On Thu, Oct 15, 2020 at 12:22:16PM +0200, Peter Zijlstra wrote:
+> > > On Thu, Oct 15, 2020 at 01:23:41AM +0200, Jann Horn wrote:
+> > >
+> > > > It would probably be good to keep LTO and non-LTO builds in sync about
+> > > > which files are subjected to objtool checks. So either you should be
+> > > > removing the OBJECT_FILES_NON_STANDARD annotations for anything that
+> > > > is linked into the main kernel (which would be a nice cleanup, if that
+> > > > is possible),
+> > >
+> > > This, I've had to do that for a number of files already for the limited
+> > > vmlinux.o passes we needed for noinstr validation.
+> >
+> > Getting rid of OBJECT_FILES_NON_STANDARD is indeed the end goal, though
+> > I'm not sure how practical that will be for some of the weirder edge
+> > case.
+> >
+> > On a related note, I have some old crypto cleanups which need dusting
+> > off.
 > 
-> No, a barrier won't solve this I think.
+> Building allyesconfig with this series and LTO enabled, I still see
+> the following objtool warnings for vmlinux.o, grouped by source file:
 > 
-> This is a coherency problem at the fabric/interconnect level. I has to
-> do with the way they implemented the DMA path from memory to the
-> ethernet controller using a different "port" of the memory controller
-> than the one used by the CPU, separately from the MMIO path, with no
-> proper ordering between those busses. Old school design .... and
-> broken.
-> 
-> By doing a read back, they probably force the previous write to memory
-> to get past the point where it will be visible to a subsequent DMA read
-> by the ethernet controller.
+> arch/x86/entry/entry_64.S:
+> __switch_to_asm()+0x0: undefined stack state
+> .entry.text+0xffd: sibling call from callable instruction with
+> modified stack frame
+> .entry.text+0x48: stack state mismatch: cfa1=7-8 cfa2=-1+0
 
-Thanks for the explanation. How wonderful :/
+Not sure what this one's about, there's no OBJECT_FILES_NON_STANDARD?
 
-It'd still be highly, highly preferable if the platform was conforming
-to the Linux memory model. IO successors (iowrite32 / writel) must
-ensure previous DRAM writes had completed. For performance sensitive
-ops, which don't require ordering we have writel_relaxed etc.
+> arch/x86/entry/entry_64_compat.S:
+> .entry.text+0x1754: unsupported instruction in callable function
+> .entry.text+0x1634: redundant CLD
+> .entry.text+0x15fd: stack state mismatch: cfa1=7-8 cfa2=-1+0
+> .entry.text+0x168c: stack state mismatch: cfa1=7-8 cfa2=-1+0
 
-I assume the DRAM controller queue is a straight FIFO and we don't have
-to worry about hitting the same address, so how about we add a read
-of some known uncached address in iowrite32 / writel?
+Ditto.
+
+> arch/x86/kernel/head_64.S:
+> .head.text+0xfb: unsupported instruction in callable function
+
+Ditto.
+
+> arch/x86/kernel/acpi/wakeup_64.S:
+> do_suspend_lowlevel()+0x116: sibling call from callable instruction
+> with modified stack frame
+
+We'll need to look at how to handle this one.
+
+> arch/x86/crypto/camellia-aesni-avx2-asm_64.S:
+> camellia_cbc_dec_32way()+0xb3: stack state mismatch: cfa1=7+520 cfa2=7+8
+> camellia_ctr_32way()+0x1a: stack state mismatch: cfa1=7+520 cfa2=7+8
+
+I can clean off my patches for all the crypto warnings.
+
+> arch/x86/lib/retpoline.S:
+> __x86_retpoline_rdi()+0x10: return with modified stack frame
+> __x86_retpoline_rdi()+0x0: stack state mismatch: cfa1=7+32 cfa2=7+8
+> __x86_retpoline_rdi()+0x0: stack state mismatch: cfa1=7+32 cfa2=-1+0
+
+Is this with upstream?  I thought we fixed that with
+UNWIND_HINT_RET_OFFSET.
+
+> Josh, Peter, any thoughts on what would be the preferred way to fix
+> these, or how to tell objtool to ignore this code?
+
+One way or another, the patches need to be free of warnings before
+getting merged.  I can help, though I'm traveling and only have limited
+bandwidth for at least the rest of the month.
+
+Ideally we'd want to have objtool understand everything, with no
+whitelisting, but some cases (e.g. suspend code) can be tricky.
+
+I wouldn't be opposed to embedding the whitelist in the binary, in a
+discardable section.  It should be relatively easy, but as I mentioned I
+may or may not have time to work on it for a bit.  I'm working half
+days, and now the ocean beckons from the window of my camper.
+
+-- 
+Josh
+
