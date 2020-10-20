@@ -2,80 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC01E2934FA
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Oct 2020 08:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EC82936F3
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Oct 2020 10:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404289AbgJTGaQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Oct 2020 02:30:16 -0400
-Received: from kernel.crashing.org ([76.164.61.194]:42884 "EHLO
-        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404279AbgJTGaO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Oct 2020 02:30:14 -0400
-X-Greylist: delayed 813 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Oct 2020 02:30:13 EDT
-Received: from localhost (gate.crashing.org [63.228.1.57])
-        (authenticated bits=0)
-        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 09K6FhPZ029406
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 20 Oct 2020 01:15:56 -0500
-Message-ID: <3ebaa814fe21eb7b4b25a2c9455a34434e0207d6.camel@kernel.crashing.org>
-Subject: Re: [PATCH] net: ftgmac100: Fix missing TX-poll issue
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Po-Yu Chuang <ratbert@faraday-tech.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org
-Date:   Tue, 20 Oct 2020 17:15:42 +1100
-In-Reply-To: <20201019195723.41a5591f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20201019073908.32262-1-dylan_hung@aspeedtech.com>
-         <CACPK8Xfn+Gn0PHCfhX-vgLTA6e2=RT+D+fnLF67_1j1iwqh7yg@mail.gmail.com>
-         <20201019120040.3152ea0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <1a02e57b6b7d425a19dc59f84091c38ca4edcf47.camel@kernel.crashing.org>
-         <20201019195723.41a5591f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S2392108AbgJTIpC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Oct 2020 04:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389334AbgJTIpC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Oct 2020 04:45:02 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153ECC061755
+        for <linux-arch@vger.kernel.org>; Tue, 20 Oct 2020 01:45:02 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d23so660979pll.7
+        for <linux-arch@vger.kernel.org>; Tue, 20 Oct 2020 01:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:message-id:from:to:cc:subject:in-reply-to:references
+         :user-agent:mime-version;
+        bh=p2KAi1Y8jAIxsXHWL71zfWkhlbCdaKgX0rSnrVgk4Bk=;
+        b=gxTMHx0SGLxChVPaiF1NqDP6Xnpd933JqK8bmHZDJp1IemUqcEwjmJlEJZLLOtTA52
+         3TTO9HfE47svlppLDWDEG7Sx3hv5oDAOMsPtmZ/Prua7fbul+zMp7N2DVdA58NL1dxdU
+         qBLWlCc1gx/uvY9pTCgHeDHh+kdhOIKgdg17b1vlSL1lfgMRfIx4RWUSctZSwAJyVACm
+         DSTR18T39b3DZh2JnBIoOl31D4kc0CK+cURBKYAXDhvrBMHu2gGwBNjPi1uCOPjHNKEu
+         SuS2qej0goUCEG5HANnywmw6U8A03BXsoqfuysr8eZrZLMsX4EDw3HHpgPxRYi1tVwbC
+         HbVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:from:to:cc:subject:in-reply-to
+         :references:user-agent:mime-version;
+        bh=p2KAi1Y8jAIxsXHWL71zfWkhlbCdaKgX0rSnrVgk4Bk=;
+        b=jAaIof2soBQcX3IBWcVtXEcW2F8nBQ7Q+9yOqhBzbbPpZq/aGYTVtpSEVja8cAT9FH
+         7Jzjcb97J2HpEUV61l/G7zRIkmu3EvAs5V8i6J1n50uSHeBZR6eywsquEBxMaYWxH5VT
+         BIwEqEeQBK/Ts+yssAr520mU2lVd5Z/aid+W+IetxWP4Qg0E3pTClVuU7QTq1KudPu6h
+         XG/u5qKAUKXWlaxfhqUO7BTx6Y7MNtzPQVrXn7hUigtIiw5TvG84wOLihuoe8nWgDXqj
+         kghr46LekL7Vfj3SAIXCWRMy8saYRnM/geN342ScM9BdZYOTNm5mk7vJ28zIcddIq0GG
+         Vnhg==
+X-Gm-Message-State: AOAM530JyAA2TIyH9wVZ5I3do+htlukDd59qs7/5uaI1L1+U26N/tM2n
+        IR7UIkunt0d4o3sgwLcwwjdlF9M1J48n1A==
+X-Google-Smtp-Source: ABdhPJx3GFwrsZg/0FhFFfBwNDUjIZuw1LyJYZt/GvhlZMAkzjxFx1qeRyHWzqGpHPIwXLuCzSWfBg==
+X-Received: by 2002:a17:90b:1646:: with SMTP id il6mr1816258pjb.235.1603183501448;
+        Tue, 20 Oct 2020 01:45:01 -0700 (PDT)
+Received: from earth-mac.local.gmail.com (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
+        by smtp.gmail.com with ESMTPSA id y16sm498902pgh.8.2020.10.20.01.44.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 20 Oct 2020 01:45:00 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 17:44:55 +0900
+Message-ID: <m2wnzl2smw.wl-thehajime@gmail.com>
+From:   Hajime Tazaki <thehajime@gmail.com>
+To:     johannes@sipsolutions.net
+Cc:     linux-arch@vger.kernel.org, tavi.purdila@gmail.com, richard@nod.at,
+        jdike@addtoit.com, linux-um@lists.infradead.org,
+        retrage01@gmail.com, linux-kernel-library@freelists.org,
+        anton.ivanov@cambridgegreys.com
+Subject: Re: [RFC v7 08/21] um: add nommu mode for UML library mode
+In-Reply-To: <945d17982b92801dc4a8d61d9fed91e0e60b0105.camel@sipsolutions.net>
+References: <cover.1601960644.git.thehajime@gmail.com>
+        <ac5a99db869705b284307dea21b37068ee5ae7d2.1601960644.git.thehajime@gmail.com>
+        <a7d49bb4cecb14559faaedf7e875d86f2cd81d8b.camel@sipsolutions.net>
+        <m2r1q83w6x.wl-thehajime@gmail.com>
+        <945d17982b92801dc4a8d61d9fed91e0e60b0105.camel@sipsolutions.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/25.3 Mule/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2020-10-19 at 19:57 -0700, Jakub Kicinski wrote:
-> > I suspect the problem is that the HW (and yes this would be a HW bug)
-> > doesn't order the CPU -> memory and the CPU -> MMIO path.
-> > 
-> > What I think happens is that the store to txde0 is potentially still in
-> > a buffer somewhere on its way to memory, gets bypassed by the store to
-> > MMIO, causing the MAC to try to read the descriptor, and getting the
-> > "old" data from memory.
+
+Hello,
+
+sorry for the late response.
+
+On Sat, 10 Oct 2020 01:06:03 +0900,
+Johannes Berg wrote:
 > 
-> I see, but in general this sort of a problem should be resolved by
-> adding an appropriate memory barrier. And in fact such barrier should
-> (these days) be implied by a writel (I'm not 100% clear on why this
-> driver uses iowrite, and if it matters).
+> On Fri, 2020-10-09 at 12:38 +0900, Hajime Tazaki wrote:
+> > 
+> > > > +++ b/arch/um/nommu/Makefile.um
+> > > 
+> > > [...]
+> > > 
+> > > > +ifeq ($(shell uname -s), Linux)
+> > > > +NPROC=$(shell nproc)
+> > > > +else # e.g., FreeBSD
+> > > > +NPROC=$(shell sysctl -n hw.ncpu)
+> > > > +endif
+> > > 
+> > > That seems very inappropriate here.
+> > 
+> > Will cut the FreeBSD part.
+> 
+> But even the NPROC and -j flag mangling seems ... awful?
 
-No, a barrier won't solve this I think.
+Okay, we won't use the -j flag at this place.
 
-This is a coherency problem at the fabric/interconnect level. I has to
-do with the way they implemented the DMA path from memory to the
-ethernet controller using a different "port" of the memory controller
-than the one used by the CPU, separately from the MMIO path, with no
-proper ordering between those busses. Old school design .... and
-broken.
+> > > > --- /dev/null
+> > > > +++ b/arch/um/nommu/include/asm/atomic64.h
+> > > 
+> > > That doesn't make sense to me, you can control CONFIG_GENERIC_ATOMIC64
+> > > to be on, and don't need the ifdef and this file?
+> > 
+> > We were suggested to not use GENERIC_ATOMIC64 on 64bit build during
+> > our v3 patchset.  So we actually control CONFIG_GENERIC_ATOMIC64 to be
+> > on only when !64BIT, and thus need atomic64.h for the 64BIT build.
+> > 
+> > https://lwn.net/ml/linux-arch/20200205093454.GG14879@hirez.programming.kicks-ass.net/
+> 
+> Well, yeah, but your architecture _is_ a piece of crap in needing
+> atomic64 emulation? :-)
+> 
+> How about just using the real atomic64 implementation like UML normally
+> does? I mean, falling back to the actual underlying CPU. Or even gcc
+> intrinsics?
+> 
+> You've basically re-implemented CONFIG_GENERIC_ATOMIC64, so perhaps
+> you've hidden it from PeterZ's view now because you're no longer
+> touching the real generic atomic64 (which is for 32-bit machines), but
+> that doesn't actually make this any *better*. Arguably *worse* since
+> you've just copied it ...
 
-By doing a read back, they probably force the previous write to memory
-to get past the point where it will be visible to a subsequent DMA read
-by the ethernet controller.
+We're trying to reimplement atomic64 ops with gcc builtins.
 
-> > It's ... fishy, but that isn't the first time an Aspeed chip has that
-> > type of bug (there's a similar one in the USB device controler iirc).
+We're now trying to address all of comments we got, and will get here
+back once we have done.
 
-Cheers,
-Ben.
-
-
+-- Hajime
