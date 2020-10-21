@@ -2,105 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5AA294F69
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 17:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F92294F74
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 17:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2443888AbgJUPBw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 11:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2443885AbgJUPBw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 11:01:52 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C42C0613CE
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 08:01:50 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id t20so2881652edr.11
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 08:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ue8Kphmgd/J9kkCdXQ6cXg3jN2T1s1VI/S6KEmBFYtA=;
-        b=tyuzf6egZNg0bmL3iIxfmvVeRFhdDnfbewBqqrw7rPk8s9ezG7HKGJBYpz7qsa0C3r
-         S3ppY6TNQS3s3qJ+E8SkywVt7v3Zd2bQYG9iNKkQ5ry9p4dyQxrKaJYxT3chX6RHizyC
-         +GySRMRyhkvGqRuGv8ic4+o/rQfFyDhJwmYxpx2ibC7icYfN3L7KTnwPZmkGNg6waxt+
-         /v0DHK/ocGmaG3hiyKz3lBsjXZFDm/NNr/l8Dh1bRHfhbCLOJwWvukIO73RcCWW7x5gT
-         F/vLxIv6fFnSA+AZM/O1jatbKn8McCq487pE+2ewPegXQiEjjWXHbjNbBW5V5tKGcGQh
-         Pzag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ue8Kphmgd/J9kkCdXQ6cXg3jN2T1s1VI/S6KEmBFYtA=;
-        b=NWI4dMCfIHlpIdPYnDy7TtO5H+6ze7KdrrjGaaag0maVAYUqYTK2T+k6Z4enOap5ak
-         wn7voezqUB/i7nemgVXIwoEnNWUUAkGQgWaIsJzKWpm1PkZrFA6KZ1am0F3bsCvHsA1W
-         PRtnbma1QsYOQ+lKg88idn8th0PPgRqP9jKFY+E5mFdj2zZYF2NmzwWsTrnOAGOTZ2Nj
-         SanemA7p7lEkzKfNDvPRHZp4ewjmygGMLlhyaHd0WaVZQmLsKjP3p0FNWQlSi4Z3xEuM
-         FGYH/ai7mVCvtnCmRHPWWEmcbrnxYr2UmnGItRll3y5oAX+lY8Xr4L6s+blVhcCqQZAf
-         A6WA==
-X-Gm-Message-State: AOAM5321xx6re0Cy4PsdBC1fT4KDOidJ6LdBPdpXo/0ou7xLBgJdTsnq
-        lwhxDcrExatMzcqBqYjWdYblqw+gzf6W3ACPK4rsoQ==
-X-Google-Smtp-Source: ABdhPJxLbzy0h2+Icd7LIsy6zh10BR+u5qt0ykST0OUv8CPsJiNxNv60HEOhNh7tmnifd2hka1h/GcVQRH2ORVgJ1P0=
-X-Received: by 2002:a05:6402:135a:: with SMTP id y26mr1563112edw.114.1603292509011;
- Wed, 21 Oct 2020 08:01:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-23-samitolvanen@google.com> <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
- <20201015102216.GB2611@hirez.programming.kicks-ass.net> <20201015203942.f3kwcohcwwa6lagd@treble>
- <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
- <20201020185217.ilg6w5l7ujau2246@treble> <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
- <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
-In-Reply-To: <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Wed, 21 Oct 2020 08:01:38 -0700
-Message-ID: <CABCJKuewXazmBpXz5irWgy+W537x1Lws5YAsFqMgo+Yio8iyRg@mail.gmail.com>
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, Jann Horn <jannh@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
+        id S2443828AbgJUPDT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 11:03:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:36416 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2443608AbgJUPDT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 11:03:19 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BF1D31B;
+        Wed, 21 Oct 2020 08:03:17 -0700 (PDT)
+Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 391343F66B;
+        Wed, 21 Oct 2020 08:03:16 -0700 (PDT)
+Date:   Wed, 21 Oct 2020 16:03:13 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
+Message-ID: <20201021150313.ecxawwxsowweye43@e107158-lin>
+References: <20201021104611.2744565-1-qais.yousef@arm.com>
+ <20201021104611.2744565-5-qais.yousef@arm.com>
+ <63fead90e91e08a1b173792b06995765@kernel.org>
+ <20201021121559.GB3976@gaia>
+ <20201021144112.GA17912@willie-the-truck>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201021144112.GA17912@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 1:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Oct 20, 2020 at 12:24:37PM -0700, Sami Tolvanen wrote:
-> > > > Building allyesconfig with this series and LTO enabled, I still see
-> > > > the following objtool warnings for vmlinux.o, grouped by source file:
-> > > >
-> > > > arch/x86/entry/entry_64.S:
-> > > > __switch_to_asm()+0x0: undefined stack state
-> > > > .entry.text+0xffd: sibling call from callable instruction with
-> > > > modified stack frame
-> > > > .entry.text+0x48: stack state mismatch: cfa1=7-8 cfa2=-1+0
-> > >
-> > > Not sure what this one's about, there's no OBJECT_FILES_NON_STANDARD?
-> >
-> > Correct, because with LTO, we won't have an ELF binary to process
-> > until we compile everything into vmlinux.o, and at that point we can
-> > no longer skip individual object files.
->
-> I think what Josh was trying to say is; this file is subject to objtool
-> on a normal build and does not generate warnings. So why would it
-> generate warnings when subject to objtool as result of a vmlinux run
-> (due to LTO or otherwise).
+On 10/21/20 15:41, Will Deacon wrote:
+> On Wed, Oct 21, 2020 at 01:15:59PM +0100, Catalin Marinas wrote:
+> > On Wed, Oct 21, 2020 at 12:09:58PM +0100, Marc Zyngier wrote:
+> > > On 2020-10-21 11:46, Qais Yousef wrote:
+> > > > Example output. I was surprised that the 2nd field (bits[7:4]) is
+> > > > printed out
+> > > > although it's set as FTR_HIDDEN.
+> > > > 
+> > > > # cat /sys/devices/system/cpu/cpu*/regs/identification/id_aa64pfr0
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > > 
+> > > > # echo 1 > /proc/sys/kernel/enable_asym_32bit
+> > > > 
+> > > > # cat /sys/devices/system/cpu/cpu*/regs/identification/id_aa64pfr0
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > > 0x0000000000000012
+> > > > 0x0000000000000012
+> > > > 0x0000000000000011
+> > > > 0x0000000000000011
+> > > 
+> > > This looks like a terrible userspace interface. It exposes unrelated
+> > > features,
+> > 
+> > Not sure why the EL1 field ended up in here, that's not relevant to the
+> > user.
+> > 
+> > > and doesn't expose the single useful information that the kernel has:
+> > > the cpumask describing the CPUs supporting  AArch32 at EL0. Why not expose
+> > > this synthetic piece of information which requires very little effort from
+> > > userspace and doesn't spit out unrelated stuff?
+> > 
+> > I thought the whole idea is to try and avoid the "very little effort"
+> > part ;).
+> > 
+> > > Not to mention the discrepancy with what userspace gets while reading
+> > > the same register via the MRS emulation.
+> > > 
+> > > Granted, the cpumask doesn't fit the cpu*/regs/identification hierarchy,
+> > > but I don't think this fits either.
+> > 
+> > We already expose MIDR and REVIDR via the current sysfs interface. We
+> > can expand it to include _all_ the other ID_* regs currently available
+> > to user via the MRS emulation and we won't have to debate what a new
+> > interface would look like. The MRS emulation and the sysfs info should
+> > probably match, though that means we need to expose the
+> > ID_AA64PFR0_EL1.EL0 field which we currently don't.
+> > 
+> > I do agree that an AArch32 cpumask is an easier option both from the
+> > kernel implementation perspective and from the application usability
+> > one, though not as easy as automatic task placement by the scheduler (my
+> > first preference, followed by the id_* regs and the aarch32 mask, though
+> > not a strong preference for any).
+> 
+> If a cpumask is easier to implement and easier to use, then I think that's
+> what we should do. It's also then dead easy to disable if necessary by
+> just returning 0. The only alternative I would prefer is not having to
+> expose this information altogether, but I'm not sure that figuring this
+> out from MIDR/REVIDR alone is reliable.
 
-Ah, right. It also doesn't generate warnings when I build defconfig
-with LTO, so clearly something confuses objtool here.
+I did suggest this before, but I'll try gain. If we want to assume a custom
+bootloader and custom user space, we can make them provide the mask.
 
-Sami
+For example, the new sysctl_enable_asym_32bit could be a cpumask instead of
+a bool as it currently is. Or we can make it a cmdline parameter too.
+In both cases some admin (bootloader or init process) has to ensure to fill it
+correctly for the target platform. The bootloader should be able to read the
+registers to figure out the mask. So more weight to make it a cmdline param.
+
+Then the rest of user space can easily parse the cpumask from
+/proc/sys/kernel/enable_asym_32bit or from /proc/cmdline.
+
+
+Thanks
+
+--
+Qais Yousef
