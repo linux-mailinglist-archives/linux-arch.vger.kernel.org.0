@@ -2,108 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEFF29523A
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 20:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3B729532A
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 21:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504074AbgJUSae (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 14:30:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49133 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406149AbgJUSad (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Oct 2020 14:30:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603305032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SWk1HmGPS11z1lVFpxCdMWGo2d19IWvUVpCVt8eeJUo=;
-        b=XHIwdzkNCGrU5fCsAQRbk5YfmiV/PQsYaq+XrMK5tFAbe3G6vGj+Yw5nL7gOLFB8pJEygv
-        zOOrM4vIktBpXjVOfAjiDuzqojSlCFQF1LxBf5rBo/5HQN0JpTQPP/jt+n3eJKxhgoNdvo
-        W254vtdiIhxK5R6Ho3PKawfx8Dfy/20=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-267-ts4ydIjKNra8FmPa6CjVIA-1; Wed, 21 Oct 2020 14:30:26 -0400
-X-MC-Unique: ts4ydIjKNra8FmPa6CjVIA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51CD0101962B;
-        Wed, 21 Oct 2020 18:30:24 +0000 (UTC)
-Received: from treble (ovpn-117-195.rdu2.redhat.com [10.10.117.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 912706EF42;
-        Wed, 21 Oct 2020 18:30:14 +0000 (UTC)
-Date:   Wed, 21 Oct 2020 13:30:09 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Jann Horn <jannh@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
+        id S2410410AbgJUT5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 15:57:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:39346 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390855AbgJUT5l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 15:57:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4880D6E;
+        Wed, 21 Oct 2020 12:57:40 -0700 (PDT)
+Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 612F63F719;
+        Wed, 21 Oct 2020 12:57:39 -0700 (PDT)
+Date:   Wed, 21 Oct 2020 20:57:36 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-Message-ID: <20201021183009.qbvhz7hsrm46vksn@treble>
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-23-samitolvanen@google.com>
- <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
- <20201015102216.GB2611@hirez.programming.kicks-ass.net>
- <20201015203942.f3kwcohcwwa6lagd@treble>
- <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
- <20201020185217.ilg6w5l7ujau2246@treble>
- <20201021095133.GA2628@hirez.programming.kicks-ass.net>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
+Message-ID: <20201021195736.mj4njbi6pxkbpbyf@e107158-lin>
+References: <20201021104611.2744565-1-qais.yousef@arm.com>
+ <20201021104611.2744565-5-qais.yousef@arm.com>
+ <63fead90e91e08a1b173792b06995765@kernel.org>
+ <20201021121559.GB3976@gaia>
+ <20201021144112.GA17912@willie-the-truck>
+ <20201021150313.ecxawwxsowweye43@e107158-lin>
+ <20201021152310.GA18071@willie-the-truck>
+ <20201021160730.komcgrp7q2tly55w@e107158-lin>
+ <20201021172345.GF18071@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201021095133.GA2628@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20201021172345.GF18071@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 11:51:33AM +0200, Peter Zijlstra wrote:
-> On Tue, Oct 20, 2020 at 01:52:17PM -0500, Josh Poimboeuf wrote:
-> > > arch/x86/lib/retpoline.S:
-> > > __x86_retpoline_rdi()+0x10: return with modified stack frame
-> > > __x86_retpoline_rdi()+0x0: stack state mismatch: cfa1=7+32 cfa2=7+8
-> > > __x86_retpoline_rdi()+0x0: stack state mismatch: cfa1=7+32 cfa2=-1+0
+On 10/21/20 18:23, Will Deacon wrote:
+> On Wed, Oct 21, 2020 at 05:07:30PM +0100, Qais Yousef wrote:
+> > On 10/21/20 16:23, Will Deacon wrote:
+> > > > > If a cpumask is easier to implement and easier to use, then I think that's
+> > > > > what we should do. It's also then dead easy to disable if necessary by
+> > > > > just returning 0. The only alternative I would prefer is not having to
+> > > > > expose this information altogether, but I'm not sure that figuring this
+> > > > > out from MIDR/REVIDR alone is reliable.
+> > > > 
+> > > > I did suggest this before, but I'll try gain. If we want to assume a custom
+> > > > bootloader and custom user space, we can make them provide the mask.
+> > > 
+> > > Who mentioned a custom bootloader? In the context of Android, we're
 > > 
-> > Is this with upstream?  I thought we fixed that with
-> > UNWIND_HINT_RET_OFFSET.
+> > Custom bootloader as in a bootloader that needs to opt-in to enable the
+> > feature (pass the right cmdline param). Catalin suggested to make this a sysctl
+> > to allow also for runtime toggling. But the initial intention was to have this
+> > to enable it at cmdline.
 > 
-> I can't reproduce this one either; but I do get different warnings:
+> Hmm, ok, I don't think allowing the cmdline to be specified means its a
+> custom bootloader.
+
+True it could be just added to chosen property in the DT file without any
+bootloader changes.
+
+Bad usage of English probably. I just meant the bootloader might need to be
+made aware of the opt-in process too. So it can potentially co-operate more.
+
+> > > talking about a user-space that already manages scheduling affinity.
+> > > 
+> > > > For example, the new sysctl_enable_asym_32bit could be a cpumask instead of
+> > > > a bool as it currently is. Or we can make it a cmdline parameter too.
+> > > > In both cases some admin (bootloader or init process) has to ensure to fill it
+> > > > correctly for the target platform. The bootloader should be able to read the
+> > > > registers to figure out the mask. So more weight to make it a cmdline param.
+> > > 
+> > > I think this is adding complexity for the sake of it. I'm much more in
+> > 
+> > I actually think it reduces complexity. No special ABI to generate the mask
+> > from the kernel. The same opt-in flag is the cpumask too.
 > 
-> gcc (Debian 10.2.0-13) 10.2.0, x86_64-defconfig:
-> 
-> defconfig-build/vmlinux.o: warning: objtool: __x86_indirect_thunk_rax() falls through to next function __x86_retpoline_rax()
-> defconfig-build/vmlinux.o: warning: objtool:   .altinstr_replacement+0x1063: (branch)
-> defconfig-build/vmlinux.o: warning: objtool:   __x86_indirect_thunk_rax()+0x0: (alt)
-> defconfig-build/vmlinux.o: warning: objtool:   __x86_indirect_thunk_rax()+0x0: <=== (sym)
-> 
-> (for every single register, not just rax)
-> 
-> Which is daft as well, because the retpoline.o run is clean. It also
-> doesn't make sense because __x86_retpoline_rax isn't in fact STT_FUNC,
-> so WTH ?!
+> Maybe I'm misunderstanding your proposal but having a cpumask instead of
 
-It is STT_FUNC:
+What I meant is that if we change the requirement to opt-in from a boolean
+switch
 
-  SYM_FUNC_START_NOALIGN(__x86_retpoline_\reg)
+	sysctl.enable_32bit_asym=1
 
-  $ readelf -s vmlinux.o |grep __x86_retpoline_rax
-  129749: 0000000000000005    17 FUNC    GLOBAL DEFAULT   39 __x86_retpoline_rax
+to require the bootloader/init scripts provide the mask of aarch32 capable cpus
 
--- 
-Josh
+	sysctl.asym_32bit_cpus=0xf0
 
+This will achieve multiple things at the same time:
+
+	* Defer cpus specification to platform designers who want to
+	  enable this feature on their platform.
+
+	* We don't need a separate API to export which cpus are 32bit capable.
+	  They can read it directly from /proc/sys/kernel/asym_32bit_cpus.
+	  When it's 0 it means the system is not asymmetric.
+
+	* If/when we want to disable this support in the future. The sysctl
+	  handler will just have to return 0 all the time and ignore all
+	  writes.
+
+So it's changing the way user space opts-in. The kernel will still treat it as
+a boolean, and probably sanity check the cpus to make sure they match what it
+sees.
+
+> a bool means you now have to consider policy on a per-cpu basis, which
+> adds an extra dimension to this. For example, do you allow that mask to
+> be changed at runtime so that differents sets of CPUs now support 32-bit?
+> Do you preserve it across hotplug?
+
+I can see how cpumask word was confusing. I hope the above is clearer.
+We don't change how the kernel works, but rather what the user space have to do
+to opt-in. Hopefully hitting 2 birds with one stone :-)
+
+Thanks!
+
+--
+Qais Yousef
