@@ -2,107 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BBE295122
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 18:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDBA29516A
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 19:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503160AbgJUQwx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 12:52:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39994 "EHLO mail.kernel.org"
+        id S2503401AbgJURTz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 13:19:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2444620AbgJUQwx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Oct 2020 12:52:53 -0400
-Received: from gaia (unknown [95.145.162.19])
+        id S2443297AbgJURTz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 13:19:55 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4E3C12173E;
-        Wed, 21 Oct 2020 16:52:50 +0000 (UTC)
-Date:   Wed, 21 Oct 2020 17:52:47 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 87DBD208C3;
+        Wed, 21 Oct 2020 17:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603300793;
+        bh=FjPVlb9Q840Pa/bPepIOfghYpMi82xyyQGAUAc7Vm6A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iDSObwJwbGfaGxhurpBKzYLQyi8ls/L6qnEvsgW03e0831RKalVxqpwRYfcg1M+aB
+         q44Ks0NHs8pDuJaHHcSj20/ENUmNOG2boyD3Bt6dmFcC1qkw6tjrRlPKYgjo76X74v
+         ew274Fpo/UNcN1mXPHoNc7hdG7t2FhlWIts/8sZ0=
+Date:   Wed, 21 Oct 2020 18:19:48 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Morten Rasmussen <morten.rasmussen@arm.com>,
+        Marc Zyngier <maz@kernel.org>, linux-arch@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/4] arm64: Add support for asymmetric AArch32 EL0
- configurations
-Message-ID: <20201021165246.GH3976@gaia>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-arm-kernel@lists.infradead.org, surenb@google.com,
+        balejs@google.com
+Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
+Message-ID: <20201021171945.GE18071@willie-the-truck>
 References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-3-qais.yousef@arm.com>
- <20201021153911.GC18071@willie-the-truck>
- <20201021162121.bdiopxvzscbhzzpt@e107158-lin>
+ <20201021104611.2744565-5-qais.yousef@arm.com>
+ <63fead90e91e08a1b173792b06995765@kernel.org>
+ <20201021121559.GB3976@gaia>
+ <20201021133316.GF8004@e123083-lin>
+ <20201021140945.GD3976@gaia>
+ <20201021144542.GB17912@willie-the-truck>
+ <20201021151005.GF3976@gaia>
+ <20201021153738.GB18071@willie-the-truck>
+ <20201021161836.GG3976@gaia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201021162121.bdiopxvzscbhzzpt@e107158-lin>
+In-Reply-To: <20201021161836.GG3976@gaia>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 05:21:21PM +0100, Qais Yousef wrote:
-> On 10/21/20 16:39, Will Deacon wrote:
-> > On Wed, Oct 21, 2020 at 11:46:09AM +0100, Qais Yousef wrote:
-> > > When the CONFIG_ASYMMETRIC_AARCH32 option is enabled (EXPERT), the type
-> > > of the ARM64_HAS_32BIT_EL0 capability becomes WEAK_LOCAL_CPU_FEATURE.
-> > > The kernel will now return true for system_supports_32bit_el0() and
-> > > checks 32-bit tasks are affined to AArch32 capable CPUs only in
-> > > do_notify_resume(). If the affinity contains a non-capable AArch32 CPU,
-> > > the tasks will get SIGKILLed. If the last CPU supporting 32-bit is
-> > > offlined, the kernel will SIGKILL any scheduled 32-bit tasks (the
-> > > alternative is to prevent offlining through a new .cpu_disable feature
-> > > entry).
+On Wed, Oct 21, 2020 at 05:18:37PM +0100, Catalin Marinas wrote:
+> On Wed, Oct 21, 2020 at 04:37:38PM +0100, Will Deacon wrote:
+> > On Wed, Oct 21, 2020 at 04:10:06PM +0100, Catalin Marinas wrote:
+> > > On Wed, Oct 21, 2020 at 03:45:43PM +0100, Will Deacon wrote:
+> > > > On Wed, Oct 21, 2020 at 03:09:46PM +0100, Catalin Marinas wrote:
+> > > > > Anyway, if the task placement is entirely off the table, the next thing
+> > > > > is asking applications to set their own mask and kill them if they do
+> > > > > the wrong thing. Here I see two possibilities for killing an app:
+> > > > > 
+> > > > > 1. When it ends up scheduled on a non-AArch32-capable CPU
+> > > > 
+> > > > That sounds fine to me. If we could do the exception return and take a
+> > > > SIGILL, that's what we'd do, but we can't so we have to catch it before.
 > > > 
-> > > In addition to the relaxation of the ARM64_HAS_32BIT_EL0 capability,
-> > > this patch factors out the 32-bit cpuinfo and features setting into
-> > > separate functions: __cpuinfo_store_cpu_32bit(),
-> > > init_cpu_32bit_features(). The cpuinfo of the booting CPU
-> > > (boot_cpu_data) is now updated on the first 32-bit capable CPU even if
-> > > it is a secondary one. The ID_AA64PFR0_EL0_64BIT_ONLY feature is relaxed
-> > > to FTR_NONSTRICT and FTR_HIGHER_SAFE when the asymmetric AArch32 support
-> > > is enabled. The compat_elf_hwcaps are only verified for the
-> > > AArch32-capable CPUs to still allow hotplugging AArch64-only CPUs.
+> > > Indeed, the illegal ERET doesn't work for this scenario.
 > > > 
-> > > Make sure that KVM never sees the asymmetric 32bit system. Guest can
-> > > still ignore ID registers and force run 32bit at EL0.
+> > > > > 2. If the user cpumask (bar the offline CPUs) is not a subset of the
+> > > > >    aarch32_mask
+> > > > > 
+> > > > > Option 1 is simpler but 2 would be slightly more consistent.
+> > > > 
+> > > > I disagree -- if we did this for something like fpsimd, then the consistent
+> > > > behaviour would be to SIGILL on the cores without the instructions.
 > > > 
-> > > Co-developed-by: Qais Yousef <qais.yousef@arm.com>
-> > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > > For fpsimd it makes sense since the main ISA is still available and the
+> > > application may be able to do something with the signal. But here we
+> > > can't do much since the entire AArch32 mode is not supported. That's why
+> > > we went for SIGKILL instead of SIGILL but thinking of it, after execve()
+> > > the signals are reset to SIG_DFL so SIGILL cannot be ignored.
+> > > 
+> > > I think it depends on whether you look at this fault as a part of ISA
+> > > not being available or as the overall application not compatible with
+> > > the system it is running on. If the latter, option 2 above makes more
+> > > sense.
 > > 
-> > [...]
-> > 
-> > > diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> > > index 5e784e16ee89..312974ab2c85 100644
-> > > --- a/arch/arm64/include/asm/thread_info.h
-> > > +++ b/arch/arm64/include/asm/thread_info.h
-> > > @@ -67,6 +67,7 @@ void arch_release_task_struct(struct task_struct *tsk);
-> > >  #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
-> > >  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
-> > >  #define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
-> > > +#define TIF_CHECK_32BIT_AFFINITY 6	/* Check thread affinity for asymmetric AArch32 */
-> > 
-> > I've looked through the patch and I still can't figure out why this extra
-> > flag is needed. We know if a CPU supports 32-bit EL0, and we know whether
-> > or not a task is 32-bit. So why the extra flag? Is it just a hangover from
-> > the old series?
+> > Hmm, I'm not sure I see the distinction in practice: you still have a binary
+> > application that cannot run on all CPUs in the system. Who cares if some of
+> > the instructions work?
 > 
-> It did evolve a bit organically.
+> The failure would be more predictable rather than the app running for a
+> while and randomly getting SIGKILL. If it only fails on execve or
+> sched_setaffinity, it may be easier to track down (well, there's the CPU
+> hotplug as well that can change the cpumask intersection outside the
+> user process control).
+
+But it's half-baked, because the moment the 32-bit task changes its affinity
+mask then you're back in the old situation. That's why I'm saying this
+doesn't add anything, because the rest of the series is designed entirely
+around delivering SIGKILL at the last minute rather than preventing us
+getting to that situation in the first place. The execve() case feels to me
+like we're considering doing something because we can, rather than because
+it's actually useful.
+
+> > > > > There's also the question on whether the kernel should allow an ELF32 to
+> > > > > be loaded (and potentially killed subsequently) if the user mask is not
+> > > > > correct on execve().
+> > > > 
+> > > > I don't see the point in distinguishing between "you did execve() on a core
+> > > > without 32-bit" and "you did execve() on a core with 32-bit and then
+> > > > migrated to a core without 32-bit".
+> > > 
+> > > In the context of option 2 above, its more about whether execve()
+> > > returns -ENOEXEC or the process gets a SIGKILL immediately.
+> > 
+> > I just don't see what we gain by returning -ENOEXEC except for extra code
+> > and behaviour in the ABI (and if you wanted consistentcy you'd also need
+> > to fail attempts to widen the affinity mask to include 64-bit-only cores
+> > from a 32-bit task).
 > 
-> AFAICS it helps as an optimization to avoid the checks unnecessarily. If it's
-> not expensive to do the checks in the loop in do_notify_resume() we can omit
-> it. We will still protect it with system_supports_asym_32bit_el0() so the check
-> is done on these systems only.
+> The -ENOEXEC is more in line with the current behaviour not allowing
+> ELF32 on systems that are not fully symmetric. So basically you'd have
+> a global opt-in as sysctl and a per-application opt-in via the affinity
+> mask.
 
-Ah, I think I remember now. We didn't want ret_to_user (entry.S) to
-always go the work_pending path if there was no context switch for a
-32-bit task. With the AArch32 check in do_notify_resume(), it would mean
-we add _TIF_32BIT to the _TIF_WORK_MASK.
+I think it's a bit strong calling that an opt-in, as the application could
+just happen to be using the right cpumask.
 
-However, we could add an asm alternative if AArch32 asym is detected to
-always route TIF_32BIT tasks to work_pending.
+> I do agree that it complicates the kernel implementation.
+> 
+> > In other words, I don't think the kernel needs to hold userspace's hand
+> > for an opt-in feature that requires userspace to handle scheduling for
+> > optimal power/performance _anyway_. Allowing the affinity to be set
+> > arbitrarily and then killing the task if it ends up trying to run on the
+> > wrong CPU is both simple and sufficient.
+> 
+> Fine by me if you want to keep things simple, less code to maintain.
+> 
+> However, it would be good to know if the Android kernel/user guys are
+> happy with this approach. If the Android kernel ends up carrying
+> additional patches for task placement, I'd question why we need to merge
+> this (partial) series at all.
 
--- 
-Catalin
+Hmm, those folks aren't even on CC :(
+
+Adding Suren and Marco...
+
+Will
