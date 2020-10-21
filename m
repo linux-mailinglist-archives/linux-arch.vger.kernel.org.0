@@ -2,121 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E14E229537A
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 22:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA762953C5
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 22:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438961AbgJUUcZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 16:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410384AbgJUUcZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 16:32:25 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C5FC0613CF
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 13:32:21 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 10so2182792pfp.5
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 13:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZlQ9VQDQ1Y9MZKtPS8PBXAKEQPFLhfcQu+fvrtVUj70=;
-        b=Emippq77DbvWgKUDGkyBMfhRMm1aDnbYDXtMujdgf+mu86LHMe+9Tlr+o7S+4ixM11
-         j/yvPBB4uvdF3zfF9C70EW8ygMoDOjnFoe2zerU36e4d5nRZYzQNJaDi6Y8z2uj2hJI4
-         PhL0lcNF0rL3NTBTeqlT4jza+R/TkvHn6SUxthmepS0xajOLKrIek6s/xEhdCSlnsUWq
-         EB2HsmKjK+IijnLdv9z2G3jWa7jN2T+KNvWypDG/8+fSUCRMnmoeAbpovfiF5c3RE2Tp
-         TSrAhiFsocuyPdjHtu1LoF4xT23mVI0v2BV+TXGqD6p3EAPx9VgvgCEWBgc6gVnfr2hK
-         nnkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZlQ9VQDQ1Y9MZKtPS8PBXAKEQPFLhfcQu+fvrtVUj70=;
-        b=EKJrW/ONW/PWqKLC0mobzaBPCikXHo6hq0yVHlBQ/yrSUIx4MrX5EM+5jmaNm+CAXv
-         JWmpFdbjV0Ns5VrdFJ6/Jdl4zjrxfdBJIJ9CynAHHZsqX/sQOhA1AzawhtV88Vzi//4O
-         4GLloSP7elYKHyOvmN808oNmqESjBTZoUG2rqpsAneFEPk7fHkXTYDewBul2hC5vga1h
-         mYzxA+vC72rOkFu5gSzk1ZJrvpAcxnUa3pQSosuo06PMviZnJypg+VrCevMATifRy2kk
-         3k9HdvrBJPs5FiUY+HizYRJ/+h7IJULfBWR4g8zRZDgjJSqJ8BH/DlB0fPN7QIckmSNB
-         ewUg==
-X-Gm-Message-State: AOAM531r5nD7hl2P7XPggfooxw+svk1sLzBqN6HdhphYEvRB2HqZjfrD
-        afIyD1dvOUcuKoP6PvJMmEAZSawt+bslgKav0tuJVQ==
-X-Google-Smtp-Source: ABdhPJwTZeJbnyRrvOsPWPMlSftQ+6gOEwM0ZlDr6yLu5e3FduIZ9zveOSWxefoq/MJY6RC0CdpUpNBwkVy8EyeVYXk=
-X-Received: by 2002:a65:4485:: with SMTP id l5mr4905625pgq.121.1603312340655;
- Wed, 21 Oct 2020 13:32:20 -0700 (PDT)
+        id S2505675AbgJUU76 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 21 Oct 2020 16:59:58 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:44003 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2505681AbgJUU7t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 16:59:49 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-133-TE6JN5gZMAinUsbykq2bUQ-1; Wed, 21 Oct 2020 21:59:44 +0100
+X-MC-Unique: TE6JN5gZMAinUsbykq2bUQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 21 Oct 2020 21:59:43 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 21 Oct 2020 21:59:43 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Greg KH' <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>
+CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Topic: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Index: AQHWp8T3NDfnH4y9nkGWtfqJueR1KKmiiApA
+Date:   Wed, 21 Oct 2020 20:59:43 +0000
+Message-ID: <b416290b76684ac392e8c43d764645f8@AcuMS.aculab.com>
+References: <20200925045146.1283714-1-hch@lst.de>
+ <20200925045146.1283714-3-hch@lst.de> <20201021161301.GA1196312@kroah.com>
+In-Reply-To: <20201021161301.GA1196312@kroah.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20201005025720.2599682-1-keescook@chromium.org>
- <202010141603.49EA0CE@keescook> <CAFP8O3LvTkqUK3rp9Q17fmyN+xApZXA8Cs=MNvxrZ3SDCDRX3A@mail.gmail.com>
- <202010211304.60EF97AF2@keescook>
-In-Reply-To: <202010211304.60EF97AF2@keescook>
-From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date:   Wed, 21 Oct 2020 13:32:09 -0700
-Message-ID: <CAFP8O3KzCbFQarDCBbwsV_saQ2stpy69-a1zBY0Jf2u9PnzzKQ@mail.gmail.com>
-Subject: Re: [PATCH v2] vmlinux.lds.h: Keep .ctors.* with .ctors
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 1:09 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Oct 14, 2020 at 09:53:39PM -0700, F=C4=81ng-ru=C3=AC S=C3=B2ng wr=
-ote:
-> > On Wed, Oct 14, 2020 at 4:04 PM Kees Cook <keescook@chromium.org> wrote=
-:
-> > > > index 5430febd34be..b83c00c63997 100644
-> > > > --- a/include/asm-generic/vmlinux.lds.h
-> > > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > > @@ -684,6 +684,7 @@
-> > > >  #ifdef CONFIG_CONSTRUCTORS
-> > > >  #define KERNEL_CTORS()       . =3D ALIGN(8);                      =
-\
-> > > >                       __ctors_start =3D .;                 \
-> > > > +                     KEEP(*(SORT(.ctors.*)))            \
-> > > >                       KEEP(*(.ctors))                    \
-> > > >                       KEEP(*(SORT(.init_array.*)))       \
-> > > >                       KEEP(*(.init_array))               \
-> > > > --
-> > > > 2.25.1
+From: Greg KH
+> Sent: 21 October 2020 17:13
+> 
+> On Fri, Sep 25, 2020 at 06:51:39AM +0200, Christoph Hellwig wrote:
+> > From: David Laight <David.Laight@ACULAB.COM>
 > >
-> > I think it would be great to figure out why these .ctors.* .dtors.* are=
- generated.
->
-> I haven't had the time to investigate. This patch keeps sfr's builds
-> from regressing, so we need at least this first.
-
-We need to know under what circumstances .ctors.* are generated.
-For Clang>=3D10.0.1, for all *-linux triples, .init_array/.finit_array
-are used by default.
-There is a toggle -fno-use-init-array (not in GCC) to switch back to
-.ctors/.dtors
-
-Modern GCC also uses .init_array. The minimum requirement is now GCC
-4.9 and thus I wonder whether the .ctors configuration is still
-supported.
-If it is (maybe because glibc version which is not specified on
-https://www.kernel.org/doc/html/latest/process/changes.html ), we
-should use
-some #if to highlight that.
-
-> > ~GCC 4.7 switched to default to .init_array/.fini_array if libc
-> > supports it. I have some refactoring in this area of Clang as well
-> > (e.g. https://reviews.llvm.org/D71393)
+> > This lets the compiler inline it into import_iovec() generating
+> > much better code.
 > >
-> > And I am not sure SORT(.init_array.*) or SORT(.ctors.*) will work. The
-> > correct construct is SORT_BY_INIT_PRIORITY(.init_array.*)
->
-> The kernel doesn't seem to use the init_priority attribute at all. Are
-> you saying the cause of the .ctors.* names are a result of some internal
-> use of init_priority by the compiler here?
->
+> > Signed-off-by: David Laight <david.laight@aculab.com>
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > ---
+> >  fs/read_write.c | 179 ------------------------------------------------
+> >  lib/iov_iter.c  | 176 +++++++++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 176 insertions(+), 179 deletions(-)
+> 
+> Strangely, this commit causes a regression in Linus's tree right now.
+> 
+> I can't really figure out what the regression is, only that this commit
+> triggers a "large Android system binary" from working properly.  There's
+> no kernel log messages anywhere, and I don't have any way to strace the
+> thing in the testing framework, so any hints that people can provide
+> would be most appreciated.
 
-If no priority is intended, consider deleting SORT to avoid confusion?
+My original commit just moved the function source from one file to another.
+So it is odd that it makes any difference.
+I don't even know if it gets inlined by Christoph's actual patch.
+(I have another patch that depended on it that I need to resubmit.)
+
+Some of the other changes from Christoph's same patch set might
+make a difference though.
+
+Might be worth forcing it to be not inlined - so it is no change.
+Or try adding a kernel log to import_iovec() or the associated
+copy failing.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
