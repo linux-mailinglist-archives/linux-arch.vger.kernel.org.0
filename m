@@ -2,164 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 831CF294867
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 08:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BF0294993
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 10:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394685AbgJUGgW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 02:36:22 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:56490 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394504AbgJUGgW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 02:36:22 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20201021063604euoutp028a1dedd7f375d1001e2458402b245541~-7nHBXiNc2178121781euoutp02p
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 06:36:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20201021063604euoutp028a1dedd7f375d1001e2458402b245541~-7nHBXiNc2178121781euoutp02p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1603262164;
-        bh=ESAFEoSvJZv3zI6kdwpy5+Kf3FaMswyAoOzJ89FNF0c=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Wiy31xkqYu+kEfJWg/NQGWGP6WBpbTopPzosKjClUtFiBmtqf31Ro0CbCzELLzEVA
-         kEmH3NNK3qWVgvdXZSlfUQQIQts3i4nNU63mtaT5wOi7jTaKX5/bxJa+GKOrOER4P3
-         qbwxdASk5BunSwmjcTywLSkB6piCppiALR90eHbM=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20201021063556eucas1p22240959c43270ef52457c4d34c17c01f~-7m-San052167021670eucas1p2J;
-        Wed, 21 Oct 2020 06:35:56 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 97.47.05997.CC6DF8F5; Wed, 21
-        Oct 2020 07:35:56 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20201021063555eucas1p24f8486354866fea4640a8f28e487d3c4~-7m_zTIUF2170121701eucas1p2J;
-        Wed, 21 Oct 2020 06:35:55 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20201021063555eusmtrp1866d482630cd1ddef9574a129274bc4b~-7m_yijaE0358403584eusmtrp1h;
-        Wed, 21 Oct 2020 06:35:55 +0000 (GMT)
-X-AuditID: cbfec7f4-65dff7000000176d-d5-5f8fd6cc173a
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id C4.00.06017.BC6DF8F5; Wed, 21
-        Oct 2020 07:35:55 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20201021063555eusmtip1000698fc810e12c390545db71534e0d7~-7m_IGsVT0811308113eusmtip1m;
-        Wed, 21 Oct 2020 06:35:55 +0000 (GMT)
-Subject: Re: arm64 build broken on linux next 20201021 -
- include/uapi/asm-generic/unistd.h:862:26: error: array index in initializer
- exceeds array bounds
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
+        id S2408423AbgJUI4i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 04:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731692AbgJUI4i (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 04:56:38 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16D5C0613CE;
+        Wed, 21 Oct 2020 01:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=T1Nj/VgNWnCwEdvHUApSGaEXo57LUFa1cim9ekP5a3o=; b=IperxMxdTeX+UHkUFxSw1fMdlu
+        rlbTj19FdMfMoz6UhXjdK2RVwZsCTVMWAqChFfg6+HksSPrab3vbiLxM3xJboJLwdKTRCwl+dV3yy
+        FnFo08yjI3ShP0Rba4/XVo8zQs9Pvs1cVqm3gByp5GDlehXtegWETrwr3UuFg9ebpFM/HxNAQJZ+K
+        Q68kD1WYDLVrH684E3zFsJk+840g1R1gh18JH0wVUpo+BepzK3sIFR7WI8HXsBSxdonfW/heQaspw
+        uT/Xp8qTHxz3hGqlStk7V1XL+657bHp6vrpU9uivEael1tRQheorfv8cjTFEh98Pn9rwWTRZCbSMV
+        3BqUoHLA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kV9uj-0000lf-BR; Wed, 21 Oct 2020 08:56:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D00FE304BAE;
+        Wed, 21 Oct 2020 10:56:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C3AF5203CC497; Wed, 21 Oct 2020 10:56:06 +0200 (CEST)
+Date:   Wed, 21 Oct 2020 10:56:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, Jann Horn <jannh@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <12dfa2bb-e567-fb42-d74f-5aaa0c5c43df@samsung.com>
-Date:   Wed, 21 Oct 2020 08:35:55 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
-        Gecko/20100101 Thunderbird/78.3.3
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
+Message-ID: <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
+References: <20201013003203.4168817-1-samitolvanen@google.com>
+ <20201013003203.4168817-23-samitolvanen@google.com>
+ <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
+ <20201015102216.GB2611@hirez.programming.kicks-ass.net>
+ <20201015203942.f3kwcohcwwa6lagd@treble>
+ <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
+ <20201020185217.ilg6w5l7ujau2246@treble>
+ <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYuL9O2BLDfCWN7+aJRER3sQW=C-ayo4Tb7QKdffjMYKDw@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBKsWRmVeSWpSXmKPExsWy7djP87pnrvXHG8yaJWLxd9IxdovPR46z
-        Wbxf1sNo0fhO2aJj11cWi02Pr7FaXN41h83i4MI2Rout96axW9z6xG9xbIGYxda9V9ktWu6Y
-        OvB6rJm3htHj969JjB5/535k9mi8cYPNY9OqTjaPO9f2sHlsXlLvcfvfY2aPz5vkAjijuGxS
-        UnMyy1KL9O0SuDL+rzrHVvCJu2LmrwPMDYwdXF2MnBwSAiYSK3acYOti5OIQEljBKPH40Q0o
-        5wujxNdFd6Gcz4wSHSsmssO0fPh/kBEisZxRYueGuVBV7xklpv1Yzw7iCAvMZZR4M/85WIuI
-        wEsmiRUNkSA2s8B0RokF1zRBbDYBQ4mut11A3RwcvAJ2EkceWIGEWQRUJU79XMICYosKJElc
-        ut8ENoZXQFDi5MwnYHFOgUCJXx/vsECMlJdo3jqbGcIWl7j1ZD4TyA0SAj/ZJV5uWMwKcbaL
-        xLLZ39kgbGGJV8e3QL0jI3F6cg8LREMzo8TDc2vZIZweRonLTTMYIaqsJe6c+wV2KbOApsT6
-        XfogpoSAo8S71eoQJp/EjbeCEDfwSUzaNp0ZIswr0dEmBDFDTWLW8XVwWw9euMQ8gVFpFpLP
-        ZiH5ZhaSb2YhrF3AyLKKUTy1tDg3PbXYKC+1XK84Mbe4NC9dLzk/dxMjML2d/nf8yw7GXX+S
-        DjEKcDAq8fBWMPXHC7EmlhVX5h5ilOBgVhLhdTp7Ok6INyWxsiq1KD++qDQntfgQozQHi5I4
-        r/Gil7FCAumJJanZqakFqUUwWSYOTqkGRivVyyFpCz7v5/tqevT8lUXZDbreS8Ln1KruuftB
-        c9rqTzViX9aL3rDzly5Y/itDNqrO5uKbnf/W/oi5ERLxSNlqrWpBjbLO1cidsm85a9zPL32t
-        9tbo84k/8i6+k84tktP2DSny2+GeXl9f4dv+eNLSzTLTf2ns7i6zSV+jn5So8Xml9+P4d0os
-        xRmJhlrMRcWJABblmihrAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNIsWRmVeSWpSXmKPExsVy+t/xu7qnr/XHG/QeM7L4O+kYu8XnI8fZ
-        LN4v62G0aHynbNGx6yuLxabH11gtLu+aw2ZxcGEbo8XWe9PYLW594rc4tkDMYuveq+wWLXdM
-        HXg91sxbw+jx+9ckRo+/cz8yezTeuMHmsWlVJ5vHnWt72Dw2L6n3uP3vMbPH501yAZxRejZF
-        +aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehn/V51jK/jE
-        XTHz1wHmBsYOri5GTg4JAROJD/8PMnYxcnEICSxllJh85wErREJG4uS0BihbWOLPtS42iKK3
-        jBInjlxmBXGEBeYySryZ/5wdxBEReMkk8envdRaQFmaB6YwSk3oDQWwhgQCJ91dXM4PYbAKG
-        El1vQUZxcPAK2EkceWAFEmYRUJU49XMJWKuoQJLE/hM3wWxeAUGJkzOfgNmcAoESvz7egRpv
-        JjFv80NmCFteonnrbChbXOLWk/lMExiFZiFpn4WkZRaSlllIWhYwsqxiFEktLc5Nzy020itO
-        zC0uzUvXS87P3cQIjOhtx35u2cHY9S74EKMAB6MSD+8Flv54IdbEsuLK3EOMEhzMSiK8TmdP
-        xwnxpiRWVqUW5ccXleakFh9iNAV6biKzlGhyPjDZ5JXEG5oamltYGpobmxubWSiJ83YIHIwR
-        EkhPLEnNTk0tSC2C6WPi4JRqYCzNVl5zu3X+1ZYV31/xNCfWTFHgv85ydg1LW67e1hWFtfJl
-        PxbY7o/juzetobduWYa7l/98C9NfL44Wftklknps0XxmocfHZmaJPz63Yallw4Lza6K6f9/S
-        VhNuXL891f1Q233TdNkoV6l5s2Zl/LxZ0hFWe9R93jqz92+OlVknvVj7Z/J1YQ8lluKMREMt
-        5qLiRAD8wt3P/gIAAA==
-X-CMS-MailID: 20201021063555eucas1p24f8486354866fea4640a8f28e487d3c4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20201021063555eucas1p24f8486354866fea4640a8f28e487d3c4
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20201021063555eucas1p24f8486354866fea4640a8f28e487d3c4
-References: <CA+G9fYuL9O2BLDfCWN7+aJRER3sQW=C-ayo4Tb7QKdffjMYKDw@mail.gmail.com>
-        <CGME20201021063555eucas1p24f8486354866fea4640a8f28e487d3c4@eucas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Naresh,
+On Tue, Oct 20, 2020 at 12:24:37PM -0700, Sami Tolvanen wrote:
+> > > Building allyesconfig with this series and LTO enabled, I still see
+> > > the following objtool warnings for vmlinux.o, grouped by source file:
+> > >
+> > > arch/x86/entry/entry_64.S:
+> > > __switch_to_asm()+0x0: undefined stack state
+> > > .entry.text+0xffd: sibling call from callable instruction with
+> > > modified stack frame
+> > > .entry.text+0x48: stack state mismatch: cfa1=7-8 cfa2=-1+0
+> >
+> > Not sure what this one's about, there's no OBJECT_FILES_NON_STANDARD?
+> 
+> Correct, because with LTO, we won't have an ELF binary to process
+> until we compile everything into vmlinux.o, and at that point we can
+> no longer skip individual object files.
 
-On 21.10.2020 07:05, Naresh Kamboju wrote:
-> arm64 build broken while building linux next 20201021 tag.
->
-> include/uapi/asm-generic/unistd.h:862:26: error: array index in
-> initializer exceeds array bounds
-> #define __NR_watch_mount 441
->                           ^
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+I think what Josh was trying to say is; this file is subject to objtool
+on a normal build and does not generate warnings. So why would it
+generate warnings when subject to objtool as result of a vmlinux run
+(due to LTO or otherwise).
 
-Conflict resolution in commit 5394c6318b32f is incomplete.
+In fact, when I build a x86_64-defconfig and then run:
 
-This fixes the build:
+  $ objtool check -barf defconfig-build/vmlinux.o
 
-diff --git a/arch/arm64/include/asm/unistd.h 
-b/arch/arm64/include/asm/unistd.h
-index b3b2019f8d16..86a9d7b3eabe 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -38,7 +38,7 @@
-  #define __ARM_NR_compat_set_tls (__ARM_NR_COMPAT_BASE + 5)
-  #define __ARM_NR_COMPAT_END            (__ARM_NR_COMPAT_BASE + 0x800)
+I do not see these in particular, although I do see a lot of:
 
--#define __NR_compat_syscalls           441
-+#define __NR_compat_syscalls           442
-  #endif
+  "sibling call from callable instruction with modified stack frame"
+  "falls through to next function"
 
-  #define __ARCH_WANT_SYS_CLONE
-diff --git a/include/uapi/asm-generic/unistd.h 
-b/include/uapi/asm-generic/unistd.h
-index 094a685aa0f9..5df46517260e 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -863,7 +863,7 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
-  __SYSCALL(__NR_watch_mount, sys_watch_mount)
+that did not show up in the individual objtool runs during the build.
 
-  #undef __NR_syscalls
--#define __NR_syscalls 441
-+#define __NR_syscalls 442
+The "falls through to next function" seems to be limited to things like:
 
-  /*
-   * 32 bit systems traditionally used different
+  warning: objtool: setup_vq() falls through to next function setup_vq.cold()
+  warning: objtool: e1000_xmit_frame() falls through to next function e1000_xmit_frame.cold()
 
-
-Best regards
-
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+So something's weird with the .cold thing on vmlinux.o runs.
