@@ -2,114 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA225294EE8
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 16:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBEA294EEA
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 16:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439881AbgJUOlU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 10:41:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53332 "EHLO mail.kernel.org"
+        id S2440191AbgJUOly (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 10:41:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:36144 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439900AbgJUOlT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Oct 2020 10:41:19 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 24EB52224E;
-        Wed, 21 Oct 2020 14:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603291279;
-        bh=ZkXHEiFNy+OsEciCgVHW7rrheEkonWr79tZKybOgUUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7RZqUjSodQFOY2O8qndgLqVSlFveJtsKXVSRUAUI9UXlO0g9WW8BZQKjSgs6GtiK
-         CIKy7/l8tmnXQylqXG5tU247DrlM+5kBAQrp1ZKg0nSiYY3EE+VlFc+/6aWoqzWLxl
-         81upOn4jnjtSE1PY93rXan+njOkS7NFcKz89YxVQ=
-Date:   Wed, 21 Oct 2020 15:41:13 +0100
-From:   Will Deacon <will@kernel.org>
+        id S2440037AbgJUOlx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 10:41:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10F47D6E;
+        Wed, 21 Oct 2020 07:41:53 -0700 (PDT)
+Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 938F83F66B;
+        Wed, 21 Oct 2020 07:41:51 -0700 (PDT)
+Date:   Wed, 21 Oct 2020 16:41:49 +0200
+From:   Morten Rasmussen <morten.rasmussen@arm.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Qais Yousef <qais.yousef@arm.com>,
+Cc:     linux-arch@vger.kernel.org,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marc Zyngier <maz@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-arm-kernel@lists.infradead.org
 Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
-Message-ID: <20201021144112.GA17912@willie-the-truck>
+Message-ID: <20201021144149.GG8004@e123083-lin>
 References: <20201021104611.2744565-1-qais.yousef@arm.com>
  <20201021104611.2744565-5-qais.yousef@arm.com>
  <63fead90e91e08a1b173792b06995765@kernel.org>
  <20201021121559.GB3976@gaia>
+ <20201021133316.GF8004@e123083-lin>
+ <20201021140945.GD3976@gaia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201021121559.GB3976@gaia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201021140945.GD3976@gaia>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 01:15:59PM +0100, Catalin Marinas wrote:
-> On Wed, Oct 21, 2020 at 12:09:58PM +0100, Marc Zyngier wrote:
-> > On 2020-10-21 11:46, Qais Yousef wrote:
-> > > Example output. I was surprised that the 2nd field (bits[7:4]) is
-> > > printed out
-> > > although it's set as FTR_HIDDEN.
-> > > 
-> > > # cat /sys/devices/system/cpu/cpu*/regs/identification/id_aa64pfr0
-> > > 0x0000000000000011
-> > > 0x0000000000000011
-> > > 0x0000000000000011
-> > > 0x0000000000000011
-> > > 0x0000000000000011
-> > > 0x0000000000000011
-> > > 
-> > > # echo 1 > /proc/sys/kernel/enable_asym_32bit
-> > > 
-> > > # cat /sys/devices/system/cpu/cpu*/regs/identification/id_aa64pfr0
-> > > 0x0000000000000011
-> > > 0x0000000000000011
-> > > 0x0000000000000012
-> > > 0x0000000000000012
-> > > 0x0000000000000011
-> > > 0x0000000000000011
+On Wed, Oct 21, 2020 at 03:09:46PM +0100, Catalin Marinas wrote:
+> On Wed, Oct 21, 2020 at 03:33:29PM +0200, Morten Rasmussen wrote:
+> > On Wed, Oct 21, 2020 at 01:15:59PM +0100, Catalin Marinas wrote:
+> > > one, though not as easy as automatic task placement by the scheduler (my
+> > > first preference, followed by the id_* regs and the aarch32 mask, though
+> > > not a strong preference for any).
 > > 
-> > This looks like a terrible userspace interface. It exposes unrelated
-> > features,
+> > Automatic task placement by the scheduler would mean giving up the
+> > requirement that the user-space affinity mask must always be honoured.
+> > Is that on the table?
 > 
-> Not sure why the EL1 field ended up in here, that's not relevant to the
-> user.
-> 
-> > and doesn't expose the single useful information that the kernel has:
-> > the cpumask describing the CPUs supporting  AArch32 at EL0. Why not expose
-> > this synthetic piece of information which requires very little effort from
-> > userspace and doesn't spit out unrelated stuff?
-> 
-> I thought the whole idea is to try and avoid the "very little effort"
-> part ;).
-> 
-> > Not to mention the discrepancy with what userspace gets while reading
-> > the same register via the MRS emulation.
-> > 
-> > Granted, the cpumask doesn't fit the cpu*/regs/identification hierarchy,
-> > but I don't think this fits either.
-> 
-> We already expose MIDR and REVIDR via the current sysfs interface. We
-> can expand it to include _all_ the other ID_* regs currently available
-> to user via the MRS emulation and we won't have to debate what a new
-> interface would look like. The MRS emulation and the sysfs info should
-> probably match, though that means we need to expose the
-> ID_AA64PFR0_EL1.EL0 field which we currently don't.
-> 
-> I do agree that an AArch32 cpumask is an easier option both from the
-> kernel implementation perspective and from the application usability
-> one, though not as easy as automatic task placement by the scheduler (my
-> first preference, followed by the id_* regs and the aarch32 mask, though
-> not a strong preference for any).
+> I think Peter rejected it but I still find it a nicer interface from a
+> dumb application perspective. It may interact badly with cpusets though
+> (at least on Android).
 
-If a cpumask is easier to implement and easier to use, then I think that's
-what we should do. It's also then dead easy to disable if necessary by
-just returning 0. The only alternative I would prefer is not having to
-expose this information altogether, but I'm not sure that figuring this
-out from MIDR/REVIDR alone is reliable.
+Agree that it would be nice for supporting legacy applications. Due to
+the cpuset interaction I think there is fair chance that user-space
+would want to know the aarch32 cpumask anyway though.
 
-Will
+> 
+> > Killing aarch32 tasks with an empty intersection between the
+> > user-space mask and aarch32_mask is not really "automatic" and would
+> > require the aarch32 capability to be exposed anyway.
+> 
+> I agree, especially if overriding the user mask is not desirable. But if
+> one doesn't play around with cpusets, 32-bit apps would run "fine" with
+> the scheduler transparently placing them on the correct CPU.
+
+Ruling out user-space setting affinity is another way of solving the
+problem ;-)
+
+> Anyway, if the task placement is entirely off the table, the next thing
+> is asking applications to set their own mask and kill them if they do
+> the wrong thing. Here I see two possibilities for killing an app:
+> 
+> 1. When it ends up scheduled on a non-AArch32-capable CPU
+> 
+> 2. If the user cpumask (bar the offline CPUs) is not a subset of the
+>    aarch32_mask
+> 
+> Option 1 is simpler but 2 would be slightly more consistent.
+
+I don't have strong preference. More consistent killing is probably nice
+for debugging purposes. If we go with 2, we would go round and kill all
+tasks in cpuset (both running and sleeping) if the cpuset mask was
+changed to not include aarch32 CPUs?
+
+> There's also the question on whether the kernel should allow an ELF32 to
+> be loaded (and potentially killed subsequently) if the user mask is not
+> correct on execve().
+
+I wonder how many apps that would handle execve() failing? If we allow
+killing, the simplest solution if there is any doubt seems to be just
+to kill the task :-)
+
+Morten
