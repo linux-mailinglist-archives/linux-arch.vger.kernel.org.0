@@ -2,121 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D91F2947AB
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 07:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB152947F8
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 07:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440325AbgJUFFZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 01:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440324AbgJUFFY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 01:05:24 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5E6C0613D6
-        for <linux-arch@vger.kernel.org>; Tue, 20 Oct 2020 22:05:22 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id w17so1105674ilg.8
-        for <linux-arch@vger.kernel.org>; Tue, 20 Oct 2020 22:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=TSmk+CUeMC40ldFbF6oW/AydEBIYRcBxKh34Sk+KxDs=;
-        b=QedtFi9aWDiAbYqLlkRKWBISzp9pjw66dacIyHmYrdqI1ae55ju9s2zVad3l1F8Nur
-         MWajYO4jkVR0TkP10wsFhEXpiAVTRw3ClyVGwi7FWWa9mxDO1wnk70f4uEvHS8y+cCBv
-         1mFf35MKoZA7s+3LynsPrpzgGMdVSKHLhOPKA7mH4dd3vCJO2F/wyv3uZgc8dyBU5Hi4
-         FA9lO9essQOmSPeQF+R6K1+CSzwANZXk8Pyk43c+pTrMcFBnEfk+G0exsn3DSKTrLYGn
-         ENCp9LgGE9vlmJwDibWgOX2zOZ6lRrW1JfGPOMurYwCFhJwnvnj67eggv7tDCKySgjv2
-         oh1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=TSmk+CUeMC40ldFbF6oW/AydEBIYRcBxKh34Sk+KxDs=;
-        b=pl+pQiawi9bDQUJfs3xHUKF2wXrGFq1p9Cd+k68sLeFj0dUcK34jeSltO4A93ORBDG
-         mSyNP9gWRbdJXYt0oBO2FuycT+KmvDOwfACcs/JD7SbewcfWOdv6CebcdSIE/Qz2PoIu
-         f0+yvLoq6ig83o1UwKZ8s+49sdff+UgQb6TBeJRP30FGXStYktJCWZx7zPr4uUIYUu0V
-         hajnG7xNV+L87F8QQqeSzIn8KPixg/sZcBFpTK9RSBxqoeyWpri2NKBeHhcQWu9BKItD
-         B4D7ZPlu7Pg7rJVWjlBA53vREAFgA8yR0yIQPjG+nJlH+BQFwc/Gvp82fRCxqIEDapqU
-         5TIg==
-X-Gm-Message-State: AOAM532NgotZ2wNpnKlsxCiR5ii7HvZn7sauhtZ2VQkw0Ah4/MqKTq1l
-        A26usm8MMbcywfQIZ/FiMDg/AZetGPYejD2Bt1Q7Tg==
-X-Google-Smtp-Source: ABdhPJxWmTg/ZXvwBDJQrQngv3o5Cpm6ToHK3iIIuewaT+aH77PrCkDjPLt+URUPEkJVDp00VkHoPeBiDWghGun4O+g=
-X-Received: by 2002:a92:9944:: with SMTP id p65mr1037022ili.127.1603256721681;
- Tue, 20 Oct 2020 22:05:21 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 21 Oct 2020 10:35:10 +0530
-Message-ID: <CA+G9fYuL9O2BLDfCWN7+aJRER3sQW=C-ayo4Tb7QKdffjMYKDw@mail.gmail.com>
-Subject: arm64 build broken on linux next 20201021 - include/uapi/asm-generic/unistd.h:862:26:
- error: array index in initializer exceeds array bounds
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        id S2394431AbgJUF5p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 01:57:45 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39735 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394425AbgJUF5p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 01:57:45 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CGKXM1Q5Gz9sSC;
+        Wed, 21 Oct 2020 16:57:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1603259863;
+        bh=mkLwb6kYwQ5MuroG8erdEQ/q9dFxwaXcp8HOCQlFz1o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oftk9kwaznnWGT5R4ERP84VjA88qUyCKap8AoP+wGfibOEhmSJLrDGuFebks+JhBU
+         Yl2AIoqmupABt314t71hQRu1GidmRFmsW8fmUPzIZJzHaxnRAm796dtCBPU8e7isGF
+         csooTmikT+1/gbscxO/rhVeMAWpBI0rGOucCJr1O1Qiuncz6pxH1LNiQIztBT85q6E
+         V82XrX6wffAj7IqIVhRKJcUVJ7Bh9s87H3f6BgGy/FkNgUaB8j/Nd3z/sENeEr33KB
+         vg/dlhJrI8qrQWPKzfwhfUrHz8GqTKpcPuQo2xOeIvBHvpQ6LVa6d+rk8zvuEK8CbC
+         Lj8EqMLViJN+w==
+Date:   Wed, 21 Oct 2020 16:57:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Christian Brauner <christian@brauner.io>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: arm64 build broken on linux next 20201021 -
+ include/uapi/asm-generic/unistd.h:862:26: error: array index in initializer
+ exceeds array bounds
+Message-ID: <20201021165737.4d1ad838@canb.auug.org.au>
+In-Reply-To: <CA+G9fYuL9O2BLDfCWN7+aJRER3sQW=C-ayo4Tb7QKdffjMYKDw@mail.gmail.com>
+References: <CA+G9fYuL9O2BLDfCWN7+aJRER3sQW=C-ayo4Tb7QKdffjMYKDw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/vsMUGu8oXuZ.cm_zXu.FKjI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-arm64 build broken while building linux next 20201021 tag.
+--Sig_/vsMUGu8oXuZ.cm_zXu.FKjI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-include/uapi/asm-generic/unistd.h:862:26: error: array index in
-initializer exceeds array bounds
-#define __NR_watch_mount 441
-                         ^
+Hi Naresh,
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+On Wed, 21 Oct 2020 10:35:10 +0530 Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>
+> arm64 build broken while building linux next 20201021 tag.
+>=20
+> include/uapi/asm-generic/unistd.h:862:26: error: array index in
+> initializer exceeds array bounds
+> #define __NR_watch_mount 441
 
-build error log on arm64:
---------------------------------
-include/uapi/asm-generic/unistd.h:862:26: error: array index in
-initializer exceeds array bounds
-#define __NR_watch_mount 441
-                         ^
-arch/arm64/kernel/sys.c:56:29: note: in definition of macro '__SYSCALL'
-#define __SYSCALL(nr, sym) [nr] = __arm64_##sym,
-                            ^~
-include/uapi/asm-generic/unistd.h:863:11: note: in expansion of macro
-'__NR_watch_mount'
-__SYSCALL(__NR_watch_mount, sys_watch_mount)
-          ^~~~~~~~~~~~~~~~
-include/uapi/asm-generic/unistd.h:862:26: note: (near initialization
-for 'sys_call_table')
-#define __NR_watch_mount 441
-                         ^
-arch/arm64/kernel/sys.c:56:29: note: in definition of macro '__SYSCALL'
-#define __SYSCALL(nr, sym) [nr] = __arm64_##sym,
-                            ^~
-include/uapi/asm-generic/unistd.h:863:11: note: in expansion of macro
-'__NR_watch_mount'
-__SYSCALL(__NR_watch_mount, sys_watch_mount)
-          ^~~~~~~~~~~~~~~~
-arch/arm64/kernel/sys.c:56:35: warning: excess elements in array initializer
-#define __SYSCALL(nr, sym) [nr] = __arm64_##sym,
-                                  ^
-include/uapi/asm-generic/unistd.h:863:1: note: in expansion of macro '__SYSCALL'
-__SYSCALL(__NR_watch_mount, sys_watch_mount)
-^~~~~~~~~
-arch/arm64/kernel/sys.c:56:35: note: (near initialization for 'sys_call_table')
-#define __SYSCALL(nr, sym) [nr] = __arm64_##sym,
-                                  ^
-include/uapi/asm-generic/unistd.h:863:1: note: in expansion of macro '__SYSCALL'
-__SYSCALL(__NR_watch_mount, sys_watch_mount)
-^~~~~~~~~
-scripts/Makefile.build:283: recipe for target 'arch/arm64/kernel/sys.o' failed
-| make[3]: *** [arch/arm64/kernel/sys.o] Error 1
-scripts/Makefile.build:500: recipe for target 'arch/arm64/kernel' failed
-| make[2]: *** [arch/arm64/kernel] Error 2
+Yeah, the __NR_syscalls in include/uapi/asm-generic/unistd.h needed to
+be fixed up in the notifications tree merge to be 442.  Sorry about
+that, I will use the correct merge resolution tomorrow.
 
-full test log,
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=hikey,label=docker-lkft/882/consoleText
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/vsMUGu8oXuZ.cm_zXu.FKjI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+PzdEACgkQAVBC80lX
+0GyPywf/eOyBnEM2pUsqMWeBkDZe16m8CuoJYhbnpwflfBozng3GxkRWKdPv4Rhi
+//GTB5VrdFww/QJDlBLQpZO8c+ROedFYTwGCXuCjGm0DRbLsM9M+ZnCiMG44wgvk
+dCeCMmtzNfa9vhJAdKCmXeIiqwO4zyynkn1c/WHNSPLp5SfaBsZYyn4Oc4Rh5fuN
+O0ZsRGEpaTvr30L01hAOoj1XhR4mf/SI/tYPyVHveglKYw6A7ObLWbHK6oytVAVU
+Ez44wifav6vPxCoouWsJ0v56fsB0BCmqRAaEC6Zg9cs9J1vUneScsn5NM5IWwk49
+e6jyMR/MaJzqiZjWNn1BApxzap7oRw==
+=sb06
+-----END PGP SIGNATURE-----
+
+--Sig_/vsMUGu8oXuZ.cm_zXu.FKjI--
