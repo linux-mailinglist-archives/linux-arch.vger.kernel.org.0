@@ -2,130 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3B729532A
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 21:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8E129533B
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 22:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410410AbgJUT5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 15:57:41 -0400
-Received: from foss.arm.com ([217.140.110.172]:39346 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390855AbgJUT5l (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Oct 2020 15:57:41 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4880D6E;
-        Wed, 21 Oct 2020 12:57:40 -0700 (PDT)
-Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 612F63F719;
-        Wed, 21 Oct 2020 12:57:39 -0700 (PDT)
-Date:   Wed, 21 Oct 2020 20:57:36 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
-Message-ID: <20201021195736.mj4njbi6pxkbpbyf@e107158-lin>
-References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-5-qais.yousef@arm.com>
- <63fead90e91e08a1b173792b06995765@kernel.org>
- <20201021121559.GB3976@gaia>
- <20201021144112.GA17912@willie-the-truck>
- <20201021150313.ecxawwxsowweye43@e107158-lin>
- <20201021152310.GA18071@willie-the-truck>
- <20201021160730.komcgrp7q2tly55w@e107158-lin>
- <20201021172345.GF18071@willie-the-truck>
+        id S2439341AbgJUUEj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 16:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393042AbgJUUEj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 16:04:39 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F132C0613CE
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 13:04:38 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id s22so2135919pga.9
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 13:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MyV1gJcxFAQQ3ezKzLWjL48pP/r6NIsOLeLTCnNX+6g=;
+        b=gd9gv83uo3riBYpEs8PF3ugJNfzSNB4r5uzG6neNC4ucEYQ70ZAQ7SkiViN2BDIWTa
+         5FHnXZOzUUXdLzYnMhbsr4d8rz7li3H7J2bDv1CYRYR7wKMufb2lQRs+5RTT7gbMjECa
+         QVv/pSQcNG3DxcpZ6JCFwhdlQlG2CHDdUMhOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MyV1gJcxFAQQ3ezKzLWjL48pP/r6NIsOLeLTCnNX+6g=;
+        b=lVjES+JdaQ+bwYjUBzZKdjr8QKlFGQAdsrBWxiiYDjg2leibtcuvqb76GaEzE3Tg5o
+         n52JZ+0y+Cp11WmxOMMFztHEXmJhqp7HJ6aS0lcWa4qbJER9HnejWrkp4vhNmEdqvQWR
+         AxeUcocZFD2ylQ+xmJoNcvCRM/WRWIMihD/eY0WvyyerZPSicoUjkM6fNq8CoWT4yAE2
+         CfvMGd/HWTO9+I910eZkMxG53ADDZz4DHYM9ifKwEG81C02DQIhXDp+5XIrnybqPZBJZ
+         gDEE0HosbeBnlKYBtqOs8kV0Yj9PA3R7xDoJ1Q1I6r0ZfdJzF8oxyhOWqPB3NtKHvZ+l
+         rNTA==
+X-Gm-Message-State: AOAM533R4RYrZ5uDODb3P7uJgvfO7nfduepDQ3GJ2fZZtsad7c4SCBQl
+        NBCDvGXFsXetHWCGLIdq/Ie5Hw==
+X-Google-Smtp-Source: ABdhPJzQMDT4NjgzXCNMb4qxA0JuGTDiQqwPA10cT3Kb6VfbouwfalZpaZSnZbTuOeHKzIiS/h2y5Q==
+X-Received: by 2002:a65:664a:: with SMTP id z10mr4742041pgv.171.1603310677590;
+        Wed, 21 Oct 2020 13:04:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n18sm3102678pff.129.2020.10.21.13.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2020 13:04:36 -0700 (PDT)
+Date:   Wed, 21 Oct 2020 13:04:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ingo Molnar <mingo@kernel.org>, x86@kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vmlinux.lds.h: Keep .ctors.* with .ctors
+Message-ID: <202010211303.4F8386F2@keescook>
+References: <20201005025720.2599682-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201021172345.GF18071@willie-the-truck>
+In-Reply-To: <20201005025720.2599682-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/21/20 18:23, Will Deacon wrote:
-> On Wed, Oct 21, 2020 at 05:07:30PM +0100, Qais Yousef wrote:
-> > On 10/21/20 16:23, Will Deacon wrote:
-> > > > > If a cpumask is easier to implement and easier to use, then I think that's
-> > > > > what we should do. It's also then dead easy to disable if necessary by
-> > > > > just returning 0. The only alternative I would prefer is not having to
-> > > > > expose this information altogether, but I'm not sure that figuring this
-> > > > > out from MIDR/REVIDR alone is reliable.
-> > > > 
-> > > > I did suggest this before, but I'll try gain. If we want to assume a custom
-> > > > bootloader and custom user space, we can make them provide the mask.
-> > > 
-> > > Who mentioned a custom bootloader? In the context of Android, we're
-> > 
-> > Custom bootloader as in a bootloader that needs to opt-in to enable the
-> > feature (pass the right cmdline param). Catalin suggested to make this a sysctl
-> > to allow also for runtime toggling. But the initial intention was to have this
-> > to enable it at cmdline.
+[thread ping: x86 maintainers, can someone please take this?]
+
+On Sun, Oct 04, 2020 at 07:57:20PM -0700, Kees Cook wrote:
+> Under some circumstances, the compiler generates .ctors.* sections. This
+> is seen doing a cross compile of x86_64 from a powerpc64el host:
 > 
-> Hmm, ok, I don't think allowing the cmdline to be specified means its a
-> custom bootloader.
-
-True it could be just added to chosen property in the DT file without any
-bootloader changes.
-
-Bad usage of English probably. I just meant the bootloader might need to be
-made aware of the opt-in process too. So it can potentially co-operate more.
-
-> > > talking about a user-space that already manages scheduling affinity.
-> > > 
-> > > > For example, the new sysctl_enable_asym_32bit could be a cpumask instead of
-> > > > a bool as it currently is. Or we can make it a cmdline parameter too.
-> > > > In both cases some admin (bootloader or init process) has to ensure to fill it
-> > > > correctly for the target platform. The bootloader should be able to read the
-> > > > registers to figure out the mask. So more weight to make it a cmdline param.
-> > > 
-> > > I think this is adding complexity for the sake of it. I'm much more in
-> > 
-> > I actually think it reduces complexity. No special ABI to generate the mask
-> > from the kernel. The same opt-in flag is the cpumask too.
+> x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/trace_clock.o' being
+> placed in section `.ctors.65435'
+> x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/ftrace.o' being
+> placed in section `.ctors.65435'
+> x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/ring_buffer.o' being
+> placed in section `.ctors.65435'
 > 
-> Maybe I'm misunderstanding your proposal but having a cpumask instead of
+> Include these orphans along with the regular .ctors section.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 83109d5d5fba ("x86/build: Warn on orphan section placement")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2: brown paper bag version: fix whitespace for proper backslash alignment
+> ---
+>  include/asm-generic/vmlinux.lds.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 5430febd34be..b83c00c63997 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -684,6 +684,7 @@
+>  #ifdef CONFIG_CONSTRUCTORS
+>  #define KERNEL_CTORS()	. = ALIGN(8);			   \
+>  			__ctors_start = .;		   \
+> +			KEEP(*(SORT(.ctors.*)))		   \
+>  			KEEP(*(.ctors))			   \
+>  			KEEP(*(SORT(.init_array.*)))	   \
+>  			KEEP(*(.init_array))		   \
+> -- 
+> 2.25.1
+> 
 
-What I meant is that if we change the requirement to opt-in from a boolean
-switch
-
-	sysctl.enable_32bit_asym=1
-
-to require the bootloader/init scripts provide the mask of aarch32 capable cpus
-
-	sysctl.asym_32bit_cpus=0xf0
-
-This will achieve multiple things at the same time:
-
-	* Defer cpus specification to platform designers who want to
-	  enable this feature on their platform.
-
-	* We don't need a separate API to export which cpus are 32bit capable.
-	  They can read it directly from /proc/sys/kernel/asym_32bit_cpus.
-	  When it's 0 it means the system is not asymmetric.
-
-	* If/when we want to disable this support in the future. The sysctl
-	  handler will just have to return 0 all the time and ignore all
-	  writes.
-
-So it's changing the way user space opts-in. The kernel will still treat it as
-a boolean, and probably sanity check the cpus to make sure they match what it
-sees.
-
-> a bool means you now have to consider policy on a per-cpu basis, which
-> adds an extra dimension to this. For example, do you allow that mask to
-> be changed at runtime so that differents sets of CPUs now support 32-bit?
-> Do you preserve it across hotplug?
-
-I can see how cpumask word was confusing. I hope the above is clearer.
-We don't change how the kernel works, but rather what the user space have to do
-to opt-in. Hopefully hitting 2 birds with one stone :-)
-
-Thanks!
-
---
-Qais Yousef
+-- 
+Kees Cook
