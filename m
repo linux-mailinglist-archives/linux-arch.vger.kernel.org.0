@@ -2,101 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C47C294EF6
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 16:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5AA294F69
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 17:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440781AbgJUOpt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 10:45:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53988 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439854AbgJUOpt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Oct 2020 10:45:49 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F9342224E;
-        Wed, 21 Oct 2020 14:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603291548;
-        bh=wfvIjqHr+sjTqVOz7H1HjcvSm8RF4NTzx29TGbux0yI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HuFl5bi2G5W9Xi9o6sonzeiLJcU4BC8GZ32t1fQrSal3Qa1vxUoibbL9jHfLE/YqK
-         0IzwHS/v7P+C4KrVymEHwpji8YER0P29kHLoYqfZUlkhRGkJASJzle/Sh473Z4Fvor
-         lcTLWpzgFXa5h9kKfkWGesUg8G4K/l0tHqQldg0s=
-Date:   Wed, 21 Oct 2020 15:45:43 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Morten Rasmussen <morten.rasmussen@arm.com>,
-        Marc Zyngier <maz@kernel.org>, linux-arch@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morse <james.morse@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
-Message-ID: <20201021144542.GB17912@willie-the-truck>
-References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-5-qais.yousef@arm.com>
- <63fead90e91e08a1b173792b06995765@kernel.org>
- <20201021121559.GB3976@gaia>
- <20201021133316.GF8004@e123083-lin>
- <20201021140945.GD3976@gaia>
+        id S2443888AbgJUPBw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 11:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2443885AbgJUPBw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 11:01:52 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C42C0613CE
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 08:01:50 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id t20so2881652edr.11
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 08:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ue8Kphmgd/J9kkCdXQ6cXg3jN2T1s1VI/S6KEmBFYtA=;
+        b=tyuzf6egZNg0bmL3iIxfmvVeRFhdDnfbewBqqrw7rPk8s9ezG7HKGJBYpz7qsa0C3r
+         S3ppY6TNQS3s3qJ+E8SkywVt7v3Zd2bQYG9iNKkQ5ry9p4dyQxrKaJYxT3chX6RHizyC
+         +GySRMRyhkvGqRuGv8ic4+o/rQfFyDhJwmYxpx2ibC7icYfN3L7KTnwPZmkGNg6waxt+
+         /v0DHK/ocGmaG3hiyKz3lBsjXZFDm/NNr/l8Dh1bRHfhbCLOJwWvukIO73RcCWW7x5gT
+         F/vLxIv6fFnSA+AZM/O1jatbKn8McCq487pE+2ewPegXQiEjjWXHbjNbBW5V5tKGcGQh
+         Pzag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ue8Kphmgd/J9kkCdXQ6cXg3jN2T1s1VI/S6KEmBFYtA=;
+        b=NWI4dMCfIHlpIdPYnDy7TtO5H+6ze7KdrrjGaaag0maVAYUqYTK2T+k6Z4enOap5ak
+         wn7voezqUB/i7nemgVXIwoEnNWUUAkGQgWaIsJzKWpm1PkZrFA6KZ1am0F3bsCvHsA1W
+         PRtnbma1QsYOQ+lKg88idn8th0PPgRqP9jKFY+E5mFdj2zZYF2NmzwWsTrnOAGOTZ2Nj
+         SanemA7p7lEkzKfNDvPRHZp4ewjmygGMLlhyaHd0WaVZQmLsKjP3p0FNWQlSi4Z3xEuM
+         FGYH/ai7mVCvtnCmRHPWWEmcbrnxYr2UmnGItRll3y5oAX+lY8Xr4L6s+blVhcCqQZAf
+         A6WA==
+X-Gm-Message-State: AOAM5321xx6re0Cy4PsdBC1fT4KDOidJ6LdBPdpXo/0ou7xLBgJdTsnq
+        lwhxDcrExatMzcqBqYjWdYblqw+gzf6W3ACPK4rsoQ==
+X-Google-Smtp-Source: ABdhPJxLbzy0h2+Icd7LIsy6zh10BR+u5qt0ykST0OUv8CPsJiNxNv60HEOhNh7tmnifd2hka1h/GcVQRH2ORVgJ1P0=
+X-Received: by 2002:a05:6402:135a:: with SMTP id y26mr1563112edw.114.1603292509011;
+ Wed, 21 Oct 2020 08:01:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201021140945.GD3976@gaia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20201013003203.4168817-1-samitolvanen@google.com>
+ <20201013003203.4168817-23-samitolvanen@google.com> <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
+ <20201015102216.GB2611@hirez.programming.kicks-ass.net> <20201015203942.f3kwcohcwwa6lagd@treble>
+ <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
+ <20201020185217.ilg6w5l7ujau2246@treble> <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
+ <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
+In-Reply-To: <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Wed, 21 Oct 2020 08:01:38 -0700
+Message-ID: <CABCJKuewXazmBpXz5irWgy+W537x1Lws5YAsFqMgo+Yio8iyRg@mail.gmail.com>
+Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, Jann Horn <jannh@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 03:09:46PM +0100, Catalin Marinas wrote:
-> On Wed, Oct 21, 2020 at 03:33:29PM +0200, Morten Rasmussen wrote:
-> > On Wed, Oct 21, 2020 at 01:15:59PM +0100, Catalin Marinas wrote:
-> > > one, though not as easy as automatic task placement by the scheduler (my
-> > > first preference, followed by the id_* regs and the aarch32 mask, though
-> > > not a strong preference for any).
-> > 
-> > Automatic task placement by the scheduler would mean giving up the
-> > requirement that the user-space affinity mask must always be honoured.
-> > Is that on the table?
-> 
-> I think Peter rejected it but I still find it a nicer interface from a
-> dumb application perspective. It may interact badly with cpusets though
-> (at least on Android).
-> 
-> > Killing aarch32 tasks with an empty intersection between the
-> > user-space mask and aarch32_mask is not really "automatic" and would
-> > require the aarch32 capability to be exposed anyway.
-> 
-> I agree, especially if overriding the user mask is not desirable. But if
-> one doesn't play around with cpusets, 32-bit apps would run "fine" with
-> the scheduler transparently placing them on the correct CPU.
-> 
-> Anyway, if the task placement is entirely off the table, the next thing
-> is asking applications to set their own mask and kill them if they do
-> the wrong thing. Here I see two possibilities for killing an app:
-> 
-> 1. When it ends up scheduled on a non-AArch32-capable CPU
+On Wed, Oct 21, 2020 at 1:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Oct 20, 2020 at 12:24:37PM -0700, Sami Tolvanen wrote:
+> > > > Building allyesconfig with this series and LTO enabled, I still see
+> > > > the following objtool warnings for vmlinux.o, grouped by source file:
+> > > >
+> > > > arch/x86/entry/entry_64.S:
+> > > > __switch_to_asm()+0x0: undefined stack state
+> > > > .entry.text+0xffd: sibling call from callable instruction with
+> > > > modified stack frame
+> > > > .entry.text+0x48: stack state mismatch: cfa1=7-8 cfa2=-1+0
+> > >
+> > > Not sure what this one's about, there's no OBJECT_FILES_NON_STANDARD?
+> >
+> > Correct, because with LTO, we won't have an ELF binary to process
+> > until we compile everything into vmlinux.o, and at that point we can
+> > no longer skip individual object files.
+>
+> I think what Josh was trying to say is; this file is subject to objtool
+> on a normal build and does not generate warnings. So why would it
+> generate warnings when subject to objtool as result of a vmlinux run
+> (due to LTO or otherwise).
 
-That sounds fine to me. If we could do the exception return and take a
-SIGILL, that's what we'd do, but we can't so we have to catch it before.
+Ah, right. It also doesn't generate warnings when I build defconfig
+with LTO, so clearly something confuses objtool here.
 
-> 2. If the user cpumask (bar the offline CPUs) is not a subset of the
->    aarch32_mask
-> 
-> Option 1 is simpler but 2 would be slightly more consistent.
-
-I disagree -- if we did this for something like fpsimd, then the consistent
-behaviour would be to SIGILL on the cores without the instructions.
-
-> There's also the question on whether the kernel should allow an ELF32 to
-> be loaded (and potentially killed subsequently) if the user mask is not
-> correct on execve().
-
-I don't see the point in distinguishing between "you did execve() on a core
-without 32-bit" and "you did execve() on a core with 32-bit and then
-migrated to a core without 32-bit".
-
-Will
+Sami
