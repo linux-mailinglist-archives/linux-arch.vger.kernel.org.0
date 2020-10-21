@@ -2,24 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B0F294D66
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 15:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00B0294D82
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 15:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436796AbgJUNWN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 09:22:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:35344 "EHLO foss.arm.com"
+        id S2392158AbgJUNa2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 09:30:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733119AbgJUNWN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 21 Oct 2020 09:22:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 03E5E31B;
-        Wed, 21 Oct 2020 06:22:12 -0700 (PDT)
-Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A98583F66B;
-        Wed, 21 Oct 2020 06:22:10 -0700 (PDT)
-Date:   Wed, 21 Oct 2020 14:22:08 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S2392144AbgJUNa2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 09:30:28 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 701792071A;
+        Wed, 21 Oct 2020 13:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603287026;
+        bh=GSjuoFu9OaFRSGYXjDmP3io5XtylKhQQISW5HO5TsMA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=w2BsJD/LiP1XZk2DrYgEuGou6fSlt4Wu84UKkOhMAEbrsa1c0D8wDipSifpM2GT2f
+         +dIOXoMN68jHFGuFrnzCmi/Wx1thDnxfuWqDN8ZPDHaqXRHidQTngFgAJGUnWv1aOu
+         oBIjDMkyaQLdvGSyEbm3slhcRsCQjBVfVqBE5br4=
+Date:   Wed, 21 Oct 2020 15:31:05 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Qais Yousef <qais.yousef@arm.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -27,124 +33,39 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         James Morse <james.morse@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
-Message-ID: <20201021132208.6lb55o7worihkznv@e107158-lin>
+Subject: Re: [RFC PATCH v2 0/4] Add support for Asymmetric AArch32 systems
+Message-ID: <20201021133105.GA1164216@kroah.com>
 References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-5-qais.yousef@arm.com>
- <20201021112818.GC1141598@kroah.com>
+ <20201021112656.GB1141598@kroah.com>
+ <20201021131504.vc3nbf2vt5dtiuva@e107158-lin>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201021112818.GC1141598@kroah.com>
+In-Reply-To: <20201021131504.vc3nbf2vt5dtiuva@e107158-lin>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/21/20 13:28, Greg Kroah-Hartman wrote:
-> On Wed, Oct 21, 2020 at 11:46:11AM +0100, Qais Yousef wrote:
-> > So that userspace can detect if the cpu has aarch32 support at EL0.
-> > 
-> > CPUREGS_ATTR_RO() was renamed to CPUREGS_RAW_ATTR_RO() to better reflect
-> > what it does. And fixed to accept both u64 and u32 without causing the
-> > printf to print out a warning about mismatched type. This was caught
-> > while testing to check the new CPUREGS_USER_ATTR_RO().
-> > 
-> > The new CPUREGS_USER_ATTR_RO() exports a Sanitised or RAW sys_reg based
-> > on a @cond to user space. The exported fields match the definition in
-> > arm64_ftr_reg so that the content of a register exported via MRS and
-> > sysfs are kept cohesive.
-> > 
-> > The @cond in our case is that the system is asymmetric aarch32 and the
-> > controlling sysctl.enable_asym_32bit is enabled.
-> > 
-> > Update Documentation/arm64/cpu-feature-registers.rst to reflect the
-> > newly visible EL0 field in ID_AA64FPR0_EL1.
-> > 
-> > Note that the MRS interface will still return the sanitized content
-> > _only_.
-> > 
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> > 
-> > Example output. I was surprised that the 2nd field (bits[7:4]) is printed out
-> > although it's set as FTR_HIDDEN.
-> > 
-> > # cat /sys/devices/system/cpu/cpu*/regs/identification/id_aa64pfr0
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 
-> > # echo 1 > /proc/sys/kernel/enable_asym_32bit
-> > 
-> > # cat /sys/devices/system/cpu/cpu*/regs/identification/id_aa64pfr0
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 0x0000000000000012
-> > 0x0000000000000012
-> > 0x0000000000000011
-> > 0x0000000000000011
-> > 
-> >  Documentation/arm64/cpu-feature-registers.rst |  2 +-
-> >  arch/arm64/kernel/cpufeature.c                |  2 +-
-> >  arch/arm64/kernel/cpuinfo.c                   | 58 +++++++++++++++++--
-> >  3 files changed, 54 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/arm64/cpu-feature-registers.rst b/Documentation/arm64/cpu-feature-registers.rst
-> > index f28853f80089..bfcbda6d6f35 100644
-> > --- a/Documentation/arm64/cpu-feature-registers.rst
-> > +++ b/Documentation/arm64/cpu-feature-registers.rst
-> > @@ -166,7 +166,7 @@ infrastructure:
-> >       +------------------------------+---------+---------+
-> >       | EL1                          | [7-4]   |    n    |
-> >       +------------------------------+---------+---------+
-> > -     | EL0                          | [3-0]   |    n    |
-> > +     | EL0                          | [3-0]   |    y    |
-> >       +------------------------------+---------+---------+
-> >  
-> >  
-> > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> > index 6f795c8221f4..0f7307c8ad80 100644
-> > --- a/arch/arm64/kernel/cpufeature.c
-> > +++ b/arch/arm64/kernel/cpufeature.c
-> > @@ -221,7 +221,7 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
-> >  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_EL3_SHIFT, 4, 0),
-> >  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_EL2_SHIFT, 4, 0),
-> >  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_EL1_SHIFT, 4, ID_AA64PFR0_EL1_64BIT_ONLY),
-> > -	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_EL0_SHIFT, 4, ID_AA64PFR0_EL0_64BIT_ONLY),
-> > +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64PFR0_EL0_SHIFT, 4, ID_AA64PFR0_EL0_64BIT_ONLY),
-> >  	ARM64_FTR_END,
-> >  };
-> >  
-> > diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-> > index 93c55986ca7f..632b9d5b5230 100644
-> > --- a/arch/arm64/kernel/cpuinfo.c
-> > +++ b/arch/arm64/kernel/cpuinfo.c
-> > @@ -231,25 +231,71 @@ static struct kobj_type cpuregs_kobj_type = {
-> >   * future expansion without an ABI break.
-> >   */
-> >  #define kobj_to_cpuinfo(kobj)	container_of(kobj, struct cpuinfo_arm64, kobj)
-> > -#define CPUREGS_ATTR_RO(_name, _field)						\
-> > +#define CPUREGS_RAW_ATTR_RO(_name, _field)				\
-> >  	static ssize_t _name##_show(struct kobject *kobj,			\
-> >  			struct kobj_attribute *attr, char *buf)			\
-> >  	{									\
-> >  		struct cpuinfo_arm64 *info = kobj_to_cpuinfo(kobj);		\
-> >  										\
-> > -		if (info->reg_midr)						\
-> > -			return sprintf(buf, "0x%016x\n", info->reg_##_field);	\
-> > -		else								\
-> > +		if (info->reg_midr) {						\
-> > +			u64 val = info->reg_##_field;				\
-> > +			return sprintf(buf, "0x%016llx\n", val);		\
+On Wed, Oct 21, 2020 at 02:15:04PM +0100, Qais Yousef wrote:
+> > Without even looking at the patch set, this is not ok...
 > 
-> Nit, for sysfs, use the new sysfs_emit() call instead of sprintf().
+> Sorry about that. Please keep in mind we're still debating if we want to
+> support this upstream.
 
-Will do.
+What do you mean by this?
 
-Thanks!
+Do you mean you will keep an out-of-tree patchset for all time for all
+future kernel versions for everyone to pull from and you will support
+for all chips that end up with this type of functionality?
 
---
-Qais Yousef
+That's a huge task to do, you all must have a lot of money to burn!
+
+It is a "trivial cost" to get changes merged upstream compared to the
+amount of time and money it costs to keep stuff out of the tree.  Why
+you would not want to do this is beyond me.
+
+But hey, I'm not in charge of your company's budget, for good reasons :)
+
+good luck!
+
+greg k-h
