@@ -2,95 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3BB294AC8
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 11:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1972294B67
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Oct 2020 12:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441518AbgJUJwC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 05:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441517AbgJUJwB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 05:52:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B85C0613CE;
-        Wed, 21 Oct 2020 02:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TTonoSMC9Qr/U6/6E+qiLczLqU7QnBRx2AW/ar8m2XI=; b=th0SHZXYoGIMeeNQk+cXXn3ZRf
-        4eqHsJyAUeQKe0z/FZOgQg3ZKafZO/IAdXuUjcIsQI8/EwkTubleigyQhAvFkH6ILAyudw/+ETGLV
-        SwMchF/jLJeFRNuNJQT/hJXEogvS6OyuEE65LokfdM2FJXRIpXQP4HwCDwqnt85mQHh+Aj/8SZs9x
-        QdDJ9xPOSco262ZobeHTh85BDuNYKoZ35/lPHthqt9nJ4G5zuO+YXBqmgzGyyudm59MOtmHyP1/TO
-        DJ0+eaqlHK1IGczOA12VYkWgY/8r/3psr144sr2lv6QAgtPP5mpwF9GWLwdmfjUcNz63fCjQIBaIf
-        OLe/XMig==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kVAmN-0004m8-56; Wed, 21 Oct 2020 09:51:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 055A73035D4;
-        Wed, 21 Oct 2020 11:51:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E7CA2214528C1; Wed, 21 Oct 2020 11:51:33 +0200 (CEST)
-Date:   Wed, 21 Oct 2020 11:51:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Jann Horn <jannh@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
+        id S2392083AbgJUKqe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Oct 2020 06:46:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:33432 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390103AbgJUKqe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 21 Oct 2020 06:46:34 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C4D71FB;
+        Wed, 21 Oct 2020 03:46:33 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0F6E3F66E;
+        Wed, 21 Oct 2020 03:46:31 -0700 (PDT)
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc:     Morten Rasmussen <morten.rasmussen@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-Message-ID: <20201021095133.GA2628@hirez.programming.kicks-ass.net>
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-23-samitolvanen@google.com>
- <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
- <20201015102216.GB2611@hirez.programming.kicks-ass.net>
- <20201015203942.f3kwcohcwwa6lagd@treble>
- <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
- <20201020185217.ilg6w5l7ujau2246@treble>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Qais Yousef <qais.yousef@arm.com>
+Subject: [RFC PATCH v2 0/4] Add support for Asymmetric AArch32 systems
+Date:   Wed, 21 Oct 2020 11:46:07 +0100
+Message-Id: <20201021104611.2744565-1-qais.yousef@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201020185217.ilg6w5l7ujau2246@treble>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 01:52:17PM -0500, Josh Poimboeuf wrote:
-> > arch/x86/lib/retpoline.S:
-> > __x86_retpoline_rdi()+0x10: return with modified stack frame
-> > __x86_retpoline_rdi()+0x0: stack state mismatch: cfa1=7+32 cfa2=7+8
-> > __x86_retpoline_rdi()+0x0: stack state mismatch: cfa1=7+32 cfa2=-1+0
-> 
-> Is this with upstream?  I thought we fixed that with
-> UNWIND_HINT_RET_OFFSET.
+This series adds basic support for Asymmetric AArch32 systems. Full rationale
+is in v1's cover letter.
 
-I can't reproduce this one either; but I do get different warnings:
+	https://lore.kernel.org/linux-arch/20201008181641.32767-1-qais.yousef@arm.com/
 
-gcc (Debian 10.2.0-13) 10.2.0, x86_64-defconfig:
+Changes in v2:
 
-defconfig-build/vmlinux.o: warning: objtool: __x86_indirect_thunk_rax() falls through to next function __x86_retpoline_rax()
-defconfig-build/vmlinux.o: warning: objtool:   .altinstr_replacement+0x1063: (branch)
-defconfig-build/vmlinux.o: warning: objtool:   __x86_indirect_thunk_rax()+0x0: (alt)
-defconfig-build/vmlinux.o: warning: objtool:   __x86_indirect_thunk_rax()+0x0: <=== (sym)
+	* We now reset vcpu->arch.target to force re-initialized for KVM patch.
+	  (Marc)
 
-(for every single register, not just rax)
+	* Fix a bug where this_cpu_has_cap() must be called with preemption
+	  disabled in check_aarch32_cpumask().
 
-Which is daft as well, because the retpoline.o run is clean. It also
-doesn't make sense because __x86_retpoline_rax isn't in fact STT_FUNC,
-so WTH ?!
+	* Add new sysctl.enable_asym_32bit. (Catalin)
+
+	* Export id_aar64fpr0 register in sysfs which allows user space to
+	  discover which cpus support 32bit@EL0. The sysctl must be enabled for
+	  the user space to discover the asymmetry. (Will/Catalin)
+
+	* Fixing up affinity in the kernel approach was dropped. The support
+	  assumes the user space that wants to enable this support knows how to
+	  guarantee correct affinities for 32bit apps by using cpusets.
+
+Open questions:
+
+	* Should there be any extra handling at execve() time? At the moment we
+	  allow the app to start and only SIGKILL it after it has moved to the
+	  'wrong' cpu. We could be stricter and do the check earlier when the
+	  elf is loaded.
+
+Thanks
+
+--
+Qais Yousef
+
+
+Qais Yousef (4):
+  arm64: kvm: Handle Asymmetric AArch32 systems
+  arm64: Add support for asymmetric AArch32 EL0 configurations
+  arm64: export emulate_sys_reg()
+  arm64: Export id_aar64fpr0 via sysfs
+
+ Documentation/arm64/cpu-feature-registers.rst |   2 +-
+ arch/arm64/include/asm/cpu.h                  |   1 +
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |  22 +++-
+ arch/arm64/include/asm/thread_info.h          |   5 +-
+ arch/arm64/kernel/cpufeature.c                |  72 ++++++-----
+ arch/arm64/kernel/cpuinfo.c                   | 116 +++++++++++++-----
+ arch/arm64/kernel/process.c                   |  17 +++
+ arch/arm64/kernel/signal.c                    |  24 ++++
+ arch/arm64/kvm/arm.c                          |  14 +++
+ arch/arm64/kvm/guest.c                        |   2 +-
+ arch/arm64/kvm/sys_regs.c                     |   8 +-
+ kernel/sysctl.c                               |  11 ++
+ 13 files changed, 226 insertions(+), 71 deletions(-)
+
+-- 
+2.25.1
+
