@@ -2,54 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E182957FC
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 07:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BE62957FE
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 07:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2444513AbgJVFiK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Oct 2020 01:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S2507980AbgJVFiy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Oct 2020 01:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2444507AbgJVFiK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Oct 2020 01:38:10 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC19C0613CE
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 22:38:10 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id h7so551065wre.4
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 22:38:09 -0700 (PDT)
+        with ESMTP id S2507979AbgJVFiy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Oct 2020 01:38:54 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE21C0613CF
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 22:38:52 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l15so531602wmi.3
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 22:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2FJ6bgUzNaVY5TwTxhI5fSUYbPLg9JNdup4mEtOxeyg=;
-        b=Y9Bl1j6Yr57hSOSVPd/mu8/0LKB/sUaN+4OYq3aFF90Ul5QrtkCiVNH9L8jrUjSMo1
-         BOKxsr/7fKRiQpN4kVGgEBqVtWszTvShe7lZdbiv6L+NLtOizZUgujXoZvT2TROyZNLx
-         zJdukWtwTTaJzdJoCyxafO4cLJd0w6GUarS9y0hhBoEjh7EAz3ipVzS+BZeksfTcJ5aq
-         wnHp4uFAiQq8uwfU3SZkrdpi1ZRZavZERN4yLWk7B//b8QjJsPq+nwqJOB5qXVbbWAae
-         FQk9F0x2v9qjKeAsX4OYBfYNubscNVPxafc3jwllMwr2lKF5yAW2F+0L+RR0jcFJ2dTr
-         c3Ng==
+        bh=73Kve3eCD9lFW3ilOeR8Q08ZRzYRtk6HhqwKqUbeckQ=;
+        b=SltHHrVlBKjJCfSt8WOzpbmWAyyApuzoEfOWBWk7w1rI4ddOMh3Jq3VYGO6SDozaCi
+         qbhKgg+BGotFSLTM3VTwCagdIHZtGQZ0qJfb8YTKuuAMgpSQTOKj52jRrdmipBKo10IT
+         7+IQukUEWnptNNCdytAifO1CErMOIHDbTXJXhjMOjlqbGSzttrbK689GXJYOm0n7wUPN
+         7n6M2HFMlorVQqLiU+y1EPf5WjXsACSieJ6qr3wGLpT7RaSZwdP9ITxTxW9sN/3RQF5B
+         9WwtjZBkREl4Z202ODJZ5nh5u9I1Vuq9TnHTOFjI2bl56AiCSh02aUn6m6OBM5pfFhVi
+         C3KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2FJ6bgUzNaVY5TwTxhI5fSUYbPLg9JNdup4mEtOxeyg=;
-        b=N2nHksD/uqADcPF3MfrDbATRtUyd8JH0cUrOBKFHVsr0CvaK0K9oeeOokA5VsKVlJ5
-         cbPtvI/dpEnK8+JREoH5BADUrxl2ooEMU9HJysmmQI6tpnqrY9Ge3G1CCNXHeG11tT/+
-         YHK+mkneyrmbNFmEDttviHdKdOtUQLIe4gWYa5RM+c4s1XvagAvL/dWbFVZevaR5DLYN
-         xQt/tasBtEV6n3U0r55+vYhYs/38J5r9b9yROk0xXq5uhp74MwlcgbWGsdkoRwnSQKwr
-         rkAOgnA1Rbr3igyMXPSj+/di10KOVA2JWySCz7HKQeMliFtJd/seX0hD/PDlsyYGbcV0
-         HITg==
-X-Gm-Message-State: AOAM5306ii2DDrqk11fNDozAB9mPsX/J2/YgZkTUDkRI3aRgbmMDbKb4
-        zu7Q3mz9zdv/NUZSuh0f0ENM0T/ti8msklNNW0Cmtg==
-X-Google-Smtp-Source: ABdhPJxk41O0FMwzCS0qOGAJ5pot2HsP0xEUlWx58Nz/Yw02Wcj0cAJSjVw5HNv+6enPy0INENlf+CnoqkGqrrxq84o=
-X-Received: by 2002:a5d:6681:: with SMTP id l1mr731145wru.356.1603345088654;
- Wed, 21 Oct 2020 22:38:08 -0700 (PDT)
+        bh=73Kve3eCD9lFW3ilOeR8Q08ZRzYRtk6HhqwKqUbeckQ=;
+        b=UBVUg3r0T20r/ZZjT5uzFPzglR8kC+upZosy7Jc1GbGGlFvlf/sDKah5NuIs0AVew9
+         P7C2jpSOz+YpILUlJGNHwLkbted3/iUJ6pnXTu6r8iH9rbZHO3EYoScyDfOiy//Wl/2/
+         KCJwBtiPNNsqtMsrup1q4r33kj79T6vsLdjQvKsNG6bjHiI4SYiPEzpcBShDePyr40+x
+         9l1FxvQKLZfgmqF18RPDdWxaf+xya8ptouYWeVFcy4DyIhwKAClUP8oMusSwhs/GJ++I
+         yVHqeonWsVp0LPJe45nqz+8rM+3Ew7ZvEpJym9AfUYfOPmk2s4UAT/VSST96w51YeXv9
+         8img==
+X-Gm-Message-State: AOAM531WyIVLcTuUycxgnAQbA2CP/S28g81+Vukv4+Ub2HNm2YyHpeSi
+        oH9l2nMb2s8BR7w5s909aNZOAX+T7Fa15EoluhWZ/Q==
+X-Google-Smtp-Source: ABdhPJz1BooD6m8TpdqoamMg/85PKq4UWpiLSY1nMNpSndxeEm8puevlbLhaB83QxyD64aWlreMZigK0s/qSSC/3jVo=
+X-Received: by 2002:a7b:c92c:: with SMTP id h12mr834132wml.134.1603345131488;
+ Wed, 21 Oct 2020 22:38:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201006001752.248564-1-atish.patra@wdc.com> <20201006001752.248564-4-atish.patra@wdc.com>
-In-Reply-To: <20201006001752.248564-4-atish.patra@wdc.com>
+References: <20201006001752.248564-1-atish.patra@wdc.com> <20201006001752.248564-5-atish.patra@wdc.com>
+In-Reply-To: <20201006001752.248564-5-atish.patra@wdc.com>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 22 Oct 2020 11:07:57 +0530
-Message-ID: <CAAhSdy2z=ae1Z92p1zJeiY8tVK3Q5t739ktH3_m_k+hBWNt+sg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] riscv: Separate memory init from paging init
+Date:   Thu, 22 Oct 2020 11:08:39 +0530
+Message-ID: <CAAhSdy162QfyxGTn=UnEDnZ3OgKh-GN=bwgQ3jpWrp1ZMWKw8g@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] riscv: Add support pte_protnone and pmd_protnone
+ if CONFIG_NUMA_BALANCING
 To:     Atish Patra <atish.patra@wdc.com>
 Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
         Greentime Hu <greentime.hu@sifive.com>,
@@ -80,63 +81,54 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Oct 6, 2020 at 5:48 AM Atish Patra <atish.patra@wdc.com> wrote:
 >
-> Currently, we perform some memory init functions in paging init. But,
-> that will be an issue for NUMA support where DT needs to be flattened
-> before numa initialization and memblock_present can only be called
-> after numa initialization.
+> From: Greentime Hu <greentime.hu@sifive.com>
 >
-> Move memory initialization related functions to a separate function.
+> These two functions are used to distinguish between PROT_NONENUMA
+> protections and hinting fault protections.
 >
-> Signed-off-by: Atish Patra <atish.patra@wdc.com>
-> Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
 > ---
->  arch/riscv/include/asm/pgtable.h | 1 +
->  arch/riscv/kernel/setup.c        | 1 +
->  arch/riscv/mm/init.c             | 6 +++++-
->  3 files changed, 7 insertions(+), 1 deletion(-)
+>  arch/riscv/include/asm/pgtable.h | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 >
 > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index eaea1f717010..515b42f98d34 100644
+> index 515b42f98d34..2751110675e6 100644
 > --- a/arch/riscv/include/asm/pgtable.h
 > +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -466,6 +466,7 @@ static inline void __kernel_map_pages(struct page *page, int numpages, int enabl
->  extern void *dtb_early_va;
->  void setup_bootmem(void);
->  void paging_init(void);
-> +void misc_mem_init(void);
+> @@ -183,6 +183,11 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+>         return (unsigned long)pfn_to_virt(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
+>  }
 >
->  #define FIRST_USER_ADDRESS  0
->
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 2c6dd329312b..07fa6d13367e 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -78,6 +78,7 @@ void __init setup_arch(char **cmdline_p)
->  #else
->         unflatten_device_tree();
->  #endif
-> +       misc_mem_init();
->
->  #ifdef CONFIG_SWIOTLB
->         swiotlb_init(1);
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index ed6e83871112..114c3966aadb 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -565,8 +565,12 @@ static void __init resource_init(void)
->  void __init paging_init(void)
->  {
->         setup_vm_final();
-> -       sparse_init();
->         setup_zero_page();
+> +static inline pte_t pmd_pte(pmd_t pmd)
+> +{
+> +       return __pte(pmd_val(pmd));
 > +}
 > +
-> +void __init misc_mem_init(void)
-> +{
-> +       sparse_init();
->         zone_sizes_init();
->         resource_init();
+>  /* Yields the page frame number (PFN) of a page table entry */
+>  static inline unsigned long pte_pfn(pte_t pte)
+>  {
+> @@ -286,6 +291,21 @@ static inline pte_t pte_mkhuge(pte_t pte)
+>         return pte;
 >  }
+>
+> +#ifdef CONFIG_NUMA_BALANCING
+> +/*
+> + * See the comment in include/asm-generic/pgtable.h
+> + */
+> +static inline int pte_protnone(pte_t pte)
+> +{
+> +       return (pte_val(pte) & (_PAGE_PRESENT | _PAGE_PROT_NONE)) == _PAGE_PROT_NONE;
+> +}
+> +
+> +static inline int pmd_protnone(pmd_t pmd)
+> +{
+> +       return pte_protnone(pmd_pte(pmd));
+> +}
+> +#endif
+> +
+>  /* Modify page protection bits */
+>  static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+>  {
 > --
 > 2.25.1
 >
