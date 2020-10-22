@@ -2,96 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F379A295C8C
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 12:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5E3295CF8
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 12:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896386AbgJVKQ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Oct 2020 06:16:29 -0400
-Received: from foss.arm.com ([217.140.110.172]:53338 "EHLO foss.arm.com"
+        id S2896686AbgJVKre (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Oct 2020 06:47:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56268 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2896371AbgJVKQ3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Oct 2020 06:16:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74CB5D6E;
-        Thu, 22 Oct 2020 03:16:28 -0700 (PDT)
-Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF4713F66E;
-        Thu, 22 Oct 2020 03:16:26 -0700 (PDT)
-Date:   Thu, 22 Oct 2020 12:16:24 +0200
-From:   Morten Rasmussen <morten.rasmussen@arm.com>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     linux-arch@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Morse <james.morse@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
-Message-ID: <20201022101624.GI8004@e123083-lin>
-References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-5-qais.yousef@arm.com>
- <63fead90e91e08a1b173792b06995765@kernel.org>
- <20201021121559.GB3976@gaia>
- <20201021133316.GF8004@e123083-lin>
- <20201021143153.7ef7n7gdd42l4rbc@e107158-lin>
+        id S2896574AbgJVKr3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Oct 2020 06:47:29 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8BA392177B;
+        Thu, 22 Oct 2020 10:47:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603363648;
+        bh=xBsbKD5SBQCcLeBR2tpUTrjFtW93i8KwvEiKlew6y/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=feiTNY176OhJVWL6CnkF4kiU6NigFm/VD3Ui4E+wpATVknPWx7I4BQqdiJv/sMgNJ
+         H4Eb2Bc9W6InfW+morvNSQUtX8ZVPuBvKSpQrb3i+BcForuB10ZbuKl1VEpEEP0vUn
+         prey8EZuMSul8lL3YVDZeBuHUKxl2I6g/LFzXfXQ=
+Date:   Thu, 22 Oct 2020 12:48:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Message-ID: <20201022104805.GA1503673@kroah.com>
+References: <20201021233914.GR3576660@ZenIV.linux.org.uk>
+ <20201022082654.GA1477657@kroah.com>
+ <80a2e5fa-718a-8433-1ab0-dd5b3e3b5416@redhat.com>
+ <5d2ecb24db1e415b8ff88261435386ec@AcuMS.aculab.com>
+ <df2e0758-b8ed-5aec-6adc-a18f499c0179@redhat.com>
+ <20201022090155.GA1483166@kroah.com>
+ <e04d0c5d-e834-a15b-7844-44dcc82785cc@redhat.com>
+ <a1533569-948a-1d5b-e231-5531aa988047@redhat.com>
+ <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
+ <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201021143153.7ef7n7gdd42l4rbc@e107158-lin>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 03:31:53PM +0100, Qais Yousef wrote:
-> On 10/21/20 15:33, Morten Rasmussen wrote:
-> > On Wed, Oct 21, 2020 at 01:15:59PM +0100, Catalin Marinas wrote:
-> > > one, though not as easy as automatic task placement by the scheduler (my
-> > > first preference, followed by the id_* regs and the aarch32 mask, though
-> > > not a strong preference for any).
+On Thu, Oct 22, 2020 at 11:36:40AM +0200, David Hildenbrand wrote:
+> On 22.10.20 11:32, David Laight wrote:
+> > From: David Hildenbrand
+> >> Sent: 22 October 2020 10:25
+> > ...
+> >> ... especially because I recall that clang and gcc behave slightly
+> >> differently:
+> >>
+> >> https://github.com/hjl-tools/x86-psABI/issues/2
+> >>
+> >> "Function args are different: narrow types are sign or zero extended to
+> >> 32 bits, depending on their type. clang depends on this for incoming
+> >> args, but gcc doesn't make that assumption. But both compilers do it
+> >> when calling, so gcc code can call clang code.
 > > 
-> > Automatic task placement by the scheduler would mean giving up the
-> > requirement that the user-space affinity mask must always be honoured.
-> > Is that on the table?
+> > It really is best to use 'int' (or even 'long') for all numeric
+> > arguments (and results) regardless of the domain of the value.
 > > 
-> > Killing aarch32 tasks with an empty intersection between the user-space
-> > mask and aarch32_mask is not really "automatic" and would require the
-> > aarch32 capability to be exposed anyway.
+> > Related, I've always worried about 'bool'....
+> > 
+> >> The upper 32 bits of registers are always undefined garbage for types
+> >> smaller than 64 bits."
+> > 
+> > On x86-64 the high bits are zeroed by all 32bit loads.
 > 
-> I just noticed this nasty corner case too.
+> Yeah, but does not help here.
 > 
 > 
-> Documentation/admin-guide/cgroup-v1/cpusets.rst: Section 1.9
+> My thinking: if the compiler that calls import_iovec() has garbage in
+> the upper 32 bit
 > 
-> "If such a task had been bound to some subset of its cpuset using the
-> sched_setaffinity() call, the task will be allowed to run on any CPU allowed in
-> its new cpuset, negating the effect of the prior sched_setaffinity() call."
+> a) gcc will zero it out and not rely on it being zero.
+> b) clang will not zero it out, assuming it is zero.
 > 
-> So user space must put the tasks into a valid cpuset to fix the problem. Or
-> make the scheduler behave like the affinity is associated with a cpuset.
+> But
 > 
-> Can user space put the task into the correct cpuset without a race? Clone3
-> syscall learnt to specify a cgroup to attach to when forking. Should we do the
-> same for execve()?
+> a) will zero it out when calling the !inlined variant
+> b) clang will zero it out when calling the !inlined variant
+> 
+> When inlining, b) strikes. We access garbage. That would mean that we
+> have calling code that's not generated by clang/gcc IIUC.
+> 
+> We can test easily by changing the parameters instead of adding an "inline".
 
-Putting a task in a cpuset overrides any affinity mask applied by a
-previous cpuset or sched_setaffinity() call. I wouldn't call it a corner
-case though. Android user-space is exploiting it all the time on some
-devices through the foreground, background, and top-app cgroups.
+Let me try that as well, as I seem to have a good reproducer, but it
+takes a while to run...
 
-If a tasks fork() the child task will belong to the same cgroup
-automatically. If you execve() you retain the previous affinity mask and
-cgroup. So putting parent task about to execve() into aarch32 into a
-cpuset with only aarch32 CPUs should be enough to never have the task or
-any of its child tasks SIGKILLED.
-
-A few simple experiments with fork() and execve() seems to confirm that.
-
-I don't see any changes needed in the kernel. Changing cgroup through
-clone could of course fail if user-space specifies an unsuitable cgroup.
-Fixing that would be part of fixing the cpuset setup in user-space which
-is required anyway.
-
-Morten
+greg k-h
