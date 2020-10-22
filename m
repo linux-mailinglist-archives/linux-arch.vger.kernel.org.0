@@ -2,74 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F60F295FE5
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 15:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42971296047
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 15:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2507470AbgJVNXs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Oct 2020 09:23:48 -0400
-Received: from verein.lst.de ([213.95.11.211]:52840 "EHLO verein.lst.de"
+        id S2900449AbgJVNr5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Oct 2020 09:47:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:58142 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2442738AbgJVNXs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Oct 2020 09:23:48 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D291467373; Thu, 22 Oct 2020 15:23:42 +0200 (CEST)
-Date:   Thu, 22 Oct 2020 15:23:42 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-Message-ID: <20201022132342.GB8781@lst.de>
-References: <20201021233914.GR3576660@ZenIV.linux.org.uk> <20201022082654.GA1477657@kroah.com> <80a2e5fa-718a-8433-1ab0-dd5b3e3b5416@redhat.com> <5d2ecb24db1e415b8ff88261435386ec@AcuMS.aculab.com> <df2e0758-b8ed-5aec-6adc-a18f499c0179@redhat.com> <20201022090155.GA1483166@kroah.com> <e04d0c5d-e834-a15b-7844-44dcc82785cc@redhat.com> <a1533569-948a-1d5b-e231-5531aa988047@redhat.com> <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com> <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
+        id S2900438AbgJVNr4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Oct 2020 09:47:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E073E101E;
+        Thu, 22 Oct 2020 06:47:55 -0700 (PDT)
+Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C9993F66E;
+        Thu, 22 Oct 2020 06:47:54 -0700 (PDT)
+Date:   Thu, 22 Oct 2020 14:47:52 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
+Message-ID: <20201022134752.wtcdkbi4fjn2blh6@e107158-lin>
+References: <20201021104611.2744565-1-qais.yousef@arm.com>
+ <20201021104611.2744565-5-qais.yousef@arm.com>
+ <63fead90e91e08a1b173792b06995765@kernel.org>
+ <20201021121559.GB3976@gaia>
+ <20201021144112.GA17912@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20201021144112.GA17912@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 11:36:40AM +0200, David Hildenbrand wrote:
-> My thinking: if the compiler that calls import_iovec() has garbage in
-> the upper 32 bit
+On 10/21/20 15:41, Will Deacon wrote:
+> > We already expose MIDR and REVIDR via the current sysfs interface. We
+> > can expand it to include _all_ the other ID_* regs currently available
+> > to user via the MRS emulation and we won't have to debate what a new
+> > interface would look like. The MRS emulation and the sysfs info should
+> > probably match, though that means we need to expose the
+> > ID_AA64PFR0_EL1.EL0 field which we currently don't.
+> > 
+> > I do agree that an AArch32 cpumask is an easier option both from the
+> > kernel implementation perspective and from the application usability
+> > one, though not as easy as automatic task placement by the scheduler (my
+> > first preference, followed by the id_* regs and the aarch32 mask, though
+> > not a strong preference for any).
 > 
-> a) gcc will zero it out and not rely on it being zero.
-> b) clang will not zero it out, assuming it is zero.
-> 
-> But
-> 
-> a) will zero it out when calling the !inlined variant
-> b) clang will zero it out when calling the !inlined variant
-> 
-> When inlining, b) strikes. We access garbage. That would mean that we
-> have calling code that's not generated by clang/gcc IIUC.
+> If a cpumask is easier to implement and easier to use, then I think that's
+> what we should do. It's also then dead easy to disable if necessary by
+> just returning 0. The only alternative I would prefer is not having to
+> expose this information altogether, but I'm not sure that figuring this
+> out from MIDR/REVIDR alone is reliable.
 
-Most callchains of import_iovec start with the assembly syscall wrappers.
+So the mask idea is about adding a new
+
+	/sys/devices/system/cpu/aarch32_cpus
+
+?
+
+I just need to make sure that Peter and Greg are happy with this arm64 specific
+mask added to sysfs in this manner. Not sure if there's a precedent of archs
+exporting special masks in sysfs.
+
+Or maybe people had something else in mind about how his this mask should be
+exported?
+
+Thanks
+
+--
+Qais Yousef
