@@ -2,209 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237C9295572
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 02:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E182957FC
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 07:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2507407AbgJVAXM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Oct 2020 20:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
+        id S2444513AbgJVFiK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Oct 2020 01:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2507222AbgJVAXM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Oct 2020 20:23:12 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467FBC0613D4
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 17:23:12 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id o26so5783444ejc.8
-        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 17:23:12 -0700 (PDT)
+        with ESMTP id S2444507AbgJVFiK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Oct 2020 01:38:10 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC19C0613CE
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 22:38:10 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id h7so551065wre.4
+        for <linux-arch@vger.kernel.org>; Wed, 21 Oct 2020 22:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=p8Hwn4AXDi9NRjlCE0oMq1jAIKpEQWx4gCW/kuHDlnE=;
-        b=CNB4qwF8XdN3RdM9KJnNC7kYAWqE3MUa239/vjNlnFSdgbAxXNDSsHdvaAwxfoPYCf
-         9I5uTsOXqOSvDFVdPGNB9kuPiLcCYP+jICpfkw/SnOdN0UwneoOuRjcJRVYvzghyOZgY
-         XvPIaPv94GmuiwvhuOy99hxIOxFWyWcpXlhs/vEB8KesGnOR/boJ2sI/4woeV6i/72q/
-         p2uHWfix+2KfdBMVPBrl7fsMQncBxq0mhjoTIYiPInfd1v8q11VRdJI0fils5s9SxrwC
-         md6xgXZxNLh51IWZJpdkb57XW+oG+EDxRaAKOL98VAQ3pysJjVwuexGYN8bLRDJoVH0/
-         WSmQ==
+        bh=2FJ6bgUzNaVY5TwTxhI5fSUYbPLg9JNdup4mEtOxeyg=;
+        b=Y9Bl1j6Yr57hSOSVPd/mu8/0LKB/sUaN+4OYq3aFF90Ul5QrtkCiVNH9L8jrUjSMo1
+         BOKxsr/7fKRiQpN4kVGgEBqVtWszTvShe7lZdbiv6L+NLtOizZUgujXoZvT2TROyZNLx
+         zJdukWtwTTaJzdJoCyxafO4cLJd0w6GUarS9y0hhBoEjh7EAz3ipVzS+BZeksfTcJ5aq
+         wnHp4uFAiQq8uwfU3SZkrdpi1ZRZavZERN4yLWk7B//b8QjJsPq+nwqJOB5qXVbbWAae
+         FQk9F0x2v9qjKeAsX4OYBfYNubscNVPxafc3jwllMwr2lKF5yAW2F+0L+RR0jcFJ2dTr
+         c3Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=p8Hwn4AXDi9NRjlCE0oMq1jAIKpEQWx4gCW/kuHDlnE=;
-        b=gw8dPUNjZ5QeLt+9SZ2NCVHULSs8L0aV68A4D6hox1ARtUZgDbLIeh40mjzueGNa4u
-         EE7XcphrQBuIxLm2lvH43gKbssSuzWKOGUgIeZA5Wefy9UYKaI0MtunYHB1myXdmGbkA
-         nJ/ws6pgTIcF37E4aKjWCPeitUEThv5w0MYeBfOvutiYrvXGunz7sp4oag+yewlWb/dz
-         BM41eAiyn7gNMGyZgSApDkkeNSmTIss6oiz9VwIvgNnfR9EQ309GbUZ8uePQOl2NY/Xb
-         5tyrRZqJkSUKGn3yX5DzYgxfMwrxE2QXbWlNYh7/eWN595puTaZgdpvRnbL/INiF2ed2
-         5Dxw==
-X-Gm-Message-State: AOAM5322Ed4W+HQew9tmup/VyE6A2Q/Ulb251JHwnUTpYk26jrwUJZXx
-        WxNOn/Ww5gndZuByrGTNEvo5enghxiHl4SzOQw1U1A==
-X-Google-Smtp-Source: ABdhPJzLM1aM6spRLX8pXe/S9QIy6/o0GCiMeSkYufHnU7EzHfprw/1bO/qSLNeYe+3BVe+LcpDtiqX5V8eEHvsaeCo=
-X-Received: by 2002:a17:906:490d:: with SMTP id b13mr5925764ejq.122.1603326190426;
- Wed, 21 Oct 2020 17:23:10 -0700 (PDT)
+        bh=2FJ6bgUzNaVY5TwTxhI5fSUYbPLg9JNdup4mEtOxeyg=;
+        b=N2nHksD/uqADcPF3MfrDbATRtUyd8JH0cUrOBKFHVsr0CvaK0K9oeeOokA5VsKVlJ5
+         cbPtvI/dpEnK8+JREoH5BADUrxl2ooEMU9HJysmmQI6tpnqrY9Ge3G1CCNXHeG11tT/+
+         YHK+mkneyrmbNFmEDttviHdKdOtUQLIe4gWYa5RM+c4s1XvagAvL/dWbFVZevaR5DLYN
+         xQt/tasBtEV6n3U0r55+vYhYs/38J5r9b9yROk0xXq5uhp74MwlcgbWGsdkoRwnSQKwr
+         rkAOgnA1Rbr3igyMXPSj+/di10KOVA2JWySCz7HKQeMliFtJd/seX0hD/PDlsyYGbcV0
+         HITg==
+X-Gm-Message-State: AOAM5306ii2DDrqk11fNDozAB9mPsX/J2/YgZkTUDkRI3aRgbmMDbKb4
+        zu7Q3mz9zdv/NUZSuh0f0ENM0T/ti8msklNNW0Cmtg==
+X-Google-Smtp-Source: ABdhPJxk41O0FMwzCS0qOGAJ5pot2HsP0xEUlWx58Nz/Yw02Wcj0cAJSjVw5HNv+6enPy0INENlf+CnoqkGqrrxq84o=
+X-Received: by 2002:a5d:6681:: with SMTP id l1mr731145wru.356.1603345088654;
+ Wed, 21 Oct 2020 22:38:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201013003203.4168817-1-samitolvanen@google.com>
- <20201013003203.4168817-23-samitolvanen@google.com> <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
- <20201015102216.GB2611@hirez.programming.kicks-ass.net> <20201015203942.f3kwcohcwwa6lagd@treble>
- <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
- <20201020185217.ilg6w5l7ujau2246@treble> <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
- <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
-In-Reply-To: <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Wed, 21 Oct 2020 17:22:59 -0700
-Message-ID: <CABCJKufL6=FiaeD8T0P+mK4JeR9J80hhjvJ6Z9S-m9UnCESxVA@mail.gmail.com>
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, Jann Horn <jannh@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
+References: <20201006001752.248564-1-atish.patra@wdc.com> <20201006001752.248564-4-atish.patra@wdc.com>
+In-Reply-To: <20201006001752.248564-4-atish.patra@wdc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 22 Oct 2020 11:07:57 +0530
+Message-ID: <CAAhSdy2z=ae1Z92p1zJeiY8tVK3Q5t739ktH3_m_k+hBWNt+sg@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] riscv: Separate memory init from paging init
+To:     Atish Patra <atish.patra@wdc.com>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        David Hildenbrand <david@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
+        Jia He <justin.he@arm.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-arch@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 1:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Tue, Oct 6, 2020 at 5:48 AM Atish Patra <atish.patra@wdc.com> wrote:
 >
-> On Tue, Oct 20, 2020 at 12:24:37PM -0700, Sami Tolvanen wrote:
-> > > > Building allyesconfig with this series and LTO enabled, I still see
-> > > > the following objtool warnings for vmlinux.o, grouped by source file:
-> > > >
-> > > > arch/x86/entry/entry_64.S:
-> > > > __switch_to_asm()+0x0: undefined stack state
-> > > > .entry.text+0xffd: sibling call from callable instruction with
-> > > > modified stack frame
-> > > > .entry.text+0x48: stack state mismatch: cfa1=7-8 cfa2=-1+0
-> > >
-> > > Not sure what this one's about, there's no OBJECT_FILES_NON_STANDARD?
-> >
-> > Correct, because with LTO, we won't have an ELF binary to process
-> > until we compile everything into vmlinux.o, and at that point we can
-> > no longer skip individual object files.
+> Currently, we perform some memory init functions in paging init. But,
+> that will be an issue for NUMA support where DT needs to be flattened
+> before numa initialization and memblock_present can only be called
+> after numa initialization.
 >
-> I think what Josh was trying to say is; this file is subject to objtool
-> on a normal build and does not generate warnings. So why would it
-> generate warnings when subject to objtool as result of a vmlinux run
-> (due to LTO or otherwise).
+> Move memory initialization related functions to a separate function.
 >
-> In fact, when I build a x86_64-defconfig and then run:
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+> Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
+> ---
+>  arch/riscv/include/asm/pgtable.h | 1 +
+>  arch/riscv/kernel/setup.c        | 1 +
+>  arch/riscv/mm/init.c             | 6 +++++-
+>  3 files changed, 7 insertions(+), 1 deletion(-)
 >
->   $ objtool check -barf defconfig-build/vmlinux.o
-
-Note that I'm passing also --vmlinux and --duplicate to objtool when
-processing vmlinux.o, and this series has a patch to split noinstr
-validation from --vmlinux, so that's skipped.
-
-> I do not see these in particular, although I do see a lot of:
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index eaea1f717010..515b42f98d34 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -466,6 +466,7 @@ static inline void __kernel_map_pages(struct page *page, int numpages, int enabl
+>  extern void *dtb_early_va;
+>  void setup_bootmem(void);
+>  void paging_init(void);
+> +void misc_mem_init(void);
 >
->   "sibling call from callable instruction with modified stack frame"
->   "falls through to next function"
+>  #define FIRST_USER_ADDRESS  0
 >
-> that did not show up in the individual objtool runs during the build.
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 2c6dd329312b..07fa6d13367e 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -78,6 +78,7 @@ void __init setup_arch(char **cmdline_p)
+>  #else
+>         unflatten_device_tree();
+>  #endif
+> +       misc_mem_init();
+>
+>  #ifdef CONFIG_SWIOTLB
+>         swiotlb_init(1);
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index ed6e83871112..114c3966aadb 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -565,8 +565,12 @@ static void __init resource_init(void)
+>  void __init paging_init(void)
+>  {
+>         setup_vm_final();
+> -       sparse_init();
+>         setup_zero_page();
+> +}
+> +
+> +void __init misc_mem_init(void)
+> +{
+> +       sparse_init();
+>         zone_sizes_init();
+>         resource_init();
+>  }
+> --
+> 2.25.1
+>
 
-I'm able to reproduce these warnings with gcc 9.3 + allyesconfig, with
-KASAN and GCOV_KERNEL disabled, as they are not enabled in LTO builds
-either. This is without the LTO series applied, so we also have the
-retpoline warnings:
+Looks good to me.
 
-$ ./tools/objtool/objtool check -arfld vmlinux.o 2>&1 | grep -vE
-'(sibling|instr)'
-vmlinux.o: warning: objtool: wakeup_long64()+0x61: indirect jump found
-in RETPOLINE build
-vmlinux.o: warning: objtool: .text+0x826308a: indirect jump found in
-RETPOLINE build
-vmlinux.o: warning: objtool: .text+0x82630c5: indirect jump found in
-RETPOLINE build
-vmlinux.o: warning: objtool: .head.text+0x748: indirect jump found in
-RETPOLINE build
-vmlinux.o: warning: objtool:
-set_bringup_idt_handler.constprop.0()+0x0: undefined stack state
-vmlinux.o: warning: objtool: .entry.text+0x1634: redundant CLD
-vmlinux.o: warning: objtool: camellia_cbc_dec_32way()+0xb3: stack
-state mismatch: cfa1=7+520 cfa2=7+8
-vmlinux.o: warning: objtool: camellia_ctr_32way()+0x1a: stack state
-mismatch: cfa1=7+520 cfa2=7+8
-vmlinux.o: warning: objtool: aesni_gcm_init_avx_gen2()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_enc_update_avx_gen2()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_dec_update_avx_gen2()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_finalize_avx_gen2()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_init_avx_gen4()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_enc_update_avx_gen4()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_dec_update_avx_gen4()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: aesni_gcm_finalize_avx_gen4()+0x12:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: sha1_transform_avx2()+0xc: unsupported
-stack pointer realignment
-vmlinux.o: warning: objtool: sha1_ni_transform()+0x7: unsupported
-stack pointer realignment
-vmlinux.o: warning: objtool: sha256_transform_rorx()+0x13: unsupported
-stack pointer realignment
-vmlinux.o: warning: objtool: sha512_transform_ssse3()+0x14:
-unsupported stack pointer realignment
-vmlinux.o: warning: objtool: sha512_transform_avx()+0x14: unsupported
-stack pointer realignment
-vmlinux.o: warning: objtool: sha512_transform_rorx()+0x7: unsupported
-stack pointer realignment
-vmlinux.o: warning: objtool: __x86_retpoline_rdi()+0x10: return with
-modified stack frame
-vmlinux.o: warning: objtool: __x86_retpoline_rdi()+0x0: stack state
-mismatch: cfa1=7+32 cfa2=7+8
-vmlinux.o: warning: objtool: __x86_retpoline_rdi()+0x0: stack state
-mismatch: cfa1=7+32 cfa2=-1+0
-vmlinux.o: warning: objtool: reset_early_page_tables()+0x0: stack
-state mismatch: cfa1=7+8 cfa2=-1+0
-vmlinux.o: warning: objtool: .entry.text+0x48: stack state mismatch:
-cfa1=7-8 cfa2=-1+0
-vmlinux.o: warning: objtool: .entry.text+0x15fd: stack state mismatch:
-cfa1=7-8 cfa2=-1+0
-vmlinux.o: warning: objtool: .entry.text+0x168c: stack state mismatch:
-cfa1=7-8 cfa2=-1+0
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-There are a couple of differences, like the first "undefined stack
-state" warning pointing to set_bringup_idt_handler.constprop.0()
-instead of __switch_to_asm(). I tried running this with --backtrace,
-but objtool segfaults at the first .entry.text warning:
-
-$ ./tools/objtool/objtool check -barfld vmlinux.o
-...
-vmlinux.o: warning: objtool:
-set_bringup_idt_handler.constprop.0()+0x0: undefined stack state
-vmlinux.o: warning: objtool:   xen_hypercall_set_trap_table()+0x0: <=== (sym)
-...
-vmlinux.o: warning: objtool: .entry.text+0xffd: sibling call from
-callable instruction with modified stack frame
-vmlinux.o: warning: objtool:   .entry.text+0xfcb: (branch)
-Segmentation fault
-
-Going back to the allyesconfig+LTO vmlinux.o, the "undefined stack
-state" warning looks quite similar:
-
-$ ./tools/objtool/objtool check -barlfd vmlinux.o
-vmlinux.o: warning: objtool: __switch_to_asm()+0x0: undefined stack state
-vmlinux.o: warning: objtool:   xen_hypercall_set_trap_table()+0x0: <=== (sym)
-vmlinux.o: warning: objtool: .entry.text+0xffd: sibling call from
-callable instruction with modified stack frame
-vmlinux.o: warning: objtool:   .entry.text+0xfcb: (branch)
-Segmentation fault
-
-Sami
+Regards,
+Anup
