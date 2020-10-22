@@ -2,140 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 808AB295C0F
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 11:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49815295C46
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Oct 2020 11:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896025AbgJVJg5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Oct 2020 05:36:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50384 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2895810AbgJVJg4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 22 Oct 2020 05:36:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603359415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DC+3OwmtjhrVCpfk4sXvCEkgbYjM3Mk+x26MXzYFx48=;
-        b=VMLvYiWBWMQ8BdmpBnQeU65MkER6Womd4xJdO54glA3t/92ZkYXsTYq1nUygAYE8r7fHoJ
-        VgCH5M1VDUAcntGU/mdWH31g0jLaaceEeQfPMxf0koDQMbNQ9meQSM/seFb5+cOHaUP3NR
-        yWNVcXHNeqU07Xr7fsFTmP86uBEG6MA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-481-oXTdLQjNMMegK_tfwCZIGg-1; Thu, 22 Oct 2020 05:36:50 -0400
-X-MC-Unique: oXTdLQjNMMegK_tfwCZIGg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2896170AbgJVJxQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Oct 2020 05:53:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36980 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2509384AbgJVJxQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 22 Oct 2020 05:53:16 -0400
+Received: from gaia (unknown [95.145.162.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6A2D364152;
-        Thu, 22 Oct 2020 09:36:46 +0000 (UTC)
-Received: from [10.36.113.152] (ovpn-113-152.ams2.redhat.com [10.36.113.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E9B810013D0;
-        Thu, 22 Oct 2020 09:36:41 +0000 (UTC)
-Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <20200925045146.1283714-1-hch@lst.de>
- <20200925045146.1283714-3-hch@lst.de> <20201021161301.GA1196312@kroah.com>
- <20201021233914.GR3576660@ZenIV.linux.org.uk>
- <20201022082654.GA1477657@kroah.com>
- <80a2e5fa-718a-8433-1ab0-dd5b3e3b5416@redhat.com>
- <5d2ecb24db1e415b8ff88261435386ec@AcuMS.aculab.com>
- <df2e0758-b8ed-5aec-6adc-a18f499c0179@redhat.com>
- <20201022090155.GA1483166@kroah.com>
- <e04d0c5d-e834-a15b-7844-44dcc82785cc@redhat.com>
- <a1533569-948a-1d5b-e231-5531aa988047@redhat.com>
- <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
-Date:   Thu, 22 Oct 2020 11:36:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        by mail.kernel.org (Postfix) with ESMTPSA id C8BD1223FB;
+        Thu, 22 Oct 2020 09:53:12 +0000 (UTC)
+Date:   Thu, 22 Oct 2020 10:53:10 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Qais Yousef <qais.yousef@arm.com>, Marc Zyngier <maz@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/4] arm64: Add support for asymmetric AArch32 EL0
+ configurations
+Message-ID: <20201022095309.GD1229@gaia>
+References: <20201021104611.2744565-1-qais.yousef@arm.com>
+ <20201021104611.2744565-3-qais.yousef@arm.com>
+ <20201021153911.GC18071@willie-the-truck>
+ <20201021162121.bdiopxvzscbhzzpt@e107158-lin>
+ <20201021165246.GH3976@gaia>
+ <20201021173859.GA18370@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201021173859.GA18370@willie-the-truck>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 22.10.20 11:32, David Laight wrote:
-> From: David Hildenbrand
->> Sent: 22 October 2020 10:25
-> ...
->> ... especially because I recall that clang and gcc behave slightly
->> differently:
->>
->> https://github.com/hjl-tools/x86-psABI/issues/2
->>
->> "Function args are different: narrow types are sign or zero extended to
->> 32 bits, depending on their type. clang depends on this for incoming
->> args, but gcc doesn't make that assumption. But both compilers do it
->> when calling, so gcc code can call clang code.
+On Wed, Oct 21, 2020 at 06:39:00PM +0100, Will Deacon wrote:
+> On Wed, Oct 21, 2020 at 05:52:47PM +0100, Catalin Marinas wrote:
+> > On Wed, Oct 21, 2020 at 05:21:21PM +0100, Qais Yousef wrote:
+> > > On 10/21/20 16:39, Will Deacon wrote:
+> > > > On Wed, Oct 21, 2020 at 11:46:09AM +0100, Qais Yousef wrote:
+> > > > > When the CONFIG_ASYMMETRIC_AARCH32 option is enabled (EXPERT), the type
+> > > > > of the ARM64_HAS_32BIT_EL0 capability becomes WEAK_LOCAL_CPU_FEATURE.
+> > > > > The kernel will now return true for system_supports_32bit_el0() and
+> > > > > checks 32-bit tasks are affined to AArch32 capable CPUs only in
+> > > > > do_notify_resume(). If the affinity contains a non-capable AArch32 CPU,
+> > > > > the tasks will get SIGKILLed. If the last CPU supporting 32-bit is
+> > > > > offlined, the kernel will SIGKILL any scheduled 32-bit tasks (the
+> > > > > alternative is to prevent offlining through a new .cpu_disable feature
+> > > > > entry).
+> > > > > 
+> > > > > In addition to the relaxation of the ARM64_HAS_32BIT_EL0 capability,
+> > > > > this patch factors out the 32-bit cpuinfo and features setting into
+> > > > > separate functions: __cpuinfo_store_cpu_32bit(),
+> > > > > init_cpu_32bit_features(). The cpuinfo of the booting CPU
+> > > > > (boot_cpu_data) is now updated on the first 32-bit capable CPU even if
+> > > > > it is a secondary one. The ID_AA64PFR0_EL0_64BIT_ONLY feature is relaxed
+> > > > > to FTR_NONSTRICT and FTR_HIGHER_SAFE when the asymmetric AArch32 support
+> > > > > is enabled. The compat_elf_hwcaps are only verified for the
+> > > > > AArch32-capable CPUs to still allow hotplugging AArch64-only CPUs.
+> > > > > 
+> > > > > Make sure that KVM never sees the asymmetric 32bit system. Guest can
+> > > > > still ignore ID registers and force run 32bit at EL0.
+> > > > > 
+> > > > > Co-developed-by: Qais Yousef <qais.yousef@arm.com>
+> > > > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+> > > > > index 5e784e16ee89..312974ab2c85 100644
+> > > > > --- a/arch/arm64/include/asm/thread_info.h
+> > > > > +++ b/arch/arm64/include/asm/thread_info.h
+> > > > > @@ -67,6 +67,7 @@ void arch_release_task_struct(struct task_struct *tsk);
+> > > > >  #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
+> > > > >  #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
+> > > > >  #define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
+> > > > > +#define TIF_CHECK_32BIT_AFFINITY 6	/* Check thread affinity for asymmetric AArch32 */
+> > > > 
+> > > > I've looked through the patch and I still can't figure out why this extra
+> > > > flag is needed. We know if a CPU supports 32-bit EL0, and we know whether
+> > > > or not a task is 32-bit. So why the extra flag? Is it just a hangover from
+> > > > the old series?
+> > > 
+> > > It did evolve a bit organically.
+> > > 
+> > > AFAICS it helps as an optimization to avoid the checks unnecessarily. If it's
+> > > not expensive to do the checks in the loop in do_notify_resume() we can omit
+> > > it. We will still protect it with system_supports_asym_32bit_el0() so the check
+> > > is done on these systems only.
+> > 
+> > Ah, I think I remember now. We didn't want ret_to_user (entry.S) to
+> > always go the work_pending path if there was no context switch for a
+> > 32-bit task. With the AArch32 check in do_notify_resume(), it would mean
+> > we add _TIF_32BIT to the _TIF_WORK_MASK.
+> > 
+> > However, we could add an asm alternative if AArch32 asym is detected to
+> > always route TIF_32BIT tasks to work_pending.
 > 
-> It really is best to use 'int' (or even 'long') for all numeric
-> arguments (and results) regardless of the domain of the value.
-> 
-> Related, I've always worried about 'bool'....
-> 
->> The upper 32 bits of registers are always undefined garbage for types
->> smaller than 64 bits."
-> 
-> On x86-64 the high bits are zeroed by all 32bit loads.
+> Or could we just use TIF_NOTIFY_RESUME, like we for for rseq()?
 
-Yeah, but does not help here.
-
-
-My thinking: if the compiler that calls import_iovec() has garbage in
-the upper 32 bit
-
-a) gcc will zero it out and not rely on it being zero.
-b) clang will not zero it out, assuming it is zero.
-
-But
-
-a) will zero it out when calling the !inlined variant
-b) clang will zero it out when calling the !inlined variant
-
-When inlining, b) strikes. We access garbage. That would mean that we
-have calling code that's not generated by clang/gcc IIUC.
-
-We can test easily by changing the parameters instead of adding an "inline".
+Maybe but it needs some analysis to make sure we don't lose this flag.
+It is cleared in some places.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Catalin
