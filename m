@@ -2,120 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09974297612
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Oct 2020 19:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D062297646
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Oct 2020 19:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1753807AbgJWRsc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Oct 2020 13:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
+        id S1754049AbgJWR7O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Oct 2020 13:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1753796AbgJWRsb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Oct 2020 13:48:31 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3DDC0613CE
-        for <linux-arch@vger.kernel.org>; Fri, 23 Oct 2020 10:48:29 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id x13so1816021pgp.7
-        for <linux-arch@vger.kernel.org>; Fri, 23 Oct 2020 10:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uHs6b4ooy0rgFnXBjoHTZU/MFzwidZAAr9PXWq9UsVk=;
-        b=h9H11cgbsiLIfnCVNg9C63PczJj6klub3nyQOP7k17qHXCkM3+IiRWUf+K8onV/M6f
-         cq6hpYWY5tijhMZOqe4vpxWnGOmq8cRM3qeYtsvRKEgPmJNNtDrmOS532+baO+0nsP5H
-         4oTZzToITDWX/+cRTyYkk0o02ppC4ZW2srP3cde+HPF1A0gWOS7McnJYg5AziS2A8+k5
-         FA/pfx2HXxsJo1PFtx/M/61rAc4BlJZES29IbLZRpqOuPDxsS+IoEvzMCqD9jME5DLTE
-         nrFqzJCCPwXyQB8C7frIf3mqYooXH89m8/kypUCqoZ0QyzM52bhO/vCOCMQcptgtC5Xq
-         D7GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uHs6b4ooy0rgFnXBjoHTZU/MFzwidZAAr9PXWq9UsVk=;
-        b=tujroI0kuGO3dMHs7P9kfeeExUBJ9sZS9csEM5wNeBlHDVnbd6R4X98jxxuupeYrEv
-         YwM5x+4uguNULpNv6gip3l3mskh1xLguKRPS78a0qbr1o0pICx4GBd4pm8ZckDxauV8k
-         JI//Z2DC1RkYNcR3uXrfLcHfiDKxw8ELU8PxDRmanRwRek8YCDdyNxTpWEsJNWxe6mIo
-         C7wUrblvbOBiP39My/oDPyXBxAMT0ktrBwB5bNZBBsQFETGT/exaolyiwiVOXcM0gAA7
-         KqNasiIzghDlUVeUnKyf/GZvoK05a6tHgdS9Ul3nUyyCJbNVlKZ+PrOVaH4bsp5X5AeU
-         YtqA==
-X-Gm-Message-State: AOAM533aZkXD67IUWRbxla9Z9n8l/wOyeC9MT1KGE9z5cGxSymK3WfH3
-        4ByTbf4QqARgTfkstoLPhduyzg==
-X-Google-Smtp-Source: ABdhPJyvkbZhNi51MOK3wMCs4cSy44OvLHixOCI7o3MOo/m8861HBGG5Vdka871MDYa0ozQesghZuQ==
-X-Received: by 2002:a17:90a:450d:: with SMTP id u13mr3848288pjg.148.1603475309279;
-        Fri, 23 Oct 2020 10:48:29 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
-        by smtp.gmail.com with ESMTPSA id w6sm2555511pgw.28.2020.10.23.10.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 10:48:28 -0700 (PDT)
-Date:   Fri, 23 Oct 2020 10:48:22 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, Jann Horn <jannh@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        with ESMTP id S463587AbgJWR7O (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Oct 2020 13:59:14 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B0DC0613CE;
+        Fri, 23 Oct 2020 10:59:13 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kW1L7-00749v-U5; Fri, 23 Oct 2020 17:58:58 +0000
+Date:   Fri, 23 Oct 2020 18:58:57 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        'Greg KH' <gregkh@linuxfoundation.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-Message-ID: <20201023174822.GA2696347@google.com>
-References: <CAG48ez2baAvKDA0wfYLKy-KnM_1CdOwjU873VJGDM=CErjsv_A@mail.gmail.com>
- <20201015102216.GB2611@hirez.programming.kicks-ass.net>
- <20201015203942.f3kwcohcwwa6lagd@treble>
- <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
- <20201020185217.ilg6w5l7ujau2246@treble>
- <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
- <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
- <20201021093213.GV2651@hirez.programming.kicks-ass.net>
- <20201021212747.ofk74lugt4hhjdzg@treble>
- <20201022072553.GN2628@hirez.programming.kicks-ass.net>
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Message-ID: <20201023175857.GA3576660@ZenIV.linux.org.uk>
+References: <a1533569-948a-1d5b-e231-5531aa988047@redhat.com>
+ <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
+ <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
+ <20201022104805.GA1503673@kroah.com>
+ <20201022121849.GA1664412@kroah.com>
+ <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
+ <20201022125759.GA1685526@kroah.com>
+ <20201022135036.GA1787470@kroah.com>
+ <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
+ <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201022072553.GN2628@hirez.programming.kicks-ass.net>
+In-Reply-To: <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 09:25:53AM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 21, 2020 at 04:27:47PM -0500, Josh Poimboeuf wrote:
-> > On Wed, Oct 21, 2020 at 11:32:13AM +0200, Peter Zijlstra wrote:
-> > > On Wed, Oct 21, 2020 at 10:56:06AM +0200, Peter Zijlstra wrote:
-> > > 
-> > > > I do not see these in particular, although I do see a lot of:
-> > > > 
-> > > >   "sibling call from callable instruction with modified stack frame"
-> > > 
-> > > defconfig-build/vmlinux.o: warning: objtool: msr_write()+0x10a: sibling call from callable instruction with modified stack frame
-> > > defconfig-build/vmlinux.o: warning: objtool:   msr_write()+0x99: (branch)
-> > > defconfig-build/vmlinux.o: warning: objtool:   msr_write()+0x3e: (branch)
-> > > defconfig-build/vmlinux.o: warning: objtool:   msr_write()+0x0: <=== (sym)
-> > > 
-> > > $ nm defconfig-build/vmlinux.o | grep msr_write
-> > > 0000000000043250 t msr_write
-> > > 00000000004289c0 T msr_write
-> > > 0000000000003056 t msr_write.cold
-> > > 
-> > > Below 'fixes' it. So this is also caused by duplicate symbols.
-> > 
-> > There's a new linker flag for renaming duplicates:
-> > 
-> >   https://sourceware.org/bugzilla/show_bug.cgi?id=26391
-> > 
-> > But I guess that doesn't help us now.
+On Fri, Oct 23, 2020 at 03:09:30PM +0200, David Hildenbrand wrote:
+
+> Now, I am not a compiler expert, but as I already cited, at least on
+> x86-64 clang expects that the high bits were cleared by the caller - in
+> contrast to gcc. I suspect it's the same on arm64, but again, I am no
+> compiler expert.
 > 
-> Well, depends a bit if clang can do it; we only need this for LTO builds
-> for now.
+> If what I said and cites for x86-64 is correct, if the function expects
+> an "unsigned int", it will happily use 64bit operations without further
+> checks where valid when assuming high bits are zero. That's why even
+> converting everything to "unsigned int" as proposed by me won't work on
+> clang - it assumes high bits are zero (as indicated by Nick).
+> 
+> As I am neither a compiler experts (did I mention that already? ;) ) nor
+> an arm64 experts, I can't tell if this is a compiler BUG or not.
 
-LLD doesn't seem to support -z unique-symbol.
-
-Sami
+On arm64 when callee expects a 32bit argument, the caller is *not* responsible
+for clearing the upper half of 64bit register used to pass the value - it only
+needs to store the actual value into the lower half.  The callee must consider
+the contents of the upper half of that register as undefined.  See AAPCS64 (e.g.
+https://github.com/ARM-software/abi-aa/blob/master/aapcs64/aapcs64.rst#parameter-passing-rules
+); AFAICS, the relevant bit is
+	"Unlike in the 32-bit AAPCS, named integral values must be narrowed by
+the callee rather than the caller."
