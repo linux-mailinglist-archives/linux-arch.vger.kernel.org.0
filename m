@@ -2,145 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E58297079
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Oct 2020 15:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8110629715B
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Oct 2020 16:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S464804AbgJWN3L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Oct 2020 09:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S464803AbgJWN3K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Oct 2020 09:29:10 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B35C0613CE;
-        Fri, 23 Oct 2020 06:29:10 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id d3so1560091wma.4;
-        Fri, 23 Oct 2020 06:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5CyMJDhTomAaoZqFkHeUCCVr9UCp9JN75j1REjgNDKA=;
-        b=Ung8MBybCGC3bEJ7PW8O5Dc1F8pLlmdO8mpN8jTjfyuuh+rBkdIryuv1jHVea+dgDN
-         1x42JDgL78dfQvYtcPTSvZfAgSYGeiPUqQoHl1LEGHdjW8Ct2FnEVnfcDPC/c8A/V+Lc
-         IGwbaFv/7uyuRtdLuBI5eY3c6AXZDhrTKQEDZqjEr7qjIZ0q6XdX86DKNZ5r1u2VB0nh
-         JMxWiObEzifGVcax+zElzZTa8vXeJzCancTXThC/AxpK7sIG6Kx8vYOibZv2yWc5uJW4
-         fCKZPLVYfzCO2xedIlghPOMExWxvP6iqDIE/zsvjhXyExPTUIXQmdYHndth79VAysIld
-         wm2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5CyMJDhTomAaoZqFkHeUCCVr9UCp9JN75j1REjgNDKA=;
-        b=QxIda9DsD8XgUckM3xuXKF1VTj7dLW2Ju3X/6jvdjk2OGNxPQWasEFN3h+y1pMK4rK
-         rJ4yXJB++TR634Qg/KQ9E68aUyM6bIlZ39FBxT/SMLDQ8ZXOTJDy2L763j0Xz3+BJslC
-         XgTmnzMQzI1sgsmEVb9UlzW0IKfPag8dTl2wbSsfGdTu4z6m6YZQVx8WdkCOy9ljC41l
-         ws1oTcs3HZA7PBLDxgsa8lSf7QgJYlAFjmM54qWtHJ6b0R1Ioq2oOfBFLd3VmSm66tMZ
-         Jr7uUg4JaOrRoPPIC8tqJRI9eG5biRSJjT3GtlPzuz+0HlaL4GYBi1MKNjGaWciB2i2j
-         K/IA==
-X-Gm-Message-State: AOAM530DhZ2UAjC+DuDLKxWkv38lNFEkr2WWIz5e3thUM7UerOQkumi4
-        Esb/W0dFCFKJBOjI+M5Ibjc=
-X-Google-Smtp-Source: ABdhPJxWcUzCkUZQf5EPci+8xvFYzP6nw9i9+fXq7oUvP/k4VKqigvib5wvMo3C2HDHJVJsGWNQPTQ==
-X-Received: by 2002:a1c:152:: with SMTP id 79mr2290463wmb.60.1603459748716;
-        Fri, 23 Oct 2020 06:29:08 -0700 (PDT)
-Received: from ?IPv6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id e20sm3128540wme.35.2020.10.23.06.29.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Oct 2020 06:29:08 -0700 (PDT)
-Subject: Re: [PATCH v8 2/8] powerpc/vdso: Remove __kernel_datapage_offset and
- simplify __get_datapage()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Will Deacon <will@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, nathanl@linux.ibm.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linuxppc-dev@lists.ozlabs.org
-References: <87wo34tbas.fsf@mpe.ellerman.id.au>
- <2f9b7d02-9e2f-4724-2608-c5573f6507a2@csgroup.eu>
- <6862421a-5a14-2e38-b825-e39e6ad3d51d@csgroup.eu>
- <87imd5h5kb.fsf@mpe.ellerman.id.au>
- <CAJwJo6ZANqYkSHbQ+3b+Fi_VT80MtrzEV5yreQAWx-L8j8x2zA@mail.gmail.com>
- <87a6yf34aj.fsf@mpe.ellerman.id.au> <20200921112638.GC2139@willie-the-truck>
- <ad72ffd3-a552-cc98-7545-d30285fd5219@csgroup.eu>
- <542145eb-7d90-0444-867e-c9cbb6bdd8e3@gmail.com>
- <ba9861da-2f5b-a649-5626-af00af634546@csgroup.eu>
- <20201023112514.GE20933@willie-the-truck>
- <284cacf4-9811-4b67-385c-2783a7cd9b31@csgroup.eu>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Message-ID: <2b25c715-c178-b4f2-04e0-bdbdfacb90b7@gmail.com>
-Date:   Fri, 23 Oct 2020 14:29:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1750617AbgJWOdT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Oct 2020 10:33:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35438 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1750605AbgJWOdS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 23 Oct 2020 10:33:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603463597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CNcKkabSWjxdlB9if9c65y0HaLkS2aARxhdVq9CbB84=;
+        b=RgZTviaSdR7S1v4WSyKdNXpiKR0I4cepr4PlzBtm5onpd8D7rJQRtG2Kp+M+5C3QH071E2
+        7TdyG7+xrdM3VPZ/s0rd0RzlvJXgV5gVAdxhqJrdLC4Fz40jeglMuAEkWekJR4eVPuIISS
+        WKns5e8z61xA4dR83ldxpS/D5/c9cbI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-106-GwdqF8yrPV2_n9bqFnB1rQ-1; Fri, 23 Oct 2020 10:33:12 -0400
+X-MC-Unique: GwdqF8yrPV2_n9bqFnB1rQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8331C804B6A;
+        Fri, 23 Oct 2020 14:33:09 +0000 (UTC)
+Received: from [10.36.114.18] (ovpn-114-18.ams2.redhat.com [10.36.114.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 44FD05D9CC;
+        Fri, 23 Oct 2020 14:33:04 +0000 (UTC)
+Subject: Re: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+From:   David Hildenbrand <david@redhat.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Greg KH' <gregkh@linuxfoundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+References: <df2e0758-b8ed-5aec-6adc-a18f499c0179@redhat.com>
+ <20201022090155.GA1483166@kroah.com>
+ <e04d0c5d-e834-a15b-7844-44dcc82785cc@redhat.com>
+ <a1533569-948a-1d5b-e231-5531aa988047@redhat.com>
+ <bc0a091865f34700b9df332c6e9dcdfd@AcuMS.aculab.com>
+ <5fd6003b-55a6-2c3c-9a28-8fd3a575ca78@redhat.com>
+ <20201022104805.GA1503673@kroah.com> <20201022121849.GA1664412@kroah.com>
+ <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
+ <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com>
+ <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
+ <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <999e2926-9a75-72fd-007a-1de0af341292@redhat.com>
+Date:   Fri, 23 Oct 2020 16:33:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-In-Reply-To: <284cacf4-9811-4b67-385c-2783a7cd9b31@csgroup.eu>
+In-Reply-To: <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christophe, Will,
-
-On 10/23/20 12:57 PM, Christophe Leroy wrote:
-> 
-> 
-> Le 23/10/2020 à 13:25, Will Deacon a écrit :
->> On Fri, Oct 23, 2020 at 01:22:04PM +0200, Christophe Leroy wrote:
->>> Hi Dmitry,
-[..]
->>> I haven't seen the patches, did you sent them out finally ?
-
-I was working on .close() hook, but while cooking it, I thought it may
-be better to make tracking of user landing generic. Note that the vdso
-base address is mostly needed by kernel as an address to land in
-userspace after processing a signal.
-
-I have some raw patches that add
-+#ifdef CONFIG_ARCH_HAS_USER_LANDING
-+               struct vm_area_struct *user_landing;
-+#endif
-inside mm_struct and I plan to finish them after rc1 gets released.
-
-While working on that, I noticed that arm32 and some other architectures
-track vdso position in mm.context with the only reason to add
-AT_SYSINFO_EHDR in the elf header that's being loaded. That's quite
-overkill to have a pointer in mm.context that rather can be a local
-variable in elf binfmt loader. Also, I found some issues with mremap
-code. The patches series mentioned are at the base of the branch with
-generic user landing. I have sent only those patches not the full branch
-as I remember there was a policy that during merge window one should
-send only fixes, rather than refactoring/new code.
-
->> I think it's this series:
+On 23.10.20 15:09, David Hildenbrand wrote:
+> On 23.10.20 14:46, David Laight wrote:
+>> From: Greg KH <gregkh@linuxfoundation.org>
+>>> Sent: 22 October 2020 14:51
 >>
->> https://lore.kernel.org/r/20201013013416.390574-1-dima@arista.com
+>> I've rammed the code into godbolt.
 >>
->> but they look really invasive to me, so I may cook a small hack for arm64
->> in the meantine / for stable.
-
-I don't mind small hacks, but I'm concerned that the suggested fix which
-sets `mm->context.vdso_base = 0` on munmap() may have it's issue: that
-won't work if a user for whatever-broken-reason will mremap() vdso on 0
-address. As the fix supposes to fix an issue that hasn't fired for
-anyone yet, it probably shouldn't introduce another. That's why I've
-used vm_area_struct to track vdso position in the patches set.
-Probably, temporary, you could use something like:
-#define BAD_VDSO_ADDRESS    (-1)UL
-Or non-page-aligned address.
-But the signal code that checks if it can land on vdso/sigpage should be
-also aligned with the new definition.
-
-> Not sure we are talking about the same thing.
+>> https://godbolt.org/z/9v5PPW
+>>
+>> Definitely a clang bug.
+>>
+>> Search for [wx]24 in the clang output.
+>> nr_segs comes in as w2 and the initial bound checks are done on w2.
+>> w24 is loaded from w2 - I don't believe this changes the high bits.
+>> There are no references to w24, just x24.
+>> So the kmalloc_array() is passed 'huge' and will fail.
+>> The iov_iter_init also gets the 64bit value.
+>>
+>> Note that the gcc code has a sign-extend copy of w2.
 > 
-> I can't see any new .close function added to vm_special_mapping in order
-> to replace arch_unmap() hook.
+> Do we have a result from using "unsigned long" in the base function and
+> explicitly masking of the high bits? That should definitely work.
+> 
+> Now, I am not a compiler expert, but as I already cited, at least on
+> x86-64 clang expects that the high bits were cleared by the caller - in
+> contrast to gcc. I suspect it's the same on arm64, but again, I am no
+> compiler expert.
+> 
+> If what I said and cites for x86-64 is correct, if the function expects
+> an "unsigned int", it will happily use 64bit operations without further
+> checks where valid when assuming high bits are zero. That's why even
+> converting everything to "unsigned int" as proposed by me won't work on
+> clang - it assumes high bits are zero (as indicated by Nick).
+> 
+> As I am neither a compiler experts (did I mention that already? ;) ) nor
+> an arm64 experts, I can't tell if this is a compiler BUG or not.
+> 
+
+I just checked against upstream code generated by clang 10 and it
+properly discards the upper 32bit via a mov w23 w2.
+
+So at least clang 10 indeed properly assumes we could have garbage and
+masks it off.
+
+Maybe the issue is somewhere else, unrelated to nr_pages ... or clang 11
+behaves differently.
+
+-- 
 Thanks,
-          Dmitry
+
+David / dhildenb
+
