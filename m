@@ -2,152 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 373FD297EAE
-	for <lists+linux-arch@lfdr.de>; Sat, 24 Oct 2020 23:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7323A298862
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 09:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1764569AbgJXVMT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sat, 24 Oct 2020 17:12:19 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:52532 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1764565AbgJXVMR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 24 Oct 2020 17:12:17 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mtapsc-3-gvyTKESiOkaAGmzuPOOVdg-1; Sat, 24 Oct 2020 22:12:12 +0100
-X-MC-Unique: gvyTKESiOkaAGmzuPOOVdg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Sat, 24 Oct 2020 22:12:11 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Sat, 24 Oct 2020 22:12:11 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Segher Boessenkool' <segher@kernel.crashing.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        id S1770424AbgJZIiL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 04:38:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47788 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1770139AbgJZIiK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Oct 2020 04:38:10 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 45392223B0;
+        Mon, 26 Oct 2020 08:38:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603701489;
+        bh=OUb5d3QtiZpYTjK7sEHmPoLojCJLpplUoBwVFg6u6zs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nF4ru/gKWJs1mrs4YQv7QK/DWqPZRmtCXGkf1YbCkJFDVn9pD0ddIbYgxaPWgVYfI
+         TmhiE2vvv4IJ2bSJc+7QV2RSuGHHqoJ2umZ4lVZJvVac9sP+Gg//L7MNCJ1pAyogFj
+         80yoX41QIhmwbypTjkQbfU/N4qzVBJY5rfYdpLLY=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         David Hildenbrand <david@redhat.com>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        'Greg KH' <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: RE: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-Thread-Topic: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-Thread-Index: AQHWqE5GNDfnH4y9nkGWtfqJueR1KKmjTCJQgAAN4UiAAAD2IIAASOeCgAF+12CAAGD4RoAAL/BggAFBVoCAAE2bsA==
-Date:   Sat, 24 Oct 2020 21:12:11 +0000
-Message-ID: <7c642593ca08469f8c00c0de10a09540@AcuMS.aculab.com>
-References: <20201022104805.GA1503673@kroah.com>
- <20201022121849.GA1664412@kroah.com>
- <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
- <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com>
- <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
- <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
- <20201023175857.GA3576660@ZenIV.linux.org.uk>
- <20201023182713.GG2672@gate.crashing.org>
- <e9a3136ead214186877804aabde74b38@AcuMS.aculab.com>
- <20201024172903.GK2672@gate.crashing.org>
-In-Reply-To: <20201024172903.GK2672@gate.crashing.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: [PATCH v7 0/7] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Mon, 26 Oct 2020 10:37:45 +0200
+Message-Id: <20201026083752.13267-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Segher Boessenkool
-> Sent: 24 October 2020 18:29
-> 
-> On Fri, Oct 23, 2020 at 09:28:59PM +0000, David Laight wrote:
-> > From: Segher Boessenkool
-> > > Sent: 23 October 2020 19:27
-> > > On Fri, Oct 23, 2020 at 06:58:57PM +0100, Al Viro wrote:
-> > > > On Fri, Oct 23, 2020 at 03:09:30PM +0200, David Hildenbrand wrote:
-> > > > On arm64 when callee expects a 32bit argument, the caller is *not* responsible
-> > > > for clearing the upper half of 64bit register used to pass the value - it only
-> > > > needs to store the actual value into the lower half.  The callee must consider
-> > > > the contents of the upper half of that register as undefined.  See AAPCS64 (e.g.
-> > > > https://github.com/ARM-software/abi-aa/blob/master/aapcs64/aapcs64.rst#parameter-passing-rules
-> > > > ); AFAICS, the relevant bit is
-> > > > 	"Unlike in the 32-bit AAPCS, named integral values must be narrowed by
-> > > > the callee rather than the caller."
-> > >
-> > > Or the formal rule:
-> > >
-> > > C.9 	If the argument is an Integral or Pointer Type, the size of the
-> > > 	argument is less than or equal to 8 bytes and the NGRN is less
-> > > 	than 8, the argument is copied to the least significant bits in
-> > > 	x[NGRN]. The NGRN is incremented by one. The argument has now
-> > > 	been allocated.
-> >
-> > So, in essence, if the value is in a 64bit register the calling
-> > code is independent of the actual type of the formal parameter.
-> > Clearly a value might need explicit widening.
-> 
-> No, this says that if you pass a 32-bit integer in a 64-bit register,
-> then the top 32 bits of that register hold an undefined value.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-That's sort of what I meant.
-The 'normal' junk in the hight bits will there because the variable
-in the calling code is wider.
+Hi,
 
-> > I've found a copy of the 64 bit arm instruction set.
-> > Unfortunately it is alpha sorted and repetitive so shows none
-> > of the symmetry and makes things difficult to find.
-> 
-> All of this is ABI, not ISA.  Look at the AAPCS64 pointed to above.
-> 
-> > But, contrary to what someone suggested most register writes
-> > (eg from arithmetic) seem to zero/extend the high bits.
-> 
-> Everything that writes a "w" does, yes.  But that has nothing to do with
-> the parameter passing rules, that is ABI.  It just means that very often
-> a 32-bit integer will be passed zero-extended in a 64-bit register, but
-> that is just luck (or not, it makes finding bugs harder ;-) )
+This is an implementation of "secret" mappings backed by a file descriptor.
 
-Working out why the code is wrong is more of an ISA issue than an ABI one.
-It may be an ABI one, but the analysis is ISA.
+The file descriptor backing secret memory mappings is created using a
+dedicated memfd_secret system call The desired protection mode for the
+memory is configured using flags parameter of the system call. The mmap()
+of the file descriptor created with memfd_secret() will create a "secret"
+memory mapping. The pages in that mapping will be marked as not present in
+the direct map and will have desired protection bits set in the user page
+table. For instance, current implementation allows uncached mappings.
 
-I've written a lot of asm over the years - decoding compiler generated
-asm isn't that hard.
-At least ARM doesn't have annulled delay slots.
+Although normally Linux userspace mappings are protected from other users,
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
 
-	David
+Additionally, in the future the secret mappings may be used as a mean to
+protect guest memory in a virtual machine host.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+For demonstration of secret memory usage we've created a userspace library
 
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/secret-memory-preloader.git
+
+that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
+
+Hiding secret memory mappings behind an anonymous file allows (ab)use of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
+
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
+
+To limit fragmentation of the direct map to splitting only PUD-size pages,
+I've added an amortizing cache of PMD-size pages to each file descriptor
+that is used as an allocation pool for the secret memory areas.
+
+It is easy to add boot time reservation of the memory for secretmem
+needs. There was an implementation in earlier version of this set, but I've
+dropped it for now as there is no consensus whether the boot time
+reservation should be done from memblock or from CMA. I beleive we can have
+this discussion after straightening out the basic implementation.
+
+v7:
+* Use set_direct_map() instead of __kernel_map_pages() to ensure error
+  handling in case the direct map update fails
+* Add accounting of large pages used to reduce the direct map fragmentation
+* Teach get_user_pages() and frieds to refuse get/pin secretmem pages
+
+v6: https://lore.kernel.org/lkml/20200924132904.1391-1-rppt@kernel.org
+* Silence the warning about missing syscall, thanks to Qian Cai
+* Replace spaces with tabs in Kconfig additions, per Randy
+* Add a selftest.
+
+v5: https://lore.kernel.org/lkml/20200916073539.3552-1-rppt@kernel.org
+* rebase on v5.9-rc5
+* drop boot time memory reservation patch
+
+v4: https://lore.kernel.org/lkml/20200818141554.13945-1-rppt@kernel.org
+* rebase on v5.9-rc1
+* Do not redefine PMD_PAGE_ORDER in fs/dax.c, thanks Kirill
+* Make secret mappings exclusive by default and only require flags to
+  memfd_secret() system call for uncached mappings, thanks again Kirill :)
+
+v3: https://lore.kernel.org/lkml/20200804095035.18778-1-rppt@kernel.org
+* Squash kernel-parameters.txt update into the commit that added the
+  command line option.
+* Make uncached mode explicitly selectable by architectures. For now enable
+  it only on x86.
+
+v2: https://lore.kernel.org/lkml/20200727162935.31714-1-rppt@kernel.org
+* Follow Michael's suggestion and name the new system call 'memfd_secret'
+* Add kernel-parameters documentation about the boot option
+* Fix i386-tinyconfig regression reported by the kbuild bot.
+  CONFIG_SECRETMEM now depends on !EMBEDDED to disable it on small systems
+  from one side and still make it available unconditionally on
+  architectures that support SET_DIRECT_MAP.
+
+v1: https://lore.kernel.org/lkml/20200720092435.17469-1-rppt@kernel.org
+
+Mike Rapoport (8):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  set_memory: allow set_direct_map_*_noflush() for multiple pages
+  mm: introduce memfd_secret system call to create "secret" memory areas
+  arch, mm: wire up memfd_secret system call were relevant
+  mm: secretmem: use PMD-size pages to amortize direct map fragmentation
+  secretmem: test: add basic selftest for memfd_secret(2)
+  mm: secretmem: add ability to reserve memory at boot
+
+ arch/Kconfig                              |   7 +
+ arch/arm64/include/asm/cacheflush.h       |   4 +-
+ arch/arm64/include/asm/unistd.h           |   2 +-
+ arch/arm64/include/asm/unistd32.h         |   2 +
+ arch/arm64/include/uapi/asm/unistd.h      |   1 +
+ arch/arm64/mm/pageattr.c                  |  10 +-
+ arch/riscv/include/asm/set_memory.h       |   4 +-
+ arch/riscv/include/asm/unistd.h           |   1 +
+ arch/riscv/mm/pageattr.c                  |   8 +-
+ arch/x86/Kconfig                          |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl    |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ arch/x86/include/asm/set_memory.h         |   4 +-
+ arch/x86/mm/pat/set_memory.c              |   8 +-
+ fs/dax.c                                  |  11 +-
+ include/linux/pgtable.h                   |   3 +
+ include/linux/set_memory.h                |   4 +-
+ include/linux/syscalls.h                  |   1 +
+ include/uapi/asm-generic/unistd.h         |   7 +-
+ include/uapi/linux/magic.h                |   1 +
+ include/uapi/linux/secretmem.h            |   8 +
+ kernel/sys_ni.c                           |   2 +
+ mm/Kconfig                                |   4 +
+ mm/Makefile                               |   1 +
+ mm/gup.c                                  |  10 +
+ mm/internal.h                             |   3 +
+ mm/mmap.c                                 |   5 +-
+ mm/secretmem.c                            | 487 ++++++++++++++++++++++
+ mm/vmalloc.c                              |   5 +-
+ scripts/checksyscalls.sh                  |   4 +
+ tools/testing/selftests/vm/.gitignore     |   1 +
+ tools/testing/selftests/vm/Makefile       |   3 +-
+ tools/testing/selftests/vm/memfd_secret.c | 296 +++++++++++++
+ tools/testing/selftests/vm/run_vmtests    |  17 +
+ 34 files changed, 892 insertions(+), 35 deletions(-)
+ create mode 100644 include/uapi/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+ create mode 100644 tools/testing/selftests/vm/memfd_secret.c
+
+--
+2.28.0
