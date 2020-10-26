@@ -2,155 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD90299CB6
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033FD299CD8
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732107AbgJ0ABK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 20:01:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36438 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436475AbgJZX4b (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:56:31 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B63B221FC;
-        Mon, 26 Oct 2020 23:56:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756591;
-        bh=hOMLBQQT58cA7OMEtDBImp7k1w5J8R403kiK9y1wlcI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NTp/x4W+ar3g2YqQifEQLde0NTKjuwtk8DyCz7fOQ+CeeDOA383tS/OiKsXot2BNr
-         XrlSkeWmZpbZO/fThFdiENytU5TrOt+M0rQg/0IJFK3QagJR+6ynTZnA8TnmFDDCtt
-         8AbA5oFNLtki+9Zc43uB9KNQjQy0VizFL3J8yjwI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        George Cherian <george.cherian@marvell.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 62/80] asm-generic/io.h: Fix !CONFIG_GENERIC_IOMAP pci_iounmap() implementation
-Date:   Mon, 26 Oct 2020 19:54:58 -0400
-Message-Id: <20201026235516.1025100-62-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026235516.1025100-1-sashal@kernel.org>
-References: <20201026235516.1025100-1-sashal@kernel.org>
+        id S2437399AbgJ0ACH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 20:02:07 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:37095 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411091AbgJZX4R (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 19:56:17 -0400
+Received: by mail-pg1-f196.google.com with SMTP id h6so6983642pgk.4
+        for <linux-arch@vger.kernel.org>; Mon, 26 Oct 2020 16:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wqqvkA3oKUwkO5eXRPOBy8lXyQg0CiUtokie2wwagwI=;
+        b=ZWDgA8+yUlKx2dZgiyZDe66Bv6aQYo4o4sBrgULvsJ7L1mqryuSoN/tRsTLtRNf5gl
+         QA5GzgrsJ4IIXk6KefYiWNloPp5dTgRya5PAi5H2X1Ck5liCNMZ9plZFbXAFJkRhGENX
+         zRADl3Fzwzqt5UTeMExAEl9+J6C00UJYGVeM9r+kQpMj10I4tNzbDp+KUhpG26z8ohQ5
+         u9LGW1VxEtuEY5uYo6W0qmYrYYX9WPLdyfh3K/l7hHXtbXds+UPAtJe/6QdzpKUrKNEa
+         IHnev7OPcOoKpcEMuZBXfSj3e5H/bPp0SHxbMGuGbkkGN2ORlWbNlGQCKJOUg6Ub1kcx
+         WOrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wqqvkA3oKUwkO5eXRPOBy8lXyQg0CiUtokie2wwagwI=;
+        b=J3SaVBdSAwvCwGNcbHAB9JoRDRWvy6+ShyvfcVmm8C43muR/TKnSuKWoPqeq5iqEJZ
+         MbIvNY6lEJS+RwOrpT8iyh4Qkxt/Uiury2DEodGEUb1S2HBWOwgqrhh/CZp/C1SeHKkW
+         tHgvfofKLM9e8aA8zkJPWzZxHFi4345/fpEK1HKCkuOaaiAPQVQDvUSXH3by63xANHfh
+         yeWfXHCQ1ERXT9dq1TDgyRQxcAaiSEYAFLaotMIFleeaMXtRWNmwM00RDkelBM8pvDCN
+         6oBJ/JDtujzUFfpN/6/QuRTe+3NOrilvpJ6brDRQLfnjruJ6gWHsjJ4cYkqgN3rDrArE
+         6Apw==
+X-Gm-Message-State: AOAM531/y8RNyH8LIG4G7/kMQgg2rRmDGyn0+UNtCLKRec01PcyYlOoT
+        4eALRpYSJq6wuqjgYmplevwdTw==
+X-Google-Smtp-Source: ABdhPJzXWytxnG400Dp//klgHvFRu6jftuSrTTs7sW7oWyETnW8LM2mlLlQ2a53Jfzf5mLG9B/rX/w==
+X-Received: by 2002:a63:5f42:: with SMTP id t63mr569296pgb.0.1603756574857;
+        Mon, 26 Oct 2020 16:56:14 -0700 (PDT)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id s38sm3637009pgm.62.2020.10.26.16.56.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2020 16:56:14 -0700 (PDT)
+Subject: Re: [REGRESSION] mm: process_vm_readv testcase no longer works after
+ compat_prcoess_vm_readv removed
+To:     Kyle Huey <me@kylehuey.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Robert O'Callahan <robert@ocallahan.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "open list:FILESYSTEMS (VFS and infrastructure)" 
+        <linux-fsdevel@vger.kernel.org>, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <70d5569e-4ad6-988a-e047-5d12d298684c@kernel.dk>
+Date:   Mon, 26 Oct 2020 17:56:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On 10/26/20 4:55 PM, Kyle Huey wrote:
+> A test program from the rr[0] test suite, vm_readv_writev[1], no
+> longer works on 5.10-rc1 when compiled as a 32 bit binary and executed
+> on a 64 bit kernel. The first process_vm_readv call (on line 35) now
+> fails with EFAULT. I have bisected this to
+> c3973b401ef2b0b8005f8074a10e96e3ea093823.
+> 
+> It should be fairly straightforward to extract the test case from our
+> repository into a standalone program.
 
-[ Upstream commit f5810e5c329238b8553ebd98b914bdbefd8e6737 ]
+Can you check with this applied?
 
-For arches that do not select CONFIG_GENERIC_IOMAP, the current
-pci_iounmap() function does nothing causing obvious memory leaks
-for mapped regions that are backed by MMIO physical space.
+diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
+index fd12da80b6f2..05676722d9cd 100644
+--- a/mm/process_vm_access.c
++++ b/mm/process_vm_access.c
+@@ -273,7 +273,8 @@ static ssize_t process_vm_rw(pid_t pid,
+ 		return rc;
+ 	if (!iov_iter_count(&iter))
+ 		goto free_iov_l;
+-	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r, false);
++	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r,
++				in_compat_syscall());
+ 	if (IS_ERR(iov_r)) {
+ 		rc = PTR_ERR(iov_r);
+ 		goto free_iov_l;
 
-In order to detect if a mapped pointer is IO vs MMIO, a check must made
-available to the pci_iounmap() function so that it can actually detect
-whether the pointer has to be unmapped.
-
-In configurations where CONFIG_HAS_IOPORT_MAP && !CONFIG_GENERIC_IOMAP,
-a mapped port is detected using an ioport_map() stub defined in
-asm-generic/io.h.
-
-Use the same logic to implement a stub (ie __pci_ioport_unmap()) that
-detects if the passed in pointer in pci_iounmap() is IO vs MMIO to
-iounmap conditionally and call it in pci_iounmap() fixing the issue.
-
-Leave __pci_ioport_unmap() as a NOP for all other config options.
-
-Tested-by: George Cherian <george.cherian@marvell.com>
-Link: https://lore.kernel.org/lkml/20200905024811.74701-1-yangyingliang@huawei.com
-Link: https://lore.kernel.org/lkml/20200824132046.3114383-1-george.cherian@marvell.com
-Link: https://lore.kernel.org/r/a9daf8d8444d0ebd00bc6d64e336ec49dbb50784.1600254147.git.lorenzo.pieralisi@arm.com
-Reported-by: George Cherian <george.cherian@marvell.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: George Cherian <george.cherian@marvell.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/asm-generic/io.h | 39 +++++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index d02806513670c..5e6c4f375e0c3 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -887,18 +887,6 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
- #include <linux/vmalloc.h>
- #define __io_virt(x) ((void __force *)(x))
- 
--#ifndef CONFIG_GENERIC_IOMAP
--struct pci_dev;
--extern void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max);
--
--#ifndef pci_iounmap
--#define pci_iounmap pci_iounmap
--static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
--{
--}
--#endif
--#endif /* CONFIG_GENERIC_IOMAP */
--
- /*
-  * Change virtual addresses to physical addresses and vv.
-  * These are pretty trivial
-@@ -1013,6 +1001,16 @@ static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
- 	port &= IO_SPACE_LIMIT;
- 	return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
- }
-+#define __pci_ioport_unmap __pci_ioport_unmap
-+static inline void __pci_ioport_unmap(void __iomem *p)
-+{
-+	uintptr_t start = (uintptr_t) PCI_IOBASE;
-+	uintptr_t addr = (uintptr_t) p;
-+
-+	if (addr >= start && addr < start + IO_SPACE_LIMIT)
-+		return;
-+	iounmap(p);
-+}
- #endif
- 
- #ifndef ioport_unmap
-@@ -1027,6 +1025,23 @@ extern void ioport_unmap(void __iomem *p);
- #endif /* CONFIG_GENERIC_IOMAP */
- #endif /* CONFIG_HAS_IOPORT_MAP */
- 
-+#ifndef CONFIG_GENERIC_IOMAP
-+struct pci_dev;
-+extern void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max);
-+
-+#ifndef __pci_ioport_unmap
-+static inline void __pci_ioport_unmap(void __iomem *p) {}
-+#endif
-+
-+#ifndef pci_iounmap
-+#define pci_iounmap pci_iounmap
-+static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
-+{
-+	__pci_ioport_unmap(p);
-+}
-+#endif
-+#endif /* CONFIG_GENERIC_IOMAP */
-+
- /*
-  * Convert a virtual cached pointer to an uncached pointer
-  */
 -- 
-2.25.1
+Jens Axboe
 
