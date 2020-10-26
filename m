@@ -2,80 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A6D29987B
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 22:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE032999F7
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 23:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729477AbgJZVDQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 17:03:16 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:42764 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729469AbgJZVDQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 17:03:16 -0400
-Received: by mail-ej1-f66.google.com with SMTP id h24so15786240ejg.9;
-        Mon, 26 Oct 2020 14:03:15 -0700 (PDT)
+        id S2394912AbgJZWz1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 18:55:27 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:36679 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394902AbgJZWz0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 18:55:26 -0400
+Received: by mail-ed1-f67.google.com with SMTP id l16so11472173eds.3
+        for <linux-arch@vger.kernel.org>; Mon, 26 Oct 2020 15:55:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x4YhuX0iisDgAsM+KB7XaZtDcwmduQRIETDyGHldEjU=;
-        b=dhlcFomiQe2Cw+akZarQWRYDr++5ZEb89CcZI+NOfo9R/UWp964KuYA+8RGOwjPXQ9
-         XjqnGpUZDh7cJmgXkxuZ5mQyO3k18jU5mu93Bjl6PbP9JFla//6UGE3cbdZY8ACGUpmC
-         l3D4FUgNQhrpgoCeB4exyZ+DisL+nrL1ea6kGVzgT6HGdkjHRklgtw6QknDRzXhM4CoE
-         eLLj4uVgqMY6TLkuM0RhaMfmE9i7Hfnd5y06ONZJJPj8867XQpq146Px/oVP5WGMqH5r
-         cz92pkwrklXUvWXMOFRqAF2UMK4ia2N9gyokvflA4rIBkman4Ygi4xlykgzyt+XNT4fY
-         cJ+w==
+        d=kylehuey.com; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=J/+n1x0TPOHJCTfSVoXlG/q+OLrGnnNxrysZ0ZyIy+Y=;
+        b=JQw5fA5cqXZCTLCd2xkURV07bnYrA8gTT/8l9H7r6P+PgM37GQ7tblZcETghImepsU
+         AcI0oUILLNpw7+Lob5wOxm8oxXKZgdxlvk1iOdkoLk31eLVc1crb3sEhxCSb6bD2V31l
+         b7OGa6zHv0zDl28Z8OMcIxY0WvmVK7pWJSrW3Zs4sWifuxNiQ2iEW7pkdOAgHIEek3Fp
+         L3yESbOX+0gb8ueK46K6rtDj34b55Vtmz8U4fPoQ/Dv2vqBsFOJNMTpbG7mznOfR5TaL
+         kpOlREDICaBo0Xi3+x/a4pHYfGgO73EI5dQFmBZNKgKh2ry9/Y+FL54IAgbsbpnA0Xzm
+         BeOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x4YhuX0iisDgAsM+KB7XaZtDcwmduQRIETDyGHldEjU=;
-        b=uL9Trj+KuvHk58KDhNb8D95Y0lxVF5SkqE0KHGmOeQlX7NI4YAebE2FLm7lZvS8xs3
-         Ptn66KWryEuPORwPEGiDmJIwm6zzP/cjek+miYEYIQkwd6xVBEOLKFr6y13AQKXNa7Qi
-         DgQWdff7EaMgH7MjnypbXSTqkdMTlZJDTqnGenuRrXPI5yIjlF5enf0QGfbmUvYGBDvY
-         SAqJgu+/nRv5r258Bk5W3ArNa2Fiv+tal+oiA7fQ0PrVrFt5S1TBOGNB2SMGXXlNKgR6
-         +C6k0/VEmE+MnatQjIYOaMh4mP1A4EzwPByLc1RHAThjGvle4PioT8HkdoRy6V6+6xDv
-         farw==
-X-Gm-Message-State: AOAM533ATSSTkdPhUicQzujtWeI5F9LKZOadewOoBtviOEv62uAhy31b
-        E3BWQ3KFllT3Y2BSYtXrosk=
-X-Google-Smtp-Source: ABdhPJwZN46JVVhEyFSbvph2Bao2c9vtU78bgRVNWxuwUoXmoOwyGiqVXtA1Gre5FyQKkcBTcLMVWQ==
-X-Received: by 2002:a17:906:3e91:: with SMTP id a17mr17421048ejj.82.1603746194313;
-        Mon, 26 Oct 2020 14:03:14 -0700 (PDT)
-Received: from ltop.local ([2a02:a03f:b7fe:f700:19a8:8f98:6135:ae35])
-        by smtp.gmail.com with ESMTPSA id a1sm5862160edk.52.2020.10.26.14.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 14:03:13 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 22:03:12 +0100
-From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>,
-        Christoph Lameter <cl@linux.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: percpu: avoid Wshadow warning
-Message-ID: <20201026210312.byq3mdo4e2ei6ee2@ltop.local>
-References: <20201026155353.3702892-1-arnd@kernel.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=J/+n1x0TPOHJCTfSVoXlG/q+OLrGnnNxrysZ0ZyIy+Y=;
+        b=EmkCU3h6JXEot+/LRfXm0nmui+3GD5TalkMztqMEuv3A82WvtpQAUn5JHiLRrCUwLb
+         ss27SPWzquOk7vIzbJ+b3htQw47h6kM9wnzpRNiuFHJ5rrX+CAPRmRztAonMgrG9Pa/a
+         GgV95fnZGJfY+lcmrzJNzXmHV7u6MdiV/pjrDzeWTOkMfVbkjnuMTL+638JWXvEbc9D2
+         Tff3RPzrYUAsAOmsOt0ENG0k0PGq8lrcOcNztxmoy8k+BkPuCMXQYIPMvrCntlciNmxO
+         qQkyBVv5KcY9tEuggXwI+lID/pQ3JbRnpchxVehM84UA7Gk26YbjGSpvLeoEDK4Jy+Xk
+         TSIQ==
+X-Gm-Message-State: AOAM530Xg5S48Yymjljz8lUCeRUAl51Q8DY7/xIz87NocJ6Rq+dAwv0L
+        VULmmIFnhyt48NrOrHmVt9++GvvxuLDH/IknpUe6lg==
+X-Google-Smtp-Source: ABdhPJyAci+5cM2zXs7C2dh5O8VDIKXSp+LVa6rVM/MPlgy6tZLvyXi43c6iWM9w5BW9l3CIsdr5O5Od75OK4rN9ByQ=
+X-Received: by 2002:aa7:d9ce:: with SMTP id v14mr12828586eds.203.1603752924617;
+ Mon, 26 Oct 2020 15:55:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201026155353.3702892-1-arnd@kernel.org>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Mon, 26 Oct 2020 15:55:13 -0700
+Message-ID: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
+Subject: [REGRESSION] mm: process_vm_readv testcase no longer works after
+ compat_prcoess_vm_readv removed
+To:     open list <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "Robert O'Callahan" <robert@ocallahan.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "open list:FILESYSTEMS (VFS and infrastructure)" 
+        <linux-fsdevel@vger.kernel.org>, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 04:53:48PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Nesting macros that use the same local variable names causes
-> warnings when building with "make W=2":
-> 
-> include/asm-generic/percpu.h:117:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
-> include/asm-generic/percpu.h:126:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
-> 
-> These are fairly harmless, but since the warning comes from
-> a global header, the warning happens every time the headers
-> are included, which is fairly annoying.
-> 
-> Rename the variables to avoid shadowing and shut up the warning.
+A test program from the rr[0] test suite, vm_readv_writev[1], no
+longer works on 5.10-rc1 when compiled as a 32 bit binary and executed
+on a 64 bit kernel. The first process_vm_readv call (on line 35) now
+fails with EFAULT. I have bisected this to
+c3973b401ef2b0b8005f8074a10e96e3ea093823.
 
-Looks good to me. Fell free to add my:
+It should be fairly straightforward to extract the test case from our
+repository into a standalone program.
 
-Reviewed-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+- Kyle
+
+[0] https://rr-project.org/
+[1] https://github.com/mozilla/rr/blob/master/src/test/vm_readv_writev.c
