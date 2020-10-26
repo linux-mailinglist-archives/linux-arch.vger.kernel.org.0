@@ -2,276 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA7A298C49
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 12:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716DA298CDF
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 13:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1774056AbgJZLuo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 07:50:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:36538 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1774022AbgJZLuQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Oct 2020 07:50:16 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E46B1474;
-        Mon, 26 Oct 2020 04:50:15 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 286993F719;
-        Mon, 26 Oct 2020 04:50:14 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v4 5/5] kselftest: Extend vdso correctness test to clock_gettime64
-Date:   Mon, 26 Oct 2020 11:49:45 +0000
-Message-Id: <20201026114945.48532-6-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201026114945.48532-1-vincenzo.frascino@arm.com>
-References: <20201026114945.48532-1-vincenzo.frascino@arm.com>
+        id S1775120AbgJZM3h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 08:29:37 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:46782 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1775119AbgJZM3g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 08:29:36 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j21so2690120ota.13;
+        Mon, 26 Oct 2020 05:29:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0trfHgi8OBfd5iB69j5LL8jeOJ1Nb/421IvjhePhaus=;
+        b=P+zlDX8Hgk/S9xxcgd506ahxBtu8rxysyBTc4iPdrjvaUKbAIYNXAzklq2sAXHfcdT
+         4zOl+sJ2I4EsX+ysfwgaFtIp72UAzGYVSLOPvF+7rEaf7n2sNg49vN9xroPjX9W7ix/w
+         WE4/Am7rq952ISK+5wgv41hBKbfGPpC12JbSi0QdtNGx3Z24DWvMShNR6iLwpMmIld/V
+         Cl3vz8QU7l24bWJe5h+7EEnnfzMMNiE2I3HTK173CU7NJkOwH2R7GA/Cp9j8Ft8XvQ3O
+         NS6eW1NQBUzx0XKvJy/3hq0kCaG9seTK3IeK/3Rzb0LxjhtrTxyU0xRs1LlbIkzZmDnW
+         y5xg==
+X-Gm-Message-State: AOAM531eY9L/FwrZLkaV9J3oHAKbC/BsZQCvHwKqpupJ1LbS0AUInOks
+        1iPCyBSNeiZM0MrFucyCj7d0TsG3BsDmzzs2Luw=
+X-Google-Smtp-Source: ABdhPJyBweNoUQCltnRnsquxLRWEfPnJGEis2BPFL9CWHQhByaLq9YhLr+yqM3AxsL8UQGje3+jKX3bZuCidiISTg8s=
+X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr13055312otc.145.1603715374142;
+ Mon, 26 Oct 2020 05:29:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200821194310.3089815-1-keescook@chromium.org> <20200821194310.3089815-14-keescook@chromium.org>
+In-Reply-To: <20200821194310.3089815-14-keescook@chromium.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 26 Oct 2020 13:29:22 +0100
+Message-ID: <CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com>
+Subject: Re: [PATCH v6 13/29] arm64/build: Assert for unwanted sections
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the release of Linux 5.1 has been added a new syscall,
-clock_gettime64, that provided a 64 bit time value for a specified
-clock_ID to make the kernel Y2038 safe on 32 bit architectures.
+Hi Kees,
 
-Extend the vdso correctness test to cover the newly exposed vdso
-function.
+On Fri, Aug 21, 2020 at 9:56 PM Kees Cook <keescook@chromium.org> wrote:
+> In preparation for warning on orphan sections, discard
+> unwanted non-zero-sized generated sections, and enforce other
+> expected-to-be-zero-sized sections (since discarding them might hide
+> problems with them suddenly gaining unexpected entries).
+>
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- tools/testing/selftests/vDSO/vdso_config.h    |   4 +-
- .../selftests/vDSO/vdso_test_correctness.c    | 115 +++++++++++++++++-
- 2 files changed, 115 insertions(+), 4 deletions(-)
+This is now commit be2881824ae9eb92 ("arm64/build: Assert for unwanted
+sections") in v5.10-rc1, and is causing the following error with
+renesas_defconfig[1]:
 
-diff --git a/tools/testing/selftests/vDSO/vdso_config.h b/tools/testing/selftests/vDSO/vdso_config.h
-index eeb725df6045..6a6fe8d4ff55 100644
---- a/tools/testing/selftests/vDSO/vdso_config.h
-+++ b/tools/testing/selftests/vDSO/vdso_config.h
-@@ -66,12 +66,13 @@ static const char *versions[6] = {
- 	"LINUX_4.15",
- };
- 
--static const char *names[2][5] = {
-+static const char *names[2][6] = {
- 	{
- 		"__kernel_gettimeofday",
- 		"__kernel_clock_gettime",
- 		"__kernel_time",
- 		"__kernel_clock_getres",
-+		"__kernel_getcpu",
- #if defined(VDSO_32BIT)
- 		"__kernel_clock_gettime64",
- #endif
-@@ -81,6 +82,7 @@ static const char *names[2][5] = {
- 		"__vdso_clock_gettime",
- 		"__vdso_time",
- 		"__vdso_clock_getres",
-+		"__vdso_getcpu",
- #if defined(VDSO_32BIT)
- 		"__vdso_clock_gettime64",
- #endif
-diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-index 42052db0f870..5029ef9b228c 100644
---- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-@@ -19,6 +19,10 @@
- #include <stdbool.h>
- #include <limits.h>
- 
-+#include "vdso_config.h"
-+
-+static const char **name;
-+
- #ifndef SYS_getcpu
- # ifdef __x86_64__
- #  define SYS_getcpu 309
-@@ -27,6 +31,17 @@
- # endif
- #endif
- 
-+#ifndef __NR_clock_gettime64
-+#define __NR_clock_gettime64	403
-+#endif
-+
-+#ifndef __kernel_timespec
-+struct __kernel_timespec {
-+	long long	tv_sec;
-+	long long	tv_nsec;
-+};
-+#endif
-+
- /* max length of lines in /proc/self/maps - anything longer is skipped here */
- #define MAPS_LINE_LEN 128
- 
-@@ -36,6 +51,10 @@ typedef int (*vgettime_t)(clockid_t, struct timespec *);
- 
- vgettime_t vdso_clock_gettime;
- 
-+typedef int (*vgettime64_t)(clockid_t, struct __kernel_timespec *);
-+
-+vgettime64_t vdso_clock_gettime64;
-+
- typedef long (*vgtod_t)(struct timeval *tv, struct timezone *tz);
- 
- vgtod_t vdso_gettimeofday;
-@@ -99,17 +118,23 @@ static void fill_function_pointers()
- 		return;
- 	}
- 
--	vdso_getcpu = (getcpu_t)dlsym(vdso, "__vdso_getcpu");
-+	vdso_getcpu = (getcpu_t)dlsym(vdso, name[4]);
- 	if (!vdso_getcpu)
- 		printf("Warning: failed to find getcpu in vDSO\n");
- 
- 	vgetcpu = (getcpu_t) vsyscall_getcpu();
- 
--	vdso_clock_gettime = (vgettime_t)dlsym(vdso, "__vdso_clock_gettime");
-+	vdso_clock_gettime = (vgettime_t)dlsym(vdso, name[1]);
- 	if (!vdso_clock_gettime)
- 		printf("Warning: failed to find clock_gettime in vDSO\n");
- 
--	vdso_gettimeofday = (vgtod_t)dlsym(vdso, "__vdso_gettimeofday");
-+#if defined(VDSO_32BIT)
-+	vdso_clock_gettime64 = (vgettime64_t)dlsym(vdso, name[5]);
-+	if (!vdso_clock_gettime64)
-+		printf("Warning: failed to find clock_gettime64 in vDSO\n");
-+#endif
-+
-+	vdso_gettimeofday = (vgtod_t)dlsym(vdso, name[0]);
- 	if (!vdso_gettimeofday)
- 		printf("Warning: failed to find gettimeofday in vDSO\n");
- 
-@@ -126,6 +151,11 @@ static inline int sys_clock_gettime(clockid_t id, struct timespec *ts)
- 	return syscall(__NR_clock_gettime, id, ts);
- }
- 
-+static inline int sys_clock_gettime64(clockid_t id, struct __kernel_timespec *ts)
-+{
-+	return syscall(__NR_clock_gettime64, id, ts);
-+}
-+
- static inline int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
- {
- 	return syscall(__NR_gettimeofday, tv, tz);
-@@ -191,6 +221,15 @@ static bool ts_leq(const struct timespec *a, const struct timespec *b)
- 		return a->tv_nsec <= b->tv_nsec;
- }
- 
-+static bool ts64_leq(const struct __kernel_timespec *a,
-+		     const struct __kernel_timespec *b)
-+{
-+	if (a->tv_sec != b->tv_sec)
-+		return a->tv_sec < b->tv_sec;
-+	else
-+		return a->tv_nsec <= b->tv_nsec;
-+}
-+
- static bool tv_leq(const struct timeval *a, const struct timeval *b)
- {
- 	if (a->tv_sec != b->tv_sec)
-@@ -254,7 +293,10 @@ static void test_one_clock_gettime(int clock, const char *name)
- 	if (!ts_leq(&start, &vdso) || !ts_leq(&vdso, &end)) {
- 		printf("[FAIL]\tTimes are out of sequence\n");
- 		nerrs++;
-+		return;
- 	}
-+
-+	printf("[OK]\tTest Passed.\n");
- }
- 
- static void test_clock_gettime(void)
-@@ -275,6 +317,70 @@ static void test_clock_gettime(void)
- 	test_one_clock_gettime(INT_MAX, "invalid");
- }
- 
-+static void test_one_clock_gettime64(int clock, const char *name)
-+{
-+	struct __kernel_timespec start, vdso, end;
-+	int vdso_ret, end_ret;
-+
-+	printf("[RUN]\tTesting clock_gettime64 for clock %s (%d)...\n", name, clock);
-+
-+	if (sys_clock_gettime64(clock, &start) < 0) {
-+		if (errno == EINVAL) {
-+			vdso_ret = vdso_clock_gettime64(clock, &vdso);
-+			if (vdso_ret == -EINVAL) {
-+				printf("[OK]\tNo such clock.\n");
-+			} else {
-+				printf("[FAIL]\tNo such clock, but __vdso_clock_gettime64 returned %d\n", vdso_ret);
-+				nerrs++;
-+			}
-+		} else {
-+			printf("[WARN]\t clock_gettime64(%d) syscall returned error %d\n", clock, errno);
-+		}
-+		return;
-+	}
-+
-+	vdso_ret = vdso_clock_gettime64(clock, &vdso);
-+	end_ret = sys_clock_gettime64(clock, &end);
-+
-+	if (vdso_ret != 0 || end_ret != 0) {
-+		printf("[FAIL]\tvDSO returned %d, syscall errno=%d\n",
-+		       vdso_ret, errno);
-+		nerrs++;
-+		return;
-+	}
-+
-+	printf("\t%llu.%09ld %llu.%09ld %llu.%09ld\n",
-+	       (unsigned long long)start.tv_sec, start.tv_nsec,
-+	       (unsigned long long)vdso.tv_sec, vdso.tv_nsec,
-+	       (unsigned long long)end.tv_sec, end.tv_nsec);
-+
-+	if (!ts64_leq(&start, &vdso) || !ts64_leq(&vdso, &end)) {
-+		printf("[FAIL]\tTimes are out of sequence\n");
-+		nerrs++;
-+		return;
-+	}
-+
-+	printf("[OK]\tTest Passed.\n");
-+}
-+
-+static void test_clock_gettime64(void)
-+{
-+	if (!vdso_clock_gettime64) {
-+		printf("[SKIP]\tNo vDSO, so skipping clock_gettime64() tests\n");
-+		return;
-+	}
-+
-+	for (int clock = 0; clock < sizeof(clocknames) / sizeof(clocknames[0]);
-+	     clock++) {
-+		test_one_clock_gettime64(clock, clocknames[clock]);
-+	}
-+
-+	/* Also test some invalid clock ids */
-+	test_one_clock_gettime64(-1, "invalid");
-+	test_one_clock_gettime64(INT_MIN, "invalid");
-+	test_one_clock_gettime64(INT_MAX, "invalid");
-+}
-+
- static void test_gettimeofday(void)
- {
- 	struct timeval start, vdso, end;
-@@ -327,9 +433,12 @@ static void test_gettimeofday(void)
- 
- int main(int argc, char **argv)
- {
-+	name = (const char **)&names[VDSO_NAMES];
-+
- 	fill_function_pointers();
- 
- 	test_clock_gettime();
-+	test_clock_gettime64();
- 	test_gettimeofday();
- 
- 	/*
--- 
-2.28.0
+    aarch64-linux-gnu-ld: warning: orphan section `.eh_frame' from
+`kernel/bpf/core.o' being placed in section `.eh_frame'
+    aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+    aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
 
+I cannot reproduce this with the standard arm64 defconfig.
+
+I bisected the error to the aforementioned commit, but understand this
+is not the real reason.  If I revert this commit, I still get:
+
+    aarch64-linux-gnu-ld: warning: orphan section `.got.plt' from
+`arch/arm64/kernel/head.o' being placed in section `.got.plt'
+    aarch64-linux-gnu-ld: warning: orphan section `.plt' from
+`arch/arm64/kernel/head.o' being placed in section `.plt'
+    aarch64-linux-gnu-ld: warning: orphan section `.data.rel.ro' from
+`arch/arm64/kernel/head.o' being placed in section `.data.rel.ro'
+    aarch64-linux-gnu-ld: warning: orphan section `.eh_frame' from
+`kernel/bpf/core.o' being placed in section `.eh_frame'
+
+I.e. including the ".eh_frame" warning. I have tried bisecting that
+warning (i.e. with be2881824ae9eb92 reverted), but that leads me to
+commit b3e5d80d0c48c0cc ("arm64/build: Warn on orphan section
+placement"), which is another red herring.
+
+Note that even on plain be2881824ae9eb92, I get:
+
+    aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+    aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+
+The parent commit obviously doesn't show that (but probably still has
+the problem).
+
+Do you have a clue!
+
+Thanks!
+
+> --- a/arch/arm64/kernel/vmlinux.lds.S
+> +++ b/arch/arm64/kernel/vmlinux.lds.S
+> @@ -121,6 +121,14 @@ SECTIONS
+>                 *(.got)                 /* Global offset table          */
+>         }
+>
+> +       /*
+> +        * Make sure that the .got.plt is either completely empty or it
+> +        * contains only the lazy dispatch entries.
+> +        */
+> +       .got.plt : { *(.got.plt) }
+> +       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+> +              "Unexpected GOT/PLT entries detected!")
+> +
+>         . = ALIGN(SEGMENT_ALIGN);
+>         _etext = .;                     /* End of text section */
+>
+> @@ -243,6 +251,18 @@ SECTIONS
+>         ELF_DETAILS
+>
+>         HEAD_SYMBOLS
+> +
+> +       /*
+> +        * Sections that should stay zero sized, which is safer to
+> +        * explicitly check instead of blindly discarding.
+> +        */
+> +       .plt : {
+> +               *(.plt) *(.plt.*) *(.iplt) *(.igot)
+> +       }
+> +       ASSERT(SIZEOF(.plt) == 0, "Unexpected run-time procedure linkages detected!")
+> +
+> +       .data.rel.ro : { *(.data.rel.ro) }
+> +       ASSERT(SIZEOF(.data.rel.ro) == 0, "Unexpected RELRO detected!")
+>  }
+>
+>  #include "image-vars.h"
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=topic/renesas-defconfig
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
