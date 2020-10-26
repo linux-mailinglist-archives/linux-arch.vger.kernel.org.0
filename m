@@ -2,238 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CF32996A9
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 20:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A6D29987B
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 22:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783358AbgJZTSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 15:18:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:49982 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1773370AbgJZTSb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Oct 2020 15:18:31 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14203139F;
-        Mon, 26 Oct 2020 12:18:30 -0700 (PDT)
-Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5CA63F66E;
-        Mon, 26 Oct 2020 12:18:28 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 19:18:26 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/4] arm64: Export id_aar64fpr0 via sysfs
-Message-ID: <20201026191826.6iuufbti2dyatg2s@e107158-lin>
-References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-5-qais.yousef@arm.com>
- <63fead90e91e08a1b173792b06995765@kernel.org>
- <20201021121559.GB3976@gaia>
- <20201021144112.GA17912@willie-the-truck>
- <20201022134752.wtcdkbi4fjn2blh6@e107158-lin>
- <20201022135559.GB1788090@kroah.com>
- <20201026190250.aktgow74haieek7v@e107158-lin>
- <20201026190805.GA897386@kroah.com>
+        id S1729477AbgJZVDQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 17:03:16 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:42764 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729469AbgJZVDQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 17:03:16 -0400
+Received: by mail-ej1-f66.google.com with SMTP id h24so15786240ejg.9;
+        Mon, 26 Oct 2020 14:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=x4YhuX0iisDgAsM+KB7XaZtDcwmduQRIETDyGHldEjU=;
+        b=dhlcFomiQe2Cw+akZarQWRYDr++5ZEb89CcZI+NOfo9R/UWp964KuYA+8RGOwjPXQ9
+         XjqnGpUZDh7cJmgXkxuZ5mQyO3k18jU5mu93Bjl6PbP9JFla//6UGE3cbdZY8ACGUpmC
+         l3D4FUgNQhrpgoCeB4exyZ+DisL+nrL1ea6kGVzgT6HGdkjHRklgtw6QknDRzXhM4CoE
+         eLLj4uVgqMY6TLkuM0RhaMfmE9i7Hfnd5y06ONZJJPj8867XQpq146Px/oVP5WGMqH5r
+         cz92pkwrklXUvWXMOFRqAF2UMK4ia2N9gyokvflA4rIBkman4Ygi4xlykgzyt+XNT4fY
+         cJ+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x4YhuX0iisDgAsM+KB7XaZtDcwmduQRIETDyGHldEjU=;
+        b=uL9Trj+KuvHk58KDhNb8D95Y0lxVF5SkqE0KHGmOeQlX7NI4YAebE2FLm7lZvS8xs3
+         Ptn66KWryEuPORwPEGiDmJIwm6zzP/cjek+miYEYIQkwd6xVBEOLKFr6y13AQKXNa7Qi
+         DgQWdff7EaMgH7MjnypbXSTqkdMTlZJDTqnGenuRrXPI5yIjlF5enf0QGfbmUvYGBDvY
+         SAqJgu+/nRv5r258Bk5W3ArNa2Fiv+tal+oiA7fQ0PrVrFt5S1TBOGNB2SMGXXlNKgR6
+         +C6k0/VEmE+MnatQjIYOaMh4mP1A4EzwPByLc1RHAThjGvle4PioT8HkdoRy6V6+6xDv
+         farw==
+X-Gm-Message-State: AOAM533ATSSTkdPhUicQzujtWeI5F9LKZOadewOoBtviOEv62uAhy31b
+        E3BWQ3KFllT3Y2BSYtXrosk=
+X-Google-Smtp-Source: ABdhPJwZN46JVVhEyFSbvph2Bao2c9vtU78bgRVNWxuwUoXmoOwyGiqVXtA1Gre5FyQKkcBTcLMVWQ==
+X-Received: by 2002:a17:906:3e91:: with SMTP id a17mr17421048ejj.82.1603746194313;
+        Mon, 26 Oct 2020 14:03:14 -0700 (PDT)
+Received: from ltop.local ([2a02:a03f:b7fe:f700:19a8:8f98:6135:ae35])
+        by smtp.gmail.com with ESMTPSA id a1sm5862160edk.52.2020.10.26.14.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2020 14:03:13 -0700 (PDT)
+Date:   Mon, 26 Oct 2020 22:03:12 +0100
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] asm-generic: percpu: avoid Wshadow warning
+Message-ID: <20201026210312.byq3mdo4e2ei6ee2@ltop.local>
+References: <20201026155353.3702892-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201026190805.GA897386@kroah.com>
+In-Reply-To: <20201026155353.3702892-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/26/20 20:08, Greg Kroah-Hartman wrote:
-> On Mon, Oct 26, 2020 at 07:02:50PM +0000, Qais Yousef wrote:
-> > On 10/22/20 15:55, Greg Kroah-Hartman wrote:
-> > > On Thu, Oct 22, 2020 at 02:47:52PM +0100, Qais Yousef wrote:
-> > > > On 10/21/20 15:41, Will Deacon wrote:
-> > > > > > We already expose MIDR and REVIDR via the current sysfs interface. We
-> > > > > > can expand it to include _all_ the other ID_* regs currently available
-> > > > > > to user via the MRS emulation and we won't have to debate what a new
-> > > > > > interface would look like. The MRS emulation and the sysfs info should
-> > > > > > probably match, though that means we need to expose the
-> > > > > > ID_AA64PFR0_EL1.EL0 field which we currently don't.
-> > > > > > 
-> > > > > > I do agree that an AArch32 cpumask is an easier option both from the
-> > > > > > kernel implementation perspective and from the application usability
-> > > > > > one, though not as easy as automatic task placement by the scheduler (my
-> > > > > > first preference, followed by the id_* regs and the aarch32 mask, though
-> > > > > > not a strong preference for any).
-> > > > > 
-> > > > > If a cpumask is easier to implement and easier to use, then I think that's
-> > > > > what we should do. It's also then dead easy to disable if necessary by
-> > > > > just returning 0. The only alternative I would prefer is not having to
-> > > > > expose this information altogether, but I'm not sure that figuring this
-> > > > > out from MIDR/REVIDR alone is reliable.
-> > > > 
-> > > > So the mask idea is about adding a new
-> > > > 
-> > > > 	/sys/devices/system/cpu/aarch32_cpus
-> > > > 
-> > > > ?
-> > > 
-> > > Is this a file, a directory, or what?  What's the contents?
-> > > 
-> > > Without any of that, I have no idea if it's "ok" or not...
-> > 
-> > Hopefully the below patch explains better. Note that I added the new attribute
-> > to driver/base/cpu.c, but assuming we will still want to go down this route, we
-> > will need a generic way for archs to add their attributes to
-> > /sys/devices/system/cpu/.
-> > 
-> > Something like having a special define for archs to append their own
-> > attributes list
-> > 
-> > 	#define SYSFS_SYSTEM_CPU_ARCH_ATTRIBUTES
-> > 
-> > Or probably there's a way to add this file (attribute) dynamically from arch
-> > code that I just didn't figure out how to do yet.
+On Mon, Oct 26, 2020 at 04:53:48PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Please do that, sysfs files should not be present when the information
-> is not needed from them.  Look at the is_visible() callback for the
-> attribute for how to do it.
-
-Okay, thanks for the hint. Will look at that.
-
-> > 
-> > Thanks
-> > 
-> > --
-> > Qais Yousef
-> > 
-> > 
-> > ---------->8------------
-> > 
-> > >From 96dfdfdacb2a26a60ba19051e8c72e839eb5408b Mon Sep 17 00:00:00 2001
-> > From: Qais Yousef <qais.yousef@arm.com>
-> > Date: Mon, 26 Oct 2020 16:33:32 +0000
-> > Subject: [PATCH] arm64: export aarch32_online mask in sysfs
-> > 
-> > This patch to be applied on top of arm64 Asymmetric AArch32 support.
-> > 
-> > It explores the option of exporting the AArch32 capable cpus as a mask
-> > on sysfs.
-> > 
-> > This is to help drive the discussion on the API before sending the next
-> > version which I yet to address some of the review comments.
-> > 
-> > The output looks like:
-> > 
-> > 	# cat /sys/devices/system/cpu/aarch32_online
-> > 	0-5
-> > 
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-devices-system-cpu |  7 +++++++
-> >  arch/arm64/include/asm/cpufeature.h                |  2 ++
-> >  arch/arm64/kernel/cpufeature.c                     |  8 ++++++++
-> >  drivers/base/cpu.c                                 | 12 ++++++++++++
-> >  4 files changed, 29 insertions(+)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> > index b555df825447..9ccb5c3f5ee3 100644
-> > --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> > +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> > @@ -36,6 +36,13 @@ Description:	CPU topology files that describe kernel limits related to
-> >  
-> >  		See Documentation/admin-guide/cputopology.rst for more information.
-> >  
-> > +What:		/sys/devices/system/cpu/aarch32_online
-> > +Date:		October 2020
-> > +Contact:	Linux ARM Kernel Mailing list <linux-arm-kernel@lists.infradead.org>
-> > +Description:	CPU topology file that describes which cpus support AArch32 at
-> > +		EL0. Only available on arm64.
-> > +
-> > +		The value is updated when a cpu becomes online then sticks.
+> Nesting macros that use the same local variable names causes
+> warnings when building with "make W=2":
 > 
-> What does "then sticks" mean?
-
-Was thinking like a sticky bit.
-
-When a cpu becomes online and we discover that it is aarch32 capable, we set
-the bit. But never clear it again if the cpu goes offline later.
-
-I'll reword it.
-
+> include/asm-generic/percpu.h:117:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
+> include/asm-generic/percpu.h:126:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
 > 
+> These are fairly harmless, but since the warning comes from
+> a global header, the warning happens every time the headers
+> are included, which is fairly annoying.
 > 
-> >  
-> >  What:		/sys/devices/system/cpu/probe
-> >  		/sys/devices/system/cpu/release
-> > diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> > index 2b87f17b2bd4..edd18002ad81 100644
-> > --- a/arch/arm64/include/asm/cpufeature.h
-> > +++ b/arch/arm64/include/asm/cpufeature.h
-> > @@ -380,6 +380,8 @@ cpucap_multi_entry_cap_matches(const struct arm64_cpu_capabilities *entry,
-> >  	return false;
-> >  }
-> >  
-> > +extern cpumask_t aarch32_el0_mask;
-> > +
-> >  extern DECLARE_BITMAP(cpu_hwcaps, ARM64_NCAPS);
-> >  extern struct static_key_false cpu_hwcap_keys[ARM64_NCAPS];
-> >  extern struct static_key_false arm64_const_caps_ready;
-> > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> > index 0f7307c8ad80..662bbc2b15cd 100644
-> > --- a/arch/arm64/kernel/cpufeature.c
-> > +++ b/arch/arm64/kernel/cpufeature.c
-> > @@ -1723,6 +1723,13 @@ cpucap_panic_on_conflict(const struct arm64_cpu_capabilities *cap)
-> >  	return !!(cap->type & ARM64_CPUCAP_PANIC_ON_CONFLICT);
-> >  }
-> >  
-> > +cpumask_t aarch32_el0_mask;
-> > +static void cpu_enable_aarch32_el0(struct arm64_cpu_capabilities const *cap)
-> > +{
-> > +	if (has_cpuid_feature(cap, SCOPE_LOCAL_CPU))
-> > +		cpumask_set_cpu(smp_processor_id(), &aarch32_el0_mask);
-> > +}
-> > +
-> >  static const struct arm64_cpu_capabilities arm64_features[] = {
-> >  	{
-> >  		.desc = "GIC system register CPU interface",
-> > @@ -1809,6 +1816,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
-> >  	{
-> >  		.capability = ARM64_HAS_ASYM_32BIT_EL0,
-> >  		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
-> > +		.cpu_enable = cpu_enable_aarch32_el0,
-> >  		.matches = has_cpuid_feature,
-> >  		.sys_reg = SYS_ID_AA64PFR0_EL1,
-> >  		.sign = FTR_UNSIGNED,
-> > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> > index d2136ab9b14a..569baacde508 100644
-> > --- a/drivers/base/cpu.c
-> > +++ b/drivers/base/cpu.c
-> > @@ -459,6 +459,15 @@ EXPORT_SYMBOL_GPL(cpu_device_create);
-> >  static DEVICE_ATTR(modalias, 0444, print_cpu_modalias, NULL);
-> >  #endif
-> >  
-> > +#ifdef CONFIG_ARM64
-> > +static ssize_t print_aarch32_online(struct device *dev,
-> > +				       struct device_attribute *attr, char *buf)
-> > +{
-> > +	return cpumap_print_to_pagebuf(true, buf, &aarch32_el0_mask);
-> > +}
-> > +static DEVICE_ATTR(aarch32_online, 0444, print_aarch32_online, NULL);
-> 
-> DEVICE_ATTR_RO()?
+> Rename the variables to avoid shadowing and shut up the warning.
 
-Indeed.
+Looks good to me. Fell free to add my:
 
-> 
-> > +#endif
-> 
-> Hah, no, no arch-specific stuff in here, sorry.  Please do this properly
-> in your arch-specific code only.
-
-Of course. It was just to see this is okay. Let me figure out how to clean this
-up.
-
-Thanks!
-
---
-Qais Yousef
+Reviewed-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
