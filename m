@@ -2,178 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0625299465
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 18:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8B52994CC
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Oct 2020 19:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1781412AbgJZRxP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 13:53:15 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34705 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1781399AbgJZRxP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 13:53:15 -0400
-Received: by mail-ot1-f66.google.com with SMTP id k3so8214056otp.1;
-        Mon, 26 Oct 2020 10:53:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aSP7w6hGOtdU2uA5tvPlkM6OwSpoT9pVdwMoOdt+1fQ=;
-        b=Cv+rJF6Y4NZozdmD79G0UFQ60mhIHnJF0O4c0Gd7Jj6j+JEWuL4KtrydHy0foChe6o
-         csZItIZpCP19LoNHVzX9sszguH31MGDTBZgBHNKITG4V5QwyzV1xv8EJqHpUJKSmdUiV
-         KWgZJSdjzX6lERZ1j421wHnYePNW/chWC4a4yKUC2MGTlfV9vjrWTFHEjhoiuGLcjjnL
-         1hlqz1XDQWuOWfe1fe9bX+zVzCKh1DdOpw0rrcItcVH45XpwzcSFfubXXk67S2k8K0VP
-         EMbSnzc5TF8BxGS1381+l7Zfq7HkGPSF9gBIz8KNSeNZq/mPyleoGslPUVsAFQ+HTQXU
-         T/pA==
-X-Gm-Message-State: AOAM5328KH5k6U0t5G2xX1pfiVmbWUWJEfkEnxHOTFC9yqfv9xgc4sbV
-        ZUOfxT3ow+s7nl4v9ffEXLeWKez2yxG8GPendlw=
-X-Google-Smtp-Source: ABdhPJzyLS3lSQG+HGr+V6jPcJm2j+7DqH4t1c+0Dyl/dUwUJFnTsFRRuWj5SDZDmDC54eq2tej3wmmsezKdR5Pt/uo=
-X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr14302905otc.145.1603734793886;
- Mon, 26 Oct 2020 10:53:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200821194310.3089815-1-keescook@chromium.org>
- <20200821194310.3089815-14-keescook@chromium.org> <CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com>
- <CAMuHMdUw9KwC=EVB60yjg7mA7Fg-efOiKE7577p+uEdGJVS2OQ@mail.gmail.com>
- <CAMuHMdUJFEt3LxWHk73AsLDGhjzBvJGAML76UAxeGzb4zOf96w@mail.gmail.com>
- <CAMj1kXHXk3BX6mz6X_03sj_pSLj9Ck-=1S57tV3__N9JQOcDEw@mail.gmail.com>
- <CAMuHMdV4jKccjKkoj38EFC-5yN99pBvthFyrX81EG4GpassZwA@mail.gmail.com> <CAKwvOdkq3ZwW+FEui1Wtj_dWBevi0Mrt4fHa4oiMZTUZKOMi3g@mail.gmail.com>
-In-Reply-To: <CAKwvOdkq3ZwW+FEui1Wtj_dWBevi0Mrt4fHa4oiMZTUZKOMi3g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 26 Oct 2020 18:53:02 +0100
-Message-ID: <CAMuHMdX+PSdT02jxA+dJCjyT5Kktn+NnVsk0563XCLnn1fazgQ@mail.gmail.com>
-Subject: Re: [PATCH v6 13/29] arm64/build: Assert for unwanted sections
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        id S1788999AbgJZSET (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 14:04:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30678 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1783355AbgJZSET (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Oct 2020 14:04:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603735457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xyYk0jDTOiwDBvTIIH8x0g5Fzg4mMedC/eOz+dtv1vA=;
+        b=EGoMAB8c70N2Vd6harlkQ/FzmyntIYF1UqIzYUMlG4GJ0mt+GsCdiuRF2tp/2eA/CdvdsB
+        yfosjulY4q6xeR5ptcNfEir0xqQElsSHC+XrBXYGs7bne9kLfAHFheHXPa45SyDbfqGdyo
+        rH9MeR1Ju7nUvUBb3J5JTpTYSrcQOOk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-34-CJKsKjOFOAGlKBQTJpbv8A-1; Mon, 26 Oct 2020 14:03:11 -0400
+X-MC-Unique: CJKsKjOFOAGlKBQTJpbv8A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12AD91015ED6;
+        Mon, 26 Oct 2020 18:03:09 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-118-122.rdu2.redhat.com [10.10.118.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 762FD19647;
+        Mon, 26 Oct 2020 18:03:07 +0000 (UTC)
+Subject: Re: [PATCH] qspinlock: use signed temporaries for cmpxchg
+To:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthew Wilcox <willy@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Will Deacon <will.deacon@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201026165807.3724647-1-arnd@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <022365e9-f7fe-5589-7867-d2ad2d33cfa3@redhat.com>
+Date:   Mon, 26 Oct 2020 14:03:06 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20201026165807.3724647-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Nick,
-
-On Mon, Oct 26, 2020 at 6:49 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
-> On Mon, Oct 26, 2020 at 10:44 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Mon, Oct 26, 2020 at 6:39 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > On Mon, 26 Oct 2020 at 17:01, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Mon, Oct 26, 2020 at 2:29 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > On Mon, Oct 26, 2020 at 1:29 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > > On Fri, Aug 21, 2020 at 9:56 PM Kees Cook <keescook@chromium.org> wrote:
-> > > > > > > In preparation for warning on orphan sections, discard
-> > > > > > > unwanted non-zero-sized generated sections, and enforce other
-> > > > > > > expected-to-be-zero-sized sections (since discarding them might hide
-> > > > > > > problems with them suddenly gaining unexpected entries).
-> > > > > > >
-> > > > > > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> > > > > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > > >
-> > > > > > This is now commit be2881824ae9eb92 ("arm64/build: Assert for unwanted
-> > > > > > sections") in v5.10-rc1, and is causing the following error with
-> > > > > > renesas_defconfig[1]:
-> > > > > >
-> > > > > >     aarch64-linux-gnu-ld: warning: orphan section `.eh_frame' from
-> > > > > > `kernel/bpf/core.o' being placed in section `.eh_frame'
-> > > > > >     aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-> > > > > >     aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-> > > > > >
-> > > > > > I cannot reproduce this with the standard arm64 defconfig.
-> > > > > >
-> > > > > > I bisected the error to the aforementioned commit, but understand this
-> > > > > > is not the real reason.  If I revert this commit, I still get:
-> > > > > >
-> > > > > >     aarch64-linux-gnu-ld: warning: orphan section `.got.plt' from
-> > > > > > `arch/arm64/kernel/head.o' being placed in section `.got.plt'
-> > > > > >     aarch64-linux-gnu-ld: warning: orphan section `.plt' from
-> > > > > > `arch/arm64/kernel/head.o' being placed in section `.plt'
-> > > > > >     aarch64-linux-gnu-ld: warning: orphan section `.data.rel.ro' from
-> > > > > > `arch/arm64/kernel/head.o' being placed in section `.data.rel.ro'
-> > > > > >     aarch64-linux-gnu-ld: warning: orphan section `.eh_frame' from
-> > > > > > `kernel/bpf/core.o' being placed in section `.eh_frame'
-> > > > > >
-> > > > > > I.e. including the ".eh_frame" warning. I have tried bisecting that
-> > > > > > warning (i.e. with be2881824ae9eb92 reverted), but that leads me to
-> > > > > > commit b3e5d80d0c48c0cc ("arm64/build: Warn on orphan section
-> > > > > > placement"), which is another red herring.
-> > > > >
-> > > > > kernel/bpf/core.o is the only file containing an eh_frame section,
-> > > > > causing the warning.
+On 10/26/20 12:57 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> When I see .eh_frame, I think -fno-asynchronous-unwind-tables is
-> missing from someone's KBUILD_CFLAGS.
-> But I don't see anything curious in kernel/bpf/Makefile, unless
-> cc-disable-warning is somehow broken.
-
-Yeah, I noticed it's added in arch/arm64/Makefile, and verified that it is
-actually passed when building kernel/bpf/core.o.
-
-> > > > > If I compile core.c with "-g" added, like arm64 defconfig does, the
-> > > > > eh_frame section is no longer emitted.
-> > > > >
-> > > > > Hence setting CONFIG_DEBUG_INFO=y, cfr. arm64 defconfig, the warning
-> > > > > is gone, but I'm back to the the "Unexpected GOT/PLT entries" below...
-> > > > >
-> > > > > > Note that even on plain be2881824ae9eb92, I get:
-> > > > > >
-> > > > > >     aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-> > > > > >     aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-> > > > > >
-> > > > > > The parent commit obviously doesn't show that (but probably still has
-> > > > > > the problem).
-> > > >
-> > > > Reverting both
-> > > > b3e5d80d0c48c0cc ("arm64/build: Warn on orphan section placement")
-> > > > be2881824ae9eb92 ("arm64/build: Assert for unwanted sections")
-> > > > seems to solve my problems, without any ill effects?
-> > > >
-> > >
-> > > I cannot reproduce the issue here with my distro GCC+binutils (Debian 8.3.0)
-> > >
-> > > The presence of .data.rel.ro and .got.plt sections suggests that the
-> > > toolchain is using -fpie and/or -z relro to build shared objects
-> > > rather than a fully linked bare metal binary.
-> > >
-> > > Which toolchain are you using? Does adding -fno-pie to the compiler
-> >
-> > gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)  from Ubuntu 20.04LTS.
-> >
-> > > command line and/or adding -z norelro to the linker command line make
-> > > any difference?
-> >
-> > I'll give that a try later...
+> When building with W=2, the build log is flooded with
 >
-> This patch just got picked up into the for-next branch of the arm64
-> tree; it enables `-z norelro` regardless of configs.
-> https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?h=for-next/core&id=3b92fa7485eba16b05166fddf38ab42f2ff6ab95
-> If you apply that, that should help you test `-z norelro` quickly.
+> include/asm-generic/qrwlock.h:65:56: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> include/asm-generic/qrwlock.h:92:53: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> include/asm-generic/qspinlock.h:68:55: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> include/asm-generic/qspinlock.h:82:52: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+>
+> The atomics are built on top of signed integers, but the caller
+> doesn't actually care. Just use signed types as well.
+>
+> Fixes: 27df89689e25 ("locking/spinlocks: Remove an instruction from spin and write locks")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   include/asm-generic/qrwlock.h   | 8 ++++----
+>   include/asm-generic/qspinlock.h | 4 ++--
+>   2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
+> index 3aefde23dcea..84ce841ce735 100644
+> --- a/include/asm-generic/qrwlock.h
+> +++ b/include/asm-generic/qrwlock.h
+> @@ -37,7 +37,7 @@ extern void queued_write_lock_slowpath(struct qrwlock *lock);
+>    */
+>   static inline int queued_read_trylock(struct qrwlock *lock)
+>   {
+> -	u32 cnts;
+> +	int cnts;
+>   
+>   	cnts = atomic_read(&lock->cnts);
+>   	if (likely(!(cnts & _QW_WMASK))) {
+> @@ -56,7 +56,7 @@ static inline int queued_read_trylock(struct qrwlock *lock)
+>    */
+>   static inline int queued_write_trylock(struct qrwlock *lock)
+>   {
+> -	u32 cnts;
+> +	int cnts;
+>   
+>   	cnts = atomic_read(&lock->cnts);
+>   	if (unlikely(cnts))
+> @@ -71,7 +71,7 @@ static inline int queued_write_trylock(struct qrwlock *lock)
+>    */
+>   static inline void queued_read_lock(struct qrwlock *lock)
+>   {
+> -	u32 cnts;
+> +	int cnts;
+>   
+>   	cnts = atomic_add_return_acquire(_QR_BIAS, &lock->cnts);
+>   	if (likely(!(cnts & _QW_WMASK)))
+> @@ -87,7 +87,7 @@ static inline void queued_read_lock(struct qrwlock *lock)
+>    */
+>   static inline void queued_write_lock(struct qrwlock *lock)
+>   {
+> -	u32 cnts = 0;
+> +	int cnts = 0;
+>   	/* Optimize for the unfair lock case where the fair flag is 0. */
+>   	if (likely(atomic_try_cmpxchg_acquire(&lock->cnts, &cnts, _QW_LOCKED)))
+>   		return;
+> diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
+> index 4fe7fd0fe834..d74b13825501 100644
+> --- a/include/asm-generic/qspinlock.h
+> +++ b/include/asm-generic/qspinlock.h
+> @@ -60,7 +60,7 @@ static __always_inline int queued_spin_is_contended(struct qspinlock *lock)
+>    */
+>   static __always_inline int queued_spin_trylock(struct qspinlock *lock)
+>   {
+> -	u32 val = atomic_read(&lock->val);
+> +	int val = atomic_read(&lock->val);
+>   
+>   	if (unlikely(val))
+>   		return 0;
+> @@ -77,7 +77,7 @@ extern void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+>    */
+>   static __always_inline void queued_spin_lock(struct qspinlock *lock)
+>   {
+> -	u32 val = 0;
+> +	int val = 0;
+>   
+>   	if (likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL)))
+>   		return;
 
-Thanks, will give that a try, too.
+Yes, it shouldn't really matter if the value is defined as int or u32. 
+However, the only caveat that I see is queued_spin_lock_slowpath() is 
+expecting a u32 argument. Maybe you should cast it back to (u32) when 
+calling it.
 
-Gr{oetje,eeting}s,
+Cheers,
+Longman
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
