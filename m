@@ -2,113 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 033FD299CD8
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B849299CE8
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437399AbgJ0ACH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 20:02:07 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37095 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2411091AbgJZX4R (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 19:56:17 -0400
-Received: by mail-pg1-f196.google.com with SMTP id h6so6983642pgk.4
-        for <linux-arch@vger.kernel.org>; Mon, 26 Oct 2020 16:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wqqvkA3oKUwkO5eXRPOBy8lXyQg0CiUtokie2wwagwI=;
-        b=ZWDgA8+yUlKx2dZgiyZDe66Bv6aQYo4o4sBrgULvsJ7L1mqryuSoN/tRsTLtRNf5gl
-         QA5GzgrsJ4IIXk6KefYiWNloPp5dTgRya5PAi5H2X1Ck5liCNMZ9plZFbXAFJkRhGENX
-         zRADl3Fzwzqt5UTeMExAEl9+J6C00UJYGVeM9r+kQpMj10I4tNzbDp+KUhpG26z8ohQ5
-         u9LGW1VxEtuEY5uYo6W0qmYrYYX9WPLdyfh3K/l7hHXtbXds+UPAtJe/6QdzpKUrKNEa
-         IHnev7OPcOoKpcEMuZBXfSj3e5H/bPp0SHxbMGuGbkkGN2ORlWbNlGQCKJOUg6Ub1kcx
-         WOrg==
+        id S2411309AbgJ0AC1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 20:02:27 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:43477 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728509AbgJ0ACY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 20:02:24 -0400
+Received: by mail-ua1-f68.google.com with SMTP id r21so3428151uaw.10;
+        Mon, 26 Oct 2020 17:02:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wqqvkA3oKUwkO5eXRPOBy8lXyQg0CiUtokie2wwagwI=;
-        b=J3SaVBdSAwvCwGNcbHAB9JoRDRWvy6+ShyvfcVmm8C43muR/TKnSuKWoPqeq5iqEJZ
-         MbIvNY6lEJS+RwOrpT8iyh4Qkxt/Uiury2DEodGEUb1S2HBWOwgqrhh/CZp/C1SeHKkW
-         tHgvfofKLM9e8aA8zkJPWzZxHFi4345/fpEK1HKCkuOaaiAPQVQDvUSXH3by63xANHfh
-         yeWfXHCQ1ERXT9dq1TDgyRQxcAaiSEYAFLaotMIFleeaMXtRWNmwM00RDkelBM8pvDCN
-         6oBJ/JDtujzUFfpN/6/QuRTe+3NOrilvpJ6brDRQLfnjruJ6gWHsjJ4cYkqgN3rDrArE
-         6Apw==
-X-Gm-Message-State: AOAM531/y8RNyH8LIG4G7/kMQgg2rRmDGyn0+UNtCLKRec01PcyYlOoT
-        4eALRpYSJq6wuqjgYmplevwdTw==
-X-Google-Smtp-Source: ABdhPJzXWytxnG400Dp//klgHvFRu6jftuSrTTs7sW7oWyETnW8LM2mlLlQ2a53Jfzf5mLG9B/rX/w==
-X-Received: by 2002:a63:5f42:: with SMTP id t63mr569296pgb.0.1603756574857;
-        Mon, 26 Oct 2020 16:56:14 -0700 (PDT)
-Received: from [192.168.1.134] ([66.219.217.173])
-        by smtp.gmail.com with ESMTPSA id s38sm3637009pgm.62.2020.10.26.16.56.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2020 16:56:14 -0700 (PDT)
-Subject: Re: [REGRESSION] mm: process_vm_readv testcase no longer works after
- compat_prcoess_vm_readv removed
-To:     Kyle Huey <me@kylehuey.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Robert O'Callahan <robert@ocallahan.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "open list:FILESYSTEMS (VFS and infrastructure)" 
-        <linux-fsdevel@vger.kernel.org>, linux-aio@kvack.org,
-        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <70d5569e-4ad6-988a-e047-5d12d298684c@kernel.dk>
-Date:   Mon, 26 Oct 2020 17:56:11 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Nc+LJIctkA2xokS8Hjft6K+F5HViXFmcJYECMK/0XSs=;
+        b=OQJ8kzN4C8CFDTkcCh2rA49sg4uUmOh9V4Korw02JjNdE/cPq08xUFfaA8odbE+NMx
+         tRuUn5bIJqDfUkoI3z6x+FzIJoAMUxD9EnTX14oCiLAOiNKLVKDrAqpUm+BzPy81a6+7
+         JrCM3k/4L21kBlJ+Ybi2JVcDhV/jf5E/xcCblqNXsd00EN2Ak1SKFD1Xf/YHPPdTKhfF
+         8zInTDMN9D9Ukek5LjPXoz88wj3NbBEFTAB4vedi9S9pAxvgaYqqIwdzOQ1mu6nYRY+H
+         edvEBa09ronjKBMHU9qkZ7fAMFaFksVZ4X5YzHa4acETkIVPuN5JNpqdONe+rFBKZkhh
+         wgKg==
+X-Gm-Message-State: AOAM5332Vyl6zd4zjaSQU53d0ayl0EBE6mwc6NA2aBPjtFEkkSIFbHoy
+        97JGltuXyqKGyPHyCMQwDCA=
+X-Google-Smtp-Source: ABdhPJy/QDAFsVqgKvAb81ohx+BGy1Y+c+QXCmSihcIl83n+0T4UvXBmk0bLcBPHg/LfD5io82Dx1g==
+X-Received: by 2002:ab0:6f81:: with SMTP id f1mr23600098uav.31.1603756943628;
+        Mon, 26 Oct 2020 17:02:23 -0700 (PDT)
+Received: from google.com (239.145.196.35.bc.googleusercontent.com. [35.196.145.239])
+        by smtp.gmail.com with ESMTPSA id f195sm374846vka.21.2020.10.26.17.02.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2020 17:02:22 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 00:02:21 +0000
+From:   Dennis Zhou <dennis@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Lameter <cl@linux.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] asm-generic: percpu: avoid Wshadow warning
+Message-ID: <20201027000221.GA3804841@google.com>
+References: <20201026155353.3702892-1-arnd@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201026155353.3702892-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/26/20 4:55 PM, Kyle Huey wrote:
-> A test program from the rr[0] test suite, vm_readv_writev[1], no
-> longer works on 5.10-rc1 when compiled as a 32 bit binary and executed
-> on a 64 bit kernel. The first process_vm_readv call (on line 35) now
-> fails with EFAULT. I have bisected this to
-> c3973b401ef2b0b8005f8074a10e96e3ea093823.
+Hello,
+
+On Mon, Oct 26, 2020 at 04:53:48PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> It should be fairly straightforward to extract the test case from our
-> repository into a standalone program.
+> Nesting macros that use the same local variable names causes
+> warnings when building with "make W=2":
+> 
+> include/asm-generic/percpu.h:117:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
+> include/asm-generic/percpu.h:126:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
+> 
+> These are fairly harmless, but since the warning comes from
+> a global header, the warning happens every time the headers
+> are included, which is fairly annoying.
+> 
+> Rename the variables to avoid shadowing and shut up the warning.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/asm-generic/percpu.h | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
+> index 35e4a53b83e6..6432a7fade91 100644
+> --- a/include/asm-generic/percpu.h
+> +++ b/include/asm-generic/percpu.h
+> @@ -114,21 +114,21 @@ do {									\
+>  
+>  #define __this_cpu_generic_read_nopreempt(pcp)				\
+>  ({									\
+> -	typeof(pcp) __ret;						\
+> +	typeof(pcp) ___ret;						\
+>  	preempt_disable_notrace();					\
+> -	__ret = READ_ONCE(*raw_cpu_ptr(&(pcp)));			\
+> +	___ret = READ_ONCE(*raw_cpu_ptr(&(pcp)));			\
+>  	preempt_enable_notrace();					\
+> -	__ret;								\
+> +	___ret;								\
+>  })
+>  
+>  #define __this_cpu_generic_read_noirq(pcp)				\
+>  ({									\
+> -	typeof(pcp) __ret;						\
+> -	unsigned long __flags;						\
+> -	raw_local_irq_save(__flags);					\
+> -	__ret = raw_cpu_generic_read(pcp);				\
+> -	raw_local_irq_restore(__flags);					\
+> -	__ret;								\
+> +	typeof(pcp) ___ret;						\
+> +	unsigned long ___flags;						\
+> +	raw_local_irq_save(___flags);					\
+> +	___ret = raw_cpu_generic_read(pcp);				\
+> +	raw_local_irq_restore(___flags);				\
+> +	___ret;								\
+>  })
+>  
+>  #define this_cpu_generic_read(pcp)					\
+> -- 
+> 2.27.0
+> 
 
-Can you check with this applied?
+I've applied this to percpu#for-5.10-fixes.
 
-diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
-index fd12da80b6f2..05676722d9cd 100644
---- a/mm/process_vm_access.c
-+++ b/mm/process_vm_access.c
-@@ -273,7 +273,8 @@ static ssize_t process_vm_rw(pid_t pid,
- 		return rc;
- 	if (!iov_iter_count(&iter))
- 		goto free_iov_l;
--	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r, false);
-+	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r,
-+				in_compat_syscall());
- 	if (IS_ERR(iov_r)) {
- 		rc = PTR_ERR(iov_r);
- 		goto free_iov_l;
-
--- 
-Jens Axboe
-
+Thanks,
+Dennis
