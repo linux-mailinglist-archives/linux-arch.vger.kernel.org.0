@@ -2,104 +2,233 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F31F29A1EB
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8943929A372
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 04:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441433AbgJ0Aup (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 20:50:45 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41419 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2411002AbgJ0Auo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 20:50:44 -0400
-Received: by mail-io1-f65.google.com with SMTP id u62so13259064iod.8
-        for <linux-arch@vger.kernel.org>; Mon, 26 Oct 2020 17:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1CZ2k4hR9c3bjTh0zoqy1spVt5F8Uv6qO7frIZFMui8=;
-        b=MKIHY4zgxSPG/n9XVnq6+PffUcL0ZlFFJ2mw2k63AaRiVO8V49k60+daDit0NXlsum
-         kRMH846fY4Est5lYhs6+8nXAUujsAKy+QR1uYU2dOLPZE60a2qhL2986HFlApMvYQThq
-         mkko3XmBeQY/GuHQQSXg+2kT0pCFG4N+S91Ik=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1CZ2k4hR9c3bjTh0zoqy1spVt5F8Uv6qO7frIZFMui8=;
-        b=eaUyMTEjm0bG9ik5ZDbq/RckiVOCjJSWUAhPalcW5RD7gdzvWtxBvw/zsPvET9Ba+a
-         TFt0Xl+CUmaKEuDTNBXDaynXcgZSgqzlNXcxIHNZEwSIBmDFUYZY4is1P9yuFzZMvChV
-         w2xHbYKCZBDNtbxPOf3N30CCDva/o+Rotqj1JB5lSIsdmL9LQjnQyJqPEMexwB7/3+n/
-         JtlAI4MNhSMgP8UCIqn0I9qbOYRvuM8S5eVrnyD73w58VRCHsW/Ho5Ea2ExTW0RW1CL2
-         SLk3idawtodddsR6myOvrU66cxRgboJZAJS5ySRDVPZhaxkuuS9HxuzVXRpgiRUC0H6h
-         xn1A==
-X-Gm-Message-State: AOAM530rJVdpUJmSySLT+8ROOpgnE5sWf0mUb0u6wPVOISedv2rai2Ke
-        RTmvF3WFcFeEmncjpZ6dBTEozQ==
-X-Google-Smtp-Source: ABdhPJzI6/YgrdTP7Pxl7fP0LGkzFgxf9z7H9Pr4VGcBoWiKHluDujRZ7xbJcmczFs6R/QM5wYI4KA==
-X-Received: by 2002:a6b:8d97:: with SMTP id p145mr12625844iod.190.1603759843715;
-        Mon, 26 Oct 2020 17:50:43 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f65sm7427553ilg.88.2020.10.26.17.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2020 17:50:43 -0700 (PDT)
-Subject: Re: [PATCH v4 0/5] kselftest: Extend vDSO tests
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201026114945.48532-1-vincenzo.frascino@arm.com>
- <87y2js1tic.fsf@nanos.tec.linutronix.de>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <127f025c-1ce5-0dcb-30a2-a26b4a8e5b35@linuxfoundation.org>
-Date:   Mon, 26 Oct 2020 18:50:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2441003AbgJ0Dwg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 23:52:36 -0400
+Received: from mga03.intel.com ([134.134.136.65]:26237 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2440959AbgJ0Dwg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 26 Oct 2020 23:52:36 -0400
+IronPort-SDR: 3WKtEcwX1OJJYi2iZSC51grFtD326IhmeFO/ROt63wp/1fsy0wu+EmtgziOIf5aswP2mZn7lkZ
+ I9O284sxEgGg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="168122899"
+X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
+   d="scan'208";a="168122899"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 20:52:35 -0700
+IronPort-SDR: M3erBLgHyfOyC1r1nSOcV76aDwH5F1psW/Dcc1MWNoBKx9B4aLsrBLHWJ1S9OBsnz3xl/hEkdb
+ GeK6JxfMx5eQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
+   d="scan'208";a="322784765"
+Received: from lkp-server01.sh.intel.com (HELO ef28dff175aa) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Oct 2020 20:52:34 -0700
+Received: from kbuild by ef28dff175aa with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kXG2D-00002P-U7; Tue, 27 Oct 2020 03:52:33 +0000
+Date:   Tue, 27 Oct 2020 11:51:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [asm-generic:asm-generic-mmu-context] BUILD SUCCESS
+ 13473b5dccd2f6ee2d9eb4384c0b39a814ffc9c5
+Message-ID: <5f979956.IfxT6WVHRA+P/cM8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <87y2js1tic.fsf@nanos.tec.linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/26/20 5:01 PM, Thomas Gleixner wrote:
-> On Mon, Oct 26 2020 at 11:49, Vincenzo Frascino wrote:
->> This series extends the kselftests for the vDSO library making sure: that
->> they compile correctly on non x86 platforms, that they can be cross
->> compiled and introducing new tests that verify the correctness of the
->> library.
->>
->> The so extended vDSO kselftests have been verified on all the platforms
->> supported by the unified vDSO library [1].
->>
->> The only new patch that this series introduces is the first one, patch 2 and
->> patch 3 have already been reviewed in past as part of other series [2] [3].
->>
->> [1] https://lore.kernel.org/lkml/20190621095252.32307-1-vincenzo.frascino@arm.com
->> [2] https://lore.kernel.org/lkml/20190621095252.32307-26-vincenzo.frascino@arm.com
->> [3] https://lore.kernel.org/lkml/20190523112116.19233-4-vincenzo.frascino@arm.com
->>
->> It is possible to build the series using the command below:
->>
->> make -C tools/testing/selftests/ ARCH=<arch> TARGETS=vDSO CC=<compiler>
->>
->> A version of the series rebased on 5.10-rc1 to simplify the testing can be found
->> at [4].
->>
->> [4] https://git.gitlab.arm.com/linux-arm/linux-vf.git vdso/v4.tests
-> 
-> Assuming Shuah will pick them up:
-> 
->    Acked-by: Thomas Gleixner <tglx@linutronix.de>
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic-mmu-context
+branch HEAD: 13473b5dccd2f6ee2d9eb4384c0b39a814ffc9c5  xtensa: use asm-generic/mmu_context.h for no-op implementations
 
+elapsed time: 723m
 
-Thanks. I will pick these up.
+configs tested: 169
+configs skipped: 3
 
-thanks,
--- Shuah
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                            zeus_defconfig
+arm                         ebsa110_defconfig
+arm                        shmobile_defconfig
+sparc                            allyesconfig
+powerpc                     sequoia_defconfig
+arm                     davinci_all_defconfig
+powerpc                       maple_defconfig
+arm                           omap1_defconfig
+powerpc                       holly_defconfig
+m68k                        mvme147_defconfig
+powerpc                     mpc83xx_defconfig
+sh                          landisk_defconfig
+powerpc                      obs600_defconfig
+mips                     decstation_defconfig
+arm                           sama5_defconfig
+m68k                       m5249evb_defconfig
+mips                    maltaup_xpa_defconfig
+sh                             sh03_defconfig
+ia64                             alldefconfig
+arm                           sunxi_defconfig
+powerpc                        icon_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                   motionpro_defconfig
+arm                       mainstone_defconfig
+powerpc                 mpc832x_rdb_defconfig
+sh                   secureedge5410_defconfig
+mips                       rbtx49xx_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                 mpc85xx_cds_defconfig
+xtensa                generic_kc705_defconfig
+arm                            qcom_defconfig
+arm                           h3600_defconfig
+arm                         s3c2410_defconfig
+sh                          rsk7264_defconfig
+riscv                            allyesconfig
+powerpc                     sbc8548_defconfig
+arm                          exynos_defconfig
+sh                      rts7751r2d1_defconfig
+mips                      malta_kvm_defconfig
+arm                         assabet_defconfig
+arc                              alldefconfig
+sh                           se7343_defconfig
+xtensa                         virt_defconfig
+powerpc                 linkstation_defconfig
+mips                      bmips_stb_defconfig
+parisc                generic-32bit_defconfig
+arm                      integrator_defconfig
+arm                          simpad_defconfig
+arm                         shannon_defconfig
+arm                         s3c6400_defconfig
+sh                            shmin_defconfig
+sh                             espt_defconfig
+arm                          iop32x_defconfig
+xtensa                              defconfig
+arm                        multi_v7_defconfig
+xtensa                  nommu_kc705_defconfig
+arc                          axs101_defconfig
+c6x                                 defconfig
+sh                               j2_defconfig
+mips                            gpr_defconfig
+sh                            migor_defconfig
+x86_64                           allyesconfig
+powerpc                      walnut_defconfig
+c6x                        evmc6472_defconfig
+mips                        nlm_xlp_defconfig
+arc                        nsimosci_defconfig
+sh                           se7780_defconfig
+arm                          moxart_defconfig
+sh                        edosk7760_defconfig
+arm                             rpc_defconfig
+sh                              ul2_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                      footbridge_defconfig
+arm                  colibri_pxa270_defconfig
+mips                malta_kvm_guest_defconfig
+sh                           se7750_defconfig
+powerpc                   bluestone_defconfig
+powerpc                   lite5200b_defconfig
+arm                         mv78xx0_defconfig
+mips                      fuloong2e_defconfig
+mips                           mtx1_defconfig
+m68k                            mac_defconfig
+sh                        dreamcast_defconfig
+powerpc                     ppa8548_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                     redwood_defconfig
+arc                      axs103_smp_defconfig
+m68k                        mvme16x_defconfig
+powerpc                      acadia_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                         ps3_defconfig
+c6x                        evmc6678_defconfig
+powerpc                       ppc64_defconfig
+arm                       versatile_defconfig
+arc                     nsimosci_hs_defconfig
+arm                           stm32_defconfig
+powerpc                    gamecube_defconfig
+mips                      pistachio_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20201026
+i386                 randconfig-a003-20201026
+i386                 randconfig-a005-20201026
+i386                 randconfig-a001-20201026
+i386                 randconfig-a006-20201026
+i386                 randconfig-a004-20201026
+x86_64               randconfig-a011-20201026
+x86_64               randconfig-a013-20201026
+x86_64               randconfig-a016-20201026
+x86_64               randconfig-a015-20201026
+x86_64               randconfig-a012-20201026
+x86_64               randconfig-a014-20201026
+i386                 randconfig-a016-20201026
+i386                 randconfig-a015-20201026
+i386                 randconfig-a014-20201026
+i386                 randconfig-a012-20201026
+i386                 randconfig-a013-20201026
+i386                 randconfig-a011-20201026
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a001-20201026
+x86_64               randconfig-a003-20201026
+x86_64               randconfig-a002-20201026
+x86_64               randconfig-a006-20201026
+x86_64               randconfig-a004-20201026
+x86_64               randconfig-a005-20201026
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
