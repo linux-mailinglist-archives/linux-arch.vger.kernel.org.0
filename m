@@ -2,127 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BFB29A64E
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 09:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE9529A68A
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 09:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508851AbgJ0IMn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 04:12:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29095 "EHLO
+        id S2395493AbgJ0I0r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 04:26:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54060 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2394912AbgJ0IMn (ORCPT
+        by vger.kernel.org with ESMTP id S2395410AbgJ0I0q (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Oct 2020 04:12:43 -0400
+        Tue, 27 Oct 2020 04:26:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603786361;
+        s=mimecast20190719; t=1603787205;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NAcngyuptikvYGGpjHccIA10XCuP57p7z320i7MuxeE=;
-        b=izoUNn+IN3+rLS+uPI2ugr4fH+bhc/8RPUCdLmHQIEXxgvGOf/wvzyyTrPB7qcmHFQ2/9k
-        jP0M+oSqKNyCy5F/nPCcgGu5+Edrzwpx40MNjSwx+9dsA4lbuVaukTsfGMoLisbpSEBr0C
-        4lEF0MXlDJeKQKu8jfH/D549QgKlgzc=
+        bh=0SgGH32DtkrCtTnKEBBNXoBqjBSTDBuSJiubuSpA7gY=;
+        b=OlX7ec/71spC9nS/tD8+Ft4ioUZH10wkzjIcoyEnbiqxAd0AB0/Icw9GXY9tjvgrmtylnk
+        4UWPNKeGw5LgYm4odr3/CgfzZm69EEU3Qu3BaVp1RKNyZH9VDfruqmd2vQCXKp8+BUe+hE
+        4DwozDLc1Nd2BGvQhPq9SFGBZSY+RUA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-251-Q8AvrUgQOMaVTr9oXfijqA-1; Tue, 27 Oct 2020 04:12:38 -0400
-X-MC-Unique: Q8AvrUgQOMaVTr9oXfijqA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-211-6RoR-GSeOCmfUqCmMk5Dsg-1; Tue, 27 Oct 2020 04:26:42 -0400
+X-MC-Unique: 6RoR-GSeOCmfUqCmMk5Dsg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1338664085;
-        Tue, 27 Oct 2020 08:12:33 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51A7C5705E;
+        Tue, 27 Oct 2020 08:26:38 +0000 (UTC)
 Received: from [10.36.113.185] (ovpn-113-185.ams2.redhat.com [10.36.113.185])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB67E5B4B3;
-        Tue, 27 Oct 2020 08:12:24 +0000 (UTC)
-Subject: Re: [PATCH v7 3/7] set_memory: allow set_direct_map_*_noflush() for
- multiple pages
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "tycho@tycho.ws" <tycho@tycho.ws>, "cl@linux.com" <cl@linux.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-nvdimm@lists.01.org" <linux-nvdimm@lists.01.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 492196EF45;
+        Tue, 27 Oct 2020 08:26:31 +0000 (UTC)
+Subject: Re: [PATCH v7 1/7] mm: add definition of PMD_PAGE_ORDER
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
 References: <20201026083752.13267-1-rppt@kernel.org>
- <20201026083752.13267-4-rppt@kernel.org>
- <e754ae3873e02e398e58091d586fe57e105803db.camel@intel.com>
+ <20201026083752.13267-2-rppt@kernel.org>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat GmbH
-Message-ID: <9202c4c1-9f1f-175f-0a85-fc8c30bc5e3b@redhat.com>
-Date:   Tue, 27 Oct 2020 09:12:23 +0100
+Message-ID: <9728bfdf-9f40-68dd-3862-5befc770268b@redhat.com>
+Date:   Tue, 27 Oct 2020 09:26:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.3.1
 MIME-Version: 1.0
-In-Reply-To: <e754ae3873e02e398e58091d586fe57e105803db.camel@intel.com>
+In-Reply-To: <20201026083752.13267-2-rppt@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 26.10.20 20:01, Edgecombe, Rick P wrote:
-> On Mon, 2020-10-26 at 10:37 +0200, Mike Rapoport wrote:
->> +++ b/arch/x86/mm/pat/set_memory.c
->> @@ -2184,14 +2184,14 @@ static int __set_pages_np(struct page *page,
->> int numpages)
->>         return __change_page_attr_set_clr(&cpa, 0);
->>  }
->>  
->> -int set_direct_map_invalid_noflush(struct page *page)
->> +int set_direct_map_invalid_noflush(struct page *page, int numpages)
->>  {
->> -       return __set_pages_np(page, 1);
->> +       return __set_pages_np(page, numpages);
->>  }
->>  
->> -int set_direct_map_default_noflush(struct page *page)
->> +int set_direct_map_default_noflush(struct page *page, int numpages)
->>  {
->> -       return __set_pages_p(page, 1);
->> +       return __set_pages_p(page, numpages);
->>  }
+On 26.10.20 09:37, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Somewhat related to your other series, this could result in large NP
-> pages and trip up hibernate.
+> The definition of PMD_PAGE_ORDER denoting the number of base pages in the
+> second-level leaf page is already used by DAX and maybe handy in other
+> cases as well.
 > 
+> Several architectures already have definition of PMD_ORDER as the size of
+> second level page table, so to avoid conflict with these definitions use
+> PMD_PAGE_ORDER name and update DAX respectively.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
-It feels somewhat desirable to disable hibernation once secretmem is
-enabled, right? Otherwise you'll be writing out your secrets to swap,
-where they will remain even after booting up again ...
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Skipping secretmem pages when hibernating is the wrong approach I guess ...
 
 -- 
 Thanks,
