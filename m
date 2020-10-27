@@ -2,141 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8975C29A89B
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 11:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658E429A8E5
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 11:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896674AbgJ0KAf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 06:00:35 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:38781 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2896655AbgJ0J7q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Oct 2020 05:59:46 -0400
-Received: by mail-il1-f193.google.com with SMTP id p16so945699ilq.5
-        for <linux-arch@vger.kernel.org>; Tue, 27 Oct 2020 02:59:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=usfplqa+qJQAziOe1mo6w6IfKhsrwJJj00MeXYg7IhA=;
-        b=SvptCW0h3KqyWUTvUvXBMtFiEBk6j6OpalEJoZylz2xyXcj5kZmUTFVVLFJfSHJjDF
-         JbIfNqzq2EujC9158/ZYxRmo0aG+Hndm39nz68uAAFn1yEkXBo0G925CUp/NSSUacDN2
-         utMN1gWJDQwzy99ypoFeRr1l+QpnSLJFzdynRaayIHPcUToy0m6vmIh7sCyF1sBMoTn2
-         ud5J5CJmUMsvm0RgumUbXEdTg+qxD0XJwVkksBJhLJDQkhpuEt69/+ofHZs4bx5Tro2I
-         WJvD4AGKeU6cpdTCE7uNyN134l6aFL3Ok63AoohakPmseNRCvzqZrSPme5zi2IlGFkqT
-         B2NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=usfplqa+qJQAziOe1mo6w6IfKhsrwJJj00MeXYg7IhA=;
-        b=r1XR6+HVZ9ClIRbn60YMxRlw+5lM1J4TBQcwWkS7/7b6RvZv8DUCAZDu4gifsdMG6u
-         P7Kn+UZMvHPxwpzJ7ArANDr2KR+yIGHnKJxdyEfuzpY/PccBbR1pZDWswudWKZ4RF/eo
-         hlWOmk5SsF0+Tq5y6CqxE//IzW1nyoD6srXjJ6rdNqNSRJ8YEgLWcJ9qaNWZ8VRelc1D
-         Gax8hA/kgnrmTofwHXkIQ+7tbafMtidFmKOn4BjXFBtnZ/bqu7lxlGxA6cSCfn4vg5hX
-         mcYtEslhlngMdgT//KlNBeU09sqcDHR4wpEyBHtPsEoeqQ6BcSN0IrIXBsI884zM8w8/
-         Kujg==
-X-Gm-Message-State: AOAM532cDRsvf8YLAArNbKn+3HEDWujwmREH0xDENeL8Ta09l4/aV3Er
-        blmSy7w6Pb33IjHjbwRYo4E18vhU+wN4uPiWMjwECA==
-X-Google-Smtp-Source: ABdhPJx0OWukHLrAYRuR0iUMopMDG1i2ka1ksbrqEfNxUTFAw6vjeqAtMwNdohBWK2MqZk+rPW64KGdBzSPJIPTEH+U=
-X-Received: by 2002:a92:d20e:: with SMTP id y14mr418095ily.252.1603792785654;
- Tue, 27 Oct 2020 02:59:45 -0700 (PDT)
+        id S2896951AbgJ0KCm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 06:02:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51200 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2896007AbgJ0Jvm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:51:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603792301;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rrv3C5Vep+wn0rySiLlJrRnX0hreOKaKWDeUz2ECss4=;
+        b=iVaMWybuS6WP3YkmTtkCOW2sAhOaqYZ6cgxBYV5uL5WDTIXDvYjlmwRynRXtQMFgeD2aFT
+        fnRadEaDiUhh9gvMgaq8W6lFLx6zXTc3mYZ+DJXnv+F17tVM7kCJdqGB9HffWkjVPZSCmM
+        vbq4W1U21cmZajT9ZErZrohZ/DJDUjo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-129-rgOUAKfoPsulfa3-RIkuKw-1; Tue, 27 Oct 2020 05:51:39 -0400
+X-MC-Unique: rgOUAKfoPsulfa3-RIkuKw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2C11C1074645;
+        Tue, 27 Oct 2020 09:51:37 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-70.rdu2.redhat.com [10.10.120.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 163CC19646;
+        Tue, 27 Oct 2020 09:51:34 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <3088368.1603790984@warthog.procyon.org.uk>
+References: <3088368.1603790984@warthog.procyon.org.uk> <20200827150030.282762-3-hch@lst.de> <20200827150030.282762-1-hch@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 02/10] fs: don't allow splice read/write without explicit ops
 MIME-Version: 1.0
-References: <20200826145249.745432-1-npiggin@gmail.com> <20200826145249.745432-6-npiggin@gmail.com>
- <20200826152510.GB24545@gaia> <1598458759.6wa1mql9py.astroid@bobo.none>
-In-Reply-To: <1598458759.6wa1mql9py.astroid@bobo.none>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 27 Oct 2020 15:29:34 +0530
-Message-ID: <CA+G9fYvejffDjf5JVymq1mfbyCUOKTqbCPE0fSM8_5CXaXCm8A@mail.gmail.com>
-Subject: Re: [PATCH v2 05/23] arm64: use asm-generic/mmu_context.h for no-op implementations
-To:     Nicholas Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arch@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Will Deacon <will@kernel.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3155817.1603792294.1@warthog.procyon.org.uk>
 Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 27 Oct 2020 09:51:34 +0000
+Message-ID: <3155818.1603792294@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 26 Aug 2020 at 21:50, Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> Excerpts from Catalin Marinas's message of August 27, 2020 1:25 am:
-> > On Thu, Aug 27, 2020 at 12:52:31AM +1000, Nicholas Piggin wrote:
-> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> >> Cc: Will Deacon <will@kernel.org>
-> >> Cc: linux-arm-kernel@lists.infradead.org
-> >> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> >
-> > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> >
->
-> Thank you, I see I stupidly mis-rebased this patch too :( Sorry
-> I'll fix that.
+David Howells <dhowells@redhat.com> wrote:
 
-arm64 build error caused due to this patch on linux next 20201027 tag.
+> > default_file_splice_write is the last piece of generic code that uses
+> > set_fs to make the uaccess routines operate on kernel pointers.  It
+> > implements a "fallback loop" for splicing from files that do not actua=
+lly
+> > provide a proper splice_read method.  The usual file systems and other
+> > high bandwith instances all provide a ->splice_read, so this just remo=
+ves
+> > support for various device drivers and procfs/debugfs files.  If splic=
+e
+> > support for any of those turns out to be important it can be added bac=
+k
+> > by switching them to the iter ops and using generic_file_splice_read.
+> =
 
-make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux ARCH=3Darm64
-CROSS_COMPILE=3Daarch64-linux-gnu- HOSTCC=3Dgcc CC=3D"sccache
-aarch64-linux-gnu-gcc" O=3Dbuild defconfig
-#
-#
-#
-set -e
-cd /linux
-export ARCH=3Darm64
-export HOSTCC=3Dgcc
-export CC=3Dgcc
-export CROSS_COMPILE=3Daarch64-linux-gnu-
-scripts/kconfig/merge_config.sh -O build 'build/.config' 'build/frag.config=
-'
-#
-#
-# make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux -j16 ARCH=3Darm64
-CROSS_COMPILE=3Daarch64-linux-gnu- HOSTCC=3Dgcc CC=3D"sccache
-aarch64-linux-gnu-gcc" O=3Dbuild Image
-#
-In file included from ../arch/arm64/include/asm/mmu_context.h:257,
-                 from ../arch/arm64/include/asm/efi.h:10,
-                 from ../arch/arm64/xen/../../arm/xen/enlighten.c:19:
-../include/asm-generic/mmu_context.h:34:19: error: redefinition of
-=E2=80=98init_new_context=E2=80=99
-   34 | static inline int init_new_context(struct task_struct *tsk,
-      |                   ^~~~~~~~~~~~~~~~
-In file included from ../arch/arm64/include/asm/efi.h:10,
-                 from ../arch/arm64/xen/../../arm/xen/enlighten.c:19:
-../arch/arm64/include/asm/mmu_context.h:180:1: note: previous
-definition of =E2=80=98init_new_context=E2=80=99 was here
-  180 | init_new_context(struct task_struct *tsk, struct mm_struct *mm)
-      | ^~~~~~~~~~~~~~~~
-make[3]: *** [../scripts/Makefile.build:283:
-arch/arm64/xen/../../arm/xen/enlighten.o] Error 1
-In file included from ../arch/arm64/include/asm/mmu_context.h:257,
-                 from ../include/linux/mmu_context.h:5,
-                 from ../kernel/sched/sched.h:54,
-                 from ../kernel/sched/core.c:13:
-../include/asm-generic/mmu_context.h:34:19: error: redefinition of
-=E2=80=98init_new_context=E2=80=99
-   34 | static inline int init_new_context(struct task_struct *tsk,
-      |                   ^~~~~~~~~~~~~~~~
-In file included from ../include/linux/mmu_context.h:5,
-                 from ../kernel/sched/sched.h:54,
-                 from ../kernel/sched/core.c:13:
-../arch/arm64/include/asm/mmu_context.h:180:1: note: previous
-definition of =E2=80=98init_new_context=E2=80=99 was here
-  180 | init_new_context(struct task_struct *tsk, struct mm_struct *mm)
-      | ^~~~~~~~~~~~~~~~
-make[3]: *** [../scripts/Makefile.build:283: kernel/sched/core.o] Error 1
+> Hmmm...  this causes the copy_file_range() syscall to fail with EINVAL i=
+n some
+> places where before it used to work.
+> =
 
+> For my part, it causes the generic/112 xfstest to fail with afs, but the=
+re may
+> be other places.
+> =
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Is this a regression we need to fix in the VFS core?  Or is it something=
+ we
+> need to fix in xfstests and assume userspace will fallback to doing it i=
+tself?
 
-full build log link,
-https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/813497297
+That said, for afs at least, the fix seems to be just this:
 
+diff --git a/fs/afs/file.c b/fs/afs/file.c
+index 395075d7fe02..2bc6adfe351a 100644
+--- a/fs/afs/file.c
++++ b/fs/afs/file.c
+@@ -33,6 +33,7 @@ const struct file_operations afs_file_operations =3D {
+ 	.write_iter	=3D afs_file_write,
+ 	.mmap		=3D afs_file_mmap,
+ 	.splice_read	=3D generic_file_splice_read,
++	.splice_write	=3D iter_file_splice_write,
+ 	.fsync		=3D afs_fsync,
+ 	.lock		=3D afs_lock,
+ 	.flock		=3D afs_flock,
 
---=20
-Linaro LKFT
-https://lkft.linaro.org
+David
+
