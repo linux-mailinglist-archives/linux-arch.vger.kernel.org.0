@@ -2,83 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E9D29A119
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F31F29A1EB
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440724AbgJ0AeH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 20:34:07 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:44164 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436545AbgJ0Acv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 20:32:51 -0400
-X-Greylist: delayed 1637 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 20:32:46 EDT
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kXCUL-009VwG-7r; Tue, 27 Oct 2020 00:05:21 +0000
-Date:   Tue, 27 Oct 2020 00:05:21 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Kyle Huey <me@kylehuey.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Robert O'Callahan <robert@ocallahan.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S2441433AbgJ0Aup (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 20:50:45 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:41419 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411002AbgJ0Auo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 20:50:44 -0400
+Received: by mail-io1-f65.google.com with SMTP id u62so13259064iod.8
+        for <linux-arch@vger.kernel.org>; Mon, 26 Oct 2020 17:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1CZ2k4hR9c3bjTh0zoqy1spVt5F8Uv6qO7frIZFMui8=;
+        b=MKIHY4zgxSPG/n9XVnq6+PffUcL0ZlFFJ2mw2k63AaRiVO8V49k60+daDit0NXlsum
+         kRMH846fY4Est5lYhs6+8nXAUujsAKy+QR1uYU2dOLPZE60a2qhL2986HFlApMvYQThq
+         mkko3XmBeQY/GuHQQSXg+2kT0pCFG4N+S91Ik=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1CZ2k4hR9c3bjTh0zoqy1spVt5F8Uv6qO7frIZFMui8=;
+        b=eaUyMTEjm0bG9ik5ZDbq/RckiVOCjJSWUAhPalcW5RD7gdzvWtxBvw/zsPvET9Ba+a
+         TFt0Xl+CUmaKEuDTNBXDaynXcgZSgqzlNXcxIHNZEwSIBmDFUYZY4is1P9yuFzZMvChV
+         w2xHbYKCZBDNtbxPOf3N30CCDva/o+Rotqj1JB5lSIsdmL9LQjnQyJqPEMexwB7/3+n/
+         JtlAI4MNhSMgP8UCIqn0I9qbOYRvuM8S5eVrnyD73w58VRCHsW/Ho5Ea2ExTW0RW1CL2
+         SLk3idawtodddsR6myOvrU66cxRgboJZAJS5ySRDVPZhaxkuuS9HxuzVXRpgiRUC0H6h
+         xn1A==
+X-Gm-Message-State: AOAM530rJVdpUJmSySLT+8ROOpgnE5sWf0mUb0u6wPVOISedv2rai2Ke
+        RTmvF3WFcFeEmncjpZ6dBTEozQ==
+X-Google-Smtp-Source: ABdhPJzI6/YgrdTP7Pxl7fP0LGkzFgxf9z7H9Pr4VGcBoWiKHluDujRZ7xbJcmczFs6R/QM5wYI4KA==
+X-Received: by 2002:a6b:8d97:: with SMTP id p145mr12625844iod.190.1603759843715;
+        Mon, 26 Oct 2020 17:50:43 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id f65sm7427553ilg.88.2020.10.26.17.50.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2020 17:50:43 -0700 (PDT)
+Subject: Re: [PATCH v4 0/5] kselftest: Extend vDSO tests
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "open list:FILESYSTEMS (VFS and infrastructure)" 
-        <linux-fsdevel@vger.kernel.org>, linux-aio@kvack.org,
-        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [REGRESSION] mm: process_vm_readv testcase no longer works after
- compat_prcoess_vm_readv removed
-Message-ID: <20201027000521.GD3576660@ZenIV.linux.org.uk>
-References: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
- <70d5569e-4ad6-988a-e047-5d12d298684c@kernel.dk>
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201026114945.48532-1-vincenzo.frascino@arm.com>
+ <87y2js1tic.fsf@nanos.tec.linutronix.de>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <127f025c-1ce5-0dcb-30a2-a26b4a8e5b35@linuxfoundation.org>
+Date:   Mon, 26 Oct 2020 18:50:42 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70d5569e-4ad6-988a-e047-5d12d298684c@kernel.dk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <87y2js1tic.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 05:56:11PM -0600, Jens Axboe wrote:
-> On 10/26/20 4:55 PM, Kyle Huey wrote:
-> > A test program from the rr[0] test suite, vm_readv_writev[1], no
-> > longer works on 5.10-rc1 when compiled as a 32 bit binary and executed
-> > on a 64 bit kernel. The first process_vm_readv call (on line 35) now
-> > fails with EFAULT. I have bisected this to
-> > c3973b401ef2b0b8005f8074a10e96e3ea093823.
-> > 
-> > It should be fairly straightforward to extract the test case from our
-> > repository into a standalone program.
+On 10/26/20 5:01 PM, Thomas Gleixner wrote:
+> On Mon, Oct 26 2020 at 11:49, Vincenzo Frascino wrote:
+>> This series extends the kselftests for the vDSO library making sure: that
+>> they compile correctly on non x86 platforms, that they can be cross
+>> compiled and introducing new tests that verify the correctness of the
+>> library.
+>>
+>> The so extended vDSO kselftests have been verified on all the platforms
+>> supported by the unified vDSO library [1].
+>>
+>> The only new patch that this series introduces is the first one, patch 2 and
+>> patch 3 have already been reviewed in past as part of other series [2] [3].
+>>
+>> [1] https://lore.kernel.org/lkml/20190621095252.32307-1-vincenzo.frascino@arm.com
+>> [2] https://lore.kernel.org/lkml/20190621095252.32307-26-vincenzo.frascino@arm.com
+>> [3] https://lore.kernel.org/lkml/20190523112116.19233-4-vincenzo.frascino@arm.com
+>>
+>> It is possible to build the series using the command below:
+>>
+>> make -C tools/testing/selftests/ ARCH=<arch> TARGETS=vDSO CC=<compiler>
+>>
+>> A version of the series rebased on 5.10-rc1 to simplify the testing can be found
+>> at [4].
+>>
+>> [4] https://git.gitlab.arm.com/linux-arm/linux-vf.git vdso/v4.tests
 > 
-> Can you check with this applied?
+> Assuming Shuah will pick them up:
 > 
-> diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
-> index fd12da80b6f2..05676722d9cd 100644
-> --- a/mm/process_vm_access.c
-> +++ b/mm/process_vm_access.c
-> @@ -273,7 +273,8 @@ static ssize_t process_vm_rw(pid_t pid,
->  		return rc;
->  	if (!iov_iter_count(&iter))
->  		goto free_iov_l;
-> -	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r, false);
-> +	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r,
-> +				in_compat_syscall());
+>    Acked-by: Thomas Gleixner <tglx@linutronix.de>
+> 
 
-_ouch_
 
-There's a bug, all right, but I'm not sure that this is all there is to it.
-For now it's probably the right fix, but...  Consider the fun trying to
-use that from 32bit process to access the memory of 64bit one.  IOW, we
-might want to add an explicit flag for "force 64bit addresses/sizes
-in rvec".
+Thanks. I will pick these up.
+
+thanks,
+-- Shuah
+
