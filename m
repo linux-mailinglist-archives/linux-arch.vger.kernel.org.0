@@ -2,90 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D185529A9BB
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 11:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D344C29A9DC
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 11:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898396AbgJ0Kdj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 06:33:39 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:60738 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2898319AbgJ0Kcz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Oct 2020 06:32:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bAP5ayvWdzkYR+dK0w03op1mBdrMVm+Mr+bLt75W8ao=; b=AbcQ4yxQc4zeJwE1YJSauIUYM0
-        0jcWGzzf/9sepuc/B5nr/O4lwAK53LmXcUPvQE5GX/6HIZa2cgVSnpFWM6Deg89O5EqAEQ/PUZz3f
-        tCSJKc6q/k5m7iakn7Kst0kfCjbzQ1eGxFvEitx+lvXQx7P2N+4Sud2QG5GN3SrsD9oj1H/LBxe7i
-        Ped6cJB1O9t/59LlP/R0VEf/dN5mOATxEi49ST3VwitIlr2yUuPwfdktJyff7gdwMZZCFduSQHqct
-        x2XpRoF9iwH5Qh0UaCcciWZHfuOXmRlmvUcBsfduhUqwsdEAzXcoVMvxozVT+/MhCuyaJn0S5Kxmd
-        4ES6S0gA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kXMHO-0006RG-Nl; Tue, 27 Oct 2020 10:32:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9A5EF3060F2;
-        Tue, 27 Oct 2020 11:32:36 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8974C20C299F5; Tue, 27 Oct 2020 11:32:36 +0100 (CET)
-Date:   Tue, 27 Oct 2020 11:32:36 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] qspinlock: use signed temporaries for cmpxchg
-Message-ID: <20201027103236.GZ2611@hirez.programming.kicks-ass.net>
-References: <20201026165807.3724647-1-arnd@kernel.org>
- <022365e9-f7fe-5589-7867-d2ad2d33cfa3@redhat.com>
- <20201027074726.GX2611@hirez.programming.kicks-ass.net>
- <CAK8P3a2vUK5scbtcRTE98ZvwxMF3xMBT61JODV__RHMj+D0G2A@mail.gmail.com>
+        id S2898623AbgJ0Kj7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 06:39:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55965 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2898504AbgJ0Ki1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Oct 2020 06:38:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603795106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CCFkL5YPwZhrmFegn8R+P6Gr+wPqzLjyH+PKfuNRXxY=;
+        b=aGg/qZd8duSzJ8OcvoNw9Pe8uHtg0UkMqhfqlNKadThrMW/Xl47mv4n1v7qTICY8EzCy7K
+        oU+FlTBepRju3oi+XjSjGFzSeeG7THct00U582f2cMAS8XvHUGhIU4vKEs09INKnsP7+61
+        T5r8kcwwuya+dmQPUCvQWeYPDeg9M9o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-296-Tghq4TRVMxClG5BzL4_sXw-1; Tue, 27 Oct 2020 06:38:22 -0400
+X-MC-Unique: Tghq4TRVMxClG5BzL4_sXw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB843100F967;
+        Tue, 27 Oct 2020 10:38:20 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-70.rdu2.redhat.com [10.10.120.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DD8176EF57;
+        Tue, 27 Oct 2020 10:38:18 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20201027095455.GA30298@lst.de>
+References: <20201027095455.GA30298@lst.de> <3088368.1603790984@warthog.procyon.org.uk> <20200827150030.282762-3-hch@lst.de> <20200827150030.282762-1-hch@lst.de> <3155818.1603792294@warthog.procyon.org.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 02/10] fs: don't allow splice read/write without explicit ops
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2vUK5scbtcRTE98ZvwxMF3xMBT61JODV__RHMj+D0G2A@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3161302.1603795098.1@warthog.procyon.org.uk>
+Date:   Tue, 27 Oct 2020 10:38:18 +0000
+Message-ID: <3161303.1603795098@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 09:33:32AM +0100, Arnd Bergmann wrote:
-> On Tue, Oct 27, 2020 at 8:47 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > On Mon, Oct 26, 2020 at 02:03:06PM -0400, Waiman Long wrote:
-> > > On 10/26/20 12:57 PM, Arnd Bergmann wrote:
-> > > Yes, it shouldn't really matter if the value is defined as int or u32.
-> > > However, the only caveat that I see is queued_spin_lock_slowpath() is
-> > > expecting a u32 argument. Maybe you should cast it back to (u32) when
-> > > calling it.
-> >
-> > No, we're not going to confuse the code. That stuff is hard enough as it
-> > is. This warning is garbage and just needs to stay off.
+Christoph Hellwig <hch@lst.de> wrote:
+
+> > That said, for afs at least, the fix seems to be just this:
 > 
-> Ok, so the question then becomes: should we drop -Wpointer-sign from
-> W=2 and move it to W=3, or instead disable it locally. I could add
-> __diag_ignore(GCC, 4, "-Wpointer-sign") in the couple of header files
-> that produce this kind of warning if there is a general feeling that it
-> still helps to have this for drivers.
+> And that is the correct fix, I was about to send it to you.
 
-What is an actual geniune bug that this warning helps find?
+Thanks.
 
-Note that the kernel relies on -fno-strict-overflow to get rid of the
-signed UB that is otherwise present in C.
+David
 
-If you add that __diag_ignore() it should go in atomic.h I suppose,
-because all of atomic hard relies on this, and then the question becomes
-how much code is left that doesn't include that header and consequently
-doesn't ignore that warning.
-
-So, is it useful to begin with in finding actual problems? and given we
-have to annotate away a bucket-load, how much coverage will there remain
-if we squish the known false-positives?
