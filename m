@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE3829CB85
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 22:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C54AA29CB86
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 22:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505991AbgJ0Vvf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 17:51:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43160 "EHLO mail.kernel.org"
+        id S374487AbgJ0Vvh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 17:51:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730075AbgJ0Vve (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Oct 2020 17:51:34 -0400
+        id S1730075AbgJ0Vvh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Oct 2020 17:51:37 -0400
 Received: from localhost.localdomain (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 098392225E;
-        Tue, 27 Oct 2020 21:51:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5CC1B20829;
+        Tue, 27 Oct 2020 21:51:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603835493;
-        bh=nU3hgM26iNL5yzEFEmr4JyXLx49XcFjrIm2/XNRCwTM=;
+        s=default; t=1603835496;
+        bh=7xtHpE+jN4KpE9aM9q3M6jMkm03ttdE7SBSV+UdhCUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h1p/YiTfKA4I1zPlc/xkUOdmqbPbFdOBKAKnCXJRvdNzzI4QZnt3w8WKPMks6DGE1
-         VYdSfzmRB+n1HaAn8L6ThtVPP4NCyCciXCgHmCz/MMQq0jTVRLdkMyXuXhs1m3hMfc
-         2o713+d9YtU3ETrrCJWaR5RxubBBoX0yULA/6eRU=
+        b=l/U0lij0fRys470mF3hwkMMbzObDJHRKi2dF5fW3IA/jbYB9alNaVzhhx/g/7o6cg
+         bqIbnBe1A7JAGpgFfiIj6b5z/Kv+dMaHVEN4zTs8fceQxp4LBtoXHGGSPMr5p3qD9D
+         f2ECqbFgp1/9T4F9tzZUUfDvDhUzvbLGLBgZ5fTY=
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
@@ -33,9 +33,9 @@ Cc:     linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
         Qais Yousef <qais.yousef@arm.com>,
         Suren Baghdasaryan <surenb@google.com>, kernel-team@android.com
-Subject: [PATCH 4/6] arm64: Kill 32-bit applications scheduled on 64-bit-only CPUs
-Date:   Tue, 27 Oct 2020 21:51:16 +0000
-Message-Id: <20201027215118.27003-5-will@kernel.org>
+Subject: [PATCH 5/6] arm64: Advertise CPUs capable of running 32-bit applcations in sysfs
+Date:   Tue, 27 Oct 2020 21:51:17 +0000
+Message-Id: <20201027215118.27003-6-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201027215118.27003-1-will@kernel.org>
 References: <20201027215118.27003-1-will@kernel.org>
@@ -45,109 +45,72 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Scheduling a 32-bit application on a 64-bit-only CPU is a bad idea.
-
-Ensure that 32-bit applications always take the slow-path when returning
-to userspace on a system with mismatched support at EL0, so that we can
-avoid trying to run on a 64-bit-only CPU and force a SIGKILL instead.
+Since 32-bit applications will be killed if they are caught trying to
+execute on a 64-bit-only CPU in a mismatched system, advertise the set
+of 32-bit capable CPUs to userspace in sysfs.
 
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- arch/arm64/kernel/process.c | 21 ++++++++++++++++++++-
- arch/arm64/kernel/signal.c  | 26 ++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+), 1 deletion(-)
+ .../ABI/testing/sysfs-devices-system-cpu      |  8 ++++++++
+ arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 4784011cecac..c45b5f9dd66b 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -542,6 +542,17 @@ static void erratum_1418040_thread_switch(struct task_struct *prev,
- 	write_sysreg(val, cntkctl_el1);
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index b555df825447..19893fb8e870 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -472,6 +472,14 @@ Description:	AArch64 CPU registers
+ 		'identification' directory exposes the CPU ID registers for
+ 		 identifying model and revision of the CPU.
+ 
++What:		/sys/devices/system/cpu/aarch32_el0
++Date:		October 2020
++Contact:	Linux ARM Kernel Mailing list <linux-arm-kernel@lists.infradead.org>
++Description:	Identifies the subset of CPUs in the system that can execute
++		AArch32 (32-bit ARM) applications. If absent, then all or none
++		of the CPUs can execute AArch32 applications and execve() will
++		behave accordingly.
++
+ What:		/sys/devices/system/cpu/cpu#/cpu_capacity
+ Date:		December 2016
+ Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 2e2219cbd54c..9f29d4d1ef7e 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -67,6 +67,7 @@
+ #include <linux/crash_dump.h>
+ #include <linux/sort.h>
+ #include <linux/stop_machine.h>
++#include <linux/sysfs.h>
+ #include <linux/types.h>
+ #include <linux/mm.h>
+ #include <linux/cpu.h>
+@@ -1236,6 +1237,24 @@ bool system_has_mismatched_32bit_el0(void)
+ 	return fld == ID_AA64PFR0_EL0_64BIT_ONLY;
  }
  
-+static void compat_thread_switch(struct task_struct *next)
++static ssize_t aarch32_el0_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
 +{
-+	if (!is_compat_thread(task_thread_info(next)))
-+		return;
-+
-+	if (!system_has_mismatched_32bit_el0())
-+		return;
-+
-+	set_tsk_thread_flag(next, TIF_NOTIFY_RESUME);
++	const struct cpumask *mask = system_32bit_el0_cpumask();
++	return sprintf(buf, "%*pbl\n", cpumask_pr_args(mask));
 +}
++static const struct kobj_attribute aarch32_el0_attr = __ATTR_RO(aarch32_el0);
 +
- /*
-  * Thread switching.
-  */
-@@ -558,6 +569,7 @@ __notrace_funcgraph struct task_struct *__switch_to(struct task_struct *prev,
- 	uao_thread_switch(next);
- 	ssbs_thread_switch(next);
- 	erratum_1418040_thread_switch(prev, next);
-+	compat_thread_switch(next);
- 
- 	/*
- 	 * Complete any pending TLB or cache maintenance on this CPU in case
-@@ -620,8 +632,15 @@ unsigned long arch_align_stack(unsigned long sp)
-  */
- void arch_setup_new_exec(void)
- {
--	current->mm->context.flags = is_compat_task() ? MMCF_AARCH32 : 0;
-+	unsigned long mmflags = 0;
-+
-+	if (is_compat_task()) {
-+		mmflags = MMCF_AARCH32;
-+		if (system_has_mismatched_32bit_el0())
-+			set_tsk_thread_flag(current, TIF_NOTIFY_RESUME);
-+	}
- 
-+	current->mm->context.flags = mmflags;
- 	ptrauth_thread_init_user(current);
- 
- 	if (task_spec_ssb_noexec(current)) {
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index a8184cad8890..bcb6ca2d9a7c 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -911,6 +911,19 @@ static void do_signal(struct pt_regs *regs)
- 	restore_saved_sigmask();
- }
- 
-+static bool cpu_affinity_invalid(struct pt_regs *regs)
++static int __init aarch32_el0_sysfs_init(void)
 +{
-+	if (!compat_user_mode(regs))
-+		return false;
++	if (!__allow_mismatched_32bit_el0)
++		return 0;
 +
-+	/*
-+	 * We're preemptible, but a reschedule will cause us to check the
-+	 * affinity again.
-+	 */
-+	return !cpumask_test_cpu(raw_smp_processor_id(),
-+				 system_32bit_el0_cpumask());
++	return sysfs_create_file(&cpu_subsys.dev_root->kobj,
++				 &aarch32_el0_attr.attr);
 +}
++device_initcall(aarch32_el0_sysfs_init);
 +
- asmlinkage void do_notify_resume(struct pt_regs *regs,
- 				 unsigned long thread_flags)
+ static bool has_32bit_el0(const struct arm64_cpu_capabilities *entry, int scope)
  {
-@@ -948,6 +961,19 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
- 			if (thread_flags & _TIF_NOTIFY_RESUME) {
- 				tracehook_notify_resume(regs);
- 				rseq_handle_notify_resume(NULL, regs);
-+
-+				/*
-+				 * If we reschedule after checking the affinity
-+				 * then we must ensure that TIF_NOTIFY_RESUME
-+				 * is set so that we check the affinity again.
-+				 * Since tracehook_notify_resume() clears the
-+				 * flag, ensure that the compiler doesn't move
-+				 * it after the affinity check.
-+				 */
-+				barrier();
-+
-+				if (cpu_affinity_invalid(regs))
-+					force_sig(SIGKILL);
- 			}
- 
- 			if (thread_flags & _TIF_FOREIGN_FPSTATE)
+ 	return has_cpuid_feature(entry, scope) || __allow_mismatched_32bit_el0;
 -- 
 2.29.0.rc2.309.g374f81d7ae-goog
 
