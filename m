@@ -2,44 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E947E29CA48
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 21:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E645129CA7E
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 21:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1796922AbgJ0Uge (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 16:36:34 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35481 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1797229AbgJ0Ugd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Oct 2020 16:36:33 -0400
-Received: by mail-pj1-f67.google.com with SMTP id h4so1349750pjk.0
-        for <linux-arch@vger.kernel.org>; Tue, 27 Oct 2020 13:36:31 -0700 (PDT)
+        id S373101AbgJ0Ukz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 16:40:55 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:55439 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504857AbgJ0Ukz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Oct 2020 16:40:55 -0400
+Received: by mail-pj1-f65.google.com with SMTP id c17so1396035pjo.5
+        for <linux-arch@vger.kernel.org>; Tue, 27 Oct 2020 13:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=33VjU+F7xAlvSJckVmNE4QUId8MWatGSN2KXkENeBPE=;
-        b=La6FRGr/jeDbtsIvtAxz+uiQhOjm4dAyWcaXp8Bqngku+6eQxP7PosB8B+goA+kSqN
-         vre0Yh4pGYryxRzhBbj4WTAawGpKZXq8Q+xPmH9Zynqe3X5rtfcpPxwKfvRLiasuYvJS
-         lYVbQeLtj9n49BX32DstNGop1I1QBd0qFZjDtslG4IJ5dZyxg+g7qbQ4zI31ec4EwbA/
-         ZDtEGqpX1SibS06EBpU+DuE1qpkKhWs8jccGCYiXAGNMeadZ88esGcIw/ZBfVFgKEPFv
-         rJT1EKacmQ+dYTEVHzy4S9Kf5DJX2+4TgmZ5Kqv74555mr4NtUjjpGWRLdH1y4keHXjw
-         pSkw==
+        bh=XK2vhDOZfiB4rtHPEukgUGdcEQPpZW+i+EIpmvDwIRs=;
+        b=iRu6J6h0ewW6b3k9tqtOhXtdCfOgge6iZYHWUcyAkDZ8YOegSkcVDF7gC3k4jPVF7H
+         XDmHxVGoKISu5zXOadu/RMA1sFU4O4dAHwEyAtV+S5dU/8uSHiYI9AhEvqJg/UFm9rDK
+         BIDEQe/9taUwEg2Aj3iILtgUniZGuwj41StKbFiGsyhl5hhuT0W9rym6qeUxDhs2UxJP
+         Q4P1Jnev3zv7MB9JT++IZEz3rD5yJitVI4Bi2H7u64sS1JViNIRkct1S/Gm9foTkzDBW
+         qZSbf3cwDZnvzrLr58fzt/JXWm21oFdsR2IgdQ53zTOUk79ToxWZhJE9tzEHuSAF7EiG
+         9BkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=33VjU+F7xAlvSJckVmNE4QUId8MWatGSN2KXkENeBPE=;
-        b=Rd+mUWOxprvvPLpVP3f4C5rgeuCmuH52H8wJhNx6tO3fqYErYW19cf+GEOr62oCVr3
-         pZPyMn54unAlMO8rfYWg01eM0Km4G2v8s4zcHj/+1LEaNdYQcIJCGXpEnvzHY+XIg0+M
-         07zQOcFI7xWx11SW7vvmu7h0lIRxIx5ggXWVZeG8qtMmQE5x9MeNYtHTJElz8H8cmksw
-         lRPpADHmndRn1LeRegQnGYlOy3mQOtAaNOpKa41ssCVWhfaxH3Seju7Wo09wDMaUkcrG
-         JyrFhQs1n38OL6Wu5nbWVvW9zwsdBojpI59dGzl7g8s6ZGN4qHiiuUMPQKh9BIsmdafv
-         78Qw==
-X-Gm-Message-State: AOAM532kblAfXDB7YpAPqgTu+4Bsug2mbABKV/RlVm0nfQSmLQ/ByCqM
-        lTeuHvHbuGTUumAmOq9IRuWBUQz6dHcYRY2i4OVJ2A==
-X-Google-Smtp-Source: ABdhPJyYjkI+PB3DKa7DZijWYM08uiHSD3LXT+KkzFwyEX8TmBIceh63CEoOK884l4tYvAjukIuxCjNXYggMXH//kmc=
-X-Received: by 2002:a17:90a:6b04:: with SMTP id v4mr3652441pjj.101.1603830991134;
- Tue, 27 Oct 2020 13:36:31 -0700 (PDT)
+        bh=XK2vhDOZfiB4rtHPEukgUGdcEQPpZW+i+EIpmvDwIRs=;
+        b=NzOhtrIyVe7pCaKk2G527+57V+gukC23peB2DG3w2OIUHTVDVZEdwq5BsTNijVE8El
+         FuD39cHjbRW5nYIJU0FEQjLTGBFzA6luySp6nZrQbGfR67jhh4HUqGsR6gagFcNLqWgS
+         tnvExptLgjNagWP3T2bXhFZr8Kr89GI4hLerRb9t++8CK7cjunpg/X6lQTiITcKhBqfr
+         +PucdgZYjQdY5xhJq2tnR9QivH9sU2TOekGlt70E6cYv+lFqJYKeDhwpBJliI+OZ9NKK
+         y7ePjTFS94BM/BB8oVv8i5kXhXyxZR+uyval5Ym5LTwlCpPDGIe4kX/jpvImn5cTbhHH
+         joXA==
+X-Gm-Message-State: AOAM532MGcRkcna464VW23uQM5KMVTvtk4j8y4RXBosDpuNVhjWyrlAL
+        WXLAw6kivaJFVsnHxAy7a2t9FULtwuxQ0lnPuVtLcA==
+X-Google-Smtp-Source: ABdhPJyUA+vysDeRt7g/FxOhDlUe9n7QzIQqbpk84eLBA1OnEyJeHMW5A2zLyqWGlfAeg+O+kTmXuUW3uirw5pihg2Y=
+X-Received: by 2002:a17:902:db82:b029:d6:3fe4:9825 with SMTP id
+ m2-20020a170902db82b02900d63fe49825mr3886001pld.29.1603831254116; Tue, 27 Oct
+ 2020 13:40:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com>
  <CAMuHMdUw9KwC=EVB60yjg7mA7Fg-efOiKE7577p+uEdGJVS2OQ@mail.gmail.com>
@@ -50,11 +51,11 @@ References: <CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com>
  <CAMuHMdUDOzJbzf=0jom9dnSzkC+dkMdkyY_BOBMAivbJfF+Gmg@mail.gmail.com>
  <CAKwvOdkE=ViGOhvoBRcV=9anjowC_vb4Vtefp9010+sC4c_+Sw@mail.gmail.com>
  <CAMj1kXEhcQ_ngNVWddV76NqEz6d0tDhfStYGd5diydefzVLvdQ@mail.gmail.com>
- <CAKwvOdm9kuKoVnQoVo7T91gRb9QiCTp2G_PnwbdPM=o710Lx5A@mail.gmail.com> <20201027203210.GB1833548@rani.riverdale.lan>
-In-Reply-To: <20201027203210.GB1833548@rani.riverdale.lan>
+ <CAKwvOd=8YO3Vm0DuaWpDigMiwni+fVdrpagZtsROGziinjLvig@mail.gmail.com> <20201027203001.GA1833548@rani.riverdale.lan>
+In-Reply-To: <20201027203001.GA1833548@rani.riverdale.lan>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 27 Oct 2020 13:36:20 -0700
-Message-ID: <CAKwvOd=ufk3G8moNb8Z1Ruw9hm1YkynZ5mQNf2k1FsmkXfCJiw@mail.gmail.com>
+Date:   Tue, 27 Oct 2020 13:40:43 -0700
+Message-ID: <CAKwvOdmrjeLpS8H_uf_cfbOYFvE-ZhOdJQ14o4VoNF8ugARA0Q@mail.gmail.com>
 Subject: Re: [PATCH v6 13/29] arm64/build: Assert for unwanted sections
 To:     Arvind Sankar <nivedita@alum.mit.edu>
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
@@ -78,43 +79,31 @@ Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        linux-toolchains@vger.kernel.org
+        kernel-toolchains@vger.kernel.org,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 1:32 PM Arvind Sankar <nivedita@alum.mit.edu> wrote:
+On Tue, Oct 27, 2020 at 1:30 PM Arvind Sankar <nivedita@alum.mit.edu> wrote:
 >
-> On Tue, Oct 27, 2020 at 01:28:02PM -0700, Nick Desaulniers wrote:
-> > > commit 3193c0836f203a91bef96d88c64cccf0be090d9c
-> > > Author: Josh Poimboeuf <jpoimboe@redhat.com>
-> > > Date:   Wed Jul 17 20:36:45 2019 -0500
-> > >
-> > >     bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()
-> > >
-> > > has
-> > >
-> > > Fixes: e55a73251da3 ("bpf: Fix ORC unwinding in non-JIT BPF code")
-> > >
-> > > and mentions objtool and CONFIG_RETPOLINE.
-> >
-> > Thanks for the context.  It might be time to revisit the above commit.
-> > If I revert it (small conflict that's easy to fixup),
-> > kernel/bpf/core.o builds cleanly with defconfig+GCC-9.3, so maybe
-> > obtool did get smart enough to handle that case?  Probably regresses
-> > the performance of that main dispatch loop for BPF, but not sure what
-> > folks are expecting when retpolines are enabled.
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
-> The objtool issue was with RETPOLINE disabled.
+> On Tue, Oct 27, 2020 at 01:17:55PM -0700, Nick Desaulniers wrote:
+> > > >  (I feel the same about there
+> > > > being an empty asm(); statement in the definition of asm_volatile_goto
+> > > > for compiler-gcc.h).  Might be time to "fix the compiler."
+> > > >
+> > > > (It sounds like Arvind is both in agreement with my sentiment, and has
+> > > > the root cause).
+> > > >
+> Btw, the bug mentioned in asm_volatile_goto seems like its been fixed in
+> 4.9, so the hack could be dropped now?
 
-Ah, sorry, in that case default-CONFIG_RETPOLINE+gcc-9.3:
-kernel/bpf/core.o: warning: objtool: ___bpf_prog_run()+0x8d4: sibling
-call from callable instruction with modified stack frame
+https://lore.kernel.org/lkml/20180907222109.163802-1-ndesaulniers@google.com/
+
+For the life of me I can't find Linus' response.  Maybe he shot it
+down in the PR, but I can't find it...Miguel do you recall?  I could
+paraphrase, but might be better to not rely on my memory.
 -- 
 Thanks,
 ~Nick Desaulniers
