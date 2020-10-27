@@ -2,247 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CB429A38C
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 05:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355A129A5BF
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 08:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502042AbgJ0EGj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 00:06:39 -0400
-Received: from mga06.intel.com ([134.134.136.31]:59617 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732989AbgJ0EEl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 27 Oct 2020 00:04:41 -0400
-IronPort-SDR: JNNPeEcDbS75Qu84JSqeEKepbe03u0icXgY5NUTBmeJDXuMMhPiINWi8emfHX2h+dXWIfmcY1v
- 3duis4/h9PYw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="229660314"
-X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="229660314"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 21:04:38 -0700
-IronPort-SDR: TrHSvJmrSzq21CtlItv/YlU3jGOP5MB3JAcdqSiLBEhuI5d19fq0hSbRhNU3/m3GaRQHIpfBJj
- u4BMtvmOiQJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="318087909"
-Received: from lkp-server01.sh.intel.com (HELO ef28dff175aa) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 Oct 2020 21:04:37 -0700
-Received: from kbuild by ef28dff175aa with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kXGDs-00002j-VY; Tue, 27 Oct 2020 04:04:36 +0000
-Date:   Tue, 27 Oct 2020 12:04:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:asm-generic-cleanup] BUILD SUCCESS
- 6f6573a4044adefbd07f1bd951a2041150e888d7
-Message-ID: <5f979c44.YHinhwQxAJmLaMkC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2508066AbgJ0Hry (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 03:47:54 -0400
+Received: from casper.infradead.org ([90.155.50.34]:33654 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2508023AbgJ0Hry (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Oct 2020 03:47:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3oTLn60jppEmd2NdwdNgyToAKW6z2EiWKWWF8Pdsajg=; b=ZRPCTz9LYcloesMNvNT9Mq+kuj
+        p0Oh8XHRHRx8BZdnNswg9WcV2pwoMtQimTlJscn/L0UFGbz6jgXEZ3LiNjwdObJxIemXF3KFyQOkr
+        Z73az4rl1/JCEK3B2E9cr5tGNkdFOz2C5XLedjPpoNiU6irsavjlsbXldu1eETWsY6pzU1TEkE9fG
+        rcJg33WkdgjCVKDs0MRyMNqxBo2ljAHLQGFgnCwCxhAEewRTdHFZiy1djhnMYEnE3dFFOgXZYxZDt
+        EP3cLjNdFiBxQij/pNydE7eqE1AmClT5JKkBSD13ec5qhSU5wzljaSDKxFvkqHwVm0SbB1bV0xxNi
+        lKXcuOww==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kXJha-0007j8-7G; Tue, 27 Oct 2020 07:47:30 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 469A53003E1;
+        Tue, 27 Oct 2020 08:47:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 34CB02127D318; Tue, 27 Oct 2020 08:47:26 +0100 (CET)
+Date:   Tue, 27 Oct 2020 08:47:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] qspinlock: use signed temporaries for cmpxchg
+Message-ID: <20201027074726.GX2611@hirez.programming.kicks-ass.net>
+References: <20201026165807.3724647-1-arnd@kernel.org>
+ <022365e9-f7fe-5589-7867-d2ad2d33cfa3@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <022365e9-f7fe-5589-7867-d2ad2d33cfa3@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic-cleanup
-branch HEAD: 6f6573a4044adefbd07f1bd951a2041150e888d7  asm-generic: fix ffs -Wshadow warning
+On Mon, Oct 26, 2020 at 02:03:06PM -0400, Waiman Long wrote:
+> On 10/26/20 12:57 PM, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > When building with W=2, the build log is flooded with
+> > 
+> > include/asm-generic/qrwlock.h:65:56: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> > include/asm-generic/qrwlock.h:92:53: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> > include/asm-generic/qspinlock.h:68:55: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> > include/asm-generic/qspinlock.h:82:52: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
+> > 
+> > The atomics are built on top of signed integers, but the caller
+> > doesn't actually care. Just use signed types as well.
 
-elapsed time: 722m
+Code consistency cares. Fundamentally we're treating it as a u32 here,
+using int just because of a confused compiler warning will confuse.
 
-configs tested: 183
-configs skipped: 3
+> > @@ -77,7 +77,7 @@ extern void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
+> >    */
+> >   static __always_inline void queued_spin_lock(struct qspinlock *lock)
+> >   {
+> > -	u32 val = 0;
+> > +	int val = 0;
+> >   	if (likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL)))
+> >   		return;
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Yes, it shouldn't really matter if the value is defined as int or u32.
+> However, the only caveat that I see is queued_spin_lock_slowpath() is
+> expecting a u32 argument. Maybe you should cast it back to (u32) when
+> calling it.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                            zeus_defconfig
-arm                         ebsa110_defconfig
-arm                        shmobile_defconfig
-sparc                            allyesconfig
-powerpc                     sequoia_defconfig
-arm                     davinci_all_defconfig
-powerpc                       maple_defconfig
-arm                           omap1_defconfig
-powerpc                       holly_defconfig
-m68k                        mvme147_defconfig
-powerpc                     mpc83xx_defconfig
-sh                          landisk_defconfig
-powerpc                      obs600_defconfig
-mips                     decstation_defconfig
-arm                           sama5_defconfig
-m68k                       m5249evb_defconfig
-mips                    maltaup_xpa_defconfig
-sh                             sh03_defconfig
-ia64                             alldefconfig
-arm                           sunxi_defconfig
-powerpc                        icon_defconfig
-sh                     magicpanelr2_defconfig
-mips                         tb0219_defconfig
-arm                             mxs_defconfig
-ia64                             allyesconfig
-arm                          pxa910_defconfig
-powerpc                   motionpro_defconfig
-arm                       mainstone_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                   secureedge5410_defconfig
-mips                       rbtx49xx_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                 mpc85xx_cds_defconfig
-xtensa                generic_kc705_defconfig
-arm                            qcom_defconfig
-arm                           h3600_defconfig
-arm                         s3c2410_defconfig
-sh                          rsk7269_defconfig
-mips                      pic32mzda_defconfig
-sh                          rsk7264_defconfig
-riscv                            allyesconfig
-powerpc                     sbc8548_defconfig
-arm                          exynos_defconfig
-sh                      rts7751r2d1_defconfig
-mips                      malta_kvm_defconfig
-arm                         assabet_defconfig
-arc                              alldefconfig
-sh                           se7343_defconfig
-xtensa                         virt_defconfig
-powerpc                 linkstation_defconfig
-mips                      bmips_stb_defconfig
-parisc                generic-32bit_defconfig
-arm                      integrator_defconfig
-arm                          simpad_defconfig
-arm                         shannon_defconfig
-arm                         s3c6400_defconfig
-sh                            shmin_defconfig
-sh                             espt_defconfig
-arm                          iop32x_defconfig
-xtensa                              defconfig
-arm                        multi_v7_defconfig
-xtensa                  nommu_kc705_defconfig
-i386                             alldefconfig
-powerpc                      mgcoge_defconfig
-arm                            lart_defconfig
-mips                     loongson1c_defconfig
-arm                        mvebu_v5_defconfig
-ia64                         bigsur_defconfig
-x86_64                           allyesconfig
-powerpc                      walnut_defconfig
-c6x                        evmc6472_defconfig
-mips                        nlm_xlp_defconfig
-arc                        nsimosci_defconfig
-sh                           se7780_defconfig
-arm                          moxart_defconfig
-sh                        edosk7760_defconfig
-arm                             rpc_defconfig
-sh                              ul2_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                  mpc866_ads_defconfig
-powerpc                          allyesconfig
-powerpc                 mpc8313_rdb_defconfig
-ia64                        generic_defconfig
-m68k                       m5275evb_defconfig
-m68k                        m5272c3_defconfig
-arm                      footbridge_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                       multi_v4t_defconfig
-arm                        trizeps4_defconfig
-mips                malta_kvm_guest_defconfig
-sh                           se7750_defconfig
-powerpc                   bluestone_defconfig
-powerpc                   lite5200b_defconfig
-arm                         mv78xx0_defconfig
-mips                      fuloong2e_defconfig
-mips                           mtx1_defconfig
-m68k                            mac_defconfig
-sh                        dreamcast_defconfig
-powerpc                     ppa8548_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                     redwood_defconfig
-arc                      axs103_smp_defconfig
-m68k                        mvme16x_defconfig
-powerpc                      acadia_defconfig
-powerpc                     tqm8560_defconfig
-ia64                                defconfig
-powerpc                         ps3_defconfig
-c6x                        evmc6678_defconfig
-powerpc                       ppc64_defconfig
-arm                       versatile_defconfig
-arc                     nsimosci_hs_defconfig
-arm                           stm32_defconfig
-powerpc                    gamecube_defconfig
-mips                      pistachio_defconfig
-ia64                             allmodconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20201026
-i386                 randconfig-a003-20201026
-i386                 randconfig-a005-20201026
-i386                 randconfig-a001-20201026
-i386                 randconfig-a006-20201026
-i386                 randconfig-a004-20201026
-x86_64               randconfig-a011-20201026
-x86_64               randconfig-a013-20201026
-x86_64               randconfig-a016-20201026
-x86_64               randconfig-a015-20201026
-x86_64               randconfig-a012-20201026
-x86_64               randconfig-a014-20201026
-i386                 randconfig-a016-20201026
-i386                 randconfig-a015-20201026
-i386                 randconfig-a014-20201026
-i386                 randconfig-a012-20201026
-i386                 randconfig-a013-20201026
-i386                 randconfig-a011-20201026
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a001-20201026
-x86_64               randconfig-a003-20201026
-x86_64               randconfig-a002-20201026
-x86_64               randconfig-a006-20201026
-x86_64               randconfig-a004-20201026
-x86_64               randconfig-a005-20201026
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+No, we're not going to confuse the code. That stuff is hard enough as it
+is. This warning is garbage and just needs to stay off.
