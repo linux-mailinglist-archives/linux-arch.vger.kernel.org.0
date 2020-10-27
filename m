@@ -2,116 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B849299CE8
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F188299DAC
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 01:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411309AbgJ0AC1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 20:02:27 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:43477 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728509AbgJ0ACY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 20:02:24 -0400
-Received: by mail-ua1-f68.google.com with SMTP id r21so3428151uaw.10;
-        Mon, 26 Oct 2020 17:02:24 -0700 (PDT)
+        id S2395106AbgJ0AJP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Oct 2020 20:09:15 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34522 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394653AbgJ0AJJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Oct 2020 20:09:09 -0400
+Received: by mail-pf1-f193.google.com with SMTP id o129so1565076pfb.1
+        for <linux-arch@vger.kernel.org>; Mon, 26 Oct 2020 17:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LsJlRjdqhDVAHhw47g/atIos95r5K18qubNura+3fzc=;
+        b=DV6OWsJ8YTis4RWe74HnMoSPHx2wnbbnih3F0P+HiF57IXnyKrAIcBplDa0TuQW0fe
+         aii8O67y5CuNtSNcN0q+CPIFocqT+ma+us4RoqX4TC6tMgaGBGUnwVHQJ/N6qPZoUIZl
+         N8PZQaTFtDJvhHp2KmiMn99XHribiQTVBqggOOByg6ZsC+AIdPeSZ7IIhzJWtbXj8peQ
+         vUIkbSwJfbOC01KBcysHUuhejsj0lkLWHowENLgMtxCKJmsxzr5jKuNTtJsywdn514eT
+         kI7wIhvyoH92wMz2QHWzCBEBrmMggfxor976qEm1YW1xHPKbqwPNkX7lWR3OAQC8rWrk
+         OKFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Nc+LJIctkA2xokS8Hjft6K+F5HViXFmcJYECMK/0XSs=;
-        b=OQJ8kzN4C8CFDTkcCh2rA49sg4uUmOh9V4Korw02JjNdE/cPq08xUFfaA8odbE+NMx
-         tRuUn5bIJqDfUkoI3z6x+FzIJoAMUxD9EnTX14oCiLAOiNKLVKDrAqpUm+BzPy81a6+7
-         JrCM3k/4L21kBlJ+Ybi2JVcDhV/jf5E/xcCblqNXsd00EN2Ak1SKFD1Xf/YHPPdTKhfF
-         8zInTDMN9D9Ukek5LjPXoz88wj3NbBEFTAB4vedi9S9pAxvgaYqqIwdzOQ1mu6nYRY+H
-         edvEBa09ronjKBMHU9qkZ7fAMFaFksVZ4X5YzHa4acETkIVPuN5JNpqdONe+rFBKZkhh
-         wgKg==
-X-Gm-Message-State: AOAM5332Vyl6zd4zjaSQU53d0ayl0EBE6mwc6NA2aBPjtFEkkSIFbHoy
-        97JGltuXyqKGyPHyCMQwDCA=
-X-Google-Smtp-Source: ABdhPJy/QDAFsVqgKvAb81ohx+BGy1Y+c+QXCmSihcIl83n+0T4UvXBmk0bLcBPHg/LfD5io82Dx1g==
-X-Received: by 2002:ab0:6f81:: with SMTP id f1mr23600098uav.31.1603756943628;
-        Mon, 26 Oct 2020 17:02:23 -0700 (PDT)
-Received: from google.com (239.145.196.35.bc.googleusercontent.com. [35.196.145.239])
-        by smtp.gmail.com with ESMTPSA id f195sm374846vka.21.2020.10.26.17.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 17:02:22 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 00:02:21 +0000
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Lameter <cl@linux.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: percpu: avoid Wshadow warning
-Message-ID: <20201027000221.GA3804841@google.com>
-References: <20201026155353.3702892-1-arnd@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LsJlRjdqhDVAHhw47g/atIos95r5K18qubNura+3fzc=;
+        b=DtnwuXb996DKEWgD/MWetDILlWBmAM5fHc9uLbICNNePfmcCx2irx5FrjCUPTQ9crG
+         mpYpfluwWJm9hpDrxciOX9i620D0Rg653N6CphfFqud/MUFmH6oprA2PAVb9MLYSgJqL
+         TQP04pkVFs8e1zwAzSzeK0CxUDXd21OizSNku3l3G+fiqPrELKEYsusBs+cIA3kpUelS
+         RPl7m0zbfaSQyhXzlhBtBOd+G8XuUB0Rew1+bzPo+zjDsmVMGmdJT1yuqJ0NJbKiFe1d
+         yZ56d9XwpGzF3F4u/HXbGUunNGpSXD7pR1iN5yyal8x0YISbU/9da4IoKMMQ2hgyO63d
+         BJZA==
+X-Gm-Message-State: AOAM5306YEdZ4kXHbOeNzKOK5eSBVpMKquM5FszRK8q+ENArwrBzCzWo
+        uSS7tfs1SGLn3ddG5Wi9aWCGAg==
+X-Google-Smtp-Source: ABdhPJzyk1CokDb3PmPO6AYN5WbyxmkTO2goVocCEnl70vwlgJZot7evNIwwh9o3S+Q92QVwXSE2HA==
+X-Received: by 2002:a65:5c02:: with SMTP id u2mr18125891pgr.173.1603757348944;
+        Mon, 26 Oct 2020 17:09:08 -0700 (PDT)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id e16sm13676837pfh.45.2020.10.26.17.09.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2020 17:09:08 -0700 (PDT)
+Subject: Re: [REGRESSION] mm: process_vm_readv testcase no longer works after
+ compat_prcoess_vm_readv removed
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Kyle Huey <me@kylehuey.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Robert O'Callahan <robert@ocallahan.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "open list:FILESYSTEMS (VFS and infrastructure)" 
+        <linux-fsdevel@vger.kernel.org>, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <CAP045Aqrsb=CXHDHx4nS-pgg+MUDj14r-kN8_Jcbn-NAUziVag@mail.gmail.com>
+ <70d5569e-4ad6-988a-e047-5d12d298684c@kernel.dk>
+ <20201027000521.GD3576660@ZenIV.linux.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <0127a542-3f93-7bd0-e00d-4a0e49846c8f@kernel.dk>
+Date:   Mon, 26 Oct 2020 18:09:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201026155353.3702892-1-arnd@kernel.org>
+In-Reply-To: <20201027000521.GD3576660@ZenIV.linux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+On 10/26/20 6:05 PM, Al Viro wrote:
+> On Mon, Oct 26, 2020 at 05:56:11PM -0600, Jens Axboe wrote:
+>> On 10/26/20 4:55 PM, Kyle Huey wrote:
+>>> A test program from the rr[0] test suite, vm_readv_writev[1], no
+>>> longer works on 5.10-rc1 when compiled as a 32 bit binary and executed
+>>> on a 64 bit kernel. The first process_vm_readv call (on line 35) now
+>>> fails with EFAULT. I have bisected this to
+>>> c3973b401ef2b0b8005f8074a10e96e3ea093823.
+>>>
+>>> It should be fairly straightforward to extract the test case from our
+>>> repository into a standalone program.
+>>
+>> Can you check with this applied?
+>>
+>> diff --git a/mm/process_vm_access.c b/mm/process_vm_access.c
+>> index fd12da80b6f2..05676722d9cd 100644
+>> --- a/mm/process_vm_access.c
+>> +++ b/mm/process_vm_access.c
+>> @@ -273,7 +273,8 @@ static ssize_t process_vm_rw(pid_t pid,
+>>  		return rc;
+>>  	if (!iov_iter_count(&iter))
+>>  		goto free_iov_l;
+>> -	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r, false);
+>> +	iov_r = iovec_from_user(rvec, riovcnt, UIO_FASTIOV, iovstack_r,
+>> +				in_compat_syscall());
+> 
+> _ouch_
+> 
+> There's a bug, all right, but I'm not sure that this is all there is
+> to it. For now it's probably the right fix, but...  Consider the fun
+> trying to use that from 32bit process to access the memory of 64bit
+> one.  IOW, we might want to add an explicit flag for "force 64bit
+> addresses/sizes in rvec".
 
-On Mon, Oct 26, 2020 at 04:53:48PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Nesting macros that use the same local variable names causes
-> warnings when building with "make W=2":
-> 
-> include/asm-generic/percpu.h:117:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
-> include/asm-generic/percpu.h:126:14: warning: declaration of '__ret' shadows a previous local [-Wshadow]
-> 
-> These are fairly harmless, but since the warning comes from
-> a global header, the warning happens every time the headers
-> are included, which is fairly annoying.
-> 
-> Rename the variables to avoid shadowing and shut up the warning.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/asm-generic/percpu.h | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-> index 35e4a53b83e6..6432a7fade91 100644
-> --- a/include/asm-generic/percpu.h
-> +++ b/include/asm-generic/percpu.h
-> @@ -114,21 +114,21 @@ do {									\
->  
->  #define __this_cpu_generic_read_nopreempt(pcp)				\
->  ({									\
-> -	typeof(pcp) __ret;						\
-> +	typeof(pcp) ___ret;						\
->  	preempt_disable_notrace();					\
-> -	__ret = READ_ONCE(*raw_cpu_ptr(&(pcp)));			\
-> +	___ret = READ_ONCE(*raw_cpu_ptr(&(pcp)));			\
->  	preempt_enable_notrace();					\
-> -	__ret;								\
-> +	___ret;								\
->  })
->  
->  #define __this_cpu_generic_read_noirq(pcp)				\
->  ({									\
-> -	typeof(pcp) __ret;						\
-> -	unsigned long __flags;						\
-> -	raw_local_irq_save(__flags);					\
-> -	__ret = raw_cpu_generic_read(pcp);				\
-> -	raw_local_irq_restore(__flags);					\
-> -	__ret;								\
-> +	typeof(pcp) ___ret;						\
-> +	unsigned long ___flags;						\
-> +	raw_local_irq_save(___flags);					\
-> +	___ret = raw_cpu_generic_read(pcp);				\
-> +	raw_local_irq_restore(___flags);				\
-> +	___ret;								\
->  })
->  
->  #define this_cpu_generic_read(pcp)					\
-> -- 
-> 2.27.0
-> 
+Ouch yes good point, nice catch.
 
-I've applied this to percpu#for-5.10-fixes.
+-- 
+Jens Axboe
 
-Thanks,
-Dennis
