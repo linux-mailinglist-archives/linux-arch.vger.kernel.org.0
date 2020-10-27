@@ -2,89 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 355A129A5BF
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 08:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BFB29A64E
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 09:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508066AbgJ0Hry (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 03:47:54 -0400
-Received: from casper.infradead.org ([90.155.50.34]:33654 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2508023AbgJ0Hry (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Oct 2020 03:47:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3oTLn60jppEmd2NdwdNgyToAKW6z2EiWKWWF8Pdsajg=; b=ZRPCTz9LYcloesMNvNT9Mq+kuj
-        p0Oh8XHRHRx8BZdnNswg9WcV2pwoMtQimTlJscn/L0UFGbz6jgXEZ3LiNjwdObJxIemXF3KFyQOkr
-        Z73az4rl1/JCEK3B2E9cr5tGNkdFOz2C5XLedjPpoNiU6irsavjlsbXldu1eETWsY6pzU1TEkE9fG
-        rcJg33WkdgjCVKDs0MRyMNqxBo2ljAHLQGFgnCwCxhAEewRTdHFZiy1djhnMYEnE3dFFOgXZYxZDt
-        EP3cLjNdFiBxQij/pNydE7eqE1AmClT5JKkBSD13ec5qhSU5wzljaSDKxFvkqHwVm0SbB1bV0xxNi
-        lKXcuOww==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kXJha-0007j8-7G; Tue, 27 Oct 2020 07:47:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 469A53003E1;
-        Tue, 27 Oct 2020 08:47:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 34CB02127D318; Tue, 27 Oct 2020 08:47:26 +0100 (CET)
-Date:   Tue, 27 Oct 2020 08:47:26 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] qspinlock: use signed temporaries for cmpxchg
-Message-ID: <20201027074726.GX2611@hirez.programming.kicks-ass.net>
-References: <20201026165807.3724647-1-arnd@kernel.org>
- <022365e9-f7fe-5589-7867-d2ad2d33cfa3@redhat.com>
+        id S2508851AbgJ0IMn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 04:12:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29095 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2394912AbgJ0IMn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Oct 2020 04:12:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603786361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NAcngyuptikvYGGpjHccIA10XCuP57p7z320i7MuxeE=;
+        b=izoUNn+IN3+rLS+uPI2ugr4fH+bhc/8RPUCdLmHQIEXxgvGOf/wvzyyTrPB7qcmHFQ2/9k
+        jP0M+oSqKNyCy5F/nPCcgGu5+Edrzwpx40MNjSwx+9dsA4lbuVaukTsfGMoLisbpSEBr0C
+        4lEF0MXlDJeKQKu8jfH/D549QgKlgzc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-251-Q8AvrUgQOMaVTr9oXfijqA-1; Tue, 27 Oct 2020 04:12:38 -0400
+X-MC-Unique: Q8AvrUgQOMaVTr9oXfijqA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1338664085;
+        Tue, 27 Oct 2020 08:12:33 +0000 (UTC)
+Received: from [10.36.113.185] (ovpn-113-185.ams2.redhat.com [10.36.113.185])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AB67E5B4B3;
+        Tue, 27 Oct 2020 08:12:24 +0000 (UTC)
+Subject: Re: [PATCH v7 3/7] set_memory: allow set_direct_map_*_noflush() for
+ multiple pages
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "tycho@tycho.ws" <tycho@tycho.ws>, "cl@linux.com" <cl@linux.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-nvdimm@lists.01.org" <linux-nvdimm@lists.01.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+References: <20201026083752.13267-1-rppt@kernel.org>
+ <20201026083752.13267-4-rppt@kernel.org>
+ <e754ae3873e02e398e58091d586fe57e105803db.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <9202c4c1-9f1f-175f-0a85-fc8c30bc5e3b@redhat.com>
+Date:   Tue, 27 Oct 2020 09:12:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <022365e9-f7fe-5589-7867-d2ad2d33cfa3@redhat.com>
+In-Reply-To: <e754ae3873e02e398e58091d586fe57e105803db.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 26, 2020 at 02:03:06PM -0400, Waiman Long wrote:
-> On 10/26/20 12:57 PM, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > When building with W=2, the build log is flooded with
-> > 
-> > include/asm-generic/qrwlock.h:65:56: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
-> > include/asm-generic/qrwlock.h:92:53: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
-> > include/asm-generic/qspinlock.h:68:55: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
-> > include/asm-generic/qspinlock.h:82:52: warning: pointer targets in passing argument 2 of 'atomic_try_cmpxchg_acquire' differ in signedness [-Wpointer-sign]
-> > 
-> > The atomics are built on top of signed integers, but the caller
-> > doesn't actually care. Just use signed types as well.
+On 26.10.20 20:01, Edgecombe, Rick P wrote:
+> On Mon, 2020-10-26 at 10:37 +0200, Mike Rapoport wrote:
+>> +++ b/arch/x86/mm/pat/set_memory.c
+>> @@ -2184,14 +2184,14 @@ static int __set_pages_np(struct page *page,
+>> int numpages)
+>>         return __change_page_attr_set_clr(&cpa, 0);
+>>  }
+>>  
+>> -int set_direct_map_invalid_noflush(struct page *page)
+>> +int set_direct_map_invalid_noflush(struct page *page, int numpages)
+>>  {
+>> -       return __set_pages_np(page, 1);
+>> +       return __set_pages_np(page, numpages);
+>>  }
+>>  
+>> -int set_direct_map_default_noflush(struct page *page)
+>> +int set_direct_map_default_noflush(struct page *page, int numpages)
+>>  {
+>> -       return __set_pages_p(page, 1);
+>> +       return __set_pages_p(page, numpages);
+>>  }
+> 
+> Somewhat related to your other series, this could result in large NP
+> pages and trip up hibernate.
+> 
 
-Code consistency cares. Fundamentally we're treating it as a u32 here,
-using int just because of a confused compiler warning will confuse.
+It feels somewhat desirable to disable hibernation once secretmem is
+enabled, right? Otherwise you'll be writing out your secrets to swap,
+where they will remain even after booting up again ...
 
-> > @@ -77,7 +77,7 @@ extern void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val);
-> >    */
-> >   static __always_inline void queued_spin_lock(struct qspinlock *lock)
-> >   {
-> > -	u32 val = 0;
-> > +	int val = 0;
-> >   	if (likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL)))
-> >   		return;
+Skipping secretmem pages when hibernating is the wrong approach I guess ...
 
-> Yes, it shouldn't really matter if the value is defined as int or u32.
-> However, the only caveat that I see is queued_spin_lock_slowpath() is
-> expecting a u32 argument. Maybe you should cast it back to (u32) when
-> calling it.
+-- 
+Thanks,
 
-No, we're not going to confuse the code. That stuff is hard enough as it
-is. This warning is garbage and just needs to stay off.
+David / dhildenb
+
