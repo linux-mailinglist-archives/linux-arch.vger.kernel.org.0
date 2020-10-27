@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1107029A388
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 05:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CB429A38C
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 05:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501892AbgJ0EEn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Oct 2020 00:04:43 -0400
-Received: from mga18.intel.com ([134.134.136.126]:21525 "EHLO mga18.intel.com"
+        id S2502042AbgJ0EGj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 00:06:39 -0400
+Received: from mga06.intel.com ([134.134.136.31]:59617 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733017AbgJ0EEl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1732989AbgJ0EEl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Tue, 27 Oct 2020 00:04:41 -0400
-IronPort-SDR: JTUxT9hpUoETdyBNwSCAQi7iETsAalZHOBsUB6FTgZBKEjPz3dIiaCgEmYWP1knao3lz6VgVZL
- lZxRQWJKTnng==
-X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="155803021"
+IronPort-SDR: JNNPeEcDbS75Qu84JSqeEKepbe03u0icXgY5NUTBmeJDXuMMhPiINWi8emfHX2h+dXWIfmcY1v
+ 3duis4/h9PYw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="229660314"
 X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="155803021"
+   d="scan'208";a="229660314"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 21:04:38 -0700
-IronPort-SDR: dBH9JvnJoWGE0KLCsezG3jdKygG8d3QBZLWmZv2kMlAElAFqyB9ohMzeF1e0A9sHb7j1/XR9uf
- WJbPAS75mdKA==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 21:04:38 -0700
+IronPort-SDR: TrHSvJmrSzq21CtlItv/YlU3jGOP5MB3JAcdqSiLBEhuI5d19fq0hSbRhNU3/m3GaRQHIpfBJj
+ u4BMtvmOiQJg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="535629911"
+   d="scan'208";a="318087909"
 Received: from lkp-server01.sh.intel.com (HELO ef28dff175aa) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Oct 2020 21:04:37 -0700
+  by orsmga003.jf.intel.com with ESMTP; 26 Oct 2020 21:04:37 -0700
 Received: from kbuild by ef28dff175aa with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kXGDs-00002h-V0; Tue, 27 Oct 2020 04:04:36 +0000
-Date:   Tue, 27 Oct 2020 12:04:18 +0800
+        id 1kXGDs-00002j-VY; Tue, 27 Oct 2020 04:04:36 +0000
+Date:   Tue, 27 Oct 2020 12:04:20 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:master] BUILD SUCCESS
- a259218ae60de9d1442c74728fe3a615cd435a19
-Message-ID: <5f979c42.mkHhNSrm7jkTs5wc%lkp@intel.com>
+Subject: [asm-generic:asm-generic-cleanup] BUILD SUCCESS
+ 6f6573a4044adefbd07f1bd951a2041150e888d7
+Message-ID: <5f979c44.YHinhwQxAJmLaMkC%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,12 +45,12 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  master
-branch HEAD: a259218ae60de9d1442c74728fe3a615cd435a19  Merge branch 'asm-generic-cleanup' into asm-generic
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic-cleanup
+branch HEAD: 6f6573a4044adefbd07f1bd951a2041150e888d7  asm-generic: fix ffs -Wshadow warning
 
 elapsed time: 722m
 
-configs tested: 182
+configs tested: 183
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -84,6 +84,10 @@ ia64                             alldefconfig
 arm                           sunxi_defconfig
 powerpc                        icon_defconfig
 sh                     magicpanelr2_defconfig
+mips                         tb0219_defconfig
+arm                             mxs_defconfig
+ia64                             allyesconfig
+arm                          pxa910_defconfig
 powerpc                   motionpro_defconfig
 arm                       mainstone_defconfig
 powerpc                 mpc832x_rdb_defconfig
@@ -120,11 +124,6 @@ arm                          iop32x_defconfig
 xtensa                              defconfig
 arm                        multi_v7_defconfig
 xtensa                  nommu_kc705_defconfig
-arc                          axs101_defconfig
-c6x                                 defconfig
-sh                               j2_defconfig
-mips                            gpr_defconfig
-sh                            migor_defconfig
 i386                             alldefconfig
 powerpc                      mgcoge_defconfig
 arm                            lart_defconfig
@@ -150,6 +149,9 @@ m68k                       m5275evb_defconfig
 m68k                        m5272c3_defconfig
 arm                      footbridge_defconfig
 arm                  colibri_pxa270_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                       multi_v4t_defconfig
+arm                        trizeps4_defconfig
 mips                malta_kvm_guest_defconfig
 sh                           se7750_defconfig
 powerpc                   bluestone_defconfig
@@ -166,6 +168,7 @@ arc                      axs103_smp_defconfig
 m68k                        mvme16x_defconfig
 powerpc                      acadia_defconfig
 powerpc                     tqm8560_defconfig
+ia64                                defconfig
 powerpc                         ps3_defconfig
 c6x                        evmc6678_defconfig
 powerpc                       ppc64_defconfig
@@ -175,8 +178,6 @@ arm                           stm32_defconfig
 powerpc                    gamecube_defconfig
 mips                      pistachio_defconfig
 ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
 m68k                             allmodconfig
 m68k                                defconfig
 m68k                             allyesconfig
