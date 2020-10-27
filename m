@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8943929A372
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 04:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1107029A388
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Oct 2020 05:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441003AbgJ0Dwg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Oct 2020 23:52:36 -0400
-Received: from mga03.intel.com ([134.134.136.65]:26237 "EHLO mga03.intel.com"
+        id S2501892AbgJ0EEn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Oct 2020 00:04:43 -0400
+Received: from mga18.intel.com ([134.134.136.126]:21525 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440959AbgJ0Dwg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 26 Oct 2020 23:52:36 -0400
-IronPort-SDR: 3WKtEcwX1OJJYi2iZSC51grFtD326IhmeFO/ROt63wp/1fsy0wu+EmtgziOIf5aswP2mZn7lkZ
- I9O284sxEgGg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="168122899"
+        id S1733017AbgJ0EEl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 27 Oct 2020 00:04:41 -0400
+IronPort-SDR: JTUxT9hpUoETdyBNwSCAQi7iETsAalZHOBsUB6FTgZBKEjPz3dIiaCgEmYWP1knao3lz6VgVZL
+ lZxRQWJKTnng==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="155803021"
 X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="168122899"
+   d="scan'208";a="155803021"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 20:52:35 -0700
-IronPort-SDR: M3erBLgHyfOyC1r1nSOcV76aDwH5F1psW/Dcc1MWNoBKx9B4aLsrBLHWJ1S9OBsnz3xl/hEkdb
- GeK6JxfMx5eQ==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 21:04:38 -0700
+IronPort-SDR: dBH9JvnJoWGE0KLCsezG3jdKygG8d3QBZLWmZv2kMlAElAFqyB9ohMzeF1e0A9sHb7j1/XR9uf
+ WJbPAS75mdKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="322784765"
+   d="scan'208";a="535629911"
 Received: from lkp-server01.sh.intel.com (HELO ef28dff175aa) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Oct 2020 20:52:34 -0700
+  by orsmga005.jf.intel.com with ESMTP; 26 Oct 2020 21:04:37 -0700
 Received: from kbuild by ef28dff175aa with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kXG2D-00002P-U7; Tue, 27 Oct 2020 03:52:33 +0000
-Date:   Tue, 27 Oct 2020 11:51:50 +0800
+        id 1kXGDs-00002h-V0; Tue, 27 Oct 2020 04:04:36 +0000
+Date:   Tue, 27 Oct 2020 12:04:18 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:asm-generic-mmu-context] BUILD SUCCESS
- 13473b5dccd2f6ee2d9eb4384c0b39a814ffc9c5
-Message-ID: <5f979956.IfxT6WVHRA+P/cM8%lkp@intel.com>
+Subject: [asm-generic:master] BUILD SUCCESS
+ a259218ae60de9d1442c74728fe3a615cd435a19
+Message-ID: <5f979c42.mkHhNSrm7jkTs5wc%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,12 +45,12 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic-mmu-context
-branch HEAD: 13473b5dccd2f6ee2d9eb4384c0b39a814ffc9c5  xtensa: use asm-generic/mmu_context.h for no-op implementations
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  master
+branch HEAD: a259218ae60de9d1442c74728fe3a615cd435a19  Merge branch 'asm-generic-cleanup' into asm-generic
 
-elapsed time: 723m
+elapsed time: 722m
 
-configs tested: 169
+configs tested: 182
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -95,6 +95,8 @@ xtensa                generic_kc705_defconfig
 arm                            qcom_defconfig
 arm                           h3600_defconfig
 arm                         s3c2410_defconfig
+sh                          rsk7269_defconfig
+mips                      pic32mzda_defconfig
 sh                          rsk7264_defconfig
 riscv                            allyesconfig
 powerpc                     sbc8548_defconfig
@@ -123,6 +125,12 @@ c6x                                 defconfig
 sh                               j2_defconfig
 mips                            gpr_defconfig
 sh                            migor_defconfig
+i386                             alldefconfig
+powerpc                      mgcoge_defconfig
+arm                            lart_defconfig
+mips                     loongson1c_defconfig
+arm                        mvebu_v5_defconfig
+ia64                         bigsur_defconfig
 x86_64                           allyesconfig
 powerpc                      walnut_defconfig
 c6x                        evmc6472_defconfig
@@ -134,6 +142,12 @@ sh                        edosk7760_defconfig
 arm                             rpc_defconfig
 sh                              ul2_defconfig
 powerpc                 mpc837x_rdb_defconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                          allyesconfig
+powerpc                 mpc8313_rdb_defconfig
+ia64                        generic_defconfig
+m68k                       m5275evb_defconfig
+m68k                        m5272c3_defconfig
 arm                      footbridge_defconfig
 arm                  colibri_pxa270_defconfig
 mips                malta_kvm_guest_defconfig
@@ -188,7 +202,6 @@ sparc                               defconfig
 i386                                defconfig
 mips                             allyesconfig
 mips                             allmodconfig
-powerpc                          allyesconfig
 powerpc                          allmodconfig
 powerpc                           allnoconfig
 i386                 randconfig-a002-20201026
