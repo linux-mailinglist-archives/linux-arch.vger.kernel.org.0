@@ -2,36 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D192629F838
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 23:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8086229F842
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 23:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725952AbgJ2WdI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Oct 2020 18:33:08 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:36534 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbgJ2Wci (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 18:32:38 -0400
-Message-Id: <20201029221806.189523375@linutronix.de>
+        id S1725938AbgJ2Wch (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Oct 2020 18:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbgJ2Wcf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 18:32:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACB5C0613CF;
+        Thu, 29 Oct 2020 15:32:14 -0700 (PDT)
+Message-Id: <20201029222650.648971542@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604010728;
+        s=2020; t=1604010729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dHsj3bB6txbW51auQ1NY6Tbn9YUEP9hPQj+cerV4cH0=;
-        b=QSHJIt7LvlxNN9hJ0pBq2tvQAj6s9PRKwf9DDs+9wLl0TB3D07XB2aNc/P+jBNvq3OKdlB
-        9uImGW8KQrL2/v2DDWGmYr3ItyplTubI+62xRgbsyi4IeFKyTQeBZLSpOp/k//RoMYNU0D
-        MRXq2PcsrvKw8tKj6JtpzI7I7c+m0/l1rgAB1Q7e0HTSfRHwiF/OYPDVhjJi/t5CuooKwL
-        72rzQkellKlgnCIrCAJFk+1lKoYhevy2jnE7fElUwMoYj2u61NhwHpz39yR1AKfSxC9hiI
-        tHhi3pMD0MqXztTmwu1jN5JS5hiXfWpnm7xNyzYqMOICUggRy8lWVYhFp7D5AA==
+         content-transfer-encoding:content-transfer-encoding:  references:references;
+        bh=KaNIP+gHbCxEiFjMUXsw2ll/YULzf8E240MXoq9IavQ=;
+        b=FpvHwJm6pm9/uI4al2h2FOCNdJpqPqZtax3Dclwt8IA/Oh5Ponv2lMvh1GZE/kMxwHRMcZ
+        5Pj/25hwyvseGa2stRrQ6hWDY3/J9EfoBCubT4NV9cRLaJkPnkbul6TYsf2UE/bjO6nYqy
+        MP3NqSdxEeVXzr2dPAJp2eN+544XjjCZzvysUGJFSV0DJ4F1x7pAoj62zoQgnVkHmJBzJv
+        2aMoaV1jf69bT21PfPJ2XWc/VjbaCiFGLIpd8e3CUva0mbOXWUXlSMVPOsqCdikb0DRuKV
+        GDHVG9u29UKonL0Qkb43DnDsJff/u2qboH5QLh+1dzup/h2AbZ3PDpxH1nrUVw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604010728;
+        s=2020e; t=1604010729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dHsj3bB6txbW51auQ1NY6Tbn9YUEP9hPQj+cerV4cH0=;
-        b=bG4zbqkg1p92+Z0M4jQM3XbBv8SsS1VZa551XHoVYcBtO5FLMANBcd4TnLvpnuGvnhoALG
-        sOxX2o7Ksc9Qt8DQ==
-Date:   Thu, 29 Oct 2020 23:18:06 +0100
+         content-transfer-encoding:content-transfer-encoding:  references:references;
+        bh=KaNIP+gHbCxEiFjMUXsw2ll/YULzf8E240MXoq9IavQ=;
+        b=02FwbJXl3OAIrXjRtBQ0DicQZ2DyF6HHvJuRKCFGyMrTUHOwJHXKipX4ubGORyuMMUanCP
+        7rAr7hNu3+xpCHBw==
+Date:   Thu, 29 Oct 2020 23:18:07 +0100
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     linux-arch@vger.kernel.org,
@@ -70,124 +73,182 @@ Cc:     linux-arch@vger.kernel.org,
         sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org
-Subject: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+Subject: [patch V2 01/18] sched: Make migrate_disable/enable() independent of RT
+References: <20201029221806.189523375@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+Content-transfer-encoding: 8-bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Rm9sbG93aW5nIHVwIHRvIHRoZSBkaXNjdXNzaW9uIGluOgoKICBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9yLzIwMjAwOTE0MjA0MjA5LjI1NjI2NjA5M0BsaW51dHJvbml4LmRlCgphbmQgdGhlIGlu
-aXRpYWwgdmVyc2lvbiBvZiB0aGlzOgoKICBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjAw
-OTE5MDkxNzUxLjAxMTExNjY0OUBsaW51dHJvbml4LmRlCgp0aGlzIHNlcmllcyBwcm92aWRlcyBh
-IHByZWVtcHRpYmxlIHZhcmlhbnQgb2Yga21hcF9hdG9taWMgJiByZWxhdGVkCmludGVyZmFjZXMu
-CgpOb3cgdGhhdCB0aGUgc2NoZWR1bGVyIGZvbGtzIGhhdmUgd3JhcHBlZCB0aGVpciBoZWFkcyBh
-cm91bmQgdGhlIG1pZ3JhdGlvbgpkaXNhYmxlIHNjaGVkdWxlciB3b2VzLCB0aGVyZSBpcyBub3Qg
-YSByZWFsIHJlYXNvbiBhbnltb3JlIHRvIGNvbmZpbmUKbWlncmF0aW9uIGRpc2FibGluZyB0byBS
-VC4KCkFzIGV4cHJlc3NlZCBpbiB0aGUgZWFybGllciBkaXNjdXNzaW9uIGJ5IGdyYXBoaWNzIGFu
-ZCBjcnlwdG8gZm9sa3MsIHRoZXJlCmlzIGludGVyZXN0IHRvIGdldCByaWQgb2YgdGhlaXIga21h
-cF9hdG9taWMqIHVzYWdlIGJlY2F1c2UgdGhleSBuZWVkIG9ubHkgYQp0ZW1wb3Jhcnkgc3RhYmxl
-IG1hcCBhbmQgbm90IGFsbCB0aGUgYmVsbHMgYW5kIHdoaXN0ZWxzIG9mIGttYXBfYXRvbWljKi4K
-ClRoaXMgc2VyaWVzIHByb3ZpZGVzIGttYXBfbG9jYWwuKiBpb21hcF9sb2NhbCB2YXJpYW50cyB3
-aGljaCBvbmx5IGRpc2FibGUKbWlncmF0aW9uIHRvIGtlZXAgdGhlIHZpcnR1YWwgbWFwcGluZyBh
-ZGRyZXNzIHN0YWJsZSBhY2Nyb3NzIHByZWVtcHRpb24sCmJ1dCBkbyBuZWl0aGVyIGRpc2FibGUg
-cGFnZWZhdWx0cyBub3IgcHJlZW1wdGlvbi4gVGhlIG5ldyBmdW5jdGlvbnMgY2FuIGJlCnVzZWQg
-aW4gYW55IGNvbnRleHQsIGJ1dCBpZiB1c2VkIGluIGF0b21pYyBjb250ZXh0IHRoZSBjYWxsZXIg
-aGFzIHRvIHRha2UKY2FyZSBvZiBldmVudHVhbGx5IGRpc2FibGluZyBwYWdlZmF1bHRzLgoKVGhp
-cyBpcyBhY2hpZXZlZCBieToKCiAtIFJlbW92aW5nIHRoZSBSVCBkZXBlbmRlbmN5IGZyb20gbWln
-cmF0ZV9kaXNhYmxlL2VuYWJsZSgpCgogLSBDb25zb2xpZGF0aW5nIGFsbCBrbWFwIGF0b21pYyBp
-bXBsZW1lbnRhdGlvbnMgaW4gZ2VuZXJpYyBjb2RlCgogLSBTd2l0Y2hpbmcgZnJvbSBwZXIgQ1BV
-IHN0b3JhZ2Ugb2YgdGhlIGttYXAgaW5kZXggdG8gYSBwZXIgdGFzayBzdG9yYWdlCgogLSBBZGRp
-bmcgYSBwdGV2YWwgYXJyYXkgdG8gdGhlIHBlciB0YXNrIHN0b3JhZ2Ugd2hpY2ggY29udGFpbnMg
-dGhlIHB0ZXZhbHMKICAgb2YgdGhlIGN1cnJlbnRseSBhY3RpdmUgdGVtcG9yYXJ5IGttYXBzCgog
-LSBBZGRpbmcgY29udGV4dCBzd2l0Y2ggY29kZSB3aGljaCBjaGVja3Mgd2hldGhlciB0aGUgb3V0
-Z29pbmcgb3IgdGhlCiAgIGluY29taW5nIHRhc2sgaGFzIGFjdGl2ZSB0ZW1wb3Jhcnkga21hcHMu
-IElmIHNvLCB0aGUgb3V0Z29pbmcgdGFzaydzCiAgIGttYXBzIGFyZSByZW1vdmVkIGFuZCB0aGUg
-aW5jb21pbmcgdGFzaydzIGttYXBzIGFyZSByZXN0b3JlZC4KCiAtIEFkZGluZyBuZXcgaW50ZXJm
-YWNlcyBrW3VuXW1hcF90ZW1wb3JhcnkqKCkgd2hpY2ggYXJlIG5vdCBkaXNhYmxpbmcKICAgcHJl
-ZW1wdGlvbiBhbmQgY2FuIGJlIGNhbGxlZCBmcm9tIGFueSBjb250ZXh0IChleGNlcHQgTk1JKS4K
-CiAgIENvbnRyYXJ5IHRvIGttYXAoKSB3aGljaCBwcm92aWRlcyBwcmVlbXB0aWJsZSBhbmQgInBl
-cnNpc3RhbnQiIG1hcHBpbmdzLAogICB0aGVzZSBpbnRlcmZhY2VzIGFyZSBtZWFudCB0byByZXBs
-YWNlIHRoZSB0ZW1wb3JhcnkgbWFwcGluZ3MgcHJvdmlkZWQgYnkKICAga21hcF9hdG9taWMqKCkg
-dG9kYXkuCgpUaGlzIGFsbG93cyB0byBnZXQgcmlkIG9mIGNvbmRpdGlvbmFsIG1hcHBpbmcgY2hv
-aWNlcyBhbmQgYWxsb3dzIHRvIGhhdmUKcHJlZW1wdGlibGUgc2hvcnQgdGVybSBtYXBwaW5ncyBv
-biA2NGJpdCB3aGljaCBhcmUgdG9kYXkgZW5mb3JjZWQgdG8gYmUKbm9uLXByZWVtcHRpYmxlIGR1
-ZSB0byB0aGUgaGlnaG1lbSBjb25zdHJhaW50cy4gSXQgY2xlYXJseSBwdXRzIG92ZXJoZWFkIG9u
-CnRoZSBoaWdobWVtIHVzZXJzLCBidXQgaGlnaG1lbSBpcyBzbG93IGFueXdheS4KClRoaXMgaXMg
-bm90IGEgd2hvbGVzYWxlIGNvbnZlcnNpb24gd2hpY2ggbWFrZXMga21hcF9hdG9taWMgbWFnaWNh
-bGx5CnByZWVtcHRpYmxlIGJlY2F1c2UgdGhlcmUgbWlnaHQgYmUgdXNhZ2Ugc2l0ZXMgd2hpY2gg
-cmVseSBvbiB0aGUgaW1wbGljaXQKcHJlZW1wdCBkaXNhYmxlLiBTbyB0aGlzIG5lZWRzIHRvIGJl
-IGRvbmUgb24gYSBjYXNlIGJ5IGNhc2UgYmFzaXMgYW5kIHRoZQpjYWxsIHNpdGVzIGNvbnZlcnRl
-ZCB0byBrbWFwX3RlbXBvcmFyeS4KCk5vdGUsIHRoYXQgdGhpcyBpcyBvbmx5IGxpZ2h0bHkgdGVz
-dGVkIG9uIFg4NiBhbmQgY29tcGxldGVseSB1bnRlc3RlZCBvbgphbGwgb3RoZXIgYXJjaGl0ZWN0
-dXJlcy4KClRoZXJlIGlzIGFsc28gYSBzdGlsbCB0byBiZSBpbnZlc3RpZ2F0ZWQgcXVlc3Rpb24g
-ZnJvbSBMaW51cyBvbiB0aGUgaW5pdGlhbApwb3N0aW5nIHZlcnN1cyB0aGUgcGVyIGNwdSAvIHBl
-ciB0YXNrIG1hcHBpbmcgc3RhY2sgZGVwdGggd2hpY2ggbWlnaHQgbmVlZAp0byBiZSBtYWRlIGxh
-cmdlciBkdWUgdG8gdGhlIGFiaWxpdHkgdG8gdGFrZSBwYWdlIGZhdWx0cyB3aXRoaW4gYSBtYXBw
-aW5nCnJlZ2lvbi4KClRob3VnaCBJIHdhbnRlZCB0byBzaGFyZSB0aGUgY3VycmVudCBzdGF0ZSBv
-ZiBhZmZhaXJzIGJlZm9yZSBpbnZlc3RpZ2F0aW5nCnRoYXQgZnVydGhlci4gSWYgdGhlcmUgaXMg
-Y29uc2Vuc3VzIGluIGdvaW5nIGZvcndhcmQgd2l0aCB0aGlzLCBJJ2xsIGhhdmUgYQpkZWVwZXIg
-bG9vayBpbnRvIHRoaXMgaXNzdWUuCgpUaGUgbG90IGlzIGF2YWlsYWJsZSBmcm9tCgogICBnaXQ6
-Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdGdseC9kZXZlbC5naXQg
-aGlnaG1lbQoKSXQgaXMgYmFzZWQgb24gUGV0ZXIgWmlqbHN0cmFzIG1pZ3JhdGUgZGlzYWJsZSBi
-cmFuY2ggd2hpY2ggaXMgY2xvc2UgdG8gYmUKbWVyZ2VkIGludG8gdGhlIHRpcCB0cmVlLCBidXQg
-c3RpbGwgbm90IGZpbmFsaXplZDoKCiAgIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGlu
-dXgva2VybmVsL2dpdC9wZXRlcnovcXVldWUuZ2l0IHNjaGVkL21pZ3JhdGUtZGlzYWJsZQoKQ2hh
-bmdlcyB2cy4gVjE6CgogIC0gTWFrZSBpdCB0cnVseSBmdW5jdGlvbmFsIGJ5IGRlcGVuZGluZyBv
-biBtaWdyYXRlIGRpc2FibGUvZW5hYmxlIChCcm93biBwYXBlcmJhZykKICAtIFJlbmFtZSB0byBr
-bWFwX2xvY2FsLiogKExpbnVzKQogIC0gRml4IHRoZSBzY2hlZCBpbi9vdXQgaXNzdWUgTGludXMg
-cG9pbnRlZCBvdXQKICAtIEZpeCBhIGZldyBzdHlsZSBpc3N1ZXMgKENocmlzdG9waCkKICAtIFNw
-bGl0IGEgZmV3IHRoaW5ncyBvdXQgaW50byBzZXBlcmF0ZSBwYXRjaGVzIHRvIG1ha2UgcmV2aWV3
-IHNpbXBsZXIKICAtIFBpY2sgdXAgYWNrZWQvcmV2aWV3ZWQgdGFncyBhcyBhcHByb3ByaWF0ZQoK
-VGhhbmtzLAoKCXRnbHgKLS0tCiBhL2FyY2gvYXJtL21tL2hpZ2htZW0uYyAgICAgICAgICAgICAg
-IHwgIDEyMSAtLS0tLS0tLS0tLS0tLS0tLS0KIGEvYXJjaC9taWNyb2JsYXplL21tL2hpZ2htZW0u
-YyAgICAgICAgfCAgIDc4IC0tLS0tLS0tLS0tLQogYS9hcmNoL25kczMyL21tL2hpZ2htZW0uYyAg
-ICAgICAgICAgICB8ICAgNDggLS0tLS0tLQogYS9hcmNoL3Bvd2VycGMvbW0vaGlnaG1lbS5jICAg
-ICAgICAgICB8ICAgNjcgLS0tLS0tLS0tLQogYS9hcmNoL3NwYXJjL21tL2hpZ2htZW0uYyAgICAg
-ICAgICAgICB8ICAxMTUgLS0tLS0tLS0tLS0tLS0tLS0KIGFyY2gvYXJjL0tjb25maWcgICAgICAg
-ICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9hcmMvaW5jbHVkZS9hc20vaGlnaG1lbS5oICAg
-ICAgICB8ICAgIDggKwogYXJjaC9hcmMvbW0vaGlnaG1lbS5jICAgICAgICAgICAgICAgICB8ICAg
-NDQgLS0tLS0tCiBhcmNoL2FybS9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgIHwgICAgMSAK
-IGFyY2gvYXJtL2luY2x1ZGUvYXNtL2hpZ2htZW0uaCAgICAgICAgfCAgIDMxICsrKy0KIGFyY2gv
-YXJtL21tL01ha2VmaWxlICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9jc2t5L0tjb25m
-aWcgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBhcmNoL2Nza3kvaW5jbHVkZS9hc20vaGln
-aG1lbS5oICAgICAgIHwgICAgNCAKIGFyY2gvY3NreS9tbS9oaWdobWVtLmMgICAgICAgICAgICAg
-ICAgfCAgIDc1IC0tLS0tLS0tLS0tCiBhcmNoL21pY3JvYmxhemUvS2NvbmZpZyAgICAgICAgICAg
-ICAgIHwgICAgMSAKIGFyY2gvbWljcm9ibGF6ZS9pbmNsdWRlL2FzbS9oaWdobWVtLmggfCAgICA2
-IAogYXJjaC9taWNyb2JsYXplL21tL01ha2VmaWxlICAgICAgICAgICB8ICAgIDEgCiBhcmNoL21p
-Y3JvYmxhemUvbW0vaW5pdC5jICAgICAgICAgICAgIHwgICAgNiAKIGFyY2gvbWlwcy9LY29uZmln
-ICAgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9taXBzL2luY2x1ZGUvYXNtL2hpZ2ht
-ZW0uaCAgICAgICB8ICAgIDQgCiBhcmNoL21pcHMvbW0vaGlnaG1lbS5jICAgICAgICAgICAgICAg
-IHwgICA3NyAtLS0tLS0tLS0tLS0KIGFyY2gvbWlwcy9tbS9pbml0LmMgICAgICAgICAgICAgICAg
-ICAgfCAgICAzIAogYXJjaC9uZHMzMi9LY29uZmlnLmNwdSAgICAgICAgICAgICAgICB8ICAgIDEg
-CiBhcmNoL25kczMyL2luY2x1ZGUvYXNtL2hpZ2htZW0uaCAgICAgIHwgICAyMSArKy0KIGFyY2gv
-bmRzMzIvbW0vTWFrZWZpbGUgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC9wb3dlcnBjL0tj
-b25maWcgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20v
-aGlnaG1lbS5oICAgIHwgICAgNiAKIGFyY2gvcG93ZXJwYy9tbS9NYWtlZmlsZSAgICAgICAgICAg
-ICAgfCAgICAxIAogYXJjaC9wb3dlcnBjL21tL21lbS5jICAgICAgICAgICAgICAgICB8ICAgIDcg
-LQogYXJjaC9zcGFyYy9LY29uZmlnICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBhcmNoL3Nw
-YXJjL2luY2x1ZGUvYXNtL2hpZ2htZW0uaCAgICAgIHwgICAgNyAtCiBhcmNoL3NwYXJjL21tL01h
-a2VmaWxlICAgICAgICAgICAgICAgIHwgICAgMyAKIGFyY2gvc3BhcmMvbW0vc3JtbXUuYyAgICAg
-ICAgICAgICAgICAgfCAgICAyIAogYXJjaC94ODYvaW5jbHVkZS9hc20vZml4bWFwLmggICAgICAg
-ICB8ICAgIDEgCiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9oaWdobWVtLmggICAgICAgIHwgICAxMiAr
-CiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9pb21hcC5oICAgICAgICAgIHwgICAxMyAtLQogYXJjaC94
-ODYvbW0vaGlnaG1lbV8zMi5jICAgICAgICAgICAgICB8ICAgNTkgLS0tLS0tLS0tCiBhcmNoL3g4
-Ni9tbS9pbml0XzMyLmMgICAgICAgICAgICAgICAgIHwgICAxNSAtLQogYXJjaC94ODYvbW0vaW9t
-YXBfMzIuYyAgICAgICAgICAgICAgICB8ICAgNTcgLS0tLS0tLS0KIGFyY2gveHRlbnNhL0tjb25m
-aWcgICAgICAgICAgICAgICAgICAgfCAgICAxIAogYXJjaC94dGVuc2EvaW5jbHVkZS9hc20vaGln
-aG1lbS5oICAgICB8ICAgIDkgKwogYXJjaC94dGVuc2EvbW0vaGlnaG1lbS5jICAgICAgICAgICAg
-ICB8ICAgNDQgLS0tLS0tCiBiL2FyY2gveDg2L0tjb25maWcgICAgICAgICAgICAgICAgICAgIHwg
-ICAgMyAKIGluY2x1ZGUvbGludXgvaGlnaG1lbS5oICAgICAgICAgICAgICAgfCAgMjAzICsrKysr
-KysrKysrKysrKysrKysrKystLS0tLS0tLS0KIGluY2x1ZGUvbGludXgvaW8tbWFwcGluZy5oICAg
-ICAgICAgICAgfCAgIDQyICsrKysrLQogaW5jbHVkZS9saW51eC9wcmVlbXB0LmggICAgICAgICAg
-ICAgICB8ICAgMzggLS0tLS0KIGluY2x1ZGUvbGludXgvc2NoZWQuaCAgICAgICAgICAgICAgICAg
-fCAgIDExICsKIGtlcm5lbC9lbnRyeS9jb21tb24uYyAgICAgICAgICAgICAgICAgfCAgICAyIAog
-a2VybmVsL2ZvcmsuYyAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgCiBrZXJuZWwvc2No
-ZWQvY29yZS5jICAgICAgICAgICAgICAgICAgIHwgICAzMCArKystCiBrZXJuZWwvc2NoZWQvc2No
-ZWQuaCAgICAgICAgICAgICAgICAgIHwgICAgMiAKIGxpYi9zbXBfcHJvY2Vzc29yX2lkLmMgICAg
-ICAgICAgICAgICAgfCAgICAyIAogbW0vS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICAgIDMgCiBtbS9oaWdobWVtLmMgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIxOCAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tCiA1NCBmaWxlcyBjaGFuZ2VkLCA1NDIg
-aW5zZXJ0aW9ucygrKSwgOTY5IGRlbGV0aW9ucygtKQoK
+Now that the scheduler can deal with migrate disable properly, there is no
+real compelling reason to make it only available for RT.
+
+There are quite some code pathes which needlessly disable preemption in
+order to prevent migration and some constructs like kmap_atomic() enforce
+it implicitly.
+
+Making it available independent of RT allows to provide a preemptible
+variant of kmap_atomic() and makes the code more consistent in general.
+
+FIXME: Rework the comment in preempt.h
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+---
+ include/linux/preempt.h |   38 +++-----------------------------------
+ include/linux/sched.h   |    2 +-
+ kernel/sched/core.c     |   12 ++----------
+ kernel/sched/sched.h    |    2 +-
+ lib/smp_processor_id.c  |    2 +-
+ 5 files changed, 8 insertions(+), 48 deletions(-)
+
+--- a/include/linux/preempt.h
++++ b/include/linux/preempt.h
+@@ -322,7 +322,7 @@ static inline void preempt_notifier_init
+ 
+ #endif
+ 
+-#if defined(CONFIG_SMP) && defined(CONFIG_PREEMPT_RT)
++#ifdef CONFIG_SMP
+ 
+ /*
+  * Migrate-Disable and why it is undesired.
+@@ -382,43 +382,11 @@ static inline void preempt_notifier_init
+ extern void migrate_disable(void);
+ extern void migrate_enable(void);
+ 
+-#elif defined(CONFIG_PREEMPT_RT)
++#else
+ 
+ static inline void migrate_disable(void) { }
+ static inline void migrate_enable(void) { }
+ 
+-#else /* !CONFIG_PREEMPT_RT */
+-
+-/**
+- * migrate_disable - Prevent migration of the current task
+- *
+- * Maps to preempt_disable() which also disables preemption. Use
+- * migrate_disable() to annotate that the intent is to prevent migration,
+- * but not necessarily preemption.
+- *
+- * Can be invoked nested like preempt_disable() and needs the corresponding
+- * number of migrate_enable() invocations.
+- */
+-static __always_inline void migrate_disable(void)
+-{
+-	preempt_disable();
+-}
+-
+-/**
+- * migrate_enable - Allow migration of the current task
+- *
+- * Counterpart to migrate_disable().
+- *
+- * As migrate_disable() can be invoked nested, only the outermost invocation
+- * reenables migration.
+- *
+- * Currently mapped to preempt_enable().
+- */
+-static __always_inline void migrate_enable(void)
+-{
+-	preempt_enable();
+-}
+-
+-#endif /* CONFIG_SMP && CONFIG_PREEMPT_RT */
++#endif /* CONFIG_SMP */
+ 
+ #endif /* __LINUX_PREEMPT_H */
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -715,7 +715,7 @@ struct task_struct {
+ 	const cpumask_t			*cpus_ptr;
+ 	cpumask_t			cpus_mask;
+ 	void				*migration_pending;
+-#if defined(CONFIG_SMP) && defined(CONFIG_PREEMPT_RT)
++#ifdef CONFIG_SMP
+ 	unsigned short			migration_disabled;
+ #endif
+ 	unsigned short			migration_flags;
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1696,8 +1696,6 @@ void check_preempt_curr(struct rq *rq, s
+ 
+ #ifdef CONFIG_SMP
+ 
+-#ifdef CONFIG_PREEMPT_RT
+-
+ static void
+ __do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask, u32 flags);
+ 
+@@ -1772,8 +1770,6 @@ static inline bool rq_has_pinned_tasks(s
+ 	return rq->nr_pinned;
+ }
+ 
+-#endif
+-
+ /*
+  * Per-CPU kthreads are allowed to run on !active && online CPUs, see
+  * __set_cpus_allowed_ptr() and select_fallback_rq().
+@@ -2841,7 +2837,7 @@ void sched_set_stop_task(int cpu, struct
+ 	}
+ }
+ 
+-#else
++#else /* CONFIG_SMP */
+ 
+ static inline int __set_cpus_allowed_ptr(struct task_struct *p,
+ 					 const struct cpumask *new_mask,
+@@ -2850,10 +2846,6 @@ static inline int __set_cpus_allowed_ptr
+ 	return set_cpus_allowed_ptr(p, new_mask);
+ }
+ 
+-#endif /* CONFIG_SMP */
+-
+-#if !defined(CONFIG_SMP) || !defined(CONFIG_PREEMPT_RT)
+-
+ static inline void migrate_disable_switch(struct rq *rq, struct task_struct *p) { }
+ 
+ static inline bool rq_has_pinned_tasks(struct rq *rq)
+@@ -2861,7 +2853,7 @@ static inline bool rq_has_pinned_tasks(s
+ 	return false;
+ }
+ 
+-#endif
++#endif /* !CONFIG_SMP */
+ 
+ static void
+ ttwu_stat(struct task_struct *p, int cpu, int wake_flags)
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1056,7 +1056,7 @@ struct rq {
+ 	struct cpuidle_state	*idle_state;
+ #endif
+ 
+-#if defined(CONFIG_PREEMPT_RT) && defined(CONFIG_SMP)
++#if CONFIG_SMP
+ 	unsigned int		nr_pinned;
+ #endif
+ 	unsigned int		push_busy;
+--- a/lib/smp_processor_id.c
++++ b/lib/smp_processor_id.c
+@@ -26,7 +26,7 @@ unsigned int check_preemption_disabled(c
+ 	if (current->nr_cpus_allowed == 1)
+ 		goto out;
+ 
+-#if defined(CONFIG_SMP) && defined(CONFIG_PREEMPT_RT)
++#ifdef CONFIG_SMP
+ 	if (current->migration_disabled)
+ 		goto out;
+ #endif
+
