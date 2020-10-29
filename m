@@ -2,83 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED27529DF63
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 02:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10C129E02E
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 02:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729954AbgJ2BBM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Oct 2020 21:01:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60518 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731525AbgJ1WR1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:27 -0400
-Received: from gaia (unknown [95.145.162.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CDD7324694;
-        Wed, 28 Oct 2020 15:14:45 +0000 (UTC)
-Date:   Wed, 28 Oct 2020 15:14:43 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>, kernel-team@android.com
-Subject: Re: [PATCH 5/6] arm64: Advertise CPUs capable of running 32-bit
- applcations in sysfs
-Message-ID: <20201028151442.GI13345@gaia>
-References: <20201027215118.27003-1-will@kernel.org>
- <20201027215118.27003-6-will@kernel.org>
- <20201028121506.GG13345@gaia>
- <20201028122759.GA28091@willie-the-truck>
+        id S1730020AbgJ2BIu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Oct 2020 21:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729533AbgJ2BGK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Oct 2020 21:06:10 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B61FC0613D3
+        for <linux-arch@vger.kernel.org>; Wed, 28 Oct 2020 18:06:08 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id d24so1246976ljg.10
+        for <linux-arch@vger.kernel.org>; Wed, 28 Oct 2020 18:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GGrU2z1MQIER/cvvO+UmfkeQMG5BianEcYdHiHe9qyQ=;
+        b=Ug/McNP55t1xm6mf6Z65dD0d/4XLutY+oae+4KAHg9dQk7Ug4H28uN0ZtA6M7NgpbT
+         I76xZ2T09J5d7Ybn9ysY9RjSdQylACxpwnNQDr/Whe2xhZiOlFqCT3OIsA9q6zLzDeCR
+         81KtjKOTYR80DEEdXwrEXNgjq/YrpBGqKd9yqxwWPNsE3aR79VfrgmiIiCuvt0LOqp4p
+         g9SdQ3WjkMfuDJcu5J+Ntpja9H+lqlKUJo2zM/NDZEiWEQKPOjO10MeAjoZ8CaD+3oKL
+         C211FUrW1ORwXJZC8XlCmBgNTqf5GZzQLzPlE4Pp9aFCrQeZrd63oWztHdhVhAjJQL1T
+         dF9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GGrU2z1MQIER/cvvO+UmfkeQMG5BianEcYdHiHe9qyQ=;
+        b=FPl7DRVpFUSUk2OQk7k6jyp6D8+cXvji1BMD8AW0T+GXC18P0m0xukCd6CiVqf8w3G
+         Q66F2j37AvmW+YLUKg8iMn8ql8nkEvvwO4dSOB4ZeeBGaeYK0ceTWB60P5W39WGujeV2
+         xwbjdS2KCcJm4tjNjdnHVCELRrD6ODWobanHLAmr/qgR4RvToasXmjSdQxsvI1Jyd2GG
+         Wu2XGo5qrvR0naSarPQsgdaLj6dkoXG2W7/nCfJtD70T6rbNgDzZgZxz9bC3358ZsTpC
+         ZdptmpE/DNsyZgfEPL9RLhRP8KhjHVGWgNHQTGD6GBQVOlbkkmA2OerPCY042Kueb88+
+         g7fw==
+X-Gm-Message-State: AOAM532Vzh50LA0Ea0ZlxoO0WIbYEpNwAt98XV5GUvyM5uQtH04cJ4UR
+        MTEY9H/tZQAlh4hXJQFbVPq9iFYg0g2RUn313GhTMA==
+X-Google-Smtp-Source: ABdhPJwED9L0K+8kxvJCn6lQw5MHjDYLpGe4e16Gh7aY6DgACpmCDb7qbKA88fIn4deadsqcNqBfZ2vFqTocP7vkRyk=
+X-Received: by 2002:a2e:9f13:: with SMTP id u19mr725677ljk.160.1603933566252;
+ Wed, 28 Oct 2020 18:06:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201028122759.GA28091@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20201027200358.557003-1-mic@digikod.net>
+In-Reply-To: <20201027200358.557003-1-mic@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 29 Oct 2020 02:05:39 +0100
+Message-ID: <CAG48ez31oct9c8fkgFHQVb5u-o5cmwdNe2pJnmitnKcidNgfzw@mail.gmail.com>
+Subject: Re: [PATCH v22 00/12] Landlock LSM
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 12:27:59PM +0000, Will Deacon wrote:
-> On Wed, Oct 28, 2020 at 12:15:07PM +0000, Catalin Marinas wrote:
-> > On Tue, Oct 27, 2020 at 09:51:17PM +0000, Will Deacon wrote:
-> > > diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> > > index b555df825447..19893fb8e870 100644
-> > > --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> > > +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> > > @@ -472,6 +472,14 @@ Description:	AArch64 CPU registers
-> > >  		'identification' directory exposes the CPU ID registers for
-> > >  		 identifying model and revision of the CPU.
-> > >  
-> > > +What:		/sys/devices/system/cpu/aarch32_el0
-> > 
-> > Nitpick: should we call this aarch32_el0_present? It's not exactly
-> > present as we populate it as CPUs come online but it's closer to this
-> > mask than to the online one.
-> 
-> I don't think so, because a CPU could be set in this mask but not in the
-> present mask, which is hugely confusing it it has "present" in the name!
+On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+> This new patch series improves documentation, cleans up comments,
+> renames ARCH_EPHEMERAL_STATES to ARCH_EPHEMERAL_INODES and removes
+> LANDLOCK_ACCESS_FS_CHROOT.
 
-How can it end up here but not in the present mask? We populate present
-early if they have a corresponding DT entry.
+Thanks for continuing to work on this! This is going to be really
+valuable for sandboxing.
 
-> > > +Date:		October 2020
-> > > +Contact:	Linux ARM Kernel Mailing list <linux-arm-kernel@lists.infradead.org>
-> > > +Description:	Identifies the subset of CPUs in the system that can execute
-> > > +		AArch32 (32-bit ARM) applications. If absent, then all or none
-> > > +		of the CPUs can execute AArch32 applications and execve() will
-> > > +		behave accordingly.
-> > 
-> > What does "accordingly" mean? Normally, we'd get ENOEXEC but here the
-> > execve() "succeeds" followed by a SIGKILL if it ends up on the wrong
-> > CPU.
-> 
-> No; if the file is absent then execve() behaves as it always has.
-
-Ah, I missed the "absent" part and got confused.
-
--- 
-Catalin
+I hadn't looked at this series for a while; but I've now read through
+it, and I don't see any major problems left. :) That said, there still
+are a couple small things...
