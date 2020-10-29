@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2C229E770
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 10:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4325229E970
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 11:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbgJ2Jfa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Oct 2020 05:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
+        id S1726518AbgJ2Krr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Oct 2020 06:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726436AbgJ2Jfa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 05:35:30 -0400
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92430C0613D2;
-        Thu, 29 Oct 2020 02:35:29 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CMKzz22RSzljGmw;
-        Thu, 29 Oct 2020 10:35:27 +0100 (CET)
+        with ESMTP id S1726321AbgJ2Krr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 06:47:47 -0400
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9D3C0613CF
+        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 03:47:46 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CMMbM18Dqzlhss3;
+        Thu, 29 Oct 2020 11:47:43 +0100 (CET)
 Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CMKzx1whmzlh8TY;
-        Thu, 29 Oct 2020 10:35:25 +0100 (CET)
-Subject: Re: [PATCH v22 02/12] landlock: Add ruleset and domain management
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CMMbK0FgSzlh8TT;
+        Thu, 29 Oct 2020 11:47:41 +0100 (CET)
+Subject: Re: [PATCH v22 07/12] landlock: Support filesystem access-control
 To:     Jann Horn <jannh@google.com>
 Cc:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
@@ -48,14 +48,14 @@ Cc:     James Morris <jmorris@namei.org>,
         the arch/x86 maintainers <x86@kernel.org>,
         =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
 References: <20201027200358.557003-1-mic@digikod.net>
- <20201027200358.557003-3-mic@digikod.net>
- <CAG48ez1j9KELLconr2RTmzt6j7QkY-wKC+8fn-rsG+wfxFJ=jg@mail.gmail.com>
+ <20201027200358.557003-8-mic@digikod.net>
+ <CAG48ez1xMfxkwhXK4b1BB4GrTVauNzfwPoCutn9axKt_PFRSVQ@mail.gmail.com>
 From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <c52342ee-cf5c-e4d6-145e-0080fc07bc91@digikod.net>
-Date:   Thu, 29 Oct 2020 10:35:24 +0100
+Message-ID: <341f2e5d-1d7f-e1d7-b982-0135dfc276e3@digikod.net>
+Date:   Thu, 29 Oct 2020 11:47:40 +0100
 User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez1j9KELLconr2RTmzt6j7QkY-wKC+8fn-rsG+wfxFJ=jg@mail.gmail.com>
+In-Reply-To: <CAG48ez1xMfxkwhXK4b1BB4GrTVauNzfwPoCutn9axKt_PFRSVQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -64,286 +64,234 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-On 29/10/2020 02:05, Jann Horn wrote:
-> On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
->> A Landlock ruleset is mainly a red-black tree with Landlock rules as
->> nodes.  This enables quick update and lookup to match a requested access
->> e.g., to a file.  A ruleset is usable through a dedicated file
->> descriptor (cf. following commit implementing syscalls) which enables a
->> process to create and populate a ruleset with new rules.
+On 29/10/2020 02:06, Jann Horn wrote:
+> (On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> Thanks to the Landlock objects and ruleset, it is possible to identify
+>> inodes according to a process's domain.  To enable an unprivileged
+>> process to express a file hierarchy, it first needs to open a directory
+>> (or a file) and pass this file descriptor to the kernel through
+>> landlock_add_rule(2).  When checking if a file access request is
+>> allowed, we walk from the requested dentry to the real root, following
+>> the different mount layers.  The access to each "tagged" inodes are
+>> collected according to their rule layer level, and ANDed to create
+>> access to the requested file hierarchy.  This makes possible to identify
+>> a lot of files without tagging every inodes nor modifying the
+>> filesystem, while still following the view and understanding the user
+>> has from the filesystem.
 >>
->> A domain is a ruleset tied to a set of processes.  This group of rules
->> defines the security policy enforced on these processes and their future
->> children.  A domain can transition to a new domain which is the
->> intersection of all its constraints and those of a ruleset provided by
->> the current process.  This modification only impact the current process.
->> This means that a process can only gain more constraints (i.e. lose
->> accesses) over time.
+>> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+>> keep the same struct inodes for the same inodes whereas these inodes are
+>> in use.
 >>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: Jann Horn <jannh@google.com>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Serge E. Hallyn <serge@hallyn.com>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Reviewed-by: Jann Horn <jannh@google.com>
-
-Thanks.
-
-> 
-> with some nits:
-> 
+>> This commit adds a minimal set of supported filesystem access-control
+>> which doesn't enable to restrict all file-related actions.  This is the
+>> result of multiple discussions to minimize the code of Landlock to ease
+>> review.  Thanks to the Landlock design, extending this access-control
+>> without breaking user space will not be a problem.  Moreover, seccomp
+>> filters can be used to restrict the use of syscall families which may
+>> not be currently handled by Landlock.
 > [...]
->> +static struct landlock_ruleset *create_ruleset(void)
->> +{
->> +       struct landlock_ruleset *new_ruleset;
->> +
->> +       new_ruleset = kzalloc(sizeof(*new_ruleset), GFP_KERNEL_ACCOUNT);
->> +       if (!new_ruleset)
->> +               return ERR_PTR(-ENOMEM);
->> +       refcount_set(&new_ruleset->usage, 1);
->> +       mutex_init(&new_ruleset->lock);
->> +       /*
->> +        * root = RB_ROOT
-> 
-> This should probably be done explicitly, even though it's currently a
-> no-op, in case the implementation of RB_ROOT changes in the future.
-
-OK, I'll do it for RB_ROOT.
-
-> 
->> +        * hierarchy = NULL
->> +        * nb_rules = 0
->> +        * nb_layers = 0
->> +        * fs_access_mask = 0
->> +        */
->> +       return new_ruleset;
->> +}
+>> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
 > [...]
 >> +/**
->> + * landlock_insert_rule - Insert a rule in a ruleset
+>> + * DOC: fs_access
 >> + *
->> + * @ruleset: The ruleset to be updated.
->> + * @rule: Read-only payload to be inserted (not own by this function).
+>> + * A set of actions on kernel objects may be defined by an attribute (e.g.
+>> + * &struct landlock_path_beneath_attr) including a bitmask of access.
+>> + *
+>> + * Filesystem flags
+>> + * ~~~~~~~~~~~~~~~~
+>> + *
+>> + * These flags enable to restrict a sandbox process to a set of actions on
 > 
-> s/own/owned/
+> s/sandbox/sandboxed/
 
 OK
 
 > 
->> + * @is_merge: If true, intersects access rights and updates the rule's layers
->> + *            (e.g. merge two rulesets), else do a union of access rights and
->> + *            keep the rule's layers (e.g. extend a ruleset)
->> + *
->> + * Assumptions:
->> + *
->> + * - An inserted rule cannot be removed.
->> + * - The underlying kernel object must be held by the caller.
->> + */
->> +int landlock_insert_rule(struct landlock_ruleset *const ruleset,
->> +               struct landlock_rule *const rule, const bool is_merge)
 > [...]
->> +static int merge_ruleset(struct landlock_ruleset *const dst,
->> +               struct landlock_ruleset *const src)
->> +{
->> +       struct landlock_rule *walker_rule, *next_rule;
->> +       int err = 0;
+>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> [...]
+>> +static const struct landlock_object_underops landlock_fs_underops = {
+>> +       .release = release_inode
+>> +};
+> [...]
+>> +/* Access-control management */
 >> +
->> +       might_sleep();
->> +       if (!src)
+>> +static bool check_access_path_continue(
+>> +               const struct landlock_ruleset *const domain,
+>> +               const struct path *const path, const u32 access_request,
+>> +               bool *const allow, u64 *const layer_mask)
+>> +{
+>> +       const struct landlock_rule *rule;
+>> +       const struct inode *inode;
+>> +       bool next = true;
+>> +
+>> +       prefetch(path->dentry->d_parent);
+> 
+> IIRC software prefetch() turned out to only rarely actually have a
+> performance benefit, and they often actually make things worse; see
+> e.g. <https://lwn.net/Articles/444336/>. Unless you have strong
+> evidence that this actually brings a performance benefit, I'd probably
+> get rid of this.
+
+I took inspiration from the fs/d_path.c:prepend_path() but I agree. I'll
+remove prefetch() calls in the next series. I'll add them later if a
+benchmark shows an interesting performance impact.
+
+> 
+>> +       if (d_is_negative(path->dentry))
+>> +               /* Continues to walk while there is no mapped inode. */
+>> +               return true;
+>> +       inode = d_backing_inode(path->dentry);
+>> +       rcu_read_lock();
+>> +       rule = landlock_find_rule(domain,
+>> +                       rcu_dereference(landlock_inode(inode)->object));
+>> +       rcu_read_unlock();
+>> +
+>> +       /* Checks for matching layers. */
+>> +       if (rule && (rule->layers | *layer_mask)) {
+>> +               *allow = (rule->access & access_request) == access_request;
+>> +               if (*allow) {
+>> +                       *layer_mask &= ~rule->layers;
+>> +                       /* Stops when a rule from each layer granted access. */
+>> +                       next = !!*layer_mask;
+>> +               } else {
+>> +                       next = false;
+>> +               }
+>> +       }
+>> +       return next;
+>> +}
+>> +
+>> +static int check_access_path(const struct landlock_ruleset *const domain,
+>> +               const struct path *const path, u32 access_request)
+>> +{
+>> +       bool allow = false;
+>> +       struct path walker_path;
+>> +       u64 layer_mask;
+>> +
+>> +       if (WARN_ON_ONCE(!domain || !path))
 >> +               return 0;
->> +       /* Only merge into a domain. */
->> +       if (WARN_ON_ONCE(!dst || !dst->hierarchy))
->> +               return -EFAULT;
->> +
->> +       mutex_lock(&dst->lock);
->> +       mutex_lock_nested(&src->lock, 1);
-> 
-> Maybe add a comment like this above these two lines? "Ruleset locks
-> are ordered by time of ruleset creation; dst is newer than src."
-
-OK
-
-> 
-> Also, maybe s/1/SINGLE_DEPTH_NESTING/.
-
-OK
-
-> 
-> 
 >> +       /*
->> +        * Makes a new layer, but only increments the number of layers after
->> +        * the rules are inserted.
+>> +        * Allows access to pseudo filesystems that will never be mountable
+>> +        * (e.g. sockfs, pipefs), but can still be reachable through
+>> +        * /proc/self/fd .
 >> +        */
->> +       if (dst->nb_layers == sizeof(walker_rule->layers) * BITS_PER_BYTE) {
->> +               err = -E2BIG;
->> +               goto out_unlock;
->> +       }
->> +       dst->fs_access_mask |= src->fs_access_mask;
+>> +       if ((path->dentry->d_sb->s_flags & SB_NOUSER) ||
+>> +                       (d_is_positive(path->dentry) &&
+>> +                        unlikely(IS_PRIVATE(d_backing_inode(path->dentry)))))
+>> +               return 0;
+>> +       if (WARN_ON_ONCE(domain->nb_layers < 1))
+>> +               return -EACCES;
 >> +
->> +       /* Merges the @src tree. */
->> +       rbtree_postorder_for_each_entry_safe(walker_rule, next_rule,
->> +                       &src->root, node) {
->> +               err = landlock_insert_rule(dst, walker_rule, true);
->> +               if (err)
->> +                       goto out_unlock;
->> +       }
->> +       dst->nb_layers++;
+>> +       layer_mask = GENMASK_ULL(domain->nb_layers - 1, 0);
+>> +       /*
+>> +        * An access request which is not handled by the domain should be
+>> +        * allowed.
+>> +        */
+>> +       access_request &= domain->fs_access_mask;
+>> +       if (access_request == 0)
+>> +               return 0;
+>> +       walker_path = *path;
+>> +       path_get(&walker_path);
+>> +       /*
+>> +        * We need to walk through all the hierarchy to not miss any relevant
+>> +        * restriction.
+>> +        */
+>> +       while (check_access_path_continue(domain, &walker_path, access_request,
+>> +                               &allow, &layer_mask)) {
+> 
+> The logic in this code might be clearer if
+> check_access_path_continue() just returns whether the rule permitted
+> the access. Then it'd look like:
+> 
+> bool allow = false;
+> [...]
+> while (check_access_path_continue(domain, &walker_path,
+> access_request, &layer_mask)) {
+>   if (layer_mask == 0) {
+>     allow = true;
+>     break;
+>   }
+>   [...]
+> }
+> 
+> I think that would make it clearer under which conditions we can end
+> up returning "true" from check_access_path().
+> 
+> (The current code also looks correct to me, I just think it'd be
+> clearer this way. If you disagree, you can keep it as-is.)
+
+I agree, applied and tested.
+
+> 
+> 
+>> +               struct dentry *parent_dentry;
 >> +
->> +out_unlock:
->> +       mutex_unlock(&src->lock);
->> +       mutex_unlock(&dst->lock);
->> +       return err;
+>> +jump_up:
+>> +               /*
+>> +                * Does not work with orphaned/private mounts like overlayfs
+>> +                * layers for now (cf. ovl_path_real() and ovl_path_open()).
+>> +                */
+>> +               if (walker_path.dentry == walker_path.mnt->mnt_root) {
+>> +                       if (follow_up(&walker_path)) {
+>> +                               /* Ignores hidden mount points. */
+>> +                               goto jump_up;
+>> +                       } else {
+>> +                               /*
+>> +                                * Stops at the real root.  Denies access
+>> +                                * because not all layers have granted access.
+>> +                                */
+>> +                               allow = false;
+>> +                               break;
+>> +                       }
+>> +               }
+>> +               if (unlikely(IS_ROOT(walker_path.dentry))) {
+>> +                       /*
+>> +                        * Stops at disconnected root directories.  Only allows
+>> +                        * access to internal filesystems (e.g. nsfs which is
+>> +                        * reachable through /proc/self/ns).
+>> +                        */
+>> +                       allow = !!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
+>> +                       break;
+>> +               }
+>> +               parent_dentry = dget_parent(walker_path.dentry);
+>> +               dput(walker_path.dentry);
+>> +               walker_path.dentry = parent_dentry;
+>> +       }
+>> +       path_put(&walker_path);
+>> +       return allow ? 0 : -EACCES;
 >> +}
 > [...]
->> diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+>> +static inline u32 get_file_access(const struct file *const file)
+>> +{
+>> +       u32 access = 0;
+>> +
+>> +       if (file->f_mode & FMODE_READ) {
+>> +               /* A directory can only be opened in read mode. */
+>> +               if (S_ISDIR(file_inode(file)->i_mode))
+>> +                       return LANDLOCK_ACCESS_FS_READ_DIR;
+>> +               access = LANDLOCK_ACCESS_FS_READ_FILE;
+>> +       }
+>> +       /*
+>> +        * A LANDLOCK_ACCESS_FS_APPEND could be added but we also need to check
+>> +        * fcntl(2).
+>> +        */
+> 
+> Once https://lore.kernel.org/linux-api/20200831153207.GO3265@brightrain.aerifal.cx/
+> lands, pwritev2() with RWF_NOAPPEND will also be problematic for
+> classifying "write" vs "append"; you may want to include that in the
+> comment. (Or delete the comment.)
+
+Right, I'll include it in the comment.
+
+> 
+>> +       if (file->f_mode & FMODE_WRITE)
+>> +               access |= LANDLOCK_ACCESS_FS_WRITE_FILE;
+>> +       /* __FMODE_EXEC is indeed part of f_flags, not f_mode. */
+>> +       if (file->f_flags & __FMODE_EXEC)
+>> +               access |= LANDLOCK_ACCESS_FS_EXECUTE;
+>> +       return access;
+>> +}
 > [...]
->> +struct landlock_rule {
->> +       /**
->> +        * @node: Node in the red-black tree.
 > 
-> s/the red-black tree/the ruleset's red-black tree/
-
-OK
-
-> 
->> +        */
->> +       struct rb_node node;
->> +       /**
->> +        * @object: Pointer to identify a kernel object (e.g. an inode).  This
->> +        * is used as a key for this ruleset element.  This pointer is set once
->> +        * and never modified.  It always point to an allocated object because
-> 
-> s/point/points/
-
-OK
-
-> 
->> +        * each rule increment the refcount of there object.
-> 
-> s/increment/increments/
-> s/there/its/
-
-OK
-
-> 
->> +        */
->> +       struct landlock_object *object;
->> +       /**
->> +        * @layers: Bitfield to identify the layers which resulted to @access
->> +        * from different consecutive intersections.
->> +        */
->> +       u64 layers;
->> +       /**
->> +        * @access: Bitfield of allowed actions on the kernel object.  They are
->> +        * relative to the object type (e.g. %LANDLOCK_ACTION_FS_READ).  This
->> +        * may be the result of the merged access rights (boolean AND) from
->> +        * multiple layers referring to the same object.
->> +        */
->> +       u32 access;
->> +};
->> +
->> +/**
->> + * struct landlock_hierarchy - Node in a ruleset hierarchy
->> + */
->> +struct landlock_hierarchy {
->> +       /**
->> +        * @parent: Pointer to the parent node, or NULL if it is a root Lanlock
-> 
-> nit: Landlock
-
-Thanks :)
-
-> 
->> +        * domain.
->> +        */
->> +       struct landlock_hierarchy *parent;
->> +       /**
->> +        * @usage: Number of potential children domains plus their parent
->> +        * domain.
->> +        */
->> +       refcount_t usage;
->> +};
->> +
->> +/**
->> + * struct landlock_ruleset - Landlock ruleset
->> + *
->> + * This data structure must contains unique entries, be updatable, and quick to
-> 
-> s/contains/contain/
-
-OK
-
-> 
->> + * match an object.
->> + */
->> +struct landlock_ruleset {
->> +       /**
->> +        * @root: Root of a red-black tree containing &struct landlock_rule
->> +        * nodes.
-> 
-> Maybe add: "Once the ruleset is installed on a process, this tree is
-> immutable until @usage reaches zero."
-
-Right.
-
-> 
->> +        */
->> +       struct rb_root root;
->> +       /**
->> +        * @hierarchy: Enables hierarchy identification even when a parent
->> +        * domain vanishes.  This is needed for the ptrace protection.
->> +        */
->> +       struct landlock_hierarchy *hierarchy;
->> +       union {
->> +               /**
->> +                * @work_free: Enables to free a ruleset within a lockless
->> +                * section.  This is only used by
->> +                * landlock_put_ruleset_deferred() when @usage reaches zero.
->> +                * The fields @lock, @usage, @nb_layers, @nb_rules and
->> +                * @fs_access_mask are then unused.
->> +                */
->> +               struct work_struct work_free;
->> +               struct {
->> +                       /**
->> +                        * @lock: Guards against concurrent modifications of
->> +                        * @root, if @usage is greater than zero.
->> +                        */
->> +                       struct mutex lock;
->> +                       /**
->> +                        * @usage: Number of processes (i.e. domains) or file
->> +                        * descriptors referencing this ruleset.
->> +                        */
->> +                       refcount_t usage;
->> +                       /**
->> +                        * @nb_rules: Number of non-overlapping (i.e. not for
->> +                        * the same object) rules in this ruleset.
->> +                        */
->> +                       u32 nb_rules;
->> +                       /**
->> +                        * @nb_layers: Number of layers which are used in this
->> +                        * ruleset.  This enables to check that all the layers
->> +                        * allow an access request.  A value of 0 identify a
-> 
-> s/identify/identifies/
-
-OK
-
-> 
-> 
-> 
->> +                        * non-merged ruleset (i.e. not a domain).
->> +                        */
->> +                       u32 nb_layers;
->> +                       /**
->> +                        * @fs_access_mask: Contains the subset of filesystem
->> +                        * actions which are restricted by a ruleset.  This is
->> +                        * used when merging rulesets and for user space
->> +                        * backward compatibility (i.e. future-proof).  Set
->> +                        * once and never changed for the lifetime of the
->> +                        * ruleset.
->> +                        */
->> +                       u32 fs_access_mask;
->> +               };
->> +       };
->> +};
