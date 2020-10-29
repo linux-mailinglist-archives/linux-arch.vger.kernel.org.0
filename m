@@ -2,182 +2,250 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6303429E01D
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 02:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3569E29E166
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 03:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404268AbgJ2BHm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Oct 2020 21:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404126AbgJ2BHm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Oct 2020 21:07:42 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51350C0613D5
-        for <linux-arch@vger.kernel.org>; Wed, 28 Oct 2020 18:07:40 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id x6so1301339ljd.3
-        for <linux-arch@vger.kernel.org>; Wed, 28 Oct 2020 18:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JHdZPPn9wLM8C261Oo5ewV1obQFhVZ5ZdtkoajBWV64=;
-        b=MTIV5nTARTLRBj0lxrRgSzGzRPYNAiPZWMkB9ep/3PqQq96Sbvp39GhCCvD9P7C/9G
-         jSa0WHMFFRSKIlGXwo17x9mJaZSXNA2WyNRoeARNazqPz6DjPLBNsihFZKJM4DFVZ/CQ
-         j3PNJYC6TnyMC9tXn4jy59H788ukVUiTCREIlCJtFaO+tL4gtg47eg+1qCzJX2qAaGf0
-         OGl7m75eU0hiHajz8+lj34XqRRj/KyofTQfSSo0wWrl+kguZAe7y41ED4NaXCYy9qrEK
-         VBXAJUcNjw8AKl3YDslsCgKie01Tu2Qs1ciqvcEbb3HuzunIQUzDI9drOA7XrORLRfmD
-         yjSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JHdZPPn9wLM8C261Oo5ewV1obQFhVZ5ZdtkoajBWV64=;
-        b=msQsiIni/HPb7x/d+gVAG/hUaACOXnNUJxwlV6GoemHY1Ky3aW2uuGtPccFIANuQVV
-         0KUmJXI4Rx3/Mbxt1MSfamlxssZAEv4b5bCL/khOoFcCu/3D9k67j+x8Xp6guf5GGrg2
-         r9T7XXTjQLJe+P15QGfZqk7c69Qm1rJOWRLcCrchPrsA5shbO0pFNLfIO01L5TtLMKfN
-         RVsK3XoClGgpMQvdZeIPC0QwR6r9U8qpKvGScO5WaXYDCFzpgbPnQ+KLD3mITibnWnqw
-         QiykmCCuslDB4CvfdjFbRVgl9Wj53tLTr0f/JoQ9DSc7Hc3AAAXm2YBH7GcV12JZGCJ8
-         1WdQ==
-X-Gm-Message-State: AOAM531m3DCt9SzzBWaWU7xKYRxqARzm98+yuSuCdo/Pp9I/JkgZ5+Bb
-        hhRxf6ojULSuM6nVdLhuL/Dxy+QyVKH0AnVgZK3v0g==
-X-Google-Smtp-Source: ABdhPJxZF2osDmUJJYFjNdSuFzFlSzMFSQ07MX9iBFABKWDfUCx38EmD5usneiPJrsJhn41DKD8OlPb4Di5oSfLsrWI=
-X-Received: by 2002:a2e:8816:: with SMTP id x22mr663617ljh.377.1603933658573;
- Wed, 28 Oct 2020 18:07:38 -0700 (PDT)
+        id S1725806AbgJ2CAv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Oct 2020 22:00:51 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32876 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726239AbgJ2CAp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 28 Oct 2020 22:00:45 -0400
+IronPort-SDR: De/ZGQNv3nkbPq32KoLmz2/Sm15JPkgXXuG6DkE9/IqkWxNRGXyGyC+mpIbwdsRZQ0N+dtTkxC
+ 1OzqkTK/R95w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9788"; a="156139230"
+X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
+   d="scan'208";a="156139230"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2020 19:00:44 -0700
+IronPort-SDR: XBdhSy/t5PeP7b3G+hkw4KNUVWPaXJsEq/HpwBale1UeDBygfW64jCs7dbPfwj/aws7Z1baxfa
+ bFi1/yWP2NWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,428,1596524400"; 
+   d="scan'208";a="424911318"
+Received: from lkp-server02.sh.intel.com (HELO 0471ce7c9af6) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Oct 2020 19:00:43 -0700
+Received: from kbuild by 0471ce7c9af6 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kXxF4-0000JW-E2; Thu, 29 Oct 2020 02:00:42 +0000
+Date:   Thu, 29 Oct 2020 09:59:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [asm-generic:master] BUILD SUCCESS
+ 24a23387c15f34bad2485a9e1c3b7ac6f0fb35a6
+Message-ID: <5f9a221e.NvsyV4Mt5GqoKhuP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-13-mic@digikod.net>
-In-Reply-To: <20201027200358.557003-13-mic@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 29 Oct 2020 02:07:11 +0100
-Message-ID: <CAG48ez07p+BtCRo4D75S3xsr76Kj_9Aipv3pBHsc4zyNjEiEmQ@mail.gmail.com>
-Subject: Re: [PATCH v22 12/12] landlock: Add user and kernel documentation
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> This documentation can be built with the Sphinx framework.
->
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-[...]
-> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/use=
-rspace-api/landlock.rst
-[...]
-> +Landlock rules
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +A Landlock rule enables to describe an action on an object.  An object i=
-s
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  master
+branch HEAD: 24a23387c15f34bad2485a9e1c3b7ac6f0fb35a6  Merge branch 'asm-generic-cleanup' into asm-generic
 
-s/enables to describe/describes/
+elapsed time: 721m
 
-> +currently a file hierarchy, and the related filesystem actions are defin=
-ed in
-> +`Access rights`_.  A set of rules is aggregated in a ruleset, which can =
-then
-> +restrict the thread enforcing it, and its future children.
-> +
-> +Defining and enforcing a security policy
-> +----------------------------------------
-> +
-> +We first need to create the ruleset that will contain our rules.  For th=
-is
-> +example, the ruleset will contain rules which only allow read actions, b=
-ut
-> +write actions will be denied.  The ruleset then needs to handle both of =
-these
-> +kind of actions.  To have a backward compatibility, these actions should=
- be
-> +ANDed with the supported ones.
+configs tested: 186
+configs skipped: 2
 
-This sounds as if there is a way for userspace to discover which
-actions are supported by the running kernel; but we don't have
-anything like that, right?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If we want to make that possible, we could maybe change
-sys_landlock_create_ruleset() so that if
-ruleset_attr.handled_access_fs contains bits we don't know, we clear
-those bits and then copy the struct back to userspace? And then
-userspace can retry the syscall with the cleared bits? Or something
-along those lines?
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+m68k                        m5307c3_defconfig
+c6x                                 defconfig
+s390                             allyesconfig
+arm                          prima2_defconfig
+ia64                          tiger_defconfig
+openrisc                         alldefconfig
+powerpc                 mpc8272_ads_defconfig
+mips                        maltaup_defconfig
+sh                           se7721_defconfig
+arc                          axs103_defconfig
+powerpc                    socrates_defconfig
+powerpc64                           defconfig
+arm                         nhk8815_defconfig
+powerpc                 mpc836x_rdk_defconfig
+sh                            shmin_defconfig
+c6x                              alldefconfig
+arm                      integrator_defconfig
+arm                          pxa3xx_defconfig
+ia64                                defconfig
+ia64                        generic_defconfig
+mips                          malta_defconfig
+sh                          lboxre2_defconfig
+alpha                            alldefconfig
+sh                          r7780mp_defconfig
+arm                            lart_defconfig
+mips                      bmips_stb_defconfig
+arm                        magician_defconfig
+m68k                        mvme147_defconfig
+powerpc                 mpc8313_rdb_defconfig
+arm                              zx_defconfig
+c6x                         dsk6455_defconfig
+parisc                generic-32bit_defconfig
+powerpc                    gamecube_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                      chrp32_defconfig
+arc                     haps_hs_smp_defconfig
+m68k                       m5249evb_defconfig
+arm                           tegra_defconfig
+powerpc                 mpc834x_mds_defconfig
+arc                                 defconfig
+arm                       aspeed_g5_defconfig
+powerpc                      katmai_defconfig
+mips                          rb532_defconfig
+powerpc                   lite5200b_defconfig
+sh                   secureedge5410_defconfig
+powerpc                        warp_defconfig
+sh                              ul2_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                             sh03_defconfig
+mips                           xway_defconfig
+powerpc                  storcenter_defconfig
+sh                        dreamcast_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                        edosk7760_defconfig
+sh                ecovec24-romimage_defconfig
+riscv                            alldefconfig
+powerpc                     asp8347_defconfig
+powerpc                     mpc512x_defconfig
+sh                           se7206_defconfig
+sh                           se7343_defconfig
+powerpc                     akebono_defconfig
+powerpc                      pcm030_defconfig
+arm                             ezx_defconfig
+powerpc64                        alldefconfig
+powerpc                  iss476-smp_defconfig
+arm                          imote2_defconfig
+powerpc                      walnut_defconfig
+mips                     decstation_defconfig
+m68k                        m5407c3_defconfig
+mips                            gpr_defconfig
+sh                               j2_defconfig
+mips                            e55_defconfig
+ia64                      gensparse_defconfig
+microblaze                          defconfig
+arm                        multi_v7_defconfig
+powerpc                   motionpro_defconfig
+mips                           gcw0_defconfig
+mips                            ar7_defconfig
+mips                           ip22_defconfig
+mips                malta_qemu_32r6_defconfig
+sh                             espt_defconfig
+arm                          ixp4xx_defconfig
+um                            kunit_defconfig
+m68k                          multi_defconfig
+nds32                            alldefconfig
+um                           x86_64_defconfig
+arm                      tct_hammer_defconfig
+mips                       bmips_be_defconfig
+arm                           viper_defconfig
+powerpc                    sam440ep_defconfig
+sh                          urquell_defconfig
+sh                          sdk7780_defconfig
+powerpc                     pseries_defconfig
+arm                            zeus_defconfig
+sh                          rsk7264_defconfig
+powerpc                    klondike_defconfig
+arm                          pxa168_defconfig
+riscv                    nommu_virt_defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20201029
+x86_64               randconfig-a002-20201029
+x86_64               randconfig-a003-20201029
+x86_64               randconfig-a006-20201029
+x86_64               randconfig-a005-20201029
+x86_64               randconfig-a004-20201029
+i386                 randconfig-a002-20201026
+i386                 randconfig-a003-20201026
+i386                 randconfig-a005-20201026
+i386                 randconfig-a001-20201026
+i386                 randconfig-a006-20201026
+i386                 randconfig-a004-20201026
+i386                 randconfig-a002-20201028
+i386                 randconfig-a005-20201028
+i386                 randconfig-a003-20201028
+i386                 randconfig-a001-20201028
+i386                 randconfig-a004-20201028
+i386                 randconfig-a006-20201028
+x86_64               randconfig-a011-20201028
+x86_64               randconfig-a013-20201028
+x86_64               randconfig-a016-20201028
+x86_64               randconfig-a015-20201028
+x86_64               randconfig-a012-20201028
+x86_64               randconfig-a014-20201028
+i386                 randconfig-a016-20201028
+i386                 randconfig-a014-20201028
+i386                 randconfig-a015-20201028
+i386                 randconfig-a013-20201028
+i386                 randconfig-a012-20201028
+i386                 randconfig-a011-20201028
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-[...]
-> +We can now add a new rule to this ruleset thanks to the returned file
-> +descriptor referring to this ruleset.  The rule will only enable to read=
- the
+clang tested configs:
+x86_64               randconfig-a001-20201028
+x86_64               randconfig-a002-20201028
+x86_64               randconfig-a003-20201028
+x86_64               randconfig-a006-20201028
+x86_64               randconfig-a005-20201028
+x86_64               randconfig-a004-20201028
+x86_64               randconfig-a001-20201026
+x86_64               randconfig-a003-20201026
+x86_64               randconfig-a002-20201026
+x86_64               randconfig-a006-20201026
+x86_64               randconfig-a004-20201026
+x86_64               randconfig-a005-20201026
 
-s/enable to read/allow reading/
-
-> +file hierarchy ``/usr``.  Without another rule, write actions would then=
- be
-> +denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with =
-the
-> +``O_PATH`` flag and fill the &struct landlock_path_beneath_attr with thi=
-s file
-> +descriptor.
-[...]
-> +Inheritance
-> +-----------
-> +
-> +Every new thread resulting from a :manpage:`clone(2)` inherits Landlock =
-domain
-> +restrictions from its parent.  This is similar to the seccomp inheritanc=
-e (cf.
-> +:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task=
-'s
-> +:manpage:`credentials(7)`.  For instance, one process's thread may apply
-> +Landlock rules to itself, but they will not be automatically applied to =
-other
-> +sibling threads (unlike POSIX thread credential changes, cf.
-> +:manpage:`nptl(7)`).
-> +
-> +When a thread sandbox itself, we have the grantee that the related secur=
-ity
-
-s/sandbox/sandboxes/
-s/grantee/guarantee/
-
-> +policy will stay enforced on all this thread's descendants.  This enable=
-s to
-> +create standalone and modular security policies per application, which w=
-ill
-
-s/enables to create/allows creating/
-
-
-> +automatically be composed between themselves according to their runtime =
-parent
-> +policies.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
