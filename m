@@ -2,62 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B73E29F901
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 00:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA2829F935
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 00:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbgJ2XTg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Oct 2020 19:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S1725791AbgJ2Xmg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Oct 2020 19:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725791AbgJ2XTf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 19:19:35 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD4EC0613CF
-        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 16:19:34 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id d25so4910659ljc.11
-        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 16:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OAaBl/U7PBG+TlUp0N4qfJ0eDW1D/8YEA2bXCC674us=;
-        b=SyS4SffxYsNmj61H9VhYyfV30AKVcQI02I05R1QJ0WmBmFSO+bnQWo+8WU1Xmtdngw
-         /WCUakc82ksJGHGKm7uLpuzRi56V0rh71ThvreQzsj4AGwhIaWOkntvIB7PKONmne7aI
-         RS+5JSoq7Rynp7XqZeCI4Lh5y/aQJhenniqh8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OAaBl/U7PBG+TlUp0N4qfJ0eDW1D/8YEA2bXCC674us=;
-        b=E891OZ61j31MH4ZWZF2UUwe7HILeXl7KhwuNI1/Bp6yZYkrtIw12BSlG/rI8k5g1BD
-         S1kFV9ORcpIg9eT1DX1o0Eak5NX5g/8VbQJOxIF07TXiN3VFLT9t68r7UFjF/X9Je/nL
-         eSqRk6eiSp4fAtBLN0IiJXe0WIfUfVFqCw1Xs+PfGRj8PH3yyrueepzfwXj+ytpuJWrv
-         tm7CjedzJrhCny4K0Yi7RKmpy3yxy3ILr+1aJy48kZwZwIfRg2x4lSGShqg9JNK3xEvy
-         L+n0b4EJjCBfBtYcdIme0lzdMxUB8nEeBsKSGiTwCrhPXOQR6WPc9ZqsuTIH/HP1NuFS
-         maDQ==
-X-Gm-Message-State: AOAM530UFfS2TBrO7QHL7sNalMqlo5RUnFuGmzmC59uX1IplazVqHLTo
-        GIltgB+C0qHpNr3Hog/radTnKHpQnK1leA==
-X-Google-Smtp-Source: ABdhPJxs5E4t8vhYqNCORJUqSF6QVNFlQbVvpbIXeL9pUWTQBoIj/b3C/uUMrKkzjqvnugGspnZlyw==
-X-Received: by 2002:a2e:2c17:: with SMTP id s23mr2955411ljs.436.1604013572880;
-        Thu, 29 Oct 2020 16:19:32 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id g20sm471984ljn.134.2020.10.29.16.19.32
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2020 16:19:32 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id d25so4910626ljc.11
-        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 16:19:32 -0700 (PDT)
-X-Received: by 2002:a2e:8815:: with SMTP id x21mr3018764ljh.312.1604013088281;
- Thu, 29 Oct 2020 16:11:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201029221806.189523375@linutronix.de>
-In-Reply-To: <20201029221806.189523375@linutronix.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Oct 2020 16:11:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
-Message-ID: <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
-Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
-To:     Thomas Gleixner <tglx@linutronix.de>
+        with ESMTP id S1725379AbgJ2Xmf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 19:42:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D4AC0613CF;
+        Thu, 29 Oct 2020 16:41:42 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604014900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dWuiBG8a+NnkPGmw23LTYR8bRuWLPOcTs2J9m+57N30=;
+        b=SXAxpB4OrSZM8KanRhq0SHKbbqNdcUZGBDuuY0dpE3HzYsV6X3WGBvormMPwGgBe13WqGS
+        zl+c6uDF44lRL3XYTntNDOXhWi1enb8HJyzyEjQMqxw3GSIbeAvode6e1x0/HUh1LOV13D
+        iGoRdWEQcslmNVQBlZot50CD5jCjvafIrM9wdZgJj+TIzPSwNqWmbdAFeVqjadC2jU11Tb
+        rGfBMY/MMEh+koaNaMVZhxHbfDry4hkHFhwfoBCQ7ddPNZj4c2CDLBpYqBLzdFm2N74+mY
+        zh6t2OfFuG8Sz0WmlH9mRTGpAIOiGIUlj2fJM+MCYBQBz4iunYGWpWFAsyGP3w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604014900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dWuiBG8a+NnkPGmw23LTYR8bRuWLPOcTs2J9m+57N30=;
+        b=bPrOV2Mu8WrqdxWFrt3BZte7XxWkrcHXKqjiK4x7RufHzyISYL2psldkYUi2DujbGIhU51
+        +7ZFtIMezAsqNiCA==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -77,9 +54,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
         <linux-snps-arc@lists.infradead.org>,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -99,27 +76,52 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+In-Reply-To: <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
+References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
+Date:   Fri, 30 Oct 2020 00:41:39 +0100
+Message-ID: <87pn50ob0s.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 3:32 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Thu, Oct 29 2020 at 16:11, Linus Torvalds wrote:
+> On Thu, Oct 29, 2020 at 3:32 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> Though I wanted to share the current state of affairs before investigating
+>> that further. If there is consensus in going forward with this, I'll have a
+>> deeper look into this issue.
 >
+> Me likee. I think this looks like the right thing to do.
 >
-> Though I wanted to share the current state of affairs before investigating
-> that further. If there is consensus in going forward with this, I'll have a
-> deeper look into this issue.
+> I didn't actually apply the patches, but just from reading them it
+> _looks_ to me like you do the migrate_disable() unconditionally, even
+> if it's not a highmem page..
+>
+> That sounds like it might be a good thing for debugging, but not
+> necessarily great in general.
+>
+> Or am I misreading things?
 
-Me likee. I think this looks like the right thing to do.
+No, you're not misreading it, but doing it conditionally would be a
+complete semantical disaster. kmap_atomic*() also disables preemption
+and pagefaults unconditionaly.  If that wouldn't be the case then every
+caller would have to have conditionals like 'if (CONFIG_HIGHMEM)' or
+worse 'if (PageHighMem(page)'.
 
-I didn't actually apply the patches, but just from reading them it
-_looks_ to me like you do the migrate_disable() unconditionally, even
-if it's not a highmem page..
+Let's not go there.
 
-That sounds like it might be a good thing for debugging, but not
-necessarily great in general.
+Migrate disable is a less horrible plague than preempt and pagefault
+disable even if the scheduler people disagree due to the lack of theory
+backing that up :)
 
-Or am I misreading things?
+The charm of the new interface is that users still can rely on per
+cpuness independent of being on a highmem plagued system. For non
+highmem systems the extra migrate disable/enable is really a minor
+nuissance.
 
-                Linus
+Thanks,
+
+        tglx
