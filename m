@@ -2,184 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA1D29EFAC
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 16:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1320229F438
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Oct 2020 19:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728063AbgJ2PZp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Oct 2020 11:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S1725871AbgJ2SmR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Oct 2020 14:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728023AbgJ2PZp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 11:25:45 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E7EC0613D6
-        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 08:25:45 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id y8so1965026qki.12
-        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 08:25:45 -0700 (PDT)
+        with ESMTP id S1725648AbgJ2SmQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Oct 2020 14:42:16 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAC2C0613CF
+        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 11:42:16 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id y12so3896508wrp.6
+        for <linux-arch@vger.kernel.org>; Thu, 29 Oct 2020 11:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=HvgcHzvgNIHPBHqniJljI4Ra8aRcuzZdi/nFEGJJmlk=;
-        b=Um/m2vHRRFZAYWoO06a+XLlpac03GEvrXOXS1V20I2AKQk4w5GkBfkGV/46D8ZpN5S
-         BWxWNch8CArb5m/vTHZUEc4EfIYBgA+rxQqiC+T2dHpCn3nvzQ05mU5/q+kNNCP5ViVw
-         ONGRXSiS594/R1bUFbRO1aGw4Tv9iiF20MUy8dmo0sXdejh5PBrAyNONbIyx3LRdQXi+
-         ut87BXzrd+IhzK3P7N72GV1q5E0T5rZ6Uhw2+wi94u4KLMo5i3+3MH67qqSG3M9NZPt6
-         c1RlmzZytANnC76GOxqvpz1TgczJ+bazkHTJ1b6CtG+nALo7EOjOUE98IZH7TJFubCbt
-         ILAQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2IjhLdSLe/LavGMCZ4vHD0wPPfdIdrDX2u7wxDkmaBI=;
+        b=nC3kL7EXNjlCxZ5fyCQwz66wSubz4eFY44c4dKVNHCp71+0Pc7+DFoDQerD9MwjKPL
+         Ig+ukPtPkNfnFGLbXrWk3TWSKssrXx61GFjZ/eJ0qiE94d3K6g5mrr+xB14Fkjum4Rts
+         TVAfYze0T+UjD4eEjgo+kWueaXifSyKDy7UAyhak0vh9f7Id/RfP/kW2tvNTYSoIzEBx
+         Tc47gtZNSrpfwkCbm0W0ea4TKpzfwnpRF315nynCzqkxvdeiShB6ZDeaEDhyUGYNhCg2
+         TJRnPGZC5UGuDWtpECohcovDy0TyB24Bs6TM9son9EGBaPItJq4to4JXRag+N3nUhNGz
+         pzHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=HvgcHzvgNIHPBHqniJljI4Ra8aRcuzZdi/nFEGJJmlk=;
-        b=Bv2vmnQ9XdwY+i9/NAdrC10Buu1TtRd3UXumtp3mICrBJoy8ATDyi/oBXaaDSP9cfp
-         TenXRODEYlcFUylDZrNNeCToIRGdHOEHRrKsr2GxYUgB1Q0x7VyPBo0SLP9pU0CucLmg
-         DhEFpjWTTzG7eod44rfJYjFCouJPAXgiFQTDeDpeX2xBxgyzp1GbXK0css0g3XglFySA
-         amLNfGmg2W0evjh74Pipb1xjJu+yZ349eK3GmUdn1uxmSXYcnIH26Pg3kLrc/1nsYVCz
-         YYTblkz2NoZm4qMCJfXLo+YTv/E56vT8DJ0avgMdATJw2xoqWgZF5gK0+qQG031zLK0S
-         lDDQ==
-X-Gm-Message-State: AOAM532lLaeesCxkGy5vQg2rnij291YqlbipDRp7SQe70ZUtEm4y4Iv9
-        BOqrWMmPZPPY7ZjOkuqNvRPP95VfpPE=
-X-Google-Smtp-Source: ABdhPJxXWDsknf/Rb1rtb69rxvbDaZbMZ5tivJ14O17u25JSH7WJ9sVZ532+dseKBdIafTNKXVhMMmXELQA=
-Sender: "glider via sendgmr" <glider@glider.muc.corp.google.com>
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:f693:9fff:fef4:9ff])
- (user=glider job=sendgmr) by 2002:ad4:4770:: with SMTP id d16mr2851186qvx.61.1603985144473;
- Thu, 29 Oct 2020 08:25:44 -0700 (PDT)
-Date:   Thu, 29 Oct 2020 16:25:39 +0100
-Message-Id: <20201029152539.3766146-1-glider@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-Subject: [PATCH v5] x86: add failure injection to get/put/clear_user
-From:   Alexander Potapenko <glider@google.com>
-To:     akpm@linux-foundation.org, bp@alien8.de, mingo@redhat.com,
-        corbet@lwn.net, tglx@linutronix.de, arnd@arndb.de
-Cc:     akinobu.mita@gmail.com, hpa@zytor.com, viro@zeniv.linux.org.uk,
-        glider@google.com, andreyknvl@google.com, dvyukov@google.com,
-        elver@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, albert.linde@gmail.com
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2IjhLdSLe/LavGMCZ4vHD0wPPfdIdrDX2u7wxDkmaBI=;
+        b=feBFInnY0/ruRTDwhv+t0FvMQ6ES0LsJMpmbFaEY8AWapLjQWKvQIWBPNeiLIRuMWV
+         Ad/Irw+51u3nBCjpLNHt0BAiG17d/uD4YH7K2K7xUG3iFCzPFnq/6ScoQaa5ZZohz11a
+         NxGc4vaAEU+IK8Y9yLPoxsThAnRVJf1M2El/riAvwBpnPhItSvwgrgUOMcG4rhzVQXdH
+         JUQiSJPUgPROMj6RJFaKZC2GY81tTG5vcLwpdqi2UI3Mmsu5waslAMVy6g87r+L0JMNK
+         2tVP2Y1z/ymW4fwm9wuMMEwiRt0JYBajlm/e7Gk17NLJzMHVUwfrUk9N5gB9qUjldD/P
+         c/yQ==
+X-Gm-Message-State: AOAM5318F+zEIHEmz40EqMWRAgbuCOlxS7JZKIWoRKv96hq5a5ZMc6nP
+        09LFTWTSgG1E3uKxG4/nbwk7PpVgNMTFZtj4oCM/Rw==
+X-Google-Smtp-Source: ABdhPJzF46qLisRXwWE0HiqUMd5M4SLfi4O4R4LrZJIsIDeAQ7gb00nNta8hxu2hVOftmTNRqQLh5mjlDAaeAXhhxTM=
+X-Received: by 2002:a5d:498a:: with SMTP id r10mr7531866wrq.106.1603996935096;
+ Thu, 29 Oct 2020 11:42:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201027215118.27003-1-will@kernel.org>
+In-Reply-To: <20201027215118.27003-1-will@kernel.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 29 Oct 2020 11:42:04 -0700
+Message-ID: <CAJuCfpH2vZfH0mZMxukKvcs1jW7Udiu4P-5z4ZyDU1-JN3xMdg@mail.gmail.com>
+Subject: Re: [PATCH 0/6] An alternative series for asymmetric AArch32 systems
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        kernel-team <kernel-team@android.com>,
+        Elliott Hughes <enh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Albert van der Linde <alinde@google.com>
+On Tue, Oct 27, 2020 at 2:51 PM Will Deacon <will@kernel.org> wrote:
+>
+> Hi all,
+>
+> I was playing around with the asymmetric AArch32 RFCv2 from Qais:
+>
+> https://lore.kernel.org/r/20201021104611.2744565-1-qais.yousef@arm.com
+>
+> and ended up writing my own implementation this afternoon. I think it's
+> smaller, simpler and easier to work with. In particular:
+>
+>   * I got rid of the sysctl in favour of a plain cmdline parameter
+>   * I don't have a new CPU capability
+>   * I don't have a new thread flag
+>   * I expose a cpumask to userspace via sysfs to identify the 32-bit CPUs
+>
+> Anyway, I don't think we should merge this stuff (other than the first patch)
+> until we've figured out what's going on in Android, but I wanted to get
+> this out as something which we might be able to build on.
 
-To test fault-tolerance of user memory acceses in x86, add support for
-fault injection.
+Hi Will,
+Thanks for posting this series. Just to provide some more background,
+on Android, 64-bit apps are forked from zygote64 process and 32-bit
+ones from zygote. So normally we could handle the issues with such
+asymmetric architectures using cpuset cgroup and placing zygote
+process (and consequently all its children) in a separate cgroup with
+affinity mask that includes only 32-bit capable cores. We would have
+to take care of the affinity mask for such tasks during task
+migrations, but it's still doable from userspace. However there are
+64-bit apps which fork 32-bit processes and that is the case which is
+unclear how to handle without help from the kernel. Still discussing
+possible solutions. CC'ing more people from Android to be in the loop.
+Thanks,
+Suren.
 
-Make both put_user() and get_user() fail with -EFAULT, and clear_user()
-fail by not clearing any bytes.
 
-Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Signed-off-by: Albert van der Linde <alinde@google.com>
-Signed-off-by: Alexander Potapenko <glider@google.com>
 
----
-v2:
- - no significant changes
-
-v3:
- - no changes
-
-v4:
- - instrument the new out-of-line implementations of get_user()/put_user()
- - fix a minor checkpatch warning in the inline assembly
-
-v5:
- - rebase after another change to put_user()
- - fix an issue reported by kernel test robot <lkp@intel.com>
-
----
----
- arch/x86/include/asm/uaccess.h | 38 +++++++++++++++++++++-------------
- arch/x86/lib/usercopy_64.c     |  3 +++
- 2 files changed, 27 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index c9fa7be3df82..036467b850f8 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -5,6 +5,7 @@
-  * User space memory access functions
-  */
- #include <linux/compiler.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/kasan-checks.h>
- #include <linux/string.h>
- #include <asm/asm.h>
-@@ -126,11 +127,16 @@ extern int __get_user_bad(void);
- 	int __ret_gu;							\
- 	register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);		\
- 	__chk_user_ptr(ptr);						\
--	asm volatile("call __" #fn "_%P4"				\
--		     : "=a" (__ret_gu), "=r" (__val_gu),		\
--			ASM_CALL_CONSTRAINT				\
--		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
--	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
-+	if (should_fail_usercopy()) {					\
-+		(x) = 0;						\
-+		__ret_gu = -EFAULT;					\
-+	} else {							\
-+		asm volatile("call __" #fn "_%P4"			\
-+			     : "=a" (__ret_gu), "=r" (__val_gu),	\
-+				ASM_CALL_CONSTRAINT			\
-+			     : "0" (ptr), "i" (sizeof(*(ptr))));	\
-+		(x) = (__force __typeof__(*(ptr))) __val_gu;		\
-+	}								\
- 	__builtin_expect(__ret_gu, 0);					\
- })
- 
-@@ -220,15 +226,19 @@ extern void __put_user_nocheck_8(void);
- 	void __user *__ptr_pu;						\
- 	register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);		\
- 	__chk_user_ptr(ptr);						\
--	__ptr_pu = (ptr);						\
--	__val_pu = (x);							\
--	asm volatile("call __" #fn "_%P[size]"				\
--		     : "=c" (__ret_pu),					\
--			ASM_CALL_CONSTRAINT				\
--		     : "0" (__ptr_pu),					\
--		       "r" (__val_pu),					\
--		       [size] "i" (sizeof(*(ptr)))			\
--		     :"ebx");						\
-+	if (unlikely(should_fail_usercopy())) {				\
-+		__ret_pu = -EFAULT;					\
-+	} else {							\
-+		__ptr_pu = (ptr);					\
-+		__val_pu = (x);						\
-+		asm volatile("call __" #fn "_%P[size]"			\
-+			     : "=c" (__ret_pu),				\
-+				ASM_CALL_CONSTRAINT			\
-+			     : "0" (__ptr_pu),				\
-+			       "r" (__val_pu),				\
-+			       [size] "i" (sizeof(*(ptr)))		\
-+			     : "ebx");					\
-+	}								\
- 	__builtin_expect(__ret_pu, 0);					\
- })
- 
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index 508c81e97ab1..5617b3864586 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -7,6 +7,7 @@
-  * Copyright 2002 Andi Kleen <ak@suse.de>
-  */
- #include <linux/export.h>
-+#include <linux/fault-inject-usercopy.h>
- #include <linux/uaccess.h>
- #include <linux/highmem.h>
- 
-@@ -50,6 +51,8 @@ EXPORT_SYMBOL(__clear_user);
- 
- unsigned long clear_user(void __user *to, unsigned long n)
- {
-+	if (should_fail_usercopy())
-+		return n;
- 	if (access_ok(to, n))
- 		return __clear_user(to, n);
- 	return n;
--- 
-2.29.1.341.ge80a0c044ae-goog
-
+>
+> Cheers,
+>
+> Will
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Morten Rasmussen <morten.rasmussen@arm.com>
+> Cc: Qais Yousef <qais.yousef@arm.com>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: kernel-team@android.com
+>
+> --->8
+>
+> Qais Yousef (1):
+>   KVM: arm64: Handle Asymmetric AArch32 systems
+>
+> Will Deacon (5):
+>   arm64: Allow mismatched 32-bit EL0 support
+>   KVM: arm64: Kill 32-bit vCPUs on systems with mismatched EL0 support
+>   arm64: Kill 32-bit applications scheduled on 64-bit-only CPUs
+>   arm64: Advertise CPUs capable of running 32-bit applcations in sysfs
+>   arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
+>
+>  .../ABI/testing/sysfs-devices-system-cpu      |  8 ++
+>  .../admin-guide/kernel-parameters.txt         |  7 ++
+>  arch/arm64/include/asm/cpufeature.h           |  3 +
+>  arch/arm64/kernel/cpufeature.c                | 80 ++++++++++++++++++-
+>  arch/arm64/kernel/process.c                   | 21 ++++-
+>  arch/arm64/kernel/signal.c                    | 26 ++++++
+>  arch/arm64/kvm/arm.c                          | 27 +++++++
+>  7 files changed, 168 insertions(+), 4 deletions(-)
+>
+> --
+> 2.29.0.rc2.309.g374f81d7ae-goog
+>
