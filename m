@@ -2,96 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0242A05A3
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 13:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D4A2A0631
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 14:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgJ3Mlg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Oct 2020 08:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S1725999AbgJ3NHB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Oct 2020 09:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726560AbgJ3Mlf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Oct 2020 08:41:35 -0400
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98EDC0613CF
-        for <linux-arch@vger.kernel.org>; Fri, 30 Oct 2020 05:41:34 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CN24C353wzlhbLm;
-        Fri, 30 Oct 2020 13:41:31 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CN2494vmzzlh8TR;
-        Fri, 30 Oct 2020 13:41:29 +0100 (CET)
-Subject: Re: [PATCH v22 08/12] landlock: Add syscall implementations
-To:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        with ESMTP id S1725975AbgJ3NHB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Oct 2020 09:07:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227DAC0613CF;
+        Fri, 30 Oct 2020 06:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rfcpHo3sYbHG9663+/oEKU5+yDacWVNSfCtmxqY30IA=; b=JKDGOHNWU/V8Y+2rs/k7xDcd+D
+        ywFaOKdh66CG7CRxohaMqHaFLXYS9D8UEmY4cTPadxISCv3CHKX+79wCldI0LV8nLjJimNpRjUFot
+        BbcFgkfMoOoVVqbSn6at/tUwkE3W4TeiBSkn85uGjZxEhlxcEUEn86bKSTG6W3x+/e6w76iTiIDMo
+        +S7YG45wv9UKO0gFrKbYfO0n5SfTbF1pG2kSlc2FKZXNaKU1XoICbQHjohPVjgTGHFNPIe1Xmtc6u
+        jm1U+Hxe5+XhivRe6Qrj/AgJuMiGDjrS/uMW8LgIirsxF3LkwsBxbZgQIkCutkdRTk0XP+Op+X95w
+        kA9B9H+g==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kYU6t-0002Yw-HM; Fri, 30 Oct 2020 13:06:27 +0000
+Date:   Fri, 30 Oct 2020 13:06:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201027200358.557003-1-mic@digikod.net>
- <20201027200358.557003-9-mic@digikod.net>
- <CAG48ez1San538w=+He309vHg4pBSCvAf7e5xeHdqeOHA6qwitw@mail.gmail.com>
- <de287149-ff42-40ca-5bd1-f48969880a06@digikod.net>
- <CAG48ez1FQVkt78129WozBwFbVhAPyAr9oJAHFHAbbNxEBr9h1g@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <163f298b-b492-fee0-b475-102ae8170419@digikod.net>
-Date:   Fri, 30 Oct 2020 13:41:29 +0100
-User-Agent: 
+        linux-arm-kernel@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic
+ & friends
+Message-ID: <20201030130627.GI27442@casper.infradead.org>
+References: <20201029221806.189523375@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez1FQVkt78129WozBwFbVhAPyAr9oJAHFHAbbNxEBr9h1g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201029221806.189523375@linutronix.de>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Oct 29, 2020 at 11:18:06PM +0100, Thomas Gleixner wrote:
+> This series provides kmap_local.* iomap_local variants which only disable
+> migration to keep the virtual mapping address stable accross preemption,
+> but do neither disable pagefaults nor preemption. The new functions can be
+> used in any context, but if used in atomic context the caller has to take
+> care of eventually disabling pagefaults.
 
-On 30/10/2020 04:07, Jann Horn wrote:
-> On Thu, Oct 29, 2020 at 12:30 PM Mickaël Salaün <mic@digikod.net> wrote:
->> On 29/10/2020 02:06, Jann Horn wrote:
->>> On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
->>>> These 3 system calls are designed to be used by unprivileged processes
->>>> to sandbox themselves:
-> [...]
->>>> +       /*
->>>> +        * Similar checks as for seccomp(2), except that an -EPERM may be
->>>> +        * returned.
->>>> +        */
->>>> +       if (!task_no_new_privs(current)) {
->>>> +               err = security_capable(current_cred(), current_user_ns(),
->>>> +                               CAP_SYS_ADMIN, CAP_OPT_NOAUDIT);
->>>
->>> I think this should be ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN)?
->>
->> Right. The main difference is that ns_capable*() set PF_SUPERPRIV in
->> current->flags. I guess seccomp should use ns_capable_noaudit() as well?
-> 
-> Yeah. That seccomp code is from commit e2cfabdfd0756, with commit date
-> in April 2012, while ns_capable_noaudit() was introduced in commit
-> 98f368e9e263, with commit date in June 2016; the seccomp code predates
-> the availability of that API.
-> 
-> Do you want to send a patch to Kees for that, or should I?
-> 
+Could I ask for a CONFIG_KMAP_DEBUG which aliases all the kmap variants
+to vmap()?  I think we currently have a problem in iov_iter on HIGHMEM
+configs:
 
-I found another case of this inconsistency in ptrace. I sent patches:
-https://lore.kernel.org/lkml/20201030123849.770769-1-mic@digikod.net/
+copy_page_to_iter() calls page_copy_sane() which checks:
+
+        head = compound_head(page);
+        if (likely(n <= v && v <= page_size(head)))
+                return true;
+
+but then:
+
+                void *kaddr = kmap_atomic(page);
+                size_t wanted = copy_to_iter(kaddr + offset, bytes, i);
+                kunmap_atomic(kaddr);
+
+so if offset to offset+bytes is larger than PAGE_SIZE, this is going to
+work for lowmem pages and fail miserably for highmem pages.  I suggest
+vmap() because vmap has a PAGE_SIZE gap between each allocation.
+
+Alternatively if we could have a kmap_atomic_compound(), that would
+be awesome, but probably not realistic to implement.  I've more
+or less resigned myself to having to map things one page at a time.
