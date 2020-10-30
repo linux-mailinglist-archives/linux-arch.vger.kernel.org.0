@@ -2,133 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7902A102C
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 22:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116512A10CC
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 23:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727869AbgJ3V2p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Oct 2020 17:28:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42164 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727727AbgJ3V2o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Oct 2020 17:28:44 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F8E822241;
-        Fri, 30 Oct 2020 21:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604093323;
-        bh=tZSPplLftF65YenDg5MlNkzy10RGzZxkh25MXH0GVn4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PnRgQyolUgqkCmxzG1qYuQvzFNCGWid218+CcJ56bfcRGfXuszO7y5Pa6YL7Yze08
-         J/7Tsj67hoX/Y1z9arApiqu3hxdDEUtyRhSVJltPMxBHhMPJleX9zExIEGYRtwALYT
-         WM/wRk2bR5M1DT5XgRdUsyy5cegXXECSS8xLX2YE=
-Received: by mail-qk1-f171.google.com with SMTP id k9so6251708qki.6;
-        Fri, 30 Oct 2020 14:28:43 -0700 (PDT)
-X-Gm-Message-State: AOAM533LWWoL0PXBLjvgY64ovW0oNDnxqEq0ALj7ZVc0y6hMgc6wQ5y4
-        gKnz69slxqfC9cMEwzVQ/+z07NdMglggMESgAE8=
-X-Google-Smtp-Source: ABdhPJwzRQW1k5B6zbrTfsf30S/rHG5MM3vjwuzzwTJuv1SPViYWCLHZOGFiwlUAQWhT5QXO52QrgMTVaMhXXk5+ufM=
-X-Received: by 2002:a05:620a:215d:: with SMTP id m29mr4296031qkm.138.1604093322540;
- Fri, 30 Oct 2020 14:28:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201030154519.1245983-1-arnd@kernel.org> <20201030154919.1246645-1-arnd@kernel.org>
- <20201030154919.1246645-4-arnd@kernel.org> <20201030165338.GG1551@shell.armlinux.org.uk>
-In-Reply-To: <20201030165338.GG1551@shell.armlinux.org.uk>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 30 Oct 2020 22:28:26 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0ZCinLU0zWj9x0=QoFkrui+1QACjADzAa4yyUaO+qzXA@mail.gmail.com>
-Message-ID: <CAK8P3a0ZCinLU0zWj9x0=QoFkrui+1QACjADzAa4yyUaO+qzXA@mail.gmail.com>
-Subject: Re: [PATCH 4/9] ARM: syscall: always store thread_info->syscall
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        id S1725791AbgJ3W0h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Oct 2020 18:26:37 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:45272 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbgJ3W0g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Oct 2020 18:26:36 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604096793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=26Ts76LEb5dF8UM0hmSIHaJpUqiGiJWBHMp5iFf7PiU=;
+        b=LxHJ68FH0YuIEFWx2pJpQimCZfTiqoGgDDau1FguLxRy0zRx9jDZctdAlFRJ324v8CuoYi
+        ZcuxU/DPzAwKZjuk1f5n85YkZURSL9nRFHt8mfu6t3it4VWyE7SlneV0erS9MR7nX9FzlP
+        P+HNof6Xh5RpyyaWT992LVmq2zyMt7WHQ/M2MkeRhrztzkZ4okq5IzkTTD/fUPiSmr0pHZ
+        BD6hj5xP7axA2OIEeQSYPyXK4XbM9OHuPNmPWTriLFFXeAcRngKo5tuvQR0c5M5uRZiaiR
+        7vOFKe6AAtTBf3UuZjT2hn26v4yx6tPJ2p6ldMkYWP3ZaJp8ZxNVmOK4vPxpMA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604096793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=26Ts76LEb5dF8UM0hmSIHaJpUqiGiJWBHMp5iFf7PiU=;
+        b=2rJuYiPt20Oowm+h+GqzEiWNX0OgtYb09gN+zSFDN57qQiTBtXhd6AncITU48GjmrMPQTD
+        wElJt4hkBKleVUBg==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+In-Reply-To: <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
+References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com> <87pn50ob0s.fsf@nanos.tec.linutronix.de> <87blgknjcw.fsf@nanos.tec.linutronix.de> <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
+Date:   Fri, 30 Oct 2020 23:26:33 +0100
+Message-ID: <87sg9vl59i.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 5:53 PM Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
+On Fri, Oct 30 2020 at 13:28, Linus Torvalds wrote:
+> On Fri, Oct 30, 2020 at 2:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> But then we really should not name it kmap_local. 'local' suggests
+>> locality, think local_irq*, local_bh* ... kmap_task would be more
+>> accurate then.
 >
-> On Fri, Oct 30, 2020 at 04:49:14PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The system call number is used in a a couple of places, in particular
-> > ptrace, seccomp and /proc/<pid>/syscall.
-> >
-> > The last one apparently never worked reliably on ARM for tasks
-> > that are not currently getting traced.
-> >
-> > Storing the syscall number in the normal entry path makes it work,
-> > as well as allowing us to see if the current system call is for
-> > OABI compat mode, which is the next thing I want to hook into.
+> So the main reason I'd like to see it is because I think on a
+> non-highmem machine, the new kmap should be a complete no-op. IOW,
+> we'd make sure that there are no costs, no need to increment any
+> "restrict migration" counts etc.
+
+Fair enough.
+
+> It's been a bit of a pain to have kmap_atomic() have magical side
+> semantics that people might then depend on.
+
+kmap_atomic() will still have the side semantics :)
+
+> I think "local" could still work as a name, because it would have to
+> be thread-local (and maybe we'd want a debug mode where that gets
+> verified, as actual HIGHMEM machines are getting rare).
 >
-> I'm not sure this patch is correct.
-
-I'm not following where you still see a mismatch, I was hoping I
-had fixed them all after your previous review :(
-
-The thread_info->syscall entry should now consistently contain
-__NR_SYSCALL_BASE on an EABI kernel, and all users of
-that should consistently mask it out.
-
-> Tracing the existing code for OABI:
+> I'd avoid "task", because that implies (to me, at least) that it
+> wouldn't be good for interrupts etc that don't have a task context.
 >
-> asmlinkage int syscall_trace_enter(struct pt_regs *regs, int scno)
-> {
->         current_thread_info()->syscall = scno;
+> I think the main issue is that it has to be released in the same
+> context as it was created (ie no passing those things around to other
+> contexts). I think "local" is fine for that, but I could imagine other
+> names. The ones that come to mind are somewhat cumbersome, though
+> ("shortterm" or "local_ctx" or something along those lines).
 
-This no longer stores to current_thread_info()->syscall but instead
-reads the number from syscall_get_nr().
+Yeah, not really intuitive either.
 
->         /* Legacy ABI only. */
-> USER(   ldr     scno, [saved_pc, #-4]   )       @ get SWI instruction
->         bic     scno, scno, #0xff000000         @ mask off SWI op-code
->         eor     scno, scno, #__NR_SYSCALL_BASE  @ check OS number
->         tst     r10, #_TIF_SYSCALL_WORK         @ are we tracing syscalls?
->         bne     __sys_trace
->
-> __sys_trace:
->         mov     r1, scno
->         add     r0, sp, #S_OFF
->         bl      syscall_trace_enter
->
-> So, thread_info->syscall does not include __NR_SYSCALL_BASE. The
-> reason for this is the code that makes use of that via syscall_get_nr().
-> kernel/trace/trace_syscalls.c:
+Let's stick with _local and add proper function documentation which
+clearly says, that the side effect of non-migratability applies only for
+the 32bit highmem case in order to make it work at all.
 
-On both CONFIG_OABI_COMPAT and on !CONFIG_AEABI kernels,
-I store the value before masking out __NR_SYSCALL_BASE
-after my change. For EABI-only kernels there is no need for
-the mask.
+So code which needs CPU locality cannot rely on it and we have enough
+debug stuff to catch something like:
 
->         syscall_nr = trace_get_syscall_nr(current, regs);
->         if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
->                 return;
->
-> and NR_syscalls is the number of syscalls, which doesn't include the
-> __NR_SYSCALL_BASE offset.
->
-> So, I think this patch actually breaks OABI.
+    kmap_local()
+    this_cpu_write(....)
+    kunmap_local()
 
-The value returned from trace_get_syscall_nr() is always in
-the 0...NR_syscalls range without the __NR_SYSCALL_BASE
-for a valid syscall. because of the added
+Let me redo the pile.
 
- static inline int syscall_get_nr(struct task_struct *task,
-                                 struct pt_regs *regs)
- {
--       return task_thread_info(task)->syscall;
-+       return task_thread_info(task)->syscall & ~__NR_OABI_SYSCALL_BASE;
- }
+While at it I might have a look at that debug request from Willy in the
+other end of this thread. Any comment on that?
 
-(plus the corresponding logic for OABI_COMPAT.
+ https://lore.kernel.org/r/87k0v7mrrd.fsf@nanos.tec.linutronix.de
 
-Which of the above do you think I got wrong?
+Thanks,
 
-      Arnd
+        tglx
+
+
+      
