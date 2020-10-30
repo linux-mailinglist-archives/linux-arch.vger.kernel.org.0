@@ -2,398 +2,203 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED2B2A0A54
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 16:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8B22A0AE2
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 17:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbgJ3Ptx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Oct 2020 11:49:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42524 "EHLO mail.kernel.org"
+        id S1726072AbgJ3QOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Oct 2020 12:14:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727251AbgJ3Ptu (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Oct 2020 11:49:50 -0400
-Received: from localhost.localdomain (HSI-KBW-46-223-126-90.hsi.kabel-badenwuerttemberg.de [46.223.126.90])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726061AbgJ3QOB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:14:01 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F908221FA;
-        Fri, 30 Oct 2020 15:49:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D73B206FA;
+        Fri, 30 Oct 2020 16:13:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604072988;
-        bh=Mb09tzc2RqZDiW5zESZRVaJa8p0JD3B9TZ8nelNX9Bo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SZu7bKNIFA36nZNFMkHJRieZUdefVsM6sCIKUKFyFuezV7w7DHs/SpVUOSI/2QIAX
-         98hJoI0rSc1QAgCTQ5JdBlxtfOYuJQy9KMPyGcoS7YjyJRO/o8g2/vNLLHYQorVmd/
-         DTIHUcBk+G0JOOP2pmqgaTbIeBqANHsNeY8rLNlw=
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        viro@zeniv.linux.org.uk, linus.walleij@linaro.org, arnd@arndb.de
-Subject: [PATCH 9/9] ARM: uaccess: remove set_fs() implementation
-Date:   Fri, 30 Oct 2020 16:49:19 +0100
-Message-Id: <20201030154919.1246645-9-arnd@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201030154919.1246645-1-arnd@kernel.org>
-References: <20201030154519.1245983-1-arnd@kernel.org>
- <20201030154919.1246645-1-arnd@kernel.org>
+        s=default; t=1604074439;
+        bh=ywikaYdRiQXniE64iyK/LcRo1wbh9lpmPAH9bB5n1fE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yr9JwkixYuMK7TzQlmStjXDhBdqB3R6vD6xmVxPTnCiWiW3eYeS/t7UsZJ/6sEpyw
+         lTEvG/tKOc7PEzgg415xqVMe5NxrXJ2oVURTzTvs/QgbUkpLa0wMci/5ILOlHRGdBw
+         TLvv4rI3qIDUP27stZgiKfVhCn4vdotwbYX8q9MQ=
+Date:   Fri, 30 Oct 2020 16:13:53 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>, kernel-team@android.com
+Subject: Re: [PATCH 2/6] arm64: Allow mismatched 32-bit EL0 support
+Message-ID: <20201030161353.GC32582@willie-the-truck>
+References: <20201027215118.27003-3-will@kernel.org>
+ <20201028111204.GB13345@gaia>
+ <20201028111713.GA27927@willie-the-truck>
+ <20201028112206.GD13345@gaia>
+ <20201028112343.GD27927@willie-the-truck>
+ <20201028114945.GE13345@gaia>
+ <20201028124049.GC28091@willie-the-truck>
+ <20201028185620.GK13345@gaia>
+ <20201029222048.GD31375@willie-the-truck>
+ <20201030111846.GC23196@gaia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201030111846.GC23196@gaia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Oct 30, 2020 at 11:18:47AM +0000, Catalin Marinas wrote:
+> On Thu, Oct 29, 2020 at 10:20:48PM +0000, Will Deacon wrote:
+> > On Wed, Oct 28, 2020 at 06:56:21PM +0000, Catalin Marinas wrote:
+> > > On Wed, Oct 28, 2020 at 12:40:49PM +0000, Will Deacon wrote:
+> > > > On Wed, Oct 28, 2020 at 11:49:46AM +0000, Catalin Marinas wrote:
+> > > > > On Wed, Oct 28, 2020 at 11:23:43AM +0000, Will Deacon wrote:
+> > > > > > On Wed, Oct 28, 2020 at 11:22:06AM +0000, Catalin Marinas wrote:
+> > > > > > > On Wed, Oct 28, 2020 at 11:17:13AM +0000, Will Deacon wrote:
+> > > > > > > > On Wed, Oct 28, 2020 at 11:12:04AM +0000, Catalin Marinas wrote:
+> > > > > Anyway, I see your reasoning behind the late CPUs but I don't
+> > > > > particularly like abusing the cpufeature support to pretend a
+> > > > > SYSTEM_FEATURE is available before knowing any CPU has it (maybe we do
+> > > > > it in other cases, I haven't checked).
+> > > > 
+> > > > Hmm, but that's exactly what this cmdline option is about. We pretend that
+> > > > the system has 32-bit EL0 when normally we would say that we don't.
+> > > 
+> > > So that's more about force-enabling 32-bit irrespective of whether any
+> > > CPU supports it (not just in the mismatched/asymmetric case). Of course,
+> > > if the aarch32_el0 mask is empty, the apps would get SIGKILL'ed.
+> > 
+> > Yes, but given that we can't generally rule out a 32-bit CPU coming online
+> > late, I don't think we should pretend that we're in a position to detect
+> > a 64-bit-only system.
+> 
+> No, we can't pretend it's a 64-bit only system but the kernel could
+> insist that 32-bit is not available if CPUs come in late. And since we
+> won't add late compat HWCAPs, I think allowing late 32-bit CPUs is a
+> pretty useless feature (see more below; of course, we allow those late
+> CPUs but they'd only run 64-bit apps).
 
-There are no remaining callers of set_fs(), so just remove it
-along with all associated code that operates on
-thread_info->addr_limit.
+Why should we insist on this? It doesn't gain us anything in the kernel and
+I don't think we should police userspace just because we can (the presence
+of the command-line option is indicative that we should really be letting
+userspace get on with it).
 
-There are still further optimizations that can be done:
+> > > > > Could we not instead add a new feature for asymmetric support that's
+> > > > > defined as ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE? This would be allowed
+> > > > > for late CPUs and we keep the system_supports_32bit_el0() unchanged.
+> > > > 
+> > > > I really don't think this gains us anything.
+> > > 
+> > > It saves us having to explain to someone passing this option on a TX2
+> > > why personality(PER_LINUX32) and even execve() appear to work (well,
+> > > until SIGKILL). The lscpu tool, for example, uses personality() to
+> > > display whether the CPUs support 32-bit.
+> > 
+> > It really doesn't save us having to explain what this option does: it will
+> > need to be documented regardless. If you pass this option on TX2 then, yes,
+> > you get access to the PER_LINUX32 personality because that's what this
+> > option does. If you don't like that, don't pass the option! It's like
+> > passing "nosmp" and being surprised that you only have one CPU online.
+> 
+> I see this analogy the other way around, you pass "allow_smp" on a UP
+> system and the kernel pretends there are more CPUs available, only that
+> the app gets SIGKILL'ed if it ends up on the fake core. Well, if it's
+> properly documented and people read it, we could live with this.
 
-- In get_user(), the address check could be moved entirely
-  into the out of line code, rather than passing a constant
-  as an argument,
+The bottom line is that passing command-line options can make things look
+different and so we need to document what they do. I don't think we're
+disagreeing here.
 
-- I assume the DACR handling can be simplified as we now
-  only change it during user access when CONFIG_CPU_SW_DOMAIN_PAN
-  is set, but not during set_fs().
+> > > Also with PER_LINUX32, /proc/cpuinfo shows the 32-bit HWCAPs. We have
+> > > compat_elf_hwcap pre-populated with some stuff which is entirely untrue
+> > > if AArch32 is missing.
+> > > 
+> > > Thinking about the COMPAT_HWCAPs, do we actually populate them properly
+> > > on an asymmetric system if the boot CPU is not AArch32-capable? In my
+> > > original patch I had to defer populating boot_cpu_data with AArch32
+> > > information until a capable CPU was found. If not,
+> > > update_32bit_cpu_features() will set most 32-bit features to 0.
+> > 
+> > I think there are two interesting aspects to the COMPAT_HWCAPS:
+> > 
+> >  1. Both my patches and the patches from Qais seem to get this wrong, so
+> >     the set of reported 32-bit caps is too small. I'll look at fixing this
+> >     for v2.
+> 
+> I had it addressed in my original patch and Qais' first post on lakml.
+> It deferred filling in the 32-bit part of boot_cpu_data until the first
+> encounter of a 32-bit CPU.
+> 
+> I suggested we drop the cpuinfo_arm64.aarch32_valid member entirely but
+> I think we should have made it a static variable in cpuinfo_store_cpu()
+> or somewhere around there and still populate the 32-bit part of
+> boot_cpu_data.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/Kconfig                   |  1 -
- arch/arm/include/asm/ptrace.h      |  1 -
- arch/arm/include/asm/thread_info.h |  4 ---
- arch/arm/include/asm/uaccess-asm.h |  6 ----
- arch/arm/include/asm/uaccess.h     | 46 +++---------------------------
- arch/arm/kernel/asm-offsets.c      |  2 --
- arch/arm/kernel/entry-common.S     |  9 ------
- arch/arm/kernel/process.c          |  7 +----
- arch/arm/kernel/signal.c           |  8 ------
- arch/arm/lib/copy_from_user.S      |  3 +-
- arch/arm/lib/copy_to_user.S        |  3 +-
- 11 files changed, 7 insertions(+), 83 deletions(-)
+OK, I haven't looked into the reason for this yet.
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index fe2f17eb2b50..55a8892dd5d8 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -120,7 +120,6 @@ config ARM
- 	select PCI_SYSCALL if PCI
- 	select PERF_USE_VMALLOC
- 	select RTC_LIB
--	select SET_FS
- 	select SYS_SUPPORTS_APM_EMULATION
- 	# Above selects are sorted alphabetically; please add new ones
- 	# according to that.  Thanks.
-diff --git a/arch/arm/include/asm/ptrace.h b/arch/arm/include/asm/ptrace.h
-index 91d6b7856be4..93051e2f402c 100644
---- a/arch/arm/include/asm/ptrace.h
-+++ b/arch/arm/include/asm/ptrace.h
-@@ -19,7 +19,6 @@ struct pt_regs {
- struct svc_pt_regs {
- 	struct pt_regs regs;
- 	u32 dacr;
--	u32 addr_limit;
- };
- 
- #define to_svc_pt_regs(r) container_of(r, struct svc_pt_regs, regs)
-diff --git a/arch/arm/include/asm/thread_info.h b/arch/arm/include/asm/thread_info.h
-index 536b6b979f63..8b705f611216 100644
---- a/arch/arm/include/asm/thread_info.h
-+++ b/arch/arm/include/asm/thread_info.h
-@@ -23,8 +23,6 @@ struct task_struct;
- 
- #include <asm/types.h>
- 
--typedef unsigned long mm_segment_t;
--
- struct cpu_context_save {
- 	__u32	r4;
- 	__u32	r5;
-@@ -46,7 +44,6 @@ struct cpu_context_save {
- struct thread_info {
- 	unsigned long		flags;		/* low level flags */
- 	int			preempt_count;	/* 0 => preemptable, <0 => bug */
--	mm_segment_t		addr_limit;	/* address limit */
- 	struct task_struct	*task;		/* main task structure */
- 	__u32			cpu;		/* cpu */
- 	__u32			cpu_domain;	/* cpu domain */
-@@ -72,7 +69,6 @@ struct thread_info {
- 	.task		= &tsk,						\
- 	.flags		= 0,						\
- 	.preempt_count	= INIT_PREEMPT_COUNT,				\
--	.addr_limit	= KERNEL_DS,					\
- }
- 
- /*
-diff --git a/arch/arm/include/asm/uaccess-asm.h b/arch/arm/include/asm/uaccess-asm.h
-index 907571fd05c6..6451a433912c 100644
---- a/arch/arm/include/asm/uaccess-asm.h
-+++ b/arch/arm/include/asm/uaccess-asm.h
-@@ -84,12 +84,8 @@
- 	 * if \disable is set.
- 	 */
- 	.macro	uaccess_entry, tsk, tmp0, tmp1, tmp2, disable
--	ldr	\tmp1, [\tsk, #TI_ADDR_LIMIT]
--	mov	\tmp2, #TASK_SIZE
--	str	\tmp2, [\tsk, #TI_ADDR_LIMIT]
-  DACR(	mrc	p15, 0, \tmp0, c3, c0, 0)
-  DACR(	str	\tmp0, [sp, #SVC_DACR])
--	str	\tmp1, [sp, #SVC_ADDR_LIMIT]
- 	.if \disable && IS_ENABLED(CONFIG_CPU_SW_DOMAIN_PAN)
- 	/* kernel=client, user=no access */
- 	mov	\tmp2, #DACR_UACCESS_DISABLE
-@@ -106,9 +102,7 @@
- 
- 	/* Restore the user access state previously saved by uaccess_entry */
- 	.macro	uaccess_exit, tsk, tmp0, tmp1
--	ldr	\tmp1, [sp, #SVC_ADDR_LIMIT]
-  DACR(	ldr	\tmp0, [sp, #SVC_DACR])
--	str	\tmp1, [\tsk, #TI_ADDR_LIMIT]
-  DACR(	mcr	p15, 0, \tmp0, c3, c0, 0)
- 	.endm
- 
-diff --git a/arch/arm/include/asm/uaccess.h b/arch/arm/include/asm/uaccess.h
-index 4f60638755c4..084d1c07c2d0 100644
---- a/arch/arm/include/asm/uaccess.h
-+++ b/arch/arm/include/asm/uaccess.h
-@@ -52,32 +52,8 @@ static __always_inline void uaccess_restore(unsigned int flags)
- extern int __get_user_bad(void);
- extern int __put_user_bad(void);
- 
--/*
-- * Note that this is actually 0x1,0000,0000
-- */
--#define KERNEL_DS	0x00000000
--
- #ifdef CONFIG_MMU
- 
--#define USER_DS		TASK_SIZE
--#define get_fs()	(current_thread_info()->addr_limit)
--
--static inline void set_fs(mm_segment_t fs)
--{
--	current_thread_info()->addr_limit = fs;
--
--	/*
--	 * Prevent a mispredicted conditional call to set_fs from forwarding
--	 * the wrong address limit to access_ok under speculation.
--	 */
--	dsb(nsh);
--	isb();
--
--	modify_domain(DOMAIN_KERNEL, fs ? DOMAIN_CLIENT : DOMAIN_MANAGER);
--}
--
--#define uaccess_kernel()	(get_fs() == KERNEL_DS)
--
- /*
-  * We use 33-bit arithmetic here.  Success returns zero, failure returns
-  * addr_limit.  We take advantage that addr_limit will be zero for KERNEL_DS,
-@@ -89,7 +65,7 @@ static inline void set_fs(mm_segment_t fs)
- 	__asm__(".syntax unified\n" \
- 		"adds %1, %2, %3; sbcscc %1, %1, %0; movcc %0, #0" \
- 		: "=&r" (flag), "=&r" (roksum) \
--		: "r" (addr), "Ir" (size), "0" (current_thread_info()->addr_limit) \
-+		: "r" (addr), "Ir" (size), "0" (TASK_SIZE) \
- 		: "cc"); \
- 	flag; })
- 
-@@ -120,7 +96,7 @@ static inline void __user *__uaccess_mask_range_ptr(const void __user *ptr,
- 	"	subshs	%1, %1, %2\n"
- 	"	movlo	%0, #0\n"
- 	: "+r" (safe_ptr), "=&r" (tmp)
--	: "r" (size), "r" (current_thread_info()->addr_limit)
-+	: "r" (size), "r" (TASK_SIZE)
- 	: "cc");
- 
- 	csdb();
-@@ -194,7 +170,7 @@ extern int __get_user_64t_4(void *);
- 
- #define __get_user_check(x, p)						\
- 	({								\
--		unsigned long __limit = current_thread_info()->addr_limit - 1; \
-+		unsigned long __limit = TASK_SIZE - 1; \
- 		register typeof(*(p)) __user *__p asm("r0") = (p);	\
- 		register __inttype(x) __r2 asm("r2");			\
- 		register unsigned long __l asm("r1") = __limit;		\
-@@ -245,7 +221,7 @@ extern int __put_user_8(void *, unsigned long long);
- 
- #define __put_user_check(__pu_val, __ptr, __err, __s)			\
- 	({								\
--		unsigned long __limit = current_thread_info()->addr_limit - 1; \
-+		unsigned long __limit = TASK_SIZE - 1; \
- 		register typeof(__pu_val) __r2 asm("r2") = __pu_val;	\
- 		register const void __user *__p asm("r0") = __ptr;	\
- 		register unsigned long __l asm("r1") = __limit;		\
-@@ -262,19 +238,8 @@ extern int __put_user_8(void *, unsigned long long);
- 
- #else /* CONFIG_MMU */
- 
--/*
-- * uClinux has only one addr space, so has simplified address limits.
-- */
--#define USER_DS			KERNEL_DS
--
--#define uaccess_kernel()	(true)
- #define __addr_ok(addr)		((void)(addr), 1)
- #define __range_ok(addr, size)	((void)(addr), 0)
--#define get_fs()		(KERNEL_DS)
--
--static inline void set_fs(mm_segment_t fs)
--{
--}
- 
- #define get_user(x, p)	__get_user(x, p)
- #define __put_user_check __put_user_nocheck
-@@ -283,9 +248,6 @@ static inline void set_fs(mm_segment_t fs)
- 
- #define access_ok(addr, size)	(__range_ok(addr, size) == 0)
- 
--#define user_addr_max() \
--	(uaccess_kernel() ? ~0UL : get_fs())
--
- #ifdef CONFIG_CPU_SPECTRE
- /*
-  * When mitigating Spectre variant 1, it is not worth fixing the non-
-diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
-index 97af6735172b..78f0a25baf2d 100644
---- a/arch/arm/kernel/asm-offsets.c
-+++ b/arch/arm/kernel/asm-offsets.c
-@@ -41,7 +41,6 @@ int main(void)
-   BLANK();
-   DEFINE(TI_FLAGS,		offsetof(struct thread_info, flags));
-   DEFINE(TI_PREEMPT,		offsetof(struct thread_info, preempt_count));
--  DEFINE(TI_ADDR_LIMIT,		offsetof(struct thread_info, addr_limit));
-   DEFINE(TI_TASK,		offsetof(struct thread_info, task));
-   DEFINE(TI_CPU,		offsetof(struct thread_info, cpu));
-   DEFINE(TI_CPU_DOMAIN,		offsetof(struct thread_info, cpu_domain));
-@@ -90,7 +89,6 @@ int main(void)
-   DEFINE(S_OLD_R0,		offsetof(struct pt_regs, ARM_ORIG_r0));
-   DEFINE(PT_REGS_SIZE,		sizeof(struct pt_regs));
-   DEFINE(SVC_DACR,		offsetof(struct svc_pt_regs, dacr));
--  DEFINE(SVC_ADDR_LIMIT,	offsetof(struct svc_pt_regs, addr_limit));
-   DEFINE(SVC_REGS_SIZE,		sizeof(struct svc_pt_regs));
-   BLANK();
-   DEFINE(SIGFRAME_RC3_OFFSET,	offsetof(struct sigframe, retcode[3]));
-diff --git a/arch/arm/kernel/entry-common.S b/arch/arm/kernel/entry-common.S
-index 9a76467bbb47..2c0bde14fba6 100644
---- a/arch/arm/kernel/entry-common.S
-+++ b/arch/arm/kernel/entry-common.S
-@@ -49,9 +49,6 @@ __ret_fast_syscall:
-  UNWIND(.fnstart	)
-  UNWIND(.cantunwind	)
- 	disable_irq_notrace			@ disable interrupts
--	ldr	r2, [tsk, #TI_ADDR_LIMIT]
--	cmp	r2, #TASK_SIZE
--	blne	addr_limit_check_failed
- 	ldr	r1, [tsk, #TI_FLAGS]		@ re-check for syscall tracing
- 	tst	r1, #_TIF_SYSCALL_WORK | _TIF_WORK_MASK
- 	bne	fast_work_pending
-@@ -86,9 +83,6 @@ __ret_fast_syscall:
- 	bl	do_rseq_syscall
- #endif
- 	disable_irq_notrace			@ disable interrupts
--	ldr	r2, [tsk, #TI_ADDR_LIMIT]
--	cmp	r2, #TASK_SIZE
--	blne	addr_limit_check_failed
- 	ldr	r1, [tsk, #TI_FLAGS]		@ re-check for syscall tracing
- 	tst	r1, #_TIF_SYSCALL_WORK | _TIF_WORK_MASK
- 	beq	no_work_pending
-@@ -127,9 +121,6 @@ ret_slow_syscall:
- #endif
- 	disable_irq_notrace			@ disable interrupts
- ENTRY(ret_to_user_from_irq)
--	ldr	r2, [tsk, #TI_ADDR_LIMIT]
--	cmp	r2, #TASK_SIZE
--	blne	addr_limit_check_failed
- 	ldr	r1, [tsk, #TI_FLAGS]
- 	tst	r1, #_TIF_WORK_MASK
- 	bne	slow_work_pending
-diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-index 8e6ace03e960..28a1a4a9dd77 100644
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -97,7 +97,7 @@ void __show_regs(struct pt_regs *regs)
- 	unsigned long flags;
- 	char buf[64];
- #ifndef CONFIG_CPU_V7M
--	unsigned int domain, fs;
-+	unsigned int domain;
- #ifdef CONFIG_CPU_SW_DOMAIN_PAN
- 	/*
- 	 * Get the domain register for the parent context. In user
-@@ -106,14 +106,11 @@ void __show_regs(struct pt_regs *regs)
- 	 */
- 	if (user_mode(regs)) {
- 		domain = DACR_UACCESS_ENABLE;
--		fs = get_fs();
- 	} else {
- 		domain = to_svc_pt_regs(regs)->dacr;
--		fs = to_svc_pt_regs(regs)->addr_limit;
- 	}
- #else
- 	domain = get_domain();
--	fs = get_fs();
- #endif
- #endif
- 
-@@ -149,8 +146,6 @@ void __show_regs(struct pt_regs *regs)
- 		if ((domain & domain_mask(DOMAIN_USER)) ==
- 		    domain_val(DOMAIN_USER, DOMAIN_NOACCESS))
- 			segment = "none";
--		else if (fs == KERNEL_DS)
--			segment = "kernel";
- 		else
- 			segment = "user";
- 
-diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
-index 585edbfccf6d..e2e4db8fee42 100644
---- a/arch/arm/kernel/signal.c
-+++ b/arch/arm/kernel/signal.c
-@@ -709,14 +709,6 @@ struct page *get_signal_page(void)
- 	return page;
- }
- 
--/* Defer to generic check */
--asmlinkage void addr_limit_check_failed(void)
--{
--#ifdef CONFIG_MMU
--	addr_limit_user_check();
--#endif
--}
--
- #ifdef CONFIG_DEBUG_RSEQ
- asmlinkage void do_rseq_syscall(struct pt_regs *regs)
- {
-diff --git a/arch/arm/lib/copy_from_user.S b/arch/arm/lib/copy_from_user.S
-index f8016e3db65d..f481ef789a93 100644
---- a/arch/arm/lib/copy_from_user.S
-+++ b/arch/arm/lib/copy_from_user.S
-@@ -109,8 +109,7 @@
- 
- ENTRY(arm_copy_from_user)
- #ifdef CONFIG_CPU_SPECTRE
--	get_thread_info r3
--	ldr	r3, [r3, #TI_ADDR_LIMIT]
-+	mov	r3, #TASK_SIZE
- 	uaccess_mask_range_ptr r1, r2, r3, ip
- #endif
- 
-diff --git a/arch/arm/lib/copy_to_user.S b/arch/arm/lib/copy_to_user.S
-index ebfe4cb3d912..215da16c7d6e 100644
---- a/arch/arm/lib/copy_to_user.S
-+++ b/arch/arm/lib/copy_to_user.S
-@@ -109,8 +109,7 @@
- ENTRY(__copy_to_user_std)
- WEAK(arm_copy_to_user)
- #ifdef CONFIG_CPU_SPECTRE
--	get_thread_info r3
--	ldr	r3, [r3, #TI_ADDR_LIMIT]
-+	mov	r3, #TASK_SIZE
- 	uaccess_mask_range_ptr r0, r2, r3, ip
- #endif
- 
--- 
-2.27.0
+> >  2. The 32-bit hwcaps are exposed by the PER_LINUX32 personality, and so
+> >     have to be fixed at boot *even if the boot CPUs are all 64-bit-only*.
+> 
+> Note that the kernel rejects PER_LINUX32 if the system is 64-bit only.
+> With this option, arguably the 64-bit personality() ABI is slightly
+> changed. It doesn't matter much, only for lscpu reporting 32-bit
+> support when it's not there.
 
+I think this is just a consequence of enabling this option.
+
+> >     This means that if the first 32-bit-capable core is onlined late, then
+> >     it will only get the base capabilities, but I think that's fine and
+> >     consistent with our overall handling of hwcaps (which cannot appear
+> >     dynamically to userspace).
+> 
+> Yes but such bare 32-bit mode is entirely useless and I don't think we
+> should even pretend we have 32-bit. The compat hwcaps here would be
+> "half thumb fastmult edsp tls idiva idivt lpae evtstrm", statically
+> filled in. It's missing major bits like "vfp" and "neon" which are
+> necessary for the general purpose 32-bit EABI.
+
+So? If we found such a CPU during boot, would we refuse to online it because
+we consider it "entirely useless"? No! That said, given that it's _very_
+likely for the late CPUs to support vfp and neon, we could set those caps
+speculatively if the 64-bit cores have fpsimd (late onlining would be
+prevented for cores lacking those). Does the architecture allow you to
+implement both AArch64 and AArch32 at EL0, but only have fpsimd for AArch64?
+
+> Yes, in theory you can run an applications that don't make use of FP but
+> are there such apps still around? Even worse, I think not having
+> HWCAP_VFP or HWCAP_NEON should lead to a SIGILL if executing such
+> instructions but I have a suspicion they'd work just fine. So our compat
+> ABI in this case is no longer consistent with what we'd expose on a
+> symmetric system.
+
+In general, we already have this case for other capabilities where the
+architecture doesn't provide us with controls to disable instructions at
+EL0, so I don't think this is something new. However, given that we can
+trap fp, then I agree that this should be consistent with the caps.
+
+> > > How strong requirement is to allow late CPUs here? I think we'd miss the
+> > > COMPAT_HWCAPs as we no longer populate them once user-space started,
+> > > they are actually setup via smp_cpus_done() -> setup_cpu_features().
+> > 
+> > I think the requirement is to be as consistent as possible and not introduce
+> > more new behaviours than we really have to. Allowing late onlining of cores
+> > but fixing the (compat) hwcaps during boot is fine.
+> 
+> As I said above, I think we would be even more inconsistent w.r.t.
+> HWCAPs if we require at least one early AArch32-capable CPU, otherwise
+> don't expose 32-bit at all. I don't see what we gain by allowing all
+> 32-bit CPUs to come in late, other than maybe saving an entry in the
+> cpufeature array.
+
+It's a combination of there not being a good reason to prevent the
+late-onlining and not gaining anything from the additional feature (I've
+already shown why it doesn't help with the vast majority of callsites).
+
+Will
