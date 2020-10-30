@@ -2,36 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116512A10CC
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 23:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA0D2A1127
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 23:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725791AbgJ3W0h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Oct 2020 18:26:37 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:45272 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgJ3W0g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Oct 2020 18:26:36 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604096793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=26Ts76LEb5dF8UM0hmSIHaJpUqiGiJWBHMp5iFf7PiU=;
-        b=LxHJ68FH0YuIEFWx2pJpQimCZfTiqoGgDDau1FguLxRy0zRx9jDZctdAlFRJ324v8CuoYi
-        ZcuxU/DPzAwKZjuk1f5n85YkZURSL9nRFHt8mfu6t3it4VWyE7SlneV0erS9MR7nX9FzlP
-        P+HNof6Xh5RpyyaWT992LVmq2zyMt7WHQ/M2MkeRhrztzkZ4okq5IzkTTD/fUPiSmr0pHZ
-        BD6hj5xP7axA2OIEeQSYPyXK4XbM9OHuPNmPWTriLFFXeAcRngKo5tuvQR0c5M5uRZiaiR
-        7vOFKe6AAtTBf3UuZjT2hn26v4yx6tPJ2p6ldMkYWP3ZaJp8ZxNVmOK4vPxpMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604096793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=26Ts76LEb5dF8UM0hmSIHaJpUqiGiJWBHMp5iFf7PiU=;
-        b=2rJuYiPt20Oowm+h+GqzEiWNX0OgtYb09gN+zSFDN57qQiTBtXhd6AncITU48GjmrMPQTD
-        wElJt4hkBKleVUBg==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        id S1725838AbgJ3Wqu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Oct 2020 18:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725836AbgJ3Wqt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Oct 2020 18:46:49 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7ACC0613D7
+        for <linux-arch@vger.kernel.org>; Fri, 30 Oct 2020 15:46:49 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id 2so8506872ljj.13
+        for <linux-arch@vger.kernel.org>; Fri, 30 Oct 2020 15:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FrhxrWCIONXWoPxsDWMRBR+W10EJDGZ7OkgmkAXhFNU=;
+        b=NSjEistXDK7QrUisKBKyvvsUCTs8KpdALOTDGFQa3ZlxOrfYPgQ15P5Hp32THt3kZR
+         cN7sjbd0KoMQ3npg9DHgup7Q9J8GXdmUQ8lIGjC/f9HFg6XaYw9GqJyObayLgtYOnfyC
+         +DPogaxfsLaFCM9OrmD2eUZrIvZD8sMP/wXjA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FrhxrWCIONXWoPxsDWMRBR+W10EJDGZ7OkgmkAXhFNU=;
+        b=ifd8xyx2jnB2I2oHhMyc9fISEda/d+geWARPUDCiU5YGXQ9uSzmshKxjNEQ5JCjwto
+         CrPH3ZMZXlcAFeTRN6FW4sH2q2jkD8Ftv5rBO2qCtUKt8zi6EEWDCtEj5XzU4JO3nWIZ
+         K8l5LtnZR1bFjjs/dOihRZdDpgwAEQfr9n2Tr8Z1sKFx65964vx8+dvT6efeCkOWoGeL
+         7shox/tARpvj6B4dEtWBL/RxFmxVI5wAaXUBic2BM/wluXUDrr+NGFiaUkJAqf8T7+V9
+         fkud3BMfjOWv/PG9NDu//ZTo+ADONuXN35ePq8yJYQ+r4g3mTldcPr0BKeNun/J/n3ni
+         zzGA==
+X-Gm-Message-State: AOAM533NcfYb4RQCoBz3Jv+wqFYbVIJ5CMPXq5DUTmhyA2vksgn947j5
+        5+rCO5hQJMIkeWZWdTUB4ByvIK6390tLpw==
+X-Google-Smtp-Source: ABdhPJyHR9wYbmUJHBmxnzwAflHScXDdrjl/36uPd0kgPnMPJRrI8UQRH0fwj0ww60FcWPAAhlLDkQ==
+X-Received: by 2002:a2e:904e:: with SMTP id n14mr1901287ljg.356.1604098007417;
+        Fri, 30 Oct 2020 15:46:47 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id r5sm802045ljm.77.2020.10.30.15.46.42
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Oct 2020 15:46:43 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id y184so7904746lfa.12
+        for <linux-arch@vger.kernel.org>; Fri, 30 Oct 2020 15:46:42 -0700 (PDT)
+X-Received: by 2002:a19:4815:: with SMTP id v21mr1949766lfa.603.1604098002560;
+ Fri, 30 Oct 2020 15:46:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
+ <87pn50ob0s.fsf@nanos.tec.linutronix.de> <87blgknjcw.fsf@nanos.tec.linutronix.de>
+ <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com> <87sg9vl59i.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87sg9vl59i.fsf@nanos.tec.linutronix.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 30 Oct 2020 15:46:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjjO9BtTUAsLraqZqdzaPGJ-qvubZfwUsmRUX896eHcGw@mail.gmail.com>
+Message-ID: <CAHk-=wjjO9BtTUAsLraqZqdzaPGJ-qvubZfwUsmRUX896eHcGw@mail.gmail.com>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -51,9 +79,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
         <linux-snps-arc@lists.infradead.org>,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -73,72 +101,50 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org, Matthew Wilcox <willy@infradead.org>
-Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
-In-Reply-To: <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
-References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com> <87pn50ob0s.fsf@nanos.tec.linutronix.de> <87blgknjcw.fsf@nanos.tec.linutronix.de> <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
-Date:   Fri, 30 Oct 2020 23:26:33 +0100
-Message-ID: <87sg9vl59i.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 30 2020 at 13:28, Linus Torvalds wrote:
-> On Fri, Oct 30, 2020 at 2:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> But then we really should not name it kmap_local. 'local' suggests
->> locality, think local_irq*, local_bh* ... kmap_task would be more
->> accurate then.
+On Fri, Oct 30, 2020 at 3:26 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> So the main reason I'd like to see it is because I think on a
-> non-highmem machine, the new kmap should be a complete no-op. IOW,
-> we'd make sure that there are no costs, no need to increment any
-> "restrict migration" counts etc.
-
-Fair enough.
-
-> It's been a bit of a pain to have kmap_atomic() have magical side
-> semantics that people might then depend on.
-
-kmap_atomic() will still have the side semantics :)
-
-> I think "local" could still work as a name, because it would have to
-> be thread-local (and maybe we'd want a debug mode where that gets
-> verified, as actual HIGHMEM machines are getting rare).
+> While at it I might have a look at that debug request from Willy in the
+> other end of this thread. Any comment on that?
 >
-> I'd avoid "task", because that implies (to me, at least) that it
-> wouldn't be good for interrupts etc that don't have a task context.
->
-> I think the main issue is that it has to be released in the same
-> context as it was created (ie no passing those things around to other
-> contexts). I think "local" is fine for that, but I could imagine other
-> names. The ones that come to mind are somewhat cumbersome, though
-> ("shortterm" or "local_ctx" or something along those lines).
+>  https://lore.kernel.org/r/87k0v7mrrd.fsf@nanos.tec.linutronix.de
 
-Yeah, not really intuitive either.
+I do think that it would be nice to have a debug mode, particularly
+since over the last few years we've really lost a lot of HIGHMEM
+coverage (to the point that I've wondered how worthwhile it really is
+to support at all any more - I think it's Arnd who argued that it's
+mainly some embedded ARM variants that will want it for the forseeable
+future).
 
-Let's stick with _local and add proper function documentation which
-clearly says, that the side effect of non-migratability applies only for
-the 32bit highmem case in order to make it work at all.
+So I'm honestly somewhat torn. I think HIGHMEM is dying, and yes that
+argues for "non-HIGHMEM had better have some debug coverage", but at
+the same time I think it doesn't even really matter any more. At some
+point those embedded ARM platforms just aren't even interesting - they
+might as well use older kernels if they are the only thing really
+arguing for HIGHMEM at all.
 
-So code which needs CPU locality cannot rely on it and we have enough
-debug stuff to catch something like:
+This is one reason why I'd like the new kmap_local() to be a no-op,
+and I'd prefer for it to have no other side effects - because I want
+to be ready to remove it entirely some day. And if we end up having
+some transition where people start rewriting "kmap_atomic()" to be
+"kmap_local() + explicit preemption disable", then I think that would
+be a good step on that whole "kmap will eventually go away" path.
 
-    kmap_local()
-    this_cpu_write(....)
-    kunmap_local()
+But I do *not* believe that we need to add _so_ much debug support
+that we'd catch Willy's "more than one page" case. And I absolutely do
+not believe for a second that we should start caring about compound
+pages. NO. kmap() is almost dead already, we're not making it worse.
 
-Let me redo the pile.
+To me, your patch series has two big advantages:
 
-While at it I might have a look at that debug request from Willy in the
-other end of this thread. Any comment on that?
+ - more common code
 
- https://lore.kernel.org/r/87k0v7mrrd.fsf@nanos.tec.linutronix.de
+ - kmap_local() becomes more of a no-op
 
-Thanks,
+and the last thing we want is to expand on kmap.
 
-        tglx
-
-
-      
+           Linus
