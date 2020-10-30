@@ -2,67 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AED92A0B05
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 17:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AA32A0B18
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Oct 2020 17:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbgJ3QYZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Oct 2020 12:24:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51730 "EHLO mail.kernel.org"
+        id S1726674AbgJ3QaA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Oct 2020 12:30:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52924 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725844AbgJ3QYZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 30 Oct 2020 12:24:25 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725844AbgJ3Q37 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:29:59 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 04EAD2083B;
-        Fri, 30 Oct 2020 16:24:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B7B72151B;
+        Fri, 30 Oct 2020 16:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604075064;
-        bh=35pFo6MvmFEoU2yJ7e0M2UeTwxoblUxK1NKRVX+1ouI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ns4ZmJvVr2OIm0C4Si+V4GvXNidYwGlWsLoG7uQ74XbavuMfNGymwLoDBv8u32CtJ
-         t3mDS1/tsI3a14TnKkKdjcOWQSUHAJU3tVm7ilxU9p2t1bQPHT0GUzvmsYhghnJXZG
-         UsGf57DIVomY4w5IlnwCnPuZBQa4+aaTNIuu0BYQ=
-Date:   Fri, 30 Oct 2020 16:24:19 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>, kernel-team@android.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-arch@vger.kernel.org, Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH 0/6] An alternative series for asymmetric AArch32 systems
-Message-ID: <20201030162419.GB32700@willie-the-truck>
-References: <20201027215118.27003-1-will@kernel.org>
- <160407459118.3016487.12247105988100320673.b4-ty@kernel.org>
+        s=default; t=1604075399;
+        bh=Zd4lIVf1bsz555QMx+XmVLs68UwovqEKCGJ66eBzUhc=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Yo5gl6bWEa+vscqKcXDbnZ+cNEqf+Dqc77TT9cGfbxUDUVNknEn9bm4XT28bgFfSo
+         EIpRMFBAOcaBFTZWaJjbaYlfjb+cy6G14GYmBB0u58zKkDTSfTj8jVjW1DYc7rU5lD
+         K/K7STUnxnSj9L7e7XZLkRB3FfWgsSDC543c1L2g=
+Received: by mail-qv1-f46.google.com with SMTP id w5so2993522qvn.12;
+        Fri, 30 Oct 2020 09:29:59 -0700 (PDT)
+X-Gm-Message-State: AOAM533Qon/54O/4e3BIkPEq7Y07PNxi1i6YHnEGUU40kbaL/Jg7oz6J
+        OyyiC5pPiaoN6Pty0XwKIqV7K9xqLsuANsD0qjs=
+X-Google-Smtp-Source: ABdhPJxzmAmY7xhPzaG3cP5JLj6pWRCKQ2WXEhuCWvPMgxtR74KLqkGKvXmy80cZdRvYbV7SlrEukKe8zjVwGj1uKOQ=
+X-Received: by 2002:a0c:a2a6:: with SMTP id g35mr9870760qva.4.1604075398185;
+ Fri, 30 Oct 2020 09:29:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <160407459118.3016487.12247105988100320673.b4-ty@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 30 Oct 2020 17:29:42 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a37eA8s68pkHcmR_wtvPaDBouqRF7S2T+t3=YUh9HuCOg@mail.gmail.com>
+Message-ID: <CAK8P3a37eA8s68pkHcmR_wtvPaDBouqRF7S2T+t3=YUh9HuCOg@mail.gmail.com>
+Subject: [GIT PULL] asm-generic: bugfix for v5.10
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 04:16:48PM +0000, Marc Zyngier wrote:
-> On Tue, 27 Oct 2020 21:51:12 +0000, Will Deacon wrote:
-> > I was playing around with the asymmetric AArch32 RFCv2 from Qais:
-> > 
-> > https://lore.kernel.org/r/20201021104611.2744565-1-qais.yousef@arm.com
-> > 
-> > and ended up writing my own implementation this afternoon. I think it's
-> > smaller, simpler and easier to work with. In particular:
-> > 
-> > [...]
-> 
-> Applied to next, thanks!
-> 
-> [1/1] KVM: arm64: Handle Asymmetric AArch32 systems
->       commit: 22f553842b14a1289c088a79a67fb479d3fa2a4e
+The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
 
-Got to be honest, this gave me a heart attack at first! First patch is
-good though, just please don't apply the rest of this stuff :)
+  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
 
-Will
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-fixes-5.10
+
+for you to fetch changes up to 0bcd0a2be8c9ef39d84d167ff85359a49f7be175:
+
+  asm-generic: mark __{get,put}_user_fn as __always_inline (2020-10-27
+16:13:09 +0100)
+
+----------------------------------------------------------------
+asm-generic: fixes for v5.10
+
+There is one small bugfix, fixing a build regression for RISC-V
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      asm-generic: mark __{get,put}_user_fn as __always_inline
+
+ include/asm-generic/uaccess.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
