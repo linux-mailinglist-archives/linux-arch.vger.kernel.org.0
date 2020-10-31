@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F402A1452
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5862A1451
 	for <lists+linux-arch@lfdr.de>; Sat, 31 Oct 2020 10:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgJaJDU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1726505AbgJaJDU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Sat, 31 Oct 2020 05:03:20 -0400
-Received: from mga12.intel.com ([192.55.52.136]:5938 "EHLO mga12.intel.com"
+Received: from mga11.intel.com ([192.55.52.93]:36270 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726501AbgJaJDT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1726424AbgJaJDT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Sat, 31 Oct 2020 05:03:19 -0400
-IronPort-SDR: KfFUygIq3WbUH7JJsE+oj4ss/sCbcqtGWHVJPvgOIGRZ09aGYXU8GBZ8VpS1oxfnchhroqA3mN
- OYW2FB3WPutQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="147996899"
+IronPort-SDR: Z5MIi2ld9Opz9H1UQpay+PSgxubrdccXUAoyLhbXz87X+ag6C+kY4NsW3Q4WdHytU/vgmycWz1
+ uvQFZrxcR8ow==
+X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="165214997"
 X-IronPort-AV: E=Sophos;i="5.77,436,1596524400"; 
-   d="scan'208";a="147996899"
+   d="scan'208";a="165214997"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2020 02:03:18 -0700
-IronPort-SDR: yeGWwZlXg60ZpgYX3K1ed4FkwxFCf1NSZ9RHzW5pSR0LzhZMysAFRjkw2hvH2gn4+kpRJECHea
- XymICWUtzeww==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2020 02:03:18 -0700
+IronPort-SDR: UlPoxoU5Aa+5zlCjC8syjq+/tMGKNlmStXLy1B/8RxarPPqS5ZdxXbTvjk+S6y9HA3K9EJ60MR
+ 2sWp1PuLXr3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,436,1596524400"; 
-   d="scan'208";a="526138532"
+   d="scan'208";a="469779581"
 Received: from lkp-server02.sh.intel.com (HELO fcc9f8859912) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Oct 2020 02:03:17 -0700
+  by orsmga004.jf.intel.com with ESMTP; 31 Oct 2020 02:03:17 -0700
 Received: from kbuild by fcc9f8859912 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kYmn7-0000Ut-1x; Sat, 31 Oct 2020 09:03:17 +0000
-Date:   Sat, 31 Oct 2020 17:02:25 +0800
+        id 1kYmn6-0000Uq-Ur; Sat, 31 Oct 2020 09:03:16 +0000
+Date:   Sat, 31 Oct 2020 17:02:27 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:master] BUILD SUCCESS
- 78d127fd689200ff1d62d1f24f6be8dd68250764
-Message-ID: <5f9d2821.oVjhGmr3+psxlcic%lkp@intel.com>
+Subject: [asm-generic:asm-generic-timers] BUILD SUCCESS
+ 0774a6ed294b963dc76df2d8342ab86d030759ec
+Message-ID: <5f9d2823.jCqOkZwGOkBVnU6Z%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,8 +45,8 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  master
-branch HEAD: 78d127fd689200ff1d62d1f24f6be8dd68250764  Merge branch 'asm-generic-timers' into asm-generic
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic-timers
+branch HEAD: 0774a6ed294b963dc76df2d8342ab86d030759ec  timekeeping: default GENERIC_CLOCKEVENTS to enabled
 
 elapsed time: 720m
 
@@ -195,10 +195,10 @@ riscv                    nommu_virt_defconfig
 riscv                             allnoconfig
 riscv                          rv32_defconfig
 riscv                            allmodconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
 x86_64                                   rhel
+x86_64                    rhel-7.6-kselftests
 x86_64                              defconfig
+x86_64                               rhel-8.3
 x86_64                                  kexec
 
 clang tested configs:
