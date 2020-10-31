@@ -2,213 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5862A1451
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Oct 2020 10:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF7C2A17AE
+	for <lists+linux-arch@lfdr.de>; Sat, 31 Oct 2020 14:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgJaJDU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 31 Oct 2020 05:03:20 -0400
-Received: from mga11.intel.com ([192.55.52.93]:36270 "EHLO mga11.intel.com"
+        id S1727445AbgJaNhT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 31 Oct 2020 09:37:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41528 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726424AbgJaJDT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 31 Oct 2020 05:03:19 -0400
-IronPort-SDR: Z5MIi2ld9Opz9H1UQpay+PSgxubrdccXUAoyLhbXz87X+ag6C+kY4NsW3Q4WdHytU/vgmycWz1
- uvQFZrxcR8ow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9790"; a="165214997"
-X-IronPort-AV: E=Sophos;i="5.77,436,1596524400"; 
-   d="scan'208";a="165214997"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2020 02:03:18 -0700
-IronPort-SDR: UlPoxoU5Aa+5zlCjC8syjq+/tMGKNlmStXLy1B/8RxarPPqS5ZdxXbTvjk+S6y9HA3K9EJ60MR
- 2sWp1PuLXr3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,436,1596524400"; 
-   d="scan'208";a="469779581"
-Received: from lkp-server02.sh.intel.com (HELO fcc9f8859912) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 31 Oct 2020 02:03:17 -0700
-Received: from kbuild by fcc9f8859912 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kYmn6-0000Uq-Ur; Sat, 31 Oct 2020 09:03:16 +0000
-Date:   Sat, 31 Oct 2020 17:02:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:asm-generic-timers] BUILD SUCCESS
- 0774a6ed294b963dc76df2d8342ab86d030759ec
-Message-ID: <5f9d2823.jCqOkZwGOkBVnU6Z%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727437AbgJaNhT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 31 Oct 2020 09:37:19 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DC1720885;
+        Sat, 31 Oct 2020 13:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604151438;
+        bh=KsL4BllLtOAiumSXMCBq8rYe7s/DE2jdXN/dD3vutNo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RM6gL96UmqjkPB4vFSwKs67HSErS+vAyVlD8S4mG0PHI5hhzZE3leS9Nv9mggOPyX
+         JXfK4y19g8PIIgLubo74FqId8jx+SP7BzrEHKZgRWm3FHX/JgHSLcPcTGK3GXcFWqE
+         hcK5huelhR7bwU7gFe0tIJwmuL8OYH248yBzDLsI=
+Received: by mail-qt1-f174.google.com with SMTP id f93so6147092qtb.10;
+        Sat, 31 Oct 2020 06:37:18 -0700 (PDT)
+X-Gm-Message-State: AOAM5307WL85jdEc9Q5dtyWeBRzkunF8iZIYr4xENs5CU7uR5CuMtS2t
+        p4uS7skDel/KXStXf5dkz464qJQf4YfQ+AH59MQ=
+X-Google-Smtp-Source: ABdhPJy91qWaVGms2GdzKOjDu6QuHL3ODS3nIJ7TUoaG3D14vcIMVYFpi2taO5I7gplDF7nHf39t19dhIbjX1TCVhrs=
+X-Received: by 2002:ac8:6c25:: with SMTP id k5mr1254491qtu.142.1604151437406;
+ Sat, 31 Oct 2020 06:37:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
+ <87pn50ob0s.fsf@nanos.tec.linutronix.de> <87blgknjcw.fsf@nanos.tec.linutronix.de>
+ <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
+ <87sg9vl59i.fsf@nanos.tec.linutronix.de> <CAHk-=wjjO9BtTUAsLraqZqdzaPGJ-qvubZfwUsmRUX896eHcGw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjjO9BtTUAsLraqZqdzaPGJ-qvubZfwUsmRUX896eHcGw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 31 Oct 2020 14:37:01 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3FyKTHDSAPCyP8e7UA0LN3OvAatNK_vQ3tnBsdbou4sA@mail.gmail.com>
+Message-ID: <CAK8P3a3FyKTHDSAPCyP8e7UA0LN3OvAatNK_vQ3tnBsdbou4sA@mail.gmail.com>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git  asm-generic-timers
-branch HEAD: 0774a6ed294b963dc76df2d8342ab86d030759ec  timekeeping: default GENERIC_CLOCKEVENTS to enabled
+On Fri, Oct 30, 2020 at 11:46 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Oct 30, 2020 at 3:26 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > While at it I might have a look at that debug request from Willy in the
+> > other end of this thread. Any comment on that?
+> >
+> >  https://lore.kernel.org/r/87k0v7mrrd.fsf@nanos.tec.linutronix.de
+>
+> I do think that it would be nice to have a debug mode, particularly
+> since over the last few years we've really lost a lot of HIGHMEM
+> coverage (to the point that I've wondered how worthwhile it really is
+> to support at all any more - I think it's Arnd who argued that it's
+> mainly some embedded ARM variants that will want it for the forseeable
+> future).
+>
+> So I'm honestly somewhat torn. I think HIGHMEM is dying, and yes that
+> argues for "non-HIGHMEM had better have some debug coverage", but at
+> the same time I think it doesn't even really matter any more.
 
-elapsed time: 720m
+Shifting the testing of highmem code to the actual users of highmem
+sounds reasonable to me. This means it will get broken more often,
+but if it doesn't happen all the time, it might serve as a canary:
+once a bug survives for long enough, we have a good indication that
+users stopped caring ;-)
 
-configs tested: 149
-configs skipped: 2
+> At some
+> point those embedded ARM platforms just aren't even interesting - they
+> might as well use older kernels if they are the only thing really
+> arguing for HIGHMEM at all.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Agreed, but it does need a little time to get there. My best guess is three
+to five years from now we can remove it for good, provided a few things
+happen first:
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                          r7785rp_defconfig
-arm                          ep93xx_defconfig
-arc                     nsimosci_hs_defconfig
-i386                             alldefconfig
-sh                           se7722_defconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                        mvme16x_defconfig
-mips                      maltasmvp_defconfig
-sh                             shx3_defconfig
-mips                      loongson3_defconfig
-powerpc                   motionpro_defconfig
-arm                     eseries_pxa_defconfig
-sh                          r7780mp_defconfig
-arm                           omap1_defconfig
-powerpc                     kilauea_defconfig
-mips                  maltasmvp_eva_defconfig
-arm                   milbeaut_m10v_defconfig
-sparc                       sparc32_defconfig
-powerpc                     skiroot_defconfig
-x86_64                           allyesconfig
-arc                        vdk_hs38_defconfig
-arm                          exynos_defconfig
-s390                          debug_defconfig
-arm                            pleb_defconfig
-ia64                          tiger_defconfig
-powerpc                 mpc834x_mds_defconfig
-xtensa                  nommu_kc705_defconfig
-mips                malta_kvm_guest_defconfig
-arm                        keystone_defconfig
-h8300                    h8300h-sim_defconfig
-arm                          ixp4xx_defconfig
-arm                         shannon_defconfig
-sh                           se7751_defconfig
-powerpc64                           defconfig
-arm                          tango4_defconfig
-powerpc                      chrp32_defconfig
-mips                     loongson1c_defconfig
-powerpc                     kmeter1_defconfig
-arm                        multi_v7_defconfig
-powerpc                 mpc8540_ads_defconfig
-mips                           mtx1_defconfig
-mips                          rm200_defconfig
-arc                         haps_hs_defconfig
-arm                        multi_v5_defconfig
-alpha                            alldefconfig
-powerpc                       ebony_defconfig
-sh                        apsh4ad0a_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                         ps3_defconfig
-arm                         socfpga_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                       bvme6000_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                         lubbock_defconfig
-arm                        magician_defconfig
-mips                        bcm47xx_defconfig
-arc                     haps_hs_smp_defconfig
-um                             i386_defconfig
-mips                          ath79_defconfig
-openrisc                         alldefconfig
-arm                        shmobile_defconfig
-sh                ecovec24-romimage_defconfig
-ia64                      gensparse_defconfig
-sh                           se7721_defconfig
-mips                        workpad_defconfig
-arm                         s3c6400_defconfig
-arm                            lart_defconfig
-powerpc                  iss476-smp_defconfig
-mips                     loongson1b_defconfig
-sparc                            allyesconfig
-riscv                               defconfig
-arm                       multi_v4t_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20201030
-x86_64               randconfig-a001-20201030
-x86_64               randconfig-a002-20201030
-x86_64               randconfig-a003-20201030
-x86_64               randconfig-a006-20201030
-x86_64               randconfig-a004-20201030
-i386                 randconfig-a005-20201030
-i386                 randconfig-a003-20201030
-i386                 randconfig-a002-20201030
-i386                 randconfig-a001-20201030
-i386                 randconfig-a006-20201030
-i386                 randconfig-a004-20201030
-i386                 randconfig-a005-20201031
-i386                 randconfig-a003-20201031
-i386                 randconfig-a002-20201031
-i386                 randconfig-a001-20201031
-i386                 randconfig-a006-20201031
-i386                 randconfig-a004-20201031
-i386                 randconfig-a011-20201030
-i386                 randconfig-a014-20201030
-i386                 randconfig-a015-20201030
-i386                 randconfig-a012-20201030
-i386                 randconfig-a013-20201030
-i386                 randconfig-a016-20201030
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+1. The remaining users of TI Keystone2, NXP i.MX6 Quad(Plus) and
+  Renesas R8A7790/R8A7791/R8A7742/R8A7743 that use the
+  largest memory configuration must have stopped requiring kernel
+  version updates.
+  These were all introduced at the peak of 32-bit Arm embedded
+  systems around 2013, but they have long (15+ year) product
+  life cycles and users pick these because they do promise kernel
+  updates, unlike other SoC families that get stuck on old vendor
+  kernels much earlier.
 
-clang tested configs:
-x86_64               randconfig-a013-20201030
-x86_64               randconfig-a014-20201030
-x86_64               randconfig-a015-20201030
-x86_64               randconfig-a016-20201030
-x86_64               randconfig-a011-20201030
-x86_64               randconfig-a012-20201030
+2. The plan to add a CONFIG_VMSPLIT_4G_4G option on arch/arm/
+  must work out. We don't have all the code yet, and so far it looks
+  like it's going to be a bit ugly and a bit slow but not nearly as ugly
+  or slow as it was on x86 20 years ago.
+  This would cover Cortex-A7/A15 systems from 2GB to 4GB,
+  which are still fairly common and need to keep using mainline
+  kernels for much longer than the system in point 1.
+  It won't help on Cortex-A9 machines with 2GB, which I hope can
+  migrate CONFIG_VMSPLIT_2G_OPT as a fallback.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+3. No new systems with larger memory must appear. I noticed that
+  e.g. the newly introduced Rockchips RV1109 and Allwinner
+  A50/R328/V316 support LP-DDR4 on a dual Cortex-A7, but I
+  hope that nobody will in practice combine a $2 SoC with a $15
+  memory chip.
+  Most other 32-bit chips use DDR3, which tends to prohibit
+  configurations over 4GB in new designs, with the cheapest
+  ones limited to 512MB (a single 256Mx16 chip) and the
+  high end having already moved on to 64 bit.
+
+Regarding 32-bit non-Arm systems, support for the MIPS-based
+Baikal T1 was merged earlier this year and is used in Russian
+PC style systems with up to 8GB.
+There are also some users on 10+ year old 32-bit netbooks or
+business laptops, both x86 and Apple G4.
+The longest-lived 32-bit embedded systems with large memory
+(other than Arm) are probably NXP QorIQ P20xx/P40xx used in
+military VME bus systems, and low-end embedded systems based
+on Vortex86.
+I'm less worried about all of these because upstream kernel
+support for ppc32 and x86-32 is already bitrotting and they will
+likely get stuck on the last working kernel before the
+TI/Renesas/NXP Arm systems do.
+
+       Arnd
