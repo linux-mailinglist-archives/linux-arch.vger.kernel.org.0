@@ -2,126 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A832A1AC1
-	for <lists+linux-arch@lfdr.de>; Sat, 31 Oct 2020 22:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2746C2A1D82
+	for <lists+linux-arch@lfdr.de>; Sun,  1 Nov 2020 12:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbgJaVdw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 31 Oct 2020 17:33:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57510 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbgJaVdw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 31 Oct 2020 17:33:52 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726347AbgKALJy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 1 Nov 2020 06:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgKALJx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 Nov 2020 06:09:53 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D07C0617A6;
+        Sun,  1 Nov 2020 03:09:53 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC6B720853;
-        Sat, 31 Oct 2020 21:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604180031;
-        bh=a949fi3JWCiOsIfB/oXLlGSJaTnnNYCIyox+iEaG/3k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FmxLv/JX6BAYBbl58Wkol2prTj8sKl9cvxus7OmDo+6URnNTLmGqZ06GE9zo4BHaB
-         iXhqDXTppGvvGbmmfODkn8e10A9CmYm2o8DPHq6nDPdkB1ghH/QP2hswGJSP45Izjn
-         hBxXJsrdmGoAujywpsoLUpU9+3792RN4eIWY5h0o=
-Received: by mail-qt1-f173.google.com with SMTP id p45so6745899qtb.5;
-        Sat, 31 Oct 2020 14:33:50 -0700 (PDT)
-X-Gm-Message-State: AOAM530phMDMs7NbEYVeHpjHR6yY98D7PX3+9oSP8hR7TfnJ5xD76Ar9
-        SbKny+x4Qac9cu0BnDzo+1WVOf3QO+ljyuylyeA=
-X-Google-Smtp-Source: ABdhPJyD/4AcE03j7HIaN207+kO4IYyQ0WkWkrWDUSbNUToIdPZlRv7YWwHuIabdMaXmtCngmEmV1ORQEwrjBUGk+Sk=
-X-Received: by 2002:ac8:4808:: with SMTP id g8mr8036830qtq.18.1604180029997;
- Sat, 31 Oct 2020 14:33:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
- <87pn50ob0s.fsf@nanos.tec.linutronix.de> <87blgknjcw.fsf@nanos.tec.linutronix.de>
- <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
- <87sg9vl59i.fsf@nanos.tec.linutronix.de> <CAHk-=wjjO9BtTUAsLraqZqdzaPGJ-qvubZfwUsmRUX896eHcGw@mail.gmail.com>
- <CAK8P3a3FyKTHDSAPCyP8e7UA0LN3OvAatNK_vQ3tnBsdbou4sA@mail.gmail.com> <20201031160539.Horde.n5yNbG9LoUSWqtuPQW_h3w1@messagerie.c-s.fr>
-In-Reply-To: <20201031160539.Horde.n5yNbG9LoUSWqtuPQW_h3w1@messagerie.c-s.fr>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 31 Oct 2020 22:33:33 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3uY0ASRGcPi-OZdRyL_xLY81nJfu+O6z-Ovxu9YCR4dQ@mail.gmail.com>
-Message-ID: <CAK8P3a3uY0ASRGcPi-OZdRyL_xLY81nJfu+O6z-Ovxu9YCR4dQ@mail.gmail.com>
-Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michal Simek <monstr@monstr.eu>,
-        Chris Zankel <chris@zankel.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, Mel Gorman <mgorman@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Christoph Hellwig <hch@lst.de>, linux-csky@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Chen <deanbo422@gmail.com>,
-        linux-sparc <sparclinux@vger.kernel.org>,
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4CPCxT5LHFzQjy2;
+        Sun,  1 Nov 2020 12:09:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id 0NqHY5bM4ywr; Sun,  1 Nov 2020 12:09:42 +0100 (CET)
+Date:   Sun, 1 Nov 2020 12:09:35 +0100
+From:   Hagen Paul Pfeifer <hagen@jauu.net>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
         Matthew Wilcox <willy@infradead.org>,
-        Guo Ren <guoren@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Ben Segall <bsegall@google.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-xtensa@linux-xtensa.org, Juri Lelli <juri.lelli@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20201101110935.GA4105325@laniakea>
+References: <20200924132904.1391-1-rppt@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200924132904.1391-1-rppt@kernel.org>
+X-Key-Id: 98350C22
+X-Key-Fingerprint: 490F 557B 6C48 6D7E 5706 2EA2 4A22 8D45 9835 0C22
+X-GPG-Key: gpg --recv-keys --keyserver wwwkeys.eu.pgp.net 98350C22
+X-MBO-SPAM-Probability: *
+X-Rspamd-Score: 0.32 / 15.00 / 15.00
+X-Rspamd-Queue-Id: EBDB416FE
+X-Rspamd-UID: bd1d51
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 31, 2020 at 4:04 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> > There are also some users on 10+ year old 32-bit netbooks or
-> > business laptops, both x86 and Apple G4.
-> > The longest-lived 32-bit embedded systems with large memory
-> > (other than Arm) are probably NXP QorIQ P20xx/P40xx used in
-> > military VME bus systems, and low-end embedded systems based
-> > on Vortex86.
-> > I'm less worried about all of these because upstream kernel
-> > support for ppc32 and x86-32 is already bitrotting and they will
-> > likely get stuck on the last working kernel before the
-> > TI/Renesas/NXP Arm systems do.
-> >
->
-> Upstream kernel support for ppc32 is bitrotting, seriously ? What do
-> you mean exactly ?
+* Mike Rapoport | 2020-09-24 16:28:58 [+0300]:
 
-I was thinking more of the platform support: out of the twelve
-32-bit platforms in arch/powerpc/platforms/, your 8xx is the only
-one listed as 'maintained' or 'supported' in the maintainers list,
-and that seems to accurately describe the current state.
+>This is an implementation of "secret" mappings backed by a file descriptor. 
+>I've dropped the boot time reservation patch for now as it is not strictly
+>required for the basic usage and can be easily added later either with or
+>without CMA.
 
-Freescale seems to have practically stopped contributing to any of
-their 32-bit platforms in 2016 after the NXP acquisition and no longer
-employing either of the maintainers. Similarly, Ben seems to have
-stopped working on powermac in 2016, which was ten years after
-the last 32-bit hardware shipped for that platform.
+Isn't memfd_secret currently *unnecessarily* designed to be a "one task
+feature"? memfd_secret fulfills exactly two (generic) features:
 
-> ppc32 is actively supported, with recent addition of support of
-> hugepages, kasan, uaccess protection, VMAP stack, etc ...
+- address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
+  direct map) - hide from kernel, great
+- disabling processor's memory caches against speculative-execution vulnerabilities
+  (spectre and friends, aka SECRET_UNCACHED), also great
 
-That is good to hear, I didn't know about these additions.
-What platforms are people using to develop these? Is this
-mainly your 8xx work, or is there ongoing development for
-platforms that need highmem?
+But, what about the following use-case: implementing a hardened IPC mechanism
+where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
+even the hardware caches are bypassed! With the patches we are so close to
+achieving this.
 
-         Arnd
+How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
+involved tasks required to know this mapping (and memfd_secret fd). After IPC
+is done, tasks can copy sensitive data from IPC pages into memfd_secret()
+pages, un-sensitive data can be used/copied everywhere.
+
+One missing piece is still the secure zeroization of the page(s) if the
+mapping is closed by last process to guarantee a secure cleanup. This can
+probably done as an general mmap feature, not coupled to memfd_secret() and
+can be done independently ("reverse" MAP_UNINITIALIZED feature).
+
+PS: thank you Mike for your effort!
+
+See the following pseudo-code as an example:
+
+
+// simple assume file-descriptor and mapping is inherited
+// by child for simplicity, ptr is 
+int fd = memfd_secret(SECRETMEM_UNCACHED);
+ftruncate(fd, PAGE_SIZE);
+uint32_t *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+pid_t pid_other;
+
+void signal_handler(int sig)
+{
+	// update IPC data on shared, uncachaed, exclusive mapped page
+	*ptr += 1;
+	// inform other
+	sleep(1);
+	kill(pid_other, SIGUSR1);
+}
+
+void ipc_loop(void)
+{
+	signal(SIGUSR1, signal_handler);
+	while (1) {
+		sleep(1);
+	}
+}
+
+int main(void)
+{
+	pid_t child_pid;
+
+	switch (child_pid = fork()) {
+	case 0:
+		pid_other = getppid();
+		break;
+	default:
+		pid_other = child_pid
+		break;
+	}
+	
+	ipc_loop();
+}
+
+
+Hagen
