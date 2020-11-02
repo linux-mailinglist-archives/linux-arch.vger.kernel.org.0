@@ -2,154 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E18F2A3269
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 18:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B33A2A32DB
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 19:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbgKBR7E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Nov 2020 12:59:04 -0500
-Received: from foss.arm.com ([217.140.110.172]:35720 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725852AbgKBR7D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 2 Nov 2020 12:59:03 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29351139F;
-        Mon,  2 Nov 2020 09:59:03 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD3923F719;
-        Mon,  2 Nov 2020 09:59:01 -0800 (PST)
-Date:   Mon, 2 Nov 2020 17:58:59 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/4] arm64: kvm: Handle Asymmetric AArch32 systems
-Message-ID: <20201102175859.22flailfpntacan6@e107158-lin.cambridge.arm.com>
-References: <20201021104611.2744565-1-qais.yousef@arm.com>
- <20201021104611.2744565-2-qais.yousef@arm.com>
- <4035e634eb2bfce4b88a159b2ec2f267@kernel.org>
- <20201021133543.zeyghjzujivnds2d@e107158-lin>
- <87587dbfb7bee53eca4d1b837fd8194a@kernel.org>
+        id S1726114AbgKBSXS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 2 Nov 2020 13:23:18 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:41475 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726395AbgKBSXR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Nov 2020 13:23:17 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-221-3eybHYmXNVuuSrMONPCpiQ-1; Mon, 02 Nov 2020 18:23:12 +0000
+X-MC-Unique: 3eybHYmXNVuuSrMONPCpiQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 2 Nov 2020 18:23:11 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 2 Nov 2020 18:23:11 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Greg KH' <gregkh@linuxfoundation.org>
+CC:     'David Hildenbrand' <david@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-aio@kvack.org" <linux-aio@kvack.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: RE: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Topic: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
+ rw_copy_check_uvector() into lib/iov_iter.c"
+Thread-Index: AQHWqE5GNDfnH4y9nkGWtfqJueR1KKmjTCJQgAAN4UiAAAD2IIAASOeCgAF+12CAAB+UKYAAAQNg///yIQCAD2i/YIAAT+MAgABLYlA=
+Date:   Mon, 2 Nov 2020 18:23:11 +0000
+Message-ID: <c751d3a7796e45a8a2640e2ded59d708@AcuMS.aculab.com>
+References: <20201022121849.GA1664412@kroah.com>
+ <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
+ <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com>
+ <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
+ <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
+ <999e2926-9a75-72fd-007a-1de0af341292@redhat.com>
+ <35d0ec90ef4f4a35a75b9df7d791f719@AcuMS.aculab.com>
+ <20201023144718.GA2525489@kroah.com>
+ <0ab5ac71f28d459db2f350c2e07b88ca@AcuMS.aculab.com>
+ <20201102135202.GA1016272@kroah.com>
+In-Reply-To: <20201102135202.GA1016272@kroah.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87587dbfb7bee53eca4d1b837fd8194a@kernel.org>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Marc
-
-On 10/21/20 14:51, Marc Zyngier wrote:
-> > > >
-> > > > 	# ./test
-> > > > 	error: kvm run failed Invalid argument
-> > > > 	 PC=ffff800010945080 X00=ffff800016a45014 X01=ffff800010945058
-> > > > 	X02=ffff800016917190 X03=0000000000000000 X04=0000000000000000
-> > > > 	X05=00000000fffffffb X06=0000000000000000 X07=ffff80001000bab0
-> > > > 	X08=0000000000000000 X09=0000000092ec5193 X10=0000000000000000
-> > > > 	X11=ffff80001608ff40 X12=ffff000075fcde86 X13=ffff000075fcde88
-> > > > 	X14=ffffffffffffffff X15=ffff00007b2105a8 X16=ffff00007b006d50
-> > > > 	X17=0000000000000000 X18=0000000000000000 X19=ffff00007a82b000
-> > > > 	X20=0000000000000000 X21=ffff800015ccd158 X22=ffff00007a82b040
-> > > > 	X23=ffff00007a82b008 X24=0000000000000000 X25=ffff800015d169b0
-> > > > 	X26=ffff8000126d05bc X27=0000000000000000 X28=0000000000000000
-> > > > 	X29=ffff80001000ba90 X30=ffff80001093f3dc  SP=ffff80001000ba90
-> > > > 	PSTATE=60000005 -ZC- EL1h
-> > > > 	qemu-system-aarch64: Failed to get KVM_REG_ARM_TIMER_CNT
-> > > 
-> > > It'd be worth working out:
-> > > - why does this show an AArch64 mode it we caught the vcpu in AArch32?
-> > > - why does QEMU shout about the timer register?
-> > 
-> > /me puts a monocular on
-> > 
-> > Which bit is the AArch64?
+From: 'Greg KH'
+> Sent: 02 November 2020 13:52
 > 
-> It clearly spits out "EL1h", and PSTATE.M is 5, also consistent with EL1h.
+> On Mon, Nov 02, 2020 at 09:06:38AM +0000, David Laight wrote:
+> > From: 'Greg KH'
+> > > Sent: 23 October 2020 15:47
+> > >
+> > > On Fri, Oct 23, 2020 at 02:39:24PM +0000, David Laight wrote:
+> > > > From: David Hildenbrand
+> > > > > Sent: 23 October 2020 15:33
+> > > > ...
+> > > > > I just checked against upstream code generated by clang 10 and it
+> > > > > properly discards the upper 32bit via a mov w23 w2.
+> > > > >
+> > > > > So at least clang 10 indeed properly assumes we could have garbage and
+> > > > > masks it off.
+> > > > >
+> > > > > Maybe the issue is somewhere else, unrelated to nr_pages ... or clang 11
+> > > > > behaves differently.
+> > > >
+> > > > We'll need the disassembly from a failing kernel image.
+> > > > It isn't that big to hand annotate.
+> > >
+> > > I've worked around the merge at the moment in the android tree, but it
+> > > is still quite reproducable, and will try to get a .o file to
+> > > disassemble on Monday or so...
+> >
+> > Did this get properly resolved?
+> 
+> For some reason, 5.10-rc2 fixed all of this up.  I backed out all of the
+> patches I had to revert to get 5.10-rc1 to work properly, and then did
+> the merge and all is well.
+> 
+> It must have been something to do with the compat changes in this same
+> area that went in after 5.10-rc1, and something got reorganized in the
+> files somehow.  I really do not know, and at the moment, don't have the
+> time to track it down anymore.  So for now, I'd say it's all good, sorry
+> for the noise.
 
-Apologies for the delay to look at the reason on failing to read the timer
-register.
+Hopefully it won't appear again.
 
-Digging into the qemu 5.0.0 code, the error message is printed from
-kvm_arm_get_virtual_time() which in turn is called from
-kvm_arm_vm_state_change(). The latter is a callback function that is called
-when a vm starts/stop.
+Saved me spending a day off reading arm64 assembler.
 
-So the sequence of events is:
+	David
 
-	VM runs 32bit apps
-	  host resets vcpu->arch.target to -1
-	    qemu::kvm_cpu_exec() hits -EINVAL error (somewhere I didn't trace)
-	      kvm_cpu_exec()::cpu_dump_state()
-	      kvm_cpu_exec()::vm_stop()
-	        ..
-	          kvm_arm_vm_state_change()
-	            kvm_arm_get_virtual_time()
-	              host return -ENOEXEC
-	                above error message is printed
-	                abort()
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-I admit I didn't trace qemu to see what's going inside it. It was only
-statically analysing the code. To verify the theory I applied the following
-hack to hide the timer register error
-
-	diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-	index 5d2a1caf55a0..1c8fdf6566ea 100644
-	--- a/arch/arm64/kvm/arm.c
-	+++ b/arch/arm64/kvm/arm.c
-	@@ -1113,7 +1113,7 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
-		case KVM_GET_ONE_REG: {
-			struct kvm_one_reg reg;
-
-	-               r = -ENOEXEC;
-	+               r = 0;
-			if (unlikely(!kvm_vcpu_initialized(vcpu)))
-				break;
-
-With that I see the following error from qemu after which it seems to have
-'hanged'. I can terminate qemu with the usual <ctrl-a>x. So it's not dead, just
-the vm has exited I suppose and qemu went into monitor mode or something.
-
-	error: kvm run failed Invalid argument
-	 PC=ffff8000109ca100 X00=ffff800016ff5014 X01=ffff8000109ca0d8
-	X02=ffff800016daae80 X03=0000000000000000 X04=0000000000000003
-	X05=0000000000000000 X06=0000000000000000 X07=ffff800016e2bae0
-	X08=00000000ffffffff X09=ffff8000109c4410 X10=0000000000000000
-	X11=ffff8000164fb9c8 X12=ffff0000458ad186 X13=ffff0000458ad188
-	X14=ffffffffffffffff X15=ffff000040268560 X16=0000000000000000
-	X17=0000000000000001 X18=0000000000000000 X19=ffff0000458c0000
-	X20=0000000000000000 X21=ffff0000458c0048 X22=ffff0000458c0008
-	X23=ffff800016103a38 X24=0000000000000000 X25=ffff800016150a38
-	X26=ffff800012a510d8 X27=ffff8000129504e0 X28=0000000000000000
-	X29=ffff800016e2bac0 X30=ffff8000109c4410  SP=ffff000040268000
-	PSTATE=834853a0 N--- EL0t
-
-Which hopefully is what you expected to see in the first place.
-
-Note that qemu v4.1.0 code didn't have this kvm_arm_get_virtual_time()
-function. It seems to be a relatively new addition.
-
-Also note that kvm_cpu_exec() in qemu completely ignores ARM_EXCEPTION_IL; the
-kvm_arch_handle_exit() for arm only catches KVM_EXIT_DEBUG and returns 0 for
-everything else. So kvm_cpu_exec() will jump back the loop to reenter the
-guest. I haven't traced it but it seems to fail before calling:
-
-	run_ret = kvm_vcpu_ioctl(cpu, KVM_RUN, 0);
-
-where return -ENOEXEC for invalid kvm_vcpu_initialized() in this path not
--EINVAL.
-
-So all in all, a lot of qemu specific handling and not sure if there's any
-guarantee how things will fail for different virtualization software. But
-I think there's a guarantee that they will fail.
-
-Thanks
-
---
-Qais Yousef
