@@ -2,140 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 195EE2A3246
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 18:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E18F2A3269
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 18:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgKBRv3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Nov 2020 12:51:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38367 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725801AbgKBRv2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Nov 2020 12:51:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604339486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lp/prYQuMgVXccCGCiV61cLz4v5q5/mm6tHCPraHIqM=;
-        b=EKQezKoEaQPVX0E/k1X4C/PLH+ukdpxJSN79mCzwzIu+B7Qv7oLCnGtx9+Sip+GlK1bsQJ
-        CAf2b8g9yEqtQduC91gEuPv8Nzmr3RHL6XE2kbyRYhxXK+84na4K4NZJcF9DdLXj5yAeEV
-        oA7Qf/09Hr525GSyHeWOYiePRs9Ql0w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-593-JugxVAtvMxar3jfSZTXWbg-1; Mon, 02 Nov 2020 12:51:22 -0500
-X-MC-Unique: JugxVAtvMxar3jfSZTXWbg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1873F879512;
-        Mon,  2 Nov 2020 17:51:18 +0000 (UTC)
-Received: from [10.36.113.163] (ovpn-113-163.ams2.redhat.com [10.36.113.163])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EA9C15B4A9;
-        Mon,  2 Nov 2020 17:51:10 +0000 (UTC)
-Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20200924132904.1391-1-rppt@kernel.org>
- <9c38ac3b-c677-6a87-ce82-ec53b69eaf71@redhat.com>
- <20201102174308.GF4879@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <d4cb2c87-4744-3929-cedd-2be78625a741@redhat.com>
-Date:   Mon, 2 Nov 2020 18:51:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1725882AbgKBR7E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Nov 2020 12:59:04 -0500
+Received: from foss.arm.com ([217.140.110.172]:35720 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725852AbgKBR7D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 2 Nov 2020 12:59:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29351139F;
+        Mon,  2 Nov 2020 09:59:03 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD3923F719;
+        Mon,  2 Nov 2020 09:59:01 -0800 (PST)
+Date:   Mon, 2 Nov 2020 17:58:59 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/4] arm64: kvm: Handle Asymmetric AArch32 systems
+Message-ID: <20201102175859.22flailfpntacan6@e107158-lin.cambridge.arm.com>
+References: <20201021104611.2744565-1-qais.yousef@arm.com>
+ <20201021104611.2744565-2-qais.yousef@arm.com>
+ <4035e634eb2bfce4b88a159b2ec2f267@kernel.org>
+ <20201021133543.zeyghjzujivnds2d@e107158-lin>
+ <87587dbfb7bee53eca4d1b837fd8194a@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201102174308.GF4879@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87587dbfb7bee53eca4d1b837fd8194a@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->> Assume you have a system with quite some ZONE_MOVABLE memory (esp. in
->> virtualized environments), eating up a significant amount of !ZONE_MOVABLE
->> memory dynamically at runtime can lead to non-obvious issues. It looks like
->> you have plenty of free memory, but the kernel might still OOM when trying
->> to do kernel allocations e.g., for pagetables. With CMA we at least know
->> what we're dealing with - it behaves like ZONE_MOVABLE except for the owner
->> that can place unmovable pages there. We can use it to compute statically
->> the amount of ZONE_MOVABLE memory we can have in the system without doing
->> harm to the system.
+Hi Marc
+
+On 10/21/20 14:51, Marc Zyngier wrote:
+> > > >
+> > > > 	# ./test
+> > > > 	error: kvm run failed Invalid argument
+> > > > 	 PC=ffff800010945080 X00=ffff800016a45014 X01=ffff800010945058
+> > > > 	X02=ffff800016917190 X03=0000000000000000 X04=0000000000000000
+> > > > 	X05=00000000fffffffb X06=0000000000000000 X07=ffff80001000bab0
+> > > > 	X08=0000000000000000 X09=0000000092ec5193 X10=0000000000000000
+> > > > 	X11=ffff80001608ff40 X12=ffff000075fcde86 X13=ffff000075fcde88
+> > > > 	X14=ffffffffffffffff X15=ffff00007b2105a8 X16=ffff00007b006d50
+> > > > 	X17=0000000000000000 X18=0000000000000000 X19=ffff00007a82b000
+> > > > 	X20=0000000000000000 X21=ffff800015ccd158 X22=ffff00007a82b040
+> > > > 	X23=ffff00007a82b008 X24=0000000000000000 X25=ffff800015d169b0
+> > > > 	X26=ffff8000126d05bc X27=0000000000000000 X28=0000000000000000
+> > > > 	X29=ffff80001000ba90 X30=ffff80001093f3dc  SP=ffff80001000ba90
+> > > > 	PSTATE=60000005 -ZC- EL1h
+> > > > 	qemu-system-aarch64: Failed to get KVM_REG_ARM_TIMER_CNT
+> > > 
+> > > It'd be worth working out:
+> > > - why does this show an AArch64 mode it we caught the vcpu in AArch32?
+> > > - why does QEMU shout about the timer register?
+> > 
+> > /me puts a monocular on
+> > 
+> > Which bit is the AArch64?
 > 
-> Why would you say that secretmem allocates from !ZONE_MOVABLE?
-> If we put boot time reservations aside, the memory allocation for
-> secretmem follows the same rules as the memory allocations for any file
-> descriptor. That means we allocate memory with GFP_HIGHUSER_MOVABLE.
+> It clearly spits out "EL1h", and PSTATE.M is 5, also consistent with EL1h.
 
-Oh, okay - I missed that! I had the impression that pages are unmovable 
-and allocating from ZONE_MOVABLE would be a violation of that?
+Apologies for the delay to look at the reason on failing to read the timer
+register.
 
-> After the allocation the memory indeed becomes unmovable but it's not
-> like we are eating memory from other zones here.
+Digging into the qemu 5.0.0 code, the error message is printed from
+kvm_arm_get_virtual_time() which in turn is called from
+kvm_arm_vm_state_change(). The latter is a callback function that is called
+when a vm starts/stop.
 
-... and here you have your problem. That's a no-no. We only allow it in 
-very special cases where it can't be avoided - e.g., vfio having to pin 
-guest memory when passing through memory to VMs.
+So the sequence of events is:
 
-Hotplug memory, online it to ZONE_MOVABLE. Allocate secretmem. Try to 
-unplug the memory again -> endless loop in offline_pages().
+	VM runs 32bit apps
+	  host resets vcpu->arch.target to -1
+	    qemu::kvm_cpu_exec() hits -EINVAL error (somewhere I didn't trace)
+	      kvm_cpu_exec()::cpu_dump_state()
+	      kvm_cpu_exec()::vm_stop()
+	        ..
+	          kvm_arm_vm_state_change()
+	            kvm_arm_get_virtual_time()
+	              host return -ENOEXEC
+	                above error message is printed
+	                abort()
 
-Or have a CMA area that gets used with GFP_HIGHUSER_MOVABLE. Allocate 
-secretmem. The owner of the area tries to allocate memory - always 
-fails. Purpose of CMA destroyed.
+I admit I didn't trace qemu to see what's going inside it. It was only
+statically analysing the code. To verify the theory I applied the following
+hack to hide the timer register error
 
-> 
->> Ideally, we would want to support page migration/compaction and allow for
->> allocation from ZONE_MOVABLE as well. Would involve temporarily mapping,
->> copying, unmapping. Sounds feasible, but not sure which roadblocks we would
->> find on the way.
-> 
-> We can support migration/compaction with temporary mapping. The first
-> roadblock I've hit there was that migration allocates 4K destination
-> page and if we use it in secret map we are back to scrambling the direct
-> map into 4K pieces. It still sounds feasible but not as trivial :)
+	diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+	index 5d2a1caf55a0..1c8fdf6566ea 100644
+	--- a/arch/arm64/kvm/arm.c
+	+++ b/arch/arm64/kvm/arm.c
+	@@ -1113,7 +1113,7 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+		case KVM_GET_ONE_REG: {
+			struct kvm_one_reg reg;
 
-That sounds like the proper way for me to do it then.
+	-               r = -ENOEXEC;
+	+               r = 0;
+			if (unlikely(!kvm_vcpu_initialized(vcpu)))
+				break;
 
-> 
-> But again, there is nothing in the current form of secretmem that
-> prevents allocation from ZONE_MOVABLE.
+With that I see the following error from qemu after which it seems to have
+'hanged'. I can terminate qemu with the usual <ctrl-a>x. So it's not dead, just
+the vm has exited I suppose and qemu went into monitor mode or something.
 
-Oh, there is something: That the pages are not movable.
+	error: kvm run failed Invalid argument
+	 PC=ffff8000109ca100 X00=ffff800016ff5014 X01=ffff8000109ca0d8
+	X02=ffff800016daae80 X03=0000000000000000 X04=0000000000000003
+	X05=0000000000000000 X06=0000000000000000 X07=ffff800016e2bae0
+	X08=00000000ffffffff X09=ffff8000109c4410 X10=0000000000000000
+	X11=ffff8000164fb9c8 X12=ffff0000458ad186 X13=ffff0000458ad188
+	X14=ffffffffffffffff X15=ffff000040268560 X16=0000000000000000
+	X17=0000000000000001 X18=0000000000000000 X19=ffff0000458c0000
+	X20=0000000000000000 X21=ffff0000458c0048 X22=ffff0000458c0008
+	X23=ffff800016103a38 X24=0000000000000000 X25=ffff800016150a38
+	X26=ffff800012a510d8 X27=ffff8000129504e0 X28=0000000000000000
+	X29=ffff800016e2bac0 X30=ffff8000109c4410  SP=ffff000040268000
+	PSTATE=834853a0 N--- EL0t
 
--- 
-Thanks,
+Which hopefully is what you expected to see in the first place.
 
-David / dhildenb
+Note that qemu v4.1.0 code didn't have this kvm_arm_get_virtual_time()
+function. It seems to be a relatively new addition.
 
+Also note that kvm_cpu_exec() in qemu completely ignores ARM_EXCEPTION_IL; the
+kvm_arch_handle_exit() for arm only catches KVM_EXIT_DEBUG and returns 0 for
+everything else. So kvm_cpu_exec() will jump back the loop to reenter the
+guest. I haven't traced it but it seems to fail before calling:
+
+	run_ret = kvm_vcpu_ioctl(cpu, KVM_RUN, 0);
+
+where return -ENOEXEC for invalid kvm_vcpu_initialized() in this path not
+-EINVAL.
+
+So all in all, a lot of qemu specific handling and not sure if there's any
+guarantee how things will fail for different virtualization software. But
+I think there's a guarantee that they will fail.
+
+Thanks
+
+--
+Qais Yousef
