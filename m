@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D2D2A2E78
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 16:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD77F2A31D6
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 18:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726433AbgKBPkm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 Nov 2020 10:40:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38504 "EHLO mail.kernel.org"
+        id S1725801AbgKBRnX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 Nov 2020 12:43:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725791AbgKBPkm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 2 Nov 2020 10:40:42 -0500
+        id S1725768AbgKBRnX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 2 Nov 2020 12:43:23 -0500
 Received: from kernel.org (unknown [87.71.17.26])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 202C12222B;
-        Mon,  2 Nov 2020 15:40:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F163621D91;
+        Mon,  2 Nov 2020 17:43:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604331641;
-        bh=JULj2YQjQ3lL8L8mphnth/XMQ+6I1NJ7oIH3/fDK0iU=;
+        s=default; t=1604339002;
+        bh=4lTOK6nJwjmoOAObnnRBOTKd0fl9eQpxyGZlvj7NIPU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n0o11Hfll3daQtruT1vsISN+BbHP9yaMYQE4FQMEMibOkJCKqnhjRxA+eho5Laarv
-         OhRwtWZyY8Wy3q5T3/CRffMJ7SInY7t/Bd/Gdm1eHv/y6zMnVypYr0S7YhVNWRGAWn
-         75tM+sdcYEOnYl8dKrbNCJbF2bUOfaK/T5JUAaOI=
-Date:   Mon, 2 Nov 2020 17:40:28 +0200
+        b=WaQHhcNIPlO/3Y1BDKIiRptwVm/gNfTOsggLuTFWgEEfzGk4JpghqGJiTK1uJXPww
+         xcrmfo2wowW6SunTYD97zxQcWOPYPEwCUuK+Opbf1HTskJ6CenmFJitmkrFyumA+RF
+         614VdGzOVlHHOfs2z6uhOZXESicNeUeTW56l5apA=
+Date:   Mon, 2 Nov 2020 19:43:08 +0200
 From:   Mike Rapoport <rppt@kernel.org>
-To:     Hagen Paul Pfeifer <hagen@jauu.net>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -34,7 +34,6 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
         Ingo Molnar <mingo@redhat.com>,
@@ -57,107 +56,99 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         x86@kernel.org
 Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
  "secret" memory areas
-Message-ID: <20201102154028.GD4879@kernel.org>
+Message-ID: <20201102174308.GF4879@kernel.org>
 References: <20200924132904.1391-1-rppt@kernel.org>
- <20201101110935.GA4105325@laniakea>
+ <9c38ac3b-c677-6a87-ce82-ec53b69eaf71@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201101110935.GA4105325@laniakea>
+In-Reply-To: <9c38ac3b-c677-6a87-ce82-ec53b69eaf71@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Nov 01, 2020 at 12:09:35PM +0100, Hagen Paul Pfeifer wrote:
-> * Mike Rapoport | 2020-09-24 16:28:58 [+0300]:
+On Mon, Nov 02, 2020 at 10:11:12AM +0100, David Hildenbrand wrote:
+> On 24.09.20 15:28, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > Hi,
+> > 
+> > This is an implementation of "secret" mappings backed by a file descriptor.
+> > I've dropped the boot time reservation patch for now as it is not strictly
+> > required for the basic usage and can be easily added later either with or
+> > without CMA.
 > 
-> >This is an implementation of "secret" mappings backed by a file descriptor. 
-> >I've dropped the boot time reservation patch for now as it is not strictly
-> >required for the basic usage and can be easily added later either with or
-> >without CMA.
+> Hi Mike,
 > 
-> Isn't memfd_secret currently *unnecessarily* designed to be a "one task
-> feature"? memfd_secret fulfills exactly two (generic) features:
+> I'd like to stress again that I'd prefer *any* secretmem allocations going
+> via CMA as long as these pages are unmovable. The user can allocate a
+> non-significant amount of unmovable allocations only fenced by the mlock
+> limit, which behave very different to mlocked pages - they are not movable
+> for page compaction/migration.
 > 
-> - address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
->   direct map) - hide from kernel, great
-> - disabling processor's memory caches against speculative-execution vulnerabilities
->   (spectre and friends, aka SECRET_UNCACHED), also great
-> 
-> But, what about the following use-case: implementing a hardened IPC mechanism
-> where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
-> even the hardware caches are bypassed! With the patches we are so close to
-> achieving this.
-> 
-> How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
-> involved tasks required to know this mapping (and memfd_secret fd). After IPC
-> is done, tasks can copy sensitive data from IPC pages into memfd_secret()
-> pages, un-sensitive data can be used/copied everywhere.
+> Assume you have a system with quite some ZONE_MOVABLE memory (esp. in
+> virtualized environments), eating up a significant amount of !ZONE_MOVABLE
+> memory dynamically at runtime can lead to non-obvious issues. It looks like
+> you have plenty of free memory, but the kernel might still OOM when trying
+> to do kernel allocations e.g., for pagetables. With CMA we at least know
+> what we're dealing with - it behaves like ZONE_MOVABLE except for the owner
+> that can place unmovable pages there. We can use it to compute statically
+> the amount of ZONE_MOVABLE memory we can have in the system without doing
+> harm to the system.
 
-As long as the task share the file descriptor, they can share the
-secretmem pages, pretty much like normal memfd.
+Why would you say that secretmem allocates from !ZONE_MOVABLE?
+If we put boot time reservations aside, the memory allocation for
+secretmem follows the same rules as the memory allocations for any file
+descriptor. That means we allocate memory with GFP_HIGHUSER_MOVABLE.
+After the allocation the memory indeed becomes unmovable but it's not
+like we are eating memory from other zones here.
 
-> One missing piece is still the secure zeroization of the page(s) if the
-> mapping is closed by last process to guarantee a secure cleanup. This can
-> probably done as an general mmap feature, not coupled to memfd_secret() and
-> can be done independently ("reverse" MAP_UNINITIALIZED feature).
+Maybe I'm missing something, but it seems to me that using CMA for any
+secretmem allocation would needlessly complicate things.
 
-There are "init_on_alloc" and "init_on_free" kernel parameters that
-enable zeroing of the pages on alloc and on free globally.
-Anyway, I'll add zeroing of the freed memory to secretmem.
+> Ideally, we would want to support page migration/compaction and allow for
+> allocation from ZONE_MOVABLE as well. Would involve temporarily mapping,
+> copying, unmapping. Sounds feasible, but not sure which roadblocks we would
+> find on the way.
 
-> PS: thank you Mike for your effort!
-> 
-> See the following pseudo-code as an example:
-> 
-> 
-> // simple assume file-descriptor and mapping is inherited
-> // by child for simplicity, ptr is 
-> int fd = memfd_secret(SECRETMEM_UNCACHED);
-> ftruncate(fd, PAGE_SIZE);
-> uint32_t *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
- 
-The ptr here will be visible to both parent and child.
+We can support migration/compaction with temporary mapping. The first
+roadblock I've hit there was that migration allocates 4K destination
+page and if we use it in secret map we are back to scrambling the direct
+map into 4K pieces. It still sounds feasible but not as trivial :)
 
-> pid_t pid_other;
+But again, there is nothing in the current form of secretmem that
+prevents allocation from ZONE_MOVABLE.
+
+> [...]
 > 
-> void signal_handler(int sig)
-> {
-> 	// update IPC data on shared, uncachaed, exclusive mapped page
-> 	*ptr += 1;
-> 	// inform other
-> 	sleep(1);
-> 	kill(pid_other, SIGUSR1);
-> }
+> > I've hesitated whether to continue to use new flags to memfd_create() or to
+> > add a new system call and I've decided to use a new system call after I've
+> > started to look into man pages update. There would have been two completely
+> > independent descriptions and I think it would have been very confusing.
 > 
-> void ipc_loop(void)
-> {
-> 	signal(SIGUSR1, signal_handler);
-> 	while (1) {
-> 		sleep(1);
-> 	}
-> }
+> This was also raised on lwn.net by "dullfire" [1]. I do wonder if it would
+> be the right place as well.
+
+I lean towards a dedicated syscall because, as I said, to me it would
+seem less confusing.
+
+> [1] https://lwn.net/Articles/835342/#Comments
 > 
-> int main(void)
-> {
-> 	pid_t child_pid;
-> 
-> 	switch (child_pid = fork()) {
-> 	case 0:
-> 		pid_other = getppid();
-> 		break;
-> 	default:
-> 		pid_other = child_pid
-> 		break;
-> 	}
-> 	
-> 	ipc_loop();
-> }
-> 
-> 
-> Hagen
-> 
+> > 
+> > Hiding secret memory mappings behind an anonymous file allows (ab)use of
+> > the page cache for tracking pages allocated for the "secret" mappings as
+> > well as using address_space_operations for e.g. page migration callbacks.
+> > 
+> > The anonymous file may be also used implicitly, like hugetlb files, to
+> > implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+> > ABIs in the future.
+> > 
+> > As the fragmentation of the direct map was one of the major concerns raised
+> > during the previous postings, I've added an amortizing cache of PMD-size
+> > pages to each file descriptor that is used as an allocation pool for the
+> > secret memory areas.
 
 -- 
 Sincerely yours,
 Mike.
+
