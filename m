@@ -2,135 +2,196 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B33A2A32DB
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Nov 2020 19:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38312A3C05
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Nov 2020 06:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbgKBSXS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 2 Nov 2020 13:23:18 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:41475 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726395AbgKBSXR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 Nov 2020 13:23:17 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-221-3eybHYmXNVuuSrMONPCpiQ-1; Mon, 02 Nov 2020 18:23:12 +0000
-X-MC-Unique: 3eybHYmXNVuuSrMONPCpiQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 2 Nov 2020 18:23:11 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 2 Nov 2020 18:23:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Greg KH' <gregkh@linuxfoundation.org>
-CC:     'David Hildenbrand' <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-aio@kvack.org" <linux-aio@kvack.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: RE: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-Thread-Topic: Buggy commit tracked to: "Re: [PATCH 2/9] iov_iter: move
- rw_copy_check_uvector() into lib/iov_iter.c"
-Thread-Index: AQHWqE5GNDfnH4y9nkGWtfqJueR1KKmjTCJQgAAN4UiAAAD2IIAASOeCgAF+12CAAB+UKYAAAQNg///yIQCAD2i/YIAAT+MAgABLYlA=
-Date:   Mon, 2 Nov 2020 18:23:11 +0000
-Message-ID: <c751d3a7796e45a8a2640e2ded59d708@AcuMS.aculab.com>
-References: <20201022121849.GA1664412@kroah.com>
- <98d9df88-b7ef-fdfb-7d90-2fa7a9d7bab5@redhat.com>
- <20201022125759.GA1685526@kroah.com> <20201022135036.GA1787470@kroah.com>
- <134f162d711d466ebbd88906fae35b33@AcuMS.aculab.com>
- <935f7168-c2f5-dd14-7124-412b284693a2@redhat.com>
- <999e2926-9a75-72fd-007a-1de0af341292@redhat.com>
- <35d0ec90ef4f4a35a75b9df7d791f719@AcuMS.aculab.com>
- <20201023144718.GA2525489@kroah.com>
- <0ab5ac71f28d459db2f350c2e07b88ca@AcuMS.aculab.com>
- <20201102135202.GA1016272@kroah.com>
-In-Reply-To: <20201102135202.GA1016272@kroah.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        id S1725997AbgKCFjn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Nov 2020 00:39:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49692 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725958AbgKCFjm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 3 Nov 2020 00:39:42 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F22EC22277;
+        Tue,  3 Nov 2020 05:39:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604381982;
+        bh=Q076BhLY0DjbtliwCu3GQaRyBU42Z/sESEIdo+7CCzE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=wXLsZJezLTss4VZf3uN/AvI46+E1z5Odjbvi+BURO54maOx6U+UQ2wefCCzSow2na
+         19n2QkXSlNBlOyUVmUmLCyaGmJEfltTAICNSS8PI8jIlpvD2qNHyrgSoRfaQnxcHG6
+         yyIKsbDtuUB0s4jDE2XaDgQxIm4o16orrtVO7jfM=
+Date:   Tue, 3 Nov 2020 14:39:38 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, Eddy_Wu@trendmicro.com,
+        x86@kernel.org, davem@davemloft.net, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org
+Subject: Re: [PATCH v5 14/21] kprobes: Remove NMI context check
+Message-Id: <20201103143938.704c7974e93c854511580c38@kernel.org>
+In-Reply-To: <20201102092726.57cb643f@gandalf.local.home>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+        <159870615628.1229682.6087311596892125907.stgit@devnote2>
+        <20201030213831.04e81962@oasis.local.home>
+        <20201102141138.1fa825113742f3bea23bc383@kernel.org>
+        <20201102145334.23d4ba691c13e0b6ca87f36d@kernel.org>
+        <20201102160234.fa0ae70915ad9e2b21c08b85@kernel.org>
+        <20201102092726.57cb643f@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: 'Greg KH'
-> Sent: 02 November 2020 13:52
+On Mon, 2 Nov 2020 09:27:26 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
 > 
-> On Mon, Nov 02, 2020 at 09:06:38AM +0000, David Laight wrote:
-> > From: 'Greg KH'
-> > > Sent: 23 October 2020 15:47
-> > >
-> > > On Fri, Oct 23, 2020 at 02:39:24PM +0000, David Laight wrote:
-> > > > From: David Hildenbrand
-> > > > > Sent: 23 October 2020 15:33
-> > > > ...
-> > > > > I just checked against upstream code generated by clang 10 and it
-> > > > > properly discards the upper 32bit via a mov w23 w2.
-> > > > >
-> > > > > So at least clang 10 indeed properly assumes we could have garbage and
-> > > > > masks it off.
-> > > > >
-> > > > > Maybe the issue is somewhere else, unrelated to nr_pages ... or clang 11
-> > > > > behaves differently.
-> > > >
-> > > > We'll need the disassembly from a failing kernel image.
-> > > > It isn't that big to hand annotate.
-> > >
-> > > I've worked around the merge at the moment in the android tree, but it
-> > > is still quite reproducable, and will try to get a .o file to
-> > > disassemble on Monday or so...
-> >
-> > Did this get properly resolved?
+> [ Peter Z, please take a look a this ]
 > 
-> For some reason, 5.10-rc2 fixed all of this up.  I backed out all of the
-> patches I had to revert to get 5.10-rc1 to work properly, and then did
-> the merge and all is well.
+> On Mon, 2 Nov 2020 16:02:34 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> It must have been something to do with the compat changes in this same
-> area that went in after 5.10-rc1, and something got reorganized in the
-> files somehow.  I really do not know, and at the moment, don't have the
-> time to track it down anymore.  So for now, I'd say it's all good, sorry
-> for the noise.
+> > >From 509b27efef8c7dbf56cab2e812916d6cd778c745 Mon Sep 17 00:00:00 2001  
+> > From: Masami Hiramatsu <mhiramat@kernel.org>
+> > Date: Mon, 2 Nov 2020 15:37:28 +0900
+> > Subject: [PATCH] kprobes: Disable lockdep for kprobe busy area
+> > 
+> > Since the code area in between kprobe_busy_begin()/end() prohibits
+> > other kprobs to call probe handlers, we can avoid inconsitent
+> > locks there. But lockdep doesn't know that, so it warns rp->lock
+> > or kretprobe_table_lock.
+> > 
+> > To supress those false-positive errors, disable lockdep while
+> > kprobe_busy is set.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  kernel/kprobes.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index 8a12a25fa40d..c7196e583600 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -1295,10 +1295,12 @@ void kprobe_busy_begin(void)
+> >  	__this_cpu_write(current_kprobe, &kprobe_busy);
+> >  	kcb = get_kprobe_ctlblk();
+> >  	kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > +	lockdep_off();
+> >  }
+> >  
+> >  void kprobe_busy_end(void)
+> >  {
+> > +	lockdep_on();
+> >  	__this_cpu_write(current_kprobe, NULL);
+> >  	preempt_enable();
+> >  }
+> > -- 
+> 
+> No, this is not the correct workaround (too big of a hammer). You could do
+> the following:
+> 
+> From 4139d9c8437b0bd2262e989ca4eb0a83b7e7bb72 Mon Sep 17 00:00:00 2001
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> Date: Mon, 2 Nov 2020 09:17:49 -0500
+> Subject: [PATCH] kprobes: Tell lockdep about kprobe nesting
+> 
+> Since the kprobe handlers have protection that prohibits other handlers from
+> executing in other contexts (like if an NMI comes in while processing a
+> kprobe, and executes the same kprobe, it will get fail with a "busy"
+> return). Lockdep is unaware of this protection. Use lockdep's nesting api to
+> differentiate between locks taken in NMI context and other context to
+> supress the false warnings.
 
-Hopefully it won't appear again.
+Ah, OK. This looks good to me.
 
-Saved me spending a day off reading arm64 assembler.
+BTW, in_nmi() in pre_handler_kretprobe() always be true because
+now int3 is treated as an NMI. So you can always pass 1 there.
 
-	David
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Thank you,
 
+> 
+> Link: https://lore.kernel.org/r/20201102160234.fa0ae70915ad9e2b21c08b85@kernel.org
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+>  kernel/kprobes.c | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 8a12a25fa40d..ccb285867059 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1249,7 +1249,12 @@ __acquires(hlist_lock)
+>  
+>  	*head = &kretprobe_inst_table[hash];
+>  	hlist_lock = kretprobe_table_lock_ptr(hash);
+> -	raw_spin_lock_irqsave(hlist_lock, *flags);
+> +	/*
+> +	 * Nested is a workaround that will soon not be needed.
+> +	 * There's other protections that make sure the same lock
+> +	 * is not taken on the same CPU that lockdep is unaware of.
+> +	 */
+> +	raw_spin_lock_irqsave_nested(hlist_lock, *flags, !!in_nmi());
+>  }
+>  NOKPROBE_SYMBOL(kretprobe_hash_lock);
+>  
+> @@ -1258,7 +1263,12 @@ static void kretprobe_table_lock(unsigned long hash,
+>  __acquires(hlist_lock)
+>  {
+>  	raw_spinlock_t *hlist_lock = kretprobe_table_lock_ptr(hash);
+> -	raw_spin_lock_irqsave(hlist_lock, *flags);
+> +	/*
+> +	 * Nested is a workaround that will soon not be needed.
+> +	 * There's other protections that make sure the same lock
+> +	 * is not taken on the same CPU that lockdep is unaware of.
+> +	 */
+> +	raw_spin_lock_irqsave_nested(hlist_lock, *flags, !!in_nmi());
+>  }
+>  NOKPROBE_SYMBOL(kretprobe_table_lock);
+>  
+> @@ -2025,10 +2035,16 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+>  	struct kretprobe *rp = container_of(p, struct kretprobe, kp);
+>  	unsigned long hash, flags = 0;
+>  	struct kretprobe_instance *ri;
+> +	int nmi = !!in_nmi();
+>  
+>  	/* TODO: consider to only swap the RA after the last pre_handler fired */
+>  	hash = hash_ptr(current, KPROBE_HASH_BITS);
+> -	raw_spin_lock_irqsave(&rp->lock, flags);
+> +	/*
+> +	 * Nested is a workaround that will soon not be needed.
+> +	 * There's other protections that make sure the same lock
+> +	 * is not taken on the same CPU that lockdep is unaware of.
+> +	 */
+> +	raw_spin_lock_irqsave_nested(&rp->lock, flags, nmi);
+>  	if (!hlist_empty(&rp->free_instances)) {
+>  		ri = hlist_entry(rp->free_instances.first,
+>  				struct kretprobe_instance, hlist);
+> @@ -2039,7 +2055,7 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+>  		ri->task = current;
+>  
+>  		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
+> -			raw_spin_lock_irqsave(&rp->lock, flags);
+> +			raw_spin_lock_irqsave_nested(&rp->lock, flags, nmi);
+>  			hlist_add_head(&ri->hlist, &rp->free_instances);
+>  			raw_spin_unlock_irqrestore(&rp->lock, flags);
+>  			return 0;
+> -- 
+> 2.25.4
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
