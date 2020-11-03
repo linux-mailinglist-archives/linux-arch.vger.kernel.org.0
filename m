@@ -2,497 +2,328 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4561D2A4E61
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Nov 2020 19:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2CD2A4F26
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Nov 2020 19:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729441AbgKCSVh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Nov 2020 13:21:37 -0500
-Received: from smtp-bc0c.mail.infomaniak.ch ([45.157.188.12]:53419 "EHLO
-        smtp-bc0c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729459AbgKCSVf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Nov 2020 13:21:35 -0500
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CQdQf65XDzlhlc4;
-        Tue,  3 Nov 2020 19:21:30 +0100 (CET)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CQdQf3kCczlh8TF;
-        Tue,  3 Nov 2020 19:21:30 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        id S1729383AbgKCSnA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Nov 2020 13:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729342AbgKCSnA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Nov 2020 13:43:00 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25EFC0617A6
+        for <linux-arch@vger.kernel.org>; Tue,  3 Nov 2020 10:42:59 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id b8so19609044wrn.0
+        for <linux-arch@vger.kernel.org>; Tue, 03 Nov 2020 10:42:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ooc/4skm8b41a0c2OVLhlIuGfy2g3W0VRGaKqUSnLp8=;
+        b=ctpRq/I4KR2iZH4NQ6gdEh86ePuqpslZPlOn1mdzkX+79TdYTXNdWmtONeK67ocwGN
+         pnpFAv/UkMXqgSNTbgfO35gWmZtYuIVWAdwrgjXu9RMB5KxH7c7zATXBzZmaOElSiDzK
+         NwvUz6Q7ybj6DW34pIRDPsIQxRJWCajO81s7pGSLsvZdDy4fznW7405Todk5u6FFSd8s
+         KufWeN1WYlltVwSLTeOsO/I3lDFOi50n4uyXpU73x1h9OW13mFZ3neTy+WIlQ4D2ERrR
+         Phr0M4VzKyHdBJRzm+yQYqHyZiwM7sd9CoSEn8FYbmb5jNyA9AzBl0YZPKLHr68DCKPX
+         DbdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ooc/4skm8b41a0c2OVLhlIuGfy2g3W0VRGaKqUSnLp8=;
+        b=uEpmxZVhFp0z0V40SgjWJ5vY4I/8ubAaN554oKXmYBwUBcZ2M/OzHZ6gXjKcaY8djS
+         sii/P6OPIa1GCiyvwtYvTRCeuQkm6p2ycXOmLs5DppyC2vM6y3mRByMS76j0nDRRHhRy
+         nImYF93eraweXPLmV0rsOO8h+DuF2Zr//U58ZS7h84Va15vovrSbbQ1XatfddeA14IoP
+         eJdhlZyK+G33JtAJhCA2DNWqx9ZVB1D7SGGndNJg/p0+7MZ+yJ8TLB7HbgKEuTS3vGD/
+         C9IeOX0Mhlcrdpc3VCpZSbzRKPncwkoREr7gwpHfVYikXiP7kINTXOEJ1DZLG4NnOID1
+         VNaQ==
+X-Gm-Message-State: AOAM533PKZLCyVQ+drlNkCyBhBPID/CgHavevKOU0Jqvq/+EyQmd8MnG
+        cQc9qJmFDTgzSHQi5GbKOQq5tCAi1Opt0Q==
+X-Google-Smtp-Source: ABdhPJzSCwPs9bpReY1ZvH8McvR4XSDVsk/2lcaduCUpzCaPFMntxFxfCSMOOzAZtvID82wFkespPQ==
+X-Received: by 2002:a5d:6681:: with SMTP id l1mr28278104wru.356.1604428977874;
+        Tue, 03 Nov 2020 10:42:57 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f853:3b7b:eb7b:1bf? ([2a01:e34:ed2f:f020:f853:3b7b:eb7b:1bf])
+        by smtp.googlemail.com with ESMTPSA id y20sm3731260wma.15.2020.11.03.10.42.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2020 10:42:57 -0800 (PST)
+Subject: Re: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal
+ power management
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v23 12/12] landlock: Add user and kernel documentation
-Date:   Tue,  3 Nov 2020 19:21:09 +0100
-Message-Id: <20201103182109.1014179-13-mic@digikod.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201103182109.1014179-1-mic@digikod.net>
-References: <20201103182109.1014179-1-mic@digikod.net>
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
+ <20201006122024.14539-4-daniel.lezcano@linaro.org>
+ <4484e771-9011-0928-e961-cd3a53be55e9@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <18d2393a-2954-f271-817f-f9f9bf651f25@linaro.org>
+Date:   Tue, 3 Nov 2020 19:42:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <4484e771-9011-0928-e961-cd3a53be55e9@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
 
-This documentation can be built with the Sphinx framework.
+Hi Lukasz,
 
-Cc: James Morris <jmorris@namei.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
----
+thanks for the review and the comments.
 
-Changes since v22:
-* Fix spelling and remove obsolete sentence (spotted by Jann Horn).
-* Bump date.
+On 23/10/2020 12:29, Lukasz Luba wrote:
+> Hi Daniel,
 
-Changes since v21:
-* Move the user space documentation to userspace-api/landlock.rst and
-  the kernel documentation to security/landlock.rst .
-* Add license headers.
-* Add last update dates.
-* Update MAINTAINERS file.
-* Add (back) links to git.kernel.org .
-* Fix spelling.
+[ ... ]
 
-Changes since v20:
-* Update examples and documentation with the new syscalls.
+>> +
+>> +config DTPM
+>> +    bool "Power capping for dynamic thermal power management"
+> 
+> Maybe starting with capital letters: Dynamic Thermal Power Management?
 
-Changes since v19:
-* Update examples and documentation with the new syscalls.
+Ok, noted.
 
-Changes since v15:
-* Add current limitations.
+[ ... ]
 
-Changes since v14:
-* Fix spelling (contributed by Randy Dunlap).
-* Extend documentation about inheritance and explain layer levels.
-* Remove the use of now-removed access rights.
-* Use GitHub links.
-* Improve kernel documentation.
-* Add section for tests.
-* Update example.
+>> +++ b/drivers/powercap/dtpm.c
+>> @@ -0,0 +1,430 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright 2020 Linaro Limited
+>> + *
+>> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> + *
+>> + * The powercap based Dynamic Thermal Power Management framework
+>> + * provides to the userspace a consistent API to set the power limit
+>> + * on some devices.
+>> + *
+>> + * DTPM defines the functions to create a tree of constraints. Each
+>> + * parent node is a virtual description of the aggregation of the
+>> + * children. It propagates the constraints set at its level to its
+>> + * children and collect the children power infomation. The leaves of
+> 
+> s/infomation/information/
 
-Changes since v13:
-* Rewrote the documentation according to the major revamp.
+Ok, thanks
 
-Previous changes:
-https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
----
- Documentation/security/index.rst         |   1 +
- Documentation/security/landlock.rst      |  79 +++++++
- Documentation/userspace-api/index.rst    |   1 +
- Documentation/userspace-api/landlock.rst | 258 +++++++++++++++++++++++
- MAINTAINERS                              |   2 +
- 5 files changed, 341 insertions(+)
- create mode 100644 Documentation/security/landlock.rst
- create mode 100644 Documentation/userspace-api/landlock.rst
+[ ... ]
 
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 8129405eb2cc..16335de04e8c 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -16,3 +16,4 @@ Security Documentation
-    siphash
-    tpm/index
-    digsig
-+   landlock
-diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-new file mode 100644
-index 000000000000..4c88a67a6958
---- /dev/null
-+++ b/Documentation/security/landlock.rst
-@@ -0,0 +1,79 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+.. Copyright © 2019-2020 ANSSI
-+
-+==================================
-+Landlock LSM: kernel documentation
-+==================================
-+
-+:Author: Mickaël Salaün
-+:Date: November 2020
-+
-+Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
-+harden a whole system, this feature should be available to any process,
-+including unprivileged ones.  Because such process may be compromised or
-+backdoored (i.e. untrusted), Landlock's features must be safe to use from the
-+kernel and other processes point of view.  Landlock's interface must therefore
-+expose a minimal attack surface.
-+
-+Landlock is designed to be usable by unprivileged processes while following the
-+system security policy enforced by other access control mechanisms (e.g. DAC,
-+LSM).  Indeed, a Landlock rule shall not interfere with other access-controls
-+enforced on the system, only add more restrictions.
-+
-+Any user can enforce Landlock rulesets on their processes.  They are merged and
-+evaluated according to the inherited ones in a way that ensures that only more
-+constraints can be added.
-+
-+User space documentation can be found here: :doc:`/userspace-api/landlock`.
-+
-+Guiding principles for safe access controls
-+===========================================
-+
-+* A Landlock rule shall be focused on access control on kernel objects instead
-+  of syscall filtering (i.e. syscall arguments), which is the purpose of
-+  seccomp-bpf.
-+* To avoid multiple kinds of side-channel attacks (e.g. leak of security
-+  policies, CPU-based attacks), Landlock rules shall not be able to
-+  programmatically communicate with user space.
-+* Kernel access check shall not slow down access request from unsandboxed
-+  processes.
-+* Computation related to Landlock operations (e.g. enforcing a ruleset) shall
-+  only impact the processes requesting them.
-+
-+Tests
-+=====
-+
-+Userspace tests for backward compatibility, ptrace restrictions and filesystem
-+support can be found here: `tools/testing/selftests/landlock/`_.
-+
-+Kernel structures
-+=================
-+
-+Object
-+------
-+
-+.. kernel-doc:: security/landlock/object.h
-+    :identifiers:
-+
-+Ruleset and domain
-+------------------
-+
-+A domain is a read-only ruleset tied to a set of subjects (i.e. tasks'
-+credentials).  Each time a ruleset is enforced on a task, the current domain is
-+duplicated and the ruleset is imported as a new layer of rules in the new
-+domain.  Indeed, once in a domain, each rule is tied to a layer level.  To
-+grant access to an object, at least one rule of each layer must allow the
-+requested action on the object.  A task can then only transit to a new domain
-+which is the intersection of the constraints from the current domain and those
-+of a ruleset provided by the task.
-+
-+The definition of a subject is implicit for a task sandboxing itself, which
-+makes the reasoning much easier and helps avoid pitfalls.
-+
-+.. kernel-doc:: security/landlock/ruleset.h
-+    :identifiers:
-+
-+.. Links
-+.. _tools/testing/selftests/landlock/:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/landlock/
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index 69fc5167e648..4918fbed5be0 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -18,6 +18,7 @@ place where this information is gathered.
- 
-    no_new_privs
-    seccomp_filter
-+   landlock
-    unshare
-    spec_ctrl
-    accelerators/ocxl
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-new file mode 100644
-index 000000000000..8f727de20479
---- /dev/null
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -0,0 +1,258 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+.. Copyright © 2019-2020 ANSSI
-+
-+=====================================
-+Landlock: unprivileged access control
-+=====================================
-+
-+:Author: Mickaël Salaün
-+:Date: November 2020
-+
-+The goal of Landlock is to enable to restrict ambient rights (e.g. global
-+filesystem access) for a set of processes.  Because Landlock is a stackable
-+LSM, it makes possible to create safe security sandboxes as new security layers
-+in addition to the existing system-wide access-controls. This kind of sandbox
-+is expected to help mitigate the security impact of bugs or
-+unexpected/malicious behaviors in user space applications.  Landlock empowers
-+any process, including unprivileged ones, to securely restrict themselves.
-+
-+Landlock rules
-+==============
-+
-+A Landlock rule describes an action on an object.  An object is currently a
-+file hierarchy, and the related filesystem actions are defined in `Access
-+rights`_.  A set of rules is aggregated in a ruleset, which can then restrict
-+the thread enforcing it, and its future children.
-+
-+Defining and enforcing a security policy
-+----------------------------------------
-+
-+We first need to create the ruleset that will contain our rules.  For this
-+example, the ruleset will contain rules which only allow read actions, but
-+write actions will be denied.  The ruleset then needs to handle both of these
-+kind of actions.
-+
-+.. code-block:: c
-+
-+    int ruleset_fd;
-+    struct landlock_ruleset_attr ruleset_attr = {
-+        .handled_access_fs =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_WRITE_FILE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_FILE |
-+            LANDLOCK_ACCESS_FS_MAKE_CHAR |
-+            LANDLOCK_ACCESS_FS_MAKE_DIR |
-+            LANDLOCK_ACCESS_FS_MAKE_REG |
-+            LANDLOCK_ACCESS_FS_MAKE_SOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_FIFO |
-+            LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_SYM,
-+    };
-+
-+    ruleset_fd = landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
-+    if (ruleset_fd < 0) {
-+        perror("Failed to create a ruleset");
-+        return 1;
-+    }
-+
-+We can now add a new rule to this ruleset thanks to the returned file
-+descriptor referring to this ruleset.  The rule will only allow reading the
-+file hierarchy ``/usr``.  Without another rule, write actions would then be
-+denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
-+``O_PATH`` flag and fill the &struct landlock_path_beneath_attr with this file
-+descriptor.
-+
-+.. code-block:: c
-+
-+    int err;
-+    struct landlock_path_beneath_attr path_beneath = {
-+        .allowed_access =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR,
-+    };
-+
-+    path_beneath.parent_fd = open("/usr", O_PATH | O_CLOEXEC);
-+    if (path_beneath.parent_fd < 0) {
-+        perror("Failed to open file");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+                            &path_beneath, 0);
-+    close(path_beneath.parent_fd);
-+    if (err) {
-+        perror("Failed to update ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+We now have a ruleset with one rule allowing read access to ``/usr`` while
-+denying all other handled accesses for the filesystem.  The next step is to
-+restrict the current thread from gaining more privileges (e.g. thanks to a SUID
-+binary).
-+
-+.. code-block:: c
-+
-+    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+        perror("Failed to restrict privileges");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+The current thread is now ready to sandbox itself with the ruleset.
-+
-+.. code-block:: c
-+
-+    if (landlock_enforce_ruleset_current(ruleset_fd, 0)) {
-+        perror("Failed to enforce ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    close(ruleset_fd);
-+
-+If the `landlock_enforce_ruleset_current` system call succeeds, the current
-+thread is now restricted and this policy will be enforced on all its
-+subsequently created children as well.  Once a thread is landlocked, there is
-+no way to remove its security policy; only adding more restrictions is allowed.
-+These threads are now in a new Landlock domain, merge of their parent one (if
-+any) with the new ruleset.
-+
-+Full working code can be found in `samples/landlock/sandboxer.c`_.
-+
-+Inheritance
-+-----------
-+
-+Every new thread resulting from a :manpage:`clone(2)` inherits Landlock domain
-+restrictions from its parent.  This is similar to the seccomp inheritance (cf.
-+:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
-+:manpage:`credentials(7)`.  For instance, one process's thread may apply
-+Landlock rules to itself, but they will not be automatically applied to other
-+sibling threads (unlike POSIX thread credential changes, cf.
-+:manpage:`nptl(7)`).
-+
-+When a thread sandboxes itself, we have the guarantee that the related security
-+policy will stay enforced on all this thread's descendants.  This allows
-+creating standalone and modular security policies per application, which will
-+automatically be composed between themselves according to their runtime parent
-+policies.
-+
-+Ptrace restrictions
-+-------------------
-+
-+A sandboxed process has less privileges than a non-sandboxed process and must
-+then be subject to additional restrictions when manipulating another process.
-+To be allowed to use :manpage:`ptrace(2)` and related syscalls on a target
-+process, a sandboxed process should have a subset of the target process rules,
-+which means the tracee must be in a sub-domain of the tracer.
-+
-+Kernel interface
-+================
-+
-+Access rights
-+-------------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: fs_access
-+
-+Creating a new ruleset
-+----------------------
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock_create_ruleset
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_ruleset_attr
-+
-+Extending a ruleset
-+-------------------
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock_add_rule
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_rule_type landlock_path_beneath_attr
-+
-+Enforcing a ruleset
-+-------------------
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock_enforce_ruleset_current
-+
-+Current limitations
-+===================
-+
-+File renaming and linking
-+-------------------------
-+
-+Because Landlock targets unprivileged access controls, it is needed to properly
-+handle composition of rules.  Such property also implies rules nesting.
-+Properly handling multiple layers of ruleset, each one of them able to restrict
-+access to files, also implies to inherit the ruleset restrictions from a parent
-+to its hierarchy.  Because files are identified and restricted by their
-+hierarchy, moving or linking a file from one directory to another imply to
-+propagate the hierarchy constraints.  To protect against privilege escalations
-+through renaming or linking, and for the sack of simplicity, Landlock currently
-+limits linking and renaming to the same directory.  Future Landlock evolutions
-+will enable more flexibility for renaming and linking, with dedicated ruleset
-+flags.
-+
-+OverlayFS
-+---------
-+
-+An OverlayFS mount point consists of upper and lower layers.  It is currently
-+not possible to reliably infer which underlying file hierarchy matches an
-+OverlayFS path composed of such layers.  It is then not currently possible to
-+track the source of an indirect access request, and then not possible to
-+properly identify and allow an unified OverlayFS hierarchy.  Restricting files
-+in an OverlayFS mount point works, but files allowed in one layer may not be
-+allowed in a related OverlayFS mount point.  A future Landlock evolution will
-+make possible to properly work with OverlayFS, according to a dedicated ruleset
-+flag.
-+
-+
-+Special filesystems
-+-------------------
-+
-+Access to regular files and directories can be restricted by Landlock,
-+according to the handled accesses of a ruleset.  However, files which do not
-+come from a user-visible filesystem (e.g. pipe, socket), but can still be
-+accessed through /proc/self/fd/, cannot currently be restricted.  Likewise,
-+some special kernel filesystems such as nsfs which can be accessed through
-+/proc/self/ns/, cannot currently be restricted.  For now, these kind of special
-+paths are then always allowed.  Future Landlock evolutions will enable to
-+restrict such paths, with dedicated ruleset flags.
-+
-+Questions and answers
-+=====================
-+
-+What about user space sandbox managers?
-+---------------------------------------
-+
-+Using user space process to enforce restrictions on kernel resources can lead
-+to race conditions or inconsistent evaluations (i.e. `Incorrect mirroring of
-+the OS code and state
-+<https://www.ndss-symposium.org/ndss2003/traps-and-pitfalls-practical-problems-system-call-interposition-based-security-tools/>`_).
-+
-+What about namespaces and containers?
-+-------------------------------------
-+
-+Namespaces can help create sandboxes but they are not designed for
-+access-control and then miss useful features for such use case (e.g. no
-+fine-grained restrictions).  Moreover, their complexity can lead to security
-+issues, especially when untrusted processes can manipulate them (cf.
-+`Controlling access to user namespaces <https://lwn.net/Articles/673597/>`_).
-+
-+Additional documentation
-+========================
-+
-+* :doc:`/security/landlock`
-+* https://landlock.io
-+
-+.. Links
-+.. _samples/landlock/sandboxer.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/samples/landlock/sandboxer.c
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d46066e172a1..3a4eb57222a7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9832,6 +9832,8 @@ L:	linux-security-module@vger.kernel.org
- S:	Supported
- W:	https://landlock.io
- T:	git https://github.com/landlock-lsm/linux.git
-+F:	Documentation/security/landlock.rst
-+F:	Documentation/userspace-api/landlock.rst
- F:	include/uapi/linux/landlock.h
- F:	security/landlock/
- K:	landlock
+>> +static struct powercap_control_type *pct;
+>> +static struct dtpm *root;
+> 
+> I wonder if it safe to have the tree without a global lock for it, like
+> mutex tree_lock ?
+> I have put some comments below when the code traverses the tree.
+
+The mutex is a heavy lock and the its purpose is to allow the current
+process to be preempted while the spinlock is very fast without preemption.
+
+Putting in place a single lock will simplify the code but I'm not sure
+it is worth as it could be a contention. It would be simpler to switch
+to a big lock than the opposite.
+
+[ ... ]
+
+>> +static void dtpm_rebalance_weight(void)
+>> +{
+>> +    __dtpm_rebalance_weight(root);
+>> +}
+>> +
+>> +static void dtpm_sub_power(struct dtpm *dtpm)
+>> +{
+>> +    struct dtpm *parent = dtpm->parent;
+>> +
+>> +    while (parent) {
+> 
+> I am not sure if it is safe for a corner case when the
+> nodes are removing from bottom to top. We don't hold a tree
+> lock, so these two (above line and below) operations might
+> be split/preempted and 'parent' freed before taking the lock.
+> Is it possible? (Note: I might missed something like double
+> locking using this local node spinlock).
+
+The parent can not be freed until it has children, the check is done in
+the release node function.
+
+>> +        spin_lock(&parent->lock);
+>> +        parent->power_min -= dtpm->power_min;
+>> +        parent->power_max -= dtpm->power_max;
+>> +        spin_unlock(&parent->lock);
+>> +        parent = parent->parent;
+>> +    }
+>> +
+>> +    dtpm_rebalance_weight();
+>> +}
+>> +
+>> +static void dtpm_add_power(struct dtpm *dtpm)
+>> +{
+>> +    struct dtpm *parent = dtpm->parent;
+>> +
+>> +    while (parent) {
+> 
+> Similar here?
+> 
+>> +        spin_lock(&parent->lock);
+>> +        parent->power_min += dtpm->power_min;
+>> +        parent->power_max += dtpm->power_max;
+>> +        spin_unlock(&parent->lock);
+>> +        parent = parent->parent;
+>> +    }
+>> +
+>> +    dtpm_rebalance_weight();
+>> +}
+>> +
+>> +/**
+>> + * dtpm_update_power - Update the power on the dtpm
+>> + * @dtpm: a pointer to a dtpm structure to update
+>> + * @power_min: a u64 representing the new power_min value
+>> + * @power_max: a u64 representing the new power_max value
+>> + *
+>> + * Function to update the power values of the dtpm node specified in
+>> + * parameter. These new values will be propagated to the tree.
+>> + *
+>> + * Return: zero on success, -EINVAL if the values are inconsistent
+>> + */
+>> +int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max)
+>> +{
+>> +    if (power_min == dtpm->power_min && power_max == dtpm->power_max)
+>> +        return 0;
+>> +
+>> +    if (power_max < power_min)
+>> +        return -EINVAL;
+>> +
+>> +    dtpm_sub_power(dtpm);
+>> +    spin_lock(&dtpm->lock);
+>> +    dtpm->power_min = power_min;
+>> +    dtpm->power_max = power_max;
+>> +    spin_unlock(&dtpm->lock);
+>> +    dtpm_add_power(dtpm);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +/**
+>> + * dtpm_release_zone - Cleanup when the node is released
+>> + * @pcz: a pointer to a powercap_zone structure
+>> + *
+>> + * Do some housecleaning and update the weight on the tree. The
+>> + * release will be denied if the node has children. This function must
+>> + * be called by the specific release callback of the different
+>> + * backends.
+>> + *
+>> + * Return: 0 on success, -EBUSY if there are children
+>> + */
+>> +int dtpm_release_zone(struct powercap_zone *pcz)
+>> +{
+>> +    struct dtpm *dtpm = to_dtpm(pcz);
+>> +    struct dtpm *parent = dtpm->parent;
+>> +
+> 
+> I would lock the whole tree, just to play safe.
+> What do you think?
+
+I would like to keep the fine grain locking to prevent a potential
+contention. If it appears we hit a locking incorrectness or a race
+putting in question the fine grain locking scheme, then we can consider
+switching to a tree lock.
+
+>> +    if (!list_empty(&dtpm->children))
+>> +        return -EBUSY;
+>> +
+>> +    if (parent) {
+>> +        spin_lock(&parent->lock);
+>> +        list_del(&dtpm->sibling);
+>> +        spin_unlock(&parent->lock);
+>> +    }
+>> +
+>> +    dtpm_sub_power(dtpm);
+>> +
+>> +    kfree(dtpm);
+>> +
+>> +    return 0;
+>> +}
+
+[ ... ]
+
+>> +struct dtpm *dtpm_alloc(void)
+>> +{
+>> +    struct dtpm *dtpm;
+>> +
+>> +    dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
+>> +    if (dtpm) {
+>> +        INIT_LIST_HEAD(&dtpm->children);
+>> +        INIT_LIST_HEAD(&dtpm->sibling);
+>> +        spin_lock_init(&dtpm->lock);
+> 
+> Why do we use spinlock and not mutex?
+
+The mutex will force the calling process to be preempted, that is useful
+when the critical sections contains blocking calls.
+
+Here we are just changing values without blocking calls, so using the
+spinlock is more adequate as they are faster.
+
+[ ... ]
+
+>> +static int __init dtpm_init(void)
+>> +{
+>> +    struct dtpm_descr **dtpm_descr;
+>> +
+>> +    pct = powercap_register_control_type(NULL, "dtpm", NULL);
+>> +    if (!pct) {
+>> +        pr_err("Failed to register control type\n");
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    for_each_dtpm_table(dtpm_descr)
+>> +        (*dtpm_descr)->init(*dtpm_descr);
+> 
+> We don't check the returned value here. It is required that the
+> devices should already be up and running (like cpufreq).
+> But if for some reason the init() failed, maybe it's worth to add a
+> field inside the dtpm_desc or dtpm struct like 'bool ready' ?
+> It could be retried to init later.
+
+It would be make sense to check the init return value if we want to
+rollback what we have done. Here we don't want to do that. If one
+subsystem fails to insert itself in the tree, it will log an error but
+the tree should continue to give access to what have been successfully
+initialized.
+
+The rollback is important in the init() ops, not in dtpm_init().
+
+>> +
+>> +    return 0;
+>> +}
+>> +late_initcall(dtpm_init);
+> 
+> The framework would start operating at late boot. We don't control
+> the thermal/power issues in earier stages.
+> Although, at this late stage all other things like cpufreq should be
+> ready, so the ->init() on them is likely to success.
+
+Right, the dtpm is accessible through sysfs for an userspace thermal
+daemon doing the smart mitigation. So do the initcall can be really late.
+
+[ ... ]
+
+Thanks for the review.
+
+  -- Daniel
+
+
 -- 
-2.28.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
