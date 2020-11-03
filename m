@@ -2,104 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D472A4AB0
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Nov 2020 17:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1E42A4ACB
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Nov 2020 17:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728309AbgKCQDv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Nov 2020 11:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728161AbgKCQDv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Nov 2020 11:03:51 -0500
-Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DBBC061A04
-        for <linux-arch@vger.kernel.org>; Tue,  3 Nov 2020 08:03:50 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CQZMm1C8kzlhqv5;
-        Tue,  3 Nov 2020 17:03:48 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CQZMk0bzXzlh8TS;
-        Tue,  3 Nov 2020 17:03:46 +0100 (CET)
-Subject: Re: [PATCH v22 07/12] landlock: Support filesystem access-control
-To:     Jann Horn <jannh@google.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201027200358.557003-1-mic@digikod.net>
- <20201027200358.557003-8-mic@digikod.net>
- <CAG48ez1xMfxkwhXK4b1BB4GrTVauNzfwPoCutn9axKt_PFRSVQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <056d8f1a-b45f-379f-d81a-8c13a1536c3f@digikod.net>
-Date:   Tue, 3 Nov 2020 17:03:45 +0100
-User-Agent: 
+        id S1727754AbgKCQJc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 3 Nov 2020 11:09:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45522 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727743AbgKCQJc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 3 Nov 2020 11:09:32 -0500
+Received: from rorschach.local.home (unknown [172.58.235.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B33E22264;
+        Tue,  3 Nov 2020 16:09:26 +0000 (UTC)
+Date:   Tue, 3 Nov 2020 11:09:13 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, Eddy_Wu@trendmicro.com,
+        x86@kernel.org, davem@davemloft.net, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, linux-arch@vger.kernel.org,
+        cameron@moodycamel.com, oleg@redhat.com, will@kernel.org,
+        paulmck@kernel.org
+Subject: Re: [PATCH v5 14/21] kprobes: Remove NMI context check
+Message-ID: <20201103110913.2d7b4cea@rorschach.local.home>
+In-Reply-To: <20201103143938.704c7974e93c854511580c38@kernel.org>
+References: <159870598914.1229682.15230803449082078353.stgit@devnote2>
+        <159870615628.1229682.6087311596892125907.stgit@devnote2>
+        <20201030213831.04e81962@oasis.local.home>
+        <20201102141138.1fa825113742f3bea23bc383@kernel.org>
+        <20201102145334.23d4ba691c13e0b6ca87f36d@kernel.org>
+        <20201102160234.fa0ae70915ad9e2b21c08b85@kernel.org>
+        <20201102092726.57cb643f@gandalf.local.home>
+        <20201103143938.704c7974e93c854511580c38@kernel.org>
+X-Mailer: Claws Mail 3.17.4git76 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez1xMfxkwhXK4b1BB4GrTVauNzfwPoCutn9axKt_PFRSVQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, 3 Nov 2020 14:39:38 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-On 29/10/2020 02:06, Jann Horn wrote:
-> (On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
-
->> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-> [...]
->> +static inline u32 get_file_access(const struct file *const file)
->> +{
->> +       u32 access = 0;
->> +
->> +       if (file->f_mode & FMODE_READ) {
->> +               /* A directory can only be opened in read mode. */
->> +               if (S_ISDIR(file_inode(file)->i_mode))
->> +                       return LANDLOCK_ACCESS_FS_READ_DIR;
->> +               access = LANDLOCK_ACCESS_FS_READ_FILE;
->> +       }
->> +       /*
->> +        * A LANDLOCK_ACCESS_FS_APPEND could be added but we also need to check
->> +        * fcntl(2).
->> +        */
+> Ah, OK. This looks good to me.
 > 
-> Once https://lore.kernel.org/linux-api/20200831153207.GO3265@brightrain.aerifal.cx/
-> lands, pwritev2() with RWF_NOAPPEND will also be problematic for
-> classifying "write" vs "append"; you may want to include that in the
-> comment. (Or delete the comment.)
+> BTW, in_nmi() in pre_handler_kretprobe() always be true because
+> now int3 is treated as an NMI. So you can always pass 1 there.
 
-Contrary to fcntl(2), pwritev2(2) doesn't seems to modify the file
-description. Otherwise, other LSMs would need to be patched.
-I'll remove this comment anyway.
+What about the below patch then?
 
 > 
->> +       if (file->f_mode & FMODE_WRITE)
->> +               access |= LANDLOCK_ACCESS_FS_WRITE_FILE;
->> +       /* __FMODE_EXEC is indeed part of f_flags, not f_mode. */
->> +       if (file->f_flags & __FMODE_EXEC)
->> +               access |= LANDLOCK_ACCESS_FS_EXECUTE;
->> +       return access;
->> +}
-> [...]
-> 
+> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thanks!
+
+From 29ac1a5c9068df06f3196173d4325c8076759551 Mon Sep 17 00:00:00 2001
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Date: Mon, 2 Nov 2020 09:17:49 -0500
+Subject: [PATCH] kprobes: Tell lockdep about kprobe nesting
+
+Since the kprobe handlers have protection that prohibits other handlers from
+executing in other contexts (like if an NMI comes in while processing a
+kprobe, and executes the same kprobe, it will get fail with a "busy"
+return). Lockdep is unaware of this protection. Use lockdep's nesting api to
+differentiate between locks taken in INT3 context and other context to
+suppress the false warnings.
+
+Link: https://lore.kernel.org/r/20201102160234.fa0ae70915ad9e2b21c08b85@kernel.org
+
+Cc: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ kernel/kprobes.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 8a12a25fa40d..30889ea5514f 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1249,7 +1249,12 @@ __acquires(hlist_lock)
+ 
+ 	*head = &kretprobe_inst_table[hash];
+ 	hlist_lock = kretprobe_table_lock_ptr(hash);
+-	raw_spin_lock_irqsave(hlist_lock, *flags);
++	/*
++	 * Nested is a workaround that will soon not be needed.
++	 * There's other protections that make sure the same lock
++	 * is not taken on the same CPU that lockdep is unaware of.
++	 */
++	raw_spin_lock_irqsave_nested(hlist_lock, *flags, 1);
+ }
+ NOKPROBE_SYMBOL(kretprobe_hash_lock);
+ 
+@@ -1258,7 +1263,12 @@ static void kretprobe_table_lock(unsigned long hash,
+ __acquires(hlist_lock)
+ {
+ 	raw_spinlock_t *hlist_lock = kretprobe_table_lock_ptr(hash);
+-	raw_spin_lock_irqsave(hlist_lock, *flags);
++	/*
++	 * Nested is a workaround that will soon not be needed.
++	 * There's other protections that make sure the same lock
++	 * is not taken on the same CPU that lockdep is unaware of.
++	 */
++	raw_spin_lock_irqsave_nested(hlist_lock, *flags, 1);
+ }
+ NOKPROBE_SYMBOL(kretprobe_table_lock);
+ 
+@@ -2028,7 +2038,12 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+ 
+ 	/* TODO: consider to only swap the RA after the last pre_handler fired */
+ 	hash = hash_ptr(current, KPROBE_HASH_BITS);
+-	raw_spin_lock_irqsave(&rp->lock, flags);
++	/*
++	 * Nested is a workaround that will soon not be needed.
++	 * There's other protections that make sure the same lock
++	 * is not taken on the same CPU that lockdep is unaware of.
++	 */
++	raw_spin_lock_irqsave_nested(&rp->lock, flags, 1);
+ 	if (!hlist_empty(&rp->free_instances)) {
+ 		ri = hlist_entry(rp->free_instances.first,
+ 				struct kretprobe_instance, hlist);
+@@ -2039,7 +2054,7 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
+ 		ri->task = current;
+ 
+ 		if (rp->entry_handler && rp->entry_handler(ri, regs)) {
+-			raw_spin_lock_irqsave(&rp->lock, flags);
++			raw_spin_lock_irqsave_nested(&rp->lock, flags, 1);
+ 			hlist_add_head(&ri->hlist, &rp->free_instances);
+ 			raw_spin_unlock_irqrestore(&rp->lock, flags);
+ 			return 0;
+-- 
+2.25.4
+
