@@ -2,189 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D39EC2A85B0
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Nov 2020 19:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314992A892C
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Nov 2020 22:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731609AbgKESHD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Nov 2020 13:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgKESHD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Nov 2020 13:07:03 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E7EC0613CF
-        for <linux-arch@vger.kernel.org>; Thu,  5 Nov 2020 10:07:01 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id e21so1867817pgr.11
-        for <linux-arch@vger.kernel.org>; Thu, 05 Nov 2020 10:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=evErAM+3R8POckj6BoWNfzcQKezQH3REiwTi+k5Ke30=;
-        b=cvZYUkjBWInIl2l1mjIWf1vI7V8s6znitGQb6c5FeaYxHv0JPbh4k6w9pz9IC9AVgi
-         gDivP8WJC+El0KFshMutO5n1YhCRHEIxrqzYwu6bCUnrciwL9E/9tGm25eHqZdW/XI91
-         T59XUK3EUSN6RVDl9mXW4WPshbsdGRiNI8znzVKFYGQbhx9IrGxgBTrOhued5XD/a+Rl
-         jGfmJLxTf7oGVAKBpYdYB481ef3UnuDvjfFSwTdh0stV94i0MsDhYbrVvvmy+VsOz+Ip
-         B26F8d2w0VLVBJD8zghUyljlnVXk+Mse1xJEVITFTDvRgVup52j0H2KEoatpkwDS97+8
-         tARQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=evErAM+3R8POckj6BoWNfzcQKezQH3REiwTi+k5Ke30=;
-        b=QfAoRmFF5jahvlkbLbYkUYnc/suH/UtjCXA01kDHGhR/vr2c766FviupFCHQPCkOPN
-         Qrqdahyj7OZi//TAunavb9B8D0FGJBDsqIZV/lBk1L0cs+i46VK7D83+HXusNaYeI+8E
-         q6yjNb81ojy/CwBeE9vIkSHUMPdXszIjQnKclDGasSdGChpOOYms4Go819/dfcwwgqC4
-         LMqSgDRaX4NOAKd2SPthctQUMFXicW+31pdkZcR2W1SpITo0qapvfV52UkmjSuibD33V
-         FRPEs29ywDxHbVBvOZyJzt6MvuIBJW6Y85YJzpGXGL5eRVBBLG5ed+QkqOjy8aNrOxVP
-         CNfQ==
-X-Gm-Message-State: AOAM531r5IXJCkKUMfSu4v345x1+maW4OJjSp1k5NLHMY4XzzINAmo2Q
-        Sh3SlgC1Vgdo6gVg112ynYPTsg==
-X-Google-Smtp-Source: ABdhPJyRc3dpCSILr1s7f7biptBWJz9+L1an7mUZwA/tps7uFu35JlM1E3LkORf3mPe7ALBUxC60+A==
-X-Received: by 2002:aa7:9607:0:b029:155:2b85:93f5 with SMTP id q7-20020aa796070000b02901552b8593f5mr3642353pfg.36.1604599621026;
-        Thu, 05 Nov 2020 10:07:01 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id b16sm3180544pju.16.2020.11.05.10.07.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 10:07:00 -0800 (PST)
-Date:   Thu, 05 Nov 2020 10:07:00 -0800 (PST)
-X-Google-Original-Date: Thu, 05 Nov 2020 09:33:55 PST (-0800)
-Subject:     Re: [PATCH v4 0/5] Unify NUMA implementation between ARM64 & RISC-V
-In-Reply-To: <20201006001752.248564-1-atish.patra@wdc.com>
-CC:     linux-kernel@vger.kernel.org, Atish Patra <Atish.Patra@wdc.com>,
-        Jonathan.Cameron@huawei.com, aou@eecs.berkeley.edu,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        anup@brainfault.org, Arnd Bergmann <arnd@arndb.de>,
-        catalin.marinas@arm.com, david@redhat.com, greentime.hu@sifive.com,
-        Greg KH <gregkh@linuxfoundation.org>, justin.he@arm.com,
-        wangkefeng.wang@huawei.com, linux-arch@vger.kernel.org,
-        linux-riscv@lists.infradead.org, rppt@kernel.org,
-        nsaenzjulienne@suse.de, Paul Walmsley <paul.walmsley@sifive.com>,
-        rafael@kernel.org, steven.price@arm.com, will@kernel.org,
-        zong.li@sifive.com, linux-arm-kernel@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Atish Patra <Atish.Patra@wdc.com>,
-        Will Deacon <willdeacon@google.com>, maz@kernel.org
-Message-ID: <mhng-6971ba28-0cea-42bc-a26c-c23b9ba2af9e@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1732035AbgKEVix (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Nov 2020 16:38:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51970 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730973AbgKEVix (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 5 Nov 2020 16:38:53 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44FB920728;
+        Thu,  5 Nov 2020 21:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604612332;
+        bh=+g0HRkpQdasPJCVm0JfsPaS+byqGJeOgICTKbkDkyuU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bikzikx4QSNv6BOmpjgCs5F6plzkI3lDeFq9bvYeGM8zOPcweXnmrbpEVeDPnW+u4
+         bRcFaIvsgeED3JFNwjgGdhUHOohBdm4ams5azB1w6CcQMjNrYoKuyqAXEHyorxY1wP
+         PUFA1wx4QZpldpsbiGyw5l+LCs/lj4a+WR9oiCxU=
+Date:   Thu, 5 Nov 2020 21:38:46 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
+        Qais Yousef <Qais.Yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>
+Subject: Re: [PATCH 2/6] arm64: Allow mismatched 32-bit EL0 support
+Message-ID: <20201105213846.GA8600@willie-the-truck>
+References: <20201028111713.GA27927@willie-the-truck>
+ <20201028112206.GD13345@gaia>
+ <20201028112343.GD27927@willie-the-truck>
+ <20201028114945.GE13345@gaia>
+ <20201028124049.GC28091@willie-the-truck>
+ <20201028185620.GK13345@gaia>
+ <20201029222048.GD31375@willie-the-truck>
+ <20201030111846.GC23196@gaia>
+ <20201030161353.GC32582@willie-the-truck>
+ <20201102114444.GC21082@gaia>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201102114444.GC21082@gaia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 05 Oct 2020 17:17:47 PDT (-0700), Atish Patra wrote:
-> This series attempts to move the ARM64 numa implementation to common
-> code so that RISC-V can leverage that as well instead of reimplementing
-> it again.
->
-> RISC-V specific bits are based on initial work done by Greentime Hu [1] but
-> modified to reuse the common implementation to avoid duplication.
->
-> [1] https://lkml.org/lkml/2020/1/10/233
->
-> This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
-> It would be great if somebody can test it on numa capable ARM64 hardware platforms.
-> This patch series doesn't modify the maintainers list for the common code (arch_numa)
-> as I am not sure if somebody from ARM64 community or Greg should take up the
-> maintainership. Ganapatrao was the original author of the arm64 version.
-> I would be happy to update that in the next revision once it is decided.
->
-> # numactl --hardware
-> available: 2 nodes (0-1)
-> node 0 cpus: 0 1 2 3
-> node 0 size: 486 MB
-> node 0 free: 470 MB
-> node 1 cpus: 4 5 6 7
-> node 1 size: 424 MB
-> node 1 free: 408 MB
-> node distances:
-> node   0   1
->   0:  10  20
->   1:  20  10
-> # numactl -show
-> policy: default
-> preferred node: current
-> physcpubind: 0 1 2 3 4 5 6 7
-> cpubind: 0 1
-> nodebind: 0 1
-> membind: 0 1
->
-> The patches are also available at
-> https://github.com/atishp04/linux/tree/5.10_numa_unified_v4
->
-> For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
-> https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
->
-> Testing:
-> RISC-V:
-> Tested in Qemu and 2 socket OmniXtend FPGA.
->
-> ARM64:
-> 2 socket kunpeng920 (4 nodes around 250G a node)
-> Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
-> There may be some minor conflicts with Mike's cleanup series [2] depending on the
-> order in which these two series are being accepted. I can rebase on top his series
-> if required.
->
-> [2] https://lkml.org/lkml/2020/8/18/754
->
-> Changes from v3->v4:
-> 1. Removed redundant duplicate header.
-> 2. Added Reviewed-by tags.
->
-> Changes from v2->v3:
-> 1. Added Acked-by/Reviewed-by tags.
-> 2. Replaced asm/acpi.h with linux/acpi.h
-> 3. Defined arch_acpi_numa_init as static.
->
-> Changes from v1->v2:
-> 1. Replaced ARM64 specific compile time protection with ACPI specific ones.
-> 2. Dropped common pcibus_to_node changes. Added required changes in RISC-V.
-> 3. Fixed few typos.
->
-> Atish Patra (4):
-> numa: Move numa implementation to common code
-> arm64, numa: Change the numa init functions name to be generic
-> riscv: Separate memory init from paging init
-> riscv: Add numa support for riscv64 platform
->
-> Greentime Hu (1):
-> riscv: Add support pte_protnone and pmd_protnone if
-> CONFIG_NUMA_BALANCING
->
-> arch/arm64/Kconfig                            |  1 +
-> arch/arm64/include/asm/numa.h                 | 45 +----------------
-> arch/arm64/kernel/acpi_numa.c                 | 13 -----
-> arch/arm64/mm/Makefile                        |  1 -
-> arch/arm64/mm/init.c                          |  4 +-
-> arch/riscv/Kconfig                            | 31 +++++++++++-
-> arch/riscv/include/asm/mmzone.h               | 13 +++++
-> arch/riscv/include/asm/numa.h                 |  8 +++
-> arch/riscv/include/asm/pci.h                  | 14 ++++++
-> arch/riscv/include/asm/pgtable.h              | 21 ++++++++
-> arch/riscv/kernel/setup.c                     | 11 ++++-
-> arch/riscv/kernel/smpboot.c                   | 12 ++++-
-> arch/riscv/mm/init.c                          | 10 +++-
-> drivers/base/Kconfig                          |  6 +++
-> drivers/base/Makefile                         |  1 +
-> .../mm/numa.c => drivers/base/arch_numa.c     | 30 ++++++++++--
-> include/asm-generic/numa.h                    | 49 +++++++++++++++++++
-> 17 files changed, 199 insertions(+), 71 deletions(-)
-> create mode 100644 arch/riscv/include/asm/mmzone.h
-> create mode 100644 arch/riscv/include/asm/numa.h
-> rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
-> create mode 100644 include/asm-generic/numa.h
+On Mon, Nov 02, 2020 at 11:44:45AM +0000, Catalin Marinas wrote:
+> On Fri, Oct 30, 2020 at 04:13:53PM +0000, Will Deacon wrote:
+> > On Fri, Oct 30, 2020 at 11:18:47AM +0000, Catalin Marinas wrote:
+> > > On Thu, Oct 29, 2020 at 10:20:48PM +0000, Will Deacon wrote:
+> > > >     This means that if the first 32-bit-capable core is onlined late, then
+> > > >     it will only get the base capabilities, but I think that's fine and
+> > > >     consistent with our overall handling of hwcaps (which cannot appear
+> > > >     dynamically to userspace).
+> > > 
+> > > Yes but such bare 32-bit mode is entirely useless and I don't think we
+> > > should even pretend we have 32-bit. The compat hwcaps here would be
+> > > "half thumb fastmult edsp tls idiva idivt lpae evtstrm", statically
+> > > filled in. It's missing major bits like "vfp" and "neon" which are
+> > > necessary for the general purpose 32-bit EABI.
+> > 
+> > So? If we found such a CPU during boot, would we refuse to online it because
+> > we consider it "entirely useless"? No!
+> 
+> We _do_ online it but as a 64-bit only CPU if there were no early 32-bit
+> CPUs since we are not updating the compat hwcaps anyway (and that's
+> handled automatically by WEAK_LOCAL_CPU_FEATURE; we do this in a few
+> places already).
+> 
+> > That said, given that it's _very_
+> > likely for the late CPUs to support vfp and neon, we could set those caps
+> > speculatively if the 64-bit cores have fpsimd (late onlining would be
+> > prevented for cores lacking those). Does the architecture allow you to
+> > implement both AArch64 and AArch32 at EL0, but only have fpsimd for AArch64?
+> 
+> Probably not but I don't want to butcher the cpufeature support further
+> and have compat hwcaps derived from ID_AA64* regs. I find this hack even
+> worse and I'd rather live with the partial hwcap information (and hope
+> user space doesn't read hwcaps anyway ;)).
+> 
+> I don't see why we should change this code further when the requirement
+> to the mobile vendors is to simply allow a 32-bit CPU to come up early.
+> 
+> > > As I said above, I think we would be even more inconsistent w.r.t.
+> > > HWCAPs if we require at least one early AArch32-capable CPU, otherwise
+> > > don't expose 32-bit at all. I don't see what we gain by allowing all
+> > > 32-bit CPUs to come in late, other than maybe saving an entry in the
+> > > cpufeature array.
+> > 
+> > It's a combination of there not being a good reason to prevent the
+> > late-onlining and not gaining anything from the additional feature (I've
+> > already shown why it doesn't help with the vast majority of callsites).
+> 
+> I underlined above, this is not about preventing late onlining, only
+> preventing late 32-bit support. Late AArch32-capable CPUs will be
+> onlined just fine, only that if we haven't got any prior 32-bit CPU, we
+> no longer report the feature and the sysfs mask.
 
-Sorry it took me a while to get around to this, I had some work stuff to deal
-with and have managed to get buried in email.  This all looks fine to me, but
-the way it's structured make it kind of hard to apply -- essentially I can't
-take the first two without at least some Acks from the arm64 folks, and it
-smells to me like it'd be better to have those go through the arm64 tree.  The
-RISC-V stuff isn't that heavywight, but I'd like it to at least land in my
-for-next at some point as otherwise it'll be completely untested.
+Ok. Then we're in agreement about not preventing late-onlining. The problem
+then is that the existing 32-bit EL0 capability is a SYSTEM cap so even with
+your diff, we still have an issue if you boot on the CPUs that support
+32-bit and then try to online a 64-bit-only core (it will fail).
 
-arm64 guys: do you want to try and do some sort of shared base tag sort of
-thing for these, or do you want me to refactor this such that it adds the
-generic stuff before removing the arm64 stuff so we can decouble that way?
+So I think we do need my changes to the existing cap, but perhaps we
+could return false from system_supports_32bit_el0() until we've actually
+seen a 32-bit capable core. That way you would keep the existing behaviour
+on TX2, and we wouldn't get any unusual late-onlining failures.
+
+I've hacked something together that seems to work, so I'll clean it up and
+post it tomorrow. I've spotted a couple of pre-existing issues at the same
+time, so I need to fix those first (WEAK_LOCAL_CPU_FEATURE doesn't set the
+cap for late CPUs and failed onlining causes RCU stalls).
+
+Will
