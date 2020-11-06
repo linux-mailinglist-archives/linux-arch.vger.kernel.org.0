@@ -2,97 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CA92A9A53
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 18:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAA52A9A8F
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 18:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727505AbgKFRC1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 12:02:27 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:45203 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbgKFRC1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 12:02:27 -0500
-Received: by mail-lf1-f68.google.com with SMTP id z21so1595417lfe.12;
-        Fri, 06 Nov 2020 09:02:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IxgRn+NDQHTCeHwfBgvEL75Ff6LWDGq3sU/W0ROdACs=;
-        b=IAJ8iU1BvxrdM2I3e2LNcRjjFUrkrBxAwYcNiFTuBg/CYbdJfpufGOYzvgoXAaWD9z
-         Dc6SI7wOPMOq7BoOZkBCxoysFFkdlXy+0Ab7Gr+w/sR2E2yM7ec8AyrcnGl9AEhg3MQ/
-         05asFOY06KdF+NMAIGP5V0UJnKLOcLxXucJ3x2ao5EhYUbxEQk+84UhXUtaui9jzPDBx
-         GEiZ4vmlmzExey3qgTXdUodCDUaMNR2LihtppR0gsOkyjL+EOwyPBhMNrj5gEJi795MQ
-         ihLB42WEWaNgNXNpdMweqqR/o8LWTtZOFqWbznr2qRcGyoAFTd8V1GakpWOusG7UZzRz
-         RTzw==
-X-Gm-Message-State: AOAM530aI9QXCkcga9Kg0kz8kY0EsPg9hhVk2aQjxUPFJLAjNrJ+JP8W
-        OTra2+jfbXlSHJD3+iTpp5IRQOMjttOuqA==
-X-Google-Smtp-Source: ABdhPJw79cVvhd1vcIuu4XPui96mAP4xDKV9ArN/Fggzk4GDVD5ecQaYCGh110VzE2qKOVR/aU9B5Q==
-X-Received: by 2002:a05:6512:104e:: with SMTP id c14mr1305423lfb.345.1604682144693;
-        Fri, 06 Nov 2020 09:02:24 -0800 (PST)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id r23sm225149lfe.228.2020.11.06.09.02.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 09:02:23 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kb587-0000G4-23; Fri, 06 Nov 2020 18:02:27 +0100
-Date:   Fri, 6 Nov 2020 18:02:27 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Johan Hovold <johan@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@gooogle.com>,
+        id S1726139AbgKFROM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 12:14:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36928 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbgKFROM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Nov 2020 12:14:12 -0500
+Received: from gaia (unknown [2.26.170.190])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5940722202;
+        Fri,  6 Nov 2020 17:14:07 +0000 (UTC)
+Date:   Fri, 6 Nov 2020 17:14:04 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Atish Patra <atish.patra@wdc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Anup Patel <anup@brainfault.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Kurtz <djkurtz@chromium.org>,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH 0/8] linker-section array fix and clean ups
-Message-ID: <20201106170227.GE4085@localhost>
-References: <20201103175711.10731-1-johan@kernel.org>
- <20201106160344.GA12184@linux-8ccs.fritz.box>
- <20201106164537.GD4085@localhost>
- <20201106115523.41f7e2ed@gandalf.local.home>
+        David Hildenbrand <david@redhat.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jia He <justin.he@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>, Zong Li <zong.li@sifive.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>
+Subject: Re: [PATCH v4 2/5] arm64, numa: Change the numa init functions name
+ to be generic
+Message-ID: <20201106171403.GK29329@gaia>
+References: <20201006001752.248564-1-atish.patra@wdc.com>
+ <20201006001752.248564-3-atish.patra@wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201106115523.41f7e2ed@gandalf.local.home>
+In-Reply-To: <20201006001752.248564-3-atish.patra@wdc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 11:55:23AM -0500, Steven Rostedt wrote:
-> On Fri, 6 Nov 2020 17:45:37 +0100
-> Johan Hovold <johan@kernel.org> wrote:
-> 
-> > It's simply specifying alignment when declaring the variable that
-> > prevents this optimisation. The relevant code is in the function
-> > align_variable() in [1] where DATA_ALIGNMENT() is never called in case
-> > an alignment has been specified (!DECL_USER_ALIGN(decl)).
-> > 
-> > There's no mention in the documentation of this that I'm aware of, but
-> > this is the way the aligned attribute has worked since its introduction
-> > judging from the commit history.
-> > 
-> > As mentioned above, we've been relying on this for kernel parameters and
-> > other structures since 2003-2004 so if it ever were to change we'd find
-> > out soon enough.
-> > 
-> > It's about to be used for scheduler classes as well. [2]
-> 
-> Is this something that gcc folks are aware of? Yes, we appear to be relying
-> on undocumented implementations, but that hasn't caused gcc to break the
-> kernel in the past.
+On Mon, Oct 05, 2020 at 05:17:49PM -0700, Atish Patra wrote:
+> diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+> index 7ff800045434..96502ff92af5 100644
+> --- a/arch/arm64/kernel/acpi_numa.c
+> +++ b/arch/arm64/kernel/acpi_numa.c
+> @@ -117,16 +117,3 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
+>  
+>  	node_set(node, numa_nodes_parsed);
+>  }
+> -
+> -int __init arm64_acpi_numa_init(void)
+> -{
+> -	int ret;
+> -
+> -	ret = acpi_numa_init();
+> -	if (ret) {
+> -		pr_info("Failed to initialise from firmware\n");
+> -		return ret;
+> -	}
+> -
+> -	return srat_disabled() ? -EINVAL : 0;
+> -}
 
-The scheduler change was suggested by Jakub so at least some of them
-are.
+I think it's better if arm64_acpi_numa_init() and arm64_numa_init()
+remained in the arm64 code. It's not really much code to be shared.
 
-Johan
+> diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
+> index 73f8b49d485c..74b4f2ddad70 100644
+> --- a/drivers/base/arch_numa.c
+> +++ b/drivers/base/arch_numa.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  
+> -#include <asm/acpi.h>
+>  #include <asm/sections.h>
+>  
+>  struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
+> @@ -444,16 +443,37 @@ static int __init dummy_numa_init(void)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_ACPI_NUMA
+> +static int __init arch_acpi_numa_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = acpi_numa_init();
+> +	if (ret) {
+> +		pr_info("Failed to initialise from firmware\n");
+> +		return ret;
+> +	}
+> +
+> +	return srat_disabled() ? -EINVAL : 0;
+> +}
+> +#else
+> +static int __init arch_acpi_numa_init(void)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +#endif
+> +
+>  /**
+> - * arm64_numa_init() - Initialize NUMA
+> + * arch_numa_init() - Initialize NUMA
+>   *
+>   * Try each configured NUMA initialization method until one succeeds. The
+> - * last fallback is dummy single node config encomapssing whole memory.
+> + * last fallback is dummy single node config encompassing whole memory.
+>   */
+> -void __init arm64_numa_init(void)
+> +void __init arch_numa_init(void)
+>  {
+>  	if (!numa_off) {
+> -		if (!acpi_disabled && !numa_init(arm64_acpi_numa_init))
+> +		if (!acpi_disabled && !numa_init(arch_acpi_numa_init))
+>  			return;
+>  		if (acpi_disabled && !numa_init(of_numa_init))
+>  			return;
+
+Does riscv even have an acpi_disabled variable?
+
+-- 
+Catalin
