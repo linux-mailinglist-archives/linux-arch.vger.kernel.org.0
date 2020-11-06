@@ -2,84 +2,192 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E0E2A9AA5
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 18:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1982A9AEE
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 18:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727641AbgKFRS0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 12:18:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38322 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727608AbgKFRS0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Nov 2020 12:18:26 -0500
-Received: from gaia (unknown [2.26.170.190])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90B4E22227;
-        Fri,  6 Nov 2020 17:18:21 +0000 (UTC)
-Date:   Fri, 6 Nov 2020 17:18:19 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Atish Patra <Atish.Patra@wdc.com>,
-        Will Deacon <willdeacon@google.com>, maz@kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan.Cameron@huawei.com,
-        aou@eecs.berkeley.edu, akpm@linux-foundation.org,
-        anshuman.khandual@arm.com, anup@brainfault.org,
-        Arnd Bergmann <arnd@arndb.de>, david@redhat.com,
-        greentime.hu@sifive.com, Greg KH <gregkh@linuxfoundation.org>,
-        justin.he@arm.com, wangkefeng.wang@huawei.com,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        rppt@kernel.org, nsaenzjulienne@suse.de,
-        Paul Walmsley <paul.walmsley@sifive.com>, rafael@kernel.org,
-        steven.price@arm.com, will@kernel.org, zong.li@sifive.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/5] Unify NUMA implementation between ARM64 & RISC-V
-Message-ID: <20201106171818.GL29329@gaia>
-References: <20201006001752.248564-1-atish.patra@wdc.com>
- <mhng-6971ba28-0cea-42bc-a26c-c23b9ba2af9e@palmerdabbelt-glaptop1>
+        id S1727697AbgKFRd1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 12:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727499AbgKFRd0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 12:33:26 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E46C0613CF
+        for <linux-arch@vger.kernel.org>; Fri,  6 Nov 2020 09:33:26 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id z2so1727008ilh.11
+        for <linux-arch@vger.kernel.org>; Fri, 06 Nov 2020 09:33:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6ZI7U3izYBLuKgwxS1LJeRXMFqpXLyUguXUomcL5pdk=;
+        b=Gum7idwrRZT5cLtv5uC2Sol2ja8VuOwCY2LT1Rmh5IGcI+Zaj1U8ZZl7uHAfTB/K+4
+         zwc01wlq6zZLsaM2E95LmhahaauO+pYSvPz9R40ehLEkrBdCtsMEF2Ryf0vyQWUH3gwF
+         OLrrVouaLiZ0iDFQ1wOGn5DnXRwRIKsUmSkPY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6ZI7U3izYBLuKgwxS1LJeRXMFqpXLyUguXUomcL5pdk=;
+        b=fqeE/F3SelyYnrwBjmSrL7JmUS+FZxnoWHQZasFJcxX7+/Ac53STpY1b7spvSEsoT2
+         w5cNGJp0++OPhnLRCYvdIlE9UYfrWg5/XqlUN0kR1jQba8zlI8mjlLkgPUp2zXewjh5A
+         TpcKCTWURRkhJr3RfE4NRrhXmbxSEaK+moaDMkscxf3SDIg41iapDTEdy57EYxTH38Pb
+         zZY5m3jaecs9zx3jkoav2iQbita9rcoFrEi+PyRxZQBeuSNWGP4NRlFpuZ+aRJItq9uE
+         mgmVxM2LKQ1YDbOG8WJl//nqtXpfhlwhVY99dKSVW1SkVVL7FTQSqfazTa758ogThHaf
+         /ajQ==
+X-Gm-Message-State: AOAM531+6qYy+qwsTZOhhe3r/Aun2yoGgAhi1/DJw9xmgkHT1nhvlJQQ
+        jlZdn+UQQs4+6AyO5o9ClNwR/S8GXhl7bDCAz7V3
+X-Google-Smtp-Source: ABdhPJxQKkLDaYAAvOSbnwEMmdO14qmO69Gu2BtyVBOiLFGnveflirWOvnXE8aUK7P43i2+nv0iQkJp/BpemBT5JVeU=
+X-Received: by 2002:a05:6e02:111:: with SMTP id t17mr2266305ilm.79.1604684006022;
+ Fri, 06 Nov 2020 09:33:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-6971ba28-0cea-42bc-a26c-c23b9ba2af9e@palmerdabbelt-glaptop1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20201006001752.248564-1-atish.patra@wdc.com> <20201006001752.248564-3-atish.patra@wdc.com>
+ <20201106171403.GK29329@gaia>
+In-Reply-To: <20201106171403.GK29329@gaia>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Fri, 6 Nov 2020 09:33:14 -0800
+Message-ID: <CAOnJCUJo795yX_7am0hdB_JFio3_ZBRHioHNcydhqEouCUynUg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] arm64, numa: Change the numa init functions name
+ to be generic
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Atish Patra <atish.patra@wdc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Zong Li <zong.li@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Jia He <justin.he@arm.com>, Anup Patel <anup@brainfault.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 10:07:00AM -0800, Palmer Dabbelt wrote:
-> On Mon, 05 Oct 2020 17:17:47 PDT (-0700), Atish Patra wrote:
-> > arch/arm64/Kconfig                            |  1 +
-> > arch/arm64/include/asm/numa.h                 | 45 +----------------
-> > arch/arm64/kernel/acpi_numa.c                 | 13 -----
-> > arch/arm64/mm/Makefile                        |  1 -
-> > arch/arm64/mm/init.c                          |  4 +-
-> > arch/riscv/Kconfig                            | 31 +++++++++++-
-> > arch/riscv/include/asm/mmzone.h               | 13 +++++
-> > arch/riscv/include/asm/numa.h                 |  8 +++
-> > arch/riscv/include/asm/pci.h                  | 14 ++++++
-> > arch/riscv/include/asm/pgtable.h              | 21 ++++++++
-> > arch/riscv/kernel/setup.c                     | 11 ++++-
-> > arch/riscv/kernel/smpboot.c                   | 12 ++++-
-> > arch/riscv/mm/init.c                          | 10 +++-
-> > drivers/base/Kconfig                          |  6 +++
-> > drivers/base/Makefile                         |  1 +
-> > .../mm/numa.c => drivers/base/arch_numa.c     | 30 ++++++++++--
-> > include/asm-generic/numa.h                    | 49 +++++++++++++++++++
-> > 17 files changed, 199 insertions(+), 71 deletions(-)
-> > create mode 100644 arch/riscv/include/asm/mmzone.h
-> > create mode 100644 arch/riscv/include/asm/numa.h
-> > rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (95%)
-> > create mode 100644 include/asm-generic/numa.h
-[...]
-> arm64 guys: do you want to try and do some sort of shared base tag sort of
-> thing for these, or do you want me to refactor this such that it adds the
-> generic stuff before removing the arm64 stuff so we can decouble that way?
+On Fri, Nov 6, 2020 at 9:14 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Mon, Oct 05, 2020 at 05:17:49PM -0700, Atish Patra wrote:
+> > diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+> > index 7ff800045434..96502ff92af5 100644
+> > --- a/arch/arm64/kernel/acpi_numa.c
+> > +++ b/arch/arm64/kernel/acpi_numa.c
+> > @@ -117,16 +117,3 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
+> >
+> >       node_set(node, numa_nodes_parsed);
+> >  }
+> > -
+> > -int __init arm64_acpi_numa_init(void)
+> > -{
+> > -     int ret;
+> > -
+> > -     ret = acpi_numa_init();
+> > -     if (ret) {
+> > -             pr_info("Failed to initialise from firmware\n");
+> > -             return ret;
+> > -     }
+> > -
+> > -     return srat_disabled() ? -EINVAL : 0;
+> > -}
+>
+> I think it's better if arm64_acpi_numa_init() and arm64_numa_init()
+> remained in the arm64 code. It's not really much code to be shared.
+>
 
-I had a comment on the second patch (probably impacting the first) but
-otherwise they look fine.
+RISC-V will probably support ACPI one day. The idea is to not to do
+exercise again in future.
+Moreover, there will be arch_numa_init which will be used by RISC-V
+and there will be arm64_numa_init
+used by arm64. However, if you feel strongly about it, I am happy to
+move back those two functions to arm64.
 
-I'm happy for this series to go in via the riscv tree but, if we run
-into conflicts, please provide a stable branch somewhere containing the
-arm64 changes (first two patches).
+In case, we decide to go that route, can we define arm64_numa_init in
+mm/init.c ?
+Defining numa.c just for arm64_numa_init in arm64 may be an overkill.
+
+> > diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
+> > index 73f8b49d485c..74b4f2ddad70 100644
+> > --- a/drivers/base/arch_numa.c
+> > +++ b/drivers/base/arch_numa.c
+> > @@ -13,7 +13,6 @@
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >
+> > -#include <asm/acpi.h>
+> >  #include <asm/sections.h>
+> >
+> >  struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
+> > @@ -444,16 +443,37 @@ static int __init dummy_numa_init(void)
+> >       return 0;
+> >  }
+> >
+> > +#ifdef CONFIG_ACPI_NUMA
+> > +static int __init arch_acpi_numa_init(void)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret = acpi_numa_init();
+> > +     if (ret) {
+> > +             pr_info("Failed to initialise from firmware\n");
+> > +             return ret;
+> > +     }
+> > +
+> > +     return srat_disabled() ? -EINVAL : 0;
+> > +}
+> > +#else
+> > +static int __init arch_acpi_numa_init(void)
+> > +{
+> > +     return -EOPNOTSUPP;
+> > +}
+> > +
+> > +#endif
+> > +
+> >  /**
+> > - * arm64_numa_init() - Initialize NUMA
+> > + * arch_numa_init() - Initialize NUMA
+> >   *
+> >   * Try each configured NUMA initialization method until one succeeds. The
+> > - * last fallback is dummy single node config encomapssing whole memory.
+> > + * last fallback is dummy single node config encompassing whole memory.
+> >   */
+> > -void __init arm64_numa_init(void)
+> > +void __init arch_numa_init(void)
+> >  {
+> >       if (!numa_off) {
+> > -             if (!acpi_disabled && !numa_init(arm64_acpi_numa_init))
+> > +             if (!acpi_disabled && !numa_init(arch_acpi_numa_init))
+> >                       return;
+> >               if (acpi_disabled && !numa_init(of_numa_init))
+> >                       return;
+>
+> Does riscv even have an acpi_disabled variable?
+>
+It is defined in "include/linux/acpi.h" which is included in arch_numa.c
+
+> --
+> Catalin
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+
 
 -- 
-Catalin
+Regards,
+Atish
