@@ -2,82 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 289532A92D9
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 10:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2BF2A967F
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 13:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgKFJgV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 04:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbgKFJgV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 04:36:21 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD88C0613D2
-        for <linux-arch@vger.kernel.org>; Fri,  6 Nov 2020 01:36:20 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id o13so672575ljj.11
-        for <linux-arch@vger.kernel.org>; Fri, 06 Nov 2020 01:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q326GXxs8YkWuvBRrekt++B5YyugaqPURgSA3otIq6U=;
-        b=XOdrV8ei8AtuxGdV1ULzurTDZi9h0STRi4e6h9KSaQcs9JaVCAn0s20MSYRGsfiFhS
-         cAQ5HcxJvNf0bcm1aZwo8OiJ6W0Fup+vqbs+neWVychssgU12cZHqou2LvwZxZ5+zw/O
-         UbY+h3caECgBTLExtoKALN2LeSJxBz6tIItFeB7JXnns2q5n4Um4KSY+uNaYOmCdF167
-         NJtEYQhcNGeAodeU/Pg9ZM0jYbX3UIxHAPtpN3fZkoLi9Yo0dKHqYBv2dMTK3YUSmFaA
-         IfnlybJGiKErfJm73wIsfRzvHBwMNHy3ybeANKJ4joxvD1nWgm+PtNMAh5sXYCS5e7k8
-         xGBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q326GXxs8YkWuvBRrekt++B5YyugaqPURgSA3otIq6U=;
-        b=PMug+A8ghpyDLuQlHpRCp4ur9rweqsqv8JZFJAAoi0NaGLz7O13Mu5HxOKsnHNsqcN
-         bnkmUo712fm4V7TETRkK6ku/YXPCjSo48DqqtQt7enqwuIT2oHJ9smSdDqyT28wAlbKU
-         FWsLCa6qiF4Vf4Kgz1pmTzAgRfpP08yJDIqPDxeDpVk22PopAq+910gDjSsf7aagniUn
-         9c1erzUb9I9ohv+VVT3NGPL6zOAM2fXr7AYgTMRaQGnWuRydRz2Hy6s2KZj20T2JDFFt
-         ILDd1a8oi3k4b0PamI41Sk5MEDithd9Bru6fU46CpFrUteUqbefeEFfEYA9b2nwglLLl
-         XUJg==
-X-Gm-Message-State: AOAM530V1Ixu3AKZrlfe+NXuOQpOlRBPUZOmxSv+R+QMOn35OsmZduuk
-        yXC2zODi2+B/2sl7lrEz8krVLGYLpH+EdjdUpPsAJA==
-X-Google-Smtp-Source: ABdhPJzROlV5g3M3Pzjhr+1raVc/1hLidCyn5chZ4duWrpT16uo1Ir8x1bNuTAoV3x713D+qUJtWOjkKrtVhYQnc/ao=
-X-Received: by 2002:a2e:80d2:: with SMTP id r18mr465456ljg.286.1604655379127;
- Fri, 06 Nov 2020 01:36:19 -0800 (PST)
+        id S1727251AbgKFMya (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 07:54:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:37764 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726939AbgKFMy3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Nov 2020 07:54:29 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E16911474;
+        Fri,  6 Nov 2020 04:54:28 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (unknown [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 925D23F718;
+        Fri,  6 Nov 2020 04:54:27 -0800 (PST)
+Date:   Fri, 6 Nov 2020 12:54:25 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>
+Subject: Re: [PATCH 2/6] arm64: Allow mismatched 32-bit EL0 support
+Message-ID: <20201106125425.u6qoswsjfskyxtoo@e107158-lin.cambridge.arm.com>
+References: <20201028112206.GD13345@gaia>
+ <20201028112343.GD27927@willie-the-truck>
+ <20201028114945.GE13345@gaia>
+ <20201028124049.GC28091@willie-the-truck>
+ <20201028185620.GK13345@gaia>
+ <20201029222048.GD31375@willie-the-truck>
+ <20201030111846.GC23196@gaia>
+ <20201030161353.GC32582@willie-the-truck>
+ <20201102114444.GC21082@gaia>
+ <20201105213846.GA8600@willie-the-truck>
 MIME-Version: 1.0
-References: <20201030154519.1245983-1-arnd@kernel.org>
-In-Reply-To: <20201030154519.1245983-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 6 Nov 2020 10:36:07 +0100
-Message-ID: <CACRpkdauAb+Rss7XU5tNyi8BwhSdPiTJwy+YL08dkf6VnNkd-g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/9] ARM: remove set_fs callers and implementation
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201105213846.GA8600@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 4:45 PM Arnd Bergmann <arnd@kernel.org> wrote:
+Hi Will
 
-> This is the rebased version of my ARM set_fs patches on top of
-> v5.10-rc1, dropping the TASK_SIZE_MAX patch but leaving everything
-> else unchanged.
->
-> I have tested the oabi-compat changes using the LTP tests for the three
-> modified syscalls using an Armv7 kernel and a Debian 5 OABI user space.
+On 11/05/20 21:38, Will Deacon wrote:
+> On Mon, Nov 02, 2020 at 11:44:45AM +0000, Catalin Marinas wrote:
+> > On Fri, Oct 30, 2020 at 04:13:53PM +0000, Will Deacon wrote:
+> > > On Fri, Oct 30, 2020 at 11:18:47AM +0000, Catalin Marinas wrote:
+> > > > On Thu, Oct 29, 2020 at 10:20:48PM +0000, Will Deacon wrote:
+> > > > >     This means that if the first 32-bit-capable core is onlined late, then
+> > > > >     it will only get the base capabilities, but I think that's fine and
+> > > > >     consistent with our overall handling of hwcaps (which cannot appear
+> > > > >     dynamically to userspace).
+> > > > 
+> > > > Yes but such bare 32-bit mode is entirely useless and I don't think we
+> > > > should even pretend we have 32-bit. The compat hwcaps here would be
+> > > > "half thumb fastmult edsp tls idiva idivt lpae evtstrm", statically
+> > > > filled in. It's missing major bits like "vfp" and "neon" which are
+> > > > necessary for the general purpose 32-bit EABI.
+> > > 
+> > > So? If we found such a CPU during boot, would we refuse to online it because
+> > > we consider it "entirely useless"? No!
+> > 
+> > We _do_ online it but as a 64-bit only CPU if there were no early 32-bit
+> > CPUs since we are not updating the compat hwcaps anyway (and that's
+> > handled automatically by WEAK_LOCAL_CPU_FEATURE; we do this in a few
+> > places already).
+> > 
+> > > That said, given that it's _very_
+> > > likely for the late CPUs to support vfp and neon, we could set those caps
+> > > speculatively if the 64-bit cores have fpsimd (late onlining would be
+> > > prevented for cores lacking those). Does the architecture allow you to
+> > > implement both AArch64 and AArch32 at EL0, but only have fpsimd for AArch64?
+> > 
+> > Probably not but I don't want to butcher the cpufeature support further
+> > and have compat hwcaps derived from ID_AA64* regs. I find this hack even
+> > worse and I'd rather live with the partial hwcap information (and hope
+> > user space doesn't read hwcaps anyway ;)).
+> > 
+> > I don't see why we should change this code further when the requirement
+> > to the mobile vendors is to simply allow a 32-bit CPU to come up early.
+> > 
+> > > > As I said above, I think we would be even more inconsistent w.r.t.
+> > > > HWCAPs if we require at least one early AArch32-capable CPU, otherwise
+> > > > don't expose 32-bit at all. I don't see what we gain by allowing all
+> > > > 32-bit CPUs to come in late, other than maybe saving an entry in the
+> > > > cpufeature array.
+> > > 
+> > > It's a combination of there not being a good reason to prevent the
+> > > late-onlining and not gaining anything from the additional feature (I've
+> > > already shown why it doesn't help with the vast majority of callsites).
+> > 
+> > I underlined above, this is not about preventing late onlining, only
+> > preventing late 32-bit support. Late AArch32-capable CPUs will be
+> > onlined just fine, only that if we haven't got any prior 32-bit CPU, we
+> > no longer report the feature and the sysfs mask.
+> 
+> Ok. Then we're in agreement about not preventing late-onlining. The problem
+> then is that the existing 32-bit EL0 capability is a SYSTEM cap so even with
+> your diff, we still have an issue if you boot on the CPUs that support
+> 32-bit and then try to online a 64-bit-only core (it will fail).
+> 
+> So I think we do need my changes to the existing cap, but perhaps we
+> could return false from system_supports_32bit_el0() until we've actually
+> seen a 32-bit capable core. That way you would keep the existing behaviour
+> on TX2, and we wouldn't get any unusual late-onlining failures.
+> 
+> I've hacked something together that seems to work, so I'll clean it up and
+> post it tomorrow. I've spotted a couple of pre-existing issues at the same
+> time, so I need to fix those first (WEAK_LOCAL_CPU_FEATURE doesn't set the
+> cap for late CPUs and failed onlining causes RCU stalls).
 
-I tested this patch set on the ARM Footbridge (SA110) with an ages old
-Red Hat Linux OABI userspace.
+FWIW I have my v3 over here in case it's of any help. It solves the problem of
+HWCAP discovery when late AArch32 CPU is booted by populating boot_cpu_date
+with 32bit features then.
 
-It works.
+	git clone https://git.gitlab.arm.com/linux-arm/linux-qy.git -b asym-aarch32-upstream-v3 origin/asym-aarch32-upstream-v3
 
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
+I abandoned the sysctl because HWCAP are boot time discoverable and it seemed
+not worth the headache to do the switch at run time for that. So except for
+patch 1, the remaining patches look similar to yours.
 
-Yours,
-Linus Walleij
+	linux32 cat /proc/cpuinfo
+
+return the right features if booted with the right cmdline option; where cpu0
+is not 32bit capable.
+
+Thanks
+
+--
+Qais Yousef
