@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCE82A9C3E
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 19:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040832A9CAC
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 19:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbgKFScW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 13:32:22 -0500
-Received: from mga12.intel.com ([192.55.52.136]:34321 "EHLO mga12.intel.com"
+        id S1727341AbgKFSuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 13:50:12 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:38510 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726034AbgKFScW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Nov 2020 13:32:22 -0500
-IronPort-SDR: Cp74Iq1flIMTKF+H5IKJrARO1I0RmYO/6NXQb86uJliKuaV9kSw7YdwST59G03fLRO+vWVMhdO
- CcRcGcpedCVA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9797"; a="148863646"
-X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
-   d="scan'208";a="148863646"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 10:32:20 -0800
-IronPort-SDR: QSmFF3Phay518UCkCcIx2W5ZdMDtxuhDzkXD52/pILlFfYCbVlk48QwvROMhAgEMgM9IDY1xVI
- h68Cyix7Os1w==
-X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
-   d="scan'208";a="321681117"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.221.127]) ([10.212.221.127])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 10:32:19 -0800
-Subject: Re: [PATCH v14 01/26] Documentation/x86: Add CET description
-To:     Borislav Petkov <bp@alien8.de>
+        id S1726415AbgKFSuL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Nov 2020 13:50:11 -0500
+Received: from zn.tnic (p200300ec2f0d1f00570cf78b071a7fce.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:1f00:570c:f78b:71a:7fce])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F9DE1EC047F;
+        Fri,  6 Nov 2020 19:50:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1604688609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rCjHT9H15zsENMgb4IN4TU+wgdULdhkDBZCw8em2rRs=;
+        b=KCvW6KUcX78rxeIqIgflI7yu/cLWVa2Ywjf/+DHV5HU2ShdtN1pjFg8/j7BPirG5kF3kEy
+        NnTR83hJ+iPrDYLw8R9HUnQQB6xd72PusNXFjeycYWHuXBdt6OCEYCT50rfA6CK3490Ztg
+        rkG32TO0Z4JaacgExp9LDhZmLw7Mj7w=
+Date:   Fri, 6 Nov 2020 19:49:53 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -52,36 +52,96 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
+        Pengfei Xu <pengfei.xu@intel.com>, Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v14 02/26] x86/cpufeatures: Add CET CPU feature flags for
+ Control-flow Enforcement Technology (CET)
+Message-ID: <20201106184953.GI14914@zn.tnic>
 References: <20201012153850.26996-1-yu-cheng.yu@intel.com>
- <20201012153850.26996-2-yu-cheng.yu@intel.com>
- <20201106173410.GG14914@zn.tnic>
- <ebaff261-f8ad-d184-edd5-8efbd675deeb@intel.com>
- <20201106182822.GH14914@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <dca16efa-4869-d21d-1056-3aa57f396380@intel.com>
-Date:   Fri, 6 Nov 2020 10:32:18 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+ <20201012153850.26996-3-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20201106182822.GH14914@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201012153850.26996-3-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/6/2020 10:28 AM, Borislav Petkov wrote:
-> On Fri, Nov 06, 2020 at 10:16:47AM -0800, Yu, Yu-cheng wrote:
->> In the current shell, if GLIBC_TUNABLES variable is set as such,
->> applications started will have CET features disabled.  I can put more
->> details here, or maybe a reference to the GLIBC man pages.
+On Mon, Oct 12, 2020 at 08:38:26AM -0700, Yu-cheng Yu wrote:
+> Add CPU feature flags for Control-flow Enforcement Technology (CET).
 > 
-> Why do you keep repeating "the current shell"? You pass it with
-> setenv(3) too, can't you?
+> CPUID.(EAX=7,ECX=0):ECX[bit 7] Shadow stack
+> CPUID.(EAX=7,ECX=0):EDX[bit 20] Indirect Branch Tracking
 > 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Reviewed-by: Borislav Petkov <bp@suse.de>
 
-Ture.  I will revise it.
+This is not the patch I reviewed, why do you keep my Reviewed-by tag?
 
-Yu-cheng
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/include/asm/cpufeatures.h       | 2 ++
+>  arch/x86/kernel/cpu/cpuid-deps.c         | 2 ++
+>  tools/arch/x86/include/asm/cpufeatures.h | 2 ++
+>  3 files changed, 6 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 2901d5df4366..c794e18e8a14 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -341,6 +341,7 @@
+>  #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
+>  #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
+>  #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
+> +#define X86_FEATURE_SHSTK		(16*32+ 7) /* Shadow Stack */
+>  #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
+>  #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
+>  #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
+> @@ -370,6 +371,7 @@
+>  #define X86_FEATURE_SERIALIZE		(18*32+14) /* SERIALIZE instruction */
+>  #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
+>  #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
+> +#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
+>  #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
+>  #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
+>  #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
+> diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+> index 3cbe24ca80ab..fec83cc74b9e 100644
+> --- a/arch/x86/kernel/cpu/cpuid-deps.c
+> +++ b/arch/x86/kernel/cpu/cpuid-deps.c
+> @@ -69,6 +69,8 @@ static const struct cpuid_dep cpuid_deps[] = {
+>  	{ X86_FEATURE_CQM_MBM_TOTAL,		X86_FEATURE_CQM_LLC   },
+>  	{ X86_FEATURE_CQM_MBM_LOCAL,		X86_FEATURE_CQM_LLC   },
+>  	{ X86_FEATURE_AVX512_BF16,		X86_FEATURE_AVX512VL  },
+> +	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
+> +	{ X86_FEATURE_IBT,			X86_FEATURE_XSAVES    },
+>  	{}
+>  };
+>  
+> diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+> index 2901d5df4366..c794e18e8a14 100644
+> --- a/tools/arch/x86/include/asm/cpufeatures.h
+> +++ b/tools/arch/x86/include/asm/cpufeatures.h
+> @@ -341,6 +341,7 @@
+>  #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
+>  #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
+>  #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
+> +#define X86_FEATURE_SHSTK		(16*32+ 7) /* Shadow Stack */
+>  #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
+>  #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
+>  #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
+> @@ -370,6 +371,7 @@
+>  #define X86_FEATURE_SERIALIZE		(18*32+14) /* SERIALIZE instruction */
+>  #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
+>  #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
+> +#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
+>  #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
+>  #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
+>  #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
+
+We don't sync the respective change in tools/ - Arnaldo does.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
