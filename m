@@ -2,146 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 040832A9CAC
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 19:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D5B2A9D8C
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 20:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727341AbgKFSuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 13:50:12 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:38510 "EHLO mail.skyhub.de"
+        id S1728059AbgKFTI4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 14:08:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56322 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726415AbgKFSuL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 6 Nov 2020 13:50:11 -0500
-Received: from zn.tnic (p200300ec2f0d1f00570cf78b071a7fce.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:1f00:570c:f78b:71a:7fce])
+        id S1725868AbgKFTIz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 6 Nov 2020 14:08:55 -0500
+Received: from gaia (unknown [2.26.170.190])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F9DE1EC047F;
-        Fri,  6 Nov 2020 19:50:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1604688609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rCjHT9H15zsENMgb4IN4TU+wgdULdhkDBZCw8em2rRs=;
-        b=KCvW6KUcX78rxeIqIgflI7yu/cLWVa2Ywjf/+DHV5HU2ShdtN1pjFg8/j7BPirG5kF3kEy
-        NnTR83hJ+iPrDYLw8R9HUnQQB6xd72PusNXFjeycYWHuXBdt6OCEYCT50rfA6CK3490Ztg
-        rkG32TO0Z4JaacgExp9LDhZmLw7Mj7w=
-Date:   Fri, 6 Nov 2020 19:49:53 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        by mail.kernel.org (Postfix) with ESMTPSA id CA06120882;
+        Fri,  6 Nov 2020 19:08:50 +0000 (UTC)
+Date:   Fri, 6 Nov 2020 19:08:48 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Atish Patra <atish.patra@wdc.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Zong Li <zong.li@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Jia He <justin.he@arm.com>, Anup Patel <anup@brainfault.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v14 02/26] x86/cpufeatures: Add CET CPU feature flags for
- Control-flow Enforcement Technology (CET)
-Message-ID: <20201106184953.GI14914@zn.tnic>
-References: <20201012153850.26996-1-yu-cheng.yu@intel.com>
- <20201012153850.26996-3-yu-cheng.yu@intel.com>
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: Re: [PATCH v4 2/5] arm64, numa: Change the numa init functions name
+ to be generic
+Message-ID: <20201106190847.GA23792@gaia>
+References: <20201006001752.248564-1-atish.patra@wdc.com>
+ <20201006001752.248564-3-atish.patra@wdc.com>
+ <20201106171403.GK29329@gaia>
+ <CAOnJCUJo795yX_7am0hdB_JFio3_ZBRHioHNcydhqEouCUynUg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201012153850.26996-3-yu-cheng.yu@intel.com>
+In-Reply-To: <CAOnJCUJo795yX_7am0hdB_JFio3_ZBRHioHNcydhqEouCUynUg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 08:38:26AM -0700, Yu-cheng Yu wrote:
-> Add CPU feature flags for Control-flow Enforcement Technology (CET).
+On Fri, Nov 06, 2020 at 09:33:14AM -0800, Atish Patra wrote:
+> On Fri, Nov 6, 2020 at 9:14 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Mon, Oct 05, 2020 at 05:17:49PM -0700, Atish Patra wrote:
+> > > diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+> > > index 7ff800045434..96502ff92af5 100644
+> > > --- a/arch/arm64/kernel/acpi_numa.c
+> > > +++ b/arch/arm64/kernel/acpi_numa.c
+> > > @@ -117,16 +117,3 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
+> > >
+> > >       node_set(node, numa_nodes_parsed);
+> > >  }
+> > > -
+> > > -int __init arm64_acpi_numa_init(void)
+> > > -{
+> > > -     int ret;
+> > > -
+> > > -     ret = acpi_numa_init();
+> > > -     if (ret) {
+> > > -             pr_info("Failed to initialise from firmware\n");
+> > > -             return ret;
+> > > -     }
+> > > -
+> > > -     return srat_disabled() ? -EINVAL : 0;
+> > > -}
+> >
+> > I think it's better if arm64_acpi_numa_init() and arm64_numa_init()
+> > remained in the arm64 code. It's not really much code to be shared.
 > 
-> CPUID.(EAX=7,ECX=0):ECX[bit 7] Shadow stack
-> CPUID.(EAX=7,ECX=0):EDX[bit 20] Indirect Branch Tracking
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Reviewed-by: Borislav Petkov <bp@suse.de>
+> RISC-V will probably support ACPI one day. The idea is to not to do
+> exercise again in future.
+> Moreover, there will be arch_numa_init which will be used by RISC-V
+> and there will be arm64_numa_init
+> used by arm64. However, if you feel strongly about it, I am happy to
+> move back those two functions to arm64.
 
-This is not the patch I reviewed, why do you keep my Reviewed-by tag?
+I don't have a strong view on this, only if there's a risk at some point
+of the implementations diverging (e.g. quirks). We can revisit it if
+that happens.
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/x86/include/asm/cpufeatures.h       | 2 ++
->  arch/x86/kernel/cpu/cpuid-deps.c         | 2 ++
->  tools/arch/x86/include/asm/cpufeatures.h | 2 ++
->  3 files changed, 6 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 2901d5df4366..c794e18e8a14 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -341,6 +341,7 @@
->  #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
->  #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
->  #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
-> +#define X86_FEATURE_SHSTK		(16*32+ 7) /* Shadow Stack */
->  #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
->  #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
->  #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
-> @@ -370,6 +371,7 @@
->  #define X86_FEATURE_SERIALIZE		(18*32+14) /* SERIALIZE instruction */
->  #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
->  #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
-> +#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
->  #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
->  #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
->  #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
-> diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-> index 3cbe24ca80ab..fec83cc74b9e 100644
-> --- a/arch/x86/kernel/cpu/cpuid-deps.c
-> +++ b/arch/x86/kernel/cpu/cpuid-deps.c
-> @@ -69,6 +69,8 @@ static const struct cpuid_dep cpuid_deps[] = {
->  	{ X86_FEATURE_CQM_MBM_TOTAL,		X86_FEATURE_CQM_LLC   },
->  	{ X86_FEATURE_CQM_MBM_LOCAL,		X86_FEATURE_CQM_LLC   },
->  	{ X86_FEATURE_AVX512_BF16,		X86_FEATURE_AVX512VL  },
-> +	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
-> +	{ X86_FEATURE_IBT,			X86_FEATURE_XSAVES    },
->  	{}
->  };
->  
-> diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
-> index 2901d5df4366..c794e18e8a14 100644
-> --- a/tools/arch/x86/include/asm/cpufeatures.h
-> +++ b/tools/arch/x86/include/asm/cpufeatures.h
-> @@ -341,6 +341,7 @@
->  #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
->  #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
->  #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
-> +#define X86_FEATURE_SHSTK		(16*32+ 7) /* Shadow Stack */
->  #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
->  #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
->  #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
-> @@ -370,6 +371,7 @@
->  #define X86_FEATURE_SERIALIZE		(18*32+14) /* SERIALIZE instruction */
->  #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
->  #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
-> +#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
->  #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
->  #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
->  #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
+It may be worth swapping patches 1 and 2 so that you don't have an
+arm64_* function in the core code after the first patch (more of a
+nitpick). Either way, feel free to add my ack on both patches:
 
-We don't sync the respective change in tools/ - Arnaldo does.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
