@@ -2,192 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1982A9AEE
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 18:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1D42A9AF3
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 18:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727697AbgKFRd1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 12:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S1727499AbgKFReZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 12:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727499AbgKFRd0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 12:33:26 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E46C0613CF
-        for <linux-arch@vger.kernel.org>; Fri,  6 Nov 2020 09:33:26 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id z2so1727008ilh.11
-        for <linux-arch@vger.kernel.org>; Fri, 06 Nov 2020 09:33:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ZI7U3izYBLuKgwxS1LJeRXMFqpXLyUguXUomcL5pdk=;
-        b=Gum7idwrRZT5cLtv5uC2Sol2ja8VuOwCY2LT1Rmh5IGcI+Zaj1U8ZZl7uHAfTB/K+4
-         zwc01wlq6zZLsaM2E95LmhahaauO+pYSvPz9R40ehLEkrBdCtsMEF2Ryf0vyQWUH3gwF
-         OLrrVouaLiZ0iDFQ1wOGn5DnXRwRIKsUmSkPY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ZI7U3izYBLuKgwxS1LJeRXMFqpXLyUguXUomcL5pdk=;
-        b=fqeE/F3SelyYnrwBjmSrL7JmUS+FZxnoWHQZasFJcxX7+/Ac53STpY1b7spvSEsoT2
-         w5cNGJp0++OPhnLRCYvdIlE9UYfrWg5/XqlUN0kR1jQba8zlI8mjlLkgPUp2zXewjh5A
-         TpcKCTWURRkhJr3RfE4NRrhXmbxSEaK+moaDMkscxf3SDIg41iapDTEdy57EYxTH38Pb
-         zZY5m3jaecs9zx3jkoav2iQbita9rcoFrEi+PyRxZQBeuSNWGP4NRlFpuZ+aRJItq9uE
-         mgmVxM2LKQ1YDbOG8WJl//nqtXpfhlwhVY99dKSVW1SkVVL7FTQSqfazTa758ogThHaf
-         /ajQ==
-X-Gm-Message-State: AOAM531+6qYy+qwsTZOhhe3r/Aun2yoGgAhi1/DJw9xmgkHT1nhvlJQQ
-        jlZdn+UQQs4+6AyO5o9ClNwR/S8GXhl7bDCAz7V3
-X-Google-Smtp-Source: ABdhPJxQKkLDaYAAvOSbnwEMmdO14qmO69Gu2BtyVBOiLFGnveflirWOvnXE8aUK7P43i2+nv0iQkJp/BpemBT5JVeU=
-X-Received: by 2002:a05:6e02:111:: with SMTP id t17mr2266305ilm.79.1604684006022;
- Fri, 06 Nov 2020 09:33:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20201006001752.248564-1-atish.patra@wdc.com> <20201006001752.248564-3-atish.patra@wdc.com>
- <20201106171403.GK29329@gaia>
-In-Reply-To: <20201106171403.GK29329@gaia>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 6 Nov 2020 09:33:14 -0800
-Message-ID: <CAOnJCUJo795yX_7am0hdB_JFio3_ZBRHioHNcydhqEouCUynUg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] arm64, numa: Change the numa init functions name
- to be generic
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Atish Patra <atish.patra@wdc.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Zong Li <zong.li@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Jia He <justin.he@arm.com>, Anup Patel <anup@brainfault.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        with ESMTP id S1727352AbgKFReZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 12:34:25 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F23AC0613CF;
+        Fri,  6 Nov 2020 09:34:25 -0800 (PST)
+Received: from zn.tnic (p200300ec2f0d1f00ad832f6a7d59b60b.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:1f00:ad83:2f6a:7d59:b60b])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B492A1EC0472;
+        Fri,  6 Nov 2020 18:34:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1604684062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=sZ9sdfZO0dp3q+XlR5ns+dfmE83j+UNdPPPEebExe5c=;
+        b=d26LGmNknsIHWGQjHbilUlMAKQzgZcL4TLfb795hEAJ3dnrB5du0h8A9kwucaFuvlgIk+m
+        HNk4fbqCpqh+DE3pPXsUHFd+k8vVaOhgRZbcQH0+hVGjl6ntbafz75XBW73Omxfw9585ag
+        WtfzHj5fRCcHMYKBeTGhjrNwJs80T9M=
+Date:   Fri, 6 Nov 2020 18:34:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v14 01/26] Documentation/x86: Add CET description
+Message-ID: <20201106173410.GG14914@zn.tnic>
+References: <20201012153850.26996-1-yu-cheng.yu@intel.com>
+ <20201012153850.26996-2-yu-cheng.yu@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201012153850.26996-2-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 6, 2020 at 9:14 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Mon, Oct 05, 2020 at 05:17:49PM -0700, Atish Patra wrote:
-> > diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
-> > index 7ff800045434..96502ff92af5 100644
-> > --- a/arch/arm64/kernel/acpi_numa.c
-> > +++ b/arch/arm64/kernel/acpi_numa.c
-> > @@ -117,16 +117,3 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
-> >
-> >       node_set(node, numa_nodes_parsed);
-> >  }
-> > -
-> > -int __init arm64_acpi_numa_init(void)
-> > -{
-> > -     int ret;
-> > -
-> > -     ret = acpi_numa_init();
-> > -     if (ret) {
-> > -             pr_info("Failed to initialise from firmware\n");
-> > -             return ret;
-> > -     }
-> > -
-> > -     return srat_disabled() ? -EINVAL : 0;
-> > -}
->
-> I think it's better if arm64_acpi_numa_init() and arm64_numa_init()
-> remained in the arm64 code. It's not really much code to be shared.
->
-
-RISC-V will probably support ACPI one day. The idea is to not to do
-exercise again in future.
-Moreover, there will be arch_numa_init which will be used by RISC-V
-and there will be arm64_numa_init
-used by arm64. However, if you feel strongly about it, I am happy to
-move back those two functions to arm64.
-
-In case, we decide to go that route, can we define arm64_numa_init in
-mm/init.c ?
-Defining numa.c just for arm64_numa_init in arm64 may be an overkill.
-
-> > diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-> > index 73f8b49d485c..74b4f2ddad70 100644
-> > --- a/drivers/base/arch_numa.c
-> > +++ b/drivers/base/arch_numa.c
-> > @@ -13,7 +13,6 @@
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> >
-> > -#include <asm/acpi.h>
-> >  #include <asm/sections.h>
-> >
-> >  struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
-> > @@ -444,16 +443,37 @@ static int __init dummy_numa_init(void)
-> >       return 0;
-> >  }
-> >
-> > +#ifdef CONFIG_ACPI_NUMA
-> > +static int __init arch_acpi_numa_init(void)
-> > +{
-> > +     int ret;
-> > +
-> > +     ret = acpi_numa_init();
-> > +     if (ret) {
-> > +             pr_info("Failed to initialise from firmware\n");
-> > +             return ret;
-> > +     }
-> > +
-> > +     return srat_disabled() ? -EINVAL : 0;
-> > +}
-> > +#else
-> > +static int __init arch_acpi_numa_init(void)
-> > +{
-> > +     return -EOPNOTSUPP;
-> > +}
-> > +
-> > +#endif
-> > +
-> >  /**
-> > - * arm64_numa_init() - Initialize NUMA
-> > + * arch_numa_init() - Initialize NUMA
-> >   *
-> >   * Try each configured NUMA initialization method until one succeeds. The
-> > - * last fallback is dummy single node config encomapssing whole memory.
-> > + * last fallback is dummy single node config encompassing whole memory.
-> >   */
-> > -void __init arm64_numa_init(void)
-> > +void __init arch_numa_init(void)
-> >  {
-> >       if (!numa_off) {
-> > -             if (!acpi_disabled && !numa_init(arm64_acpi_numa_init))
-> > +             if (!acpi_disabled && !numa_init(arch_acpi_numa_init))
-> >                       return;
-> >               if (acpi_disabled && !numa_init(of_numa_init))
-> >                       return;
->
-> Does riscv even have an acpi_disabled variable?
->
-It is defined in "include/linux/acpi.h" which is included in arch_numa.c
-
-> --
-> Catalin
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+On Mon, Oct 12, 2020 at 08:38:25AM -0700, Yu-cheng Yu wrote:
+> +[1] Overview
+> +============
+> +
+> +Control-flow Enforcement Technology (CET) is an Intel processor feature
+> +that provides protection against return/jump-oriented programming (ROP)
+> +attacks.  It can be set up to protect both applications and the kernel.
+> +Only user-mode protection is implemented in the 64-bit kernel, including
+> +support for running legacy 32-bit applications.
+> +
+> +CET introduces Shadow Stack and Indirect Branch Tracking.  Shadow stack is
+> +a secondary stack allocated from memory and cannot be directly modified by
+> +applications.  When executing a CALL, the processor pushes the return
+				       ^
+				    . .. instruction ...
 
 
+> +address to both the normal stack and the shadow stack.  Upon function
+> +return, the processor pops the shadow stack copy and compares it to the
+> +normal stack copy.  If the two differ, the processor raises a control-
+> +protection fault.  Indirect branch tracking verifies indirect CALL/JMP
+> +targets are intended as marked by the compiler with 'ENDBR' opcodes.
+> +
+> +There are two kernel configuration options:
+> +
+> +    X86_SHADOW_STACK_USER, and
+> +    X86_BRANCH_TRACKING_USER.
+> +
+> +These need to be enabled to build a CET-enabled kernel, and Binutils v2.31
+> +and GCC v8.1 or later are required to build a CET kernel.  To build a CET-
+> +enabled application, GLIBC v2.28 or later is also required.
+> +
+> +There are two command-line options for disabling CET features::
+> +
+> +    no_user_shstk - disables user shadow stack, and
+> +    no_user_ibt   - disables user indirect branch tracking.
+> +
+> +At run time, /proc/cpuinfo shows CET features if the processor supports
+> +CET.
+> +
+> +[2] Application Enabling
+> +========================
+> +
+> +An application's CET capability is marked in its ELF header and can be
+> +verified from the following command output, in the NT_GNU_PROPERTY_TYPE_0
+> +field:
+> +
+> +    readelf -n <application>
+
+Can be verified how? What does it say for a CET-enabled executable? Put
+it here in the doc pls.
+
+> +
+> +If an application supports CET and is statically linked, it will run with
+> +CET protection.  If the application needs any shared libraries, the loader
+> +checks all dependencies and enables CET when all requirements are met.
+> +
+> +[3] Backward Compatibility
+> +==========================
+> +
+> +GLIBC provides a few tunables for backward compatibility.
+> +
+> +GLIBC_TUNABLES=glibc.tune.hwcaps=-SHSTK,-IBT
+> +    Turn off SHSTK/IBT for the current shell.
+
+For the current shell? How?
+
+You mean, you execute the kernel shell with that variable set? So you
+set this variable in any executable's env which links with glibc in
+order to disable CET?
+
+In any case, this needs clarification.
 
 -- 
-Regards,
-Atish
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
