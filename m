@@ -2,92 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21DE2A9206
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 10:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289532A92D9
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Nov 2020 10:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbgKFJCc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Nov 2020 04:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S1726589AbgKFJgV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Nov 2020 04:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726027AbgKFJC2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 04:02:28 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3F1C0613CF
-        for <linux-arch@vger.kernel.org>; Fri,  6 Nov 2020 01:02:27 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id v19so596952lji.5
-        for <linux-arch@vger.kernel.org>; Fri, 06 Nov 2020 01:02:27 -0800 (PST)
+        with ESMTP id S1726578AbgKFJgV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Nov 2020 04:36:21 -0500
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD88C0613D2
+        for <linux-arch@vger.kernel.org>; Fri,  6 Nov 2020 01:36:20 -0800 (PST)
+Received: by mail-lj1-x243.google.com with SMTP id o13so672575ljj.11
+        for <linux-arch@vger.kernel.org>; Fri, 06 Nov 2020 01:36:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gGpm+hTgP3uSHc11kp/wC/9AQaj0Wxc5iwlyk0l4rxU=;
-        b=wubGnpb1Wk3yX0c3VStUaEQWmvHsW7CyYe5k/5JpppMRaNKhSxvZwzi6+l+B17Toqx
-         TxcuChm2PsWjT3wmCjLSFCqlc6GrWcbk+bCmyLTX7tt6q+SdmHh1KPErgv/j+hC5Zxbs
-         MMkgs9gJhHT5Jc2Ga18UZ6Gmuv1m35fRv91zZcGI7saFibfT4JpZ40GHRLxIjtVdsGPP
-         1HMdDGzc5mF0rmvewC0WKU6atzUIkS7ZInNX6yBSt8PfIfeHWDgjTbdiErWyFrk+EwaC
-         szUyHdXneTpqcWQf2XlFQf42kLcHxSvS/9Qj8EQDSDi2bqba+X4gLNhK0vaCBG/Nfqos
-         lHhg==
+        bh=q326GXxs8YkWuvBRrekt++B5YyugaqPURgSA3otIq6U=;
+        b=XOdrV8ei8AtuxGdV1ULzurTDZi9h0STRi4e6h9KSaQcs9JaVCAn0s20MSYRGsfiFhS
+         cAQ5HcxJvNf0bcm1aZwo8OiJ6W0Fup+vqbs+neWVychssgU12cZHqou2LvwZxZ5+zw/O
+         UbY+h3caECgBTLExtoKALN2LeSJxBz6tIItFeB7JXnns2q5n4Um4KSY+uNaYOmCdF167
+         NJtEYQhcNGeAodeU/Pg9ZM0jYbX3UIxHAPtpN3fZkoLi9Yo0dKHqYBv2dMTK3YUSmFaA
+         IfnlybJGiKErfJm73wIsfRzvHBwMNHy3ybeANKJ4joxvD1nWgm+PtNMAh5sXYCS5e7k8
+         xGBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gGpm+hTgP3uSHc11kp/wC/9AQaj0Wxc5iwlyk0l4rxU=;
-        b=XRrRBfPYH/bkmsZOx4qMrn5D4jrJX+l5qtooLUP29hp5oCszEgVpm/tuGbgg89JmiC
-         FRAN3VoL7UsDR9tUj/1/nDfppTFRcVpFcqVrBNW7k05Uzq5u292oWCBUA6n1tVBXSNoI
-         ucGbga1LrxaFGBWFZeEvjRZVFQTHRQWcwSpI5j6AcXLHHZIZANFauFrQbwBAX0ZL3Ri3
-         S1tEbhVP6zU6Syk80igF/gjD1xyOL3K1qjS0CreeFMl/8OETLoFPg2iK0ZYqzhWTlZCo
-         u6PTW9/ciKQ2i76eZSgD78Xik9vKpt02DUEtbTcDGtjSFxFjMYheL6lkM08jGoh5uJvk
-         Yp/g==
-X-Gm-Message-State: AOAM533JV1AuSvVnXuJsslqfnbd2Z4t4TBRvfk8/FuFcw/TtD4bOXvjI
-        RzdDTL3NJXU57TD4EfU0NcVJue1Gte6g3LvAW++5aA==
-X-Google-Smtp-Source: ABdhPJwpBGjD4hxUWe5IBanElpgpL/GBbicPDmJOUdpSaqy6eP8G9wyJ2i0EBTejTmRu+M3D7rzTZYnldm2CMLo7h9o=
-X-Received: by 2002:a05:651c:1205:: with SMTP id i5mr409279lja.283.1604653345700;
- Fri, 06 Nov 2020 01:02:25 -0800 (PST)
+        bh=q326GXxs8YkWuvBRrekt++B5YyugaqPURgSA3otIq6U=;
+        b=PMug+A8ghpyDLuQlHpRCp4ur9rweqsqv8JZFJAAoi0NaGLz7O13Mu5HxOKsnHNsqcN
+         bnkmUo712fm4V7TETRkK6ku/YXPCjSo48DqqtQt7enqwuIT2oHJ9smSdDqyT28wAlbKU
+         FWsLCa6qiF4Vf4Kgz1pmTzAgRfpP08yJDIqPDxeDpVk22PopAq+910gDjSsf7aagniUn
+         9c1erzUb9I9ohv+VVT3NGPL6zOAM2fXr7AYgTMRaQGnWuRydRz2Hy6s2KZj20T2JDFFt
+         ILDd1a8oi3k4b0PamI41Sk5MEDithd9Bru6fU46CpFrUteUqbefeEFfEYA9b2nwglLLl
+         XUJg==
+X-Gm-Message-State: AOAM530V1Ixu3AKZrlfe+NXuOQpOlRBPUZOmxSv+R+QMOn35OsmZduuk
+        yXC2zODi2+B/2sl7lrEz8krVLGYLpH+EdjdUpPsAJA==
+X-Google-Smtp-Source: ABdhPJzROlV5g3M3Pzjhr+1raVc/1hLidCyn5chZ4duWrpT16uo1Ir8x1bNuTAoV3x713D+qUJtWOjkKrtVhYQnc/ao=
+X-Received: by 2002:a2e:80d2:: with SMTP id r18mr465456ljg.286.1604655379127;
+ Fri, 06 Nov 2020 01:36:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20201030154519.1245983-1-arnd@kernel.org> <20201030154919.1246645-1-arnd@kernel.org>
- <20201030154919.1246645-2-arnd@kernel.org>
-In-Reply-To: <20201030154919.1246645-2-arnd@kernel.org>
+References: <20201030154519.1245983-1-arnd@kernel.org>
+In-Reply-To: <20201030154519.1245983-1-arnd@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 6 Nov 2020 10:02:14 +0100
-Message-ID: <CACRpkdZaQnG-mFs6q4DGtupRbcw50mhimsKmFz0FxOGLbSNO_w@mail.gmail.com>
-Subject: Re: [PATCH 2/9] ARM: traps: use get_kernel_nofault instead of set_fs()
+Date:   Fri, 6 Nov 2020 10:36:07 +0100
+Message-ID: <CACRpkdauAb+Rss7XU5tNyi8BwhSdPiTJwy+YL08dkf6VnNkd-g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] ARM: remove set_fs callers and implementation
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Russell King <linux@armlinux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux-Arch <linux-arch@vger.kernel.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
+        Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 4:49 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Fri, Oct 30, 2020 at 4:45 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-> From: Arnd Bergmann <arnd@arndb.de>
+> This is the rebased version of my ARM set_fs patches on top of
+> v5.10-rc1, dropping the TASK_SIZE_MAX patch but leaving everything
+> else unchanged.
 >
-> ARM uses set_fs() and __get_user() to allow the stack dumping code to
-> access possibly invalid pointers carefully. These can be changed to the
-> simpler get_kernel_nofault(), and allow the eventual removal of set_fs().
->
-> dump_instr() will print either kernel or user space pointers,
-> depending on how it was called. For dump_mem(), I assume we are only
-> interested in kernel pointers, and the only time that this is called
-> with user_mode(regs)==true is when the regs themselves are unreliable
-> as a result of the condition that caused the trap.
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> I have tested the oabi-compat changes using the LTP tests for the three
+> modified syscalls using an Armv7 kernel and a Debian 5 OABI user space.
 
-Not to mention the drastically improved readability of the code,
-as ARM developers no more needs to cross-reference the
-x86 FS segment register to figure out what this might be
-doing.
+I tested this patch set on the ARM Footbridge (SA110) with an ages old
+Red Hat Linux OABI userspace.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+It works.
+
+Tested-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
