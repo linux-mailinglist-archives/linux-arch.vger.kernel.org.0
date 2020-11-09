@@ -2,65 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0E52AA276
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Nov 2020 06:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E202AB52A
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Nov 2020 11:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbgKGFIt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 7 Nov 2020 00:08:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59010 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726880AbgKGFIt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 7 Nov 2020 00:08:49 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727077AbgKIKmN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Nov 2020 05:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726423AbgKIKmM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Nov 2020 05:42:12 -0500
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AB1C0613CF;
+        Mon,  9 Nov 2020 02:42:12 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6BF4C20872;
-        Sat,  7 Nov 2020 05:08:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604725727;
-        bh=55KoHb8qRGofoRpTcqTP6+Sj4wA/iZddMk3945/FVcc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=clH9jKll51JXfmaZOHedvXOzyp7t2WgbUCWUJcFUbBilgShWQhDpvNoMEYLV6qd43
-         +Fl/JEjNDA8ao703NxINPTq7DhZShDMQQ3SqcctGfKdjL2V0jw0fCkDbxitCqY1TJo
-         ueNrSwM6MnUGAptjcct12z9Zzj6EsXyQ2pksLgGM=
-Date:   Fri, 6 Nov 2020 21:08:45 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4CV6xs6XHyzQkm5;
+        Mon,  9 Nov 2020 11:42:09 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id GrIZVsje57hw; Mon,  9 Nov 2020 11:42:04 +0100 (CET)
+Date:   Mon, 9 Nov 2020 11:41:59 +0100 (CET)
+From:   Hagen Paul Pfeifer <hagen@jauu.net>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michel Lespinasse <walken@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Bernd Edlinger <bernd.edlinger@hotmail.de>,
-        John Johansen <john.johansen@canonical.com>,
-        Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [RFC] proc: get_wchan() stack unwind only makes sense for
- sleeping/non-self tasks
-Message-Id: <20201106210845.e9e95e91b779a01b6751e240@linux-foundation.org>
-In-Reply-To: <20201105231132.2130132-1-vgupta@synopsys.com>
-References: <20201105231132.2130132-1-vgupta@synopsys.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Message-ID: <651318720.14321.1604918519928@office.mailbox.org>
+In-Reply-To: <20201104170247.GT4879@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20201101110935.GA4105325@laniakea> <20201102154028.GD4879@kernel.org>
+ <1547601988.128687.1604411534845@office.mailbox.org>
+ <20201103163002.GK4879@kernel.org>
+ <1988407921.138656.1604489953944@office.mailbox.org>
+ <20201104170247.GT4879@kernel.org>
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -3.01 / 15.00 / 15.00
+X-Rspamd-Queue-Id: 2C76B177D
+X-Rspamd-UID: 6438b0
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu,  5 Nov 2020 15:11:32 -0800 Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+> On 11/04/2020 6:02 PM Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> Yes, this will work. The processes that share the memfd_secret file
+> descriptor will have access to the same memory pages, pretty much like
+> with shared memory.
 
-> Most architectures currently check this in their get_wchan() implementation
-> (ARC doesn't hence this patch). However doing this in core code shows
-> the semantics better so move the check one level up (eventually remove
-> the boiler-plate code from arches)
+Perfect!
 
-It would be nice to clean up the arch callees in the same patch, at
-least so it doesn't get forgotten about.  Are you prepared to propose
-such a change?
+Acked-by: Hagen Paul Pfeifer <hagen@jauu.net>
 
+Thank you for the effort Mike, if zeroize feature will also included it will
+be great! The memset-all-pages after use is just overkill, a dedicated flag for
+memfd_secret (or mmap) would be superior.
+
+Hagen
