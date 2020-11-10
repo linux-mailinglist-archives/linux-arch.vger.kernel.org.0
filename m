@@ -2,74 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 248212AD116
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 09:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3952AD276
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 10:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730120AbgKJIRm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 03:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729706AbgKJIRm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Nov 2020 03:17:42 -0500
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35ACC0613D1
-        for <linux-arch@vger.kernel.org>; Tue, 10 Nov 2020 00:17:41 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CVghg2QrmzlhSh0;
-        Tue, 10 Nov 2020 09:17:39 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CVghd1jfMzlh8Tf;
-        Tue, 10 Nov 2020 09:17:37 +0100 (CET)
-Subject: Re: [PATCH v23 00/12] Landlock LSM
-To:     James Morris <jmorris@namei.org>
-Cc:     "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20201103182109.1014179-1-mic@digikod.net>
- <alpine.LRH.2.21.2011101745100.9130@namei.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <421e49f4-d3ec-fd17-be42-7c73448b99a1@digikod.net>
-Date:   Tue, 10 Nov 2020 09:16:47 +0100
-User-Agent: 
+        id S1729149AbgKJJ2s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 04:28:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50708 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726825AbgKJJ2s (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Nov 2020 04:28:48 -0500
+Received: from trantor (unknown [2.26.170.190])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A184320781;
+        Tue, 10 Nov 2020 09:28:45 +0000 (UTC)
+Date:   Tue, 10 Nov 2020 09:28:43 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com
+Subject: Re: [PATCH v2 5/6] arm64: Advertise CPUs capable of running 32-bit
+ applications in sysfs
+Message-ID: <X6pdSx84CWvag02r@trantor>
+References: <20201109213023.15092-1-will@kernel.org>
+ <20201109213023.15092-6-will@kernel.org>
+ <X6o7euVw0QlysIPV@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.2011101745100.9130@namei.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X6o7euVw0QlysIPV@kroah.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Nov 10, 2020 at 08:04:26AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Nov 09, 2020 at 09:30:21PM +0000, Will Deacon wrote:
+> > Since 32-bit applications will be killed if they are caught trying to
+> > execute on a 64-bit-only CPU in a mismatched system, advertise the set
+> > of 32-bit capable CPUs to userspace in sysfs.
+> > 
+> > Signed-off-by: Will Deacon <will@kernel.org>
+> > ---
+> >  .../ABI/testing/sysfs-devices-system-cpu      |  9 +++++++++
+> >  arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
+> >  2 files changed, 28 insertions(+)
+> 
+> I still think the "kill processes that can not run on this CPU" is crazy
 
-On 10/11/2020 07:47, James Morris wrote:
-> On Tue, 3 Nov 2020, Mickaël Salaün wrote:
-> 
->> Hi,
->>
->> Can you please consider to merge this into the tree?
->>
-> 
-> I've added this to my tree:
-> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm
-> 
-> and merged into next-testing (which is pulled into linux-next).
-> 
-> 
-> Please make any further changes against the branch in my tree.
+I agree it's crazy, though we try to keep the kernel support simple
+while making it a user-space problem. The alternative is to
+force-migrate such process to a more capable CPU, potentially against
+the desired user cpumask. In addition, we'd have to block CPU hot-unplug
+in case the last 32-bit capable CPU disappears.
 
-Great, thanks!
+The only sane thing is not to allow 32-bit processes at all on such
+hardware but I think we lost that battle ;).
+
+-- 
+Catalin
