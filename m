@@ -2,25 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B34042AD465
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 12:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AC62AD6EA
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 13:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgKJLFv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 06:05:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:53968 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726152AbgKJLFv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Nov 2020 06:05:51 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72B0111D4;
-        Tue, 10 Nov 2020 03:05:50 -0800 (PST)
-Received: from [10.57.21.178] (unknown [10.57.21.178])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60C103F6CF;
-        Tue, 10 Nov 2020 03:05:48 -0800 (PST)
+        id S1730424AbgKJMzv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 07:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730368AbgKJMzv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Nov 2020 07:55:51 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFF0C0613D3
+        for <linux-arch@vger.kernel.org>; Tue, 10 Nov 2020 04:55:51 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id p22so2887543wmg.3
+        for <linux-arch@vger.kernel.org>; Tue, 10 Nov 2020 04:55:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Nv2Iddcxs1d2PfbeIZnN3SiLsasGHglATCG+tB07IsI=;
+        b=WIVjv45X5toRFfkJ1lSrT0YVSLDS40EsO3c19JdIRRJXhJJiPh5wHBhSzMa0sZkU3M
+         NN3kAzPgxlBGxobUZP1kN8kVJw6Kq/GqGFXT6CIjCr99S4nB1qziNbvIDZakx/CwB+Gv
+         OMeqbOntEMQl0liun1n0Du7Hbbkt5pZKZkmo5Y+y7YIY1iAOvJ7lCNhPJ4nEt+UJwSJ9
+         XbiHr8IRj+oCHJurlLL4waYuCZt9Nsada1DDlNpOPgb4VcwW9jbVnR/y6WgtiENSNww/
+         ZzQQ1OW6gOXj0eUbkT3YnQa82ilMVNzOCOkvQD0dKszIoVYqsVn4IFo9qPk29tkCWGHZ
+         ruhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Nv2Iddcxs1d2PfbeIZnN3SiLsasGHglATCG+tB07IsI=;
+        b=kn8c2X1ayGSzULxz4JNgROUZ+4WrvEjDzyURQxiuFlXF7R7X7Mz1BLbZAGKFDfqVNK
+         6PJXCNrUN8VIo7lCMo/tsEQOwk6gUMXKlTVtqIvr88W3mOk07Uvi0hTujux3cqSDqh8K
+         HOGdppmgajkxI9sQsJfiDPdmABtiuF3Oomtike/X+LRrObk7bWroCyqL1eS4ols46N7T
+         6vLj5yB17zAboeFzSJxo9on8mrLzD/03NkjHyG+P3ueDsnIlcjLZviBiTQMaoouM9515
+         KhHIc381yfdvkIgtOIPRpFEUv2Bz0k67iNto/vn8WFXnUYO3FpQSS6xDLwlL1oDly1kn
+         eLzQ==
+X-Gm-Message-State: AOAM530r4Llr3Oq4vLnpKKDW+DfZetb3exPid9MxBfiryKoxe2CU8bse
+        BHMqLiHmuyCaBg07+nUvDsDt19ci/11g7g==
+X-Google-Smtp-Source: ABdhPJwO00jWObsmAMNaE0hP33ILrN87kQ+KfLYdT2MJbty3Uht3B979tZpO1RurYxLHmQeuwnJKQw==
+X-Received: by 2002:a1c:9d02:: with SMTP id g2mr4804119wme.110.1605012949305;
+        Tue, 10 Nov 2020 04:55:49 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:1087:e960:613c:926b? ([2a01:e34:ed2f:f020:1087:e960:613c:926b])
+        by smtp.googlemail.com with ESMTPSA id k20sm977440wmi.15.2020.11.10.04.55.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 04:55:48 -0800 (PST)
 Subject: Re: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal
  power management
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rui.zhang@intel.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -30,13 +60,14 @@ Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
 References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
  <20201006122024.14539-4-daniel.lezcano@linaro.org>
  <8fea0109-30d4-7d67-ffeb-8e588a4dadc3@arm.com>
-Message-ID: <313a92c5-3c45-616f-1fe8-9837721f9889@arm.com>
-Date:   Tue, 10 Nov 2020 11:05:46 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <6c018f8e-41b9-55bc-4d47-d2104cabfb86@linaro.org>
+Date:   Tue, 10 Nov 2020 13:55:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <8fea0109-30d4-7d67-ffeb-8e588a4dadc3@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -44,68 +75,14 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-Actually I've found one issue when I have been trying to clean
-my testing branch with modified scmi-cpufreq.c.
+Hi Lukasz,
 
+thanks for the review
 
-On 11/10/20 9:59 AM, Lukasz Luba wrote:
-> Hi Daniel,
-> 
-> I've experimented with the patch set and went through the code again.
-> It looks good, only a few minor comments.
-> 
-> On 10/6/20 1:20 PM, Daniel Lezcano wrote:
->> On the embedded world, the complexity of the SoC leads to an
->> increasing number of hotspots which need to be monitored and mitigated
->> as a whole in order to prevent the temperature to go above the
->> normative and legally stated 'skin temperature'.
+On 10/11/2020 10:59, Lukasz Luba wrote:
 
-[snip]
+[ ... ]
 
->> diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
->> new file mode 100644
->> index 000000000000..6696bdcfdb87
->> --- /dev/null
->> +++ b/include/linux/dtpm.h
->> @@ -0,0 +1,73 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (C) 2020 Linaro Ltd
->> + *
->> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
->> + */
->> +#ifndef ___DTPM_H__
->> +#define ___DTPM_H__
->> +
->> +#include <linux/of.h>
->> +#include <linux/powercap.h>
->> +
->> +#define MAX_DTPM_DESCR 8
->> +#define MAX_DTPM_CONSTRAINTS 1
->> +
->> +struct dtpm {
->> +    struct powercap_zone zone;
->> +    struct dtpm *parent;
->> +    struct list_head sibling;
->> +    struct list_head children;
->> +    spinlock_t lock;
->> +    u64 power_limit;
->> +    u64 power_max;
->> +    u64 power_min;
->> +    int weight;
->> +    void *private;
->> +};
->> +
->> +struct dtpm_descr;
->> +
->> +typedef int (*dtpm_init_t)(struct dtpm_descr *);
->> +
->> +struct dtpm_descr {
->> +    struct dtpm *parent;
->> +    const char *name;
->> +    dtpm_init_t init;
->> +};
->> +
 >> +/* Init section thermal table */
 >> +extern struct dtpm_descr *__dtpm_table[];
 >> +extern struct dtpm_descr *__dtpm_table_end[];
@@ -117,7 +94,18 @@ On 11/10/20 9:59 AM, Lukasz Luba wrote:
 > I had to change the section name to string, to pass compilation:
 > __used __section("__dtpm_table") = &name
 > I don't know if it's my compiler or configuration.
-> 
+
+Actually, it is:
+
+commit 33def8498fdde180023444b08e12b72a9efed41d
+Author: Joe Perches <joe@perches.com>
+Date:   Wed Oct 21 19:36:07 2020 -0700
+
+    treewide: Convert macro and uses of __section(foo) to __section("foo")
+
+Your change is correct, I've noticed it a few days ago when rebasing the
+series.
+
 > I've tried to register this DTPM in scmi-cpufreq.c with macro
 > proposed in patch 4/4 commit message, but I might missed some
 > important includes there...
@@ -146,113 +134,40 @@ On 11/10/20 9:59 AM, Lukasz Luba wrote:
 >> +int dtpm_register_parent(const char *name, struct dtpm *dtpm,
 >> +             struct dtpm *parent);
 >> +
->> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm 
+>> +int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm
 >> *parent,
 >> +          struct powercap_zone_ops *ops, int nr_constraints,
 >> +          struct powercap_zone_constraint_ops *const_ops);
-
-This header is missing
-#ifdef CONFIG_DTPM with static inline functions and empty DTPM_DECLARE()
-macro.
-I got these issues, when my testing code in scmi-cpufreq.c was compiled
-w/o CONFIG_DTPM and DTPM_CPU
-
-/usr/bin/aarch64-linux-gnu-ld: warning: orphan section `__dtpm_table' 
-from `drivers/cpufreq/scmi-cpufreq.o' being placed in section 
-`__dtpm_table'.
-/usr/bin/aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-/usr/bin/aarch64-linux-gnu-ld: Unexpected run-time procedure linkages 
-detected!
-drivers/cpufreq/scmi-cpufreq.o: In function `dtpm_register_pkg':
-/data/linux/drivers/cpufreq/scmi-cpufreq.c:272: undefined reference to 
-`dtpm_alloc'
-/data/linux/drivers/cpufreq/scmi-cpufreq.c:276: undefined reference to 
-`dtpm_register_parent'
-/data/linux/drivers/cpufreq/scmi-cpufreq.c:280: undefined reference to 
-`dtpm_register_cpu'
-Makefile:1164: recipe for target 'vmlinux' failed
-
-
-The diff bellow fixed my issues. Then I had one for patch 4/4
-for static inline int dtpm_register_cpu() function. I've followed the
-thermal.h scheme with -ENODEV, but you can choose different approach.
---------------------------8<---------------------------------------------
-diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
-index 6696bdcfdb87..0ef784ca5d0b 100644
---- a/include/linux/dtpm.h
-+++ b/include/linux/dtpm.h
-@@ -40,6 +40,7 @@ struct dtpm_descr {
-  extern struct dtpm_descr *__dtpm_table[];
-  extern struct dtpm_descr *__dtpm_table_end[];
-
-+#ifdef CONFIG_DTPM
-  #define DTPM_TABLE_ENTRY(name)			\
-  	static typeof(name) *__dtpm_table_entry_##name	\
-  	__used __section(__dtpm_table) = &name
-@@ -70,4 +71,36 @@ int dtpm_register_parent(const char *name, struct 
-dtpm *dtpm,
-  int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm 
-*parent,
-  		  struct powercap_zone_ops *ops, int nr_constraints,
-  		  struct powercap_zone_constraint_ops *const_ops);
--#endif
-+#else
-+#define DTPM_DECLARE(name)
-+static inline
-+int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max)
-+{
-+	return -ENODEV;
-+}
-+static inline int dtpm_release_zone(struct powercap_zone *pcz)
-+{
-+	return -ENODEV;
-+}
-+static inline struct dtpm *dtpm_alloc(void)
-+{
-+	return ERR_PTR(-ENODEV);
-+}
-+static inline void dtpm_unregister(struct dtpm *dtpm)
-+{ }
-+static inline
-+int dtpm_register_parent(const char *name, struct dtpm *dtpm,
-+			 struct dtpm *parent)
-+{
-+	return -ENODEV;
-+}
-+static inline
-+int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
-+		  struct powercap_zone_ops *ops, int nr_constraints,
-+		  struct powercap_zone_constraint_ops *const_ops)
-+{
-+	return -ENODEV;
-+}
-+#endif /* CONFIG_DTPM */
-+
-+#endif /* __DTPM_H__ */
-
------------------------------>8-------------------------------------------
-
-
 >> +#endif
 >>
 > 
 > Minor comment. This new framework deserves more debug prints, especially
 > in registration/unregistration paths. I had to put some, to test it.
 > But it can be done later as well, after it gets into mainline.
-> 
+
+Ok, I will add some debug traces.
+
 > I have also run different hotplug stress tests to check this tree
 > locking. The userspace process constantly reading these values, while
 > the last CPU in the cluster was going on/off and node was detaching.
 > I haven't seen any problems, but the tree wasn't so deep.
 > Everything was calculated properly, no error, null pointers, etc.
-> 
+
+Great! thank you very much for this test
+
 > Apart from the spelling minor issues and the long constraint name, LGTM
 > 
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com> > Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Please ignore these two for a while. But if you decide to take this diff 
-above, you can add these two tags then in v2.
-This is the only issue that I see.
+Thanks for the review
 
-Regards,
-Lukasz
+  -- Daniel
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
