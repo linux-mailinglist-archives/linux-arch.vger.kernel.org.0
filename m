@@ -2,75 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78ADF2ACFFA
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 07:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1096E2AD035
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 08:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728234AbgKJGsZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 01:48:25 -0500
-Received: from namei.org ([65.99.196.166]:39838 "EHLO namei.org"
+        id S1726690AbgKJHEb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 02:04:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43362 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726006AbgKJGsY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Nov 2020 01:48:24 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 0AA6lEtx009182;
-        Tue, 10 Nov 2020 06:47:14 GMT
-Date:   Tue, 10 Nov 2020 17:47:14 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v23 00/12] Landlock LSM
-In-Reply-To: <20201103182109.1014179-1-mic@digikod.net>
-Message-ID: <alpine.LRH.2.21.2011101745100.9130@namei.org>
-References: <20201103182109.1014179-1-mic@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1726462AbgKJHEa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Nov 2020 02:04:30 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 76C8D2068D;
+        Tue, 10 Nov 2020 07:04:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604991870;
+        bh=GodH8mXkwS3BpyGB+OPflXphx7SbHt5K0HWedDmjuZk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OAFy/2Z6HjpCOsMXkc3yHhuNjvyxjE9HbjninumZe/AiFP5oHFKN/RkSQN6qCvBPO
+         DQWSZ8NmuftDyZPLsgjrwHYTbIwz4l7/wcbZHi1fIPYvUyQYsRv1mf4fGRE506RAJH
+         AKM5kFEtLEh+yOS/OxBALcVH8hTV8BhAWYlPWdk0=
+Date:   Tue, 10 Nov 2020 08:04:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com
+Subject: Re: [PATCH v2 5/6] arm64: Advertise CPUs capable of running 32-bit
+ applications in sysfs
+Message-ID: <X6o7euVw0QlysIPV@kroah.com>
+References: <20201109213023.15092-1-will@kernel.org>
+ <20201109213023.15092-6-will@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-1397860341-1604990838=:9130"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201109213023.15092-6-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---1665246916-1397860341-1604990838=:9130
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 3 Nov 2020, Mickaël Salaün wrote:
-
-> Hi,
+On Mon, Nov 09, 2020 at 09:30:21PM +0000, Will Deacon wrote:
+> Since 32-bit applications will be killed if they are caught trying to
+> execute on a 64-bit-only CPU in a mismatched system, advertise the set
+> of 32-bit capable CPUs to userspace in sysfs.
 > 
-> Can you please consider to merge this into the tree?
-> 
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
+>  .../ABI/testing/sysfs-devices-system-cpu      |  9 +++++++++
+>  arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
+>  2 files changed, 28 insertions(+)
 
-I've added this to my tree:
-git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm
+I still think the "kill processes that can not run on this CPU" is crazy
+but that has nothing to do with this sysfs file patch, which looks good
+to me:
 
-and merged into next-testing (which is pulled into linux-next).
-
-
-Please make any further changes against the branch in my tree.
-
-
--- 
-James Morris
-<jmorris@namei.org>
-
---1665246916-1397860341-1604990838=:9130--
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
