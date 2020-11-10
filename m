@@ -2,64 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1096E2AD035
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 08:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248212AD116
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 09:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgKJHEb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 02:04:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43362 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726462AbgKJHEa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Nov 2020 02:04:30 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76C8D2068D;
-        Tue, 10 Nov 2020 07:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604991870;
-        bh=GodH8mXkwS3BpyGB+OPflXphx7SbHt5K0HWedDmjuZk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OAFy/2Z6HjpCOsMXkc3yHhuNjvyxjE9HbjninumZe/AiFP5oHFKN/RkSQN6qCvBPO
-         DQWSZ8NmuftDyZPLsgjrwHYTbIwz4l7/wcbZHi1fIPYvUyQYsRv1mf4fGRE506RAJH
-         AKM5kFEtLEh+yOS/OxBALcVH8hTV8BhAWYlPWdk0=
-Date:   Tue, 10 Nov 2020 08:04:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, kernel-team@android.com
-Subject: Re: [PATCH v2 5/6] arm64: Advertise CPUs capable of running 32-bit
- applications in sysfs
-Message-ID: <X6o7euVw0QlysIPV@kroah.com>
-References: <20201109213023.15092-1-will@kernel.org>
- <20201109213023.15092-6-will@kernel.org>
+        id S1730120AbgKJIRm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 03:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729706AbgKJIRm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Nov 2020 03:17:42 -0500
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35ACC0613D1
+        for <linux-arch@vger.kernel.org>; Tue, 10 Nov 2020 00:17:41 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CVghg2QrmzlhSh0;
+        Tue, 10 Nov 2020 09:17:39 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CVghd1jfMzlh8Tf;
+        Tue, 10 Nov 2020 09:17:37 +0100 (CET)
+Subject: Re: [PATCH v23 00/12] Landlock LSM
+To:     James Morris <jmorris@namei.org>
+Cc:     "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20201103182109.1014179-1-mic@digikod.net>
+ <alpine.LRH.2.21.2011101745100.9130@namei.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <421e49f4-d3ec-fd17-be42-7c73448b99a1@digikod.net>
+Date:   Tue, 10 Nov 2020 09:16:47 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201109213023.15092-6-will@kernel.org>
+In-Reply-To: <alpine.LRH.2.21.2011101745100.9130@namei.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 09, 2020 at 09:30:21PM +0000, Will Deacon wrote:
-> Since 32-bit applications will be killed if they are caught trying to
-> execute on a 64-bit-only CPU in a mismatched system, advertise the set
-> of 32-bit capable CPUs to userspace in sysfs.
+
+On 10/11/2020 07:47, James Morris wrote:
+> On Tue, 3 Nov 2020, Mickaël Salaün wrote:
 > 
-> Signed-off-by: Will Deacon <will@kernel.org>
-> ---
->  .../ABI/testing/sysfs-devices-system-cpu      |  9 +++++++++
->  arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
->  2 files changed, 28 insertions(+)
+>> Hi,
+>>
+>> Can you please consider to merge this into the tree?
+>>
+> 
+> I've added this to my tree:
+> git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git landlock_lsm
+> 
+> and merged into next-testing (which is pulled into linux-next).
+> 
+> 
+> Please make any further changes against the branch in my tree.
 
-I still think the "kill processes that can not run on this CPU" is crazy
-but that has nothing to do with this sysfs file patch, which looks good
-to me:
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Great, thanks!
