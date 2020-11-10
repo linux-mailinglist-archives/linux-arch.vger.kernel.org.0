@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8AA2ADBD7
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 17:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9723E2ADBE6
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 17:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732625AbgKJQY3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 11:24:29 -0500
-Received: from mga11.intel.com ([192.55.52.93]:42886 "EHLO mga11.intel.com"
+        id S1732752AbgKJQYk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 11:24:40 -0500
+Received: from mga02.intel.com ([134.134.136.20]:25988 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730639AbgKJQWz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Nov 2020 11:22:55 -0500
-IronPort-SDR: ESUCjScixeeRV08ZgD6RV2j/J8P5a1vffdGI6ya0f8++cXDNZmOVoR23ROU01hj8zwjsccACYK
- Vws7l5pfxfLQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9801"; a="166492981"
+        id S1730285AbgKJQWy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Nov 2020 11:22:54 -0500
+IronPort-SDR: afA7vCTZ45w3iRHpxEthrlT55Wv9DDm05oAodJEjiwZ4saIJYi49bnCxKVa7Zfiy81RJv4v+aT
+ nEHsXrU1lLGA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9801"; a="157008720"
 X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="166492981"
+   d="scan'208";a="157008720"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:51 -0800
-IronPort-SDR: btnedAJXepRgTCIznTycPfe/5Ka1MFwIT0ZAGB0RSyB+Fqksri5RnOESYNHQ/Z3lZSvCu+co0n
- TatqdnoiAZcA==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:53 -0800
+IronPort-SDR: X4ZGIXYr72OoqjMRdcb2KyYOrHFdaxGQUCrbrs3fyfXGApp6XDRiaLux66jcXM+tUX9weRoVLv
+ roxMnFNfg1gg==
 X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="365572845"
+   d="scan'208";a="365572853"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:51 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -54,9 +54,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v15 11/26] x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for transition from _PAGE_DIRTY_HW to _PAGE_COW
-Date:   Tue, 10 Nov 2020 08:21:56 -0800
-Message-Id: <20201110162211.9207-12-yu-cheng.yu@intel.com>
+Subject: [PATCH v15 12/26] mm: Introduce VM_SHSTK for shadow stack memory
+Date:   Tue, 10 Nov 2020 08:21:57 -0800
+Message-Id: <20201110162211.9207-13-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201110162211.9207-1-yu-cheng.yu@intel.com>
 References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
@@ -66,100 +66,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When shadow stack is introduced, [R/O + _PAGE_DIRTY_HW] PTE is reserved
-for shadow stack.  Copy-on-write PTEs have [R/O + _PAGE_COW].
-
-When a PTE goes from [R/W + _PAGE_DIRTY_HW] to [R/O + _PAGE_COW], it could
-become a transient shadow stack PTE in two cases:
-
-The first case is that some processors can start a write but end up seeing
-a read-only PTE by the time they get to the Dirty bit, creating a transient
-shadow stack PTE.  However, this will not occur on processors supporting
-shadow stack, therefore we don't need a TLB flush here.
-
-The second case is that when the software, without atomic, tests & replaces
-_PAGE_DIRTY_HW with _PAGE_COW, a transient shadow stack PTE can exist.
-This is prevented with cmpxchg.
-
-Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
-insights to the issue.  Jann Horn provided the cmpxchg solution.
+A Shadow Stack PTE must be read-only and have _PAGE_DIRTY set.  However,
+read-only and Dirty PTEs also exist for copy-on-write (COW) pages.  These
+two cases are handled differently for page faults.  Introduce VM_SHSTK to
+track shadow stack VMAs.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/pgtable.h | 52 ++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ arch/x86/mm/mmap.c | 2 ++
+ fs/proc/task_mmu.c | 3 +++
+ include/linux/mm.h | 8 ++++++++
+ 3 files changed, 13 insertions(+)
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 07a08e763bce..5fd4d6b60383 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1229,6 +1229,32 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
- static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pte_t *ptep)
+diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
+index c90c20904a60..a22c6b6fc607 100644
+--- a/arch/x86/mm/mmap.c
++++ b/arch/x86/mm/mmap.c
+@@ -165,6 +165,8 @@ unsigned long get_mmap_base(int is_legacy)
+ 
+ const char *arch_vma_name(struct vm_area_struct *vma)
  {
-+	/*
-+	 * Some processors can start a write, but end up seeing a read-only
-+	 * PTE by the time they get to the Dirty bit.  In this case, they
-+	 * will set the Dirty bit, leaving a read-only, Dirty PTE which
-+	 * looks like a shadow stack PTE.
-+	 *
-+	 * However, this behavior has been improved and will not occur on
-+	 * processors supporting shadow stack.  Without this guarantee, a
-+	 * transition to a non-present PTE and flush the TLB would be
-+	 * needed.
-+	 *
-+	 * When changing a writable PTE to read-only and if the PTE has
-+	 * _PAGE_DIRTY_HW set, move that bit to _PAGE_COW so that the
-+	 * PTE is not a shadow stack PTE.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-+		pte_t old_pte, new_pte;
-+
-+		do {
-+			old_pte = READ_ONCE(*ptep);
-+			new_pte = pte_wrprotect(old_pte);
-+
-+		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
-+
-+		return;
-+	}
- 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
++	if (vma->vm_flags & VM_SHSTK)
++		return "[shadow stack]";
+ 	return NULL;
  }
  
-@@ -1285,6 +1311,32 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
- static inline void pmdp_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pmd_t *pmdp)
- {
-+	/*
-+	 * Some processors can start a write, but end up seeing a read-only
-+	 * PMD by the time they get to the Dirty bit.  In this case, they
-+	 * will set the Dirty bit, leaving a read-only, Dirty PMD which
-+	 * looks like a Shadow Stack PMD.
-+	 *
-+	 * However, this behavior has been improved and will not occur on
-+	 * processors supporting Shadow Stack.  Without this guarantee, a
-+	 * transition to a non-present PMD and flush the TLB would be
-+	 * needed.
-+	 *
-+	 * When changing a writable PMD to read-only and if the PMD has
-+	 * _PAGE_DIRTY_HW set, we move that bit to _PAGE_COW so that the
-+	 * PMD is not a shadow stack PMD.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-+		pmd_t old_pmd, new_pmd;
-+
-+		do {
-+			old_pmd = READ_ONCE(*pmdp);
-+			new_pmd = pmd_wrprotect(old_pmd);
-+
-+		} while (!try_cmpxchg((pmdval_t *)pmdp, (pmdval_t *)&old_pmd, pmd_val(new_pmd)));
-+
-+		return;
-+	}
- 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
- }
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 217aa2705d5d..c72143cdbb5d 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -661,6 +661,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ 		[ilog2(VM_PKEY_BIT4)]	= "",
+ #endif
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
++#ifdef CONFIG_X86_SHADOW_STACK_USER
++		[ilog2(VM_SHSTK)]	= "ss",
++#endif
+ 	};
+ 	size_t i;
  
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index db6ae4d3fb4e..c7f527bd21fb 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -304,11 +304,13 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_HIGH_ARCH_BIT_2	34	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_3	35	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_4	36	/* bit only usable on 64-bit architectures */
++#define VM_HIGH_ARCH_BIT_5	37	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_0	BIT(VM_HIGH_ARCH_BIT_0)
+ #define VM_HIGH_ARCH_1	BIT(VM_HIGH_ARCH_BIT_1)
+ #define VM_HIGH_ARCH_2	BIT(VM_HIGH_ARCH_BIT_2)
+ #define VM_HIGH_ARCH_3	BIT(VM_HIGH_ARCH_BIT_3)
+ #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
++#define VM_HIGH_ARCH_5	BIT(VM_HIGH_ARCH_BIT_5)
+ #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
+ 
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+@@ -324,6 +326,12 @@ extern unsigned int kobjsize(const void *objp);
+ #endif
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
+ 
++#ifdef CONFIG_X86_SHADOW_STACK_USER
++# define VM_SHSTK	VM_HIGH_ARCH_5
++#else
++# define VM_SHSTK	VM_NONE
++#endif
++
+ #if defined(CONFIG_X86)
+ # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
+ #elif defined(CONFIG_PPC)
 -- 
 2.21.0
 
