@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB652ADBB3
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 17:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D4F2ADBC2
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 17:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726737AbgKJQXu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 11:23:50 -0500
-Received: from mga05.intel.com ([192.55.52.43]:28141 "EHLO mga05.intel.com"
+        id S1732388AbgKJQYD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 11:24:03 -0500
+Received: from mga18.intel.com ([134.134.136.126]:12562 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730994AbgKJQW6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1730922AbgKJQW6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Tue, 10 Nov 2020 11:22:58 -0500
-IronPort-SDR: xCcqDJKG1SW8PPkgqC66jLFKJwyCrX2dOfIOqfYkjFXtqXJFhcZZrqFGbbGHkEPiQPJPPL9WYb
- yY/GzmccYPgw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9801"; a="254713404"
+IronPort-SDR: shccuWG3HT6FfqWtI40wdOsoKP2sXusUlsx+GGQS84OBfJ0UQS9cZ/O28iKUM+0NEvWv4zUdT0
+ ST9Z6AaDqvhw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9801"; a="157781969"
 X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="254713404"
+   d="scan'208";a="157781969"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:56 -0800
-IronPort-SDR: On53lC7w9+nB/NsAa8Yw99CUBO0EJGFQ6m8GklvnarS6AoMAE7ggdJwSYpCqf5M8u7/gi5pa3K
- J59362OYvNwA==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:56 -0800
+IronPort-SDR: O4DP9VBWsHs9OYuBGdMV743IPlwqTcFJueU4f0RYdXLLm5KW2GMMk3xzXPcc1AagNj3YiJFz/R
+ 2hilZ6W0c4iA==
 X-IronPort-AV: E=Sophos;i="5.77,466,1596524400"; 
-   d="scan'208";a="365572940"
+   d="scan'208";a="365572944"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:55 -0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2020 08:22:56 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -54,9 +54,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v15 25/26] x86/cet/shstk: Add arch_prctl functions for shadow stack
-Date:   Tue, 10 Nov 2020 08:22:10 -0800
-Message-Id: <20201110162211.9207-26-yu-cheng.yu@intel.com>
+Subject: [PATCH v15 26/26] mm: Introduce PROT_SHSTK for shadow stack
+Date:   Tue, 10 Nov 2020 08:22:11 -0800
+Message-Id: <20201110162211.9207-27-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201110162211.9207-1-yu-cheng.yu@intel.com>
 References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
@@ -66,182 +66,208 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-arch_prctl(ARCH_X86_CET_STATUS, u64 *args)
-    Get CET feature status.
+There are three possible options to create a shadow stack allocation API:
+an arch_prctl, a new syscall, or adding PROT_SHSTK to mmap()/mprotect().
+Each has its advantages and compromises.
 
-    The parameter 'args' is a pointer to a user buffer.  The kernel returns
-    the following information:
+An arch_prctl() is the least intrusive.  However, the existing x86
+arch_prctl() takes only two parameters.  Multiple parameters must be
+passed in a memory buffer.  There is a proposal to pass more parameters in
+registers [1], but no active discussion on that.
 
-    *args = shadow stack/IBT status
-    *(args + 1) = shadow stack base address
-    *(args + 2) = shadow stack size
+A new syscall minimizes compatibility issues and offers an extensible frame
+work to other architectures, but this will likely result in some overlap of
+mmap()/mprotect().
 
-arch_prctl(ARCH_X86_CET_DISABLE, unsigned int features)
-    Disable CET features specified in 'features'.  Return -EPERM if CET is
-    locked.
+The introduction of PROT_SHSTK to mmap()/mprotect() takes advantage of
+existing APIs.  The x86-specific PROT_SHSTK is translated to VM_SHSTK and
+a shadow stack mapping is created without reinventing the wheel.  There are
+potential pitfalls though.  The most obvious one would be using this as a
+bypass to shadow stack protection.  However, the attacker would have to get
+to the syscall first.
 
-arch_prctl(ARCH_X86_CET_LOCK)
-    Lock in CET features.
+Since arch_calc_vm_prot_bits() is modified, I have moved arch_vm_get_page
+_prot() and arch_calc_vm_prot_bits() to x86/include/asm/mman.h.
+This will be more consistent with other architectures.
 
-Also change do_arch_prctl_common()'s parameter 'cpuid_enabled' to
-'arg2', as it is now also passed to prctl_cet().
+[1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/include/asm/cet.h        |  3 ++
- arch/x86/include/uapi/asm/prctl.h |  4 ++
- arch/x86/kernel/Makefile          |  2 +-
- arch/x86/kernel/cet_prctl.c       | 68 +++++++++++++++++++++++++++++++
- arch/x86/kernel/process.c         |  6 +--
- 5 files changed, 79 insertions(+), 4 deletions(-)
- create mode 100644 arch/x86/kernel/cet_prctl.c
+ arch/x86/include/asm/mman.h      | 83 ++++++++++++++++++++++++++++++++
+ arch/x86/include/uapi/asm/mman.h | 28 ++---------
+ include/linux/mm.h               |  1 +
+ mm/mmap.c                        |  8 ++-
+ 4 files changed, 95 insertions(+), 25 deletions(-)
+ create mode 100644 arch/x86/include/asm/mman.h
 
-diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index ec4b5e62d0ce..16870e5bc8eb 100644
---- a/arch/x86/include/asm/cet.h
-+++ b/arch/x86/include/asm/cet.h
-@@ -14,9 +14,11 @@ struct sc_ext;
- struct cet_status {
- 	unsigned long	shstk_base;
- 	unsigned long	shstk_size;
-+	unsigned int	locked:1;
- };
- 
- #ifdef CONFIG_X86_CET
-+int prctl_cet(int option, u64 arg2);
- int cet_setup_shstk(void);
- int cet_setup_thread_shstk(struct task_struct *p, unsigned long clone_flags);
- void cet_disable_shstk(void);
-@@ -25,6 +27,7 @@ int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp)
- void cet_restore_signal(struct sc_ext *sc);
- int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
- #else
-+static inline int prctl_cet(int option, u64 arg2) { return -EINVAL; }
- static inline int cet_setup_thread_shstk(struct task_struct *p,
- 					 unsigned long clone_flags) { return 0; }
- static inline void cet_disable_shstk(void) {}
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 5a6aac9fa41f..9245bf629120 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -14,4 +14,8 @@
- #define ARCH_MAP_VDSO_32	0x2002
- #define ARCH_MAP_VDSO_64	0x2003
- 
-+#define ARCH_X86_CET_STATUS		0x3001
-+#define ARCH_X86_CET_DISABLE		0x3002
-+#define ARCH_X86_CET_LOCK		0x3003
-+
- #endif /* _ASM_X86_PRCTL_H */
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 4a89d0f3792e..5d04c4f21485 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -151,7 +151,7 @@ obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
- obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
- 
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev-es.o
--obj-$(CONFIG_X86_CET)			+= cet.o
-+obj-$(CONFIG_X86_CET)			+= cet.o cet_prctl.o
- 
- ###
- # 64 bit specific files
-diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
+diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
 new file mode 100644
-index 000000000000..bd5ad11763e4
+index 000000000000..0dcaef6f889a
 --- /dev/null
-+++ b/arch/x86/kernel/cet_prctl.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/arch/x86/include/asm/mman.h
+@@ -0,0 +1,83 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_MMAN_H
++#define _ASM_X86_MMAN_H
 +
-+#include <linux/errno.h>
-+#include <linux/uaccess.h>
-+#include <linux/prctl.h>
-+#include <linux/compat.h>
-+#include <linux/mman.h>
-+#include <linux/elfcore.h>
-+#include <asm/processor.h>
-+#include <asm/prctl.h>
-+#include <asm/cet.h>
++#include <linux/mm.h>
++#include <uapi/asm/mman.h>
 +
-+/* See Documentation/x86/intel_cet.rst. */
++#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
++/*
++ * Take the 4 protection key bits out of the vma->vm_flags
++ * value and turn them in to the bits that we can put in
++ * to a pte.
++ *
++ * Only override these if Protection Keys are available
++ * (which is only on 64-bit).
++ */
++#define arch_vm_get_page_prot(vm_flags)	__pgprot(	\
++		((vm_flags) & VM_PKEY_BIT0 ? _PAGE_PKEY_BIT0 : 0) |	\
++		((vm_flags) & VM_PKEY_BIT1 ? _PAGE_PKEY_BIT1 : 0) |	\
++		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
++		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
 +
-+static int copy_status_to_user(struct cet_status *cet, u64 arg2)
++#define pkey_vm_prot_bits(prot, key) (			\
++		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
++		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
++		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
++		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
++#else
++#define pkey_vm_prot_bits(prot, key) (0)
++#endif
++
++static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
++	unsigned long pkey)
 +{
-+	u64 buf[3] = {0, 0, 0};
++	unsigned long vm_prot_bits = pkey_vm_prot_bits(prot, pkey);
 +
-+	if (cet->shstk_size) {
-+		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_SHSTK;
-+		buf[1] = (u64)cet->shstk_base;
-+		buf[2] = (u64)cet->shstk_size;
++	if (!(prot & PROT_WRITE) && (prot & PROT_SHSTK))
++		vm_prot_bits |= VM_SHSTK;
++
++	return vm_prot_bits;
++}
++#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
++
++#ifdef CONFIG_X86_SHADOW_STACK_USER
++static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
++{
++	unsigned long valid = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM;
++
++	if (prot & ~(valid | PROT_SHSTK))
++		return false;
++
++	if (prot & PROT_SHSTK) {
++		struct vm_area_struct *vma;
++
++		if (!current->thread.cet.shstk_size)
++			return false;
++
++		/*
++		 * A shadow stack mapping is indirectly writable by only
++		 * the CALL and WRUSS instructions, but not other write
++		 * instructions).  PROT_SHSTK and PROT_WRITE are mutually
++		 * exclusive.
++		 */
++		if (prot & PROT_WRITE)
++			return false;
++
++		vma = find_vma(current->mm, addr);
++		if (!vma)
++			return false;
++
++		/*
++		 * Shadow stack cannot be backed by a file or shared.
++		 */
++		if (vma->vm_file || (vma->vm_flags & VM_SHARED))
++			return false;
 +	}
 +
-+	return copy_to_user((u64 __user *)arg2, buf, sizeof(buf));
++	return true;
 +}
++#define arch_validate_prot arch_validate_prot
++#endif
 +
-+int prctl_cet(int option, u64 arg2)
-+{
-+	struct cet_status *cet;
-+	unsigned int features;
-+
-+	/*
-+	 * GLIBC's ENOTSUPP == EOPNOTSUPP == 95, and it does not recognize
-+	 * the kernel's ENOTSUPP (524).  So return EOPNOTSUPP here.
-+	 */
-+	if (!IS_ENABLED(CONFIG_X86_CET))
-+		return -EOPNOTSUPP;
-+
-+	cet = &current->thread.cet;
-+
-+	if (option == ARCH_X86_CET_STATUS)
-+		return copy_status_to_user(cet, arg2);
-+
-+	if (!static_cpu_has(X86_FEATURE_SHSTK))
-+		return -EOPNOTSUPP;
-+
-+	switch (option) {
-+	case ARCH_X86_CET_DISABLE:
-+		if (cet->locked)
-+			return -EPERM;
-+
-+		features = (unsigned int)arg2;
-+
-+		if (features & GNU_PROPERTY_X86_FEATURE_1_INVAL)
++#endif /* _ASM_X86_MMAN_H */
+diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+index d4a8d0424bfb..39bb7db344a6 100644
+--- a/arch/x86/include/uapi/asm/mman.h
++++ b/arch/x86/include/uapi/asm/mman.h
+@@ -1,31 +1,11 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _ASM_X86_MMAN_H
+-#define _ASM_X86_MMAN_H
++#ifndef _UAPI_ASM_X86_MMAN_H
++#define _UAPI_ASM_X86_MMAN_H
+ 
+ #define MAP_32BIT	0x40		/* only give out 32bit addresses */
+ 
+-#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+-/*
+- * Take the 4 protection key bits out of the vma->vm_flags
+- * value and turn them in to the bits that we can put in
+- * to a pte.
+- *
+- * Only override these if Protection Keys are available
+- * (which is only on 64-bit).
+- */
+-#define arch_vm_get_page_prot(vm_flags)	__pgprot(	\
+-		((vm_flags) & VM_PKEY_BIT0 ? _PAGE_PKEY_BIT0 : 0) |	\
+-		((vm_flags) & VM_PKEY_BIT1 ? _PAGE_PKEY_BIT1 : 0) |	\
+-		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
+-		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
+-
+-#define arch_calc_vm_prot_bits(prot, key) (		\
+-		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
+-		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
+-		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
+-		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
+-#endif
++#define PROT_SHSTK	0x10		/* shadow stack pages */
+ 
+ #include <asm-generic/mman.h>
+ 
+-#endif /* _ASM_X86_MMAN_H */
++#endif /* _UAPI_ASM_X86_MMAN_H */
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index ef1bd7c7e88b..4c5ff13ed332 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -334,6 +334,7 @@ extern unsigned int kobjsize(const void *objp);
+ 
+ #if defined(CONFIG_X86)
+ # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
++# define VM_ARCH_CLEAR	VM_SHSTK
+ #elif defined(CONFIG_PPC)
+ # define VM_SAO		VM_ARCH_1	/* Strong Access Ordering (powerpc) */
+ #elif defined(CONFIG_PARISC)
+diff --git a/mm/mmap.c b/mm/mmap.c
+index c4938e4b789b..da7e0c6689ee 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1483,6 +1483,12 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 		struct inode *inode = file_inode(file);
+ 		unsigned long flags_mask;
+ 
++		/*
++		 * Call stack cannot be backed by a file.
++		 */
++		if (vm_flags & VM_SHSTK)
 +			return -EINVAL;
-+		if (features & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
-+			cet_disable_shstk();
-+		return 0;
 +
-+	case ARCH_X86_CET_LOCK:
-+		cet->locked = 1;
-+		return 0;
-+
-+	default:
-+		return -ENOSYS;
-+	}
-+}
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 67632ba893b7..33cb6da22ef0 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -977,14 +977,14 @@ unsigned long get_wchan(struct task_struct *p)
- }
+ 		if (!file_mmap_ok(file, inode, pgoff, len))
+ 			return -EOVERFLOW;
  
- long do_arch_prctl_common(struct task_struct *task, int option,
--			  unsigned long cpuid_enabled)
-+			  unsigned long arg2)
- {
- 	switch (option) {
- 	case ARCH_GET_CPUID:
- 		return get_cpuid_mode();
- 	case ARCH_SET_CPUID:
--		return set_cpuid_mode(task, cpuid_enabled);
-+		return set_cpuid_mode(task, arg2);
- 	}
- 
--	return -EINVAL;
-+	return prctl_cet(option, arg2);
- }
+@@ -1547,7 +1553,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	} else {
+ 		switch (flags & MAP_TYPE) {
+ 		case MAP_SHARED:
+-			if (vm_flags & (VM_GROWSDOWN|VM_GROWSUP))
++			if (vm_flags & (VM_GROWSDOWN|VM_GROWSUP|VM_SHSTK))
+ 				return -EINVAL;
+ 			/*
+ 			 * Ignore pgoff.
 -- 
 2.21.0
 
