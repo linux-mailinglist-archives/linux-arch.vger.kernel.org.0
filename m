@@ -2,90 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EC72ADD4C
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 18:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96752ADDC6
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Nov 2020 19:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731142AbgKJRqY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Nov 2020 12:46:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21186 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729183AbgKJRqY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 10 Nov 2020 12:46:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605030382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iLppkAldaglNseeA1mLxrkn09RICx19onIxN5TInB1E=;
-        b=GVGL4ZpAPVUPna9JI/Y/q5C0Djvv8sabIfR7/x/FMRUSdlq+mwCoEX+ZALnjnkkmZu3IuX
-        Gaaw77hNqZ7K0/xE/dmf69v7QbaLts1umh1tts5gmYWyz93dWBjCiTcM+gTM3mp9vE7ljL
-        c10TbKbgOEzTuFOGOFcLyPlb+W/uCLM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-300-k_d5_NtXO2qoXW_XbKINLw-1; Tue, 10 Nov 2020 12:46:18 -0500
-X-MC-Unique: k_d5_NtXO2qoXW_XbKINLw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1730960AbgKJSHE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Nov 2020 13:07:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56100 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726428AbgKJSHD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 10 Nov 2020 13:07:03 -0500
+Received: from kernel.org (unknown [77.125.7.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C5FD804758;
-        Tue, 10 Nov 2020 17:46:15 +0000 (UTC)
-Received: from treble (ovpn-120-104.rdu2.redhat.com [10.10.120.104])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0BAA52C31E;
-        Tue, 10 Nov 2020 17:46:09 +0000 (UTC)
-Date:   Tue, 10 Nov 2020 11:46:06 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-Message-ID: <20201110174606.mp5m33lgqksks4mt@treble>
-References: <20201015102216.GB2611@hirez.programming.kicks-ass.net>
- <20201015203942.f3kwcohcwwa6lagd@treble>
- <CABCJKufDLmBCwmgGnfLcBw_B_4U8VY-R-dSNNp86TFfuMobPMw@mail.gmail.com>
- <20201020185217.ilg6w5l7ujau2246@treble>
- <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
- <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
- <CABCJKufL6=FiaeD8T0P+mK4JeR9J80hhjvJ6Z9S-m9UnCESxVA@mail.gmail.com>
- <20201023173617.GA3021099@google.com>
- <CABCJKuee7hUQSiksdRMYNNx05bW7pWaDm4fQ__znGQ99z9-dEw@mail.gmail.com>
- <20201110022924.tekltjo25wtrao7z@treble>
+        by mail.kernel.org (Postfix) with ESMTPSA id C35F820781;
+        Tue, 10 Nov 2020 18:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605031623;
+        bh=bAkJ6qFghBqAmYDEu7geL4WoAC5U+zvSUa3tfgn5GqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rsCfawPZ7PZXYREKxvAae+uk/8IQqHbGnFjdff7AGzyGjc4x/SKxcILYVT/rLCce9
+         nmpcocs0Se3KfPVLk80KrhXz6x5Oy3hYomKMAGm/YGBiEJSxYFnSu9uNQghCJwavMR
+         lgeiRSDZJxGsficIgAw5m1qVpszWlc3MZZCq7S1w=
+Date:   Tue, 10 Nov 2020 20:06:48 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v8 2/9] mmap: make mlock_future_check() global
+Message-ID: <20201110180648.GB4758@kernel.org>
+References: <20201110151444.20662-1-rppt@kernel.org>
+ <20201110151444.20662-3-rppt@kernel.org>
+ <9e2fafd7-abb0-aa79-fa66-cd8662307446@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201110022924.tekltjo25wtrao7z@treble>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <9e2fafd7-abb0-aa79-fa66-cd8662307446@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 09, 2020 at 08:29:24PM -0600, Josh Poimboeuf wrote:
-> On Mon, Nov 09, 2020 at 03:11:41PM -0800, Sami Tolvanen wrote:
-> > CONFIG_XEN
+On Tue, Nov 10, 2020 at 06:17:26PM +0100, David Hildenbrand wrote:
+> On 10.11.20 16:14, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
 > > 
-> > __switch_to_asm()+0x0: undefined stack state
-> >   xen_hypercall_set_trap_table()+0x0: <=== (sym)
+> > It will be used by the upcoming secret memory implementation.
+> > 
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > ---
+> >   mm/internal.h | 3 +++
+> >   mm/mmap.c     | 5 ++---
+> >   2 files changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/mm/internal.h b/mm/internal.h
+> > index c43ccdddb0f6..ae146a260b14 100644
+> > --- a/mm/internal.h
+> > +++ b/mm/internal.h
+> > @@ -348,6 +348,9 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
+> >   extern void mlock_vma_page(struct page *page);
+> >   extern unsigned int munlock_vma_page(struct page *page);
+> > +extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+> > +			      unsigned long len);
+> > +
+> >   /*
+> >    * Clear the page's PageMlocked().  This can be useful in a situation where
+> >    * we want to unconditionally remove a page from the pagecache -- e.g.,
+> > diff --git a/mm/mmap.c b/mm/mmap.c
+> > index 61f72b09d990..c481f088bd50 100644
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -1348,9 +1348,8 @@ static inline unsigned long round_hint_to_min(unsigned long hint)
+> >   	return hint;
+> >   }
+> > -static inline int mlock_future_check(struct mm_struct *mm,
+> > -				     unsigned long flags,
+> > -				     unsigned long len)
+> > +int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+> > +		       unsigned long len)
+> >   {
+> >   	unsigned long locked, lock_limit;
+> > 
+> 
+> So, an interesting question is if you actually want to charge secretmem
+> pages against mlock now, or if you want a dedicated secretmem cgroup
+> controller instead?
 
-With your branch + GCC 9 I can recreate all the warnings except this
-one.
+Well, with the current implementation there are three limits an
+administrator can use to control secretmem limits: mlock, memcg and
+kernel parameter.
 
-Will do some digging on the others...
+The kernel parameter puts a global upper limit for secretmem usage,
+memcg accounts all secretmem allocations, including the unused memory in
+large pages caching and mlock allows per task limit for secretmem
+mappings, well, like mlock does.
+
+I didn't consider a dedicated cgroup, as it seems we already have enough
+existing knobs and a new one would be unnecessary.
+
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
 
 -- 
-Josh
-
+Sincerely yours,
+Mike.
