@@ -2,72 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C232AF267
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Nov 2020 14:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813232AF55A
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Nov 2020 16:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726039AbgKKNpE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 Nov 2020 08:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726081AbgKKNoj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 Nov 2020 08:44:39 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C6AC0613D1;
-        Wed, 11 Nov 2020 05:44:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=g1I41NQbwOIjGBdwjkC+j3mhwkFAgihVuGwfeKOpVXw=; b=rzNsu/t5CsZEaMWoYXHzDbNrPL
-        /TAv4GnYapw/nguBJc/zUT6Iv6zn+HStz9N+isLCC57QHu+J6pG15Djaz3zcKpfAbyPp/kSlEaa3W
-        mEbFjlVD+sJU7HecHv2/8dQq6r0tSBizpXPqf3dISnGaOJKD8jk4j/JfAwfIhV//EaUaJPiDZnprs
-        36YVfqJuWOvquFAkXNiPDWzE5spUp9Bm9cqOmy7E735N2Z9bVxucoC+VF7FfvHug3zuqqoZvTdl+W
-        0JzO6UOZENZZWndygSO5ujxeVcZ8pcVOPDG434D8SY+GvGbqGm7ztvF0fyIVm6ToWlsqLr/y/rmPk
-        BTx/HJEA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kcqQ4-0007Ne-3t; Wed, 11 Nov 2020 13:44:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S1727166AbgKKPr1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 Nov 2020 10:47:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726274AbgKKPrY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 11 Nov 2020 10:47:24 -0500
+Received: from linux-8ccs (p57a236d4.dip0.t-ipconnect.de [87.162.54.212])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 77B7C300238;
-        Wed, 11 Nov 2020 14:44:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 619C42BDF9699; Wed, 11 Nov 2020 14:44:12 +0100 (CET)
-Date:   Wed, 11 Nov 2020 14:44:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C8B4E20709;
+        Wed, 11 Nov 2020 15:47:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605109643;
+        bh=9YfkkQ9wkyZZeXSsWCszRktU6AOG71Q42S1YPmEDuW4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yH0r3uT7ZVJ/rL/JLJzzPkKUzrrJfgOhruyaFU7b+LW4L6jPFinMWadlrS66zQmBi
+         zxDYjCri6wVsNVwJcrHvbzjg3iMCLuUrhhTcmtScnN7I9MqWu2Kx3DRJ+vrt6Ip3iL
+         TtxAITaYRnJ3F/ZNAdHzXE+3gnZPfu1GDZ4ZqaWc=
+Date:   Wed, 11 Nov 2020 16:47:16 +0100
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@gooogle.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/3] asm-generic/atomic64: Add support for ARCH_ATOMIC
-Message-ID: <20201111134412.GT2611@hirez.programming.kicks-ass.net>
-References: <20201111110723.3148665-1-npiggin@gmail.com>
- <20201111110723.3148665-2-npiggin@gmail.com>
- <3086114c-8af6-3863-0cbf-5d3956fcda95@csgroup.eu>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Kurtz <djkurtz@chromium.org>,
+        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH 0/8] linker-section array fix and clean ups
+Message-ID: <20201111154716.GB5304@linux-8ccs>
+References: <20201103175711.10731-1-johan@kernel.org>
+ <20201106160344.GA12184@linux-8ccs.fritz.box>
+ <20201106164537.GD4085@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3086114c-8af6-3863-0cbf-5d3956fcda95@csgroup.eu>
+In-Reply-To: <20201106164537.GD4085@localhost>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 02:39:01PM +0100, Christophe Leroy wrote:
-> Hello,
-> 
-> Le 11/11/2020 à 12:07, Nicholas Piggin a écrit :
-> > This passes atomic64 selftest on ppc32 on qemu (uniprocessor only)
-> > both before and after powerpc is converted to use ARCH_ATOMIC.
-> 
-> Can you explain what this change does and why it is needed ?
++++ Johan Hovold [06/11/20 17:45 +0100]:
+>On Fri, Nov 06, 2020 at 05:03:45PM +0100, Jessica Yu wrote:
+>> +++ Johan Hovold [03/11/20 18:57 +0100]:
+>> >We rely on the linker to create arrays for a number of things including
+>> >kernel parameters and device-tree-match entries.
+>> >
+>> >The stride of these linker-section arrays obviously needs to match the
+>> >expectations of the code accessing them or bad things will happen.
+>> >
+>> >One thing to watch out for is that gcc is known to increase the
+>> >alignment of larger objects with static extent as an optimisation (on
+>> >x86), but this can be suppressed by using the aligned attribute when
+>> >declaring entries.
+>> >
+>> >We've been relying on this behaviour for 16 years for kernel parameters
+>> >(and other structures) and it indeed hasn't changed since the
+>> >introduction of the aligned attribute in gcc 3.1 (see align_variable()
+>> >in [1]).
+>> >
+>> >Occasionally this gcc optimisation do cause problems which have instead
+>> >been worked around in various creative ways including using indirection
+>> >through an array of pointers. This was originally done for tracepoints
+>> >[2] after a number of failed attempts to create properly aligned arrays,
+>> >and the approach was later reused for module-version attributes [3] and
+>> >earlycon entries.
+>>
+>> >[2] https://lore.kernel.org/lkml/20110126222622.GA10794@Krystal/
+>
+>> So unfortunately, I am not familiar enough with the semantics of gcc's
+>> aligned attribute. AFAICT from the patch you linked in [2], the
+>> original purpose of the pointer indirection workaround was to avoid
+>> relying on (potentially inconsistent) compiler-specific behavior with
+>> respect to the aligned attribute. The main concern was potential
+>> up-alignment being done by gcc (or the linker) despite the desired
+>> alignment being specified. Indeed, the gcc documentation also states
+>> that the aligned attribute only specifies the *minimum* alignment,
+>> although there's no guarantee that up-alignment wouldn't occur.
+>>
+>> So I guess my question is, is there some implicit guarantee that
+>> specifying alignment by type via __alignof__ that's supposed to
+>> prevent gcc from up-aligning? Or are we just assuming that gcc won't
+>> increase the alignment? The gcc docs don't seem to clarify this
+>> unfortunately.
+>
+>It's simply specifying alignment when declaring the variable that
+>prevents this optimisation. The relevant code is in the function
+>align_variable() in [1] where DATA_ALIGNMENT() is never called in case
+>an alignment has been specified (!DECL_USER_ALIGN(decl)).
+>
+>There's no mention in the documentation of this that I'm aware of, but
+>this is the way the aligned attribute has worked since its introduction
+>judging from the commit history.
+>
+>As mentioned above, we've been relying on this for kernel parameters and
+>other structures since 2003-2004 so if it ever were to change we'd find
+>out soon enough.
+>
+>It's about to be used for scheduler classes as well. [2]
+>
+>Johan
+>
+>[1] https://github.com/gcc-mirror/gcc/blob/master/gcc/varasm.c
+>[2] https://lore.kernel.org/r/160396870486.397.377616182428528939.tip-bot2@tip-bot2
 
-That certainly should've been in the Changelog. This enables atomic
-instrumentation, see asm-generic/atomic-instrumented.h. IOW, it makes
-atomic ops visible to K*SAN.
+Thanks for providing the links and references. Your explanation and
+this reply from Jakub [1] clarified things for me. I was not aware of
+the distinction gcc made between aligned attributes on types vs. on
+variables. So from what I understand now, gcc suppresses the
+optimization when the alignment is specified in the variable
+declaration, but not necessarily when the aligned attribute is just on
+the type.
+
+Even though it's been in use for a long time, I think it would be
+really helpful if this gcc quirk was explained just a bit more in the
+patch changelogs, especially since this is undocumented behavior.
+I found the explanation in [1] (as well as in your cover letter) to be
+sufficient. Maybe something like "GCC suppresses any optimizations
+increasing alignment when the alignment is specified in the variable
+declaration, as opposed to just on the type definition. Therefore,
+explicitly specify type alignment when declaring entries to prevent
+gcc from increasing alignment."
+
+In any case, I can take the module and moduleparam.h patches through
+my tree, but I will wait a few days in case there are any objections.
+
+Thanks,
+
+Jessica
+
+[1] https://lore.kernel.org/lkml/20201021131806.GA2176@tucnak/
