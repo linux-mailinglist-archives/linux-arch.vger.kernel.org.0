@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BAD2B25E1
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Nov 2020 21:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5132B2B2894
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Nov 2020 23:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgKMUwg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Nov 2020 15:52:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42302 "EHLO
+        id S1725981AbgKMWed (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Nov 2020 17:34:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42392 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725981AbgKMUwg (ORCPT
+        by vger.kernel.org with ESMTP id S1726158AbgKMWea (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Nov 2020 15:52:36 -0500
+        Fri, 13 Nov 2020 17:34:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605300754;
+        s=mimecast20190719; t=1605306868;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=BjbZK0zeIm65whn17k5UcYS2uZ9Kdra7izOdoHD5fpw=;
-        b=Vja5qVPNIORDTOqSTqSA1jcAlfT/9vrn5afRTuLTV2O+YzVDYdQDkZoL37/6A1pzb93pSt
-        eb+daRvz6lU/tMbAKzxYhO8jb90f8eR6wDYa+ixONXQWp9/6C6CtIDgp0SGNW3th3CrTwM
-        yiZn5KPlfqSCzNaHzf+p9LDCBY+kRcM=
+        bh=8Rq1SwLUmuk5yTiT3dYLgLhG1v7f4gsVqDXVvnML+kQ=;
+        b=HHZHs8oAPhAgKaCArEN5SwF8DPfVSX25N5UBC8yDVSLZcRa386K7GOa0SXuzjZCTQViJAt
+        NTaw2gAMLvbamzJMQNULLsSNGm6Bl6Z+70lK7EPNnryt+Vt9tbhlx5B9qq0pUmwBEsBUys
+        hfSoxN1cUdA2HJjZ4URu4TJHPdJnNW4=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-302-6NjMwWGtNSa0dWipx0MBdw-1; Fri, 13 Nov 2020 15:52:30 -0500
-X-MC-Unique: 6NjMwWGtNSa0dWipx0MBdw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-508-kgiX0vPEOgWkK_HzwNLmJg-1; Fri, 13 Nov 2020 17:34:24 -0500
+X-MC-Unique: kgiX0vPEOgWkK_HzwNLmJg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3E7A28015A8;
-        Fri, 13 Nov 2020 20:52:28 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11ACD186DD33;
+        Fri, 13 Nov 2020 22:34:22 +0000 (UTC)
 Received: from treble (ovpn-117-69.rdu2.redhat.com [10.10.117.69])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6296B5B4A4;
-        Fri, 13 Nov 2020 20:52:24 +0000 (UTC)
-Date:   Fri, 13 Nov 2020 14:52:21 -0600
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 71FFA5D707;
+        Fri, 13 Nov 2020 22:34:15 +0000 (UTC)
+Date:   Fri, 13 Nov 2020 16:34:12 -0600
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -54,7 +54,7 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         kernel list <linux-kernel@vger.kernel.org>,
         linux-pci@vger.kernel.org
 Subject: Re: [PATCH v6 22/25] x86/asm: annotate indirect jumps
-Message-ID: <20201113205221.jybsu3himgjqd3tq@treble>
+Message-ID: <20201113223412.inono2ekrs7ky7rm@treble>
 References: <CABCJKucVjFtrOsw58kn4OnW5kdkUh8G7Zs4s6QU9s6O7soRiAA@mail.gmail.com>
  <20201021085606.GZ2628@hirez.programming.kicks-ass.net>
  <CABCJKufL6=FiaeD8T0P+mK4JeR9J80hhjvJ6Z9S-m9UnCESxVA@mail.gmail.com>
@@ -69,49 +69,12 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <CABCJKufA-aOcsOqb1NiMQeBGm9Q-JxjoPjsuNpHh0kL4LzfO0w@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Nov 13, 2020 at 12:24:32PM -0800, Sami Tolvanen wrote:
-> On Fri, Nov 13, 2020 at 11:54 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> >
-> > On Tue, Nov 10, 2020 at 10:59:55AM -0800, Sami Tolvanen wrote:
-> > > On Tue, Nov 10, 2020 at 9:46 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > > >
-> > > > On Mon, Nov 09, 2020 at 08:29:24PM -0600, Josh Poimboeuf wrote:
-> > > > > On Mon, Nov 09, 2020 at 03:11:41PM -0800, Sami Tolvanen wrote:
-> > > > > > CONFIG_XEN
-> > > > > >
-> > > > > > __switch_to_asm()+0x0: undefined stack state
-> > > > > >   xen_hypercall_set_trap_table()+0x0: <=== (sym)
-> > > >
-> > > > With your branch + GCC 9 I can recreate all the warnings except this
-> > > > one.
-> > >
-> > > In a gcc build this warning is replaced with a different one:
-> > >
-> > > vmlinux.o: warning: objtool: __startup_secondary_64()+0x7: return with
-> > > modified stack frame
-> > >
-> > > This just seems to depend on which function is placed right after the
-> > > code in xen-head.S. With gcc, the disassembly looks like this:
-> > >
-> > > 0000000000000000 <asm_cpu_bringup_and_idle>:
-> > >        0:       e8 00 00 00 00          callq  5 <asm_cpu_bringup_and_idle+0x5>
-> > >                         1: R_X86_64_PLT32       cpu_bringup_and_idle-0x4
-> > >        5:       e9 f6 0f 00 00          jmpq   1000
-> > > <xen_hypercall_set_trap_table>
-> > > ...
-> > > 0000000000001000 <xen_hypercall_set_trap_table>:
-> > >         ...
-> > > ...
-> > > 0000000000002000 <__startup_secondary_64>:
-> > >
-> > > With Clang+LTO, we end up with __switch_to_asm here instead of
-> > > __startup_secondary_64.
-> >
 > > I still don't see this warning for some reason.
 > 
 > Do you have CONFIG_XEN enabled? I can reproduce this on ToT master as follows:
@@ -126,10 +89,91 @@ On Fri, Nov 13, 2020 at 12:24:32PM -0800, Sami Tolvanen wrote:
 > $ ./tools/objtool/objtool check -arfld vmlinux.o 2>&1 | grep secondary
 > vmlinux.o: warning: objtool: __startup_secondary_64()+0x2: return with
 > modified stack frame
+> 
+> > Is it fixed by adding cpu_bringup_and_idle() to global_noreturns[] in
+> > tools/objtool/check.c?
+> 
+> No, that didn't fix the warning. Here's what I tested:
 
-Ok, I see it now on Linus' tree.  I just didn't see it on your clang-lto
-branch.
+I think this fixes it:
 
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH] x86/xen: Fix objtool vmlinux.o validation of xen hypercalls
+
+Objtool vmlinux.o validation is showing warnings like the following:
+
+  # tools/objtool/objtool check -barfld vmlinux.o
+  vmlinux.o: warning: objtool: __startup_secondary_64()+0x2: return with modified stack frame
+  vmlinux.o: warning: objtool:   xen_hypercall_set_trap_table()+0x0: <=== (sym)
+
+Objtool falls through all the empty hypercall text and gets confused
+when it encounters the first real function afterwards.  The empty unwind
+hints in the hypercalls aren't working for some reason.  Replace them
+with a more straightforward use of STACK_FRAME_NON_STANDARD.
+
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ arch/x86/xen/xen-head.S | 9 ++++-----
+ include/linux/objtool.h | 8 ++++++++
+ 2 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+index 2d7c8f34f56c..3c538b1ff4a6 100644
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/elfnote.h>
+ #include <linux/init.h>
++#include <linux/objtool.h>
+ 
+ #include <asm/boot.h>
+ #include <asm/asm.h>
+@@ -67,14 +68,12 @@ SYM_CODE_END(asm_cpu_bringup_and_idle)
+ .pushsection .text
+ 	.balign PAGE_SIZE
+ SYM_CODE_START(hypercall_page)
+-	.rept (PAGE_SIZE / 32)
+-		UNWIND_HINT_EMPTY
+-		.skip 32
+-	.endr
++	.skip PAGE_SIZE
+ 
+ #define HYPERCALL(n) \
+ 	.equ xen_hypercall_##n, hypercall_page + __HYPERVISOR_##n * 32; \
+-	.type xen_hypercall_##n, @function; .size xen_hypercall_##n, 32
++	.type xen_hypercall_##n, @function; .size xen_hypercall_##n, 32; \
++	STACK_FRAME_NON_STANDARD xen_hypercall_##n
+ #include <asm/xen-hypercalls.h>
+ #undef HYPERCALL
+ SYM_CODE_END(hypercall_page)
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 577f51436cf9..746617265236 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -109,6 +109,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD func:req
++	.pushsection .discard.func_stack_frame_non_standard
++		.long \func - .
++	.popsection
++.endm
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #else /* !CONFIG_STACK_VALIDATION */
+@@ -123,6 +129,8 @@ struct unwind_hint {
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
+ .endm
+ #endif
++.macro STACK_FRAME_NON_STANDARD func:req
++.endm
+ 
+ #endif /* CONFIG_STACK_VALIDATION */
+ 
 -- 
-Josh
+2.25.4
 
