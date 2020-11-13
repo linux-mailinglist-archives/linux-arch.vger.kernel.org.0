@@ -2,99 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3392B13E1
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Nov 2020 02:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 698BD2B1846
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Nov 2020 10:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgKMBfP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Nov 2020 20:35:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43888 "EHLO mail.kernel.org"
+        id S1726176AbgKMJgi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Nov 2020 04:36:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49686 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbgKMBfO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 12 Nov 2020 20:35:14 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        id S1726149AbgKMJgg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 13 Nov 2020 04:36:36 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C4A3216C4;
-        Fri, 13 Nov 2020 01:35:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 63EE222240;
+        Fri, 13 Nov 2020 09:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605231303;
-        bh=7IlWDoYFw6qKRjH3BOF82R+49xhuW2KtSCCfIWH1mkI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p0qhu8FlLRBehX3rgLy1uFImTw0miiTwEZpreJOS2JwqBOK7aypH/FXHF7H7cSQaJ
-         99y8LK9p6OmIEjarwU8D+b4yDZG1JvcRwCGKSU23kxdHuvZhv3MoS/AuK35nuazPZd
-         cG0gF1kwLqiFd64IeHBis7a9eoZv0ffsedBM0C8A=
-Date:   Thu, 12 Nov 2020 17:35:00 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        s=default; t=1605260196;
+        bh=Awbze+yn+sds2zWgzVstLWw9uJr4cE6in8SvDz0W3C4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zQWpJ/KPcFLuU9qRwqAVsOjXoZWMHlyxIG0jZaGNU0Kzkml7x7qqhmuCj1Ut2G2s6
+         8LYuupsLS6ia26YI2GYqDrcAbQlziwz0ucqBbQxmltYbtZXBWrlUYXGBDbtsabuD2R
+         q+0rkeYJlXuPW54IH7qyJN6ryDoVZKQMfcqk1+/0=
+Date:   Fri, 13 Nov 2020 09:36:30 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v8 6/9] secretmem: add memcg accounting
-Message-Id: <20201112173500.2556342ceefdbe0d66347ecd@linux-foundation.org>
-In-Reply-To: <20201110151444.20662-7-rppt@kernel.org>
-References: <20201110151444.20662-1-rppt@kernel.org>
-        <20201110151444.20662-7-rppt@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com
+Subject: Re: [PATCH v2 2/6] arm64: Allow mismatched 32-bit EL0 support
+Message-ID: <20201113093630.GA21075@willie-the-truck>
+References: <20201109213023.15092-1-will@kernel.org>
+ <20201109213023.15092-3-will@kernel.org>
+ <20201111191043.GA5125@gaia>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201111191043.GA5125@gaia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 10 Nov 2020 17:14:41 +0200 Mike Rapoport <rppt@kernel.org> wrote:
+On Wed, Nov 11, 2020 at 07:10:44PM +0000, Catalin Marinas wrote:
+> On Mon, Nov 09, 2020 at 09:30:18PM +0000, Will Deacon wrote:
+> > +static bool has_32bit_el0(const struct arm64_cpu_capabilities *entry, int scope)
+> > +{
+> > +	if (!has_cpuid_feature(entry, scope))
+> > +		return allow_mismatched_32bit_el0;
+> 
+> I still don't like overriding the cpufeature mechanism in this way. What about
+> something like below? It still doesn't fit perfectly but at least the
+> capability represents what was detected in the system. We then decide in
+> system_supports_32bit_el0() whether to allow asymmetry. There is an
+> extra trick to park a non-AArch32 capable CPU in has_32bit_el0() if it
+> comes up late and the feature has already been advertised with
+> !allow_mismatched_32bit_el0.
 
-> Account memory consumed by secretmem to memcg. The accounting is updated
-> when the memory is actually allocated and freed.
+I deliberately allow late onlining of 64-bit-only cores and I don't think
+this is something we should forbid (although it's not clear from your patch
+when allow_mismatched_32bit_el0 gets set). Furthermore, killing CPUs from
+the matches callback feels _very_ dodgy to me, as it's invoked indirectly
+by things such as this_cpu_has_cap().
 
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: secretmem-add-memcg-accounting-fix
+> I find it clearer, though I probably stared at it more than at your
+> patch ;).
 
-fix CONFIG_MEMCG=n build
+Yeah, swings and roundabouts...
 
-Cc: Mike Rapoport <rppt@linux.ibm.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
+I think we're quibbling on implementation details a bit here whereas we
+should probably be focussing on what to do about execve() and CPU hotplug.
+Your patch doesn't apply on top of my series or replace this one, so there's
+not an awful lot I can do with it. I'm about to post a v3 with a tentative
+solution for execve(), so please could you demonstrate your idea on top of
+that so I can see how it fits together?
 
- mm/filemap.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'd like to move on from the "I don't like this" (none of us do) discussion
+and figure out the functional aspects, if possible. We can always paint it
+a different colour later on, but we don't even have a full solution yet.
 
---- a/mm/filemap.c~secretmem-add-memcg-accounting-fix
-+++ a/mm/filemap.c
-@@ -844,7 +844,7 @@ static noinline int __add_to_page_cache_
- 	page->mapping = mapping;
- 	page->index = offset;
- 
--	if (!huge && !page->memcg_data) {
-+	if (!huge && !page_memcg(page)) {
- 		error = mem_cgroup_charge(page, current->mm, gfp);
- 		if (error)
- 			goto error;
-_
+Thanks,
 
+Will
