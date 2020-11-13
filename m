@@ -2,123 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D882B194A
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Nov 2020 11:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7062B1A33
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Nov 2020 12:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbgKMKpX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Nov 2020 05:45:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:35924 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726176AbgKMKpW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 13 Nov 2020 05:45:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E8EC1042;
-        Fri, 13 Nov 2020 02:45:21 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D5CB3F6CF;
-        Fri, 13 Nov 2020 02:45:20 -0800 (PST)
-Date:   Fri, 13 Nov 2020 10:45:18 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <Morten.Rasmussen@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "kernel-team@android.com" <kernel-team@android.com>
-Subject: Re: [PATCH 2/6] arm64: Allow mismatched 32-bit EL0 support
-Message-ID: <20201113104518.yuzl6plijonvjw6p@e107158-lin.cambridge.arm.com>
-References: <20201105213846.GA8600@willie-the-truck>
- <20201106125425.u6qoswsjfskyxtoo@e107158-lin.cambridge.arm.com>
- <20201106130007.GA10605@willie-the-truck>
- <20201106144835.q363ezyse4vc5kdg@e107158-lin.cambridge.arm.com>
- <20201109135259.GA14526@willie-the-truck>
- <20201111162700.p4sem2fup5qjjbqz@e107158-lin.cambridge.arm.com>
- <20201112102424.GB19506@willie-the-truck>
- <20201112115555.65sfsod6uf6xm5gy@e107158-lin.cambridge.arm.com>
- <20201112164943.7kdskvxcnuodphow@e107158-lin.cambridge.arm.com>
- <20201112173625.GA20000@willie-the-truck>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201112173625.GA20000@willie-the-truck>
+        id S1726781AbgKMLka (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Nov 2020 06:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726755AbgKMLjg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Nov 2020 06:39:36 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4608BC061A4C;
+        Fri, 13 Nov 2020 03:38:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=jl8/r0xaMvasSwPtiqvuXDrfgB86XgTbuKStGFmkiqY=; b=TFLbTK0JP/5BAcXKX2HQt08pv9
+        +yfdqZ45zKuzf9IDyKKPjB/o3TbxkGrOMnA79gVfHVP6tSs5G4asBxys+mFaGoEMWLuBcLO7hW0Zh
+        BVJbQUkn1tosKYOXrYdlG4NsZaHX+wzJz2Q2DcYFfy6MPe2fw4ensHMnO66kO1pJQB0MAyy5ihv/p
+        Mzv6U+/wH/1G2ro5d52EcghpQxybxZ90RovOSSa10Rlvbir/gBzAZ53PlVyso0pC9cQ1IpQr5+ozJ
+        OLJWhjtmLBPhD5OSVPcl2Y7vlpY7NIpLM4h75aQjSgy6OhfHNPdj0Xn9qaRak6oiHAsDB2wRC4Flm
+        rLXSbwMw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kdXPK-0001jN-TN; Fri, 13 Nov 2020 11:38:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 53967300238;
+        Fri, 13 Nov 2020 12:38:19 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 363C72BB8B0D0; Fri, 13 Nov 2020 12:38:19 +0100 (CET)
+Message-ID: <20201113111901.743573013@infradead.org>
+User-Agent: quilt/0.66
+Date:   Fri, 13 Nov 2020 12:19:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kan.liang@linux.intel.com, mingo@kernel.org, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, eranian@google.com
+Cc:     christophe.leroy@csgroup.eu, npiggin@gmail.com,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au, will@kernel.org,
+        willy@infradead.org, aneesh.kumar@linux.ibm.com,
+        sparclinux@vger.kernel.org, davem@davemloft.net,
+        catalin.marinas@arm.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        dave.hansen@intel.com, kirill.shutemov@linux.intel.com,
+        peterz@infradead.org
+Subject: [PATCH 0/5] perf/mm: Fix PERF_SAMPLE_*_PAGE_SIZE
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/12/20 17:36, Will Deacon wrote:
-> On Thu, Nov 12, 2020 at 04:49:43PM +0000, Qais Yousef wrote:
-> > On 11/12/20 11:55, Qais Yousef wrote:
-> > > On 11/12/20 10:24, Will Deacon wrote:
-> > > > On Wed, Nov 11, 2020 at 04:27:00PM +0000, Qais Yousef wrote:
-> > > > > On 11/09/20 13:52, Will Deacon wrote:
-> > > > > > On Fri, Nov 06, 2020 at 02:48:35PM +0000, Qais Yousef wrote:
-> > > > > > > On 11/06/20 13:00, Will Deacon wrote:
-> > > > > > > > On Fri, Nov 06, 2020 at 12:54:25PM +0000, Qais Yousef wrote:
-> > > > > > > > > FWIW I have my v3 over here in case it's of any help. It solves the problem of
-> > > > > > > > > HWCAP discovery when late AArch32 CPU is booted by populating boot_cpu_date
-> > > > > > > > > with 32bit features then.
-> > > > > > > > > 
-> > > > > > > > > 	git clone https://git.gitlab.arm.com/linux-arm/linux-qy.git -b asym-aarch32-upstream-v3 origin/asym-aarch32-upstream-v3
-> > > > > > > > 
-> > > > > > > > Cheers, I've done something similar. I was hoping to post it today, but I've
-> > > > > > > > been side-tracked with bug fixing this morning. The main headache I ended up
-> > > > > > > > with was allowing late-onlining of 64-bit-only CPUs if all the boot CPUs
-> > > > > > > > are 32-bit capable. What do you do in that case?
-> > > > > > > 
-> > > > > > > Do you mean if CPUs 0-3 were 32bit capable and we boot with maxcpus=4 then
-> > > > > > > attempt to bring the remaining 64bit-only cpus online later?
-> > > > > > 
-> > > > > > Right. I think we will refuse to online them. I'll post my attempt at
-> > > > > > handling that shortly.
-> > > > > 
-> > > > > Sorry for the delayed response.
-> > > > > 
-> > > > > You're right, I tried that and they refuse to come online. We missed that tbh.
-> > > > > 
-> > > > > Haven't thought what we should do yet. I tried your v2 and it failed similarly.
-> > > > 
-> > > > Hmm, it shouldn't do. Please could you provide the log? My hunch is that you
-> > > > are blatting 32-bit EL1 support as well, and we can't handle a mismatch for
-> > > > that with a late CPU. Do you know if the CPUs being integrated into these
-> > > > broken designs have a mismatch at EL1 as well?
-> > > 
-> > > Hmm my test could have been invalid then. We shouldn't have mismatch at EL1,
-> > > for ease of testing I used a hacked up patch to fake asymmetry on Juno. Testing
-> > > on FVP now, it takes time to boot up though..
-> > > 
-> > > Let me re-run this and get you the log from proper environment. Assuming it
-> > > still fails.
-> > 
-> > Still fails the same on FVP. dmesg attached. There's a splat shortly after
-> > attempting to online CPU 4.
-> > 
-> > 	# cat /sys/devices/system/cpu/online
-> > 	0-3
-> > 	# cat /sys/devices/system/cpu/aarch32_el0
-> > 	0-3
-> > 
-> > Now while writing this I just realized I tell the FVP to disable aarch32
-> > support at EL0. So this might still make the kernel thinks there's AArch32
-> > support at EL1 - which seems is what makes your series get confused?
-> 
->  | CPU features: CPU4: Detected conflict for capability 53 (32-bit EL1 Support), System: 1, CPU: 0
-> 
-> So we're doing the right thing here.
+Hi,
 
-Okay. So the systems we test on will always fail until we have real hardware.
-Makes sense.
+These patches provide generic infrastructure to determine TLB page size from
+page table entries alone. Perf will use this (for either data or code address)
+to aid in profiling TLB issues.
 
-> I've already queued fixes for the splat in for-next/fixes, as it's
-> unrelated.
+While most architectures only have page table aligned large pages, some
+(notably ARM64, Sparc64 and Power) provide non page table aligned large pages
+and need to provide their own implementation of these functions.
 
-Great thanks!
+I've provided (completely untested) implementations for ARM64 and Sparc64, but
+failed to penetrate the _many_ Power MMUs. I'm hoping Nick or Aneesh can help
+me out there.
 
-Cheers
-
---
-Qais Yousef
