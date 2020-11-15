@@ -2,37 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4DB2B2F7A
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Nov 2020 19:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010492B32C0
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Nov 2020 07:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbgKNSHq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 14 Nov 2020 13:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726070AbgKNSHp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 14 Nov 2020 13:07:45 -0500
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7986C0613D1;
-        Sat, 14 Nov 2020 10:07:44 -0800 (PST)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id 5551A5C2E37;
-        Sat, 14 Nov 2020 19:07:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1605377261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sb3trAdNHnBEBlNbdcbEeB4VP1eESqXIt0QS/y9AvzQ=;
-        b=n2TeB026DClBYkuw3PuXKVXncRiz0K2uAG1nK+Y54G/XWQIAWo5aH7mZnLPtcEoUw8hDIM
-        YBN393BgnUAvXHBK5+9lgv6nDUftoEyn9/a1OMOZDAIFynhVgzsjcfzCV3oP/KjzAe6dEe
-        nQYgjzGd4nLiqvVszABF3z1c3K4Q5Ns=
-MIME-Version: 1.0
-Date:   Sat, 14 Nov 2020 19:07:40 +0100
-From:   Stefan Agner <stefan@agner.ch>
+        id S1726491AbgKOGo6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 Nov 2020 01:44:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46346 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726437AbgKOGo5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 15 Nov 2020 01:44:57 -0500
+Received: from kernel.org (unknown [77.125.7.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7EBEC22370;
+        Sun, 15 Nov 2020 06:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605422696;
+        bh=zlgWaEsvaBPI/2B5mQxtu9/ewwZdZRArj2Z7wm+N0us=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OtNWvNql57fd93JbsFFcxxo3uo5Zy+akCxWptJtp5wKB9+HdFEq3VTVEUljFrJAGc
+         ZIa0gLCF95d8ZB7MPI2iMOog9UXWg2k4cwsfF84rJY9IF5HKf4cVypU2Cy/Qr8zYtz
+         V7QVziM321Dnxfd/FzG77yITBUESxK04TmcIYwr8=
+Date:   Sun, 15 Nov 2020 08:44:47 +0200
+From:   Mike Rapoport <rppt@kernel.org>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Stefan Agner <stefan@agner.ch>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Nitin Gupta <ngupta@vflare.org>,
         Minchan Kim <minchan@kernel.org>,
@@ -51,18 +46,17 @@ Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-riscv@lists.infradead.org
 Subject: Re: [PATCH] arch: pgtable: define MAX_POSSIBLE_PHYSMEM_BITS where
  needed
-In-Reply-To: <20201113145932.10994-1-arnd@kernel.org>
+Message-ID: <20201115064447.GS4758@kernel.org>
 References: <20201113145932.10994-1-arnd@kernel.org>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <e28bb3cc9ca6f1a07f382e30d8fca43e@agner.ch>
-X-Sender: stefan@agner.ch
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201113145932.10994-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-11-13 15:59, Arnd Bergmann wrote:
+On Fri, Nov 13, 2020 at 03:59:32PM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
 > Stefan Agner reported a bug when using zsram on 32-bit Arm machines
@@ -72,9 +66,7 @@ On 2020-11-13 15:59, Arnd Bergmann wrote:
 >   pgd = a27bd01c
 >   [00000000] *pgd=236a0003, *pmd=1ffa64003
 >   Internal error: Oops: 207 [#1] SMP ARM
->   Modules linked in: mdio_bcm_unimac(+) brcmfmac cfg80211 brcmutil
-> raspberrypi_hwmon hci_uart crc32_arm_ce bcm2711_thermal phy_generic
-> genet
+>   Modules linked in: mdio_bcm_unimac(+) brcmfmac cfg80211 brcmutil raspberrypi_hwmon hci_uart crc32_arm_ce bcm2711_thermal phy_generic genet
 >   CPU: 0 PID: 123 Comm: mkfs.ext4 Not tainted 5.9.6 #1
 >   Hardware name: BCM2711
 >   PC is at zs_map_object+0x94/0x338
@@ -141,9 +133,11 @@ On 2020-11-13 15:59, Arnd Bergmann wrote:
 > Cc: Palmer Dabbelt <palmer@dabbelt.com>
 > Cc: Albert Ou <aou@eecs.berkeley.edu>
 > Cc: linux-riscv@lists.infradead.org
-> Link:
-> https://lore.kernel.org/linux-mm/bdfa44bf1c570b05d6c70898e2bbb0acf234ecdf.1604762181.git.stefan@agner.ch/
+> Link: https://lore.kernel.org/linux-mm/bdfa44bf1c570b05d6c70898e2bbb0acf234ecdf.1604762181.git.stefan@agner.ch/
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
 > ---
 > If everyone is happy with this version, I would suggest merging this as
 > a bugfix through my asm-generic tree for linux-5.10. I originally
@@ -153,17 +147,6 @@ On 2020-11-13 15:59, Arnd Bergmann wrote:
 >  arch/arc/include/asm/pgtable.h               |  2 ++
 >  arch/arm/include/asm/pgtable-2level.h        |  2 ++
 >  arch/arm/include/asm/pgtable-3level.h        |  2 ++
-
-Tested, it fixed the issue on my test system, thanks!
-
-For ARM:
-
-Reviewed-by: Stefan Agner <stefan@agner.ch>
-Tested-by: Stefan Agner <stefan@agner.ch>
-
---
-Stefan
-
 >  arch/mips/include/asm/pgtable-32.h           |  3 +++
 >  arch/powerpc/include/asm/book3s/32/pgtable.h |  2 ++
 >  arch/powerpc/include/asm/nohash/32/pgtable.h |  2 ++
@@ -186,8 +169,7 @@ Stefan
 >  #endif
 >  
 >  /**************************************************************************
-> diff --git a/arch/arm/include/asm/pgtable-2level.h
-> b/arch/arm/include/asm/pgtable-2level.h
+> diff --git a/arch/arm/include/asm/pgtable-2level.h b/arch/arm/include/asm/pgtable-2level.h
 > index 3502c2f746ca..baf7d0204eb5 100644
 > --- a/arch/arm/include/asm/pgtable-2level.h
 > +++ b/arch/arm/include/asm/pgtable-2level.h
@@ -200,8 +182,7 @@ Stefan
 >  /*
 >   * PMD_SHIFT determines the size of the area a second-level page table can map
 >   * PGDIR_SHIFT determines what a third-level page table entry can map
-> diff --git a/arch/arm/include/asm/pgtable-3level.h
-> b/arch/arm/include/asm/pgtable-3level.h
+> diff --git a/arch/arm/include/asm/pgtable-3level.h b/arch/arm/include/asm/pgtable-3level.h
 > index fbb6693c3352..2b85d175e999 100644
 > --- a/arch/arm/include/asm/pgtable-3level.h
 > +++ b/arch/arm/include/asm/pgtable-3level.h
@@ -214,8 +195,7 @@ Stefan
 >  /*
 >   * PGDIR_SHIFT determines the size a top-level page table entry can map.
 >   */
-> diff --git a/arch/mips/include/asm/pgtable-32.h
-> b/arch/mips/include/asm/pgtable-32.h
+> diff --git a/arch/mips/include/asm/pgtable-32.h b/arch/mips/include/asm/pgtable-32.h
 > index a950fc1ddb4d..6c0532d7b211 100644
 > --- a/arch/mips/include/asm/pgtable-32.h
 > +++ b/arch/mips/include/asm/pgtable-32.h
@@ -224,8 +204,7 @@ Stefan
 >  #if defined(CONFIG_XPA)
 >  
 > +#define MAX_POSSIBLE_PHYSMEM_BITS 40
->  #define pte_pfn(x)		(((unsigned long)((x).pte_high >> _PFN_SHIFT)) |
-> (unsigned long)((x).pte_low << _PAGE_PRESENT_SHIFT))
+>  #define pte_pfn(x)		(((unsigned long)((x).pte_high >> _PFN_SHIFT)) | (unsigned long)((x).pte_low << _PAGE_PRESENT_SHIFT))
 >  static inline pte_t
 >  pfn_pte(unsigned long pfn, pgprot_t prot)
 > @@ -169,6 +170,7 @@ pfn_pte(unsigned long pfn, pgprot_t prot)
@@ -236,18 +215,15 @@ Stefan
 >  #define pte_pfn(x)		((unsigned long)((x).pte_high >> 6))
 >  
 >  static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
-> @@ -183,6 +185,7 @@ static inline pte_t pfn_pte(unsigned long pfn,
-> pgprot_t prot)
+> @@ -183,6 +185,7 @@ static inline pte_t pfn_pte(unsigned long pfn, pgprot_t prot)
 >  
 >  #else
 >  
 > +#define MAX_POSSIBLE_PHYSMEM_BITS 32
 >  #ifdef CONFIG_CPU_VR41XX
 >  #define pte_pfn(x)		((unsigned long)((x).pte >> (PAGE_SHIFT + 2)))
->  #define pfn_pte(pfn, prot)	__pte(((pfn) << (PAGE_SHIFT + 2)) |
-> pgprot_val(prot))
-> diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h
-> b/arch/powerpc/include/asm/book3s/32/pgtable.h
+>  #define pfn_pte(pfn, prot)	__pte(((pfn) << (PAGE_SHIFT + 2)) | pgprot_val(prot))
+> diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/include/asm/book3s/32/pgtable.h
 > index 36443cda8dcf..1376be95e975 100644
 > --- a/arch/powerpc/include/asm/book3s/32/pgtable.h
 > +++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
@@ -262,13 +238,11 @@ Stefan
 >  #endif
 >  
 >  /*
-> diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h
-> b/arch/powerpc/include/asm/nohash/32/pgtable.h
+> diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/include/asm/nohash/32/pgtable.h
 > index ee2243ba96cf..96522f7f0618 100644
 > --- a/arch/powerpc/include/asm/nohash/32/pgtable.h
 > +++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
-> @@ -153,8 +153,10 @@ int map_kernel_page(unsigned long va, phys_addr_t
-> pa, pgprot_t prot);
+> @@ -153,8 +153,10 @@ int map_kernel_page(unsigned long va, phys_addr_t pa, pgprot_t prot);
 >   */
 >  #if defined(CONFIG_PPC32) && defined(CONFIG_PTE_64BIT)
 >  #define PTE_RPN_MASK	(~((1ULL << PTE_RPN_SHIFT) - 1))
@@ -279,8 +253,7 @@ Stefan
 >  #endif
 >  
 >  /*
-> diff --git a/arch/riscv/include/asm/pgtable-32.h
-> b/arch/riscv/include/asm/pgtable-32.h
+> diff --git a/arch/riscv/include/asm/pgtable-32.h b/arch/riscv/include/asm/pgtable-32.h
 > index b0ab66e5fdb1..5b2e79e5bfa5 100644
 > --- a/arch/riscv/include/asm/pgtable-32.h
 > +++ b/arch/riscv/include/asm/pgtable-32.h
@@ -315,3 +288,10 @@ Stefan
 >  #ifndef has_transparent_hugepage
 >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 >  #define has_transparent_hugepage() 1
+> -- 
+> 2.27.0
+> 
+
+-- 
+Sincerely yours,
+Mike.
