@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165E82B32E9
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Nov 2020 09:28:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A93E2B330F
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Nov 2020 09:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbgKOI0l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 15 Nov 2020 03:26:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51566 "EHLO mail.kernel.org"
+        id S1726734AbgKOIp7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 Nov 2020 03:45:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726230AbgKOI0j (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 15 Nov 2020 03:26:39 -0500
+        id S1726600AbgKOIpz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 15 Nov 2020 03:45:55 -0500
 Received: from kernel.org (unknown [77.125.7.142])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B40D20825;
-        Sun, 15 Nov 2020 08:26:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC352223FB;
+        Sun, 15 Nov 2020 08:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605428798;
-        bh=N8nX4EItu7ygJosleHRb6Se+RCkeKeuBhze7L0pxdoc=;
+        s=default; t=1605429954;
+        bh=I2e6oiG56Ipc+LYVEf48Tzpdu9e5X2SPeAjMkXGJ+FY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OzCqWMqjydzAb9tsTc50ml1otm0W+jgR45ewsq/G5RaHSABMkhoMFFhu9KCzP5EgM
-         H4hHM4CWx5jTJGIkXhhIkkUUbJjjG0LCaHvvN1Sygkt5FEaoKMH2vyKuxCD0ZXI6ak
-         TE0ypAnInCIfqSa2/EaG3mDDyN0He79bGRMwfBCI=
-Date:   Sun, 15 Nov 2020 10:26:25 +0200
+        b=mvUrkC8DbWSBeGtX5LmBQbQw3erYKhs5cOaKJid6GDJMPM7nXXubIxoNcBB3oGNe7
+         rCwIs49LamtntTc1amgIjfXRya2sb8UfoqlV6jooN7E3J+NN/S80wRZL4M8ZXWanKD
+         tXrCqT3L+M5TGE/FDZPfoLrZTF0AQQmH6gi3Hxpk=
+Date:   Sun, 15 Nov 2020 10:45:39 +0200
 From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
@@ -34,11 +34,11 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         James Bottomley <jejb@linux.ibm.com>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
@@ -54,128 +54,48 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v8 2/9] mmap: make mlock_future_check() global
-Message-ID: <20201115082625.GT4758@kernel.org>
-References: <20201112190827.GP4758@kernel.org>
- <7A16CA44-782D-4ABA-8D93-76BDD0A90F94@redhat.com>
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
+Subject: Re: [PATCH v8 4/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20201115084539.GU4758@kernel.org>
+References: <20201110151444.20662-1-rppt@kernel.org>
+ <20201110151444.20662-5-rppt@kernel.org>
+ <20201113140656.GG17076@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7A16CA44-782D-4ABA-8D93-76BDD0A90F94@redhat.com>
+In-Reply-To: <20201113140656.GG17076@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 09:15:18PM +0100, David Hildenbrand wrote:
+On Fri, Nov 13, 2020 at 02:06:56PM +0000, Matthew Wilcox wrote:
+> On Tue, Nov 10, 2020 at 05:14:39PM +0200, Mike Rapoport wrote:
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index c89c5444924b..d8d170fa5210 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -884,4 +884,7 @@ config ARCH_HAS_HUGEPD
+> >  config MAPPING_DIRTY_HELPERS
+> >          bool
+> >  
+> > +config SECRETMEM
+> > +	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
 > 
-> > Am 12.11.2020 um 20:08 schrieb Mike Rapoport <rppt@kernel.org>:
-> > 
-> > ﻿On Thu, Nov 12, 2020 at 05:22:00PM +0100, David Hildenbrand wrote:
-> >>> On 10.11.20 19:06, Mike Rapoport wrote:
-> >>> On Tue, Nov 10, 2020 at 06:17:26PM +0100, David Hildenbrand wrote:
-> >>>> On 10.11.20 16:14, Mike Rapoport wrote:
-> >>>>> From: Mike Rapoport <rppt@linux.ibm.com>
-> >>>>> 
-> >>>>> It will be used by the upcoming secret memory implementation.
-> >>>>> 
-> >>>>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> >>>>> ---
-> >>>>>   mm/internal.h | 3 +++
-> >>>>>   mm/mmap.c     | 5 ++---
-> >>>>>   2 files changed, 5 insertions(+), 3 deletions(-)
-> >>>>> 
-> >>>>> diff --git a/mm/internal.h b/mm/internal.h
-> >>>>> index c43ccdddb0f6..ae146a260b14 100644
-> >>>>> --- a/mm/internal.h
-> >>>>> +++ b/mm/internal.h
-> >>>>> @@ -348,6 +348,9 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
-> >>>>>   extern void mlock_vma_page(struct page *page);
-> >>>>>   extern unsigned int munlock_vma_page(struct page *page);
-> >>>>> +extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
-> >>>>> +                  unsigned long len);
-> >>>>> +
-> >>>>>   /*
-> >>>>>    * Clear the page's PageMlocked().  This can be useful in a situation where
-> >>>>>    * we want to unconditionally remove a page from the pagecache -- e.g.,
-> >>>>> diff --git a/mm/mmap.c b/mm/mmap.c
-> >>>>> index 61f72b09d990..c481f088bd50 100644
-> >>>>> --- a/mm/mmap.c
-> >>>>> +++ b/mm/mmap.c
-> >>>>> @@ -1348,9 +1348,8 @@ static inline unsigned long round_hint_to_min(unsigned long hint)
-> >>>>>       return hint;
-> >>>>>   }
-> >>>>> -static inline int mlock_future_check(struct mm_struct *mm,
-> >>>>> -                     unsigned long flags,
-> >>>>> -                     unsigned long len)
-> >>>>> +int mlock_future_check(struct mm_struct *mm, unsigned long flags,
-> >>>>> +               unsigned long len)
-> >>>>>   {
-> >>>>>       unsigned long locked, lock_limit;
-> >>>>> 
-> >>>> 
-> >>>> So, an interesting question is if you actually want to charge secretmem
-> >>>> pages against mlock now, or if you want a dedicated secretmem cgroup
-> >>>> controller instead?
-> >>> 
-> >>> Well, with the current implementation there are three limits an
-> >>> administrator can use to control secretmem limits: mlock, memcg and
-> >>> kernel parameter.
-> >>> 
-> >>> The kernel parameter puts a global upper limit for secretmem usage,
-> >>> memcg accounts all secretmem allocations, including the unused memory in
-> >>> large pages caching and mlock allows per task limit for secretmem
-> >>> mappings, well, like mlock does.
-> >>> 
-> >>> I didn't consider a dedicated cgroup, as it seems we already have enough
-> >>> existing knobs and a new one would be unnecessary.
-> >> 
-> >> To me it feels like the mlock() limit is a wrong fit for secretmem. But
-> >> maybe there are other cases of using the mlock() limit without actually
-> >> doing mlock() that I am not aware of (most probably :) )?
-> > 
-> > Secretmem does not explicitly calls to mlock() but it does what mlock()
-> > does and a bit more. Citing mlock(2):
-> > 
-> >  mlock(),  mlock2(),  and  mlockall()  lock  part  or all of the calling
-> >  process's virtual address space into RAM, preventing that  memory  from
-> >  being paged to the swap area.
-> > 
-> > So, based on that secretmem pages are not swappable, I think that
-> > RLIMIT_MEMLOCK is appropriate here.
-> > 
-> 
-> The page explicitly lists mlock() system calls.
+> So I now have to build this in, whether I want it or not?
 
-Well, it's mlock() man page, isn't it? ;-)
+Why wouldn't anybody want this nice feature? ;-)
 
-My thinking was that since secretmem does what mlock() does wrt
-swapability, it should at least obey the same limit, i.e.
-RLIMIT_MEMLOCK.
+Now, seriously, I hesitated a lot about having a prompt here, but in the
+end I've decided to go without it.
 
-> E.g., we also don‘t
-> account for gigantic pages - which might be allocated from CMA and are
-> not swappable.
- 
-Do you mean gigantic pages in hugetlbfs?
-It seems to me that hugetlbfs accounting is a completely different
-story.
+The added footprint is not so big, with x86 defconfig it's less than 8K
+and with distro (I've checked with Fedora) config the difference is less
+than 1k because they anyway have CMA=y.
 
-> >> I mean, my concern is not earth shattering, this can be reworked later. As I
-> >> said, it just feels wrong.
-> >> 
-> >> -- 
-> >> Thanks,
-> >> 
-> >> David / dhildenb
-> >> 
-> > 
-> > -- 
-> > Sincerely yours,
-> > Mike.
-> > 
-> 
+As this is "security" feature, disros most probably would have this
+enabled anyway, and I believe users that will see something like "Allow
+hiding memory from the kernel" will hit Y there.
 
 -- 
 Sincerely yours,
