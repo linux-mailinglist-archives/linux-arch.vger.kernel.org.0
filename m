@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3B92B4E29
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Nov 2020 18:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D992B4E38
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Nov 2020 18:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387567AbgKPRmd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Nov 2020 12:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S2387424AbgKPRm4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Nov 2020 12:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387911AbgKPRmb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Nov 2020 12:42:31 -0500
+        with ESMTP id S2387921AbgKPRmf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Nov 2020 12:42:35 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0F9C0613CF;
-        Mon, 16 Nov 2020 09:42:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F7CC0613CF;
+        Mon, 16 Nov 2020 09:42:35 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: krisman)
-        with ESMTPSA id D321E1F45E54
+        with ESMTPSA id C9C491F45E58
 From:   Gabriel Krisman Bertazi <krisman@collabora.com>
 To:     tglx@linutronix.de
 Cc:     hch@infradead.org, mingo@redhat.com, keescook@chromium.org,
@@ -26,9 +26,9 @@ Cc:     hch@infradead.org, mingo@redhat.com, keescook@chromium.org,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH v2 04/10] seccomp: Migrate to use SYSCALL_WORK flag
-Date:   Mon, 16 Nov 2020 12:42:00 -0500
-Message-Id: <20201116174206.2639648-5-krisman@collabora.com>
+Subject: [PATCH v2 05/10] tracepoints: Migrate to use SYSCALL_WORK flag
+Date:   Mon, 16 Nov 2020 12:42:01 -0500
+Message-Id: <20201116174206.2639648-6-krisman@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201116174206.2639648-1-krisman@collabora.com>
 References: <20201116174206.2639648-1-krisman@collabora.com>
@@ -38,9 +38,10 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When one the generic syscall entry code, use the syscall_work field in
-struct thread_info and specific SYSCALL_WORK flags to setup this syscall
-work.  This flag has the advantage of being architecture independent.
+For architectures that rely on the generic syscall entry code, use the
+syscall_work field in struct thread_info and the specific SYSCALL_WORK
+flag.  This set of flags has the advantage of being architecture
+independent.
 
 Users of the flag outside of the generic entry code should rely on the
 accessor macros, such that the flag is still correctly resolved for
@@ -55,147 +56,150 @@ Changes since v2:
   - Avoid FLAG/_FLAG defines (tglx)
   - Fix comment to refer to SYSCALL_WORK_SECCOMP (me)
 ---
- include/asm-generic/syscall.h | 2 +-
- include/linux/entry-common.h  | 8 ++------
- include/linux/seccomp.h       | 2 +-
- include/linux/thread_info.h   | 6 ++++++
- kernel/entry/common.c         | 2 +-
- kernel/fork.c                 | 2 +-
- kernel/seccomp.c              | 6 +++---
- 7 files changed, 15 insertions(+), 13 deletions(-)
+ include/linux/entry-common.h | 13 +++++--------
+ include/linux/thread_info.h  |  2 ++
+ include/trace/syscall.h      |  6 +++---
+ kernel/entry/common.c        |  4 ++--
+ kernel/trace/trace_events.c  |  8 ++++----
+ kernel/tracepoint.c          |  4 ++--
+ 6 files changed, 18 insertions(+), 19 deletions(-)
 
-diff --git a/include/asm-generic/syscall.h b/include/asm-generic/syscall.h
-index f3135e734387..524d8e68ff5e 100644
---- a/include/asm-generic/syscall.h
-+++ b/include/asm-generic/syscall.h
-@@ -135,7 +135,7 @@ void syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
-  * Returns the AUDIT_ARCH_* based on the system call convention in use.
-  *
-  * It's only valid to call this when @task is stopped on entry to a system
-- * call, due to %TIF_SYSCALL_TRACE, %TIF_SYSCALL_AUDIT, or %TIF_SECCOMP.
-+ * call, due to %TIF_SYSCALL_TRACE, %TIF_SYSCALL_AUDIT, or %SYSCALL_WORK_SECCOMP.
-  *
-  * Architectures which permit CONFIG_HAVE_ARCH_SECCOMP_FILTER must
-  * provide an implementation of this.
 diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index cbc5c702ee4d..f3fc4457f63f 100644
+index f3fc4457f63f..8aba367e5c79 100644
 --- a/include/linux/entry-common.h
 +++ b/include/linux/entry-common.h
-@@ -21,10 +21,6 @@
- # define _TIF_SYSCALL_TRACEPOINT	(0)
+@@ -17,10 +17,6 @@
+ # define _TIF_SYSCALL_EMU		(0)
  #endif
  
--#ifndef _TIF_SECCOMP
--# define _TIF_SECCOMP			(0)
+-#ifndef _TIF_SYSCALL_TRACEPOINT
+-# define _TIF_SYSCALL_TRACEPOINT	(0)
 -#endif
 -
  #ifndef _TIF_SYSCALL_AUDIT
  # define _TIF_SYSCALL_AUDIT		(0)
  #endif
-@@ -49,7 +45,7 @@
- #endif
+@@ -46,7 +42,7 @@
  
  #define SYSCALL_ENTER_WORK						\
--	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | _TIF_SECCOMP |	\
-+	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT  |			\
- 	 _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_EMU |			\
+ 	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT  |			\
+-	 _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_EMU |			\
++	 _TIF_SYSCALL_EMU |						\
  	 ARCH_SYSCALL_ENTER_WORK)
  
-@@ -64,7 +60,7 @@
- 	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT |			\
- 	 _TIF_SYSCALL_TRACEPOINT | ARCH_SYSCALL_EXIT_WORK)
+ /*
+@@ -58,10 +54,11 @@
  
--#define SYSCALL_WORK_ENTER	(0)
-+#define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP)
- #define SYSCALL_WORK_EXIT	(0)
+ #define SYSCALL_EXIT_WORK						\
+ 	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT |			\
+-	 _TIF_SYSCALL_TRACEPOINT | ARCH_SYSCALL_EXIT_WORK)
++	 ARCH_SYSCALL_EXIT_WORK)
+ 
+-#define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP)
+-#define SYSCALL_WORK_EXIT	(0)
++#define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP |			\
++				 SYSCALL_WORK_SYSCALL_TRACEPOINT)
++#define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT)
  
  /*
-diff --git a/include/linux/seccomp.h b/include/linux/seccomp.h
-index 02aef2844c38..47763f3999f7 100644
---- a/include/linux/seccomp.h
-+++ b/include/linux/seccomp.h
-@@ -42,7 +42,7 @@ struct seccomp {
- extern int __secure_computing(const struct seccomp_data *sd);
- static inline int secure_computing(void)
- {
--	if (unlikely(test_thread_flag(TIF_SECCOMP)))
-+	if (unlikely(test_syscall_work(SECCOMP)))
- 		return  __secure_computing(NULL);
- 	return 0;
- }
+  * TIF flags handled in exit_to_user_mode_loop()
 diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
-index f2d78de55840..1d6488130b5c 100644
+index 1d6488130b5c..ff0ac2ebb4ff 100644
 --- a/include/linux/thread_info.h
 +++ b/include/linux/thread_info.h
-@@ -35,6 +35,12 @@ enum {
- 	GOOD_STACK,
+@@ -37,9 +37,11 @@ enum {
+ 
+ enum syscall_work_bit {
+ 	SYSCALL_WORK_BIT_SECCOMP,
++	SYSCALL_WORK_BIT_SYSCALL_TRACEPOINT,
  };
  
-+enum syscall_work_bit {
-+	SYSCALL_WORK_BIT_SECCOMP,
-+};
-+
-+#define SYSCALL_WORK_SECCOMP		BIT(SYSCALL_WORK_BIT_SECCOMP)
-+
+ #define SYSCALL_WORK_SECCOMP		BIT(SYSCALL_WORK_BIT_SECCOMP)
++#define SYSCALL_WORK_SYSCALL_TRACEPOINT	BIT(SYSCALL_WORK_BIT_SYSCALL_TRACEPOINT)
+ 
  #include <asm/thread_info.h>
  
- #ifdef __KERNEL__
+diff --git a/include/trace/syscall.h b/include/trace/syscall.h
+index dc8ac27d27c1..8e193f3a33b3 100644
+--- a/include/trace/syscall.h
++++ b/include/trace/syscall.h
+@@ -37,10 +37,10 @@ struct syscall_metadata {
+ #if defined(CONFIG_TRACEPOINTS) && defined(CONFIG_HAVE_SYSCALL_TRACEPOINTS)
+ static inline void syscall_tracepoint_update(struct task_struct *p)
+ {
+-	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+-		set_tsk_thread_flag(p, TIF_SYSCALL_TRACEPOINT);
++	if (test_syscall_work(SYSCALL_TRACEPOINT))
++		set_task_syscall_work(p, SYSCALL_TRACEPOINT);
+ 	else
+-		clear_tsk_thread_flag(p, TIF_SYSCALL_TRACEPOINT);
++		clear_task_syscall_work(p, SYSCALL_TRACEPOINT);
+ }
+ #else
+ static inline void syscall_tracepoint_update(struct task_struct *p)
 diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index 51c25f774791..c321056c73d7 100644
+index c321056c73d7..4e2b3c08d939 100644
 --- a/kernel/entry/common.c
 +++ b/kernel/entry/common.c
-@@ -54,7 +54,7 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+@@ -63,7 +63,7 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+ 	/* Either of the above might have changed the syscall number */
+ 	syscall = syscall_get_nr(current, regs);
+ 
+-	if (unlikely(ti_work & _TIF_SYSCALL_TRACEPOINT))
++	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT))
+ 		trace_sys_enter(regs, syscall);
+ 
+ 	syscall_enter_audit(regs, syscall);
+@@ -233,7 +233,7 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long ti_work,
+ 
+ 	audit_syscall_exit(regs);
+ 
+-	if (ti_work & _TIF_SYSCALL_TRACEPOINT)
++	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
+ 		trace_sys_exit(regs, syscall_get_return_value(current, regs));
+ 
+ 	step = report_single_step(ti_work);
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 47a71f96e5bc..adf65b502453 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -3428,10 +3428,10 @@ static __init int event_trace_enable(void)
+  * initialize events and perhaps start any events that are on the
+  * command line. Unfortunately, there are some events that will not
+  * start this early, like the system call tracepoints that need
+- * to set the TIF_SYSCALL_TRACEPOINT flag of pid 1. But event_trace_enable()
+- * is called before pid 1 starts, and this flag is never set, making
+- * the syscall tracepoint never get reached, but the event is enabled
+- * regardless (and not doing anything).
++ * to set the %SYSCALL_WORK_SYSCALL_TRACEPOINT flag of pid 1. But
++ * event_trace_enable() is called before pid 1 starts, and this flag
++ * is never set, making the syscall tracepoint never get reached, but
++ * the event is enabled regardless (and not doing anything).
+  */
+ static __init int event_trace_enable_again(void)
+ {
+diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+index 3f659f855074..7261fa0f5e3c 100644
+--- a/kernel/tracepoint.c
++++ b/kernel/tracepoint.c
+@@ -594,7 +594,7 @@ int syscall_regfunc(void)
+ 	if (!sys_tracepoint_refcount) {
+ 		read_lock(&tasklist_lock);
+ 		for_each_process_thread(p, t) {
+-			set_tsk_thread_flag(t, TIF_SYSCALL_TRACEPOINT);
++			set_task_syscall_work(t, SYSCALL_TRACEPOINT);
+ 		}
+ 		read_unlock(&tasklist_lock);
  	}
- 
- 	/* Do seccomp after ptrace, to catch any tracer changes. */
--	if (ti_work & _TIF_SECCOMP) {
-+	if (work & SYSCALL_WORK_SECCOMP) {
- 		ret = __secure_computing(NULL);
- 		if (ret == -1L)
- 			return ret;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 7199d359690c..4433c9c60100 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1625,7 +1625,7 @@ static void copy_seccomp(struct task_struct *p)
- 	 * to manually enable the seccomp thread flag here.
- 	 */
- 	if (p->seccomp.mode != SECCOMP_MODE_DISABLED)
--		set_tsk_thread_flag(p, TIF_SECCOMP);
-+		set_task_syscall_work(p, SECCOMP);
- #endif
- }
- 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 8ad7a293255a..f67e92d11ad7 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -356,14 +356,14 @@ static inline void seccomp_assign_mode(struct task_struct *task,
- 
- 	task->seccomp.mode = seccomp_mode;
- 	/*
--	 * Make sure TIF_SECCOMP cannot be set before the mode (and
-+	 * Make sure SYSCALL_WORK_SECCOMP cannot be set before the mode (and
- 	 * filter) is set.
- 	 */
- 	smp_mb__before_atomic();
- 	/* Assume default seccomp processes want spec flaw mitigation. */
- 	if ((flags & SECCOMP_FILTER_FLAG_SPEC_ALLOW) == 0)
- 		arch_seccomp_spec_mitigate(task);
--	set_tsk_thread_flag(task, TIF_SECCOMP);
-+	set_task_syscall_work(task, SECCOMP);
- }
- 
- #ifdef CONFIG_SECCOMP_FILTER
-@@ -929,7 +929,7 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
- 
- 	/*
- 	 * Make sure that any changes to mode from another thread have
--	 * been seen after TIF_SECCOMP was seen.
-+	 * been seen after SYSCALL_WORK_SECCOMP was seen.
- 	 */
- 	rmb();
- 
+@@ -611,7 +611,7 @@ void syscall_unregfunc(void)
+ 	if (!sys_tracepoint_refcount) {
+ 		read_lock(&tasklist_lock);
+ 		for_each_process_thread(p, t) {
+-			clear_tsk_thread_flag(t, TIF_SYSCALL_TRACEPOINT);
++			clear_task_syscall_work(t, SYSCALL_TRACEPOINT);
+ 		}
+ 		read_unlock(&tasklist_lock);
+ 	}
 -- 
 2.29.2
 
