@@ -2,75 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCA72B4B89
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Nov 2020 17:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75202B4BC7
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Nov 2020 17:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731504AbgKPQoS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Nov 2020 11:44:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59984 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730503AbgKPQoR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 16 Nov 2020 11:44:17 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F59620E65;
-        Mon, 16 Nov 2020 16:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605545057;
-        bh=yTrjFuAFKEPr9WXf5xuld1Qh5lzQFn9zg5l6OTYrWDw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hhlvp98N6Y3zPHsB3OMhCFT1OIkTLJWhoLxSsVIpfbXOEQN1DT3+73+LRAYCQMPvi
-         RyEGr3IruZKcarP8LLcekaGl/rjQSYjdN8QuVwT4w3xUgwbd97MkLViqRM86lXtbsi
-         d8Gynz+6/9mH3Gax6dntcJxXVcPdspJHyRUf2UaY=
-Received: by mail-oo1-f52.google.com with SMTP id l20so4044905oot.3;
-        Mon, 16 Nov 2020 08:44:17 -0800 (PST)
-X-Gm-Message-State: AOAM5307bwApZRdv5e5k1m123Ne+udn4UI5amdXFuaxGGYA1jhzU7T9+
-        gmLoxOHXU/s/9IB3IEw0451hzR8SV/draBKjTGQ=
-X-Google-Smtp-Source: ABdhPJzcI0iU/kQZ6feELKQXs2iwC3Ud05OCSxkBb+ndz5nnaCz+I4BxAgPXoeidAIuJVCuFG/jhuPtisEOx6ED7VdM=
-X-Received: by 2002:a4a:7055:: with SMTP id b21mr175385oof.66.1605545056474;
- Mon, 16 Nov 2020 08:44:16 -0800 (PST)
+        id S1731108AbgKPQzd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Nov 2020 11:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731088AbgKPQzc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Nov 2020 11:55:32 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA385C0613CF;
+        Mon, 16 Nov 2020 08:55:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qwpmaY+3FLIw2My8lpkirBu6QWcmDVtCZWX9oSsd5pI=; b=sCjdaAN7YgUfR5Na4/L2rwidiM
+        15tIgEAD8fxyHNfjXSLVkszMh4VTvOdC4da0kQq33F5KN4YSPiZ1pNJ9L3rNDo7hadHux4HVGEMek
+        gK6TmC0vH1duDtKuQzo1ZYcV7W6fvsORpiGDSkx6N/FLHn6JtiFfK079qdGhTFdukuBnFzojnMJEG
+        soexUqk6dXlXrsFdSZ0FCimGpoCbHwE4Er09GJ3Cs7tnhIyuNpJXdhi3Fp9CJDQA/FmtXMCTtp2Bh
+        YPYI07+Be6K6ArB4N8yV3nsqZFzjHUdnpniYgtCJxv2v3RU7k1q3I0QDvlbvjYpcQLy1IaBJccdYa
+        3w3WYxuw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kehmU-0006C5-2F; Mon, 16 Nov 2020 16:55:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3D864301959;
+        Mon, 16 Nov 2020 17:55:04 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 28BB820282DFC; Mon, 16 Nov 2020 17:55:04 +0100 (CET)
+Date:   Mon, 16 Nov 2020 17:55:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        kan.liang@linux.intel.com, mingo@kernel.org, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, eranian@google.com, christophe.leroy@csgroup.eu,
+        npiggin@gmail.com, linuxppc-dev@lists.ozlabs.org,
+        mpe@ellerman.id.au, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        sparclinux@vger.kernel.org, davem@davemloft.net,
+        catalin.marinas@arm.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com
+Subject: Re: [PATCH 0/5] perf/mm: Fix PERF_SAMPLE_*_PAGE_SIZE
+Message-ID: <20201116165504.GH3121392@hirez.programming.kicks-ass.net>
+References: <20201113111901.743573013@infradead.org>
+ <20201116154357.bw64c5ie2kiu5l4x@box>
+ <20201116155404.GD29991@casper.infradead.org>
+ <eeec67f6-ea05-1115-f249-b6cdcf2c5e2c@intel.com>
 MIME-Version: 1.0
-References: <20201112215657.GA4539@charmander> <20201116162311.GA15585@infradead.org>
-In-Reply-To: <20201116162311.GA15585@infradead.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 16 Nov 2020 17:44:00 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2JyaGj2GJXYac-hURK1Z54D6cnU4qYZmV3L4pVLifBLA@mail.gmail.com>
-Message-ID: <CAK8P3a2JyaGj2GJXYac-hURK1Z54D6cnU4qYZmV3L4pVLifBLA@mail.gmail.com>
-Subject: Re: [PATCH] syscalls: Fix file comments for syscalls implemented in kernel/sys.c
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Tal Zussman <tz2294@columbia.edu>, Arnd Bergmann <arnd@arndb.de>,
-        Linux API <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eeec67f6-ea05-1115-f249-b6cdcf2c5e2c@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 5:23 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Thu, Nov 12, 2020 at 04:56:57PM -0500, Tal Zussman wrote:
-> > The relevant syscalls were previously moved from kernel/timer.c to kernel/sys.c,
-> > but the comments weren't updated to reflect this change.
-> >
-> > Fixing these comments messes up the alphabetical ordering of syscalls by
-> > filename. This could be fixed by merging the two groups of kernel/sys.c syscalls,
-> > but that would require reordering the syscalls and renumbering them to maintain
-> > the numerical order in unistd.h.
->
-> Lots of overly long lines in your commit log.
->
-> As for the patch itself:  IMHO we should just remove the comments
-> about the files as that information is completely irrelevant.
+On Mon, Nov 16, 2020 at 08:28:23AM -0800, Dave Hansen wrote:
+> On 11/16/20 7:54 AM, Matthew Wilcox wrote:
+> > It gets even more complicated with CPUs with multiple levels of TLB
+> > which support different TLB entry sizes.  My CPU reports:
+> > 
+> > TLB info
+> >  Instruction TLB: 2M/4M pages, fully associative, 8 entries
+> >  Instruction TLB: 4K pages, 8-way associative, 64 entries
+> >  Data TLB: 1GB pages, 4-way set associative, 4 entries
+> >  Data TLB: 4KB pages, 4-way associative, 64 entries
+> >  Shared L2 TLB: 4KB/2MB pages, 6-way associative, 1536 entries
+> 
+> It's even "worse" on recent AMD systems.  Those will coalesce multiple
+> adjacent PTEs into a single TLB entry.  I think Alphas did something
+> like this back in the day with an opt-in.
+> 
+> Anyway, the changelog should probably replace:
 
-I noticed I already applied the patch last week to the asm-generic cleanups
-branch, but forgot to send out the email about it.
+ARM64 does too.
 
-I do agree the file names are rather useless, and I would apply a follow-up
-patch to completely remove them as well. My real plan was to remove
-the file itself and replace it with the parsable syscall.tbl format that we
-use for all non-generic architectures, but I haven't gotten around to updating
-the patch that Firoz Khan did a long time ago.
+> > This enables PERF_SAMPLE_{DATA,CODE}_PAGE_SIZE to report accurate TLB
+> > page sizes.
+> 
+> with something more like:
+> 
+> This enables PERF_SAMPLE_{DATA,CODE}_PAGE_SIZE to report accurate page
+> table mapping sizes.
 
-      arnd
+Sure.
