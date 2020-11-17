@@ -2,26 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 961122B53E5
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Nov 2020 22:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B3C2B5967
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Nov 2020 06:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbgKPVgX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Nov 2020 16:36:23 -0500
-Received: from smtp-bc08.mail.infomaniak.ch ([45.157.188.8]:46401 "EHLO
-        smtp-bc08.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729685AbgKPVgW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 16 Nov 2020 16:36:22 -0500
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CZj7S2n4nzlhKBs;
-        Mon, 16 Nov 2020 22:36:20 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CZj7P4XQrzlh8TF;
-        Mon, 16 Nov 2020 22:36:17 +0100 (CET)
-Subject: Re: [PATCH v22 01/12] landlock: Add object management
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
+        id S1727049AbgKQFih (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Nov 2020 00:38:37 -0500
+Received: from namei.org ([65.99.196.166]:53830 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725355AbgKQFig (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Nov 2020 00:38:36 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 0AH5bZvw023472;
+        Tue, 17 Nov 2020 05:37:35 GMT
+Date:   Tue, 17 Nov 2020 16:37:35 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+cc:     "Serge E . Hallyn" <serge@hallyn.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@amacapital.net>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
@@ -38,63 +34,47 @@ Cc:     James Morris <jmorris@namei.org>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201027200358.557003-1-mic@digikod.net>
- <20201027200358.557003-2-mic@digikod.net> <20201116212609.GA13063@amd>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <523d2141-e6f9-354d-d102-ae8345c84686@digikod.net>
-Date:   Mon, 16 Nov 2020 22:36:17 +0100
-User-Agent: 
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v24 00/12] Landlock LSM
+In-Reply-To: <20201112205141.775752-1-mic@digikod.net>
+Message-ID: <alpine.LRH.2.21.2011171635410.23193@namei.org>
+References: <20201112205141.775752-1-mic@digikod.net>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20201116212609.GA13063@amd>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="1665246916-1723075868-1605591457=:23193"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 16/11/2020 22:26, Pavel Machek wrote:
-> Hi!
-> 
->> A Landlock object enables to identify a kernel object (e.g. an inode).
->> A Landlock rule is a set of access rights allowed on an object.  Rules
->> are grouped in rulesets that may be tied to a set of processes (i.e.
->> subjects) to enforce a scoped access-control (i.e. a domain).
->>
->> Because Landlock's goal is to empower any process (especially
->> unprivileged ones) to sandbox themselves, we cannot rely on a
->> system-wide object identification such as file extended attributes.
-> 
-> 
->> +config SECURITY_LANDLOCK
->> +	bool "Landlock support"
->> +	depends on SECURITY
->> +	select SECURITY_PATH
->> +	help
->> +	  Landlock is a safe sandboxing mechanism which enables processes to
->> +	  restrict themselves (and their future children) by gradually
->> +	  enforcing tailored access control policies.  A security policy is a
->> +	  set of access rights (e.g. open a file in read-only, make a
->> +	  directory, etc.) tied to a file hierarchy.  Such policy can be configured
->> +	  and enforced by any processes for themselves thanks to dedicated system
->> +	  calls: landlock_create_ruleset(), landlock_add_rule(), and
->> +	  landlock_enforce_ruleset_current().
-> 
-> How does it interact with setuid binaries? Being able to exec passwd
-> in a sandbox sounds like ... fun way to get root? :-).
+--1665246916-1723075868-1605591457=:23193
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-It works like seccomp: if you run with CAP_SYS_ADMIN in the current
-namespace, then SUID binaries may be allowed, otherwise if you use
-PR_SET_NO_NEW_PRIVS, then executing a SUID binary is denied.
+On Thu, 12 Nov 2020, Mickaël Salaün wrote:
 
-The 24th version is here:
-https://lore.kernel.org/lkml/20201112205141.775752-1-mic@digikod.net/
+> Hi,
+> 
+> This patch series simplifies the code, makes stacked access-control more
+> consistent (from the user point of view), properly handles memory
+> allocation errors, and adds more tests (covering layered ruleset corner
+> cases).  Most of these changes were sent as a separate patch series:
+> https://lore.kernel.org/lkml/20201111213442.434639-1-mic@digikod.net/
+> 
+> James and Jann, could you please take a look at the main changes
+> (patches 2, 7 and 8)?
 
-> 
-> Best regards,
-> 								Pavel
-> 								
-> 
+We definitely need more review on these changes that came in. I'll drop 
+the previous patchset from my tree and wait until the latest code is fully 
+reviewed.
+
+Fundamental locking issues and similar should be worked out before 
+submitting for mainline merge.
+
+-- 
+James Morris
+<jmorris@namei.org>
+
+--1665246916-1723075868-1605591457=:23193--
