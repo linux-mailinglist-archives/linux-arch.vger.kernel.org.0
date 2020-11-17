@@ -2,212 +2,263 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DB62B6E29
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Nov 2020 20:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1A22B6ED3
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Nov 2020 20:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbgKQTL0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Nov 2020 14:11:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54262 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725771AbgKQTL0 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 17 Nov 2020 14:11:26 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44D79221FC;
-        Tue, 17 Nov 2020 19:11:23 +0000 (UTC)
-Date:   Tue, 17 Nov 2020 14:11:21 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     tglx@linutronix.de, hch@infradead.org, mingo@redhat.com,
-        keescook@chromium.org, arnd@arndb.de, luto@amacapital.net,
-        wad@chromium.org, paul@paul-moore.com, eparis@redhat.com,
-        oleg@redhat.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kernel@collabora.com,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2 05/10] tracepoints: Migrate to use SYSCALL_WORK flag
-Message-ID: <20201117141121.4f1f792a@gandalf.local.home>
-In-Reply-To: <20201116174206.2639648-6-krisman@collabora.com>
-References: <20201116174206.2639648-1-krisman@collabora.com>
-        <20201116174206.2639648-6-krisman@collabora.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728309AbgKQTiJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Nov 2020 14:38:09 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46616 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726352AbgKQTiJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 17 Nov 2020 14:38:09 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AHJXeBY024599;
+        Tue, 17 Nov 2020 11:34:17 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=uatSQMSi5cWdaUPa4qWJsPwJT50JMEV62M/bUPP1wEI=;
+ b=JRY0ZN05WZf7mPMAdeYXCjPTTcOTl8tzvwFFkLmY+mEcuUIohSNEKrmZTyZkuWt3XI0C
+ HP8oqTmFi9fOBHcHZ0QZk0/L60UK1I72vJ9dgh4xqEV7wDn58suQCAFpac16sRO7Ah0W
+ knASkwHELitiook6Px+LN9HOVH/duyNqtXs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34uwyg762e-15
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 17 Nov 2020 11:34:17 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 17 Nov 2020 11:34:09 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SSz5h9ONphWKXIm+CNVcATKGcFegHyvoXYOI6mSNJ8OzBFvCVHOp2hEtfBWr0CuGcnrlUxXxICw+wucuipaQvNyeI/C0fR4prpwWkMH+4YN5F9oIY1m5GrZmWxLTzgVeJkaG5W7INlZvlGV1TFiiz+i+K0WplBUny/oYFVUHd4gi4WLAgxEJNkxgGs434/3JW+lePnWooSAraGdIm31wcrwKKIxGmVh97MJ2insX4E1vD9blrbfT5ir/d2yOYZYqDPC3elyPN4k/wpGE992vMnGLWGpLmtC8gX+tk4x9+SHSK7o+xbc87xiYGjtKgVENLbEd7NQQwYb53yImmeG8lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uatSQMSi5cWdaUPa4qWJsPwJT50JMEV62M/bUPP1wEI=;
+ b=cy/QBWnYIWJfw/p/1Ypq8LHzWQstqYVpnOblz5TpoOPAmr6gKxeU7sK/yxgXVzPX3wXa14AXpgOE9F3XRqtZ2bxCtIhGufZh67yzdejt9nmt0C6M+nS6WtakHVBeq4vsfgAdsKk3tzckYNTZEQnj4pIqEc5imfAj2Hv3MWCtBzx4TmVOSPTGL882CImQ69PvQJJUpMhKsIYRh0GGKFen5u8p7DLW5r0WHHZolvxi2a8y0KO8xqQ91aEC+i9+QCJfMriiAbYWxm40LtHgEGCWC4VeIZgXHlVsMpqaZlu/mfLP8cHQdpyx2fviUSi/iFAvDbxZWry1/mkCarG5m+q2rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uatSQMSi5cWdaUPa4qWJsPwJT50JMEV62M/bUPP1wEI=;
+ b=bkPZrEqDH9pvV0Urx/h9aKjdbBXG7iTHNShqjEM8kOobrYc61Vw8Akp9ie/bzOWqcnRzxZBco7VQcYHtNoNRKFg4LvCGW13bFuQLnBx78db1FBttZnWtYZM9PVw9QYtpEdJUyWAJ4eloPGHk8XDBl1jeeUrOF04fOyhfMY90ADM=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by BYAPR15MB2213.namprd15.prod.outlook.com (2603:10b6:a02:85::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.24; Tue, 17 Nov
+ 2020 19:34:05 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::3925:e1f9:4c6a:9396]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::3925:e1f9:4c6a:9396%6]) with mapi id 15.20.3564.031; Tue, 17 Nov 2020
+ 19:34:05 +0000
+Date:   Tue, 17 Nov 2020 11:33:58 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Mike Rapoport <rppt@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-nvdimm@lists.01.org>, <linux-riscv@lists.infradead.org>,
+        <x86@kernel.org>
+Subject: Re: [PATCH v9 6/9] secretmem: add memcg accounting
+Message-ID: <20201117193358.GB109785@carbon.dhcp.thefacebook.com>
+References: <20201117162932.13649-1-rppt@kernel.org>
+ <20201117162932.13649-7-rppt@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201117162932.13649-7-rppt@kernel.org>
+X-Originating-IP: [2620:10d:c090:400::5:4f92]
+X-ClientProxiedBy: CO2PR06CA0066.namprd06.prod.outlook.com
+ (2603:10b6:104:3::24) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from carbon.dhcp.thefacebook.com (2620:10d:c090:400::5:4f92) by CO2PR06CA0066.namprd06.prod.outlook.com (2603:10b6:104:3::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Tue, 17 Nov 2020 19:34:02 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a313af32-277e-40f9-8483-08d88b2fbeb5
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2213:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2213B05A94882FB7EF6EB694BEE20@BYAPR15MB2213.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fzeG4mE9RNRRLfeOVH5Wnhj3Ffgt12GeAyAxOgUN4tgPX6YvLI1o9+XVQx18jmaOXpcP+N9PfdekP1et6rQB64rCWbBvkzF6lSB7L5GhjD7ZgnW8cBZB1X866bM3mYvr64RXBAccwymQ4hke6QYValF3yyKvNlbD7iEzdo21BSR8FVznZYNebtKURhk7b/Syoz4evuMcJR9fruuUoLV2WzrkkBjNl9Q1QO4pJnTEFmGWMuMwSnHqrWjnxuqw2/vAT/T/xJ9dj++RuaLmCyjWchh3trU5qFr8MB3wM6z2nbNf/QRioMt/ALgODTYANEDerz/voegKibR5/nbpV0nM1g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(136003)(366004)(346002)(376002)(9686003)(4326008)(52116002)(2906002)(66476007)(6506007)(478600001)(16526019)(66556008)(8936002)(1076003)(6916009)(33656002)(66946007)(55016002)(5660300002)(186003)(7696005)(83380400001)(15650500001)(316002)(86362001)(7416002)(6666004)(7406005)(54906003)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: w300MdiX2CI1saMYk2y1yHiHExycD1PAAW4IiMn4+M3ks9jfGhqdtnTPETfVBJmZ8Wn1kPx2GnWE7D3eHtHGNEy2SMsEzoFzU2JVl538Rl474+gV3dS/h1m6LCSNkx87x/ucMTHq6rc9YUbTNUiI4y+WavPVSESCBfUFOf6gY61bYpUrzR9FRAV5X0rHiLqcji4UCAgbXMpIRd1kntd5sIrCIJCUnV0gNHxTKmBiRUEAeYTtGeu1y8laHgkIUeyGjLE9SRYKmYeEoft2mL1J/TWGUlFeHkNMnyCOsx+Lv3tuekpYOA74leN9cC79TR9v98bWHmyto8JFAE5Laf9vrpC48i5aCVzhHTIIrxnyXWLpzZ16qlUY+hO4X40T7p6TnJNCQevMB+HVxaf7WfzmWJcLBS9sMPZ4+Wx8LVKwrl2xoYXLZB60Y+FKSYADh7cuusb3s6altzTOs1zg5VLAz6iNnx9K1Q8LoKMkkd6bvbfXYCAJ41wGpBZLUr76/UNR22UEhg56i3aS7nB3nU5qEjzpLZIBxGSUv/TT8M/8hpDSSODjeMHH/sZCu36EWHXN+I8jgOWLKnT5iY/iVLoYgYnJ7VEQ8BijoZOKAU1RW+2wU4LDC1uoKuXzc0Mz1YFDTYzNs49df3+rcvEV2IaVVhrSIj+BqF2rfqJlN2u4I3Y=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a313af32-277e-40f9-8483-08d88b2fbeb5
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2020 19:34:05.6913
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: y16jFNs0M57UPhcL7ZDqDQP9trzkVNPtdJOT+i1ZcssbS7BH8+uTKfSl4Loktiok
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2213
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-17_07:2020-11-17,2020-11-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1011 mlxscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0 spamscore=0
+ phishscore=0 suspectscore=1 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2011170142
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 16 Nov 2020 12:42:01 -0500
-Gabriel Krisman Bertazi <krisman@collabora.com> wrote:
-
-> For architectures that rely on the generic syscall entry code, use the
-> syscall_work field in struct thread_info and the specific SYSCALL_WORK
-> flag.  This set of flags has the advantage of being architecture
-> independent.
+On Tue, Nov 17, 2020 at 06:29:29PM +0200, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Users of the flag outside of the generic entry code should rely on the
-> accessor macros, such that the flag is still correctly resolved for
-> architectures that don't use the generic entry code and still rely on
-> TIF flags for system call work.
+> Account memory consumed by secretmem to memcg. The accounting is updated
+> when the memory is actually allocated and freed.
 > 
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Hi Mike!
 
-Also added Mathieu to Cc.
+I like this version so much more, thank you for fixing it.
+Please, feel free to add
+Acked-by: Roman Gushchin <guro@fb.com> .
 
--- Steve
+Thanks!
 
-> 
 > ---
-> Changes since v2:
->   - Drop explicit value assignment in enum (tglx)
->   - Avoid FLAG/_FLAG defines (tglx)
->   - Fix comment to refer to SYSCALL_WORK_SECCOMP (me)
-> ---
->  include/linux/entry-common.h | 13 +++++--------
->  include/linux/thread_info.h  |  2 ++
->  include/trace/syscall.h      |  6 +++---
->  kernel/entry/common.c        |  4 ++--
->  kernel/trace/trace_events.c  |  8 ++++----
->  kernel/tracepoint.c          |  4 ++--
->  6 files changed, 18 insertions(+), 19 deletions(-)
+>  mm/filemap.c   |  3 ++-
+>  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
+>  2 files changed, 37 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index f3fc4457f63f..8aba367e5c79 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -17,10 +17,6 @@
->  # define _TIF_SYSCALL_EMU		(0)
->  #endif
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 249cf489f5df..cf7f1dc9f4b8 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -42,6 +42,7 @@
+>  #include <linux/psi.h>
+>  #include <linux/ramfs.h>
+>  #include <linux/page_idle.h>
+> +#include <linux/secretmem.h>
+>  #include "internal.h"
 >  
-> -#ifndef _TIF_SYSCALL_TRACEPOINT
-> -# define _TIF_SYSCALL_TRACEPOINT	(0)
-> -#endif
-> -
->  #ifndef _TIF_SYSCALL_AUDIT
->  # define _TIF_SYSCALL_AUDIT		(0)
->  #endif
-> @@ -46,7 +42,7 @@
+>  #define CREATE_TRACE_POINTS
+> @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
+>  	page->mapping = mapping;
+>  	page->index = offset;
 >  
->  #define SYSCALL_ENTER_WORK						\
->  	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT  |			\
-> -	 _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_EMU |			\
-> +	 _TIF_SYSCALL_EMU |						\
->  	 ARCH_SYSCALL_ENTER_WORK)
+> -	if (!huge) {
+> +	if (!huge && !page_is_secretmem(page)) {
+>  		error = mem_cgroup_charge(page, current->mm, gfp);
+>  		if (error)
+>  			goto error;
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index d4c44fc568a4..abf6ecdf70cb 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/memblock.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/secretmem.h>
+> +#include <linux/memcontrol.h>
+>  #include <linux/set_memory.h>
+>  #include <linux/sched/signal.h>
 >  
->  /*
-> @@ -58,10 +54,11 @@
+> @@ -50,6 +51,32 @@ struct secretmem_ctx {
 >  
->  #define SYSCALL_EXIT_WORK						\
->  	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT |			\
-> -	 _TIF_SYSCALL_TRACEPOINT | ARCH_SYSCALL_EXIT_WORK)
-> +	 ARCH_SYSCALL_EXIT_WORK)
+>  static struct cma *secretmem_cma;
 >  
-> -#define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP)
-> -#define SYSCALL_WORK_EXIT	(0)
-> +#define SYSCALL_WORK_ENTER	(SYSCALL_WORK_SECCOMP |			\
-> +				 SYSCALL_WORK_SYSCALL_TRACEPOINT)
-> +#define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT)
->  
->  /*
->   * TIF flags handled in exit_to_user_mode_loop()
-> diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
-> index 1d6488130b5c..ff0ac2ebb4ff 100644
-> --- a/include/linux/thread_info.h
-> +++ b/include/linux/thread_info.h
-> @@ -37,9 +37,11 @@ enum {
->  
->  enum syscall_work_bit {
->  	SYSCALL_WORK_BIT_SECCOMP,
-> +	SYSCALL_WORK_BIT_SYSCALL_TRACEPOINT,
->  };
->  
->  #define SYSCALL_WORK_SECCOMP		BIT(SYSCALL_WORK_BIT_SECCOMP)
-> +#define SYSCALL_WORK_SYSCALL_TRACEPOINT	BIT(SYSCALL_WORK_BIT_SYSCALL_TRACEPOINT)
->  
->  #include <asm/thread_info.h>
->  
-> diff --git a/include/trace/syscall.h b/include/trace/syscall.h
-> index dc8ac27d27c1..8e193f3a33b3 100644
-> --- a/include/trace/syscall.h
-> +++ b/include/trace/syscall.h
-> @@ -37,10 +37,10 @@ struct syscall_metadata {
->  #if defined(CONFIG_TRACEPOINTS) && defined(CONFIG_HAVE_SYSCALL_TRACEPOINTS)
->  static inline void syscall_tracepoint_update(struct task_struct *p)
->  {
-> -	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
-> -		set_tsk_thread_flag(p, TIF_SYSCALL_TRACEPOINT);
-> +	if (test_syscall_work(SYSCALL_TRACEPOINT))
-> +		set_task_syscall_work(p, SYSCALL_TRACEPOINT);
->  	else
-> -		clear_tsk_thread_flag(p, TIF_SYSCALL_TRACEPOINT);
-> +		clear_task_syscall_work(p, SYSCALL_TRACEPOINT);
->  }
->  #else
->  static inline void syscall_tracepoint_update(struct task_struct *p)
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index c321056c73d7..4e2b3c08d939 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -63,7 +63,7 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
->  	/* Either of the above might have changed the syscall number */
->  	syscall = syscall_get_nr(current, regs);
->  
-> -	if (unlikely(ti_work & _TIF_SYSCALL_TRACEPOINT))
-> +	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT))
->  		trace_sys_enter(regs, syscall);
->  
->  	syscall_enter_audit(regs, syscall);
-> @@ -233,7 +233,7 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long ti_work,
->  
->  	audit_syscall_exit(regs);
->  
-> -	if (ti_work & _TIF_SYSCALL_TRACEPOINT)
-> +	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
->  		trace_sys_exit(regs, syscall_get_return_value(current, regs));
->  
->  	step = report_single_step(ti_work);
-> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-> index 47a71f96e5bc..adf65b502453 100644
-> --- a/kernel/trace/trace_events.c
-> +++ b/kernel/trace/trace_events.c
-> @@ -3428,10 +3428,10 @@ static __init int event_trace_enable(void)
->   * initialize events and perhaps start any events that are on the
->   * command line. Unfortunately, there are some events that will not
->   * start this early, like the system call tracepoints that need
-> - * to set the TIF_SYSCALL_TRACEPOINT flag of pid 1. But event_trace_enable()
-> - * is called before pid 1 starts, and this flag is never set, making
-> - * the syscall tracepoint never get reached, but the event is enabled
-> - * regardless (and not doing anything).
-> + * to set the %SYSCALL_WORK_SYSCALL_TRACEPOINT flag of pid 1. But
-> + * event_trace_enable() is called before pid 1 starts, and this flag
-> + * is never set, making the syscall tracepoint never get reached, but
-> + * the event is enabled regardless (and not doing anything).
->   */
->  static __init int event_trace_enable_again(void)
->  {
-> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-> index 3f659f855074..7261fa0f5e3c 100644
-> --- a/kernel/tracepoint.c
-> +++ b/kernel/tracepoint.c
-> @@ -594,7 +594,7 @@ int syscall_regfunc(void)
->  	if (!sys_tracepoint_refcount) {
->  		read_lock(&tasklist_lock);
->  		for_each_process_thread(p, t) {
-> -			set_tsk_thread_flag(t, TIF_SYSCALL_TRACEPOINT);
-> +			set_task_syscall_work(t, SYSCALL_TRACEPOINT);
->  		}
->  		read_unlock(&tasklist_lock);
->  	}
-> @@ -611,7 +611,7 @@ void syscall_unregfunc(void)
->  	if (!sys_tracepoint_refcount) {
->  		read_lock(&tasklist_lock);
->  		for_each_process_thread(p, t) {
-> -			clear_tsk_thread_flag(t, TIF_SYSCALL_TRACEPOINT);
-> +			clear_task_syscall_work(t, SYSCALL_TRACEPOINT);
->  		}
->  		read_unlock(&tasklist_lock);
->  	}
+> +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
+> +{
+> +	int err;
+> +
+> +	err = memcg_kmem_charge_page(page, gfp, order);
+> +	if (err)
+> +		return err;
+> +
+> +	/*
+> +	 * seceremem caches are unreclaimable kernel allocations, so treat
+           ^^^^^^^^^
+	   secretmem?
 
+> +	 * them as unreclaimable slab memory for VM statistics purposes
+> +	 */
+> +	mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
+> +			    PAGE_SIZE << order);
+> +
+> +	return 0;
+> +}
+> +
+> +static void secretmem_unaccount_pages(struct page *page, int order)
+> +{
+> +
+> +	mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
+> +			    -PAGE_SIZE << order);
+> +	memcg_kmem_uncharge_page(page, order);
+> +}
+> +
+>  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  {
+>  	unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
+> @@ -62,10 +89,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  	if (!page)
+>  		return -ENOMEM;
+>  
+> -	err = set_direct_map_invalid_noflush(page, nr_pages);
+> +	err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
+>  	if (err)
+>  		goto err_cma_release;
+>  
+> +	err = set_direct_map_invalid_noflush(page, nr_pages);
+> +	if (err)
+> +		goto err_memcg_uncharge;
+> +
+>  	addr = (unsigned long)page_address(page);
+>  	err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
+>  	if (err)
+> @@ -82,6 +113,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  	 * won't fail
+>  	 */
+>  	set_direct_map_default_noflush(page, nr_pages);
+> +err_memcg_uncharge:
+> +	secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>  err_cma_release:
+>  	cma_release(secretmem_cma, page, nr_pages);
+>  	return err;
+> @@ -312,6 +345,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
+>  	int i;
+>  
+>  	set_direct_map_default_noflush(page, nr_pages);
+> +	secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>  
+>  	for (i = 0; i < nr_pages; i++)
+>  		clear_highpage(page + i);
+> -- 
+> 2.28.0
+> 
