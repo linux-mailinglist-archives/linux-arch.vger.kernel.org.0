@@ -2,25 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F6B2B92C5
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 13:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 917B92B9358
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 14:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727267AbgKSMrj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Nov 2020 07:47:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:56420 "EHLO foss.arm.com"
+        id S1727156AbgKSNMr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Nov 2020 08:12:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726719AbgKSMrj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Nov 2020 07:47:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7FD21396;
-        Thu, 19 Nov 2020 04:47:38 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C0093F718;
-        Thu, 19 Nov 2020 04:47:36 -0800 (PST)
-References: <20201113093720.21106-1-will@kernel.org> <20201113093720.21106-8-will@kernel.org>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Will Deacon <will@kernel.org>
+        id S1727107AbgKSNMr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 19 Nov 2020 08:12:47 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 41CC52222A;
+        Thu, 19 Nov 2020 13:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605791564;
+        bh=+S1H0ZJpI+XEJQFoYwrcrygpnJ+0WlSbLdnlvQ3oIAY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vwnHgZxHP8mA72dLl+N1D1ijUGgvL48bEfydoyKdJw0kCsH7hurie2mO1R1i2q/xR
+         d+ZGYDXjrWiC1kZq5o38c0ehtfEQvVEVLzAPy2RjlUQGkFivVKHEldZ0c0wEf+N8UZ
+         TEOeuRZVLsRMX2oRy5EFkwQ7cihGGQsv9enII3NM=
+Date:   Thu, 19 Nov 2020 13:12:37 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Valentin Schneider <valentin.schneider@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -37,59 +42,52 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         kernel-team@android.com
-Subject: Re: [PATCH v3 07/14] sched: Introduce restrict_cpus_allowed_ptr() to limit task CPU affinity
-In-reply-to: <20201113093720.21106-8-will@kernel.org>
-Date:   Thu, 19 Nov 2020 12:47:34 +0000
-Message-ID: <jhj8saxwm1l.mognet@arm.com>
+Subject: Re: [PATCH v3 02/14] arm64: Allow mismatched 32-bit EL0 support
+Message-ID: <20201119131236.GC4331@willie-the-truck>
+References: <20201113093720.21106-1-will@kernel.org>
+ <20201113093720.21106-3-will@kernel.org>
+ <jhjblftwpqq.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jhjblftwpqq.mognet@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Valentin,
 
-On 13/11/20 09:37, Will Deacon wrote:
-> Asymmetric systems may not offer the same level of userspace ISA support
-> across all CPUs, meaning that some applications cannot be executed by
-> some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
-> not feature support for 32-bit applications on both clusters.
->
-> Although userspace can carefully manage the affinity masks for such
-> tasks, one place where it is particularly problematic is execve()
-> because the CPU on which the execve() is occurring may be incompatible
-> with the new application image. In such a situation, it is desirable to
-> restrict the affinity mask of the task and ensure that the new image is
-> entered on a compatible CPU.
+Thanks for the review.
 
-> From userspace's point of view, this looks the same as if the
-> incompatible CPUs have been hotplugged off in its affinity mask.
+On Thu, Nov 19, 2020 at 11:27:41AM +0000, Valentin Schneider wrote:
+> 
+> On 13/11/20 09:37, Will Deacon wrote:
+> > +const struct cpumask *system_32bit_el0_cpumask(void)
+> > +{
+> > +	if (!system_supports_32bit_el0())
+> > +		return cpu_none_mask;
+> > +
+> > +	if (static_branch_unlikely(&arm64_mismatched_32bit_el0))
+> > +		return cpu_32bit_el0_mask;
+> > +
+> > +	return cpu_present_mask;
+> > +}
+> 
+> Nit: this is used in patch 13 to implement arch_cpu_allowed_mask(). Since
+> that latter defaults to cpu_possible_mask, this probably should too.
 
-{pedantic reading warning}
+My original thinking was that, in a system where 32-bit EL0 support is
+detected at boot and we're not handling mismatches, then it would be nice
+to avoid saying that late CPUs are all 32-bit capable given that they will
+fail to be onlined if they're not.
 
-Hotplugged CPUs *can* be set in a task's affinity mask, though interact
-weirdly with cpusets [1]. Having it be the same as hotplug would mean
-keeping incompatible CPUs allowed in the affinity mask, but preventing them
-from being picked via e.g. is_cpu_allowed().
+However, the reality is that we don't currently distinguish between the
+present and possible masks on arm64 so it doesn't make any difference. It's
+also not useful to userspace, because if the cores aren't online then so
+what? Your observation above is another nail in the coffin, so I'll change
+this to the possible mask as you suggest.
 
-I was actually hoping this could be a feasible approach, i.e. have an
-extra CPU active mask filter for any task:
+Cheers,
 
-  cpu_active_mask & arch_cpu_allowed_mask(p)
-
-rather than fiddle with task affinity. Sadly this would also require fixing
-up pretty much any place that uses cpu_active_mask(), and probably places
-that use p->cpus_ptr as well. RT / DL balancing comes to mind, because that
-uses either a task's affinity or a CPU's root domain (which reflects the
-cpu_active_mask) to figure out where to push a task.
-
-So while I'm wary of hacking up affinity, I fear it might be the lesser
-evil :(
-
-[1]: https://lore.kernel.org/lkml/1251528473.590671.1579196495905.JavaMail.zimbra@efficios.com/
-
-> In preparation for restricting the affinity mask for compat tasks on
-> arm64 systems without uniform support for 32-bit applications, introduce
-> a restrict_cpus_allowed_ptr(), which allows the current affinity mask
-> for a task to be shrunk to the intersection of a parameter mask.
->
-> Signed-off-by: Will Deacon <will@kernel.org>
+Will
