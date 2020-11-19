@@ -2,31 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8392B958F
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 15:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DCD2B9779
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 17:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727777AbgKSOyx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Nov 2020 09:54:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:59750 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728044AbgKSOyw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Nov 2020 09:54:52 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F87911D4;
-        Thu, 19 Nov 2020 06:54:52 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C423A3F719;
-        Thu, 19 Nov 2020 06:54:49 -0800 (PST)
-References: <20201113093720.21106-1-will@kernel.org> <20201113093720.21106-8-will@kernel.org> <jhj8saxwm1l.mognet@arm.com> <20201119131319.GE4331@willie-the-truck>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
+        id S1727981AbgKSQKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Nov 2020 11:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727841AbgKSQKE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Nov 2020 11:10:04 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C429C0613CF;
+        Thu, 19 Nov 2020 08:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gT+aycviSHZiSVl6jswLbLNrg/uiSiMYLbgQMN7rMto=; b=AI2lVVKrmsVKgsicoDpaTb0HIr
+        OzOqlDqCZxXvpG7NHAX7weDFKlljBL6wnqCy//WM6TW/yMtdFKChH4FCSRKwES7Ff2+D5OmmmNjfY
+        oUvepoJexunxdO7bbuqOVJhgpQpQ4vcQx8LiDhHixGr1ExZ3Lgsu2g8JAJGEhaHtkpH5xrGxzZE14
+        F/1gLv41pIiaiJpC69307E1sUnlFAdn8GscUktxjPy7nxrVQQ9kv4OipQAdoRugjFHmkfhseCvNPk
+        SiHL1EpaFewLIJKCSdmywkJsRJUNmzPm42Q4EL9+w2qrefjfnVGh9BSe5w/4d2heVKdBt6EAvtvKS
+        cicepZ8g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kfmVI-0006ei-9y; Thu, 19 Nov 2020 16:09:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 228793019CE;
+        Thu, 19 Nov 2020 17:09:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 01C5F200E0A45; Thu, 19 Nov 2020 17:09:44 +0100 (CET)
+Date:   Thu, 19 Nov 2020 17:09:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
         Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
         Qais Yousef <qais.yousef@arm.com>,
         Suren Baghdasaryan <surenb@google.com>,
@@ -37,46 +53,39 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         kernel-team@android.com
-Subject: Re: [PATCH v3 07/14] sched: Introduce restrict_cpus_allowed_ptr() to limit task CPU affinity
-In-reply-to: <20201119131319.GE4331@willie-the-truck>
-Date:   Thu, 19 Nov 2020 14:54:47 +0000
-Message-ID: <jhj5z61wg5k.mognet@arm.com>
+Subject: Re: [PATCH v3 07/14] sched: Introduce restrict_cpus_allowed_ptr() to
+ limit task CPU affinity
+Message-ID: <20201119160944.GP3121392@hirez.programming.kicks-ass.net>
+References: <20201113093720.21106-1-will@kernel.org>
+ <20201113093720.21106-8-will@kernel.org>
+ <jhj8saxwm1l.mognet@arm.com>
+ <20201119131319.GE4331@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201119131319.GE4331@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Nov 19, 2020 at 01:13:20PM +0000, Will Deacon wrote:
 
-On 19/11/20 13:13, Will Deacon wrote:
-> On Thu, Nov 19, 2020 at 12:47:34PM +0000, Valentin Schneider wrote:
->>
->> On 13/11/20 09:37, Will Deacon wrote:
->> > Asymmetric systems may not offer the same level of userspace ISA support
->> > across all CPUs, meaning that some applications cannot be executed by
->> > some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
->> > not feature support for 32-bit applications on both clusters.
->> >
->> > Although userspace can carefully manage the affinity masks for such
->> > tasks, one place where it is particularly problematic is execve()
->> > because the CPU on which the execve() is occurring may be incompatible
->> > with the new application image. In such a situation, it is desirable to
->> > restrict the affinity mask of the task and ensure that the new image is
->> > entered on a compatible CPU.
->>
->> > From userspace's point of view, this looks the same as if the
->> > incompatible CPUs have been hotplugged off in its affinity mask.
->>
->> {pedantic reading warning}
->>
->> Hotplugged CPUs *can* be set in a task's affinity mask, though interact
->> weirdly with cpusets [1]. Having it be the same as hotplug would mean
->> keeping incompatible CPUs allowed in the affinity mask, but preventing them
->> from being picked via e.g. is_cpu_allowed().
->
 > Sure, but I was talking about what userspace sees, and I don't think it ever
 > sees CPUs that have been hotplugged off, right? That is, sched_getaffinity()
 > masks its result with the active_mask.
->
 
-Right, this wasn't pedantic reading, but reading between the lines!
+# for i in /sys/devices/system/cpu/cpu*/online; do echo -n $i ":"; cat $i; done
+/sys/devices/system/cpu/cpu1/online :0
+/sys/devices/system/cpu/cpu2/online :1
+/sys/devices/system/cpu/cpu3/online :1
+/sys/devices/system/cpu/cpu4/online :1
+/sys/devices/system/cpu/cpu5/online :1
+/sys/devices/system/cpu/cpu6/online :1
+/sys/devices/system/cpu/cpu7/online :1
+
+# grep Cpus_allowed /proc/self/status
+Cpus_allowed:   ff
+Cpus_allowed_list:      0-7
+
+
+:-)
