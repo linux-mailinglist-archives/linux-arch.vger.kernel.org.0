@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606A92B90A7
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 12:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C392B90AA
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 12:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgKSLHS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Nov 2020 06:07:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33350 "EHLO mail.kernel.org"
+        id S1726619AbgKSLHc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Nov 2020 06:07:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726580AbgKSLHS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Nov 2020 06:07:18 -0500
+        id S1725843AbgKSLHb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 19 Nov 2020 06:07:31 -0500
 Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1C08C22248;
-        Thu, 19 Nov 2020 11:07:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB98A22248;
+        Thu, 19 Nov 2020 11:07:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605784037;
-        bh=+WwDHFmhE9MS11P7KUuWkxiPo6fvIEVugJhgXLZJcR0=;
+        s=default; t=1605784050;
+        bh=IFWCYkPdfqc245s/XXDJ72zIwthXd5CYEww4fQuyMKI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pLRb0ge/P3ZJCh1BzFlpiY5cYssXpnuUKk5rQraPQgkYekjSdJIH+GG7/ythHuLFu
-         /wK8Q88KDTgfi36pa6wtpoFZec5+heJzw2pFzr6rQqgUzYw+1IWA/ZmWrkT9GXWXtF
-         Lr3+RfK/JFkN8imWgqExNyP4UOh6LX4kKZHKiEjI=
-Date:   Thu, 19 Nov 2020 11:07:09 +0000
+        b=he9WtmW7U8XMQ7IHFIvgoUxjzie8s4Ven1o1/QWXq+g1T/8ZhjiuayVMhWin8Iu9s
+         7XH5+ElgMqV7pi+NWIzowDER3ZlzIH8xTevnazQlpph+PupkOe//ZQ5PsY5adsgv/E
+         qqTkqyrtXpxBvvfIoPb9HHSqB4k2ffoc3plB/KFU=
+Date:   Thu, 19 Nov 2020 11:07:24 +0000
 From:   Will Deacon <will@kernel.org>
 To:     Quentin Perret <qperret@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
@@ -41,90 +41,74 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         kernel-team@android.com
-Subject: Re: [PATCH v3 10/14] sched: Introduce arch_cpu_allowed_mask() to
- limit fallback rq selection
-Message-ID: <20201119110709.GD3946@willie-the-truck>
+Subject: Re: [PATCH v3 11/14] sched: Reject CPU affinity changes based on
+ arch_cpu_allowed_mask()
+Message-ID: <20201119110723.GE3946@willie-the-truck>
 References: <20201113093720.21106-1-will@kernel.org>
- <20201113093720.21106-11-will@kernel.org>
- <20201119093850.GD2416649@google.com>
+ <20201113093720.21106-12-will@kernel.org>
+ <20201119094744.GE2416649@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201119093850.GD2416649@google.com>
+In-Reply-To: <20201119094744.GE2416649@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 09:38:50AM +0000, Quentin Perret wrote:
-> On Friday 13 Nov 2020 at 09:37:15 (+0000), Will Deacon wrote:
-> > Asymmetric systems may not offer the same level of userspace ISA support
-> > across all CPUs, meaning that some applications cannot be executed by
-> > some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
-> > not feature support for 32-bit applications on both clusters.
-> > 
-> > On such a system, we must take care not to migrate a task to an
-> > unsupported CPU when forcefully moving tasks in select_fallback_rq()
-> > in response to a CPU hot-unplug operation.
-> > 
-> > Introduce an arch_cpu_allowed_mask() hook which, given a task argument,
-> > allows an architecture to return a cpumask of CPUs that are capable of
-> > executing that task. The default implementation returns the
-> > cpu_possible_mask, since sane machines do not suffer from per-cpu ISA
-> > limitations that affect scheduling. The new mask is used when selecting
-> > the fallback runqueue as a last resort before forcing a migration to the
-> > first active CPU.
+On Thu, Nov 19, 2020 at 09:47:44AM +0000, Quentin Perret wrote:
+> On Friday 13 Nov 2020 at 09:37:16 (+0000), Will Deacon wrote:
+> > Reject explicit requests to change the affinity mask of a task via
+> > set_cpus_allowed_ptr() if the requested mask is not a subset of the
+> > mask returned by arch_cpu_allowed_mask(). This ensures that the
+> > 'cpus_mask' for a given task cannot contain CPUs which are incapable of
+> > executing it, except in cases where the affinity is forced.
 > > 
 > > Signed-off-by: Will Deacon <will@kernel.org>
 > > ---
-> >  kernel/sched/core.c | 13 ++++++++++---
-> >  1 file changed, 10 insertions(+), 3 deletions(-)
+> >  kernel/sched/core.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > > 
 > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 818c8f7bdf2a..8df38ebfe769 100644
+> > index 8df38ebfe769..13bdb2ae4d3f 100644
 > > --- a/kernel/sched/core.c
 > > +++ b/kernel/sched/core.c
-> > @@ -1696,6 +1696,11 @@ void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags)
+> > @@ -1877,6 +1877,7 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
+> >  					 struct rq_flags *rf)
+> >  {
+> >  	const struct cpumask *cpu_valid_mask = cpu_active_mask;
+> > +	const struct cpumask *cpu_allowed_mask = arch_cpu_allowed_mask(p);
+> >  	unsigned int dest_cpu;
+> >  	int ret = 0;
 > >  
-> >  #ifdef CONFIG_SMP
-> >  
-> > +/* Must contain at least one active CPU */
-> > +#ifndef arch_cpu_allowed_mask
-> > +#define  arch_cpu_allowed_mask(p)	cpu_possible_mask
-> > +#endif
-> > +
-> >  /*
-> >   * Per-CPU kthreads are allowed to run on !active && online CPUs, see
-> >   * __set_cpus_allowed_ptr() and select_fallback_rq().
-> > @@ -1708,7 +1713,10 @@ static inline bool is_cpu_allowed(struct task_struct *p, int cpu)
-> >  	if (is_per_cpu_kthread(p))
-> >  		return cpu_online(cpu);
-> >  
-> > -	return cpu_active(cpu);
-> > +	if (!cpu_active(cpu))
-> > +		return false;
-> > +
-> > +	return cpumask_test_cpu(cpu, arch_cpu_allowed_mask(p));
-> >  }
-> >  
-> >  /*
-> > @@ -2361,10 +2369,9 @@ static int select_fallback_rq(int cpu, struct task_struct *p)
-> >  			}
-> >  			fallthrough;
-> >  		case possible:
-> > -			do_set_cpus_allowed(p, cpu_possible_mask);
-> > +			do_set_cpus_allowed(p, arch_cpu_allowed_mask(p));
+> > @@ -1887,6 +1888,9 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
+> >  		 * Kernel threads are allowed on online && !active CPUs
+> >  		 */
+> >  		cpu_valid_mask = cpu_online_mask;
+> > +	} else if (!cpumask_subset(new_mask, cpu_allowed_mask)) {
+> > +		ret = -EINVAL;
+> > +		goto out;
 > 
-> Nit: I'm wondering if this should be called arch_cpu_possible_mask()
-> instead?
-
-I'm open to renaming it, so if nobody else has any better ideas then I'll
-go with this.
-
-> In any case:
+> So, IIUC, this should make the sched_setaffinity() syscall fail and
+> return -EINVAL to userspace if it tries to put 64bits CPUs in the
+> affinity mask of a 32 bits task, which I think makes sense.
 > 
-> Reviewed-by: Quentin Perret <qperret@google.com?
+> But what about affinity change via cpusets? e.g., if a 32 bit task is
+> migrated to a cpuset with 64 bit CPUs, then the migration will be
+> 'successful' and the task will appear to be in the destination cgroup,
+> but the actual affinity of the task will be something completely
+> different?
 
-Ta!
+Yeah, the cpuset code ignores the return value of set_cpus_allowed_ptr() in
+update_tasks_cpumask() so the failure won't be propagated, but then again I
+think that might be the right thing to do. Nothing prevents 32-bit and
+64-bit tasks from co-existing in the same cpuseti afaict, so forcing the
+64-bit tasks onto the 32-bit-capable cores feels much worse than the
+approach taken here imo. Nothing says we _have_ to schedule on all of the
+cores in the mask.
+
+The interesting case is what happens if the cpuset for a 32-bit task is
+changed to contain only the 64-bit-only cores. I think that's a userspace
+bug, but the fallback rq selection should avert disaster.
 
 Will
