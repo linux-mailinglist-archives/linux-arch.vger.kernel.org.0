@@ -2,209 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9610E2B9B33
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 20:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068C62B9B7B
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Nov 2020 20:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727151AbgKSTGr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Nov 2020 14:06:47 -0500
-Received: from mga12.intel.com ([192.55.52.136]:21738 "EHLO mga12.intel.com"
+        id S1727189AbgKSTZ7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Nov 2020 14:25:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727379AbgKSTGl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 19 Nov 2020 14:06:41 -0500
-IronPort-SDR: CoOWW9S1lU/DwL6pCf82prx3WqF7RkYoDe4Ldp6T+0vGKDafBdCueTSTNYDTj6SLSVKj4grBtI
- rDIg/QSrqAIA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9810"; a="150614466"
-X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
-   d="scan'208";a="150614466"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2020 11:06:40 -0800
-IronPort-SDR: cRHXwcW+O3T3Lu6hmAFl89aA2EOI2uiwuiEY3qbl0hMiNN9OnNPbO6iLxi8CMh0omk72M3lJr0
- 9grhV6NPeSzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,354,1599548400"; 
-   d="scan'208";a="431333999"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Nov 2020 11:06:40 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
-        x86@kernel.org
-Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
-        Dave.Martin@arm.com, mpe@ellerman.id.au, tony.luck@intel.com,
-        ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] selftest/x86/signal: Include test cases for validating sigaltstack
-Date:   Thu, 19 Nov 2020 11:02:37 -0800
-Message-Id: <20201119190237.626-5-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201119190237.626-1-chang.seok.bae@intel.com>
-References: <20201119190237.626-1-chang.seok.bae@intel.com>
+        id S1727905AbgKSTZ6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 19 Nov 2020 14:25:58 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7AF6221FE;
+        Thu, 19 Nov 2020 19:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605813958;
+        bh=tpiSO13FbNyZ42kAbeVAMN0z3Q1MzKH9/3qggLww0uQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r7Gvj5r18o4ajlJFxbZptgsKAjyvN81ac7Vl0PWWW7vgY0S4IhHlyeIc5GLyIIw/h
+         pJN+A48yxUDNPeT2M/RVFraejiLdehZ5T+GwLeGCdGiZ/aPb/eGZ19Tm36d84efeEe
+         W3kpJD0CA6Sxju9AI3YUc85X4mQR6ey0TYoH/F3I=
+Date:   Thu, 19 Nov 2020 19:25:51 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v3 07/14] sched: Introduce restrict_cpus_allowed_ptr() to
+ limit task CPU affinity
+Message-ID: <20201119192550.GD4906@willie-the-truck>
+References: <20201113093720.21106-1-will@kernel.org>
+ <20201113093720.21106-8-will@kernel.org>
+ <jhj8saxwm1l.mognet@arm.com>
+ <20201119131319.GE4331@willie-the-truck>
+ <20201119160944.GP3121392@hirez.programming.kicks-ass.net>
+ <jhj4kllwahv.mognet@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jhj4kllwahv.mognet@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The test measures the kernel's signal delivery with different (enough vs.
-insufficient) stack sizes.
+On Thu, Nov 19, 2020 at 04:57:22PM +0000, Valentin Schneider wrote:
+> 
+> On 19/11/20 16:09, Peter Zijlstra wrote:
+> > On Thu, Nov 19, 2020 at 01:13:20PM +0000, Will Deacon wrote:
+> >
+> >> Sure, but I was talking about what userspace sees, and I don't think it ever
+> >> sees CPUs that have been hotplugged off, right? That is, sched_getaffinity()
+> >> masks its result with the active_mask.
+> >
+> > # for i in /sys/devices/system/cpu/cpu*/online; do echo -n $i ":"; cat $i; done
+> > /sys/devices/system/cpu/cpu1/online :0
+> > /sys/devices/system/cpu/cpu2/online :1
+> > /sys/devices/system/cpu/cpu3/online :1
+> > /sys/devices/system/cpu/cpu4/online :1
+> > /sys/devices/system/cpu/cpu5/online :1
+> > /sys/devices/system/cpu/cpu6/online :1
+> > /sys/devices/system/cpu/cpu7/online :1
+> >
+> > # grep Cpus_allowed /proc/self/status
+> > Cpus_allowed:   ff
+> > Cpus_allowed_list:      0-7
+> >
+> >
+> > :-)
+> 
+> Harumph, so there is that...
+> 
+> $ while true; do continue; done &
+> $ PID=$!
+> $ taskset -pc 0-1 $PID
+>   pid 849's current affinity list: 0-5
+>   pid 849's new affinity list: 0,1
+> $ echo 0 > /sys/devices/system/cpu/cpu1/online
+>   [12578.545726] CPU1: shutdown
+>   [12578.548454] psci: CPU1 killed (polled 0 ms)
+> $ taskset -pc $PID
+>   pid 849's current affinity list: 0
+> $ cat /proc/$PID/status | grep Cpus
+>   Cpus_allowed:   03
+>   Cpus_allowed_list:      0-1
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- tools/testing/selftests/x86/Makefile      |   2 +-
- tools/testing/selftests/x86/sigaltstack.c | 126 ++++++++++++++++++++++
- 2 files changed, 127 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+Yeah, I'm not sure this is worth tackling tbh. sched_getaffinity() does the
+right thing, but poking around in /proc and /sys is always going to defeat
+the illusion and I don't see what we gain in reporting CPUs on which the
+task is _never_ going to run anyway. But I'll revise my stance on it being
+identical to hotplug :) (I would've gotten away with it too, if it wasn't
+for those pesky hackers).
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 6703c7906b71..e0c52e5ab49e 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vdso test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore
-+			syscall_arg_fault fsgsbase_restore sigaltstack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
-new file mode 100644
-index 000000000000..353679df6901
---- /dev/null
-+++ b/tools/testing/selftests/x86/sigaltstack.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define _GNU_SOURCE
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <err.h>
-+#include <errno.h>
-+#include <limits.h>
-+#include <sys/mman.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <setjmp.h>
-+
-+/* sigaltstack()-enforced minimum stack */
-+#define ENFORCED_MINSIGSTKSZ	2048
-+
-+#ifndef AT_MINSIGSTKSZ
-+#  define AT_MINSIGSTKSZ	51
-+#endif
-+
-+static int nerrs;
-+
-+static bool sigalrm_expected;
-+
-+static unsigned long at_minstack_size;
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
-+		       int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static void clearhandler(int sig)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static int setup_altstack(void *start, unsigned long size)
-+{
-+	stack_t ss;
-+
-+	memset(&ss, 0, sizeof(ss));
-+	ss.ss_size = size;
-+	ss.ss_sp = start;
-+
-+	return sigaltstack(&ss, NULL);
-+}
-+
-+static jmp_buf jmpbuf;
-+
-+static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (sigalrm_expected) {
-+		printf("[FAIL]\tSIGSEGV signal delivered.\n");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGSEGV signal expectedly delivered.\n");
-+	}
-+
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (!sigalrm_expected) {
-+		printf("[FAIL]\tSIGALRM sigal delivered.\n");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGALRM signal expectedly delivered.\n");
-+	}
-+}
-+
-+static void test_sigaltstack(void *altstack, unsigned long size)
-+{
-+	if (setup_altstack(altstack, size))
-+		err(1, "sigaltstack()");
-+
-+	sigalrm_expected = (size > at_minstack_size) ? true : false;
-+
-+	sethandler(SIGSEGV, sigsegv, 0);
-+	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
-+
-+	if (sigsetjmp(jmpbuf, 1) == 0) {
-+		printf("[RUN]\tTest an %s sigaltstack\n",
-+		       sigalrm_expected ? "enough" : "insufficient");
-+		raise(SIGALRM);
-+	}
-+
-+	clearhandler(SIGALRM);
-+	clearhandler(SIGSEGV);
-+}
-+
-+int main(void)
-+{
-+	void *altstack;
-+
-+	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
-+
-+	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+	if (altstack == MAP_FAILED)
-+		err(1, "mmap()");
-+
-+	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
-+		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
-+
-+	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
-+
-+	return nerrs == 0 ? 0 : 1;
-+}
--- 
-2.17.1
-
+Will
