@@ -2,52 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FF12BB5D2
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 20:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6022BB67B
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 21:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729114AbgKTTrY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Nov 2020 14:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
+        id S1730523AbgKTUTs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Nov 2020 15:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729119AbgKTTrY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 14:47:24 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED28C061A48
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 11:47:24 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id 10so8879529pfp.5
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 11:47:24 -0800 (PST)
+        with ESMTP id S1728335AbgKTUTp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 15:19:45 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8AC061A47
+        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 12:19:43 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id u7so5673857vsq.11
+        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 12:19:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=elr/neHdSPND1QBbHYVTIKRGGtBg1vE7OdThIsRU5pI=;
-        b=XzoPI1crChRR6wLQGUnQdTruNmuVNj0hkcwU6yjn8xXrOzmnTuw8bZwNjYOSUMiNjn
-         EBV38WHid50TNovyKvDuuqOK6ny2jvmInIM/dgDYVmxiGIxn7be54rsKduzrLe/jMV3q
-         ANWN/74SZ1EEZvtawKD5ujXQl6B2YxxD3r8JI=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7acuhIcf2aj+2HfwBkYRj3S/5vwbxxWC1CPfVW74VbQ=;
+        b=gyFkFQiGUkXaUSAApDExFsLoGANoyNJrTgq+Uj6paRE46wRNgi6CKDFwmTfHlKvQPj
+         Er7YyuPh/Vm7IE8fo7s0qFaQ+J1KSSTh2gKBxnB1wIcKxIDjY6KSardWaLK7oDrc8y2c
+         4kdFdNabC+L2Mjs5rrPZnanoVf79hAu3cru/VeNYnxmuOucQz4Zphk15Gez73fSD2CqD
+         AQbMyvtkwotDifRaGV6FeXKSexUu1NjZCba58CUErs2OOa74uTI7jGSLqvFrp+lsC6E+
+         Ms7cuIiIpj16zzxU5/wxq9BhB8eXHmGgvUZLrwYiI37n7bXiBngkjjGfqQuKlN1BFLWq
+         HIdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=elr/neHdSPND1QBbHYVTIKRGGtBg1vE7OdThIsRU5pI=;
-        b=WtW8OJ1H4N5duCNANFoJ2G9MxYFGvXnAWQnixXb+If2UtqWOBjBMFxo4CUz2fiH5lD
-         zQ+GCimfKenXIENfJ75+gYcbUvUg7eCNUFmWBh+w41uUKfKXTKwbJf3GBe0Ianq6DlsA
-         SprnTPWVuJMzbJH3oUYugD+h9C8C2He9xSuL4QZ68/iodAX88mhOGsYon5ISNFJHss/L
-         YOb6IM5nfp6oWhFX97bCF5AwseZAS0YCijmB52kUebVCm0ApdQvvJwOJKIzPkxsLyfj/
-         ZU0ncGWogSp81j4Fgr6k8U1LU1YOHVk9JcYLvbYN7JO2G/DNSkHUgQmGGHqbCMUWJ8dh
-         eIRw==
-X-Gm-Message-State: AOAM530Pr38W7IcToPUWrGEQcdR16hBPDLDsU1zRy9uYu5dUm7G7qVU3
-        ZF2QfJTomVMo8rHU8IA52fr4sA==
-X-Google-Smtp-Source: ABdhPJwnsGzh6rI5stQsBcWRn8N0h8Ns8b+OJp9DPF9o8s3fODKrXmSZ/a2sub1vz+HM8LuYBAXNBw==
-X-Received: by 2002:a62:ea09:0:b029:197:bad4:1e78 with SMTP id t9-20020a62ea090000b0290197bad41e78mr8311744pfh.22.1605901643516;
-        Fri, 20 Nov 2020 11:47:23 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h16sm4507596pfo.185.2020.11.20.11.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 11:47:22 -0800 (PST)
-Date:   Fri, 20 Nov 2020 11:47:21 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7acuhIcf2aj+2HfwBkYRj3S/5vwbxxWC1CPfVW74VbQ=;
+        b=SCzH921mENMR0ah6G4z8vxYLeFV8NYmzabHKn1tnZfXHxy5Unuls/+hj5cJvr1xRxl
+         Unegcqsyn7DbDNVVg3JXbosZ9TudA7JxRZLP6mFwOxG6QXlepGVr7+RxZoc4VscHPEV3
+         /oB25JTfW4f8rJGuDzGh4AcWBiDCvaDuJM83KwiR9hKpFDslclm3EnkyzhAM/2Jkvv4t
+         v8hP3mZF4cAPZHlF5RQWvRgP6d2C1+uxB6kJkdL4XVReZ5OX4PFUeGiIzs9Et/6jGjf9
+         l6HI+BYyPuAR/jwU2YkrL0xf+RMZ4tpQiqNM8bxmBAYFH94aeXqgLyXTR4XJfwiNTZxI
+         c2rw==
+X-Gm-Message-State: AOAM531/amlcetW4tPhBAopHeRHggCPaCyrEvvCFd5+A/q9PO3JkY3MP
+        FJqapxlx8TW/89cdg+9zIIBDPk1FwQPreQiUBYmlYA==
+X-Google-Smtp-Source: ABdhPJxFgydZX2L5XAnYwSfeznScyETG/9FyvzzmXojnDnWISYdoy1l6/FMv24FHnaLHqIodrvwFJpF/G3jjdZFT5xQ=
+X-Received: by 2002:a67:7107:: with SMTP id m7mr15151234vsc.17.1605903582865;
+ Fri, 20 Nov 2020 12:19:42 -0800 (PST)
+MIME-Version: 1.0
+References: <20201118220731.925424-1-samitolvanen@google.com>
+ <CAKwvOd=5PhCTZ-yHr08gPYNEsGEjZa=rDY0-unhkhofjXhqwLQ@mail.gmail.com> <CAMj1kXEVzDi5=uteUAzG5E=j+aTCHEbMxwDfor-s=DthpREpyw@mail.gmail.com>
+In-Reply-To: <CAMj1kXEVzDi5=uteUAzG5E=j+aTCHEbMxwDfor-s=DthpREpyw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 20 Nov 2020 12:19:31 -0800
+Message-ID: <CAKwvOdmpBNx9iSguGXivjJ03FaN5rgv2oaXZUQxYPdRccQmdyQ@mail.gmail.com>
+Subject: Re: [PATCH v7 00/17] Add support for Clang LTO
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Will Deacon <will@kernel.org>,
@@ -55,35 +60,48 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v7 02/17] kbuild: add support for Clang LTO
-Message-ID: <202011201144.3F2BB70C@keescook>
-References: <20201118220731.925424-1-samitolvanen@google.com>
- <20201118220731.925424-3-samitolvanen@google.com>
- <CAKwvOdnYTMzaahnBqdNYPz3KMdnkp=jZ4hxiqkTYzM5+BBdezA@mail.gmail.com>
- <CABCJKucj_jUwoiLc35R7qFe+cNKTWgT+gsCa5pPiY66+1--3Lg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKucj_jUwoiLc35R7qFe+cNKTWgT+gsCa5pPiY66+1--3Lg@mail.gmail.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Alistair Delva <adelva@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 08:23:11AM -0800, Sami Tolvanen wrote:
-> Changing the ThinLTO config to a choice and moving it after the main
-> LTO config sounds like a good idea to me. I'll see if I can change
-> this in v8. Thanks!
+On Fri, Nov 20, 2020 at 2:30 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Thu, 19 Nov 2020 at 00:42, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > Thanks for continuing to drive this series Sami.  For the series,
+> >
+> > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> >
+> > I did virtualized boot tests with the series applied to aarch64
+> > defconfig without CONFIG_LTO, with CONFIG_LTO_CLANG, and a third time
+> > with CONFIG_THINLTO.  If you make changes to the series in follow ups,
+> > please drop my tested by tag from the modified patches and I'll help
+> > re-test.  Some minor feedback on the Kconfig change, but I'll post it
+> > off of that patch.
+> >
+>
+> When you say 'virtualized" do you mean QEMU on x86? Or actual
+> virtualization on an AArch64 KVM host?
 
-Originally, I thought this might be a bit ugly once GCC LTO is added,
-but this could be just a choice like we're done for the stack
-initialization. Something like an "LTO" choice of NONE, CLANG_FULL,
-CLANG_THIN, and in the future GCC, etc.
+aarch64 guest on x86_64 host.  If you have additional configurations
+that are important to you, additional testing help would be
+appreciated.
+
+>
+> The distinction is important here, given the potential impact of LTO
+> on things that QEMU simply does not model when it runs in TCG mode on
+> a foreign host architecture.
 
 -- 
-Kees Cook
+Thanks,
+~Nick Desaulniers
