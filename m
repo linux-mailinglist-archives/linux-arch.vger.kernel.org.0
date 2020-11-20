@@ -2,122 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C29B2BB9AA
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 00:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7608B2BBA31
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 00:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728393AbgKTXFH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Nov 2020 18:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728161AbgKTXFG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 18:05:06 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45050C061A47
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 15:05:06 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id s9so11699097ljo.11
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 15:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WsItiRlY2ZsY1kLHaN9bW+mg6xUUzDuK1HmeXy3qoOM=;
-        b=LULwD43R9K6cuWxcFQ3hXHCXYhiJN+3GbIfFgwF3U+9D4uK3QRYGXhUNIUm/phAvgJ
-         O1+dQBQPdrOTkni7W+oLdBOBc2AuCnoiRAW66303aXkiViycOcEDheImdEnAvuTIjXzp
-         eLP5Sjq1o7lBd24nmSshBGwl7Y0U5t7ogW/mH3gP2dUJ1nM4usf4NwpQS82BRv6K9Yap
-         EMrQjrG/eD9JrD4ypfMMHEas9+4anxoeUxQJeMNfyj46BkBpdcwCf7RtWmInwVepP2GK
-         gV24+8jJQZTCASDuFsakteAbIMTSJCXGpatnCUddjQGQYa13xtA2KiDV3arQoVCzVSqZ
-         QhLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WsItiRlY2ZsY1kLHaN9bW+mg6xUUzDuK1HmeXy3qoOM=;
-        b=h3fJURp/YskRXKmPQStZnjYbJrM0c8vktMqUQfgBBVcG287j9wKZD2rAEydISUxbTM
-         GyORqmoaht1VJEhWl2jjZEyE7cX8i6Jx9H6aN1w6PwsGjHcnK3qYxEfDC64JShnJdlXR
-         8hCodQFC+W2ZzlVZLylV0/Xeih7ji6Ild4PcJcGA2Y017ttx1fR5Zj9ZAcTj7aTwPfW0
-         Vh0nZB4hUcyaipexrn09aTfg5l2tEk/DOTv1c4okylFnBLYJ4ukqiFq08XzyoG8YNB+g
-         xJdlAtdXxBuJpKgvKWzIAJG/IkxTbIlsig0xyHxI5D7J2lMuicrvrWO5Yl6N/ZgzQocx
-         XEKQ==
-X-Gm-Message-State: AOAM5311x9JGQvYtWFMR9fzFfIWq2ACOPbEAfzUC8xintJoLh3TXs5LT
-        hPtIiq66GAkpNCim0/8B+pnKJzonhgq4eF6ePU45NA==
-X-Google-Smtp-Source: ABdhPJymlpDCBYMRse6yxmhBac3FkYvw4MIKvsrIx7Zv7EbYRWZkOmL5ixX8POB9rfwViL1vOrupv+a/zLsoSj3iJio=
-X-Received: by 2002:a2e:8891:: with SMTP id k17mr8457473lji.326.1605913504291;
- Fri, 20 Nov 2020 15:05:04 -0800 (PST)
+        id S1728600AbgKTXap (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Nov 2020 18:30:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49456 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726719AbgKTXap (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 20 Nov 2020 18:30:45 -0500
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E21D92240B;
+        Fri, 20 Nov 2020 23:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605915044;
+        bh=pAOPOCc79X5vSW6IJcHVGfCdHUlnqpSzr+lv+zQxwCc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RZzdH79P6J5urfJDjwQdKxx5LnTEOmSru+Pngr2whnPMGGF/5iys8b3oGoRp3fiC2
+         B9zPEK+hV1YvwzBAM2H5HZymjsteXPWwOamkRpmbJpb2YTeAXwp7dY7auSdWBrz/F2
+         /N80r04AHKKCoaM6D2sPwvKPyEcCtIgwahDH+KeA=
+Received: by mail-oi1-f171.google.com with SMTP id a130so4261361oif.7;
+        Fri, 20 Nov 2020 15:30:43 -0800 (PST)
+X-Gm-Message-State: AOAM533pXk4s93Kp6xS5SPeBjmQHE6F7HrGLtTmGW9MvJrhvPJEB/PXB
+        Igq2Kgez7AHQx295Eujy15HDa2XxY6dtvlnIMBk=
+X-Google-Smtp-Source: ABdhPJydXVeIwFrz87ExsApybJ0EuK40nIe6165egNvLnhUN+I4Xd9fvkCEU5QPaIxetxiAiYULX8LNHUT5DTI1cr7A=
+X-Received: by 2002:aca:5c82:: with SMTP id q124mr8196235oib.33.1605915043305;
+ Fri, 20 Nov 2020 15:30:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20201119190237.626-1-chang.seok.bae@intel.com> <20201119190237.626-4-chang.seok.bae@intel.com>
-In-Reply-To: <20201119190237.626-4-chang.seok.bae@intel.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Sat, 21 Nov 2020 00:04:38 +0100
-Message-ID: <CAG48ez1aKtwYMEHfGX6_FuX9fOruwvCqEGYVL8eLdV8bg-wHCQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] x86/signal: Prevent an alternate stack overflow
- before a signal delivery
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Dave Martin <Dave.Martin@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Tony Luck <tony.luck@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        libc-alpha@sourceware.org, linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Hiroshi Shimamoto <h-shimamoto@ct.jp.nec.com>,
-        Roland McGrath <roland@redhat.com>
+References: <20201118220731.925424-1-samitolvanen@google.com>
+ <CAKwvOd=5PhCTZ-yHr08gPYNEsGEjZa=rDY0-unhkhofjXhqwLQ@mail.gmail.com>
+ <CAMj1kXEVzDi5=uteUAzG5E=j+aTCHEbMxwDfor-s=DthpREpyw@mail.gmail.com> <CAKwvOdmpBNx9iSguGXivjJ03FaN5rgv2oaXZUQxYPdRccQmdyQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmpBNx9iSguGXivjJ03FaN5rgv2oaXZUQxYPdRccQmdyQ@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 21 Nov 2020 00:30:32 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEoPEd6GzjL1XuxTPwitbR03BiBEXpAGtUytMj-h=vCkg@mail.gmail.com>
+Message-ID: <CAMj1kXEoPEd6GzjL1XuxTPwitbR03BiBEXpAGtUytMj-h=vCkg@mail.gmail.com>
+Subject: Re: [PATCH v7 00/17] Add support for Clang LTO
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Alistair Delva <adelva@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 8:40 PM Chang S. Bae <chang.seok.bae@intel.com> wrote:
-> The kernel pushes data on the userspace stack when entering a signal. If
-> using a sigaltstack(), the kernel precisely knows the user stack size.
+On Fri, 20 Nov 2020 at 21:19, Nick Desaulniers <ndesaulniers@google.com> wrote:
 >
-> When the kernel knows that the user stack is too small, avoid the overflow
-> and do an immediate SIGSEGV instead.
+> On Fri, Nov 20, 2020 at 2:30 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Thu, 19 Nov 2020 at 00:42, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > >
+> > > Thanks for continuing to drive this series Sami.  For the series,
+> > >
+> > > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > > I did virtualized boot tests with the series applied to aarch64
+> > > defconfig without CONFIG_LTO, with CONFIG_LTO_CLANG, and a third time
+> > > with CONFIG_THINLTO.  If you make changes to the series in follow ups,
+> > > please drop my tested by tag from the modified patches and I'll help
+> > > re-test.  Some minor feedback on the Kconfig change, but I'll post it
+> > > off of that patch.
+> > >
+> >
+> > When you say 'virtualized" do you mean QEMU on x86? Or actual
+> > virtualization on an AArch64 KVM host?
 >
-> This overflow is known to occur on systems with large XSAVE state. The
-> effort to increase the size typically used for altstacks reduces the
-> frequency of these overflows, but this approach is still useful for legacy
-> binaries.
+> aarch64 guest on x86_64 host.  If you have additional configurations
+> that are important to you, additional testing help would be
+> appreciated.
 >
-> Here the kernel expects a bit conservative stack size (for 64-bit apps).
-> Legacy binaries used a too-small sigaltstack would be already overflowed
-> before this change, if they run on modern hardware.
-[...]
-> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-> index ee6f1ceaa7a2..cee41d684dc2 100644
-> --- a/arch/x86/kernel/signal.c
-> +++ b/arch/x86/kernel/signal.c
-> @@ -251,8 +251,13 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+
+Could you run this on an actual phone? Or does Android already ship
+with this stuff?
+
+
+> >
+> > The distinction is important here, given the potential impact of LTO
+> > on things that QEMU simply does not model when it runs in TCG mode on
+> > a foreign host architecture.
 >
->         /* This is the X/Open sanctioned signal stack switching.  */
->         if (ka->sa.sa_flags & SA_ONSTACK) {
-> -               if (sas_ss_flags(sp) == 0)
-> +               if (sas_ss_flags(sp) == 0) {
-> +                       /* If the altstack might overflow, die with SIGSEGV: */
-> +                       if (!altstack_size_ok(current))
-> +                               return (void __user *)-1L;
-> +
->                         sp = current->sas_ss_sp + current->sas_ss_size;
-> +               }
-
-A couple lines further down, we have this (since commit 14fc9fbc700d):
-
-        /*
-         * If we are on the alternate signal stack and would overflow it, don't.
-         * Return an always-bogus address instead so we will die with SIGSEGV.
-         */
-        if (onsigstack && !likely(on_sig_stack(sp)))
-                return (void __user *)-1L;
-
-Is that not working?
-
-
-(It won't handle the case where the kernel fills up almost all of the
-alternate stack, and the userspace signal handler then overflows out
-of the alternate signal stack. But there isn't much the kernel can do
-about that...)
+> --
+> Thanks,
+> ~Nick Desaulniers
