@@ -2,99 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEDD2BB6B2
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 21:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E292BB6D0
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 21:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730629AbgKTUZW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Nov 2020 15:25:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S1730732AbgKTU3k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Nov 2020 15:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730527AbgKTUZW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 15:25:22 -0500
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF99C061A04
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 12:25:22 -0800 (PST)
-Received: by mail-ua1-x944.google.com with SMTP id k12so3516189uae.13
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 12:25:22 -0800 (PST)
+        with ESMTP id S1730651AbgKTU3k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 15:29:40 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9761C0613CF;
+        Fri, 20 Nov 2020 12:29:38 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id t5so8112755qtp.2;
+        Fri, 20 Nov 2020 12:29:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=984nJeLydsE3/GDg3HBO6Z6L/1lt0gFfqkKrV/lzSfk=;
-        b=nQ48JfzXRyNDknHGCh3KFKjURhf06zzRND+V/pJL/fMRQP6lLOU4+KjKu6MWYvNGLA
-         u/GGSVGE3kgxtbIMz5PxE83KRGKSZySAWIrCVeitIKgVg4oGgHd7hM0MclX/o0xA6iM7
-         0TjfjF8WKDBiTvlY0PE7KxWfiT12N620kb+jYUJpJQnbHzG2Y3yDy80EStVPPkzsPuX8
-         bdbm2U6exJndNtMvOE62BvjnmwhCNTdLYsvSFa7Pnlfa76FT693PoaC9m6in5Jl5pjA+
-         pLXxKB786iLdW3LX7Ve2TlFLslpMT2/zDAEyjn27o3Ofet4vrVt0LEU4XrMBd4DoJ1cH
-         vg6A==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fWEyiKtLOwc5BKH8g+Q/g+4/sPbOaRfc0dXxralt2Mw=;
+        b=slPQ//pemKZh9f5kkjudlch0CBWhSXQy2VCSu7HRkD1RW0Ao5+0ftQM2E6UPD3hccj
+         qjQNNmRuGGdK3qOvq5NYurgRaP3hJJuevD4jAH/fmKo+acNl1pILRNLqMDFd7QZ+2prZ
+         tmcUlDky6roTiagY+1Ks0VwGJwggfgRDYhMNyjlvUprVonMn9YqbkCKWYuYbATXQn2JP
+         H9tN2HQsAdXChUj0afdmZW/4fCcfq/VPLcHKF5jmoDMHeF6P0ZDz4TumaSvPvAlnmbSp
+         9HEAzto9pPBh3Vc65NGET29HWmFU7wMfbtObL4BW7Zce7yCYVt0G+SkyUa9ICW+0aIqa
+         CMtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=984nJeLydsE3/GDg3HBO6Z6L/1lt0gFfqkKrV/lzSfk=;
-        b=eCJ1EOpm3Rm2fi7YFm+yuIcoDiJg/s88lS/iltOPEDyx4a98I4RhNxbuRX2tOAbXgF
-         7OGfmnC0uYhVW8mv/0gbdJmJUZOZL6KBBd5A9J4HlNcEWBDfI+ETmg0POL1jxK6XcMPH
-         8Mx+CorjKrjnuwxy4ZsnlPqp27H+pNuYLvXw2MZdPaBiGOBu8qPNMfRFNPiEXb5FSMuc
-         VPktNaQ1f3sgGQ8z8kTshGSWwojm7egft6jiRmqgIh6+EJ+Vo/Yp229Xfzis8R+fhFmd
-         QR9ojhsAUJoqk8IkfFcUodOyYg4S0tSHolL/NZEk0n0V+4yOSdNZRoh3bhQAY8t5jvDI
-         thmA==
-X-Gm-Message-State: AOAM5339D2kIue5lSIiZDyvR0+3sXntZZ0KydrT9SshX/vpauTXWho7j
-        ULarU9+jQEYXbhJc4O+k4LUnmtqavecqBeEKnf0xOQ==
-X-Google-Smtp-Source: ABdhPJxCT20kCKg82r2GF6byyQKxIJWZrkcRHsjZAfiHsHplg/RwP3f21qH6ZHRA+utWdlmz3m8dxOiRg7Ud36B+6lo=
-X-Received: by 2002:a9f:2595:: with SMTP id 21mr10567817uaf.33.1605903921022;
- Fri, 20 Nov 2020 12:25:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118220731.925424-1-samitolvanen@google.com> <20201120040424.a3wctajzft4ufoiw@treble>
-In-Reply-To: <20201120040424.a3wctajzft4ufoiw@treble>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 20 Nov 2020 12:25:09 -0800
-Message-ID: <CABCJKueTjhjSY=oOD3bWqn7E_1X9k-MK+6r_Z35AiCKDTNK18g@mail.gmail.com>
-Subject: Re: [PATCH v7 00/17] Add support for Clang LTO
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fWEyiKtLOwc5BKH8g+Q/g+4/sPbOaRfc0dXxralt2Mw=;
+        b=c4pVaR9D+CoUU7W6+5RJsHy6xekr8zhxscgYuRaG64gQ74mjIU2J1YnG/4XloCL4Do
+         f8o90Bml3Ce/nyIqsK6sS+m8oSx4Z34a7MhigyGJyi7nYEURwOq2VGZ18r4x5F/KVrI2
+         yi5nkE38it1Pq9Ja4ClZnfdqefEYyIcyEbyeQP5/pbw5LjzMdrQgo7QFaUxRMHy5UVDW
+         FroqbFARRjaHpwYwvN7S4+3MyvIi7EdNWkj7WJdzuRKAS8KJzptxNCs9M8MViwsMpojC
+         FKEUgFg/3MxvMkqQ9v+o7/35wPifH4otpBw+1cs4ykHJEn+T78lvcHYv8dVaxB+fjMH4
+         1lrg==
+X-Gm-Message-State: AOAM533dD/CiJFobC4S8vncNo3dO0PzjSIayCbFSD7R+Zqj4TyKZRwe5
+        FEZWd0bsoMOtU0Ux5ifcpko=
+X-Google-Smtp-Source: ABdhPJyeXkg7uuNpc9skA29Vf8QCCxes8SLhmi9OBG/8zRZ22lxtrFLvm4CI1/fXBFji9v0sjbaDkA==
+X-Received: by 2002:ac8:3496:: with SMTP id w22mr17736541qtb.222.1605904178000;
+        Fri, 20 Nov 2020 12:29:38 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id v32sm2850385qtb.42.2020.11.20.12.29.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2020 12:29:36 -0800 (PST)
+Date:   Fri, 20 Nov 2020 13:29:35 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Will Deacon <will@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v7 02/17] kbuild: add support for Clang LTO
+Message-ID: <20201120202935.GA1220359@ubuntu-m3-large-x86>
+References: <20201118220731.925424-1-samitolvanen@google.com>
+ <20201118220731.925424-3-samitolvanen@google.com>
+ <CAKwvOdnYTMzaahnBqdNYPz3KMdnkp=jZ4hxiqkTYzM5+BBdezA@mail.gmail.com>
+ <CABCJKucj_jUwoiLc35R7qFe+cNKTWgT+gsCa5pPiY66+1--3Lg@mail.gmail.com>
+ <202011201144.3F2BB70C@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202011201144.3F2BB70C@keescook>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 8:04 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
->
-> On Wed, Nov 18, 2020 at 02:07:14PM -0800, Sami Tolvanen wrote:
-> > This patch series adds support for building the kernel with Clang's
-> > Link Time Optimization (LTO). In addition to performance, the primary
-> > motivation for LTO is to allow Clang's Control-Flow Integrity (CFI) to
-> > be used in the kernel. Google has shipped millions of Pixel devices
-> > running three major kernel versions with LTO+CFI since 2018.
-> >
-> > Most of the patches are build system changes for handling LLVM bitcode,
-> > which Clang produces with LTO instead of ELF object files, postponing
-> > ELF processing until a later stage, and ensuring initcall ordering.
-> >
-> > Note that v7 brings back arm64 support as Will has now staged the
-> > prerequisite memory ordering patches [1], and drops x86_64 while we work
-> > on fixing the remaining objtool warnings [2].
->
-> Sami,
->
-> Here are some patches to fix the objtool issues (other than crypto which
-> I'll work on next).
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-vmlinux
+On Fri, Nov 20, 2020 at 11:47:21AM -0800, Kees Cook wrote:
+> On Fri, Nov 20, 2020 at 08:23:11AM -0800, Sami Tolvanen wrote:
+> > Changing the ThinLTO config to a choice and moving it after the main
+> > LTO config sounds like a good idea to me. I'll see if I can change
+> > this in v8. Thanks!
+> 
+> Originally, I thought this might be a bit ugly once GCC LTO is added,
+> but this could be just a choice like we're done for the stack
+> initialization. Something like an "LTO" choice of NONE, CLANG_FULL,
+> CLANG_THIN, and in the future GCC, etc.
 
-Thanks, Josh! I can confirm that these fix all the non-crypto objtool
-warnings with LTO as well.
+Having two separate choices might be a little bit cleaner though? One
+for the compiler (LTO_CLANG versus LTO_GCC) and one for the type
+(THINLTO versus FULLLTO). The type one could just have a "depends on
+CC_IS_CLANG" to ensure it only showed up when needed.
 
-Sami
+Cheers,
+Nathan
