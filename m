@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC9D2BB43E
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 19:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F5F2BB445
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 19:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731467AbgKTSo1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Nov 2020 13:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S1731012AbgKTSqC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Nov 2020 13:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731457AbgKTSo0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 13:44:26 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84439C0613CF;
-        Fri, 20 Nov 2020 10:44:25 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id s2so5298990plr.9;
-        Fri, 20 Nov 2020 10:44:25 -0800 (PST)
+        with ESMTP id S1727862AbgKTSqB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 13:46:01 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDF5C0613CF;
+        Fri, 20 Nov 2020 10:46:01 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id t21so8051326pgl.3;
+        Fri, 20 Nov 2020 10:46:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=cK5F4d0qMv8rWJ7QrP6ojZzILBcMD6l3/NGR5/zHn7g=;
-        b=JDmUnio1aSGCqFrCLxgQawip7qmMCTVk/WxT1wywIs4ubhldWhE81sZ8HL1BspCcwU
-         ZpXoOLh3nCOau9q+oL5oYYEGs5uhiuybwEUGN9OAEaENpAUNux57VoeF6h5n+9PsMQ+b
-         QsQK08JsbIq94vZ2aE47GM5BtKOGOp99nCI5PXeQogU3Hbb1Y9fxQxHDf8nH/0F+a+zf
-         0mMAjPimAH6SC4apd3jbLAlpXpPttDSNZrbvcf/YR+zI1Rn3UoKvs36bIhpW2T70FMxn
-         4RBwnlgYg4jrjFhgHjWtOKXBgHx0+MGYyjNrd+SyLGK9sfbjpHbKruTMeZSM5VnNI/tm
-         1qMg==
+        bh=uRfbcvxICboodQKlXinezNDbNPHvNn9T8ybYNIuKq0c=;
+        b=U9H+SThKzcEXd9tLGPr811jW2dYlCQuUZfL61AUO7ajIgdPvGvKGXBWcN7Ra8DTx9j
+         0IJbTG2lt8H/Y4tot+GSwwCHrSeXYDJaZ77HbBh4iTv0Z7PzuCPMANeH1TiRTxNi9j6I
+         g8JhYvlJPpERfX/sZtajXIakUE/v8dZ5xrGUI/wyEO3BqYogh98HU+VvSYVZ6UKnt+XX
+         Qx1nKnHDgCT/c/uorufeMkl3ppRNTP8mSvhB5MLNO9p/nOtvRe0UbZg4XOaGp0yhzRSy
+         xK9ohdt74h/xzeY1bp9d9A7AK1F9u2v2uM4SGKlqiE2dP2FWsQOQ0aaLO3MOsvvltgYD
+         chGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cK5F4d0qMv8rWJ7QrP6ojZzILBcMD6l3/NGR5/zHn7g=;
-        b=NpodfHcm35Khl0pIHR0+YgAK2h5AzRIFSz+1zod5mafyAKUvdRbcBsNRlU1f1BNVAd
-         9p7MtIAqt2y0KDjHCFUhD/I21gYZEn47s65EIpRTIx75kajs0Kt3VW/1EYgP+6eEqlYv
-         5jkmDkE4F8SLPeYRSu8Z1txgyQPZIG6iLmZ58RC7ja30KVGQnFSr2YaJCnIJ3BblpbVQ
-         GUZPTYpmX2w453Apoxx1bR6jpBUwd2d1UjQVqEZWaHrhRHUZR7cZ9w6LSc70vq7uMe/u
-         ElUMOEctW7tlwctY40jx736WvIhv7oCY8gMpMaswEBER1VKDztbPqFwV7xmRSCzjdkya
-         93pg==
-X-Gm-Message-State: AOAM532lmecvf9x/yU0kDEQVVLqb6vVc78kod9hbhv7OjGLgDMJQm6Xq
-        kW79thPrqArkUBYEgRGrJjU=
-X-Google-Smtp-Source: ABdhPJz4LuKXhDhCCts6c4qxBuonU2yyA62xYcyZVA/6Ht5a1UW44vjUMzTXOBHxjTCPcprZwATb3Q==
-X-Received: by 2002:a17:902:8609:b029:d8:fc3c:b01a with SMTP id f9-20020a1709028609b02900d8fc3cb01amr14765755plo.36.1605897865137;
-        Fri, 20 Nov 2020 10:44:25 -0800 (PST)
+        bh=uRfbcvxICboodQKlXinezNDbNPHvNn9T8ybYNIuKq0c=;
+        b=DKwNJeIF2/JeaWnIHJUcQuQCBAOeOSGytW9d5Y6NV8V7yqkK5dhsauvHuVL9O7CZHv
+         RKfBQ+INVjYWc3oYAp9hNdDbxpttZXYq8rSrQn8oEnOsVgNW+aS77cixDq4iQnH/mkXl
+         HCDFHxBLAcZKd6Fd9kFeCyHiQexyYFxksE3LnsLR91JPe5lGf2BI+fRakJz7VqQ1FAWN
+         ZfLxUQs6aZQjZOMZYRKFMCzS0E8aZjMsicTAnnYEGMuj/ocejvkvzKzWH7CePtVzKjvJ
+         xULVj0LmFL1krgCu2RAUz05Li5LMjhH3Vc+EAxR41lK/6cLkYnJLTGvOSaVLEsA0aOog
+         /Ozg==
+X-Gm-Message-State: AOAM530mdU/1uFQh1JJ/CBuiuQ2XqG9Zue1xI+UqYKhjoARcjgvEj9WC
+        +yAy6VzA+CwCo6P3D/oPClg=
+X-Google-Smtp-Source: ABdhPJyWXZsEhH6jt/PDfBCjCATNuUdMTae2dGTKO861W53YNzTXD212XNGggD+wyA3731udHYZC4A==
+X-Received: by 2002:a17:90a:4816:: with SMTP id a22mr12202439pjh.228.1605897961351;
+        Fri, 20 Nov 2020 10:46:01 -0800 (PST)
 Received: from syed ([223.225.2.215])
-        by smtp.gmail.com with ESMTPSA id n10sm3988016pgb.45.2020.11.20.10.44.17
+        by smtp.gmail.com with ESMTPSA id h16sm4397847pfo.185.2020.11.20.10.45.53
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 20 Nov 2020 10:44:24 -0800 (PST)
-Date:   Sat, 21 Nov 2020 00:14:04 +0530
+        Fri, 20 Nov 2020 10:46:00 -0800 (PST)
+Date:   Sat, 21 Nov 2020 00:15:41 +0530
 From:   Syed Nayyar Waris <syednwaris@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
@@ -58,8 +58,8 @@ Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
         linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org
-Subject: [RESEND PATCH 2/4] lib/test_bitmap.c: Modify for_each_set_clump test
-Message-ID: <27dfda9e32e6f7d0ba9399209c70e5c3c73d0113.1605893642.git.syednwaris@gmail.com>
+Subject: [RESEND PATCH 3/4] gpio: xilinx: Modify bitmap_set_value() calls
+Message-ID: <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
 References: <cover.1605893641.git.syednwaris@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,30 +70,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Modify the test where bitmap_set_value() is called. bitmap_set_value()
-now takes an extra bitmap-width as second argument and the width of
+Modify the bitmap_set_value() calls. bitmap_set_value()
+now takes an extra bitmap width as second argument and the width of
 value is now present as the fourth argument.
 
+Cc: Michal Simek <michal.simek@xilinx.com>
 Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
 ---
- lib/test_bitmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpio/gpio-xilinx.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 1c5791ff02cb..7fafe6a0bc08 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -656,8 +656,8 @@ static void __init prepare_test_data(unsigned int index)
- 	unsigned long width = 0;
+diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+index ad4ee4145db4..05dae086c4d0 100644
+--- a/drivers/gpio/gpio-xilinx.c
++++ b/drivers/gpio/gpio-xilinx.c
+@@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
+ 	spin_lock_irqsave(&chip->gpio_lock[0], flags);
+ 	spin_lock(&chip->gpio_lock[1]);
  
- 	for (i = 0; i < clump_test_data[index].count; i++) {
--		bitmap_set_value(clump_test_data[index].data,
--			clump_bitmap_data[(clump_test_data[index].offset)++], width, 32);
-+		bitmap_set_value(clump_test_data[index].data, 256,
-+			clump_bitmap_data[(clump_test_data[index].offset)++], 32, width);
- 		width += 32;
- 	}
- }
+-	bitmap_set_value(old, state[0], 0, width[0]);
+-	bitmap_set_value(old, state[1], width[0], width[1]);
++	bitmap_set_value(old, 64, state[0], width[0], 0);
++	bitmap_set_value(old, 64, state[1], width[1], width[0]);
+ 	bitmap_replace(new, old, bits, mask, gc->ngpio);
+ 
+-	bitmap_set_value(old, state[0], 0, 32);
+-	bitmap_set_value(old, state[1], 32, 32);
++	bitmap_set_value(old, 64, state[0], 32, 0);
++	bitmap_set_value(old, 64, state[1], 32, 32);
+ 	state[0] = bitmap_get_value(new, 0, width[0]);
+ 	state[1] = bitmap_get_value(new, width[0], width[1]);
+-	bitmap_set_value(new, state[0], 0, 32);
+-	bitmap_set_value(new, state[1], 32, 32);
++	bitmap_set_value(new, 64, state[0], 32, 0);
++	bitmap_set_value(new, 64, state[1], 32, 32);
+ 	bitmap_xor(changed, old, new, 64);
+ 
+ 	if (((u32 *)changed)[0])
 -- 
 2.29.0
 
