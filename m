@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0132BB436
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 19:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC9D2BB43E
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Nov 2020 19:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731461AbgKTSnW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Nov 2020 13:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S1731467AbgKTSo1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Nov 2020 13:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731383AbgKTSnW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 13:43:22 -0500
+        with ESMTP id S1731457AbgKTSo0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Nov 2020 13:44:26 -0500
 Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACC0C0613CF;
-        Fri, 20 Nov 2020 10:43:21 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id t18so5326692plo.0;
-        Fri, 20 Nov 2020 10:43:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84439C0613CF;
+        Fri, 20 Nov 2020 10:44:25 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id s2so5298990plr.9;
+        Fri, 20 Nov 2020 10:44:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=WXCokNcFtmUFZk8OkEAohOIZoUd84BUeBegjeYFXaK0=;
-        b=ArT35zTApfxrR1D++Yl4zdVcqMbNXWKgsa0paeogv6PsVQMX08hAhXuEAm5XltrVWc
-         uZe7e7D6Wh40OS7WDxbltcmSugAp0AaEPsobXvyuFAX2K77ZisSUsaDjy7XaXa+H6pBy
-         EtGUG/Og/DE0Uq5zQnMh1aat6V6ektoPy6gdfoYdKJo7Z3V9Yb54w1Q4EYmn8rIX6NYA
-         gg7AQ3SyOFoUv3GbH/RlX0Hs2LdAijINN/hfenjEZvDP5+rp/8Dbt1q3insU0jt9KufL
-         OyTutRqH2qjpuuJPYMyu1PxUd8ZQz6J0FOXX0vhHSmRf2Ewu5cMRJSlpMkRGp5QwGi+D
-         jbeg==
+        bh=cK5F4d0qMv8rWJ7QrP6ojZzILBcMD6l3/NGR5/zHn7g=;
+        b=JDmUnio1aSGCqFrCLxgQawip7qmMCTVk/WxT1wywIs4ubhldWhE81sZ8HL1BspCcwU
+         ZpXoOLh3nCOau9q+oL5oYYEGs5uhiuybwEUGN9OAEaENpAUNux57VoeF6h5n+9PsMQ+b
+         QsQK08JsbIq94vZ2aE47GM5BtKOGOp99nCI5PXeQogU3Hbb1Y9fxQxHDf8nH/0F+a+zf
+         0mMAjPimAH6SC4apd3jbLAlpXpPttDSNZrbvcf/YR+zI1Rn3UoKvs36bIhpW2T70FMxn
+         4RBwnlgYg4jrjFhgHjWtOKXBgHx0+MGYyjNrd+SyLGK9sfbjpHbKruTMeZSM5VnNI/tm
+         1qMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WXCokNcFtmUFZk8OkEAohOIZoUd84BUeBegjeYFXaK0=;
-        b=chHuOeIDvKczJdBeXUZ1u6kYIcjiQm9Yb5rohiIedMfvyy7FxVNFcNwJ0KdZaRsjvG
-         3o2nUpwIKdmbhLM39sSGaVIJXIyOx9qvECyVKxcjimRI9RFuIiZEV8/+EtgvEXERJPD9
-         8+D9049GHWNMCsKK63zdTkA+Sh0fdRQcQo3SN5+ndGNqdo8S/tja13e8y5lGpzlFtsyZ
-         r2nbDENx5BP++dBx8wTLhsrD2Gku0TLBEjlOLtzf7FqmjrhLhrmlGEDsxzYwytQYsRFl
-         lzVUkpm+9FQomfikX6Ijg8+TzSUXvfllDNytsQ5ThhviXZ0MQQAwkN7R3cV6KKMR+tLy
-         jUdA==
-X-Gm-Message-State: AOAM531bdBDL57x5xrbBDWJpVZj878Iw0qZGVDGkZ1mYp/xNjt9Y2Xp3
-        0XvnpID72NYjwS5CBW6SRDlMS3HakaQ=
-X-Google-Smtp-Source: ABdhPJzohs3MmB+IkhzVGQX6moCZPPkrpU7OcKdu237FnWfI5fZuik401VUybcFI/uigj/eyV0ODXw==
-X-Received: by 2002:a17:902:bc46:b029:d6:d98a:1a68 with SMTP id t6-20020a170902bc46b02900d6d98a1a68mr14200054plz.63.1605897801482;
-        Fri, 20 Nov 2020 10:43:21 -0800 (PST)
+        bh=cK5F4d0qMv8rWJ7QrP6ojZzILBcMD6l3/NGR5/zHn7g=;
+        b=NpodfHcm35Khl0pIHR0+YgAK2h5AzRIFSz+1zod5mafyAKUvdRbcBsNRlU1f1BNVAd
+         9p7MtIAqt2y0KDjHCFUhD/I21gYZEn47s65EIpRTIx75kajs0Kt3VW/1EYgP+6eEqlYv
+         5jkmDkE4F8SLPeYRSu8Z1txgyQPZIG6iLmZ58RC7ja30KVGQnFSr2YaJCnIJ3BblpbVQ
+         GUZPTYpmX2w453Apoxx1bR6jpBUwd2d1UjQVqEZWaHrhRHUZR7cZ9w6LSc70vq7uMe/u
+         ElUMOEctW7tlwctY40jx736WvIhv7oCY8gMpMaswEBER1VKDztbPqFwV7xmRSCzjdkya
+         93pg==
+X-Gm-Message-State: AOAM532lmecvf9x/yU0kDEQVVLqb6vVc78kod9hbhv7OjGLgDMJQm6Xq
+        kW79thPrqArkUBYEgRGrJjU=
+X-Google-Smtp-Source: ABdhPJz4LuKXhDhCCts6c4qxBuonU2yyA62xYcyZVA/6Ht5a1UW44vjUMzTXOBHxjTCPcprZwATb3Q==
+X-Received: by 2002:a17:902:8609:b029:d8:fc3c:b01a with SMTP id f9-20020a1709028609b02900d8fc3cb01amr14765755plo.36.1605897865137;
+        Fri, 20 Nov 2020 10:44:25 -0800 (PST)
 Received: from syed ([223.225.2.215])
-        by smtp.gmail.com with ESMTPSA id p15sm5191603pjg.21.2020.11.20.10.43.14
+        by smtp.gmail.com with ESMTPSA id n10sm3988016pgb.45.2020.11.20.10.44.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 20 Nov 2020 10:43:20 -0800 (PST)
-Date:   Sat, 21 Nov 2020 00:13:02 +0530
+        Fri, 20 Nov 2020 10:44:24 -0800 (PST)
+Date:   Sat, 21 Nov 2020 00:14:04 +0530
 From:   Syed Nayyar Waris <syednwaris@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
@@ -58,9 +58,8 @@ Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
         linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org
-Subject: [RESEND PATCH 1/4] bitmap: Modify bitmap_set_value() to check bitmap
- length
-Message-ID: <b2011fb2e0438bdfd0b663b9f0456d0aef20f04b.1605893642.git.syednwaris@gmail.com>
+Subject: [RESEND PATCH 2/4] lib/test_bitmap.c: Modify for_each_set_clump test
+Message-ID: <27dfda9e32e6f7d0ba9399209c70e5c3c73d0113.1605893642.git.syednwaris@gmail.com>
 References: <cover.1605893641.git.syednwaris@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,87 +70,28 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add explicit check to see if the value being written into the bitmap
-does not fall outside the bitmap.
-The situation that it is falling outside would never be possible in the
-code because the boundaries are required to be correct before the function
-is called. The responsibility is on the caller for ensuring the boundaries
-are correct.
-The code change is simply to silence the GCC warning messages
-because GCC is not aware that the boundaries have already been checked.
-As such, we're better off using __builtin_unreachable() here because we
-can avoid the latency of the conditional check entirely.
+Modify the test where bitmap_set_value() is called. bitmap_set_value()
+now takes an extra bitmap-width as second argument and the width of
+value is now present as the fourth argument.
 
-Cc: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- include/linux/bitmap.h | 35 +++++++++++++++++++++--------------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+ lib/test_bitmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index 386d08777342..efb6199ea1e7 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -78,8 +78,9 @@
-  *  bitmap_get_value(map, start, nbits)		Get bit value of size
-  *                                              'nbits' from map at start
-  *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
-- *  bitmap_set_value(map, value, start, nbits)	Set bit value of size 'nbits'
-- *                                              of map at start
-+ *  bitmap_set_value(map, nbits, value, value_width, start)
-+ *                                              Set bit value of size value_width
-+ *                                              to map at start
-  *
-  * Note, bitmap_zero() and bitmap_fill() operate over the region of
-  * unsigned longs, that is, bits behind bitmap till the unsigned long
-@@ -610,30 +611,36 @@ static inline void bitmap_set_value8(unsigned long *map, unsigned long value,
- }
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index 1c5791ff02cb..7fafe6a0bc08 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -656,8 +656,8 @@ static void __init prepare_test_data(unsigned int index)
+ 	unsigned long width = 0;
  
- /**
-- * bitmap_set_value - set n-bit value within a memory region
-+ * bitmap_set_value - set value within a memory region
-  * @map: address to the bitmap memory region
-- * @value: value of nbits
-- * @start: bit offset of the n-bit value
-- * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
-+ * @nbits: size of map in bits
-+ * @value: value of clump
-+ * @value_width: size of value in bits (must be between 1 and BITS_PER_LONG inclusive)
-+ * @start: bit offset of the value
-  */
--static inline void bitmap_set_value(unsigned long *map,
--				    unsigned long value,
--				    unsigned long start, unsigned long nbits)
-+static inline void bitmap_set_value(unsigned long *map, unsigned long nbits,
-+				    unsigned long value, unsigned long value_width,
-+				    unsigned long start)
- {
--	const size_t index = BIT_WORD(start);
-+	const unsigned long index = BIT_WORD(start);
-+	const unsigned long length = BIT_WORD(nbits);
- 	const unsigned long offset = start % BITS_PER_LONG;
- 	const unsigned long ceiling = round_up(start + 1, BITS_PER_LONG);
- 	const unsigned long space = ceiling - start;
- 
--	value &= GENMASK(nbits - 1, 0);
-+	value &= GENMASK(value_width - 1, 0);
- 
--	if (space >= nbits) {
--		map[index] &= ~(GENMASK(nbits - 1, 0) << offset);
-+	if (space >= value_width) {
-+		map[index] &= ~(GENMASK(value_width - 1, 0) << offset);
- 		map[index] |= value << offset;
- 	} else {
- 		map[index + 0] &= ~BITMAP_FIRST_WORD_MASK(start);
- 		map[index + 0] |= value << offset;
--		map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + nbits);
-+
-+		if (index + 1 >= length)
-+			__builtin_unreachable();
-+
-+		map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + value_width);
- 		map[index + 1] |= value >> space;
+ 	for (i = 0; i < clump_test_data[index].count; i++) {
+-		bitmap_set_value(clump_test_data[index].data,
+-			clump_bitmap_data[(clump_test_data[index].offset)++], width, 32);
++		bitmap_set_value(clump_test_data[index].data, 256,
++			clump_bitmap_data[(clump_test_data[index].offset)++], 32, width);
+ 		width += 32;
  	}
  }
 -- 
