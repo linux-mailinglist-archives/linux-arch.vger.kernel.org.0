@@ -2,124 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A483E2BBDD8
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 08:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD962BBE41
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 10:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727082AbgKUHfq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Nov 2020 02:35:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726161AbgKUHfp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 21 Nov 2020 02:35:45 -0500
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A43012224A;
-        Sat, 21 Nov 2020 07:35:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605944144;
-        bh=JIOyIP3Z1qYK7PEjNX1ygOHQ10RRXlMdlRpxuOVqaF4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NBoERCzx0bOfs1Spi/qI4Jr4R9gR8nafDvLzNl5y954yhL+AaVOlArn46YJkANI7T
-         7abJYj5XFHRgl30rA/lbg/rqlMovYayapPUq/NdCriwpLmDqbHGPoFB/SLz/cLTFne
-         1lltJvXcAoTRU2aCkyn4SJsnZCZs0Biim543HgXo=
-Received: by mail-oi1-f177.google.com with SMTP id c80so13347823oib.2;
-        Fri, 20 Nov 2020 23:35:44 -0800 (PST)
-X-Gm-Message-State: AOAM533XGJRslAI2T+3QpkpO+RvNRSTokXUTYapch7qFcAvRgtNw5gjL
-        pF3r1REgFKT6pLRKz68m5wAup7lQ0Now8fP87ps=
-X-Google-Smtp-Source: ABdhPJx40jOdwbcNKyqzBINwkmCmwPpkhWi97MwgNpvEdbPfdyMgPT4NA53Xt6JomdsOtV9RsBYuyUMJZVUA9Le699M=
-X-Received: by 2002:aca:d4d5:: with SMTP id l204mr7701517oig.174.1605944144026;
- Fri, 20 Nov 2020 23:35:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118220731.925424-1-samitolvanen@google.com>
- <CAKwvOd=5PhCTZ-yHr08gPYNEsGEjZa=rDY0-unhkhofjXhqwLQ@mail.gmail.com>
- <CAMj1kXEVzDi5=uteUAzG5E=j+aTCHEbMxwDfor-s=DthpREpyw@mail.gmail.com>
- <CAKwvOdmpBNx9iSguGXivjJ03FaN5rgv2oaXZUQxYPdRccQmdyQ@mail.gmail.com>
- <CAMj1kXEoPEd6GzjL1XuxTPwitbR03BiBEXpAGtUytMj-h=vCkg@mail.gmail.com> <CAKwvOdmk1D0dLDOHEWX=jHpUxUT2JbwgnF62Qv3Rv=coNPadHg@mail.gmail.com>
-In-Reply-To: <CAKwvOdmk1D0dLDOHEWX=jHpUxUT2JbwgnF62Qv3Rv=coNPadHg@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 21 Nov 2020 08:35:33 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHTtXqssica=ADMOrA+7mhBQv=nGBsR-XR0+LAKk_-dWA@mail.gmail.com>
-Message-ID: <CAMj1kXHTtXqssica=ADMOrA+7mhBQv=nGBsR-XR0+LAKk_-dWA@mail.gmail.com>
-Subject: Re: [PATCH v7 00/17] Add support for Clang LTO
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+        id S1727257AbgKUJpH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Nov 2020 04:45:07 -0500
+Received: from smtp-8fa9.mail.infomaniak.ch ([83.166.143.169]:38187 "EHLO
+        smtp-8fa9.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726709AbgKUJpH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 21 Nov 2020 04:45:07 -0500
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CdT6R6RqJzlhrhL;
+        Sat, 21 Nov 2020 10:45:03 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CdT6P5kbjzlh8TD;
+        Sat, 21 Nov 2020 10:45:01 +0100 (CET)
+Subject: Re: [PATCH v24 02/12] landlock: Add ruleset and domain management
+To:     Jann Horn <jannh@google.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Alistair Delva <adelva@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201112205141.775752-1-mic@digikod.net>
+ <20201112205141.775752-3-mic@digikod.net>
+ <CAG48ez2RE6S7jKQY3iyoNRM5vV67W4S7OwJ0gmNGy+MB8F56vg@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <28499c4b-d388-7bd1-046e-a775c326e156@digikod.net>
+Date:   Sat, 21 Nov 2020 10:45:01 +0100
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <CAG48ez2RE6S7jKQY3iyoNRM5vV67W4S7OwJ0gmNGy+MB8F56vg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 21 Nov 2020 at 00:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Fri, Nov 20, 2020 at 3:30 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Fri, 20 Nov 2020 at 21:19, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > >
-> > > On Fri, Nov 20, 2020 at 2:30 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > >
-> > > > On Thu, 19 Nov 2020 at 00:42, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > > > >
-> > > > > Thanks for continuing to drive this series Sami.  For the series,
-> > > > >
-> > > > > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > > >
-> > > > > I did virtualized boot tests with the series applied to aarch64
-> > > > > defconfig without CONFIG_LTO, with CONFIG_LTO_CLANG, and a third time
-> > > > > with CONFIG_THINLTO.  If you make changes to the series in follow ups,
-> > > > > please drop my tested by tag from the modified patches and I'll help
-> > > > > re-test.  Some minor feedback on the Kconfig change, but I'll post it
-> > > > > off of that patch.
-> > > > >
-> > > >
-> > > > When you say 'virtualized" do you mean QEMU on x86? Or actual
-> > > > virtualization on an AArch64 KVM host?
-> > >
-> > > aarch64 guest on x86_64 host.  If you have additional configurations
-> > > that are important to you, additional testing help would be
-> > > appreciated.
-> > >
-> >
-> > Could you run this on an actual phone? Or does Android already ship
-> > with this stuff?
->
-> By `this`, if you mean "the LTO series", it has been shipping on
-> Android phones for years now, I think it's even required in the latest
-> release.
->
-> If you mean "the LTO series + mainline" on a phone, well there's the
-> android-mainline of https://android.googlesource.com/kernel/common/,
-> in which this series was recently removed in order to facilitate
-> rebasing Android's patches on ToT-mainline until getting the series
-> landed upstream.  Bit of a chicken and the egg problem there.
->
-> If you mean "the LTO series + mainline + KVM" on a phone; I don't know
-> the precise state of aarch64 KVM and Android (Will or Marc would
-> know).  We did experiment recently with RockPI's for aach64 KVM, IIRC;
-> I think Android is tricky as it still requires A64+A32/T32 chipsets,
-> Alistair would know more.  Might be interesting to boot a virtualized
-> (or paravirtualized?) guest built with LTO in a host built with LTO
-> for sure, but I don't know if we have tried that yet (I think we did
-> try LTO guests of android kernels, but I think they were on the stock
-> RockPI host BSP image IIRC).
->
 
-I don't think testing under KVM gives us more confidence or coverage
-than testing on bare metal. I was just pointing out that 'virtualized'
-is misleading, and if you test things under QEMU/x86 + TCG, it is
-better to be clear about this, and refer to it as 'under emulation'.
+On 21/11/2020 08:00, Jann Horn wrote:
+> On Thu, Nov 12, 2020 at 9:51 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> A Landlock ruleset is mainly a red-black tree with Landlock rules as
+>> nodes.  This enables quick update and lookup to match a requested
+>> access, e.g. to a file.  A ruleset is usable through a dedicated file
+>> descriptor (cf. following commit implementing syscalls) which enables a
+>> process to create and populate a ruleset with new rules.
+>>
+>> A domain is a ruleset tied to a set of processes.  This group of rules
+>> defines the security policy enforced on these processes and their future
+>> children.  A domain can transition to a new domain which is the
+>> intersection of all its constraints and those of a ruleset provided by
+>> the current process.  This modification only impact the current process.
+>> This means that a process can only gain more constraints (i.e. lose
+>> accesses) over time.
+>>
+>> Cc: James Morris <jmorris@namei.org>
+>> Cc: Jann Horn <jannh@google.com>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Serge E. Hallyn <serge@hallyn.com>
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>> ---
+>>
+>> Changes since v23:
+>> * Always intersect access rights.  Following the filesystem change
+>>   logic, make ruleset updates more consistent by always intersecting
+>>   access rights (boolean AND) instead of combining them (boolean OR) for
+>>   the same layer.
+> 
+> This seems wrong to me. If some software e.g. builds a policy that
+> allows it to execute specific libraries and to open input files
+> specified on the command line, and the user then specifies a library
+> as an input file, this change will make that fail unless the software
+> explicitly deduplicates the rules.
+> Userspace will be forced to add extra complexity to work around this.
+
+That's a valid use case I didn't think about. Reverting this change is
+not an issue.
+
+> 
+>>   This defensive approach could also help avoid user
+>>   space to inadvertently allow multiple access rights for the same
+>>   object (e.g.  write and execute access on a path hierarchy) instead of
+>>   dealing with such inconsistency.  This can happen when there is no
+>>   deduplication of objects (e.g. paths and underlying inodes) whereas
+>>   they get different access rights with landlock_add_rule(2).
+> 
+> I don't see why that's an issue. If userspace wants to be able to
+> access the same object in different ways for different purposes, it
+> should be able to do that, no?
+> 
+> I liked the semantics from the previous version.
+> 
+
+I agree, but the real issue is with the ruleset layers applied to the
+filesystem, cf. patch 7.
