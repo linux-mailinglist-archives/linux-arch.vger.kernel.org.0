@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B5F2BBDA2
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 08:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7B52BBDAC
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 08:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgKUHAn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Nov 2020 02:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S1727160AbgKUHAv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Nov 2020 02:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726983AbgKUHAn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Nov 2020 02:00:43 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C29C061A4B
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 23:00:42 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id u19so16650079lfr.7
-        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 23:00:42 -0800 (PST)
+        with ESMTP id S1727107AbgKUHAv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Nov 2020 02:00:51 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C13C0613CF
+        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 23:00:49 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id 142so12406528ljj.10
+        for <linux-arch@vger.kernel.org>; Fri, 20 Nov 2020 23:00:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=qSt/XnTloXSnWYtWCxId4OBXpP28x7HyJlEM0VTTxfw=;
-        b=SXMdW3IqDbJ6iWw8IZ9Q5CNHq9VhrWbVp/EFAUzmCzAPgt7dcdixohikYsRS8jBWb1
-         kjZbjAisDfdp9lwbGwx8t8ITuW2ZvTjirm7OuW6PzkBN++x9KgW/YZWIVfeW6e6mlx3U
-         /lumB7FQ98t3ujt+mefcDxCxr8UBoHSfT7/x/vIP0AqU4k0hMZAjxoIG9CjXFXs8CFQQ
-         HZdfjKvCNoGFCrGQCY8jcCvrkzlnJsbl7lsY/u+ZRYaynCCRUhJ+Qr2rZkAfpo8ZBl7g
-         IhCZE31GiyxOfhCWdnhAONlyo2d8Cy1QH+CApFXoypZopMLIK39U9YnN+CMIrVgDo1yp
-         gxMA==
+        bh=zCcA4sLycmShyMxZ6i9Eumf1OUB1JNsCrcUOdwj1SQI=;
+        b=dyVl3+GKSo/xVNAFCoPUWUc6gQmdnw/aoaQ4OWYQZWi2kHziBvNSeTnr32XAufXgxx
+         hKm1lXxIoBOeyloaPYvydgxjC+QYQhPhdTBvC3QDAyA7AJyAjx1Sfg+qUFcGGSyONF8a
+         rMKz4vmvLjBUQoyU5nljmBLmfmujXCOPYrMhv1QkKNn3puxg8Bv8DNt5W2ZOwFPaeWbF
+         Wzo6H7mzy9nAyHb2lga5U1+/aFxC+fqkiabeBSqjroyj0XzDF5MUiNTLKPowTk9qU32M
+         0Frm4j8FEeopwqA7QqTNyauy419MUnrYWXvN0JzetsvpCro/b6d4UfZLXFRL8XQqSWR4
+         iSWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qSt/XnTloXSnWYtWCxId4OBXpP28x7HyJlEM0VTTxfw=;
-        b=iw/xr6prttutBuTeFq/KJ/sDlMtpUN0f2S/fUBxTqfZWxOjX5tNL0WczY3uLruh+5z
-         Uk+7497c4KoWWOnMrukxw/6DyXv2bSEZCAKuGIRL6HPqOpg2q8UQwzZbIeFg9NOrfGeV
-         RHpeg0X+FT9O/BCeTHu/+QrTEpJMlR56eOYumXe0+ZRmmgkhX+cKtpiLn5uPftZgULEm
-         vJcVRAyKc4tReA6QFeqqAdifBSmxcVCEf9JuuZRxU5MFXyDbi8ZT2dOxeZPh2dU84A8s
-         /7mqLf5ilR/Jro/ek7iAH6A4AdE8Ygl9hGSTPeFPRSWYDK0mlcJ1Z2GMPoOA3yZo+ted
-         kVOA==
-X-Gm-Message-State: AOAM531mrNtw6I8jIRjjGwww1vk7Zhs4suyq+LenGYIOy6HxWtglnVs3
-        f8A6YVi2zXPuujRN25YoHjwUrg6I7dx8UIfmSv2BXw==
-X-Google-Smtp-Source: ABdhPJysESVBpzmb8AIe4IsYMGTwUSB/SEEqglyDLyhegKtUN1uX2v4ambD1WjsgatbnwE0AiCnynPiP1Rb9iZe/YZ0=
-X-Received: by 2002:a05:6512:348e:: with SMTP id v14mr8698488lfr.97.1605942041000;
- Fri, 20 Nov 2020 23:00:41 -0800 (PST)
+        bh=zCcA4sLycmShyMxZ6i9Eumf1OUB1JNsCrcUOdwj1SQI=;
+        b=A4ViUBsYBmyzlzqZxYlDC18bcgukHldPE5wkDpaxNU3EkW2Rn879Y0sAE/xdQZguxV
+         zZKaQYyWMU9VaOYdzmJIcjIUBEuXGfKnOZo/v7rP6mRsy/U3WmfaslXnEvGJ85qZmbMg
+         TnUbHJIn+vE43qtuBOpNoSCosVIb/j2sNuhH2BrhFhQ2kW3Gzvn8b1iMyE8FDqYOEFOi
+         8lNHCYgp32W8kG3wBQ5Ko70NZyUxfoabykGn6PcMA4A0NbzP5TVW9FHItukCzj7txIqi
+         dHsUQygILnihR8g6bTWvAy/oixBLx7C2Lpmo0LJ+YC2E5T7JnLfb9WP2kKRdVV9qU37L
+         lRGQ==
+X-Gm-Message-State: AOAM5302J0op16TZlQciFJYGMacOv1azShgxX55Wh4q6IMXUVhrguwKf
+        Khc7iZN/F9tMelYw4bsRlxDTPTBn6hIqAbuyjhSnQQ==
+X-Google-Smtp-Source: ABdhPJy8wln+obg/cf+h2tvCfZva23mNjQ3IqbWTfUAeh0QB4VP+04PcFgpYrhykI0RBGORAa7WxIWYKQRHp7mANu3Y=
+X-Received: by 2002:a2e:9d8d:: with SMTP id c13mr9054289ljj.160.1605942047455;
+ Fri, 20 Nov 2020 23:00:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-13-mic@digikod.net>
-In-Reply-To: <20201112205141.775752-13-mic@digikod.net>
+References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-8-mic@digikod.net>
+In-Reply-To: <20201112205141.775752-8-mic@digikod.net>
 From:   Jann Horn <jannh@google.com>
 Date:   Sat, 21 Nov 2020 08:00:00 +0100
-Message-ID: <CAG48ez0S1_jd0YzXZ9tx94gU0sw-WeXgG336d=3YP7+iZvRgaA@mail.gmail.com>
-Subject: Re: [PATCH v24 12/12] landlock: Add user and kernel documentation
+Message-ID: <CAG48ez3HA63CX852LLDFCcNyzRGwAr3x_cvA1-t8tgDxfF1dOQ@mail.gmail.com>
+Subject: Re: [PATCH v24 07/12] landlock: Support filesystem access-control
 To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
@@ -84,13 +84,147 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Thu, Nov 12, 2020 at 9:52 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
 wrote:
-> This documentation can be built with the Sphinx framework.
+> Thanks to the Landlock objects and ruleset, it is possible to identify
+> inodes according to a process's domain.  To enable an unprivileged
+> process to express a file hierarchy, it first needs to open a directory
+> (or a file) and pass this file descriptor to the kernel through
+> landlock_add_rule(2).  When checking if a file access request is
+> allowed, we walk from the requested dentry to the real root, following
+> the different mount layers.  The access to each "tagged" inodes are
+> collected according to their rule layer level, and ANDed to create
+> access to the requested file hierarchy.  This makes possible to identify
+> a lot of files without tagging every inodes nor modifying the
+> filesystem, while still following the view and understanding the user
+> has from the filesystem.
 >
+> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+> keep the same struct inodes for the same inodes whereas these inodes are
+> in use.
+>
+> This commit adds a minimal set of supported filesystem access-control
+> which doesn't enable to restrict all file-related actions.  This is the
+> result of multiple discussions to minimize the code of Landlock to ease
+> review.  Thanks to the Landlock design, extending this access-control
+> without breaking user space will not be a problem.  Moreover, seccomp
+> filters can be used to restrict the use of syscall families which may
+> not be currently handled by Landlock.
+>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 > Cc: James Morris <jmorris@namei.org>
 > Cc: Jann Horn <jannh@google.com>
+> Cc: Jeff Dike <jdike@addtoit.com>
 > Cc: Kees Cook <keescook@chromium.org>
+> Cc: Richard Weinberger <richard@nod.at>
 > Cc: Serge E. Hallyn <serge@hallyn.com>
 > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
+> ---
+>
+> Changes since v23:
+> * Enforce deterministic interleaved path rules.  To have consistent
+>   layered rules, granting access to a path implies that all accesses
+>   tied to inodes, from the requested file to the real root, must be
+>   checked.  Otherwise, stacked rules may result to overzealous
+>   restrictions.  By excluding the ability to add exceptions in the same
+>   layer (e.g. /a allowed, /a/b denied, and /a/b/c allowed), we get
+>   deterministic interleaved path rules.  This removes an optimization
 
-Reviewed-by: Jann Horn <jannh@google.com>
+I don't understand the "deterministic interleaved path rules" part.
+
+
+What if I have a policy like this?
+
+/home/user READ
+/home/user/Downloads READ+WRITE
+
+That's a reasonable policy, right?
+
+If I then try to open /home/user/Downloads/foo in WRITE mode, the loop
+will first check against the READ+WRITE rule for /home/user, that
+check will pass, and then it will check against the READ rule for /,
+which will deny the access, right? That seems bad.
+
+
+The v22 code ensured that for each layer, the most specific rule (the
+first we encounter on the walk) always wins, right? What's the problem
+with that?
+
+>   which could be replaced by a proper cache mechanism.  This also
+>   further simplifies and explain check_access_path_continue().
+
+From the interdiff between v23 and v24 (git range-diff
+99ade5d59b23~1..99ade5d59b23 faa8c09be9fd~1..faa8c09be9fd):
+
+    @@ security/landlock/fs.c (new)
+     +                  rcu_dereference(landlock_inode(inode)->object));
+     +  rcu_read_unlock();
+     +
+    -+  /* Checks for matching layers. */
+    -+  if (rule && (rule->layers | *layer_mask)) {
+    -+          if ((rule->access & access_request) =3D=3D access_request) =
+{
+    -+                  *layer_mask &=3D ~rule->layers;
+    -+                  return true;
+    -+          } else {
+    -+                  return false;
+    -+          }
+    ++  if (!rule)
+    ++          /* Continues to walk if there is no rule for this inode. */
+    ++          return true;
+    ++  /*
+    ++   * We must check all layers for each inode because we may encounter
+    ++   * multiple different accesses from the same layer in a walk.  Each
+    ++   * layer must at least allow the access request one time (i.e. with=
+ one
+    ++   * inode).  This enables to have a deterministic behavior whatever
+    ++   * inode is tagged within interleaved layers.
+    ++   */
+    ++  if ((rule->access & access_request) =3D=3D access_request) {
+    ++          /* Validates layers for which all accesses are allowed. */
+    ++          *layer_mask &=3D ~rule->layers;
+    ++          /* Continues to walk until all layers are validated. */
+    ++          return true;
+     +  }
+    -+  return true;
+    ++  /* Stops if a rule in the path don't allow all requested access. */
+    ++  return false;
+     +}
+     +
+     +static int check_access_path(const struct landlock_ruleset *const dom=
+ain,
+    @@ security/landlock/fs.c (new)
+     +                          &layer_mask)) {
+     +          struct dentry *parent_dentry;
+     +
+    -+          /* Stops when a rule from each layer granted access. */
+    -+          if (layer_mask =3D=3D 0) {
+    -+                  allowed =3D true;
+    -+                  break;
+    -+          }
+    -+
+
+This change also made it so that disconnected paths aren't accessible
+unless they're internal, right? While previously, the access could be
+permitted if the walk stops before reaching the disconnected point? I
+guess that's fine, but it should probably be documented.
+
+     +jump_up:
+     +          /*
+     +           * Does not work with orphaned/private mounts like overlayf=
+s
+    @@ security/landlock/fs.c (new)
+     +                          goto jump_up;
+     +                  } else {
+     +                          /*
+    -+                           * Stops at the real root.  Denies access
+    -+                           * because not all layers have granted acce=
+ss.
+    ++                           * Stops at the real root.  Denies access i=
+f
+    ++                           * not all layers granted access.
+     +                           */
+    -+                          allowed =3D false;
+    ++                          allowed =3D (layer_mask =3D=3D 0);
+     +                          break;
+     +                  }
+     +          }
