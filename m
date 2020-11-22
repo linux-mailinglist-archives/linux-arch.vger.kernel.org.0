@@ -2,214 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67E02BC575
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Nov 2020 12:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831132BC9B5
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Nov 2020 22:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727621AbgKVLvo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 22 Nov 2020 06:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S1726489AbgKVVs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 22 Nov 2020 16:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727589AbgKVLvn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Nov 2020 06:51:43 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64304C0613CF
-        for <linux-arch@vger.kernel.org>; Sun, 22 Nov 2020 03:51:43 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id p8so15637449wrx.5
-        for <linux-arch@vger.kernel.org>; Sun, 22 Nov 2020 03:51:43 -0800 (PST)
+        with ESMTP id S1726486AbgKVVs6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Nov 2020 16:48:58 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBD1C0613CF
+        for <linux-arch@vger.kernel.org>; Sun, 22 Nov 2020 13:48:58 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id bo9so14840456ejb.13
+        for <linux-arch@vger.kernel.org>; Sun, 22 Nov 2020 13:48:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=QKuA4ekOdaJDz2ZNBGMOghu/aSzBNJa42AJDcLk6jOQ=;
-        b=JLXA+ro1f2pyGijb818SWjOikHzun2D9pSZJAUZpINS8K7zgz+m7JszJJQs55yurWT
-         9t+EqoPX+MxO35oCTS7NZX59A2jMR3pJywt1RlwTgCD3oTIgAXpyeHfNngg84KtBzDD7
-         E+38SOwvkHdp5SwUG/kvz4JkLvs2k7uQBxbFqqvocVtgo8tvIb8a2fHQGLAL42FNYBA7
-         cBjWmCZhPQexEzUxT01Ag6FH/qDQ+E9yJcC1yfRBaewKl+lXRHi5UpyofKtAaq0aTeQV
-         Vjjz1spnPClre/ExirNh0SSCAVKn8bZ0bxsXwSFZPMUfAHXLLXBDbus+hqJCbxMCE9g1
-         nGfQ==
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
+        b=VAGTlsE/c+SvyPTRqkq8uFcaMxBcwmkZw/dEEdZ9m2G9gMQvdOw0RuMCvSgXWSDlkD
+         jhAJ03edksmoTfjK3KGxlb4BT4UmaLk2k+UKfWa1g34EezR1vm5rSKG4Gz1v9XAKH6WJ
+         65lMqkd4crJfGPnV/2qOso+iyM22r6+wvoK0/qLqgRpfFaqaYsaAOwRcqFWgo2D9QMig
+         YbCWavu65kH/ODgTAw5DyPsRIoQDNmhbSei/OrSszUg7EGZ3wtvVxm+1fdGE2s595AJT
+         y2DPaTIGfx2UCKJbAcdzXPuqUJ6M0tSluDfJ8OSWaytjY2cUYcLB4j7dgCCKSR6YYOjy
+         9GoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=QKuA4ekOdaJDz2ZNBGMOghu/aSzBNJa42AJDcLk6jOQ=;
-        b=Ao84eR936YQx0R1CO05VTQqIvB7I4zRkBt4i/XBK4pPIE4D5sr3Rn9xICl8J6ygTa4
-         FU/xqmhuYCh0zkCvewfGGH6+yAX+OrMxzHfXE3P6vKOtfJxZ9F6Ugf3xU7m0Z/jFJOoA
-         zISeSSbSv5blgCGKZKLg5MW3oTjEgP/jK78Mi3Lx6PLLHddbj06sEEicW0iLZiqqK7zz
-         ZfVpi3AWe/HTGoabaCYdtVtu4n01dxgmBKrLSgZWLWs+kaZoBag3bDt4p1gZ3TT9bYVG
-         o5Y1Igl1ltTgPPuEdtFxh6GmfVzsCUNJI7vtnvQSRxlsddsH6MT8sBNG/uL4nxVs/qbF
-         PF3g==
-X-Gm-Message-State: AOAM531QrlUe76vz2sRAFfh5pDn3a42yYVV+wSmYAvoDi3ipPON4xDTB
-        dJTicTopjEMS9QNK67sQRf+fyJdOHw==
-X-Google-Smtp-Source: ABdhPJz+m3jlhX90gQlAUF42BIgXNnP7Vh6lwxA/UyDttKVK2dM4N/+gCW5fs60mcrZYPhqH2c7vNA==
-X-Received: by 2002:a5d:52c1:: with SMTP id r1mr27040160wrv.255.1606045902201;
-        Sun, 22 Nov 2020 03:51:42 -0800 (PST)
-Received: from localhost.localdomain ([46.53.251.228])
-        by smtp.gmail.com with ESMTPSA id k81sm48190115wma.2.2020.11.22.03.51.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2020 03:51:41 -0800 (PST)
-Date:   Sun, 22 Nov 2020 14:51:39 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org
-Subject: [PATCH] asm-generic/io.h: terser readsb() and friends
-Message-ID: <20201122115139.GA47348@localhost.localdomain>
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
+        b=Nm71+Tl6HuvEWarYGlCpnKafsB7phdSP8nSoUzc4wNxmYBySLziC1uBr/1WUXooxoc
+         delHgi7TQD17ogezmgBpJdatlfEGkLAHoSfs1a2YDUajdy6vwydk1zEhiGNuxXkC5rfc
+         WXHQSnJLZO/5JIpg/aQOLsXWMVO09yO3/YuH1VwpPpsPKWmQ0JnxHgQF/xwt0IQxatN9
+         2As1OSdMG0MXqxNwkJupBwCpCqNiiIIQvDXuHvv/+1HBUk6hfrGChwKnIEBrRQBwURvh
+         vpMGQ0uKeYDpfc8hPlGkwwxz8Q3DAMgxm6imDKseDk2BjRkf/oTPpHy5/aM9QcIAiPK2
+         QGLw==
+X-Gm-Message-State: AOAM530+m1F1dZkIxCCA3OmZpMzMk++GKq0HytBE3Gnpg6Z04VP4S2w0
+        BXqjpCnld0kpfMo24spDIOw=
+X-Google-Smtp-Source: ABdhPJwNMf+0a24EFS5QWy589WhCj6ymXYf1knUu8Bo7IA5Qh1keuVE0Y02NM+4VXF6sUp1xjsdf0A==
+X-Received: by 2002:a17:906:6dd6:: with SMTP id j22mr32337571ejt.255.1606081737328;
+        Sun, 22 Nov 2020 13:48:57 -0800 (PST)
+Received: from [192.168.43.48] ([197.210.35.67])
+        by smtp.gmail.com with ESMTPSA id e17sm4016232edc.45.2020.11.22.13.48.52
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sun, 22 Nov 2020 13:48:56 -0800 (PST)
+Message-ID: <5fbadcc8.1c69fb81.8dfc7.11b0@mx.google.com>
+Sender: Baniko Diallo <banidiallo23@gmail.com>
+From:   Adelina Zeuki <adelinazeuki@gmail.com>
+X-Google-Original-From: "Adelina Zeuki" <  adelinazeuki@gmail.comm >
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hello !!
+To:     Recipients <adelinazeuki@gmail.comm>
+Date:   Sun, 22 Nov 2020 21:48:46 +0000
+Reply-To: adelinazeuki@gmail.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-	if (count) {
-		do {
-			...
-		} while (--count);
-	}
+Hi dear,
 
-can be rewritten as
-
-	while (count-- > 0) {
-		...
-	}
-
-Drop useless variables while I'm at it.
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
- include/asm-generic/io.h |   68 ++++++++++++++++-------------------------------
- 1 file changed, 24 insertions(+), 44 deletions(-)
-
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -317,13 +317,10 @@ static inline void writeq_relaxed(u64 value, volatile void __iomem *addr)
- static inline void readsb(const volatile void __iomem *addr, void *buffer,
- 			  unsigned int count)
- {
--	if (count) {
--		u8 *buf = buffer;
-+	u8 *buf = buffer;
- 
--		do {
--			u8 x = __raw_readb(addr);
--			*buf++ = x;
--		} while (--count);
-+	while (count-- > 0) {
-+		*buf++ = __raw_readb(addr);
- 	}
- }
- #endif
-@@ -333,13 +330,10 @@ static inline void readsb(const volatile void __iomem *addr, void *buffer,
- static inline void readsw(const volatile void __iomem *addr, void *buffer,
- 			  unsigned int count)
- {
--	if (count) {
--		u16 *buf = buffer;
-+	u16 *buf = buffer;
- 
--		do {
--			u16 x = __raw_readw(addr);
--			*buf++ = x;
--		} while (--count);
-+	while (count-- > 0) {
-+		*buf++ = __raw_readw(addr);
- 	}
- }
- #endif
-@@ -349,13 +343,10 @@ static inline void readsw(const volatile void __iomem *addr, void *buffer,
- static inline void readsl(const volatile void __iomem *addr, void *buffer,
- 			  unsigned int count)
- {
--	if (count) {
--		u32 *buf = buffer;
-+	u32 *buf = buffer;
- 
--		do {
--			u32 x = __raw_readl(addr);
--			*buf++ = x;
--		} while (--count);
-+	while (count-- > 0) {
-+		*buf++ = __raw_readl(addr);
- 	}
- }
- #endif
-@@ -366,13 +357,10 @@ static inline void readsl(const volatile void __iomem *addr, void *buffer,
- static inline void readsq(const volatile void __iomem *addr, void *buffer,
- 			  unsigned int count)
- {
--	if (count) {
--		u64 *buf = buffer;
-+	u64 *buf = buffer;
- 
--		do {
--			u64 x = __raw_readq(addr);
--			*buf++ = x;
--		} while (--count);
-+	while (count-- > 0) {
-+		*buf++ = __raw_readq(addr);
- 	}
- }
- #endif
-@@ -383,12 +371,10 @@ static inline void readsq(const volatile void __iomem *addr, void *buffer,
- static inline void writesb(volatile void __iomem *addr, const void *buffer,
- 			   unsigned int count)
- {
--	if (count) {
--		const u8 *buf = buffer;
-+	const u8 *buf = buffer;
- 
--		do {
--			__raw_writeb(*buf++, addr);
--		} while (--count);
-+	while (count-- > 0) {
-+		__raw_writeb(*buf++, addr);
- 	}
- }
- #endif
-@@ -398,12 +384,10 @@ static inline void writesb(volatile void __iomem *addr, const void *buffer,
- static inline void writesw(volatile void __iomem *addr, const void *buffer,
- 			   unsigned int count)
- {
--	if (count) {
--		const u16 *buf = buffer;
-+	const u16 *buf = buffer;
- 
--		do {
--			__raw_writew(*buf++, addr);
--		} while (--count);
-+	while (count-- > 0) {
-+		__raw_writew(*buf++, addr);
- 	}
- }
- #endif
-@@ -413,12 +397,10 @@ static inline void writesw(volatile void __iomem *addr, const void *buffer,
- static inline void writesl(volatile void __iomem *addr, const void *buffer,
- 			   unsigned int count)
- {
--	if (count) {
--		const u32 *buf = buffer;
-+	const u32 *buf = buffer;
- 
--		do {
--			__raw_writel(*buf++, addr);
--		} while (--count);
-+	while (count-- > 0) {
-+		__raw_writel(*buf++, addr);
- 	}
- }
- #endif
-@@ -429,12 +411,10 @@ static inline void writesl(volatile void __iomem *addr, const void *buffer,
- static inline void writesq(volatile void __iomem *addr, const void *buffer,
- 			   unsigned int count)
- {
--	if (count) {
--		const u64 *buf = buffer;
-+	const u64 *buf = buffer;
- 
--		do {
--			__raw_writeq(*buf++, addr);
--		} while (--count);
-+	while (count-- > 0) {
-+		__raw_writeq(*buf++, addr);
- 	}
- }
- #endif
+Can i talk with you ?
