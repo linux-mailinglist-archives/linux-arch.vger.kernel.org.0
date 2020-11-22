@@ -2,137 +2,214 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D04D82BC1FF
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Nov 2020 21:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C67E02BC575
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Nov 2020 12:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728441AbgKUULb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Nov 2020 15:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S1727621AbgKVLvo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 22 Nov 2020 06:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728475AbgKUUL3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Nov 2020 15:11:29 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC85C0613CF
-        for <linux-arch@vger.kernel.org>; Sat, 21 Nov 2020 12:11:28 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id b6so720658pfp.7
-        for <linux-arch@vger.kernel.org>; Sat, 21 Nov 2020 12:11:28 -0800 (PST)
+        with ESMTP id S1727589AbgKVLvn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Nov 2020 06:51:43 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64304C0613CF
+        for <linux-arch@vger.kernel.org>; Sun, 22 Nov 2020 03:51:43 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id p8so15637449wrx.5
+        for <linux-arch@vger.kernel.org>; Sun, 22 Nov 2020 03:51:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2E/G1+BC++eqc5/VVuVWg3zAaLSLEIJOC7i/xjg7VSs=;
-        b=d6GrwcPvUVOPqv9gOqNrM/bSP2HBSSL4qRmWjJIA4m3hlxWzzEj5T+lfuVhxoorPwR
-         NB2BxSopAcepiomrLE56aIQhqr6iGtiFG6DXeV6iIvBvUM0uetc94YKKaGPVURg9KuKK
-         wPaVmZ+dITTlnTfMDAnpXhgP+pbbnBqLxnBaU=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=QKuA4ekOdaJDz2ZNBGMOghu/aSzBNJa42AJDcLk6jOQ=;
+        b=JLXA+ro1f2pyGijb818SWjOikHzun2D9pSZJAUZpINS8K7zgz+m7JszJJQs55yurWT
+         9t+EqoPX+MxO35oCTS7NZX59A2jMR3pJywt1RlwTgCD3oTIgAXpyeHfNngg84KtBzDD7
+         E+38SOwvkHdp5SwUG/kvz4JkLvs2k7uQBxbFqqvocVtgo8tvIb8a2fHQGLAL42FNYBA7
+         cBjWmCZhPQexEzUxT01Ag6FH/qDQ+E9yJcC1yfRBaewKl+lXRHi5UpyofKtAaq0aTeQV
+         Vjjz1spnPClre/ExirNh0SSCAVKn8bZ0bxsXwSFZPMUfAHXLLXBDbus+hqJCbxMCE9g1
+         nGfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2E/G1+BC++eqc5/VVuVWg3zAaLSLEIJOC7i/xjg7VSs=;
-        b=JpzOA3qxW3tn0C3csBhU2jBwQVhnATblwopUyG+RA0KQ+FR6GrG0pNpTuFtwT8Dfg2
-         2DXubgjnEhyBRR5fIqpmpOyyDpiRLneGvWJxWfac7LwTSsIo/+DPyWUgNRXFvcRw5s6Y
-         nI05BYl24CEhXteJVOo4DDL366e90qnKW5A1j08rateJlGUhrj4wnxoQngZyjYIrLWE7
-         okbrfeBHPm0FfqBFzWXiz/qGrWyRhPsnNxXutXglPXgsCGqaWgiTN2reg6d1N0m8AG9Q
-         8zM9sVlLPUg6zi3iekLONXgY037tsg8+aLVDwGtbfSJF4GILUO0/tV4WFTjAtRVcNADQ
-         aBiQ==
-X-Gm-Message-State: AOAM532AiwXjm3j2K2RLAbNjwPSpln894E5WJxAfIijoFYGhoIN0WKFy
-        1k3DXMPiukxmamJ7Ng/tqNLzcg==
-X-Google-Smtp-Source: ABdhPJxD+jcfx423cWLQ4O6Da2CSyrYt2pnWQlkBVEKwXqI/6a+7t8fMpRLZBlqwuFIT6m30Fbuv4Q==
-X-Received: by 2002:a17:90a:f406:: with SMTP id ch6mr15105294pjb.134.1605989487549;
-        Sat, 21 Nov 2020 12:11:27 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y10sm8724624pjm.34.2020.11.21.12.11.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=QKuA4ekOdaJDz2ZNBGMOghu/aSzBNJa42AJDcLk6jOQ=;
+        b=Ao84eR936YQx0R1CO05VTQqIvB7I4zRkBt4i/XBK4pPIE4D5sr3Rn9xICl8J6ygTa4
+         FU/xqmhuYCh0zkCvewfGGH6+yAX+OrMxzHfXE3P6vKOtfJxZ9F6Ugf3xU7m0Z/jFJOoA
+         zISeSSbSv5blgCGKZKLg5MW3oTjEgP/jK78Mi3Lx6PLLHddbj06sEEicW0iLZiqqK7zz
+         ZfVpi3AWe/HTGoabaCYdtVtu4n01dxgmBKrLSgZWLWs+kaZoBag3bDt4p1gZ3TT9bYVG
+         o5Y1Igl1ltTgPPuEdtFxh6GmfVzsCUNJI7vtnvQSRxlsddsH6MT8sBNG/uL4nxVs/qbF
+         PF3g==
+X-Gm-Message-State: AOAM531QrlUe76vz2sRAFfh5pDn3a42yYVV+wSmYAvoDi3ipPON4xDTB
+        dJTicTopjEMS9QNK67sQRf+fyJdOHw==
+X-Google-Smtp-Source: ABdhPJz+m3jlhX90gQlAUF42BIgXNnP7Vh6lwxA/UyDttKVK2dM4N/+gCW5fs60mcrZYPhqH2c7vNA==
+X-Received: by 2002:a5d:52c1:: with SMTP id r1mr27040160wrv.255.1606045902201;
+        Sun, 22 Nov 2020 03:51:42 -0800 (PST)
+Received: from localhost.localdomain ([46.53.251.228])
+        by smtp.gmail.com with ESMTPSA id k81sm48190115wma.2.2020.11.22.03.51.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Nov 2020 12:11:26 -0800 (PST)
-Date:   Sat, 21 Nov 2020 12:11:25 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v7 02/17] kbuild: add support for Clang LTO
-Message-ID: <202011211204.211E2B12@keescook>
-References: <20201118220731.925424-1-samitolvanen@google.com>
- <20201118220731.925424-3-samitolvanen@google.com>
- <CAKwvOdnYTMzaahnBqdNYPz3KMdnkp=jZ4hxiqkTYzM5+BBdezA@mail.gmail.com>
- <CABCJKucj_jUwoiLc35R7qFe+cNKTWgT+gsCa5pPiY66+1--3Lg@mail.gmail.com>
- <202011201144.3F2BB70C@keescook>
- <20201120202935.GA1220359@ubuntu-m3-large-x86>
- <202011201241.B159562D7@keescook>
- <CABCJKucJ87wa73YJkN_dYUyE7foQT+12gdWJZw1PgZ_decFr4w@mail.gmail.com>
- <202011201556.3B910EF@keescook>
- <CABCJKudy5xFfjBFpFPR255-NAb1yOSuVqsL4fFUwJGGWKDnmQQ@mail.gmail.com>
+        Sun, 22 Nov 2020 03:51:41 -0800 (PST)
+Date:   Sun, 22 Nov 2020 14:51:39 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org
+Subject: [PATCH] asm-generic/io.h: terser readsb() and friends
+Message-ID: <20201122115139.GA47348@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CABCJKudy5xFfjBFpFPR255-NAb1yOSuVqsL4fFUwJGGWKDnmQQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 05:46:44PM -0800, Sami Tolvanen wrote:
-> Sure, this looks good to me, I'll use this in v8. The only minor
-> concern I have is that ThinLTO cannot be set as the default LTO mode,
-> but I assume anyone who selects LTO is also capable of deciding which
-> mode is better for them.
+	if (count) {
+		do {
+			...
+		} while (--count);
+	}
 
-It could be re-arranged similar to what you had before, but like:
+can be rewritten as
 
-config LTO
-	bool "..."
-	depends on HAS_LTO
-	help
-	  ...
+	while (count-- > 0) {
+		...
+	}
 
-choice
-	prompt "LTO mode" if LTO
-	default LTO_GCC if HAS_LTO_GCC
-	default LTO_CLANG_THIN if HAS_LTO_CLANG
-	default LTO_CLANG_FULL
-	help
-	  ...
+Drop useless variables while I'm at it.
 
-	config LTO_CLANG_THIN
-	...
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
 
-	config LTO_CLANG_FULL
-endchoice
+ include/asm-generic/io.h |   68 ++++++++++++++++-------------------------------
+ 1 file changed, 24 insertions(+), 44 deletions(-)
 
-Then the LTO is top-level yes/no, but depends on detected capabilities,
-and the mode is visible if LTO is chosen, etc.
-
-I'm not really sure which is better...
-
-> > +config LTO_CLANG_THIN
-> > +       bool "Clang ThinLTO (EXPERIMENTAL)"
-> > +       depends on ARCH_SUPPORTS_LTO_CLANG_THIN
-> > +       select LTO_CLANG
-> > +       help
-> > +         This option enables Clang's ThinLTO, which allows for parallel
-> > +         optimization and faster incremental compiles compared to the
-> > +         CONFIG_LTO_CLANG_FULL option. More information can be found
-> > +         from Clang's documentation:
-> > +
-> > +           https://clang.llvm.org/docs/ThinLTO.html
-> > +
-> > +         If unsure, say Y.
-> >  endchoice
-> 
-> The two LTO_CLANG_* options need to depend on HAS_LTO_CLANG, of course.
-
-Whoops, yes. Thanks for catching that. :)
-
--- 
-Kees Cook
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -317,13 +317,10 @@ static inline void writeq_relaxed(u64 value, volatile void __iomem *addr)
+ static inline void readsb(const volatile void __iomem *addr, void *buffer,
+ 			  unsigned int count)
+ {
+-	if (count) {
+-		u8 *buf = buffer;
++	u8 *buf = buffer;
+ 
+-		do {
+-			u8 x = __raw_readb(addr);
+-			*buf++ = x;
+-		} while (--count);
++	while (count-- > 0) {
++		*buf++ = __raw_readb(addr);
+ 	}
+ }
+ #endif
+@@ -333,13 +330,10 @@ static inline void readsb(const volatile void __iomem *addr, void *buffer,
+ static inline void readsw(const volatile void __iomem *addr, void *buffer,
+ 			  unsigned int count)
+ {
+-	if (count) {
+-		u16 *buf = buffer;
++	u16 *buf = buffer;
+ 
+-		do {
+-			u16 x = __raw_readw(addr);
+-			*buf++ = x;
+-		} while (--count);
++	while (count-- > 0) {
++		*buf++ = __raw_readw(addr);
+ 	}
+ }
+ #endif
+@@ -349,13 +343,10 @@ static inline void readsw(const volatile void __iomem *addr, void *buffer,
+ static inline void readsl(const volatile void __iomem *addr, void *buffer,
+ 			  unsigned int count)
+ {
+-	if (count) {
+-		u32 *buf = buffer;
++	u32 *buf = buffer;
+ 
+-		do {
+-			u32 x = __raw_readl(addr);
+-			*buf++ = x;
+-		} while (--count);
++	while (count-- > 0) {
++		*buf++ = __raw_readl(addr);
+ 	}
+ }
+ #endif
+@@ -366,13 +357,10 @@ static inline void readsl(const volatile void __iomem *addr, void *buffer,
+ static inline void readsq(const volatile void __iomem *addr, void *buffer,
+ 			  unsigned int count)
+ {
+-	if (count) {
+-		u64 *buf = buffer;
++	u64 *buf = buffer;
+ 
+-		do {
+-			u64 x = __raw_readq(addr);
+-			*buf++ = x;
+-		} while (--count);
++	while (count-- > 0) {
++		*buf++ = __raw_readq(addr);
+ 	}
+ }
+ #endif
+@@ -383,12 +371,10 @@ static inline void readsq(const volatile void __iomem *addr, void *buffer,
+ static inline void writesb(volatile void __iomem *addr, const void *buffer,
+ 			   unsigned int count)
+ {
+-	if (count) {
+-		const u8 *buf = buffer;
++	const u8 *buf = buffer;
+ 
+-		do {
+-			__raw_writeb(*buf++, addr);
+-		} while (--count);
++	while (count-- > 0) {
++		__raw_writeb(*buf++, addr);
+ 	}
+ }
+ #endif
+@@ -398,12 +384,10 @@ static inline void writesb(volatile void __iomem *addr, const void *buffer,
+ static inline void writesw(volatile void __iomem *addr, const void *buffer,
+ 			   unsigned int count)
+ {
+-	if (count) {
+-		const u16 *buf = buffer;
++	const u16 *buf = buffer;
+ 
+-		do {
+-			__raw_writew(*buf++, addr);
+-		} while (--count);
++	while (count-- > 0) {
++		__raw_writew(*buf++, addr);
+ 	}
+ }
+ #endif
+@@ -413,12 +397,10 @@ static inline void writesw(volatile void __iomem *addr, const void *buffer,
+ static inline void writesl(volatile void __iomem *addr, const void *buffer,
+ 			   unsigned int count)
+ {
+-	if (count) {
+-		const u32 *buf = buffer;
++	const u32 *buf = buffer;
+ 
+-		do {
+-			__raw_writel(*buf++, addr);
+-		} while (--count);
++	while (count-- > 0) {
++		__raw_writel(*buf++, addr);
+ 	}
+ }
+ #endif
+@@ -429,12 +411,10 @@ static inline void writesl(volatile void __iomem *addr, const void *buffer,
+ static inline void writesq(volatile void __iomem *addr, const void *buffer,
+ 			   unsigned int count)
+ {
+-	if (count) {
+-		const u64 *buf = buffer;
++	const u64 *buf = buffer;
+ 
+-		do {
+-			__raw_writeq(*buf++, addr);
+-		} while (--count);
++	while (count-- > 0) {
++		__raw_writeq(*buf++, addr);
+ 	}
+ }
+ #endif
