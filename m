@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078312C2BDA
+	by mail.lfdr.de (Postfix) with ESMTP id F1D7D2C2BDC
 	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 16:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389969AbgKXPvJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Nov 2020 10:51:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50416 "EHLO mail.kernel.org"
+        id S2389979AbgKXPvN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Nov 2020 10:51:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50500 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389441AbgKXPvJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 24 Nov 2020 10:51:09 -0500
+        id S2389367AbgKXPvN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 24 Nov 2020 10:51:13 -0500
 Received: from localhost.localdomain (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3ADF12086A;
-        Tue, 24 Nov 2020 15:51:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE5932087C;
+        Tue, 24 Nov 2020 15:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606233068;
-        bh=X2W8sDs5r9Smn/YgyXcOa5uzquvNXtff5TMj5lfN6Zs=;
+        s=default; t=1606233072;
+        bh=GITL8G1up8GBvnybZoYdKctU/jEO6ZDZ7RfBFX4ClI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aD6/cOcDs5PRSyZ/2pO6HDF2UO3HVp2mHKoB+cAx0Oil2tKnXeHjptHw4q04/jPeC
-         l6G85u8tK1+JK3C5s+uRRPZYhS5Zh9H9qUe6ep+KxKVGS3l8pDHkwegOEJ1rs6TKNp
-         lk0NYC3sp0mRdZT1PnO43fNKkHeOluT4pDMqWgoU=
+        b=pmZTlR+duYJlPLSSoPBi7b9Xry2gk2b69ejIMLe5MUgoa9u8f/kaE2Q90R83KAhlc
+         t9U6X1W1svWBUHPsqvzHTcUh8sky5m3uz9lMjz4vm8amyr1DWi2Go3vNCoUnwhI9v1
+         HPkx3fp1bz101HQEeQbcg74B3K0yC5e/+zKXsLWg=
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         kernel-team@android.com
-Subject: [PATCH v4 05/14] arm64: Advertise CPUs capable of running 32-bit applications in sysfs
-Date:   Tue, 24 Nov 2020 15:50:30 +0000
-Message-Id: <20201124155039.13804-6-will@kernel.org>
+Subject: [PATCH v4 06/14] arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
+Date:   Tue, 24 Nov 2020 15:50:31 +0000
+Message-Id: <20201124155039.13804-7-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201124155039.13804-1-will@kernel.org>
 References: <20201124155039.13804-1-will@kernel.org>
@@ -53,74 +53,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since 32-bit applications will be killed if they are caught trying to
-execute on a 64-bit-only CPU in a mismatched system, advertise the set
-of 32-bit capable CPUs to userspace in sysfs.
+Allow systems with mismatched 32-bit support at EL0 to run 32-bit
+applications based on a new kernel parameter.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- .../ABI/testing/sysfs-devices-system-cpu      |  9 +++++++++
- arch/arm64/kernel/cpufeature.c                | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
+ arch/arm64/kernel/cpufeature.c                  | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 1a04ca8162ad..8a2e377b0dde 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -493,6 +493,15 @@ Description:	AArch64 CPU registers
- 		'identification' directory exposes the CPU ID registers for
- 		identifying model and revision of the CPU.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 526d65d8573a..f20188c44d83 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -289,6 +289,13 @@
+ 			do not want to use tracing_snapshot_alloc() as it needs
+ 			to be done where GFP_KERNEL allocations are allowed.
  
-+What:		/sys/devices/system/cpu/aarch32_el0
-+Date:		November 2020
-+Contact:	Linux ARM Kernel Mailing list <linux-arm-kernel@lists.infradead.org>
-+Description:	Identifies the subset of CPUs in the system that can execute
-+		AArch32 (32-bit ARM) applications. If present, the same format as
-+		/sys/devices/system/cpu/{offline,online,possible,present} is used.
-+		If absent, then all or none of the CPUs can execute AArch32
-+		applications and execve() will behave accordingly.
++	allow_mismatched_32bit_el0 [ARM64]
++			Allow execve() of 32-bit applications and setting of the
++			PER_LINUX32 personality on systems where only a strict
++			subset of the CPUs support 32-bit EL0. When this
++			parameter is present, the set of CPUs supporting 32-bit
++			EL0 is indicated by /sys/devices/system/cpu/aarch32_el0.
 +
- What:		/sys/devices/system/cpu/cpu#/cpu_capacity
- Date:		December 2016
- Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+ 	amd_iommu=	[HW,X86-64]
+ 			Pass parameters to the AMD IOMMU driver in the system.
+ 			Possible values are:
 diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index bc71a51f1b9c..534f80edb594 100644
+index 534f80edb594..29017cbb6c8e 100644
 --- a/arch/arm64/kernel/cpufeature.c
 +++ b/arch/arm64/kernel/cpufeature.c
-@@ -67,6 +67,7 @@
- #include <linux/crash_dump.h>
- #include <linux/sort.h>
- #include <linux/stop_machine.h>
-+#include <linux/sysfs.h>
- #include <linux/types.h>
- #include <linux/mm.h>
- #include <linux/cpu.h>
-@@ -1272,6 +1273,24 @@ const struct cpumask *system_32bit_el0_cpumask(void)
+@@ -1273,6 +1273,13 @@ const struct cpumask *system_32bit_el0_cpumask(void)
  	return cpu_possible_mask;
  }
  
-+static ssize_t aarch32_el0_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
++static int __init parse_32bit_el0_param(char *str)
 +{
-+	const struct cpumask *mask = system_32bit_el0_cpumask();
-+
-+	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(mask));
++	allow_mismatched_32bit_el0 = true;
++	return 0;
 +}
-+static const DEVICE_ATTR_RO(aarch32_el0);
++early_param("allow_mismatched_32bit_el0", parse_32bit_el0_param);
 +
-+static int __init aarch32_el0_sysfs_init(void)
-+{
-+	if (!allow_mismatched_32bit_el0)
-+		return 0;
-+
-+	return device_create_file(cpu_subsys.dev_root, &dev_attr_aarch32_el0);
-+}
-+device_initcall(aarch32_el0_sysfs_init);
-+
- static bool has_32bit_el0(const struct arm64_cpu_capabilities *entry, int scope)
+ static ssize_t aarch32_el0_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
  {
- 	if (!has_cpuid_feature(entry, scope))
 -- 
 2.29.2.454.gaff20da3a2-goog
 
