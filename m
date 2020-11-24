@@ -2,103 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C682C3011
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 19:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6ED82C3019
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 19:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390881AbgKXSlE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Nov 2020 13:41:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S2390911AbgKXSmV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Nov 2020 13:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390718AbgKXSlD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Nov 2020 13:41:03 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F93C0613D6;
-        Tue, 24 Nov 2020 10:41:03 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id z21so30265984lfe.12;
-        Tue, 24 Nov 2020 10:41:03 -0800 (PST)
+        with ESMTP id S2390935AbgKXSmU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Nov 2020 13:42:20 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6885C0617A6
+        for <linux-arch@vger.kernel.org>; Tue, 24 Nov 2020 10:42:14 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id f18so5247585ljg.9
+        for <linux-arch@vger.kernel.org>; Tue, 24 Nov 2020 10:42:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JUB7Xs9QzVpt8Oml1/xqWcWXLiXlsrQkDAlaEfZx9MA=;
-        b=Gu+s0COFP/i9mprayW0Q8znE1e18rNxnqEOaSHBI1/XSeDjYxUyySCZEKysJdqxaV1
-         bRCSH/G2tsD4m61Qlrz+0wN+LMTfAJN+oUbUQZiUB7nwCs0keqm4WRpfovWzjJoY9rlb
-         60SOv7QYqDEZ40HxOz5JWmupboBS8QyeowlcA/HvTPdvgiFc2t1R87/JaAoP8hjoCFP7
-         bj3jorIrRaDJRjyUtfILIGki7Bdq5KiAjgvbPoclZihPD4i6NBerN1EK23rdVXNE/fqN
-         adCi/q40XPFcJqFCIT1cvXJ9KraQOfnfz5YskaF6VVDIxdnOA0Hsm3j575fPPxZL+UyZ
-         Nrxg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7bYxDHbnmMeqeAaCeZZRsCP/3hYPYLY12AMSLIFZUIg=;
+        b=VKlK3+QLeMWZ1q3zj34Obxbm2JFZ/yNE7EaUqGdyv8+Yu+bCV6Z/PFlAyqKMwkXK8U
+         J79+sAAVRwvpqkxh6lly891xvx0PSQoJ3eyq6/0uoZzOzDmuUZJ+PH/ysn/byJDernYi
+         /19Lq2qs6y22Py0nYJKyE9aw1W+qCTJBHiEJg5u11ljE6vVgJguOFDp6PRiZh8KuInWw
+         4OuUW90DHsKAEaiErfNGx9NGVhLLVB0yyPWFWbHSLwxpqSFuDe41XpqzvdozjnQaL4Cc
+         RckVQWC58sV9mGG1MuHm4eHGG+YEhHqWH/5Uq1ZYweG2RSE+icNSDdwDCqgl1fwINGDn
+         sKSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JUB7Xs9QzVpt8Oml1/xqWcWXLiXlsrQkDAlaEfZx9MA=;
-        b=WOHHHnjLBWsCGIpyqjGmt9XcwgUFBiLFPvA84Fk9gTLiOHnrirjxgEuaNqfeuzhob/
-         HJVmCvbcS8cRysx/tNG1kWt8l8DQj87P/8H9T0gig92QsAiRLaIW2MOfB/IrhDsmI/ME
-         7CqFqNfIdHCMOLhnHhnGM+bVJSKlma7dJNA34IVaupJ8htutQOkpc/Sx7/ugatzLHoWC
-         eB+yh1zmTux7hQ2qgYZxK4BT3itBUvScrTcBXZW4J/LlCrGzOelkp+LCG1KV+q2n4EyJ
-         k3n81eZKfO7H1m2Gwf5Vq5HqNCTl46FkAyUAGLdAROABMVftTGVlwkQ8GbHyqQCEl+Kj
-         OmIQ==
-X-Gm-Message-State: AOAM530W2kOmOZ1R2YB/Jc0lxt+J+q7RMg5L26thAm1dOpetUoY8pyTH
-        H4e/jW/iSzgePXdl0cSQOr4=
-X-Google-Smtp-Source: ABdhPJy8JTUGHpeE8Abs3baDde8lb/U0Ejq9lcToygmR5X6z4VsvUuEa70WxT6PaHw16lehYXcVUXw==
-X-Received: by 2002:a19:64f:: with SMTP id 76mr2525014lfg.569.1606243261968;
-        Tue, 24 Nov 2020 10:41:01 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-159.dynamic.spd-mgts.ru. [109.252.193.159])
-        by smtp.googlemail.com with ESMTPSA id y12sm1875322lfh.120.2020.11.24.10.41.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2020 10:41:01 -0800 (PST)
-Subject: Re: [PATCH v2 04/10] seccomp: Migrate to use SYSCALL_WORK flag
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     tglx@linutronix.de, hch@infradead.org, mingo@redhat.com,
-        keescook@chromium.org, arnd@arndb.de, luto@amacapital.net,
-        wad@chromium.org, rostedt@goodmis.org, paul@paul-moore.com,
-        eparis@redhat.com, oleg@redhat.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org, kernel@collabora.com,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>
-References: <20201116174206.2639648-1-krisman@collabora.com>
- <20201116174206.2639648-5-krisman@collabora.com>
- <20646400-0e16-0eb5-c829-3b77df8c38e3@gmail.com>
- <87360yprl0.fsf@collabora.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c97451ad-b8de-76cc-0849-47f9b3b32693@gmail.com>
-Date:   Tue, 24 Nov 2020 21:41:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7bYxDHbnmMeqeAaCeZZRsCP/3hYPYLY12AMSLIFZUIg=;
+        b=ASxJPNo6Xf5fwTxYYZWOx2Z6BHeavUhwYyewvzWJjru8OO0zCDEJMHHDa7CBfUhg+y
+         mJwDQRvrtX8Ipe1KHSu21X88Ag2zrrfR7xb7uZDIqfjRgJ4NrHMIO0y9m4QSzCE4gNOU
+         4GcPEyre43nNw3sEW1Lw1oAIhKicOWUV1kC5IcAcMd+Ob8SUAPaM6DpfWOAM6APlfZZt
+         5Nj3/qBh/QvclrH2UWAXYh3cUFKAz6MsfJe/eYnuNtOE6o8t4L9w7yw+dhJ5Ftvo6Ljd
+         nx4uW9ebG6uBv/cgY218ONDIU5ZEKA1zQQ7qxSrtkRMSIZsxib/u0ji6MhGF2lsdmpXG
+         PzDA==
+X-Gm-Message-State: AOAM532RJEuhYIeDyTJCGQRvBsOAK9PDb41/KT6Rpo2EM8qm8gfoLidl
+        yGMuVfefbACwXRcgujE2gM5jVi2hSvv3AjMjmUcttQ==
+X-Google-Smtp-Source: ABdhPJxeG/RWLjpouaYjw9/E6VOlHTDg7MXYwTLOec/QiAK98nvPxkCA8eImKbQOu8sM28sUqbLkIsh+P+4Qc2KLZUw=
+X-Received: by 2002:a05:651c:1035:: with SMTP id w21mr209576ljm.326.1606243332802;
+ Tue, 24 Nov 2020 10:42:12 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87360yprl0.fsf@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201119190237.626-1-chang.seok.bae@intel.com>
+ <20201119190237.626-4-chang.seok.bae@intel.com> <CAG48ez1aKtwYMEHfGX6_FuX9fOruwvCqEGYVL8eLdV8bg-wHCQ@mail.gmail.com>
+ <B2D7D498-D118-447E-93C6-DB03D42CBA4E@intel.com>
+In-Reply-To: <B2D7D498-D118-447E-93C6-DB03D42CBA4E@intel.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 24 Nov 2020 19:41:46 +0100
+Message-ID: <CAG48ez1JK6pMT2UD1v0FwiCQq48FbE5Eb0d3tK=kK4Sg0TG7OQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] x86/signal: Prevent an alternate stack overflow
+ before a signal delivery
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Dave Martin <Dave.Martin@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Hiroshi Shimamoto <h-shimamoto@ct.jp.nec.com>,
+        Roland McGrath <roland@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-24.11.2020 20:55, Gabriel Krisman Bertazi пишет:
-> Dmitry Osipenko <digetx@gmail.com> writes:
-> 
->> Hi,
->>
->> This patch broke seccomp on arm32 using linux-next, chromium browser
->> doesn't work anymore and there are these errors in KMSG:
->>
->> Unhandled prefetch abort: breakpoint debug exception (0x002) at ...
->>
->> Note that arm doesn't use CONFIG_GENERIC_ENTRY. Please fix, thanks in
->> advance.
-> 
-> Hi Dmitry,
-> 
-> I believe this is the same problem reported yesterday on this thread
-> 
->   https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2390444.html
-> 
-> can you please try the patch I shared on that thread?
-> 
->   https://lore.kernel.org/patchwork/patch/1344098/
+On Tue, Nov 24, 2020 at 7:22 PM Bae, Chang Seok
+<chang.seok.bae@intel.com> wrote:
+> > On Nov 20, 2020, at 15:04, Jann Horn <jannh@google.com> wrote:
+> > On Thu, Nov 19, 2020 at 8:40 PM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+> >>
+> >> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> >> index ee6f1ceaa7a2..cee41d684dc2 100644
+> >> --- a/arch/x86/kernel/signal.c
+> >> +++ b/arch/x86/kernel/signal.c
+> >> @@ -251,8 +251,13 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+> >>
+> >>        /* This is the X/Open sanctioned signal stack switching.  */
+> >>        if (ka->sa.sa_flags & SA_ONSTACK) {
+> >> -               if (sas_ss_flags(sp) == 0)
+> >> +               if (sas_ss_flags(sp) == 0) {
+> >> +                       /* If the altstack might overflow, die with SIGSEGV: */
+> >> +                       if (!altstack_size_ok(current))
+> >> +                               return (void __user *)-1L;
+> >> +
+> >>                        sp = current->sas_ss_sp + current->sas_ss_size;
+> >> +               }
+> >
+> > A couple lines further down, we have this (since commit 14fc9fbc700d):
+> >
+> >        /*
+> >         * If we are on the alternate signal stack and would overflow it, don't.
+> >         * Return an always-bogus address instead so we will die with SIGSEGV.
+> >         */
+> >        if (onsigstack && !likely(on_sig_stack(sp)))
+> >                return (void __user *)-1L;
+> >
+> > Is that not working?
+>
+> onsigstack is set at the beginning here. If a signal hits under normal stack,
+> this flag is not set. Then it will miss the overflow.
+>
+> The added check allows to detect the sigaltstack overflow (always).
 
-It works, thank you.
+Ah, I think I understand what you're trying to do. But wouldn't the
+better approach be to ensure that the existing on_sig_stack() check is
+also used if we just switched to the signal stack? Something like:
 
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index be0d7d4152ec..2f57842fb4d6 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -237,7 +237,7 @@ get_sigframe(struct k_sigaction *ka, struct
+pt_regs *regs, size_t frame_size,
+        unsigned long math_size = 0;
+        unsigned long sp = regs->sp;
+        unsigned long buf_fx = 0;
+-       int onsigstack = on_sig_stack(sp);
++       bool onsigstack = on_sig_stack(sp);
+        int ret;
+
+        /* redzone */
+@@ -246,8 +246,10 @@ get_sigframe(struct k_sigaction *ka, struct
+pt_regs *regs, size_t frame_size,
+
+        /* This is the X/Open sanctioned signal stack switching.  */
+        if (ka->sa.sa_flags & SA_ONSTACK) {
+-               if (sas_ss_flags(sp) == 0)
++               if (sas_ss_flags(sp) == 0) {
+                        sp = current->sas_ss_sp + current->sas_ss_size;
++                       onsigstack = true;
++               }
+        } else if (IS_ENABLED(CONFIG_X86_32) &&
+                   !onsigstack &&
+                   regs->ss != __USER_DS &&
