@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5145E2C2BE8
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 16:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4013C2C2BEA
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 16:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390038AbgKXPvg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Nov 2020 10:51:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51064 "EHLO mail.kernel.org"
+        id S2390057AbgKXPvk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Nov 2020 10:51:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390035AbgKXPvf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 24 Nov 2020 10:51:35 -0500
+        id S2390035AbgKXPvj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 24 Nov 2020 10:51:39 -0500
 Received: from localhost.localdomain (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 646D02086A;
-        Tue, 24 Nov 2020 15:51:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F4E6208B8;
+        Tue, 24 Nov 2020 15:51:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606233094;
-        bh=deEZsI4JMfZft5nsFKUFREErfrnI08kQMrUiB+oeZmE=;
+        s=default; t=1606233098;
+        bh=7Ebp29kKUNXVb6tmuQcv5bbeN769DFJqrRvA/Joldb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jZAqDxPfY0CHfGP9qkIm9uA+pzT5bEH+/W5nd8/KT6OUaSR/R9lxlP6cDozzyYre9
-         Tgdoyau5VM1CQ6qiFuQQ5EId1gG4CPP1/nXJfROp/VPvMed5bpu13OyvzkBRsaSW9y
-         Vs8F/2gRZiBZPvxKvvoOhQnp6uL4xKpywLit4EXc=
+        b=1iiAk968KZdS+IeqsnVi4txXb41K9b3QAu3V2lsONo3syIAqT3P/AV0UrgPduUtSV
+         Y5dhnwsEjfDm7ObBiWJYZ7pAnoh5mEiOVkvPjl/EfVUdVbNaLGDoi9lCw6/EQHBK2g
+         Na3R/3IBm/2Nw9yELyXrN8Ymetlv+ywS2GOrwvgw=
 From:   Will Deacon <will@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         kernel-team@android.com
-Subject: [PATCH v4 11/14] sched: Reject CPU affinity changes based on arch_task_cpu_possible_mask()
-Date:   Tue, 24 Nov 2020 15:50:36 +0000
-Message-Id: <20201124155039.13804-12-will@kernel.org>
+Subject: [PATCH v4 12/14] arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system
+Date:   Tue, 24 Nov 2020 15:50:37 +0000
+Message-Id: <20201124155039.13804-13-will@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201124155039.13804-1-will@kernel.org>
 References: <20201124155039.13804-1-will@kernel.org>
@@ -53,39 +53,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Reject explicit requests to change the affinity mask of a task via
-set_cpus_allowed_ptr() if the requested mask is not a subset of the
-mask returned by arch_task_cpu_possible_mask(). This ensures that the
-'cpus_mask' for a given task cannot contain CPUs which are incapable of
-executing it, except in cases where the affinity is forced.
+If we want to support 32-bit applications, then when we identify a CPU
+with mismatched 32-bit EL0 support we must ensure that we will always
+have an active 32-bit CPU available to us from then on. This is important
+for the scheduler, because is_cpu_allowed() will be constrained to 32-bit
+CPUs for compat tasks and forced migration due to a hotplug event will
+hang if no 32-bit CPUs are available.
+
+On detecting a mismatch, prevent offlining of either the mismatching CPU
+if it is 32-bit capable, or find the first active 32-bit capable CPU
+otherwise.
 
 Signed-off-by: Will Deacon <will@kernel.org>
 ---
- kernel/sched/core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/kernel/cpufeature.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 99992d0beb65..095deda50643 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1877,6 +1877,7 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
- 					 struct rq_flags *rf)
- {
- 	const struct cpumask *cpu_valid_mask = cpu_active_mask;
-+	const struct cpumask *cpu_allowed_mask = arch_task_cpu_possible_mask(p);
- 	unsigned int dest_cpu;
- 	int ret = 0;
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 29017cbb6c8e..fe470683b43e 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1237,6 +1237,8 @@ has_cpuid_feature(const struct arm64_cpu_capabilities *entry, int scope)
  
-@@ -1887,6 +1888,9 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
- 		 * Kernel threads are allowed on online && !active CPUs
- 		 */
- 		cpu_valid_mask = cpu_online_mask;
-+	} else if (!cpumask_subset(new_mask, cpu_allowed_mask)) {
-+		ret = -EINVAL;
-+		goto out;
+ static int enable_mismatched_32bit_el0(unsigned int cpu)
+ {
++	static int lucky_winner = -1;
++
+ 	struct cpuinfo_arm64 *info = &per_cpu(cpu_data, cpu);
+ 	bool cpu_32bit = id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0);
+ 
+@@ -1245,6 +1247,22 @@ static int enable_mismatched_32bit_el0(unsigned int cpu)
+ 		static_branch_enable_cpuslocked(&arm64_mismatched_32bit_el0);
  	}
  
- 	/*
++	if (cpumask_test_cpu(0, cpu_32bit_el0_mask) == cpu_32bit)
++		return 0;
++
++	if (lucky_winner >= 0)
++		return 0;
++
++	/*
++	 * We've detected a mismatch. We need to keep one of our CPUs with
++	 * 32-bit EL0 online so that is_cpu_allowed() doesn't end up rejecting
++	 * every CPU in the system for a 32-bit task.
++	 */
++	lucky_winner = cpu_32bit ? cpu : cpumask_any_and(cpu_32bit_el0_mask,
++							 cpu_active_mask);
++	get_cpu_device(lucky_winner)->offline_disabled = true;
++	pr_info("Asymmetric 32-bit EL0 support detected on CPU %u; CPU hot-unplug disabled on CPU %u\n",
++		cpu, lucky_winner);
+ 	return 0;
+ }
+ 
 -- 
 2.29.2.454.gaff20da3a2-goog
 
