@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAE12C2DF7
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 18:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2122C2DEC
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 18:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403855AbgKXRIV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Nov 2020 12:08:21 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:38998 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390740AbgKXRIJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Nov 2020 12:08:09 -0500
-Received: by mail-wm1-f67.google.com with SMTP id s13so3620782wmh.4;
-        Tue, 24 Nov 2020 09:08:07 -0800 (PST)
+        id S2390742AbgKXRII (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Nov 2020 12:08:08 -0500
+Received: from mail-wm1-f42.google.com ([209.85.128.42]:55202 "EHLO
+        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390731AbgKXRIG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 Nov 2020 12:08:06 -0500
+Received: by mail-wm1-f42.google.com with SMTP id d142so3037264wmd.4;
+        Tue, 24 Nov 2020 09:08:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iSy+7CaWmr7dYr0SNSPrl+Q/2IeK6S5L4pZcI30bMis=;
-        b=C1MmvGnIyNVLNIg2BxuDwDHGl5SFPWNhbWmxI/bOUFp4++Rt9O+A1fdD6ShaYsFhh6
-         72vp+wv4Qq831p1RRWGYGdcNo4lIiq61TY3XcdQh+YNXRZlmSb5eASZjilTD7+KOEdNN
-         zUnoA3fQIduJDX4WiniBGuIIcuxLAPdWUSWrt0PsZrTnIvS/4nOpxM6AKIHXL4011YOD
-         jxpDp/l3aNk2TVgszKESHIc0NiLQWFEXWn83bD9aTNrWCOur52Pe+JkLT94RJyWPmeO/
-         FG1Uld8sE3lI691jUFZfsdcDuRUA6pRg3X462uh4S7IbdrDUzirq4FK7avInQ1ZEnnl6
-         1g6w==
-X-Gm-Message-State: AOAM532sgSWMvswS7i93yNMETSMNCLie9/liB2mkRvvKjwVboUvQdwBW
-        odgeSJxHhQ2RX7HT5MuKK+R8sCAbecY=
-X-Google-Smtp-Source: ABdhPJx3Eg+8d06wrLvmyagpiwC8Rplun4TrB/OqQ9EUt4ZcPblI4BQKby/Mag6aWyanryxr1I79XA==
-X-Received: by 2002:a1c:1dc1:: with SMTP id d184mr5555065wmd.169.1606237682996;
-        Tue, 24 Nov 2020 09:08:02 -0800 (PST)
+        bh=4GlVdwdA5EB25k3fSlwC9DjHq4FfGnf7gcREl/vUHnA=;
+        b=D+CP3eI/NPCmS1SMVirimaovPof3dESSkzpRQAokRw4OtZy0Hy1GBdfrTRd9I+S1q5
+         BX0U87m4+cds7kvGOn2dx7OGTOok27d0HB/2LdAIdE83PJXCW3OGC/jszR1MWmR3lbjj
+         dLvwWHitBzP1tBUbd0dYzt+agOkFv3Z9DCVZoEtfUKRuzPPlyLE6kV+Yq/O7kA92u85S
+         b1vSl+RY9oGS5cwQvka3H0YxkrcxzZA8jmC+w8LV7ipwhd+HTxTMxuZznEKXm8KQWKe0
+         g+LbgRqVvHZs5rFoy4DNY1TaB14Dz6wdtsmh0OaUptqdKfW4xVg2rR2Ss9owVmmNjjv2
+         ICZA==
+X-Gm-Message-State: AOAM533IkSAJALZ5FqgjGDAKEnG147f/Z5biKYWKc3iDRooOwRRGv09m
+        m6vGI5AvKDJ9JNqnbXAZe2/Hirve6TM=
+X-Google-Smtp-Source: ABdhPJwrbQsH2NsT3/fJoFyvOhkvKLdnoIq/n1W/bc/iZMH9VARGNCSwy5l58Ldxl6t+uJ5CRuwXCQ==
+X-Received: by 2002:a7b:cd11:: with SMTP id f17mr5547330wmj.127.1606237683966;
+        Tue, 24 Nov 2020 09:08:03 -0800 (PST)
 Received: from liuwe-devbox-debian-v2.j3c5onc20sse1dnehy4noqpfcg.zx.internal.cloudapp.net ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id v20sm6419874wmh.44.2020.11.24.09.08.02
+        by smtp.gmail.com with ESMTPSA id v20sm6419874wmh.44.2020.11.24.09.08.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 09:08:02 -0800 (PST)
+        Tue, 24 Nov 2020 09:08:03 -0800 (PST)
 From:   Wei Liu <wei.liu@kernel.org>
 To:     Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
 Cc:     virtualization@lists.linux-foundation.org,
@@ -45,11 +45,14 @@ Cc:     virtualization@lists.linux-foundation.org,
         "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
         linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH v3 13/17] asm-generic/hyperv: introduce hv_device_id and auxiliary structures
-Date:   Tue, 24 Nov 2020 17:07:40 +0000
-Message-Id: <20201124170744.112180-14-wei.liu@kernel.org>
+Subject: [PATCH v3 14/17] asm-generic/hyperv: import data structures for mapping device interrupts
+Date:   Tue, 24 Nov 2020 17:07:41 +0000
+Message-Id: <20201124170744.112180-15-wei.liu@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201124170744.112180-1-wei.liu@kernel.org>
 References: <20201124170744.112180-1-wei.liu@kernel.org>
@@ -59,104 +62,88 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We will need to identify the device we want Microsoft Hypervisor to
-manipulate.  Introduce the data structures for that purpose.
-
-They will be used in a later patch.
-
 Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
 Co-Developed-by: Sunil Muthuswamy <sunilmut@microsoft.com>
 Signed-off-by: Wei Liu <wei.liu@kernel.org>
 ---
- include/asm-generic/hyperv-tlfs.h | 79 +++++++++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ arch/x86/include/asm/hyperv-tlfs.h | 13 +++++++++++
+ include/asm-generic/hyperv-tlfs.h  | 36 ++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
+diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+index 41b628b9fb15..592c75e51e0f 100644
+--- a/arch/x86/include/asm/hyperv-tlfs.h
++++ b/arch/x86/include/asm/hyperv-tlfs.h
+@@ -526,6 +526,19 @@ struct hv_partition_assist_pg {
+ 	u32 tlb_lock_count;
+ };
+ 
++enum hv_interrupt_type {
++	HV_X64_INTERRUPT_TYPE_FIXED             = 0x0000,
++	HV_X64_INTERRUPT_TYPE_LOWESTPRIORITY    = 0x0001,
++	HV_X64_INTERRUPT_TYPE_SMI               = 0x0002,
++	HV_X64_INTERRUPT_TYPE_REMOTEREAD        = 0x0003,
++	HV_X64_INTERRUPT_TYPE_NMI               = 0x0004,
++	HV_X64_INTERRUPT_TYPE_INIT              = 0x0005,
++	HV_X64_INTERRUPT_TYPE_SIPI              = 0x0006,
++	HV_X64_INTERRUPT_TYPE_EXTINT            = 0x0007,
++	HV_X64_INTERRUPT_TYPE_LOCALINT0         = 0x0008,
++	HV_X64_INTERRUPT_TYPE_LOCALINT1         = 0x0009,
++	HV_X64_INTERRUPT_TYPE_MAXIMUM           = 0x000A,
++};
+ 
+ #include <asm-generic/hyperv-tlfs.h>
+ 
 diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index 8423bf53c237..42ff1326c6bd 100644
+index 42ff1326c6bd..07efe0131fe3 100644
 --- a/include/asm-generic/hyperv-tlfs.h
 +++ b/include/asm-generic/hyperv-tlfs.h
-@@ -623,4 +623,83 @@ struct hv_set_vp_registers_input {
- 	} element[];
+@@ -152,6 +152,8 @@ struct ms_hyperv_tsc_page {
+ #define HVCALL_RETRIEVE_DEBUG_DATA		0x006a
+ #define HVCALL_RESET_DEBUG_SESSION		0x006b
+ #define HVCALL_ADD_LOGICAL_PROCESSOR		0x0076
++#define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
++#define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+ #define HVCALL_RETARGET_INTERRUPT		0x007e
+ #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+ #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+@@ -702,4 +704,38 @@ union hv_device_id {
+ 	} acpi;
  } __packed;
  
-+enum hv_device_type {
-+	HV_DEVICE_TYPE_LOGICAL = 0,
-+	HV_DEVICE_TYPE_PCI = 1,
-+	HV_DEVICE_TYPE_IOAPIC = 2,
-+	HV_DEVICE_TYPE_ACPI = 3,
++enum hv_interrupt_trigger_mode {
++	HV_INTERRUPT_TRIGGER_MODE_EDGE = 0,
++	HV_INTERRUPT_TRIGGER_MODE_LEVEL = 1,
 +};
 +
-+typedef u16 hv_pci_rid;
-+typedef u16 hv_pci_segment;
-+typedef u64 hv_logical_device_id;
-+union hv_pci_bdf {
-+	u16 as_uint16;
-+
-+	struct {
-+		u8 function:3;
-+		u8 device:5;
-+		u8 bus;
-+	};
++struct hv_device_interrupt_descriptor {
++	u32 interrupt_type;
++	u32 trigger_mode;
++	u32 vector_count;
++	u32 reserved;
++	struct hv_device_interrupt_target target;
 +} __packed;
 +
-+union hv_pci_bus_range {
-+	u16 as_uint16;
-+
-+	struct {
-+		u8 subordinate_bus;
-+		u8 secondary_bus;
-+	};
++struct hv_input_map_device_interrupt {
++	u64 partition_id;
++	u64 device_id;
++	u64 flags;
++	struct hv_interrupt_entry logical_interrupt_entry;
++	struct hv_device_interrupt_descriptor interrupt_descriptor;
 +} __packed;
 +
-+union hv_device_id {
-+	u64 as_uint64;
-+
-+	struct {
-+		u64 :62;
-+		u64 device_type:2;
-+	};
-+
-+	/* HV_DEVICE_TYPE_LOGICAL */
-+	struct {
-+		u64 id:62;
-+		u64 device_type:2;
-+	} logical;
-+
-+	/* HV_DEVICE_TYPE_PCI */
-+	struct {
-+		union {
-+			hv_pci_rid rid;
-+			union hv_pci_bdf bdf;
-+		};
-+
-+		hv_pci_segment segment;
-+		union hv_pci_bus_range shadow_bus_range;
-+
-+		u16 phantom_function_bits:2;
-+		u16 source_shadow:1;
-+
-+		u16 rsvdz0:11;
-+		u16 device_type:2;
-+	} pci;
-+
-+	/* HV_DEVICE_TYPE_IOAPIC */
-+	struct {
-+		u8 ioapic_id;
-+		u8 rsvdz0;
-+		u16 rsvdz1;
-+		u16 rsvdz2;
-+
-+		u16 rsvdz3:14;
-+		u16 device_type:2;
-+	} ioapic;
-+
-+	/* HV_DEVICE_TYPE_ACPI */
-+	struct {
-+		u32 input_mapping_base;
-+		u32 input_mapping_count:30;
-+		u32 device_type:2;
-+	} acpi;
++struct hv_output_map_device_interrupt {
++	struct hv_interrupt_entry interrupt_entry;
 +} __packed;
++
++struct hv_input_unmap_device_interrupt {
++	u64 partition_id;
++	u64 device_id;
++	struct hv_interrupt_entry interrupt_entry;
++} __packed;
++
++#define HV_SOURCE_SHADOW_NONE               0x0
++#define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
 +
  #endif
 -- 
