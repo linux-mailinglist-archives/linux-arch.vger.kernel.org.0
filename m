@@ -2,34 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606EA2C2165
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 10:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF742C236D
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Nov 2020 12:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728967AbgKXJ3i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 Nov 2020 04:29:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38102 "EHLO mail.kernel.org"
+        id S1732376AbgKXK76 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 Nov 2020 05:59:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727901AbgKXJ3i (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 24 Nov 2020 04:29:38 -0500
-Received: from kernel.org (unknown [77.125.7.142])
+        id S1732373AbgKXK76 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 24 Nov 2020 05:59:58 -0500
+Received: from gaia (unknown [95.146.230.165])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08D202073C;
-        Tue, 24 Nov 2020 09:29:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606210177;
-        bh=iTkMZLIpRtTWQfDGIB3Vl3mRtp/b8gkTxfVBLDleW2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P3bKeuXgUqKvyJMqI2t3WocMqVtq5rV80ChLv9RkXZobErCnfHPcZXypQS/ff8OIc
-         k9Yt6nSUwbnDnaqXryHrQQDoC3ltsZJwF2Txq8wR9gdzisTN7cFmPk0qphW+f2nwAw
-         8OtVd4ZVVbsESt0E2Fi0gLuo0Co6IDESghVXVkF8=
-Date:   Tue, 24 Nov 2020 11:29:19 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id BBA3E2076B;
+        Tue, 24 Nov 2020 10:59:50 +0000 (UTC)
+Date:   Tue, 24 Nov 2020 10:59:48 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -49,53 +42,92 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-riscv@lists.infradead.org, X86 ML <x86@kernel.org>
-Subject: Re: [PATCH v10 0/9] mm: introduce memfd_secret system call to create
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
+Subject: Re: [PATCH v11 4/9] mm: introduce memfd_secret system call to create
  "secret" memory areas
-Message-ID: <20201124092919.GI8537@kernel.org>
-References: <20201123095432.5860-1-rppt@kernel.org>
- <CALCETrXr-9ABs7rzXcCrh1VXn-15AfpwjA6bQA7aU9Ta7DR+bw@mail.gmail.com>
+Message-ID: <20201124105947.GA5527@gaia>
+References: <20201124092556.12009-1-rppt@kernel.org>
+ <20201124092556.12009-5-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALCETrXr-9ABs7rzXcCrh1VXn-15AfpwjA6bQA7aU9Ta7DR+bw@mail.gmail.com>
+In-Reply-To: <20201124092556.12009-5-rppt@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 07:28:22AM -0800, Andy Lutomirski wrote:
-> On Mon, Nov 23, 2020 at 1:54 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > Hi,
-> >
-> > This is an implementation of "secret" mappings backed by a file descriptor.
-> >
-> > The file descriptor backing secret memory mappings is created using a
-> > dedicated memfd_secret system call The desired protection mode for the
-> > memory is configured using flags parameter of the system call. The mmap()
-> > of the file descriptor created with memfd_secret() will create a "secret"
-> > memory mapping. The pages in that mapping will be marked as not present in
-> > the direct map and will have desired protection bits set in the user page
-> > table. For instance, current implementation allows uncached mappings.
-> 
-> I'm still not ready to ACK uncached mappings on x86.  I'm fine with
-> the concept of allowing privileged users to create UC memory on x86
-> for testing and experimentation, but it's a big can of worms in
-> general. 
+Hi Mike,
 
-Ok, let's move forward without UC. 
+On Tue, Nov 24, 2020 at 11:25:51AM +0200, Mike Rapoport wrote:
+> +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+> +{
+> +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> +	struct inode *inode = file_inode(vmf->vma->vm_file);
+> +	pgoff_t offset = vmf->pgoff;
+> +	vm_fault_t ret = 0;
+> +	unsigned long addr;
+> +	struct page *page;
+> +	int err;
+> +
+> +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+> +		return vmf_error(-EINVAL);
+> +
+> +	page = find_get_page(mapping, offset);
+> +	if (!page) {
+> +
+> +		page = secretmem_alloc_page(vmf->gfp_mask);
+> +		if (!page)
+> +			return vmf_error(-ENOMEM);
+> +
+> +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
+> +		if (unlikely(err))
+> +			goto err_put_page;
+> +
+> +		err = set_direct_map_invalid_noflush(page, 1);
+> +		if (err)
+> +			goto err_del_page_cache;
+
+On arm64, set_direct_map_default_noflush() returns 0 if !rodata_full but
+no pgtable changes happen since the linear map can be a mix of small and
+huge pages. The arm64 implementation doesn't break large mappings. I
+presume we don't want to tell the user that the designated memory is
+"secret" but the kernel silently ignored it.
+
+We could change the arm64 set_direct_map* to return an error, however, I
+think it would be pretty unexpected for the user to get a fault when
+trying to access it. It may be better to return a -ENOSYS or something
+on the actual syscall if the fault-in wouldn't be allowed later.
+
+Alternatively, we could make the linear map always use pages on arm64,
+irrespective of other config or cmdline options (maybe not justified
+unless we have clear memsecret users). Yet another idea is to get
+set_direct_map* to break pmd/pud mappings into pte but that's not always
+possible without a stop_machine() and potentially disabling the MMU.
+
+> +
+> +		addr = (unsigned long)page_address(page);
+> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> +
+> +		__SetPageUptodate(page);
+> +
+> +		ret = VM_FAULT_LOCKED;
+> +	}
+> +
+> +	vmf->page = page;
+> +	return ret;
+> +
+> +err_del_page_cache:
+> +	delete_from_page_cache(page);
+> +err_put_page:
+> +	put_page(page);
+> +	return vmf_error(err);
+> +}
 
 -- 
-Sincerely yours,
-Mike.
+Catalin
