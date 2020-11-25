@@ -2,101 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE732C4273
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Nov 2020 15:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366922C4759
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Nov 2020 19:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728404AbgKYOv2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Nov 2020 09:51:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43904 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726139AbgKYOv2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 25 Nov 2020 09:51:28 -0500
-Received: from linux-8ccs (p57a232c3.dip0.t-ipconnect.de [87.162.50.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F88F206B5;
-        Wed, 25 Nov 2020 14:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606315887;
-        bh=N/IosfIbGitpjFvIvBGjanWy43jAdZYMsZ1O1iGVCqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VuobexrSYNEaJHUs9u8B/SEUrsMEqYnTPlfO+3DgAS7ih1zUglusNmcgifq8bDMyV
-         QBlrqLdOO3ztt3E3e0qdvNNZSRe3EVocsttsim8BK4KBLlRz+Zr/oWXp0D169urNyg
-         mGDDK+JjsM7HTSxR2N98YJK6Mx0A1w8OV/wAYlL8=
-Date:   Wed, 25 Nov 2020 15:51:20 +0100
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Kurtz <djkurtz@chromium.org>,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH 0/8] linker-section array fix and clean ups
-Message-ID: <20201125145118.GA32446@linux-8ccs>
-References: <20201103175711.10731-1-johan@kernel.org>
- <20201106160344.GA12184@linux-8ccs.fritz.box>
- <20201106164537.GD4085@localhost>
- <20201111154716.GB5304@linux-8ccs>
- <X66VvI/M4GRDbiWM@localhost>
- <X7uRZUY+2L9Yg9wt@localhost>
+        id S1731918AbgKYSOy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Nov 2020 13:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730643AbgKYSOy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Nov 2020 13:14:54 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE93AC0613D4;
+        Wed, 25 Nov 2020 10:14:53 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id m13so3040895ioq.9;
+        Wed, 25 Nov 2020 10:14:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NIpG45UWwddpGV+62KwVJM4R9vkmQaVM+kUHYytsuOk=;
+        b=kWV6G2yZXMm4VSHbnojYmPa+C5P3JnpUTHqE23CMhNkQBQWRzmmhqOLBUtQv2atXCT
+         gfx8m7eCmFJ7pVlsuccPiH6QWEPUd8AOsN93MuFELIyPMSRf5jsCMU0WOq//RI0OE3v8
+         Xcdy8XkXYHOwwkywVeuV38sTpPsttpVy3JvqUPqjjnzwH11K8V/hcwvS5Z9IHaMrKIUK
+         5aPycy8OBpj2x7nvopzyosAyOu5TyhaWlUYzEp+8JqfTnIOXSNZZFCbA0rFGLuslWfdY
+         0h9j9VHpYmDhGDt0sVob662k93U0Re/54lGaFjmxi8C+L9fpuTq3YUdx9b9EMjfmYlAP
+         xBkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NIpG45UWwddpGV+62KwVJM4R9vkmQaVM+kUHYytsuOk=;
+        b=eGNs1ZBLBayuVA4HFTYdwRRp2B6JX5sBFZu9gdbQXp7ZkUya3FzV3rNyLsIaXdh2fl
+         1hQVdNaU/cI4mn4GB6XdOTFgRjLyBuUNfVBU2Z3gWB7RYJm69S8+NnaWho44nF792gC0
+         m9/tuZkaVbKSINvAVLeZLKT1105l/4jdMX2EaRAHu2NQUWMkZiJUZ2p7NZJW7RN0SWjd
+         5g/5eUxANUESc3xvKVXaQDvpAGH66XBCSRsdWnA2DeB/mEBI//RsTVYavGsCHo9s6O58
+         TtbjsxqiahEdB+eL3UWU6sF1XuHw5r6SL2FNZgNfVIHPIzvePpZQ1RHKLz8pDGjqmEfC
+         N8uA==
+X-Gm-Message-State: AOAM531jHlFCHk4UC5pcbvGttDLYkCbgoo6zlgxUMds69xaYUmoWI5hh
+        vvs65c/j52dhKSxTH0IKtPfC/znq5UeUzz7EIkQ=
+X-Google-Smtp-Source: ABdhPJy4bdnOlLLsyDMAPulYW5mY6232Uy6n2lvrULm8bBlPIp8KqHJcFEF94nx0UycVv+ODFkxSMwE58yByCsD5otA=
+X-Received: by 2002:a5e:a815:: with SMTP id c21mr2793016ioa.141.1606328093153;
+ Wed, 25 Nov 2020 10:14:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <X7uRZUY+2L9Yg9wt@localhost>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <30b491ad-a7e1-f7b5-26b8-2cfffc81a080@huawei.com> <CAAH8bW_p3LJPgOoJgUHt6O0run+LB2RbjnAVpeLn_KCAZKNR+A@mail.gmail.com>
+In-Reply-To: <CAAH8bW_p3LJPgOoJgUHt6O0run+LB2RbjnAVpeLn_KCAZKNR+A@mail.gmail.com>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Wed, 25 Nov 2020 10:14:42 -0800
+Message-ID: <CAAH8bW8Zo1U3oMu5Gggp-MyNNZ8_WieQn+GKYiML93O9sJB=Dg@mail.gmail.com>
+Subject: Re: [Question] About SECCOMP issue for ILP32
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     bobo.shaobowang@huawei.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Alexander Graf <agraf@suse.de>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andreas Schwab <schwab@suse.de>,
+        Andrew Pinski <pinskia@gmail.com>,
+        Bamvor Zhangjian <bamv2005@gmail.com>,
+        Chris Metcalf <cmetcalf@mellanox.com>,
+        Christoph Muellner <christoph.muellner@theobroma-systems.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        James Hogan <james.hogan@imgtec.com>,
+        James Morse <james.morse@arm.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        Lin Yongting <linyongting@huawei.com>,
+        Manuel Montezelo <manuel.montezelo@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+        Nathan_Lynch <Nathan_Lynch@mentor.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Prasun Kapoor <Prasun.Kapoor@caviumnetworks.com>,
+        Ramana Radhakrishnan <ramana.gcc@googlemail.com>,
+        Steve Ellcey <sellcey@caviumnetworks.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+++ Johan Hovold [23/11/20 11:39 +0100]:
->On Fri, Nov 13, 2020 at 03:18:36PM +0100, Johan Hovold wrote:
->> On Wed, Nov 11, 2020 at 04:47:16PM +0100, Jessica Yu wrote:
->>
->> > Thanks for providing the links and references. Your explanation and
->> > this reply from Jakub [1] clarified things for me. I was not aware of
->> > the distinction gcc made between aligned attributes on types vs. on
->> > variables. So from what I understand now, gcc suppresses the
->> > optimization when the alignment is specified in the variable
->> > declaration, but not necessarily when the aligned attribute is just on
->> > the type.
->> >
->> > Even though it's been in use for a long time, I think it would be
->> > really helpful if this gcc quirk was explained just a bit more in the
->> > patch changelogs, especially since this is undocumented behavior.
->> > I found the explanation in [1] (as well as in your cover letter) to be
->> > sufficient. Maybe something like "GCC suppresses any optimizations
->> > increasing alignment when the alignment is specified in the variable
->> > declaration, as opposed to just on the type definition. Therefore,
->> > explicitly specify type alignment when declaring entries to prevent
->> > gcc from increasing alignment."
->>
->> Sure, I can try to expand the commit messages a bit.
+On Mon, Aug 31, 2020 at 11:15 AM Yury Norov <yury.norov@gmail.com> wrote:
 >
->I've amended the commit messages of the relevant patches to make it more
->clear that the optimisation can be suppressed by specifying alignment
->when declaring variables, but without making additional claims about the
->type attribute. I hope the result is acceptable to you.
+> On Mon, Aug 31, 2020 at 5:48 AM Xiongfeng Wang
+> <wangxiongfeng2@huawei.com> wrote:
+> >
+> > Hi Yury,
+> >
 >
->Perhaps you can include a lore link to the patches when applying so that
->this thread can be found easily if needed.
+> Hi Xiongfeng,
+>
+> [restore CC list]
+>
+> Haven't seen this before. What kernel / glibc / ltp do you use?
+>
+> > We were testing the ILP32 feature and came accross a problem. Very apperaciate
+> > it if you could give us some help !
+> >
+> > We compile the LTP testsuite with '-mabi=ilp32' and run it on a machine with
+> > kernel and glibc applied with ILP32 patches. But we failed on one testcase,
+> > prctl04. It print the following error info.
+> > 'prctl04.c:199: FAIL: SECCOMP_MODE_STRICT doesn't permit read(2) write(2) and
+> > _exit(2)'
+> >
+> > The testcase is like below, syscall 'prctl' followed by a syscall 'write'.
+> > prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT);
+> > SAFE_WRITE(1, fd, "a", 1);
+> >
+> > When we execute syscall 'write', we receive a SIGKILL. It's not as expected.
+> > We track the kernel and found out it is because we failed the syscall_whitelist
+> > check in '__secure_computing_strict'. Because flag 'TIF_32BIT_AARCH64' is set,
+> > we falls into the 'in_compat_syscall()' branch. We compare the parameter
+> > 'this_syscall' with return value of 'get_compat_model_syscalls()'
+> > The syscall number of '__NR_write' for ilp32 application is 64, but it is 4 for
+> > 'model_syscalls_32' returned from 'get_compat_model_syscalls()'
+> > So '__secure_computing_strict' retuned with 'do_exit(SIGKILL)'. We have a
+> > modification like below, but I am not sure if it correct or not.
+> >
+> > --- a/kernel/seccomp.c
+> > +++ b/kernel/seccomp.c
+> > @@ -618,7 +618,7 @@ static void __secure_computing_strict(int this_syscall)
+> >  {
+> >         const int *syscall_whitelist = mode1_syscalls;
+> >  #ifdef CONFIG_COMPAT
+> > -       if (in_compat_syscall())
+> > +       if (is_a32_compat_task())
+> >                 syscall_whitelist = get_compat_mode1_syscalls();
+>
+> It calls the arch function from generic code. It may break build for
+> other arches.
+> This also looks dangerous because it treats ILP32 execution as non-compat.
+>
+> The right approach would be implementing arch-specific
+> get_compat_mode1_syscalls()
+> in arch/arm64/include/asm/seccomp.h that returns an appropriate table.
+> Refer MIPS
+> code for this: arch/mips/include/asm/seccomp.h
+>
+> Thanks,
+> Yury
+>
+> >  #endif
+> >         do {
+> >
+> >
+> > Thanks,
+> > Xiongfeng
+> >
 
-Hi Johan,
+The fix is on my repo; versions 5.2 and 4.19 are updated:
 
-Good idea, I've included a link to this thread for each patch.
-I've queued up patches 3, 4, 6, 7, 8 for testing before pushing them
-out to modules-next.
-
-Thanks!
-
-Jessica
+https://github.com/norov/linux/commits/ilp32-4.19
+https://github.com/norov/linux/commits/ilp32-5.2
