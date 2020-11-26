@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2922C53B9
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Nov 2020 13:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A662C53B2
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Nov 2020 13:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388957AbgKZMMY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Nov 2020 07:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S2388955AbgKZMMR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Nov 2020 07:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731806AbgKZMMQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Nov 2020 07:12:16 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C753C0613D4;
-        Thu, 26 Nov 2020 04:12:16 -0800 (PST)
+        with ESMTP id S1726321AbgKZMML (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Nov 2020 07:12:11 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDD0C0613D4;
+        Thu, 26 Nov 2020 04:12:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=rpbquXH+0OLb9Ygx9Cjnl4wM8Crhm2/za8S9KIMZWMw=; b=d8ikFQ5g9M8lBrRxWBmLTEkJDp
-        VtICYG1lRvUYUCUKr1BN1rH5eaPykQr9wx7UdLxj1LfOfrqIjYl0Z5jFvOSUB/ghUdKTpO11zcGbT
-        utQNSFHw4QUryo41ulTed+h+zQ+gzYo258idCY/G3jxQlzPYgTtrfO+eD8SpMXj8iZHHqRgU+cKsS
-        k4AvReMGVW4kp01jhyYq9tbgf0FxvTgPRuYjicUbVV7F8pT2jjLgS8nw2A4OqvrluwdX2dx7g35Du
-        qe5qc5fulD1C/pVIjenroQAKrK9p1+mC7ZGz2zBi0c0XKnkzKrRPwRGEzaZyz6teVOCMNtiSmwX28
-        qk8lisXw==;
+        bh=iHRAwfISjmDVO4YfqfbHVdJ2ZWVEpJxsSVYRxtpbcsQ=; b=W1TFRVvdOr3lqnjmu4Y3X0/O4K
+        qyYaWMnTjj3afueuAAHp0gS8+bjPsQpM5E1cRwSPhxFOM9A7aRRXp3o/JnStAwU6vy0cCjiBykvRU
+        XIUPUxUm0kXIjvuMDkam3L90Om+RBffrCXY7GSog/KMNwDJrXUqDE4A5uEWivj/m8Pt55wM+O6Ucn
+        7IttdTgHVwb12drQItluBFvQoZCiqlxfscVXFv7LKvsuuX0L6/jWRDymIweOz7bphA9gBgIqMIFGK
+        fzuo455MVRa9j9pCHxHKaNkANOgW+7Ls3HYw4Gwr9FKxPmgM+PZFQVBcfQnQna8YyJvchQM7+nFld
+        sL82ZTCA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kiG7c-0006M3-SX; Thu, 26 Nov 2020 12:11:37 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kiG7b-0000OI-SD; Thu, 26 Nov 2020 12:11:36 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1BDE43059DE;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E009D3070F9;
         Thu, 26 Nov 2020 13:11:34 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 003CE2D167BE7; Thu, 26 Nov 2020 13:11:33 +0100 (CET)
-Message-ID: <20201126121121.226210959@infradead.org>
+        id 05D712D167BEB; Thu, 26 Nov 2020 13:11:34 +0100 (CET)
+Message-ID: <20201126121121.301768209@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 26 Nov 2020 13:01:18 +0100
+Date:   Thu, 26 Nov 2020 13:01:19 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     kan.liang@linux.intel.com, mingo@kernel.org, acme@kernel.org,
         mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -49,7 +49,7 @@ Cc:     christophe.leroy@csgroup.eu, npiggin@gmail.com,
         linux-kernel@vger.kernel.org, ak@linux.intel.com,
         dave.hansen@intel.com, kirill.shutemov@linux.intel.com,
         peterz@infradead.org
-Subject: [PATCH v2 4/6] arm64/mm: Implement pXX_leaf_size() support
+Subject: [PATCH v2 5/6] sparc64/mm: Implement pXX_leaf_size() support
 References: <20201126120114.071913521@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,29 +57,76 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ARM64 has non-pagetable aligned large page support with PTE_CONT, when
-this bit is set the page is part of a super-page. Match the hugetlb
-code and support these super pages for PTE and PMD levels.
+Sparc64 has non-pagetable aligned large page support; wire up the
+pXX_leaf_size() functions to report the correct pagetable page size.
 
 This enables PERF_SAMPLE_{DATA,CODE}_PAGE_SIZE to report accurate
 pagetable leaf sizes.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arm64/include/asm/pgtable.h |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/sparc/include/asm/pgtable_64.h |   13 +++++++++++++
+ arch/sparc/mm/hugetlbpage.c         |   19 +++++++++++++------
+ 2 files changed, 26 insertions(+), 6 deletions(-)
 
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -503,6 +503,9 @@ extern pgprot_t phys_mem_access_prot(str
- 				 PMD_TYPE_SECT)
- #define pmd_leaf(pmd)		pmd_sect(pmd)
+--- a/arch/sparc/include/asm/pgtable_64.h
++++ b/arch/sparc/include/asm/pgtable_64.h
+@@ -1121,6 +1121,19 @@ extern unsigned long cmdline_memory_size
  
-+#define pmd_leaf_size(pmd)	(pmd_cont(pmd) ? CONT_PMD_SIZE : PMD_SIZE)
-+#define pte_leaf_size(pte)	(pte_cont(pte) ? CONT_PTE_SIZE : PAGE_SIZE)
+ asmlinkage void do_sparc64_fault(struct pt_regs *regs);
+ 
++#ifdef CONFIG_HUGETLB_PAGE
 +
- #if defined(CONFIG_ARM64_64K_PAGES) || CONFIG_PGTABLE_LEVELS < 3
- static inline bool pud_sect(pud_t pud) { return false; }
- static inline bool pud_table(pud_t pud) { return true; }
++#define pud_leaf_size pud_leaf_size
++extern unsigned long pud_leaf_size(pud_t pud);
++
++#define pmd_leaf_size pmd_leaf_size
++extern unsigned long pmd_leaf_size(pmd_t pmd);
++
++#define pte_leaf_size pte_leaf_size
++extern unsigned long pte_leaf_size(pte_t pte);
++
++#endif /* CONFIG_HUGETLB_PAGE */
++
+ #endif /* !(__ASSEMBLY__) */
+ 
+ #endif /* !(_SPARC64_PGTABLE_H) */
+--- a/arch/sparc/mm/hugetlbpage.c
++++ b/arch/sparc/mm/hugetlbpage.c
+@@ -247,14 +247,17 @@ static unsigned int sun4u_huge_tte_to_sh
+ 	return shift;
+ }
+ 
+-static unsigned int huge_tte_to_shift(pte_t entry)
++static unsigned long tte_to_shift(pte_t entry)
+ {
+-	unsigned long shift;
+-
+ 	if (tlb_type == hypervisor)
+-		shift = sun4v_huge_tte_to_shift(entry);
+-	else
+-		shift = sun4u_huge_tte_to_shift(entry);
++		return sun4v_huge_tte_to_shift(entry);
++
++	return sun4u_huge_tte_to_shift(entry);
++}
++
++static unsigned int huge_tte_to_shift(pte_t entry)
++{
++	unsigned long shift = tte_to_shift(entry);
+ 
+ 	if (shift == PAGE_SHIFT)
+ 		WARN_ONCE(1, "tto_to_shift: invalid hugepage tte=0x%lx\n",
+@@ -272,6 +275,10 @@ static unsigned long huge_tte_to_size(pt
+ 	return size;
+ }
+ 
++unsigned long pud_leaf_size(pud_t pud) { return 1UL << tte_to_shift((pte_t)pud); }
++unsigned long pmd_leaf_size(pmd_t pmd) { return 1UL << tte_to_shift((pte_t)pmd); }
++unsigned long pte_leaf_size(pte_t pte) { return 1UL << tte_to_shift((pte_t)pte); }
++
+ pte_t *huge_pte_alloc(struct mm_struct *mm,
+ 			unsigned long addr, unsigned long sz)
+ {
 
 
