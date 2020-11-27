@@ -2,82 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AA52C6D2C
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 23:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588E82C6D3A
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 23:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727988AbgK0U4x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Nov 2020 15:56:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45190 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729330AbgK0U4J (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Nov 2020 15:56:09 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F77F2223D;
-        Fri, 27 Nov 2020 20:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606510568;
-        bh=dMMuekuBNzQmFJKaVsfxBM+WX/QdLd4eVfUpm+iNAVI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=mrCQxOkt9DBpuUuHnYidsarQ8GaKqfcMTv7TrTVANaIHcNyWVqCo15IJALf104U/Q
-         gPAcXt+QkeqWMqc/GUkBXcQo6+WcaFWAcFae5VBcSiS016Ufv+d7iq+vNmN5N/uyVj
-         eBf2AA3djosMZDm67VsW5UjwcpOoxSHDNa10B5lE=
-Received: by mail-ot1-f49.google.com with SMTP id f12so5721825oto.10;
-        Fri, 27 Nov 2020 12:56:08 -0800 (PST)
-X-Gm-Message-State: AOAM530y0PkEGI4Gqght7Y4Hz2lAxJbNfBi5cTnAKEjPTVQNFZfcaGr+
-        6nvZij4TWueUAecOpFqS347192BQ14ZYPCpfTJI=
-X-Google-Smtp-Source: ABdhPJzjHQCLfWUmBEOu/CPExDBvIrvJNywm38G6+Gl4Cf2XKvI8Fq/h51TX6t0gSnNDt+jINhaKtXyKMXgGnc3QRC4=
-X-Received: by 2002:a9d:be1:: with SMTP id 88mr7814388oth.210.1606510567814;
- Fri, 27 Nov 2020 12:56:07 -0800 (PST)
+        id S1730248AbgK0Wal (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Nov 2020 17:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731500AbgK0Waa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Nov 2020 17:30:30 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2F9C0613D1;
+        Fri, 27 Nov 2020 14:30:28 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id y9so5860035ilb.0;
+        Fri, 27 Nov 2020 14:30:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/o9AB5sxFmB6P6+LlPx890WM9LW9SfDitLHJttzL1v4=;
+        b=djRq0/yxMPI5MCFmd23Vg22J3XiZVe07Ouzsl7ZNOI2Bzc1L7Z9JjLUCjdvvoLC+vZ
+         e9XNtcgKrHOMuQ7TftT3nsXC69V+9e1zk/Js7aRkvaK2cwVJ7Cw9DMmKQK3obv51u1Tj
+         jkdyRnrZQ4SAN0y36BeskYrOUcuHbNOXxY63Dy1EYZcLnhSyr4pOtAE2DB5BZU308Gua
+         dG9WWdG5kgbTmkFRZxerVb1WYb7NYcJuapb4CtJiZO3Rcrfjl+x1Cfjsmi3oW+jP1GVo
+         LMLsZpQG0yJeJs94Xz2h9KBCUodN+p6qV2+9tpSgi/5Myv5/zZBkKifuw0Fn5Xy5sRh+
+         MKWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/o9AB5sxFmB6P6+LlPx890WM9LW9SfDitLHJttzL1v4=;
+        b=DHP2dxMGqvPon3b3+6p/txQznrZYuvDyas7DNZeqkOi96xwRTpRdlxSC5nXzj7qjmn
+         28SgLQT9iqHjCnW325lqBcRt7XJTrOoo+9/t/jexOTY/1fyZlaqj5dvVhvnCMUIL/024
+         A8wFwo/kpupGKtTlmUIMf3dy7KdKzY3wXvWwYcKDev/4itrvtKOObMzxFADpaHxRvWiX
+         Q+N3KBT9OtcWimbpEjI/EwBi/mBDXtEpWUx6WdjlSiFSRVQmvoOUoweU3TWcJ0/v6BCV
+         v+3w138jVKMMtLktUvPYu0BzJwnip7Esk4yEhmdHTqEU1kXwCL5dikFNx7Xe6taFZgC3
+         saQg==
+X-Gm-Message-State: AOAM533+aDUO7QHobCiMGGN0PJHrCXNIXDQFmF1Rp5fOTTL0Wod7+5qA
+        /GYdAph8S0F7x+RvjgtM3jYIogeK9DSDYBny3Q==
+X-Google-Smtp-Source: ABdhPJxAlJ9It81MGT+VkGPXRpNlnP/iJGMirRASXeYvPtuv4puDTMuHyfUfaeTAiUkHBUYPw/rfcAZOxRTd4aBV8u4=
+X-Received: by 2002:a92:c690:: with SMTP id o16mr8721220ilg.172.1606516227771;
+ Fri, 27 Nov 2020 14:30:27 -0800 (PST)
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 27 Nov 2020 21:55:52 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3eLXunBbxa=i4Z-tXnPwAt==xTg1_hs4TZq7w1LH2dng@mail.gmail.com>
-Message-ID: <CAK8P3a3eLXunBbxa=i4Z-tXnPwAt==xTg1_hs4TZq7w1LH2dng@mail.gmail.com>
-Subject: [GIT PULL] asm-generic: add correct MAX_POSSIBLE_PHYSMEM_BITS setting
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Stefan Agner <stefan@agner.ch>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20201126155246.25961-1-jack@suse.cz> <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
+In-Reply-To: <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Fri, 27 Nov 2020 17:30:15 -0500
+Message-ID: <CAMzpN2gADAWBoTgKEgepCHVKoqOw3T_D_W30Q2-vJtQpfn0jwg@mail.gmail.com>
+Subject: Re: [PATCH] fanotify: Fix fanotify_mark() on 32-bit x86
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, linux-arch <linux-arch@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit f8394f232b1eab649ce2df5c5f15b0e528c92091:
+On Fri, Nov 27, 2020 at 1:13 PM Andy Lutomirski <luto@kernel.org> wrote:
+>
+> On Thu, Nov 26, 2020 at 7:52 AM Jan Kara <jack@suse.cz> wrote:
+> >
+> > Commit converting syscalls taking 64-bit arguments to new scheme of compat
+> > handlers omitted converting fanotify_mark(2) which then broke the
+> > syscall for 32-bit x86 builds. Add missed conversion. It is somewhat
+> > cumbersome since we need to keep the original compat handler for all the
+> > other 32-bit archs.
+> >
+>
+> This is stupendously ugly.  I'm not really sure how this is supposed
+> to work on any 32-bit arch.  I'm also not sure whether we should
+> expect the SYSCALL_DEFINE macros to figure this out by themselves.
 
-  Linux 5.10-rc3 (2020-11-08 16:10:16 -0800)
+It works on 32-bit arches because the compiler implicitly uses
+consecutive input registers or stack slots for 64-bit arguments, and
+some arches have alignment requirements that result in hidden padding.
+x86-32 is different now because parameters are passed in via pt_regs,
+and the 64-bit value has to explicitly be reassembled from the high
+and low 32-bit values, just like in the compat case.
 
-are available in the Git repository at:
+I think the simplest way to handle this is add a wrapper in
+arch/x86/kernel/sys_ia32.c with the other fs syscalls that need 64-bit
+args.  That keeps this mess out of general code.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-fixes-5.10-2
-
-for you to fetch changes up to cef397038167ac15d085914493d6c86385773709:
-
-  arch: pgtable: define MAX_POSSIBLE_PHYSMEM_BITS where needed
-(2020-11-16 16:57:18 +0100)
-
-----------------------------------------------------------------
-asm-generic: add correct MAX_POSSIBLE_PHYSMEM_BITS setting
-
-This is a single bugfix for a bug that Stefan Agner found on 32-bit
-Arm, but that exists on several other architectures.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      arch: pgtable: define MAX_POSSIBLE_PHYSMEM_BITS where needed
-
- arch/arc/include/asm/pgtable.h               |  2 ++
- arch/arm/include/asm/pgtable-2level.h        |  2 ++
- arch/arm/include/asm/pgtable-3level.h        |  2 ++
- arch/mips/include/asm/pgtable-32.h           |  3 +++
- arch/powerpc/include/asm/book3s/32/pgtable.h |  2 ++
- arch/powerpc/include/asm/nohash/32/pgtable.h |  2 ++
- arch/riscv/include/asm/pgtable-32.h          |  2 ++
- include/linux/pgtable.h                      | 13 +++++++++++++
- 8 files changed, 28 insertions(+)
+--
+Brian Gerst
