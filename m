@@ -2,137 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7724A2C6B70
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 19:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A1A2C6B79
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 19:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732191AbgK0SNS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Nov 2020 13:13:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45412 "EHLO mail.kernel.org"
+        id S1732348AbgK0SQi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Nov 2020 13:16:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47342 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732265AbgK0SNS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Nov 2020 13:13:18 -0500
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1732304AbgK0SQi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Nov 2020 13:16:38 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6431D2224B
-        for <linux-arch@vger.kernel.org>; Fri, 27 Nov 2020 18:13:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1A62208B3;
+        Fri, 27 Nov 2020 18:16:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606500797;
-        bh=1bo6H9+/KQJ6VWNzr+NXNTKVa7Q21pKSbzsXSkioxfc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=yk7nAQ8/WRulmAUdFGobbdczXVBW2mFmEp10IrSfmIjjxAsbwfaFpzB1ku3OYw51I
-         fWbbFkNem/7R5M2S4CB48qAsLmaFicDeIS0i+MRS1UJpOR4zOe0I3Faiy1q2MQ7TCI
-         4RUFLcHZtA4pt3ggkkcIaxHB7kylJ/ozNNVQ4zaA=
-Received: by mail-wm1-f45.google.com with SMTP id x22so5836413wmc.5
-        for <linux-arch@vger.kernel.org>; Fri, 27 Nov 2020 10:13:17 -0800 (PST)
-X-Gm-Message-State: AOAM530856GN3l+Sjgap2qHtBwjVzTg4SJl3/zeScPfDUcrWaD93p4yS
-        5Km4OKkmFwx18kdCPul9TKhYZQU4gh1Lyj5siVDYMg==
-X-Google-Smtp-Source: ABdhPJwuK0ObJ3lq9tHj2zI493p7it0lhkV8QgcGO4JpQeedx4Jt0eN4+9mE0Dn0wZhe0GqKtkPtNZOWzMKzOrhdgis=
-X-Received: by 2002:a1c:7e87:: with SMTP id z129mr10547148wmc.176.1606500793991;
- Fri, 27 Nov 2020 10:13:13 -0800 (PST)
+        s=default; t=1606500997;
+        bh=KJhR0+3cvmbOXE9PhjQeGFn/24gub6784UkEmwXw5uE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=2smiPe6gNquCuQoUII3DbEIDRB8r/6RQjNr+KsqSDVaxnOqqYDwSaMoSyJ9055QPn
+         ecGVfDEurF4rBgyL7dKUcTEMGa5xwbgEVNMYbSh18XbjqLrNscWB5ahf4YJmla/tED
+         3JELBrkR04VghGLZW+AQtL2NVaGoC/utl/0gQPBg=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1kiiIN-00E8Gu-R2; Fri, 27 Nov 2020 18:16:35 +0000
 MIME-Version: 1.0
-References: <20201126155246.25961-1-jack@suse.cz>
-In-Reply-To: <20201126155246.25961-1-jack@suse.cz>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 27 Nov 2020 10:13:01 -0800
-X-Gmail-Original-Message-ID: <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
-Message-ID: <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
-Subject: Re: [PATCH] fanotify: Fix fanotify_mark() on 32-bit x86
-To:     Jan Kara <jack@suse.cz>, linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Brian Gerst <brgerst@gmail.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 27 Nov 2020 18:16:35 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 03/14] KVM: arm64: Kill 32-bit vCPUs on systems with
+ mismatched EL0 support
+In-Reply-To: <20201127172434.GA984327@google.com>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-4-will@kernel.org>
+ <9bd06b193e7fb859a1207bb1302b7597@kernel.org>
+ <20201127115304.GB20564@willie-the-truck>
+ <583c4074bbd4cf8b8085037745a5d1c0@kernel.org>
+ <20201127172434.GA984327@google.com>
+User-Agent: Roundcube Webmail/1.4.9
+Message-ID: <9de8639549040b4478b312503fd5a23f@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: qperret@google.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, gregkh@linuxfoundation.org, peterz@infradead.org, morten.rasmussen@arm.com, qais.yousef@arm.com, surenb@google.com, tj@kernel.org, lizefan@huawei.com, hannes@cmpxchg.org, mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 7:52 AM Jan Kara <jack@suse.cz> wrote:
->
-> Commit converting syscalls taking 64-bit arguments to new scheme of compa=
-t
-> handlers omitted converting fanotify_mark(2) which then broke the
-> syscall for 32-bit x86 builds. Add missed conversion. It is somewhat
-> cumbersome since we need to keep the original compat handler for all the
-> other 32-bit archs.
->
+On 2020-11-27 17:24, Quentin Perret wrote:
+> On Friday 27 Nov 2020 at 17:14:11 (+0000), Marc Zyngier wrote:
 
-This is stupendously ugly.  I'm not really sure how this is supposed
-to work on any 32-bit arch.  I'm also not sure whether we should
-expect the SYSCALL_DEFINE macros to figure this out by themselves.
+[...]
 
-At the very least, the native arm 32 and arm64 compat cases should get test=
-ed.
+>> Yeah, the sanitized read feels better, if only because that is
+>> what we are going to read in all the valid cases, unfortunately.
+>> read_sanitised_ftr_reg() is sadly not designed to be called on
+>> a fast path, meaning that 32bit guests will do a bsearch() on
+>> the ID-regs every time they exit...
+>> 
+>> I guess we will have to evaluate how much we loose with this.
+> 
+> Could we use the trick we have for arm64_ftr_reg_ctrel0 to speed this
+> up?
 
-Al and Christoph, you're probably a lot more familiar than I am with
-the nasty details of syscall ABI with 64-bit arguments.
+Maybe. I want to first verify whether this has any measurable impact.
+Another possibility would be to cache the last read_sanitised_ftr_reg()
+access, just to see if that helps. There shouldn't be that many code
+paths hammering it.
 
-> CC: Brian Gerst <brgerst@gmail.com>
-> Suggested-by: Borislav Petkov <bp@suse.de>
-> Reported-by: Pawe=C5=82 Jasiak <pawel@jasiak.xyz>
-> Reported-and-tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 121b32a58a3a ("x86/entry/32: Use IA32-specific wrappers for syscal=
-ls taking 64-bit arguments")
-> CC: stable@vger.kernel.org
-> Signed-off-by: Jan Kara <jack@suse.cz>
-> ---
->  arch/x86/entry/syscalls/syscall_32.tbl | 2 +-
->  fs/notify/fanotify/fanotify_user.c     | 7 ++++++-
->  2 files changed, 7 insertions(+), 2 deletions(-)
->
-> I plan to queue this fix into my tree next week. I'd be happy if someone =
-with
-> x86 ABI knowledge checks whether I've got the patch right (especially var=
-ious
-> config variants) because it was mostly a guesswork of me & Boris ;). Than=
-ks!
->
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/sysc=
-alls/syscall_32.tbl
-> index 0d0667a9fbd7..b2ec6ff88307 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -350,7 +350,7 @@
->  336    i386    perf_event_open         sys_perf_event_open
->  337    i386    recvmmsg                sys_recvmmsg_time32             c=
-ompat_sys_recvmmsg_time32
->  338    i386    fanotify_init           sys_fanotify_init
-> -339    i386    fanotify_mark           sys_fanotify_mark               c=
-ompat_sys_fanotify_mark
-> +339    i386    fanotify_mark           sys_ia32_fanotify_mark
->  340    i386    prlimit64               sys_prlimit64
->  341    i386    name_to_handle_at       sys_name_to_handle_at
->  342    i386    open_by_handle_at       sys_open_by_handle_at           c=
-ompat_sys_open_by_handle_at
-> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fano=
-tify_user.c
-> index 3e01d8f2ab90..ba38f0fec4d0 100644
-> --- a/fs/notify/fanotify/fanotify_user.c
-> +++ b/fs/notify/fanotify/fanotify_user.c
-> @@ -1292,8 +1292,13 @@ SYSCALL_DEFINE5(fanotify_mark, int, fanotify_fd, u=
-nsigned int, flags,
->         return do_fanotify_mark(fanotify_fd, flags, mask, dfd, pathname);
->  }
->
-> -#ifdef CONFIG_COMPAT
-> +#if defined(CONFIG_COMPAT) || defined(CONFIG_X86_32) || \
-> +    defined(CONFIG_IA32_EMULATION)
-> +#if defined(CONFIG_X86_32) || defined(CONFIG_IA32_EMULATION)
-> +SYSCALL_DEFINE6(ia32_fanotify_mark,
-> +#elif CONFIG_COMPAT
->  COMPAT_SYSCALL_DEFINE6(fanotify_mark,
-> +#endif
->                                 int, fanotify_fd, unsigned int, flags,
->                                 __u32, mask0, __u32, mask1, int, dfd,
->                                 const char  __user *, pathname)
-> --
-> 2.16.4
->
+Thanks,
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...
