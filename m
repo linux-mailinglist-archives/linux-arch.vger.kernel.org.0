@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD61B2C6416
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 12:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24D42C641D
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 12:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727737AbgK0Lud (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Nov 2020 06:50:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60232 "EHLO mail.kernel.org"
+        id S1727149AbgK0LxN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Nov 2020 06:53:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbgK0Luc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Nov 2020 06:50:32 -0500
+        id S1725985AbgK0LxN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Nov 2020 06:53:13 -0500
 Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2BCF621D46;
-        Fri, 27 Nov 2020 11:50:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D728821D46;
+        Fri, 27 Nov 2020 11:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606477831;
-        bh=LtVP95hrMMclG30wUBaX1D+fuXhT9e1/YraMHggZoh4=;
+        s=default; t=1606477991;
+        bh=iRowjQfwiQpVHUf5+VNrejatl3jHns8UFqG/fY0lA64=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=baVlIfO4opAFzmlCelU1RQ/Ds6muHOTAl+KSi62Xbp8/MIWJqKnE0Ve3lP4Y6gy7P
-         b+esiDjwFAuzVUsRCaxta69kKtcv3ECBwbgqVWIQJ7E16ksrQR+LQ0mwbI0qq294ts
-         mqWKmcetdnshC1gijJOw7q0zMyvniz8Fltl0Snzk=
-Date:   Fri, 27 Nov 2020 11:50:24 +0000
+        b=fDqlxhg0s8I0lbubTcM0KCHwdQ5Jm6b4//0Z144munNg+uAsO9SfKes4f3FiFafg6
+         lAjcNtv7ZpDmchUtH/zWKAHaB1tPAac0SuUp2XQbWK/yruSh3QdkHZDTae0hZhU55t
+         rH4IdTGP0Q4Y9DdwQ4WMRTRoLzqccezgT1m48lk8=
+Date:   Fri, 27 Nov 2020 11:53:05 +0000
 From:   Will Deacon <will@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
@@ -41,80 +41,87 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         kernel-team@android.com
-Subject: Re: [PATCH v4 02/14] arm64: Allow mismatched 32-bit EL0 support
-Message-ID: <20201127115024.GA20564@willie-the-truck>
+Subject: Re: [PATCH v4 03/14] KVM: arm64: Kill 32-bit vCPUs on systems with
+ mismatched EL0 support
+Message-ID: <20201127115304.GB20564@willie-the-truck>
 References: <20201124155039.13804-1-will@kernel.org>
- <20201124155039.13804-3-will@kernel.org>
- <d7dfc12ca87d65fad79bfe2cd697a28d@kernel.org>
+ <20201124155039.13804-4-will@kernel.org>
+ <9bd06b193e7fb859a1207bb1302b7597@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d7dfc12ca87d65fad79bfe2cd697a28d@kernel.org>
+In-Reply-To: <9bd06b193e7fb859a1207bb1302b7597@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 10:25:06AM +0000, Marc Zyngier wrote:
+On Fri, Nov 27, 2020 at 10:26:47AM +0000, Marc Zyngier wrote:
 > On 2020-11-24 15:50, Will Deacon wrote:
-> > When confronted with a mixture of CPUs, some of which support 32-bit
-> > applications and others which don't, we quite sensibly treat the system
-> > as 64-bit only for userspace and prevent execve() of 32-bit binaries.
+> > If a vCPU is caught running 32-bit code on a system with mismatched
+> > support at EL0, then we should kill it.
 > > 
-> > Unfortunately, some crazy folks have decided to build systems like this
-> > with the intention of running 32-bit applications, so relax our
-> > sanitisation logic to continue to advertise 32-bit support to userspace
-> > on these systems and track the real 32-bit capable cores in a cpumask
-> > instead. For now, the default behaviour remains but will be tied to
-> > a command-line option in a later patch.
-> > 
+> > Acked-by: Marc Zyngier <maz@kernel.org>
 > > Signed-off-by: Will Deacon <will@kernel.org>
 > > ---
-> >  arch/arm64/include/asm/cpucaps.h    |   2 +-
-> >  arch/arm64/include/asm/cpufeature.h |   8 ++-
-> >  arch/arm64/kernel/cpufeature.c      | 106 ++++++++++++++++++++++++++--
-> >  3 files changed, 107 insertions(+), 9 deletions(-)
+> >  arch/arm64/kvm/arm.c | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
 > > 
-> > diff --git a/arch/arm64/include/asm/cpucaps.h
-> > b/arch/arm64/include/asm/cpucaps.h
-> > index e7d98997c09c..e6f0eb4643a0 100644
-> > --- a/arch/arm64/include/asm/cpucaps.h
-> > +++ b/arch/arm64/include/asm/cpucaps.h
-> > @@ -20,7 +20,7 @@
-> >  #define ARM64_ALT_PAN_NOT_UAO			10
-> >  #define ARM64_HAS_VIRT_HOST_EXTN		11
-> >  #define ARM64_WORKAROUND_CAVIUM_27456		12
-> > -#define ARM64_HAS_32BIT_EL0			13
-> > +#define ARM64_HAS_32BIT_EL0_DO_NOT_USE		13
-> >  #define ARM64_HARDEN_EL2_VECTORS		14
-> >  #define ARM64_HAS_CNP				15
-> >  #define ARM64_HAS_NO_FPSIMD			16
-> > diff --git a/arch/arm64/include/asm/cpufeature.h
-> > b/arch/arm64/include/asm/cpufeature.h
-> > index 97244d4feca9..f447d313a9c5 100644
-> > --- a/arch/arm64/include/asm/cpufeature.h
-> > +++ b/arch/arm64/include/asm/cpufeature.h
-> > @@ -604,9 +604,15 @@ static inline bool
-> > cpu_supports_mixed_endian_el0(void)
-> >  	return id_aa64mmfr0_mixed_endian_el0(read_cpuid(ID_AA64MMFR0_EL1));
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 5750ec34960e..d322ac0f4a8e 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -633,6 +633,15 @@ static void check_vcpu_requests(struct kvm_vcpu
+> > *vcpu)
+> >  	}
 > >  }
 > > 
-> > +const struct cpumask *system_32bit_el0_cpumask(void);
-> > +DECLARE_STATIC_KEY_FALSE(arm64_mismatched_32bit_el0);
+> > +static bool vcpu_mode_is_bad_32bit(struct kvm_vcpu *vcpu)
+> > +{
+> > +	if (likely(!vcpu_mode_is_32bit(vcpu)))
+> > +		return false;
 > > +
-> >  static inline bool system_supports_32bit_el0(void)
-> >  {
-> > -	return cpus_have_const_cap(ARM64_HAS_32BIT_EL0);
-> > +	u64 pfr0 = read_sanitised_ftr_reg(SYS_ID_AA64PFR0_EL1);
+> > +	return !system_supports_32bit_el0() ||
+> > +		static_branch_unlikely(&arm64_mismatched_32bit_el0);
+> > +}
 > > +
-> > +	return id_aa64pfr0_32bit_el0(pfr0) ||
-> > +	       static_branch_unlikely(&arm64_mismatched_32bit_el0);
+> >  /**
+> >   * kvm_arch_vcpu_ioctl_run - the main VCPU run function to execute
+> > guest code
+> >   * @vcpu:	The VCPU pointer
+> > @@ -816,7 +825,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> >  		 * with the asymmetric AArch32 case), return to userspace with
+> >  		 * a fatal error.
+> >  		 */
+> > -		if (!system_supports_32bit_el0() && vcpu_mode_is_32bit(vcpu)) {
+> > +		if (vcpu_mode_is_bad_32bit(vcpu)) {
+> >  			/*
+> >  			 * As we have caught the guest red-handed, decide that
+> >  			 * it isn't fit for purpose anymore by making the vcpu
 > 
-> nit: swapping the two sides of this expression has the potential
-> for slightly better code, resulting in better performance on
-> these asymmetric systems. Not a big real, but since this lands
-> on the fast path on vcpu exit, I'll take every bit of optimisation.
+> Given the new definition of system_supports_32bit_el0() in the previous
+> patch,
+> why do we need this patch at all?
 
-I'll swap 'em, thanks.
+I think the check is still needed, as this is an unusual case where we
+want to reject the mismatched system. For example, imagine
+'arm64_mismatched_32bit_el0' is true and we're on a mismatched system: in
+this case system_supports_32bit_el0() will return 'true' because we
+allow 32-bit applications to run, we support the 32-bit personality etc.
+
+However, we still want to terminate 32-bit vCPUs if we spot them in this
+situation, so we have to check for:
+
+	!system_supports_32bit_el0() ||
+	static_branch_unlikely(&arm64_mismatched_32bit_el0)
+
+so that we only allow 32-bit vCPUs when all of the physical CPUs support
+it at EL0.
+
+I could make this clearer either by adding a comment, or avoiding
+system_supports_32bit_el0() entirely here and just checking the
+sanitised SYS_ID_AA64PFR0_EL1 register directly instead.
+
+What do you prefer?
 
 Will
