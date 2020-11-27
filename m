@@ -2,118 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 922AC2C61B7
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 10:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDAB2C623E
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 10:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgK0Jau (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Nov 2020 04:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S1728629AbgK0Jtr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Nov 2020 04:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbgK0Jat (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Nov 2020 04:30:49 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C047C0613D1;
-        Fri, 27 Nov 2020 01:30:49 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id w24so5886187wmi.0;
-        Fri, 27 Nov 2020 01:30:49 -0800 (PST)
+        with ESMTP id S1727707AbgK0Jtq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Nov 2020 04:49:46 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C6CC0613D1
+        for <linux-arch@vger.kernel.org>; Fri, 27 Nov 2020 01:49:45 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id p8so4898135wrx.5
+        for <linux-arch@vger.kernel.org>; Fri, 27 Nov 2020 01:49:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nugmvnf9RyCLTrUTV0QpRDumZd95otaQgvkhBHEAu7E=;
-        b=NlBZ/29o2yYLP8MbXhcI0F/PK0kEPTH3DFAdsLeeBcKpyteYi9dRQF9ylidoQVa8mm
-         wDQo91JF0o+zGG+JQfgfK6BkZjX82P8EjLsRWx/5cqEzKRROufYECgf+j0pw6mGYPkUH
-         sR993CVob6DqaGsTSWrdsPcNVJRt4903vj/s1xKyfqcmpI+ndEIR6sAVLvmHTKwojyeS
-         1FmpUy0S5XSL/DisUf+Y50goYPvscoOF0CpFIXeENbqCBbwbUYP8yJGdaXkBr/PSGiuZ
-         bWXkBs0Zb29qWAvBFFe12QRmj0orYSJxdMIl6TUic2Kw6MKlS8ATWm/rFrS8g+sEJLvb
-         xCJg==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SpT5mux3bkiG98XNqiWb/4fRNdxP5kYN/sKhC7Wqp5Y=;
+        b=ShlgV2ihO15dKzZF7Q5JSurKvH/8b7WBrfBL3rXm98DSM65G0173YTWVI9zUisZ9z+
+         s+srz7LcMlSJQVJgzweKt8t2Hh7GK5ff2Dkk3yXXtU3U0OgiBdlN5H601dPQZBpgoLRJ
+         +ehhVD1z9uyWz9+aNcNOk8JE7SFYC+bNaorZR4oRE0oYR/0Ti/9s5/kaiiYrNDnzDF8w
+         UkvfSFi4ASF4ELof6dCRRyPAa0AUptDfA+snYkAsPbzosOCQN13+EJNJFneHlrXy6t1+
+         VLiALeOUTEJK2w1CAVJeZdDshRolAhPrfpgyb69Z+LDQ7m4VbZlHCQ1RIykRu+UluUac
+         TpBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nugmvnf9RyCLTrUTV0QpRDumZd95otaQgvkhBHEAu7E=;
-        b=QGr3Y1ljEWL8CMjFMbMaoQa/PJKiiZlGdy6YdDPAnKnZ9sfM++T1aiMuNufnVV+y3k
-         8DryLpCibbrQbKKps2O+/lUX5YxmdzLjSa8HQdcRbBwDEEvrsUPw9Fk2zCngFmO2Outa
-         VjyBExtTOIzYxdUB1pkwREvOxvpcFATSAU9mwtfag6RKAAhRadr4VPMFdbtkqOQhSjlU
-         dJ8V2N+s0vbav1BeNWTJ3AhYGMwGr2byIESSeUaaZLkSAtIZYWDIxQNKw5BbaBYrsFcQ
-         pG5Elcvpx3PkFvwbgYfOWYsU/CMXdp59/a/081whZy27YWme5AjMsRnHn9zWApBOKX3b
-         dXdQ==
-X-Gm-Message-State: AOAM533MNR7rrOFmXawy8NpEUf/wpCn/dNbrdXPAyhjaAuXvqTJat8Q5
-        ls3i+OKuWM/uiFZc7ZuZ6GkqiHvPLO32KQ==
-X-Google-Smtp-Source: ABdhPJwBs+sLle0BSQ86bLNV9Pc6YbzoxSFdD/QjRGIfOKtQxVLou0Ml7WPz3t0ZVfryaCsqHyBg0Q==
-X-Received: by 2002:a7b:c34a:: with SMTP id l10mr7798201wmj.125.1606469446708;
-        Fri, 27 Nov 2020 01:30:46 -0800 (PST)
-Received: from ?IPv6:2001:a61:24b3:de01:7310:e730:497d:ea6a? ([2001:a61:24b3:de01:7310:e730:497d:ea6a])
-        by smtp.gmail.com with ESMTPSA id l23sm11535934wmh.40.2020.11.27.01.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2020 01:30:45 -0800 (PST)
-Cc:     mtk.manpages@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        luto@kernel.org, x86@kernel.org, len.brown@intel.com,
-        dave.hansen@intel.com, hjl.tools@gmail.com, Dave.Martin@arm.com,
-        mpe@ellerman.id.au, tony.luck@intel.com, ravi.v.shankar@intel.com,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: Re: [PATCH v2 2/4] x86/elf: Support a new ELF aux vector
- AT_MINSIGSTKSZ
-To:     Borislav Petkov <bp@suse.de>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>
-References: <20201119190237.626-1-chang.seok.bae@intel.com>
- <20201119190237.626-3-chang.seok.bae@intel.com>
- <20201126174418.GA29770@zn.tnic>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <7b2b1f7f-75e5-01ab-7571-71340825d299@gmail.com>
-Date:   Fri, 27 Nov 2020 10:30:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SpT5mux3bkiG98XNqiWb/4fRNdxP5kYN/sKhC7Wqp5Y=;
+        b=D04YCRYShK3z5YlnYazwt2YA67QYfmt6OSTdpB7FWcKvVMcXD+osHADa3rJeaxPHsL
+         sgcFuNh6KojBS2/asPqE7l6phVQX9clh/FDufioqE2y9jXbpA8UwRbJ7E0RmYxpx/ABR
+         A6Mg9OplGisIbPokSzNJ+5sLU8uRXj6JGM9t0Fflxkv97LTieK5i1sfpBmvRGX40u3WO
+         eTCfdcw+4bS0dC7H9Zwiz3coDRD0QK1KDkeqwNdx7LCj05EZr50VeJ1eJpHiVggBM4yc
+         TaSCGnQr/PqGfnvkSRTQKjd030mYVSyCWTzZYrunF9YFLFy/0NTC1QwUF+t6Hm20VRMD
+         EhOQ==
+X-Gm-Message-State: AOAM531xYeWF7XOazUDDNP4lFu95CRJaLpDQb3u0IxOC9k88j3x937L1
+        llTcI7d0q8NAbD0p47F1iZE+jg==
+X-Google-Smtp-Source: ABdhPJzEeC7rSvqMDDBHhuFjpH6cfspj1JR8WUhh8BLlTEHIhPiXR/gY7Yq5b2S9zICmvRBnj1UkMg==
+X-Received: by 2002:adf:e449:: with SMTP id t9mr9451492wrm.257.1606470584483;
+        Fri, 27 Nov 2020 01:49:44 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:210:f693:9fff:fef4:a7ef])
+        by smtp.gmail.com with ESMTPSA id g131sm13545886wma.35.2020.11.27.01.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2020 01:49:43 -0800 (PST)
+Date:   Fri, 27 Nov 2020 09:49:40 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 07/14] sched: Introduce restrict_cpus_allowed_ptr() to
+ limit task CPU affinity
+Message-ID: <20201127094940.GA906877@google.com>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-8-will@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20201126174418.GA29770@zn.tnic>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201124155039.13804-8-will@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hey Dave Marin,
+On Tuesday 24 Nov 2020 at 15:50:32 (+0000), Will Deacon wrote:
+> Asymmetric systems may not offer the same level of userspace ISA support
+> across all CPUs, meaning that some applications cannot be executed by
+> some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
+> not feature support for 32-bit applications on both clusters.
+> 
+> Although userspace can carefully manage the affinity masks for such
+> tasks, one place where it is particularly problematic is execve()
+> because the CPU on which the execve() is occurring may be incompatible
+> with the new application image. In such a situation, it is desirable to
+> restrict the affinity mask of the task and ensure that the new image is
+> entered on a compatible CPU. From userspace's point of view, this looks
+> the same as if the incompatible CPUs have been hotplugged off in its
+> affinity mask.
+> 
+> In preparation for restricting the affinity mask for compat tasks on
+> arm64 systems without uniform support for 32-bit applications, introduce
+> a restrict_cpus_allowed_ptr(), which allows the current affinity mask
+> for a task to be shrunk to the intersection of a parameter mask.
+> 
+> Signed-off-by: Will Deacon <will@kernel.org>
 
-On 11/26/20 6:44 PM, Borislav Petkov wrote:
-> On Thu, Nov 19, 2020 at 11:02:35AM -0800, Chang S. Bae wrote:
->> Historically, signal.h defines MINSIGSTKSZ (2KB) and SIGSTKSZ (8KB), for
->> use by all architectures with sigaltstack(2). Over time, the hardware state
->> size grew, but these constants did not evolve. Today, literal use of these
->> constants on several architectures may result in signal stack overflow, and
->> thus user data corruption.
->>
->> A few years ago, the ARM team addressed this issue by establishing
->> getauxval(AT_MINSIGSTKSZ), such that the kernel can supply at runtime value
->> that is an appropriate replacement on the current and future hardware.
->>
->> Add getauxval(AT_MINSIGSTKSZ) support to x86, analogous to the support
->> added for ARM in commit 94b07c1f8c39 ("arm64: signal: Report signal frame
->> size to userspace via auxv").
-> 
-> I don't see it documented here:
-> 
-> https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man3/getauxval.3
-> 
-> Dunno, now that two architectures will have it, maybe that is good
-> enough reason to document it.
-> 
-> Adding Michael.
-
-Commit 94b07c1f8c39 was your, Dave. Might I convince you to write a 
-patch for getauxval(3)?
+Reviewed-by: Quentin Perret <qperret@google.com>
 
 Thanks,
-
-
-Michael
-
-
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+Quentin
