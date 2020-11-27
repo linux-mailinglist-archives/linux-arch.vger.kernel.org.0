@@ -2,94 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 588E82C6D3A
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Nov 2020 23:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0879F2C6DF0
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 01:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730248AbgK0Wal (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Nov 2020 17:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731500AbgK0Waa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Nov 2020 17:30:30 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2F9C0613D1;
-        Fri, 27 Nov 2020 14:30:28 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id y9so5860035ilb.0;
-        Fri, 27 Nov 2020 14:30:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/o9AB5sxFmB6P6+LlPx890WM9LW9SfDitLHJttzL1v4=;
-        b=djRq0/yxMPI5MCFmd23Vg22J3XiZVe07Ouzsl7ZNOI2Bzc1L7Z9JjLUCjdvvoLC+vZ
-         e9XNtcgKrHOMuQ7TftT3nsXC69V+9e1zk/Js7aRkvaK2cwVJ7Cw9DMmKQK3obv51u1Tj
-         jkdyRnrZQ4SAN0y36BeskYrOUcuHbNOXxY63Dy1EYZcLnhSyr4pOtAE2DB5BZU308Gua
-         dG9WWdG5kgbTmkFRZxerVb1WYb7NYcJuapb4CtJiZO3Rcrfjl+x1Cfjsmi3oW+jP1GVo
-         LMLsZpQG0yJeJs94Xz2h9KBCUodN+p6qV2+9tpSgi/5Myv5/zZBkKifuw0Fn5Xy5sRh+
-         MKWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/o9AB5sxFmB6P6+LlPx890WM9LW9SfDitLHJttzL1v4=;
-        b=DHP2dxMGqvPon3b3+6p/txQznrZYuvDyas7DNZeqkOi96xwRTpRdlxSC5nXzj7qjmn
-         28SgLQT9iqHjCnW325lqBcRt7XJTrOoo+9/t/jexOTY/1fyZlaqj5dvVhvnCMUIL/024
-         A8wFwo/kpupGKtTlmUIMf3dy7KdKzY3wXvWwYcKDev/4itrvtKOObMzxFADpaHxRvWiX
-         Q+N3KBT9OtcWimbpEjI/EwBi/mBDXtEpWUx6WdjlSiFSRVQmvoOUoweU3TWcJ0/v6BCV
-         v+3w138jVKMMtLktUvPYu0BzJwnip7Esk4yEhmdHTqEU1kXwCL5dikFNx7Xe6taFZgC3
-         saQg==
-X-Gm-Message-State: AOAM533+aDUO7QHobCiMGGN0PJHrCXNIXDQFmF1Rp5fOTTL0Wod7+5qA
-        /GYdAph8S0F7x+RvjgtM3jYIogeK9DSDYBny3Q==
-X-Google-Smtp-Source: ABdhPJxAlJ9It81MGT+VkGPXRpNlnP/iJGMirRASXeYvPtuv4puDTMuHyfUfaeTAiUkHBUYPw/rfcAZOxRTd4aBV8u4=
-X-Received: by 2002:a92:c690:: with SMTP id o16mr8721220ilg.172.1606516227771;
- Fri, 27 Nov 2020 14:30:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20201126155246.25961-1-jack@suse.cz> <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
-In-Reply-To: <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Fri, 27 Nov 2020 17:30:15 -0500
-Message-ID: <CAMzpN2gADAWBoTgKEgepCHVKoqOw3T_D_W30Q2-vJtQpfn0jwg@mail.gmail.com>
-Subject: Re: [PATCH] fanotify: Fix fanotify_mark() on 32-bit x86
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726178AbgK0Xad (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Nov 2020 18:30:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728790AbgK0X3x (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 27 Nov 2020 18:29:53 -0500
+Subject: Re: [GIT PULL] asm-generic: add correct MAX_POSSIBLE_PHYSMEM_BITS setting
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606519792;
+        bh=Pm8QM5uOxr7zFCVrEdjYCdNWAyDxH5FBVu2CRm3k3Wc=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=hslpCcWGZWw+wy/omyWQKmSPaOgWgZ1yqLAHNPM87Oki5SbBwQUA48fW7n+zxsPrK
+         6KCcD1jtrlh6+7LcQUwQ2ERb5/rn4+e+GX+/agaOF7KZfEL9EP4lwnAFM7KIs/iPk/
+         H8bE2uCyvrG/k19p154JQkFkbqlws2GLHRdAM/h0=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK8P3a3eLXunBbxa=i4Z-tXnPwAt==xTg1_hs4TZq7w1LH2dng@mail.gmail.com>
+References: <CAK8P3a3eLXunBbxa=i4Z-tXnPwAt==xTg1_hs4TZq7w1LH2dng@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK8P3a3eLXunBbxa=i4Z-tXnPwAt==xTg1_hs4TZq7w1LH2dng@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-5.10-2
+X-PR-Tracked-Commit-Id: cef397038167ac15d085914493d6c86385773709
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c84e1efae022071a4fcf9f1899bf71777c49943a
+Message-Id: <160651979281.32137.14163803965999226530.pr-tracker-bot@kernel.org>
+Date:   Fri, 27 Nov 2020 23:29:52 +0000
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Stefan Agner <stefan@agner.ch>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 1:13 PM Andy Lutomirski <luto@kernel.org> wrote:
->
-> On Thu, Nov 26, 2020 at 7:52 AM Jan Kara <jack@suse.cz> wrote:
-> >
-> > Commit converting syscalls taking 64-bit arguments to new scheme of compat
-> > handlers omitted converting fanotify_mark(2) which then broke the
-> > syscall for 32-bit x86 builds. Add missed conversion. It is somewhat
-> > cumbersome since we need to keep the original compat handler for all the
-> > other 32-bit archs.
-> >
->
-> This is stupendously ugly.  I'm not really sure how this is supposed
-> to work on any 32-bit arch.  I'm also not sure whether we should
-> expect the SYSCALL_DEFINE macros to figure this out by themselves.
+The pull request you sent on Fri, 27 Nov 2020 21:55:52 +0100:
 
-It works on 32-bit arches because the compiler implicitly uses
-consecutive input registers or stack slots for 64-bit arguments, and
-some arches have alignment requirements that result in hidden padding.
-x86-32 is different now because parameters are passed in via pt_regs,
-and the 64-bit value has to explicitly be reassembled from the high
-and low 32-bit values, just like in the compat case.
+> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-5.10-2
 
-I think the simplest way to handle this is add a wrapper in
-arch/x86/kernel/sys_ia32.c with the other fs syscalls that need 64-bit
-args.  That keeps this mess out of general code.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c84e1efae022071a4fcf9f1899bf71777c49943a
 
---
-Brian Gerst
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
