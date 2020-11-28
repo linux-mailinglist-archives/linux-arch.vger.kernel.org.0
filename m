@@ -2,103 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 617952C725C
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407D02C72A4
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732128AbgK1VuT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S2389933AbgK1VuN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387441AbgK1TIH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 14:08:07 -0500
+        with ESMTP id S1729747AbgK1S3k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:29:40 -0500
 Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E77C09B04E;
-        Sat, 28 Nov 2020 07:27:10 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id w187so7047718pfd.5;
-        Sat, 28 Nov 2020 07:27:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B34C0258EE;
+        Sat, 28 Nov 2020 08:01:51 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id e8so7097822pfh.2;
+        Sat, 28 Nov 2020 08:01:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DNjSlcfmF+OHlo4gVLmadoYUI7t/ZPA6392s3YiGIWc=;
-        b=ZhyQyF3xqUCTfNzTWjnt5F47H7u0baAN9fFtRmD3iym4ZXUMOqum0cQhh3hWOctZwj
-         gPht2kBh0BvlDlTsq8TVE/kd5SPzqm9X89p6ZfrT7H3C/ioyQY5tgO574Ym+INLe4FYc
-         s21mRxDd6DGVyMY1fWbws1Pq/YhrjXB32LaWupdtbDbaxsW0QfJbAiHeuVFfQKfuXwL4
-         4JshxsnUfWHqQSkk+FnO+m1Flu7Wg1g/bOkeKaOJwHSdKSQC2TLM6Ybi/1wfBU+oOXqX
-         Ncoe8p+vMg2cCr2cs0+3oYuDvraNpEh/P6BLPY5BbX1hBeAPkFfbcGcv4oiBi8Qqp35b
-         wWXg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2O6qcQHJ1HIADKlavbzosnF3a3wMtszkYQ/PuPl66qI=;
+        b=CgE6KOyTfg3utDcRpZdx3wNg5OyhBXbYyc7PH8oa6j60BTtpQLlHDpvZodUSgtskAv
+         kqzv+kzRC8gJVu60u38BrPXBYCz+1pEo0KvxCwXjcwsZBMYy4UyOWOY3pEIZ4CakN9AD
+         IlOOeUveQZn2f5Ib6HdtyeE6Xd8O/3Ajz61BxBQaI2kgQLf9g57ysabjeDv/7CTlsJSV
+         6GIrzobXL4pzBVG6qscprgZn16B+G8oGEPy3hSkuzq1R6I3T2JlwKWSi3WfN7MY57x/P
+         zPH8/jK+/t1BSRextQVoRrJHkVB9PMJuGQ9K8ajrDnT+LwE9dGk9paNd5x5WY4BqSCif
+         XnDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DNjSlcfmF+OHlo4gVLmadoYUI7t/ZPA6392s3YiGIWc=;
-        b=hpToaxFilG1HP9rpvu+QEXihaYA2Dqt9DGAVkoZzIu2pn/yYfAUoPT8ZXo0WfyQghJ
-         hX1tcyngkhKr7WNfis+eV5lS5qSQ8fhdZ4Bk33ZnSurvD+YgX6IYXkFcyxwJdxZ2r5p/
-         kqgpZ10f+GNHetZeErewPDUSg4DUX31wsbTuRVFTJmals/Oth4yGj9S2JhLnE1vvheZ3
-         kBdIsMHDVdsz/RgbQd+rZpxwkAIvhZSpugSqE2oN/6rfZOcqhr65ykHFNnNHGhkUOGba
-         UGVb+6XummAzCO4r5YgOW4xvke0qo1gKHWVHNVCvAx4p0th3F0eiIkl5/TO1sg4+8p9n
-         +fcg==
-X-Gm-Message-State: AOAM531iEzUzXwbwSgjsnu54tpYm8RppwKSvXC62Sxatp3V7NjNjc/W0
-        y10AZn8k2fmK4olBI1zOIP4=
-X-Google-Smtp-Source: ABdhPJyr33fJ1cRT/CXJUB52w14TzTSG2z78e+wqJpSmyHM7mMK5eJZP/z+qSOVYdPM5WOeIlQODnQ==
-X-Received: by 2002:a17:90a:1b6f:: with SMTP id q102mr16974828pjq.9.1606577229927;
-        Sat, 28 Nov 2020 07:27:09 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2O6qcQHJ1HIADKlavbzosnF3a3wMtszkYQ/PuPl66qI=;
+        b=sdnVo1Y4H/oHWneo5uGHyD9ra7RcE7/+VdI98aGK3dZWNbw3Bs46Ta7iBy1Ku0I84s
+         w97ejLL2WE0iIaY4pTmXA3aY6BeJp3xs7WanNEpMaS45qfabQLCLcatYe98NAct3fm1m
+         opuxTHND7DaKJAXJAExjvwCOGyjMkpIXKfJRT4dooWBEl6Mn0miQkmPExxYqN4CHk2WB
+         +3HwKrY0ZhSvr6JlThziiG1CxDkgqgNWfhsByKEauQOWgv2CMDahdOz2ulkrsx7IBbtx
+         u3MSTXUDzDDIHMQtPDIWV9tVEORlq4gC0hFHsv4vDP1egcJqClba+fyiO9p6BfCj/1zQ
+         GLjQ==
+X-Gm-Message-State: AOAM531NEUKXjc/wpmaX3r8IKsB4MCELi32eX7rhufAxiVzOTxSRvIZZ
+        2aITcwaBGyjCwp8Rop0U9UaO6gVxi7k=
+X-Google-Smtp-Source: ABdhPJwuiEos39Kd+yWnNTMmDC8yimmI7zJPon0FpMljcy6a+V40CGpf8EDqJAwgKioFXcJ84fR1pw==
+X-Received: by 2002:a17:90a:f695:: with SMTP id cl21mr16872124pjb.137.1606579310741;
+        Sat, 28 Nov 2020 08:01:50 -0800 (PST)
 Received: from bobo.ibm.com (193-116-103-132.tpgi.com.au. [193.116.103.132])
-        by smtp.gmail.com with ESMTPSA id d22sm15500173pjw.11.2020.11.28.07.27.05
+        by smtp.gmail.com with ESMTPSA id d4sm9762607pjz.28.2020.11.28.08.01.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2020 07:27:09 -0800 (PST)
+        Sat, 28 Nov 2020 08:01:50 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+To:     linux-kernel@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
         linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Zefan Li <lizefan@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v8 12/12] powerpc/64s/radix: Enable huge vmalloc mappings
-Date:   Sun, 29 Nov 2020 01:25:59 +1000
-Message-Id: <20201128152559.999540-13-npiggin@gmail.com>
+        linux-mm@kvack.org, Anton Blanchard <anton@ozlabs.org>
+Subject: [PATCH 0/8] shoot lazy tlbs
+Date:   Sun, 29 Nov 2020 02:01:33 +1000
+Message-Id: <20201128160141.1003903-1-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20201128152559.999540-1-npiggin@gmail.com>
-References: <20201128152559.999540-1-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Cc: linuxppc-dev@lists.ozlabs.org
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 2 ++
- arch/powerpc/Kconfig                            | 1 +
- 2 files changed, 3 insertions(+)
+This is a rebase now on top of Arnd's asm-generic tree, which has
+reduced most of the fluff from this patch series.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 44fde25bb221..3538c750c583 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3220,6 +3220,8 @@
- 
- 	nohugeiomap	[KNL,X86,PPC,ARM64] Disable kernel huge I/O mappings.
- 
-+	nohugevmalloc	[PPC] Disable kernel huge vmalloc mappings.
-+
- 	nosmt		[KNL,S390] Disable symmetric multithreading (SMT).
- 			Equivalent to smt=1.
- 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index e9f13fe08492..ae10381dd324 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -178,6 +178,7 @@ config PPC
- 	select GENERIC_TIME_VSYSCALL
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HUGE_VMAP		if PPC_BOOK3S_64 && PPC_RADIX_MMU
-+	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <= 14
- 	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <= 14
+The x86 refactoring is still in the way a bit, I hope to get some
+movement on that rather than rebase the main patches off it, because
+I think it's a good cleanup. I think it could go in a generic
+mm/scheduler series if we get arch acks because it's really just
+refactoring wrappers.
+
+The main result is reduced contention on lazy tlb mm refcount that
+helps very big systems.
+
+Thanks,
+Nick
+
+Nicholas Piggin (8):
+  lazy tlb: introduce exit_lazy_tlb
+  x86: use exit_lazy_tlb rather than
+    membarrier_mm_sync_core_before_usermode
+  x86: remove ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+  lazy tlb: introduce lazy mm refcount helper functions
+  lazy tlb: allow lazy tlb mm switching to be configurable
+  lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+  powerpc: use lazy mm refcount helper functions
+  powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
+
+ .../membarrier-sync-core/arch-support.txt     |  6 +-
+ arch/Kconfig                                  | 24 +++++
+ arch/arm/mach-rpc/ecard.c                     |  3 +-
+ arch/powerpc/Kconfig                          |  1 +
+ arch/powerpc/kernel/smp.c                     |  2 +-
+ arch/powerpc/mm/book3s64/radix_tlb.c          |  5 +-
+ arch/x86/Kconfig                              |  1 -
+ arch/x86/include/asm/mmu_context.h            | 27 ++++++
+ arch/x86/kernel/alternative.c                 |  2 +-
+ arch/x86/kernel/cpu/mce/core.c                |  2 +-
+ drivers/misc/sgi-gru/grufault.c               |  2 +-
+ drivers/misc/sgi-gru/gruhandles.c             |  2 +-
+ drivers/misc/sgi-gru/grukservices.c           |  2 +-
+ fs/exec.c                                     |  6 +-
+ include/asm-generic/mmu_context.h             | 21 ++++
+ include/linux/sched/mm.h                      | 34 ++++---
+ include/linux/sync_core.h                     | 21 ----
+ init/Kconfig                                  |  3 -
+ kernel/cpu.c                                  |  6 +-
+ kernel/exit.c                                 |  2 +-
+ kernel/fork.c                                 | 53 ++++++++++
+ kernel/kthread.c                              | 12 ++-
+ kernel/sched/core.c                           | 97 +++++++++++++------
+ kernel/sched/sched.h                          |  4 +-
+ 24 files changed, 247 insertions(+), 91 deletions(-)
+ delete mode 100644 include/linux/sync_core.h
+
 -- 
 2.23.0
 
