@@ -2,33 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4B32C7296
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913EB2C72B1
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389906AbgK1VuL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:11 -0500
-Received: from mga02.intel.com ([134.134.136.20]:19349 "EHLO mga02.intel.com"
+        id S1728851AbgK1VuP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:15 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19858 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729533AbgK1S16 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 28 Nov 2020 13:27:58 -0500
-IronPort-SDR: OPOyZK1VZCtm/BBuZIpqX0JXtqLhMjp5uT/fRk3byxVsjAQ3AiAWZ2Su4mqrBuXDaudff1L3mF
- ASoqTe2vahHQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9819"; a="159537056"
+        id S1730015AbgK1Se6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 28 Nov 2020 13:34:58 -0500
+IronPort-SDR: yZ5ypykwZaqAGwmfTPK4ggSzuCyzMIvoDmRZL7zSoZIZEOa9o+RVKR26mUKKrIeDxDvC6HhEuX
+ GqfPTFIoLfBg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9819"; a="159537387"
 X-IronPort-AV: E=Sophos;i="5.78,377,1599548400"; 
-   d="scan'208";a="159537056"
+   d="scan'208";a="159537387"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 08:24:00 -0800
-IronPort-SDR: FDIYYBr2hlKPLMbEhzG7QTIT1dc8+Q0vPjFxJnrDDSbotYpzRlODAOgHg1F1ZOFB7gou8+8goX
- dGWqsJsDMvIw==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 08:31:04 -0800
+IronPort-SDR: +n7zX3+y7NU8HyCqky6ikXcGlW5FSpcq0oLNmMMVjen8KqccfxO8hC+osTPgLafcCAfE1F3j1x
+ QRE+JF0pkCEw==
 X-IronPort-AV: E=Sophos;i="5.78,377,1599548400"; 
-   d="scan'208";a="480006706"
+   d="scan'208";a="480007886"
 Received: from jckaplan-mobl1.amr.corp.intel.com (HELO [10.212.23.254]) ([10.212.23.254])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 08:23:59 -0800
-Subject: Re: [PATCH v15 05/26] x86/cet/shstk: Add Kconfig option for user-mode
- Shadow Stack
-To:     Borislav Petkov <bp@alien8.de>
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 08:31:02 -0800
+Subject: Re: [PATCH v15 00/26] Control-flow Enforcement: Shadow Stack
+To:     Balbir Singh <bsingharora@gmail.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -36,7 +35,7 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -55,15 +54,14 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
- <20201110162211.9207-6-yu-cheng.yu@intel.com>
- <20201127171012.GD13163@zn.tnic>
+ <20201127092905.GB473773@balbir-desktop>
 From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <98e1b159-bf32-5c67-455b-f798023770ef@intel.com>
-Date:   Sat, 28 Nov 2020 08:23:59 -0800
+Message-ID: <60d3c72c-b85f-88ac-c79b-1340445bb228@intel.com>
+Date:   Sat, 28 Nov 2020 08:31:02 -0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.1
 MIME-Version: 1.0
-In-Reply-To: <20201127171012.GD13163@zn.tnic>
+In-Reply-To: <20201127092905.GB473773@balbir-desktop>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,81 +69,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/27/2020 9:10 AM, Borislav Petkov wrote:
-> On Tue, Nov 10, 2020 at 08:21:50AM -0800, Yu-cheng Yu wrote:
->> +config X86_CET
->> +	def_bool n
->> +
->> +config ARCH_HAS_SHADOW_STACK
->> +	def_bool n
->> +
->> +config X86_SHADOW_STACK_USER
+On 11/27/2020 1:29 AM, Balbir Singh wrote:
+> On Tue, Nov 10, 2020 at 08:21:45AM -0800, Yu-cheng Yu wrote:
+>> Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+>> return/jump-oriented programming attacks.  Details are in "Intel 64 and
+>> IA-32 Architectures Software Developer's Manual" [1].
+>>
+>> CET can protect applications and the kernel.  This series enables only
+>> application-level protection, and has three parts:
+>>
+>>    - Shadow stack [2],
+>>    - Indirect branch tracking [3], and
+>>    - Selftests [4].
+>>
+>> I have run tests on these patches for quite some time, and they have been
+>> very stable.  Linux distributions with CET are available now, and Intel
+>> processors with CET are becoming available.  It would be nice if CET
+>> support can be accepted into the kernel.  I will be working to address any
+>> issues should they come up.
+>>
 > 
-> Is X86_SHADOW_STACK_KERNEL coming too?
-> 
-> Regardless, you can add it when it comes and you can use only X86_CET
-> for now and drop this one and simplify this pile of Kconfig symbols.
-
-We have X86_BRANCH_TRACKING_USER too.  My thought was, X86_CET means any 
-of kernel/user shadow stack/ibt.
-
-> 
->> +	prompt "Intel Shadow Stacks for user-mode"
->> +	def_bool n
->> +	depends on CPU_SUP_INTEL && X86_64
->> +	depends on AS_HAS_SHADOW_STACK
->> +	select ARCH_USES_HIGH_VMA_FLAGS
->> +	select X86_CET
->> +	select ARCH_HAS_SHADOW_STACK
->> +	help
->> +	  Shadow Stacks provides protection against program stack
->> +	  corruption.  It's a hardware feature.  This only matters
->> +	  if you have the right hardware.  It's a security hardening
->> +	  feature and apps must be enabled to use it.  You get no
->> +	  protection "for free" on old userspace.  The hardware can
->> +	  support user and kernel, but this option is for user space
->> +	  only.
->> +	  Support for this feature is only known to be present on
->> +	  processors released in 2020 or later.  CET features are also
->> +	  known to increase kernel text size by 3.7 KB.
-> 
-> This help text needs some rewriting. You can find an inspiration about
-> more adequate style in that same Kconfig file.
+> Is there a way to run these patches for testing? Bochs emulation or anything
+> else? I presume you've been testing against violations of CET in user space?
+> Can you share your testing?
+>   
+> Balbir Singh.
 > 
 
-I will work on it.
+Machines with CET are already available on the market.  I tested these 
+on real machines with Fedora.  There is a quick test in my earlier 
+selftest patches:
 
->> +
->> +	  If unsure, say N.
->> +
->>   config EFI
->>   	bool "EFI runtime service support"
->>   	depends on ACPI
->> diff --git a/scripts/as-x86_64-has-shadow-stack.sh b/scripts/as-x86_64-has-shadow-stack.sh
->> new file mode 100755
->> index 000000000000..fac1d363a1b8
->> --- /dev/null
->> +++ b/scripts/as-x86_64-has-shadow-stack.sh
->> @@ -0,0 +1,4 @@
->> +#!/bin/sh
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +echo "wrussq %rax, (%rbx)" | $* -x assembler -c -
-> 
-> 						      2> /dev/null
-> 
-> otherwise you get
-> 
-> {standard input}: Assembler messages:
-> {standard input}:1: Error: no such instruction: `wrussq %rax,(%rbx)
-> 
-> on non-enlightened toolchains during build.
-> 
+https://lore.kernel.org/linux-api/20200521211720.20236-6-yu-cheng.yu@intel.com/
 
-Yes, I will fix this in the next revision.
-
+Thanks,
 Yu-cheng
-
-> Thx.
-> 
-
