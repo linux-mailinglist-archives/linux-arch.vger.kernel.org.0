@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC302C729E
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F052C7293
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389929AbgK1VuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S2389915AbgK1VuL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729610AbgK1S17 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:27:59 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847EBC0258F0;
-        Sat, 28 Nov 2020 08:02:00 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id t37so6718764pga.7;
-        Sat, 28 Nov 2020 08:02:00 -0800 (PST)
+        with ESMTP id S1729592AbgK1S16 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:27:58 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8BBC0258F1;
+        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id w187so7095573pfd.5;
+        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6Twyf0/RNSa3vRRlfp1Oet03l6vxb8aXJKdhGNWclcs=;
-        b=tOVJyMY59cAHL0Zzh3IdRygvgG/jwamJDHuys8IGkS0xRl9q8lB2RMbbQR9JlnInyL
-         Eiuv17njNNKkWNknihj7Gt/Y7sYfrxSdsi8OC7T/3P/067pVTZC+d6GwyK3b+oxynnHv
-         ualnu2jlm8a7xOIh0iPc0la4kJAcrDbOYjgazdmLJTBG3CCm2GZT9ruRdlt+io/y2DTA
-         aei7B3l2rG8ORKFGCWYu5he3af+ipX4rgqppNP+1mnOSxSOHvlzwY6p9/sqY9ECmBnHP
-         u2Uj3PTMr7YGFUnRDq3YRKNrLuM3DfdvKxH7KW1/3XGwL0QQe7tOEpxh9XVVA/35Gknb
-         kQdQ==
+        bh=oqskVFo4rCcY4G7AX3q/Z2vOLhCcdMU13oOzjm6oOQI=;
+        b=hAkQC7bxM/rt+UgL+n2DK2GVPrv7Fvv8VOFfmVyChH9mG2M8V1dhWuexs7FMt4k/VH
+         00X2IJnPJZxukN07v+6IUoaQEfrLRCAqYOOlZ5fq8l1BvW7IrGtlw1huOZSLzz2y0SZx
+         3ChCeIKf/3CDuf5o8vxiVXRbP+dl0i3USN+GGPFeVf1n0aup+2heHkiGuTtTAlOIHxup
+         yVXQkUUka7ppthU1cQ04gq4WktB3u20vnaqT8BvQDxOruSqzz3f4f2+uoHUVHCc17E5Q
+         QRBdGNwQLOrc1P3jbriPiXC3R/Y7g87L4RcqcZA6HPgDlB6tEXZDAiIKBbkorJcDGkrE
+         lHsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6Twyf0/RNSa3vRRlfp1Oet03l6vxb8aXJKdhGNWclcs=;
-        b=hP34e20CU9o4AaHIPw6e4UhS1zacrDd56C6T+4W7nqPFTP7XNxqS5u3gSLjBmSWUTw
-         mgFTykx6VtXD7hW4mKu8WAQ+KJTfo25WudzPeG/B1MSzC4/gi5aHMMj8RxrmjJX+h8Vv
-         kJ6Mq9l3m2K/s08YzwYQVLqzIbQ76foliznB1fZHkb/o/orWMLL+Ghy/os1sAN8kEPwg
-         FH4zC/5H6L3Mii33eeT2Rl3YGXXr2KQRnUK6eSpDpCdnJYodoScJ33RcCrcvkIIKXmmy
-         w6nMaa72CzCjLoCHxp+0gssIqqZZh9Vn6iC8dco+vsLXAKWvzR870ICxi3DchMcEPuZM
-         Ia+g==
-X-Gm-Message-State: AOAM531iA7g4KLcI0R2mC/4Pfu1AZJHFgMiV4MUThy+IeXd4XXjnWrkp
-        tWfiWyLRk1umC32xoMZa5g9y8MYQ9pY=
-X-Google-Smtp-Source: ABdhPJwmFPhtuAX9fmgjTV1NdLL+hs+IbGGuWhOPDdSX9td7UVffTtdAIrAze3tOKAkjX2mNhJn8wA==
-X-Received: by 2002:a17:90a:460b:: with SMTP id w11mr16545731pjg.12.1606579319860;
-        Sat, 28 Nov 2020 08:01:59 -0800 (PST)
+        bh=oqskVFo4rCcY4G7AX3q/Z2vOLhCcdMU13oOzjm6oOQI=;
+        b=Xh8eG8cCm0GD3YosyqgkZOkQW0n7cXe/feI3DqhyA1gkJuNSNlJ3koyKsuiB28O2KR
+         EtwkY6UF4BjhHpqAopqRw0tIjgsCm2Mph4RJh8buMr6J6wtCF/khAlYDl0UlNLj9Ez6w
+         dOxp3uKaN+rPaxyHi/G0JaseArVwS5qNhdHcbFVLxIdmiS22dYSZSjkT0Ravmwhb0DiN
+         59cvrvwAry0eRuJgYkXiqF+wCoVRIiKjcIBnmtsl6re8+cFxEXd/rUfeDb4eiVrm53zP
+         8MmsVcFjFLuMNYGQHaWlsdXdn6yvaqkKCFDS9BRWVBXVOMB8QHz7tV08Csohv/bpn86C
+         BQ/w==
+X-Gm-Message-State: AOAM533YXSTWFCiA1jPKOt1qNwIn545R62/sAF4KEhdOL6kw2bkikvcq
+        zdooPW6EMf+gZtV+siOUPJNxU1CE0Ng=
+X-Google-Smtp-Source: ABdhPJzGaihamaR9rIxqQPEuAuhYCkZ5jY/oI8W/R+Ypcsv9gPzHWmICwyEssj9w/cCRebDK8ONgCg==
+X-Received: by 2002:a17:90a:f0d4:: with SMTP id fa20mr13620976pjb.129.1606579324386;
+        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
 Received: from bobo.ibm.com (193-116-103-132.tpgi.com.au. [193.116.103.132])
-        by smtp.gmail.com with ESMTPSA id d4sm9762607pjz.28.2020.11.28.08.01.55
+        by smtp.gmail.com with ESMTPSA id d4sm9762607pjz.28.2020.11.28.08.02.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2020 08:01:59 -0800 (PST)
+        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
@@ -55,9 +55,9 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-mm@kvack.org, Anton Blanchard <anton@ozlabs.org>
-Subject: [PATCH 2/8] x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
-Date:   Sun, 29 Nov 2020 02:01:35 +1000
-Message-Id: <20201128160141.1003903-3-npiggin@gmail.com>
+Subject: [PATCH 3/8] x86: remove ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+Date:   Sun, 29 Nov 2020 02:01:36 +1000
+Message-Id: <20201128160141.1003903-4-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20201128160141.1003903-1-npiggin@gmail.com>
 References: <20201128160141.1003903-1-npiggin@gmail.com>
@@ -67,203 +67,150 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-And get rid of the generic sync_core_before_usermode facility. This is
-functionally a no-op in the core scheduler code, but it also catches
-
-This helper is the wrong way around I think. The idea that membarrier
-state requires a core sync before returning to user is the easy one
-that does not need hiding behind membarrier calls. The gap in core
-synchronization due to x86's sysret/sysexit and lazy tlb mode, is the
-tricky detail that is better put in x86 lazy tlb code.
-
-Consider if an arch did not synchronize core in switch_mm either, then
-membarrier_mm_sync_core_before_usermode would be in the wrong place
-but arch specific mmu context functions would still be the right place.
-There is also a exit_lazy_tlb case that is not covered by this call, which
-could be a bugs (kthread use mm the membarrier process's mm then context
-switch back to the process without switching mm or lazy mm switch).
-
-This makes lazy tlb code a bit more modular.
+Switch remaining x86-specific users to asm/sync_core.h, remove the
+linux/sync_core.h header and ARCH_ option.
 
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- .../membarrier-sync-core/arch-support.txt     |  6 ++++-
- arch/x86/include/asm/mmu_context.h            | 27 +++++++++++++++++++
- include/linux/sched/mm.h                      | 14 ----------
- kernel/cpu.c                                  |  4 ++-
- kernel/sched/core.c                           | 16 +++++------
- 5 files changed, 42 insertions(+), 25 deletions(-)
+ arch/x86/Kconfig                    |  1 -
+ arch/x86/kernel/alternative.c       |  2 +-
+ arch/x86/kernel/cpu/mce/core.c      |  2 +-
+ drivers/misc/sgi-gru/grufault.c     |  2 +-
+ drivers/misc/sgi-gru/gruhandles.c   |  2 +-
+ drivers/misc/sgi-gru/grukservices.c |  2 +-
+ include/linux/sync_core.h           | 21 ---------------------
+ init/Kconfig                        |  3 ---
+ 8 files changed, 5 insertions(+), 30 deletions(-)
+ delete mode 100644 include/linux/sync_core.h
 
-diff --git a/Documentation/features/sched/membarrier-sync-core/arch-support.txt b/Documentation/features/sched/membarrier-sync-core/arch-support.txt
-index 47e6903f47a5..0763a63a7097 100644
---- a/Documentation/features/sched/membarrier-sync-core/arch-support.txt
-+++ b/Documentation/features/sched/membarrier-sync-core/arch-support.txt
-@@ -5,6 +5,10 @@
- #
- # Architecture requirements
- #
-+# If your architecture returns to user-space through non-core-serializing
-+# instructions, you need to ensure these are done in switch_mm and exit_lazy_tlb
-+# (if lazy tlb switching is implemented).
-+#
- # * arm/arm64/powerpc
- #
- # Rely on implicit context synchronization as a result of exception return
-@@ -24,7 +28,7 @@
- # instead on write_cr3() performed by switch_mm() to provide core serialization
- # after changing the current mm, and deal with the special case of kthread ->
- # uthread (temporarily keeping current mm into active_mm) by issuing a
--# sync_core_before_usermode() in that specific case.
-+# serializing instruction in exit_lazy_mm() in that specific case.
- #
-     -----------------------
-     |         arch |status|
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 36afcbea6a9f..8094893254f1 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -6,12 +6,14 @@
- #include <linux/atomic.h>
- #include <linux/mm_types.h>
- #include <linux/pkeys.h>
-+#include <linux/sched/mm.h>
- 
- #include <trace/events/tlb.h>
- 
- #include <asm/tlbflush.h>
- #include <asm/paravirt.h>
- #include <asm/debugreg.h>
-+#include <asm/sync_core.h>
- 
- extern atomic64_t last_mm_ctx_id;
- 
-@@ -94,6 +96,31 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
- #define enter_lazy_tlb enter_lazy_tlb
- extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
- 
-+#ifdef CONFIG_MEMBARRIER
-+/*
-+ * Ensure that a core serializing instruction is issued before returning
-+ * to user-mode, if a SYNC_CORE was requested. x86 implements return to
-+ * user-space through sysexit, sysrel, and sysretq, which are not core
-+ * serializing.
-+ *
-+ * See the membarrier comment in finish_task_switch as to why this is done
-+ * in exit_lazy_tlb.
-+ */
-+#define exit_lazy_tlb exit_lazy_tlb
-+static inline void exit_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
-+{
-+	/* Switching mm is serializing with write_cr3 */
-+        if (tsk->mm != mm)
-+                return;
-+
-+        if (likely(!(atomic_read(&mm->membarrier_state) &
-+                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
-+                return;
-+
-+	sync_core_before_usermode();
-+}
-+#endif
-+
- /*
-  * Init a new mm.  Used on mm copies, like at fork()
-  * and on mm's that are brand-new, like at execve().
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index d5ece7a9a403..2c6bcdf76d99 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -7,7 +7,6 @@
- #include <linux/sched.h>
- #include <linux/mm_types.h>
- #include <linux/gfp.h>
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f6946b81f74a..160d3ad90507 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -80,7 +80,6 @@ config X86
+ 	select ARCH_HAS_SET_DIRECT_MAP
+ 	select ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_HAS_STRICT_MODULE_RWX
+-	select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+ 	select ARCH_HAS_DEBUG_WX
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 2400ad62f330..9a7ab08f4157 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -17,7 +17,7 @@
+ #include <linux/kprobes.h>
+ #include <linux/mmu_context.h>
+ #include <linux/bsearch.h>
 -#include <linux/sync_core.h>
++#include <asm/sync_core.h>
+ #include <asm/text-patching.h>
+ #include <asm/alternative.h>
+ #include <asm/sections.h>
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 4102b866e7c0..282ea9942829 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -41,12 +41,12 @@
+ #include <linux/irq_work.h>
+ #include <linux/export.h>
+ #include <linux/set_memory.h>
+-#include <linux/sync_core.h>
+ #include <linux/task_work.h>
+ #include <linux/hardirq.h>
  
- /*
-  * Routines for handling mm_structs
-@@ -335,16 +334,6 @@ enum {
- #include <asm/membarrier.h>
- #endif
- 
--static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
--{
--	if (current->mm != mm)
--		return;
--	if (likely(!(atomic_read(&mm->membarrier_state) &
--		     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
--		return;
--	sync_core_before_usermode();
--}
--
- extern void membarrier_exec_mmap(struct mm_struct *mm);
- 
+ #include <asm/intel-family.h>
+ #include <asm/processor.h>
++#include <asm/sync_core.h>
+ #include <asm/traps.h>
+ #include <asm/tlbflush.h>
+ #include <asm/mce.h>
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index 723825524ea0..48fd5b101de1 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -20,8 +20,8 @@
+ #include <linux/io.h>
+ #include <linux/uaccess.h>
+ #include <linux/security.h>
+-#include <linux/sync_core.h>
+ #include <linux/prefetch.h>
++#include <asm/sync_core.h>
+ #include "gru.h"
+ #include "grutables.h"
+ #include "grulib.h"
+diff --git a/drivers/misc/sgi-gru/gruhandles.c b/drivers/misc/sgi-gru/gruhandles.c
+index 1d75d5e540bc..c8cba1c1b00f 100644
+--- a/drivers/misc/sgi-gru/gruhandles.c
++++ b/drivers/misc/sgi-gru/gruhandles.c
+@@ -16,7 +16,7 @@
+ #define GRU_OPERATION_TIMEOUT	(((cycles_t) local_cpu_data->itc_freq)*10)
+ #define CLKS2NSEC(c)		((c) *1000000000 / local_cpu_data->itc_freq)
  #else
-@@ -358,9 +347,6 @@ static inline void membarrier_arch_switch_mm(struct mm_struct *prev,
- static inline void membarrier_exec_mmap(struct mm_struct *mm)
- {
- }
--static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+-#include <linux/sync_core.h>
++#include <asm/sync_core.h>
+ #include <asm/tsc.h>
+ #define GRU_OPERATION_TIMEOUT	((cycles_t) tsc_khz*10*1000)
+ #define CLKS2NSEC(c)		((c) * 1000000 / tsc_khz)
+diff --git a/drivers/misc/sgi-gru/grukservices.c b/drivers/misc/sgi-gru/grukservices.c
+index 0ea923fe6371..860aea9deb45 100644
+--- a/drivers/misc/sgi-gru/grukservices.c
++++ b/drivers/misc/sgi-gru/grukservices.c
+@@ -16,11 +16,11 @@
+ #include <linux/miscdevice.h>
+ #include <linux/proc_fs.h>
+ #include <linux/interrupt.h>
+-#include <linux/sync_core.h>
+ #include <linux/uaccess.h>
+ #include <linux/delay.h>
+ #include <linux/export.h>
+ #include <asm/io_apic.h>
++#include <asm/sync_core.h>
+ #include "gru.h"
+ #include "grulib.h"
+ #include "grutables.h"
+diff --git a/include/linux/sync_core.h b/include/linux/sync_core.h
+deleted file mode 100644
+index 013da4b8b327..000000000000
+--- a/include/linux/sync_core.h
++++ /dev/null
+@@ -1,21 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _LINUX_SYNC_CORE_H
+-#define _LINUX_SYNC_CORE_H
+-
+-#ifdef CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+-#include <asm/sync_core.h>
+-#else
+-/*
+- * This is a dummy sync_core_before_usermode() implementation that can be used
+- * on all architectures which return to user-space through core serializing
+- * instructions.
+- * If your architecture returns to user-space through non-core-serializing
+- * instructions, you need to write your own functions.
+- */
+-static inline void sync_core_before_usermode(void)
 -{
 -}
- #endif
+-#endif
+-
+-#endif /* _LINUX_SYNC_CORE_H */
+-
+diff --git a/init/Kconfig b/init/Kconfig
+index 02d13ae27abb..82f9b5c937cb 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2334,9 +2334,6 @@ source "kernel/Kconfig.locks"
+ config ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	bool
  
- #endif /* _LINUX_SCHED_MM_H */
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6ff2578ecf17..134688d79589 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -572,7 +572,9 @@ static int finish_cpu(unsigned int cpu)
- 
- 	/*
- 	 * idle_task_exit() will have switched to &init_mm, now
--	 * clean up any remaining active_mm state.
-+	 * clean up any remaining active_mm state. exit_lazy_tlb
-+	 * is not done, if an arch did any accounting in these
-+	 * functions it would have to be added.
- 	 */
- 	if (mm != &init_mm)
- 		idle->active_mm = &init_mm;
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index dcc46039ade5..e4e8cebd82e2 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3620,22 +3620,19 @@ static struct rq *finish_task_switch(struct task_struct *prev)
- 	kcov_finish_switch(current);
- 
- 	fire_sched_in_preempt_notifiers(current);
-+
- 	/*
- 	 * When switching through a kernel thread, the loop in
- 	 * membarrier_{private,global}_expedited() may have observed that
- 	 * kernel thread and not issued an IPI. It is therefore possible to
- 	 * schedule between user->kernel->user threads without passing though
--	 * switch_mm(). Membarrier requires a barrier after storing to
--	 * rq->curr, before returning to userspace, so provide them here:
--	 *
--	 * - a full memory barrier for {PRIVATE,GLOBAL}_EXPEDITED, implicitly
--	 *   provided by mmdrop(),
--	 * - a sync_core for SYNC_CORE.
-+	 * switch_mm(). Membarrier requires a full barrier after storing to
-+	 * rq->curr, before returning to userspace, for
-+	 * {PRIVATE,GLOBAL}_EXPEDITED. This is implicitly provided by mmdrop().
- 	 */
--	if (mm) {
--		membarrier_mm_sync_core_before_usermode(mm);
-+	if (mm)
- 		mmdrop(mm);
--	}
-+
- 	if (unlikely(prev_state == TASK_DEAD)) {
- 		if (prev->sched_class->task_dead)
- 			prev->sched_class->task_dead(prev);
-@@ -6689,6 +6686,7 @@ void idle_task_exit(void)
- 	BUG_ON(current != this_rq()->idle);
- 
- 	if (mm != &init_mm) {
-+		/* enter_lazy_tlb is not done because we're about to go down */
- 		switch_mm(mm, &init_mm, current);
- 		finish_arch_post_lock_switch();
- 	}
+-config ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+-	bool
+-
+ # It may be useful for an architecture to override the definitions of the
+ # SYSCALL_DEFINE() and __SYSCALL_DEFINEx() macros in <linux/syscalls.h>
+ # and the COMPAT_ variants in <linux/compat.h>, in particular to use a
 -- 
 2.23.0
 
