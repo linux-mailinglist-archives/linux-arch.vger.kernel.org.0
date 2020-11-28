@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F052C7293
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 595A32C72A2
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389915AbgK1VuL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S1727468AbgK1VuN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729592AbgK1S16 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:27:58 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8BBC0258F1;
-        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id w187so7095573pfd.5;
-        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
+        with ESMTP id S1729742AbgK1S3k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:29:40 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9664DC0258F2;
+        Sat, 28 Nov 2020 08:02:09 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id w6so7110052pfu.1;
+        Sat, 28 Nov 2020 08:02:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oqskVFo4rCcY4G7AX3q/Z2vOLhCcdMU13oOzjm6oOQI=;
-        b=hAkQC7bxM/rt+UgL+n2DK2GVPrv7Fvv8VOFfmVyChH9mG2M8V1dhWuexs7FMt4k/VH
-         00X2IJnPJZxukN07v+6IUoaQEfrLRCAqYOOlZ5fq8l1BvW7IrGtlw1huOZSLzz2y0SZx
-         3ChCeIKf/3CDuf5o8vxiVXRbP+dl0i3USN+GGPFeVf1n0aup+2heHkiGuTtTAlOIHxup
-         yVXQkUUka7ppthU1cQ04gq4WktB3u20vnaqT8BvQDxOruSqzz3f4f2+uoHUVHCc17E5Q
-         QRBdGNwQLOrc1P3jbriPiXC3R/Y7g87L4RcqcZA6HPgDlB6tEXZDAiIKBbkorJcDGkrE
-         lHsw==
+        bh=846xez6akqNpiAUuyJyg7Cgtsg97LYlLXrFa3gyFRtY=;
+        b=skUfCusnapFL4QjTU84UBawv0Zb8dW/d/8QkYdctwdGHUzbPnVqI5dIbMXvJyVUugf
+         fgXzb23Cz1uq763IJaPqMvWoeXOjJml4Bpo9mt9rCdL/6+cuAwsKwfGbh2JTKjN00pjh
+         5+n/jaWP5ggmGwOSrHnLZMtDcoPOHKbY6UXKvpgUovNRtB5ykoCejDrKXfvgh+sxy9HW
+         MXEkoFva1uTEWLHLOYYXehr+6OI3Un+jP+UFbRtazCKWOMWRQzoluNnvm+jYuY3MdK0a
+         QuV/D0FrPuV58JHb7DlkbeKAMloJwgFzRPJk+JdSGvWtQM5k2cc4yP+2/1I1nSubjBbN
+         tL5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oqskVFo4rCcY4G7AX3q/Z2vOLhCcdMU13oOzjm6oOQI=;
-        b=Xh8eG8cCm0GD3YosyqgkZOkQW0n7cXe/feI3DqhyA1gkJuNSNlJ3koyKsuiB28O2KR
-         EtwkY6UF4BjhHpqAopqRw0tIjgsCm2Mph4RJh8buMr6J6wtCF/khAlYDl0UlNLj9Ez6w
-         dOxp3uKaN+rPaxyHi/G0JaseArVwS5qNhdHcbFVLxIdmiS22dYSZSjkT0Ravmwhb0DiN
-         59cvrvwAry0eRuJgYkXiqF+wCoVRIiKjcIBnmtsl6re8+cFxEXd/rUfeDb4eiVrm53zP
-         8MmsVcFjFLuMNYGQHaWlsdXdn6yvaqkKCFDS9BRWVBXVOMB8QHz7tV08Csohv/bpn86C
-         BQ/w==
-X-Gm-Message-State: AOAM533YXSTWFCiA1jPKOt1qNwIn545R62/sAF4KEhdOL6kw2bkikvcq
-        zdooPW6EMf+gZtV+siOUPJNxU1CE0Ng=
-X-Google-Smtp-Source: ABdhPJzGaihamaR9rIxqQPEuAuhYCkZ5jY/oI8W/R+Ypcsv9gPzHWmICwyEssj9w/cCRebDK8ONgCg==
-X-Received: by 2002:a17:90a:f0d4:: with SMTP id fa20mr13620976pjb.129.1606579324386;
-        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
+        bh=846xez6akqNpiAUuyJyg7Cgtsg97LYlLXrFa3gyFRtY=;
+        b=pZJ2sfpCrrbDwbmuAHPr8iewrbN7KvGFszifsKwPcdMW29OMtuLgUMdpN/xdp4VgNs
+         6eZ0YN/e3YtF9aYNX7DudEB6IP7YIo8H/Eu6djB0C24ZMtMXA9B/H6Io4BqRVOd5QEpd
+         yNFKyamXCZLtFRyOW+N8gUDYkFl/EGLn8HwqeyBN9LQ1O9tGp378CwqEba/rgjVYl0ZM
+         rFR9vEOfOKfXBRLam2XuFx9ug4MBhE5EUOB+yISZilEaeDZzHx/K59ctO5VqpultwPP4
+         RPq/wP5VA3jisDc1tFLjx/kO2GdlVd+vTKljWI9TLBdpF2NeOJoW/GyOtls4VS5g7XCy
+         8x2A==
+X-Gm-Message-State: AOAM5306tfVkdQdDILj3ZOfPoFbuDSdrtanFeE+qUozRLYQi2pSbgzLp
+        vJJhQVFjuBA3miJjNRg9pnuJcDtWi3Q=
+X-Google-Smtp-Source: ABdhPJzfS/HO/ZAtAEyDNg6acxA2ioQDK2tyBX/rWx/5uj/HtudHJ/+YK14jYXjHb2pJaVwlFAEt1g==
+X-Received: by 2002:a17:90b:4b11:: with SMTP id lx17mr17067698pjb.154.1606579328904;
+        Sat, 28 Nov 2020 08:02:08 -0800 (PST)
 Received: from bobo.ibm.com (193-116-103-132.tpgi.com.au. [193.116.103.132])
-        by smtp.gmail.com with ESMTPSA id d4sm9762607pjz.28.2020.11.28.08.02.00
+        by smtp.gmail.com with ESMTPSA id d4sm9762607pjz.28.2020.11.28.08.02.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2020 08:02:04 -0800 (PST)
+        Sat, 28 Nov 2020 08:02:08 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
@@ -55,9 +55,9 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-mm@kvack.org, Anton Blanchard <anton@ozlabs.org>
-Subject: [PATCH 3/8] x86: remove ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-Date:   Sun, 29 Nov 2020 02:01:36 +1000
-Message-Id: <20201128160141.1003903-4-npiggin@gmail.com>
+Subject: [PATCH 4/8] lazy tlb: introduce lazy mm refcount helper functions
+Date:   Sun, 29 Nov 2020 02:01:37 +1000
+Message-Id: <20201128160141.1003903-5-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20201128160141.1003903-1-npiggin@gmail.com>
 References: <20201128160141.1003903-1-npiggin@gmail.com>
@@ -67,150 +67,216 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Switch remaining x86-specific users to asm/sync_core.h, remove the
-linux/sync_core.h header and ARCH_ option.
+Add explicit _lazy_tlb annotated functions for lazy mm refcounting.
+This makes things a bit more explicit, and allows explicit refcounting
+to be removed if it is not used.
 
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- arch/x86/Kconfig                    |  1 -
- arch/x86/kernel/alternative.c       |  2 +-
- arch/x86/kernel/cpu/mce/core.c      |  2 +-
- drivers/misc/sgi-gru/grufault.c     |  2 +-
- drivers/misc/sgi-gru/gruhandles.c   |  2 +-
- drivers/misc/sgi-gru/grukservices.c |  2 +-
- include/linux/sync_core.h           | 21 ---------------------
- init/Kconfig                        |  3 ---
- 8 files changed, 5 insertions(+), 30 deletions(-)
- delete mode 100644 include/linux/sync_core.h
+ arch/arm/mach-rpc/ecard.c            |  2 +-
+ arch/powerpc/mm/book3s64/radix_tlb.c |  4 ++--
+ fs/exec.c                            |  2 +-
+ include/linux/sched/mm.h             | 11 +++++++++++
+ kernel/cpu.c                         |  2 +-
+ kernel/exit.c                        |  2 +-
+ kernel/kthread.c                     | 11 +++++++----
+ kernel/sched/core.c                  | 15 ++++++++-------
+ 8 files changed, 32 insertions(+), 17 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f6946b81f74a..160d3ad90507 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -80,7 +80,6 @@ config X86
- 	select ARCH_HAS_SET_DIRECT_MAP
- 	select ARCH_HAS_STRICT_KERNEL_RWX
- 	select ARCH_HAS_STRICT_MODULE_RWX
--	select ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
- 	select ARCH_HAS_SYSCALL_WRAPPER
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_DEBUG_WX
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 2400ad62f330..9a7ab08f4157 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -17,7 +17,7 @@
- #include <linux/kprobes.h>
- #include <linux/mmu_context.h>
- #include <linux/bsearch.h>
--#include <linux/sync_core.h>
-+#include <asm/sync_core.h>
- #include <asm/text-patching.h>
- #include <asm/alternative.h>
- #include <asm/sections.h>
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 4102b866e7c0..282ea9942829 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -41,12 +41,12 @@
- #include <linux/irq_work.h>
- #include <linux/export.h>
- #include <linux/set_memory.h>
--#include <linux/sync_core.h>
- #include <linux/task_work.h>
- #include <linux/hardirq.h>
+diff --git a/arch/arm/mach-rpc/ecard.c b/arch/arm/mach-rpc/ecard.c
+index 43eb1bfba466..a75938702c58 100644
+--- a/arch/arm/mach-rpc/ecard.c
++++ b/arch/arm/mach-rpc/ecard.c
+@@ -254,7 +254,7 @@ static int ecard_init_mm(void)
+ 	current->active_mm = mm;
+ 	activate_mm(active_mm, mm);
+ 	exit_lazy_tlb(active_mm, current);
+-	mmdrop(active_mm);
++	mmdrop_lazy_tlb(active_mm);
+ 	ecard_init_pgtables(mm);
+ 	return 0;
+ }
+diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+index ac3fec03926a..e66606ef2a3d 100644
+--- a/arch/powerpc/mm/book3s64/radix_tlb.c
++++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+@@ -658,11 +658,11 @@ static void do_exit_flush_lazy_tlb(void *arg)
+ 	if (current->active_mm == mm) {
+ 		WARN_ON_ONCE(current->mm != NULL);
+ 		/* Is a kernel thread and is using mm as the lazy tlb */
+-		mmgrab(&init_mm);
++		mmgrab_lazy_tlb(&init_mm);
+ 		current->active_mm = &init_mm;
+ 		switch_mm_irqs_off(mm, &init_mm, current);
+ 		exit_lazy_tlb(mm, current);
+-		mmdrop(mm);
++		mmdrop_lazy_tlb(mm);
+ 	}
  
- #include <asm/intel-family.h>
- #include <asm/processor.h>
-+#include <asm/sync_core.h>
- #include <asm/traps.h>
- #include <asm/tlbflush.h>
- #include <asm/mce.h>
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index 723825524ea0..48fd5b101de1 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -20,8 +20,8 @@
- #include <linux/io.h>
- #include <linux/uaccess.h>
- #include <linux/security.h>
--#include <linux/sync_core.h>
- #include <linux/prefetch.h>
-+#include <asm/sync_core.h>
- #include "gru.h"
- #include "grutables.h"
- #include "grulib.h"
-diff --git a/drivers/misc/sgi-gru/gruhandles.c b/drivers/misc/sgi-gru/gruhandles.c
-index 1d75d5e540bc..c8cba1c1b00f 100644
---- a/drivers/misc/sgi-gru/gruhandles.c
-+++ b/drivers/misc/sgi-gru/gruhandles.c
-@@ -16,7 +16,7 @@
- #define GRU_OPERATION_TIMEOUT	(((cycles_t) local_cpu_data->itc_freq)*10)
- #define CLKS2NSEC(c)		((c) *1000000000 / local_cpu_data->itc_freq)
- #else
--#include <linux/sync_core.h>
-+#include <asm/sync_core.h>
- #include <asm/tsc.h>
- #define GRU_OPERATION_TIMEOUT	((cycles_t) tsc_khz*10*1000)
- #define CLKS2NSEC(c)		((c) * 1000000 / tsc_khz)
-diff --git a/drivers/misc/sgi-gru/grukservices.c b/drivers/misc/sgi-gru/grukservices.c
-index 0ea923fe6371..860aea9deb45 100644
---- a/drivers/misc/sgi-gru/grukservices.c
-+++ b/drivers/misc/sgi-gru/grukservices.c
-@@ -16,11 +16,11 @@
- #include <linux/miscdevice.h>
- #include <linux/proc_fs.h>
- #include <linux/interrupt.h>
--#include <linux/sync_core.h>
- #include <linux/uaccess.h>
- #include <linux/delay.h>
- #include <linux/export.h>
- #include <asm/io_apic.h>
-+#include <asm/sync_core.h>
- #include "gru.h"
- #include "grulib.h"
- #include "grutables.h"
-diff --git a/include/linux/sync_core.h b/include/linux/sync_core.h
-deleted file mode 100644
-index 013da4b8b327..000000000000
---- a/include/linux/sync_core.h
-+++ /dev/null
-@@ -1,21 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_SYNC_CORE_H
--#define _LINUX_SYNC_CORE_H
--
--#ifdef CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
--#include <asm/sync_core.h>
--#else
--/*
-- * This is a dummy sync_core_before_usermode() implementation that can be used
-- * on all architectures which return to user-space through core serializing
-- * instructions.
-- * If your architecture returns to user-space through non-core-serializing
-- * instructions, you need to write your own functions.
-- */
--static inline void sync_core_before_usermode(void)
--{
--}
--#endif
--
--#endif /* _LINUX_SYNC_CORE_H */
--
-diff --git a/init/Kconfig b/init/Kconfig
-index 02d13ae27abb..82f9b5c937cb 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2334,9 +2334,6 @@ source "kernel/Kconfig.locks"
- config ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	bool
+ 	atomic_dec(&mm->context.active_cpus);
+diff --git a/fs/exec.c b/fs/exec.c
+index 4b4dea1bb7ba..0a1461bb62e2 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1031,7 +1031,7 @@ static int exec_mmap(struct mm_struct *mm)
+ 		mm_update_next_owner(old_mm);
+ 		mmput(old_mm);
+ 	} else {
+-		mmdrop(active_mm);
++		mmdrop_lazy_tlb(active_mm);
+ 	}
+ 	return 0;
+ }
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 2c6bcdf76d99..7157c0f6fef8 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -48,6 +48,17 @@ static inline void mmdrop(struct mm_struct *mm)
+ 		__mmdrop(mm);
+ }
  
--config ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
--	bool
--
- # It may be useful for an architecture to override the definitions of the
- # SYSCALL_DEFINE() and __SYSCALL_DEFINEx() macros in <linux/syscalls.h>
- # and the COMPAT_ variants in <linux/compat.h>, in particular to use a
++/* Helpers for lazy TLB mm refcounting */
++static inline void mmgrab_lazy_tlb(struct mm_struct *mm)
++{
++	mmgrab(mm);
++}
++
++static inline void mmdrop_lazy_tlb(struct mm_struct *mm)
++{
++	mmdrop(mm);
++}
++
+ /**
+  * mmget() - Pin the address space associated with a &struct mm_struct.
+  * @mm: The address space to pin.
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 134688d79589..ff9fcbc4e76b 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -578,7 +578,7 @@ static int finish_cpu(unsigned int cpu)
+ 	 */
+ 	if (mm != &init_mm)
+ 		idle->active_mm = &init_mm;
+-	mmdrop(mm);
++	mmdrop_lazy_tlb(mm);
+ 	return 0;
+ }
+ 
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 1f236ed375f8..3711a74fcf4a 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -474,7 +474,7 @@ static void exit_mm(void)
+ 		__set_current_state(TASK_RUNNING);
+ 		mmap_read_lock(mm);
+ 	}
+-	mmgrab(mm);
++	mmgrab_lazy_tlb(mm);
+ 	BUG_ON(mm != current->active_mm);
+ 	/* more a memory barrier than a real lock */
+ 	task_lock(current);
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index e380302aac13..f1241e19327e 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -1240,14 +1240,14 @@ void kthread_use_mm(struct mm_struct *mm)
+ 	WARN_ON_ONCE(!(tsk->flags & PF_KTHREAD));
+ 	WARN_ON_ONCE(tsk->mm);
+ 
++	mmgrab(mm);
++
+ 	task_lock(tsk);
+ 	/* Hold off tlb flush IPIs while switching mm's */
+ 	local_irq_disable();
+ 	active_mm = tsk->active_mm;
+-	if (active_mm != mm) {
+-		mmgrab(mm);
++	if (active_mm != mm)
+ 		tsk->active_mm = mm;
+-	}
+ 	tsk->mm = mm;
+ 	switch_mm_irqs_off(active_mm, mm, tsk);
+ 	exit_lazy_tlb(active_mm, tsk);
+@@ -1258,7 +1258,7 @@ void kthread_use_mm(struct mm_struct *mm)
+ #endif
+ 
+ 	if (active_mm != mm)
+-		mmdrop(active_mm);
++		mmdrop_lazy_tlb(active_mm);
+ 
+ 	to_kthread(tsk)->oldfs = force_uaccess_begin();
+ }
+@@ -1281,10 +1281,13 @@ void kthread_unuse_mm(struct mm_struct *mm)
+ 	sync_mm_rss(mm);
+ 	local_irq_disable();
+ 	tsk->mm = NULL;
++	mmgrab_lazy_tlb(mm);
+ 	/* active_mm is still 'mm' */
+ 	enter_lazy_tlb(mm, tsk);
+ 	local_irq_enable();
+ 	task_unlock(tsk);
++
++	mmdrop(mm);
+ }
+ EXPORT_SYMBOL_GPL(kthread_unuse_mm);
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index e4e8cebd82e2..e372b613d514 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3628,10 +3628,11 @@ static struct rq *finish_task_switch(struct task_struct *prev)
+ 	 * schedule between user->kernel->user threads without passing though
+ 	 * switch_mm(). Membarrier requires a full barrier after storing to
+ 	 * rq->curr, before returning to userspace, for
+-	 * {PRIVATE,GLOBAL}_EXPEDITED. This is implicitly provided by mmdrop().
++	 * {PRIVATE,GLOBAL}_EXPEDITED. This is implicitly provided by
++	 * mmdrop_lazy_tlb().
+ 	 */
+ 	if (mm)
+-		mmdrop(mm);
++		mmdrop_lazy_tlb(mm);
+ 
+ 	if (unlikely(prev_state == TASK_DEAD)) {
+ 		if (prev->sched_class->task_dead)
+@@ -3736,9 +3737,9 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ 
+ 	/*
+ 	 * kernel -> kernel   lazy + transfer active
+-	 *   user -> kernel   lazy + mmgrab() active
++	 *   user -> kernel   lazy + mmgrab_lazy_tlb() active
+ 	 *
+-	 * kernel ->   user   switch + mmdrop() active
++	 * kernel ->   user   switch + mmdrop_lazy_tlb() active
+ 	 *   user ->   user   switch
+ 	 */
+ 	if (!next->mm) {                                // to kernel
+@@ -3746,7 +3747,7 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ 
+ 		next->active_mm = prev->active_mm;
+ 		if (prev->mm)                           // from user
+-			mmgrab(prev->active_mm);
++			mmgrab_lazy_tlb(prev->active_mm);
+ 		else
+ 			prev->active_mm = NULL;
+ 	} else {                                        // to user
+@@ -3764,7 +3765,7 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ 		if (!prev->mm) {                        // from kernel
+ 			exit_lazy_tlb(prev->active_mm, next);
+ 
+-			/* will mmdrop() in finish_task_switch(). */
++			/* will mmdrop_lazy_tlb() in finish_task_switch(). */
+ 			rq->prev_mm = prev->active_mm;
+ 			prev->active_mm = NULL;
+ 		}
+@@ -7206,7 +7207,7 @@ void __init sched_init(void)
+ 	/*
+ 	 * The boot idle thread does lazy MMU switching as well:
+ 	 */
+-	mmgrab(&init_mm);
++	mmgrab_lazy_tlb(&init_mm);
+ 	enter_lazy_tlb(&init_mm, current);
+ 
+ 	/*
 -- 
 2.23.0
 
