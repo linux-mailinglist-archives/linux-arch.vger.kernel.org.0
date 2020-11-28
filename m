@@ -2,93 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB8D2C72AA
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4B32C7296
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbgK1VuO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 16:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729945AbgK1Sc6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:32:58 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC6AC0258FE;
-        Sat, 28 Nov 2020 08:02:28 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id t18so4136657plo.0;
-        Sat, 28 Nov 2020 08:02:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8ryYzZTfuMdMQoDGnZ6qQm92nrELT0Bznsq8pS5zNkE=;
-        b=O2SH7PLZYn9x9yrSkPvaAZdWZ4Hk1Nz9o1vpICXBIyIIgIdy8d9QFKV+1r92+5zuOs
-         gYKTram4WPDCSdl+hhVkmF9+vrkTQECccC9p+zkSVnyHnydt6RZsEWjgzXbamDwz8Ryf
-         WwRcOCDkLf2yHoNmiO4MHVOErhGamyhGZEu/rYwWW8NOV9V/N1bEFCnSnAJQkVeT5lqs
-         dhR5ybbQNLsLTLCFZze+EY6rm27mttggd2bAwJ7eXS3YKnz/bnqJ0GT0EmjvtORGnwS+
-         17SXi5CsTI/P47c8OyIr30m3TcLjy6wRktbukjqqdEaVGzvGIE/erk1qflt4sxiTfF0m
-         Fmsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8ryYzZTfuMdMQoDGnZ6qQm92nrELT0Bznsq8pS5zNkE=;
-        b=eK3ziEiE/BotdTZW6j9wspQR52WnithtcjadyQQbvez7+1nH9mIw713INsCA7atain
-         WnZ7/xIS4VZzgXyzV1pYxSaKqL0Pssl1nqpimSjtQELdominV9kPVi1/eHMiiipqUZZL
-         jQZuV7MiVqi+9lSv8j+q2XTAZ7UjtH/sNKruXFkJfI7xbBJbfDM9oHa0JFgyIVZpK9Gr
-         Jk/8ygVfsO0964Ih11yWpcg1wYp/028w4zHA5stZyVLwVWuk3X6ZEQHDNXYgF8+BJ7YB
-         XCXI10L8x7UjqqfQtnXQxf9Q964IL+LodZNVw/OWBmxqtWic85AIRyxPUsyIKONaJHeS
-         nowA==
-X-Gm-Message-State: AOAM531fO9qEJrbSwNy66FU3VtJELN11WMKjloj4ZrMoIrRdfgzXEN1Z
-        CdCjJeKO2AtrYmjY7OsluNOUUMYn+wU=
-X-Google-Smtp-Source: ABdhPJxOmOSo7yBdZGFr5Ee5U/YJuP5XMrKl+Nl3YUOkuajp7hYak8NpHsUyWSygIXkb6jTi/aUZeA==
-X-Received: by 2002:a17:902:ee53:b029:da:4c68:2795 with SMTP id 19-20020a170902ee53b02900da4c682795mr8244122plo.7.1606579347904;
-        Sat, 28 Nov 2020 08:02:27 -0800 (PST)
-Received: from bobo.ibm.com (193-116-103-132.tpgi.com.au. [193.116.103.132])
-        by smtp.gmail.com with ESMTPSA id d4sm9762607pjz.28.2020.11.28.08.02.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2020 08:02:27 -0800 (PST)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        id S2389906AbgK1VuL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:11 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19349 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729533AbgK1S16 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 28 Nov 2020 13:27:58 -0500
+IronPort-SDR: OPOyZK1VZCtm/BBuZIpqX0JXtqLhMjp5uT/fRk3byxVsjAQ3AiAWZ2Su4mqrBuXDaudff1L3mF
+ ASoqTe2vahHQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9819"; a="159537056"
+X-IronPort-AV: E=Sophos;i="5.78,377,1599548400"; 
+   d="scan'208";a="159537056"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 08:24:00 -0800
+IronPort-SDR: FDIYYBr2hlKPLMbEhzG7QTIT1dc8+Q0vPjFxJnrDDSbotYpzRlODAOgHg1F1ZOFB7gou8+8goX
+ dGWqsJsDMvIw==
+X-IronPort-AV: E=Sophos;i="5.78,377,1599548400"; 
+   d="scan'208";a="480006706"
+Received: from jckaplan-mobl1.amr.corp.intel.com (HELO [10.212.23.254]) ([10.212.23.254])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2020 08:23:59 -0800
+Subject: Re: [PATCH v15 05/26] x86/cet/shstk: Add Kconfig option for user-mode
+ Shadow Stack
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, Anton Blanchard <anton@ozlabs.org>
-Subject: [PATCH 8/8] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
-Date:   Sun, 29 Nov 2020 02:01:41 +1000
-Message-Id: <20201128160141.1003903-9-npiggin@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20201128160141.1003903-1-npiggin@gmail.com>
-References: <20201128160141.1003903-1-npiggin@gmail.com>
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
+ <20201110162211.9207-6-yu-cheng.yu@intel.com>
+ <20201127171012.GD13163@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <98e1b159-bf32-5c67-455b-f798023770ef@intel.com>
+Date:   Sat, 28 Nov 2020 08:23:59 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201127171012.GD13163@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On a 16-socket 192-core POWER8 system, a context switching benchmark
-with as many software threads as CPUs (so each switch will go in and
-out of idle), upstream can achieve a rate of about 1 million context
-switches per second. After this patch it goes up to 118 million.
+On 11/27/2020 9:10 AM, Borislav Petkov wrote:
+> On Tue, Nov 10, 2020 at 08:21:50AM -0800, Yu-cheng Yu wrote:
+>> +config X86_CET
+>> +	def_bool n
+>> +
+>> +config ARCH_HAS_SHADOW_STACK
+>> +	def_bool n
+>> +
+>> +config X86_SHADOW_STACK_USER
+> 
+> Is X86_SHADOW_STACK_KERNEL coming too?
+> 
+> Regardless, you can add it when it comes and you can use only X86_CET
+> for now and drop this one and simplify this pile of Kconfig symbols.
 
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- arch/powerpc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+We have X86_BRANCH_TRACKING_USER too.  My thought was, X86_CET means any 
+of kernel/user shadow stack/ibt.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index e9f13fe08492..d4793c0229d2 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -231,6 +231,7 @@ config PPC
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select MMU_GATHER_RCU_TABLE_FREE
- 	select MMU_GATHER_PAGE_SIZE
-+	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RELIABLE_STACKTRACE		if PPC_BOOK3S_64 && CPU_LITTLE_ENDIAN
- 	select HAVE_SYSCALL_TRACEPOINTS
--- 
-2.23.0
+> 
+>> +	prompt "Intel Shadow Stacks for user-mode"
+>> +	def_bool n
+>> +	depends on CPU_SUP_INTEL && X86_64
+>> +	depends on AS_HAS_SHADOW_STACK
+>> +	select ARCH_USES_HIGH_VMA_FLAGS
+>> +	select X86_CET
+>> +	select ARCH_HAS_SHADOW_STACK
+>> +	help
+>> +	  Shadow Stacks provides protection against program stack
+>> +	  corruption.  It's a hardware feature.  This only matters
+>> +	  if you have the right hardware.  It's a security hardening
+>> +	  feature and apps must be enabled to use it.  You get no
+>> +	  protection "for free" on old userspace.  The hardware can
+>> +	  support user and kernel, but this option is for user space
+>> +	  only.
+>> +	  Support for this feature is only known to be present on
+>> +	  processors released in 2020 or later.  CET features are also
+>> +	  known to increase kernel text size by 3.7 KB.
+> 
+> This help text needs some rewriting. You can find an inspiration about
+> more adequate style in that same Kconfig file.
+> 
+
+I will work on it.
+
+>> +
+>> +	  If unsure, say N.
+>> +
+>>   config EFI
+>>   	bool "EFI runtime service support"
+>>   	depends on ACPI
+>> diff --git a/scripts/as-x86_64-has-shadow-stack.sh b/scripts/as-x86_64-has-shadow-stack.sh
+>> new file mode 100755
+>> index 000000000000..fac1d363a1b8
+>> --- /dev/null
+>> +++ b/scripts/as-x86_64-has-shadow-stack.sh
+>> @@ -0,0 +1,4 @@
+>> +#!/bin/sh
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +echo "wrussq %rax, (%rbx)" | $* -x assembler -c -
+> 
+> 						      2> /dev/null
+> 
+> otherwise you get
+> 
+> {standard input}: Assembler messages:
+> {standard input}:1: Error: no such instruction: `wrussq %rax,(%rbx)
+> 
+> on non-enlightened toolchains during build.
+> 
+
+Yes, I will fix this in the next revision.
+
+Yu-cheng
+
+> Thx.
+> 
 
