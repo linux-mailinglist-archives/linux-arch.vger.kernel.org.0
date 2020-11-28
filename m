@@ -2,98 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495642C6DFA
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 01:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD922C72AD
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Nov 2020 23:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729459AbgK1Ahg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Nov 2020 19:37:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730166AbgK1Ag6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 27 Nov 2020 19:36:58 -0500
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D213922252
-        for <linux-arch@vger.kernel.org>; Sat, 28 Nov 2020 00:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606523800;
-        bh=rlndTyZ07ltlrWHTqYBWYToR6dBHNbYRn2Phd8hj/mU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PgCGztmP82ygA1ZsSzxJ9a1GMWL3KxVVbaqgVpZRu4UprXuSXgSBiPfJQ5y5bvyI7
-         F6LsIl5VQzjrVSGbaCyzWfq47gwl3WwPPbHzBXigJnwqnw+855mvFGIGjZ0ubDAJFT
-         AYFDu+IPGTUGjMykmu4T5mxs3enNs2QrcoU08Lck=
-Received: by mail-wr1-f43.google.com with SMTP id m6so7203821wrg.7
-        for <linux-arch@vger.kernel.org>; Fri, 27 Nov 2020 16:36:39 -0800 (PST)
-X-Gm-Message-State: AOAM531Xk69Ag6gp3Iym3T5xyynDDDhHHP413dLRGxtGWzRcrLzsmjjw
-        ku01MiLJd04JFss0ojYWmcFieSsjW/hbZdt37HHpwA==
-X-Google-Smtp-Source: ABdhPJyHzaToMneHQIlE/CQuox4gGtAV1aibN/c+MmVJ3U1vZACyFpmgVNo/aQXl4esq+dTc1TYGAfgXUmiUr2S50zM=
-X-Received: by 2002:a5d:5482:: with SMTP id h2mr13958810wrv.18.1606523798379;
- Fri, 27 Nov 2020 16:36:38 -0800 (PST)
+        id S1729393AbgK1VuP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731556AbgK1Sw7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Nov 2020 13:52:59 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8179FC061A4F;
+        Fri, 27 Nov 2020 21:57:01 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id t3so5892903pgi.11;
+        Fri, 27 Nov 2020 21:57:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9pljJYqBFFJMT23aRvOkmjosrfPaZRUoII94EEjK9qU=;
+        b=pAWIgWzJiDXbACtUw0Rf9V31klbqZp0donc49T3DevUTgr5yZc7iqIvDFEwKYQ19yX
+         YzR6RuMRHh/QbKr75FfabgQCEuRWVuYDyMXcsJaHZ9bm6HrGaZuPDO9pw7UWKR4n6tDm
+         fXg/8UpA3r6drmwFG5YN7M0kk6TDwLaVQ8j6IqnUqhvRQICO9/XSElMRefZKgYnFLxsq
+         4UdGXA8XtmKglxID6DMAtZuulzWC7KD5+bd7Lcbo+q1LleNMFOBE2brIQRZSnhL2jz4s
+         7ozmachgSuSCf4E5p1X9njmjDhVSiesKbXHXfVW51ZbpXRjalYE+Ywbd3ETl5b7A8Of1
+         7P6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9pljJYqBFFJMT23aRvOkmjosrfPaZRUoII94EEjK9qU=;
+        b=eQrBrVL8QMoXzuivbWVaC1jTAmh4vH2XPLGt67h9Ojqs6veFDwV7NRwpD/OQydBeF9
+         WWRpt0I6pI9ucPXH2iOdP5NI+8SsPZ9icgYg9Z7/ZyijaS/MG7QEbX6rubntm5bB+4tA
+         L7AlzoepWqLrzWBrDFipr4n1iliK1b3vSRAS00bxBee/uF7bfcFvtknEMZ1WppP+fyH5
+         luZ32SXyeUS0G9waC+lO8LhmzsXqL2YrSIfqMvsZr50uTQvWpS1xyyoW6OBSXaw+4G3n
+         znjTwP8F5cbqBA2KLCjU9j8jxe/UCh9Kl4xB8gQrP9LtP3OBTvOnYoL9jgpXYT4Ked2m
+         8bKQ==
+X-Gm-Message-State: AOAM531f1slpq8YO3ZK/VEdqANfsJaspVuitMGEJNcWeQY/CaLDjIreg
+        xAK8Y1vzG4gfvFbLLBSF/xU=
+X-Google-Smtp-Source: ABdhPJzalDvif4YtaXVkhN9LAKKZUXXwCXAnRSqCKLQYo2zGE3B4VQsH2gjUeE+MBVvy3uCxJ8WVtw==
+X-Received: by 2002:a17:90b:1811:: with SMTP id lw17mr14391926pjb.105.1606543020911;
+        Fri, 27 Nov 2020 21:57:00 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id i10sm9550637pfk.206.2020.11.27.21.56.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2020 21:57:00 -0800 (PST)
+Subject: Re: [PATCH memory-model 6/8] tools/memory-model: Add types to litmus
+ tests
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20201105215953.GA15309@paulmck-ThinkPad-P72>
+ <20201105220017.15410-6-paulmck@kernel.org>
+ <12e0baf4-b1c9-d674-1d4c-310e0a9b6343@gmail.com>
+ <20201105225605.GQ3249@paulmck-ThinkPad-P72>
+ <2acf8de5-efe9-a205-cb62-04c4774008c0@gmail.com>
+ <20201127154652.GU1437@paulmck-ThinkPad-P72>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <78e1ccaf-9d35-b2a5-1865-fb0a76b3e57e@gmail.com>
+Date:   Sat, 28 Nov 2020 14:56:55 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201126155246.25961-1-jack@suse.cz> <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
- <CAMzpN2gADAWBoTgKEgepCHVKoqOw3T_D_W30Q2-vJtQpfn0jwg@mail.gmail.com>
-In-Reply-To: <CAMzpN2gADAWBoTgKEgepCHVKoqOw3T_D_W30Q2-vJtQpfn0jwg@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 27 Nov 2020 16:36:24 -0800
-X-Gmail-Original-Message-ID: <CALCETrXS8e9BRcpmSYqE5_Cvrt96wUOWK_P2bFWUkD2BozPNbg@mail.gmail.com>
-Message-ID: <CALCETrXS8e9BRcpmSYqE5_Cvrt96wUOWK_P2bFWUkD2BozPNbg@mail.gmail.com>
-Subject: Re: [PATCH] fanotify: Fix fanotify_mark() on 32-bit x86
-To:     Brian Gerst <brgerst@gmail.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Jan Kara <jack@suse.cz>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201127154652.GU1437@paulmck-ThinkPad-P72>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 2:30 PM Brian Gerst <brgerst@gmail.com> wrote:
->
-> On Fri, Nov 27, 2020 at 1:13 PM Andy Lutomirski <luto@kernel.org> wrote:
-> >
-> > On Thu, Nov 26, 2020 at 7:52 AM Jan Kara <jack@suse.cz> wrote:
-> > >
-> > > Commit converting syscalls taking 64-bit arguments to new scheme of compat
-> > > handlers omitted converting fanotify_mark(2) which then broke the
-> > > syscall for 32-bit x86 builds. Add missed conversion. It is somewhat
-> > > cumbersome since we need to keep the original compat handler for all the
-> > > other 32-bit archs.
-> > >
-> >
-> > This is stupendously ugly.  I'm not really sure how this is supposed
-> > to work on any 32-bit arch.  I'm also not sure whether we should
-> > expect the SYSCALL_DEFINE macros to figure this out by themselves.
->
-> It works on 32-bit arches because the compiler implicitly uses
-> consecutive input registers or stack slots for 64-bit arguments, and
-> some arches have alignment requirements that result in hidden padding.
-> x86-32 is different now because parameters are passed in via pt_regs,
-> and the 64-bit value has to explicitly be reassembled from the high
-> and low 32-bit values, just like in the compat case.
->
+On Fri, 27 Nov 2020 07:46:52 -0800, Paul E. McKenney wrote:
+> On Wed, Nov 25, 2020 at 08:34:47PM +0900, Akira Yokosawa wrote:
+[...]
+>> Hi Paul,
+>>
+>> I'm seeing this patch still alive in the updated for-mingo-lkmm branch.
+>> Have you got some objection?
+> 
+> From git, which was not able to trivially revert.
 
-That was my guess.
+;-) ;-)
 
-> I think the simplest way to handle this is add a wrapper in
-> arch/x86/kernel/sys_ia32.c with the other fs syscalls that need 64-bit
-> args.  That keeps this mess out of general code.
+>                                                   If you send me a
+> patch on top that removes the uneeded declarations and if someone
+> tests it with a klitmus run, I will take it for the merge window
+> following the upcoming one.
 
+Got it!
+I'm submitting a patch set in reply to this mail.
 
-Want to send a patch?
+1/2 is the removal of those redundant type declarations.
+2/2 is an obvious fix of typo I made in the klitmus7 compat table.
 
-I also wonder if there's a straightforward way to statically check
-this.  Maybe the syscall wrapper macros could be rigged up to avoid
-emitting the ia32 stubs if there is a u64 or s64 arg, so the build
-would fail if someone tries to stick one in the syscall tables.  I
-tried to do this, but I got a bit lost in the macro maze and my
-attempt didn't work.
+        Thanks, Akira
 
---Andy
+> 
+> 							Thanx, Paul
+> 
+>>         Thanks, Akira
+>>
+
