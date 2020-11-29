@@ -2,93 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AEA2C776B
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 04:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6363B2C7774
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 04:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725839AbgK2Dd6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 22:33:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44312 "EHLO mail.kernel.org"
+        id S1725852AbgK2Dzx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 22:55:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50252 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725616AbgK2Dd6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 28 Nov 2020 22:33:58 -0500
-Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725839AbgK2Dzx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 28 Nov 2020 22:55:53 -0500
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F3FA82065C;
-        Sun, 29 Nov 2020 03:33:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0330421D7A
+        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 03:55:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606620798;
-        bh=c+2OdbKbduuehb88A5gHc1LV8eJcBLMOoGx1EaPeJEU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=llP0iKdkTCaCKX7mRMd2cthOvfPgvrtdM8s3J+GJRHb02OrnQtSOD00ilBFUZ8ovv
-         A1bxZzzmoHLgZiNS5h3+yaa2MraNZSSHnIN0w4U0E3LTh8bo0CMWUXopFCUT51iUor
-         j9WbDSz6A3uqTKGorAjhGb/PY66eFcOItaE1bAMY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C11633522D27; Sat, 28 Nov 2020 19:33:17 -0800 (PST)
-Date:   Sat, 28 Nov 2020 19:33:17 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr
-Subject: Re: [PATCH 2/2] tools/memory-model: Fix typo in klitmus7
- compatibility table
-Message-ID: <20201129033317.GA1437@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20201105215953.GA15309@paulmck-ThinkPad-P72>
- <20201105220017.15410-6-paulmck@kernel.org>
- <12e0baf4-b1c9-d674-1d4c-310e0a9b6343@gmail.com>
- <20201105225605.GQ3249@paulmck-ThinkPad-P72>
- <2acf8de5-efe9-a205-cb62-04c4774008c0@gmail.com>
- <20201127154652.GU1437@paulmck-ThinkPad-P72>
- <78e1ccaf-9d35-b2a5-1865-fb0a76b3e57e@gmail.com>
- <0f7b4255-cb68-bb1e-6717-3b60a3020c36@gmail.com>
+        s=default; t=1606622112;
+        bh=SFN0cW7ogqkomQKOXYAGwHhs99pK+M7jTK6kr0JdxhQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RIa5z40goQIQDLMNaAtltuoB/wE0qEzVAOMGYNuhmvzVHq0LWbHfJof2wjKw7TPOs
+         1XgBacK+PIBgAGvGw0Z1NTuKx/2qpjY45VH0QJbKQ3LKZmBA0wjqH9YalNQOkGM0iH
+         Xd0UudwbagjBtu41fJaBX4gb+sXd87B5VGO25xGg=
+Received: by mail-wr1-f49.google.com with SMTP id g14so10310675wrm.13
+        for <linux-arch@vger.kernel.org>; Sat, 28 Nov 2020 19:55:11 -0800 (PST)
+X-Gm-Message-State: AOAM532zKeH+b8jZYpOf/K4r6KKUGGhl0n78LwERqstBugUldtcgdmV/
+        t8qYqtZGjer5WN3VsbJv7lLoDjdQs+EzaW23Bf7zlA==
+X-Google-Smtp-Source: ABdhPJwS4QIa9ZSC36DmJxGBf/plpbJObGJjJ0ZkOhBf+B6z5NpaaqPHMyKoPNucQWoi6SiCDnzDwGiIMEAs9GwV6rw=
+X-Received: by 2002:adf:e449:: with SMTP id t9mr20484863wrm.257.1606622110451;
+ Sat, 28 Nov 2020 19:55:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f7b4255-cb68-bb1e-6717-3b60a3020c36@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20201128160141.1003903-1-npiggin@gmail.com> <20201128160141.1003903-7-npiggin@gmail.com>
+In-Reply-To: <20201128160141.1003903-7-npiggin@gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Sat, 28 Nov 2020 19:54:57 -0800
+X-Gmail-Original-Message-ID: <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
+Message-ID: <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
+Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 03:01:49PM +0900, Akira Yokosawa wrote:
-> >From 4f577823fa60e14ae58caa2d3c0b2ced64e6eb43 Mon Sep 17 00:00:00 2001
-> From: Akira Yokosawa <akiyks@gmail.com>
-> Date: Sat, 28 Nov 2020 14:32:15 +0900
-> Subject: [PATCH 2/2] tools/memory-model: Fix typo in klitmus7 compatibility table
-> 
-> klitmus7 of herdtools7 7.48 or earlier depends on ACCESS_ONCE(),
-> which was removed in Linux v4.15.
-> Fix the obvious typo in the table.
-> 
-> Fixes: d075a78a5ab1 ("tools/memory-model/README: Expand dependency of klitmus7")
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+On Sat, Nov 28, 2020 at 8:02 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+>
+> On big systems, the mm refcount can become highly contented when doing
+> a lot of context switching with threaded applications (particularly
+> switching between the idle thread and an application thread).
+>
+> Abandoning lazy tlb slows switching down quite a bit in the important
+> user->idle->user cases, so so instead implement a non-refcounted scheme
+> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
+> any remaining lazy ones.
+>
+> Shootdown IPIs are some concern, but they have not been observed to be
+> a big problem with this scheme (the powerpc implementation generated
+> 314 additional interrupts on a 144 CPU system during a kernel compile).
+> There are a number of strategies that could be employed to reduce IPIs
+> if they turn out to be a problem for some workload.
 
-Both queued for review and further testing, thank you!
+I'm still wondering whether we can do even better.
 
-							Thanx, Paul
+The IPIs you're doing aren't really necessary -- we don't
+fundamentally need to free the pagetables immediately when all
+non-lazy users are done with them (and current kernels don't) -- what
+we need to do is to synchronize all the bookkeeping.  So, with
+adequate locking (famous last words), a couple of alternative schemes
+ought to be possible.
 
-> ---
->  tools/memory-model/README | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/memory-model/README b/tools/memory-model/README
-> index 39d08d1f0443..9a84c45504ab 100644
-> --- a/tools/memory-model/README
-> +++ b/tools/memory-model/README
-> @@ -51,7 +51,7 @@ klitmus7 Compatibility Table
->  	============  ==========
->  	target Linux  herdtools7
->  	------------  ----------
-> -	     -- 4.18  7.48 --
-> +	     -- 4.14  7.48 --
->  	4.15 -- 4.19  7.49 --
->  	4.20 -- 5.5   7.54 --
->  	5.6  --       7.56 --
-> -- 
-> 2.17.1
-> 
-> 
+a) Instead of sending an IPI, increment mm_count on behalf of the
+remote CPU and do something to make sure that the remote CPU knows we
+did this on its behalf.  Then free the mm when mm_count hits zero.
+
+b) Treat mm_cpumask as part of the refcount.  Add one to mm_count when
+an mm is created.  Once mm_users hits zero, whoever clears the last
+bit in mm_cpumask is responsible for decrementing a single reference
+from mm_count, and whoever sets it to zero frees the mm.
+
+Version (b) seems fairly straightforward to implement -- add RCU
+protection and a atomic_t special_ref_cleared (initially 0) to struct
+mm_struct itself.  After anyone clears a bit to mm_cpumask (which is
+already a barrier), they read mm_users.  If it's zero, then they scan
+mm_cpumask and see if it's empty.  If it is, they atomically swap
+special_ref_cleared to 1.  If it was zero before the swap, they do
+mmdrop().  I can imagine some tweaks that could make this a big
+faster, at least in the limit of a huge number of CPUs.
+
+Version (a) seems a bit harder to reason about.  Maybe it could be
+done like this.  Add a percpu variable mm_with_extra_count.  This
+variable can be NULL, but it can also be an mm that has an extra
+reference on behalf of the cpu in question.
+
+__mmput scans mm_cpumask and, for each cpu in the mask, mmgrabs the mm
+and cmpxchgs that cpu's mm_with_extra_count from NULL to mm.  If it
+succeeds, then we win.  If it fails, further thought is required, and
+maybe we have to send an IPI, although maybe some other cleverness is
+possible.  Any time a CPU switches mms, it does atomic swaps
+mm_with_extra_count to NULL and mmdrops whatever the mm was.  (Maybe
+it needs to check the mm isn't equal to the new mm, although it would
+be quite bizarre for this to happen.)  Other than these mmgrab and
+mmdrop calls, the mm switching code doesn't mmgrab or mmdrop at all.
+
+
+Version (a) seems like it could have excellent performance.
+
+
+*However*, I think we should consider whether we want to do something
+even bigger first.  Even with any of these changes, we still need to
+maintain mm_cpumask(), and that itself can be a scalability problem.
+I wonder if we can solve this problem too.  Perhaps the switch_mm()
+paths could only ever set mm_cpumask bits, and anyone who would send
+an IPI because a bit is set in mm_cpumask would first check some
+percpu variable (cpu_rq(cpu)->something?  an entirely new variable) to
+see if the bit in mm_cpumask is spurious.  Or perhaps mm_cpumask could
+be split up across multiple cachelines, one per node.
+
+We should keep the recent lessons from Apple in mind, though: x86 is a
+dinosaur.  The future of atomics is going to look a lot more like
+ARM's LSE than x86's rather anemic set.  This means that mm_cpumask
+operations won't need to be full barriers forever, and we might not
+want to take the implied full barriers in set_bit() and clear_bit()
+for granted.
+
+--Andy
