@@ -2,133 +2,210 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6363B2C7774
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 04:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E94B2C79CC
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 16:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725852AbgK2Dzx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 22:55:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725839AbgK2Dzx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 28 Nov 2020 22:55:53 -0500
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0330421D7A
-        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 03:55:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606622112;
-        bh=SFN0cW7ogqkomQKOXYAGwHhs99pK+M7jTK6kr0JdxhQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RIa5z40goQIQDLMNaAtltuoB/wE0qEzVAOMGYNuhmvzVHq0LWbHfJof2wjKw7TPOs
-         1XgBacK+PIBgAGvGw0Z1NTuKx/2qpjY45VH0QJbKQ3LKZmBA0wjqH9YalNQOkGM0iH
-         Xd0UudwbagjBtu41fJaBX4gb+sXd87B5VGO25xGg=
-Received: by mail-wr1-f49.google.com with SMTP id g14so10310675wrm.13
-        for <linux-arch@vger.kernel.org>; Sat, 28 Nov 2020 19:55:11 -0800 (PST)
-X-Gm-Message-State: AOAM532zKeH+b8jZYpOf/K4r6KKUGGhl0n78LwERqstBugUldtcgdmV/
-        t8qYqtZGjer5WN3VsbJv7lLoDjdQs+EzaW23Bf7zlA==
-X-Google-Smtp-Source: ABdhPJwS4QIa9ZSC36DmJxGBf/plpbJObGJjJ0ZkOhBf+B6z5NpaaqPHMyKoPNucQWoi6SiCDnzDwGiIMEAs9GwV6rw=
-X-Received: by 2002:adf:e449:: with SMTP id t9mr20484863wrm.257.1606622110451;
- Sat, 28 Nov 2020 19:55:10 -0800 (PST)
+        id S1727427AbgK2Pyk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 29 Nov 2020 10:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727058AbgK2Pyj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 29 Nov 2020 10:54:39 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DC1C0613D3
+        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 07:53:58 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id l11so15667345lfg.0
+        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 07:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3PuJ9ydxTViJxhC8bUeJS1Nnpydv/VEM9Wi1gMrMaBs=;
+        b=isTAhbDaUuUXk1VQ3ndJOQ/CuS5MKUiZU9CQF6PymdXpFUOWrtmdwQbOetQXqfuYcu
+         DN+OBA9qL3A9IiYDok2MOFG354WJgz9qAUvm/bYWWVPi9WyZ1PJ1lNfGjJRLoAZLO2Vg
+         uRTzD4pVG+cV2/ymy6+tsxqoVguJfYNDW/2RvIvgoZeWEzlw11EW3XkkvoYk35tVWwPn
+         HfZCQVeqGtpyFhpd4OUy9FJVmyQdiOL8EaFCqmL+9cNs+NvTNNL4303WZgB9szddFdV8
+         BfgLnmnM0DdbVQ1i8kfeHCJ1NEzilifWALzo17ajgIx/BZAN0Q0Iv6ejITAt4NtpIu5W
+         GSXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3PuJ9ydxTViJxhC8bUeJS1Nnpydv/VEM9Wi1gMrMaBs=;
+        b=WMIKS6qIyVnvbktr55N1XUMcz21Tw9+hqb0WofeTfjG3oFuv9DrPZHxMhuQKeI/B0U
+         4+KVTV5g6fVQHHjKdagxR4e5+Ra4pAnf0wiLxMy/5OElAkJKjFexyqCCn8C3cYAYLD03
+         8wIDrQEodWl+ZpAU2XY+maIX027k5thGVZtB5n+WPiNur4QeOXLQ45lBt6gAqn665xcT
+         LRxzKgDz5oD7/R8mU1iOcQQma4us6+nmCAgpaLPw4la13VYcmoyGtzbqRnIGlt0BGMNj
+         /j4SPJQidoUItHx1cDnPi3TA4Eul831lnp9GB2eIMqk8Vp5MaenQxfl73CzntRqjoQ/j
+         YAcA==
+X-Gm-Message-State: AOAM531Bh+apjjsxOMO/+0b+ivUN5JVO1GjAKiBOHeN978TExnlsdQHv
+        Mbvu60PAYOHCHAbRseQ6gBorkr0CqDMfD8bh/4CuLg==
+X-Google-Smtp-Source: ABdhPJzudR+9Ib3gs3Y02i4BAQQW5kNsVm6Yid+szIpP/1AQJ9ils7ZN++n24NpQOPLTFTgkysS30jlcr9Wp5KFuvz0=
+X-Received: by 2002:ac2:43b1:: with SMTP id t17mr7446330lfl.385.1606665236632;
+ Sun, 29 Nov 2020 07:53:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20201128160141.1003903-1-npiggin@gmail.com> <20201128160141.1003903-7-npiggin@gmail.com>
-In-Reply-To: <20201128160141.1003903-7-npiggin@gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Sat, 28 Nov 2020 19:54:57 -0800
-X-Gmail-Original-Message-ID: <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
-Message-ID: <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
-Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb option
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+References: <20201125092208.12544-1-rppt@kernel.org> <20201125092208.12544-8-rppt@kernel.org>
+In-Reply-To: <20201125092208.12544-8-rppt@kernel.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Sun, 29 Nov 2020 07:53:45 -0800
+Message-ID: <CALvZod4MoXod_YkbO+4k2=PS=xdMVbZa2HWWuUnMZ1G9hSr+Jw@mail.gmail.com>
+Subject: Re: [PATCH v12 07/10] secretmem: add memcg accounting
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 8:02 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+On Wed, Nov 25, 2020 at 1:51 AM Mike Rapoport <rppt@kernel.org> wrote:
 >
-> On big systems, the mm refcount can become highly contented when doing
-> a lot of context switching with threaded applications (particularly
-> switching between the idle thread and an application thread).
+> From: Mike Rapoport <rppt@linux.ibm.com>
 >
-> Abandoning lazy tlb slows switching down quite a bit in the important
-> user->idle->user cases, so so instead implement a non-refcounted scheme
-> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
-> any remaining lazy ones.
+> Account memory consumed by secretmem to memcg. The accounting is updated
+> when the memory is actually allocated and freed.
 >
-> Shootdown IPIs are some concern, but they have not been observed to be
-> a big problem with this scheme (the powerpc implementation generated
-> 314 additional interrupts on a 144 CPU system during a kernel compile).
-> There are a number of strategies that could be employed to reduce IPIs
-> if they turn out to be a problem for some workload.
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Roman Gushchin <guro@fb.com>
+> ---
+>  mm/filemap.c   |  3 ++-
+>  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
+>  2 files changed, 37 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 249cf489f5df..cf7f1dc9f4b8 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -42,6 +42,7 @@
+>  #include <linux/psi.h>
+>  #include <linux/ramfs.h>
+>  #include <linux/page_idle.h>
+> +#include <linux/secretmem.h>
+>  #include "internal.h"
+>
+>  #define CREATE_TRACE_POINTS
+> @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
+>         page->mapping = mapping;
+>         page->index = offset;
+>
+> -       if (!huge) {
+> +       if (!huge && !page_is_secretmem(page)) {
+>                 error = mem_cgroup_charge(page, current->mm, gfp);
+>                 if (error)
+>                         goto error;
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 52a900a135a5..eb6628390444 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/memblock.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/secretmem.h>
+> +#include <linux/memcontrol.h>
+>  #include <linux/set_memory.h>
+>  #include <linux/sched/signal.h>
+>
+> @@ -44,6 +45,32 @@ struct secretmem_ctx {
+>
+>  static struct cma *secretmem_cma;
+>
+> +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
+> +{
+> +       int err;
+> +
+> +       err = memcg_kmem_charge_page(page, gfp, order);
+> +       if (err)
+> +               return err;
+> +
+> +       /*
+> +        * seceremem caches are unreclaimable kernel allocations, so treat
+> +        * them as unreclaimable slab memory for VM statistics purposes
+> +        */
+> +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
+> +                           PAGE_SIZE << order);
 
-I'm still wondering whether we can do even better.
+Please use mod_lruvec_page_state() instead, so we get the memcg stats too.
 
-The IPIs you're doing aren't really necessary -- we don't
-fundamentally need to free the pagetables immediately when all
-non-lazy users are done with them (and current kernels don't) -- what
-we need to do is to synchronize all the bookkeeping.  So, with
-adequate locking (famous last words), a couple of alternative schemes
-ought to be possible.
+BTW I think secretmem deserves a vmstat entry instead of overloading
+NR_SLAB_UNRECLAIMABLE_B.
 
-a) Instead of sending an IPI, increment mm_count on behalf of the
-remote CPU and do something to make sure that the remote CPU knows we
-did this on its behalf.  Then free the mm when mm_count hits zero.
-
-b) Treat mm_cpumask as part of the refcount.  Add one to mm_count when
-an mm is created.  Once mm_users hits zero, whoever clears the last
-bit in mm_cpumask is responsible for decrementing a single reference
-from mm_count, and whoever sets it to zero frees the mm.
-
-Version (b) seems fairly straightforward to implement -- add RCU
-protection and a atomic_t special_ref_cleared (initially 0) to struct
-mm_struct itself.  After anyone clears a bit to mm_cpumask (which is
-already a barrier), they read mm_users.  If it's zero, then they scan
-mm_cpumask and see if it's empty.  If it is, they atomically swap
-special_ref_cleared to 1.  If it was zero before the swap, they do
-mmdrop().  I can imagine some tweaks that could make this a big
-faster, at least in the limit of a huge number of CPUs.
-
-Version (a) seems a bit harder to reason about.  Maybe it could be
-done like this.  Add a percpu variable mm_with_extra_count.  This
-variable can be NULL, but it can also be an mm that has an extra
-reference on behalf of the cpu in question.
-
-__mmput scans mm_cpumask and, for each cpu in the mask, mmgrabs the mm
-and cmpxchgs that cpu's mm_with_extra_count from NULL to mm.  If it
-succeeds, then we win.  If it fails, further thought is required, and
-maybe we have to send an IPI, although maybe some other cleverness is
-possible.  Any time a CPU switches mms, it does atomic swaps
-mm_with_extra_count to NULL and mmdrops whatever the mm was.  (Maybe
-it needs to check the mm isn't equal to the new mm, although it would
-be quite bizarre for this to happen.)  Other than these mmgrab and
-mmdrop calls, the mm switching code doesn't mmgrab or mmdrop at all.
-
-
-Version (a) seems like it could have excellent performance.
-
-
-*However*, I think we should consider whether we want to do something
-even bigger first.  Even with any of these changes, we still need to
-maintain mm_cpumask(), and that itself can be a scalability problem.
-I wonder if we can solve this problem too.  Perhaps the switch_mm()
-paths could only ever set mm_cpumask bits, and anyone who would send
-an IPI because a bit is set in mm_cpumask would first check some
-percpu variable (cpu_rq(cpu)->something?  an entirely new variable) to
-see if the bit in mm_cpumask is spurious.  Or perhaps mm_cpumask could
-be split up across multiple cachelines, one per node.
-
-We should keep the recent lessons from Apple in mind, though: x86 is a
-dinosaur.  The future of atomics is going to look a lot more like
-ARM's LSE than x86's rather anemic set.  This means that mm_cpumask
-operations won't need to be full barriers forever, and we might not
-want to take the implied full barriers in set_bit() and clear_bit()
-for granted.
-
---Andy
+> +
+> +       return 0;
+> +}
+> +
+> +static void secretmem_unaccount_pages(struct page *page, int order)
+> +{
+> +
+> +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
+> +                           -PAGE_SIZE << order);
+> +       memcg_kmem_uncharge_page(page, order);
+> +}
+> +
+>  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  {
+>         unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
+> @@ -56,10 +83,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>         if (!page)
+>                 return -ENOMEM;
+>
+> -       err = set_direct_map_invalid_noflush(page, nr_pages);
+> +       err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
+>         if (err)
+>                 goto err_cma_release;
+>
+> +       err = set_direct_map_invalid_noflush(page, nr_pages);
+> +       if (err)
+> +               goto err_memcg_uncharge;
+> +
+>         addr = (unsigned long)page_address(page);
+>         err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
+>         if (err)
+> @@ -76,6 +107,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>          * won't fail
+>          */
+>         set_direct_map_default_noflush(page, nr_pages);
+> +err_memcg_uncharge:
+> +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>  err_cma_release:
+>         cma_release(secretmem_cma, page, nr_pages);
+>         return err;
+> @@ -302,6 +335,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
+>         int i;
+>
+>         set_direct_map_default_noflush(page, nr_pages);
+> +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>
+>         for (i = 0; i < nr_pages; i++)
+>                 clear_highpage(page + i);
+> --
+> 2.28.0
+>
