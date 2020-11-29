@@ -2,145 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6D52C76DE
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 01:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AEA2C776B
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 04:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbgK2Aj2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Nov 2020 19:39:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39372 "EHLO mail.kernel.org"
+        id S1725839AbgK2Dd6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Nov 2020 22:33:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725616AbgK2Aj2 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 28 Nov 2020 19:39:28 -0500
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725616AbgK2Dd6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 28 Nov 2020 22:33:58 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A2E8120885
-        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 00:38:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F3FA82065C;
+        Sun, 29 Nov 2020 03:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606610326;
-        bh=lWw5TMojtbxaKw7VvjVfQ7hiJVxsrMbwUI8CIDgcSZY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a0taiRYTV5hE9MJz5yrB/E4wLTcpu6J4VhuvST+LEVmSTVkna4nUBPRDjdWVBTVMJ
-         fuTCF7fuMt1843shzrtQziGt1E6DLo44ThR0PCOZcAPf5A0Sg0lmg8AcXiordCw4sf
-         uiPYBlSLwsDESf2UJUzrOy9iNR4XYHvtnQJKiDYs=
-Received: by mail-wm1-f44.google.com with SMTP id w24so12637408wmi.0
-        for <linux-arch@vger.kernel.org>; Sat, 28 Nov 2020 16:38:46 -0800 (PST)
-X-Gm-Message-State: AOAM530IoL5QcJItjzyNbayL1yMJfBWbpNjPRmWxjFti4siLWhSotdDI
-        YB/AWIvns8xR20XEGSXBtk6sgKRHavq1wJVmhy/shQ==
-X-Google-Smtp-Source: ABdhPJwLyYJ+CcbT9yQXWivpvUJZnHSwXyqV4grvoj5mlZ4cyzQ891rccLTwbv5dzdTuLdNLgiIWQRFmH9pj5WLHwsU=
-X-Received: by 2002:a7b:cb41:: with SMTP id v1mr4301883wmj.36.1606610325224;
- Sat, 28 Nov 2020 16:38:45 -0800 (PST)
+        s=default; t=1606620798;
+        bh=c+2OdbKbduuehb88A5gHc1LV8eJcBLMOoGx1EaPeJEU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=llP0iKdkTCaCKX7mRMd2cthOvfPgvrtdM8s3J+GJRHb02OrnQtSOD00ilBFUZ8ovv
+         A1bxZzzmoHLgZiNS5h3+yaa2MraNZSSHnIN0w4U0E3LTh8bo0CMWUXopFCUT51iUor
+         j9WbDSz6A3uqTKGorAjhGb/PY66eFcOItaE1bAMY=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C11633522D27; Sat, 28 Nov 2020 19:33:17 -0800 (PST)
+Date:   Sat, 28 Nov 2020 19:33:17 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr
+Subject: Re: [PATCH 2/2] tools/memory-model: Fix typo in klitmus7
+ compatibility table
+Message-ID: <20201129033317.GA1437@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201105215953.GA15309@paulmck-ThinkPad-P72>
+ <20201105220017.15410-6-paulmck@kernel.org>
+ <12e0baf4-b1c9-d674-1d4c-310e0a9b6343@gmail.com>
+ <20201105225605.GQ3249@paulmck-ThinkPad-P72>
+ <2acf8de5-efe9-a205-cb62-04c4774008c0@gmail.com>
+ <20201127154652.GU1437@paulmck-ThinkPad-P72>
+ <78e1ccaf-9d35-b2a5-1865-fb0a76b3e57e@gmail.com>
+ <0f7b4255-cb68-bb1e-6717-3b60a3020c36@gmail.com>
 MIME-Version: 1.0
-References: <20201128160141.1003903-1-npiggin@gmail.com> <20201128160141.1003903-2-npiggin@gmail.com>
-In-Reply-To: <20201128160141.1003903-2-npiggin@gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Sat, 28 Nov 2020 16:38:33 -0800
-X-Gmail-Original-Message-ID: <CALCETrVbFm7gZ7G_5DWa6UGYtCzZTQvC_CPRVDZ0Lb-tiMnjSg@mail.gmail.com>
-Message-ID: <CALCETrVbFm7gZ7G_5DWa6UGYtCzZTQvC_CPRVDZ0Lb-tiMnjSg@mail.gmail.com>
-Subject: Re: [PATCH 1/8] lazy tlb: introduce exit_lazy_tlb
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0f7b4255-cb68-bb1e-6717-3b60a3020c36@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 8:01 AM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> This is called at points where a lazy mm is switched away or made not
-> lazy (by its owner switching back).
->
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+On Sat, Nov 28, 2020 at 03:01:49PM +0900, Akira Yokosawa wrote:
+> >From 4f577823fa60e14ae58caa2d3c0b2ced64e6eb43 Mon Sep 17 00:00:00 2001
+> From: Akira Yokosawa <akiyks@gmail.com>
+> Date: Sat, 28 Nov 2020 14:32:15 +0900
+> Subject: [PATCH 2/2] tools/memory-model: Fix typo in klitmus7 compatibility table
+> 
+> klitmus7 of herdtools7 7.48 or earlier depends on ACCESS_ONCE(),
+> which was removed in Linux v4.15.
+> Fix the obvious typo in the table.
+> 
+> Fixes: d075a78a5ab1 ("tools/memory-model/README: Expand dependency of klitmus7")
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+
+Both queued for review and further testing, thank you!
+
+							Thanx, Paul
+
 > ---
->  arch/arm/mach-rpc/ecard.c            |  1 +
->  arch/powerpc/mm/book3s64/radix_tlb.c |  1 +
->  fs/exec.c                            |  6 ++++--
->  include/asm-generic/mmu_context.h    | 21 +++++++++++++++++++++
->  kernel/kthread.c                     |  1 +
->  kernel/sched/core.c                  |  2 ++
->  6 files changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/mach-rpc/ecard.c b/arch/arm/mach-rpc/ecard.c
-> index 827b50f1c73e..43eb1bfba466 100644
-> --- a/arch/arm/mach-rpc/ecard.c
-> +++ b/arch/arm/mach-rpc/ecard.c
-> @@ -253,6 +253,7 @@ static int ecard_init_mm(void)
->         current->mm = mm;
->         current->active_mm = mm;
->         activate_mm(active_mm, mm);
-> +       exit_lazy_tlb(active_mm, current);
->         mmdrop(active_mm);
->         ecard_init_pgtables(mm);
->         return 0;
-> diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
-> index b487b489d4b6..ac3fec03926a 100644
-> --- a/arch/powerpc/mm/book3s64/radix_tlb.c
-> +++ b/arch/powerpc/mm/book3s64/radix_tlb.c
-> @@ -661,6 +661,7 @@ static void do_exit_flush_lazy_tlb(void *arg)
->                 mmgrab(&init_mm);
->                 current->active_mm = &init_mm;
->                 switch_mm_irqs_off(mm, &init_mm, current);
-> +               exit_lazy_tlb(mm, current);
->                 mmdrop(mm);
->         }
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 547a2390baf5..4b4dea1bb7ba 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1017,6 +1017,8 @@ static int exec_mmap(struct mm_struct *mm)
->         if (!IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
->                 local_irq_enable();
->         activate_mm(active_mm, mm);
-> +       if (!old_mm)
-> +               exit_lazy_tlb(active_mm, tsk);
->         if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
->                 local_irq_enable();
->         tsk->mm->vmacache_seqnum = 0;
-> @@ -1028,9 +1030,9 @@ static int exec_mmap(struct mm_struct *mm)
->                 setmax_mm_hiwater_rss(&tsk->signal->maxrss, old_mm);
->                 mm_update_next_owner(old_mm);
->                 mmput(old_mm);
-> -               return 0;
-> +       } else {
-> +               mmdrop(active_mm);
->         }
-> -       mmdrop(active_mm);
-
-This looks like an unrelated change.
-
->         return 0;
->  }
->
-> diff --git a/include/asm-generic/mmu_context.h b/include/asm-generic/mmu_context.h
-> index 91727065bacb..4626d0020e65 100644
-> --- a/include/asm-generic/mmu_context.h
-> +++ b/include/asm-generic/mmu_context.h
-> @@ -24,6 +24,27 @@ static inline void enter_lazy_tlb(struct mm_struct *mm,
->  }
->  #endif
->
-> +/*
-> + * exit_lazy_tlb - Called after switching away from a lazy TLB mode mm.
-> + *
-> + * mm:  the lazy mm context that was switched
-> + * tsk: the task that was switched to (with a non-lazy mm)
-> + *
-> + * mm may equal tsk->mm.
-> + * mm and tsk->mm will not be NULL.
-> + *
-> + * Note this is not symmetrical to enter_lazy_tlb, this is not
-> + * called when tasks switch into the lazy mm, it's called after the
-> + * lazy mm becomes non-lazy (either switched to a different mm or the
-> + * owner of the mm returns).
-> + */
-> +#ifndef exit_lazy_tlb
-> +static inline void exit_lazy_tlb(struct mm_struct *mm,
-
-Maybe name this parameter prev_lazy_mm?
+>  tools/memory-model/README | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/memory-model/README b/tools/memory-model/README
+> index 39d08d1f0443..9a84c45504ab 100644
+> --- a/tools/memory-model/README
+> +++ b/tools/memory-model/README
+> @@ -51,7 +51,7 @@ klitmus7 Compatibility Table
+>  	============  ==========
+>  	target Linux  herdtools7
+>  	------------  ----------
+> -	     -- 4.18  7.48 --
+> +	     -- 4.14  7.48 --
+>  	4.15 -- 4.19  7.49 --
+>  	4.20 -- 5.5   7.54 --
+>  	5.6  --       7.56 --
+> -- 
+> 2.17.1
+> 
+> 
