@@ -2,203 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8592C7A39
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 18:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8E52C7B23
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Nov 2020 21:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbgK2R1X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 29 Nov 2020 12:27:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49932 "EHLO mail.kernel.org"
+        id S1727385AbgK2URV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 29 Nov 2020 15:17:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725468AbgK2R1W (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 29 Nov 2020 12:27:22 -0500
-Received: from kernel.org (unknown [87.71.85.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726440AbgK2URU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 29 Nov 2020 15:17:20 -0500
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 422E9206F4;
-        Sun, 29 Nov 2020 17:26:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BB9D620870
+        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 20:16:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606670801;
-        bh=193fTdj4a0UGUIyrwcsvt+1ylSiVDeNw4WwJgyyeI0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VcPgX8dFSy9Ib9kWnBH2tRtaSziWbjbmm/b3KwtE1n5ZeUaApS9TIAbB17gPzKn16
-         16Tdha8Hm4Jgj6OkL5MJvDw7grmc3v+aPRxni9lGCOKPmW+seMn30mlZzbCH+CCfcq
-         1IVHreDWn8hVqwZBOZMP3h7CF/w11Dl4ALLVGb3o=
-Date:   Sun, 29 Nov 2020 19:26:25 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: Re: [PATCH v12 07/10] secretmem: add memcg accounting
-Message-ID: <20201129172625.GD557259@kernel.org>
-References: <20201125092208.12544-1-rppt@kernel.org>
- <20201125092208.12544-8-rppt@kernel.org>
- <CALvZod4MoXod_YkbO+4k2=PS=xdMVbZa2HWWuUnMZ1G9hSr+Jw@mail.gmail.com>
+        s=default; t=1606681000;
+        bh=N/5rjQqJanCNkJazZn/cQ2aPW49EUqzYQDUy+Xdcge0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KiuuWU0bKgXhfhotWCf0rYVtbTbBbphVh4LCZHE/dCR9NBCC8GcNZooNBZ5Gi5zU9
+         PctBfFUnw2EWNN1FkCP1+deRAWJ7usmjY0l2u58A5HXfyVqqdZ5I3lzOC6Z+jAOlZG
+         E77lUb1oMr2CSCePllItgypJ/5XR6/HfDF5zPFlc=
+Received: by mail-wr1-f46.google.com with SMTP id k14so12548965wrn.1
+        for <linux-arch@vger.kernel.org>; Sun, 29 Nov 2020 12:16:39 -0800 (PST)
+X-Gm-Message-State: AOAM532FPBnzdmMX0/h3loPXm21BuqP2C+L2xIds3TfsCoURHdEPeU0y
+        dWsBHXDRlS+xR3Db981v46McNIcKb9j3px/gXp0oWA==
+X-Google-Smtp-Source: ABdhPJwYikNyF98Tybzh36itlesMK1rlfrvxImOMUWZkk0NuWSWbLwn6lWsiusLeR7vr43/6ZfjVImZ+tuEfqHGf3aM=
+X-Received: by 2002:a5d:49ce:: with SMTP id t14mr24072262wrs.75.1606680998232;
+ Sun, 29 Nov 2020 12:16:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod4MoXod_YkbO+4k2=PS=xdMVbZa2HWWuUnMZ1G9hSr+Jw@mail.gmail.com>
+References: <20201128160141.1003903-1-npiggin@gmail.com> <20201128160141.1003903-7-npiggin@gmail.com>
+ <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
+In-Reply-To: <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Sun, 29 Nov 2020 12:16:26 -0800
+X-Gmail-Original-Message-ID: <CALCETrWBtCfD+jZ3S+O8FK-HFPODuhbDEbbfWvS=-iPATNFAOA@mail.gmail.com>
+Message-ID: <CALCETrWBtCfD+jZ3S+O8FK-HFPODuhbDEbbfWvS=-iPATNFAOA@mail.gmail.com>
+Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Nov 29, 2020 at 07:53:45AM -0800, Shakeel Butt wrote:
-> On Wed, Nov 25, 2020 at 1:51 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Sat, Nov 28, 2020 at 7:54 PM Andy Lutomirski <luto@kernel.org> wrote:
+>
+> On Sat, Nov 28, 2020 at 8:02 AM Nicholas Piggin <npiggin@gmail.com> wrote:
 > >
-> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > On big systems, the mm refcount can become highly contented when doing
+> > a lot of context switching with threaded applications (particularly
+> > switching between the idle thread and an application thread).
 > >
-> > Account memory consumed by secretmem to memcg. The accounting is updated
-> > when the memory is actually allocated and freed.
+> > Abandoning lazy tlb slows switching down quite a bit in the important
+> > user->idle->user cases, so so instead implement a non-refcounted scheme
+> > that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
+> > any remaining lazy ones.
 > >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > Acked-by: Roman Gushchin <guro@fb.com>
-> > ---
-> >  mm/filemap.c   |  3 ++-
-> >  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 37 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/filemap.c b/mm/filemap.c
-> > index 249cf489f5df..cf7f1dc9f4b8 100644
-> > --- a/mm/filemap.c
-> > +++ b/mm/filemap.c
-> > @@ -42,6 +42,7 @@
-> >  #include <linux/psi.h>
-> >  #include <linux/ramfs.h>
-> >  #include <linux/page_idle.h>
-> > +#include <linux/secretmem.h>
-> >  #include "internal.h"
-> >
-> >  #define CREATE_TRACE_POINTS
-> > @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
-> >         page->mapping = mapping;
-> >         page->index = offset;
-> >
-> > -       if (!huge) {
-> > +       if (!huge && !page_is_secretmem(page)) {
-> >                 error = mem_cgroup_charge(page, current->mm, gfp);
-> >                 if (error)
-> >                         goto error;
-> > diff --git a/mm/secretmem.c b/mm/secretmem.c
-> > index 52a900a135a5..eb6628390444 100644
-> > --- a/mm/secretmem.c
-> > +++ b/mm/secretmem.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/memblock.h>
-> >  #include <linux/pseudo_fs.h>
-> >  #include <linux/secretmem.h>
-> > +#include <linux/memcontrol.h>
-> >  #include <linux/set_memory.h>
-> >  #include <linux/sched/signal.h>
-> >
-> > @@ -44,6 +45,32 @@ struct secretmem_ctx {
-> >
-> >  static struct cma *secretmem_cma;
-> >
-> > +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
-> > +{
-> > +       int err;
-> > +
-> > +       err = memcg_kmem_charge_page(page, gfp, order);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       /*
-> > +        * seceremem caches are unreclaimable kernel allocations, so treat
-> > +        * them as unreclaimable slab memory for VM statistics purposes
-> > +        */
-> > +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
-> > +                           PAGE_SIZE << order);
-> 
-> Please use mod_lruvec_page_state() instead, so we get the memcg stats too.
+> > Shootdown IPIs are some concern, but they have not been observed to be
+> > a big problem with this scheme (the powerpc implementation generated
+> > 314 additional interrupts on a 144 CPU system during a kernel compile).
+> > There are a number of strategies that could be employed to reduce IPIs
+> > if they turn out to be a problem for some workload.
+>
+> I'm still wondering whether we can do even better.
+>
 
-Ok
+Hold on a sec.. __mmput() unmaps VMAs, frees pagetables, and flushes
+the TLB.  On x86, this will shoot down all lazies as long as even a
+single pagetable was freed.  (Or at least it will if we don't have a
+serious bug, but the code seems okay.  We'll hit pmd_free_tlb, which
+sets tlb->freed_tables, which will trigger the IPI.)  So, on
+architectures like x86, the shootdown approach should be free.  The
+only way it ought to have any excess IPIs is if we have CPUs in
+mm_cpumask() that don't need IPI to free pagetables, which could
+happen on paravirt.
 
-> BTW I think secretmem deserves a vmstat entry instead of overloading
-> NR_SLAB_UNRECLAIMABLE_B.
-
-I'd prefer to wait with a dedicated vmstat for now. We can always add it
-later, once we have better picture of secremem usage.
-
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void secretmem_unaccount_pages(struct page *page, int order)
-> > +{
-> > +
-> > +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
-> > +                           -PAGE_SIZE << order);
-> > +       memcg_kmem_uncharge_page(page, order);
-> > +}
-> > +
-> >  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >  {
-> >         unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-> > @@ -56,10 +83,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >         if (!page)
-> >                 return -ENOMEM;
-> >
-> > -       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
-> >         if (err)
-> >                 goto err_cma_release;
-> >
-> > +       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       if (err)
-> > +               goto err_memcg_uncharge;
-> > +
-> >         addr = (unsigned long)page_address(page);
-> >         err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
-> >         if (err)
-> > @@ -76,6 +107,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >          * won't fail
-> >          */
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +err_memcg_uncharge:
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >  err_cma_release:
-> >         cma_release(secretmem_cma, page, nr_pages);
-> >         return err;
-> > @@ -302,6 +335,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> >         int i;
-> >
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >
-> >         for (i = 0; i < nr_pages; i++)
-> >                 clear_highpage(page + i);
-> > --
-> > 2.28.0
-> >
-
--- 
-Sincerely yours,
-Mike.
+Can you try to figure out why you saw any increase in IPIs?  It would
+be nice if we can make the new code unconditional.
