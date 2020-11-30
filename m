@@ -2,104 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9563A2C9259
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 00:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A480F2C92F5
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 00:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726737AbgK3XRX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Nov 2020 18:17:23 -0500
-Received: from mga03.intel.com ([134.134.136.65]:14641 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725980AbgK3XRX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Nov 2020 18:17:23 -0500
-IronPort-SDR: 2M66a1CBDUX2xv1RrxEuV7pYVhO0OMukquy7cf1L3M9fl4zADSbLKV8BAfGdBFGNlBwNUm43EX
- MNPXFz8x/nOA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="172827551"
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="172827551"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 15:16:42 -0800
-IronPort-SDR: 8zNcFY7NhPl0VCOSeKl8PZxj5MKCbmm2A/J0IdXrJVCPnhKSv9Tcuho0ZMivcKfzjSj1RDIlJG
- /oGpjHi+WO/g==
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="480848257"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.122.22]) ([10.212.122.22])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 15:16:40 -0800
-Subject: Re: [NEEDS-REVIEW] [PATCH v15 03/26] x86/fpu/xstate: Introduce CET
- MSR XSAVES supervisor states
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
- <20201110162211.9207-4-yu-cheng.yu@intel.com>
- <cfbd90a8-6996-fa7b-a41a-54ff540f419c@intel.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <3b83517e-17d6-3b53-6dbf-8ad727707b16@intel.com>
-Date:   Mon, 30 Nov 2020 15:16:39 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S2388134AbgK3XpZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Nov 2020 18:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387915AbgK3XpZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Nov 2020 18:45:25 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0077EC0613D4
+        for <linux-arch@vger.kernel.org>; Mon, 30 Nov 2020 15:44:44 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id n18so141118ual.9
+        for <linux-arch@vger.kernel.org>; Mon, 30 Nov 2020 15:44:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ja5iGBqziMZwVeGBVGC3tNT2ITsfFSrpoAOQrYPIRMQ=;
+        b=eIXhFNYrQLrGwHzLPxYGVzWJa/DjXZ3+RK17U4inbSIH8/cLDO1KD8N72OM/zUzB53
+         8yZIeDx97sYjz1uuAvgXJWY765o7D+jPAp3RstXWhEiYWpp6ZfWnqW3rRJRO93eLdG7N
+         2D9TsLZvw7lNns1x8kWHXquH6wydBNpMO2aUV+NR7F+6FAuRbZwFPyrw1V0DxEKSqnp1
+         vdA7qZ099dTy0qixQPzpa9880t8pAmy3P49uy+98kt3oenJTnRXEAx2MWqQdTsTmzPcS
+         FKM8rzdiYWV3COU/X3eovPeyZKHokoQStzQObR4NRJfYg5/2ZfrRz9fPrSbgCSdilzFy
+         91tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ja5iGBqziMZwVeGBVGC3tNT2ITsfFSrpoAOQrYPIRMQ=;
+        b=SzpvzDNXD9ptfpt959buNdWq32ymozw5wmzpncTbNnUsWwZtbNW8VDUTU3ZgWWOXJ8
+         7SSBRSzeAoE2p4NFCny7ExKH20P/Nus0KpBVzcDxcNFHDd4gpW+WnQ9ZQAVLeqM1zKEX
+         gIXLu8QVFbYO7QOA+PSLRX72A2x9fe2CHrn540fEjxenX3opjFBEfMyrRrDKWZQ0J37I
+         IYHS291JhkY7zDwfyDK+w8I4PXBa30xbA8vViQoQZGDGyQ+ToK3I6JYJoRVxGE+LyxwI
+         ckYOC6UOsCbpMu3cLYG5dL/e6t40YVxNCCdnggtk5MqDxRrPzEalKlN3AxZXgr1wu7s3
+         u/jw==
+X-Gm-Message-State: AOAM531GIukSSJxmoNDb5mY4LFxKL61xVz6LhFpc6d/+oNWk+Edu3N11
+        CQR6yRDf31dxONI3DjkSX/fyF3/c6g4jj6D+W+Fkeg==
+X-Google-Smtp-Source: ABdhPJwCzKcJqz39IP46Bo7yz6o/13jgHbjOX0vtta6vuRLC/rbSBznCfSrqxtOCA/emfEwjuB/DVNaoOwhY3XJ9gtU=
+X-Received: by 2002:a9f:2595:: with SMTP id 21mr286471uaf.33.1606779883895;
+ Mon, 30 Nov 2020 15:44:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <cfbd90a8-6996-fa7b-a41a-54ff540f419c@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201118220731.925424-1-samitolvanen@google.com>
+ <20201118220731.925424-15-samitolvanen@google.com> <20201130115222.GC24563@willie-the-truck>
+In-Reply-To: <20201130115222.GC24563@willie-the-truck>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 30 Nov 2020 15:44:32 -0800
+Message-ID: <CABCJKueSjSdpztOsDExCaLyQ+Pip+r6bY=Y1hR=VTOODmoSZMQ@mail.gmail.com>
+Subject: Re: [PATCH v7 14/17] arm64: vdso: disable LTO
+To:     Will Deacon <will@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/30/2020 9:45 AM, Dave Hansen wrote:
-> On 11/10/20 8:21 AM, Yu-cheng Yu wrote:
->> Control-flow Enforcement Technology (CET) adds five MSRs.  Introduce
->> them and their XSAVES supervisor states:
->>
->>      MSR_IA32_U_CET (user-mode CET settings),
->>      MSR_IA32_PL3_SSP (user-mode Shadow Stack pointer),
->>      MSR_IA32_PL0_SSP (kernel-mode Shadow Stack pointer),
->>      MSR_IA32_PL1_SSP (Privilege Level 1 Shadow Stack pointer),
->>      MSR_IA32_PL2_SSP (Privilege Level 2 Shadow Stack pointer).
-> 
-> This patch goes into a bunch of XSAVE work that this changelog only
-> briefly touches on.  I think it needs to be beefed up a bit.
-> 
-[...]
-> 
-> Do we have any other spots in the kernel where we care about:
-> 
-> 	boot_cpu_has(X86_FEATURE_SHSTK) ||
-> 	boot_cpu_has(X86_FEATURE_IBT)
-> 
-> ?  If so, we could also address this by declaring a software-defined
-> X86_FEATURE_CET and then setting it if SHSTK||IBT is supported, then we
-> just put that one feature in xsave_cpuid_features[].
-> 
+On Mon, Nov 30, 2020 at 3:52 AM Will Deacon <will@kernel.org> wrote:
+>
+> On Wed, Nov 18, 2020 at 02:07:28PM -0800, Sami Tolvanen wrote:
+> > Disable LTO for the vDSO by filtering out CC_FLAGS_LTO, as there's no
+> > point in using link-time optimization for the small about of C code.
+>
+> "about" => "amount" ?
 
-These features have different CPUIDs but are complementary parts.  I 
-don't know if someday there will be shadow-stack-only CPUs, but an 
-IBT-only CPU is weird.  What if the kernel checks that the CPU has both 
-features and presents only one feature flag (X86_FEATURE_CET), no 
-X86_FEATURE_SHSTK or X86_FEATURE_IBT?
+Oops, I'll fix that in v8. Thanks!
+
+Sami
