@@ -2,108 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAED52C8E62
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Nov 2020 20:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E0C2C8E84
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Nov 2020 20:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgK3TsP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Nov 2020 14:48:15 -0500
-Received: from mga03.intel.com ([134.134.136.65]:60307 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729194AbgK3TsO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 30 Nov 2020 14:48:14 -0500
-IronPort-SDR: Fa5ywpL0Q9iyDBlloG20yGVYGU8RVzRYsw5qJTFkETcY+uHZ7BgIkdfnrtGmlZ+1VL+8R+UBc2
- /RP1vwkxAFEA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="172800330"
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="172800330"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 11:47:33 -0800
-IronPort-SDR: orzMZuJ32woFCZ7q36QfA9/NJY3Ac/tcD/xJWvuX5MZfyK9drPO8O/V1TgLerY62KI4YLy9zco
- QzvT6RXgKkIA==
-X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
-   d="scan'208";a="372623976"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.122.22]) ([10.212.122.22])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 11:47:32 -0800
-Subject: Re: [PATCH v15 01/26] Documentation/x86: Add CET description
-To:     =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        bsingharora@gmail.com, Jonathan Corbet <corbet@lwn.net>,
-        dave.hansen@linux.intel.com, esyr@redhat.com,
-        Florian Weimer <fweimer@redhat.com>, gorcunov@gmail.com,
-        "H.J. Lu" <hjl.tools@gmail.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        jannh@google.com, Kees Cook <keescook@chromium.org>,
-        linux-api@vger.kernel.org, linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        luto@kernel.org, mike.kravetz@oracle.com,
-        Ingo Molnar <mingo@redhat.com>, nadav.amit@gmail.com,
+        id S1728122AbgK3T4p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Nov 2020 14:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726827AbgK3T4p (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Nov 2020 14:56:45 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B51DC0613D4
+        for <linux-arch@vger.kernel.org>; Mon, 30 Nov 2020 11:56:05 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id kk4so244621pjb.7
+        for <linux-arch@vger.kernel.org>; Mon, 30 Nov 2020 11:56:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=DLtArDV8cKP0BeVklsVGWZ4r7522fWxRlpZkbLI2DME=;
+        b=Kngn4LeLTwq4qYdSAXMCdhjRvG2+hfAwezvYYxclNLH4UYmaXcHHHm/oDA7haEQqo5
+         cDgZ9CTL0bEBGcADB4JOqwDiXbdJifF4LwJgDbjttt2y9O+5miEIVUz2RYOGgeK4NbXj
+         AZHT/WuYNGIuZ+g8cSddgDUX/X/wdLKAeH5yE1Nh6rDk+ejhrEqeGQWhdv05kN+gQ9Uh
+         oOmj6zDFqIWJQpVkAoxeNann4anzRJS+12uX8GB2/354ozUtuLyoprqIvdEFHrYVQBXR
+         J0hiCEXvI45QzTD2c934ITS2t0agvN8pr8586/Tl43yb3ixwscsBmaJeFId+9Gzx78bV
+         bteQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=DLtArDV8cKP0BeVklsVGWZ4r7522fWxRlpZkbLI2DME=;
+        b=cZjBJneXohQgCwrFElN8L/s7IffVolp3pjxHbALEfbJftOU1LQmYPtvERXdMMBc1Ak
+         wu7SZzxqE7RDP17Sd/UK35yYtqde2J2sxDUUmmy5nVdzrf+RmUxHhbKtjS6xFG8vmVAR
+         uDNCh838+KX94vNsw/j/AN+oZYdzWZkCfPicBIOxXEwU7onouDwKWw826V8rnYR2wf8a
+         caoTJE6aYe5kI/x+7FhyAPCmQ4FRmr5rJf9ecm9snlwMq3voW8ooFNvUxfezDeVfvljT
+         Ap776v8YC/YK8MKg96gt7FFkMy2AjqJycnMhBtdHN1LeKK6qJ6/XWYYeHs0OXlNg4M8k
+         NN/Q==
+X-Gm-Message-State: AOAM532Gqq9aCReJP2Rb9Zkv9cl7MyRH9Zszdh2QLg/d+g6Lt0Oildp3
+        QcVIuzxMX1UA3r67+YmhJkQzWg24qXFN9ELyOiI=
+X-Google-Smtp-Source: ABdhPJzB688RhMdWZtegBv6aVz52FbjVdJ0Q+QuBT876w4Q6KmkjclwwABgZ0Hd+nwZUsJGEaNoSrmQC9+tOAwhsDUU=
+Sender: "ndesaulniers via sendgmr" 
+        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:4d25])
+ (user=ndesaulniers job=sendgmr) by 2002:a17:90a:f28f:: with SMTP id
+ fs15mr495886pjb.121.1606766164462; Mon, 30 Nov 2020 11:56:04 -0800 (PST)
+Date:   Mon, 30 Nov 2020 11:56:02 -0800
+In-Reply-To: <20201110162211.9207-6-yu-cheng.yu@intel.com>
+Message-Id: <20201130195602.331842-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+References: <20201110162211.9207-6-yu-cheng.yu@intel.com>
+X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+Subject: Re: [PATCH v15 05/26] x86/cet/shstk: Add Kconfig option for user-mode
+ Shadow Stack
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     yu-cheng.yu@intel.com
+Cc:     Dave.Martin@arm.com, arnd@arndb.de, bp@alien8.de,
+        bsingharora@gmail.com, corbet@lwn.net, dave.hansen@linux.intel.com,
+        esyr@redhat.com, fweimer@redhat.com, gorcunov@gmail.com,
+        hjl.tools@gmail.com, hpa@zytor.com, jannh@google.com,
+        keescook@chromium.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        mike.kravetz@oracle.com, mingo@redhat.com, nadav.amit@gmail.com,
         oleg@redhat.com, pavel@ucw.cz, pengfei.xu@intel.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        peterz@infradead.org, ravi.v.shankar@intel.com,
+        rdunlap@infradead.org, tglx@linutronix.de,
         vedvyas.shanbhogue@intel.com, weijiang.yang@intel.com,
-        X86 ML <x86@kernel.org>, Luis Lozano <llozano@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        erich.keane@intel.com
-References: <20201110162211.9207-2-yu-cheng.yu@intel.com>
- <20201130182641.29812-1-ndesaulniers@google.com>
- <4fad528b-e467-f96d-b7fb-9484fd975886@intel.com>
- <CAFP8O3LjdP69_T1Ve-zZjvg7+v8xV1mh9Wk8zm4LpAsE2PG58Q@mail.gmail.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <a675b406-dcb9-ac38-3ecb-c98378d333cf@intel.com>
-Date:   Mon, 30 Nov 2020 11:47:31 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
-MIME-Version: 1.0
-In-Reply-To: <CAFP8O3LjdP69_T1Ve-zZjvg7+v8xV1mh9Wk8zm4LpAsE2PG58Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Will Deacon <will@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/30/2020 11:38 AM, Fāng-ruì Sòng wrote:
-> On Mon, Nov 30, 2020 at 10:34 AM Yu, Yu-cheng <yu-cheng.yu@intel.com> wrote:
->>
->> On 11/30/2020 10:26 AM, Nick Desaulniers wrote:
->>> (In response to https://lore.kernel.org/lkml/20201110162211.9207-2-yu-cheng.yu@intel.com/)
->>>
->>>> These need to be enabled to build a CET-enabled kernel, and Binutils v2.31
->>>> and GCC v8.1 or later are required to build a CET kernel.
->>>
->>> What about LLVM? Surely CrOS might be of interest to ship this on (we ship the
->>> equivalent for aarch64 on Android).
->>>
->>
->> I have not built with LLVM, but think it probably will work as well.  I
->> will test it.
->>
->>>> An application's CET capability is marked in its ELF header and can be
->>>> verified from the following command output, in the NT_GNU_PROPERTY_TYPE_0
->>>> field:
->>>>
->>>>       readelf -n <application> | grep SHSTK
->>>>           properties: x86 feature: IBT, SHSTK
->>>
->>> Same for llvm-readelf.
->>>
->>
->> I will add that to the document.
->>
->> Thanks,
->> Yu-cheng
-> 
-> The baseline LLVM version is 10.0.1, which is good enough for  clang
-> -fcf-protection=full, llvm-readelf -n, LLD's .note.gnu.property
-> handling (the LLD option is `-z force-ibt`, though)
-> 
-> 
+In response to https://lore.kernel.org/lkml/20201110162211.9207-6-yu-cheng.yu@intel.com/.
 
-Thanks!
+Hi Yu-cheng,
+This feature reminds me very much of
+ARCH_SUPPORTS_SHADOW_CALL_STACK/CC_HAVE_SHADOW_CALL_STACK implemented in
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5287569a790d2546a06db07e391bf84b8bd6cf51.
 
-Yu-cheng
+Do you think it would be worthwhile to share the same config name between x86
+and aarch64?
+
+(Though, it seems on x86 there will be a distinction between kernel mode and
+user mode configs, if I understand correctly?)
