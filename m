@@ -2,36 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 773882C8C72
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Nov 2020 19:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA852C8C86
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Nov 2020 19:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388013AbgK3SPl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Nov 2020 13:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726376AbgK3SPl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Nov 2020 13:15:41 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D534CC0613D4;
-        Mon, 30 Nov 2020 10:15:00 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0c0400dc0f4426b730eaa1.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:400:dc0f:4426:b730:eaa1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 382831EC0249;
-        Mon, 30 Nov 2020 19:14:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1606760099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=DsIkyRDqsHAg65QslwmCp09JK5IjAEIZ6mx1FlBzzao=;
-        b=cYDnN961MFrBT2jgiFz98Jd1x2JPsKSatoVYE6Ap3wX8nWbvd9+BnwaGXSppVat3ie+7Pi
-        4M3BhZGFiVKezT3prSdk2+xQZivfw0GqWSQ6QMI/IL1S8vhW1jUqZE0+8bZfSt56qp4ZcU
-        4ImngURjhKH93VTjAU3Fj/J8Y+wUYtw=
-Date:   Mon, 30 Nov 2020 19:15:00 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S2388086AbgK3SR4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Nov 2020 13:17:56 -0500
+Received: from mga18.intel.com ([134.134.136.126]:6957 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388071AbgK3SRw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 30 Nov 2020 13:17:52 -0500
+IronPort-SDR: wj5Dzt4t1e8jeh6eHiiSFfBl4zWQ1rUJUit/MrUwRmJ0ORHcy0BUGxMbDJANiHtZ+QI+DQ4HOl
+ C9xh77ZZrfQA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9821"; a="160457112"
+X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
+   d="scan'208";a="160457112"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 10:17:11 -0800
+IronPort-SDR: Po7ha/fJ6IXwregsxpli6VTfXr+znPuolwEztJizbK2473bykZTG02oYFxl670BEDxM3PIUpwE
+ f6imrB/W1kIA==
+X-IronPort-AV: E=Sophos;i="5.78,382,1599548400"; 
+   d="scan'208";a="434379152"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.122.22]) ([10.212.122.22])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2020 10:17:09 -0800
+Subject: Re: [NEEDS-REVIEW] [PATCH v15 03/26] x86/fpu/xstate: Introduce CET
+ MSR XSAVES supervisor states
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -39,6 +37,7 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -56,48 +55,58 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v15 05/26] x86/cet/shstk: Add Kconfig option for
- user-mode Shadow Stack
-Message-ID: <20201130181500.GH6019@zn.tnic>
 References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
- <20201110162211.9207-6-yu-cheng.yu@intel.com>
- <20201127171012.GD13163@zn.tnic>
- <98e1b159-bf32-5c67-455b-f798023770ef@intel.com>
+ <20201110162211.9207-4-yu-cheng.yu@intel.com>
+ <cfbd90a8-6996-fa7b-a41a-54ff540f419c@intel.com>
+ <f7033860-f322-fe13-fdc1-552e8777f003@intel.com>
+ <31c8dabc-185d-be7b-c800-30a7ff29b34e@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <0110eba0-09cd-ace8-57d3-859475610b42@intel.com>
+Date:   Mon, 30 Nov 2020 10:17:09 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <98e1b159-bf32-5c67-455b-f798023770ef@intel.com>
+In-Reply-To: <31c8dabc-185d-be7b-c800-30a7ff29b34e@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 08:23:59AM -0800, Yu, Yu-cheng wrote:
-> We have X86_BRANCH_TRACKING_USER too.  My thought was, X86_CET means any of
-> kernel/user shadow stack/ibt.
+On 11/30/2020 10:12 AM, Dave Hansen wrote:
+> On 11/30/20 10:06 AM, Yu, Yu-cheng wrote:
+>>>> +            if (!boot_cpu_has(X86_FEATURE_SHSTK) &&
+>>>> +                !boot_cpu_has(X86_FEATURE_IBT))
+>>>> +                xfeatures_mask_all &= ~BIT_ULL(i);
+>>>> +        } else {
+>>>> +            if ((xsave_cpuid_features[i] == -1) ||
+>>>
+>>> Where did the -1 come from?  Was that introduced earlier in this series?
+>>>    I don't see any way a xsave_cpuid_features[] can be -1 in the
+>>> current tree.
+>>
+>> Yes, we used to have a hole in xsave_cpuid_features[] and put -1 there.
+>> Do we want to keep this in case we again have holes in the future?
+> 
+> So, it's dead code for the moment and it's impossible to tell what -1
+> means without looking at git history?  That seems, um, suboptimal.
+> 
+> Shouldn't we have:
+> 
+> #define XFEATURE_NO_DEP -1
+> 
+> ?
+> 
+> And then this code becomes:
+> 
+> 	if ((xsave_cpuid_features[i] == XFEATURE_NO_DEP))
+> 		// skip it...
+> 
+> We can even put a comment in xsave_cpuid_features[] to tell folks to use
+> it.
+> 
 
-It is not about what it means - it is what you're going to use/need. You have
-ifdeffery both with X86_CET and X86_SHADOW_STACK_USER.
+Yes, I will work on that.
 
-This one
-
-+#ifdef CONFIG_X86_SHADOW_STACK_USER
-+#define DISABLE_SHSTK	0
-+#else
-+#define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
-+#endif
-
-for example, is clearly wrong and wants to be #ifdef CONFIG_X86_CET, for
-example. Unless I'm missing something totally obvious.
-
-In any case, you need to analyze what Kconfig defines the code will
-need and to what they belong and add only the minimal subset needed.
-Our Kconfig symbols space is already nuts so adding more needs to be
-absolutely justified.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Yu-cheng
