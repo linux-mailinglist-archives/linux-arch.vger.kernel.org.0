@@ -2,98 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E0E2C9981
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 09:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C59E2C9E67
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 10:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728553AbgLAIay (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 03:30:54 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34848 "EHLO mx2.suse.de"
+        id S1728555AbgLAJ4f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 04:56:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59062 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726415AbgLAIay (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Dec 2020 03:30:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9BC77AF45;
-        Tue,  1 Dec 2020 08:30:11 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 55D931E131B; Tue,  1 Dec 2020 09:30:07 +0100 (CET)
-Date:   Tue, 1 Dec 2020 09:30:07 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Brian Gerst <brgerst@gmail.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Jan Kara <jack@suse.cz>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        id S1726099AbgLAJ4f (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Dec 2020 04:56:35 -0500
+Received: from linux-8ccs (p57a232c3.dip0.t-ipconnect.de [87.162.50.195])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1DE6820657;
+        Tue,  1 Dec 2020 09:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606816554;
+        bh=6kpZqmqH8xua3fMlvH5v7aR2iYhj3V3XHB8sPP9GwtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CaKC+wOGCkaFDrokRs8vG8T9PyHnxjZewI0Q4wUOl8ZG1bedSsewuxTUWHg1g0Xga
+         g/qOMTN06J1M9yi62pQ/0janvXuvmXgbHFgl+gWFYJlyHsmlnf3/e1Cy2+EE14B3pQ
+         o/gp5LAXkM8m/KaEOGWeTPQwL8vV2/UmbPytjHQ0=
+Date:   Tue, 1 Dec 2020 10:55:47 +0100
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] fanotify: Fix fanotify_mark() on 32-bit x86
-Message-ID: <20201201083007.GA24488@quack2.suse.cz>
-References: <20201126155246.25961-1-jack@suse.cz>
- <CALCETrVaj6rnvqX2cxj3u++hg_XZD-Zo4iYUPTFDiwaO49xDrg@mail.gmail.com>
- <CAMzpN2gADAWBoTgKEgepCHVKoqOw3T_D_W30Q2-vJtQpfn0jwg@mail.gmail.com>
- <CALCETrXS8e9BRcpmSYqE5_Cvrt96wUOWK_P2bFWUkD2BozPNbg@mail.gmail.com>
- <CAMzpN2gkNnqnT3hS4jaHTphO+KdZmC=9Hi4tXk3RV9C-EcwtLQ@mail.gmail.com>
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Kurtz <djkurtz@chromium.org>,
+        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH 0/8] linker-section array fix and clean ups
+Message-ID: <20201201095544.GA9394@linux-8ccs>
+References: <20201103175711.10731-1-johan@kernel.org>
+ <20201106160344.GA12184@linux-8ccs.fritz.box>
+ <20201106164537.GD4085@localhost>
+ <20201111154716.GB5304@linux-8ccs>
+ <X66VvI/M4GRDbiWM@localhost>
+ <X7uRZUY+2L9Yg9wt@localhost>
+ <20201125145118.GA32446@linux-8ccs>
+ <X8DN7b03/U2XDORg@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <CAMzpN2gkNnqnT3hS4jaHTphO+KdZmC=9Hi4tXk3RV9C-EcwtLQ@mail.gmail.com>
+In-Reply-To: <X8DN7b03/U2XDORg@localhost>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon 30-11-20 17:21:08, Brian Gerst wrote:
-> On Fri, Nov 27, 2020 at 7:36 PM Andy Lutomirski <luto@kernel.org> wrote:
-> >
-> > On Fri, Nov 27, 2020 at 2:30 PM Brian Gerst <brgerst@gmail.com> wrote:
-> > >
-> > > On Fri, Nov 27, 2020 at 1:13 PM Andy Lutomirski <luto@kernel.org> wrote:
-> > > >
-> > > > On Thu, Nov 26, 2020 at 7:52 AM Jan Kara <jack@suse.cz> wrote:
-> > > > >
-> > > > > Commit converting syscalls taking 64-bit arguments to new scheme of compat
-> > > > > handlers omitted converting fanotify_mark(2) which then broke the
-> > > > > syscall for 32-bit x86 builds. Add missed conversion. It is somewhat
-> > > > > cumbersome since we need to keep the original compat handler for all the
-> > > > > other 32-bit archs.
-> > > > >
-> > > >
-> > > > This is stupendously ugly.  I'm not really sure how this is supposed
-> > > > to work on any 32-bit arch.  I'm also not sure whether we should
-> > > > expect the SYSCALL_DEFINE macros to figure this out by themselves.
-> > >
-> > > It works on 32-bit arches because the compiler implicitly uses
-> > > consecutive input registers or stack slots for 64-bit arguments, and
-> > > some arches have alignment requirements that result in hidden padding.
-> > > x86-32 is different now because parameters are passed in via pt_regs,
-> > > and the 64-bit value has to explicitly be reassembled from the high
-> > > and low 32-bit values, just like in the compat case.
-> > >
-> >
-> > That was my guess.
-> >
-> > > I think the simplest way to handle this is add a wrapper in
-> > > arch/x86/kernel/sys_ia32.c with the other fs syscalls that need 64-bit
-> > > args.  That keeps this mess out of general code.
-> >
-> >
-> > Want to send a patch?
-> 
-> I settled on doing something along the same line as Jan, but in a more
-> generic way that lays the groundwork for converting more of these
-> arch-specific compat wrappers to a generic wrapper.
++++ Johan Hovold [27/11/20 10:59 +0100]:
+>On Wed, Nov 25, 2020 at 03:51:20PM +0100, Jessica Yu wrote:
+>
+>> I've queued up patches 3, 4, 6, 7, 8 for testing before pushing them
+>> out to modules-next.
+>
+>Thanks, Jessica.
+>
+>Perhaps you can consider taking also the one for setup parameters (patch
+>5/8) through your tree since its related to the module-parameter one.
+>
+>Johan
 
-Cool, thanks for looking into this!
+Sure, done.
 
-> Patch coming soon.
+Thanks,
 
-Looking forward to it :)
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jessica
