@@ -2,89 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B89A2CA92A
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 18:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7332CA9BC
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 18:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388080AbgLAQ54 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 11:57:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42186 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391923AbgLAQ5z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:57:55 -0500
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF72D208FE;
-        Tue,  1 Dec 2020 16:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606841835;
-        bh=TD1OZINnY67L3Dc0uTdiWI+k0pIiWGWqD8B7hdSEwtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cerhKoK4Goj22/4KIM/bZh+JacRzL+mMtrkqnS6nd/4K2XghIlz8IpR945QMidmyU
-         Bv/DyiZUVDLW/UDzs5/v77e4wKdS05kZ6yP0QTdtUrTFOi7XCR9G5bD1WLtJruPVuH
-         XPEPDg1fqmG/FzNrr/srx2Q9oL89rLAXy6TgnlHI=
-Date:   Tue, 1 Dec 2020 16:57:08 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Quentin Perret <qperret@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S2390737AbgLARbo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 12:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388248AbgLARbn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 12:31:43 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88023C0613D4
+        for <linux-arch@vger.kernel.org>; Tue,  1 Dec 2020 09:31:03 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id k5so1516493plt.6
+        for <linux-arch@vger.kernel.org>; Tue, 01 Dec 2020 09:31:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fIhrXegmFXx4Y1S8YgnbVoZcP9r/eMN50vMQw7Htjj0=;
+        b=COBsdbubf4U1NB4bryhE6zpFJFlxC6tnZcSZU41etUauCccqXZsiquU+7Pg3YtVZk6
+         FaJj4o1AIWN+/OM9H6u8TAIFxZgoJVNQ/2jTBB5a/m2hHYR3qjgThVUzKnMTBTgmN/d+
+         qjZ/Lpe9hl7c2js/gywR+ayaeczGzpkDoU8ik=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fIhrXegmFXx4Y1S8YgnbVoZcP9r/eMN50vMQw7Htjj0=;
+        b=fY4DqJu0CSI/D3CguGosId6dFB+At87pKleO4JMNBCFnzNWZEZfrzCR5nxtO8k24LU
+         a7JQOqFzoPJ8GXxPiL+BCyJjx4EoEgCSj6ew8Z1oBJEZ0VsokhTqksqgaojdfEMdSmwF
+         Vos4KvRKbcCihpMRFDNpLEB21mSFeMCb6OA18BKt1N+OSI06xq8SCsq1tLRTxAqx1wSf
+         oNDIFPuJ+OEFMlCcsv1rGFTkE/VpuoJq4RdlfJK8BXk5vzDXr5a3TIWX+s7EMkIVx32G
+         cuVMrYUoK3dR+xpKsH83HqpBkgJlOJmLGmLACzsD8oIazhA4eOykskXvzogg37lzDtMZ
+         Xpsw==
+X-Gm-Message-State: AOAM533numInbS6j0F2NTmacvM+WiLk6TJx5z6YM9sD0dAa56MXtrD7B
+        FoUt05v0lt1rrDFZqlwoLMvyYA==
+X-Google-Smtp-Source: ABdhPJxNXrz8lyJzMPvVj7dGfW+IUsSemW9FmHsAZMwUW4pvNI4+h4MvkJF21vQXTZU3MgV3CsB+ag==
+X-Received: by 2002:a17:90b:224a:: with SMTP id hk10mr3671202pjb.81.1606843863156;
+        Tue, 01 Dec 2020 09:31:03 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j143sm400818pfd.20.2020.12.01.09.31.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 09:31:01 -0800 (PST)
+Date:   Tue, 1 Dec 2020 09:31:00 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com
-Subject: Re: [PATCH v4 03/14] KVM: arm64: Kill 32-bit vCPUs on systems with
- mismatched EL0 support
-Message-ID: <20201201165707.GF27783@willie-the-truck>
-References: <20201124155039.13804-1-will@kernel.org>
- <20201124155039.13804-4-will@kernel.org>
- <9bd06b193e7fb859a1207bb1302b7597@kernel.org>
- <20201127115304.GB20564@willie-the-truck>
- <583c4074bbd4cf8b8085037745a5d1c0@kernel.org>
- <20201127172434.GA984327@google.com>
- <9de8639549040b4478b312503fd5a23f@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v7 00/17] Add support for Clang LTO
+Message-ID: <202012010929.3788AF5@keescook>
+References: <20201118220731.925424-1-samitolvanen@google.com>
+ <20201130120130.GF24563@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9de8639549040b4478b312503fd5a23f@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201130120130.GF24563@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 06:16:35PM +0000, Marc Zyngier wrote:
-> On 2020-11-27 17:24, Quentin Perret wrote:
-> > On Friday 27 Nov 2020 at 17:14:11 (+0000), Marc Zyngier wrote:
+On Mon, Nov 30, 2020 at 12:01:31PM +0000, Will Deacon wrote:
+> Hi Sami,
 > 
-> [...]
-> 
-> > > Yeah, the sanitized read feels better, if only because that is
-> > > what we are going to read in all the valid cases, unfortunately.
-> > > read_sanitised_ftr_reg() is sadly not designed to be called on
-> > > a fast path, meaning that 32bit guests will do a bsearch() on
-> > > the ID-regs every time they exit...
-> > > 
-> > > I guess we will have to evaluate how much we loose with this.
+> On Wed, Nov 18, 2020 at 02:07:14PM -0800, Sami Tolvanen wrote:
+> > This patch series adds support for building the kernel with Clang's
+> > Link Time Optimization (LTO). In addition to performance, the primary
+> > motivation for LTO is to allow Clang's Control-Flow Integrity (CFI) to
+> > be used in the kernel. Google has shipped millions of Pixel devices
+> > running three major kernel versions with LTO+CFI since 2018.
 > > 
-> > Could we use the trick we have for arm64_ftr_reg_ctrel0 to speed this
-> > up?
+> > Most of the patches are build system changes for handling LLVM bitcode,
+> > which Clang produces with LTO instead of ELF object files, postponing
+> > ELF processing until a later stage, and ensuring initcall ordering.
+> > 
+> > Note that v7 brings back arm64 support as Will has now staged the
+> > prerequisite memory ordering patches [1], and drops x86_64 while we work
+> > on fixing the remaining objtool warnings [2].
 > 
-> Maybe. I want to first verify whether this has any measurable impact.
-> Another possibility would be to cache the last read_sanitised_ftr_reg()
-> access, just to see if that helps. There shouldn't be that many code
-> paths hammering it.
+> Sounds like you're going to post a v8, but that's the plan for merging
+> that? The arm64 parts look pretty good to me now.
 
-We don't have huge numbers of ID registers, so the bsearch shouldn't be
-too expensive. However, I'd like to remind myself why we can't index into
-the feature register array directly as we _should_ know all of this stuff
-at compile time, right?
+I haven't seen Masahiro comment on this in a while, so given the review
+history and its use (for years now) in Android, I will carry v8 (assuming
+all is fine with it) it in -next unless there are objections.
 
-Will
+-- 
+Kees Cook
