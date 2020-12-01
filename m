@@ -2,120 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 278082CA725
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 16:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B5D2CA794
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 17:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390440AbgLAPeV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 10:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S2391953AbgLAP5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 10:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390299AbgLAPeV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 10:34:21 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC877C0613D4
-        for <linux-arch@vger.kernel.org>; Tue,  1 Dec 2020 07:33:40 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id a16so4970342ejj.5
-        for <linux-arch@vger.kernel.org>; Tue, 01 Dec 2020 07:33:40 -0800 (PST)
+        with ESMTP id S2389229AbgLAP5k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 10:57:40 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984B0C0613D4
+        for <linux-arch@vger.kernel.org>; Tue,  1 Dec 2020 07:56:54 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id g14so3351292wrm.13
+        for <linux-arch@vger.kernel.org>; Tue, 01 Dec 2020 07:56:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HfEmRbTUVu5buzmFymRjrzPmVpKwAUdxNZbmsbAARHI=;
-        b=zpM6mciORqM6FM9fWyXykgzZO3tN82WyO0CznE01WirlCqvzyB+NGE5sturlw191Qx
-         Xq63A6beE6QUlpwGR8Y2YKDluTLb33Ve5fE1Uc28FMlxUg54ywnsX8QPhpf1MHECTtqZ
-         ScroKkCi3TaDc25Jq20JrHOD/xCk6mneZMpeNk/pcThyqwNMh5X5EjN17rbvEZvvOhqO
-         Q+GW6ry+hLHmpavB/uFRWpWIRCSqR5An+CX7Ea1DvPduQXTsImNn/KJfEoH3ZU37N+pP
-         HN9G5K2EnscgljSpnGyrGFRRWTNDf5RxzEi+fuWqxcZrq2vWBCAipkpsHGklZeiyXvcF
-         Qwuw==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yVk5KHBR+Mddw8rCuMxzgEChumqmL4eB1KqK5P0hH5E=;
+        b=UlFHk+22AOC3daNQPBuWa/WMNZh1Aip8NACSrVS7zIMCaANpB+k7HZYxRY/53FozG5
+         ejfoB5rw0FQIm/4x7tHSlcIZytPxDItsRVPnGd7qrBKCVtkYSq3bsbEn0wieqpSLza+M
+         J5P4tX7HOYIWiNwkc4h0gs+0qMY8CyEKgTY2ZohmAZWJCjwibOoXG3Xw/aJhrnDLH0d7
+         tQoRF5o1yotOhTPfrhiXDDTIjYasLy0/3zw0CBtfa6Gkeoj3PrvpzNMJFmcYlueLw16X
+         nRRH8FJcCl4/tElozP8dUn1P8pWTY4XIxbjDnPtR6vv4TP9yNf4vlMmJq4ISdt0lBAxl
+         vvgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HfEmRbTUVu5buzmFymRjrzPmVpKwAUdxNZbmsbAARHI=;
-        b=dPOjz+rwIiYa1FcQ3qkyq9EqouFDL+bi+r0h7QGTS39jqLM1MWD1qURMOpACg+pvy9
-         QE/PRKN9JBs2PWQtyxFVOS+fUu+R+NpLAlXNhAfBw3mVV6693NToF2EczrnvJAuw2f1B
-         LCUeqXuPhrAeiRQkQjeFU7LPal1cBWrxZJGk++aGntUzXwwtINxCH9Utx5X/wpqpX9Iv
-         xQY+ikf/yIrBH5xH5DLC08ks+k9Pg35ljhL9GE0o4U8YnXtzasZK09IDskHYPEPHRntZ
-         bGIR28EUqMMWx4AvnPo1+/paSXJCb+9lA9gRN5/urlNUP5yJ7Tj1umRypc7gqD0bBpT7
-         64dg==
-X-Gm-Message-State: AOAM530A0tMDj/h4QmwA75v/YHUtvSAKhu9K/kNP/naZ1LtsmWdHOSeY
-        mCbON+IY5Qyn8oNrhJueMnQQO1ARSHbmWYwl9v3JrQ==
-X-Google-Smtp-Source: ABdhPJwaleYJQJJT3SsISIG12SOKNywBoidZAcD+gTb6G8zgyBFg95d1+qKFI19arkSUdTOEX+v3bvq6AXYs2hdUcY4=
-X-Received: by 2002:a17:907:b09:: with SMTP id h9mr3591194ejl.155.1606836819337;
- Tue, 01 Dec 2020 07:33:39 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yVk5KHBR+Mddw8rCuMxzgEChumqmL4eB1KqK5P0hH5E=;
+        b=hMD2l7kTaSaB278l/vP7mPJIxKXPkOKQ9RRlQJ7FOTYdBROLPGyslvZIH4+OUxnklT
+         nwEmOGTRpEb1tk0VP5T8vluKvWs51z52cteRp5BCeaB4hPZB2FoFLHXihweVHbw11UK+
+         ehXh4cF0Gr97nkRzYMrlqwaeJoB8/MHYUK7Y+kiXRvuTa/E+rKhCM0zQC7eSANfnLsDk
+         oVc2o6uLRqLw4RItQTVw2BybjUb9QVBo36niV30rulpWWgStYk+1xyQTfXkpXhSKrEll
+         Hfi3jm0kRpcDI1nptUY1b9E/o/19azCukPVIgvDQJD/WZW/GGofMPMlZJXXSaALCy88G
+         /CSQ==
+X-Gm-Message-State: AOAM531+R2DmPmVU28tJDOCMyZXqusPKuNeutz1Im+9YreRHCtytjaQO
+        SfpFKr52uQokv/TEnEOoNbRijw==
+X-Google-Smtp-Source: ABdhPJy1biYd6YQn7O1yE1QJCAD4BDZLFDdoPnTRU70gL8vejvUzgcP6kviW3MJ5lcRJrE6SWUoDnw==
+X-Received: by 2002:adf:e788:: with SMTP id n8mr4738634wrm.84.1606838213044;
+        Tue, 01 Dec 2020 07:56:53 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:210:f693:9fff:fef4:a7ef])
+        by smtp.gmail.com with ESMTPSA id n4sm376363wmc.30.2020.12.01.07.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 07:56:52 -0800 (PST)
+Date:   Tue, 1 Dec 2020 15:56:49 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 09/14] cpuset: Don't use the cpu_possible_mask as a
+ last resort for cgroup v1
+Message-ID: <20201201155649.GB1914005@google.com>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-10-will@kernel.org>
+ <20201127133245.4hbx65mo3zinawvo@e107158-lin.cambridge.arm.com>
+ <20201130170531.qo67rai5lftskmk2@e107158-lin.cambridge.arm.com>
+ <20201130173610.GA1715200@google.com>
+ <20201201115842.t77abecneuesd5ih@e107158-lin.cambridge.arm.com>
+ <20201201123748.GA1896574@google.com>
+ <20201201141121.5w2wed3633slo6dw@e107158-lin.cambridge.arm.com>
 MIME-Version: 1.0
-References: <cover.1605893641.git.syednwaris@gmail.com> <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
-In-Reply-To: <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Tue, 1 Dec 2020 16:33:28 +0100
-Message-ID: <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
-Subject: Re: [RESEND PATCH 3/4] gpio: xilinx: Modify bitmap_set_value() calls
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>, rrichter@marvell.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-arch@vger.kernel.org,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201201141121.5w2wed3633slo6dw@e107158-lin.cambridge.arm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 7:46 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
->
-> Modify the bitmap_set_value() calls. bitmap_set_value()
-> now takes an extra bitmap width as second argument and the width of
-> value is now present as the fourth argument.
->
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> ---
->  drivers/gpio/gpio-xilinx.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> index ad4ee4145db4..05dae086c4d0 100644
-> --- a/drivers/gpio/gpio-xilinx.c
-> +++ b/drivers/gpio/gpio-xilinx.c
-> @@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
->         spin_lock_irqsave(&chip->gpio_lock[0], flags);
->         spin_lock(&chip->gpio_lock[1]);
->
-> -       bitmap_set_value(old, state[0], 0, width[0]);
-> -       bitmap_set_value(old, state[1], width[0], width[1]);
-> +       bitmap_set_value(old, 64, state[0], width[0], 0);
-> +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
->         bitmap_replace(new, old, bits, mask, gc->ngpio);
->
-> -       bitmap_set_value(old, state[0], 0, 32);
-> -       bitmap_set_value(old, state[1], 32, 32);
-> +       bitmap_set_value(old, 64, state[0], 32, 0);
-> +       bitmap_set_value(old, 64, state[1], 32, 32);
->         state[0] = bitmap_get_value(new, 0, width[0]);
->         state[1] = bitmap_get_value(new, width[0], width[1]);
-> -       bitmap_set_value(new, state[0], 0, 32);
-> -       bitmap_set_value(new, state[1], 32, 32);
-> +       bitmap_set_value(new, 64, state[0], 32, 0);
-> +       bitmap_set_value(new, 64, state[1], 32, 32);
->         bitmap_xor(changed, old, new, 64);
->
->         if (((u32 *)changed)[0])
-> --
-> 2.29.0
->
+On Tuesday 01 Dec 2020 at 14:11:21 (+0000), Qais Yousef wrote:
+> AFAIU, OEMs have to define their cpusets. So it makes sense to me for them to
+> define it correctly if they want to enable asym aarch32.
+> 
+> Systems that don't care about this feature shouldn't be affected. If they do,
+> then I'm missing something.
 
-This series is not bisectable because you modify the interface -
-breaking existing users - and you only fix them later. Please squash
-those changes into a single commit.
+Right, but there are 2 cases for 32 bit tasks in Android:
 
-Bartosz
+  1. 32 bit apps; these are not an issue, the Android framework knows
+     about them and it's fine to expect it to setup cpusets accordingly
+     IMO.
+
+  2. 64 bit apps that also happen to have a 32 bit binary payload, and
+     exec into it. The Android framework has no visibility over that,
+     all it sees is a 64 bit app. Sadly we can't detect this stupid
+     pattern, but we need these to remain somewhat functional.
+
+I was only talking about 2. the whole time, sorry if that wasn't clear.
+With that said, see below for the discussion about cpuset/hotplug.
+
+> We deal with hotplug by not allowing one of the aarch32 cpus from going
+> offline.
+
+Sure, but that would only work if we have that 32 bit CPU present in
+_all_ cpusets, no? What I'd like to avoid is to keep a (big) 32
+bit CPU in the background cpuset of 64 bit tasks. That would make that
+big CPU available to _all_ 64 bit apps in the background, whether they
+need 32 bit support or not, because again we cannot distinguish them.
+And yeah, I expect this to be not go down well in practice.
+
+
+So, if we're going to support this, a requirement for Android is that
+some cpusets will be 64 bit only, and it's possible that we'll exec into
+32 bit from within these cpusets. It's an edge case, we don't really
+want to optimize for it, but it needs to not fall apart completely.
+I'm not fundamentally against doing smarter things at all, I'm saying we
+(Android) just don't _need_ smarter things ATM, so we may want to keep
+it simple.
+
+My point in the previous message is, if we're accepting this for exec,
+a logical next step could be to accept it for cpuset migrations too.
+Failing the cgroup migration is hard since: there is no guarantee the
+source cpuset has 32 bit CPUs anyway (assuming the exec'd task is kept
+in the same cpuset), so why bother; userspace just doesn't know there
+are 32 bit tasks in an app and would keep trying to migrate it to 64 bit
+cpuset over and over again; you could end up with apps being stuck
+halfway through a top-app->background transition where some tasks have
+migrated but not others, ...
+
+It's a bit of a mess :/
+
+
+<snip>
+> For hotplug we have to make sure a single cpu stays alive. The fallback you're
+> talking about should still work the same if the task is not attached to
+> a cpuset. Just it has to take the intersection with the
+> arch_task_cpu_possible_cpu() into account.
+
+Yep, agreed, there's probably room for improvement there.
+
+> For cpusets, if hotunplug results in an empty cpuset, then all tasks are moved
+> to the nearest ancestor if I read the code correctly. In our case, only 32bit
+> tasks have to move out to retain this behavior. Since now for the first time we
+> have tasks that can't run on all cpus.
+> 
+> Which by the way might be the right behavior for 64bit tasks execing 32bit
+> binary in a 64bit only cpuset. I suggested SIGKILL'ing them but maybe moving
+> them to the nearest ancestor too is more aligned with the behavior above.
+
+Hmm, I guess that means putting all 32-bit-execd-from-64-bit tasks in
+the root group in Android. I'll try and check the implications, but that
+might be just fine... Sounds like a sensible behaviour to me anyways.
+
+Thanks,
+Quentin
