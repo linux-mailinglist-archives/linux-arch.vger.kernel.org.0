@@ -2,197 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8D32CA897
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 17:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5902CA919
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 18:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbgLAQpW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 11:45:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59542 "EHLO mail.kernel.org"
+        id S2392149AbgLAQ4o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 11:56:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728720AbgLAQpW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:45:22 -0500
-Received: from kernel.org (unknown [87.71.85.130])
+        id S2391870AbgLAQ4o (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Dec 2020 11:56:44 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DAF89206B7;
-        Tue,  1 Dec 2020 16:44:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4AC5D20758;
+        Tue,  1 Dec 2020 16:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606841081;
-        bh=GUtX0hNx32YEEtCdAUkzC5OF7zPy+e78biDig6Frozg=;
+        s=default; t=1606841763;
+        bh=vUuXTXCHpWTLplaXDa7P3d5b/wIiiAS0ETXN4wuN2fk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gvfnhaSLv1jMRih6i9BkZFwqT83+9p5JD98gXcO7JIrkTzOBB+rRro5U9QgAxqQSV
-         7dt/xWjtLVQEVt1Ex5jrQh1zNLQMN4ovnZ42jokTz+d8CL1J4Neq9s1+q39AS5euFb
-         +V52ld2bkVC2Nmbbgl6GFHYT0sShRwKokRlnOllM=
-Date:   Tue, 1 Dec 2020 18:44:24 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        b=I1wIYNg/HvF50Fj/9wfP8UwgScivH9fyVobDbKu3FMRDi9Y45PIaNfIyFFMbk1TAI
+         giZ1+3jsBg0JgigKTmUCm4FDNjikJjPRLTTnafkXTAtK3VboulGEVLUSDrLaTt/6cU
+         jDqN7gTIGMZwUJM6GvOUp0J3Rh5bjTiZco63HcXs=
+Date:   Tue, 1 Dec 2020 16:55:56 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: Re: [PATCH v13 07/10] secretmem: add memcg accounting
-Message-ID: <20201201164424.GC751215@kernel.org>
-References: <20201201074559.27742-1-rppt@kernel.org>
- <20201201074559.27742-8-rppt@kernel.org>
- <CALvZod4bTBGf7DS=5EUCeU810p5C1aqf5sB0n1N8sc4jt5W3Tg@mail.gmail.com>
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 08/14] arm64: exec: Adjust affinity for compat tasks
+ with mismatched 32-bit EL0
+Message-ID: <20201201165556.GA27783@willie-the-truck>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-9-will@kernel.org>
+ <20201127132306.ee4frq6ujz3fqxic@e107158-lin.cambridge.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvZod4bTBGf7DS=5EUCeU810p5C1aqf5sB0n1N8sc4jt5W3Tg@mail.gmail.com>
+In-Reply-To: <20201127132306.ee4frq6ujz3fqxic@e107158-lin.cambridge.arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 08:26:28AM -0800, Shakeel Butt wrote:
-> On Mon, Nov 30, 2020 at 11:47 PM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > Account memory consumed by secretmem to memcg. The accounting is updated
-> > when the memory is actually allocated and freed.
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > Acked-by: Roman Gushchin <guro@fb.com>
+On Fri, Nov 27, 2020 at 01:23:06PM +0000, Qais Yousef wrote:
+> On 11/24/20 15:50, Will Deacon wrote:
+> > When exec'ing a 32-bit task on a system with mismatched support for
+> > 32-bit EL0, try to ensure that it starts life on a CPU that can actually
+> > run it.
+> > 
+> > Signed-off-by: Will Deacon <will@kernel.org>
 > > ---
-> >  mm/filemap.c   |  3 ++-
-> >  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 37 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/filemap.c b/mm/filemap.c
-> > index 249cf489f5df..cf7f1dc9f4b8 100644
-> > --- a/mm/filemap.c
-> > +++ b/mm/filemap.c
-> > @@ -42,6 +42,7 @@
-> >  #include <linux/psi.h>
-> >  #include <linux/ramfs.h>
-> >  #include <linux/page_idle.h>
-> > +#include <linux/secretmem.h>
-> >  #include "internal.h"
-> >
-> >  #define CREATE_TRACE_POINTS
-> > @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
-> >         page->mapping = mapping;
-> >         page->index = offset;
-> >
-> > -       if (!huge) {
-> > +       if (!huge && !page_is_secretmem(page)) {
-> >                 error = mem_cgroup_charge(page, current->mm, gfp);
-> >                 if (error)
-> >                         goto error;
-> > diff --git a/mm/secretmem.c b/mm/secretmem.c
-> > index 52a900a135a5..5e3e5102ad4c 100644
-> > --- a/mm/secretmem.c
-> > +++ b/mm/secretmem.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/memblock.h>
-> >  #include <linux/pseudo_fs.h>
-> >  #include <linux/secretmem.h>
-> > +#include <linux/memcontrol.h>
-> >  #include <linux/set_memory.h>
-> >  #include <linux/sched/signal.h>
-> >
-> > @@ -44,6 +45,32 @@ struct secretmem_ctx {
-> >
-> >  static struct cma *secretmem_cma;
-> >
-> > +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
+> >  arch/arm64/kernel/process.c | 42 ++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 41 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> > index 1540ab0fbf23..72116b0c7c73 100644
+> > --- a/arch/arm64/kernel/process.c
+> > +++ b/arch/arm64/kernel/process.c
+> > @@ -31,6 +31,7 @@
+> >  #include <linux/interrupt.h>
+> >  #include <linux/init.h>
+> >  #include <linux/cpu.h>
+> > +#include <linux/cpuset.h>
+> >  #include <linux/elfcore.h>
+> >  #include <linux/pm.h>
+> >  #include <linux/tick.h>
+> > @@ -625,6 +626,45 @@ unsigned long arch_align_stack(unsigned long sp)
+> >  	return sp & ~0xf;
+> >  }
+> >  
+> > +static void adjust_compat_task_affinity(struct task_struct *p)
 > > +{
-> > +       int err;
+> > +	cpumask_var_t cpuset_mask;
+> > +	const struct cpumask *possible_mask = system_32bit_el0_cpumask();
+> > +	const struct cpumask *newmask = possible_mask;
 > > +
-> > +       err = memcg_kmem_charge_page(page, gfp, order);
-> > +       if (err)
-> > +               return err;
+> > +	/*
+> > +	 * Restrict the CPU affinity mask for a 32-bit task so that it contains
+> > +	 * only the 32-bit-capable subset of its original CPU mask. If this is
+> > +	 * empty, then try again with the cpuset allowed mask. If that fails,
+> > +	 * forcefully override it with the set of all 32-bit-capable CPUs that
+> > +	 * we know about.
+> > +	 *
+> > +	 * From the perspective of the task, this looks similar to what would
+> > +	 * happen if the 64-bit-only CPUs were hot-unplugged at the point of
+> > +	 * execve().
+> > +	 */
+> > +	if (!restrict_cpus_allowed_ptr(p, possible_mask))
+> > +		goto out;
 > > +
-> > +       /*
-> > +        * seceremem caches are unreclaimable kernel allocations, so treat
-> > +        * them as unreclaimable slab memory for VM statistics purposes
-> > +        */
-> > +       mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
-> > +                             PAGE_SIZE << order);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void secretmem_unaccount_pages(struct page *page, int order)
-> > +{
-> > +
-> > +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
-> > +                           -PAGE_SIZE << order);
+> > +	if (alloc_cpumask_var(&cpuset_mask, GFP_KERNEL)) {
+> > +		cpuset_cpus_allowed(p, cpuset_mask);
+> > +		if (cpumask_and(cpuset_mask, cpuset_mask, possible_mask)) {
+> > +			newmask = cpuset_mask;
+> > +			goto out_set_mask;
+> > +		}
+> > +	}
 > 
-> mod_lruvec_page_state()
+> Wouldn't it be better to move this logic to restrict_cpus_allowed_ptr()?
+> I think it should always take cpusets into account and it's not special to
+> this particular handling here, no?
 
-Argh... Will fix.
+I did actually try this but didn't pursue it further because I was worried
+that I was putting too much of the "can't run a 32-bit task on a 64-bit-only
+CPU" logic into what would otherwise be a potentially useful library function
+if/when other architectures want something similar. But I'll have another
+look because there were a couple of ideas I didn't try out.
 
-> > +       memcg_kmem_uncharge_page(page, order);
-> > +}
-> > +
-> >  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >  {
-> >         unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-> > @@ -56,10 +83,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >         if (!page)
-> >                 return -ENOMEM;
-> >
-> > -       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
-> >         if (err)
-> >                 goto err_cma_release;
-> >
-> > +       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       if (err)
-> > +               goto err_memcg_uncharge;
-> > +
-> >         addr = (unsigned long)page_address(page);
-> >         err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
-> >         if (err)
-> > @@ -76,6 +107,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >          * won't fail
-> >          */
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +err_memcg_uncharge:
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >  err_cma_release:
-> >         cma_release(secretmem_cma, page, nr_pages);
-> >         return err;
-> > @@ -302,6 +335,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> >         int i;
-> >
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >
-> >         for (i = 0; i < nr_pages; i++)
-> >                 clear_highpage(page + i);
-> > --
-> > 2.28.0
-> >
+> > +	if (printk_ratelimit()) {
+> > +		printk_deferred("Overriding affinity for 32-bit process %d (%s) to CPUs %*pbl\n",
+> > +				task_pid_nr(p), p->comm, cpumask_pr_args(newmask));
+> > +	}
+> 
+> We have 2 cases where the affinity could have been overridden but we won't
+> print anything:
+> 
+> 	1. restrict_cpus_allowed_ptr()
+> 	2. intersection of cpuset_mask and possible mask drops some cpus.
+> 
+> Shouldn't we print something in these cases too?
 
--- 
-Sincerely yours,
-Mike.
+I don't think so: in these cases we've found a subset of CPUs that we can
+run on, and so there's no need to warn. Nothing says we _have_ to use all
+the CPUs available to us. The case where we override the affinity mask
+altogether, however, does warrant a warning. This is very similar to the
+hotplug behaviour in select_fallback_rq().
+
+Will
