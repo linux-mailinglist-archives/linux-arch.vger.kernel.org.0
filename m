@@ -2,80 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C59E2C9E67
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 10:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7742CA20A
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Dec 2020 13:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbgLAJ4f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 04:56:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59062 "EHLO mail.kernel.org"
+        id S2390693AbgLAL7d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 06:59:33 -0500
+Received: from foss.arm.com ([217.140.110.172]:41540 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726099AbgLAJ4f (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Dec 2020 04:56:35 -0500
-Received: from linux-8ccs (p57a232c3.dip0.t-ipconnect.de [87.162.50.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1DE6820657;
-        Tue,  1 Dec 2020 09:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606816554;
-        bh=6kpZqmqH8xua3fMlvH5v7aR2iYhj3V3XHB8sPP9GwtE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CaKC+wOGCkaFDrokRs8vG8T9PyHnxjZewI0Q4wUOl8ZG1bedSsewuxTUWHg1g0Xga
-         g/qOMTN06J1M9yi62pQ/0janvXuvmXgbHFgl+gWFYJlyHsmlnf3/e1Cy2+EE14B3pQ
-         o/gp5LAXkM8m/KaEOGWeTPQwL8vV2/UmbPytjHQ0=
-Date:   Tue, 1 Dec 2020 10:55:47 +0100
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+        id S2389432AbgLAL7c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 1 Dec 2020 06:59:32 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BEE38101E;
+        Tue,  1 Dec 2020 03:58:46 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (unknown [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C8D43F718;
+        Tue,  1 Dec 2020 03:58:44 -0800 (PST)
+Date:   Tue, 1 Dec 2020 11:58:42 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Jelinek <jakub@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Kurtz <djkurtz@chromium.org>,
-        linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH 0/8] linker-section array fix and clean ups
-Message-ID: <20201201095544.GA9394@linux-8ccs>
-References: <20201103175711.10731-1-johan@kernel.org>
- <20201106160344.GA12184@linux-8ccs.fritz.box>
- <20201106164537.GD4085@localhost>
- <20201111154716.GB5304@linux-8ccs>
- <X66VvI/M4GRDbiWM@localhost>
- <X7uRZUY+2L9Yg9wt@localhost>
- <20201125145118.GA32446@linux-8ccs>
- <X8DN7b03/U2XDORg@localhost>
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 09/14] cpuset: Don't use the cpu_possible_mask as a
+ last resort for cgroup v1
+Message-ID: <20201201115842.t77abecneuesd5ih@e107158-lin.cambridge.arm.com>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-10-will@kernel.org>
+ <20201127133245.4hbx65mo3zinawvo@e107158-lin.cambridge.arm.com>
+ <20201130170531.qo67rai5lftskmk2@e107158-lin.cambridge.arm.com>
+ <20201130173610.GA1715200@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <X8DN7b03/U2XDORg@localhost>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20201130173610.GA1715200@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+++ Johan Hovold [27/11/20 10:59 +0100]:
->On Wed, Nov 25, 2020 at 03:51:20PM +0100, Jessica Yu wrote:
->
->> I've queued up patches 3, 4, 6, 7, 8 for testing before pushing them
->> out to modules-next.
->
->Thanks, Jessica.
->
->Perhaps you can consider taking also the one for setup parameters (patch
->5/8) through your tree since its related to the module-parameter one.
->
->Johan
+On 11/30/20 17:36, Quentin Perret wrote:
+> On Monday 30 Nov 2020 at 17:05:31 (+0000), Qais Yousef wrote:
+> > I create 3 cpusets: 64bit, 32bit and mix. As the name indicates, 64bit contains
+> > all 64bit-only cpus, 32bit contains 32bit-capable ones and mix has a mixture of
+> > both.
+> > 
+> > If I try to move my test binary to 64bit cpuset, it moves there and I see the
+> > WARN_ON_ONCE() triggered. The task has attached to the new cpuset but
+> > set_allowed_cpus_ptr() has failed and we end up with whatever affinity we had
+> > previously. Breaking cpusets effectively.
+> 
+> Right, and so does exec'ing from a 64 bit task into 32 bit executable
+> from within a 64 bit-only cpuset :( . And there is nothing we can really
 
-Sure, done.
+True. The kernel can decide to kill the task or force detach it then, no?
+Sending SIGKILL makes more sense.
 
-Thanks,
+> do about it, we cannot fail the exec because we need this to work for
+> existing apps, and there is no way the Android framework can know
+> upfront.
 
-Jessica
+It knows upfront it has enabled asym aarch32. So it needs to make sure not to
+create 'invalid' cpusets?
+
+> 
+> So the only thing we can do really is WARN() and proceed to ignore the
+> cpuset, which is what this series does :/. It's not exactly pretty but I
+> don't think we can do much better than that TBH, and it's the same thing
+> for the example you brought up. Failing cpuset_can_attach() will not
+> help, we can only WARN and proceed ...
+
+I think for cases where we can prevent userspace from doing something wrong, we
+should. Like trying to attach to a cpuset that will result in an empty mask.
+FWIW, it does something similar with deadline tasks. See task_can_attach().
+
+Similarly for the case when userspace tries to modify the cpuset.cpus such that
+a task will end up with empty cpumask. We now have the new case that some tasks
+can only run on a subset of cpu_possible_mask. So the definition of empty
+cpumask has gained an extra meaning.
+
+> 
+> Now, Android should be fine with that I think. We only need the kernel
+> to implement a safe fallback mechanism when userspace gives
+> contradictory commands, because we know there are edge cases userspace
+> _cannot_ deal with correctly, but this fallback doesn't need to be
+> highly optimized (at least for Android), but I'm happy to hear what
+> others think.
+
+Why not go with our original patch that fixes affinity then in the arch code if
+the task wakes up on the wrong cpu? It is much simpler approach IMO to achieve
+the same thing.
+
+I was under the impression that if we go down teaching the scheduler about asym
+ISA, then we have to deal with these edge cases. I don't think we're far away
+from getting there.
+
+Thanks
+
+--
+Qais Yousef
