@@ -2,87 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F922CBEF6
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 15:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6D42CBF18
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 15:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727893AbgLBODY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Dec 2020 09:03:24 -0500
-Received: from foss.arm.com ([217.140.110.172]:40756 "EHLO foss.arm.com"
+        id S2388939AbgLBOIL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Dec 2020 09:08:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:40906 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727460AbgLBODY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Dec 2020 09:03:24 -0500
+        id S1729043AbgLBOIK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Dec 2020 09:08:10 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 001D91063;
-        Wed,  2 Dec 2020 06:02:39 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.23.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E27F83F718;
-        Wed,  2 Dec 2020 06:02:35 -0800 (PST)
-Date:   Wed, 2 Dec 2020 14:02:33 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "trix@redhat.com" <trix@redhat.com>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "nitesh@redhat.com" <nitesh@redhat.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "leon@sidebranch.com" <leon@sidebranch.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "pauld@redhat.com" <pauld@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH v5 0/9] "Task_isolation" mode
-Message-ID: <20201202140233.GB66958@C02TD0UTHF1T.local>
-References: <8d887e59ca713726f4fcb25a316e1e932b02823e.camel@marvell.com>
- <b0e7afd3-4c11-c8f3-834b-699c20dbdd90@redhat.com>
- <a31f81cfa62936ff5edc420be63a5ac0b318b594.camel@marvell.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDDFE1063;
+        Wed,  2 Dec 2020 06:07:24 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A600A3F718;
+        Wed,  2 Dec 2020 06:07:22 -0800 (PST)
+Date:   Wed, 2 Dec 2020 14:07:20 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 08/14] arm64: exec: Adjust affinity for compat tasks
+ with mismatched 32-bit EL0
+Message-ID: <20201202140720.vlnpvge3bgtvn43s@e107158-lin.cambridge.arm.com>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-9-will@kernel.org>
+ <20201127132306.ee4frq6ujz3fqxic@e107158-lin.cambridge.arm.com>
+ <20201201165556.GA27783@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a31f81cfa62936ff5edc420be63a5ac0b318b594.camel@marvell.com>
+In-Reply-To: <20201201165556.GA27783@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 05:40:49PM +0000, Alex Belits wrote:
+On 12/01/20 16:55, Will Deacon wrote:
+> > > +static void adjust_compat_task_affinity(struct task_struct *p)
+> > > +{
+> > > +	cpumask_var_t cpuset_mask;
+> > > +	const struct cpumask *possible_mask = system_32bit_el0_cpumask();
+> > > +	const struct cpumask *newmask = possible_mask;
+> > > +
+> > > +	/*
+> > > +	 * Restrict the CPU affinity mask for a 32-bit task so that it contains
+> > > +	 * only the 32-bit-capable subset of its original CPU mask. If this is
+> > > +	 * empty, then try again with the cpuset allowed mask. If that fails,
+> > > +	 * forcefully override it with the set of all 32-bit-capable CPUs that
+> > > +	 * we know about.
+> > > +	 *
+> > > +	 * From the perspective of the task, this looks similar to what would
+> > > +	 * happen if the 64-bit-only CPUs were hot-unplugged at the point of
+> > > +	 * execve().
+> > > +	 */
+> > > +	if (!restrict_cpus_allowed_ptr(p, possible_mask))
+> > > +		goto out;
+> > > +
+> > > +	if (alloc_cpumask_var(&cpuset_mask, GFP_KERNEL)) {
+> > > +		cpuset_cpus_allowed(p, cpuset_mask);
+> > > +		if (cpumask_and(cpuset_mask, cpuset_mask, possible_mask)) {
+> > > +			newmask = cpuset_mask;
+> > > +			goto out_set_mask;
+> > > +		}
+> > > +	}
+> > 
+> > Wouldn't it be better to move this logic to restrict_cpus_allowed_ptr()?
+> > I think it should always take cpusets into account and it's not special to
+> > this particular handling here, no?
 > 
-> On Tue, 2020-11-24 at 08:36 -0800, Tom Rix wrote:
-> > External Email
-> > 
-> > -------------------------------------------------------------------
-> > ---
-> > 
-> > On 11/23/20 9:42 AM, Alex Belits wrote:
-> > > This is an update of task isolation work that was originally done
-> > > by
-> > > Chris Metcalf <cmetcalf@mellanox.com> and maintained by him until
-> > > November 2017. It is adapted to the current kernel and cleaned up
-> > > to
-> > > implement its functionality in a more complete and cleaner manner.
-> > 
-> > I am having problems applying the patchset to today's linux-next.
-> > 
-> > Which kernel should I be using ?
+> I did actually try this but didn't pursue it further because I was worried
+> that I was putting too much of the "can't run a 32-bit task on a 64-bit-only
+> CPU" logic into what would otherwise be a potentially useful library function
+> if/when other architectures want something similar. But I'll have another
+> look because there were a couple of ideas I didn't try out.
+
+If we improve the cpuset handling issues to take into account
+arch_task_cpu_possible_mask() as discussed in the other thread, I think we can
+drop the cpuset handling here.
+
 > 
-> The patches are against Linus' tree, in particular, commit
-> a349e4c659609fd20e4beea89e5c4a4038e33a95
+> > > +	if (printk_ratelimit()) {
+> > > +		printk_deferred("Overriding affinity for 32-bit process %d (%s) to CPUs %*pbl\n",
+> > > +				task_pid_nr(p), p->comm, cpumask_pr_args(newmask));
+> > > +	}
+> > 
+> > We have 2 cases where the affinity could have been overridden but we won't
+> > print anything:
+> > 
+> > 	1. restrict_cpus_allowed_ptr()
+> > 	2. intersection of cpuset_mask and possible mask drops some cpus.
+> > 
+> > Shouldn't we print something in these cases too?
+> 
+> I don't think so: in these cases we've found a subset of CPUs that we can
+> run on, and so there's no need to warn. Nothing says we _have_ to use all
+> the CPUs available to us. The case where we override the affinity mask
+> altogether, however, does warrant a warning. This is very similar to the
+> hotplug behaviour in select_fallback_rq().
 
-Is there any reason to base on that commit in particular?
+Okay. It is just to warn when we actually break the affinity because we ended
+up with empty mask; not just because we changed the affinity to an intersecting
+one.
 
-Generally it's preferred that a series is based on a tag (so either a
-release or an -rc kernel), and that the cover letter explains what the
-base is. If you can do that in future it'll make the series much easier
-to work with.
+I think this makes sense, yes. We might be able to drop this too if we improve
+cpuset handling. The devil is in the details I guess.
 
-Thanks,
-Mark.
+Thanks
+
+--
+Qais Yousef
