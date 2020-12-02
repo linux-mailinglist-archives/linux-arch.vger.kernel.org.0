@@ -2,106 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E11912CB69D
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 09:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF71D2CB9A1
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 10:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbgLBISq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Dec 2020 03:18:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54394 "EHLO mail.kernel.org"
+        id S2388024AbgLBJsU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Dec 2020 04:48:20 -0500
+Received: from mga02.intel.com ([134.134.136.20]:47109 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgLBISq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Dec 2020 03:18:46 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8CE08221FA;
-        Wed,  2 Dec 2020 08:18:05 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1kkNKt-00FHEK-BO; Wed, 02 Dec 2020 08:18:03 +0000
+        id S2387847AbgLBJsU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Dec 2020 04:48:20 -0500
+IronPort-SDR: jBQ+scQGYgYA7J1yGbc8TGX2sxz5zAqs6X7dF39bzEpU/BpsI3CX8CXzy9XWVKTyZ3N2010qTK
+ T9vSZ0SaGf5g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9822"; a="160044157"
+X-IronPort-AV: E=Sophos;i="5.78,386,1599548400"; 
+   d="scan'208";a="160044157"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 01:46:19 -0800
+IronPort-SDR: fdvpCu4LKJtzIw6OKe18ZEzN2E4Mf7z7aFv8zacZOZQTlNPMdPurke/7A1ibbvXwQSMT0GwKK3
+ KSE/RUnLUc/A==
+X-IronPort-AV: E=Sophos;i="5.78,386,1599548400"; 
+   d="scan'208";a="365228059"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2020 01:46:16 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kkOjF-00BTr4-MB; Wed, 02 Dec 2020 11:47:17 +0200
+Date:   Wed, 2 Dec 2020 11:47:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yun Levi <ppbuk5246@gmail.com>
+Cc:     dushistov@mail.ru, arnd@arndb.de, akpm@linux-foundation.org,
+        gustavo@embeddedor.com, vilhelm.gray@gmail.com,
+        richard.weiyang@linux.alibaba.com, joseph.qi@linux.alibaba.com,
+        skalluru@marvell.com, yury.norov@gmail.com, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] lib/find_bit: Add find_prev_*_bit functions.
+Message-ID: <20201202094717.GX4077@smile.fi.intel.com>
+References: <CAM7-yPQcmU3MM66oAHQ6kcEukPFgj074_h-S-S+O53Lrx2yeBg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 02 Dec 2020 08:18:03 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Quentin Perret <qperret@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com
-Subject: Re: [PATCH v4 03/14] KVM: arm64: Kill 32-bit vCPUs on systems with
- mismatched EL0 support
-In-Reply-To: <20201201165707.GF27783@willie-the-truck>
-References: <20201124155039.13804-1-will@kernel.org>
- <20201124155039.13804-4-will@kernel.org>
- <9bd06b193e7fb859a1207bb1302b7597@kernel.org>
- <20201127115304.GB20564@willie-the-truck>
- <583c4074bbd4cf8b8085037745a5d1c0@kernel.org>
- <20201127172434.GA984327@google.com>
- <9de8639549040b4478b312503fd5a23f@kernel.org>
- <20201201165707.GF27783@willie-the-truck>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <5e59a8f5bc84403ce2c8f26aa874cb1b@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: will@kernel.org, qperret@google.com, linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, gregkh@linuxfoundation.org, peterz@infradead.org, morten.rasmussen@arm.com, qais.yousef@arm.com, surenb@google.com, tj@kernel.org, lizefan@huawei.com, hannes@cmpxchg.org, mingo@redhat.com, juri.lelli@redhat.com, vincent.guittot@linaro.org, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM7-yPQcmU3MM66oAHQ6kcEukPFgj074_h-S-S+O53Lrx2yeBg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-12-01 16:57, Will Deacon wrote:
-> On Fri, Nov 27, 2020 at 06:16:35PM +0000, Marc Zyngier wrote:
->> On 2020-11-27 17:24, Quentin Perret wrote:
->> > On Friday 27 Nov 2020 at 17:14:11 (+0000), Marc Zyngier wrote:
->> 
->> [...]
->> 
->> > > Yeah, the sanitized read feels better, if only because that is
->> > > what we are going to read in all the valid cases, unfortunately.
->> > > read_sanitised_ftr_reg() is sadly not designed to be called on
->> > > a fast path, meaning that 32bit guests will do a bsearch() on
->> > > the ID-regs every time they exit...
->> > >
->> > > I guess we will have to evaluate how much we loose with this.
->> >
->> > Could we use the trick we have for arm64_ftr_reg_ctrel0 to speed this
->> > up?
->> 
->> Maybe. I want to first verify whether this has any measurable impact.
->> Another possibility would be to cache the last 
->> read_sanitised_ftr_reg()
->> access, just to see if that helps. There shouldn't be that many code
->> paths hammering it.
-> 
-> We don't have huge numbers of ID registers, so the bsearch shouldn't be
-> too expensive. However, I'd like to remind myself why we can't index 
-> into
-> the feature register array directly as we _should_ know all of this 
-> stuff
-> at compile time, right?
+On Wed, Dec 02, 2020 at 10:10:09AM +0900, Yun Levi wrote:
+> Inspired find_next_*bit function series, add find_prev_*_bit series.
+> I'm not sure whether it'll be used right now But, I add these functions
+> for future usage.
 
-Simply because it's not indexed by ID reg. It's just an ordered 
-collection,
-similar to the for sys_reg emulation in KVM. You can compute the index
-ahead of time, but just not at compile time. At least not with the
-way the arm64_ftr_regs array is built.
+This patch has few issues:
+- it has more things than described (should be several patches instead)
+- new functionality can be split logically to couple or more pieces as well
+- it proposes functionality w/o user (dead code)
 
-         M.
 -- 
-Jazz is not dead. It just smells funny...
+With Best Regards,
+Andy Shevchenko
+
+
