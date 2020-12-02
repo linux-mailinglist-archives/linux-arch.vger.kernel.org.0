@@ -2,257 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EA12CB316
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 04:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFE52CB326
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 04:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbgLBDBT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 22:01:19 -0500
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:58238 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbgLBDBT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 22:01:19 -0500
-X-Greylist: delayed 1020 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Dec 2020 22:01:16 EST
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 0B230FY3010208;
-        Wed, 2 Dec 2020 12:00:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 0B230FY3010208
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1606878015;
-        bh=bae6OEGZccYsxihZZpKD9adLEYkbdiNBF+1eXUN2gTY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ucq+5afygNO9hVQg++YTDfIDVKEk9+zsLqE7JR393hi9krpQH7+bD0C8aAZMbFmbD
-         +OQ6i7CaMieOFlBqrS/SEBYvAqJ/sjzzA7xRxAnMD8SreXyM6oIIu95dQT2MpZC18o
-         /aL1rtTky94Z4HhsecQUfuTaFwt1lE5aXFKUMJk9+BuVy23J+24XI9rKKo704REfSC
-         ZwV31dws3Vzgm2VpY6w1pRGgf95MDOba6Pqu2Iaewf6pcIqiHur6dMHnyE05yF57ku
-         lCNFUdVMBhb2FZXQYnBu4ly7hRUR1xuEzi721w7dxVMmjU9ecGBkflNSyZ6BEnOHJZ
-         yxSDheoiBcWDQ==
-X-Nifty-SrcIP: [209.85.216.49]
-Received: by mail-pj1-f49.google.com with SMTP id r9so159179pjl.5;
-        Tue, 01 Dec 2020 19:00:15 -0800 (PST)
-X-Gm-Message-State: AOAM532CoO99HKXq66jG6xT/3zNCsJ3RBIsCC9F9Ma9oD4ll3cRNvzIS
-        j+84q+4YirXgfyw2X7VjUyFd/VrrEA7HulEfdGw=
-X-Google-Smtp-Source: ABdhPJxtoS2uIcM+4LbPLIZn8Kx+Yzfzjaw/Yg6CiGuVAmShSIC5gq9eCcR8svHa50umwklx7CPEGfnalqUCBoqVvvQ=
-X-Received: by 2002:a17:902:bc86:b029:da:9da4:3092 with SMTP id
- bb6-20020a170902bc86b02900da9da43092mr549251plb.71.1606878014719; Tue, 01 Dec
- 2020 19:00:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20201201213707.541432-1-samitolvanen@google.com> <20201201213707.541432-3-samitolvanen@google.com>
-In-Reply-To: <20201201213707.541432-3-samitolvanen@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 2 Dec 2020 11:59:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASMh1KysAB4+gU7_iuTW+5GT2_yMDevwpLwx0iqjxwmWw@mail.gmail.com>
-Message-ID: <CAK7LNASMh1KysAB4+gU7_iuTW+5GT2_yMDevwpLwx0iqjxwmWw@mail.gmail.com>
-Subject: Re: [PATCH v8 02/16] kbuild: add support for Clang LTO
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        id S1726206AbgLBDKS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 22:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbgLBDKS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 22:10:18 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A36BC0613CF;
+        Tue,  1 Dec 2020 19:09:38 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id t37so199987pga.7;
+        Tue, 01 Dec 2020 19:09:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=mTu9T1PiFi4oAwV6r4bAppvxwrYc5gq1agidYIWJs7k=;
+        b=FGyql/mAwbC1lUm8OPPQwoMJm0RNgttEWeqjEk80gdvhrTf/haYKk+IQqtLUfSkh7C
+         18g6gG85BpyZUGNf1QEwbfi7jBex7GvtzzE0FZH0m4fgyJaYCYaOY6xKD78d7sa1+K4q
+         LvAGIpkix2QOJKzt5ynJuu/N4kRYthA2BQAfCKUNUqQarTh86Pe1k+WzKPKsQXNQkInm
+         uZgMhlZFWV231VFKUe/WXy8uvsxTzTosj/NTnCd7qkX8U5mI1QDntoq5K4whE+TGvbPi
+         qQjkj5Q8gj/uxsqwMAIFrq4gb6d0ULz15QLMDsbE6eiTAhnp/ueeteVY1W23J52Yz3Jl
+         BP4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=mTu9T1PiFi4oAwV6r4bAppvxwrYc5gq1agidYIWJs7k=;
+        b=Dy2P/6SSMkoJosDTfjk15Av3RdV0dB+ngu3/6PygaJVZTlUi1sQKKlrMYtpiXdIijz
+         MM8MkrdxEqTStU0v6nZ9N0y+LxF04i8uLl1uBycZG6CwNcME+6lao6xDvgfOZGbG4WSE
+         OjaYEXKQZ544M74GfPT7VFGNoMiQbXYKNxY37zj0Dgf55ht7dB098K0C5Y9CqP/XCFpY
+         HgbI1FYEiuIB2W2HQYyKtv04hQnaJmFATJINDlEHw/zycdGSj/QjVfD/6OJz0h0hw954
+         S9HeoPA+vPhvl+XW7HrkpAlwNMPiSKmB0vmqAsVuCLs8VLAAxx9h90mt3ZxbytSbPo6w
+         lY6Q==
+X-Gm-Message-State: AOAM5310Mkmb43T9YA38f+BoHgLua9X7e13heN7gnPjFaHdV+AGdIrSf
+        +56s5evQidPyTPct851zGR4=
+X-Google-Smtp-Source: ABdhPJyMqgqZnm3RX5OBhSrD+f5WEYMBcOc1X5In125AXSEq+tZ/SLJm9LVYEWZ7r6/Oj+0f1pVMQQ==
+X-Received: by 2002:a63:a0b:: with SMTP id 11mr717907pgk.21.1606878577415;
+        Tue, 01 Dec 2020 19:09:37 -0800 (PST)
+Received: from localhost ([1.132.180.166])
+        by smtp.gmail.com with ESMTPSA id o133sm309710pfg.97.2020.12.01.19.09.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 19:09:37 -0800 (PST)
+Date:   Wed, 02 Dec 2020 13:09:29 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb
+ option
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+References: <20201128160141.1003903-1-npiggin@gmail.com>
+        <20201128160141.1003903-7-npiggin@gmail.com>
+        <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
+In-Reply-To: <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
+MIME-Version: 1.0
+Message-Id: <1606877416.ym0jhixy72.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 2, 2020 at 6:37 AM 'Sami Tolvanen' via Clang Built Linux
-<clang-built-linux@googlegroups.com> wrote:
->
-> This change adds build system support for Clang's Link Time
-> Optimization (LTO). With -flto, instead of ELF object files, Clang
-> produces LLVM bitcode, which is compiled into native code at link
-> time, allowing the final binary to be optimized globally. For more
-> details, see:
->
->   https://llvm.org/docs/LinkTimeOptimization.html
->
-> The Kconfig option CONFIG_LTO_CLANG is implemented as a choice,
-> which defaults to LTO being disabled. To use LTO, the architecture
-> must select ARCH_SUPPORTS_LTO_CLANG and support:
->
->   - compiling with Clang,
->   - compiling inline assembly with Clang's integrated assembler,
->   - and linking with LLD.
->
-> While using full LTO results in the best runtime performance, the
-> compilation is not scalable in time or memory. CONFIG_THINLTO
-> enables ThinLTO, which allows parallel optimization and faster
-> incremental builds. ThinLTO is used by default if the architecture
-> also selects ARCH_SUPPORTS_THINLTO:
->
->   https://clang.llvm.org/docs/ThinLTO.html
->
-> To enable LTO, LLVM tools must be used to handle bitcode files. The
-> easiest way is to pass the LLVM=1 option to make:
->
->   $ make LLVM=1 defconfig
->   $ scripts/config -e LTO_CLANG
->   $ make LLVM=1
->
-> Alternatively, at least the following LLVM tools must be used:
->
->   CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm
->
-> To prepare for LTO support with other compilers, common parts are
-> gated behind the CONFIG_LTO option, and LTO can be disabled for
-> specific files by filtering out CC_FLAGS_LTO.
->
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  Makefile                          | 19 ++++++-
->  arch/Kconfig                      | 88 +++++++++++++++++++++++++++++++
->  include/asm-generic/vmlinux.lds.h | 11 ++--
->  scripts/Makefile.build            |  9 +++-
->  scripts/Makefile.modfinal         |  9 +++-
->  scripts/Makefile.modpost          | 21 +++++++-
->  scripts/link-vmlinux.sh           | 32 ++++++++---
->  7 files changed, 171 insertions(+), 18 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 16b7f0890e75..f5cac2428efc 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -891,6 +891,21 @@ KBUILD_CFLAGS      += $(CC_FLAGS_SCS)
->  export CC_FLAGS_SCS
->  endif
->
-> +ifdef CONFIG_LTO_CLANG
-> +ifdef CONFIG_LTO_CLANG_THIN
-> +CC_FLAGS_LTO   += -flto=thin -fsplit-lto-unit
-> +KBUILD_LDFLAGS += --thinlto-cache-dir=$(extmod-prefix).thinlto-cache
-> +else
-> +CC_FLAGS_LTO   += -flto
-> +endif
-> +CC_FLAGS_LTO   += -fvisibility=default
-> +endif
-> +
-> +ifdef CONFIG_LTO
-> +KBUILD_CFLAGS  += $(CC_FLAGS_LTO)
-> +export CC_FLAGS_LTO
-> +endif
-> +
->  ifdef CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_32B
->  KBUILD_CFLAGS += -falign-functions=32
->  endif
-> @@ -1471,7 +1486,7 @@ MRPROPER_FILES += include/config include/generated          \
->                   *.spec
->
->  # Directories & files removed with 'make distclean'
-> -DISTCLEAN_FILES += tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS
-> +DISTCLEAN_FILES += tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS .thinlto-cache
->
->  # clean - Delete most, but leave enough to build external modules
->  #
-> @@ -1717,7 +1732,7 @@ PHONY += compile_commands.json
->
->  clean-dirs := $(KBUILD_EXTMOD)
->  clean: rm-files := $(KBUILD_EXTMOD)/Module.symvers $(KBUILD_EXTMOD)/modules.nsdeps \
-> -       $(KBUILD_EXTMOD)/compile_commands.json
-> +       $(KBUILD_EXTMOD)/compile_commands.json $(KBUILD_EXTMOD)/.thinlto-cache
->
->  PHONY += help
->  help:
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 56b6ccc0e32d..30907b554451 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -598,6 +598,94 @@ config SHADOW_CALL_STACK
->           reading and writing arbitrary memory may be able to locate them
->           and hijack control flow by modifying the stacks.
->
-> +config LTO
-> +       bool
-> +       help
-> +         Selected if the kernel will be built using the compiler's LTO feature.
-> +
-> +config LTO_CLANG
-> +       bool
-> +       select LTO
-> +       help
-> +         Selected if the kernel will be built using Clang's LTO feature.
-> +
-> +config ARCH_SUPPORTS_LTO_CLANG
-> +       bool
-> +       help
-> +         An architecture should select this option if it supports:
-> +         - compiling with Clang,
-> +         - compiling inline assembly with Clang's integrated assembler,
-> +         - and linking with LLD.
-> +
-> +config ARCH_SUPPORTS_LTO_CLANG_THIN
-> +       bool
-> +       help
-> +         An architecture should select this option if it can support Clang's
-> +         ThinLTO mode.
-> +
-> +config HAS_LTO_CLANG
-> +       def_bool y
-> +       # Clang >= 11: https://github.com/ClangBuiltLinux/linux/issues/510
-> +       depends on CC_IS_CLANG && CLANG_VERSION >= 110000 && LD_IS_LLD
-> +       depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
-> +       depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
-> +       depends on ARCH_SUPPORTS_LTO_CLANG
-> +       depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT
-> +       depends on !KASAN
-> +       depends on !GCOV_KERNEL
-> +       depends on !MODVERSIONS
-> +       help
-> +         The compiler and Kconfig options support building with Clang's
-> +         LTO.
-> +
-> +choice
-> +       prompt "Link Time Optimization (LTO)"
-> +       default LTO_NONE
-> +       help
-> +         This option enables Link Time Optimization (LTO), which allows the
-> +         compiler to optimize binaries globally.
-> +
-> +         If unsure, select LTO_NONE. Note that LTO is very resource-intensive
-> +         so it's disabled by default.
-> +
-> +config LTO_NONE
-> +       bool "None"
-> +       help
-> +         Build the kernel normally, without Link Time Optimization (LTO).
-> +
-> +config LTO_CLANG_FULL
-> +       bool "Clang Full LTO (EXPERIMENTAL)"
-> +       depends on HAS_LTO_CLANG
-> +       select LTO_CLANG
-> +       help
-> +          This option enables Clang's full Link Time Optimization (LTO), which
-> +          allows the compiler to optimize the kernel globally. If you enable
-> +          this option, the compiler generates LLVM bitcode instead of ELF
-> +          object files, and the actual compilation from bitcode happens at
-> +          the LTO link step, which may take several minutes depending on the
-> +          kernel configuration. More information can be found from LLVM's
-> +          documentation:
-> +
-> +           https://llvm.org/docs/LinkTimeOptimization.html
-> +
+Excerpts from Andy Lutomirski's message of November 29, 2020 1:54 pm:
+> On Sat, Nov 28, 2020 at 8:02 AM Nicholas Piggin <npiggin@gmail.com> wrote=
+:
+>>
+>> On big systems, the mm refcount can become highly contented when doing
+>> a lot of context switching with threaded applications (particularly
+>> switching between the idle thread and an application thread).
+>>
+>> Abandoning lazy tlb slows switching down quite a bit in the important
+>> user->idle->user cases, so so instead implement a non-refcounted scheme
+>> that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
+>> any remaining lazy ones.
+>>
+>> Shootdown IPIs are some concern, but they have not been observed to be
+>> a big problem with this scheme (the powerpc implementation generated
+>> 314 additional interrupts on a 144 CPU system during a kernel compile).
+>> There are a number of strategies that could be employed to reduce IPIs
+>> if they turn out to be a problem for some workload.
+>=20
+> I'm still wondering whether we can do even better.
 
-This help document is misleading.
-People who read the document would misunderstand how great this feature would.
+We probably can, for some values of better / more complex. This came up=20
+last time I posted, there was a big concern about IPIs etc, but it just=20
+wasn't an issue at all even when I tried to coax them to happen a bit.
 
-This should be added in the commit log and Kconfig help:
+The thing is they are faily self-limiting, it's not actually all that=20
+frequent that you have an mm get taken for a lazy *and* move between=20
+CPUs. Perhaps more often with threaded apps, but in that case you're=20
+eating various IPI costs anyway (e.g., when moving the task to another
+CPU, on TLB shootdowns, etc).
 
-            In contrast to the example in the documentation, Clang LTO
-            for the kernel cannot remove any unreachable function or data.
-            In fact, this results in even bigger vmlinux and modules.
+So from last time I did measure and I did document some possible=20
+improvements that could be made in comments, but I decided to keep it=20
+simple before adding complexity to it.
+
+>=20
+> The IPIs you're doing aren't really necessary -- we don't
+> fundamentally need to free the pagetables immediately when all
+> non-lazy users are done with them (and current kernels don't) -- what
+> we need to do is to synchronize all the bookkeeping.  So, with
+> adequate locking (famous last words), a couple of alternative schemes
+> ought to be possible.
+
+It's not freeing the page tables, those are freed by this point already=20
+I think (at least on powerpc they are). It's releasing the lazy mm.
+
+>=20
+> a) Instead of sending an IPI, increment mm_count on behalf of the
+> remote CPU and do something to make sure that the remote CPU knows we
+> did this on its behalf.  Then free the mm when mm_count hits zero.
+>=20
+> b) Treat mm_cpumask as part of the refcount.  Add one to mm_count when
+> an mm is created.  Once mm_users hits zero, whoever clears the last
+> bit in mm_cpumask is responsible for decrementing a single reference
+> from mm_count, and whoever sets it to zero frees the mm.
+
+Right, these were some possible avenues to explore, thing is it's=20
+complexity and more synchronisation costs, and in the fast (context=20
+switch) path too. The IPI actually avoids all fast path work, atomic
+or not.
+
+> Version (b) seems fairly straightforward to implement -- add RCU
+> protection and a atomic_t special_ref_cleared (initially 0) to struct
+> mm_struct itself.  After anyone clears a bit to mm_cpumask (which is
+> already a barrier), they read mm_users.  If it's zero, then they scan
+> mm_cpumask and see if it's empty.  If it is, they atomically swap
+> special_ref_cleared to 1.  If it was zero before the swap, they do
+> mmdrop().  I can imagine some tweaks that could make this a big
+> faster, at least in the limit of a huge number of CPUs.
+>=20
+> Version (a) seems a bit harder to reason about.  Maybe it could be
+> done like this.  Add a percpu variable mm_with_extra_count.  This
+> variable can be NULL, but it can also be an mm that has an extra
+> reference on behalf of the cpu in question.
+>=20
+> __mmput scans mm_cpumask and, for each cpu in the mask, mmgrabs the mm
+> and cmpxchgs that cpu's mm_with_extra_count from NULL to mm.  If it
+> succeeds, then we win.  If it fails, further thought is required, and
+> maybe we have to send an IPI, although maybe some other cleverness is
+> possible.  Any time a CPU switches mms, it does atomic swaps
+> mm_with_extra_count to NULL and mmdrops whatever the mm was.  (Maybe
+> it needs to check the mm isn't equal to the new mm, although it would
+> be quite bizarre for this to happen.)  Other than these mmgrab and
+> mmdrop calls, the mm switching code doesn't mmgrab or mmdrop at all.
+>=20
+>=20
+> Version (a) seems like it could have excellent performance.
+
+That said, if x86 wanted to explore something like this, the code to do=20
+it is a bit modular (I don't think a proliferation of lazy refcounting=20
+config options is a good idea of course, but 2 versions one for powrepc
+style set-and-forget mm_cpumask and one for x86 set-and-clear would
+be okay.
+
+> *However*, I think we should consider whether we want to do something
+> even bigger first.  Even with any of these changes, we still need to
+> maintain mm_cpumask(), and that itself can be a scalability problem.
+> I wonder if we can solve this problem too.  Perhaps the switch_mm()
+> paths could only ever set mm_cpumask bits,
+
+Powerpc does this.
+
+> and anyone who would send
+> an IPI because a bit is set in mm_cpumask would first check some
+> percpu variable (cpu_rq(cpu)->something?=20
+
+This is a suggested possible optimization to the IPI scheme (you would
+check if it's active).
+
+There's pros and cons to it. You get more IPIs and cross TLB shootdowns
+and jitter cleaning up behind you rather than cleaning up as you go.
+
+> an entirely new variable) to
+> see if the bit in mm_cpumask is spurious.  Or perhaps mm_cpumask could
+> be split up across multiple cachelines, one per node.
+
+IIRC Peter or someone mentioned this was something that was looked at=20
+for x86.
+
+> We should keep the recent lessons from Apple in mind, though: x86 is a
+> dinosaur.
+
+Wow. What is the recent lesson from Apple?? I'm completely out of the=20
+loop here.
+
+> The future of atomics is going to look a lot more like
+> ARM's LSE than x86's rather anemic set.  This means that mm_cpumask
+> operations won't need to be full barriers forever, and we might not
+> want to take the implied full barriers in set_bit() and clear_bit()
+> for granted.
+
+Sure, set_bit / clear_bit aren't full barriers in terms of Linux=20
+semantics, so generic code doesn't assume that. What x86 does is
+add the smp_mb__after_blah or before_blah to avoid an added barrier
+because of it's heavier-than-required set_bit.
+
+I'm not quite sure what you were getting at though. The atomic itself is=20
+really quite a small cost of the exit() operation (or even a context=20
+switch operation) _most_ of the time (x86 CPUs seem to have very fast
+atomics so might be even smaller cost for you). It's just when you=20
+happen to bounce a cache line, which hurts no matter what you do.
+
+Thanks,
+Nick
 
 
-
-
--- 
-Best Regards
-Masahiro Yamada
