@@ -2,125 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F222CBE13
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 14:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF8F2CBE8F
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 14:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727714AbgLBNRj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Dec 2020 08:17:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:39334 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727531AbgLBNRj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Dec 2020 08:17:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E8D830E;
-        Wed,  2 Dec 2020 05:16:53 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C5AF3F718;
-        Wed,  2 Dec 2020 05:16:51 -0800 (PST)
-Date:   Wed, 2 Dec 2020 13:16:48 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com
-Subject: Re: [PATCH v4 02/14] arm64: Allow mismatched 32-bit EL0 support
-Message-ID: <20201202131648.iqdk5hdskucdhc3s@e107158-lin.cambridge.arm.com>
-References: <20201124155039.13804-1-will@kernel.org>
- <20201124155039.13804-3-will@kernel.org>
- <20201127130941.pr3grbcir6jdtzwa@e107158-lin.cambridge.arm.com>
- <20201201165621.GB27783@willie-the-truck>
+        id S1727666AbgLBNj7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Dec 2020 08:39:59 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51354 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725920AbgLBNj7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Dec 2020 08:39:59 -0500
+Received: by mail-wm1-f66.google.com with SMTP id v14so7314157wml.1;
+        Wed, 02 Dec 2020 05:39:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FJ6xsLQx9dY05IPFoonCh3sF/1Zc711Of2UZIMZEMno=;
+        b=NMtOa7vjYq9yFrbFk5RXqW+gXSDUYKu4Ng0XQY0KEFpmj4VNCTN7jP/wxvsyg12wME
+         jAV+LmXjldUrqCYX12nBa6gaiOGFdMYhYs0wgyjEkMgk3Y6KEGbygo4E9sTHL5WkJFvB
+         1ZXva6czIgbjLRWWbyJgLg26Fe0OLUGqaESsT7rI2M47klrlZw0JCEuMZVRuo4jLZ55J
+         AfhLe/vYxSxM7Yb2MwgrZFBMvlI36ngM5I6JsHbkgdi9u5+muGW5BCKicAPmIHNuM8Rm
+         34pDFsdujFnNhCqiKOzVAn9xMG24+av22RuJk2ABbf0uxgk5cgMI+AvLLQHUbRfVk1KC
+         1QUA==
+X-Gm-Message-State: AOAM530BzlxZCefH/WjsVJGQ9AFoigDQU9s06wocp8fwRGALdN3W32jE
+        bRKhAP4KYp7fZVEwPDSrWss=
+X-Google-Smtp-Source: ABdhPJxlQAAVuHK9QnwgrH5pU8A6gRGvEJWKj5rhzDCmCUxOYxO63UZbzgCMgwNF2JiH6J971dffLQ==
+X-Received: by 2002:a7b:c055:: with SMTP id u21mr3189754wmc.130.1606916351950;
+        Wed, 02 Dec 2020 05:39:11 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id s4sm2143519wru.56.2020.12.02.05.39.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 05:39:11 -0800 (PST)
+Date:   Wed, 2 Dec 2020 13:39:10 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+        Rob Herring <robh@kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 12/17] asm-generic/hyperv: update hv_interrupt_entry
+Message-ID: <20201202133910.6pihxjpu4qq5ljy5@liuwe-devbox-debian-v2>
+References: <20201124170744.112180-1-wei.liu@kernel.org>
+ <20201124170744.112180-13-wei.liu@kernel.org>
+ <012811843c94694f595e11bebfd9d4075f81f7f2.camel@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201201165621.GB27783@willie-the-truck>
+In-Reply-To: <012811843c94694f595e11bebfd9d4075f81f7f2.camel@infradead.org>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/01/20 16:56, Will Deacon wrote:
-> On Fri, Nov 27, 2020 at 01:09:41PM +0000, Qais Yousef wrote:
-> > On 11/24/20 15:50, Will Deacon wrote:
-> > > When confronted with a mixture of CPUs, some of which support 32-bit
+On Tue, Nov 24, 2020 at 06:05:27PM +0000, David Woodhouse wrote:
+> On Tue, 2020-11-24 at 17:07 +0000, Wei Liu wrote:
+> > We will soon use the same structure to handle IO-APIC interrupts as
+> > well. Introduce an enum to identify the source and a data structure for
+> > IO-APIC RTE.
 > > 
-> > Confronted made me laugh, well chosen word! :D
+> > While at it, update pci-hyperv.c to use the enum.
 > > 
-> > For some reason made me think of this :p
+> > No functional change.
 > > 
-> > 	https://www.youtube.com/watch?v=NJbXPzSPzxc&t=1m33s
+> > Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> > Acked-by: Rob Herring <robh@kernel.org>
 > 
-> I think it just about sums it up!
+> The I/OAPIC is just a device for generating MSIs.
 > 
-> > > applications and others which don't, we quite sensibly treat the system
-> > > as 64-bit only for userspace and prevent execve() of 32-bit binaries.
-> > > 
-> > > Unfortunately, some crazy folks have decided to build systems like this
-> > > with the intention of running 32-bit applications, so relax our
-> > > sanitisation logic to continue to advertise 32-bit support to userspace
-> > > on these systems and track the real 32-bit capable cores in a cpumask
-> > > instead. For now, the default behaviour remains but will be tied to
-> > > a command-line option in a later patch.
-> > > 
-> > > Signed-off-by: Will Deacon <will@kernel.org>
-> > > ---
-> > >  arch/arm64/include/asm/cpucaps.h    |   2 +-
-> > >  arch/arm64/include/asm/cpufeature.h |   8 ++-
-> > >  arch/arm64/kernel/cpufeature.c      | 106 ++++++++++++++++++++++++++--
-> > >  3 files changed, 107 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/arch/arm64/include/asm/cpucaps.h b/arch/arm64/include/asm/cpucaps.h
-> > > index e7d98997c09c..e6f0eb4643a0 100644
-> > > --- a/arch/arm64/include/asm/cpucaps.h
-> > > +++ b/arch/arm64/include/asm/cpucaps.h
-> > > @@ -20,7 +20,7 @@
-> > >  #define ARM64_ALT_PAN_NOT_UAO			10
-> > >  #define ARM64_HAS_VIRT_HOST_EXTN		11
-> > >  #define ARM64_WORKAROUND_CAVIUM_27456		12
-> > > -#define ARM64_HAS_32BIT_EL0			13
-> > > +#define ARM64_HAS_32BIT_EL0_DO_NOT_USE		13
-> > 
-> > nit: would UNUSED be better here? Worth adding a comment as to why too?
+> Can you check if this renders your patch obsolete:
 > 
-> UNUSED sounds like you could delete it, but I'll add a comment.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/apic&id=5d5a97133887b2dfd8e2ad0347c3a02cc7aaa0cb
 
-+1, thanks.
+David, thanks for your comment.
 
-> 
-> > >  #define ARM64_HARDEN_EL2_VECTORS		14
-> > >  #define ARM64_HAS_CNP				15
-> > >  #define ARM64_HAS_NO_FPSIMD			16
-> > 
-> > [...]
-> > 
-> > > +static bool has_32bit_el0(const struct arm64_cpu_capabilities *entry, int scope)
-> > > +{
-> > > +	if (!has_cpuid_feature(entry, scope))
-> > > +		return allow_mismatched_32bit_el0;
-> > 
-> > If a user passes the command line by mistake on a 64bit only system, this will
-> > return true. I'll be honest, I'm not entirely sure what the impact is. I get
-> > lost in the features maze. It is nicely encapsulated, but hard to navigate for
-> > the none initiated :-)
-> 
-> The thing is, we can't generally detect a 64-bit-only system because a
-> 32-bit-capable CPU could be hotplugged on late. So passing this option
-> just controls what the behaviour is at the point that the 32-bit-capable
-> CPU appears. If one doesn't appear, then there won't be a difference.
+This patch merely copies the definitions from Microsoft Hypervisor. The
+data structure is the exact one that is returned from the hypervisor.
+The hypervisor doesn't return a pair of (addr,data). It translates
+(addr,data) to IO-APIC RTE for the caller -- like what
+ioapic_setup_msg_from_msi does in your patch.
 
-Okay, thanks for confirming.
+I don't think your patch makes this patch obsolete.
 
-Cheers
-
---
-Qais Yousef
+Wei.
