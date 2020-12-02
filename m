@@ -2,100 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF8F2CBE8F
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 14:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89312CBEC0
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 14:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727666AbgLBNj7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Dec 2020 08:39:59 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:51354 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbgLBNj7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Dec 2020 08:39:59 -0500
-Received: by mail-wm1-f66.google.com with SMTP id v14so7314157wml.1;
-        Wed, 02 Dec 2020 05:39:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FJ6xsLQx9dY05IPFoonCh3sF/1Zc711Of2UZIMZEMno=;
-        b=NMtOa7vjYq9yFrbFk5RXqW+gXSDUYKu4Ng0XQY0KEFpmj4VNCTN7jP/wxvsyg12wME
-         jAV+LmXjldUrqCYX12nBa6gaiOGFdMYhYs0wgyjEkMgk3Y6KEGbygo4E9sTHL5WkJFvB
-         1ZXva6czIgbjLRWWbyJgLg26Fe0OLUGqaESsT7rI2M47klrlZw0JCEuMZVRuo4jLZ55J
-         AfhLe/vYxSxM7Yb2MwgrZFBMvlI36ngM5I6JsHbkgdi9u5+muGW5BCKicAPmIHNuM8Rm
-         34pDFsdujFnNhCqiKOzVAn9xMG24+av22RuJk2ABbf0uxgk5cgMI+AvLLQHUbRfVk1KC
-         1QUA==
-X-Gm-Message-State: AOAM530BzlxZCefH/WjsVJGQ9AFoigDQU9s06wocp8fwRGALdN3W32jE
-        bRKhAP4KYp7fZVEwPDSrWss=
-X-Google-Smtp-Source: ABdhPJxlQAAVuHK9QnwgrH5pU8A6gRGvEJWKj5rhzDCmCUxOYxO63UZbzgCMgwNF2JiH6J971dffLQ==
-X-Received: by 2002:a7b:c055:: with SMTP id u21mr3189754wmc.130.1606916351950;
-        Wed, 02 Dec 2020 05:39:11 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id s4sm2143519wru.56.2020.12.02.05.39.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 05:39:11 -0800 (PST)
-Date:   Wed, 2 Dec 2020 13:39:10 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        Rob Herring <robh@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3 12/17] asm-generic/hyperv: update hv_interrupt_entry
-Message-ID: <20201202133910.6pihxjpu4qq5ljy5@liuwe-devbox-debian-v2>
-References: <20201124170744.112180-1-wei.liu@kernel.org>
- <20201124170744.112180-13-wei.liu@kernel.org>
- <012811843c94694f595e11bebfd9d4075f81f7f2.camel@infradead.org>
+        id S1728129AbgLBNxH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Dec 2020 08:53:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:40150 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727761AbgLBNxH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:53:07 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 191E230E;
+        Wed,  2 Dec 2020 05:52:21 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB2393F718;
+        Wed,  2 Dec 2020 05:52:18 -0800 (PST)
+Date:   Wed, 2 Dec 2020 13:52:16 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 04/14] arm64: Kill 32-bit applications scheduled on
+ 64-bit-only CPUs
+Message-ID: <20201202135216.7jilpcvocnqqp5aj@e107158-lin.cambridge.arm.com>
+References: <20201124155039.13804-1-will@kernel.org>
+ <20201124155039.13804-5-will@kernel.org>
+ <20201127131217.skekrybqjdidm5ki@e107158-lin.cambridge.arm.com>
+ <20201201165633.GC27783@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <012811843c94694f595e11bebfd9d4075f81f7f2.camel@infradead.org>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20201201165633.GC27783@willie-the-truck>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 06:05:27PM +0000, David Woodhouse wrote:
-> On Tue, 2020-11-24 at 17:07 +0000, Wei Liu wrote:
-> > We will soon use the same structure to handle IO-APIC interrupts as
-> > well. Introduce an enum to identify the source and a data structure for
-> > IO-APIC RTE.
+On 12/01/20 16:56, Will Deacon wrote:
+> On Fri, Nov 27, 2020 at 01:12:17PM +0000, Qais Yousef wrote:
+> > On 11/24/20 15:50, Will Deacon wrote:
+> > > Scheduling a 32-bit application on a 64-bit-only CPU is a bad idea.
+> > > 
+> > > Ensure that 32-bit applications always take the slow-path when returning
+> > > to userspace on a system with mismatched support at EL0, so that we can
+> > > avoid trying to run on a 64-bit-only CPU and force a SIGKILL instead.
+> > > 
+> > > Signed-off-by: Will Deacon <will@kernel.org>
+> > > ---
 > > 
-> > While at it, update pci-hyperv.c to use the enum.
+> > nit: We drop this patch at the end. Can't we avoid it altogether instead?
+> 
+> I did it like this so that the last patch can be reverted for
+> testing/debugging, but also because I think it helps the structure of the
+> series.
+
+Cool. I had a comment about the barrier(), you were worried about
+cpu_affinity_invalid() being inlined by the compiler and then things get
+mangled such that TIF_NOTIFY_RESUME clearing is moved after the call as you
+described? Can the compiler move things if cpu_affinity_invalid() is a proper
+function call (not inlined)?
+
+> 
+> > > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> > > index a8184cad8890..bcb6ca2d9a7c 100644
+> > > --- a/arch/arm64/kernel/signal.c
+> > > +++ b/arch/arm64/kernel/signal.c
+> > > @@ -911,6 +911,19 @@ static void do_signal(struct pt_regs *regs)
+> > >  	restore_saved_sigmask();
+> > >  }
+> > >  
+> > > +static bool cpu_affinity_invalid(struct pt_regs *regs)
+> > > +{
+> > > +	if (!compat_user_mode(regs))
+> > > +		return false;
 > > 
-> > No functional change.
+> > Silly question. Is there an advantage of using compat_user_mode() vs
+> > is_compat_task()? I see the latter used in the file although struct pt_regs
+> > *regs is passed to the functions calling it.
 > > 
-> > Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> > Acked-by: Rob Herring <robh@kernel.org>
+> > Nothing's wrong with it, just curious.
 > 
-> The I/OAPIC is just a device for generating MSIs.
-> 
-> Can you check if this renders your patch obsolete:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/apic&id=5d5a97133887b2dfd8e2ad0347c3a02cc7aaa0cb
+> Not sure about advantages, but is_compat_task() is available in core code,
+> whereas compat_user_mode() is specific to arm64. The former implicitly
+> operates on 'current' and just checks thread flag, whereas the latter
+> actually goes and looks at mode field of the spsr to see what we're
+> going to be returning into.
 
-David, thanks for your comment.
+Okay, so just 2 different ways to do the same thing and you happened to pick
+the one that first came to mind.
 
-This patch merely copies the definitions from Microsoft Hypervisor. The
-data structure is the exact one that is returned from the hypervisor.
-The hypervisor doesn't return a pair of (addr,data). It translates
-(addr,data) to IO-APIC RTE for the caller -- like what
-ioapic_setup_msg_from_msi does in your patch.
+Thanks
 
-I don't think your patch makes this patch obsolete.
-
-Wei.
+--
+Qais Yousef
