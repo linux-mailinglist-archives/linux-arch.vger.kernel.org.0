@@ -2,154 +2,585 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFB32CB0A2
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 00:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C40632CB21D
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 02:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbgLAXFU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 18:05:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726167AbgLAXFU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 1 Dec 2020 18:05:20 -0500
-Date:   Tue, 1 Dec 2020 23:04:33 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606863879;
-        bh=+P5vOdE+JdhBYVVmnBPwF/BQp7C9Ej9MDqmd8+IjdKI=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rAt6FAvKgNYwFAgXKvslaKL2L6D4TLQGFxZmDaTouwi97GTnBFyrm06gN7lGsh3ep
-         JNTvMNBGYwgPEMCS26CZ+p8j7CC0jYFldWx8GhpDNTh5+gMpmQzAV9Pn/tYxecOCxN
-         bwTthtT3eT5majrxU3YmECb7LZk3Mpa8R6JOHjpc=
-From:   Will Deacon <will@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
-Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb
- option
-Message-ID: <20201201230432.GC28496@willie-the-truck>
-References: <20201128160141.1003903-1-npiggin@gmail.com>
- <20201128160141.1003903-7-npiggin@gmail.com>
- <CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com>
- <CALCETrWBtCfD+jZ3S+O8FK-HFPODuhbDEbbfWvS=-iPATNFAOA@mail.gmail.com>
- <CALCETrXAR_9EGaOF8ymVkZycxgZkYk0dR+NjEpTfVzdcS3sOVw@mail.gmail.com>
- <20201201212758.GA28300@willie-the-truck>
- <CALCETrVP3qAQ50yHU-AzZQsiRB9JGO5FQf91kuk7DCvNY51EXQ@mail.gmail.com>
+        id S1726556AbgLBBLC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 20:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726342AbgLBBLC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 20:11:02 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DBCC0613D4;
+        Tue,  1 Dec 2020 17:10:21 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id k14so234339wrn.1;
+        Tue, 01 Dec 2020 17:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=gPWc5D6e1GbpYB/CmI0kFszGPjzeM9t3g37edwAeP7g=;
+        b=OLB5gsaPMk4U4WrTg3s5l9IPokqxNliCGjhNk7Ax3U8nSORTJjVWTHreFtVbMOisOq
+         KL+OGKi+mWJCJQNZ4sS3X9uZ1JIDhnZtN7oCBkqGJ4uw5jwfqW71ceD3AemdYN32eesg
+         A/nkkaIn/aBgS6lU7Pl26qxqXyYK8OZmsTyuxw+4yzujv4SYJIH+OxcW73yZyQS5phO1
+         FANIhv2noIZZeLzWLWCmmKm6ZZDJ/USDmnc5aJHBhjmLImFprX1S0r2b2Xsr6if7pGEa
+         uvCOn+xqVFgbI5zG2tCsbjNspT1QzHnKe+SUVHfBiQUOj1DlLEoENreQuqZaws9Z3vdC
+         aPjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=gPWc5D6e1GbpYB/CmI0kFszGPjzeM9t3g37edwAeP7g=;
+        b=toE9T7X3BThq+JPwdfsof7y8BGnHDXyrzDQje2PmqcS4hAvMed9VVQgJi3bCseP4Td
+         HV1SspQ8hauYk8u8P/iivRLrHiPeRHww76VA5q7pv4vMMkvM9QQBhrrLpxoxAyjnF/C+
+         2szWqVHhfCVguDmAFR4HQNgMBSwXX3iARMBKCawP+Yw2Xd2EUujCArsi49qWJOz+0a/Q
+         x4vZ6ZPUA0SEfHNamuKRnR3RxJ/IPYSEWcxOXPbNg5cav8Ht+BP87KWzWr/gNNEnwdZ9
+         vOaZ1FGkDOfQj1Sfg5eev41m6T4nk0O8w+OCjig/lIxz6+EFzCvIc8KIDHuavxa0v1Eo
+         n3NQ==
+X-Gm-Message-State: AOAM531ca3geL7TMEe1h9e20s3BHHLJJu9jxnSDyh95svqiMcieXXT7z
+        Kgjo0lG5NWUrmWA2RrVvn5ciieMDe7TmeG88dXmBNAouDAw=
+X-Google-Smtp-Source: ABdhPJxZj3qbjYMBFz+P2HHQx4mNVoIVuE8PCFS3Et8Fug5OQjdg3Y8oPsfFEOXuoZYcDtb8ALNFJmWmFVVf5KSZKks=
+X-Received: by 2002:adf:f70b:: with SMTP id r11mr7346794wrp.133.1606871420516;
+ Tue, 01 Dec 2020 17:10:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALCETrVP3qAQ50yHU-AzZQsiRB9JGO5FQf91kuk7DCvNY51EXQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Yun Levi <ppbuk5246@gmail.com>
+Date:   Wed, 2 Dec 2020 10:10:09 +0900
+Message-ID: <CAM7-yPQcmU3MM66oAHQ6kcEukPFgj074_h-S-S+O53Lrx2yeBg@mail.gmail.com>
+Subject: [PATCH] lib/find_bit: Add find_prev_*_bit functions.
+To:     dushistov@mail.ru, arnd@arndb.de, akpm@linux-foundation.org,
+        gustavo@embeddedor.com, vilhelm.gray@gmail.com,
+        richard.weiyang@linux.alibaba.com,
+        andriy.shevchenko@linux.intel.com, joseph.qi@linux.alibaba.com,
+        skalluru@marvell.com, yury.norov@gmail.com, jpoimboe@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 01:50:38PM -0800, Andy Lutomirski wrote:
-> On Tue, Dec 1, 2020 at 1:28 PM Will Deacon <will@kernel.org> wrote:
-> >
-> > On Mon, Nov 30, 2020 at 10:31:51AM -0800, Andy Lutomirski wrote:
-> > > other arch folk: there's some background here:
-> > >
-> > > https://lkml.kernel.org/r/CALCETrVXUbe8LfNn-Qs+DzrOQaiw+sFUg1J047yByV31SaTOZw@mail.gmail.com
-> > >
-> > > On Sun, Nov 29, 2020 at 12:16 PM Andy Lutomirski <luto@kernel.org> wrote:
-> > > >
-> > > > On Sat, Nov 28, 2020 at 7:54 PM Andy Lutomirski <luto@kernel.org> wrote:
-> > > > >
-> > > > > On Sat, Nov 28, 2020 at 8:02 AM Nicholas Piggin <npiggin@gmail.com> wrote:
-> > > > > >
-> > > > > > On big systems, the mm refcount can become highly contented when doing
-> > > > > > a lot of context switching with threaded applications (particularly
-> > > > > > switching between the idle thread and an application thread).
-> > > > > >
-> > > > > > Abandoning lazy tlb slows switching down quite a bit in the important
-> > > > > > user->idle->user cases, so so instead implement a non-refcounted scheme
-> > > > > > that causes __mmdrop() to IPI all CPUs in the mm_cpumask and shoot down
-> > > > > > any remaining lazy ones.
-> > > > > >
-> > > > > > Shootdown IPIs are some concern, but they have not been observed to be
-> > > > > > a big problem with this scheme (the powerpc implementation generated
-> > > > > > 314 additional interrupts on a 144 CPU system during a kernel compile).
-> > > > > > There are a number of strategies that could be employed to reduce IPIs
-> > > > > > if they turn out to be a problem for some workload.
-> > > > >
-> > > > > I'm still wondering whether we can do even better.
-> > > > >
-> > > >
-> > > > Hold on a sec.. __mmput() unmaps VMAs, frees pagetables, and flushes
-> > > > the TLB.  On x86, this will shoot down all lazies as long as even a
-> > > > single pagetable was freed.  (Or at least it will if we don't have a
-> > > > serious bug, but the code seems okay.  We'll hit pmd_free_tlb, which
-> > > > sets tlb->freed_tables, which will trigger the IPI.)  So, on
-> > > > architectures like x86, the shootdown approach should be free.  The
-> > > > only way it ought to have any excess IPIs is if we have CPUs in
-> > > > mm_cpumask() that don't need IPI to free pagetables, which could
-> > > > happen on paravirt.
-> > >
-> > > Indeed, on x86, we do this:
-> > >
-> > > [   11.558844]  flush_tlb_mm_range.cold+0x18/0x1d
-> > > [   11.559905]  tlb_finish_mmu+0x10e/0x1a0
-> > > [   11.561068]  exit_mmap+0xc8/0x1a0
-> > > [   11.561932]  mmput+0x29/0xd0
-> > > [   11.562688]  do_exit+0x316/0xa90
-> > > [   11.563588]  do_group_exit+0x34/0xb0
-> > > [   11.564476]  __x64_sys_exit_group+0xf/0x10
-> > > [   11.565512]  do_syscall_64+0x34/0x50
-> > >
-> > > and we have info->freed_tables set.
-> > >
-> > > What are the architectures that have large systems like?
-> > >
-> > > x86: we already zap lazies, so it should cost basically nothing to do
-> > > a little loop at the end of __mmput() to make sure that no lazies are
-> > > left.  If we care about paravirt performance, we could implement one
-> > > of the optimizations I mentioned above to fix up the refcounts instead
-> > > of sending an IPI to any remaining lazies.
-> > >
-> > > arm64: AFAICT arm64's flush uses magic arm64 hardware support for
-> > > remote flushes, so any lazy mm references will still exist after
-> > > exit_mmap().  (arm64 uses lazy TLB, right?)  So this is kind of like
-> > > the x86 paravirt case.  Are there large enough arm64 systems that any
-> > > of this matters?
-> >
-> > Yes, there are large arm64 systems where performance of TLB invalidation
-> > matters, but they're either niche (supercomputers) or not readily available
-> > (NUMA boxes).
-> >
-> > But anyway, we blow away the TLB for everybody in tlb_finish_mmu() after
-> > freeing the page-tables. We have an optimisation to avoid flushing if
-> > we're just unmapping leaf entries when the mm is going away, but we don't
-> > have a choice once we get to actually reclaiming the page-tables.
-> >
-> > One thing I probably should mention, though, is that we don't maintain
-> > mm_cpumask() because we're not able to benefit from it and the atomic
-> > update is a waste of time.
-> 
-> Do you do anything special for lazy TLB or do you just use the generic
-> code?  (i.e. where do your user pagetables point when you go from a
-> user task to idle or to a kernel thread?)
+Inspired find_next_*bit function series, add find_prev_*_bit series.
+I'm not sure whether it'll be used right now But, I add these functions
+for future usage.
 
-We don't do anything special (there's something funny with the PAN emulation
-but you can ignore that); the page-table just points wherever it did before
-for userspace. Switching explicitly to the init_mm, however, causes us to
-unmap userspace entirely.
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+---
+ fs/ufs/util.h                     |  24 +++---
+ include/asm-generic/bitops/find.h |  69 ++++++++++++++++
+ include/asm-generic/bitops/le.h   |  33 ++++++++
+ include/linux/bitops.h            |  34 +++++---
+ lib/find_bit.c                    | 126 +++++++++++++++++++++++++++++-
+ 5 files changed, 260 insertions(+), 26 deletions(-)
 
-Since we have ASIDs, switch_mm() generally doesn't have to care about the
-TLBs at all.
+diff --git a/fs/ufs/util.h b/fs/ufs/util.h
+index 4931bec1a01c..7c87c77d10ca 100644
+--- a/fs/ufs/util.h
++++ b/fs/ufs/util.h
+@@ -2,7 +2,7 @@
+ /*
+  *  linux/fs/ufs/util.h
+  *
+- * Copyright (C) 1998
++ * Copyright (C) 1998
+  * Daniel Pirkl <daniel.pirkl@email.cz>
+  * Charles University, Faculty of Mathematics and Physics
+  */
+@@ -263,7 +263,7 @@ extern int ufs_prepare_chunk(struct page *page,
+loff_t pos, unsigned len);
+ /*
+  * These functions manipulate ufs buffers
+  */
+-#define ubh_bread(sb,fragment,size) _ubh_bread_(uspi,sb,fragment,size)
++#define ubh_bread(sb,fragment,size) _ubh_bread_(uspi,sb,fragment,size)
+ extern struct ufs_buffer_head * _ubh_bread_(struct
+ufs_sb_private_info *, struct super_block *, u64 , u64);
+ extern struct ufs_buffer_head * ubh_bread_uspi(struct
+ufs_sb_private_info *, struct super_block *, u64, u64);
+ extern void ubh_brelse (struct ufs_buffer_head *);
+@@ -296,7 +296,7 @@ static inline void *get_usb_offset(struct
+ufs_sb_private_info *uspi,
+                                   unsigned int offset)
+ {
+        unsigned int index;
+-
++
+        index = offset >> uspi->s_fshift;
+        offset &= ~uspi->s_fmask;
+        return uspi->s_ubh.bh[index]->b_data + offset;
+@@ -411,9 +411,9 @@ static inline unsigned _ubh_find_next_zero_bit_(
+                offset = 0;
+        }
+        return (base << uspi->s_bpfshift) + pos - begin;
+-}
++}
 
-> Do you end up with all cpus set in mm_cpumask or can you have the mm
-> loaded on a CPU that isn't in mm_cpumask?
+-static inline unsigned find_last_zero_bit (unsigned char * bitmap,
++static inline unsigned __ubh_find_last_zero_bit(unsigned char * bitmap,
+        unsigned size, unsigned offset)
+ {
+        unsigned bit, i;
+@@ -453,7 +453,7 @@ static inline unsigned _ubh_find_last_zero_bit_(
+                            size + (uspi->s_bpf - start), uspi->s_bpf)
+                        - (uspi->s_bpf - start);
+                size -= count;
+-               pos = find_last_zero_bit (ubh->bh[base]->b_data,
++               pos = __ubh_find_last_zero_bit(ubh->bh[base]->b_data,
+                        start, start - count);
+                if (pos > start - count || !size)
+                        break;
+@@ -461,7 +461,7 @@ static inline unsigned _ubh_find_last_zero_bit_(
+                start = uspi->s_bpf;
+        }
+        return (base << uspi->s_bpfshift) + pos - begin;
+-}
++}
 
-I think the mask is always zero (we never set anything in there).
+ #define ubh_isblockclear(ubh,begin,block)
+(!_ubh_isblockset_(uspi,ubh,begin,block))
 
-Will
+@@ -483,7 +483,7 @@ static inline int _ubh_isblockset_(struct
+ufs_sb_private_info * uspi,
+                mask = 0x01 << (block & 0x07);
+                return (*ubh_get_addr (ubh, begin + (block >> 3)) &
+mask) == mask;
+        }
+-       return 0;
++       return 0;
+ }
+
+ #define ubh_clrblock(ubh,begin,block) _ubh_clrblock_(uspi,ubh,begin,block)
+@@ -492,8 +492,8 @@ static inline void _ubh_clrblock_(struct
+ufs_sb_private_info * uspi,
+ {
+        switch (uspi->s_fpb) {
+        case 8:
+-               *ubh_get_addr (ubh, begin + block) = 0x00;
+-               return;
++               *ubh_get_addr (ubh, begin + block) = 0x00;
++               return;
+        case 4:
+                *ubh_get_addr (ubh, begin + (block >> 1)) &= ~(0x0f <<
+((block & 0x01) << 2));
+                return;
+@@ -531,9 +531,9 @@ static inline void ufs_fragacct (struct
+super_block * sb, unsigned blockmap,
+ {
+        struct ufs_sb_private_info * uspi;
+        unsigned fragsize, pos;
+-
++
+        uspi = UFS_SB(sb)->s_uspi;
+-
++
+        fragsize = 0;
+        for (pos = 0; pos < uspi->s_fpb; pos++) {
+                if (blockmap & (1 << pos)) {
+diff --git a/include/asm-generic/bitops/find.h
+b/include/asm-generic/bitops/find.h
+index 9fdf21302fdf..ca18b2ec954c 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -16,6 +16,20 @@ extern unsigned long find_next_bit(const unsigned
+long *addr, unsigned long
+                size, unsigned long offset);
+ #endif
+
++#ifndef find_prev_bit
++/**
++ * find_prev_bit - find the prev set bit in a memory region
++ * @addr: The address to base the search on
++ * @offset: The bitnumber to start searching at
++ * @size: The bitmap size in bits
++ *
++ * Returns the bit number for the prev set bit
++ * If no bits are set, returns @size.
++ */
++extern unsigned long find_prev_bit(const unsigned long *addr, unsigned long
++               size, unsigned long offset);
++#endif
++
+ #ifndef find_next_and_bit
+ /**
+  * find_next_and_bit - find the next set bit in both memory regions
+@@ -32,6 +46,22 @@ extern unsigned long find_next_and_bit(const
+unsigned long *addr1,
+                unsigned long offset);
+ #endif
+
++#ifndef find_prev_and_bit
++/**
++ * find_prev_and_bit - find the prev set bit in both memory regions
++ * @addr1: The first address to base the search on
++ * @addr2: The second address to base the search on
++ * @offset: The bitnumber to start searching at
++ * @size: The bitmap size in bits
++ *
++ * Returns the bit number for the prev set bit
++ * If no bits are set, returns @size.
++ */
++extern unsigned long find_prev_and_bit(const unsigned long *addr1,
++               const unsigned long *addr2, unsigned long size,
++               unsigned long offset);
++#endif
++
+ #ifndef find_next_zero_bit
+ /**
+  * find_next_zero_bit - find the next cleared bit in a memory region
+@@ -46,6 +76,20 @@ extern unsigned long find_next_zero_bit(const
+unsigned long *addr, unsigned
+                long size, unsigned long offset);
+ #endif
+
++#ifndef find_prev_zero_bit
++/**
++ * find_prev_zero_bit - find the prev cleared bit in a memory region
++ * @addr: The address to base the search on
++ * @offset: The bitnumber to start searching at
++ * @size: The bitmap size in bits
++ *
++ * Returns the bit number of the prev zero bit
++ * If no bits are zero, returns @size.
++ */
++extern unsigned long find_prev_zero_bit(const unsigned long *addr, unsigned
++               long size, unsigned long offset);
++#endif
++
+ #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+
+ /**
+@@ -80,6 +124,31 @@ extern unsigned long find_first_zero_bit(const
+unsigned long *addr,
+
+ #endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
+
++#ifndef find_last_bit
++/**
++ * find_last_bit - find the last set bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The number of bits to search
++ *
++ * Returns the bit number of the last set bit, or size.
++ */
++extern unsigned long find_last_bit(const unsigned long *addr,
++                                  unsigned long size);
++#endif
++
++#ifndef find_last_zero_bit
++/**
++ * find_last_zero_bit - find the last cleared bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The maximum number of bits to search
++ *
++ * Returns the bit number of the first cleared bit.
++ * If no bits are zero, returns @size.
++ */
++extern unsigned long find_last_zero_bit(const unsigned long *addr,
++                                        unsigned long size);
++#endif
++
+ /**
+  * find_next_clump8 - find next 8-bit clump with set bits in a memory region
+  * @clump: location to store copy of found clump
+diff --git a/include/asm-generic/bitops/le.h b/include/asm-generic/bitops/le.h
+index 188d3eba3ace..d0bd15bc34d9 100644
+--- a/include/asm-generic/bitops/le.h
++++ b/include/asm-generic/bitops/le.h
+@@ -27,6 +27,24 @@ static inline unsigned long
+find_first_zero_bit_le(const void *addr,
+        return find_first_zero_bit(addr, size);
+ }
+
++static inline unsigned long find_prev_zero_bit_le(const void *addr,
++               unsigned long size, unsigned long offset)
++{
++       return find_prev_zero_bit(addr, size, offset);
++}
++
++static inline unsigned long find_prev_bit_le(const void *addr,
++               unsigned long size, unsigned long offset)
++{
++       return find_prev_bit(addr, size, offset);
++}
++
++static inline unsigned long find_last_zero_bit_le(const void *addr,
++               unsigned long size)
++{
++       return find_last_zero_bit(addr, size);
++}
++
+ #elif defined(__BIG_ENDIAN)
+
+ #define BITOP_LE_SWIZZLE       ((BITS_PER_LONG-1) & ~0x7)
+@@ -41,11 +59,26 @@ extern unsigned long find_next_bit_le(const void *addr,
+                unsigned long size, unsigned long offset);
+ #endif
+
++#ifndef find_prev_zero_bit_le
++extern unsigned long find_prev_zero_bit_le(const void *addr,
++               unsigned long size, unsigned long offset);
++#endif
++
++#ifndef find_prev_bit_le
++extern unsigned long find_prev_bit_le(const void *addr,
++               unsigned long size, unsigned long offset);
++#endif
++
+ #ifndef find_first_zero_bit_le
+ #define find_first_zero_bit_le(addr, size) \
+        find_next_zero_bit_le((addr), (size), 0)
+ #endif
+
++#ifndef find_last_zero_bit_le
++#define find_last_zero_bit_le(addr, size) \
++       find_prev_zero_bit_le((addr), (size), (size - 1))
++#endif
++
+ #else
+ #error "Please fix <asm/byteorder.h>"
+ #endif
+diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+index 5b74bdf159d6..124c68929861 100644
+--- a/include/linux/bitops.h
++++ b/include/linux/bitops.h
+@@ -50,6 +50,28 @@ extern unsigned long __sw_hweight64(__u64 w);
+             (bit) < (size);                                    \
+             (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
+
++#define for_each_set_bit_reverse(bit, addr, size) \
++       for ((bit) = find_last_bit((addr), (size));             \
++            (bit) < (size);                                    \
++            (bit) = find_prev_bit((addr), (size), (bit)))
++
++/* same as for_each_set_bit_reverse() but use bit as value to start with */
++#define for_each_set_bit_from_reverse(bit, addr, size) \
++       for ((bit) = find_prev_bit((addr), (size), (bit));      \
++            (bit) < (size);                                    \
++            (bit) = find_prev_bit((addr), (size), (bit - 1)))
++
++#define for_each_clear_bit_reverse(bit, addr, size) \
++       for ((bit) = find_last_zero_bit((addr), (size));        \
++            (bit) < (size);                                    \
++            (bit) = find_prev_zero_bit((addr), (size), (bit)))
++
++/* same as for_each_clear_bit_reverse() but use bit as value to start with */
++#define for_each_clear_bit_from_reverse(bit, addr, size) \
++       for ((bit) = find_prev_zero_bit((addr), (size), (bit)); \
++            (bit) < (size);                                    \
++            (bit) = find_next_zero_bit((addr), (size), (bit - 1)))
++
+ /**
+  * for_each_set_clump8 - iterate over bitmap for each 8-bit clump with set bits
+  * @start: bit offset to start search and to store the current iteration offset
+@@ -283,17 +305,5 @@ static __always_inline void __assign_bit(long nr,
+volatile unsigned long *addr,
+ })
+ #endif
+
+-#ifndef find_last_bit
+-/**
+- * find_last_bit - find the last set bit in a memory region
+- * @addr: The address to start the search at
+- * @size: The number of bits to search
+- *
+- * Returns the bit number of the last set bit, or size.
+- */
+-extern unsigned long find_last_bit(const unsigned long *addr,
+-                                  unsigned long size);
+-#endif
+-
+ #endif /* __KERNEL__ */
+ #endif
+diff --git a/lib/find_bit.c b/lib/find_bit.c
+index 4a8751010d59..cbe06abd3d21 100644
+--- a/lib/find_bit.c
++++ b/lib/find_bit.c
+@@ -69,6 +69,58 @@ static unsigned long _find_next_bit(const unsigned
+long *addr1,
+ }
+ #endif
+
++#if !defined(find_prev_bit) || !defined(find_prev_zero_bit) ||
+         \
++       !defined(find_prev_bit_le) || !defined(find_prev_zero_bit_le)
+||        \
++       !defined(find_prev_and_bit)
++/*
++ * This is a common helper function for find_prev_bit, find_prev_zero_bit, and
++ * find_prev_and_bit. The differences are:
++ *  - The "invert" argument, which is XORed with each fetched word before
++ *    searching it for one bits.
++ *  - The optional "addr2", which is anded with "addr1" if present.
++ */
++static unsigned long _find_prev_bit(const unsigned long *addr1,
++               const unsigned long *addr2, unsigned long nbits,
++               unsigned long start, unsigned long invert, unsigned long le)
++{
++       unsigned long tmp, mask;
++
++       if (unlikely(start >= nbits))
++               return nbits;
++
++       tmp = addr1[start / BITS_PER_LONG];
++       if (addr2)
++               tmp &= addr2[start / BITS_PER_LONG];
++       tmp ^= invert;
++
++       /* Handle 1st word. */
++       mask = BITMAP_LAST_WORD_MASK(start + 1);
++       if (le)
++               mask = swab(mask);
++
++       tmp &= mask;
++
++       start = round_down(start, BITS_PER_LONG);
++
++       while (!tmp) {
++               start -= BITS_PER_LONG;
++               if (start >= nbits)
++                       return nbits;
++
++               tmp = addr1[start / BITS_PER_LONG];
++               if (addr2)
++                       tmp &= addr2[start / BITS_PER_LONG];
++               tmp ^= invert;
++       }
++
++       if (le)
++               tmp = swab(tmp);
++
++       return start + __fls(tmp);
++}
++#endif
++
++
+ #ifndef find_next_bit
+ /*
+  * Find the next set bit in a memory region.
+@@ -81,6 +133,18 @@ unsigned long find_next_bit(const unsigned long
+*addr, unsigned long size,
+ EXPORT_SYMBOL(find_next_bit);
+ #endif
+
++#ifndef find_prev_bit
++/*
++ * Find the prev set bit in a memory region.
++ */
++unsigned long find_prev_bit(const unsigned long *addr, unsigned long size,
++                           unsigned long offset)
++{
++       return _find_prev_bit(addr, NULL, size, offset, 0UL, 0);
++}
++EXPORT_SYMBOL(find_prev_bit);
++#endif
++
+ #ifndef find_next_zero_bit
+ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+                                 unsigned long offset)
+@@ -90,7 +154,16 @@ unsigned long find_next_zero_bit(const unsigned
+long *addr, unsigned long size,
+ EXPORT_SYMBOL(find_next_zero_bit);
+ #endif
+
+-#if !defined(find_next_and_bit)
++#ifndef find_prev_zero_bit
++unsigned long find_prev_zero_bit(const unsigned long *addr, unsigned long size,
++                                unsigned long offset)
++{
++       return _find_prev_bit(addr, NULL, size, offset, ~0UL, 0);
++}
++EXPORT_SYMBOL(find_prev_zero_bit);
++#endif
++
++#ifndef find_next_and_bit
+ unsigned long find_next_and_bit(const unsigned long *addr1,
+                const unsigned long *addr2, unsigned long size,
+                unsigned long offset)
+@@ -100,6 +173,16 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
+ EXPORT_SYMBOL(find_next_and_bit);
+ #endif
+
++#ifndef find_prev_and_bit
++unsigned long find_prev_and_bit(const unsigned long *addr1,
++               const unsigned long *addr2, unsigned long size,
++               unsigned long offset)
++{
++       return _find_prev_bit(addr1, addr2, size, offset, 0UL, 0);
++}
++EXPORT_SYMBOL(find_prev_and_bit);
++#endif
++
+ #ifndef find_first_bit
+ /*
+  * Find the first set bit in a memory region.
+@@ -141,7 +224,7 @@ unsigned long find_last_bit(const unsigned long
+*addr, unsigned long size)
+ {
+        if (size) {
+                unsigned long val = BITMAP_LAST_WORD_MASK(size);
+-               unsigned long idx = (size-1) / BITS_PER_LONG;
++               unsigned long idx = (size - 1) / BITS_PER_LONG;
+
+                do {
+                        val &= addr[idx];
+@@ -156,6 +239,27 @@ unsigned long find_last_bit(const unsigned long
+*addr, unsigned long size)
+ EXPORT_SYMBOL(find_last_bit);
+ #endif
+
++#ifndef find_last_zero_bit
++unsigned long find_last_zero_bit(const unsigned long *addr, unsigned long size)
++{
++       if (size) {
++               unsigned long val = BITMAP_LAST_WORD_MASK(size);
++               unsigned long idx = (size - 1) / BITS_PER_LONG;
++
++               do {
++                       val &= ~addr[idx];
++                       if (val)
++                               return idx * BITS_PER_LONG + __fls(val);
++
++                       val = ~0ul;
++               } while (idx--);
++       }
++
++       return size;
++}
++EXPORT_SYMBOL(find_last_zero_bit);
++#endif
++
+ #ifdef __BIG_ENDIAN
+
+ #ifndef find_next_zero_bit_le
+@@ -167,6 +271,15 @@ unsigned long find_next_zero_bit_le(const void
+*addr, unsigned
+ EXPORT_SYMBOL(find_next_zero_bit_le);
+ #endif
+
++#ifndef find_prev_zero_bit_le
++unsigned long find_prev_zero_bit_le(const void *addr, unsigned
++               long size, unsigned long offset)
++{
++       return _find_prev_bit(addr, NULL, size, offset, ~0UL, 1);
++}
++EXPORT_SYMBOL(find_prev_zero_bit_le);
++#endif
++
+ #ifndef find_next_bit_le
+ unsigned long find_next_bit_le(const void *addr, unsigned
+                long size, unsigned long offset)
+@@ -176,6 +289,15 @@ unsigned long find_next_bit_le(const void *addr, unsigned
+ EXPORT_SYMBOL(find_next_bit_le);
+ #endif
+
++#ifdef find_prev_bit_le
++unsigned long find_prev_bit_le(const void *addr, unsigned
++               long size, unsigned long offset)
++{
++       return _find_prev_bit(addr, NULL, size, offset, 0UL, 1);
++}
++EXPORT_SYMBOL(find_prev_bit_le);
++#endif
++
+ #endif /* __BIG_ENDIAN */
+
+ unsigned long find_next_clump8(unsigned long *clump, const unsigned long *addr,
+--
+2.29.2
