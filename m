@@ -2,118 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B512CB2F3
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 03:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6922CB2E8
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Dec 2020 03:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727658AbgLBCyn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Dec 2020 21:54:43 -0500
-Received: from condef-01.nifty.com ([202.248.20.66]:16984 "EHLO
-        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727590AbgLBCyn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 21:54:43 -0500
-X-Greylist: delayed 396 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Dec 2020 21:54:42 EST
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-01.nifty.com with ESMTP id 0B22iHKQ013099;
-        Wed, 2 Dec 2020 11:44:17 +0900
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 0B22gx4q032295;
-        Wed, 2 Dec 2020 11:42:59 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 0B22gx4q032295
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1606876979;
-        bh=//nWGYyIDtis41/3ZWUbaJfDU17XquHuh1VxESk+fpY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YhmiZCSWdh+h7s2WRTav0INDhIR0rcnW35LlnpIfVUtKyPSMmn+U17B/PK2aeTfa0
-         fTnIGUz3KTJn2M/uiSK20i3edyMDKfviF8pdQau6NsNFuR5b+RtdIG7+HHZ9VW1XBz
-         0GSmvELzZl434j3vtGAy0eAhTaGhMeqCKOAa5PHzgTqSpTWn8ylQtVj1qzI0S88FpS
-         5Qmc1v9gpgH4CSlyu1l3vJez8xoPDRUopIN9fnCrE1/m/NaN6WWHtUaRXetDnkb7Qh
-         ClAnpe17jQ5AWERHhKiobDQLrM8nw0OP1rORNoH9up9fs2A9pm23zlyZViLl2L/fJF
-         iti0WfF94tSpA==
-X-Nifty-SrcIP: [209.85.210.182]
-Received: by mail-pf1-f182.google.com with SMTP id y7so260820pfq.11;
-        Tue, 01 Dec 2020 18:42:59 -0800 (PST)
-X-Gm-Message-State: AOAM532sqHjnu2Q91CS7sGZ32cLRiVh074gCuaIH6ycxqvFH0zD3eZl0
-        lYqG4GbJRq0Bp/Odz0lqqnAuigEzabKBg/2cZxw=
-X-Google-Smtp-Source: ABdhPJzi9iDwIta7ZmCbotxfEvvd7Hv2CLzIMvLHO3nRGZI4HCgMqMJzj1Z+ul8DEREU6Yg0tTulHGqnbS5vWd1Hxg8=
-X-Received: by 2002:aa7:9606:0:b029:198:14c4:4f44 with SMTP id
- q6-20020aa796060000b029019814c44f44mr748749pfg.80.1606876978646; Tue, 01 Dec
- 2020 18:42:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118220731.925424-1-samitolvanen@google.com>
- <20201130120130.GF24563@willie-the-truck> <202012010929.3788AF5@keescook>
-In-Reply-To: <202012010929.3788AF5@keescook>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 2 Dec 2020 11:42:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASQPOGohtUyzBM6n54pzpLN35kDXC7VbvWzX8QWUmqq9g@mail.gmail.com>
-Message-ID: <CAK7LNASQPOGohtUyzBM6n54pzpLN35kDXC7VbvWzX8QWUmqq9g@mail.gmail.com>
-Subject: Re: [PATCH v7 00/17] Add support for Clang LTO
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        id S1727696AbgLBCum (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Dec 2020 21:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727460AbgLBCum (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Dec 2020 21:50:42 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2823C0613CF;
+        Tue,  1 Dec 2020 18:49:59 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id l11so307827plt.1;
+        Tue, 01 Dec 2020 18:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=kK3Q9wTcGhoxGEIMY0Ll+QkOAdyw6ggQzHJw4qOuYBo=;
+        b=pdL+rHdqu9vZr8iSAMFhpbbe1/kXYhSgOjwbgZIvhE/l3SVZzO1LhnQjnoaLWGVZl4
+         M8c+NjJu2tub2F6H8k8gWWjXcgbDJp4gKUa4j1+U9N4XPzuCaWDIyztRbcztPyG3ztJx
+         mnbn7XKo0qZCxNPxMHgwUJS8r+TtX0KOSXD/9QAArw2VisEk5mEtscjd6SeBtv9b4Hoi
+         tWCCSUMhpeKm5oCwErlUeXm/kxSr524TEn1wjfLo4B+EYEAh1va4Ji9yppYQNEQsxMEY
+         jCWQmFaKYEiI2A51naOLEBqu4aXSWyKOU2W+ekS9bj9SLU21fHSjE8JrSZY0g8CxoJ5Z
+         PMzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=kK3Q9wTcGhoxGEIMY0Ll+QkOAdyw6ggQzHJw4qOuYBo=;
+        b=GdzhTkyYJQ7/vCducPUc8GKLxl1af+gmUPvBSU0mxX5z79UQmyUpq6M36uZz0kEYf3
+         hHaJ6iOzSRuSiDCayaBncDRuR/ZMDGRSwSNIpTBhR4h8YK6shq8mkLI0GuTyj8WCR2ZO
+         IJLhhIsjQw317/YF48WtzDLAoolIwFkOPxocaIUBgdqXtpR2sjc6OpdpC56S9QW4lazR
+         9N3Rx3n1B/yVPtQuF0wxx4ex3j27W2Z+n30qRAWioPFiWq5mFBrJ3M7r7Iw/BiVLCnDI
+         YCG8iNNXOTtvTW/B2PqZvQCleJ7jZML/pabZ8mueiFHYn91M3TzS1HnGIERSmIj21Ily
+         SxmA==
+X-Gm-Message-State: AOAM531EgoPyuODzQddDkF6JcLdoLL1rUoPsO0O2O/WAkvEMQ79mMnqQ
+        zr/JbNBVGkLCw3eynEKynDBXS5/7REs=
+X-Google-Smtp-Source: ABdhPJyWh9QiGaql1Lp94BlZmVG3HCxLBZGBrbL9Z7xBftB8HeziAbVbGnP4a+X0o3l7pddCcYYVEA==
+X-Received: by 2002:a17:902:fe05:b029:da:7345:c773 with SMTP id g5-20020a170902fe05b02900da7345c773mr664641plj.20.1606877399319;
+        Tue, 01 Dec 2020 18:49:59 -0800 (PST)
+Received: from localhost ([1.132.177.56])
+        by smtp.gmail.com with ESMTPSA id h8sm223576pgg.79.2020.12.01.18.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 18:49:58 -0800 (PST)
+Date:   Wed, 02 Dec 2020 12:49:51 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 5/8] lazy tlb: allow lazy tlb mm switching to be
+ configurable
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+References: <20201128160141.1003903-1-npiggin@gmail.com>
+        <20201128160141.1003903-6-npiggin@gmail.com>
+        <CALCETrWz3hqptsmTHAu1Qb=E8FPhYRVfcO1nhTVHwOpTNq6w1w@mail.gmail.com>
+In-Reply-To: <CALCETrWz3hqptsmTHAu1Qb=E8FPhYRVfcO1nhTVHwOpTNq6w1w@mail.gmail.com>
+MIME-Version: 1.0
+Message-Id: <1606876546.8oyicax8hw.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 2, 2020 at 2:31 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Nov 30, 2020 at 12:01:31PM +0000, Will Deacon wrote:
-> > Hi Sami,
-> >
-> > On Wed, Nov 18, 2020 at 02:07:14PM -0800, Sami Tolvanen wrote:
-> > > This patch series adds support for building the kernel with Clang's
-> > > Link Time Optimization (LTO). In addition to performance, the primary
-> > > motivation for LTO is to allow Clang's Control-Flow Integrity (CFI) to
-> > > be used in the kernel. Google has shipped millions of Pixel devices
-> > > running three major kernel versions with LTO+CFI since 2018.
-> > >
-> > > Most of the patches are build system changes for handling LLVM bitcode,
-> > > which Clang produces with LTO instead of ELF object files, postponing
-> > > ELF processing until a later stage, and ensuring initcall ordering.
-> > >
-> > > Note that v7 brings back arm64 support as Will has now staged the
-> > > prerequisite memory ordering patches [1], and drops x86_64 while we work
-> > > on fixing the remaining objtool warnings [2].
-> >
-> > Sounds like you're going to post a v8, but that's the plan for merging
-> > that? The arm64 parts look pretty good to me now.
->
-> I haven't seen Masahiro comment on this in a while, so given the review
-> history and its use (for years now) in Android, I will carry v8 (assuming
-> all is fine with it) it in -next unless there are objections.
+Excerpts from Andy Lutomirski's message of November 29, 2020 10:36 am:
+> On Sat, Nov 28, 2020 at 8:02 AM Nicholas Piggin <npiggin@gmail.com> wrote=
+:
+>>
+>> NOMMU systems could easily go without this and save a bit of code
+>> and the refcount atomics, because their mm switch is a no-op. I
+>> haven't flipped them over because haven't audited all arch code to
+>> convert over to using the _lazy_tlb refcounting.
+>>
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> ---
+>>  arch/Kconfig             | 11 +++++++
+>>  include/linux/sched/mm.h | 13 ++++++--
+>>  kernel/sched/core.c      | 68 +++++++++++++++++++++++++++++-----------
+>>  kernel/sched/sched.h     |  4 ++-
+>>  4 files changed, 75 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/arch/Kconfig b/arch/Kconfig
+>> index 56b6ccc0e32d..596bf589d74b 100644
+>> --- a/arch/Kconfig
+>> +++ b/arch/Kconfig
+>> @@ -430,6 +430,17 @@ config ARCH_WANT_IRQS_OFF_ACTIVATE_MM
+>>           irqs disabled over activate_mm. Architectures that do IPI base=
+d TLB
+>>           shootdowns should enable this.
+>>
+>> +# Should make this depend on MMU, because there is little use for lazy =
+mm switching
+>> +# with NOMMU. Must audit NOMMU architecture code for lazy mm refcountin=
+g first.
+>> +config MMU_LAZY_TLB
+>> +       def_bool y
+>> +       help
+>> +         Enable "lazy TLB" mmu context switching for kernel threads.
+>> +
+>> +config MMU_LAZY_TLB_REFCOUNT
+>> +       def_bool y
+>> +       depends on MMU_LAZY_TLB
+>> +
+>=20
+> This could use some documentation as to what "no" means.
 
+Sure I can add a bit more.
 
-What I dislike about this implementation is
-it cannot drop any unreachable function/data.
-(and it is completely different from GCC LTO)
+>=20
+>>  config ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>         bool
+>>
+>> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+>> index 7157c0f6fef8..bd0f27402d4b 100644
+>> --- a/include/linux/sched/mm.h
+>> +++ b/include/linux/sched/mm.h
+>> @@ -51,12 +51,21 @@ static inline void mmdrop(struct mm_struct *mm)
+>>  /* Helpers for lazy TLB mm refcounting */
+>>  static inline void mmgrab_lazy_tlb(struct mm_struct *mm)
+>>  {
+>> -       mmgrab(mm);
+>> +       if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_REFCOUNT))
+>> +               mmgrab(mm);
+>>  }
+>>
+>>  static inline void mmdrop_lazy_tlb(struct mm_struct *mm)
+>>  {
+>> -       mmdrop(mm);
+>> +       if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_REFCOUNT)) {
+>> +               mmdrop(mm);
+>> +       } else {
+>> +               /*
+>> +                * mmdrop_lazy_tlb must provide a full memory barrier, s=
+ee the
+>> +                * membarrier comment finish_task_switch.
+>=20
+> "membarrier comment in finish_task_switch()", perhaps?
 
-This is not real LTO.
+Sure.
 
+Thanks,
+Nick
 
-
-
-> --
-> Kees Cook
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/202012010929.3788AF5%40keescook.
-
-
-
--- 
-Best Regards
-Masahiro Yamada
