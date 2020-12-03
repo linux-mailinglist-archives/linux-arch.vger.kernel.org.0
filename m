@@ -2,172 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB2D2CDFB1
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 21:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2139C2CE172
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 23:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgLCU2X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 15:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S1728008AbgLCWOa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 17:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgLCU2X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 15:28:23 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDA4C061A4F
-        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 12:27:42 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id v1so1743759pjr.2
-        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 12:27:42 -0800 (PST)
+        with ESMTP id S1727990AbgLCWOa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 17:14:30 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B015C061A51;
+        Thu,  3 Dec 2020 14:13:50 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o7so1958988pjj.2;
+        Thu, 03 Dec 2020 14:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6c6iTUosRVrmzGiP/7D9+PLxepmiQNzcidmSqRByqjY=;
-        b=P5vIYvPKNrqAHbY+37GxHogE+dsicUpBmvZgrwQHiqxH1dN/QDFkNS4CHeqX0Klynh
-         RPpodRunirGMRa1lbe22VFDlAne/i4zyDGOLxn6tThQN3JMOCkGOe4QMgEsT4rzB2xzU
-         NJ+rv9emMXNv5oCTFgKJk9NONjPuYP5XC7FppqfCfhcBKEPF2Weu5X3QFVLM/OSTbuka
-         RdNracu5rjrrEeZ6ivk71nZ0I9X/HLaNl9ndqba4TQtG7dqrQuvnTZimGzHOceasfjXp
-         uGg7Bp57PhU7d9REcSV+IixxlQibyidOAdEfQqcJC5M6ChGWMGXy21ztAvQWsO0DSa4a
-         tSeg==
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=eEmxf4uLm5+F9e4VAD5l7evhNTpueoEKmJf7NHBSgF8=;
+        b=UPHGqln5b2MVwkQJ9DPW4W+c/WOYPO4pDdYgSkuUBuPAEool6k1o9tCh15tbT9uHrK
+         Att6CPPLElr2Kizx6k8SBYlHiYybik+D2pHNYrEi6lvIa/OVMCqcofSbjZiFQCWNagWm
+         gpfCcQKaP4yJ2ZfKAd6w0i3b/1ey0c1DO4esRuIh3lZT4EjH/cz8VKCKfqyuShuaeYhd
+         x0YLD40CLwN02ITpU2TIn1dchmgPuXgxg9Hw3uQ8i6iktCUFcnDMyR1iVOdnAXdjnV9J
+         dlREfCYAI47ZTNuw4m686ZqB4sYG5SbZx+ElCOdLB971GcExKVCtR58og1IlVpDkeiRG
+         GVzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6c6iTUosRVrmzGiP/7D9+PLxepmiQNzcidmSqRByqjY=;
-        b=a25u7rdz7wdlQ5rkxpyRkDSHfX+HuyXFqcd1g4XbLDcXN6gHWRSIR/PQAQCdvV3ZBD
-         eIyOG/PUwp5ULK98ciIJuX1BR5f5zNeNMY+K4cjpGMgk2lPfkYwAWIuDohh+zySHDOz/
-         PVsjLE3bovq0taGompJRBbuI7MYsK6FiISQTlfzf2JIh9Ke1oDOGbLdm/isiQVPAHHer
-         PZ/D5bk4xyVcpG/5W1ZfYEiAgyFzlVxAu/dHtsEF3o0Hf70k0m2mOWartUlg1uBtCBn8
-         WVONNjbN0wpYQKRH6Kp0HOgVg4YrQPss4qq5uVEUO7QXRi9IpOqab42G4jU6U+YNUT6y
-         aVGQ==
-X-Gm-Message-State: AOAM530gGe6R6a84FnY4pfmUJzrpBg3TbXbqrtkot1bqvTLMMcyAcIQ3
-        c+TDLzBqd8E+kt9X2MuTo9BCEQ==
-X-Google-Smtp-Source: ABdhPJx6QkUBqweo7oQdPA48Ai0FtNZPUHQPt5H2J3HGuEr+QdVmoNFtgjOXybM803OsnuHkeTZtwQ==
-X-Received: by 2002:a17:902:b7c3:b029:da:76bc:2aa9 with SMTP id v3-20020a170902b7c3b02900da76bc2aa9mr671331plz.21.1607027262306;
-        Thu, 03 Dec 2020 12:27:42 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:0:a6ae:11ff:fe11:4abb])
-        by smtp.gmail.com with ESMTPSA id o14sm2008267pgh.1.2020.12.03.12.27.40
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=eEmxf4uLm5+F9e4VAD5l7evhNTpueoEKmJf7NHBSgF8=;
+        b=FlNZE4b7yFP1PfUPA3ekk+GiwxBmDE118Ls7F0vMiP528wUfo4cjDJ6fm1CjSO3EPk
+         MBglHtPIi9TOx9yf4cFy23CgSfjdamvux5rzG+ameVYQhUveu0fYdS5cHBkhbMcOB2JS
+         ZpXXqibHveSV7orjuqOkvCYCOy0TdpV9D58xQfk5ZKNHfoNVGoVin4OXaQoQb3Btnu4B
+         0JrJ85C0Cu7fct3Aa8a2E9IVi1sSjtRSz5cOMTUvSnizpUk2cY3MtCq4AiFqJNxrGqCT
+         +lXuII9YQYEUxpsKDqDHyMrC1188UG0Ii0xjMfbUmCCm0WtWDmNcZpe3Hva3MG14MKNS
+         eOpw==
+X-Gm-Message-State: AOAM531YGhfHr/4Tzs/Wwok9GxO/I0T2YqWyjMupQUBdIxOOJQfpXuiX
+        jSgjSlq5RLOjHE+UjJbuqjQ=
+X-Google-Smtp-Source: ABdhPJz9kr0b40p8QhJurdR1DemR7fcJ+w7w3vdRbJJ4sHZwhGLmJpARUd3RcgIEF27oxEAuC/OzQg==
+X-Received: by 2002:a17:90a:d308:: with SMTP id p8mr1145716pju.110.1607033630047;
+        Thu, 03 Dec 2020 14:13:50 -0800 (PST)
+Received: from localhost ([2001:8004:1480:55d9:df22:9c5d:bdf7:7c2b])
+        by smtp.gmail.com with ESMTPSA id kb12sm318120pjb.2.2020.12.03.14.13.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 12:27:41 -0800 (PST)
-Date:   Thu, 3 Dec 2020 12:27:37 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thu, 03 Dec 2020 14:13:49 -0800 (PST)
+Date:   Fri, 04 Dec 2020 08:13:40 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [MOCKUP] x86/mm: Lightweight lazy mm refcounting
+To:     Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        kernel test robot <lkp@intel.com>, dwmw@amazon.co.uk,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jakub Jelinek <jakub@redhat.com>
-Subject: Re: [PATCH] firmware_loader: Align .builtin_fw to 8
-Message-ID: <20201203202737.7c4wrifqafszyd5y@google.com>
-References: <20201203170529.1029105-1-maskray@google.com>
- <CAKwvOd=8trq9qndYvf8KD4_3XVfaT_BXcNZhrKP67-YH9WQL0g@mail.gmail.com>
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>
+References: <7c4bcc0a464ca60be1e0aeba805a192be0ee81e5.1606972194.git.luto@kernel.org>
+        <20201203084448.GF2414@hirez.programming.kicks-ass.net>
+In-Reply-To: <20201203084448.GF2414@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=8trq9qndYvf8KD4_3XVfaT_BXcNZhrKP67-YH9WQL0g@mail.gmail.com>
+Message-Id: <1607033145.hcppy9ndl4.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2020-12-03, Nick Desaulniers wrote:
->On Thu, Dec 3, 2020 at 9:05 AM Fangrui Song <maskray@google.com> wrote:
->>
->> arm64 references the start address of .builtin_fw (__start_builtin_fw)
->> with a pair of R_AARCH64_ADR_PREL_PG_HI21/R_AARCH64_LDST64_ABS_LO12_NC
->> relocations. The compiler is allowed to emit the
->> R_AARCH64_LDST64_ABS_LO12_NC relocation because struct builtin_fw in
->> include/linux/firmware.h is 8-byte aligned.
->>
->> The R_AARCH64_LDST64_ABS_LO12_NC relocation requires the address to be a
->> multiple of 8, which may not be the case if .builtin_fw is empty.
->> Unconditionally align .builtin_fw to fix the linker error.
->>
->> Fixes: 5658c76 ("firmware: allow firmware files to be built into kernel image")
->> Link: https://github.com/ClangBuiltLinux/linux/issues/1204
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Fangrui Song <maskray@google.com>
->> ---
->>  include/asm-generic/vmlinux.lds.h | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
->> index b2b3d81b1535..3cd4bd1193ab 100644
->> --- a/include/asm-generic/vmlinux.lds.h
->> +++ b/include/asm-generic/vmlinux.lds.h
->> @@ -459,6 +459,7 @@
->>         }                                                               \
->>                                                                         \
->>         /* Built-in firmware blobs */                                   \
->> +       ALIGN_FUNCTION();                                               \
->
->Thanks for the patch!
->
->I'm going to repeat my question from the above link
->(https://github.com/ClangBuiltLinux/linux/issues/1204#issuecomment-737610582)
->just in case it's not naive:
->
->ALIGN_FUNCTION() C preprocessor macro seems to be used to realign
->code, while STRUCT_ALIGN() seems to be used to realign data.  It looks
->to me like only data is put into .builtin_fw.  If these relocations
->require an alignment of 8, than multiples of 8 should also be fine
->(STRUCT_ALIGN in 32 for all toolchain version, except gcc 4.9 which is
->64; both are multiples of 8 though).  It looks like only structs are
->placed in .builtin_fw; ie. data.  In that case, I worry that using
->ALIGN_FUNCTION/8 might actually be under-aligning data in this
->section.
+Excerpts from Peter Zijlstra's message of December 3, 2020 6:44 pm:
+> On Wed, Dec 02, 2020 at 09:25:51PM -0800, Andy Lutomirski wrote:
+>=20
+>> power: same as ARM, except that the loop may be rather larger since
+>> the systems are bigger.  But I imagine it's still faster than Nick's
+>> approach -- a cmpxchg to a remote cacheline should still be faster than
+>> an IPI shootdown.=20
+>=20
+> While a single atomic might be cheaper than an IPI, the comparison
+> doesn't work out nicely. You do the xchg() on every unlazy, while the
+> IPI would be once per process exit.
+>=20
+> So over the life of the process, it might do very many unlazies, adding
+> up to a total cost far in excess of what the single IPI would've been.
 
-Regarding STRUCT_ALIGN (32 for GCC>4.9) in
-include/asm-generic/vmlinux.lds.h, it is probably not suitable for
-.builtin_fw
+Yeah this is the concern, I looked at things that add cost to the
+idle switch code and it gets hard to justify the scalability improvement
+when you slow these fundmaental things down even a bit.
 
-* Its comment is a bit unclear. It probably should mention that the
-   32-byte overalignment is only for global structure variables which are
-   at least 32 byte large. But this is just my observation. Adding a GCC
-   maintainer to comment on this.
-* Even if GCC does overalign defined global struct variables, it is unlikely
-   that GCC will leverage this property for undefined `extern struct
-   builtin_fw __start_builtin_fw[]` (drivers/base/firmware_loader/main.c)
+I still think working on the assumption that IPIs =3D scary expensive=20
+might not be correct. An IPI itself is, but you only issue them when=20
+you've left a lazy mm on another CPU which just isn't that often.
 
-To make .builtin_fw aligned, I agree that ALIGN_FUNCTION() is probably a
-misuse. Maybe I should just use `. = ALIGN(8)` if the kernel linker
-script prefers `. = ALIGN(8)` to an output section alignment
-(https://sourceware.org/binutils/docs/ld/Output-Section-Description.html#Output-Section-Description
-https://lld.llvm.org/ELF/linker_script.html#output-section-alignment)
-
->Though, in https://github.com/ClangBuiltLinux/linux/issues/1204#issuecomment-737625134
->you're comment:
->
->>> In GNU ld, the empty .builtin_fw is removed
->
->So that's a difference in behavior between ld.bfd and ld.lld, which is
->fine, but it makes me wonder whether we should instead or additionally
->be discarding this section explicitly via linker script when
->CONFIG_FW_LOADER is not set?
-
-Short answer: No, we should not discard .builtin_fw
-
-   .builtin_fw        : AT(ADDR(.builtin_fw) - LOAD_OFFSET) {
-   __start_builtin_fw = .; ... }
-
-In LLD, either a section reference (`ADDR(.builtin_fw)`) or a
-non-PROVIDE symbol assignment __start_builtin_fw makes the section non-discardable.
-
-It can be argued that discarding an output section with a symbol
-assignment (GNU ld) is strange because the symbol (st_shndx) will be
-defined relative to an arbitrary unrelated section. Retaining the
-section can avoid some other issues.
-
->>         .builtin_fw        : AT(ADDR(.builtin_fw) - LOAD_OFFSET) {      \
->>                 __start_builtin_fw = .;                                 \
->>                 KEEP(*(.builtin_fw))                                    \
->> --
->> 2.29.2.576.ga3fc446d84-goog
->>
->
->
->-- 
->Thanks,
->~Nick Desaulniers
+Thanks,
+Nick
