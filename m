@@ -2,130 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AED2CDBE5
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 18:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771512CDC27
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 18:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731453AbgLCRIZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 12:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S1731487AbgLCRPF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 12:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731452AbgLCRIY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 12:08:24 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691D0C061A51
-        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 09:07:44 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id r24so3769311lfm.8
-        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 09:07:44 -0800 (PST)
+        with ESMTP id S1731388AbgLCRPF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 12:15:05 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EC3C061A4E
+        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 09:14:25 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id 4so1498468plk.5
+        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 09:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+MQyiUOcMt6gFRBNfnN0H07pYjhZgF4qm1+bZjvfjTY=;
-        b=Cx6oEw3asYjWnT8nYuCvr3UMa7sC7zqGfjZH+6NM/LRsctzlYBq4jWYT5t+CTuzy81
-         ufA/35gbWjoyI3GR4sHKJJ/dXIYNWsy/BxrQVF9OwKV8d6p4mG8Br2zZ9qAR1jhR1sR5
-         XFtBts/povF4EP6Ny/d1T5ZXYf5b7sm8jc1Iq+39jvlvaKhZ804pJUPhzTdzV+xw97qN
-         T4REXRSQqTMIj7T7Nw8GXA7uRLUe6tmfZ+hAOZ2AadWxtejiV4KjYgBy29l+9CK6RmgP
-         /m7bEmZBumCr+ghR9RTNKJtACi6yZ1mK18q6oD/IvZz6axncMy9glbpDQAxZ3Bj+bHAk
-         275w==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=jpxIDRJby02bDSmzqib9oh8ZXDBqI+2pH5k0P2lzdWM=;
+        b=aRJu1HO4xnNzb8jocw95sh/+CjsELYLpn2jhaJctdiBvV0Fo/IKe2d9DUjnFTVLurX
+         Zz5jY6puhccVi4/XYJcF7M1WWjBZ/WYrYvOH0BlxpJnlRQ5Gv20I5Qa54qDavxIpMqu7
+         46YMj6QXtaEh429/CwE53Heyk8rCED0kC2GVSiksY3g51x/NcNUwhV8nC9XoV+cO/mxt
+         4h3T5yaHfoFjomEoJs048LrdfUJhUseSC4iy7RdIuoRUVb60jBp4vPTph+8LXJR4h17K
+         q4oZzEwHYNz5a1MVWTTRm26Dfo5pZpVJIp2icQJRZ7CVgm0Yy3vM/31Kuj9RXfgsUNyL
+         FvEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+MQyiUOcMt6gFRBNfnN0H07pYjhZgF4qm1+bZjvfjTY=;
-        b=QDeRr0oT3DEEYeOpcssoJz7ZzE8nNjteV1V2hjn2LNJAyxrGP6I7RD8S2HOQWoDcHB
-         uVe9MztK3T/MUc2bPGghZHgLEq2Ys6F2zIXy3M6R0Qwd+4Jgw50BgdOURfbH80u+Gqqi
-         19hec9rntQSwmIMpL/e3OGLMwBvhNHXLhMGZHNFoqhzwc4PQHj5KSs+/mOn0evKnRjfg
-         alQqv6bvijQx2bJgyiuxX8g3vdJ1exJ/K/SbtBDPct/SRMF3naS8iwcqO80VYTgmOTP6
-         Vejx+rk1DeSjqaeidttgE1oWaWK5Ru5i4DH3+XWGUy6rUKVtiscr8ZhCPoeWklpx46FO
-         TNFw==
-X-Gm-Message-State: AOAM5311y5b6eoRE7ubab55E7/J3fASXi545+11Qjs0yWG9SNM/OicRl
-        qS7KxS7ERxMOcUyalRqcUJEm7Ivvh+vm3fgG+/HeKg==
-X-Google-Smtp-Source: ABdhPJyeNpRimBzFqDhGioLOrE5ouq1kJk4Pby6GpAHMXjB75Cnj+2lIjlrUJWt+qddSs9EdyIaV3e9wcFRpPEdvaH8=
-X-Received: by 2002:a19:c815:: with SMTP id y21mr1656793lff.589.1607015262357;
- Thu, 03 Dec 2020 09:07:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20201201213707.541432-1-samitolvanen@google.com> <20201203112622.GA31188@willie-the-truck>
-In-Reply-To: <20201203112622.GA31188@willie-the-truck>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Thu, 3 Dec 2020 09:07:30 -0800
-Message-ID: <CABCJKueby8pUoN7f5=6RoyLSt4PgWNx8idUej0sNwAi0F3Xqzw@mail.gmail.com>
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-To:     Will Deacon <will@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=jpxIDRJby02bDSmzqib9oh8ZXDBqI+2pH5k0P2lzdWM=;
+        b=AYe2Pn6J5ZxBy6TUOMqA7WwXrxd78u+JJ8aN5dPbzINb6KkKJ3tScBkXr/nLrfC2lt
+         hNAZS2xEv7Zs8+1rBdX3xYc0+YUsbKJU7ulAus3MKk4GuP/M769hS9nOnhB/PnRjy5Xp
+         eJs+gxoYrRhV53C4P/U9RjXTW3KpfHsFRjbJo2vqYoNEJZWTI4el09QnbfRX6cqypgTp
+         R9tog0tP645P5N7DCbrGwPL2zS87eUyOUFMqjZ1iSqhZyE7nQ0iD8Bw5+FeIHQL4HfRM
+         BJf+9OWd2rnUoE0q68qDqNdduFm935ykyRVOn2sd0lVfu7ytjy0G6fmNyHS1lZwH0Qjn
+         JqQg==
+X-Gm-Message-State: AOAM533PGUGXa73uzXgaYhMt3nDmgWbvJD3lLh1WJzvo1A9yOmsbT6Yo
+        3EZWH2KYuVBXhU2d/anc8HFQfA==
+X-Google-Smtp-Source: ABdhPJwE4etOoyGMx9UOKs7yAhw7hgOhsifHtas0tGfE12clfk9l2UH+s+JZSLZnFMT+6hGUVEc2Aw==
+X-Received: by 2002:a17:90a:5988:: with SMTP id l8mr120805pji.82.1607015664612;
+        Thu, 03 Dec 2020 09:14:24 -0800 (PST)
+Received: from ?IPv6:2600:1010:b02c:6432:59d6:b4ed:32aa:4315? ([2600:1010:b02c:6432:59d6:b4ed:32aa:4315])
+        by smtp.gmail.com with ESMTPSA id t9sm30146pjq.46.2020.12.03.09.14.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Dec 2020 09:14:23 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+Date:   Thu, 3 Dec 2020 09:14:22 -0800
+Message-Id: <E6BC2596-6087-49F2-8758-CA5598998BBE@amacapital.net>
+References: <20201203170332.GA27195@oc3871087118.ibm.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
+In-Reply-To: <20201203170332.GA27195@oc3871087118.ibm.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+X-Mailer: iPhone Mail (18B121)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 3, 2020 at 3:26 AM Will Deacon <will@kernel.org> wrote:
->
-> Hi Sami,
->
-> On Tue, Dec 01, 2020 at 01:36:51PM -0800, Sami Tolvanen wrote:
-> > This patch series adds support for building the kernel with Clang's
-> > Link Time Optimization (LTO). In addition to performance, the primary
-> > motivation for LTO is to allow Clang's Control-Flow Integrity (CFI)
-> > to be used in the kernel. Google has shipped millions of Pixel
-> > devices running three major kernel versions with LTO+CFI since 2018.
-> >
-> > Most of the patches are build system changes for handling LLVM
-> > bitcode, which Clang produces with LTO instead of ELF object files,
-> > postponing ELF processing until a later stage, and ensuring initcall
-> > ordering.
-> >
-> > Note that arm64 support depends on Will's memory ordering patches
-> > [1]. I will post x86_64 patches separately after we have fixed the
-> > remaining objtool warnings [2][3].
->
-> I took this series for a spin, with my for-next/lto branch merged in but
-> I see a failure during the LTO stage with clang 11.0.5 because it doesn't
-> understand the '.arch_extension rcpc' directive we throw out in READ_ONCE().
 
-I just tested this with Clang 11.0.0, which I believe is the latest
-11.x version, and the current Clang 12 development branch, and both
-work for me. Godbolt confirms that '.arch_extension rcpc' is supported
-by the integrated assembler starting with Clang 11 (the example fails
-with 10.0.1):
 
-https://godbolt.org/z/1csGcT
+> On Dec 3, 2020, at 9:09 AM, Alexander Gordeev <agordeev@linux.ibm.com> wro=
+te:
+>=20
+> =EF=BB=BFOn Mon, Nov 30, 2020 at 10:31:51AM -0800, Andy Lutomirski wrote:
+>> other arch folk: there's some background here:
 
-What does running clang --version and ld.lld --version tell you?
+>=20
+>>=20
+>> power: Ridiculously complicated, seems to vary by system and kernel confi=
+g.
+>>=20
+>> So, Nick, your unconditional IPI scheme is apparently a big
+>> improvement for power, and it should be an improvement and have low
+>> cost for x86.  On arm64 and s390x it will add more IPIs on process
+>> exit but reduce contention on context switching depending on how lazy
+>=20
+> s390 does not invalidate TLBs per-CPU explicitly - we have special
+> instructions for that. Those in turn initiate signalling to other
+> CPUs, completely transparent to OS.
 
-> We actually check that this extension is available before using it in
-> the arm64 Kconfig:
->
->         config AS_HAS_LDAPR
->                 def_bool $(as-instr,.arch_extension rcpc)
->
-> so this shouldn't happen. I then realised, I wasn't passing LLVM_IAS=1
-> on my Make command line; with that, then the detection works correctly
-> and the LTO step succeeds.
->
-> Why is it necessary to pass LLVM_IAS=1 if LTO is enabled? I think it
-> would be _much_ better if this was implicit (or if LTO depended on it).
+Just to make sure I understand: this means that you broadcast flushes to all=
+ CPUs, not just a subset?
 
-Without LLVM_IAS=1, Clang uses two different assemblers when LTO is
-enabled: the external GNU assembler for stand-alone assembly, and
-LLVM's integrated assembler for inline assembly. as-instr tests the
-external assembler and makes an admittedly reasonable assumption that
-the test is also valid for inline assembly.
+>=20
+> Apart from mm_count, I am struggling to realize how the suggested
+> scheme could change the the contention on s390 in connection with
+> TLB. Could you clarify a bit here, please?
 
-I agree that it would reduce confusion in future if we just always
-enabled IAS with LTO. Nick, Nathan, any thoughts about this?
+I=E2=80=99m just talking about mm_count. Maintaining mm_count is quite expen=
+sive on some workloads.
 
-Sami
+>=20
+>> TLB works.  I suppose we could try it for all architectures without
+>> any further optimizations.  Or we could try one of the perhaps
+>> excessively clever improvements I linked above.  arm64, s390x people,
+>> what do you think?
+>=20
+> I do not immediately see anything in the series that would harm
+> performance on s390.
+>=20
+> We however use mm_cpumask to distinguish between local and global TLB
+> flushes. With this series it looks like mm_cpumask is *required* to
+> be consistent with lazy users. And that is something quite diffucult
+> for us to adhere (at least in the foreseeable future).
+
+You don=E2=80=99t actually need to maintain mm_cpumask =E2=80=94 we could sc=
+an all CPUs instead.
+
+>=20
+> But actually keeping track of lazy users in a cpumask is something
+> the generic code would rather do AFAICT.
+
+The problem is that arches don=E2=80=99t agree on what the contents of mm_cp=
+umask should be.  Tracking a mask of exactly what the arch wants in generic c=
+ode is a nontrivial operation.
