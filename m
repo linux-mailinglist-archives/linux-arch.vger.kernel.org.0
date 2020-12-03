@@ -2,57 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9622CDE17
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 19:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA6D2CDE73
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 20:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbgLCSyQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 13:54:16 -0500
-Received: from wtarreau.pck.nerim.net ([62.212.114.60]:48235 "EHLO 1wt.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726142AbgLCSyQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Dec 2020 13:54:16 -0500
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 0B3IqvIh029075;
-        Thu, 3 Dec 2020 19:52:57 +0100
-Date:   Thu, 3 Dec 2020 19:52:57 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Yun Levi <ppbuk5246@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>, dushistov@mail.ru,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        richard.weiyang@linux.alibaba.com, joseph.qi@linux.alibaba.com,
-        skalluru@marvell.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re:
-Message-ID: <20201203185257.GA29072@1wt.eu>
-References: <c79b08e9-d36a-849e-d023-6fa155043aa9@rasmusvillemoes.dk>
- <CAM7-yPTsy+wJO8oQ7srjiXk+VjFFSUdJfdnVx9Ma_H8jJJnZKA@mail.gmail.com>
- <CAAH8bW-jUeFVU-0OrJzK-MuGgKJgZv38RZugEQzFRJHSXFRRDA@mail.gmail.com>
- <CAM7-yPRBPP6SFzdmwWF5Y99g+aWcp=OY9Uvp-5h1MSDPmsORNw@mail.gmail.com>
- <CAAH8bW-+XnNsd9p3xZ1utmyY24gaBa0ko4tngBii4T+2cMkcYg@mail.gmail.com>
- <CAM7-yPQCWj6rOyLEgOqF3HGkFV1WKtqyVhEtDbS3HW=2A-HuBA@mail.gmail.com>
- <CAM7-yPTtiVnUztE=xpNYgRcZTGd1aX_V9ZHd=2YZYc1uQNBXtw@mail.gmail.com>
- <a0cc0d2e-9c55-8546-f070-26feed5de37f@rasmusvillemoes.dk>
- <CAM7-yPQrvYUwX-cbgpzhomCTFEi9sQ9iGuLNcL-Fsj7XZ0knhw@mail.gmail.com>
- <CAAH8bW9=J_now4SU=-WzvBOa=ftStgGVpspyw_g7oafbuNHNHQ@mail.gmail.com>
+        id S2387404AbgLCTFc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 14:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731663AbgLCTFb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 14:05:31 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAA3C061A51
+        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 11:04:51 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id t37so1978681pga.7
+        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 11:04:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MGVJZBDXNN6LdEStSCVvQ7DYrKz46JI0zY/CXjUt84Y=;
+        b=Xpngdm+dVlFRitn2i9O7Ckeyv9yY5k8xWK55Ab3b6x7eM5kQJiJc/IgV7V86j4qg2H
+         amLk/0khYfIAjNlik2isDsQqYyz/ilBOzlQEBFZ6DMpPi+cGaj2elvUtLpjhXqYOb5AQ
+         G8O3zDWWSiyFmCjEcIyMyecmxlJYoXBN3ba0ejgO7NgjloiouWAheLWWDP6mQUpPft7Q
+         TPaUsJh85PI/1XvIG5kAonobzDqw9iwKWWP9UhM+EPX9ckPS/f0zd3Uz30kVeLTa1gyS
+         3EMIdCE3a12qF/S3m/RfefmgYZg6Asg+OeFN+wPWNzMo63obakJbrKvpbdNA1dD5NNhd
+         7Xeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MGVJZBDXNN6LdEStSCVvQ7DYrKz46JI0zY/CXjUt84Y=;
+        b=buv9nwXe+KS+T/SDKikgRnZ5BJW/O12ImvkAPwSHGAsFUpsx+1LjPFZXRLv4hlSEjp
+         mLzKy3E+0Dx5k8S2vhHTcDH301XTHajzsTrJGcdB6KT+AJJLfnXFNINsyRZIxaBfEvVs
+         g2PG3Q2CwIDN/1uDYhhSI9/dYBExYMv7wKBMBp7NpKh+juFarJ0IzDIuPqBe/FwFmjbB
+         UPfnEcrQ87jLXqKHC4RLYoaGrBVBDCv48SmPHPwN9P1IDq3y1KiYnJ8RZOIDlLaJ0uk3
+         //xSbfO24UkBV1XRXeiE3wg9Iq68Ka+M2lX5+BXofndW0JkoOzaFbn80qTi44xu2tEX4
+         EJwg==
+X-Gm-Message-State: AOAM5305vBkuzAXAg7VoYW1o+uFwO7po/GON8kyWGPtYUNkJPqkOZf5G
+        /qV6KNCLqUzRtG0MtbkIBm9h+Pg9Eg/lX2Ceoy4KRA==
+X-Google-Smtp-Source: ABdhPJygUP1cIJwRL7tVCs5S0BP8zl26VHCEvSZgnDfJ1ubHqNbQexJfBHlekI9nVH0KVp4PeLXnxJUT/QE7eXpWKqU=
+X-Received: by 2002:a62:1896:0:b029:197:491c:be38 with SMTP id
+ 144-20020a6218960000b0290197491cbe38mr374126pfy.15.1607022290861; Thu, 03 Dec
+ 2020 11:04:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAH8bW9=J_now4SU=-WzvBOa=ftStgGVpspyw_g7oafbuNHNHQ@mail.gmail.com>
-User-Agent: Mutt/1.6.1 (2016-04-27)
+References: <20201203170529.1029105-1-maskray@google.com>
+In-Reply-To: <20201203170529.1029105-1-maskray@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Dec 2020 11:04:39 -0800
+Message-ID: <CAKwvOd=8trq9qndYvf8KD4_3XVfaT_BXcNZhrKP67-YH9WQL0g@mail.gmail.com>
+Subject: Re: [PATCH] firmware_loader: Align .builtin_fw to 8
+To:     Fangrui Song <maskray@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        kernel test robot <lkp@intel.com>, dwmw@amazon.co.uk,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
-> Yun, could you please stop top-posting and excessive trimming in the thread?
+On Thu, Dec 3, 2020 at 9:05 AM Fangrui Song <maskray@google.com> wrote:
+>
+> arm64 references the start address of .builtin_fw (__start_builtin_fw)
+> with a pair of R_AARCH64_ADR_PREL_PG_HI21/R_AARCH64_LDST64_ABS_LO12_NC
+> relocations. The compiler is allowed to emit the
+> R_AARCH64_LDST64_ABS_LO12_NC relocation because struct builtin_fw in
+> include/linux/firmware.h is 8-byte aligned.
+>
+> The R_AARCH64_LDST64_ABS_LO12_NC relocation requires the address to be a
+> multiple of 8, which may not be the case if .builtin_fw is empty.
+> Unconditionally align .builtin_fw to fix the linker error.
+>
+> Fixes: 5658c76 ("firmware: allow firmware files to be built into kernel image")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1204
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index b2b3d81b1535..3cd4bd1193ab 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -459,6 +459,7 @@
+>         }                                                               \
+>                                                                         \
+>         /* Built-in firmware blobs */                                   \
+> +       ALIGN_FUNCTION();                                               \
 
-And re-configure the mail agent to make the "Subject" field appear and
-fill it.
+Thanks for the patch!
 
-Willy
+I'm going to repeat my question from the above link
+(https://github.com/ClangBuiltLinux/linux/issues/1204#issuecomment-737610582)
+just in case it's not naive:
+
+ALIGN_FUNCTION() C preprocessor macro seems to be used to realign
+code, while STRUCT_ALIGN() seems to be used to realign data.  It looks
+to me like only data is put into .builtin_fw.  If these relocations
+require an alignment of 8, than multiples of 8 should also be fine
+(STRUCT_ALIGN in 32 for all toolchain version, except gcc 4.9 which is
+64; both are multiples of 8 though).  It looks like only structs are
+placed in .builtin_fw; ie. data.  In that case, I worry that using
+ALIGN_FUNCTION/8 might actually be under-aligning data in this
+section.
+
+Though, in https://github.com/ClangBuiltLinux/linux/issues/1204#issuecomment-737625134
+you're comment:
+
+>> In GNU ld, the empty .builtin_fw is removed
+
+So that's a difference in behavior between ld.bfd and ld.lld, which is
+fine, but it makes me wonder whether we should instead or additionally
+be discarding this section explicitly via linker script when
+CONFIG_FW_LOADER is not set?
+
+
+>         .builtin_fw        : AT(ADDR(.builtin_fw) - LOAD_OFFSET) {      \
+>                 __start_builtin_fw = .;                                 \
+>                 KEEP(*(.builtin_fw))                                    \
+> --
+> 2.29.2.576.ga3fc446d84-goog
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
