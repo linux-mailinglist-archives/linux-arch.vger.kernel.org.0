@@ -2,33 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 498562CD585
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 13:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C7E2CD969
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 15:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728044AbgLCMcU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 07:32:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726213AbgLCMcT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 07:32:19 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F893C061A4F;
-        Thu,  3 Dec 2020 04:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2bjAG/22Xb88hJcxvz1EpCKJuf3oMonmSEWRI/Pfre8=; b=kN0UfyVg5AFOJTIput+Nt86Ekc
-        Q3LG5weU1QXDniBRaUvnMsL7gDgKEdCY5djySEvEofodaN1oOJzQyhc1Kf2/yO4W0VNfTEksLApbT
-        A7Zi3WkZDAXP4ejREwrP3JYM18d0SnEFU/HmbURuGmvuY6Oezfkiz1aIsxY0nHJGzo5KPTCSHarUI
-        u3Yj4gaRjHW1Br4I8C/SIXsIstOJ5pyAIpUodg1RBA7oTCEEJdBXkfai7rjojy37PucTs0pEh6BEr
-        Z4KFyjpIxNUiC+YtkWgZ9KwSFPTGRMAm4wn2reffMSzX/xrfLSVu656ADBhfEBiUC3U7LtZHRMja2
-        3DiMaunw==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kknlh-0007Ex-HX; Thu, 03 Dec 2020 12:31:29 +0000
-Date:   Thu, 3 Dec 2020 12:31:29 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andy Lutomirski <luto@kernel.org>
+        id S1730968AbgLCOkS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 09:40:18 -0500
+Received: from shelob.surriel.com ([96.67.55.147]:35180 "EHLO
+        shelob.surriel.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730963AbgLCOkR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 09:40:17 -0500
+X-Greylist: delayed 780 seconds by postgrey-1.27 at vger.kernel.org; Thu, 03 Dec 2020 09:40:17 EST
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1kkpZ2-00023G-Re; Thu, 03 Dec 2020 09:26:32 -0500
+Message-ID: <0239dde7da2d6b6499970f343c7498c711ce14c2.camel@surriel.com>
+Subject: Re: [MOCKUP] x86/mm: Lightweight lazy mm refcounting
+From:   Rik van Riel <riel@surriel.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Anton Blanchard <anton@ozlabs.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -39,41 +32,65 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         X86 ML <x86@kernel.org>, Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Rik van Riel <riel@surriel.com>,
         Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [MOCKUP] x86/mm: Lightweight lazy mm refcounting
-Message-ID: <20201203123129.GH11935@casper.infradead.org>
+Date:   Thu, 03 Dec 2020 09:26:32 -0500
+In-Reply-To: <20201203123129.GH11935@casper.infradead.org>
 References: <7c4bcc0a464ca60be1e0aeba805a192be0ee81e5.1606972194.git.luto@kernel.org>
+         <20201203123129.GH11935@casper.infradead.org>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-s09L+bRyOvtccCU/oR2v"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c4bcc0a464ca60be1e0aeba805a192be0ee81e5.1606972194.git.luto@kernel.org>
+Sender: riel@shelob.surriel.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 09:25:51PM -0800, Andy Lutomirski wrote:
-> This code compiles, but I haven't even tried to boot it.  The earlier
-> part of the series isn't terribly interesting -- it's a handful of
-> cleanups that remove all reads of ->active_mm from arch/x86.  I've
-> been meaning to do that for a while, and now I did it.  But, with
-> that done, I think we can move to a totally different lazy mm refcounting
-> model.
 
-I went back and read Documentation/vm/active_mm.rst recently.
+--=-s09L+bRyOvtccCU/oR2v
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I think it's useful to think about how this would have been handled if
-we'd had RCU at the time.  Particularly:
+On Thu, 2020-12-03 at 12:31 +0000, Matthew Wilcox wrote:
 
-Linus wrote:
-> To support all that, the "struct mm_struct" now has two counters: a
-> "mm_users" counter that is how many "real address space users" there are,
-> and a "mm_count" counter that is the number of "lazy" users (ie anonymous
-> users) plus one if there are any real users.
+> And this just makes me think RCU freeing of mm_struct.  I'm sure it's
+> more complicated than that (then, or now), but if an anonymous
+> process
+> is borrowing a freed mm, and the mm is freed by RCU then it will not
+> go
+> away until the task context switches.  When we context switch back to
+> the anon task, it'll borrow some other task's MM and won't even
+> notice
+> that the MM it was using has gone away.
 
-And this just makes me think RCU freeing of mm_struct.  I'm sure it's
-more complicated than that (then, or now), but if an anonymous process
-is borrowing a freed mm, and the mm is freed by RCU then it will not go
-away until the task context switches.  When we context switch back to
-the anon task, it'll borrow some other task's MM and won't even notice
-that the MM it was using has gone away.
+One major complication here is that most of the
+active_mm borrowing is done by the idle task,
+but RCU does not wait for idle tasks to context
+switch.
+
+That means RCU, as it is today, is not a
+mechanism that mm_struct freeing could just
+piggyback off.
+
+--=20
+All Rights Reversed.
+
+--=-s09L+bRyOvtccCU/oR2v
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAl/I9ZgACgkQznnekoTE
+3oM1Xwf7BP5sCqPmSgYX7xGoYDG/xK8xty72ALiZ2ixV5SAzOInMZX7m2nmOLZ9k
+0Nu3ycKqeKKdjvuqou4W+DEuiBR0Sy8hkkrlCcrzpmTQ0fv/igXyrRChA4V5u5Ki
+SbE5tojr7tuCNj7O7iQF92x36A63PAVpI7k3hKxEvJtemPOYdxdxldF66nXm9/u9
+1UJRMYEZHqvLJxWrSHe+NwZxcaYwGTWlnn6G69RJ5uC3leyuyFyKUdKcCLJR8c0/
+nD001j/kwgtM+bkieMMCrWOEsKKCkLZGjSrZN0z/mDykDD26ITyCXrLgixXn+reJ
+zFtzuMl49QDCB66Xb1d9oMbFcUzlJA==
+=yjqa
+-----END PGP SIGNATURE-----
+
+--=-s09L+bRyOvtccCU/oR2v--
+
