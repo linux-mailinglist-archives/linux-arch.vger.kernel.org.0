@@ -2,134 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771512CDC27
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2712CDCF6
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 19:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731487AbgLCRPF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 12:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731388AbgLCRPF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 12:15:05 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EC3C061A4E
-        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 09:14:25 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id 4so1498468plk.5
-        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 09:14:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=jpxIDRJby02bDSmzqib9oh8ZXDBqI+2pH5k0P2lzdWM=;
-        b=aRJu1HO4xnNzb8jocw95sh/+CjsELYLpn2jhaJctdiBvV0Fo/IKe2d9DUjnFTVLurX
-         Zz5jY6puhccVi4/XYJcF7M1WWjBZ/WYrYvOH0BlxpJnlRQ5Gv20I5Qa54qDavxIpMqu7
-         46YMj6QXtaEh429/CwE53Heyk8rCED0kC2GVSiksY3g51x/NcNUwhV8nC9XoV+cO/mxt
-         4h3T5yaHfoFjomEoJs048LrdfUJhUseSC4iy7RdIuoRUVb60jBp4vPTph+8LXJR4h17K
-         q4oZzEwHYNz5a1MVWTTRm26Dfo5pZpVJIp2icQJRZ7CVgm0Yy3vM/31Kuj9RXfgsUNyL
-         FvEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=jpxIDRJby02bDSmzqib9oh8ZXDBqI+2pH5k0P2lzdWM=;
-        b=AYe2Pn6J5ZxBy6TUOMqA7WwXrxd78u+JJ8aN5dPbzINb6KkKJ3tScBkXr/nLrfC2lt
-         hNAZS2xEv7Zs8+1rBdX3xYc0+YUsbKJU7ulAus3MKk4GuP/M769hS9nOnhB/PnRjy5Xp
-         eJs+gxoYrRhV53C4P/U9RjXTW3KpfHsFRjbJo2vqYoNEJZWTI4el09QnbfRX6cqypgTp
-         R9tog0tP645P5N7DCbrGwPL2zS87eUyOUFMqjZ1iSqhZyE7nQ0iD8Bw5+FeIHQL4HfRM
-         BJf+9OWd2rnUoE0q68qDqNdduFm935ykyRVOn2sd0lVfu7ytjy0G6fmNyHS1lZwH0Qjn
-         JqQg==
-X-Gm-Message-State: AOAM533PGUGXa73uzXgaYhMt3nDmgWbvJD3lLh1WJzvo1A9yOmsbT6Yo
-        3EZWH2KYuVBXhU2d/anc8HFQfA==
-X-Google-Smtp-Source: ABdhPJwE4etOoyGMx9UOKs7yAhw7hgOhsifHtas0tGfE12clfk9l2UH+s+JZSLZnFMT+6hGUVEc2Aw==
-X-Received: by 2002:a17:90a:5988:: with SMTP id l8mr120805pji.82.1607015664612;
-        Thu, 03 Dec 2020 09:14:24 -0800 (PST)
-Received: from ?IPv6:2600:1010:b02c:6432:59d6:b4ed:32aa:4315? ([2600:1010:b02c:6432:59d6:b4ed:32aa:4315])
-        by smtp.gmail.com with ESMTPSA id t9sm30146pjq.46.2020.12.03.09.14.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Dec 2020 09:14:23 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb option
-Date:   Thu, 3 Dec 2020 09:14:22 -0800
-Message-Id: <E6BC2596-6087-49F2-8758-CA5598998BBE@amacapital.net>
-References: <20201203170332.GA27195@oc3871087118.ibm.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S2387555AbgLCSBa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 13:01:30 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:37912 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727427AbgLCSBa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 13:01:30 -0500
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 0B3I09j7020577;
+        Fri, 4 Dec 2020 03:00:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 0B3I09j7020577
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1607018410;
+        bh=Q8rUUiuQPCHtIjHKZ25iSma0yE471Wc2ZwPZ52EYpXA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c8s94mdsXSLOpVko39GE94yfv+2gzeMV/HXHNgIMkxeaqs8gjTvHpyvc2Xc0x9pOj
+         AOo5icsDHKvZetFGaTQCnk0cKQ64JBO/QcME0MIpJmNR70qzQGBLDVLMQriKEtrf09
+         yv65KIKeqMTg7CQGAkp2+G7PJhG/gZuWBLu3nsI5/gRf3JF1p4iFNrgeogUg5sMZDX
+         OxZGYC0MUVzIDtPDfvYm6yrGA+cQgoxRX8vOCyoRkUFyfnh//b803fH+Mwg1ZMkR4k
+         +6+9QN+iT25bS1Wl0RaAhdLej2oBMXB47uOpVd1xqElr2bZakypeGE/bv0usqrCRg6
+         ibM489qfF/Jbg==
+X-Nifty-SrcIP: [209.85.216.53]
+Received: by mail-pj1-f53.google.com with SMTP id r9so1507333pjl.5;
+        Thu, 03 Dec 2020 10:00:09 -0800 (PST)
+X-Gm-Message-State: AOAM5302niKOsGTtmVehzsma3d7+g3OkyPv0KsbggUz8WKbmYHkZAHL4
+        QH1DVsIcf1jYWrDHa+pjcSqnX3WWMAbFlhr8Ano=
+X-Google-Smtp-Source: ABdhPJyWwlayA/XR+Bnh4a5mDodnSKw0H8nrbACrY1JSJtlwr6wE2FkK0g+IV8XwwRNT2lr2uJVlldeyzgyNeL0U9xo=
+X-Received: by 2002:a17:90a:fa0c:: with SMTP id cm12mr265364pjb.87.1607018409010;
+ Thu, 03 Dec 2020 10:00:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20201013003203.4168817-1-samitolvanen@google.com>
+ <20201013003203.4168817-15-samitolvanen@google.com> <202010141549.412F2BF0@keescook>
+In-Reply-To: <202010141549.412F2BF0@keescook>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 4 Dec 2020 02:59:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT350QjusoYCQEHDdoxAfTZjj82xp86O1qoNF=0u0PN-g@mail.gmail.com>
+Message-ID: <CAK7LNAT350QjusoYCQEHDdoxAfTZjj82xp86O1qoNF=0u0PN-g@mail.gmail.com>
+Subject: Re: [PATCH v6 14/25] kbuild: lto: remove duplicate dependencies from
+ .mod files
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
-In-Reply-To: <20201203170332.GA27195@oc3871087118.ibm.com>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-X-Mailer: iPhone Mail (18B121)
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Oct 15, 2020 at 7:50 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Oct 12, 2020 at 05:31:52PM -0700, Sami Tolvanen wrote:
+> > With LTO, llvm-nm prints out symbols for each archive member
+> > separately, which results in a lot of duplicate dependencies in the
+> > .mod file when CONFIG_TRIM_UNUSED_SYMS is enabled. When a module
+> > consists of several compilation units, the output can exceed the
+> > default xargs command size limit and split the dependency list to
+> > multiple lines, which results in used symbols getting trimmed.
+> >
+> > This change removes duplicate dependencies, which will reduce the
+> > probability of this happening and makes .mod files smaller and
+> > easier to read.
+> >
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> Hi Masahiro,
+>
+> This appears to be a general improvement as well. This looks like it can
+> land without depending on the rest of the series.
+
+It cannot.
+Adding "sort -u" is pointless without the rest of the series
+since the symbol duplication happens only with Clang LTO.
+
+This is not a solution.
+"reduce the probability of this happening" well describes it.
+
+I wrote a different patch.
 
 
-> On Dec 3, 2020, at 9:09 AM, Alexander Gordeev <agordeev@linux.ibm.com> wro=
-te:
->=20
-> =EF=BB=BFOn Mon, Nov 30, 2020 at 10:31:51AM -0800, Andy Lutomirski wrote:
->> other arch folk: there's some background here:
 
->=20
->>=20
->> power: Ridiculously complicated, seems to vary by system and kernel confi=
-g.
->>=20
->> So, Nick, your unconditional IPI scheme is apparently a big
->> improvement for power, and it should be an improvement and have low
->> cost for x86.  On arm64 and s390x it will add more IPIs on process
->> exit but reduce contention on context switching depending on how lazy
->=20
-> s390 does not invalidate TLBs per-CPU explicitly - we have special
-> instructions for that. Those in turn initiate signalling to other
-> CPUs, completely transparent to OS.
+> -Kees
+>
+> > ---
+> >  scripts/Makefile.build | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > index ab0ddf4884fd..96d6c9e18901 100644
+> > --- a/scripts/Makefile.build
+> > +++ b/scripts/Makefile.build
+> > @@ -266,7 +266,7 @@ endef
+> >
+> >  # List module undefined symbols (or empty line if not enabled)
+> >  ifdef CONFIG_TRIM_UNUSED_KSYMS
+> > -cmd_undef_syms = $(NM) $< | sed -n 's/^  *U //p' | xargs echo
+> > +cmd_undef_syms = $(NM) $< | sed -n 's/^  *U //p' | sort -u | xargs echo
+> >  else
+> >  cmd_undef_syms = echo
+> >  endif
+> > --
+> > 2.28.0.1011.ga647a8990f-goog
+> >
+>
+> --
+> Kees Cook
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/202010141549.412F2BF0%40keescook.
 
-Just to make sure I understand: this means that you broadcast flushes to all=
- CPUs, not just a subset?
 
->=20
-> Apart from mm_count, I am struggling to realize how the suggested
-> scheme could change the the contention on s390 in connection with
-> TLB. Could you clarify a bit here, please?
 
-I=E2=80=99m just talking about mm_count. Maintaining mm_count is quite expen=
-sive on some workloads.
-
->=20
->> TLB works.  I suppose we could try it for all architectures without
->> any further optimizations.  Or we could try one of the perhaps
->> excessively clever improvements I linked above.  arm64, s390x people,
->> what do you think?
->=20
-> I do not immediately see anything in the series that would harm
-> performance on s390.
->=20
-> We however use mm_cpumask to distinguish between local and global TLB
-> flushes. With this series it looks like mm_cpumask is *required* to
-> be consistent with lazy users. And that is something quite diffucult
-> for us to adhere (at least in the foreseeable future).
-
-You don=E2=80=99t actually need to maintain mm_cpumask =E2=80=94 we could sc=
-an all CPUs instead.
-
->=20
-> But actually keeping track of lazy users in a cpumask is something
-> the generic code would rather do AFAICT.
-
-The problem is that arches don=E2=80=99t agree on what the contents of mm_cp=
-umask should be.  Tracking a mask of exactly what the arch wants in generic c=
-ode is a nontrivial operation.
+-- 
+Best Regards
+Masahiro Yamada
