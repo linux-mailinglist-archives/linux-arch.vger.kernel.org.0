@@ -2,125 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F842CDD4D
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 19:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2F02CDDD7
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 19:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729730AbgLCSXl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 13:23:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53654 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729508AbgLCSXk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Dec 2020 13:23:40 -0500
-Date:   Thu, 3 Dec 2020 18:22:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607019780;
-        bh=5a8ME2oAXsKqPoeqJfEFvJGi2qwglFd3HcH42x+ZJqE=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j4tuv3canVKeGWPc00whrPf+yMo+rCeJBSSu9hQ8JKopGOeh22g/l4jLBxki+Q3S4
-         GSy6xiQfH2GEr5ORIucdbbEVNr0+FmT1NytvINuFt62ibIHSwQQe+XYxmKQbFUBoQm
-         Pe3O1nyWoKMJPEEb4rf10UT8GM0TMsNCoKs0CA1Y6VDqMD3Fa15DWO2+8KzDpouaH/
-         jk1NY9n6DPz7lGFPTSZZ3NhJoqHMrLxT9UBGdtIKfzs7C+/Z/dfeNnE5pmTpJgadKr
-         WuTbKHZQrQHeug6qVN5E7eo5w7WLqpt9nlELvChtCWZI3JyjnMxiQXEC4zYRHhnct0
-         /Nj+EdgBLhJYA==
-From:   Will Deacon <will@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        id S1731767AbgLCSev (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 13:34:51 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26422 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731765AbgLCSeu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 13:34:50 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B3IVt3E020708;
+        Thu, 3 Dec 2020 13:33:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=TZJYX0Xz4UjLTS/rfkcr8IlGL0o4uzxTOtku92jtwoI=;
+ b=NfVpGea8w/urP+0xgSu8wxf+gdvh/U9VpdAgRmDV/BYhdSkDTgZuI5WETvZMzmQH0f0s
+ 6aodtW5hM+tXF1P1ifdywCxCWC739OrsJym2RAyBb8JynxWz5GlcnN5vA3evZorrsORu
+ r3tm7YWaKF+GTGtna0a/TQ8xxljtbOffZk4walLTYWRylxkl2LN1mm2jWuGv6OS9j9ZQ
+ icpOh09siL9FBldltwygdBtXOyZj7JQbYWSYpO/+GSpfkqF4qKSurnWaLY6pnN8AD8Kk
+ fZGhPeQ5U74AgwZpXFo5fw/G71TwLj8rHaQ+uz7tRCePeC7u3JUg7kD+tkpxPC3CeVvQ IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3573jf3ppm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Dec 2020 13:33:48 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B3IWmnw024120;
+        Thu, 3 Dec 2020 13:33:48 -0500
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3573jf3png-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Dec 2020 13:33:48 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B3ICY7q021745;
+        Thu, 3 Dec 2020 18:33:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 35693xhgu7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Dec 2020 18:33:45 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B3IXg9c24314226
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Dec 2020 18:33:42 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79EE6AE051;
+        Thu,  3 Dec 2020 18:33:42 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 86250AE04D;
+        Thu,  3 Dec 2020 18:33:41 +0000 (GMT)
+Received: from oc3871087118.ibm.com (unknown [9.145.157.245])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  3 Dec 2020 18:33:41 +0000 (GMT)
+Date:   Thu, 3 Dec 2020 19:33:40 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Andy Lutomirski <luto@kernel.org>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
         linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-Message-ID: <20201203182252.GA32011@willie-the-truck>
-References: <20201201213707.541432-1-samitolvanen@google.com>
- <20201203112622.GA31188@willie-the-truck>
- <CABCJKueby8pUoN7f5=6RoyLSt4PgWNx8idUej0sNwAi0F3Xqzw@mail.gmail.com>
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-MM <linux-mm@kvack.org>, Anton Blanchard <anton@ozlabs.org>
+Subject: Re: [PATCH 6/8] lazy tlb: shoot lazies, a non-refcounting lazy tlb
+ option
+Message-ID: <20201203183339.GA29470@oc3871087118.ibm.com>
+References: <20201203170332.GA27195@oc3871087118.ibm.com>
+ <E6BC2596-6087-49F2-8758-CA5598998BBE@amacapital.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CABCJKueby8pUoN7f5=6RoyLSt4PgWNx8idUej0sNwAi0F3Xqzw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <E6BC2596-6087-49F2-8758-CA5598998BBE@amacapital.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-03_10:2020-12-03,2020-12-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 phishscore=0 clxscore=1011 malwarescore=0
+ adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012030107
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 09:07:30AM -0800, Sami Tolvanen wrote:
-> On Thu, Dec 3, 2020 at 3:26 AM Will Deacon <will@kernel.org> wrote:
-> > On Tue, Dec 01, 2020 at 01:36:51PM -0800, Sami Tolvanen wrote:
-> > > This patch series adds support for building the kernel with Clang's
-> > > Link Time Optimization (LTO). In addition to performance, the primary
-> > > motivation for LTO is to allow Clang's Control-Flow Integrity (CFI)
-> > > to be used in the kernel. Google has shipped millions of Pixel
-> > > devices running three major kernel versions with LTO+CFI since 2018.
-> > >
-> > > Most of the patches are build system changes for handling LLVM
-> > > bitcode, which Clang produces with LTO instead of ELF object files,
-> > > postponing ELF processing until a later stage, and ensuring initcall
-> > > ordering.
-> > >
-> > > Note that arm64 support depends on Will's memory ordering patches
-> > > [1]. I will post x86_64 patches separately after we have fixed the
-> > > remaining objtool warnings [2][3].
-> >
-> > I took this series for a spin, with my for-next/lto branch merged in but
-> > I see a failure during the LTO stage with clang 11.0.5 because it doesn't
-> > understand the '.arch_extension rcpc' directive we throw out in READ_ONCE().
+On Thu, Dec 03, 2020 at 09:14:22AM -0800, Andy Lutomirski wrote:
 > 
-> I just tested this with Clang 11.0.0, which I believe is the latest
-> 11.x version, and the current Clang 12 development branch, and both
-> work for me. Godbolt confirms that '.arch_extension rcpc' is supported
-> by the integrated assembler starting with Clang 11 (the example fails
-> with 10.0.1):
 > 
-> https://godbolt.org/z/1csGcT
+> > On Dec 3, 2020, at 9:09 AM, Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+> > 
+> > ﻿On Mon, Nov 30, 2020 at 10:31:51AM -0800, Andy Lutomirski wrote:
+> >> other arch folk: there's some background here:
 > 
-> What does running clang --version and ld.lld --version tell you?
-
-I'm using some Android prebuilts I had kicking around:
-
-Android (6875598, based on r399163b) clang version 11.0.5 (https://android.googlesource.com/toolchain/llvm-project 87f1315dfbea7c137aa2e6d362dbb457e388158d)
-Target: x86_64-unknown-linux-gnu
-Thread model: posix
-InstalledDir: /usr/local/google/home/willdeacon/work/android/repo/android-kernel/prebuilts-master/clang/host/linux-x86/clang-r399163b/bin
-
-and:
-
-LLD 11.0.5 (/buildbot/tmp/tmpx1DlI_ 87f1315dfbea7c137aa2e6d362dbb457e388158d) (compatible with GNU linkers)
-
-> > We actually check that this extension is available before using it in
-> > the arm64 Kconfig:
-> >
-> >         config AS_HAS_LDAPR
-> >                 def_bool $(as-instr,.arch_extension rcpc)
-> >
-> > so this shouldn't happen. I then realised, I wasn't passing LLVM_IAS=1
-> > on my Make command line; with that, then the detection works correctly
-> > and the LTO step succeeds.
-> >
-> > Why is it necessary to pass LLVM_IAS=1 if LTO is enabled? I think it
-> > would be _much_ better if this was implicit (or if LTO depended on it).
+> > 
+> >> 
+> >> power: Ridiculously complicated, seems to vary by system and kernel config.
+> >> 
+> >> So, Nick, your unconditional IPI scheme is apparently a big
+> >> improvement for power, and it should be an improvement and have low
+> >> cost for x86.  On arm64 and s390x it will add more IPIs on process
+> >> exit but reduce contention on context switching depending on how lazy
+> > 
+> > s390 does not invalidate TLBs per-CPU explicitly - we have special
+> > instructions for that. Those in turn initiate signalling to other
+> > CPUs, completely transparent to OS.
 > 
-> Without LLVM_IAS=1, Clang uses two different assemblers when LTO is
-> enabled: the external GNU assembler for stand-alone assembly, and
-> LLVM's integrated assembler for inline assembly. as-instr tests the
-> external assembler and makes an admittedly reasonable assumption that
-> the test is also valid for inline assembly.
+> Just to make sure I understand: this means that you broadcast flushes to all CPUs, not just a subset?
+
+Correct.
+If mm has one CPU attached we flush TLB only for that CPU.
+If mm has more than one CPUs attached we flush all CPUs' TLBs.
+
+In fact, details are bit more complicated, since the hardware
+is able to flush subsets of TLB entries depending on provided
+parameters (e.g page tables used to create that entries).
+But we can not select a CPU subset.
+
+> > Apart from mm_count, I am struggling to realize how the suggested
+> > scheme could change the the contention on s390 in connection with
+> > TLB. Could you clarify a bit here, please?
 > 
-> I agree that it would reduce confusion in future if we just always
-> enabled IAS with LTO. Nick, Nathan, any thoughts about this?
+> I’m just talking about mm_count. Maintaining mm_count is quite expensive on some workloads.
+> 
+> > 
+> >> TLB works.  I suppose we could try it for all architectures without
+> >> any further optimizations.  Or we could try one of the perhaps
+> >> excessively clever improvements I linked above.  arm64, s390x people,
+> >> what do you think?
+> > 
+> > I do not immediately see anything in the series that would harm
+> > performance on s390.
+> > 
+> > We however use mm_cpumask to distinguish between local and global TLB
+> > flushes. With this series it looks like mm_cpumask is *required* to
+> > be consistent with lazy users. And that is something quite diffucult
+> > for us to adhere (at least in the foreseeable future).
+> 
+> You don’t actually need to maintain mm_cpumask — we could scan all CPUs instead.
+> 
+> > 
+> > But actually keeping track of lazy users in a cpumask is something
+> > the generic code would rather do AFAICT.
+> 
+> The problem is that arches don’t agree on what the contents of mm_cpumask should be.  Tracking a mask of exactly what the arch wants in generic code is a nontrivial operation.
 
-That works for me, although I'm happy with anything which means that the
-assembler checks via as-instr apply to the assembler which will ultimately
-be used.
+It could be yet another cpumask or the CPU scan you mentioned.
+Just wanted to make sure there is no new requirement for an arch
+to maintain mm_cpumask ;)
 
-Will
+Thanks, Andy!
