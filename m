@@ -2,87 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DB92CD487
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 12:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498562CD585
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Dec 2020 13:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbgLCL1L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 06:27:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52412 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbgLCL1L (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 3 Dec 2020 06:27:11 -0500
-Date:   Thu, 3 Dec 2020 11:26:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1606994790;
-        bh=Z6fRxajiQsjMgIcL2B8U6vdSMQSDFY19TKRTAoS5XwM=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BmIBlbUTavBbJSA9SMVKb3tOHpXr6pmjMIykJxf8ysFQLdGr4NcG39u+tYjgBM15e
-         ND0gIZQk/Z9Q2lye0p54KpIoxeRbEo86wBhS+sakJ/LTeGH97qgsHZUNuhciXa3sjH
-         Sdap/WsTwkwgmaDLJvxtIbvdHONV85FJ/NQJoTHO+D6r6+nGzh+djD8BmVCZPcr1UA
-         9KjdS0id2HpEqXYn1f4KtDSfcRnH9mLEjtLYqQpbDQNvRQtx3PhNUaVOjUSpg7p1Fx
-         +aW7XBdMBvjBOcwlwLm9jvoC5FZG3oy1RfqNQMCD7k9DXou+nfkgGL9P6MIG326q2n
-         FxiM1lHhq2TrA==
-From:   Will Deacon <will@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-Message-ID: <20201203112622.GA31188@willie-the-truck>
-References: <20201201213707.541432-1-samitolvanen@google.com>
+        id S1728044AbgLCMcU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 07:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgLCMcT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 07:32:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F893C061A4F;
+        Thu,  3 Dec 2020 04:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2bjAG/22Xb88hJcxvz1EpCKJuf3oMonmSEWRI/Pfre8=; b=kN0UfyVg5AFOJTIput+Nt86Ekc
+        Q3LG5weU1QXDniBRaUvnMsL7gDgKEdCY5djySEvEofodaN1oOJzQyhc1Kf2/yO4W0VNfTEksLApbT
+        A7Zi3WkZDAXP4ejREwrP3JYM18d0SnEFU/HmbURuGmvuY6Oezfkiz1aIsxY0nHJGzo5KPTCSHarUI
+        u3Yj4gaRjHW1Br4I8C/SIXsIstOJ5pyAIpUodg1RBA7oTCEEJdBXkfai7rjojy37PucTs0pEh6BEr
+        Z4KFyjpIxNUiC+YtkWgZ9KwSFPTGRMAm4wn2reffMSzX/xrfLSVu656ADBhfEBiUC3U7LtZHRMja2
+        3DiMaunw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kknlh-0007Ex-HX; Thu, 03 Dec 2020 12:31:29 +0000
+Date:   Thu, 3 Dec 2020 12:31:29 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        X86 ML <x86@kernel.org>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [MOCKUP] x86/mm: Lightweight lazy mm refcounting
+Message-ID: <20201203123129.GH11935@casper.infradead.org>
+References: <7c4bcc0a464ca60be1e0aeba805a192be0ee81e5.1606972194.git.luto@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201201213707.541432-1-samitolvanen@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <7c4bcc0a464ca60be1e0aeba805a192be0ee81e5.1606972194.git.luto@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Sami,
+On Wed, Dec 02, 2020 at 09:25:51PM -0800, Andy Lutomirski wrote:
+> This code compiles, but I haven't even tried to boot it.  The earlier
+> part of the series isn't terribly interesting -- it's a handful of
+> cleanups that remove all reads of ->active_mm from arch/x86.  I've
+> been meaning to do that for a while, and now I did it.  But, with
+> that done, I think we can move to a totally different lazy mm refcounting
+> model.
 
-On Tue, Dec 01, 2020 at 01:36:51PM -0800, Sami Tolvanen wrote:
-> This patch series adds support for building the kernel with Clang's
-> Link Time Optimization (LTO). In addition to performance, the primary
-> motivation for LTO is to allow Clang's Control-Flow Integrity (CFI)
-> to be used in the kernel. Google has shipped millions of Pixel
-> devices running three major kernel versions with LTO+CFI since 2018.
-> 
-> Most of the patches are build system changes for handling LLVM
-> bitcode, which Clang produces with LTO instead of ELF object files,
-> postponing ELF processing until a later stage, and ensuring initcall
-> ordering.
-> 
-> Note that arm64 support depends on Will's memory ordering patches
-> [1]. I will post x86_64 patches separately after we have fixed the
-> remaining objtool warnings [2][3].
+I went back and read Documentation/vm/active_mm.rst recently.
 
-I took this series for a spin, with my for-next/lto branch merged in but
-I see a failure during the LTO stage with clang 11.0.5 because it doesn't
-understand the '.arch_extension rcpc' directive we throw out in READ_ONCE().
+I think it's useful to think about how this would have been handled if
+we'd had RCU at the time.  Particularly:
 
-We actually check that this extension is available before using it in
-the arm64 Kconfig:
+Linus wrote:
+> To support all that, the "struct mm_struct" now has two counters: a
+> "mm_users" counter that is how many "real address space users" there are,
+> and a "mm_count" counter that is the number of "lazy" users (ie anonymous
+> users) plus one if there are any real users.
 
-	config AS_HAS_LDAPR
-		def_bool $(as-instr,.arch_extension rcpc)
-
-so this shouldn't happen. I then realised, I wasn't passing LLVM_IAS=1
-on my Make command line; with that, then the detection works correctly
-and the LTO step succeeds.
-
-Why is it necessary to pass LLVM_IAS=1 if LTO is enabled? I think it
-would be _much_ better if this was implicit (or if LTO depended on it).
-
-Cheers,
-
-Will
+And this just makes me think RCU freeing of mm_struct.  I'm sure it's
+more complicated than that (then, or now), but if an anonymous process
+is borrowing a freed mm, and the mm is freed by RCU then it will not go
+away until the task context switches.  When we context switch back to
+the anon task, it'll borrow some other task's MM and won't even notice
+that the MM it was using has gone away.
