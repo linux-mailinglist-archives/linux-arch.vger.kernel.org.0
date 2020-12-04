@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 026292CEF30
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 15:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCBF2CEF50
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 15:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387403AbgLDODD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Dec 2020 09:03:03 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40584 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387411AbgLDODD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Dec 2020 09:03:03 -0500
-Received: by mail-lj1-f194.google.com with SMTP id y10so6726597ljc.7;
-        Fri, 04 Dec 2020 06:02:45 -0800 (PST)
+        id S2387721AbgLDOEB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Dec 2020 09:04:01 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:32836 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727682AbgLDOEA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Dec 2020 09:04:00 -0500
+Received: by mail-lj1-f196.google.com with SMTP id t22so6775664ljk.0;
+        Fri, 04 Dec 2020 06:03:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=SzMGLrWLNHR2uzHXkA7fVFrIiRthHhSpOA3S/SFE9xY=;
-        b=TzUjj/BpaZfivNUeAp7DAG1igfiRj5tHGg5seiN6pCpGZkRlVcT5ZFXJKVFoDwCwkk
-         6UxTkP5ZJd5zcAk075mbpjnP6tq0Fs992sdW8izzbu99pz/GSyksSXFGJAJPfJ+PktMq
-         094Y4l2Lh2Kb7WCvbnxdoDfASju6yGjA+/YBSMhPzPo/7oUjZNVXMNE7XiCUyvbmauO+
-         hEJVT5OSH5PiZBe7kA2WFirXvVbRI3pSDAKwvgQ8LA05SRNHg8uZIKh/85cHsyqInmY0
-         +RyTIu9efPdgQFJS9WqnB3PEVXqQNqYpeLxAEQ9VE1Uck4G93elfrnpz4Y/UxaMSX94J
-         l9cw==
-X-Gm-Message-State: AOAM530olr8BrLUT2/YkFKavRDKPF8JRFl5DTIJTBZotoFCRYpV6O19R
-        wf0bfSmxYEfufIs6jE2MfDc=
-X-Google-Smtp-Source: ABdhPJzinbl8W6GNnuh2d0iNrH45Uu5Od1aTjnKkRJ/b/Lo8Z2zvuOe5aiVnx94/T6QOmdOgJLSiFA==
-X-Received: by 2002:a2e:5853:: with SMTP id x19mr3739427ljd.232.1607090540012;
-        Fri, 04 Dec 2020 06:02:20 -0800 (PST)
+        bh=Gtn8MsRe3DMgMj91x+Smnp8eMKhG03Wope+aIlxxQKc=;
+        b=B91VVU4A3KpJL9fLSSmOfV1L0wYc+SSiBbOa+OHF6qWPFem8RDzTBqqzAsCvrJ9eTr
+         NZzgwmJk7UmJJBTapLvWHSamxMaqVXhwDM1lmL42m9HVU7YJsZ3CcUkqGEDGiEbnG8zj
+         nZIqa8fvE7T2LY6bspbQxPc2JEpy40/22kzky36BdzRL1m0RDqgVdE6A+6lK0DspOhcL
+         qEcCtkSLbYeZYJIa8nYrRMMi2dl8uyFY0RfnsBXf3bLxC+8WLTMTB5zA7cqRqVtYo+UE
+         oPZuhGitrL+7tWDyFNpf1CHFsMPf02wGcBCoHesaULbQ8B0qL30y2erbXp4Pmeyrrp0o
+         oIWg==
+X-Gm-Message-State: AOAM533FA4IMFITXBJsEjMBDIulqJS4NBLwSFkcR8taSqKBdIkEhekv7
+        GodnF37Avy+CU50Ko6vBcJo=
+X-Google-Smtp-Source: ABdhPJyVfVQdGoJLMZW3wLfqHywZjFX2O6JRGNqsqocxYouT0vH7fJrP+ILfGOn67a6g1kiOs0AAYg==
+X-Received: by 2002:a2e:593:: with SMTP id 141mr225913ljf.86.1607090592510;
+        Fri, 04 Dec 2020 06:03:12 -0800 (PST)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id r141sm1684042lff.55.2020.12.04.06.02.18
+        by smtp.gmail.com with ESMTPSA id b12sm1729780ljj.133.2020.12.04.06.03.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 06:02:19 -0800 (PST)
+        Fri, 04 Dec 2020 06:03:11 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1klBfh-0004K0-Ao; Fri, 04 Dec 2020 15:02:53 +0100
-Date:   Fri, 4 Dec 2020 15:02:53 +0100
+        id 1klBgX-0004KF-A2; Fri, 04 Dec 2020 15:03:45 +0100
+Date:   Fri, 4 Dec 2020 15:03:45 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -53,62 +53,39 @@ Cc:     Frank Rowand <frowand.list@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Daniel Kurtz <djkurtz@chromium.org>,
         linux-arch@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 1/8] of: fix linker-section match-table corruption
-Message-ID: <X8pBjbZlbaWaOFxe@localhost>
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v2 2/8] earlycon: simplify earlycon-table implementation
+Message-ID: <X8pBwTl7nZoOQ18m@localhost>
 References: <20201123102319.8090-1-johan@kernel.org>
- <20201123102319.8090-2-johan@kernel.org>
+ <20201123102319.8090-3-johan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201123102319.8090-2-johan@kernel.org>
+In-Reply-To: <20201123102319.8090-3-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Rob,
+Greg,
 
-On Mon, Nov 23, 2020 at 11:23:12AM +0100, Johan Hovold wrote:
-> Specify type alignment when declaring linker-section match-table entries
-> to prevent gcc from increasing alignment and corrupting the various
-> tables with padding (e.g. timers, irqchips, clocks, reserved memory).
+On Mon, Nov 23, 2020 at 11:23:13AM +0100, Johan Hovold wrote:
+> Instead of using the array-of-pointers trick to avoid having gcc mess up
+> the earlycon array stride, specify type alignment when declaring entries
+> to prevent gcc from increasing alignment.
 > 
-> This is specifically needed on x86 where gcc (typically) aligns larger
-> objects like struct of_device_id with static extent on 32-byte
-> boundaries which at best prevents matching on anything but the first
-> entry. Specifying alignment when declaring variables suppresses this
-> optimisation.
+> This is essentially an alternative (one-line) fix to the problem
+> addressed by commit dd709e72cb93 ("earlycon: Use a pointer table to fix
+> __earlycon_table stride").
 > 
-> Here's a 64-bit example where all entries are corrupt as 16 bytes of
-> padding has been inserted before the first entry:
+> gcc can increase the alignment of larger objects with static extent as
+> an optimisation, but this can be suppressed by using the aligned
+> attribute when declaring variables.
 > 
-> 	ffffffff8266b4b0 D __clk_of_table
-> 	ffffffff8266b4c0 d __of_table_fixed_factor_clk
-> 	ffffffff8266b5a0 d __of_table_fixed_clk
-> 	ffffffff8266b680 d __clk_of_table_sentinel
+> Note that we have been relying on this behaviour for kernel parameters
+> for 16 years and it indeed hasn't changed since the introduction of the
+> aligned attribute in gcc-3.1.
 > 
-> And here's a 32-bit example where the 8-byte-aligned table happens to be
-> placed on a 32-byte boundary so that all but the first entry are corrupt
-> due to the 28 bytes of padding inserted between entries:
-> 
-> 	812b3ec0 D __irqchip_of_table
-> 	812b3ec0 d __of_table_irqchip1
-> 	812b3fa0 d __of_table_irqchip2
-> 	812b4080 d __of_table_irqchip3
-> 	812b4160 d irqchip_of_match_end
-> 
-> Verified on x86 using gcc-9.3 and gcc-4.9 (which uses 64-byte
-> alignment), and on arm using gcc-7.2.
-> 
-> Note that there are no in-tree users of these tables on x86 currently
-> (even if they are included in the image).
-> 
-> Fixes: 54196ccbe0ba ("of: consolidate linker section OF match table declarations")
-> Fixes: f6e916b82022 ("irqchip: add basic infrastructure")
-> Cc: stable <stable@vger.kernel.org>     # 3.9
 > Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
 
 Could you pick this one up for 5.11?
 
