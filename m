@@ -2,209 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9532CE4C0
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 02:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740BD2CE531
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 02:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387439AbgLDBM0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 20:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S1725966AbgLDBhS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 20:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728406AbgLDBM0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 20:12:26 -0500
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58350C061A53
-        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 17:11:40 -0800 (PST)
-Received: by mail-qv1-xf4a.google.com with SMTP id 102so3276117qva.0
-        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 17:11:40 -0800 (PST)
+        with ESMTP id S1725960AbgLDBhS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 20:37:18 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FE5C061A4F;
+        Thu,  3 Dec 2020 17:36:32 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id f190so5714756wme.1;
+        Thu, 03 Dec 2020 17:36:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=pLRRzZdi/63YiDhRi+XJakRixQ1i8h1osfRwCQB8g5M=;
-        b=VFGPrKi4ZBMvJ55xiMOEv09Xxz31ymosmHZRUn+Lpe1qlDPzSVpQ4Zf1nATfA6tPHk
-         AeU2a1QCciqvolP55/LozsV/Xg9NQmHCvyYw3VVBh20xn82dwtNWIDBB2MfBWO6MrPIf
-         WTgXvxZsTgv4BRElBsxbvlepXaUJMd+ff03353yWV2ReImCnaAwnTSeR9YS6DBV2jJwz
-         /MEcOmIt/Hm6NYg87KjRcuGjhszCfqJyFG459lK6G5rSg4gZVQ2YJC5ULlExKBXSiNNS
-         y1tnakTyZY+swmB5pjVBARPf5Hjsh4dwD4/7X/97+8FsrHM86ARgl48fCXiNTDyxUAWc
-         Siwg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EDnqPAuMFc3aDJ1gKE8cCoQHdXC7zdbOSc7aPUe4uc0=;
+        b=Nb38SQxRMTtgkUHMMCP8/14Oh8D7MBSzLOp4prcGC8xI/1LrS/m/FBlYkrB51rLeVu
+         7waHOYx0G6WDGbGvZEtv0l4JNGfFmqt0OYeDuatlddeDHmTP/oxkLWZpnvB+Zs9OjVIe
+         T2RO2+Cr05AHqFqSbOCu1KGvatxZ/yo/eA0X/tGrSXJj5OjVQNaGu4luBp+M4pMCtSMb
+         vTzl7zJXtaeuhkeGEIYitghPnjfAe0xJZoPX/0aQ9BWjl5Pz7u1blYs/Eq4UFr6A7uPm
+         THpLQiTO0ki7/I3Qxdzqi/BfnX8E35/9xxMLQO7YwW8fSgHPFCX4YJvR7MxG2uBjbuf5
+         CVqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=pLRRzZdi/63YiDhRi+XJakRixQ1i8h1osfRwCQB8g5M=;
-        b=UzABNx4GiL6GLeLF1QTvDHBlA4vKJHznZVCBIQq0ubSeUA6jOpDND45C7hAYsUkCtU
-         LgB0ePWhkJQJgxaJPE4sP4Fepl3SGKh8EE1yI8oQW0QMsyLYtgOz3Qy5lHk3Tr7esIZ5
-         z8ZIeTSuFBBSG+7vN0FWRFgfYyU+mzBH16Lg8HWsVQgwdTvOyffqTuF99K5c4TK3sFTw
-         9q29M+BZv4BOl7F5FMgvx/Z6EoBHwrFvY2/6xFL7lFLaI6H6USKWKB34CSopdLRn7Kcm
-         IsN+aYQmw/g4pRG7OxMWYb89dq5Wl1aXJgdtAVneOFELF8zs6N7u23/+l4zXrN3DiTMQ
-         1XIw==
-X-Gm-Message-State: AOAM53089izAmXr8gBwVDQCiykdK4mmPwQqswINm925XzS2n/AuZJeX8
-        UFZWVWe6PbY7FLHc5CQkKrPe32fibJaUcrIBlO4=
-X-Google-Smtp-Source: ABdhPJyM0adl50ylGky8nCiNz//0uLGCwaPLuzxWr1v4ZsqecKm4FANzDm31yrpU+GcG9OM7gZ4oNhbHY8qfwByvDrU=
-Sender: "ndesaulniers via sendgmr" 
-        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:4d25])
- (user=ndesaulniers job=sendgmr) by 2002:ad4:5106:: with SMTP id
- g6mr2373201qvp.1.1607044299523; Thu, 03 Dec 2020 17:11:39 -0800 (PST)
-Date:   Thu,  3 Dec 2020 17:11:27 -0800
-In-Reply-To: <20201204011129.2493105-1-ndesaulniers@google.com>
-Message-Id: <20201204011129.2493105-2-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <20201204011129.2493105-1-ndesaulniers@google.com>
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
-Subject: [PATCH v3 2/2] Kbuild: implement support for DWARF v5
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        clang-built-linux@googlegroups.com,
-        Nick Clifton <nickc@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EDnqPAuMFc3aDJ1gKE8cCoQHdXC7zdbOSc7aPUe4uc0=;
+        b=p79qsa/e1lT+Lyvubt9wErUpD2LwpGFhgPtWafhBKaEtLUPlVILT+eMHYlhDUlrnLu
+         EkqlxUI7cJQNhEhqtFHikJTJpuRJs/DGkqet8Serx2Pb0b9/bC9mFYLXk6ItzOe6xuN8
+         amvcvH5FeRFb4uQ3qy1JHmcQgUiG2DYygqMCgB/7pEskqTPwJA8e2Uq6jMzjLRNwQ7th
+         Q+ktSRvuiFEMQoHuVcUiK92JnkZfzvNHcd/0E3COzBWM28c9NCk3iNU2M/OS6Gze4F5M
+         aKVZlCutd6Uq15exXoRbJG4HdLxhh1AbFYmLSMwapphVV/Fvsp65TFLptGyt5uJbcj/7
+         mu3A==
+X-Gm-Message-State: AOAM532Ijvtaisd4iNaspIZGjsqy1MWkwbwBlI5OVdkmoQTN+W5eVCtW
+        AzS746y6Cccn2hZSUq//bOQEzbI0LcJ6xmrdeRk=
+X-Google-Smtp-Source: ABdhPJxB8ppwZt7nVzylc64WYbgQxDiBhmVfRANwLxoVf7Nu2sBpxisXr48zyxR/Fz0bRNUbGcVitg0GGcytz2iHkOI=
+X-Received: by 2002:a1c:f20e:: with SMTP id s14mr1513795wmc.126.1607045790515;
+ Thu, 03 Dec 2020 17:36:30 -0800 (PST)
+MIME-Version: 1.0
+References: <c79b08e9-d36a-849e-d023-6fa155043aa9@rasmusvillemoes.dk>
+ <CAM7-yPTsy+wJO8oQ7srjiXk+VjFFSUdJfdnVx9Ma_H8jJJnZKA@mail.gmail.com>
+ <CAAH8bW-jUeFVU-0OrJzK-MuGgKJgZv38RZugEQzFRJHSXFRRDA@mail.gmail.com>
+ <CAM7-yPRBPP6SFzdmwWF5Y99g+aWcp=OY9Uvp-5h1MSDPmsORNw@mail.gmail.com>
+ <CAAH8bW-+XnNsd9p3xZ1utmyY24gaBa0ko4tngBii4T+2cMkcYg@mail.gmail.com>
+ <CAM7-yPQCWj6rOyLEgOqF3HGkFV1WKtqyVhEtDbS3HW=2A-HuBA@mail.gmail.com>
+ <CAM7-yPTtiVnUztE=xpNYgRcZTGd1aX_V9ZHd=2YZYc1uQNBXtw@mail.gmail.com>
+ <a0cc0d2e-9c55-8546-f070-26feed5de37f@rasmusvillemoes.dk> <CAM7-yPQrvYUwX-cbgpzhomCTFEi9sQ9iGuLNcL-Fsj7XZ0knhw@mail.gmail.com>
+ <CAAH8bW9=J_now4SU=-WzvBOa=ftStgGVpspyw_g7oafbuNHNHQ@mail.gmail.com> <20201203185257.GA29072@1wt.eu>
+In-Reply-To: <20201203185257.GA29072@1wt.eu>
+From:   Yun Levi <ppbuk5246@gmail.com>
+Date:   Fri, 4 Dec 2020 10:36:19 +0900
+Message-ID: <CAM7-yPQiG-akz6SC3m4oPGDMyOq4p8-yf8Kh+pumCoqvWY4w9w@mail.gmail.com>
+Subject: Re:
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>, dushistov@mail.ru,
         Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Changbin Du <changbin.du@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        richard.weiyang@linux.alibaba.com, joseph.qi@linux.alibaba.com,
+        skalluru@marvell.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-DWARF v5 is the latest standard of the DWARF debug info format.
+>On Fri, Dec 4, 2020 at 3:53 AM Willy Tarreau <w@1wt.eu> wrote:
+>
+> On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
+> > Yun, could you please stop top-posting and excessive trimming in the thread?
+>
+> And re-configure the mail agent to make the "Subject" field appear and
+> fill it.
 
-Feature detection of DWARF5 is onerous, especially given that we've
-removed $(AS), so we must query $(CC) for DWARF5 assembler directive
-support.  GNU `as` only recently gained support for specifying
--gdwarf-5.
+>On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
+> Yun, could you please stop top-posting and excessive trimming in the thread?
+Sorry to make you uncomfortable... Thanks for advice.
 
-The DWARF version of a binary can be validated with:
-$ llvm-dwarfdump vmlinux | head -n 4 | grep version
-or
-$ readelf --debug-dump=info vmlinux 2>/dev/null | grep Version
+>On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
+> As you said, find_last_bit() and proposed find_prev_*_bit() have the
+> same functionality.
+> If you really want to have find_prev_*_bit(), could you please at
+> least write it using find_last_bit(), otherwise it would be just a
+> blottering.
 
-DWARF5 wins significantly in terms of size when mixed with compression
-(CONFIG_DEBUG_INFO_COMPRESSED).
+Actually find_prev_*_bit call _find_prev_bit which is a common helper function
+like _find_next_bit.
+As you know this function is required to support __BIGEDIAN's little
+endian search.
+find_prev_bit actually wrapper of _find_prev_bit which have a feature
+the find_last_bit.
 
-363M    vmlinux.clang12.dwarf5.compressed
-434M    vmlinux.clang12.dwarf4.compressed
-439M    vmlinux.clang12.dwarf2.compressed
-457M    vmlinux.clang12.dwarf5
-536M    vmlinux.clang12.dwarf4
-548M    vmlinux.clang12.dwarf2
+That makes the semantics difference between find_last_bit and find_prev_bit.
+-- specify where you find from and
+   In loop, find_last_bit couldn't sustain original size as sentinel
+return value
+    (we should change the size argument for next searching
+     But it means whenever we call, "NOT SET or NOT CLEAR"'s sentinel
+return value is changed per call).
 
-515M    vmlinux.gcc10.2.dwarf5.compressed
-599M    vmlinux.gcc10.2.dwarf4.compressed
-624M    vmlinux.gcc10.2.dwarf2.compressed
-630M    vmlinux.gcc10.2.dwarf5
-765M    vmlinux.gcc10.2.dwarf4
-809M    vmlinux.gcc10.2.dwarf2
+Because we should have _find_prev_bit,
+I think it's the matter to choose which is better to usein
+find_prev_bit (find_last_bit? or _find_prev_bit?)
+sustaining find_prev_bit feature (give size as sentinel return, from
+where I start).
+if my understanding is correct.
 
-Though the quality of debug info is harder to quantify; size is not a
-proxy for quality.
+In my view, I prefer to use _find_prev_bit like find_next_bit for
+integrated format.
 
-Jakub notes:
-  All [GCC] 5.1 - 6.x did was start accepting -gdwarf-5 as experimental
-  option that enabled some small DWARF subset (initially only a few
-  DW_LANG_* codes newly added to DWARF5 drafts).  Only GCC 7 (released
-  after DWARF 5 has been finalized) started emitting DWARF5 section
-  headers and got most of the DWARF5 changes in...
+But In some of the benchmarking, find_last_bit is better than _find_prev_bit,
+here what I tested (look similar but sometimes have some difference).
 
-Version check GCC so that we don't need to worry about the difference in
-command line args between GNU readelf and llvm-readelf/llvm-dwarfdump to
-validate the DWARF Version in the assembler feature detection script.
+              Start testing find_bit() with random-filled bitmap
+[  +0.001850] find_next_bit:                  842792 ns, 163788 iterations
+[  +0.000873] find_prev_bit:                  870914 ns, 163788 iterations
+[  +0.000824] find_next_zero_bit:             821959 ns, 163894 iterations
+[  +0.000677] find_prev_zero_bit:             676240 ns, 163894 iterations
+[  +0.000777] find_last_bit:                  659103 ns, 163788 iterations
+[  +0.001822] find_first_bit:                1708041 ns,  16250 iterations
+[  +0.000539] find_next_and_bit:              492182 ns,  73871 iterations
+[  +0.000001]
+              Start testing find_bit() with sparse bitmap
+[  +0.000222] find_next_bit:                   13227 ns,    654 iterations
+[  +0.000013] find_prev_bit:                   11652 ns,    654 iterations
+[  +0.001845] find_next_zero_bit:            1723869 ns, 327028 iterations
+[  +0.001538] find_prev_zero_bit:            1355808 ns, 327028 iterations
+[  +0.000010] find_last_bit:                    8114 ns,    654 iterations
+[  +0.000867] find_first_bit:                 710639 ns,    654 iterations
+[  +0.000006] find_next_and_bit:                4273 ns,      1 iterations
+[  +0.000004] find_next_and_bit:                3278 ns,      1 iterations
 
-Link: http://www.dwarfstd.org/doc/DWARF5.pdf
-Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
-Suggested-by: Jakub Jelinek <jakub@redhat.com>
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Suggested-by: Fangrui Song <maskray@google.com>
-Suggested-by: Caroline Tice <cmtice@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- Makefile                          |  1 +
- include/asm-generic/vmlinux.lds.h |  6 +++++-
- lib/Kconfig.debug                 | 14 ++++++++++++++
- scripts/test_dwarf5_support.sh    |  9 +++++++++
- 4 files changed, 29 insertions(+), 1 deletion(-)
- create mode 100755 scripts/test_dwarf5_support.sh
+              Start testing find_bit() with random-filled bitmap
+[  +0.001784] find_next_bit:                  805553 ns, 164240 iterations
+[  +0.000643] find_prev_bit:                  632474 ns, 164240 iterations
+[  +0.000950] find_next_zero_bit:             877215 ns, 163442 iterations
+[  +0.000664] find_prev_zero_bit:             662339 ns, 163442 iterations
+[  +0.000680] find_last_bit:                  602204 ns, 164240 iterations
+[  +0.001912] find_first_bit:                1758208 ns,  16408 iterations
+[  +0.000760] find_next_and_bit:              531033 ns,  73798 iterations
+[  +0.000002]
+              Start testing find_bit() with sparse bitmap
+[  +0.000203] find_next_bit:                   12468 ns,    656 iterations
+[  +0.000205] find_prev_bit:                   10948 ns,    656 iterations
+[  +0.001759] find_next_zero_bit:            1579447 ns, 327026 iterations
+[  +0.001935] find_prev_zero_bit:            1931961 ns, 327026 iterations
+[  +0.000013] find_last_bit:                    9543 ns,    656 iterations
+[  +0.000732] find_first_bit:                 562009 ns,    656 iterations
+[  +0.000217] find_next_and_bit:                6804 ns,      1 iterations
+[  +0.000007] find_next_and_bit:                4367 ns,      1 iterations
 
-diff --git a/Makefile b/Makefile
-index 2430e1ee7c44..45231f6c1935 100644
---- a/Makefile
-+++ b/Makefile
-@@ -828,6 +828,7 @@ endif
- 
- dwarf-version-$(CONFIG_DEBUG_INFO_DWARF2) := 2
- dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-+dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
- DEBUG_CFLAGS	+= -gdwarf-$(dwarf-version-y)
- ifneq ($(dwarf-version-y)$(LLVM_IAS),21)
- # Binutils 2.35+ required for -gdwarf-4+ support.
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b2b3d81b1535..76ce62c77029 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -829,7 +829,11 @@
- 		.debug_types	0 : { *(.debug_types) }			\
- 		/* DWARF 5 */						\
- 		.debug_macro	0 : { *(.debug_macro) }			\
--		.debug_addr	0 : { *(.debug_addr) }
-+		.debug_addr	0 : { *(.debug_addr) }			\
-+		.debug_line_str	0 : { *(.debug_line_str) }		\
-+		.debug_loclists	0 : { *(.debug_loclists) }		\
-+		.debug_rnglists	0 : { *(.debug_rnglists) }		\
-+		.debug_str_offsets	0 : { *(.debug_str_offsets) }
- 
- /* Stabs debugging sections. */
- #define STABS_DEBUG							\
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 04719294a7a3..987815771ad6 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -274,6 +274,20 @@ config DEBUG_INFO_DWARF4
- 	  It makes the debug information larger, but it significantly
- 	  improves the success of resolving variables in gdb on optimized code.
- 
-+config DEBUG_INFO_DWARF5
-+	bool "Generate DWARF Version 5 debuginfo"
-+	depends on GCC_VERSION >= 70000 || CC_IS_CLANG
-+	depends on $(success,$(srctree)/scripts/test_dwarf5_support.sh $(CC) $(CLANG_FLAGS))
-+	help
-+	  Generate DWARF v5 debug info. Requires binutils 2.35, gcc 7.0+, and
-+	  gdb 8.0+. Changes to the structure of debug info in Version 5 allow
-+	  for around 15-18% savings in resulting image and debug info section sizes
-+	  as compared to DWARF Version 4. DWARF Version 5 standardizes previous
-+	  extensions such as accelerators for symbol indexing and the format for
-+	  fission (.dwo/.dwp) files. Users may not want to select this config if
-+	  they rely on tooling that has not yet been updated to support
-+	  DWARF Version 5.
-+
- endchoice # "DWARF version"
- 
- config DEBUG_INFO_BTF
-diff --git a/scripts/test_dwarf5_support.sh b/scripts/test_dwarf5_support.sh
-new file mode 100755
-index 000000000000..156ad5ec4274
---- /dev/null
-+++ b/scripts/test_dwarf5_support.sh
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Test that assembler accepts -gdwarf-5 and .file 0 directives, which were bugs
-+# in binutils < 2.35.
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=25612
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=25614
-+set -e
-+echo '.file 0 "filename"' | $* -Wa,-gdwarf-5 -c -x assembler -o /dev/null -
--- 
-2.29.2.576.ga3fc446d84-goog
+Is it better to write find_prev_bit using find_last_bit?
+I question again.
 
+Thanks for your great advice, But please forgive my fault and lackness.
+
+HTH.
+Levi.
