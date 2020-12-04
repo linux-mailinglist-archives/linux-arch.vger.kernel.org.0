@@ -2,168 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740BD2CE531
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 02:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3862CE599
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 03:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725966AbgLDBhS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Dec 2020 20:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S1726337AbgLDCSm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Dec 2020 21:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725960AbgLDBhS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 20:37:18 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FE5C061A4F;
-        Thu,  3 Dec 2020 17:36:32 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id f190so5714756wme.1;
-        Thu, 03 Dec 2020 17:36:32 -0800 (PST)
+        with ESMTP id S1726242AbgLDCSm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Dec 2020 21:18:42 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71811C061A4F
+        for <linux-arch@vger.kernel.org>; Thu,  3 Dec 2020 18:18:02 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id o4so2613981pgj.0
+        for <linux-arch@vger.kernel.org>; Thu, 03 Dec 2020 18:18:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EDnqPAuMFc3aDJ1gKE8cCoQHdXC7zdbOSc7aPUe4uc0=;
-        b=Nb38SQxRMTtgkUHMMCP8/14Oh8D7MBSzLOp4prcGC8xI/1LrS/m/FBlYkrB51rLeVu
-         7waHOYx0G6WDGbGvZEtv0l4JNGfFmqt0OYeDuatlddeDHmTP/oxkLWZpnvB+Zs9OjVIe
-         T2RO2+Cr05AHqFqSbOCu1KGvatxZ/yo/eA0X/tGrSXJj5OjVQNaGu4luBp+M4pMCtSMb
-         vTzl7zJXtaeuhkeGEIYitghPnjfAe0xJZoPX/0aQ9BWjl5Pz7u1blYs/Eq4UFr6A7uPm
-         THpLQiTO0ki7/I3Qxdzqi/BfnX8E35/9xxMLQO7YwW8fSgHPFCX4YJvR7MxG2uBjbuf5
-         CVqQ==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=Fd2ivA1JfGBE/YYaFxTeQJoY+3hIQ82HTGN9ThwBn8w=;
+        b=bd67G5cfWvkCpWSjpFtI1+6l2zRYD23xLf/mhlvIDACjrdi9nyf9dA0r6nvvREyg08
+         f3/zsofCKY9aHt8SOxoMx94nNle0IBiOTvBwYKGdD9BVOEcCdLCVu0I6aOeaq7weUEWd
+         EEIsrpT29dZ7HUU6IaIcUu+7qyqHljF6kf1ZearRQIWy4NWCn0VtkvVswIJqSbx1kOPr
+         WLin59SvycwQtsrRgOoTfDikupSHB/+1QbEuAminucunl/PpeQO2nhXPBX/ZUzrub1eG
+         EpYVkC2O08NhLbUm2XXwT50LKLrJr4vr8BkrzMgNmwHT5STBd5lQTFYdQbdw0F0SfX1w
+         5njw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EDnqPAuMFc3aDJ1gKE8cCoQHdXC7zdbOSc7aPUe4uc0=;
-        b=p79qsa/e1lT+Lyvubt9wErUpD2LwpGFhgPtWafhBKaEtLUPlVILT+eMHYlhDUlrnLu
-         EkqlxUI7cJQNhEhqtFHikJTJpuRJs/DGkqet8Serx2Pb0b9/bC9mFYLXk6ItzOe6xuN8
-         amvcvH5FeRFb4uQ3qy1JHmcQgUiG2DYygqMCgB/7pEskqTPwJA8e2Uq6jMzjLRNwQ7th
-         Q+ktSRvuiFEMQoHuVcUiK92JnkZfzvNHcd/0E3COzBWM28c9NCk3iNU2M/OS6Gze4F5M
-         aKVZlCutd6Uq15exXoRbJG4HdLxhh1AbFYmLSMwapphVV/Fvsp65TFLptGyt5uJbcj/7
-         mu3A==
-X-Gm-Message-State: AOAM532Ijvtaisd4iNaspIZGjsqy1MWkwbwBlI5OVdkmoQTN+W5eVCtW
-        AzS746y6Cccn2hZSUq//bOQEzbI0LcJ6xmrdeRk=
-X-Google-Smtp-Source: ABdhPJxB8ppwZt7nVzylc64WYbgQxDiBhmVfRANwLxoVf7Nu2sBpxisXr48zyxR/Fz0bRNUbGcVitg0GGcytz2iHkOI=
-X-Received: by 2002:a1c:f20e:: with SMTP id s14mr1513795wmc.126.1607045790515;
- Thu, 03 Dec 2020 17:36:30 -0800 (PST)
-MIME-Version: 1.0
-References: <c79b08e9-d36a-849e-d023-6fa155043aa9@rasmusvillemoes.dk>
- <CAM7-yPTsy+wJO8oQ7srjiXk+VjFFSUdJfdnVx9Ma_H8jJJnZKA@mail.gmail.com>
- <CAAH8bW-jUeFVU-0OrJzK-MuGgKJgZv38RZugEQzFRJHSXFRRDA@mail.gmail.com>
- <CAM7-yPRBPP6SFzdmwWF5Y99g+aWcp=OY9Uvp-5h1MSDPmsORNw@mail.gmail.com>
- <CAAH8bW-+XnNsd9p3xZ1utmyY24gaBa0ko4tngBii4T+2cMkcYg@mail.gmail.com>
- <CAM7-yPQCWj6rOyLEgOqF3HGkFV1WKtqyVhEtDbS3HW=2A-HuBA@mail.gmail.com>
- <CAM7-yPTtiVnUztE=xpNYgRcZTGd1aX_V9ZHd=2YZYc1uQNBXtw@mail.gmail.com>
- <a0cc0d2e-9c55-8546-f070-26feed5de37f@rasmusvillemoes.dk> <CAM7-yPQrvYUwX-cbgpzhomCTFEi9sQ9iGuLNcL-Fsj7XZ0knhw@mail.gmail.com>
- <CAAH8bW9=J_now4SU=-WzvBOa=ftStgGVpspyw_g7oafbuNHNHQ@mail.gmail.com> <20201203185257.GA29072@1wt.eu>
-In-Reply-To: <20201203185257.GA29072@1wt.eu>
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Fri, 4 Dec 2020 10:36:19 +0900
-Message-ID: <CAM7-yPQiG-akz6SC3m4oPGDMyOq4p8-yf8Kh+pumCoqvWY4w9w@mail.gmail.com>
-Subject: Re:
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>, dushistov@mail.ru,
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=Fd2ivA1JfGBE/YYaFxTeQJoY+3hIQ82HTGN9ThwBn8w=;
+        b=WBj4VuWXQviTPyrU6Tp/OgqTnyI3i2TFb+rBwvJTJS9jV5xxbXV4UGNzPqFA0StokI
+         liw+mkCjmvU9G2B6rvpQOTCX+i2bQzI0bbYPdEa8vxfQ3ViAfyBYPFxqSJGfmmjXeSJh
+         R0gDdLL4cfSg5gA5kdteRsgtBI3kbEgNVxdWxfX8CfGTtCzlswLFW79fdSRBtmMysWY+
+         axvHjQgpezgFkGRPcb9fmaJXp0/A/Hxe9+2emN/TQ0/QCGSPPq5rh5F1saoLynGiJbCE
+         TryamLgP+GYA3DDpPhPQOskJB894RT8yLqRH9jnALC85RQtqg8vWBEmBaQ2W00DfC5Nh
+         NzRw==
+X-Gm-Message-State: AOAM5334C2xXhLWN+DndzTr+9FntEaAVW9Q5CyJcarR5sZmMZH/Cu54T
+        EG5KE+Kovoc9wJ9DZFhHc6AXAg==
+X-Google-Smtp-Source: ABdhPJyNuKKB+iExcQqlDxHUMCskHI2/BePAL+9W0Ez0GHtzU2CIr3B8j01gRJIOeumT/wnwKHF+4w==
+X-Received: by 2002:a63:f64c:: with SMTP id u12mr5577532pgj.325.1607048281788;
+        Thu, 03 Dec 2020 18:18:01 -0800 (PST)
+Received: from ?IPv6:2600:1010:b052:49bb:5861:3d22:1fe4:dfb5? ([2600:1010:b052:49bb:5861:3d22:1fe4:dfb5])
+        by smtp.gmail.com with ESMTPSA id v17sm2249260pga.58.2020.12.03.18.18.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Dec 2020 18:18:01 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [MOCKUP] x86/mm: Lightweight lazy mm refcounting
+Date:   Thu, 3 Dec 2020 18:17:59 -0800
+Message-Id: <3B47C470-2900-4A53-9F8E-CB3A003FA361@amacapital.net>
+References: <1607033145.hcppy9ndl4.astroid@bobo.none>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anton Blanchard <anton@ozlabs.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        richard.weiyang@linux.alibaba.com, joseph.qi@linux.alibaba.com,
-        skalluru@marvell.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>
+In-Reply-To: <1607033145.hcppy9ndl4.astroid@bobo.none>
+To:     Nicholas Piggin <npiggin@gmail.com>
+X-Mailer: iPhone Mail (18B121)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->On Fri, Dec 4, 2020 at 3:53 AM Willy Tarreau <w@1wt.eu> wrote:
->
-> On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
-> > Yun, could you please stop top-posting and excessive trimming in the thread?
->
-> And re-configure the mail agent to make the "Subject" field appear and
-> fill it.
 
->On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
-> Yun, could you please stop top-posting and excessive trimming in the thread?
-Sorry to make you uncomfortable... Thanks for advice.
+> On Dec 3, 2020, at 2:13 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
+>=20
+> =EF=BB=BFExcerpts from Peter Zijlstra's message of December 3, 2020 6:44 p=
+m:
+>>> On Wed, Dec 02, 2020 at 09:25:51PM -0800, Andy Lutomirski wrote:
+>>>=20
+>>> power: same as ARM, except that the loop may be rather larger since
+>>> the systems are bigger.  But I imagine it's still faster than Nick's
+>>> approach -- a cmpxchg to a remote cacheline should still be faster than
+>>> an IPI shootdown.=20
+>>=20
+>> While a single atomic might be cheaper than an IPI, the comparison
+>> doesn't work out nicely. You do the xchg() on every unlazy, while the
+>> IPI would be once per process exit.
+>>=20
+>> So over the life of the process, it might do very many unlazies, adding
+>> up to a total cost far in excess of what the single IPI would've been.
+>=20
+> Yeah this is the concern, I looked at things that add cost to the
+> idle switch code and it gets hard to justify the scalability improvement
+> when you slow these fundmaental things down even a bit.
 
->On Thu, Dec 03, 2020 at 10:46:25AM -0800, Yury Norov wrote:
-> As you said, find_last_bit() and proposed find_prev_*_bit() have the
-> same functionality.
-> If you really want to have find_prev_*_bit(), could you please at
-> least write it using find_last_bit(), otherwise it would be just a
-> blottering.
+v2 fixes this and is generally much nicer. I=E2=80=99ll send it out in a cou=
+ple hours.
 
-Actually find_prev_*_bit call _find_prev_bit which is a common helper function
-like _find_next_bit.
-As you know this function is required to support __BIGEDIAN's little
-endian search.
-find_prev_bit actually wrapper of _find_prev_bit which have a feature
-the find_last_bit.
-
-That makes the semantics difference between find_last_bit and find_prev_bit.
--- specify where you find from and
-   In loop, find_last_bit couldn't sustain original size as sentinel
-return value
-    (we should change the size argument for next searching
-     But it means whenever we call, "NOT SET or NOT CLEAR"'s sentinel
-return value is changed per call).
-
-Because we should have _find_prev_bit,
-I think it's the matter to choose which is better to usein
-find_prev_bit (find_last_bit? or _find_prev_bit?)
-sustaining find_prev_bit feature (give size as sentinel return, from
-where I start).
-if my understanding is correct.
-
-In my view, I prefer to use _find_prev_bit like find_next_bit for
-integrated format.
-
-But In some of the benchmarking, find_last_bit is better than _find_prev_bit,
-here what I tested (look similar but sometimes have some difference).
-
-              Start testing find_bit() with random-filled bitmap
-[  +0.001850] find_next_bit:                  842792 ns, 163788 iterations
-[  +0.000873] find_prev_bit:                  870914 ns, 163788 iterations
-[  +0.000824] find_next_zero_bit:             821959 ns, 163894 iterations
-[  +0.000677] find_prev_zero_bit:             676240 ns, 163894 iterations
-[  +0.000777] find_last_bit:                  659103 ns, 163788 iterations
-[  +0.001822] find_first_bit:                1708041 ns,  16250 iterations
-[  +0.000539] find_next_and_bit:              492182 ns,  73871 iterations
-[  +0.000001]
-              Start testing find_bit() with sparse bitmap
-[  +0.000222] find_next_bit:                   13227 ns,    654 iterations
-[  +0.000013] find_prev_bit:                   11652 ns,    654 iterations
-[  +0.001845] find_next_zero_bit:            1723869 ns, 327028 iterations
-[  +0.001538] find_prev_zero_bit:            1355808 ns, 327028 iterations
-[  +0.000010] find_last_bit:                    8114 ns,    654 iterations
-[  +0.000867] find_first_bit:                 710639 ns,    654 iterations
-[  +0.000006] find_next_and_bit:                4273 ns,      1 iterations
-[  +0.000004] find_next_and_bit:                3278 ns,      1 iterations
-
-              Start testing find_bit() with random-filled bitmap
-[  +0.001784] find_next_bit:                  805553 ns, 164240 iterations
-[  +0.000643] find_prev_bit:                  632474 ns, 164240 iterations
-[  +0.000950] find_next_zero_bit:             877215 ns, 163442 iterations
-[  +0.000664] find_prev_zero_bit:             662339 ns, 163442 iterations
-[  +0.000680] find_last_bit:                  602204 ns, 164240 iterations
-[  +0.001912] find_first_bit:                1758208 ns,  16408 iterations
-[  +0.000760] find_next_and_bit:              531033 ns,  73798 iterations
-[  +0.000002]
-              Start testing find_bit() with sparse bitmap
-[  +0.000203] find_next_bit:                   12468 ns,    656 iterations
-[  +0.000205] find_prev_bit:                   10948 ns,    656 iterations
-[  +0.001759] find_next_zero_bit:            1579447 ns, 327026 iterations
-[  +0.001935] find_prev_zero_bit:            1931961 ns, 327026 iterations
-[  +0.000013] find_last_bit:                    9543 ns,    656 iterations
-[  +0.000732] find_first_bit:                 562009 ns,    656 iterations
-[  +0.000217] find_next_and_bit:                6804 ns,      1 iterations
-[  +0.000007] find_next_and_bit:                4367 ns,      1 iterations
-
-Is it better to write find_prev_bit using find_last_bit?
-I question again.
-
-Thanks for your great advice, But please forgive my fault and lackness.
-
-HTH.
-Levi.
+>=20
+> I still think working on the assumption that IPIs =3D scary expensive=20
+> might not be correct. An IPI itself is, but you only issue them when=20
+> you've left a lazy mm on another CPU which just isn't that often.
+>=20
+> Thanks,
+> Nick
