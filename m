@@ -2,159 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 464082CE94B
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 09:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA612CE95C
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Dec 2020 09:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728441AbgLDINu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Dec 2020 03:13:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S1727007AbgLDISO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Dec 2020 03:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727402AbgLDINu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Dec 2020 03:13:50 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53704C061A51;
-        Fri,  4 Dec 2020 00:13:10 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id h7so3410213pjk.1;
-        Fri, 04 Dec 2020 00:13:10 -0800 (PST)
+        with ESMTP id S1726744AbgLDISN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Dec 2020 03:18:13 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D04C061A4F;
+        Fri,  4 Dec 2020 00:17:33 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id x15so2701020pll.2;
+        Fri, 04 Dec 2020 00:17:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=3fbzFtODlG6DhIFOuWtZWUtQuIVTw1JtB82OhelR1f8=;
-        b=hiaCSk2RB4ZbZZ7qUDKx5WuheWKkTpmcIvHy+cDMvtWoe2wDZGGmS/CTLyju1KF2h8
-         wrdeWY5t6bUGml15IUYpkpCB3LWc8lGpFbHfR3bWaCjZlD3sXcH9T/3RpltgStc6Koto
-         1j8Cz+Cj3tG5sw/UmjdiDUMINMSPhCVp5JuxGyUJtGxH4PAe0RR8GUSCV82Zd8p/Yh41
-         BzYOl3j+6ON8TZJFpdErKBQway7qpqf5hq+9ZcktbSgtVO/++tslXRwcBKuYp/G8Kldq
-         AlgSDTdbZ8gam9IwQZQDkNGSFEc5lAR9DYMhIO6aym5RiP/KPWlSuKDaVLgbPXhM+Sm+
-         jnVw==
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Ln++9Eg71n524JlS9NV8GRrodOh9pkKHZvYyLb9NMN8=;
+        b=tDMVJKyflN4AytQ5BZaaYAnTvD40r+ph9Q8CJrtzq7qK9cpK3KDT6NOzafwsRREUcD
+         cFOOnkH3VCh4P6E9SdpOxq99EPa00kcFmWHnSoHwuuBUU9wzc2BnYLtTa8cnb+wgzfWA
+         cYOKmCVOuNPAnNExrsPEQ05s7tlIMsCdXuWeTR/ULMR768eflA18ANFzJp+tE6n7ZDbI
+         Yi0bGLF9muM5t6o5/PHdMx2RcQylbUroFG3yhwwc92dxPrF0kAFGFslctsribroovhp6
+         dvfEzYiMCqlGfhspEHuBVSRWoyJ6QkaJU9DwZ3WgttxlG5yI+Ee7qGY1fTD1cuKjoG8m
+         KyxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=3fbzFtODlG6DhIFOuWtZWUtQuIVTw1JtB82OhelR1f8=;
-        b=oY2aBJKp5hYSyLJCNOnvLg6Vz4qg1EUJN5VPyrFAzRZ7S56IPY+oNKLv+sZgfjghM0
-         kKa2IFRtTnMsHh6QjAyfAryfXWhRgYDlr6IL47w+I/+4EjJECEnblBVMvPRqGfBqmE0i
-         l20a6qeT6CwSUQXUH5tsIMnnyB6iM7yrQioGy+DWKneb7Pv75jFrk6FoAgIJIqya9dQC
-         vEqhMY1DrvD9c9EENOObCPiN2Mu1YlZAtmvmytsZ3RZs6RdmEiQ1xkx5m/ZO7PX+FPTL
-         g2ehTByEQ6I+5z6rnLh/ewlEZ3btJbpEiE7aG5LdGZcpnqsfMeEPz5CiTV9VkJEmUQ6S
-         YLQA==
-X-Gm-Message-State: AOAM532JT858ZyxOMh+NtSzkg5fNoKzeD8KIaIN192F7A6J+Ba9OyOM4
-        vVE14HSOgDqyj6SkzDyQmSuXR+m4kLs=
-X-Google-Smtp-Source: ABdhPJxFGKvxSujUjSN4DbHCJiDIqCfKt/Gd/ih5Y1oXid6kspH8VxuaLkxN8iSd6XopGq0+v05kZA==
-X-Received: by 2002:a17:902:c395:b029:da:9aca:c972 with SMTP id g21-20020a170902c395b02900da9acac972mr2815306plg.32.1607069588337;
-        Fri, 04 Dec 2020 00:13:08 -0800 (PST)
-Received: from localhost ([1.129.136.83])
-        by smtp.gmail.com with ESMTPSA id n68sm4177105pfn.161.2020.12.04.00.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 00:13:07 -0800 (PST)
-Date:   Fri, 04 Dec 2020 18:12:58 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v8 11/12] mm/vmalloc: Hugepage vmalloc mappings
-To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "Jonathan.Cameron@Huawei.com" <Jonathan.Cameron@Huawei.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "lizefan@huawei.com" <lizefan@huawei.com>
-References: <20201128152559.999540-1-npiggin@gmail.com>
-        <20201128152559.999540-12-npiggin@gmail.com>
-        <e9d3a50e1b18f9ea1cdfdc221bef75db19273417.camel@intel.com>
-In-Reply-To: <e9d3a50e1b18f9ea1cdfdc221bef75db19273417.camel@intel.com>
-MIME-Version: 1.0
-Message-Id: <1607068679.lfd133za4h.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Ln++9Eg71n524JlS9NV8GRrodOh9pkKHZvYyLb9NMN8=;
+        b=BSX14aMzPBDT0hRSCi2pwYk1WncaiIoJ7sGMlBCwoPg1qf5jtgzbTGPuy/UtcijELX
+         LwXhLKQOinI8B2DcRJaS/c1SRlZbNKPhrJ2h7iO4lob9xT+enh5/kWwN2WYmMkBdyqvR
+         xBX7IbKkHn9ClPfr+jit2QFI1xTVkhsgR6W3B0QyeMEhXDExNidENybehP4c/HnV4Jii
+         bTqx1MeGjnUn8AzTJIA5e9At1UolUODgXvzfp4Y5Jm/HuNTZiRhg+PRuRLKdBXP6fm7c
+         EwFBmYh/gfKubvwKZdYymZZ+t5Fzl5Wbo4dAg2L8QXaT8RzRpu0F7kwosJKoxMdyELJ6
+         p7bQ==
+X-Gm-Message-State: AOAM530dWG8unHZHGfFEWsqqJy214mUzlxErxcIvwlCB1dA/p6aVFsbE
+        98ruJSMChnVmbEgz9JPHK/8=
+X-Google-Smtp-Source: ABdhPJx1Ho3dBYScBiLMsFzyMeRifNVoKPOlG/ESpTJs/U21Gcdn1OiMMq9h+u0zR4BCVQgth9i5dQ==
+X-Received: by 2002:a17:902:b498:b029:da:84a7:be94 with SMTP id y24-20020a170902b498b02900da84a7be94mr2861306plr.52.1607069852915;
+        Fri, 04 Dec 2020 00:17:32 -0800 (PST)
+Received: from ?IPv6:2601:647:4700:9b2:e462:2bde:2e8b:f9df? ([2601:647:4700:9b2:e462:2bde:2e8b:f9df])
+        by smtp.gmail.com with ESMTPSA id g16sm3842217pfb.201.2020.12.04.00.17.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 04 Dec 2020 00:17:31 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [RFC v2 1/2] [NEEDS HELP] x86/mm: Handle unlazying membarrier
+ core sync in the arch code
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <203d39d11562575fd8bd6a094d97a3a332d8b265.1607059162.git.luto@kernel.org>
+Date:   Fri, 4 Dec 2020 00:17:29 -0800
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        X86 ML <x86@kernel.org>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jann Horn <jannh@google.com>
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <A61977A7-F0B2-4492-AB6D-06E24417FA59@gmail.com>
+References: <cover.1607059162.git.luto@kernel.org>
+ <203d39d11562575fd8bd6a094d97a3a332d8b265.1607059162.git.luto@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Edgecombe, Rick P's message of December 1, 2020 6:21 am:
-> On Sun, 2020-11-29 at 01:25 +1000, Nicholas Piggin wrote:
->> Support huge page vmalloc mappings. Config option
->> HAVE_ARCH_HUGE_VMALLOC
->> enables support on architectures that define HAVE_ARCH_HUGE_VMAP and
->> supports PMD sized vmap mappings.
->>=20
->> vmalloc will attempt to allocate PMD-sized pages if allocating PMD
->> size
->> or larger, and fall back to small pages if that was unsuccessful.
->>=20
->> Allocations that do not use PAGE_KERNEL prot are not permitted to use
->> huge pages, because not all callers expect this (e.g., module
->> allocations vs strict module rwx).
->=20
-> Several architectures (x86, arm64, others?) allocate modules initially
-> with PAGE_KERNEL and so I think this test will not exclude module
-> allocations in those cases.
+I am not very familiar with membarrier, but here are my 2 cents while =
+trying
+to answer your questions.
 
-Ah, thanks. I guess archs must additionally ensure that their
-PAGE_KERNEL allocations are suitable for huge page mappings before
-enabling the option.
+> On Dec 3, 2020, at 9:26 PM, Andy Lutomirski <luto@kernel.org> wrote:
+> @@ -496,6 +497,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, =
+struct mm_struct *next,
+> 		 * from one thread in a process to another thread in the =
+same
+> 		 * process. No TLB flush required.
+> 		 */
+> +
+> +		// XXX: why is this okay wrt membarrier?
+> 		if (!was_lazy)
+> 			return;
 
-If there is interest from those archs to support this, I have an
-early (un-posted) patch that adds an explicit VM_HUGE flag that could
-override the pessemistic arch default. It's not much trouble to add this=20
-to the large system hash allocations. It's very out of date now but I=20
-can at least give what I have to anyone doing an arch support that
-wants it.
+I am confused.
 
->=20
-> [snip]
->=20
->> @@ -2400,6 +2453,7 @@ static inline void set_area_direct_map(const
->> struct vm_struct *area,
->>  {
->>  	int i;
->> =20
->> +	/* HUGE_VMALLOC passes small pages to set_direct_map */
->>  	for (i =3D 0; i < area->nr_pages; i++)
->>  		if (page_address(area->pages[i]))
->>  			set_direct_map(area->pages[i]);
->> @@ -2433,11 +2487,12 @@ static void vm_remove_mappings(struct
->> vm_struct *area, int deallocate_pages)
->>  	 * map. Find the start and end range of the direct mappings to
->> make sure
->>  	 * the vm_unmap_aliases() flush includes the direct map.
->>  	 */
->> -	for (i =3D 0; i < area->nr_pages; i++) {
->> +	for (i =3D 0; i < area->nr_pages; i +=3D 1U << area->page_order) {
->>  		unsigned long addr =3D (unsigned long)page_address(area-
->> >pages[i]);
->>  		if (addr) {
->> +			unsigned long page_size =3D PAGE_SIZE << area-
->> >page_order;
->>  			start =3D min(addr, start);
->> -			end =3D max(addr + PAGE_SIZE, end);
->> +			end =3D max(addr + page_size, end);
->>  			flush_dmap =3D 1;
->>  		}
->>  	}
->=20
-> The logic around this is a bit tangled. The reset of the direct map has
-> to succeed, but if the set_direct_map_() functions require a split they
-> could fail. For x86, set_memory_ro() calls on a vmalloc alias will
-> mirror the page size and permission on the direct map and so the direct
-> map will be broken to 4k pages if it's a RO vmalloc allocation.
->=20
-> But after this, module vmalloc()'s could have large pages which would
-> result in large RO pages on the direct map. Then it could possibly fail
-> when trying to reset a 4k page out of a large RO direct map mapping.=20
->=20
-> I think either module allocations need to be actually excluded from
-> having large pages (seems like you might have seen other issues as
-> well?), or another option could be to use the changes here:
-> https://lore.kernel.org/lkml/20201125092208.12544-4-rppt@kernel.org/
-> to reset the direct map for a large page range at a time for large=20
-> vmalloc pages.
->=20
+On one hand, it seems that membarrier_private_expedited() would issue an =
+IPI
+to that core, as it would find that this core=E2=80=99s =
+cpu_rq(cpu)->curr->mm is the
+same as the one that the membarrier applies to. But=E2=80=A6 (see below)
 
-Right, x86 would have to do something about that before enabling.
-A VM_HUGE flag might be quick and easy but maybe other options are not=20
-too difficult.
 
-Thanks,
-Nick
+> @@ -508,12 +511,24 @@ void switch_mm_irqs_off(struct mm_struct *prev, =
+struct mm_struct *next,
+> 		smp_mb();
+> 		next_tlb_gen =3D atomic64_read(&next->context.tlb_gen);
+> 		if (this_cpu_read(cpu_tlbstate.ctxs[prev_asid].tlb_gen) =
+=3D=3D
+> -				next_tlb_gen)
+> +		    next_tlb_gen) {
+> +			/*
+> +			 * We're reactivating an mm, and membarrier =
+might
+> +			 * need to serialize.  Tell membarrier.
+> +			 */
+> +
+> +			// XXX: I can't understand the logic in
+> +			// membarrier_mm_sync_core_before_usermode().  =
+What's
+> +			// the mm check for?
+> +			membarrier_mm_sync_core_before_usermode(next);
+
+On the other hand the reason for this mm check that you mention =
+contradicts
+my previous understanding as the git log says:
+
+commit 2840cf02fae627860156737e83326df354ee4ec6
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Thu Sep 19 13:37:01 2019 -0400
+
+    sched/membarrier: Call sync_core only before usermode for same mm
+   =20
+    When the prev and next task's mm change, switch_mm() provides the =
+core
+    serializing guarantees before returning to usermode. The only case
+    where an explicit core serialization is needed is when the scheduler
+    keeps the same mm for prev and next.
+
+> 	/*
+> 	 * When switching through a kernel thread, the loop in
+> 	 * membarrier_{private,global}_expedited() may have observed =
+that
+> 	 * kernel thread and not issued an IPI. It is therefore possible =
+to
+> 	 * schedule between user->kernel->user threads without passing =
+though
+> 	 * switch_mm(). Membarrier requires a barrier after storing to
+> -	 * rq->curr, before returning to userspace, so provide them =
+here:
+> +	 * rq->curr, before returning to userspace, and mmdrop() =
+provides
+> +	 * this barrier.
+> 	 *
+> -	 * - a full memory barrier for {PRIVATE,GLOBAL}_EXPEDITED, =
+implicitly
+> -	 *   provided by mmdrop(),
+> -	 * - a sync_core for SYNC_CORE.
+> +	 * XXX: I don't think mmdrop() actually does this.  There's no
+> +	 * smp_mb__before/after_atomic() in there.
+
+I presume that since x86 is the only one that needs
+membarrier_mm_sync_core_before_usermode(), nobody noticed the missing
+smp_mb__before/after_atomic(). These are anyhow a compiler barrier in =
+x86,
+and such a barrier would take place before the return to userspace.
+
