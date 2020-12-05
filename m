@@ -2,134 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE8C2CF956
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Dec 2020 05:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C756A2CF958
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Dec 2020 05:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgLEEtt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Dec 2020 23:49:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S1727794AbgLEEty (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Dec 2020 23:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726136AbgLEEts (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Dec 2020 23:49:48 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F941C0613D1;
-        Fri,  4 Dec 2020 20:49:08 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id l23so4375091pjg.1;
-        Fri, 04 Dec 2020 20:49:08 -0800 (PST)
+        with ESMTP id S1726136AbgLEEtu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Dec 2020 23:49:50 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9783C061A4F;
+        Fri,  4 Dec 2020 20:49:10 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id b5so488028pjl.0;
+        Fri, 04 Dec 2020 20:49:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=Nb9T4leS4Okb7bkKk074tEGv/Gy3QayUZQ2lyWI+CyQ=;
-        b=gsJHXW8CYsLyLTGSztE7txvh3vIMuAuI05hKOHlhR0HFrQBO6CTfJYEIeyx8ndojh1
-         0FV2zvl0jvqa9Mnjdo8U9Tn4iteqER/YF57+OwBL3Oao94w7Fsy5uq1mr4qK3Di89Qm3
-         zrgeYMS+VqwCFbZrM4vin8093CMu9ZrdafYMjQS75LMmG1L4BmOowHHo/TZeuFDDwfYX
-         Td27wU3NTZ8hTWseuXT6puZdomZRynpZbhCGO2yimfIVAk5gaL6Gjrax2Ic6A0rjXeXb
-         Rp4LeNAyAgUZO2fmQFhnksDdyz0pfUZA5AroTTuKFIjh0Ml/LbzvjNafCw0TvDfT8pkn
-         OV3g==
+        bh=8K5w8jDXkKIlAngW/XG7feDMYwmdKQNqo3uNmj5tiHg=;
+        b=hYrtKqIDsBey9XtGHSIn0Bg7onNveij1HRFaHy9NAT8RO52Hqr03V26BGscp7X7CN+
+         yd8n/Zyn0Umq/3pX7RhQIKWuCYjKZwO48ER0FE07sfBRLKZO8pbMUWpMA6O98+eFyGm+
+         RXFHC3/u1Vi82UHwVdkjVhC5qnvJa/xn7RUpM+ytoWsqMa/zo+5rH4A8NXU3H+jrBO2V
+         ODKk31Gfzzq4v622z7u+bLuqoFNUe/5RydNnSz3bWku7+Grocps27gRlbTEx6RhCdG6f
+         cX1hU41DTIG/zzPiDOHGcoEx5siB5+6BI/RQp/Mw44cS6if02xsNGtcme+Gjq041HeQV
+         xf7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=Nb9T4leS4Okb7bkKk074tEGv/Gy3QayUZQ2lyWI+CyQ=;
-        b=UEyfMDNtKGt/4ei/tE0J1P+XzWayJTucG9tycqzyNh/kIuGK8Wv3pJ9maUclr684av
-         1xSGMXKq4OdlQ9+NKImrBr5Bg7wBFG2ozOh5AyeDginCl/1q5t3u3Epjdw5xDcFIDnoo
-         dUaG4sN4uVClSvt15biv4/o3wEGsfWqj1ipa86eiFCQqhOfwH6qQGlHalVcGMvpSsj0i
-         0cnn5eyyiq+FBFSQeMEZqBe8rj0BchjSyu1KM2YL+XzsxvDPmODnYrnGZRpJPmrp96P0
-         ehVkdpE3RFKgRRggX3gXZpE2jEUHK7Mv222a/xNHntIYvndpsF8ZN1Aet5J9xiuzmt3q
-         3vqg==
-X-Gm-Message-State: AOAM5310OYAEDq9nAIX71K1QcF6FeN5/c5B89i7Ju1zrYAPRDghZJJ3Q
-        OF0sSM1mBK8xyKYAbbdeAJI=
-X-Google-Smtp-Source: ABdhPJyib/qkhvo5CnfZZZ++38N/B+omKeTLXjREaNcrLJrVPtGwsFQpMnAhzrFUjxmdaRS0GTqXjA==
-X-Received: by 2002:a17:902:8309:b029:da:1140:df85 with SMTP id bd9-20020a1709028309b02900da1140df85mr6851672plb.46.1607143748095;
-        Fri, 04 Dec 2020 20:49:08 -0800 (PST)
+        bh=8K5w8jDXkKIlAngW/XG7feDMYwmdKQNqo3uNmj5tiHg=;
+        b=K46oyUcCajdVJQdnjqn7SFKuxG0BupI13eB6ChLRSrusnDZ7rnGyLgxdnkirlSnEnD
+         4pcE+uxb2GEPAfnyUJ9wB1otpUPqT57fA87vKhyboiIhNcbla7Uz3OSdpwUzM24yhvNF
+         S1/dQQzbrU6p2KLgiM2Y1+Licsp/F7zGEMUClkSGxnAkAzUAbfzgK0sll//HhbvbHKGl
+         OFekqyKZpKSfBVGjAKGg1pbbtP7EiEXnYIK6IxtZ+u81H1zB3m5HHtejg2mpmEMN6aq1
+         sfNmTXvAJK87fozvmmqLdz8dgAgdauTK1r3hk7205VUcLco4zjKciX+tSy19upq4de+s
+         pc0w==
+X-Gm-Message-State: AOAM530S7uGNjmDhh9UFbdYLMlYidTh3S4lqTxOQd03+3PQkUL97Fj6Y
+        oYGbossiUeCv27N+TO70G4k=
+X-Google-Smtp-Source: ABdhPJw/E26yjJEohaTP7ApEdDRtaSfWTjVTMQOkzfNuPiHlz5TFw2OnaE0hnGXZ8o7aQSs7ynbtnA==
+X-Received: by 2002:a17:90a:9289:: with SMTP id n9mr4238282pjo.67.1607143750294;
+        Fri, 04 Dec 2020 20:49:10 -0800 (PST)
 Received: from localhost ([1.129.238.242])
-        by smtp.gmail.com with ESMTPSA id q23sm6620406pfg.18.2020.12.04.20.49.06
+        by smtp.gmail.com with ESMTPSA id 126sm5352861pgg.46.2020.12.04.20.49.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Dec 2020 20:49:07 -0800 (PST)
-Date:   Sat, 05 Dec 2020 14:49:00 +1000
+        Fri, 04 Dec 2020 20:49:09 -0800 (PST)
+Date:   Sat, 05 Dec 2020 14:49:04 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v8 11/12] mm/vmalloc: Hugepage vmalloc mappings
-To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "Jonathan.Cameron@Huawei.com" <Jonathan.Cameron@Huawei.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "lizefan@huawei.com" <lizefan@huawei.com>
-References: <20201128152559.999540-1-npiggin@gmail.com>
-        <20201128152559.999540-12-npiggin@gmail.com>
-        <e9d3a50e1b18f9ea1cdfdc221bef75db19273417.camel@intel.com>
-        <1607068679.lfd133za4h.astroid@bobo.none>
-        <2e8e1f3e47736e8f5e749cee85b7036cbf9cb1b5.camel@intel.com>
-In-Reply-To: <2e8e1f3e47736e8f5e749cee85b7036cbf9cb1b5.camel@intel.com>
+Subject: Re: [RFC v2 2/2] [MOCKUP] sched/mm: Lightweight lazy mm refcounting
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jann Horn <jannh@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>
+References: <1607065599.ecww2w3xq3.astroid@bobo.none>
+        <D9715BFE-744E-49B4-A10B-32735123BE6D@amacapital.net>
+In-Reply-To: <D9715BFE-744E-49B4-A10B-32735123BE6D@amacapital.net>
 MIME-Version: 1.0
-Message-Id: <1607142139.ple4gyiix8.astroid@bobo.none>
+Message-Id: <1607141044.0ibmnpwoeq.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Edgecombe, Rick P's message of December 5, 2020 4:33 am:
-> On Fri, 2020-12-04 at 18:12 +1000, Nicholas Piggin wrote:
->> Excerpts from Edgecombe, Rick P's message of December 1, 2020 6:21
->> am:
->> > On Sun, 2020-11-29 at 01:25 +1000, Nicholas Piggin wrote:
->> > > Support huge page vmalloc mappings. Config option
->> > > HAVE_ARCH_HUGE_VMALLOC
->> > > enables support on architectures that define HAVE_ARCH_HUGE_VMAP
->> > > and
->> > > supports PMD sized vmap mappings.
->> > >=20
->> > > vmalloc will attempt to allocate PMD-sized pages if allocating
->> > > PMD
->> > > size
->> > > or larger, and fall back to small pages if that was unsuccessful.
->> > >=20
->> > > Allocations that do not use PAGE_KERNEL prot are not permitted to
->> > > use
->> > > huge pages, because not all callers expect this (e.g., module
->> > > allocations vs strict module rwx).
->> >=20
->> > Several architectures (x86, arm64, others?) allocate modules
->> > initially
->> > with PAGE_KERNEL and so I think this test will not exclude module
->> > allocations in those cases.
->>=20
->> Ah, thanks. I guess archs must additionally ensure that their
->> PAGE_KERNEL allocations are suitable for huge page mappings before
->> enabling the option.
->>=20
->> If there is interest from those archs to support this, I have an
->> early (un-posted) patch that adds an explicit VM_HUGE flag that could
->> override the pessemistic arch default. It's not much trouble to add
->> this=20
->> to the large system hash allocations. It's very out of date now but
->> I=20
->> can at least give what I have to anyone doing an arch support that
->> wants it.
+Excerpts from Andy Lutomirski's message of December 5, 2020 12:37 am:
 >=20
-> Ahh, sorry, I totally missed that this was only enabled for powerpc.
 >=20
-> That patch might be useful for me actually. Or maybe a VM_NOHUGE, since
-> there are only a few places where executable vmallocs are created? I'm
-> not sure what the other issues are.
+>> On Dec 3, 2020, at 11:54 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
+>>=20
+>> =EF=BB=BFExcerpts from Andy Lutomirski's message of December 4, 2020 3:2=
+6 pm:
+>>> This is a mockup.  It's designed to illustrate the algorithm and how th=
+e
+>>> code might be structured.  There are several things blatantly wrong wit=
+h
+>>> it:
+>>>=20
+>>> The coding stype is not up to kernel standards.  I have prototypes in t=
+he
+>>> wrong places and other hacks.
+>>>=20
+>>> There's a problem with mm_cpumask() not being reliable.
+>>=20
+>> Interesting, this might be a way to reduce those IPIs with fairly=20
+>> minimal fast path cost. Would be interesting to see how much performance=
+=20
+>> advantage it has over my dumb simple shoot-lazies.
+>=20
+> My real motivation isn=E2=80=99t really performance per se. I think there=
+=E2=80=99s considerable value in keeping the core algorithms the same acros=
+s all architectures, and I think my approach can manage that with only a si=
+ngle hint from the architecture as to which CPUs to scan.
+>=20
+> With shoot-lazies, in contrast, enabling it everywhere would either malfu=
+nction or have very poor performance or even DoS issues on arches like arm6=
+4 and s390x that don=E2=80=99t track mm_cpumask at all.  I=E2=80=99m sure w=
+e could come up with some way to mitigate that, but I think that my approac=
+h may be better overall for keeping the core code uniform and relatively st=
+raightforward.
 
-Yeah good question, VM_HUGE might be safer but maybe it would be=20
-possible there's only a few problems that have to be annotated with
-VM_NOHUGE, good point. I'll dig it out and see.
-
-> I am endeavoring to have small module allocations share large pages, so
-> this infrastructure is a big help already.
-> https://lore.kernel.org/lkml/20201120202426.18009-1-rick.p.edgecombe@inte=
-l.com/
-
-Oh nice that's what I wanted to do next! We should try get this work
-for x86 as well then.
+I'd go the other way. The mm_cpumark, TLB, and lazy maintainence is=20
+different between architectures anyway. I'd keep the simple refcount,
+and the pretty simple shoot-lazies approaches for now at least until
+a bit more is done on other fronts. If x86 is shooting down lazies on=20
+the final TLB flush as well, then I might be inclined to think that's
+the better way to go in the long term. Shoot-lazies would be a bit of
+a bolted on hack for powerpc/hash but it has ~zero impact to core code
+really.
 
 Thanks,
 Nick
