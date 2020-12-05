@@ -2,101 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 962482CFEE3
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Dec 2020 21:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5427B2CFEE9
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Dec 2020 21:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbgLEUlc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Dec 2020 15:41:32 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:36658 "EHLO
+        id S1727071AbgLEUno (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Dec 2020 15:43:44 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:37066 "EHLO
         jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgLEUlc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Dec 2020 15:41:32 -0500
+        with ESMTP id S1725996AbgLEUno (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Dec 2020 15:43:44 -0500
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 506DF1C0B7C; Sat,  5 Dec 2020 21:40:50 +0100 (CET)
-Date:   Sat, 5 Dec 2020 21:40:49 +0100
+        id C4F971C0B8B; Sat,  5 Dec 2020 21:43:01 +0100 (CET)
+Date:   Sat, 5 Dec 2020 21:43:01 +0100
 From:   Pavel Machek <pavel@ucw.cz>
-To:     Alex Belits <abelits@marvell.com>
-Cc:     "nitesh@redhat.com" <nitesh@redhat.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        Prasun Kapoor <pkapoor@marvell.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "leon@sidebranch.com" <leon@sidebranch.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "pauld@redhat.com" <pauld@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v5 0/9] "Task_isolation" mode
-Message-ID: <20201205204049.GA8578@amd>
-References: <8d887e59ca713726f4fcb25a316e1e932b02823e.camel@marvell.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 00/14] An alternative series for asymmetric AArch32
+ systems
+Message-ID: <20201205204301.GB8578@amd>
+References: <20201124155039.13804-1-will@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+        protocol="application/pgp-signature"; boundary="kXdP64Ggrk/fb43R"
 Content-Disposition: inline
-In-Reply-To: <8d887e59ca713726f4fcb25a316e1e932b02823e.camel@marvell.com>
+In-Reply-To: <20201124155039.13804-1-will@kernel.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
-> General description
+On Tue 2020-11-24 15:50:25, Will Deacon wrote:
+> Hello folks,
 >=20
-> This is the result of development and maintenance of task isolation
-> functionality that originally started based on task isolation patch
-> v15 and was later updated to include v16. It provided predictable
-> environment for userspace tasks running on arm64 processors alongside
-> with full-featured Linux environment. It is intended to provide
-> reliable interruption-free environment from the point when a userspace
-> task enters isolation and until the moment it leaves isolation or
-> receives a signal intentionally sent to it, and was successfully used
-> for this purpose. While CPU isolation with nohz provides an
-> environment that is close to this requirement, the remaining IPIs and
-> other disturbances keep it from being usable for tasks that require
-> complete predictability of CPU timing.
+> Here's version four of the wonderful patches I previously posted here:
+>=20
+>   v1: https://lore.kernel.org/r/20201027215118.27003-1-will@kernel.org
+>   v2: https://lore.kernel.org/r/20201109213023.15092-1-will@kernel.org
+>   v3: https://lore.kernel.org/r/20201113093720.21106-1-will@kernel.org
+>=20
+> and which started life as a reimplementation of some patches from Qais:
+>=20
+>   https://lore.kernel.org/r/20201021104611.2744565-1-qais.yousef@arm.com
+>=20
+> The aim of this series is to allow 32-bit ARM applications to run on
+> arm64 SoCs where not all of the CPUs support the 32-bit instruction set.
+> Unfortunately, such SoCs are real and will continue to be productised
+> over the next few years at least.
 
-So... what kind of guarantees does this aim to provide / what tasks it
-is useful for?
+Out of curiosity, what systems are that?
 
-For real time response, we have other approaches.
+Is the 32-bit available on the big or on the little cores?
 
-If you want to guarantee performnace of the "isolated" task... I don't
-see how that works. Other tasks on the system still compete for DRAM
-bandwidth, caches, etc...
+And... fun way to accelerate demise of arm32 :-).
 
-So... what is the usecase?
-								Pavel
+Best regards,
+									Pavel
 --=20
 http://www.livejournal.com/~pavelmachek
 
---u3/rZRmxL6MmkK24
+--kXdP64Ggrk/fb43R
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iEYEARECAAYFAl/L8FEACgkQMOfwapXb+vJE3wCfYs+cxM/a7TO3oAUetWlr1POn
-XBIAn3IURI08m9SC3Yh05MPaBjmvFyYq
-=Y8jH
+iEYEARECAAYFAl/L8NUACgkQMOfwapXb+vJKawCgoM+JfmKVtgscUMb1upqBcin4
+lTMAn1VlyMbbfJqa4BTWIYugvngHmIor
+=yYfr
 -----END PGP SIGNATURE-----
 
---u3/rZRmxL6MmkK24--
+--kXdP64Ggrk/fb43R--
