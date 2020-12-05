@@ -2,130 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB33B2CFB20
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Dec 2020 12:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673572CFDC9
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Dec 2020 19:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729489AbgLELQ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Dec 2020 06:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S1725923AbgLESoS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Dec 2020 13:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729564AbgLELLM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Dec 2020 06:11:12 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500FAC0613D1
-        for <linux-arch@vger.kernel.org>; Sat,  5 Dec 2020 03:10:15 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id r5so8523005eda.12
-        for <linux-arch@vger.kernel.org>; Sat, 05 Dec 2020 03:10:15 -0800 (PST)
+        with ESMTP id S1726954AbgLEQtq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Dec 2020 11:49:46 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA3BC02B8F9
+        for <linux-arch@vger.kernel.org>; Sat,  5 Dec 2020 08:11:57 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id m5so4932605pjv.5
+        for <linux-arch@vger.kernel.org>; Sat, 05 Dec 2020 08:11:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=284Aswjz/2aC/ESWP2Gvj4AFxGv5jL6flAbPPGxPgBs=;
-        b=N8xLr/exrAAFOyKCgcYejTnwi5NhKD9FvXUr2xSuCjk1Zm+/U5r6t2wwz154xabUfm
-         Hq40S47ibOK6mrdzy0V8ASiOR4AZbqjDDZh7fAysCYLuYHKLujWexjeO8SI1F6qFfeiN
-         q+5rW9/BGZ7uRivpDJLMD7WkXl6JAVT618TZs=
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=Mz/7Yi61thJ88HE692aK3MZiSQS4EROkVabvy/8vXTw=;
+        b=DhL2umoxMynanfmyKr00u4At2reQZYap7bLysS7iO2w5j378kBnpkqTo925b1AMXV9
+         GfnmqNtET9W86zssaaOutcBbaatQqvIuT0cFpK/81Z7C+e8JNbfIu0fT5XUcH3GNcfdc
+         TB+RF64MfXALrRuW3BwDZoBwlIBtNKpXrKm5Y0/qTBIU331wiDfW9P9m9Ss4s+Q3hmKj
+         IbLQSoUJ7xJOh7w9Sws/9AcCKZ+1eQgOt1ThRR6L9HNeFOZO+EVk2vhjr0XajH5/mYrN
+         BMTdOzYSYOvXdJvjmZaBKKSwrzDg8IwR22EhWuj7sLHF1rrlBKjTfwBTm4b8Mzs0E+Hn
+         xxiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=284Aswjz/2aC/ESWP2Gvj4AFxGv5jL6flAbPPGxPgBs=;
-        b=sMc53I524bWziH5cK3CxcWoJ/YDLyYBDlwcoTg6nVNU0T4alpKPb8eA50djvYa/ic8
-         7DJTD4MmU6XtoRIP8TgBHi9QCLZvybmo8ym9DFYYe3jdL7AaoCJm/917IISCuCtDDhoD
-         lRaTHr9tcIz6bLjqOlhunAymSP/mOpOwJLkEZnIQAblQN1of3D6lF8Gc1ggLunnNvd5z
-         Ze0zLDH+oGI0hfe5Slw2e3/Nbpj1Hw5fwS+gQPEAkJXfAiJ7sS3X4S/CwTqaYsytcF1F
-         MMoxcfXpKb/QOk7zIGD0dvmibfwnYEbv3jm+uDE0DOML2gGQwgA6dlssUHzoTo6g7qXa
-         bpuw==
-X-Gm-Message-State: AOAM530EQxFJ4WO/PEm1QyapKVRzK8TNgCkiZQSgr03Conlr7MG0L6zW
-        zazM8rPzQXg8UUrHihYqACYshQ==
-X-Google-Smtp-Source: ABdhPJzYl2i9djyB85mC4XSa8URKw2iEGGxnQ5DBeKjmiQT4KYj06KTCr2IK69IPVAUYf4H5Dk8NTg==
-X-Received: by 2002:a50:9991:: with SMTP id m17mr11593464edb.48.1607166613960;
-        Sat, 05 Dec 2020 03:10:13 -0800 (PST)
-Received: from [192.168.1.149] (5.186.115.188.cgn.fibianet.dk. [5.186.115.188])
-        by smtp.gmail.com with ESMTPSA id d4sm5520008edq.36.2020.12.05.03.10.13
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=Mz/7Yi61thJ88HE692aK3MZiSQS4EROkVabvy/8vXTw=;
+        b=ja2fFkZuLNy3oh/QjpOO824vX/eiWrS+3W9bK3Mnau/T4pkD802Bt51VKrZ4Ltbmr2
+         j1Et2Wg+Yj1Ssk+BszGzs5zZwUFbjt3O0Wykr7HtQM+JhfJ6T6ZiLebkG4jRUhoCA+56
+         D2OYLcRR6yzGq8h4eHp7lou1uZJ25graxKZDddzdyLuTMjMyT0p980ymDM84ovh4+iVw
+         OU2rXgTzoMkRnqjQB3miVRT+sN+5UXKkbuOfJnwgiKyUtqp0gH1+PiSstKLiiYhlQhbS
+         gXe5j6wHEJajhJEqiQzDb/XmIEaHlLslq6A7Ktx/w4d1lJusDosqv5IJw9yCWCiWOCNS
+         mD9g==
+X-Gm-Message-State: AOAM533dVcOJY/4ZLFvVLmmdzKJxMU6CRpG1VYHu+Yj0a7igFHpvIrYc
+        0gWUT3a7TIiSeHoMu16F+yKTDw==
+X-Google-Smtp-Source: ABdhPJwZpG0woeNrtDGe9OhzFE0RR6dieb9MhtJVWcHQn4MXBKdlSYP/d9e6WoDZV96QQKI0PbKqlA==
+X-Received: by 2002:a17:902:bd4c:b029:d8:fd6a:6ca2 with SMTP id b12-20020a170902bd4cb02900d8fd6a6ca2mr8830175plx.53.1607184717112;
+        Sat, 05 Dec 2020 08:11:57 -0800 (PST)
+Received: from ?IPv6:2601:646:c200:1ef2:c541:6c6c:97fe:790? ([2601:646:c200:1ef2:c541:6c6c:97fe:790])
+        by smtp.gmail.com with ESMTPSA id mr7sm5466394pjb.31.2020.12.05.08.11.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Dec 2020 03:10:13 -0800 (PST)
-Subject: Re:
-To:     Yury Norov <yury.norov@gmail.com>, Yun Levi <ppbuk5246@gmail.com>
-Cc:     dushistov@mail.ru, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        richard.weiyang@linux.alibaba.com, joseph.qi@linux.alibaba.com,
-        skalluru@marvell.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <CAM7-yPQcmU3MM66oAHQ6kcEukPFgj074_h-S-S+O53Lrx2yeBg@mail.gmail.com>
- <20201202094717.GX4077@smile.fi.intel.com>
- <c79b08e9-d36a-849e-d023-6fa155043aa9@rasmusvillemoes.dk>
- <CAM7-yPTsy+wJO8oQ7srjiXk+VjFFSUdJfdnVx9Ma_H8jJJnZKA@mail.gmail.com>
- <CAAH8bW-jUeFVU-0OrJzK-MuGgKJgZv38RZugEQzFRJHSXFRRDA@mail.gmail.com>
- <CAM7-yPRBPP6SFzdmwWF5Y99g+aWcp=OY9Uvp-5h1MSDPmsORNw@mail.gmail.com>
- <CAAH8bW-+XnNsd9p3xZ1utmyY24gaBa0ko4tngBii4T+2cMkcYg@mail.gmail.com>
- <CAM7-yPQCWj6rOyLEgOqF3HGkFV1WKtqyVhEtDbS3HW=2A-HuBA@mail.gmail.com>
- <CAM7-yPTtiVnUztE=xpNYgRcZTGd1aX_V9ZHd=2YZYc1uQNBXtw@mail.gmail.com>
- <a0cc0d2e-9c55-8546-f070-26feed5de37f@rasmusvillemoes.dk>
- <CAM7-yPQrvYUwX-cbgpzhomCTFEi9sQ9iGuLNcL-Fsj7XZ0knhw@mail.gmail.com>
- <CAAH8bW9=J_now4SU=-WzvBOa=ftStgGVpspyw_g7oafbuNHNHQ@mail.gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <65bcccd3-db04-8056-e57c-0976a1eccfd5@rasmusvillemoes.dk>
-Date:   Sat, 5 Dec 2020 12:10:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAAH8bW9=J_now4SU=-WzvBOa=ftStgGVpspyw_g7oafbuNHNHQ@mail.gmail.com>
+        Sat, 05 Dec 2020 08:11:56 -0800 (PST)
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH 2/8] x86: use exit_lazy_tlb rather than membarrier_mm_sync_core_before_usermode
+Date:   Sat, 5 Dec 2020 08:11:54 -0800
+Message-Id: <116A6B40-C77B-4B6A-897B-18342CD62CEC@amacapital.net>
+References: <1607152918.fkgmomgfw9.astroid@bobo.none>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+In-Reply-To: <1607152918.fkgmomgfw9.astroid@bobo.none>
+To:     Nicholas Piggin <npiggin@gmail.com>
+X-Mailer: iPhone Mail (18B121)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 03/12/2020 19.46, Yury Norov wrote:
 
-> I would prefer to avoid changing the find*bit() semantics. As for now,
-> if any of find_*_bit()
-> finds nothing, it returns the size of the bitmap it was passed.
+> On Dec 5, 2020, at 12:00 AM, Nicholas Piggin <npiggin@gmail.com> wrote:
+>=20
+>=20
+> I disagree. Until now nobody following it noticed that the mm gets
+> un-lazied in other cases, because that was not too clear from the
+> code (only indirectly using non-standard terminology in the arch
+> support document).
 
-Yeah, we should actually try to fix that, it causes bad code generation.
-It's hard, because callers of course do that "if ret == size" check. But
-it's really silly that something like find_first_bit needs to do that
-"min(i*BPL + __ffs(word), size)" - the caller does a comparison anyway,
-that comparison might as well be "ret >= size" rather than "ret ==
-size", and then we could get rid of that branch (which min() necessarily
-becomes) at the end of find_next_bit.
+> In other words, membarrier needs a special sync to deal with the case=20
+> when a kthread takes the mm.
 
-I haven't dug very deep into this, but I could also imagine the
-arch-specific parts of this might become a little easier to do if the
-semantics were just "if no such bit, return an indeterminate value >=
-the size".
+I don=E2=80=99t think this is actually true. Somehow the x86 oddities about C=
+R3 writes leaked too much into the membarrier core code and comments. (I dou=
+bt this is x86 specific.  The actual x86 specific part seems to be that we c=
+an return to user mode without syncing the instruction stream.)
 
-> Changing this for
-> a single function would break the consistency, and may cause problems
-> for those who
-> rely on existing behaviour.
+As far as I can tell, membarrier doesn=E2=80=99t care at all about laziness.=
+ Membarrier cares about rq->curr->mm.  The fact that a cpu can switch its ac=
+tual loaded mm without scheduling at all (on x86 at least) is entirely besid=
+e the point except insofar as it has an effect on whether a subsequent switc=
+h_mm() call serializes.  If we notify membarrier about x86=E2=80=99s asynchr=
+onous CR3 writes, then membarrier needs to understand what to do with them, w=
+hich results in an unmaintainable mess in membarrier *and* in the x86 code.
 
-True. But I think it should be possible - I suppose most users are via
-the iterator macros, which could all be updated at once. Changing ret ==
-size to ret >= size will still work even if the implementations have not
-been switched over, so it should be doable.
+I=E2=80=99m currently trying to document how membarrier actually works, and h=
+opefully this will result in untangling membarrier from mmdrop() and such.
 
-> 
-> Passing non-positive size to find_*_bit() should produce undefined
-> behaviour, because we cannot dereference a pointer to the bitmap in
-> this case; this is most probably a sign of a problem on a caller side
-> anyways.
-
-No, the out-of-line bitmap functions should all handle the case of a
-zero-size bitmap sensibly.
-
-Is bitmap full? Yes (all the 0 bits are set).
-Is bitmap empty? Yes, (none of the 0 bits are set).
-Find the first bit set (returns 0, there's no such bit)
-
-Etc. The static inlines for small_const_nbits do assume that the pointer
-can be dereferenced, which is why small_const_nbits was updated to mean
-1<=bits<=BITS_PER_LONG rather than just bits<=BITS_PER_LONG.
-
-Rasmus
+A silly part of this is that x86 already has a high quality implementation o=
+f most of membarrier(): flush_tlb_mm().  If you flush an mm=E2=80=99s TLB, w=
+e carefully propagate the flush to all threads, with attention to memory ord=
+ering.  We can=E2=80=99t use this directly as an arch-specific implementatio=
+n of membarrier because it has the annoying side affect of flushing the TLB a=
+nd because upcoming hardware might be able to flush without guaranteeing a c=
+ore sync.  (Upcoming means Zen 3, but the Zen 3 implementation is sadly not u=
+sable by Linux.)
