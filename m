@@ -2,154 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 520A42CFFAF
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 00:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13922CFFC0
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 00:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbgLEXPq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Dec 2020 18:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726011AbgLEXPq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Dec 2020 18:15:46 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB87C0613D1;
-        Sat,  5 Dec 2020 15:15:05 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id o4so5913743pgj.0;
-        Sat, 05 Dec 2020 15:15:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=L+vg4JbP0FJBCP1pF1I695Sm385f278Rs5jRmS9rNXg=;
-        b=QqSC0/j6vjRBOiUDUATi/LPsIVAKUy7bK3rktA0IiR7ML8OM2DpeGXtMsUyK3nMwvk
-         pSIpV88iDIfxTLuHlmK8QbBnKk9K3t3fr+y6EQaJIyRri4NV/kXIDMmBsMZJZSctTZtK
-         HhdYeIA6jeB/vHZdcEGMnXvdBMLb3PuBdsn0rJvHnz/Lly9SVkMu+NWh4/mOtxfPk22B
-         G98NTD3lNPX4TNB+6ZX95CA788LnFcXhbCyOA600VVkyE4El+oW55ey3b5hgAYD+ZvMV
-         XEhp7uyplSDklj4P9m6cf1EiAoFeRjIeP8qF9dgrcpjqlXWreqnm2tGOqgBF6WlFcWiJ
-         4FLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=L+vg4JbP0FJBCP1pF1I695Sm385f278Rs5jRmS9rNXg=;
-        b=js+5CWAzZhwlp8x97vYdjl9tKnmugqScV8+PLLz8H+GkhVwkFlW98Au7CMSNIZQvIX
-         wHXNE87XwarFlWLtzVJ3eMUl09aKFhRkJ+CDH+2G349iYEKzxzSwRHO3CXPKOcGWPWGa
-         KyyW6AXZOzVDrdraRssjomIcfmmTayfd6Kp7g7AfPKOrNq2zVeSIY84nQaaKKDDEXA9c
-         0YWjWxtk7/vCdKwA84MLQ8sWJ39XrBNCzw6n+7bfEVCb+M4GMCM6gUQg9vi4nHk0i5f4
-         SqbXjRoHTmABOxYSPt6BOUW/h6MvR8P+/+MtWzvkDT4qncvP137fP6r3rRSQ+JADtmY7
-         cF2w==
-X-Gm-Message-State: AOAM533Pzm2iGBcYLlHC3mpAYcc6lmeQ6ixoq5zYboCJmc1HFlfNMHHo
-        rV/NEhqoHNAOECz+sP/aQ26baZ5qaBI=
-X-Google-Smtp-Source: ABdhPJzfxzuJbfqX3AxcZgkq+sDJtUgImoz4dGsHTfVrStKXtO6JvVyi6Isgck4AhVl4gjBk5OYlzg==
-X-Received: by 2002:a63:1107:: with SMTP id g7mr12703758pgl.432.1607210105367;
-        Sat, 05 Dec 2020 15:15:05 -0800 (PST)
-Received: from localhost ([1.129.241.238])
-        by smtp.gmail.com with ESMTPSA id k26sm9514644pfg.8.2020.12.05.15.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Dec 2020 15:15:04 -0800 (PST)
-Date:   Sun, 06 Dec 2020 09:14:57 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 2/8] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-References: <1607152918.fkgmomgfw9.astroid@bobo.none>
-        <116A6B40-C77B-4B6A-897B-18342CD62CEC@amacapital.net>
-In-Reply-To: <116A6B40-C77B-4B6A-897B-18342CD62CEC@amacapital.net>
+        id S1725784AbgLEX0a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Dec 2020 18:26:30 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55620 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725270AbgLEX03 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Dec 2020 18:26:29 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607210746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OF/yxcOl24sCZMNn4pFXh470oPoxUajiPWkLNQAbERU=;
+        b=qM/BWflaQxEXLQ8tIgzhYUuf1xoW7bdG4CvFJrmU0VDLsTE391cb0fqh1cULmil6JPkN5H
+        CjM9f71zxVI6Sk6dpZdpMv1/Dmw/Ki6KPTrX209JefSyxBKR9gikRtVtEd2SDYLG5WPI34
+        6CcwxqoVWHvlbSCVv7N6hjn1WunbYGvZ0LdHs9tCkU7kmNqqKPy+2SusNfTxHqzjDH8xHD
+        Y1qThnsAJvud0e+1SToR7En8O3qIzL05tGCeqq6uPq9qkX5Rgy3UCVdCx6Yovo0QV/UY4c
+        vLzoVpeqNJv/og+qJE/8OA0XGq+IVUZNcsbicbnWcoQYUKcC8m2Dk6fgKORH0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607210746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OF/yxcOl24sCZMNn4pFXh470oPoxUajiPWkLNQAbERU=;
+        b=F0Wpl6o+XvAhNAela/BGvtsgKXboiTn2PGy6xEd0AhejBgQ9J5NvG+DtqLBW5WYakJVmng
+        7IXzd1Pi4pU5X8CQ==
+To:     Pavel Machek <pavel@ucw.cz>, Alex Belits <abelits@marvell.com>
+Cc:     "nitesh\@redhat.com" <nitesh@redhat.com>,
+        "frederic\@kernel.org" <frederic@kernel.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "linux-api\@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "davem\@davemloft.net" <davem@davemloft.net>,
+        "trix\@redhat.com" <trix@redhat.com>,
+        "mingo\@kernel.org" <mingo@kernel.org>,
+        "catalin.marinas\@arm.com" <catalin.marinas@arm.com>,
+        "rostedt\@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterx\@redhat.com" <peterx@redhat.com>,
+        "linux-arch\@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "mtosatti\@redhat.com" <mtosatti@redhat.com>,
+        "will\@kernel.org" <will@kernel.org>,
+        "peterz\@infradead.org" <peterz@infradead.org>,
+        "leon\@sidebranch.com" <leon@sidebranch.com>,
+        "linux-arm-kernel\@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "pauld\@redhat.com" <pauld@redhat.com>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 0/9] "Task_isolation" mode
+In-Reply-To: <20201205204049.GA8578@amd>
+References: <8d887e59ca713726f4fcb25a316e1e932b02823e.camel@marvell.com> <20201205204049.GA8578@amd>
+Date:   Sun, 06 Dec 2020 00:25:45 +0100
+Message-ID: <87h7oz96o6.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Message-Id: <1607209402.fogfsh8ov4.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Andy Lutomirski's message of December 6, 2020 2:11 am:
->=20
->> On Dec 5, 2020, at 12:00 AM, Nicholas Piggin <npiggin@gmail.com> wrote:
->>=20
->>=20
->> I disagree. Until now nobody following it noticed that the mm gets
->> un-lazied in other cases, because that was not too clear from the
->> code (only indirectly using non-standard terminology in the arch
->> support document).
->=20
->> In other words, membarrier needs a special sync to deal with the case=20
->> when a kthread takes the mm.
->=20
-> I don=E2=80=99t think this is actually true. Somehow the x86 oddities abo=
-ut=20
-> CR3 writes leaked too much into the membarrier core code and comments.=20
-> (I doubt this is x86 specific.  The actual x86 specific part seems to=20
-> be that we can return to user mode without syncing the instruction=20
-> stream.)
->=20
-> As far as I can tell, membarrier doesn=E2=80=99t care at all about lazine=
-ss.=20
-> Membarrier cares about rq->curr->mm.  The fact that a cpu can switch=20
-> its actual loaded mm without scheduling at all (on x86 at least) is=20
-> entirely beside the point except insofar as it has an effect on=20
-> whether a subsequent switch_mm() call serializes.
+Pavel,
 
-Core membarrier itself doesn't care about laziness, which is why the
-membarrier flush should go in exit_lazy_tlb() or other x86 specific
-code (at least until more architectures did the same thing and we moved
-it into generic code). I just meant this non-serialising return as=20
-documented in the membarrier arch enablement doc specifies the lazy tlb
-requirement.
+On Sat, Dec 05 2020 at 21:40, Pavel Machek wrote:
+> So... what kind of guarantees does this aim to provide / what tasks it
+> is useful for?
+>
+> For real time response, we have other approaches.
 
-If an mm was lazy tlb for a kernel thread and then it becomes unlazy,
-and if switch_mm is serialising but return to user is not, then you
-need a serialising instruction somewhere before return to user. unlazy
-is the logical place to add that, because the lazy tlb mm (i.e.,=20
-switching to a kernel thread and back without switching mm) is what=20
-opens the hole.
+Depends on your requirements. Some problems are actually better solved
+with busy polling. See below.
 
-> If we notify=20
-> membarrier about x86=E2=80=99s asynchronous CR3 writes, then membarrier n=
-eeds=20
-> to understand what to do with them, which results in an unmaintainable=20
-> mess in membarrier *and* in the x86 code.
+> If you want to guarantee performnace of the "isolated" task... I don't
+> see how that works. Other tasks on the system still compete for DRAM
+> bandwidth, caches, etc...
 
-How do you mean? exit_lazy_tlb is the opposite, core scheduler notifying
-arch code about when an mm becomes not-lazy, and nothing to do with
-membarrier at all even. It's a convenient hook to do your un-lazying.
-I guess you can do it also checking things in switch_mm and keeping state
-in arch code, I don't think that's necessarily the best place to put it.
+Applications which want to run as undisturbed as possible. There is
+quite a range of those:
 
-So membarrier code is unchanged (it cares that the serialise is done at
-un-lazy time), core code is simpler (no knowledge of this membarrier=20
-quirk and it already knows about lazy-tlb so the calls actually improve=20
-the documentation), and x86 code I would argue becomes nicer (or no real
-difference at worst) because you can move some exit lazy tlb handling to
-that specific call rather than decipher it from switch_mm.
+  - Hardware in the loop simulation is today often done with that crude
+    approach of "offlining" a CPU and then instead of playing dead
+    jumping to a preloaded bare metal executable. That's a horrible hack
+    and impossible to debug, but gives them the results they need to
+    achieve. These applications are well optimized vs. cache and memory
+    foot print, so they don't worry about these things too much and they
+    surely don't run on SMI and BIOS value add inflicted machines.
 
->=20
-> I=E2=80=99m currently trying to document how membarrier actually works, a=
-nd=20
-> hopefully this will result in untangling membarrier from mmdrop() and=20
-> such.
+    Don't even think about waiting for an interrupt to achieve what
+    these folks are doing. So no, there are problems which a general
+    purpose realtime OS cannot solve ever.
 
-That would be nice.
+  - HPC computations on large data sets. While the memory foot print is
+    large the access patterns are cache optimized. 
 
->=20
-> A silly part of this is that x86 already has a high quality=20
-> implementation of most of membarrier(): flush_tlb_mm().  If you flush=20
-> an mm=E2=80=99s TLB, we carefully propagate the flush to all threads, wit=
-h=20
-> attention to memory ordering.  We can=E2=80=99t use this directly as an=20
-> arch-specific implementation of membarrier because it has the annoying=20
-> side affect of flushing the TLB and because upcoming hardware might be=20
-> able to flush without guaranteeing a core sync.  (Upcoming means Zen=20
-> 3, but the Zen 3 implementation is sadly not usable by Linux.)
->=20
+    The problem there is that any unnecessary IPI, tick interrupt or
+    whatever nuisance is disturbing the carefully optimized cache usage
+    and alone getting rid of the timer interrupt gained them measurable
+    performance. Even very low single digit percentage of runtime saving
+    is valuable for these folks because the compute time on such beasts
+    is expensive.
 
-A hardware broadcast TLB flush, you mean? What makes it unusable by=20
-Linux out of curiosity?
+  - Realtime guests in KVM. With posted interrupts and a fully populated
+    host side page table there is no point in running host side
+    interrupts or IPIs for random accounting or whatever purposes as
+    they affect the latency in the guest. With all the side effects
+    mitigated and a properly set up guest and host it is possible to get
+    to a zero exit situation after the bootup phase which means pretty
+    much matching bare metal behaviour.
+
+    Yes, you can do that with e.g. Jailhouse as well, but you lose lots
+    of the fancy things KVM provides. And people care about these not
+    just because they are fancy. They care because their application
+    scenario needs them.
+
+There are more reasons why people want to be able to get as much
+isolation from the OS as possible but at the same time have a sane
+execution environment, debugging, performance monitoring and the OS
+provided protection mechanisms instead of horrible hacks.
+
+Isolation makes sense for a range of applications and there is no reason
+why Linux should not support them. 
+
+Thanks,
+
+        tglx
