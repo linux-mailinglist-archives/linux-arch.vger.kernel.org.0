@@ -2,110 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AF12D0153
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 07:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E15E2D0159
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 07:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgLFGvT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Dec 2020 01:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S1726589AbgLFGvc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Dec 2020 01:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgLFGvS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 01:51:18 -0500
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAA8C0613D0;
-        Sat,  5 Dec 2020 22:50:32 -0800 (PST)
-Received: by mail-io1-xd41.google.com with SMTP id r9so10168285ioo.7;
-        Sat, 05 Dec 2020 22:50:32 -0800 (PST)
+        with ESMTP id S1725867AbgLFGvb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 01:51:31 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491BBC0613D4;
+        Sat,  5 Dec 2020 22:50:51 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id 11so611892pfu.4;
+        Sat, 05 Dec 2020 22:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xEFX9m1tSvdSJQ3/EiaRpiuUqPA/jqJsIXCgLkJIHTI=;
-        b=DzK6LtMphXGVMKUPACceGTUsVVmN1cNs/QClR/+YjCKMnWe4BnLQBIJsKr7tKxkNyY
-         w8fYOkrp4AJry9LpefYGu1ZK0PRDfStCJRHpd340BZOhkyFknzV9Qv1a8xkVOdyY9zFf
-         gj6zMq1tQBs9MJGB2si/iNyk8qcAPb1OkxqdQ0kknvb2P9OxzdM9jt0tLWQNa3/KRgUW
-         26EXDEONiip05JtUgT3RheVciiRVzO2cil6qzk6OBDikvUihqXg+enkPIQLrcSwu//N1
-         F9oG7BK1bIa+jJndHBOVysL6/gUrP1m+nsgJWeLkzCRdImG92pho9jGdEKn0kHXouQT4
-         KWgQ==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=FX0UailaNX0q+4Z+Y5R9hIxj0ArhyVPsbwe2N/jEEzM=;
+        b=YQWA/4ZTe6M9q3MYP55f69EOLM9UY5efkxhwcV0Bwv0uj88o9COAFSRYJY7pBndWOd
+         ICSlePTIlrnvZvMc1BR0pQbhhDfT2t/tVhNg55npDn98IUnh7g66B/u4Rl5adDmqosxM
+         i1qELRcX1rtFXX82Kx8XZgTVDkz/FmxXPuPWXAgUxrOKXIvo/8n4IBLcVgC622HEdaDz
+         BXkYhNG2in8wR9Fc5cucJEz1whldUnEfbeQvJrXpJxRU/ejdPOwZbwU40UULo6sqMUo2
+         afDB43BYkRChqcE9zOkqCfJpXCiIEdBNU5KHxDAYEbckiluDwUL/90cImovoW6NdwASx
+         f8PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xEFX9m1tSvdSJQ3/EiaRpiuUqPA/jqJsIXCgLkJIHTI=;
-        b=U7GtvkKDm7TRWA95HV5KbJYsyVb4eET/SBEyYuQLmyureDm5cZADZuMXbBgmIYXBzZ
-         Tse6wUSKxXp7ymv3aS2rEwRPj7FvZZ0nEq4zKclEixBKBypaYe84eTWsCB3sD20X1o/k
-         cA5Cj/mo6A1HqWx+B4NPis5EEuvvLa44XxVqom8UrznYcFORrPus3tMPWM25FuWaPd/E
-         jOWkC+GWS7HMeK/BpmYSUn+H+cB5G8aGFu79QLKSDCom76sutIV4eLrDG/BCCDHbOXKz
-         ahdxoS2XzW/skNbjSgtrqZQ6bLtgxSSTGrgEpXxgdtbhyl7dTqPTdZeGImOcktzHazCf
-         BSHQ==
-X-Gm-Message-State: AOAM533MFKHfzni8Ou4ZDNIP/0pIL9jOZxihVn0KYQp4A0JH13aZTyP5
-        FpnsihFuMpI2HrqphV8xPkI=
-X-Google-Smtp-Source: ABdhPJwZVi5tRrvxZ13o7P0VRkdeEgYwBAdwWzBfj6NClRTOtnOrrhmD5vISX/qn43sceqJ+Sz+PdQ==
-X-Received: by 2002:a5d:958b:: with SMTP id a11mr13034197ioo.160.1607237432100;
-        Sat, 05 Dec 2020 22:50:32 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id v23sm4068308iol.21.2020.12.05.22.50.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=FX0UailaNX0q+4Z+Y5R9hIxj0ArhyVPsbwe2N/jEEzM=;
+        b=QNadYS+ZKwtK2oViKiwsWN9KZgzXEW7kMnzaSqHSucH5MRH6VG+htFzL4f2FluGtrv
+         iIBFvtaUU+Y3q2yc9UcTkKOH5fl1+4dMV/ChsU7jna3ZAPIhOoDidyyD0yduVHDnJjTj
+         aByB/rqgIPL3Cm6W6+tuIOmve804qV+9ABhQdutMjMG1tom4pYvft9H+N0OzB3PTe64V
+         TDCUyYobM7zLAPRdXQSI9trHch6dRjBbeAvRjaWvxr5qXm0+/KaER/DK+stqSgiZKb/3
+         e37pwhAHp2IgFmDaqbA0foMnH28VCUnap4ow1NZ/pfMRHQOtEIq91iGSP35MyOCGMlsS
+         nFeg==
+X-Gm-Message-State: AOAM530Sc25VEHi4UmSE6FMQXl3nT11uGNJE1zkS/7f6/YL+05Ty36e9
+        9O3ksjoPraGth2eap4eBYp8=
+X-Google-Smtp-Source: ABdhPJzuwuSeBYeYRy4WQup+GzCaOHrHXR0vxzD0VDqSyoE/RH8FPQ1/Qdn7NdGJhugZrmwZ4HzhXQ==
+X-Received: by 2002:a65:490c:: with SMTP id p12mr13995291pgs.98.1607237450811;
+        Sat, 05 Dec 2020 22:50:50 -0800 (PST)
+Received: from ubuntu ([211.226.85.205])
+        by smtp.gmail.com with ESMTPSA id z23sm2182499pfn.202.2020.12.05.22.50.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Dec 2020 22:50:30 -0800 (PST)
-Date:   Sat, 5 Dec 2020 23:50:28 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>, Jian Cai <jiancai@google.com>,
-        Kristof Beyls <Kristof.Beyls@arm.com>
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-Message-ID: <20201206065028.GA2819096@ubuntu-m3-large-x86>
-References: <20201201213707.541432-1-samitolvanen@google.com>
- <20201203112622.GA31188@willie-the-truck>
- <CABCJKueby8pUoN7f5=6RoyLSt4PgWNx8idUej0sNwAi0F3Xqzw@mail.gmail.com>
- <20201203182252.GA32011@willie-the-truck>
- <CAKwvOdnvq=L=gQMv9MHaStmKMOuD5jvffzMedhp3gytYB6R7TQ@mail.gmail.com>
- <CABCJKufgkq+k0DeYaXrzjXniy=T_N4sN1bxoK9=cUxTZN5xSVQ@mail.gmail.com>
+        Sat, 05 Dec 2020 22:50:50 -0800 (PST)
+Date:   Sun, 6 Dec 2020 15:50:40 +0900
+From:   Levi Yun <ppbuk5246@gmail.com>
+To:     akpm@linux-foundation.org, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com,
+        richard.weiyang@linux.alibaba.com, christian.brauner@ubuntu.com,
+        arnd@arndb.de, jpoimboe@redhat.com, changbin.du@intel.com,
+        rdunlap@infradead.org, masahiroy@kernel.org,
+        gregkh@linuxfoundation.org, peterz@infradead.org,
+        peter.enderborg@sony.com, krzk@kernel.org,
+        brendanhiggins@google.com, keescook@chromium.org,
+        broonie@kernel.org, matti.vaittinen@fi.rohmeurope.com,
+        mhiramat@kernel.org, jpa@git.mail.kapsi.fi, nivedita@alum.mit.edu,
+        glider@google.com, orson.zhai@unisoc.com,
+        takahiro.akashi@linaro.org, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com, dushistov@mail.ru
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+Subject: [PATCH v2 8/8] ufs/util.h: Apply new find_last_zero_bit.
+Message-ID: <20201206065040.GA6385@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABCJKufgkq+k0DeYaXrzjXniy=T_N4sN1bxoK9=cUxTZN5xSVQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 04, 2020 at 02:52:41PM -0800, Sami Tolvanen wrote:
-> On Thu, Dec 3, 2020 at 2:32 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > So I'd recommend to Sami to simply make the Kconfig also depend on
-> > clang's integrated assembler (not just llvm-nm and llvm-ar).
-> 
-> Sure, sounds good to me. What's the preferred way to test for this in Kconfig?
-> 
-> It looks like actually trying to test if we have an LLVM assembler
-> (e.g. using $(as-instr,.section
-> ".linker-options","e",@llvm_linker_options)) doesn't work as Kconfig
-> doesn't pass -no-integrated-as to clang here. I could do something
-> simple like $(success,echo $(LLVM) $(LLVM_IAS) | grep -q "1 1").
-> 
-> Thoughts?
-> 
-> Sami
+Former find_last_zero_bit in ufs makes complie error when we add
+find_last_zero_bit in lib/find_bit.c
+We remove former find_last_zero_bit in ufs which iterates per char,
+And apply new find_last_zero_bit in lib.
 
-I think
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+---
+ fs/ufs/util.h | 30 +++---------------------------
+ 1 file changed, 3 insertions(+), 27 deletions(-)
 
-    depends on $(success,test $(LLVM_IAS) -eq 1)
-
-should work, at least according to my brief test.
-
-Cheers,
-Nathan
+diff --git a/fs/ufs/util.h b/fs/ufs/util.h
+index 4931bec1a01c..3024f2076feb 100644
+--- a/fs/ufs/util.h
++++ b/fs/ufs/util.h
+@@ -413,29 +413,6 @@ static inline unsigned _ubh_find_next_zero_bit_(
+ 	return (base << uspi->s_bpfshift) + pos - begin;
+ } 	
+ 
+-static inline unsigned find_last_zero_bit (unsigned char * bitmap,
+-	unsigned size, unsigned offset)
+-{
+-	unsigned bit, i;
+-	unsigned char * mapp;
+-	unsigned char map;
+-
+-	mapp = bitmap + (size >> 3);
+-	map = *mapp--;
+-	bit = 1 << (size & 7);
+-	for (i = size; i > offset; i--) {
+-		if ((map & bit) == 0)
+-			break;
+-		if ((i & 7) != 0) {
+-			bit >>= 1;
+-		} else {
+-			map = *mapp--;
+-			bit = 1 << 7;
+-		}
+-	}
+-	return i;
+-}
+-
+ #define ubh_find_last_zero_bit(ubh,begin,size,offset) _ubh_find_last_zero_bit_(uspi,ubh,begin,size,offset)
+ static inline unsigned _ubh_find_last_zero_bit_(
+ 	struct ufs_sb_private_info * uspi, struct ufs_buffer_head * ubh,
+@@ -453,15 +430,14 @@ static inline unsigned _ubh_find_last_zero_bit_(
+ 			    size + (uspi->s_bpf - start), uspi->s_bpf)
+ 			- (uspi->s_bpf - start);
+ 		size -= count;
+-		pos = find_last_zero_bit (ubh->bh[base]->b_data,
+-			start, start - count);
+-		if (pos > start - count || !size)
++		pos = find_last_zero_bit_le(ubh->bh[base]->b_data, start + 1);
++		if ((pos < start + 1 && pos > start - count) || !size)
+ 			break;
+ 		base--;
+ 		start = uspi->s_bpf;
+ 	}
+ 	return (base << uspi->s_bpfshift) + pos - begin;
+-} 	
++}
+ 
+ #define ubh_isblockclear(ubh,begin,block) (!_ubh_isblockset_(uspi,ubh,begin,block))
+ 
+-- 
+2.27.0
