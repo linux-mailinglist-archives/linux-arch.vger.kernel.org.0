@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4D22D0146
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 07:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5092D014C
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 07:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbgLFGtZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Dec 2020 01:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
+        id S1726314AbgLFGt4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Dec 2020 01:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgLFGtZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 01:49:25 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C642C0613D0;
-        Sat,  5 Dec 2020 22:48:45 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id iq13so5526034pjb.3;
-        Sat, 05 Dec 2020 22:48:45 -0800 (PST)
+        with ESMTP id S1725972AbgLFGt4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 01:49:56 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDFEC0613D1;
+        Sat,  5 Dec 2020 22:49:16 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id i3so3248284pfd.6;
+        Sat, 05 Dec 2020 22:49:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=BSumPRorxhYM+yM2n0c7LX3KunZP5zaLLWlWEG1gKAk=;
-        b=q7hcXkt4db0YUyJbU8dEm8m4wT7h2tRSIWGRqBYhrvUqDCa2tCD90naJVOmzv8TSgj
-         L+I+Jqe5jDBdkZwCToRXr3FBBH4Wu0os8eqOmF+ndusd7kLuznDpt1jlggxqqyw2lR/m
-         As41sw2wmx3+OAonQHF03m2n+X7g5x63cO30N7gGJ4LqQEy9yqgOQnXwYQU2qODC1ucO
-         wYFI2KsFpZRseWtwa7eZkePDLhYpFVoXJcJGBNO1ZOZN5fGoEG4So5vteLuCCa2nAOCu
-         X0i/+ler0oQ1CMi8IcaWTWF9Q6Bhr3WtFKJUdoa6diYPRX7dt75byiCni1Uwxfce4dw7
-         2diA==
+        bh=JHUF9M56L8pdroROSR587IeeoCouh6v3u8sIURXLiNA=;
+        b=SOyfMthpjyhEi/02hNXXLzHE/6Af7pxFK6SOtjOIeC+ugV5YbVyFSjTK3i//pfaNZI
+         L9ujV0+gQrECKVfWXMt8n+t7w1pARd088tOxIPKf4Nu0HTF/cEa8hgG5GeqNJzCb1asD
+         MlKtib3G0oCGwFGR6Uprq7nwwixDQnQ+hfbIroSJVwKKy/fAgRgkYnWV5dsG0WChb8Sz
+         5OtStMUY3Cq3sJmzbH2aac06G3JtYpN6jNSAUXaJjRGmkIt1IlkDuD8LwEcQ2CgIvBS9
+         PqUEuue5E6AVrdcHvN9LsrtfsvtWBz3VC889sSNXYpffA5JAHreL2cQQIBAs1mfS91X7
+         mcaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=BSumPRorxhYM+yM2n0c7LX3KunZP5zaLLWlWEG1gKAk=;
-        b=KbahLEsJ6onKSx7riqn6Ij19UxNOx3GhG0rc1QpZYuOPRZGuY0MzGQNQXGbaim4j/6
-         QVLZc16bCt++xTkfNP5ruGGdv8mEFjytT0LKURet2JlhGMjsi+l3ZEjVMGQ/tPTPwgC5
-         c6nyKMf7uC+WRTDaE7UI6PTj4L02d9D7lB8Ku24V181Q7aPOTQ/tiFU6uSHN1fBKXP6z
-         5JHrz+XR3+U1D4i+RzD2y1YvaW0qPVGcBzZZQ87d69MJOVNixNcyWd1mZVKbW8VMHeXP
-         xsYRcQXNRloCCHFMCq1/8FsokvBO6MvjxgcomPOxCYAt6vWZ0L73SMbrPtkZke4IwgCu
-         qicw==
-X-Gm-Message-State: AOAM532rMD9Pw1s+jNyqEUOwj20E5Z11sbZDrEbkzaWth+ISpLpMACNU
-        yQyFXTQdBnHDRsxr13LEmgk=
-X-Google-Smtp-Source: ABdhPJwoTpJ4E5tf2AAjNZ5yNQ4XDM1kCtaz8oOOtskM/DFoBKee2KyV2dbt2mFnleoPZ8dqI9UQjg==
-X-Received: by 2002:a17:90a:a10c:: with SMTP id s12mr11572479pjp.86.1607237324441;
-        Sat, 05 Dec 2020 22:48:44 -0800 (PST)
+        bh=JHUF9M56L8pdroROSR587IeeoCouh6v3u8sIURXLiNA=;
+        b=Zs85017FWYIATQEVeXxiEIzm1A1qTIs05pBgoTnkSiVuuAjg9K3aXZYSpH0Lh/1Bc9
+         hvUDay88S6ZoW0ZjrnSIE+Q3G5RBImULLpU87RJ1B7PRFihdNAeHnG38iwbObiPXOUxC
+         J3Z1C4WgljXmmDGEVSPHGLGDGp2lsyo3fqS6C+hPJENG++scoPoKX+AD3w6i0JFgaBRy
+         Hi18xfxRot7hPV7kLNBuOBY8c2YHLCktCHIZjORsqlQ380evOJ0h1eaQYdT6wk9SqG9J
+         7HIoTqCWbe9f4bLEvv+QRyjavzJDxVaLI7CcKuBzRIWq9HQIb26UKr1dVFK1zafxn61Q
+         90fA==
+X-Gm-Message-State: AOAM530o4ndcZbbDdy0bPTogqVPKr9+mwST/EQAjb9ukvpiGxeC/4ryi
+        Z7766V3bVkIhGbcvqf2qmbU=
+X-Google-Smtp-Source: ABdhPJxiA0F32S55TyaAc9F/HlMsxvkqL0uY2yvMaSaLugwwFxqynL5xNu1KVJLAzhu0u9nvo4djzQ==
+X-Received: by 2002:a05:6a00:22c9:b029:198:15b2:bbd3 with SMTP id f9-20020a056a0022c9b029019815b2bbd3mr11223897pfj.64.1607237355539;
+        Sat, 05 Dec 2020 22:49:15 -0800 (PST)
 Received: from ubuntu ([211.226.85.205])
-        by smtp.gmail.com with ESMTPSA id gm2sm7009349pjb.35.2020.12.05.22.48.36
+        by smtp.gmail.com with ESMTPSA id a18sm511721pfg.107.2020.12.05.22.49.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Dec 2020 22:48:43 -0800 (PST)
-Date:   Sun, 6 Dec 2020 15:48:32 +0900
+        Sat, 05 Dec 2020 22:49:15 -0800 (PST)
+Date:   Sun, 6 Dec 2020 15:49:05 +0900
 From:   Levi Yun <ppbuk5246@gmail.com>
 To:     akpm@linux-foundation.org, yury.norov@gmail.com,
         andriy.shevchenko@linux.intel.com,
@@ -63,8 +63,8 @@ To:     akpm@linux-foundation.org, yury.norov@gmail.com,
         dsterba@suse.com, dushistov@mail.ru
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-btrfs@vger.kernel.org
-Subject: [PATCH v2 4/8] bitops/le.h: Add le support for find_last_bit
-Message-ID: <20201206064832.GA6114@ubuntu>
+Subject: [PATCH v2 5/8] lib/find_bit_bench.c: Add find_last_zero_bit.
+Message-ID: <20201206064905.GA6183@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -72,52 +72,145 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Inspired find_next_*_bit function series, add find_last_zero_bit.
-These patch adds declarations for find_last_zero_bit.
-This patch is for le support of find_last_bit and find_last_bit_zero.
+Add bench test of find_last_zero_bit.
+
+Also, this patch fix the unmatched iterations value with
+find_next_bit and find_last_bit which happen when
+the last bit set or not,
+Let suppose, 4096 bitmap size and 4095 bit is set only.
+In this case former find_next_bit returns iterations count as 0.
+But find_last_bit returns it as 1.
+This unmatched return value makes some confusion.
+So we fix it.
 
 Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
 ---
- include/asm-generic/bitops/le.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ lib/find_bit_benchmark.c | 51 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 37 insertions(+), 14 deletions(-)
 
-diff --git a/include/asm-generic/bitops/le.h b/include/asm-generic/bitops/le.h
-index 188d3eba3ace..3d6661cc8077 100644
---- a/include/asm-generic/bitops/le.h
-+++ b/include/asm-generic/bitops/le.h
-@@ -27,6 +27,18 @@ static inline unsigned long find_first_zero_bit_le(const void *addr,
- 	return find_first_zero_bit(addr, size);
+diff --git a/lib/find_bit_benchmark.c b/lib/find_bit_benchmark.c
+index 5637c5711db9..007371169008 100644
+--- a/lib/find_bit_benchmark.c
++++ b/lib/find_bit_benchmark.c
+@@ -35,14 +35,14 @@ static DECLARE_BITMAP(bitmap2, BITMAP_LEN) __initdata;
+  */
+ static int __init test_find_first_bit(void *bitmap, unsigned long len)
+ {
+-	unsigned long i, cnt;
++	unsigned long i = 0, cnt = 0;
+ 	ktime_t time;
+ 
+ 	time = ktime_get();
+-	for (cnt = i = 0; i < len; cnt++) {
++	do {
+ 		i = find_first_bit(bitmap, len);
+ 		__clear_bit(i, bitmap);
+-	}
++	} while (i++ < len && ++cnt);
+ 	time = ktime_get() - time;
+ 	pr_err("find_first_bit:     %18llu ns, %6ld iterations\n", time, cnt);
+ 
+@@ -51,12 +51,13 @@ static int __init test_find_first_bit(void *bitmap, unsigned long len)
+ 
+ static int __init test_find_next_bit(const void *bitmap, unsigned long len)
+ {
+-	unsigned long i, cnt;
++	unsigned long i = 0, cnt = 0;
+ 	ktime_t time;
+ 
+ 	time = ktime_get();
+-	for (cnt = i = 0; i < BITMAP_LEN; cnt++)
+-		i = find_next_bit(bitmap, BITMAP_LEN, i) + 1;
++	do {
++		i = find_next_bit(bitmap, BITMAP_LEN, i);
++	} while (i++ < BITMAP_LEN && ++cnt);
+ 	time = ktime_get() - time;
+ 	pr_err("find_next_bit:      %18llu ns, %6ld iterations\n", time, cnt);
+ 
+@@ -65,12 +66,13 @@ static int __init test_find_next_bit(const void *bitmap, unsigned long len)
+ 
+ static int __init test_find_next_zero_bit(const void *bitmap, unsigned long len)
+ {
+-	unsigned long i, cnt;
++	unsigned long i = 0, cnt = 0;
+ 	ktime_t time;
+ 
+ 	time = ktime_get();
+-	for (cnt = i = 0; i < BITMAP_LEN; cnt++)
+-		i = find_next_zero_bit(bitmap, len, i) + 1;
++	do {
++		i = find_next_zero_bit(bitmap, len, i);
++	} while (i++ < BITMAP_LEN && ++cnt);
+ 	time = ktime_get() - time;
+ 	pr_err("find_next_zero_bit: %18llu ns, %6ld iterations\n", time, cnt);
+ 
+@@ -84,27 +86,46 @@ static int __init test_find_last_bit(const void *bitmap, unsigned long len)
+ 
+ 	time = ktime_get();
+ 	do {
+-		cnt++;
+ 		l = find_last_bit(bitmap, len);
+ 		if (l >= len)
+ 			break;
+ 		len = l;
+-	} while (len);
++	} while (len >= 0 && ++cnt); /**< to find real 0 bit set. */
+ 	time = ktime_get() - time;
+ 	pr_err("find_last_bit:      %18llu ns, %6ld iterations\n", time, cnt);
+ 
+ 	return 0;
  }
  
-+static inline unsigned long find_last_bit_le(const void *addr,
-+		unsigned long size)
++static int __init test_find_last_zero_bit(const void *bitmap, unsigned long len)
 +{
-+	return find_last_bit(addr, size);
++	unsigned long l, cnt = 0;
++	ktime_t time;
++
++	time = ktime_get();
++	do {
++		l = find_last_zero_bit(bitmap, len);
++		if (l >= len)
++			break;
++		len = l;
++	} while (len >= 0 && ++cnt); /**< to find real 0 bit set. */
++	time = ktime_get() - time;
++	pr_err("find_last_zero_bit:      %18llu ns, %6ld iterations\n", time, cnt);
++
++	return 0;
 +}
 +
-+static inline unsigned long find_last_zero_bit_le(const void *addr,
-+		unsigned long size)
-+{
-+	return find_last_zero_bit(addr, size);
-+}
 +
- #elif defined(__BIG_ENDIAN)
+ static int __init test_find_next_and_bit(const void *bitmap,
+ 		const void *bitmap2, unsigned long len)
+ {
+-	unsigned long i, cnt;
++	unsigned long i, cnt = 0;
+ 	ktime_t time;
  
- #define BITOP_LE_SWIZZLE	((BITS_PER_LONG-1) & ~0x7)
-@@ -46,6 +58,14 @@ extern unsigned long find_next_bit_le(const void *addr,
- 	find_next_zero_bit_le((addr), (size), 0)
- #endif
+ 	time = ktime_get();
+-	for (cnt = i = 0; i < BITMAP_LEN; cnt++)
+-		i = find_next_and_bit(bitmap, bitmap2, BITMAP_LEN, i + 1);
++	do {
++		i = find_next_and_bit(bitmap, bitmap2, BITMAP_LEN, i);
++	} while (i++ < BITMAP_LEN && ++cnt);
+ 	time = ktime_get() - time;
+ 	pr_err("find_next_and_bit:  %18llu ns, %6ld iterations\n", time, cnt);
  
-+#ifndef find_last_zero_bit_le
-+extern unsigned long find_last_zero_bit_le(const void *addr, unsigned long size);
-+#endif
-+
-+#ifndef find_last_bit_le
-+extern unsigned long find_last_bit_le(const void *addr, unsigned long size);
-+#endif
-+
- #else
- #error "Please fix <asm/byteorder.h>"
- #endif
+@@ -123,6 +144,7 @@ static int __init find_bit_test(void)
+ 	test_find_next_bit(bitmap, BITMAP_LEN);
+ 	test_find_next_zero_bit(bitmap, BITMAP_LEN);
+ 	test_find_last_bit(bitmap, BITMAP_LEN);
++	test_find_last_zero_bit(bitmap, BITMAP_LEN);
+ 
+ 	/*
+ 	 * test_find_first_bit() may take some time, so
+@@ -144,6 +166,7 @@ static int __init find_bit_test(void)
+ 	test_find_next_bit(bitmap, BITMAP_LEN);
+ 	test_find_next_zero_bit(bitmap, BITMAP_LEN);
+ 	test_find_last_bit(bitmap, BITMAP_LEN);
++	test_find_last_zero_bit(bitmap, BITMAP_LEN);
+ 	test_find_first_bit(bitmap, BITMAP_LEN);
+ 	test_find_next_and_bit(bitmap, bitmap2, BITMAP_LEN);
+ 
 -- 
 2.27.0
