@@ -2,62 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4EE2D01F8
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 09:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EE32D0203
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 09:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbgLFIkS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Dec 2020 03:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S1725772AbgLFIqQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Dec 2020 03:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725772AbgLFIkR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 03:40:17 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78040C0613D0;
-        Sun,  6 Dec 2020 00:39:31 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id i2so9583734wrs.4;
-        Sun, 06 Dec 2020 00:39:31 -0800 (PST)
+        with ESMTP id S1725767AbgLFIqP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 03:46:15 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD10C0613D0;
+        Sun,  6 Dec 2020 00:45:29 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id e7so9579759wrv.6;
+        Sun, 06 Dec 2020 00:45:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GPQpDYkjbkwCoiD1+juG9zqIYLBLtaHF+LBjNA/5Kdw=;
-        b=Ri2vWoYTJ6G4Stx/W9/EYkJ3p9wOMxhUIFWSDuloMlm/SWfoUlIXMT1ryZF7IA2BC0
-         NRpm/uvuta153AlhOPDBk5civ/b4qENFWDA+LxuXIrkK2abp18f2TCu8MOyZqjz7zD78
-         p0Nx08WryRYzZmN4hHUBQBaRVB214Dt1G3MuZfZh1Ka79Fhu4x+Bd6yILRPeB3OKccVc
-         cbJMZ8rv+c5yTpJnBFOIZ2jaOiu6NXHUZjryY3SwDAFvqbY63IzIKGwnhIEQeTYzajho
-         95m26ZgpUqeueYDQ4Dd9Qroy/rLlSDEtoN9cea5IEQA02lQT9tNtbWixzw7y4bdDo+/j
-         xtlQ==
+        bh=VFydP16aQgSOYZnYU7/OlYLKjUicVKh61lfiFMpnZts=;
+        b=jqNgAhpbTyB50/v0hzFe7KzXFtpZOthuqD3u07KgsEbduNLeqWxJBHKIfEB0G8R0JS
+         FMy7Xlz2zszv2GmDBDwbUbpP0zWQrI32hIUoRagrWLl2/pBgX95gMpmfHC+m/PdUJsZZ
+         fA9OWn2ZSkED5NFpNgu8EP5uqbxnOgRvqT98mccNmpMhgJFvOjf6+Y9BML134UiIcQty
+         PHmv5+rQb8uydoE0cGIvrW58v6YQWwhyOwiezAq1zBodNo9Bk0qK6LQm+GVVXomTfUJ6
+         hEWtDePoZNMV79aGUIO0cUv1nTKkNmKtfbQRw7lfN/yz6j1fmh9lOjWXHU5BbXVr1URU
+         6Zjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GPQpDYkjbkwCoiD1+juG9zqIYLBLtaHF+LBjNA/5Kdw=;
-        b=JOfSWb3nMNQWkZ5FcXEwRuAhJXiFxJt0GymsT52icJ2XdYkmEpiMZNXiWz5KNgIVwT
-         tYaE+PztlbRo7XfrsToKGBi0/C/bGVTIeunnEJcZnidJOFe92TNeaRrQOqQGtJtuU1Ec
-         Xk6eb/8MgznHxLLlbt3HZ+3JpcdJi3XFYDmOmvhdxYLdiayOskbbqZc7YgfhpeSlfT5E
-         SNMsIYQxLGSyvvRbBXJR9b2lfXXFVeNDmUNS/ORUQ4CELVZd5yvaDdM+FCBTdWeGk8jq
-         WMwEQ59ngk3esB/lVCL8vKpkuUfv7FUm/9BinzET6tFJtBYnT9f2bD+CxaMC6xvAntqS
-         K4IQ==
-X-Gm-Message-State: AOAM531aulND07+S4ACESdxv3Xw683ne+WKPYjvA1L7zNZboOGrP4fDR
-        0x/QNF/PBALb5K1dX7zrcWCikOO5M+ffDilDTSE=
-X-Google-Smtp-Source: ABdhPJyBd+OnqrCIklB+ogp6TX5gMOOz3SVeb6dk3Ctp/xkR+4JMMoo9/YpwwJaKMIgo27GNSrnqLI62OArTv+1si3E=
-X-Received: by 2002:adf:90f1:: with SMTP id i104mr10248596wri.348.1607243969831;
- Sun, 06 Dec 2020 00:39:29 -0800 (PST)
+        bh=VFydP16aQgSOYZnYU7/OlYLKjUicVKh61lfiFMpnZts=;
+        b=Lii+dSaSC7uwxSYOcaV3RFEkx73tlj7fu5a7Ku4RdXtPV1rVkVTDF6y64BxrCI9Ftf
+         EV8o5p9rJqRXOKueZGgqmHBK6GEsaivst9P90hRdQUpSOO/jlaRy8pmY9JF38pZaa6yZ
+         wGeNRy/7Ea6Ff7iYY+KAuHzmHWisfpi03BEAx14daFOIXC6sgWTnumQurhTxA3maJnSs
+         A1Py4dSNRL+L52v2YRJeg+5cycD28MCAcaRRRjf+rWExwAYqUBJHHeb+Xt5MYnZScZUJ
+         uO3sPvI+P0grUleG7dip2uZGzqy16wdxByz3niegTjgsKtnYjY3/32ml0r+TLCTciIDX
+         1I0w==
+X-Gm-Message-State: AOAM533OXaZNEYsKbOeaAIqDmuFAVrZcmnoBy+L2bk5ZMQN5K2qDJGqY
+        hW7rYEv6YEt6HKK63E/OpISTPFNxWgMKoGR9oUg=
+X-Google-Smtp-Source: ABdhPJyx/rqejwi9S49Zw3m5y1kznKAsmMF4SEWOKLs4TkvxGb/+CuRHTVP9NVskbOod8rOFO+vN+pumquIRqEEhsgA=
+X-Received: by 2002:adf:bd84:: with SMTP id l4mr14090824wrh.41.1607244327663;
+ Sun, 06 Dec 2020 00:45:27 -0800 (PST)
 MIME-Version: 1.0
 References: <20201206064624.GA5871@ubuntu> <X8yWxe/9gzosFOam@kroah.com>
 In-Reply-To: <X8yWxe/9gzosFOam@kroah.com>
 From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Sun, 6 Dec 2020 17:39:16 +0900
-Message-ID: <CAM7-yPSPxTz8CmVfD2vC=P4RW6yBXsYiH+YfKQtd4PzPj=ocvA@mail.gmail.com>
+Date:   Sun, 6 Dec 2020 17:45:14 +0900
+Message-ID: <CAM7-yPSpqCUEJqJW+hzz9ccJbU5OnOZj1Vpyi8d5LG5=QbCTjA@mail.gmail.com>
 Subject: Re: [PATCH v2 1/8] lib/find_bit.c: Add find_last_zero_bit
-To:     gregkh@linuxfoundation.org
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         richard.weiyang@linux.alibaba.com, christian.brauner@ubuntu.com,
         Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, changbin.du@intel.com,
-        rdunlap@infradead.org, masahiroy@kernel.org, peterz@infradead.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>, rdunlap@infradead.org,
+        masahiroy@kernel.org, peterz@infradead.org,
         peter.enderborg@sony.com, krzk@kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
         Kees Cook <keescook@chromium.org>, broonie@kernel.org,
@@ -74,29 +74,11 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> This, and the change above this, are not related to this patch so you
-> might not want to include them.
->
-> Also, why is this patch series even needed?  I don't see a justification
-> for it anywhere, only "what" this patch is, not "why".
+Sorry, in 7'th patch (not 8th).
 
-A little part of codes are trying to find the last zero bit using
-for_each_clear_bit.
-For example in fs/btrfs/free-space-cache.c' s
-steal_from_bitmap_to_front function
-which I changed in the 8'th patch.
-I think it has some overhead to find the last clear bit (it start to
-find from 0 bit to specified index),
-so I try to add the find_last_zero_bit function to improve this.
 
-Maybe I have a lack explanation in the message.
-
-Sorry to make noise.
-
-Thanks.
+Thanks
 Levi.
-
-
 
 On Sun, Dec 6, 2020 at 5:31 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
