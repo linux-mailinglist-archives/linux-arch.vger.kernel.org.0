@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD042D013F
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 07:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8E82D0143
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 07:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbgLFGsD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Dec 2020 01:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S1725832AbgLFGsk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Dec 2020 01:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbgLFGsC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 01:48:02 -0500
+        with ESMTP id S1725804AbgLFGsj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 01:48:39 -0500
 Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2180C0613D0;
-        Sat,  5 Dec 2020 22:47:22 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id b5so1721254pjl.0;
-        Sat, 05 Dec 2020 22:47:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BE0C0613D1;
+        Sat,  5 Dec 2020 22:47:59 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id lb18so2992763pjb.5;
+        Sat, 05 Dec 2020 22:47:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=HigwzuIkd2mgtCXhNqT5DjNxRNzKxVeBqvUWRjiFTO8=;
-        b=qT6PuKUnakUjvBPGR2Zp/38SINruBNsnINkPkqbaPOEvGr9u42YP7+Q3PhV0ozHNoi
-         ezq9SXEZoIO8YnR9F0JGKnqGRxdOQBbIFPSB2pRdIcpXGI+cxB1tV3R57NEWbqa6nQBE
-         f5C62KIcjfQ9D82gnqGJEtLmKw7cOmfh9xsO/N7VCkhp0O1G9pvdPeTm/EcBnAyiVN93
-         86p+46irVclqrjRNRpZd+zLhQaqEjOvmPt1WVNzyZeXmlkDkpDjdi7iuv0GfJqLmE3z4
-         h+kAQmogF0AzPRxXgird0S2+e25c7A8vTCcwLSynAWW0VaVExhH+oEGDicacGUfUE3e/
-         LHYw==
+        bh=ZWfo4LRU9rmSY/q/C6F3vJReUbd7Kg5Z+IjcutjFQrk=;
+        b=mFzjkfqwVzDaTJSAaHPXe4EbeW1vABRipaj8sZ94I3NTjvmLb1FehrUUBbJKyPMiNP
+         8Wxa8dJgShHMf9T5DHOxWCbmay3E0D9r/BnAMvO1fbBZkuMwuoR1P9SVlldNFi0UNKU+
+         hHvK3+MZgORJSB7FJIJlihpgLAlN0ig1nDWWNdvskWr8lWALW7ijQKk+Nlg4ECvC+aIs
+         0HpgQV9OOz2Q4OnVLPQs7doUTU3zcxlCShkFx9vSWtMaHlT+oV5bbu4580n0MeF9ihwm
+         eMD7bQZllzUEEYFXsd9RkiBJi2j6zWpa/rBWQm+zSSGQ/R0YFaIeSeGy2upRRgF4TqEw
+         JfBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=HigwzuIkd2mgtCXhNqT5DjNxRNzKxVeBqvUWRjiFTO8=;
-        b=TLHdtHUjr9C2Bu+zudLrDMbNRyj7F9Mrf7AcqHKaBzerxMhfG8G9V+BM4Yg2BeXmC0
-         TbfFH29h2zKTY8dEJ0amm6/IX8nCJG2EzYLJB/nRN+jVw6tcBGvVZ9qrVZl0aCiS/+iI
-         sSpt5wf++LJFp7Jm9xbhwL2obh+ztpBdpjWSrcLec8iqpuS+Xg2urInjlEMH7WuWCabN
-         EwvZ6FelKmGaYT3PhS17Fcx9r4DbJhjrozQd/7aceIg3ZCyeq216aAQmX+SQuPsupnkX
-         xM9mCV8aB1+NnDf4lY66DuWbccOpi9/RrokOObZt/j+MNm2MAN5WIeYH+dSiG/v5nG9T
-         H30Q==
-X-Gm-Message-State: AOAM531GfQFtAdmvYNYfVBwXnzqgEhbsbsrtpmEkSk8vOFrO8Lzu/a9/
-        jXViNnE1QpNlSfUiLWooks8=
-X-Google-Smtp-Source: ABdhPJw7DTk/uokh2EGb/RaGa9whxkc0K4uqC9bhZyMW6QOfRKDM1uMgQW8DkuiYXVn8FnnrP+2CCg==
-X-Received: by 2002:a17:902:6803:b029:da:1469:8945 with SMTP id h3-20020a1709026803b02900da14698945mr10845900plk.15.1607237242208;
-        Sat, 05 Dec 2020 22:47:22 -0800 (PST)
+        bh=ZWfo4LRU9rmSY/q/C6F3vJReUbd7Kg5Z+IjcutjFQrk=;
+        b=BLL3YHwfRxmswDyttDiEPrKRnGcI+/Vli3ltPY9MUB0TPCyowr/rU0b3hHP+Kuwh1X
+         bzKGbDOUNrQXvAhE7dofcUKB0zAf528cvV1BKT65cwdXDNLH0e7ZMFRcCsjNiSXjpedd
+         q7sWPhEperSRLUu43yIjVhiTVIOp7hOVPVSzCSajoA2NvAvfyxmnnBKEgwSH0XdyvIZw
+         UE+D9wMiQ/g3NiO3Qcq2UCaWs6zB6ZFLOcV/oKkNHXEouKAEII0xXCQwNKr9KT+eMKvS
+         KysawuZiCMxGDyeExmZzcdXk9dPA9bSXEfwLCMAhQDWET28EhPcyAkY/AxoYKwJKGiAC
+         Xqew==
+X-Gm-Message-State: AOAM530W3C3SFA1kYqtM3CGdjHcrtJXy1blGuE9Pz9RS2sCKZMbDSCsO
+        0o3qMsdUCVPKjSy/gCEpin8=
+X-Google-Smtp-Source: ABdhPJz/NUGVOeST7QTKajRSwp9huVV7+yfaVo/YgFYaQ4WjG0T50pualk1jw8qdmd5RMYJjJGj5MQ==
+X-Received: by 2002:a17:90b:4b11:: with SMTP id lx17mr11391016pjb.154.1607237279376;
+        Sat, 05 Dec 2020 22:47:59 -0800 (PST)
 Received: from ubuntu ([211.226.85.205])
-        by smtp.gmail.com with ESMTPSA id mr7sm6805206pjb.31.2020.12.05.22.47.14
+        by smtp.gmail.com with ESMTPSA id i10sm10562393pfq.189.2020.12.05.22.47.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Dec 2020 22:47:21 -0800 (PST)
-Date:   Sun, 6 Dec 2020 15:47:11 +0900
+        Sat, 05 Dec 2020 22:47:58 -0800 (PST)
+Date:   Sun, 6 Dec 2020 15:47:49 +0900
 From:   Levi Yun <ppbuk5246@gmail.com>
 To:     akpm@linux-foundation.org, yury.norov@gmail.com,
         andriy.shevchenko@linux.intel.com,
@@ -63,8 +63,8 @@ To:     akpm@linux-foundation.org, yury.norov@gmail.com,
         dsterba@suse.com, dushistov@mail.ru
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-btrfs@vger.kernel.org
-Subject: [PATCH v2 2/8] linux/bitops.h: Add find_each_*_bit_reverse macros
-Message-ID: <20201206064711.GA5941@ubuntu>
+Subject: [PATCH v2 3/8] bitops/find.h: Add declaration find_last_zero_bit
+Message-ID: <20201206064749.GA6042@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -72,71 +72,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add reverse routine for find_each_*_bit using find_last_bit and
-find_last_zero_bit.
-for correspondant usage wtih find_each_*_bit macros we use same
-parameters,
-But when we use these macro different from find_each_*_bit,
-@size should be a variable NOT constants.
+Inspired find_next_*_bit function series, add find_last_zero_bit.
+These patch adds declarations for find_last_zero_bit.
+Also, I move declaration of find_last_bit to asm-generic/bitops/find.h
+Because:
+I think its declaration need not to in __KERNEL__ macro compared to
+find_next_*_bit and find_first_*_bit.
 
 Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
 ---
- include/linux/bitops.h | 37 +++++++++++++++++++++++++------------
- 1 file changed, 25 insertions(+), 12 deletions(-)
+ include/asm-generic/bitops/find.h | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-index 5b74bdf159d6..f6ab611ca732 100644
---- a/include/linux/bitops.h
-+++ b/include/linux/bitops.h
-@@ -50,6 +50,31 @@ extern unsigned long __sw_hweight64(__u64 w);
- 	     (bit) < (size);					\
- 	     (bit) = find_next_zero_bit((addr), (size), (bit) + 1))
+diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+index 9fdf21302fdf..eeb2d6669f83 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -80,6 +80,31 @@ extern unsigned long find_first_zero_bit(const unsigned long *addr,
  
+ #endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
+ 
++#ifndef find_last_bit
 +/**
-+ * find_each_*_reverse's @size should be variable NOT constant.
++ * find_last_bit - find the last set bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The number of bits to search
++ *
++ * Returns the bit number of the last set bit, or size.
 + */
-+#define for_each_set_bit_reverse(bit, addr, size) \
-+	for ((bit) = find_last_bit((addr), (size));		\
-+	     (bit) < (size) && (size);					\
-+	     (size) = (bit), (bit) = find_last_bit((addr), (size)))
++extern unsigned long find_last_bit(const unsigned long *addr,
++				   unsigned long size);
++#endif
 +
-+/* same as for_each_set_bit_reverse() but use bit as value to start with */
-+#define for_each_set_bit_from_reverse(bit, addr, size) \
-+	for ((size) = (bit + 1), (bit) = find_last_bit((addr), (size));	\
-+	     (bit) < (size) && (size);					\
-+	     (size) = (bit), (bit) = find_last_bit((addr), (size)))
-+
-+#define for_each_clear_bit_reverse(bit, addr, size) \
-+	for ((bit) = find_last_zero_bit((addr), (size));	\
-+	     (bit) < (size) && (size);					\
-+	     (size) = (bit), (bit) = find_last_zero_bit((addr), (size)))
-+
-+/* same as for_each_clear_bit_reverse() but use bit as value to start with */
-+#define for_each_clear_bit_from_reverse(bit, addr, size) \
-+	for ((size) = (bit + 1), (bit) = find_last_zero_bit((addr), (size));	\
-+	     (bit) < (size) && (size);					\
-+	     (size) = (bit), (bit) = find_last_zero_bit((addr), (size)))
++#ifndef find_last_zero_bit
++/**
++ * find_last_zero_bit - find the last cleared bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The maximum number of bits to search
++ *
++ * Returns the bit number of the first cleared bit.
++ * If no bits are zero, returns @size.
++ */
++extern unsigned long find_last_zero_bit(const unsigned long *addr,
++					 unsigned long size);
++#endif
 +
  /**
-  * for_each_set_clump8 - iterate over bitmap for each 8-bit clump with set bits
-  * @start: bit offset to start search and to store the current iteration offset
-@@ -283,17 +308,5 @@ static __always_inline void __assign_bit(long nr, volatile unsigned long *addr,
- })
- #endif
- 
--#ifndef find_last_bit
--/**
-- * find_last_bit - find the last set bit in a memory region
-- * @addr: The address to start the search at
-- * @size: The number of bits to search
-- *
-- * Returns the bit number of the last set bit, or size.
-- */
--extern unsigned long find_last_bit(const unsigned long *addr,
--				   unsigned long size);
--#endif
--
- #endif /* __KERNEL__ */
- #endif
+  * find_next_clump8 - find next 8-bit clump with set bits in a memory region
+  * @clump: location to store copy of found clump
 -- 
 2.27.0
