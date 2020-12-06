@@ -2,140 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 838312D036D
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 12:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045FF2D070C
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Dec 2020 21:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727383AbgLFLec (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Dec 2020 06:34:32 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29942 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725822AbgLFLec (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 06:34:32 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B6BWEGF085086;
-        Sun, 6 Dec 2020 06:33:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=uLfseV5BFzDmXMVMV/hSVrONSrIDY8EYPsZgh4LDO3w=;
- b=PyoHBTbfhHjuCF1oLDWBdxBcOWbCcrx0qLYyzv7yOnKgB8jexML7XfGkA98WvLEgdz9M
- 5NVJEhCmmrIp3Cx/4wUBNFH/D12JYvRM6KGOh+zrPqK66oGPKD1sItX+hCPEy/g/dqx8
- 1mmR3tykJNjL2hzRzO/O781IVtqWFJTVQvwgussGhs8iMkWv0vL1sYxGjdogh8qOVzX/
- SKGw534Doh9a4lhe7kZPaYQRhzkF3jPh5UqBUmeHv/oWgcvtpiXVn10MduwIQjXxq60m
- JJ3NaX0IoUFgCLFSlAYhKmodHgvNyY3naabX9laFI+MV677+t5cfrBEj9LnLb9HpaiTM Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 358rmxnm9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Dec 2020 06:33:30 -0500
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B6BXGjl087843;
-        Sun, 6 Dec 2020 06:33:29 -0500
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 358rmxnm8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Dec 2020 06:33:29 -0500
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B6BVO6l024300;
-        Sun, 6 Dec 2020 11:33:27 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3581u8hkes-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Dec 2020 11:33:27 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B6BUtaN30933468
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 6 Dec 2020 11:30:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3F1ED4C046;
-        Sun,  6 Dec 2020 11:30:55 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A6284C040;
-        Sun,  6 Dec 2020 11:30:51 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.50.18])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sun,  6 Dec 2020 11:30:51 +0000 (GMT)
-Date:   Sun, 6 Dec 2020 13:30:48 +0200
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v14 09/10] arch, mm: wire up memfd_secret system call
- were relevant
-Message-ID: <20201206113048.GC123287@linux.ibm.com>
-References: <20201203062949.5484-1-rppt@kernel.org>
- <20201203062949.5484-10-rppt@kernel.org>
- <20201203153916.91f0f80dcb8a0fa81fc341fa@linux-foundation.org>
+        id S1727661AbgLFUKY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Dec 2020 15:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbgLFUKY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Dec 2020 15:10:24 -0500
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D55C0613D0
+        for <linux-arch@vger.kernel.org>; Sun,  6 Dec 2020 12:09:43 -0800 (PST)
+Received: by mail-ua1-x941.google.com with SMTP id x4so3787850uac.11
+        for <linux-arch@vger.kernel.org>; Sun, 06 Dec 2020 12:09:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iz05We4T6eIjQaXBvxz0eSpPimwSlGMKW8WGflLLLgw=;
+        b=iS/yxV/uv33bWygYcp3w94mm68WCg/cooZBDHGRBRFCb+HEVGfBEws+dpr/6P25Mqk
+         CGF0txaBIDtDjqi1yLxaRHzbKNu312tAIiWry1c6H2XUemwifDXDJ3xgms3nJQh018Ju
+         tSfem3j42gdxUipuE2UCBGdP6HbCXjgyA35rk3ybR2x5sUXsvaX34+w/11PCnDP3wUw3
+         VXU3d3GrfxpXDM3mNsWNN8WzS04oerefikrSUgI3Sa41DzU+d/SyYsbVuDLVrcBbBAFd
+         TPfpfk+LViEDwCmkthUfnAh26cBtd4O/zl0ILiNY2vgWj3ccwdwRthGGUZbaHtAB4IuL
+         4E/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iz05We4T6eIjQaXBvxz0eSpPimwSlGMKW8WGflLLLgw=;
+        b=j/GDafR+rsUDmr+wKwbKmVY4SzLR7K6YxjuF2JY/iZXFjS3YV7jAI28jMfbl17BSps
+         kadbNQqzWBpg/ZwehZjKiYVleGLsdsdmS9fwj0iGj529SCJHERZCoW9zu5rIalpdKONA
+         T0rD4vGJofTrMHI3mSCIoJf2Cx7RTtzdNFrSZbOEGXAcXiNci95Ing+57bcHxNBT5k/1
+         adff8JHJD5YpNqTphlyLyFpYtRx5ELEzQHzRYqGhF6CmVSHzx2j1TJ6kLU9XWCrcwmta
+         qe7RklUtRaUAzRNlOGnt1dhssh/bzaEP6Auw7yvEKu48tuxoroPKrnnD4ta0R0XvYYS/
+         GYeA==
+X-Gm-Message-State: AOAM5306G4QqL2Wtknm8J6f4zyrQLVu735VsXlcHVfgmM17A6acsE1CH
+        +Y7V4aMDllePS8lOA7wC8Pu78zQXc9oJFtMBkIUUmg==
+X-Google-Smtp-Source: ABdhPJyKCb8VYAdpRAyuT9QnDEa4WUbLFAwf7yIvP0eytyeCFIBxggFhwRm1Itv8d1sjhOU4I4dMU+iMqgn79bJuOn0=
+X-Received: by 2002:ab0:6f0f:: with SMTP id r15mr3484878uah.52.1607285382144;
+ Sun, 06 Dec 2020 12:09:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201203153916.91f0f80dcb8a0fa81fc341fa@linux-foundation.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-06_06:2020-12-04,2020-12-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=1
- impostorscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- mlxlogscore=802 malwarescore=0 adultscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012060070
+References: <20201201213707.541432-1-samitolvanen@google.com>
+ <20201203112622.GA31188@willie-the-truck> <CABCJKueby8pUoN7f5=6RoyLSt4PgWNx8idUej0sNwAi0F3Xqzw@mail.gmail.com>
+ <20201203182252.GA32011@willie-the-truck> <CAKwvOdnvq=L=gQMv9MHaStmKMOuD5jvffzMedhp3gytYB6R7TQ@mail.gmail.com>
+ <CABCJKufgkq+k0DeYaXrzjXniy=T_N4sN1bxoK9=cUxTZN5xSVQ@mail.gmail.com> <20201206065028.GA2819096@ubuntu-m3-large-x86>
+In-Reply-To: <20201206065028.GA2819096@ubuntu-m3-large-x86>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Sun, 6 Dec 2020 12:09:31 -0800
+Message-ID: <CABCJKue9TJnhge6TVPj9vfZXPGD4RW2JYiN3kNwVKNovTCq8ZA@mail.gmail.com>
+Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>, Jian Cai <jiancai@google.com>,
+        Kristof Beyls <Kristof.Beyls@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 03:39:16PM -0800, Andrew Morton wrote:
-> On Thu,  3 Dec 2020 08:29:48 +0200 Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> > Wire up memfd_secret system call on architectures that define
-> > ARCH_HAS_SET_DIRECT_MAP, namely arm64, risc-v and x86.
-> > 
-> > ...
+On Sat, Dec 5, 2020 at 10:50 PM Nathan Chancellor
+<natechancellor@gmail.com> wrote:
+>
+> On Fri, Dec 04, 2020 at 02:52:41PM -0800, Sami Tolvanen wrote:
+> > On Thu, Dec 3, 2020 at 2:32 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > >
+> > > So I'd recommend to Sami to simply make the Kconfig also depend on
+> > > clang's integrated assembler (not just llvm-nm and llvm-ar).
 > >
-> > --- a/include/uapi/asm-generic/unistd.h
-> > +++ b/include/uapi/asm-generic/unistd.h
-> > @@ -861,9 +861,13 @@ __SYSCALL(__NR_faccessat2, sys_faccessat2)
-> >  __SYSCALL(__NR_process_madvise, sys_process_madvise)
-> >  #define __NR_watch_mount 441
-> >  __SYSCALL(__NR_watch_mount, sys_watch_mount)
-> > +#ifdef __ARCH_WANT_MEMFD_SECRET
-> > +#define __NR_memfd_secret 442
-> > +__SYSCALL(__NR_memfd_secret, sys_memfd_secret)
-> > +#endif
-> 
-> Why do we add the ifdef?  Can't we simply define the syscall on all
-> architectures and let sys_ni do its thing?
- 
-I quite blindly copied it from clone3. I agree there is no real need for
-it and sys_ni handles this just fine.
+> > Sure, sounds good to me. What's the preferred way to test for this in Kconfig?
+> >
+> > It looks like actually trying to test if we have an LLVM assembler
+> > (e.g. using $(as-instr,.section
+> > ".linker-options","e",@llvm_linker_options)) doesn't work as Kconfig
+> > doesn't pass -no-integrated-as to clang here.
 
--- 
-Sincerely yours,
-Mike.
+After a closer look, that's actually not correct, this seems to work
+with Clang+LLD no matter which assembler is used. I suppose we could
+test for .gasversion. to detect GNU as, but that's hardly ideal.
+
+> >I could do something
+> > simple like $(success,echo $(LLVM) $(LLVM_IAS) | grep -q "1 1").
+> >
+> > Thoughts?
+> >
+> > Sami
+>
+> I think
+>
+>     depends on $(success,test $(LLVM_IAS) -eq 1)
+>
+> should work, at least according to my brief test.
+
+Sure, looks good to me. However, I think we should also test for
+LLVM=1 to avoid possible further issues with mismatched toolchains
+instead of only checking for llvm-nm and llvm-ar.
+
+Sami
