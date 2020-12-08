@@ -2,30 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD90B2D321A
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 19:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE7E2D3357
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 21:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730918AbgLHS0K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Dec 2020 13:26:10 -0500
-Received: from mga02.intel.com ([134.134.136.20]:29455 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730894AbgLHS0K (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Dec 2020 13:26:10 -0500
-IronPort-SDR: /yg7CeF3YvlmAQnd/x01t6+NXRWrpogDAn9HQAxozVRZT4CkfnTv3k2FaxfHf7o4iwsfhbAMex
- r18DfVZEjBDw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9829"; a="160995662"
-X-IronPort-AV: E=Sophos;i="5.78,403,1599548400"; 
-   d="scan'208";a="160995662"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 10:25:29 -0800
-IronPort-SDR: MVXY+ufzzjWpRkO/fcrw7djp1AEmJjNq9PnlBlwIbD8V1ZktkEzklCAxWd0oBRp2C8pAxGfKhi
- xQw8ZyCXIxMA==
-X-IronPort-AV: E=Sophos;i="5.78,403,1599548400"; 
-   d="scan'208";a="317917122"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.139.184]) ([10.209.139.184])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2020 10:25:27 -0800
-Subject: Re: [PATCH v15 08/26] x86/mm: Introduce _PAGE_COW
-To:     Borislav Petkov <bp@alien8.de>
+        id S1731394AbgLHUQN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Dec 2020 15:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731152AbgLHUPM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Dec 2020 15:15:12 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EECC0613D6;
+        Tue,  8 Dec 2020 12:14:32 -0800 (PST)
+Received: from zn.tnic (p200300ec2f0f08004da90e847a90bd48.dip0.t-ipconnect.de [IPv6:2003:ec:2f0f:800:4da9:e84:7a90:bd48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 433751EC053F;
+        Tue,  8 Dec 2020 19:47:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1607453247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=N7zLgo+iGnV/6dQc9oAjeLX3V0c+bnEUyOPpx3AqhUE=;
+        b=qVpEjpAW6ERZtUChtOctB0atXOEQ9sLnL3RAG8ruZzpOCH41xOHx3EnwVn4iyhbQl9vBz4
+        HI/Yk9gZwrTzU7nxtY7YhtvWO9Sj8BsNle4GW/6iHTq6qVmAR4dqc+EmS78ViFZXu7SFiJ
+        JS2rHxlWADJXb4GziJW4KqDoA5cUXM0=
+Date:   Tue, 8 Dec 2020 19:47:27 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -51,156 +56,53 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v15 08/26] x86/mm: Introduce _PAGE_COW
+Message-ID: <20201208184727.GF27920@zn.tnic>
 References: <20201110162211.9207-1-yu-cheng.yu@intel.com>
  <20201110162211.9207-9-yu-cheng.yu@intel.com>
  <20201208175014.GD27920@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <218503f6-eec1-94b0-8404-6f92c55799e3@intel.com>
-Date:   Tue, 8 Dec 2020 10:25:15 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+ <218503f6-eec1-94b0-8404-6f92c55799e3@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20201208175014.GD27920@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <218503f6-eec1-94b0-8404-6f92c55799e3@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/8/2020 9:50 AM, Borislav Petkov wrote:
-> On Tue, Nov 10, 2020 at 08:21:53AM -0800, Yu-cheng Yu wrote:
->> There is essentially no room left in the x86 hardware PTEs on some OSes
->> (not Linux).  That left the hardware architects looking for a way to
->> represent a new memory type (shadow stack) within the existing bits.
->> They chose to repurpose a lightly-used state: Write=0,Dirty=1.
+On Tue, Dec 08, 2020 at 10:25:15AM -0800, Yu, Yu-cheng wrote:
+> > Both are "R/O + _PAGE_COW". Where's the difference? The dirty bit?
 > 
-> It is not clear to me what the definition and semantics of that bit is.
+> The PTEs are the same for both (a) and (b), but come from different routes.
+
+Do not be afraid to go into detail and explain to me what those routes
+are please.
+
+> > > (e) A page where the processor observed a Write=1 PTE, started a write, set
+> > >      Dirty=1, but then observed a Write=0 PTE.
+> > 
+> > How does that happen? Something changed the PTE's W bit to 0 in-between?
 > 
-> +#define _PAGE_BIT_COW          _PAGE_BIT_SOFTW5 /* copy-on-write */
+> Yes.
+
+Also do not scare from going into detail and explaining what you mean
+here. Example?
+
+> > Does _PAGE_COW mean dirty too?
 > 
-> Is it set by hw or by sw and hw uses it to know it is a shadow stack
-> page, and so on.
-> 
-> I think you should lead with its definition.
+> Yes.  Basically [read-only & dirty] is created by software.  Now the
+> software uses a different bit.
 
-Ok.
+That convention:
 
-...
+"[read-only & dirty] is created by software."
 
->> Write=0,Dirty=1 PTEs.  In places where we do create them, we need to find
->> an alternative way to represent them _without_ using the same hardware bit
->> combination.  Thus, enter _PAGE_COW.  This results in the following:
->>
->> (a) A modified, copy-on-write (COW) page: (R/O + _PAGE_COW)
->> (b) A R/O page that has been COW'ed: (R/O + _PAGE_COW)
-> 
-> Both are "R/O + _PAGE_COW". Where's the difference? The dirty bit?
+needs some prominent writeup somewhere explaining what it is.
 
-The PTEs are the same for both (a) and (b), but come from different routes.
+Thx.
 
->>      The user page is in a R/O VMA, and get_user_pages() needs a writable
->>      copy.  The page fault handler creates a copy of the page and sets
->>      the new copy's PTE as R/O and _PAGE_COW.
->> (c) A shadow stack PTE: (R/O + _PAGE_DIRTY_HW)
-> 
-> So W=0, D=1 ?
+-- 
+Regards/Gruss,
+    Boris.
 
-Yes.
-
->> (d) A shared shadow stack PTE: (R/O + _PAGE_COW)
->>      When a shadow stack page is being shared among processes (this happens
->>      at fork()), its PTE is cleared of _PAGE_DIRTY_HW, so the next shadow
->>      stack access causes a fault, and the page is duplicated and
->>      _PAGE_DIRTY_HW is set again.  This is the COW equivalent for shadow
->>      stack pages, even though it's copy-on-access rather than copy-on-write.
->> (e) A page where the processor observed a Write=1 PTE, started a write, set
->>      Dirty=1, but then observed a Write=0 PTE.
-> 
-> How does that happen? Something changed the PTE's W bit to 0 in-between?
-
-Yes.
-
-...
-
->> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
->> index b23697658b28..c88c7ccf0318 100644
->> --- a/arch/x86/include/asm/pgtable.h
->> +++ b/arch/x86/include/asm/pgtable.h
->> @@ -121,9 +121,9 @@ extern pmdval_t early_pmd_flags;
->>    * The following only work if pte_present() is true.
->>    * Undefined behaviour if not..
->>    */
->> -static inline int pte_dirty(pte_t pte)
->> +static inline bool pte_dirty(pte_t pte)
->>   {
->> -	return pte_flags(pte) & _PAGE_DIRTY_HW;
->> +	return pte_flags(pte) & _PAGE_DIRTY_BITS;
-> 
-> Why?
-> 
-> Does _PAGE_COW mean dirty too?
-
-Yes.  Basically [read-only & dirty] is created by software.  Now the 
-software uses a different bit.
-
->> @@ -343,6 +349,17 @@ static inline pte_t pte_mkold(pte_t pte)
->>   
->>   static inline pte_t pte_wrprotect(pte_t pte)
->>   {
->> +	/*
->> +	 * Blindly clearing _PAGE_RW might accidentally create
->> +	 * a shadow stack PTE (RW=0,Dirty=1).  Move the hardware
->> +	 * dirty value to the software bit.
->> +	 */
->> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
->> +		pte.pte |= (pte.pte & _PAGE_DIRTY_HW) >>
->> +			   _PAGE_BIT_DIRTY_HW << _PAGE_BIT_COW;
-> 
-> Let that line stick out. And that shifting is not grokkable at a quick
-> glance, at least not to me. Simplify?
-
-Ok.
-
->>   static inline pmd_t pmd_wrprotect(pmd_t pmd)
->>   {
->> +	/*
->> +	 * Blindly clearing _PAGE_RW might accidentally create
->> +	 * a shadow stack PMD (RW=0,Dirty=1).  Move the hardware
->> +	 * dirty value to the software bit.
-> 
-> This whole carefully sidestepping the possiblity of creating a shadow
-> stack pXd is kinda sucky...
-> 
->> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
->> index 7462a574fc93..5f764d8d9bae 100644
->> --- a/arch/x86/include/asm/pgtable_types.h
->> +++ b/arch/x86/include/asm/pgtable_types.h
->> @@ -23,7 +23,8 @@
->>   #define _PAGE_BIT_SOFTW2	10	/* " */
->>   #define _PAGE_BIT_SOFTW3	11	/* " */
->>   #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
->> -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
->> +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
->> +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
->>   #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
->>   #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
->>   #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
->> @@ -36,6 +37,16 @@
->>   #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
->>   #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
->>   
->> +/*
->> + * This bit indicates a copy-on-write page, and is different from
->> + * _PAGE_BIT_SOFT_DIRTY, which tracks which pages a task writes to.
->> + */
->> +#ifdef CONFIG_X86_64
-> 
-> CONFIG_X86_64 ? Do all x86 machines out there support CET?
-> 
-> If anything, CONFIG_X86_CET...
-
-Ok.
-
---
-Yu-cheng
+https://people.kernel.org/tglx/notes-about-netiquette
