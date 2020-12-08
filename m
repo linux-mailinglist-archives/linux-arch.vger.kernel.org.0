@@ -2,155 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 262392D2A8A
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 13:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9370D2D2BE3
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 14:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728536AbgLHMQa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Dec 2020 07:16:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52558 "EHLO mail.kernel.org"
+        id S1727716AbgLHN33 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Dec 2020 08:29:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727550AbgLHMQa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Dec 2020 07:16:30 -0500
-X-Gm-Message-State: AOAM531pCNf3+pt4/gxI7ev0HTiugt+kVRX+mWEA0Xc3ccWL5NzuNlxw
-        Q5DMJzmliyrBsBbl/PytXnxnVlcQgL24/EPkz3M=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607429749;
-        bh=K94MQ6q50UGiEvhj+VB0lG6N0jZujxUWTttppsr8gwM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ns4p/v7H7ScAMGSZF+uiL0GLrzuK92X4fsakgAnSLuAme/K5fEsEi38bY3jw803Wy
-         audkXq/WYB7RTMZ3yOuTK6onrxqVBtnoYqkkvLnvpNRPrQxrYcO6XAo70lbZp3Wa4T
-         9qu4teHx4OR4D7tI19aZUR6LPG7nQ4wU5rtl2vcxyqBk81XPqwKBpVKsGaiwHXIJuy
-         PuNNq9XDDyWTO1GKhaqTq1XoK2qrf9wdaOmxVotAI6FaDwC0nVzQIN5BYHWvkh+7Pl
-         TIDC46XqhgPtl/QkCcf02gs7jdiOHkHzlufEr692R+gOJKVmFAwvvzdy3POnIF8teL
-         9TV0RUdUG0tPw==
-X-Google-Smtp-Source: ABdhPJwYXzEbw5wojirREdrWvTDFdS68u6lSRc1TxQHV80oZ08BdPpLLWGJpTl+WAoAqOweiNLoKVC/CXI7Rr5nYmRU=
-X-Received: by 2002:a05:6808:9a9:: with SMTP id e9mr2451121oig.4.1607429748222;
- Tue, 08 Dec 2020 04:15:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20201201213707.541432-1-samitolvanen@google.com>
-In-Reply-To: <20201201213707.541432-1-samitolvanen@google.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 8 Dec 2020 13:15:31 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
-Message-ID: <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        id S1726080AbgLHN33 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Dec 2020 08:29:29 -0500
+From:   Will Deacon <will@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Will Deacon <will@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Peter Zijlstra <peterz@infradead.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com
+Subject: [PATCH v5 00/15] An alternative series for asymmetric AArch32 systems
+Date:   Tue,  8 Dec 2020 13:28:20 +0000
+Message-Id: <20201208132835.6151-1-will@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 10:37 PM 'Sami Tolvanen' via Clang Built Linux
-<clang-built-linux@googlegroups.com> wrote:
->
-> This patch series adds support for building the kernel with Clang's
-> Link Time Optimization (LTO). In addition to performance, the primary
-> motivation for LTO is to allow Clang's Control-Flow Integrity (CFI)
-> to be used in the kernel. Google has shipped millions of Pixel
-> devices running three major kernel versions with LTO+CFI since 2018.
->
-> Most of the patches are build system changes for handling LLVM
-> bitcode, which Clang produces with LTO instead of ELF object files,
-> postponing ELF processing until a later stage, and ensuring initcall
-> ordering.
->
-> Note that arm64 support depends on Will's memory ordering patches
-> [1]. I will post x86_64 patches separately after we have fixed the
-> remaining objtool warnings [2][3].
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/log/?h=for-next/lto
-> [2] https://lore.kernel.org/lkml/20201120040424.a3wctajzft4ufoiw@treble/
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/log/?h=objtool-vmlinux
->
-> You can also pull this series from
->
->   https://github.com/samitolvanen/linux.git lto-v8
+Hi all,
 
-I've tried pull this into my randconfig test tree to give it a spin.
-So far I have
-not managed to get a working build out of it, the main problem so far being
-that it is really slow to build because the link stage only uses one CPU.
-These are the other issues I've seen so far:
+Christmas has come early: it's time for version five of these patches
+which have previously appeared here:
 
-- one build seems to take even longer to link. It's currently at 35GB RAM
-  usage and 40 minutes into the final link, but I'm worried it might
-not complete
-  before it runs out of memory.  I only have 128GB installed, and google-chrome
-  uses another 30GB of that, and I'm also doing some other builds in parallel.
-  Is there a minimum recommended amount of memory for doing LTO builds?
+  v1: https://lore.kernel.org/r/20201027215118.27003-1-will@kernel.org
+  v2: https://lore.kernel.org/r/20201109213023.15092-1-will@kernel.org
+  v3: https://lore.kernel.org/r/20201113093720.21106-1-will@kernel.org
+  v4: https://lore.kernel.org/r/20201124155039.13804-1-will@kernel.org
 
-- One build failed with
- ld.lld -EL -maarch64elf -mllvm -import-instr-limit=5 -r -o vmlinux.o
--T .tmp_initcalls.lds --whole-archive arch/arm64/kernel/head.o
-init/built-in.a usr/built-in.a arch/arm64/built-in.a kernel/built-in.a
-certs/built-in.a mm/built-in.a fs/built-in.a ipc/built-in.a
-security/built-in.a crypto/built-in.a block/built-in.a
-arch/arm64/lib/built-in.a lib/built-in.a drivers/built-in.a
-sound/built-in.a net/built-in.a virt/built-in.a --no-whole-archive
---start-group arch/arm64/lib/lib.a lib/lib.a
-./drivers/firmware/efi/libstub/lib.a --end-group
-  "ld.lld: error: arch/arm64/kernel/head.o: invalid symbol index"
-  after about 30 minutes
+and which started life as a reimplementation of some patches from Qais:
 
-- CONFIG_CPU_BIG_ENDIAN doesn't seem to work with lld, and LTO
-  doesn't work with ld.bfd.
-  I've added a CPU_LITTLE_ENDIAN dependency to
-  ARCH_SUPPORTS_LTO_CLANG{,THIN}
+  https://lore.kernel.org/r/20201021104611.2744565-1-qais.yousef@arm.com
 
-- one build failed with
-  "ld.lld: error: Never resolved function from blockaddress (Producer:
-'LLVM12.0.0' Reader: 'LLVM 12.0.0')"
-  Not sure how to debug this
+There's also now a nice writeup on LWN:
 
-- one build seems to have dropped all symbols the string operations
-from vmlinux,
-  so while the link goes through, modules cannot be loaded:
- ERROR: modpost: "memmove" [drivers/media/rc/rc-core.ko] undefined!
- ERROR: modpost: "memcpy" [net/wireless/cfg80211.ko] undefined!
- ERROR: modpost: "memcpy" [net/8021q/8021q.ko] undefined!
- ERROR: modpost: "memset" [net/8021q/8021q.ko] undefined!
- ERROR: modpost: "memcpy" [net/unix/unix.ko] undefined!
- ERROR: modpost: "memset" [net/sched/cls_u32.ko] undefined!
- ERROR: modpost: "memcpy" [net/sched/cls_u32.ko] undefined!
- ERROR: modpost: "memset" [net/sched/sch_skbprio.ko] undefined!
- ERROR: modpost: "memcpy" [net/802/garp.ko] undefined!
- I first thought this was related to a clang-12 bug I saw the other day, but
- this also happens with clang-11
+  https://lwn.net/Articles/838339/
 
-- many builds complain about thousands of duplicate symbols in the kernel, e.g.
-  ld.lld: error: duplicate symbol: qrtr_endpoint_post
- >>> defined in net/qrtr/qrtr.lto.o
- >>> defined in net/qrtr/qrtr.o
- ld.lld: error: duplicate symbol: init_module
- >>> defined in crypto/842.lto.o
- >>> defined in crypto/842.o
- ld.lld: error: duplicate symbol: init_module
- >>> defined in net/netfilter/nfnetlink_log.lto.o
- >>> defined in net/netfilter/nfnetlink_log.o
- ld.lld: error: duplicate symbol: vli_from_be64
- >>> defined in crypto/ecc.lto.o
- >>> defined in crypto/ecc.o
- ld.lld: error: duplicate symbol: __mod_of__plldig_clk_id_device_table
- >>> defined in drivers/clk/clk-plldig.lto.o
- >>> defined in drivers/clk/clk-plldig.o
+and rumours of a feature film are doing the rounds.
 
-Not sure if these are all known issues. If there is one you'd like me try
-take a closer look at for finding which config options break it, I can try
+[subscriber-only, but if you're reading this then you should really
+ subscribe.]
 
-     Arnd
+The aim of this series is to allow 32-bit ARM applications to run on
+arm64 SoCs where not all of the CPUs support the 32-bit instruction set.
+Unfortunately, such SoCs are real and will continue to be productised
+over the next few years at least. I can assure you that I'm not just
+doing this for fun.
+
+Changes in v5 include:
+
+  * Teach cpuset_cpus_allowed() about task_cpu_possible_mask() so that
+    we can avoid returning incompatible CPUs for a given task. This
+    means that sched_setaffinity() can be used with larger masks (like
+    the online mask) from userspace and also allows us to take into
+    account the cpuset hierarchy when forcefully overriding the affinity
+    for a task on execve().
+
+  * Honour task_cpu_possible_mask() when attaching a task to a cpuset,
+    so that the resulting affinity mask does not contain any incompatible
+    CPUs (since it would be rejected by set_cpus_allowed_ptr() otherwise).
+
+  * Moved overriding of the affinity mask into the scheduler core rather
+    than munge affinity masks directly in the architecture backend.
+
+  * Extended comments and documentation.
+
+  * Some renaming and cosmetic changes.
+
+I'm pretty happy with this now, although it still needs review and will
+require rebasing to play nicely with the SCA changes in -next.
+
+Cheers,
+
+Will
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Morten Rasmussen <morten.rasmussen@arm.com>
+Cc: Qais Yousef <qais.yousef@arm.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Quentin Perret <qperret@google.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Li Zefan <lizefan@huawei.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: kernel-team@android.com
+
+--->8
+
+
+Will Deacon (15):
+  arm64: cpuinfo: Split AArch32 registers out into a separate struct
+  arm64: Allow mismatched 32-bit EL0 support
+  KVM: arm64: Kill 32-bit vCPUs on systems with mismatched EL0 support
+  arm64: Kill 32-bit applications scheduled on 64-bit-only CPUs
+  arm64: Advertise CPUs capable of running 32-bit applications in sysfs
+  sched: Introduce task_cpu_possible_mask() to limit fallback rq
+    selection
+  cpuset: Don't use the cpu_possible_mask as a last resort for cgroup v1
+  cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()
+  sched: Reject CPU affinity changes based on task_cpu_possible_mask()
+  sched: Introduce force_compatible_cpus_allowed_ptr() to limit CPU
+    affinity
+  arm64: Implement task_cpu_possible_mask()
+  arm64: exec: Adjust affinity for compat tasks with mismatched 32-bit
+    EL0
+  arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched
+    system
+  arm64: Hook up cmdline parameter to allow mismatched 32-bit EL0
+  arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   9 +
+ .../admin-guide/kernel-parameters.txt         |   8 +
+ arch/arm64/include/asm/cpu.h                  |  44 ++--
+ arch/arm64/include/asm/cpucaps.h              |   3 +-
+ arch/arm64/include/asm/cpufeature.h           |   8 +-
+ arch/arm64/include/asm/mmu_context.h          |  13 ++
+ arch/arm64/kernel/cpufeature.c                | 219 ++++++++++++++----
+ arch/arm64/kernel/cpuinfo.c                   |  53 +++--
+ arch/arm64/kernel/process.c                   |  19 +-
+ arch/arm64/kvm/arm.c                          |  11 +-
+ include/linux/cpuset.h                        |   3 +-
+ include/linux/mmu_context.h                   |   8 +
+ include/linux/sched.h                         |   1 +
+ kernel/cgroup/cpuset.c                        |  39 ++--
+ kernel/sched/core.c                           | 112 +++++++--
+ 15 files changed, 426 insertions(+), 124 deletions(-)
+
+-- 
+2.29.2.576.ga3fc446d84-goog
+
