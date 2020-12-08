@@ -2,166 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D3A2D2C05
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 14:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF1A2D2C51
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 14:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729445AbgLHNaQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Dec 2020 08:30:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49190 "EHLO mail.kernel.org"
+        id S1729514AbgLHNzw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Dec 2020 08:55:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58018 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726080AbgLHNaO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 8 Dec 2020 08:30:14 -0500
-From:   Will Deacon <will@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com
-Subject: [PATCH v5 08/15] cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()
-Date:   Tue,  8 Dec 2020 13:28:28 +0000
-Message-Id: <20201208132835.6151-9-will@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201208132835.6151-1-will@kernel.org>
-References: <20201208132835.6151-1-will@kernel.org>
+        id S1726338AbgLHNzw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Dec 2020 08:55:52 -0500
+X-Gm-Message-State: AOAM531vd5GLJ17BIhllutjkE+6n48AniZDMzZN4ItSIvtDTIS7W8Z9L
+        5oWC82bBr16v2Ax/S/G/pXGTP2skjhWDLM+BhGQ=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607435711;
+        bh=aMUeJmcHjLR1mxPMY4lSg5wm08l9vr2Dq3J8KhZCHss=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=N6+VRiKj1w/sHG04FJYJajgruVEl0d0kXpByOymHxPthCNLPJiukFzJ0fV2Fks4F3
+         f3OYCjwUjrh0Mlf1Q4sJGjiuG+CSXHTbFZTkrqCv+RKCMWkLCdkoGeXDRPUxmeCutZ
+         PvCcGNK3GKImyzLMtrB2yTw7+GoV0yDqsIR4dn7IMy5VKyojDA4DfYN2ZEygwOrw5h
+         yf899Lyg8XrtlHlrasiYJQpQD5/jtisPkmLxhy3aBeoCxaov7xm4Im/ELWLRl42Ocw
+         cizq88EGMi2nzasl/XChEgEAvqZzmNujCnkYUHPFgAM4zpJ9J9XBeHGGlR89vy8Yhi
+         rTnMXtxRGJrBQ==
+X-Google-Smtp-Source: ABdhPJw84bKjNW6pc9lV2J+47WEe1njStGFQFPiO39biuyycOb/7NnBSKOzxngL0mEe4vYZqUHtN+LSV3ssbam6y5lc=
+X-Received: by 2002:a1c:b4c4:: with SMTP id d187mr3984205wmf.38.1607435710266;
+ Tue, 08 Dec 2020 05:55:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201201213707.541432-1-samitolvanen@google.com> <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
+In-Reply-To: <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 8 Dec 2020 14:54:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0AyciKoHzrgtaLxP9boo8WqZCe8YfPBzGPQ14PW_2KgQ@mail.gmail.com>
+Message-ID: <CAK8P3a0AyciKoHzrgtaLxP9boo8WqZCe8YfPBzGPQ14PW_2KgQ@mail.gmail.com>
+Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Asymmetric systems may not offer the same level of userspace ISA support
-across all CPUs, meaning that some applications cannot be executed by
-some CPUs. As a concrete example, upcoming arm64 big.LITTLE designs do
-not feature support for 32-bit applications on both clusters.
+On Tue, Dec 8, 2020 at 1:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> On Tue, Dec 1, 2020 at 10:37 PM 'Sami Tolvanen' via Clang Built Linux <clang-built-linux@googlegroups.com> wrote:
+>
+> - many builds complain about thousands of duplicate symbols in the kernel, e.g.
+>   ld.lld: error: duplicate symbol: qrtr_endpoint_post
+>  >>> defined in net/qrtr/qrtr.lto.o
+>  >>> defined in net/qrtr/qrtr.o
+>  ld.lld: error: duplicate symbol: init_module
+>  >>> defined in crypto/842.lto.o
+>  >>> defined in crypto/842.o
+>  ld.lld: error: duplicate symbol: init_module
+>  >>> defined in net/netfilter/nfnetlink_log.lto.o
+>  >>> defined in net/netfilter/nfnetlink_log.o
+>  ld.lld: error: duplicate symbol: vli_from_be64
+>  >>> defined in crypto/ecc.lto.o
+>  >>> defined in crypto/ecc.o
+>  ld.lld: error: duplicate symbol: __mod_of__plldig_clk_id_device_table
+>  >>> defined in drivers/clk/clk-plldig.lto.o
+>  >>> defined in drivers/clk/clk-plldig.o
 
-Modify guarantee_online_cpus() to take task_cpu_possible_mask() into
-account when trying to find a suitable set of online CPUs for a given
-task. This will avoid passing an invalid mask to set_cpus_allowed_ptr()
-during ->attach() and will subsequently allow the cpuset hierarchy to be
-taken into account when forcefully overriding the affinity mask for a
-task which requires migration to a compatible CPU.
+A small update here: I see this behavior with every single module
+build, including 'tinyconfig' with one module enabled, and 'defconfig'.
 
-Cc: Li Zefan <lizefan@huawei.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Will Deacon <will@kernel.org>
----
- include/linux/cpuset.h |  3 ++-
- kernel/cgroup/cpuset.c | 33 +++++++++++++++++++--------------
- 2 files changed, 21 insertions(+), 15 deletions(-)
+I tuned the randconfig setting using KCONFIG_PROBABILITY=2:2:1
+now, which only enables a few symbols. With this I see faster build
+times (obvioulsy), aroudn 30 seconds per kernel, and all small builds
+with CONFIG_MODULES disabled so far succeed.
+It appears that the problems I saw originally only happen for larger
+configurations, or possibly a combination of Kconfig options that don't
+happen that often on randconfig builds with low
+KCONFIG_PROBABILITY.
 
-diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-index 04c20de66afc..414a8e694413 100644
---- a/include/linux/cpuset.h
-+++ b/include/linux/cpuset.h
-@@ -15,6 +15,7 @@
- #include <linux/cpumask.h>
- #include <linux/nodemask.h>
- #include <linux/mm.h>
-+#include <linux/mmu_context.h>
- #include <linux/jump_label.h>
- 
- #ifdef CONFIG_CPUSETS
-@@ -184,7 +185,7 @@ static inline void cpuset_read_unlock(void) { }
- static inline void cpuset_cpus_allowed(struct task_struct *p,
- 				       struct cpumask *mask)
- {
--	cpumask_copy(mask, cpu_possible_mask);
-+	cpumask_copy(mask, task_cpu_possible_mask(p));
- }
- 
- static inline void cpuset_cpus_allowed_fallback(struct task_struct *p)
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index e970737c3ed2..d30febf1f69f 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -372,18 +372,26 @@ static inline bool is_in_v2_mode(void)
- }
- 
- /*
-- * Return in pmask the portion of a cpusets's cpus_allowed that
-- * are online.  If none are online, walk up the cpuset hierarchy
-- * until we find one that does have some online cpus.
-+ * Return in pmask the portion of a task's cpusets's cpus_allowed that
-+ * are online and are capable of running the task.  If none are found,
-+ * walk up the cpuset hierarchy until we find one that does have some
-+ * appropriate cpus.
-  *
-  * One way or another, we guarantee to return some non-empty subset
-  * of cpu_online_mask.
-  *
-  * Call with callback_lock or cpuset_mutex held.
-  */
--static void guarantee_online_cpus(struct cpuset *cs, struct cpumask *pmask)
-+static void guarantee_online_cpus(struct task_struct *tsk,
-+				  struct cpumask *pmask)
- {
--	while (!cpumask_intersects(cs->effective_cpus, cpu_online_mask)) {
-+	struct cpuset *cs = task_cs(tsk);
-+	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
-+
-+	if (WARN_ON(!cpumask_and(pmask, possible_mask, cpu_online_mask)))
-+		cpumask_copy(pmask, cpu_online_mask);
-+
-+	while (!cpumask_intersects(cs->effective_cpus, pmask)) {
- 		cs = parent_cs(cs);
- 		if (unlikely(!cs)) {
- 			/*
-@@ -393,11 +401,10 @@ static void guarantee_online_cpus(struct cpuset *cs, struct cpumask *pmask)
- 			 * cpuset's effective_cpus is on its way to be
- 			 * identical to cpu_online_mask.
- 			 */
--			cpumask_copy(pmask, cpu_online_mask);
- 			return;
- 		}
- 	}
--	cpumask_and(pmask, cs->effective_cpus, cpu_online_mask);
-+	cpumask_and(pmask, pmask, cs->effective_cpus);
- }
- 
- /*
-@@ -2176,15 +2183,13 @@ static void cpuset_attach(struct cgroup_taskset *tset)
- 
- 	percpu_down_write(&cpuset_rwsem);
- 
--	/* prepare for attach */
--	if (cs == &top_cpuset)
--		cpumask_copy(cpus_attach, cpu_possible_mask);
--	else
--		guarantee_online_cpus(cs, cpus_attach);
--
- 	guarantee_online_mems(cs, &cpuset_attach_nodemask_to);
- 
- 	cgroup_taskset_for_each(task, css, tset) {
-+		if (cs != &top_cpuset)
-+			guarantee_online_cpus(task, cpus_attach);
-+		else
-+			cpumask_copy(cpus_attach, task_cpu_possible_mask(task));
- 		/*
- 		 * can_attach beforehand should guarantee that this doesn't
- 		 * fail.  TODO: have a better way to handle failure here
-@@ -3280,7 +3285,7 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
- 
- 	spin_lock_irqsave(&callback_lock, flags);
- 	rcu_read_lock();
--	guarantee_online_cpus(task_cs(tsk), pmask);
-+	guarantee_online_cpus(tsk, pmask);
- 	rcu_read_unlock();
- 	spin_unlock_irqrestore(&callback_lock, flags);
- }
--- 
-2.29.2.576.ga3fc446d84-goog
-
+      Arnd
