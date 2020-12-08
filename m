@@ -2,97 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBFA2D1F4F
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 01:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E01C2D202D
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 02:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728842AbgLHArr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Dec 2020 19:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728824AbgLHArr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Dec 2020 19:47:47 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D16C061749;
-        Mon,  7 Dec 2020 16:47:03 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id c14so1308207qtn.0;
-        Mon, 07 Dec 2020 16:47:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VZHUufd0g6UdJFDVTYdblkgbgMRwbf0Y/fHI7mLRtWU=;
-        b=l8tTsbTg21o1/hkJDil01QyPt1S+hNNQArxmXVMWZl+14KG3cwUPD9yhA9zz5er/OS
-         WYmStLyhnHG81FxqOu7c5y430buEHIvhm1Kow/NQKRBzNLmEZELihteVRg5vdXuLfAHG
-         rCoL22aDgnYFYdg61Z5cuWrNOH2SbjzbnuSM9xLI1c/BWw55NcLnaGoD4ziICgb+XXXK
-         ZeF6QVt5WjFDXfuParnupBwgMVJIt4Nk49/ME1JGFmKbptXtgpSroyIdGE0tbGMqLfhi
-         B0JM0p8wI/gGSE0p8C1IQpscG2TL91p7V58n7vS9habhu8GuNnQ8wlQktv+vR8fmUA6f
-         4RyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VZHUufd0g6UdJFDVTYdblkgbgMRwbf0Y/fHI7mLRtWU=;
-        b=SRGbrW0SIzqsr+RLBdHk1qe54LmJtlZUTuSdDq32ZhX/qSt382FeH7cHaDOVR2ULIO
-         +9QC52fS5tcfJGXO5NuaRAssTgmN9qGBaL/F1fVw64O0FWphC68EkgkZ2yFW3wGnYyMh
-         5k7o4p/3DTyZ9oOUbPrnr4iEjXbySPqI+v29gBCxAonPmfLKv5AoK/bA8qh8oprUZEBj
-         3jhaYSjR6qdL8euMWpQwY47CDVOURDoOsyt6GcpBBJDIR61c5zMWQNVsTp1e2zG+tFLC
-         RA+q7LewQCZuoOmb1oSgW4HC2NBUP7uev7QO0MNd85qT6c23uzAwUiZs0lDr9fS1SnwA
-         x8Hw==
-X-Gm-Message-State: AOAM532JHV4ENlJKXhyq/SwsONxn00CgplUokizYTLOmhWKGZ5fHQcAO
-        L9/NG0yViZHvZ9yBSoq6LyM=
-X-Google-Smtp-Source: ABdhPJxkqh2BZJT/hzS1hsNzGm89wAIBgMDItnp0jBYXVFcXuYuBQBr+FGcdnMvIwDpLuGTDZMUazw==
-X-Received: by 2002:ac8:51d8:: with SMTP id d24mr14423965qtn.73.1607388422238;
-        Mon, 07 Dec 2020 16:47:02 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id x28sm11544785qtv.8.2020.12.07.16.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 16:47:01 -0800 (PST)
-Date:   Mon, 7 Dec 2020 17:46:59 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Will Deacon <will@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        id S1726459AbgLHBfn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Dec 2020 20:35:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47376 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726190AbgLHBfn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 7 Dec 2020 20:35:43 -0500
+Date:   Mon, 7 Dec 2020 17:34:59 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1607391302;
+        bh=i3984NOIVWMaE+QFhgCLJtfILbc6/RSkG9XvGukRs7w=;
+        h=From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hca7faBpqEriF6FZPtd0wlbzAlfSR3EKfyTBaBt4dgDAVy9k1yPd7IQFpymwABy3h
+         s9qHHlOLbsb4kwF/DfCdj2T4PkbJ+5OVWDB3l03SlUvMWEw9yXHqVH08/s5GvFXorR
+         waVdV51wewfkqAeXxoNzsw4CAoe7ms/Mee6ucYrc=
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Qian Cai <qcai@redhat.com>, Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>, Jian Cai <jiancai@google.com>,
-        Kristof Beyls <Kristof.Beyls@arm.com>
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-Message-ID: <20201208004659.GA587492@ubuntu-m3-large-x86>
-References: <20201201213707.541432-1-samitolvanen@google.com>
- <20201203112622.GA31188@willie-the-truck>
- <CABCJKueby8pUoN7f5=6RoyLSt4PgWNx8idUej0sNwAi0F3Xqzw@mail.gmail.com>
- <20201203182252.GA32011@willie-the-truck>
- <CAKwvOdnvq=L=gQMv9MHaStmKMOuD5jvffzMedhp3gytYB6R7TQ@mail.gmail.com>
- <CABCJKufgkq+k0DeYaXrzjXniy=T_N4sN1bxoK9=cUxTZN5xSVQ@mail.gmail.com>
- <20201206065028.GA2819096@ubuntu-m3-large-x86>
- <CABCJKue9TJnhge6TVPj9vfZXPGD4RW2JYiN3kNwVKNovTCq8ZA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKue9TJnhge6TVPj9vfZXPGD4RW2JYiN3kNwVKNovTCq8ZA@mail.gmail.com>
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v14 09/10] arch, mm: wire up memfd_secret system call
+ were relevant
+Message-Id: <20201207173459.a4d4a3404e163314c29f0785@linux-foundation.org>
+In-Reply-To: <20201207160006.GG1112728@linux.ibm.com>
+References: <20201203062949.5484-1-rppt@kernel.org>
+        <20201203062949.5484-10-rppt@kernel.org>
+        <81631d3391abca3f41f2e19092b97a61d49f4e44.camel@redhat.com>
+        <20201207160006.GG1112728@linux.ibm.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Dec 06, 2020 at 12:09:31PM -0800, Sami Tolvanen wrote:
-> Sure, looks good to me. However, I think we should also test for
-> LLVM=1 to avoid possible further issues with mismatched toolchains
-> instead of only checking for llvm-nm and llvm-ar.
+On Mon, 7 Dec 2020 18:00:06 +0200 Mike Rapoport <rppt@linux.ibm.com> wrote:
 
-It might still be worth testing for $(AR) and $(NM) because in theory, a
-user could say 'make AR=ar LLVM=1'. Highly unlikely I suppose but worth
-considering.
+> > 
+> > I can't see where was it defined for arm64 after it looks like Andrew has
+> > deleted the  above chunk. Thus, we have a warning using this .config:
+> > 
+> > https://cailca.coding.net/public/linux/mm/git/files/master/arm64.config
+> > 
+> > <stdin>:1539:2: warning: #warning syscall memfd_secret not implemented [-Wcpp]
+> 
+> I was under the impression that Andrew only removed the #ifdef...
+> 
+> Andrew, can you please restore syscall definition for memfd_secret() in
+> include/uapi/asm-generic/unistd.h?
+> 
 
-Cheers,
-Nathan
+urgh, OK, that seems to have got lost in the (moderate amount of)
+conflict resolution).
+
+--- a/include/uapi/asm-generic/unistd.h~arch-mm-wire-up-memfd_secret-system-call-were-relevant-fix
++++ a/include/uapi/asm-generic/unistd.h
+@@ -863,9 +863,13 @@ __SYSCALL(__NR_process_madvise, sys_proc
+ __SYSCALL(__NR_watch_mount, sys_watch_mount)
+ #define __NR_epoll_pwait2 442
+ __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
++#ifdef __ARCH_WANT_MEMFD_SECRET
++#define __NR_memfd_secret 443
++__SYSCALL(__NR_memfd_secret, sys_memfd_secret)
++#endif
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 443
++#define __NR_syscalls 444
+ 
+ /*
+  * 32 bit systems traditionally used different
+_
+
