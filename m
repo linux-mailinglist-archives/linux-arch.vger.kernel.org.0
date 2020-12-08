@@ -2,53 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C822D264C
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 09:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E037E2D2907
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Dec 2020 11:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgLHIfi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Dec 2020 03:35:38 -0500
-Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:51034 "EHLO
-        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725927AbgLHIfi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Dec 2020 03:35:38 -0500
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
-        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id CBA0F1A606C;
-        Tue,  8 Dec 2020 04:09:26 +0900 (JST)
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
-        by postfix.imss71 (Postfix) with ESMTP id 71FC683826D;
-        Tue,  8 Dec 2020 04:09:26 +0900 (JST)
-Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
-        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id 426EA83825B;
-        Tue,  8 Dec 2020 04:09:26 +0900 (JST)
+        id S1728699AbgLHKgf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Dec 2020 05:36:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44474 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727965AbgLHKgf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 8 Dec 2020 05:36:35 -0500
+Date:   Tue, 8 Dec 2020 10:35:50 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607423754;
+        bh=ffXh/ffsFEu14yYkVpY1W+3Tb6JWOvb9jWcp7gmAz2g=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jv1ty0fx2BX6Qj72fdbIYdZax8z6degjujXihkSyIV3UDb97UyieX87rWb9JnOawd
+         pXhwuacdG+oxlOhtVN1nycBQGosStF8DwNj07kppxrJ/n2SKKvQORxiMA19Mb+xBJs
+         xz71tgAnVkOVazSgi0d+kxvDN5kC6lqWXpiBAtVnBZmobANuUmpOrTEtMaANVSB3PQ
+         gwZO1zItEGR8VUcUdPpVyXosXmXS7/zzf5wYI64aJrLaJl0Qf6RG0/jONM3jY+8OW7
+         Y0oeCYv2buhqif9br8mchpVwsELCVxhQigueqioBdr8BhNLL7Na0L7A9OlPMlJqJSq
+         KfGD6MFcN2qew==
+From:   Will Deacon <will@kernel.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>
+Subject: Re: [PATCH] arm64: enable GENERIC_FIND_FIRST_BIT
+Message-ID: <20201208103549.GA5887@willie-the-truck>
+References: <20201205165406.108990-1-yury.norov@gmail.com>
+ <20201207112530.GB4379@willie-the-truck>
+ <CAAH8bW-fb0wPwwvo8P8VW33zV=Wi_LPWxdJH8y2wdGGqPE+3nA@mail.gmail.com>
 MIME-Version: 1.0
-Message-ID: <20201207190926.000057A2.0664@hyogo-dai.ac.jp>
-Date:   Tue, 08 Dec 2020 04:09:26 +0900
-From:   "Raymond " <hozumi@hyogo-dai.ac.jp>
-To:     <infocarferw1@aim.com>
-Reply-To: <infocarfer@aim.com>
-Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
-         Kuo Fung I have Important Matter to Discuss with you concerning
-         my late client. Died without a NEXT OF KIN. Send me your private
-         email for full details information.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MAILER: Active! mail
-X-TM-AS-MML: disable
-X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
-X-TM-AS-Result: No--2.951-5.0-31-10
-X-imss-scan-details: No--2.951-5.0-31-10
-X-TM-AS-User-Approved-Sender: No
-X-TMASE-MatchedRID: X41QhRrT5f5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce6P0
-        clhHAFPyJA6GJqxAEzL554DD9nXlqqPFjJEFr+olfeZdJ1XsoriOub3SYcq1hJf7eAx/Ae/AbQo
-        eraIcZBRw7u01FqNA2K1Ia4IbeAdLm9ukrtqhno/rIUidklntLAP5zT0d393cymsk/wUE4hoZaR
-        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
-        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAH8bW-fb0wPwwvo8P8VW33zV=Wi_LPWxdJH8y2wdGGqPE+3nA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-email:kraymond75@aol.com
+On Mon, Dec 07, 2020 at 05:59:16PM -0800, Yury Norov wrote:
+> (CC: Alexey Klimov)
+> 
+> On Mon, Dec 7, 2020 at 3:25 AM Will Deacon <will@kernel.org> wrote:
+> >
+> > On Sat, Dec 05, 2020 at 08:54:06AM -0800, Yury Norov wrote:
+> > > ARM64 doesn't implement find_first_{zero}_bit in arch code and doesn't
+> > > enable it in config. It leads to using find_next_bit() which is less
+> > > efficient:
+> >
+> > [...]
+> >
+> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > index 1515f6f153a0..2b90ef1f548e 100644
+> > > --- a/arch/arm64/Kconfig
+> > > +++ b/arch/arm64/Kconfig
+> > > @@ -106,6 +106,7 @@ config ARM64
+> > >       select GENERIC_CPU_AUTOPROBE
+> > >       select GENERIC_CPU_VULNERABILITIES
+> > >       select GENERIC_EARLY_IOREMAP
+> > > +     select GENERIC_FIND_FIRST_BIT
+> >
+> > Does this actually make any measurable difference? The disassembly with
+> > or without this is _very_ similar for me (clang 11).
+> >
+> > Will
+> 
+> On A-53 find_first_bit() is almost twice faster than find_next_bit(),
+> according to
+> lib/find_bit_benchmark. (Thanks to Alexey for testing.)
 
+I guess it's more compiler dependent than anything else, and it's a pity
+that find_next_bit() isn't implemented in terms of the generic
+find_first_bit() tbh, but if the numbers are as you suggest then I don't
+have a problem selecting this on arm64.
 
-
+Will
