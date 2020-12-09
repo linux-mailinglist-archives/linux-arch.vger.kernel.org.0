@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9FE2D4D95
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09552D4D9D
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388454AbgLIWZO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 17:25:14 -0500
-Received: from mga18.intel.com ([134.134.136.126]:14575 "EHLO mga18.intel.com"
+        id S2388774AbgLIW0F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 17:26:05 -0500
+Received: from mga18.intel.com ([134.134.136.126]:14580 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388691AbgLIWZF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 17:25:05 -0500
-IronPort-SDR: iZHq93F+BqXqCbGc4DVgpccVzUMX7Dqdxr+oG+T7cnYUtnJv3tNY5NXc3mgvumKPYNeOCgso/G
- AJeZccPBNf8w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918087"
+        id S2388770AbgLIW0B (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 17:26:01 -0500
+IronPort-SDR: iVDL0VLggpUUvJPQVpyeCTCcB6mYiyNvtciHcwEfky784BKdtBk8NanH1mMPMwnx0tOerCnITR
+ UWVqpi9crkGg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918139"
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="161918087"
+   d="scan'208";a="161918139"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:49 -0800
-IronPort-SDR: OamW4pYyTSz0ZhOUmwFPRhgHCsZR41BIf0AjT3cOqRtoFj4wOq1r8A2yBMwJm+x1Z8ggzPa/VP
- TpuEkmiewkuA==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:53 -0800
+IronPort-SDR: CtE8vg1RI+oHoMFz/iD08gUZEb2w7jdAnkCtyBHb2bcp6WiLxS1k+lVPuNGMj/gFNqmekuy905
+ f5M823d8wyiA==
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="318543548"
+   d="scan'208";a="318543600"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:49 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:53 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v16 12/26] mm: Introduce VM_SHSTK for shadow stack memory
-Date:   Wed,  9 Dec 2020 14:23:06 -0800
-Message-Id: <20201209222320.1724-13-yu-cheng.yu@intel.com>
+Subject: [PATCH v16 26/26] mm: Introduce PROT_SHSTK for shadow stack
+Date:   Wed,  9 Dec 2020 14:23:20 -0800
+Message-Id: <20201209222320.1724-27-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201209222320.1724-1-yu-cheng.yu@intel.com>
 References: <20201209222320.1724-1-yu-cheng.yu@intel.com>
@@ -64,77 +64,208 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A shadow stack PTE must be read-only and have _PAGE_DIRTY set.  However,
-read-only and Dirty PTEs also exist for copy-on-write (COW) pages.  These
-two cases are handled differently for page faults.  Introduce VM_SHSTK to
-track shadow stack VMAs.
+There are three possible options to create a shadow stack allocation API:
+an arch_prctl, a new syscall, or adding PROT_SHSTK to mmap()/mprotect().
+Each has its advantages and compromises.
+
+An arch_prctl() is the least intrusive.  However, the existing x86
+arch_prctl() takes only two parameters.  Multiple parameters must be
+passed in a memory buffer.  There is a proposal to pass more parameters in
+registers [1], but no active discussion on that.
+
+A new syscall minimizes compatibility issues and offers an extensible frame
+work to other architectures, but this will likely result in some overlap of
+mmap()/mprotect().
+
+The introduction of PROT_SHSTK to mmap()/mprotect() takes advantage of
+existing APIs.  The x86-specific PROT_SHSTK is translated to VM_SHSTK and
+a shadow stack mapping is created without reinventing the wheel.  There are
+potential pitfalls though.  The most obvious one would be using this as a
+bypass to shadow stack protection.  However, the attacker would have to get
+to the syscall first.
+
+Since arch_calc_vm_prot_bits() is modified, I have moved arch_vm_get_page
+_prot() and arch_calc_vm_prot_bits() to x86/include/asm/mman.h.
+This will be more consistent with other architectures.
+
+[1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/mm/mmap.c | 2 ++
- fs/proc/task_mmu.c | 3 +++
- include/linux/mm.h | 8 ++++++++
- 3 files changed, 13 insertions(+)
+ arch/x86/include/asm/mman.h      | 83 ++++++++++++++++++++++++++++++++
+ arch/x86/include/uapi/asm/mman.h | 28 ++---------
+ include/linux/mm.h               |  1 +
+ mm/mmap.c                        |  8 ++-
+ 4 files changed, 95 insertions(+), 25 deletions(-)
+ create mode 100644 arch/x86/include/asm/mman.h
 
-diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-index c90c20904a60..a22c6b6fc607 100644
---- a/arch/x86/mm/mmap.c
-+++ b/arch/x86/mm/mmap.c
-@@ -165,6 +165,8 @@ unsigned long get_mmap_base(int is_legacy)
- 
- const char *arch_vma_name(struct vm_area_struct *vma)
- {
-+	if (vma->vm_flags & VM_SHSTK)
-+		return "[shadow stack]";
- 	return NULL;
- }
- 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 217aa2705d5d..5fc5c3b6ea31 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -661,6 +661,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
- 		[ilog2(VM_PKEY_BIT4)]	= "",
- #endif
- #endif /* CONFIG_ARCH_HAS_PKEYS */
-+#ifdef CONFIG_X86_CET_USER
-+		[ilog2(VM_SHSTK)]	= "ss",
-+#endif
- 	};
- 	size_t i;
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index db6ae4d3fb4e..ab11e47945ee 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -304,11 +304,13 @@ extern unsigned int kobjsize(const void *objp);
- #define VM_HIGH_ARCH_BIT_2	34	/* bit only usable on 64-bit architectures */
- #define VM_HIGH_ARCH_BIT_3	35	/* bit only usable on 64-bit architectures */
- #define VM_HIGH_ARCH_BIT_4	36	/* bit only usable on 64-bit architectures */
-+#define VM_HIGH_ARCH_BIT_5	37	/* bit only usable on 64-bit architectures */
- #define VM_HIGH_ARCH_0	BIT(VM_HIGH_ARCH_BIT_0)
- #define VM_HIGH_ARCH_1	BIT(VM_HIGH_ARCH_BIT_1)
- #define VM_HIGH_ARCH_2	BIT(VM_HIGH_ARCH_BIT_2)
- #define VM_HIGH_ARCH_3	BIT(VM_HIGH_ARCH_BIT_3)
- #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
-+#define VM_HIGH_ARCH_5	BIT(VM_HIGH_ARCH_BIT_5)
- #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
- 
- #ifdef CONFIG_ARCH_HAS_PKEYS
-@@ -324,6 +326,12 @@ extern unsigned int kobjsize(const void *objp);
- #endif
- #endif /* CONFIG_ARCH_HAS_PKEYS */
- 
-+#ifdef CONFIG_X86_CET_USER
-+# define VM_SHSTK	VM_HIGH_ARCH_5
+diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+new file mode 100644
+index 000000000000..6cb7801edb4b
+--- /dev/null
++++ b/arch/x86/include/asm/mman.h
+@@ -0,0 +1,83 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_MMAN_H
++#define _ASM_X86_MMAN_H
++
++#include <linux/mm.h>
++#include <uapi/asm/mman.h>
++
++#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
++/*
++ * Take the 4 protection key bits out of the vma->vm_flags
++ * value and turn them in to the bits that we can put in
++ * to a pte.
++ *
++ * Only override these if Protection Keys are available
++ * (which is only on 64-bit).
++ */
++#define arch_vm_get_page_prot(vm_flags)	__pgprot(	\
++		((vm_flags) & VM_PKEY_BIT0 ? _PAGE_PKEY_BIT0 : 0) |	\
++		((vm_flags) & VM_PKEY_BIT1 ? _PAGE_PKEY_BIT1 : 0) |	\
++		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
++		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
++
++#define pkey_vm_prot_bits(prot, key) (			\
++		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
++		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
++		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
++		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
 +#else
-+# define VM_SHSTK	VM_NONE
++#define pkey_vm_prot_bits(prot, key) (0)
 +#endif
 +
++static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
++	unsigned long pkey)
++{
++	unsigned long vm_prot_bits = pkey_vm_prot_bits(prot, pkey);
++
++	if (!(prot & PROT_WRITE) && (prot & PROT_SHSTK))
++		vm_prot_bits |= VM_SHSTK;
++
++	return vm_prot_bits;
++}
++#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
++
++#ifdef CONFIG_X86_CET_USER
++static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
++{
++	unsigned long valid = PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM;
++
++	if (prot & ~(valid | PROT_SHSTK))
++		return false;
++
++	if (prot & PROT_SHSTK) {
++		struct vm_area_struct *vma;
++
++		if (!current->thread.cet.shstk_size)
++			return false;
++
++		/*
++		 * A shadow stack mapping is indirectly writable by only
++		 * the CALL and WRUSS instructions, but not other write
++		 * instructions).  PROT_SHSTK and PROT_WRITE are mutually
++		 * exclusive.
++		 */
++		if (prot & PROT_WRITE)
++			return false;
++
++		vma = find_vma(current->mm, addr);
++		if (!vma)
++			return false;
++
++		/*
++		 * Shadow stack cannot be backed by a file or shared.
++		 */
++		if (vma->vm_file || (vma->vm_flags & VM_SHARED))
++			return false;
++	}
++
++	return true;
++}
++#define arch_validate_prot arch_validate_prot
++#endif
++
++#endif /* _ASM_X86_MMAN_H */
+diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+index d4a8d0424bfb..39bb7db344a6 100644
+--- a/arch/x86/include/uapi/asm/mman.h
++++ b/arch/x86/include/uapi/asm/mman.h
+@@ -1,31 +1,11 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _ASM_X86_MMAN_H
+-#define _ASM_X86_MMAN_H
++#ifndef _UAPI_ASM_X86_MMAN_H
++#define _UAPI_ASM_X86_MMAN_H
+ 
+ #define MAP_32BIT	0x40		/* only give out 32bit addresses */
+ 
+-#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+-/*
+- * Take the 4 protection key bits out of the vma->vm_flags
+- * value and turn them in to the bits that we can put in
+- * to a pte.
+- *
+- * Only override these if Protection Keys are available
+- * (which is only on 64-bit).
+- */
+-#define arch_vm_get_page_prot(vm_flags)	__pgprot(	\
+-		((vm_flags) & VM_PKEY_BIT0 ? _PAGE_PKEY_BIT0 : 0) |	\
+-		((vm_flags) & VM_PKEY_BIT1 ? _PAGE_PKEY_BIT1 : 0) |	\
+-		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
+-		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
+-
+-#define arch_calc_vm_prot_bits(prot, key) (		\
+-		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
+-		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
+-		((key) & 0x4 ? VM_PKEY_BIT2 : 0) |      \
+-		((key) & 0x8 ? VM_PKEY_BIT3 : 0))
+-#endif
++#define PROT_SHSTK	0x10		/* shadow stack pages */
+ 
+ #include <asm-generic/mman.h>
+ 
+-#endif /* _ASM_X86_MMAN_H */
++#endif /* _UAPI_ASM_X86_MMAN_H */
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 331058914b15..89d402e52442 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -334,6 +334,7 @@ extern unsigned int kobjsize(const void *objp);
+ 
  #if defined(CONFIG_X86)
  # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
++# define VM_ARCH_CLEAR	VM_SHSTK
  #elif defined(CONFIG_PPC)
+ # define VM_SAO		VM_ARCH_1	/* Strong Access Ordering (powerpc) */
+ #elif defined(CONFIG_PARISC)
+diff --git a/mm/mmap.c b/mm/mmap.c
+index c193c5d70197..ab1365106791 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1483,6 +1483,12 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 		struct inode *inode = file_inode(file);
+ 		unsigned long flags_mask;
+ 
++		/*
++		 * Call stack cannot be backed by a file.
++		 */
++		if (vm_flags & VM_SHSTK)
++			return -EINVAL;
++
+ 		if (!file_mmap_ok(file, inode, pgoff, len))
+ 			return -EOVERFLOW;
+ 
+@@ -1547,7 +1553,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	} else {
+ 		switch (flags & MAP_TYPE) {
+ 		case MAP_SHARED:
+-			if (vm_flags & (VM_GROWSDOWN|VM_GROWSUP))
++			if (vm_flags & (VM_GROWSDOWN|VM_GROWSUP|VM_SHSTK))
+ 				return -EINVAL;
+ 			/*
+ 			 * Ignore pgoff.
 -- 
 2.21.0
 
