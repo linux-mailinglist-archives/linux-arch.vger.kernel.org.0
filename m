@@ -2,39 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D08742D485F
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 18:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60812D4A09
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 20:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728498AbgLIRwk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 12:52:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49798 "EHLO mail.kernel.org"
+        id S1727794AbgLITZ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 14:25:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34436 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728375AbgLIRwe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 12:52:34 -0500
-X-Gm-Message-State: AOAM530y4QUf0cGgU8zIRU8GLYcT9iFMN2zPz6qZljF3tBpaqdUei+kM
-        PYF8OBSdIJK0mBtVaUng82kgkNjcDBZ33/ojEgA=
+        id S1729345AbgLITZV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 14:25:21 -0500
+X-Gm-Message-State: AOAM532l3TbJttgtMFWH/FX67lJ0sF8srCFNHYJ1OCbEfC0IAsx9G5Za
+        vQUdSmwYe/3ytUt5nEORRuc865GWKYZdZBbFY5U=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607536312;
-        bh=PkhafiKufzKb4ug4EZv6MWBGYou8NhXyEMjpgO/uc5E=;
+        s=k20201202; t=1607541880;
+        bh=PZ3OfDYS58ZqvFY9CXvEZH4DVeL16HFv3jTodD2L44Y=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nO+yHSD0aD/myoaEBloVJSGAXz/9Z9jr2v13Ie8CZZquSOaxn9x54EWCBKPspHYr9
-         C7ov27bcIKqHGqsw0G2b+SRoGTpaMyzBiPtAowkH+Ri14rs1FZxhzgI1YDBJU3B6Yh
-         wsPQInRPENeXuhDzJK8x93nWLhePtzQbjVQ4JCq8GZAw33D4KaIEBkodUp45W78tZY
-         oMFyQlU9exNc1aSWvJld48xqQbYIdgpTXz8nY/aMrldCE2NXZTQj2Tn4uTZWfo1B5Q
-         6pvYNvOpCKBRZd+m8zIp2GDb95NKAzMEotGY/d8IZOzA4HjydrO2M2hq91pKktRA4J
-         D4lKm4IJ0IP/Q==
-X-Google-Smtp-Source: ABdhPJwZtZIjXcrCwL02Q3BtuaRQhJR6T9E0Dq/dAi3/J5U0ZXsANoGU6mTtSwfetrFJDwqXgvlouDcEx+44OiL8SQA=
-X-Received: by 2002:aca:bd0b:: with SMTP id n11mr2533645oif.11.1607536311473;
- Wed, 09 Dec 2020 09:51:51 -0800 (PST)
+        b=VIdtJMVmToMLsEqoyt3Bw07XE58IWwbXZOF/8vrKCAGHhqAdsjQZPJS4ga0NNbRG8
+         spLjREDJ4m3bTXixW4JfKn8XswUsOOLs2W9FkMCN+8Z3YFlyRmQSSNmHYmLYsCTxJD
+         zj0j4Ti2xsxMaim+W2o/IpIIHePjqUYsYAQemyp3ETe6u+EgUMbFRqz4LJTWkEkY3N
+         yX4xTcMaC0W5M9lOAIy2/yi5mhsM6Y6nT+IaGhBTpK2YLWIyyqcxfsxQlm4dbfRZ71
+         W8Vw21ekj4xBV3oG8wCADt5YbBnXr2ko3FbvYFKqtPvGaksKPDHteUs9DBPQtdgtsQ
+         AUPXqcO+wHU5g==
+X-Google-Smtp-Source: ABdhPJxrF0JWWKfF8bdNN4CMhLw4IPsYEUqP84GKhCmRyu9bJHDs/0dxAJvZhfRzwJd+w8POtqSy2lbm6ieBc+qVqo4=
+X-Received: by 2002:aca:44d:: with SMTP id 74mr2951158oie.4.1607541879572;
+ Wed, 09 Dec 2020 11:24:39 -0800 (PST)
 MIME-Version: 1.0
 References: <20201201213707.541432-1-samitolvanen@google.com>
  <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
- <CAK8P3a2DYDCjkqf7oqWFfBT_=rjyJGgnh6kBzUkR8GyvxsB6uQ@mail.gmail.com> <CABCJKud7ZC7_rXVmrF5PnDOMZTJX9iB7uYAa03YF-dkEojnBxg@mail.gmail.com>
-In-Reply-To: <CABCJKud7ZC7_rXVmrF5PnDOMZTJX9iB7uYAa03YF-dkEojnBxg@mail.gmail.com>
+ <CABCJKueCHo2RYfx_A21m+=d1gQLR9QsOOxCsHFeicCqyHkb-Kg@mail.gmail.com>
+ <CAK8P3a1Xfpt7QLkvxjtXKcgzcWkS8g9bmxD687+rqjTafTzKrg@mail.gmail.com>
+ <CAK8P3a3O65m6Us=YvCP3QA+0kqAeEqfi-DLOJa+JYmBqs8-JcA@mail.gmail.com> <CABCJKud-4p2CnTyC5qjREL+Z_q8sD6cYE-0QU7poVKALgoVcNQ@mail.gmail.com>
+In-Reply-To: <CABCJKud-4p2CnTyC5qjREL+Z_q8sD6cYE-0QU7poVKALgoVcNQ@mail.gmail.com>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 9 Dec 2020 18:51:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a04nQwJkK-CPWNzvfKavZnHQYzKX5OGB7Rm3Ee_62oXhA@mail.gmail.com>
-Message-ID: <CAK8P3a04nQwJkK-CPWNzvfKavZnHQYzKX5OGB7Rm3Ee_62oXhA@mail.gmail.com>
+Date:   Wed, 9 Dec 2020 20:24:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0_QfKEQ=F_F9ZUaqzN7gGGGSrE6Zk=8+qxFgGap-X5OQ@mail.gmail.com>
+Message-ID: <CAK8P3a0_QfKEQ=F_F9ZUaqzN7gGGGSrE6Zk=8+qxFgGap-X5OQ@mail.gmail.com>
 Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
 To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -58,28 +60,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 9, 2020 at 5:25 PM 'Sami Tolvanen' via Clang Built Linux
+On Wed, Dec 9, 2020 at 5:09 PM 'Sami Tolvanen' via Clang Built Linux
 <clang-built-linux@googlegroups.com> wrote:
+> On Tue, Dec 8, 2020 at 1:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Tue, Dec 8, 2020 at 9:59 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > >
+> > > Attaching the config for "ld.lld: error: Never resolved function from
+> > >   blockaddress (Producer: 'LLVM12.0.0' Reader: 'LLVM 12.0.0')"
+> >
+> > And here is a new one: "ld.lld: error: assignment to symbol
+> > init_pg_end does not converge"
 >
-> On Wed, Dec 9, 2020 at 4:36 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > On Tue, Dec 8, 2020 at 1:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> >
-> > It seems to happen because of CONFIG_TRIM_UNUSED_KSYMS,
-> > which is a shame, since I think that is an option we'd always want to
-> > have enabled with LTO, to allow more dead code to be eliminated.
+> Thanks for these. I can reproduce the "Never resolved function from
+> blockaddress" issue with full LTO, but I couldn't reproduce this one
+> with ToT Clang, and the config doesn't have LTO enabled:
 >
-> Ah yes, this is a known issue. We use TRIM_UNUSED_KSYMS with LTO in
-> Android's Generic Kernel Image and the problem is that bitcode doesn't
-> yet contain calls to these functions, so autoksyms won't see them. The
-> solution is to use a symbol whitelist with LTO to prevent these from
-> being trimmed. I suspect we would need a default whitelist for LTO
-> builds.
+> $ grep LTO 0x2824F594_defconfig
+> CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN=y
+>
+> Is this the correct config file?
 
-A built-in allowlist sounds good to me. FWIW, in the randconfigs so far, I only
-saw five symbols that would need to be on it:
+It is the right file, and so far this is the only defconfig on which I
+see the "does not converge" error, so I don't have any other one.
 
-memcpy(), memmove(), memset(), __stack_chk_fail() and __stack_chk_guard
+I suspect this might be an issue in the version of lld that I have here
+and unrelated to LTO, and I can confirm that I see the error
+with LTO still disabled.
 
-       Arnd
+It seems to be completely random. I do see the bug on next-20201203
+but not on a later one. I also tried bisecting through linux-next and
+arrived at "lib: stackdepot: add support to configure STACK_HASH_SIZE",
+which is almost certainly not related, other than just changing a few
+symbols around.
+
+      Arnd
