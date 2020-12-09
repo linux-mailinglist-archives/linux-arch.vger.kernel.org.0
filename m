@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5B52D4E1F
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04622D4E42
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388683AbgLIWYy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 17:24:54 -0500
-Received: from mga18.intel.com ([134.134.136.126]:14579 "EHLO mga18.intel.com"
+        id S2389101AbgLIWlp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 17:41:45 -0500
+Received: from mga18.intel.com ([134.134.136.126]:14589 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388668AbgLIWYs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 17:24:48 -0500
-IronPort-SDR: H1hkZw1G1BWgW0JRsvPrQSe1ob5qMemyj/hm0enlBtEy+WX+Hvx/y439/LYc55bWv8dKtr5Zfx
- DckXMHUaKaNA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918066"
+        id S2388670AbgLIWYt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 17:24:49 -0500
+IronPort-SDR: 39lErl7LiLtF0MMX7eY0uN02HleJapwk7r4yCOD/52TUtyzX24gECA960nNXX8FZbrh6pZRjsN
+ TpmvSTd3Z6rg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918074"
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="161918066"
+   d="scan'208";a="161918074"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:48 -0800
-IronPort-SDR: ty8/zxcEg+j8OO53+PiH7ehYM/HmBrZD4jpcf/y7tQ5rd5Lnc1azHgQX4M6KlY/q8CCWrt8MWX
- sn2Bcvb+ir8Q==
+IronPort-SDR: Lqhl2w+Y6f9kaq3kAq7f3QWDfP8MCba4BGtAFeaGcXvLrvB+S50Ktx9Hzw9kbcJpWKnsnfmdDv
+ Yjeb35pCkZ/g==
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="318543525"
+   d="scan'208";a="318543534"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:48 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v16 06/26] x86/cet: Add control-protection fault handler
-Date:   Wed,  9 Dec 2020 14:23:00 -0800
-Message-Id: <20201209222320.1724-7-yu-cheng.yu@intel.com>
+Subject: [PATCH v16 08/26] x86/mm: Introduce _PAGE_COW
+Date:   Wed,  9 Dec 2020 14:23:02 -0800
+Message-Id: <20201209222320.1724-9-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201209222320.1724-1-yu-cheng.yu@intel.com>
 References: <20201209222320.1724-1-yu-cheng.yu@intel.com>
@@ -64,152 +64,352 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A control-protection fault is triggered when a control-flow transfer
-attempt violates Shadow Stack or Indirect Branch Tracking constraints.
-For example, the return address for a RET instruction differs from the copy
-on the shadow stack; or an indirect JMP instruction, without the NOTRACK
-prefix, arrives at a non-ENDBR opcode.
+There is essentially no room left in the x86 hardware PTEs on some OSes
+(not Linux).  That left the hardware architects looking for a way to
+represent a new memory type (shadow stack) within the existing bits.
+They chose to repurpose a lightly-used state: Write=0, Dirty=1.
 
-The control-protection fault handler works in a similar way as the general
-protection fault handler.  It provides the si_code SEGV_CPERR to the signal
-handler.
+The reason it's lightly used is that Dirty=1 is normally set by hardware
+and cannot normally be set by hardware on a Write=0 PTE.  Software must
+normally be involved to create one of these PTEs, so software can simply
+opt to not create them.
+
+In places where Linux normally creates Write=0, Dirty=1, it can use the
+software-defined _PAGE_COW in place of the hardware _PAGE_DIRTY.  In other
+words, whenever Linux needs to create Write=0, Dirty=1, it instead creates
+Write=0, Cow=1, except for shadow stack, which is Write=0, Dirty=1.  This
+clearly separates shadow stack from other data, and results in the
+following:
+
+(a) A modified, copy-on-write (COW) page: (Write=0, Cow=1)
+(b) A R/O page that has been COW'ed: (Write=0, Cow=1)
+    The user page is in a R/O VMA, and get_user_pages() needs a writable
+    copy.  The page fault handler creates a copy of the page and sets
+    the new copy's PTE as Write=0 and Cow=1.
+(c) A shadow stack PTE: (Write=0, Dirty=1)
+(d) A shared shadow stack PTE: (Write=0, Cow=1)
+    When a shadow stack page is being shared among processes (this happens
+    at fork()), its PTE is made Dirty=0, so the next shadow stack access
+    causes a fault, and the page is duplicated and Dirty=1 is set again.
+    This is the COW equivalent for shadow stack pages, even though it's
+    copy-on-access rather than copy-on-write.
+(e) A page where the processor observed a Write=1 PTE, started a write, set
+    Dirty=1, but then observed a Write=0 PTE.  That's possible today, but
+    will not happen on processors that support shadow stack.
+
+Define _PAGE_COW and update pte_*() helpers and apply the same changes to
+pmd and pud.
+
+After this, there are six free bits left in the 64-bit PTE, and no more
+free bits in the 32-bit PTE (except for PAE) and Shadow Stack is not
+implemented for the 32-bit kernel.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/include/asm/idtentry.h    |  4 ++
- arch/x86/kernel/idt.c              |  4 ++
- arch/x86/kernel/signal_compat.c    |  2 +-
- arch/x86/kernel/traps.c            | 59 ++++++++++++++++++++++++++++++
- include/uapi/asm-generic/siginfo.h |  3 +-
- 5 files changed, 70 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/pgtable.h       | 117 ++++++++++++++++++++++++---
+ arch/x86/include/asm/pgtable_types.h |  42 +++++++++-
+ 2 files changed, 148 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index b2442eb0ac2f..e072427fecd4 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -577,6 +577,10 @@ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_SS,	exc_stack_segment);
- DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP,	exc_general_protection);
- DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_AC,	exc_alignment_check);
- 
-+#ifdef CONFIG_X86_CET_USER
-+DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP, exc_control_protection);
-+#endif
-+
- /* Raw exception entries which need extra work */
- DECLARE_IDTENTRY_RAW(X86_TRAP_UD,		exc_invalid_op);
- DECLARE_IDTENTRY_RAW(X86_TRAP_BP,		exc_int3);
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index ee1a283f8e96..463dcae55c3f 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -105,6 +105,10 @@ static const __initconst struct idt_data def_idts[] = {
- #elif defined(CONFIG_X86_32)
- 	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_32),
- #endif
-+
-+#ifdef CONFIG_X86_CET_USER
-+	INTG(X86_TRAP_CP,		asm_exc_control_protection),
-+#endif
- };
- 
- /*
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-index a7f3e12cfbdb..c44d4bebea07 100644
---- a/arch/x86/kernel/signal_compat.c
-+++ b/arch/x86/kernel/signal_compat.c
-@@ -27,7 +27,7 @@ static inline void signal_compat_build_tests(void)
- 	 */
- 	BUILD_BUG_ON(NSIGILL  != 11);
- 	BUILD_BUG_ON(NSIGFPE  != 15);
--	BUILD_BUG_ON(NSIGSEGV != 9);
-+	BUILD_BUG_ON(NSIGSEGV != 10);
- 	BUILD_BUG_ON(NSIGBUS  != 5);
- 	BUILD_BUG_ON(NSIGTRAP != 5);
- 	BUILD_BUG_ON(NSIGCHLD != 6);
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index e19df6cde35d..58f847afeb60 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -598,6 +598,65 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
- 	cond_local_irq_disable(regs);
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index a02c67291cfc..61e4d3b17d87 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -121,9 +121,9 @@ extern pmdval_t early_pmd_flags;
+  * The following only work if pte_present() is true.
+  * Undefined behaviour if not..
+  */
+-static inline int pte_dirty(pte_t pte)
++static inline bool pte_dirty(pte_t pte)
+ {
+-	return pte_flags(pte) & _PAGE_DIRTY;
++	return pte_flags(pte) & _PAGE_DIRTY_BITS;
  }
  
-+#ifdef CONFIG_X86_CET_USER
-+static const char * const control_protection_err[] = {
-+	"unknown",
-+	"near-ret",
-+	"far-ret/iret",
-+	"endbranch",
-+	"rstorssp",
-+	"setssbsy",
-+};
-+
-+/*
-+ * When a control protection exception occurs, send a signal to the responsible
-+ * application.  Currently, control protection is only enabled for the user
-+ * mode.  This exception should not come from the kernel mode.
-+ */
-+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-+{
-+	struct task_struct *tsk;
-+
-+	if (!user_mode(regs)) {
-+		if (notify_die(DIE_TRAP, "control protection fault", regs,
-+			       error_code, X86_TRAP_CP, SIGSEGV) == NOTIFY_STOP)
-+			return;
-+		die("Upexpected/unsupported kernel control protection fault", regs, error_code);
+ 
+@@ -160,9 +160,9 @@ static inline int pte_young(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_ACCESSED;
+ }
+ 
+-static inline int pmd_dirty(pmd_t pmd)
++static inline bool pmd_dirty(pmd_t pmd)
+ {
+-	return pmd_flags(pmd) & _PAGE_DIRTY;
++	return pmd_flags(pmd) & _PAGE_DIRTY_BITS;
+ }
+ 
+ static inline int pmd_young(pmd_t pmd)
+@@ -170,9 +170,9 @@ static inline int pmd_young(pmd_t pmd)
+ 	return pmd_flags(pmd) & _PAGE_ACCESSED;
+ }
+ 
+-static inline int pud_dirty(pud_t pud)
++static inline bool pud_dirty(pud_t pud)
+ {
+-	return pud_flags(pud) & _PAGE_DIRTY;
++	return pud_flags(pud) & _PAGE_DIRTY_BITS;
+ }
+ 
+ static inline int pud_young(pud_t pud)
+@@ -182,6 +182,12 @@ static inline int pud_young(pud_t pud)
+ 
+ static inline int pte_write(pte_t pte)
+ {
++	/*
++	 * If _PAGE_DIRTY is set, the PTE must either have _PAGE_RW or be
++	 * a shadow stack PTE, which is logically writable.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK))
++		return pte_flags(pte) & (_PAGE_RW | _PAGE_DIRTY);
+ 	return pte_flags(pte) & _PAGE_RW;
+ }
+ 
+@@ -333,7 +339,7 @@ static inline pte_t pte_clear_uffd_wp(pte_t pte)
+ 
+ static inline pte_t pte_mkclean(pte_t pte)
+ {
+-	return pte_clear_flags(pte, _PAGE_DIRTY);
++	return pte_clear_flags(pte, _PAGE_DIRTY_BITS);
+ }
+ 
+ static inline pte_t pte_mkold(pte_t pte)
+@@ -343,6 +349,16 @@ static inline pte_t pte_mkold(pte_t pte)
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
++	/*
++	 * Blindly clearing _PAGE_RW might accidentally create
++	 * a shadow stack PTE (RW=0, Dirty=1).  Move the hardware
++	 * dirty value to the software bit.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		pte.pte |= (pte.pte & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
++		pte = pte_clear_flags(pte, _PAGE_DIRTY);
 +	}
 +
-+	cond_local_irq_enable(regs);
+ 	return pte_clear_flags(pte, _PAGE_RW);
+ }
+ 
+@@ -353,6 +369,18 @@ static inline pte_t pte_mkexec(pte_t pte)
+ 
+ static inline pte_t pte_mkdirty(pte_t pte)
+ {
++	pteval_t dirty = _PAGE_DIRTY;
 +
-+	if (!boot_cpu_has(X86_FEATURE_CET))
-+		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
++	/* Avoid creating (HW)Dirty=1, Write=0 PTEs */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && !pte_write(pte))
++		dirty = _PAGE_COW;
 +
-+	tsk = current;
-+	tsk->thread.error_code = error_code;
-+	tsk->thread.trap_nr = X86_TRAP_CP;
-+
-+	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-+	    printk_ratelimit()) {
-+		unsigned int max_err;
-+		unsigned long ssp;
-+
-+		max_err = ARRAY_SIZE(control_protection_err) - 1;
-+		if ((error_code < 0) || (error_code > max_err))
-+			error_code = 0;
-+
-+		rdmsrl(MSR_IA32_PL3_SSP, ssp);
-+		pr_info("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
-+			tsk->comm, task_pid_nr(tsk),
-+			regs->ip, regs->sp, ssp, error_code,
-+			control_protection_err[error_code]);
-+		print_vma_addr(KERN_CONT " in ", regs->ip);
-+		pr_cont("\n");
-+	}
-+
-+	force_sig_fault(SIGSEGV, SEGV_CPERR,
-+			(void __user *)uprobe_get_trap_addr(regs));
-+	cond_local_irq_disable(regs);
++	return pte_set_flags(pte, dirty | _PAGE_SOFT_DIRTY);
 +}
++
++static inline pte_t pte_mkwrite_shstk(pte_t pte)
++{
++	pte = pte_clear_flags(pte, _PAGE_COW);
+ 	return pte_set_flags(pte, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
+ }
+ 
+@@ -363,6 +391,13 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 
+ static inline pte_t pte_mkwrite(pte_t pte)
+ {
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		if (pte_flags(pte) & _PAGE_COW) {
++			pte = pte_clear_flags(pte, _PAGE_COW);
++			pte = pte_set_flags(pte, _PAGE_DIRTY);
++		}
++	}
++
+ 	return pte_set_flags(pte, _PAGE_RW);
+ }
+ 
+@@ -434,16 +469,40 @@ static inline pmd_t pmd_mkold(pmd_t pmd)
+ 
+ static inline pmd_t pmd_mkclean(pmd_t pmd)
+ {
+-	return pmd_clear_flags(pmd, _PAGE_DIRTY);
++	return pmd_clear_flags(pmd, _PAGE_DIRTY_BITS);
+ }
+ 
+ static inline pmd_t pmd_wrprotect(pmd_t pmd)
+ {
++	/*
++	 * Blindly clearing _PAGE_RW might accidentally create
++	 * a shadow stack PMD (RW=0, Dirty=1).  Move the hardware
++	 * dirty value to the software bit.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		pmdval_t v = native_pmd_val(pmd);
++
++		v |= (v & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
++		pmd = pmd_clear_flags(__pmd(v), _PAGE_DIRTY);
++	}
++
+ 	return pmd_clear_flags(pmd, _PAGE_RW);
+ }
+ 
+ static inline pmd_t pmd_mkdirty(pmd_t pmd)
+ {
++	pmdval_t dirty = _PAGE_DIRTY;
++
++	/* Avoid creating (HW)Dirty=1, Write=0 PMDs */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && !(pmd_flags(pmd) & _PAGE_RW))
++		dirty = _PAGE_COW;
++
++	return pmd_set_flags(pmd, dirty | _PAGE_SOFT_DIRTY);
++}
++
++static inline pmd_t pmd_mkwrite_shstk(pmd_t pmd)
++{
++	pmd = pmd_clear_flags(pmd, _PAGE_COW);
+ 	return pmd_set_flags(pmd, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
+ }
+ 
+@@ -464,6 +523,13 @@ static inline pmd_t pmd_mkyoung(pmd_t pmd)
+ 
+ static inline pmd_t pmd_mkwrite(pmd_t pmd)
+ {
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		if (pmd_flags(pmd) & _PAGE_COW) {
++			pmd = pmd_clear_flags(pmd, _PAGE_COW);
++			pmd = pmd_set_flags(pmd, _PAGE_DIRTY);
++		}
++	}
++
+ 	return pmd_set_flags(pmd, _PAGE_RW);
+ }
+ 
+@@ -488,17 +554,35 @@ static inline pud_t pud_mkold(pud_t pud)
+ 
+ static inline pud_t pud_mkclean(pud_t pud)
+ {
+-	return pud_clear_flags(pud, _PAGE_DIRTY);
++	return pud_clear_flags(pud, _PAGE_DIRTY_BITS);
+ }
+ 
+ static inline pud_t pud_wrprotect(pud_t pud)
+ {
++	/*
++	 * Blindly clearing _PAGE_RW might accidentally create
++	 * a shadow stack PUD (RW=0, Dirty=1).  Move the hardware
++	 * dirty value to the software bit.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		pudval_t v = native_pud_val(pud);
++
++		v |= (v & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
++		pud = pud_clear_flags(__pud(v), _PAGE_DIRTY);
++	}
++
+ 	return pud_clear_flags(pud, _PAGE_RW);
+ }
+ 
+ static inline pud_t pud_mkdirty(pud_t pud)
+ {
+-	return pud_set_flags(pud, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
++	pudval_t dirty = _PAGE_DIRTY;
++
++	/* Avoid creating (HW)Dirty=1, Write=0 PUDs */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && !(pud_flags(pud) & _PAGE_RW))
++		dirty = _PAGE_COW;
++
++	return pud_set_flags(pud, dirty | _PAGE_SOFT_DIRTY);
+ }
+ 
+ static inline pud_t pud_mkdevmap(pud_t pud)
+@@ -518,6 +602,13 @@ static inline pud_t pud_mkyoung(pud_t pud)
+ 
+ static inline pud_t pud_mkwrite(pud_t pud)
+ {
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		if (pud_flags(pud) & _PAGE_COW) {
++			pud = pud_clear_flags(pud, _PAGE_COW);
++			pud = pud_set_flags(pud, _PAGE_DIRTY);
++		}
++	}
++
+ 	return pud_set_flags(pud, _PAGE_RW);
+ }
+ 
+@@ -1131,6 +1222,12 @@ extern int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ #define pmd_write pmd_write
+ static inline int pmd_write(pmd_t pmd)
+ {
++	/*
++	 * If _PAGE_DIRTY is set, then the PMD must either have _PAGE_RW or
++	 * be a shadow stack PMD, which is logically writable.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK))
++		return pmd_flags(pmd) & (_PAGE_RW | _PAGE_DIRTY);
+ 	return pmd_flags(pmd) & _PAGE_RW;
+ }
+ 
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index 1314bf7606b3..d2227a55d81a 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -23,7 +23,8 @@
+ #define _PAGE_BIT_SOFTW2	10	/* " */
+ #define _PAGE_BIT_SOFTW3	11	/* " */
+ #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
+-#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
++#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
++#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
+ #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
+ #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
+ #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
+@@ -36,6 +37,15 @@
+ #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
+ #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
+ 
++/*
++ * Indicates a copy-on-write page.
++ */
++#ifdef CONFIG_X86_CET_USER
++#define _PAGE_BIT_COW		_PAGE_BIT_SOFTW5 /* copy-on-write */
++#else
++#define _PAGE_BIT_COW		0
 +#endif
 +
- static bool do_int3(struct pt_regs *regs)
- {
- 	int res;
-diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-index 7aacf9389010..96b9647d14ae 100644
---- a/include/uapi/asm-generic/siginfo.h
-+++ b/include/uapi/asm-generic/siginfo.h
-@@ -231,7 +231,8 @@ typedef struct siginfo {
- #define SEGV_ADIPERR	7	/* Precise MCD exception */
- #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
- #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
--#define NSIGSEGV	9
-+#define SEGV_CPERR	10	/* Control protection fault */
-+#define NSIGSEGV	10
+ /* If _PAGE_BIT_PRESENT is clear, we use these: */
+ /* - if the user mapped it with PROT_NONE; pte_present gives true */
+ #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
+@@ -117,6 +127,36 @@
+ #define _PAGE_DEVMAP	(_AT(pteval_t, 0))
+ #endif
+ 
++/*
++ * The hardware requires shadow stack to be read-only and Dirty.
++ * _PAGE_COW is a software-only bit used to separate copy-on-write PTEs
++ * from shadow stack PTEs:
++ * (a) A modified, copy-on-write (COW) page: (Write=0, Cow=1)
++ * (b) A R/O page that has been COW'ed: (Write=0, Cow=1)
++ *     The user page is in a R/O VMA, and get_user_pages() needs a
++ *     writable copy.  The page fault handler creates a copy of the page
++ *     and sets the new copy's PTE as Write=0, Cow=1.
++ * (c) A shadow stack PTE: (Write=0, Dirty=1)
++ * (d) A shared (copy-on-access) shadow stack PTE: (Write=0, Cow=1)
++ *     When a shadow stack page is being shared among processes (this
++ *     happens at fork()), its PTE is cleared of _PAGE_DIRTY, so the next
++ *     shadow stack access causes a fault, and the page is duplicated and
++ *     _PAGE_DIRTY is set again.  This is the COW equivalent for shadow
++ *     stack pages, even though it's copy-on-access rather than
++ *     copy-on-write.
++ * (e) A page where the processor observed a Write=1 PTE, started a write,
++ *     set Dirty=1, but then observed a Write=0 PTE (changed by another
++ *     thread).  That's possible today, but will not happen on processors
++ *     that support shadow stack.
++ */
++#ifdef CONFIG_X86_CET_USER
++#define _PAGE_COW	(_AT(pteval_t, 1) << _PAGE_BIT_COW)
++#else
++#define _PAGE_COW	(_AT(pteval_t, 0))
++#endif
++
++#define _PAGE_DIRTY_BITS (_PAGE_DIRTY | _PAGE_COW)
++
+ #define _PAGE_PROTNONE	(_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE)
  
  /*
-  * SIGBUS si_codes
 -- 
 2.21.0
 
