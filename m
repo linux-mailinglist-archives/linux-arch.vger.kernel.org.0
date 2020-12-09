@@ -2,106 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F45B2D3E76
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 10:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500D82D3F04
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 10:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728994AbgLIJUs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 04:20:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46210 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728168AbgLIJUn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 04:20:43 -0500
-X-Gm-Message-State: AOAM531J7Vg2u3e+CBbPAenvEGJyNqC8iDKRrnvpUX2SnKx7dTPh5H8g
-        dh9avPGHi+9OQW0Tjk25o6W1etXtw4fXqm8t5tI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607505602;
-        bh=sq+XLLMMI02zOMjuS3XQlCpve1fu802tRE6ExZV+b3g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mz1eKySbhCwGkbLV5t4HHdidZSNRp8ep2zj81vQ3dh0zvGWrkZC0vdC/U4Z5jPmAH
-         RsnTv6T8UkgUu3/DI8noayHdoA5IW63jffV5Yigv6x4ThqUS8S8XXZBgjRo6/2V22P
-         Neet2n07dy7/2tSKL+VrUxyP820lngLG2tooHpd+2HtBgqaq710EfFpFaqc523AR0p
-         aKPqdimRV+XlnE7kRLf2ZjBWup+qF8eoxeo74A3Zu9WXLDv+QFuqON9l++c0Zo8DMI
-         XEzYRXAuANnx15CcJncBhcD2Qvq/D17T937D5R9aqTdMwgRshpTexvfuqVGmqAwMey
-         nLGve9ysgUwXw==
-X-Google-Smtp-Source: ABdhPJzy1WH7QEwYKyjZFMswZieiJpvEKVPf4nSKGRTcgXdAouLHKE27qdaJY2tvlSq5f0mibXd6i944QYu2cZlqE1k=
-X-Received: by 2002:aca:44d:: with SMTP id 74mr1104225oie.4.1607505601280;
- Wed, 09 Dec 2020 01:20:01 -0800 (PST)
+        id S1727920AbgLIJm2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 04:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727339AbgLIJm0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Dec 2020 04:42:26 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB527C0613D6
+        for <linux-arch@vger.kernel.org>; Wed,  9 Dec 2020 01:41:45 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id n142so650820qkn.2
+        for <linux-arch@vger.kernel.org>; Wed, 09 Dec 2020 01:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fpk-unair-ac-id.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=92Os9NiopX2G70wNSeTktuHCfONLQcseB+pSGBY9NNc=;
+        b=auzdZigZM7E759L7NKQgcvTn53IsDX/AjZwrXUMFgUVeYCAnXURrHqEcJwqWgvnijl
+         OTOEujuzjA4/Qi6l21Of2ctgzrZdIehGA8w3q+zwts0do/U+XyLs+DncH9k7GCt3SAMC
+         R4My5uUgjjgB7giQFKmvpck5wGvgedwE/F5VRUePzm0hOsfbt7iYezP7T4J8l1TEHuFo
+         gV+W+XsfHCvFujbT6DtS08nnUdzD7isrjQ+vcCBVgaauCN8126JGlbnZzRZw51sVto1i
+         pEIFFa3upfrtu3u0tmpqqUzXp3jSIw6ciJew7JS9EXHOfJXT45Vwfc+xAAWPntK5jvr/
+         tXGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=92Os9NiopX2G70wNSeTktuHCfONLQcseB+pSGBY9NNc=;
+        b=uMn5Ow48xEe0/YW5Swg/JdU03fZMIYq0K6YmsrjHqcsfYBLF9FcserMRIzSq1GeYF7
+         Kj0MwIpoUXAmKPjxW1U4yhLZFDMHCH116uqj/pT3rLk9r7mH5Ga7V3ENmmM7W3OJbzK4
+         tFGjBjrV53weZ2H6pp4c6TSRCsfm7SsGjEpMnqfJngpoyomyS2jDFwNz94TR2KF679H9
+         Nz9Q3APnclSPGWg8xy27eCAH5F9URqyAhltUm33ng2F6IauRWMvBtVDxo54OvEo1+KKk
+         rfd+W31HvhJNSjY07YISUOGZQYlPAa/cOQ/BCoOhZjZsFGJUAAIFlqc7Of5WBv3PKom7
+         W5Pg==
+X-Gm-Message-State: AOAM5330nE8rjlTwBGSKrxhhxGFBvQZgMu7NZlCBl+C22FKAeCuzFE3z
+        EDGywOQv5XMd9OCWR63cmpsV2/PDYU0Eq56plJAOvg==
+X-Google-Smtp-Source: ABdhPJz/RQV2+J4by4skt50bTWfduyRYM3jvRMVDIQKwzqLaya/ov6K46ldSdQkh5JDbWlMcBK8yFXCsxOBDFJtecD4=
+X-Received: by 2002:a37:a80f:: with SMTP id r15mr1931353qke.289.1607506905067;
+ Wed, 09 Dec 2020 01:41:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20201201213707.541432-1-samitolvanen@google.com>
- <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
- <CABCJKueCHo2RYfx_A21m+=d1gQLR9QsOOxCsHFeicCqyHkb-Kg@mail.gmail.com> <20201209045554.fxlzrmxknakl2gdr@google.com>
-In-Reply-To: <20201209045554.fxlzrmxknakl2gdr@google.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 9 Dec 2020 10:19:44 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1p8yKMKXB1cUpy-5PjehJGPX0SPNEx4VsMmqgOeR6fZg@mail.gmail.com>
-Message-ID: <CAK8P3a1p8yKMKXB1cUpy-5PjehJGPX0SPNEx4VsMmqgOeR6fZg@mail.gmail.com>
-Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
-To:     Fangrui Song <maskray@google.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>
+Received: by 2002:ac8:5448:0:0:0:0:0 with HTTP; Wed, 9 Dec 2020 01:41:44 -0800 (PST)
+Reply-To: suniew321@gmail.com
+From:   Sunie Wendy <agustono@fpk.unair.ac.id>
+Date:   Wed, 9 Dec 2020 10:41:44 +0100
+Message-ID: <CAL5_z9s+Kc-dhsk9xM3dy6xv7+b7u3=pneX_oOvdNCDpO_bpUw@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 9, 2020 at 5:56 AM 'Fangrui Song' via Clang Built Linux
-<clang-built-linux@googlegroups.com> wrote:
-> On 2020-12-08, 'Sami Tolvanen' via Clang Built Linux wrote:
-> >On Tue, Dec 8, 2020 at 4:15 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >> So far I have
-> >> not managed to get a working build out of it, the main problem so far being
-> >> that it is really slow to build because the link stage only uses one CPU.
-> >> These are the other issues I've seen so far:
->
-> ld.lld ThinLTO uses the number of (physical cores enabled by affinity) by default.
-
-Ah, I see.  Do you know if it's also possible to do something like
--flto=jobserver
-to integrate better with the kernel build system?
-
-I tend to run multiple builds under a top-level makefile with 'make
--j30' in order
-to use 30 of the 32 threads and leave the scheduling to jobserver instead of
-the kernel. If the linker itself is multithreaded but the jobserver
-thinks it is a
-single thread, could end up with 30 concurrent linkers each trying to use
-16 cores.
-
-> >> - CONFIG_CPU_BIG_ENDIAN doesn't seem to work with lld, and LTO
-> >>   doesn't work with ld.bfd.
-> >>   I've added a CPU_LITTLE_ENDIAN dependency to
-> >>   ARCH_SUPPORTS_LTO_CLANG{,THIN}
-> >
-> >Ah, good point. I'll fix this in v9.
->
-> Full/Thin LTO should work with GNU ld and gold with LLVMgold.so built from
-> llvm-project (https://llvm.org/docs/GoldPlugin.html ). You'll need to make sure
-> that LLVMgold.so is newer than clang. (Newer clang may introduce bitcode
-> attributes which are unrecognizable by older LLVMgold.so/ld.lld)
-
-The current patch series requires LLD:
-
-config HAS_LTO_CLANG
-       def_bool y
-       depends on CC_IS_CLANG && CLANG_VERSION >= 110000 && LD_IS_LLD
-
-Is this something we should change then, or try to keep it simple with the
-current approach, leaving LTO disabled for big-endian builds and hosts without
-a working lld?
-
-       Arnd
+Hello
+I sent a letter to your mail but got no reply  from you. Did you
+receive my previous mail please i wait to read your mail soon on my
+email address at ( suniew321@gmail.com ) respond to me
