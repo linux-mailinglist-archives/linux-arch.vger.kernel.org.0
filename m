@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD8D2D4E3A
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53B12D4E33
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388657AbgLIWYe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 17:24:34 -0500
-Received: from mga18.intel.com ([134.134.136.126]:14589 "EHLO mga18.intel.com"
+        id S2388673AbgLIWYt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 17:24:49 -0500
+Received: from mga18.intel.com ([134.134.136.126]:14593 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388642AbgLIWYd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 17:24:33 -0500
-IronPort-SDR: I083tIUh+W71UT2pAY96VYFRNu3KtqFuN6nJdkMe1K6Mn9orMcx/zn6W1d3ynTSRXtJyJCjlj7
- CeJ+5gOnIM0w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918057"
+        id S2388257AbgLIWYh (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 17:24:37 -0500
+IronPort-SDR: 8vuBj69WIbhAtw6PPJ+pkDWW/8ErpfUmHfCcSml2B7HV19Kk4esVKrfTaxG6902d0Ac2bKDZ2X
+ WNSrAhw2trFQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918059"
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="161918057"
+   d="scan'208";a="161918059"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:47 -0800
-IronPort-SDR: wX/48FKp7Othk9Kp2RGZxb12b0GcOEarUCrsvW57bXp/4jvYXC86emF91AkER/tei4zV4PwWij
- yoIlXt0dEMBg==
+IronPort-SDR: CP6PZcmeVwvtbtuAKyd6lJn0X6rH0mwteYnL87xSNlF+yNPFTZt/Vg6lnnJN8q39PdtkULzflC
+ WO5xYnJkdV+Q==
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="318543514"
+   d="scan'208";a="318543516"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:47 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v16 03/26] x86/cpufeatures: Add CET CPU feature flags for Control-flow Enforcement Technology (CET)
-Date:   Wed,  9 Dec 2020 14:22:57 -0800
-Message-Id: <20201209222320.1724-4-yu-cheng.yu@intel.com>
+Subject: [PATCH v16 04/26] x86/cpufeatures: Introduce X86_FEATURE_CET and setup functions
+Date:   Wed,  9 Dec 2020 14:22:58 -0800
+Message-Id: <20201209222320.1724-5-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201209222320.1724-1-yu-cheng.yu@intel.com>
 References: <20201209222320.1724-1-yu-cheng.yu@intel.com>
@@ -64,82 +64,165 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add CPU feature flags for Control-flow Enforcement Technology (CET).
-
-CPUID.(EAX=7,ECX=0):ECX[bit 7] Shadow stack
-CPUID.(EAX=7,ECX=0):EDX[bit 20] Indirect Branch Tracking
+Introduce a software-defined X86_FEATURE_CET, which indicates either Shadow
+Stack or Indirect Branch Tracking (or both) is present.  Also introduce
+related cpu init/setup functions.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/include/asm/cpufeatures.h       |  2 ++
- arch/x86/include/asm/disabled-features.h | 12 ++++++++++--
- arch/x86/kernel/cpu/cpuid-deps.c         |  2 ++
- 3 files changed, 14 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/cpufeatures.h          |  2 +-
+ arch/x86/include/asm/disabled-features.h    |  5 ++-
+ arch/x86/include/uapi/asm/processor-flags.h |  2 ++
+ arch/x86/kernel/cpu/common.c                | 40 ++++++++++++++++++++-
+ 4 files changed, 46 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index dad350d42ecf..c9f6d62da463 100644
+index c9f6d62da463..16d445e6fa6b 100644
 --- a/arch/x86/include/asm/cpufeatures.h
 +++ b/arch/x86/include/asm/cpufeatures.h
-@@ -343,6 +343,7 @@
- #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
- #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
- #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
-+#define X86_FEATURE_SHSTK		(16*32+ 7) /* Shadow Stack */
- #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
- #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
- #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
-@@ -374,6 +375,7 @@
- #define X86_FEATURE_TSXLDTRK		(18*32+16) /* TSX Suspend Load Address Tracking */
- #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
- #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
-+#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
- #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
- #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
- #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
+@@ -108,7 +108,7 @@
+ #define X86_FEATURE_EXTD_APICID		( 3*32+26) /* Extended APICID (8 bits) */
+ #define X86_FEATURE_AMD_DCM		( 3*32+27) /* AMD multi-node processor */
+ #define X86_FEATURE_APERFMPERF		( 3*32+28) /* P-State hardware coordination feedback capability (APERF/MPERF MSRs) */
+-/* free					( 3*32+29) */
++#define X86_FEATURE_CET			( 3*32+29) /* Control-flow enforcement */
+ #define X86_FEATURE_NONSTOP_TSC_S3	( 3*32+30) /* TSC doesn't stop in S3 state */
+ #define X86_FEATURE_TSC_KNOWN_FREQ	( 3*32+31) /* TSC has known frequency */
+ 
 diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index 5861d34f9771..b22ba3db6b25 100644
+index b22ba3db6b25..e4d5ca2ba5c6 100644
 --- a/arch/x86/include/asm/disabled-features.h
 +++ b/arch/x86/include/asm/disabled-features.h
-@@ -62,6 +62,14 @@
- # define DISABLE_ENQCMD (1 << (X86_FEATURE_ENQCMD & 31))
+@@ -65,9 +65,11 @@
+ #ifdef CONFIG_X86_CET_USER
+ #define DISABLE_SHSTK	0
+ #define DISABLE_IBT	0
++#define DISABLE_CET	0
+ #else
+ #define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
+ #define DISABLE_IBT	(1 << (X86_FEATURE_IBT & 31))
++#define DISABLE_CET	(1 << (X86_FEATURE_CET & 31))
  #endif
  
-+#ifdef CONFIG_X86_CET_USER
-+#define DISABLE_SHSTK	0
-+#define DISABLE_IBT	0
-+#else
-+#define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
-+#define DISABLE_IBT	(1 << (X86_FEATURE_IBT & 31))
-+#endif
+ /*
+@@ -76,7 +78,8 @@
+ #define DISABLED_MASK0	(DISABLE_VME)
+ #define DISABLED_MASK1	0
+ #define DISABLED_MASK2	0
+-#define DISABLED_MASK3	(DISABLE_CYRIX_ARR|DISABLE_CENTAUR_MCR|DISABLE_K6_MTRR)
++#define DISABLED_MASK3	(DISABLE_CYRIX_ARR|DISABLE_CENTAUR_MCR|DISABLE_K6_MTRR| \
++			 DISABLE_CET)
+ #define DISABLED_MASK4	(DISABLE_PCID)
+ #define DISABLED_MASK5	0
+ #define DISABLED_MASK6	0
+diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
+index bcba3c643e63..a8df907e8017 100644
+--- a/arch/x86/include/uapi/asm/processor-flags.h
++++ b/arch/x86/include/uapi/asm/processor-flags.h
+@@ -130,6 +130,8 @@
+ #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
+ #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
+ #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
++#define X86_CR4_CET_BIT		23 /* enable Control-flow Enforcement */
++#define X86_CR4_CET		_BITUL(X86_CR4_CET_BIT)
+ 
+ /*
+  * x86-64 Task Priority Register, CR8
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 35ad8480c464..03c367f79adc 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -510,6 +510,14 @@ static __init int setup_disable_pku(char *arg)
+ __setup("nopku", setup_disable_pku);
+ #endif /* CONFIG_X86_64 */
+ 
++static __always_inline void setup_cet(struct cpuinfo_x86 *c)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_CET))
++		return;
++
++	cr4_set_bits(X86_CR4_CET);
++}
 +
  /*
-  * Make sure to add features to the correct mask
-  */
-@@ -82,9 +90,9 @@
- #define DISABLED_MASK14	0
- #define DISABLED_MASK15	0
- #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
--			 DISABLE_ENQCMD)
-+			 DISABLE_ENQCMD|DISABLE_SHSTK)
- #define DISABLED_MASK17	0
--#define DISABLED_MASK18	0
-+#define DISABLED_MASK18	(DISABLE_IBT)
- #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
+  * Some CPU features depend on higher CPUID levels, which may not always
+  * be available due to CPUID level capping or broken virtualization
+@@ -895,6 +903,12 @@ static void init_speculation_control(struct cpuinfo_x86 *c)
+ 	}
+ }
  
- #endif /* _ASM_X86_DISABLED_FEATURES_H */
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index d502241995a3..9a3971e2f98f 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -71,6 +71,8 @@ static const struct cpuid_dep cpuid_deps[] = {
- 	{ X86_FEATURE_AVX512_BF16,		X86_FEATURE_AVX512VL  },
- 	{ X86_FEATURE_ENQCMD,			X86_FEATURE_XSAVES    },
- 	{ X86_FEATURE_PER_THREAD_MBA,		X86_FEATURE_MBA       },
-+	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
-+	{ X86_FEATURE_IBT,			X86_FEATURE_XSAVES    },
- 	{}
- };
++static void init_cet_features(struct cpuinfo_x86 *c)
++{
++	if (cpu_has(c, X86_FEATURE_SHSTK) || cpu_has(c, X86_FEATURE_IBT))
++		set_cpu_cap(c, X86_FEATURE_CET);
++}
++
+ void get_cpu_cap(struct cpuinfo_x86 *c)
+ {
+ 	u32 eax, ebx, ecx, edx;
+@@ -960,6 +974,7 @@ void get_cpu_cap(struct cpuinfo_x86 *c)
+ 	if (c->extended_cpuid_level >= 0x8000000a)
+ 		c->x86_capability[CPUID_8000_000A_EDX] = cpuid_edx(0x8000000a);
  
++	init_cet_features(c);
+ 	init_scattered_cpuid_features(c);
+ 	init_speculation_control(c);
+ 
+@@ -1221,6 +1236,15 @@ static void detect_nopl(void)
+ #endif
+ }
+ 
++static void adjust_combined_cpu_features(void)
++{
++#ifdef CONFIG_X86_CET_USER
++	if (test_bit(X86_FEATURE_SHSTK, (unsigned long *)cpu_caps_cleared) &&
++	    test_bit(X86_FEATURE_IBT, (unsigned long *)cpu_caps_cleared))
++		setup_clear_cpu_cap(X86_FEATURE_CET);
++#endif
++}
++
+ /*
+  * We parse cpu parameters early because fpu__init_system() is executed
+  * before parse_early_param().
+@@ -1252,9 +1276,19 @@ static void __init cpu_parse_early_param(void)
+ 	if (cmdline_find_option_bool(boot_command_line, "noxsaves"))
+ 		setup_clear_cpu_cap(X86_FEATURE_XSAVES);
+ 
++	/*
++	 * CET states are XSAVES states and options must be parsed early.
++	 */
++#ifdef CONFIG_X86_CET_USER
++	if (cmdline_find_option_bool(boot_command_line, "no_user_shstk"))
++		setup_clear_cpu_cap(X86_FEATURE_SHSTK);
++	if (cmdline_find_option_bool(boot_command_line, "no_user_ibt"))
++		setup_clear_cpu_cap(X86_FEATURE_IBT);
++#endif
++
+ 	arglen = cmdline_find_option(boot_command_line, "clearcpuid", arg, sizeof(arg));
+ 	if (arglen <= 0)
+-		return;
++		goto done;
+ 
+ 	pr_info("Clearing CPUID bits:");
+ 	do {
+@@ -1272,6 +1306,9 @@ static void __init cpu_parse_early_param(void)
+ 		}
+ 	} while (res == 2);
+ 	pr_cont("\n");
++
++done:
++	adjust_combined_cpu_features();
+ }
+ 
+ /*
+@@ -1591,6 +1628,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ 
+ 	x86_init_rdrand(c);
+ 	setup_pku(c);
++	setup_cet(c);
+ 
+ 	/*
+ 	 * Clear/Set all flags overridden by options, need do it
 -- 
 2.21.0
 
