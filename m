@@ -2,246 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52E72D460C
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 16:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3942C2D4674
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 17:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731870AbgLIPzc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 10:55:32 -0500
-Received: from goliath.siemens.de ([192.35.17.28]:45088 "EHLO
-        goliath.siemens.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729877AbgLIPz2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Dec 2020 10:55:28 -0500
-X-Greylist: delayed 4530 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Dec 2020 10:55:21 EST
-Received: from mail1.siemens.de (mail1.siemens.de [139.23.33.14])
-        by goliath.siemens.de (8.15.2/8.15.2) with ESMTPS id 0B9EbVs3007322
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Dec 2020 15:37:31 +0100
-Received: from tsnlaptop.atstm41.nbgm.siemens.de ([144.145.220.34])
-        by mail1.siemens.de (8.15.2/8.15.2) with ESMTP id 0B9EbGp3002581;
-        Wed, 9 Dec 2020 15:37:28 +0100
-From:   Erez Geva <erez.geva.ext@siemens.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Eyal Birger <eyal.birger@gmail.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Jon Rosen <jrosen@cisco.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mao Wenan <maowenan@huawei.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Or Cohen <orcohen@paloaltonetworks.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Xie He <xie.he.0141@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladis Dronov <vdronov@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Ines Molzahn <ines.molzahn@siemens.com>,
-        Simon Sudler <simon.sudler@siemens.com>,
-        Andreas Meisinger <andreas.meisinger@siemens.com>,
-        Andreas Bucher <andreas.bucher@siemens.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Andreas Zirkler <andreas.zirkler@siemens.com>,
-        Ermin Sakic <ermin.sakic@siemens.com>,
-        An Ninh Nguyen <anninh.nguyen@siemens.com>,
-        Michael Saenger <michael.saenger@siemens.com>,
-        Bernd Maehringer <bernd.maehringer@siemens.com>,
-        Gisela Greinert <gisela.greinert@siemens.com>,
-        Erez Geva <erez.geva.ext@siemens.com>,
-        Erez Geva <ErezGeva2@gmail.com>
-Subject: [PATCH 3/3] The TC ETF Qdisc pass the hardware timestamp to the interface driver.
-Date:   Wed,  9 Dec 2020 15:37:06 +0100
-Message-Id: <20201209143707.13503-4-erez.geva.ext@siemens.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201209143707.13503-1-erez.geva.ext@siemens.com>
-References: <20201209143707.13503-1-erez.geva.ext@siemens.com>
+        id S1727742AbgLIQKL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 11:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726247AbgLIQKL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Dec 2020 11:10:11 -0500
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E25C061794
+        for <linux-arch@vger.kernel.org>; Wed,  9 Dec 2020 08:09:31 -0800 (PST)
+Received: by mail-vs1-xe42.google.com with SMTP id p7so1164466vsf.8
+        for <linux-arch@vger.kernel.org>; Wed, 09 Dec 2020 08:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nqyEOFHVM5Ky3nbjp7naROpurgTB2x9ZG+Hz5wH8wPU=;
+        b=enl+HYZfvbCMKTqutKGkL4DEIVorJ/taYS/JJw+IfqHlE5cVy/zslMzRYwk2VdL0wr
+         s43qvZaWjhm/0laGuZtBRiui2gDEsXPAouZwsdj9LIev9pb2X/bwrRXUz4XQTOg3gVSD
+         oU/wAXdv54FAHrtCWR59AqwHnZVb1iQ5qyFEXrsxKVlxFgEsa1wy3FjVzPGnpuhILmIW
+         zeGKaFuVPAWhnS6yaQBw6k4xASuW/5YzXjkd2dqGVGtP6DkVDRKUww9R9SaonJ1JE+Q9
+         lzNtBdhD0wjbRFTlp/UFs5dlfE7SYVAYipT8+m8J2FPZ6M4UOJscZl9ID0t64scrmJIq
+         Nq6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nqyEOFHVM5Ky3nbjp7naROpurgTB2x9ZG+Hz5wH8wPU=;
+        b=Qh16UKJjU/2041v4NT8mqW6sJ7T93khikYSmeLJ7oUMSPu9rhldsSBukPNaFUk0ukP
+         kZXVmatKxteii7LuIcWdFMFFJ8rDA6oj3EYm0HpyQx52V14Z7JqMlPmouT6hdMcPeRHl
+         a1b/r9RSCnbnrTHruaU0CIpVr8RJfGXUeaY1Merot30y1i8jS4CmRtJ7JnaE0nnMBzPh
+         IKLJtNGGXqxGPKpcai0wzPNGIowA9DsvlKXUUC+hkKgLb0ixMmBKLO6cJ/VrUgeI1Juh
+         f6f/bZZ9B5lytcItoka/RAIhPGG/QdczqEcv8Tx037jhHa9wc5K6i1LGxkaPVOjd0u48
+         UG+w==
+X-Gm-Message-State: AOAM5301ZFHXmzxtOLrDw/XBVOMgmp13MpeMwbksEtDnnBIBcLsqhhga
+        ++6QNTWlr14P5js6i1sE/wJX/MiznlNpd4s9GV0MnA==
+X-Google-Smtp-Source: ABdhPJygyHjARSrnsdIbp51NuTL1nsIMlAfXLy2zaWgCIgwi3WqDnANYwazmXhxW1QwBlbPUShTlfc50yzUmoDM5q7s=
+X-Received: by 2002:a67:4341:: with SMTP id q62mr2124127vsa.14.1607530169863;
+ Wed, 09 Dec 2020 08:09:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201201213707.541432-1-samitolvanen@google.com>
+ <CAK8P3a1WEAo2SEgKUEs3SB7n7QeeHa0=cx_nO==rDK0jjDArow@mail.gmail.com>
+ <CABCJKueCHo2RYfx_A21m+=d1gQLR9QsOOxCsHFeicCqyHkb-Kg@mail.gmail.com>
+ <CAK8P3a1Xfpt7QLkvxjtXKcgzcWkS8g9bmxD687+rqjTafTzKrg@mail.gmail.com> <CAK8P3a3O65m6Us=YvCP3QA+0kqAeEqfi-DLOJa+JYmBqs8-JcA@mail.gmail.com>
+In-Reply-To: <CAK8P3a3O65m6Us=YvCP3QA+0kqAeEqfi-DLOJa+JYmBqs8-JcA@mail.gmail.com>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Wed, 9 Dec 2020 08:09:18 -0800
+Message-ID: <CABCJKud-4p2CnTyC5qjREL+Z_q8sD6cYE-0QU7poVKALgoVcNQ@mail.gmail.com>
+Subject: Re: [PATCH v8 00/16] Add support for Clang LTO
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The ETF pass the TX sending hardware timestamp to
- the network interface driver.
+On Tue, Dec 8, 2020 at 1:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Tue, Dec 8, 2020 at 9:59 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > Attaching the config for "ld.lld: error: Never resolved function from
+> >   blockaddress (Producer: 'LLVM12.0.0' Reader: 'LLVM 12.0.0')"
+>
+> And here is a new one: "ld.lld: error: assignment to symbol
+> init_pg_end does not converge"
 
-  - Add new flag to the ETF Qdisc setting that mandate
-    the use of the hardware timestamp in a socket's buffer.
-  - The ETF Qdisc pass the TX sending hardware timestamp to the
-    network interface driver.
+Thanks for these. I can reproduce the "Never resolved function from
+blockaddress" issue with full LTO, but I couldn't reproduce this one
+with ToT Clang, and the config doesn't have LTO enabled:
 
-Signed-off-by: Erez Geva <erez.geva.ext@siemens.com>
----
- include/uapi/linux/pkt_sched.h |  1 +
- net/sched/sch_etf.c            | 59 +++++++++++++++++++++++++++-------
- 2 files changed, 49 insertions(+), 11 deletions(-)
+$ grep LTO 0x2824F594_defconfig
+CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN=y
 
-diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-index 9e7c2c607845..51e2b57bfa81 100644
---- a/include/uapi/linux/pkt_sched.h
-+++ b/include/uapi/linux/pkt_sched.h
-@@ -1056,6 +1056,7 @@ struct tc_etf_qopt {
- #define TC_ETF_DEADLINE_MODE_ON	_BITUL(0)
- #define TC_ETF_OFFLOAD_ON	_BITUL(1)
- #define TC_ETF_SKIP_SOCK_CHECK	_BITUL(2)
-+#define TC_ETF_USE_HW_TIMESTAMP _BITUL(3)
- };
- 
- enum {
-diff --git a/net/sched/sch_etf.c b/net/sched/sch_etf.c
-index c48f91075b5c..67eace3e180f 100644
---- a/net/sched/sch_etf.c
-+++ b/net/sched/sch_etf.c
-@@ -23,11 +23,13 @@
- #define DEADLINE_MODE_IS_ON(x) ((x)->flags & TC_ETF_DEADLINE_MODE_ON)
- #define OFFLOAD_IS_ON(x) ((x)->flags & TC_ETF_OFFLOAD_ON)
- #define SKIP_SOCK_CHECK_IS_SET(x) ((x)->flags & TC_ETF_SKIP_SOCK_CHECK)
-+#define USE_HW_TIMESTAMP(x) ((x)->flags & TC_ETF_USE_HW_TIMESTAMP)
- 
- struct etf_sched_data {
- 	bool offload;
- 	bool deadline_mode;
- 	bool skip_sock_check;
-+	bool use_hw_timestamp;
- 	int clockid;
- 	int queue;
- 	s32 delta; /* in ns */
-@@ -75,7 +77,7 @@ static inline int validate_input_params(struct tc_etf_qopt *qopt,
- static bool is_packet_valid(struct Qdisc *sch, struct sk_buff *nskb)
- {
- 	struct etf_sched_data *q = qdisc_priv(sch);
--	ktime_t txtime = nskb->tstamp;
-+	ktime_t hwtxtime, txtime = nskb->tstamp;
- 	struct sock *sk = nskb->sk;
- 	ktime_t now;
- 
-@@ -88,6 +90,9 @@ static bool is_packet_valid(struct Qdisc *sch, struct sk_buff *nskb)
- 	if (!sock_flag(sk, SOCK_TXTIME))
- 		return false;
- 
-+	if (!q->use_hw_timestamp != !sock_flag(sk, SOCK_HW_TXTIME))
-+		return false;
-+
- 	/* We don't perform crosstimestamping.
- 	 * Drop if packet's clockid differs from qdisc's.
- 	 */
-@@ -99,7 +104,11 @@ static bool is_packet_valid(struct Qdisc *sch, struct sk_buff *nskb)
- 
- skip:
- 	now = q->get_time();
--	if (ktime_before(txtime, now) || ktime_before(txtime, q->last))
-+	if (q->use_hw_timestamp)
-+		hwtxtime = skb_hwtstamps(nskb)->hwtstamp;
-+	else
-+		hwtxtime = txtime;
-+	if (ktime_before(txtime, now) || ktime_before(hwtxtime, q->last))
- 		return false;
- 
- 	return true;
-@@ -173,16 +182,33 @@ static int etf_enqueue_timesortedlist(struct sk_buff *nskb, struct Qdisc *sch,
- 		return qdisc_drop(nskb, sch, to_free);
- 	}
- 
--	while (*p) {
--		struct sk_buff *skb;
-+	if (q->use_hw_timestamp) {
-+		ktime_t hwtxtime = skb_hwtstamps(nskb)->hwtstamp;
-+
-+		while (*p) {
-+			struct sk_buff *skb;
- 
--		parent = *p;
--		skb = rb_to_skb(parent);
--		if (ktime_compare(txtime, skb->tstamp) >= 0) {
--			p = &parent->rb_right;
--			leftmost = false;
--		} else {
--			p = &parent->rb_left;
-+			parent = *p;
-+			skb = rb_to_skb(parent);
-+			if (ktime_compare(hwtxtime, skb_hwtstamps(skb)->hwtstamp) >= 0) {
-+				p = &parent->rb_right;
-+				leftmost = false;
-+			} else {
-+				p = &parent->rb_left;
-+			}
-+		}
-+	} else {
-+		while (*p) {
-+			struct sk_buff *skb;
-+
-+			parent = *p;
-+			skb = rb_to_skb(parent);
-+			if (ktime_compare(txtime, skb->tstamp) >= 0) {
-+				p = &parent->rb_right;
-+				leftmost = false;
-+			} else {
-+				p = &parent->rb_left;
-+			}
- 		}
- 	}
- 	rb_link_node(&nskb->rbnode, parent, p);
-@@ -245,6 +271,10 @@ static void timesortedlist_remove(struct Qdisc *sch, struct sk_buff *skb)
- 
- 	qdisc_bstats_update(sch, skb);
- 
-+	/* Pass hardware time to driver and to last */
-+	if (q->use_hw_timestamp)
-+		skb->tstamp = skb_hwtstamps(skb)->hwtstamp;
-+
- 	q->last = skb->tstamp;
- 
- 	sch->q.qlen--;
-@@ -393,6 +423,10 @@ static int etf_init(struct Qdisc *sch, struct nlattr *opt,
- 	q->offload = OFFLOAD_IS_ON(qopt);
- 	q->deadline_mode = DEADLINE_MODE_IS_ON(qopt);
- 	q->skip_sock_check = SKIP_SOCK_CHECK_IS_SET(qopt);
-+	q->use_hw_timestamp = USE_HW_TIMESTAMP(qopt);
-+	/* deadline mode can not coexist with using hardware time */
-+	if (q->use_hw_timestamp && q->deadline_mode)
-+		return -EOPNOTSUPP;
- 
- 	switch (q->clockid) {
- 	case CLOCK_REALTIME:
-@@ -484,6 +518,9 @@ static int etf_dump(struct Qdisc *sch, struct sk_buff *skb)
- 	if (q->skip_sock_check)
- 		opt.flags |= TC_ETF_SKIP_SOCK_CHECK;
- 
-+	if (q->use_hw_timestamp)
-+		opt.flags |= TC_ETF_USE_HW_TIMESTAMP;
-+
- 	if (nla_put(skb, TCA_ETF_PARMS, sizeof(opt), &opt))
- 		goto nla_put_failure;
- 
--- 
-2.20.1
+Is this the correct config file?
 
+Sami
