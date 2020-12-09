@@ -2,528 +2,276 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF2F2D4A79
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 20:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B92D4B8F
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 21:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729320AbgLITgy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 14:36:54 -0500
-Received: from smtp-190d.mail.infomaniak.ch ([185.125.25.13]:32903 "EHLO
-        smtp-190d.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387664AbgLITaR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Dec 2020 14:30:17 -0500
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CrnD172MtzlhQQy;
-        Wed,  9 Dec 2020 20:29:05 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CrnD14DGnzlh8TL;
-        Wed,  9 Dec 2020 20:29:05 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        id S1727894AbgLIUTk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 15:19:40 -0500
+Received: from mail-eopbgr40051.outbound.protection.outlook.com ([40.107.4.51]:47778
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725972AbgLIUT1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 15:19:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hZ91AHcwyvWKGsueP+FNvQZrPNkRg+DcUeLvX1s1jLU02davvyGcOVHwc9NoXsutzwVv31qGixBNt3tKB+r1wMYnbi31NGN80dMRfUQgmyFbzFfXvLXVVTuZPYZ/+GY47NS3EckS+SzCVM1IMgk799wn2idHkBhcRcESBvDHpQXTg4D+7+efrwFvWt3XeiW8ccEMwkyoPTIANLYox2Tb0gHYwEH3dLXXLDmrljzEjyasATruecmp06bB1I7hg8SjeEpCsKeNhGueS06Fz8TGckUYEK9sF/5gXK81Cb4fQrSDFPsLl//1VWUEceZqyqsW45Xb8OmUP0MabmtXPZQTAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NxEBd7tvGe2tOeCLr2Qdmj02Eqy3nOACux4pE2AjU/8=;
+ b=HsUMaaiEMsR8itZfRXKJiVpEmmi8827rAPGNQj3HsKrsGfRNykiviOuw9OmH8RJOsh9Ab41b1TLdFYw5ADVnH+57Nyrcn4qZOK+uwHPdwU72AwXWggqGZcDHdcuMJZ0KR08NebvcsWKZMDDpROOYYQMYSxOT0fzocVwbBd2o1dvNx3VkPJNvVQEONA0tls5fza5E2Kt6Dz3Gm+ky1+vI7sLOhL8ekFeK5q1MZZpUP8CmmKBJQrK4TDNMj4xlAEvIWWP1STBYq/R5bIkDC8cufvup+gADxgsxXFn++lhnI/s2qyv2ZRt7zCjKF3g+T/321e/dGYiGTECuMJB+YoVBlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=siemens.onmicrosoft.com; s=selector1-siemens-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NxEBd7tvGe2tOeCLr2Qdmj02Eqy3nOACux4pE2AjU/8=;
+ b=cYfqC7UJ09iTJBLjv+QaCuWdlrK+MS9I8yx8Bjk18k4qo4OiqKV3c7N6ppeb3QmRSWAHotHDIehQpziPv0hyFaJjQ2DKqMfXvoe9b1f45FvJXdR7WO+GnDU2pj8Ss2F5PtRST50cJSPIZyiOdp/e0TGZK6JFCOtqC1yTP2Hhn+s=
+Received: from VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:7c::28)
+ by VI1PR10MB3277.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:135::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Wed, 9 Dec
+ 2020 20:18:42 +0000
+Received: from VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c4f9:99d0:c75:bc2f]) by VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c4f9:99d0:c75:bc2f%7]) with mapi id 15.20.3654.013; Wed, 9 Dec 2020
+ 20:18:42 +0000
+From:   "Geva, Erez" <erez.geva.ext@siemens.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+CC:     Network Development <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Eyal Birger <eyal.birger@gmail.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Jon Rosen <jrosen@cisco.com>,
         Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v26 12/12] landlock: Add user and kernel documentation
-Date:   Wed,  9 Dec 2020 20:28:39 +0100
-Message-Id: <20201209192839.1396820-13-mic@digikod.net>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201209192839.1396820-1-mic@digikod.net>
-References: <20201209192839.1396820-1-mic@digikod.net>
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Or Cohen <orcohen@paloaltonetworks.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Xie He <xie.he.0141@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladis Dronov <vdronov@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        "Molzahn, Ines" <ines.molzahn@siemens.com>,
+        "Sudler, Simon" <simon.sudler@siemens.com>,
+        "Meisinger, Andreas" <andreas.meisinger@siemens.com>,
+        "Bucher, Andreas" <andreas.bucher@siemens.com>,
+        "henning.schild@siemens.com" <henning.schild@siemens.com>,
+        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
+        "Zirkler, Andreas" <andreas.zirkler@siemens.com>,
+        "Sakic, Ermin" <ermin.sakic@siemens.com>,
+        "anninh.nguyen@siemens.com" <anninh.nguyen@siemens.com>,
+        "Saenger, Michael" <michael.saenger@siemens.com>,
+        "Maehringer, Bernd" <bernd.maehringer@siemens.com>,
+        "gisela.greinert@siemens.com" <gisela.greinert@siemens.com>,
+        Erez Geva <ErezGeva2@gmail.com>
+Subject: Re: [PATCH 1/3] Add TX sending hardware timestamp.
+Thread-Topic: [PATCH 1/3] Add TX sending hardware timestamp.
+Thread-Index: AQHWzjjS+JtwwiLyJkKEw3ObDmZ1g6nu2GGAgAAIlICAACaHgIAAFaqA
+Date:   Wed, 9 Dec 2020 20:18:42 +0000
+Message-ID: <VI1PR10MB2446ACEACAE1F3671682407FABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+References: <20201209143707.13503-1-erez.geva.ext@siemens.com>
+ <20201209143707.13503-2-erez.geva.ext@siemens.com>
+ <CA+FuTScWkYn0Ur+aSuz1cREbQJO0fB6powOm8PFxze4v8JwBaw@mail.gmail.com>
+ <VI1PR10MB244654C4B42E47DB5EBE0B05ABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+ <CA+FuTSd7oB0qO707W6htvs=FOJn10cgSQ4_iGFz4Sk9URXtZiw@mail.gmail.com>
+In-Reply-To: <CA+FuTSd7oB0qO707W6htvs=FOJn10cgSQ4_iGFz4Sk9URXtZiw@mail.gmail.com>
+Accept-Language: en-GB, en-DE, he-IL, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Enabled=true;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SetDate=2020-12-09T20:18:39Z;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Method=Standard;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Name=restricted-default;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ActionId=eae03ecb-24cb-4829-918f-ef7d28c5c1f5;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ContentBits=0
+document_confidentiality: Restricted
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=siemens.com;
+x-originating-ip: [165.225.26.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: d77a14db-569e-40a2-e265-08d89c7f9fa0
+x-ms-traffictypediagnostic: VI1PR10MB3277:
+x-ld-processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR10MB32774E0833A088019BD0D354ABCC0@VI1PR10MB3277.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jcaM/U8qXpcfpv6/u68IMySPmiuKuV01UA61BolfGuesWJDiwkF9LIsuQ26Pyj4v2Q90sWDQVQfm8ub5L3O8KarTp+mBRZq8iEDzChzlt2B44D+ifnSsDZ1Y+Pc/UCLy1O2fKqH7uV0Vaqhda7l4PnU4bmXwuhZd9UBiA9fobh9x2zX6EPjZ9l8vleip2CZYHSjcnQRCQ9VcppgyezWHkNyuUarsiFMJLYxof1LPmIonRSqV0JJ4gk8EgHGQbGOXbneZdh/iZBFwOTIeAWV0kPb103KRn+qZ07qRaB6kpkzBSxbhb9yaDPpUYNTob93fL+rFKJ3ccS4q5d66FS94Ug==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(86362001)(66556008)(66476007)(71200400001)(64756008)(7416002)(6506007)(66946007)(4326008)(54906003)(76116006)(7406005)(83380400001)(186003)(6916009)(9686003)(33656002)(8676002)(66446008)(8936002)(508600001)(53546011)(2906002)(5660300002)(7696005)(52536014)(55236004)(26005)(55016002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?R1pyazhPMllhOU1OMU90ZEdPNlYwdFNXb21mK29LRHh3amVXOEZNOE5kN05a?=
+ =?utf-8?B?VGNrU0RpU2MzYVU1WVVDLzVqa3puaDlPcWhEZW9LclFKaTdTTWxTZ1Y4U2w2?=
+ =?utf-8?B?WFQ4UzA4eVN6Q2ttU05rcE1aalRIS3ZRbmlYZjU2Zm9LWGZURGxJc2lJcVJr?=
+ =?utf-8?B?Mm5TUVhiM2RnSUpDMzZab0pKdTZQdS9uS2czeWNtTW9KSXozb0lPcENjS0Nj?=
+ =?utf-8?B?RllyM1BLVTNHMnd3Zm9WbDljYm5yTVVEdGo5ZFEwUXlQamdWU1IvM2hCUmxv?=
+ =?utf-8?B?azlUWWVkSlhOMDlmMGcxd2FIVFNVbUNKdWhucDVpbkJWZldrNE5PZUw1bjZP?=
+ =?utf-8?B?M3VadTJqamY1bXBNOWhraEcyTjhyVzJJN2UrVWE0SlFOMWJsQzV5d1JlUEp3?=
+ =?utf-8?B?azd2dTdiY2J0eVlqYXI5WUlGSEI2Nm1McGZNY3JBdzdld1Y3eUJHZi9ZTVJF?=
+ =?utf-8?B?NFZYNWVXdzlrOVZQRHdqallsbVFhNExFd0JZeXVJR3VSSXlBZUkwbEdSRVp2?=
+ =?utf-8?B?V2NiVXZXTmpYMnlTeVRRRUJEZjlpVlBhdlVuNXVPSEFTZmE4YlJFZHlpemR5?=
+ =?utf-8?B?c0VJTWwwMWtBdzhnUTI5aE5POFlqMDBEWGJpaWw3dXg3cnFpTDVqRGRXVmhr?=
+ =?utf-8?B?OUlPbkJDMTI3a2FDckc5YkpTU3V4bjFTOXBpdWJ2NFNMcnZnZFBiM08xOXlu?=
+ =?utf-8?B?bVNWSTdaSGFqcnE1aUdwL0Vmc09RVnlLWER3bkJ5QnNkUnMySStlR1c1Y1JO?=
+ =?utf-8?B?L3pYUXBrb2huVnVLK1B6eXJPM0llRjZTQnJ0eG5LZkFwSmVtRXQwaEFyVjVQ?=
+ =?utf-8?B?REN5bENkSkcwMi9XOVJoTkE0SkJ0MjVSSUVrTE1jcFRSUDFqakVRU3A0R0p2?=
+ =?utf-8?B?b2VBYnU4MEZ6blJnenQ4bENEaWhvakZWamhTTjlGT3BJKzBZZmJLUm95R2di?=
+ =?utf-8?B?V0RkZUdGSlMyeVltZUZabVpvdUpObWR1VXhtWUt2WmZhYmpFYlhBTTFHa1ZG?=
+ =?utf-8?B?bHVRcWlUWnpaQ1lqVmRYUTQyL3dZaXk0ZWRYOG45NkprWjRJSWttMDY4QXZj?=
+ =?utf-8?B?bWs1OUpTMHlQU2JtQ2FuQTBhbVpUbndUakFGUWxlZVB5WjZETkJuRFRwNmZG?=
+ =?utf-8?B?QitCa01xeHpyekdPSUlsNzJxWnNWaVl1TU54TFZJeVZERVBXR3pxaFhkK0Jm?=
+ =?utf-8?B?ZUwydVcxWVpJNWI1M0JhY3dCT3pJNDJHUVVEeVdmMEt1ZDdWQkpHVm96MTdO?=
+ =?utf-8?B?cU0ycjY1NDlSQXoyNWN0VUxqdXJlUmtVQXMyaVh5VzdMWDFyS2JJcm5QNTdi?=
+ =?utf-8?Q?+oXVwdU9Tep0c=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9D0B420A82BE7D4596E33B5DFB16B6D5@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d77a14db-569e-40a2-e265-08d89c7f9fa0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2020 20:18:42.2857
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MVZQG9UV2ag8NL1ksT9ET8XYMxebQ+gNV7KcjVj+woYdLf5yYcSSbWIQrFZx+85skM/gtn2So+s9unuAnlxxzy8pc/nSp2X7vwwFQ9hxlIo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3277
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
-
-This documentation can be built with the Sphinx framework.
-
-Cc: James Morris <jmorris@namei.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-Reviewed-by: Jann Horn <jannh@google.com>
----
-
-Changes since v24:
-* Add Reviewed-by: Jann Horn <jannh@google.com>
-* Add a paragraph to explain how the ruleset layers work.
-* Bump date.
-
-Changes since v23:
-* Explain limitations for the maximum number of stacked ruleset, and the
-  memory usage restrictions.
-
-Changes since v22:
-* Fix spelling and remove obsolete sentence (spotted by Jann Horn).
-* Bump date.
-
-Changes since v21:
-* Move the user space documentation to userspace-api/landlock.rst and
-  the kernel documentation to security/landlock.rst .
-* Add license headers.
-* Add last update dates.
-* Update MAINTAINERS file.
-* Add (back) links to git.kernel.org .
-* Fix spelling.
-
-Changes since v20:
-* Update examples and documentation with the new syscalls.
-
-Changes since v19:
-* Update examples and documentation with the new syscalls.
-
-Changes since v15:
-* Add current limitations.
-
-Changes since v14:
-* Fix spelling (contributed by Randy Dunlap).
-* Extend documentation about inheritance and explain layer levels.
-* Remove the use of now-removed access rights.
-* Use GitHub links.
-* Improve kernel documentation.
-* Add section for tests.
-* Update example.
-
-Changes since v13:
-* Rewrote the documentation according to the major revamp.
-
-Previous changes:
-https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
----
- Documentation/security/index.rst         |   1 +
- Documentation/security/landlock.rst      |  79 +++++++
- Documentation/userspace-api/index.rst    |   1 +
- Documentation/userspace-api/landlock.rst | 280 +++++++++++++++++++++++
- MAINTAINERS                              |   2 +
- 5 files changed, 363 insertions(+)
- create mode 100644 Documentation/security/landlock.rst
- create mode 100644 Documentation/userspace-api/landlock.rst
-
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 8129405eb2cc..16335de04e8c 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -16,3 +16,4 @@ Security Documentation
-    siphash
-    tpm/index
-    digsig
-+   landlock
-diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-new file mode 100644
-index 000000000000..92317b2ad732
---- /dev/null
-+++ b/Documentation/security/landlock.rst
-@@ -0,0 +1,79 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+.. Copyright © 2019-2020 ANSSI
-+
-+==================================
-+Landlock LSM: kernel documentation
-+==================================
-+
-+:Author: Mickaël Salaün
-+:Date: December 2020
-+
-+Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
-+harden a whole system, this feature should be available to any process,
-+including unprivileged ones.  Because such process may be compromised or
-+backdoored (i.e. untrusted), Landlock's features must be safe to use from the
-+kernel and other processes point of view.  Landlock's interface must therefore
-+expose a minimal attack surface.
-+
-+Landlock is designed to be usable by unprivileged processes while following the
-+system security policy enforced by other access control mechanisms (e.g. DAC,
-+LSM).  Indeed, a Landlock rule shall not interfere with other access-controls
-+enforced on the system, only add more restrictions.
-+
-+Any user can enforce Landlock rulesets on their processes.  They are merged and
-+evaluated according to the inherited ones in a way that ensures that only more
-+constraints can be added.
-+
-+User space documentation can be found here: :doc:`/userspace-api/landlock`.
-+
-+Guiding principles for safe access controls
-+===========================================
-+
-+* A Landlock rule shall be focused on access control on kernel objects instead
-+  of syscall filtering (i.e. syscall arguments), which is the purpose of
-+  seccomp-bpf.
-+* To avoid multiple kinds of side-channel attacks (e.g. leak of security
-+  policies, CPU-based attacks), Landlock rules shall not be able to
-+  programmatically communicate with user space.
-+* Kernel access check shall not slow down access request from unsandboxed
-+  processes.
-+* Computation related to Landlock operations (e.g. enforcing a ruleset) shall
-+  only impact the processes requesting them.
-+
-+Tests
-+=====
-+
-+Userspace tests for backward compatibility, ptrace restrictions and filesystem
-+support can be found here: `tools/testing/selftests/landlock/`_.
-+
-+Kernel structures
-+=================
-+
-+Object
-+------
-+
-+.. kernel-doc:: security/landlock/object.h
-+    :identifiers:
-+
-+Ruleset and domain
-+------------------
-+
-+A domain is a read-only ruleset tied to a set of subjects (i.e. tasks'
-+credentials).  Each time a ruleset is enforced on a task, the current domain is
-+duplicated and the ruleset is imported as a new layer of rules in the new
-+domain.  Indeed, once in a domain, each rule is tied to a layer level.  To
-+grant access to an object, at least one rule of each layer must allow the
-+requested action on the object.  A task can then only transit to a new domain
-+which is the intersection of the constraints from the current domain and those
-+of a ruleset provided by the task.
-+
-+The definition of a subject is implicit for a task sandboxing itself, which
-+makes the reasoning much easier and helps avoid pitfalls.
-+
-+.. kernel-doc:: security/landlock/ruleset.h
-+    :identifiers:
-+
-+.. Links
-+.. _tools/testing/selftests/landlock/:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/tools/testing/selftests/landlock/
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index acd2cc2a538d..01f1748ab569 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -18,6 +18,7 @@ place where this information is gathered.
- 
-    no_new_privs
-    seccomp_filter
-+   landlock
-    unshare
-    spec_ctrl
-    accelerators/ocxl
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-new file mode 100644
-index 000000000000..84aea5478acc
---- /dev/null
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -0,0 +1,280 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+.. Copyright © 2019-2020 ANSSI
-+
-+=====================================
-+Landlock: unprivileged access control
-+=====================================
-+
-+:Author: Mickaël Salaün
-+:Date: December 2020
-+
-+The goal of Landlock is to enable to restrict ambient rights (e.g. global
-+filesystem access) for a set of processes.  Because Landlock is a stackable
-+LSM, it makes possible to create safe security sandboxes as new security layers
-+in addition to the existing system-wide access-controls. This kind of sandbox
-+is expected to help mitigate the security impact of bugs or
-+unexpected/malicious behaviors in user space applications.  Landlock empowers
-+any process, including unprivileged ones, to securely restrict themselves.
-+
-+Landlock rules
-+==============
-+
-+A Landlock rule describes an action on an object.  An object is currently a
-+file hierarchy, and the related filesystem actions are defined in `Access
-+rights`_.  A set of rules is aggregated in a ruleset, which can then restrict
-+the thread enforcing it, and its future children.
-+
-+Defining and enforcing a security policy
-+----------------------------------------
-+
-+We first need to create the ruleset that will contain our rules.  For this
-+example, the ruleset will contain rules which only allow read actions, but
-+write actions will be denied.  The ruleset then needs to handle both of these
-+kind of actions.
-+
-+.. code-block:: c
-+
-+    int ruleset_fd;
-+    struct landlock_ruleset_attr ruleset_attr = {
-+        .handled_access_fs =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_WRITE_FILE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_FILE |
-+            LANDLOCK_ACCESS_FS_MAKE_CHAR |
-+            LANDLOCK_ACCESS_FS_MAKE_DIR |
-+            LANDLOCK_ACCESS_FS_MAKE_REG |
-+            LANDLOCK_ACCESS_FS_MAKE_SOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_FIFO |
-+            LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_SYM,
-+    };
-+
-+    ruleset_fd = landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
-+    if (ruleset_fd < 0) {
-+        perror("Failed to create a ruleset");
-+        return 1;
-+    }
-+
-+We can now add a new rule to this ruleset thanks to the returned file
-+descriptor referring to this ruleset.  The rule will only allow reading the
-+file hierarchy ``/usr``.  Without another rule, write actions would then be
-+denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
-+``O_PATH`` flag and fill the &struct landlock_path_beneath_attr with this file
-+descriptor.
-+
-+.. code-block:: c
-+
-+    int err;
-+    struct landlock_path_beneath_attr path_beneath = {
-+        .allowed_access =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR,
-+    };
-+
-+    path_beneath.parent_fd = open("/usr", O_PATH | O_CLOEXEC);
-+    if (path_beneath.parent_fd < 0) {
-+        perror("Failed to open file");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
-+                            &path_beneath, 0);
-+    close(path_beneath.parent_fd);
-+    if (err) {
-+        perror("Failed to update ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+We now have a ruleset with one rule allowing read access to ``/usr`` while
-+denying all other handled accesses for the filesystem.  The next step is to
-+restrict the current thread from gaining more privileges (e.g. thanks to a SUID
-+binary).
-+
-+.. code-block:: c
-+
-+    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+        perror("Failed to restrict privileges");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+The current thread is now ready to sandbox itself with the ruleset.
-+
-+.. code-block:: c
-+
-+    if (landlock_enforce_ruleset_current(ruleset_fd, 0)) {
-+        perror("Failed to enforce ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    close(ruleset_fd);
-+
-+If the `landlock_enforce_ruleset_current` system call succeeds, the current
-+thread is now restricted and this policy will be enforced on all its
-+subsequently created children as well.  Once a thread is landlocked, there is
-+no way to remove its security policy; only adding more restrictions is allowed.
-+These threads are now in a new Landlock domain, merge of their parent one (if
-+any) with the new ruleset.
-+
-+Full working code can be found in `samples/landlock/sandboxer.c`_.
-+
-+Inheritance
-+-----------
-+
-+Every new thread resulting from a :manpage:`clone(2)` inherits Landlock domain
-+restrictions from its parent.  This is similar to the seccomp inheritance (cf.
-+:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
-+:manpage:`credentials(7)`.  For instance, one process's thread may apply
-+Landlock rules to itself, but they will not be automatically applied to other
-+sibling threads (unlike POSIX thread credential changes, cf.
-+:manpage:`nptl(7)`).
-+
-+When a thread sandboxes itself, we have the guarantee that the related security
-+policy will stay enforced on all this thread's descendants.  This allows
-+creating standalone and modular security policies per application, which will
-+automatically be composed between themselves according to their runtime parent
-+policies.
-+
-+A sandboxed thread can add more constraints to itself with a new enforced
-+ruleset.  This complementary policy inherits from the previous enforced
-+rulesets.  Access to a file path is granted if, for each policy layer, at least
-+one rule encountered on the path (from the file to the root) grants the access.
-+
-+Ptrace restrictions
-+-------------------
-+
-+A sandboxed process has less privileges than a non-sandboxed process and must
-+then be subject to additional restrictions when manipulating another process.
-+To be allowed to use :manpage:`ptrace(2)` and related syscalls on a target
-+process, a sandboxed process should have a subset of the target process rules,
-+which means the tracee must be in a sub-domain of the tracer.
-+
-+Kernel interface
-+================
-+
-+Access rights
-+-------------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: fs_access
-+
-+Creating a new ruleset
-+----------------------
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock_create_ruleset
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_ruleset_attr
-+
-+Extending a ruleset
-+-------------------
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock_add_rule
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_rule_type landlock_path_beneath_attr
-+
-+Enforcing a ruleset
-+-------------------
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock_enforce_ruleset_current
-+
-+Current limitations
-+===================
-+
-+Ruleset layers
-+--------------
-+
-+There is a limit of 64 layers of stacked rulesets.  This can be an issue for a
-+task willing to enforce a new ruleset in complement to its 64 inherited
-+rulesets.  Once this limit is reached, sys_landlock_enforce_ruleset_current()
-+returns E2BIG.  It is then strongly suggested to carefully build rulesets once
-+in the life of a thread, especially for applications able to launch other
-+applications which may also want to sandbox themselves (e.g. shells, container
-+managers, etc.).
-+
-+Memory usage
-+------------
-+
-+Kernel memory allocated to create rulesets is accounted and can be restricted
-+by the :doc:`/admin-guide/cgroup-v1/memory`.
-+
-+File renaming and linking
-+-------------------------
-+
-+Because Landlock targets unprivileged access controls, it is needed to properly
-+handle composition of rules.  Such property also implies rules nesting.
-+Properly handling multiple layers of ruleset, each one of them able to restrict
-+access to files, also implies to inherit the ruleset restrictions from a parent
-+to its hierarchy.  Because files are identified and restricted by their
-+hierarchy, moving or linking a file from one directory to another imply to
-+propagate the hierarchy constraints.  To protect against privilege escalations
-+through renaming or linking, and for the sack of simplicity, Landlock currently
-+limits linking and renaming to the same directory.  Future Landlock evolutions
-+will enable more flexibility for renaming and linking, with dedicated ruleset
-+flags.
-+
-+OverlayFS
-+---------
-+
-+An OverlayFS mount point consists of upper and lower layers.  It is currently
-+not possible to reliably infer which underlying file hierarchy matches an
-+OverlayFS path composed of such layers.  It is then not currently possible to
-+track the source of an indirect access request, and then not possible to
-+properly identify and allow an unified OverlayFS hierarchy.  Restricting files
-+in an OverlayFS mount point works, but files allowed in one layer may not be
-+allowed in a related OverlayFS mount point.  A future Landlock evolution will
-+make possible to properly work with OverlayFS, according to a dedicated ruleset
-+flag.
-+
-+
-+Special filesystems
-+-------------------
-+
-+Access to regular files and directories can be restricted by Landlock,
-+according to the handled accesses of a ruleset.  However, files which do not
-+come from a user-visible filesystem (e.g. pipe, socket), but can still be
-+accessed through /proc/self/fd/, cannot currently be restricted.  Likewise,
-+some special kernel filesystems such as nsfs which can be accessed through
-+/proc/self/ns/, cannot currently be restricted.  For now, these kind of special
-+paths are then always allowed.  Future Landlock evolutions will enable to
-+restrict such paths, with dedicated ruleset flags.
-+
-+Questions and answers
-+=====================
-+
-+What about user space sandbox managers?
-+---------------------------------------
-+
-+Using user space process to enforce restrictions on kernel resources can lead
-+to race conditions or inconsistent evaluations (i.e. `Incorrect mirroring of
-+the OS code and state
-+<https://www.ndss-symposium.org/ndss2003/traps-and-pitfalls-practical-problems-system-call-interposition-based-security-tools/>`_).
-+
-+What about namespaces and containers?
-+-------------------------------------
-+
-+Namespaces can help create sandboxes but they are not designed for
-+access-control and then miss useful features for such use case (e.g. no
-+fine-grained restrictions).  Moreover, their complexity can lead to security
-+issues, especially when untrusted processes can manipulate them (cf.
-+`Controlling access to user namespaces <https://lwn.net/Articles/673597/>`_).
-+
-+Additional documentation
-+========================
-+
-+* :doc:`/security/landlock`
-+* https://landlock.io
-+
-+.. Links
-+.. _samples/landlock/sandboxer.c:
-+   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/samples/landlock/sandboxer.c
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8656d3b9dd0e..dc9c07809f6f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9833,6 +9833,8 @@ L:	linux-security-module@vger.kernel.org
- S:	Supported
- W:	https://landlock.io
- T:	git https://github.com/landlock-lsm/linux.git
-+F:	Documentation/security/landlock.rst
-+F:	Documentation/userspace-api/landlock.rst
- F:	include/uapi/linux/landlock.h
- F:	security/landlock/
- K:	landlock
--- 
-2.29.2
-
+DQpPbiAwOS8xMi8yMDIwIDE4OjM3LCBXaWxsZW0gZGUgQnJ1aWpuIHdyb3RlOg0KPiBPbiBXZWQs
+IERlYyA5LCAyMDIwIGF0IDEwOjI1IEFNIEdldmEsIEVyZXogPGVyZXouZ2V2YS5leHRAc2llbWVu
+cy5jb20+IHdyb3RlOg0KPj4NCj4+DQo+PiBPbiAwOS8xMi8yMDIwIDE1OjQ4LCBXaWxsZW0gZGUg
+QnJ1aWpuIHdyb3RlOg0KPj4+IE9uIFdlZCwgRGVjIDksIDIwMjAgYXQgOTozNyBBTSBFcmV6IEdl
+dmEgPGVyZXouZ2V2YS5leHRAc2llbWVucy5jb20+IHdyb3RlOg0KPj4+Pg0KPj4+PiBDb25maWd1
+cmUgYW5kIHNlbmQgVFggc2VuZGluZyBoYXJkd2FyZSB0aW1lc3RhbXAgZnJvbQ0KPj4+PiAgICB1
+c2VyIHNwYWNlIGFwcGxpY2F0aW9uIHRvIHRoZSBzb2NrZXQgbGF5ZXIsDQo+Pj4+ICAgIHRvIHBy
+b3ZpZGUgdG8gdGhlIFRDIEVUQyBRZGlzYywgYW5kIHBhc3MgaXQgdG8NCj4+Pj4gICAgdGhlIGlu
+dGVyZmFjZSBuZXR3b3JrIGRyaXZlci4NCj4+Pj4NCj4+Pj4gICAgLSBOZXcgZmxhZyBmb3IgdGhl
+IFNPX1RYVElNRSBzb2NrZXQgb3B0aW9uLg0KPj4+PiAgICAtIE5ldyBhY2Nlc3MgYXV4aWxpYXJ5
+IGRhdGEgaGVhZGVyIHRvIHBhc3MgdGhlDQo+Pj4+ICAgICAgVFggc2VuZGluZyBoYXJkd2FyZSB0
+aW1lc3RhbXAuDQo+Pj4+ICAgIC0gQWRkIHRoZSBoYXJkd2FyZSB0aW1lc3RhbXAgdG8gdGhlIHNv
+Y2tldCBjb29raWUuDQo+Pj4+ICAgIC0gQ29weSB0aGUgVFggc2VuZGluZyBoYXJkd2FyZSB0aW1l
+c3RhbXAgdG8gdGhlIHNvY2tldCBjb29raWUuDQo+Pj4+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IEVy
+ZXogR2V2YSA8ZXJlei5nZXZhLmV4dEBzaWVtZW5zLmNvbT4NCj4+Pg0KPj4+IEhhcmR3YXJlIG9m
+ZmxvYWQgb2YgcGFjaW5nIGlzIGRlZmluaXRlbHkgdXNlZnVsLg0KPj4+DQo+PiBUaGFua3MgZm9y
+IHlvdXIgY29tbWVudC4NCj4+IEkgYWdyZWUsIGl0IGlzIG5vdCBsaW1pdGVkIG9mIHVzZS4NCj4+
+DQo+Pj4gSSBkb24ndCB0aGluayB0aGlzIG5lZWRzIGEgbmV3IHNlcGFyYXRlIGgvdyB2YXJpYW50
+IG9mIFNPX1RYVElNRS4NCj4+Pg0KPj4gSSBvbmx5IGV4dGVuZCBTT19UWFRJTUUuDQo+IA0KPiBU
+aGUgcGF0Y2hzZXQgcGFzc2VzIGEgc2VwYXJhdGUgdGltZXN0YW1wIGZyb20gc2tiLT50c3RhbXAg
+YWxvbmcNCj4gdGhyb3VnaCB0aGUgaXAgY29va2llLCBjb3JrICh0cmFuc21pdF9od190aW1lKSBh
+bmQgd2l0aCB0aGUgc2tiIGluDQo+IHNoaW5mby4NCj4gDQo+IEkgZG9uJ3Qgc2VlIHRoZSBuZWVk
+IGZvciB0d28gdGltZXN0YW1wcywgb25lIHRpZWQgdG8gc29mdHdhcmUgYW5kIG9uZQ0KPiB0byBo
+YXJkd2FyZS4gV2hlbiB3b3VsZCB3ZSB3YW50IHRvIHBhY2UgdHdpY2U/DQoNCkFzIHRoZSBOZXQt
+TGluayB1c2VzIHN5c3RlbSBjbG9jayBhbmQgdGhlIG5ldHdvcmsgaW50ZXJmYWNlIGhhcmR3YXJl
+IHVzZXMgaXQncyBvd24gUEhDLg0KVGhlIGN1cnJlbnQgRVRGIGRlcGVuZHMgb24gc3luY2hyb25p
+emluZyB0aGUgc3lzdGVtIGNsb2NrIGFuZCB0aGUgUEhDLg0KIA0KPj4+IEluZGVlZCwgd2Ugd2Fu
+dCBwYWNpbmcgb2ZmbG9hZCB0byB3b3JrIGZvciBleGlzdGluZyBhcHBsaWNhdGlvbnMuDQo+Pj4N
+Cj4+IEFzIHRoZSBjb252ZXJzaW9uIG9mIHRoZSBQSEMgYW5kIHRoZSBzeXN0ZW0gY2xvY2sgaXMg
+ZHluYW1pYyBvdmVyIHRpbWUuDQo+PiBIb3cgZG8geW91IHByb3BzZSB0byBhY2hpdmUgaXQ/DQo+
+IA0KPiBDYW4geW91IGVsYWJvcmF0ZSBvbiB0aGlzIGNvbmNlcm4/DQoNClVzaW5nIHNpbmdsZSB0
+aW1lIHN0YW1wIGhhdmUgMyBwb3NzaWJsZSBzb2x1dGlvbnM6DQoNCjEuIEN1cnJlbnQgc29sdXRp
+b24sIHN5bmNocm9uaXplIHRoZSBzeXN0ZW0gY2xvY2sgYW5kIHRoZSBQSEMuDQogICAgQXBwbGlj
+YXRpb24gdXNlcyB0aGUgc3lzdGVtIGNsb2NrLg0KICAgIFRoZSBFVEYgY2FuIHVzZSB0aGUgc3lz
+dGVtIGNsb2NrIGZvciBvcmRlcmluZyBhbmQgcGFzcyB0aGUgcGFja2V0IHRvIHRoZSBkcml2ZXIg
+b24gdGltZQ0KICAgIFRoZSBuZXR3b3JrIGludGVyZmFjZSBoYXJkd2FyZSBjb21wYXJlIHRoZSB0
+aW1lLXN0YW1wIHRvIHRoZSBQSEMuDQoNCjIuIFRoZSBhcHBsaWNhdGlvbiBjb252ZXJ0IHRoZSBQ
+SEMgdGltZS1zdGFtcCB0byBzeXN0ZW0gY2xvY2sgYmFzZWQuDQogICAgIFRoZSBFVEYgd29ya3Mg
+YXMgc29sdXRpb24gMQ0KICAgICBUaGUgbmV0d29yayBkcml2ZXIgY29udmVydCB0aGUgc3lzdGVt
+IGNsb2NrIHRpbWUtc3RhbXAgYmFjayB0byBQSEMgdGltZS1zdGFtcC4NCiAgICAgVGhpcyBzb2x1
+dGlvbiBuZWVkIGEgbmV3IE5ldC1MaW5rIGZsYWcgYW5kIG1vZGlmeSB0aGUgcmVsZXZhbnQgbmV0
+d29yayBkcml2ZXJzLg0KICAgICBZZXQgdGhpcyBzb2x1dGlvbiBoYXZlIDIgcHJvYmxlbXM6DQog
+ICAgICogQXMgYXBwbGljYXRpb25zIHRvZGF5IGFyZSBub3QgYXdhcmUgdGhhdCBzeXN0ZW0gY2xv
+Y2sgYW5kIFBIQyBhcmUgbm90IHN5bmNocm9uaXplZCBhbmQNCiAgICAgICAgdGhlcmVmb3JlIGRv
+IG5vdCBwZXJmb3JtIGFueSBjb252ZXJzaW9uLCBtb3N0IG9mIHRoZW0gb25seSB1c2UgdGhlIHN5
+c3RlbSBjbG9jay4NCiAgICAgKiBBcyB0aGUgY29udmVyc2lvbiBpbiB0aGUgbmV0d29yayBkcml2
+ZXIgaGFwcGVucyB+MzAwIC0gNjAwIG1pY3Jvc2Vjb25kcyBhZnRlciANCiAgICAgICAgdGhlIGFw
+cGxpY2F0aW9uIHNlbmQgdGhlIHBhY2tldC4NCiAgICAgICAgQW5kIGFzIHRoZSBQSEMgYW5kIHN5
+c3RlbSBjbG9jayBmcmVxdWVuY2llcyBhbmQgb2Zmc2V0IGNhbiBjaGFuZ2UgZHVyaW5nIHRoaXMg
+cGVyaW9kLg0KICAgICAgICBUaGUgY29udmVyc2lvbiB3aWxsIHByb2R1Y2UgYSBkaWZmZXJlbnQg
+UEhDIHRpbWUtc3RhbXAgZnJvbSB0aGUgYXBwbGljYXRpb24gb3JpZ2luYWwgdGltZS1zdGFtcC4N
+CiAgICAgICAgV2UgcmVxdWlyZSBhIHByZWNlc3Npb24gb2YgMSBuYW5vc2Vjb25kcyBvZiB0aGUg
+UEhDIHRpbWUtc3RhbXAuDQoNCjMuIFRoZSBhcHBsaWNhdGlvbiB1c2VzIFBIQyB0aW1lLXN0YW1w
+IGZvciBza2ItPnRzdGFtcA0KICAgIFRoZSBFVEYgY29udmVydCB0aGUgIFBIQyB0aW1lLXN0YW1w
+IHRvIHN5c3RlbSBjbG9jayB0aW1lLXN0YW1wLg0KICAgIFRoaXMgc29sdXRpb24gcmVxdWlyZSBp
+bXBsZW1lbnRhdGlvbnMgb24gc3VwcG9ydGluZyByZWFkaW5nIFBIQyBjbG9ja3MNCiAgICBmcm9t
+IElSUS9rZXJuZWwgdGhyZWFkIGNvbnRleHQgaW4ga2VybmVsIHNwYWNlLg0KDQpKdXN0IGZvciBj
+bGFyaWZpY2F0aW9uOg0KRVRGIGFzIGFsbCBOZXQtTGluaywgb25seSB1c2VzIHN5c3RlbSBjbG9j
+ayAodGhlIFRBSSkNClRoZSBuZXR3b3JrIGludGVyZmFjZSBoYXJkd2FyZSBvbmx5IHVzZXMgdGhl
+IFBIQy4NCk5vciBOZXQtTGluayBuZWl0aGVyIHRoZSBkcml2ZXIgcGVyZm9ybSBhbnkgY29udmVy
+c2lvbnMuDQpUaGUgS2VybmVsIGRvZXMgbm90IHByb3ZpZGUgYW5kIGNsb2NrIGNvbnZlcnNpb24g
+YmVzaWRlIHN5c3RlbSBjbG9jay4NCkxpbnV4IGtlcm5lbCBpcyBhIHNpbmdsZSBjbG9jayBzeXN0
+ZW0uDQoNCj4gDQo+IFRoZSBzaW1wbGVzdCBzb2x1dGlvbiBmb3Igb2ZmbG9hZGluZyBwYWNpbmcg
+d291bGQgYmUgdG8gaW50ZXJwcmV0DQo+IHNrYi0+dHN0YW1wIGVpdGhlciBmb3Igc29mdHdhcmUg
+cGFjaW5nLCBvciBza2lwIHNvZnR3YXJlIHBhY2luZyBpZiB0aGUNCj4gZGV2aWNlIGFkdmVydGlz
+ZXMgYSBORVRJRl9GIGhhcmR3YXJlIHBhY2luZyBmZWF0dXJlLg0KDQpUaGF0IHdpbGwgZGVmeSB0
+aGUgcHVycG9zZSBvZiBFVEYuDQpFVEYgZXhpc3QgZm9yIG9yZGVyaW5nIHBhY2tldHMuDQpXaHkg
+c2hvdWxkIHRoZSBkZXZpY2UgZHJpdmVyIGRlZmVyIGl0Pw0KU2ltcGx5IGRvIG5vdCB1c2UgdGhl
+IFFESVNDIGZvciB0aGlzIGludGVyZmFjZS4NCg0KPiANCj4gQ2xvY2tiYXNlIGlzIGFuIGlzc3Vl
+LiBUaGUgZGV2aWNlIGRyaXZlciBtYXkgaGF2ZSB0byBjb252ZXJ0IHRvDQo+IHdoYXRldmVyIGZv
+cm1hdCB0aGUgZGV2aWNlIGV4cGVjdHMgd2hlbiBjb3B5aW5nIHNrYi0+dHN0YW1wIGluIHRoZQ0K
+PiBkZXZpY2UgdHggZGVzY3JpcHRvci4NCg0KV2UgZG8gaG9wZSBvdXIgZGVmaW5pdGlvbiBpcyBj
+bGVhci4NCkluIHRoZSBjdXJyZW50IGtlcm5lbCBza2ItPnRzdGFtcCB1c2VzIHN5c3RlbSBjbG9j
+ay4NClRoZSBoYXJkd2FyZSB0aW1lLXN0YW1wIGlzIFBIQyBiYXNlZCwgYXMgaXQgaXMgdXNlZCB0
+b2RheSBmb3IgUFRQIHR3byBzdGVwcy4NCldlIG9ubHkgcHJvcG9zZSB0byB1c2UgdGhlIHNhbWUg
+aGFyZHdhcmUgdGltZS1zdGFtcC4NCg0KUGFzc2luZyB0aGUgaGFyZHdhcmUgdGltZS1zdGFtcCB0
+byB0aGUgc2tiLT50c3RhbXAgbWlnaHQgc2VlbXMgYSBiaXQgdHJpY2t5DQpUaGUgZ2FvbCBpcyB0
+aGUgbGVhdmUgdGhlIGRyaXZlciB1bmF3YXJlIHRvIHdoZXRoZXIgd2UNCiogU3luY2hyb25pemlu
+ZyB0aGUgUEhDIGFuZCBzeXN0ZW0gY2xvY2sNCiogVGhlIEVURiBwYXNzIHRoZSBoYXJkd2FyZSB0
+aW1lLXN0YW1wIHRvIHNrYi0+dHN0YW1wDQpPbmx5IHRoZSBhcHBsaWNhdGlvbnMgYW5kIHRoZSBF
+VEYgYXJlIGF3YXJlLg0KVGhlIGFwcGxpY2F0aW9uIGNhbiBkZXRlY3QgYnkgY2hlY2tpbmcgdGhl
+IEVURiBmbGFnLg0KVGhlIEVURiBmbGFncyBhcmUgcGFydCBvZiB0aGUgbmV0d29yayBhZG1pbmlz
+dHJhdGlvbi4NClRoYXQgYWxzbyBjb25maWd1cmUgdGhlIFBUUCBhbmQgdGhlIHN5c3RlbSBjbG9j
+ayBzeW5jaHJvbml6YXRpb24uDQoNCj4gDQo+Pg0KPj4+IEl0IG9ubHkgcmVxdWlyZXMgdGhhdCBw
+YWNpbmcgcWRpc2NzLCBib3RoIHNjaF9ldGYgYW5kIHNjaF9mcSwNCj4+PiBvcHRpb25hbGx5IHNr
+aXAgcXVldWluZyBpbiB0aGVpciAuZW5xdWV1ZSBjYWxsYmFjayBhbmQgaW5zdGVhZCBhbGxvdw0K
+Pj4+IHRoZSBza2IgdG8gcGFzcyB0byB0aGUgZGV2aWNlIGRyaXZlciBhcyBpcywgd2l0aCBza2It
+PnRzdGFtcCBzZXQuIE9ubHkNCj4+PiB0byBkZXZpY2VzIHRoYXQgYWR2ZXJ0aXNlIHN1cHBvcnQg
+Zm9yIGgvdyBwYWNpbmcgb2ZmbG9hZC4NCj4+Pg0KPj4gSSBkaWQgbm90IHVzZSAiRmFpciBRdWV1
+ZSB0cmFmZmljIHBvbGljaW5nIi4NCj4+IEFzIGZvciBFVEYsIGl0IGlzIGFsbCBhYm91dCBvcmRl
+cmluZyBwYWNrZXRzIGZyb20gZGlmZmVyZW50IGFwcGxpY2F0aW9ucy4NCj4+IEhvdyBjYW4gd2Ug
+YWNoaXZlIGl0IHdpdGggc2tpcGluZyBxdWV1aW5nPw0KPj4gQ291bGQgeW91IGVsYWJvcmF0ZSBv
+biB0aGlzIHBvaW50Pw0KPiANCj4gVGhlIHFkaXNjIGNhbiBvbmx5IGRlZmVyIHBhY2luZyB0byBo
+YXJkd2FyZSBpZiBoYXJkd2FyZSBjYW4gZW5zdXJlIHRoZQ0KPiBzYW1lIGludmFyaWFudHMgb24g
+b3JkZXJpbmcsIG9mIGNvdXJzZS4NCg0KWWVzLCB0aGlzIGlzIHdoeSB3ZSBzdWdnZXN0IEVURiBv
+cmRlciBwYWNrZXRzIHVzaW5nIHRoZSBoYXJkd2FyZSB0aW1lLXN0YW1wLg0KQW5kIHBhc3MgdGhl
+IHBhY2tldCBiYXNlZCBvbiBzeXN0ZW0gdGltZS4NClNvIEVURiBxdWVyeSB0aGUgc3lzdGVtIGNs
+b2NrIG9ubHkgYW5kIG5vdCB0aGUgUEhDLg0KDQo+IA0KPiBCdHc6IHRoaXMgaXMgcXVpdGUgYSBs
+b25nIGxpc3Qgb2YgQ0M6cw0KPiANCkkgbmVlZCB0byB1cGRhdGUgbXkgY29tcGFueSBjb2xsZWFn
+dWVzIGFzIHdlbGwgYXMgdGhlIExpbnV4IGdyb3VwLg0K
