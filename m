@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9A92D4DB5
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188482D4DBA
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388589AbgLIW30 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 17:29:26 -0500
+        id S2388762AbgLIW3z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 17:29:55 -0500
 Received: from mga01.intel.com ([192.55.52.88]:7773 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388699AbgLIW3Q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 17:29:16 -0500
-IronPort-SDR: mpy0vBMjrtUgYTf3i+lA9/75C2qLn/ye1K6a3JkxxmTWdO45lTx6KmI5txzHYW005Iqhhtk2wK
- K8ocrgn98wUQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="192468353"
+        id S2388829AbgLIW3w (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 17:29:52 -0500
+IronPort-SDR: O9OkoIBhSO0lzy8pmQ6JDHaKLyW4d+Z5gUHfQPwy7z2tO34QKjX2AandJzMFOueSiuFVI1JUU1
+ QpMiNLR526fQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="192468363"
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="192468353"
+   d="scan'208";a="192468363"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:28:10 -0800
-IronPort-SDR: Q68EBq02wyhMX6tVMQGq6R1dG5qjEMZ0OYfHaX1NQOpCdtDXy0RPDX8mowHOa+7bBZPjkHkme4
- aXHH+VSnGGfQ==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:28:12 -0800
+IronPort-SDR: IZarz+11qB9wZSjaBifLQa7qBG52MoFKZ7hcqq93VjK4hTHgyv6MAhy69nMMXedqn3c4crG0jU
+ CdUxHzev0Cbg==
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="364333612"
+   d="scan'208";a="364333627"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:28:10 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:28:12 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v16 1/7] x86/cet/ibt: Update Kconfig for user-mode Indirect Branch Tracking
-Date:   Wed,  9 Dec 2020 14:27:46 -0800
-Message-Id: <20201209222752.2911-2-yu-cheng.yu@intel.com>
+Subject: [PATCH v16 4/7] x86/cet/ibt: Update ELF header parsing for Indirect Branch Tracking
+Date:   Wed,  9 Dec 2020 14:27:49 -0800
+Message-Id: <20201209222752.2911-5-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201209222752.2911-1-yu-cheng.yu@intel.com>
 References: <20201209222752.2911-1-yu-cheng.yu@intel.com>
@@ -64,30 +64,34 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Indirect branch tracking is a hardware security feature that verifies near
-indirect call/jump instructions arrive at intended targets, which are
-labeled by the compiler with ENDBR opcodes.  If such instructions reach
-unlabeled locations, the processor raises control-protection faults.
-
-Check the compiler is up-to-date at config time.
+An ELF file's .note.gnu.property indicates features the file supports.
+The property is parsed at loading time and passed to arch_setup_elf_
+property().  Update it for Indirect Branch Tracking.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/process_64.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 264de177a721..d08c0eb563da 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1942,6 +1942,7 @@ config X86_CET_USER
- 	def_bool n
- 	depends on CPU_SUP_INTEL && X86_64
- 	depends on AS_WRUSS
-+	depends on $(cc-option,-fcf-protection)
- 	select ARCH_USES_HIGH_VMA_FLAGS
- 	select ARCH_HAS_SHADOW_STACK
- 	select ARCH_MAYBE_MKWRITE
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 2586745b2392..bf3d38394edf 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -866,6 +866,14 @@ int arch_setup_elf_property(struct arch_elf_state *state)
+ 			r = cet_setup_shstk();
+ 	}
+ 
++	if (r < 0)
++		return r;
++
++	if (static_cpu_has(X86_FEATURE_IBT)) {
++		if (state->gnu_property & GNU_PROPERTY_X86_FEATURE_1_IBT)
++			r = cet_setup_ibt();
++	}
++
+ 	return r;
+ }
+ #endif
 -- 
 2.21.0
 
