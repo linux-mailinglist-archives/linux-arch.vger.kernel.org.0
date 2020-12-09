@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539032D4E38
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD8D2D4E3A
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Dec 2020 23:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388648AbgLIWYd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Dec 2020 17:24:33 -0500
-Received: from mga18.intel.com ([134.134.136.126]:14580 "EHLO mga18.intel.com"
+        id S2388657AbgLIWYe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Dec 2020 17:24:34 -0500
+Received: from mga18.intel.com ([134.134.136.126]:14589 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388639AbgLIWYa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 9 Dec 2020 17:24:30 -0500
-IronPort-SDR: Mx53IUsyXR5JmTKr+ayHHjWStJ8dsZnDVty1g/mNWTeIvxfLduqY0p01+8pK4dG5RWS2RTau6w
- mGxm/bwMz/FA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918055"
+        id S2388642AbgLIWYd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 9 Dec 2020 17:24:33 -0500
+IronPort-SDR: I083tIUh+W71UT2pAY96VYFRNu3KtqFuN6nJdkMe1K6Mn9orMcx/zn6W1d3ynTSRXtJyJCjlj7
+ CeJ+5gOnIM0w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161918057"
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="161918055"
+   d="scan'208";a="161918057"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:47 -0800
-IronPort-SDR: uclimdvVR2tD5wF0nf91TYXck+W/PPf4mnEQLUGLoYy68dqMmFwq7ldTI6YTy1s+ftRXAmW1LR
- Ir9wdLNWFfEQ==
+IronPort-SDR: wX/48FKp7Othk9Kp2RGZxb12b0GcOEarUCrsvW57bXp/4jvYXC86emF91AkER/tei4zV4PwWij
+ yoIlXt0dEMBg==
 X-IronPort-AV: E=Sophos;i="5.78,407,1599548400"; 
-   d="scan'208";a="318543510"
+   d="scan'208";a="318543514"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:46 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 14:23:47 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v16 02/26] x86/cet/shstk: Add Kconfig option for user-mode control-flow protection
-Date:   Wed,  9 Dec 2020 14:22:56 -0800
-Message-Id: <20201209222320.1724-3-yu-cheng.yu@intel.com>
+Subject: [PATCH v16 03/26] x86/cpufeatures: Add CET CPU feature flags for Control-flow Enforcement Technology (CET)
+Date:   Wed,  9 Dec 2020 14:22:57 -0800
+Message-Id: <20201209222320.1724-4-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201209222320.1724-1-yu-cheng.yu@intel.com>
 References: <20201209222320.1724-1-yu-cheng.yu@intel.com>
@@ -64,64 +64,82 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Shadow Stack provides protection against function return address
-corruption.  It is active when the processor supports it, the kernel has
-CONFIG_X86_CET_USER, and the application is built for the feature.
-This is only implemented for the 64-bit kernel.  When it is enabled, legacy
-non-Shadow Stack applications continue to work, but without protection.
+Add CPU feature flags for Control-flow Enforcement Technology (CET).
+
+CPUID.(EAX=7,ECX=0):ECX[bit 7] Shadow stack
+CPUID.(EAX=7,ECX=0):EDX[bit 20] Indirect Branch Tracking
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
- arch/x86/Kconfig           | 22 ++++++++++++++++++++++
- arch/x86/Kconfig.assembler |  5 +++++
- 2 files changed, 27 insertions(+)
+ arch/x86/include/asm/cpufeatures.h       |  2 ++
+ arch/x86/include/asm/disabled-features.h | 12 ++++++++++--
+ arch/x86/kernel/cpu/cpuid-deps.c         |  2 ++
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index fbf26e0f7a6a..78b4b5bb1272 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1931,6 +1931,28 @@ config X86_INTEL_TSX_MODE_AUTO
- 	  side channel attacks- equals the tsx=auto command line parameter.
- endchoice
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index dad350d42ecf..c9f6d62da463 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -343,6 +343,7 @@
+ #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
+ #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
+ #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
++#define X86_FEATURE_SHSTK		(16*32+ 7) /* Shadow Stack */
+ #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
+ #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
+ #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
+@@ -374,6 +375,7 @@
+ #define X86_FEATURE_TSXLDTRK		(18*32+16) /* TSX Suspend Load Address Tracking */
+ #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
+ #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
++#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
+ #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
+ #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
+ #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 5861d34f9771..b22ba3db6b25 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -62,6 +62,14 @@
+ # define DISABLE_ENQCMD (1 << (X86_FEATURE_ENQCMD & 31))
+ #endif
  
-+config ARCH_HAS_SHADOW_STACK
-+	def_bool n
++#ifdef CONFIG_X86_CET_USER
++#define DISABLE_SHSTK	0
++#define DISABLE_IBT	0
++#else
++#define DISABLE_SHSTK	(1 << (X86_FEATURE_SHSTK & 31))
++#define DISABLE_IBT	(1 << (X86_FEATURE_IBT & 31))
++#endif
 +
-+config X86_CET_USER
-+	prompt "Intel Control-flow protection for user-mode"
-+	def_bool n
-+	depends on CPU_SUP_INTEL && X86_64
-+	depends on AS_WRUSS
-+	select ARCH_USES_HIGH_VMA_FLAGS
-+	select ARCH_HAS_SHADOW_STACK
-+	help
-+	  Control-flow protection is a hardware security hardening feature
-+	  that detects function-return address or jump target changes by
-+	  malicious code.  Applications must be enabled to use it, and old
-+	  userspace does not get protection "for free".
-+	  Support for this feature is present on processors released in
-+	  2020 or later.  Enabling this feature increases kernel text size
-+	  by 3.7 KB.
-+	  See Documentation/x86/intel_cet.rst for more information.
-+
-+	  If unsure, say N.
-+
- config EFI
- 	bool "EFI runtime service support"
- 	depends on ACPI
-diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
-index 26b8c08e2fc4..00c79dd93651 100644
---- a/arch/x86/Kconfig.assembler
-+++ b/arch/x86/Kconfig.assembler
-@@ -19,3 +19,8 @@ config AS_TPAUSE
- 	def_bool $(as-instr,tpause %ecx)
- 	help
- 	  Supported by binutils >= 2.31.1 and LLVM integrated assembler >= V7
-+
-+config AS_WRUSS
-+	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
-+	help
-+	  Supported by binutils >= 2.31 and LLVM integrated assembler
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -82,9 +90,9 @@
+ #define DISABLED_MASK14	0
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+-			 DISABLE_ENQCMD)
++			 DISABLE_ENQCMD|DISABLE_SHSTK)
+ #define DISABLED_MASK17	0
+-#define DISABLED_MASK18	0
++#define DISABLED_MASK18	(DISABLE_IBT)
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 19)
+ 
+ #endif /* _ASM_X86_DISABLED_FEATURES_H */
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index d502241995a3..9a3971e2f98f 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -71,6 +71,8 @@ static const struct cpuid_dep cpuid_deps[] = {
+ 	{ X86_FEATURE_AVX512_BF16,		X86_FEATURE_AVX512VL  },
+ 	{ X86_FEATURE_ENQCMD,			X86_FEATURE_XSAVES    },
+ 	{ X86_FEATURE_PER_THREAD_MBA,		X86_FEATURE_MBA       },
++	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
++	{ X86_FEATURE_IBT,			X86_FEATURE_XSAVES    },
+ 	{}
+ };
+ 
 -- 
 2.21.0
 
