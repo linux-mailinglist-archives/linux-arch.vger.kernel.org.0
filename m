@@ -2,244 +2,304 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA112D64BB
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Dec 2020 19:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8B72D661D
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Dec 2020 20:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392930AbgLJSSQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Dec 2020 13:18:16 -0500
-Received: from mail-eopbgr60042.outbound.protection.outlook.com ([40.107.6.42]:45429
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2403837AbgLJSSM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 10 Dec 2020 13:18:12 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LQMzW8acptK92vQ799oI8zHlSZyZWO1W2RM26rUk0FfCfPJr2nYSCN8V7bEAP3qCcR+ZM6Btl4MrVgmqtHPhhf7U1wbZbGlsqXPUjZeVr8DH1+WvkgExDQN9WC0m5conE5n90WpCGNkGOxOvoqauNUPNA6J2F6GoxTu5iSstNOlXydw1mKabQarrRwS0uo4bkTqLdOcUZCm7S0L3B+zBl8XE77BCYk/wVDvSnrFgB4TzCroTQKeS7fnnsQiKI0cQ/sC9uCCxonSEXOBgR9J7+cC8Sl8lFck60XWwpOKNSzMhSIC42QpLs9VoYh5xNniPA6KfflgzpmHLVpP8m2OcNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tCxCdGZnHQYZ1osj0jBr1b8U8pP4ENDfyjrf6dXZjwc=;
- b=O/Ko0iwcVub9X+L5W9H3Nkcp+jFQ4FoSc36cB1g7GIdE3o9xP0qBFPdhjkA74qXpx/2C9lLEg68t389NHh1wW+RdD0kQO8Z4I2XI8LDWAVlCRb97uQfFVpXpqAbm74mpW+jaBh9PqHBFdpUCImUMxSeXpTHTDwiFKDm1E4ERuK68sI+6pJBV/47br2yTNWm6k/zRj6/CDwvg+Ydhl3TH/u4LGWQQEIFIzAB4tgMSZZyLWFTFP20AeWg4zyDwFHg5jx9kNnhjfUME4JFdRz/OX6U39RuHiU5zt87j/heYgP+0TA4cOE+jK7tyEUIAMCujxQ6+3Bn7IA4NKDSnG3QJkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
+        id S2393385AbgLJTNO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Dec 2020 14:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393380AbgLJTNG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Dec 2020 14:13:06 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55196C06179C;
+        Thu, 10 Dec 2020 11:12:26 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id x16so8902639ejj.7;
+        Thu, 10 Dec 2020 11:12:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=siemens.onmicrosoft.com; s=selector1-siemens-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tCxCdGZnHQYZ1osj0jBr1b8U8pP4ENDfyjrf6dXZjwc=;
- b=CzdzZuwDboCpV2ibkZLiBx5cCCVCaNo27EdGlQRhj7R0b/0dpzyog4dNk0ZePIPBbO8UkbGRBqB2b5KmWbDR//jfFzWJ9s6sbNKPV9chdUnVTbXn0QGqjquroI7mMBTaA7/8XozOD80Mv+sMUyXi4Z+G3vVGBbxyQOIpKI9418s=
-Received: from AM6PR10MB2438.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:52::11)
- by AM7PR10MB3496.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:13f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12; Thu, 10 Dec
- 2020 18:17:25 +0000
-Received: from AM6PR10MB2438.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7c1c:5b4e:ad40:b4bd]) by AM6PR10MB2438.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7c1c:5b4e:ad40:b4bd%6]) with mapi id 15.20.3654.015; Thu, 10 Dec 2020
- 18:17:24 +0000
-From:   "Geva, Erez" <erez.geva.ext@siemens.com>
-To:     kernel test robot <lkp@intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>
-CC:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XMPtkPHlfScXxnYtiT73cT3123zHLd5ONBXCS1dAZ+M=;
+        b=VZvQ6MsGSCr52HnisluE283ZiiX5FQ2VQwX1Sq80Xfx9pK2XkorU4Buz1hjD/9mLXV
+         rIt/H0xMm28hNn1cdVEgmFaQceeFGLXMcvr866GMkMqe7c4TmoThjfJ1gJvmyjhI/IpH
+         3PGh7XvIoqlC+J70qn0s2dRq9wVa6ZUx0V73iF8emJ0z+O1o5wTJ87tO4OlOwclWFpuU
+         JXcKAY3J94y9Y/JOXHlNU46P3n1YMpnLwKnYNHS3RLdhghV7Y4GkYUlu+vBd3P2vqGmQ
+         jb9vOtMekAiKplU+95IZceUUp1KCd5gDTdGcuQ9z7/t1QfkhPMIB6N2EtXyvHxaM8g5+
+         tXSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XMPtkPHlfScXxnYtiT73cT3123zHLd5ONBXCS1dAZ+M=;
+        b=IXdx6EuwnUAw4RWKQkEraRQt7SoY6QP7qDyCSZ7vIc37esWWjSdqmVqyioFtplsLJS
+         25X+a/SXTakNWpa71y9akYNoKkSnAzKbaauVe0AEHOCl7Vu+cabCbufDjzTmEOd9n0Ya
+         YF04bGedhgYLmhbtsD7y9LqLeUDpY9NUel6Kym9CAr9caiPAn/WFbtkm29/cxU3LKv+t
+         7bsPAbHRlSHaRZ41y0/zOvlQhryplBIcDyfol4gU/G+UGmKohrZTkV5KpgG/0zf9/yUx
+         xHAoSU2z1Uw6zbOBxL+D0OKGNsf3w0J3xPJRE66/+IDLm6prc/+UBrXEHuc1dDIR4H+C
+         XXBQ==
+X-Gm-Message-State: AOAM533UTPdpM/NrzfkHZzlvwdCUgTXAONiB4mwCZYcuOT/J1o/MEnPo
+        PX0KTRplQVE+7wGpzNVypwNQ3gN8qDAETFftvJU=
+X-Google-Smtp-Source: ABdhPJzKj2M4qLSgR7C5iggAlGzaZdKq+cTuuQy/hK6vAtsOTDChiPq6Z2rGEATrtFA4PF+BrGkmGuHrdXxbitZdRpo=
+X-Received: by 2002:a17:906:3683:: with SMTP id a3mr7528466ejc.538.1607627544909;
+ Thu, 10 Dec 2020 11:12:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20201209143707.13503-1-erez.geva.ext@siemens.com>
+ <20201209143707.13503-2-erez.geva.ext@siemens.com> <CA+FuTScWkYn0Ur+aSuz1cREbQJO0fB6powOm8PFxze4v8JwBaw@mail.gmail.com>
+ <VI1PR10MB244654C4B42E47DB5EBE0B05ABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+ <CA+FuTSd7oB0qO707W6htvs=FOJn10cgSQ4_iGFz4Sk9URXtZiw@mail.gmail.com> <VI1PR10MB2446ACEACAE1F3671682407FABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <VI1PR10MB2446ACEACAE1F3671682407FABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 10 Dec 2020 14:11:49 -0500
+Message-ID: <CAF=yD-LkknU3GwJgG_OiMPFONZtO3ECHEX0QfTaUTTX_N0i-KA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Add TX sending hardware timestamp.
+To:     "Geva, Erez" <erez.geva.ext@siemens.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Arnd Bergmann <arnd@arndb.de>,
         Cong Wang <xiyou.wangcong@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Eyal Birger <eyal.birger@gmail.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Jon Rosen <jrosen@cisco.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Or Cohen <orcohen@paloaltonetworks.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Xie He <xie.he.0141@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladis Dronov <vdronov@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        "Molzahn, Ines" <ines.molzahn@siemens.com>,
         "Sudler, Simon" <simon.sudler@siemens.com>,
         "Meisinger, Andreas" <andreas.meisinger@siemens.com>,
+        "Bucher, Andreas" <andreas.bucher@siemens.com>,
+        "henning.schild@siemens.com" <henning.schild@siemens.com>,
         "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
-        "henning.schild@siemens.com" <henning.schild@siemens.com>
-Subject: Re: [PATCH 1/3] Add TX sending hardware timestamp.
-Thread-Topic: [PATCH 1/3] Add TX sending hardware timestamp.
-Thread-Index: AQHWzjjS+JtwwiLyJkKEw3ObDmZ1g6nvp7+AgACdOQCAAB/egA==
-Date:   Thu, 10 Dec 2020 18:17:23 +0000
-Message-ID: <AM6PR10MB2438372B8E1E528A359A64E9ABCB0@AM6PR10MB2438.EURPRD10.PROD.OUTLOOK.COM>
-References: <20201209143707.13503-2-erez.geva.ext@siemens.com>
- <202012101050.lTUKkbvy-lkp@intel.com>
- <VI1PR10MB244664932EF569D492539DB8ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <VI1PR10MB244664932EF569D492539DB8ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-DE, he-IL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Enabled=true;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SetDate=2020-12-10T18:17:21Z;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Method=Standard;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Name=restricted-default;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ActionId=edac9743-7858-4bc8-bfa6-868eef5c53cf;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ContentBits=0
-document_confidentiality: Restricted
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=siemens.com;
-x-originating-ip: [165.225.26.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 390151a9-a279-4692-0b9a-08d89d37d7f5
-x-ms-traffictypediagnostic: AM7PR10MB3496:
-x-ld-processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM7PR10MB3496D1F470AEE4DF87612D3EABCB0@AM7PR10MB3496.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G6KE0FZ+4OJ5JlHAhtmvRtkE3cu6KVqMKl2B/qwPhCYLBAGjenWu7XyaioeJrqTKYIrRRkG0SezevbWgGgNRwe/p63YqTAVPcEMpxhmZKvnn13VN+67sa1lOPrtO9nBtzi2zEpA3kd/vO11l5uy7oL4pPI44eHESebG7/fmdeNuWnV3lEKv+zgkGyAThaBzh85WTec2MFKm9xWIVpNbsGUNQs1rUvxUCEuR2F+jjFcN2v/3JjhedcD9o5Ea0TBKH7oMgphdLZBHx5TAbpph3Aq0imaOwh1GoqrVJNPvk2yZMFrV6s5tEoQM2FNnCnjs/Eh0w4SIMSd8n/qz0/G8c/321X+HzSM8wM4bjJLlxuymieJQ4SJyA/Ew9mnU+eTrs8XMV+mk2G8wWrPiCpWNukz+lcUJsL4M9Q7gK6NctaH1fV49EKF4kRWBK35/n0HAi
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR10MB2438.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(346002)(396003)(366004)(136003)(8676002)(55016002)(7416002)(6506007)(7696005)(9686003)(55236004)(2906002)(76116006)(66946007)(66446008)(316002)(66476007)(966005)(26005)(64756008)(5660300002)(186003)(86362001)(71200400001)(33656002)(4326008)(8936002)(54906003)(66556008)(53546011)(110136005)(52536014)(478600001)(107886003)(83380400001)(2004002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?UXpaeVo1T1lmcW1wczVKOHg2OU5YWnlvVmVFTk1xb1hMZDBNRDdPVU5oZTZ0?=
- =?utf-8?B?U0V0Z0ZUc21PWmwxYmVDbW1NRHc5bHMvWGx2bXZ6YlQvQ0tpMVIwSlo4Wkhx?=
- =?utf-8?B?aWVWUGtBUkR3NTl3bHQzTGVXTXFNeTI1Yk4relRkeWVoNU9ZYVZFZEJ6N3Zp?=
- =?utf-8?B?M3hHUHRmakVtb0JvQXJ3RUdjdDBhQm9HakdlRFhBREhld3JTY3pmN2ZzZ0tX?=
- =?utf-8?B?TkZOellra1hUTUlVL3J5b2U5cVl2UUQyVmlIdW1kTVRaeDJyVm1pUSs0d3FV?=
- =?utf-8?B?Wkt0UUxwOU5wT0NuZThUaDB1VUx0Q2ZZTVp3Mk1NT3M1TmJJZ3ZsaExvbEQr?=
- =?utf-8?B?YWRkekg0MzEyeXN6T0UrM2NhTDVYUm5FQjFJWDBlN1pkT1dmNmZhSm16cnhh?=
- =?utf-8?B?ZHRvaUQ3cWZGaHdYVTFjbGViOGc0cWhRRS9vcFo2MkxWRFU1MDZIQ1JFZlNq?=
- =?utf-8?B?ZzlMb2p3NmhHdDl6WmgxUzZYSXgvc3kzb25QdUkxMys3b3gvejJkRGQ4Tm9j?=
- =?utf-8?B?YjB0MGpyMzRUZFZWYUs3K3Q1dWliUXQzZlZhdS9vZjY5c3RJQ3VteENpS1Mv?=
- =?utf-8?B?L1R4bVNTSmhXamZ6MEU1MTUrT3VZY2pOeTZkQ05Qc3BsSDB3dkV5UHFxZnhJ?=
- =?utf-8?B?OFNhVTk0c01TSCt0T0hUNTVoMFNqdExaN2tZMlRWZyt4ZUZEN2ZseEVnQ0pO?=
- =?utf-8?B?ZzdvS3poQy83bU5WVnB0bGVtQ3RrTW5RNWlkWEFITU9EU1JscXlobC92VERw?=
- =?utf-8?B?ZkJMakRlbEFVZC9UWjB4QU5iOS8zeFNONzRsZEJiaDY2OTByRXJGYklKcFJX?=
- =?utf-8?B?bXBLYTFTRXVVKzNhR2h0S1JwSzlqVkcvZ0dOSWVYVDhtdkVXRXg4eXZTVUZm?=
- =?utf-8?B?Y2Q4SFBEajZDamZkNldYbGNiMVoyU3JUNTFrVXMwUG4yaHRDY2FuNXZaWVk1?=
- =?utf-8?B?Tmtta1FFbU16MFlJN2gvc1RNRVFXYnJmNmR2RzJFaHIzb3JBY0hoNDZScjRV?=
- =?utf-8?B?ZUJ0QkpOcmU5NG1tVEN3NVdqTGs1T1AzWXJLOXZrd0pqM1hMVHY0UlZWZU1x?=
- =?utf-8?B?TEpVREFuNVBHeFJ3QWpFOHhRVW0wazVteE5pNEEycXowNTlna2pJbzZBNFNZ?=
- =?utf-8?B?VEtRQWdZVG5SV3JhQ3RFNkJpcFErWllob1cvY1ZIR1RhekxZMmdzQ3R4M05z?=
- =?utf-8?B?bmYzdVdmZSsyMGgzR2g3czQwS1FlYW5iM0JVT2Q1cjZ1V05mQ2VkVGovN2ts?=
- =?utf-8?B?QkVmdzN2L1IzWFZoUmRjaytXZkFmNklhdGdEUVZZdytuMkJ1SVJydExRMGZx?=
- =?utf-8?Q?3X7yqpA69pXcY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <195A145459202E44BAC0355BA153A5E4@EURPRD10.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR10MB2438.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 390151a9-a279-4692-0b9a-08d89d37d7f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2020 18:17:24.2899
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: St4sk+3twgL4G1sDPC77ttW26jvTzx5cogTQFXaoo+p/Or1w5/0yYciRH2dlmmhfDtmRA/ZXjZvJAolRyTJ4Didnplkk4uSeuRcWVfEYVIk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR10MB3496
+        "Zirkler, Andreas" <andreas.zirkler@siemens.com>,
+        "Sakic, Ermin" <ermin.sakic@siemens.com>,
+        "anninh.nguyen@siemens.com" <anninh.nguyen@siemens.com>,
+        "Saenger, Michael" <michael.saenger@siemens.com>,
+        "Maehringer, Bernd" <bernd.maehringer@siemens.com>,
+        "gisela.greinert@siemens.com" <gisela.greinert@siemens.com>,
+        Erez Geva <ErezGeva2@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-DQpPbiAxMC8xMi8yMDIwIDEzOjMzLCBHZXZhLCBFcmV6IChleHQpIChESSBQQSBDSSBSJkQgMykg
-d3JvdGU6DQo+IA0KPiBPbiAxMC8xMi8yMDIwIDA0OjExLCBrZXJuZWwgdGVzdCByb2JvdCB3cm90
-ZToNCj4+IEhpIEVyZXosDQo+Pg0KPj4gVGhhbmsgeW91IGZvciB0aGUgcGF0Y2ghIFlldCBzb21l
-dGhpbmcgdG8gaW1wcm92ZToNCj4+DQo+IFRoYW5rcyBmb3IgdGhlIHJvYm90LA0KPiBhcyB3ZSBy
-YXJlbHkgdXNlIGNsYW5nIGZvciBrZXJuZWwuIEl0IGlzIHZlcnkgaGVscGZ1bC4NCj4gDQo+PiBb
-YXV0byBidWlsZCB0ZXN0IEVSUk9SIG9uIGI2NTA1NDU5Nzg3MmNlM2FlZmJjNmE2NjYzODVlYWJk
-ZjllMjg4ZGFdDQo+Pg0KPj4gdXJsOiAgICBodHRwczovL2dpdGh1Yi5jb20vMGRheS1jaS9saW51
-eC9jb21taXRzL0VyZXotR2V2YS9BZGQtc2VuZGluZy1UWC1oYXJkd2FyZS10aW1lc3RhbXAtZm9y
-LVRDLUVURi1RZGlzYy8yMDIwMTIxMC0wMDA1MjENCj4gSSBjYW4gbm90IGZpbmQgdGhpcyBjb21t
-aXQNCj4gDQo+PiBiYXNlOiAgICBiNjUwNTQ1OTc4NzJjZTNhZWZiYzZhNjY2Mzg1ZWFiZGY5ZTI4
-OGRhDQo+PiBjb25maWc6IG1pcHMtcmFuZGNvbmZpZy1yMDI2LTIwMjAxMjA5IChhdHRhY2hlZCBh
-cyAuY29uZmlnKQ0KPj4gY29tcGlsZXI6IGNsYW5nIHZlcnNpb24gMTIuMC4wIChodHRwczovL2dp
-dGh1Yi5jb20vbGx2bS9sbHZtLXByb2plY3QgMTk2ODgwNGFjNzI2ZTc2NzRkNWRlMjJiYzIyMDRi
-NDU4NTdkYTM0NCkNCj4gSG93ZXZlciB0aGUgY2xhbmcgaW4NCj4gaHR0cHM6Ly9kb3dubG9hZC4w
-MS5vcmcvMGRheS1jaS9jcm9zcy1wYWNrYWdlL2NsYW5nLWxhdGVzdC9jbGFuZy50YXIueHogIGlz
-IHZlcnNpb24gMTENCj4gDQo+PiByZXByb2R1Y2UgKHRoaXMgaXMgYSBXPTEgYnVpbGQpOg0KPj4g
-ICAgICAgICAgIHdnZXQgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2ludGVsL2xr
-cC10ZXN0cy9tYXN0ZXIvc2Jpbi9tYWtlLmNyb3NzIC1PIH4vYmluL21ha2UuY3Jvc3MNCj4gWW91
-ciBtYWtlIGNyb3NzIHNjcmlwdCB0cmllcyB0byBkb3dubG9hZCB0aGUgY2xhbmcgZXZlcnkgdGlt
-ZS4NCj4gUGxlYXNlIHNlcGFyYXRlIHRoZSBkb3dubG9hZCAod2hpY2ggaXMgfjQwMCBNQiBhbmQg
-MiBHQiBhZnRlciBvcGVuKSBmcm9tIHRoZSBjb21waWxhdGlvbi4NCj4gDQo+IFBsZWFzZSB1c2Ug
-IndnZXQiIGZvbGxvdyB5b3VyIG93biBpbnN0cnVjdGlvbnMgaW4gdGhpcyBlbWFpbC4NCj4gDQo+
-PiAgICAgICAgICAgY2htb2QgK3ggfi9iaW4vbWFrZS5jcm9zcw0KPj4gICAgICAgICAgICMgaW5z
-dGFsbCBtaXBzIGNyb3NzIGNvbXBpbGluZyB0b29sIGZvciBjbGFuZyBidWlsZA0KPj4gICAgICAg
-ICAgICMgYXB0LWdldCBpbnN0YWxsIGJpbnV0aWxzLW1pcHMtbGludXgtZ251DQo+PiAgICAgICAg
-ICAgIyBodHRwczovL2dpdGh1Yi5jb20vMGRheS1jaS9saW51eC9jb21taXQvOGE4ZjYzNGJjNzRk
-YjE2ZGM1NTFjZmNmM2I2M2MxMTgzZjk4ZWFhYw0KPj4gICAgICAgICAgIGdpdCByZW1vdGUgYWRk
-IGxpbnV4LXJldmlldyBodHRwczovL2dpdGh1Yi5jb20vMGRheS1jaS9saW51eA0KPj4gICAgICAg
-ICAgIGdpdCBmZXRjaCAtLW5vLXRhZ3MgbGludXgtcmV2aWV3IEVyZXotR2V2YS9BZGQtc2VuZGlu
-Zy1UWC1oYXJkd2FyZS10aW1lc3RhbXAtZm9yLVRDLUVURi1RZGlzYy8yMDIwMTIxMC0wMDA1MjEN
-Cj4gVGhpcyBicmFuY2ggaXMgYWJzZW50DQo+IA0KPj4gICAgICAgICAgIGdpdCBjaGVja291dCA4
-YThmNjM0YmM3NGRiMTZkYzU1MWNmY2YzYjYzYzExODNmOThlYWFjDQo+IFRoaXMgY29tbWl0IGFz
-IHdlbGwNCj4gDQo+PiAgICAgICAgICAgIyBzYXZlIHRoZSBhdHRhY2hlZCAuY29uZmlnIHRvIGxp
-bnV4IGJ1aWxkIHRyZWUNCj4+ICAgICAgICAgICBDT01QSUxFUl9JTlNUQUxMX1BBVEg9JEhPTUUv
-MGRheSBDT01QSUxFUj1jbGFuZyBtYWtlLmNyb3NzIEFSQ0g9bWlwcw0KPj4NCj4gSSB1c2UgRGVi
-aWFuIDEwLjcuDQo+IEkgdXN1YWxseSBjb21waWxlIHdpdGggR0NDLiBJIGhhdmUgbm90IHNlZSBh
-bnkgZXJyb3JzLg0KPiANCj4gV2hlbiBJIHVzZSBjbGFuZyAxMSBmcm9tIGRvd25sb2FkLjAxLm9y
-ZyBJIGdldCBhIGNyYXNoIHJpZ2h0IGF3YXkuDQo+IFBsZWFzZSBhZGQgYSBwcm9wZXIgaW5zdHJ1
-Y3Rpb25zIGhvdyB0byB1c2UgY2xhbmcgb24gRGViaWFuIG9yIHByb3ZpZGUNCj4gYSBEb2NrZXIg
-Y29udGFpbmVyIHdpdGggdXBkYXRlZCBjbGFuZyBmb3IgdGVzdGluZy4NCj4gDQo+PiBJZiB5b3Ug
-Zml4IHRoZSBpc3N1ZSwga2luZGx5IGFkZCBmb2xsb3dpbmcgdGFnIGFzIGFwcHJvcHJpYXRlDQo+
-PiBSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+Pg0KPj4g
-QWxsIGVycm9ycyAobmV3IG9uZXMgcHJlZml4ZWQgYnkgPj4pOg0KPj4NCj4+Pj4gbmV0L2NvcmUv
-c29jay5jOjIzODM6NzogZXJyb3I6IHVzZSBvZiB1bmRlY2xhcmVkIGlkZW50aWZpZXIgJ1NDTV9I
-V19UWFRJTUUnOyBkaWQgeW91IG1lYW4gJ1NPQ0tfSFdfVFhUSU1FJz8NCj4+ICAgICAgICAgICAg
-ICBjYXNlIFNDTV9IV19UWFRJTUU6DQo+PiAgICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+
-DQo+PiAgICAgICAgICAgICAgICAgICBTT0NLX0hXX1RYVElNRQ0KPj4gICAgICBpbmNsdWRlL25l
-dC9zb2NrLmg6ODYyOjI6IG5vdGU6ICdTT0NLX0hXX1RYVElNRScgZGVjbGFyZWQgaGVyZQ0KPj4g
-ICAgICAgICAgICAgIFNPQ0tfSFdfVFhUSU1FLA0KPj4gICAgICAgICAgICAgIF4NCj4+ICAgICAg
-MSBlcnJvciBnZW5lcmF0ZWQuDQo+Pg0KPj4gdmltICsyMzgzIG5ldC9jb3JlL3NvY2suYw0KPj4N
-Cj4+ICAgICAyMzUxCQ0KPj4gICAgIDIzNTIJaW50IF9fc29ja19jbXNnX3NlbmQoc3RydWN0IHNv
-Y2sgKnNrLCBzdHJ1Y3QgbXNnaGRyICptc2csIHN0cnVjdCBjbXNnaGRyICpjbXNnLA0KPj4gICAg
-IDIzNTMJCQkgICAgIHN0cnVjdCBzb2NrY21fY29va2llICpzb2NrYykNCj4+ICAgICAyMzU0CXsN
-Cj4+ICAgICAyMzU1CQl1MzIgdHNmbGFnczsNCj4+ICAgICAyMzU2CQ0KPj4gICAgIDIzNTcJCXN3
-aXRjaCAoY21zZy0+Y21zZ190eXBlKSB7DQo+PiAgICAgMjM1OAkJY2FzZSBTT19NQVJLOg0KPj4g
-ICAgIDIzNTkJCQlpZiAoIW5zX2NhcGFibGUoc29ja19uZXQoc2spLT51c2VyX25zLCBDQVBfTkVU
-X0FETUlOKSkNCj4+ICAgICAyMzYwCQkJCXJldHVybiAtRVBFUk07DQo+PiAgICAgMjM2MQkJCWlm
-IChjbXNnLT5jbXNnX2xlbiAhPSBDTVNHX0xFTihzaXplb2YodTMyKSkpDQo+PiAgICAgMjM2MgkJ
-CQlyZXR1cm4gLUVJTlZBTDsNCj4+ICAgICAyMzYzCQkJc29ja2MtPm1hcmsgPSAqKHUzMiAqKUNN
-U0dfREFUQShjbXNnKTsNCj4+ICAgICAyMzY0CQkJYnJlYWs7DQo+PiAgICAgMjM2NQkJY2FzZSBT
-T19USU1FU1RBTVBJTkdfT0xEOg0KPj4gICAgIDIzNjYJCQlpZiAoY21zZy0+Y21zZ19sZW4gIT0g
-Q01TR19MRU4oc2l6ZW9mKHUzMikpKQ0KPj4gICAgIDIzNjcJCQkJcmV0dXJuIC1FSU5WQUw7DQo+
-PiAgICAgMjM2OAkNCj4+ICAgICAyMzY5CQkJdHNmbGFncyA9ICoodTMyICopQ01TR19EQVRBKGNt
-c2cpOw0KPj4gICAgIDIzNzAJCQlpZiAodHNmbGFncyAmIH5TT0ZfVElNRVNUQU1QSU5HX1RYX1JF
-Q09SRF9NQVNLKQ0KPj4gICAgIDIzNzEJCQkJcmV0dXJuIC1FSU5WQUw7DQo+PiAgICAgMjM3MgkN
-Cj4+ICAgICAyMzczCQkJc29ja2MtPnRzZmxhZ3MgJj0gflNPRl9USU1FU1RBTVBJTkdfVFhfUkVD
-T1JEX01BU0s7DQo+PiAgICAgMjM3NAkJCXNvY2tjLT50c2ZsYWdzIHw9IHRzZmxhZ3M7DQo+PiAg
-ICAgMjM3NQkJCWJyZWFrOw0KPj4gICAgIDIzNzYJCWNhc2UgU0NNX1RYVElNRToNCj4+ICAgICAy
-Mzc3CQkJaWYgKCFzb2NrX2ZsYWcoc2ssIFNPQ0tfVFhUSU1FKSkNCj4+ICAgICAyMzc4CQkJCXJl
-dHVybiAtRUlOVkFMOw0KPj4gICAgIDIzNzkJCQlpZiAoY21zZy0+Y21zZ19sZW4gIT0gQ01TR19M
-RU4oc2l6ZW9mKHU2NCkpKQ0KPj4gICAgIDIzODAJCQkJcmV0dXJuIC1FSU5WQUw7DQo+PiAgICAg
-MjM4MQkJCXNvY2tjLT50cmFuc21pdF90aW1lID0gZ2V0X3VuYWxpZ25lZCgodTY0ICopQ01TR19E
-QVRBKGNtc2cpKTsNCj4+ICAgICAyMzgyCQkJYnJlYWs7DQo+Pj4gMjM4MwkJY2FzZSBTQ01fSFdf
-VFhUSU1FOg0KPj4gICAgIDIzODQJCQlpZiAoIXNvY2tfZmxhZyhzaywgU09DS19IV19UWFRJTUUp
-KQ0KPj4gICAgIDIzODUJCQkJcmV0dXJuIC1FSU5WQUw7DQo+PiAgICAgMjM4NgkJCWlmIChjbXNn
-LT5jbXNnX2xlbiAhPSBDTVNHX0xFTihzaXplb2YodTY0KSkpDQo+PiAgICAgMjM4NwkJCQlyZXR1
-cm4gLUVJTlZBTDsNCj4+ICAgICAyMzg4CQkJc29ja2MtPnRyYW5zbWl0X2h3X3RpbWUgPSBnZXRf
-dW5hbGlnbmVkKCh1NjQgKilDTVNHX0RBVEEoY21zZykpOw0KPj4gICAgIDIzODkJCQlicmVhazsN
-Cj4+ICAgICAyMzkwCQkvKiBTQ01fUklHSFRTIGFuZCBTQ01fQ1JFREVOVElBTFMgYXJlIHNlbWFu
-dGljYWxseSBpbiBTT0xfVU5JWC4gKi8NCj4+ICAgICAyMzkxCQljYXNlIFNDTV9SSUdIVFM6DQo+
-PiAgICAgMjM5MgkJY2FzZSBTQ01fQ1JFREVOVElBTFM6DQo+PiAgICAgMjM5MwkJCWJyZWFrOw0K
-Pj4gICAgIDIzOTQJCWRlZmF1bHQ6DQo+PiAgICAgMjM5NQkJCXJldHVybiAtRUlOVkFMOw0KPj4g
-ICAgIDIzOTYJCX0NCj4+ICAgICAyMzk3CQlyZXR1cm4gMDsNCj4+ICAgICAyMzk4CX0NCj4+ICAg
-ICAyMzk5CUVYUE9SVF9TWU1CT0woX19zb2NrX2Ntc2dfc2VuZCk7DQo+PiAgICAgMjQwMAkNCj4+
-DQo+PiAtLS0NCj4+IDAtREFZIENJIEtlcm5lbCBUZXN0IFNlcnZpY2UsIEludGVsIENvcnBvcmF0
-aW9uDQo+PiBodHRwczovL2xpc3RzLjAxLm9yZy9oeXBlcmtpdHR5L2xpc3Qva2J1aWxkLWFsbEBs
-aXN0cy4wMS5vcmcNCj4+DQo+IA0KPiBQbGVhc2UgaW1wcm92ZSB0aGUgcm9ib3QsIHNvIHdlIGNh
-biBjb21wbHkgYW5kIHByb3Blcmx5IHN1cHBvcnQgY2xhbmcgY29tcGlsYXRpb24uDQo+IA0KPiBU
-aGFua3MNCj4gICAgIEVyZXoNCj4gDQoNClVwZGF0ZSwNCg0KSSB1c2UgdGhlIHNhbWUgLmNvbmZp
-ZyBmcm9tIHRoZSBJbnRlbCByb2JvdCB0ZXN0Lg0KDQpJIHdhcyB0cnlpbmcgdG8gY29tcGlsZSB2
-NS4xMC1yYzYgd2l0aCBHQ0MgY3Jvc3MgY29tcGlsZXIgZm9yIG1pcHMuDQoNCiMgYXB0LWdldCBp
-bnN0YWxsIC10IHNpZCBnY2MtbWlwcy1saW51eC1nbnUNCg0Ka2VybmVsLXRlc3QgKCh2NS4xMC1y
-YzYpKSQgL3Vzci9iaW4vbWlwcy1saW51eC1nbnUtZ2NjIC0tdmVyc2lvbg0KbWlwcy1saW51eC1n
-bnUtZ2NjIChEZWJpYW4gMTAuMi4wLTE3KSAxMC4yLjANCkNvcHlyaWdodCAoQykgMjAyMCBGcmVl
-IFNvZnR3YXJlIEZvdW5kYXRpb24sIEluYy4NClRoaXMgaXMgZnJlZSBzb2Z0d2FyZTsgc2VlIHRo
-ZSBzb3VyY2UgZm9yIGNvcHlpbmcgY29uZGl0aW9ucy4gIFRoZXJlIGlzIE5PDQp3YXJyYW50eTsg
-bm90IGV2ZW4gZm9yIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIg
-UFVSUE9TRS4NCg0Ka2VybmVsLXRlc3QgKCh2NS4xMC1yYzYpKSQgY3AgLi4vaW50ZWxfcm9ib3Qu
-Y29uZmlnIC5jb25maWcNCmtlcm5lbC10ZXN0ICgodjUuMTAtcmM2KSkkIG1ha2UgQVJDSD1taXBz
-IENST1NTX0NPTVBJTEU9L3Vzci9iaW4vbWlwcy1saW51eC1nbnUtIG9sZGRlZmNvbmZpZw0KLi4u
-DQoNCmtlcm5lbC10ZXN0ICgodjUuMTAtcmM2KSkkIG1ha2UgQVJDSD1taXBzIENST1NTX0NPTVBJ
-TEU9L3Vzci9iaW4vbWlwcy1saW51eC1nbnUtIGFsbA0KLi4uDQogIENDICAgICAgaW5pdC9tYWlu
-Lm8NCntzdGFuZGFyZCBpbnB1dH06IEFzc2VtYmxlciBtZXNzYWdlczoNCntzdGFuZGFyZCBpbnB1
-dH06OTEwMzogRXJyb3I6IGZvdW5kICcoJywgZXhwZWN0ZWQ6ICcpJw0Ke3N0YW5kYXJkIGlucHV0
-fTo5MTAzOiBFcnJvcjogZm91bmQgJygnLCBleHBlY3RlZDogJyknDQp7c3RhbmRhcmQgaW5wdXR9
-OjkxMDM6IEVycm9yOiBub24tY29uc3RhbnQgZXhwcmVzc2lvbiBpbiAiLmlmIiBzdGF0ZW1lbnQN
-CntzdGFuZGFyZCBpbnB1dH06OTEwMzogRXJyb3I6IGp1bmsgYXQgZW5kIG9mIGxpbmUsIGZpcnN0
-IHVucmVjb2duaXplZCBjaGFyYWN0ZXIgaXMgYCgnDQptYWtlWzFdOiAqKiogW3NjcmlwdHMvTWFr
-ZWZpbGUuYnVpbGQ6MjgzOiBpbml0L21haW4ub10gRXJyb3IgMQ0KbWFrZTogKioqIFtNYWtlZmls
-ZToxNzk3OiBpbml0XSBFcnJvciAyDQoNCkVyZXoNCg==
+On Wed, Dec 9, 2020 at 3:18 PM Geva, Erez <erez.geva.ext@siemens.com> wrote:
+>
+>
+> On 09/12/2020 18:37, Willem de Bruijn wrote:
+> > On Wed, Dec 9, 2020 at 10:25 AM Geva, Erez <erez.geva.ext@siemens.com> wrote:
+> >>
+> >>
+> >> On 09/12/2020 15:48, Willem de Bruijn wrote:
+> >>> On Wed, Dec 9, 2020 at 9:37 AM Erez Geva <erez.geva.ext@siemens.com> wrote:
+> >>>>
+> >>>> Configure and send TX sending hardware timestamp from
+> >>>>    user space application to the socket layer,
+> >>>>    to provide to the TC ETC Qdisc, and pass it to
+> >>>>    the interface network driver.
+> >>>>
+> >>>>    - New flag for the SO_TXTIME socket option.
+> >>>>    - New access auxiliary data header to pass the
+> >>>>      TX sending hardware timestamp.
+> >>>>    - Add the hardware timestamp to the socket cookie.
+> >>>>    - Copy the TX sending hardware timestamp to the socket cookie.
+> >>>>
+> >>>> Signed-off-by: Erez Geva <erez.geva.ext@siemens.com>
+> >>>
+> >>> Hardware offload of pacing is definitely useful.
+> >>>
+> >> Thanks for your comment.
+> >> I agree, it is not limited of use.
+> >>
+> >>> I don't think this needs a new separate h/w variant of SO_TXTIME.
+> >>>
+> >> I only extend SO_TXTIME.
+> >
+> > The patchset passes a separate timestamp from skb->tstamp along
+> > through the ip cookie, cork (transmit_hw_time) and with the skb in
+> > shinfo.
+> >
+> > I don't see the need for two timestamps, one tied to software and one
+> > to hardware. When would we want to pace twice?
+>
+> As the Net-Link uses system clock and the network interface hardware uses it's own PHC.
+> The current ETF depends on synchronizing the system clock and the PHC.
+
+If I understand correctly, you are trying to achieve a single delivery time.
+The need for two separate timestamps passed along is only because the
+kernel is unable to do the time base conversion.
+
+Else, ETF could program the qdisc watchdog in system time and later,
+on dequeue, convert skb->tstamp to the h/w time base before
+passing it to the device.
+
+It's still not entirely clear to me why the packet has to be held by
+ETF initially first, if it is held until delivery time by hardware
+later. But more on that below.
+
+So far, the use case sounds a bit narrow and the use of two timestamp
+fields for a single delivery event a bit of a hack.
+
+And one that does impose a cost in the hot path of many workloads
+by adding a field the ip cookie, cork and writing to (possibly cold)
+skb_shinfo for every packet.
+
+> >>> Indeed, we want pacing offload to work for existing applications.
+> >>>
+> >> As the conversion of the PHC and the system clock is dynamic over time.
+> >> How do you propse to achive it?
+> >
+> > Can you elaborate on this concern?
+>
+> Using single time stamp have 3 possible solutions:
+>
+> 1. Current solution, synchronize the system clock and the PHC.
+>     Application uses the system clock.
+>     The ETF can use the system clock for ordering and pass the packet to the driver on time
+>     The network interface hardware compare the time-stamp to the PHC.
+>
+> 2. The application convert the PHC time-stamp to system clock based.
+>      The ETF works as solution 1
+>      The network driver convert the system clock time-stamp back to PHC time-stamp.
+>      This solution need a new Net-Link flag and modify the relevant network drivers.
+>      Yet this solution have 2 problems:
+>      * As applications today are not aware that system clock and PHC are not synchronized and
+>         therefore do not perform any conversion, most of them only use the system clock.
+>      * As the conversion in the network driver happens ~300 - 600 microseconds after
+>         the application send the packet.
+>         And as the PHC and system clock frequencies and offset can change during this period.
+>         The conversion will produce a different PHC time-stamp from the application original time-stamp.
+>         We require a precession of 1 nanoseconds of the PHC time-stamp.
+>
+> 3. The application uses PHC time-stamp for skb->tstamp
+>     The ETF convert the  PHC time-stamp to system clock time-stamp.
+>     This solution require implementations on supporting reading PHC clocks
+>     from IRQ/kernel thread context in kernel space.
+
+ETF has to release the packet well in advance of the hardware
+timestamp for the packet to arrive at the device on time. In practice
+I would expect this delta parameter to be at least at usec timescale.
+That gives some wiggle room with regard to s/w tstamp, at least.
+
+If changes in clock distance are relatively infrequent, could this
+clock diff be a qdisc parameter, updated infrequently outside the
+packet path?
+
+It would even be preferable if the qdisc and core stack could be
+ignorant of such hardware clocks and the time base is converted by the
+device driver when encoding skb->tstamp into the tx descriptor. Is the
+device hardware clock readable by the driver?
+
+From the above, it sounds like this is not trivial.
+
+I don't know which exact device you're targeting. Is it an in-tree driver?
+
+> Just for clarification:
+> ETF as all Net-Link, only uses system clock (the TAI)
+> The network interface hardware only uses the PHC.
+> Nor Net-Link neither the driver perform any conversions.
+> The Kernel does not provide and clock conversion beside system clock.
+> Linux kernel is a single clock system.
+>
+> >
+> > The simplest solution for offloading pacing would be to interpret
+> > skb->tstamp either for software pacing, or skip software pacing if the
+> > device advertises a NETIF_F hardware pacing feature.
+>
+> That will defy the purpose of ETF.
+> ETF exist for ordering packets.
+> Why should the device driver defer it?
+> Simply do not use the QDISC for this interface.
+
+ETF queues packets until their delivery time is reached. It does not
+order for any other reason than to calculate the next qdisc watchdog
+event, really.
+
+If h/w can do the same and the driver can convert skb->tstamp to the
+right timebase, indeed no qdisc is needed for pacing. But there may be
+a need for selective h/w offload if h/w has additional constraints,
+such as on the number of packets outstanding or time horizon.
+
+> >
+> > Clockbase is an issue. The device driver may have to convert to
+> > whatever format the device expects when copying skb->tstamp in the
+> > device tx descriptor.
+>
+> We do hope our definition is clear.
+> In the current kernel skb->tstamp uses system clock.
+> The hardware time-stamp is PHC based, as it is used today for PTP two steps.
+> We only propose to use the same hardware time-stamp.
+>
+> Passing the hardware time-stamp to the skb->tstamp might seems a bit tricky
+> The gaol is the leave the driver unaware to whether we
+> * Synchronizing the PHC and system clock
+> * The ETF pass the hardware time-stamp to skb->tstamp
+> Only the applications and the ETF are aware.
+> The application can detect by checking the ETF flag.
+> The ETF flags are part of the network administration.
+> That also configure the PTP and the system clock synchronization.
+>
+> >
+> >>
+> >>> It only requires that pacing qdiscs, both sch_etf and sch_fq,
+> >>> optionally skip queuing in their .enqueue callback and instead allow
+> >>> the skb to pass to the device driver as is, with skb->tstamp set. Only
+> >>> to devices that advertise support for h/w pacing offload.
+> >>>
+> >> I did not use "Fair Queue traffic policing".
+> >> As for ETF, it is all about ordering packets from different applications.
+> >> How can we achive it with skiping queuing?
+> >> Could you elaborate on this point?
+> >
+> > The qdisc can only defer pacing to hardware if hardware can ensure the
+> > same invariants on ordering, of course.
+>
+> Yes, this is why we suggest ETF order packets using the hardware time-stamp.
+> And pass the packet based on system time.
+> So ETF query the system clock only and not the PHC.
+
+On which note: with this patch set all applications have to agree to
+use h/w time base in etf_enqueue_timesortedlist. In practice that
+makes this h/w mode a qdisc used by a single process?
+
+> >
+> > Btw: this is quite a long list of CC:s
+> >
+> I need to update my company colleagues as well as the Linux group.
+
+Of course. But even ignoring that this is still quite a large list (> 40).
+
+My response yesterday was actually blocked as a result ;) Retrying now.
