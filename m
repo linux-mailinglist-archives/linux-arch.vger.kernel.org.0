@@ -2,156 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 784AE2D78F5
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Dec 2020 16:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9932D7DB0
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Dec 2020 19:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406594AbgLKPQ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Dec 2020 10:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S1730341AbgLKSJO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Dec 2020 13:09:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437751AbgLKPQb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Dec 2020 10:16:31 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E9AC061793;
-        Fri, 11 Dec 2020 07:15:51 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id lt17so12832798ejb.3;
-        Fri, 11 Dec 2020 07:15:51 -0800 (PST)
+        with ESMTP id S1729143AbgLKSIx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Dec 2020 13:08:53 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948D9C061793;
+        Fri, 11 Dec 2020 10:08:13 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id h4so4397831qkk.4;
+        Fri, 11 Dec 2020 10:08:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2aaKiEZk4U61gzkDJ4LumBR7Gh8KLHTbl34rXEDKxdA=;
-        b=tQD4gNl+B6QDTrWDVzDJoMZRUwjCiu+0MyDOzGb/gCBcLPu0wlp6rj/CH/p/eh2/4h
-         bAep1ZbVfdYguecbtPIGXAeX1HNJOzVLdojya8sWw/ZqL6P49umz/r7vPtQMILqPUA0B
-         B+L0+JxdRfPMaNcDMq4PBHABxIyS3RdEEuxJ7s7gfBFHIaCHe5pG057ndUiB72qn2Wzp
-         SSOpkNrOgJLyw+wXPmMUk0vcxIAPcwsAo8XAmBhSc4MEQy6ANJBc2xlErSF5ySl0UUz3
-         jEkgKRfdXTp8dpqMdzowXgAFpNnL5+QBkV+SD6rIR99orsp4f5HhMwWgdMoPfhWhYpks
-         ZKZQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tb0y+vgKZ75r7FvS5QVh1rGnGDYz+mrb7UR1MucpS5w=;
+        b=AUs7F4ua1aW9ZopDlCVYQZ6GvmSlovN0hlWDGixtj3frbcGgr4QNT+Ra3lpWARZXJ+
+         f4Nw8GgWhumDeCn1ywP5GGnzYP0vGwRIzmYXQa1XvK2YJZqHLc/N3RXUKFdOtf1qry+k
+         jMEhOYGOcf7Ric1YLs+0HCb9OEXwRvXZ0sgKcRVOBbi7Skiz+ZMaH5Lk6a/xrpm3yOOd
+         UuHzlapcvquwseMbWAahI5MmZPMTAjWCvkJftxW6/2YZA9njqsjT3SNz+jV9kL8mx7op
+         Ib8+08PzSXQmMk+Hq8rSYIC+6tpL1cn7nLBpLEr1M+OrkNmqsNj/MPdRE1pMmADvWPNA
+         qu6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2aaKiEZk4U61gzkDJ4LumBR7Gh8KLHTbl34rXEDKxdA=;
-        b=Qy3k4MI6VbhHmNolVYhPjjbTq4uZoCd0p13MVvH5PsI1YAaxnT0h9eRRCgUWDBpXBQ
-         oDShV62atAm8P0BdnfOBk92bsTlGmU4QloQ+i3y9jlfxG719YBDvxyM+78G2hSQsj0Ms
-         /MUmJMbDTKlNRdsiAc6cZP7/3yL+ZHxTniCGhX3Yb8/O4QRE8fJNd0bj31nV5x0F/IIz
-         JQwhfU82eZIBKL3H8mtRXKEwbg9aS75+P5ozhN0HPieZ1Fr7Zkw3PNa1Z33lO5VnXhzo
-         UlfECr8Tu+xOWt/6BVWB15SdxfyvKnvgWIedkPi66G3LK81j2BaA8gVWokfVhXBAJ1WY
-         2Hww==
-X-Gm-Message-State: AOAM532sjdc8vCbpeKkbBQn8Sy7DNzbXDfYVj6a7vVV8nxJHWIrIWKs9
-        X1sNClZUcU9tdzJTX4NsoJHAX8ZEClCH6WunPJ8=
-X-Google-Smtp-Source: ABdhPJy+wt2enqGCJSJG6yroMv9oyr/vnzy4kxI/+aKNEAgXCu0iE28sjxXMrt0wn+mudx5PCERhwBLw3GJ9SY42f6w=
-X-Received: by 2002:a17:906:8255:: with SMTP id f21mr11103776ejx.265.1607699749861;
- Fri, 11 Dec 2020 07:15:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20201209143707.13503-1-erez.geva.ext@siemens.com>
- <20201209143707.13503-2-erez.geva.ext@siemens.com> <CA+FuTScWkYn0Ur+aSuz1cREbQJO0fB6powOm8PFxze4v8JwBaw@mail.gmail.com>
- <VI1PR10MB244654C4B42E47DB5EBE0B05ABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
- <CA+FuTSd7oB0qO707W6htvs=FOJn10cgSQ4_iGFz4Sk9URXtZiw@mail.gmail.com>
- <VI1PR10MB2446ACEACAE1F3671682407FABCC0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
- <CAF=yD-LkknU3GwJgG_OiMPFONZtO3ECHEX0QfTaUTTX_N0i-KA@mail.gmail.com>
- <VI1PR10MB24460D805E8091EB09F81199ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
- <CAF=yD-Lf=JpkXvGs=AGtyhCEFcG_8_WgnNbg1cbGownohsHw8g@mail.gmail.com> <87r1nxxk3u.fsf@intel.com>
-In-Reply-To: <87r1nxxk3u.fsf@intel.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 11 Dec 2020 10:15:13 -0500
-Message-ID: <CAF=yD-Ladcx-xFWD__9ybz0=iKLJ4=1yWpiZ0GJu4YfmSvp7wQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Add TX sending hardware timestamp.
-To:     Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc:     "Geva, Erez" <erez.geva.ext@siemens.com>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tb0y+vgKZ75r7FvS5QVh1rGnGDYz+mrb7UR1MucpS5w=;
+        b=kuMn8Pv6KJcvahQaKIC3uXAtgfjyxRt5AWJHp7Cy6IG/cMpzmpBWuUUpuGub7ReOTj
+         6pYJXZfbC44eaWLHSsLQD0UGzUDJoiOgO0bjwtsFZc/ccMuTO3KbF6BTjRZ7WSQMZP5P
+         +ZJ5Oj6q1aK5358bTKT9jHIUYVhaCikemq/NoCITuO30Qg9h4p6Pw52knJTYPi28iyXL
+         C6ARfgItXBIkwHoPtxZ9Dii/Nvwv0xYsQbevF+ilRAYT3ghfzaVNAvWl/BeBnig0duMY
+         Qxpd7rJlX3NUDSkF7hb/FFE/9LP8wm/szuUYzvuQ76wy2HyaZQVziXziewc3saCGdOY8
+         7Cjg==
+X-Gm-Message-State: AOAM530l3eI7PjkO7wFkrzuBynykAhkPr3kg9Klj0joh3GZTDw3yzgpE
+        MARorLiN9YWCnVNoAyQiuTk=
+X-Google-Smtp-Source: ABdhPJwvJuRnmcVRNXqpa7e69IuosIRo3bP9ze7lFEvemoSBzlYKUFwNAlUgS46RCQXWVw8VE7FW0w==
+X-Received: by 2002:ae9:c01a:: with SMTP id u26mr17800951qkk.372.1607710091170;
+        Fri, 11 Dec 2020 10:08:11 -0800 (PST)
+Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
+        by smtp.gmail.com with ESMTPSA id o21sm6598541qko.9.2020.12.11.10.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Dec 2020 10:08:10 -0800 (PST)
+Date:   Fri, 11 Dec 2020 10:08:09 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Pavel Machek <pavel@ucw.cz>, Alex Belits <abelits@marvell.com>,
+        "nitesh@redhat.com" <nitesh@redhat.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        Prasun Kapoor <pkapoor@marvell.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterx@redhat.com" <peterx@redhat.com>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Eyal Birger <eyal.birger@gmail.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Jon Rosen <jrosen@cisco.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Or Cohen <orcohen@paloaltonetworks.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Xie He <xie.he.0141@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladis Dronov <vdronov@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Vedang Patel <vedang.patel@intel.com>,
-        "Sudler, Simon" <simon.sudler@siemens.com>,
-        "Meisinger, Andreas" <andreas.meisinger@siemens.com>,
-        "henning.schild@siemens.com" <henning.schild@siemens.com>,
-        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
-        "Zirkler, Andreas" <andreas.zirkler@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
+        "mtosatti@redhat.com" <mtosatti@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "leon@sidebranch.com" <leon@sidebranch.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "pauld@redhat.com" <pauld@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 0/9] "Task_isolation" mode
+Message-ID: <20201211180809.GA397355@yury-ThinkPad>
+References: <8d887e59ca713726f4fcb25a316e1e932b02823e.camel@marvell.com>
+ <20201205204049.GA8578@amd>
+ <87h7oz96o6.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h7oz96o6.fsf@nanos.tec.linutronix.de>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> >> >>>> I did not use "Fair Queue traffic policing".
-> >> >>>> As for ETF, it is all about ordering packets from different applications.
-> >> >>>> How can we achive it with skiping queuing?
-> >> >>>> Could you elaborate on this point?
-> >> >>>
-> >> >>> The qdisc can only defer pacing to hardware if hardware can ensure the
-> >> >>> same invariants on ordering, of course.
-> >> >>
-> >> >> Yes, this is why we suggest ETF order packets using the hardware time-stamp.
-> >> >> And pass the packet based on system time.
-> >> >> So ETF query the system clock only and not the PHC.
-> >> >
-> >> > On which note: with this patch set all applications have to agree to
-> >> > use h/w time base in etf_enqueue_timesortedlist. In practice that
-> >> > makes this h/w mode a qdisc used by a single process?
-> >>
-> >> A single process theoretically does not need ETF, just set the skb-> tstamp and use a pass through queue.
-> >> However the only way now to set TC_SETUP_QDISC_ETF in the driver is using ETF.
+On Sun, Dec 06, 2020 at 12:25:45AM +0100, Thomas Gleixner wrote:
+> Pavel,
+> 
+> On Sat, Dec 05 2020 at 21:40, Pavel Machek wrote:
+> > So... what kind of guarantees does this aim to provide / what tasks it
+> > is useful for?
 > >
-> > Yes, and I'd like to eventually get rid of this constraint.
-> >
->
-> I'm interested in these kind of ideas :-)
->
-> What would be your end goal? Something like:
->  - Any application is able to set SO_TXTIME;
->  - We would have a best effort support for scheduling packets based on
->  their transmission time enabled by default;
->  - If the hardware supports, there would be a "offload" flag that could
->  be enabled;
->
-> More or less this?
+> > For real time response, we have other approaches.
+> 
+> Depends on your requirements. Some problems are actually better solved
+> with busy polling. See below.
+> 
+> > If you want to guarantee performnace of the "isolated" task... I don't
+> > see how that works. Other tasks on the system still compete for DRAM
+> > bandwidth, caches, etc...
+> 
+> Applications which want to run as undisturbed as possible. There is
+> quite a range of those:
+> 
+>   - Hardware in the loop simulation is today often done with that crude
+>     approach of "offlining" a CPU and then instead of playing dead
+>     jumping to a preloaded bare metal executable. That's a horrible hack
+>     and impossible to debug, but gives them the results they need to
+>     achieve. These applications are well optimized vs. cache and memory
+>     foot print, so they don't worry about these things too much and they
+>     surely don't run on SMI and BIOS value add inflicted machines.
+> 
+>     Don't even think about waiting for an interrupt to achieve what
+>     these folks are doing. So no, there are problems which a general
+>     purpose realtime OS cannot solve ever.
+> 
+>   - HPC computations on large data sets. While the memory foot print is
+>     large the access patterns are cache optimized. 
+> 
+>     The problem there is that any unnecessary IPI, tick interrupt or
+>     whatever nuisance is disturbing the carefully optimized cache usage
+>     and alone getting rid of the timer interrupt gained them measurable
+>     performance. Even very low single digit percentage of runtime saving
+>     is valuable for these folks because the compute time on such beasts
+>     is expensive.
+> 
+>   - Realtime guests in KVM. With posted interrupts and a fully populated
+>     host side page table there is no point in running host side
+>     interrupts or IPIs for random accounting or whatever purposes as
+>     they affect the latency in the guest. With all the side effects
+>     mitigated and a properly set up guest and host it is possible to get
+>     to a zero exit situation after the bootup phase which means pretty
+>     much matching bare metal behaviour.
+> 
+>     Yes, you can do that with e.g. Jailhouse as well, but you lose lots
+>     of the fancy things KVM provides. And people care about these not
+>     just because they are fancy. They care because their application
+>     scenario needs them.
+> 
+> There are more reasons why people want to be able to get as much
+> isolation from the OS as possible but at the same time have a sane
+> execution environment, debugging, performance monitoring and the OS
+> provided protection mechanisms instead of horrible hacks.
+> 
+> Isolation makes sense for a range of applications and there is no reason
+> why Linux should not support them. 
 
-Exactly. Pacing is stateless, so relatively amenable to offload.
+One good client for the task isolation is Open Data Plane. There are
+even some code stubs supposed to enable isolation where needed.
 
-For applications that offload pacing to the OS with SO_TXTIME, such as
-QUIC, further reduce jitter and timer wake-ups (and thus cycles) by
-offloading to hardware.
+> > If you want to guarantee performnace of the "isolated" task... I don't
+> > see how that works. Other tasks on the system still compete for DRAM
+> > bandwidth, caches, etc...
 
-Not only for SO_TXTIME, also for pacing initiated by the kernel TCP stack.
+My experiments say that typical delay caused by dry IPI or syscall is
+2000-20000 'ticks'. Typical delay caused by cache miss is 3-30 ticks.
 
-Initially, in absence of hardware support, at least in virtual environments
-offload from guest to host OS.
+To guarantee cache / memory bandwidth, one can use resctrl. Linux has
+implementation of it for x86 only, but arm64 has support for for
+resctrl on CPU side.
+
+Thanks,
+Yury
+
+> Thanks,
+> 
+>         tglx
