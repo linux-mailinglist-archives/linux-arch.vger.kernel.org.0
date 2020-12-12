@@ -2,197 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E4D2D8592
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E383D2D85A2
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438506AbgLLJ7n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Dec 2020 04:59:43 -0500
-Received: from mga02.intel.com ([134.134.136.20]:61275 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438508AbgLLJ7g (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 12 Dec 2020 04:59:36 -0500
-IronPort-SDR: ifZ8E8h53bGYsOeUzY+Qy2LwopJQHsMDkbQPfPp7f0zQwa6SzJZtTItV3d9R1VCmgq9VVUPb0W
- J7FG4CvqQo4A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="161586165"
-X-IronPort-AV: E=Sophos;i="5.78,413,1599548400"; 
-   d="scan'208";a="161586165"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2020 00:51:09 -0800
-IronPort-SDR: aSBz5MFlyrxBJJzgSWgWgFPnNZy+yYkUI01f1gEKuZmrrl5Qfun45FyAmLvVl/IFwKO0p7Bh7U
- 88DPh5b1fv1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,413,1599548400"; 
-   d="scan'208";a="324863738"
-Received: from pl-dbox.sh.intel.com (HELO intel.com) ([10.239.159.39])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Dec 2020 00:51:04 -0800
-Date:   Sat, 12 Dec 2020 16:47:08 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     "Geva, Erez" <erez.geva.ext@siemens.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Cong Wang <xiyou.wangcong@gmail.com>, Sudler@ml01.01.org,
-        Andreas <andreas.meisinger@siemens.com>,
-        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
-        "henning.schild@siemens.com" <henning.schild@siemens.com>
-Subject: Re: [kbuild-all] Re: [PATCH 1/3] Add TX sending hardware timestamp.
-Message-ID: <20201212084708.GA31899@intel.com>
-References: <20201209143707.13503-2-erez.geva.ext@siemens.com>
- <202012101050.lTUKkbvy-lkp@intel.com>
- <VI1PR10MB244664932EF569D492539DB8ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+        id S2438132AbgLLKDN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Dec 2020 05:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407318AbgLLJyb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:54:31 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6230C0619D2;
+        Sat, 12 Dec 2020 01:33:37 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id t8so8663011pfg.8;
+        Sat, 12 Dec 2020 01:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=f1FArQJwKvbV3BehyF4qEYRVrF15VQjMltXB6x2VXEs=;
+        b=VfglcvXKb3iG6utIOpUfYAhtiw18RAnZXn+8XlkXEyYi23SGNxEmGpmMtBJvmqNiwQ
+         OIQVaVut6CGtqNUs5pftpzY7bdxIAlVW1LvP4gMmfgXjyMaswbb6tUjYn+9zZfiruEFA
+         mVK1h31PnUfdKRNRvEaYnwUF48Kl1mFGBH2NyQpeJcN0xSx6z6Nxyn5a12Vcal50Z5Ok
+         1Cfqn72/66gvm3CAtIdmMP1WxOTYjRXNIu7G3e0rGQoeyWyeQ7EaluvMLFqhKYXeCUzB
+         DCxEh/eOh9yijgAQ1PRTyvWD/TDKrFRMUgDxrAVcuRCzruLk4W4bdqjBZ9UPI3xc96+e
+         pYTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=f1FArQJwKvbV3BehyF4qEYRVrF15VQjMltXB6x2VXEs=;
+        b=fqL6xJ6LPwjx0Y8DCFCQP46olE0HivZZbLJogXxOGVxAToumlDtOkCIeX6lrtMGlof
+         zGQQPOXMdc/EoijgU8jXIViQvF8SQ0O4UXmOAdMXqrcXRtsdW6ezlaF5129U480szFzF
+         ZRGDsilFm0lvZH13rOKRUW/xRY6Tfs/2ABfgxM9hcqQoIi+w9h2535+lSSYfQJtfwvmt
+         4BjHjuDUBgmc75J5Rlaqq+F1xD7kuKPcCWAuMzPM/cmFhyYEXxMfbYW5QdCDmB7AtRez
+         9Av+fV6fLMdWfa3yEmo0K5hOqF2gtrlAlJ12C/80AdnF30ZdxjrJoEUJuLyIN7EkwGXt
+         jKWg==
+X-Gm-Message-State: AOAM532+GeF9etmQ4JvHGL4UQaY/bxkgpXwHFa4QecwltoFxLWYCAWy8
+        BjKj6M9ZA9zER0d50kyhjw0=
+X-Google-Smtp-Source: ABdhPJz5b/yhDHG5uH6YU/ZzFV4elj98QRD5Y6ho7DQz8+eoqDrOz5qWPGF+glH9iqDCk2RFt6pbNw==
+X-Received: by 2002:a63:d401:: with SMTP id a1mr15671694pgh.42.1607765617145;
+        Sat, 12 Dec 2020 01:33:37 -0800 (PST)
+Received: from syed ([106.202.80.219])
+        by smtp.gmail.com with ESMTPSA id g9sm13902333pgk.73.2020.12.12.01.33.27
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 12 Dec 2020 01:33:36 -0800 (PST)
+Date:   Sat, 12 Dec 2020 15:03:15 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     linus.walleij@linaro.org, akpm@linux-foundation.org
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/2] Modify bitmap_set_value() to suppress compiler warning
+Message-ID: <cover.1607765147.git.syednwaris@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <VI1PR10MB244664932EF569D492539DB8ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 12:41:32PM +0000, Geva, Erez wrote:
-> 
-> On 10/12/2020 04:11, kernel test robot wrote:
-> > Hi Erez,
-> > 
-> > Thank you for the patch! Yet something to improve:
-> > 
-> Thanks for the robot,
-> as we rarely use clang for kernel. It is very helpful.
-> 
-> > [auto build test ERROR on b65054597872ce3aefbc6a666385eabdf9e288da]
-> > 
-> > url:    https://github.com/0day-ci/linux/commits/Erez-Geva/Add-sending-TX-hardware-timestamp-for-TC-ETF-Qdisc/20201210-000521
-> I can not find this commit
-> 
-> > base:    b65054597872ce3aefbc6a666385eabdf9e288da
-> > config: mips-randconfig-r026-20201209 (attached as .config)
-> > compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project 1968804ac726e7674d5de22bc2204b45857da344)
-> However the clang in 
-> https://download.01.org/0day-ci/cross-package/clang-latest/clang.tar.xz  is version 11
-Sorry that these are issues at our side, including the branch/commit missing.
-The push to download.01.org failed and did not really work, we will look for
-recovering them.
+Hi All,
 
-> 
-> > reproduce (this is a W=1 build):
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> Your make cross script tries to download the clang every time.
-> Please separate the download (which is ~400 MB and 2 GB after open) from the compilation.
-Hi Erez, thanks for your feedback, we will improve the reproduction
-side per these suggestions.
+The purpose of this patchset is to suppress the compiler warning (-Wtype-limits).
 
-> 
-> Please use "wget" follow your own instructions in this email.
-> 
-> >          chmod +x ~/bin/make.cross
-> >          # install mips cross compiling tool for clang build
-> >          # apt-get install binutils-mips-linux-gnu
-> >          # https://github.com/0day-ci/linux/commit/8a8f634bc74db16dc551cfcf3b63c1183f98eaac
-> >          git remote add linux-review https://github.com/0day-ci/linux
-> >          git fetch --no-tags linux-review Erez-Geva/Add-sending-TX-hardware-timestamp-for-TC-ETF-Qdisc/20201210-000521
-> This branch is absent
-> 
-> >          git checkout 8a8f634bc74db16dc551cfcf3b63c1183f98eaac
-> This commit as well
-> 
-> >          # save the attached .config to linux build tree
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips
-> > 
-> I use Debian 10.7.
-> I usually compile with GCC. I have not see any errors.
-> 
-> When I use clang 11 from download.01.org I get a crash right away.
-> Please add a proper instructions how to use clang on Debian or provide 
-> a Docker container with updated clang for testing.
-> 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >>> net/core/sock.c:2383:7: error: use of undeclared identifier 'SCM_HW_TXTIME'; did you mean 'SOCK_HW_TXTIME'?
-> >             case SCM_HW_TXTIME:
-> >                  ^~~~~~~~~~~~~
-> >                  SOCK_HW_TXTIME
-> >     include/net/sock.h:862:2: note: 'SOCK_HW_TXTIME' declared here
-> >             SOCK_HW_TXTIME,
-> >             ^
-> >     1 error generated.
-> > 
-> > vim +2383 net/core/sock.c
-> > 
-> >    2351	
-> >    2352	int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
-> >    2353			     struct sockcm_cookie *sockc)
-> >    2354	{
-> >    2355		u32 tsflags;
-> >    2356	
-> >    2357		switch (cmsg->cmsg_type) {
-> >    2358		case SO_MARK:
-> >    2359			if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-> >    2360				return -EPERM;
-> >    2361			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
-> >    2362				return -EINVAL;
-> >    2363			sockc->mark = *(u32 *)CMSG_DATA(cmsg);
-> >    2364			break;
-> >    2365		case SO_TIMESTAMPING_OLD:
-> >    2366			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
-> >    2367				return -EINVAL;
-> >    2368	
-> >    2369			tsflags = *(u32 *)CMSG_DATA(cmsg);
-> >    2370			if (tsflags & ~SOF_TIMESTAMPING_TX_RECORD_MASK)
-> >    2371				return -EINVAL;
-> >    2372	
-> >    2373			sockc->tsflags &= ~SOF_TIMESTAMPING_TX_RECORD_MASK;
-> >    2374			sockc->tsflags |= tsflags;
-> >    2375			break;
-> >    2376		case SCM_TXTIME:
-> >    2377			if (!sock_flag(sk, SOCK_TXTIME))
-> >    2378				return -EINVAL;
-> >    2379			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u64)))
-> >    2380				return -EINVAL;
-> >    2381			sockc->transmit_time = get_unaligned((u64 *)CMSG_DATA(cmsg));
-> >    2382			break;
-> >> 2383		case SCM_HW_TXTIME:
-> >    2384			if (!sock_flag(sk, SOCK_HW_TXTIME))
-> >    2385				return -EINVAL;
-> >    2386			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u64)))
-> >    2387				return -EINVAL;
-> >    2388			sockc->transmit_hw_time = get_unaligned((u64 *)CMSG_DATA(cmsg));
-> >    2389			break;
-> >    2390		/* SCM_RIGHTS and SCM_CREDENTIALS are semantically in SOL_UNIX. */
-> >    2391		case SCM_RIGHTS:
-> >    2392		case SCM_CREDENTIALS:
-> >    2393			break;
-> >    2394		default:
-> >    2395			return -EINVAL;
-> >    2396		}
-> >    2397		return 0;
-> >    2398	}
-> >    2399	EXPORT_SYMBOL(__sock_cmsg_send);
-> >    2400	
-> > 
-> > ---
-> > 0-DAY CI Kernel Test Service, Intel Corporation
-> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> > 
-> 
-> Please improve the robot, so we can comply and properly support clang compilation.
-Got it, we will keep improving the bot.
+In function bitmap_set_value(), add explicit check to see if the value being
+written into the bitmap does not fall outside the bitmap.
+The situation that it is falling outside is never possible in the code
+because the boundaries are required to be correct before the function is
+called. The responsibility is on the caller for ensuring the boundaries
+are correct.
+The code change is simply to silence the GCC warning messages
+because GCC is not aware that the boundaries have already been checked.
+As such, we're better off using __builtin_unreachable() here because we
+can avoid the latency of the conditional check entirely.
 
-> 
-> Thanks
->    Erez
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+Michal,
+What do you think of [PATCH 2/2]? Is the conditional check needed, and also does
+returning -EINVAL look good?
+
+Changes in v2:
+ - [Patch 1/2]: Squashed earlier three patches into one.
+
+Syed Nayyar Waris (2):
+  bitmap: Modify bitmap_set_value() to check bitmap length
+  gpio: xilinx: Add extra check if sum of widths exceed 64
+
+ drivers/gpio/gpio-xilinx.c | 18 ++++++++++++------
+ include/linux/bitmap.h     | 35 +++++++++++++++++++++--------------
+ lib/test_bitmap.c          |  4 ++--
+ 3 files changed, 35 insertions(+), 22 deletions(-)
+
+
+base-commit: b640c4e12bbe1f0b6383c3ef788a89e5427c763f
+-- 
+2.29.0
+
