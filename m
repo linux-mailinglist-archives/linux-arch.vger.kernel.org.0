@@ -2,132 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AC92D85C8
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E166E2D870A
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 15:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438693AbgLLKMB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Dec 2020 05:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405248AbgLLJyA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:54:00 -0500
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1001C0619D8;
-        Sat, 12 Dec 2020 01:39:58 -0800 (PST)
-Received: by mail-io1-xd42.google.com with SMTP id q137so12046933iod.9;
-        Sat, 12 Dec 2020 01:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hYZSVCjgqXKtM8w9BwAb1e1KcOhU0SGPdZRd58OQmRs=;
-        b=pKxu+obPNk7a6SYH3xsDSt9agGgQZDuXzchVjSYTXgwLjARonlnuEGrm0W8cep4KiV
-         pZ6Hw2bwsHjcWiCbt28qizIlyUtAMdcoihnbQnzcbntdmT7Rvnl0t8c/Gt5wiS8DxOeP
-         1iggijddzfqkYPRaWE7CN1x6gHG3Lwv33dLJAsxQbilBbNl9SJj1fxtgk+x4k1tHpE8u
-         RmuuBwnd8FNsEXX5YRGf3JrTdl8NZ/xqnDJcfs4ADrMvr9YM9woWdWD4UGNcNyCMyRDH
-         BliWGJIhb0svXU6lKpUilyzj/VsLI43NSzurW15Qv9s72uakm+6ZbM3z9lIRfsmhmwLv
-         sOuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hYZSVCjgqXKtM8w9BwAb1e1KcOhU0SGPdZRd58OQmRs=;
-        b=hCVuA60IdAwIiOUNe5lvLV/fvec5Zj7n9KTWLlzUU46KSMWJhzEV6TmR6sYWMtGhgG
-         VxZmtzWLnYSNuSnigkRX3iWdqo2ZH30Dmt7pQr8Fs9fGz+xxuEjMzAgzFfnjXSHIVeSn
-         d7ynQMQQ177CiNPaY7rU99KhEdS4NrjsYgBaAxvY1K6Yn5Ru8Bxe4RbgcDOhKrjLGVrL
-         7md8Mi1GSabyEoezfz6s7p9yUV5vJNyTaWUEXrMXLIpbRr1ilMCwiJDWld9ODkY3TE9n
-         +GiAVPiICyQ4/w85QSKCNqwqG4sYTTlP5ibAoGB0l2W+cuURYLraWa6CZ0GWwmT4JxEU
-         DfhQ==
-X-Gm-Message-State: AOAM531O14l+7ApM0lC57J7ubm4fHRbLxt1BS7IrAyroDeeP4fY0Uvb+
-        ej7a+I1kSQ1bK4RnWZQoJ1DGWEYuRGxtioggPHY=
-X-Google-Smtp-Source: ABdhPJwnV020ZqaXHNufnjXvtw7jCXttXeXdrOYLOXHKXep/NLPywmuK1frHKxV/Hkp6JjYfTA+aW1xFR5T8rXufrG4=
-X-Received: by 2002:a05:6602:14c5:: with SMTP id b5mr20317154iow.44.1607765998041;
- Sat, 12 Dec 2020 01:39:58 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1605893641.git.syednwaris@gmail.com> <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
- <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
-In-Reply-To: <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Sat, 12 Dec 2020 15:09:46 +0530
-Message-ID: <CACG_h5o1SCRyU4b_d49S7u1OVeEX_2b0mkBgnzJGNotGw-VwkA@mail.gmail.com>
-Subject: Re: [RESEND PATCH 3/4] gpio: xilinx: Modify bitmap_set_value() calls
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+        id S2439136AbgLLOAk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Dec 2020 09:00:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2439135AbgLLOAj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 12 Dec 2020 09:00:39 -0500
+Date:   Sat, 12 Dec 2020 15:59:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607781598;
+        bh=W+S3uDjo9SUaklycr1VwLEkb3P+e5VKfy1opxSFjfP4=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=flXIgTj5QPdmF322uyfveGkWCvdiCUBTDqJEmaQAdBMU+9OnpTfe38HJDNJgc0lH8
+         G3M3nYjTvl4Jk0YTIcL5XhPPhChBAc7qxqYwpPq+/oyL9pin060A7R+FLePp8EI92r
+         GwnqdckCsl6axBY1CL4fx8yH/moiz2Z+oLa3jsxNsEo1pT2EOLhqIregvSKc55N4Zj
+         WuUAHrJAd8PgEDWlSYMQSNKmu4qJ1V3ZA+z2Yx8VyWB6hblUmlV0BHoIXeUaszFyMu
+         HjV36aGN0+weJj3fLUwesb3uBHEoXTzG37NgAFnxayD4MEFDMvTjDeUmf4Kr35XObN
+         Un6GIU6DTV1SA==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-pm <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v14 10/10] secretmem: test: add basic selftest for
+ memfd_secret(2)
+Message-ID: <20201212135940.GD8946@kernel.org>
+References: <20201203062949.5484-1-rppt@kernel.org>
+ <20201203062949.5484-11-rppt@kernel.org>
+ <248f928b-1383-48ea-8584-ec10146e60c9@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <248f928b-1383-48ea-8584-ec10146e60c9@nvidia.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 9:03 PM Bartosz Golaszewski
-<bgolaszewski@baylibre.com> wrote:
->
-> On Fri, Nov 20, 2020 at 7:46 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> >
-> > Modify the bitmap_set_value() calls. bitmap_set_value()
-> > now takes an extra bitmap width as second argument and the width of
-> > value is now present as the fourth argument.
-> >
-> > Cc: Michal Simek <michal.simek@xilinx.com>
-> > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-> > ---
-> >  drivers/gpio/gpio-xilinx.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-> > index ad4ee4145db4..05dae086c4d0 100644
-> > --- a/drivers/gpio/gpio-xilinx.c
-> > +++ b/drivers/gpio/gpio-xilinx.c
-> > @@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
-> >         spin_lock_irqsave(&chip->gpio_lock[0], flags);
-> >         spin_lock(&chip->gpio_lock[1]);
-> >
-> > -       bitmap_set_value(old, state[0], 0, width[0]);
-> > -       bitmap_set_value(old, state[1], width[0], width[1]);
-> > +       bitmap_set_value(old, 64, state[0], width[0], 0);
-> > +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
-> >         bitmap_replace(new, old, bits, mask, gc->ngpio);
-> >
-> > -       bitmap_set_value(old, state[0], 0, 32);
-> > -       bitmap_set_value(old, state[1], 32, 32);
-> > +       bitmap_set_value(old, 64, state[0], 32, 0);
-> > +       bitmap_set_value(old, 64, state[1], 32, 32);
-> >         state[0] = bitmap_get_value(new, 0, width[0]);
-> >         state[1] = bitmap_get_value(new, width[0], width[1]);
-> > -       bitmap_set_value(new, state[0], 0, 32);
-> > -       bitmap_set_value(new, state[1], 32, 32);
-> > +       bitmap_set_value(new, 64, state[0], 32, 0);
-> > +       bitmap_set_value(new, 64, state[1], 32, 32);
-> >         bitmap_xor(changed, old, new, 64);
-> >
-> >         if (((u32 *)changed)[0])
-> > --
-> > 2.29.0
-> >
->
-> This series is not bisectable because you modify the interface -
-> breaking existing users - and you only fix them later. Please squash
-> those changes into a single commit.
->
-> Bartosz
+Hi John,
 
-Hi Bartosz,
+On Fri, Dec 11, 2020 at 10:16:23PM -0800, John Hubbard wrote:
+> On 12/2/20 10:29 PM, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> ...
+> > +#include "../kselftest.h"
+> > +
+> > +#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
+> > +#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
+> > +#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
+> > +
+> > +#ifdef __NR_memfd_secret
+> > +
+> > +#include <linux/secretmem.h>
+> 
+> Hi Mike,
+> 
+> Say, when I tried this out from today's linux-next, I had to delete the
+> above line. In other words, the following was required in order to build:
+> 
+> diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
+> index 79578dfd13e6..c878c2b841fc 100644
+> --- a/tools/testing/selftests/vm/memfd_secret.c
+> +++ b/tools/testing/selftests/vm/memfd_secret.c
+> @@ -29,8 +29,6 @@
+> 
+>  #ifdef __NR_memfd_secret
+> 
+> -#include <linux/secretmem.h>
+> -
+>  #define PATTERN        0x55
+> 
+>  static const int prot = PROT_READ | PROT_WRITE;
+> 
+> 
+> ...and that makes sense to me, because:
+> 
+> a) secretmem.h is not in the uapi, which this selftests/vm build system
+>    expects (it runs "make headers_install" for us, which is *not* going
+>    to pick up items in the kernel include dirs), and
+> 
+> b) There is nothing in secretmem.h that this test uses, anyway! Just these:
+> 
+> bool vma_is_secretmem(struct vm_area_struct *vma);
+> bool page_is_secretmem(struct page *page);
+> bool secretmem_active(void);
+> 
+> 
+> ...or am I just Doing It Wrong? :)
 
-I have squashed the changes and have sent a new patchset v2.
+You are perfectly right, I had a stale header in uapi from the prevoius
+versions, the include in the test remained from then.
 
-Regards
-Syed Nayyar Waris
+@Andrew, can you please add the hunk above as a fixup?
+
+> thanks,
+> -- 
+> John Hubbard
+> NVIDIA
+
+-- 
+Sincerely yours,
+Mike.
