@@ -2,219 +2,197 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 720EC2D856B
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 10:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E4D2D8592
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731406AbgLLJx4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Dec 2020 04:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388329AbgLLJxQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:53:16 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A8C0619D6;
-        Sat, 12 Dec 2020 01:34:25 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id v3so5930833plz.13;
-        Sat, 12 Dec 2020 01:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WXcPd+483PEznyO4jvnkSGgGlYQfHXVeIHWzyQm2ncM=;
-        b=Wl9vC+4ELxkCwMr9bDvZvx+KC5THZHjhPm3tmWD+M9RLgj5b8YQCFKEN7ze6cSmxoI
-         sTgBHjeObpO7qB+0emlQqVko33ww1S/EYG0ucEwj4/LyZXKLy5o749fH6K3syw195Lcn
-         ny35VKCZtysJpuLzDANZO9uBuAKAaRLia4/A1HBDTUrkARc4xtjjGUH01L26T1gQS/KX
-         Ej3iX+Mm7NEjX8Wm3d0nzAjLL6N8auiVwizIFqCZsImH6wp3Tn0G2Z0TVhooQ2e/k2dc
-         0w3QXvxxUWeeQkTObQ9MVg13gl4qzA8dNkI1/+xyDSOoSChGiq4g6FMu2PKR9NNHB626
-         YRDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WXcPd+483PEznyO4jvnkSGgGlYQfHXVeIHWzyQm2ncM=;
-        b=hvn8WvRNXaUWS323wqvOfx4Ob9XVcnhgg6E5YUwe6Vh8obguZIrF4ToAV4fKq0M/iZ
-         8qOINuCThMA/y4jxnSOgooaL9Gdby6rfMWXe0ZIDX/sPThJSU5c5TH22d+L6NJ12MbGP
-         riMWQpseXLegSAgE0aRJjAkxvZRVL/j4chl6VN4HrvfQGOxsJbwV/KOl5ddrySX69/BO
-         4YPJQackrLDYqSTpNTnehcdx3haCYElipv44X9XYewmEewvBRYVrdhIEF5hYbhiw2Sa5
-         9q1EkiMiJfefLUgILt7mht6MVFBPRwdibgUz/a51loBHrsPEcAbVmePcBp9pBOacW4Sg
-         rkzw==
-X-Gm-Message-State: AOAM532NddzGSu4eLiOwFo553banPkwq4KWYPnMAxpKp8A/SNXg9ftbR
-        8GS7u8qpJAKM1hLyllNmTPM=
-X-Google-Smtp-Source: ABdhPJwxtpcsd0Ah66k1CFJHGyjxaH4DBV2uGAmTP6q9XwnXC7BsGcXL0R7gLJlD3YYYYtQTDgcz+g==
-X-Received: by 2002:a17:90a:dc07:: with SMTP id i7mr16611865pjv.163.1607765664582;
-        Sat, 12 Dec 2020 01:34:24 -0800 (PST)
-Received: from syed ([106.202.80.219])
-        by smtp.gmail.com with ESMTPSA id s24sm8063609pfh.47.2020.12.12.01.34.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 12 Dec 2020 01:34:24 -0800 (PST)
-Date:   Sat, 12 Dec 2020 15:04:05 +0530
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-To:     linus.walleij@linaro.org, akpm@linux-foundation.org
-Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 1/2] bitmap: Modify bitmap_set_value() to check bitmap
- length
-Message-ID: <20268bfeb500ad8819e3a11aa1bea27eade4fd39.1607765147.git.syednwaris@gmail.com>
-References: <cover.1607765147.git.syednwaris@gmail.com>
+        id S2438506AbgLLJ7n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Dec 2020 04:59:43 -0500
+Received: from mga02.intel.com ([134.134.136.20]:61275 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2438508AbgLLJ7g (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 12 Dec 2020 04:59:36 -0500
+IronPort-SDR: ifZ8E8h53bGYsOeUzY+Qy2LwopJQHsMDkbQPfPp7f0zQwa6SzJZtTItV3d9R1VCmgq9VVUPb0W
+ J7FG4CvqQo4A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="161586165"
+X-IronPort-AV: E=Sophos;i="5.78,413,1599548400"; 
+   d="scan'208";a="161586165"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2020 00:51:09 -0800
+IronPort-SDR: aSBz5MFlyrxBJJzgSWgWgFPnNZy+yYkUI01f1gEKuZmrrl5Qfun45FyAmLvVl/IFwKO0p7Bh7U
+ 88DPh5b1fv1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,413,1599548400"; 
+   d="scan'208";a="324863738"
+Received: from pl-dbox.sh.intel.com (HELO intel.com) ([10.239.159.39])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Dec 2020 00:51:04 -0800
+Date:   Sat, 12 Dec 2020 16:47:08 +0800
+From:   Philip Li <philip.li@intel.com>
+To:     "Geva, Erez" <erez.geva.ext@siemens.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cong Wang <xiyou.wangcong@gmail.com>, Sudler@ml01.01.org,
+        Andreas <andreas.meisinger@siemens.com>,
+        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
+        "henning.schild@siemens.com" <henning.schild@siemens.com>
+Subject: Re: [kbuild-all] Re: [PATCH 1/3] Add TX sending hardware timestamp.
+Message-ID: <20201212084708.GA31899@intel.com>
+References: <20201209143707.13503-2-erez.geva.ext@siemens.com>
+ <202012101050.lTUKkbvy-lkp@intel.com>
+ <VI1PR10MB244664932EF569D492539DB8ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1607765147.git.syednwaris@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <VI1PR10MB244664932EF569D492539DB8ABCB0@VI1PR10MB2446.EURPRD10.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add explicit check to see if the value being written into the bitmap
-does not fall outside the bitmap.
-The situation that it is falling outside would never be possible in the
-code because the boundaries are required to be correct before the
-function is called. The responsibility is on the caller for ensuring the
-boundaries are correct.
-The code change is simply to silence the GCC warning messages
-because GCC is not aware that the boundaries have already been checked.
-As such, we're better off using __builtin_unreachable() here because we
-can avoid the latency of the conditional check entirely.
+On Thu, Dec 10, 2020 at 12:41:32PM +0000, Geva, Erez wrote:
+> 
+> On 10/12/2020 04:11, kernel test robot wrote:
+> > Hi Erez,
+> > 
+> > Thank you for the patch! Yet something to improve:
+> > 
+> Thanks for the robot,
+> as we rarely use clang for kernel. It is very helpful.
+> 
+> > [auto build test ERROR on b65054597872ce3aefbc6a666385eabdf9e288da]
+> > 
+> > url:    https://github.com/0day-ci/linux/commits/Erez-Geva/Add-sending-TX-hardware-timestamp-for-TC-ETF-Qdisc/20201210-000521
+> I can not find this commit
+> 
+> > base:    b65054597872ce3aefbc6a666385eabdf9e288da
+> > config: mips-randconfig-r026-20201209 (attached as .config)
+> > compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project 1968804ac726e7674d5de22bc2204b45857da344)
+> However the clang in 
+> https://download.01.org/0day-ci/cross-package/clang-latest/clang.tar.xz  is version 11
+Sorry that these are issues at our side, including the branch/commit missing.
+The push to download.01.org failed and did not really work, we will look for
+recovering them.
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+> 
+> > reproduce (this is a W=1 build):
+> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> Your make cross script tries to download the clang every time.
+> Please separate the download (which is ~400 MB and 2 GB after open) from the compilation.
+Hi Erez, thanks for your feedback, we will improve the reproduction
+side per these suggestions.
 
-lib/test_bitmap.c: Modify for_each_set_clump test
+> 
+> Please use "wget" follow your own instructions in this email.
+> 
+> >          chmod +x ~/bin/make.cross
+> >          # install mips cross compiling tool for clang build
+> >          # apt-get install binutils-mips-linux-gnu
+> >          # https://github.com/0day-ci/linux/commit/8a8f634bc74db16dc551cfcf3b63c1183f98eaac
+> >          git remote add linux-review https://github.com/0day-ci/linux
+> >          git fetch --no-tags linux-review Erez-Geva/Add-sending-TX-hardware-timestamp-for-TC-ETF-Qdisc/20201210-000521
+> This branch is absent
+> 
+> >          git checkout 8a8f634bc74db16dc551cfcf3b63c1183f98eaac
+> This commit as well
+> 
+> >          # save the attached .config to linux build tree
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=mips
+> > 
+> I use Debian 10.7.
+> I usually compile with GCC. I have not see any errors.
+> 
+> When I use clang 11 from download.01.org I get a crash right away.
+> Please add a proper instructions how to use clang on Debian or provide 
+> a Docker container with updated clang for testing.
+> 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >>> net/core/sock.c:2383:7: error: use of undeclared identifier 'SCM_HW_TXTIME'; did you mean 'SOCK_HW_TXTIME'?
+> >             case SCM_HW_TXTIME:
+> >                  ^~~~~~~~~~~~~
+> >                  SOCK_HW_TXTIME
+> >     include/net/sock.h:862:2: note: 'SOCK_HW_TXTIME' declared here
+> >             SOCK_HW_TXTIME,
+> >             ^
+> >     1 error generated.
+> > 
+> > vim +2383 net/core/sock.c
+> > 
+> >    2351	
+> >    2352	int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
+> >    2353			     struct sockcm_cookie *sockc)
+> >    2354	{
+> >    2355		u32 tsflags;
+> >    2356	
+> >    2357		switch (cmsg->cmsg_type) {
+> >    2358		case SO_MARK:
+> >    2359			if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
+> >    2360				return -EPERM;
+> >    2361			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
+> >    2362				return -EINVAL;
+> >    2363			sockc->mark = *(u32 *)CMSG_DATA(cmsg);
+> >    2364			break;
+> >    2365		case SO_TIMESTAMPING_OLD:
+> >    2366			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
+> >    2367				return -EINVAL;
+> >    2368	
+> >    2369			tsflags = *(u32 *)CMSG_DATA(cmsg);
+> >    2370			if (tsflags & ~SOF_TIMESTAMPING_TX_RECORD_MASK)
+> >    2371				return -EINVAL;
+> >    2372	
+> >    2373			sockc->tsflags &= ~SOF_TIMESTAMPING_TX_RECORD_MASK;
+> >    2374			sockc->tsflags |= tsflags;
+> >    2375			break;
+> >    2376		case SCM_TXTIME:
+> >    2377			if (!sock_flag(sk, SOCK_TXTIME))
+> >    2378				return -EINVAL;
+> >    2379			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u64)))
+> >    2380				return -EINVAL;
+> >    2381			sockc->transmit_time = get_unaligned((u64 *)CMSG_DATA(cmsg));
+> >    2382			break;
+> >> 2383		case SCM_HW_TXTIME:
+> >    2384			if (!sock_flag(sk, SOCK_HW_TXTIME))
+> >    2385				return -EINVAL;
+> >    2386			if (cmsg->cmsg_len != CMSG_LEN(sizeof(u64)))
+> >    2387				return -EINVAL;
+> >    2388			sockc->transmit_hw_time = get_unaligned((u64 *)CMSG_DATA(cmsg));
+> >    2389			break;
+> >    2390		/* SCM_RIGHTS and SCM_CREDENTIALS are semantically in SOL_UNIX. */
+> >    2391		case SCM_RIGHTS:
+> >    2392		case SCM_CREDENTIALS:
+> >    2393			break;
+> >    2394		default:
+> >    2395			return -EINVAL;
+> >    2396		}
+> >    2397		return 0;
+> >    2398	}
+> >    2399	EXPORT_SYMBOL(__sock_cmsg_send);
+> >    2400	
+> > 
+> > ---
+> > 0-DAY CI Kernel Test Service, Intel Corporation
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > 
+> 
+> Please improve the robot, so we can comply and properly support clang compilation.
+Got it, we will keep improving the bot.
 
-Modify the test where bitmap_set_value() is called. bitmap_set_value()
-now takes an extra bitmap-width as second argument and the width of
-value is now present as the fourth argument.
-
-Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
-
-gpio: xilinx: Modify bitmap_set_value() calls
-
-Modify the bitmap_set_value() calls. bitmap_set_value()
-now takes an extra bitmap width as second argument and the width of
-value is now present as the fourth argument.
-
-Cc: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
----
- drivers/gpio/gpio-xilinx.c | 12 ++++++------
- include/linux/bitmap.h     | 35 +++++++++++++++++++++--------------
- lib/test_bitmap.c          |  4 ++--
- 3 files changed, 29 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-index ad4ee4145db4..05dae086c4d0 100644
---- a/drivers/gpio/gpio-xilinx.c
-+++ b/drivers/gpio/gpio-xilinx.c
-@@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
- 	spin_lock_irqsave(&chip->gpio_lock[0], flags);
- 	spin_lock(&chip->gpio_lock[1]);
- 
--	bitmap_set_value(old, state[0], 0, width[0]);
--	bitmap_set_value(old, state[1], width[0], width[1]);
-+	bitmap_set_value(old, 64, state[0], width[0], 0);
-+	bitmap_set_value(old, 64, state[1], width[1], width[0]);
- 	bitmap_replace(new, old, bits, mask, gc->ngpio);
- 
--	bitmap_set_value(old, state[0], 0, 32);
--	bitmap_set_value(old, state[1], 32, 32);
-+	bitmap_set_value(old, 64, state[0], 32, 0);
-+	bitmap_set_value(old, 64, state[1], 32, 32);
- 	state[0] = bitmap_get_value(new, 0, width[0]);
- 	state[1] = bitmap_get_value(new, width[0], width[1]);
--	bitmap_set_value(new, state[0], 0, 32);
--	bitmap_set_value(new, state[1], 32, 32);
-+	bitmap_set_value(new, 64, state[0], 32, 0);
-+	bitmap_set_value(new, 64, state[1], 32, 32);
- 	bitmap_xor(changed, old, new, 64);
- 
- 	if (((u32 *)changed)[0])
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index 386d08777342..efb6199ea1e7 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -78,8 +78,9 @@
-  *  bitmap_get_value(map, start, nbits)		Get bit value of size
-  *                                              'nbits' from map at start
-  *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
-- *  bitmap_set_value(map, value, start, nbits)	Set bit value of size 'nbits'
-- *                                              of map at start
-+ *  bitmap_set_value(map, nbits, value, value_width, start)
-+ *                                              Set bit value of size value_width
-+ *                                              to map at start
-  *
-  * Note, bitmap_zero() and bitmap_fill() operate over the region of
-  * unsigned longs, that is, bits behind bitmap till the unsigned long
-@@ -610,30 +611,36 @@ static inline void bitmap_set_value8(unsigned long *map, unsigned long value,
- }
- 
- /**
-- * bitmap_set_value - set n-bit value within a memory region
-+ * bitmap_set_value - set value within a memory region
-  * @map: address to the bitmap memory region
-- * @value: value of nbits
-- * @start: bit offset of the n-bit value
-- * @nbits: size of value in bits (must be between 1 and BITS_PER_LONG inclusive).
-+ * @nbits: size of map in bits
-+ * @value: value of clump
-+ * @value_width: size of value in bits (must be between 1 and BITS_PER_LONG inclusive)
-+ * @start: bit offset of the value
-  */
--static inline void bitmap_set_value(unsigned long *map,
--				    unsigned long value,
--				    unsigned long start, unsigned long nbits)
-+static inline void bitmap_set_value(unsigned long *map, unsigned long nbits,
-+				    unsigned long value, unsigned long value_width,
-+				    unsigned long start)
- {
--	const size_t index = BIT_WORD(start);
-+	const unsigned long index = BIT_WORD(start);
-+	const unsigned long length = BIT_WORD(nbits);
- 	const unsigned long offset = start % BITS_PER_LONG;
- 	const unsigned long ceiling = round_up(start + 1, BITS_PER_LONG);
- 	const unsigned long space = ceiling - start;
- 
--	value &= GENMASK(nbits - 1, 0);
-+	value &= GENMASK(value_width - 1, 0);
- 
--	if (space >= nbits) {
--		map[index] &= ~(GENMASK(nbits - 1, 0) << offset);
-+	if (space >= value_width) {
-+		map[index] &= ~(GENMASK(value_width - 1, 0) << offset);
- 		map[index] |= value << offset;
- 	} else {
- 		map[index + 0] &= ~BITMAP_FIRST_WORD_MASK(start);
- 		map[index + 0] |= value << offset;
--		map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + nbits);
-+
-+		if (index + 1 >= length)
-+			__builtin_unreachable();
-+
-+		map[index + 1] &= ~BITMAP_LAST_WORD_MASK(start + value_width);
- 		map[index + 1] |= value >> space;
- 	}
- }
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 1c5791ff02cb..7fafe6a0bc08 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -656,8 +656,8 @@ static void __init prepare_test_data(unsigned int index)
- 	unsigned long width = 0;
- 
- 	for (i = 0; i < clump_test_data[index].count; i++) {
--		bitmap_set_value(clump_test_data[index].data,
--			clump_bitmap_data[(clump_test_data[index].offset)++], width, 32);
-+		bitmap_set_value(clump_test_data[index].data, 256,
-+			clump_bitmap_data[(clump_test_data[index].offset)++], 32, width);
- 		width += 32;
- 	}
- }
--- 
-2.29.0
-
+> 
+> Thanks
+>    Erez
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
