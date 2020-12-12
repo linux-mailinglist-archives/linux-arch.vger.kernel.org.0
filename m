@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E383D2D85A2
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3669B2D85AC
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438132AbgLLKDN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Dec 2020 05:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S2438563AbgLLKFc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Dec 2020 05:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407318AbgLLJyb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:54:31 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6230C0619D2;
-        Sat, 12 Dec 2020 01:33:37 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id t8so8663011pfg.8;
-        Sat, 12 Dec 2020 01:33:37 -0800 (PST)
+        with ESMTP id S2407213AbgLLJyQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:54:16 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F8CC0619D7;
+        Sat, 12 Dec 2020 01:35:14 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id j13so3751306pjz.3;
+        Sat, 12 Dec 2020 01:35:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=f1FArQJwKvbV3BehyF4qEYRVrF15VQjMltXB6x2VXEs=;
-        b=VfglcvXKb3iG6utIOpUfYAhtiw18RAnZXn+8XlkXEyYi23SGNxEmGpmMtBJvmqNiwQ
-         OIQVaVut6CGtqNUs5pftpzY7bdxIAlVW1LvP4gMmfgXjyMaswbb6tUjYn+9zZfiruEFA
-         mVK1h31PnUfdKRNRvEaYnwUF48Kl1mFGBH2NyQpeJcN0xSx6z6Nxyn5a12Vcal50Z5Ok
-         1Cfqn72/66gvm3CAtIdmMP1WxOTYjRXNIu7G3e0rGQoeyWyeQ7EaluvMLFqhKYXeCUzB
-         DCxEh/eOh9yijgAQ1PRTyvWD/TDKrFRMUgDxrAVcuRCzruLk4W4bdqjBZ9UPI3xc96+e
-         pYTQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Yy8mAP2XRxcUpsdCsTm+KdTXMmpuQJot11SefIetIN0=;
+        b=KVDtSO/0uKi/QiWrCU1zn8LcujpIvT+dkAK6HUZ93j38/Q+wLHDfplKTgdiVbzeMtl
+         flByeS8IhAqGaM4xzRwM1ErjEBytK51Eg7hcFne7vL3kiWZmIyO/VkSa0yE+wUmO3MkY
+         2ItDX5YGfJy/zCkHG/K1SNWKWcXmkK5BKcaxahXVVDp3319WZrlDHTa7JcZ6RGEnDo9L
+         9KpEh5kKl8IsgVn++gvfaaAqXza+k2fziihzv68mnliqi6+CiuxyDxTLWh8bZelMx+Gf
+         B4nt6ssW7RkPVJPXZbSRdJJKVmkaqHvOchQ0OstcveZPVYVbtQLpHlD3u/5ncYpbr69R
+         TYDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=f1FArQJwKvbV3BehyF4qEYRVrF15VQjMltXB6x2VXEs=;
-        b=fqL6xJ6LPwjx0Y8DCFCQP46olE0HivZZbLJogXxOGVxAToumlDtOkCIeX6lrtMGlof
-         zGQQPOXMdc/EoijgU8jXIViQvF8SQ0O4UXmOAdMXqrcXRtsdW6ezlaF5129U480szFzF
-         ZRGDsilFm0lvZH13rOKRUW/xRY6Tfs/2ABfgxM9hcqQoIi+w9h2535+lSSYfQJtfwvmt
-         4BjHjuDUBgmc75J5Rlaqq+F1xD7kuKPcCWAuMzPM/cmFhyYEXxMfbYW5QdCDmB7AtRez
-         9Av+fV6fLMdWfa3yEmo0K5hOqF2gtrlAlJ12C/80AdnF30ZdxjrJoEUJuLyIN7EkwGXt
-         jKWg==
-X-Gm-Message-State: AOAM532+GeF9etmQ4JvHGL4UQaY/bxkgpXwHFa4QecwltoFxLWYCAWy8
-        BjKj6M9ZA9zER0d50kyhjw0=
-X-Google-Smtp-Source: ABdhPJz5b/yhDHG5uH6YU/ZzFV4elj98QRD5Y6ho7DQz8+eoqDrOz5qWPGF+glH9iqDCk2RFt6pbNw==
-X-Received: by 2002:a63:d401:: with SMTP id a1mr15671694pgh.42.1607765617145;
-        Sat, 12 Dec 2020 01:33:37 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Yy8mAP2XRxcUpsdCsTm+KdTXMmpuQJot11SefIetIN0=;
+        b=bk3+knL4U9bhqDBJwzaL/N0u2YblpCxS187ZdpUj15APvZMw4IwKWc4kLkmqO83zAa
+         3Otn2ussVMKOqOV+XbJfRJbfDpbtFBOOY4WN6PBtJz+hFeIklolPTsUt2oq5JjbkhN7a
+         mKxZmVIvsVZupdhv7YczlmkJTSyZf5I/P4v2qs8cubYa/OvrWN0yC0+nOGQxR10UCFG1
+         Y6qIBUO4U9ltzX2GqihD8qItgyGlkCGpyZwUCPyLSH9xioC6JS+lE7TNR3EDTt3bCpjM
+         fmy2IER1P9Cir8d/dfI4enBxxcHh0+wobBapv0qxoaHGfcsqXngfb2OmfCxh1GNUEIJ+
+         SJ2g==
+X-Gm-Message-State: AOAM531GKna2FmUudOuxsR/nl4eIPGChzNlDBx0yezYzLlAFMaeRhES7
+        kk5V/etiCV9WxHiqY8GmnX8=
+X-Google-Smtp-Source: ABdhPJwZWXWUNVkgyYTtW0SFPElBeAGEfsA9TkWsRluzgsAtKHm13tPqN0cj0s/4D2Wt4UMZB1edbw==
+X-Received: by 2002:a17:90a:450c:: with SMTP id u12mr16772360pjg.93.1607765713923;
+        Sat, 12 Dec 2020 01:35:13 -0800 (PST)
 Received: from syed ([106.202.80.219])
-        by smtp.gmail.com with ESMTPSA id g9sm13902333pgk.73.2020.12.12.01.33.27
+        by smtp.gmail.com with ESMTPSA id s5sm13342405pfh.5.2020.12.12.01.35.05
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 12 Dec 2020 01:33:36 -0800 (PST)
-Date:   Sat, 12 Dec 2020 15:03:15 +0530
+        Sat, 12 Dec 2020 01:35:13 -0800 (PST)
+Date:   Sat, 12 Dec 2020 15:04:54 +0530
 From:   Syed Nayyar Waris <syednwaris@gmail.com>
 To:     linus.walleij@linaro.org, akpm@linux-foundation.org
 Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
@@ -58,49 +58,45 @@ Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
         linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 0/2] Modify bitmap_set_value() to suppress compiler warning
-Message-ID: <cover.1607765147.git.syednwaris@gmail.com>
+Subject: [PATCH v2 2/2] gpio: xilinx: Add extra check if sum of widths exceed
+ 64
+Message-ID: <7049b151670d3cb3ca190185bb484a79b2d5d845.1607765148.git.syednwaris@gmail.com>
+References: <cover.1607765147.git.syednwaris@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1607765147.git.syednwaris@gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi All,
+Add extra check to see if sum of widths does not exceed 64. If it
+exceeds then return -EINVAL alongwith appropriate error message.
 
-The purpose of this patchset is to suppress the compiler warning (-Wtype-limits).
+Cc: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
+---
+ drivers/gpio/gpio-xilinx.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-In function bitmap_set_value(), add explicit check to see if the value being
-written into the bitmap does not fall outside the bitmap.
-The situation that it is falling outside is never possible in the code
-because the boundaries are required to be correct before the function is
-called. The responsibility is on the caller for ensuring the boundaries
-are correct.
-The code change is simply to silence the GCC warning messages
-because GCC is not aware that the boundaries have already been checked.
-As such, we're better off using __builtin_unreachable() here because we
-can avoid the latency of the conditional check entirely.
-
-Michal,
-What do you think of [PATCH 2/2]? Is the conditional check needed, and also does
-returning -EINVAL look good?
-
-Changes in v2:
- - [Patch 1/2]: Squashed earlier three patches into one.
-
-Syed Nayyar Waris (2):
-  bitmap: Modify bitmap_set_value() to check bitmap length
-  gpio: xilinx: Add extra check if sum of widths exceed 64
-
- drivers/gpio/gpio-xilinx.c | 18 ++++++++++++------
- include/linux/bitmap.h     | 35 +++++++++++++++++++++--------------
- lib/test_bitmap.c          |  4 ++--
- 3 files changed, 35 insertions(+), 22 deletions(-)
-
-
-base-commit: b640c4e12bbe1f0b6383c3ef788a89e5427c763f
+diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+index 05dae086c4d0..a2e92a1cf50b 100644
+--- a/drivers/gpio/gpio-xilinx.c
++++ b/drivers/gpio/gpio-xilinx.c
+@@ -340,6 +340,12 @@ static int xgpio_probe(struct platform_device *pdev)
+ 
+ 	chip->gc.base = -1;
+ 	chip->gc.ngpio = chip->gpio_width[0] + chip->gpio_width[1];
++
++	if (chip->gc.ngpio > 64) {
++		dev_err(&pdev->dev, "invalid configuration: number of GPIO is greater than 64");
++		return -EINVAL;
++	}
++
+ 	chip->gc.parent = &pdev->dev;
+ 	chip->gc.direction_input = xgpio_dir_in;
+ 	chip->gc.direction_output = xgpio_dir_out;
 -- 
 2.29.0
 
