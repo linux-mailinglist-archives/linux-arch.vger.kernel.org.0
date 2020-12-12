@@ -2,101 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3669B2D85AC
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AC92D85C8
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 11:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438563AbgLLKFc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Dec 2020 05:05:32 -0500
+        id S2438693AbgLLKMB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 12 Dec 2020 05:12:01 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407213AbgLLJyQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:54:16 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F8CC0619D7;
-        Sat, 12 Dec 2020 01:35:14 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id j13so3751306pjz.3;
-        Sat, 12 Dec 2020 01:35:14 -0800 (PST)
+        with ESMTP id S2405248AbgLLJyA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 12 Dec 2020 04:54:00 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1001C0619D8;
+        Sat, 12 Dec 2020 01:39:58 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id q137so12046933iod.9;
+        Sat, 12 Dec 2020 01:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Yy8mAP2XRxcUpsdCsTm+KdTXMmpuQJot11SefIetIN0=;
-        b=KVDtSO/0uKi/QiWrCU1zn8LcujpIvT+dkAK6HUZ93j38/Q+wLHDfplKTgdiVbzeMtl
-         flByeS8IhAqGaM4xzRwM1ErjEBytK51Eg7hcFne7vL3kiWZmIyO/VkSa0yE+wUmO3MkY
-         2ItDX5YGfJy/zCkHG/K1SNWKWcXmkK5BKcaxahXVVDp3319WZrlDHTa7JcZ6RGEnDo9L
-         9KpEh5kKl8IsgVn++gvfaaAqXza+k2fziihzv68mnliqi6+CiuxyDxTLWh8bZelMx+Gf
-         B4nt6ssW7RkPVJPXZbSRdJJKVmkaqHvOchQ0OstcveZPVYVbtQLpHlD3u/5ncYpbr69R
-         TYDg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hYZSVCjgqXKtM8w9BwAb1e1KcOhU0SGPdZRd58OQmRs=;
+        b=pKxu+obPNk7a6SYH3xsDSt9agGgQZDuXzchVjSYTXgwLjARonlnuEGrm0W8cep4KiV
+         pZ6Hw2bwsHjcWiCbt28qizIlyUtAMdcoihnbQnzcbntdmT7Rvnl0t8c/Gt5wiS8DxOeP
+         1iggijddzfqkYPRaWE7CN1x6gHG3Lwv33dLJAsxQbilBbNl9SJj1fxtgk+x4k1tHpE8u
+         RmuuBwnd8FNsEXX5YRGf3JrTdl8NZ/xqnDJcfs4ADrMvr9YM9woWdWD4UGNcNyCMyRDH
+         BliWGJIhb0svXU6lKpUilyzj/VsLI43NSzurW15Qv9s72uakm+6ZbM3z9lIRfsmhmwLv
+         sOuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Yy8mAP2XRxcUpsdCsTm+KdTXMmpuQJot11SefIetIN0=;
-        b=bk3+knL4U9bhqDBJwzaL/N0u2YblpCxS187ZdpUj15APvZMw4IwKWc4kLkmqO83zAa
-         3Otn2ussVMKOqOV+XbJfRJbfDpbtFBOOY4WN6PBtJz+hFeIklolPTsUt2oq5JjbkhN7a
-         mKxZmVIvsVZupdhv7YczlmkJTSyZf5I/P4v2qs8cubYa/OvrWN0yC0+nOGQxR10UCFG1
-         Y6qIBUO4U9ltzX2GqihD8qItgyGlkCGpyZwUCPyLSH9xioC6JS+lE7TNR3EDTt3bCpjM
-         fmy2IER1P9Cir8d/dfI4enBxxcHh0+wobBapv0qxoaHGfcsqXngfb2OmfCxh1GNUEIJ+
-         SJ2g==
-X-Gm-Message-State: AOAM531GKna2FmUudOuxsR/nl4eIPGChzNlDBx0yezYzLlAFMaeRhES7
-        kk5V/etiCV9WxHiqY8GmnX8=
-X-Google-Smtp-Source: ABdhPJwZWXWUNVkgyYTtW0SFPElBeAGEfsA9TkWsRluzgsAtKHm13tPqN0cj0s/4D2Wt4UMZB1edbw==
-X-Received: by 2002:a17:90a:450c:: with SMTP id u12mr16772360pjg.93.1607765713923;
-        Sat, 12 Dec 2020 01:35:13 -0800 (PST)
-Received: from syed ([106.202.80.219])
-        by smtp.gmail.com with ESMTPSA id s5sm13342405pfh.5.2020.12.12.01.35.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 12 Dec 2020 01:35:13 -0800 (PST)
-Date:   Sat, 12 Dec 2020 15:04:54 +0530
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-To:     linus.walleij@linaro.org, akpm@linux-foundation.org
-Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 2/2] gpio: xilinx: Add extra check if sum of widths exceed
- 64
-Message-ID: <7049b151670d3cb3ca190185bb484a79b2d5d845.1607765148.git.syednwaris@gmail.com>
-References: <cover.1607765147.git.syednwaris@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hYZSVCjgqXKtM8w9BwAb1e1KcOhU0SGPdZRd58OQmRs=;
+        b=hCVuA60IdAwIiOUNe5lvLV/fvec5Zj7n9KTWLlzUU46KSMWJhzEV6TmR6sYWMtGhgG
+         VxZmtzWLnYSNuSnigkRX3iWdqo2ZH30Dmt7pQr8Fs9fGz+xxuEjMzAgzFfnjXSHIVeSn
+         d7ynQMQQ177CiNPaY7rU99KhEdS4NrjsYgBaAxvY1K6Yn5Ru8Bxe4RbgcDOhKrjLGVrL
+         7md8Mi1GSabyEoezfz6s7p9yUV5vJNyTaWUEXrMXLIpbRr1ilMCwiJDWld9ODkY3TE9n
+         +GiAVPiICyQ4/w85QSKCNqwqG4sYTTlP5ibAoGB0l2W+cuURYLraWa6CZ0GWwmT4JxEU
+         DfhQ==
+X-Gm-Message-State: AOAM531O14l+7ApM0lC57J7ubm4fHRbLxt1BS7IrAyroDeeP4fY0Uvb+
+        ej7a+I1kSQ1bK4RnWZQoJ1DGWEYuRGxtioggPHY=
+X-Google-Smtp-Source: ABdhPJwnV020ZqaXHNufnjXvtw7jCXttXeXdrOYLOXHKXep/NLPywmuK1frHKxV/Hkp6JjYfTA+aW1xFR5T8rXufrG4=
+X-Received: by 2002:a05:6602:14c5:: with SMTP id b5mr20317154iow.44.1607765998041;
+ Sat, 12 Dec 2020 01:39:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1607765147.git.syednwaris@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <cover.1605893641.git.syednwaris@gmail.com> <c509c26eb9903414bd730bdd344b7864aedaa6f1.1605893642.git.syednwaris@gmail.com>
+ <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
+In-Reply-To: <CAMpxmJVNPWCUFnBXzDW3uJ_1Sv4rQ=M0WbKmoW4juYLUQP-ABA@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Sat, 12 Dec 2020 15:09:46 +0530
+Message-ID: <CACG_h5o1SCRyU4b_d49S7u1OVeEX_2b0mkBgnzJGNotGw-VwkA@mail.gmail.com>
+Subject: Re: [RESEND PATCH 3/4] gpio: xilinx: Modify bitmap_set_value() calls
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add extra check to see if sum of widths does not exceed 64. If it
-exceeds then return -EINVAL alongwith appropriate error message.
+On Tue, Dec 1, 2020 at 9:03 PM Bartosz Golaszewski
+<bgolaszewski@baylibre.com> wrote:
+>
+> On Fri, Nov 20, 2020 at 7:46 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+> >
+> > Modify the bitmap_set_value() calls. bitmap_set_value()
+> > now takes an extra bitmap width as second argument and the width of
+> > value is now present as the fourth argument.
+> >
+> > Cc: Michal Simek <michal.simek@xilinx.com>
+> > Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
+> > ---
+> >  drivers/gpio/gpio-xilinx.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+> > index ad4ee4145db4..05dae086c4d0 100644
+> > --- a/drivers/gpio/gpio-xilinx.c
+> > +++ b/drivers/gpio/gpio-xilinx.c
+> > @@ -151,16 +151,16 @@ static void xgpio_set_multiple(struct gpio_chip *gc, unsigned long *mask,
+> >         spin_lock_irqsave(&chip->gpio_lock[0], flags);
+> >         spin_lock(&chip->gpio_lock[1]);
+> >
+> > -       bitmap_set_value(old, state[0], 0, width[0]);
+> > -       bitmap_set_value(old, state[1], width[0], width[1]);
+> > +       bitmap_set_value(old, 64, state[0], width[0], 0);
+> > +       bitmap_set_value(old, 64, state[1], width[1], width[0]);
+> >         bitmap_replace(new, old, bits, mask, gc->ngpio);
+> >
+> > -       bitmap_set_value(old, state[0], 0, 32);
+> > -       bitmap_set_value(old, state[1], 32, 32);
+> > +       bitmap_set_value(old, 64, state[0], 32, 0);
+> > +       bitmap_set_value(old, 64, state[1], 32, 32);
+> >         state[0] = bitmap_get_value(new, 0, width[0]);
+> >         state[1] = bitmap_get_value(new, width[0], width[1]);
+> > -       bitmap_set_value(new, state[0], 0, 32);
+> > -       bitmap_set_value(new, state[1], 32, 32);
+> > +       bitmap_set_value(new, 64, state[0], 32, 0);
+> > +       bitmap_set_value(new, 64, state[1], 32, 32);
+> >         bitmap_xor(changed, old, new, 64);
+> >
+> >         if (((u32 *)changed)[0])
+> > --
+> > 2.29.0
+> >
+>
+> This series is not bisectable because you modify the interface -
+> breaking existing users - and you only fix them later. Please squash
+> those changes into a single commit.
+>
+> Bartosz
 
-Cc: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Syed Nayyar Waris <syednwaris@gmail.com>
----
- drivers/gpio/gpio-xilinx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Hi Bartosz,
 
-diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
-index 05dae086c4d0..a2e92a1cf50b 100644
---- a/drivers/gpio/gpio-xilinx.c
-+++ b/drivers/gpio/gpio-xilinx.c
-@@ -340,6 +340,12 @@ static int xgpio_probe(struct platform_device *pdev)
- 
- 	chip->gc.base = -1;
- 	chip->gc.ngpio = chip->gpio_width[0] + chip->gpio_width[1];
-+
-+	if (chip->gc.ngpio > 64) {
-+		dev_err(&pdev->dev, "invalid configuration: number of GPIO is greater than 64");
-+		return -EINVAL;
-+	}
-+
- 	chip->gc.parent = &pdev->dev;
- 	chip->gc.direction_input = xgpio_dir_in;
- 	chip->gc.direction_output = xgpio_dir_out;
--- 
-2.29.0
+I have squashed the changes and have sent a new patchset v2.
 
+Regards
+Syed Nayyar Waris
