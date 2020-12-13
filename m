@@ -2,135 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E166E2D870A
-	for <lists+linux-arch@lfdr.de>; Sat, 12 Dec 2020 15:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE422D8D1A
+	for <lists+linux-arch@lfdr.de>; Sun, 13 Dec 2020 13:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439136AbgLLOAk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 12 Dec 2020 09:00:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53562 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439135AbgLLOAj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 12 Dec 2020 09:00:39 -0500
-Date:   Sat, 12 Dec 2020 15:59:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607781598;
-        bh=W+S3uDjo9SUaklycr1VwLEkb3P+e5VKfy1opxSFjfP4=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=flXIgTj5QPdmF322uyfveGkWCvdiCUBTDqJEmaQAdBMU+9OnpTfe38HJDNJgc0lH8
-         G3M3nYjTvl4Jk0YTIcL5XhPPhChBAc7qxqYwpPq+/oyL9pin060A7R+FLePp8EI92r
-         GwnqdckCsl6axBY1CL4fx8yH/moiz2Z+oLa3jsxNsEo1pT2EOLhqIregvSKc55N4Zj
-         WuUAHrJAd8PgEDWlSYMQSNKmu4qJ1V3ZA+z2Yx8VyWB6hblUmlV0BHoIXeUaszFyMu
-         HjV36aGN0+weJj3fLUwesb3uBHEoXTzG37NgAFnxayD4MEFDMvTjDeUmf4Kr35XObN
-         Un6GIU6DTV1SA==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v14 10/10] secretmem: test: add basic selftest for
- memfd_secret(2)
-Message-ID: <20201212135940.GD8946@kernel.org>
-References: <20201203062949.5484-1-rppt@kernel.org>
- <20201203062949.5484-11-rppt@kernel.org>
- <248f928b-1383-48ea-8584-ec10146e60c9@nvidia.com>
+        id S2406579AbgLMMbJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 13 Dec 2020 07:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405872AbgLMMbA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Dec 2020 07:31:00 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBE8C0613D3
+        for <linux-arch@vger.kernel.org>; Sun, 13 Dec 2020 04:30:20 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id jx16so18699603ejb.10
+        for <linux-arch@vger.kernel.org>; Sun, 13 Dec 2020 04:30:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
+        b=TM7tyhU2EXRcRZwpnWgmaPmrKsIJ58bFqkT+NqWbVXzaxuYoUVKWgj7R4z5v96ZeXq
+         jxahvkMCP9zRk2LtU7TpQ63cERjDjR13zcYod77IQxVbudarbAQ5YhtENZr4QXJVtey5
+         LSfON5SiLlIfSoLOZmuuxNyXGWNUImpU62bNzt1QaVR+HonOQOkuJ79gPp3Jm5qPnPgJ
+         lfm7gTJ47ai4r+9nMmttuOLGp+EkT35Y5u0Lp4bvl2vu/b/LukuIRE3f27m0l3w1N5s4
+         IMEvGuA9P8LGTpW6Jq/68UU8n1p2zuApwodB1BY3CYFhr0h1YW2fw792Fgorau4sptEW
+         PlkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=xzxdWyHrXhHu6b7fYfNflc4EJF5/TpK4zPGY4/WRmDk=;
+        b=Bn4kyAj0SWmRQolZz3K0vR0aRgjkOqA9H+0FSvCuUezFQh/aU09RpruFMeKx2+p6uV
+         jIkQfzFNs0Unqu5dW0Ccjt4yYX3wfV3Yh8o6Ua66TAX3QTAHTgp+xQHfm0OYdUto5SXp
+         7Nfq6/tWuMy5yQhc0fV/Sqb/E1CYiealFKEHHgAPUHwb1QOLMWdQUq89wOVxuLYckJnK
+         LeNCV2UaUl5haQ0Y5xqQjED5YxXgeiqlbPDWq0qJN958Gk2xkhvgK5aoeDz6UwISQjSM
+         xl8XOcKXApfnammS/sNJ8g8GkZSqQrpYhUw1JEzzUHaCgpPr4ND0Hx8pg9b+gHHfjnoj
+         Tb0A==
+X-Gm-Message-State: AOAM531cSSJBzkbLfwCcsS2+OValoEzegr30+eaIcHt1ZFX1UFQu3h0g
+        Wv+E6fmabLyuoBzkgUm2imdabr594PXIuNqb8p0=
+X-Google-Smtp-Source: ABdhPJwYLGbOosRE8Wd0jiKBMdXtdDUX9I7t/kYcSYo3NCOCEmTIZPgAuYEzXRSnkKlVfvIoMbEXJyTpJvSkh2qxKfM=
+X-Received: by 2002:a17:906:d19b:: with SMTP id c27mr18855447ejz.234.1607862619058;
+ Sun, 13 Dec 2020 04:30:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <248f928b-1383-48ea-8584-ec10146e60c9@nvidia.com>
+Received: by 2002:aa7:d517:0:0:0:0:0 with HTTP; Sun, 13 Dec 2020 04:30:18
+ -0800 (PST)
+Reply-To: georgemike7031@gmail.com
+From:   george mike <edemhoegbesso@gmail.com>
+Date:   Sun, 13 Dec 2020 13:30:18 +0100
+Message-ID: <CAPM9i68TE2+ZhX451ucNmfJG=qN6H0FXNKc702AK99j+mYbEOQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi John,
+Hallo
 
-On Fri, Dec 11, 2020 at 10:16:23PM -0800, John Hubbard wrote:
-> On 12/2/20 10:29 PM, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> ...
-> > +#include "../kselftest.h"
-> > +
-> > +#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
-> > +#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
-> > +#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
-> > +
-> > +#ifdef __NR_memfd_secret
-> > +
-> > +#include <linux/secretmem.h>
-> 
-> Hi Mike,
-> 
-> Say, when I tried this out from today's linux-next, I had to delete the
-> above line. In other words, the following was required in order to build:
-> 
-> diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-> index 79578dfd13e6..c878c2b841fc 100644
-> --- a/tools/testing/selftests/vm/memfd_secret.c
-> +++ b/tools/testing/selftests/vm/memfd_secret.c
-> @@ -29,8 +29,6 @@
-> 
->  #ifdef __NR_memfd_secret
-> 
-> -#include <linux/secretmem.h>
-> -
->  #define PATTERN        0x55
-> 
->  static const int prot = PROT_READ | PROT_WRITE;
-> 
-> 
-> ...and that makes sense to me, because:
-> 
-> a) secretmem.h is not in the uapi, which this selftests/vm build system
->    expects (it runs "make headers_install" for us, which is *not* going
->    to pick up items in the kernel include dirs), and
-> 
-> b) There is nothing in secretmem.h that this test uses, anyway! Just these:
-> 
-> bool vma_is_secretmem(struct vm_area_struct *vma);
-> bool page_is_secretmem(struct page *page);
-> bool secretmem_active(void);
-> 
-> 
-> ...or am I just Doing It Wrong? :)
+Mein Name ist George Mike. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
+Ihnen anbieten
+der n=C3=A4chste Verwandte meines Klienten. Sie erben die Summe von (8,5
+Millionen US-Dollar)
+Dollar, die mein Kunde vor seinem Tod auf der Bank gelassen hat.
 
-You are perfectly right, I had a stale header in uapi from the prevoius
-versions, the include in the test remained from then.
+Mein Kunde ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau bei
+einem Autounfall ums Leben gekommen ist
+und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, 50% darauf
+sein f=C3=BCr dich.
+Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
+Informationen: georgemike7031@gmail.com
 
-@Andrew, can you please add the hunk above as a fixup?
-
-> thanks,
-> -- 
-> John Hubbard
-> NVIDIA
-
--- 
-Sincerely yours,
-Mike.
+Vielen Dank im Voraus,
+Mr. George Mike,
