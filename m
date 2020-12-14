@@ -2,108 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9112D9303
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Dec 2020 06:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523E22D935F
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Dec 2020 07:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405889AbgLNFyg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Dec 2020 00:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S2438683AbgLNGyC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Dec 2020 01:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406070AbgLNFy1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Dec 2020 00:54:27 -0500
+        with ESMTP id S2438682AbgLNGyC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Dec 2020 01:54:02 -0500
 Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27373C0613CF;
-        Sun, 13 Dec 2020 21:53:47 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id p21so4331724pjv.0;
-        Sun, 13 Dec 2020 21:53:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569A4C0613CF;
+        Sun, 13 Dec 2020 22:53:22 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id lb18so5736780pjb.5;
+        Sun, 13 Dec 2020 22:53:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=NqlRmCcPn1hL++OXjNViT5mh7QFqv3t1WGYe29FT4N0=;
-        b=OU2rJ+vKQqYkt0zKH+mic4jtuIu5GNnbiOiORyCT+A09h9fwQVJL2rUCwqMLf/iuvX
-         9ZevRGt+gw00mt8IToXd9T4cMAxsajKDwuMJ3rHqXjunXGxeic1yFQN6+BViqPc3jG7q
-         EHj/gFwO3qj7id91+Aj8fVSteXlSH1WbD3B2ObgpDbyX8867Mu/Zc/nZkwqf3u3MeTWQ
-         GUeAIzmYgifLuP+jbiHnVevOjjad1G3brEZa0Wsx/7D97e94816uenMsagjZ4YzhON5a
-         kRKy8l2UgGjX8qjPTJPf7BQTJmLavUTfJA2Wx7MZfep/q6BF6KkbSj6Q3l16mESODtcO
-         iBEA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=836ueWsqhXJFS2jsaV/+MeW0snlTaUrAFFynrxAzOKk=;
+        b=q6GEshR5RFezy4+EprhXJG3fpkvIJHTaEh/EvfhfVA5FfUUDnQ3+4cDCpIRFRC/Mm2
+         ZbtvniEPDGviRpZFiQEw8za5h5Z+oWiIlhCu6JBrMnylhIiZhpvC1s1wknSQzDFn0sBw
+         8JBT7WhTHfWQfd/wi8sI02TaNRGE436yalS6VtVi39Gml2AGcKkbCiNmqS+4M4ZvGaeu
+         xyWfWZoDpWHAvjMESrmKu4FJkOpTQ9ExYrWUgUdh4fCFUa3xeWlwuMz2sCEkKblW5gxy
+         +XHxC0WI5idDR3jZr0BQTqsOClCl3URK8jdwMk8i0+K2wgfBGhE4DdSap9b1vIhgbLvC
+         7w7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=NqlRmCcPn1hL++OXjNViT5mh7QFqv3t1WGYe29FT4N0=;
-        b=ShmvmuBd0/4q349HXDI8yRIxn4N5aMv7gisZrwKsG4FZCPeqDUTMV5tdlQX/ybiCC1
-         kE3saPlMBsSRtfU3BLe77r1Gnd5e5vwjybzpAmbL1UKF0Xq427mocJlx0BYqXiwaBrsS
-         Cliq5B17Bk6w5zxFgyjbAKG8Kh4fNb61SLyCs6vrqSFPdoKmw5vkw083b8OdpGf/GYBZ
-         qc/86XZipWlkO2pi9zBno7BKaB7RNh9A7fy7+ou48WkT6ov9AhW33ROwJjztVev0k88S
-         sEUaUB3m3b1WJ2IsvM0smpJDG+dnfHUQUsQUTSd31K8Yg23IIEA1qEOpkK+0AzBSmw08
-         ol9A==
-X-Gm-Message-State: AOAM5327PZUnpFxzpXqfL6MgaT2gBfqudDERrkD4BS1w5Udw9fPGS/OU
-        +4B70DiVHOsRrHAM7EC+MU4sTFDgDvk=
-X-Google-Smtp-Source: ABdhPJwf3b9TbWiNhAad5JT/pHJRZTvkOiZpc3S6PMZHL+xFsjBjgGypaMaAxP447A+pDMg1mPexiA==
-X-Received: by 2002:a17:90a:fb92:: with SMTP id cp18mr23372071pjb.203.1607925226593;
-        Sun, 13 Dec 2020 21:53:46 -0800 (PST)
-Received: from localhost ([220.240.228.148])
-        by smtp.gmail.com with ESMTPSA id v126sm17639802pfb.137.2020.12.13.21.53.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=836ueWsqhXJFS2jsaV/+MeW0snlTaUrAFFynrxAzOKk=;
+        b=fyYTfwzmEaZEOzHspzBi7tjrG/WkkNw7reR7XDe5PJAFbAw+eC63soyt59Rb5CuWsL
+         IiyjrpnfKnHNYmznNHVlAk8z4uFZpg90f+GtmwIgzoOLm9y4Faj/cNJAScM/FiaHfoLu
+         H1AMyVHZFGCdRInoFdSt8Ouf9cp0pA58c1R1xoUmVXYoReGxC+JyLN6spJptrWcD08g2
+         81yfJmVChwf4lxqLPbeIKeUAeaSbBO5ZDXMukO0N24j4M9xQdOTTQy7noh6BtRC6BSO4
+         5QuOOIizYDnuW0+80EVSEfpPU3dlUwmsaaQFDPrzQHp8Ofl1HFhg1eYqHqglNIqY7N7R
+         S8jw==
+X-Gm-Message-State: AOAM533YMPxdFvNc5vYgRf0VgrpCS0QxtmpcoEMiko7BeFOYis6BS1Tu
+        AhunRdHth/GJYOnglJega80DR+a6pxc=
+X-Google-Smtp-Source: ABdhPJyoH0x/t5iFpjCJhCQTVS//5zozzcYJHAEPewzZkngQ9RzGM8cWtjfAj/AvxA1N7fuXpEPEMA==
+X-Received: by 2002:a17:90a:a45:: with SMTP id o63mr24426408pjo.146.1607928801482;
+        Sun, 13 Dec 2020 22:53:21 -0800 (PST)
+Received: from bobo.ozlabs.ibm.com ([220.240.228.148])
+        by smtp.gmail.com with ESMTPSA id 84sm19570018pfy.9.2020.12.13.22.53.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Dec 2020 21:53:45 -0800 (PST)
-Date:   Mon, 14 Dec 2020 15:53:40 +1000
+        Sun, 13 Dec 2020 22:53:20 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 2/8] x86: use exit_lazy_tlb rather than
- membarrier_mm_sync_core_before_usermode
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-References: <1607152918.fkgmomgfw9.astroid@bobo.none>
-        <116A6B40-C77B-4B6A-897B-18342CD62CEC@amacapital.net>
-        <1607209402.fogfsh8ov4.astroid@bobo.none>
-        <CALCETrWFjOXAd5=ctX3tzgUbyfwM+bT-f8WY_QWOeuDdFxhWbg@mail.gmail.com>
-        <1607224014.8xeujbleij.astroid@bobo.none>
-        <CALCETrV5BzXuUYm5YAoEKPZZPfLrbHckvwBHzWKrxZS8hqzHEg@mail.gmail.com>
-        <1607918323.6muyu2l982.astroid@bobo.none>
-In-Reply-To: <1607918323.6muyu2l982.astroid@bobo.none>
+To:     linux-kernel@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+        Anton Blanchard <anton@ozlabs.org>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: [PATCH v2 0/5] shoot lazy tlbs
+Date:   Mon, 14 Dec 2020 16:53:07 +1000
+Message-Id: <20201214065312.270062-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Message-Id: <1607924970.hd6nln4qe5.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Nicholas Piggin's message of December 14, 2020 2:07 pm:
-> Excerpts from Andy Lutomirski's message of December 11, 2020 10:11 am:
->>> On Dec 5, 2020, at 7:59 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
->>>
->>=20
->>> I'm still going to persue shoot-lazies for the merge window. As you
->>> see it's about a dozen lines and a if (IS_ENABLED(... in core code.
->>> Your change is common code, but a significant complexity (which
->>> affects all archs) so needs a lot more review and testing at this
->>> point.
->>=20
->> I don't think it's ready for this merge window.
->=20
-> Yes next one I meant (aka this one for development perspective :)).
->=20
->> I read the early
->> patches again, and I think they make the membarrier code worse, not
->> better.
->=20
-> Mathieu and I disagree, so we are at an impasse.
-
-Well actually not really, I went and cut out the exit_lazy_tlb stuff
-from the patch series, those are better to be untangled anyway. I think=20
-an earlier version had something in exit_lazy_tlb for the mm refcounting=20
-change but it's not required now anyway.
-
-I'll split them out and just work on the shoot lazies series for now, I
-might revisit exit_lazy_tlb after the dust settles from that and the
-current membarrier changes. I'll test and repost shortly.
+This is another rebase, on top of mainline now (don't need the
+asm-generic tree), and without any x86 or membarrier changes.
+This makes the series far smaller and more manageable and
+without the controversial bits.
 
 Thanks,
 Nick
+
+Nicholas Piggin (5):
+  lazy tlb: introduce lazy mm refcount helper functions
+  lazy tlb: allow lazy tlb mm switching to be configurable
+  lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+  powerpc: use lazy mm refcount helper functions
+  powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
+
+ arch/Kconfig                         | 30 ++++++++++
+ arch/arm/mach-rpc/ecard.c            |  2 +-
+ arch/powerpc/Kconfig                 |  1 +
+ arch/powerpc/kernel/smp.c            |  2 +-
+ arch/powerpc/mm/book3s64/radix_tlb.c |  4 +-
+ fs/exec.c                            |  4 +-
+ include/linux/sched/mm.h             | 20 +++++++
+ kernel/cpu.c                         |  2 +-
+ kernel/exit.c                        |  2 +-
+ kernel/fork.c                        | 52 ++++++++++++++++
+ kernel/kthread.c                     | 11 ++--
+ kernel/sched/core.c                  | 88 ++++++++++++++++++++--------
+ kernel/sched/sched.h                 |  4 +-
+ 13 files changed, 184 insertions(+), 38 deletions(-)
+
+-- 
+2.23.0
+
