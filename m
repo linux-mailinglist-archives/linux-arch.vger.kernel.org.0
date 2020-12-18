@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7FF2DE581
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A36A2DE58A
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729633AbgLRPBm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Dec 2020 10:01:42 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:49413 "EHLO
+        id S1730065AbgLRPB7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 10:01:59 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:47809 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729275AbgLRPBj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:39 -0500
+        with ESMTP id S1729477AbgLRPBk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:40 -0500
 Received: from orion.localdomain ([95.115.54.243]) by mrelayeu.kundenserver.de
  (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MWzwP-1kb8we1aC9-00XHi6; Fri, 18 Dec 2020 15:58:29 +0100
+ 1MkYLW-1kN2HB06hi-00m5Az; Fri, 18 Dec 2020 15:58:31 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -33,24 +33,24 @@ Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH 16/23] arch: alpha: use generic irq error counter
-Date:   Fri, 18 Dec 2020 15:57:39 +0100
-Message-Id: <20201218145746.24205-17-info@metux.net>
+Subject: [PATCH 17/23] arch: arm: use generic irq error counter
+Date:   Fri, 18 Dec 2020 15:57:40 +0100
+Message-Id: <20201218145746.24205-18-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201218145746.24205-1-info@metux.net>
 References: <20201218145746.24205-1-info@metux.net>
-X-Provags-ID: V03:K1:BuNrPAZ8tbuJ9DpLqCoSNcPTN/hg43SyGKZ7eDkFT4x21CSANOt
- 4hcjC06gI4HWH5v5ZsEzDCT15f5Rj/vp6FEoZFpl/DH+6C2ikAEkDtUYMrSznSxMWkulDKM
- Iwmz6I+i3+cwf/bGfKY05IeD9m/hg50aFp2nT05L6bkARAhhVSPj1VrgoNOkZm8KIfYI6qQ
- 9Si7xQ4qT7aXFEzDE4dcQ==
+X-Provags-ID: V03:K1:AjFm0NQX4XGWjyVKhyjtZ1ZxUGz/lh2upIhOiUCFgeJbZo7FO3J
+ ApYOcFCC2Ri1tGjWSPZdSk7VNenlE4o9jfmJ+2RHlqSe/5C2HIoMcNR9GDGXy7Q9kQgvd4V
+ 4oRrXgZf6iKQdDk74H0e8/Q0nxn6RdGaEBxfhR8l2zFpuaK/QonjA3URoYKwB7zYaU5I01L
+ 7cTTnCiK6H87mMC4yXtfg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:68PyTn5wFp0=:umFv8Fu/HJdYPCRN4Cb4Gt
- 2jgHCCIsuIddZvW12vAxH96qUL9Eyt7Igp7Ffu3szeWGb7KjjMNaH6tZreF3ed2qIc6c3uGEr
- wrJQgA0vIddh2bEVwXG9rRmq7ZETJjI/pk5ldZV79p8rXhNWUzZhvKmx1no2TNwHAhgJjQkPy
- wDX97zxd+aRuL+Dg+9InwvtMHyK9FZVZXCAV/O5Zw4nI4/8L9jJgunpJ0pljKFGoqnkEsMzL8
- J0F6kmrBBr1A55GTACOqaVotuj51oFLP4rH4a1wACDEA4OBo469eHaRuCzSkAjSow70UoYAuK
- kHNAFPOBBk+nYlWcm9iX1UD+NH79zOD2kkHeHg+FvnYpdc2MMWNZfA2G2ZkMcK8PfXnR3CLKE
- aS3QDNLOvOR3qD4GoCGVkNCe7byyZohlTPhQlYvKJMVtvBSY8CzhgI818DjSN
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uVWcVyq5qYY=:UP5+aqEIPGTarWR6GLJxWa
+ YER39udKzjc+XwiqREKAzRUz4PfZJonGREGXqFoezLJHS9WE4SxlakRMtUGvi8j9HX6sQhrJ5
+ dEXDkHanmHj5ADOH0CBrU0S5izAPFQs62NMKZ3FPSwmTl9bH09oKXIP+W/7bLU7h/+TKtrTDu
+ jW/eHjXWEvDfFXLbqOI/hEVUVO+v4tXuNADnGmeTnMICUZJG/kZj6uT39GVXuLenxur8J/mkP
+ xRdFph7OhbZOFLafDuWmdMZaH7jtDqxljkvV8l9f4w41BcoTZkcGGFixNoqLDnVTIl8Hr26uJ
+ biBxxbLRjJ5f5FNxIX7n7RKJtwn2XwXG2/6ypE8ZwybNi7chl1KpFyvndc073eSBd7lBE4p7N
+ UZKpzGZoJVmjWJhRME+yu3mN+7n6L11bG8iOdieZ3CSIJIMakcpolS/558K+x
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -60,143 +60,103 @@ by all callers of ack_bad_irq(), in order to remove duplicate code.
 
 Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 ---
- arch/alpha/include/asm/hardirq.h |  3 ---
- arch/alpha/include/asm/hw_irq.h  |  2 --
- arch/alpha/kernel/irq.c          | 12 +++---------
- arch/alpha/kernel/irq_alpha.c    |  5 +++--
- arch/alpha/kernel/perf_event.c   |  6 +++---
- 5 files changed, 9 insertions(+), 19 deletions(-)
+ arch/arm/include/asm/hardirq.h  | 2 +-
+ arch/arm/include/asm/hw_irq.h   | 6 ------
+ arch/arm/kernel/irq.c           | 6 ++----
+ drivers/irqchip/irq-omap-intc.c | 5 ++---
+ 4 files changed, 5 insertions(+), 14 deletions(-)
 
-diff --git a/arch/alpha/include/asm/hardirq.h b/arch/alpha/include/asm/hardirq.h
-index 5ce5b34e8a1a..0bbc9947e364 100644
---- a/arch/alpha/include/asm/hardirq.h
-+++ b/arch/alpha/include/asm/hardirq.h
-@@ -2,9 +2,6 @@
- #ifndef _ALPHA_HARDIRQ_H
- #define _ALPHA_HARDIRQ_H
+diff --git a/arch/arm/include/asm/hardirq.h b/arch/arm/include/asm/hardirq.h
+index 706efafbf972..d9ae8998240d 100644
+--- a/arch/arm/include/asm/hardirq.h
++++ b/arch/arm/include/asm/hardirq.h
+@@ -5,7 +5,7 @@
+ #include <asm/irq.h>
  
--void ack_bad_irq(unsigned int irq);
+ #define __ARCH_IRQ_EXIT_IRQS_DISABLED	1
 -#define ack_bad_irq ack_bad_irq
--
++#define ack_bad_irq(irq)
+ 
  #include <asm-generic/hardirq.h>
  
- #endif /* _ALPHA_HARDIRQ_H */
-diff --git a/arch/alpha/include/asm/hw_irq.h b/arch/alpha/include/asm/hw_irq.h
-index e2d81ac0d934..0be79f3a6cae 100644
---- a/arch/alpha/include/asm/hw_irq.h
-+++ b/arch/alpha/include/asm/hw_irq.h
-@@ -2,8 +2,6 @@
- #ifndef _ALPHA_HW_IRQ_H
- #define _ALPHA_HW_IRQ_H
+diff --git a/arch/arm/include/asm/hw_irq.h b/arch/arm/include/asm/hw_irq.h
+index 5305c7e33aee..adbbeb11b930 100644
+--- a/arch/arm/include/asm/hw_irq.h
++++ b/arch/arm/include/asm/hw_irq.h
+@@ -5,12 +5,6 @@
+ #ifndef _ARCH_ARM_HW_IRQ_H
+ #define _ARCH_ARM_HW_IRQ_H
  
--
--extern volatile unsigned long irq_err_count;
- DECLARE_PER_CPU(unsigned long, irq_pmi_count);
- 
- #ifdef CONFIG_ALPHA_GENERIC
-diff --git a/arch/alpha/kernel/irq.c b/arch/alpha/kernel/irq.c
-index c1980eea75a6..2b7dad83e0dc 100644
---- a/arch/alpha/kernel/irq.c
-+++ b/arch/alpha/kernel/irq.c
-@@ -25,18 +25,12 @@
- #include <linux/seq_file.h>
- #include <linux/profile.h>
- #include <linux/bitops.h>
--
-+#include <asm-generic/irq-err.h>
- #include <asm/io.h>
- #include <linux/uaccess.h>
- 
--volatile unsigned long irq_err_count;
- DEFINE_PER_CPU(unsigned long, irq_pmi_count);
- 
--void ack_bad_irq(unsigned int irq)
+-static inline void ack_bad_irq(int irq)
 -{
+-	extern unsigned long irq_err_count;
 -	irq_err_count++;
 -}
 -
- #ifdef CONFIG_SMP 
- static char irq_user_affinity[NR_IRQS];
+ #define ARCH_IRQ_INIT_FLAGS	(IRQ_NOREQUEST | IRQ_NOPROBE)
  
-@@ -79,7 +73,7 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 	for_each_online_cpu(j)
- 		seq_printf(p, "%10lu ", per_cpu(irq_pmi_count, j));
- 	seq_puts(p, "          Performance Monitoring\n");
--	seq_printf(p, "ERR: %10lu\n", irq_err_count);
-+	seq_printf(p, "ERR: %10lu\n", irq_err_get());
+ #endif
+diff --git a/arch/arm/kernel/irq.c b/arch/arm/kernel/irq.c
+index 698b6f636156..72c3b8ce74db 100644
+--- a/arch/arm/kernel/irq.c
++++ b/arch/arm/kernel/irq.c
+@@ -32,7 +32,7 @@
+ #include <linux/kallsyms.h>
+ #include <linux/proc_fs.h>
+ #include <linux/export.h>
+-
++#include <asm-generic/irq-err.h>
+ #include <asm/hardware/cache-l2x0.h>
+ #include <asm/hardware/cache-uniphier.h>
+ #include <asm/outercache.h>
+@@ -41,8 +41,6 @@
+ #include <asm/mach/irq.h>
+ #include <asm/mach/time.h>
+ 
+-unsigned long irq_err_count;
+-
+ int arch_show_interrupts(struct seq_file *p, int prec)
+ {
+ #ifdef CONFIG_FIQ
+@@ -51,7 +49,7 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ #ifdef CONFIG_SMP
+ 	show_ipi_list(p, prec);
+ #endif
+-	seq_printf(p, "%*s: %10lu\n", prec, "Err", irq_err_count);
++	seq_printf(p, "%*s: %10lu\n", prec, "Err", irq_err_get());
  	return 0;
  }
  
-@@ -109,7 +103,7 @@ handle_irq(int irq)
- 	
- 	if (!desc || ((unsigned) irq > ACTUAL_NR_IRQS &&
- 	    illegal_count < MAX_ILLEGAL_IRQS)) {
--		irq_err_count++;
-+		irq_err_inc();
- 		illegal_count++;
- 		printk(KERN_CRIT "device_interrupt: invalid interrupt %d\n",
- 		       irq);
-diff --git a/arch/alpha/kernel/irq_alpha.c b/arch/alpha/kernel/irq_alpha.c
-index d17e44c99df9..3b6373cf73d9 100644
---- a/arch/alpha/kernel/irq_alpha.c
-+++ b/arch/alpha/kernel/irq_alpha.c
-@@ -13,6 +13,7 @@
- #include <asm/dma.h>
- #include <asm/perf_event.h>
- #include <asm/mce.h>
-+#include <asm-generic/irq-err.h>
- 
- #include "proto.h"
- #include "irq_impl.h"
-@@ -30,7 +31,7 @@ EXPORT_SYMBOL(__min_ipl);
- static void
- dummy_perf(unsigned long vector, struct pt_regs *regs)
- {
--	irq_err_count++;
-+	irq_err_inc();
- 	printk(KERN_CRIT "Performance counter interrupt!\n");
- }
- 
-@@ -60,7 +61,7 @@ do_entInt(unsigned long type, unsigned long vector,
- 		handle_ipi(regs);
- 		return;
- #else
--		irq_err_count++;
-+		irq_err_inc();
- 		printk(KERN_CRIT "Interprocessor interrupt? "
- 		       "You must be kidding!\n");
- #endif
-diff --git a/arch/alpha/kernel/perf_event.c b/arch/alpha/kernel/perf_event.c
-index e7a59d927d78..d855cece7bb1 100644
---- a/arch/alpha/kernel/perf_event.c
-+++ b/arch/alpha/kernel/perf_event.c
-@@ -16,7 +16,7 @@
- #include <linux/kdebug.h>
- #include <linux/mutex.h>
+diff --git a/drivers/irqchip/irq-omap-intc.c b/drivers/irqchip/irq-omap-intc.c
+index d360a6eddd6d..2682c6e814c2 100644
+--- a/drivers/irqchip/irq-omap-intc.c
++++ b/drivers/irqchip/irq-omap-intc.c
+@@ -15,7 +15,7 @@
  #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
 -
 +#include <asm-generic/irq-err.h>
- #include <asm/hwrpb.h>
- #include <linux/atomic.h>
- #include <asm/irq.h>
-@@ -823,7 +823,7 @@ static void alpha_perf_event_irq_handler(unsigned long la_ptr,
- 	/* la_ptr is the counter that overflowed. */
- 	if (unlikely(la_ptr >= alpha_pmu->num_pmcs)) {
- 		/* This should never occur! */
--		irq_err_count++;
-+		irq_err_inc();
- 		pr_warn("PMI: silly index %ld\n", la_ptr);
- 		wrperfmon(PERFMON_CMD_ENABLE, cpuc->idx_mask);
- 		return;
-@@ -846,7 +846,7 @@ static void alpha_perf_event_irq_handler(unsigned long la_ptr,
+ #include <asm/exception.h>
+ #include <linux/irqchip.h>
+ #include <linux/irqdomain.h>
+@@ -328,7 +328,6 @@ static int __init omap_init_irq(u32 base, struct device_node *node)
+ static asmlinkage void __exception_irq_entry
+ omap_intc_handle_irq(struct pt_regs *regs)
+ {
+-	extern unsigned long irq_err_count;
+ 	u32 irqnr;
  
- 	if (unlikely(!event)) {
- 		/* This should never occur! */
+ 	irqnr = intc_readl(INTC_SIR);
+@@ -351,7 +350,7 @@ omap_intc_handle_irq(struct pt_regs *regs)
+ 	 */
+ 	if (unlikely((irqnr & SPURIOUSIRQ_MASK) == SPURIOUSIRQ_MASK)) {
+ 		pr_err_once("%s: spurious irq!\n", __func__);
 -		irq_err_count++;
 +		irq_err_inc();
- 		pr_warn("PMI: No event at index %d!\n", idx);
- 		wrperfmon(PERFMON_CMD_ENABLE, cpuc->idx_mask);
+ 		omap_ack_irq(NULL);
  		return;
+ 	}
 -- 
 2.11.0
 
