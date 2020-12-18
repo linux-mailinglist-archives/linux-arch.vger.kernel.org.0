@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A66C2DE441
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 15:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5952DE4B3
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 15:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728246AbgLROfW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Dec 2020 09:35:22 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:58097 "EHLO
+        id S1728119AbgLROgX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 09:36:23 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:38775 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728090AbgLROfT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 09:35:19 -0500
+        with ESMTP id S1727662AbgLROfQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 09:35:16 -0500
 Received: from orion.localdomain ([95.115.54.243]) by mrelayeu.kundenserver.de
  (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1Mc02Z-1kERs31cCN-00dZVM; Fri, 18 Dec 2020 15:31:56 +0100
+ 1MD9Kj-1kzJDr1AGX-0099IA; Fri, 18 Dec 2020 15:31:58 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -33,24 +33,24 @@ Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH 08/23] arch: powerpc: drop misleading warning on spurious IRQ
-Date:   Fri, 18 Dec 2020 15:31:07 +0100
-Message-Id: <20201218143122.19459-9-info@metux.net>
+Subject: [PATCH 09/23] arch: s390: drop misleading warning on spurious IRQ
+Date:   Fri, 18 Dec 2020 15:31:08 +0100
+Message-Id: <20201218143122.19459-10-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201218143122.19459-1-info@metux.net>
 References: <20201218143122.19459-1-info@metux.net>
-X-Provags-ID: V03:K1:961O0xhqjt06JiBAQ8Yncab4D353QPKNLI0x7+d8iArc+FX9JJc
- 0fYjZ1qnDNl4kr3Aekh/iVsP+OGXI1qqwH32vJEuKlfCSjqCn9YE13jC6MEjNSaajNcbOvw
- t7/ZFEBBowcuZjc5pvaIr454zwTWgvpLVJwAzTfwLuLhbouuyN43H6ItJWuM9l2Mp/fqA2O
- hYFPkEMktMx8l6+KWzxHA==
+X-Provags-ID: V03:K1:+Fk5XG1M51DsDMqllxhuk9QMdwKM8nFiYzagO2Q/2cSgAuejovr
+ dtmISK1c/qztd4178uEaymF5uh/0I6XlA2Tqnyx7Bfb0v6ONN47Yqppdl3VTdau8eLZW2Uv
+ /pHid2mGQ+3dMXHd9bKt92Duo1y1rPLeQr5rGle5B4uBkwH7iz9s0bsnzCRdN3jFBUhSf/r
+ +0OdIMQ80t8v/+o43h3+A==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rmyd5L+c8oo=:af1DwGEi2rqk8/XvBYK887
- Qc0FMsYeXbJ44alPx5v/X6YbB6kQrzzJzD+BOwatOt6U/VcQ7ccBHRIz0ddrI1NFDknST0W30
- yrXcKQg6D1oa41C+DY0PG8k82fCE6yE0VVnC8nvwBukc9ERNvNyyqm2vUOSERsg/ImRDRK6/v
- ovwMqhJu0aS9KLrm3VCnyB3M1UrWmK2OV0vA1MdFDISYcfVveeO6gsySzzBl1V01Q3yfCFkpf
- CLOPUMg8i7ywroK5iGwC3G/GsQ/CJsDgwu2Uz5j6to+hhIZ35tBExY7flR1DvF4N8L9hTqVgK
- FxmyUF9bQFsZAVu5URE92FPVB8UGH+fpcnEdFw0J1lryWJp8ClH7NRgAMMR/agS7mQE+ENfIT
- +HBZTVYR2NI9F5zQ8qAC/Fo7eUachb1YeZDE5FlSG/Sjax16/Y4MuROWJM7CH
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Z2f4lndISjI=:zHUd/iqf0O3qag8NkEcoBz
+ x4x9TA7Ovp04jopysG/BlFtt1L5oIEmvskqof0AHt9vQMAKkztiscW5ztKv8l1IPCHM4FRUK7
+ ob3aoPzcMvd0E5ijhnPp1qaioD3QFkMaBe+oev+iwsti2I965xNEIIOKQakRqrgwN7V2zYzBB
+ 8XgP9bUY+3Tiv6CMn8DT42WJvWvHPiqPqpw8bGh8YBe9MMOekLpBZz6OTOzdFxDgJdyVlkxMc
+ Woo6ULY0pjIcEj/2+3mzbmDNZrNjx4xo4WB6FTNIsI5UvulnLwvmYxAQR8juEJf6ShH7cGcxY
+ kk6tE44rK5SWHHMaqfK5sZEBFToA3VUjtPeCZxjWMfyLWLVp6UOq4BJ74AXDFlPs57qLm8Xbb
+ uH6PiWBNvirOZkAb5kUMzlHPjSXYR1xgbCzp2pBMri5zdtt3HN0eVFGqhHnrw
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -67,15 +67,15 @@ we just don't need to duplicate this in each single arch. So just drop it.
 
 Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 ---
- arch/powerpc/include/asm/hardirq.h | 5 +----
+ arch/s390/include/asm/hardirq.h | 5 +----
  1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/hardirq.h b/arch/powerpc/include/asm/hardirq.h
-index f133b5930ae1..4138193c2367 100644
---- a/arch/powerpc/include/asm/hardirq.h
-+++ b/arch/powerpc/include/asm/hardirq.h
-@@ -27,10 +27,7 @@ DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
- #define __ARCH_IRQ_STAT
+diff --git a/arch/s390/include/asm/hardirq.h b/arch/s390/include/asm/hardirq.h
+index dfbc3c6c0674..56d95fcb310a 100644
+--- a/arch/s390/include/asm/hardirq.h
++++ b/arch/s390/include/asm/hardirq.h
+@@ -21,9 +21,6 @@
+ #define __ARCH_HAS_DO_SOFTIRQ
  #define __ARCH_IRQ_EXIT_IRQS_DISABLED
  
 -static inline void ack_bad_irq(unsigned int irq)
@@ -84,8 +84,7 @@ index f133b5930ae1..4138193c2367 100644
 -}
 +#define ack_bad_irq(irq)
  
- extern u64 arch_irq_stat_cpu(unsigned int cpu);
- #define arch_irq_stat_cpu	arch_irq_stat_cpu
+ #endif /* __ASM_HARDIRQ_H */
 -- 
 2.11.0
 
