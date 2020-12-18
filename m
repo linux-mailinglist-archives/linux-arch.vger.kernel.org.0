@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2632DE5D3
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56252DE5C7
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728582AbgLRPB1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Dec 2020 10:01:27 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:44499 "EHLO
+        id S1728162AbgLRPCZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 10:02:25 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:45487 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgLRPB0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:26 -0500
+        with ESMTP id S1728730AbgLRPBa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:30 -0500
 Received: from orion.localdomain ([95.115.54.243]) by mrelayeu.kundenserver.de
  (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MQ6C0-1kUE7V11ge-00M2E7; Fri, 18 Dec 2020 15:58:17 +0100
+ 1N4hex-1k7pjp3to7-011gFY; Fri, 18 Dec 2020 15:58:19 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -33,26 +33,26 @@ Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH 09/23] arch: s390: drop misleading warning on spurious IRQ
-Date:   Fri, 18 Dec 2020 15:57:32 +0100
-Message-Id: <20201218145746.24205-10-info@metux.net>
+Subject: [PATCH 10/23] arch: sh: drop misleading warning on spurious IRQ
+Date:   Fri, 18 Dec 2020 15:57:33 +0100
+Message-Id: <20201218145746.24205-11-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201218145746.24205-1-info@metux.net>
 References: <20201218145746.24205-1-info@metux.net>
-X-Provags-ID: V03:K1:QEAmA5iKAY7yb6fpx739pkgHqKb//azl6Ie4ED83yqgmc8uzz78
- je0zJbCosnMbIWEiXz8jt+KbDWZXeuggHKDVT2W8jxEfaVb6Dj85q+aDZ0eG+C5z3C7yTQJ
- zHjuLDxxS3QYN/9impytgSfa9fXOrYPqa3SB4neTbcKQOvRpaTdzr5iqb/+5WQpFAU9o+Ha
- SEyQbLyqZlBbYk6p+/IjQ==
+X-Provags-ID: V03:K1:n12oP3JSFdzHbdPHfGLc/eyYhy99xvRd/Zl5J0TLtYnt5jRmItv
+ iBoKqGJzKtE1cptmOrCYFnpxsT2kddEHwQF+M+hdBpwplwB8LieM/+oZLoePAQ1Jbo8ZNUK
+ WvZWJRmTU8H7efFxfvGQDAgF/VzmaZFVYYVXPIucMwQtPBZB18ir086XAMcctmg0knXV+nh
+ XJAYldaOgDjpgd+dswptQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YV3sSSFnJq0=:YZVk0tQ3J+WnmWr/Pu0Pm1
- 7SOKrhIwQrQMJPSefezvPQve2Pi0TFI7iW56s+zi1RtaEzCrb9S8aIKjRZdrtJH/6M9cDLbTt
- OyCjUYsHiUYU07uV56uXxP/7KQsSNztjn2ponpcQOguphmvQlkrbsDBUnt2pSzZm3SNmOKeUN
- Ajjq1Cl9aGow14Ychv31B1uCtcuUfeFK0pR48KmA7P1VFrwoXey4a+rTaQ5cP+reHLyhV+jC6
- 3sWgxHQaoQs7iSJEAvZpUH/WD1gDagDqYWSdl9HgX7wGphIEj2ebmhHSRydFR7QyoSiFUfIF8
- vupQd0MUMVFKtUFPM5cDaoQ6ThXrFaZbtCLXCOLvbJPpxD5EuNUcNX9er3gaJ5cd+gMS7d4av
- 6ZXR4YirUjnR9RP0tlYLITw0YDmLKN/tSfVS2Yys7jMaN5hKjEdeWFAm3nBi7sDNoeQKP0dLB
- NDGqie0ThRtnt/wBlAreQg0mK3Ip3+U9h49dECSG2tvEFMnTYEPAcwMhqbziOCYZ+mvsGdGGS
- twE+rsC0hFMVmkoqwYuazc=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HjWPrqnCh9g=:nWXKZzOD/GGnb7cDBprLO6
+ ltg75MxwEjQU6yee9vlY+d0VqCWO3tEvvA5MwKZg6SKMyexKOYIREKI5Kp71yRtBpIWjN+j7f
+ sH8FtAzk+AHl5eAaONphhT/ihtKttLsgoqoDQ0Jv4Tzqtq3GMXompZ/rwxwJ3UREY5RvAQg4t
+ GxwMHPuRcSE31pQ+FmeYTBTETpmHcB2zkdBjDfSHCzwUkF9iVw+w4MftOE23kbKIiKVfr0IA4
+ Jd2PrwrS5E+YbwHtFxfL54dgMVF1V8lItNBerRHGFs1iVwiKF/yqcwZ29wnzw16hIZcWRdi9T
+ PSjDgJD7APPGIotv/zHmUNTD3xOapj4yXPzDi4sKcbNrC9UeNyn/PZRLXJJSFWgW0CDxWj1WZ
+ lkFvc3qffLVHibMSlRKfcnbdJwMJ7Xjts6XNamB6l2a4y0RWLv+aRPfk/2dxH7kVRIpO+Wlqu
+ e8w9kgL7YOxE6hH/FNlmzdSXRxw4tOLSPJcHgrhXuphsfEXP8PNQ5QL6KEvH3PCi2mkk80ebH
+ Zq6rOqLGBYfsv6bh4zUwZE=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -69,24 +69,21 @@ we just don't need to duplicate this in each single arch. So just drop it.
 
 Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 ---
- arch/s390/include/asm/hardirq.h | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ arch/sh/kernel/irq.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/s390/include/asm/hardirq.h b/arch/s390/include/asm/hardirq.h
-index dfbc3c6c0674..56d95fcb310a 100644
---- a/arch/s390/include/asm/hardirq.h
-+++ b/arch/s390/include/asm/hardirq.h
-@@ -21,9 +21,6 @@
- #define __ARCH_HAS_DO_SOFTIRQ
- #define __ARCH_IRQ_EXIT_IRQS_DISABLED
+diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
+index ab5f790b0cd2..c14a142efe60 100644
+--- a/arch/sh/kernel/irq.c
++++ b/arch/sh/kernel/irq.c
+@@ -31,7 +31,6 @@ atomic_t irq_err_count;
+ void ack_bad_irq(unsigned int irq)
+ {
+ 	atomic_inc(&irq_err_count);
+-	printk("unexpected IRQ trap at vector %02x\n", irq);
+ }
  
--static inline void ack_bad_irq(unsigned int irq)
--{
--	printk(KERN_CRIT "unexpected IRQ trap at vector %02x\n", irq);
--}
-+#define ack_bad_irq(irq)
- 
- #endif /* __ASM_HARDIRQ_H */
+ #if defined(CONFIG_PROC_FS)
 -- 
 2.11.0
 
