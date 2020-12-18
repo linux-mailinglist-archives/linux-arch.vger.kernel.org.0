@@ -2,127 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 354082DE563
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB482DE707
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729275AbgLRPBn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Dec 2020 10:01:43 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:38499 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgLRPBn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:43 -0500
-Received: from orion.localdomain ([95.115.54.243]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MXGes-1kaJzo1mqk-00Yf1R; Fri, 18 Dec 2020 15:58:34 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, msalter@redhat.com, jacquiot.aurelien@gmail.com,
-        gerg@linux-m68k.org, geert@linux-m68k.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        tglx@linutronix.de, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        maz@kernel.org, tony@atomide.com, arnd@arndb.de,
-        linux-alpha@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 19/23] arch: c6x: use generic irq error counter
-Date:   Fri, 18 Dec 2020 15:57:42 +0100
-Message-Id: <20201218145746.24205-20-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201218145746.24205-1-info@metux.net>
-References: <20201218145746.24205-1-info@metux.net>
-X-Provags-ID: V03:K1:vGxAbbeZY4OEgvOO7MYiKmDZBDY60quvsSjppUQCMRjagdSkOZ8
- ydkb3jUw1Lyn17JCeP/6k4+TqopM4qU1u6GcFgQQxcfzxRZ1My3C4c9VypwnijkEKg6TS0H
- yVy/RbRMfZmz8LOVqZxbqkRmrY5j854jH7TOuqcn0rLrYfZ+sOLf82j2aqwcE+ql1Y6Xrt3
- vpKfIhWW4REXCGcZ2VJOw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XqgpVchyEE4=:YfHTOR4ZwcuZgE0r+kH/gB
- MnZZDfS38xi8T78o6xqRorG2Of+3B0SvDxkxuJcbYF67XLmsfJKSEK9lSLOQExXUbNkEpbG3C
- q4qDZMR6BK4N0DXeY1JhMC+eWYf3ibfDVP8o1Gvnp0So19Mw+VmVSsjOLVI5Wz0rHHmsTst9j
- upnd5iT4m0hQ6az76D6IgKZ4c2KHI96HleQ64QpYAzwRwwUjCOM4lN0fPEu3/9ZDZ6IDsJZNb
- g+VGcOpfKZvyhZmOV3cyTWhwbUfo3JkSAvuc+zGrJeSvkHJAJA5SP5B3aCPuVqpPf3c4+A1qU
- yrFYlt2jq6KpPhqajAE5BRMMUv1B69rIdivA9h57YuvnTCl2byNNRDKwKYiTKIgf7ODPhTwnF
- A7vwknLG88D7u32kCc94EGty/dOHzCb1QwLlb10XCLOmbAEsmiOdjcj9bjqR6
+        id S1727053AbgLRP4r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 10:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725797AbgLRP4r (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:56:47 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28006C0617A7;
+        Fri, 18 Dec 2020 07:56:07 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id n16so1591298pgm.0;
+        Fri, 18 Dec 2020 07:56:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=abkacR5EtfH7n3c7FX6aX1PPXUx2EG3knfWGOF7I8KQ=;
+        b=CBfVYlZ7drbVWtqD4bM3rkW3OWAqtTHQ4tOTswiI8hMNopfxOrNSevY5aJbqvp0mM5
+         TCt5A9KlDha/typLUMvAinFqZihBhKDs4BnfOvsBgN1UEuOfn2IctSX1c7RAJE00PX2w
+         n7klcFUYA8+Wh03OFueMg42mGZ0RkQcUL9Og1KFLwVu3sptluQTtOKanGWeSuBQ6+cvG
+         IQarphsJdlgszUZ2XFgxxcoIxIFcXYZtA7DiUUAY+OhzWh0reHMzfpVaZ6Tbo/44jQMr
+         d42Q7DDFcqvQMmrXsNBpvMeT3nysS6sMGtm6mQ7XQdIwUbkG3/ZAqQL4skrB49QcSHxQ
+         YUtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=abkacR5EtfH7n3c7FX6aX1PPXUx2EG3knfWGOF7I8KQ=;
+        b=c/cqZzY4wqpKKkqKdHgyX4S3xg6deNWnLSVFQPtsPb8AwR6RuB6RLa4ecouD90os4O
+         2GSt6P1LZRf220aaKYHUfUL6uhmoAYRT9Sh0c0/uawl0vUDAgeZAHgx9NZpFYBwwMVFF
+         FQ0jrU1k6+AdenjeO4qLaNid17eDP4yISZn1oPo6GFjECc7VsCTtf57JW4dSpcTMLMBr
+         5eA6b5vEe+wEvdKELJElYKm8zXuPJP04ZgWm++vjzow4//9TH9BSyY2s1ElUNkXvnV7H
+         mUF1Twguozcq4Rk24I0wICZ6xIO9Uh781mcprCN3Dfu4b3rPsCaudi7nruYhdcQawAxB
+         7/aw==
+X-Gm-Message-State: AOAM532YaV5M8Qr692GEUlIfNqCbePWCm9v0zqJPzG0ljVRW99BXhYiu
+        Kh5JCfLCUEQnfPiiKTGXqN9dY/gnFJMQfoTE5fM=
+X-Google-Smtp-Source: ABdhPJx7CKHKNahHF7wOhrRaWmRijCkWWyTNv/8H9aIqR6dzxIZFoFPjsHMLJGY+VN1uh1mCeWPnu3uWBQAXjL7LLn4=
+X-Received: by 2002:a63:b1e:: with SMTP id 30mr4683229pgl.203.1608306966654;
+ Fri, 18 Dec 2020 07:56:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20201218143122.19459-1-info@metux.net> <20201218143122.19459-2-info@metux.net>
+In-Reply-To: <20201218143122.19459-2-info@metux.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 18 Dec 2020 17:55:50 +0200
+Message-ID: <CAHp75VfYz_K2BYOxqmSx0q+1F2F9Lp1eb70RrNYzJHs3FX+quQ@mail.gmail.com>
+Subject: Re: [PATCH 01/23] kernel: irq: irqdescs: warn on spurious IRQ
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, msalter@redhat.com,
+        jacquiot.aurelien@gmail.com, gerg@linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
+        linux-c6x-dev@linux-c6x.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>, linux-s390@vger.kernel.org,
+        Linux-SH <linux-sh@vger.kernel.org>, sparclinux@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use the newly introduced irq error counter, that's already maintained
-by all callers of ack_bad_irq(), in order to remove duplicate code.
+On Fri, Dec 18, 2020 at 4:37 PM Enrico Weigelt, metux IT consult
+<info@metux.net> wrote:
 
-Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
----
- arch/c6x/include/asm/hardirq.h |  3 ---
- arch/c6x/include/asm/irq.h     |  2 --
- arch/c6x/kernel/irq.c          | 11 ++---------
- 3 files changed, 2 insertions(+), 14 deletions(-)
+> +               if (printk_ratelimit())
+> +                       pr_warn("spurious IRQ: irq=%d hwirq=%d nr_irqs=%d\n",
+> +                               irq, hwirq, nr_irqs);
 
-diff --git a/arch/c6x/include/asm/hardirq.h b/arch/c6x/include/asm/hardirq.h
-index f37d07d31040..f70f6113e53a 100644
---- a/arch/c6x/include/asm/hardirq.h
-+++ b/arch/c6x/include/asm/hardirq.h
-@@ -9,9 +9,6 @@
- #ifndef _ASM_C6X_HARDIRQ_H
- #define _ASM_C6X_HARDIRQ_H
- 
--extern void ack_bad_irq(int irq);
--#define ack_bad_irq ack_bad_irq
--
- #include <asm-generic/hardirq.h>
- 
- #endif /* _ASM_C6X_HARDIRQ_H */
-diff --git a/arch/c6x/include/asm/irq.h b/arch/c6x/include/asm/irq.h
-index 9da4d1afd0d7..f42c5747c3ee 100644
---- a/arch/c6x/include/asm/irq.h
-+++ b/arch/c6x/include/asm/irq.h
-@@ -45,6 +45,4 @@ struct pt_regs;
- 
- extern asmlinkage void c6x_do_IRQ(unsigned int prio, struct pt_regs *regs);
- 
--extern unsigned long irq_err_count;
--
- #endif /* _ASM_C6X_IRQ_H */
-diff --git a/arch/c6x/kernel/irq.c b/arch/c6x/kernel/irq.c
-index b9f7cfa2ed21..9f9d798925de 100644
---- a/arch/c6x/kernel/irq.c
-+++ b/arch/c6x/kernel/irq.c
-@@ -21,12 +21,10 @@
- #include <linux/of_irq.h>
- #include <linux/interrupt.h>
- #include <linux/kernel_stat.h>
--
-+#include <asm-generic/irq-err.h>
- #include <asm/megamod-pic.h>
- #include <asm/special_insns.h>
- 
--unsigned long irq_err_count;
--
- static DEFINE_RAW_SPINLOCK(core_irq_lock);
- 
- static void mask_core_irq(struct irq_data *data)
-@@ -114,13 +112,8 @@ void __init init_IRQ(void)
- 	set_creg(ICR, 0xfff0);
- }
- 
--void ack_bad_irq(int irq)
--{
--	irq_err_count++;
--}
--
- int arch_show_interrupts(struct seq_file *p, int prec)
- {
--	seq_printf(p, "%*s: %10lu\n", prec, "Err", irq_err_count);
-+	seq_printf(p, "%*s: %10lu\n", prec, "Err", irq_err_get());
- 	return 0;
- }
+Perhaps you missed pr_warn_ratelimit() macro which is already in the
+kernel for a long time.
+
 -- 
-2.11.0
-
+With Best Regards,
+Andy Shevchenko
