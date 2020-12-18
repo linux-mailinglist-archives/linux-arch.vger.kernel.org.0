@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B152DE489
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 15:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383982DE471
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 15:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbgLROf7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Dec 2020 09:35:59 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:36429 "EHLO
+        id S1728564AbgLROfm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 09:35:42 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:48969 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbgLROfV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 09:35:21 -0500
+        with ESMTP id S1728196AbgLROfX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 09:35:23 -0500
 Received: from orion.localdomain ([95.115.54.243]) by mrelayeu.kundenserver.de
  (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MKsaz-1kVhVj3qdZ-00LDZe; Fri, 18 Dec 2020 15:32:15 +0100
+ 1MO9qz-1kSO7t2hRp-00OXUo; Fri, 18 Dec 2020 15:32:16 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -33,24 +33,24 @@ Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH 18/23] arch: arm64: use generic irq error counter
-Date:   Fri, 18 Dec 2020 15:31:17 +0100
-Message-Id: <20201218143122.19459-19-info@metux.net>
+Subject: [PATCH 19/23] arch: c6x: use generic irq error counter
+Date:   Fri, 18 Dec 2020 15:31:18 +0100
+Message-Id: <20201218143122.19459-20-info@metux.net>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20201218143122.19459-1-info@metux.net>
 References: <20201218143122.19459-1-info@metux.net>
-X-Provags-ID: V03:K1:ztAWgZI6xXIfs5hYABBMduPYxgBBPoOn3rTgKXCVjuQRy90ITLt
- Kg8k1YgqROrNsUA/RyLZJBzZVI3ZD2zezon+kPruX0g7F21+kdHyFQBv2S1Ck+zsXTj1H0m
- /BRMIKeXSwSpOj7tOcC2/xNNtF4ZZHCgr4LHlae/yPoEZlwrECyZ3alMstYrejssMsxs1Ny
- 6EQOPvdu2hC5uMp1enYzA==
+X-Provags-ID: V03:K1:bUKbPuD/IE863dGqQP/aUVD3gMjanOmJq5smfk4HYWrMLwZeTSB
+ k45+tw0yA/1Jgzwos83k90orLCs83aroaMpeBB39uP1uMMStvQ9QhtXMH4BYz0IipHOkY0v
+ kH2GQ3WJCiarTYQXG5Q2sadZG2E46xZvuqbjZ+YUOPphysIBTTbyIiz3i3rbydpQdeWrHaA
+ LVhGNnbvccZshL+Bhd3sQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Qd7gra9QKvU=:O3jAGv/c5nlZ9E1xiuVgIk
- I/ROuH1PlRfC/WrQnnVjkPgr48uJhGUs7PhqJrDCP4BZ7svz+H8cFCnoO2qKASLLVdZHp/JdD
- VdC0OmwMj2BnLqdOCiobtrS3RVOdzl940UD3oVWN487csDRsWTQ2UO39aAcVPD7XmQxJ1DVUi
- A6tB+zOj2ZCmwIFtkDpXNdVTUqi1lvAZA0DctLKqrlxVTNOVGSwOuLuLziGW4/Yil5+BivZFe
- ce/U2cXBCqEnBZxzfOHXp9ubtzOiBXFGtiVHr4CG9A/lFXvcerxsZEuApO8vUj6+Rg7f+FowC
- Ic7l7LAYUWOJ3Hm+9/0UsiOnt0iOPdXzrfQ0sEc8YmI5bbS+r9TYGLdfpzOw24Pm8evwda6DG
- ciSq2XP5sWHyCQt/mDsjjemlN2Uu6RiGXg1++FaAB32SN3jJZ93zYxKEySUBl
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vf+aytBGJWs=:r2eZwHED7IQmg6gl03ucQ8
+ l/17rxJDH3Q0EehshvVMk0IPYVvjvVR1C65/GN46yrjD3HCMOP/rrIcikwR5HIgVGjphssKtc
+ o1lv+fPa0+Hc94H5Hrr/VIr7xmqV3jwm/vnqCzDlsUPvneuBzmfR3qpEB8UAYM1h9ScjXoC2l
+ MKQTwfAiMlD7plZW+Ee/8vfC1criUczadakTuunPoNaWsDY1eyC+81GByepRkc1iQUKybJcMl
+ ZfT5eVrVcfhx4kg56Z6SbUPfyHAapCnNNYUJo0WSq16JFSLA6qZunWCcuhqFj0NJmHWstMF+B
+ 1mDqxGu7XYmAbhrPklXsi0ZwpczbVtKfKbBJMPT4YOecjG+Y3G6ewvh1UD6PrIxn5E5d54uln
+ v2eQWiQMuctBB13Iev8txxMZUc5iK4R0+3okQnQhFKSsiqpo7859MSe15Do6+
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -60,66 +60,69 @@ by all callers of ack_bad_irq(), in order to remove duplicate code.
 
 Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 ---
- arch/arm64/include/asm/hardirq.h | 9 ++-------
- arch/arm64/kernel/smp.c          | 6 ++----
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ arch/c6x/include/asm/hardirq.h |  3 ---
+ arch/c6x/include/asm/irq.h     |  2 --
+ arch/c6x/kernel/irq.c          | 11 ++---------
+ 3 files changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/arch/arm64/include/asm/hardirq.h b/arch/arm64/include/asm/hardirq.h
-index cbfa7b6f2e09..760922571084 100644
---- a/arch/arm64/include/asm/hardirq.h
-+++ b/arch/arm64/include/asm/hardirq.h
-@@ -13,7 +13,8 @@
- #include <asm/kvm_arm.h>
- #include <asm/sysreg.h>
+diff --git a/arch/c6x/include/asm/hardirq.h b/arch/c6x/include/asm/hardirq.h
+index f37d07d31040..f70f6113e53a 100644
+--- a/arch/c6x/include/asm/hardirq.h
++++ b/arch/c6x/include/asm/hardirq.h
+@@ -9,9 +9,6 @@
+ #ifndef _ASM_C6X_HARDIRQ_H
+ #define _ASM_C6X_HARDIRQ_H
  
+-extern void ack_bad_irq(int irq);
 -#define ack_bad_irq ack_bad_irq
-+#define ack_bad_irq(irq)
-+
+-
  #include <asm-generic/hardirq.h>
  
- #define __ARCH_IRQ_EXIT_IRQS_DISABLED	1
-@@ -85,10 +86,4 @@ do {									\
- 		write_sysreg(___hcr, hcr_el2);				\
- } while (0)
+ #endif /* _ASM_C6X_HARDIRQ_H */
+diff --git a/arch/c6x/include/asm/irq.h b/arch/c6x/include/asm/irq.h
+index 9da4d1afd0d7..f42c5747c3ee 100644
+--- a/arch/c6x/include/asm/irq.h
++++ b/arch/c6x/include/asm/irq.h
+@@ -45,6 +45,4 @@ struct pt_regs;
  
--static inline void ack_bad_irq(unsigned int irq)
--{
--	extern unsigned long irq_err_count;
--	irq_err_count++;
--}
+ extern asmlinkage void c6x_do_IRQ(unsigned int prio, struct pt_regs *regs);
+ 
+-extern unsigned long irq_err_count;
 -
- #endif /* __ASM_HARDIRQ_H */
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index 2499b895efea..0edc565ea735 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -33,7 +33,7 @@
+ #endif /* _ASM_C6X_IRQ_H */
+diff --git a/arch/c6x/kernel/irq.c b/arch/c6x/kernel/irq.c
+index b9f7cfa2ed21..9f9d798925de 100644
+--- a/arch/c6x/kernel/irq.c
++++ b/arch/c6x/kernel/irq.c
+@@ -21,12 +21,10 @@
+ #include <linux/of_irq.h>
+ #include <linux/interrupt.h>
  #include <linux/kernel_stat.h>
- #include <linux/kexec.h>
- #include <linux/kvm_host.h>
 -
 +#include <asm-generic/irq-err.h>
- #include <asm/alternative.h>
- #include <asm/atomic.h>
- #include <asm/cacheflush.h>
-@@ -798,8 +798,6 @@ static const char *ipi_types[NR_IPI] __tracepoint_string = {
- 
- static void smp_cross_call(const struct cpumask *target, unsigned int ipinr);
+ #include <asm/megamod-pic.h>
+ #include <asm/special_insns.h>
  
 -unsigned long irq_err_count;
 -
+ static DEFINE_RAW_SPINLOCK(core_irq_lock);
+ 
+ static void mask_core_irq(struct irq_data *data)
+@@ -114,13 +112,8 @@ void __init init_IRQ(void)
+ 	set_creg(ICR, 0xfff0);
+ }
+ 
+-void ack_bad_irq(int irq)
+-{
+-	irq_err_count++;
+-}
+-
  int arch_show_interrupts(struct seq_file *p, int prec)
  {
- 	unsigned int cpu, i;
-@@ -813,7 +811,7 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 		seq_printf(p, "      %s\n", ipi_types[i]);
- 	}
- 
 -	seq_printf(p, "%*s: %10lu\n", prec, "Err", irq_err_count);
 +	seq_printf(p, "%*s: %10lu\n", prec, "Err", irq_err_get());
  	return 0;
  }
- 
 -- 
 2.11.0
 
