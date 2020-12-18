@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 610872DE60B
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002CA2DE608
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 16:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726057AbgLRPBP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Dec 2020 10:01:15 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:60003 "EHLO
+        id S1728100AbgLRPBO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 10:01:14 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:46187 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgLRPBP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:15 -0500
+        with ESMTP id S1726057AbgLRPBN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Dec 2020 10:01:13 -0500
 Received: from orion.localdomain ([95.115.54.243]) by mrelayeu.kundenserver.de
  (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N5FtF-1k7Hmp0Rxl-0118Hm; Fri, 18 Dec 2020 15:58:02 +0100
+ 1MxV4T-1jsyRe3BBR-00xr1G; Fri, 18 Dec 2020 15:58:03 +0100
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
@@ -33,65 +33,55 @@ Cc:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: (repost) cleaning up handling of bad IRQs
-Date:   Fri, 18 Dec 2020 15:57:23 +0100
-Message-Id: <20201218145746.24205-1-info@metux.net>
+Subject: [PATCH 01/23] kernel: irq: irqdescs: warn on spurious IRQ
+Date:   Fri, 18 Dec 2020 15:57:24 +0100
+Message-Id: <20201218145746.24205-2-info@metux.net>
 X-Mailer: git-send-email 2.11.0
-X-Provags-ID: V03:K1:kDy23KicY6yANCRUU/uS27W+PiA6W2GQEJc1w+ZgwWxEjEL6wp+
- O8q9sjFQjB+V0eXbRSVHReMrDSfLKWhKYaglZe/mGoKnGo+tKe78BIINCtGjVGRkQlVCPRT
- E0zs050IDCFNASTif7ntcdtcNCuqqIz4boa/lWXOWWv6+2VsptoinSFPTn2gbyoldCF3WLk
- LPxaYtQibJh05k9ukhkIw==
+In-Reply-To: <20201218145746.24205-1-info@metux.net>
+References: <20201218145746.24205-1-info@metux.net>
+X-Provags-ID: V03:K1:sNvhDkhkHXSckZsIcYNRvhSxb4brkTcSkjpsXzG++3eNb3snJ0g
+ J9Qv02uTs0nLp3/Ko4ksdZTvqxTqsz/VJHyYyKuCFEMndBxaiM7R6Nof8j/9Bc9v3uf5xpe
+ 63QhWeMZuMwyVcEvebQIrDokrsdpA8FvkxHUgTyntRUgah4L5gvEw4KA3yYR+yPnDkLUVC3
+ 8MNk6k5JHeB3igb+vXtww==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WqNj1TBcidE=:gp0GmOgW/MpqQGs+zxKh6i
- I0088aGoSzOIfC95i/SEDZNYBUDmgwLa8n4SXmJkOmu/GGWNmsBGg/Xf8yNQt9k/hZG1GWXPN
- xEBtNhEWsGOydmRhKc+SGqkOJt1MGEphhCucm67oCLQxZfaAVCyV1LE8fm4EHrJROazGyYjEq
- lH16F/3XvcljV+pCYiqIoRjM6+oypx0etdtwnLgAZmNyA9S6WTF37Yqa3INS1S7FwBDy3Kbkw
- IcBnm6E0VHQ4OPHXxABvAk2oIndJOeCt+tf9gc9//r1GcOSb4BYRCbTjQKkvol7Zx++hrz8D9
- ayJibSTe5nhuLcL+SN4HlKtWfuz6RmVjv6c/fDlR3j/qL/eB03XvQh9FCZg3jiwKfX5w6bpnL
- fTy0MG7FyqXlq0+laGULoIs9JiSUAXz4NDEYbZiUPQeKZN9i2edp69JRiVoBK
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9PanUVZdncQ=:ruo0TGsTgyRzC2TD10Yg7n
+ tmilzgQTchCUSCtJB+uJD3tGAJPZ9rwFCJr6cZE5MH5SbA2m0AOTtj8oqqDNWs8cLtj8MBzny
+ OhaA/tPgAr4XHJ3zLyN+a0GPhlRq80gQgL+Ir6o8L7/nzU8QaaUASC4VwN+2lsvHJnbu/dD2E
+ 9D88ErzP/g7tyF5JbwFxJzVax960xo3H+WX5YZFCZY+Xcj+4xol4bg6k52Ta6nTcF3SzEjyHC
+ ikW+qSf4SJlMh7T8archj1wmz3XI/Y3jh3j8E9P9Uzw5ETe/syz3q2DMAcV1VplhWFe+b6f6E
+ xxspiEAqDYUOfrIIQhqv6q9qB51Wdw+U8KHXfmVbQvQSu23IvSIptkF+o6GiMZ74cbRjOBudF
+ mpN2jme8ZtPkVAXOogvV4r9jproDuTrmcbv3Eh6uWCxvZnez2YLonKGvYn2my
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello friends,
+Add a warning on spurious IRQs to __handle_domain_irq(), also telling the
+linux IRQ number (if any), the hw IRQ number and the max nr of IRQs.
 
- << reposting, since first queue didn't go through completely, due to mailer problem >>
+That's far more informative than the warnings in (some of) the individual
+arch's ack_bad_irq()'s. These aren't really helpful since either the
+other callers already had printed more detailed information or (when called
+by __handle_domain_irq()) the printout just doesn't tell anything useful.
 
-here's a patch queue for cleaning up the IRQ handling. Inspired by a
-discussion we had on a previous patch of mine:
+Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+---
+ kernel/irq/irqdesc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-    "arch: fix 'unexpected IRQ trap at vector' warnings"
-    https://www.spinics.net/lists/kernel/msg3763137.html
-
-Turned out that the whole message, as it is right now, doesn't make much
-sense at at all - not just incorrect wording, but also not quite useful
-information. And the whole ack_bad_irq() thing deserves a cleanup anyways.
-
-So, I've had a closer look and came to these conclusions:
-
-1. The warning message doesn't need to be duplicated in the per architecture
-   ack_bad_irq() functions. All, but one callers already do their own warning.
-   Thus just adding a pr_warn() call there, printing out more useful data
-   like the hardware IRQ number, and dropping all warnings from all the
-   ack_bad_irq() functions.
-
-2. Many of the ack_bad_irq()'s count up the spurious interrupts - lots of
-   duplications over the various archs. Some of them using atomic_t, some
-   just plain ints. Consolidating this by introducing a global counter
-   with inline'd accessors and doing the upcounting in the (currently 3)
-   call sites of ack_bad_irq(). After that, step by step changing all
-   archs to use the new counter.
-
-3. For all but one arch (x86), ack_bad_irq() became a no-op.
-
-   On x86, it's just a call to ack_APIC_irq(), in order to prevent lockups
-   when IRQs missed to be ack'ed on the APIC. Could we perhaps do this in
-   some better place ? In that case, ack_bad_irq() could easily be removed
-   entirely.
-
-have fun,
-
---mtx
-
-
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index e810eb9906ea..62a381351775 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -681,6 +681,9 @@ int __handle_domain_irq(struct irq_domain *domain, unsigned int hwirq,
+ 	 * than crashing, do something sensible.
+ 	 */
+ 	if (unlikely(!irq || irq >= nr_irqs)) {
++		if (printk_ratelimit())
++			pr_warn("spurious IRQ: irq=%d hwirq=%d nr_irqs=%d\n",
++				irq, hwirq, nr_irqs);
+ 		ack_bad_irq(irq);
+ 		ret = -EINVAL;
+ 	} else {
+-- 
+2.11.0
 
