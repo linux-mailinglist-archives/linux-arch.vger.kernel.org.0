@@ -2,115 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB2D2DD38C
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Dec 2020 16:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935A22DE3AC
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Dec 2020 15:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgLQPBj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Dec 2020 10:01:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:40786 "EHLO foss.arm.com"
+        id S1725775AbgLROIs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Dec 2020 09:08:48 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:19929 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728086AbgLQPBj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 17 Dec 2020 10:01:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A48130E;
-        Thu, 17 Dec 2020 07:00:53 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F036B3F66B;
-        Thu, 17 Dec 2020 07:00:50 -0800 (PST)
-Date:   Thu, 17 Dec 2020 15:00:48 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Quentin Perret <qperret@google.com>, Tejun Heo <tj@kernel.org>,
-        Li Zefan <lizefan@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com
-Subject: Re: [PATCH v5 07/15] cpuset: Don't use the cpu_possible_mask as a
- last resort for cgroup v1
-Message-ID: <20201217150048.d6enq5hhchvh32hz@e107158-lin.cambridge.arm.com>
-References: <20201208132835.6151-1-will@kernel.org>
- <20201208132835.6151-8-will@kernel.org>
- <20201217121552.ds7g2icvqp5nvtha@e107158-lin.cambridge.arm.com>
- <20201217134401.GY3040@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201217134401.GY3040@hirez.programming.kicks-ass.net>
+        id S1725535AbgLROIs (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 18 Dec 2020 09:08:48 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4Cy9gL3Ck1z9txvg;
+        Fri, 18 Dec 2020 15:07:58 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 5Ndh04yO9aS3; Fri, 18 Dec 2020 15:07:58 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4Cy9gL1tj2z9txvB;
+        Fri, 18 Dec 2020 15:07:58 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B41FD8B783;
+        Fri, 18 Dec 2020 15:07:59 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ynTuRuN7N3DG; Fri, 18 Dec 2020 15:07:59 +0100 (CET)
+Received: from po17688vm.idsi0.si.c-s.fr (unknown [192.168.204.43])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5C2E88B75F;
+        Fri, 18 Dec 2020 15:07:59 +0100 (CET)
+Received: by po17688vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id F030266868; Fri, 18 Dec 2020 14:07:58 +0000 (UTC)
+Message-Id: <320d7a9ed7b379a6e0edf16d539bc22447272e65.1608299993.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH] mm: Remove arch_remap() and mm-arch-hooks.h
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Date:   Fri, 18 Dec 2020 14:07:58 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/17/20 14:44, Peter Zijlstra wrote:
-> On Thu, Dec 17, 2020 at 12:15:52PM +0000, Qais Yousef wrote:
-> > On 12/08/20 13:28, Will Deacon wrote:
-> > > If the scheduler cannot find an allowed CPU for a task,
-> > > cpuset_cpus_allowed_fallback() will widen the affinity to cpu_possible_mask
-> > > if cgroup v1 is in use.
-> > > 
-> > > In preparation for allowing architectures to provide their own fallback
-> > > mask, just return early if we're not using cgroup v2 and allow
-> > > select_fallback_rq() to figure out the mask by itself.
-> > > 
-> > > Cc: Li Zefan <lizefan@huawei.com>
-> > > Cc: Tejun Heo <tj@kernel.org>
-> > > Cc: Johannes Weiner <hannes@cmpxchg.org>
-> > > Reviewed-by: Quentin Perret <qperret@google.com>
-> > > Signed-off-by: Will Deacon <will@kernel.org>
-> > > ---
-> > >  kernel/cgroup/cpuset.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> > > index 57b5b5d0a5fd..e970737c3ed2 100644
-> > > --- a/kernel/cgroup/cpuset.c
-> > > +++ b/kernel/cgroup/cpuset.c
-> > > @@ -3299,9 +3299,11 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
-> > >  
-> > >  void cpuset_cpus_allowed_fallback(struct task_struct *tsk)
-> > >  {
-> > > +	if (!is_in_v2_mode())
-> > > +		return; /* select_fallback_rq will try harder */
-> > > +
-> > >  	rcu_read_lock();
-> > > -	do_set_cpus_allowed(tsk, is_in_v2_mode() ?
-> > > -		task_cs(tsk)->cpus_allowed : cpu_possible_mask);
-> > > +	do_set_cpus_allowed(tsk, task_cs(tsk)->cpus_allowed);
-> > 
-> > Why is it safe to return that for cpuset v2?
-> 
-> v1
-> 
-> Because in that case it does cpu_possible_mask, which, if you look at
-> select_fallback_rq(), is exactly what happens when cpuset 'fails' to
-> find a candidate.
-> 
-> Or at least, that's how I read the patch.
+powerpc was the last provider of arch_remap() and the last
+user of mm-arch-hooks.h.
 
-Okay I can see that if v2 has effectively empty mask for the 32bit tasks, then
-we'll fallback to the 'possible' switch case where we set
-task_cpu_possible_mask().
+Since commit 526a9c4a7234 ("powerpc/vdso: Provide vdso_remap()"),
+arch_remap() hence mm-arch-hooks.h are not used anymore.
 
-But how about when task_cs(tsk)->cpus_allowed contains partially invalid cpus?
+Remove them.
 
-The search for a candidate cpu will return a correct dest_cpu, but the actual
-cpu_mask of the task will contain invalid cpus that could be picked up later,
-no? Shouldn't we
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/um/include/asm/Kbuild          |  1 -
+ include/asm-generic/Kbuild          |  1 -
+ include/asm-generic/mm-arch-hooks.h | 16 ----------------
+ include/linux/mm-arch-hooks.h       | 22 ----------------------
+ mm/mremap.c                         |  3 ---
+ 5 files changed, 43 deletions(-)
+ delete mode 100644 include/asm-generic/mm-arch-hooks.h
+ delete mode 100644 include/linux/mm-arch-hooks.h
 
-	cpumask_and(mask, task_cs(tsk)->cpus_allowed, task_cpu_possible_mask())
+diff --git a/arch/um/include/asm/Kbuild b/arch/um/include/asm/Kbuild
+index 1c63b260ecc4..314979467db1 100644
+--- a/arch/um/include/asm/Kbuild
++++ b/arch/um/include/asm/Kbuild
+@@ -14,7 +14,6 @@ generic-y += irq_regs.h
+ generic-y += irq_work.h
+ generic-y += kdebug.h
+ generic-y += mcs_spinlock.h
+-generic-y += mm-arch-hooks.h
+ generic-y += mmiowb.h
+ generic-y += module.lds.h
+ generic-y += param.h
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index 4365b9aa3e3f..e867eb3058d5 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -34,7 +34,6 @@ mandatory-y += kmap_size.h
+ mandatory-y += kprobes.h
+ mandatory-y += linkage.h
+ mandatory-y += local.h
+-mandatory-y += mm-arch-hooks.h
+ mandatory-y += mmiowb.h
+ mandatory-y += mmu.h
+ mandatory-y += mmu_context.h
+diff --git a/include/asm-generic/mm-arch-hooks.h b/include/asm-generic/mm-arch-hooks.h
+deleted file mode 100644
+index 5ff0e5193f85..000000000000
+--- a/include/asm-generic/mm-arch-hooks.h
++++ /dev/null
+@@ -1,16 +0,0 @@
+-/*
+- * Architecture specific mm hooks
+- */
+-
+-#ifndef _ASM_GENERIC_MM_ARCH_HOOKS_H
+-#define _ASM_GENERIC_MM_ARCH_HOOKS_H
+-
+-/*
+- * This file should be included through arch/../include/asm/Kbuild for
+- * the architecture which doesn't need specific mm hooks.
+- *
+- * In that case, the generic hooks defined in include/linux/mm-arch-hooks.h
+- * are used.
+- */
+-
+-#endif /* _ASM_GENERIC_MM_ARCH_HOOKS_H */
+diff --git a/include/linux/mm-arch-hooks.h b/include/linux/mm-arch-hooks.h
+deleted file mode 100644
+index 9c4bedc95504..000000000000
+--- a/include/linux/mm-arch-hooks.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Generic mm no-op hooks.
+- *
+- * Copyright (C) 2015, IBM Corporation
+- * Author: Laurent Dufour <ldufour@linux.vnet.ibm.com>
+- */
+-#ifndef _LINUX_MM_ARCH_HOOKS_H
+-#define _LINUX_MM_ARCH_HOOKS_H
+-
+-#include <asm/mm-arch-hooks.h>
+-
+-#ifndef arch_remap
+-static inline void arch_remap(struct mm_struct *mm,
+-			      unsigned long old_start, unsigned long old_end,
+-			      unsigned long new_start, unsigned long new_end)
+-{
+-}
+-#define arch_remap arch_remap
+-#endif
+-
+-#endif /* _LINUX_MM_ARCH_HOOKS_H */
+diff --git a/mm/mremap.c b/mm/mremap.c
+index c5590afe7165..e43696a91260 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -22,7 +22,6 @@
+ #include <linux/syscalls.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/uaccess.h>
+-#include <linux/mm-arch-hooks.h>
+ #include <linux/userfaultfd_k.h>
+ 
+ #include <asm/cacheflush.h>
+@@ -560,8 +559,6 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 		new_addr = err;
+ 	} else {
+ 		mremap_userfaultfd_prep(new_vma, uf);
+-		arch_remap(mm, old_addr, old_addr + old_len,
+-			   new_addr, new_addr + new_len);
+ 	}
+ 
+ 	/* Conceal VM_ACCOUNT so old reservation is not undone */
+-- 
+2.25.0
 
-to remove those invalid cpus?
-
-Thanks
-
---
-Qais Yousef
