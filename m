@@ -2,15 +2,15 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF8C2DF5CE
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Dec 2020 16:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461BB2DF5EA
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Dec 2020 16:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727655AbgLTPNS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Dec 2020 10:13:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39318 "EHLO mail.kernel.org"
+        id S1727672AbgLTPkK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Dec 2020 10:40:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44856 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727590AbgLTPNS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 20 Dec 2020 10:13:18 -0500
+        id S1727667AbgLTPkK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 20 Dec 2020 10:40:10 -0500
 From:   guoren@kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     guoren@kernel.org, arnd@arndb.de
@@ -20,8 +20,8 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         Arnd Bergmann <arnd@kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
 Subject: [PATCH v2 1/5] csky: Remove custom asm/atomic.h implementation
-Date:   Sun, 20 Dec 2020 15:12:22 +0000
-Message-Id: <1608477146-60070-1-git-send-email-guoren@kernel.org>
+Date:   Sun, 20 Dec 2020 15:39:19 +0000
+Message-Id: <1608478763-60148-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
