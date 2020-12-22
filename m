@@ -2,125 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A97BA2DFAD2
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Dec 2020 11:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002242E04B9
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Dec 2020 04:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgLUKIT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Dec 2020 05:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S1726112AbgLVDZk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Dec 2020 22:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725804AbgLUKIS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Dec 2020 05:08:18 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E6FC061793;
-        Mon, 21 Dec 2020 02:07:38 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id g1so8376138ilk.7;
-        Mon, 21 Dec 2020 02:07:38 -0800 (PST)
+        with ESMTP id S1726108AbgLVDZk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Dec 2020 22:25:40 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405A0C0613D3;
+        Mon, 21 Dec 2020 19:25:00 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id v3so6687033plz.13;
+        Mon, 21 Dec 2020 19:25:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qMI1qb6jm5Lag9GLrKzNd8c/nLzIAunUnseb/Ze4wwk=;
-        b=TNketNi86VoSW7yUCz1xJ0TySRbiCNnk6lgZVPNFHRq1Z0hYh2gKvfrjKM7LrvZdfw
-         RQePP3CI0izt8okVH5i0MDqzLe17kJ+gYsfp1t+Ps8IwCEHGQkv7O3PSU8DKD3ZNNffG
-         /JlM0O2eWxUHvRwz8qee/+LJwONqHO0lDu8V6J4W8M+AzN/jgGfMEfd8saM3jRp+ynNl
-         yyNQ52YpnwxSo70pHdjSzvzY1s3U8IilByiBPR9JecD00QG9hEu5BbgRdRErCXzWs2gF
-         45fFo4tr95q3qQ6Y+q0mxPqCFls3IDtt7iuwAPe+p0gTlRoSBsbkFCIhsAdHSkhvZ6+r
-         94Mg==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=RaIPy33YYEHJBauFMKe6av1pPOpX7ysWVTHsmm1YmMM=;
+        b=ewOT59Q9HpQla5OCbUNuYsgXbMc8UhzAb+Znyajenyzz8BwWRCoAZgSTwmYWDMkF0W
+         5HMlPZgNEUaUqWG94oTI1QX/x2zNWvpyoFwdmJhNeWJr7ZEOb6v6q3os0P37EXZ+o9Cq
+         Nk54nLNx1tvUUNqyZcDmu5Z0eGsOzS+gRsbXlvkrLfFP2tOB5sdT3nO0kTrfpcLI2PWr
+         UjpRcZ4Z79RM2Ow9kDy1E463PuAByhGGXjmfrmszZO+NiMscBbvnLek9ylz2/nbuW+jy
+         QGMFJNginIEiJVPO5aUVK5hVnU7ALVWMrlu1PUPzFDECCwn6HGgXmagXgyAjOYYZiGno
+         zHUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qMI1qb6jm5Lag9GLrKzNd8c/nLzIAunUnseb/Ze4wwk=;
-        b=YYKLvGl49Km5hp+Bhy6/FVGJ+0Bs1nfjCqWnTl+18srqAkzbUwoRONQZ8fc0oxqVtK
-         K8zasPDI3EpqyiKJ7JGaqivlENoYT2EvhUaGwIeYGnvBldfIKZ4WQJDbI7dajvUJP+jU
-         I2Z1a/71m7Mmmx+UdTauIar3o5BA8H5IUXbnuH2FBrriA58Guqh/yOAQDj9MElWGkHxV
-         ls07dg3f9eF3pMIaOyGd9BmC0b5E3PzeeCtQoWQA/6vOiNpW6rUKLh15DgZa+/sCOyIs
-         2Gv6B683vv1YoKiiU12qLhDmnX9ZndeEtAZqd3BbVx8/yMcn9MrIxPn7osbk0X//571l
-         Mi3A==
-X-Gm-Message-State: AOAM532IJrq3cD4UeWGwIHg1XDotXF8tOTmhme06aQyNCMZoSIRSLQAl
-        SGAqA2+QLJQk0+1+TKBagaaq0zLivqz8H7DQHrQbPzj51EY=
-X-Google-Smtp-Source: ABdhPJxBtvImbDXQFJZFiuLU9iSSxkb054vusc68KLoVKz7M+YJaEYxx6P2xuo8zwNE89O9MkgEk4eONGxpDIef9SqA=
-X-Received: by 2002:a63:74b:: with SMTP id 72mr14619803pgh.4.1608542798518;
- Mon, 21 Dec 2020 01:26:38 -0800 (PST)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=RaIPy33YYEHJBauFMKe6av1pPOpX7ysWVTHsmm1YmMM=;
+        b=Ay8YPg8VD9AruaWeiMCd+wGO4grVkl1uvMrXkjqj2G1wZBcxm3zPyYBKd9c7AYR/4X
+         Shl/IaMtDFxvVPrmMThIMUYm2La3P9TwNbHiPcWg5v+p/0LKiKHGhDNGP7BPA0GfLdRi
+         z0BQTH1Yiw/KTmQ+nfeD/jWzpxpJRCeBf4/z+frbfZVZAsKTBifpjMKCo4XJqzaUHnao
+         V3VFBcZYRiJhnF90lv4X2U9Rnbxxj20oeIL4oZCWlB1wBTHmbC3wGsjJTLlKRzHQlqmf
+         kAz5zaBHPn3MzpQI+FUB6QVp81jqW9u0NoUOGOS57iRMXBk5GWPcWvEeF5QvKea/CeKX
+         jjTw==
+X-Gm-Message-State: AOAM530J91ixCtRoDFVtm86Yae0nfpGHG020fNDtiN7evH06ex0oiCpz
+        oUyqFWccQUZb7qHYdo1JBnc=
+X-Google-Smtp-Source: ABdhPJzkTvnjsHxReSw4V5fj0dM0Vu8lxpxM+IrNd8ypuWhbpX9Lip2Ep3vWvroEYcLFo35d/NhuoA==
+X-Received: by 2002:a17:902:778e:b029:da:feef:8f2d with SMTP id o14-20020a170902778eb02900dafeef8f2dmr19315658pll.25.1608607499815;
+        Mon, 21 Dec 2020 19:24:59 -0800 (PST)
+Received: from localhost (193-116-97-30.tpgi.com.au. [193.116.97.30])
+        by smtp.gmail.com with ESMTPSA id c23sm3432480pgc.72.2020.12.21.19.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Dec 2020 19:24:59 -0800 (PST)
+Date:   Tue, 22 Dec 2020 13:24:53 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v3 3/3] mm: optimise pte dirty/accessed bit setting by
+ demand based pte insertion
+To:     Hugh Dickins <hughd@google.com>
+Cc:     linux-mm@kvack.org, Bibo Mao <maobibo@loongson.cn>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Huang Pei <huangpei@loongson.cn>, linux-arch@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20201220045535.848591-1-npiggin@gmail.com>
+        <20201220045535.848591-4-npiggin@gmail.com>
+        <alpine.LSU.2.11.2012211000260.1880@eggly.anvils>
+In-Reply-To: <alpine.LSU.2.11.2012211000260.1880@eggly.anvils>
 MIME-Version: 1.0
-References: <20201218143122.19459-1-info@metux.net> <20201218143122.19459-2-info@metux.net>
- <CAHp75VfYz_K2BYOxqmSx0q+1F2F9Lp1eb70RrNYzJHs3FX+quQ@mail.gmail.com> <87ft3zyaqa.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87ft3zyaqa.fsf@mpe.ellerman.id.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Dec 2020 11:27:27 +0200
-Message-ID: <CAHp75VeGs-x0-XgpLS0uB2oZmxKZREfUKM1ByUwmRquqFc2FPg@mail.gmail.com>
-Subject: Re: [PATCH 01/23] kernel: irq: irqdescs: warn on spurious IRQ
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, msalter@redhat.com,
-        jacquiot.aurelien@gmail.com, gerg@linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>, linux-s390@vger.kernel.org,
-        Linux-SH <linux-sh@vger.kernel.org>, sparclinux@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1608606460.clzumasfvm.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 7:44 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> > On Fri, Dec 18, 2020 at 4:37 PM Enrico Weigelt, metux IT consult
-> > <info@metux.net> wrote:
-> >
-> >> +               if (printk_ratelimit())
-> >> +                       pr_warn("spurious IRQ: irq=%d hwirq=%d nr_irqs=%d\n",
-> >> +                               irq, hwirq, nr_irqs);
-> >
-> > Perhaps you missed pr_warn_ratelimit() macro which is already in the
-> > kernel for a long time.
->
-> pr_warn_ratelimited() which calls printk_ratelimited().
+Excerpts from Hugh Dickins's message of December 22, 2020 4:21 am:
+> Hi Nick,
+>=20
+> On Sun, 20 Dec 2020, Nicholas Piggin wrote:
+>=20
+>> Similarly to the previous patch, this tries to optimise dirty/accessed
+>> bits in ptes to avoid access costs of hardware setting them.
+>>=20
+>> This tidies up a few last cases where dirty/accessed faults can be seen,
+>> and subsumes the pte_sw_mkyoung helper -- it's not just architectures
+>> with explicit software dirty/accessed bits that take expensive faults to
+>> modify ptes.
+>>=20
+>> The vast majority of the remaining dirty/accessed faults on kbuild
+>> workloads after this patch are from NUMA migration, due to
+>> remove_migration_pte inserting old/clean ptes.
+>=20
+> Are you sure about this patch? It looks wrong to me: because isn't
+> _PAGE_ACCESSED (young) already included in the vm_page_prot __S001 etc?
+>=20
+> I haven't checked all instances below, but in general, that's why the
+> existing code tends not to bother to mkyoung, but does sometimes mkold
+> (admittedly confusing).
 
-I stand corrected.
-Right, that's what I had in mind (actually didn't know that there are variants).
+There might have been one or two cases where it didn't come directly
+from vm_page_prot, but it was a few rebases and updates ago. I did see
+one or two places where powerpc was taking faults. Good point though I=20
+can test again and see, and I might split the patch.
 
-Thanks!
+>=20
+> A quick check on x86 and powerpc looks like they do have _PAGE_ACCESSED
+> in there; and IIRC that's true, or ought to be true, of all architectures=
+.
+>=20
+> Maybe not mips, which I see you have singled out: I remember going round
+> this loop a few months ago with mips, where strange changes were being
+> proposed to compensate for not having that bit in their vm_page_prot.
+> I didn't follow through to see how that ended up, but I did suggest
+> mips needed to follow the same convention as the other architectures.
 
-> And see the comment above printk_ratelimit():
->
-> /*
->  * Please don't use printk_ratelimit(), because it shares ratelimiting state
->  * with all other unrelated printk_ratelimit() callsites.  Instead use
->  * printk_ratelimited() or plain old __ratelimit().
->  */
+Yeah the main thing is to try get all architectures doing the same thing
+and get rid of that sw_mkyoung too. Given the (Intel) x86 result of the
+heavy micro-fault, I don't think anybody is special and we should=20
+require them to follow the same behaviour unless it's proven that one
+needs something different.
 
+If we can get all arch to set accessed in vm_page_prot and get rid of=20
+most of these mkyoung()s then all the better. And it actually looks like
+MIPS may be changing direction:
 
--- 
-With Best Regards,
-Andy Shevchenko
+https://lore.kernel.org/linux-arch/20200919074731.22372-1-huangpei@loongson=
+.cn/
+
+What's the chances of that going upstream for the next merge window? It
+seems like the right thing to do.
+
+Thanks,
+Nick
