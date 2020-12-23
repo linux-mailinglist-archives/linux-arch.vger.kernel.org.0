@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B062E189F
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Dec 2020 06:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D7F2E189B
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Dec 2020 06:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726288AbgLWFsZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Dec 2020 00:48:25 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:51396 "EHLO
+        id S1726069AbgLWFrQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Dec 2020 00:47:16 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:50364 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725820AbgLWFsZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Dec 2020 00:48:25 -0500
+        with ESMTP id S1726642AbgLWFq6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Dec 2020 00:46:58 -0500
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BN5iSWU037119;
-        Wed, 23 Dec 2020 05:47:21 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BN5iGjp036950;
+        Wed, 23 Dec 2020 05:45:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=uZyfhnF6uZkcLYssq7N9Kl3pKCAbuk8pttMg2Yuj6zo=;
- b=Ms5JprMl24BB7fKQ6BIq4G1ovGu6X7279aeAgYqeTSKONtZUaKsqxQbwLw4BTCjlnO41
- iJEr+cYHOXa7Hc6JRZW0Z9JvCfedK4FmqpEu94aSYjw5RlUkdZEhyrhb/vYosygZ9HSC
- bCxD74MnCZjmF2zFRXS6WIt/64Yb+FgR0mjBqPLwRA9sVzMEf6sqAW8cP3pfu+NEnVkM
- IzbpT4IPDoq6kgzoQF9cJBa63uTl7VRyxT1dN2mkSOHYnkrL0b1zaZLn/oFJx3vvhEmD
- K9EkUK8UmGaJntk+v/2B17AuMyQlTgBUVhWyYoV17jhObD/lI8Fkl5bNcW9cysjDwS5u fg== 
+ bh=l4K3+soBf81ftAgup0L66Xd+MstErj6d8Xna4kpbme8=;
+ b=kC1wD5kJJWL7wfZmYsp+BFPltxMtYoC8Jp8oexH6OwS4tt7u49aINd+cVGmMgstHSl+r
+ U+j26TATYZcgwLr93xsR7VFFR+ORXUoTArDtEKMe+qhRXYMJiGvhkrXaBtzaV5bZmF3s
+ ss0YqspX8WFDLAbcmrSSBG8E1RoqOvppoYl2eO7mpHtC9CRP3kzEqlrrIksgQwGqqIqb
+ 7HidMBD+lDnGyinR8YBgXec3YsNhUA0Rs0rNqj5v1szwDxl7Xi3jd+X2xT8ihlQfVrMt
+ 15JEwRDy/QbNjUGmTZ+MzssEqSly5Uw4X5VcYi+JmiRo1ZCFpFktJdlol/XNtKdFGkm3 6A== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 35k0cw6bdg-1
+        by aserp2120.oracle.com with ESMTP id 35k0cw6baa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Dec 2020 05:47:21 +0000
+        Wed, 23 Dec 2020 05:45:21 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BN5fblu022295;
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0BN5fc48022684;
         Wed, 23 Dec 2020 05:45:20 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 35k0e2hnu0-1
+        by userp3020.oracle.com with ESMTP id 35k0e2hnu3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 23 Dec 2020 05:45:20 +0000
 Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BN5jCFW019012;
-        Wed, 23 Dec 2020 05:45:12 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0BN5jDpC019014;
+        Wed, 23 Dec 2020 05:45:13 GMT
 Received: from neelam.us.oracle.com (/10.152.128.16)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 22 Dec 2020 21:45:11 -0800
+        with ESMTP ; Tue, 22 Dec 2020 21:45:13 -0800
 From:   Alex Kogan <alex.kogan@oracle.com>
 To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
         will.deacon@arm.com, arnd@arndb.de, longman@redhat.com,
@@ -49,9 +49,9 @@ To:     linux@armlinux.org.uk, peterz@infradead.org, mingo@redhat.com,
         jglauber@marvell.com
 Cc:     steven.sistare@oracle.com, daniel.m.jordan@oracle.com,
         alex.kogan@oracle.com, dave.dice@oracle.com
-Subject: [PATCH v13 5/6] locking/qspinlock: Avoid moving certain threads between waiting queues in CNA
-Date:   Wed, 23 Dec 2020 00:44:54 -0500
-Message-Id: <20201223054455.1990884-6-alex.kogan@oracle.com>
+Subject: [PATCH v13 6/6] locking/qspinlock: Introduce the shuffle reduction optimization into CNA
+Date:   Wed, 23 Dec 2020 00:44:55 -0500
+Message-Id: <20201223054455.1990884-7-alex.kogan@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201223054455.1990884-1-alex.kogan@oracle.com>
 References: <20201223054455.1990884-1-alex.kogan@oracle.com>
@@ -72,92 +72,85 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Prohibit moving certain threads (e.g., in irq and nmi contexts)
-to the secondary queue. Those prioritized threads will always stay
-in the primary queue, and so will have a shorter wait time for the lock.
+This performance optimization chooses probabilistically to avoid moving
+threads from the main queue into the secondary one when the secondary queue
+is empty.
+
+It is helpful when the lock is only lightly contended. In particular, it
+makes CNA less eager to create a secondary queue, but does not introduce
+any extra delays for threads waiting in that queue once it is created.
 
 Signed-off-by: Alex Kogan <alex.kogan@oracle.com>
 Reviewed-by: Steve Sistare <steven.sistare@oracle.com>
 Reviewed-by: Waiman Long <longman@redhat.com>
 ---
- kernel/locking/qspinlock_cna.h | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+ kernel/locking/qspinlock_cna.h | 39 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/locking/qspinlock_cna.h b/kernel/locking/qspinlock_cna.h
-index d3e27549c769..ac3109ab0a84 100644
+index ac3109ab0a84..621399242735 100644
 --- a/kernel/locking/qspinlock_cna.h
 +++ b/kernel/locking/qspinlock_cna.h
-@@ -4,6 +4,7 @@
- #endif
+@@ -5,6 +5,7 @@
  
  #include <linux/topology.h>
-+#include <linux/sched/rt.h>
+ #include <linux/sched/rt.h>
++#include <linux/random.h>
  
  /*
   * Implement a NUMA-aware version of MCS (aka CNA, or compact NUMA-aware lock).
-@@ -35,7 +36,8 @@
-  * running on the same NUMA node. If it is not, that waiter is detached from the
-  * main queue and moved into the tail of the secondary queue. This way, we
-  * gradually filter the primary queue, leaving only waiters running on the same
-- * preferred NUMA node.
-+ * preferred NUMA node. Note that certain priortized waiters (e.g., in
-+ * irq and nmi contexts) are excluded from being moved to the secondary queue.
-  *
-  * We change the NUMA node preference after a waiter at the head of the
-  * secondary queue spins for a certain amount of time (10ms, by default).
-@@ -49,6 +51,8 @@
-  *          Dave Dice <dave.dice@oracle.com>
-  */
- 
-+#define CNA_PRIORITY_NODE      0xffff
-+
- struct cna_node {
- 	struct mcs_spinlock	mcs;
- 	u16			numa_node;
-@@ -121,9 +125,10 @@ static int __init cna_init_nodes(void)
- 
- static __always_inline void cna_init_node(struct mcs_spinlock *node)
- {
-+	bool priority = !in_task() || irqs_disabled() || rt_task(current);
- 	struct cna_node *cn = (struct cna_node *)node;
- 
--	cn->numa_node = cn->real_numa_node;
-+	cn->numa_node = priority ? CNA_PRIORITY_NODE : cn->real_numa_node;
- 	cn->start_time = 0;
+@@ -86,6 +87,34 @@ static inline bool intra_node_threshold_reached(struct cna_node *cn)
+ 	return current_time - threshold > 0;
  }
  
-@@ -262,11 +267,13 @@ static u32 cna_order_queue(struct mcs_spinlock *node)
- 	next_numa_node = ((struct cna_node *)next)->numa_node;
- 
- 	if (next_numa_node != numa_node) {
--		struct mcs_spinlock *nnext = READ_ONCE(next->next);
-+		if (next_numa_node != CNA_PRIORITY_NODE) {
-+			struct mcs_spinlock *nnext = READ_ONCE(next->next);
- 
--		if (nnext) {
--			cna_splice_next(node, next, nnext);
--			next = nnext;
-+			if (nnext) {
-+				cna_splice_next(node, next, nnext);
-+				next = nnext;
-+			}
- 		}
- 		/*
- 		 * Inherit NUMA node id of primary queue, to maintain the
-@@ -284,6 +291,13 @@ static __always_inline u32 cna_wait_head_or_lock(struct qspinlock *lock,
++/*
++ * Controls the probability for enabling the ordering of the main queue
++ * when the secondary queue is empty. The chosen value reduces the amount
++ * of unnecessary shuffling of threads between the two waiting queues
++ * when the contention is low, while responding fast enough and enabling
++ * the shuffling when the contention is high.
++ */
++#define SHUFFLE_REDUCTION_PROB_ARG  (7)
++
++/* Per-CPU pseudo-random number seed */
++static DEFINE_PER_CPU(u32, seed);
++
++/*
++ * Return false with probability 1 / 2^@num_bits.
++ * Intuitively, the larger @num_bits the less likely false is to be returned.
++ * @num_bits must be a number between 0 and 31.
++ */
++static bool probably(unsigned int num_bits)
++{
++	u32 s;
++
++	s = this_cpu_read(seed);
++	s = next_pseudo_random32(s);
++	this_cpu_write(seed, s);
++
++	return s & ((1 << num_bits) - 1);
++}
++
+ static void __init cna_init_nodes_per_cpu(unsigned int cpu)
+ {
+ 	struct mcs_spinlock *base = per_cpu_ptr(&qnodes[0].mcs, cpu);
+@@ -290,7 +319,15 @@ static __always_inline u32 cna_wait_head_or_lock(struct qspinlock *lock,
+ {
  	struct cna_node *cn = (struct cna_node *)node;
  
- 	if (!cn->start_time || !intra_node_threshold_reached(cn)) {
+-	if (!cn->start_time || !intra_node_threshold_reached(cn)) {
++	if (node->locked <= 1 && probably(SHUFFLE_REDUCTION_PROB_ARG)) {
 +		/*
-+		 * We are at the head of the wait queue, no need to use
-+		 * the fake NUMA node ID.
++		 * When the secondary queue is empty, skip the call to
++		 * cna_order_queue() with high probability. This optimization
++		 * reduces the overhead of unnecessary shuffling of threads
++		 * between waiting queues when the lock is only lightly contended.
 +		 */
-+		if (cn->numa_node == CNA_PRIORITY_NODE)
-+			cn->numa_node = cn->real_numa_node;
-+
++		cn->partial_order = LOCAL_WAITER_FOUND;
++	} else if (!cn->start_time || !intra_node_threshold_reached(cn)) {
  		/*
- 		 * Try and put the time otherwise spent spin waiting on
- 		 * _Q_LOCKED_PENDING_MASK to use by sorting our lists.
+ 		 * We are at the head of the wait queue, no need to use
+ 		 * the fake NUMA node ID.
 -- 
 2.24.3 (Apple Git-128)
 
