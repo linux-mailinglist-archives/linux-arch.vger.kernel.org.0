@@ -2,122 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46682E10F6
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Dec 2020 01:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645B42E1179
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Dec 2020 02:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgLWA5z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Dec 2020 19:57:55 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:46482 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726069AbgLWA5z (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 22 Dec 2020 19:57:55 -0500
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [196.245.9.36])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr8vWleJfyMEDAA--.4294S2;
-        Wed, 23 Dec 2020 08:57:02 +0800 (CST)
-Date:   Wed, 23 Dec 2020 08:56:52 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Hugh Dickins <hughd@google.com>, linux-mm@kvack.org,
-        Bibo Mao <maobibo@loongson.cn>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] mm: optimise pte dirty/accessed bit setting by
- demand based pte insertion
-Message-ID: <20201223005651.bviywoihdzzlm3z6@ambrosehua-HP-xw6600-Workstation>
-References: <20201220045535.848591-1-npiggin@gmail.com>
- <20201220045535.848591-4-npiggin@gmail.com>
- <alpine.LSU.2.11.2012211000260.1880@eggly.anvils>
- <1608606460.clzumasfvm.astroid@bobo.none>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1608606460.clzumasfvm.astroid@bobo.none>
-User-Agent: NeoMutt/20171215
-X-CM-TRANSID: AQAAf9Dxr8vWleJfyMEDAA--.4294S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw4xXr4fXFy5GrWxuFykZrb_yoW5XFyfpF
-        WrGan0yan8JF1xtw4Iyw17ZFySvrWfXFZ8XFn0gryjv39xWF97tr4I9ayY9FyDCr4kCa1j
-        vF13Xa4DZF4DuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyKb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkIecxEwVCF1wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUqEoXUUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S1726463AbgLWB6Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Dec 2020 20:58:16 -0500
+Received: from mga06.intel.com ([134.134.136.31]:49021 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726361AbgLWB6Q (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 22 Dec 2020 20:58:16 -0500
+IronPort-SDR: 6/5/hEI65WYj41wI9AjeK0K8Sw31TSmCAF0vpOJQa/wmDTtp2dTW2gDU5BAbvCW11Wku9+ytCj
+ 0ZI9gVN0ikSA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9843"; a="237508790"
+X-IronPort-AV: E=Sophos;i="5.78,440,1599548400"; 
+   d="scan'208";a="237508790"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 17:57:34 -0800
+IronPort-SDR: yKGf3adYatD3eoY0tuXwgz1+NJhRrMtTFTzMfHezOqij4PZBXBtISpD1hyJUM8IP5GEQlaQXYY
+ CdJHd91uQlVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,440,1599548400"; 
+   d="scan'208";a="457755715"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2020 17:57:33 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com
+Subject: [PATCH v3 0/4] x86: Improve Minimum Alternate Stack Size
+Date:   Tue, 22 Dec 2020 17:53:08 -0800
+Message-Id: <20201223015312.4882-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, 
-On Tue, Dec 22, 2020 at 01:24:53PM +1000, Nicholas Piggin wrote:
-> Excerpts from Hugh Dickins's message of December 22, 2020 4:21 am:
-> > Hi Nick,
-> > 
-> > On Sun, 20 Dec 2020, Nicholas Piggin wrote:
-> > 
-> >> Similarly to the previous patch, this tries to optimise dirty/accessed
-> >> bits in ptes to avoid access costs of hardware setting them.
-> >> 
-> >> This tidies up a few last cases where dirty/accessed faults can be seen,
-> >> and subsumes the pte_sw_mkyoung helper -- it's not just architectures
-> >> with explicit software dirty/accessed bits that take expensive faults to
-> >> modify ptes.
-> >> 
-> >> The vast majority of the remaining dirty/accessed faults on kbuild
-> >> workloads after this patch are from NUMA migration, due to
-> >> remove_migration_pte inserting old/clean ptes.
-> > 
-> > Are you sure about this patch? It looks wrong to me: because isn't
-> > _PAGE_ACCESSED (young) already included in the vm_page_prot __S001 etc?
-> > 
-> > I haven't checked all instances below, but in general, that's why the
-> > existing code tends not to bother to mkyoung, but does sometimes mkold
-> > (admittedly confusing).
-> 
-> There might have been one or two cases where it didn't come directly
-> from vm_page_prot, but it was a few rebases and updates ago. I did see
-> one or two places where powerpc was taking faults. Good point though I 
-> can test again and see, and I might split the patch.
-> 
-> > 
-> > A quick check on x86 and powerpc looks like they do have _PAGE_ACCESSED
-> > in there; and IIRC that's true, or ought to be true, of all architectures.
-> > 
-> > Maybe not mips, which I see you have singled out: I remember going round
-> > this loop a few months ago with mips, where strange changes were being
-> > proposed to compensate for not having that bit in their vm_page_prot.
-> > I didn't follow through to see how that ended up, but I did suggest
-> > mips needed to follow the same convention as the other architectures.
-> 
-> Yeah the main thing is to try get all architectures doing the same thing
-> and get rid of that sw_mkyoung too. Given the (Intel) x86 result of the
-> heavy micro-fault, I don't think anybody is special and we should 
-> require them to follow the same behaviour unless it's proven that one
-> needs something different.
-> 
-> If we can get all arch to set accessed in vm_page_prot and get rid of 
-> most of these mkyoung()s then all the better. And it actually looks like
-> MIPS may be changing direction:
-> 
-> https://lore.kernel.org/linux-arch/20200919074731.22372-1-huangpei@loongson.cn/
-> 
-> What's the chances of that going upstream for the next merge window? It
-> seems like the right thing to do.
+During signal entry, the kernel pushes data onto the normal userspace
+stack. On x86, the data pushed onto the user stack includes XSAVE state,
+which has grown over time as new features and larger registers have been
+added to the architecture.
 
-Any comment on V4:
+MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
+typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
+compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
+constant indicates to userspace how much data the kernel expects to push on
+the user stack, [2][3].
 
-https://lore.kernel.org/linux-arch/20201019081257.32127-1-huangpei@loongson.cn/
+However, this constant is much too small and does not reflect recent
+additions to the architecture. For instance, when AVX-512 states are in
+use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
 
-> 
-> Thanks,
-> Nick
+The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
+cause user stack overflow when delivering a signal.
 
-Thanks,
-Huang Pei
+In this series, we suggest a couple of things:
+1. Provide a variable minimum stack size to userspace, as a similar
+   approach to [5]
+2. Avoid using a too-small alternate stack
+
+Changes from v2 [7]:
+* Simplified the sigaltstack overflow prevention (Jann Horn)
+* Renamed fpstate size helper with cleanup (Borislav Petkov)
+* Cleaned up the signframe struct size defines (Borislav Petkov)
+* Revised the selftest messages (Borislav Petkov)
+* Revised a changelog (Borislav Petkov)
+
+Changes from v1 [6]:
+* Took stack alignment into account for sigframe size (Dave Martin)
+
+[1]: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/bits/sigstack.h;h=b9dca794da093dc4d41d39db9851d444e1b54d9b;hb=HEAD
+[2]: https://www.gnu.org/software/libc/manual/html_node/Signal-Stack.html
+[3]: https://man7.org/linux/man-pages/man2/sigaltstack.2.html
+[4]: https://bugzilla.kernel.org/show_bug.cgi?id=153531
+[5]: https://blog.linuxplumbersconf.org/2017/ocw/system/presentations/4671/original/plumbers-dm-2017.pdf
+[6]: https://lore.kernel.org/lkml/20200929205746.6763-1-chang.seok.bae@intel.com/
+[7]: https://lore.kernel.org/lkml/20201119190237.626-1-chang.seok.bae@intel.com/
+
+Chang S. Bae (4):
+  x86/signal: Introduce helpers to get the maximum signal frame size
+  x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
+  x86/signal: Prevent an alternate stack overflow before a signal
+    delivery
+  selftest/x86/signal: Include test cases for validating sigaltstack
+
+ arch/x86/include/asm/elf.h                |   4 +
+ arch/x86/include/asm/fpu/signal.h         |   2 +
+ arch/x86/include/asm/sigframe.h           |   2 +
+ arch/x86/include/uapi/asm/auxvec.h        |   6 +-
+ arch/x86/kernel/cpu/common.c              |   3 +
+ arch/x86/kernel/fpu/signal.c              |  19 ++++
+ arch/x86/kernel/signal.c                  |  69 +++++++++++-
+ tools/testing/selftests/x86/Makefile      |   2 +-
+ tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
+ 9 files changed, 228 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+
+-- 
+2.17.1
 
