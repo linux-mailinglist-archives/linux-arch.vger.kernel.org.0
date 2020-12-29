@@ -2,26 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E6B2E74B4
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Dec 2020 22:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCBA2E747E
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Dec 2020 22:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727193AbgL2VfD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Dec 2020 16:35:03 -0500
-Received: from mga03.intel.com ([134.134.136.65]:11891 "EHLO mga03.intel.com"
+        id S1726256AbgL2Vdc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Dec 2020 16:33:32 -0500
+Received: from mga03.intel.com ([134.134.136.65]:11897 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726634AbgL2Vda (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 29 Dec 2020 16:33:30 -0500
-IronPort-SDR: vcnDB6M018wPdVqM8vCq7Vqj5oAsI8+d5TZBl29GTDuzqd7b9cRIlcsnTyzqZIQKZ8RJ0jwT1X
- N0iVXT4qOxQg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9849"; a="176640521"
+        id S1726652AbgL2Vdc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 29 Dec 2020 16:33:32 -0500
+IronPort-SDR: b1pMd7CLyIYaQnZ7IB38xWCKbQ7S1F0ClfNJrmqHVWOJ5s58dZ5FIiLT3h8zzff/3/YHbyOuXk
+ yOaWXjxA9wkw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9849"; a="176640524"
 X-IronPort-AV: E=Sophos;i="5.78,459,1599548400"; 
-   d="scan'208";a="176640521"
+   d="scan'208";a="176640524"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2020 13:32:22 -0800
-IronPort-SDR: j13N8E9XHMcV/WRTGcgWjlHw0WUXJIXKK4VcsVYNZR9GWdPFXf5UT1GvBgWmG6FnXqRdpDStip
- 09KmImfaBZ5g==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2020 13:32:23 -0800
+IronPort-SDR: X/tenw+0DyHjxL92CaOVC5mw2evFr4SO13TzgpUDUgyEMTFEVj8h6+EDVknu/1scXAYPjpBWNz
+ qJgLkA/hiSQA==
 X-IronPort-AV: E=Sophos;i="5.78,459,1599548400"; 
-   d="scan'208";a="376189603"
+   d="scan'208";a="376189608"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2020 13:32:22 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v17 10/26] x86/mm: Update pte_modify for _PAGE_COW
-Date:   Tue, 29 Dec 2020 13:30:37 -0800
-Message-Id: <20201229213053.16395-11-yu-cheng.yu@intel.com>
+Subject: [PATCH v17 11/26] x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+Date:   Tue, 29 Dec 2020 13:30:38 -0800
+Message-Id: <20201229213053.16395-12-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201229213053.16395-1-yu-cheng.yu@intel.com>
 References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
@@ -64,84 +64,100 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The read-only and Dirty PTE has been used to indicate copy-on-write pages.
-However, newer x86 processors also regard a read-only and Dirty PTE as a
-shadow stack page.  In order to separate the two, the software-defined
-_PAGE_COW is created to replace _PAGE_DIRTY for the copy-on-write case, and
-pte_*() are updated.
+When Shadow Stack is introduced, [R/O + _PAGE_DIRTY] PTE is reserved for
+shadow stack.  Copy-on-write PTEs have [R/O + _PAGE_COW].
 
-Pte_modify() changes a PTE to 'newprot', but it doesn't use the pte_*().
-Introduce fixup_dirty_pte(), which sets a dirty PTE, based on _PAGE_RW,
-to either _PAGE_DIRTY or _PAGE_COW.
+When a PTE goes from [R/W + _PAGE_DIRTY] to [R/O + _PAGE_COW], it could
+become a transient shadow stack PTE in two cases:
 
-Apply the same changes to pmd_modify().
+The first case is that some processors can start a write but end up seeing
+a read-only PTE by the time they get to the Dirty bit, creating a transient
+shadow stack PTE.  However, this will not occur on processors supporting
+Shadow Stack, therefore we don't need a TLB flush here.
+
+The second case is that when the software, without atomic, tests & replaces
+_PAGE_DIRTY with _PAGE_COW, a transient shadow stack PTE can exist.
+This is prevented with cmpxchg.
+
+Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
+insights to the issue.  Jann Horn provided the cmpxchg solution.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/pgtable.h | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ arch/x86/include/asm/pgtable.h | 52 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 61e4d3b17d87..666c25ab9564 100644
+index 666c25ab9564..1c84f1ba32b9 100644
 --- a/arch/x86/include/asm/pgtable.h
 +++ b/arch/x86/include/asm/pgtable.h
-@@ -723,6 +723,21 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
- 
- static inline u64 flip_protnone_guard(u64 oldval, u64 val, u64 mask);
- 
-+static inline pteval_t fixup_dirty_pte(pteval_t pteval)
-+{
-+	pte_t pte = __pte(pteval);
-+
-+	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && pte_dirty(pte)) {
-+		pte = pte_mkclean(pte);
-+
-+		if (pte_flags(pte) & _PAGE_RW)
-+			pte = pte_set_flags(pte, _PAGE_DIRTY);
-+		else
-+			pte = pte_set_flags(pte, _PAGE_COW);
-+	}
-+	return pte_val(pte);
-+}
-+
- static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+@@ -1226,6 +1226,32 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+ static inline void ptep_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long addr, pte_t *ptep)
  {
- 	pteval_t val = pte_val(pte), oldval = val;
-@@ -733,16 +748,34 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- 	 */
- 	val &= _PAGE_CHG_MASK;
- 	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
-+	val = fixup_dirty_pte(val);
- 	val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
- 	return __pte(val);
++	/*
++	 * Some processors can start a write, but end up seeing a read-only
++	 * PTE by the time they get to the Dirty bit.  In this case, they
++	 * will set the Dirty bit, leaving a read-only, Dirty PTE which
++	 * looks like a shadow stack PTE.
++	 *
++	 * However, this behavior has been improved and will not occur on
++	 * processors supporting Shadow Stack.  Without this guarantee, a
++	 * transition to a non-present PTE and flush the TLB would be
++	 * needed.
++	 *
++	 * When changing a writable PTE to read-only and if the PTE has
++	 * _PAGE_DIRTY set, move that bit to _PAGE_COW so that the PTE is
++	 * not a shadow stack PTE.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		pte_t old_pte, new_pte;
++
++		do {
++			old_pte = READ_ONCE(*ptep);
++			new_pte = pte_wrprotect(old_pte);
++
++		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
++
++		return;
++	}
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
  }
  
-+static inline int pmd_write(pmd_t pmd);
-+static inline pmdval_t fixup_dirty_pmd(pmdval_t pmdval)
-+{
-+	pmd_t pmd = __pmd(pmdval);
-+
-+	if (cpu_feature_enabled(X86_FEATURE_SHSTK) && pmd_dirty(pmd)) {
-+		pmd = pmd_mkclean(pmd);
-+
-+		if (pmd_flags(pmd) & _PAGE_RW)
-+			pmd = pmd_set_flags(pmd, _PAGE_DIRTY);
-+		else
-+			pmd = pmd_set_flags(pmd, _PAGE_COW);
-+	}
-+	return pmd_val(pmd);
-+}
-+
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+@@ -1282,6 +1308,32 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
+ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long addr, pmd_t *pmdp)
  {
- 	pmdval_t val = pmd_val(pmd), oldval = val;
- 
- 	val &= _HPAGE_CHG_MASK;
- 	val |= check_pgprot(newprot) & ~_HPAGE_CHG_MASK;
-+	val = fixup_dirty_pmd(val);
- 	val = flip_protnone_guard(oldval, val, PHYSICAL_PMD_PAGE_MASK);
- 	return __pmd(val);
++	/*
++	 * Some processors can start a write, but end up seeing a read-only
++	 * PMD by the time they get to the Dirty bit.  In this case, they
++	 * will set the Dirty bit, leaving a read-only, Dirty PMD which
++	 * looks like a Shadow Stack PMD.
++	 *
++	 * However, this behavior has been improved and will not occur on
++	 * processors supporting Shadow Stack.  Without this guarantee, a
++	 * transition to a non-present PMD and flush the TLB would be
++	 * needed.
++	 *
++	 * When changing a writable PMD to read-only and if the PMD has
++	 * _PAGE_DIRTY set, move that bit to _PAGE_COW so that the PMD is
++	 * not a shadow stack PMD.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		pmd_t old_pmd, new_pmd;
++
++		do {
++			old_pmd = READ_ONCE(*pmdp);
++			new_pmd = pmd_wrprotect(old_pmd);
++
++		} while (!try_cmpxchg((pmdval_t *)pmdp, (pmdval_t *)&old_pmd, pmd_val(new_pmd)));
++
++		return;
++	}
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
  }
+ 
 -- 
 2.21.0
 
