@@ -2,141 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D524E2E9EA8
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Jan 2021 21:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65782E9E99
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Jan 2021 21:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbhADUMM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jan 2021 15:12:12 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:14191 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728045AbhADUMM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jan 2021 15:12:12 -0500
-X-Originating-IP: 90.112.190.212
-Received: from debian.home (lfbn-gre-1-231-212.w90-112.abo.wanadoo.fr [90.112.190.212])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 0044F240005;
-        Mon,  4 Jan 2021 20:11:27 +0000 (UTC)
-From:   Alexandre Ghiti <alex@ghiti.fr>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexandre Ghiti <alex@ghiti.fr>
-Subject: [RFC PATCH 12/12] riscv: Improve virtual kernel memory layout dump
-Date:   Mon,  4 Jan 2021 14:58:40 -0500
-Message-Id: <20210104195840.1593-13-alex@ghiti.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210104195840.1593-1-alex@ghiti.fr>
-References: <20210104195840.1593-1-alex@ghiti.fr>
+        id S1725921AbhADUJK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jan 2021 15:09:10 -0500
+Received: from mga11.intel.com ([192.55.52.93]:35243 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725840AbhADUJK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 4 Jan 2021 15:09:10 -0500
+IronPort-SDR: s5K+C27vyajcSgtzMVnYrTLDOOpnV7CQ717Anbodlk4hEBc58Jr90+l/mVWCNKMVWVq+xu0vZ2
+ i68jNCNbwLcw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9854"; a="173494318"
+X-IronPort-AV: E=Sophos;i="5.78,474,1599548400"; 
+   d="scan'208";a="173494318"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 12:08:29 -0800
+IronPort-SDR: urpI8d5B4JN9RjNmAOAUe5lL7HXhD3ElEk+4b7L539xEbw5mo/rkDiYv+M0N4sNtH00csg4QQ/
+ mzFVpqGchYdw==
+X-IronPort-AV: E=Sophos;i="5.78,474,1599548400"; 
+   d="scan'208";a="360892786"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.103.116]) ([10.209.103.116])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2021 12:08:28 -0800
+Subject: Re: [PATCH v17 00/26] Control-flow Enforcement: Shadow Stack
+To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>, x86-patch-review@intel.com,
+        "Schlobohm, Bruce" <bruce.schlobohm@intel.com>
+References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <0a475c4c-58b0-0da7-8889-a0dbbc7d0fdc@intel.com>
+Date:   Mon, 4 Jan 2021 12:08:27 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201229213053.16395-1-yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the arrival of sv48 and its large address space, it would be
-cumbersome to statically define the unit size to use to print the different
-portions of the virtual memory layout: instead, determine it dynamically.
+On 12/29/2020 1:30 PM, Yu-cheng Yu wrote:
+> Control-flow Enforcement (CET) is a new Intel processor feature that blocks
+> return/jump-oriented programming attacks.  Details are in "Intel 64 and
+> IA-32 Architectures Software Developer's Manual" [1].
+> 
+> CET can protect applications and the kernel.  This series enables only
+> application-level protection, and has three parts:
+> 
+>    - Shadow stack [2],
+>    - Indirect branch tracking [3], and
+>    - Selftests [4].
+> 
+> I have run tests on these patches for quite some time, and they have been
+> very stable.  Linux distributions with CET are available now, and Intel
+> processors with CET are already on the market.  It would be nice if CET
+> support can be accepted into the kernel.  I will be working to address any
+> issues should they come up.
+> 
+> Changes in v17:
+> - Rebase to v5.11-rc1.
 
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
----
- arch/riscv/mm/init.c  | 46 ++++++++++++++++++++++++++++++++++++-------
- include/linux/sizes.h |  3 ++-
- 2 files changed, 41 insertions(+), 8 deletions(-)
+Hi Reviewers,
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index f9a99cb1870b..f06c21985274 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -80,30 +80,62 @@ static void setup_zero_page(void)
- }
- 
- #if defined(CONFIG_MMU) && defined(CONFIG_DEBUG_VM)
-+
-+#define LOG2_SZ_1K  ilog2(SZ_1K)
-+#define LOG2_SZ_1M  ilog2(SZ_1M)
-+#define LOG2_SZ_1G  ilog2(SZ_1G)
-+#define LOG2_SZ_1T  ilog2(SZ_1T)
-+
- static inline void print_mlk(char *name, unsigned long b, unsigned long t)
- {
- 	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld kB)\n", name, b, t,
--		  (((t) - (b)) >> 10));
-+		  (((t) - (b)) >> LOG2_SZ_1K));
- }
- 
- static inline void print_mlm(char *name, unsigned long b, unsigned long t)
- {
- 	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld MB)\n", name, b, t,
--		  (((t) - (b)) >> 20));
-+		  (((t) - (b)) >> LOG2_SZ_1M));
-+}
-+
-+static inline void print_mlg(char *name, unsigned long b, unsigned long t)
-+{
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld GB)\n", name, b, t,
-+		  (((t) - (b)) >> LOG2_SZ_1G));
-+}
-+
-+static inline void print_mlt(char *name, unsigned long b, unsigned long t)
-+{
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld TB)\n", name, b, t,
-+		  (((t) - (b)) >> LOG2_SZ_1T));
-+}
-+
-+static inline void print_ml(char *name, unsigned long b, unsigned long t)
-+{
-+    unsigned long diff = t - b;
-+
-+    if ((diff >> LOG2_SZ_1T) >= 10)
-+        print_mlt(name, b, t);
-+    else if ((diff >> LOG2_SZ_1G) >= 10)
-+        print_mlg(name, b, t);
-+    else if ((diff >> LOG2_SZ_1M) >= 10)
-+        print_mlm(name, b, t);
-+    else
-+        print_mlk(name, b, t);
- }
- 
- static void print_vm_layout(void)
- {
- 	pr_notice("Virtual kernel memory layout:\n");
--	print_mlk("fixmap", (unsigned long)FIXADDR_START,
-+	print_ml("fixmap", (unsigned long)FIXADDR_START,
- 		  (unsigned long)FIXADDR_TOP);
--	print_mlm("pci io", (unsigned long)PCI_IO_START,
-+	print_ml("pci io", (unsigned long)PCI_IO_START,
- 		  (unsigned long)PCI_IO_END);
--	print_mlm("vmemmap", (unsigned long)VMEMMAP_START,
-+	print_ml("vmemmap", (unsigned long)VMEMMAP_START,
- 		  (unsigned long)VMEMMAP_END);
--	print_mlm("vmalloc", (unsigned long)VMALLOC_START,
-+	print_ml("vmalloc", (unsigned long)VMALLOC_START,
- 		  (unsigned long)VMALLOC_END);
--	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
-+	print_ml("lowmem", (unsigned long)PAGE_OFFSET,
- 		  (unsigned long)high_memory);
- }
- #else
-diff --git a/include/linux/sizes.h b/include/linux/sizes.h
-index 9874f6f67537..9528b082873b 100644
---- a/include/linux/sizes.h
-+++ b/include/linux/sizes.h
-@@ -42,8 +42,9 @@
- 
- #define SZ_1G				0x40000000
- #define SZ_2G				0x80000000
--
- #define SZ_4G				_AC(0x100000000, ULL)
-+
-+#define SZ_1T				_AC(0x10000000000, ULL)
- #define SZ_64T				_AC(0x400000000000, ULL)
- 
- #endif /* __LINUX_SIZES_H__ */
--- 
-2.20.1
+After a few revisions/re-bases, I have dropped some Reviewed-by tags. 
+This revision is only a re-base to the latest Linus tree.  Please kindly 
+comment if there are anything still not resolved, and I appreciate very 
+much Reviewed-by/Acked-by tags to satisfactory patches.
 
+--
+Thanks,
+Yu-cheng
