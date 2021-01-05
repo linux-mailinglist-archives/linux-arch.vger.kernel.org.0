@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5B52EAA34
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jan 2021 12:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93B2EAA73
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jan 2021 13:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729843AbhAELvg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Jan 2021 06:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S1726626AbhAEMHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Jan 2021 07:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729832AbhAELvf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jan 2021 06:51:35 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050F5C061796
-        for <linux-arch@vger.kernel.org>; Tue,  5 Jan 2021 03:50:54 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id o17so71912435lfg.4
-        for <linux-arch@vger.kernel.org>; Tue, 05 Jan 2021 03:50:54 -0800 (PST)
+        with ESMTP id S1726109AbhAEMHP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jan 2021 07:07:15 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C7C061794
+        for <linux-arch@vger.kernel.org>; Tue,  5 Jan 2021 04:06:47 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d13so35901130wrc.13
+        for <linux-arch@vger.kernel.org>; Tue, 05 Jan 2021 04:06:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GMWcCJQk+Rc106f6w1tIJLqayhhWxkXCtH/PhYMDIiI=;
-        b=L3N8vC83TqKzTctV7E2OtqvdyhBreaCwsrCVeTMeMHIp3o8wHSirwAyY+z1QMf5Kot
-         jyoi43+zd2SYr2QQp8ASbJnV933WljNMOdRmltzU+Ndf5utJaqn2sBcmbSS1F+ahZ857
-         7SQLwE4R77jOBz1HxEWTHuFOY0BlEidUklbFQUpcP7V38t/q/w45Wu7WXos820LA5GWt
-         E96qrzRO8yB6mwe8AK+6agZs8HOGr8d4LMjRKdeDtrRRshDGUxvJL00HnRrIH/uvpNZP
-         lguIh/lvVc4wOn4ulFhPuVfb/tfqAHddtb4VPjoGwyvVjI00EbhQ2yInvspX1/QUf1dY
-         h2bg==
+        bh=AGKjJEiSSy2izG4ujkGcD0moiRRni/L2Q0MG/wluNhc=;
+        b=mtV8E91wND1aKNfDji9QLYJPBQMWC8mHS1I4adE/gfWGyS6lubB7mDXao3j2RV8Gmu
+         uvYlNcWrA9nXdzJsCVF3yIA5OIQ7xTm3zkjLJEsotudU5JnoWOVITaPrlrGq82UcKjTk
+         SfuYEppZJ5ULuLdMAJN9HJZydDXSWYqNIVljiT911GOBsYlN6+r3kLua9KF6YQQ5TNd5
+         EiqCuJ7lj7GlkpGGr+YxlDZgMgYBCDn3+kQmmPMEA1COtJGyh3o4GoSX50Cpk3fWNeIN
+         vUK5NHkPWGI6ZLGwtDcGIvRktep2OxxEdLXK+aAgJeaBrAtZdI9msB7it8mYfk2uz9vE
+         bsdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GMWcCJQk+Rc106f6w1tIJLqayhhWxkXCtH/PhYMDIiI=;
-        b=EDl4EKhg1Yv4PF5pxEMxI7mxD+HixlrdxmOQ8oh5sNXu1rV+r3zWVL61b/Q2ztrUS5
-         c10P0AZpC9muwj6eYjKofpcWD2tJTwKFdP1OODN9BytxzlAGQAnO49xHqgSuKcNSDcSN
-         RV1UdEbiqXIBtX+pNX1p2ylKXYWtsnBJ4yvnxqE/CphU92XEqzR7ff0YVqliLsEfa9WZ
-         zjPIxRWlVRdTRYVzOId+/v1LMseWZQsKSZiT4/50+tZyCClU/DQiSjUmczNwEQM3bA3q
-         j+qGYTDfgruNwlqHYwYS81bTttrSAIFha5W/qElBTy03budJ6LiJo6S9lHwqgSg2iPMU
-         fYPQ==
-X-Gm-Message-State: AOAM531kuWyGGMyh+AM0eywu7cCoEBb8KBn8d3XgluzpVpJIiBWFaqJN
-        vYvTYD0OYPxUOJqBk+oXirlw2tISaKlI/+HojSQycw==
-X-Google-Smtp-Source: ABdhPJwIJ4Eri51uGtG/aVqVtz2LvPh0hXyL/E8bZpYX6Ob5yGscIPGvWXzqG3VUE1KwxJiPW4lZiwft1o2i16OsuXw=
-X-Received: by 2002:a2e:8e98:: with SMTP id z24mr35256172ljk.83.1609847453386;
- Tue, 05 Jan 2021 03:50:53 -0800 (PST)
+        bh=AGKjJEiSSy2izG4ujkGcD0moiRRni/L2Q0MG/wluNhc=;
+        b=kkC5CsDn0byPknpXaS3OSU9DPuqiAvL58+Wuhy/tknxcUodl5kx4aM4YTNV8rBuBNU
+         gUxd5YAkDV1ddhUKzTwEP3mvJjF0thc9BGNBd3ebqJnvFTtsiIAv1Q0wjnRThzEKNLhC
+         ILgVOlfbCjgr4iEDMGV6JGQiqR1UBm/tn3vzVbBsakrCFu5U7dH9XOtv0yn+eyiXONRo
+         FU4RFWr0G76PRDdelnA2Bhen88NyFIXaPGmVS/diyTB//h0oxumyiETqKPCw4N3CgWfD
+         vSUGTyZ2V7qSr8fnsaqMLuSuc+c0wrLdZtDT53SO/ahoevcHGNbvH0SbGVd74EbAnTAY
+         J24g==
+X-Gm-Message-State: AOAM533CqTt7MrogqPey2WHYIg6F/NLTveSaPQvWLJ0soPti67xpY/fC
+        MPLM4JyQWz28G8ShRJq9tkLgVJIiisP46rJXXI5Q8w==
+X-Google-Smtp-Source: ABdhPJzFWenLt+B+f1yF1feYSMrXNb+Mp6Ub9dRfYe/spk0aF2jGgTIUeiE6CfQ/l7BuWWVxGTeJ+rIJPBN3zlzSg3g=
+X-Received: by 2002:adf:c18d:: with SMTP id x13mr83182459wre.128.1609848406611;
+ Tue, 05 Jan 2021 04:06:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20210104195840.1593-1-alex@ghiti.fr> <20210104195840.1593-3-alex@ghiti.fr>
-In-Reply-To: <20210104195840.1593-3-alex@ghiti.fr>
+References: <20210104195840.1593-1-alex@ghiti.fr> <20210104195840.1593-5-alex@ghiti.fr>
+In-Reply-To: <20210104195840.1593-5-alex@ghiti.fr>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 5 Jan 2021 17:20:42 +0530
-Message-ID: <CAAhSdy0WpPg-=+NMGFORfrd+Rgq0kwKu7Z3ioMAEfxj+J+KPjw@mail.gmail.com>
-Subject: Re: [RFC PATCH 02/12] riscv: Protect the kernel linear mapping
+Date:   Tue, 5 Jan 2021 17:36:35 +0530
+Message-ID: <CAAhSdy0Diu3nD+QswUUr7Ox+FdZGRedivJ6gNU2dYUCaOx8KjA@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/12] riscv: Allow to dynamically define VA_BITS
 To:     Alexandre Ghiti <alex@ghiti.fr>
 Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -65,122 +65,101 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 5, 2021 at 1:31 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
+On Tue, Jan 5, 2021 at 1:33 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
 >
-> The kernel is now mapped at the end of the address space and it should
-> be accessed through this mapping only: so map the whole kernel in the
-> linear mapping as read only.
+> With 4-level page table folding at runtime, we don't know at compile time
+> the size of the virtual address space so we must set VA_BITS dynamically
+> so that sparsemem reserves the right amount of memory for struct pages.
 >
 > Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
 > ---
->  arch/riscv/include/asm/page.h |  9 ++++++++-
->  arch/riscv/mm/init.c          | 29 +++++++++++++++++++++--------
->  2 files changed, 29 insertions(+), 9 deletions(-)
+>  arch/riscv/Kconfig                 | 10 ----------
+>  arch/riscv/include/asm/pgtable.h   | 11 +++++++++--
+>  arch/riscv/include/asm/sparsemem.h |  6 +++++-
+>  3 files changed, 14 insertions(+), 13 deletions(-)
 >
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index 98188e315e8d..a93e35aaa717 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -102,8 +102,15 @@ extern unsigned long pfn_base;
->  extern unsigned long max_low_pfn;
->  extern unsigned long min_low_pfn;
->  extern unsigned long kernel_virt_addr;
-> +extern uintptr_t load_pa, load_sz;
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 44377fd7860e..2979a44103be 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -122,16 +122,6 @@ config ZONE_DMA32
+>         bool
+>         default y if 64BIT
+>
+> -config VA_BITS
+> -       int
+> -       default 32 if 32BIT
+> -       default 39 if 64BIT
+> -
+> -config PA_BITS
+> -       int
+> -       default 34 if 32BIT
+> -       default 56 if 64BIT
+> -
+>  config PAGE_OFFSET
+>         hex
+>         default 0xC0000000 if 32BIT && MAXPHYSMEM_2GB
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 102b728ca146..c7973bfd65bc 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -43,8 +43,14 @@
+>   * struct pages to map half the virtual address space. Then
+>   * position vmemmap directly below the VMALLOC region.
+>   */
+> +#ifdef CONFIG_64BIT
+> +#define VA_BITS                39
+> +#else
+> +#define VA_BITS                32
+> +#endif
 > +
-> +#define linear_mapping_pa_to_va(x)     ((void *)((unsigned long)(x) + va_pa_offset))
-> +#define kernel_mapping_pa_to_va(x)     \
-> +       ((void *)((unsigned long) (x) + va_kernel_pa_offset))
-> +#define __pa_to_va_nodebug(x)                          \
-> +       ((x >= load_pa && x < load_pa + load_sz) ?      \
-> +               kernel_mapping_pa_to_va(x): linear_mapping_pa_to_va(x))
-
-This change should be part of PATCH1
-
+>  #define VMEMMAP_SHIFT \
+> -       (CONFIG_VA_BITS - PAGE_SHIFT - 1 + STRUCT_PAGE_MAX_SHIFT)
+> +       (VA_BITS - PAGE_SHIFT - 1 + STRUCT_PAGE_MAX_SHIFT)
+>  #define VMEMMAP_SIZE   BIT(VMEMMAP_SHIFT)
+>  #define VMEMMAP_END    (VMALLOC_START - 1)
+>  #define VMEMMAP_START  (VMALLOC_START - VMEMMAP_SIZE)
+> @@ -83,6 +89,7 @@
+>  #endif /* CONFIG_64BIT */
 >
-> -#define __pa_to_va_nodebug(x)  ((void *)((unsigned long) (x) + va_pa_offset))
->  #define linear_mapping_va_to_pa(x)     ((unsigned long)(x) - va_pa_offset)
->  #define kernel_mapping_va_to_pa(x)     \
->         ((unsigned long)(x) - va_kernel_pa_offset)
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 9d06ff0e015a..7b87c14f1d24 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -159,8 +159,6 @@ void __init setup_bootmem(void)
->  {
->         phys_addr_t mem_start = 0;
->         phys_addr_t start, end = 0;
-> -       phys_addr_t vmlinux_end = __pa_symbol(&_end);
-> -       phys_addr_t vmlinux_start = __pa_symbol(&_start);
-
-This as well.
-
->         u64 i;
->
->         /* Find the memory region containing the kernel */
-> @@ -168,7 +166,7 @@ void __init setup_bootmem(void)
->                 phys_addr_t size = end - start;
->                 if (!mem_start)
->                         mem_start = start;
-> -               if (start <= vmlinux_start && vmlinux_end <= end)
-> +               if (start <= load_pa && (load_pa + load_sz) <= end)
->                         BUG_ON(size == 0);
->         }
->
-> @@ -179,8 +177,13 @@ void __init setup_bootmem(void)
->          */
->         memblock_enforce_memory_limit(mem_start - PAGE_OFFSET);
->
-> -       /* Reserve from the start of the kernel to the end of the kernel */
-> -       memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
-> +       /*
-> +        * Reserve from the start of the kernel to the end of the kernel
-> +        * and make sure we align the reservation on PMD_SIZE since we will
-> +        * map the kernel in the linear mapping as read-only: we do not want
-> +        * any allocation to happen between _end and the next pmd aligned page.
-> +        */
-> +       memblock_reserve(load_pa, (load_sz + PMD_SIZE - 1) & ~(PMD_SIZE - 1));
->
->         max_pfn = PFN_DOWN(memblock_end_of_DRAM());
->         max_low_pfn = max_pfn;
-> @@ -438,7 +441,9 @@ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
->  #error "setup_vm() is called from head.S before relocate so it should not use absolute addressing."
+>  #ifdef CONFIG_MMU
+> +
+>  /* Number of entries in the page global directory */
+>  #define PTRS_PER_PGD    (PAGE_SIZE / sizeof(pgd_t))
+>  /* Number of entries in the page table */
+> @@ -453,7 +460,7 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
+>   * and give the kernel the other (upper) half.
+>   */
+>  #ifdef CONFIG_64BIT
+> -#define KERN_VIRT_START        (-(BIT(CONFIG_VA_BITS)) + TASK_SIZE)
+> +#define KERN_VIRT_START        (-(BIT(VA_BITS)) + TASK_SIZE)
+>  #else
+>  #define KERN_VIRT_START        FIXADDR_START
 >  #endif
+> diff --git a/arch/riscv/include/asm/sparsemem.h b/arch/riscv/include/asm/sparsemem.h
+> index 45a7018a8118..63acaecc3374 100644
+> --- a/arch/riscv/include/asm/sparsemem.h
+> +++ b/arch/riscv/include/asm/sparsemem.h
+> @@ -4,7 +4,11 @@
+>  #define _ASM_RISCV_SPARSEMEM_H
 >
-> -static uintptr_t load_pa, load_sz;
-> +uintptr_t load_pa, load_sz;
-> +EXPORT_SYMBOL(load_pa);
-> +EXPORT_SYMBOL(load_sz);
-
-I think all changes till here should be in PATCH1.
-
-Only the changes here onwards seems to be as-per PATCH description.
-
->
->  static void __init create_kernel_page_table(pgd_t *pgdir, uintptr_t map_size)
->  {
-> @@ -596,9 +601,17 @@ static void __init setup_vm_final(void)
->
->                 map_size = best_map_size(start, end - start);
->                 for (pa = start; pa < end; pa += map_size) {
-> -                       va = (uintptr_t)__va(pa);
-> +                       pgprot_t prot = PAGE_KERNEL;
-> +
-> +                       /* Protect the kernel mapping that lies in the linear mapping */
-> +                       if (pa >= __pa(_start) && pa < __pa(_end))
-> +                               prot = PAGE_KERNEL_READ;
-> +
-> +                       /* Make sure we get virtual addresses in the linear mapping */
-> +                       va = (uintptr_t)linear_mapping_pa_to_va(pa);
-> +
->                         create_pgd_mapping(swapper_pg_dir, va, pa,
-> -                                          map_size, PAGE_KERNEL);
-> +                                          map_size, prot);
->                 }
->         }
+>  #ifdef CONFIG_SPARSEMEM
+> -#define MAX_PHYSMEM_BITS       CONFIG_PA_BITS
+> +#ifdef CONFIG_64BIT
+> +#define MAX_PHYSMEM_BITS       56
+> +#else
+> +#define MAX_PHYSMEM_BITS       34
+> +#endif /* CONFIG_64BIT */
+>  #define SECTION_SIZE_BITS      27
+>  #endif /* CONFIG_SPARSEMEM */
 >
 > --
 > 2.20.1
 >
+
+Looks good to me.
+
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
 Regards,
 Anup
