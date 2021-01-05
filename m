@@ -2,85 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F32A42EAD7B
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jan 2021 15:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668702EB1AF
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jan 2021 18:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727712AbhAEOjr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Jan 2021 09:39:47 -0500
-Received: from mga01.intel.com ([192.55.52.88]:57659 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726352AbhAEOjr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 5 Jan 2021 09:39:47 -0500
-IronPort-SDR: 76GgTXaTbOxZI+4owxucJxNXHQhGBNlK59dqgMCyfv/Qa1pkMGV17Az9DYXIgpOnmcTuApvpbo
- kRiDBnb25b4w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9854"; a="195646550"
-X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
-   d="scan'208";a="195646550"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 06:38:26 -0800
-IronPort-SDR: ORfDRMZuZZIjtE6Ot4XA8E9TvMJhsJAUxJ1mx5ey/k3CoGP/FtoFSprpDMWbSJKdXdzmdZ3M8W
- V7uDqPgr1s2g==
-X-IronPort-AV: E=Sophos;i="5.78,477,1599548400"; 
-   d="scan'208";a="397844641"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2021 06:38:20 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kwnUX-002Cub-Lc; Tue, 05 Jan 2021 16:39:21 +0200
-Date:   Tue, 5 Jan 2021 16:39:21 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "(Exiting) Amit Kucheria" <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 0/5] Introduce the for_each_set_clump macro
-Message-ID: <20210105143921.GL4077@smile.fi.intel.com>
-References: <cover.1608963094.git.syednwaris@gmail.com>
- <CACRpkdYZwMy5faNhUyiNnvdnMOf4ac7XWqjnf3f4jCJeE=p2Lw@mail.gmail.com>
- <CAMpxmJW46Oh2h7RrBNo5vACfYnWy63rZOO=Va=ppUDeaj5GpBg@mail.gmail.com>
+        id S1730540AbhAERpn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Jan 2021 12:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730506AbhAERpn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jan 2021 12:45:43 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C02C061574
+        for <linux-arch@vger.kernel.org>; Tue,  5 Jan 2021 09:45:02 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id j140so368974vsd.4
+        for <linux-arch@vger.kernel.org>; Tue, 05 Jan 2021 09:45:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2poEGmb5do8w/L6iPewO1Yp5f3/JnzeKXCH38sWzZXQ=;
+        b=P43/otfzyF8OEXWYSnLBvAtrZ8jU3DHL6R45ivbEW8I5pdnDwPh8ALa5giu9uAZCK/
+         ERGWMImbG89Mm1Wt1Lx6Z/5EjiCTz1zarkfuQ49MExOHD15U2cp/XDQpbED0Bspnh5ZB
+         Uh+WDCyai/MDfxDcbNdgi8FxHwP9AtULTe8Fs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2poEGmb5do8w/L6iPewO1Yp5f3/JnzeKXCH38sWzZXQ=;
+        b=Tjip7doL3JWi4XGTdn/OnV4hFjZ2xZqTiwEYgC1rYjQO5ppcQMpAsdUQE0hlBC/spY
+         EK09052KfspnAz1817CrozRkKa8FHF03Zs+Fot7+xt3oc/fOzIZ6tJFzRAGwe2dzN3We
+         da58wr1AOybTuKt4RWnLwTSBg8GdTdhJ5FZQ21GcKnx/XGxLb07ckX2FWKj/FRXgzR2U
+         v9rRLSanTQLg1B43vjFNhl3inht3UJ40HS6GrPChTk2rJ1enBqAmhoyvD8UhyYVEZU4W
+         WiwO4EeN6m3bDFHVwaJvoANEYawyHmwHzSooM2O+Im7yVLtgavrUzB0qH4XPURfgF0Qj
+         YVGQ==
+X-Gm-Message-State: AOAM530I/iuxcUvQQZePJPg1tFX9vRQwGuNMitQTEc5/E7UE8TZwFGEN
+        sIPvGyy5s3uOt6MCiGUQQPWWG4FNe4cx7g==
+X-Google-Smtp-Source: ABdhPJybRDFeREAC06lfQozPgBZIs1y+453ThD5/0hzcDWG7mhqUypbf+1ri8vA11RE24SuzALfbbQ==
+X-Received: by 2002:a05:6102:3195:: with SMTP id c21mr383316vsh.19.1609868701188;
+        Tue, 05 Jan 2021 09:45:01 -0800 (PST)
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com. [209.85.217.52])
+        by smtp.gmail.com with ESMTPSA id g23sm48455uan.7.2021.01.05.09.44.59
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jan 2021 09:45:00 -0800 (PST)
+Received: by mail-vs1-f52.google.com with SMTP id u7so341012vsg.11
+        for <linux-arch@vger.kernel.org>; Tue, 05 Jan 2021 09:44:59 -0800 (PST)
+X-Received: by 2002:a05:6102:21c4:: with SMTP id r4mr461281vsg.37.1609868699223;
+ Tue, 05 Jan 2021 09:44:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMpxmJW46Oh2h7RrBNo5vACfYnWy63rZOO=Va=ppUDeaj5GpBg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20201203202737.7c4wrifqafszyd5y@google.com> <20201208054646.2913063-1-maskray@google.com>
+In-Reply-To: <20201208054646.2913063-1-maskray@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 5 Jan 2021 09:44:48 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WWSniXCaC+vAKRa1fCZB4_dbaejwq+NCF56aZFYE-Xsg@mail.gmail.com>
+Message-ID: <CAD=FV=WWSniXCaC+vAKRa1fCZB4_dbaejwq+NCF56aZFYE-Xsg@mail.gmail.com>
+Subject: Re: [PATCH v2] firmware_loader: Align .builtin_fw to 8
+To:     Fangrui Song <maskray@google.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 05, 2021 at 03:19:13PM +0100, Bartosz Golaszewski wrote:
-> On Sun, Dec 27, 2020 at 10:27 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Sat, Dec 26, 2020 at 7:41 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> >
-> > > Since this patchset primarily affects GPIO drivers, would you like
-> > > to pick it up through your GPIO tree?
-> >
-> > Actually Bartosz is handling the GPIO patches for v5.12.
-> > I tried to merge the patch series before but failed for
-> > various reasons.
+Hi,
 
-> My info on this is a bit outdated - didn't Linus Torvalds reject these
-> patches from Andrew Morton's PR? Or am I confusing this series with
-> something else?
+On Mon, Dec 7, 2020 at 9:49 PM Fangrui Song <maskray@google.com> wrote:
+>
+> arm64 references the start address of .builtin_fw (__start_builtin_fw)
+> with a pair of R_AARCH64_ADR_PREL_PG_HI21/R_AARCH64_LDST64_ABS_LO12_NC
+> relocations. The compiler is allowed to emit the
+> R_AARCH64_LDST64_ABS_LO12_NC relocation because struct builtin_fw in
+> include/linux/firmware.h is 8-byte aligned.
+>
+> The R_AARCH64_LDST64_ABS_LO12_NC relocation requires the address to be a
+> multiple of 8, which may not be the case if .builtin_fw is empty.
+> Unconditionally align .builtin_fw to fix the linker error. 32-bit
+> architectures could use ALIGN(4) but that would add unnecessary
+> complexity, so just use ALIGN(8).
+>
+> Fixes: 5658c76 ("firmware: allow firmware files to be built into kernel image")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1204
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>
+> ---
+> Change in v2:
+> * Use output section alignment instead of inappropriate ALIGN_FUNCTION()
+> ---
+>  include/asm-generic/vmlinux.lds.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Linus T. told that it can be done inside GPIO realm. This version tries
-(badly in my opinion) to achieve that.
+Tested-by: Douglas Anderson <dianders@chromium.org>
 
--- 
-With Best Regards,
-Andy Shevchenko
+For whatever reason this is hitting developers on Chrome OS a whole
+lot suddenly.  Any chance it could be landed?  Which tree should it go
+through?
 
-
+-Doug
