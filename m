@@ -2,214 +2,347 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944C92EA081
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jan 2021 00:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521802EA225
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jan 2021 02:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbhADXLz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jan 2021 18:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbhADXLz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jan 2021 18:11:55 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB90C061793;
-        Mon,  4 Jan 2021 15:11:14 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id h6so15420470vsr.6;
-        Mon, 04 Jan 2021 15:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nZJG52DxHM8NxYEaACeWBEq/7egLrC9ZK8TAPAUC9Tw=;
-        b=bsAS2U5frW0z20sukfGBmeBZd50Frv6sTH0dmHyLmWie751Euilrw1VEXr+I4buBsY
-         CFmFofP7b47XSYyOCFHJvYbNcqUTVIbLHsYlxSaP6QGGipxwfMm9RZJ1Ns0X5Pf3oTol
-         JkuqIEf1PSfCUf00PRmuU60qMh1cDaP8jL/Z6B84dBXckskWxrHeFkRp7sTDsF3uRab3
-         i3Y7wGZG3YktDKV6qkIyoty6V7duCEKW7sWqriyl6JeFkw6HXBVrAuOj1svnOSOwjx8M
-         P/LvDVjbvYhm/77s8YLyDADC9G5l8Qm3DiIlVqBomOepwqDtiRQUv6zl/OrPV8y4kq5A
-         ckcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nZJG52DxHM8NxYEaACeWBEq/7egLrC9ZK8TAPAUC9Tw=;
-        b=fXcWsPH4BMku64PKe1FyMbPJHMBYen66KU3WfSnJEJZYexQQs7I3iXH7Y1XGEM35Mt
-         QGEdC+PDZcsKper7vjRWPA+BaN+EaIb4QIe++m+QXs5+sPMMxV7/0wXEWI/Pm1hd3ABa
-         9l0NPThVrnvnaTkYMy+VVhj0AQYUDvsG3bNvJHCbTfIkEhOkao6dpBCKRTOuoh/fVo/v
-         bnNd7lPoM8OTPd2DQq2BadC4e7voEZ5XxS1XAy4ghBI6t8rmhdNVeCcn7NOUQyEsYELg
-         PMPXFjiDg8NGscyDnsQSCEp3pmkkYMpExo/1sAvATSFTPFK3tKVUGvMaWc1mPbuwq2mj
-         jLSg==
-X-Gm-Message-State: AOAM530VLrsBKcoW67t0jXjquff8im7mf3mGqC+QC0x9ixPJ+0vOf/d7
-        t/3PFnEJh1iaxgd2yyBZ4/RpcL/JnthrQg==
-X-Google-Smtp-Source: ABdhPJw751wkgYmEj0+hrixadDSPrbP+NJnOALKJQAU32Zzh0Xr5LV3XehzV4PEqUfmWRn635VdNnQ==
-X-Received: by 2002:a05:6214:20a7:: with SMTP id 7mr78391783qvd.59.1609798351740;
-        Mon, 04 Jan 2021 14:12:31 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id k19sm37992586qkh.6.2021.01.04.14.12.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 14:12:30 -0800 (PST)
-Date:   Mon, 4 Jan 2021 15:12:29 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        clang-built-linux@googlegroups.com,
-        Nick Clifton <nickc@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
+        id S1728180AbhAEBAq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jan 2021 20:00:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39314 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728135AbhAEBAp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 4 Jan 2021 20:00:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ADCE6229C4;
+        Tue,  5 Jan 2021 00:59:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609808380;
+        bh=k5tUJHFjMO2s79xpLs4QJPdGWhJciPZsye1o8rF3dAs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=J3TSwo3nNU7X1fflv8qhWlBhn2SmnPDX6zcIj6O9oxknpuMjJ7N3yvo9ua4URUl0A
+         PuUfYceIKgapinnC/7xgRiktpmKCh88uXW3LIc+YIkYPxRD/9TsV1xs0NmEEJ6pjuk
+         oOPR+/OyUvkgYYruRtYDpBW7qfr/apzWLFoFvF4TGS/TmChN4wb9jYM6uX/RFJil+Z
+         yH/zKrmA41wjU1rucnDW1bq8SawDIgRo6A2eiQ22TOP0a4SI8/53r6h2GhKGeDbolu
+         KP0RRqhT1KCPIJETNATjvr6VeQAgN6iMWTc1LgWYyJbTxVaFthxWvx/CpUMxRgvKs3
+         4F1Hff+G6hnoQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Changbin Du <changbin.du@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] Kbuild: implement support for DWARF v5
-Message-ID: <20210104221229.GB1405526@ubuntu-m3-large-x86>
-References: <20201204011129.2493105-1-ndesaulniers@google.com>
- <20201204011129.2493105-2-ndesaulniers@google.com>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 13/17] local64.h: make <asm/local64.h> mandatory
+Date:   Mon,  4 Jan 2021 19:59:11 -0500
+Message-Id: <20210105005915.3954208-13-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210105005915.3954208-1-sashal@kernel.org>
+References: <20210105005915.3954208-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201204011129.2493105-2-ndesaulniers@google.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 05:11:27PM -0800, Nick Desaulniers wrote:
-> DWARF v5 is the latest standard of the DWARF debug info format.
-> 
-> Feature detection of DWARF5 is onerous, especially given that we've
-> removed $(AS), so we must query $(CC) for DWARF5 assembler directive
-> support.  GNU `as` only recently gained support for specifying
-> -gdwarf-5.
-> 
-> The DWARF version of a binary can be validated with:
-> $ llvm-dwarfdump vmlinux | head -n 4 | grep version
-> or
-> $ readelf --debug-dump=info vmlinux 2>/dev/null | grep Version
-> 
-> DWARF5 wins significantly in terms of size when mixed with compression
-> (CONFIG_DEBUG_INFO_COMPRESSED).
-> 
-> 363M    vmlinux.clang12.dwarf5.compressed
-> 434M    vmlinux.clang12.dwarf4.compressed
-> 439M    vmlinux.clang12.dwarf2.compressed
-> 457M    vmlinux.clang12.dwarf5
-> 536M    vmlinux.clang12.dwarf4
-> 548M    vmlinux.clang12.dwarf2
-> 
-> 515M    vmlinux.gcc10.2.dwarf5.compressed
-> 599M    vmlinux.gcc10.2.dwarf4.compressed
-> 624M    vmlinux.gcc10.2.dwarf2.compressed
-> 630M    vmlinux.gcc10.2.dwarf5
-> 765M    vmlinux.gcc10.2.dwarf4
-> 809M    vmlinux.gcc10.2.dwarf2
-> 
-> Though the quality of debug info is harder to quantify; size is not a
-> proxy for quality.
-> 
-> Jakub notes:
->   All [GCC] 5.1 - 6.x did was start accepting -gdwarf-5 as experimental
->   option that enabled some small DWARF subset (initially only a few
->   DW_LANG_* codes newly added to DWARF5 drafts).  Only GCC 7 (released
->   after DWARF 5 has been finalized) started emitting DWARF5 section
->   headers and got most of the DWARF5 changes in...
-> 
-> Version check GCC so that we don't need to worry about the difference in
-> command line args between GNU readelf and llvm-readelf/llvm-dwarfdump to
-> validate the DWARF Version in the assembler feature detection script.
-> 
-> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
-> Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
-> Suggested-by: Jakub Jelinek <jakub@redhat.com>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Suggested-by: Caroline Tice <cmtice@google.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+[ Upstream commit 87dbc209ea04645fd2351981f09eff5d23f8e2e9 ]
 
-> ---
->  Makefile                          |  1 +
->  include/asm-generic/vmlinux.lds.h |  6 +++++-
->  lib/Kconfig.debug                 | 14 ++++++++++++++
->  scripts/test_dwarf5_support.sh    |  9 +++++++++
->  4 files changed, 29 insertions(+), 1 deletion(-)
->  create mode 100755 scripts/test_dwarf5_support.sh
-> 
-> diff --git a/Makefile b/Makefile
-> index 2430e1ee7c44..45231f6c1935 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -828,6 +828,7 @@ endif
->  
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF2) := 2
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
->  DEBUG_CFLAGS	+= -gdwarf-$(dwarf-version-y)
->  ifneq ($(dwarf-version-y)$(LLVM_IAS),21)
->  # Binutils 2.35+ required for -gdwarf-4+ support.
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index b2b3d81b1535..76ce62c77029 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -829,7 +829,11 @@
->  		.debug_types	0 : { *(.debug_types) }			\
->  		/* DWARF 5 */						\
->  		.debug_macro	0 : { *(.debug_macro) }			\
-> -		.debug_addr	0 : { *(.debug_addr) }
-> +		.debug_addr	0 : { *(.debug_addr) }			\
-> +		.debug_line_str	0 : { *(.debug_line_str) }		\
-> +		.debug_loclists	0 : { *(.debug_loclists) }		\
-> +		.debug_rnglists	0 : { *(.debug_rnglists) }		\
-> +		.debug_str_offsets	0 : { *(.debug_str_offsets) }
->  
->  /* Stabs debugging sections. */
->  #define STABS_DEBUG							\
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 04719294a7a3..987815771ad6 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -274,6 +274,20 @@ config DEBUG_INFO_DWARF4
->  	  It makes the debug information larger, but it significantly
->  	  improves the success of resolving variables in gdb on optimized code.
->  
-> +config DEBUG_INFO_DWARF5
-> +	bool "Generate DWARF Version 5 debuginfo"
-> +	depends on GCC_VERSION >= 70000 || CC_IS_CLANG
-> +	depends on $(success,$(srctree)/scripts/test_dwarf5_support.sh $(CC) $(CLANG_FLAGS))
-> +	help
-> +	  Generate DWARF v5 debug info. Requires binutils 2.35, gcc 7.0+, and
-> +	  gdb 8.0+. Changes to the structure of debug info in Version 5 allow
-> +	  for around 15-18% savings in resulting image and debug info section sizes
-> +	  as compared to DWARF Version 4. DWARF Version 5 standardizes previous
-> +	  extensions such as accelerators for symbol indexing and the format for
-> +	  fission (.dwo/.dwp) files. Users may not want to select this config if
-> +	  they rely on tooling that has not yet been updated to support
-> +	  DWARF Version 5.
-> +
->  endchoice # "DWARF version"
->  
->  config DEBUG_INFO_BTF
-> diff --git a/scripts/test_dwarf5_support.sh b/scripts/test_dwarf5_support.sh
-> new file mode 100755
-> index 000000000000..156ad5ec4274
-> --- /dev/null
-> +++ b/scripts/test_dwarf5_support.sh
-> @@ -0,0 +1,9 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# Test that assembler accepts -gdwarf-5 and .file 0 directives, which were bugs
-> +# in binutils < 2.35.
-> +# https://sourceware.org/bugzilla/show_bug.cgi?id=25612
-> +# https://sourceware.org/bugzilla/show_bug.cgi?id=25614
-> +set -e
-> +echo '.file 0 "filename"' | $* -Wa,-gdwarf-5 -c -x assembler -o /dev/null -
-> -- 
-> 2.29.2.576.ga3fc446d84-goog
-> 
+Make <asm-generic/local64.h> mandatory in include/asm-generic/Kbuild and
+remove all arch/*/include/asm/local64.h arch-specific files since they
+only #include <asm-generic/local64.h>.
+
+This fixes build errors on arch/c6x/ and arch/nios2/ for
+block/blk-iocost.c.
+
+Build-tested on 21 of 25 arch-es.  (tools problems on the others)
+
+Yes, we could even rename <asm-generic/local64.h> to
+<linux/local64.h> and change all #includes to use
+<linux/local64.h> instead.
+
+Link: https://lkml.kernel.org/r/20201227024446.17018-1-rdunlap@infradead.org
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: Mark Salter <msalter@redhat.com>
+Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/alpha/include/asm/local64.h   | 1 -
+ arch/arc/include/asm/Kbuild        | 1 -
+ arch/arm/include/asm/Kbuild        | 1 -
+ arch/arm64/include/asm/Kbuild      | 1 -
+ arch/csky/include/asm/Kbuild       | 1 -
+ arch/h8300/include/asm/Kbuild      | 1 -
+ arch/hexagon/include/asm/Kbuild    | 1 -
+ arch/ia64/include/asm/local64.h    | 1 -
+ arch/m68k/include/asm/Kbuild       | 1 -
+ arch/microblaze/include/asm/Kbuild | 1 -
+ arch/mips/include/asm/Kbuild       | 1 -
+ arch/nds32/include/asm/Kbuild      | 1 -
+ arch/parisc/include/asm/Kbuild     | 1 -
+ arch/powerpc/include/asm/Kbuild    | 1 -
+ arch/riscv/include/asm/Kbuild      | 1 -
+ arch/s390/include/asm/Kbuild       | 1 -
+ arch/sh/include/asm/Kbuild         | 1 -
+ arch/sparc/include/asm/Kbuild      | 1 -
+ arch/x86/include/asm/local64.h     | 1 -
+ arch/xtensa/include/asm/Kbuild     | 1 -
+ include/asm-generic/Kbuild         | 1 +
+ 21 files changed, 1 insertion(+), 20 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/local64.h
+ delete mode 100644 arch/ia64/include/asm/local64.h
+ delete mode 100644 arch/x86/include/asm/local64.h
+
+diff --git a/arch/alpha/include/asm/local64.h b/arch/alpha/include/asm/local64.h
+deleted file mode 100644
+index 36c93b5cc239b..0000000000000
+--- a/arch/alpha/include/asm/local64.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <asm-generic/local64.h>
+diff --git a/arch/arc/include/asm/Kbuild b/arch/arc/include/asm/Kbuild
+index 81f4edec0c2a9..3c1afa524b9c2 100644
+--- a/arch/arc/include/asm/Kbuild
++++ b/arch/arc/include/asm/Kbuild
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ generic-y += extable.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += parport.h
+ generic-y += user.h
+diff --git a/arch/arm/include/asm/Kbuild b/arch/arm/include/asm/Kbuild
+index 383635b68763c..f1398b9267c08 100644
+--- a/arch/arm/include/asm/Kbuild
++++ b/arch/arm/include/asm/Kbuild
+@@ -2,7 +2,6 @@
+ generic-y += early_ioremap.h
+ generic-y += extable.h
+ generic-y += flat.h
+-generic-y += local64.h
+ generic-y += parport.h
+ generic-y += seccomp.h
+ 
+diff --git a/arch/arm64/include/asm/Kbuild b/arch/arm64/include/asm/Kbuild
+index ff9cbb6312128..07ac208edc894 100644
+--- a/arch/arm64/include/asm/Kbuild
++++ b/arch/arm64/include/asm/Kbuild
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ generic-y += early_ioremap.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += qrwlock.h
+ generic-y += qspinlock.h
+diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+index 64876e59e2ef9..2a5a4d94fafad 100644
+--- a/arch/csky/include/asm/Kbuild
++++ b/arch/csky/include/asm/Kbuild
+@@ -2,7 +2,6 @@
+ generic-y += asm-offsets.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += qrwlock.h
+ generic-y += seccomp.h
+ generic-y += user.h
+diff --git a/arch/h8300/include/asm/Kbuild b/arch/h8300/include/asm/Kbuild
+index ddf04f32b5467..60ee7f0d60a8f 100644
+--- a/arch/h8300/include/asm/Kbuild
++++ b/arch/h8300/include/asm/Kbuild
+@@ -2,7 +2,6 @@
+ generic-y += asm-offsets.h
+ generic-y += extable.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += parport.h
+ generic-y += spinlock.h
+diff --git a/arch/hexagon/include/asm/Kbuild b/arch/hexagon/include/asm/Kbuild
+index 373964bb177e4..3ece3c93fe086 100644
+--- a/arch/hexagon/include/asm/Kbuild
++++ b/arch/hexagon/include/asm/Kbuild
+@@ -2,5 +2,4 @@
+ generic-y += extable.h
+ generic-y += iomap.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+diff --git a/arch/ia64/include/asm/local64.h b/arch/ia64/include/asm/local64.h
+deleted file mode 100644
+index 36c93b5cc239b..0000000000000
+--- a/arch/ia64/include/asm/local64.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <asm-generic/local64.h>
+diff --git a/arch/m68k/include/asm/Kbuild b/arch/m68k/include/asm/Kbuild
+index 1bff55aa2d54e..0dbf9c5c6faeb 100644
+--- a/arch/m68k/include/asm/Kbuild
++++ b/arch/m68k/include/asm/Kbuild
+@@ -2,6 +2,5 @@
+ generated-y += syscall_table.h
+ generic-y += extable.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += spinlock.h
+diff --git a/arch/microblaze/include/asm/Kbuild b/arch/microblaze/include/asm/Kbuild
+index 63bce836b9f10..29b0e557aa7c5 100644
+--- a/arch/microblaze/include/asm/Kbuild
++++ b/arch/microblaze/include/asm/Kbuild
+@@ -2,7 +2,6 @@
+ generated-y += syscall_table.h
+ generic-y += extable.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += parport.h
+ generic-y += syscalls.h
+diff --git a/arch/mips/include/asm/Kbuild b/arch/mips/include/asm/Kbuild
+index 198b3bafdac97..95b4fa7bd0d1f 100644
+--- a/arch/mips/include/asm/Kbuild
++++ b/arch/mips/include/asm/Kbuild
+@@ -6,7 +6,6 @@ generated-y += syscall_table_64_n64.h
+ generated-y += syscall_table_64_o32.h
+ generic-y += export.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += parport.h
+ generic-y += qrwlock.h
+diff --git a/arch/nds32/include/asm/Kbuild b/arch/nds32/include/asm/Kbuild
+index ff1e94299317d..82a4453c9c2d5 100644
+--- a/arch/nds32/include/asm/Kbuild
++++ b/arch/nds32/include/asm/Kbuild
+@@ -4,6 +4,5 @@ generic-y += cmpxchg.h
+ generic-y += export.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += parport.h
+ generic-y += user.h
+diff --git a/arch/parisc/include/asm/Kbuild b/arch/parisc/include/asm/Kbuild
+index e3ee5c0bfe80f..a1bd2adc63e3a 100644
+--- a/arch/parisc/include/asm/Kbuild
++++ b/arch/parisc/include/asm/Kbuild
+@@ -3,7 +3,6 @@ generated-y += syscall_table_32.h
+ generated-y += syscall_table_64.h
+ generated-y += syscall_table_c32.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += seccomp.h
+ generic-y += user.h
+diff --git a/arch/powerpc/include/asm/Kbuild b/arch/powerpc/include/asm/Kbuild
+index 90cd5c53af666..e1f9b4ea1c537 100644
+--- a/arch/powerpc/include/asm/Kbuild
++++ b/arch/powerpc/include/asm/Kbuild
+@@ -5,7 +5,6 @@ generated-y += syscall_table_c32.h
+ generated-y += syscall_table_spu.h
+ generic-y += export.h
+ generic-y += kvm_types.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += qrwlock.h
+ generic-y += vtime.h
+diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
+index 59dd7be550054..445ccc97305a5 100644
+--- a/arch/riscv/include/asm/Kbuild
++++ b/arch/riscv/include/asm/Kbuild
+@@ -3,6 +3,5 @@ generic-y += early_ioremap.h
+ generic-y += extable.h
+ generic-y += flat.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+diff --git a/arch/s390/include/asm/Kbuild b/arch/s390/include/asm/Kbuild
+index 319efa0e6d024..1a18d7b82f86d 100644
+--- a/arch/s390/include/asm/Kbuild
++++ b/arch/s390/include/asm/Kbuild
+@@ -7,5 +7,4 @@ generated-y += unistd_nr.h
+ generic-y += asm-offsets.h
+ generic-y += export.h
+ generic-y += kvm_types.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+diff --git a/arch/sh/include/asm/Kbuild b/arch/sh/include/asm/Kbuild
+index 7435182ef8465..fc44d9c88b419 100644
+--- a/arch/sh/include/asm/Kbuild
++++ b/arch/sh/include/asm/Kbuild
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ generated-y += syscall_table.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += parport.h
+diff --git a/arch/sparc/include/asm/Kbuild b/arch/sparc/include/asm/Kbuild
+index 5269a704801fa..3688fdae50e45 100644
+--- a/arch/sparc/include/asm/Kbuild
++++ b/arch/sparc/include/asm/Kbuild
+@@ -6,5 +6,4 @@ generated-y += syscall_table_64.h
+ generated-y += syscall_table_c32.h
+ generic-y += export.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+diff --git a/arch/x86/include/asm/local64.h b/arch/x86/include/asm/local64.h
+deleted file mode 100644
+index 36c93b5cc239b..0000000000000
+--- a/arch/x86/include/asm/local64.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include <asm-generic/local64.h>
+diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
+index c59c42a1221a8..adefb1636f7ae 100644
+--- a/arch/xtensa/include/asm/Kbuild
++++ b/arch/xtensa/include/asm/Kbuild
+@@ -2,7 +2,6 @@
+ generated-y += syscall_table.h
+ generic-y += extable.h
+ generic-y += kvm_para.h
+-generic-y += local64.h
+ generic-y += mcs_spinlock.h
+ generic-y += param.h
+ generic-y += qrwlock.h
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index e78bbb9a07e90..d1300c6e0a471 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -34,6 +34,7 @@ mandatory-y += kmap_types.h
+ mandatory-y += kprobes.h
+ mandatory-y += linkage.h
+ mandatory-y += local.h
++mandatory-y += local64.h
+ mandatory-y += mm-arch-hooks.h
+ mandatory-y += mmiowb.h
+ mandatory-y += mmu.h
+-- 
+2.27.0
+
