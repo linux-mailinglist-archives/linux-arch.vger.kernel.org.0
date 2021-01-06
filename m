@@ -2,96 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6652EC262
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Jan 2021 18:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297D32EC26B
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Jan 2021 18:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727425AbhAFRga (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Jan 2021 12:36:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53068 "EHLO mail.kernel.org"
+        id S1727618AbhAFRhV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Jan 2021 12:37:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726535AbhAFRga (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 6 Jan 2021 12:36:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 27EE620657;
-        Wed,  6 Jan 2021 17:35:49 +0000 (UTC)
+        id S1726581AbhAFRhV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 6 Jan 2021 12:37:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B372E20657;
+        Wed,  6 Jan 2021 17:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609954549;
-        bh=k/pidVaDKztHR41se4lBhvy8bU+Plsc0TOzwpF2mduk=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=hnsJIqRKhC24C/Stvdg5YKGmas3ubUsxEHrnaljMTkRZZZfYugDUrOd8B04PHjptH
-         74s04YV9YWhg6RsV7VHoIbEgIKGqbO0Ft7uPuGoXUFg16s9bZ9T4mTbY02mv5+ukT9
-         B8rZDLHondps6aXX+pohT/nmRJFF115otfGe3PQZbs2AMYczh48nflSHYbJeYFgpuq
-         k2gq2X2g/U42mEKpwQFsFgRSSTp9xAPstrqxFauKu4vi+2ZJprMP08obC9hMFNIB3C
-         xZMJqdzdNgAPPOu7ErBpkHL7YCLEwS+cbwhUkRkV0EwV9VRfiKM5IY685xRviQLMxz
-         apXhNnxsJ2C8w==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id E421735225EC; Wed,  6 Jan 2021 09:35:48 -0800 (PST)
-Date:   Wed, 6 Jan 2021 09:35:48 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        s=k20201202; t=1609954600;
+        bh=wj3HaNixVkUoCdMWDV3gqv9RNsgUKYMMrBr4rQ/Li34=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Vvz7yoO0xg9KXBbwJe7xVTaDIeW9yGAwHPnxiR8yi1h0bcHkV/E9ngKR6CohYbIDk
+         s7WYdd5YzS1C9MMgW9MuOtq8hAGbmE3eR8ddR9bvQMVpEyloBr0gtwklHSLxU5Rv7O
+         ETHZA4g59Ojjrw004DZvrPxe2UmqvTrf1AGWkCqYqPVoB9EZLejPzEiiH95mqSWTli
+         +yICFjxcyN8GuSnnBZ8v0kDdUwuDYQiqn1AsGajz0itNXg1Eglrn+rb3KwqDlfOVgd
+         g2JJ05vGMpViuNVU/sxNrYhrDALBhtjyPwC6cj8ps3xM0JaTR0kdpSgpXac22ImAuu
+         OvQuvCP2D7QYQ==
+From:   paulmck@kernel.org
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@fb.com, mingo@kernel.org
 Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-Subject: [PATCH memory-model 0/3] LKMM updates for v5.12
-Message-ID: <20210106173548.GA23664@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH tip/core/rcu 1/3] tools/memory-model: Tie acquire loads to reads-from
+Date:   Wed,  6 Jan 2021 09:36:36 -0800
+Message-Id: <20210106173638.23741-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.9.5
+In-Reply-To: <20210106173548.GA23664@paulmck-ThinkPad-P72>
+References: <20210106173548.GA23664@paulmck-ThinkPad-P72>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello!
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-This series provides a few LKMM updates:
+This commit explicitly makes the connection between acquire loads and
+the reads-from relation.  It also adds an entry for happens-before,
+and refers to the corresponding section of explanation.txt.
 
-1.	tools/memory-model: Tie acquire loads to reads-from.
+Reported-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ tools/memory-model/Documentation/glossary.txt | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-2.	tools/memory-model: Remove redundant initialization in litmus
-	tests, courtesy of Akira Yokosawa.
+diff --git a/tools/memory-model/Documentation/glossary.txt b/tools/memory-model/Documentation/glossary.txt
+index 79acb75..b2da636 100644
+--- a/tools/memory-model/Documentation/glossary.txt
++++ b/tools/memory-model/Documentation/glossary.txt
+@@ -33,10 +33,11 @@ Acquire:  With respect to a lock, acquiring that lock, for example,
+ 	acquire loads.
+ 
+ 	When an acquire load returns the value stored by a release store
+-	to that same variable, then all operations preceding that store
+-	happen before any operations following that load acquire.
++	to that same variable, (in other words, the acquire load "reads
++	from" the release store), then all operations preceding that
++	store "happen before" any operations following that load acquire.
+ 
+-	See also "Relaxed" and "Release".
++	See also "Happens-Before", "Reads-From", "Relaxed", and "Release".
+ 
+ Coherence (co):  When one CPU's store to a given variable overwrites
+ 	either the value from another CPU's store or some later value,
+@@ -119,6 +120,11 @@ Fully Ordered:  An operation such as smp_mb() that orders all of
+ 	that orders all of its CPU's prior accesses, itself, and
+ 	all of its CPU's subsequent accesses.
+ 
++Happens-Before (hb): A relation between two accesses in which LKMM
++	guarantees the first access precedes the second.  For more
++	detail, please see the "THE HAPPENS-BEFORE RELATION: hb"
++	section of explanation.txt.
++
+ Marked Access:  An access to a variable that uses an special function or
+ 	macro such as "r1 = READ_ONCE(x)" or "smp_store_release(&a, 1)".
+ 
+-- 
+2.9.5
 
-3.	tools/memory-model: Fix typo in klitmus7 compatibility table,
-	courtesy of Akira Yokosawa.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- Documentation/glossary.txt                                              |   12 +++++++---
- README                                                                  |    2 -
- litmus-tests/CoRR+poonceonce+Once.litmus                                |    4 ---
- litmus-tests/CoRW+poonceonce+Once.litmus                                |    4 ---
- litmus-tests/CoWR+poonceonce+Once.litmus                                |    4 ---
- litmus-tests/CoWW+poonceonce.litmus                                     |    4 ---
- litmus-tests/IRIW+fencembonceonces+OnceOnce.litmus                      |    5 ----
- litmus-tests/IRIW+poonceonces+OnceOnce.litmus                           |    5 ----
- litmus-tests/ISA2+pooncelock+pooncelock+pombonce.litmus                 |    7 -----
- litmus-tests/ISA2+poonceonces.litmus                                    |    6 -----
- litmus-tests/ISA2+pooncerelease+poacquirerelease+poacquireonce.litmus   |    6 -----
- litmus-tests/LB+fencembonceonce+ctrlonceonce.litmus                     |    5 ----
- litmus-tests/LB+poacquireonce+pooncerelease.litmus                      |    5 ----
- litmus-tests/LB+poonceonces.litmus                                      |    5 ----
- litmus-tests/MP+fencewmbonceonce+fencermbonceonce.litmus                |    5 ----
- litmus-tests/MP+onceassign+derefonce.litmus                             |    4 ---
- litmus-tests/MP+polockmbonce+poacquiresilsil.litmus                     |    5 ----
- litmus-tests/MP+polockonce+poacquiresilsil.litmus                       |    5 ----
- litmus-tests/MP+polocks.litmus                                          |    6 -----
- litmus-tests/MP+poonceonces.litmus                                      |    5 ----
- litmus-tests/MP+pooncerelease+poacquireonce.litmus                      |    5 ----
- litmus-tests/MP+porevlocks.litmus                                       |    6 -----
- litmus-tests/R+fencembonceonces.litmus                                  |    5 ----
- litmus-tests/R+poonceonces.litmus                                       |    5 ----
- litmus-tests/S+fencewmbonceonce+poacquireonce.litmus                    |    5 ----
- litmus-tests/S+poonceonces.litmus                                       |    5 ----
- litmus-tests/SB+fencembonceonces.litmus                                 |    5 ----
- litmus-tests/SB+poonceonces.litmus                                      |    5 ----
- litmus-tests/SB+rfionceonce-poonceonces.litmus                          |    5 ----
- litmus-tests/WRC+poonceonces+Once.litmus                                |    5 ----
- litmus-tests/WRC+pooncerelease+fencermbonceonce+Once.litmus             |    5 ----
- litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus                 |    7 -----
- litmus-tests/Z6.0+pooncelock+pooncelock+pombonce.litmus                 |    7 -----
- litmus-tests/Z6.0+pooncerelease+poacquirerelease+fencembonceonce.litmus |    6 -----
- 34 files changed, 42 insertions(+), 138 deletions(-)
