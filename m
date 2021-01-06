@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908562EC50F
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Jan 2021 21:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92E22EC4FE
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Jan 2021 21:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727735AbhAFUfO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Jan 2021 15:35:14 -0500
-Received: from mail-wm1-f43.google.com ([209.85.128.43]:40900 "EHLO
-        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbhAFUer (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Jan 2021 15:34:47 -0500
-Received: by mail-wm1-f43.google.com with SMTP id r4so3695269wmh.5;
-        Wed, 06 Jan 2021 12:34:30 -0800 (PST)
+        id S1727552AbhAFUes (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Jan 2021 15:34:48 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]:35690 "EHLO
+        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727498AbhAFUes (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Jan 2021 15:34:48 -0500
+Received: by mail-wm1-f51.google.com with SMTP id e25so3735105wme.0;
+        Wed, 06 Jan 2021 12:34:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DAKijZroIKQByX8CE0+1w/bE11gheXfs1vD8PWKgeTU=;
-        b=hY8mkTWqRm47gOkNso3IHZhnRVK6jter5wnzhvuyzPJEUhoTuur/eMIanT9cxuCCzl
-         14ghTpPUKuaBhsl4vId/HO0jnpduAPc+26am1TpOc5wbv/cD6FdKx8NBo+mAsFOHv2OA
-         +ruw68zxsj2LDbjadZ7SEIeKtrdm3zMFFOw328bIg/h8KLh+vz19mKRd2NuCXnNiGBxs
-         vtj+w3LwdFm18Be+Tn+HrytlzYc6T+Ugp2+R1zpQjHt+plUq+la7XnQd1UKXDT4bZBtw
-         UMj6FTbPtnFDKoJ9zse7sVVWVPHbvQAMS0HpwtQDYlC8G3mgdVmOPV4+5nLLlGyPpJDZ
-         BP0g==
-X-Gm-Message-State: AOAM530HDyKKNk8Us6XCtTRJjKTc5EGFqWQ4tLrE9QpoYDurHQ8qZcXq
-        vxUuCunvy85oO+sWSUPz5Jn8zaCkM6s=
-X-Google-Smtp-Source: ABdhPJwUgNxMdLUn6hWXgtOGt1egKTevR1W/4hWs3CrSHdK7rUotGUG+2zt6J9yyFSk4mQYZgn3arg==
-X-Received: by 2002:a1c:2646:: with SMTP id m67mr5180316wmm.81.1609965245152;
+        bh=jgoWHWZJp95oZbUGT1gHoY/N870o7iAvx/CdWeU6WPw=;
+        b=dGQiW4nhVJNlw575IV/Mt+VXj5/oktgOU7EJhiTvwcq7IAs4P8RdU/5jl8ZBWVWyJS
+         g7kZ/OrK2PxaBxHhLD4HoQpsKaz+LkOYoZCDMlVwBxbGVVuTjup4KJcIF/Ue3OHnRdkj
+         AAu4tHBLot/sguo3gPE6olN9f1UD9+BaFJy5xSargXPS5Iko3zt64qfo0tMX5uAXoott
+         kGuVhmGjIhPwh444b1mOB4KaTNm71xPLEWBpcmH3RX0TVplfKMF2/41crMn90IjxABib
+         Dt0mSjjVqoLp5uZZA1f1VDS6wCktepr5ykrHxZD4kF+JAe84pOranUZvfchbdFluNX9y
+         xq7g==
+X-Gm-Message-State: AOAM531CUkwhgVj5R4HeZPH41ZNnadhf3OBp9bfq2tbTuJkTwbWHp27W
+        UiFv9eSbiqxUhATTlR+cUb4nm00ouPE=
+X-Google-Smtp-Source: ABdhPJyuv5q+M5o/O3HzK6MUdNmuBbtkf73L2+Y2yHON5LVpnXlrbvr42vAowFRH9ldi5ITl4ZtVvQ==
+X-Received: by 2002:a05:600c:2042:: with SMTP id p2mr5316377wmg.152.1609965245946;
         Wed, 06 Jan 2021 12:34:05 -0800 (PST)
 Received: from liuwe-devbox-debian-v2.j3c5onc20sse1dnehy4noqpfcg.zx.internal.cloudapp.net ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id u9sm4499456wmb.32.2021.01.06.12.34.04
+        by smtp.gmail.com with ESMTPSA id u9sm4499456wmb.32.2021.01.06.12.34.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 12:34:04 -0800 (PST)
+        Wed, 06 Jan 2021 12:34:05 -0800 (PST)
 From:   Wei Liu <wei.liu@kernel.org>
 To:     Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
 Cc:     virtualization@lists.linux-foundation.org,
@@ -41,18 +41,19 @@ Cc:     virtualization@lists.linux-foundation.org,
         Vineeth Pillai <viremana@linux.microsoft.com>,
         Sunil Muthuswamy <sunilmut@microsoft.com>,
         Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
+        Wei Liu <wei.liu@kernel.org>, Rob Herring <robh@kernel.org>,
         "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-pci@vger.kernel.org (open list:PCI NATIVE HOST BRIDGE AND
+        ENDPOINT DRIVERS),
         linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH v4 11/17] asm-generic/hyperv: update hv_msi_entry
-Date:   Wed,  6 Jan 2021 20:33:44 +0000
-Message-Id: <20210106203350.14568-12-wei.liu@kernel.org>
+Subject: [PATCH v4 12/17] asm-generic/hyperv: update hv_interrupt_entry
+Date:   Wed,  6 Jan 2021 20:33:45 +0000
+Message-Id: <20210106203350.14568-13-wei.liu@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210106203350.14568-1-wei.liu@kernel.org>
 References: <20210106203350.14568-1-wei.liu@kernel.org>
@@ -62,77 +63,90 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We will soon need to access fields inside the MSI address and MSI data
-fields. Introduce hv_msi_address_register and hv_msi_data_register.
+We will soon use the same structure to handle IO-APIC interrupts as
+well. Introduce an enum to identify the source and a data structure for
+IO-APIC RTE.
 
-Fix up one user of hv_msi_entry in mshyperv.h.
+While at it, update pci-hyperv.c to use the enum.
 
-No functional change expected.
+No functional change.
 
 Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- arch/x86/include/asm/mshyperv.h   |  4 ++--
- include/asm-generic/hyperv-tlfs.h | 28 ++++++++++++++++++++++++++--
- 2 files changed, 28 insertions(+), 4 deletions(-)
+ drivers/pci/controller/pci-hyperv.c |  2 +-
+ include/asm-generic/hyperv-tlfs.h   | 36 +++++++++++++++++++++++++++--
+ 2 files changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 4e590a167160..cbee72550a12 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -257,8 +257,8 @@ static inline void hv_apic_init(void) {}
- static inline void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
- 					      struct msi_desc *msi_desc)
- {
--	msi_entry->address = msi_desc->msg.address_lo;
--	msi_entry->data = msi_desc->msg.data;
-+	msi_entry->address.as_uint32 = msi_desc->msg.address_lo;
-+	msi_entry->data.as_uint32 = msi_desc->msg.data;
- }
- 
- #else /* CONFIG_HYPERV */
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index 6db8d96a78eb..87aa62ee0368 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -1216,7 +1216,7 @@ static void hv_irq_unmask(struct irq_data *data)
+ 	params = &hbus->retarget_msi_interrupt_params;
+ 	memset(params, 0, sizeof(*params));
+ 	params->partition_id = HV_PARTITION_ID_SELF;
+-	params->int_entry.source = 1; /* MSI(-X) */
++	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
+ 	hv_set_msi_entry_from_desc(&params->int_entry.msi_entry, msi_desc);
+ 	params->device_id = (hbus->hdev->dev_instance.b[5] << 24) |
+ 			   (hbus->hdev->dev_instance.b[4] << 16) |
 diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index ec53570102f0..7e103be42799 100644
+index 7e103be42799..8423bf53c237 100644
 --- a/include/asm-generic/hyperv-tlfs.h
 +++ b/include/asm-generic/hyperv-tlfs.h
-@@ -480,12 +480,36 @@ struct hv_create_vp {
+@@ -480,6 +480,11 @@ struct hv_create_vp {
  	u64 flags;
  } __packed;
  
-+union hv_msi_address_register {
-+	u32 as_uint32;
-+	struct {
-+		u32 reserved1:2;
-+		u32 destination_mode:1;
-+		u32 redirection_hint:1;
-+		u32 reserved2:8;
-+		u32 destination_id:8;
-+		u32 msi_base:12;
-+	};
-+} __packed;
++enum hv_interrupt_source {
++	HV_INTERRUPT_SOURCE_MSI = 1, /* MSI and MSI-X */
++	HV_INTERRUPT_SOURCE_IOAPIC,
++};
 +
-+union hv_msi_data_register {
-+	u32 as_uint32;
-+	struct {
-+		u32 vector:8;
-+		u32 delivery_mode:3;
-+		u32 reserved1:3;
-+		u32 level_assert:1;
-+		u32 trigger_mode:1;
-+		u32 reserved2:16;
-+	};
-+} __packed;
-+
- /* HvRetargetDeviceInterrupt hypercall */
- union hv_msi_entry {
- 	u64 as_uint64;
+ union hv_msi_address_register {
+ 	u32 as_uint32;
  	struct {
--		u32 address;
--		u32 data;
-+		union hv_msi_address_register address;
-+		union hv_msi_data_register data;
+@@ -513,10 +518,37 @@ union hv_msi_entry {
  	} __packed;
  };
  
++union hv_ioapic_rte {
++	u64 as_uint64;
++
++	struct {
++		u32 vector:8;
++		u32 delivery_mode:3;
++		u32 destination_mode:1;
++		u32 delivery_status:1;
++		u32 interrupt_polarity:1;
++		u32 remote_irr:1;
++		u32 trigger_mode:1;
++		u32 interrupt_mask:1;
++		u32 reserved1:15;
++
++		u32 reserved2:24;
++		u32 destination_id:8;
++	};
++
++	struct {
++		u32 low_uint32;
++		u32 high_uint32;
++	};
++} __packed;
++
+ struct hv_interrupt_entry {
+-	u32 source;			/* 1 for MSI(-X) */
++	u32 source;
+ 	u32 reserved1;
+-	union hv_msi_entry msi_entry;
++	union {
++		union hv_msi_entry msi_entry;
++		union hv_ioapic_rte ioapic_rte;
++	};
+ } __packed;
+ 
+ /*
 -- 
 2.20.1
 
