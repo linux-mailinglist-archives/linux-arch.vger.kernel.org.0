@@ -2,157 +2,229 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92182EBB05
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Jan 2021 09:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEAC2EBB4A
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Jan 2021 09:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbhAFIUR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Jan 2021 03:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726020AbhAFIUQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Jan 2021 03:20:16 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0B1C06134C;
-        Wed,  6 Jan 2021 00:19:36 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id i5so1757760pgo.1;
-        Wed, 06 Jan 2021 00:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/U5C7cSXXWC3ZHRZnRRNCwYTblI/jKmn2rVA8KcxSJM=;
-        b=PAK/LCgT64vP6V1vGj+K9eE8e05GbIdrgGgEZmxtg9N74xdClCsYi4QLfwVO+VAirP
-         selgESgzICugrADPg0yKx/auIhK2WDP3gl0eF27I++3+Fh0SYUVDggeHigfolqUefZE9
-         lqOr2KqLlzUR2ynVavN9HeiK10rIuYs6kGxJdCwd5xKqTxXJW8oxS9ahnjbtL1ytaOeS
-         2JqZAZWM7Yy3yEI92RBU1CMNO8b4zwRWU0ikSJL6Q+TZZTAyUXVJPOL+pr+kbtJn5WrM
-         IXsY+S1tPmq4QzOVkgmlx7fk53q4At5W1yNZ2Kn4ivgI7L3r8lCzyi5QSMyE8tGQaZIg
-         fCmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/U5C7cSXXWC3ZHRZnRRNCwYTblI/jKmn2rVA8KcxSJM=;
-        b=oo5CK7h0T1YXLVqyafoQnbjOg9cW+w0ehDsJLTV7QqkyOG4/Io9clDXXreMm1cC4KM
-         zAkzvPYArML2FajCRXH6XFfkotgG78ZI93X+MXgBWPnu0BQ8aJH/8U8tkQdhGjtph3Ya
-         BCpKH54ecuqyimCb+YXiKZ/GfY/AjlzqxFbupVA6GwkaOvVFSNQ3M8n7x7szHFEbZ0bB
-         iyDCPQw5JnXsqH/ZY31KKlg35GyijncWdOFUDOO20JYMDfB1tKd/9pGvLD8TTn+AZmFJ
-         UEytBOJBPh5m/urJhbXK6pUbIWGpEim/N0nTl7XRLKu1nsvhMslJxhTnXhVAsOkDlVqN
-         /D2g==
-X-Gm-Message-State: AOAM530AFiCgJxGmMGB3+VRRnGyJhyHlJkYPgUh8xrwnoCJHc1C09JEa
-        DOSnF59hxqHDyONDJ0rmpBA=
-X-Google-Smtp-Source: ABdhPJzngzNs2PcZJpclKMgPnTHoksW90J8u4KTkMxsH+ek49+eJ14WA6u41OIhjUkvHrYkH0UG1pQ==
-X-Received: by 2002:a63:1863:: with SMTP id 35mr3393995pgy.191.1609921176010;
-        Wed, 06 Jan 2021 00:19:36 -0800 (PST)
-Received: from shinobu (p97026-ipoefx.ipoe.ocn.ne.jp. [153.246.132.25])
-        by smtp.gmail.com with ESMTPSA id i25sm1684029pgb.33.2021.01.06.00.19.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 00:19:35 -0800 (PST)
-Date:   Wed, 6 Jan 2021 17:19:25 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Syed Nayyar Waris <syednwaris@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "(Exiting) Amit Kucheria" <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 0/5] Introduce the for_each_set_clump macro
-Message-ID: <X/VyjQUIbqXAeZpe@shinobu>
-References: <cover.1608963094.git.syednwaris@gmail.com>
- <CACRpkdYZwMy5faNhUyiNnvdnMOf4ac7XWqjnf3f4jCJeE=p2Lw@mail.gmail.com>
- <CAMpxmJW46Oh2h7RrBNo5vACfYnWy63rZOO=Va=ppUDeaj5GpBg@mail.gmail.com>
- <20210105143921.GL4077@smile.fi.intel.com>
- <CAMpxmJXX5tPBvHRBkgCBK22vUc_FOo2ENUagqOF-opzakkyjrA@mail.gmail.com>
+        id S1726459AbhAFItp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Jan 2021 03:49:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45674 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726433AbhAFItp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 6 Jan 2021 03:49:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC51123118;
+        Wed,  6 Jan 2021 08:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609922943;
+        bh=gT3/+tWZtzKe1j6x5VFIce7vv/uhbvZNpLPaNlsXcKM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=np2gSS/mPFxgqMcu+9+al7Nh78bO3/FEXITDBqeJ69Vt6G7smIWAuO5u1QB36GjXX
+         6ZbAYTL86VdhGSNMDHxo6QWlqSCCgfr34eBwbKDY82OZTK0PfrW5OTdxYqlflR9TBm
+         D6ubYtlKGL+/OiK7hkAUTYRc9TSGHQtL2qYGiwZaS9NMV4xaSrWb/eaASTOu+HJ3FJ
+         ch3rM6h55SWBP4Ik01eeps6tBAFaESZ5C60MALPLRcQT5I/hAlah7550Co5SpdFHH9
+         w7fyAwQOtsWqeo104orTBUT2OHnVrQSwfJZ1AzCpc1M+l4my4vXHGz1lT9QcNrrhT5
+         eO2B/p27lufjA==
+Received: by mail-ot1-f44.google.com with SMTP id 11so2328891oty.9;
+        Wed, 06 Jan 2021 00:49:03 -0800 (PST)
+X-Gm-Message-State: AOAM533I6qie+FBV9wsT75+OoHlglYYjZPJlbufFq6r3Tia/QlawaDWG
+        CFK8sOjWBoUXu+Of6ZryiGwf3snIdup7dlRMJCg=
+X-Google-Smtp-Source: ABdhPJy3gx1O+/hZNiiIEIl7JAsbZS46QiIzX4CWfduzbKOPXb9L+t7kxJpvAnO5PDTD34g7IHQ7qtIXvsXh5hW4M7w=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr2443064otm.305.1609922942761;
+ Wed, 06 Jan 2021 00:49:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ygWp8EN/cCl4AW3c"
-Content-Disposition: inline
-In-Reply-To: <CAMpxmJXX5tPBvHRBkgCBK22vUc_FOo2ENUagqOF-opzakkyjrA@mail.gmail.com>
+References: <20210106064807.253112-1-Sonicadvance1@gmail.com>
+In-Reply-To: <20210106064807.253112-1-Sonicadvance1@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 6 Jan 2021 09:48:46 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2tV3HzPpbCR7mAeutx38_D2d-vfpEgpXv+GW_98w3VSQ@mail.gmail.com>
+Message-ID: <CAK8P3a2tV3HzPpbCR7mAeutx38_D2d-vfpEgpXv+GW_98w3VSQ@mail.gmail.com>
+Subject: Re: [PATCH] Adds a new ioctl32 syscall for backwards compatibility layers
+To:     sonicadvance1@gmail.com
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "Amanieu d'Antras" <amanieu@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Joe Perches <joe@perches.com>, Jan Kara <jack@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, Jan 6, 2021 at 7:48 AM <sonicadvance1@gmail.com> wrote:
+> From: Ryan Houdek <Sonicadvance1@gmail.com>
+...
+> This does not solve the following problems:
+> 1) compat_alloc_user_space inside ioctl
+> 2) ioctls that check task mode instead of entry point for behaviour
+> 3) ioctls allocating memory
+> 4) struct packing problems between architectures
+>
+> Workarounds for the problems presented:
+> 1a) Do a stack pivot to the lower 32bits from userspace
+>   - Forces host 64bit process to have its thread stacks to live in 32bit
+>   space. Not ideal.
+>   - Only do a stack pivot on ioctl to save previous 32bit VA space
+> 1b) Teach kernel that compat_alloc_userspace can return a 64bit pointer
+>   - x86-64 truncates stack from this function
+>   - AArch64 returns the full stack pointer
+>   - Only ~29 users. Validating all of them support a 64bit stack is
+>   trivial?
 
---ygWp8EN/cCl4AW3c
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've almost completed the removal of compat_alloc_user_space(),
+that should no longer be a concern when the syscall gets added.
 
-On Wed, Jan 06, 2021 at 08:27:43AM +0100, Bartosz Golaszewski wrote:
-> On Tue, Jan 5, 2021 at 3:38 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Tue, Jan 05, 2021 at 03:19:13PM +0100, Bartosz Golaszewski wrote:
-> > > On Sun, Dec 27, 2020 at 10:27 PM Linus Walleij <linus.walleij@linaro.=
-org> wrote:
-> > > >
-> > > > On Sat, Dec 26, 2020 at 7:41 AM Syed Nayyar Waris <syednwaris@gmail=
-=2Ecom> wrote:
-> > > >
-> > > > > Since this patchset primarily affects GPIO drivers, would you like
-> > > > > to pick it up through your GPIO tree?
-> > > >
-> > > > Actually Bartosz is handling the GPIO patches for v5.12.
-> > > > I tried to merge the patch series before but failed for
-> > > > various reasons.
-> >
-> > > My info on this is a bit outdated - didn't Linus Torvalds reject these
-> > > patches from Andrew Morton's PR? Or am I confusing this series with
-> > > something else?
-> >
-> > Linus T. told that it can be done inside GPIO realm. This version tries
-> > (badly in my opinion) to achieve that.
-> >
->=20
-> I'm seeing William and Arnd have some unaddressed issues with patch 1
-> (with using __builtin_unreachable()).
->=20
-> Admittedly I didn't follow the previous iterations too much so I may
-> miss some history behind it. Why do the first two patches go into lib
-> if this is supposed to be gpiolib-only?
->=20
-> Bartosz
+> 2a) Any application using these can be checked for compatibility in
+> userspace and put on a block list.
+> 2b) Fix any ioctls doing broken behaviour based on task mode rather than
+> ioctl entry point
 
-This patchset originally start out as a replacement for
-bitmap_get_value8/bitmap_set_value8/for_each_set_clump8, which are used
-outside of the GPIO subsystem. Over the course of the revisions, the
-scope of this patchset was reduced down and now it's only affecting GPIO
-drivers.
+What the ioctls() actually check is 'in_compat_syscall()', which is not
+the mode of the task but the type of syscall. There is actually a general
+trend to use this helper more rather than less, and I think the only
+way forward here is to ensure that this returns true when entering
+through the new syscall number.
 
-You're right that this shouldn't be going into lib anymore because it's
-gpiolib-only now. I expect the next revision of this patchset Syed
-submits will address that.
+For x86, this has another complication, as some ioctls also need to
+check whether they are in an ia32 task (with packed u64 and 32-bit
+__kernel_old_time_t) or an x32 task (with aligned u64 and 64-bit
+__kernel_old_time_t). If the new syscall gets wired up on x86 as well,
+you'd need to decide which of the two behaviors you want.
 
-William Breathitt Gray
+> 3a) Userspace consumes all VA space above 32bit. Forcing allocations to
+> occur in lower 32bits
+>   - This is the current implementation
+> 3b) Ensure any allocation in the ioctl handles ioctl entrypoint rather
+> than just allow generic memory allocations in full VA space
+>   - This is hard to guarantee
 
---ygWp8EN/cCl4AW3c
-Content-Type: application/pgp-signature; name="signature.asc"
+What kind of allocation do you mean here? Can you give an example of
+an ioctl that does this?
 
------BEGIN PGP SIGNATURE-----
+> 4a) Blocklist any application using ioctls that have different struct
+> packing across the boundary
+>   - Can happen when struct packing of 32bit x86 application goes down
+>   the aarch64 compat_ioctl path
+>   - Userspace is a AArch64 process passing 32bit x86 ioctl structures
+>   through the compat_ioctl path which is typically for AArch32 processes
+>   - None currently identified
+> 4b) Work with upstream kernel and userspace projects to evaluate and fix
+>   - Identify the problem ioctls
+>   - Implement a new ioctl with more sane struct packing that matches
+>   cross-arch
+>   - Implement new ioctl while maintaining backwards compatibility with
+>   previous ioctl handler
+>   - Change upstream project to use the new compatibility ioctl
+>   - ioctl deprecation will be case by case per device and project
+> 4b) Userspace implements a full ioctl emulation layer
+>   - Parses the full ioctl tree
+>   - Either passes through ioctls that it doesn't understand or
+>   transforms ioctls that it knows are trouble
+>   - Has the downside that it can still run in to edge cases that will
+>   fail
+>   - Performance of additional tracking is a concern
+>   - Prone to failure keeping the kernel ioctl and userspace ioctl
+>   handling in sync
+>   - Really want to have it in the kernel space as much as possible
 
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAl/1cnkACgkQhvpINdm7
-VJLMPRAAwJEYL1+57OyJLDo0vHssi6pk3Thk0epTN66eEBfuWpVGeQIpwB3oeKjp
-N/h5TcXnHUBk7r52tZwPbkm/YoFPbzGCz+3JIOKxIOhnbq3hRjtgPDQOQmBJEMX3
-pIhwSPAtCR+NSzOr5W1yXifWhOazAE5RXhLs1XedN60Gx1Zbopyl5XDr2YbFesgJ
-IUwzzncM6VXMAU6Gf6mbuLFiWRBjLTFyCAtHHZaBxVPbU6hrUwdqXIAXBmaL/pl+
-PBvCiKMXXFCCxJ+hAtTZ+ODXjxO9tRbzvDnYolERDXNK+iO/o5bXoks+Dm/UDROQ
-r+mt2yIIur6IF8SU/pFdC0SYr7PTpv1WtT6D+Q4AlXpwG2yP8g/kXhYE+pJF1M3m
-jGqhYRf7Li6hC6K9xp/3C1pjTGRBB8lhYQWCHbmqT8IqHo/vMLf3Moqvmt/+hFB8
-cGSS+bR7HGQBxJQ58xlwumPCbI0s79wU/HjEcvhQLNZACr7pgNRvHYv9BdXoGN16
-CZZKXSnhOuJxgMOWAplY+unyNBqSItcqNXFQLouoToRGZwqp+tPo04IiOP5NSv6v
-kxipYcsXAApQSy1wqtLsX0LBso4OPSl3e4eAOFJYanWPy6HhJpZgx7BXlDFoDkG3
-lc9Kn4B0BMp8eVH5Qi6gDrMZMIUvrNmWw2XHs4BuRZ5FSpYR0oY=
-=37la
------END PGP SIGNATURE-----
+I think there are only a few ioctls that are affected, and you can
+probably get a list from qemu, which emulates them in user space
+already. Doing that transformation should not be all that hard
+in the end.
 
---ygWp8EN/cCl4AW3c--
+If we want to do this in the kernel, this probably requires changes
+to the syscall calling convention. Adding a flag to pick a particular
+style of ioctl arguments would work, and this could enable the
+case of emulating arm32 ioctls on x86-64 hosts.
+
+> diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+> index 86a9d7b3eabe..949788f5ba40 100644
+> --- a/arch/arm64/include/asm/unistd.h
+> +++ b/arch/arm64/include/asm/unistd.h
+> @@ -38,7 +38,7 @@
+>  #define __ARM_NR_compat_set_tls                (__ARM_NR_COMPAT_BASE + 5)
+>  #define __ARM_NR_COMPAT_END            (__ARM_NR_COMPAT_BASE + 0x800)
+>
+> -#define __NR_compat_syscalls           442
+> +#define __NR_compat_syscalls           443
+>  #endif
+>
+>  #define __ARCH_WANT_SYS_CLONE
+> diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+> index cccfbbefbf95..35e3bc83dbdc 100644
+> --- a/arch/arm64/include/asm/unistd32.h
+> +++ b/arch/arm64/include/asm/unistd32.h
+> @@ -891,6 +891,8 @@ __SYSCALL(__NR_faccessat2, sys_faccessat2)
+>  __SYSCALL(__NR_process_madvise, sys_process_madvise)
+>  #define __NR_epoll_pwait2 441
+>  __SYSCALL(__NR_epoll_pwait2, compat_sys_epoll_pwait2)
+> +#define __NR_ioctl32 442
+> +__SYSCALL(__NR_ioctl32, compat_sys_ioctl)
+>
+
+I'm not sure why you want this in 32-bit processes, can't they just call
+the normal ioctl() function?
+
+>  }
+> +
+> +COMPAT_SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd,
+> +                       compat_ulong_t, arg)
+> +{
+> +       return do_ioctl32(fd, cmd, arg);
+> +}
+> +
+> +SYSCALL_DEFINE3(ioctl32, unsigned int, fd, unsigned int, cmd,
+> +                       compat_ulong_t, arg)
+> +{
+> +       return do_ioctl32(fd, cmd, arg);
+> +}
+
+These two look identical to me, I don't think you need to add a wrapper
+here at all, but can just use the normal compat_sys_ioctl entry point
+unless you want to add a 'flags' argument to control the struct padding.
+
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> index 728752917785..18279e5b7b4f 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -862,8 +862,15 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+>  #define __NR_epoll_pwait2 441
+>  __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+>
+> +#define __NR_ioctl32 442
+> +#ifdef CONFIG_COMPAT
+> +__SC_COMP(__NR_ioctl32, sys_ioctl32, compat_sys_ioctl)
+> +#else
+> +__SC_COMP(__NR_ioctl32, sys_ni_syscall, sys_ni_syscall)
+> +#endif
+> +
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 442
+> +#define __NR_syscalls 443
+
+(already mentioned on IRC)
+
+If you add it here, the same number should be assigned across all architectures,
+or at least a comment added to declare the number as reserved, to keep
+the following syscalls in sync.
+
+        Arnd
