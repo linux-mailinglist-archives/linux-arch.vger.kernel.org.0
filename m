@@ -2,62 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B102ECE98
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Jan 2021 12:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 179DA2ECF1C
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Jan 2021 12:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbhAGLUY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jan 2021 06:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbhAGLUY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jan 2021 06:20:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969B8C0612F4;
-        Thu,  7 Jan 2021 03:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OaPgUI5aCCYZQI5vszvvf5IbsCgMfnpkhzevE0JkHCg=; b=IqMv68P+0jpey0fzZ2N7VF5J0c
-        +L6n+CHvNdfG/kIP9nSZwYPxAJ8845r1RWz+LYvGkHdRK4gsZOa8Kdduzx3/MzGNN9F/cmC3hY9Xh
-        H/k0ui/EotgpzaVCqeDsSVJDevd+hbrEf1roXh7bNuatFoRaR1XUFHsUfuJMtJBMEKL0SZ1RwD3tC
-        +FvDUxIKEkVBUystdkRrTilwb3iJcNGpE2v1lP108klPNUzFh12n0aQG1W14x/rZDgTXhJ6BHr5CZ
-        t4lp82RVBz6/Qw1NrnFqHYha8VShHtXEsgcY61ub/lWvzEFFk4yCrrnp80NGV8SI1M41GYbKaiQzk
-        QGBk9MuA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1kxTJr-003JrH-MO; Thu, 07 Jan 2021 11:19:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 996513060AE;
-        Thu,  7 Jan 2021 12:19:04 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7F47220164737; Thu,  7 Jan 2021 12:19:04 +0100 (CET)
-Date:   Thu, 7 Jan 2021 12:19:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v2 1/5] csky: Remove custom asm/atomic.h implementation
-Message-ID: <X/buKPr5OCH3C32J@hirez.programming.kicks-ass.net>
-References: <1608478763-60148-1-git-send-email-guoren@kernel.org>
+        id S1726338AbhAGLwc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jan 2021 06:52:32 -0500
+Received: from mail-40131.protonmail.ch ([185.70.40.131]:40163 "EHLO
+        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725960AbhAGLwc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jan 2021 06:52:32 -0500
+Date:   Thu, 07 Jan 2021 11:51:44 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1610020309; bh=DrNPDCI5aGCF7b5CZJNTzFjDzr4fV3uFR8hbRikrekQ=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=JhDu74CyZxiVoZN4SNG2Dkh/eCyKWE5abJFrIB64wNs9O3PTPr/nkrNkFhaTYSz7Q
+         XmIvNsASTb/ZXQRL619zcgYqvc4/EWHculnh8KvIpUQ8zXzeplsUIOYM5RKjI8Duwd
+         ZdqU/SL7kBa298cfB9stEHEqihsfv/TpB7AffQyEDnzHT9MZURxf9XbMggbyxVWkWR
+         thxNXMXZu1k1hU0q9CTeBfInpU9799VtsxvU77sGgYLTSEv1b7TgR1WsaEKRS6R+yG
+         ehOE5mz0aGApWhSAjHEjzQMbq2mp8IA970qAi27WPQp0tsXRRV4iDb37UP5gv0UKS9
+         R3EMzrTs7FDtg==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Pei Huang <huangpei@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, stable@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH v3 mips-next 0/7] MIPS: vmlinux.lds.S sections fixes & cleanup
+Message-ID: <20210107115120.281008-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1608478763-60148-1-git-send-email-guoren@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Dec 20, 2020 at 03:39:19PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Use generic atomic implementation based on cmpxchg. So remove csky
-> asm/atomic.h.
+This series hunts the problems discovered after manual enabling of
+ARCH_WANT_LD_ORPHAN_WARN. Notably:
+ - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
+   placement (marked for stable);
+ - properly stops .eh_frame section generation.
 
-Clarification would be good. Typically cmpxchg() loops perform
-sub-optimal on LL/SC architectures, due to the double loop construction.
+Compile and runtime tested on MIPS32R2 CPS board with no issues
+using two different toolkits:
+ - Binutils 2.35.1, GCC 10.2.0;
+ - LLVM stack 11.0.0.
+
+Since v2 [1]:
+ - stop discarding .eh_frame and just prevent it from generating
+   (Kees);
+ - drop redundant sections assertions (Fangrui);
+ - place GOT table in .text instead of asserting as it's not empty
+   when building with LLVM (Nathan);
+ - catch compound literals in generic definitions when building with
+   LD_DEAD_CODE_DATA_ELIMINATION (Kees);
+ - collect two Reviewed-bys (Kees).
+
+Since v1 [0]:
+ - catch .got entries too as LLD may produce it (Nathan);
+ - check for unwanted sections to be zero-sized instead of
+   discarding (Fangrui).
+
+[0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm.m=
+e
+[1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@pm.m=
+e
+
+Alexander Lobakin (7):
+  MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
+  MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
+  MIPS: properly stop .eh_frame generation
+  MIPS: vmlinux.lds.S: catch bad .rel.dyn at link time
+  MIPS: vmlinux.lds.S: explicitly declare .got table
+  vmlinux.lds.h: catch compound literals into data and BSS
+  MIPS: select ARCH_WANT_LD_ORPHAN_WARN
+
+ arch/mips/Kconfig                 |  1 +
+ arch/mips/include/asm/asm.h       | 18 ++++++++++++++++++
+ arch/mips/kernel/vmlinux.lds.S    | 15 ++++++++++++++-
+ include/asm-generic/vmlinux.lds.h |  6 +++---
+ 4 files changed, 36 insertions(+), 4 deletions(-)
+
+--=20
+2.30.0
+
+
