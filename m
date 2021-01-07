@@ -2,76 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 996832ED072
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Jan 2021 14:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE6E2ED093
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Jan 2021 14:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728161AbhAGNPK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jan 2021 08:15:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727753AbhAGNPK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 7 Jan 2021 08:15:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6CE4B22285;
-        Thu,  7 Jan 2021 13:14:25 +0000 (UTC)
-Subject: Re: ARC no console output (was Re: [PATCH 1/2] init/console: Use
- ttynull as a fallback when there is no console)
-To:     John Ogness <john.ogness@linutronix.de>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shreyas Joshi <shreyas.joshi@biamp.com>,
-        shreyasjoshi15@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        linux-kernel@vger.kernel.org, buildroot@busybox.net,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-arch@vger.kernel.org,
-        arcml <linux-snps-arc@lists.infradead.org>
-References: <20201111135450.11214-1-pmladek@suse.com>
- <20201111135450.11214-2-pmladek@suse.com>
- <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
- <8735zdm86m.fsf@jogness.linutronix.de>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-Message-ID: <ac2aaa56-deca-8644-2a42-ca8ee8a77883@linux-m68k.org>
-Date:   Thu, 7 Jan 2021 23:14:22 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728128AbhAGNVU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jan 2021 08:21:20 -0500
+Received: from mail-40133.protonmail.ch ([185.70.40.133]:46332 "EHLO
+        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728425AbhAGNVU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jan 2021 08:21:20 -0500
+Date:   Thu, 07 Jan 2021 13:20:33 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1610025637; bh=1iHiRQzHqAO/hOdIJm7931oVSjvi8g99iSxotTA/NNE=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=Awz+ntc9XFxB3byalr3Ar0uBftjJ34q+4h01Xb55pnPE3Cb64NIpk3HqGpInQ7lEm
+         f6b/iJ6qEzjkGHR/WVYiIP8MGtzwz2845rJwK73wU8Ca2Z+RDR1feEDja745CtaX13
+         YL8g99zm6cGpd9uCDzGTF1tR8xxXYSFAi4zGQ5URQZpECQtUr6pbWAQS6qbfg7eoDx
+         eDJ4NEonCsAwafi18yssbLCIDOb6C6nDO/8r9kWQtP/cMPh0/BWIQJWzoocZknZmb8
+         zV0Qqo5jWC/DQqDm1Mx42/kayzt2kVW1LGADT3FpV0r+XKZngqbmWdTPz7np+oFPXR
+         l9sncFXbotHKg==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Pei Huang <huangpei@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, stable@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH v4 mips-next 4/7] MIPS: vmlinux.lds.S: catch bad .rel.dyn at link time
+Message-ID: <20210107132010.463129-1-alobakin@pm.me>
+In-Reply-To: <20210107123331.354075-1-alobakin@pm.me>
+References: <20210107123331.354075-1-alobakin@pm.me>
 MIME-Version: 1.0
-In-Reply-To: <8735zdm86m.fsf@jogness.linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi John,
+Catch any symbols placed in .rel.dyn and check for these sections
+to be zero-sized at link time.
+Eliminates following ld warning:
 
-On 7/1/21 7:02 pm, John Ogness wrote:
-> On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
->> This breaks ARC booting (no output on console).
-> 
-> Could you provide the kernel boot arguments that you use? This series is
-> partly about addressing users that have used boot arguments that are
-> technically incorrect (even if had worked). Seeing the boot arguments of
-> users that are not experiencing problems may help to reveal some of the
-> unusual console usages until now.
+mips-alpine-linux-musl-ld: warning: orphan section `.rel.dyn'
+from `init/main.o' being placed in section `.rel.dyn'
 
-I can show an example for m68knommu which this change breaks too
-(with no console output on boot).
+Adopted from x86/kernel/vmlinux.lds.S.
 
-All the ColdFire dev board targets (arch/m68k/configs/m5*) have a 
-compiled in boot argument which is "root=/dev/mtdblock0". They have no
-real mechanism to pass boot arguments from their boot loader, so it is
-compiled in.
+Suggested-by: Fangrui Song <maskray@google.com>
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ arch/mips/kernel/vmlinux.lds.S | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-The default mcf serial driver is the console on these and no 
-"console=ttyS0" argument was required in the past.
-
-Regards
-Greg
+diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.=
+S
+index 0f4e46ea4458..0f736d60d43e 100644
+--- a/arch/mips/kernel/vmlinux.lds.S
++++ b/arch/mips/kernel/vmlinux.lds.S
+@@ -226,4 +226,15 @@ SECTIONS
+ =09=09*(.pdr)
+ =09=09*(.reginfo)
+ =09}
++
++=09/*
++=09 * Sections that should stay zero sized, which is safer to
++=09 * explicitly check instead of blindly discarding.
++=09 */
++
++=09.rel.dyn : {
++=09=09*(.rel.*)
++=09=09*(.rel_*)
++=09}
++=09ASSERT(SIZEOF(.rel.dyn) =3D=3D 0, "Unexpected run-time relocations (.re=
+l) detected!")
+ }
+--=20
+2.30.0
 
 
