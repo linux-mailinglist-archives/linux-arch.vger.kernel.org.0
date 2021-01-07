@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B56A12ECF3C
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Jan 2021 12:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EED62ECFB7
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Jan 2021 13:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728117AbhAGLzS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jan 2021 06:55:18 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:43284 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727949AbhAGLzS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jan 2021 06:55:18 -0500
-Date:   Thu, 07 Jan 2021 11:54:25 +0000
+        id S1728201AbhAGMaz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jan 2021 07:30:55 -0500
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:44469 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728188AbhAGMaz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jan 2021 07:30:55 -0500
+Date:   Thu, 07 Jan 2021 12:30:08 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610020475; bh=1c0zIRSp5j+9jPf96D96lWaXSqjKgRxuaqZWXnp1GJA=;
+        t=1610022611; bh=e3bnSwSnCE4VZ3KFWoriT36YdZpDmKtvitn1N44EPZE=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=QSf4PK1l/0z+lqNG/RN+SWI8NiSqHOQYaqNMT8tTimEIsiiENHGqnuihCuJ3YfoTS
-         PwSAP0XUEjMITW1M5igKo6aiOLj+hPQ/VbHC404RmbVM7zmG89DsY0Fv2hyhFJ4ZNz
-         1XPd99TE8cWH/9iL0qyVCv2k+6igCBxmqW7kCSiAKWcPe1GAvIEAmC+/qJlZWV3IF/
-         HegvS3yUPHnrgTtRi1vsPzSH02S6gvkG76xhpSPZLFAlcqCM6jVtk3HiLdvJT8g6Cj
-         aIT5D9n9qMw0z1SZ6HCDiay0gmxBlNIf12r3H+iRq7DHCrv6PnTUtDcTvsP714KN+m
-         djC48Y9URNyEw==
+        b=XCLeYds6RzSh90AdJ1CaF4KFV3CHWPyxMwMhTa83qQc7MJ+JXPWLc+/UvPMcxndVL
+         UiIFs1v1aKyG7f+cHiMq0XOWCY5IprIKS53oJ8y2+6AGa6QfX0PBurvT/8qz+F9HHz
+         bLFgEVtQ8WvHyC+JvYTUjZwDYrrr5WIa6smG/oVCwR3QsHqwrxRa26XWHEqYUStDnV
+         vaImFwahpngARKQ2Tzzgva60b/NBSfy4khM8l8epRK6+VyShEk6i/Okcwx/sn8Ochk
+         26aHQbFY5oF817lW77n3OgIvBrlf5MlXKDJd3khCX9vwmc5yS697cb+qX+xCRtr3Vs
+         RQaI2SRl9GiOQ==
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+Cc:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Fangrui Song <maskray@google.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Pei Huang <huangpei@loongson.cn>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexander Lobakin <alobakin@pm.me>,
         Sami Tolvanen <samitolvanen@google.com>,
         Ingo Molnar <mingo@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -39,10 +39,10 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
         linux-arch@vger.kernel.org, stable@vger.kernel.org,
         clang-built-linux@googlegroups.com
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v3 mips-next 7/7] MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-Message-ID: <20210107115329.281266-7-alobakin@pm.me>
-In-Reply-To: <20210107115329.281266-1-alobakin@pm.me>
-References: <20210107115120.281008-1-alobakin@pm.me> <20210107115329.281266-1-alobakin@pm.me>
+Subject: Re: [PATCH v3 mips-next 0/7] MIPS: vmlinux.lds.S sections fixes & cleanup
+Message-ID: <20210107122944.353565-1-alobakin@pm.me>
+In-Reply-To: <20210107115120.281008-1-alobakin@pm.me>
+References: <20210107115120.281008-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -55,29 +55,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now, after that all the sections are explicitly described and
-declared in vmlinux.lds.S, we can enable ld orphan warnings to
-prevent from missing any new sections in future.
+> This series hunts the problems discovered after manual enabling of
+> ARCH_WANT_LD_ORPHAN_WARN. Notably:
+>  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
+>    placement (marked for stable);
+>  - properly stops .eh_frame section generation.
+>=20
+> Compile and runtime tested on MIPS32R2 CPS board with no issues
+> using two different toolkits:
+>  - Binutils 2.35.1, GCC 10.2.0;
+>  - LLVM stack 11.0.0.
+>=20
+> Since v2 [1]:
+>  - stop discarding .eh_frame and just prevent it from generating
+>    (Kees);
+>  - drop redundant sections assertions (Fangrui);
+>  - place GOT table in .text instead of asserting as it's not empty
+>    when building with LLVM (Nathan);
+>  - catch compound literals in generic definitions when building with
+>    LD_DEAD_CODE_DATA_ELIMINATION (Kees);
+>  - collect two Reviewed-bys (Kees).
+>=20
+> Since v1 [0]:
+>  - catch .got entries too as LLD may produce it (Nathan);
+>  - check for unwanted sections to be zero-sized instead of
+>    discarding (Fangrui).
+>=20
+> [0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm=
+.me
+> [1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@pm=
+.me
+>=20
+> Alexander Lobakin (7):
+>   MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
+>   MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
+>   MIPS: properly stop .eh_frame generation
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Well, GNU fails to build VDSO with this patch... Sorry, sending
+v4 now.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d68df1febd25..d3e64cc0932b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -18,6 +18,7 @@ config MIPS
- =09select ARCH_USE_QUEUED_SPINLOCKS
- =09select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- =09select ARCH_WANT_IPC_PARSE_VERSION
-+=09select ARCH_WANT_LD_ORPHAN_WARN
- =09select BUILDTIME_TABLE_SORT
- =09select CLONE_BACKWARDS
- =09select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
---=20
-2.30.0
+>   MIPS: vmlinux.lds.S: catch bad .rel.dyn at link time
+>   MIPS: vmlinux.lds.S: explicitly declare .got table
+>   vmlinux.lds.h: catch compound literals into data and BSS
+>   MIPS: select ARCH_WANT_LD_ORPHAN_WARN
+>=20
+>  arch/mips/Kconfig                 |  1 +
+>  arch/mips/include/asm/asm.h       | 18 ++++++++++++++++++
+>  arch/mips/kernel/vmlinux.lds.S    | 15 ++++++++++++++-
+>  include/asm-generic/vmlinux.lds.h |  6 +++---
+>  4 files changed, 36 insertions(+), 4 deletions(-)
+>=20
+> --
+> 2.30.0
 
+Al
 
