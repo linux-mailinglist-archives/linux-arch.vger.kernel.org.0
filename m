@@ -2,109 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D972EFA3F
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Jan 2021 22:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410192EFA65
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Jan 2021 22:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729463AbhAHVUD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Jan 2021 16:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S1728350AbhAHVYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Jan 2021 16:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728940AbhAHVUD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Jan 2021 16:20:03 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2407C061793;
-        Fri,  8 Jan 2021 13:19:22 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id f26so9827319qka.0;
-        Fri, 08 Jan 2021 13:19:22 -0800 (PST)
+        with ESMTP id S1728185AbhAHVYu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Jan 2021 16:24:50 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599A7C061793
+        for <linux-arch@vger.kernel.org>; Fri,  8 Jan 2021 13:24:10 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id g15so8422522pgu.9
+        for <linux-arch@vger.kernel.org>; Fri, 08 Jan 2021 13:24:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hnXLl4sHbKEop6wOqXRNzmI1tuKMV2HMaSYRF/O+288=;
-        b=unfNElP7xA2Sx2i4/PYLes/KURdHDgTBaRSIhvDyW1dATgDtcLx8X7bdS3KdW8COcH
-         hq46bxmUjaPgcv5cHp0eTddMSVvu9fj1f772wnAxJwi9gGEhY6aXcHu/rcx/DKMdp4Bt
-         USaMgeXqktWYH8f78nEQv0dP4ftyWtZ1eyVIsZveFCwBwOw/DhqO/Xc8przOBA5FDTjm
-         XehhfkW/vSUFay0ft5eiEvAOMB7MJBXTV99GFXbu7r+4diYhqjJbT6f4bZkQpqf5ifvc
-         UE7pZArnW+Sl+dBeWuqLc6mYCfvzmRCZAoGu4kCdSW4bdq5BZRNdAKvsOwweEPzLdDKw
-         aBlg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gXhZ728/q6Uo5WIgNruf81h0fqXJVTEcW5f5eeageBQ=;
+        b=VqzD82yXJfOmBagZ9ORhbg/MoZj2O0543WpKtM3DlsSr51kE4vDTwVs3642NiQwEDH
+         1zTxRTZOt/v3lJz5f2XqdX6dfShlwy+W+Lup4Rcx9Vv7qTfhJMvEeL4l6FLxG+yLRmBV
+         al5SnoGST8nzQm+J/ueTr9rP1oNXCGL47fllh7mJNLnOL6vIDd5Rt/gKQdP+PQ9unWES
+         /0s8XwBSaU0hUwBIEwmJ/ojTbDahdgNrktWE/92f8jF7aVU3kJk4tsVQ5bcocj9SylxJ
+         6kT+80pTGSdI2GDMwpvoWNZoU5HJexdZznltFVqbjHz962iYOwSWprCqb3hqEtPLXpog
+         jXVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hnXLl4sHbKEop6wOqXRNzmI1tuKMV2HMaSYRF/O+288=;
-        b=gdv2gPfPejbrZgovXh2iMfzTXDumJTsZpIZrYOJvFPF/OwPMj/pjWcAFJl+lxgLNO4
-         biy+HQSdtmxksit3Gl/KpTgH1YwGj2flxkr5vRyAzI/M1kDnaFpFE34uL4FUIUhwzJ6i
-         JaEcc05UYccKNIgfSlGwwe0JLoHHt3UjPwKxhdazbeGZ2FhRsb/7pdT8Lf5Ol8GoADsR
-         E5mohBIDwb/dniXadVKnubo4H7BCz6GTxwWht7Fq8a9be/Ztml2BQEBgReBmnu4Q9sZK
-         /YwACuUi+GiEH++4M2vmjHtxUFoyl+Fpttpyn2KBWrDczO8jChepfr9kHr+Yauj7K3bO
-         KI/g==
-X-Gm-Message-State: AOAM530dX5nyn4xNiyVAEel9Gb9jRgeK8IL8cWzET8ajmPQ8RB6CFDQx
-        GHOhw5i2Otzq/1w5mNoYJ5E=
-X-Google-Smtp-Source: ABdhPJxdd6u4Oceg1KPjIbdklnamT9CZ5Zdtmx32wCgErkWYrB9pYGhZFRq1edyAuj4fGTauhEeq0Q==
-X-Received: by 2002:a05:620a:ec5:: with SMTP id x5mr5797597qkm.143.1610140761875;
-        Fri, 08 Jan 2021 13:19:21 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id p128sm5732545qkb.101.2021.01.08.13.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jan 2021 13:19:21 -0800 (PST)
-Date:   Fri, 8 Jan 2021 14:19:19 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v4 mips-next 7/7] MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-Message-ID: <20210108211919.GG2547542@ubuntu-m3-large-x86>
-References: <20210107123331.354075-1-alobakin@pm.me>
- <20210107132010.463129-1-alobakin@pm.me>
- <20210107132010.463129-4-alobakin@pm.me>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gXhZ728/q6Uo5WIgNruf81h0fqXJVTEcW5f5eeageBQ=;
+        b=LhOVxuFJw7MAl3LyxessP64ikEdj9nX24PQkr9c0GFb5MiadoLKf6eKGgHE9Xy85/v
+         QJFiWex7wLed40BuyLrRPxLmWVLx8DuH+VSZzFuBJgBGU4j2z7KlIWBXyGabMjl2OfLx
+         F8IaMf+HZ5WznWJNGerNMyLhXFO8W1lcEzYEJIdqLkWWCFV4gjvGmlPMFwyHEanEWAsl
+         qwDOpLX+IXXuLYY+tH2WcmPpPy3mXmfoivH+AVYyLBbE2Uumvp5ZV8rZIkIdyXlMDIeL
+         +TYHqrQI21KXr6cI/31DM7ua7W/RjBxypcYR7KzxAueNod3Xd62Et07htWRWaGJCXVJq
+         sESg==
+X-Gm-Message-State: AOAM531Wsgas5IDS7gZp5EWknFbsiMLmQddkLTQckAbpjLiSjTB8FtAr
+        r8X8J/71oUnIAVQ62CN34swCcRPtAZdGFq1zuV6uQA==
+X-Google-Smtp-Source: ABdhPJznVuBLE0Y/KOfnwW+Tb3nLZGgFDiTyiQNkKueYB3rN6uQaJZtkNQwuxLH3n5KWE9Xse4Bg1LsKd4sAvAR+1y0=
+X-Received: by 2002:a63:1142:: with SMTP id 2mr8978911pgr.263.1610141049735;
+ Fri, 08 Jan 2021 13:24:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210107132010.463129-4-alobakin@pm.me>
+References: <20210108092024.4034860-1-arnd@kernel.org> <20210108093258.GB4031@willie-the-truck>
+ <CAK8P3a27y_EM6s3SwH1e6FR7bqeT3PEoLbxSWPyZ=4BzqAjceg@mail.gmail.com>
+In-Reply-To: <CAK8P3a27y_EM6s3SwH1e6FR7bqeT3PEoLbxSWPyZ=4BzqAjceg@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 8 Jan 2021 13:23:58 -0800
+Message-ID: <CAKwvOdkrfFXoZs8_xSJMhEFs7XQw6KKcu_JRT7_rUnHNR7A5qQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: make atomic helpers __always_inline
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 01:21:02PM +0000, Alexander Lobakin wrote:
-> Now, after that all the sections are explicitly described and
-> declared in vmlinux.lds.S, we can enable ld orphan warnings to
-> prevent from missing any new sections in future.
-> 
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+On Fri, Jan 8, 2021 at 2:27 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> On Fri, Jan 8, 2021 at 10:33 AM Will Deacon <will@kernel.org> wrote:
+> > On Fri, Jan 08, 2021 at 10:19:56AM +0100, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > With UBSAN enabled and building with clang, there are occasionally
+> > > warnings like
+> > >
+> > > WARNING: modpost: vmlinux.o(.text+0xc533ec): Section mismatch in reference from the function arch_atomic64_or() to the variable .init.data:numa_nodes_parsed
+> > > The function arch_atomic64_or() references
+> > > the variable __initdata numa_nodes_parsed.
+> > > This is often because arch_atomic64_or lacks a __initdata
+> > > annotation or the annotation of numa_nodes_parsed is wrong.
+> > >
+> > > for functions that end up not being inlined as intended but operating
+> > > on __initdata variables. Mark these as __always_inline, along with
+> > > the corresponding asm-generic wrappers.
+> >
+> > Hmm, I don't fully grok this. Why does it matter if a non '__init' function
+> > is called with a pointer to some '__initdata'? Or is the reference coming
+> > from somewhere else? (where?).
+>
+> There are (at least) three ways for gcc to deal with a 'static inline'
+> function:
+>
+> a) fully inline it as the __always_inline attribute does
+> b) not inline it at all, treating it as a regular static function
+> c) create a specialized version with different calling conventions
+>
+> In this case, clang goes with option c when it notices that all
+> callers pass the same constant pointer. This means we have a
+> synthetic
+>
+> static noinline long arch_atomic64_or(long i)
+> {
+>         return __lse_ll_sc_body(atomic64_fetch_or, i, &numa_nodes_parsed);
+> }
+>
+> which is a few bytes shorter than option b as it saves a load in the
+> caller. This function definition however violates the kernel's rules
+> for section references, as the synthetic version is not marked __init.
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+Interesting, I didn't know LLVM could do that.  Do you have a simpler
+test case? Maybe I could just fix that in LLVM. (I would guess that
+when synthesizing a function from an existing function, the new
+function needs to copy the original functions attributes as well).
 
-> ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index d68df1febd25..d3e64cc0932b 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -18,6 +18,7 @@ config MIPS
->  	select ARCH_USE_QUEUED_SPINLOCKS
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
->  	select ARCH_WANT_IPC_PARSE_VERSION
-> +	select ARCH_WANT_LD_ORPHAN_WARN
->  	select BUILDTIME_TABLE_SORT
->  	select CLONE_BACKWARDS
->  	select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
-> -- 
-> 2.30.0
-> 
-> 
+-- 
+Thanks,
+~Nick Desaulniers
