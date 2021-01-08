@@ -2,147 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6458E2EEF60
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Jan 2021 10:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C02E2EEFB2
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Jan 2021 10:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbhAHJVM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Jan 2021 04:21:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49746 "EHLO mail.kernel.org"
+        id S1727589AbhAHJbX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Jan 2021 04:31:23 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57788 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728100AbhAHJVL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:21:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F50C22BEA;
-        Fri,  8 Jan 2021 09:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610097630;
-        bh=nRSp5uGK2zEc2nY08vnzMxXgCeuSyaQHH0R1e5xv5DU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f7AwRejYLfpb7SmYKpTW9Q3T3RU2Yi2KAgORsY6u2WBJYmhpwNulbIVUJZuqKhlz/
-         I1V1MCAccFoXgunOmRBA0AeDtZAzqFvvxL3BztP05tY9HECTff+PCeNn0ML3h6eoYV
-         ZswWBMlXl0PmojDj/c4jlyU92usIJUBseVjJgmjG2+4fKW/ZSJphemwozr6mbqnE14
-         4ydGdvNuAZD7Pob01Jkkbp3fyjqrsy6Mgb2TH4GOGWyyToQZYAAnYdX1dIzIa9E588
-         xSnMgXqm4pVhiVEV8t2X3eWeq242LDGOifn/DDPsuPhGqkxvDfwxJ4kqTiRf7Exg5b
-         n3DKRc2DWHv6A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH] arm64: make atomic helpers __always_inline
-Date:   Fri,  8 Jan 2021 10:19:56 +0100
-Message-Id: <20210108092024.4034860-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S1725869AbhAHJbV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 8 Jan 2021 04:31:21 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1610098234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xfgKJpMAHp8Rvytw3TE0W+1mkInelAxdQ/ewwANtj8Q=;
+        b=C9zvaA4tcvVEzY61cFjTG0aG6Xs3pGfGgZ5ltAWj6AwsAN6jEzLoYT3Zg2GfiX/PFAd6YK
+        HKCLR0e1Pc5yHesrNNe0VMKDO301cl1S9ade8FWeJ/vZ5mosclvvuDUlbsUCH/6GUaG90W
+        09bOjXnMVIoHJUmT5ugwEX1JSE7kEZs=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 3887AACAF;
+        Fri,  8 Jan 2021 09:30:34 +0000 (UTC)
+Date:   Fri, 8 Jan 2021 10:30:33 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Vineet Gupta <vgupta@synopsys.com>
+Cc:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shreyas Joshi <shreyas.joshi@biamp.com>,
+        shreyasjoshi15@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        linux-kernel@vger.kernel.org, buildroot@busybox.net,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-arch@vger.kernel.org,
+        arcml <linux-snps-arc@lists.infradead.org>
+Subject: Re: ARC no console output (was Re: [PATCH 1/2] init/console: Use
+ ttynull as a fallback when there is no console)
+Message-ID: <X/gmOSvgzrPxBdIk@alley>
+References: <20201111135450.11214-1-pmladek@suse.com>
+ <20201111135450.11214-2-pmladek@suse.com>
+ <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
+ <8735zdm86m.fsf@jogness.linutronix.de>
+ <50ade852-c598-6476-1f4b-9a3f8d11d143@synopsys.com>
+ <X/c/ONCYz2QQdvOP@alley>
+ <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com>
+ <X/fWGjYI5LapMdGW@jagdpanzerIV.localdomain>
+ <d7db7948-4831-8dac-0d16-7933bcd9d995@synopsys.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7db7948-4831-8dac-0d16-7933bcd9d995@synopsys.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu 2021-01-07 21:18:20, Vineet Gupta wrote:
+> On 1/7/21 7:48 PM, Sergey Senozhatsky wrote:
+> > On (21/01/07 09:58), Vineet Gupta wrote:
+> > > On 1/7/21 9:04 AM, Petr Mladek wrote:
+> > > > On Thu 2021-01-07 08:43:16, Vineet Gupta wrote:
+> > > > > Hi John,
+> > > > > 
+> > > > > On 1/7/21 1:02 AM, John Ogness wrote:
+> > > > > > Hi Vineet,
+> > > > > > 
+> > > > > > On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
+> > > > > > > This breaks ARC booting (no output on console).
+> > > > > > 
+> > > > > > Could you provide the kernel boot arguments that you use? This series is
+> > > > > > partly about addressing users that have used boot arguments that are
+> > > > > > technically incorrect (even if had worked). Seeing the boot arguments of
+> > > > > > users that are not experiencing problems may help to reveal some of the
+> > > > > > unusual console usages until now.
+> > > > > 
+> > > > > 
+> > > > > Kernel command line: earlycon=uart8250,mmio32,0xf0005000,115200n8
+> > > > > console=ttyS0,115200n8 debug print-fatal-signals=1
+> > > > 
+> > > > This is strange, the problematic patch should use ttynull
+> > > > only as a fallback. It should not be used when a particular console
+> > > > is defined on the command line.
+> > > 
+> > > What happens in my case is console_on_rootfs() doesn't find /dev/console and
+> > > switching to ttynull. /dev is not present because devtmpfs doesn't automount
+> > > for initramfs.
 
-With UBSAN enabled and building with clang, there are occasionally
-warnings like
+I see. I did not though about a possibility that /dev/console could
+not be opened from other reasons.
 
-WARNING: modpost: vmlinux.o(.text+0xc533ec): Section mismatch in reference from the function arch_atomic64_or() to the variable .init.data:numa_nodes_parsed
-The function arch_atomic64_or() references
-the variable __initdata numa_nodes_parsed.
-This is often because arch_atomic64_or lacks a __initdata
-annotation or the annotation of numa_nodes_parsed is wrong.
+> > I wonder if we'll move the nulltty fallback logic into printk code [1]
+> > will it fix the problem?
+> > 
+> > [1] https://lore.kernel.org/lkml/X6x%2FAxD1qanC6evJ@jagdpanzerIV.localdomain/
+> 
+> Your reasoning in the post above makes total sense.
+> 
+> I tired the patch: adding register_ttynull_console() call in
+> console_device(), removing from console_on_rootfs() band that works too.
 
-for functions that end up not being inlined as intended but operating
-on __initdata variables. Mark these as __always_inline, along with
-the corresponding asm-generic wrappers.
+IMHO, this worked because you removed the change in console_on_rootfs().
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm64/include/asm/atomic.h     | 10 +++++-----
- include/asm-generic/bitops/atomic.h |  6 +++---
- 2 files changed, 8 insertions(+), 8 deletions(-)
+I guess that the change in console_device() did not make any
+difference. It was likely not called because
+filp_open("/dev/console", O_RDWR, 0) failed earlier because
+/dev/ did not exists.
 
-diff --git a/arch/arm64/include/asm/atomic.h b/arch/arm64/include/asm/atomic.h
-index 015ddffaf6ca..b56a4b2bc248 100644
---- a/arch/arm64/include/asm/atomic.h
-+++ b/arch/arm64/include/asm/atomic.h
-@@ -17,7 +17,7 @@
- #include <asm/lse.h>
- 
- #define ATOMIC_OP(op)							\
--static inline void arch_##op(int i, atomic_t *v)			\
-+static __always_inline void arch_##op(int i, atomic_t *v)		\
- {									\
- 	__lse_ll_sc_body(op, i, v);					\
- }
-@@ -32,7 +32,7 @@ ATOMIC_OP(atomic_sub)
- #undef ATOMIC_OP
- 
- #define ATOMIC_FETCH_OP(name, op)					\
--static inline int arch_##op##name(int i, atomic_t *v)			\
-+static __always_inline int arch_##op##name(int i, atomic_t *v)		\
- {									\
- 	return __lse_ll_sc_body(op##name, i, v);			\
- }
-@@ -56,7 +56,7 @@ ATOMIC_FETCH_OPS(atomic_sub_return)
- #undef ATOMIC_FETCH_OPS
- 
- #define ATOMIC64_OP(op)							\
--static inline void arch_##op(long i, atomic64_t *v)			\
-+static __always_inline void arch_##op(long i, atomic64_t *v)		\
- {									\
- 	__lse_ll_sc_body(op, i, v);					\
- }
-@@ -71,7 +71,7 @@ ATOMIC64_OP(atomic64_sub)
- #undef ATOMIC64_OP
- 
- #define ATOMIC64_FETCH_OP(name, op)					\
--static inline long arch_##op##name(long i, atomic64_t *v)		\
-+static __always_inline long arch_##op##name(long i, atomic64_t *v)	\
- {									\
- 	return __lse_ll_sc_body(op##name, i, v);			\
- }
-@@ -94,7 +94,7 @@ ATOMIC64_FETCH_OPS(atomic64_sub_return)
- #undef ATOMIC64_FETCH_OP
- #undef ATOMIC64_FETCH_OPS
- 
--static inline long arch_atomic64_dec_if_positive(atomic64_t *v)
-+static __always_inline long arch_atomic64_dec_if_positive(atomic64_t *v)
- {
- 	return __lse_ll_sc_body(atomic64_dec_if_positive, v);
- }
-diff --git a/include/asm-generic/bitops/atomic.h b/include/asm-generic/bitops/atomic.h
-index dd90c9792909..0e7316a86240 100644
---- a/include/asm-generic/bitops/atomic.h
-+++ b/include/asm-generic/bitops/atomic.h
-@@ -11,19 +11,19 @@
-  * See Documentation/atomic_bitops.txt for details.
-  */
- 
--static inline void set_bit(unsigned int nr, volatile unsigned long *p)
-+static __always_inline void set_bit(unsigned int nr, volatile unsigned long *p)
- {
- 	p += BIT_WORD(nr);
- 	atomic_long_or(BIT_MASK(nr), (atomic_long_t *)p);
- }
- 
--static inline void clear_bit(unsigned int nr, volatile unsigned long *p)
-+static __always_inline void clear_bit(unsigned int nr, volatile unsigned long *p)
- {
- 	p += BIT_WORD(nr);
- 	atomic_long_andnot(BIT_MASK(nr), (atomic_long_t *)p);
- }
- 
--static inline void change_bit(unsigned int nr, volatile unsigned long *p)
-+static __always_inline void change_bit(unsigned int nr, volatile unsigned long *p)
- {
- 	p += BIT_WORD(nr);
- 	atomic_long_xor(BIT_MASK(nr), (atomic_long_t *)p);
--- 
-2.29.2
+Anyway, the proposed change in console_device() has some
+more problems that I realized this week:
 
+   + It does not check whether console_drivers really contains
+     any console with tty binding.
+
+   + register_ttynull_console() calls
+    add_preferred_console(ttynull_console.name, 0, NULL).
+    The ttynull console stays preferred even when any better
+    console gets registered later. As a result, it would
+    stay associated with /dev/console.
+
+The right solution would be to enable ttynull console and
+do _not_ modify the list of preferred consoles. And it makes
+sense to add the console only there is no console with
+tty binding at the moment.
+
+I still have to think whether console_device() is a better or
+worse location for adding tyynull as a fallback.
+
+Anyway, it has to wait. The proper solution can't be done easily
+with the existing register_console() code. We need to clean
+it up first.
+
+Best Regards,
+Petr
