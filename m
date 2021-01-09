@@ -2,248 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A04522F0468
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Jan 2021 00:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8428F2F0471
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Jan 2021 00:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbhAIXaU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 Jan 2021 18:30:20 -0500
-Received: from mail2.protonmail.ch ([185.70.40.22]:42132 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbhAIXaT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 18:30:19 -0500
-Date:   Sat, 09 Jan 2021 23:29:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610234970; bh=pMEyCkfk3836kvqwMIdMdIzN2xVleYFCbHN70qUBA2o=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=NVwRdLfBflwgXZrlD7FRLoza4KQdWqScq4bDvhfLZlhON6ztVZ7C0exav5vjbaoYm
-         16/8zglcMA0+owhyAcOOL5V5o2V+n5VIK7bp7dblsWYrYis5Mq8Ogh+jYpG/XCWJeb
-         QLuKs/q0BlemLRBx5+YdIh5sgY0zCbvJt+WKpyl7kaIVnwD7GSHZa/bLcMHbbfhAZI
-         PmWpdHupuVzdykyDA8ABbYL2us70gN4Rg9alyP0KHKuu454ysEhfGDQmWeVh/5fdle
-         vzCRC51ZNsLLbzq9V86dk34xLyCAWqKleFrs7h93gagvNewXYNvwTvxtz0bMM068XN
-         OMIh7jXs65tug==
-To:     Nick Desaulniers <ndesaulniers@google.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
-Message-ID: <20210109232854.954832-1-alobakin@pm.me>
-In-Reply-To: <20210109191457.786517-1-alobakin@pm.me>
-References: <20210109171058.497636-1-alobakin@pm.me> <CAKwvOdmV2tj4Uyz1iDkqCj+snWPpnnAmxJyN+puL33EpMRPzUw@mail.gmail.com> <20210109191457.786517-1-alobakin@pm.me>
+        id S1726090AbhAIXpt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 Jan 2021 18:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726062AbhAIXps (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 18:45:48 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D3C061786;
+        Sat,  9 Jan 2021 15:45:08 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id x15so14456278ilq.1;
+        Sat, 09 Jan 2021 15:45:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=+RrrtQj8SC/rvlP5LlORUe5YEU0RLqpKs9/GxE+Y/3s=;
+        b=UOX+83msyY0c9zbWi3lYQYT+DWm3pxfGQCmxDKZPWRz9aNa0fJmFuyJAoTAa/G4p7p
+         SfNMBUVFInFsSss6Hai+8E7R2dRPkeMJSuuqPKYrSgxVvPznCQuX0c2x7pK0ziYUnGZu
+         C/dqYRW3yn3mK0faEKPwVBExadp8Kgslh3Ifx3qEtRAOxZYLp3wJrsmwNVogv2Xvn8YT
+         DVM8yO3ktn4mQBz3CJwUaGYDKRVh9+pk89SZhcMQUvemteqhM0YjjcAszrwEuZ3YQsOL
+         +z0ZOj3P4MtB6Y0w3VDW2nsmUA/2XYGMxtK5IxtSgUVZaBmlLr3bxkan/kkyZN9N4cu3
+         RmgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=+RrrtQj8SC/rvlP5LlORUe5YEU0RLqpKs9/GxE+Y/3s=;
+        b=OFV3OyOAg0obWFCwp1sLAbrE3ECZLl7SYTUr9dG1BC5+7xUOx8FUmAnOJVqpw7wjln
+         fx/WghkwXJ9sccqLfbkB5noz/dhA0FpcH+u3RW1lENnxUzZPl81YPObewNMz6Vs64k+B
+         QGuxfQ4yqnA2GFIAxGlbK5se0MxGb14SuuvhSPgMpIrJ4JR4svSYUsWka6M25UzsDkbR
+         t1JtDy28MVFnzhiBLibuxLTKYZZVzfWSVjMpw6pO/CVrpiILDIEw4OUVN6H+Xg+nkbqf
+         A/rJzp49EJADtT92uU3ps6w35TzEwixVaCMF3MCmqpKzs7iALazrMgT7468OIQSmQVR5
+         SS6w==
+X-Gm-Message-State: AOAM531hDmgOBC55VZ1fryac+uvCL9zdon+yBJ7z9M/cv5/wx+yO+Ne7
+        EMJcuxl4UmeQhqs7u1HmPdgFA8LwkYEky6AQyog=
+X-Google-Smtp-Source: ABdhPJzWsen+1bFKw+cuUM+1jT3nRAdUJAbnO8/1z/3RJ3vKQKxWxm92cFnz6xMw+Un/kDcSMfb/nu/s13W2lsXa7/g=
+X-Received: by 2002:a92:c002:: with SMTP id q2mr10229657ild.186.1610235907552;
+ Sat, 09 Jan 2021 15:45:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <20201211184633.3213045-1-samitolvanen@google.com>
+ <CA+icZUWYxO1hHW-_vrJid7EstqQRYQphjO3Xn6pj6qfEYEONbA@mail.gmail.com>
+ <20210109153646.zrmglpvr27f5zd7m@treble> <CA+icZUUiucbsQZtJKYdD7Y7Cq8hJZdBwsF0U0BFbaBtnLY3Nsw@mail.gmail.com>
+ <20210109160709.kqqpf64klflajarl@treble> <CA+icZUU=sS2xfzo9qTUTPQ0prbbQcj29tpDt1qK5cYZxarXuxg@mail.gmail.com>
+ <20210109163256.3sv3wbgrshbj72ik@treble> <CA+icZUUszOHkJ8Acx2mDowg3StZw9EureDQ7YYkJkcAnpLBA+g@mail.gmail.com>
+ <20210109170353.litivfvc4zotnimv@treble> <20210109170558.meufvgwrjtqo5v3i@treble>
+In-Reply-To: <20210109170558.meufvgwrjtqo5v3i@treble>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 10 Jan 2021 00:44:54 +0100
+Message-ID: <CA+icZUVS_CbbxG-V0RZxqxcY7E__QUrVxgC1VRmTLN4wrz=E5w@mail.gmail.com>
+Subject: Re: [PATCH v9 00/16] Add support for Clang LTO
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Alexander Lobakin <alobakin@pm.me>
-Date: Sat, 09 Jan 2021 19:15:31 +0000
+On Sat, Jan 9, 2021 at 6:06 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Sat, Jan 09, 2021 at 11:03:57AM -0600, Josh Poimboeuf wrote:
+> > On Sat, Jan 09, 2021 at 05:45:47PM +0100, Sedat Dilek wrote:
+> > > I tried merging with clang-cfi Git which is based on Linux v5.11-rc2+
+> > > with a lot of merge conflicts.
+> > >
+> > > Did you try on top of cfi-10 Git tag which is based on Linux v5.10?
+> > >
+> > > Whatever you successfully did... Can you give me a step-by-step instruction?
+> >
+> > Oops, my bad.  My last three commits (which I just added) do conflict.
+> > Sorry for the confusion.
+> >
+> > Just drop my last three commits:
+> >
+> > git fetch https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-vmlinux
+> > git checkout -B tmp FETCH_HEAD
+> > git reset --hard HEAD~~~
+> > git fetch https://github.com/samitolvanen/linux clang-lto
+> > git rebase --onto FETCH_HEAD 79881bfc57be
+>
+> Last one should be:
+>
+> git rebase --onto FETCH_HEAD 2c85ebc57b3e
+>
 
-> From: Nick Desaulniers <ndesaulniers@google.com>
-> Date: Sat, 9 Jan 2021 09:50:44 -0800
->
->> On Sat, Jan 9, 2021 at 9:11 AM Alexander Lobakin <alobakin@pm.me> wrote:
->>>
->>> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
->>>
->>> While testing MIPS with LLVM, I found a weird and very rare bug with
->>> MIPS relocs that LLVM emits into kernel modules. It happens on both
->>> 11.0.0 and latest git snapshot and applies, as I can see, only to
->>> references to static symbols.
->>>
->>> When the kernel loads the module, it allocates a space for every
->>> section and then manually apply the relocations relative to the
->>> new address.
->>>
->>> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
->>> It's static and referenced only in phy_register_driver(), where it's
->>> used to fill callback pointer in a structure.
->>>
->>> The real function address after module loading is 0xc06c1444, that
->>> is observed in its ELF st_value field.
->>> There are two relocs related to this usage in phy_register_driver():
->>>
->>> R_MIPS_HI16 refers to 0x3c010000
->>> R_MIPS_LO16 refers to 0x24339444
->>>
->>> The address of .text is 0xc06b8000. So the destination is calculated
->>> as follows:
->>>
->>> 0x00000000 from hi16;
->>> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
->>> 0xc06b8000 from base.
->>>
->>> =3D 0xc06b1444. The value is lower than the real phy_probe() address
->>> (0xc06c1444) by 0x10000 and is lower than the base address of
->>> module's .text, so it's 100% incorrect.
->>>
->>> This results in:
->>>
->>> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
->>> address c06b1444, epc =3D3D=3D3D c06b1444, ra =3D3D=3D3D 803f1090
->>>
->>> The correct instructions should be:
->>>
->>> R_MIPS_HI16 0x3c010001
->>> R_MIPS_LO16 0x24339444
->>>
->>> so there'll be 0x00010000 from hi16.
->>>
->>> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
->>> if the destination is lower than the base address, which should never
->>> happen), and seems like I have only 3 such places in libphy.ko (and
->>> one in nf_tables.ko).
->>> I don't think it should be handled somehow in mentioned source code
->>> as it would look rather ugly and may break kernels build with GNU
->>> stack, which seems to not produce such bad codes.
->>>
->>> If I should report this to any other resources, please let me know.
->>> I chose clang-built-linux and LKML as it may not happen with userland
->>> (didn't tried to catch).
->>
->> Thanks for the report.  Sounds like we may indeed be producing an
->> incorrect relocation.  This is only seen for big endian triples?
->
-> Unfortunately I don't have a LE board to play with, so can confirm
-> only Big Endian.
->
-> (BTW, if someone can say if it's possible for MIPS (and how if it is)
-> to launch a LE kernel from BE-booted preloader and U-Boot, that would
-> be super cool)
->
->> Getting a way for us to deterministically reproduce would be a good
->> first step.  Which config or configs beyond defconfig, and which
->> relocations specifically are you observing this with?
->
-> I use `make 32r2_defconfig` which combines several configs from
-> arch/mips/configs:
->  - generic_defconfig;
->  - generic/32r2.config;
->  - generic/eb.config.
->
-> Aside from that, I enable a bunch of my WIP drivers and the
-> Netfilter. On my setup, this bug is always present in libphy.ko,
-> so CONFIG_PHYLIB=3Dm (with all deps) should be enough.
->
-> The three failed relocs belongs to this part of code: [0]
->
-> llvm-readelf on them:
->
-> Relocation section '.rel.text' at offset 0xbf60 contains 2281 entries:
-> [...]
-> 00005740  00029305 R_MIPS_HI16            00000000   .text
-> 00005744  00029306 R_MIPS_LO16            00000000   .text
-> 00005720  00029305 R_MIPS_HI16            00000000   .text
-> 00005748  00029306 R_MIPS_LO16            00000000   .text
-> 0000573c  00029305 R_MIPS_HI16            00000000   .text
-> 0000574c  00029306 R_MIPS_LO16            00000000   .text
->
-> The first pair is the one from my first mail:
-> 0x3c010000 <-- should be 0x3c010001 to work properly
-> 0x24339444
->
-> I'm planning to hunt for more now, will let you know.
+Hi Josh,
 
-Unfortunately, R_MIPS_32 also suffers from that. And unlikely
-R_MIPS_{HI,LO}16, they can't be handled runtime as the values
-are pure random.
-I expanded arch/mips/kernel/module.c a bit, so it tries to find
-the actual symbol in .symtab after each applied relocation and
-print the detailed info. Here's an example from nf_defrag_ipv6
-loading:
+as said I tried your latest changes on top of Linux v5.10.6 + cfi-5.10.
+This reduces the objtool-warnings in vmlinux.o from 15 down to 2.
 
-[  429.789793] nf_defrag_ipv6: final section addresses:
-[  429.795409] =090xc07214fc __ksymtab_gpl
-[  429.799574] =090xc0720000 .text
-[  429.802902] =090xc07216b0 .data
-[  429.806249] =090xc0721790 .bss
-[  429.809474] =090xc0721508 __ksymtab_strings
-[  429.813977] =090xc0728000 .init.text
-[  429.817781] =090xc07214c0 .exit.text
-[  429.821606] =090xc0721520 .rodata
-[  429.825120] =090xc0721578 .rodata.str1.1
-[  429.829322] =090xc0721638 .note.Linux
-[  429.833226] =090xc0721800 .gnu.linkonce.this_module
-[  429.838503] =090xc0721650 .MIPS.abiflags
-[  429.842702] =090xc0721668 .reginfo
-[  429.846326] =090xc0721680 .note.gnu.build-id
-[  429.851129] nf_defrag_ipv6: R_MIPS_32 [0x00000008]: 0xc07216b0 -> 0xc072=
-16b8 is broken
-[  429.860017] nf_defrag_ipv6: R_MIPS_32 [0x00000008]: 0xc07216b0 -> 0xc072=
-16b8 is broken
-[  429.868875] nf_defrag_ipv6: R_MIPS_32 [0x00000138]: 0xc0720000 -> 0xc072=
-0138 is defrag6_net_exit
-[  429.878706] nf_defrag_ipv6: R_MIPS_32 [0x000012c8]: 0xc0720000 -> 0xc072=
-12c8 is nf_ct_net_init
-[  429.888335] nf_defrag_ipv6: R_MIPS_32 [0x0000142c]: 0xc0720000 -> 0xc072=
-142c is nf_ct_net_pre_exit
-[  429.898367] nf_defrag_ipv6: R_MIPS_32 [0x00001440]: 0xc0720000 -> 0xc072=
-1440 is nf_ct_net_exit
-[  429.907994] nf_defrag_ipv6: R_MIPS_32 [0x00000057]: 0xc0721578 -> 0xc072=
-15cf is broken
-[  429.916872] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0x80f297f0 -> 0x80f2=
-97f0 is proc_dointvec_jiffies
-[  429.927177] nf_defrag_ipv6: R_MIPS_32 [0x00000039]: 0xc0721578 -> 0xc072=
-15b1 is broken
-[  429.936044] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0x80f29374 -> 0x80f2=
-9374 is proc_doulongvec_minmax
-[  429.946453] nf_defrag_ipv6: R_MIPS_32 [0x00000072]: 0xc0721578 -> 0xc072=
-15ea is broken
-[  429.955320] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0x80f29374 -> 0x80f2=
-9374 is proc_doulongvec_minmax
-[  429.965737] nf_defrag_ipv6: R_MIPS_32 [0x000000a4]: 0xc0720000 -> 0xc072=
-00a4 is ipv6_defrag
-[  429.975094] nf_defrag_ipv6: R_MIPS_32 [0x000000a4]: 0xc0720000 -> 0xc072=
-00a4 is ipv6_defrag
-[  429.984431] nf_defrag_ipv6: R_MIPS_32 [0x0000106c]: 0xc0720000 -> 0xc072=
-106c is ip6frag_key_hashfn
-[  429.994470] nf_defrag_ipv6: R_MIPS_32 [0x00001090]: 0xc0720000 -> 0xc072=
-1090 is ip6frag_obj_hashfn
-[  430.004486] nf_defrag_ipv6: R_MIPS_32 [0x000010b8]: 0xc0720000 -> 0xc072=
-10b8 is ip6frag_obj_cmpfn
-[  430.014425] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc0720000 -> 0xc072=
-0000 is nf_defrag_ipv6_enable
-[  430.024742] nf_defrag_ipv6: R_MIPS_32 [0x00000001]: 0xc0721508 -> 0xc072=
-1509 is __kstrtab_nf_defrag_ipv6_enable
-[  430.036074] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc0721508 -> 0xc072=
-1508 is __kstrtabns_nf_defrag_ipv6_enable
-[  430.047561] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc0728000 -> 0xc072=
-8000 is init_module
-[  430.056930] nf_defrag_ipv6: R_MIPS_32 [0x00000000]: 0xc07214c0 -> 0xc072=
-14c0 is cleanup_module
+Without your latest changes:
 
-At least five symbols are broken and lead to nowhere: two from .data
-and three from .rodata. Values in square braces are initial references
-that can be observed via `nm -n` -- and for broken ones they really
-don't correspond to any symbols, mismatching the neighbours' addresses
-by 0x40-0x50.
+$ grep 'vmlinux.o: warning: objtool:'
+build-log_5.10.4-3-amd64-clang11-cfi.txt | wc -l
+15
 
-So for now seems like it's really an LLVM problem and there can't be
-any simple workaround for it in the kernel.
+$ grep 'vmlinux.o: warning: objtool:'
+build-log_5.10.4-3-amd64-clang11-cfi.txt
+vmlinux.o: warning: objtool: wakeup_long64()+0x61: indirect jump found
+in RETPOLINE build
+vmlinux.o: warning: objtool: .text+0x408a: indirect jump found in
+RETPOLINE build
+vmlinux.o: warning: objtool: .text+0x40c5: indirect jump found in
+RETPOLINE build
+vmlinux.o: warning: objtool: .head.text+0x298: indirect jump found in
+RETPOLINE build
+vmlinux.o: warning: objtool: __switch_to_asm()+0x0: undefined stack state
+vmlinux.o: warning: objtool: .entry.text+0xf91: sibling call from
+callable instruction with modified stack frame
+vmlinux.o: warning: objtool: .entry.text+0x16c4: unsupported
+instruction in callable function
+vmlinux.o: warning: objtool: .entry.text+0x15a4: redundant CLD
+vmlinux.o: warning: objtool: do_suspend_lowlevel()+0x116: sibling call
+from callable instruction with modified stack frame
+vmlinux.o: warning: objtool: kretprobe_trampoline()+0x49: return with
+modified stack frame
+vmlinux.o: warning: objtool: machine_real_restart()+0x85: unsupported
+instruction in callable function
+vmlinux.o: warning: objtool: __x86_retpoline_rdi()+0x0: stack state
+mismatch: cfa1=7+8 cfa2=-1+0
+vmlinux.o: warning: objtool: .entry.text+0x48: stack state mismatch:
+cfa1=7-8 cfa2=-1+0
+vmlinux.o: warning: objtool: .entry.text+0x156d: stack state mismatch:
+cfa1=7-8 cfa2=-1+0
+vmlinux.o: warning: objtool: .entry.text+0x15fc: stack state mismatch:
+cfa1=7-8 cfa2=-1+0
 
-> [0] https://elixir.bootlin.com/linux/v5.11-rc2/source/drivers/net/phy/phy=
-_device.c#L2989
->
->> Thanks,
->> ~Nick Desaulniers
->
-> Thanks,
-> Al
+With your latest changes in <jpoimboe.git#objtool-vmlinux>:
 
-Al
+$ grep 'vmlinux.o: warning: objtool:'
+build-log_5.10.6-1-amd64-clang11-cfi.txt | wc -l
+2
 
+$ grep 'vmlinux.o: warning: objtool:' build-log_5.10.6-1-amd64-clang11-cfi.txt
+vmlinux.o: warning: objtool: kretprobe_trampoline()+0x49: return with
+modified stack frame
+vmlinux.o: warning: objtool: machine_real_restart()+0x85: unsupported
+instruction in callable function
+
+Awesome.
+
+If you need further information, please let me know.
+
+Regards,
+- Sedat -
