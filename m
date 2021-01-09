@@ -2,138 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9812F022A
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Jan 2021 18:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A0A2F0251
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Jan 2021 18:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726080AbhAIRXa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 Jan 2021 12:23:30 -0500
-Received: from mail2.protonmail.ch ([185.70.40.22]:44599 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725926AbhAIRX3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 12:23:29 -0500
-Date:   Sat, 09 Jan 2021 17:22:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610212965; bh=lopjhVQdd7RoqSJIPbFqTTvc23zHkmg9CyWUgEh5sKA=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=Ri9U/Od4YzXlGOUK9ElK3xgypcRqggj+x1IlTwfndxT4i6t/zNX6uYCGF3hLZ60Qt
-         s/10mn9DN1W47l3PQM6dE4GbXdn6Wb/tK76qD7kFojUFXwNedZU5sZQ1W91do4HS+q
-         ROsNrcPcXlnfAqcrXeqDOpJpmHUKvc1V/WxHlm77MGG2e53MPBTAxRlttmmt2uwTA4
-         +FiDGuvgG6ceKOdiy2Sz9QeQ9n69ly+y+MN2S4KmUxnKl+rpa+XzJOWQzm34XDZCOy
-         LcrRcjQjnyOWKA/31JwyV55dqUS1YGppDwjXj/WYfHH0l7xFdrAALzy5Rdy7hKzQWG
-         SrFbmsX4FgPMA==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v4 mips-next 0/7] MIPS: vmlinux.lds.S sections fixes & cleanup
-Message-ID: <20210109172204.498737-1-alobakin@pm.me>
-In-Reply-To: <20210109111259.GA4213@alpha.franken.de>
-References: <20210107123331.354075-1-alobakin@pm.me> <20210109111259.GA4213@alpha.franken.de>
+        id S1726303AbhAIRe2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 Jan 2021 12:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbhAIRe2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 12:34:28 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03FDC06179F;
+        Sat,  9 Jan 2021 09:33:47 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id e7so13764376ile.7;
+        Sat, 09 Jan 2021 09:33:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=NikId7Xj7bWOh+hLaIn+ZZMlijXDi8nElT+l6OdToWY=;
+        b=g/pQdtKnuFESOOqddx88eblRnszCnOfblr9FrlAOcVMiw7QPdJqBkMMrQ8qQv9pejD
+         Ny2QqfbXSFy15cuqaGq979m/4cqR8/p9VV4Cuvi9Gve2mhoptlZVOPLFeaYRm9zI89SV
+         +55oFqz636EU/Ok+b+qFnjxTAKDjuWyUWV7m7LPzGH9djYzDFb2Qb/PsVddrPMgbVPDN
+         OrCQxG97wM8LYRaXgfKklCI33p8jWUdT6RGI260XhXB85Yt+7M7k/i+uGfRPxpcOpCIC
+         pA5zReSdT48tC7O9yfnxIhsS+NqdW8Ux/y6F0q7ZlOhNU+h9ZOmHlkhfKUPMM+XFueIr
+         M4gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=NikId7Xj7bWOh+hLaIn+ZZMlijXDi8nElT+l6OdToWY=;
+        b=eBV+4t/j30uMVQizE6i8Uw5ah+pQWKVmrtCuCs78vrUHzjcJyrNZHhIVMXE4fAxRGe
+         E1Mvwr8tzbd2sjPaTiEcDKuqOYqSAUFzPLz4qqNdUKtvQ2MiowprgKwoIPN369yLOkK0
+         bJ1CqKfuOz+PUTj4eM8wREmE3edH9HgeziimHa9qceQ5EVAw4ncdvChXHsfT08EheUgt
+         gL6tubO99YD2Ega0JUr23Vs1xf094bzwTc7uqAQeHoi1z1rs76mpZuNstizJ7DDPA/CN
+         PWwMO9TA92yduxVAMe87T7TBHL/d31GtdGgHoWhTJw2MqxTm07x7TZc0O/uhdpKSe8j5
+         1GhA==
+X-Gm-Message-State: AOAM533L3sIBcShqYObQpkpovThGMGR4q76mzNDuB+aPKkZjEo5Pgpvw
+        zyhsVZ+dxE6l65yUXzrAlI8NezVBW2mxubm+TzM=
+X-Google-Smtp-Source: ABdhPJx1ffrLsMiWlEmhD/YwfQk9GM6w4n9rJLKldS7um9a/rbcv+zWLw4Px08XWbgZ5NbTJHYMzeaP0UJYTrFD6Q3s=
+X-Received: by 2002:a05:6e02:1a43:: with SMTP id u3mr9156005ilv.209.1610213627012;
+ Sat, 09 Jan 2021 09:33:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <20201211184633.3213045-1-samitolvanen@google.com>
+ <CA+icZUWYxO1hHW-_vrJid7EstqQRYQphjO3Xn6pj6qfEYEONbA@mail.gmail.com>
+ <20210109153646.zrmglpvr27f5zd7m@treble> <CA+icZUUiucbsQZtJKYdD7Y7Cq8hJZdBwsF0U0BFbaBtnLY3Nsw@mail.gmail.com>
+ <20210109160709.kqqpf64klflajarl@treble> <CA+icZUU=sS2xfzo9qTUTPQ0prbbQcj29tpDt1qK5cYZxarXuxg@mail.gmail.com>
+ <20210109163256.3sv3wbgrshbj72ik@treble> <CA+icZUUszOHkJ8Acx2mDowg3StZw9EureDQ7YYkJkcAnpLBA+g@mail.gmail.com>
+ <20210109170353.litivfvc4zotnimv@treble> <20210109170558.meufvgwrjtqo5v3i@treble>
+In-Reply-To: <20210109170558.meufvgwrjtqo5v3i@treble>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 9 Jan 2021 18:33:36 +0100
+Message-ID: <CA+icZUVEyCJK4ja_d=45t35=uRoXSDutcqEXBtKbChoP3MozrQ@mail.gmail.com>
+Subject: Re: [PATCH v9 00/16] Add support for Clang LTO
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date: Sat, 9 Jan 2021 12:12:59 +0100
-
-> On Thu, Jan 07, 2021 at 12:33:38PM +0000, Alexander Lobakin wrote:
->> This series hunts the problems discovered after manual enabling of
->> ARCH_WANT_LD_ORPHAN_WARN. Notably:
->>  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
->>    placement (marked for stable);
->>  - properly stops .eh_frame section generation.
->>
->> Compile and runtime tested on MIPS32R2 CPS board with no issues
->> using two different toolkits:
->>  - Binutils 2.35.1, GCC 10.2.0;
->>  - LLVM stack 11.0.0.
->>
->> Since v3 [2]:
->>  - fix the third patch as GNU stack emits .rel.dyn into VDSO for
->>    some reason if .cfi_sections is specified.
->>
->> Since v2 [1]:
->>  - stop discarding .eh_frame and just prevent it from generating
->>    (Kees);
->>  - drop redundant sections assertions (Fangrui);
->>  - place GOT table in .text instead of asserting as it's not empty
->>    when building with LLVM (Nathan);
->>  - catch compound literals in generic definitions when building with
->>    LD_DEAD_CODE_DATA_ELIMINATION (Kees);
->>  - collect two Reviewed-bys (Kees).
->>
->> Since v1 [0]:
->>  - catch .got entries too as LLD may produce it (Nathan);
->>  - check for unwanted sections to be zero-sized instead of
->>    discarding (Fangrui).
->>
->> [0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@p=
-m.me
->> [1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@p=
-m.me
->> [2] https://lore.kernel.org/linux-mips/20210107115120.281008-1-alobakin@=
-pm.me
->>
->> Alexander Lobakin (7):
->>   MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
->>   MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
->>   MIPS: properly stop .eh_frame generation
->>   MIPS: vmlinux.lds.S: catch bad .rel.dyn at link time
->>   MIPS: vmlinux.lds.S: explicitly declare .got table
->>   vmlinux.lds.h: catch compound literals into data and BSS
->>   MIPS: select ARCH_WANT_LD_ORPHAN_WARN
+On Sat, Jan 9, 2021 at 6:06 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 >
-> this breaks my builds:
+> On Sat, Jan 09, 2021 at 11:03:57AM -0600, Josh Poimboeuf wrote:
+> > On Sat, Jan 09, 2021 at 05:45:47PM +0100, Sedat Dilek wrote:
+> > > I tried merging with clang-cfi Git which is based on Linux v5.11-rc2+
+> > > with a lot of merge conflicts.
+> > >
+> > > Did you try on top of cfi-10 Git tag which is based on Linux v5.10?
+> > >
+> > > Whatever you successfully did... Can you give me a step-by-step instruction?
+> >
+> > Oops, my bad.  My last three commits (which I just added) do conflict.
+> > Sorry for the confusion.
+> >
+> > Just drop my last three commits:
+> >
+> > git fetch https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-vmlinux
+> > git checkout -B tmp FETCH_HEAD
+> > git reset --hard HEAD~~~
+> > git fetch https://github.com/samitolvanen/linux clang-lto
+> > git rebase --onto FETCH_HEAD 79881bfc57be
 >
->   LD      vmlinux.o
->   MODPOST vmlinux.symvers
->   MODINFO modules.builtin.modinfo
->   GEN     modules.builtin
->   LD      .tmp_vmlinux.kallsyms1
-> mips64-linux-gnu-ld: Unexpected run-time relocations (.rel) detected!
-
-I think they should be handled as it's done for ARM64 [0]. Will do v5
-soon.
-
-[0] https://elixir.bootlin.com/linux/v5.11-rc2/source/arch/arm64/kernel/vml=
-inux.lds.S#L219
-
-> $ mips64-linux-gnu-ld --version
-> GNU ld version 2.27-3.fc24
+> Last one should be:
 >
-> $ mips64-linux-gnu-gcc --version
-> mips64-linux-gnu-gcc (GCC) 6.1.1 20160621 (Red Hat Cross 6.1.1-2)
+> git rebase --onto FETCH_HEAD 2c85ebc57b3e
 >
-> Thomas.
 
-Thanks,
-Alex
+OK, that worked fine.
 
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+So commit 2c85ebc57b3e is v5.10 Git tag in upstream.
 
+So, I substituted:
+
+git rebase --onto FETCH_HEAD v5.10
+
+Thanks.
+
+- Sedat -
