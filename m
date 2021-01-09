@@ -2,73 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 255152EFE38
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Jan 2021 07:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53D82EFF49
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Jan 2021 12:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbhAIG4v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 Jan 2021 01:56:51 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:10565 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725850AbhAIG4v (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 01:56:51 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DCW1X08sczMFB1
-        for <linux-arch@vger.kernel.org>; Sat,  9 Jan 2021 14:54:56 +0800 (CST)
-Received: from code-website.localdomain (10.175.127.227) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Sat, 9 Jan 2021 14:56:02 +0800
-From:   yangerkun <yangerkun@huawei.com>
-To:     <arnd@arndb.de>, <yangerkun@huawei.com>
-CC:     <linux-arch@vger.kernel.org>
-Subject: [PATCH 2/2] syscalls: fix define file comments for lookup_dcookie
-Date:   Sat, 9 Jan 2021 14:58:28 +0800
-Message-ID: <20210109065828.1528262-2-yangerkun@huawei.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20210109065828.1528262-1-yangerkun@huawei.com>
-References: <20210109065828.1528262-1-yangerkun@huawei.com>
+        id S1726251AbhAIL4U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 Jan 2021 06:56:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60804 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725890AbhAIL4U (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 9 Jan 2021 06:56:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C80C423A3C
+        for <linux-arch@vger.kernel.org>; Sat,  9 Jan 2021 11:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610193339;
+        bh=u3NbI55l4MsFTvpxJ3mJbsQRiePIoGilb3r9FUpSqig=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FSjGoSu3Q2y0Il8BWa+1W5ql/1AlkcOwqcoNg32WJv4m+l3ZukNS+ui/DylOg18EJ
+         II8uQTLQ33xIuX1mFHxp8r/T6+YslrcAGNQB2+gS92o/WYELtOPO6v7C1cdTkHY2z7
+         3gx4w/KNpDk0TpFIGoECd28FCLfUpoGWuhmMIPvulBwmVKdmQug7A5inF+il/RpSfL
+         xOe5BeMg01TgahWFL81dY6lXhBPpVtB6FmeTtwABltmPOHjdjaHHMdUHMGCjEzxt4l
+         rJggKfihy/OE037gR0pTGEnMRPAdofBKdSLgiGYGkGwD+EL4mt7pCYcF30osRAPudv
+         gVddkBYc0ioNA==
+Received: by mail-oi1-f182.google.com with SMTP id q25so14596731oij.10
+        for <linux-arch@vger.kernel.org>; Sat, 09 Jan 2021 03:55:39 -0800 (PST)
+X-Gm-Message-State: AOAM531dQQ9he5FXRx1IwTqHQEjJQRjk6YzGsSW9eCCStvcry4MMYMpi
+        nFjaIE83ld2L1hcilvkR50Yy4L6GRcqb1VuNcGY=
+X-Google-Smtp-Source: ABdhPJx1kiCIkKhFfwfsPZ1GXmRRt4NoAoeyEo5M8rl4oGVRLIfAHaAJqPv2/VZYPKkrIdlcmeE83zljGVwmZlQDgZA=
+X-Received: by 2002:aca:44d:: with SMTP id 74mr5090984oie.4.1610193339178;
+ Sat, 09 Jan 2021 03:55:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-CFilter-Loop: Reflected
+References: <20210109065828.1528262-1-yangerkun@huawei.com>
+In-Reply-To: <20210109065828.1528262-1-yangerkun@huawei.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sat, 9 Jan 2021 12:55:23 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3dQfmTKGA-i4izmCt=4opOs-YWnpYNudeqzncnkvKxAw@mail.gmail.com>
+Message-ID: <CAK8P3a3dQfmTKGA-i4izmCt=4opOs-YWnpYNudeqzncnkvKxAw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] syscalls: add comments show the define file for aio
+To:     yangerkun <yangerkun@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The define file for lookup_dcookie is fs/dcookies.c, not fs/cookies.c
+On Sat, Jan 9, 2021 at 7:58 AM yangerkun <yangerkun@huawei.com> wrote:
+>
+> fs/aio.c define the syscalls for aio.
+>
+> Signed-off-by: yangerkun <yangerkun@huawei.com>
 
-Signed-off-by: yangerkun <yangerkun@huawei.com>
----
- include/uapi/asm-generic/unistd.h       | 2 +-
- tools/include/uapi/asm-generic/unistd.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is obviously correct.
 
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 84022c87ed49..9886ff3337df 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -74,7 +74,7 @@ __SYSCALL(__NR_fremovexattr, sys_fremovexattr)
- #define __NR_getcwd 17
- __SYSCALL(__NR_getcwd, sys_getcwd)
- 
--/* fs/cookies.c */
-+/* fs/dcookies.c */
- #define __NR_lookup_dcookie 18
- __SC_COMP(__NR_lookup_dcookie, sys_lookup_dcookie, compat_sys_lookup_dcookie)
- 
-diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
-index 84022c87ed49..9886ff3337df 100644
---- a/tools/include/uapi/asm-generic/unistd.h
-+++ b/tools/include/uapi/asm-generic/unistd.h
-@@ -74,7 +74,7 @@ __SYSCALL(__NR_fremovexattr, sys_fremovexattr)
- #define __NR_getcwd 17
- __SYSCALL(__NR_getcwd, sys_getcwd)
- 
--/* fs/cookies.c */
-+/* fs/dcookies.c */
- #define __NR_lookup_dcookie 18
- __SC_COMP(__NR_lookup_dcookie, sys_lookup_dcookie, compat_sys_lookup_dcookie)
- 
--- 
-2.25.4
+However, as Christoph Hellwig suggested the last time this came up
+for include/linux/syscalls.h, let's maybe just remove all those comments
+altogether.
 
+What I really want to do with this file though, is to completely remove
+it altogether and replace it with a syscall.tbl file as we have it in the
+architectures that do not use the generic table.
+
+If you or someone else wants to help out with that, I can point
+you to the last version of the proposed patches for that from
+a few years ago, and guide you through what else needs to be
+done before it can get merged.
+
+       Arnd
