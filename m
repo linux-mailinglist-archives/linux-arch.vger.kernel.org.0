@@ -2,96 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 786CD2F020B
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Jan 2021 18:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4536F2F021B
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Jan 2021 18:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbhAIRHf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 9 Jan 2021 12:07:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28840 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726090AbhAIRHe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 12:07:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610211968;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=joUlfz99h/FvbQhyQ1sXKa4tTuoivxwQKiFtAkkLoGE=;
-        b=S4/Yeg+xUxWPxccd5/Zr1OD0OeoJeEml8KhPTKNp5Gh059lluMNWm3fe/B3MT9XqIHoh4G
-        QBOpX5mMFJtKAR1DV1/uoxXbn/71iqjzUSV5EDKMBLb16QKHlH33ebDudLROqAJI0qtIm/
-        xd3YbCyDVfRdGhg1gCvlefWyW+8xxRY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-254-s4qYlsTrNKOXjyTgnesYQQ-1; Sat, 09 Jan 2021 12:06:04 -0500
-X-MC-Unique: s4qYlsTrNKOXjyTgnesYQQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 56322180A093;
-        Sat,  9 Jan 2021 17:06:02 +0000 (UTC)
-Received: from treble (ovpn-120-156.rdu2.redhat.com [10.10.120.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 96EEA19C45;
-        Sat,  9 Jan 2021 17:06:00 +0000 (UTC)
-Date:   Sat, 9 Jan 2021 11:05:58 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+        id S1725966AbhAIRMH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 9 Jan 2021 12:12:07 -0500
+Received: from mail-40136.protonmail.ch ([185.70.40.136]:34808 "EHLO
+        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbhAIRMH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 9 Jan 2021 12:12:07 -0500
+Date:   Sat, 09 Jan 2021 17:11:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1610212284; bh=rNDBsb/5jzCtXm4ccD8b7PVBPJte7jON6vMo9RPdX3M=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=nf+g7+lS8IzGv3c6ZvZrzY+ePPPHiMRzcP0qbyj6dCj3V0JZYtnbC/xU0F4qi8UA3
+         lqr6JHYmAlMtG/c/yOOWutwTfhIvq+RLeCLNf2CfKb6I7ZTSfF5+Gq5ALZRC5lVIw8
+         MJdoitNxqtpedH6rdzRbReTQnpkf0P7CrskZ8u3P/PwRqF+lL3SsBhi6rTir74RI2t
+         CKB/4PKkDlNytTni8KsQ/4iOaJSCTb97NhW7NJHFxa0mlFXcGTAuUtg5rA54fc3nZ7
+         VNmfI45t8El6PIDJ0J+WQ0ljEKvd3gUf+NET2t65Kv4Zzp3PcKuXdZWk9VoRznhGJH
+         GFdlXN/qrO4ZQ==
+To:     clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        kernel-hardening@lists.openwall.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v9 00/16] Add support for Clang LTO
-Message-ID: <20210109170558.meufvgwrjtqo5v3i@treble>
-References: <20201211184633.3213045-1-samitolvanen@google.com>
- <CA+icZUWYxO1hHW-_vrJid7EstqQRYQphjO3Xn6pj6qfEYEONbA@mail.gmail.com>
- <20210109153646.zrmglpvr27f5zd7m@treble>
- <CA+icZUUiucbsQZtJKYdD7Y7Cq8hJZdBwsF0U0BFbaBtnLY3Nsw@mail.gmail.com>
- <20210109160709.kqqpf64klflajarl@treble>
- <CA+icZUU=sS2xfzo9qTUTPQ0prbbQcj29tpDt1qK5cYZxarXuxg@mail.gmail.com>
- <20210109163256.3sv3wbgrshbj72ik@treble>
- <CA+icZUUszOHkJ8Acx2mDowg3StZw9EureDQ7YYkJkcAnpLBA+g@mail.gmail.com>
- <20210109170353.litivfvc4zotnimv@treble>
+        Fangrui Song <maskray@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
+Message-ID: <20210109171058.497636-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210109170353.litivfvc4zotnimv@treble>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 09, 2021 at 11:03:57AM -0600, Josh Poimboeuf wrote:
-> On Sat, Jan 09, 2021 at 05:45:47PM +0100, Sedat Dilek wrote:
-> > I tried merging with clang-cfi Git which is based on Linux v5.11-rc2+
-> > with a lot of merge conflicts.
-> > 
-> > Did you try on top of cfi-10 Git tag which is based on Linux v5.10?
-> > 
-> > Whatever you successfully did... Can you give me a step-by-step instruction?
-> 
-> Oops, my bad.  My last three commits (which I just added) do conflict.
-> Sorry for the confusion.
-> 
-> Just drop my last three commits:
-> 
-> git fetch https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-vmlinux
-> git checkout -B tmp FETCH_HEAD
-> git reset --hard HEAD~~~
-> git fetch https://github.com/samitolvanen/linux clang-lto
-> git rebase --onto FETCH_HEAD 79881bfc57be
+Machine: MIPS32 R2 Big Endian (interAptiv (multi))
 
-Last one should be:
+While testing MIPS with LLVM, I found a weird and very rare bug with
+MIPS relocs that LLVM emits into kernel modules. It happens on both
+11.0.0 and latest git snapshot and applies, as I can see, only to
+references to static symbols.
 
-git rebase --onto FETCH_HEAD 2c85ebc57b3e
+When the kernel loads the module, it allocates a space for every
+section and then manually apply the relocations relative to the
+new address.
 
--- 
-Josh
+Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
+It's static and referenced only in phy_register_driver(), where it's
+used to fill callback pointer in a structure.
+
+The real function address after module loading is 0xc06c1444, that
+is observed in its ELF st_value field.
+There are two relocs related to this usage in phy_register_driver():
+
+R_MIPS_HI16 refers to 0x3c010000
+R_MIPS_LO16 refers to 0x24339444
+
+The address of .text is 0xc06b8000. So the destination is calculated
+as follows:
+
+0x00000000 from hi16;
+0xffff9444 from lo16 (sign extend as it's always treated as signed);
+0xc06b8000 from base.
+
+=3D 0xc06b1444. The value is lower than the real phy_probe() address
+(0xc06c1444) by 0x10000 and is lower than the base address of
+module's .text, so it's 100% incorrect.
+
+This results in:
+
+[    2.204022] CPU 3 Unable to handle kernel paging request at virtual
+address c06b1444, epc =3D=3D c06b1444, ra =3D=3D 803f1090
+
+The correct instructions should be:
+
+R_MIPS_HI16 0x3c010001
+R_MIPS_LO16 0x24339444
+
+so there'll be 0x00010000 from hi16.
+
+I tried to catch those bugs in arch/mips/kernel/module.c (by checking
+if the destination is lower than the base address, which should never
+happen), and seems like I have only 3 such places in libphy.ko (and
+one in nf_tables.ko).
+I don't think it should be handled somehow in mentioned source code
+as it would look rather ugly and may break kernels build with GNU
+stack, which seems to not produce such bad codes.
+
+If I should report this to any other resources, please let me know.
+I chose clang-built-linux and LKML as it may not happen with userland
+(didn't tried to catch).
+
+Thanks,
+Al
 
