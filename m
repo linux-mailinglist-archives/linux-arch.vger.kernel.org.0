@@ -2,151 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D2D2F1FEE
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Jan 2021 20:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7DA2F2059
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Jan 2021 21:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391323AbhAKTyW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Jan 2021 14:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S2391346AbhAKUEW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Jan 2021 15:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391320AbhAKTyV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Jan 2021 14:54:21 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92554C0617A3
-        for <linux-arch@vger.kernel.org>; Mon, 11 Jan 2021 11:53:41 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id t6so75440plq.1
-        for <linux-arch@vger.kernel.org>; Mon, 11 Jan 2021 11:53:41 -0800 (PST)
+        with ESMTP id S2391041AbhAKUEV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Jan 2021 15:04:21 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847AAC061786
+        for <linux-arch@vger.kernel.org>; Mon, 11 Jan 2021 12:03:41 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id t22so609443pfl.3
+        for <linux-arch@vger.kernel.org>; Mon, 11 Jan 2021 12:03:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kqzAS7vv3isJxvxaKX99/4deyJqxK70Am6O+u1zhufI=;
-        b=nXAUtCl5E6clL+2HewBlse6knjeO3Qp1aPdeuYBpDlz8EnXwTACfUnrSGm0VuMOjw1
-         NeS74Ipb8j/qW34RmwJt2LVEnF+By3NNt3nJYOYr9sp3TttH9K1qA3p2N9EIH3AitKXC
-         YPuAv5EsYMTsYTnNVAx1szkPJdL9X18yzs2F0=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZrJB+VMtGpCDCw4tM56I2rie2eVd0wx7yFHoaKknnYg=;
+        b=UAs6pdpvplb3evozh776RK+Y7oY1aYI/sHPY0xeva0O56+dVywtAJM/5eecmlvKLta
+         tPbZQDW5ISleDtiey5TcQZ5Y3f4maAZrQDtNDpkslUXrcPyimVGjvXpJfDJ3973aeMhc
+         mxbOHCIhelpxcXsND8NVkjbAFc4b6kiWm3u2mjKaB8aQxs8C0+XIk+42KfE2QoHi8D5t
+         +FNO3rjcYNoA45249wLHza+GO79FF+UhYeBADcsUG2okqIym5LCDQB7tpM0YpSPv4Rsk
+         7ZsRNCWaE5gcxdS+xGL7THXqaZCywa8lprgs0Fq/LSWEGTmrbBE++eWm08ti9fXEH2/q
+         a5lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kqzAS7vv3isJxvxaKX99/4deyJqxK70Am6O+u1zhufI=;
-        b=cT7RmRL2Dlpur2DoQ2g7SF4134Q9h7FqW3OggUVDh1nDE1+vF+RNTMRww33/PXxYOG
-         jLdgr+ZBVfvyGJwusrN0VSmtyRVAc7sAZcqBUv5mD2qOLthDZO4jGiv71P8IlO0Kpg8p
-         HwFY12iFs+j71InOgIsm8RWSdj3QHjquREsDPK8xBGa7KtWwRZfocqAslFlDrch2q7XO
-         c1NtSGLa8qAO7TKsvZtdhyDS1f5qGWHWNPRUJDnZquZ+fDDi1YHNlHsz2nEnXzZ1pPzJ
-         Fr+S0Y3uVBrsLr6aoG75KVUXFNnOCtpHO42vEpsWW12OeJAng7whHvfyIFjQ0z8tzE96
-         8qyA==
-X-Gm-Message-State: AOAM531N+ppuSAL4d0nCBpFyK/2aWz3p5ngEuxg8hiBu8oUiLoQs6lQp
-        oCeVkyTPHIJp7SdK5z12t9tg4Q==
-X-Google-Smtp-Source: ABdhPJzvYP86OQ4uqkMtM24wFDq6qEnqHZO8PCbrEqVvaJXgt7NLlNssoaUa0+LDD1I6B0iBoCU/JQ==
-X-Received: by 2002:a17:902:eb53:b029:da:da92:c187 with SMTP id i19-20020a170902eb53b02900dada92c187mr1378702pli.34.1610394821104;
-        Mon, 11 Jan 2021 11:53:41 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a23sm214136pjh.19.2021.01.11.11.53.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 11:53:40 -0800 (PST)
-Date:   Mon, 11 Jan 2021 11:53:39 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v5 mips-next 0/9] MIPS: vmlinux.lds.S sections fixes &
- cleanup
-Message-ID: <202101111153.AE5123B6@keescook>
-References: <20210110115245.30762-1-alobakin@pm.me>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZrJB+VMtGpCDCw4tM56I2rie2eVd0wx7yFHoaKknnYg=;
+        b=GxDl4cDEEDdneCAykOK8GmNd7p13zW163RZL4LqFVVJwowKHb1RZ3CecOEYKWYTcrd
+         MZaIWVqxo/m5SG7GtErTLDyJWiYGaeWt7eQHFMwuFtHire9+avm74W8FmtBbIAofZ2gA
+         OPcMrGVcTMYq82vvnCVSC+NoukBOTneDTBB9sC860wBJF75FifUCmjodNbM/Tfuuvoug
+         cd3OESi9DNGI7MIijT13BIiA+IIjCtcb643Ir9btypXJ/s8jpH/kT0cFb4TB+wXrEqE/
+         osq+EBdk+RruzZ0pok5uc/GWS4Ah/j6OY7k+x4eS59resQWKaFlRnhH620ocYekckLRV
+         f1bw==
+X-Gm-Message-State: AOAM531Q4zzxu1qnj27EyUzphp9ufMmQmTNMkShzoTW3Hu75/2oxAhNb
+        FL7ghJhzKmhMICyP5hEdm6dkI+aowS2LxUUgqVA6hw==
+X-Google-Smtp-Source: ABdhPJxuoye7X2mfkcy+WoKggyaSsMD8piRi3S8uQqJDMwkZ5+yLuLV+oH/Qv5jPm+Cx/V9ac7+aWmlZJXrLL1hmiL0=
+X-Received: by 2002:a63:5701:: with SMTP id l1mr1118729pgb.381.1610395420744;
+ Mon, 11 Jan 2021 12:03:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210110115245.30762-1-alobakin@pm.me>
+References: <20210109171058.497636-1-alobakin@pm.me> <CAKwvOdmV2tj4Uyz1iDkqCj+snWPpnnAmxJyN+puL33EpMRPzUw@mail.gmail.com>
+ <20210109191457.786517-1-alobakin@pm.me>
+In-Reply-To: <20210109191457.786517-1-alobakin@pm.me>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 11 Jan 2021 12:03:29 -0800
+Message-ID: <CAKwvOdnOXXaz+S1agu5kCQLm+qEkXE2Hpd2_V8yPsbUTQH7JZw@mail.gmail.com>
+Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
+To:     Alexander Lobakin <alobakin@pm.me>,
+        Fangrui Song <maskray@google.com>
+Cc:     clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 11:53:50AM +0000, Alexander Lobakin wrote:
-> This series hunts the problems discovered after manual enabling of
-> ARCH_WANT_LD_ORPHAN_WARN. Notably:
->  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
->    placement (marked for stable);
->  - stops blind catching of orphan text sections with .text.*
->    directive;
->  - properly stops .eh_frame section generation.
-> 
-> Compile and runtime tested on MIPS32R2 CPS board with no issues
-> using two different toolkits:
->  - Binutils 2.35.1, GCC 10.2.1 (with Alpine patches);
->  - LLVM stack: 11.0.0 and from latest Git snapshot.
-> 
-> Since v4 [3]:
->  - new: drop redundant .text.cps-vec creation and blind inclusion
->    of orphan text sections via .text.* directive in vmlinux.lds.S;
->  - don't assert SIZEOF(.rel.dyn) as it's reported that it may be not
->    empty on certain machines and compilers (Thomas);
->  - align GOT table like it's done for ARM64;
->  - new: catch UBSAN's "unnamed data" sections in generic definitions
->    when building with LD_DEAD_CODE_DATA_ELIMINATION;
->  - collect Reviewed-bys (Kees, Nathan).
+Hi Alexander,
+I'm genuinely trying to reproduce/understand this report, questions below:
 
-Looks good; which tree will this land through?
+On Sat, Jan 9, 2021 at 11:15 AM Alexander Lobakin <alobakin@pm.me> wrote:
+>
+> From: Nick Desaulniers <ndesaulniers@google.com>
+> Date: Sat, 9 Jan 2021 09:50:44 -0800
+>
+> > On Sat, Jan 9, 2021 at 9:11 AM Alexander Lobakin <alobakin@pm.me> wrote=
+:
+> >>
+> >> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
+> >>
+> >> While testing MIPS with LLVM, I found a weird and very rare bug with
+> >> MIPS relocs that LLVM emits into kernel modules. It happens on both
+> >> 11.0.0 and latest git snapshot and applies, as I can see, only to
+> >> references to static symbols.
+> >>
+> >> When the kernel loads the module, it allocates a space for every
+> >> section and then manually apply the relocations relative to the
+> >> new address.
+> >>
+> >> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
+> >> It's static and referenced only in phy_register_driver(), where it's
+> >> used to fill callback pointer in a structure.
+> >>
+> >> The real function address after module loading is 0xc06c1444, that
+> >> is observed in its ELF st_value field.
+> >> There are two relocs related to this usage in phy_register_driver():
+> >>
+> >> R_MIPS_HI16 refers to 0x3c010000
+> >> R_MIPS_LO16 refers to 0x24339444
 
--Kees
+Sorry, how are these calculated?  (Explicit shell commands invoked
+would be appreciated)
 
-> 
-> Since v3 [2]:
->  - fix the third patch as GNU stack emits .rel.dyn into VDSO for
->    some reason if .cfi_sections is specified.
-> 
-> Since v2 [1]:
->  - stop discarding .eh_frame and just prevent it from generating
->    (Kees);
->  - drop redundant sections assertions (Fangrui);
->  - place GOT table in .text instead of asserting as it's not empty
->    when building with LLVM (Nathan);
->  - catch compound literals in generic definitions when building with
->    LD_DEAD_CODE_DATA_ELIMINATION (Kees);
->  - collect two Reviewed-bys (Kees).
-> 
-> Since v1 [0]:
->  - catch .got entries too as LLD may produce it (Nathan);
->  - check for unwanted sections to be zero-sized instead of
->    discarding (Fangrui).
-> 
-> [0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm.me
-> [1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@pm.me
-> [2] https://lore.kernel.org/linux-mips/20210107115120.281008-1-alobakin@pm.me
-> [3] https://lore.kernel.org/linux-mips/20210107123331.354075-1-alobakin@pm.me
-> 
-> Alexander Lobakin (9):
->   MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
->   MIPS: CPS: don't create redundant .text.cps-vec section
->   MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
->   MIPS: properly stop .eh_frame generation
->   MIPS: vmlinux.lds.S: explicitly catch .rel.dyn symbols
->   MIPS: vmlinux.lds.S: explicitly declare .got table
->   vmlinux.lds.h: catch compound literals into data and BSS
->   vmlinux.lds.h: catch UBSAN's "unnamed data" into data
->   MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-> 
->  arch/mips/Kconfig                 |  1 +
->  arch/mips/include/asm/asm.h       | 18 ++++++++++++++++++
->  arch/mips/kernel/cps-vec.S        |  1 -
->  arch/mips/kernel/vmlinux.lds.S    | 11 +++++++++--
->  include/asm-generic/vmlinux.lds.h |  6 +++---
->  5 files changed, 31 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.30.0
-> 
-> 
+I'm doing:
+$ ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- make CC=3Dclang -j71 32r2_def=
+config
+$ ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- make CC=3Dclang -j71 modules
+$ llvm-nm --format=3Dsysv drivers/net/phy/phy_device.o | grep phy_probe
+$ llvm-objdump -Dr --disassemble-symbols=3Dphy_driver_register
+drivers/net/phy/phy_device.o
+$ llvm-readelf -r drivers/net/phy/phy_device.o  | grep -e R_MIPS_HI16
+-e R_MIPS_LO16
 
--- 
-Kees Cook
+for some of the commands trying to verify.
+
+> >>
+> >> The address of .text is 0xc06b8000. So the destination is calculated
+> >> as follows:
+> >>
+> >> 0x00000000 from hi16;
+> >> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
+> >> 0xc06b8000 from base.
+> >>
+> >> =3D 0xc06b1444. The value is lower than the real phy_probe() address
+> >> (0xc06c1444) by 0x10000 and is lower than the base address of
+> >> module's .text, so it's 100% incorrect.
+
+The disassembly for me produces:
+    399c: 3c 03 00 00   lui     $3, 0 <phy_device_free>
+                        0000399c:  R_MIPS_HI16  .text
+...
+    39a8: 24 63 3a 5c   addiu   $3, $3, 14940 <phy_probe>
+                        000039a8:  R_MIPS_LO16  .text
+
+I'm not really sure how to manually resolve the relocations; Fangrui
+do you have any tips? (I'm coincidentally reading through Linkers &
+Loaders currently, but only just started chpt. 4).
+
+> >>
+> >> This results in:
+> >>
+> >> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
+> >> address c06b1444, epc =3D=3D c06b1444, ra =3D=3D 803f1090
+> >>
+> >> The correct instructions should be:
+> >>
+> >> R_MIPS_HI16 0x3c010001
+> >> R_MIPS_LO16 0x24339444
+> >>
+> >> so there'll be 0x00010000 from hi16.
+> >>
+> >> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
+> >> if the destination is lower than the base address, which should never
+> >> happen), and seems like I have only 3 such places in libphy.ko (and
+> >> one in nf_tables.ko).
+> >> I don't think it should be handled somehow in mentioned source code
+> >> as it would look rather ugly and may break kernels build with GNU
+> >> stack, which seems to not produce such bad codes.
+> >>
+> >> If I should report this to any other resources, please let me know.
+> >> I chose clang-built-linux and LKML as it may not happen with userland
+> >> (didn't tried to catch).
+> >
+> > Thanks for the report.  Sounds like we may indeed be producing an
+> > incorrect relocation.  This is only seen for big endian triples?
+>
+> Unfortunately I don't have a LE board to play with, so can confirm
+> only Big Endian.
+>
+> (BTW, if someone can say if it's possible for MIPS (and how if it is)
+> to launch a LE kernel from BE-booted preloader and U-Boot, that would
+> be super cool)
+>
+> > Getting a way for us to deterministically reproduce would be a good
+> > first step.  Which config or configs beyond defconfig, and which
+> > relocations specifically are you observing this with?
+>
+> I use `make 32r2_defconfig` which combines several configs from
+> arch/mips/configs:
+>  - generic_defconfig;
+>  - generic/32r2.config;
+>  - generic/eb.config.
+>
+> Aside from that, I enable a bunch of my WIP drivers and the
+> Netfilter. On my setup, this bug is always present in libphy.ko,
+> so CONFIG_PHYLIB=3Dm (with all deps) should be enough.
+>
+> The three failed relocs belongs to this part of code: [0]
+>
+> llvm-readelf on them:
+>
+> Relocation section '.rel.text' at offset 0xbf60 contains 2281 entries:=C2=
+=AC
+> [...]
+> 00005740  00029305 R_MIPS_HI16            00000000   .text
+> 00005744  00029306 R_MIPS_LO16            00000000   .text
+> 00005720  00029305 R_MIPS_HI16            00000000   .text
+> 00005748  00029306 R_MIPS_LO16            00000000   .text
+> 0000573c  00029305 R_MIPS_HI16            00000000   .text
+> 0000574c  00029306 R_MIPS_LO16            00000000   .text
+>
+> The first pair is the one from my first mail:
+> 0x3c010000 <-- should be 0x3c010001 to work properly
+> 0x24339444
+>
+> I'm planning to hunt for more now, will let you know.
+>
+> [0] https://elixir.bootlin.com/linux/v5.11-rc2/source/drivers/net/phy/phy=
+_device.c#L2989
+>
+> > Thanks,
+> > ~Nick Desaulniers
+>
+> Thanks,
+> Al
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
