@@ -2,216 +2,335 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5BC2F5186
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 18:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B3E2F5481
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 22:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728229AbhAMRzq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Jan 2021 12:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53754 "EHLO
+        id S1728958AbhAMVNq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Jan 2021 16:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727785AbhAMRzq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Jan 2021 12:55:46 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A1BC061786;
-        Wed, 13 Jan 2021 09:55:06 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id 186so2989981qkj.3;
-        Wed, 13 Jan 2021 09:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+hfHoNO0I8KH/ocWW18bIfM/5TPtJSym5RVhTD/3ic4=;
-        b=O5MT405bKjrTH7i3pchDFPTaWtmoF37VLhqyQWeF1I2s4knT4Q7H4qjAV29LVX+LOb
-         ipTKy+j8dp/nErKfNOGKBJJ6id7b1GcJB/fMDTAbxfCJ6Uf4zqJa52vlZwghfEnTysrJ
-         8pItPKgLgj8qZRA6+VCv6zQUAt+f07+cPCno6FX3IqE+bz4Qi/uNIaKendURniZHRLNk
-         clnJuG+cfKNFECa0H2OanZRxudh0FV2/aYKr8Ql04Gq7i+EZpe1OpPPTr3WlThEUxhrb
-         XdbMlhoDsf9eOEvc0dYjk/JvWwb5e/yWakrNC/kyviUFTuPxzfqq1nt3qH3E50SigvHd
-         1KxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+hfHoNO0I8KH/ocWW18bIfM/5TPtJSym5RVhTD/3ic4=;
-        b=cr1chDrLRGsDDcYZKi5JJJRqPtEdJBTI2F3ubyLkKDEFNFtzcLu1iCRxRjzyZfU73G
-         PXzFV+02hPUaokgEx0O7H4KaDmugpFOd1H/Il6P/AqkGJ4qeuXv6cvq6wZ9Mvb1OMEnQ
-         WV5IKUaYkwLMWJmyzWCxcLPb9oWfHczqBPsGHxpVSdf+vUkKi9Ot8aVz0EwAdPMITBwm
-         Imp9mI+1yAntAC0WwId3nsrNRYUlSDmn1M7QnkkPoVKL7IPF74hK3Ffnt6lGfDrjwxYy
-         4ZjFEmSU5euD9TPt+OV0EO6ORJLOWDWMwKNBLJaj2bdm4bbi0mc/Pglu7smIuDJ2LQHi
-         O35Q==
-X-Gm-Message-State: AOAM531dHh9/F0eKZ9hUBMdJnKk3wJnU3ymacEk6jy7NGDckEIHAb2jW
-        EXroQe1/Ly1C242GkFIuJWc=
-X-Google-Smtp-Source: ABdhPJzS3kF14lLxHytdFtsIsOuvTcYochgub0U1iYP+1975xDMMf1MT2+NpPvnL1l4w0VjyIHvdDw==
-X-Received: by 2002:a37:8d85:: with SMTP id p127mr3120897qkd.393.1610560505104;
-        Wed, 13 Jan 2021 09:55:05 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id n14sm1385094qtr.9.2021.01.13.09.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 09:55:04 -0800 (PST)
-Date:   Wed, 13 Jan 2021 10:55:02 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Subject: Re: [PATCH v4 3/3] Kbuild: implement support for DWARF v5
-Message-ID: <20210113175502.GC4158893@ubuntu-m3-large-x86>
-References: <20210113003235.716547-1-ndesaulniers@google.com>
- <20210113003235.716547-4-ndesaulniers@google.com>
+        with ESMTP id S1729027AbhAMVJS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Jan 2021 16:09:18 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE10C061794
+        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 13:09:54 -0800 (PST)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1kznOq-005vHf-5i; Wed, 13 Jan 2021 22:09:52 +0100
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-um@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 2/3] um: rework userspace stubs to not hard-code stub location
+Date:   Wed, 13 Jan 2021 22:09:43 +0100
+Message-Id: <20210113220944.5a2ed3c1e619.I08d3297d2a88fda957e5139b9803a20bc600b0eb@changeid>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210113220944.7732f6bfd3bb.Ib87c91b49d57d27314cf444696273da6d8463e9c@changeid>
+References: <20210113220944.7732f6bfd3bb.Ib87c91b49d57d27314cf444696273da6d8463e9c@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210113003235.716547-4-ndesaulniers@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 04:32:35PM -0800, Nick Desaulniers wrote:
-> DWARF v5 is the latest standard of the DWARF debug info format.
-> 
-> Feature detection of DWARF5 is onerous, especially given that we've
-> removed $(AS), so we must query $(CC) for DWARF5 assembler directive
-> support.  GNU `as` only recently gained support for specifying
-> -gdwarf-5.
-> 
-> The DWARF version of a binary can be validated with:
-> $ llvm-dwarfdump vmlinux | head -n 4 | grep version
-> or
-> $ readelf --debug-dump=info vmlinux 2>/dev/null | grep Version
-> 
-> DWARF5 wins significantly in terms of size when mixed with compression
-> (CONFIG_DEBUG_INFO_COMPRESSED).
-> 
-> 363M    vmlinux.clang12.dwarf5.compressed
-> 434M    vmlinux.clang12.dwarf4.compressed
-> 439M    vmlinux.clang12.dwarf2.compressed
-> 457M    vmlinux.clang12.dwarf5
-> 536M    vmlinux.clang12.dwarf4
-> 548M    vmlinux.clang12.dwarf2
-> 
-> 515M    vmlinux.gcc10.2.dwarf5.compressed
-> 599M    vmlinux.gcc10.2.dwarf4.compressed
-> 624M    vmlinux.gcc10.2.dwarf2.compressed
-> 630M    vmlinux.gcc10.2.dwarf5
-> 765M    vmlinux.gcc10.2.dwarf4
-> 809M    vmlinux.gcc10.2.dwarf2
-> 
-> Though the quality of debug info is harder to quantify; size is not a
-> proxy for quality.
-> 
-> Jakub notes:
->   All [GCC] 5.1 - 6.x did was start accepting -gdwarf-5 as experimental
->   option that enabled some small DWARF subset (initially only a few
->   DW_LANG_* codes newly added to DWARF5 drafts).  Only GCC 7 (released
->   after DWARF 5 has been finalized) started emitting DWARF5 section
->   headers and got most of the DWARF5 changes in...
-> 
-> Version check GCC so that we don't need to worry about the difference in
-> command line args between GNU readelf and llvm-readelf/llvm-dwarfdump to
-> validate the DWARF Version in the assembler feature detection script.
-> 
-> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
-> Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
-> Suggested-by: Jakub Jelinek <jakub@redhat.com>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Suggested-by: Caroline Tice <cmtice@google.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-One small nit below.
+The userspace stacks mostly have a stack (and in the case of the
+syscall stub we can just set their stack pointer) that points to
+the location of the stub data page already.
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+Rework the stubs to use the stack pointer to derive the start of
+the data page, rather than requiring it to be hard-coded.
 
-> ---
->  Makefile                          |  1 +
->  include/asm-generic/vmlinux.lds.h |  6 +++++-
->  lib/Kconfig.debug                 | 17 +++++++++++++++++
->  scripts/test_dwarf5_support.sh    |  9 +++++++++
->  4 files changed, 32 insertions(+), 1 deletion(-)
->  create mode 100755 scripts/test_dwarf5_support.sh
-> 
-> diff --git a/Makefile b/Makefile
-> index 656fff17b331..1067cfd98249 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -828,6 +828,7 @@ endif
->  
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF2) := 2
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
->  DEBUG_CFLAGS	+= -gdwarf-$(dwarf-version-y)
->  ifneq ($(dwarf-version-y)$(LLVM_IAS),21)
->  # Binutils 2.35+ required for -gdwarf-4+ support.
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 49944f00d2b3..37dc4110875e 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -843,7 +843,11 @@
->  		.debug_types	0 : { *(.debug_types) }			\
->  		/* DWARF 5 */						\
->  		.debug_macro	0 : { *(.debug_macro) }			\
-> -		.debug_addr	0 : { *(.debug_addr) }
-> +		.debug_addr	0 : { *(.debug_addr) }			\
-> +		.debug_line_str	0 : { *(.debug_line_str) }		\
-> +		.debug_loclists	0 : { *(.debug_loclists) }		\
-> +		.debug_rnglists	0 : { *(.debug_rnglists) }		\
-> +		.debug_str_offsets	0 : { *(.debug_str_offsets) }
->  
->  /* Stabs debugging sections. */
->  #define STABS_DEBUG							\
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index e80770fac4f0..60a4f5e27ada 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -273,6 +273,23 @@ config DEBUG_INFO_DWARF4
->  	  It makes the debug information larger, but it significantly
->  	  improves the success of resolving variables in gdb on optimized code.
->  
-> +config DEBUG_INFO_DWARF5
-> +	bool "Generate DWARF Version 5 debuginfo"
-> +	depends on GCC_VERSION >= 50000 || CC_IS_CLANG
-> +	depends on CC_IS_GCC || $(success,$(srctree)/scripts/test_dwarf5_support.sh $(CC) $(CLANG_FLAGS))
-> +	help
-> +	  Generate DWARF v5 debug info. Requires binutils 2.35, gcc 5.0+ (gcc
-> +	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-> +	  draft features until 7.0), and gdb 8.0+.
-> +
-> +	  Changes to the structure of debug info in Version 5 allow for around
-> +	  15-18% savings in resulting image and debug info section sizes as
-> +	  compared to DWARF Version 4. DWARF Version 5 standardizes previous
-> +	  extensions such as accelerators for symbol indexing and the format
-> +	  for fission (.dwo/.dwp) files. Users may not want to select this
-> +	  config if they rely on tooling that has not yet been updated to
-> +	  support DWARF Version 5.
-> +
->  endchoice # "DWARF version"
->  
->  config DEBUG_INFO_BTF
-> diff --git a/scripts/test_dwarf5_support.sh b/scripts/test_dwarf5_support.sh
-> new file mode 100755
-> index 000000000000..142a1b5c7fa2
-> --- /dev/null
-> +++ b/scripts/test_dwarf5_support.sh
-> @@ -0,0 +1,9 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# Test that assembler accepts -gdwarf-5 and .file 0 directives, which were bugs
-> +# in binutils < 2.35.
-> +# https://sourceware.org/bugzilla/show_bug.cgi?id=25612
-> +# https://sourceware.org/bugzilla/show_bug.cgi?id=25614
-> +set -e
+In the clone stub, also integrate the int3 into the stack remap,
+since we really must not use the stack while we remap it.
 
-This is unnecessary, clang will error without this and a script's exit
-code is the exit code of its last command.
+This prepares for putting the stub at a variable location that's
+not part of the normal address space of the userspace processes
+running inside the UML machine.
 
-> +echo '.file 0 "filename"' | $* -gdwarf-5 -Wa,-gdwarf-5 -c -x assembler -o /dev/null -
-> -- 
-> 2.30.0.284.gd98b1dd5eaa7-goog
-> 
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+ arch/um/include/shared/as-layout.h      | 16 +++--------
+ arch/um/include/shared/common-offsets.h |  6 +++++
+ arch/um/kernel/skas/clone.c             |  3 +--
+ arch/um/os-Linux/skas/mem.c             |  2 ++
+ arch/x86/um/shared/sysdep/stub_32.h     | 33 +++++++++++++++--------
+ arch/x86/um/shared/sysdep/stub_64.h     | 36 ++++++++++++++++---------
+ arch/x86/um/stub_32.S                   | 17 +++++++-----
+ arch/x86/um/stub_64.S                   |  5 ++--
+ arch/x86/um/stub_segv.c                 |  5 ++--
+ 9 files changed, 75 insertions(+), 48 deletions(-)
+
+diff --git a/arch/um/include/shared/as-layout.h b/arch/um/include/shared/as-layout.h
+index 5f286ef2721b..56408bf3480d 100644
+--- a/arch/um/include/shared/as-layout.h
++++ b/arch/um/include/shared/as-layout.h
+@@ -20,18 +20,10 @@
+  * 'UL' and other type specifiers unilaterally.  We
+  * use the following macros to deal with this.
+  */
+-
+-#ifdef __ASSEMBLY__
+-#define _UML_AC(X, Y)	(Y)
+-#else
+-#define __UML_AC(X, Y)	(X(Y))
+-#define _UML_AC(X, Y)	__UML_AC(X, Y)
+-#endif
+-
+-#define STUB_START _UML_AC(, 0x100000)
+-#define STUB_CODE _UML_AC((unsigned long), STUB_START)
+-#define STUB_DATA _UML_AC((unsigned long), STUB_CODE + UM_KERN_PAGE_SIZE)
+-#define STUB_END _UML_AC((unsigned long), STUB_DATA + UM_KERN_PAGE_SIZE)
++#define STUB_START 0x100000UL
++#define STUB_CODE STUB_START
++#define STUB_DATA (STUB_CODE + UM_KERN_PAGE_SIZE)
++#define STUB_END (STUB_DATA + UM_KERN_PAGE_SIZE)
+ 
+ #ifndef __ASSEMBLY__
+ 
+diff --git a/arch/um/include/shared/common-offsets.h b/arch/um/include/shared/common-offsets.h
+index 16a51a8c800f..edc90ab73734 100644
+--- a/arch/um/include/shared/common-offsets.h
++++ b/arch/um/include/shared/common-offsets.h
+@@ -1,5 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /* for use by sys-$SUBARCH/kernel-offsets.c */
++#include <stub-data.h>
+ 
+ DEFINE(KERNEL_MADV_REMOVE, MADV_REMOVE);
+ 
+@@ -43,3 +44,8 @@ DEFINE(UML_CONFIG_64BIT, CONFIG_64BIT);
+ #ifdef CONFIG_UML_TIME_TRAVEL_SUPPORT
+ DEFINE(UML_CONFIG_UML_TIME_TRAVEL_SUPPORT, CONFIG_UML_TIME_TRAVEL_SUPPORT);
+ #endif
++
++/* for stub */
++DEFINE(UML_STUB_FIELD_OFFSET, offsetof(struct stub_data, offset));
++DEFINE(UML_STUB_FIELD_CHILD_ERR, offsetof(struct stub_data, child_err));
++DEFINE(UML_STUB_FIELD_FD, offsetof(struct stub_data, fd));
+diff --git a/arch/um/kernel/skas/clone.c b/arch/um/kernel/skas/clone.c
+index 7c592c788cbf..592cdb138441 100644
+--- a/arch/um/kernel/skas/clone.c
++++ b/arch/um/kernel/skas/clone.c
+@@ -41,8 +41,7 @@ stub_clone_handler(void)
+ 		goto done;
+ 	}
+ 
+-	remap_stack(data->fd, data->offset);
+-	goto done;
++	remap_stack_and_trap();
+ 
+  done:
+ 	trap_myself();
+diff --git a/arch/um/os-Linux/skas/mem.c b/arch/um/os-Linux/skas/mem.c
+index c546d16f8dfe..3b4975ee67e2 100644
+--- a/arch/um/os-Linux/skas/mem.c
++++ b/arch/um/os-Linux/skas/mem.c
+@@ -40,6 +40,8 @@ static int __init init_syscall_regs(void)
+ 	syscall_regs[REGS_IP_INDEX] = STUB_CODE +
+ 		((unsigned long) batch_syscall_stub -
+ 		 (unsigned long) __syscall_stub_start);
++	syscall_regs[REGS_SP_INDEX] = STUB_DATA;
++
+ 	return 0;
+ }
+ 
+diff --git a/arch/x86/um/shared/sysdep/stub_32.h b/arch/x86/um/shared/sysdep/stub_32.h
+index 8ea69211e53c..c3891c1ada26 100644
+--- a/arch/x86/um/shared/sysdep/stub_32.h
++++ b/arch/x86/um/shared/sysdep/stub_32.h
+@@ -7,8 +7,8 @@
+ #define __SYSDEP_STUB_H
+ 
+ #include <asm/ptrace.h>
++#include <generated/asm-offsets.h>
+ 
+-#define STUB_SYSCALL_RET EAX
+ #define STUB_MMAP_NR __NR_mmap2
+ #define MMAP_OFFSET(o) ((o) >> UM_KERN_PAGE_SHIFT)
+ 
+@@ -77,17 +77,28 @@ static inline void trap_myself(void)
+ 	__asm("int3");
+ }
+ 
+-static inline void remap_stack(int fd, unsigned long offset)
++static void inline remap_stack_and_trap(void)
+ {
+-	__asm__ volatile ("movl %%eax,%%ebp ; movl %0,%%eax ; int $0x80 ;"
+-			  "movl %7, %%ebx ; movl %%eax, (%%ebx)"
+-			  : : "g" (STUB_MMAP_NR), "b" (STUB_DATA),
+-			    "c" (UM_KERN_PAGE_SIZE),
+-			    "d" (PROT_READ | PROT_WRITE),
+-			    "S" (MAP_FIXED | MAP_SHARED), "D" (fd),
+-			    "a" (offset),
+-			    "i" (&((struct stub_data *) STUB_DATA)->child_err)
+-			  : "memory");
++	__asm__ volatile (
++		"movl %%esp,%%ebx ;"
++		"andl %0,%%ebx ;"
++		"movl %1,%%eax ;"
++		"movl %%ebx,%%edi ; addl %2,%%edi ; movl (%%edi),%%edi ;"
++		"movl %%ebx,%%ebp ; addl %3,%%ebp ; movl (%%ebp),%%ebp ;"
++		"int $0x80 ;"
++		"addl %4,%%ebx ; movl %%eax, (%%ebx) ;"
++		"int $3"
++		: :
++		"g" (~(UM_KERN_PAGE_SIZE - 1)),
++		"g" (STUB_MMAP_NR),
++		"g" (UML_STUB_FIELD_FD),
++		"g" (UML_STUB_FIELD_OFFSET),
++		"g" (UML_STUB_FIELD_CHILD_ERR),
++		"c" (UM_KERN_PAGE_SIZE),
++		"d" (PROT_READ | PROT_WRITE),
++		"S" (MAP_FIXED | MAP_SHARED)
++		:
++		"memory");
+ }
+ 
+ #endif
+diff --git a/arch/x86/um/shared/sysdep/stub_64.h b/arch/x86/um/shared/sysdep/stub_64.h
+index b7b8b8e4359d..6e2626b77a2e 100644
+--- a/arch/x86/um/shared/sysdep/stub_64.h
++++ b/arch/x86/um/shared/sysdep/stub_64.h
+@@ -7,8 +7,8 @@
+ #define __SYSDEP_STUB_H
+ 
+ #include <sysdep/ptrace_user.h>
++#include <generated/asm-offsets.h>
+ 
+-#define STUB_SYSCALL_RET PT_INDEX(RAX)
+ #define STUB_MMAP_NR __NR_mmap
+ #define MMAP_OFFSET(o) (o)
+ 
+@@ -82,18 +82,30 @@ static inline void trap_myself(void)
+ 	__asm("int3");
+ }
+ 
+-static inline void remap_stack(long fd, unsigned long offset)
++static inline void remap_stack_and_trap(void)
+ {
+-	__asm__ volatile ("movq %4,%%r10 ; movq %5,%%r8 ; "
+-			  "movq %6, %%r9; " __syscall "; movq %7, %%rbx ; "
+-			  "movq %%rax, (%%rbx)":
+-			  : "a" (STUB_MMAP_NR), "D" (STUB_DATA),
+-			    "S" (UM_KERN_PAGE_SIZE),
+-			    "d" (PROT_READ | PROT_WRITE),
+-                            "g" (MAP_FIXED | MAP_SHARED), "g" (fd),
+-			    "g" (offset),
+-			    "i" (&((struct stub_data *) STUB_DATA)->child_err)
+-			  : __syscall_clobber, "r10", "r8", "r9" );
++	__asm__ volatile (
++		"movq %0,%%rax ;"
++		"movq %%rsp,%%rdi ;"
++		"andq %1,%%rdi ;"
++		"movq %2,%%r10 ;"
++		"movq %%rdi,%%r8 ; addq %3,%%r8 ; movq (%%r8),%%r8 ;"
++		"movq %%rdi,%%r9 ; addq %4,%%r9 ; movq (%%r9),%%r9 ;"
++		__syscall ";"
++		"movq %%rsp,%%rdi ; andq %1,%%rdi ;"
++		"addq %5,%%rdi ; movq %%rax, (%%rdi) ;"
++		"int3"
++		: :
++		"g" (STUB_MMAP_NR),
++		"g" (~(UM_KERN_PAGE_SIZE - 1)),
++		"g" (MAP_FIXED | MAP_SHARED),
++		"g" (UML_STUB_FIELD_FD),
++		"g" (UML_STUB_FIELD_OFFSET),
++		"g" (UML_STUB_FIELD_CHILD_ERR),
++		"S" (UM_KERN_PAGE_SIZE),
++		"d" (PROT_READ | PROT_WRITE)
++		:
++		__syscall_clobber, "r10", "r8", "r9");
+ }
+ 
+ #endif
+diff --git a/arch/x86/um/stub_32.S b/arch/x86/um/stub_32.S
+index a193e88536a9..8291899e6aaf 100644
+--- a/arch/x86/um/stub_32.S
++++ b/arch/x86/um/stub_32.S
+@@ -5,21 +5,22 @@
+ 
+ 	.globl batch_syscall_stub
+ batch_syscall_stub:
+-	/* load pointer to first operation */
+-	mov	$(STUB_DATA+8), %esp
+-
++	/* %esp comes in as "top of page" */
++	mov %esp, %ecx
++	/* %esp has pointer to first operation */
++	add $8, %esp
+ again:
+ 	/* load length of additional data */
+ 	mov	0x0(%esp), %eax
+ 
+ 	/* if(length == 0) : end of list */
+ 	/* write possible 0 to header */
+-	mov	%eax, STUB_DATA+4
++	mov	%eax, 0x4(%ecx)
+ 	cmpl	$0, %eax
+ 	jz	done
+ 
+ 	/* save current pointer */
+-	mov	%esp, STUB_DATA+4
++	mov	%esp, 0x4(%ecx)
+ 
+ 	/* skip additional data */
+ 	add	%eax, %esp
+@@ -38,6 +39,10 @@ again:
+ 	/* execute syscall */
+ 	int	$0x80
+ 
++	/* restore top of page pointer in %ecx */
++	mov	%esp, %ecx
++	andl	$(~UM_KERN_PAGE_SIZE) + 1, %ecx
++
+ 	/* check return value */
+ 	pop	%ebx
+ 	cmp	%ebx, %eax
+@@ -45,7 +50,7 @@ again:
+ 
+ done:
+ 	/* save return value */
+-	mov	%eax, STUB_DATA
++	mov	%eax, (%ecx)
+ 
+ 	/* stop */
+ 	int3
+diff --git a/arch/x86/um/stub_64.S b/arch/x86/um/stub_64.S
+index 8a95c5b2eaf9..f3404640197a 100644
+--- a/arch/x86/um/stub_64.S
++++ b/arch/x86/um/stub_64.S
+@@ -4,9 +4,8 @@
+ .section .__syscall_stub, "ax"
+ 	.globl batch_syscall_stub
+ batch_syscall_stub:
+-	mov	$(STUB_DATA), %rbx
+-	/* load pointer to first operation */
+-	mov	%rbx, %rsp
++	/* %rsp has the pointer to first operation */
++	mov	%rsp, %rbx
+ 	add	$0x10, %rsp
+ again:
+ 	/* load length of additional data */
+diff --git a/arch/x86/um/stub_segv.c b/arch/x86/um/stub_segv.c
+index 27361cbb7ca9..21836eaf1725 100644
+--- a/arch/x86/um/stub_segv.c
++++ b/arch/x86/um/stub_segv.c
+@@ -11,10 +11,11 @@
+ void __attribute__ ((__section__ (".__syscall_stub")))
+ stub_segv_handler(int sig, siginfo_t *info, void *p)
+ {
++	int stack;
+ 	ucontext_t *uc = p;
++	struct faultinfo *f = (void *)(((unsigned long)&stack) & ~(UM_KERN_PAGE_SIZE - 1));
+ 
+-	GET_FAULTINFO_FROM_MC(*((struct faultinfo *) STUB_DATA),
+-			      &uc->uc_mcontext);
++	GET_FAULTINFO_FROM_MC(*f, &uc->uc_mcontext);
+ 	trap_myself();
+ }
+ 
+-- 
+2.26.2
+
