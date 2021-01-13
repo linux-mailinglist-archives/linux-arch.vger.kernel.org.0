@@ -2,122 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAFE2F56ED
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 02:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB602F574E
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 03:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbhANBzp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Jan 2021 20:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S1726808AbhAMVNf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Jan 2021 16:13:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729614AbhAMXuZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Jan 2021 18:50:25 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082B8C0617A6
-        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 15:27:22 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id g15so2483142pgu.9
-        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 15:27:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rhh6w6PnAshqzzDi7tIorGSnjSwjXHOfLfkdJH6Oxgk=;
-        b=UsAe64kOAc8ogK7jOBzOesd7Gj13f2B4Po8m+3R3dmVXJk6pEq3gYcmuaRd7El09bO
-         Pp9zCxf2v08t8ZWzssQTx0k0WdOnBcT3jgcHctNfwEtJoZYm3e3My7kUgzf5amFidX7U
-         3RAcgUTqJ/nW4n7VBXamre7h42HseZwdwLdsy8OXsvbzJcBMowDxF2ZoCDZz1+kzzXJv
-         j704xO1uL9COVu3l3LUelEPeCyK9q/+k0NcEh72F2vqTVL5V6wFlhm4hKS66EXiGDsqT
-         OIP8nNh5erhaKpw9pbAOhJIe0W3K8OMJi6dJhV32YQQE5oiccvLsW6hzifztteos5F4h
-         cXyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rhh6w6PnAshqzzDi7tIorGSnjSwjXHOfLfkdJH6Oxgk=;
-        b=CJvOoMlJFRa7eGmQneibZzeG3Lx3TU690DQ+FH4oQ2PM8+S8Q382rfbtmYgSPY9WB5
-         XrVyyr49MYQ4XAtjinjGZOC6IwScAAhJpqCXlU7vJEi+QfDJ4BX7K/xSRhjmivXzEBxq
-         tNeYZ47td7jDE19GR4yn3EqV7EGmEMCW7yLCvGVgqb+wTbz4q3UnwQ7gEaCjJ5jyc15V
-         1qBYImBeP3YZN/38wlhfmMfAwCcZHlnR01WLW7aEEVnd/CKkZBZ50fmgPw0xvx7YFP+y
-         qlw/OI3thQCFiOwzinLFHnfzB2wz0YL4xCtS2BoILk4Z43fX6TvZa96bOluV3SEFAKlY
-         0dTw==
-X-Gm-Message-State: AOAM5316opVs+Cs3PrbpjcK/2YHzIqGzxK+SY1n/QPuUMt0K/prp+WdJ
-        LJB1WQbgkfyLAr4ohh/qsIYuFE9EeHumHmlCcV7BVw==
-X-Google-Smtp-Source: ABdhPJynbg/QsB8oO89RHz2rLF3RFS5Hrqec+YsAoymztXcghiURgnIYfZbNXYr16Sz5/nfz/+3mrTX2fRX2z2LbEqI=
-X-Received: by 2002:a63:1142:: with SMTP id 2mr4397001pgr.263.1610580441323;
- Wed, 13 Jan 2021 15:27:21 -0800 (PST)
+        with ESMTP id S1729026AbhAMVJS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Jan 2021 16:09:18 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8B4C061786
+        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 13:09:53 -0800 (PST)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1kznOp-005vHf-SI; Wed, 13 Jan 2021 22:09:51 +0100
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-um@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 1/3] um: separate child and parent errors in clone stub
+Date:   Wed, 13 Jan 2021 22:09:42 +0100
+Message-Id: <20210113220944.7732f6bfd3bb.Ib87c91b49d57d27314cf444696273da6d8463e9c@changeid>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210113003235.716547-1-ndesaulniers@google.com>
- <20210113003235.716547-3-ndesaulniers@google.com> <CA+icZUV6pNP1AN_JEhqon6Hgk3Yfq0_VNghvRX0N9mw6pGtpVw@mail.gmail.com>
-In-Reply-To: <CA+icZUV6pNP1AN_JEhqon6Hgk3Yfq0_VNghvRX0N9mw6pGtpVw@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 13 Jan 2021 15:27:09 -0800
-Message-ID: <CAKwvOdm40Z3YutxwWyV922XdchN7Dz+v9kJNjF13vKxNUXrJnQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] Kbuild: make DWARF version a choice
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sedat,
-Thanks for testing, and congrats on https://lwn.net/Articles/839772/.
-I always appreciate you taking the time to help test my work, and
-other Clang+Linux kernel patches!
+From: Johannes Berg <johannes.berg@intel.com>
 
-On Wed, Jan 13, 2021 at 1:24 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Wed, Jan 13, 2021 at 1:32 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -826,12 +826,16 @@ else
-> >  DEBUG_CFLAGS   += -g
-> >  endif
-> >
-> > -ifneq ($(LLVM_IAS),1)
-> > -KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF2) := 2
-> > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> > +DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
+If the two are mixed up, then it looks as though the parent
+returned an error if the child failed (before) the mmap(),
+and then the resulting process never gets killed. Fix this
+by splitting the child and parent errors, reporting and
+using them appropriately.
 
-^ DEBUG_CFLAGS are set for everyone (all toolchains) if
-CONFIG_DEBUG_INFO is defined.
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+ arch/um/include/shared/skas/stub-data.h |  2 +-
+ arch/um/kernel/skas/clone.c             | 25 +++++++++++--------------
+ arch/um/os-Linux/skas/process.c         | 23 +++++++++++++----------
+ arch/x86/um/shared/sysdep/stub_32.h     |  2 +-
+ arch/x86/um/shared/sysdep/stub_64.h     |  2 +-
+ 5 files changed, 27 insertions(+), 27 deletions(-)
 
-> > +ifneq ($(dwarf-version-y)$(LLVM_IAS),21)
-
-^ "If not using dwarf 2 and LLVM_IAS=1", ie. CONFIG_DEBUG_INFO_DWARF5
-&& CONFIG_CC_IS_GCC
-
-> > +# Binutils 2.35+ required for -gdwarf-4+ support.
-> > +dwarf-aflag    := $(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y))
-> > +ifdef CONFIG_CC_IS_CLANG
-
-^ "if clang"
-
-> > +DEBUG_CFLAGS   += $(dwarf-aflag)
-> >  endif
->
-> Why is that "ifdef CONFIG_CC_IS_CLANG"?
-
-That's what Arvind requested on v2, IIUC:
-https://lore.kernel.org/lkml/X8psgMuL4jMjP%2FOy@rani.riverdale.lan/
-
-> When I use GCC v10.2.1 DEBUG_CFLAGS are not set.
-
-You should have -gdwarf-4 (and not -Wa,-gwarf-4) set for DEBUG_CFLAGS
-when compiling with GCC and enabling CONFIG_DEBUG_INFO_DWARF4. Can you
-please confirm? (Perhaps you may have accidentally disabled
-CONFIG_DEBUG_INFO by rerunning `make defconfig`?)
+diff --git a/arch/um/include/shared/skas/stub-data.h b/arch/um/include/shared/skas/stub-data.h
+index 6b01d97a9386..5e3ade3fb38b 100644
+--- a/arch/um/include/shared/skas/stub-data.h
++++ b/arch/um/include/shared/skas/stub-data.h
+@@ -11,7 +11,7 @@
+ struct stub_data {
+ 	unsigned long offset;
+ 	int fd;
+-	long err;
++	long parent_err, child_err;
+ };
+ 
+ #endif
+diff --git a/arch/um/kernel/skas/clone.c b/arch/um/kernel/skas/clone.c
+index bfb70c456b30..7c592c788cbf 100644
+--- a/arch/um/kernel/skas/clone.c
++++ b/arch/um/kernel/skas/clone.c
+@@ -24,29 +24,26 @@
+ void __attribute__ ((__section__ (".__syscall_stub")))
+ stub_clone_handler(void)
+ {
+-	struct stub_data *data = (struct stub_data *) STUB_DATA;
++	int stack;
++	struct stub_data *data = (void *) ((unsigned long)&stack & ~(UM_KERN_PAGE_SIZE - 1));
+ 	long err;
+ 
+ 	err = stub_syscall2(__NR_clone, CLONE_PARENT | CLONE_FILES | SIGCHLD,
+-			    STUB_DATA + UM_KERN_PAGE_SIZE / 2 - sizeof(void *));
+-	if (err != 0)
+-		goto out;
++			    (unsigned long)data + UM_KERN_PAGE_SIZE / 2 - sizeof(void *));
++	if (err) {
++		data->parent_err = err;
++		goto done;
++	}
+ 
+ 	err = stub_syscall4(__NR_ptrace, PTRACE_TRACEME, 0, 0, 0);
+-	if (err)
+-		goto out;
++	if (err) {
++		data->child_err = err;
++		goto done;
++	}
+ 
+ 	remap_stack(data->fd, data->offset);
+ 	goto done;
+ 
+- out:
+-	/*
+-	 * save current result.
+-	 * Parent: pid;
+-	 * child: retcode of mmap already saved and it jumps around this
+-	 * assignment
+-	 */
+-	data->err = err;
+  done:
+ 	trap_myself();
+ }
+diff --git a/arch/um/os-Linux/skas/process.c b/arch/um/os-Linux/skas/process.c
+index d910e25c273e..623b0aeadf4c 100644
+--- a/arch/um/os-Linux/skas/process.c
++++ b/arch/um/os-Linux/skas/process.c
+@@ -545,8 +545,14 @@ int copy_context_skas0(unsigned long new_stack, int pid)
+ 	 * and child's mmap2 calls
+ 	 */
+ 	*data = ((struct stub_data) {
+-			.offset	= MMAP_OFFSET(new_offset),
+-			.fd     = new_fd
++		.offset	= MMAP_OFFSET(new_offset),
++		.fd     = new_fd,
++		.parent_err = -ESRCH,
++		.child_err = 0,
++	});
++
++	*child_data = ((struct stub_data) {
++		.child_err = -ESRCH,
+ 	});
+ 
+ 	err = ptrace_setregs(pid, thread_regs);
+@@ -564,9 +570,6 @@ int copy_context_skas0(unsigned long new_stack, int pid)
+ 		return err;
+ 	}
+ 
+-	/* set a well known return code for detection of child write failure */
+-	child_data->err = 12345678;
+-
+ 	/*
+ 	 * Wait, until parent has finished its work: read child's pid from
+ 	 * parent's stack, and check, if bad result.
+@@ -581,7 +584,7 @@ int copy_context_skas0(unsigned long new_stack, int pid)
+ 
+ 	wait_stub_done(pid);
+ 
+-	pid = data->err;
++	pid = data->parent_err;
+ 	if (pid < 0) {
+ 		printk(UM_KERN_ERR "copy_context_skas0 - stub-parent reports "
+ 		       "error %d\n", -pid);
+@@ -593,10 +596,10 @@ int copy_context_skas0(unsigned long new_stack, int pid)
+ 	 * child's stack and check it.
+ 	 */
+ 	wait_stub_done(pid);
+-	if (child_data->err != STUB_DATA) {
+-		printk(UM_KERN_ERR "copy_context_skas0 - stub-child reports "
+-		       "error %ld\n", child_data->err);
+-		err = child_data->err;
++	if (child_data->child_err != STUB_DATA) {
++		printk(UM_KERN_ERR "copy_context_skas0 - stub-child %d reports "
++		       "error %ld\n", pid, data->child_err);
++		err = data->child_err;
+ 		goto out_kill;
+ 	}
+ 
+diff --git a/arch/x86/um/shared/sysdep/stub_32.h b/arch/x86/um/shared/sysdep/stub_32.h
+index 51fd256c75f0..8ea69211e53c 100644
+--- a/arch/x86/um/shared/sysdep/stub_32.h
++++ b/arch/x86/um/shared/sysdep/stub_32.h
+@@ -86,7 +86,7 @@ static inline void remap_stack(int fd, unsigned long offset)
+ 			    "d" (PROT_READ | PROT_WRITE),
+ 			    "S" (MAP_FIXED | MAP_SHARED), "D" (fd),
+ 			    "a" (offset),
+-			    "i" (&((struct stub_data *) STUB_DATA)->err)
++			    "i" (&((struct stub_data *) STUB_DATA)->child_err)
+ 			  : "memory");
+ }
+ 
+diff --git a/arch/x86/um/shared/sysdep/stub_64.h b/arch/x86/um/shared/sysdep/stub_64.h
+index 994df93c5ed3..b7b8b8e4359d 100644
+--- a/arch/x86/um/shared/sysdep/stub_64.h
++++ b/arch/x86/um/shared/sysdep/stub_64.h
+@@ -92,7 +92,7 @@ static inline void remap_stack(long fd, unsigned long offset)
+ 			    "d" (PROT_READ | PROT_WRITE),
+                             "g" (MAP_FIXED | MAP_SHARED), "g" (fd),
+ 			    "g" (offset),
+-			    "i" (&((struct stub_data *) STUB_DATA)->err)
++			    "i" (&((struct stub_data *) STUB_DATA)->child_err)
+ 			  : __syscall_clobber, "r10", "r8", "r9" );
+ }
+ 
 -- 
-Thanks,
-~Nick Desaulniers
+2.26.2
+
