@@ -2,91 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 618692F3FCE
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 01:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000492F4028
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 01:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387649AbhALXCb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Jan 2021 18:02:31 -0500
-Received: from mga11.intel.com ([192.55.52.93]:32015 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729320AbhALXCa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 12 Jan 2021 18:02:30 -0500
-IronPort-SDR: RMO7RHKhKv9vip0YRrOcKlfQwRyvynVK/ATTUSKiWao9mEzs9qo3o3K2UEj9SFapyh8qf84MB4
- sy+Drv0cPZYw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="174611842"
-X-IronPort-AV: E=Sophos;i="5.79,342,1602572400"; 
-   d="scan'208";a="174611842"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 15:02:07 -0800
-IronPort-SDR: zBMMKHAiBobVrLDfrDcDdJSqGxiTSdD34PT5PSkJ0OlBLjoAwyPye77F//xOR069fHpa7ys6T0
- P6adA37XOpHQ==
-X-IronPort-AV: E=Sophos;i="5.79,342,1602572400"; 
-   d="scan'208";a="571845814"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.89.212]) ([10.212.89.212])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 15:02:06 -0800
-Subject: Re: [PATCH v17 04/26] x86/cpufeatures: Introduce X86_FEATURE_CET and
- setup functions
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20201229213053.16395-5-yu-cheng.yu@intel.com>
- <20210111230900.5916-1-yu-cheng.yu@intel.com>
- <20210112123854.GE13086@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <0b144668-a989-6bc7-0b0d-2195d2d73397@intel.com>
-Date:   Tue, 12 Jan 2021 15:02:06 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210112123854.GE13086@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2438125AbhAMAnQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Jan 2021 19:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392394AbhAMAd2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jan 2021 19:33:28 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB27CC061786
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jan 2021 16:32:47 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id o9so601724yba.4
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jan 2021 16:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=5rko6s7/MxxtN4vVcBpBg113Pb8TIp2GhMMzMhRrSK4=;
+        b=p4mDtQ/JWBQVcqiSngiVHj1RDJXheN9j4tRJZdYqOef3abOmLeMAEwfLvwCSZaq72V
+         G+vUc4J+fzLAMEur0uasAO4tZTA5D+eRIvWKG6bK0GwnwBgnyCe/P3TDCE/ZVxj/33iW
+         nI7HNKVv87dAHunABvsFKROzqxByZa2P1XtgX+yh6cVQuPHUtAiwQ78s1ui09zTayJbN
+         HS2wFLIEu9gMfxL7BaqP8CrMPeoTys7pn1IOwKxGpH91mGB46UBdoqFiKjkGWXF6exUH
+         pbPMt7PkH59Kw0zzF1wq9mDSqSdLTBVqOfplGUeTXNf3oKX3HMCJmxz7+IAUaLi6fvpE
+         N41Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=5rko6s7/MxxtN4vVcBpBg113Pb8TIp2GhMMzMhRrSK4=;
+        b=ciispqtyRJP9gHqwxyjrjroYIfKRrOnjw0xkcZu5l4P8XHRvcWPOrsHHPwzmefhDhN
+         fOdZkMnX2fjuVZDpZbxPqrUTO4EsMaYtGgmUVeg7HLEONewzR7eU7B93Wt3cFy6TExlw
+         hOv8iKx/V0SfFpC7JmcDJYkyDd27x1h+Z+okjZJpRDNuhXIqs0AHUHHRJ+KYHa3KIpnv
+         aQ6AgC6AIAREAtXa4ZzwzzwBlui/WTdQpw2N+R+6E1SEZFamgGUO41Mup6DenYGqkMsw
+         rXQXMle+XihRXsr+Qcb2O+4RAIaoAinwh5rIti8XvucncecQBp2hFPAlc3g5IfvnvqS3
+         Egnw==
+X-Gm-Message-State: AOAM533GM6cNAK3Vp7RREGCcqqh1CIbfmyaKTSzUIhpNCtN/rYFGCurd
+        VxFb6Y8TeRc3innKY2vFA/4OlH14zPfRXBZIcWs=
+X-Google-Smtp-Source: ABdhPJyz29k5mHwumIN/WLsewxzzQWULrBkzUA+/LMCzZdq219IKRBifSlFkuKDLgTPRlO+O4yjAZg9VmDmhK0cKzJM=
+Sender: "ndesaulniers via sendgmr" 
+        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:4d25])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:9387:: with SMTP id
+ a7mr3131575ybm.73.1610497966973; Tue, 12 Jan 2021 16:32:46 -0800 (PST)
+Date:   Tue, 12 Jan 2021 16:32:32 -0800
+Message-Id: <20210113003235.716547-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+Subject: [PATCH v4 0/3] Kbuild: DWARF v5 support
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/12/2021 4:38 AM, Borislav Petkov wrote:
-> On Mon, Jan 11, 2021 at 03:09:00PM -0800, Yu-cheng Yu wrote:
->> @@ -1252,6 +1260,16 @@ static void __init cpu_parse_early_param(void)
->>   	if (cmdline_find_option_bool(boot_command_line, "noxsaves"))
->>   		setup_clear_cpu_cap(X86_FEATURE_XSAVES);
->>   
->> +	/*
->> +	 * CET states are XSAVES states and options must be parsed early.
->> +	 */
-> 
-> That comment is redundant - look at the containing function's name.
-> 
-> Otherwise patch looks just as it should.
-> 
-> Thx.
-> 
+DWARF v5 is the latest standard of the DWARF debug info format.
 
-Should I send an updated patch?  Thanks!
+DWARF5 wins significantly in terms of size when mixed with compression
+(CONFIG_DEBUG_INFO_COMPRESSED).
 
---
-Yu-cheng
+Link: http://www.dwarfstd.org/doc/DWARF5.pdf
+
+Patch 1 is a cleanup from Masahiro and isn't DWARF v5 specific.
+Patch 2 is a cleanup that lays the ground work and isn't DWARF
+v5 specific.
+Patch 3 implements Kconfig and Kbuild support for DWARFv5.
+
+Changes from v3:
+
+Changes as per Arvind:
+* only add -Wa,-gdwarf-5 for (LLVM=1|CC=clang)+LLVM_IAS=0 builds.
+* add -gdwarf-5 to Kconfig shell script.
+* only run Kconfig shell script for Clang.
+
+Apologies to Sedat and Nathan; I appreciate previous testing/review, but
+I did no carry forward your Tested-by and Reviewed-by tags, as the
+patches have changed too much IMO.
+
+Changes from v2:
+* Drop two of the earlier patches that have been accepted already.
+* Add measurements with GCC 10.2 to commit message.
+* Update help text as per Arvind with help from Caroline.
+* Improve case/wording between DWARF Versions as per Masahiro.
+
+Changes from the RFC:
+* split patch in 3 patch series, include Fangrui's patch, too.
+* prefer `DWARF vX` format, as per Fangrui.
+* use spaces between assignment in Makefile as per Masahiro.
+* simplify setting dwarf-version-y as per Masahiro.
+* indent `prompt` in Kconfig change as per Masahiro.
+* remove explicit default in Kconfig as per Masahiro.
+* add comments to test_dwarf5_support.sh.
+* change echo in test_dwarf5_support.sh as per Masahiro.
+* remove -u from test_dwarf5_support.sh as per Masahiro.
+* add a -gdwarf-5 cc-option check to Kconfig as per Jakub.
+
+Masahiro Yamada (1):
+  Remove $(cc-option,-gdwarf-4) dependency from CONFIG_DEBUG_INFO_DWARF4
+
+Nick Desaulniers (2):
+  Kbuild: make DWARF version a choice
+  Kbuild: implement support for DWARF v5
+
+ Makefile                          | 15 +++++++----
+ include/asm-generic/vmlinux.lds.h |  6 ++++-
+ lib/Kconfig.debug                 | 41 +++++++++++++++++++++++++------
+ scripts/test_dwarf5_support.sh    |  9 +++++++
+ 4 files changed, 58 insertions(+), 13 deletions(-)
+ create mode 100755 scripts/test_dwarf5_support.sh
+
+-- 
+2.30.0.284.gd98b1dd5eaa7-goog
+
