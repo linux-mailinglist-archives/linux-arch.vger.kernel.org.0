@@ -2,80 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E20B42F4925
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 12:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616542F497B
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 12:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbhAMK6W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Jan 2021 05:58:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:51248 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726459AbhAMK6W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 Jan 2021 05:58:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610535415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5mnxdraFFc27NKPKaDd5/PxGNaQDZhdz3BpuYoF4+jY=;
-        b=L9hjAuz1SkydBjNl7kLF2U2t8tP/uDZ+UCH8YGUWXbCcDB6IXw17lnrinXd+eaAWtskNb/
-        dysfWCdh/8j8hwfqqSC8i9RBIycUhBUK0WehhAKjlygayzLXhV2J2rn0bmsxVrW3IoVPNK
-        EQQMIOwosWwfgslSGoUZkWvH+aXXt1w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-270-52fHE9t9Mq2VGNsItg2Cnw-1; Wed, 13 Jan 2021 05:56:52 -0500
-X-MC-Unique: 52fHE9t9Mq2VGNsItg2Cnw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D44E918C8C02;
-        Wed, 13 Jan 2021 10:56:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-112-8.rdu2.redhat.com [10.10.112.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 05A086A914;
-        Wed, 13 Jan 2021 10:56:44 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <e6bd9820-8b77-57fc-f318-9b928e4d951b@schaufler-ca.com>
-References: <e6bd9820-8b77-57fc-f318-9b928e4d951b@schaufler-ca.com> <1610099389-28329-1-git-send-email-pnagar@codeaurora.org> <0f467390-e018-6051-0014-ab475ed76863@schaufler-ca.com> <dab6357acbd63edd53099d106d111bf4@codeaurora.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     dhowells@redhat.com, pnagar@codeaurora.org, arnd@arndb.de,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, psodagud@codeaurora.org,
-        nmardana@codeaurora.org, dsule@codeaurora.org,
-        Joe Perches <joe@perches.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2] selinux: security: Move selinux_state to a separate page
+        id S1727518AbhAMLCK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Jan 2021 06:02:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38838 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727442AbhAMLAw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 Jan 2021 06:00:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 96C0123383;
+        Wed, 13 Jan 2021 10:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610535569;
+        bh=UsiaJ5TeFRIuOKIuSBE3ueTDIjqdP8/ojUP8xNThLiU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JwQBO8e3swkxbw4v0qYoQuzfOutZcHgnI0MSHLSa7aQYUqKKz9xGmdslvbE+6X+pl
+         iQOsreIaYUaopfrnoALMeRcoV8b2ewED6qoB6VZAohTV2XoiM/Ugq8CdhsTDpkpFSC
+         sHsApbyrBjWJlSbUXBv7tLCy1UNX3cGrSSAD7j++4HLesIzeEjFZVPQJn2J5oLmjON
+         LO6JcKkXMZsrXk8YpCGzlX782pac1zAqJFB7uHTlnn9sXRcGD3zlcwAV7Mf5VR7pFG
+         iH9Nqr9o9EuUz7C11onQCo1Sg/vfJIRxblyM1+yeUPdfpo0R+ivUmKOYdf8WcgHtgm
+         MAEc9cWWKa5YQ==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kzds7-00DpFo-1W; Wed, 13 Jan 2021 11:59:27 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 00/24] Fix broken file docs cross-references
+Date:   Wed, 13 Jan 2021 11:59:01 +0100
+Message-Id: <cover.1610535349.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2646560.1610535404.1@warthog.procyon.org.uk>
-Date:   Wed, 13 Jan 2021 10:56:44 +0000
-Message-ID: <2646561.1610535404@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Casey Schaufler <casey@schaufler-ca.com> wrote:
+File renames and yaml conversions broke file references for several files,
+as reported by:
 
-> >> How would this interact with or complement __read_mostly?
-> >>
-> > Currently, the mechanism we are working on developing is
-> > independent of __read_mostly. This is something we can look more into
-> > while working further on the mechanism.
-> 
-> Please either integrate the two or explain how they differ.
-> It appears that you haven't considered how you might exploit
-> or expand the existing mechanism.
+	./scripts/documentation-file-ref-check
 
-I think __read_mostly is about grouping stuff together that's rarely going to
-be read to make the CPU's data cache more efficient.  It doesn't stop people
-writing to such a variable.
+Fix most of them.
 
-David
+Please notice that this series was generated against  linux-next
+(next-20210113).  So, it is better if the fixup patch could be added
+at the same tree that received the patch renaming the filename.
+
+Regards,
+Mauro
+
+Mauro Carvalho Chehab (24):
+  MAINTAINERS: update adi,ad5758.yaml reference
+  MAINTAINERS: update fsl,dpaa2-console.yaml reference
+  MAINTAINERS: update st,hts221.yaml reference
+  MAINTAINERS: update dpot-dac.yaml reference
+  MAINTAINERS: update envelope-detector.yaml reference
+  MAINTAINERS: update current-sense-amplifier.yaml reference
+  MAINTAINERS: update current-sense-shunt.yaml reference
+  MAINTAINERS: update voltage-divider.yaml reference
+  MAINTAINERS: update mtk-sd.yaml reference
+  MAINTAINERS: update atmel,sama5d2-adc.yaml reference
+  MAINTAINERS: update pni,rm3100.yaml reference
+  MAINTAINERS: update renesas,rcar-gyroadc.yaml reference
+  MAINTAINERS: update st,lsm6dsx.yaml reference
+  MAINTAINERS: update st,vl53l0x.yaml reference
+  MAINTAINERS: update ti,dac7612.yaml reference
+  Documentation/hwmon/ina2xx.rst: update ti,ina2xx.yaml reference
+  arch/Kconfig: update unaligned-memory-access.rst reference
+  include/linux/iio/dac/mcp4725.h: update a microchip,mcp4725.yaml ref
+  doc: update rcu_dereference.rst reference
+  ASoC: audio-graph-card: update audio-graph-card.yaml reference
+  dt-bindings: display: mediatek: update mediatek,dpi.yaml reference
+  dt-bindings: memory: mediatek: update mediatek,smi-larb.yaml
+    references
+  dt-bindings:iio:adc: update adc.yaml reference
+  dt-bindings: phy: update phy-cadence-sierra.yaml reference
+
+ .../bindings/display/bridge/sii902x.txt       |  2 +-
+ .../display/mediatek/mediatek,disp.txt        |  4 +--
+ .../bindings/iio/adc/adi,ad7192.yaml          |  2 +-
+ .../bindings/media/mediatek-jpeg-decoder.txt  |  2 +-
+ .../bindings/media/mediatek-jpeg-encoder.txt  |  2 +-
+ .../bindings/media/mediatek-mdp.txt           |  2 +-
+ .../bindings/phy/ti,phy-j721e-wiz.yaml        |  2 +-
+ Documentation/hwmon/ina2xx.rst                |  2 +-
+ MAINTAINERS                                   | 30 +++++++++----------
+ arch/Kconfig                                  |  2 +-
+ include/linux/iio/dac/mcp4725.h               |  2 +-
+ tools/memory-model/Documentation/glossary.txt |  2 +-
+ 12 files changed, 27 insertions(+), 27 deletions(-)
+
+-- 
+2.29.2
+
 
