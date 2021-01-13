@@ -2,90 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626DA2F4C67
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 14:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17282F4E37
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Jan 2021 16:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726471AbhAMNo7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Jan 2021 08:44:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39526 "EHLO mail.kernel.org"
+        id S1726645AbhAMPNI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Jan 2021 10:13:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57936 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726143AbhAMNo7 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 13 Jan 2021 08:44:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D31823339;
-        Wed, 13 Jan 2021 13:44:16 +0000 (UTC)
+        id S1725943AbhAMPNI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 13 Jan 2021 10:13:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DD79F2333E;
+        Wed, 13 Jan 2021 15:12:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610545458;
-        bh=yxQwj7GErWFKst6hClfszM91CiSR/sjTPkADcoTkPH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YcB7crq3hn52aPbNe0/Ti6ExxAYovh1rGMfLJgiY80ZiCBwTAdK01k7DjSMHeTTTh
-         063QZiOJyfrrssG3CeaAqvSqH8DBGF4OJ0i5aTHZcgcenfO44Auq8lu4oKYwaHI3IB
-         9eB7hMuzH/hkWi8YU/n90wQrXeB+Wk7baC1Hx6Lw3xk/NEB/5hgWs7pIBCx2OVjIYl
-         Owxa4Vacll3dWTFxSazNhWMnqdujGsipk+JBvQFnyjNcdnGv1LxIgTN9FXfMyz0znr
-         oqp651nCUQBI6ebnKxP1+Pc+9ATW113fjboBTwjMTGJonczcNcyUzJWo6BE3l5PqG/
-         49B2XXQtW6LGg==
-Date:   Wed, 13 Jan 2021 13:44:12 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        s=k20201202; t=1610550746;
+        bh=sY6LSpADNTXFnYKZ4zGIS9mQHZ3VCv/mrboz1GvoHBI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=tfA9ExzxTVn1GDm/tUWmbU8PVo26QiJRTFUNWxcFPOqRMETUDPUDdC8I9qbobIGnA
+         xjT7wMBtgMpwZOOhxbsjn6o7ehLpThtOyo4N0hpLilfNY4DB6wkxY9mU41B/g8uW/J
+         hc5E4HaH3SUFMjNg41U3YswMb/iToI97YpCIyLyXwfHix9M7SAU0B6fX7MLbZJbCin
+         xZ9SnbjPc3FH6/aGsRFZmfKJaMbmvKMOUWxnrVAJnleFHQjRkY4xCAO7rjXjMyKTXG
+         XyfO1iqJ2Mb45aeHjUoVx9ep2ZVqD/XtlNBpOLHQi2nRLWxoL4Okzf/BMMlrw7yh+5
+         KgVYgycKHaQ2w==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 8C4A435225BD; Wed, 13 Jan 2021 07:12:26 -0800 (PST)
+Date:   Wed, 13 Jan 2021 07:12:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] arm64: make atomic helpers __always_inline
-Message-ID: <20210113134412.GA11757@willie-the-truck>
-References: <20210108092024.4034860-1-arnd@kernel.org>
- <20210108093258.GB4031@willie-the-truck>
- <X/jDGbwDNcVrZdDJ@hirez.programming.kicks-ass.net>
- <20210112102312.GC34326@C02TD0UTHF1T.local>
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/24] doc: update rcu_dereference.rst reference
+Message-ID: <20210113151226.GS2743@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <cover.1610535349.git.mchehab+huawei@kernel.org>
+ <e2293b68eefdd00ea0f4795bc0672ef70f8627e2.1610535350.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210112102312.GC34326@C02TD0UTHF1T.local>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <e2293b68eefdd00ea0f4795bc0672ef70f8627e2.1610535350.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 10:23:12AM +0000, Mark Rutland wrote:
-> On Fri, Jan 08, 2021 at 09:39:53PM +0100, Peter Zijlstra wrote:
-> > On Fri, Jan 08, 2021 at 09:32:58AM +0000, Will Deacon wrote:
-> > > Hi Arnd,
-> > > 
-> > > On Fri, Jan 08, 2021 at 10:19:56AM +0100, Arnd Bergmann wrote:
-> > > > From: Arnd Bergmann <arnd@arndb.de>
-> > > > 
-> > > > With UBSAN enabled and building with clang, there are occasionally
-> > > > warnings like
-> > > > 
-> > > > WARNING: modpost: vmlinux.o(.text+0xc533ec): Section mismatch in reference from the function arch_atomic64_or() to the variable .init.data:numa_nodes_parsed
-> > > > The function arch_atomic64_or() references
-> > > > the variable __initdata numa_nodes_parsed.
-> > > > This is often because arch_atomic64_or lacks a __initdata
-> > > > annotation or the annotation of numa_nodes_parsed is wrong.
-> > > > 
-> > > > for functions that end up not being inlined as intended but operating
-> > > > on __initdata variables. Mark these as __always_inline, along with
-> > > > the corresponding asm-generic wrappers.
-> > > 
-> > > Hmm, I don't fully grok this. Why does it matter if a non '__init' function
-> > > is called with a pointer to some '__initdata'? Or is the reference coming
-> > > from somewhere else? (where?).
-> > 
-> > FWIW the x86 atomics are __always_inline in part due to the noinstr
-> > crud, which I imagine resulted in much the same 'fun'.
+On Wed, Jan 13, 2021 at 11:59:20AM +0100, Mauro Carvalho Chehab wrote:
+> Changeset b00aedf978aa ("doc: Convert to rcu_dereference.txt to rcu_dereference.rst")
+> renamed: Documentation/RCU/rcu_dereference.txt
+> to: Documentation/RCU/rcu_dereference.rst.
 > 
-> FWIW, I was planning on doing the same here as part of making arm64
-> noinstr safe, so I reckon we should probably do this regardless of
-> whether it's a complete fix for the section mismatch issue.
+> Update its cross-reference accordingly.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Fair enough:
+Queued, thank you!
 
-Acked-by: Will Deacon <will@kernel.org>
+							Thanx, Paul
 
-Will
+> ---
+>  tools/memory-model/Documentation/glossary.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/memory-model/Documentation/glossary.txt b/tools/memory-model/Documentation/glossary.txt
+> index b2da6365be63..6f3d16dbf467 100644
+> --- a/tools/memory-model/Documentation/glossary.txt
+> +++ b/tools/memory-model/Documentation/glossary.txt
+> @@ -19,7 +19,7 @@ Address Dependency:  When the address of a later memory access is computed
+>  	 from the value returned by the rcu_dereference() on line 2, the
+>  	 address dependency extends from that rcu_dereference() to that
+>  	 "p->a".  In rare cases, optimizing compilers can destroy address
+> -	 dependencies.	Please see Documentation/RCU/rcu_dereference.txt
+> +	 dependencies.	Please see Documentation/RCU/rcu_dereference.rst
+>  	 for more information.
+>  
+>  	 See also "Control Dependency" and "Data Dependency".
+> -- 
+> 2.29.2
+> 
