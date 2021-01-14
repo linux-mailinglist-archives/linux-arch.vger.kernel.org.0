@@ -2,98 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD882F6414
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 16:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 914312F6A5F
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 20:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729191AbhANPQg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jan 2021 10:16:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729187AbhANPQg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 14 Jan 2021 10:16:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 95B6923A5F;
-        Thu, 14 Jan 2021 15:15:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610637355;
-        bh=gLLPfUlONDQS1aydZtW+IGDKTZFvNgwsCEdoTD72IQw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=sZU21nyC4NBdj1AEj57D3V0spmSCTc2E/oaHXNUMcM6JnI5+hmweUpjA6yAxPCBrd
-         YNUVPzSBtuJ0X4IEBcRBhLANz5V0ryERU6hW0b0EznTRPW3fZfxK62anFWsiSr5pwC
-         bHG5WsJbWpTzh96KibHLYR9lWs7Z0DrEbqMUoUPghX4I7FN+CTw7Jy8MLyBYs31G3H
-         5Ki8VWdAXiN3g//7bl7DRuztJHWec1fQpwki+ehO4MmURhYf8MP2XceVtLxiyNbbFD
-         3zdz9Kq7fB3NP7qw7a95QAM9M9niENeE68w5ahFPNQvuncy9toCXC6JzKayPovtB7C
-         q/kxbWdzCaCcw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 6498B35225DC; Thu, 14 Jan 2021 07:15:55 -0800 (PST)
-Date:   Thu, 14 Jan 2021 07:15:55 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH -rcu] tools/memory-model: Remove reference to
- atomic_ops.rst
-Message-ID: <20210114151555.GG2743@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <28849fc0-1d1e-6e1b-380c-672da2622aec@gmail.com>
+        id S1729362AbhANTCC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Jan 2021 14:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729015AbhANTCC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jan 2021 14:02:02 -0500
+X-Greylist: delayed 386 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jan 2021 11:01:16 PST
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [IPv6:2001:1600:4:17::190c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E17C061757
+        for <linux-arch@vger.kernel.org>; Thu, 14 Jan 2021 11:01:16 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DGtls2KsZzMq8XJ;
+        Thu, 14 Jan 2021 19:54:49 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DGtlp18bWzlh8T2;
+        Thu, 14 Jan 2021 19:54:46 +0100 (CET)
+Subject: Re: [PATCH v26 07/12] landlock: Support filesystem access-control
+To:     Jann Horn <jannh@google.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201209192839.1396820-1-mic@digikod.net>
+ <20201209192839.1396820-8-mic@digikod.net>
+ <CAG48ez1wbAQwU-eoC9DngHyUM_5F01MJQpRnLaJFvfRUrnXBdA@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <aeb3e152-8108-89d2-0577-4b130368f14f@digikod.net>
+Date:   Thu, 14 Jan 2021 19:54:36 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28849fc0-1d1e-6e1b-380c-672da2622aec@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAG48ez1wbAQwU-eoC9DngHyUM_5F01MJQpRnLaJFvfRUrnXBdA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 11:40:26PM +0900, Akira Yokosawa wrote:
-> >From 1d7642add7f74ca307f1bf70569e23edf8b1a023 Mon Sep 17 00:00:00 2001
-> From: Akira Yokosawa <akiyks@gmail.com>
-> Date: Thu, 14 Jan 2021 23:09:07 +0900
-> Subject: [PATCH -rcu] tools/memory-model: Remove reference to atomic_ops.rst
-> 
-> atomic_ops.rst was removed by commit f0400a77ebdc ("atomic: Delete
-> obsolete documentation").
-> Remove the broken link in tools/memory-model/Documentation/simple.txt.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
 
-Good catch, thank you!  Queued for v5.12.
+On 14/01/2021 04:22, Jann Horn wrote:
+> On Wed, Dec 9, 2020 at 8:28 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> Thanks to the Landlock objects and ruleset, it is possible to identify
+>> inodes according to a process's domain.  To enable an unprivileged
+>> process to express a file hierarchy, it first needs to open a directory
+>> (or a file) and pass this file descriptor to the kernel through
+>> landlock_add_rule(2).  When checking if a file access request is
+>> allowed, we walk from the requested dentry to the real root, following
+>> the different mount layers.  The access to each "tagged" inodes are
+>> collected according to their rule layer level, and ANDed to create
+>> access to the requested file hierarchy.  This makes possible to identify
+>> a lot of files without tagging every inodes nor modifying the
+>> filesystem, while still following the view and understanding the user
+>> has from the filesystem.
+>>
+>> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+>> keep the same struct inodes for the same inodes whereas these inodes are
+>> in use.
+>>
+>> This commit adds a minimal set of supported filesystem access-control
+>> which doesn't enable to restrict all file-related actions.  This is the
+>> result of multiple discussions to minimize the code of Landlock to ease
+>> review.  Thanks to the Landlock design, extending this access-control
+>> without breaking user space will not be a problem.  Moreover, seccomp
+>> filters can be used to restrict the use of syscall families which may
+>> not be currently handled by Landlock.
+> [...]
+>> +static bool check_access_path_continue(
+>> +               const struct landlock_ruleset *const domain,
+>> +               const struct path *const path, const u32 access_request,
+>> +               u64 *const layer_mask)
+>> +{
+> [...]
+>> +       /*
+>> +        * An access is granted if, for each policy layer, at least one rule
+>> +        * encountered on the pathwalk grants the access, regardless of their
+>> +        * position in the layer stack.  We must then check not-yet-seen layers
+>> +        * for each inode, from the last one added to the first one.
+>> +        */
+>> +       for (i = 0; i < rule->num_layers; i++) {
+>> +               const struct landlock_layer *const layer = &rule->layers[i];
+>> +               const u64 layer_level = BIT_ULL(layer->level - 1);
+>> +
+>> +               if (!(layer_level & *layer_mask))
+>> +                       continue;
+>> +               if ((layer->access & access_request) != access_request)
+>> +                       return false;
+>> +               *layer_mask &= ~layer_level;
+> 
+> Hmm... shouldn't the last 5 lines be replaced by the following?
+> 
+> if ((layer->access & access_request) == access_request)
+>     *layer_mask &= ~layer_level;
+> 
+> And then, since this function would always return true, you could
+> change its return type to "void".
+> 
+> 
+> As far as I can tell, the current version will still, if a ruleset
+> looks like this:
+> 
+> /usr read+write
+> /usr/lib/ read
+> 
+> reject write access to /usr/lib, right?
 
-							Thanx, Paul
+If these two rules are from different layers, then yes it would work as
+intended. However, if these rules are from the same layer the path walk
+will not stop at /usr/lib but go down to /usr, which grants write
+access. This is the reason I wrote it like this and the
+layout1.inherit_subset test checks that. I'm updating the documentation
+to better explain how an access is checked with one or multiple layers.
 
-> ---
-> Hi Paul,
+Doing this way also enables to stop the path walk earlier, which is the
+original purpose of this function.
+
+
 > 
-> This is relative to dev of -rcu.
 > 
->         Thanks, Akira
-> --
->  tools/memory-model/Documentation/simple.txt | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/memory-model/Documentation/simple.txt b/tools/memory-model/Documentation/simple.txt
-> index 81e1a0ec5342..4c789ec8334f 100644
-> --- a/tools/memory-model/Documentation/simple.txt
-> +++ b/tools/memory-model/Documentation/simple.txt
-> @@ -189,7 +189,6 @@ Additional information may be found in these files:
->  
->  Documentation/atomic_t.txt
->  Documentation/atomic_bitops.txt
-> -Documentation/core-api/atomic_ops.rst
->  Documentation/core-api/refcount-vs-atomic.rst
->  
->  Reading code using these primitives is often also quite helpful.
-> -- 
-> 2.17.1
-> 
+>> +       }
+>> +       return true;
+>> +}
