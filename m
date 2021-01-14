@@ -2,121 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4682F57FA
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 04:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1D92F593D
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 04:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730131AbhANCMH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Jan 2021 21:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S1727184AbhANDWu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Jan 2021 22:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729238AbhAMWIy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Jan 2021 17:08:54 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7A1C061575;
-        Wed, 13 Jan 2021 14:07:48 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id h16so3610363edt.7;
-        Wed, 13 Jan 2021 14:07:48 -0800 (PST)
+        with ESMTP id S1728047AbhANDWq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Jan 2021 22:22:46 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD11C0617A4
+        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 19:21:58 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id a12so6005103lfl.6
+        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 19:21:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=Fjx4x9CJD2wWjKON/wheiuq+1EzL46Iryc22xTN24oY=;
-        b=va4GwRxtMiYIKSA/SqIIQIDY1vPL/tulMkOywZckEhLZbkhHpEMpYvfhLrH13087EN
-         kXM2l8Jf61kJJXZttzxj3aSr3wdcXQ3NiOK/1XYg5lwTvXKffuuaxQKICLn8mwRhoiez
-         7KNyrcUunR+dYvmVagw8isyRG7MvR5ZtxwcoZgoSZ5lKIx5/3EejSzfQlYdS0zYagmev
-         cPIsk0AJvOACpUU+da4NawTYTwixhknA+O6n4rxx5TmITa1OIsGTEg86Y9Xol9aSUYWP
-         tJMSk0r8RKd98RiFQc/HOsUK2zSr4NVbZSraJ+tgb4CMpTMF87CAs02UeyIbmSdq3xqG
-         KXgg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vBKhWUt1LhGAbz4nnRDMUBnzWjuIyMjEZqvvewkWv1c=;
+        b=NaIVV7JM8xDZ1C/WCKEpyacKuGqEWPxP6vpebXWTWTzzL1T6CKyVM2e5z2n7D/dkwY
+         0shB76+ANbIpUlcIUeIlgXWuxwBl4Dyl25ILehT0lz0wm7yTqX9ZIbQXm/DJfYRSCTQq
+         /sA0p0frlZZqD8gLu4OIEuYj/VZyM0tLnHmDr5eYJQShu0NvHJqDf+OBxKv13kzaAZYX
+         BKPcpiI95E7gIXeB67td0Oc3RAzsdxKmv69JEPxyF4yL8cUJ9eCfNPAIO3k+pEHxYnVm
+         SlUg67QRFzYrVnG54RRpwBYMbN+Hw0PAn/grXz5aewJztLd/C/Rs7zXzpbzCt6BKz28m
+         3tgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=Fjx4x9CJD2wWjKON/wheiuq+1EzL46Iryc22xTN24oY=;
-        b=CgL744oy/hNzjwT+pI2yPFgx/+Puvk6q77KeUomTOp+295yPR3OOx7vLkfZDSDy5oG
-         jfJTWcfyp3zh8SsKCSWyNNmwsg1AQF8ncUghoH+HvlMkLDkuDwKSR1GkCa1tB8KqpyAW
-         gREANaDlXFZf9vlGc4dmWxedLRnmi/8k+P8xbw5UoFfD3qcg4/rIM69BJPY/lj8UDKTt
-         5m/C3yRFMD2soCxlNj64mN4pEUtXNN/0uPUHeC+7kkmmMfNL52XhA2BLs6vYiDiUrUgS
-         72G3T5OKsN3A8+oDIUifpyd3rBOdi4kZ0EWnwZVuTAY80OgWfR/j6zwZhRMtpeONnMij
-         1Uuw==
-X-Gm-Message-State: AOAM5306Qnw2RRvtxbXM6S1qy5591Xvo7x83IA2xWh90bsgA2M3CDA4R
-        Mo0akocU3CxF5CQewKt0ojPok9SlO30=
-X-Google-Smtp-Source: ABdhPJxUKBGh3JepPbB6R+MrqeDdFx9YTBcgjZ4Pvjh9UD5YwM/YStAH0Z8jRgQKOwNMRp6Mt1XMwQ==
-X-Received: by 2002:a50:c34b:: with SMTP id q11mr449809edb.214.1610575667713;
-        Wed, 13 Jan 2021 14:07:47 -0800 (PST)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id b14sm1403781edu.3.2021.01.13.14.07.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 14:07:46 -0800 (PST)
-Sender: Peter Korsgaard <jacmet@gmail.com>
-Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
-        (envelope-from <peter@korsgaard.com>)
-        id 1kzoIr-0004d2-QY; Wed, 13 Jan 2021 23:07:45 +0100
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Vineet Gupta <vgupta@synopsys.com>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-arch@vger.kernel.org,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Shreyas Joshi <shreyas.joshi@biamp.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        buildroot@busybox.net, arcml <linux-snps-arc@lists.infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        shreyasjoshi15@gmail.com, Guenter Roeck <linux@roeck-us.net>
-Subject: Re: ARC no console output (was Re: [PATCH 1/2] init/console: Use ttynull as a fallback when there is no console)
-References: <20201111135450.11214-1-pmladek@suse.com>
-        <20201111135450.11214-2-pmladek@suse.com>
-        <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
-        <8735zdm86m.fsf@jogness.linutronix.de>
-        <50ade852-c598-6476-1f4b-9a3f8d11d143@synopsys.com>
-        <X/c/ONCYz2QQdvOP@alley>
-        <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com>
-Date:   Wed, 13 Jan 2021 23:07:45 +0100
-In-Reply-To: <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com> (Vineet
-        Gupta's message of "Thu, 7 Jan 2021 09:58:05 -0800")
-Message-ID: <87turkfq32.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vBKhWUt1LhGAbz4nnRDMUBnzWjuIyMjEZqvvewkWv1c=;
+        b=MlPw4j4KgQ7kxZTnmEzOvlbL1Wlgq+K1IYM56QlFaJpc/FCGty36pUfHdYAi0W7JYk
+         ScDsC1QMcMI3p/JYWnGPfAWGLD0sl5gnVrzSVeYQu1pPNytnGUiVgf0hvlBB+HxsypFv
+         yB2n7gaq5iniZrxJcs6FjVswMsTTBP4Ip+vtYLyQpU9bKfifY8uNh9c2YKn1Hb+NC/5x
+         i/V0BZb9TtpafHzlTP4K0mW+Kdx6ze+ESAoIHXLA0vRWYw7JvqFEmB+GT5/3G3Ojs8Ge
+         L7jO+qzMABLISrKVXlTSw4doSLU4zWpmVHfaMjbSkcrAsU4Q043PA02DrvOIbPpRNo2N
+         6Bgw==
+X-Gm-Message-State: AOAM532d+haP2aqnzUfkrLRyFVS3rTjaCcmEXfYO0wwXbN3A63R5BuhN
+        /8yHiLzZSAF9MuruobOBZpfCJgtcuDxJxqWsP6ZwOA==
+X-Google-Smtp-Source: ABdhPJyC/YkIU5Vr2XJQiVDPrgVLFbaYhJ6+pm2t5TLIpN9FVFsVdXVKpsifVVwckoCM1Y2ngeh/f+jtPiuasry3Q0U=
+X-Received: by 2002:a19:8053:: with SMTP id b80mr2516185lfd.74.1610594516694;
+ Wed, 13 Jan 2021 19:21:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20201209192839.1396820-1-mic@digikod.net> <20201209192839.1396820-12-mic@digikod.net>
+In-Reply-To: <20201209192839.1396820-12-mic@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 14 Jan 2021 04:21:30 +0100
+Message-ID: <CAG48ez2yQNvcCrmCCBZKy_cxoZzNgremxWMia1YHsgaj4edqrA@mail.gmail.com>
+Subject: Re: [PATCH v26 11/12] samples/landlock: Add a sandbox manager example
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->>>>> "Vineet" == Vineet Gupta <vgupta@synopsys.com> writes:
+On Wed, Dec 9, 2020 at 8:29 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> w=
+rote:
+> Add a basic sandbox tool to launch a command which can only access a
+> whitelist of file hierarchies in a read-only or read-write way.
 
- > On 1/7/21 9:04 AM, Petr Mladek wrote:
- >> On Thu 2021-01-07 08:43:16, Vineet Gupta wrote:
- >>> Hi John,
- >>> 
- >>> On 1/7/21 1:02 AM, John Ogness wrote:
- >>>> Hi Vineet,
- >>>> 
- >>>> On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
- >>>>> This breaks ARC booting (no output on console).
- >>>> 
- >>>> Could you provide the kernel boot arguments that you use? This series is
- >>>> partly about addressing users that have used boot arguments that are
- >>>> technically incorrect (even if had worked). Seeing the boot arguments of
- >>>> users that are not experiencing problems may help to reveal some of the
- >>>> unusual console usages until now.
- >>> 
- >>> 
- >>> Kernel command line: earlycon=uart8250,mmio32,0xf0005000,115200n8
- >>> console=ttyS0,115200n8 debug print-fatal-signals=1
- >> 
- >> This is strange, the problematic patch should use ttynull
- >> only as a fallback. It should not be used when a particular console
- >> is defined on the command line.
+I have to admit that I didn't really look at this closely before
+because it's just sample code... but I guess I should. You can add
 
- > What happens in my case is console_on_rootfs() doesn't find
- > /dev/console and switching to ttynull. /dev is not present because
- > devtmpfs doesn't automount for initramfs.
+Reviewed-by: Jann Horn <jannh@google.com>
 
-But our initramfs/cpio logic ensures that the initramfs has a static
-/dev/console device node, so how can that be?
+if you fix the following nits:
 
-https://git.buildroot.net/buildroot/tree/fs/cpio/cpio.mk#n25
+[...]
+> diff --git a/samples/Kconfig b/samples/Kconfig
+[...]
+> +config SAMPLE_LANDLOCK
+> +       bool "Build Landlock sample code"
+> +       depends on HEADERS_INSTALL
+> +       help
+> +         Build a simple Landlock sandbox manager able to launch a proces=
+s
+> +         restricted by a user-defined filesystem access control.
 
--- 
-Bye, Peter Korsgaard
+nit: s/filesystem access control/filesystem access control policy/
+
+[...]
+> diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
+[...]
+> +/*
+> + * Simple Landlock sandbox manager able to launch a process restricted b=
+y a
+> + * user-defined filesystem access control.
+
+nit: s/filesystem access control/filesystem access control policy/
+
+[...]
+> +int main(const int argc, char *const argv[], char *const *const envp)
+> +{
+[...]
+> +       if (argc < 2) {
+[...]
+> +               fprintf(stderr, "* %s: list of paths allowed to be used i=
+n a read-only way.\n",
+> +                               ENV_FS_RO_NAME);
+> +               fprintf(stderr, "* %s: list of paths allowed to be used i=
+n a read-write way.\n",
+> +                               ENV_FS_RO_NAME);
+
+s/ENV_FS_RO_NAME/ENV_FS_RW_NAME/
+
+> +               fprintf(stderr, "\nexample:\n"
+> +                               "%s=3D\"/bin:/lib:/usr:/proc:/etc:/dev/ur=
+andom\" "
+> +                               "%s=3D\"/dev/null:/dev/full:/dev/zero:/de=
+v/pts:/tmp\" "
+> +                               "%s bash -i\n",
+> +                               ENV_FS_RO_NAME, ENV_FS_RW_NAME, argv[0]);
+> +               return 1;
+> +       }
+> +
+> +       ruleset_fd =3D landlock_create_ruleset(&ruleset_attr, sizeof(rule=
+set_attr), 0);
+> +       if (ruleset_fd < 0) {
+> +               perror("Failed to create a ruleset");
+> +               switch (errno) {
+
+(Just as a note: In theory perror() can change the value of errno, as
+far as I know - so AFAIK you'd theoretically have to do something
+like:
+
+int errno_ =3D errno;
+perror("...");
+switch (errno_) {
+ ...
+}
+
+I'll almost certainly work fine as-is in practice though.)
