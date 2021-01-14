@@ -2,207 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94572F5A43
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 06:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A5F2F5B2E
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 08:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbhANFWU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jan 2021 00:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S1726492AbhANHVX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Jan 2021 02:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725846AbhANFWT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jan 2021 00:22:19 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B1C06179F
-        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 21:21:39 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id v3so2319482plz.13
-        for <linux-arch@vger.kernel.org>; Wed, 13 Jan 2021 21:21:39 -0800 (PST)
+        with ESMTP id S1726162AbhANHVX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jan 2021 02:21:23 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739D0C061786;
+        Wed, 13 Jan 2021 23:20:42 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id b19so6810864ioa.9;
+        Wed, 13 Jan 2021 23:20:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dSai6iPBy5GOPDDnJmUw+Dep5lqLN0apCZM1NIECn6w=;
-        b=Z9kw/dgGpDfKf6drcfBTl9HA7hYqlue69fbt8q81Hskf1Zt1m+/hcgNtdYUfC9ABGH
-         rqjqSbr/e3NOqpzFUiB10YWLn65uTl7/ClX2fIYNDjDmEH/fQ2LowsXdbeOe7OHgIgpu
-         w1kwu+nlr51EuFu9rC9YqBpvLSzIqxdlNh+dM269of29OOT/I8/EJ5eY1O80Iy1d84Uf
-         jaYuI3NDGsJPEnafqFnxyzYFl+P0/xXCn2rrsJVeRggnLIFMgNboy/7YwnGMcVR308lJ
-         CjNNBax0UoSoZQKc8PvGfgoIWzwzHrhBPBJ64iVFVN0Rx9ByqfO4jJGemlZziLtykF/M
-         15mA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=mxmch7rl4egTEBXYfPlF0zYnqi6xJdFXG+QKIy1/Y8I=;
+        b=eIH3XcvZt5LZzmQYeTgR0kWfAXt/LyPrhvg/sY/HMekpk9NEEkQSL3CAn2UiEWe6n1
+         CAvkqBec0A15ELhyuf683EMldYKzEPeZD3WHdEI0dYo0+O514JlkhvvBr9u0GlnqTjrP
+         DPNoIPxN4wgzMYcNzr9kU0j0m66V+NYse/W/BQ2J3oKAY9OVg4iWaRe7LNMtGnpQAKdX
+         S9VbCd8JyUgMQ+7Y/1LclPYy/FZX5x+dcp/4UgfV3cXjwJTYQClzmmbAysQhD1UwFDeX
+         kYDc/yohyrqIP02FwPpuf+7Ex6XyPZQIplkHMbxk175ovUAx/GfKPcurlMptLWa9qn03
+         UQkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=dSai6iPBy5GOPDDnJmUw+Dep5lqLN0apCZM1NIECn6w=;
-        b=DYCH8aJWCX/2r66Q/p0U2aybUtiEuJDx3MF2g85ylHq5vzJ+2l6AxoGSuRpPKJ9ph1
-         NG0sRzihugfuPfvnqfV0P2aZWi/dTff0FbzR6uQCcxcCeSqDsa80LJK5naGbj0VIlOhh
-         MeX01CwEofKlINSvvM/pbzc0+Zowyk8j3re8x7t1WwXSmJuRBvnz9VD2zVNHsD3oF7QM
-         1xSxz6a3EiAYKFKU8gT0YFuFTCCZJszbHgHOFA4Wfrlt6a5OUm1lEW/k7oHNu/VpyXyb
-         VKxfSMxlvWQUcOVSOuJE7J9XVhzVYwEM74GbXRqQU4+KyTWeddoLNjslHEbLERhuXew3
-         VVJg==
-X-Gm-Message-State: AOAM532lARzDvrOLEBQ6hmLnvMoAoLJAQ1Yvv1GRX3Io0BOn2+whtA86
-        Ok48ZtbWxv1m13qC4XoRkxIS/g==
-X-Google-Smtp-Source: ABdhPJzftb4hm1KpIPbHySW6VDs66gZk4k12vOhzyy3pxiqoAT9//sHcwcXIMGLCNEsyrT3stfkrUg==
-X-Received: by 2002:a17:90b:8cb:: with SMTP id ds11mr3201447pjb.208.1610601699133;
-        Wed, 13 Jan 2021 21:21:39 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id n4sm4009507pfu.150.2021.01.13.21.21.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 21:21:38 -0800 (PST)
-Date:   Wed, 13 Jan 2021 21:21:38 -0800 (PST)
-X-Google-Original-Date: Wed, 13 Jan 2021 21:21:37 PST (-0800)
-Subject:     Re: [PATCH v5 0/5] Unify NUMA implementation between ARM64 & RISC-V
-In-Reply-To: <CAOnJCUJq5e7W1UXkFFMkKje_BTedekoUT=32ia6t+Sc4UVDhEQ@mail.gmail.com>
-CC:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        catalin.marinas@arm.com, Jonathan.Cameron@huawei.com,
-        Atish Patra <Atish.Patra@wdc.com>,
-        linux-riscv@lists.infradead.org, will@kernel.org, ardb@kernel.org,
-        linux-arch@vger.kernel.org, liuzhengyuan@tj.kylinos.cn,
-        bhe@redhat.com, anup@brainfault.org, daniel.lezcano@linaro.org,
-        steven.price@arm.com, greentime.hu@sifive.com,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        anshuman.khandual@arm.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        akpm@linux-foundation.org, rppt@kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     atishp@atishpatra.org
-Message-ID: <mhng-e9591590-a6e1-41b1-ae48-1987bba7c828@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=mxmch7rl4egTEBXYfPlF0zYnqi6xJdFXG+QKIy1/Y8I=;
+        b=LEaFFYcqeUdc1RHLKfgydjIzz3oI1krUCsPr4FyX8JK63OSIrRUrScK6t00ZAn9O4a
+         zzGc890OvpTHclxP3JyxsCIeWgGBtE7J2bi+ReOEoNjL89+HYZlhKm4sTq6B5QvXLPog
+         iFXRNmh+UTRxyTxF/vLmwIZwsyCfIC+Ks5maUflx4XQPHr52b+UZkQcP+qpuH1dKHEGE
+         UQllT4rkO5Cte+UYjJxUIaAUP2xCod/gpPc4dTLPzy+IKKLS4RsM3WbrWMWTujp8EZ/i
+         OriFSG0UOhwH3mzaujNvSu+IJKh5gji+TYEyEpDJTMTjaYfLDzmHqrbwtaDj8CZ5bLhi
+         DylA==
+X-Gm-Message-State: AOAM532fiWZny1BxQcC5U1FZzn8//ccyLGmq3Nrjv9xUW6zU11qjzBlX
+        /OTMHHZhdn/Pqgy6Xgq6ChW1OcV023wxc5KY8tY=
+X-Google-Smtp-Source: ABdhPJwJr/PgXCsU3O6sOg5x0hrwEzoAJf2Pyb2OVKXY96+1O/mjXdx4M47frYxpZTpd4kltOebUzKMElpHakqUmvqo=
+X-Received: by 2002:a02:9f19:: with SMTP id z25mr5442115jal.30.1610608841857;
+ Wed, 13 Jan 2021 23:20:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20210113003235.716547-1-ndesaulniers@google.com>
+ <20210113003235.716547-3-ndesaulniers@google.com> <CA+icZUV6pNP1AN_JEhqon6Hgk3Yfq0_VNghvRX0N9mw6pGtpVw@mail.gmail.com>
+ <CAKwvOdm40Z3YutxwWyV922XdchN7Dz+v9kJNjF13vKxNUXrJnQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdm40Z3YutxwWyV922XdchN7Dz+v9kJNjF13vKxNUXrJnQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 14 Jan 2021 08:20:30 +0100
+Message-ID: <CA+icZUWySPfGGswqEBZkCQ+OjogmMqzBvik3ddLHPWJ2w8EC3A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] Kbuild: make DWARF version a choice
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 11 Jan 2021 11:31:11 PST (-0800), atishp@atishpatra.org wrote:
-> On Sat, Jan 9, 2021 at 12:51 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>
->> On Sun, 13 Dec 2020 17:02:19 PST (-0800), atishp@atishpatra.org wrote:
->> > On Wed, Nov 18, 2020 at 4:39 PM Atish Patra <atish.patra@wdc.com> wrote:
->> >>
->> >> This series attempts to move the ARM64 numa implementation to common
->> >> code so that RISC-V can leverage that as well instead of reimplementing
->> >> it again.
->> >>
->> >> RISC-V specific bits are based on initial work done by Greentime Hu [1] but
->> >> modified to reuse the common implementation to avoid duplication.
->> >>
->> >> [1] https://lkml.org/lkml/2020/1/10/233
->> >>
->> >> This series has been tested on qemu with numa enabled for both RISC-V & ARM64.
->> >> It would be great if somebody can test it on numa capable ARM64 hardware platforms.
->> >> This patch series doesn't modify the maintainers list for the common code (arch_numa)
->> >> as I am not sure if somebody from ARM64 community or Greg should take up the
->> >> maintainership. Ganapatrao was the original author of the arm64 version.
->> >> I would be happy to update that in the next revision once it is decided.
->> >>
->> >> # numactl --hardware
->> >> available: 2 nodes (0-1)
->> >> node 0 cpus: 0 1 2 3
->> >> node 0 size: 486 MB
->> >> node 0 free: 470 MB
->> >> node 1 cpus: 4 5 6 7
->> >> node 1 size: 424 MB
->> >> node 1 free: 408 MB
->> >> node distances:
->> >> node   0   1
->> >>   0:  10  20
->> >>   1:  20  10
->> >> # numactl -show
->> >> policy: default
->> >> preferred node: current
->> >> physcpubind: 0 1 2 3 4 5 6 7
->> >> cpubind: 0 1
->> >> nodebind: 0 1
->> >> membind: 0 1
->> >>
->> >> The patches are also available at
->> >> https://github.com/atishp04/linux/tree/5.11_numa_unified_v5
->> >>
->> >> For RISC-V, the following qemu series is a pre-requisite(already available in upstream)
->> >> https://patchwork.kernel.org/project/qemu-devel/list/?series=303313
->> >>
->> >> Testing:
->> >> RISC-V:
->> >> Tested in Qemu and 2 socket OmniXtend FPGA.
->> >>
->> >> ARM64:
->> >> 2 socket kunpeng920 (4 nodes around 250G a node)
->> >> Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> >>
->> >> Changes from v4->v5:
->> >> 1. Added by Acked-by & Reviewed-by tags.
->> >> 2. Swapped patch 1 & 2 in v4 version.
->> >>
->> >> Changes from v3->v4:
->> >> 1. Removed redundant duplicate header.
->> >> 2. Added Reviewed-by tags.
->> >>
->> >> Changes from v2->v3:
->> >> 1. Added Acked-by/Reviewed-by tags.
->> >> 2. Replaced asm/acpi.h with linux/acpi.h
->> >> 3. Defined arch_acpi_numa_init as static.
->> >>
->> >> Changes from v1->v2:
->> >> 1. Replaced ARM64 specific compile time protection with ACPI specific ones.
->> >> 2. Dropped common pcibus_to_node changes. Added required changes in RISC-V.
->> >> 3. Fixed few typos.
->> >>
->> >> Atish Patra (4):
->> >> arm64, numa: Change the numa init functions name to be generic
->> >> numa: Move numa implementation to common code
->> >> riscv: Separate memory init from paging init
->> >> riscv: Add numa support for riscv64 platform
->> >>
->> >> Greentime Hu (1):
->> >> riscv: Add support pte_protnone and pmd_protnone if
->> >> CONFIG_NUMA_BALANCING
->> >>
->> >> arch/arm64/Kconfig                            |  1 +
->> >> arch/arm64/include/asm/numa.h                 | 48 +----------------
->> >> arch/arm64/kernel/acpi_numa.c                 | 12 -----
->> >> arch/arm64/mm/Makefile                        |  1 -
->> >> arch/arm64/mm/init.c                          |  4 +-
->> >> arch/riscv/Kconfig                            | 31 ++++++++++-
->> >> arch/riscv/include/asm/mmzone.h               | 13 +++++
->> >> arch/riscv/include/asm/numa.h                 |  8 +++
->> >> arch/riscv/include/asm/pci.h                  | 14 +++++
->> >> arch/riscv/include/asm/pgtable.h              | 21 ++++++++
->> >> arch/riscv/kernel/setup.c                     | 11 +++-
->> >> arch/riscv/kernel/smpboot.c                   | 12 ++++-
->> >> arch/riscv/mm/init.c                          | 10 +++-
->> >> drivers/base/Kconfig                          |  6 +++
->> >> drivers/base/Makefile                         |  1 +
->> >> .../mm/numa.c => drivers/base/arch_numa.c     | 27 ++++++++--
->> >> include/asm-generic/numa.h                    | 52 +++++++++++++++++++
->> >> 17 files changed, 200 insertions(+), 72 deletions(-)
->> >> create mode 100644 arch/riscv/include/asm/mmzone.h
->> >> create mode 100644 arch/riscv/include/asm/numa.h
->> >> rename arch/arm64/mm/numa.c => drivers/base/arch_numa.c (96%)
->> >> create mode 100644 include/asm-generic/numa.h
->> >>
->> >> --
->> >> 2.25.1
->> >>
->> >>
->> >> _______________________________________________
->> >> linux-riscv mailing list
->> >> linux-riscv@lists.infradead.org
->> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
->> >
->> > Hey Palmer,
->> > I did not see this series in for-next. Let me know if you need
->> > anything else to be done for this series.
->>
->> Sorry about that.  It's on for-next, with Randy's comment addressed.  There was
->> one merge conflict: we don't have resource_init() in for-next yet (which I
->> think means I missed something else).
+On Thu, Jan 14, 2021 at 12:27 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> resource_init is changed to init_resource and moved to setup.c in the
-> following patch which was merged in 5.11 MW.
-> 00ab027a3b82 RISC-V: Add kernel image sections to the resource tree
+> Sedat,
+> Thanks for testing, and congrats on https://lwn.net/Articles/839772/.
+> I always appreciate you taking the time to help test my work, and
+> other Clang+Linux kernel patches!
+>
 
-Ah, great, for some reason I thought we hadn't merged those yet.
+Hi Nick,
 
->> IDK if that's necessary for the NUMA
->> stuff, I just dropped it.  I haven't tested this yet.
+cool, again in the top 15 :-).
+
+I should ask Mr. Corbet for a LWN subscription.
+
+> On Wed, Jan 13, 2021 at 1:24 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Wed, Jan 13, 2021 at 1:32 AM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -826,12 +826,16 @@ else
+> > >  DEBUG_CFLAGS   += -g
+> > >  endif
+> > >
+> > > -ifneq ($(LLVM_IAS),1)
+> > > -KBUILD_AFLAGS  += -Wa,-gdwarf-2
+> > > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF2) := 2
+> > > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
+> > > +DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
+>
+> ^ DEBUG_CFLAGS are set for everyone (all toolchains) if
+> CONFIG_DEBUG_INFO is defined.
+>
+> > > +ifneq ($(dwarf-version-y)$(LLVM_IAS),21)
+>
+> ^ "If not using dwarf 2 and LLVM_IAS=1", ie. CONFIG_DEBUG_INFO_DWARF5
+> && CONFIG_CC_IS_GCC
+>
+
+OK, I know DWARF v2 and LLVM_IAS=1 is broken.
+
+Looks like DWARF v5 with GCC v10.2.1 and binutils v2.35.1 is currently
+(here) no good choice.
+
+> > > +# Binutils 2.35+ required for -gdwarf-4+ support.
+> > > +dwarf-aflag    := $(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y))
+> > > +ifdef CONFIG_CC_IS_CLANG
+>
+> ^ "if clang"
+>
+> > > +DEBUG_CFLAGS   += $(dwarf-aflag)
+> > >  endif
+> >
+> > Why is that "ifdef CONFIG_CC_IS_CLANG"?
+>
+> That's what Arvind requested on v2, IIUC:
+> https://lore.kernel.org/lkml/X8psgMuL4jMjP%2FOy@rani.riverdale.lan/
+>
+> > When I use GCC v10.2.1 DEBUG_CFLAGS are not set.
+>
+> You should have -gdwarf-4 (and not -Wa,-gwarf-4) set for DEBUG_CFLAGS
+> when compiling with GCC and enabling CONFIG_DEBUG_INFO_DWARF4. Can you
+> please confirm? (Perhaps you may have accidentally disabled
+> CONFIG_DEBUG_INFO by rerunning `make defconfig`?)
+>
+
+$ egrep 'CC_IS_|LD_IS|BTF|DWARF'
+config-5.11.0-rc3-5-amd64-gcc10-llvm11 | grep ^CONFIG
+CONFIG_CC_IS_GCC=y
+CONFIG_LD_IS_LLD=y
+CONFIG_DEBUG_INFO_DWARF4=y
+CONFIG_DEBUG_INFO_BTF=y
+CONFIG_DEBUG_INFO_BTF_MODULES=y
+
+$ grep '\-Wa,-gdwarf-4' build-log_5.11.0-rc3-5-amd64-gcc10-llvm11.txt
+| wc -l
+156
