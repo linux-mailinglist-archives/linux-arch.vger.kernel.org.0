@@ -2,418 +2,525 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B662C2F715C
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 05:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299D62F7379
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 08:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbhAOEE6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jan 2021 23:04:58 -0500
-Received: from condef-01.nifty.com ([202.248.20.66]:42267 "EHLO
-        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbhAOEE5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jan 2021 23:04:57 -0500
-X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Thu, 14 Jan 2021 23:04:54 EST
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-01.nifty.com with ESMTP id 10F3tq6i029495
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 12:55:52 +0900
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 10F3spac023891;
-        Fri, 15 Jan 2021 12:54:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 10F3spac023891
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1610682892;
-        bh=dvrxZUq6ijykTnD91sHJvb7lCcdoTSyu0O0fWTAIYoM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XpGecBRfbzNDU1XRdw1oyaJIK3vWxD6xDaUs+7+0sPJwF1P4Top3cwMgfEEOEXrbZ
-         g69CJGtjw7ZznqUCcJaDndISi97C5zZV3fynAWMCKXv2Yft+cRH7wYu1AH8F0h5/69
-         xG2eEptBC+ocQN7fjNW9Vm2WIrITAeNoUQ2Dv6KmT/pQRneRK88xVLwGZo6KT98MLe
-         uIOLlw50mRZTTex7a9YuJKI7Org7OZ1oGs6VP4FHU8o1JjZLfHLM1cpirKQvRDhBkK
-         mlC0LaFoLs/OVjj8RlNOEbMnkE61ByFYAewT7jC0xTA2MvaMz6qundc0HyguKEbYww
-         xNJdG6fWFrZRw==
-X-Nifty-SrcIP: [209.85.216.50]
-Received: by mail-pj1-f50.google.com with SMTP id w1so5590902pjc.0;
-        Thu, 14 Jan 2021 19:54:51 -0800 (PST)
-X-Gm-Message-State: AOAM533yT2HQsa6AohArVXyUrnknzarNJJ3rBrXjcNU89W50kHzplvIj
-        pBgKGvDbxwYKleXs/UGOxIga82Wysr4nB0Lz46s=
-X-Google-Smtp-Source: ABdhPJw+5aw6ebzdJ+mKRENfXlgdBo73zbYuYnZY3ng8MDzKIn4MxHq2U55gy6kd0YoA6Fb27j1lfF6zZQETnpBdjhs=
-X-Received: by 2002:a17:90a:c910:: with SMTP id v16mr8357377pjt.198.1610682890563;
- Thu, 14 Jan 2021 19:54:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20210113003235.716547-1-ndesaulniers@google.com>
- <20210113003235.716547-3-ndesaulniers@google.com> <CA+icZUV6pNP1AN_JEhqon6Hgk3Yfq0_VNghvRX0N9mw6pGtpVw@mail.gmail.com>
- <CAKwvOdm40Z3YutxwWyV922XdchN7Dz+v9kJNjF13vKxNUXrJnQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdm40Z3YutxwWyV922XdchN7Dz+v9kJNjF13vKxNUXrJnQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 15 Jan 2021 12:54:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASkCbm-075tPrNgR8s-fQ5y4MTjPQXhKO04JT+2X6R-GQ@mail.gmail.com>
-Message-ID: <CAK7LNASkCbm-075tPrNgR8s-fQ5y4MTjPQXhKO04JT+2X6R-GQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] Kbuild: make DWARF version a choice
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S1728701AbhAOHEd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 02:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726494AbhAOHEb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 02:04:31 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA24C061575;
+        Thu, 14 Jan 2021 23:03:50 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id b3so4925437pft.3;
+        Thu, 14 Jan 2021 23:03:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GHiYLWes15995yc06JXjproFwSKI9EhRTzfJK8Em9SI=;
+        b=VuQxLNreZ35kgOv9t50bPmMmRYfdkoMyenmcQ/EDiL+khkwLjA9TiaeWqm8RE+0z5J
+         dJMnoqkNtpJ1vG4fRJ04X1k47+3GXa8DrrEpMY9XbvvaQDogHwCuIKtSthDXdn7B+psV
+         LLMjBR/e+Dkqs27AHDNisqoPuW0e47Zp2vCrNUEJRIsM65Y1hyOF60ujN5G+mVYCqmRt
+         lE+aEa9thbHHIIwH/bcuweSMJ/b5Zp+RON0M0MddkMSsHMojeueLCI6AYwxpCXSqVODX
+         3qjJY+iwd58/bhyAB4Ak0o5l/ViRZO3c3fC0mS1r/UaLnBREjoKNbKdVPsSTW8eGAeJr
+         TlQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GHiYLWes15995yc06JXjproFwSKI9EhRTzfJK8Em9SI=;
+        b=Svm4X1qu0SxEfD41qvCe89/nBaUL+EB26KqMZwXa0esM3vSxGFoZP7LCqqodEUHAJ9
+         P8FnL2Lahm0nwAgdsfEZcXDangJFYvLY/CKFVBGzmqItfgNVEd2kmZBJuYqHGYel5XDM
+         g06y/wfiaPA6LfOt0LyxrupNPHxyDOmmQw7/a9VQti4/SNC1uDVb+/oX8WN3HgnDj7G4
+         N7c68kEkcsLI43z6lM/jZBMZFrDoIAePIZAvVpnwr5adIN5SRgtZhZTYeZKN0ZdjMB39
+         DGZnYi/4hH5ebcT77/19PFTkwFaoQa1QfdI+ySo1Ca6RJD8tgrFgzLeR1U73UHTCMfcB
+         ATmQ==
+X-Gm-Message-State: AOAM530tsb5SUONvTY/9rCFXCYqjWlWl7X6LalrshMT7NlhOyTlh12UL
+        UoA3foY5zbdP8CtIt+fSrQ4=
+X-Google-Smtp-Source: ABdhPJy33sFGOuEJVL/71ZTFrs1JqOaDhD02Tw/th8z46pDfvhRBV6ViKBsRBoDKqTo0JFodgh2g5A==
+X-Received: by 2002:a62:8050:0:b029:19d:e8b4:ba1 with SMTP id j77-20020a6280500000b029019de8b40ba1mr11371438pfd.69.1610694229866;
+        Thu, 14 Jan 2021 23:03:49 -0800 (PST)
+Received: from localhost.localdomain (76-242-91-105.lightspeed.sntcca.sbcglobal.net. [76.242.91.105])
+        by smtp.gmail.com with ESMTPSA id h8sm8399086pjc.2.2021.01.14.23.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jan 2021 23:03:49 -0800 (PST)
+From:   sonicadvance1@gmail.com
+X-Google-Original-From: Sonicadvance1@gmail.com
+Cc:     Ryan Houdek <Sonicadvance1@gmail.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        David Rientjes <rientjes@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Oleg Nesterov <oleg@redhat.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jan Kara <jack@suse.cz>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] Adds a new ioctl32 syscall for backwards compatibility layers
+Date:   Thu, 14 Jan 2021 23:02:50 -0800
+Message-Id: <20210115070326.294332-1-Sonicadvance1@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210106064807.253112-1-Sonicadvance1@gmail.com>
+References: <20210106064807.253112-1-Sonicadvance1@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 8:27 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Sedat,
-> Thanks for testing, and congrats on https://lwn.net/Articles/839772/.
-> I always appreciate you taking the time to help test my work, and
-> other Clang+Linux kernel patches!
->
-> On Wed, Jan 13, 2021 at 1:24 PM Sedat Dilek <sedat.dilek@gmail.com> wrote=
-:
-> >
-> > On Wed, Jan 13, 2021 at 1:32 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -826,12 +826,16 @@ else
-> > >  DEBUG_CFLAGS   +=3D -g
-> > >  endif
-> > >
-> > > -ifneq ($(LLVM_IAS),1)
-> > > -KBUILD_AFLAGS  +=3D -Wa,-gdwarf-2
-> > > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF2) :=3D 2
-> > > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) :=3D 4
-> > > +DEBUG_CFLAGS   +=3D -gdwarf-$(dwarf-version-y)
->
-> ^ DEBUG_CFLAGS are set for everyone (all toolchains) if
-> CONFIG_DEBUG_INFO is defined.
->
-> > > +ifneq ($(dwarf-version-y)$(LLVM_IAS),21)
->
-> ^ "If not using dwarf 2 and LLVM_IAS=3D1", ie. CONFIG_DEBUG_INFO_DWARF5
-> && CONFIG_CC_IS_GCC
->
-> > > +# Binutils 2.35+ required for -gdwarf-4+ support.
-> > > +dwarf-aflag    :=3D $(call as-option,-Wa$(comma)-gdwarf-$(dwarf-vers=
-ion-y))
-> > > +ifdef CONFIG_CC_IS_CLANG
->
-> ^ "if clang"
->
-> > > +DEBUG_CFLAGS   +=3D $(dwarf-aflag)
-> > >  endif
-> >
-> > Why is that "ifdef CONFIG_CC_IS_CLANG"?
->
-> That's what Arvind requested on v2, IIUC:
-> https://lore.kernel.org/lkml/X8psgMuL4jMjP%2FOy@rani.riverdale.lan/
+From: Ryan Houdek <Sonicadvance1@gmail.com>
+
+Problem presented:
+A backwards compatibility layer that allows running x86-64 and x86
+processes inside of an AArch64 process.
+  - CPU is emulated
+  - Syscall interface is mostly passthrough
+  - Some syscalls require patching or emulation depending on behaviour
+  - Not viable from the emulator design to use an AArch32 host process
+
+x86-64 and x86 userspace emulator source:
+https://github.com/FEX-Emu/FEX
+Usage of ioctl32 is currently in a downstream fork. This will be the
+first user of the syscall.
+
+Cross documentation:
+https://github.com/FEX-Emu/FEX/wiki/32Bit-x86-Woes#ioctl---54
+
+ioctls are opaque from the emulator perspective and the data wants to be
+passed through a syscall as unimpeded as possible.
+Sadly due to ioctl struct differences between x86 and x86-64, we need a
+syscall that exposes the compatibility ioctl handler to userspace in a
+64bit process.
+
+This is necessary behaves of the behaviour differences that occur
+between an x86 process doing an ioctl and an x86-64 process doing an
+ioctl.
+
+Both of which are captured and passed through the AArch64 ioctl space.
+This is implementing a new ioctl32 syscall that allows us to pass 32bit
+x86 ioctls through to the kernel with zero or minimal manipulation.
+
+The only supported hosts where we care about this currently is AArch64
+and x86-64 (For testing purposes).
+PPC64LE, MIPS64LE, and RISC-V64 might be interesting to support in the
+future; But I don't have any platforms that get anywhere near Cortex-A77
+performance in those architectures. Nor do I have the time to bring up
+the emulator on them.
+x86-64 can get to the compatibility ioctl through the int $0x80 handler.
+
+This does not solve the following problems:
+1) compat_alloc_user_space inside ioctl
+2) ioctls that check task mode instead of entry point for behaviour
+3) ioctls allocating memory
+4) struct packing problems between architectures
+
+Workarounds for the problems presented:
+1a) Do a stack pivot to the lower 32bits from userspace
+  - Forces host 64bit process to have its thread stacks to live in 32bit
+  space. Not ideal.
+  - Only do a stack pivot on ioctl to save previous 32bit VA space
+1b) Teach kernel that compat_alloc_userspace can return a 64bit pointer
+  - x86-64 truncates stack from this function
+  - AArch64 returns the full stack pointer
+  - Only ~29 users. Validating all of them support a 64bit stack is
+  trivial?
+
+2a) Any application using these can be checked for compatibility in
+userspace and put on a block list.
+2b) Fix any ioctls doing broken behaviour based on task mode rather than
+ioctl entry point
+
+3a) Userspace consumes all VA space above 32bit. Forcing allocations to
+occur in lower 32bits
+  - This is the current implementation
+3b) Ensure any allocation in the ioctl handles ioctl entrypoint rather
+than just allow generic memory allocations in full VA space
+  - This is hard to guarantee
+
+4a) Blocklist any application using ioctls that have different struct
+packing across the boundary
+  - Can happen when struct packing of 32bit x86 application goes down
+  the aarch64 compat_ioctl path
+  - Userspace is a AArch64 process passing 32bit x86 ioctl structures
+  through the compat_ioctl path which is typically for AArch32 processes
+  - None currently identified
+4b) Work with upstream kernel and userspace projects to evaluate and fix
+  - Identify the problem ioctls
+  - Implement a new ioctl with more sane struct packing that matches
+  cross-arch
+  - Implement new ioctl while maintaining backwards compatibility with
+  previous ioctl handler
+  - Change upstream project to use the new compatibility ioctl
+  - ioctl deprecation will be case by case per device and project
+4b) Userspace implements a full ioctl emulation layer
+  - Parses the full ioctl tree
+  - Either passes through ioctls that it doesn't understand or
+  transforms ioctls that it knows are trouble
+  - Has the downside that it can still run in to edge cases that will
+  fail
+  - Performance of additional tracking is a concern
+  - Prone to failure keeping the kernel ioctl and userspace ioctl
+  handling in sync
+  - Really want to have it in the kernel space as much as possible
+
+Signed-off-by: Ryan Houdek <Sonicadvance1@gmail.com>
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      |  1 +
+ arch/arm/tools/syscall.tbl                  |  1 +
+ arch/arm64/include/asm/unistd.h             |  2 +-
+ arch/arm64/include/asm/unistd32.h           |  2 ++
+ arch/ia64/kernel/syscalls/syscall.tbl       |  1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |  1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |  1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 ++
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |  1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |  1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |  1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |  1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |  1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |  1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |  1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |  1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |  1 +
+ fs/ioctl.c                                  | 18 ++++++++++++++++--
+ include/linux/syscalls.h                    |  4 ++++
+ include/uapi/asm-generic/unistd.h           |  9 ++++++++-
+ kernel/sys_ni.c                             |  3 +++
+ tools/include/uapi/asm-generic/unistd.h     |  9 ++++++++-
+ 23 files changed, 59 insertions(+), 5 deletions(-)
+
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index a6617067dbe6..81e70fd241d7 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -481,3 +481,4 @@
+ 549	common	faccessat2			sys_faccessat2
+ 550	common	process_madvise			sys_process_madvise
+ 551	common	epoll_pwait2			sys_epoll_pwait2
++552	common	ioctl32			sys_ni_syscall
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index 20e1170e2e0a..98fbf1af1169 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -455,3 +455,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
++442	common	ioctl32			sys_ni_syscall
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 86a9d7b3eabe..949788f5ba40 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -38,7 +38,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		442
++#define __NR_compat_syscalls		443
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index cccfbbefbf95..35e3bc83dbdc 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -891,6 +891,8 @@ __SYSCALL(__NR_faccessat2, sys_faccessat2)
+ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+ #define __NR_epoll_pwait2 441
+ __SYSCALL(__NR_epoll_pwait2, compat_sys_epoll_pwait2)
++#define __NR_ioctl32 442
++__SYSCALL(__NR_ioctl32, compat_sys_ioctl)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index bfc00f2bd437..087fc9627357 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -362,3 +362,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
++442	common	sys_ioctl32			sys_ioctl32
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 7fe4e45c864c..502b2f87ab60 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -441,3 +441,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
++442	common	ioctl32			sys_ni_syscall
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index a522adf194ab..e69be6c836d2 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -447,3 +447,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
++442	common	ioctl32			sys_ni_syscall
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 0f03ad223f33..ba395218446f 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -380,3 +380,4 @@
+ 439	n32	faccessat2			sys_faccessat2
+ 440	n32	process_madvise			sys_process_madvise
+ 441	n32	epoll_pwait2			compat_sys_epoll_pwait2
++442	n32	ioctl32			sys_ni_syscall
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 91649690b52f..f42f939702e2 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -356,3 +356,5 @@
+ 439	n64	faccessat2			sys_faccessat2
+ 440	n64	process_madvise			sys_process_madvise
+ 441	n64	epoll_pwait2			sys_epoll_pwait2
++441	n64	epoll_pwait2			sys_epoll_pwait2
++442	n64	ioctl32			sys_ioctl32
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 4bad0c40aed6..b08ff6066f06 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -429,3 +429,4 @@
+ 439	o32	faccessat2			sys_faccessat2
+ 440	o32	process_madvise			sys_process_madvise
+ 441	o32	epoll_pwait2			sys_epoll_pwait2		compat_sys_epoll_pwait2
++442	o32	ioctl32			sys_ni_syscall
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 6bcc31966b44..84d2b88d92fa 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -439,3 +439,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2		compat_sys_epoll_pwait2
++442	64	ioctl32			sys_ioctl32
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index f744eb5cba88..9f04d73cf649 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -531,3 +531,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2		compat_sys_epoll_pwait2
++442	64	sys_ioctl32				sys_ioctl32
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index d443423495e5..2c90c0ecb5c7 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -444,3 +444,4 @@
+ 439  common	faccessat2		sys_faccessat2			sys_faccessat2
+ 440  common	process_madvise		sys_process_madvise		sys_process_madvise
+ 441  common	epoll_pwait2		sys_epoll_pwait2		compat_sys_epoll_pwait2
++442	64	sys_ioctl32			sys_ni_syscall
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 9df40ac0ebc0..1e02a13fa049 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -444,3 +444,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
++442	common	ioctl32			sys_ni_syscall
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 40d8c7cd8298..f7d24678d0b1 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -487,3 +487,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2		compat_sys_epoll_pwait2
++442	64	sys_ioctl32			sys_ioctl32
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 874aeacde2dd..b1a3461e1e20 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -446,3 +446,4 @@
+ 439	i386	faccessat2		sys_faccessat2
+ 440	i386	process_madvise		sys_process_madvise
+ 441	i386	epoll_pwait2		sys_epoll_pwait2		compat_sys_epoll_pwait2
++442	i386	ioctl32		sys_ni_syscall
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 78672124d28b..0250a04df0df 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -363,6 +363,7 @@
+ 439	common	faccessat2		sys_faccessat2
+ 440	common	process_madvise		sys_process_madvise
+ 441	common	epoll_pwait2		sys_epoll_pwait2
++442	64	ioctl32		sys_ioctl32
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 46116a28eeed..34b653b36b7b 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -412,3 +412,4 @@
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
+ 441	common	epoll_pwait2			sys_epoll_pwait2
++442	common	ioctl32			sys_ni_syscall
+diff --git a/fs/ioctl.c b/fs/ioctl.c
+index 4e6cc0a7d69c..7b324a21a257 100644
+--- a/fs/ioctl.c
++++ b/fs/ioctl.c
+@@ -790,8 +790,8 @@ long compat_ptr_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ }
+ EXPORT_SYMBOL(compat_ptr_ioctl);
+ 
+-COMPAT_SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd,
+-		       compat_ulong_t, arg)
++long do_ioctl32(unsigned int fd, unsigned int cmd,
++			compat_ulong_t arg)
+ {
+ 	struct fd f = fdget(fd);
+ 	int error;
+@@ -850,4 +850,18 @@ COMPAT_SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd,
+ 
+ 	return error;
+ }
++
++COMPAT_SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd,
++			compat_ulong_t, arg)
++{
++	return do_ioctl32(fd, cmd, arg);
++}
++
++#if BITS_PER_LONG == 64
++SYSCALL_DEFINE3(ioctl32, unsigned int, fd, unsigned int, cmd,
++			compat_ulong_t, arg)
++{
++	return do_ioctl32(fd, cmd, arg);
++}
++#endif
+ #endif
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index f3929aff39cf..fb7bac17167a 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -386,6 +386,10 @@ asmlinkage long sys_inotify_rm_watch(int fd, __s32 wd);
+ /* fs/ioctl.c */
+ asmlinkage long sys_ioctl(unsigned int fd, unsigned int cmd,
+ 				unsigned long arg);
++#if defined(CONFIG_COMPAT) && BITS_PER_LONG == 64
++asmlinkage long sys_ioctl32(unsigned int fd, unsigned int cmd,
++				compat_ulong_t arg);
++#endif
+ 
+ /* fs/ioprio.c */
+ asmlinkage long sys_ioprio_set(int which, int who, int ioprio);
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 728752917785..18279e5b7b4f 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -862,8 +862,15 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+ #define __NR_epoll_pwait2 441
+ __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+ 
++#define __NR_ioctl32 442
++#ifdef CONFIG_COMPAT
++__SC_COMP(__NR_ioctl32, sys_ioctl32, compat_sys_ioctl)
++#else
++__SC_COMP(__NR_ioctl32, sys_ni_syscall, sys_ni_syscall)
++#endif
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 442
++#define __NR_syscalls 443
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+index 19aa806890d5..5a2f25eb341c 100644
+--- a/kernel/sys_ni.c
++++ b/kernel/sys_ni.c
+@@ -302,6 +302,9 @@ COND_SYSCALL(recvmmsg_time32);
+ COND_SYSCALL_COMPAT(recvmmsg_time32);
+ COND_SYSCALL_COMPAT(recvmmsg_time64);
+ 
++COND_SYSCALL(ioctl32);
++COND_SYSCALL_COMPAT(ioctl32);
++
+ /*
+  * Architecture specific syscalls: see further below
+  */
+diff --git a/tools/include/uapi/asm-generic/unistd.h b/tools/include/uapi/asm-generic/unistd.h
+index 728752917785..18279e5b7b4f 100644
+--- a/tools/include/uapi/asm-generic/unistd.h
++++ b/tools/include/uapi/asm-generic/unistd.h
+@@ -862,8 +862,15 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+ #define __NR_epoll_pwait2 441
+ __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+ 
++#define __NR_ioctl32 442
++#ifdef CONFIG_COMPAT
++__SC_COMP(__NR_ioctl32, sys_ioctl32, compat_sys_ioctl)
++#else
++__SC_COMP(__NR_ioctl32, sys_ni_syscall, sys_ni_syscall)
++#endif
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 442
++#define __NR_syscalls 443
+ 
+ /*
+  * 32 bit systems traditionally used different
+-- 
+2.27.0
 
-
-
-If CONFIG_CC_IS_CLANG is set,
-both -gdwarf and -Wa,-gdwarf-4 are passed to DEBUG_CFLAGS.
-
-Is it necessary?
-
-
-
-IIUC, -Wa,-gdwarf is meaningless
-when you build *.c files.
-
-
-I passed -v option to see
-how gas is invoked behind the scene.
-
-
-See the following results
-for [1] GCC + GAS and [2] Clang + GAS cases
-
-
-
-
-[1] GCC + GAS
-
-
-masahiro@grover:~$ cat test.c
-int main(void) { return 0; }
-masahiro@grover:~$ gcc -v -gdwarf-4 -c -o test.o test.c
-Using built-in specs.
-COLLECT_GCC=3Dgcc
-OFFLOAD_TARGET_NAMES=3Dnvptx-none:amdgcn-amdhsa:hsa
-OFFLOAD_TARGET_DEFAULT=3D1
-Target: x86_64-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion=3D'Ubuntu
-10.2.0-13ubuntu1'
---with-bugurl=3Dfile:///usr/share/doc/gcc-10/README.Bugs
---enable-languages=3Dc,ada,c++,go,brig,d,fortran,objc,obj-c++,m2
---prefix=3D/usr --with-gcc-major-version-only --program-suffix=3D-10
---program-prefix=3Dx86_64-linux-gnu- --enable-shared
---enable-linker-build-id --libexecdir=3D/usr/lib
---without-included-gettext --enable-threads=3Dposix --libdir=3D/usr/lib
---enable-nls --enable-clocale=3Dgnu --enable-libstdcxx-debug
---enable-libstdcxx-time=3Dyes --with-default-libstdcxx-abi=3Dnew
---enable-gnu-unique-object --disable-vtable-verify --enable-plugin
---enable-default-pie --with-system-zlib
---enable-libphobos-checking=3Drelease --with-target-system-zlib=3Dauto
---enable-objc-gc=3Dauto --enable-multiarch --disable-werror
---with-arch-32=3Di686 --with-abi=3Dm64 --with-multilib-list=3Dm32,m64,mx32
---enable-multilib --with-tune=3Dgeneric
---enable-offload-targets=3Dnvptx-none=3D/build/gcc-10-JvwpWM/gcc-10-10.2.0/=
-debian/tmp-nvptx/usr,amdgcn-amdhsa=3D/build/gcc-10-JvwpWM/gcc-10-10.2.0/deb=
-ian/tmp-gcn/usr,hsa
---without-cuda-driver --enable-checking=3Drelease
---build=3Dx86_64-linux-gnu --host=3Dx86_64-linux-gnu
---target=3Dx86_64-linux-gnu
-Thread model: posix
-Supported LTO compression algorithms: zlib zstd
-gcc version 10.2.0 (Ubuntu 10.2.0-13ubuntu1)
-COLLECT_GCC_OPTIONS=3D'-v' '-gdwarf-4' '-c' '-o' 'test.o'
-'-mtune=3Dgeneric' '-march=3Dx86-64'
- /usr/lib/gcc/x86_64-linux-gnu/10/cc1 -quiet -v -imultiarch
-x86_64-linux-gnu test.c -quiet -dumpbase test.c -mtune=3Dgeneric
--march=3Dx86-64 -auxbase-strip test.o -gdwarf-4 -version
--fasynchronous-unwind-tables -fstack-protector-strong -Wformat
--Wformat-security -fstack-clash-protection -fcf-protection -o
-/tmp/cc4hKJeo.s
-GNU C17 (Ubuntu 10.2.0-13ubuntu1) version 10.2.0 (x86_64-linux-gnu)
-compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version
-4.1.0, MPC version 1.2.0-rc1, isl version isl-0.22.1-GMP
-
-GGC heuristics: --param ggc-min-expand=3D100 --param ggc-min-heapsize=3D131=
-072
-ignoring nonexistent directory "/usr/local/include/x86_64-linux-gnu"
-ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/10/include-fi=
-xed"
-ignoring nonexistent directory
-"/usr/lib/gcc/x86_64-linux-gnu/10/../../../../x86_64-linux-gnu/include"
-#include "..." search starts here:
-#include <...> search starts here:
- /usr/lib/gcc/x86_64-linux-gnu/10/include
- /usr/local/include
- /usr/include/x86_64-linux-gnu
- /usr/include
-End of search list.
-GNU C17 (Ubuntu 10.2.0-13ubuntu1) version 10.2.0 (x86_64-linux-gnu)
-compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version
-4.1.0, MPC version 1.2.0-rc1, isl version isl-0.22.1-GMP
-
-GGC heuristics: --param ggc-min-expand=3D100 --param ggc-min-heapsize=3D131=
-072
-Compiler executable checksum: 4831429547eb0be4fec215fca56ed5cf
-COLLECT_GCC_OPTIONS=3D'-v' '-gdwarf-4' '-c' '-o' 'test.o'
-'-mtune=3Dgeneric' '-march=3Dx86-64'
- as -v --64 -o test.o /tmp/cc4hKJeo.s
-GNU assembler version 2.35.1 (x86_64-linux-gnu) using BFD version (GNU
-Binutils for Ubuntu) 2.35.1
-COMPILER_PATH=3D/usr/lib/gcc/x86_64-linux-gnu/10/:/usr/lib/gcc/x86_64-linux=
--gnu/10/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/10/:/=
-usr/lib/gcc/x86_64-linux-gnu/
-LIBRARY_PATH=3D/usr/lib/gcc/x86_64-linux-gnu/10/:/usr/lib/gcc/x86_64-linux-=
-gnu/10/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/10/../../..=
-/../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/us=
-r/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/10/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS=3D'-v' '-gdwarf-4' '-c' '-o' 'test.o'
-'-mtune=3Dgeneric' '-march=3Dx86-64'
-masahiro@grover:~$ readelf  --debug-dump=3Dinfo test.o
-Contents of the .debug_info section:
-
-  Compilation Unit @ offset 0x0:
-   Length:        0x4f (32-bit)
-   Version:       4
-   Abbrev Offset: 0x0
-   Pointer Size:  8
- <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
-    <c>   DW_AT_producer    : (indirect string, offset: 0x16): GNU C17
-10.2.0 -mtune=3Dgeneric -march=3Dx86-64 -gdwarf-4
--fasynchronous-unwind-tables -fstack-protector-strong
--fstack-clash-protection -fcf-protection
-    <10>   DW_AT_language    : 12 (ANSI C99)
-    <11>   DW_AT_name        : (indirect string, offset: 0xf): test.c
-    <15>   DW_AT_comp_dir    : (indirect string, offset: 0x0): /home/masahi=
-ro
-    <19>   DW_AT_low_pc      : 0x0
-    <21>   DW_AT_high_pc     : 0xf
-    <29>   DW_AT_stmt_list   : 0x0
- <1><2d>: Abbrev Number: 2 (DW_TAG_subprogram)
-    <2e>   DW_AT_external    : 1
-    <2e>   DW_AT_name        : (indirect string, offset: 0xab): main
-    <32>   DW_AT_decl_file   : 1
-    <33>   DW_AT_decl_line   : 1
-    <34>   DW_AT_decl_column : 5
-    <35>   DW_AT_prototyped  : 1
-    <35>   DW_AT_type        : <0x4b>
-    <39>   DW_AT_low_pc      : 0x0
-    <41>   DW_AT_high_pc     : 0xf
-    <49>   DW_AT_frame_base  : 1 byte block: 9c (DW_OP_call_frame_cfa)
-    <4b>   DW_AT_GNU_all_call_sites: 1
- <1><4b>: Abbrev Number: 3 (DW_TAG_base_type)
-    <4c>   DW_AT_byte_size   : 4
-    <4d>   DW_AT_encoding    : 5 (signed)
-    <4e>   DW_AT_name        : int
- <1><52>: Abbrev Number: 0
-
-
-
-
-
-[2] Clang + GAS
-
-masahiro@grover:~$ clang -v -fno-integrated-as -gdwarf-4 -c -o test.o test.=
-c
-Ubuntu clang version 11.0.0-2
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/10
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/8
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/10
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/8
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/9
-Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/10
-Candidate multilib: .;@m64
-Selected multilib: .;@m64
- "/usr/lib/llvm-11/bin/clang" -cc1 -triple x86_64-pc-linux-gnu -S
--disable-free -disable-llvm-verifier -discard-value-names
--main-file-name test.c -mrelocation-model static -mframe-pointer=3Dall
--fmath-errno -fno-rounding-math -no-integrated-as
--mconstructor-aliases -munwind-tables -target-cpu x86-64
--fno-split-dwarf-inlining -debug-info-kind=3Dlimited -dwarf-version=3D4
--debugger-tuning=3Dgdb -v -resource-dir
-/usr/lib/llvm-11/lib/clang/11.0.0 -internal-isystem /usr/local/include
--internal-isystem /usr/lib/llvm-11/lib/clang/11.0.0/include
--internal-externc-isystem /usr/include/x86_64-linux-gnu
--internal-externc-isystem /include -internal-externc-isystem
-/usr/include -fno-dwarf-directory-asm -fdebug-compilation-dir
-/home/masahiro -ferror-limit 19 -fgnuc-version=3D4.2.1
--fcolor-diagnostics -o /tmp/test-f43580.s -x c test.c
-clang -cc1 version 11.0.0 based upon LLVM 11.0.0 default target
-x86_64-pc-linux-gnu
-ignoring nonexistent directory "/include"
-#include "..." search starts here:
-#include <...> search starts here:
- /usr/local/include
- /usr/lib/llvm-11/lib/clang/11.0.0/include
- /usr/include/x86_64-linux-gnu
- /usr/include
-End of search list.
- "/usr/bin/as" --64 -o test.o /tmp/test-f43580.s
-masahiro@grover:~$ readelf  --debug-dump=3Dinfo test.o
-Contents of the .debug_info section:
-
-  Compilation Unit @ offset 0x0:
-   Length:        0x47 (32-bit)
-   Version:       4
-   Abbrev Offset: 0x0
-   Pointer Size:  8
- <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
-    <c>   DW_AT_producer    : (indirect string, offset: 0x0): Ubuntu
-clang version 11.0.0-2
-    <10>   DW_AT_language    : 12 (ANSI C99)
-    <12>   DW_AT_name        : (indirect string, offset: 0x1e): test.c
-    <16>   DW_AT_stmt_list   : 0x0
-    <1a>   DW_AT_comp_dir    : (indirect string, offset: 0x25): /home/masah=
-iro
-    <1e>   DW_AT_low_pc      : 0x0
-    <26>   DW_AT_high_pc     : 0xf
- <1><2a>: Abbrev Number: 2 (DW_TAG_subprogram)
-    <2b>   DW_AT_low_pc      : 0x0
-    <33>   DW_AT_high_pc     : 0xf
-    <37>   DW_AT_frame_base  : 1 byte block: 56 (DW_OP_reg6 (rbp))
-    <39>   DW_AT_name        : (indirect string, offset: 0x34): main
-    <3d>   DW_AT_decl_file   : 1
-    <3e>   DW_AT_decl_line   : 1
-    <3f>   DW_AT_prototyped  : 1
-    <3f>   DW_AT_type        : <0x43>
-    <43>   DW_AT_external    : 1
- <1><43>: Abbrev Number: 3 (DW_TAG_base_type)
-    <44>   DW_AT_name        : (indirect string, offset: 0x39): int
-    <48>   DW_AT_encoding    : 5 (signed)
-    <49>   DW_AT_byte_size   : 4
- <1><4a>: Abbrev Number: 0
-
-
-
-
-
-
-In [1],  "as -v --64 -o test.o /tmp/cc4hKJeo.s"
-is the command that invoked gas.
-
-There is no -gdwarf-4 option passed to gas here,
-but the produced object has the correct dwarf4 info.
-
-
-
-
-In [2],   "/usr/bin/as" --64 -o test.o /tmp/test-f43580.s
-is the command that invoked gas.
-
-Again, no -gdwarf-4 option here,
-but the produced object has the correct dwarf4 info.
-
-
-
-
-So, when you build *.c -> *.o,
-passing -gdwarf-* is enough.
-
-The debug info is generated in the compile stage (i.e. by cc1)
-and included in the intermediate /tmp/*.s file.
-
-All gas needs to do is to transform the debug sections
-in the intermediate /tmp/*.s file
-into the binary stream in the .o file.
-GAS does it without being instructed by the
-explicit -Wa,-gdwarf-* option.
-
-
-In my understanding, passing -Wa,-gdwarf
-makes sense only when you build *.S -> *.o
-
-
-This is why I think
-  DEBUG_CFLAGS +=3D -gdwarf-4   (for source debug of .c files)
-and
-  KBUILD_AFLAGS +=3D -Wa,gdwarf-4  (for source debug of .S files)
-
-are basically orthogonal (and they can be even controlled by
-separate CONFIG options).
-
-
-As stated above,  DEBUG_CFLAGS +=3D -Wa,gdward-4
-does not make sense.
-
-
-I am not a compiler expert, but
-that is what I understood from some experiments.
-
-Please correct me if I am wrong.
-
-
-
-
-
-
-> > When I use GCC v10.2.1 DEBUG_CFLAGS are not set.
->
-> You should have -gdwarf-4 (and not -Wa,-gwarf-4) set for DEBUG_CFLAGS
-> when compiling with GCC and enabling CONFIG_DEBUG_INFO_DWARF4. Can you
-> please confirm? (Perhaps you may have accidentally disabled
-> CONFIG_DEBUG_INFO by rerunning `make defconfig`?)
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---
-Best Regards
-
-
-Masahiro Yamada
