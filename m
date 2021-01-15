@@ -2,45 +2,20 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 986ED2F8842
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 23:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7992F8894
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 23:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbhAOWSJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 17:18:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41218 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725863AbhAOWSI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 Jan 2021 17:18:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 72CA423B1C;
-        Fri, 15 Jan 2021 22:17:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610749047;
-        bh=51AgOraSDUgeKFnzRXPrgQAF8UQsqnNhAJF/wHnUnuA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W/+YhIqhwKpXMR1YHjsUDC/1vi3AWO14SB7s0CrInE/m/l9jIXs2gKoWQtGg6DRi1
-         mf4Us2McffrGNfxp4IKqE9Krhk9PJ6mRw52FrXdnWRw8t7OGbutqFJFImF//XaAK3B
-         k296fxiI4dCA4u0e733GVj0Fpxayev4L71aTiRKsi0yNHKw3Gn80vLuK3OmBZXWmyw
-         oknAsGz6IZ87kZfT4BR2bsmLOb9d+uOeSqnk8nhAisGl7bkTC8POoU9m8/KrTzm54l
-         klHJ4yfGG8GXfWeMFLvQaAf6u+lkXxtZwfx2ZfsR0uBSzeGhBbnktJm2piA7XJhISW
-         g81QIgbXjkJ+w==
-Received: by mail-ot1-f45.google.com with SMTP id i6so10089561otr.2;
-        Fri, 15 Jan 2021 14:17:27 -0800 (PST)
-X-Gm-Message-State: AOAM531wQ7MD+YQyIxDlZLa3XX50C34/yuPr2NlM290VqK70kyaIQa4/
-        JQLg5v0E45RQGGRcM0NlLlG+ON39+2PaRgniB6o=
-X-Google-Smtp-Source: ABdhPJzHJByccZmsXaGOr/S4V/q8avY6+thC6kueUHGkctW9f6W31ifVaDPG/I+0qa2z+2m2Zdjz/ZATG5ejh/XajAM=
-X-Received: by 2002:a05:6830:2413:: with SMTP id j19mr10338611ots.251.1610749045821;
- Fri, 15 Jan 2021 14:17:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20210106064807.253112-1-Sonicadvance1@gmail.com>
- <20210115070326.294332-1-Sonicadvance1@gmail.com> <b15672b1caec4cf980f2753d06b03596@AcuMS.aculab.com>
-In-Reply-To: <b15672b1caec4cf980f2753d06b03596@AcuMS.aculab.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 15 Jan 2021 23:17:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1gqt-gBCPTdNeY+8SaG8eUGN4zkCrNKSjA=aEL-TkaUQ@mail.gmail.com>
-Message-ID: <CAK8P3a1gqt-gBCPTdNeY+8SaG8eUGN4zkCrNKSjA=aEL-TkaUQ@mail.gmail.com>
-Subject: Re: [PATCH] Adds a new ioctl32 syscall for backwards compatibility layers
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "sonicadvance1@gmail.com" <sonicadvance1@gmail.com>,
+        id S1727092AbhAOWla (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 17:41:30 -0500
+Received: from brightrain.aerifal.cx ([216.12.86.13]:47880 "EHLO
+        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727155AbhAOWl3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 17:41:29 -0500
+Date:   Fri, 15 Jan 2021 17:23:25 -0500
+From:   Rich Felker <dalias@libc.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "sonicadvance1@gmail.com" <sonicadvance1@gmail.com>,
         Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
@@ -60,7 +35,6 @@ Cc:     "sonicadvance1@gmail.com" <sonicadvance1@gmail.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
         "David S. Miller" <davem@davemloft.net>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -106,64 +80,90 @@ Cc:     "sonicadvance1@gmail.com" <sonicadvance1@gmail.com>,
         "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] Adds a new ioctl32 syscall for backwards compatibility
+ layers
+Message-ID: <20210115222325.GJ23432@brightrain.aerifal.cx>
+References: <20210106064807.253112-1-Sonicadvance1@gmail.com>
+ <20210115070326.294332-1-Sonicadvance1@gmail.com>
+ <b15672b1caec4cf980f2753d06b03596@AcuMS.aculab.com>
+ <CAK8P3a1gqt-gBCPTdNeY+8SaG8eUGN4zkCrNKSjA=aEL-TkaUQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1gqt-gBCPTdNeY+8SaG8eUGN4zkCrNKSjA=aEL-TkaUQ@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 9:01 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: sonicadvance1@gmail.com
-> > Sent: 15 January 2021 07:03
-> > Problem presented:
-> > A backwards compatibility layer that allows running x86-64 and x86
-> > processes inside of an AArch64 process.
-> >   - CPU is emulated
-> >   - Syscall interface is mostly passthrough
-> >   - Some syscalls require patching or emulation depending on behaviour
-> >   - Not viable from the emulator design to use an AArch32 host process
+On Fri, Jan 15, 2021 at 11:17:09PM +0100, Arnd Bergmann wrote:
+> On Fri, Jan 15, 2021 at 9:01 PM David Laight <David.Laight@aculab.com> wrote:
 > >
->
-> You are going to need to add all the x86 compatibility code into
-> your arm64 kernel.
-> This is likely to be different from the 32bit arm compatibility
-> because 64bit items are only aligned on 32bit boundaries.
-> The x86 x32 compatibility will be more like the 32bit arm 'compat'
-> code - I'm pretty sure arm32 64bit aligned 64bit data.
+> > From: sonicadvance1@gmail.com
+> > > Sent: 15 January 2021 07:03
+> > > Problem presented:
+> > > A backwards compatibility layer that allows running x86-64 and x86
+> > > processes inside of an AArch64 process.
+> > >   - CPU is emulated
+> > >   - Syscall interface is mostly passthrough
+> > >   - Some syscalls require patching or emulation depending on behaviour
+> > >   - Not viable from the emulator design to use an AArch32 host process
+> > >
+> >
+> > You are going to need to add all the x86 compatibility code into
+> > your arm64 kernel.
+> > This is likely to be different from the 32bit arm compatibility
+> > because 64bit items are only aligned on 32bit boundaries.
+> > The x86 x32 compatibility will be more like the 32bit arm 'compat'
+> > code - I'm pretty sure arm32 64bit aligned 64bit data.
+> 
+> All other architectures that have both 32-bit and 64-bit variants
+> use the same alignment for all types, except for x86.
+> 
+> There are additional differences though, especially if one
+> were to try to generalize the interface to all architectures.
+> A subset of the issues includes
+> 
+> - x32 has 64-bit types in places of some types that are
+>   32 bit everywhere else (time_t, ino_t, off_t, clock_t, ...)
+> 
+> - m68k aligns struct members to at most 16 bits
+> 
+> - uid_t/gid_t/ino_t/dev_t/... are
+> 
+> > You'll then need to remember how the process entered the kernel
+> > to work out which compatibility code to invoke.
+> > This is what x86 does.
+> > It allows a single process to do all three types of system call.
+> >
+> > Trying to 'patch up' structures outside the kernel, or in the
+> > syscall interface code will always cause grief somewhere.
+> > The only sane place is in the code that uses the structures.
+> > Which, for ioctls, means inside the driver that parses them.
+> 
+> He's already doing the system call emulation for all the system
+> calls other than ioctl in user space though. In my experience,
+> there are actually fairly few ioctl commands that are different
+> between architectures -- most of them have no misaligned
+> or architecture-defined struct members at all.
+> 
+> Once you have conversion functions to deal with the 32/64-bit
+> interface differences and architecture specifics of sockets,
+> sysvipc, signals, stat, and input_event, handling the
+> x86-32 specific ioctl commands is comparably easy.
 
-All other architectures that have both 32-bit and 64-bit variants
-use the same alignment for all types, except for x86.
+Indeed, all of this should just be done in userspace. Note (as you of
+course know, but others on CC probably don't) that we did this in musl
+libc for the sake of being able to run a time64 userspace on a
+pre-time64 kernel, with translation from the new time64 ioctl
+structures to the versions needed by the old ioctls and back using a
+fairly simple table:
 
-There are additional differences though, especially if one
-were to try to generalize the interface to all architectures.
-A subset of the issues includes
+https://git.musl-libc.org/cgit/musl/tree/src/misc/ioctl.c?id=v1.2.2
 
-- x32 has 64-bit types in places of some types that are
-  32 bit everywhere else (time_t, ino_t, off_t, clock_t, ...)
+I imagine there's a fair bit more to be done for 32-/64-bit mismatch
+in size/long/pointer types and different alignments, but the problem
+is almost certainly tractable, and much easier than what they already
+have to be doing for syscalls.
 
-- m68k aligns struct members to at most 16 bits
-
-- uid_t/gid_t/ino_t/dev_t/... are
-
-> You'll then need to remember how the process entered the kernel
-> to work out which compatibility code to invoke.
-> This is what x86 does.
-> It allows a single process to do all three types of system call.
->
-> Trying to 'patch up' structures outside the kernel, or in the
-> syscall interface code will always cause grief somewhere.
-> The only sane place is in the code that uses the structures.
-> Which, for ioctls, means inside the driver that parses them.
-
-He's already doing the system call emulation for all the system
-calls other than ioctl in user space though. In my experience,
-there are actually fairly few ioctl commands that are different
-between architectures -- most of them have no misaligned
-or architecture-defined struct members at all.
-
-Once you have conversion functions to deal with the 32/64-bit
-interface differences and architecture specifics of sockets,
-sysvipc, signals, stat, and input_event, handling the
-x86-32 specific ioctl commands is comparably easy.
-
-         Arnd
+Rich
