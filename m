@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD6F2F7BDC
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 14:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6982F7B97
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 14:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387410AbhAONGo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 08:06:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36468 "EHLO mail.kernel.org"
+        id S1727818AbhAONDq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 08:03:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732571AbhAOMbU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 Jan 2021 07:31:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A3DF23359;
-        Fri, 15 Jan 2021 12:30:52 +0000 (UTC)
+        id S1732814AbhAOMbr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 15 Jan 2021 07:31:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B4ED6223E0;
+        Fri, 15 Jan 2021 12:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1610713852;
-        bh=zMvVyCvwo/EX6UZN4/MyQq2opcAvoCJ188svsQtvNys=;
+        s=korg; t=1610713892;
+        bh=ywoUHKCi0smieEK+SvYseF8rMMCIbmHFRL9jbMC+D4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2eCUBtZXJNMp/aCG/8rpzNtKxDzkg+uKuxN6qbBr13WH+bsKqlFDEPNVG6hvlbU/9
-         MDGHvO5at0RTxj+VRAS40SxsDbiy5hYgP1gGUujOR8KYck9GcUrSr39SbtDzJMURPh
-         rmK61ngnLVri5Xn29KtX2ASk0ulE6/yCOKvKnilE=
+        b=aJIWbjFKwlDG/dwVJAxsfYiByB6I0wuI4eEogxDSUuHnQnGzn2j8EDSGSwbWzVo4N
+         DRGqW2GyXR7MBy1+HhMgRZQ/cdRGjRjPyJXMcQP/8FMlW6DdO2GcYc6W828tQKtwA2
+         uZ4GAUJyzroWciNh3lwdWITG36QVkhRsqbgEDhVA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Manoj Gupta <manojgupta@google.com>,
         linux-arch@vger.kernel.org,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 4.9 10/25] vmlinux.lds.h: Add PGO and AutoFDO input sections
-Date:   Fri, 15 Jan 2021 13:27:41 +0100
-Message-Id: <20210115121957.192486980@linuxfoundation.org>
+Subject: [PATCH 4.14 08/28] vmlinux.lds.h: Add PGO and AutoFDO input sections
+Date:   Fri, 15 Jan 2021 13:27:45 +0100
+Message-Id: <20210115121957.158347707@linuxfoundation.org>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210115121956.679956165@linuxfoundation.org>
-References: <20210115121956.679956165@linuxfoundation.org>
+In-Reply-To: <20210115121956.731354372@linuxfoundation.org>
+References: <20210115121956.731354372@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -106,7 +106,7 @@ Link: https://bugs.chromium.org/p/chromium/issues/detail?id=1084760
 Link: https://lore.kernel.org/r/20200821194310.3089815-7-keescook@chromium.org
 
 Debugged-by: Luis Lozano <llozano@google.com>
-[nc: Fix small conflict around lack of NOINSTR_TEXT and .text..refcount]
+[nc: Resolve small conflict due to lack of NOINSTR_TEXT]
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -115,7 +115,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/include/asm-generic/vmlinux.lds.h
 +++ b/include/asm-generic/vmlinux.lds.h
-@@ -460,7 +460,10 @@
+@@ -459,7 +459,10 @@
   */
  #define TEXT_TEXT							\
  		ALIGN_FUNCTION();					\
@@ -124,8 +124,8 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 +		*(TEXT_MAIN .text.fixup)				\
 +		*(.text.unlikely .text.unlikely.*)			\
 +		*(.text.unknown .text.unknown.*)			\
+ 		*(.text..refcount)					\
  		*(.ref.text)						\
  	MEM_KEEP(init.text)						\
- 	MEM_KEEP(exit.text)						\
 
 
