@@ -2,64 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 316462F87F0
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 22:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2492F87F8
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 22:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbhAOVwG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 16:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S1726189AbhAOVyN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 16:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725918AbhAOVwC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 16:52:02 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113F7C0613D3
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 13:51:22 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id c22so6830218pgg.13
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 13:51:22 -0800 (PST)
+        with ESMTP id S1725918AbhAOVyN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 16:54:13 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2F2C061757;
+        Fri, 15 Jan 2021 13:53:33 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id b19so18514641ioa.9;
+        Fri, 15 Jan 2021 13:53:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bDXCYaPPP0GIkxQ0+LDG4H4iGHCT3lB0lv11EmEvqJo=;
-        b=aYNVZ9aKSBpd8Mj3qDl38GWChq0Ec/arFQZ2fyibRnqtvci54awJw4bKSPn83e0O+u
-         diq+Q83kTaNzVQbuxf9IRHQwgX5p1vR6KFr65Yi9hjHKOMo+9oD0CR+AEdlYWasYnaYV
-         3U8wZvAJFLgDkWrsByVsKP/VrszQuRDcKYY9V5NUXg2RrmlvAum7f67WLiTWP9nQpmrf
-         G6yEKJusEODXTZjrgDL/HY2AACHiapX4rviYH0tInQxHWw6qLkKO38OwfAvUYS2blIF6
-         /1rNSdy82Ty4hrC/Og+jxRHKkSqimI/xgcpG4GeflDzLPjpu6y97krH2SIztsjKMMp6L
-         Sp8A==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=QGgWdRhGlMRkOeIpOovebewRZU6OcvKJKaY936bfj8M=;
+        b=HeIuPg6FTdGEmh+d9FY5EwtF4rLQW+LXH364RVzngBdhKa6ETh+YEOiTWXxmPEEzsu
+         AeaXKeIXkCZUyKopa+1LJMNV0no7OEZ+fli3UfvRWw/N4MG9i3LeuUjC9W64eDgovb9D
+         snGKnsgfnvjSTelvI8k9MuiPP/Co7b2JOT+HLA/wZC8EEv6cjWs2GywOOx0fEMqbexUJ
+         YCo6SfxqEXtkeuf4K9LJOgBRaHQlmqvpIE4UZY/KVx1KK09krEUMEQm4K/fro6OtakSR
+         n1TKPD7fHQSCERyoHCZDyQ14cU3JYRKWPSoYEouEnhae7AnV4tuyyl1UMO5iu7fosep3
+         5aoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bDXCYaPPP0GIkxQ0+LDG4H4iGHCT3lB0lv11EmEvqJo=;
-        b=b3C8EzcxalPKoMqEuHxwsc1umBRldZZHPLaVSBU/k/idOTK0N6K62V00BtEp0zSgXz
-         yaCBzbYssvqydWQcUP8hefxn7r4IWpwyOjNF8TNTOFAz8yKB1pYKmQ7lM9HNdwWGHv6S
-         CCAxyaNB//RLmDNxXNQYnaQDxu3rY5cCvT2XEiwkZCE09RvuZ8dS7NjkcaIa79BTaXWz
-         +HYzk1o2NOT6D6OMgcAFeOYqPFAVSDVhwKDst0vyHEIKZ8OJCIG2hUTbDdvGMq6Is5td
-         joX6b3UFUf50b5tbmvgQ5ds4V2VXHvUB8g2O3xEZSG/ZbTfg4A3Hc5HBmQxJQ01pjsnv
-         JNtw==
-X-Gm-Message-State: AOAM530byulVEqP6vvS6KzDB0s1q7HfXCA6Dd+uBMvZk+RryDLsXJSmy
-        3YwBJH0zm1ubm6Wl8jYoqTRH+4WfR39HV14c8L9/Hg==
-X-Google-Smtp-Source: ABdhPJxZuanyAw4Z57+/EwtC8G2Fw9A0treLl50nhmo2Y2OQ+I8eff+axH/1uLMQvRgcTcNhiS9fIEkO02ZBmBDblUs=
-X-Received: by 2002:a62:1896:0:b029:197:491c:be38 with SMTP id
- 144-20020a6218960000b0290197491cbe38mr14843937pfy.15.1610747481454; Fri, 15
- Jan 2021 13:51:21 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=QGgWdRhGlMRkOeIpOovebewRZU6OcvKJKaY936bfj8M=;
+        b=HZdFmEDmdDkRjklP2sbjIHRJYw1JviViin4++XOHMPzmD1Li9Dek+HekQoEFOcT2p2
+         Z+kuXW9U5CQuF9If5eK1vebgYDsPsszO1zFbIZTTeQmjavQY3MjINafrAoi+6PWWKQxE
+         ZkPiIuDZcNKs7/r5cC4cT6oJ/BmByceUxbZl9s8x6UZoBrycd6bY8J0A2JpT7IQLWkRO
+         wXO8A23fD1T1ON3KI/QN53YE/0kbazPHjYWK0QT2wGUxQkU0wPOHzwhRdYQhBqV3uXBV
+         qay1i4za4oD3bAZcycYCvRYzO0RGkWX69tdVeH0f0ViPEdcoqgYK6/BNoZ986RA/h/JS
+         pq9A==
+X-Gm-Message-State: AOAM530FdffQfqK8D81j3xBgvLnrX7nisrZFGXnFvHxQpIN4tOpXNvjx
+        aPO+VUylCN6eWDDqz5i2++Grv8l4V0M3ToHfDCg=
+X-Google-Smtp-Source: ABdhPJxln8CIUWXmSmXFVncexVKeB01GyfAU5+JXqmzqepstvWhc3yxpmHjhBEMcQMbDdFOKNc8ynNai4sFcUJj606A=
+X-Received: by 2002:a02:2ace:: with SMTP id w197mr12068965jaw.132.1610747612529;
+ Fri, 15 Jan 2021 13:53:32 -0800 (PST)
 MIME-Version: 1.0
 References: <20210115210616.404156-1-ndesaulniers@google.com>
- <20210115210616.404156-2-ndesaulniers@google.com> <CA+icZUVtodEz=E+TG0Pt_OUDgW5-0x2WzVOhzQDbyuVR1igU6Q@mail.gmail.com>
-In-Reply-To: <CA+icZUVtodEz=E+TG0Pt_OUDgW5-0x2WzVOhzQDbyuVR1igU6Q@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 15 Jan 2021 13:51:10 -0800
-Message-ID: <CAKwvOd==3r8HNe8P5SuoumRtQ3w7iZkGhhVNhAEyh=rSFDNtKw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] Remove $(cc-option,-gdwarf-4) dependency from CONFIG_DEBUG_INFO_DWARF4
-To:     Sedat Dilek <sedat.dilek@gmail.com>
+In-Reply-To: <20210115210616.404156-1-ndesaulniers@google.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 15 Jan 2021 22:53:21 +0100
+Message-ID: <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
+To:     Nick Desaulniers <ndesaulniers@google.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
         Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         Jakub Jelinek <jakub@redhat.com>,
         Fangrui Song <maskray@google.com>,
         Caroline Tice <cmtice@google.com>,
@@ -72,87 +70,99 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 1:48 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Fri, Jan 15, 2021 at 10:06 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> On Fri, Jan 15, 2021 at 10:06 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > From: Masahiro Yamada <masahiroy@kernel.org>
-> >
-> > The -gdwarf-4 flag is supported by GCC 4.5+, and also by Clang.
-> >
-> > You can see it at https://godbolt.org/z/6ed1oW
-> >
-> >   For gcc 4.5.3 pane,    line 37:    .value 0x4
-> >   For clang 10.0.1 pane, line 117:   .short 4
-> >
-> > Given Documentation/process/changes.rst stating GCC 4.9 is the minimal
-> > version, this cc-option is unneeded.
-> >
-> > Note
-> > ----
-> >
-> > CONFIG_DEBUG_INFO_DWARF4 controls the DWARF version only for C files.
-> >
-> > As you can see in the top Makefile, -gdwarf-4 is only passed to CFLAGS.
-> >
-> >   ifdef CONFIG_DEBUG_INFO_DWARF4
-> >   DEBUG_CFLAGS    += -gdwarf-4
-> >   endif
-> >
-> > This flag is used when compiling *.c files.
-> >
-> > On the other hand, the assembler is always given -gdwarf-2.
-> >
-> >   KBUILD_AFLAGS   += -Wa,-gdwarf-2
-> >
-> > Hence, the debug info that comes from *.S files is always DWARF v2.
-> > This is simply because GAS supported only -gdwarf-2 for a long time.
-> >
-> > Recently, GAS gained the support for --dwarf-[3|4|5] options. [1]
-> > And, also we have Clang integrated assembler. So, the debug info
-> > for *.S files might be improved if we want.
-> >
-> > In my understanding, the current code is intentional, not a bug.
-> >
-> > [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=31bf18645d98b4d3d7357353be840e320649a67d
-> >
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> DWARF v5 is the latest standard of the DWARF debug info format.
 >
-> Subject misses a "kbuild:" label like in all other patches.
-> You have:
-> "Remove $(cc-option,-gdwarf-4) dependency from CONFIG_DEBUG_INFO_DWARF4"
-
-Ack, I wonder how that happened? Ah well, will fix in v6; thanks for
-the feedback.
-
+> DWARF5 wins significantly in terms of size when mixed with compression
+> (CONFIG_DEBUG_INFO_COMPRESSED).
 >
-> - Sedat -
+> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
 >
-> > ---
-> >  lib/Kconfig.debug | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 78361f0abe3a..dd7d8d35b2a5 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -258,7 +258,6 @@ config DEBUG_INFO_SPLIT
-> >
-> >  config DEBUG_INFO_DWARF4
-> >         bool "Generate dwarf4 debuginfo"
-> > -       depends on $(cc-option,-gdwarf-4)
-> >         help
-> >           Generate dwarf4 debug info. This requires recent versions
-> >           of gcc and gdb. It makes the debug information larger.
-> > --
-> > 2.30.0.284.gd98b1dd5eaa7-goog
-> >
+> Patch 1 is a cleanup from Masahiro and isn't DWARF v5 specific.
+> Patch 2 is a cleanup that lays the ground work and isn't DWARF
+> v5 specific.
+> Patch 3 implements Kconfig and Kbuild support for DWARFv5.
+>
+> Changes from v4:
+> * drop set -e from script as per Nathan.
+> * add dependency on !CONFIG_DEBUG_INFO_BTF for DWARF v5 as per Sedat.
+> * Move LLVM_IAS=1 complexity from patch 2 to patch 3 as per Arvind and
+>   Masahiro. Sorry it took me a few tries to understand the point (I
+>   might still not), but it looks much cleaner this way. Sorry Nathan, I
+>   did not carry forward your previous reviews as a result, but I would
+>   appreciate if you could look again.
+> * Add Nathan's reviewed by tag to patch 1.
+> * Reword commit message for patch 3 to mention LLVM_IAS=1 and -gdwarf-5
+>   binutils addition later, and BTF issue.
+> * I still happen to see a pahole related error spew for the combination
+>   of:
+>   * LLVM=1
+>   * LLVM_IAS=1
+>   * CONFIG_DEBUG_INFO_DWARF4
+>   * CONFIG_DEBUG_INFO_BTF
+>   Though they're non-fatal to the build. I'm not sure yet why removing
+>   any one of the above prevents the warning spew. Maybe we'll need a v6.
+>
 
+En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
+CONFIG_DEBUG_INFO_DWARF4.
+So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
 
+I had some other small nits commented in the single patches.
 
--- 
-Thanks,
-~Nick Desaulniers
+As requested in your previous patch-series, feel free to add my:
+
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+
+- Sedat -
+
+> Changes from v3:
+>
+> Changes as per Arvind:
+> * only add -Wa,-gdwarf-5 for (LLVM=1|CC=clang)+LLVM_IAS=0 builds.
+> * add -gdwarf-5 to Kconfig shell script.
+> * only run Kconfig shell script for Clang.
+>
+> Apologies to Sedat and Nathan; I appreciate previous testing/review, but
+> I did no carry forward your Tested-by and Reviewed-by tags, as the
+> patches have changed too much IMO.
+>
+> Changes from v2:
+> * Drop two of the earlier patches that have been accepted already.
+> * Add measurements with GCC 10.2 to commit message.
+> * Update help text as per Arvind with help from Caroline.
+> * Improve case/wording between DWARF Versions as per Masahiro.
+>
+> Changes from the RFC:
+> * split patch in 3 patch series, include Fangrui's patch, too.
+> * prefer `DWARF vX` format, as per Fangrui.
+> * use spaces between assignment in Makefile as per Masahiro.
+> * simplify setting dwarf-version-y as per Masahiro.
+> * indent `prompt` in Kconfig change as per Masahiro.
+> * remove explicit default in Kconfig as per Masahiro.
+> * add comments to test_dwarf5_support.sh.
+> * change echo in test_dwarf5_support.sh as per Masahiro.
+> * remove -u from test_dwarf5_support.sh as per Masahiro.
+> * add a -gdwarf-5 cc-option check to Kconfig as per Jakub.
+>
+> *** BLURB HERE ***
+>
+> Masahiro Yamada (1):
+>   Remove $(cc-option,-gdwarf-4) dependency from CONFIG_DEBUG_INFO_DWARF4
+>
+> Nick Desaulniers (2):
+>   Kbuild: make DWARF version a choice
+>   Kbuild: implement support for DWARF v5
+>
+>  Makefile                          | 13 +++++++---
+>  include/asm-generic/vmlinux.lds.h |  6 ++++-
+>  lib/Kconfig.debug                 | 42 +++++++++++++++++++++++++------
+>  scripts/test_dwarf5_support.sh    |  8 ++++++
+>  4 files changed, 57 insertions(+), 12 deletions(-)
+>  create mode 100755 scripts/test_dwarf5_support.sh
+>
+> --
+> 2.30.0.284.gd98b1dd5eaa7-goog
+>
