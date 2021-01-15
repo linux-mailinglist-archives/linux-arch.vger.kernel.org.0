@@ -2,189 +2,273 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABEA2F6E71
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Jan 2021 23:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8F62F7087
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 03:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730450AbhANWoR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jan 2021 17:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S1726590AbhAOCWw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Jan 2021 21:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730762AbhANWoL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jan 2021 17:44:11 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBD6C0613D3
-        for <linux-arch@vger.kernel.org>; Thu, 14 Jan 2021 14:43:30 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id m13so8273643ljo.11
-        for <linux-arch@vger.kernel.org>; Thu, 14 Jan 2021 14:43:30 -0800 (PST)
+        with ESMTP id S1726182AbhAOCWv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jan 2021 21:22:51 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7B0C061757;
+        Thu, 14 Jan 2021 18:22:11 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id d189so8097541oig.11;
+        Thu, 14 Jan 2021 18:22:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=l0aLIrK9Ls3yChluxnDYpvoAFnbmuAeFSQRaGDSDK6s=;
-        b=Xp2UG1bDqZV6MWUIg3PXRWlOxm3AESTgyUaOByzy05KbBMIlWQTWhAjiAXqIJLco8n
-         CKATzDajP+/i7+U9T8QSEVzVCGM9KCooEF2Qog6oGaP7m4UbxqlPABfgxbuvEWJTi9CN
-         eqzQu31AW2vsl1w6jVkXxJ/M5h/fqc7PNe9pqO61lRW1/nWovu8unaTR5XmmIZkfZgwP
-         tr+Axa7VGzhhKFDPvqTzv2L+EqZ4C5BEDY31jsINoIDSNsVV2C0gKRsxVsVvX38Zs0wH
-         p15PatmNXOKYvYVm9VjZ1UxZrw3YprkBpqifeMBtnXs/ATFse8XhCqZ+GPH/cm/nlJcE
-         s4sQ==
+         :cc;
+        bh=6wmzLSUbWxe7uYFFgvS6JY6e1cTj43Im/jbA3ENu1Rc=;
+        b=pys63q1jQeIO+K9Ufv///n2i/i+KcDT1oo6C2FKGkDnaZVyG3Ndg/Xlb6ZSe3qsPgu
+         1ow58z4xua1KrT2bPeaIJ7xw5eJV+3Q9LlFqICJJrT05XuiEHuimqiNue8JrukWbr/kf
+         ++zsQuDpMjahWUdaHFCK0zC10XRrdp+JoM7c/qOtBacO/SitZCVP5FtgtBCuraMRCZ7N
+         J0xB2R4sAJv4D0W3aYPtEfUr7Q37jlim67TDPhrW1jbMscUIq/D1C1zAFq6K1BlnA9Yx
+         +0CXTiFr0qd4bEK2XofXKCilxg94oYOS+cZfUlDxh9jC1LyHZu21fwdXpVrOjwxbXupW
+         Ey3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=l0aLIrK9Ls3yChluxnDYpvoAFnbmuAeFSQRaGDSDK6s=;
-        b=PrizlQu4NV2mCif8djoi+1LhAuRVb47BOi54+PzDTc2dhY1yLOzhunUA8JP3p7n1Ip
-         UR2shslJ9+doyTsMiX2JMOi0vIiWE00PB4RjEO7WJhV0/+TTCa6Of8SHDa5DUw5n2htY
-         gW4SAkoJp2R0PhR3yvOH0X2DwplMmjr7u+kVRTeo+9KjbFFpv1OccfSB72AfJEz7SMeh
-         75VdePO27Zrbg0PhgcvGlgrvZ5o+5hKX7Bpdy+01eMlvtUzmET+I3tdzAAWLC94GrxP3
-         u5WTL6gK3oXpLO8F6jIwkZKO0WDNaGY9eTJFOK0iUfG9oMb1en7wXc5d9RZWrjDmsdMv
-         tTvA==
-X-Gm-Message-State: AOAM530xczmXyY6JedOTH7IRtPZ86naBfWRtwyPCf2ktgW28ePtgejEv
-        Ioim+XHLp60Lbpux/MzZHmQbOIshbxWjZxMIXwDwFw==
-X-Google-Smtp-Source: ABdhPJwmu2cBfmtpdruzglhRIadtD3T+wRN+tSM4C2y7Zg3rHsx1RPPVdIX6GIoHvdQgt3ctrnlKrS5mVOsEqS6Krko=
-X-Received: by 2002:a2e:50c:: with SMTP id 12mr4154104ljf.226.1610664208863;
- Thu, 14 Jan 2021 14:43:28 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=6wmzLSUbWxe7uYFFgvS6JY6e1cTj43Im/jbA3ENu1Rc=;
+        b=neOHtFuNuUDPdpDgd/L7oMq/LRRYvOLgTmmZZx0NhzRd2J9nmktcbhCX4ki61j5P3o
+         zl0N8YqqEf/K1hJ3x0rne2Rt4UOm9FZsUclL1gd8vonXpkgxcyhWhftJeegkcVxyO8sS
+         5qh2P503i4hDIbZQZ5VI6/4YWOtydLty0KHyJIFqwO+BhxvRxKEA99eIYaNbqkIQmu//
+         40IDm96fkHKvw9JCc2vsc2CMpEA0ZuQ/dZdCLw3b5UIgsIyPVPhDOJanHuLrBhTfxYmx
+         zPeJH9dFjDX6nYjbWRdz3rWZ7x+Okic7cmo1HAgWWKcr7JCmvSKCDR4LtyzzDj/WussF
+         24Sw==
+X-Gm-Message-State: AOAM532i1ENtTxaSr7c4zyqi+opeaKVJaVYmEjzheW3YGdIGPaGSPy3/
+        9iiw9WJodpGo7rtNR2B+x/I0amTlQ1pR+o6niFs=
+X-Google-Smtp-Source: ABdhPJwvVIKYYfKxra9oBS+BV3RiFPDAm5pu3/AUUL1pyCsAxWO2UWplnbDuREC25fyBoVHFWscvUGW/dc9ut9l4J4o=
+X-Received: by 2002:aca:f15:: with SMTP id 21mr4706888oip.109.1610677330863;
+ Thu, 14 Jan 2021 18:22:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20201209192839.1396820-1-mic@digikod.net> <20201209192839.1396820-8-mic@digikod.net>
- <CAG48ez1wbAQwU-eoC9DngHyUM_5F01MJQpRnLaJFvfRUrnXBdA@mail.gmail.com> <aeb3e152-8108-89d2-0577-4b130368f14f@digikod.net>
-In-Reply-To: <aeb3e152-8108-89d2-0577-4b130368f14f@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 14 Jan 2021 23:43:02 +0100
-Message-ID: <CAG48ez2HJCFvmFALDYDYnufE755Dqh3JquAMf-1mnzmRrdKaoQ@mail.gmail.com>
-Subject: Re: [PATCH v26 07/12] landlock: Support filesystem access-control
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+References: <20210106064807.253112-1-Sonicadvance1@gmail.com> <CAK8P3a2tV3HzPpbCR7mAeutx38_D2d-vfpEgpXv+GW_98w3VSQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a2tV3HzPpbCR7mAeutx38_D2d-vfpEgpXv+GW_98w3VSQ@mail.gmail.com>
+From:   Ryan Houdek <sonicadvance1@gmail.com>
+Date:   Thu, 14 Jan 2021 18:21:59 -0800
+Message-ID: <CABnRqDcTaqZj8u8hhwbysU-o_phZh-5-vZsiDScq6xrKbPH_Kw@mail.gmail.com>
+Subject: Re: [PATCH] Adds a new ioctl32 syscall for backwards compatibility layers
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "Amanieu d'Antras" <amanieu@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Joe Perches <joe@perches.com>, Jan Kara <jack@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 7:54 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> On 14/01/2021 04:22, Jann Horn wrote:
-> > On Wed, Dec 9, 2020 at 8:28 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.ne=
-t> wrote:
-> >> Thanks to the Landlock objects and ruleset, it is possible to identify
-> >> inodes according to a process's domain.  To enable an unprivileged
-> >> process to express a file hierarchy, it first needs to open a director=
-y
-> >> (or a file) and pass this file descriptor to the kernel through
-> >> landlock_add_rule(2).  When checking if a file access request is
-> >> allowed, we walk from the requested dentry to the real root, following
-> >> the different mount layers.  The access to each "tagged" inodes are
-> >> collected according to their rule layer level, and ANDed to create
-> >> access to the requested file hierarchy.  This makes possible to identi=
-fy
-> >> a lot of files without tagging every inodes nor modifying the
-> >> filesystem, while still following the view and understanding the user
-> >> has from the filesystem.
-> >>
-> >> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
-> >> keep the same struct inodes for the same inodes whereas these inodes a=
-re
-> >> in use.
-> >>
-> >> This commit adds a minimal set of supported filesystem access-control
-> >> which doesn't enable to restrict all file-related actions.  This is th=
-e
-> >> result of multiple discussions to minimize the code of Landlock to eas=
-e
-> >> review.  Thanks to the Landlock design, extending this access-control
-> >> without breaking user space will not be a problem.  Moreover, seccomp
-> >> filters can be used to restrict the use of syscall families which may
-> >> not be currently handled by Landlock.
-> > [...]
-> >> +static bool check_access_path_continue(
-> >> +               const struct landlock_ruleset *const domain,
-> >> +               const struct path *const path, const u32 access_reques=
-t,
-> >> +               u64 *const layer_mask)
-> >> +{
-> > [...]
-> >> +       /*
-> >> +        * An access is granted if, for each policy layer, at least on=
-e rule
-> >> +        * encountered on the pathwalk grants the access, regardless o=
-f their
-> >> +        * position in the layer stack.  We must then check not-yet-se=
-en layers
-> >> +        * for each inode, from the last one added to the first one.
-> >> +        */
-> >> +       for (i =3D 0; i < rule->num_layers; i++) {
-> >> +               const struct landlock_layer *const layer =3D &rule->la=
-yers[i];
-> >> +               const u64 layer_level =3D BIT_ULL(layer->level - 1);
-> >> +
-> >> +               if (!(layer_level & *layer_mask))
-> >> +                       continue;
-> >> +               if ((layer->access & access_request) !=3D access_reque=
-st)
-> >> +                       return false;
-> >> +               *layer_mask &=3D ~layer_level;
-> >
-> > Hmm... shouldn't the last 5 lines be replaced by the following?
-> >
-> > if ((layer->access & access_request) =3D=3D access_request)
-> >     *layer_mask &=3D ~layer_level;
-> >
-> > And then, since this function would always return true, you could
-> > change its return type to "void".
-> >
-> >
-> > As far as I can tell, the current version will still, if a ruleset
-> > looks like this:
-> >
-> > /usr read+write
-> > /usr/lib/ read
-> >
-> > reject write access to /usr/lib, right?
+On Wed, Jan 6, 2021 at 12:49 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> If these two rules are from different layers, then yes it would work as
-> intended. However, if these rules are from the same layer the path walk
-> will not stop at /usr/lib but go down to /usr, which grants write
-> access.
+> On Wed, Jan 6, 2021 at 7:48 AM <sonicadvance1@gmail.com> wrote:
+> > From: Ryan Houdek <Sonicadvance1@gmail.com>
+> ...
+> > This does not solve the following problems:
+> > 1) compat_alloc_user_space inside ioctl
+> > 2) ioctls that check task mode instead of entry point for behaviour
+> > 3) ioctls allocating memory
+> > 4) struct packing problems between architectures
+> >
+> > Workarounds for the problems presented:
+> > 1a) Do a stack pivot to the lower 32bits from userspace
+> >   - Forces host 64bit process to have its thread stacks to live in 32bit
+> >   space. Not ideal.
+> >   - Only do a stack pivot on ioctl to save previous 32bit VA space
+> > 1b) Teach kernel that compat_alloc_userspace can return a 64bit pointer
+> >   - x86-64 truncates stack from this function
+> >   - AArch64 returns the full stack pointer
+> >   - Only ~29 users. Validating all of them support a 64bit stack is
+> >   trivial?
+>
+> I've almost completed the removal of compat_alloc_user_space(),
+> that should no longer be a concern when the syscall gets added.
+>
+> > 2a) Any application using these can be checked for compatibility in
+> > userspace and put on a block list.
+> > 2b) Fix any ioctls doing broken behaviour based on task mode rather than
+> > ioctl entry point
+>
+> What the ioctls() actually check is 'in_compat_syscall()', which is not
+> the mode of the task but the type of syscall. There is actually a general
+> trend to use this helper more rather than less, and I think the only
+> way forward here is to ensure that this returns true when entering
+> through the new syscall number.
+>
+> For x86, this has another complication, as some ioctls also need to
+> check whether they are in an ia32 task (with packed u64 and 32-bit
+> __kernel_old_time_t) or an x32 task (with aligned u64 and 64-bit
+> __kernel_old_time_t). If the new syscall gets wired up on x86 as well,
+> you'd need to decide which of the two behaviors you want.
 
-I don't see why the code would do what you're saying it does. And an
-experiment seems to confirm what I said; I checked out landlock-v26,
-and the behavior I get is:
+I can have a follow-up patch that makes this do ni_syscall on x86_64
+since we can go through the int 0x80 handler, or x32 handler path and
+choose whichever one there.
 
-user@vm:~/landlock$ dd if=3D/dev/null of=3D/tmp/aaa
-0+0 records in
-0+0 records out
-0 bytes copied, 0.00106365 s, 0.0 kB/s
-user@vm:~/landlock$ LL_FS_RO=3D'/lib' LL_FS_RW=3D'/' ./sandboxer dd
-if=3D/dev/null of=3D/tmp/aaa
-0+0 records in
-0+0 records out
-0 bytes copied, 0.000491814 s, 0.0 kB/s
-user@vm:~/landlock$ LL_FS_RO=3D'/tmp' LL_FS_RW=3D'/' ./sandboxer dd
-if=3D/dev/null of=3D/tmp/aaa
-dd: failed to open '/tmp/aaa': Permission denied
-user@vm:~/landlock$
+>
+> > 3a) Userspace consumes all VA space above 32bit. Forcing allocations to
+> > occur in lower 32bits
+> >   - This is the current implementation
+> > 3b) Ensure any allocation in the ioctl handles ioctl entrypoint rather
+> > than just allow generic memory allocations in full VA space
+> >   - This is hard to guarantee
+>
+> What kind of allocation do you mean here? Can you give an example of
+> an ioctl that does this?
 
-Granting read access to /tmp prevents writing to it, even though write
-access was granted to /.
+My concern here would be something like DRM allocating memory and
+returning a pointer to userspace that ends up in 64bit space.
+I can see something like `drm_get_unmapped_area` calls in to
+`current->mm->get_unmapped_area` which I believe only ends up falling
+down TASK_SIZE checks.
+Which could potentially return pointers in the 64bit address space
+range in this case. Theoretically can be resolved either by thieving
+the full 64bit VA range, or doing something like the Tango layer
+patches that on syscall entry changes the syscall to a "compat"
+syscall.
+compat syscall flag like Tango might be nicer here?
+
+>
+> > 4a) Blocklist any application using ioctls that have different struct
+> > packing across the boundary
+> >   - Can happen when struct packing of 32bit x86 application goes down
+> >   the aarch64 compat_ioctl path
+> >   - Userspace is a AArch64 process passing 32bit x86 ioctl structures
+> >   through the compat_ioctl path which is typically for AArch32 processes
+> >   - None currently identified
+> > 4b) Work with upstream kernel and userspace projects to evaluate and fix
+> >   - Identify the problem ioctls
+> >   - Implement a new ioctl with more sane struct packing that matches
+> >   cross-arch
+> >   - Implement new ioctl while maintaining backwards compatibility with
+> >   previous ioctl handler
+> >   - Change upstream project to use the new compatibility ioctl
+> >   - ioctl deprecation will be case by case per device and project
+> > 4b) Userspace implements a full ioctl emulation layer
+> >   - Parses the full ioctl tree
+> >   - Either passes through ioctls that it doesn't understand or
+> >   transforms ioctls that it knows are trouble
+> >   - Has the downside that it can still run in to edge cases that will
+> >   fail
+> >   - Performance of additional tracking is a concern
+> >   - Prone to failure keeping the kernel ioctl and userspace ioctl
+> >   handling in sync
+> >   - Really want to have it in the kernel space as much as possible
+>
+> I think there are only a few ioctls that are affected, and you can
+> probably get a list from qemu, which emulates them in user space
+> already. Doing that transformation should not be all that hard
+> in the end.
+>
+> If we want to do this in the kernel, this probably requires changes
+> to the syscall calling convention. Adding a flag to pick a particular
+> style of ioctl arguments would work, and this could enable the
+> case of emulating arm32 ioctls on x86-64 hosts.
+>
+> > diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+> > index 86a9d7b3eabe..949788f5ba40 100644
+> > --- a/arch/arm64/include/asm/unistd.h
+> > +++ b/arch/arm64/include/asm/unistd.h
+> > @@ -38,7 +38,7 @@
+> >  #define __ARM_NR_compat_set_tls                (__ARM_NR_COMPAT_BASE + 5)
+> >  #define __ARM_NR_COMPAT_END            (__ARM_NR_COMPAT_BASE + 0x800)
+> >
+> > -#define __NR_compat_syscalls           442
+> > +#define __NR_compat_syscalls           443
+> >  #endif
+> >
+> >  #define __ARCH_WANT_SYS_CLONE
+> > diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+> > index cccfbbefbf95..35e3bc83dbdc 100644
+> > --- a/arch/arm64/include/asm/unistd32.h
+> > +++ b/arch/arm64/include/asm/unistd32.h
+> > @@ -891,6 +891,8 @@ __SYSCALL(__NR_faccessat2, sys_faccessat2)
+> >  __SYSCALL(__NR_process_madvise, sys_process_madvise)
+> >  #define __NR_epoll_pwait2 441
+> >  __SYSCALL(__NR_epoll_pwait2, compat_sys_epoll_pwait2)
+> > +#define __NR_ioctl32 442
+> > +__SYSCALL(__NR_ioctl32, compat_sys_ioctl)
+> >
+>
+> I'm not sure why you want this in 32-bit processes, can't they just call
+> the normal ioctl() function?
+>
+
+I'll have a follow up patch that on 32bit hosts this is a ni_syscall instead
+
+> >  }
+> > +
+> > +COMPAT_SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd,
+> > +                       compat_ulong_t, arg)
+> > +{
+> > +       return do_ioctl32(fd, cmd, arg);
+> > +}
+> > +
+> > +SYSCALL_DEFINE3(ioctl32, unsigned int, fd, unsigned int, cmd,
+> > +                       compat_ulong_t, arg)
+> > +{
+> > +       return do_ioctl32(fd, cmd, arg);
+> > +}
+>
+> These two look identical to me, I don't think you need to add a wrapper
+> here at all, but can just use the normal compat_sys_ioctl entry point
+> unless you want to add a 'flags' argument to control the struct padding.
+
+I tried having the dispatch table call directly in to the COMPAT one
+and the way things were lining up weren't allowing me to do this.
+Since this is a bit unique in how it operates, I'm not quite sure if
+there is another example I could pull from for this.
+
+>
+> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> > index 728752917785..18279e5b7b4f 100644
+> > --- a/include/uapi/asm-generic/unistd.h
+> > +++ b/include/uapi/asm-generic/unistd.h
+> > @@ -862,8 +862,15 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+> >  #define __NR_epoll_pwait2 441
+> >  __SC_COMP(__NR_epoll_pwait2, sys_epoll_pwait2, compat_sys_epoll_pwait2)
+> >
+> > +#define __NR_ioctl32 442
+> > +#ifdef CONFIG_COMPAT
+> > +__SC_COMP(__NR_ioctl32, sys_ioctl32, compat_sys_ioctl)
+> > +#else
+> > +__SC_COMP(__NR_ioctl32, sys_ni_syscall, sys_ni_syscall)
+> > +#endif
+> > +
+> >  #undef __NR_syscalls
+> > -#define __NR_syscalls 442
+> > +#define __NR_syscalls 443
+>
+> (already mentioned on IRC)
+>
+
+> If you add it here, the same number should be assigned across all architectures,
+> or at least a comment added to declare the number as reserved, to keep
+> the following syscalls in sync.
+
+I can have a followup patch that adds this to all the backends.
+>
+>         Arnd
