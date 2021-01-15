@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299D62F7379
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 08:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7CC2F73A5
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 08:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728701AbhAOHEd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 02:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S1730330AbhAOHSk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 02:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbhAOHEb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 02:04:31 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA24C061575;
-        Thu, 14 Jan 2021 23:03:50 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id b3so4925437pft.3;
-        Thu, 14 Jan 2021 23:03:50 -0800 (PST)
+        with ESMTP id S1726494AbhAOHSj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 02:18:39 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEDBC061575;
+        Thu, 14 Jan 2021 23:17:59 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id my11so5095279pjb.1;
+        Thu, 14 Jan 2021 23:17:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GHiYLWes15995yc06JXjproFwSKI9EhRTzfJK8Em9SI=;
-        b=VuQxLNreZ35kgOv9t50bPmMmRYfdkoMyenmcQ/EDiL+khkwLjA9TiaeWqm8RE+0z5J
-         dJMnoqkNtpJ1vG4fRJ04X1k47+3GXa8DrrEpMY9XbvvaQDogHwCuIKtSthDXdn7B+psV
-         LLMjBR/e+Dkqs27AHDNisqoPuW0e47Zp2vCrNUEJRIsM65Y1hyOF60ujN5G+mVYCqmRt
-         lE+aEa9thbHHIIwH/bcuweSMJ/b5Zp+RON0M0MddkMSsHMojeueLCI6AYwxpCXSqVODX
-         3qjJY+iwd58/bhyAB4Ak0o5l/ViRZO3c3fC0mS1r/UaLnBREjoKNbKdVPsSTW8eGAeJr
-         TlQQ==
+        bh=fDBgTqph7U6sqOSXdt8AcS70Ilsiw0uIpXx8fn1angs=;
+        b=tj4DTccmh3ZQGUeqObnceaG0RemZklXTh5qssoEslhdzP0IvX6IzjS7dNL2lxBOffY
+         HkNStF1IOROuK+FkBE1ipDnikzcP3W2yAFJn1ZFOWrkZpgprx5iXGuk1HuIq/QBpXYpX
+         ZnbYUnkmOaTFPBZdZGwHrMxyPm1CnRftniktjtISvy/bYUG/pY2e4cC6Z/CcR3H73ucr
+         ervLAuU1fFhlXHaeEJEcU8ob7crnGhBqvTu5nFcRFE+cagJQdQIJzcq+VykJi3n9FtKM
+         fKwI4DRLGQtgFnLFMTkA8X00tYzFJ9js1tYR/leJe45ACMHo9kMOAdn3gnEYsucDbWLU
+         MErA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GHiYLWes15995yc06JXjproFwSKI9EhRTzfJK8Em9SI=;
-        b=Svm4X1qu0SxEfD41qvCe89/nBaUL+EB26KqMZwXa0esM3vSxGFoZP7LCqqodEUHAJ9
-         P8FnL2Lahm0nwAgdsfEZcXDangJFYvLY/CKFVBGzmqItfgNVEd2kmZBJuYqHGYel5XDM
-         g06y/wfiaPA6LfOt0LyxrupNPHxyDOmmQw7/a9VQti4/SNC1uDVb+/oX8WN3HgnDj7G4
-         N7c68kEkcsLI43z6lM/jZBMZFrDoIAePIZAvVpnwr5adIN5SRgtZhZTYeZKN0ZdjMB39
-         DGZnYi/4hH5ebcT77/19PFTkwFaoQa1QfdI+ySo1Ca6RJD8tgrFgzLeR1U73UHTCMfcB
-         ATmQ==
-X-Gm-Message-State: AOAM530tsb5SUONvTY/9rCFXCYqjWlWl7X6LalrshMT7NlhOyTlh12UL
-        UoA3foY5zbdP8CtIt+fSrQ4=
-X-Google-Smtp-Source: ABdhPJy33sFGOuEJVL/71ZTFrs1JqOaDhD02Tw/th8z46pDfvhRBV6ViKBsRBoDKqTo0JFodgh2g5A==
-X-Received: by 2002:a62:8050:0:b029:19d:e8b4:ba1 with SMTP id j77-20020a6280500000b029019de8b40ba1mr11371438pfd.69.1610694229866;
-        Thu, 14 Jan 2021 23:03:49 -0800 (PST)
+        bh=fDBgTqph7U6sqOSXdt8AcS70Ilsiw0uIpXx8fn1angs=;
+        b=h03YwuVl3JnTRN6ihKinIpkT/xprAfwQamTs8OGWQT/voLFL0vVBuSsanhPC+oVFAT
+         XFV7mWh0cE0aV2/T92hyMuh2EhQEs4HVRQM5229RJw61+AckJAvxe4MAXl4l5cH27ycz
+         0IrL10worX4SuJljSAa+7LhJJWqvrUlb/FZ6r529YjH4ABqHi+EQc1u1b2UqnEML8BHM
+         JR5muiJRtyI0LKlTHnM3Mrqqldx1E3v3h+d7Ww6Fm+hR88IpSURigdyUINmV0s7Dp8zU
+         SemdiYZ3LeHoiMkYp0MHvEpodFNdvczpe5dCPUzzkNyyK+4NntIZi7nYT4sf4vQwozdA
+         Wpjw==
+X-Gm-Message-State: AOAM531xc1kXwuMiiNUzAudjERWRBDhg9RkDbKnmD/NxUHfdGwIsQiSG
+        u/1+Ncbj2afrap43ebM3nr8=
+X-Google-Smtp-Source: ABdhPJzxCbaWhr5YDOC8CbRfvLQL9StIWqn3Qw30/BIDB8yn3be1W3dAF+FL/5uyfEj6iJOcPD8xNw==
+X-Received: by 2002:a17:90b:368f:: with SMTP id mj15mr8883373pjb.201.1610695078447;
+        Thu, 14 Jan 2021 23:17:58 -0800 (PST)
 Received: from localhost.localdomain (76-242-91-105.lightspeed.sntcca.sbcglobal.net. [76.242.91.105])
-        by smtp.gmail.com with ESMTPSA id h8sm8399086pjc.2.2021.01.14.23.03.45
+        by smtp.gmail.com with ESMTPSA id w1sm7037456pfn.151.2021.01.14.23.17.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jan 2021 23:03:49 -0800 (PST)
+        Thu, 14 Jan 2021 23:17:57 -0800 (PST)
 From:   sonicadvance1@gmail.com
 X-Google-Original-From: Sonicadvance1@gmail.com
 Cc:     Ryan Houdek <Sonicadvance1@gmail.com>,
@@ -80,24 +80,23 @@ Cc:     Ryan Houdek <Sonicadvance1@gmail.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Minchan Kim <minchan@kernel.org>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Xiaoming Ni <nixiaoming@huawei.com>,
-        David Rientjes <rientjes@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Oleg Nesterov <oleg@redhat.com>,
         YueHaibing <yuehaibing@huawei.com>,
         Suren Baghdasaryan <surenb@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Nicholas Piggin <npiggin@gmail.com>,
         Brian Gerst <brgerst@gmail.com>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jan Kara <jack@suse.cz>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Joe Perches <joe@perches.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
@@ -107,12 +106,12 @@ Cc:     Ryan Houdek <Sonicadvance1@gmail.com>,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH] Adds a new ioctl32 syscall for backwards compatibility layers
-Date:   Thu, 14 Jan 2021 23:02:50 -0800
-Message-Id: <20210115070326.294332-1-Sonicadvance1@gmail.com>
+Subject: [PATCH v2] Adds a new ioctl32 syscall for backwards compatibility layers
+Date:   Thu, 14 Jan 2021 23:17:14 -0800
+Message-Id: <20210115071740.295973-1-Sonicadvance1@gmail.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210106064807.253112-1-Sonicadvance1@gmail.com>
-References: <20210106064807.253112-1-Sonicadvance1@gmail.com>
+In-Reply-To: <20210115070326.294332-1-Sonicadvance1@gmail.com>
+References: <20210115070326.294332-1-Sonicadvance1@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -214,6 +213,12 @@ packing across the boundary
   - Prone to failure keeping the kernel ioctl and userspace ioctl
   handling in sync
   - Really want to have it in the kernel space as much as possible
+
+Changes in v2:
+- Added the syscall to all architecture tables
+- Disabled on 32bit and BE platforms. They can call ioctl directly.
+- Disabled on x86-64 as well since you can call this from ia32 or x32
+dispatch tables
 
 Signed-off-by: Ryan Houdek <Sonicadvance1@gmail.com>
 ---
