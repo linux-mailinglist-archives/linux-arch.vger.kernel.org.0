@@ -2,119 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DF22F7E8B
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 15:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6F62F817A
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 18:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728586AbhAOOry (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 09:47:54 -0500
-Received: from elvis.franken.de ([193.175.24.41]:53938 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732175AbhAOOry (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 15 Jan 2021 09:47:54 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1l0QNY-0006aU-02; Fri, 15 Jan 2021 15:47:08 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id CCB8EC057E; Fri, 15 Jan 2021 15:40:37 +0100 (CET)
-Date:   Fri, 15 Jan 2021 15:40:37 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Kees Cook <keescook@chromium.org>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, stable@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v5 mips-next 0/9] MIPS: vmlinux.lds.S sections fixes &
- cleanup
-Message-ID: <20210115144037.GC15166@alpha.franken.de>
-References: <20210110115245.30762-1-alobakin@pm.me>
+        id S1727517AbhAOREi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 12:04:38 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:11023 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbhAOREi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 12:04:38 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DHSDB4JtVzj8G9;
+        Sat, 16 Jan 2021 01:02:50 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.498.0; Sat, 16 Jan 2021 01:03:47 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>, <arnd@arndb.de>,
+        <akpm@linux-foundation.org>, <xuwei5@hisilicon.com>,
+        <lorenzo.pieralisi@arm.com>, <helgaas@kernel.org>,
+        <jiaxun.yang@flygoat.com>, <song.bao.hua@hisilicon.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linuxarm@openeuler.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH RFC 0/4] Fix arm64 crash for accessing unmapped IO port regions (reboot)
+Date:   Sat, 16 Jan 2021 00:58:45 +0800
+Message-ID: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210110115245.30762-1-alobakin@pm.me>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 11:53:50AM +0000, Alexander Lobakin wrote:
-> This series hunts the problems discovered after manual enabling of
-> ARCH_WANT_LD_ORPHAN_WARN. Notably:
->  - adds the missing PAGE_ALIGNED_DATA() section affecting VDSO
->    placement (marked for stable);
->  - stops blind catching of orphan text sections with .text.*
->    directive;
->  - properly stops .eh_frame section generation.
-> 
-> Compile and runtime tested on MIPS32R2 CPS board with no issues
-> using two different toolkits:
->  - Binutils 2.35.1, GCC 10.2.1 (with Alpine patches);
->  - LLVM stack: 11.0.0 and from latest Git snapshot.
-> 
-> Since v4 [3]:
->  - new: drop redundant .text.cps-vec creation and blind inclusion
->    of orphan text sections via .text.* directive in vmlinux.lds.S;
->  - don't assert SIZEOF(.rel.dyn) as it's reported that it may be not
->    empty on certain machines and compilers (Thomas);
->  - align GOT table like it's done for ARM64;
->  - new: catch UBSAN's "unnamed data" sections in generic definitions
->    when building with LD_DEAD_CODE_DATA_ELIMINATION;
->  - collect Reviewed-bys (Kees, Nathan).
-> 
-> Since v3 [2]:
->  - fix the third patch as GNU stack emits .rel.dyn into VDSO for
->    some reason if .cfi_sections is specified.
-> 
-> Since v2 [1]:
->  - stop discarding .eh_frame and just prevent it from generating
->    (Kees);
->  - drop redundant sections assertions (Fangrui);
->  - place GOT table in .text instead of asserting as it's not empty
->    when building with LLVM (Nathan);
->  - catch compound literals in generic definitions when building with
->    LD_DEAD_CODE_DATA_ELIMINATION (Kees);
->  - collect two Reviewed-bys (Kees).
-> 
-> Since v1 [0]:
->  - catch .got entries too as LLD may produce it (Nathan);
->  - check for unwanted sections to be zero-sized instead of
->    discarding (Fangrui).
-> 
-> [0] https://lore.kernel.org/linux-mips/20210104121729.46981-1-alobakin@pm.me
-> [1] https://lore.kernel.org/linux-mips/20210106200713.31840-1-alobakin@pm.me
-> [2] https://lore.kernel.org/linux-mips/20210107115120.281008-1-alobakin@pm.me
-> [3] https://lore.kernel.org/linux-mips/20210107123331.354075-1-alobakin@pm.me
-> 
-> Alexander Lobakin (9):
->   MIPS: vmlinux.lds.S: add missing PAGE_ALIGNED_DATA() section
->   MIPS: CPS: don't create redundant .text.cps-vec section
->   MIPS: vmlinux.lds.S: add ".gnu.attributes" to DISCARDS
->   MIPS: properly stop .eh_frame generation
->   MIPS: vmlinux.lds.S: explicitly catch .rel.dyn symbols
->   MIPS: vmlinux.lds.S: explicitly declare .got table
->   vmlinux.lds.h: catch compound literals into data and BSS
->   vmlinux.lds.h: catch UBSAN's "unnamed data" into data
->   MIPS: select ARCH_WANT_LD_ORPHAN_WARN
-> 
->  arch/mips/Kconfig                 |  1 +
->  arch/mips/include/asm/asm.h       | 18 ++++++++++++++++++
->  arch/mips/kernel/cps-vec.S        |  1 -
->  arch/mips/kernel/vmlinux.lds.S    | 11 +++++++++--
->  include/asm-generic/vmlinux.lds.h |  6 +++---
->  5 files changed, 31 insertions(+), 6 deletions(-)
+This is a reboot of my original series to address the problem of drivers
+for legacy ISA devices accessing unmapped IO port regions on arm64 systems
+and causing the system to crash.
 
-applied to mips-next.
+There was another recent report of such an issue [0], and some old ones
+[1] and [2] for reference.
 
-Thoomas.
+The background is that many systems do not include PCI host controllers,
+or they do and controller probe may have failed. For these cases, no IO
+ports are mapped. However, loading drivers for legacy ISA devices can
+crash the system as there is nothing to stop them accessing those IO
+ports (which have not been io remap'ed).
+
+My original solution tried to keep the kernel alive in these situations by
+rejecting logical PIO access to PCI IO regions until PCI IO port regions
+have been mapped.
+
+This series goes one step further, by just reserving the complete legacy
+IO port range in 0x0--0xffff for arm64. The motivation for doing this is
+to make the request_region() calls for those drivers fail, like this:
+
+root@ubuntu:/home/john# insmod mk712.ko
+ [ 3415.575800] mk712: unable to get IO region
+insmod: ERROR: could not insert module mk712.ko: No such device
+
+Otherwise, in theory, those drivers could initiate rogue accesses to
+mapped IO port regions for other devices and cause corruptions or
+side-effects. Indeed, those drivers should not be allowed to access
+IO ports at all in such a system.
+
+As a secondary defence, for broken drivers who do not call
+request_region(), IO port accesses in range 0--0xffff will be ignored,
+again preserving the system.
+
+I am sending as an RFC as I am not sure of any problem with reserving
+first 0x10000 of IO space like this. There is reserve= commandline
+argument, which does allow this already.
+
+For reference, here's how /proc/ioports looks on my arm64 system with
+this change:
+
+root@ubuntu:/home/john# more /proc/ioports
+00010000-0001ffff : PCI Bus 0002:f8
+  00010000-00010fff : PCI Bus 0002:f9
+    00010000-00010007 : 0002:f9:00.0
+      00010000-00010007 : serial
+    00010008-0001000f : 0002:f9:00.1
+      00010008-0001000f : serial
+    00010010-00010017 : 0002:f9:00.2
+    00010018-0001001f : 0002:f9:00.2
+00020000-0002ffff : PCI Bus 0004:88
+00030000-0003ffff : PCI Bus 0005:78
+00040000-0004ffff : PCI Bus 0006:c0
+00050000-0005ffff : PCI Bus 0007:90
+00060000-0006ffff : PCI Bus 000a:10
+00070000-0007ffff : PCI Bus 000c:20
+00080000-0008ffff : PCI Bus 000d:30
+
+[0] https://lore.kernel.org/linux-input/20210112055129.7840-1-song.bao.hua@hisilicon.com/T/#mf86445470160c44ac110e9d200b09245169dc5b6
+[1] https://lore.kernel.org/linux-pci/56F209A9.4040304@huawei.com
+[2] https://lore.kernel.org/linux-arm-kernel/e6995b4a-184a-d8d4-f4d4-9ce75d8f47c0@huawei.com/
+
+Difference since v4:
+https://lore.kernel.org/linux-pci/1560262374-67875-1-git-send-email-john.garry@huawei.com/
+- Reserve legacy ISA region
+
+John Garry (4):
+  arm64: io: Introduce IO_SPACE_BASE
+  asm-generic/io.h: Add IO_SPACE_BASE
+  kernel/resource: Make ioport_resource.start configurable
+  logic_pio: Warn on and discard accesses to addresses below
+    IO_SPACE_BASE
+
+ arch/arm64/include/asm/io.h |  1 +
+ include/asm-generic/io.h    |  4 ++++
+ include/linux/logic_pio.h   |  5 +++++
+ kernel/resource.c           |  2 +-
+ lib/logic_pio.c             | 20 ++++++++++++++------
+ 5 files changed, 25 insertions(+), 7 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.26.2
+
