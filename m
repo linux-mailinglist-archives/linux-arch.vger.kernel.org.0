@@ -2,58 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B716B2F896D
-	for <lists+linux-arch@lfdr.de>; Sat, 16 Jan 2021 00:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D362F898C
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Jan 2021 00:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbhAOXf0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 18:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S1728461AbhAOXnj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 18:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726989AbhAOXfZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 18:35:25 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598F7C061793
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 15:34:45 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id x18so5496681pln.6
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 15:34:45 -0800 (PST)
+        with ESMTP id S1726785AbhAOXni (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 18:43:38 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B91FC061757;
+        Fri, 15 Jan 2021 15:42:58 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id w127so6594447ybw.8;
+        Fri, 15 Jan 2021 15:42:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=M45X1uVUPkAgzVTV1F36XDTKyhVWjHkf+etFM5uHOJs=;
-        b=aIx3Nub14MCK6Ayv85Qd7DS3NeDHqNI2lHEyU5eGrWUowDcvNuVy2/an4j5/+207q6
-         EsHUAA/Et0cuJjYAOm8qIJY7n220NxZp0yp18RNKAXViuPN4lMtybmXLIJxmtwJqGDKR
-         PNOvolEQRZKk/XmMe0BT9hmxXXfmzp0AbpVgJUja6M7QaSzKjKw0DFtTUBcAJ7s3FFA9
-         zZ3oGphi2Rk3sLtncvFNTbA7+nH1X4HvgOc0d8r4kqIgnW3OwPdu2ik1PVVrCQy5sDEW
-         y1NBbRTFTpCCrJGbxAltfxNi8HpVJpPJ1gloIBkn9Vt5DDmGg2lYfVpmu6VMWYEO2VKN
-         2okA==
+        bh=2F29hULLcdjxbbHgzXktPmVGYBC0Y8dyyq9NoQsYzh8=;
+        b=ruZ8RBfUjCYDk5g71LaZonLr9SanFa+9ZvtOKwn7AVkcKasgPV+s6tLvVqkN4xmMd1
+         mxfHOb5mH/1iHveJRn1Eow/yXNXr3CxEkiGbgr2+s05vXnhpb8CB0yfukPbfN6P1zVzi
+         GoLB/w9SYrdM/fLqixWUiPn4a5y8JB/xD4M/8ymJFraik/8JjnSuRHw6IopKHBYS7dz8
+         wnmGfHX6zNdihG/eNc20eRvzszXw/mEaFHC8W7kgc552pUHrir6rQcd3xUL94bugP3Wf
+         1YvZqcAOVbk0PNJrmOT8Le0/gEt8bmGPQc4qg1STz+1SykT1Y7+5B7UptBPLywaTSp2Z
+         nZHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M45X1uVUPkAgzVTV1F36XDTKyhVWjHkf+etFM5uHOJs=;
-        b=FumhAlA7cAJt+SceccnAq6puIjYyRy8sc8DOrN1zlpTGphRdYvK1O6R7HXI6P+Z7TU
-         x+J5zjbUGyJPaWm/t9xghqT/iOaKemRVQcMU0tyM8+avwuou+EdeIAfHs9fJdYJ4cWjx
-         CD4A89HBl99Ot5WWoHFC4NzEBNsSaUWNKi+Uny43VXl6diIVIf/O8UnjMpmep62ROKaF
-         po505UDWYJX4nUxtMe6wnX0d81zhAXp+APO8TKL1Ulxlc0LR3QTykVc26EJO2jSZyd8I
-         ZNepE1RyLyx+8j2XxIU2Hlr8PEf7dtoBuT50560fWGUxaB39Iz6Q5QLBIvBpA/KiGOPC
-         4/8A==
-X-Gm-Message-State: AOAM530JREuyl6EBtRtvk2JpUIP0YdrZaSGBv//dzpzN9y/0eCCBkwza
-        tZiw0OzHasCqrbomV+ODf/7/5B1FgMim399F+Qc9hw==
-X-Google-Smtp-Source: ABdhPJxkSxoT54fsPyvQtLqE50NgLGUdW+qfRdnn9mqxf/4hpJok+NnuJbRhl1zXuiY9UFXdTWTlniFEn3qoaGBjRss=
-X-Received: by 2002:a17:902:26a:b029:da:af47:77c7 with SMTP id
- 97-20020a170902026ab02900daaf4777c7mr15203377plc.10.1610753684580; Fri, 15
- Jan 2021 15:34:44 -0800 (PST)
+        bh=2F29hULLcdjxbbHgzXktPmVGYBC0Y8dyyq9NoQsYzh8=;
+        b=qjyCPaPf2P+inCyGTO5tB9gP5WmeBGsiZ/R55ba/bqhXOF7MFyuhaGuT202Dx/k2P8
+         TeDYbaSz5iMxsvXkWTjp20pJUZ+R88Q4q0T6G7d2mnEtZhP3g3Cd3lYDxUm7bEf98W4u
+         JNGJXDW4kmD5RvE5+GkYHu3vtZq+9A5xLVszKvkxkK5jg/AjeyQDSTpAZWUPnWv5p0Z8
+         IEepjTyJuTWNEiQ4MvKFW9xsAckJeVGSSnQW81PQm444FiEbNKh03RQfnqQhsb2viGGh
+         3wpxdu07MjP/KBwOSD4OVMd3CrqAGcX5YMUACZHORaqeqDQIyjUreL6S8rsLcBwHjrDR
+         RDAA==
+X-Gm-Message-State: AOAM533PRr3M4QzQ061qWO+dbCCDlv9LSNVI727cURvIkxqPD4SDV5BQ
+        JF7nufw9zBU2TwqrV6uEFtucnwDAA1sA06Jd+lDFAZIdtlY=
+X-Google-Smtp-Source: ABdhPJyUZh6YD/vIb/sAZ0PFxW8PZ1mh3UlMjBGw67gYNpc8/5BM04oB3c6VWYOqnlM1cS4x8AsWv/3pgMdece0t0qA=
+X-Received: by 2002:a25:d6d0:: with SMTP id n199mr20593271ybg.27.1610754177664;
+ Fri, 15 Jan 2021 15:42:57 -0800 (PST)
 MIME-Version: 1.0
 References: <20210115210616.404156-1-ndesaulniers@google.com>
- <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com> <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com>
-In-Reply-To: <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 15 Jan 2021 15:34:33 -0800
-Message-ID: <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
+ <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
+ <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com> <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
+In-Reply-To: <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 15 Jan 2021 15:42:46 -0800
+Message-ID: <CAEf4BzZ7y84+oe9CD4g3r19qGup=kYnm8+f+5K4YQ=6gqTWtcQ@mail.gmail.com>
 Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
-To:     Sedat Dilek <sedat.dilek@gmail.com>, Yonghong Song <yhs@fb.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sedat Dilek <sedat.dilek@gmail.com>, Yonghong Song <yhs@fb.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -71,38 +72,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
+On Fri, Jan 15, 2021 at 3:34 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
+> On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
+> >
+> >
+> >
+> > On 1/15/21 1:53 PM, Sedat Dilek wrote:
+> > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
+> > > CONFIG_DEBUG_INFO_DWARF4.
+> > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
 >
->
-> On 1/15/21 1:53 PM, Sedat Dilek wrote:
-> > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
-> > CONFIG_DEBUG_INFO_DWARF4.
-> > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
+> Can you privately send me your configs that repro? Maybe I can isolate
+> it to a set of configs?
 
-Can you privately send me your configs that repro? Maybe I can isolate
-it to a set of configs?
+Why privately? To reproduce and fix the issue we (BPF and pahole
+community) would need the config as well.
 
->
-> I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
-> It is not there before and adding this may suddenly break some users.
->
-> If certain combination of gcc/llvm does not work for
-> CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
-> should fix.
-
-Is there a place I should report bugs?
 
 >
 > >
-> > I had some other small nits commented in the single patches.
+> > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
+> > It is not there before and adding this may suddenly break some users.
 > >
-> > As requested in your previous patch-series, feel free to add my:
+> > If certain combination of gcc/llvm does not work for
+> > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
+> > should fix.
+>
+> Is there a place I should report bugs?
+
+bpf@vger.kernel.org (BPF in general) and dwarves@vger.kernel.org
+(pahole, which seems to be emitting these warnings and having problems
+with DWARF5).
+
+
+>
 > >
-> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-
-Yeah, I'll keep it if v6 is just commit message changes.
-
--- 
-Thanks,
-~Nick Desaulniers
+> > >
+> > > I had some other small nits commented in the single patches.
+> > >
+> > > As requested in your previous patch-series, feel free to add my:
+> > >
+> > > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+>
+> Yeah, I'll keep it if v6 is just commit message changes.
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
