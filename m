@@ -2,59 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 401A02F8814
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 23:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F322F881B
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jan 2021 23:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727220AbhAOWAo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jan 2021 17:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
+        id S1726032AbhAOWEG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jan 2021 17:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727180AbhAOWAn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 17:00:43 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A33C0613D3
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 14:00:03 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id y12so5839058pji.1
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jan 2021 14:00:03 -0800 (PST)
+        with ESMTP id S1725918AbhAOWEF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jan 2021 17:04:05 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298BBC061757;
+        Fri, 15 Jan 2021 14:03:25 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id z5so21018110iob.11;
+        Fri, 15 Jan 2021 14:03:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t+cXnlBFq8WTb5dbUuQjMhr2A9oyhYcZeyKpPnSTr6w=;
-        b=QLLEcyFZlJw4ynxsEl/y7diypFyFaKmWF4wjvz1MVPrhe8yqb7TUO+Ovl53eFy26Zv
-         Vyg5Vk3uZvPqK6588DPWboXivEXa3KNLyYY/5n2ObfYjdy4O8kNybJEOXXl4z31Wu3tg
-         WeoiETvHF9c1TpKB8iy6QCpos8IBMCYYU3wG2Vc8MjyO2spULnzUloAeRMeO6+qIeouz
-         d1Ichh/XhTrAxPSBVitupF2zoFqmu3mNARKz4godC+9BNADtNnj9GLukfhzs1afjTJw5
-         DwF4Syp3TUFPUuyh9EkhGKWCv+2155I4WZAM7aFVKXa79UtaLT6u/71833Pwz4pTBnli
-         4pkQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=tH8Dd34wEyfZ8To5q7YwlSddVn5ZC+wDT5td0wwyUuk=;
+        b=dYvn+9zA8P3938yyld3jbcIUaxmBOhcHz64JaegN4ZtOxkFwFJiAK7+rcU1eKEHPdn
+         ORGa5on80grzxAz8UG7eUjKuXOKbUvtdRnfqIYS6EWgYYsjT1HaZAOhXktZzti77b0+4
+         s5ew8kSS/vmdtEMC85XSGSYgc7OWs4Uad5S8BHb+kU6hutLIsJ4Bd7lwCHNq9b8N7vbS
+         X50kDtHThbWqhswHsqh5i1DNgZntvB5DwtcUfUexRDMlG9S1wQMtlfG/7s1pO4B7gGFO
+         Cmt8U01g5UT6HYv3W8DOLCNL5V7j7dK9Fjgbc2ZO0uS+jgs0AgEQCYuUvpmPwBah6FTC
+         xCGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t+cXnlBFq8WTb5dbUuQjMhr2A9oyhYcZeyKpPnSTr6w=;
-        b=ap4SwgwR+3Mr8S1cgvgOUKcV3uLHzgsgiwPuJnqx/dL7c/8YCeweKKqWhmM7f9AEql
-         cXZxbxMLdXqlVamMwxP7Xb1nFm2yL/QgfxR5dnJAfhr8cpvhJmQp3xz/1wZZ4akSbe+W
-         Y2fOhoy0VaPDNSw9QASlybw2wgfieX9hZZZTlbUxQf25RQA5kMG5iYnsD9CVewg+2ne8
-         i6WP4nDbKHGx+pdAOo9/av1++tbZGsLW5aD4dDslc+6PC7Bk/q7ONM73p3UVo26GBV0v
-         Lh9/x0uQx7KxoZ5CdblwipsYp9ZnhFYQhoXIUER1BVxSD0QZXkStkGGbgUfNt2y+7FA9
-         07Pg==
-X-Gm-Message-State: AOAM531HLG1A3jQTmxcXDrIwStTkDSwR7EbOxPbE1vLMZdG3Ne5HkHfM
-        c+P2TwPUAGLXfMKhL9Lr69c49g==
-X-Google-Smtp-Source: ABdhPJzep3S44Y7zZ4tUZ7UjgW93naxrl5+2ShLyVoxK0xq3SG+/UcqzXcTgycoKPrvPPFwBliHnKg==
-X-Received: by 2002:a17:90a:5b:: with SMTP id 27mr12832398pjb.207.1610748002351;
-        Fri, 15 Jan 2021 14:00:02 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:0:a6ae:11ff:fe11:4abb])
-        by smtp.gmail.com with ESMTPSA id 14sm8710459pfi.131.2021.01.15.14.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 14:00:01 -0800 (PST)
-Date:   Fri, 15 Jan 2021 13:59:58 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=tH8Dd34wEyfZ8To5q7YwlSddVn5ZC+wDT5td0wwyUuk=;
+        b=ZwMi68o9DlEPKIFSMF03IbUkB7ZiziqKnkuR4bBffRpk+KRr109hZRKWg1amSxKyUX
+         BRnkIRpogy2M59XsDkjDu8ZKuTxuP3FwC+IBZGs7bN0Aohcz8M1DCMRGxktwzqKvRJCO
+         x+5EoAsobPXfbxAps2BA4ySfMw2TxaFNY4T9tBzh6RRUGPx81rOP2kWQorRl56k9uZAN
+         d89lSlYzDuQQF3Uy8eNRUqn6x8WfXwj/5yqQdmFRAB3CeacULJMbuWkB8h/54OjsOibh
+         rfj23Ycnr7CJaHtmDE8mDuyQVDzEDTNWF7xJhbeZxy/KTucTHPyjCZLhY+ot/dj3EwyM
+         H1Rw==
+X-Gm-Message-State: AOAM5322IN/WpX0yIQAY3dlQSGYWXqGPM0oaIuls2UI7lkisPq91oIfU
+        OQvYO7MFn+cgQbe7Snjffq/BSDr/M+R/WmPSG1c=
+X-Google-Smtp-Source: ABdhPJz44cWsXYPea/ZZKcd88vD/2n0dS0mjhpWGfDguMnuAnasVTEECqFKeVHNGUB/QnrPwcNPIENzJZusFSvQNplI=
+X-Received: by 2002:a02:b78e:: with SMTP id f14mr4458589jam.97.1610748204486;
+ Fri, 15 Jan 2021 14:03:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20210115210616.404156-1-ndesaulniers@google.com>
+ <20210115210616.404156-2-ndesaulniers@google.com> <20210115215958.3cqewpk7hycfr3hm@google.com>
+In-Reply-To: <20210115215958.3cqewpk7hycfr3hm@google.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 15 Jan 2021 23:03:13 +0100
+Message-ID: <CA+icZUXjiNaHgYpBXB_DO76XznfqOG-rpH5i6NzhBx-gGoN=ZA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] Remove $(cc-option,-gdwarf-4) dependency from CONFIG_DEBUG_INFO_DWARF4
+To:     Fangrui Song <maskray@google.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
         linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         Jakub Jelinek <jakub@redhat.com>,
         Caroline Tice <cmtice@google.com>,
@@ -62,85 +66,86 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH v5 1/3] Remove $(cc-option,-gdwarf-4) dependency from
- CONFIG_DEBUG_INFO_DWARF4
-Message-ID: <20210115215958.3cqewpk7hycfr3hm@google.com>
-References: <20210115210616.404156-1-ndesaulniers@google.com>
- <20210115210616.404156-2-ndesaulniers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210115210616.404156-2-ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2021-01-15, Nick Desaulniers wrote:
->From: Masahiro Yamada <masahiroy@kernel.org>
+On Fri, Jan 15, 2021 at 11:00 PM Fangrui Song <maskray@google.com> wrote:
 >
->The -gdwarf-4 flag is supported by GCC 4.5+, and also by Clang.
+> On 2021-01-15, Nick Desaulniers wrote:
+> >From: Masahiro Yamada <masahiroy@kernel.org>
+> >
+> >The -gdwarf-4 flag is supported by GCC 4.5+, and also by Clang.
+> >
+> >You can see it at https://godbolt.org/z/6ed1oW
+> >
+> >  For gcc 4.5.3 pane,    line 37:    .value 0x4
+> >  For clang 10.0.1 pane, line 117:   .short 4
+> >
+> >Given Documentation/process/changes.rst stating GCC 4.9 is the minimal
+> >version, this cc-option is unneeded.
+> >
+> >Note
+> >----
+> >
+> >CONFIG_DEBUG_INFO_DWARF4 controls the DWARF version only for C files.
+> >
+> >As you can see in the top Makefile, -gdwarf-4 is only passed to CFLAGS.
+> >
+> >  ifdef CONFIG_DEBUG_INFO_DWARF4
+> >  DEBUG_CFLAGS    += -gdwarf-4
+> >  endif
+> >
+> >This flag is used when compiling *.c files.
+> >
+> >On the other hand, the assembler is always given -gdwarf-2.
+> >
+> >  KBUILD_AFLAGS   += -Wa,-gdwarf-2
+> >
+> >Hence, the debug info that comes from *.S files is always DWARF v2.
+> >This is simply because GAS supported only -gdwarf-2 for a long time.
+> >
+> >Recently, GAS gained the support for --dwarf-[3|4|5] options. [1]
 >
->You can see it at https://godbolt.org/z/6ed1oW
+> The gas commit description has a typo. The supported options are -gdwarf-[345] or --gdwarf-[345].
+> -gdwarf2 and --gdwarf2 are kept for compatibility.
 >
->  For gcc 4.5.3 pane,    line 37:    .value 0x4
->  For clang 10.0.1 pane, line 117:   .short 4
+> Looks good otherwise.
 >
->Given Documentation/process/changes.rst stating GCC 4.9 is the minimal
->version, this cc-option is unneeded.
->
->Note
->----
->
->CONFIG_DEBUG_INFO_DWARF4 controls the DWARF version only for C files.
->
->As you can see in the top Makefile, -gdwarf-4 is only passed to CFLAGS.
->
->  ifdef CONFIG_DEBUG_INFO_DWARF4
->  DEBUG_CFLAGS    += -gdwarf-4
->  endif
->
->This flag is used when compiling *.c files.
->
->On the other hand, the assembler is always given -gdwarf-2.
->
->  KBUILD_AFLAGS   += -Wa,-gdwarf-2
->
->Hence, the debug info that comes from *.S files is always DWARF v2.
->This is simply because GAS supported only -gdwarf-2 for a long time.
->
->Recently, GAS gained the support for --dwarf-[3|4|5] options. [1]
 
-The gas commit description has a typo. The supported options are -gdwarf-[345] or --gdwarf-[345].
--gdwarf2 and --gdwarf2 are kept for compatibility.
+Good catch Fangrui.
+Yesterday, I wondered - after a cut-n-paste from the patch's changelog
+- why I did not see anything --dwarfX related in my logs.
 
-Looks good otherwise.
+- Sedat -
 
->And, also we have Clang integrated assembler. So, the debug info
->for *.S files might be improved if we want.
->
->In my understanding, the current code is intentional, not a bug.
->
->[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=31bf18645d98b4d3d7357353be840e320649a67d
->
->Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
->Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->---
-> lib/Kconfig.debug | 1 -
-> 1 file changed, 1 deletion(-)
->
->diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->index 78361f0abe3a..dd7d8d35b2a5 100644
->--- a/lib/Kconfig.debug
->+++ b/lib/Kconfig.debug
->@@ -258,7 +258,6 @@ config DEBUG_INFO_SPLIT
->
-> config DEBUG_INFO_DWARF4
-> 	bool "Generate dwarf4 debuginfo"
->-	depends on $(cc-option,-gdwarf-4)
-> 	help
-> 	  Generate dwarf4 debug info. This requires recent versions
-> 	  of gcc and gdb. It makes the debug information larger.
->-- 
->2.30.0.284.gd98b1dd5eaa7-goog
->
+> >And, also we have Clang integrated assembler. So, the debug info
+> >for *.S files might be improved if we want.
+> >
+> >In my understanding, the current code is intentional, not a bug.
+> >
+> >[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=31bf18645d98b4d3d7357353be840e320649a67d
+> >
+> >Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> >Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+> >Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> >---
+> > lib/Kconfig.debug | 1 -
+> > 1 file changed, 1 deletion(-)
+> >
+> >diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> >index 78361f0abe3a..dd7d8d35b2a5 100644
+> >--- a/lib/Kconfig.debug
+> >+++ b/lib/Kconfig.debug
+> >@@ -258,7 +258,6 @@ config DEBUG_INFO_SPLIT
+> >
+> > config DEBUG_INFO_DWARF4
+> >       bool "Generate dwarf4 debuginfo"
+> >-      depends on $(cc-option,-gdwarf-4)
+> >       help
+> >         Generate dwarf4 debug info. This requires recent versions
+> >         of gcc and gdb. It makes the debug information larger.
+> >--
+> >2.30.0.284.gd98b1dd5eaa7-goog
+> >
