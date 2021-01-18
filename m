@@ -2,110 +2,180 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECD52F9510
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Jan 2021 21:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6742F9787
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Jan 2021 03:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730226AbhAQUPK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Jan 2021 15:15:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46198 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728732AbhAQUPI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 17 Jan 2021 15:15:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0262221D7F;
-        Sun, 17 Jan 2021 20:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610914468;
-        bh=/275w1gmJINORnvZPOCvbcQvFYNu59iWeBPKZ1AiDLE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jbo6wEePj/G4UWwJpJc3Yl6I8K14+p9MFY6rNzEg2khiXV2pIH35IA1oyvlPrXMHZ
-         H9KE+O30jdsfGkpXuzp9XVyGBM9WBymy7cURCikQ2VhCObmDHIMnGWnAwFy4r9Ot1i
-         0siB0NSpehbI+6hEznDoN22w0sEW2aGthCHHp1e8gXbp9z8YaCHV2ptG9mavRadq4M
-         yPdHlKK/8xovZS97HsRLHvyS6VH59ZH0nc6/K/b1VUuWdbD3iy0Iz7ksAZkw3Md/BG
-         LCAy4p/egLE8B9dvauwF1OSwJd58W2kr5AaSPsYRY7TlQ0C5ZfyVF8yGtlpWB6emg9
-         UbhigWiEllWaA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A020540522; Sun, 17 Jan 2021 17:15:00 -0300 (-03)
-Date:   Sun, 17 Jan 2021 17:15:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
-Message-ID: <20210117201500.GO457607@kernel.org>
-References: <20210115210616.404156-1-ndesaulniers@google.com>
- <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
- <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com>
- <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
- <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com>
+        id S1730832AbhARCBB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Jan 2021 21:01:01 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:52001 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730784AbhARCBA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 17 Jan 2021 21:01:00 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7429F580691;
+        Sun, 17 Jan 2021 20:59:53 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Sun, 17 Jan 2021 20:59:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=/
+        sgmulDHp9rb7PANJ3YQeT7vYqlzAUl9a9PJU2TOFmU=; b=SBt8i3AAOYoPS+tjZ
+        a+fFzGY9e8jJmmqjZU+Q71NK3b8q/2JOCTc+hu45JQDaFlWojNYOIhrBhHEYfQxp
+        yFVszswjnwlEgYvWu7F7py0Np5jYg0XzqBx6EuEVSM5tSabVfzOFjjfrX3QpiQO7
+        IovmrFRlOApeAiiAiBdYJ/LBlQjUUMfhiYlIBlQzSbTvx3ZVO5oFz17A3+2FpkJh
+        fLpodCI5TZXzF8d05UPKu0FeIgTmKpiIYJu2OGYRpGo3+xzjHMPNXOpSglK5E4a2
+        EL03IiWrzZh97JEaRHCoHEiF3rGD107d5TxVnrKebIZKOr39QkHlTZqJql68jDDD
+        hJhsQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=/sgmulDHp9rb7PANJ3YQeT7vYqlzAUl9a9PJU2TOF
+        mU=; b=Fu9oVD8v9DVMtGCVFAH82kUeTkasi1oQ9IvWAQLpkBMwFGuFII/uKhJCA
+        vCDnAl5WpofkNH3jw5sFZeDoUjxpZDdVTp3r5wX++ZRqJn2POKdUTmBwQHLIiN25
+        fFGRY+eMJ4Hr9CJk42Evx1Jq8nI6mYlnpJHgR5tpbJJIesM2QC/uetLcSHEUkFe4
+        YIL69305CCgiQPvo8qco12LT3hN6sVgQlFLJJC4pWL3o/Rg2uZ11XZ5Y7DDKY2/u
+        Y3dyEJsbiYBggoSFWgZ9INpnCiPUTSp2rAETOnz95GPFVStfis8aNbXKfT/4pFjt
+        uR9JZ8c2lZy5sMRDobR17JHXKBcZQ==
+X-ME-Sender: <xms:l-sEYJCkLZH2UJGzP2vauPOP_nwPhqRBwS-gPvYPrl3EJzxJwWAoPQ>
+    <xme:l-sEYHiN_q4EIFerhwAkJTKdlGgBIseViXndJRDQoFE7GPQCatRtwjbztlHjSWZxY
+    OT6kag8fkpVasACCrM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdejgdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeftnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepteduueduffeghfefgeetfeevtdfftedugfdtveduudetgfefffel
+    vddtgfelleefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepgeehrdeffe
+    drhedtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:l-sEYElkfKcR0HURU7YnX7c3Eioemnj04tRfeRSe9ZPFAochYuzn9Q>
+    <xmx:l-sEYDy1PxiYh387JoY6s3D_ghWw3g85QJuv9mX1M_QsaN9mQGT-rA>
+    <xmx:l-sEYOTWh-c5IJtu0rCvHQGOENBFGPPQvL7uYkxs7gfVaOS7nsgQ4w>
+    <xmx:mesEYFK9Va2bqi9zNc3sMjbUy_AnW_rFTYuRMqUpEfxU1TaY5KOxGzE9yO4>
+Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
+        by mail.messagingengine.com (Postfix) with ESMTPA id BDEFB1080059;
+        Sun, 17 Jan 2021 20:59:44 -0500 (EST)
+Subject: Re: [PATCH RFC 0/4] Fix arm64 crash for accessing unmapped IO port
+ regions (reboot)
+To:     John Garry <john.garry@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, arnd@arndb.de, akpm@linux-foundation.org,
+        xuwei5@hisilicon.com, lorenzo.pieralisi@arm.com,
+        helgaas@kernel.org, song.bao.hua@hisilicon.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-pci@vger.kernel.org, linuxarm@openeuler.org
+References: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <982ed6eb-6975-aea8-1555-a557633966f5@flygoat.com>
+Date:   Mon, 18 Jan 2021 09:59:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
-> 
-> 
-> On 1/15/21 3:34 PM, Nick Desaulniers wrote:
-> > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
-> > > 
-> > > 
-> > > 
-> > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
-> > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
-> > > > CONFIG_DEBUG_INFO_DWARF4.
-> > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
-> > 
-> > Can you privately send me your configs that repro? Maybe I can isolate
-> > it to a set of configs?
-> > 
-> > > 
-> > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
-> > > It is not there before and adding this may suddenly break some users.
-> > > 
-> > > If certain combination of gcc/llvm does not work for
-> > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
-> > > should fix.
-> > 
-> > Is there a place I should report bugs?
-> 
-> You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
-> dwarves@vger.kernel.org and bpf@vger.kernel.org.
+ÔÚ 2021/1/16 ÉÏÎç12:58, John Garry Ð´µÀ:
+> This is a reboot of my original series to address the problem of drivers
+> for legacy ISA devices accessing unmapped IO port regions on arm64 systems
+> and causing the system to crash.
+>
+> There was another recent report of such an issue [0], and some old ones
+> [1] and [2] for reference.
+>
+> The background is that many systems do not include PCI host controllers,
+> or they do and controller probe may have failed. For these cases, no IO
+> ports are mapped. However, loading drivers for legacy ISA devices can
+> crash the system as there is nothing to stop them accessing those IO
+> ports (which have not been io remap'ed).
+>
+> My original solution tried to keep the kernel alive in these situations by
+> rejecting logical PIO access to PCI IO regions until PCI IO port regions
+> have been mapped.
+>
+> This series goes one step further, by just reserving the complete legacy
+> IO port range in 0x0--0xffff for arm64. The motivation for doing this is
+> to make the request_region() calls for those drivers fail, like this:
+>
+> root@ubuntu:/home/john# insmod mk712.ko
+>   [ 3415.575800] mk712: unable to get IO region
+> insmod: ERROR: could not insert module mk712.ko: No such device
+>
+> Otherwise, in theory, those drivers could initiate rogue accesses to
+> mapped IO port regions for other devices and cause corruptions or
+> side-effects. Indeed, those drivers should not be allowed to access
+> IO ports at all in such a system.
+>
+> As a secondary defence, for broken drivers who do not call
+> request_region(), IO port accesses in range 0--0xffff will be ignored,
+> again preserving the system.
+>
+> I am sending as an RFC as I am not sure of any problem with reserving
+> first 0x10000 of IO space like this. There is reserve= commandline
+> argument, which does allow this already.
 
-I'm coming back from vacation, will try to read the messages and see if
-I can fix this.
+Hi John,
 
-Thanks,
+Is it ok with ACPI? I'm not really familiar with ACPI on arm64 but my 
+impression
+is ACPI would use legacy I/O ports to communicate with kbd controller, 
+EC and
+power management facilities.
 
-- Arnaldo
- 
-> > 
-> > > 
-> > > > 
-> > > > I had some other small nits commented in the single patches.
-> > > > 
-> > > > As requested in your previous patch-series, feel free to add my:
-> > > > 
-> > > > Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > 
-> > Yeah, I'll keep it if v6 is just commit message changes.
-> > 
+We'd better have a method to detect if ISA bus is not present on the system
+instead of reserve them unconditionally.
 
--- 
+Thanks.
 
-- Arnaldo
+- Jiaxun
+
+>
+> For reference, here's how /proc/ioports looks on my arm64 system with
+> this change:
+>
+> root@ubuntu:/home/john# more /proc/ioports
+> 00010000-0001ffff : PCI Bus 0002:f8
+>    00010000-00010fff : PCI Bus 0002:f9
+>      00010000-00010007 : 0002:f9:00.0
+>        00010000-00010007 : serial
+>      00010008-0001000f : 0002:f9:00.1
+>        00010008-0001000f : serial
+>      00010010-00010017 : 0002:f9:00.2
+>      00010018-0001001f : 0002:f9:00.2
+> 00020000-0002ffff : PCI Bus 0004:88
+> 00030000-0003ffff : PCI Bus 0005:78
+> 00040000-0004ffff : PCI Bus 0006:c0
+> 00050000-0005ffff : PCI Bus 0007:90
+> 00060000-0006ffff : PCI Bus 000a:10
+> 00070000-0007ffff : PCI Bus 000c:20
+> 00080000-0008ffff : PCI Bus 000d:30
+>
+> [0] https://lore.kernel.org/linux-input/20210112055129.7840-1-song.bao.hua@hisilicon.com/T/#mf86445470160c44ac110e9d200b09245169dc5b6
+> [1] https://lore.kernel.org/linux-pci/56F209A9.4040304@huawei.com
+> [2] https://lore.kernel.org/linux-arm-kernel/e6995b4a-184a-d8d4-f4d4-9ce75d8f47c0@huawei.com/
+>
+> Difference since v4:
+> https://lore.kernel.org/linux-pci/1560262374-67875-1-git-send-email-john.garry@huawei.com/
+> - Reserve legacy ISA region
+>
+> John Garry (4):
+>    arm64: io: Introduce IO_SPACE_BASE
+>    asm-generic/io.h: Add IO_SPACE_BASE
+>    kernel/resource: Make ioport_resource.start configurable
+>    logic_pio: Warn on and discard accesses to addresses below
+>      IO_SPACE_BASE
+>
+>   arch/arm64/include/asm/io.h |  1 +
+>   include/asm-generic/io.h    |  4 ++++
+>   include/linux/logic_pio.h   |  5 +++++
+>   kernel/resource.c           |  2 +-
+>   lib/logic_pio.c             | 20 ++++++++++++++------
+>   5 files changed, 25 insertions(+), 7 deletions(-)
+>
+
