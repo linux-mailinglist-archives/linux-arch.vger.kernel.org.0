@@ -2,180 +2,284 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6742F9787
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Jan 2021 03:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DDD2F999A
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Jan 2021 06:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730832AbhARCBB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Jan 2021 21:01:01 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:52001 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730784AbhARCBA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 17 Jan 2021 21:01:00 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7429F580691;
-        Sun, 17 Jan 2021 20:59:53 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 17 Jan 2021 20:59:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=/
-        sgmulDHp9rb7PANJ3YQeT7vYqlzAUl9a9PJU2TOFmU=; b=SBt8i3AAOYoPS+tjZ
-        a+fFzGY9e8jJmmqjZU+Q71NK3b8q/2JOCTc+hu45JQDaFlWojNYOIhrBhHEYfQxp
-        yFVszswjnwlEgYvWu7F7py0Np5jYg0XzqBx6EuEVSM5tSabVfzOFjjfrX3QpiQO7
-        IovmrFRlOApeAiiAiBdYJ/LBlQjUUMfhiYlIBlQzSbTvx3ZVO5oFz17A3+2FpkJh
-        fLpodCI5TZXzF8d05UPKu0FeIgTmKpiIYJu2OGYRpGo3+xzjHMPNXOpSglK5E4a2
-        EL03IiWrzZh97JEaRHCoHEiF3rGD107d5TxVnrKebIZKOr39QkHlTZqJql68jDDD
-        hJhsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=/sgmulDHp9rb7PANJ3YQeT7vYqlzAUl9a9PJU2TOF
-        mU=; b=Fu9oVD8v9DVMtGCVFAH82kUeTkasi1oQ9IvWAQLpkBMwFGuFII/uKhJCA
-        vCDnAl5WpofkNH3jw5sFZeDoUjxpZDdVTp3r5wX++ZRqJn2POKdUTmBwQHLIiN25
-        fFGRY+eMJ4Hr9CJk42Evx1Jq8nI6mYlnpJHgR5tpbJJIesM2QC/uetLcSHEUkFe4
-        YIL69305CCgiQPvo8qco12LT3hN6sVgQlFLJJC4pWL3o/Rg2uZ11XZ5Y7DDKY2/u
-        Y3dyEJsbiYBggoSFWgZ9INpnCiPUTSp2rAETOnz95GPFVStfis8aNbXKfT/4pFjt
-        uR9JZ8c2lZy5sMRDobR17JHXKBcZQ==
-X-ME-Sender: <xms:l-sEYJCkLZH2UJGzP2vauPOP_nwPhqRBwS-gPvYPrl3EJzxJwWAoPQ>
-    <xme:l-sEYHiN_q4EIFerhwAkJTKdlGgBIseViXndJRDQoFE7GPQCatRtwjbztlHjSWZxY
-    OT6kag8fkpVasACCrM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrtdejgdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeftnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepteduueduffeghfefgeetfeevtdfftedugfdtveduudetgfefffel
-    vddtgfelleefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepgeehrdeffe
-    drhedtrddvheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:l-sEYElkfKcR0HURU7YnX7c3Eioemnj04tRfeRSe9ZPFAochYuzn9Q>
-    <xmx:l-sEYDy1PxiYh387JoY6s3D_ghWw3g85QJuv9mX1M_QsaN9mQGT-rA>
-    <xmx:l-sEYOTWh-c5IJtu0rCvHQGOENBFGPPQvL7uYkxs7gfVaOS7nsgQ4w>
-    <xmx:mesEYFK9Va2bqi9zNc3sMjbUy_AnW_rFTYuRMqUpEfxU1TaY5KOxGzE9yO4>
-Received: from [0.0.0.0] (li1000-254.members.linode.com [45.33.50.254])
-        by mail.messagingengine.com (Postfix) with ESMTPA id BDEFB1080059;
-        Sun, 17 Jan 2021 20:59:44 -0500 (EST)
-Subject: Re: [PATCH RFC 0/4] Fix arm64 crash for accessing unmapped IO port
- regions (reboot)
-To:     John Garry <john.garry@huawei.com>, catalin.marinas@arm.com,
-        will@kernel.org, arnd@arndb.de, akpm@linux-foundation.org,
-        xuwei5@hisilicon.com, lorenzo.pieralisi@arm.com,
-        helgaas@kernel.org, song.bao.hua@hisilicon.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linuxarm@openeuler.org
-References: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <982ed6eb-6975-aea8-1555-a557633966f5@flygoat.com>
-Date:   Mon, 18 Jan 2021 09:59:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1731849AbhARF6I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 18 Jan 2021 00:58:08 -0500
+Received: from so254-31.mailgun.net ([198.61.254.31]:56164 "EHLO
+        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731840AbhARF50 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 18 Jan 2021 00:57:26 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610949426; h=Message-ID: Subject: Cc: To: From: Date:
+ Content-Transfer-Encoding: Content-Type: MIME-Version: Sender;
+ bh=Y5tb+FamCD4fE7la8PAvRJnTl96e73Nm7Kz1X9XqF1Y=; b=aZVWVjsxz9rcmKnnRSTkGAFZCdGDmcZqBIb8QtDJMUSi/ahFD7yN308sEnGmjTDkG4ONiPvh
+ hXPE7YMbpX7IUsP9LIwMA7lA6CYshK67Y8GlJMFcVKkqcfSUk2KDjEMaFsqlNi5uBozOP9/j
+ s4ejZZQVpezGFcG/nGCbsAiUrlo=
+X-Mailgun-Sending-Ip: 198.61.254.31
+X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 6005230c02b2f1cb1a7d9ffa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 18 Jan 2021 05:56:27
+ GMT
+Sender: pnagar=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1154EC43467; Mon, 18 Jan 2021 05:56:27 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pnagar)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0C868C433CA;
+        Mon, 18 Jan 2021 05:56:24 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Date:   Mon, 18 Jan 2021 11:26:24 +0530
+From:   pnagar@codeaurora.org
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     arnd@arndb.de, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        psodagud@codeaurora.org, nmardana@codeaurora.org,
+        dsule@codeaurora.org, Joe Perches <joe@perches.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] selinux: security: Move selinux_state to a
+ separate page
+Message-ID: <7f33036270f781568858bbc17a496b48@codeaurora.org>
+X-Sender: pnagar@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-�� 2021/1/16 ����12:58, John Garry д��:
-> This is a reboot of my original series to address the problem of drivers
-> for legacy ISA devices accessing unmapped IO port regions on arm64 systems
-> and causing the system to crash.
->
-> There was another recent report of such an issue [0], and some old ones
-> [1] and [2] for reference.
->
-> The background is that many systems do not include PCI host controllers,
-> or they do and controller probe may have failed. For these cases, no IO
-> ports are mapped. However, loading drivers for legacy ISA devices can
-> crash the system as there is nothing to stop them accessing those IO
-> ports (which have not been io remap'ed).
->
-> My original solution tried to keep the kernel alive in these situations by
-> rejecting logical PIO access to PCI IO regions until PCI IO port regions
-> have been mapped.
->
-> This series goes one step further, by just reserving the complete legacy
-> IO port range in 0x0--0xffff for arm64. The motivation for doing this is
-> to make the request_region() calls for those drivers fail, like this:
->
-> root@ubuntu:/home/john# insmod mk712.ko
->   [ 3415.575800] mk712: unable to get IO region
-> insmod: ERROR: could not insert module mk712.ko: No such device
->
-> Otherwise, in theory, those drivers could initiate rogue accesses to
-> mapped IO port regions for other devices and cause corruptions or
-> side-effects. Indeed, those drivers should not be allowed to access
-> IO ports at all in such a system.
->
-> As a secondary defence, for broken drivers who do not call
-> request_region(), IO port accesses in range 0--0xffff will be ignored,
-> again preserving the system.
->
-> I am sending as an RFC as I am not sure of any problem with reserving
-> first 0x10000 of IO space like this. There is reserve= commandline
-> argument, which does allow this already.
+On 2021-01-12 22:36, Casey Schaufler wrote:
+> On 1/12/2021 1:36 AM, pnagar@codeaurora.org wrote:
+>> On 2021-01-08 22:41, Casey Schaufler wrote:
+>>> On 1/8/2021 1:49 AM, Preeti Nagar wrote:
+>>>> The changes introduce a new security feature, RunTime Integrity 
+>>>> Check
+>>>> (RTIC), designed to protect Linux Kernel at runtime. The motivation
+>>>> behind these changes is:
+>>>> 1. The system protection offered by SE for Android relies on the
+>>>> assumption of kernel integrity. If the kernel itself is compromised 
+>>>> (by
+>>>> a perhaps as yet unknown future vulnerability), SE for Android 
+>>>> security
+>>>> mechanisms could potentially be disabled and rendered ineffective.
+>>>> 2. Qualcomm Snapdragon devices use Secure Boot, which adds 
+>>>> cryptographic
+>>>> checks to each stage of the boot-up process, to assert the 
+>>>> authenticity
+>>>> of all secure software images that the device executes.  However, 
+>>>> due to
+>>>> various vulnerabilities in SW modules, the integrity of the system 
+>>>> can be
+>>>> compromised at any time after device boot-up, leading to 
+>>>> un-authorized
+>>>> SW executing.
+>>> 
+>>> It would be helpful if you characterized the "various 
+>>> vulnerabilities"
+>>> rather than simply asserting their existence. This would allow the 
+>>> reviewer
+>>> to determine if the proposed patch addresses the issue.
+>>> 
+>> There might not currently be vulnerabilities, but the system is meant 
+>> more
+>> specifically to harden valuable assets against future compromises. The 
+>> key
+>> value add is a third party independent entity keeping a watch on 
+>> crucial
+>> kernel assets.
+> 
+> Could you characterize the potential vulnerabilities, then?
+> Seriously, there's a gazillion ways data integrity can be
+> compromised. Which of those are addressed?
+> 
+1. Memory Corruption vulnerabilities (example buffer overflows) which 
+can be
+exploited to modify the critical kernel assets as a part of a directed 
+attack
+or inadvertently are the major type of vulnerabilities which this 
+mechanism
+directly addresses.
+2. This can be useful in preventing privilege escalation attacks 
+(modifying
+some critical kernel structures) which can be caused by exploits 
+targetting
+various other types of vulnerabilities such as improper input validation 
+and
+integer overflows.
 
-Hi John,
+>> 
+>>>> Using this mechanism, some sensitive variables of the kernel which 
+>>>> are
+>>>> initialized after init or are updated rarely can also be protected 
+>>>> from
+>>>> simple overwrites and attacks trying to modify these.
+>>> 
+>>> How would this interact with or complement __read_mostly?
+>>> 
+>> Currently, the mechanism we are working on developing is
+>> independent of __read_mostly. This is something we can look more into
+>> while working further on the mechanism.
+> 
+> Please either integrate the two or explain how they differ.
+> It appears that you haven't considered how you might exploit
+> or expand the existing mechanism.
+> 
+On looking up more about __read_mostly and also as David Howells shared, 
+I
+understand there two are different.
+__read_mostly is seemed to be primarily designed for cache-related 
+performance
+improvement [1]. In RTIC design, the idea is of protection and 
+monitoring aspect.
+If there are some security-critical kernel assets which are expected to 
+be
+updated sometimes or rarely, then, we can monitor the writes to these as 
+well
+and check for any unauthorized attempts.
+1. https://lkml.org/lkml/2007/12/13/487
 
-Is it ok with ACPI? I'm not really familiar with ACPI on arm64 but my 
-impression
-is ACPI would use legacy I/O ports to communicate with kbd controller, 
-EC and
-power management facilities.
+>> 
+>>>> 
+>>>> Currently, the change moves selinux_state structure to a separate 
+>>>> page. In
+>>>> future we plan to move more security-related kernel assets to this 
+>>>> page to
+>>>> enhance protection.
+>>> 
+>>> What's special about selinux_state? What about the SELinux policy?
+>>> How would I, as maintainer of the Smack security module, know if
+>>> some Smack data should be treated the same way?
+>>> 
+>> We are investigating more of the SELinux related and other kernel 
+>> assets
+>> which can be included in the protection. The basis of selinux_state is
+>> because disabling of SELinux is one of the common attack vectors in
+>> Android. We understand any kernel assets, unauthorized changes to 
+>> which
+>> can give way to security or any other type of attack can be considered 
+>> to
+>> be a potential asset to be added to the protection.
+> 
+> Yeah, I get that. It looks like this could be a useful mechanism
+> beyond SELinux. No point in hoarding it.
+> 
+Thank you! Will try and update the commit header line if possible to 
+convey this
+information.
 
-We'd better have a method to detect if ISA bus is not present on the system
-instead of reserve them unconditionally.
-
-Thanks.
-
-- Jiaxun
-
->
-> For reference, here's how /proc/ioports looks on my arm64 system with
-> this change:
->
-> root@ubuntu:/home/john# more /proc/ioports
-> 00010000-0001ffff : PCI Bus 0002:f8
->    00010000-00010fff : PCI Bus 0002:f9
->      00010000-00010007 : 0002:f9:00.0
->        00010000-00010007 : serial
->      00010008-0001000f : 0002:f9:00.1
->        00010008-0001000f : serial
->      00010010-00010017 : 0002:f9:00.2
->      00010018-0001001f : 0002:f9:00.2
-> 00020000-0002ffff : PCI Bus 0004:88
-> 00030000-0003ffff : PCI Bus 0005:78
-> 00040000-0004ffff : PCI Bus 0006:c0
-> 00050000-0005ffff : PCI Bus 0007:90
-> 00060000-0006ffff : PCI Bus 000a:10
-> 00070000-0007ffff : PCI Bus 000c:20
-> 00080000-0008ffff : PCI Bus 000d:30
->
-> [0] https://lore.kernel.org/linux-input/20210112055129.7840-1-song.bao.hua@hisilicon.com/T/#mf86445470160c44ac110e9d200b09245169dc5b6
-> [1] https://lore.kernel.org/linux-pci/56F209A9.4040304@huawei.com
-> [2] https://lore.kernel.org/linux-arm-kernel/e6995b4a-184a-d8d4-f4d4-9ce75d8f47c0@huawei.com/
->
-> Difference since v4:
-> https://lore.kernel.org/linux-pci/1560262374-67875-1-git-send-email-john.garry@huawei.com/
-> - Reserve legacy ISA region
->
-> John Garry (4):
->    arm64: io: Introduce IO_SPACE_BASE
->    asm-generic/io.h: Add IO_SPACE_BASE
->    kernel/resource: Make ioport_resource.start configurable
->    logic_pio: Warn on and discard accesses to addresses below
->      IO_SPACE_BASE
->
->   arch/arm64/include/asm/io.h |  1 +
->   include/asm-generic/io.h    |  4 ++++
->   include/linux/logic_pio.h   |  5 +++++
->   kernel/resource.c           |  2 +-
->   lib/logic_pio.c             | 20 ++++++++++++++------
->   5 files changed, 25 insertions(+), 7 deletions(-)
->
-
+>> 
+>>>> 
+>>>> We want to seek your suggestions and comments on the idea and the 
+>>>> changes
+>>>> in the patch.
+>>>> 
+>>>> Signed-off-by: Preeti Nagar <pnagar@codeaurora.org>
+>>>> ---
+>>>>  include/asm-generic/vmlinux.lds.h | 10 ++++++++++
+>>>>  include/linux/init.h              |  4 ++++
+>>>>  security/Kconfig                  | 10 ++++++++++
+>>>>  security/selinux/hooks.c          |  4 ++++
+>>>>  4 files changed, 28 insertions(+)
+>>>> 
+>>>> diff --git a/include/asm-generic/vmlinux.lds.h 
+>>>> b/include/asm-generic/vmlinux.lds.h
+>>>> index b2b3d81..158dbc2 100644
+>>>> --- a/include/asm-generic/vmlinux.lds.h
+>>>> +++ b/include/asm-generic/vmlinux.lds.h
+>>>> @@ -770,6 +770,15 @@
+>>>>          *(.scommon)                        \
+>>>>      }
+>>>> 
+>>>> +#ifdef CONFIG_SECURITY_RTIC
+>>>> +#define RTIC_BSS                            \
+>>>> +    . = ALIGN(PAGE_SIZE);                        \
+>>>> +    KEEP(*(.bss.rtic))                        \
+>>>> +    . = ALIGN(PAGE_SIZE);
+>>>> +#else
+>>>> +#define RTIC_BSS
+>>>> +#endif
+>>>> +
+>>>>  /*
+>>>>   * Allow archectures to redefine BSS_FIRST_SECTIONS to add extra
+>>>>   * sections to the front of bss.
+>>>> @@ -782,6 +791,7 @@
+>>>>      . = ALIGN(bss_align);                        \
+>>>>      .bss : AT(ADDR(.bss) - LOAD_OFFSET) {                \
+>>>>          BSS_FIRST_SECTIONS                    \
+>>>> +        RTIC_BSS                        \
+>>>>          . = ALIGN(PAGE_SIZE);                    \
+>>>>          *(.bss..page_aligned)                    \
+>>>>          . = ALIGN(PAGE_SIZE);                    \
+>>>> diff --git a/include/linux/init.h b/include/linux/init.h
+>>>> index 7b53cb3..617adcf 100644
+>>>> --- a/include/linux/init.h
+>>>> +++ b/include/linux/init.h
+>>>> @@ -300,6 +300,10 @@ void __init parse_early_options(char *cmdline);
+>>>>  /* Data marked not to be saved by software suspend */
+>>>>  #define __nosavedata __section(".data..nosave")
+>>>> 
+>>>> +#ifdef CONFIG_SECURITY_RTIC
+>>>> +#define __rticdata  __section(".bss.rtic")
+>>>> +#endif
+>>>> +
+>>>>  #ifdef MODULE
+>>>>  #define __exit_p(x) x
+>>>>  #else
+>>>> diff --git a/security/Kconfig b/security/Kconfig
+>>>> index 7561f6f..66b61b9 100644
+>>>> --- a/security/Kconfig
+>>>> +++ b/security/Kconfig
+>>>> @@ -291,5 +291,15 @@ config LSM
+>>>> 
+>>>>  source "security/Kconfig.hardening"
+>>>> 
+>>>> +config SECURITY_RTIC
+>>>> +        bool "RunTime Integrity Check feature"
+>>> 
+>>> Shouldn't this depend on the architecture(s) supporting the
+>>> feature?
+>>> 
+>>>> +        help
+>>>> +      RTIC(RunTime Integrity Check) feature is to protect Linux 
+>>>> kernel
+>>>> +      at runtime. This relocates some of the security sensitive 
+>>>> kernel
+>>>> +      structures to a separate page aligned special section.
+>>>> +
+>>>> +      This is to enable monitoring and protection of these kernel 
+>>>> assets
+>>>> +      from a higher exception level(EL) against any unauthorized 
+>>>> changes.
+>>> 
+>>> "if you are unsure ..."
+>>> 
+>> We just thought keeping it generic might be a better idea, thus, moved 
+>> the
+>> changes to generic files from arch-specific files and thus, kept 
+>> config also
+>> independent of the arch. Can surely make this config arch dependent if 
+>> that is
+>> a better approach?
+> 
+> It's kind of silly to enable this if the hardware doesn't
+> support it, isn't it?
+> 
+Yes, that makes sense. Will update depends on to the ARM64 arch in the 
+next
+version. Thank you.
