@@ -2,126 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7FF2FC024
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Jan 2021 20:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D092FC0F7
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Jan 2021 21:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729765AbhASThq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 14:37:46 -0500
-Received: from mga06.intel.com ([134.134.136.31]:26308 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729697AbhASThP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 19 Jan 2021 14:37:15 -0500
-IronPort-SDR: 0+4H1OMbq+Z3k3dNpg8TMaQ1vi7Vf67YJi4WVAtnLlhUNA0oBllE1cqyLmxczgLDudxOuUD88t
- xPN7QhvFlcQA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="240525703"
-X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
-   d="scan'208";a="240525703"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 11:36:34 -0800
-IronPort-SDR: fm0aLemlT7MG5HKCe9xsp1Ifq+9Zp6/U4cGc0toMhg5UJPQKq6ePMCdEJXKxy7GxDh5YS8dhzE
- eRpoNdU525fw==
-X-IronPort-AV: E=Sophos;i="5.79,359,1602572400"; 
-   d="scan'208";a="501042644"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.139.183]) ([10.209.139.183])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2021 11:36:32 -0800
-Subject: Re: [PATCH v17 06/26] x86/cet: Add control-protection fault handler
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1732012AbhASU1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 15:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391951AbhASU0X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 15:26:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58BC0613ED;
+        Tue, 19 Jan 2021 12:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3skarH8usgooZsIjjZg9m11Y8vaFLaunY8jfnB6wGPQ=; b=IcFHUlBLm4M8B7XITZrlaPwJZk
+        PxLbfPfkfkOKcDtLlhfkXiUHka5CvTPb7hLgrgmT3Ja+UqcHjN9zY1H6Tmg+WZOu5IRktFRwdo/cS
+        V9j3hg1Ow8RITENXtDtJLmBCwghrrgT8ZPHCKw/4HQvv4xpai+rfbtNKnht6rSRWFZHmep0AFdaLc
+        WpT0BIFZXKaOI1hvNwPxLTcH2Gpj0LlBuWbpsOxA9rDZtRWPCXjXziJFZX6g2OZYB33LP00RMcFkb
+        3de7nf3N03r6bUtfXPBA8XywS5tDj8kVNevPplCpPm+FZKgebPUFH+9MEl3Zc+oBbVK/fmh04LESS
+        xKXNl/dg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l1xW1-00EmeP-RV; Tue, 19 Jan 2021 20:22:22 +0000
+Date:   Tue, 19 Jan 2021 20:22:13 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
- <20201229213053.16395-7-yu-cheng.yu@intel.com>
- <20210119120425.GI27433@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <a6b18663-a53d-60bc-57e8-8b327a169bc4@intel.com>
-Date:   Tue, 19 Jan 2021 11:36:31 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
+Subject: Re: [PATCH v14 05/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <20210119202213.GI2260413@casper.infradead.org>
+References: <20201203062949.5484-1-rppt@kernel.org>
+ <20201203062949.5484-6-rppt@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210119120425.GI27433@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201203062949.5484-6-rppt@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/19/2021 4:04 AM, Borislav Petkov wrote:
-> On Tue, Dec 29, 2020 at 01:30:33PM -0800, Yu-cheng Yu wrote:
-[...]
->> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->> +{
->> +	struct task_struct *tsk;
->> +
->> +	if (!user_mode(regs)) {
->> +		if (notify_die(DIE_TRAP, "control protection fault", regs,
->> +			       error_code, X86_TRAP_CP, SIGSEGV) == NOTIFY_STOP)
->> +			return;
->> +		die("Upexpected/unsupported kernel control protection fault", regs, error_code);
-> 
-> Isn't the machine supposed to panic() here and do no further progress?
+On Thu, Dec 03, 2020 at 08:29:44AM +0200, Mike Rapoport wrote:
+> +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+> +{
+> +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> +	struct inode *inode = file_inode(vmf->vma->vm_file);
+> +	pgoff_t offset = vmf->pgoff;
+> +	vm_fault_t ret = 0;
+> +	unsigned long addr;
+> +	struct page *page;
+> +	int err;
+> +
+> +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+> +		return vmf_error(-EINVAL);
+> +
+> +	page = find_get_page(mapping, offset);
+> +	if (!page) {
+> +
+> +		page = secretmem_alloc_page(vmf->gfp_mask);
+> +		if (!page)
+> +			return vmf_error(-ENOMEM);
 
-Ok, make it panic().
+Just use VM_FAULT_OOM directly.
 
->> +	}
->> +
->> +	cond_local_irq_enable(regs);
->> +
->> +	if (!boot_cpu_has(X86_FEATURE_CET))
->> +		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
->> +
->> +	tsk = current;
->> +	tsk->thread.error_code = error_code;
->> +	tsk->thread.trap_nr = X86_TRAP_CP;
->> +
->> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
->> +	    printk_ratelimit()) {
-> 
-> WARNING: Prefer printk_ratelimited or pr_<level>_ratelimited to printk_ratelimit
-> #136: FILE: arch/x86/kernel/traps.c:645:
-> +	    printk_ratelimit()) {
-> 
-> Still not using checkpatch?
+> +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
+> +		if (unlikely(err))
+> +			goto err_put_page;
 
-Most places in arch/x86 still use printk_ratelimit().  I should have 
-trusted checkpatch.  I will fix it.
+What if the error is EEXIST because somebody else raced with you to add
+a new page to the page cache?
 
->> +		unsigned int max_err;
->> +		unsigned long ssp;
->> +
->> +		max_err = ARRAY_SIZE(control_protection_err) - 1;
->> +		if ((error_code < 0) || (error_code > max_err))
->> +			error_code = 0;
->> +
->> +		rdmsrl(MSR_IA32_PL3_SSP, ssp);
->> +		pr_info("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
-> 
-> If anything, all this stuff should be pr_emerg().
+> +		err = set_direct_map_invalid_noflush(page, 1);
+> +		if (err)
+> +			goto err_del_page_cache;
 
-I will fix it.
+Does this work correctly if somebody else has a reference to the page
+in the meantime?
 
---
-Yu-cheng
+> +		addr = (unsigned long)page_address(page);
+> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> +
+> +		__SetPageUptodate(page);
+
+Once you've added it to the cache, somebody else can come along and try
+to lock it.  They will set PageWaiter.  Now you call __SetPageUptodate
+and wipe out their PageWaiter bit.  So you won't wake them up when you
+unlock.
+
+You can call __SetPageUptodate before adding it to the page cache,
+but once it's visible to another thread, you can't do that.
+
+> +		ret = VM_FAULT_LOCKED;
+> +	}
+> +
+> +	vmf->page = page;
+
+You're supposed to return the page locked, so use find_lock_page() instead
+of find_get_page().
+
+> +	return ret;
+> +
+> +err_del_page_cache:
+> +	delete_from_page_cache(page);
+> +err_put_page:
+> +	put_page(page);
+> +	return vmf_error(err);
+> +}
