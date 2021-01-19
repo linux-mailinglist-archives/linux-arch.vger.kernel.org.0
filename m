@@ -2,140 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D092FC0F7
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Jan 2021 21:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7212FC1E8
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Jan 2021 22:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732012AbhASU1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 15:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
+        id S2388318AbhASStN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 13:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391951AbhASU0X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 15:26:23 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58BC0613ED;
-        Tue, 19 Jan 2021 12:25:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3skarH8usgooZsIjjZg9m11Y8vaFLaunY8jfnB6wGPQ=; b=IcFHUlBLm4M8B7XITZrlaPwJZk
-        PxLbfPfkfkOKcDtLlhfkXiUHka5CvTPb7hLgrgmT3Ja+UqcHjN9zY1H6Tmg+WZOu5IRktFRwdo/cS
-        V9j3hg1Ow8RITENXtDtJLmBCwghrrgT8ZPHCKw/4HQvv4xpai+rfbtNKnht6rSRWFZHmep0AFdaLc
-        WpT0BIFZXKaOI1hvNwPxLTcH2Gpj0LlBuWbpsOxA9rDZtRWPCXjXziJFZX6g2OZYB33LP00RMcFkb
-        3de7nf3N03r6bUtfXPBA8XywS5tDj8kVNevPplCpPm+FZKgebPUFH+9MEl3Zc+oBbVK/fmh04LESS
-        xKXNl/dg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l1xW1-00EmeP-RV; Tue, 19 Jan 2021 20:22:22 +0000
-Date:   Tue, 19 Jan 2021 20:22:13 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        with ESMTP id S2391743AbhASR7j (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 12:59:39 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DE6C061573;
+        Tue, 19 Jan 2021 09:58:59 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id e15so581563wme.0;
+        Tue, 19 Jan 2021 09:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ud39rUOwi9a+eDdinAxLAEakzSkS3TdE+RD/bhNorzQ=;
+        b=VXR7vmWGIj2jjxYIWeOws2Wl7U9SiEVahWjLU/e+0eN82PYKaoRniIiDIRK7msShQ0
+         TBfAjeteW6riRRxAoQrjol1Z6EUC/OjkammyFdgHunOCrZtHA2/S6gDYFPSGopFWjlWD
+         glIrEMHhg+sYx/tZy/MByl3pxJr2XDyca5U6qecQ1fxzE4VbsVInnwY68Cy3NeeBetN/
+         9o4sKysDN9draRqQv1uBTFPEB8XXm+9dllwXobePv0iuIlgVkSFYjY6Ds/ssTN7xfL/U
+         58ts6kr6GPaC4gKFgM5/Li01b/rMBs7Fkqrpp0/rQojH4NAGkbMsjrn9ZPgWSxc4g3yd
+         Rrwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ud39rUOwi9a+eDdinAxLAEakzSkS3TdE+RD/bhNorzQ=;
+        b=BW9amq7I1zUq+i6ZaJzxa6EtekYENN5TFsyYHbsvB0w3VeXHNKvqhBDIVBot9GfGzK
+         6WBwyCVxS6YcBFwsbolgry4SQuy9KUXhguTCFOCc6CeTZu1IoWhKzc4hfSDueNDyMgBH
+         wcaQQ/2mB2W3jdy6FdNnRqDSGGEDE47hgZulMBKz2thOsQg6RHoU5deDILyyW+1Rj5G8
+         22pgJ3Azj7EB28P0qyHoBZ17j3otdiZi8raA4YCuk7/c9cH8TJa4tURNVqAWFNvaksc7
+         9TjzzdKQPXBdY4ljmB9IcBR68duI0xdnXNyqKIeUXIT99W95VwYLE2iUmD1m8HiGP8ai
+         KZcA==
+X-Gm-Message-State: AOAM5336rHo/LXhbzlFLETMeW98zj5bkG1XO5Yxef33EeudffoavmtBn
+        0HYhHFTr36FMhdJtMZNte5hC6VIFA/OTPnva
+X-Google-Smtp-Source: ABdhPJxJX9Y5y3EIyEHi9aNLRaU90KBI2X7LlLhhRsr/PehD6xzCuAqiAzYfgdq2RgPg9LZ6ZsBpSg==
+X-Received: by 2002:a05:600c:3548:: with SMTP id i8mr747653wmq.104.1611079137762;
+        Tue, 19 Jan 2021 09:58:57 -0800 (PST)
+Received: from anparri.mshome.net (host-79-50-177-118.retail.telecomitalia.it. [79.50.177.118])
+        by smtp.gmail.com with ESMTPSA id h125sm5899312wmh.16.2021.01.19.09.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 09:58:57 -0800 (PST)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Saruhan Karademir <skarade@microsoft.com>,
+        Juan Vazquez <juvazq@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
-Subject: Re: [PATCH v14 05/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <20210119202213.GI2260413@casper.infradead.org>
-References: <20201203062949.5484-1-rppt@kernel.org>
- <20201203062949.5484-6-rppt@kernel.org>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, x86@kernel.org,
+        linux-arch@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 0/4] Drivers: hv: vmbus: Restrict devices and configurations on 'isolated' guests
+Date:   Tue, 19 Jan 2021 18:58:37 +0100
+Message-Id: <20210119175841.22248-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201203062949.5484-6-rppt@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 08:29:44AM +0200, Mike Rapoport wrote:
-> +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> +{
-> +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> +	pgoff_t offset = vmf->pgoff;
-> +	vm_fault_t ret = 0;
-> +	unsigned long addr;
-> +	struct page *page;
-> +	int err;
-> +
-> +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> +		return vmf_error(-EINVAL);
-> +
-> +	page = find_get_page(mapping, offset);
-> +	if (!page) {
-> +
-> +		page = secretmem_alloc_page(vmf->gfp_mask);
-> +		if (!page)
-> +			return vmf_error(-ENOMEM);
+Hi all,
 
-Just use VM_FAULT_OOM directly.
+To reduce the footprint of the code that will be exercised, and hence
+the exposure to bugs and vulnerabilities, restrict configurations and
+devices on 'isolated' VMs.
 
-> +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
-> +		if (unlikely(err))
-> +			goto err_put_page;
+Specs of the Isolation Configuration leaf (cf. patch #1) were derived
+from internal discussions with the Hyper-V team and, AFAICT, they are
+not publicly available yet.
 
-What if the error is EEXIST because somebody else raced with you to add
-a new page to the page cache?
+The series has some minor/naming conflict with on-going work aimed at
+enabling SNP VMs on Hyper-V[1]; such conflicts can be addressed later
+at the right time.
 
-> +		err = set_direct_map_invalid_noflush(page, 1);
-> +		if (err)
-> +			goto err_del_page_cache;
+Applies to hyperv-next.
 
-Does this work correctly if somebody else has a reference to the page
-in the meantime?
+Thanks,
+  Andrea
 
-> +		addr = (unsigned long)page_address(page);
-> +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> +
-> +		__SetPageUptodate(page);
+[1] https://github.com/lantianyu/linux # cvm
 
-Once you've added it to the cache, somebody else can come along and try
-to lock it.  They will set PageWaiter.  Now you call __SetPageUptodate
-and wipe out their PageWaiter bit.  So you won't wake them up when you
-unlock.
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: x86@kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: netdev@vger.kernel.org
 
-You can call __SetPageUptodate before adding it to the page cache,
-but once it's visible to another thread, you can't do that.
+Andrea Parri (Microsoft) (4):
+  x86/hyperv: Load/save the Isolation Configuration leaf
+  Drivers: hv: vmbus: Restrict vmbus_devices on isolated guests
+  Drivers: hv: vmbus: Enforce 'VMBus version >= 5.2' on isolated guests
+  hv_netvsc: Restrict configurations on isolated guests
 
-> +		ret = VM_FAULT_LOCKED;
-> +	}
-> +
-> +	vmf->page = page;
+ arch/x86/hyperv/hv_init.c          | 15 +++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h | 15 +++++++++++++
+ arch/x86/kernel/cpu/mshyperv.c     |  9 ++++++++
+ drivers/hv/channel_mgmt.c          | 36 ++++++++++++++++++++++++++++++
+ drivers/hv/connection.c            | 13 +++++++++++
+ drivers/net/hyperv/netvsc.c        | 21 ++++++++++++++---
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ include/asm-generic/mshyperv.h     |  5 +++++
+ include/linux/hyperv.h             |  1 +
+ 9 files changed, 113 insertions(+), 3 deletions(-)
 
-You're supposed to return the page locked, so use find_lock_page() instead
-of find_get_page().
+-- 
+2.25.1
 
-> +	return ret;
-> +
-> +err_del_page_cache:
-> +	delete_from_page_cache(page);
-> +err_put_page:
-> +	put_page(page);
-> +	return vmf_error(err);
-> +}
