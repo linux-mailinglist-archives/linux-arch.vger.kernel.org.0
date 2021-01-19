@@ -2,177 +2,180 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 606D52FBA5D
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Jan 2021 15:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E272FBE08
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Jan 2021 18:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387629AbhASOxb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 09:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S1728642AbhASOxV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 09:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392367AbhASMFQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 07:05:16 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFC9C061574;
-        Tue, 19 Jan 2021 04:04:35 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0bca00c2aa0e949335efb7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:ca00:c2aa:e94:9335:efb7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7A35E1EC05E9;
-        Tue, 19 Jan 2021 13:04:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1611057871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=/Pv8SRw220kJLxdDOBMETHVBBP03v/5o64vtmGCNBWM=;
-        b=aFehaN5VqYjE809Cxac/bMeLnYEeUHwYj7aStR7i3DSRTsYV1n9bR4MV51Fyepq+0KyUNv
-        Hgv6PDg2vj96bWjRz7a/bliHjv/5tAC5qZVCOD0B9zLErTlYWbS5i0lRdCXQZYuo82/mtf
-        TW846Qycog45LbPUY/XS3LDMejbLwp0=
-Date:   Tue, 19 Jan 2021 13:04:25 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v17 06/26] x86/cet: Add control-protection fault handler
-Message-ID: <20210119120425.GI27433@zn.tnic>
-References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
- <20201229213053.16395-7-yu-cheng.yu@intel.com>
+        with ESMTP id S2388780AbhASLUs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 06:20:48 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A625C0613CF;
+        Tue, 19 Jan 2021 03:19:04 -0800 (PST)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1l1p2K-008fvT-5d; Tue, 19 Jan 2021 12:19:00 +0100
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-um@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH] init/module: split CONFIG_CONSTRUCTORS to fix module gcov on UML
+Date:   Tue, 19 Jan 2021 12:18:53 +0100
+Message-Id: <20210119121853.4e22b2506c9a.I1358f584b76f1898373adfed77f4462c8705b736@changeid>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201229213053.16395-7-yu-cheng.yu@intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 01:30:33PM -0800, Yu-cheng Yu wrote:
-> @@ -606,6 +606,65 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
->  	cond_local_irq_disable(regs);
->  }
->  
-> +#ifdef CONFIG_X86_CET_USER
-> +static const char * const control_protection_err[] = {
-> +	"unknown",
-> +	"near-ret",
-> +	"far-ret/iret",
-> +	"endbranch",
-> +	"rstorssp",
-> +	"setssbsy",
-> +};
-> +
-> +/*
-> + * When a control protection exception occurs, send a signal to the responsible
-> + * application.  Currently, control protection is only enabled for the user
-> + * mode.  This exception should not come from the kernel mode.
-> + */
+From: Johannes Berg <johannes.berg@intel.com>
 
-There's no "the user mode" or "the kernel mode" - just "user mode" or
-"kernel mode".
+On ARCH=um, loading a module doesn't result in its constructors
+getting called, which breaks module gcov since the debugfs files
+are never registered. On the other hand, in-kernel constructors
+have already been called by the dynamic linker, so we can't call
+them again.
 
-> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> +{
-> +	struct task_struct *tsk;
-> +
-> +	if (!user_mode(regs)) {
-> +		if (notify_die(DIE_TRAP, "control protection fault", regs,
-> +			       error_code, X86_TRAP_CP, SIGSEGV) == NOTIFY_STOP)
-> +			return;
-> +		die("Upexpected/unsupported kernel control protection fault", regs, error_code);
+Get out of this conundrum by splitting CONFIG_CONSTRUCTORS into
+CONFIG_CONSTRUCTORS_KERNEL and CONFIG_CONSTRUCTORS_MODULE, both
+of which are enabled by default if CONFIG_CONSTRUCTORS is turned
+on, but CONFIG_CONSTRUCTORS_KERNEL depends on !UML so that it's
+not used on ARCH=um.
 
-Isn't the machine supposed to panic() here and do no further progress?
+Also remove the "if !UML" from GCOV selecting CONSTRUCTORS now,
+since we really do want CONSTRUCTORS, just not kernel binary
+ones.
 
-> +	}
-> +
-> +	cond_local_irq_enable(regs);
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_CET))
-> +		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
-> +
-> +	tsk = current;
-> +	tsk->thread.error_code = error_code;
-> +	tsk->thread.trap_nr = X86_TRAP_CP;
-> +
-> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-> +	    printk_ratelimit()) {
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+Tested with a kernel configured with CONFIG_GCOV_KERNEL, without
+the patch nothing ever appears in /sys/kernel/debug/gcov/ (apart
+from the reset file), and with it we get the files and they work.
 
-WARNING: Prefer printk_ratelimited or pr_<level>_ratelimited to printk_ratelimit
-#136: FILE: arch/x86/kernel/traps.c:645:
-+	    printk_ratelimit()) {
+I have no idea which tree this might go through, any suggestions?
+---
+ include/asm-generic/vmlinux.lds.h | 6 +++---
+ include/linux/module.h            | 2 +-
+ init/Kconfig                      | 9 ++++++++-
+ init/main.c                       | 2 +-
+ kernel/gcov/Kconfig               | 2 +-
+ kernel/module.c                   | 4 ++--
+ 6 files changed, 16 insertions(+), 9 deletions(-)
 
-Still not using checkpatch?
-
-> +		unsigned int max_err;
-> +		unsigned long ssp;
-> +
-> +		max_err = ARRAY_SIZE(control_protection_err) - 1;
-> +		if ((error_code < 0) || (error_code > max_err))
-> +			error_code = 0;
-> +
-> +		rdmsrl(MSR_IA32_PL3_SSP, ssp);
-> +		pr_info("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
-
-If anything, all this stuff should be pr_emerg().
-
-> +			tsk->comm, task_pid_nr(tsk),
-> +			regs->ip, regs->sp, ssp, error_code,
-> +			control_protection_err[error_code]);
-> +		print_vma_addr(KERN_CONT " in ", regs->ip);
-> +		pr_cont("\n");
-> +	}
-> +
-> +	force_sig_fault(SIGSEGV, SEGV_CPERR,
-> +			(void __user *)uprobe_get_trap_addr(regs));
-> +	cond_local_irq_disable(regs);
-> +}
-> +#endif
-> +
->  static bool do_int3(struct pt_regs *regs)
->  {
->  	int res;
-> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-> index d2597000407a..1c2ea91284a0 100644
-> --- a/include/uapi/asm-generic/siginfo.h
-> +++ b/include/uapi/asm-generic/siginfo.h
-> @@ -231,7 +231,8 @@ typedef struct siginfo {
->  #define SEGV_ADIPERR	7	/* Precise MCD exception */
->  #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
->  #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
-> -#define NSIGSEGV	9
-> +#define SEGV_CPERR	10	/* Control protection fault */
-> +#define NSIGSEGV	10
-
-This looks like it needs documentation in this manpage:
-
-https://www.man7.org/linux/man-pages/man2/sigaction.2.html
-
-+ Michael.
-
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index b2b3d81b1535..87b300471c54 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -698,7 +698,7 @@
+ 		INIT_TASK_DATA(align)					\
+ 	}
+ 
+-#ifdef CONFIG_CONSTRUCTORS
++#ifdef CONFIG_CONSTRUCTORS_KERNEL
+ #define KERNEL_CTORS()	. = ALIGN(8);			   \
+ 			__ctors_start = .;		   \
+ 			KEEP(*(SORT(.ctors.*)))		   \
+@@ -990,11 +990,11 @@
+ /*
+  * Clang's -fsanitize=kernel-address and -fsanitize=thread produce
+  * unwanted sections (.eh_frame and .init_array.*), but
+- * CONFIG_CONSTRUCTORS wants to keep any .init_array.* sections.
++ * CONFIG_CONSTRUCTORS_KERNEL wants to keep any .init_array.* sections.
+  * https://bugs.llvm.org/show_bug.cgi?id=46478
+  */
+ #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KCSAN)
+-# ifdef CONFIG_CONSTRUCTORS
++# ifdef CONFIG_CONSTRUCTORS_KERNEL
+ #  define SANITIZER_DISCARDS						\
+ 	*(.eh_frame)
+ # else
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 7a0bcb5b1ffc..027cfdbd84bd 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -528,7 +528,7 @@ struct module {
+ 	atomic_t refcnt;
+ #endif
+ 
+-#ifdef CONFIG_CONSTRUCTORS
++#ifdef CONFIG_CONSTRUCTORS_MODULE
+ 	/* Constructor functions. */
+ 	ctor_fn_t *ctors;
+ 	unsigned int num_ctors;
+diff --git a/init/Kconfig b/init/Kconfig
+index b77c60f8b963..e409de8d6c17 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -76,7 +76,14 @@ config CC_HAS_ASM_INLINE
+ 
+ config CONSTRUCTORS
+ 	bool
+-	depends on !UML
++
++config CONSTRUCTORS_KERNEL
++	def_bool y
++	depends on CONSTRUCTORS && !UML
++
++config CONSTRUCTORS_MODULE
++	def_bool y
++	depends on CONSTRUCTORS
+ 
+ config IRQ_WORK
+ 	bool
+diff --git a/init/main.c b/init/main.c
+index c68d784376ca..51eb4802511c 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1066,7 +1066,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ /* Call all constructor functions linked into the kernel. */
+ static void __init do_ctors(void)
+ {
+-#ifdef CONFIG_CONSTRUCTORS
++#ifdef CONFIG_CONSTRUCTORS_KERNEL
+ 	ctor_fn_t *fn = (ctor_fn_t *) __ctors_start;
+ 
+ 	for (; fn < (ctor_fn_t *) __ctors_end; fn++)
+diff --git a/kernel/gcov/Kconfig b/kernel/gcov/Kconfig
+index 3110c77230c7..f62de2dea8a3 100644
+--- a/kernel/gcov/Kconfig
++++ b/kernel/gcov/Kconfig
+@@ -4,7 +4,7 @@ menu "GCOV-based kernel profiling"
+ config GCOV_KERNEL
+ 	bool "Enable gcov-based kernel profiling"
+ 	depends on DEBUG_FS
+-	select CONSTRUCTORS if !UML
++	select CONSTRUCTORS
+ 	default n
+ 	help
+ 	This option enables gcov-based code profiling (e.g. for code coverage
+diff --git a/kernel/module.c b/kernel/module.c
+index 4bf30e4b3eaa..c161a360d929 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3257,7 +3257,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 					    &mod->num_unused_gpl_syms);
+ 	mod->unused_gpl_crcs = section_addr(info, "__kcrctab_unused_gpl");
+ #endif
+-#ifdef CONFIG_CONSTRUCTORS
++#ifdef CONFIG_CONSTRUCTORS_MODULE
+ 	mod->ctors = section_objs(info, ".ctors",
+ 				  sizeof(*mod->ctors), &mod->num_ctors);
+ 	if (!mod->ctors)
+@@ -3612,7 +3612,7 @@ static bool finished_loading(const char *name)
+ /* Call module constructors. */
+ static void do_mod_ctors(struct module *mod)
+ {
+-#ifdef CONFIG_CONSTRUCTORS
++#ifdef CONFIG_CONSTRUCTORS_MODULE
+ 	unsigned long i;
+ 
+ 	for (i = 0; i < mod->num_ctors; i++)
 -- 
-Regards/Gruss,
-    Boris.
+2.26.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
