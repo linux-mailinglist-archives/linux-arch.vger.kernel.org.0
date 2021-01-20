@@ -2,27 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 629362FC7D1
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 03:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E522FC7E7
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 03:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbhATB2Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 20:28:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47354 "EHLO mail.kernel.org"
+        id S1731930AbhATC3a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 21:29:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729973AbhATB2O (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 19 Jan 2021 20:28:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DEF1123339;
-        Wed, 20 Jan 2021 01:26:31 +0000 (UTC)
+        id S1730671AbhATB3A (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 19 Jan 2021 20:29:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF302233FC;
+        Wed, 20 Jan 2021 01:27:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611105992;
-        bh=gGUduK6MdbqDUC7gU/Os07HogcN1GBUxcwWnvsA0Gz8=;
+        s=k20201202; t=1611106042;
+        bh=8bj+lnRpNczUZo35PzLngMNOFbjrf+wRcmr3i5pK/UU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=re3HOL3kisEQN3mHesF5PEzfplBhA+/pa4zcM2TLmkc3VOwSLUg7A7jaTqHHAnhnO
-         TeBust6mBptUheQDihZ/43dwexgie518GReIBjBkeQyS5UE5adlbUO/jxRZLH+MBKk
-         rFtN9/8jj+LwK6TRkgsHWrJ1NVRqmnkCmXmmLtghVhx7waxtbW9yeiPT7xO1E4Fzba
-         UEkNmv4LbggDYeKo7T6NNjjcB0uSU+QKyJwcmzHck7loU2oYY6UWiK43k3+mGCBiMw
-         CC25eHUl2fDp0C7iRC3MV9psOtW9fUMzuhYOZ8x5yjv+zP/vK9/64whzo3q2KtWRFs
-         Dhc4bFqGZMa8Q==
+        b=U3aVfbhOrH+ycyS65ij8DmuLHZbrBO2CWyKDZMGZ6zqqbdve4mTaHTp/VlCGoD7rd
+         L7WZ44/sAua9eNi4Ik2I71j8PWHbklOO+hZiwZoNEQCXqeUlZUSvf6ZXHdcUQETfw7
+         jrndKz3t+NQNdogmP1kd7B2PvLvceHnTS+tEuTjRnwvEUvfSQS4vR8TeFIWJqDszDb
+         gPvBWHlRlMwZhYFEcuSDR1OGlGfEQ2/8flelr0nCbB5BuqvpNc01H8L9CLiweC3Pc2
+         zIYLpxgfyDk0LJndc/Kys0yXqJkPlZYKktY84gEXKFENBO61F4dTzUr0aK9mfUU/nK
+         MjNq5iYW0r1LA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
@@ -30,12 +30,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.10 23/45] arm64: make atomic helpers __always_inline
-Date:   Tue, 19 Jan 2021 20:25:40 -0500
-Message-Id: <20210120012602.769683-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 13/26] arm64: make atomic helpers __always_inline
+Date:   Tue, 19 Jan 2021 20:26:50 -0500
+Message-Id: <20210120012704.770095-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210120012602.769683-1-sashal@kernel.org>
-References: <20210120012602.769683-1-sashal@kernel.org>
+In-Reply-To: <20210120012704.770095-1-sashal@kernel.org>
+References: <20210120012704.770095-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -72,7 +72,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/arch/arm64/include/asm/atomic.h b/arch/arm64/include/asm/atomic.h
-index 015ddffaf6caa..b56a4b2bc2486 100644
+index 9543b5e0534d2..6e0f48ddfc656 100644
 --- a/arch/arm64/include/asm/atomic.h
 +++ b/arch/arm64/include/asm/atomic.h
 @@ -17,7 +17,7 @@
