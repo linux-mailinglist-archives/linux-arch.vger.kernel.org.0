@@ -2,150 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD002FD193
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 14:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0412FD3CF
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 16:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388569AbhATM6K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Jan 2021 07:58:10 -0500
-Received: from mail-lf1-f52.google.com ([209.85.167.52]:40850 "EHLO
-        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389272AbhATMLd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Jan 2021 07:11:33 -0500
-Received: by mail-lf1-f52.google.com with SMTP id v24so27167815lfr.7;
-        Wed, 20 Jan 2021 04:11:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ib7tyiX0BGEQmayJX1r0is3zXQopkTNEFvw3DWHlEoQ=;
-        b=nJSYUGsgf4ozNAae2LfFix7XcYwxMQUrVzmwmxs5gGEN3ELxiULpYGEn/cFi2LSOIo
-         28r+Z3MUO9cOmU9BqUBRBPGl6PX0vFZAessAPnFKJzSDgNudHO3hl1aEhzJOvW2wXxl3
-         QH4mHB18TW2d0TaHI3ektYyibC9ifLZ+Bw1mNqb67x0E4alMsg5e1PdEMVSWgdscUQf/
-         9zVDwTRFl2VuVFyvJUNubV7wYDZqd6dXdM23adbcrpMBK+iVlS8p5CWN8J3/m0LxsaOI
-         ELAWoZLwNeMezdK3Y7aHD0ecQy7GcqZp4vmajKjRRtANWRyqVGgStnG7Y9nnk4MccLNz
-         XA2A==
-X-Gm-Message-State: AOAM5336k4wYyxQB5pRLk9CVqa3jrgaXfy5Yfds/UWL8CdkZPKLQY98U
-        VwhStj2+YJpfT+NE11xIuuTt834UzAk=
-X-Google-Smtp-Source: ABdhPJxVpeat0aAJP0Q8txo8+u2I65FI//NnWPEbtMkWW9DAqQIROios7mF2Bd432nsJphA5PadvkQ==
-X-Received: by 2002:a5d:43cc:: with SMTP id v12mr8736721wrr.319.1611144077348;
-        Wed, 20 Jan 2021 04:01:17 -0800 (PST)
-Received: from liuwe-devbox-debian-v2.j3c5onc20sse1dnehy4noqpfcg.zx.internal.cloudapp.net ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id x17sm3747671wro.40.2021.01.20.04.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 04:01:16 -0800 (PST)
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
-Cc:     virtualization@lists.linux-foundation.org,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        pasha.tatashin@soleen.com, Wei Liu <wei.liu@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
+        id S2390367AbhATPLi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Jan 2021 10:11:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48730 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390990AbhATPGO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 20 Jan 2021 10:06:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A01A23356;
+        Wed, 20 Jan 2021 15:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611155125;
+        bh=9874V4EQF8pGhQeRtiLlHuHTZWGypK1q+CZx02TXhZM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVer5+wzd/VviGPx62NgeNadLX736EMkLOQOVHuy+k8sx0BcR+ivCEkKsnZIoxtnT
+         GpWkXKSHUVrX3tMi+iQiZNVYUchhp0zB4TrjPy0CuHAyWgurs4kWeeuPwxfawgBGve
+         xWg9JGEgJG54bZgaB141RZ4cuaX9zxlmp5uYxxVFC9vITcsuqfvwAakLkytsiWOGfL
+         pNtcU5EE62T/qNQ15LxVmcJccjD7XRVg6hOvj3C8536te+4LBKab+YM8J44PRYhLZX
+         NgPhXfCDCBlcUFMljfwDktrV1a/D2LNFJaqimj3Xi9rVUzUTR1HHM4iQVtrs0WE0Q2
+         /+v3XgxNylKfQ==
+Date:   Wed, 20 Jan 2021 17:05:10 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH v5 14/16] asm-generic/hyperv: import data structures for mapping device interrupts
-Date:   Wed, 20 Jan 2021 12:00:56 +0000
-Message-Id: <20210120120058.29138-15-wei.liu@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210120120058.29138-1-wei.liu@kernel.org>
-References: <20210120120058.29138-1-wei.liu@kernel.org>
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
+Subject: Re: [PATCH v14 05/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <20210120150510.GO1106298@kernel.org>
+References: <20201203062949.5484-1-rppt@kernel.org>
+ <20201203062949.5484-6-rppt@kernel.org>
+ <20210119202213.GI2260413@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210119202213.GI2260413@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-Co-Developed-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
----
- arch/x86/include/asm/hyperv-tlfs.h | 13 +++++++++++
- include/asm-generic/hyperv-tlfs.h  | 36 ++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
+On Tue, Jan 19, 2021 at 08:22:13PM +0000, Matthew Wilcox wrote:
+> On Thu, Dec 03, 2020 at 08:29:44AM +0200, Mike Rapoport wrote:
+> > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+> > +{
+> > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
+> > +	struct inode *inode = file_inode(vmf->vma->vm_file);
+> > +	pgoff_t offset = vmf->pgoff;
+> > +	vm_fault_t ret = 0;
+> > +	unsigned long addr;
+> > +	struct page *page;
+> > +	int err;
+> > +
+> > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+> > +		return vmf_error(-EINVAL);
+> > +
+> > +	page = find_get_page(mapping, offset);
+> > +	if (!page) {
+> > +
+> > +		page = secretmem_alloc_page(vmf->gfp_mask);
+> > +		if (!page)
+> > +			return vmf_error(-ENOMEM);
+> 
+> Just use VM_FAULT_OOM directly.
+ 
+Ok.
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 204010350604..ab7d6cde548d 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -533,6 +533,19 @@ struct hv_partition_assist_pg {
- 	u32 tlb_lock_count;
- };
+> > +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
+> > +		if (unlikely(err))
+> > +			goto err_put_page;
+> 
+> What if the error is EEXIST because somebody else raced with you to add
+> a new page to the page cache?
+
+Right, for -EEXIST I need a retry here, thanks.
+
+> > +		err = set_direct_map_invalid_noflush(page, 1);
+> > +		if (err)
+> > +			goto err_del_page_cache;
+> 
+> Does this work correctly if somebody else has a reference to the page
+> in the meantime?
+
+Yes, it does. If somebody else won the race that page was dropped from the
+direct map and this call would be essentially a nop. And anyway, the very
+next patch changes the way pages are removed from the direct map ;-)
+
+> > +		addr = (unsigned long)page_address(page);
+> > +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> > +
+> > +		__SetPageUptodate(page);
+> 
+> Once you've added it to the cache, somebody else can come along and try
+> to lock it.  They will set PageWaiter.  Now you call __SetPageUptodate
+> and wipe out their PageWaiter bit.  So you won't wake them up when you
+> unlock.
+> 
+> You can call __SetPageUptodate before adding it to the page cache,
+> but once it's visible to another thread, you can't do that.
+
+Will fix.
+
+> > +		ret = VM_FAULT_LOCKED;
+> > +	}
+> > +
+> > +	vmf->page = page;
+> 
+> You're supposed to return the page locked, so use find_lock_page() instead
+> of find_get_page().
+
+Ok/
  
-+enum hv_interrupt_type {
-+	HV_X64_INTERRUPT_TYPE_FIXED             = 0x0000,
-+	HV_X64_INTERRUPT_TYPE_LOWESTPRIORITY    = 0x0001,
-+	HV_X64_INTERRUPT_TYPE_SMI               = 0x0002,
-+	HV_X64_INTERRUPT_TYPE_REMOTEREAD        = 0x0003,
-+	HV_X64_INTERRUPT_TYPE_NMI               = 0x0004,
-+	HV_X64_INTERRUPT_TYPE_INIT              = 0x0005,
-+	HV_X64_INTERRUPT_TYPE_SIPI              = 0x0006,
-+	HV_X64_INTERRUPT_TYPE_EXTINT            = 0x0007,
-+	HV_X64_INTERRUPT_TYPE_LOCALINT0         = 0x0008,
-+	HV_X64_INTERRUPT_TYPE_LOCALINT1         = 0x0009,
-+	HV_X64_INTERRUPT_TYPE_MAXIMUM           = 0x000A,
-+};
- 
- #include <asm-generic/hyperv-tlfs.h>
- 
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index 42ff1326c6bd..07efe0131fe3 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -152,6 +152,8 @@ struct ms_hyperv_tsc_page {
- #define HVCALL_RETRIEVE_DEBUG_DATA		0x006a
- #define HVCALL_RESET_DEBUG_SESSION		0x006b
- #define HVCALL_ADD_LOGICAL_PROCESSOR		0x0076
-+#define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
-+#define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
- #define HVCALL_RETARGET_INTERRUPT		0x007e
- #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
- #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
-@@ -702,4 +704,38 @@ union hv_device_id {
- 	} acpi;
- } __packed;
- 
-+enum hv_interrupt_trigger_mode {
-+	HV_INTERRUPT_TRIGGER_MODE_EDGE = 0,
-+	HV_INTERRUPT_TRIGGER_MODE_LEVEL = 1,
-+};
-+
-+struct hv_device_interrupt_descriptor {
-+	u32 interrupt_type;
-+	u32 trigger_mode;
-+	u32 vector_count;
-+	u32 reserved;
-+	struct hv_device_interrupt_target target;
-+} __packed;
-+
-+struct hv_input_map_device_interrupt {
-+	u64 partition_id;
-+	u64 device_id;
-+	u64 flags;
-+	struct hv_interrupt_entry logical_interrupt_entry;
-+	struct hv_device_interrupt_descriptor interrupt_descriptor;
-+} __packed;
-+
-+struct hv_output_map_device_interrupt {
-+	struct hv_interrupt_entry interrupt_entry;
-+} __packed;
-+
-+struct hv_input_unmap_device_interrupt {
-+	u64 partition_id;
-+	u64 device_id;
-+	struct hv_interrupt_entry interrupt_entry;
-+} __packed;
-+
-+#define HV_SOURCE_SHADOW_NONE               0x0
-+#define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
-+
- #endif
+> > +	return ret;
+> > +
+> > +err_del_page_cache:
+> > +	delete_from_page_cache(page);
+> > +err_put_page:
+> > +	put_page(page);
+> > +	return vmf_error(err);
+> > +}
+
 -- 
-2.20.1
-
+Sincerely yours,
+Mike.
