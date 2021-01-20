@@ -2,155 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0412FD3CF
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 16:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB612FD4D0
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 17:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390367AbhATPLi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Jan 2021 10:11:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48730 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390990AbhATPGO (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 20 Jan 2021 10:06:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A01A23356;
-        Wed, 20 Jan 2021 15:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611155125;
-        bh=9874V4EQF8pGhQeRtiLlHuHTZWGypK1q+CZx02TXhZM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uVer5+wzd/VviGPx62NgeNadLX736EMkLOQOVHuy+k8sx0BcR+ivCEkKsnZIoxtnT
-         GpWkXKSHUVrX3tMi+iQiZNVYUchhp0zB4TrjPy0CuHAyWgurs4kWeeuPwxfawgBGve
-         xWg9JGEgJG54bZgaB141RZ4cuaX9zxlmp5uYxxVFC9vITcsuqfvwAakLkytsiWOGfL
-         pNtcU5EE62T/qNQ15LxVmcJccjD7XRVg6hOvj3C8536te+4LBKab+YM8J44PRYhLZX
-         NgPhXfCDCBlcUFMljfwDktrV1a/D2LNFJaqimj3Xi9rVUzUTR1HHM4iQVtrs0WE0Q2
-         /+v3XgxNylKfQ==
-Date:   Wed, 20 Jan 2021 17:05:10 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
-Subject: Re: [PATCH v14 05/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <20210120150510.GO1106298@kernel.org>
-References: <20201203062949.5484-1-rppt@kernel.org>
- <20201203062949.5484-6-rppt@kernel.org>
- <20210119202213.GI2260413@casper.infradead.org>
+        id S2390903AbhATQC0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Jan 2021 11:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388512AbhATP6x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Jan 2021 10:58:53 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301C3C0613C1
+        for <linux-arch@vger.kernel.org>; Wed, 20 Jan 2021 07:58:10 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id d22so15342836edy.1
+        for <linux-arch@vger.kernel.org>; Wed, 20 Jan 2021 07:58:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jCuMF59B75JqVZRhUet2Yi3cLtXy0EDEiwxjM9Hz1MA=;
+        b=VKJaXqGF5WS+x6qqQVL8towVM+Fs6mOF52cERPGOF256NSc0stzZeiyd+yEIlqipJM
+         4aSZwbXPPypgcZ5VnQTX3nknuSIBOevMjlr4FKBbp0+7jtzLVfo+4k5ndliZNMM43lJH
+         QljeH0cWV55LcLU8pVK+OZdU5O7WPEnSPsLqBcm1YunALWs3RoeztvB0He7lpF6xXGl7
+         imnY6os11BG4kI4Dhq4UVrui3t8Qg05RhQLsJd1ZZwBsbI5QN4NjytDNbHUFHOYznihS
+         3hetaM+CVwTavWBJRdAZLvajJ56jUxx7vxZzNB4ecNRMRzt8w8PRE9wH6IrxTmvyAZSb
+         oKhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jCuMF59B75JqVZRhUet2Yi3cLtXy0EDEiwxjM9Hz1MA=;
+        b=PZ95ntc4JS/usEScoHyfsykOPQXMnElG9goyakaRntjqQyybDXRA+XAPrqU1vtOxrL
+         r84xBYXCqSYDmEDE7gRZAH3rnBLTzDLMQmip2Rmv+NqJD1ZGokuCjjHftoVkvqw5v9yJ
+         M8vsxO+mNmo+lZm5y/Lt6qYgOK7w4yCjuONUa0a4cQATazBOH7+24X1E7fd2M4lSkT8C
+         rbeXqoLp369jjWMoGQaR9ltq7Mr/Chixo7F2hoU1v5MXVPaTb8SIp4ozdUt+eil69chJ
+         zRv1MCai6QJJAq6TJLugRUAi5xd3KvUnfAgclKNOB9oHA58oE5uG4e8t49DIPcGD9Prj
+         +5XQ==
+X-Gm-Message-State: AOAM530Eehdl8bWAm9UE/FFUvWRurCB7CcvIarK5ig4TwiYFdxcM0Y1a
+        g8LegARqsO8W4xeyKNYupcRqmfqmqBCNNBTeWknYjw==
+X-Google-Smtp-Source: ABdhPJwX/Q4xQp3XH8ogo8mdjPkIAyaTubhtdUMly2dIrPifA7A3MMAZC5W5GCCC4gFAzCV5TtScoAlTWEg/zN3wit4=
+X-Received: by 2002:a05:6402:5246:: with SMTP id t6mr7843959edd.62.1611158288805;
+ Wed, 20 Jan 2021 07:58:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210119202213.GI2260413@casper.infradead.org>
+References: <20210120120058.29138-1-wei.liu@kernel.org> <20210120120058.29138-2-wei.liu@kernel.org>
+In-Reply-To: <20210120120058.29138-2-wei.liu@kernel.org>
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+Date:   Wed, 20 Jan 2021 10:57:33 -0500
+Message-ID: <CA+CK2bB0pO61=BX89CNycNKEzjHygzNFxCbn6zDD=5by44qijQ@mail.gmail.com>
+Subject: Re: [PATCH v5 01/16] asm-generic/hyperv: change HV_CPU_POWER_MANAGEMENT
+ to HV_CPU_MANAGEMENT
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 08:22:13PM +0000, Matthew Wilcox wrote:
-> On Thu, Dec 03, 2020 at 08:29:44AM +0200, Mike Rapoport wrote:
-> > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> > +{
-> > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> > +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> > +	pgoff_t offset = vmf->pgoff;
-> > +	vm_fault_t ret = 0;
-> > +	unsigned long addr;
-> > +	struct page *page;
-> > +	int err;
-> > +
-> > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> > +		return vmf_error(-EINVAL);
-> > +
-> > +	page = find_get_page(mapping, offset);
-> > +	if (!page) {
-> > +
-> > +		page = secretmem_alloc_page(vmf->gfp_mask);
-> > +		if (!page)
-> > +			return vmf_error(-ENOMEM);
-> 
-> Just use VM_FAULT_OOM directly.
- 
-Ok.
+On Wed, Jan 20, 2021 at 7:01 AM Wei Liu <wei.liu@kernel.org> wrote:
+>
+> This makes the name match Hyper-V TLFS.
+>
+> Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  include/asm-generic/hyperv-tlfs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index e73a11850055..e6903589a82a 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -88,7 +88,7 @@
+>  #define HV_CONNECT_PORT                                BIT(7)
+>  #define HV_ACCESS_STATS                                BIT(8)
+>  #define HV_DEBUGGING                           BIT(11)
+> -#define HV_CPU_POWER_MANAGEMENT                        BIT(12)
+> +#define HV_CPU_MANAGEMENT                      BIT(12)
 
-> > +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
-> > +		if (unlikely(err))
-> > +			goto err_put_page;
-> 
-> What if the error is EEXIST because somebody else raced with you to add
-> a new page to the page cache?
-
-Right, for -EEXIST I need a retry here, thanks.
-
-> > +		err = set_direct_map_invalid_noflush(page, 1);
-> > +		if (err)
-> > +			goto err_del_page_cache;
-> 
-> Does this work correctly if somebody else has a reference to the page
-> in the meantime?
-
-Yes, it does. If somebody else won the race that page was dropped from the
-direct map and this call would be essentially a nop. And anyway, the very
-next patch changes the way pages are removed from the direct map ;-)
-
-> > +		addr = (unsigned long)page_address(page);
-> > +		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-> > +
-> > +		__SetPageUptodate(page);
-> 
-> Once you've added it to the cache, somebody else can come along and try
-> to lock it.  They will set PageWaiter.  Now you call __SetPageUptodate
-> and wipe out their PageWaiter bit.  So you won't wake them up when you
-> unlock.
-> 
-> You can call __SetPageUptodate before adding it to the page cache,
-> but once it's visible to another thread, you can't do that.
-
-Will fix.
-
-> > +		ret = VM_FAULT_LOCKED;
-> > +	}
-> > +
-> > +	vmf->page = page;
-> 
-> You're supposed to return the page locked, so use find_lock_page() instead
-> of find_get_page().
-
-Ok/
- 
-> > +	return ret;
-> > +
-> > +err_del_page_cache:
-> > +	delete_from_page_cache(page);
-> > +err_put_page:
-> > +	put_page(page);
-> > +	return vmf_error(err);
-> > +}
-
--- 
-Sincerely yours,
-Mike.
+Reviewed-by: Pavel Tatashin <pasha.tatashin@soleen.com>
