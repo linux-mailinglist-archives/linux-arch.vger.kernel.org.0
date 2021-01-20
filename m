@@ -2,135 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4622FD4E9
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 17:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7630D2FD4FB
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 17:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391235AbhATQFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Jan 2021 11:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391205AbhATQFL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Jan 2021 11:05:11 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12124C061793;
-        Wed, 20 Jan 2021 08:04:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=saaFHJth3qz3xI0Dro7UHa0PgnHwAKKwZMU5+56dtJE=; b=ZACVPHDnW8nMnHToaApes5g3Rw
-        YvejBi+ndU51oeSrxqqcYYLAwliMBGBXghPXPYc7XG0lsgIcf+/IvR9eJvgtCr1Y5bxBLOsNZcLBQ
-        vxSb7WDqPTplOeChJJO0bdqf2couRLArJqCqj+JJHVlMqYUasnii5Ahu8a9pr17qMCP5jWMHxkGSS
-        q6aEdJuVPlms8bTXRO0qZ2BUkaKlzq/5TxYAwU0Ad6+fh/jU8PXLs9HsRV6qDt9A/EPq+R0dOuJcM
-        Lpx6Y1tpfz20HDKCh6YfbGEj7XSx+aNMkVsZzAS1FtW9RnCqIaJmYKn7ticVopJumXn3gPadcnzNH
-        uNwqFTFw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l2Fvu-00Fsqd-9M; Wed, 20 Jan 2021 16:02:37 +0000
-Date:   Wed, 20 Jan 2021 16:02:10 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>
-Subject: Re: [PATCH v14 05/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <20210120160210.GK2260413@casper.infradead.org>
-References: <20201203062949.5484-1-rppt@kernel.org>
- <20201203062949.5484-6-rppt@kernel.org>
- <20210119202213.GI2260413@casper.infradead.org>
- <20210120150510.GO1106298@kernel.org>
+        id S1729996AbhATQI1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Jan 2021 11:08:27 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27954 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391243AbhATQIJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 20 Jan 2021 11:08:09 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10KG4Axe123491;
+        Wed, 20 Jan 2021 11:07:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=A1bIFM9NYAheORR+plPg7G3Z9va+nqu/TpLkuMlQioI=;
+ b=CPnqeajm81Qy2H6ylARkAEyQroRb7eUr75eeZRdv+lMETb6vY4Zcv/Im1XMV5nS2eBuK
+ EFYJdWpo6rZ7bCE86/rK60mLDIPwZ5K/5rkbgZpMCJWAHpKthUPunvn3+UeO5Kttq4t4
+ bPR0xH7hexM+cQVorb5TM4LczjHZu8rA1ePrTYldzPiIqC9YifHexP3eFxpjg+OBHZQQ
+ d0VgIoaRhdOwyHzRs/smgR7J3NfPCbZ8M/XMJwFKDGmTj+bs5OLPoiIRihV+8GnTw268
+ IJ3m1lLmiO0DSfOtA8u+tMX9r8lHriYpUZVQ/STMfyI3mG+P3ARXZGjqxbDQkStX1bdY qg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 366nfcd4a5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jan 2021 11:07:16 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10KG6ogA007440;
+        Wed, 20 Jan 2021 16:07:14 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3668ny0dsc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jan 2021 16:07:13 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10KG7BgV44892640
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jan 2021 16:07:11 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 628B7AE06A;
+        Wed, 20 Jan 2021 16:07:11 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15B49AE067;
+        Wed, 20 Jan 2021 16:07:11 +0000 (GMT)
+Received: from [9.145.21.215] (unknown [9.145.21.215])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Jan 2021 16:07:11 +0000 (GMT)
+Subject: Re: [PATCH] init/module: split CONFIG_CONSTRUCTORS to fix module gcov
+ on UML
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Jessica Yu <jeyu@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20210119121853.4e22b2506c9a.I1358f584b76f1898373adfed77f4462c8705b736@changeid>
+From:   Peter Oberparleiter <oberpar@linux.ibm.com>
+Message-ID: <8191aa4a-3bd7-5de7-1ad2-73b851128ff3@linux.ibm.com>
+Date:   Wed, 20 Jan 2021 17:07:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210120150510.GO1106298@kernel.org>
+In-Reply-To: <20210119121853.4e22b2506c9a.I1358f584b76f1898373adfed77f4462c8705b736@changeid>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-20_06:2021-01-20,2021-01-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=895 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 mlxscore=0 spamscore=0 malwarescore=0 clxscore=1011
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101200092
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 05:05:10PM +0200, Mike Rapoport wrote:
-> On Tue, Jan 19, 2021 at 08:22:13PM +0000, Matthew Wilcox wrote:
-> > On Thu, Dec 03, 2020 at 08:29:44AM +0200, Mike Rapoport wrote:
-> > > +static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-> > > +{
-> > > +	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-> > > +	struct inode *inode = file_inode(vmf->vma->vm_file);
-> > > +	pgoff_t offset = vmf->pgoff;
-> > > +	vm_fault_t ret = 0;
-> > > +	unsigned long addr;
-> > > +	struct page *page;
-> > > +	int err;
-> > > +
-> > > +	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-> > > +		return vmf_error(-EINVAL);
-> > > +
-> > > +	page = find_get_page(mapping, offset);
-> > > +	if (!page) {
-> > > +
-> > > +		page = secretmem_alloc_page(vmf->gfp_mask);
-> > > +		if (!page)
-> > > +			return vmf_error(-ENOMEM);
-> > 
-> > Just use VM_FAULT_OOM directly.
->  
-> Ok.
+On 19.01.2021 12:18, Johannes Berg wrote:
+> From: Johannes Berg <johannes.berg@intel.com>
 > 
-> > > +		err = add_to_page_cache(page, mapping, offset, vmf->gfp_mask);
-> > > +		if (unlikely(err))
-> > > +			goto err_put_page;
-> > 
-> > What if the error is EEXIST because somebody else raced with you to add
-> > a new page to the page cache?
+> On ARCH=um, loading a module doesn't result in its constructors
+> getting called, which breaks module gcov since the debugfs files
+> are never registered. On the other hand, in-kernel constructors
+> have already been called by the dynamic linker, so we can't call
+> them again.
 > 
-> Right, for -EEXIST I need a retry here, thanks.
+> Get out of this conundrum by splitting CONFIG_CONSTRUCTORS into
+> CONFIG_CONSTRUCTORS_KERNEL and CONFIG_CONSTRUCTORS_MODULE, both
+> of which are enabled by default if CONFIG_CONSTRUCTORS is turned
+> on, but CONFIG_CONSTRUCTORS_KERNEL depends on !UML so that it's
+> not used on ARCH=um.
 > 
-> > > +		err = set_direct_map_invalid_noflush(page, 1);
-> > > +		if (err)
-> > > +			goto err_del_page_cache;
-> > 
-> > Does this work correctly if somebody else has a reference to the page
-> > in the meantime?
+> Also remove the "if !UML" from GCOV selecting CONSTRUCTORS now,
+> since we really do want CONSTRUCTORS, just not kernel binary
+> ones.
 > 
-> Yes, it does. If somebody else won the race that page was dropped from the
-> direct map and this call would be essentially a nop. And anyway, the very
-> next patch changes the way pages are removed from the direct map ;-)
+> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 
-What I'm thinking is:
+Do you expect other users for these new config symbols? If not it seems
+to me that the goal of enabling module constructors for UML could also
+be achieved without introducing new config symbols.
 
-thread A page faults
-doesn't find page
-allocates page
-adds page to page cache
-				thread B page faults
-				does find page in page cache
-set direct map invalid fails
-deletes from page cache
-				... ?
+For example you could suppress calling any built-in kernel constructors
+in case of UML by extending the ifdef in do_ctors() to depend on both
+CONFIG_CONSTRUCTORS and !CONFIG_UML (maybe with an explanatory comment).
 
+Of course you'd still need to remove the !UML dependency in
+CONFIG_GCOV_KERNEL.
+
+> ---
+> Tested with a kernel configured with CONFIG_GCOV_KERNEL, without
+> the patch nothing ever appears in /sys/kernel/debug/gcov/ (apart
+> from the reset file), and with it we get the files and they work.
+> 
+> I have no idea which tree this might go through, any suggestions?
+
+So far Andrew Morton was kind enough to pick up gcov-kernel related
+changes, so that route might be an option.
+
+
+-- 
+Peter Oberparleiter
+Linux on Z Development - IBM Germany
