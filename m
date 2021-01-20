@@ -2,538 +2,850 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BEE2FC8FB
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5096F2FC99B
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731950AbhATC3b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 21:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S1729328AbhATDyU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 22:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729224AbhATC2U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:28:20 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1461C061757
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:27:39 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id m5so1176242pjv.5
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:27:39 -0800 (PST)
+        with ESMTP id S1729309AbhATC22 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:28:28 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6D2C061575;
+        Tue, 19 Jan 2021 18:27:48 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id g15so1190732pjd.2;
+        Tue, 19 Jan 2021 18:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xmX908JENsIXDrEuDymsi+FvEW13oaUohjpobi1D9g4=;
-        b=DYqc0rK++mSjK9zWY3Hn25MhlWE0ZyNQekd3rVmaee6yC8pzSYsyKDkAiqed3zoXye
-         VyEU98eJmECkaRhvM9QRbb+GgMrA4NIJYd6laFvasrNeBF/biMC7fbui4V2fBSsV49Kz
-         +7L0bZe6iEzGTF+N8o0RmUf4OJYkTawW7ssOL1XgkY8TLfo7GiaYm1z+F52C+VDvSp5U
-         +Wnyf/e/Po9rEYG04XqowaPCS6kv9sUYBhyxUEDj4CwdQPhsaM7Vw9o8/IQ3jS9iePam
-         Ibe9ZO2O/CPhFzBd2cMMUXvNOQtODdYlkoY2zJ/hQBQIWV+NuDllyEHVKYnTY9DnXfly
-         ipCA==
+        bh=OnYVmGFbXg4KMW3vo/uezkbFXArJdoJVphGD9ue+UkE=;
+        b=Nwnc761pt+Y6hsqUjwez1+Bxqx5rpjVXV7Be1lqmTgGwWk2I51M3dxikBYA5i0syCI
+         xziutfThR3LBhXJuKcs/NfPWcZUT43/SfnbewJiKH5JfmYMt+kfGjwcDfRGjVS3FeD50
+         lLPH9C8VNSwjArkzGWr01UWMkgkM/xJtfkW02eWnMnkeRUXx0cjzQDfU4WrT8z42+2BI
+         ncVWZItLdpOIen5xJqzZdgc3mjWqbpZw7svR58C9VXMCjNaP/Z4LMlZPdFiuH6cuPfLJ
+         it01PVGQqkB9kkSKxBoSNPY0Ga20MtfcPL6TTuT8cM+FIQG5JNGIpLuftMf0HFm/d7FQ
+         DjNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xmX908JENsIXDrEuDymsi+FvEW13oaUohjpobi1D9g4=;
-        b=jZA1W5tBghkyMd3bipOyDItodEI8qn3aQ/I9Mg1Yx5FR+/t///JZnCJq048HoKnBSr
-         CPzqRmXfKK0EnnUFOYbH4xE2nLXvMa7NgjFPqUgDNgUoYpE4jcJqaNgucANK0ltT12b4
-         VS34uWmVgnCgqnvr2vcIWUOWe+dH68VUYjNdEWqTmliyPogWQswdX4ceYrixy6rCagI4
-         DIv54JdDOonUdk68TNX4mhO3ynKfm1m0nzMevnkn8shbilzrZV215lCPan9iSxAVu04N
-         z8bbeifTp1iD3AItEBssa9VBAMohz1yhY5HvI36Xwt5ZEawlqfnesldLKTAq1IULhXB7
-         HqLg==
-X-Gm-Message-State: AOAM533L+woQh+j5Wgr50iHgL0fo0lVzFFEFHALZKmbXRXVJ/YtnWUB+
-        nvysv1TmAjgnXA8OgIDFE+I=
-X-Google-Smtp-Source: ABdhPJxvrx4G9jyn55O6bB/Z7HSP8HjG7sIXrm2A4GpA7Sd6y4lzBL8DA/LGDvTtpEkNWSCCOWiihA==
-X-Received: by 2002:a17:902:ed88:b029:de:86f9:3e09 with SMTP id e8-20020a170902ed88b02900de86f93e09mr7593378plj.38.1611109659043;
-        Tue, 19 Jan 2021 18:27:39 -0800 (PST)
+        bh=OnYVmGFbXg4KMW3vo/uezkbFXArJdoJVphGD9ue+UkE=;
+        b=Uvnne1vlswiL/ltnc/LxffRb2WWl+IWcrJ71mQeOoVa60pegSMx4x8Lssqgo2eF6A7
+         a73dj6uZ1lXsmmHlO+nD+yN4ygsPwRX00T+2v1Cb7qdJsvJHDCybN6hfCJeRWLPyH4jK
+         VURwf4/AK/oDNSG4ttpI5+ZYIJe0DgjRU24W+5YYU8CDuZxtAVmCQL+o0ljTSnJ1Xz1O
+         YjG1aQ9iDPvGSsa+pHYbLT+5MOta2iNPL1SNTaVlG9vRX12mNlYEUN8kSXxF7gkUKi6W
+         lHTV6KnQOBnJNQHDuZd55HBmh+ZDa6HnNmHNtEcHZoHFHn13xZZRS2dE6szaFiZlKLmq
+         puXw==
+X-Gm-Message-State: AOAM530np18Noi2yFR9+lnqiEG93hYVNugbloeWjSlJMGppXFuj0QoJG
+        6zVyV32qD7mPYj9/vxNYmOmMhZiC2GvWb/6yDhY=
+X-Google-Smtp-Source: ABdhPJx4d1WqUqXIv09ddz5Op4zEyvHfVtavl5jgMyPSwLTiGO1UQvAR4LJXGZovTEsgnXX62nrI3A==
+X-Received: by 2002:a17:90b:46cf:: with SMTP id jx15mr2917731pjb.61.1611109667806;
+        Tue, 19 Jan 2021 18:27:47 -0800 (PST)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id 21sm378356pfx.84.2021.01.19.18.27.37
+        by smtp.gmail.com with ESMTPSA id 77sm364737pfx.156.2021.01.19.18.27.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Jan 2021 18:27:38 -0800 (PST)
+        Tue, 19 Jan 2021 18:27:47 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 340EA20442D28F; Wed, 20 Jan 2021 11:27:36 +0900 (JST)
+        id 573E120442D291; Wed, 20 Jan 2021 11:27:45 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com
 Cc:     thehajime@gmail.com, tavi.purdila@gmail.com, retrage01@gmail.com,
-        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org
-Subject: [RFC v8 00/20] Unifying LKL into UML
-Date:   Wed, 20 Jan 2021 11:27:05 +0900
-Message-Id: <cover.1611103406.git.thehajime@gmail.com>
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        Octavian Purdila <tavi@cs.pub.ro>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org
+Subject: [RFC v8 01/20] um: split build in kernel and host parts
+Date:   Wed, 20 Jan 2021 11:27:06 +0900
+Message-Id: <0fe85c69ab49a92a7f8b83af16213cab9e2480e4.1611103406.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
-In-Reply-To: <cover.1601960644.git.thehajime@gmail.com>
-References: <cover.1601960644.git.thehajime@gmail.com>
+In-Reply-To: <cover.1611103406.git.thehajime@gmail.com>
+References: <cover.1611103406.git.thehajime@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is another spin of the unification of LKL into UML.  Updated and
-fixed comments from our v7 patches.  The summary is listed in the
-changelog below.
+From: Octavian Purdila <tavi@cs.pub.ro>
 
-Note that the whole patchset requires the patch "um: ubd: fix command
-line handling of ubd" to be correctly tested, which I previously
-submitted.
+This patch splits the UML build in two parts: a kernel part that
+generates a relocatable object (linux.o) and a host build part that
+links the relocatable object into an executable.
 
+This allows us to simplify the linker script since we can now remove
+the host bits (e.g. .rel sections). It also gives us greater
+flexibility since it will be much easier to support other
+architectures and OSes if we use the standard linker script.
 
-Changes in rfc v8:
-- stop using the term "nommu" mode, "library" mode instead
-- generic atomic64 rewrite to use gcc builtin atomics
-- use kernel-doc format for comments
-- stop using a collection of function pointer (struct lkl_host_operations),
-  but weak functions
-- use python3, not python
-- use c99 initializers for strerror
-- add comments/descriptions about thread implementation
-- remove redundant Kconfig entries (RAID6_PQ_BENCHMARK, STACKTRACE_SUPPORT,
-  etc)
-- refine code comments
-- stop using NPROC for the internal -j flag
-- remove make argument of "UMMODE=library"
-- preserve the vmlinux file as it is
-- rework commit history with reasonable files
-- rework test framework using kselftest (tools/testing/selftests/um/)
-- add documentation, MAINTAINERS
+The host build part has been implemented in tools/um so that we can
+reuse the available host build infrastructure.
 
+The patch preserves the way to invoke the UML build as follows,
 
-Changes in rfc v7:
-- preserve `make ARCH=um` syntax to build UML
-- introduce `make ARCH=um UMMODE=library` to build library mode
-- fix undefined symbols issue during modpost
-- clean up makefiles (arch/um, tools/um)
+ $ make ARCH=um defconfig
+ $ make ARCH=um
 
-Changes in rfc v6:
-- rebase with the current linus tree
+but it internally calls tools/um/Makefile in order to complete the full
+build to link the relocatable object and the rest of files.
 
-Changes in rfc v5:
-- rewrite whole patchset from scratch
-- move arch-dependent code of arch/um and arch/x86/um to tools/um
- - mainly code under os-Linux/ involved
- - introduce 2-stage build (kernel, and host-dependent parts)
- - clean up vmlinux.lds.S
-- put LKL-specific implementations as a SUBARCH under arch/um/nommu
-- introduce !CONFIG_MMU in arch/um
-- use struct arch_thread and arch_switch_to() for subarch-specific
-  thread implementation
-- integrate with the IRQ infrastructure of UML
-- tested with block device drivers (ubd) for the proof
+This commit also relaxes the condition of UML in scripts/link-vmlinux.sh
+since we can postpone the link process with host libraries (-lpthread,
+etc) to the 2nd starge.
 
-Changes in rfc v4: (https://lwn.net/Articles/816276/)
-- Rebase on the current uml/master branch
-- Fix IRQ handling (bug fix)
-- drop a patch for CONFIG_GENERIC_ATOMIC64 (comment by Peter Zijlstra)
-- implement vector net driver for UMMODE_LIB (comment by Anton)
-- clean up uapi headers to avoid duplicates
-- clean up IRQ handling code (comment by Anton)
-- fix error handling in test code (comments by David Disseldorp)
-
-Changes in rfc v3:
-- use UML drivers (net, block) from LKL programs
-- drop virtio device implementations
-- drop mingw32 (Windows) host
-- drop android (arm/aarch64) host
-- drop FreeBSD (x86_64) host
-- drop LD_PRELOAD (hijack) support
-- update milestone
-
-rfc v2:
-- use UMMODE instead of SUBARCH to switch UML or LKL
-- tools/lkl directory is still there. I confirmed we can move under arch/um
-  (e.g., arch/um/lkl/hosts).  I will move it IF this is preferable.
-- drop several patches involved non-uml directory
-- drop several patches which are not required
-- refine commit logs
-- document updated
-
-
-
-
-LKL (Linux Kernel Library) is aiming to allow reusing the Linux kernel code
-as extensively as possible with minimal effort and reduced maintenance
-overhead.
-
-Examples of how LKL can be used are: creating userspace applications
-(running on Linux and other operating systems) that can read or write Linux
-filesystems or can use the Linux networking stack, creating kernel drivers
-for other operating systems that can read Linux filesystems, bootloaders
-support for reading/writing Linux filesystems, etc.
-
-With LKL, the kernel code is compiled into an object file that can be
-directly linked by applications. The API offered by LKL is based on the
-Linux system call interface.
-
-LKL is originally implemented as an architecture port in arch/lkl, but this
-series of commits tries to integrate this into arch/um as one of the mode
-of UML.  This was discussed during RFC email of LKL (*1).
-
-The latest LKL version can be found at https://github.com/lkl/linux
-
-Milestone
-=========
-This patches is a first step toward upstreaming *library mode* of
-Linux kernel, but we think we need to have several steps toward our
-goal, describing in the below.
-
-
-Milestone 1: LKL lib on top of UML
- * Kernel - Host build split
- -  Build UML as a relocatable object using the UML's kernel linker script.
- -  Move the ptrace and other well isolated os code out of arch/um to
-    tools/um
- -  Use standard host toolchain to create a static library stripped of
-    the ptrace code. Use standard host toolchain to build the main UML
-    executable.
- -  Add library init API that creates the UML kernel process and starts
-    UML.
- * System calls APIs
- -  Add new system call interface based on UML's irq facility.
- -  Use the LKL scripts to export the required headers to create system
-    calls APIs that use the UML system calls infrastructure.
- -  Keep the underlying host and driver operations (threads, irqs, etc.)
-    as they are now in UML.
- * Boot test
- -  Port the LKL boot test to verify that we are able to programatically
-    issue system calls.
-
-Milestone 2: add virtio disk support
- * Export asm/io.h operations to host/os. Create IO access operations
-   and redirect them to weak os_ variants that use the current UML
-   implementation.
- * Add the LKL IO access layer including generic virtio handling and the
-   virtio block device code.
- * Port LKL disk test and disk apps (lklfuse, fs2tar, cptofs)
-
-Milestone 3: new arch ports
-  * Abstract the system call / IRQ mode the move the implementation to host
-  * Abstract the thread model and move the implementation to host
-  * Add LKL thread model and LKL ports
-
-
-Building LKL the host library and LKL applications
-==================================================
-
-% make ARCH=um SUBARCH=lkl defconfig
-% make ARCH=um SUBARCH=lkl
-
-will build LKL as a object file, it will install it in
-tools/um/libtogether with the headers files in tools/um/include then
-will build the host library, tests and a few of application examples:
-
-* tools/testing/selftests/um/boot.c - a simple applications that uses
-  LKL and exercises the basic LKL APIs
-
-* tools/testing/selftests/um/disk.c - a simple applications that tests
-  LKL and exercises the basic filesystem-related LKL APIs
-
-Those tests can run with the following kselftest command:
-
-    $ make ARCH=um SUBARCH=lkl TARGETS="um" kselftest
-
-Supported hosts
-===============
-
-Currently LKL supports Linux userspace applications. New hosts can be added
-relatively easy if the host supports gcc and GNU ld. Previous versions of
-LKL supported Windows kernel and Haiku kernel hosts, and we also have WIP
-patches with rump-hypercall interface, used in UEFI, as well as macOS
-userspace (part of POSIX).
-
-There is also musl-libc port for LKL, which might be interested in for some
-folks.
-
-
-Further readings about LKL
-=========================
-
-- Discussion in github LKL issue
-https://github.com/lkl/linux/issues/304
-
-- LKL (an article)
-https://www.researchgate.net/profile/Nicolae_Tapus2/publication/224164682_LKL_The_Linux_kernel_library/links/02bfe50fd921ab4f7c000000.pdf
-
-*1 RFC email to LKML (back in 2015)
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1012277.html
-
-
-Please review the following changes for suitability for inclusion. If you have
-any objections or suggestions for improvement, please respond to the patches. If
-you agree with the changes, please provide your Acked-by.
-
-The following changes since commit 19c329f6808995b142b3966301f217c831e7cf31:
-
-  Linux 5.11-rc4 (2021-01-17 16:37:05 -0800)
-
-are available in the Git repository at:
-
-  git://github.com/thehajime/linux 043677211bb5562397c511911e7861c3e217611b
-  https://github.com/thehajime/linux/tree/uml-lkl-5.11rc4-v8
-
-Hajime Tazaki (18):
-  um: move arch/um/os-Linux dir to tools/um/uml
-  um: move arch/x86/um/os-Linux to tools/um/uml/
-  um: extend arch_switch_to for alternate SUBARCH
-  um: add UML library mode
-  um: lkl: host interface
-  um: lkl: memory handling
-  um: lkl: kernel thread support
-  um: lkl: system call interface and application API
-  um: lkl: basic console support
-  um: lkl: initialization and cleanup
-  um: lkl: integrate with irq infrastructure of UML
-  um: lkl: plug in the build system
-  um: host: add library mode build for ARCH=um
-  um: host: add utilities functions
-  um: host: posix host operations
-  selftests/um: lkl: add test programs for library mode of UML
-  um: lkl: add block device support of UML
-  um: lkl: add documentation
-
-Octavian Purdila (2):
-  um: split build in kernel and host parts
-  um: implement os_initcalls and os_exitcalls
-
- Documentation/virt/uml/lkl.txt                |  48 ++
- MAINTAINERS                                   |  10 +
- arch/um/Kconfig                               |  37 +-
- arch/um/Makefile                              |  41 +-
- arch/um/configs/lkl_defconfig                 |  73 +++
- arch/um/drivers/Makefile                      |  10 +-
- .../um/{os-Linux => }/drivers/ethertap_kern.c |   0
- arch/um/{os-Linux => }/drivers/tuntap_kern.c  |   0
- arch/um/include/asm/common.lds.S              |  99 ----
- arch/um/include/asm/host_ops.h                |   9 +
- arch/um/include/asm/mmu.h                     |   3 +
- arch/um/include/asm/mmu_context.h             |  10 +
- arch/um/include/asm/page.h                    |  15 +
- arch/um/include/asm/pgtable.h                 |  27 +
- arch/um/include/asm/thread_info.h             |  24 +
- arch/um/include/asm/uaccess.h                 |   6 +
- arch/um/include/asm/xor.h                     |   3 +-
- arch/um/include/shared/as-layout.h            |   1 +
- .../drivers => include/shared}/etap.h         |   0
- arch/um/include/shared/init.h                 |  19 +-
- arch/um/include/shared/os.h                   |   1 +
- .../drivers => include/shared}/tuntap.h       |   0
- arch/um/kernel/Makefile                       |  13 +-
- arch/um/kernel/dyn.lds.S                      | 171 -------
- arch/um/kernel/irq.c                          |  13 +
- arch/um/kernel/process.c                      |  14 +-
- arch/um/kernel/reboot.c                       |   5 +
- arch/um/kernel/time.c                         |   2 +
- arch/um/kernel/um_arch.c                      |  16 +
- arch/um/kernel/uml.lds.S                      | 115 -----
- arch/um/{os-Linux => kernel}/user_syms.c      |   0
- arch/um/kernel/vmlinux.lds.S                  |  92 +++-
- arch/um/lkl/Makefile                          |   2 +
- arch/um/lkl/Makefile.um                       |  18 +
- arch/um/lkl/include/asm/Kbuild                |   7 +
- arch/um/lkl/include/asm/archparam.h           |   1 +
- arch/um/lkl/include/asm/atomic.h              |  11 +
- arch/um/lkl/include/asm/atomic64.h            |  91 ++++
- arch/um/lkl/include/asm/cpu.h                 |  15 +
- arch/um/lkl/include/asm/elf.h                 |  19 +
- arch/um/lkl/include/asm/mm_context.h          |   8 +
- arch/um/lkl/include/asm/processor.h           |  48 ++
- arch/um/lkl/include/asm/ptrace.h              |  21 +
- arch/um/lkl/include/asm/sched.h               |  23 +
- arch/um/lkl/include/asm/segment.h             |   9 +
- arch/um/lkl/include/asm/syscall_wrapper.h     |  57 +++
- arch/um/lkl/include/asm/syscalls.h            |  15 +
- arch/um/lkl/include/uapi/asm/Kbuild           |   6 +
- arch/um/lkl/include/uapi/asm/bitsperlong.h    |  16 +
- arch/um/lkl/include/uapi/asm/byteorder.h      |  13 +
- arch/um/lkl/include/uapi/asm/host_ops.h       | 280 +++++++++++
- arch/um/lkl/include/uapi/asm/sigcontext.h     |  12 +
- arch/um/lkl/include/uapi/asm/syscalls.h       | 301 ++++++++++++
- arch/um/lkl/include/uapi/asm/unistd.h         |  17 +
- arch/um/lkl/um/Kconfig                        |  21 +
- arch/um/lkl/um/Makefile                       |   4 +
- arch/um/lkl/um/bootmem.c                      | 107 ++++
- arch/um/lkl/um/console.c                      |  41 ++
- arch/um/lkl/um/cpu.c                          | 269 ++++++++++
- arch/um/lkl/um/delay.c                        |  31 ++
- arch/um/lkl/um/setup.c                        | 179 +++++++
- arch/um/lkl/um/shared/sysdep/archsetjmp.h     |  13 +
- arch/um/lkl/um/shared/sysdep/faultinfo.h      |   8 +
- arch/um/lkl/um/shared/sysdep/kernel-offsets.h |  12 +
- arch/um/lkl/um/shared/sysdep/mcontext.h       |   9 +
- arch/um/lkl/um/shared/sysdep/ptrace.h         |  42 ++
- arch/um/lkl/um/shared/sysdep/ptrace_user.h    |   7 +
- arch/um/lkl/um/syscalls.c                     | 193 ++++++++
- arch/um/lkl/um/threads.c                      | 261 ++++++++++
- arch/um/lkl/um/unimplemented.c                |  70 +++
- arch/um/lkl/um/user_constants.h               |  13 +
- arch/um/os-Linux/Makefile                     |  21 -
- arch/um/os-Linux/drivers/Makefile             |  13 -
- arch/um/scripts/headers_install.py            | 200 ++++++++
- arch/x86/um/Makefile                          |   2 +-
- arch/x86/um/os-Linux/Makefile                 |  13 -
- arch/x86/um/ptrace_32.c                       |   2 +-
- arch/x86/um/syscalls_64.c                     |   2 +-
- scripts/headers_install.sh                    |   6 +-
- scripts/link-vmlinux.sh                       |  42 +-
- tools/testing/selftests/Makefile              |   3 +
- tools/testing/selftests/um/Makefile           |  16 +
- tools/testing/selftests/um/boot.c             | 376 ++++++++++++++
- tools/testing/selftests/um/cla.c              | 159 ++++++
- tools/testing/selftests/um/cla.h              |  33 ++
- tools/testing/selftests/um/disk-ext4.sh       |   6 +
- tools/testing/selftests/um/disk-vfat.sh       |   6 +
- tools/testing/selftests/um/disk.c             | 166 +++++++
- tools/testing/selftests/um/disk.sh            |  67 +++
- tools/testing/selftests/um/test.c             | 128 +++++
- tools/testing/selftests/um/test.h             |  72 +++
- tools/testing/selftests/um/test.sh            | 181 +++++++
- tools/um/.gitignore                           |   1 +
- tools/um/Makefile                             |  76 +++
- tools/um/Targets                              |   9 +
- tools/um/include/lkl.h                        | 364 ++++++++++++++
- tools/um/include/lkl_host.h                   |  19 +
- tools/um/lib/Build                            |   7 +
- tools/um/lib/fs.c                             | 461 ++++++++++++++++++
- tools/um/lib/jmp_buf.c                        |  14 +
- tools/um/lib/posix-host.c                     | 273 +++++++++++
- tools/um/lib/utils.c                          | 207 ++++++++
- tools/um/uml/Build                            |  59 +++
- tools/um/uml/drivers/Build                    |  10 +
- .../um/uml}/drivers/ethertap_user.c           |   0
- .../um/uml}/drivers/tuntap_user.c             |   0
- {arch/um/os-Linux => tools/um/uml}/elf_aux.c  |   0
- {arch/um/os-Linux => tools/um/uml}/execvp.c   |   4 -
- {arch/um/os-Linux => tools/um/uml}/file.c     |   0
- {arch/um/os-Linux => tools/um/uml}/helper.c   |   0
- {arch/um/os-Linux => tools/um/uml}/irq.c      |   0
- tools/um/uml/lkl/Build                        |   1 +
- tools/um/uml/lkl/registers.c                  |  21 +
- tools/um/uml/lkl/unimplemented.c              |  21 +
- {arch/um/os-Linux => tools/um/uml}/main.c     |   0
- {arch/um/os-Linux => tools/um/uml}/mem.c      |   0
- {arch/um/os-Linux => tools/um/uml}/process.c  |   2 +
- .../um/os-Linux => tools/um/uml}/registers.c  |   0
- {arch/um/os-Linux => tools/um/uml}/sigio.c    |   0
- {arch/um/os-Linux => tools/um/uml}/signal.c   |  12 +-
- .../skas/Makefile => tools/um/uml/skas/Build  |   6 +-
- {arch/um/os-Linux => tools/um/uml}/skas/mem.c |   0
- .../os-Linux => tools/um/uml}/skas/process.c  |   3 +-
- {arch/um/os-Linux => tools/um/uml}/start_up.c |   0
- {arch/um/os-Linux => tools/um/uml}/time.c     |   0
- {arch/um/os-Linux => tools/um/uml}/tty.c      |   0
- {arch/um/os-Linux => tools/um/uml}/umid.c     |   0
- {arch/um/os-Linux => tools/um/uml}/util.c     |  26 +
- tools/um/uml/x86/Build                        |  11 +
- .../os-Linux => tools/um/uml/x86}/mcontext.c  |   0
- .../um/os-Linux => tools/um/uml/x86}/prctl.c  |   0
- .../os-Linux => tools/um/uml/x86}/registers.c |   0
- .../os-Linux => tools/um/uml/x86}/task_size.c |   0
- .../um/os-Linux => tools/um/uml/x86}/tls.c    |   0
- 134 files changed, 5743 insertions(+), 525 deletions(-)
- create mode 100644 Documentation/virt/uml/lkl.txt
- create mode 100644 arch/um/configs/lkl_defconfig
- rename arch/um/{os-Linux => }/drivers/ethertap_kern.c (100%)
- rename arch/um/{os-Linux => }/drivers/tuntap_kern.c (100%)
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>
+Cc: linux-kbuild@vger.kernel.org
+Signed-off-by: Octavian Purdila <tavi@cs.pub.ro>
+Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
+---
+ arch/um/Kconfig                  |  12 +--
+ arch/um/Makefile                 |  29 ++++--
+ arch/um/include/asm/common.lds.S |  99 ------------------
+ arch/um/kernel/dyn.lds.S         | 171 -------------------------------
+ arch/um/kernel/uml.lds.S         | 115 ---------------------
+ arch/um/kernel/vmlinux.lds.S     |  92 +++++++++++++++--
+ scripts/link-vmlinux.sh          |  42 +++-----
+ tools/um/Makefile                |  74 +++++++++++++
+ tools/um/Targets                 |   4 +
+ tools/um/uml/Build               |   0
+ 10 files changed, 200 insertions(+), 438 deletions(-)
  delete mode 100644 arch/um/include/asm/common.lds.S
- create mode 100644 arch/um/include/asm/host_ops.h
- rename arch/um/{os-Linux/drivers => include/shared}/etap.h (100%)
- rename arch/um/{os-Linux/drivers => include/shared}/tuntap.h (100%)
  delete mode 100644 arch/um/kernel/dyn.lds.S
  delete mode 100644 arch/um/kernel/uml.lds.S
- rename arch/um/{os-Linux => kernel}/user_syms.c (100%)
- create mode 100644 arch/um/lkl/Makefile
- create mode 100644 arch/um/lkl/Makefile.um
- create mode 100644 arch/um/lkl/include/asm/Kbuild
- create mode 100644 arch/um/lkl/include/asm/archparam.h
- create mode 100644 arch/um/lkl/include/asm/atomic.h
- create mode 100644 arch/um/lkl/include/asm/atomic64.h
- create mode 100644 arch/um/lkl/include/asm/cpu.h
- create mode 100644 arch/um/lkl/include/asm/elf.h
- create mode 100644 arch/um/lkl/include/asm/mm_context.h
- create mode 100644 arch/um/lkl/include/asm/processor.h
- create mode 100644 arch/um/lkl/include/asm/ptrace.h
- create mode 100644 arch/um/lkl/include/asm/sched.h
- create mode 100644 arch/um/lkl/include/asm/segment.h
- create mode 100644 arch/um/lkl/include/asm/syscall_wrapper.h
- create mode 100644 arch/um/lkl/include/asm/syscalls.h
- create mode 100644 arch/um/lkl/include/uapi/asm/Kbuild
- create mode 100644 arch/um/lkl/include/uapi/asm/bitsperlong.h
- create mode 100644 arch/um/lkl/include/uapi/asm/byteorder.h
- create mode 100644 arch/um/lkl/include/uapi/asm/host_ops.h
- create mode 100644 arch/um/lkl/include/uapi/asm/sigcontext.h
- create mode 100644 arch/um/lkl/include/uapi/asm/syscalls.h
- create mode 100644 arch/um/lkl/include/uapi/asm/unistd.h
- create mode 100644 arch/um/lkl/um/Kconfig
- create mode 100644 arch/um/lkl/um/Makefile
- create mode 100644 arch/um/lkl/um/bootmem.c
- create mode 100644 arch/um/lkl/um/console.c
- create mode 100644 arch/um/lkl/um/cpu.c
- create mode 100644 arch/um/lkl/um/delay.c
- create mode 100644 arch/um/lkl/um/setup.c
- create mode 100644 arch/um/lkl/um/shared/sysdep/archsetjmp.h
- create mode 100644 arch/um/lkl/um/shared/sysdep/faultinfo.h
- create mode 100644 arch/um/lkl/um/shared/sysdep/kernel-offsets.h
- create mode 100644 arch/um/lkl/um/shared/sysdep/mcontext.h
- create mode 100644 arch/um/lkl/um/shared/sysdep/ptrace.h
- create mode 100644 arch/um/lkl/um/shared/sysdep/ptrace_user.h
- create mode 100644 arch/um/lkl/um/syscalls.c
- create mode 100644 arch/um/lkl/um/threads.c
- create mode 100644 arch/um/lkl/um/unimplemented.c
- create mode 100644 arch/um/lkl/um/user_constants.h
- delete mode 100644 arch/um/os-Linux/Makefile
- delete mode 100644 arch/um/os-Linux/drivers/Makefile
- create mode 100755 arch/um/scripts/headers_install.py
- delete mode 100644 arch/x86/um/os-Linux/Makefile
- create mode 100644 tools/testing/selftests/um/Makefile
- create mode 100644 tools/testing/selftests/um/boot.c
- create mode 100644 tools/testing/selftests/um/cla.c
- create mode 100644 tools/testing/selftests/um/cla.h
- create mode 100755 tools/testing/selftests/um/disk-ext4.sh
- create mode 100755 tools/testing/selftests/um/disk-vfat.sh
- create mode 100644 tools/testing/selftests/um/disk.c
- create mode 100755 tools/testing/selftests/um/disk.sh
- create mode 100644 tools/testing/selftests/um/test.c
- create mode 100644 tools/testing/selftests/um/test.h
- create mode 100644 tools/testing/selftests/um/test.sh
- create mode 100644 tools/um/.gitignore
  create mode 100644 tools/um/Makefile
  create mode 100644 tools/um/Targets
- create mode 100644 tools/um/include/lkl.h
- create mode 100644 tools/um/include/lkl_host.h
- create mode 100644 tools/um/lib/Build
- create mode 100644 tools/um/lib/fs.c
- create mode 100644 tools/um/lib/jmp_buf.c
- create mode 100644 tools/um/lib/posix-host.c
- create mode 100644 tools/um/lib/utils.c
  create mode 100644 tools/um/uml/Build
- create mode 100644 tools/um/uml/drivers/Build
- rename {arch/um/os-Linux => tools/um/uml}/drivers/ethertap_user.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/drivers/tuntap_user.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/elf_aux.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/execvp.c (98%)
- rename {arch/um/os-Linux => tools/um/uml}/file.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/helper.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/irq.c (100%)
- create mode 100644 tools/um/uml/lkl/Build
- create mode 100644 tools/um/uml/lkl/registers.c
- create mode 100644 tools/um/uml/lkl/unimplemented.c
- rename {arch/um/os-Linux => tools/um/uml}/main.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/mem.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/process.c (99%)
- rename {arch/um/os-Linux => tools/um/uml}/registers.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/sigio.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/signal.c (96%)
- rename arch/um/os-Linux/skas/Makefile => tools/um/uml/skas/Build (56%)
- rename {arch/um/os-Linux => tools/um/uml}/skas/mem.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/skas/process.c (99%)
- rename {arch/um/os-Linux => tools/um/uml}/start_up.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/time.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/tty.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/umid.c (100%)
- rename {arch/um/os-Linux => tools/um/uml}/util.c (89%)
- create mode 100644 tools/um/uml/x86/Build
- rename {arch/x86/um/os-Linux => tools/um/uml/x86}/mcontext.c (100%)
- rename {arch/x86/um/os-Linux => tools/um/uml/x86}/prctl.c (100%)
- rename {arch/x86/um/os-Linux => tools/um/uml/x86}/registers.c (100%)
- rename {arch/x86/um/os-Linux => tools/um/uml/x86}/task_size.c (100%)
- rename {arch/x86/um/os-Linux => tools/um/uml/x86}/tls.c (100%)
 
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 34d302d1a07f..9e2d9efbcdd1 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -21,6 +21,7 @@ config UML
+ 	select HAVE_GCC_PLUGINS
+ 	select SET_FS
+ 	select TTY # Needed for line.c
++	select MODULE_REL_CRCS if MODVERSIONS
+ 
+ config MMU
+ 	bool
+@@ -80,17 +81,6 @@ config STATIC_LINK
+ 	  NOTE: This option is incompatible with some networking features which
+ 	  depend on features that require being dynamically loaded (like NSS).
+ 
+-config LD_SCRIPT_STATIC
+-	bool
+-	default y
+-	depends on STATIC_LINK
+-
+-config LD_SCRIPT_DYN
+-	bool
+-	default y
+-	depends on !LD_SCRIPT_STATIC
+-	select MODULE_REL_CRCS if MODVERSIONS
+-
+ config HOSTFS
+ 	tristate "Host filesystem"
+ 	help
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index 1cea46ff9bb7..48fbbc3a0032 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -95,14 +95,30 @@ KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/include \
+ KERNEL_DEFINES = $(strip -Derrno=kernel_errno -Dsigprocmask=kernel_sigprocmask \
+ 			 -Dmktime=kernel_mktime $(ARCH_KERNEL_DEFINES))
+ KBUILD_CFLAGS += $(KERNEL_DEFINES)
++LDFLAGS_vmlinux += -r
+ 
+-PHONY += linux
+-
++INSTALL_PATH=$(objtree)/tools/um
+ all: linux
+-
+-linux: vmlinux
+-	@echo '  LINK $@'
+-	$(Q)ln -f $< $@
++pre-2nd: linux.o
++	@echo "  INSTALL $(INSTALL_PATH)/lib/$<"
++	@mkdir -p $(INSTALL_PATH)/lib/
++	@cp $< $(INSTALL_PATH)/lib/
++
++PHONY += linux.o
++
++linux: pre-2nd
++	$(Q)$(MAKE) -C $(srctree)/tools/um
++	$(Q)cp $(objtree)/tools/um/uml/linux $(objtree)/
++	$(Q)cp $(objtree)/linux $(objtree)/vmlinux
++
++linux.o: vmlinux
++#revert vmlinux file from vmlinux.a
++ifneq ("$(wildcard vmlinux.a)","")
++	$(Q)cp vmlinux.a vmlinux
++endif
++	$(Q)cp vmlinux vmlinux.a
++	@echo "  LINK    $@"
++	$(Q)$(OBJCOPY) -R .eh_frame $< $@
+ 
+ define archhelp
+   echo '* linux		- Binary kernel image (./linux) - for backward'
+@@ -144,5 +160,6 @@ MRPROPER_FILES += arch/$(SUBARCH)/include/generated
+ archclean:
+ 	@find . \( -name '*.bb' -o -name '*.bbg' -o -name '*.da' \
+ 		-o -name '*.gcov' \) -type f -print | xargs rm -f
++	$(Q)$(MAKE) -C $(srctree)/tools/um clean
+ 
+ export HEADER_ARCH SUBARCH USER_CFLAGS CFLAGS_NO_HARDENING OS DEV_NULL_PATH
+diff --git a/arch/um/include/asm/common.lds.S b/arch/um/include/asm/common.lds.S
+deleted file mode 100644
+index eca6c452a41b..000000000000
+--- a/arch/um/include/asm/common.lds.S
++++ /dev/null
+@@ -1,99 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#include <asm-generic/vmlinux.lds.h>
+-
+-  .fini      : { *(.fini)    } =0x9090
+-  _etext = .;
+-  PROVIDE (etext = .);
+-
+-  . = ALIGN(4096);
+-  _sdata = .;
+-  PROVIDE (sdata = .);
+-
+-  RO_DATA(4096)
+-
+-  .unprotected : { *(.unprotected) }
+-  . = ALIGN(4096);
+-  PROVIDE (_unprotected_end = .);
+-
+-  . = ALIGN(4096);
+-  EXCEPTION_TABLE(0)
+-
+-  BUG_TABLE
+-
+-  .uml.setup.init : {
+-	__uml_setup_start = .;
+-	*(.uml.setup.init)
+-	__uml_setup_end = .;
+-  }
+-	
+-  .uml.help.init : {
+-	__uml_help_start = .;
+-	*(.uml.help.init)
+-	__uml_help_end = .;
+-  }
+-	
+-  .uml.postsetup.init : {
+-	__uml_postsetup_start = .;
+-	*(.uml.postsetup.init)
+-	__uml_postsetup_end = .;
+-  }
+-	
+-  .init.setup : {
+-	INIT_SETUP(0)
+-  }
+-
+-  PERCPU_SECTION(32)
+-	
+-  .initcall.init : {
+-	INIT_CALLS
+-  }
+-
+-  .con_initcall.init : {
+-	CON_INITCALL
+-  }
+-
+-  .exitcall : {
+-	__exitcall_begin = .;
+-	*(.exitcall.exit)
+-	__exitcall_end = .;
+-  }
+-
+-  .uml.exitcall : {
+-	__uml_exitcall_begin = .;
+-	*(.uml.exitcall.exit)
+-	__uml_exitcall_end = .;
+-  }
+-
+-  . = ALIGN(4);
+-  .altinstructions : {
+-	__alt_instructions = .;
+-	*(.altinstructions)
+-	__alt_instructions_end = .;
+-  }
+-  .altinstr_replacement : { *(.altinstr_replacement) }
+-  /* .exit.text is discard at runtime, not link time, to deal with references
+-     from .altinstructions and .eh_frame */
+-  .exit.text : { EXIT_TEXT }
+-  .exit.data : { *(.exit.data) }
+-
+-  .preinit_array : {
+-	__preinit_array_start = .;
+-	*(.preinit_array)
+-	__preinit_array_end = .;
+-  }
+-  .init_array : {
+-	__init_array_start = .;
+-	*(.init_array)
+-	__init_array_end = .;
+-  }
+-  .fini_array : {
+-	__fini_array_start = .;
+-	*(.fini_array)
+-	__fini_array_end = .;
+-  }
+-
+-   . = ALIGN(4096);
+-  .init.ramfs : {
+-	INIT_RAM_FS
+-  }
+-
+diff --git a/arch/um/kernel/dyn.lds.S b/arch/um/kernel/dyn.lds.S
+deleted file mode 100644
+index dacbfabf66d8..000000000000
+--- a/arch/um/kernel/dyn.lds.S
++++ /dev/null
+@@ -1,171 +0,0 @@
+-#include <asm/vmlinux.lds.h>
+-#include <asm/page.h>
+-
+-OUTPUT_FORMAT(ELF_FORMAT)
+-OUTPUT_ARCH(ELF_ARCH)
+-ENTRY(_start)
+-jiffies = jiffies_64;
+-
+-SECTIONS
+-{
+-  PROVIDE (__executable_start = START);
+-  . = START + SIZEOF_HEADERS;
+-  .interp         : { *(.interp) }
+-  __binary_start = .;
+-  . = ALIGN(4096);		/* Init code and data */
+-  _text = .;
+-  INIT_TEXT_SECTION(PAGE_SIZE)
+-
+-  . = ALIGN(PAGE_SIZE);
+-
+-  /* Read-only sections, merged into text segment: */
+-  .hash           : { *(.hash) }
+-  .gnu.hash       : { *(.gnu.hash) }
+-  .dynsym         : { *(.dynsym) }
+-  .dynstr         : { *(.dynstr) }
+-  .gnu.version    : { *(.gnu.version) }
+-  .gnu.version_d  : { *(.gnu.version_d) }
+-  .gnu.version_r  : { *(.gnu.version_r) }
+-  .rel.init       : { *(.rel.init) }
+-  .rela.init      : { *(.rela.init) }
+-  .rel.text       : { *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*) }
+-  .rela.text      : { *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*) }
+-  .rel.fini       : { *(.rel.fini) }
+-  .rela.fini      : { *(.rela.fini) }
+-  .rel.rodata     : { *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*) }
+-  .rela.rodata    : { *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*) }
+-  .rel.data       : { *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*) }
+-  .rela.data      : { *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*) }
+-  .rel.tdata	  : { *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*) }
+-  .rela.tdata	  : { *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*) }
+-  .rel.tbss	  : { *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*) }
+-  .rela.tbss	  : { *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*) }
+-  .rel.ctors      : { *(.rel.ctors) }
+-  .rela.ctors     : { *(.rela.ctors) }
+-  .rel.dtors      : { *(.rel.dtors) }
+-  .rela.dtors     : { *(.rela.dtors) }
+-  .rel.got        : { *(.rel.got) }
+-  .rela.got       : { *(.rela.got) }
+-  .rel.bss        : { *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*) }
+-  .rela.bss       : { *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*) }
+-  .rel.plt : {
+-	*(.rel.plt)
+-	PROVIDE_HIDDEN(__rel_iplt_start = .);
+-	*(.rel.iplt)
+-	PROVIDE_HIDDEN(__rel_iplt_end = .);
+-  }
+-  .rela.plt : {
+-	*(.rela.plt)
+-	PROVIDE_HIDDEN(__rela_iplt_start = .);
+-	*(.rela.iplt)
+-	PROVIDE_HIDDEN(__rela_iplt_end = .);
+-  }
+-  .init           : {
+-    KEEP (*(.init))
+-  } =0x90909090
+-  .plt            : { *(.plt) }
+-  .text           : {
+-    _stext = .;
+-    TEXT_TEXT
+-    SCHED_TEXT
+-    CPUIDLE_TEXT
+-    LOCK_TEXT
+-    IRQENTRY_TEXT
+-    SOFTIRQENTRY_TEXT
+-    *(.fixup)
+-    *(.stub .text.* .gnu.linkonce.t.*)
+-    /* .gnu.warning sections are handled specially by elf32.em.  */
+-    *(.gnu.warning)
+-
+-    . = ALIGN(PAGE_SIZE);
+-  } =0x90909090
+-  . = ALIGN(PAGE_SIZE);
+-  .syscall_stub : {
+-	__syscall_stub_start = .;
+-	*(.__syscall_stub*)
+-	__syscall_stub_end = .;
+-  }
+-  .fini           : {
+-    KEEP (*(.fini))
+-  } =0x90909090
+-
+-  .kstrtab : { *(.kstrtab) }
+-
+-  #include <asm/common.lds.S>
+-
+-  __init_begin = .;
+-  init.data : { INIT_DATA }
+-  __init_end = .;
+-
+-  /* Ensure the __preinit_array_start label is properly aligned.  We
+-     could instead move the label definition inside the section, but
+-     the linker would then create the section even if it turns out to
+-     be empty, which isn't pretty.  */
+-  . = ALIGN(32 / 8);
+-  .preinit_array     : { *(.preinit_array) }
+-  .init_array     : { *(.init_array) }
+-  .fini_array     : { *(.fini_array) }
+-  .data           : {
+-    INIT_TASK_DATA(KERNEL_STACK_SIZE)
+-    . = ALIGN(KERNEL_STACK_SIZE);
+-    *(.data..init_irqstack)
+-    DATA_DATA
+-    *(.data.* .gnu.linkonce.d.*)
+-    SORT(CONSTRUCTORS)
+-  }
+-  .data1          : { *(.data1) }
+-  .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
+-  .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
+-  .eh_frame       : { KEEP (*(.eh_frame)) }
+-  .gcc_except_table   : { *(.gcc_except_table) }
+-  .dynamic        : { *(.dynamic) }
+-  .ctors          : {
+-    /* gcc uses crtbegin.o to find the start of
+-       the constructors, so we make sure it is
+-       first.  Because this is a wildcard, it
+-       doesn't matter if the user does not
+-       actually link against crtbegin.o; the
+-       linker won't look for a file to match a
+-       wildcard.  The wildcard also means that it
+-       doesn't matter which directory crtbegin.o
+-       is in.  */
+-    KEEP (*crtbegin.o(.ctors))
+-    /* We don't want to include the .ctor section from
+-       from the crtend.o file until after the sorted ctors.
+-       The .ctor section from the crtend file contains the
+-       end of ctors marker and it must be last */
+-    KEEP (*(EXCLUDE_FILE (*crtend.o ) .ctors))
+-    KEEP (*(SORT(.ctors.*)))
+-    KEEP (*(.ctors))
+-  }
+-  .dtors          : {
+-    KEEP (*crtbegin.o(.dtors))
+-    KEEP (*(EXCLUDE_FILE (*crtend.o ) .dtors))
+-    KEEP (*(SORT(.dtors.*)))
+-    KEEP (*(.dtors))
+-  }
+-  .jcr            : { KEEP (*(.jcr)) }
+-  .got            : { *(.got.plt) *(.got) }
+-  _edata = .;
+-  PROVIDE (edata = .);
+-  .bss            : {
+-   __bss_start = .;
+-   *(.dynbss)
+-   *(.bss .bss.* .gnu.linkonce.b.*)
+-   *(COMMON)
+-   /* Align here to ensure that the .bss section occupies space up to
+-      _end.  Align after .bss to ensure correct alignment even if the
+-      .bss section disappears because there are no input sections.  */
+-   . = ALIGN(32 / 8);
+-  . = ALIGN(32 / 8);
+-  }
+-   __bss_stop = .;
+-  _end = .;
+-  PROVIDE (end = .);
+-
+-  STABS_DEBUG
+-  DWARF_DEBUG
+-  ELF_DETAILS
+-
+-  DISCARDS
+-}
+diff --git a/arch/um/kernel/uml.lds.S b/arch/um/kernel/uml.lds.S
+deleted file mode 100644
+index 45d957d7004c..000000000000
+--- a/arch/um/kernel/uml.lds.S
++++ /dev/null
+@@ -1,115 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#include <asm/vmlinux.lds.h>
+-#include <asm/page.h>
+-
+-OUTPUT_FORMAT(ELF_FORMAT)
+-OUTPUT_ARCH(ELF_ARCH)
+-ENTRY(_start)
+-jiffies = jiffies_64;
+-
+-SECTIONS
+-{
+-  /* This must contain the right address - not quite the default ELF one.*/
+-  PROVIDE (__executable_start = START);
+-  /* Static binaries stick stuff here, like the sigreturn trampoline,
+-   * invisibly to objdump.  So, just make __binary_start equal to the very
+-   * beginning of the executable, and if there are unmapped pages after this,
+-   * they are forever unusable.
+-   */
+-  __binary_start = START;
+-
+-  . = START + SIZEOF_HEADERS;
+-  . = ALIGN(PAGE_SIZE);
+-
+-  _text = .;
+-  INIT_TEXT_SECTION(0)
+-
+-  .text      :
+-  {
+-    _stext = .;
+-    TEXT_TEXT
+-    SCHED_TEXT
+-    CPUIDLE_TEXT
+-    LOCK_TEXT
+-    IRQENTRY_TEXT
+-    SOFTIRQENTRY_TEXT
+-    *(.fixup)
+-    /* .gnu.warning sections are handled specially by elf32.em.  */
+-    *(.gnu.warning)
+-    *(.gnu.linkonce.t*)
+-  }
+-
+-  . = ALIGN(PAGE_SIZE);
+-  .syscall_stub : {
+-	__syscall_stub_start = .;
+-	*(.__syscall_stub*)
+-	__syscall_stub_end = .;
+-  }
+-
+-  /*
+-   * These are needed even in a static link, even if they wind up being empty.
+-   * Newer glibc needs these __rel{,a}_iplt_{start,end} symbols.
+-   */
+-  .rel.plt : {
+-	*(.rel.plt)
+-	PROVIDE_HIDDEN(__rel_iplt_start = .);
+-	*(.rel.iplt)
+-	PROVIDE_HIDDEN(__rel_iplt_end = .);
+-  }
+-  .rela.plt : {
+-	*(.rela.plt)
+-	PROVIDE_HIDDEN(__rela_iplt_start = .);
+-	*(.rela.iplt)
+-	PROVIDE_HIDDEN(__rela_iplt_end = .);
+-  }
+-
+-  #include <asm/common.lds.S>
+-
+-  __init_begin = .;
+-  init.data : { INIT_DATA }
+-  __init_end = .;
+-
+-  .data    :
+-  {
+-    INIT_TASK_DATA(KERNEL_STACK_SIZE)
+-    . = ALIGN(KERNEL_STACK_SIZE);
+-    *(.data..init_irqstack)
+-    DATA_DATA
+-    *(.gnu.linkonce.d*)
+-    CONSTRUCTORS
+-  }
+-  .data1   : { *(.data1) }
+-  .ctors         :
+-  {
+-    *(.ctors)
+-  }
+-  .dtors         :
+-  {
+-    *(.dtors)
+-  }
+-
+-  .got           : { *(.got.plt) *(.got) }
+-  .dynamic       : { *(.dynamic) }
+-  .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
+-  .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
+-  /* We want the small data sections together, so single-instruction offsets
+-     can access them all, and initialized data all before uninitialized, so
+-     we can shorten the on-disk segment size.  */
+-  .sdata     : { *(.sdata) }
+-  _edata  =  .;
+-  PROVIDE (edata = .);
+-  . = ALIGN(PAGE_SIZE);
+-  __bss_start = .;
+-  PROVIDE(_bss_start = .);
+-  SBSS(0)
+-  BSS(0)
+-   __bss_stop = .;
+-  _end = .;
+-  PROVIDE (end = .);
+-
+-  STABS_DEBUG
+-  DWARF_DEBUG
+-  ELF_DETAILS
+-
+-  DISCARDS
+-}
+diff --git a/arch/um/kernel/vmlinux.lds.S b/arch/um/kernel/vmlinux.lds.S
+index 16e49bfa2b42..a673f51defda 100644
+--- a/arch/um/kernel/vmlinux.lds.S
++++ b/arch/um/kernel/vmlinux.lds.S
+@@ -1,8 +1,88 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <asm/vmlinux.lds.h>
++#include <asm/thread_info.h>
++#include <asm/page.h>
++#include <asm/thread_info.h>
++#include <asm/cache.h>
++#include <linux/export.h>
+ 
+-KERNEL_STACK_SIZE = 4096 * (1 << CONFIG_KERNEL_STACK_ORDER);
++OUTPUT_FORMAT(ELF_FORMAT)
++jiffies = jiffies_64;
+ 
+-#ifdef CONFIG_LD_SCRIPT_STATIC
+-#include "uml.lds.S"
+-#else
+-#include "dyn.lds.S"
+-#endif
++
++SECTIONS
++{
++	__init_begin = . ;
++	HEAD_TEXT_SECTION
++	INIT_TEXT_SECTION(PAGE_SIZE)
++	INIT_DATA_SECTION(16)
++	PERCPU_SECTION(L1_CACHE_BYTES)
++	__init_end = . ;
++
++	_stext = . ;
++	_text = . ;
++	.text : ALIGN(THREAD_SIZE)
++	{
++		__binary_start = . ;
++		TEXT_TEXT
++		SCHED_TEXT
++		LOCK_TEXT
++		CPUIDLE_TEXT
++		IRQENTRY_TEXT
++		SOFTIRQENTRY_TEXT
++	}
++	_etext = . ;
++
++	.syscall_stub : ALIGN(PAGE_SIZE)
++	{
++		__syscall_stub_start = .;
++		*(.__syscall_stub*)
++		__syscall_stub_end = .;
++	}
++
++	_sdata = . ;
++	RO_DATA(PAGE_SIZE)
++	RW_DATA(L1_CACHE_BYTES, PAGE_SIZE, THREAD_SIZE)
++	.data : ALIGN(THREAD_SIZE)  { }
++
++	EXCEPTION_TABLE(16)
++
++	.uml.init_irqstack : ALIGN(THREAD_SIZE) {
++		*(.data..init_irqstack)
++	}
++
++	.uml.setup.init : ALIGN(8) {
++		__uml_setup_start = .;
++		*(.uml.setup.init)
++		__uml_setup_end = .;
++	}
++
++	.uml.help.init : ALIGN(8)  {
++		__uml_help_start = .;
++		*(.uml.help.init)
++		__uml_help_end = .;
++	}
++
++	.uml.postsetup.init : ALIGN(8) {
++		__uml_postsetup_start = .;
++		*(.uml.postsetup.init)
++		__uml_postsetup_end = .;
++	}
++
++	.uml.exitcall : ALIGN(8) {
++		__uml_exitcall_begin = .;
++		*(.uml.exitcall.exit)
++		__uml_exitcall_end = .;
++	}
++	_edata = . ;
++
++	BSS_SECTION(0, 0, 0)
++	_end = . ;
++
++	STABS_DEBUG
++
++	DWARF_DEBUG
++	ELF_DETAILS
++
++	DISCARDS
++}
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 6eded325c837..9bc0e212657c 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -102,36 +102,18 @@ vmlinux_link()
+ 		strip_debug=-Wl,--strip-debug
+ 	fi
+ 
+-	if [ "${SRCARCH}" != "um" ]; then
+-		objects="--whole-archive			\
+-			${KBUILD_VMLINUX_OBJS}			\
+-			--no-whole-archive			\
+-			--start-group				\
+-			${KBUILD_VMLINUX_LIBS}			\
+-			--end-group				\
+-			${@}"
+-
+-		${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
+-			${strip_debug#-Wl,}			\
+-			-o ${output}				\
+-			-T ${lds} ${objects}
+-	else
+-		objects="-Wl,--whole-archive			\
+-			${KBUILD_VMLINUX_OBJS}			\
+-			-Wl,--no-whole-archive			\
+-			-Wl,--start-group			\
+-			${KBUILD_VMLINUX_LIBS}			\
+-			-Wl,--end-group				\
+-			${@}"
+-
+-		${CC} ${CFLAGS_vmlinux}				\
+-			${strip_debug}				\
+-			-o ${output}				\
+-			-Wl,-T,${lds}				\
+-			${objects}				\
+-			-lutil -lrt -lpthread
+-		rm -f linux
+-	fi
++	objects="--whole-archive			\
++		${KBUILD_VMLINUX_OBJS}			\
++		--no-whole-archive			\
++		--start-group				\
++		${KBUILD_VMLINUX_LIBS}			\
++		--end-group				\
++		${@}"
++
++	${LD} ${KBUILD_LDFLAGS} ${LDFLAGS_vmlinux}	\
++		${strip_debug#-Wl,}			\
++		-o ${output}				\
++		-T ${lds} ${objects}
+ }
+ 
+ # generate .BTF typeinfo from DWARF debuginfo
+diff --git a/tools/um/Makefile b/tools/um/Makefile
+new file mode 100644
+index 000000000000..2b4e6b63355b
+--- /dev/null
++++ b/tools/um/Makefile
+@@ -0,0 +1,74 @@
++# Do not use make's built-in rules
++# (this improves performance and avoids hard-to-debug behaviour);
++# also do not print "Entering directory..." messages from make
++.SUFFIXES:
++MAKEFLAGS += -r --no-print-directory
++
++ifneq ($(silent),1)
++  ifneq ($(V),1)
++	QUIET_AUTOCONF       = @echo '  AUTOCONF '$@;
++	Q = @
++  endif
++endif
++
++PREFIX   := /usr
++
++srctree := $(patsubst %/,%,$(dir $(shell pwd)))
++srctree := $(patsubst %/,%,$(dir $(srctree)))
++export srctree
++
++-include ../scripts/Makefile.include
++
++# OUTPUT fixup should be *after* include ../scripts/Makefile.include
++ifneq ($(OUTPUT),)
++  OUTPUT := $(OUTPUT)/tools/um/
++else
++  OUTPUT := $(CURDIR)/
++endif
++export OUTPUT
++export objtree := $(OUTPUT)/../..
++
++export CFLAGS += -I$(OUTPUT)/include -Iinclude -Wall -g -O2 -Wextra -fPIC \
++	 -Wno-unused-parameter \
++	 -Wno-missing-field-initializers -fno-strict-aliasing
++
++-include Targets
++
++TARGETS := $(progs-y:%=$(OUTPUT)%)
++TARGETS += $(libs-y:%=$(OUTPUT)%)
++all: $(TARGETS)
++
++# rule to build linux.o
++$(objtree)/linux.o:
++	$(Q)echo ""
++	$(Q)echo ""
++	$(Q)echo "==> $@ isn't found; please make ARCH=um"
++	$(Q)echo ""
++	$(Q)echo ""
++	$(Q)exit 1
++
++$(OUTPUT)lib/linux.o: $(objtree)/linux.o
++	$(Q)cp $(objtree)/linux.o $(OUTPUT)lib/linux.o
++
++$(OUTPUT)liblinux.a: $(OUTPUT)lib/linux.o $(OUTPUT)uml/liblinux-in.o
++	$(QUIET_AR)$(AR) -rc $@ $^
++
++# rule to link programs
++$(OUTPUT)%: $(OUTPUT)%-in.o $(OUTPUT)liblinux.a
++	$(QUIET_LINK)$(CC) $(LDFLAGS) $(LDFLAGS_$(notdir $*)-y) -o $@ $^ $(LDLIBS) $(LDLIBS_$(notdir $*)-y)
++
++# rule to build objects
++$(OUTPUT)%-in.o: FORCE
++	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(patsubst %/,%,$(dir $*)) obj=$(notdir $*)
++
++RM := rm -f
++clean:
++	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
++	 -delete -o -name '\.*.d' -delete
++	$(call QUIET_CLEAN, liblinux.a)$(RM) $(OUTPUT)/liblinux.a
++	$(call QUIET_CLEAN, $(TARGETS))$(RM) $(TARGETS)
++
++FORCE: ;
++.PHONY: all clean FORCE
++.IGNORE: clean
++.NOTPARALLEL : lib/linux.o
+diff --git a/tools/um/Targets b/tools/um/Targets
+new file mode 100644
+index 000000000000..cfe1d3c3c6ff
+--- /dev/null
++++ b/tools/um/Targets
+@@ -0,0 +1,4 @@
++progs-y += uml/linux
++LDLIBS_linux-y := -lrt -lpthread -lutil
++LDFLAGS_linux-y := -no-pie -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
++LDFLAGS_linux-$(CONFIG_STATIC_LINK) += -static
+diff --git a/tools/um/uml/Build b/tools/um/uml/Build
+new file mode 100644
+index 000000000000..e69de29bb2d1
 -- 
 2.21.0 (Apple Git-122.2)
 
