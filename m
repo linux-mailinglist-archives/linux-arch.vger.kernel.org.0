@@ -2,61 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EA12FC918
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107C42FC90A
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728655AbhATDfa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 22:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S1728253AbhATDcC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 22:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731897AbhATC32 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:29:28 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7CDC0613CF
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:28:45 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id s15so11673411plr.9
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:28:45 -0800 (PST)
+        with ESMTP id S1732059AbhATC3x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:29:53 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75021C0613D3
+        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:28:50 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id x12so11662907plr.10
+        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:28:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ToO/WYTxIr1LPeucqKH8GBPoC7WHzAa9s65l36SnES4=;
-        b=NfCJd3GtI8WkI01UhpkCPCkjOx+iy/+59sUAtGJi5QUqBVOvn8xcw0EHFLmkQPpgNk
-         WR7KB4gN3r1TjCb72jKedGaaA5eV2PAwBz+bsNjkK6AhlkrugHf0K4Z/O+xMEUuGHaI2
-         mDgbzy60NyLBIjQ7Y6solGCFdiZsP7pBwwzq6dtQJgG4DBrZZbkaOH62OctNXug9OGlz
-         eDyp/Ql75Fh5IW+SvVrfldk2LmejrRqWfbt4H51zXz+ZYPexe6RvlpSFZ/S2gKUVCQ8d
-         hHdsAmHyFHxiHbytDEjnMnGrqKWIdNNbWOf/sfI1n8ptQDJWTZt6Ai1iQP0Ffxw+wEjV
-         g6vg==
+        bh=CVsmm0PG5z3WdArxPZod8DyojNLUmU9ogrzEl7sHLN0=;
+        b=MmrWcN0o3wOgZUudNSQC7Tn9/N3nCo4jbrxTC0G3l2a3ckLMkOoVdgX0Gk8n7lCBQ9
+         BcJdAimIEjAfX5Xkmx86uvtLojP/+Ale+FeJ/Wu9AzOYDZLWAcdtFLpXa7KynflnR/SF
+         qDIApEqM8QBO4gjn/zbW0tG93THS6CIPAFqpgHKz9pFuMobqvTn+JbQu9MzvcQ1Vx260
+         VggzrUjjglAfLzLbUC0qy+IsdTpPjUX4V6YU3xiFosfnZnYax4Fw6wQ7R1ix36DS2LtP
+         52cgtXx9SuzU/2LYjldn2aUALVf00tTUqXfPFrmwiw15PEqS14L8nTTFffyN0LpzTy3M
+         U36Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ToO/WYTxIr1LPeucqKH8GBPoC7WHzAa9s65l36SnES4=;
-        b=pmyU66pA4rSLe5oP2CF9ROOOtSOEGJB1hj3iVFdTEnlo9i+F6FL04BUYR5A+vjimNJ
-         RhhR9h3oqVDx3LIOw4uDh2tTSui/Cl/B410hINFawhfQ0XoPiNJdtqFx6pUMq+bUTRX/
-         TTJd1CXyoowpNfmhFFZgkOP5BJCEB5sboAbztKqaHTHSF9lUvbbprnvmmaCeQeOnyx2v
-         acRmKMG/yr6kSNkV40wzeVTANIHNp0yUJT0I89ZPKK91C0ykMTWAIAwTmHMdBhEaTccX
-         PjR0S8ZJGsWKeNfqgWieSsUvv/Q8VVmCvmKc4jXmDxgJDJ0/Ar+HXx/VLRr4He2ifsjJ
-         HlEg==
-X-Gm-Message-State: AOAM530uNuXKBRyAwqVo1s9X1Elpl0uv21HDqYYxw8zc0hwbRUqs8+0Q
-        84/MCz5fZFC5hZYINJW39Io=
-X-Google-Smtp-Source: ABdhPJxNraVi0423Ev4XYbhrqbhx7PS0eFJCADqDT1ysnnSBADxtflwaQ1FagFj3USJ3HvE1ZQgs1A==
-X-Received: by 2002:a17:902:7242:b029:db:d1ae:46bb with SMTP id c2-20020a1709027242b02900dbd1ae46bbmr7652190pll.77.1611109724402;
-        Tue, 19 Jan 2021 18:28:44 -0800 (PST)
+        bh=CVsmm0PG5z3WdArxPZod8DyojNLUmU9ogrzEl7sHLN0=;
+        b=Gu2aAClGmzxhHvkg+ExW2IWZtFArx1vx1ThuZUpL+Jv5gCkKp+tbghXOJUKuGinSqa
+         UsW8DWe0Fiu5c9vIhLIBP1zXKeWMMTW37Es1W3/An5VvGvHmlmIKrEMLtUVsZMghlNmc
+         Yaq33YIgCZ+Xx11wmBuZ0pwWGUJ7wjyKz396uj+8LOPyHJ3CQFtoefKWPFyWnGzO8Ml0
+         ANmrKsbF3gqQ2DVY1GQRo7lIVz/Gb4SU8jgaSoWJ6ZtzavZbo6wo2QH9YR5dkH1iAux9
+         RyS+UMSaUd/5fFChAdbTQF3FuXvhyI3/MkAFLIWCsNxMzngBG8cPIOkRrytrwQ/86/i8
+         TBfg==
+X-Gm-Message-State: AOAM532zE9z2KBfOwa57pYaQ4FJRtProts6wweT4dX3XhATMYaeHDelA
+        iJMXXYQJVA4Y5EAN9IRmE4Q=
+X-Google-Smtp-Source: ABdhPJyPJM3ActgkX7nE6LQk6EMwjlZ6agJ/M4ajSLM/oyi8AYtXws5iXoLS0SYWK02fkoawbInQVg==
+X-Received: by 2002:a17:90b:34b:: with SMTP id fh11mr2865687pjb.225.1611109729750;
+        Tue, 19 Jan 2021 18:28:49 -0800 (PST)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id 68sm382550pfe.33.2021.01.19.18.28.43
+        by smtp.gmail.com with ESMTPSA id a19sm370223pfi.130.2021.01.19.18.28.48
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Jan 2021 18:28:43 -0800 (PST)
+        Tue, 19 Jan 2021 18:28:49 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 089BD20442D333; Wed, 20 Jan 2021 11:28:42 +0900 (JST)
+        id B1A5820442D348; Wed, 20 Jan 2021 11:28:46 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com
 Cc:     thehajime@gmail.com, tavi.purdila@gmail.com, retrage01@gmail.com,
-        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org
-Subject: [RFC v8 09/20] um: lkl: kernel thread support
-Date:   Wed, 20 Jan 2021 11:27:14 +0900
-Message-Id: <3aecd66b9314f2b435fb6df029dc5829bf8c50ff.1611103406.git.thehajime@gmail.com>
+        linux-kernel-library@freelists.org, linux-arch@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [RFC v8 10/20] um: lkl: system call interface and application API
+Date:   Wed, 20 Jan 2021 11:27:15 +0900
+Message-Id: <04ab68956d43fea811745957f014a9a44dbdf4bd.1611103406.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1611103406.git.thehajime@gmail.com>
 References: <cover.1611103406.git.thehajime@gmail.com>
@@ -66,855 +67,1023 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-library mode does not support user processes but it must support kernel
-threads as part as the normal kernel work-flow. It uses host functions
-to create and terminate host threads that are going to run the kernel
-threads. It also uses semaphores to synchronize those threads and to
-allow the Linux kernel scheduler to control how the kernel threads
-run.
+The application API is based on the kernel system call interface in
+order to offer a stable API to applications. Note that we can't
+offer the full Linux system call interface due to the limitations of
+library mode such as lack of virtual memory, signal, user processes, etc.
 
-Each kernel thread runs in a host thread and has a host semaphore
-associated with it - the thread's scheduling semaphore. The semaphore
-counter is initialized to 0. The first thing a kernel thread does
-after getting spawned, before running any kernel code, is to perform a
-down operation to block the thread.
+The host is using dedicated kernel thread, which is switched upon the
+entry of lkl_syscall so that numbers of context switches can be reduced
+for the faster performance.
 
-The kernel controls host threads scheduling by performing up and down
-operations on the scheduling semaphore. In __switch_context an up
-operation on the next thread is performed to wake up a blocked thread,
-and a down operation is performed on the prev thread to block it.
+To expose the API definitions to applications, this commit uses
+syscall_wrapper to define arch-specific information of syscall, and this
+is used to generate syscall_defs.h for lkl so that it can be used
+as a template of the list of syscall available for LKL apps.
 
-A thread is terminated by marking it in free_thread_info and
-performing an up operation on the scheduling semaphore at which point
-the marked thread will terminate itself.
+To avoid collisions between the Linux API and the LKL API (e.g.  struct
+stat, MKNOD, etc.) we use a python script to modify the user headers
+and to prefix all of the global symbols (structures, typedefs,
+defines) with LKL, lkl, _LKL, _lkl, __LKL or __lkl.
 
-Kernel threads are executed with the synchronization to other context
-primitivecs of kernel, such as idle thread, system calls, interrupts,
-"reentrancy", CPU shutdown, imbalance wake up, which are not
-controllable with a simple synchronization mechanism.  Thus we
-introduced a logical CPU entity, struct lkl_cpu, to run Linux code with
-multiple threads; CPU get/put functions (lkl_cpu_put/lkl_cpu_get) is
-used to serialize access between LKL threads and host threads that
-issue direct calls.
+This commit also added an exception to SPDX-License-Identifier for the
+library mode of UML, since applications may statically link the library,
+thus this the GPL exception to the exported headers doesn't apply to.
 
-UML common part (process.c) is extended to call idle functions of
-SUBARCH as well as kernel thread detection with a flag information of
-TIF_HOST_THREAD.
-
+Cc: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- arch/um/include/asm/thread_info.h       |  24 +++
- arch/um/kernel/process.c                |   8 +-
- arch/um/lkl/include/asm/cpu.h           |  11 +
- arch/um/lkl/include/asm/sched.h         |  23 +++
- arch/um/lkl/include/uapi/asm/host_ops.h | 164 +++++++++++++++
- arch/um/lkl/um/cpu.c                    | 223 ++++++++++++++++++++
- arch/um/lkl/um/threads.c                | 258 ++++++++++++++++++++++++
- 7 files changed, 710 insertions(+), 1 deletion(-)
- create mode 100644 arch/um/lkl/include/asm/cpu.h
- create mode 100644 arch/um/lkl/include/asm/sched.h
- create mode 100644 arch/um/lkl/um/cpu.c
- create mode 100644 arch/um/lkl/um/threads.c
+ arch/um/Kconfig                            |   1 +
+ arch/um/lkl/Makefile.um                    |  16 ++
+ arch/um/lkl/include/asm/syscall_wrapper.h  |  57 ++++
+ arch/um/lkl/include/asm/syscalls.h         |  15 +
+ arch/um/lkl/include/uapi/asm/Kbuild        |   6 +
+ arch/um/lkl/include/uapi/asm/bitsperlong.h |   5 +-
+ arch/um/lkl/include/uapi/asm/byteorder.h   |   6 +-
+ arch/um/lkl/include/uapi/asm/host_ops.h    |  43 +++
+ arch/um/lkl/include/uapi/asm/syscalls.h    | 301 +++++++++++++++++++++
+ arch/um/lkl/include/uapi/asm/unistd.h      |  15 +
+ arch/um/lkl/um/syscalls.c                  | 193 +++++++++++++
+ arch/um/scripts/headers_install.py         | 200 ++++++++++++++
+ scripts/headers_install.sh                 |   6 +-
+ 13 files changed, 860 insertions(+), 4 deletions(-)
+ create mode 100644 arch/um/lkl/include/asm/syscall_wrapper.h
+ create mode 100644 arch/um/lkl/include/asm/syscalls.h
+ create mode 100644 arch/um/lkl/include/uapi/asm/Kbuild
+ create mode 100644 arch/um/lkl/include/uapi/asm/syscalls.h
+ create mode 100644 arch/um/lkl/include/uapi/asm/unistd.h
+ create mode 100644 arch/um/lkl/um/syscalls.c
+ create mode 100755 arch/um/scripts/headers_install.py
 
-diff --git a/arch/um/include/asm/thread_info.h b/arch/um/include/asm/thread_info.h
-index 3b1cb8b3b186..528e0347a9d8 100644
---- a/arch/um/include/asm/thread_info.h
-+++ b/arch/um/include/asm/thread_info.h
-@@ -40,6 +40,7 @@ struct thread_info {
- 	.real_thread = NULL,			\
- }
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 53c7919ec5b7..24c6596260de 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -28,6 +28,7 @@ config UMMODE_LIB
+ 	depends on !SMP
+ 	select UACCESS_MEMCPY
+ 	select ARCH_THREAD_STACK_ALLOCATOR
++	select ARCH_HAS_SYSCALL_WRAPPER
+ 	help
+ 	 This mode switches a mode to build a library of UML (Linux
+ 	 Kernel Library/LKL).  If this is Y, the build only generates,
+diff --git a/arch/um/lkl/Makefile.um b/arch/um/lkl/Makefile.um
+index 7d3f590d88a2..8c3f4f1a2032 100644
+--- a/arch/um/lkl/Makefile.um
++++ b/arch/um/lkl/Makefile.um
+@@ -1,2 +1,18 @@
+ KBUILD_CFLAGS += -fno-builtin -fPIC
+ ELF_FORMAT=$(shell $(LD) -r -print-output-format)
++
++INSTALL_PATH ?= $(objtree)/tools/um
++SYSCALL_DEFS_H := $(objtree)/$(HOST_DIR)/include/generated/uapi/asm/syscall_defs.h
++REPLACED_SYSCALL_DEFS_H := $(INSTALL_PATH)/include/lkl/asm/syscall_defs.h
++
++um_headers_install: $(REPLACED_SYSCALL_DEFS_H) scripts_unifdef
++
++$(REPLACED_SYSCALL_DEFS_H): $(SYSCALL_DEFS_H) $(srctree)/$(ARCH_DIR)/scripts/headers_install.py
++	$(Q)$(srctree)/$(ARCH_DIR)/scripts/headers_install.py \
++		$(INSTALL_PATH)/include
++
++$(objtree)/$(HOST_DIR)/include/generated/uapi/asm/syscall_defs.h: vmlinux
++	$(Q)$(OBJCOPY) -j .syscall_defs -O binary --set-section-flags \
++		       .syscall_defs=alloc $< $@
++	$(Q) export tmpfile=$(shell mktemp); \
++	sed 's/\x0//g' $@ > $$tmpfile; mv $$tmpfile $@ ; rm -f $$tmpfile
+diff --git a/arch/um/lkl/include/asm/syscall_wrapper.h b/arch/um/lkl/include/asm/syscall_wrapper.h
+new file mode 100644
+index 000000000000..bb2a7d4274f6
+--- /dev/null
++++ b/arch/um/lkl/include/asm/syscall_wrapper.h
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __UM_SYSCALL_WRAPPER_H
++#define __UM_SYSCALL_WRAPPER_H
++
++#define __SC_ASCII(t, a) #t "," #a
++
++#define __ASCII_MAP0(m, ...)
++#define __ASCII_MAP1(m, t, a) m(t, a)
++#define __ASCII_MAP2(m, t, a, ...) m(t, a) "," __ASCII_MAP1(m, __VA_ARGS__)
++#define __ASCII_MAP3(m, t, a, ...) m(t, a) "," __ASCII_MAP2(m, __VA_ARGS__)
++#define __ASCII_MAP4(m, t, a, ...) m(t, a) "," __ASCII_MAP3(m, __VA_ARGS__)
++#define __ASCII_MAP5(m, t, a, ...) m(t, a) "," __ASCII_MAP4(m, __VA_ARGS__)
++#define __ASCII_MAP6(m, t, a, ...) m(t, a) "," __ASCII_MAP5(m, __VA_ARGS__)
++#define __ASCII_MAP(n, ...) __ASCII_MAP##n(__VA_ARGS__)
++
++#ifdef __MINGW32__
++#define SECTION_ATTRS "n0"
++#else
++#define SECTION_ATTRS "a"
++#endif
++
++#define __SYSCALL_DEFINE_ARCH(x, name, ...)				\
++	asm(".section .syscall_defs,\"" SECTION_ATTRS "\"\n"		\
++	    ".ascii \"#ifdef __NR" #name "\\n\"\n"			\
++	    ".ascii \"SYSCALL_DEFINE" #x "(" #name ","			\
++	    __ASCII_MAP(x, __SC_ASCII, __VA_ARGS__) ")\\n\"\n"		\
++	    ".ascii \"#endif\\n\"\n"					\
++	    ".section .text\n")
++
++#define SYSCALL_DEFINE0(sname)					\
++	SYSCALL_METADATA(_##sname, 0);				\
++	__SYSCALL_DEFINE_ARCH(0, _##sname);			\
++	asmlinkage long sys_##sname(void);			\
++	ALLOW_ERROR_INJECTION(sys_##sname, ERRNO);		\
++	asmlinkage long sys_##sname(void)
++
++#define __SYSCALL_DEFINEx(x, name, ...)					\
++	__SYSCALL_DEFINE_ARCH(x, name, __VA_ARGS__);			\
++	__diag_push();							\
++	__diag_ignore(GCC, 8, "-Wattribute-alias",			\
++		      "Type aliasing is used to sanitize syscall arguments");\
++	asmlinkage long sys##name(__MAP(x, __SC_DECL, __VA_ARGS__))	\
++		__attribute__((alias(__stringify(__se_sys##name))));	\
++	ALLOW_ERROR_INJECTION(sys##name, ERRNO);			\
++	static inline long __do_sys##name(__MAP(x, __SC_DECL, __VA_ARGS__)); \
++	asmlinkage long __se_sys##name(__MAP(x, __SC_LONG, __VA_ARGS__)); \
++	asmlinkage long __se_sys##name(__MAP(x, __SC_LONG, __VA_ARGS__)) \
++	{								\
++		long ret = __do_sys##name(__MAP(x, __SC_CAST, __VA_ARGS__)); \
++		__MAP(x, __SC_TEST, __VA_ARGS__);			\
++		__PROTECT(x, ret, __MAP(x, __SC_ARGS, __VA_ARGS__));	\
++		return ret;						\
++	}								\
++	__diag_pop();							\
++	static inline long __do_sys##name(__MAP(x, __SC_DECL, __VA_ARGS__))
++
++#endif /* __UM_SYSCALL_WRAPPER_H */
+diff --git a/arch/um/lkl/include/asm/syscalls.h b/arch/um/lkl/include/asm/syscalls.h
+new file mode 100644
+index 000000000000..6061d9415dad
+--- /dev/null
++++ b/arch/um/lkl/include/asm/syscalls.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++int syscalls_init(void);
++void syscalls_cleanup(void);
++long lkl_syscall(long no, long *params);
++void wakeup_idle_host_task(void);
++
++#define sys_mmap sys_ni_syscall
++#define sys_rt_sigreturn sys_ni_syscall
++#define sys_arch_prctl sys_ni_syscall
++#define sys_iopl sys_ni_syscall
++#define sys_ioperm sys_ni_syscall
++#define sys_clone sys_ni_syscall
++
++int run_syscalls(void);
+diff --git a/arch/um/lkl/include/uapi/asm/Kbuild b/arch/um/lkl/include/uapi/asm/Kbuild
+new file mode 100644
+index 000000000000..1c89a1640263
+--- /dev/null
++++ b/arch/um/lkl/include/uapi/asm/Kbuild
+@@ -0,0 +1,6 @@
++# UAPI Header export list
++
++generated-y += syscall_defs.h
++
++# generated-y file is parsed by special user headers handling
++# see arch/um/script/headers_install.py
+diff --git a/arch/um/lkl/include/uapi/asm/bitsperlong.h b/arch/um/lkl/include/uapi/asm/bitsperlong.h
+index f6657ba0ff9b..b3a5adf0b04f 100644
+--- a/arch/um/lkl/include/uapi/asm/bitsperlong.h
++++ b/arch/um/lkl/include/uapi/asm/bitsperlong.h
+@@ -2,7 +2,10 @@
+ #ifndef __UM_LIBMODE_UAPI_BITSPERLONG_H
+ #define __UM_LIBMODE_UAPI_BITSPERLONG_H
  
-+#ifndef CONFIG_UMMODE_LIB
- /* how to get the thread information struct from C */
- static inline struct thread_info *current_thread_info(void)
- {
-@@ -52,6 +53,27 @@ static inline struct thread_info *current_thread_info(void)
- 	return ti;
- }
+-#ifdef CONFIG_64BIT
++/* need to add new arch defines here, as we cannot use CONFIG_64BIT here
++ * to avoid CONFIG leaks to userspace
++ */
++#if defined(__x86_64__)
+ #define __BITS_PER_LONG 64
+ #else
+ #define __BITS_PER_LONG 32
+diff --git a/arch/um/lkl/include/uapi/asm/byteorder.h b/arch/um/lkl/include/uapi/asm/byteorder.h
+index a4ae973f440b..ed19f6a836c6 100644
+--- a/arch/um/lkl/include/uapi/asm/byteorder.h
++++ b/arch/um/lkl/include/uapi/asm/byteorder.h
+@@ -2,10 +2,12 @@
+ #ifndef __UM_LIBMODE_UAPI_BYTEORDER_H
+ #define __UM_LIBMODE_UAPI_BYTEORDER_H
  
-+#else /* CONFIG_UMMODE_LIB */
-+
-+#define __HAVE_THREAD_FUNCTIONS
-+#define task_thread_info(task)	((struct thread_info *)(task)->stack)
-+#define task_stack_page(task)	((task)->stack)
-+#define end_of_stack(p) (&task_thread_info(p)->aux_fp_regs[FP_SIZE-1])
-+
-+void threads_init(void);
-+void threads_cleanup(void);
-+
-+unsigned long *alloc_thread_stack_node(struct task_struct *p, int node);
-+void setup_thread_stack(struct task_struct *p, struct task_struct *org);
-+void free_thread_stack(struct task_struct *tsk);
-+
-+extern struct thread_info *_current_thread_info;
-+static inline struct thread_info *current_thread_info(void)
-+{
-+	return _current_thread_info;
-+}
-+#endif /* CONFIG_UMMODE_LIB */
-+
+-#if defined(CONFIG_BIG_ENDIAN)
++#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ #include <linux/byteorder/big_endian.h>
+-#else
++#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #include <linux/byteorder/little_endian.h>
++#else
++#error "cannot detect endian of the target"
  #endif
  
- #define TIF_SYSCALL_TRACE	0	/* syscall trace active */
-@@ -64,6 +86,8 @@ static inline struct thread_info *current_thread_info(void)
- #define TIF_RESTORE_SIGMASK	7
- #define TIF_NOTIFY_RESUME	8
- #define TIF_SECCOMP		9	/* secure computing */
-+#define TIF_SCHED_JB		10	/* thread is configured with jump buffer */
-+#define TIF_HOST_THREAD	11	/* thread is a host task */
- 
- #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
- #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
-diff --git a/arch/um/kernel/process.c b/arch/um/kernel/process.c
-index 9b0a36f64339..535ba738f2f5 100644
---- a/arch/um/kernel/process.c
-+++ b/arch/um/kernel/process.c
-@@ -160,7 +160,8 @@ int copy_thread(unsigned long clone_flags, unsigned long sp,
- 		unsigned long arg, struct task_struct * p, unsigned long tls)
- {
- 	void (*handler)(void);
--	int kthread = current->flags & PF_KTHREAD;
-+	int kthread = current->flags & PF_KTHREAD ||
-+		test_ti_thread_flag(current_thread_info(), TIF_HOST_THREAD);
- 	int ret = 0;
- 
- 	p->thread = (struct thread_struct) INIT_THREAD;
-@@ -214,10 +215,15 @@ void um_idle_sleep(void)
- 		os_idle_sleep();
- }
- 
-+void __weak subarch_cpu_idle(void)
-+{
-+}
-+
- void arch_cpu_idle(void)
- {
- 	cpu_tasks[current_thread_info()->cpu].pid = os_getpid();
- 	um_idle_sleep();
-+	subarch_cpu_idle();
- 	raw_local_irq_enable();
- }
- 
-diff --git a/arch/um/lkl/include/asm/cpu.h b/arch/um/lkl/include/asm/cpu.h
-new file mode 100644
-index 000000000000..c1164187151e
---- /dev/null
-+++ b/arch/um/lkl/include/asm/cpu.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __UM_LIBMODE_CPU_H
-+#define __UM_LIBMODE_CPU_H
-+
-+int lkl_cpu_get(void);
-+void lkl_cpu_put(void);
-+int lkl_cpu_init(void);
-+void lkl_cpu_wait_shutdown(void);
-+void lkl_cpu_change_owner(lkl_thread_t owner);
-+
-+#endif
-diff --git a/arch/um/lkl/include/asm/sched.h b/arch/um/lkl/include/asm/sched.h
-new file mode 100644
-index 000000000000..1ac063ed987c
---- /dev/null
-+++ b/arch/um/lkl/include/asm/sched.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __UM_LIBMODE_SCHED_H
-+#define __UM_LIBMODE_SCHED_H
-+
-+#include <linux/sched.h>
-+#include <uapi/asm/host_ops.h>
-+
-+static inline void thread_sched_jb(void)
-+{
-+	if (test_ti_thread_flag(current_thread_info(), TIF_HOST_THREAD)) {
-+		set_ti_thread_flag(current_thread_info(), TIF_SCHED_JB);
-+		set_current_state(TASK_UNINTERRUPTIBLE);
-+		lkl_jmp_buf_set(&current_thread_info()->task->thread.arch.sched_jb,
-+				     schedule);
-+	} else {
-+		lkl_bug("%s can be used only for host task", __func__);
-+	}
-+}
-+
-+void switch_to_host_task(struct task_struct *);
-+int host_task_stub(void *unused);
-+
-+#endif
+ #endif
 diff --git a/arch/um/lkl/include/uapi/asm/host_ops.h b/arch/um/lkl/include/uapi/asm/host_ops.h
-index 17219802fa1d..039a17972d7d 100644
+index 039a17972d7d..b97aa1099a17 100644
 --- a/arch/um/lkl/include/uapi/asm/host_ops.h
 +++ b/arch/um/lkl/include/uapi/asm/host_ops.h
-@@ -2,6 +2,13 @@
- #ifndef __UM_LIBMODE_UAPI_HOST_OPS_H
- #define __UM_LIBMODE_UAPI_HOST_OPS_H
- 
-+struct lkl_mutex;
-+struct lkl_sem;
-+typedef unsigned long lkl_thread_t;
-+struct lkl_jmp_buf {
-+	unsigned long buf[128];
-+};
-+
- /**
-  * struct lkl_host_operations - host operations used by the Linux kernel
-  *
-@@ -36,4 +43,161 @@ void *lkl_mem_alloc(unsigned long mem);
+@@ -200,4 +200,47 @@ void lkl_jmp_buf_set(struct lkl_jmp_buf *jmpb, void (*f)(void));
   */
- void lkl_mem_free(void *mem);
+ void lkl_jmp_buf_longjmp(struct lkl_jmp_buf *jmpb, int val);
  
 +/**
-+ * lkl_sem_alloc - allocate a host semaphore an initialize it to count
++ * lkl_tls_alloc - allocate a thread local storage key
 + *
-+ * @count: initial counter value
++ * @destructor: a destructor called upon termination. if this is not NULL it
++ * will be called when a thread terminates with its argument set to the current
++ * thread local storage value
 + *
-+ * Return: the pointer of allocated semaphore
++ * Return: non-NULL address of allocated struct lkl_tls_key if successful;
++ * otherwise NULL
 + *
 + */
-+struct lkl_sem *lkl_sem_alloc(int count);
++struct lkl_tls_key *lkl_tls_alloc(void (*destructor)(void *));
 +
 +/**
-+ * lkl_sem_free - free a host semaphore
++ * lkl_tls_free - frees a thread local storage key
 + *
-+ * @sem: the address of semaphore to be freed
++ * @key: lkl_tls_key to be freed
 + *
 + */
-+void lkl_sem_free(struct lkl_sem *sem);
++void lkl_tls_free(struct lkl_tls_key *key);
 +
 +/**
-+ * lkl_sem_up - perform an up operation on the semaphore
++ * lkl_tls_set - associate data to the thread local storage key
 + *
-+ * @sem: semaphore pointer address
++ * @key: lkl_tls_key to be configured
++ * @data: the value associated with the @key
++ *
++ * Return: 0 if successful
 + *
 + */
-+void lkl_sem_up(struct lkl_sem *sem);
++int lkl_tls_set(struct lkl_tls_key *key, void *data);
 +
 +/**
-+ * lkl_sem_down - perform a down operation on the semaphore
++ * lkl_tls_get - obtain the value associated with tls
 + *
-+ * @sem: semaphore pointer address
++ * @key: lkl_tls_key to be queried
 + *
-+ */
-+void lkl_sem_down(struct lkl_sem *sem);
-+
-+/**
-+ * lkl_mutex_alloc - allocate and initialize a host mutex
-+ *
-+ * @recursive: boolean flag if the mutex is recursive or not
-+ *
-+ * Return: the pointer of allocated mutex
++ * Return: data associated with the thread local storage key or NULL
++ * on error
 + *
 + */
-+struct lkl_mutex *lkl_mutex_alloc(int recursive);
-+
-+/**
-+ * lkl_mutex_free - free a host mutex
-+ *
-+ * @mutex: the mutex pointer to be freed
-+ *
-+ */
-+void lkl_mutex_lock(struct lkl_mutex *mutex);
-+
-+/**
-+ * lkl_mutex_lock - acquire the mutex
-+ *
-+ * @_mutex: the mutex pointer to be locked
-+ *
-+ */
-+void lkl_mutex_unlock(struct lkl_mutex *_mutex);
-+
-+/**
-+ * lkl_mutex_unlock - release the mutex
-+ *
-+ * @_mutex: the mutex pointer to be released
-+ *
-+ */
-+void lkl_mutex_free(struct lkl_mutex *_mutex);
-+
-+/**
-+ * lkl_thread_create - create a new thread and run f(arg) in its context
-+ *
-+ * @fn: a start routine when creating a thread
-+ * @arg: an argument for the function @fn
-+ *
-+ * Return: a thread handle or 0 if the thread could not be created
-+ *
-+ */
-+lkl_thread_t lkl_thread_create(void* (*fn)(void *), void *arg);
-+
-+/**
-+ * lkl_thread_detach - on POSIX systems, free up resources held by
-+ * pthreads.
-+ *
-+ */
-+void lkl_thread_detach(void);
-+
-+/**
-+ * lkl_thread_exit - terminates the current thread
-+ *
-+ */
-+void lkl_thread_exit(void);
-+
-+/**
-+ * lkl_thread_join - wait for the given thread to terminate.
-+ *
-+ * @tid: thread id to wait
-+ *
-+ * Return: 0 for success, -1 otherwise
-+ *
-+ */
-+int lkl_thread_join(lkl_thread_t tid);
-+
-+/**
-+ * lkl_thread_self - returns the identifier of the current thread
-+ *
-+ * Return: the identifier of the current thread
-+ *
-+ */
-+lkl_thread_t lkl_thread_self(void);
-+
-+/**
-+ * lkl_thread_equal - compare if thread a and b are identical or not
-+ *
-+ * @a: a thread to be compared
-+ * @b: another thread to be compared with @a
-+ *
-+ * Return: 1 if @a and @b are same; otherwise 0
-+ *
-+ */
-+int lkl_thread_equal(lkl_thread_t a, lkl_thread_t b);
-+
-+/**
-+ * lkl_gettid - obtain the thread identifier of the current thread
-+ *
-+ * Return: the host thread id of the caller, which need not be the same
-+ * as the handle returned by thread_create
-+ *
-+ */
-+long lkl_gettid(void);
-+
-+/**
-+ * lkl_jmp_buf_set - set the jump buffer with a setup function
-+ *
-+ * @jmpb: jump buffer to be saved
-+ * @f: a function to be called
-+ *
-+ * This runs the given function and setups a jump back point by saving
-+ * the context in the jump buffer; jmp_buf_longjmp can be called from the give
-+ * function or any callee in that function to return back to the jump back
-+ * point.
-+ *
-+ * NOTE: we can't return from lkl_jmp_buf_set before calling lkl_jmp_buf_longjmp
-+ * or otherwise the saved context (stack) is not going to be valid, so we must
-+ * pass the function that will eventually call longjmp here.
-+ *
-+ */
-+void lkl_jmp_buf_set(struct lkl_jmp_buf *jmpb, void (*f)(void));
-+
-+/**
-+ * lkl_jmp_buf_longjmp - perform a jump back to the saved jump buffer
-+ *
-+ * @jmpb: jump buffer to be restored
-+ * @val: returned value of longjmp
-+ *
-+ */
-+void lkl_jmp_buf_longjmp(struct lkl_jmp_buf *jmpb, int val);
++void *lkl_tls_get(struct lkl_tls_key *key);
 +
  #endif
-diff --git a/arch/um/lkl/um/cpu.c b/arch/um/lkl/um/cpu.c
+diff --git a/arch/um/lkl/include/uapi/asm/syscalls.h b/arch/um/lkl/include/uapi/asm/syscalls.h
 new file mode 100644
-index 000000000000..75452b28d741
+index 000000000000..62c343199625
 --- /dev/null
-+++ b/arch/um/lkl/um/cpu.c
-@@ -0,0 +1,223 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/kernel.h>
-+#include <linux/sched/stat.h>
-+#include <asm/host_ops.h>
-+#include <asm/cpu.h>
-+#include <asm/thread_info.h>
++++ b/arch/um/lkl/include/uapi/asm/syscalls.h
+@@ -0,0 +1,301 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __UM_LIBMODE_UAPI_SYSCALLS_H
++#define __UM_LIBMODE_UAPI_SYSCALLS_H
++
++#include <linux/types.h>
++
++typedef __kernel_uid32_t	qid_t;
++typedef __kernel_fd_set		fd_set;
++typedef __kernel_mode_t		mode_t;
++typedef unsigned short		umode_t;
++typedef __u32			nlink_t;
++typedef __kernel_off_t		off_t;
++typedef __kernel_pid_t		pid_t;
++typedef __kernel_key_t		key_t;
++typedef __kernel_suseconds_t	suseconds_t;
++typedef __kernel_timer_t	timer_t;
++typedef __kernel_clockid_t	clockid_t;
++typedef __kernel_mqd_t		mqd_t;
++typedef __kernel_uid32_t	uid_t;
++typedef __kernel_gid32_t	gid_t;
++typedef __kernel_uid16_t        uid16_t;
++typedef __kernel_gid16_t        gid16_t;
++typedef unsigned long		uintptr_t;
++
++typedef __kernel_loff_t		loff_t;
++typedef __kernel_size_t		size_t;
++typedef __kernel_ssize_t	ssize_t;
++typedef __kernel_time_t		time_t;
++typedef __kernel_clock_t	clock_t;
++typedef __u32			u32;
++typedef __s32			s32;
++typedef __u64			u64;
++typedef __s64			s64;
++
++typedef __kernel_long_t	__kernel_old_time_t;
++
++#define __user
++
 +#include <asm/unistd.h>
-+#include <asm/sched.h>
-+#include <asm/syscalls.h>
-+#include <init.h>
-+
-+/*
-+ * This structure is used to get access to the "LKL CPU" that allows us to run
-+ * Linux code. Because we have to deal with various synchronization requirements
-+ * between idle thread, system calls, interrupts, "reentrancy", CPU shutdown,
-+ * imbalance wake up (i.e. acquire the CPU from one thread and release it from
-+ * another), we can't use a simple synchronization mechanism such as (recursive)
-+ * mutex or semaphore. Instead, we use a mutex and a bunch of status data plus a
-+ * semaphore.
++/* Temporary undefine system calls that don't have data types defined in UAPI
++ * headers
 + */
-+static struct lkl_cpu {
-+	/* lock that protects the CPU status data */
-+	struct lkl_mutex *lock;
-+	/*
-+	 * Since we must free the cpu lock during shutdown we need a
-+	 * synchronization algorithm between lkl_cpu_shutdown() and the CPU
-+	 * access functions since lkl_cpu_get() gets called from thread
-+	 * destructor callback functions which may be scheduled after
-+	 * lkl_cpu_shutdown() has freed the cpu lock.
-+	 *
-+	 * An atomic counter is used to keep track of the number of running
-+	 * CPU access functions and allow the shutdown function to wait for
-+	 * them.
-+	 *
-+	 * The shutdown functions adds MAX_THREADS to this counter which allows
-+	 * the CPU access functions to check if the shutdown process has
-+	 * started.
-+	 *
-+	 * This algorithm assumes that we never have more the MAX_THREADS
-+	 * requesting CPU access.
-+	 */
-+	#define MAX_THREADS 1000000
-+	unsigned int shutdown_gate;
-+	/* no of threads waiting the CPU */
-+	unsigned int sleepers;
-+	/* no of times the current thread got the CPU */
-+	unsigned int count;
-+	/* current thread that owns the CPU */
-+	lkl_thread_t owner;
-+	/* semaphore for threads waiting the CPU */
-+	struct lkl_sem *sem;
-+	/* semaphore used for shutdown */
-+	struct lkl_sem *shutdown_sem;
-+} cpu;
++#undef __NR_kexec_load
++#undef __NR_getcpu
++#undef __NR_sched_getattr
++#undef __NR_sched_setattr
++#undef __NR_sched_setparam
++#undef __NR_sched_getparam
++#undef __NR_sched_setscheduler
++#undef __NR_name_to_handle_at
++#undef __NR_open_by_handle_at
 +
-+/*
-+ * internal routine to acquire LKL CPU's lock
++/* deprecated system calls */
++#undef __NR_access
++#undef __NR_chmod
++#undef __NR_chown
++#undef __NR_lchown
++#undef __NR_open
++#undef __NR_creat
++#undef __NR_readlink
++#undef __NR_pipe
++#undef __NR_mknod
++#undef __NR_mkdir
++#undef __NR_rmdir
++#undef __NR_unlink
++#undef __NR_symlink
++#undef __NR_link
++#undef __NR_rename
++#undef __NR_getdents
++#undef __NR_select
++#undef __NR_poll
++#undef __NR_dup2
++#undef __NR_sysfs
++#undef __NR_ustat
++#undef __NR_inotify_init
++#undef __NR_epoll_create
++#undef __NR_epoll_wait
++#undef __NR_signalfd
++#undef __NR_eventfd
++
++#undef __NR_umount
++#define __NR_umount __NR_umount2
++
++#if defined(__x86_64__)
++#define __NR_newfstat __NR3264_fstat
++#define __NR_newfstatat __NR3264_fstatat
++#endif
++
++#include <linux/time.h>
++#include <linux/times.h>
++#include <linux/timex.h>
++#include <linux/capability.h>
++#define __KERNEL__ /* to pull in S_ definitions */
++#include <linux/stat.h>
++#undef __KERNEL__
++#include <linux/errno.h>
++#include <linux/fcntl.h>
++#include <linux/fs.h>
++#include <asm/statfs.h>
++#include <asm/stat.h>
++#include <linux/bpf.h>
++#include <linux/msg.h>
++#include <linux/resource.h>
++#include <linux/sysinfo.h>
++#include <linux/shm.h>
++#include <linux/aio_abi.h>
++#include <linux/socket.h>
++#include <linux/perf_event.h>
++#include <linux/sem.h>
++#include <linux/futex.h>
++#include <linux/poll.h>
++#include <linux/mqueue.h>
++#include <linux/eventpoll.h>
++#include <linux/uio.h>
++#include <asm/signal.h>
++#include <asm/siginfo.h>
++#include <linux/utime.h>
++#include <asm/socket.h>
++#include <linux/icmp.h>
++#include <linux/ip.h>
++
++/* Define data structures used in system calls that are not defined in UAPI
++ * headers
 + */
-+static int __cpu_try_get_lock(int n)
-+{
-+	lkl_thread_t self;
++struct sockaddr {
++	unsigned short int sa_family;
++	char sa_data[14];
++};
 +
-+	if (__sync_fetch_and_add(&cpu.shutdown_gate, n) >= MAX_THREADS)
-+		return -2;
++#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO 1
++#define __UAPI_DEF_IF_IFNAMSIZ	1
++#define __UAPI_DEF_IF_NET_DEVICE_FLAGS 1
++#define __UAPI_DEF_IF_IFREQ	1
++#define __UAPI_DEF_IF_IFMAP	1
++#include <linux/if.h>
++#define __UAPI_DEF_IN_IPPROTO	1
++#define __UAPI_DEF_IN_ADDR	1
++#define __UAPI_DEF_IN6_ADDR	1
++#define __UAPI_DEF_IP_MREQ	1
++#define __UAPI_DEF_IN_PKTINFO	1
++#define __UAPI_DEF_SOCKADDR_IN	1
++#define __UAPI_DEF_IN_CLASS	1
++#include <linux/in.h>
++#include <linux/in6.h>
++#include <linux/sockios.h>
++#include <linux/route.h>
++#include <linux/ipv6_route.h>
++#include <linux/ipv6.h>
++#include <linux/netlink.h>
++#include <linux/neighbour.h>
++#include <linux/rtnetlink.h>
++#include <linux/fib_rules.h>
 +
-+	lkl_mutex_lock(cpu.lock);
++#include <linux/kdev_t.h>
++#include <linux/virtio_blk.h>
++#include <linux/virtio_net.h>
++#include <linux/virtio_ring.h>
++#include <linux/pkt_sched.h>
++#include <linux/io_uring.h>
++#include <linux/utsname.h>
 +
-+	if (cpu.shutdown_gate >= MAX_THREADS)
-+		return -1;
++struct user_msghdr {
++	void		__user *msg_name;
++	int		msg_namelen;
++	struct iovec	__user *msg_iov;
++	__kernel_size_t	msg_iovlen;
++	void		__user *msg_control;
++	__kernel_size_t	msg_controllen;
++	unsigned int	msg_flags;
++};
 +
-+	self = lkl_thread_self();
++typedef __u32 key_serial_t;
 +
-+	/* if someone else is using the cpu, indicate as return 0 */
-+	if (cpu.owner && !lkl_thread_equal(cpu.owner, self))
-+		return 0;
++struct mmsghdr {
++	struct user_msghdr  msg_hdr;
++	unsigned int        msg_len;
++};
 +
-+	/* set the owner of cpu */
-+	cpu.owner = self;
-+	cpu.count++;
++struct linux_dirent64 {
++	u64		d_ino;
++	s64		d_off;
++	unsigned short	d_reclen;
++	unsigned char	d_type;
++	char		d_name[0];
++};
 +
-+	return 1;
-+}
++struct linux_dirent {
++	unsigned long	d_ino;
++	unsigned long	d_off;
++	unsigned short	d_reclen;
++	char		d_name[1];
++};
 +
-+/*
-+ * internal routine to release LKL CPU's lock
++struct ustat {
++	__kernel_daddr_t	f_tfree;
++	__kernel_ino_t		f_tinode;
++	char			f_fname[6];
++	char			f_fpack[6];
++};
++
++struct __aio_sigset;
++struct clone_args;
++
++typedef __kernel_rwf_t		rwf_t;
++
++/**
++ * lkl_syscall() - issue LKL system calls
++ *
++ * @no: system call number
++ * @params: parameters of system calls
++ *
++ * Return: 0 if there is no error; otherwise non-zero value returns.
++ *
++ * The function is an entry point of LKL system call.
 + */
-+static void __cpu_try_get_unlock(int lock_ret, int n)
-+{
-+	/* release lock only if __cpu_try_get_lock() holds cpu.lock
-+	 * (returns >= -1)
-+	 */
-+	if (lock_ret >= -1)
-+		lkl_mutex_unlock(cpu.lock);
-+	__sync_fetch_and_sub(&cpu.shutdown_gate, n);
-+}
++long lkl_syscall(long no, long *params);
 +
-+void lkl_cpu_change_owner(lkl_thread_t owner)
-+{
-+	lkl_mutex_lock(cpu.lock);
-+	if (cpu.count > 1)
-+		lkl_bug("bad count while changing owner\n");
-+	cpu.owner = owner;
-+	lkl_mutex_unlock(cpu.lock);
-+}
++/**
++ * lkl_sys_halt() - terminate LKL kernel
++ *
++ * Return: 0 if there is no error; otherwise non-zero value returns.
++ *
++ * The function requests the termination of LKL kernel.
++ */
++long lkl_sys_halt(void);
 +
-+int lkl_cpu_get(void)
-+{
-+	int ret;
++#define __MAP0(m, ...)
++#define __MAP1(m, t, a) m(t, a)
++#define __MAP2(m, t, a, ...) m(t, a), __MAP1(m, __VA_ARGS__)
++#define __MAP3(m, t, a, ...) m(t, a), __MAP2(m, __VA_ARGS__)
++#define __MAP4(m, t, a, ...) m(t, a), __MAP3(m, __VA_ARGS__)
++#define __MAP5(m, t, a, ...) m(t, a), __MAP4(m, __VA_ARGS__)
++#define __MAP6(m, t, a, ...) m(t, a), __MAP5(m, __VA_ARGS__)
++#define __MAP(n, ...) __MAP##n(__VA_ARGS__)
 +
-+	ret = __cpu_try_get_lock(1);
++#define __SC_LONG(t, a) (long)(a)
++#define __SC_TABLE(t, a) {sizeof(t), (long long)(a)}
++#define __SC_DECL(t, a) t a
 +
-+	/* when somebody holds a lock, sleep until released,
-+	 * with obtaining a semaphore (cpu.sem)
-+	 */
-+	while (ret == 0) {
-+		cpu.sleepers++;
-+		__cpu_try_get_unlock(ret, 0);
-+		lkl_sem_down(cpu.sem);
-+		ret = __cpu_try_get_lock(0);
++#define LKL_SYSCALL0(name)					       \
++	static inline long lkl_sys##name(void)			       \
++	{							       \
++		long params[6];					       \
++		return lkl_syscall(__lkl__NR##name, params);	       \
 +	}
 +
-+	__cpu_try_get_unlock(ret, 1);
++#if __BITS_PER_LONG == 32
++#define LKL_SYSCALLx(x, name, ...)					\
++	static inline							\
++	long lkl_sys##name(__MAP(x, __SC_DECL, __VA_ARGS__))		\
++	{								\
++		struct {						\
++			unsigned int size;				\
++			long long value;				\
++		} lkl_params[x] = { __MAP(x, __SC_TABLE, __VA_ARGS__) }; \
++		long sys_params[6], i, k;				\
++		for (i = k = 0; i < x && k < 6; i++, k++) {		\
++			if (lkl_params[i].size > sizeof(long) &&	\
++			    k + 1 < 6) {				\
++				sys_params[k] =				\
++					(long)(lkl_params[i].value & (-1UL)); \
++				k++;					\
++				sys_params[k] =				\
++					(long)(lkl_params[i].value >>	\
++					       __BITS_PER_LONG);	\
++			} else {					\
++				sys_params[k] = (long)(lkl_params[i].value); \
++			}						\
++		}							\
++		return lkl_syscall(__lkl__NR##name, sys_params);	\
++	}
++#else
++#define LKL_SYSCALLx(x, name, ...)					\
++	static inline							\
++	long lkl_sys##name(__MAP(x, __SC_DECL, __VA_ARGS__))		\
++	{								\
++		long lkl_params[6] = { __MAP(x, __SC_LONG, __VA_ARGS__) }; \
++		return lkl_syscall(__lkl__NR##name, lkl_params);	\
++	}
++#endif
++
++#define SYSCALL_DEFINE0(name, ...) LKL_SYSCALL0(name)
++#define SYSCALL_DEFINE1(name, ...) LKL_SYSCALLx(1, name, __VA_ARGS__)
++#define SYSCALL_DEFINE2(name, ...) LKL_SYSCALLx(2, name, __VA_ARGS__)
++#define SYSCALL_DEFINE3(name, ...) LKL_SYSCALLx(3, name, __VA_ARGS__)
++#define SYSCALL_DEFINE4(name, ...) LKL_SYSCALLx(4, name, __VA_ARGS__)
++#define SYSCALL_DEFINE5(name, ...) LKL_SYSCALLx(5, name, __VA_ARGS__)
++#define SYSCALL_DEFINE6(name, ...) LKL_SYSCALLx(6, name, __VA_ARGS__)
++
++#if __BITS_PER_LONG == 32
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
++#endif
++
++#include <asm/syscall_defs.h>
++
++#if __BITS_PER_LONG == 32
++#pragma GCC diagnostic pop
++#endif
++
++#endif
+diff --git a/arch/um/lkl/include/uapi/asm/unistd.h b/arch/um/lkl/include/uapi/asm/unistd.h
+new file mode 100644
+index 000000000000..6f5d67b45fbd
+--- /dev/null
++++ b/arch/um/lkl/include/uapi/asm/unistd.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __UM_LIBMODE_UAPI_UNISTD_H
++#define __UM_LIBMODE_UAPI_UNISTD_H
++
++#define __ARCH_WANT_NEW_STAT
++#include <asm/bitsperlong.h>
++
++#if __BITS_PER_LONG == 64
++#define __ARCH_WANT_SYS_NEWFSTATAT
++#endif
++
++#include <asm-generic/unistd.h>
++
++
++#endif
+diff --git a/arch/um/lkl/um/syscalls.c b/arch/um/lkl/um/syscalls.c
+new file mode 100644
+index 000000000000..45cb5c656f69
+--- /dev/null
++++ b/arch/um/lkl/um/syscalls.c
+@@ -0,0 +1,193 @@
++// SPDX-License-Identifier: GPL-2.0
++#ifdef CONFIG_ARCH_HAS_SYSCALL_WRAPPER
++#undef CONFIG_ARCH_HAS_SYSCALL_WRAPPER
++#include <linux/syscalls.h>
++#define CONFIG_ARCH_HAS_SYSCALL_WRAPPER
++#endif
++
++#include <linux/stat.h>
++#include <linux/irq.h>
++#include <linux/sched.h>
++#include <linux/interrupt.h>
++#include <linux/jhash.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++#include <linux/net.h>
++#include <linux/task_work.h>
++
++#include <asm/host_ops.h>
++#include <asm/syscalls.h>
++#include <asm/cpu.h>
++#include <asm/sched.h>
++#include <kern_util.h>
++#include <os.h>
++
++typedef long (*syscall_handler_t)(long arg1, ...);
++
++#undef __SYSCALL
++#define __SYSCALL(nr, sym)[nr] = (syscall_handler_t)sym,
++
++syscall_handler_t syscall_table[__NR_syscalls] = {
++	[0 ... __NR_syscalls - 1] =  (syscall_handler_t)sys_ni_syscall,
++#undef __UM_LIBMODE_UAPI_UNISTD_H
++#include <asm/unistd.h>
++
++#if __BITS_PER_LONG == 32
++#include <asm/unistd_32.h>
++#endif
++};
++
++
++static long run_syscall(long no, long *params)
++{
++	long ret;
++
++	if (no < 0 || no >= __NR_syscalls)
++		return -ENOSYS;
++
++	ret = syscall_table[no](params[0], params[1], params[2], params[3],
++				params[4], params[5]);
++
++	task_work_run();
 +
 +	return ret;
 +}
 +
-+void lkl_cpu_put(void)
++
++#define CLONE_FLAGS (CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_THREAD |	\
++		     CLONE_SIGHAND | SIGCHLD)
++
++static int host_task_id;
++static struct task_struct *host0;
++
++static int new_host_task(struct task_struct **task)
 +{
-+	lkl_mutex_lock(cpu.lock);
++	pid_t pid;
 +
-+	if (!cpu.count || !cpu.owner ||
-+	    !lkl_thread_equal(cpu.owner, lkl_thread_self()))
-+		lkl_bug("%s: unbalanced put\n", __func__);
++	switch_to_host_task(host0);
 +
-+	/* switch to userspace code if current is host task (TIF_HOST_THREAD),
-+	 * AND, there are other running tasks.
-+	 */
-+	if (test_ti_thread_flag(current_thread_info(), TIF_HOST_THREAD) &&
-+	    !single_task_running() && cpu.count == 1) {
-+		if (in_interrupt())
-+			lkl_bug("%s: in interrupt\n", __func__);
-+		lkl_mutex_unlock(cpu.lock);
++	pid = kernel_thread(host_task_stub, NULL, CLONE_FLAGS);
++	if (pid < 0)
++		return pid;
++
++	rcu_read_lock();
++	*task = find_task_by_pid_ns(pid, &init_pid_ns);
++	rcu_read_unlock();
++
++	host_task_id++;
++
++	snprintf((*task)->comm, sizeof((*task)->comm), "host%d", host_task_id);
++
++	return 0;
++}
++static void exit_task(void)
++{
++	do_exit(0);
++}
++
++static void del_host_task(void *arg)
++{
++	struct task_struct *task = (struct task_struct *)arg;
++	struct thread_info *ti = task_thread_info(task);
++
++	if (lkl_cpu_get() < 0)
++		return;
++
++	switch_to_host_task(task);
++	host_task_id--;
++	set_ti_thread_flag(ti, TIF_SCHED_JB);
++	lkl_jmp_buf_set(&ti->task->thread.arch.sched_jb, exit_task);
++}
++
++static struct lkl_tls_key *task_key;
++
++long lkl_syscall(long no, long *params)
++{
++	struct task_struct *task = host0;
++	long ret;
++
++	ret = lkl_cpu_get();
++	if (ret < 0)
++		return ret;
++
++	task = lkl_tls_get(task_key);
++	if (!task) {
++		ret = new_host_task(&task);
++		if (ret)
++			goto out;
++		lkl_tls_set(task_key, task);
++	}
++
++	switch_to_host_task(task);
++
++	ret = run_syscall(no, params);
++
++	if (no == __NR_reboot) {
 +		thread_sched_jb();
-+		return;
++		return ret;
 +	}
 +
-+	/* if there are any other tasks holding cpu lock, return after
-+	 * decreasing cpu.count
-+	 */
-+	if (--cpu.count > 0) {
-+		lkl_mutex_unlock(cpu.lock);
-+		return;
-+	}
++out:
++	lkl_cpu_put();
 +
-+	/* release semaphore if slept */
-+	if (cpu.sleepers) {
-+		cpu.sleepers--;
-+		lkl_sem_up(cpu.sem);
-+	}
-+
-+	cpu.owner = 0;
-+
-+	lkl_mutex_unlock(cpu.lock);
++	return ret;
 +}
 +
-+static void lkl_cpu_shutdown(void)
-+{
-+	__sync_fetch_and_add(&cpu.shutdown_gate, MAX_THREADS);
-+}
-+__uml_exitcall(lkl_cpu_shutdown);
++static struct task_struct *idle_host_task;
 +
-+void lkl_cpu_wait_shutdown(void)
++/* called from idle, don't failed, don't block */
++void wakeup_idle_host_task(void)
 +{
-+	lkl_sem_down(cpu.shutdown_sem);
-+	lkl_sem_free(cpu.shutdown_sem);
++	if (!need_resched() && idle_host_task)
++		wake_up_process(idle_host_task);
 +}
 +
-+static void lkl_cpu_cleanup(bool shutdown)
++static int idle_host_task_loop(void *unused)
 +{
-+	while (__sync_fetch_and_add(&cpu.shutdown_gate, 0) > MAX_THREADS)
-+		;
++	struct thread_info *ti = task_thread_info(current);
 +
-+	/* if caller indicates shutdown, notify the semaphore to release
-+	 * the block (lkl_cpu_wait_shutdown()).
-+	 */
-+	if (shutdown)
-+		lkl_sem_up(cpu.shutdown_sem);
-+	/* if lkl_cpu_wait_shutdown() is not called, free shutdown_sem here */
-+	else if (cpu.shutdown_sem)
-+		lkl_sem_free(cpu.shutdown_sem);
++	snprintf(current->comm, sizeof(current->comm), "idle_host_task");
++	set_thread_flag(TIF_HOST_THREAD);
++	idle_host_task = current;
 +
-+	if (cpu.sem)
-+		lkl_sem_free(cpu.sem);
-+	if (cpu.lock)
-+		lkl_mutex_free(cpu.lock);
-+}
-+
-+void subarch_cpu_idle(void)
-+{
-+	if (cpu.shutdown_gate >= MAX_THREADS) {
-+		lkl_mutex_lock(cpu.lock);
-+		while (cpu.sleepers--)
-+			lkl_sem_up(cpu.sem);
-+		lkl_mutex_unlock(cpu.lock);
-+
-+		lkl_cpu_cleanup(true);
-+		lkl_thread_exit();
++	for (;;) {
++		lkl_cpu_put();
++		lkl_sem_down(ti->task->thread.arch.sched_sem);
++		if (idle_host_task == NULL) {
++			lkl_thread_exit();
++			return 0;
++		}
++		schedule_tail(ti->task->thread.prev_sched);
 +	}
 +}
 +
-+int lkl_cpu_init(void)
++int syscalls_init(void)
 +{
-+	cpu.lock = lkl_mutex_alloc(0);
-+	cpu.sem = lkl_sem_alloc(0);
-+	cpu.shutdown_sem = lkl_sem_alloc(0);
++	snprintf(current->comm, sizeof(current->comm), "host0");
++	set_thread_flag(TIF_HOST_THREAD);
++	host0 = current;
 +
-+	if (!cpu.lock || !cpu.sem || !cpu.shutdown_sem) {
-+		lkl_cpu_cleanup(false);
-+		return -ENOMEM;
++	task_key = lkl_tls_alloc(del_host_task);
++	if (!task_key)
++		return -1;
++
++	if (kernel_thread(idle_host_task_loop, NULL, CLONE_FLAGS) < 0) {
++		lkl_tls_free(task_key);
++		return -1;
 +	}
 +
 +	return 0;
 +}
-diff --git a/arch/um/lkl/um/threads.c b/arch/um/lkl/um/threads.c
-new file mode 100644
-index 000000000000..7ef9b9f2a6b7
---- /dev/null
-+++ b/arch/um/lkl/um/threads.c
-@@ -0,0 +1,258 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/slab.h>
-+#include <linux/sched/task.h>
-+#include <linux/sched/signal.h>
-+#include <asm/host_ops.h>
-+#include <asm/cpu.h>
-+#include <asm/sched.h>
 +
-+#include <os.h>
-+
-+static int init_arch_thread(struct arch_thread *thread)
++void syscalls_cleanup(void)
 +{
-+	thread->sched_sem = lkl_sem_alloc(0);
-+	if (!thread->sched_sem)
-+		return -ENOMEM;
++	if (idle_host_task) {
++		struct thread_info *ti = task_thread_info(idle_host_task);
 +
-+	thread->dead = false;
-+	thread->tid = 0;
-+
-+	return 0;
-+}
-+
-+unsigned long *alloc_thread_stack_node(struct task_struct *task, int node)
-+{
-+	struct thread_info *ti;
-+
-+	ti = kmalloc(sizeof(*ti), GFP_KERNEL | __GFP_ZERO);
-+	if (!ti)
-+		return NULL;
-+
-+	ti->task = task;
-+	return (unsigned long *)ti;
-+}
-+
-+/*
-+ * The only new tasks created are kernel threads that have a predefined starting
-+ * point thus no stack copy is required.
-+ */
-+void setup_thread_stack(struct task_struct *p, struct task_struct *org)
-+{
-+	struct thread_info *ti = task_thread_info(p);
-+	struct thread_info *org_ti = task_thread_info(org);
-+
-+	ti->flags = org_ti->flags;
-+	ti->preempt_count = org_ti->preempt_count;
-+	ti->addr_limit = org_ti->addr_limit;
-+}
-+
-+static void kill_thread(struct thread_info *ti)
-+{
-+	if (!test_ti_thread_flag(ti, TIF_HOST_THREAD)) {
-+		ti->task->thread.arch.dead = true;
++		idle_host_task = NULL;
 +		lkl_sem_up(ti->task->thread.arch.sched_sem);
 +		lkl_thread_join(ti->task->thread.arch.tid);
 +	}
-+	lkl_sem_free(ti->task->thread.arch.sched_sem);
++
++	lkl_tls_free(task_key);
 +}
+diff --git a/arch/um/scripts/headers_install.py b/arch/um/scripts/headers_install.py
+new file mode 100755
+index 000000000000..0309f3478698
+--- /dev/null
++++ b/arch/um/scripts/headers_install.py
+@@ -0,0 +1,200 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++import re, os, sys, argparse, multiprocessing, fnmatch
 +
-+void free_thread_stack(struct task_struct *tsk)
-+{
-+	struct thread_info *ti = task_thread_info(tsk);
++srctree = os.environ["srctree"]
++objtree = os.environ["objtree"]
++header_paths = [ "include/uapi/", "arch/um/lkl/include/uapi/",
++                 "arch/um/lkl/include/generated/uapi/" ]
 +
-+	kill_thread(ti);
-+	kfree(ti);
-+}
++headers = set()
++includes = set()
 +
-+struct thread_info *_current_thread_info = &init_thread_union.thread_info;
-+EXPORT_SYMBOL(_current_thread_info);
++def relpath2abspath(relpath):
++    if "generated" in relpath:
++        return objtree + "/" + relpath
++    else:
++        return srctree + "/" + relpath
 +
-+void switch_threads(jmp_buf *me, jmp_buf *you)
-+{
-+	/* NOP */
-+}
++def find_headers(path):
++    headers.add(path)
++    f = open(relpath2abspath(path))
++    for l in f.readlines():
++        m = re.search("#\s*include <(.*)>", l)
++        try:
++            i = m.group(1)
++            for p in header_paths:
++                if os.access(relpath2abspath(p + i), os.R_OK):
++                    if p + i not in headers:
++                        includes.add(i)
++                        headers.add(p + i)
++                        find_headers(p + i)
++        except:
++            pass
++    f.close()
 +
-+/*
-+ * schedule() expects the return of this function to be the task that we
-+ * switched away from. Returning prev is not going to work because we are
-+ * actually going to return the previous taks that was scheduled before the
-+ * task we are going to wake up, and not the current task, e.g.:
-+ *
-+ * swapper -> init: saved prev on swapper stack is swapper
-+ * init -> ksoftirqd0: saved prev on init stack is init
-+ * ksoftirqd0 -> swapper: returned prev is swapper
-+ */
-+static struct task_struct *abs_prev = &init_task;
++def has_lkl_prefix(w):
++  return w.startswith("lkl") or w.startswith("_lkl") or w.startswith("__lkl") \
++         or w.startswith("LKL") or w.startswith("_LKL") or w.startswith("__LKL")
 +
-+void arch_switch_to(struct task_struct *prev,
-+		    struct task_struct *next)
-+{
-+	struct arch_thread *_prev = &prev->thread.arch;
-+	struct arch_thread *_next = &next->thread.arch;
-+	unsigned long _prev_flags = task_thread_info(prev)->flags;
-+	struct lkl_jmp_buf *_prev_jb;
++def find_symbols(regexp, store):
++    for h in headers:
++        f = open(h)
++        for l in f.readlines():
++            m = regexp.search(l)
++            if not m:
++                continue
++            for e in reversed(m.groups()):
++                if e:
++                    if not has_lkl_prefix(e):
++                        store.add(e)
++                    break
++        f.close()
 +
-+	_current_thread_info = task_thread_info(next);
-+	next->thread.prev_sched = prev;
-+	abs_prev = prev;
++def find_ml_symbols(regexp, store):
++    for h in headers:
++        for i in regexp.finditer(open(h).read()):
++            for j in reversed(i.groups()):
++                if j:
++                    if not has_lkl_prefix(j):
++                        store.add(j)
++                    break
 +
-+	WARN_ON(!_next->tid);
-+	lkl_cpu_change_owner(_next->tid);
++def find_enums(block_regexp, symbol_regexp, store):
++    for h in headers:
++        # remove comments
++        content = re.sub(re.compile("(\/\*(\*(?!\/)|[^*])*\*\/)", re.S|re.M), " ", open(h).read())
++        # remove preprocesor lines
++        clean_content = ""
++        for l in content.split("\n"):
++            if re.match("\s*#", l):
++                continue
++            clean_content += l + "\n"
++        for i in block_regexp.finditer(clean_content):
++            for j in reversed(i.groups()):
++                if j:
++                    for k in symbol_regexp.finditer(j):
++                        for l in k.groups():
++                            if l:
++                                if not has_lkl_prefix(l):
++                                    store.add(l)
++                                break
 +
-+	if (test_bit(TIF_SCHED_JB, &_prev_flags)) {
-+		/* Atomic. Must be done before wakeup next */
-+		clear_ti_thread_flag(task_thread_info(prev), TIF_SCHED_JB);
-+		_prev_jb = &_prev->sched_jb;
-+	}
++def lkl_prefix(w):
++    r = ""
 +
-+	lkl_sem_up(_next->sched_sem);
-+	if (test_bit(TIF_SCHED_JB, &_prev_flags))
-+		lkl_jmp_buf_longjmp(_prev_jb, 1);
-+	else
-+		lkl_sem_down(_prev->sched_sem);
++    if w.startswith("__"):
++        r = "__"
++    elif w.startswith("_"):
++        r = "_"
 +
-+	if (_prev->dead)
-+		lkl_thread_exit();
++    if w.isupper():
++        r += "LKL"
++    else:
++        r += "lkl"
 +
-+	/* __switch_to (arch/um) returns this value */
-+	current->thread.prev_sched = abs_prev;
-+}
++    if not w.startswith("_"):
++        r += "_"
 +
-+int host_task_stub(void *unused)
-+{
-+	return 0;
-+}
++    r += w
 +
-+void switch_to_host_task(struct task_struct *task)
-+{
-+	if (WARN_ON(!test_tsk_thread_flag(task, TIF_HOST_THREAD)))
-+		return;
++    return r
 +
-+	task->thread.arch.tid = lkl_thread_self();
++def replace(h):
++    content = open(h).read()
++    for i in includes:
++        search_str = "(#[ \t]*include[ \t]*[<\"][ \t]*)" + i + "([ \t]*[>\"])"
++        replace_str = "\\1" + "lkl/" + i + "\\2"
++        content = re.sub(search_str, replace_str, content)
++    tmp = ""
++    for w in re.split("(\W+)", content):
++        if w in defines:
++            w = lkl_prefix(w)
++        tmp += w
++    content = tmp
++    for s in structs:
++        search_str = "(\W?struct\s+)" + s + "(\W)"
++        replace_str = "\\1" + lkl_prefix(s) + "\\2"
++        content = re.sub(search_str, replace_str, content, flags = re.MULTILINE)
++    for s in unions:
++        search_str = "(\W?union\s+)" + s + "(\W)"
++        replace_str = "\\1" + lkl_prefix(s) + "\\2"
++        content = re.sub(search_str, replace_str, content, flags = re.MULTILINE)
++    open(h, 'w').write(content)
 +
-+	if (current == task)
-+		return;
++parser = argparse.ArgumentParser(description='install lkl headers')
++parser.add_argument('path', help='path to install to', )
++args = parser.parse_args()
 +
-+	wake_up_process(task);
-+	thread_sched_jb();
-+	lkl_sem_down(task->thread.arch.sched_sem);
-+	schedule_tail(abs_prev);
-+}
++find_headers("arch/um/lkl/include/uapi/asm/syscalls.h")
++headers.add("arch/um/lkl/include/uapi/asm/host_ops.h")
 +
-+struct thread_bootstrap_arg {
-+	struct thread_info *ti;
-+	int (*f)(void *a);
-+	void *arg;
-+};
++if 'LKL_INSTALL_ADDITIONAL_HEADERS' in os.environ:
++    with open(os.environ['LKL_INSTALL_ADDITIONAL_HEADERS'], 'rU') as f:
++        for line in f.readlines():
++            line = line.split('#', 1)[0].strip()
++            if line != '':
++                headers.add(line)
 +
-+static void *thread_bootstrap(void *_tba)
-+{
-+	struct thread_bootstrap_arg *tba = (struct thread_bootstrap_arg *)_tba;
-+	struct thread_info *ti = tba->ti;
-+	int (*f)(void *) = tba->f;
-+	void *arg = tba->arg;
++new_headers = set()
 +
-+	lkl_sem_down(ti->task->thread.arch.sched_sem);
-+	kfree(tba);
-+	if (ti->task->thread.prev_sched)
-+		schedule_tail(ti->task->thread.prev_sched);
++for h in headers:
++    h = relpath2abspath(h)
++    dir = os.path.dirname(h)
++    out_dir = args.path + "/" + re.sub("(" + srctree + "/arch/um/lkl/include/uapi/|"
++                                       + srctree + "/include/uapi/|"
++                                       + "arch/um/lkl/include/generated/uapi/|"
++                                       + "include/generated/uapi/|"
++                                       + "include/generated)(.*)", "lkl/\\2", dir)
++    try:
++        os.makedirs(out_dir)
++    except:
++        pass
++    print("  INSTALL %s" % (out_dir + "/" + os.path.basename(h)))
++    os.system(srctree+"/scripts/headers_install.sh %s %s" % (os.path.abspath(h),
++                                                       out_dir + "/" + os.path.basename(h)))
++    new_headers.add(out_dir + "/" + os.path.basename(h))
 +
-+	f(arg);
-+	do_exit(0);
++headers = new_headers
 +
-+	return NULL;
-+}
++defines = set()
++structs = set()
++unions = set()
 +
-+void new_thread(void *stack, jmp_buf *buf, void (*handler)(void))
-+{
-+	struct thread_info *ti = (struct thread_info *)stack;
-+	struct task_struct *p = ti->task;
-+	struct thread_bootstrap_arg *tba;
-+	int ret;
++p = re.compile("#[ \t]*define[ \t]*(\w+)")
++find_symbols(p, defines)
++p = re.compile("typedef.*(\(\*(\w+)\)\(.*\)\s*|\W+(\w+)\s*|\s+(\w+)\(.*\)\s*);")
++find_symbols(p, defines)
++p = re.compile("typedef\s+(struct|union)\s+\w*\s*{[^\\{\}]*}\W*(\w+)\s*;", re.M|re.S)
++find_ml_symbols(p, defines)
++defines.add("siginfo_t")
++defines.add("sigevent_t")
++p = re.compile("struct\s+(\w+)\s*\{")
++find_symbols(p, structs)
++structs.add("iovec")
++p = re.compile("union\s+(\w+)\s*\{")
++find_symbols(p, unions)
++p = re.compile("static\s+__inline__(\s+\w+)+\s+(\w+)\([^)]*\)\s")
++find_symbols(p, defines)
++p = re.compile("static\s+__always_inline(\s+\w+)+\s+(\w+)\([^)]*\)\s")
++find_symbols(p, defines)
++p = re.compile("enum\s+(\w*)\s*{([^}]*)}", re.M|re.S)
++q = re.compile("(\w+)\s*(,|=[^,]*|$)", re.M|re.S)
++find_enums(p, q, defines)
 +
-+	unsigned long esp = (unsigned long)p->thread.request.u.thread.proc;
-+	unsigned long unused = (unsigned long)p->thread.request.u.thread.arg;
++# needed for i386
++defines.add("__NR_stime")
 +
-+	ret = init_arch_thread(&p->thread.arch);
-+	if (ret < 0)
-+		panic("%s: init_arch_thread", __func__);
++def process_header(h):
++    print("  REPLACE %s" % h)
++    replace(h)
 +
-+	if ((int (*)(void *))esp == host_task_stub) {
-+		set_ti_thread_flag(ti, TIF_HOST_THREAD);
-+		return;
-+	}
-+
-+	tba = kmalloc(sizeof(*tba), GFP_KERNEL);
-+	if (!tba)
-+		return;
-+
-+	tba->f = (int (*)(void *))esp;
-+	tba->arg = (void *)unused;
-+	tba->ti = ti;
-+
-+	p->thread.arch.tid = lkl_thread_create(thread_bootstrap, tba);
-+	if (!p->thread.arch.tid) {
-+		kfree(tba);
-+		return;
-+	}
-+}
-+
-+void show_stack(struct task_struct *task, unsigned long *esp)
-+{
-+}
-+
-+static inline void pr_early(const char *str)
-+{
-+	lkl_print(str, strlen(str));
-+}
-+
-+/**
-+ * This is called before the kernel initializes, so no kernel calls (including
-+ * printk) can't be made yet.
-+ */
-+void threads_init(void)
-+{
-+	int ret;
-+	struct thread_info *ti = &init_thread_union.thread_info;
-+
-+	ti->task->thread = (struct thread_struct) INIT_THREAD;
-+	ret = init_arch_thread(&ti->task->thread.arch);
-+	if (ret < 0)
-+		pr_early("lkl: failed to allocate init schedule semaphore\n");
-+
-+	ti->task->thread.arch.tid = lkl_thread_self();
-+}
-+
-+void threads_cleanup(void)
-+{
-+	struct task_struct *p, *t;
-+
-+	for_each_process_thread(p, t) {
-+		struct thread_info *ti = task_thread_info(t);
-+
-+		if (t->pid != 1 && !test_ti_thread_flag(ti, TIF_HOST_THREAD))
-+			WARN(!(t->flags & PF_KTHREAD),
-+			     "non kernel thread task %s\n", t->comm);
-+		WARN(t->state == TASK_RUNNING,
-+		     "thread %s still running while halting\n", t->comm);
-+
-+		kill_thread(ti);
-+	}
-+
-+	lkl_sem_free(
-+		init_thread_union.thread_info.task->thread.arch.sched_sem);
-+}
-+
-+void initial_thread_cb_skas(void (*proc)(void *), void *arg)
-+{
-+	pr_warn("unimplemented %s", __func__);
-+}
-+
-+int arch_set_tls(struct task_struct *new, unsigned long tls)
-+{
-+	panic("unimplemented %s", __func__);
-+}
-+void clear_flushed_tls(struct task_struct *task)
-+{
-+	panic("unimplemented %s", __func__);
-+}
++# use num of processors determined by os.cpu_count()
++p = multiprocessing.Pool(None)
++try:
++    p.map_async(process_header, headers).wait(999999)
++    p.close()
++except:
++    p.terminate()
++finally:
++    p.join()
+diff --git a/scripts/headers_install.sh b/scripts/headers_install.sh
+index dd554bd436cc..d44b92979db4 100755
+--- a/scripts/headers_install.sh
++++ b/scripts/headers_install.sh
+@@ -24,7 +24,11 @@ TMPFILE=$OUTFILE.tmp
+ trap 'rm -f $OUTFILE $TMPFILE' EXIT
+ 
+ # SPDX-License-Identifier with GPL variants must have "WITH Linux-syscall-note"
+-if [ -n "$(sed -n -e "/SPDX-License-Identifier:.*GPL-/{/WITH Linux-syscall-note/!p}" $INFILE)" ]; then
++#
++# ARCH=um with library mode exposes uapi headers but applications may be linked
++# statically, thus this GPL exception doesn't apply to.
++if [ -n "$(sed -n -e "/SPDX-License-Identifier:.*GPL-/{/WITH Linux-syscall-note/!p}" $INFILE)" ] &&
++	[ "$SRCARCH" != "um" ]; then
+ 	echo "error: $INFILE: missing \"WITH Linux-syscall-note\" for SPDX-License-Identifier" >&2
+ 	exit 1
+ fi
 -- 
 2.21.0 (Apple Git-122.2)
 
