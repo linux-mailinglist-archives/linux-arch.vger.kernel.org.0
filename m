@@ -2,61 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E412FC909
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78AB2FC910
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbhATDbY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 22:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S1727013AbhATDen (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 22:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732072AbhATC34 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:29:56 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA75C0613ED
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:16 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id o20so5154584pfu.0
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:16 -0800 (PST)
+        with ESMTP id S1731982AbhATC3f (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:29:35 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78E5C061793
+        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:20 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id v19so14193139pgj.12
+        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iR0rH4noiY0NrQInQIw7FL2wGYYI8flSm7RU9FhIUpo=;
-        b=q8U6v/ANEMoDMJXIBR48Izh3z+6DE9vJ6b6dcV1V+bEZrbw2doMG2iKOFd5Z+jIYL4
-         b4JEG/9i4ACMPv/a8+gpRclJ01ASb1FbwrfZ9773LbbXlNTm/7V3khymJB6y1GsiYo6a
-         BLnQUticTguurof5aOnOKobRjJeXAMCiXJlUuymHMcN00nGYyKW7AJ4bdnmCeadq0x0x
-         Dk9IvzgS9d2snc+Q8sZj7h/Wgh8GMsFiiuttkFQ64bqULqOErKoKNxOCG1abn8bqqmnY
-         QL4c2uVBREKQC7+KDDB4bse1lV11nOAyKMi4O72XLEKZU9VfAALnbxtBsmwaYtHStsUe
-         cADw==
+        bh=TnbxlQtHOOSR1UjdJYrHMUANWgwLreFhRecaPDeoXc0=;
+        b=nZK8UUNrJfm/LqYi1pksUq5e42Wl5SKW3HosuQIFeyVz5/0Tn+z4CjBdeTJCl5RUvk
+         h2w0kNSW+nrLJQbaYM3OeWbhqX4bw2Vgq2JvItXkaLIxdC5FZdh/K+wvLccy2iF+y7+N
+         d03+SxYPACSu8ZhbbC6fzH+zCfKWgFmixE3nKs/0aof9MI8gfI79KY4SJItcEMrMvEg/
+         ClbJu793YlsSnktNx3UgS9tiRNn0aZcgxAstCj7uX5nWw5quz7wfwwKmBwn6njRT7kzF
+         DztkWNjnV1GQxrWsKCV3Fk9FP1PuyOQ9v+P3gHyxOXFaRIGXv2omGFsgJ+hxspMrThsM
+         1czQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iR0rH4noiY0NrQInQIw7FL2wGYYI8flSm7RU9FhIUpo=;
-        b=MKTMaD6Yrbb33dHeTaqjX8VRziKXD8/GW0tINr+uQ8JlX9ZzldmSLDIgA9PXJjlvmk
-         tAIRliEvOcae1+CTXW8E9uHVBZw9Mfya+uB39OP/rFe5K3CXe5L0cdRWJi1TxZgfIA9A
-         TNqPL8OZ3nwcG8TMhetWr8y64dP3Jd7JY2M3SPgslYXuL+cJ9OBp3WsXcra8ngnFVyzr
-         NLqa6CCgSt9YHo3iD9WdEstIN4B5p7ibDo89VI1x9aMO4Ge70WJZLteq1mlPs7bZ9DAr
-         4x0EhkX34HIfqizENawHTMalbdgIyyXvVII31DHdeJtQ/rTKtYYVcvI57+Ic3tOMq3WT
-         7m4A==
-X-Gm-Message-State: AOAM533pS0rZPylXhfnWZSfMPMi3mfizCY3cHmJDJ7v6KykoEVMZjNuV
-        KiUo3kMDZGWirgIqxeJMxeg=
-X-Google-Smtp-Source: ABdhPJxyA5+KbuR9GNUH7RykKIikQ4XzaML136l9WfqFzzuO9hiL+74MzJ8PmIksu1l1tlbIfU2beA==
-X-Received: by 2002:a63:e101:: with SMTP id z1mr7243500pgh.190.1611109755902;
-        Tue, 19 Jan 2021 18:29:15 -0800 (PST)
+        bh=TnbxlQtHOOSR1UjdJYrHMUANWgwLreFhRecaPDeoXc0=;
+        b=rFaaWnRmNFLloeFwFRmXrIOk0POK2Ppb4TlQJWAuCXTGWSX5cbHEsFLY7H4LpidoRC
+         9yEM183PbgA9HcGWiKSJ2rXCyNTX8PDF9kVR2gUFLqza3ShUfiPEmTckRJfp3FFvF5XY
+         Nu5tBEJtRqb3fnP5vNX+L3qhqdGa0S+Fm5nkHOSj0a+mDwOOJYRSRzCgvYHiRRJRaG1/
+         EEfGAi+AUrA56jH9/qEIJ2VCVH8zRJKTxseFLOE5TG3Xst25hi7KBGoi+gvP3PrXOmHY
+         3vSVY9BfORL7CnzHnpoReo+5QOGXWCEcL8eZduY5Z2Osj1FWoQ4IAV15PoJxFJvcHCO9
+         EgRA==
+X-Gm-Message-State: AOAM532DdcFepDvjaDwuYsDMl8PpUFTy4QiVVn+aI67Uh7QU5f9vZEP/
+        tPPwh+PWxIB0MLBpHdX4Bf4=
+X-Google-Smtp-Source: ABdhPJx+oFZ3Zw1B9duYD+TkeeQ9E+UIyt6NIGOk8pTJWtKWchGpbt4xuAHaode05GjElrcWQXM8/A==
+X-Received: by 2002:a63:cf56:: with SMTP id b22mr7248541pgj.16.1611109760230;
+        Tue, 19 Jan 2021 18:29:20 -0800 (PST)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id b1sm249548pjh.54.2021.01.19.18.29.15
+        by smtp.gmail.com with ESMTPSA id n15sm245434pjk.57.2021.01.19.18.29.19
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Jan 2021 18:29:15 -0800 (PST)
+        Tue, 19 Jan 2021 18:29:19 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 5BDC020442D3B0; Wed, 20 Jan 2021 11:29:12 +0900 (JST)
+        id 99C7320442D3B8; Wed, 20 Jan 2021 11:29:17 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com
 Cc:     thehajime@gmail.com, tavi.purdila@gmail.com, retrage01@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org
-Subject: [RFC v8 13/20] um: lkl: integrate with irq infrastructure of UML
-Date:   Wed, 20 Jan 2021 11:27:18 +0900
-Message-Id: <46935454bf02224fb325f0e74d60d0ed674a59f9.1611103406.git.thehajime@gmail.com>
+Subject: [RFC v8 15/20] um: host: add library mode build for ARCH=um
+Date:   Wed, 20 Jan 2021 11:27:20 +0900
+Message-Id: <800d34cda146c025770e5a802de592417dfced30.1611103406.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1611103406.git.thehajime@gmail.com>
 References: <cover.1611103406.git.thehajime@gmail.com>
@@ -66,266 +66,337 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In order to cooperate with UML's irq infrastructure and LKL threads
-based on host threads, irq handlers shall synchronize the our
-scheduler which is controlled by struct lkl_cpu.  To do that, the irq
-infra notifies its entry of handlers by obtaining cpu access of thread
-scheduler (lkl_cpu_try_run_irq) and its release (lkl_cpu_put).
+This patch adds the skeleton for the host library.
 
-In additon to that, in order to stick the signal handler's thread to the
-one of the idle thread, several required configurations of (thread's)
-signal mask are added: otherwise handlers running on arbitrary thread
-cannot obtain cpu access and immediately fall into pending interrupt
-which may slow down the delivery of signals.
+The host library is implementing the host operations needed by library
+mode and splits into host dependent (e.g., POSIX hosts) and host
+independent parts.
 
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
+Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- arch/um/include/shared/os.h   |  1 +
- arch/um/kernel/irq.c          | 13 ++++++++++
- arch/um/kernel/time.c         |  2 ++
- arch/um/lkl/include/asm/cpu.h |  4 +++
- arch/um/lkl/um/cpu.c          | 46 +++++++++++++++++++++++++++++++++++
- arch/um/lkl/um/setup.c        |  5 ++++
- arch/um/lkl/um/threads.c      |  3 +++
- tools/um/uml/signal.c         | 12 +++++++--
- 8 files changed, 84 insertions(+), 2 deletions(-)
+ tools/um/.gitignore              |   1 +
+ tools/um/Makefile                |   1 +
+ tools/um/Targets                 |   6 +-
+ tools/um/include/lkl.h           | 135 +++++++++++++++++++++++++++++++
+ tools/um/include/lkl_host.h      |  18 +++++
+ tools/um/uml/Build               |  16 +++-
+ tools/um/uml/lkl/Build           |   1 +
+ tools/um/uml/lkl/registers.c     |  21 +++++
+ tools/um/uml/lkl/unimplemented.c |  21 +++++
+ 9 files changed, 214 insertions(+), 6 deletions(-)
+ create mode 100644 tools/um/.gitignore
+ create mode 100644 tools/um/include/lkl.h
+ create mode 100644 tools/um/include/lkl_host.h
+ create mode 100644 tools/um/uml/lkl/Build
+ create mode 100644 tools/um/uml/lkl/registers.c
+ create mode 100644 tools/um/uml/lkl/unimplemented.c
 
-diff --git a/arch/um/include/shared/os.h b/arch/um/include/shared/os.h
-index 13d86f94cf0f..cd8583e4df12 100644
---- a/arch/um/include/shared/os.h
-+++ b/arch/um/include/shared/os.h
-@@ -243,6 +243,7 @@ extern int set_signals_trace(int enable);
- extern int os_is_signal_stack(void);
- extern void deliver_alarm(void);
- extern void register_pm_wake_signal(void);
-+extern void set_pending_signals(int sig);
+diff --git a/tools/um/.gitignore b/tools/um/.gitignore
+new file mode 100644
+index 000000000000..0d20b6487c61
+--- /dev/null
++++ b/tools/um/.gitignore
+@@ -0,0 +1 @@
++*.pyc
+diff --git a/tools/um/Makefile b/tools/um/Makefile
+index 877d0bdefa67..c07e91a93372 100644
+--- a/tools/um/Makefile
++++ b/tools/um/Makefile
+@@ -66,6 +66,7 @@ RM := rm -f
+ clean:
+ 	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
+ 	 -delete -o -name '\.*.d' -delete
++	$(call QUIET_CLEAN, headers)$(RM) -r $(OUTPUT)/include/lkl/
+ 	$(call QUIET_CLEAN, liblinux.a)$(RM) $(OUTPUT)/liblinux.a
+ 	$(call QUIET_CLEAN, $(TARGETS))$(RM) $(TARGETS)
  
- /* util.c */
- extern void stack_protections(unsigned long address);
-diff --git a/arch/um/kernel/irq.c b/arch/um/kernel/irq.c
-index 3741d2380060..d632156b52ac 100644
---- a/arch/um/kernel/irq.c
-+++ b/arch/um/kernel/irq.c
-@@ -21,6 +21,7 @@
- #include <irq_user.h>
- #include <irq_kern.h>
- #include <as-layout.h>
-+#include <asm/cpu.h>
+diff --git a/tools/um/Targets b/tools/um/Targets
+index e8b43c7758fe..ae6c8d8b168e 100644
+--- a/tools/um/Targets
++++ b/tools/um/Targets
+@@ -1,7 +1,9 @@
+-ifneq ($(CONFIG_UMMODE_LIB),y)
++ifeq ($(CONFIG_UMMODE_LIB),y)
++libs-y += liblinux.a
++else
+ progs-y += uml/linux
+ endif
  
- 
- extern void free_irqs(void);
-@@ -563,6 +564,11 @@ unsigned long to_irq_stack(unsigned long *mask_out)
- 	unsigned long mask, old;
- 	int nested;
- 
-+#ifdef CONFIG_UMMODE_LIB
-+	if (!lkl_irq_enter(ffs(*mask_out) - 1))
-+		return 1;
+-LDLIBS_linux-y := -lrt -lpthread -lutil
++LDLIBS := -lrt -lpthread -lutil
+ LDFLAGS_linux-y := -no-pie -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
+ LDFLAGS_linux-$(CONFIG_STATIC_LINK) += -static
+diff --git a/tools/um/include/lkl.h b/tools/um/include/lkl.h
+new file mode 100644
+index 000000000000..2417ed5ccf71
+--- /dev/null
++++ b/tools/um/include/lkl.h
+@@ -0,0 +1,135 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LKL_H
++#define _LKL_H
++
++#ifdef __cplusplus
++extern "C" {
 +#endif
 +
- 	mask = xchg(&pending_mask, *mask_out);
- 	if (mask != 0) {
- 		/*
-@@ -579,6 +585,10 @@ unsigned long to_irq_stack(unsigned long *mask_out)
- 			old |= mask;
- 			mask = xchg(&pending_mask, old);
- 		} while (mask != old);
++#define _LKL_LIBC_COMPAT_H
 +
-+#ifdef CONFIG_UMMODE_LIB
-+		lkl_irq_exit();
++#ifdef __cplusplus
++#define class __lkl__class
 +#endif
- 		return 1;
- 	}
- 
-@@ -616,6 +626,9 @@ unsigned long from_irq_stack(int nested)
- 	*to = *ti;
- 
- 	mask = xchg(&pending_mask, 0);
-+#ifdef CONFIG_UMMODE_LIB
-+	lkl_irq_exit();
++
++/*
++ * Avoid collisions between Android which defines __unused and
++ * linux/icmp.h which uses __unused as a structure field.
++ */
++#pragma push_macro("__unused")
++#undef __unused
++
++#include <lkl/asm/syscalls.h>
++
++#pragma pop_macro("__unused")
++
++#ifdef __cplusplus
++#undef class
 +#endif
- 	return mask & ~1;
- }
- 
-diff --git a/arch/um/kernel/time.c b/arch/um/kernel/time.c
-index f4db89b5b5a6..07d705ec5193 100644
---- a/arch/um/kernel/time.c
-+++ b/arch/um/kernel/time.c
-@@ -659,11 +659,13 @@ static struct clock_event_device timer_clockevent = {
- 
- static irqreturn_t um_timer(int irq, void *dev)
- {
-+#ifndef CONFIG_UMMODE_LIB
- 	if (get_current()->mm != NULL)
- 	{
-         /* userspace - relay signal, results in correct userspace timers */
- 		os_alarm_process(get_current()->mm->context.id.u.pid);
- 	}
++
++#if __LKL__BITS_PER_LONG == 64
++#define lkl_sys_fstatat lkl_sys_newfstatat
++#define lkl_sys_fstat lkl_sys_newfstat
++
++#else
++#define __lkl__NR_fcntl __lkl__NR_fcntl64
++
++#define lkl_stat lkl_stat64
++#define lkl_sys_stat lkl_sys_stat64
++#define lkl_sys_lstat lkl_sys_lstat64
++#define lkl_sys_truncate lkl_sys_truncate64
++#define lkl_sys_ftruncate lkl_sys_ftruncate64
++#define lkl_sys_sendfile lkl_sys_sendfile64
++#define lkl_sys_fstatat lkl_sys_fstatat64
++#define lkl_sys_fstat lkl_sys_fstat64
++#define lkl_sys_fcntl lkl_sys_fcntl64
++
++#define lkl_statfs lkl_statfs64
++
++static inline int lkl_sys_statfs(const char *path, struct lkl_statfs *buf)
++{
++	return lkl_sys_statfs64(path, sizeof(*buf), buf);
++}
++
++static inline int lkl_sys_fstatfs(unsigned int fd, struct lkl_statfs *buf)
++{
++	return lkl_sys_fstatfs64(fd, sizeof(*buf), buf);
++}
++
++#define lkl_sys_nanosleep lkl_sys_nanosleep_time32
++static inline int lkl_sys_nanosleep_time32(struct lkl_timespec *rqtp,
++					   struct lkl_timespec *rmtp)
++{
++	long p[6] = {(long)rqtp, (long)rmtp, 0, 0, 0, 0};
++
++	return lkl_syscall(__lkl__NR_nanosleep, p);
++}
++
 +#endif
- 
- 	(*timer_clockevent.event_handler)(&timer_clockevent);
- 
-diff --git a/arch/um/lkl/include/asm/cpu.h b/arch/um/lkl/include/asm/cpu.h
-index c1164187151e..b241b5bbdc53 100644
---- a/arch/um/lkl/include/asm/cpu.h
-+++ b/arch/um/lkl/include/asm/cpu.h
-@@ -8,4 +8,8 @@ int lkl_cpu_init(void);
- void lkl_cpu_wait_shutdown(void);
- void lkl_cpu_change_owner(lkl_thread_t owner);
- 
-+int lkl_cpu_try_run_irq(int irq);
-+void lkl_irq_exit(void);
-+int lkl_irq_enter(int sig);
 +
- #endif
-diff --git a/arch/um/lkl/um/cpu.c b/arch/um/lkl/um/cpu.c
-index 75452b28d741..841c7e9cc881 100644
---- a/arch/um/lkl/um/cpu.c
-+++ b/arch/um/lkl/um/cpu.c
-@@ -8,6 +8,7 @@
- #include <asm/sched.h>
- #include <asm/syscalls.h>
- #include <init.h>
-+#include <os.h>
- 
- /*
-  * This structure is used to get access to the "LKL CPU" that allows us to run
-@@ -41,6 +42,7 @@ static struct lkl_cpu {
- 	 */
- 	#define MAX_THREADS 1000000
- 	unsigned int shutdown_gate;
-+	bool irqs_pending;
- 	/* no of threads waiting the CPU */
- 	unsigned int sleepers;
- 	/* no of times the current thread got the CPU */
-@@ -53,6 +55,16 @@ static struct lkl_cpu {
- 	struct lkl_sem *shutdown_sem;
- } cpu;
- 
-+static void run_irqs(void)
++static inline int lkl_sys_stat(const char *path, struct lkl_stat *buf)
 +{
-+	unblock_signals();
++	return lkl_sys_fstatat(LKL_AT_FDCWD, path, buf, 0);
 +}
 +
-+static void set_irq_pending(int sig)
++static inline int lkl_sys_lstat(const char *path, struct lkl_stat *buf)
 +{
-+	set_pending_signals(sig);
++	return lkl_sys_fstatat(LKL_AT_FDCWD, path, buf,
++			       LKL_AT_SYMLINK_NOFOLLOW);
 +}
 +
- /*
-  * internal routine to acquire LKL CPU's lock
-  */
-@@ -132,6 +144,16 @@ void lkl_cpu_put(void)
- 	    !lkl_thread_equal(cpu.owner, lkl_thread_self()))
- 		lkl_bug("%s: unbalanced put\n", __func__);
- 
-+	/* we're going to trigger irq handlers if there are any pending
-+	 * interrupts, and not irq_disabled.
-+	 */
-+	while (cpu.irqs_pending && !irqs_disabled()) {
-+		cpu.irqs_pending = false;
-+		lkl_mutex_unlock(cpu.lock);
-+		run_irqs();
-+		lkl_mutex_lock(cpu.lock);
-+	}
-+
- 	/* switch to userspace code if current is host task (TIF_HOST_THREAD),
- 	 * AND, there are other running tasks.
- 	 */
-@@ -163,6 +185,30 @@ void lkl_cpu_put(void)
- 	lkl_mutex_unlock(cpu.lock);
- }
- 
-+int lkl_cpu_try_run_irq(int irq)
++#ifdef __lkl__NR_openat
++/**
++ * lkl_sys_open - wrapper for lkl_sys_openat
++ */
++static inline long lkl_sys_open(const char *file, int flags, int mode)
 +{
-+	int ret;
-+
-+	ret = __cpu_try_get_lock(1);
-+	if (!ret) {
-+		set_irq_pending(irq);
-+		cpu.irqs_pending = true;
-+	}
-+	__cpu_try_get_unlock(ret, 1);
-+
-+	return ret;
++	return lkl_sys_openat(LKL_AT_FDCWD, file, flags, mode);
 +}
 +
-+int lkl_irq_enter(int sig)
++/**
++ * lkl_sys_creat - wrapper for lkl_sys_openat
++ */
++static inline long lkl_sys_creat(const char *file, int mode)
 +{
-+	return lkl_cpu_try_run_irq(sig);
++	return lkl_sys_openat(LKL_AT_FDCWD, file,
++			      LKL_O_CREAT|LKL_O_WRONLY|LKL_O_TRUNC, mode);
++}
++#endif
++
++#ifdef __lkl__NR_mkdirat
++/**
++ * lkl_sys_mkdir - wrapper for lkl_sys_mkdirat
++ */
++static inline long lkl_sys_mkdir(const char *path, mode_t mode)
++{
++	return lkl_sys_mkdirat(LKL_AT_FDCWD, path, mode);
++}
++#endif
++
++#ifdef __lkl__NR_epoll_create1
++/**
++ * lkl_sys_epoll_create - wrapper for lkl_sys_epoll_create1
++ */
++static inline long lkl_sys_epoll_create(int size)
++{
++	return lkl_sys_epoll_create1(0);
++}
++#endif
++
++#ifdef __lkl__NR_epoll_pwait
++/**
++ * lkl_sys_epoll_wait - wrapper for lkl_sys_epoll_pwait
++ */
++static inline long lkl_sys_epoll_wait(int fd, struct lkl_epoll_event *ev,
++				      int cnt, int to)
++{
++	return lkl_sys_epoll_pwait(fd, ev, cnt, to, 0, _LKL_NSIG/8);
++}
++#endif
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
+diff --git a/tools/um/include/lkl_host.h b/tools/um/include/lkl_host.h
+new file mode 100644
+index 000000000000..5fe7a64dc4dd
+--- /dev/null
++++ b/tools/um/include/lkl_host.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LKL_HOST_H
++#define _LKL_HOST_H
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include <lkl/asm/host_ops.h>
++#include <lkl.h>
++
++extern struct lkl_host_operations lkl_host_ops;
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
+diff --git a/tools/um/uml/Build b/tools/um/uml/Build
+index 810aa99f8409..b523923afd45 100644
+--- a/tools/um/uml/Build
++++ b/tools/um/uml/Build
+@@ -8,13 +8,21 @@ KCOV_INSTRUMENT                := n
+ 
+ include $(objtree)/include/config/auto.conf
+ 
+-liblinux-y += execvp.o file.o helper.o irq.o main.o mem.o process.o \
+-	registers.o sigio.o signal.o start_up.o time.o tty.o \
+-	umid.o util.o drivers/ skas/
++liblinux-y += execvp.o file.o helper.o irq.o mem.o process.o \
++	registers.o sigio.o signal.o time.o tty.o \
++	umid.o util.o drivers/
+ 
+ CFLAGS_signal.o += -Wframe-larger-than=4096
+ 
++ifndef CONFIG_UMMODE_LIB
++liblinux-y += main.o start_up.o skas/
++HEADER_ARCH 	:= x86
+ liblinux-y += x86/
++else
++HEADER_ARCH 	:= um/lkl
++liblinux-y += lkl/
++endif
++
+ liblinux-$(CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA) += elf_aux.o
+ 
+ export O = $(srctree)
+@@ -24,7 +32,6 @@ CFLAGS := -g -O2
+ 
+ # from arch/um/Makefile
+ ARCH_DIR := arch/um
+-HEADER_ARCH 	:= x86
+ HOST_DIR := arch/$(HEADER_ARCH)
+ ifdef CONFIG_64BIT
+   KBUILD_CFLAGS += -mcmodel=large
+@@ -34,6 +41,7 @@ KBUILD_CFLAGS += $(CFLAGS) $(CFLAGS-y) -D__arch_um__ \
+ 	-Dlongjmp=kernel_longjmp -Dsetjmp=kernel_setjmp \
+ 	-Din6addr_loopback=kernel_in6addr_loopback \
+ 	-Din6addr_any=kernel_in6addr_any -Dstrrchr=kernel_strrchr
++KBUILD_CFLAGS := $(filter-out -Dsigprocmask=kernel_sigprocmask,$(KBUILD_CFLAGS))
+ SHARED_HEADERS	:= $(ARCH_DIR)/include/shared
+ MODE_INCLUDE	+= -I$(srctree)/$(ARCH_DIR)/include/shared/skas
+ ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS)
+diff --git a/tools/um/uml/lkl/Build b/tools/um/uml/lkl/Build
+new file mode 100644
+index 000000000000..98fd6b86a085
+--- /dev/null
++++ b/tools/um/uml/lkl/Build
+@@ -0,0 +1 @@
++liblinux-y = registers.o unimplemented.o
+diff --git a/tools/um/uml/lkl/registers.c b/tools/um/uml/lkl/registers.c
+new file mode 100644
+index 000000000000..11573a204720
+--- /dev/null
++++ b/tools/um/uml/lkl/registers.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++
++struct uml_pt_regs;
++
++int get_fp_registers(int pid, unsigned long *regs)
++{
++	return 0;
 +}
 +
-+void lkl_irq_exit(void)
++int save_i387_registers(int pid, unsigned long *fp_regs)
 +{
-+	return lkl_cpu_put();
++	return 0;
 +}
 +
- static void lkl_cpu_shutdown(void)
- {
- 	__sync_fetch_and_add(&cpu.shutdown_gate, MAX_THREADS);
-diff --git a/arch/um/lkl/um/setup.c b/arch/um/lkl/um/setup.c
-index ba8338d4fc23..12b235826573 100644
---- a/arch/um/lkl/um/setup.c
-+++ b/arch/um/lkl/um/setup.c
-@@ -36,6 +36,8 @@ static void __init *lkl_run_kernel(void *arg)
- 
- 	panic_blink = lkl_panic_blink;
- 
-+	/* signal should be received at this thread (main and idle threads) */
-+	init_new_thread_signals();
- 	threads_init();
- 	lkl_cpu_get();
- 	start_kernel();
-@@ -58,6 +60,9 @@ int __init lkl_start_kernel(struct lkl_host_operations *ops,
- 	if (ret)
- 		goto out_free_init_sem;
- 
-+	change_sig(SIGALRM, 0);
-+	change_sig(SIGIO, 0);
-+
- 	ret = lkl_thread_create(lkl_run_kernel, NULL);
- 	if (!ret) {
- 		ret = -ENOMEM;
-diff --git a/arch/um/lkl/um/threads.c b/arch/um/lkl/um/threads.c
-index 7ef9b9f2a6b7..c7ff578b7a91 100644
---- a/arch/um/lkl/um/threads.c
-+++ b/arch/um/lkl/um/threads.c
-@@ -152,6 +152,9 @@ static void *thread_bootstrap(void *_tba)
- 	int (*f)(void *) = tba->f;
- 	void *arg = tba->arg;
- 
-+	change_sig(SIGALRM, 0);
-+	change_sig(SIGIO, 0);
-+
- 	lkl_sem_down(ti->task->thread.arch.sched_sem);
- 	kfree(tba);
- 	if (ti->task->thread.prev_sched)
-diff --git a/tools/um/uml/signal.c b/tools/um/uml/signal.c
-index 96f511d1aabe..de04b0dd34bb 100644
---- a/tools/um/uml/signal.c
-+++ b/tools/um/uml/signal.c
-@@ -230,8 +230,8 @@ void set_handler(int sig)
- 
- 	sigemptyset(&sig_mask);
- 	sigaddset(&sig_mask, sig);
--	if (sigprocmask(SIG_UNBLOCK, &sig_mask, NULL) < 0)
--		panic("sigprocmask failed - errno = %d\n", errno);
-+	if (pthread_sigmask(SIG_UNBLOCK, &sig_mask, NULL) < 0)
-+		panic("pthread_sigmask failed - errno = %d\n", errno);
- }
- 
- void send_sigio_to_self(void)
-@@ -375,3 +375,11 @@ int os_is_signal_stack(void)
- 
- 	return ss.ss_flags & SS_ONSTACK;
- }
-+
-+void set_pending_signals(int sig)
++void arch_init_registers(int pid)
 +{
-+	if (sig == SIGIO)
-+		signals_pending |= SIGIO_MASK;
-+	else if (sig == SIGALRM)
-+		signals_pending |= SIGALRM_MASK;
++}
++
++void get_regs_from_mc(struct uml_pt_regs *regs, void *mc)
++{
++}
+diff --git a/tools/um/uml/lkl/unimplemented.c b/tools/um/uml/lkl/unimplemented.c
+new file mode 100644
+index 000000000000..9da3e5c8bafb
+--- /dev/null
++++ b/tools/um/uml/lkl/unimplemented.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <generated/user_constants.h>
++
++struct uml_pt_regs;
++
++/* os-Linux/skas/process.c */
++int userspace_pid[UM_NR_CPUS];
++void userspace(struct uml_pt_regs *regs, unsigned long *aux_fp_regs)
++{}
++
++
++/* x86/os-Linux/task_size.c */
++unsigned long os_get_top_address(void)
++{
++	return 0;
++}
++
++/* start-up.c */
++void os_early_checks(void)
++{
 +}
 -- 
 2.21.0 (Apple Git-122.2)
