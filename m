@@ -2,61 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A78AB2FC910
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566D62FC90D
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jan 2021 04:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727013AbhATDen (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Jan 2021 22:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S1728723AbhATDc0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Jan 2021 22:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731982AbhATC3f (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:29:35 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78E5C061793
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:20 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id v19so14193139pgj.12
-        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:20 -0800 (PST)
+        with ESMTP id S1732015AbhATC3s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Jan 2021 21:29:48 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E75C061575
+        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:33 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id x18so11682194pln.6
+        for <linux-arch@vger.kernel.org>; Tue, 19 Jan 2021 18:29:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TnbxlQtHOOSR1UjdJYrHMUANWgwLreFhRecaPDeoXc0=;
-        b=nZK8UUNrJfm/LqYi1pksUq5e42Wl5SKW3HosuQIFeyVz5/0Tn+z4CjBdeTJCl5RUvk
-         h2w0kNSW+nrLJQbaYM3OeWbhqX4bw2Vgq2JvItXkaLIxdC5FZdh/K+wvLccy2iF+y7+N
-         d03+SxYPACSu8ZhbbC6fzH+zCfKWgFmixE3nKs/0aof9MI8gfI79KY4SJItcEMrMvEg/
-         ClbJu793YlsSnktNx3UgS9tiRNn0aZcgxAstCj7uX5nWw5quz7wfwwKmBwn6njRT7kzF
-         DztkWNjnV1GQxrWsKCV3Fk9FP1PuyOQ9v+P3gHyxOXFaRIGXv2omGFsgJ+hxspMrThsM
-         1czQ==
+        bh=n/dbbS0rMlpQp00koX4eBauIdFcCxHN4tLYTcu+aBbI=;
+        b=Yu3XAmShQwGA9NbbMUP0V6TpATKelYqfitBamIpxlRYWx3HITJzOKhwxIuILKipYyr
+         vwL3tH3iFcsyDxVk42a7u1Av5eDbwZIBRarXcDDEgBXqQ0X3HkE65azocsR1MUaFt5BE
+         yj/93j5U+dI9S6rCBAv6X7ClS6HIKQqKb8nbxBSBfXUL66h3yZ+KD3c0gy6REHT3Paby
+         pjpvVXl8YDK2llxlRbnyRGaXkBse1qSPsZ41v8zUu1f9roNXrmkS2gmKKzmy8tVcAJ5Z
+         XFccGI3W8sTjzUwaxnp7eMS8okKfIZJBbz3jCfj3o+0bfkA8Exz6WOuOg1uhtldocAxe
+         nJ3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TnbxlQtHOOSR1UjdJYrHMUANWgwLreFhRecaPDeoXc0=;
-        b=rFaaWnRmNFLloeFwFRmXrIOk0POK2Ppb4TlQJWAuCXTGWSX5cbHEsFLY7H4LpidoRC
-         9yEM183PbgA9HcGWiKSJ2rXCyNTX8PDF9kVR2gUFLqza3ShUfiPEmTckRJfp3FFvF5XY
-         Nu5tBEJtRqb3fnP5vNX+L3qhqdGa0S+Fm5nkHOSj0a+mDwOOJYRSRzCgvYHiRRJRaG1/
-         EEfGAi+AUrA56jH9/qEIJ2VCVH8zRJKTxseFLOE5TG3Xst25hi7KBGoi+gvP3PrXOmHY
-         3vSVY9BfORL7CnzHnpoReo+5QOGXWCEcL8eZduY5Z2Osj1FWoQ4IAV15PoJxFJvcHCO9
-         EgRA==
-X-Gm-Message-State: AOAM532DdcFepDvjaDwuYsDMl8PpUFTy4QiVVn+aI67Uh7QU5f9vZEP/
-        tPPwh+PWxIB0MLBpHdX4Bf4=
-X-Google-Smtp-Source: ABdhPJx+oFZ3Zw1B9duYD+TkeeQ9E+UIyt6NIGOk8pTJWtKWchGpbt4xuAHaode05GjElrcWQXM8/A==
-X-Received: by 2002:a63:cf56:: with SMTP id b22mr7248541pgj.16.1611109760230;
-        Tue, 19 Jan 2021 18:29:20 -0800 (PST)
+        bh=n/dbbS0rMlpQp00koX4eBauIdFcCxHN4tLYTcu+aBbI=;
+        b=bwyUx46/nyaAax+qLh+HZAli8FvWMs1bk2akYm9kX+W3E9JvnRVFFhprL40b6k2VUL
+         bFVHOxgF/AfDq1Y0iNIzirewV9Ztz1Ocg2UEbtb29liul0tF2Njt1r1ITu6qwvQxJhkx
+         /2DwI0+vozPyTkbWLyOSwqLDkVCjC2+J6/bFhwyVFTrIYRo1u4Bs/0OqRGGtEFthBqN/
+         McJ+pFLU4NUogSFaryBekWCSbUoh07W9KvLN5xbb5OKGa4K6ZyGggbOONgs3+ZMbJqFe
+         40KFtFafKKQm+9peFRmoQXYFOVXjpkVlVnGqiDjtXVnUY6yU9hETdPQCyYsVbLVJ9iK8
+         j48A==
+X-Gm-Message-State: AOAM532ylrl2CjLbEjsZkIGtB2CEAasuEfM7MlBGlPM2wkGY/2HaofaD
+        PPIsu0iCBlbKTBlcHAFbXjSu/+T64F3Qp4reeQo=
+X-Google-Smtp-Source: ABdhPJwsUtX6KtjCCrsv6R3BCj/oMIfRCSL6+b7hUdJHYrJxzW7aiHN+khBbrOmfzMsvkt/SpI5wig==
+X-Received: by 2002:a17:902:5991:b029:de:a709:ffda with SMTP id p17-20020a1709025991b02900dea709ffdamr7689240pli.63.1611109773034;
+        Tue, 19 Jan 2021 18:29:33 -0800 (PST)
 Received: from earth-mac.local (219x123x138x129.ap219.ftth.ucom.ne.jp. [219.123.138.129])
-        by smtp.gmail.com with ESMTPSA id n15sm245434pjk.57.2021.01.19.18.29.19
+        by smtp.gmail.com with ESMTPSA id 197sm349261pgg.43.2021.01.19.18.29.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 Jan 2021 18:29:19 -0800 (PST)
+        Tue, 19 Jan 2021 18:29:32 -0800 (PST)
 Received: by earth-mac.local (Postfix, from userid 501)
-        id 99C7320442D3B8; Wed, 20 Jan 2021 11:29:17 +0900 (JST)
+        id 34E6820442D3F1; Wed, 20 Jan 2021 11:29:30 +0900 (JST)
 From:   Hajime Tazaki <thehajime@gmail.com>
 To:     linux-um@lists.infradead.org, jdike@addtoit.com, richard@nod.at,
         anton.ivanov@cambridgegreys.com
 Cc:     thehajime@gmail.com, tavi.purdila@gmail.com, retrage01@gmail.com,
         linux-kernel-library@freelists.org, linux-arch@vger.kernel.org
-Subject: [RFC v8 15/20] um: host: add library mode build for ARCH=um
-Date:   Wed, 20 Jan 2021 11:27:20 +0900
-Message-Id: <800d34cda146c025770e5a802de592417dfced30.1611103406.git.thehajime@gmail.com>
+Subject: [RFC v8 16/20] um: host: add utilities functions
+Date:   Wed, 20 Jan 2021 11:27:21 +0900
+Message-Id: <8416d4b2f5c5510bfa3162cf04bae181c13d3f6e.1611103406.git.thehajime@gmail.com>
 X-Mailer: git-send-email 2.20.1 (Apple Git-117)
 In-Reply-To: <cover.1611103406.git.thehajime@gmail.com>
 References: <cover.1611103406.git.thehajime@gmail.com>
@@ -66,337 +66,273 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds the skeleton for the host library.
-
-The host library is implementing the host operations needed by library
-mode and splits into host dependent (e.g., POSIX hosts) and host
-independent parts.
+Add basic utility functions for getting a string from a kernel error
+code and a fprintf like function that uses the host print
+operation. The latter is useful for informing the user about errors
+that occur in the host library.
 
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
-Signed-off-by: Octavian Purdila <tavi.purdila@gmail.com>
 ---
- tools/um/.gitignore              |   1 +
- tools/um/Makefile                |   1 +
- tools/um/Targets                 |   6 +-
- tools/um/include/lkl.h           | 135 +++++++++++++++++++++++++++++++
- tools/um/include/lkl_host.h      |  18 +++++
- tools/um/uml/Build               |  16 +++-
- tools/um/uml/lkl/Build           |   1 +
- tools/um/uml/lkl/registers.c     |  21 +++++
- tools/um/uml/lkl/unimplemented.c |  21 +++++
- 9 files changed, 214 insertions(+), 6 deletions(-)
- create mode 100644 tools/um/.gitignore
- create mode 100644 tools/um/include/lkl.h
- create mode 100644 tools/um/include/lkl_host.h
- create mode 100644 tools/um/uml/lkl/Build
- create mode 100644 tools/um/uml/lkl/registers.c
- create mode 100644 tools/um/uml/lkl/unimplemented.c
+ tools/um/include/lkl.h |  23 +++++
+ tools/um/lib/Build     |   3 +
+ tools/um/lib/utils.c   | 205 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 231 insertions(+)
+ create mode 100644 tools/um/lib/Build
+ create mode 100644 tools/um/lib/utils.c
 
-diff --git a/tools/um/.gitignore b/tools/um/.gitignore
-new file mode 100644
-index 000000000000..0d20b6487c61
---- /dev/null
-+++ b/tools/um/.gitignore
-@@ -0,0 +1 @@
-+*.pyc
-diff --git a/tools/um/Makefile b/tools/um/Makefile
-index 877d0bdefa67..c07e91a93372 100644
---- a/tools/um/Makefile
-+++ b/tools/um/Makefile
-@@ -66,6 +66,7 @@ RM := rm -f
- clean:
- 	$(call QUIET_CLEAN, objects)find $(OUTPUT) -name '*.o' -delete -o -name '\.*.cmd'\
- 	 -delete -o -name '\.*.d' -delete
-+	$(call QUIET_CLEAN, headers)$(RM) -r $(OUTPUT)/include/lkl/
- 	$(call QUIET_CLEAN, liblinux.a)$(RM) $(OUTPUT)/liblinux.a
- 	$(call QUIET_CLEAN, $(TARGETS))$(RM) $(TARGETS)
- 
-diff --git a/tools/um/Targets b/tools/um/Targets
-index e8b43c7758fe..ae6c8d8b168e 100644
---- a/tools/um/Targets
-+++ b/tools/um/Targets
-@@ -1,7 +1,9 @@
--ifneq ($(CONFIG_UMMODE_LIB),y)
-+ifeq ($(CONFIG_UMMODE_LIB),y)
-+libs-y += liblinux.a
-+else
- progs-y += uml/linux
- endif
- 
--LDLIBS_linux-y := -lrt -lpthread -lutil
-+LDLIBS := -lrt -lpthread -lutil
- LDFLAGS_linux-y := -no-pie -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
- LDFLAGS_linux-$(CONFIG_STATIC_LINK) += -static
 diff --git a/tools/um/include/lkl.h b/tools/um/include/lkl.h
-new file mode 100644
-index 000000000000..2417ed5ccf71
---- /dev/null
+index 2417ed5ccf71..97da2d11502f 100644
+--- a/tools/um/include/lkl.h
 +++ b/tools/um/include/lkl.h
-@@ -0,0 +1,135 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LKL_H
-+#define _LKL_H
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+#define _LKL_LIBC_COMPAT_H
-+
-+#ifdef __cplusplus
-+#define class __lkl__class
-+#endif
-+
-+/*
-+ * Avoid collisions between Android which defines __unused and
-+ * linux/icmp.h which uses __unused as a structure field.
-+ */
-+#pragma push_macro("__unused")
-+#undef __unused
-+
-+#include <lkl/asm/syscalls.h>
-+
-+#pragma pop_macro("__unused")
-+
-+#ifdef __cplusplus
-+#undef class
-+#endif
-+
-+#if __LKL__BITS_PER_LONG == 64
-+#define lkl_sys_fstatat lkl_sys_newfstatat
-+#define lkl_sys_fstat lkl_sys_newfstat
-+
-+#else
-+#define __lkl__NR_fcntl __lkl__NR_fcntl64
-+
-+#define lkl_stat lkl_stat64
-+#define lkl_sys_stat lkl_sys_stat64
-+#define lkl_sys_lstat lkl_sys_lstat64
-+#define lkl_sys_truncate lkl_sys_truncate64
-+#define lkl_sys_ftruncate lkl_sys_ftruncate64
-+#define lkl_sys_sendfile lkl_sys_sendfile64
-+#define lkl_sys_fstatat lkl_sys_fstatat64
-+#define lkl_sys_fstat lkl_sys_fstat64
-+#define lkl_sys_fcntl lkl_sys_fcntl64
-+
-+#define lkl_statfs lkl_statfs64
-+
-+static inline int lkl_sys_statfs(const char *path, struct lkl_statfs *buf)
-+{
-+	return lkl_sys_statfs64(path, sizeof(*buf), buf);
-+}
-+
-+static inline int lkl_sys_fstatfs(unsigned int fd, struct lkl_statfs *buf)
-+{
-+	return lkl_sys_fstatfs64(fd, sizeof(*buf), buf);
-+}
-+
-+#define lkl_sys_nanosleep lkl_sys_nanosleep_time32
-+static inline int lkl_sys_nanosleep_time32(struct lkl_timespec *rqtp,
-+					   struct lkl_timespec *rmtp)
-+{
-+	long p[6] = {(long)rqtp, (long)rmtp, 0, 0, 0, 0};
-+
-+	return lkl_syscall(__lkl__NR_nanosleep, p);
-+}
-+
-+#endif
-+
-+static inline int lkl_sys_stat(const char *path, struct lkl_stat *buf)
-+{
-+	return lkl_sys_fstatat(LKL_AT_FDCWD, path, buf, 0);
-+}
-+
-+static inline int lkl_sys_lstat(const char *path, struct lkl_stat *buf)
-+{
-+	return lkl_sys_fstatat(LKL_AT_FDCWD, path, buf,
-+			       LKL_AT_SYMLINK_NOFOLLOW);
-+}
-+
-+#ifdef __lkl__NR_openat
+@@ -27,6 +27,29 @@ extern "C" {
+ #undef class
+ #endif
+ 
 +/**
-+ * lkl_sys_open - wrapper for lkl_sys_openat
++ * lkl_printf - print a message via the host print operation
++ *
++ * @fmt: printf like format string
 + */
-+static inline long lkl_sys_open(const char *file, int flags, int mode)
-+{
-+	return lkl_sys_openat(LKL_AT_FDCWD, file, flags, mode);
-+}
++int lkl_printf(const char *fmt, ...);
 +
 +/**
-+ * lkl_sys_creat - wrapper for lkl_sys_openat
++ * lkl_strerror - returns a string describing the given error code
++ *
++ * @err - error code
++ * @returns - string for the given error code
 + */
-+static inline long lkl_sys_creat(const char *file, int mode)
-+{
-+	return lkl_sys_openat(LKL_AT_FDCWD, file,
-+			      LKL_O_CREAT|LKL_O_WRONLY|LKL_O_TRUNC, mode);
-+}
-+#endif
++const char *lkl_strerror(int err);
 +
-+#ifdef __lkl__NR_mkdirat
 +/**
-+ * lkl_sys_mkdir - wrapper for lkl_sys_mkdirat
++ * lkl_perror - prints a string describing the given error code
++ *
++ * @msg - prefix for the error message
++ * @err - error code
 + */
-+static inline long lkl_sys_mkdir(const char *path, mode_t mode)
-+{
-+	return lkl_sys_mkdirat(LKL_AT_FDCWD, path, mode);
-+}
-+#endif
++void lkl_perror(char *msg, int err);
 +
-+#ifdef __lkl__NR_epoll_create1
-+/**
-+ * lkl_sys_epoll_create - wrapper for lkl_sys_epoll_create1
-+ */
-+static inline long lkl_sys_epoll_create(int size)
-+{
-+	return lkl_sys_epoll_create1(0);
-+}
-+#endif
-+
-+#ifdef __lkl__NR_epoll_pwait
-+/**
-+ * lkl_sys_epoll_wait - wrapper for lkl_sys_epoll_pwait
-+ */
-+static inline long lkl_sys_epoll_wait(int fd, struct lkl_epoll_event *ev,
-+				      int cnt, int to)
-+{
-+	return lkl_sys_epoll_pwait(fd, ev, cnt, to, 0, _LKL_NSIG/8);
-+}
-+#endif
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
-diff --git a/tools/um/include/lkl_host.h b/tools/um/include/lkl_host.h
+ #if __LKL__BITS_PER_LONG == 64
+ #define lkl_sys_fstatat lkl_sys_newfstatat
+ #define lkl_sys_fstat lkl_sys_newfstat
+diff --git a/tools/um/lib/Build b/tools/um/lib/Build
 new file mode 100644
-index 000000000000..5fe7a64dc4dd
+index 000000000000..77acd6f55e76
 --- /dev/null
-+++ b/tools/um/include/lkl_host.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LKL_HOST_H
-+#define _LKL_HOST_H
++++ b/tools/um/lib/Build
+@@ -0,0 +1,3 @@
++include $(objtree)/include/config/auto.conf
 +
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+#include <lkl/asm/host_ops.h>
-+#include <lkl.h>
-+
-+extern struct lkl_host_operations lkl_host_ops;
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
-diff --git a/tools/um/uml/Build b/tools/um/uml/Build
-index 810aa99f8409..b523923afd45 100644
---- a/tools/um/uml/Build
-+++ b/tools/um/uml/Build
-@@ -8,13 +8,21 @@ KCOV_INSTRUMENT                := n
- 
- include $(objtree)/include/config/auto.conf
- 
--liblinux-y += execvp.o file.o helper.o irq.o main.o mem.o process.o \
--	registers.o sigio.o signal.o start_up.o time.o tty.o \
--	umid.o util.o drivers/ skas/
-+liblinux-y += execvp.o file.o helper.o irq.o mem.o process.o \
-+	registers.o sigio.o signal.o time.o tty.o \
-+	umid.o util.o drivers/
- 
- CFLAGS_signal.o += -Wframe-larger-than=4096
- 
-+ifndef CONFIG_UMMODE_LIB
-+liblinux-y += main.o start_up.o skas/
-+HEADER_ARCH 	:= x86
- liblinux-y += x86/
-+else
-+HEADER_ARCH 	:= um/lkl
-+liblinux-y += lkl/
-+endif
-+
- liblinux-$(CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA) += elf_aux.o
- 
- export O = $(srctree)
-@@ -24,7 +32,6 @@ CFLAGS := -g -O2
- 
- # from arch/um/Makefile
- ARCH_DIR := arch/um
--HEADER_ARCH 	:= x86
- HOST_DIR := arch/$(HEADER_ARCH)
- ifdef CONFIG_64BIT
-   KBUILD_CFLAGS += -mcmodel=large
-@@ -34,6 +41,7 @@ KBUILD_CFLAGS += $(CFLAGS) $(CFLAGS-y) -D__arch_um__ \
- 	-Dlongjmp=kernel_longjmp -Dsetjmp=kernel_setjmp \
- 	-Din6addr_loopback=kernel_in6addr_loopback \
- 	-Din6addr_any=kernel_in6addr_any -Dstrrchr=kernel_strrchr
-+KBUILD_CFLAGS := $(filter-out -Dsigprocmask=kernel_sigprocmask,$(KBUILD_CFLAGS))
- SHARED_HEADERS	:= $(ARCH_DIR)/include/shared
- MODE_INCLUDE	+= -I$(srctree)/$(ARCH_DIR)/include/shared/skas
- ARCH_INCLUDE	:= -I$(srctree)/$(SHARED_HEADERS)
-diff --git a/tools/um/uml/lkl/Build b/tools/um/uml/lkl/Build
++liblinux-$(CONFIG_UMMODE_LIB) += utils.o
+diff --git a/tools/um/lib/utils.c b/tools/um/lib/utils.c
 new file mode 100644
-index 000000000000..98fd6b86a085
+index 000000000000..3b38e1a95124
 --- /dev/null
-+++ b/tools/um/uml/lkl/Build
-@@ -0,0 +1 @@
-+liblinux-y = registers.o unimplemented.o
-diff --git a/tools/um/uml/lkl/registers.c b/tools/um/uml/lkl/registers.c
-new file mode 100644
-index 000000000000..11573a204720
---- /dev/null
-+++ b/tools/um/uml/lkl/registers.c
-@@ -0,0 +1,21 @@
++++ b/tools/um/lib/utils.c
+@@ -0,0 +1,205 @@
 +// SPDX-License-Identifier: GPL-2.0
++#include <stdarg.h>
++#include <stdio.h>
++#include <string.h>
++#include <lkl_host.h>
 +
-+struct uml_pt_regs;
++static const char * const lkl_err_strings[] = {
++	[0]			= "Success",
++	[LKL_EPERM]		= "Operation not permitted",
++	[LKL_ENOENT]		= "No such file or directory",
++	[LKL_ESRCH]		= "No such process",
++	[LKL_EINTR]		= "Interrupted system call",
++	[LKL_EIO]		= "I/O error",
++	[LKL_ENXIO]		= "No such device or address",
++	[LKL_E2BIG]		= "Argument list too long",
++	[LKL_ENOEXEC]		= "Exec format error",
++	[LKL_EBADF]		= "Bad file number",
++	[LKL_ECHILD]		= "No child processes",
++	[LKL_EAGAIN]		= "Try again",
++	[LKL_ENOMEM]		= "Out of memory",
++	[LKL_EACCES]		= "Permission denied",
++	[LKL_EFAULT]		= "Bad address",
++	[LKL_ENOTBLK]		= "Block device required",
++	[LKL_EBUSY]		= "Device or resource busy",
++	[LKL_EEXIST]		= "File exists",
++	[LKL_EXDEV]		= "Cross-device link",
++	[LKL_ENODEV]		= "No such device",
++	[LKL_ENOTDIR]		= "Not a directory",
++	[LKL_EISDIR]		= "Is a directory",
++	[LKL_EINVAL]		= "Invalid argument",
++	[LKL_ENFILE]		= "File table overflow",
++	[LKL_EMFILE]		= "Too many open files",
++	[LKL_ENOTTY]		= "Not a typewriter",
++	[LKL_ETXTBSY]		= "Text file busy",
++	[LKL_EFBIG]		= "File too large",
++	[LKL_ENOSPC]		= "No space left on device",
++	[LKL_ESPIPE]		= "Illegal seek",
++	[LKL_EROFS]		= "Read-only file system",
++	[LKL_EMLINK]		= "Too many links",
++	[LKL_EPIPE]		= "Broken pipe",
++	[LKL_EDOM]		= "Math argument out of domain of func",
++	[LKL_ERANGE]		= "Math result not representable",
++	[LKL_EDEADLK]		= "Resource deadlock would occur",
++	[LKL_ENAMETOOLONG]	= "File name too long",
++	[LKL_ENOLCK]		= "No record locks available",
++	[LKL_ENOSYS]		= "Invalid system call number",
++	[LKL_ENOTEMPTY]		= "Directory not empty",
++	[LKL_ELOOP]		= "Too many symbolic links encountered",
++	[LKL_ENOMSG]		= "No message of desired type",
++	[LKL_EIDRM]		= "Identifier removed",
++	[LKL_ECHRNG]		= "Channel number out of range",
++	[LKL_EL2NSYNC]		= "Level 2 not synchronized",
++	[LKL_EL3HLT]		= "Level 3 halted",
++	[LKL_EL3RST]		= "Level 3 reset",
++	[LKL_ELNRNG]		= "Link number out of range",
++	[LKL_EUNATCH]		= "Protocol driver not attached",
++	[LKL_ENOCSI]		= "No CSI structure available",
++	[LKL_EL2HLT]		= "Level 2 halted",
++	[LKL_EBADE]		= "Invalid exchange",
++	[LKL_EBADR]		= "Invalid request descriptor",
++	[LKL_EXFULL]		= "Exchange full",
++	[LKL_ENOANO]		= "No anode",
++	[LKL_EBADRQC]		= "Invalid request code",
++	[LKL_EBADSLT]		= "Invalid slot",
++	[LKL_EBFONT]		= "Bad font file format",
++	[LKL_ENOSTR]		= "Device not a stream",
++	[LKL_ENODATA]		= "No data available",
++	[LKL_ETIME]		= "Timer expired",
++	[LKL_ENOSR]		= "Out of streams resources",
++	[LKL_ENONET]		= "Machine is not on the network",
++	[LKL_ENOPKG]		= "Package not installed",
++	[LKL_EREMOTE]		= "Object is remote",
++	[LKL_ENOLINK]		= "Link has been severed",
++	[LKL_EADV]		= "Advertise error",
++	[LKL_ESRMNT]		= "Srmount error",
++	[LKL_ECOMM]		= "Communication error on send",
++	[LKL_EPROTO]		= "Protocol error",
++	[LKL_EMULTIHOP]		= "Multihop attempted",
++	[LKL_EDOTDOT]		= "RFS specific error",
++	[LKL_EBADMSG]		= "Not a data message",
++	[LKL_EOVERFLOW]		= "Value too large for defined data type",
++	[LKL_ENOTUNIQ]		= "Name not unique on network",
++	[LKL_EBADFD]		= "File descriptor in bad state",
++	[LKL_EREMCHG]		= "Remote address changed",
++	[LKL_ELIBACC]		= "Can not access a needed shared library",
++	[LKL_ELIBBAD]		= "Accessing a corrupted shared library",
++	[LKL_ELIBSCN]		= ".lib section in a.out corrupted",
++	[LKL_ELIBMAX]		= "Attempting to link in too many shared libraries",
++	[LKL_ELIBEXEC]		= "Cannot exec a shared library directly",
++	[LKL_EILSEQ]		= "Illegal byte sequence",
++	[LKL_ERESTART]		= "Interrupted system call should be restarted",
++	[LKL_ESTRPIPE]		= "Streams pipe error",
++	[LKL_EUSERS]		= "Too many users",
++	[LKL_ENOTSOCK]		= "Socket operation on non-socket",
++	[LKL_EDESTADDRREQ]	= "Destination address required",
++	[LKL_EMSGSIZE]		= "Message too long",
++	[LKL_EPROTOTYPE]	= "Protocol wrong type for socket",
++	[LKL_ENOPROTOOPT]	= "Protocol not available",
++	[LKL_EPROTONOSUPPORT]	= "Protocol not supported",
++	[LKL_ESOCKTNOSUPPORT]	= "Socket type not supported",
++	[LKL_EOPNOTSUPP]	= "Operation not supported on transport endpoint",
++	[LKL_EPFNOSUPPORT]	= "Protocol family not supported",
++	[LKL_EAFNOSUPPORT]	= "Address family not supported by protocol",
++	[LKL_EADDRINUSE]	= "Address already in use",
++	[LKL_EADDRNOTAVAIL]	= "Cannot assign requested address",
++	[LKL_ENETDOWN]		= "Network is down",
++	[LKL_ENETUNREACH]	= "Network is unreachable",
++	[LKL_ENETRESET]		= "Network dropped connection because of reset",
++	[LKL_ECONNABORTED]	= "Software caused connection abort",
++	[LKL_ECONNRESET]	= "Connection reset by peer",
++	[LKL_ENOBUFS]		= "No buffer space available",
++	[LKL_EISCONN]		= "Transport endpoint is already connected",
++	[LKL_ENOTCONN]		= "Transport endpoint is not connected",
++	[LKL_ESHUTDOWN]		= "Cannot send after transport endpoint shutdown",
++	[LKL_ETOOMANYREFS]	= "Too many references: cannot splice",
++	[LKL_ETIMEDOUT]		= "Connection timed out",
++	[LKL_ECONNREFUSED]	= "Connection refused",
++	[LKL_EHOSTDOWN]		= "Host is down",
++	[LKL_EHOSTUNREACH]	= "No route to host",
++	[LKL_EALREADY]		= "Operation already in progress",
++	[LKL_EINPROGRESS]	= "Operation now in progress",
++	[LKL_ESTALE]		= "Stale file handle",
++	[LKL_EUCLEAN]		= "Structure needs cleaning",
++	[LKL_ENOTNAM]		= "Not a XENIX named type file",
++	[LKL_ENAVAIL]		= "No XENIX semaphores available",
++	[LKL_EISNAM]		= "Is a named type file",
++	[LKL_EREMOTEIO]		= "Remote I/O error",
++	[LKL_EDQUOT]		= "Quota exceeded",
++	[LKL_ENOMEDIUM]		= "No medium found",
++	[LKL_EMEDIUMTYPE]	= "Wrong medium type",
++	[LKL_ECANCELED]		= "Operation Canceled",
++	[LKL_ENOKEY]		= "Required key not available",
++	[LKL_EKEYEXPIRED]	= "Key has expired",
++	[LKL_EKEYREVOKED]	= "Key has been revoked",
++	[LKL_EKEYREJECTED]	= "Key was rejected by service",
++	[LKL_EOWNERDEAD]	= "Owner died",
++	[LKL_ENOTRECOVERABLE]	= "State not recoverable",
++	[LKL_ERFKILL]		= "Operation not possible due to RF-kill",
++	[LKL_EHWPOISON]		= "Memory page has hardware error",
++};
 +
-+int get_fp_registers(int pid, unsigned long *regs)
++const char *lkl_strerror(int err)
 +{
-+	return 0;
++	if (err < 0)
++		err = -err;
++
++	if ((size_t)err >= sizeof(lkl_err_strings) / sizeof(const char *))
++		return "Bad error code";
++
++	return lkl_err_strings[err];
 +}
 +
-+int save_i387_registers(int pid, unsigned long *fp_regs)
++void lkl_perror(char *msg, int err)
 +{
-+	return 0;
++	const char *err_msg = lkl_strerror(err);
++	/* We need to use 'real' printf because lkl_print can
++	 * be turned off when debugging is off.
++	 */
++	lkl_printf("%s: %s\n", msg, err_msg);
 +}
 +
-+void arch_init_registers(int pid)
++static int lkl_vprintf(const char *fmt, va_list args)
 +{
++	int n;
++	char *buffer;
++	va_list copy;
++
++	va_copy(copy, args);
++	n = vsnprintf(NULL, 0, fmt, copy);
++	va_end(copy);
++
++	buffer = lkl_mem_alloc(n + 1);
++	if (!buffer)
++		return (-1);
++
++	vsnprintf(buffer, n + 1, fmt, args);
++
++	lkl_print(buffer, n);
++	lkl_mem_free(buffer);
++
++	return n;
 +}
 +
-+void get_regs_from_mc(struct uml_pt_regs *regs, void *mc)
++int lkl_printf(const char *fmt, ...)
 +{
-+}
-diff --git a/tools/um/uml/lkl/unimplemented.c b/tools/um/uml/lkl/unimplemented.c
-new file mode 100644
-index 000000000000..9da3e5c8bafb
---- /dev/null
-+++ b/tools/um/uml/lkl/unimplemented.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <generated/user_constants.h>
++	int n;
++	va_list args;
 +
-+struct uml_pt_regs;
++	va_start(args, fmt);
++	n = lkl_vprintf(fmt, args);
++	va_end(args);
 +
-+/* os-Linux/skas/process.c */
-+int userspace_pid[UM_NR_CPUS];
-+void userspace(struct uml_pt_regs *regs, unsigned long *aux_fp_regs)
-+{}
-+
-+
-+/* x86/os-Linux/task_size.c */
-+unsigned long os_get_top_address(void)
-+{
-+	return 0;
++	return n;
 +}
 +
-+/* start-up.c */
-+void os_early_checks(void)
++void lkl_bug(const char *fmt, ...)
 +{
++	va_list args;
++
++	va_start(args, fmt);
++	lkl_vprintf(fmt, args);
++	va_end(args);
++
++	lkl_panic();
 +}
 -- 
 2.21.0 (Apple Git-122.2)
