@@ -2,134 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F99F2FF4C0
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 20:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7852FF5B8
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 21:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbhAUTil (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Jan 2021 14:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbhAUTiK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Jan 2021 14:38:10 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A39C06174A
-        for <linux-arch@vger.kernel.org>; Thu, 21 Jan 2021 11:37:30 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id m5so2316434pjv.5
-        for <linux-arch@vger.kernel.org>; Thu, 21 Jan 2021 11:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dnk9Enykj65w83ubv86uEi6KNf5yYzMFREtVI9281dI=;
-        b=JWH4tYHbk26CJuY27Dmp0A+zBeE20cqoYeOXBA+lG9CS33vCchR0H9GY3AJPMiQh6b
-         xcIKigTqdsUpwDtrgRiP7W8ZkrU65NwK+EGX/Ocw7kGBuQQ/D5bN6L7iQWT3vdan7lIM
-         /SbynjcuxJf9KmeIrh5SIfXHk7D6lqzOFzNCa6y/Dco1DIuwY1vNsE06WVaXCJDhcloG
-         LZOc9QIK8Vsy3OFNeR62Fav/CvPwmov2OyL+ia/eJs6SFntOcO+PmbCpvcvpCVq/gGyZ
-         G8I99rZfcmHeU32y/zulLUhxGYAUY3tyOn0k2bVBrIJX7NOmP3xI54CK7dyOEkBaYblD
-         kYVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dnk9Enykj65w83ubv86uEi6KNf5yYzMFREtVI9281dI=;
-        b=WIXu9LI/aIwZlGkibImiYnQNQDDIgxyQ8ZiVhJbmsj7u1q9lB64kR4NNswlQCW3otQ
-         sikuADLX41CftlZxU7UfYLjsz/EkLlGesCyqsMJPpMJ8QY36RLa7ZDe5FmVVmkJh5yCt
-         0JpCKdxmRFHxYBo1DBTF/RjLkaVlR9HEK73YkGH2MuGKbkDBxXkO8Tf/Cv/Mf4zm9ri1
-         jK1xAgACn9etcjgV2zX60Q8DiqE5+/8BZft2stTrrqHf+jjSusRd+Xc+ZU223Tysqd52
-         41fVWQBerCDA+Dya6jZFxnbs2RNVcZifgLZOu/A+DW3QhHela8PMDX+UYxs6pzXiFG93
-         6hlA==
-X-Gm-Message-State: AOAM5335YVVaGNWyfbQYs/1ha69k2cwYJhWJ1GeTLoHbiqPehxWUD5fY
-        y4QiCEqvi7aBtzWIy4117JQLO+NWuC5OzaBnqncui9gYaTk=
-X-Google-Smtp-Source: ABdhPJz7qmwzdWABn6nile0A/tLl94zngWGEj4NQpAKrGDxcZmKeyLD1jLxvmvYbq5hgTI5PecRXT4LKsNlm2LjQLew=
-X-Received: by 2002:a17:90b:30d4:: with SMTP id hi20mr1019865pjb.41.1611257849733;
- Thu, 21 Jan 2021 11:37:29 -0800 (PST)
+        id S1727066AbhAUUUg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Jan 2021 15:20:36 -0500
+Received: from mga04.intel.com ([192.55.52.120]:49885 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726987AbhAUUTN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Jan 2021 15:19:13 -0500
+IronPort-SDR: EdP40jXPw+KKSV3cqCCoVhFR0wuD/kbzmYahGjOhdWGHqM0tcOXfR6ncx1qqB99ytQSnFcD+QI
+ v2h7TbUiuFdg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="176764782"
+X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
+   d="scan'208";a="176764782"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 12:16:26 -0800
+IronPort-SDR: Xeb6GP6QHS5E+NUN4IsRGZ97r6GOsWNpHXOAkde9SaUDTqrCmzanAvvZHRo2+bsJULzAS4gGR+
+ RVNS7GFSD8vw==
+X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
+   d="scan'208";a="385443835"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.46.254]) ([10.209.46.254])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 12:16:24 -0800
+Subject: Re: [PATCH v17 08/26] x86/mm: Introduce _PAGE_COW
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
+ <20201229213053.16395-9-yu-cheng.yu@intel.com>
+ <20210121184405.GE32060@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <b4d4bec7-504e-2443-4cf3-0801b179000f@intel.com>
+Date:   Thu, 21 Jan 2021 12:16:23 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-References: <20200515171612.1020-1-catalin.marinas@arm.com> <20200515171612.1020-25-catalin.marinas@arm.com>
-In-Reply-To: <20200515171612.1020-25-catalin.marinas@arm.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 21 Jan 2021 20:37:18 +0100
-Message-ID: <CAAeHK+y=8iD_nvXFFerXcZbH=pjLFQbUP_+Ftayj-t9r9h8Ghg@mail.gmail.com>
-Subject: Re: [PATCH v4 24/26] arm64: mte: Introduce early param to disable MTE support
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Dave P Martin <Dave.Martin@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Peter Collingbourne <pcc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210121184405.GE32060@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 15, 2020 at 7:17 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> For performance analysis it may be desirable to disable MTE altogether
-> via an early param. Introduce arm64.mte_disable and, if true, filter out
-> the sanitised ID_AA64PFR1_EL1.MTE field to avoid exposing the HWCAP to
-> user.
->
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> ---
->
-> Notes:
->     New in v4.
->
->  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
->  arch/arm64/kernel/cpufeature.c                  | 11 +++++++++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f2a93c8679e8..7436e7462b85 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -373,6 +373,10 @@
->         arcrimi=        [HW,NET] ARCnet - "RIM I" (entirely mem-mapped) cards
->                         Format: <io>,<irq>,<nodeID>
->
-> +       arm64.mte_disable=
-> +                       [ARM64] Disable Linux support for the Memory
-> +                       Tagging Extension (both user and in-kernel).
-> +
->         ataflop=        [HW,M68k]
->
->         atarimouse=     [HW,MOUSE] Atari Mouse
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index aaadc1cbc006..f7596830694f 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -126,12 +126,23 @@ static void cpu_enable_cnp(struct arm64_cpu_capabilities const *cap);
->  static bool __system_matches_cap(unsigned int n);
->
->  #ifdef CONFIG_ARM64_MTE
-> +static bool mte_disable;
-> +
-> +static int __init arm64_mte_disable(char *buf)
-> +{
-> +       return strtobool(buf, &mte_disable);
-> +}
-> +early_param("arm64.mte_disable", arm64_mte_disable);
-> +
->  s64 mte_ftr_filter(const struct arm64_ftr_bits *ftrp, s64 val)
->  {
->         struct device_node *np;
->         static bool memory_checked = false;
->         static bool mte_capable = true;
->
-> +       if (mte_disable)
-> +               return ID_AA64PFR1_MTE_NI;
-> +
->         /* EL0-only MTE is not supported by Linux, don't expose it */
->         if (val < ID_AA64PFR1_MTE)
->                 return ID_AA64PFR1_MTE_NI;
+On 1/21/2021 10:44 AM, Borislav Petkov wrote:
+> On Tue, Dec 29, 2020 at 01:30:35PM -0800, Yu-cheng Yu wrote:
+[...]
+>> @@ -343,6 +349,16 @@ static inline pte_t pte_mkold(pte_t pte)
+>>   
+>>   static inline pte_t pte_wrprotect(pte_t pte)
+>>   {
+>> +	/*
+>> +	 * Blindly clearing _PAGE_RW might accidentally create
+>> +	 * a shadow stack PTE (RW=0, Dirty=1).  Move the hardware
+>> +	 * dirty value to the software bit.
+>> +	 */
+>> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+>> +		pte.pte |= (pte.pte & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
+> 
+> Why the unreadable shifting when you can simply do:
+> 
+>                  if (pte.pte & _PAGE_DIRTY)
+>                          pte.pte |= _PAGE_COW;
+> 
+> ?
 
-Hi Calatin,
+It clears _PAGE_DIRTY and sets _PAGE_COW.  That is,
 
-While this patch didn't land upstream, we need an MTE kill-switch for
-Android GKI. Is this patch OK to take as is? Is it still valid?
+if (pte.pte & _PAGE_DIRTY) {
+	pte.pte &= ~_PAGE_DIRTY;
+	pte.pte |= _PAGE_COW;
+}
 
-Thanks!
+So, shifting makes resulting code more efficient.
+
+>> @@ -434,16 +469,40 @@ static inline pmd_t pmd_mkold(pmd_t pmd)
+>>   
+>>   static inline pmd_t pmd_mkclean(pmd_t pmd)
+>>   {
+>> -	return pmd_clear_flags(pmd, _PAGE_DIRTY);
+>> +	return pmd_clear_flags(pmd, _PAGE_DIRTY_BITS);
+>>   }
+>>   
+>>   static inline pmd_t pmd_wrprotect(pmd_t pmd)
+>>   {
+>> +	/*
+>> +	 * Blindly clearing _PAGE_RW might accidentally create
+>> +	 * a shadow stack PMD (RW=0, Dirty=1).  Move the hardware
+>> +	 * dirty value to the software bit.
+>> +	 */
+>> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+>> +		pmdval_t v = native_pmd_val(pmd);
+>> +
+>> +		v |= (v & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
+> 
+> As above.
+> 
+>> @@ -488,17 +554,35 @@ static inline pud_t pud_mkold(pud_t pud)
+>>   
+>>   static inline pud_t pud_mkclean(pud_t pud)
+>>   {
+>> -	return pud_clear_flags(pud, _PAGE_DIRTY);
+>> +	return pud_clear_flags(pud, _PAGE_DIRTY_BITS);
+>>   }
+>>   
+>>   static inline pud_t pud_wrprotect(pud_t pud)
+>>   {
+>> +	/*
+>> +	 * Blindly clearing _PAGE_RW might accidentally create
+>> +	 * a shadow stack PUD (RW=0, Dirty=1).  Move the hardware
+>> +	 * dirty value to the software bit.
+>> +	 */
+>> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+>> +		pudval_t v = native_pud_val(pud);
+>> +
+>> +		v |= (v & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
+> 
+> Ditto.
+> 
+>> @@ -1131,6 +1222,12 @@ extern int pmdp_clear_flush_young(struct vm_area_struct *vma,
+>>   #define pmd_write pmd_write
+>>   static inline int pmd_write(pmd_t pmd)
+>>   {
+>> +	/*
+>> +	 * If _PAGE_DIRTY is set, then the PMD must either have _PAGE_RW or
+>> +	 * be a shadow stack PMD, which is logically writable.
+>> +	 */
+>> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK))
+>> +		return pmd_flags(pmd) & (_PAGE_RW | _PAGE_DIRTY);
+> 
+> 	else
+> 
+> 
+>>   	return pmd_flags(pmd) & _PAGE_RW;
+>>   }
+>>  
