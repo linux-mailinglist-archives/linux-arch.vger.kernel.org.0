@@ -2,41 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D51F02FF778
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 22:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411562FF7D2
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 23:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727785AbhAUVlr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Jan 2021 16:41:47 -0500
-Received: from mga07.intel.com ([134.134.136.100]:49386 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727369AbhAUVlb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 Jan 2021 16:41:31 -0500
-IronPort-SDR: OGhMR9Rk/bgECFutorlR+55TQQLiyl5C7hVx35FZf8eTbKrQzIn96rvNOqElguH7raWHtuL6L+
- SNWEJvgg209g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="243425919"
-X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
-   d="scan'208";a="243425919"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 13:40:50 -0800
-IronPort-SDR: u+JpUjjQSXfUXGLMAXw5NU/pwznQ/bNs8S+w5N5NH/wdP5atFQQCvDp7F07Fk3vKwlzciE8b70
- SLxX92CVOZxg==
-X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
-   d="scan'208";a="571851418"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.46.254]) ([10.209.46.254])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 13:40:47 -0800
-Subject: Re: [PATCH v17 08/26] x86/mm: Introduce _PAGE_COW
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        id S1726583AbhAUWRw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Jan 2021 17:17:52 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:54986 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725961AbhAUWRt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Jan 2021 17:17:49 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-244-l2OEnG_AOqSZjOQ6quE8Sw-1; Thu, 21 Jan 2021 22:16:09 +0000
+X-MC-Unique: l2OEnG_AOqSZjOQ6quE8Sw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 21 Jan 2021 22:16:08 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 21 Jan 2021 22:16:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Yu, Yu-cheng'" <yu-cheng.yu@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
+        "Eugene Syromiatnikov" <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
         "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -49,44 +52,56 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
+        "Weijiang Yang" <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
+Subject: RE: [PATCH v17 08/26] x86/mm: Introduce _PAGE_COW
+Thread-Topic: [PATCH v17 08/26] x86/mm: Introduce _PAGE_COW
+Thread-Index: AQHW8DMjsVkr7OKTZEWf0jgz1DSfFaoyopGA
+Date:   Thu, 21 Jan 2021 22:16:08 +0000
+Message-ID: <cd9d04ab66d144b7942b5030d9813115@AcuMS.aculab.com>
 References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
  <20201229213053.16395-9-yu-cheng.yu@intel.com>
  <20210121184405.GE32060@zn.tnic>
  <b4d4bec7-504e-2443-4cf3-0801b179000f@intel.com>
- <20210121204113.GG32060@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <56a7b904-dddc-d92c-b74f-552f9738b8ac@intel.com>
-Date:   Thu, 21 Jan 2021 13:40:46 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+In-Reply-To: <b4d4bec7-504e-2443-4cf3-0801b179000f@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <20210121204113.GG32060@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/21/2021 12:41 PM, Borislav Petkov wrote:
-> On Thu, Jan 21, 2021 at 12:16:23PM -0800, Yu, Yu-cheng wrote:
->> It clears _PAGE_DIRTY and sets _PAGE_COW.  That is,
->>
->> if (pte.pte & _PAGE_DIRTY) {
->> 	pte.pte &= ~_PAGE_DIRTY;
->> 	pte.pte |= _PAGE_COW;
->> }
->>
->> So, shifting makes resulting code more efficient.
-> 
-> Efficient for what? Is this a hot path?
-> 
-> If not, I'd take readable code any day of the week.
-> 
+RnJvbTogWXUsIFl1LWNoZW5nIA0KPiANCj4gT24gMS8yMS8yMDIxIDEwOjQ0IEFNLCBCb3Jpc2xh
+diBQZXRrb3Ygd3JvdGU6DQo+ID4gT24gVHVlLCBEZWMgMjksIDIwMjAgYXQgMDE6MzA6MzVQTSAt
+MDgwMCwgWXUtY2hlbmcgWXUgd3JvdGU6DQo+IFsuLi5dDQo+ID4+IEBAIC0zNDMsNiArMzQ5LDE2
+IEBAIHN0YXRpYyBpbmxpbmUgcHRlX3QgcHRlX21rb2xkKHB0ZV90IHB0ZSkNCj4gPj4NCj4gPj4g
+ICBzdGF0aWMgaW5saW5lIHB0ZV90IHB0ZV93cnByb3RlY3QocHRlX3QgcHRlKQ0KPiA+PiAgIHsN
+Cj4gPj4gKwkvKg0KPiA+PiArCSAqIEJsaW5kbHkgY2xlYXJpbmcgX1BBR0VfUlcgbWlnaHQgYWNj
+aWRlbnRhbGx5IGNyZWF0ZQ0KPiA+PiArCSAqIGEgc2hhZG93IHN0YWNrIFBURSAoUlc9MCwgRGly
+dHk9MSkuICBNb3ZlIHRoZSBoYXJkd2FyZQ0KPiA+PiArCSAqIGRpcnR5IHZhbHVlIHRvIHRoZSBz
+b2Z0d2FyZSBiaXQuDQo+ID4+ICsJICovDQo+ID4+ICsJaWYgKGNwdV9mZWF0dXJlX2VuYWJsZWQo
+WDg2X0ZFQVRVUkVfU0hTVEspKSB7DQo+ID4+ICsJCXB0ZS5wdGUgfD0gKHB0ZS5wdGUgJiBfUEFH
+RV9ESVJUWSkgPj4gX1BBR0VfQklUX0RJUlRZIDw8IF9QQUdFX0JJVF9DT1c7DQo+ID4NCj4gPiBX
+aHkgdGhlIHVucmVhZGFibGUgc2hpZnRpbmcgd2hlbiB5b3UgY2FuIHNpbXBseSBkbzoNCj4gPg0K
+PiA+ICAgICAgICAgICAgICAgICAgaWYgKHB0ZS5wdGUgJiBfUEFHRV9ESVJUWSkNCj4gPiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgcHRlLnB0ZSB8PSBfUEFHRV9DT1c7DQo+ID4NCg0KPiA+ID8N
+Cj4gDQo+IEl0IGNsZWFycyBfUEFHRV9ESVJUWSBhbmQgc2V0cyBfUEFHRV9DT1cuICBUaGF0IGlz
+LA0KPiANCj4gaWYgKHB0ZS5wdGUgJiBfUEFHRV9ESVJUWSkgew0KPiAJcHRlLnB0ZSAmPSB+X1BB
+R0VfRElSVFk7DQo+IAlwdGUucHRlIHw9IF9QQUdFX0NPVzsNCj4gfQ0KPiANCj4gU28sIHNoaWZ0
+aW5nIG1ha2VzIHJlc3VsdGluZyBjb2RlIG1vcmUgZWZmaWNpZW50Lg0KDQpEb2VzIHRoZSBjb21w
+aWxlciBtYW5hZ2UgdG8gZG8gb25lIHNoaWZ0Pw0KDQpIb3cgY2FuIGl0IGNsZWFyIGFueXRoaW5n
+Pw0KVGhlcmUgaXMgb25seSBhbiB8PSBhZ2FpbnN0IHRoZSB0YXJnZXQuDQoNClNvbWV0aGluZyBo
+b3JyaWQgd2l0aCBePSBtaWdodCBzZXQgYW5kIGNsZWFyLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
+ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
+ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Ok, I will change it to the more readable code as stated earlier.
-
---
-Yu-cheng
