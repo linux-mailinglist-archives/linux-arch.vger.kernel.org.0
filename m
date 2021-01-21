@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDF42FF5DD
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 21:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D802FF5D2
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 21:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbhAUUYP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Jan 2021 15:24:15 -0500
-Received: from mga02.intel.com ([134.134.136.20]:18232 "EHLO mga02.intel.com"
+        id S1726917AbhAUU1v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Jan 2021 15:27:51 -0500
+Received: from mga11.intel.com ([192.55.52.93]:37478 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726218AbhAUUYE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 Jan 2021 15:24:04 -0500
-IronPort-SDR: twAW8xWKaWIBWPaPvSLcyAPXzpMfUkzjVE8BiRIYJG8c6pt9BFYDu3AD1StNJIMfXNEA5LyGc4
- OsvmU6kca8cw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="166436747"
+        id S1726997AbhAUU1S (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Jan 2021 15:27:18 -0500
+IronPort-SDR: GZFjckO3E67e3Z1Hklui13AS2smauql0fNiH3Bjug8w5PfVT3WYcrBwvZzUod2mo6mblRQwB/0
+ x1qp7dRDWdFA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="175829250"
 X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
-   d="scan'208";a="166436747"
+   d="scan'208";a="175829250"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 12:20:06 -0800
-IronPort-SDR: dw3V33aGCuPm00mLvo/kUJgEyjw0gHOU8UbgKgNJ/Ma2+t1nI6PRcsfDmXsnsxsrjgqoDb52T6
- Xj86G5LBUwDA==
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 12:26:35 -0800
+IronPort-SDR: /uFx+avYsRhLADZ8fPagdJvvvyTs26xDMYeqFSWXFKK2ylrGVJXcueq05ULNixdTG1pBuLUsUQ
+ Gvv6eKpFE/7w==
 X-IronPort-AV: E=Sophos;i="5.79,365,1602572400"; 
-   d="scan'208";a="356644995"
+   d="scan'208";a="356647690"
 Received: from rsood-mobl1.amr.corp.intel.com (HELO [10.212.109.36]) ([10.212.109.36])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 12:20:05 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 12:26:32 -0800
 Subject: Re: [PATCH v17 08/26] x86/mm: Introduce _PAGE_COW
 To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
         Borislav Petkov <bp@alien8.de>
@@ -56,6 +56,7 @@ References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
  <20201229213053.16395-9-yu-cheng.yu@intel.com>
  <20210121184405.GE32060@zn.tnic>
  <b4d4bec7-504e-2443-4cf3-0801b179000f@intel.com>
+ <ecb5eb93-5dac-5c05-a72b-aa4719e1351f@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -100,51 +101,24 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <ecb5eb93-5dac-5c05-a72b-aa4719e1351f@intel.com>
-Date:   Thu, 21 Jan 2021 12:20:04 -0800
+Message-ID: <28f56a51-b8e5-4f1f-1cda-036670c80a22@intel.com>
+Date:   Thu, 21 Jan 2021 12:26:32 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <b4d4bec7-504e-2443-4cf3-0801b179000f@intel.com>
+In-Reply-To: <ecb5eb93-5dac-5c05-a72b-aa4719e1351f@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/21/21 12:16 PM, Yu, Yu-cheng wrote:
-> 
->>> @@ -343,6 +349,16 @@ static inline pte_t pte_mkold(pte_t pte)
->>>     static inline pte_t pte_wrprotect(pte_t pte)
->>>   {
->>> +    /*
->>> +     * Blindly clearing _PAGE_RW might accidentally create
->>> +     * a shadow stack PTE (RW=0, Dirty=1).  Move the hardware
->>> +     * dirty value to the software bit.
->>> +     */
->>> +    if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
->>> +        pte.pte |= (pte.pte & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY <<
->>> _PAGE_BIT_COW;
->>
->> Why the unreadable shifting when you can simply do:
->>
->>                  if (pte.pte & _PAGE_DIRTY)
->>                          pte.pte |= _PAGE_COW;
->>
->> ?
-> 
-> It clears _PAGE_DIRTY and sets _PAGE_COW.  That is,
-> 
-> if (pte.pte & _PAGE_DIRTY) {
->     pte.pte &= ~_PAGE_DIRTY;
->     pte.pte |= _PAGE_COW;
-> }
-> 
-> So, shifting makes resulting code more efficient.
+> Usually, the compiler is better at making code efficient than humans.  I
+> find that coding it in the most human-readable way is best unless I
+> *know* the compiler is unable to generate god code.
 
-Are you sure?
+"good code", even.
 
-Usually, the compiler is better at making code efficient than humans.  I
-find that coding it in the most human-readable way is best unless I
-*know* the compiler is unable to generate god code.
+I really want a "god code" compiler, though. :)
+
