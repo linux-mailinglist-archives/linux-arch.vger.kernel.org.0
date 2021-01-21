@@ -2,143 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD1E2FEA0D
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 13:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88162FEAC7
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 13:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730937AbhAUM3E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Jan 2021 07:29:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55628 "EHLO mail.kernel.org"
+        id S1729924AbhAUMzx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Jan 2021 07:55:53 -0500
+Received: from mga02.intel.com ([134.134.136.20]:25764 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731181AbhAUM2k (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 Jan 2021 07:28:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C430B239EB;
-        Thu, 21 Jan 2021 12:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611232077;
-        bh=iee2dGZmaG4EKHM9QU8vrsOr5P0gX21AcMxI1zm4D/0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fwqTN5s9dGfhafNCAW3/3vPo3qyGrohHCq4/eZNWYfdYlRi1IJ6+Xr3gYM6+1cfCE
-         fJGvWrsLFdhtFIcYbcn/SarR+gLyAewsemDvsG77vVIkYSc2CXIpMwfnqAxoGBKXI9
-         LpCujH+FGxAF46KUFIC4NkMsdNP5ciyoDHqpTDGUeaGVdrCp/+dzSJ8mXR+Tyt5knU
-         nOicr95ukZkuleEjysKJjLrn9URhintfNIWpCmF1tY9uBnPjIP3EtHVVdlNqMxFXb+
-         WKV6ijxfhptUtPDrN8yhePWz1bY8ZLp7BSkI1lNUHmekbD12M2DJDYt6Zi4Q0soKPF
-         9A4mHzXzOK7VQ==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [PATCH v16 02/11] mmap: make mlock_future_check() global
-Date:   Thu, 21 Jan 2021 14:27:14 +0200
-Message-Id: <20210121122723.3446-3-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210121122723.3446-1-rppt@kernel.org>
-References: <20210121122723.3446-1-rppt@kernel.org>
+        id S1729492AbhAUKfm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:35:42 -0500
+IronPort-SDR: DfxDX+FYLQd0kl4iU09XXKmAS6kIJTG3dGOyjZ6iyguVbvx39rzNVIioZQwLdtH1Fv3AbqVjqh
+ ker18n62zJnA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="166347355"
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="166347355"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 02:33:44 -0800
+IronPort-SDR: t0/3SHCCmps/HIQS11ATR5hPbMpPuTorfoWhf5Y7rT93Ngh/CeE1NlXGpQo1QXCKDgpJ0yqs0j
+ 8H3qxCqbE9uw==
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="570685626"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 02:33:40 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l2XIY-007OH7-06; Thu, 21 Jan 2021 12:34:42 +0200
+Date:   Thu, 21 Jan 2021 12:34:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dennis Zhou <dennis@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        David Sterba <dsterba@suse.com>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH 5/6] lib: add fast path for find_next_*_bit()
+Message-ID: <YAlYwZOO6QyaR6UZ@smile.fi.intel.com>
+References: <20210121000630.371883-1-yury.norov@gmail.com>
+ <20210121000630.371883-6-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121000630.371883-6-yury.norov@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On Wed, Jan 20, 2021 at 04:06:29PM -0800, Yury Norov wrote:
+> Similarly to bitmap functions, find_next_*_bit() users will benefit
+> if we'll handle a case of bitmaps that fit into a single word. In the
+> very best case, the compiler may replace a function call with a
+> single ffs or ffz instruction.
 
-It will be used by the upcoming secret memory implementation.
+> +	if (small_const_nbits(size)) {
+> +		unsigned long val;
+> +
+> +		if (unlikely(offset >= size))
+> +			return size;
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christopher Lameter <cl@linux.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: Will Deacon <will@kernel.org>
----
- mm/internal.h | 3 +++
- mm/mmap.c     | 5 ++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+> +		val = *addr & BITMAP_FIRST_WORD_MASK(offset)
+> +				& BITMAP_LAST_WORD_MASK(size);
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 9902648f2206..8e9c660f33ca 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -353,6 +353,9 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
- extern void mlock_vma_page(struct page *page);
- extern unsigned int munlock_vma_page(struct page *page);
- 
-+extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
-+			      unsigned long len);
-+
- /*
-  * Clear the page's PageMlocked().  This can be useful in a situation where
-  * we want to unconditionally remove a page from the pagecache -- e.g.,
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 28ef5e29152a..10b9b8b88913 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1346,9 +1346,8 @@ static inline unsigned long round_hint_to_min(unsigned long hint)
- 	return hint;
- }
- 
--static inline int mlock_future_check(struct mm_struct *mm,
--				     unsigned long flags,
--				     unsigned long len)
-+int mlock_future_check(struct mm_struct *mm, unsigned long flags,
-+		       unsigned long len)
- {
- 	unsigned long locked, lock_limit;
- 
+Seems like a new helper can be introduced (BITS or BITMAP namespace depending
+on the decision):
+
+#define	_OFFSET_SIZE_MASK(o,s)					\
+	(BITMAP_FIRST_WORD_MASK(o) & BITMAP_LAST_WORD_MASK(s))
+
+		val = *addr & BITMAP_OFFSET_SIZE_MASK(offset, size);
+
+And so on below.
+
+> +		return val ? __ffs(val) : size;
+> +	}
+
 -- 
-2.28.0
+With Best Regards,
+Andy Shevchenko
+
 
