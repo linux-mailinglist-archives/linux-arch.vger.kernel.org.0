@@ -2,167 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 540422FEA23
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 13:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D491C2FEB76
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Jan 2021 14:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731038AbhAUMcq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Jan 2021 07:32:46 -0500
-Received: from foss.arm.com ([217.140.110.172]:34770 "EHLO foss.arm.com"
+        id S1731628AbhAUNTS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Jan 2021 08:19:18 -0500
+Received: from mga07.intel.com ([134.134.136.100]:40972 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731060AbhAUMcl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 21 Jan 2021 07:32:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88F9811B3;
-        Thu, 21 Jan 2021 04:31:46 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.35.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29BEC3F66E;
-        Thu, 21 Jan 2021 04:31:43 -0800 (PST)
-Date:   Thu, 21 Jan 2021 12:31:40 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
+        id S1729337AbhAUK3D (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:29:03 -0500
+IronPort-SDR: TUATUDGwUn7VaKLb5yV24oEW+7xMrYOXYvC5urHuNGHCU5ysvc2W2/py6L9O+UuVnADY9efPH7
+ aLdhT+dAzCYQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="243321049"
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="243321049"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 02:27:04 -0800
+IronPort-SDR: QgeIy8Ssun2hy6R9w17UY0Ll/AXBiBRb1BeFr667ljwzuCW2rJkpwHDq8WPMolQ61OBDnrLG/t
+ VJau4CgcO5fw==
+X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
+   d="scan'208";a="570684050"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 02:27:00 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l2XC6-007Nsw-Be; Thu, 21 Jan 2021 12:28:02 +0200
+Date:   Thu, 21 Jan 2021 12:28:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: Fatal signal handling within uaccess faults
-Message-ID: <20210121123140.GD48431@C02TD0UTHF1T.local>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dennis Zhou <dennis@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        David Sterba <dsterba@suse.com>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH 4/6] lib: inline _find_next_bit() wrappers
+Message-ID: <YAlXMj7sIoPjZP3W@smile.fi.intel.com>
+References: <20210121000630.371883-1-yury.norov@gmail.com>
+ <20210121000630.371883-5-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20210121000630.371883-5-yury.norov@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+On Wed, Jan 20, 2021 at 04:06:28PM -0800, Yury Norov wrote:
+> lib/find_bit.c declares five single-line wrappers for _find_next_bit().
+> We may turn those wrappers to inline functions. It eliminates
+> unneeded function calls and opens room for compile-time optimizations.
 
-Arch maintainers, if you are Cc'd I believe your architecture has a
-user-triggerable livelock; please see below for details. Apologies in
-advance if I am mistaken!
+...
 
-I believe the following architectures ARE affected:
+> --- a/include/asm-generic/bitops/le.h
+> +++ b/include/asm-generic/bitops/le.h
+> @@ -4,6 +4,7 @@
+>  
+>  #include <asm/types.h>
+>  #include <asm/byteorder.h>
+> +#include <asm-generic/bitops/find.h>
 
-	alpha, hexagon, ia64, m68k, microblaze, mips, nios2, openrisc,
-	parisc, riscv, sparc (32 & 64), xtensa
+I'm wondering if generic header inclusion should go before arch-dependent ones.
 
-I believe the following architectures ARE NOT affected:
+...
 
-	arc, arm, arm64, c6x, h8300, nds32, powerpc, s390, sh, x86
+> -#ifndef find_next_bit
 
-... and csky has a fix pending as of today.
+> -#ifndef find_next_zero_bit
 
-The issue is that in the fault handling path, architectures have a check
-with the shape:
+> -#if !defined(find_next_and_bit)
 
-| if (fault_signal_pending(fault, regs))
-|         return;
+> -#ifndef find_next_zero_bit_le
 
-... where if a uaccess (e.g. get_user()) triggers a fault and there's a
-fault signal pending, the handler will return to the uaccess without
-having performed a uaccess fault fixup, and so the CPU will immediately
-execute the uaccess instruction again, whereupon it will livelock
-bouncing between that instruction and the fault handler.
+> -#ifndef find_next_bit_le
 
-The architectures (with an MMU) which are not affected apply the uaccess
-fixup, and so return to the error handler for the uaccess, and make
-forward progress. Usually, this looks something like:
+Shouldn't you leave these in new wrappers as well?
 
-| if (fault_signal_pending(fault, regs)) {
-|         if (!user_mode(regs))
-|                 goto no_context; // or fixup_exception(...), etc
-|         return;
-| }
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I believe similar changes need to be made to each of the architectures
-I've listed as affected above.
 
-This was previously reported back in July 2017:
-
-https://lore.kernel.org/lkml/20170822102527.GA14671@leverpostej/
-
-... but it looks like it looks like that wasn't sufficiently visible, so
-I'm poking folk explicitly this time around.
-
-I believe that this can be triggered with the test case below,
-duplicated from the previous posting. If the architecture is affected,
-it will not be possible to kill the test program with any signal.
-
-Thanks,
-Mark.
-
----->8----
-#include <errno.h>
-#include <linux/userfaultfd.h>
-#include <stdio.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
-#include <sys/vfs.h>
-#include <unistd.h>
-
-int main(int argc, char *argv[])
-{
-        void *mem;
-        long pagesz;
-        int uffd, ret;
-        struct uffdio_api api = {
-                .api = UFFD_API
-        };
-        struct uffdio_register reg;
-
-        pagesz = sysconf(_SC_PAGESIZE);
-        if (pagesz < 0) {
-        return errno;
-        }
-
-        mem = mmap(NULL, pagesz, PROT_READ | PROT_WRITE,
-        	   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-        if (mem == MAP_FAILED)
-                return errno;
-
-        uffd = syscall(__NR_userfaultfd, 0);
-        if (uffd < 0)
-                return errno;
-
-        ret = ioctl(uffd, UFFDIO_API, &api);
-        if (ret < 0)
-                return errno;
-
-        reg = (struct uffdio_register) {
-                        .range = {
-                        .start = (unsigned long)mem,
-                        .len = pagesz
-                },
-                .mode = UFFDIO_REGISTER_MODE_MISSING
-        };
-
-        ret = ioctl(uffd, UFFDIO_REGISTER, &reg);
-        if (ret < 0)
-                return errno;
-
-        /*
-         * Force an arbitrary uaccess to memory monitored by the userfaultfd.
-         * This will block, but when a SIGKILL is sent, will consume all
-         * available CPU time without being killed, and may inhibit forward
-         * progress of the system.
-         */
-        ret = fstatfs(0, (struct statfs *)mem);
-
-        return 0;
-}
