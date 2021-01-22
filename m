@@ -2,146 +2,190 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 134AE3006DD
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Jan 2021 16:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD248300679
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Jan 2021 16:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbhAVPNv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Jan 2021 10:13:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26408 "EHLO
+        id S1729081AbhAVPDI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Jan 2021 10:03:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23129 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729066AbhAVPCw (ORCPT
+        by vger.kernel.org with ESMTP id S1729058AbhAVPDA (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 22 Jan 2021 10:02:52 -0500
+        Fri, 22 Jan 2021 10:03:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611327686;
+        s=mimecast20190719; t=1611327691;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=pmb5w3rLav37us1XL43BkDMIwzOvI7ua2CZXzDfcqdo=;
-        b=RMNia+aWsbZ2a4Uow1vMMsoI1dfC5hik/A4ABjPSW+h7rvN7tUD2HQmzicf9J1bJJvX5fx
-        a2A57LcIXNIQLFbhEMwC7faaho3vWa3w8uNOjc3wvYqS8FNHz7o/T5ZR/lNv462IxQJDe2
-        tDVWVCPnmJmqGK+Win3qP+3ouaN9etY=
+        bh=BKzcxPUR2jhhc0R2WEFUXJm7hKrjjWAOGp3ZV18Fm8U=;
+        b=ISasN/ktSR4yocOj26Yi67otEbr03NR1+S2yHn8SPFTjs04+YAFgvEpPnLaYj7AQKRpaSJ
+        fTyT7rjrTh9fTcM8qmv+u2gI3TEdS6rLgTS8AQQGlZL5S7mjLxC7luoxdSHZlKDLZr1/EM
+        ZSDwD6UC0DbiNTbcJbnb4aO4C78OWQM=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-321-8khLFf0OO4Wy_Qo2eG4Tuw-1; Fri, 22 Jan 2021 10:01:22 -0500
-X-MC-Unique: 8khLFf0OO4Wy_Qo2eG4Tuw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-432-Q2OnEu_tO7WNHpoNSVMMJA-1; Fri, 22 Jan 2021 10:01:27 -0500
+X-MC-Unique: Q2OnEu_tO7WNHpoNSVMMJA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A28DA190A7A1;
-        Fri, 22 Jan 2021 15:01:18 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70D94806661;
+        Fri, 22 Jan 2021 15:01:25 +0000 (UTC)
 Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 32EC36F990;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2B3365DA33;
         Fri, 22 Jan 2021 15:01:18 +0000 (UTC)
 Received: by fuller.cnet (Postfix, from userid 1000)
-        id 02E034178900; Fri, 22 Jan 2021 11:13:20 -0300 (-03)
-Date:   Fri, 22 Jan 2021 11:13:20 -0300
+        id 0DA054178901; Fri, 22 Jan 2021 12:00:01 -0300 (-03)
+Date:   Fri, 22 Jan 2021 12:00:00 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     Frederic Weisbecker <frederic@kernel.org>
 Cc:     Alex Belits <abelits@marvell.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
         Prasun Kapoor <pkapoor@marvell.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "peterx@redhat.com" <peterx@redhat.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
+        "nitesh@redhat.com" <nitesh@redhat.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "will@kernel.org" <will@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "leon@sidebranch.com" <leon@sidebranch.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "pauld@redhat.com" <pauld@redhat.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v4 11/13] task_isolation: net: don't flush backlog on
- CPUs running isolated tasks
-Message-ID: <20210122141320.GA66969@fuller.cnet>
-References: <04be044c1bcd76b7438b7563edc35383417f12c8.camel@marvell.com>
- <01470cf1f1a2e79e46a87bb5a8a4780a1c3cc740.camel@marvell.com>
- <20201001144731.GC6595@lothringen>
+Subject: Re: [EXT] Re: [PATCH v5 9/9] task_isolation: kick_all_cpus_sync:
+ don't kick isolated cpus
+Message-ID: <20210122150000.GA69079@fuller.cnet>
+References: <8d887e59ca713726f4fcb25a316e1e932b02823e.camel@marvell.com>
+ <3236b13f42679031960c5605be20664e90e75223.camel@marvell.com>
+ <20201123222907.GC1751@lothringen>
+ <c65ac23c1c408614110635c33eaf4ace98da4343.camel@marvell.com>
+ <20201123232106.GD1751@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201001144731.GC6595@lothringen>
+In-Reply-To: <20201123232106.GD1751@lothringen>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 04:47:31PM +0200, Frederic Weisbecker wrote:
-> On Wed, Jul 22, 2020 at 02:58:24PM +0000, Alex Belits wrote:
-> > From: Yuri Norov <ynorov@marvell.com>
+On Tue, Nov 24, 2020 at 12:21:06AM +0100, Frederic Weisbecker wrote:
+> On Mon, Nov 23, 2020 at 10:39:34PM +0000, Alex Belits wrote:
 > > 
-
-> > so we don't need to flush it.
-> 
-> What guarantees that we have no backlog on it?
-
-From Paolo's work to use lockless reading of 
-per-CPU skb lists
-
-https://www.spinics.net/lists/netdev/msg682693.html
-
-It also exposed skb queue length to userspace
-
-https://www.spinics.net/lists/netdev/msg684939.html
-
-But if i remember correctly waiting for a RCU grace
-period was also necessary to ensure no backlog !?! 
-
-Paolo would you please remind us what was the sequence of steps?
-(and then also, for the userspace isolation interface, where 
-the application informs the kernel that its entering isolated
-mode, is just confirming the queues have zero length is
-sufficient?).
-
-TIA!
-
-> 
-> > Currently flush_all_backlogs()
-> > enqueues corresponding work on all CPUs including ones that run
-> > isolated tasks. It leads to breaking task isolation for nothing.
+> > On Mon, 2020-11-23 at 23:29 +0100, Frederic Weisbecker wrote:
+> > > External Email
+> > > 
+> > > -------------------------------------------------------------------
+> > > ---
+> > > On Mon, Nov 23, 2020 at 05:58:42PM +0000, Alex Belits wrote:
+> > > > From: Yuri Norov <ynorov@marvell.com>
+> > > > 
+> > > > Make sure that kick_all_cpus_sync() does not call CPUs that are
+> > > > running
+> > > > isolated tasks.
+> > > > 
+> > > > Signed-off-by: Yuri Norov <ynorov@marvell.com>
+> > > > [abelits@marvell.com: use safe task_isolation_cpumask()
+> > > > implementation]
+> > > > Signed-off-by: Alex Belits <abelits@marvell.com>
+> > > > ---
+> > > >  kernel/smp.c | 14 +++++++++++++-
+> > > >  1 file changed, 13 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/kernel/smp.c b/kernel/smp.c
+> > > > index 4d17501433be..b2faecf58ed0 100644
+> > > > --- a/kernel/smp.c
+> > > > +++ b/kernel/smp.c
+> > > > @@ -932,9 +932,21 @@ static void do_nothing(void *unused)
+> > > >   */
+> > > >  void kick_all_cpus_sync(void)
+> > > >  {
+> > > > +	struct cpumask mask;
+> > > > +
+> > > >  	/* Make sure the change is visible before we kick the cpus */
+> > > >  	smp_mb();
+> > > > -	smp_call_function(do_nothing, NULL, 1);
+> > > > +
+> > > > +	preempt_disable();
+> > > > +#ifdef CONFIG_TASK_ISOLATION
+> > > > +	cpumask_clear(&mask);
+> > > > +	task_isolation_cpumask(&mask);
+> > > > +	cpumask_complement(&mask, &mask);
+> > > > +#else
+> > > > +	cpumask_setall(&mask);
+> > > > +#endif
+> > > > +	smp_call_function_many(&mask, do_nothing, NULL, 1);
+> > > > +	preempt_enable();
+> > > 
+> > > Same comment about IPIs here.
 > > 
-> > In this patch, backlog flushing is enqueued only on non-isolated CPUs.
+> > This is different from timers. The original design was based on the
+> > idea that every CPU should be able to enter kernel at any time and run
+> > kernel code with no additional preparation. Then the only solution is
+> > to always do full broadcast and require all CPUs to process it.
 > > 
-> > Signed-off-by: Yuri Norov <ynorov@marvell.com>
-> > [abelits@marvell.com: use safe task_isolation_on_cpu() implementation]
-> > Signed-off-by: Alex Belits <abelits@marvell.com>
-> > ---
-> >  net/core/dev.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index 90b59fc50dc9..83a282f7453d 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -74,6 +74,7 @@
-> >  #include <linux/cpu.h>
-> >  #include <linux/types.h>
-> >  #include <linux/kernel.h>
-> > +#include <linux/isolation.h>
-> >  #include <linux/hash.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/sched.h>
-> > @@ -5624,9 +5625,13 @@ static void flush_all_backlogs(void)
-> >  
-> >  	get_online_cpus();
-> >  
-> > -	for_each_online_cpu(cpu)
-> > +	smp_rmb();
+> > What I am trying to introduce is the idea of CPU that is not likely to
+> > run kernel code any soon, and can afford to go through an additional
+> > synchronization procedure on the next entry into kernel. The
+> > synchronization is not skipped, it simply happens later, early in
+> > kernel entry code.
+
+Perhaps a bitmask of pending flushes makes more sense? 
+static_key_enable IPIs is one of the users, but for its case it would 
+be necessary to differentiate between in-kernel mode and out of kernel 
+mode atomically (since i-cache flush must be performed if isolated CPU 
+is in kernel mode).
+
+> Ah I see, this is ordered that way:
 > 
-> What is it ordering?
+> ll_isol_flags = ISOLATED
 > 
-> > +	for_each_online_cpu(cpu) {
-> > +		if (task_isolation_on_cpu(cpu))
-> > +			continue;
-> >  		queue_work_on(cpu, system_highpri_wq,
-> >  			      per_cpu_ptr(&flush_works, cpu));
-> > +	}
-> >  
-> >  	for_each_online_cpu(cpu)
-> >  		flush_work(per_cpu_ptr(&flush_works, cpu));
+>          CPU 0                                CPU 1
+>     ------------------                       -----------------
+>                                             // kernel entry
+>     data_to_sync = 1                        ll_isol_flags = ISOLATED_BROKEN
+>     smp_mb()                                smp_mb()
+>     if ll_isol_flags(CPU 1) == ISOLATED     READ data_to_sync
+>          smp_call(CPU 1)
+
+Since isolated mode with syscalls is a desired feature, having a
+separate atomic with in_kernel_mode = 0/1 (that is set/cleared 
+on kernel entry / kernel exit, while on TIF_TASK_ISOLATION), would be
+necessary (and a similar race-free logic as above).
+
+> You should document that, ie: explain why what you're doing is safe.
 > 
-> Thanks.
+> Also Beware though that the data to sync in question doesn't need to be visible
+> in the entry code before task_isolation_kernel_enter(). You need to audit all
+> the callers of kick_all_cpus_sync().
+
+Cscope tag: flush_icache_range
+   #   line  filename / context / line
+   1     96  arch/arc/kernel/jump_label.c <<arch_jump_label_transform>>
+             flush_icache_range(entry->code, entry->code + JUMP_LABEL_NOP_SIZE);
+
+This case would be OK for delayed processing before kernel entry, as long as
+no code before task_isolation_kernel_enter can be modified (which i am
+not sure about).
+
+But:
+
+  36     28  arch/ia64/include/asm/cacheflush.h <<flush_icache_user_page>>
+             flush_icache_range(_addr, _addr + (len)); \
+
+Is less certain.
+
+Alex do you recall if arch_jump_label_transform was the only offender or 
+there were others as well? (suppose handling only the ones which matter
+in production at the moment, and later fixing individual ones makes most
+sense).
+
+
 
