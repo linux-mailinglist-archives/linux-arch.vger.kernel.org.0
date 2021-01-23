@@ -2,159 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90BA300F70
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Jan 2021 22:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7193012F5
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Jan 2021 05:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730402AbhAVV4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Jan 2021 16:56:13 -0500
-Received: from mga01.intel.com ([192.55.52.88]:50183 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730000AbhAVVzl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 22 Jan 2021 16:55:41 -0500
-IronPort-SDR: 9q3S4emmk4xclOw/YXm/yZII8Ovg/ah2F38SDUKp0EqM6nryCd3wUb4PA09QOpFP4aklCGwW0H
- duX7C1HTlQhA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9872"; a="198274442"
-X-IronPort-AV: E=Sophos;i="5.79,367,1602572400"; 
-   d="scan'208";a="198274442"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 13:54:55 -0800
-IronPort-SDR: QgzfLeU+SScNpiuZ2ShHor3Mk1anNcKXZI/IncTCR7ogj4sTRd8kBKfwZPHV0PQyfLDml4sqvL
- fM8zo+rax78Q==
-X-IronPort-AV: E=Sophos;i="5.79,367,1602572400"; 
-   d="scan'208";a="400976899"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.79.184]) ([10.212.79.184])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2021 13:54:54 -0800
-Subject: Re: [PATCH v17 08/26] x86/mm: Introduce _PAGE_COW
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Randy Dunlap' <rdunlap@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
- <20201229213053.16395-9-yu-cheng.yu@intel.com>
- <20210121184405.GE32060@zn.tnic>
- <b4d4bec7-504e-2443-4cf3-0801b179000f@intel.com>
- <cd9d04ab66d144b7942b5030d9813115@AcuMS.aculab.com>
- <9344cd90-1818-a716-91d2-2b85df01347b@infradead.org>
- <b6eda0f414f34634b4e1aca80c4b5d5d@AcuMS.aculab.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <1b9cd39a-fe66-d237-b847-2b62ff1477e7@intel.com>
-Date:   Fri, 22 Jan 2021 13:54:53 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <b6eda0f414f34634b4e1aca80c4b5d5d@AcuMS.aculab.com>
+        id S1726535AbhAWENe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Jan 2021 23:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726597AbhAWENM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Jan 2021 23:13:12 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8690BC06178B
+        for <linux-arch@vger.kernel.org>; Fri, 22 Jan 2021 20:12:32 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id q7so5193239pgm.5
+        for <linux-arch@vger.kernel.org>; Fri, 22 Jan 2021 20:12:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rfxqzONqLpenH9bMcTSEoRtSy4r+OTMclT611uQQPw0=;
+        b=VYOj8q7y3B1Ci/zXV0TKKQdP+Hr4DW7yRsr1E+oiVJMPmFipjS5UZ8xLl2xoHoz/6B
+         jkpCwgPiLIZPoGfOi1wN88wt16jBRvoyvro7VvrIPcH4RTJznQoHQmoB2t8HyrxAaJdZ
+         HBhFM+SE5uT3rPuNDZ63XGBOHfrbXdGCrMh+WmJzIou1s39XhI+QRXq2zuC7lcQ0WAEq
+         +J2EBBfVHpHbKs6R2YJuQHl6VFRabnTwOH35OE4IYc02CQ9CIGb17Ob6QmJQaoizK2CX
+         qmyOJqbeCl8AsonG5sk05tyhobY+J8YKqRp8zWdSTNaaYU7FnZoryWgNkEnc2zVWMeFD
+         MIhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rfxqzONqLpenH9bMcTSEoRtSy4r+OTMclT611uQQPw0=;
+        b=g3ujzRnR4xvymkIxsVXIiqD5RSlKScC2ldB3p04lM2LHJQL72KYFTUwQ5vJP818Z5p
+         R8hODi0tgMFY+0bhtqSo5Lt6CU7ZU3eb+GjhOCdGCa83dodTv9B6Tb8Y/GRjekoEmX/L
+         xeMhzW6gbBucoBmeTOCkGTLTRJRIDaUTMEkFsj9gRCjNgpU+5FV/Z0v84PREhpX9oXsJ
+         IvSLRqbx8cr6kQTqF5pUhH5UXTtkQsWROqPGQzGaprqr/177FfoPiPiBTxgn/9P96n/m
+         QGcgRd0WUb4uXRu84/zHOKPdCMr8F5fPQ01r0Zl7jIdMzfdxGk6o5R3BpHsO3wG1x5GN
+         Pfmg==
+X-Gm-Message-State: AOAM531kBRvCTcQKQwh9gRC7O2YY+7xFSGWYuJPh0QGT3w8SV3U5i/Jg
+        4H+abPnEJQPcYHSO7xWvUpx4Ng==
+X-Google-Smtp-Source: ABdhPJz23uPwWexptJVrp5X0oeJBb+aQPxkhO88fX4JWNnDnVCTuobkNxuBQWZrcK1ekbZ/uQmCkcQ==
+X-Received: by 2002:a62:2aca:0:b029:1bb:4349:f889 with SMTP id q193-20020a622aca0000b02901bb4349f889mr8177532pfq.26.1611375151785;
+        Fri, 22 Jan 2021 20:12:31 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id f15sm10628173pja.24.2021.01.22.20.12.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jan 2021 20:12:30 -0800 (PST)
+Date:   Fri, 22 Jan 2021 20:12:30 -0800 (PST)
+X-Google-Original-Date: Fri, 22 Jan 2021 20:12:28 PST (-0800)
+Subject:     Re: [PATCH v15 03/11] riscv/Kconfig: make direct map manipulation options depend on MMU
+In-Reply-To: <20210120180612.1058-4-rppt@kernel.org>
+CC:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        luto@kernel.org, Arnd Bergmann <arnd@arndb.de>, bp@alien8.de,
+        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        elena.reshetova@intel.com, hpa@zytor.com, mingo@redhat.com,
+        jejb@linux.ibm.com, kirill@shutemov.name, willy@infradead.org,
+        mark.rutland@arm.com, rppt@linux.ibm.com, rppt@kernel.org,
+        mtk.manpages@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        peterz@infradead.org, rick.p.edgecombe@intel.com, guro@fb.com,
+        shakeelb@google.com, shuah@kernel.org, tglx@linutronix.de,
+        tycho@tycho.ws, will@kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, lkp@intel.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rppt@kernel.org
+Message-ID: <mhng-5cbc9b30-ac9a-4748-bf12-8f0de4c89f79@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/21/2021 2:32 PM, David Laight wrote:
-> From: Randy Dunlap
->> Sent: 21 January 2021 22:19
->>
->> On 1/21/21 2:16 PM, David Laight wrote:
->>> From: Yu, Yu-cheng
->>>>
->>>> On 1/21/2021 10:44 AM, Borislav Petkov wrote:
->>>>> On Tue, Dec 29, 2020 at 01:30:35PM -0800, Yu-cheng Yu wrote:
->>>> [...]
->>>>>> @@ -343,6 +349,16 @@ static inline pte_t pte_mkold(pte_t pte)
->>>>>>
->>>>>>    static inline pte_t pte_wrprotect(pte_t pte)
->>>>>>    {
->>>>>> +	/*
->>>>>> +	 * Blindly clearing _PAGE_RW might accidentally create
->>>>>> +	 * a shadow stack PTE (RW=0, Dirty=1).  Move the hardware
->>>>>> +	 * dirty value to the software bit.
->>>>>> +	 */
->>>>>> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
->>>>>> +		pte.pte |= (pte.pte & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
->>>>>
->>>>> Why the unreadable shifting when you can simply do:
->>>>>
->>>>>                   if (pte.pte & _PAGE_DIRTY)
->>>>>                           pte.pte |= _PAGE_COW;
->>>>>
->>>
->>>>> ?
->>>>
->>>> It clears _PAGE_DIRTY and sets _PAGE_COW.  That is,
->>>>
->>>> if (pte.pte & _PAGE_DIRTY) {
->>>> 	pte.pte &= ~_PAGE_DIRTY;
->>>> 	pte.pte |= _PAGE_COW;
->>>> }
->>>>
->>>> So, shifting makes resulting code more efficient.
->>>
->>> Does the compiler manage to do one shift?
->>>
->>> How can it clear anything?
->>
->> It could shift it off either end since there are both << and >>.
-> 
-> It is still:
-> 	pte.pte |= xxxxxxx;
-> 
->>> There is only an |= against the target.
->>>
->>> Something horrid with ^= might set and clear.
-> 
-> It could be 4 instructions:
-> 	is_dirty = pte.pte & PAGE_DIRTY;
-> 	pte.pte &= ~PAGE_DIRTY; // or pte.pte ^= is_dirty
-> 	is_cow = is_dirty << (BIT_COW - BIT_DIRTY); // or equivalent >>
-> 	pte.pte |= is_cow;
-> provided you've a three operand form for one of the first two instructions.
-> Something like ARM might manage to merge the last two as well.
-> But the register dependency chain length may matter more than
-> the number of instructions.
-> The above is likely to be three long.
+On Wed, 20 Jan 2021 10:06:04 PST (-0800), rppt@kernel.org wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> ARCH_HAS_SET_DIRECT_MAP and ARCH_HAS_SET_MEMORY configuration options have
+> no meaning when CONFIG_MMU is disabled and there is no point to enable them
+> for the nommu case.
+>
+> Add an explicit dependency on MMU for these options.
+>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  arch/riscv/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index d82303dcc6b6..d35ce19ab1fa 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -25,8 +25,8 @@ config RISCV
+>  	select ARCH_HAS_KCOV
+>  	select ARCH_HAS_MMIOWB
+>  	select ARCH_HAS_PTE_SPECIAL
+> -	select ARCH_HAS_SET_DIRECT_MAP
+> -	select ARCH_HAS_SET_MEMORY
+> +	select ARCH_HAS_SET_DIRECT_MAP if MMU
+> +	select ARCH_HAS_SET_MEMORY if MMU
+>  	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
+>  	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+>  	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
 
-I see what you are saying.  The patch is like...
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
 
-	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-		pte.pte |= (pte.pte & _PAGE_DIRTY) >> _PAGE_BIT_DIRTY << _PAGE_BIT_COW;
-		pte = pte_clear_flags(pte, _PAGE_DIRTY);
-	}
+LMK if you want this to go in via the RISC-V tree, otherwise I'm going to
+assume it's going in along with the rest of these.  FWIW I see these in other
+architectures without the MMU guard.
 
-It is not necessary to do the shifting.  I will make it, simply,
-
-if (pte.pte & _PAGE_DIRTY) {
-	pte.pte &= ~PAGE_DIRTY;
-	pte.pte |= _PAGE_COW;
-}
-
-Thanks for your comments.
-
---
-Yu-cheng
+Thanks!
