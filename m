@@ -2,162 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB679301A5B
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Jan 2021 08:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DF2301A82
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Jan 2021 09:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbhAXHoc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 24 Jan 2021 02:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S1726550AbhAXIXk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Jan 2021 03:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbhAXHoa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jan 2021 02:44:30 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B1DC061573;
-        Sat, 23 Jan 2021 23:43:50 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id t6so5735978plq.1;
-        Sat, 23 Jan 2021 23:43:50 -0800 (PST)
+        with ESMTP id S1726452AbhAXIXg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jan 2021 03:23:36 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DBAC061573;
+        Sun, 24 Jan 2021 00:22:54 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id g3so5757452plp.2;
+        Sun, 24 Jan 2021 00:22:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=+/6kKIloWjHkv6epE2TcP1cNMAlAxbqvJ/hMS+1BVS4=;
-        b=ECst8pGK76Kt1i3hYRpk0C6YXFoVILwmhhITV8vLf7lxSp2DLkJIQbiJRMgNAQ8RhZ
-         2FVBi6yU5cpVn2+k1ymdhPEiD0mTUZewRMTA/C2lx5qVisItC7g1Qk4OGg76U8ceJGgf
-         oVWl3fnrKEggNSaXGGGHmXoOoXhZnwiVh1RBJL+lYFEHkFwpvlYF/ZZKyKChrGABAFdp
-         R/fMbwbCbc15w5wSt5bs8uhzzHSiG/b/UpPKVMdktKCdkIGIrgNk1sVD54D/UhBtSvjQ
-         s/HrxyZxn4pyAnjsJNo50WHO0keUtTPyw5qR6gy6UgFyMCLXWft4SR0fRSKV2J1bQRZG
-         TWVg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vxwgyuW5XH28Q8/mj8v779VyclgJcF5KFu/DzCcjZnI=;
+        b=Fs0JCb3pwKQ3Qw2tgKBDrI0dac88HUkrErNJBG0hmRLf5MyNBR21T+TPQXWbZhzXWR
+         5CKgAqureRQX5U3msaUj+PUlSx+eroPq001obnVV7TfXWOm2oSyNkyE7wZM7J9Pv8Mta
+         xDge4jkywbVh2WRt+ij2Wvj7yIwZDjn6BDaEtOt4/C2gHaR7aiHu96kIa1ZiMKOG6JX1
+         Vdh6g9cgk2rsp+rAgX7ps8P3fUZTlODulpbF24noaVvODB7zOCWZr/S0xRJRBhHCPNRm
+         j4Jo4Rxa5z8wzdHpC1OgyDz4e7JPp8DkXwn0yn6X7IPbVkLVco3Zbc8HUofZ34N5kcGN
+         zLUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=+/6kKIloWjHkv6epE2TcP1cNMAlAxbqvJ/hMS+1BVS4=;
-        b=EIrszH50sy2p5PmXEtQrMgpJkRW2qj8W0knMKty27+kIRWwlRIaeGmvAmrFkiAtS93
-         5EoIyz5HFy4Wd+TV8SL99FV+5iTy+JaIUkuXiCBaBMWZTQp7ksr+StKyB0fppXBntfmx
-         orju92wg/yLUd4GMfx3zptGfc/jtGRcFfG3Tsfgiirlf/M6pordLINIKID4z8cTuzhys
-         DyBQqca8mhWPGdj8p5gRsIZaWEHkIM3KvKqHbfqjNpyRr36u+kmWnmLgVOpQMnmsM9Q1
-         eurvW9gTbAzqhmuSWdM/jOX7Oj0yfgP1sITosPdRaUnOAndfsW3QMTohmsbJzN1bHegA
-         7qIA==
-X-Gm-Message-State: AOAM533COurQx6m8pfEkH7aVLLjAdK3/73WetN9g8TEyR4iP9ssZou/9
-        V4sugYo1NMxpasSh8pRs+eE=
-X-Google-Smtp-Source: ABdhPJzN8ma2KWKosLen5J4F3FRMoKuPNeofyB7rb0dBGiGJZybg1BFnjDhMrrGiBy+u68O8a9eDMw==
-X-Received: by 2002:a17:90a:de97:: with SMTP id n23mr6422067pjv.216.1611474229873;
-        Sat, 23 Jan 2021 23:43:49 -0800 (PST)
-Received: from localhost ([124.170.13.62])
-        by smtp.gmail.com with ESMTPSA id b17sm12014448pfp.167.2021.01.23.23.43.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vxwgyuW5XH28Q8/mj8v779VyclgJcF5KFu/DzCcjZnI=;
+        b=Uv58EzZmSjxxVSApv/3VudNwyQOsV8ow+7KDZf9GMdM7dWYzmDZ6lkooCLX7uMarRr
+         BJsCIrY0kEC3JWO5xG3SZhbjQ58FgQsQRJVxRr8ziH959YDk5XzNQVW0k8UWszsPhdM1
+         1cGIk8pIVOVg2mki9u69/jhadXOkUrSSLUAWbEYAGY2dmw3DD+sfKENm7WxVy3YoGuLu
+         E6TAEQKBRCb1j6275oX/sk3h1CYWRpVgWyzor2ghgjypYclW+zgenT/hyUDsUYqhbsIn
+         HqY0fHOG6X50EpkK2EKEuQwo13XIT2MjN74U9vbkytKykI3ZwzFYotZKBk2Dvh0owEQs
+         lpfw==
+X-Gm-Message-State: AOAM5304G3jJRaEboHGFCOtwnIg/J7cFrHSk7YInbpzwrV0GqqlMsX7J
+        2VKXK0sgiPvKTItfHUqh5Ew=
+X-Google-Smtp-Source: ABdhPJwork++HKOseNPRq3Vls6uVbkN5KsPiEY5ah8ze3Qk+PSvpG3taYXPMNJK4g7gAUsggjvJOSg==
+X-Received: by 2002:a17:90b:b0b:: with SMTP id bf11mr10064810pjb.122.1611476573791;
+        Sun, 24 Jan 2021 00:22:53 -0800 (PST)
+Received: from bobo.ozlabs.ibm.com ([124.170.13.62])
+        by smtp.gmail.com with ESMTPSA id gb12sm11799757pjb.51.2021.01.24.00.22.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jan 2021 23:43:49 -0800 (PST)
-Date:   Sun, 24 Jan 2021 17:43:43 +1000
+        Sun, 24 Jan 2021 00:22:53 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v9 05/12] mm: HUGE_VMAP arch support cleanup
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Ding Tianhong <dingtianhong@huawei.com>, linux-mm@kvack.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Zefan Li <lizefan@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
         Christoph Hellwig <hch@infradead.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        =?iso-8859-1?q?Jonathan=0A?= Cameron 
-        <Jonathan.Cameron@Huawei.com>, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        =?iso-8859-1?q?Rick=0A?= Edgecombe <rick.p.edgecombe@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org
-References: <20201205065725.1286370-1-npiggin@gmail.com>
-        <20201205065725.1286370-6-npiggin@gmail.com>
-        <c7eb5ba6-1187-d82f-d74c-0ca2c8ae8faf@huawei.com>
-In-Reply-To: <c7eb5ba6-1187-d82f-d74c-0ca2c8ae8faf@huawei.com>
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Ding Tianhong <dingtianhong@huawei.com>
+Subject: [PATCH v10 00/12] huge vmalloc mappings
+Date:   Sun, 24 Jan 2021 18:22:18 +1000
+Message-Id: <20210124082230.2118861-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Message-Id: <1611473993.etnqidihnt.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Ding Tianhong's message of January 4, 2021 10:33 pm:
-> On 2020/12/5 14:57, Nicholas Piggin wrote:
->> This changes the awkward approach where architectures provide init
->> functions to determine which levels they can provide large mappings for,
->> to one where the arch is queried for each call.
->>=20
->> This removes code and indirection, and allows constant-folding of dead
->> code for unsupported levels.
->>=20
->> This also adds a prot argument to the arch query. This is unused
->> currently but could help with some architectures (e.g., some powerpc
->> processors can't map uncacheable memory with large pages).
->>=20
->> Cc: linuxppc-dev@lists.ozlabs.org
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: x86@kernel.org
->> Cc: "H. Peter Anvin" <hpa@zytor.com>
->> Acked-by: Catalin Marinas <catalin.marinas@arm.com> [arm64]
->> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> ---
->>  arch/arm64/include/asm/vmalloc.h         |  8 +++
->>  arch/arm64/mm/mmu.c                      | 10 +--
->>  arch/powerpc/include/asm/vmalloc.h       |  8 +++
->>  arch/powerpc/mm/book3s64/radix_pgtable.c |  8 +--
->>  arch/x86/include/asm/vmalloc.h           |  7 ++
->>  arch/x86/mm/ioremap.c                    | 10 +--
->>  include/linux/io.h                       |  9 ---
->>  include/linux/vmalloc.h                  |  6 ++
->>  init/main.c                              |  1 -
->>  mm/ioremap.c                             | 88 +++++++++---------------
->>  10 files changed, 77 insertions(+), 78 deletions(-)
->>=20
->> diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/v=
-malloc.h
->> index 2ca708ab9b20..597b40405319 100644
->> --- a/arch/arm64/include/asm/vmalloc.h
->> +++ b/arch/arm64/include/asm/vmalloc.h
->> @@ -1,4 +1,12 @@
->>  #ifndef _ASM_ARM64_VMALLOC_H
->>  #define _ASM_ARM64_VMALLOC_H
->> =20
->> +#include <asm/page.h>
->> +
->> +#ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
->> +bool arch_vmap_p4d_supported(pgprot_t prot);
->> +bool arch_vmap_pud_supported(pgprot_t prot);
->> +bool arch_vmap_pmd_supported(pgprot_t prot);
->> +#endif
->> +
->>  #endif /* _ASM_ARM64_VMALLOC_H */
->> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
->> index ca692a815731..1b60079c1cef 100644
->> --- a/arch/arm64/mm/mmu.c
->> +++ b/arch/arm64/mm/mmu.c
->> @@ -1315,12 +1315,12 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phy=
-s, int *size, pgprot_t prot)
->>  	return dt_virt;
->>  }
->> =20
->> -int __init arch_ioremap_p4d_supported(void)
->> +bool arch_vmap_p4d_supported(pgprot_t prot)
->>  {
->> -	return 0;
->> +	return false;
->>  }
->> =20
->=20
-> I think you should put this function in the CONFIG_HAVE_ARCH_HUGE_VMAP, o=
-therwise it may break the compile when disable the CONFIG_HAVE_ARCH_HUGE_VM=
-AP, the same
-> as the x86 and ppc.
-
-Ah, good catch. arm64 is okay because it always selects=20
-HAVE_ARCH_HUGE_VMAP, powerpc is okay because it places
-them in a file that's only compiled for configs that select
-huge vmap, but x86-32 without PAE build breaks. I'll fix that.
+Fixed a couple of bugs that Ding noticed in review and testing.
 
 Thanks,
 Nick
+
+Since v9:
+- Fixed intermediate build breakage on x86-32 !PAE [thanks Ding]
+- Fixed small page fallback case vm_struct double-free [thanks Ding]
+
+Since v8:
+- Fixed nommu compile.
+- Added Kconfig option help text
+- Added VM_NOHUGE which should help archs implement it [suggested by Rick]
+
+Since v7:
+- Rebase, added some acks, compile fix
+- Removed "order=" from vmallocinfo, it's a bit confusing (nr_pages
+  is in small page size for compatibility).
+- Added arch_vmap_pmd_supported() test before starting to allocate
+  the large page, rather than only testing it when doing the map, to
+  avoid unsupported configs trying to allocate huge pages for no
+  reason.
+
+Since v6:
+- Fixed a false positive warning introduced in patch 2, found by
+  kbuild test robot.
+
+Since v5:
+- Split arch changes out better and make the constant folding work
+- Avoid most of the 80 column wrap, fix a reference to lib/ioremap.c
+- Fix compile error on some archs
+
+Since v4:
+- Fixed an off-by-page-order bug in v4
+- Several minor cleanups.
+- Added page order to /proc/vmallocinfo
+- Added hugepage to alloc_large_system_hage output.
+- Made an architecture config option, powerpc only for now.
+
+Since v3:
+- Fixed an off-by-one bug in a loop
+- Fix !CONFIG_HAVE_ARCH_HUGE_VMAP build fail
+
+*** BLURB HERE ***
+
+Nicholas Piggin (12):
+  mm/vmalloc: fix vmalloc_to_page for huge vmap mappings
+  mm: apply_to_pte_range warn and fail if a large pte is encountered
+  mm/vmalloc: rename vmap_*_range vmap_pages_*_range
+  mm/ioremap: rename ioremap_*_range to vmap_*_range
+  mm: HUGE_VMAP arch support cleanup
+  powerpc: inline huge vmap supported functions
+  arm64: inline huge vmap supported functions
+  x86: inline huge vmap supported functions
+  mm: Move vmap_range from mm/ioremap.c to mm/vmalloc.c
+  mm/vmalloc: add vmap_range_noflush variant
+  mm/vmalloc: Hugepage vmalloc mappings
+  powerpc/64s/radix: Enable huge vmalloc mappings
+
+ .../admin-guide/kernel-parameters.txt         |   2 +
+ arch/Kconfig                                  |  10 +
+ arch/arm64/include/asm/vmalloc.h              |  25 +
+ arch/arm64/mm/mmu.c                           |  26 -
+ arch/powerpc/Kconfig                          |   1 +
+ arch/powerpc/include/asm/vmalloc.h            |  21 +
+ arch/powerpc/kernel/module.c                  |  13 +-
+ arch/powerpc/mm/book3s64/radix_pgtable.c      |  21 -
+ arch/x86/include/asm/vmalloc.h                |  23 +
+ arch/x86/mm/ioremap.c                         |  19 -
+ arch/x86/mm/pgtable.c                         |  13 -
+ include/linux/io.h                            |   9 -
+ include/linux/vmalloc.h                       |  27 ++
+ init/main.c                                   |   1 -
+ mm/ioremap.c                                  | 225 +--------
+ mm/memory.c                                   |  66 ++-
+ mm/page_alloc.c                               |   5 +-
+ mm/vmalloc.c                                  | 455 +++++++++++++++---
+ 18 files changed, 563 insertions(+), 399 deletions(-)
+
+-- 
+2.23.0
+
