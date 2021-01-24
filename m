@@ -2,194 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29031301E67
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Jan 2021 20:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21AD301F84
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Jan 2021 00:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbhAXTN3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 24 Jan 2021 14:13:29 -0500
-Received: from mga05.intel.com ([192.55.52.43]:36097 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726545AbhAXTN1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 24 Jan 2021 14:13:27 -0500
-IronPort-SDR: MRTpMrmQoG5INBM4LdNFiJsBlMgDG8eo/NHvu/qRpZ9owukqc9NCvDFMZ0prGp++iq6mzZllZ5
- 990/9Oe3EDPw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="264454414"
-X-IronPort-AV: E=Sophos;i="5.79,371,1602572400"; 
-   d="scan'208";a="264454414"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2021 11:12:46 -0800
-IronPort-SDR: KrOe1P0wvo0Ho7YBg4aUyFk8rzDlYE+253g9LKY6NrX82MVJaRbWSADFhnoL5RhAsbM+uPPLxK
- svz8+/jKWltQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,371,1602572400"; 
-   d="scan'208";a="352707691"
-Received: from lkp-server01.sh.intel.com (HELO 27c4e0a4b6d9) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2021 11:12:45 -0800
-Received: from kbuild by 27c4e0a4b6d9 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l3koW-0000QS-Ap; Sun, 24 Jan 2021 19:12:44 +0000
-Date:   Mon, 25 Jan 2021 03:11:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [asm-generic:master] BUILD SUCCESS
- 38489db09b109c22eedf6cd3846ef742bceb45fe
-Message-ID: <600dc679.QtJoPrbXnXwtzKCa%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726127AbhAXXSS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Jan 2021 18:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726007AbhAXXSR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jan 2021 18:18:17 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044A2C061573;
+        Sun, 24 Jan 2021 15:17:36 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id p15so7224354pjv.3;
+        Sun, 24 Jan 2021 15:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=vmIru6MfV60AorXtK81mK9wqaHb82tqsfwMpO7SPkgI=;
+        b=K+U49/R9bHOeSIDkgGZanLLovgbgmh5uQMQVJNnno8FThvFwXybrHyFT1R0qJhL9GK
+         K1z14NFcw8Tqbmru39dBz7taSSjxBTWys7rsL0OmtRPn95vN+d3PRTbM1dM386Q8o3NW
+         ZE49oxL2QRa8FMV1zkeB4pVweM6cN0Tq37ApvBTDV/wUHnSWz3eB8Siv1aq6EDaIUxvk
+         y3agWJFjQS6CACCLLpedCSp9CaUCa8JU1IiOXioY2cIn2r3WVWp8ZTeCKhd8ugm6CgOz
+         +pSx4SP2x2g+/E2iZqd1FQYamEwSq1XLCNZ9sPvJ0B5GgaMWjXqggSIF09D7OVqoJAFB
+         waYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=vmIru6MfV60AorXtK81mK9wqaHb82tqsfwMpO7SPkgI=;
+        b=MUQ08/Xlj5ToZCyjGEf3nZ3r/SKlwrJwUTQMmAqw91RMW1LnjKip3d2RYedDj5u5n0
+         ws2L81hOlFbnSeIXNnQXHaqDZHf8+Zl21QkcfUEJOgGE98QWtitUuTOnWwbvHO8k0JUB
+         NyFiyb+32lBe6MCR3i+g91BA0b/HlBS2ldFwoigCO6ey1dp5bjoEpHSwyITCX7t4NDDj
+         OiwBuVcCCMTUVXbPIRpOvbdeXNwMF2SgTRmflRvpy3NZW5Knyne7aKmfj/dLZgbHv3nm
+         IqVWejcIZ5QHJRfVpeOsBNoGgv29ATI9AK6MYx68B/RDrZSdZgKepWfeEW/XlCbSWfs3
+         R6WQ==
+X-Gm-Message-State: AOAM530zzZPBPnPTTvnHLjE5cgCWCwxXW4fowkWVgpJFRo4mwi5dJK8Z
+        j9r9EIn3PYIAmICMcW9fodw=
+X-Google-Smtp-Source: ABdhPJy2kG8tVAgVFmG9UnEo3wcKE3mHDXxXZlqFto7Q/Kp/s+THDx1kKu0L5cmF2uvncLYV9yvjIw==
+X-Received: by 2002:a17:902:c94d:b029:de:9b70:d886 with SMTP id i13-20020a170902c94db02900de9b70d886mr6340876pla.5.1611530255875;
+        Sun, 24 Jan 2021 15:17:35 -0800 (PST)
+Received: from localhost ([124.170.13.62])
+        by smtp.gmail.com with ESMTPSA id gg6sm20043833pjb.2.2021.01.24.15.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jan 2021 15:17:34 -0800 (PST)
+Date:   Mon, 25 Jan 2021 09:17:18 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v10 11/12] mm/vmalloc: Hugepage vmalloc mappings
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        Zefan Li <lizefan@huawei.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20210124082230.2118861-1-npiggin@gmail.com>
+        <20210124082230.2118861-12-npiggin@gmail.com>
+        <20210124150729.GC733865@infradead.org>
+In-Reply-To: <20210124150729.GC733865@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Message-Id: <1611529781.hxjbuadzrl.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-branch HEAD: 38489db09b109c22eedf6cd3846ef742bceb45fe  Merge branch 'asm-generic-fixes' into asm-generic
+Excerpts from Christoph Hellwig's message of January 25, 2021 1:07 am:
+> On Sun, Jan 24, 2021 at 06:22:29PM +1000, Nicholas Piggin wrote:
+>> diff --git a/arch/Kconfig b/arch/Kconfig
+>> index 24862d15f3a3..f87feb616184 100644
+>> --- a/arch/Kconfig
+>> +++ b/arch/Kconfig
+>> @@ -724,6 +724,16 @@ config HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+>>  config HAVE_ARCH_HUGE_VMAP
+>>  	bool
+>> =20
+>> +config HAVE_ARCH_HUGE_VMALLOC
+>> +	depends on HAVE_ARCH_HUGE_VMAP
+>> +	bool
+>> +	help
+>> +	  Archs that select this would be capable of PMD-sized vmaps (i.e.,
+>> +	  arch_vmap_pmd_supported() returns true), and they must make no
+>> +	  assumptions that vmalloc memory is mapped with PAGE_SIZE ptes. The
+>> +	  VM_NOHUGE flag can be used to prohibit arch-specific allocations fro=
+m
+>> +	  using hugepages to help with this (e.g., modules may require it).
+>=20
+> help texts don't make sense for options that aren't user visible.
 
-elapsed time: 737m
+Yeah it was supposed to just be a comment but if it was user visible=20
+then similar kind of thing would not make sense in help text, so I'll
+just turn it into a real comment as per Randy's suggestion.
 
-configs tested: 132
-configs skipped: 3
+> More importantly, is there any good reason to keep the option and not
+> just go the extra step and enable huge page vmalloc for arm64 and x86
+> as well?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Yes they need to ensure they exclude vmallocs that can't be huge one
+way or another (VM_ flag or prot arg).
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                        mvebu_v5_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                      ppc40x_defconfig
-sh                              ul2_defconfig
-mips                       lemote2f_defconfig
-sh                          rsk7264_defconfig
-powerpc                 linkstation_defconfig
-arm                      pxa255-idp_defconfig
-arm                     am200epdkit_defconfig
-mips                      pistachio_defconfig
-xtensa                  cadence_csp_defconfig
-arm                            lart_defconfig
-mips                        omega2p_defconfig
-powerpc                    gamecube_defconfig
-sh                            migor_defconfig
-powerpc                      ppc44x_defconfig
-mips                         tb0219_defconfig
-powerpc                      pcm030_defconfig
-powerpc                       ebony_defconfig
-sh                             espt_defconfig
-sparc64                             defconfig
-arc                              allyesconfig
-powerpc                  mpc885_ads_defconfig
-s390                          debug_defconfig
-arm                          iop32x_defconfig
-arm                          tango4_defconfig
-mips                        nlm_xlr_defconfig
-sh                         apsh4a3a_defconfig
-powerpc                      cm5200_defconfig
-sparc                       sparc32_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                    vt8500_v6_v7_defconfig
-sh                                  defconfig
-sh                           se7712_defconfig
-arm                        neponset_defconfig
-mips                        workpad_defconfig
-powerpc                      walnut_defconfig
-arm                           sama5_defconfig
-mips                          ath79_defconfig
-mips                         db1xxx_defconfig
-arm                             mxs_defconfig
-powerpc                  storcenter_defconfig
-arm                          lpd270_defconfig
-nios2                            alldefconfig
-arm                          pcm027_defconfig
-mips                       capcella_defconfig
-mips                          ath25_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                          simpad_defconfig
-arm                         shannon_defconfig
-powerpc                        fsp2_defconfig
-arm                         s5pv210_defconfig
-arc                           tb10x_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                   lite5200b_defconfig
-arm                           stm32_defconfig
-arm                        realview_defconfig
-powerpc                     sbc8548_defconfig
-alpha                               defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm                        vexpress_defconfig
-arm                        oxnas_v6_defconfig
-mips                           ci20_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210124
-i386                 randconfig-a002-20210124
-i386                 randconfig-a003-20210124
-x86_64               randconfig-a012-20210124
-x86_64               randconfig-a016-20210124
-x86_64               randconfig-a015-20210124
-x86_64               randconfig-a011-20210124
-x86_64               randconfig-a013-20210124
-x86_64               randconfig-a014-20210124
-i386                 randconfig-a013-20210124
-i386                 randconfig-a012-20210124
-i386                 randconfig-a014-20210124
-i386                 randconfig-a016-20210124
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+After they're converted we can fold it into HUGE_VMAP.
 
-clang tested configs:
-x86_64               randconfig-a003-20210124
-x86_64               randconfig-a002-20210124
-x86_64               randconfig-a001-20210124
-x86_64               randconfig-a005-20210124
-x86_64               randconfig-a006-20210124
-x86_64               randconfig-a004-20210124
+>> +static inline bool is_vm_area_hugepages(const void *addr)
+>> +{
+>> +	/*
+>> +	 * This may not 100% tell if the area is mapped with > PAGE_SIZE
+>> +	 * page table entries, if for some reason the architecture indicates
+>> +	 * larger sizes are available but decides not to use them, nothing
+>> +	 * prevents that. This only indicates the size of the physical page
+>> +	 * allocated in the vmalloc layer.
+>> +	 */
+>> +	return (find_vm_area(addr)->page_order > 0);
+>=20
+> No need for the braces here.
+>=20
+>>  }
+>> =20
+>> +static int vmap_pages_range_noflush(unsigned long addr, unsigned long e=
+nd,
+>> +		pgprot_t prot, struct page **pages, unsigned int page_shift)
+>> +{
+>> +	unsigned int i, nr =3D (end - addr) >> PAGE_SHIFT;
+>> +
+>> +	WARN_ON(page_shift < PAGE_SHIFT);
+>> +
+>> +	if (page_shift =3D=3D PAGE_SHIFT)
+>> +		return vmap_small_pages_range_noflush(addr, end, prot, pages);
+>=20
+> This begs for a IS_ENABLED check to disable the hugepage code for
+> architectures that don't need it.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yeah good point.
+
+>> +int map_kernel_range_noflush(unsigned long addr, unsigned long size,
+>> +			     pgprot_t prot, struct page **pages)
+>> +{
+>> +	return vmap_pages_range_noflush(addr, addr + size, prot, pages, PAGE_S=
+HIFT);
+>> +}
+>=20
+> Please just kill off map_kernel_range_noflush and map_kernel_range
+> off entirely in favor of the vmap versions.
+
+I can do a cleanup patch on top of it.
+
+>> +	for (i =3D 0; i < area->nr_pages; i +=3D 1U << area->page_order) {
+>=20
+> Maybe using a helper that takes the vm_area_struct and either returns
+> area->page_order or always 0 based on IS_ENABLED?
+
+I'll see how it looks.
+
+Thanks,
+Nick
