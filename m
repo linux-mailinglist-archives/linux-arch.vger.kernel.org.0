@@ -2,87 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F245E301BBD
-	for <lists+linux-arch@lfdr.de>; Sun, 24 Jan 2021 13:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910C0301BCC
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Jan 2021 13:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbhAXMFh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 24 Jan 2021 07:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S1726600AbhAXMXK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Jan 2021 07:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbhAXMFf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jan 2021 07:05:35 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8BEC061573;
-        Sun, 24 Jan 2021 04:04:55 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id q20so6744822pfu.8;
-        Sun, 24 Jan 2021 04:04:54 -0800 (PST)
+        with ESMTP id S1726583AbhAXMXJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jan 2021 07:23:09 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5D7C061573;
+        Sun, 24 Jan 2021 04:22:29 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id 31so5885095plb.10;
+        Sun, 24 Jan 2021 04:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=PDAPpKGJ0bTpmZBGx4ylhGlHNA52pbsxkqqZU/p/cQE=;
-        b=N1+Ohqsxn1BBliytIL9FWntOw4uoZXJpJmq3olgCDZcMrsdKpIjBtCdm6Q1jifEvmr
-         kKRew8+LLCRezG16J/ebB8KtQ7KiCQNFkVwXeQHonGKnLwdx3pnJMlwxY2i71MIQnrvP
-         N7GzBDYqlDwotX3C5JSVYTSqBH27RoWQJCvMG1YSJ3wyEYf7e7HaRXmXDBYUFxJqIhwS
-         DxWX5BCxSNBYX9fXe2SdS/Mr0od6c3/i0ZtOT4HHqZjK/UdnhKU6ngpKD+oQLnfiNCbl
-         pxAyJlUgQ66A38zjsN/RzOC23VxklUz+MxZ8XqfVIleSePqQl3Kc32R5kKbWcavSe14h
-         rbWA==
+        bh=CRaVGlQqRX3eurTgpUbO4LACsIgYJz7bYMhi3+skM5w=;
+        b=bKuMIpY94qcNZor5JJbg9y1rkV+5c8vEcy8sNNmZrJUwLgNFSRZhf+all1fV932huz
+         wST13It32l8icQp15BnImsizqjvbJQLYNhoL7x7ZRkgBgcOfNuR8Oy0kVPUtgd1ORKS6
+         JEyqT1VlF3ILsaDXQZtPvomWZNaQJnlMIURLJq0oMoqXmWEnsJ9AEU7HJ5sPiJoq/dOm
+         vwEBo/rNNqQJZ9HFhwjQUVLozjNpoyus8kim5gwC4+mChA5Y9Kan3xIm7TjU2jav6WrC
+         5DV23rzG1YktYfARiBniJtFxlEvfZYmXbYjVn2fO51jteM+KsG+O3Dr62VcXSAjmPccp
+         gqtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=PDAPpKGJ0bTpmZBGx4ylhGlHNA52pbsxkqqZU/p/cQE=;
-        b=EbBwJ9JDp9xBZgA8f7CwYdsMyRXhncwB0ZroeWWf381YzzuIg0IE0jKWi1Sxv5hgB6
-         MVMFqC/swajei3gGE3s3IOkNEVr7a6aUFdf4Li7v4QIjvAYDh+3dIl+6mOThSyaR46ng
-         bSadM7J9IF72+O8lRdW8JpVGTXcWg+ItXRkmxnv6D4NkyZquIj42ctgGvVmklhzUnFW2
-         NvDahOCRRjvo3RvF/hHz9Gbo9lybVCOe84KTF1N5RW92HzVPykFs22WZOsdzV26zPSWx
-         aXqiweKISU99TJaEDmlYYpkwsfoHhkTgOS9OAN/n/KleRXN1eSkOCJhzIhYgYPvx7uXh
-         Pqlg==
-X-Gm-Message-State: AOAM5301LZE2GMATMaFP4gIG0Td8OWBVKSBw0XA1mjwzhiRxqDnBmKfU
-        hgWR66CzHF52O4D+DyaCrug=
-X-Google-Smtp-Source: ABdhPJw0uJzRaMZJamLkCUg0NzjWJZ3f8wx59FYHNHPFfq58pfs7SdkANYAREpz+MFCRwlu/xnW1ig==
-X-Received: by 2002:aa7:978e:0:b029:1bd:f965:66dd with SMTP id o14-20020aa7978e0000b02901bdf96566ddmr1977761pfp.46.1611489894337;
-        Sun, 24 Jan 2021 04:04:54 -0800 (PST)
+        bh=CRaVGlQqRX3eurTgpUbO4LACsIgYJz7bYMhi3+skM5w=;
+        b=G/j8l49aPOXHpQ2f5K8vAdK+CUdPKepE9/lsSvs2D2B4hjOQZ8iR2dOW30pz+zgTQ0
+         uiBxb1zftOBr8/THW0IwihAcselRFESMlOq30tyFMeUDgS5WDKQAkgsSoY+/bbl1dNrA
+         IRCJGmFb14UlIBr00PXY6VeFB81OsBEfNlAE4X637BNHkZOfL2rWEz+dyhfFUuMS0T2f
+         yGdUSILh6njkjWnnlg/IrUhOHM8V6k8+fToXZMbbFmT6XoivcJkY5dh4XLlMtXMDVRCP
+         g+y2uYXRmbb3l99ERILBSxg4uXILH0n1VsSYJ+z9JoizCMk1wJKaLBrJO38BBviI9/di
+         ks7Q==
+X-Gm-Message-State: AOAM531fmM+RnULb6XG/u6J7/HxB2ZWvqOly1YimIiPSq83cbdOOU7fo
+        u8AakT8NmJsDOWBddZpsT6A=
+X-Google-Smtp-Source: ABdhPJy/cCBq2SaALYuvfokncGx1EYWoF3TIXnlyNQ1FvlbAreoJvYPu98Y/UK3bgTxLg0uNGqM4cA==
+X-Received: by 2002:a17:90a:de97:: with SMTP id n23mr7464729pjv.216.1611490949139;
+        Sun, 24 Jan 2021 04:22:29 -0800 (PST)
 Received: from localhost ([124.170.13.62])
-        by smtp.gmail.com with ESMTPSA id 78sm10076194pfx.127.2021.01.24.04.04.52
+        by smtp.gmail.com with ESMTPSA id 5sm13830020pff.125.2021.01.24.04.22.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jan 2021 04:04:53 -0800 (PST)
-Date:   Sun, 24 Jan 2021 22:04:47 +1000
+        Sun, 24 Jan 2021 04:22:28 -0800 (PST)
+Date:   Sun, 24 Jan 2021 22:22:22 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v10 04/12] mm/ioremap: rename ioremap_*_range to
- vmap_*_range
+Subject: Re: [PATCH v10 05/12] mm: HUGE_VMAP arch support cleanup
 To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Ding Tianhong <dingtianhong@huawei.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        Zefan Li <lizefan@huawei.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
 References: <20210124082230.2118861-1-npiggin@gmail.com>
-        <20210124082230.2118861-5-npiggin@gmail.com>
-        <20210124113636.GD694255@infradead.org>
-In-Reply-To: <20210124113636.GD694255@infradead.org>
+        <20210124082230.2118861-6-npiggin@gmail.com>
+        <20210124114008.GE694255@infradead.org>
+In-Reply-To: <20210124114008.GE694255@infradead.org>
 MIME-Version: 1.0
-Message-Id: <1611489705.hu96tutmbn.astroid@bobo.none>
+Message-Id: <1611489959.87u9aj91nf.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Christoph Hellwig's message of January 24, 2021 9:36 pm:
-> On Sun, Jan 24, 2021 at 06:22:22PM +1000, Nicholas Piggin wrote:
->> This will be used as a generic kernel virtual mapping function, so
->> re-name it in preparation.
+Excerpts from Christoph Hellwig's message of January 24, 2021 9:40 pm:
+>> diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/v=
+malloc.h
+>> index 2ca708ab9b20..597b40405319 100644
+>> --- a/arch/arm64/include/asm/vmalloc.h
+>> +++ b/arch/arm64/include/asm/vmalloc.h
+>> @@ -1,4 +1,12 @@
+>>  #ifndef _ASM_ARM64_VMALLOC_H
+>>  #define _ASM_ARM64_VMALLOC_H
+>> =20
+>> +#include <asm/page.h>
+>> +
+>> +#ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
+>> +bool arch_vmap_p4d_supported(pgprot_t prot);
+>> +bool arch_vmap_pud_supported(pgprot_t prot);
+>> +bool arch_vmap_pmd_supported(pgprot_t prot);
+>> +#endif
 >=20
-> The new name looks ok, but shouldn't it also move to vmalloc.c with
-> the more generic name and purpose?
->=20
+> Shouldn't the be inlines or macros?  Also it would be useful
+> if the architectures would not have to override all functions
+> but just those that are it actually implements?
 
-Yes, I moved it in a later patch to make reviewing easier. Rename in=20
-this one then the move patch is cut and paste.
+It gets better in the next patches. I did it this way again to avoid=20
+moving a lot of code at the same time as changing name / prototype
+slightly.
+
+I didn't see individual generic fallbacks being all that useful really=20
+at this scale. I don't mind keeping the explicit false.
+
+> Also lots of > 80 char lines in the patch.
+
+Yeah there's a few, I can reduce those.
 
 Thanks,
 Nick
