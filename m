@@ -2,123 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 576563014DA
-	for <lists+linux-arch@lfdr.de>; Sat, 23 Jan 2021 12:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB679301A5B
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Jan 2021 08:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbhAWLWQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 23 Jan 2021 06:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S1726367AbhAXHoc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Jan 2021 02:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbhAWLWP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Jan 2021 06:22:15 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FB1C06174A;
-        Sat, 23 Jan 2021 03:21:34 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id 6so11369584ejz.5;
-        Sat, 23 Jan 2021 03:21:34 -0800 (PST)
+        with ESMTP id S1726038AbhAXHoa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jan 2021 02:44:30 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B1DC061573;
+        Sat, 23 Jan 2021 23:43:50 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id t6so5735978plq.1;
+        Sat, 23 Jan 2021 23:43:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=tCJVoQC4xBY3BGtp3Oi80kGjpZ26JA6I+lIE3EpCRh0=;
-        b=hytw3ianpw4z4IdU1YPAg0GhJMxNxjd110yTuneOWwxJVJgn/u/pVLYBbA9IDChGFY
-         n+/EsGqL5uVQAq4K+H29xyPc1NSJBTpSxx8gxnorZ9paSAxRjT8sr9Vvi9hrGZJfJCaD
-         /9kEUj8uh+Wy+S0F9BCsvlyhpzo+ywNfZvppRQFllw7eK41yzQPJ/0+t8OJOfR7y8aGe
-         fsziO0cikKu5iR9boDrBab3Z4vEIfbjCTBo8XuqRNkDg6pIEs77UsyW5aTdVYG+j6n9B
-         8Y7fXo/Pz/UByPlTEfiDe9U5ZX1I2siZjr09MOhwvx5NSiq0hV9cLCiQfMuCpjvFPSDm
-         nd8g==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=+/6kKIloWjHkv6epE2TcP1cNMAlAxbqvJ/hMS+1BVS4=;
+        b=ECst8pGK76Kt1i3hYRpk0C6YXFoVILwmhhITV8vLf7lxSp2DLkJIQbiJRMgNAQ8RhZ
+         2FVBi6yU5cpVn2+k1ymdhPEiD0mTUZewRMTA/C2lx5qVisItC7g1Qk4OGg76U8ceJGgf
+         oVWl3fnrKEggNSaXGGGHmXoOoXhZnwiVh1RBJL+lYFEHkFwpvlYF/ZZKyKChrGABAFdp
+         R/fMbwbCbc15w5wSt5bs8uhzzHSiG/b/UpPKVMdktKCdkIGIrgNk1sVD54D/UhBtSvjQ
+         s/HrxyZxn4pyAnjsJNo50WHO0keUtTPyw5qR6gy6UgFyMCLXWft4SR0fRSKV2J1bQRZG
+         TWVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=tCJVoQC4xBY3BGtp3Oi80kGjpZ26JA6I+lIE3EpCRh0=;
-        b=Qak0ABrONvP0oHhyv1cfrR0+CMB6eeuxFYT/s90Q7Ahg6oqHXLnTNas689Pq+c3rQC
-         DcJokuxWlIKpvsEfC232woR2A6eMLMfxc+fFtM8S0LCg6C7n+Eoc5+xZM/7EYyJSFhkx
-         xTCbNq7R4ZhB2lP+3WGc5OtzLPrgHb1kVeXZutBJudAn/PzQB1/HFgYaKMaWzRML0Ybu
-         VIjvUOCJrPg0Pj3Mv/TiffhGGcBhKx8Z8RmvXSU/3fNkjIc30rAye1tfTfqOxLWtwyJg
-         VGjBfuESTcT64PlNUh/cJc5h0b/8QHftl4rdy2teGRmQNVJAVIvskkhmI6wjODmIOt1l
-         ZFYA==
-X-Gm-Message-State: AOAM532c098OczLT+GOm6l21Q0oe270PZHKQT9i9BRL6UsKF+grOpZcb
-        zQ05M/IOWYJj5FD1eEKUq4DoEaHWUOJNjQ==
-X-Google-Smtp-Source: ABdhPJxncUjn1LRbw7PboCskFi9l+SgUcnUBCQtRag/N1CjcyStamRSkapMhdaUtcSe34VBEDO4Wyw==
-X-Received: by 2002:a17:906:19c3:: with SMTP id h3mr408122ejd.429.1611400893038;
-        Sat, 23 Jan 2021 03:21:33 -0800 (PST)
-Received: from localhost (cpc158799-hari22-2-0-cust25.20-2.cable.virginm.net. [82.3.12.26])
-        by smtp.gmail.com with ESMTPSA id a11sm7064797edt.26.2021.01.23.03.21.32
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=+/6kKIloWjHkv6epE2TcP1cNMAlAxbqvJ/hMS+1BVS4=;
+        b=EIrszH50sy2p5PmXEtQrMgpJkRW2qj8W0knMKty27+kIRWwlRIaeGmvAmrFkiAtS93
+         5EoIyz5HFy4Wd+TV8SL99FV+5iTy+JaIUkuXiCBaBMWZTQp7ksr+StKyB0fppXBntfmx
+         orju92wg/yLUd4GMfx3zptGfc/jtGRcFfG3Tsfgiirlf/M6pordLINIKID4z8cTuzhys
+         DyBQqca8mhWPGdj8p5gRsIZaWEHkIM3KvKqHbfqjNpyRr36u+kmWnmLgVOpQMnmsM9Q1
+         eurvW9gTbAzqhmuSWdM/jOX7Oj0yfgP1sITosPdRaUnOAndfsW3QMTohmsbJzN1bHegA
+         7qIA==
+X-Gm-Message-State: AOAM533COurQx6m8pfEkH7aVLLjAdK3/73WetN9g8TEyR4iP9ssZou/9
+        V4sugYo1NMxpasSh8pRs+eE=
+X-Google-Smtp-Source: ABdhPJzN8ma2KWKosLen5J4F3FRMoKuPNeofyB7rb0dBGiGJZybg1BFnjDhMrrGiBy+u68O8a9eDMw==
+X-Received: by 2002:a17:90a:de97:: with SMTP id n23mr6422067pjv.216.1611474229873;
+        Sat, 23 Jan 2021 23:43:49 -0800 (PST)
+Received: from localhost ([124.170.13.62])
+        by smtp.gmail.com with ESMTPSA id b17sm12014448pfp.167.2021.01.23.23.43.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jan 2021 03:21:32 -0800 (PST)
-Date:   Sat, 23 Jan 2021 03:21:32 -0800 (PST)
-X-Google-Original-Date: Sat, 23 Jan 2021 10:56:48 +0000
- From 3920487b3156cc2f90ebbb7d018c9f3f34637d62 Mon Sep 17 00:00:00 2001
-From:   Yuxuan Shui <yshuiv7@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     krisman@collabora.com, linux-arch@vger.kernel.org,
-        kernel@collabora.com, yshuiv7@gmail.com
-Subject: [PATCH] ptrace: restore the previous single step reporting behavior
-Message-ID: <877do3gaq9.fsf@m5Zedd9JOGzJrf0>
+        Sat, 23 Jan 2021 23:43:49 -0800 (PST)
+Date:   Sun, 24 Jan 2021 17:43:43 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v9 05/12] mm: HUGE_VMAP arch support cleanup
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Ding Tianhong <dingtianhong@huawei.com>, linux-mm@kvack.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        =?iso-8859-1?q?Jonathan=0A?= Cameron 
+        <Jonathan.Cameron@Huawei.com>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        =?iso-8859-1?q?Rick=0A?= Edgecombe <rick.p.edgecombe@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
+References: <20201205065725.1286370-1-npiggin@gmail.com>
+        <20201205065725.1286370-6-npiggin@gmail.com>
+        <c7eb5ba6-1187-d82f-d74c-0ca2c8ae8faf@huawei.com>
+In-Reply-To: <c7eb5ba6-1187-d82f-d74c-0ca2c8ae8faf@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Message-Id: <1611473993.etnqidihnt.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Excerpts from Ding Tianhong's message of January 4, 2021 10:33 pm:
+> On 2020/12/5 14:57, Nicholas Piggin wrote:
+>> This changes the awkward approach where architectures provide init
+>> functions to determine which levels they can provide large mappings for,
+>> to one where the arch is queried for each call.
+>>=20
+>> This removes code and indirection, and allows constant-folding of dead
+>> code for unsupported levels.
+>>=20
+>> This also adds a prot argument to the arch query. This is unused
+>> currently but could help with some architectures (e.g., some powerpc
+>> processors can't map uncacheable memory with large pages).
+>>=20
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: x86@kernel.org
+>> Cc: "H. Peter Anvin" <hpa@zytor.com>
+>> Acked-by: Catalin Marinas <catalin.marinas@arm.com> [arm64]
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> ---
+>>  arch/arm64/include/asm/vmalloc.h         |  8 +++
+>>  arch/arm64/mm/mmu.c                      | 10 +--
+>>  arch/powerpc/include/asm/vmalloc.h       |  8 +++
+>>  arch/powerpc/mm/book3s64/radix_pgtable.c |  8 +--
+>>  arch/x86/include/asm/vmalloc.h           |  7 ++
+>>  arch/x86/mm/ioremap.c                    | 10 +--
+>>  include/linux/io.h                       |  9 ---
+>>  include/linux/vmalloc.h                  |  6 ++
+>>  init/main.c                              |  1 -
+>>  mm/ioremap.c                             | 88 +++++++++---------------
+>>  10 files changed, 77 insertions(+), 78 deletions(-)
+>>=20
+>> diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/v=
+malloc.h
+>> index 2ca708ab9b20..597b40405319 100644
+>> --- a/arch/arm64/include/asm/vmalloc.h
+>> +++ b/arch/arm64/include/asm/vmalloc.h
+>> @@ -1,4 +1,12 @@
+>>  #ifndef _ASM_ARM64_VMALLOC_H
+>>  #define _ASM_ARM64_VMALLOC_H
+>> =20
+>> +#include <asm/page.h>
+>> +
+>> +#ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
+>> +bool arch_vmap_p4d_supported(pgprot_t prot);
+>> +bool arch_vmap_pud_supported(pgprot_t prot);
+>> +bool arch_vmap_pmd_supported(pgprot_t prot);
+>> +#endif
+>> +
+>>  #endif /* _ASM_ARM64_VMALLOC_H */
+>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+>> index ca692a815731..1b60079c1cef 100644
+>> --- a/arch/arm64/mm/mmu.c
+>> +++ b/arch/arm64/mm/mmu.c
+>> @@ -1315,12 +1315,12 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phy=
+s, int *size, pgprot_t prot)
+>>  	return dt_virt;
+>>  }
+>> =20
+>> -int __init arch_ioremap_p4d_supported(void)
+>> +bool arch_vmap_p4d_supported(pgprot_t prot)
+>>  {
+>> -	return 0;
+>> +	return false;
+>>  }
+>> =20
+>=20
+> I think you should put this function in the CONFIG_HAVE_ARCH_HUGE_VMAP, o=
+therwise it may break the compile when disable the CONFIG_HAVE_ARCH_HUGE_VM=
+AP, the same
+> as the x86 and ppc.
 
-Commit 64eb35f701f04b30706e21d1b02636b5d31a37d2 changed when single step
-is reported.
+Ah, good catch. arm64 is okay because it always selects=20
+HAVE_ARCH_HUGE_VMAP, powerpc is okay because it places
+them in a file that's only compiled for configs that select
+huge vmap, but x86-32 without PAE build breaks. I'll fix that.
 
-Specifically, the report_single_step is changed so that single steps are
-only reported when both SYSCALL_EMU and _TIF_SINGLESTEP are set, while
-previously they are reported when _TIF_SINGLESTEP is set without
-_TIF_SYSCALL_EMU being set.
-
-This behavior change breaks rr [1]
-
-This commit restores the old behavior.
-
-[1]: https://github.com/rr-debugger/rr/issues/2793
-
-Signed-off-by: Yuxuan Shui <yshuiv7@gmail.com>
-=2D--
- kernel/entry/common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index 90533f34ea99c..ad3b17fcde782 100644
-=2D-- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -220,7 +220,7 @@ static inline bool rep:ort_single_step(unsigned long wo=
-rk)
-  */
- static inline bool report_single_step(unsigned long work)
- {
-=2D	if (!(work & SYSCALL_WORK_SYSCALL_EMU))
-+	if (!!(work & SYSCALL_WORK_SYSCALL_EMU))
- 		return false;
-=20
- 	return !!(current_thread_info()->flags & _TIF_SINGLESTEP);
-=2D-=20
-2.30.0
-
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEL6EJkr0WlitWahBy06RAW+bMF/QFAmAMBrMACgkQ06RAW+bM
-F/SE6w/+LKNStNWKuVgglb2MGrIdELiwmsxyXVsjKQVZ0+9qnYtrWzq+l+tXzbaH
-erPZaiQiDBaUw98qlv+d6/Bhkj8iJgMP9NghCjw24BaIfYSoyDYA+YiKRp941m4s
-pRGfNon3pdAN3Z7K2a6ZNUqSALB0zFsOdqaS95kV9iU/h07ISiRjneYXuUzFDMkL
-/5J4zWj3Ut0P3/2HU3u7JekplTa/EKPKXF8CuBzFygQ5yaFl5mRiAUZP+LDzbJXq
-8xdy7FhLBI6Aj5Yz7XDSde5aLYp62LhQi9WSv6SCCAYrntH7UqwrsLRpATv84HlF
-8heFxZw5wYSZSgo7iWxHURZ7FXiZIxdyoRuS4ZzT9NfwlW5yjbgZZoQHmUEkbRdM
-neSBSvh/7w3vwvNIkxhX2Ga+VH+9X3zS6WlJOGpSq2+HnzBsDsFFld7lvsmxKV7L
-RmSXFoJfQ5KsDJlASoWk7IsNr+1ch9uSZxAzz5345pETZLzdxvwY+G9D6BtSqw47
-dm0id9NRGAsn59npB53IxGN/f+u3bH+nODBkZB8FLa+FBxHa52PBkJ5BWrpV/kpU
-0wP8dHKHnWZa2DxwpLBdV6QjtQD3X9NhjWRlEAvQwltpL04jqQp5tVeFW2Nu0Dtd
-WgiT+4zVvwbPecZ8DhbBEubzA3PQ597utf3zTPQOxrTpTg4Msl4=
-=OVRe
------END PGP SIGNATURE-----
---=-=-=--
+Thanks,
+Nick
