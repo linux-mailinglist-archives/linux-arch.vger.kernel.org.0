@@ -2,122 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE213034A3
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 06:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FB43034A7
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 06:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729045AbhAZFZL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 00:25:11 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:62090 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726032AbhAYJQQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Jan 2021 04:16:16 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4DPPMX1YsFz9tytr;
-        Mon, 25 Jan 2021 10:14:48 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id kQAyO7I1Rv8X; Mon, 25 Jan 2021 10:14:48 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4DPPMX0YBjz9tytp;
-        Mon, 25 Jan 2021 10:14:48 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2DB448B780;
-        Mon, 25 Jan 2021 10:14:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id NLJtyCdWxlpx; Mon, 25 Jan 2021 10:14:53 +0100 (CET)
-Received: from [172.25.230.103] (po15451.idsi0.si.c-s.fr [172.25.230.103])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B6BB28B75F;
-        Mon, 25 Jan 2021 10:14:52 +0100 (CET)
-Subject: Re: [PATCH v10 11/12] mm/vmalloc: Hugepage vmalloc mappings
-To:     Nicholas Piggin <npiggin@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        id S1726032AbhAZFZP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 00:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727779AbhAYMKU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 07:10:20 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D78C0617AB;
+        Mon, 25 Jan 2021 03:37:16 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id q2so4661359plk.4;
+        Mon, 25 Jan 2021 03:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=lyJL5RmrtYo3SR2xmnLNbqSqvpRFTAglsJ8iapGc2cU=;
+        b=vcl7mmpM9cZo4dan8q3yYSJT0AyPGuHr3thpLqcrviOPOA41GAV3uo8D9VYuRQpTEp
+         NnWoNXgf7XiKyty0VOn5VbeqVuykZioqekTbXVF9PKingcpZ9ZPskR2CmcKT8oTmuwq/
+         T7qFyq/23apKBb45YIT2xz4SPpF9AB8Kb3QAjtbIe+yEEWKAQ/ST0g9B4M8UN6ZKWTad
+         As/BPdDcOaHyjYZWsaiMuOVWMDVK62za1SQeWu83BrFJQr3s2JJjNNU/VaFp8qR4nLhm
+         v5VdwwKX77foe4XldOYA1/2BzkKBNx8Kg36s6ydAN2/eKN6RPp/NsH2Ml6W6IQffgDCG
+         ZeAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=lyJL5RmrtYo3SR2xmnLNbqSqvpRFTAglsJ8iapGc2cU=;
+        b=aVfQ2uAAIHZtsUHYXwZf4a4iXRndstFr3HutkVIscj1OWjCCouMOkDRSNmJ++9UMXa
+         KPnHLMqh4XKUVryOND+Fu3nvuV7hGJY9qx6Bm9nyeCnYSB5869W5x4mmJWoCLuk+ojC/
+         FEVKd6GYBbBqkC4Q9nbCA9Z3vya0LF1cgRjW07GRRk0Pp/JUaooDcGq07jkrWNOGmzuV
+         MK586NvrSsYnoFPOpLt1DoI+Rz16piWHswBrp+fNY02aSKL1PsJC70YwQ/djVlZRT+s5
+         RjngEyYE+qZMAsqiaeuP/o0ru2B8GLfH1nt6zvCBbHjdCJnCisCGNle3rZ7uD2Y/A9cr
+         4xBQ==
+X-Gm-Message-State: AOAM533lXQ4PFvi07zLvdHu05euh+9vtYCQIvxaOmZOP3e0hHfF2sNzW
+        kC9AhzxyOm9ttGuSP4HHScs=
+X-Google-Smtp-Source: ABdhPJwQaEG7os5ttUkuIQn0Krrn6BcNJkyonQbGJcEmjaCMBQ8fY8SMo+YBjwAoUiTKyR2QsVZxLg==
+X-Received: by 2002:a17:902:59c1:b029:df:fd49:f08d with SMTP id d1-20020a17090259c1b02900dffd49f08dmr200075plj.76.1611574636100;
+        Mon, 25 Jan 2021 03:37:16 -0800 (PST)
+Received: from localhost (192.156.221.203.dial.dynamic.acc50-nort-cbr.comindico.com.au. [203.221.156.192])
+        by smtp.gmail.com with ESMTPSA id x125sm13108821pfd.17.2021.01.25.03.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jan 2021 03:37:14 -0800 (PST)
+Date:   Mon, 25 Jan 2021 21:37:08 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v10 06/12] powerpc: inline huge vmap supported functions
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-mm@kvack.org
+Cc:     Ding Tianhong <dingtianhong@huawei.com>,
         Christoph Hellwig <hch@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Zefan Li <lizefan@huawei.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
 References: <20210124082230.2118861-1-npiggin@gmail.com>
- <20210124082230.2118861-12-npiggin@gmail.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <933352bd-dcf3-c483-4d7a-07afe1116cf1@csgroup.eu>
-Date:   Mon, 25 Jan 2021 10:14:54 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        <20210124082230.2118861-7-npiggin@gmail.com>
+        <c03010a7-a358-0321-d5d4-80a770c2213f@csgroup.eu>
+In-Reply-To: <c03010a7-a358-0321-d5d4-80a770c2213f@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <20210124082230.2118861-12-npiggin@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Message-Id: <1611574452.y64320stks.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Excerpts from Christophe Leroy's message of January 25, 2021 6:42 pm:
+>=20
+>=20
+> Le 24/01/2021 =C3=A0 09:22, Nicholas Piggin a =C3=A9crit=C2=A0:
+>> This allows unsupported levels to be constant folded away, and so
+>> p4d_free_pud_page can be removed because it's no longer linked to.
+>=20
+> Ah, ok, you did it here. Why not squashing this patch into patch 5 direct=
+ly ?
 
+To reduce arch code movement in the first patch and split up these arch
+patches to get separate acks for them.
 
-Le 24/01/2021 à 09:22, Nicholas Piggin a écrit :
-> Support huge page vmalloc mappings. Config option HAVE_ARCH_HUGE_VMALLOC
-> enables support on architectures that define HAVE_ARCH_HUGE_VMAP and
-> supports PMD sized vmap mappings.
-> 
-> vmalloc will attempt to allocate PMD-sized pages if allocating PMD size
-> or larger, and fall back to small pages if that was unsuccessful.
-> 
-> Architectures must ensure that any arch specific vmalloc allocations
-> that require PAGE_SIZE mappings (e.g., module allocations vs strict
-> module rwx) use the VM_NOHUGE flag to inhibit larger mappings.
-> 
-> When hugepage vmalloc mappings are enabled in the next patch, this
-> reduces TLB misses by nearly 30x on a `git diff` workload on a 2-node
-> POWER9 (59,800 -> 2,100) and reduces CPU cycles by 0.54%.
-> 
-> This can result in more internal fragmentation and memory overhead for a
-> given allocation, an option nohugevmalloc is added to disable at boot.
-> 
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> ---
->   arch/Kconfig            |  10 +++
->   include/linux/vmalloc.h |  18 ++++
->   mm/page_alloc.c         |   5 +-
->   mm/vmalloc.c            | 192 ++++++++++++++++++++++++++++++----------
->   4 files changed, 177 insertions(+), 48 deletions(-)
-> 
+Maybe overkill for these changes but doesn't hurt I think.
 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 0377e1d059e5..eef61e0f5170 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-
-> @@ -2691,15 +2746,18 @@ EXPORT_SYMBOL_GPL(vmap_pfn);
->   #endif /* CONFIG_VMAP_PFN */
->   
->   static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
-> -				 pgprot_t prot, int node)
-> +				 pgprot_t prot, unsigned int page_shift,
-> +				 int node)
->   {
->   	const gfp_t nested_gfp = (gfp_mask & GFP_RECLAIM_MASK) | __GFP_ZERO;
-> -	unsigned int nr_pages = get_vm_area_size(area) >> PAGE_SHIFT;
-> -	unsigned long array_size;
-> -	unsigned int i;
-> +	unsigned int page_order = page_shift - PAGE_SHIFT;
-> +	unsigned long addr = (unsigned long)area->addr;
-> +	unsigned long size = get_vm_area_size(area);
-> +	unsigned int nr_small_pages = size >> PAGE_SHIFT;
->   	struct page **pages;
-> +	unsigned int i;
->   
-> -	array_size = (unsigned long)nr_pages * sizeof(struct page *);
-> +	array_size = (unsigned long)nr_small_pages * sizeof(struct page *);
-
-array_size() is a function in include/linux/overflow.h
-
-For some reason, it breaks the build with your series.
-
-
->   	gfp_mask |= __GFP_NOWARN;
->   	if (!(gfp_mask & (GFP_DMA | GFP_DMA32)))
->   		gfp_mask |= __GFP_HIGHMEM;
+Thanks,
+Nick
