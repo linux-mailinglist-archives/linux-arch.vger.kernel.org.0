@@ -2,148 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC36302DA8
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Jan 2021 22:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181FE302E6D
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Jan 2021 22:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732660AbhAYV2w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Jan 2021 16:28:52 -0500
-Received: from mga12.intel.com ([192.55.52.136]:40418 "EHLO mga12.intel.com"
+        id S1732828AbhAYVs4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Jan 2021 16:48:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732639AbhAYV2p (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Jan 2021 16:28:45 -0500
-IronPort-SDR: qQemToLgMMZ59OKFRg4BQvDBfckkexbBzBk4PpAiPH126Dz75Y5yMs9dDGYIjhq25IYiX8ftK7
- Dg3uPJDK+Kow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="158982823"
-X-IronPort-AV: E=Sophos;i="5.79,374,1602572400"; 
-   d="scan'208";a="158982823"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 13:27:54 -0800
-IronPort-SDR: Zpt6kh4eRCAa6nhreOyas/x36owT9wmvFrJuKFK1hHDfdutyCbNqyanAiEN4kb+/4ZGudwMisH
- PLl97Bf6SEEg==
-X-IronPort-AV: E=Sophos;i="5.79,374,1602572400"; 
-   d="scan'208";a="429441203"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.60.232]) ([10.212.60.232])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 13:27:52 -0800
-Subject: Re: [PATCH v17 11/26] x86/mm: Update ptep_set_wrprotect() and
- pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S1732834AbhAYVib (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 25 Jan 2021 16:38:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F8A2229C6;
+        Mon, 25 Jan 2021 21:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611610543;
+        bh=2Di0IbIXl1xn2Q918lq0pHS35BBSv9IAQLWTpnF3034=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cy17SSKvvNvxfTqzme3GulWvb12hmNhkF7DBhyy2a+M5IaoGf8exm+dMOhwdI3cnD
+         O9Y6le+GeozBAOlFWKkpEB+vZ71maF7XrODlor4nn34mqAaY2SmcJJTy1/7R4Vzp0U
+         bPshjl150D1+6AqGJJwRZluiwgpDdWOErZGjlhYbAQhuHLMYpqQxkt2okbl3QmaaEV
+         +AvTUTAKQGnim5uoCQhk9nL/vcRX66pRqMexDaS2sIjDuNGgW078c+2BX0w5Eu0hmE
+         oc6a5eiysTeaoVlQWOTzqTt5FOVdCY/F5kyVzE2NWYn7vW0p6El384BwmC/nQzLCGf
+         IjSwSAhpZJ+aA==
+Date:   Mon, 25 Jan 2021 23:35:26 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
- <20201229213053.16395-12-yu-cheng.yu@intel.com>
- <20210125182709.GC23290@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <8084836b-4990-90e8-5c9a-97a920f0239e@intel.com>
-Date:   Mon, 25 Jan 2021 13:27:51 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
+Message-ID: <20210125213526.GK6332@kernel.org>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-9-rppt@kernel.org>
+ <20210125161706.GE308988@casper.infradead.org>
+ <CALvZod7rn_5oXT6Z+iRCeMX_iMRO9G_8FnwSRGpJJwyBz5Wpnw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210125182709.GC23290@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7rn_5oXT6Z+iRCeMX_iMRO9G_8FnwSRGpJJwyBz5Wpnw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/25/2021 10:27 AM, Borislav Petkov wrote:
-> On Tue, Dec 29, 2020 at 01:30:38PM -0800, Yu-cheng Yu wrote:
+On Mon, Jan 25, 2021 at 09:18:04AM -0800, Shakeel Butt wrote:
+> On Mon, Jan 25, 2021 at 8:20 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Thu, Jan 21, 2021 at 02:27:20PM +0200, Mike Rapoport wrote:
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > >
+> > > Account memory consumed by secretmem to memcg. The accounting is updated
+> > > when the memory is actually allocated and freed.
 
-[...]
+I though about doing per-page accounting, but then one would be able to
+create a lot of secretmem file descriptors, use only a page from each while
+actual memory consumption will be way higher.
 
->> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
->> index 666c25ab9564..1c84f1ba32b9 100644
->> --- a/arch/x86/include/asm/pgtable.h
->> +++ b/arch/x86/include/asm/pgtable.h
->> @@ -1226,6 +1226,32 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->>   static inline void ptep_set_wrprotect(struct mm_struct *mm,
->>   				      unsigned long addr, pte_t *ptep)
->>   {
->> +	/*
->> +	 * Some processors can start a write, but end up seeing a read-only
->> +	 * PTE by the time they get to the Dirty bit.  In this case, they
->> +	 * will set the Dirty bit, leaving a read-only, Dirty PTE which
->> +	 * looks like a shadow stack PTE.
->> +	 *
->> +	 * However, this behavior has been improved
+> > I think this is wrong.  It fails to account subsequent allocators from
+> > the same PMD.  If you want to track like this, you need separate pools
+> > per memcg.
+> >
 > 
-> Improved how?
+> Are these secretmem pools shared between different jobs/memcgs?
 
-Processors supporting Shadow Stack will not set a read-only PTE's dirty 
-bit.  I will revise the comments.
+A secretmem pool is per anonymous file descriptor and this file descriptor
+can be shared only explicitly between several processes. So, the secretmem
+pool should not be shared between different jobs/memcg. Of course, it's
+possible to spread threads of a process across different memcgs, but in
+that case the accounting will be similar to what's happening today with
+sl*b. The first thread to cause kmalloc() will be charged for the
+allocation of the entire slab and subsequent allocations from that slab
+will not be accounted.
 
->> and will not occur on
->> +	 * processors supporting Shadow Stack.  Without this guarantee, a
-> 
-> Which guarantee? That it won't happen on CPUs which support SHSTK?
-> 
+That said, having a pool per memcg will add ton of complexity with very
+dubious value.
 
-Yes.
-
->> +	 * transition to a non-present PTE and flush the TLB would be
-> 
-> s/flush the TLB/TLB flush/
-> 
->> +	 * needed.
->> +	 *
->> +	 * When changing a writable PTE to read-only and if the PTE has
->> +	 * _PAGE_DIRTY set, move that bit to _PAGE_COW so that the PTE is
->> +	 * not a shadow stack PTE.
->> +	 */
-> 
-> This sentence doesn't belong here as it refers to what pte_wrprotect()
-> does. You could expand the comment in pte_wrprotect() with this here as
-> it is better.
-
-I will move this paragraph to pte_wrprotect().
-
-> 
->> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
->> +		pte_t old_pte, new_pte;
->> +
->> +		do {
->> +			old_pte = READ_ONCE(*ptep);
->> +			new_pte = pte_wrprotect(old_pte);
-> 
-> Maybe I'm missing something but those two can happen outside of the
-> loop, no? Or is *ptep somehow changing concurrently while the loop is
-> doing the CMPXCHG and you need to recreate it each time?
-> 
-> IOW, you can generate upfront and do the empty loop...
-
-*ptep can change concurrently.
-
-> 
->> +
->> +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
->> +
->> +		return;
->> +	}
->>   	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
->>   }
->>   
-
-[...]
+-- 
+Sincerely yours,
+Mike.
