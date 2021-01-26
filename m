@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C046304DCB
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 01:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A79A304DFB
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 01:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726124AbhAZXRG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 18:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S1730943AbhAZX3K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 18:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbhAZEqD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 23:46:03 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFFBC061573;
-        Mon, 25 Jan 2021 20:45:23 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id 11so9801035pfu.4;
-        Mon, 25 Jan 2021 20:45:23 -0800 (PST)
+        with ESMTP id S1727243AbhAZEqZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 23:46:25 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41027C0613D6;
+        Mon, 25 Jan 2021 20:45:39 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id s15so9130108plr.9;
+        Mon, 25 Jan 2021 20:45:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AFfFN2OAQ8TwttkY21sH9afv+ooH6c07LAgyNmn2ne8=;
-        b=SYAJDvZ64NU29shcQLyX9k6o8kTN0WBUv14l0TWsjcwt8g3sIOk5GSfxvOS92GwMXa
-         92FOajX3UORP5tkqQE8zpafN6H0PJy2u9A3rTMrcLw8LMjH7/+qNT+ap0yxO9khh7zAq
-         NIWoLk0pvSRhR3EmUFm26IVns/dfQAJVn0JkomMdxpVi6Oi0Bis/Z+KTFbG0Hv3iJvqZ
-         yDrOp9taoWmnsfzRZ+bFeBqsEAJz9pC91YSXuzzQ8rIrJHvDtrDcSdwlWV+T95BvQueB
-         WRwTdYuxABa/YgIi4hWkzme/RTHYzfOqkWro6yeCdVn8hefk8d9DcQ+qV2MdXbZqJ3q+
-         WM6w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5DEowptUwTfPDCMussMIbiVZhaeAlKFwS/BCdRa1CbQ=;
+        b=XJK7tG9SvtTGxWs3TOVQ6fHZwRaw5VyqizXAmj67yIEfyHNbc3e9UCyfIF8qPyusjA
+         rrC4odf7MiUP9VqOLP2v6acz5sT2GmevGHRV6OiP11IBbKReyvlt0KxzOEz9BkfACiLv
+         nTWhm93X0gCoNhFUHbYf7axau6wnKMI82qDpU8OMNlK3zxM7YZ4XAnBBuWEWqKmv1fMH
+         J7Ev+wzH5EuiNl17/i3hfjWd0OqOBOLn/TLm/xdsFYktFp6wfP2J1Qvd0/u7C3plfAdq
+         1hibv5GoG5/ajjgyjD9i0Q3inKGfesOBEL516Hoxs3sH0uZK9HoMF29D+5Vn7F6lIn8A
+         SOWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AFfFN2OAQ8TwttkY21sH9afv+ooH6c07LAgyNmn2ne8=;
-        b=r+edtqDel9l31JnCXqVZmLFn892/KA5pkUtTpR4jXTXqfOAmftDaGGPDN98otNBaa/
-         nJKSvAiKqhlXwZt/UkOoRKcJkCk7HvniyfdzRl/Vg/OnHTZYoDH7ycbd/G8kgilr4IqD
-         GBut3TvGjX2hWb7HsB6540S+d4p9igLUwW5JWaP3+6e8KHMWEt09UTj5t592/zQ6xEen
-         QRdw/yvr0c8bejoXsjs/WV37bdeNR41Pems05aCUtgNOGmMCoDmGJekLJi499tUbpmn5
-         a7q6FGaEk4P5WVMpioaRoU6ocUgThu649+nuXOTicm7g897+lzFoiMk/Uh/Jfth/bgnh
-         bDEQ==
-X-Gm-Message-State: AOAM531sI4mz2ns7NiRHj8pTIVli6+kGRWGL2mHRuRAOZXME6mskA8fw
-        Ac7lNW33RfMrOiOslh7uG7k=
-X-Google-Smtp-Source: ABdhPJw2TZnjjQ2toXtftBVanmOt8gohLfB95odGUonFep85R53b56tt4Y6Y/w91de6NlHaKOXitiw==
-X-Received: by 2002:a63:df09:: with SMTP id u9mr3890007pgg.187.1611636323069;
-        Mon, 25 Jan 2021 20:45:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5DEowptUwTfPDCMussMIbiVZhaeAlKFwS/BCdRa1CbQ=;
+        b=COZKBZ3ktMU7ovsGYqHKW1EtZbbUTpx54/JMJ+1NrexXd1i12ctmtVlsc4fOdjuUb4
+         HFIS+9d9OII0sBDCQZXqZKImoRKzMfW+ZMQSxHx8jp3j8wLG2ekpdSPuT1BCW5Y0a8xH
+         F2A6nU+fMNz3+53ICvU35r9yw8rhe66r8lhe7Linjox4pDtJJC8Bm5bkZOaeoUOFsIAu
+         6CeqzpahMuAZUQZ5wCkkkWxjXx9NnscsXX+l9I0vn8XaJ6FFQvujrDDWJjCtSe5u2J4M
+         gr0TKFpPF4Lm09jV7c7ar+4L5GsLqaaeg5qu16207UVnWOLOrIUoXvQm4WuVu0fAMoRV
+         7+qg==
+X-Gm-Message-State: AOAM533N3Wd1JzSeEAMrj3HiUBZZUo1Dn5cG1bxiW1foOZ9w5ELWuIOs
+        AyT2d0F03cLR36eb2+Quhl4=
+X-Google-Smtp-Source: ABdhPJyUK0q6PQk//45Rqh+tNd1BCuCVLTelVDJer0Preys832RKide+3fnd1LhVRvhDXW9RWBXjew==
+X-Received: by 2002:a17:90a:77ca:: with SMTP id e10mr4080733pjs.53.1611636338859;
+        Mon, 25 Jan 2021 20:45:38 -0800 (PST)
 Received: from bobo.ozlabs.ibm.com (192.156.221.203.dial.dynamic.acc50-nort-cbr.comindico.com.au. [203.221.156.192])
-        by smtp.gmail.com with ESMTPSA id 68sm19272293pfg.90.2021.01.25.20.45.18
+        by smtp.gmail.com with ESMTPSA id 68sm19272293pfg.90.2021.01.25.20.45.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 20:45:22 -0800 (PST)
+        Mon, 25 Jan 2021 20:45:38 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
@@ -55,105 +55,101 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
         Christoph Hellwig <hch@infradead.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>
-Subject: [PATCH v11 00/13] huge vmalloc mappings
-Date:   Tue, 26 Jan 2021 14:44:57 +1000
-Message-Id: <20210126044510.2491820-1-npiggin@gmail.com>
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v11 03/13] mm/vmalloc: rename vmap_*_range vmap_pages_*_range
+Date:   Tue, 26 Jan 2021 14:45:00 +1000
+Message-Id: <20210126044510.2491820-4-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20210126044510.2491820-1-npiggin@gmail.com>
+References: <20210126044510.2491820-1-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I think I ended up implementing all Christoph's comments because
-they turned out better in the end. Cleanups coming in another
-series though.
+The vmalloc mapper operates on a struct page * array rather than a
+linear physical address, re-name it to make this distinction clear.
 
-Thanks,
-Nick
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ mm/vmalloc.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Since v10:
-- Fixed code style, most > 80 colums, tweak patch titles, etc [thanks Christoph]
-- Made huge vmalloc code and data structure compile away if unselected
-  [Christoph]
-- Archs only have to provide arch_vmap_p?d_supported for levels they
-  implement [Christoph]
-
-Since v9:
-- Fixed intermediate build breakage on x86-32 !PAE [thanks Ding]
-- Fixed small page fallback case vm_struct double-free [thanks Ding]
-
-Since v8:
-- Fixed nommu compile.
-- Added Kconfig option help text
-- Added VM_NOHUGE which should help archs implement it [suggested by Rick]
-
-Since v7:
-- Rebase, added some acks, compile fix
-- Removed "order=" from vmallocinfo, it's a bit confusing (nr_pages
-  is in small page size for compatibility).
-- Added arch_vmap_pmd_supported() test before starting to allocate
-  the large page, rather than only testing it when doing the map, to
-  avoid unsupported configs trying to allocate huge pages for no
-  reason.
-
-Since v6:
-- Fixed a false positive warning introduced in patch 2, found by
-  kbuild test robot.
-
-Since v5:
-- Split arch changes out better and make the constant folding work
-- Avoid most of the 80 column wrap, fix a reference to lib/ioremap.c
-- Fix compile error on some archs
-
-Since v4:
-- Fixed an off-by-page-order bug in v4
-- Several minor cleanups.
-- Added page order to /proc/vmallocinfo
-- Added hugepage to alloc_large_system_hage output.
-- Made an architecture config option, powerpc only for now.
-
-Since v3:
-- Fixed an off-by-one bug in a loop
-- Fix !CONFIG_HAVE_ARCH_HUGE_VMAP build fail
-
-Nicholas Piggin (13):
-  mm/vmalloc: fix HUGE_VMAP regression by enabling huge pages in
-    vmalloc_to_page
-  mm: apply_to_pte_range warn and fail if a large pte is encountered
-  mm/vmalloc: rename vmap_*_range vmap_pages_*_range
-  mm/ioremap: rename ioremap_*_range to vmap_*_range
-  mm: HUGE_VMAP arch support cleanup
-  powerpc: inline huge vmap supported functions
-  arm64: inline huge vmap supported functions
-  x86: inline huge vmap supported functions
-  mm/vmalloc: provide fallback arch huge vmap support functions
-  mm: Move vmap_range from mm/ioremap.c to mm/vmalloc.c
-  mm/vmalloc: add vmap_range_noflush variant
-  mm/vmalloc: Hugepage vmalloc mappings
-  powerpc/64s/radix: Enable huge vmalloc mappings
-
- .../admin-guide/kernel-parameters.txt         |   2 +
- arch/Kconfig                                  |  11 +
- arch/arm64/include/asm/vmalloc.h              |  24 +
- arch/arm64/mm/mmu.c                           |  26 -
- arch/powerpc/Kconfig                          |   1 +
- arch/powerpc/include/asm/vmalloc.h            |  20 +
- arch/powerpc/kernel/module.c                  |  21 +-
- arch/powerpc/mm/book3s64/radix_pgtable.c      |  21 -
- arch/x86/include/asm/vmalloc.h                |  20 +
- arch/x86/mm/ioremap.c                         |  19 -
- arch/x86/mm/pgtable.c                         |  13 -
- include/linux/io.h                            |   9 -
- include/linux/vmalloc.h                       |  46 ++
- init/main.c                                   |   1 -
- mm/ioremap.c                                  | 225 +-------
- mm/memory.c                                   |  66 ++-
- mm/page_alloc.c                               |   5 +-
- mm/vmalloc.c                                  | 484 +++++++++++++++---
- 18 files changed, 614 insertions(+), 400 deletions(-)
-
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 62372f9e0167..7f2f36116980 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -189,7 +189,7 @@ void unmap_kernel_range_noflush(unsigned long start, unsigned long size)
+ 		arch_sync_kernel_mappings(start, end);
+ }
+ 
+-static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
++static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -217,7 +217,7 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
+ 	return 0;
+ }
+ 
+-static int vmap_pmd_range(pud_t *pud, unsigned long addr,
++static int vmap_pages_pmd_range(pud_t *pud, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -229,13 +229,13 @@ static int vmap_pmd_range(pud_t *pud, unsigned long addr,
+ 		return -ENOMEM;
+ 	do {
+ 		next = pmd_addr_end(addr, end);
+-		if (vmap_pte_range(pmd, addr, next, prot, pages, nr, mask))
++		if (vmap_pages_pte_range(pmd, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
+ 	} while (pmd++, addr = next, addr != end);
+ 	return 0;
+ }
+ 
+-static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
++static int vmap_pages_pud_range(p4d_t *p4d, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -247,13 +247,13 @@ static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
+ 		return -ENOMEM;
+ 	do {
+ 		next = pud_addr_end(addr, end);
+-		if (vmap_pmd_range(pud, addr, next, prot, pages, nr, mask))
++		if (vmap_pages_pmd_range(pud, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
+ 	} while (pud++, addr = next, addr != end);
+ 	return 0;
+ }
+ 
+-static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
++static int vmap_pages_p4d_range(pgd_t *pgd, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -265,7 +265,7 @@ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
+ 		return -ENOMEM;
+ 	do {
+ 		next = p4d_addr_end(addr, end);
+-		if (vmap_pud_range(p4d, addr, next, prot, pages, nr, mask))
++		if (vmap_pages_pud_range(p4d, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
+ 	} while (p4d++, addr = next, addr != end);
+ 	return 0;
+@@ -306,7 +306,7 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
+ 		next = pgd_addr_end(addr, end);
+ 		if (pgd_bad(*pgd))
+ 			mask |= PGTBL_PGD_MODIFIED;
+-		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
++		err = vmap_pages_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
+ 		if (err)
+ 			return err;
+ 	} while (pgd++, addr = next, addr != end);
 -- 
 2.23.0
 
