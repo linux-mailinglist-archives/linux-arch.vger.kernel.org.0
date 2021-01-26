@@ -2,105 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9327730419F
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 16:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27F6304216
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 16:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406132AbhAZPIP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 10:08:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34092 "EHLO mx2.suse.de"
+        id S2405245AbhAZPRw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 10:17:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406091AbhAZPGp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 26 Jan 2021 10:06:45 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611673558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CXc9QyfjbzYkr/9E7kWbWAYLlI4FbRmuEeT8rg+wTwU=;
-        b=RcjpwZyxbSnL27+xPbzI8DyQUePSR4WX2wnQ97UeZMl/oXbeJLspplWQnjrpGmeZ7f77M8
-        pp/AUp1dBACy/R4ZeJn8VoibDW4Ammk83FYCwymuY2mppYsbTam98rNT5itWkQIDggqXZG
-        gLCeXQM4w8C09vqYIx/Yft3mlmE8rVM=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E4094AF2F;
-        Tue, 26 Jan 2021 15:05:57 +0000 (UTC)
-Date:   Tue, 26 Jan 2021 16:05:55 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
-Message-ID: <20210126150555.GU827@dhcp22.suse.cz>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-9-rppt@kernel.org>
- <20210125165451.GT827@dhcp22.suse.cz>
- <20210125213817.GM6332@kernel.org>
- <20210126144838.GL308988@casper.infradead.org>
+        id S2406165AbhAZPRt (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 Jan 2021 10:17:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3452023125;
+        Tue, 26 Jan 2021 15:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611674229;
+        bh=jQUlNAmaG/JIlfb8wj1P0QU7PlzvHrMjBt0DjW3UBfQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Bse7wsbZ4WVfRFS7M6zYsvz61/gsg2IADS3AYZUKCyQl67/RBZHesYz30LfB5DwgG
+         U+P0lYcLi+mkaKFCcoYhq7wXMemGr2O+3NJuQnGEJqaOBpQr8pmqHAARSguolW8TW+
+         RrKLJp9zyMMphbZg2qtcugYXTmXp405TmGnMM6ZMB+z51Y/vFWx79NTXJBfFPFn9ak
+         ry+BSaAz4/K9SCfaoHYG07170FVnp4HvQ4tHvNjjtqkHip5psrx8gvAstS3PaQKbTO
+         6PsSQzQo0KwVpaggBh1Y3dQkfWeTNUTqPpjbKYVGV7xbAmtvMVphH9HgTeYSPYjXut
+         jKWqVZcxGodeg==
+Received: by mail-oi1-f180.google.com with SMTP id i25so7387178oie.10;
+        Tue, 26 Jan 2021 07:17:09 -0800 (PST)
+X-Gm-Message-State: AOAM5333uZIMqhBhlYMD0VfjFJx9OBG8Mv7Dan7L/zVPvS/81Apdq14r
+        R1LKVt1n18C2ZBErbDBAjGlb17slvpy1In2NA6U=
+X-Google-Smtp-Source: ABdhPJwzZ3sReWOgVZhRx5LVbv2/3ZapJ6LqBiJgyYUw2cSJE/Ic21/PhdWhJsnpxVhszTtG/IuY5pouzNYsdV0bduk=
+X-Received: by 2002:aca:eb0a:: with SMTP id j10mr121687oih.4.1611674228434;
+ Tue, 26 Jan 2021 07:17:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126144838.GL308988@casper.infradead.org>
+References: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1610729929-188490-1-git-send-email-john.garry@huawei.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 26 Jan 2021 16:16:51 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a38HsXrebiCdJXJdxdBvS7AUjs+rVEex-0JQ+ZsytTy8A@mail.gmail.com>
+Message-ID: <CAK8P3a38HsXrebiCdJXJdxdBvS7AUjs+rVEex-0JQ+ZsytTy8A@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/4] Fix arm64 crash for accessing unmapped IO port
+ regions (reboot)
+To:     John Garry <john.garry@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>, linuxarm@openeuler.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue 26-01-21 14:48:38, Matthew Wilcox wrote:
-> On Mon, Jan 25, 2021 at 11:38:17PM +0200, Mike Rapoport wrote:
-> > I cannot use __GFP_ACCOUNT because cma_alloc() does not use gfp.
-> > Besides, kmem accounting with __GFP_ACCOUNT does not seem
-> > to update stats and there was an explicit request for statistics:
-> >  
-> > https://lore.kernel.org/lkml/CALo0P13aq3GsONnZrksZNU9RtfhMsZXGWhK1n=xYJWQizCd4Zw@mail.gmail.com/
-> > 
-> > As for (ab)using NR_SLAB_UNRECLAIMABLE_B, as it was already discussed here:
-> > 
-> > https://lore.kernel.org/lkml/20201129172625.GD557259@kernel.org/
-> > 
-> > I think that a dedicated stats counter would be too much at the moment and
-> > NR_SLAB_UNRECLAIMABLE_B is the only explicit stat for unreclaimable memory.
-> 
-> That's not true -- Mlocked is also unreclaimable.  And doesn't this
-> feel more like mlocked memory than unreclaimable slab?  It's also
-> Unevictable, so could be counted there instead.
+On Fri, Jan 15, 2021 at 5:58 PM John Garry <john.garry@huawei.com> wrote:
+>
+> This is a reboot of my original series to address the problem of drivers
+> for legacy ISA devices accessing unmapped IO port regions on arm64 systems
+> and causing the system to crash.
+>
+> There was another recent report of such an issue [0], and some old ones
+> [1] and [2] for reference.
+>
+> The background is that many systems do not include PCI host controllers,
+> or they do and controller probe may have failed. For these cases, no IO
+> ports are mapped. However, loading drivers for legacy ISA devices can
+> crash the system as there is nothing to stop them accessing those IO
+> ports (which have not been io remap'ed).
+>
+> My original solution tried to keep the kernel alive in these situations by
+> rejecting logical PIO access to PCI IO regions until PCI IO port regions
+> have been mapped.
+>
+> This series goes one step further, by just reserving the complete legacy
+> IO port range in 0x0--0xffff for arm64. The motivation for doing this is
+> to make the request_region() calls for those drivers fail, like this:
+>
+> root@ubuntu:/home/john# insmod mk712.ko
+>  [ 3415.575800] mk712: unable to get IO region
+> insmod: ERROR: could not insert module mk712.ko: No such device
+>
+> Otherwise, in theory, those drivers could initiate rogue accesses to
+> mapped IO port regions for other devices and cause corruptions or
+> side-effects. Indeed, those drivers should not be allowed to access
+> IO ports at all in such a system.
+>
+> As a secondary defence, for broken drivers who do not call
+> request_region(), IO port accesses in range 0--0xffff will be ignored,
+> again preserving the system.
+>
+> I am sending as an RFC as I am not sure of any problem with reserving
+> first 0x10000 of IO space like this. There is reserve= commandline
+> argument, which does allow this already.
+>
+> For reference, here's how /proc/ioports looks on my arm64 system with
+> this change:
+>
+> root@ubuntu:/home/john# more /proc/ioports
+> 00010000-0001ffff : PCI Bus 0002:f8
+>   00010000-00010fff : PCI Bus 0002:f9
+>     00010000-00010007 : 0002:f9:00.0
+>       00010000-00010007 : serial
+>     00010008-0001000f : 0002:f9:00.1
+>       00010008-0001000f : serial
+>     00010010-00010017 : 0002:f9:00.2
+>     00010018-0001001f : 0002:f9:00.2
+> 00020000-0002ffff : PCI Bus 0004:88
+> 00030000-0003ffff : PCI Bus 0005:78
+> 00040000-0004ffff : PCI Bus 0006:c0
+> 00050000-0005ffff : PCI Bus 0007:90
+> 00060000-0006ffff : PCI Bus 000a:10
+> 00070000-0007ffff : PCI Bus 000c:20
+> 00080000-0008ffff : PCI Bus 000d:30
 
-yes, that is indeed true, except the unreclaimable counter is tracking
-the unevictable LRUs. These pages are not on any LRU and that can cause
-some confusion. Maybe they shouldn't be so special and they should live
-on unevistable LRU and get their stats automagically.
+Doesn't this mean we lose the ability to access PCI devices
+with legacy ISA compatibility? Most importantly, any GPU today
+should in theory still support VGA frame buffer mode or text
+console, but both of these stop working if the low I/O ports are
+not mapped to the corresponding PCI bus. There is of course
+already a problem if you have multiple PCI host bridges, and
+each one gets its own PIO range, which means that only one
+of them can have an ISA bridge with working PIO behind it.
 
-I definitely do agree that this would be a better fit than NR_SLAB
-abuse. But considering that this is somehow even more special than mlock
-then a dedicated counter sounds as even better fit.
--- 
-Michal Hocko
-SUSE Labs
+Another such case would be a BMC that has legacy ISA devices
+behind a (real or emulated) LPC bus, e.g. a 8250 UART, ps2
+keyboard, RTC, or an ATA CDROM. Not sure if any of those are
+ever used on Arm machines.
+
+Regarding the size of the reservation, does this actually need
+to cover the 0x0fff...0xffff range or just 0x0000...0x0fff? I don't
+think there are any drivers that hardcode I/O ports beyond 0x0fff
+because those would not work on ISA buses but require PCI
+assigned BARs.
+
+One more thought: There are two common ways in which PCI
+host bridges map their PIO ports: either each host bridge has
+its own 0x0...0xffff BAR range but gets remapped to an
+arbitrary range of port numbers in the kernel, or each host bridge
+uses a distinct range of port numbers, and the kernel can use
+a 1:1 mapping between hardware and software port numbers,
+i.e. the number in the BAR is the same as in the kernel.
+
+If all numbers are shifted by 0x10000, that second case no
+longer works, and there is always an offset.
+
+        Arnd
