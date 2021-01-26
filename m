@@ -2,113 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA22E3049A6
+	by mail.lfdr.de (Postfix) with ESMTP id 379483049A5
 	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 21:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731001AbhAZFZU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 00:25:20 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:54977 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728374AbhAYMtn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:49:43 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-82-6XwU-z6xP--r2gJKmt1_cg-1; Mon, 25 Jan 2021 12:23:59 +0000
-X-MC-Unique: 6XwU-z6xP--r2gJKmt1_cg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 25 Jan 2021 12:24:01 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 25 Jan 2021 12:24:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Zefan Li" <lizefan@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: RE: [PATCH v10 11/12] mm/vmalloc: Hugepage vmalloc mappings
-Thread-Topic: [PATCH v10 11/12] mm/vmalloc: Hugepage vmalloc mappings
-Thread-Index: AQHW8vrJGsfXJcLsV0a1KHeguqyGFao4Q6bA
-Date:   Mon, 25 Jan 2021 12:24:01 +0000
-Message-ID: <7749b310046c4b9baa07037af1d97d87@AcuMS.aculab.com>
-References: <20210124082230.2118861-1-npiggin@gmail.com>
- <20210124082230.2118861-12-npiggin@gmail.com>
- <933352bd-dcf3-c483-4d7a-07afe1116cf1@csgroup.eu>
-In-Reply-To: <933352bd-dcf3-c483-4d7a-07afe1116cf1@csgroup.eu>
-Accept-Language: en-GB, en-US
+        id S1732317AbhAZFZa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 00:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727707AbhAZBbc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 20:31:32 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20712.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::712])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDCAC061225;
+        Mon, 25 Jan 2021 16:51:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FzS+diy68QzL0F/aiNcG2SPrdE/+uRSNO9GA4W8sXDVYgHb78PEgvpmQ8ab6HxdnAjo9N9nTOQT/vvtnkob5peqrnv76h99KyJaWJavsOB+0dGEc9ovR6br/m7l1nU7tAyC8hnYWG9Q8/Qctat+AAmXhRjFAT76vyjIVyuSHcKl+2lLyft1up7M9tUxQgESCzfQBIyVQIZfQgkda66okm3FrRWEtQ0u9vcEElomD7AKz/XOIKGX9wD9GAf2hsXzCjYTbrWc+SAJUBEZurNM4uf6eR+iv5JAE9RQeR0kZVoBUGkgW0/uWqKLuKHQOei/zwi9m944iY2++g7i75Dai9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PGyEhyhpg6Xu7fwYnqUNzwS4fJprTOzBU9CnQeIGrjk=;
+ b=aGumx1SJbBwvpFPVX9N0KnmVHY+WqOt43VFnWWub6clO/pU5b9IoIiT7uKC895i4rH8wqCJhU71OsN0b6sTrfYvV5j1sq6MzkUooJxB/XP2NNTMQLIDrinq/yGTS326/DngJNQT+YTc0OCHnRCBv6oqvtZC6egSdobaMmHO2tEnFx7m0yn501AAaaibIZmy2oEHNiTWiD5nzu+pX8E7Lg6ZUU6iGQW+oI807fClOEdk3MmmWLkLpsdvCTwwdv0HnUVza4zbgE//uGjnlLGggE1qWCT8RePbN04cZKl2LB9bLuT514qxKTbG2Nt5rTm3714mIU1vYYHHzTiDJquyrSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PGyEhyhpg6Xu7fwYnqUNzwS4fJprTOzBU9CnQeIGrjk=;
+ b=Oeu3eUF8qV0wWl27aPbiceRvsLauW0ZpfHXlhOKtXchPnBlIPDAbkmyutEY26emyBK9rQst2CB5taexrxOmow1/xeMdudhZQwY3N27V1m+vQjZmg8eNP5jy2wCiosQsJ2525GxCXbZfwYbzjBxATdFfvXT6vACfEUPyMvBur3YI=
+Received: from (2603:10b6:301:7c::11) by
+ MWHPR21MB0862.namprd21.prod.outlook.com (2603:10b6:300:77::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3825.1; Tue, 26 Jan 2021 00:25:27 +0000
+Received: from MWHPR21MB1593.namprd21.prod.outlook.com
+ ([fe80::9c8:94c9:faf1:17c2]) by MWHPR21MB1593.namprd21.prod.outlook.com
+ ([fe80::9c8:94c9:faf1:17c2%9]) with mapi id 15.20.3825.003; Tue, 26 Jan 2021
+ 00:25:27 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>,
+        vkuznets <vkuznets@redhat.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v5 01/16] asm-generic/hyperv: change
+ HV_CPU_POWER_MANAGEMENT to HV_CPU_MANAGEMENT
+Thread-Topic: [PATCH v5 01/16] asm-generic/hyperv: change
+ HV_CPU_POWER_MANAGEMENT to HV_CPU_MANAGEMENT
+Thread-Index: AQHW7yPwfLyUlDpBGUOgcxvPWRvy2qo5FQEg
+Date:   Tue, 26 Jan 2021 00:25:27 +0000
+Message-ID: <MWHPR21MB15939F8E462F6148F1882335D7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
+References: <20210120120058.29138-1-wei.liu@kernel.org>
+ <20210120120058.29138-2-wei.liu@kernel.org>
+In-Reply-To: <20210120120058.29138-2-wei.liu@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-01-26T00:25:24Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=994d2267-3a17-40c7-b208-1675a73de679;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=microsoft.com;
+x-originating-ip: [66.75.126.197]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: ce052b7f-3d9b-427f-8b0d-08d8c190e186
+x-ms-traffictypediagnostic: MWHPR21MB0862:
+x-ms-exchange-transport-forked: True
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-microsoft-antispam-prvs: <MWHPR21MB0862FAB0F54C4FE98B228768D7BC9@MWHPR21MB0862.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:261;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Y1zBOk5Cch2Q0fgZ88pzHfv8FPZ2tRZFBwxk6z6rnDgUitmEcOuWD/ADIdpbhpTKsGXmo9UOrfIBaxDZBxqVBwc4VH3mhkQrCKKHPiZnbwV6p7QMHHQAL67SfkpuzRGj89G0+dFlZPKVOfXX47aFsL3POO62lFORuLJJX62jgDZxjMBi1JtDDgZI/SxcMsrw8kSlqhaD3eX0QdNHYowVJSlxCYebSq1cUm9JzQkp62QBTqjJeZDTvG7G0uVsLLIeuAPrTYcXqeoYcY9tuupwTm13qF0eGRGNxyREnI/AB4VN2ktHmulfbzItMwadQeiiO2uYAIcWr6gAQn7hicBQ79SzyxatNMkRayAxArGG+67NKkRhQZQAhqIeywveGzB6GDIfZ3bUiDvnUUbw1e6q2aHn3DOsFkZjFbxpsm/JuiwdlQ5BeSIEiz1CEY3XEAlPIeDJQ8UBKZvtWZRCj50WuxLl7mUc/fxK/IFDRVR4gy2qluoGAQ4VDBgYVgJs71N55rtctXGsWrtJNwnrNAwxjiuvk5Hno3CapbwI6GpOBMiCxqzINbEwcNqR5KyhfHXj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(83380400001)(7696005)(66556008)(76116006)(8936002)(9686003)(8676002)(66946007)(86362001)(66446008)(64756008)(82960400001)(82950400001)(66476007)(55016002)(8990500004)(10290500003)(33656002)(4744005)(71200400001)(5660300002)(316002)(478600001)(4326008)(26005)(6506007)(52536014)(2906002)(186003)(54906003)(110136005)(41533002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?5f99lt+LuFS+Jkw0yPMMIszX6VjbJS0iQfPs0PYVT/WjYzua5ewWNd1pNJFe?=
+ =?us-ascii?Q?ZVTxfQVwncQPRInu5aUF3EcYs3AllZl71TBPqHzCdc2O96Kj77AXOvvTN17r?=
+ =?us-ascii?Q?5zxS+MpOVp2ee+5SiJaicsXUCscwcLT5iTycWqA+Jn3X3fzF/I3hBr7T7NOz?=
+ =?us-ascii?Q?JL4p0EMgcSp4f/vwovJOAeY0EZlPrAuycHvODQRfEAyGf+GbuQ81WZdEn919?=
+ =?us-ascii?Q?yRjrZ1VEzvlh3Pj1zZX97KrqyOPKClkpOD0EIlYGnCdzav7Qk4esDAWGG4+S?=
+ =?us-ascii?Q?I1VCMsUEQD5XOU2ffbUzVbJ5kj9XWaN0GmzT9adqh+ZvS01oPdPXHfD91XEr?=
+ =?us-ascii?Q?k9vrF6BRJbxEuLcGfSdIx/Vju+0+6MLcuVEz7hCAsvsFrukx01LK9jcp+23i?=
+ =?us-ascii?Q?dIThhFmqBQoRyxVTeH+Qu9beU9QzG6TzKTOZ1BG2sTIobmZArTE+F8NR6Z2L?=
+ =?us-ascii?Q?N3QsqVjXU3OZSGCDKf7SgJxFVePIITrDTFLgCsbw29tLmMt4lad81X8vDJYQ?=
+ =?us-ascii?Q?J6yQp09TC+TX/4kwk6nHEkhOJyRBrIRN+/msoLo1HqVWe5DW7B7wTIwG11CL?=
+ =?us-ascii?Q?xjKnqgvC7u/cOGO9RsCeSPEQ/xRx0Sf7jyHVCgy7FVaP3Pfz7kTo9X7Rclv+?=
+ =?us-ascii?Q?EcLrRREOiYaQPkM0oyquVEsQFBNbwYBHjsP6gImF7Yly9c4M5yFzovgz+UUO?=
+ =?us-ascii?Q?i5PRciy8/ZnLHyAL00S6dsJ4Z07ivXWGZeBirecc+aG3aWlZ8bUPRS6uOfWF?=
+ =?us-ascii?Q?qcsdkn2nFNqLRU5QukuhBSThHXGr7Ox8f7zInxLul7xE3tbkhmH7rJ6zxO4h?=
+ =?us-ascii?Q?2jdDrpAlbjGhdatTKM0xZs1vkR0e5dGqAXAv4zUituuhelqXU72SIqKflJze?=
+ =?us-ascii?Q?HxY3Byo65I9BMnbHJ4P0m8uwCLBGT8fZ/48+871vFy7e7J/FiJx+68+OTDjL?=
+ =?us-ascii?Q?RaccZxskuYK/AHNss0WxqUsL+Cpprkj8HamgN8ocJFSSiGvfnyyHaSIm1fMX?=
+ =?us-ascii?Q?kikD3GplLCQV6y1ZXYY4AnJYNu2DjUXtKRTeQr6YWdZLojSttR6uNWCF6yP5?=
+ =?us-ascii?Q?spcddz0O?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce052b7f-3d9b-427f-8b0d-08d8c190e186
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2021 00:25:27.4008
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vSl2tSniivxX55E7qRdJLI3ZK/ZS81QkNkaIVS2fLVpUmPCBT0Bw/SpRsk+hC1ruyNF82Y4eKmwmQece30bscsX2KjQ1RNY/xOoaQ//9scU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0862
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQ2hyaXN0b3BoZSBMZXJveQ0KPiBTZW50OiAyNSBKYW51YXJ5IDIwMjEgMDk6MTUNCj4g
-DQo+IExlIDI0LzAxLzIwMjEgw6AgMDk6MjIsIE5pY2hvbGFzIFBpZ2dpbiBhIMOpY3JpdMKgOg0K
-PiA+IFN1cHBvcnQgaHVnZSBwYWdlIHZtYWxsb2MgbWFwcGluZ3MuIENvbmZpZyBvcHRpb24gSEFW
-RV9BUkNIX0hVR0VfVk1BTExPQw0KPiA+IGVuYWJsZXMgc3VwcG9ydCBvbiBhcmNoaXRlY3R1cmVz
-IHRoYXQgZGVmaW5lIEhBVkVfQVJDSF9IVUdFX1ZNQVAgYW5kDQo+ID4gc3VwcG9ydHMgUE1EIHNp
-emVkIHZtYXAgbWFwcGluZ3MuDQo+ID4NCj4gPiB2bWFsbG9jIHdpbGwgYXR0ZW1wdCB0byBhbGxv
-Y2F0ZSBQTUQtc2l6ZWQgcGFnZXMgaWYgYWxsb2NhdGluZyBQTUQgc2l6ZQ0KPiA+IG9yIGxhcmdl
-ciwgYW5kIGZhbGwgYmFjayB0byBzbWFsbCBwYWdlcyBpZiB0aGF0IHdhcyB1bnN1Y2Nlc3NmdWwu
-DQo+ID4NCj4gPiBBcmNoaXRlY3R1cmVzIG11c3QgZW5zdXJlIHRoYXQgYW55IGFyY2ggc3BlY2lm
-aWMgdm1hbGxvYyBhbGxvY2F0aW9ucw0KPiA+IHRoYXQgcmVxdWlyZSBQQUdFX1NJWkUgbWFwcGlu
-Z3MgKGUuZy4sIG1vZHVsZSBhbGxvY2F0aW9ucyB2cyBzdHJpY3QNCj4gPiBtb2R1bGUgcnd4KSB1
-c2UgdGhlIFZNX05PSFVHRSBmbGFnIHRvIGluaGliaXQgbGFyZ2VyIG1hcHBpbmdzLg0KPiA+DQo+
-ID4gV2hlbiBodWdlcGFnZSB2bWFsbG9jIG1hcHBpbmdzIGFyZSBlbmFibGVkIGluIHRoZSBuZXh0
-IHBhdGNoLCB0aGlzDQo+ID4gcmVkdWNlcyBUTEIgbWlzc2VzIGJ5IG5lYXJseSAzMHggb24gYSBg
-Z2l0IGRpZmZgIHdvcmtsb2FkIG9uIGEgMi1ub2RlDQo+ID4gUE9XRVI5ICg1OSw4MDAgLT4gMiwx
-MDApIGFuZCByZWR1Y2VzIENQVSBjeWNsZXMgYnkgMC41NCUuDQo+ID4NCj4gPiBUaGlzIGNhbiBy
-ZXN1bHQgaW4gbW9yZSBpbnRlcm5hbCBmcmFnbWVudGF0aW9uIGFuZCBtZW1vcnkgb3ZlcmhlYWQg
-Zm9yIGENCj4gPiBnaXZlbiBhbGxvY2F0aW9uLCBhbiBvcHRpb24gbm9odWdldm1hbGxvYyBpcyBh
-ZGRlZCB0byBkaXNhYmxlIGF0IGJvb3QuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBOaWNob2xh
-cyBQaWdnaW4gPG5waWdnaW5AZ21haWwuY29tPg0KPiA+IC0tLQ0KPiA+ICAgYXJjaC9LY29uZmln
-ICAgICAgICAgICAgfCAgMTAgKysrDQo+ID4gICBpbmNsdWRlL2xpbnV4L3ZtYWxsb2MuaCB8ICAx
-OCArKysrDQo+ID4gICBtbS9wYWdlX2FsbG9jLmMgICAgICAgICB8ICAgNSArLQ0KPiA+ICAgbW0v
-dm1hbGxvYy5jICAgICAgICAgICAgfCAxOTIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-LS0tLS0tLS0tLQ0KPiA+ICAgNCBmaWxlcyBjaGFuZ2VkLCAxNzcgaW5zZXJ0aW9ucygrKSwgNDgg
-ZGVsZXRpb25zKC0pDQo+ID4NCj4gDQo+ID4gZGlmZiAtLWdpdCBhL21tL3ZtYWxsb2MuYyBiL21t
-L3ZtYWxsb2MuYw0KPiA+IGluZGV4IDAzNzdlMWQwNTllNS4uZWVmNjFlMGY1MTcwIDEwMDY0NA0K
-PiA+IC0tLSBhL21tL3ZtYWxsb2MuYw0KPiA+ICsrKyBiL21tL3ZtYWxsb2MuYw0KPiANCj4gPiBA
-QCAtMjY5MSwxNSArMjc0NiwxOCBAQCBFWFBPUlRfU1lNQk9MX0dQTCh2bWFwX3Bmbik7DQo+ID4g
-ICAjZW5kaWYgLyogQ09ORklHX1ZNQVBfUEZOICovDQo+ID4NCj4gPiAgIHN0YXRpYyB2b2lkICpf
-X3ZtYWxsb2NfYXJlYV9ub2RlKHN0cnVjdCB2bV9zdHJ1Y3QgKmFyZWEsIGdmcF90IGdmcF9tYXNr
-LA0KPiA+IC0JCQkJIHBncHJvdF90IHByb3QsIGludCBub2RlKQ0KPiA+ICsJCQkJIHBncHJvdF90
-IHByb3QsIHVuc2lnbmVkIGludCBwYWdlX3NoaWZ0LA0KPiA+ICsJCQkJIGludCBub2RlKQ0KPiA+
-ICAgew0KPiA+ICAgCWNvbnN0IGdmcF90IG5lc3RlZF9nZnAgPSAoZ2ZwX21hc2sgJiBHRlBfUkVD
-TEFJTV9NQVNLKSB8IF9fR0ZQX1pFUk87DQo+ID4gLQl1bnNpZ25lZCBpbnQgbnJfcGFnZXMgPSBn
-ZXRfdm1fYXJlYV9zaXplKGFyZWEpID4+IFBBR0VfU0hJRlQ7DQo+ID4gLQl1bnNpZ25lZCBsb25n
-IGFycmF5X3NpemU7DQo+ID4gLQl1bnNpZ25lZCBpbnQgaTsNCj4gPiArCXVuc2lnbmVkIGludCBw
-YWdlX29yZGVyID0gcGFnZV9zaGlmdCAtIFBBR0VfU0hJRlQ7DQo+ID4gKwl1bnNpZ25lZCBsb25n
-IGFkZHIgPSAodW5zaWduZWQgbG9uZylhcmVhLT5hZGRyOw0KPiA+ICsJdW5zaWduZWQgbG9uZyBz
-aXplID0gZ2V0X3ZtX2FyZWFfc2l6ZShhcmVhKTsNCj4gPiArCXVuc2lnbmVkIGludCBucl9zbWFs
-bF9wYWdlcyA9IHNpemUgPj4gUEFHRV9TSElGVDsNCj4gPiAgIAlzdHJ1Y3QgcGFnZSAqKnBhZ2Vz
-Ow0KPiA+ICsJdW5zaWduZWQgaW50IGk7DQo+ID4NCj4gPiAtCWFycmF5X3NpemUgPSAodW5zaWdu
-ZWQgbG9uZylucl9wYWdlcyAqIHNpemVvZihzdHJ1Y3QgcGFnZSAqKTsNCj4gPiArCWFycmF5X3Np
-emUgPSAodW5zaWduZWQgbG9uZylucl9zbWFsbF9wYWdlcyAqIHNpemVvZihzdHJ1Y3QgcGFnZSAq
-KTsNCj4gDQo+IGFycmF5X3NpemUoKSBpcyBhIGZ1bmN0aW9uIGluIGluY2x1ZGUvbGludXgvb3Zl
-cmZsb3cuaA0KPiANCj4gRm9yIHNvbWUgcmVhc29uLCBpdCBicmVha3MgdGhlIGJ1aWxkIHdpdGgg
-eW91ciBzZXJpZXMuDQoNCkkgY2FuJ3Qgc2VlIHRoZSByZXBsYWNlbWVudCBkZWZpbml0aW9uIGZv
-ciBhcnJheV9zaXplLg0KVGhlIG9sZCBsb2NhbCB2YXJpYWJsZSBpcyBkZWxldGVkLg0KDQoJRGF2
-aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
-IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
-ODYgKFdhbGVzKQ0K
+From: Wei Liu <wei.liu@kernel.org> Sent: Wednesday, January 20, 2021 4:01 A=
+M
+>=20
+> This makes the name match Hyper-V TLFS.
+>=20
+> Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  include/asm-generic/hyperv-tlfs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
+rv-tlfs.h
+> index e73a11850055..e6903589a82a 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -88,7 +88,7 @@
+>  #define HV_CONNECT_PORT				BIT(7)
+>  #define HV_ACCESS_STATS				BIT(8)
+>  #define HV_DEBUGGING				BIT(11)
+> -#define HV_CPU_POWER_MANAGEMENT			BIT(12)
+> +#define HV_CPU_MANAGEMENT			BIT(12)
+>=20
+>=20
+>  /*
+> --
+> 2.20.1
+
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
