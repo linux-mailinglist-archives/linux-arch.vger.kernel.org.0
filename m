@@ -2,178 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0354F30395E
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 10:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AC630397B
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 10:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731161AbhAZJs1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 04:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391276AbhAZJsI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jan 2021 04:48:08 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9357CC06174A;
-        Tue, 26 Jan 2021 01:47:28 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id g15so11134669pgu.9;
-        Tue, 26 Jan 2021 01:47:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=SPAzPMHTUwMywoI0YQ3zzW5m1bqgTd/Dm/sAyJYiZoU=;
-        b=W2PrIvrIVmdbuaEdejTXL/7FLIJb/5mP1qpGdgnJtEEGw7NLZ+e/FI97ohHsWVDipd
-         5dF8C5mNdVkZUqB8JfAS7PVUERPWq0KWNurxULF9TUHwuvDN0DeZRbbdCL34p8Gvz4rL
-         lmYEI8nq984fQtKOef6ZAELQJyH11zFN8f4BrI4A2zhXFdY6nTsAOBxwfPyggbwFRezg
-         fqippu/BO5P96Mb8WjAFpfV2A8YAsRcRl8N4VBP7YTcQzZte9XHY+e/2unQxKMhd6eSy
-         UmIiqO7KXZL6uSq5C2Wr8+0OKovo+QEy7YhcRTzibFN1n3rz7n4oqURRM4erA2+Pfj+/
-         3vRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=SPAzPMHTUwMywoI0YQ3zzW5m1bqgTd/Dm/sAyJYiZoU=;
-        b=JyN2bTF+sm2Xr84SuTvJoEZbff4ya2QqFWyrbpx9lTUku2W2ZNGGKxGYjEAe4VAaLu
-         x3k2sXaaZRCzSErK54himzCcZXARTNZT9F7dExq0pzdijOMzcUaMweJJZQayYigOk82v
-         3nd4LJAwSEOe3fynxUxZZK32bBb6K/KTOZYo5aCUGXSEK3f2+UWhIX0ztxgkF/BCTcbL
-         Oav6Epsh50Ty6ZAg/sVEmLl4CH9B8KhW5VZdMfkPuWmT3De8VkgS1QkviVluNY/7moJF
-         FDZcWamuhzG83fTHNvKMl2yEmQBST5tc07SYjCMuwYeTlvfDG/esHMDhM0DGkA65Z4vk
-         pqZg==
-X-Gm-Message-State: AOAM530Q1JNy9CCaTdVjDBkPf+P9mGg+OrjNAry4yJv6jpGH7ffRMmAs
-        AeyVFcXXRBoUqyeIOXOSNWM=
-X-Google-Smtp-Source: ABdhPJw2MXPKRaA2kctx6FW3cVhePx8H93ZknPUe2RtbSEpjbwM/uc3AYcTkxnbnOic06K/F2HkFzQ==
-X-Received: by 2002:a62:54c3:0:b029:1bc:731c:dfc1 with SMTP id i186-20020a6254c30000b02901bc731cdfc1mr4627362pfb.20.1611654448148;
-        Tue, 26 Jan 2021 01:47:28 -0800 (PST)
-Received: from localhost (192.156.221.203.dial.dynamic.acc50-nort-cbr.comindico.com.au. [203.221.156.192])
-        by smtp.gmail.com with ESMTPSA id v21sm1095752pfn.80.2021.01.26.01.47.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 01:47:27 -0800 (PST)
-Date:   Tue, 26 Jan 2021 19:47:22 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v11 12/13] mm/vmalloc: Hugepage vmalloc mappings
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Ding Tianhong <dingtianhong@huawei.com>, linux-mm@kvack.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-References: <20210126044510.2491820-1-npiggin@gmail.com>
-        <20210126044510.2491820-13-npiggin@gmail.com>
-        <0f360e6e-6d34-19ce-6c76-a17a5f4f7fc3@huawei.com>
-In-Reply-To: <0f360e6e-6d34-19ce-6c76-a17a5f4f7fc3@huawei.com>
+        id S1727151AbhAZJuT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 04:50:19 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51674 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391617AbhAZJtv (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:49:51 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611654544; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=osw4L0DyfBtcvVTgNeZhtou4RLCF+glHhzfn0pNfjYg=;
+        b=umFtaF7Xp+88tywWv+IHw+GChi1pbTz5a0a/jUxktvgzyCsZINaZZCBo497bleXWAM+EaU
+        GR3gp9zDi+MvoS/Bfup9r+ocJQrD+2eLOJm6arv0yMnJpQ/n5l0mmiAHda+EzLGkIzOcSy
+        pFLJXF60F17xvk+8Oxor/2Ezl2/NIsE=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id D1727AC4F;
+        Tue, 26 Jan 2021 09:49:03 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 10:49:03 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 06/11] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <20210126094903.GI827@dhcp22.suse.cz>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-7-rppt@kernel.org>
+ <20210125170122.GU827@dhcp22.suse.cz>
+ <20210125213618.GL6332@kernel.org>
+ <20210126071614.GX827@dhcp22.suse.cz>
+ <20210126083311.GN6332@kernel.org>
+ <20210126090013.GF827@dhcp22.suse.cz>
+ <20210126092011.GP6332@kernel.org>
 MIME-Version: 1.0
-Message-Id: <1611653945.t3oot63nwn.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210126092011.GP6332@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Ding Tianhong's message of January 26, 2021 4:59 pm:
-> On 2021/1/26 12:45, Nicholas Piggin wrote:
->> Support huge page vmalloc mappings. Config option HAVE_ARCH_HUGE_VMALLOC
->> enables support on architectures that define HAVE_ARCH_HUGE_VMAP and
->> supports PMD sized vmap mappings.
->>=20
->> vmalloc will attempt to allocate PMD-sized pages if allocating PMD size
->> or larger, and fall back to small pages if that was unsuccessful.
->>=20
->> Architectures must ensure that any arch specific vmalloc allocations
->> that require PAGE_SIZE mappings (e.g., module allocations vs strict
->> module rwx) use the VM_NOHUGE flag to inhibit larger mappings.
->>=20
->> When hugepage vmalloc mappings are enabled in the next patch, this
->> reduces TLB misses by nearly 30x on a `git diff` workload on a 2-node
->> POWER9 (59,800 -> 2,100) and reduces CPU cycles by 0.54%.
->>=20
->> This can result in more internal fragmentation and memory overhead for a
->> given allocation, an option nohugevmalloc is added to disable at boot.
->>=20
->> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->> ---
->>  arch/Kconfig            |  11 ++
->>  include/linux/vmalloc.h |  21 ++++
->>  mm/page_alloc.c         |   5 +-
->>  mm/vmalloc.c            | 215 +++++++++++++++++++++++++++++++---------
->>  4 files changed, 205 insertions(+), 47 deletions(-)
->>=20
->> diff --git a/arch/Kconfig b/arch/Kconfig
->> index 24862d15f3a3..eef170e0c9b8 100644
->> --- a/arch/Kconfig
->> +++ b/arch/Kconfig
->> @@ -724,6 +724,17 @@ config HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
->>  config HAVE_ARCH_HUGE_VMAP
->>  	bool
->> =20
->> +#
->> +#  Archs that select this would be capable of PMD-sized vmaps (i.e.,
->> +#  arch_vmap_pmd_supported() returns true), and they must make no assum=
-ptions
->> +#  that vmalloc memory is mapped with PAGE_SIZE ptes. The VM_NO_HUGE_VM=
-AP flag
->> +#  can be used to prohibit arch-specific allocations from using hugepag=
-es to
->> +#  help with this (e.g., modules may require it).
->> +#
->> +config HAVE_ARCH_HUGE_VMALLOC
->> +	depends on HAVE_ARCH_HUGE_VMAP
->> +	bool
->> +
->>  config ARCH_WANT_HUGE_PMD_SHARE
->>  	bool
->> =20
->> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
->> index 99ea72d547dc..93270adf5db5 100644
->> --- a/include/linux/vmalloc.h
->> +++ b/include/linux/vmalloc.h
->> @@ -25,6 +25,7 @@ struct notifier_block;		/* in notifier.h */
->>  #define VM_NO_GUARD		0x00000040      /* don't add guard page */
->>  #define VM_KASAN		0x00000080      /* has allocated kasan shadow memory =
-*/
->>  #define VM_MAP_PUT_PAGES	0x00000100	/* put pages and free array in vfre=
-e */
->> +#define VM_NO_HUGE_VMAP		0x00000200	/* force PAGE_SIZE pte mapping */
->>=20
->>  /*
->>   * VM_KASAN is used slighly differently depending on CONFIG_KASAN_VMALL=
-OC.
->> @@ -59,6 +60,9 @@ struct vm_struct {
->>  	unsigned long		size;
->>  	unsigned long		flags;
->>  	struct page		**pages;
->> +#ifdef CONFIG_HAVE_ARCH_HUGE_VMALLOC
->> +	unsigned int		page_order;
->> +#endif
->>  	unsigned int		nr_pages;
->>  	phys_addr_t		phys_addr;
->>  	const void		*caller;
-> Hi Nicholas:
->=20
-> Give a suggestion :)
->=20
-> The page order was only used to indicate the huge page flag for vm area, =
-and only valid when
-> size bigger than PMD_SIZE, so can we use the vm flgas to instead of that,=
- just like define the
-> new flag named VM_HUGEPAGE, it would not break the vm struct, and it is e=
-asier for me to backport the serious
-> patches to our own branches. (Base on the lts version).
+On Tue 26-01-21 11:20:11, Mike Rapoport wrote:
+> On Tue, Jan 26, 2021 at 10:00:13AM +0100, Michal Hocko wrote:
+> > On Tue 26-01-21 10:33:11, Mike Rapoport wrote:
+> > > On Tue, Jan 26, 2021 at 08:16:14AM +0100, Michal Hocko wrote:
+> > > > On Mon 25-01-21 23:36:18, Mike Rapoport wrote:
+> > > > > On Mon, Jan 25, 2021 at 06:01:22PM +0100, Michal Hocko wrote:
+> > > > > > On Thu 21-01-21 14:27:18, Mike Rapoport wrote:
+> > > > > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > > > > > 
+> > > > > > > Introduce "memfd_secret" system call with the ability to create memory
+> > > > > > > areas visible only in the context of the owning process and not mapped not
+> > > > > > > only to other processes but in the kernel page tables as well.
+> > > > > > > 
+> > > > > > > The user will create a file descriptor using the memfd_secret() system
+> > > > > > > call. The memory areas created by mmap() calls from this file descriptor
+> > > > > > > will be unmapped from the kernel direct map and they will be only mapped in
+> > > > > > > the page table of the owning mm.
+> > > > > > > 
+> > > > > > > The secret memory remains accessible in the process context using uaccess
+> > > > > > > primitives, but it is not accessible using direct/linear map addresses.
+> > > > > > > 
+> > > > > > > Functions in the follow_page()/get_user_page() family will refuse to return
+> > > > > > > a page that belongs to the secret memory area.
+> > > > > > > 
+> > > > > > > A page that was a part of the secret memory area is cleared when it is
+> > > > > > > freed.
+> > > > > > > 
+> > > > > > > The following example demonstrates creation of a secret mapping (error
+> > > > > > > handling is omitted):
+> > > > > > > 
+> > > > > > > 	fd = memfd_secret(0);
+> > > > > > > 	ftruncate(fd, MAP_SIZE);
+> > > > > > > 	ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> > > > > > 
+> > > > > > I do not see any access control or permission model for this feature.
+> > > > > > Is this feature generally safe to anybody?
+> > > > > 
+> > > > > The mappings obey memlock limit. Besides, this feature should be enabled
+> > > > > explicitly at boot with the kernel parameter that says what is the maximal
+> > > > > memory size secretmem can consume.
+> > > > 
+> > > > Why is such a model sufficient and future proof? I mean even when it has
+> > > > to be enabled by an admin it is still all or nothing approach. Mlock
+> > > > limit is not really useful because it is per mm rather than per user.
+> > > > 
+> > > > Is there any reason why this is allowed for non-privileged processes?
+> > > > Maybe this has been discussed in the past but is there any reason why
+> > > > this cannot be done by a special device which will allow to provide at
+> > > > least some permission policy?
+> > >  
+> > > Why this should not be allowed for non-privileged processes? This behaves
+> > > similarly to mlocked memory, so I don't see a reason why secretmem should
+> > > have different permissions model.
+> > 
+> > Because appart from the reclaim aspect it fragments the direct mapping
+> > IIUC. That might have an impact on all others, right?
+> 
+> It does fragment the direct map, but first it only splits 1G pages to 2M
+> pages and as was discussed several times already it's not that clear which
+> page size in the direct map is the best and this is very much workload
+> dependent.
 
-Hmm, it might be possible. I'm not sure if 1GB vmallocs will be used any=20
-time soon (or maybe they will for edge case configurations? It would be=20
-trivial to add support for).
+I do appreciate this has been discussed but this changelog is not
+specific on any of that reasoning and I am pretty sure nobody will
+remember details in few years in the future. Also some numbers would be
+appropriate.
 
-The other concern I have is that Christophe IIRC was asking about=20
-implementing a mapping for PPC which used TLB mappings that were=20
-different than kernel page table tree size. Although I guess we could=20
-deal with that when it comes.
+> These are the results of the benchmarks I've run with the default direct
+> mapping covered with 1G pages, with disabled 1G pages using "nogbpages" in
+> the kernel command line and with the entire direct map forced to use 4K
+> pages using a simple patch to arch/x86/mm/init.c.
+> 
+> https://docs.google.com/spreadsheets/d/1tdD-cu8e93vnfGsTFxZ5YdaEfs2E1GELlvWNOGkJV2U/edit?usp=sharing
 
-I like the flexibility of page_order though. How hard would it be for=20
-you to do the backport with VM_HUGEPAGE yourself?
-
-I should also say, thanks for all the review and testing from the Huawei=20
-team. Do you have an x86 patch?
-
-Thanks,
-Nick
+A good start for the data I am asking above.
+-- 
+Michal Hocko
+SUSE Labs
