@@ -2,162 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE8D303C16
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 12:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4B0303C48
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Jan 2021 12:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405250AbhAZLu2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 06:50:28 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:11884 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405534AbhAZLti (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jan 2021 06:49:38 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DQ4jV433Mz7Wyh;
-        Tue, 26 Jan 2021 19:47:42 +0800 (CST)
-Received: from [10.174.177.80] (10.174.177.80) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 26 Jan 2021 19:48:46 +0800
-Subject: Re: [PATCH v11 12/13] mm/vmalloc: Hugepage vmalloc mappings
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-References: <20210126044510.2491820-1-npiggin@gmail.com>
- <20210126044510.2491820-13-npiggin@gmail.com>
- <0f360e6e-6d34-19ce-6c76-a17a5f4f7fc3@huawei.com>
- <1611653945.t3oot63nwn.astroid@bobo.none>
-From:   Ding Tianhong <dingtianhong@huawei.com>
-Message-ID: <a84836bb-d913-eb58-cd16-b268f479bd8b@huawei.com>
-Date:   Tue, 26 Jan 2021 19:48:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
+        id S2405307AbhAZL6n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 06:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405079AbhAZL5y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jan 2021 06:57:54 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7BAC06174A;
+        Tue, 26 Jan 2021 03:57:06 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id i9so2517477wmq.1;
+        Tue, 26 Jan 2021 03:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bC1xZCmdZ+IRgftlF79fVLCQMAhOapBGa0B/um1CcO8=;
+        b=NvLuiFaNEsDhP1ZT0XPyH0ZKdRAsqatHGT5unjbajWjdArRkVDJVOK62L8+MNYZaqW
+         ldu05rKhXRBtGlL4Az5POr82yGwm34tbWZ9UHGXmTB3bC6AzbbLIlqiZ4/L54/6+4fUX
+         IYC9WPWKNOyCffsVRWDF3A5tN8acJt6m1pTsS47ER1JX6kCgHeUHHIKyhoOR1XVSVMZc
+         siTtM4OBn+or7zkXn4pT2u+vMXAwsC7viaHq9bYco+ytZ5lCW9+fnLY7KZZPVZMDu75C
+         JY5jT3Xb+jfFmG6AsueC050KJxcZv63tj6ufNyjUkKrffTPpQM6i5iEJJvhh6M7nbEfu
+         yXtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bC1xZCmdZ+IRgftlF79fVLCQMAhOapBGa0B/um1CcO8=;
+        b=TUJM54xfwBIQXRQKqpULdZCZsfEfxk61604TBzdguf1OXR71bXHCHJD9hto5//zpMu
+         MEN1+F4JKqBTk38TPckrK+vsjpHHylI+J+upQdv4bc1Sd76KdhutkLBVzGGcFXs+K1Mq
+         BqBxBIR9M0i1IMsMXIx7kKLmAwy8kH6pdg7ndmn033DJ4lJaNpKMEyzPlNYDVpok9yCG
+         ZQXHBkhWDvBwmmLuUdne05RkcybWclIdQE5AKMzTFBvvrt9ookhwFCO5VC9j8xoJJ6U6
+         jQum9jXKB6VhpFps8kXtZ5XOj7mWyXe4ydg5ca+D0FaY5qS9CEF8rSPcn/UC0+BrQbVb
+         WbDQ==
+X-Gm-Message-State: AOAM533lReK9EzcVTH5CjYSYP4EgA+d5UJVHXt9ay+jgJbuBOfmdiI8r
+        aunldcwyJ0XHsGcOeaVJxRpwx2okq9Slo+dc
+X-Google-Smtp-Source: ABdhPJxAGmp/2Q5U5eZgPzQBNLYgAVOsmF0XfLf4kQKtFcTGrEYhjftqslWZDJ2Pry78yUQ6ZA5CXw==
+X-Received: by 2002:a1c:4984:: with SMTP id w126mr4262426wma.139.1611662224976;
+        Tue, 26 Jan 2021 03:57:04 -0800 (PST)
+Received: from anparri.mshome.net (host-95-238-70-33.retail.telecomitalia.it. [95.238.70.33])
+        by smtp.gmail.com with ESMTPSA id z185sm3330283wmb.0.2021.01.26.03.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jan 2021 03:57:04 -0800 (PST)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Saruhan Karademir <skarade@microsoft.com>,
+        Juan Vazquez <juvazq@microsoft.com>,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, x86@kernel.org,
+        linux-arch@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 0/4] Drivers: hv: vmbus: Restrict devices and configurations on 'isolated' guests
+Date:   Tue, 26 Jan 2021 12:56:37 +0100
+Message-Id: <20210126115641.2527-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1611653945.t3oot63nwn.astroid@bobo.none>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.80]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2021/1/26 17:47, Nicholas Piggin wrote:
-> Excerpts from Ding Tianhong's message of January 26, 2021 4:59 pm:
->> On 2021/1/26 12:45, Nicholas Piggin wrote:
->>> Support huge page vmalloc mappings. Config option HAVE_ARCH_HUGE_VMALLOC
->>> enables support on architectures that define HAVE_ARCH_HUGE_VMAP and
->>> supports PMD sized vmap mappings.
->>>
->>> vmalloc will attempt to allocate PMD-sized pages if allocating PMD size
->>> or larger, and fall back to small pages if that was unsuccessful.
->>>
->>> Architectures must ensure that any arch specific vmalloc allocations
->>> that require PAGE_SIZE mappings (e.g., module allocations vs strict
->>> module rwx) use the VM_NOHUGE flag to inhibit larger mappings.
->>>
->>> When hugepage vmalloc mappings are enabled in the next patch, this
->>> reduces TLB misses by nearly 30x on a `git diff` workload on a 2-node
->>> POWER9 (59,800 -> 2,100) and reduces CPU cycles by 0.54%.
->>>
->>> This can result in more internal fragmentation and memory overhead for a
->>> given allocation, an option nohugevmalloc is added to disable at boot.
->>>
->>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
->>> ---
->>>  arch/Kconfig            |  11 ++
->>>  include/linux/vmalloc.h |  21 ++++
->>>  mm/page_alloc.c         |   5 +-
->>>  mm/vmalloc.c            | 215 +++++++++++++++++++++++++++++++---------
->>>  4 files changed, 205 insertions(+), 47 deletions(-)
->>>
->>> diff --git a/arch/Kconfig b/arch/Kconfig
->>> index 24862d15f3a3..eef170e0c9b8 100644
->>> --- a/arch/Kconfig
->>> +++ b/arch/Kconfig
->>> @@ -724,6 +724,17 @@ config HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
->>>  config HAVE_ARCH_HUGE_VMAP
->>>  	bool
->>>  
->>> +#
->>> +#  Archs that select this would be capable of PMD-sized vmaps (i.e.,
->>> +#  arch_vmap_pmd_supported() returns true), and they must make no assumptions
->>> +#  that vmalloc memory is mapped with PAGE_SIZE ptes. The VM_NO_HUGE_VMAP flag
->>> +#  can be used to prohibit arch-specific allocations from using hugepages to
->>> +#  help with this (e.g., modules may require it).
->>> +#
->>> +config HAVE_ARCH_HUGE_VMALLOC
->>> +	depends on HAVE_ARCH_HUGE_VMAP
->>> +	bool
->>> +
->>>  config ARCH_WANT_HUGE_PMD_SHARE
->>>  	bool
->>>  
->>> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
->>> index 99ea72d547dc..93270adf5db5 100644
->>> --- a/include/linux/vmalloc.h
->>> +++ b/include/linux/vmalloc.h
->>> @@ -25,6 +25,7 @@ struct notifier_block;		/* in notifier.h */
->>>  #define VM_NO_GUARD		0x00000040      /* don't add guard page */
->>>  #define VM_KASAN		0x00000080      /* has allocated kasan shadow memory */
->>>  #define VM_MAP_PUT_PAGES	0x00000100	/* put pages and free array in vfree */
->>> +#define VM_NO_HUGE_VMAP		0x00000200	/* force PAGE_SIZE pte mapping */
->>>
->>>  /*
->>>   * VM_KASAN is used slighly differently depending on CONFIG_KASAN_VMALLOC.
->>> @@ -59,6 +60,9 @@ struct vm_struct {
->>>  	unsigned long		size;
->>>  	unsigned long		flags;
->>>  	struct page		**pages;
->>> +#ifdef CONFIG_HAVE_ARCH_HUGE_VMALLOC
->>> +	unsigned int		page_order;
->>> +#endif
->>>  	unsigned int		nr_pages;
->>>  	phys_addr_t		phys_addr;
->>>  	const void		*caller;
->> Hi Nicholas:
->>
->> Give a suggestion :)
->>
->> The page order was only used to indicate the huge page flag for vm area, and only valid when
->> size bigger than PMD_SIZE, so can we use the vm flgas to instead of that, just like define the
->> new flag named VM_HUGEPAGE, it would not break the vm struct, and it is easier for me to backport the serious
->> patches to our own branches. (Base on the lts version).
-> 
-> Hmm, it might be possible. I'm not sure if 1GB vmallocs will be used any 
-> time soon (or maybe they will for edge case configurations? It would be 
-> trivial to add support for).
-> 
+Changes since v1 [1]:
+  - improve/add logging (Haiyang Zhang)
+  - move NVSC version check after version negotiation (Haiyang Zhang)
 
-1GB vmallocs is really crazy, but maybe used for future. :)
+[1] https://lkml.kernel.org/r/20210119175841.22248-1-parri.andrea@gmail.com
 
-> The other concern I have is that Christophe IIRC was asking about 
-> implementing a mapping for PPC which used TLB mappings that were 
-> different than kernel page table tree size. Although I guess we could 
-> deal with that when it comes.
-> 
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: x86@kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: netdev@vger.kernel.org
 
-I didn't check the PPC platform, but a agree with you.
+Andrea Parri (Microsoft) (4):
+  x86/hyperv: Load/save the Isolation Configuration leaf
+  Drivers: hv: vmbus: Restrict vmbus_devices on isolated guests
+  Drivers: hv: vmbus: Enforce 'VMBus version >= 5.2' on isolated guests
+  hv_netvsc: Restrict configurations on isolated guests
 
-> I like the flexibility of page_order though. How hard would it be for 
-> you to do the backport with VM_HUGEPAGE yourself?
-> 
+ arch/x86/hyperv/hv_init.c          | 15 +++++++++++++
+ arch/x86/include/asm/hyperv-tlfs.h | 15 +++++++++++++
+ arch/x86/kernel/cpu/mshyperv.c     |  9 ++++++++
+ drivers/hv/channel_mgmt.c          | 36 ++++++++++++++++++++++++++++++
+ drivers/hv/connection.c            | 13 +++++++++++
+ drivers/net/hyperv/netvsc.c        | 27 +++++++++++++++++++---
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ include/asm-generic/mshyperv.h     |  5 +++++
+ include/linux/hyperv.h             |  1 +
+ 9 files changed, 119 insertions(+), 3 deletions(-)
 
-Yes, i can fix it with VM_HUGEPAGE for my own branch.
-
-> I should also say, thanks for all the review and testing from the Huawei 
-> team. Do you have an x86 patch?
-I only enable and use it for x86 and aarch64 platform, this serious patches is
-really help us a lot. Thanks.
-
-Ding
-
-> Thanks,
-> Nick
-> .
-> 
+-- 
+2.25.1
 
