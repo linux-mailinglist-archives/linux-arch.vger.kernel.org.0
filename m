@@ -2,140 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FA73054E1
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 08:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B27A63054E4
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 08:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S317194AbhAZXez (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 18:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728127AbhAZEtF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 23:49:05 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8277FC0617A9;
-        Mon, 25 Jan 2021 20:46:36 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id u4so1501142pjn.4;
-        Mon, 25 Jan 2021 20:46:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HXs4Cj6o6shYfoax70RVYzCwBDZMrsiR3W07FJlkL80=;
-        b=em2ETLc2fmMNWMdsL7a3G9C/i2KTlvjJT7ObdcOF6dTxLJN4UJJF3wzgBFleaf53AT
-         +brJms1nV0OiCanP6bfpsVN2ia/GEYy+ccuiWozVTDcWecdk0KIATFDQlZ39OQO0/Kca
-         scrYlMQV+lAJAIB9Nn2lK939PFP+YnSMedpEA9aA4px/tOJFiwoTWEbBbyOawAP26zXh
-         wc32fL8hdoqR6jPo3mfxcPbkjMa8tHoM9HdPHK8IlQugbRXoL2W3KKbknEvcp+iJvwfO
-         XWld+RkeESUtoiUNVhst5HZrkyn0mPS0nb0LkOGND9BXhUfYdRrxZ0+bPEJXqchqshYh
-         BCUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HXs4Cj6o6shYfoax70RVYzCwBDZMrsiR3W07FJlkL80=;
-        b=H3g3v1wTPMFiXu/qoqYgWHLLD1rm4O6OiTl5pvJ5QHbox8qZjAcXsTTdYtooUAcZ9U
-         OBhTjrxinb1pt9rQI+og6VY0KA3sThFmDrp33NahoMdjl77EjPPeilVU6j//x+AfOenr
-         Tc8hZkyIcKmLlTBhIN6zlsOPqnHE2geUNDZBXfA0nd8F0iYuNcmJ9TUTQXkb1TpwBu8t
-         4Q9QycoOCycJ9EtD+MNpiFuFzkpl5WwyFd7ei1BcSlZ4/8jl3xHs1YK9kEeRI20Mo12H
-         b8FRt6VdWKXQiBLJAlYGqH8Yp0GNbRB597IK2zXSdHdYIVPFGdMzjJFnkO6mBhkTPRY0
-         NUiQ==
-X-Gm-Message-State: AOAM530xq8BM8UOli0onGZBFwLRFSjctEVO+F7YvJW1LuTzsrceWqsJp
-        dpA8IP9DETk1jErE8Jq+lss=
-X-Google-Smtp-Source: ABdhPJx2FC7TaGsOZdYSD6/GYNfkxxHgUEWaT66Dp7jYgo96FrqrcmfF5Lm5CEJMTTzSqN0js60PAw==
-X-Received: by 2002:a17:90b:1b50:: with SMTP id nv16mr3816102pjb.153.1611636396072;
-        Mon, 25 Jan 2021 20:46:36 -0800 (PST)
-Received: from bobo.ozlabs.ibm.com (192.156.221.203.dial.dynamic.acc50-nort-cbr.comindico.com.au. [203.221.156.192])
-        by smtp.gmail.com with ESMTPSA id 68sm19272293pfg.90.2021.01.25.20.46.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 20:46:35 -0800 (PST)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>
-Subject: [PATCH v11 13/13] powerpc/64s/radix: Enable huge vmalloc mappings
-Date:   Tue, 26 Jan 2021 14:45:10 +1000
-Message-Id: <20210126044510.2491820-14-npiggin@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20210126044510.2491820-1-npiggin@gmail.com>
-References: <20210126044510.2491820-1-npiggin@gmail.com>
+        id S317186AbhAZXgg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 18:36:36 -0500
+Received: from mga18.intel.com ([134.134.136.126]:20783 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389898AbhAZRHf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 26 Jan 2021 12:07:35 -0500
+IronPort-SDR: 9wuXSXAJ/fTnUCYvNVky7DM26HdRJlCUxFyLAx1+wFQwT0Ner8vwQY5NSzxsCcgR6uhcBZabko
+ BSkpd4Ytrd7g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9876"; a="167603534"
+X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
+   d="scan'208";a="167603534"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 08:43:54 -0800
+IronPort-SDR: eGwpQ92J/sX81sqArYH6+QIHP+J0S4EMZTaaYIKsSJxcLe0QKMCKSSF3yj0bW41zDIEqCl3g42
+ x8Jj9aQHSdrg==
+X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
+   d="scan'208";a="504585840"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.153.84]) ([10.212.153.84])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 08:43:51 -0800
+Subject: Re: [PATCH v17 11/26] x86/mm: Update ptep_set_wrprotect() and
+ pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20201229213053.16395-1-yu-cheng.yu@intel.com>
+ <20201229213053.16395-12-yu-cheng.yu@intel.com>
+ <20210125182709.GC23290@zn.tnic>
+ <YA/W63sob0keoD+i@hirez.programming.kicks-ass.net>
+ <YA/jlOuNpcPPNHA1@hirez.programming.kicks-ass.net>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <2f69ab09-57e8-6da0-07ab-5b885758fc27@intel.com>
+Date:   Tue, 26 Jan 2021 08:43:51 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YA/jlOuNpcPPNHA1@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Cc: linuxppc-dev@lists.ozlabs.org
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- .../admin-guide/kernel-parameters.txt         |  2 ++
- arch/powerpc/Kconfig                          |  1 +
- arch/powerpc/kernel/module.c                  | 21 +++++++++++++++----
- 3 files changed, 20 insertions(+), 4 deletions(-)
+On 1/26/2021 1:40 AM, Peter Zijlstra wrote:
+> On Tue, Jan 26, 2021 at 09:46:36AM +0100, Peter Zijlstra wrote:
+>> On Mon, Jan 25, 2021 at 07:27:09PM +0100, Borislav Petkov wrote:
+>>
+>>>> +		pte_t old_pte, new_pte;
+>>>> +
+>>>> +		do {
+>>>> +			old_pte = READ_ONCE(*ptep);
+>>>> +			new_pte = pte_wrprotect(old_pte);
+>>>
+>>> Maybe I'm missing something but those two can happen outside of the
+>>> loop, no? Or is *ptep somehow changing concurrently while the loop is
+>>> doing the CMPXCHG and you need to recreate it each time?
+>>>
+>>> IOW, you can generate upfront and do the empty loop...
+>>>
+>>>> +
+>>>> +		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+>>>> +
+>>>> +		return;
+>>>> +	}
+>>
+>> Empty loop would be wrong, but that wants to be written like:
+>>
+>> 	old_pte = READ_ONCE(*ptep);
+>> 	do {
+>> 		new_pte = pte_wrprotect(old_pte);
+>> 	} while (try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+> 
+> ! went missing, too early, moar wake-up juice.
+> 
+>> Since try_cmpxchg() will update old_pte on failure.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a10b545c2070..d62df53e5200 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3225,6 +3225,8 @@
- 
- 	nohugeiomap	[KNL,X86,PPC,ARM64] Disable kernel huge I/O mappings.
- 
-+	nohugevmalloc	[PPC] Disable kernel huge vmalloc mappings.
-+
- 	nosmt		[KNL,S390] Disable symmetric multithreading (SMT).
- 			Equivalent to smt=1.
- 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 107bb4319e0e..781da6829ab7 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -181,6 +181,7 @@ config PPC
- 	select GENERIC_GETTIMEOFDAY
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HUGE_VMAP		if PPC_BOOK3S_64 && PPC_RADIX_MMU
-+	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <= 14
- 	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <= 14
-diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
-index a211b0253cdb..07026335d24d 100644
---- a/arch/powerpc/kernel/module.c
-+++ b/arch/powerpc/kernel/module.c
-@@ -87,13 +87,26 @@ int module_finalize(const Elf_Ehdr *hdr,
- 	return 0;
- }
- 
--#ifdef MODULES_VADDR
- void *module_alloc(unsigned long size)
- {
-+	unsigned long start = VMALLOC_START;
-+	unsigned long end = VMALLOC_END;
-+
-+#ifdef MODULES_VADDR
- 	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
-+	start = MODULES_VADDR;
-+	end = MODULES_END;
-+#endif
-+
-+	/*
-+	 * Don't do huge page allocations for modules yet until more testing
-+	 * is done. STRICT_MODULE_RWX may require extra work to support this
-+	 * too.
-+	 */
- 
--	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END, GFP_KERNEL,
--				    PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-+	return __vmalloc_node_range(size, 1, start, end, GFP_KERNEL,
-+				    PAGE_KERNEL_EXEC,
-+				    VM_NO_HUGE_VMAP | VM_FLUSH_RESET_PERMS,
-+				    NUMA_NO_NODE,
- 				    __builtin_return_address(0));
- }
--#endif
--- 
-2.23.0
+Thanks Peter!  I will fix that.
 
+--
+Yu-cheng
