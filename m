@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CD4304DFA
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 01:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49158304DFD
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 01:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbhAZX25 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jan 2021 18:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
+        id S1730964AbhAZXaV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jan 2021 18:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727280AbhAZEqZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 23:46:25 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A790C06174A;
-        Mon, 25 Jan 2021 20:45:44 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id a20so1321727pjs.1;
-        Mon, 25 Jan 2021 20:45:44 -0800 (PST)
+        with ESMTP id S1727479AbhAZErB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jan 2021 23:47:01 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2125C061788;
+        Mon, 25 Jan 2021 20:46:04 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id a20so1322091pjs.1;
+        Mon, 25 Jan 2021 20:46:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0Y/hT12bvV3dyctfA7PHWDL72BJBoDG5OIVFWS0o/KA=;
-        b=cKfs+3iZcUsEU2DJRzyNBGyKPqwf9qmJ5SmfGJD0poztI9hR7KwTdYJlt8HbcBXHi3
-         JrFtvJmSjQtzQTm6PpAyHKq+GLny7A3D2liCW4Lw65rKi+isC4FwSHgFYyyfY8kH4m8h
-         bMcgBJV1jOftAOJC7TpwQDRPAl4tVtyKFrgeLOJPbqM+oCSyyT/1ty5TCxdX2BLSBZiv
-         irAU8MDCAbZyCleVI4XiFFCp9OobTQn5dDXJzAdkagrRxSLpTYiH4Ld8qQl1lT1/ecDZ
-         qUXjLxafdZIDnttJqYpI2G0JIjpsNeAz5OTLe/FlcA2yMd4l5RDIBRUTyWNdGyBZbI+R
-         clJA==
+        bh=0fqvAYwIAe6qA/JSpZVbQ06eMe+7hHIC7Sc9a7+Vq/o=;
+        b=D/0cuUms54veLQjAd1d9Hms4mts+lxzMvE2kXzGZEeIC6xz6SppZbx/rBu2+p845yY
+         9FLqDySl+pjX5oKzGKJGDjrv2uBx5KdPcaCn3CpHJggkGOa1ygNRlvzlxYp1NDqqcF3t
+         8Vg500s8AYGewz4J7z34Kzbhun7Lxk7a9vqpI2XgSk5GEvU28RY/Cu0DHq5XCiLFFE75
+         p1bAbTuHmjgTISiDFgzdZgFFnVG1s2NGcLkwYLfX6YP+P5akxvuOPNN/3MQrg3F57nwh
+         hmvDscoK7jL/bcNdCsQ7eHn+oS41TnZbK2PkYDUsx9C3xXtnIrrmZSNAwrzEt4gEJ4Gg
+         0OcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0Y/hT12bvV3dyctfA7PHWDL72BJBoDG5OIVFWS0o/KA=;
-        b=ub5LOwBapT1zFs7WUrtPNdjwx/p3ux1AeVhtWrEnjrztdlGYC6JSdxZk/g6vROgqMy
-         GdKW9Fvxj0TJmny4IXAB9Wglfjbf1zNuo/uJtUZIF1OKNwILwTHpSbLdN99tvSv/NnCE
-         Y6hGPepc/bUaEEsXyTF3D39EeKGFYMK684uZLdnccT6fxy0ZW1PanhLlqr/6LymNlJen
-         Shh5u++bQxvB6OBqXgrHlcGRJGRzkx0VqgUJRPJVmqRnHMdLlI4LsuQHR1nR1fSe6cRN
-         JCWDrFHndKpgOfGhHdLWDMwBHqRel4nfrn5K2+3f2HtGbANPADp5trttATemVxywfMFo
-         sRQA==
-X-Gm-Message-State: AOAM530zKEwUbk7UJzDOT0vq8ux92txWXsxjUb5n3L2qzGxjOUH/BGTV
-        RpV4MdpRSfS/CKonZMUca14=
-X-Google-Smtp-Source: ABdhPJzWCtpCTxRVXcLihUG4/EnMzUSezB5CJ22QIPhCOTLmuqZW9tJHTp//ahZE8S8sRw3zaN1p6g==
-X-Received: by 2002:a17:90a:8597:: with SMTP id m23mr3895796pjn.85.1611636344185;
-        Mon, 25 Jan 2021 20:45:44 -0800 (PST)
+        bh=0fqvAYwIAe6qA/JSpZVbQ06eMe+7hHIC7Sc9a7+Vq/o=;
+        b=s2ekZgpUbA5HMqMj0QYmQnFY/9yFI3ZSwKpOpS5O5lKiHciTARTl4kWZOPol2M/KNH
+         uO9IPioorw/Wgc0yl+e7kvMdahMleUEcT3DQlOb0kuZM2Dz59z4fseWBUZugot4ltDm5
+         LZnsJCVyDtAh/Cjb309EyeoPOY3aqHrLHX7PPhcUEHAi+V/RJSXmnOSUbhU6dj2zqsXD
+         voqCLmjt3CbJC1dgru2GXFN7/Y9Gme1DPvGAarnQvrorDEhdt/Tq9N6VFvqjp/PtnBrs
+         dCfMnZsuvwhArENaDgMVNkenmPDpMp8Wq4aspW5O4p6yDNLNuAe+a10SdFUqManWssuR
+         j9ig==
+X-Gm-Message-State: AOAM531acOLa3aMduJKwU6S0gPyU4iu3XftLM6Y6Wlz5WiqzJK+maf7B
+        2TCyqTvZFnV1YImBOaiUaTY=
+X-Google-Smtp-Source: ABdhPJwg8Xi8G/OTFk2zVMLMCDy4bSObItXkLBAX9N36BVkCzQob7CnN0W1NVUckPWV6/HJRJrxV5A==
+X-Received: by 2002:a17:902:26a:b029:da:af47:77c7 with SMTP id 97-20020a170902026ab02900daaf4777c7mr4079082plc.10.1611636363126;
+        Mon, 25 Jan 2021 20:46:03 -0800 (PST)
 Received: from bobo.ozlabs.ibm.com (192.156.221.203.dial.dynamic.acc50-nort-cbr.comindico.com.au. [203.221.156.192])
-        by smtp.gmail.com with ESMTPSA id 68sm19272293pfg.90.2021.01.25.20.45.39
+        by smtp.gmail.com with ESMTPSA id 68sm19272293pfg.90.2021.01.25.20.45.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 20:45:43 -0800 (PST)
+        Mon, 25 Jan 2021 20:46:02 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
@@ -55,10 +55,13 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
         Christoph Hellwig <hch@infradead.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>
-Subject: [PATCH v11 04/13] mm/ioremap: rename ioremap_*_range to vmap_*_range
-Date:   Tue, 26 Jan 2021 14:45:01 +1000
-Message-Id: <20210126044510.2491820-5-npiggin@gmail.com>
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v11 07/13] arm64: inline huge vmap supported functions
+Date:   Tue, 26 Jan 2021 14:45:04 +1000
+Message-Id: <20210126044510.2491820-8-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20210126044510.2491820-1-npiggin@gmail.com>
 References: <20210126044510.2491820-1-npiggin@gmail.com>
@@ -68,178 +71,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This will be used as a generic kernel virtual mapping function, so
-re-name it in preparation.
+This allows unsupported levels to be constant folded away, and so
+p4d_free_pud_page can be removed because it's no longer linked to.
 
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- mm/ioremap.c | 64 +++++++++++++++++++++++++++-------------------------
- 1 file changed, 33 insertions(+), 31 deletions(-)
+ arch/arm64/include/asm/vmalloc.h | 23 ++++++++++++++++++++---
+ arch/arm64/mm/mmu.c              | 26 --------------------------
+ 2 files changed, 20 insertions(+), 29 deletions(-)
 
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index 5fa1ab41d152..3f4d36f9745a 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -61,9 +61,9 @@ static inline int ioremap_pud_enabled(void) { return 0; }
- static inline int ioremap_pmd_enabled(void) { return 0; }
- #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
+diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/vmalloc.h
+index 597b40405319..fc9a12d6cc1a 100644
+--- a/arch/arm64/include/asm/vmalloc.h
++++ b/arch/arm64/include/asm/vmalloc.h
+@@ -4,9 +4,26 @@
+ #include <asm/page.h>
  
--static int ioremap_pte_range(pmd_t *pmd, unsigned long addr,
--		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
--		pgtbl_mod_mask *mask)
-+static int vmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot,
-+			pgtbl_mod_mask *mask)
- {
- 	pte_t *pte;
- 	u64 pfn;
-@@ -81,9 +81,8 @@ static int ioremap_pte_range(pmd_t *pmd, unsigned long addr,
- 	return 0;
- }
- 
--static int ioremap_try_huge_pmd(pmd_t *pmd, unsigned long addr,
--				unsigned long end, phys_addr_t phys_addr,
--				pgprot_t prot)
-+static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot)
- {
- 	if (!ioremap_pmd_enabled())
- 		return 0;
-@@ -103,9 +102,9 @@ static int ioremap_try_huge_pmd(pmd_t *pmd, unsigned long addr,
- 	return pmd_set_huge(pmd, phys_addr, prot);
- }
- 
--static inline int ioremap_pmd_range(pud_t *pud, unsigned long addr,
--		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
--		pgtbl_mod_mask *mask)
-+static int vmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot,
-+			pgtbl_mod_mask *mask)
- {
- 	pmd_t *pmd;
- 	unsigned long next;
-@@ -116,20 +115,19 @@ static inline int ioremap_pmd_range(pud_t *pud, unsigned long addr,
- 	do {
- 		next = pmd_addr_end(addr, end);
- 
--		if (ioremap_try_huge_pmd(pmd, addr, next, phys_addr, prot)) {
-+		if (vmap_try_huge_pmd(pmd, addr, next, phys_addr, prot)) {
- 			*mask |= PGTBL_PMD_MODIFIED;
- 			continue;
- 		}
- 
--		if (ioremap_pte_range(pmd, addr, next, phys_addr, prot, mask))
-+		if (vmap_pte_range(pmd, addr, next, phys_addr, prot, mask))
- 			return -ENOMEM;
- 	} while (pmd++, phys_addr += (next - addr), addr = next, addr != end);
- 	return 0;
- }
- 
--static int ioremap_try_huge_pud(pud_t *pud, unsigned long addr,
--				unsigned long end, phys_addr_t phys_addr,
--				pgprot_t prot)
-+static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot)
- {
- 	if (!ioremap_pud_enabled())
- 		return 0;
-@@ -149,9 +147,9 @@ static int ioremap_try_huge_pud(pud_t *pud, unsigned long addr,
- 	return pud_set_huge(pud, phys_addr, prot);
- }
- 
--static inline int ioremap_pud_range(p4d_t *p4d, unsigned long addr,
--		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
--		pgtbl_mod_mask *mask)
-+static int vmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot,
-+			pgtbl_mod_mask *mask)
- {
- 	pud_t *pud;
- 	unsigned long next;
-@@ -162,20 +160,19 @@ static inline int ioremap_pud_range(p4d_t *p4d, unsigned long addr,
- 	do {
- 		next = pud_addr_end(addr, end);
- 
--		if (ioremap_try_huge_pud(pud, addr, next, phys_addr, prot)) {
-+		if (vmap_try_huge_pud(pud, addr, next, phys_addr, prot)) {
- 			*mask |= PGTBL_PUD_MODIFIED;
- 			continue;
- 		}
- 
--		if (ioremap_pmd_range(pud, addr, next, phys_addr, prot, mask))
-+		if (vmap_pmd_range(pud, addr, next, phys_addr, prot, mask))
- 			return -ENOMEM;
- 	} while (pud++, phys_addr += (next - addr), addr = next, addr != end);
- 	return 0;
- }
- 
--static int ioremap_try_huge_p4d(p4d_t *p4d, unsigned long addr,
--				unsigned long end, phys_addr_t phys_addr,
--				pgprot_t prot)
-+static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot)
- {
- 	if (!ioremap_p4d_enabled())
- 		return 0;
-@@ -195,9 +192,9 @@ static int ioremap_try_huge_p4d(p4d_t *p4d, unsigned long addr,
- 	return p4d_set_huge(p4d, phys_addr, prot);
- }
- 
--static inline int ioremap_p4d_range(pgd_t *pgd, unsigned long addr,
--		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
--		pgtbl_mod_mask *mask)
-+static int vmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot,
-+			pgtbl_mod_mask *mask)
- {
- 	p4d_t *p4d;
- 	unsigned long next;
-@@ -208,19 +205,19 @@ static inline int ioremap_p4d_range(pgd_t *pgd, unsigned long addr,
- 	do {
- 		next = p4d_addr_end(addr, end);
- 
--		if (ioremap_try_huge_p4d(p4d, addr, next, phys_addr, prot)) {
-+		if (vmap_try_huge_p4d(p4d, addr, next, phys_addr, prot)) {
- 			*mask |= PGTBL_P4D_MODIFIED;
- 			continue;
- 		}
- 
--		if (ioremap_pud_range(p4d, addr, next, phys_addr, prot, mask))
-+		if (vmap_pud_range(p4d, addr, next, phys_addr, prot, mask))
- 			return -ENOMEM;
- 	} while (p4d++, phys_addr += (next - addr), addr = next, addr != end);
- 	return 0;
- }
- 
--int ioremap_page_range(unsigned long addr,
--		       unsigned long end, phys_addr_t phys_addr, pgprot_t prot)
-+static int vmap_range(unsigned long addr, unsigned long end,
-+			phys_addr_t phys_addr, pgprot_t prot)
- {
- 	pgd_t *pgd;
- 	unsigned long start;
-@@ -235,8 +232,7 @@ int ioremap_page_range(unsigned long addr,
- 	pgd = pgd_offset_k(addr);
- 	do {
- 		next = pgd_addr_end(addr, end);
--		err = ioremap_p4d_range(pgd, addr, next, phys_addr, prot,
--					&mask);
-+		err = vmap_p4d_range(pgd, addr, next, phys_addr, prot, &mask);
- 		if (err)
- 			break;
- 	} while (pgd++, phys_addr += (next - addr), addr = next, addr != end);
-@@ -249,6 +245,12 @@ int ioremap_page_range(unsigned long addr,
- 	return err;
- }
- 
-+int ioremap_page_range(unsigned long addr,
-+		       unsigned long end, phys_addr_t phys_addr, pgprot_t prot)
+ #ifdef CONFIG_HAVE_ARCH_HUGE_VMAP
+-bool arch_vmap_p4d_supported(pgprot_t prot);
+-bool arch_vmap_pud_supported(pgprot_t prot);
+-bool arch_vmap_pmd_supported(pgprot_t prot);
++static inline bool arch_vmap_p4d_supported(pgprot_t prot)
 +{
-+	return vmap_range(addr, end, phys_addr, prot);
++	return false;
 +}
 +
- #ifdef CONFIG_GENERIC_IOREMAP
- void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
++static inline bool arch_vmap_pud_supported(pgprot_t prot)
++{
++	/*
++	 * Only 4k granule supports level 1 block mappings.
++	 * SW table walks can't handle removal of intermediate entries.
++	 */
++	return IS_ENABLED(CONFIG_ARM64_4K_PAGES) &&
++	       !IS_ENABLED(CONFIG_PTDUMP_DEBUGFS);
++}
++
++static inline bool arch_vmap_pmd_supported(pgprot_t prot)
++{
++	/* See arch_vmap_pud_supported() */
++	return !IS_ENABLED(CONFIG_PTDUMP_DEBUGFS);
++}
+ #endif
+ 
+ #endif /* _ASM_ARM64_VMALLOC_H */
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 1613d290cbd1..ab9ba7c36dae 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -1313,27 +1313,6 @@ void *__init fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot)
+ 	return dt_virt;
+ }
+ 
+-bool arch_vmap_p4d_supported(pgprot_t prot)
+-{
+-	return false;
+-}
+-
+-bool arch_vmap_pud_supported(pgprot_t prot)
+-{
+-	/*
+-	 * Only 4k granule supports level 1 block mappings.
+-	 * SW table walks can't handle removal of intermediate entries.
+-	 */
+-	return IS_ENABLED(CONFIG_ARM64_4K_PAGES) &&
+-	       !IS_ENABLED(CONFIG_PTDUMP_DEBUGFS);
+-}
+-
+-bool arch_vmap_pmd_supported(pgprot_t prot)
+-{
+-	/* See arch_vmap_pud_supported() */
+-	return !IS_ENABLED(CONFIG_PTDUMP_DEBUGFS);
+-}
+-
+ int pud_set_huge(pud_t *pudp, phys_addr_t phys, pgprot_t prot)
+ {
+ 	pud_t new_pud = pfn_pud(__phys_to_pfn(phys), mk_pud_sect_prot(prot));
+@@ -1425,11 +1404,6 @@ int pud_free_pmd_page(pud_t *pudp, unsigned long addr)
+ 	return 1;
+ }
+ 
+-int p4d_free_pud_page(p4d_t *p4d, unsigned long addr)
+-{
+-	return 0;	/* Don't attempt a block mapping */
+-}
+-
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ static void __remove_pgd_mapping(pgd_t *pgdir, unsigned long start, u64 size)
  {
 -- 
 2.23.0
