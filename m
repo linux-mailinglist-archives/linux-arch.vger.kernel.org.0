@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702FE306509
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 21:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE2030650C
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 21:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbhA0UZI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 15:25:08 -0500
-Received: from mail-bn7nam10on2091.outbound.protection.outlook.com ([40.107.92.91]:61825
+        id S231882AbhA0UZ3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 15:25:29 -0500
+Received: from mail-bn7nam10on2103.outbound.protection.outlook.com ([40.107.92.103]:44481
         "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231968AbhA0UZF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 27 Jan 2021 15:25:05 -0500
+        id S231968AbhA0UZP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 27 Jan 2021 15:25:15 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a2qMoeYb+SCaE0kHXG6C4K/kem2lS3WSh5EhKy90D97sgzZx7Ab/ISa2wE50Pc+iZQTToz9hZLTHJ8x6/z61ad27HJG+CkH41vm52rx+kRanMxrRUzn2wPc7r3bcyyN3/+KqGZAMbdukewSwU/BRt0nGG5gXv91ITSzZXLxgEq5Y0jl+i0Twt/iOMPhmrfHxgdB1QPgU8DTDRaeCRfBfKaQXMg0Fp0HDXzKFDiDdfDbLHb5YHDjudXmvJPg8vc5T9BKTvz615NVojmyf8SDEpXajhlkvtxWxO5GPzp/a7hmqKYVCyEdd2YO4xFGBYoc2LVvbzo9L03zW8R7Alef0uw==
+ b=kDtaeMy16gcPIbZkWNTJ/KlRsMVPrG+/7rbT1K/7REUYD7T2ytRBDd/8tHB7raCl+z6agG/Bp0ud9O0ZsO17Ie0Q6ZosEtaoGUONhXVPZxiWEINhJm+afsoul1mlxvWatraNF1dgkNUaUGpkJD44y9cmQdUwb/whVh94jF4GKshqqfxjKDwY82jDM7bxos+2EGCj9/Xsw8G+22eEU8ld2Vdp3x9VhRjl3DExIFrlSolnNsxKVKnPAmcDeU3yIcPhTsDVOozMVi791UYoik52mEslSRcV7cETmFqjYWaGrK1tcTRMR+cGe6BMv96TfzuesRyPiYsgphPTOB/lpTYlgg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i4uSV4yAL/VcnW3Lf7MGrB5fOqGBLFst3k0fX1W1hqs=;
- b=ESrTYhdtu7nzXhmuZ1JEzLSq93EhDQlcttabAS10k928MUBxOONujRdw4XiEhqk4E0UIiAg9T8s0/Qx/e+y2CpcXE/mhsg3hMyC6iHYVqVkBgGmP56tygPXiBBzpycXMSKYkEEUfUMOI1mpCXclUKbiqbo6y9oDepasfnY/IDb0FIDxK306H05EvhIDHtsTrLwOvbQQlqh5nC5dQMZQpuBtXJKIIZUzLet2tQ+gMJKOUfeuK2xbwiv4uz9+7Y/ezJZjp81k8+zp0Fn0jpBgkYZL1bSSDgyGVcXkzBau7RtNHh1jr8RMDF4955SV3AuHwYjG0Hv0ZOsVFSVH/Pqe94Q==
+ bh=GHceeEvTKmw5/BUZNhNj/pPtOMiiEHak1LnYWBAsrrY=;
+ b=hIxlCdABoil5lwrIuuWqH+SdmfiFVNqg2td+DlAI5XUACgu7btGt363j7+KX+VyL5YdShemrU7B4TTgfYrtOJTjfqqgQJ627E/Yk4wzQ2BTsKxSLFQr5KsdtUlVGDsSnbgg0vNtuwoQV7Ax9ZLM3LAWfAxPgmZX00K0Q3CKWtQJNriQgB7qsKNvLfBRXULe3YtgEE/rrWjWYwRrktEq77dt30CtURs+Q5JvV8U5H6cect8A0kP/wybivvfFyY5PoOieSO5GxqiRzrmAKAK16of2HGty1ZS8DeFxgf0smai6Kv6la2SndfeteFxP8XdctHSwHl54rqzG8AtQt4NcTeA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i4uSV4yAL/VcnW3Lf7MGrB5fOqGBLFst3k0fX1W1hqs=;
- b=LsuPF9PNBWAz0mE8MfauK4j18by3dwHfGMyU0wR+/krmvCek//Ua7vK4wIUJKoMMPue1xIv3dBHP/B+8BCigH8KY4tG+t2H8F6Xl128XGWNcscDOpEE0i4Bp10hPAa3/iQ5fGD9AzfCdWGMdnhDhQ/OnM9AXE9/+ZLZNt7wTMGM=
+ bh=GHceeEvTKmw5/BUZNhNj/pPtOMiiEHak1LnYWBAsrrY=;
+ b=HcF+byc8YrOOQw7O9A3HgkurTFCTL3Lb2e2wORH5xbTPXs6mJNXV4X+PhL4v1/y8PUj7L9pNdOTeai5qRHIew8BpASwvSunL01KFe1rSRjcmzdBDV9Og+dVLSb+OCf+nV/WytcK7ZAYVE8J8k4Zq0jXTxEr+pbaJ5LxCbtrDyXU=
 Authentication-Results: microsoft.com; dkim=none (message not signed)
  header.d=none;microsoft.com; dmarc=none action=none
  header.from=microsoft.com;
 Received: from (2603:10b6:208:3a::13) by
  MN2PR21MB1215.namprd21.prod.outlook.com (2603:10b6:208:3a::15) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3825.6; Wed, 27 Jan 2021 20:24:16 +0000
+ 15.20.3825.6; Wed, 27 Jan 2021 20:24:18 +0000
 Received: from MN2PR21MB1213.namprd21.prod.outlook.com
  ([fe80::91f:e9a:5737:3a05]) by MN2PR21MB1213.namprd21.prod.outlook.com
  ([fe80::91f:e9a:5737:3a05%9]) with mapi id 15.20.3825.006; Wed, 27 Jan 2021
- 20:24:16 +0000
+ 20:24:18 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
@@ -45,10 +45,12 @@ To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         linux-hyperv@vger.kernel.org
 Cc:     mikelley@microsoft.com, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 00/10] Refactor arch specific Hyper-V code
-Date:   Wed, 27 Jan 2021 12:23:35 -0800
-Message-Id: <1611779025-21503-1-git-send-email-mikelley@microsoft.com>
+Subject: [PATCH 01/10] Drivers: hv: vmbus: Move Hyper-V page allocator to arch neutral code
+Date:   Wed, 27 Jan 2021 12:23:36 -0800
+Message-Id: <1611779025-21503-2-git-send-email-mikelley@microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1611779025-21503-1-git-send-email-mikelley@microsoft.com>
+References: <1611779025-21503-1-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain
 X-Originating-IP: [131.107.174.144]
 X-ClientProxiedBy: MW4PR03CA0139.namprd03.prod.outlook.com
@@ -56,105 +58,184 @@ X-ClientProxiedBy: MW4PR03CA0139.namprd03.prod.outlook.com
  (2603:10b6:208:3a::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mhkdev.corp.microsoft.com (131.107.174.144) by MW4PR03CA0139.namprd03.prod.outlook.com (2603:10b6:303:8c::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Wed, 27 Jan 2021 20:24:14 +0000
+Received: from mhkdev.corp.microsoft.com (131.107.174.144) by MW4PR03CA0139.namprd03.prod.outlook.com (2603:10b6:303:8c::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Wed, 27 Jan 2021 20:24:16 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 02535152-192a-4d47-963f-08d8c3018498
+X-MS-Office365-Filtering-Correlation-Id: 77b8f8eb-8a5c-40ce-e5bc-08d8c30185b7
 X-MS-TrafficTypeDiagnostic: MN2PR21MB1215:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR21MB1215E9B61304CE7BFF2E9D94D7BB9@MN2PR21MB1215.namprd21.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <MN2PR21MB1215621A2DCC5D907DFAAA40D7BB9@MN2PR21MB1215.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DbQ+bCdI34df4GFiXZeK28JegpUxeawJfHGVq+1s/4SDmjCSFpyE74uKjN78BejupSqASNLnOy/fCSaT/Xotu520rBVacO+M0wU3ySGKqLO6UyP0aHiAejMsBVw1N/QkcP9M8tIvCCDdqkxYLOURbh6GUwRUvSYe+3YCyu2TOTjYq9PjM6ECKFYnqCoGbkDwq/UveB7dS6/ylAtTaaU88sdxQuBe35lwexdxoSg9PKoNKzrWf2N5cpXIExVSr1P233Md+ZyAXhQJ6/bjT5CUmxSSWeH+NTd61t2N2zTAk69Dfo3USoLUWo3m4WUYAKXLAmAVT5cXw2r8VCvOFQjDak07tHeaowgUyQ/XPhCjpqWzgrPpGKt/QvYFvi+MUbF6fIi5J1HO+8k6cqBimkTiID/TvFIlQe/lCcB6AtECKftOJF5X+kqnNhTKmIM73X8o0gNvjs69Uqgik3Sn+HBPTsB7Iqu5xNeJjOf6Ib3eKBCWEOoqP2MWsYdjwguV2t9UZ7Y7rhJXO9v4DsHwBDCM/ml2CX3/ugY3BIfGHVzRIw8TWGA/2QWw+kvPuCTrhMaTElLQ0gRslF+Y3MXl7Sz06kmkYZjA8fxGiMcGSTDP+zZdTlAjHNLCypPBS+xlqpfhHaYqtvVAaBqMDqqMnfmj+w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR21MB1213.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(6666004)(66476007)(66946007)(956004)(26005)(66556008)(478600001)(921005)(8676002)(5660300002)(966005)(316002)(2906002)(86362001)(83380400001)(8936002)(186003)(36756003)(82960400001)(16526019)(4326008)(2616005)(6486002)(7416002)(10290500003)(82950400001)(52116002)(7696005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?/Y81Qg7VHqO9vPVHAnRWiLHIL2jllJ587EknePBKh21EzG5kEzQvNpm3V7AB?=
- =?us-ascii?Q?mSvzJPxibDb3zlZ5Cy1N/mwmEWg/869SaeabP4KOxgyc7RYTdQf5XKVEHrPH?=
- =?us-ascii?Q?xMgo0kVEgnW8TcUtXA3/CCiXCV+UtRGfroS80HmoLvRGVNtO3PTXVmb86PcX?=
- =?us-ascii?Q?HSik2Jpp8BxL6nNEdEYIMUh1NTMZSsxJJ/afvUskuCxGaIN40dXaqXD/6yoz?=
- =?us-ascii?Q?V+UwsmtXrJFA4QSwBRZV3NYD0jAlTK+J2LB+EcPpBokEwftdFnJSHNHT9d0k?=
- =?us-ascii?Q?jN3dMG7N695GUIGxOop7NMXLzb1jfn+5RdFLyzwdyZe88HJIcbiSk6/LlyiM?=
- =?us-ascii?Q?Zw0MPHWRyTZk7PG+Hiydc7+aMICz52CWi63K86cAaf3b2pSqZpDbnM1mG28l?=
- =?us-ascii?Q?AWJDIqASRLt48nJ/TEl7+rUfPL2CxN29dQssc91ZAf08ESCwHWEfmVjc//b3?=
- =?us-ascii?Q?V1w+6WzWNKjylpiPtqNLUTcrCzdCm+Mnu4cPKek2XgvnWpZCjF1jbMg7C6iz?=
- =?us-ascii?Q?qtROT40jyLGdfSRESqhe8p+XY25/jnNXgXBqsNxY5lnFTJzL4vTyR0iWQqkh?=
- =?us-ascii?Q?NTABDzSSSsrpuTFoLo0Cicj8s5N9Pg9n0oLgvQVn3zlvALAMxzDnqXV1odTo?=
- =?us-ascii?Q?NxbyUDs47Zpluu6c/JkCXxNkt6oo+xmadvpTmX/t6qxekqSnYwiGtDfhB4dJ?=
- =?us-ascii?Q?fA9h1gi4DMmy5Hb+hTrga6YwADwkw4p4i5BFx0s7f7UBotrkcDzIfl5qVVMH?=
- =?us-ascii?Q?+mK0tu2P9TcraD33Qiz8el+Qyl7/bhtTAUnq7BVu9hnkXlx2WsBSseynlrSI?=
- =?us-ascii?Q?7FvU9jVLVxccB8PKSvXJrbLPBgVdlBv1DTfNnqWVQZGscRf4WFkOMdnS6E4Y?=
- =?us-ascii?Q?W6nrKceQHeR0tpHOxHa/MDSjQztZd6iUeuHNO0WieGD/nOKe2T501iClgMUo?=
- =?us-ascii?Q?z4TXn9/BnnzTHyHp9xaz7bOi3UUnAFNJSRz23m0q9R65ARE7TbI91OsTiN+O?=
- =?us-ascii?Q?QFxw6uSSxDxTfxODyIZnNrpIgvTY8cam0sd9UOgePmV9H8pL01DzUafqHp2k?=
- =?us-ascii?Q?U700EYju?=
+X-Microsoft-Antispam-Message-Info: zfz83W8jrFKMoGDu6/mD4Q65tJuj4At5qc6yYY12LxEarnAk/ot436Vj6hC9Mv1PqMfxMzHKtsbMxrWg3FnBGz37U/98/z8cBdysTChNbRqF+3gcOs6Db4xu26pgms7zq7q88F3mBWZoXNCutNCbgsO1AZKog4hc+yg1ZW+fxBRmivZPjVnthGvFtkae6iD/j/aqAsa0GeUpdlax8fFa/94O/BHmAbox5i2HoAMPv7bXtN4JOISSggLJoJaQ9VGCPV1w7Fg1Nl53sDXqBpspD2UMSYASNscsAdn3j6881u5Da0uFocYhToP/mXP6r0Znkqg0onB1wZnyJv8pAs7uHZWGbKNSuUNCSZcDNQnLPQH6Lm34vsP9v7PrHHj+Jn7M6xKvuhz/sl5/hmTIgs+WuQE4dAHg9Tj6y5yDA1n5AIwFc6sm1fXgqK6YARQcL2pG/Ur0uu0OJlm7etxCc/vjeAjATowhRLvXXDX4HJPADsALVwkxsM3HtWKMoXiz29u5w3VM3mfg8z1L97ZV+smD4g7vz53VD9An9OZNulWINthUd/4jGlJhHPDo4nAFABMp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR21MB1213.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(6666004)(66476007)(66946007)(956004)(26005)(66556008)(478600001)(921005)(8676002)(5660300002)(316002)(2906002)(86362001)(83380400001)(8936002)(186003)(36756003)(82960400001)(16526019)(4326008)(2616005)(6486002)(7416002)(10290500003)(82950400001)(52116002)(7696005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?HFM11gvpVa2/abdkXN1wJXka4XDS1Ono4H/Tzvnlyk7OKr3OLDwTb5hg6+AD?=
+ =?us-ascii?Q?s2l/M5+YcpJyp88YGy8VnHSWKn/jSbyAh2+hXptoaI3f1y2bjVGoHgIdQmcr?=
+ =?us-ascii?Q?I3WAwAoA7WJNvpkpsuu7IY3P9L78A3XIsUR+SUje29yR38v2Tulh9KOR2O/L?=
+ =?us-ascii?Q?YaYmxDn34jMcuVmif+uFddRV73guT/GmsXc+yDP0hlcQ8qsWy2lHCcTnpTt0?=
+ =?us-ascii?Q?XcbNZq3MqWcAiliMddsnmrpoRezXaIIQhCxFzohiZkX/mzBcyvqrkSRDO5Ud?=
+ =?us-ascii?Q?ShPQUU+7T1Cbx99+567xVDn0Sl4bSRB8ZG8DGTSQvbiiOhJ7MQ6fv9suRrNl?=
+ =?us-ascii?Q?WBpiY9tSBvhxTcNT7YOkG71HXKKyqjKjLCo1KuBTuX/oEomdR7WN4jwgCD+4?=
+ =?us-ascii?Q?ob4etl1knqD/GAOnJJqDH4lh7J997fDwfelxCFDPqNOjKfeyY3/MYfWBYYT5?=
+ =?us-ascii?Q?tmRjl6+ZJFh6B9nR54urBjdftMlf7LP0TjaKDOJFHegP4vgxNB+kySuQTuTy?=
+ =?us-ascii?Q?wFBqpK/2bo3tvYwORwqtNrQxv6TpB2Lr11sNV1wHfLamQsNrWfels5LzZDM5?=
+ =?us-ascii?Q?hztU4ZIREkOC8yRbHV/gCUCTgbMvwqFEFfyTj+hdnicQM7jIG4JJcsSZC3L/?=
+ =?us-ascii?Q?du7/nhamYgZqw4OvxMItizoCN4QT24QzxrR0sZh2WQs0hmPXZeAJKZLqsbjh?=
+ =?us-ascii?Q?gm2CEEiyeWuwuFcsVYTvfdotXjVVYUy0pDkG9Mcby1aqmC8N1615FWvqbQaN?=
+ =?us-ascii?Q?CrNrkDgcM1POL0OXl35Erf6HXPHXRb5RNyNNVomytxhNFyrMrucJ/z0VvqrL?=
+ =?us-ascii?Q?yGF5LJVRpWH8q3vELGSxVFjfw48Xfs9+yA3WWJvK0HlTI8HckDp5Op77w53d?=
+ =?us-ascii?Q?E9flcNJR9Z2vnCD4jGIq+JGCaOVI95ApUcLxTsKw6R+loK78unG/YO97mMow?=
+ =?us-ascii?Q?G9LTPbwrM1GF7EmTq/bFoQKwJdh6M7URh6/XS00cDaO9ddtuUL3SCYXq2aA9?=
+ =?us-ascii?Q?Ik+HVpUjoWsn1W+BnL58+TXawPX/4f+5ZRejkZpJCuHRPYWPlMM7UnPHYOGS?=
+ =?us-ascii?Q?x4AHEjtz?=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02535152-192a-4d47-963f-08d8c3018498
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77b8f8eb-8a5c-40ce-e5bc-08d8c30185b7
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR21MB1213.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 20:24:16.1570
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 20:24:18.0559
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VKsoskyIrFnltYSjloICtuf87hXdAqWuR9QpqdR0oaSAFwVHIX24qp+ITW/yW6AblME8zIupfP6cesjdhR4I8Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: oBIvrP5v2mITONoCrnIphTh/nJW8N+PtCXVuW3IIjtlZinbuDGpJaVA/RyUlh5PllDSnDyANgHt85uYyX1rgwQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1215
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-To support Linux guests on Hyper-V on multiple architectures, the original
-approach factored out all differences between Hyper-V on x86/x64 and
-Hyper-V on ARM64 into functions or #defines under arch/x86 and
-arch/arm64. Some of these differences are truly related to the
-architecture, but others are more properly treated as Linux OS
-differences or just quirks in Hyper-V. Feedback from Arnd Bergmann[1]
-recommended that differences other than architecture should be
-incorporated into the architecture independent Hyper-V code. Each
-difference can be handled with conditions specific to the difference
-instead of tying it to the broader x86/x64 vs. ARM64. This approach
-reduces the amount of code under arch/x86 and arch/arm64 and keeps
-the non-architectural differences localized and more easily understood.
+The Hyper-V page allocator functions are implemented in an architecture
+neutral way.  Move them into the architecture neutral VMbus module so
+a separate implementation for ARM64 is not needed.
 
-This patch set implements the new approach by changing the interface
-between the architecture independent code and the architecture dependent
-code for x86/x64. The patches move code from arch/x86 to the
-architecture independent Hyper-V code whenever possible, and add
-architecture independent support needed by other architectures like
-ARM64.  No functionality is changed for x86/x64.  A subsequent patch
-set will provide the Hyper-V support code under arch/arm64.
+No functional change.
 
-This patch set results in an increase in lines of code (though some
-of the increase is additional comments).  But the lines needed under
-arch/arm64 in the upcoming patch set is significantly reduced, resulting
-in a net decrease of about 125 lines.
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+---
+ arch/x86/hyperv/hv_init.c       | 22 ----------------------
+ arch/x86/include/asm/mshyperv.h |  5 -----
+ drivers/hv/hv.c                 | 36 ++++++++++++++++++++++++++++++++++++
+ include/asm-generic/mshyperv.h  |  4 ++++
+ 4 files changed, 40 insertions(+), 27 deletions(-)
 
-[1] https://lore.kernel.org/lkml/CAK8P3a1hDBVembCd+6=ENUWYFz=72JBTFMrKYZ2aFd+_Q04F+g@mail.gmail.com/
-
-Michael Kelley (10):
-  Drivers: hv: vmbus: Move Hyper-V page allocator to arch neutral code
-  x86/hyper-v: Move hv_message_type to architecture neutral module
-  Drivers: hv: Redo Hyper-V synthetic MSR get/set functions
-  Drivers: hv: vmbus: Move hyperv_report_panic_msg to arch neutral code
-  Drivers: hv: vmbus: Handle auto EOI quirk inline
-  Drivers: hv: vmbus: Move handling of VMbus interrupts
-  clocksource/drivers/hyper-v: Handle vDSO differences inline
-  clocksource/drivers/hyper-v: Handle sched_clock differences inline
-  clocksource/drivers/hyper-v: Set clocksource rating based on Hyper-V
-    feature
-  clocksource/drivers/hyper-v: Move handling of STIMER0 interrupts
-
- arch/x86/hyperv/hv_init.c          |  53 +-------
- arch/x86/include/asm/hyperv-tlfs.h | 131 ++++++++++---------
- arch/x86/include/asm/mshyperv.h    |  67 ++--------
- arch/x86/kernel/cpu/mshyperv.c     |  23 ++--
- drivers/clocksource/hyperv_timer.c | 250 +++++++++++++++++++++++++------------
- drivers/hv/hv.c                    |  93 +++++++++++---
- drivers/hv/vmbus_drv.c             |  89 +++++++++++--
- include/asm-generic/hyperv-tlfs.h  |  35 ++++++
- include/asm-generic/mshyperv.h     |  19 ++-
- include/clocksource/hyperv_timer.h |   3 +-
- 10 files changed, 450 insertions(+), 313 deletions(-)
-
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index e04d90a..2d1688e 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -44,28 +44,6 @@
+ u32 hv_max_vp_index;
+ EXPORT_SYMBOL_GPL(hv_max_vp_index);
+ 
+-void *hv_alloc_hyperv_page(void)
+-{
+-	BUILD_BUG_ON(PAGE_SIZE != HV_HYP_PAGE_SIZE);
+-
+-	return (void *)__get_free_page(GFP_KERNEL);
+-}
+-EXPORT_SYMBOL_GPL(hv_alloc_hyperv_page);
+-
+-void *hv_alloc_hyperv_zeroed_page(void)
+-{
+-        BUILD_BUG_ON(PAGE_SIZE != HV_HYP_PAGE_SIZE);
+-
+-        return (void *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
+-}
+-EXPORT_SYMBOL_GPL(hv_alloc_hyperv_zeroed_page);
+-
+-void hv_free_hyperv_page(unsigned long addr)
+-{
+-	free_page(addr);
+-}
+-EXPORT_SYMBOL_GPL(hv_free_hyperv_page);
+-
+ static int hv_cpu_init(unsigned int cpu)
+ {
+ 	u64 msr_vp_index;
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index ffc2899..29d0414 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -224,9 +224,6 @@ static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
+ 
+ void __init hyperv_init(void);
+ void hyperv_setup_mmu_ops(void);
+-void *hv_alloc_hyperv_page(void);
+-void *hv_alloc_hyperv_zeroed_page(void);
+-void hv_free_hyperv_page(unsigned long addr);
+ void set_hv_tscchange_cb(void (*cb)(void));
+ void clear_hv_tscchange_cb(void);
+ void hyperv_stop_tsc_emulation(void);
+@@ -255,8 +252,6 @@ static inline void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+ #else /* CONFIG_HYPERV */
+ static inline void hyperv_init(void) {}
+ static inline void hyperv_setup_mmu_ops(void) {}
+-static inline void *hv_alloc_hyperv_page(void) { return NULL; }
+-static inline void hv_free_hyperv_page(unsigned long addr) {}
+ static inline void set_hv_tscchange_cb(void (*cb)(void)) {}
+ static inline void clear_hv_tscchange_cb(void) {}
+ static inline void hyperv_stop_tsc_emulation(void) {};
+diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+index f202ac7..cca8d5e 100644
+--- a/drivers/hv/hv.c
++++ b/drivers/hv/hv.c
+@@ -37,6 +37,42 @@ int hv_init(void)
+ }
+ 
+ /*
++ * Functions for allocating and freeing memory with size and
++ * alignment HV_HYP_PAGE_SIZE. These functions are needed because
++ * the guest page size may not be the same as the Hyper-V page
++ * size. We depend upon kmalloc() aligning power-of-two size
++ * allocations to the allocation size boundary, so that the
++ * allocated memory appears to Hyper-V as a page of the size
++ * it expects.
++ */
++
++void *hv_alloc_hyperv_page(void)
++{
++	BUILD_BUG_ON(PAGE_SIZE <  HV_HYP_PAGE_SIZE);
++
++	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
++		return (void *)__get_free_page(GFP_KERNEL);
++	else
++		return kmalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
++}
++
++void *hv_alloc_hyperv_zeroed_page(void)
++{
++	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
++		return (void *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
++	else
++		return kzalloc(HV_HYP_PAGE_SIZE, GFP_KERNEL);
++}
++
++void hv_free_hyperv_page(unsigned long addr)
++{
++	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
++		free_page(addr);
++	else
++		kfree((void *)addr);
++}
++
++/*
+  * hv_post_message - Post a message using the hypervisor message IPC.
+  *
+  * This involves a hypercall.
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index c577996..762d3ac 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -114,6 +114,10 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
+ /* Sentinel value for an uninitialized entry in hv_vp_index array */
+ #define VP_INVAL	U32_MAX
+ 
++void *hv_alloc_hyperv_page(void);
++void *hv_alloc_hyperv_zeroed_page(void);
++void hv_free_hyperv_page(unsigned long addr);
++
+ /**
+  * hv_cpu_number_to_vp_number() - Map CPU to VP.
+  * @cpu_number: CPU number in Linux terms
 -- 
 1.8.3.1
 
