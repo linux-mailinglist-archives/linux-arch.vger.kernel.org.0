@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 224F930660D
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 22:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145EF306605
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 22:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbhA0V2L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 16:28:11 -0500
-Received: from mga04.intel.com ([192.55.52.120]:48884 "EHLO mga04.intel.com"
+        id S1344101AbhA0V1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 16:27:24 -0500
+Received: from mga04.intel.com ([192.55.52.120]:48882 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231636AbhA0V1R (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 27 Jan 2021 16:27:17 -0500
-IronPort-SDR: sg6l+Wou5DHlgNEs12aUcQfumiIW1twQS19fsQP0Yz6rt1laZNYFTw1nvcCR2N2c8m0Keg5WW5
- bnEWaH6U0F9w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="177573111"
+        id S234507AbhA0V0u (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 27 Jan 2021 16:26:50 -0500
+IronPort-SDR: LI6XYAK6aNaIU7rR8BQdrYKmsrHs9e3UGT6r6SQ43UpQNHrB6pttQ0kpJ/F6CZzAtcy3VH1ssH
+ wM7j2J8oHZVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="177573117"
 X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
-   d="scan'208";a="177573111"
+   d="scan'208";a="177573117"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:25:52 -0800
-IronPort-SDR: 1xvmQRpg2nvKc24+zNYxreW5DWsUxaoLIquk+jHCcgBogAxGl7cLAtu0vaHVWHhUcS+TNcR7Rx
- A3KxXReY49fQ==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:25:53 -0800
+IronPort-SDR: xDwIrpMYBhKD7HQjSxTEeU179oJG9ZcsGMnb/9h95KlxkPFMKjyHChENPsuo8iVorDETWyCx5h
+ 04ylv0VaaHPQ==
 X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
-   d="scan'208";a="353948204"
+   d="scan'208";a="353948212"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:25:51 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:25:53 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,10 +51,17 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v18 07/25] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
-Date:   Wed, 27 Jan 2021 13:25:06 -0800
-Message-Id: <20210127212524.10188-8-yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Subject: [PATCH v18 09/25] drm/i915/gvt: Change _PAGE_DIRTY to _PAGE_DIRTY_BITS
+Date:   Wed, 27 Jan 2021 13:25:08 -0800
+Message-Id: <20210127212524.10188-10-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210127212524.10188-1-yu-cheng.yu@intel.com>
 References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
@@ -64,61 +71,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The x86 family of processors do not directly create read-only and Dirty
-PTEs.  These PTEs are created by software.  One such case is that kernel
-read-only pages are historically setup as Dirty.
-
-New processors that support Shadow Stack regard read-only and Dirty PTEs as
-shadow stack pages.  This results in ambiguity between shadow stack and
-kernel read-only pages.  To resolve this, removed Dirty from kernel read-
-only pages.
+After the introduction of _PAGE_COW, a modified page's PTE can have either
+_PAGE_DIRTY or _PAGE_COW.  Change _PAGE_DIRTY to _PAGE_DIRTY_BITS.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
+Cc: Zhi Wang <zhi.a.wang@intel.com>
 ---
- arch/x86/include/asm/pgtable_types.h | 6 +++---
- arch/x86/mm/pat/set_memory.c         | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/i915/gvt/gtt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 394757ee030a..b8b79d618bbc 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -194,10 +194,10 @@ enum page_cache_mode {
- #define _KERNPG_TABLE		 (__PP|__RW|   0|___A|   0|___D|   0|   0| _ENC)
- #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
- #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
--#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
--#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
-+#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|   0|   0|___G)
-+#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|   0|   0|___G)
- #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
--#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|___D|   0|___G)
-+#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|   0|   0|___G)
- #define __PAGE_KERNEL_LARGE	 (__PP|__RW|   0|___A|__NX|___D|_PSE|___G)
- #define __PAGE_KERNEL_LARGE_EXEC (__PP|__RW|   0|___A|   0|___D|_PSE|___G)
- #define __PAGE_KERNEL_WP	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __WP)
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 16f878c26667..6bebb95a6988 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1932,7 +1932,7 @@ int set_memory_nx(unsigned long addr, int numpages)
+diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+index 897c007ea96a..937b6083b2dc 100644
+--- a/drivers/gpu/drm/i915/gvt/gtt.c
++++ b/drivers/gpu/drm/i915/gvt/gtt.c
+@@ -1216,7 +1216,7 @@ static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
+ 	}
  
- int set_memory_ro(unsigned long addr, int numpages)
- {
--	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW), 0);
-+	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW | _PAGE_DIRTY), 0);
- }
+ 	/* Clear dirty field. */
+-	se->val64 &= ~_PAGE_DIRTY;
++	se->val64 &= ~_PAGE_DIRTY_BITS;
  
- int set_memory_rw(unsigned long addr, int numpages)
+ 	ops->clear_pse(se);
+ 	ops->clear_ips(se);
 -- 
 2.21.0
 
