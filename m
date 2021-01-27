@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF9930667F
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 22:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DE1306656
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 22:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbhA0VkI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 16:40:08 -0500
+        id S235048AbhA0Vfg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 16:35:36 -0500
 Received: from mga12.intel.com ([192.55.52.136]:11286 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229769AbhA0ViG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 27 Jan 2021 16:38:06 -0500
-IronPort-SDR: k+oM58lHnVOKb6IZHmjLeic7ahN7k/yRN84XcF0CcVLXpzIUuv7nDScVE5JM2iGRiZOMTo4o89
- iUQ5Mr6w7Mfg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="159309025"
+        id S235502AbhA0Vdg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 27 Jan 2021 16:33:36 -0500
+IronPort-SDR: 1C6kwAypKC3rogyywoycp5gryo9ja19C0/dn2xhAm6e14c6bbnuAbWu3w8I8sY06yKrA1X2T7b
+ bMrhdMzfD3Cg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="159309026"
 X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
-   d="scan'208";a="159309025"
+   d="scan'208";a="159309026"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:30:38 -0800
-IronPort-SDR: Tx1cC08GivZUYttuXh7+gIEPGxfNwyqsuKccd1HrWAOI/LAOpBaNwvJdZ7eJwvnPAGwDqnzvhk
- B9X4sbKgllCA==
+IronPort-SDR: IySvv2pF1d3N/60YOMj+QWV+PWVEqCjOBniHDo0zq7hN7/LXpUYviorx1EBF2A3wn4r+l9BG4y
+ 8m7MDiTqSJvQ==
 X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
-   d="scan'208";a="362581380"
+   d="scan'208";a="362581384"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:30:37 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:30:38 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v18 6/7] x86/vdso/32: Add ENDBR32 to __kernel_vsyscall entry point
-Date:   Wed, 27 Jan 2021 13:30:27 -0800
-Message-Id: <20210127213028.11362-7-yu-cheng.yu@intel.com>
+Subject: [PATCH v18 7/7] x86/vdso: Insert endbr32/endbr64 to vDSO
+Date:   Wed, 27 Jan 2021 13:30:28 -0800
+Message-Id: <20210127213028.11362-8-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210127213028.11362-1-yu-cheng.yu@intel.com>
 References: <20210127213028.11362-1-yu-cheng.yu@intel.com>
@@ -66,29 +66,33 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "H.J. Lu" <hjl.tools@gmail.com>
 
-Add ENDBR32 to __kernel_vsyscall entry point.
+When Indirect Branch Tracking (IBT) is enabled, vDSO functions may be
+called indirectly, and must have ENDBR32 or ENDBR64 as the first
+instruction.  The compiler must support -fcf-protection=branch so that it
+can be used to compile vDSO.
 
 Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Acked-by: Andy Lutomirski <luto@kernel.org>
 ---
- arch/x86/entry/vdso/vdso32/system_call.S | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/entry/vdso/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
-index de1fff7188aa..f19eaec3de3b 100644
---- a/arch/x86/entry/vdso/vdso32/system_call.S
-+++ b/arch/x86/entry/vdso/vdso32/system_call.S
-@@ -14,6 +14,9 @@
- 	ALIGN
- __kernel_vsyscall:
- 	CFI_STARTPROC
-+#ifdef CONFIG_X86_CET
-+	endbr32
-+#endif
- 	/*
- 	 * Reshuffle regs so that all of any of the entry instructions
- 	 * will preserve enough state.
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 02e3e42f380b..ff7b56feb5c3 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -93,6 +93,10 @@ endif
+ 
+ $(vobjs): KBUILD_CFLAGS := $(filter-out $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+ 
++ifdef CONFIG_X86_CET
++$(vobjs) $(vobjs32): KBUILD_CFLAGS += -fcf-protection=branch
++endif
++
+ #
+ # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+ #
 -- 
 2.21.0
 
