@@ -2,134 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AABC23051B0
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 06:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5963052AC
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 07:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbhA0FFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 00:05:23 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:11609 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233777AbhA0D2T (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jan 2021 22:28:19 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DQRqt0YPLz1607h;
-        Wed, 27 Jan 2021 10:09:30 +0800 (CST)
-Received: from [10.174.179.117] (10.174.179.117) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 27 Jan 2021 10:10:34 +0800
-Subject: Re: [PATCH v11 03/13] mm/vmalloc: rename vmap_*_range
- vmap_pages_*_range
-To:     Nicholas Piggin <npiggin@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Christoph Hellwig <hch@lst.de>, <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20210126044510.2491820-1-npiggin@gmail.com>
- <20210126044510.2491820-4-npiggin@gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <01fe6df9-8c92-72c9-94cb-797e11160ad7@huawei.com>
-Date:   Wed, 27 Jan 2021 10:10:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210126044510.2491820-4-npiggin@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.117]
-X-CFilter-Loop: Reflected
+        id S232071AbhA0F7j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 00:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232942AbhA0Fsb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 00:48:31 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4596BC06178B
+        for <linux-arch@vger.kernel.org>; Tue, 26 Jan 2021 21:46:20 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id h15so422146pli.8
+        for <linux-arch@vger.kernel.org>; Tue, 26 Jan 2021 21:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pGwLX141izLDvx1hQTGiiwKO086AeFCYCtYAmNWi9wI=;
+        b=AmTdH3IG4UQzJndI1D27UQJWy8ntwz3x96fLaGYHHI8DDA6H+Y68FXg1U5+ek6ovCn
+         BQskNvflja4Kqe4HWtn3w42joJ9YUlN577FkgtA2wn8h4A+gee/IgXId+fkal+R9QLJn
+         Na2PxVzgvj5x+O52bGPuCVBbamCyvJdweyNcbR3LECVkeySnNjL82VUJ/YR5uOBQj289
+         qijz8MXoF7zeIeGbr1pzM0INdKa2u6ikLS6t9DFsADUNGVZIqVyByhitCvhByTi3r9Cb
+         GFO8v3dk3dOPI8NCgIEvoLfRAsoSe8tDBOqTLpl21rRUuC+KF1FC+PjiJRruBMdfA3J+
+         e4PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=pGwLX141izLDvx1hQTGiiwKO086AeFCYCtYAmNWi9wI=;
+        b=CYObYALOMQed6KzHB9vwpXHNuQ3MeyOAz9gN6UqAvfMbr5DK8gRAWwvJU5M/ZkXlVQ
+         37lw6EHAO2fs7ZmeNQOvMKn1iFXcBXWv1LOpK3xlrpKQyvkgUP31X8usCOaKEppvifqs
+         87CxppxmpOT89N/8PudX6Z52XikTLHae0d2flxRLnqU1Y0To9h0pS7t7ZWOlNgYGjW2X
+         WqsEuV7nyyYVgGozWnxdrCNgneqcxljjXdZlHvk8fR1ODXgg/Nh/hd9geTNSbDBNUcte
+         LWUyUtQFwVMVUgepgtgaKC5SbO2AnwIMCZDn0JXrGFOcizwG6hJtLFKhDqqL3L9bKKt3
+         dMRQ==
+X-Gm-Message-State: AOAM531cutzvHHnbjTW1BIprC0z7HOsqWVXobpJcheKV8IzHcnh/h1Zb
+        KHhFRX2u5xichG8QziXFWSpmFw==
+X-Google-Smtp-Source: ABdhPJzlYhGFSdTqcPKE8K2PIdYf+VA6n3sx73gQUwIFBNusPJfAV5LCpnY0tYvL1n4CZqElayMtXA==
+X-Received: by 2002:a17:902:e8c9:b029:de:a2c7:e661 with SMTP id v9-20020a170902e8c9b02900dea2c7e661mr9611617plg.76.1611726379718;
+        Tue, 26 Jan 2021 21:46:19 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id 145sm840907pge.88.2021.01.26.21.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jan 2021 21:46:18 -0800 (PST)
+Date:   Tue, 26 Jan 2021 21:46:18 -0800 (PST)
+X-Google-Original-Date: Tue, 26 Jan 2021 21:46:11 PST (-0800)
+Subject:     Re: [PATCH v15 03/11] riscv/Kconfig: make direct map manipulation options depend on MMU
+In-Reply-To: <20210123110041.GE6332@kernel.org>
+CC:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        luto@kernel.org, Arnd Bergmann <arnd@arndb.de>, bp@alien8.de,
+        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        elena.reshetova@intel.com, hpa@zytor.com, mingo@redhat.com,
+        jejb@linux.ibm.com, kirill@shutemov.name, willy@infradead.org,
+        mark.rutland@arm.com, rppt@linux.ibm.com, mtk.manpages@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>, peterz@infradead.org,
+        rick.p.edgecombe@intel.com, guro@fb.com, shakeelb@google.com,
+        shuah@kernel.org, tglx@linutronix.de, tycho@tycho.ws,
+        will@kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, lkp@intel.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rppt@kernel.org
+Message-ID: <mhng-0c84abc1-8ac8-4142-be1c-a269d8b345f8@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi:
-On 2021/1/26 12:45, Nicholas Piggin wrote:
-> The vmalloc mapper operates on a struct page * array rather than a
-> linear physical address, re-name it to make this distinction clear.
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> ---
->  mm/vmalloc.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 62372f9e0167..7f2f36116980 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -189,7 +189,7 @@ void unmap_kernel_range_noflush(unsigned long start, unsigned long size)
->  		arch_sync_kernel_mappings(start, end);
->  }
->  
-> -static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
-> +static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
->  		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
->  		pgtbl_mod_mask *mask)
->  {
-> @@ -217,7 +217,7 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
->  	return 0;
->  }
->  
-> -static int vmap_pmd_range(pud_t *pud, unsigned long addr,
-> +static int vmap_pages_pmd_range(pud_t *pud, unsigned long addr,
->  		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
->  		pgtbl_mod_mask *mask)
->  {
-> @@ -229,13 +229,13 @@ static int vmap_pmd_range(pud_t *pud, unsigned long addr,
->  		return -ENOMEM;
->  	do {
->  		next = pmd_addr_end(addr, end);
-> -		if (vmap_pte_range(pmd, addr, next, prot, pages, nr, mask))
-> +		if (vmap_pages_pte_range(pmd, addr, next, prot, pages, nr, mask))
->  			return -ENOMEM;
->  	} while (pmd++, addr = next, addr != end);
->  	return 0;
->  }
->  
-> -static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
-> +static int vmap_pages_pud_range(p4d_t *p4d, unsigned long addr,
->  		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
->  		pgtbl_mod_mask *mask)
->  {
-> @@ -247,13 +247,13 @@ static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
->  		return -ENOMEM;
->  	do {
->  		next = pud_addr_end(addr, end);
-> -		if (vmap_pmd_range(pud, addr, next, prot, pages, nr, mask))
-> +		if (vmap_pages_pmd_range(pud, addr, next, prot, pages, nr, mask))
->  			return -ENOMEM;
->  	} while (pud++, addr = next, addr != end);
->  	return 0;
->  }
->  
-> -static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
-> +static int vmap_pages_p4d_range(pgd_t *pgd, unsigned long addr,
->  		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
->  		pgtbl_mod_mask *mask)
->  {
-> @@ -265,7 +265,7 @@ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
->  		return -ENOMEM;
->  	do {
->  		next = p4d_addr_end(addr, end);
-> -		if (vmap_pud_range(p4d, addr, next, prot, pages, nr, mask))
-> +		if (vmap_pages_pud_range(p4d, addr, next, prot, pages, nr, mask))
->  			return -ENOMEM;
->  	} while (p4d++, addr = next, addr != end);
->  	return 0;
-> @@ -306,7 +306,7 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
->  		next = pgd_addr_end(addr, end);
->  		if (pgd_bad(*pgd))
->  			mask |= PGTBL_PGD_MODIFIED;
-> -		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
-> +		err = vmap_pages_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
->  		if (err)
->  			return err;
->  	} while (pgd++, addr = next, addr != end);
-> 
+On Sat, 23 Jan 2021 03:00:41 PST (-0800), rppt@kernel.org wrote:
+> On Fri, Jan 22, 2021 at 08:12:30PM -0800, Palmer Dabbelt wrote:
+>> On Wed, 20 Jan 2021 10:06:04 PST (-0800), rppt@kernel.org wrote:
+>> > From: Mike Rapoport <rppt@linux.ibm.com>
+>> >
+>> > ARCH_HAS_SET_DIRECT_MAP and ARCH_HAS_SET_MEMORY configuration options have
+>> > no meaning when CONFIG_MMU is disabled and there is no point to enable them
+>> > for the nommu case.
+>> >
+>> > Add an explicit dependency on MMU for these options.
+>> >
+>> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+>> > Reported-by: kernel test robot <lkp@intel.com>
+>> > ---
+>> >  arch/riscv/Kconfig | 4 ++--
+>> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> > index d82303dcc6b6..d35ce19ab1fa 100644
+>> > --- a/arch/riscv/Kconfig
+>> > +++ b/arch/riscv/Kconfig
+>> > @@ -25,8 +25,8 @@ config RISCV
+>> >  	select ARCH_HAS_KCOV
+>> >  	select ARCH_HAS_MMIOWB
+>> >  	select ARCH_HAS_PTE_SPECIAL
+>> > -	select ARCH_HAS_SET_DIRECT_MAP
+>> > -	select ARCH_HAS_SET_MEMORY
+>> > +	select ARCH_HAS_SET_DIRECT_MAP if MMU
+>> > +	select ARCH_HAS_SET_MEMORY if MMU
+>> >  	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
+>> >  	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+>> >  	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+>>
+>> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+>> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+>>
+>> LMK if you want this to go in via the RISC-V tree, otherwise I'm going to
+>> assume it's going in along with the rest of these.  FWIW I see these in other
+>> architectures without the MMU guard.
+>
+> Except arm, they all always have MMU=y and arm selects only
+> ARCH_HAS_SET_MEMORY and has empty stubs for those when MMU=n.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+OK, maybe I just checked ARM, then.  I was just making sure.
+
+> Indeed I might have been over zealous adding ARCH_HAS_SET_MEMORY dependency
+> on MMU, as riscv also has these stubs, but I thought that making this
+> explicit is a nice thing.
+
+It seems reasonable to me.
+
+Thanks!
