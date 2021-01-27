@@ -2,130 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5963052AC
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 07:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B02E305334
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 07:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbhA0F7j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 00:59:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231252AbhA0GaR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 01:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbhA0Fsb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 00:48:31 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4596BC06178B
-        for <linux-arch@vger.kernel.org>; Tue, 26 Jan 2021 21:46:20 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id h15so422146pli.8
-        for <linux-arch@vger.kernel.org>; Tue, 26 Jan 2021 21:46:20 -0800 (PST)
+        with ESMTP id S231572AbhA0GSm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 01:18:42 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A35FC06174A;
+        Tue, 26 Jan 2021 22:18:02 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id y17so737536ili.12;
+        Tue, 26 Jan 2021 22:18:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pGwLX141izLDvx1hQTGiiwKO086AeFCYCtYAmNWi9wI=;
-        b=AmTdH3IG4UQzJndI1D27UQJWy8ntwz3x96fLaGYHHI8DDA6H+Y68FXg1U5+ek6ovCn
-         BQskNvflja4Kqe4HWtn3w42joJ9YUlN577FkgtA2wn8h4A+gee/IgXId+fkal+R9QLJn
-         Na2PxVzgvj5x+O52bGPuCVBbamCyvJdweyNcbR3LECVkeySnNjL82VUJ/YR5uOBQj289
-         qijz8MXoF7zeIeGbr1pzM0INdKa2u6ikLS6t9DFsADUNGVZIqVyByhitCvhByTi3r9Cb
-         GFO8v3dk3dOPI8NCgIEvoLfRAsoSe8tDBOqTLpl21rRUuC+KF1FC+PjiJRruBMdfA3J+
-         e4PQ==
+        bh=ECfYTa8g/RycDbRtH0Yn068mLUNU/nijcXJNyLlgQgY=;
+        b=eDw4roxzk2VITFd9zUB48hbCgR9FB1N9cd2g7I7ayoi9LWIjrpHZgrtvgIJBSfLWD+
+         eorNCdswJvZUQCPzFRzbQsAtKdztjr+cJ9Vd8+UR07mCBr2qHA1JymoLnCHRd696NvjX
+         uOslp6y4BKiKdhVlS9Xixpsphrh0P5jTOcZW74OvAyp9ddPsm7HrHyFrlK8EPVoXdPr9
+         +8Fk6Ovf1qUAeQYwwDPXLdCMonkMPUicaCPS30q3znj1XuWuN6WusHvbQugQtBd4pwOr
+         CthT7yQagTUJYu4zCDYmybJqqDOjzu0HMCLt9RqPyqdBl6Pf8bFwMJ4LNdWOwXPDXSZ3
+         ywrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=pGwLX141izLDvx1hQTGiiwKO086AeFCYCtYAmNWi9wI=;
-        b=CYObYALOMQed6KzHB9vwpXHNuQ3MeyOAz9gN6UqAvfMbr5DK8gRAWwvJU5M/ZkXlVQ
-         37lw6EHAO2fs7ZmeNQOvMKn1iFXcBXWv1LOpK3xlrpKQyvkgUP31X8usCOaKEppvifqs
-         87CxppxmpOT89N/8PudX6Z52XikTLHae0d2flxRLnqU1Y0To9h0pS7t7ZWOlNgYGjW2X
-         WqsEuV7nyyYVgGozWnxdrCNgneqcxljjXdZlHvk8fR1ODXgg/Nh/hd9geTNSbDBNUcte
-         LWUyUtQFwVMVUgepgtgaKC5SbO2AnwIMCZDn0JXrGFOcizwG6hJtLFKhDqqL3L9bKKt3
-         dMRQ==
-X-Gm-Message-State: AOAM531cutzvHHnbjTW1BIprC0z7HOsqWVXobpJcheKV8IzHcnh/h1Zb
-        KHhFRX2u5xichG8QziXFWSpmFw==
-X-Google-Smtp-Source: ABdhPJzlYhGFSdTqcPKE8K2PIdYf+VA6n3sx73gQUwIFBNusPJfAV5LCpnY0tYvL1n4CZqElayMtXA==
-X-Received: by 2002:a17:902:e8c9:b029:de:a2c7:e661 with SMTP id v9-20020a170902e8c9b02900dea2c7e661mr9611617plg.76.1611726379718;
-        Tue, 26 Jan 2021 21:46:19 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id 145sm840907pge.88.2021.01.26.21.46.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ECfYTa8g/RycDbRtH0Yn068mLUNU/nijcXJNyLlgQgY=;
+        b=VhvWj1CZQjREbXo41XK7cQ40FTjsXQJNWQNJFU28gcGwLw9qpuFUnK2DwZGmUZeymw
+         EKk4/TMUREWTNAPxYQ8dkQ+nNN4pUBO7r5l4dwuCoI80I8N5Tw9QX6ovA38UFyqscdLI
+         QO3XME0q5rNlQO8+8NfZSBfiNh3QmIjdhr3CUFWSndG5lUIMgQuPC+tY+rbyhb+It46j
+         iNKM2reb35DgSOHaP399nF2JjPDrC4el652ZklOGg5NFOXNSM/jf/XIr0s8wccXLQNBH
+         NLItd/iiD2cJtc0QeIgCBuz23OgimtHDrH1w6DAJx0kHChGo7HYe9sDJDGhDC8DaZnPl
+         TE6Q==
+X-Gm-Message-State: AOAM531WXF/VDzLjlsv5jboQaEtdzm+Zy5I5yamcHewOwzW+Ya3K9qW5
+        iLy9tBVszc7pLzU8mYZDZKgS/buBFjUftQ==
+X-Google-Smtp-Source: ABdhPJz82JoqeNCni7Sw0B4tNgZbCVA/qBL4J2zNUePZmXzJdMP0M/BzJxS+yDG9sz+arplzdzsBlQ==
+X-Received: by 2002:a92:a803:: with SMTP id o3mr2618129ilh.82.1611728281311;
+        Tue, 26 Jan 2021 22:18:01 -0800 (PST)
+Received: from frodo.mearth (c-24-9-77-57.hsd1.co.comcast.net. [24.9.77.57])
+        by smtp.googlemail.com with ESMTPSA id r6sm547556ilt.56.2021.01.26.22.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 21:46:18 -0800 (PST)
-Date:   Tue, 26 Jan 2021 21:46:18 -0800 (PST)
-X-Google-Original-Date: Tue, 26 Jan 2021 21:46:11 PST (-0800)
-Subject:     Re: [PATCH v15 03/11] riscv/Kconfig: make direct map manipulation options depend on MMU
-In-Reply-To: <20210123110041.GE6332@kernel.org>
-CC:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        luto@kernel.org, Arnd Bergmann <arnd@arndb.de>, bp@alien8.de,
-        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        elena.reshetova@intel.com, hpa@zytor.com, mingo@redhat.com,
-        jejb@linux.ibm.com, kirill@shutemov.name, willy@infradead.org,
-        mark.rutland@arm.com, rppt@linux.ibm.com, mtk.manpages@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, peterz@infradead.org,
-        rick.p.edgecombe@intel.com, guro@fb.com, shakeelb@google.com,
-        shuah@kernel.org, tglx@linutronix.de, tycho@tycho.ws,
-        will@kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, lkp@intel.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     rppt@kernel.org
-Message-ID: <mhng-0c84abc1-8ac8-4142-be1c-a269d8b345f8@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 26 Jan 2021 22:18:00 -0800 (PST)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jim Cromie <jim.cromie@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH 19/20] dyndbg: try conditional linker expression in KEEP - RFC
+Date:   Tue, 26 Jan 2021 23:17:52 -0700
+Message-Id: <20210127061752.120083-1-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 23 Jan 2021 03:00:41 PST (-0800), rppt@kernel.org wrote:
-> On Fri, Jan 22, 2021 at 08:12:30PM -0800, Palmer Dabbelt wrote:
->> On Wed, 20 Jan 2021 10:06:04 PST (-0800), rppt@kernel.org wrote:
->> > From: Mike Rapoport <rppt@linux.ibm.com>
->> >
->> > ARCH_HAS_SET_DIRECT_MAP and ARCH_HAS_SET_MEMORY configuration options have
->> > no meaning when CONFIG_MMU is disabled and there is no point to enable them
->> > for the nommu case.
->> >
->> > Add an explicit dependency on MMU for these options.
->> >
->> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->> > Reported-by: kernel test robot <lkp@intel.com>
->> > ---
->> >  arch/riscv/Kconfig | 4 ++--
->> >  1 file changed, 2 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> > index d82303dcc6b6..d35ce19ab1fa 100644
->> > --- a/arch/riscv/Kconfig
->> > +++ b/arch/riscv/Kconfig
->> > @@ -25,8 +25,8 @@ config RISCV
->> >  	select ARCH_HAS_KCOV
->> >  	select ARCH_HAS_MMIOWB
->> >  	select ARCH_HAS_PTE_SPECIAL
->> > -	select ARCH_HAS_SET_DIRECT_MAP
->> > -	select ARCH_HAS_SET_MEMORY
->> > +	select ARCH_HAS_SET_DIRECT_MAP if MMU
->> > +	select ARCH_HAS_SET_MEMORY if MMU
->> >  	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
->> >  	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
->> >  	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
->>
->> Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
->> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
->>
->> LMK if you want this to go in via the RISC-V tree, otherwise I'm going to
->> assume it's going in along with the rest of these.  FWIW I see these in other
->> architectures without the MMU guard.
->
-> Except arm, they all always have MMU=y and arm selects only
-> ARCH_HAS_SET_MEMORY and has empty stubs for those when MMU=n.
+This is the last patch in v3 of patchest Ive sent previously:
+v2: https://lore.kernel.org/lkml/?q=Cromie+v2+00%2F19+2020-12-25+-Re
 
-OK, maybe I just checked ARM, then.  I was just making sure.
+It isolates my only issue now, Id appreciate advice, and dont want to
+distract you with the 18 previous commits.
 
-> Indeed I might have been over zealous adding ARCH_HAS_SET_MEMORY dependency
-> on MMU, as riscv also has these stubs, but I thought that making this
-> explicit is a nice thing.
+Im trying to use ? : inside a KEEP(*(expression)) to only include
+A_header when A has content.
 
-It seems reasonable to me.
+IE:
+  KEEP(*( A ? A_header : ))
 
-Thanks!
+It fails with inscrutable linker error.
+  GEN     modules.builtin
+  LD      .tmp_vmlinux.kallsyms1
+ld:./arch/x86/kernel/vmlinux.lds:46: syntax error
+
+Is this possible by other modes of expression ?
+
+I tried inserting {} 1st, that failed, appearing to foreclose any
+foreach-like construct.  I also tried () around each term, and a
+preceding, embedded "_loc=.;" statement to test the parser.
+
+I didnt try doing this with 2 separate KEEPs; while it would be
+simple, it defeats the adjacency guaranteed by *(.text .rdata), which
+is the point of this.
+
+If this were to be possible, it opens up interesting options to
+statically construct table headers, and possibly even tree structures
+in the linker script.  Id use it to add 1 header for each module, and
+strip a column out of the table.
+
+Ive pulled binutils to take a look at the source; having never done
+anything bison-ish, I anticipate a long study without some focused
+primer knowledge.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+ include/asm-generic/vmlinux.lds.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 87868c5a980a..6198cc850f9b 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -329,10 +329,10 @@
+ #define DYNAMIC_DEBUG_DATA()						\
+ 	. = ALIGN(8);							\
+ 	__start___dyndbg_sites = .;					\
+-	KEEP(*(__dyndbg_sites .gnu.linkonce.*.dyndbg_site))			\
++	KEEP(*(__dyndbg_sites ? .gnu.linkonce.*.dyndbg_site : ))	\
+ 	__stop___dyndbg_sites = .;					\
+ 	__start___dyndbg = .;						\
+-	KEEP(*(__dyndbg .gnu.linkonce.*.dyndbg))				\
++	KEEP(*(__dyndbg ? .gnu.linkonce.*.dyndbg : ))			\
+ 	__stop___dyndbg = .;
+ #else
+ #define DYNAMIC_DEBUG_DATA()
+-- 
+2.29.2
+
