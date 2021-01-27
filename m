@@ -2,97 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DE1306656
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 22:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8F13067A2
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 00:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbhA0Vfg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 16:35:36 -0500
-Received: from mga12.intel.com ([192.55.52.136]:11286 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235502AbhA0Vdg (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 27 Jan 2021 16:33:36 -0500
-IronPort-SDR: 1C6kwAypKC3rogyywoycp5gryo9ja19C0/dn2xhAm6e14c6bbnuAbWu3w8I8sY06yKrA1X2T7b
- bMrhdMzfD3Cg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="159309026"
-X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
-   d="scan'208";a="159309026"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:30:38 -0800
-IronPort-SDR: IySvv2pF1d3N/60YOMj+QWV+PWVEqCjOBniHDo0zq7hN7/LXpUYviorx1EBF2A3wn4r+l9BG4y
- 8m7MDiTqSJvQ==
-X-IronPort-AV: E=Sophos;i="5.79,380,1602572400"; 
-   d="scan'208";a="362581384"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2021 13:30:38 -0800
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v18 7/7] x86/vdso: Insert endbr32/endbr64 to vDSO
-Date:   Wed, 27 Jan 2021 13:30:28 -0800
-Message-Id: <20210127213028.11362-8-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210127213028.11362-1-yu-cheng.yu@intel.com>
-References: <20210127213028.11362-1-yu-cheng.yu@intel.com>
+        id S235408AbhA0XQO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 18:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235328AbhA0XMF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 18:12:05 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0930C06174A
+        for <linux-arch@vger.kernel.org>; Wed, 27 Jan 2021 15:11:11 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id dj23so4439835edb.13
+        for <linux-arch@vger.kernel.org>; Wed, 27 Jan 2021 15:11:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=P4E9XkSKWUJdsiYmpjHKs1qxutdDmK6RKi7DGMsqnfo=;
+        b=Q2jkOledYj90UawG6DC1dSHDZAGnp9L6DRQjK1D66cAkvwO6hk8Xsthr7hqEG7jueZ
+         yLBGLtdTjXbY4Zjya6m4NQBwZtczDulMvssVO+laJZt1eWI07XllWSnP1EdmbRKwwvh6
+         gDymjd48Dx3Egm/G2yK/IswQSAYCyEHvEkLdZuZrbR5Kr0prZweJoS2W2u6tKhLjfA0d
+         LzYTShcFm6mXtyyKuOiiCWOIqv7+lsW9/KjBYgUtoF32rut5vFG00NyZIGrdS0AwtcpR
+         5N2pBfKtF6WYksAgOtvJa7U8Nn7dzehnAxp8Zcnx5p2LfR5oHqRjx7NLpk429kaj/mdW
+         PksA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=P4E9XkSKWUJdsiYmpjHKs1qxutdDmK6RKi7DGMsqnfo=;
+        b=X3yyNifYt+N0VM4UQHTMHGQWgWbKnhOPUu2wAM5n3xW1b7+CD0Z+ms3TBEZM55U/KC
+         kVS8aOfH4BLXU9E4puL065BXCoxWr7fgaAYql4Pq/fz0JOPLkiunP0zLFzPv5+tIaMc5
+         gv6drxG5rsMvGxjT5jEz2T7CT1jR8TUeNBt8/JamXYVCiYdQ+3/mVKL7eXKvrY5SQA6K
+         Hk7baUNAfFIj86JbZqgR74w0jFvWT3Jv76Gx+4GGUStdHOPnkjbIDJOTNWl5qf2Zyerq
+         d3MH3GpzayhzCD+CD5YeKzakql3Q9zXn6kUf0bD0Hunp7Ee0f4gZCmsPS9J1YFio9xga
+         5zsg==
+X-Gm-Message-State: AOAM533kdijdfVu92kCUv+SsGpCSaJO2WvC5wrY1LKxqeRivvioG2syw
+        TwTYAHL1AtlWblu5yqtTwzhiw+EMFQCOpRELQylptQ==
+X-Google-Smtp-Source: ABdhPJwZ05CRYzyDCIn0+aFVtJGEaG/UnKXK3voTOj0Ndco5CXyd3muvzdlRYeyyYdJ8Cn8ILMSQUOEfipZHhI1dia4=
+X-Received: by 2002:a05:6402:1341:: with SMTP id y1mr11078032edw.273.1611789070344;
+ Wed, 27 Jan 2021 15:11:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Wed, 27 Jan 2021 15:10:59 -0800
+Message-ID: <CAP045Arw973KWCiHqXmRJ3QxH8o84on-t8Nm6NyEYXDpicF7JA@mail.gmail.com>
+Subject: Re: [PATCH] ptrace: restore the previous single step reporting behavior
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     kernel@collabora.com, krisman@collabora.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yshuiv7@gmail.com, "Robert O'Callahan" <rocallahan@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+Hey everyone,
 
-When Indirect Branch Tracking (IBT) is enabled, vDSO functions may be
-called indirectly, and must have ENDBR32 or ENDBR64 as the first
-instruction.  The compiler must support -fcf-protection=branch so that it
-can be used to compile vDSO.
+This regression[0] has totally broken rr on 5.11. Could we get someone
+to look at and merge Yuxuan's patch here?
 
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Acked-by: Andy Lutomirski <luto@kernel.org>
----
- arch/x86/entry/vdso/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+- Kyle
 
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 02e3e42f380b..ff7b56feb5c3 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -93,6 +93,10 @@ endif
- 
- $(vobjs): KBUILD_CFLAGS := $(filter-out $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- 
-+ifdef CONFIG_X86_CET
-+$(vobjs) $(vobjs32): KBUILD_CFLAGS += -fcf-protection=branch
-+endif
-+
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
- #
--- 
-2.21.0
-
+[0] https://github.com/rr-debugger/rr/issues/2793
