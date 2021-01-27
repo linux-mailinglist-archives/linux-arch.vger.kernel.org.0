@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D565E306518
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 21:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88433306521
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jan 2021 21:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbhA0U0b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 15:26:31 -0500
-Received: from mail-bn7nam10on2091.outbound.protection.outlook.com ([40.107.92.91]:61825
+        id S233009AbhA0U1y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 15:27:54 -0500
+Received: from mail-bn7nam10on2119.outbound.protection.outlook.com ([40.107.92.119]:59360
         "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232702AbhA0U0K (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 27 Jan 2021 15:26:10 -0500
+        id S232839AbhA0U02 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 27 Jan 2021 15:26:28 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VVguhxboczW5md09grt/C4KR8m2VYYdPbUk5DYaLE+FvCF3jnCFcx1HFNCKJeQmpKlhkF9ovLG5pxBqsajrxSLePqc2/uYMaHE70W6FSz3nuUHtxTqXuVWyNQXP9VmZIRrV9afecX6EyQ/olG510YI9xNmrvmIq9CEBfofKkcWkcAd5Zrq88rQEUI8c/fqF4xq5SerMIfGMn4ORFBgU54++Y0Mb3n3f5r9+MylCn3geJu+Wz4KNKa+Bd1BnH6uKn7Kf1uezPtBLYUuqXxp0Ye3smHd8neRF4jjbxQaVRar91Ae46DANutBTXpjFyj5YHdz5O03Ojqi2MBtsv2Gpecg==
+ b=eseMG1mhF1TH4YNJRYv8Pr/nTRZi6fj8RthgE0MtIx8yINaL9H6Iljs+FcsHgqXSlinI+GVpJfEjeH2QA0drmYtbEL8zeLjixUpWQOprMMdJEx4rBNEparjSynuJMO1CuV9E5SpulKJk1KpRwfuzpXG6J3Zb7lrp/Ji++VMRl6KAuBTUXmhKQuGToaHpa4aNpPLXBc2lV1sSeR5ztasd8V7uQN8hVaAColDkRIs+oiEu6ZyvM+gCw9OHf+30Ec6JygNXvxBt0fCnTWtLIMReZBgLBt9NUiIPjG8ffE9NnIIud6xdRELMcKq0SjSu6Yfp3aBuSO5dQxFbxJB4uSivog==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WlPs69BH7Y19heM5a9ZfyThmQWHfKRlozZ+lnew4f1Q=;
- b=b1IaG7ih2afqIPa0TEpkZNlUjqUm7otGLWAV33/M8VAKxvf/wKRlmaODXpHLL9+q3nzO4Zj34pN+g1gAE+rH1EAZ3HubwZvtYusXgLYznf9k4KKZEGsdPdH63UMUaZ0y+fQO1yuGjF+WCaQPhS7RS7jZF9mzZ1u9InkrC1wulcn59mpb1SsQivNLSrl7dc/d8Cr8GG7qwV+9cqFQrC+gaK1qalJBz9Zr75KaK9GWFgbN10UwCuODJoqzMvr5mZ8hDTB4aKWbIPl6VVH1XxI3RmroQgG/2BpfjKrR15k7/Dyvr4iA0uPL6rw+HyUQzvAwwMIsgu4muLjZGKrGvQE19w==
+ bh=NgHNvx65TNaHNTmJvXgCYt3WST8kj7CB5fpRisUa1MM=;
+ b=f0n3JqLXPT32i3l1+F09VdVMfNxDuhItIpEq+vmwH1cjav35ApXHUxQ8VSIOfR864fqnFMmpZzAeW09glP+QyvzfFD8pb4UtG3GbK0hnN2+ciKybyCuclb8YQFmffMpag50k1CfhvbsMGIM6d58/g8Jvy4O50ZpMbOzQNLZpIYlJKsFZxU3t/NuHNPFVjJWNvkHFlsEZoOtMmZB8eOLSom//oWVQSMbQW8Ei4xchQJwhh8va9M5owtfKHYBQgMQvvOlymVUppoXh4R3EZG+h26gkmJwg2DhhtdWmXF+DmG1jBL1O9FbRN17tzCfJ0+8zcHzuQxQJKn1ZYCSCsQnX7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WlPs69BH7Y19heM5a9ZfyThmQWHfKRlozZ+lnew4f1Q=;
- b=imqB5EEWD5t1bgCmcjpihrDd6rzNc1BH3fzbgCyMJUPM9lvoIXAVQtuE1ceBrI9nTM4MnNBI6tksV5M12SpRIzkgCJaxqaWlpK9TKDVCEXAFv3XQrK60jJfgr7NisVpRKm8yhj/VoBxNgGc/YF8reMMJoud/K/IziphGGcGf4Sg=
+ bh=NgHNvx65TNaHNTmJvXgCYt3WST8kj7CB5fpRisUa1MM=;
+ b=SSnTVR0026szMiETTpqJ3Gdz6mEIXiGYBMt2g+EB23uos/YONSJWj4Dlni8vGoQdAlfP8ZaWXo7jJxLVNzDQeJiampsJMzZUXdtYyd6426Gx0WOffxjSdeKHD/xDgb9mpRGZTx4u7fjIAkghl9kVHbodMm3oYd9h0dq5BfPjQRM=
 Authentication-Results: microsoft.com; dkim=none (message not signed)
  header.d=none;microsoft.com; dmarc=none action=none
  header.from=microsoft.com;
 Received: from (2603:10b6:208:3a::13) by
  MN2PR21MB1215.namprd21.prod.outlook.com (2603:10b6:208:3a::15) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3825.6; Wed, 27 Jan 2021 20:24:25 +0000
+ 15.20.3825.6; Wed, 27 Jan 2021 20:24:26 +0000
 Received: from MN2PR21MB1213.namprd21.prod.outlook.com
  ([fe80::91f:e9a:5737:3a05]) by MN2PR21MB1213.namprd21.prod.outlook.com
  ([fe80::91f:e9a:5737:3a05%9]) with mapi id 15.20.3825.006; Wed, 27 Jan 2021
- 20:24:24 +0000
+ 20:24:26 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
@@ -45,9 +45,9 @@ To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         linux-hyperv@vger.kernel.org
 Cc:     mikelley@microsoft.com, linux-kernel@vger.kernel.org,
         x86@kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 05/10] Drivers: hv: vmbus: Handle auto EOI quirk inline
-Date:   Wed, 27 Jan 2021 12:23:40 -0800
-Message-Id: <1611779025-21503-6-git-send-email-mikelley@microsoft.com>
+Subject: [PATCH 06/10] Drivers: hv: vmbus: Move handling of VMbus interrupts
+Date:   Wed, 27 Jan 2021 12:23:41 -0800
+Message-Id: <1611779025-21503-7-git-send-email-mikelley@microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1611779025-21503-1-git-send-email-mikelley@microsoft.com>
 References: <1611779025-21503-1-git-send-email-mikelley@microsoft.com>
@@ -58,101 +58,291 @@ X-ClientProxiedBy: MW4PR03CA0139.namprd03.prod.outlook.com
  (2603:10b6:208:3a::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mhkdev.corp.microsoft.com (131.107.174.144) by MW4PR03CA0139.namprd03.prod.outlook.com (2603:10b6:303:8c::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Wed, 27 Jan 2021 20:24:23 +0000
+Received: from mhkdev.corp.microsoft.com (131.107.174.144) by MW4PR03CA0139.namprd03.prod.outlook.com (2603:10b6:303:8c::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Wed, 27 Jan 2021 20:24:25 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 2d12e72a-aa15-4511-3f30-08d8c30189a6
+X-MS-Office365-Filtering-Correlation-Id: 62df4985-6ffe-4af8-e6fe-08d8c3018aaf
 X-MS-TrafficTypeDiagnostic: MN2PR21MB1215:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR21MB1215D1845FE39B65F9D7631FD7BB9@MN2PR21MB1215.namprd21.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-Microsoft-Antispam-PRVS: <MN2PR21MB12154D0B8959C3038BD1D40BD7BB9@MN2PR21MB1215.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 51f5o5DDJAUfEExHlvatHTRHevnSjuo52scRbRTUlVrLsexy4UHVcvWcUmy0gFLqDLZFeHUU2bCAwoDuDS2ax+8VY48Jm5uYp4ptUpESP0hDmq/kI+plsoheEhUuwQrjZYymSkNoiOfp2gqvBsOCmgTXV8Pu7ekkwzPfR9D+N0baG/WKtj5U3UlDsNaLCeepThacebJ/re5vUDF0muQbOc6z0zB1y2yMj72PQWxHstMVX6jWB2RLkQp4ZhywHXbAjdjmpM2SFblCn+mr4PfvmF18TBG/Tipzyomf+4New0BentZwKwv4R4XDlCNGryMDxn+56kXjxDBE29AgRVxbId1bN2q6scwb6YtipTeJnscqKwNeowCTrFVRSmb4MfGZ+8b4fk5lU+0rJSQBxlaCvseyrTgHvtS9gszuiXntuKgET1YtkNEMeXE/6ZtyCYzFhFK0iSvWlA0pjlK93jH5SiqtCIcOPFoJkvrFR8MqGf7/Y7ZEfZ+47wtRjoTg84xMJ46nPsoZz8IyPAFrw4Y3Au0BE/RPT/th1ZuHm5jMsOkp5NbngwtDhXsDYj3pJcVQ
+X-Microsoft-Antispam-Message-Info: pYwWaGori/2si8NJfipUmDnelUj6oV+knrSTDR/VVJqDiU0LWchC7Blp1Lp8Zyt8g+NdnUCjASFf6LXVVHMQmDlBk+yOEPCiHoq8yl8vOuEHN5aHn9/hluDm+WmlTYXbClCEXY9pFUp8bUhHOllU9FbdBKMuKcqbqht8schRHfNvZQCilSd9onA8tlYDUS2pciyomADNca0+ZKQFsREzK+viBC5TLs+a6R6O46egpEj9/YsS1U+MXZO0g2cqO4maHvXn4JCjcNmcmVaeUQb3TTKyFxnxIwMdNjoMj/AuC/7Xq8PWOLD/K86pu7KbUeYlRlTPKgFR+qNETfempi3R9Owz04yISQ59uhWirD88twb6IPqr0TKtn0b0meHqVtJBWOtPmbNpxkT9cae3cFqQaCHtOz4nrbxDtctiz3WE4henOBzvVCL0tUvEJl+pcMRE26al7yYPen/E9XK/KGkgP/jU+oinKUy2jk4hazcsPYsDLn1ryahIN4N/aQvrUwVULKoMy1AkO54GBikP70NATqHNsDs22Aesx/cZw6O0eMQuj3bVEdQf6AIbG8sXiFbY
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR21MB1213.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(6666004)(66476007)(66946007)(956004)(26005)(66556008)(478600001)(921005)(8676002)(5660300002)(316002)(2906002)(86362001)(83380400001)(8936002)(186003)(36756003)(82960400001)(16526019)(4326008)(2616005)(6486002)(7416002)(10290500003)(82950400001)(52116002)(7696005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?OVLI96+4wwOJHzKdgWGwAZJnT63QlTWK2+EcjFXqGvUOQAU3iO2QzPkElH9u?=
- =?us-ascii?Q?o1ULiHXMuYbPFxEEASpJcI01URYWGWctQ19HkI9wSSrYK9rMVtzZwU7ScSjp?=
- =?us-ascii?Q?IQh0hlzgeYWOF/VgzlGHPSuASvxSWb5zTPEzPgl/mARpZtCAAAU7yabDImpd?=
- =?us-ascii?Q?smSfdZ4Tz/9z/tbZutFMqBJL41rnioyxdkD9OYvdLDNcjXhyLMp9PeYutpYF?=
- =?us-ascii?Q?I9rkgRSVua82XzOn/B9WamWZr3QIPKRcnDO/SQ9ajzxhK3lMoO2ooyseDCb3?=
- =?us-ascii?Q?EIDPWtklpoMQ6lMy6++Rva32ywEkuHCoAF9ayntl4W8WdWl7bqfGvXv6xvkU?=
- =?us-ascii?Q?bZFSXQ58uUeAwVyKTdXSqevfGkEqYLDfcd7xmtcltffXzdlfxvnDyJUt4VjJ?=
- =?us-ascii?Q?psfhaUM2mpevIJmKPIrxLjZ3dz3dOI5iWDzpmBaPR+TM1bxTfcILzo12Q8Nw?=
- =?us-ascii?Q?VXcwgxaOXOtt9XpCuZ3mITBMbIMUYIbAMRR105QG8D17+OR4C0rruhcfpIyz?=
- =?us-ascii?Q?Yg2K4oi4E9hwnlc3aL5aDGT4sDcrr+WQ/f0ymPV/u9Yvt06yw1lsjFpqFEUa?=
- =?us-ascii?Q?x6YjsHBAJfRFBtI5ZN3dY50NTJVgWIBnDuOlu2yORgvCbQz4kF7fowBnqI2f?=
- =?us-ascii?Q?MhEe/ITizR9ouxew/3WcJoYB3Mrt6T0YXwdIQEhnWsJMHnll9umBsFwKWaYN?=
- =?us-ascii?Q?uLrOlsMoFU/9ulihrNf/aVzKWERCXCoVaVVquEvAuI0AF6J+4kFLENaNagKh?=
- =?us-ascii?Q?3a55RblYyhBzb9XGrQIywXX8fhx6ohmhqbfJI3AWRsEf4khPbrvLvQu+E9qU?=
- =?us-ascii?Q?bKNZe9LcSNuNtpt4RTheRN345J7UYr0F6B2bBsfZxfCuo1BvGy3o5H4SX78s?=
- =?us-ascii?Q?ueoj5P23FQHE+tkc858P6HJ595IrGDVpLsDNR2dZx7X9y812tr4Yf82pEYJH?=
- =?us-ascii?Q?rl3xZtb5EqsApVj68T9AHkGMr2VrVrGTGX3Lr69TKn9ff803JCy813pxCrjU?=
- =?us-ascii?Q?jW1hANdTDBe10DC4GM6nbdPNcv/8XA3fH0DrEeFbv4NvhgjfVCUKIPRQzXuS?=
- =?us-ascii?Q?UiYYzq4b?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?AlF2gly0fJjNcsI3WYbzCh03QfYdJOy2SRq4ksOakdQp88BhtBejByizOV6l?=
+ =?us-ascii?Q?/Age2/vfQ6908w587mWR7NsdZ/pafjq8z2ilIvyzlquTeS/vNSVzZbnHhwfz?=
+ =?us-ascii?Q?A4psBT3+zAC25m7Fikc+X44ko0RZpPMvgLsn2MA20Zwtp4gGLe7W7i3fskqa?=
+ =?us-ascii?Q?eHA/Z8Nnt4sJlhvFjnm6e7soYOm5zkYbU5lulwiJWjqwziS2KGRWE8iEDTdQ?=
+ =?us-ascii?Q?vqR8a+c5tvQsYGbdSqx8dFAP+zCVGAyEJkr66YuCt69z31L54zytzM2ZemGQ?=
+ =?us-ascii?Q?lRvo9AWUBH0UQe9AQrZhNl3Wjn7iGvJQwSzUK6IXO8p/HtQbIyZ30BPFP9LB?=
+ =?us-ascii?Q?Ejo/dsiVJg7257IN1WJXYapOb/zTQ5XoZq7+jSfgyTKUTQqPIwsLX0e7ML7h?=
+ =?us-ascii?Q?I75IuAJ0GJTPr/PbDKO81AkWcOqhAKMiXOO2Yh6Dex5Dtze19S+wqtgGQXbr?=
+ =?us-ascii?Q?udwOcAsIxdQQ268HCLe7jIHJdhBBVTMZAqVQov3lm1U07Z6O+thsyBfc+pQZ?=
+ =?us-ascii?Q?S+QgYig4AUup5xT9n6NW1t+gAZA3E7yC5FyXcbkNplIhneY1/Y1T1r+i249P?=
+ =?us-ascii?Q?+zNGerOgLiabttK3sZri8bMr+BEStriotmnc6nfxEv53JGjF08l8KmuOTOGl?=
+ =?us-ascii?Q?K48I9G++ysVJPJ5M8GMnjE1SP94Itp+Ucjv2390jydBujtOeSQft7NvCNjQO?=
+ =?us-ascii?Q?mbnHAxZD7jjaX/yG9Q5AhAtNif/eTZ7E9FPeJN6bN5RWqOc0Enss7hYhNy8F?=
+ =?us-ascii?Q?Cjly4Rr/vXad+3Oc1wwuoDfVXRwUV9Hy/R7zaTsIGroo7SfZ3hpeDmBt8J8z?=
+ =?us-ascii?Q?CAAQizth9bSI+pZlcOaeYPJHkAK80+MJj0P7HNx1cjeJrQSG7mVTjtOMoqAb?=
+ =?us-ascii?Q?EyXNDX/4z2lkGpBfPUiOjQXfhgCwD7ZeF++RQQcHaNLA+EJeSky79AIeg2qT?=
+ =?us-ascii?Q?nNlmdEW9PgX5VJMVHRglIZuXwZIPs3Gl4BQRvDkbhDgznOjkcmKQowdaX67S?=
+ =?us-ascii?Q?gxKNfczMAAOsGoaDroMWaKRwxTw1Q1I4I4rRmVvfneCRBVhTVenIVwU+tcJg?=
+ =?us-ascii?Q?tZfiqbgE?=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d12e72a-aa15-4511-3f30-08d8c30189a6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62df4985-6ffe-4af8-e6fe-08d8c3018aaf
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR21MB1213.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 20:24:24.7041
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 20:24:26.3321
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8NbIXie60sk0PxhTPEvNEoB6YQlRW/rytn/zMV6g07qIo/AzTdFKqZ9/vbBU99j3fdzCfWyAj5yt9D5it4dbFw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: cmf/lEja6MOeFCMAlp8SsiRyXJYkU0f1hanrLmgfXy3slr/ZGXuswLozgX87OoN3aefYvvWOGzU/qEsUtqwrDQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1215
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On x86/x64, Hyper-V provides a flag to indicate auto EOI functionality,
-but it doesn't on ARM64. Handle this quirk inline instead of calling
-into code under arch/x86 (and coming, under arch/arm64).
+VMbus interrupts are most naturally modelled as per-cpu IRQs.  But
+because x86/x64 doesn't have per-cpu IRQs, the core VMbus interrupt
+handling machinery is done in code under arch/x86 and Linux IRQs are
+not used.  Adding support for ARM64 means adding equivalent code
+using per-cpu IRQs under arch/arm64.
+
+A better model is to treat per-cpu IRQs as the normal path (which it is
+for modern architectures), and the x86/x64 path as the exception.  Do this
+by incorporating standard Linux per-cpu IRQ allocation into the main VMbus
+driver, and bypassing it in the x86/x64 exception case. For x86/x64,
+special case code is retained under arch/x86, but no VMbus interrupt
+handling code is needed under arch/arm64.
 
 No functional change.
 
 Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 ---
- arch/x86/include/asm/mshyperv.h |  3 ---
- drivers/hv/hv.c                 | 12 +++++++++++-
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/mshyperv.h |  1 -
+ arch/x86/kernel/cpu/mshyperv.c  | 13 +++------
+ drivers/hv/hv.c                 |  8 +++++-
+ drivers/hv/vmbus_drv.c          | 63 ++++++++++++++++++++++++++++++++++++-----
+ include/asm-generic/mshyperv.h  |  7 ++---
+ 5 files changed, 70 insertions(+), 22 deletions(-)
 
 diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index eba637d1..d12a188 100644
+index d12a188..4d3e0c5 100644
 --- a/arch/x86/include/asm/mshyperv.h
 +++ b/arch/x86/include/asm/mshyperv.h
-@@ -27,9 +27,6 @@ static inline u64 hv_get_register(unsigned int reg)
- 	return value;
+@@ -32,7 +32,6 @@ static inline u64 hv_get_register(unsigned int reg)
+ #define hv_enable_vdso_clocksource() \
+ 	vclocks_set_used(VDSO_CLOCKMODE_HVCLOCK);
+ #define hv_get_raw_timer() rdtsc_ordered()
+-#define hv_get_vector() HYPERVISOR_CALLBACK_VECTOR
+ 
+ /*
+  * Reference to pv_ops must be inline so objtool
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index f628e3dc..5679100a1 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -55,23 +55,18 @@
+ 	set_irq_regs(old_regs);
  }
  
--#define hv_recommend_using_aeoi() \
--	(!(ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED))
--
- #define hv_set_clocksource_vdso(val) \
- 	((val).vdso_clock_mode = VDSO_CLOCKMODE_HVCLOCK)
- #define hv_enable_vdso_clocksource() \
+-int hv_setup_vmbus_irq(int irq, void (*handler)(void))
++void hv_setup_vmbus_handler(void (*handler)(void))
+ {
+-	/*
+-	 * The 'irq' argument is ignored on x86/x64 because a hard-coded
+-	 * interrupt vector is used for Hyper-V interrupts.
+-	 */
+ 	vmbus_handler = handler;
+-	return 0;
+ }
++EXPORT_SYMBOL_GPL(hv_setup_vmbus_handler);
+ 
+-void hv_remove_vmbus_irq(void)
++void hv_remove_vmbus_handler(void)
+ {
+ 	/* We have no way to deallocate the interrupt gate */
+ 	vmbus_handler = NULL;
+ }
+-EXPORT_SYMBOL_GPL(hv_setup_vmbus_irq);
+-EXPORT_SYMBOL_GPL(hv_remove_vmbus_irq);
++EXPORT_SYMBOL_GPL(hv_remove_vmbus_handler);
+ 
+ /*
+  * Routines to do per-architecture handling of stimer0
 diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index 0c1fa69..afe7a62 100644
+index afe7a62..917b29e 100644
 --- a/drivers/hv/hv.c
 +++ b/drivers/hv/hv.c
-@@ -219,7 +219,17 @@ void hv_synic_enable_regs(unsigned int cpu)
+@@ -16,6 +16,7 @@
+ #include <linux/version.h>
+ #include <linux/random.h>
+ #include <linux/clockchips.h>
++#include <linux/interrupt.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <asm/mshyperv.h>
+ #include "hyperv_vmbus.h"
+@@ -214,10 +215,12 @@ void hv_synic_enable_regs(unsigned int cpu)
+ 	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
  
- 	shared_sint.vector = hv_get_vector();
+ 	/* Setup the shared SINT. */
++	if (vmbus_irq != -1)
++		enable_percpu_irq(vmbus_irq, 0);
+ 	shared_sint.as_uint64 = hv_get_register(HV_REGISTER_SINT0 +
+ 					VMBUS_MESSAGE_SINT);
+ 
+-	shared_sint.vector = hv_get_vector();
++	shared_sint.vector = vmbus_interrupt;
  	shared_sint.masked = false;
--	shared_sint.auto_eoi = hv_recommend_using_aeoi();
+ 
+ 	/*
+@@ -285,6 +288,9 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 	sctrl.as_uint64 = hv_get_register(HV_REGISTER_SCONTROL);
+ 	sctrl.enable = 0;
+ 	hv_set_register(HV_REGISTER_SCONTROL, sctrl.as_uint64);
++
++	if (vmbus_irq != -1)
++		disable_percpu_irq(vmbus_irq);
+ }
+ 
+ 
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 8affe68..62721a7 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -48,8 +48,10 @@ struct vmbus_dynid {
+ 
+ static void *hv_panic_page;
+ 
++static long __percpu *vmbus_evt;
++
+ /* Values parsed from ACPI DSDT */
+-static int vmbus_irq;
++int vmbus_irq;
+ int vmbus_interrupt;
+ 
+ /*
+@@ -1354,7 +1356,13 @@ static void vmbus_isr(void)
+ 			tasklet_schedule(&hv_cpu->msg_dpc);
+ 	}
+ 
+-	add_interrupt_randomness(hv_get_vector(), 0);
++	add_interrupt_randomness(vmbus_interrupt, 0);
++}
++
++static irqreturn_t vmbus_percpu_isr(int irq, void *dev_id)
++{
++	vmbus_isr();
++	return IRQ_HANDLED;
+ }
+ 
+ /*
+@@ -1469,9 +1477,28 @@ static int vmbus_bus_init(void)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = hv_setup_vmbus_irq(vmbus_irq, vmbus_isr);
+-	if (ret)
+-		goto err_setup;
++	/*
++	 * VMbus interrupts are best modeled as per-cpu interrupts. If
++	 * on an architecture with support for per-cpu IRQs (e.g. ARM64),
++	 * allocate a per-cpu IRQ using standard Linux kernel functionality.
++	 * If not on such an architecture (e.g., x86/x64), then rely on
++	 * code in the arch-specific portion of the code tree to connect
++	 * the VMbus interrupt handler.
++	 */
++
++	if (vmbus_irq == -1) {
++		hv_setup_vmbus_handler(vmbus_isr);
++	} else {
++		vmbus_evt = alloc_percpu(long);
++		ret = request_percpu_irq(vmbus_irq, vmbus_percpu_isr,
++				"Hyper-V VMbus", vmbus_evt);
++		if (ret) {
++			pr_err("Can't request Hyper-V VMbus IRQ %d, Err %d",
++					vmbus_irq, ret);
++			free_percpu(vmbus_evt);
++			goto err_setup;
++		}
++	}
+ 
+ 	ret = hv_synic_alloc();
+ 	if (ret)
+@@ -1532,7 +1559,12 @@ static int vmbus_bus_init(void)
+ err_cpuhp:
+ 	hv_synic_free();
+ err_alloc:
+-	hv_remove_vmbus_irq();
++	if (vmbus_irq == -1) {
++		hv_remove_vmbus_handler();
++	} else {
++		free_percpu_irq(vmbus_irq, vmbus_evt);
++		free_percpu(vmbus_evt);
++	}
+ err_setup:
+ 	bus_unregister(&hv_bus);
+ 	unregister_sysctl_table(hv_ctl_table_hdr);
+@@ -2649,6 +2681,18 @@ static int __init hv_acpi_init(void)
+ 		ret = -ETIMEDOUT;
+ 		goto cleanup;
+ 	}
 +
 +	/*
-+	 * On architectures where Hyper-V doesn't support AEOI (e.g., ARM64),
-+	 * it doesn't provide a recommendation flag and AEOI must be disabled.
++	 * If we're on an architecture with a hardcoded hypervisor
++	 * vector (i.e. x86/x64), override the VMbus interrupt found
++	 * in the ACPI tables. Ensure vmbus_irq is not set since the
++	 * normal Linux IRQ mechanism is not used in this case.
 +	 */
-+#ifdef HV_DEPRECATING_AEOI_RECOMMENDED
-+	shared_sint.auto_eoi =
-+			!(ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED);
-+#else
-+	shared_sint.auto_eoi = 0;
++#ifdef HYPERVISOR_CALLBACK_VECTOR
++	vmbus_interrupt = HYPERVISOR_CALLBACK_VECTOR;
++	vmbus_irq = -1;
 +#endif
- 	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
- 				shared_sint.as_uint64);
++
+ 	hv_debug_init();
  
+ 	ret = vmbus_bus_init();
+@@ -2679,7 +2723,12 @@ static void __exit vmbus_exit(void)
+ 	vmbus_connection.conn_state = DISCONNECTED;
+ 	hv_stimer_global_cleanup();
+ 	vmbus_disconnect();
+-	hv_remove_vmbus_irq();
++	if (vmbus_irq == -1) {
++		hv_remove_vmbus_handler();
++	} else {
++		free_percpu_irq(vmbus_irq, vmbus_evt);
++		free_percpu(vmbus_evt);
++	}
+ 	for_each_online_cpu(cpu) {
+ 		struct hv_per_cpu_context *hv_cpu
+ 			= per_cpu_ptr(hv_context.cpu_context, cpu);
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 6a8072f..9f4089b 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -89,10 +89,8 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
+ 	}
+ }
+ 
+-int hv_setup_vmbus_irq(int irq, void (*handler)(void));
+-void hv_remove_vmbus_irq(void);
+-void hv_enable_vmbus_irq(void);
+-void hv_disable_vmbus_irq(void);
++void hv_setup_vmbus_handler(void (*handler)(void));
++void hv_remove_vmbus_handler(void);
+ 
+ void hv_setup_kexec_handler(void (*handler)(void));
+ void hv_remove_kexec_handler(void);
+@@ -100,6 +98,7 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
+ void hv_remove_crash_handler(void);
+ 
+ extern int vmbus_interrupt;
++extern int vmbus_irq;
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
+ /*
 -- 
 1.8.3.1
 
