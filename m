@@ -2,229 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D69306B26
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 03:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD65306B79
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 04:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbhA1CjC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 21:39:02 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:11208 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbhA1CjB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 21:39:01 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DR4Ns5pmHzl6G5;
-        Thu, 28 Jan 2021 10:36:45 +0800 (CST)
-Received: from [10.174.179.117] (10.174.179.117) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 28 Jan 2021 10:38:12 +0800
-Subject: Re: [PATCH v11 04/13] mm/ioremap: rename ioremap_*_range to
- vmap_*_range
-To:     Nicholas Piggin <npiggin@gmail.com>
+        id S229913AbhA1DOT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 22:14:19 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12038 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229578AbhA1DOS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 22:14:18 -0500
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DR59Y4L1szMR3L;
+        Thu, 28 Jan 2021 11:12:01 +0800 (CST)
+Received: from [10.174.177.80] (10.174.177.80) by
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 28 Jan 2021 11:13:20 +0800
+Subject: Re: [PATCH v11 01/13] mm/vmalloc: fix HUGE_VMAP regression by
+ enabling huge pages in vmalloc_to_page
+To:     Nicholas Piggin <npiggin@gmail.com>, <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>,
         Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
         Christoph Hellwig <hch@infradead.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ding Tianhong <dingtianhong@huawei.com>, <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+        Christoph Hellwig <hch@lst.de>
 References: <20210126044510.2491820-1-npiggin@gmail.com>
- <20210126044510.2491820-5-npiggin@gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5a690f1c-7c12-9446-980b-6715c9290a96@huawei.com>
-Date:   Thu, 28 Jan 2021 10:38:12 +0800
+ <20210126044510.2491820-2-npiggin@gmail.com>
+From:   Ding Tianhong <dingtianhong@huawei.com>
+Message-ID: <2dcbe2c9-c968-4895-fc43-c40dfe9f06d3@huawei.com>
+Date:   Thu, 28 Jan 2021 11:13:20 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-In-Reply-To: <20210126044510.2491820-5-npiggin@gmail.com>
+In-Reply-To: <20210126044510.2491820-2-npiggin@gmail.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.117]
+X-Originating-IP: [10.174.177.80]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi:
-On 2021/1/26 12:45, Nicholas Piggin wrote:
-> This will be used as a generic kernel virtual mapping function, so
-> re-name it in preparation.
+On 2021/1/26 12:44, Nicholas Piggin wrote:
+> vmalloc_to_page returns NULL for addresses mapped by larger pages[*].
+> Whether or not a vmap is huge depends on the architecture details,
+> alignments, boot options, etc., which the caller can not be expected
+> to know. Therefore HUGE_VMAP is a regression for vmalloc_to_page.
 > 
-
-Looks good to me. Thanks.
-
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
+> This change teaches vmalloc_to_page about larger pages, and returns
+> the struct page that corresponds to the offset within the large page.
+> This makes the API agnostic to mapping implementation details.
+> 
+> [*] As explained by commit 029c54b095995 ("mm/vmalloc.c: huge-vmap:
+>     fail gracefully on unexpected huge vmap mappings")
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 > Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 > ---
->  mm/ioremap.c | 64 +++++++++++++++++++++++++++-------------------------
->  1 file changed, 33 insertions(+), 31 deletions(-)
+>  mm/vmalloc.c | 41 ++++++++++++++++++++++++++---------------
+>  1 file changed, 26 insertions(+), 15 deletions(-)
 > 
-> diff --git a/mm/ioremap.c b/mm/ioremap.c
-> index 5fa1ab41d152..3f4d36f9745a 100644
-> --- a/mm/ioremap.c
-> +++ b/mm/ioremap.c
-> @@ -61,9 +61,9 @@ static inline int ioremap_pud_enabled(void) { return 0; }
->  static inline int ioremap_pmd_enabled(void) { return 0; }
->  #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
->  
-> -static int ioremap_pte_range(pmd_t *pmd, unsigned long addr,
-> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
-> -		pgtbl_mod_mask *mask)
-> +static int vmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot,
-> +			pgtbl_mod_mask *mask)
->  {
->  	pte_t *pte;
->  	u64 pfn;
-> @@ -81,9 +81,8 @@ static int ioremap_pte_range(pmd_t *pmd, unsigned long addr,
->  	return 0;
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index e6f352bf0498..62372f9e0167 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -34,7 +34,7 @@
+>  #include <linux/bitops.h>
+>  #include <linux/rbtree_augmented.h>
+>  #include <linux/overflow.h>
+> -
+> +#include <linux/pgtable.h>
+>  #include <linux/uaccess.h>
+>  #include <asm/tlbflush.h>
+>  #include <asm/shmparam.h>
+> @@ -343,7 +343,9 @@ int is_vmalloc_or_module_addr(const void *x)
 >  }
 >  
-> -static int ioremap_try_huge_pmd(pmd_t *pmd, unsigned long addr,
-> -				unsigned long end, phys_addr_t phys_addr,
-> -				pgprot_t prot)
-> +static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot)
+>  /*
+> - * Walk a vmap address to the struct page it maps.
+> + * Walk a vmap address to the struct page it maps. Huge vmap mappings will
+> + * return the tail page that corresponds to the base page address, which
+> + * matches small vmap mappings.
+>   */
+>  struct page *vmalloc_to_page(const void *vmalloc_addr)
 >  {
->  	if (!ioremap_pmd_enabled())
->  		return 0;
-> @@ -103,9 +102,9 @@ static int ioremap_try_huge_pmd(pmd_t *pmd, unsigned long addr,
->  	return pmd_set_huge(pmd, phys_addr, prot);
->  }
+> @@ -363,25 +365,33 @@ struct page *vmalloc_to_page(const void *vmalloc_addr)
 >  
-> -static inline int ioremap_pmd_range(pud_t *pud, unsigned long addr,
-> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
-> -		pgtbl_mod_mask *mask)
-> +static int vmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot,
-> +			pgtbl_mod_mask *mask)
->  {
->  	pmd_t *pmd;
->  	unsigned long next;
-> @@ -116,20 +115,19 @@ static inline int ioremap_pmd_range(pud_t *pud, unsigned long addr,
->  	do {
->  		next = pmd_addr_end(addr, end);
->  
-> -		if (ioremap_try_huge_pmd(pmd, addr, next, phys_addr, prot)) {
-> +		if (vmap_try_huge_pmd(pmd, addr, next, phys_addr, prot)) {
->  			*mask |= PGTBL_PMD_MODIFIED;
->  			continue;
->  		}
->  
-> -		if (ioremap_pte_range(pmd, addr, next, phys_addr, prot, mask))
-> +		if (vmap_pte_range(pmd, addr, next, phys_addr, prot, mask))
->  			return -ENOMEM;
->  	} while (pmd++, phys_addr += (next - addr), addr = next, addr != end);
->  	return 0;
->  }
->  
-> -static int ioremap_try_huge_pud(pud_t *pud, unsigned long addr,
-> -				unsigned long end, phys_addr_t phys_addr,
-> -				pgprot_t prot)
-> +static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot)
->  {
->  	if (!ioremap_pud_enabled())
->  		return 0;
-> @@ -149,9 +147,9 @@ static int ioremap_try_huge_pud(pud_t *pud, unsigned long addr,
->  	return pud_set_huge(pud, phys_addr, prot);
->  }
->  
-> -static inline int ioremap_pud_range(p4d_t *p4d, unsigned long addr,
-> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
-> -		pgtbl_mod_mask *mask)
-> +static int vmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot,
-> +			pgtbl_mod_mask *mask)
->  {
->  	pud_t *pud;
->  	unsigned long next;
-> @@ -162,20 +160,19 @@ static inline int ioremap_pud_range(p4d_t *p4d, unsigned long addr,
->  	do {
->  		next = pud_addr_end(addr, end);
->  
-> -		if (ioremap_try_huge_pud(pud, addr, next, phys_addr, prot)) {
-> +		if (vmap_try_huge_pud(pud, addr, next, phys_addr, prot)) {
->  			*mask |= PGTBL_PUD_MODIFIED;
->  			continue;
->  		}
->  
-> -		if (ioremap_pmd_range(pud, addr, next, phys_addr, prot, mask))
-> +		if (vmap_pmd_range(pud, addr, next, phys_addr, prot, mask))
->  			return -ENOMEM;
->  	} while (pud++, phys_addr += (next - addr), addr = next, addr != end);
->  	return 0;
->  }
->  
-> -static int ioremap_try_huge_p4d(p4d_t *p4d, unsigned long addr,
-> -				unsigned long end, phys_addr_t phys_addr,
-> -				pgprot_t prot)
-> +static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot)
->  {
->  	if (!ioremap_p4d_enabled())
->  		return 0;
-> @@ -195,9 +192,9 @@ static int ioremap_try_huge_p4d(p4d_t *p4d, unsigned long addr,
->  	return p4d_set_huge(p4d, phys_addr, prot);
->  }
->  
-> -static inline int ioremap_p4d_range(pgd_t *pgd, unsigned long addr,
-> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
-> -		pgtbl_mod_mask *mask)
-> +static int vmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot,
-> +			pgtbl_mod_mask *mask)
->  {
->  	p4d_t *p4d;
->  	unsigned long next;
-> @@ -208,19 +205,19 @@ static inline int ioremap_p4d_range(pgd_t *pgd, unsigned long addr,
->  	do {
->  		next = p4d_addr_end(addr, end);
->  
-> -		if (ioremap_try_huge_p4d(p4d, addr, next, phys_addr, prot)) {
-> +		if (vmap_try_huge_p4d(p4d, addr, next, phys_addr, prot)) {
->  			*mask |= PGTBL_P4D_MODIFIED;
->  			continue;
->  		}
->  
-> -		if (ioremap_pud_range(p4d, addr, next, phys_addr, prot, mask))
-> +		if (vmap_pud_range(p4d, addr, next, phys_addr, prot, mask))
->  			return -ENOMEM;
->  	} while (p4d++, phys_addr += (next - addr), addr = next, addr != end);
->  	return 0;
->  }
->  
-> -int ioremap_page_range(unsigned long addr,
-> -		       unsigned long end, phys_addr_t phys_addr, pgprot_t prot)
-> +static int vmap_range(unsigned long addr, unsigned long end,
-> +			phys_addr_t phys_addr, pgprot_t prot)
->  {
->  	pgd_t *pgd;
->  	unsigned long start;
-> @@ -235,8 +232,7 @@ int ioremap_page_range(unsigned long addr,
->  	pgd = pgd_offset_k(addr);
->  	do {
->  		next = pgd_addr_end(addr, end);
-> -		err = ioremap_p4d_range(pgd, addr, next, phys_addr, prot,
-> -					&mask);
-> +		err = vmap_p4d_range(pgd, addr, next, phys_addr, prot, &mask);
->  		if (err)
->  			break;
->  	} while (pgd++, phys_addr += (next - addr), addr = next, addr != end);
-> @@ -249,6 +245,12 @@ int ioremap_page_range(unsigned long addr,
->  	return err;
->  }
->  
-> +int ioremap_page_range(unsigned long addr,
-> +		       unsigned long end, phys_addr_t phys_addr, pgprot_t prot)
-> +{
-> +	return vmap_range(addr, end, phys_addr, prot);
-> +}
+>  	if (pgd_none(*pgd))
+>  		return NULL;
+> +	if (WARN_ON_ONCE(pgd_leaf(*pgd)))
+> +		return NULL; /* XXX: no allowance for huge pgd */
+> +	if (WARN_ON_ONCE(pgd_bad(*pgd)))
+> +		return NULL;
 > +
->  #ifdef CONFIG_GENERIC_IOREMAP
->  void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
->  {
+>  	p4d = p4d_offset(pgd, addr);
+>  	if (p4d_none(*p4d))
+>  		return NULL;
+> -	pud = pud_offset(p4d, addr);
+> +	if (p4d_leaf(*p4d))
+> +		return p4d_page(*p4d) + ((addr & ~P4D_MASK) >> PAGE_SHIFT);
+> +	if (WARN_ON_ONCE(p4d_bad(*p4d)))
+> +		return NULL;
+>  
+> -	/*
+> -	 * Don't dereference bad PUD or PMD (below) entries. This will also
+> -	 * identify huge mappings, which we may encounter on architectures
+> -	 * that define CONFIG_HAVE_ARCH_HUGE_VMAP=y. Such regions will be
+> -	 * identified as vmalloc addresses by is_vmalloc_addr(), but are
+> -	 * not [unambiguously] associated with a struct page, so there is
+> -	 * no correct value to return for them.
+> -	 */
+> -	WARN_ON_ONCE(pud_bad(*pud));
+> -	if (pud_none(*pud) || pud_bad(*pud))
+> +	pud = pud_offset(p4d, addr);
+> +	if (pud_none(*pud))
+> +		return NULL;
+> +	if (pud_leaf(*pud))
+> +		return pud_page(*pud) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+
+Hi Nicho:
+
+/builds/1mzfdQzleCy69KZFb5qHNSEgabZ/mm/vmalloc.c: In function 'vmalloc_to_page':
+/builds/1mzfdQzleCy69KZFb5qHNSEgabZ/include/asm-generic/pgtable-nop4d-hack.h:48:27: error: implicit declaration of function 'pud_page'; did you mean 'put_page'? [-Werror=implicit-function-declaration]
+   48 | #define pgd_page(pgd)    (pud_page((pud_t){ pgd }))
+      |                           ^~~~~~~~
+
+the pug_page is not defined for aarch32 when enabling 2-level page config, it break the system building.
+
+
+> +	if (WARN_ON_ONCE(pud_bad(*pud)))
+>  		return NULL;
+> +
+>  	pmd = pmd_offset(pud, addr);
+> -	WARN_ON_ONCE(pmd_bad(*pmd));
+> -	if (pmd_none(*pmd) || pmd_bad(*pmd))
+> +	if (pmd_none(*pmd))
+> +		return NULL;
+> +	if (pmd_leaf(*pmd))
+> +		return pmd_page(*pmd) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
+> +	if (WARN_ON_ONCE(pmd_bad(*pmd)))
+>  		return NULL;
+>  
+>  	ptep = pte_offset_map(pmd, addr);
+> @@ -389,6 +399,7 @@ struct page *vmalloc_to_page(const void *vmalloc_addr)
+>  	if (pte_present(pte))
+>  		page = pte_page(pte);
+>  	pte_unmap(ptep);
+> +
+>  	return page;
+>  }
+>  EXPORT_SYMBOL(vmalloc_to_page);
 > 
 
