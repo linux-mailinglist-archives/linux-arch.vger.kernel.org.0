@@ -2,116 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E631B307AAA
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 17:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50181307DE0
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 19:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbhA1QYr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 Jan 2021 11:24:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53964 "EHLO mx2.suse.de"
+        id S231201AbhA1SZz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 Jan 2021 13:25:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39190 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231634AbhA1QYq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 28 Jan 2021 11:24:46 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611851039; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WWmcYeElb62qutT0Kcoo6xDCdrj66eelF83EHgFDfB4=;
-        b=ZJlUD8pQK2nIX/Cnj1UyvowYIjPxyyZKq5kI8NYKzxJt5tEqE9314CXd37wDkUTpPEa6Vf
-        YEZQtVEmaZg8j88rldXEzhTt3tU4zmyFht8LR4yeM3dwIAsKI4509bn1BlnRgtEZNO+G8l
-        DXrH4A5dU/j38+v0Vo5e/8cwta9YIu0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A6C7DAC41;
-        Thu, 28 Jan 2021 16:23:59 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 17:23:58 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <YBLlHpJj0sjzrxFv@dhcp22.suse.cz>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
- <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz>
- <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
- <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
- <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
- <alpine.DEB.2.22.394.2101281549390.11861@www.lameter.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2101281549390.11861@www.lameter.com>
+        id S231862AbhA1SUT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 28 Jan 2021 13:20:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id CA90B64E28;
+        Thu, 28 Jan 2021 18:16:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611857815;
+        bh=EdUwL/QDhFhONKjS8Ixd/ah7+ex2+S6R0CxzmeI3nis=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=RqLZT9MSQ5F9QJHn3EGf0dwq8hOxg5YF/NyPJ9pjd8HhPLK6JKeU0WZ8iyGoUDZ7v
+         wDRnaBe38PTGY3TWGO58QCqwNiJpIboD4bNCKeLE44gnxtN7tjFoTYppELZXSp3Fz6
+         FJiY6yw32xgEl/3Tqerz3p/pNhwn76xTyaMzQqX8KnnsIxibBtx0o71djWzHRPMA64
+         No0PdCCAKwe22aZ5L6NWbf4+DeJuhhB1Xy2I7hIazyPamtE3w3jOM7B/uXQQur1dLe
+         F9ItytYZheqLvM0NK6ks88iZo1vYAH7671S194PVl5FRSAOmsp1nxkHn3o8TwxiqZF
+         KqP9V8JBUUsmg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C32E965307;
+        Thu, 28 Jan 2021 18:16:55 +0000 (UTC)
+Subject: Re: [GIT PULL] asm-generic/ia64 fixes, mark as orphaned
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK8P3a2+tvr6O7LxF8M6sJ-e-NmbijAmXt13FPEvOXtY_PSgPQ@mail.gmail.com>
+References: <CAK8P3a2+tvr6O7LxF8M6sJ-e-NmbijAmXt13FPEvOXtY_PSgPQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK8P3a2+tvr6O7LxF8M6sJ-e-NmbijAmXt13FPEvOXtY_PSgPQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-v5.11
+X-PR-Tracked-Commit-Id: 96ec72a3425d1515b69b7f9dc34a4a6ce5862a37
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 228345bf98cd78f91d007478a51f9a471489e44a
+Message-Id: <161185781579.19532.14632163617295027701.pr-tracker-bot@kernel.org>
+Date:   Thu, 28 Jan 2021 18:16:55 +0000
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-arch <linux-arch@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu 28-01-21 15:56:36, Cristopher Lameter wrote:
-> On Thu, 28 Jan 2021, Michal Hocko wrote:
-> 
-> > > > If you kill the allocating process then yes, it would work, but your
-> > > > process might be the very last to be selected.
-> > >
-> > > OOMs are different if you have a "constrained allocation". In that case it
-> > > is the fault of the process who wanted memory with certain conditions.
-> > > That memory is not available. General memory is available though. In that
-> > > case the allocating process is killed.
-> >
-> > I do not see this implementation would do anything like that. Neither
-> > anything like that implemented in the oom killer. Constrained
-> > allocations (cpusets/memcg/mempolicy) only do restrict their selection
-> > to processes which belong to the same domain. So I am not really sure
-> > what you are referring to. The is only a global knob to _always_ kill
-> > the allocating process on OOM.
-> 
-> Constrained allocations refer to allocations where the NUMA nodes are
-> restricted or something else does not allow the use of arbitrary memory.
-> The OOM killer changes its behavior.
+The pull request you sent on Thu, 28 Jan 2021 16:35:55 +0100:
 
-Yes as described in the above paragraph.
+> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-v5.11
 
-> In the past we fell back to killing the calling process.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/228345bf98cd78f91d007478a51f9a471489e44a
 
-Yeah, but this is no longer the case since 6f48d0ebd907a (more than 10
-years ago.
+Thank you!
 
-Anyway this is not really important because if you want to kill the
-allocating task because there is no chance the fault can succed then
-there is a SIGBUS as already mentioned.
 -- 
-Michal Hocko
-SUSE Labs
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
