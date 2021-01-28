@@ -2,26 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2292130773B
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 14:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C979307771
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 14:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbhA1Nij (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 Jan 2021 08:38:39 -0500
-Received: from gentwo.org ([3.19.106.255]:44572 "EHLO gentwo.org"
+        id S231168AbhA1NuX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 Jan 2021 08:50:23 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37626 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231139AbhA1Nii (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 28 Jan 2021 08:38:38 -0500
-X-Greylist: delayed 576 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 08:38:37 EST
-Received: by gentwo.org (Postfix, from userid 1002)
-        id 7A84C3F4C1; Thu, 28 Jan 2021 13:28:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by gentwo.org (Postfix) with ESMTP id 77AFA3F461;
-        Thu, 28 Jan 2021 13:28:10 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 13:28:10 +0000 (UTC)
-From:   Christoph Lameter <cl@linux.com>
-X-X-Sender: cl@www.lameter.com
-To:     Michal Hocko <mhocko@suse.com>
-cc:     Mike Rapoport <rppt@kernel.org>,
+        id S229811AbhA1NuW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 28 Jan 2021 08:50:22 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611841775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=75llh3uw6L6UpTgmVsHlz+i8LHZJ84jNMGnauBZqITc=;
+        b=RFEQmGK/LljkSM2oiWx77CIGoV0eKNOaEQIEAkrhzpN9jbb3MOKURRCYaRwYVt6/w/U/+e
+        g4VVantqh8P7n2dKzYTMYQk4w9MXZKXSASL6hjd+n4xFytPepUsla6MMacf9DtnSP1AmZ/
+        v2BcnFvMM+kSY0c0Ye3UOYH/R63VQ8Q=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9E752AF78;
+        Thu, 28 Jan 2021 13:49:35 +0000 (UTC)
+Date:   Thu, 28 Jan 2021 14:49:34 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christoph Lameter <cl@linux.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
         David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -56,33 +61,51 @@ cc:     Mike Rapoport <rppt@kernel.org>,
         Palmer Dabbelt <palmerdabbelt@google.com>
 Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
  direct map fragmentation
-In-Reply-To: <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
-Message-ID: <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
-References: <20210121122723.3446-1-rppt@kernel.org> <20210121122723.3446-8-rppt@kernel.org> <20210126114657.GL827@dhcp22.suse.cz> <303f348d-e494-e386-d1f5-14505b5da254@redhat.com> <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
+Message-ID: <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-8-rppt@kernel.org>
+ <20210126114657.GL827@dhcp22.suse.cz>
+ <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+ <20210126120823.GM827@dhcp22.suse.cz>
+ <20210128092259.GB242749@kernel.org>
  <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+ <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 28 Jan 2021, Michal Hocko wrote:
-
-> > So, if I understand your concerns correct this implementation has two
-> > issues:
-> > 1) allocation failure at page fault that causes unrecoverable OOM and
-> > 2) a possibility for an unprivileged user to deplete secretmem pool and
-> > cause (1) to others
+On Thu 28-01-21 13:28:10, Cristopher Lameter wrote:
+> On Thu, 28 Jan 2021, Michal Hocko wrote:
+> 
+> > > So, if I understand your concerns correct this implementation has two
+> > > issues:
+> > > 1) allocation failure at page fault that causes unrecoverable OOM and
+> > > 2) a possibility for an unprivileged user to deplete secretmem pool and
+> > > cause (1) to others
+> > >
+> > > I'm not really familiar with OOM internals, but when I simulated an
+> > > allocation failure in my testing only the allocating process and it's
+> > > parent were OOM-killed and then the system continued normally.
 > >
-> > I'm not really familiar with OOM internals, but when I simulated an
-> > allocation failure in my testing only the allocating process and it's
-> > parent were OOM-killed and then the system continued normally.
->
-> If you kill the allocating process then yes, it would work, but your
-> process might be the very last to be selected.
+> > If you kill the allocating process then yes, it would work, but your
+> > process might be the very last to be selected.
+> 
+> OOMs are different if you have a "constrained allocation". In that case it
+> is the fault of the process who wanted memory with certain conditions.
+> That memory is not available. General memory is available though. In that
+> case the allocating process is killed.
 
-OOMs are different if you have a "constrained allocation". In that case it
-is the fault of the process who wanted memory with certain conditions.
-That memory is not available. General memory is available though. In that
-case the allocating process is killed.
+I do not see this implementation would do anything like that. Neither
+anything like that implemented in the oom killer. Constrained
+allocations (cpusets/memcg/mempolicy) only do restrict their selection
+to processes which belong to the same domain. So I am not really sure
+what you are referring to. The is only a global knob to _always_ kill
+the allocating process on OOM.
+
+-- 
+Michal Hocko
+SUSE Labs
