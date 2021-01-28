@@ -2,84 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 029CB3079E2
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 16:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB67F307A24
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 16:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbhA1Pgz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 Jan 2021 10:36:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60138 "EHLO mail.kernel.org"
+        id S231139AbhA1P5a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 Jan 2021 10:57:30 -0500
+Received: from gentwo.org ([3.19.106.255]:44642 "EHLO gentwo.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231734AbhA1Pgx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 28 Jan 2021 10:36:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 58AC664DF6;
-        Thu, 28 Jan 2021 15:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611848172;
-        bh=SZe1atd52ul7NwgAh5nbYAq/K9Mgj2qkqmtovGsXEB0=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Pncw16Rptx1XmV6fDUdRkHJP6iYOcH7SmWiKM1Y9ZfwL5sXx0OEzggxLCh39IJmw4
-         YGLst5VK7W6IRC8hlfxBYdMVqt5LaqR/Y6zFvFNKCt1rJbPwtWBGUmbbsbwItFwmZL
-         FmUmZee3sd1MM1OCWAOLO2w4KD38UfHWYcgwit+PKaOW+G2bbG1rfpGYY8wd98KsNw
-         8ZH3wWkEAkUdj7rtbIZLBjFjI0EZoWtspempTyerZArujuQNVr/ddcyE7kHimDX8sT
-         195TFLPcV26cKAvD999gSwPcPvl1YubJLehwcdx+DIlroIwwzKE8zw3o3XlOTBchjO
-         0lyOhaXtPS1Kg==
-Received: by mail-oi1-f177.google.com with SMTP id a77so6425375oii.4;
-        Thu, 28 Jan 2021 07:36:12 -0800 (PST)
-X-Gm-Message-State: AOAM5302q1v2hZrxn4PtZi9mNtYWMBaRrjXkTbloTsynu7aTIlALJ44K
-        z7lekvXwYxYec+UFLmpmoeFZOt75fg5E5XeuIQE=
-X-Google-Smtp-Source: ABdhPJy4cjus9by7PS47ZyvwLRq6mjFpIaaoXwZUHmSJbfTAFRgYBQFeSLPAKm0DMaxkZj2g1sZivzTgQLrgr6VXzeg=
-X-Received: by 2002:aca:eb0a:: with SMTP id j10mr6960946oih.4.1611848171666;
- Thu, 28 Jan 2021 07:36:11 -0800 (PST)
+        id S229885AbhA1P53 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 28 Jan 2021 10:57:29 -0500
+Received: by gentwo.org (Postfix, from userid 1002)
+        id 70A813F4C1; Thu, 28 Jan 2021 15:56:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.org (Postfix) with ESMTP id 6DA583F461;
+        Thu, 28 Jan 2021 15:56:36 +0000 (UTC)
+Date:   Thu, 28 Jan 2021 15:56:36 +0000 (UTC)
+From:   Christoph Lameter <cl@linux.com>
+X-X-Sender: cl@www.lameter.com
+To:     Michal Hocko <mhocko@suse.com>
+cc:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+In-Reply-To: <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
+Message-ID: <alpine.DEB.2.22.394.2101281549390.11861@www.lameter.com>
+References: <20210121122723.3446-1-rppt@kernel.org> <20210121122723.3446-8-rppt@kernel.org> <20210126114657.GL827@dhcp22.suse.cz> <303f348d-e494-e386-d1f5-14505b5da254@redhat.com> <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
+ <YBK1kqL7JA7NePBQ@dhcp22.suse.cz> <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com> <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 28 Jan 2021 16:35:55 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2+tvr6O7LxF8M6sJ-e-NmbijAmXt13FPEvOXtY_PSgPQ@mail.gmail.com>
-Message-ID: <CAK8P3a2+tvr6O7LxF8M6sJ-e-NmbijAmXt13FPEvOXtY_PSgPQ@mail.gmail.com>
-Subject: [GIT PULL] asm-generic/ia64 fixes, mark as orphaned
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+On Thu, 28 Jan 2021, Michal Hocko wrote:
 
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+> > > If you kill the allocating process then yes, it would work, but your
+> > > process might be the very last to be selected.
+> >
+> > OOMs are different if you have a "constrained allocation". In that case it
+> > is the fault of the process who wanted memory with certain conditions.
+> > That memory is not available. General memory is available though. In that
+> > case the allocating process is killed.
+>
+> I do not see this implementation would do anything like that. Neither
+> anything like that implemented in the oom killer. Constrained
+> allocations (cpusets/memcg/mempolicy) only do restrict their selection
+> to processes which belong to the same domain. So I am not really sure
+> what you are referring to. The is only a global knob to _always_ kill
+> the allocating process on OOM.
 
-are available in the Git repository at:
+Constrained allocations refer to allocations where the NUMA nodes are
+restricted or something else does not allow the use of arbitrary memory.
+The OOM killer changes its behavior. In the past we fell back to killing
+the calling process.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-fixes-v5.11
+See constrained_alloc() in mm/oom_kill.c
 
-for you to fetch changes up to 96ec72a3425d1515b69b7f9dc34a4a6ce5862a37:
+static const char * const oom_constraint_text[] = {
+        [CONSTRAINT_NONE] = "CONSTRAINT_NONE",
+        [CONSTRAINT_CPUSET] = "CONSTRAINT_CPUSET",
+        [CONSTRAINT_MEMORY_POLICY] = "CONSTRAINT_MEMORY_POLICY",
+        [CONSTRAINT_MEMCG] = "CONSTRAINT_MEMCG",
+};
 
-  ia64: Mark architecture as orphaned (2021-01-12 17:03:04 +0100)
+/*
+ * Determine the type of allocation constraint.
+ */
+static enum oom_constraint constrained_alloc(struct oom_control *oc)
+{
 
-----------------------------------------------------------------
-asm-generic/ia64 fixes, mark as orphaned
-
-Commit 2b49ddcef297 ("ia64: convert to legacy_timer_tick") from my timer
-series I merged through the asm-generic tree caused a regression on all
-ia64 machines, as bisected by Adrian Glaubitz.
-
-Tony Luck is no longer really working on ia64, so instead of merging the
-fix through his tree, we ended up deciding that I'd merge the fix myself
-along a patch to mark the architecture as Orphaned and a compile time
-warning fix I made while working on the regression.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-----------------------------------------------------------------
-Arnd Bergmann (3):
-      ia64: fix timer cleanup regression
-      ia64: fix xchg() warning
-      ia64: Mark architecture as orphaned
-
- MAINTAINERS                          |  5 +----
- arch/ia64/include/uapi/asm/cmpxchg.h |  2 +-
- arch/ia64/kernel/time.c              | 31 ++++++++++++++++++-------------
- 3 files changed, 20 insertions(+), 18 deletions(-)
