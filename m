@@ -2,44 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C979307771
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 14:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0423077A5
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 15:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbhA1NuX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 28 Jan 2021 08:50:23 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37626 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229811AbhA1NuW (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 28 Jan 2021 08:50:22 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611841775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=75llh3uw6L6UpTgmVsHlz+i8LHZJ84jNMGnauBZqITc=;
-        b=RFEQmGK/LljkSM2oiWx77CIGoV0eKNOaEQIEAkrhzpN9jbb3MOKURRCYaRwYVt6/w/U/+e
-        g4VVantqh8P7n2dKzYTMYQk4w9MXZKXSASL6hjd+n4xFytPepUsla6MMacf9DtnSP1AmZ/
-        v2BcnFvMM+kSY0c0Ye3UOYH/R63VQ8Q=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9E752AF78;
-        Thu, 28 Jan 2021 13:49:35 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 14:49:34 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
+        id S231268AbhA1OGK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 28 Jan 2021 09:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229847AbhA1OGF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 28 Jan 2021 09:06:05 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B125C061574
+        for <linux-arch@vger.kernel.org>; Thu, 28 Jan 2021 06:05:25 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id t8so6423608ljk.10
+        for <linux-arch@vger.kernel.org>; Thu, 28 Jan 2021 06:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y3gG47U5h6Z0ms3PRQUM8QBx0aKm7Kdbts1+blceg04=;
+        b=CfsrBQTGs0Esbt43WsOC7Vky4axjxTddmdc93F7OYhDFG0xRi8EFPzo+ljigoe2pot
+         nl08e50onWdGXMFNApzFBAnmpeofi5yYUDo1CTz9cqW42zyNQd9HH0L/9STRoEjZ5zJc
+         fTQNEKQF+kRCuFHnyz08L6kuBS11UhljPl/rF/qd+Dep7b9BbEiHXcPCIznldnx2v/az
+         YhUiFaD5ezD3+239rpnSr1++mcg29oPu7pI5YQLwKfPBN7dvfoXrUj0cu4J0tiwMoTNG
+         iQABFGbqct02pstWAwbScdjSu0GGO2jqtYNWDU9LQ7vjkegvI5234iUqZC4wfqsWXuRJ
+         Fycg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y3gG47U5h6Z0ms3PRQUM8QBx0aKm7Kdbts1+blceg04=;
+        b=BVegq1SJDqE9WqYkj6ahj6dPTPdUBcHoYk1FrzGizKUJzQWMr5IOX0CSneIiP+jsHS
+         jxfASdaFn7OB0013+I+/rvhJhj1zyBpVZ4/oCp4ytBrxJNKBEiHvSTMp/2mALTkvRrh1
+         jqA9Ht3gqn1vg394ZSvSQBNB+lhRSNmLf7ZIIIfQjc/0U+sr5Z33bVYdZtJtqzQ6Adx5
+         dH8MCIhpeZu51zFnS1hmMjHJu7KSApFumoBhiIKgUUdlPyH+Odr4xu0tfMirU5AjaVg0
+         AjEhGoIHA2rBgHIcYnguBTWabL13TBTVKPQ2+mcKI6bdqVvOrQZbrG0IzhG0u7vgfUbM
+         D/Cg==
+X-Gm-Message-State: AOAM531fjmv9MhCAGxGMdz9Gpbh7sedKArgDOE7PgV6UqaIbnLiYTwCW
+        iZN8mXf8ViSncoek1o6ZmBEsfh0rAP1I1jWoaCj0CA==
+X-Google-Smtp-Source: ABdhPJzmRLfShao52Wl8c2GnOI8Esxdu0gDu7Q4WjHT9JBMYe6CY6I8ohfbMaBXYGGmZSWG03007q03WUtavSFPY58o=
+X-Received: by 2002:a2e:9ed1:: with SMTP id h17mr8071290ljk.160.1611842723157;
+ Thu, 28 Jan 2021 06:05:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20210121122723.3446-1-rppt@kernel.org> <20210121122723.3446-9-rppt@kernel.org>
+ <20210125165451.GT827@dhcp22.suse.cz> <20210125213817.GM6332@kernel.org>
+ <20210126144838.GL308988@casper.infradead.org> <20210126150555.GU827@dhcp22.suse.cz>
+ <20210127184213.GA919963@carbon.dhcp.thefacebook.com> <YBJuwqItjCemDN5L@dhcp22.suse.cz>
+In-Reply-To: <YBJuwqItjCemDN5L@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 28 Jan 2021 06:05:11 -0800
+Message-ID: <CALvZod7YjXvaYoZ7HXq2sDkwvpjpLBA-jhrzxa48jEuBt6zLNQ@mail.gmail.com>
+Subject: Re: [PATCH v16 08/11] secretmem: add memcg accounting
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Roman Gushchin <guro@fb.com>, Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         James Bottomley <jejb@linux.ibm.com>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
@@ -47,65 +76,77 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
         Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
- <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz>
- <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
- <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu 28-01-21 13:28:10, Cristopher Lameter wrote:
-> On Thu, 28 Jan 2021, Michal Hocko wrote:
-> 
-> > > So, if I understand your concerns correct this implementation has two
-> > > issues:
-> > > 1) allocation failure at page fault that causes unrecoverable OOM and
-> > > 2) a possibility for an unprivileged user to deplete secretmem pool and
-> > > cause (1) to others
+On Wed, Jan 27, 2021 at 11:59 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 27-01-21 10:42:13, Roman Gushchin wrote:
+> > On Tue, Jan 26, 2021 at 04:05:55PM +0100, Michal Hocko wrote:
+> > > On Tue 26-01-21 14:48:38, Matthew Wilcox wrote:
+> > > > On Mon, Jan 25, 2021 at 11:38:17PM +0200, Mike Rapoport wrote:
+> > > > > I cannot use __GFP_ACCOUNT because cma_alloc() does not use gfp.
+> > > > > Besides, kmem accounting with __GFP_ACCOUNT does not seem
+> > > > > to update stats and there was an explicit request for statistics:
+> > > > >
+> > > > > https://lore.kernel.org/lkml/CALo0P13aq3GsONnZrksZNU9RtfhMsZXGWhK1n=xYJWQizCd4Zw@mail.gmail.com/
+> > > > >
+> > > > > As for (ab)using NR_SLAB_UNRECLAIMABLE_B, as it was already discussed here:
+> > > > >
+> > > > > https://lore.kernel.org/lkml/20201129172625.GD557259@kernel.org/
+> > > > >
+> > > > > I think that a dedicated stats counter would be too much at the moment and
+> > > > > NR_SLAB_UNRECLAIMABLE_B is the only explicit stat for unreclaimable memory.
+> > > >
+> > > > That's not true -- Mlocked is also unreclaimable.  And doesn't this
+> > > > feel more like mlocked memory than unreclaimable slab?  It's also
+> > > > Unevictable, so could be counted there instead.
 > > >
-> > > I'm not really familiar with OOM internals, but when I simulated an
-> > > allocation failure in my testing only the allocating process and it's
-> > > parent were OOM-killed and then the system continued normally.
+> > > yes, that is indeed true, except the unreclaimable counter is tracking
+> > > the unevictable LRUs. These pages are not on any LRU and that can cause
+> > > some confusion. Maybe they shouldn't be so special and they should live
+> > > on unevistable LRU and get their stats automagically.
+> > >
+> > > I definitely do agree that this would be a better fit than NR_SLAB
+> > > abuse. But considering that this is somehow even more special than mlock
+> > > then a dedicated counter sounds as even better fit.
 > >
-> > If you kill the allocating process then yes, it would work, but your
-> > process might be the very last to be selected.
-> 
-> OOMs are different if you have a "constrained allocation". In that case it
-> is the fault of the process who wanted memory with certain conditions.
-> That memory is not available. General memory is available though. In that
-> case the allocating process is killed.
+> > I think it depends on how large these areas will be in practice.
+> > If they will be measured in single or double digits MBs, a separate entry
+> > is hardly a good choice: because of the batching the displayed value
+> > will be in the noise range, plus every new vmstat item adds to the
+> > struct mem_cgroup size.
+> >
+> > If it will be measured in GBs, of course, a separate counter is preferred.
+> > So I'd suggest to go with NR_SLAB (which should have been named NR_KMEM)
+> > as now and conditionally switch to a separate counter later.
+>
+> I really do not think the overall usage matters when it comes to abusing
+> other counters. Changing this in future will be always tricky and there
+> always be our favorite "Can this break userspace" question. Yes we dared
+> to change meaning of some counters but this is not generally possible.
+> Just have a look how accounting shmem as a page cache has turned out
+> being much more tricky than many like.
+>
+> Really if a separate counter is a big deal, for which I do not see any
+> big reason, then this should be accounted as unevictable (as suggested
+> by Matthew) and ideally pages of those mappings should be sitting in the
+> unevictable LRU as well unless there is a strong reason against.
+>
 
-I do not see this implementation would do anything like that. Neither
-anything like that implemented in the oom killer. Constrained
-allocations (cpusets/memcg/mempolicy) only do restrict their selection
-to processes which belong to the same domain. So I am not really sure
-what you are referring to. The is only a global knob to _always_ kill
-the allocating process on OOM.
-
--- 
-Michal Hocko
-SUSE Labs
+Why not decide based on the movability of these pages? If movable then
+unevictable LRU seems like the right way otherwise NR_SLAB.
