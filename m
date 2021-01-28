@@ -2,215 +2,229 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411E430699C
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 02:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D69306B26
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Jan 2021 03:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbhA1BJO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jan 2021 20:09:14 -0500
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:34320 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbhA1BHD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 20:07:03 -0500
-X-Greylist: delayed 596 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 Jan 2021 20:03:33 EST
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 10S12TSn031297;
-        Thu, 28 Jan 2021 10:02:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 10S12TSn031297
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1611795750;
-        bh=kQBsC8DD1I5pmWkAr2jPmQQNw1PckPFdZPVIdpQVYdo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X2YfGmKV6JyqV6skhwNlBN5EndPUYjWcNkOTo404Y6vE/VjuzQzR3Hwre1o9jMX7P
-         t3pE8Eb/agEN1+SaB5WdhX3qLWKgeotk+EENxzm+2r79cEMgEquohGT/DZdc81+USy
-         n577YnXPqvQTSLbcIfGIwlXir96y4XYna6GbZ8JMehDKy3q1du6FKs+xB6Ee7gryFW
-         8fZJW0K2rhzEg2LE1IdBsw1wzN8ed4VgNVCiOpTvAQkAVq2uvVboz8HiD/Bu/u7vRJ
-         Dx8w8fXdYSaprH/rcXQNKd/WA9Z42fXEQaKNyPcCBPduv5pMUUnZ/FcS8rZF2bdrdk
-         Arf+3kYeRwbDg==
-X-Nifty-SrcIP: [209.85.215.180]
-Received: by mail-pg1-f180.google.com with SMTP id o63so3128254pgo.6;
-        Wed, 27 Jan 2021 17:02:29 -0800 (PST)
-X-Gm-Message-State: AOAM533NiyidxTcQRno3xFKXmT4J72EvPvtC6QBfPw/D/lsRzvvE3KZI
-        npM5tlDCLeHTVzX6nFJRn71lR0FVvwTVxuNSo2o=
-X-Google-Smtp-Source: ABdhPJx2qrnkZf85rd51ifbo3/yHH3r4r1ZqUYd8szq6YngeUvtL91K9BCWmJopJwX8xwD3QAcfaeKREyWnPk27LDQ4=
-X-Received: by 2002:a63:575e:: with SMTP id h30mr13844879pgm.7.1611795748589;
- Wed, 27 Jan 2021 17:02:28 -0800 (PST)
+        id S229732AbhA1CjC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jan 2021 21:39:02 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11208 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229494AbhA1CjB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jan 2021 21:39:01 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DR4Ns5pmHzl6G5;
+        Thu, 28 Jan 2021 10:36:45 +0800 (CST)
+Received: from [10.174.179.117] (10.174.179.117) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 28 Jan 2021 10:38:12 +0800
+Subject: Re: [PATCH v11 04/13] mm/ioremap: rename ioremap_*_range to
+ vmap_*_range
+To:     Nicholas Piggin <npiggin@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Ding Tianhong <dingtianhong@huawei.com>, <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20210126044510.2491820-1-npiggin@gmail.com>
+ <20210126044510.2491820-5-npiggin@gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5a690f1c-7c12-9446-980b-6715c9290a96@huawei.com>
+Date:   Thu, 28 Jan 2021 10:38:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20210128005110.2613902-1-masahiroy@kernel.org> <20210128005110.2613902-2-masahiroy@kernel.org>
-In-Reply-To: <20210128005110.2613902-2-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 28 Jan 2021 10:01:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASxQkX9R3g+r2mwKGE11oFLkNVPwsTezgHFzLgHjzcjdw@mail.gmail.com>
-Message-ID: <CAK7LNASxQkX9R3g+r2mwKGE11oFLkNVPwsTezgHFzLgHjzcjdw@mail.gmail.com>
-Subject: Re: [PATCH 01/27] scripts: add generic syscalltbl.sh
-To:     linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-alpha@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-um@lists.infradead.org,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210126044510.2491820-5-npiggin@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.117]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 9:51 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Most of architectures generate syscall headers at the compile time
-> in the almost same way.
->
-> The syscall table has the same format for all architectures. Each line
-> has 3, 4 or 5 fields; syscall number, ABI, syscall name, native entry
-> point, and compat entry point. The syscall table is processed by
-> syscalltbl.sh script into header files.
->
-> Despite the same pattern, scripts are maintained per architecture,
-> which results in code duplication and bad maintainability.
->
-> As of v5.11-rc1, 12 architectures duplicate similar shell scripts:
->
->   $ find arch -name syscalltbl.sh | sort
->   arch/alpha/kernel/syscalls/syscalltbl.sh
->   arch/arm/tools/syscalltbl.sh
->   arch/ia64/kernel/syscalls/syscalltbl.sh
->   arch/m68k/kernel/syscalls/syscalltbl.sh
->   arch/microblaze/kernel/syscalls/syscalltbl.sh
->   arch/mips/kernel/syscalls/syscalltbl.sh
->   arch/parisc/kernel/syscalls/syscalltbl.sh
->   arch/powerpc/kernel/syscalls/syscalltbl.sh
->   arch/sh/kernel/syscalls/syscalltbl.sh
->   arch/sparc/kernel/syscalls/syscalltbl.sh
->   arch/x86/entry/syscalls/syscalltbl.sh
->   arch/xtensa/kernel/syscalls/syscalltbl.sh
->
-> My goal is to unify them into a single file, scripts/syscalltbl.sh.
->
-> For example, the i386 syscall table looks like this:
->
->   0  i386  restart_syscall  sys_restart_syscall
->   1  i386  exit             sys_exit
->   2  i386  fork             sys_fork
->   3  i386  read             sys_read
->   4  i386  write            sys_write
->   5  i386  open             sys_open              compat_sys_open
->   ...
->
-> scripts/syscalltbl.sh generates the following code:
->
->   __SYSCALL(0, sys_restart_syscall)
->   __SYSCALL(1, sys_exit)
->   __SYSCALL(2, sys_fork)
->   __SYSCALL(3, sys_read)
->   __SYSCALL(4, sys_write)
->   __SYSCALL_WITH_COMPAT(5, sys_open, compat_sys_open)
->   ...
->
-> Then, the i386 kernel will do:
->
->   #define __SYSCALL_WITH_COMPAT(nr, native, compat) __SYSCALL(nr, native)
->
-> and the x86_64 kernel will do:
->
->   #define __SYSCALL_WITH_COMPAT(nr, native, compat) __SYSCALL(nr, compat)
->
-> I noticed all 32/64 bit architectures can be covered by the same
-> pattern. Having an arch-specific script is fine if there is a good
-> reason to do so, but a single generic script should work for this case.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi:
+On 2021/1/26 12:45, Nicholas Piggin wrote:
+> This will be used as a generic kernel virtual mapping function, so
+> re-name it in preparation.
+> 
+
+Looks good to me. Thanks.
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 > ---
->
->  scripts/syscalltbl.sh | 52 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 scripts/syscalltbl.sh
->
-> diff --git a/scripts/syscalltbl.sh b/scripts/syscalltbl.sh
-> new file mode 100644
-> index 000000000000..15bf4e09f88c
-> --- /dev/null
-> +++ b/scripts/syscalltbl.sh
-> @@ -0,0 +1,52 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Usage:
-> +#  scripts/syscalltbl.sh INFILE OUTFILE [ABIS] [OFFSET]
-> +#
-> +# INFILE: input syscall table
-> +# OUTFILE: output file
-> +# ABIS (optional): specify the ABIs to handle.
-> +#                  If omitted, all lines are handled.
-> +# OFFSET (optinal): spefify the offset of the syscall numbers.
-> +#                   If omitted, the offset is zero.
-> +#
-> +# The syscall table format:
-> +# nr abi name native [compat]
-
-
-This line should be
-
- nr abi name [native] [compat]
-
-
-because the native entry point is also optional.
-(if it is missing, sys_ni_syscall is used)
-
-
-
-
-> +#
-> +# nr: syscall number
-> +# abi: ABI name
-> +# name: syscall name
-> +# native: native entry point
-
-native (optional): native entry point
-
-
-> +# compat (optional): compat entry point
+>  mm/ioremap.c | 64 +++++++++++++++++++++++++++-------------------------
+>  1 file changed, 33 insertions(+), 31 deletions(-)
+> 
+> diff --git a/mm/ioremap.c b/mm/ioremap.c
+> index 5fa1ab41d152..3f4d36f9745a 100644
+> --- a/mm/ioremap.c
+> +++ b/mm/ioremap.c
+> @@ -61,9 +61,9 @@ static inline int ioremap_pud_enabled(void) { return 0; }
+>  static inline int ioremap_pmd_enabled(void) { return 0; }
+>  #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
+>  
+> -static int ioremap_pte_range(pmd_t *pmd, unsigned long addr,
+> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
+> -		pgtbl_mod_mask *mask)
+> +static int vmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot,
+> +			pgtbl_mod_mask *mask)
+>  {
+>  	pte_t *pte;
+>  	u64 pfn;
+> @@ -81,9 +81,8 @@ static int ioremap_pte_range(pmd_t *pmd, unsigned long addr,
+>  	return 0;
+>  }
+>  
+> -static int ioremap_try_huge_pmd(pmd_t *pmd, unsigned long addr,
+> -				unsigned long end, phys_addr_t phys_addr,
+> -				pgprot_t prot)
+> +static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot)
+>  {
+>  	if (!ioremap_pmd_enabled())
+>  		return 0;
+> @@ -103,9 +102,9 @@ static int ioremap_try_huge_pmd(pmd_t *pmd, unsigned long addr,
+>  	return pmd_set_huge(pmd, phys_addr, prot);
+>  }
+>  
+> -static inline int ioremap_pmd_range(pud_t *pud, unsigned long addr,
+> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
+> -		pgtbl_mod_mask *mask)
+> +static int vmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot,
+> +			pgtbl_mod_mask *mask)
+>  {
+>  	pmd_t *pmd;
+>  	unsigned long next;
+> @@ -116,20 +115,19 @@ static inline int ioremap_pmd_range(pud_t *pud, unsigned long addr,
+>  	do {
+>  		next = pmd_addr_end(addr, end);
+>  
+> -		if (ioremap_try_huge_pmd(pmd, addr, next, phys_addr, prot)) {
+> +		if (vmap_try_huge_pmd(pmd, addr, next, phys_addr, prot)) {
+>  			*mask |= PGTBL_PMD_MODIFIED;
+>  			continue;
+>  		}
+>  
+> -		if (ioremap_pte_range(pmd, addr, next, phys_addr, prot, mask))
+> +		if (vmap_pte_range(pmd, addr, next, phys_addr, prot, mask))
+>  			return -ENOMEM;
+>  	} while (pmd++, phys_addr += (next - addr), addr = next, addr != end);
+>  	return 0;
+>  }
+>  
+> -static int ioremap_try_huge_pud(pud_t *pud, unsigned long addr,
+> -				unsigned long end, phys_addr_t phys_addr,
+> -				pgprot_t prot)
+> +static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot)
+>  {
+>  	if (!ioremap_pud_enabled())
+>  		return 0;
+> @@ -149,9 +147,9 @@ static int ioremap_try_huge_pud(pud_t *pud, unsigned long addr,
+>  	return pud_set_huge(pud, phys_addr, prot);
+>  }
+>  
+> -static inline int ioremap_pud_range(p4d_t *p4d, unsigned long addr,
+> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
+> -		pgtbl_mod_mask *mask)
+> +static int vmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot,
+> +			pgtbl_mod_mask *mask)
+>  {
+>  	pud_t *pud;
+>  	unsigned long next;
+> @@ -162,20 +160,19 @@ static inline int ioremap_pud_range(p4d_t *p4d, unsigned long addr,
+>  	do {
+>  		next = pud_addr_end(addr, end);
+>  
+> -		if (ioremap_try_huge_pud(pud, addr, next, phys_addr, prot)) {
+> +		if (vmap_try_huge_pud(pud, addr, next, phys_addr, prot)) {
+>  			*mask |= PGTBL_PUD_MODIFIED;
+>  			continue;
+>  		}
+>  
+> -		if (ioremap_pmd_range(pud, addr, next, phys_addr, prot, mask))
+> +		if (vmap_pmd_range(pud, addr, next, phys_addr, prot, mask))
+>  			return -ENOMEM;
+>  	} while (pud++, phys_addr += (next - addr), addr = next, addr != end);
+>  	return 0;
+>  }
+>  
+> -static int ioremap_try_huge_p4d(p4d_t *p4d, unsigned long addr,
+> -				unsigned long end, phys_addr_t phys_addr,
+> -				pgprot_t prot)
+> +static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot)
+>  {
+>  	if (!ioremap_p4d_enabled())
+>  		return 0;
+> @@ -195,9 +192,9 @@ static int ioremap_try_huge_p4d(p4d_t *p4d, unsigned long addr,
+>  	return p4d_set_huge(p4d, phys_addr, prot);
+>  }
+>  
+> -static inline int ioremap_p4d_range(pgd_t *pgd, unsigned long addr,
+> -		unsigned long end, phys_addr_t phys_addr, pgprot_t prot,
+> -		pgtbl_mod_mask *mask)
+> +static int vmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot,
+> +			pgtbl_mod_mask *mask)
+>  {
+>  	p4d_t *p4d;
+>  	unsigned long next;
+> @@ -208,19 +205,19 @@ static inline int ioremap_p4d_range(pgd_t *pgd, unsigned long addr,
+>  	do {
+>  		next = p4d_addr_end(addr, end);
+>  
+> -		if (ioremap_try_huge_p4d(p4d, addr, next, phys_addr, prot)) {
+> +		if (vmap_try_huge_p4d(p4d, addr, next, phys_addr, prot)) {
+>  			*mask |= PGTBL_P4D_MODIFIED;
+>  			continue;
+>  		}
+>  
+> -		if (ioremap_pud_range(p4d, addr, next, phys_addr, prot, mask))
+> +		if (vmap_pud_range(p4d, addr, next, phys_addr, prot, mask))
+>  			return -ENOMEM;
+>  	} while (p4d++, phys_addr += (next - addr), addr = next, addr != end);
+>  	return 0;
+>  }
+>  
+> -int ioremap_page_range(unsigned long addr,
+> -		       unsigned long end, phys_addr_t phys_addr, pgprot_t prot)
+> +static int vmap_range(unsigned long addr, unsigned long end,
+> +			phys_addr_t phys_addr, pgprot_t prot)
+>  {
+>  	pgd_t *pgd;
+>  	unsigned long start;
+> @@ -235,8 +232,7 @@ int ioremap_page_range(unsigned long addr,
+>  	pgd = pgd_offset_k(addr);
+>  	do {
+>  		next = pgd_addr_end(addr, end);
+> -		err = ioremap_p4d_range(pgd, addr, next, phys_addr, prot,
+> -					&mask);
+> +		err = vmap_p4d_range(pgd, addr, next, phys_addr, prot, &mask);
+>  		if (err)
+>  			break;
+>  	} while (pgd++, phys_addr += (next - addr), addr = next, addr != end);
+> @@ -249,6 +245,12 @@ int ioremap_page_range(unsigned long addr,
+>  	return err;
+>  }
+>  
+> +int ioremap_page_range(unsigned long addr,
+> +		       unsigned long end, phys_addr_t phys_addr, pgprot_t prot)
+> +{
+> +	return vmap_range(addr, end, phys_addr, prot);
+> +}
 > +
-> +set -e
-> +
-> +in="$1"
-> +out="$2"
-> +abis=$(echo "($3)" | tr ',' '|')
-> +offset="${4:-0}"
-> +
-> +nxt=$offset
-> +
-> +grep -E "^[0-9]+[[:space:]]+${abis}" "$in" | sort -n | {
-> +
-> +       while read nr abi name native compat ; do
-> +
-> +               nr=$((nr + $offset))
-> +
-> +               while [ $nxt -lt $nr ]; do
-> +                       echo "__SYSCALL($nxt, sys_ni_syscall)"
-> +                       nxt=$((nxt + 1))
-> +               done
-> +
-> +               if [ -n "$compat" ]; then
-> +                       echo "__SYSCALL_WITH_COMPAT($nr, $native, $compat)"
-> +               elif [ -n "$native" ]; then
-> +                       echo "__SYSCALL($nr, $native)"
-> +               else
-> +                       echo "__SYSCALL($nr, sys_ni_syscall)"
-> +               fi
-> +               nxt=$((nr + 1))
-> +       done
-> +} > "$out"
-> --
-> 2.27.0
->
+>  #ifdef CONFIG_GENERIC_IOREMAP
+>  void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
+>  {
+> 
 
-
--- 
-Best Regards
-Masahiro Yamada
