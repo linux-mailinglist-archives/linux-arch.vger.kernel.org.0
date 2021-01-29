@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35209308EB1
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 21:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7B2308EB4
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 21:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbhA2Urj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 15:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S233149AbhA2UsX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 15:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233311AbhA2UrC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 15:47:02 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D290EC061786;
-        Fri, 29 Jan 2021 12:45:36 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id d85so10081521qkg.5;
-        Fri, 29 Jan 2021 12:45:36 -0800 (PST)
+        with ESMTP id S233281AbhA2UrF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 15:47:05 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E09CC06178B;
+        Fri, 29 Jan 2021 12:45:38 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id l23so7677404qtq.13;
+        Fri, 29 Jan 2021 12:45:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XrOPnUU4jEbWi/M2Zi06ni4mxPUtjC+T0l547A4XI6E=;
-        b=e49ztA0Af1BL+k/IT0uKmcHOJLVpLTAxtd/459UXQMGKsiBwYP9TZZlT7GnG5lE9bc
-         e/Pua9mryQeRc/M4GfZ7g70Ezwj7yGPGNtLwjzIZNEisH5h+nB1pN39B0DNXtJzHuMwt
-         PW0xivngi/qmMI7Abh47I6kE0dHJxlM2Cya2Q85B3b794H+X7j4pqlvkknX5ixMjAI1H
-         GZleweJULTfP4WiRXprwnuQEtt5/akCHh64kVCZHfr9HuutskvQ/7irdfiFkSFmfCJO/
-         t6VstshNuSko0Bhl0W1kXX9TUPFdgnV0FDyqUSZzR0wfr2IgO7JRqzr3Kf+YJBv8O5EZ
-         AboQ==
+        bh=eq0sMeRmDWJcO+dKhI424xhFawJ8LFDKhMRVHIBIiKc=;
+        b=AHivjTzFAp/b/nR8VmTUXzXGfbRKBYFOYEbUrCUGoGaEorL7/lc0UECjq0rUl61sL+
+         LB8gJkrTpYwSyrkrMBmVM53eZydk7Kp9As4jwPW5+JQYVyWWN50oBwh8ue3U8+zK28I4
+         rZIx+/aUCQbtOe6AHR+3ubIuiTtAG2PMu60fhmhoYOTiwmL0Ry2jjAvuBQNnrjf6DrpR
+         KwlihKrzhwsPVlruuckOofJhPIhktwfv74njjYnct8jCbg7p5/SfVfjk6FVntpZsrjJ8
+         ORRTkgfBK0U3t2Hh5a7xzyi3jl7J+P3iV5NNXTINtQ6KerM+6NxRSmL8/IRJE5DBDM24
+         9Gsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XrOPnUU4jEbWi/M2Zi06ni4mxPUtjC+T0l547A4XI6E=;
-        b=j8iX21eS7NaXy+mnQxdL3tlnvQ6ESp0KYDIDPIoHKzn33RezFBvNS7tbKFQurCARRC
-         dLDSstvIF70ih5Y60KkSlwoL2yLpWUUftAHsI1dh2hKtNzC4hCvFaE8XaUpuVsC44hiM
-         3YNzyaBXftkIkY3Nj32yM6ocY+vG2y7YlPPaebt+jXV2D0G6EoNyhfuInXLpOcMdIud0
-         GoRcWtbE9s2CS4XULH4wxSpmKFSDJfCfU/ifFIHM41+y4o54sKYfDOj6MqUEtbcqcLFo
-         4ach1PbtIphwAV2A66Lh3JUAdqJRp8E99o+U/eUoSiw7BUYkCastDmYLreMkoVqleC0o
-         HKaw==
-X-Gm-Message-State: AOAM5329Fj+1rrguQV5gm8kUFfxmYajXB7a5UQryLZh4DJWTT1JLfPv8
-        KOXtUw8xavnU822VUmUKCa4=
-X-Google-Smtp-Source: ABdhPJx1nrnIMv5t3d04PZEKLsT4RR6h0kU1kfuS0tY67molyRF7oIsTXPeXMVQBLoTvJA9xKRHnPw==
-X-Received: by 2002:a37:4cca:: with SMTP id z193mr6030578qka.304.1611953136007;
-        Fri, 29 Jan 2021 12:45:36 -0800 (PST)
+        bh=eq0sMeRmDWJcO+dKhI424xhFawJ8LFDKhMRVHIBIiKc=;
+        b=ncrdH2cX76yK0+nMZUYxztOKeipk9n/edsatOYNPRH1hrDMLNomVjHaiCFrKjd4CeC
+         MKZwPIQ2pJmq7cvT0yZMsXELLekIpnFU/nhryRvK+eA/Q4EX2bL5NE9Ja8SaWaje2J5a
+         fNgvuy9X4yRdT8p+No7a0F8MWCnpziFngD/xEYyzpvnhXu66niGreJivAAeNSPuYt8rI
+         m1E15s3Rjbf46yzusBpR5xHGmcUf+vIFDcA6/aXbp+d35hAdAUILP/MExTvBv+G7/3zD
+         J75MXo7kY3Yw1UgE8IeYAyHZtJYE2U4zo1UFT+1M/r2LEvuZdmxWryygAkpa8Gukh1co
+         SSqA==
+X-Gm-Message-State: AOAM532g4lk8epsmzQdGIimXj5/Iua7nDWDpfaOLOmMXK/RM87Ue+6sj
+        q0gIPzfxSHw4e4NLVQN1qZw=
+X-Google-Smtp-Source: ABdhPJx4pMPfghfKt/B37gG9/Ri4lWGALr10jOSBenl2tFTFS26KP/rcpR94pry4YHoqjV0kcIpGqA==
+X-Received: by 2002:ac8:490e:: with SMTP id e14mr5957359qtq.99.1611953137124;
+        Fri, 29 Jan 2021 12:45:37 -0800 (PST)
 Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id c15sm6599439qkj.129.2021.01.29.12.45.35
+        by smtp.gmail.com with ESMTPSA id j5sm150931qth.80.2021.01.29.12.45.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jan 2021 12:45:35 -0800 (PST)
+        Fri, 29 Jan 2021 12:45:36 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
         linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
@@ -64,9 +64,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>,
         Wei Yang <richard.weiyang@linux.alibaba.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Subject: [PATCH 2/5] bits_per_long.h: introduce SMALL_CONST() macro
-Date:   Fri, 29 Jan 2021 12:45:25 -0800
-Message-Id: <20210129204528.2118168-4-yury.norov@gmail.com>
+Subject: [PATCH 3/5] lib: inline _find_next_bit() wrappers
+Date:   Fri, 29 Jan 2021 12:45:26 -0800
+Message-Id: <20210129204528.2118168-5-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210129204528.2118168-1-yury.norov@gmail.com>
 References: <20210129204528.2118168-1-yury.norov@gmail.com>
@@ -76,292 +76,348 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Many algorithms become simplier if they are passed with relatively small
-input values. One example is bitmap operations when the whole bitmap fits
-into one word. To implement such simplifications, linux/bitmap.h declares
-small_const_nbits() macro.
-
-Other subsystems may also benefit from optimizations of this sort, like
-find_bit API in the following patches. So it looks helpful to generalize
-the macro and extend it's visibility.
-
-It should probably go to linux/kernel.h, but doing that creates circular
-dependencies. So put it in asm-generic/bitsperlong.h.
+lib/find_bit.c declares five single-line wrappers for _find_next_bit().
+We may turn those wrappers to inline functions. It eliminates unneeded
+function calls and opens room for compile-time optimizations.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/asm-generic/bitsperlong.h       |  2 ++
- include/linux/bitmap.h                  | 33 +++++++++++--------------
- include/linux/bits.h                    |  2 +-
- tools/include/asm-generic/bitsperlong.h |  2 ++
- tools/include/linux/bitmap.h            | 19 ++++++--------
- 5 files changed, 28 insertions(+), 30 deletions(-)
+ include/asm-generic/bitops/find.h       | 28 ++++++++++---
+ include/asm-generic/bitops/le.h         | 17 ++++++--
+ lib/find_bit.c                          | 56 +------------------------
+ tools/include/asm-generic/bitops/find.h | 27 +++++++++---
+ tools/lib/find_bit.c                    | 52 ++++++++++-------------
+ 5 files changed, 79 insertions(+), 101 deletions(-)
 
-diff --git a/include/asm-generic/bitsperlong.h b/include/asm-generic/bitsperlong.h
-index 3905c1c93dc2..0eeb77544f1d 100644
---- a/include/asm-generic/bitsperlong.h
-+++ b/include/asm-generic/bitsperlong.h
-@@ -23,4 +23,6 @@
- #define BITS_PER_LONG_LONG 64
- #endif
+diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
+index 9fdf21302fdf..7ad70dab8e93 100644
+--- a/include/asm-generic/bitops/find.h
++++ b/include/asm-generic/bitops/find.h
+@@ -2,6 +2,10 @@
+ #ifndef _ASM_GENERIC_BITOPS_FIND_H_
+ #define _ASM_GENERIC_BITOPS_FIND_H_
  
-+#define SMALL_CONST(n) (__builtin_constant_p(n) && (unsigned long)(n) < BITS_PER_LONG)
++extern unsigned long _find_next_bit(const unsigned long *addr1,
++		const unsigned long *addr2, unsigned long nbits,
++		unsigned long start, unsigned long invert, unsigned long le);
 +
- #endif /* __ASM_GENERIC_BITS_PER_LONG */
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index c862082b4d1a..89e43ba775d4 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -224,9 +224,6 @@ extern int bitmap_print_to_pagebuf(bool list, char *buf,
-  * so make such users (should any ever turn up) call the out-of-line
-  * versions.
+ #ifndef find_next_bit
+ /**
+  * find_next_bit - find the next set bit in a memory region
+@@ -12,8 +16,12 @@
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
   */
--#define small_const_nbits(nbits) \
--	(__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
--
- static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
- {
- 	unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
-@@ -278,7 +275,7 @@ extern void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap,
- static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return (*dst = *src1 & *src2 & BITS_FIRST_MASK(nbits - 1)) != 0;
- 	return __bitmap_and(dst, src1, src2, nbits);
- }
-@@ -286,7 +283,7 @@ static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
- static inline void bitmap_or(unsigned long *dst, const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = *src1 | *src2;
- 	else
- 		__bitmap_or(dst, src1, src2, nbits);
-@@ -295,7 +292,7 @@ static inline void bitmap_or(unsigned long *dst, const unsigned long *src1,
- static inline void bitmap_xor(unsigned long *dst, const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = *src1 ^ *src2;
- 	else
- 		__bitmap_xor(dst, src1, src2, nbits);
-@@ -304,7 +301,7 @@ static inline void bitmap_xor(unsigned long *dst, const unsigned long *src1,
- static inline int bitmap_andnot(unsigned long *dst, const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return (*dst = *src1 & ~(*src2) & BITS_FIRST_MASK(nbits - 1)) != 0;
- 	return __bitmap_andnot(dst, src1, src2, nbits);
- }
-@@ -312,7 +309,7 @@ static inline int bitmap_andnot(unsigned long *dst, const unsigned long *src1,
- static inline void bitmap_complement(unsigned long *dst, const unsigned long *src,
- 			unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = ~(*src);
- 	else
- 		__bitmap_complement(dst, src, nbits);
-@@ -328,7 +325,7 @@ static inline void bitmap_complement(unsigned long *dst, const unsigned long *sr
- static inline int bitmap_equal(const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return !((*src1 ^ *src2) & BITS_FIRST_MASK(nbits - 1));
- 	if (__builtin_constant_p(nbits & BITMAP_MEM_MASK) &&
- 	    IS_ALIGNED(nbits, BITMAP_MEM_ALIGNMENT))
-@@ -350,7 +347,7 @@ static inline bool bitmap_or_equal(const unsigned long *src1,
- 				   const unsigned long *src3,
- 				   unsigned int nbits)
- {
--	if (!small_const_nbits(nbits))
-+	if (!SMALL_CONST(nbits - 1))
- 		return __bitmap_or_equal(src1, src2, src3, nbits);
- 
- 	return !(((*src1 | *src2) ^ *src3) & BITS_FIRST_MASK(nbits - 1));
-@@ -359,7 +356,7 @@ static inline bool bitmap_or_equal(const unsigned long *src1,
- static inline int bitmap_intersects(const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return ((*src1 & *src2) & BITS_FIRST_MASK(nbits - 1)) != 0;
- 	else
- 		return __bitmap_intersects(src1, src2, nbits);
-@@ -368,7 +365,7 @@ static inline int bitmap_intersects(const unsigned long *src1,
- static inline int bitmap_subset(const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return ! ((*src1 & ~(*src2)) & BITS_FIRST_MASK(nbits - 1));
- 	else
- 		return __bitmap_subset(src1, src2, nbits);
-@@ -376,7 +373,7 @@ static inline int bitmap_subset(const unsigned long *src1,
- 
- static inline bool bitmap_empty(const unsigned long *src, unsigned nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return ! (*src & BITS_FIRST_MASK(nbits - 1));
- 
- 	return find_first_bit(src, nbits) == nbits;
-@@ -384,7 +381,7 @@ static inline bool bitmap_empty(const unsigned long *src, unsigned nbits)
- 
- static inline bool bitmap_full(const unsigned long *src, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return ! (~(*src) & BITS_FIRST_MASK(nbits - 1));
- 
- 	return find_first_zero_bit(src, nbits) == nbits;
-@@ -392,7 +389,7 @@ static inline bool bitmap_full(const unsigned long *src, unsigned int nbits)
- 
- static __always_inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return hweight_long(*src & BITS_FIRST_MASK(nbits - 1));
- 	return __bitmap_weight(src, nbits);
- }
-@@ -428,7 +425,7 @@ static __always_inline void bitmap_clear(unsigned long *map, unsigned int start,
- static inline void bitmap_shift_right(unsigned long *dst, const unsigned long *src,
- 				unsigned int shift, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = (*src & BITS_FIRST_MASK(nbits - 1)) >> shift;
- 	else
- 		__bitmap_shift_right(dst, src, shift, nbits);
-@@ -437,7 +434,7 @@ static inline void bitmap_shift_right(unsigned long *dst, const unsigned long *s
- static inline void bitmap_shift_left(unsigned long *dst, const unsigned long *src,
- 				unsigned int shift, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = (*src << shift) & BITS_FIRST_MASK(nbits - 1);
- 	else
- 		__bitmap_shift_left(dst, src, shift, nbits);
-@@ -449,7 +446,7 @@ static inline void bitmap_replace(unsigned long *dst,
- 				  const unsigned long *mask,
- 				  unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = (*old & ~(*mask)) | (*new & *mask);
- 	else
- 		__bitmap_replace(dst, old, new, mask, nbits);
-diff --git a/include/linux/bits.h b/include/linux/bits.h
-index 3a29b1190744..e07e4a55241b 100644
---- a/include/linux/bits.h
-+++ b/include/linux/bits.h
-@@ -37,7 +37,7 @@
- #define GENMASK(h, l) \
- 	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
- 
--#define BITS_FIRST(nr)		GENMASK(nr), 0)
-+#define BITS_FIRST(nr)		GENMASK((nr), 0)
- #define BITS_LAST(nr)		GENMASK(BITS_PER_LONG - 1, (nr))
- 
- #define BITS_FIRST_MASK(nr)	__GENMASK((nr) % BITS_PER_LONG, 0)
-diff --git a/tools/include/asm-generic/bitsperlong.h b/tools/include/asm-generic/bitsperlong.h
-index 8f2283052333..432d272baf27 100644
---- a/tools/include/asm-generic/bitsperlong.h
-+++ b/tools/include/asm-generic/bitsperlong.h
-@@ -18,4 +18,6 @@
- #define BITS_PER_LONG_LONG 64
+-extern unsigned long find_next_bit(const unsigned long *addr, unsigned long
+-		size, unsigned long offset);
++static inline
++unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
++			    unsigned long offset)
++{
++	return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
++}
  #endif
  
-+#define SMALL_CONST(n) (__builtin_constant_p(n) && (unsigned long)(n) < BITS_PER_LONG)
-+
- #endif /* __ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
-index ded716902bd0..bcbe6fe8fdab 100644
---- a/tools/include/linux/bitmap.h
-+++ b/tools/include/linux/bitmap.h
-@@ -19,12 +19,9 @@ int __bitmap_equal(const unsigned long *bitmap1,
- 		   const unsigned long *bitmap2, unsigned int bits);
- void bitmap_clear(unsigned long *map, unsigned int start, int len);
+ #ifndef find_next_and_bit
+@@ -27,9 +35,13 @@ extern unsigned long find_next_bit(const unsigned long *addr, unsigned long
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-extern unsigned long find_next_and_bit(const unsigned long *addr1,
++static inline
++unsigned long find_next_and_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long size,
+-		unsigned long offset);
++		unsigned long offset)
++{
++	return _find_next_bit(addr1, addr2, size, offset, 0UL, 0);
++}
+ #endif
  
--#define small_const_nbits(nbits) \
--	(__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG)
+ #ifndef find_next_zero_bit
+@@ -42,8 +54,12 @@ extern unsigned long find_next_and_bit(const unsigned long *addr1,
+  * Returns the bit number of the next zero bit
+  * If no bits are zero, returns @size.
+  */
+-extern unsigned long find_next_zero_bit(const unsigned long *addr, unsigned
+-		long size, unsigned long offset);
++static inline
++unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
++				 unsigned long offset)
++{
++	return _find_next_bit(addr, NULL, size, offset, ~0UL, 0);
++}
+ #endif
+ 
+ #ifdef CONFIG_GENERIC_FIND_FIRST_BIT
+diff --git a/include/asm-generic/bitops/le.h b/include/asm-generic/bitops/le.h
+index 188d3eba3ace..21305f6cea0b 100644
+--- a/include/asm-generic/bitops/le.h
++++ b/include/asm-generic/bitops/le.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_GENERIC_BITOPS_LE_H_
+ #define _ASM_GENERIC_BITOPS_LE_H_
+ 
++#include <asm-generic/bitops/find.h>
+ #include <asm/types.h>
+ #include <asm/byteorder.h>
+ 
+@@ -32,13 +33,21 @@ static inline unsigned long find_first_zero_bit_le(const void *addr,
+ #define BITOP_LE_SWIZZLE	((BITS_PER_LONG-1) & ~0x7)
+ 
+ #ifndef find_next_zero_bit_le
+-extern unsigned long find_next_zero_bit_le(const void *addr,
+-		unsigned long size, unsigned long offset);
++static inline
++unsigned long find_next_zero_bit_le(const void *addr, unsigned
++		long size, unsigned long offset)
++{
++	return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
++}
+ #endif
+ 
+ #ifndef find_next_bit_le
+-extern unsigned long find_next_bit_le(const void *addr,
+-		unsigned long size, unsigned long offset);
++static inline
++unsigned long find_next_bit_le(const void *addr, unsigned
++		long size, unsigned long offset)
++{
++	return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
++}
+ #endif
+ 
+ #ifndef find_first_zero_bit_le
+diff --git a/lib/find_bit.c b/lib/find_bit.c
+index 8c2a71a18793..2470ae390f3c 100644
+--- a/lib/find_bit.c
++++ b/lib/find_bit.c
+@@ -29,7 +29,7 @@
+  *    searching it for one bits.
+  *  - The optional "addr2", which is anded with "addr1" if present.
+  */
+-static unsigned long _find_next_bit(const unsigned long *addr1,
++unsigned long _find_next_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long nbits,
+ 		unsigned long start, unsigned long invert, unsigned long le)
+ {
+@@ -68,37 +68,7 @@ static unsigned long _find_next_bit(const unsigned long *addr1,
+ 
+ 	return min(start + __ffs(tmp), nbits);
+ }
+-#endif
 -
- static inline void bitmap_zero(unsigned long *dst, int nbits)
+-#ifndef find_next_bit
+-/*
+- * Find the next set bit in a memory region.
+- */
+-unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+-			    unsigned long offset)
+-{
+-	return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
+-}
+-EXPORT_SYMBOL(find_next_bit);
+-#endif
+-
+-#ifndef find_next_zero_bit
+-unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+-				 unsigned long offset)
+-{
+-	return _find_next_bit(addr, NULL, size, offset, ~0UL, 0);
+-}
+-EXPORT_SYMBOL(find_next_zero_bit);
+-#endif
+-
+-#if !defined(find_next_and_bit)
+-unsigned long find_next_and_bit(const unsigned long *addr1,
+-		const unsigned long *addr2, unsigned long size,
+-		unsigned long offset)
+-{
+-	return _find_next_bit(addr1, addr2, size, offset, 0UL, 0);
+-}
+-EXPORT_SYMBOL(find_next_and_bit);
++EXPORT_SYMBOL(_find_next_bit);
+ #endif
+ 
+ #ifndef find_first_bit
+@@ -157,28 +127,6 @@ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+ EXPORT_SYMBOL(find_last_bit);
+ #endif
+ 
+-#ifdef __BIG_ENDIAN
+-
+-#ifndef find_next_zero_bit_le
+-unsigned long find_next_zero_bit_le(const void *addr, unsigned
+-		long size, unsigned long offset)
+-{
+-	return _find_next_bit(addr, NULL, size, offset, ~0UL, 1);
+-}
+-EXPORT_SYMBOL(find_next_zero_bit_le);
+-#endif
+-
+-#ifndef find_next_bit_le
+-unsigned long find_next_bit_le(const void *addr, unsigned
+-		long size, unsigned long offset)
+-{
+-	return _find_next_bit(addr, NULL, size, offset, 0UL, 1);
+-}
+-EXPORT_SYMBOL(find_next_bit_le);
+-#endif
+-
+-#endif /* __BIG_ENDIAN */
+-
+ unsigned long find_next_clump8(unsigned long *clump, const unsigned long *addr,
+ 			       unsigned long size, unsigned long offset)
  {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = 0UL;
- 	else {
- 		int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
-@@ -35,7 +32,7 @@ static inline void bitmap_zero(unsigned long *dst, int nbits)
- static inline void bitmap_fill(unsigned long *dst, unsigned int nbits)
+diff --git a/tools/include/asm-generic/bitops/find.h b/tools/include/asm-generic/bitops/find.h
+index 16ed1982cb34..9fe62d10b084 100644
+--- a/tools/include/asm-generic/bitops/find.h
++++ b/tools/include/asm-generic/bitops/find.h
+@@ -2,6 +2,10 @@
+ #ifndef _TOOLS_LINUX_ASM_GENERIC_BITOPS_FIND_H_
+ #define _TOOLS_LINUX_ASM_GENERIC_BITOPS_FIND_H_
+ 
++extern unsigned long _find_next_bit(const unsigned long *addr1,
++		const unsigned long *addr2, unsigned long nbits,
++		unsigned long start, unsigned long invert, unsigned long le);
++
+ #ifndef find_next_bit
+ /**
+  * find_next_bit - find the next set bit in a memory region
+@@ -12,8 +16,12 @@
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-extern unsigned long find_next_bit(const unsigned long *addr, unsigned long
+-		size, unsigned long offset);
++static inline
++unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
++			    unsigned long offset)
++{
++	return _find_next_bit(addr, NULL, size, offset, 0UL, 0);
++}
+ #endif
+ 
+ #ifndef find_next_and_bit
+@@ -27,13 +35,16 @@ extern unsigned long find_next_bit(const unsigned long *addr, unsigned long
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-extern unsigned long find_next_and_bit(const unsigned long *addr1,
++static inline
++unsigned long find_next_and_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long size,
+-		unsigned long offset);
++		unsigned long offset)
++{
++	return _find_next_bit(addr1, addr2, size, offset, 0UL, 0);
++}
+ #endif
+ 
+ #ifndef find_next_zero_bit
+-
+ /**
+  * find_next_zero_bit - find the next cleared bit in a memory region
+  * @addr: The address to base the search on
+@@ -43,8 +54,12 @@ extern unsigned long find_next_and_bit(const unsigned long *addr1,
+  * Returns the bit number of the next zero bit
+  * If no bits are zero, returns @size.
+  */
++static inline
+ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+-				 unsigned long offset);
++				 unsigned long offset)
++{
++	return _find_next_bit(addr, NULL, size, offset, ~0UL, 0);
++}
+ #endif
+ 
+ #ifndef find_first_bit
+diff --git a/tools/lib/find_bit.c b/tools/lib/find_bit.c
+index 49abb18549cc..c3378b291205 100644
+--- a/tools/lib/find_bit.c
++++ b/tools/lib/find_bit.c
+@@ -28,11 +28,12 @@
+  *    searching it for one bits.
+  *  - The optional "addr2", which is anded with "addr1" if present.
+  */
+-static inline unsigned long _find_next_bit(const unsigned long *addr1,
++unsigned long _find_next_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long nbits,
+-		unsigned long start, unsigned long invert)
++		unsigned long start, unsigned long invert, unsigned long le)
  {
- 	unsigned int nlongs = BITS_TO_LONGS(nbits);
--	if (!small_const_nbits(nbits)) {
-+	if (!SMALL_CONST(nbits - 1)) {
- 		unsigned int len = (nlongs - 1) * sizeof(unsigned long);
- 		memset(dst, 0xff,  len);
+-	unsigned long tmp;
++	unsigned long tmp, mask;
++	(void) le;
+ 
+ 	if (unlikely(start >= nbits))
+ 		return nbits;
+@@ -43,7 +44,19 @@ static inline unsigned long _find_next_bit(const unsigned long *addr1,
+ 	tmp ^= invert;
+ 
+ 	/* Handle 1st word. */
+-	tmp &= BITS_LAST_MASK(start);
++	mask = BITS_LAST_MASK(start);
++
++	/*
++	 * Due to the lack of swab() in tools, and the fact that it doesn't
++	 * need little-endian support, just comment it out
++	 */
++#if (0)
++	if (le)
++		mask = swab(mask);
++#endif
++
++	tmp &= mask;
++
+ 	start = round_down(start, BITS_PER_LONG);
+ 
+ 	while (!tmp) {
+@@ -57,18 +70,12 @@ static inline unsigned long _find_next_bit(const unsigned long *addr1,
+ 		tmp ^= invert;
  	}
-@@ -44,7 +41,7 @@ static inline void bitmap_fill(unsigned long *dst, unsigned int nbits)
  
- static inline int bitmap_empty(const unsigned long *src, unsigned nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return ! (*src & BITS_FIRST_MASK(nbits - 1));
+-	return min(start + __ffs(tmp), nbits);
+-}
++#if (0)
++	if (le)
++		tmp = swab(tmp);
+ #endif
  
- 	return find_first_bit(src, nbits) == nbits;
-@@ -52,7 +49,7 @@ static inline int bitmap_empty(const unsigned long *src, unsigned nbits)
- 
- static inline int bitmap_full(const unsigned long *src, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return ! (~(*src) & BITS_FIRST_MASK(nbits - 1));
- 
- 	return find_first_zero_bit(src, nbits) == nbits;
-@@ -60,7 +57,7 @@ static inline int bitmap_full(const unsigned long *src, unsigned int nbits)
- 
- static inline int bitmap_weight(const unsigned long *src, int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return hweight_long(*src & BITS_FIRST_MASK(nbits - 1));
- 	return __bitmap_weight(src, nbits);
+-#ifndef find_next_bit
+-/*
+- * Find the next set bit in a memory region.
+- */
+-unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+-			    unsigned long offset)
+-{
+-	return _find_next_bit(addr, NULL, size, offset, 0UL);
++	return min(start + __ffs(tmp), nbits);
  }
-@@ -68,7 +65,7 @@ static inline int bitmap_weight(const unsigned long *src, int nbits)
- static inline void bitmap_or(unsigned long *dst, const unsigned long *src1,
- 			     const unsigned long *src2, int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = *src1 | *src2;
- 	else
- 		__bitmap_or(dst, src1, src2, nbits);
-@@ -146,7 +143,7 @@ size_t bitmap_scnprintf(unsigned long *bitmap, int nbits,
- static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
- 			     const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return (*dst = *src1 & *src2 & BITS_FIRST_MASK(nbits - 1)) != 0;
- 	return __bitmap_and(dst, src1, src2, nbits);
+ #endif
+ 
+@@ -105,20 +112,3 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ 	return size;
  }
-@@ -162,7 +159,7 @@ static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
- static inline int bitmap_equal(const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return !((*src1 ^ *src2) & BITS_FIRST_MASK(nbits - 1));
- 	if (__builtin_constant_p(nbits & BITMAP_MEM_MASK) &&
- 	    IS_ALIGNED(nbits, BITMAP_MEM_ALIGNMENT))
+ #endif
+-
+-#ifndef find_next_zero_bit
+-unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+-				 unsigned long offset)
+-{
+-	return _find_next_bit(addr, NULL, size, offset, ~0UL);
+-}
+-#endif
+-
+-#ifndef find_next_and_bit
+-unsigned long find_next_and_bit(const unsigned long *addr1,
+-		const unsigned long *addr2, unsigned long size,
+-		unsigned long offset)
+-{
+-	return _find_next_bit(addr1, addr2, size, offset, 0UL);
+-}
+-#endif
 -- 
 2.25.1
 
