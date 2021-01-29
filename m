@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17856308D3B
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 20:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E46308D99
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 20:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbhA2TRK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 14:17:10 -0500
-Received: from mga17.intel.com ([192.55.52.151]:43969 "EHLO mga17.intel.com"
+        id S232805AbhA2TnR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 14:43:17 -0500
+Received: from mga02.intel.com ([134.134.136.20]:54042 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232878AbhA2TP4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 29 Jan 2021 14:15:56 -0500
-IronPort-SDR: l6rc0NaUyT0nzoknpA5z3mbcrSj7dUJ5K5HXDsnxLc0QnZ43/5kSbLEDAMGiYJ3wpdQ4iK8JCJ
- A/kzInG+ldDw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="160242845"
+        id S232579AbhA2TnP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 29 Jan 2021 14:43:15 -0500
+IronPort-SDR: rrXrmA6QRY+CxiKpyUeTWv1/LmVn7WbHBoxUEcNQ0ZaxHSq8+iLC0BDe9o2KOgiqz5Mb5TLSuj
+ ccH9WfY+orhA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="167573055"
 X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
-   d="scan'208";a="160242845"
+   d="scan'208";a="167573055"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 11:15:15 -0800
-IronPort-SDR: Iy2cUxiZVI0edkYg62aZLsDq8cmFpB6aHQ5NGGveMCuV6xHtz4c7TdVS4Iy+74vg6gn5XJiJ+V
- 8HF4WBOlVsbA==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 11:42:34 -0800
+IronPort-SDR: 195gX9XdVpakp62fsy8xJUiigAhHk2qgv2DL+s0P6VpzOxWG+7HtZz4O3Oe6KwODX6FjlfPlM6
+ Zfuo2joRTxcg==
 X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
-   d="scan'208";a="576560749"
+   d="scan'208";a="576567420"
 Received: from bkmossma-mobl.amr.corp.intel.com (HELO [10.209.175.74]) ([10.209.175.74])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 11:15:14 -0800
-Subject: Re: [PATCH v18 24/25] x86/cet/shstk: Add arch_prctl functions for
- shadow stack
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, x86@kernel.org,
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 11:42:32 -0800
+Subject: Re: [PATCH v18 02/25] x86/cet/shstk: Add Kconfig option for user-mode
+ control-flow protection
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -54,9 +54,7 @@ To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, x86@kernel.org,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
- <20210127212524.10188-25-yu-cheng.yu@intel.com>
- <ba39586d-25b6-6ea5-19c3-adf17b59f910@intel.com>
- <761ae8ce-0560-24cc-e6f7-684475cb3708@intel.com>
+ <20210127212524.10188-3-yu-cheng.yu@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -101,12 +99,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <179fe87e-8fd1-9a26-e4f6-a508b45a54d4@intel.com>
-Date:   Fri, 29 Jan 2021 11:15:12 -0800
+Message-ID: <40a5a9b5-9c83-473d-5f62-a16ecde50f2a@intel.com>
+Date:   Fri, 29 Jan 2021 11:42:31 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <761ae8ce-0560-24cc-e6f7-684475cb3708@intel.com>
+In-Reply-To: <20210127212524.10188-3-yu-cheng.yu@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -114,43 +112,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/29/21 10:56 AM, Yu, Yu-cheng wrote:
-> On 1/29/2021 9:07 AM, Dave Hansen wrote:
->> On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
->>> +    u64 buf[3] = {0, 0, 0};
+On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
+> +	help
+> +	  Control-flow protection is a hardware security hardening feature
+> +	  that detects function-return address or jump target changes by
+> +	  malicious code.
 
-Doesn't the compiler zero these if you initialize it to anything?  In
-other words, doesn't this work?
+It's not really one feature.  I also think it's not worth talking about
+shadow stacks or indirect branch tracking in *here*.  Leave that for
+Documentation/.
 
-	u64 buf[3] = {};
+Just say:
 
->>> +    if (cet->shstk_size) {
->>> +        buf[0] |= GNU_PROPERTY_X86_FEATURE_1_SHSTK;
->>> +        buf[1] = (u64)cet->shstk_base;
->>> +        buf[2] = (u64)cet->shstk_size;
->>
->> What's the casting for?
-> 
-> cet->shstk_base and cet->shstk_size are both 'unsigned long', not u64,
-> so the cast.
+	Control-flow protection is a set of hardware features which
+	place additional restrictions on indirect branches.  These help
+	mitigate ROP attacks.
 
-Sure, but we don't put explicit casts at every implicit type conversion
-in the kernel.  What function does this casting serve?
+... and add more in the IBT patches.
 
->>> +    cet = &current->thread.cet;
->>> +
->>> +    if (option == ARCH_X86_CET_STATUS)
->>> +        return copy_status_to_user(cet, arg2);
->>
->> What's the point of doing copy_status_to_user() if the processor doesn't
->> support CET?  In other words, shouldn't this be below the CPU feature
->> check?
-> 
-> The thought was to tell the difference between the kernel itself does
-> not support CET and the system does not have CET.  And, if the kernel
-> supports it, show CET status of the thread.
+>  Applications must be enabled to use it, and old
+> +	  userspace does not get protection "for free".
+> +	  Support for this feature is present on processors released in
+> +	  2020 or later.  Enabling this feature increases kernel text size
+> +	  by 3.7 KB.
 
-Why would that matter to userspace?
-
-If they want to know if the processor has CET support there are existing
-ways to do it.  I don't think this should be part of the ABI.
+Did any CPUs ever get released that have this?  If so, name them.  If
+not, time to change this to 2021, I think.
