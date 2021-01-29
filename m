@@ -2,70 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B170430900F
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 23:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C977630901F
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 23:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbhA2W2B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 17:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
+        id S232795AbhA2WcG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 17:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbhA2W2B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 17:28:01 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E881AC061573
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 14:27:20 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id v19so7585044pgj.12
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 14:27:20 -0800 (PST)
+        with ESMTP id S233529AbhA2Wbw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 17:31:52 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC79C06174A
+        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 14:31:12 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id d2so1102793pjs.4
+        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 14:31:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n9U4McTABtuqtNOqLAuCMtCG5shXKI8/Zm0sjdl2VjY=;
-        b=FUWhIb9FG/USCOO4QZJ5Qrq0vYZm/TwgDTrDBUSJdTUUik+KQRz+nMV923YVEU58O4
-         OtA8qDFn6GnX+cW9FR3ZXKzz9ZmtTt9e8AqCN3awjtAaFsrIsfx83fwH5ezyf1tlCsdr
-         KPza42VJCugXMvuFQvUcl253ilKa/HSE3nxybsZ9Pg7t0JtvR5QJEyHFN/QzBwvcUEeT
-         fgJWMnXSUmhcFcyDEJEBrMyhzaOgjvzwmbPDLQciQlMgF+oFttvTsJHY0FpN9w2rK/+H
-         p85caq1P+P0Q24BosdcrnVH2MHmjRis3RopRcfCVXOMGXl/vT4e19QeG2HChK+L1wszX
-         aUCg==
+        bh=mEuUNTLPjyCKU+1m6bFPUEO4cIWG2fR+kA7IEzmsiA0=;
+        b=MXQ3szzyutAJwpx9freM5P5nZtBdbzPRo9DqX45Y+eAKATqPcrdQ8wG5Cl5YJ/rm/D
+         X2E4zfRQqwpyQuRxesyxK6FL/smz/4zcdNBQ88GzDjV8VW2ci5WrKiKdTxCYWYA7+o2B
+         2P9y/wRdwIglbjUpEVC3bLxRXlzvalIG8Mc58ABIuLGso/xNT1XiFDiN4Y2YQ3zPDT4b
+         8+gzTn7RmCMg+xftHFBOifOW5zsiX7BLXZ42olQ1a5itnwUl2dEggiBQkgugVgGLEBgW
+         1Mymw9wHEVVblcehWi40xNb3k8GqVDiLpO2ABVf9WcYBaby+4QY45RsdK9JjTPnJzOiE
+         dLpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n9U4McTABtuqtNOqLAuCMtCG5shXKI8/Zm0sjdl2VjY=;
-        b=k4FQfWcQuxl3riEDJoGTYXF2iV/ZZe0XcY3mv7njZ0GpP6iAmDLf+WxNxV0lUWlv+m
-         izM6oQAQUB7/bpg9jQz2Mfj2/k6PpQz6KmwTAa3fHeaumQ1mu6uMFTetV2WC9p3Id7Mb
-         2p45P5Atf5jOZ2LZzHebWALrSjJSJEk/mCxG589tevs60O5whT14z23fFd8VGvI30b4o
-         iFdDtZmG0hTNzuC6jIy8z6xxoUqK8sD37+1J/5/stpSe69azf95zCHJwSX+KgKmWfrqP
-         SwoSzCKeR9JBjphQZedmL+huVEjZL2sW5/kIANoq0Qmiw2bbtcbXl581WCVacxLK41eH
-         2z9A==
-X-Gm-Message-State: AOAM530vqzdbHqHLVbFZ0KB9wvW/n7tAJwePnxfC7BV9hqgynQxK72+a
-        y2OYPcHlxlcEWxHVWvtSmodt6hCwZA9ysMfKKtOBXQ==
-X-Google-Smtp-Source: ABdhPJwTCR93qGzhgDT4bimMP33GFgwbaaPci0RZWnEL3JJU3pGZd0Xr5JUgbTXOlHA04z28ZlPzCBNydXSDof9nlGs=
-X-Received: by 2002:a63:7e10:: with SMTP id z16mr6729496pgc.263.1611959240285;
- Fri, 29 Jan 2021 14:27:20 -0800 (PST)
+        bh=mEuUNTLPjyCKU+1m6bFPUEO4cIWG2fR+kA7IEzmsiA0=;
+        b=UwkOnLyo9CBiNZXHTYudLPBQmWjJE/XhtWU9a1hAmLXvHbYuBsHPDEKR0tJZl4WJWL
+         bWkVcTKeASRKN5FI8PAZLTiiZfHF1DzpEcX4Ohv0fCE+jFV6KnWjx3NTC4A6GEVfWly0
+         avJeJVFGvNLuhXK9JAX+8y7aRL5XQhW53ubE2eP072OkJ0UzqECMIVYT0b8tkU96rofQ
+         gFHVVmyYTD97nCGDRMCtia13BmYWlDJ1ZIdaGBBBQu/Pcu/tJvfVYh2lhpaY+kO8Sb69
+         NAIVTUHpYQ6ZQdcXZEDNRXB+eWPg2lx9iUQmTy54MCwjrkNBz+Qlk7tnQspn74iILb7J
+         cOCw==
+X-Gm-Message-State: AOAM531R2LtM7Jd6SHLNmfEiKQJ4b/WLSJRNYbAcYgdm3HHDF/sOV+kM
+        cDgiUodlvgmkp1/0EOO9+AUGSVLTa391NHK2olGmCA==
+X-Google-Smtp-Source: ABdhPJwZsd7PybQkVmrkiSQDc4U0xVvSfLsYOJxZuikVsd6WthzvrApfmvev2Zuw72TEGqzKpkNH/e4Nv7e7QE9S2ow=
+X-Received: by 2002:a17:90a:8b82:: with SMTP id z2mr6462674pjn.25.1611959471740;
+ Fri, 29 Jan 2021 14:31:11 -0800 (PST)
 MIME-Version: 1.0
 References: <20210129194318.2125748-1-ndesaulniers@google.com>
  <20210129194318.2125748-3-ndesaulniers@google.com> <CA+icZUX4q-JhCo+UZ9T3FhbC_gso-oaB0OR9KdH5iEpoGZyqVw@mail.gmail.com>
  <CAKwvOdnj1Np62+eOiTOCRXSW6GLSv4hmvtWaz=0aTZEEot_dhw@mail.gmail.com>
- <20210129205702.GS4020736@tucnak> <CAKwvOdmuSaf28dOdP8Yo6+RyiviMNKcq8JY=-qgbwjbPVwHmLw@mail.gmail.com>
- <20210129211102.GT4020736@tucnak>
-In-Reply-To: <20210129211102.GT4020736@tucnak>
+ <CA+icZUWsyjDY58ZZ0MAVfWqBJ8FUSpM6=_5aqPcRTfX2W8Y-+Q@mail.gmail.com>
+ <CAKwvOd=mHvEtto37rzFMfsFYe2e-Cp2MAiyRYxHWPdc-HbT8EA@mail.gmail.com>
+ <CA+icZUWxK9fdV8PNGqbQrOFmSZ2Ts4nNqfVMMNUh5u79Ld7hjA@mail.gmail.com>
+ <CA+icZUUo6URpxHh6_Tppv9_Z1dyhGDB2OqSCY3yRw72aA0EbMQ@mail.gmail.com>
+ <CAKwvOdmWx0reabY-S3nXfTZuhs-_SP7pbb0uHyGeaNSQnm8eRQ@mail.gmail.com>
+ <CA+icZUWsncyKvxPZ5g=a3ssWy=cYahsU6hprM3n=jFUmnjPC6w@mail.gmail.com>
+ <CAKwvOdk4kG-_c3inNj9ry_xUU9SQE-2AqQp40YL_V=6SHU6E=Q@mail.gmail.com> <CA+icZUX576Rt7HJ4hvrwRTCC2pTmoH-Yu-haU+MDb8B6yADAYA@mail.gmail.com>
+In-Reply-To: <CA+icZUX576Rt7HJ4hvrwRTCC2pTmoH-Yu-haU+MDb8B6yADAYA@mail.gmail.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 29 Jan 2021 14:27:09 -0800
-Message-ID: <CAKwvOdmrSNNkfFc7U3h2qWnNc+okxeBravE4Huun_LOv75_Bvw@mail.gmail.com>
+Date:   Fri, 29 Jan 2021 14:31:01 -0800
+Message-ID: <CAKwvOdmq=L_ob-WpNBE-fSc3oYXT10ZvttfiXiZw3+SxaWWy-A@mail.gmail.com>
 Subject: Re: [PATCH v6 2/2] Kbuild: implement support for DWARF v5
-To:     Jakub Jelinek <jakub@redhat.com>
-Cc:     Nick Clifton <nickc@redhat.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
+        Jakub Jelinek <jakub@redhat.com>,
         Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>, Yonghong Song <yhs@fb.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -75,41 +80,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 1:11 PM Jakub Jelinek <jakub@redhat.com> wrote:
+On Fri, Jan 29, 2021 at 2:23 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> On Fri, Jan 29, 2021 at 01:05:56PM -0800, Nick Desaulniers wrote:
-> > > Wasn't that fixed in GAS?
-> > > https://sourceware.org/bugzilla/show_bug.cgi?id=27195
+> On Fri, Jan 29, 2021 at 11:21 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
 > >
-> > $ make LLVM=1 -j72 defconfig
-> > $ ./scripts/config -e DEBUG_INFO -e DEBUG_INFO_DWARF5
-> > $ make LLVM=1 -j72
-> > ...
-> > /tmp/init-d50d89.s: Assembler messages:
-> > /tmp/init-d50d89.s:10: Error: file number less than one
-> > /tmp/init-d50d89.s:11: Error: junk at end of line, first unrecognized
-> > character is `m'
+> > On Fri, Jan 29, 2021 at 2:11 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Fri, Jan 29, 2021 at 11:09 PM Nick Desaulniers
+> > > <ndesaulniers@google.com> wrote:
+> > > >
+> > > > On Fri, Jan 29, 2021 at 1:20 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Jan 29, 2021 at 10:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > > > >
+> > > > > > On Fri, Jan 29, 2021 at 10:09 PM Nick Desaulniers
+> > > > > > <ndesaulniers@google.com> wrote:
+> > > > > > >
+> > > > > > > Can you tell me please what is the precise command line invocation of
+> > > > > > > make and which source file you observed this on so that I can
+> > > > > > > reproduce?
+> > > >
+> > > > If you don't send me your invocation of `make`, I cannot help you.
+> > > >
+> > >
+> > > /usr/bin/perf_5.10 stat make V=1 -j4 LLVM=1 LLVM_IAS=1
+> > > PAHOLE=/opt/pahole/bin/pahole LOCALVERSION=-10-amd64-clang12
+> > > -lto-pgo KBUILD_VERBOSE=1 KBUILD_BUILD_HOST=iniza
+> > > KBUILD_BUILD_USER=sedat.dilek@gmail.com
+> > > KBUILD_BUILD_TIMESTAMP=2021-01-29 bindeb-pkg
+> > > KDEB_PKGVERSION=5.11.0~rc5-10~bullseye+dileks1
 > >
-> > which is https://sourceware.org/bugzilla/show_bug.cgi?id=25611.
+> > $ make LLVM=1 LLVM_IAS=1 -j72 defconfig
+> > $ make LLVM=1 LLVM_IAS=1 -j72 menuconfig
+> > <enable CONFIG_DEBUG_INFO and CONFIG_DEBUG_INFO_DWARF5>
+> > $ make LLVM=1 LLVM_IAS=1 -j72 V=1 &> log.txt
+> > $ grep '\-g -gdwarf-5 -g -gdwarf-5' log.txt | wc -l
+> > 0
+> > $ grep '\-g -gdwarf-5' log.txt | wc -l
+> > 2517
 > >
-> > $ as --version | head -n1
-> > GNU assembler (GNU Binutils for Debian) 2.35.1
+> > Do have the patch applied twice, perhaps?
 > >
-> > Maybe GAS should not need to be told -gdwarf-5 to parse these?  Then
-> > we would not need to pass -Wa,-gdwarf-5 via clang with
-> > -no-integrated-as.
 >
-> That is what sw#27195 is about, just try current binutils 2.35, 2.36 or
-> trunk branches.
+> Switched to my v6 local Git branch and invoked above make line I gave you.
+> I still see that double.
+> Looks like I need some "undrunken" switch.
 
-Ok, yep, I can confirm.  I just built ToT binutils and I no longer
-need to specify -Wa,-gdwarf-5 when building with clang with
--no-integrated-as.
-
-I will update scripts/test_dwarf5_support.sh to check for that and
-update the comments/documentation/commit messages to say binutils
-2.35.2+, link to https://sourceware.org/bugzilla/show_bug.cgi?id=27195
-instead, then drop hunk that was passing -Wa,-gdwarf-5.
+Can you follow my steps precisely to see whether it's your .config?
+Perhaps there is a config that duplicates DEBUG_CFLAGS that is not set
+in the defconfig?  If so, it's still harmless to specify the same
+commands twice, and likely isn't introduced by this patch set if so;
+so I'm not sure how much more effort is worth pursuing.
 -- 
 Thanks,
 ~Nick Desaulniers
