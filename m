@@ -2,60 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB051308DFD
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 21:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3559B308E02
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 21:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbhA2UCO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 15:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbhA2T7a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 14:59:30 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D81C061574
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 11:58:24 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id r38so7368429pgk.13
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 11:58:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=aPmRknrUXoM+y6mtZ5BJIoZ2z2YX2kZHPwEWyf5g8oc=;
-        b=aGp6lfHXNFiIoLGHImiNQDdm/k9ZVdbPXLHXzyLRrq20nvxq0i4U/eIYXg1+udihlc
-         1AJqRM191iNRasbNF0tJetz0cEnR6xX+JGEI4M4ZO4XFEtLTMPoRtQONA1kUCPqT3bq7
-         VGh9DfPFhQ/FBR9e2uZGqQMlH6sdmeHA5lro8JgNwX+lWEwkja8X7ODQFTkrmK4b0Psn
-         b6lSUJdAEwMkPKKlN8TF7msXr7KnUfDh4Q/4WDY1HGTZxFABmtNNmtvbpT/7yvwN64pD
-         tOji7YJ+jm0mTT/zBekdF3XUHPrmMxFjZZrpxvyRA7cROMwzT1an3fAHQwL4nv5O03Dn
-         xOrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=aPmRknrUXoM+y6mtZ5BJIoZ2z2YX2kZHPwEWyf5g8oc=;
-        b=cb4FEeHF5WsrUzubps06BPRRT4kl03at/9433RffEogEVw3qnd68ucb1il4B1L29fc
-         t+cgZ6ygJ6oa2UE6IWHcHufPZzPUFhks7c9xPyltjLxGo9zJSKG5z8F45QI8twe0WlHU
-         VPhxMl/ywLgqzsTYzNuViaEvzyBpnIOCzXA3SYNunSveT0FLWInMlHxIYdmwOL7ThHkr
-         vuCPNlsDWz5bNG3SlDqNKBRl20bho0xT36xf8AVczEMYzPTZsyG1R2LTdxq9Z3eZ1/8s
-         QfonhuHR355sgBqvmTDAtuA7hBZZKkItqkUmUrPFbdz5QToPCRPjLw7D3pDfPjCxd8UJ
-         OQTw==
-X-Gm-Message-State: AOAM5339ZPVqqcjYD2U7CzryOQsD7xCFi5U72NENs8POqvU/8sZTqQWs
-        kSOPmnb2rW2cPLJmo0MapIjqBQ==
-X-Google-Smtp-Source: ABdhPJyVSSMtq6GrB08WQhwRVajO1mCXK195f1+mqR1Nl8ENdGTgc77vzrwNYHLhtryRg06DbVCv0Q==
-X-Received: by 2002:a63:5116:: with SMTP id f22mr6162045pgb.162.1611950304487;
-        Fri, 29 Jan 2021 11:58:24 -0800 (PST)
-Received: from ?IPv6:2600:1010:b04b:3f76:e5b1:55a0:5bce:dce3? ([2600:1010:b04b:3f76:e5b1:55a0:5bce:dce3])
-        by smtp.gmail.com with ESMTPSA id y10sm9771144pff.197.2021.01.29.11.58.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jan 2021 11:58:23 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v18 02/25] x86/cet/shstk: Add Kconfig option for user-mode control-flow protection
-Date:   Fri, 29 Jan 2021 11:58:21 -0800
-Message-Id: <86F8CE62-A94B-46BD-9A29-DBE1CC14AA83@amacapital.net>
-References: <40a5a9b5-9c83-473d-5f62-a16ecde50f2a@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        id S232752AbhA2UDM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 15:03:12 -0500
+Received: from mga04.intel.com ([192.55.52.120]:19665 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233182AbhA2UCB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 29 Jan 2021 15:02:01 -0500
+IronPort-SDR: nl1VEiwq3vgV+9YCdwMvy2DbTvzqgHTJaJEIDJkKVoXm270/sc3/92M+OHuiA3LrnHYnOKPOX7
+ PvrD7Xxryp6w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="177914146"
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="177914146"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 12:00:47 -0800
+IronPort-SDR: c7w6gyxKcP32QMKgbQ7rCeCI3Gb7MxoZ3Mm5vf3g4Ta9XgJrcK7IZMEbWhNDXUP1fAoMRpPJG/
+ 9+qDpl84HO3Q==
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="410850563"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.73.214]) ([10.212.73.214])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 12:00:46 -0800
+Subject: Re: [PATCH v18 02/25] x86/cet/shstk: Add Kconfig option for user-mode
+ control-flow protection
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -82,42 +53,52 @@ Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
+References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
+ <20210127212524.10188-3-yu-cheng.yu@intel.com>
+ <40a5a9b5-9c83-473d-5f62-a16ecde50f2a@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <636174be-d49a-55bc-b996-79c7df9d5f1d@intel.com>
+Date:   Fri, 29 Jan 2021 12:00:46 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
+MIME-Version: 1.0
 In-Reply-To: <40a5a9b5-9c83-473d-5f62-a16ecde50f2a@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-X-Mailer: iPhone Mail (18C66)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-> On Jan 29, 2021, at 11:42 AM, Dave Hansen <dave.hansen@intel.com> wrote:
->=20
-> =EF=BB=BFOn 1/27/21 1:25 PM, Yu-cheng Yu wrote:
->> +    help
->> +      Control-flow protection is a hardware security hardening feature
->> +      that detects function-return address or jump target changes by
->> +      malicious code.
->=20
+On 1/29/2021 11:42 AM, Dave Hansen wrote:
+> On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
+>> +	help
+>> +	  Control-flow protection is a hardware security hardening feature
+>> +	  that detects function-return address or jump target changes by
+>> +	  malicious code.
+> 
 > It's not really one feature.  I also think it's not worth talking about
 > shadow stacks or indirect branch tracking in *here*.  Leave that for
 > Documentation/.
->=20
+> 
 > Just say:
->=20
->    Control-flow protection is a set of hardware features which
->    place additional restrictions on indirect branches.  These help
->    mitigate ROP attacks.
->=20
+> 
+> 	Control-flow protection is a set of hardware features which
+> 	place additional restrictions on indirect branches.  These help
+> 	mitigate ROP attacks.
+> 
 > ... and add more in the IBT patches.
->=20
->> Applications must be enabled to use it, and old
->> +      userspace does not get protection "for free".
->> +      Support for this feature is present on processors released in
->> +      2020 or later.  Enabling this feature increases kernel text size
->> +      by 3.7 KB.
->=20
+> 
+>>   Applications must be enabled to use it, and old
+>> +	  userspace does not get protection "for free".
+>> +	  Support for this feature is present on processors released in
+>> +	  2020 or later.  Enabling this feature increases kernel text size
+>> +	  by 3.7 KB.
+> 
 > Did any CPUs ever get released that have this?  If so, name them.  If
 > not, time to change this to 2021, I think.
+> 
 
-Zen 3 :)=
+Ok.  I will update this.
+
+Yu-cheng
