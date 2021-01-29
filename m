@@ -2,184 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 767F43088F7
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 13:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C040308AF7
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 18:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbhA2MQ2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 07:16:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58192 "EHLO mx2.suse.de"
+        id S231593AbhA2RH7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 12:07:59 -0500
+Received: from mga07.intel.com ([134.134.136.100]:22339 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232862AbhA2MOY (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 29 Jan 2021 07:14:24 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611910277; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oz5cMvs61w9nxAoe4HzR3mysk0/Hr5mRI47kmCm2DS0=;
-        b=JlAN3/6ogutWOafvXtaRPUY2CcqVH8YluGJuxVw3j5M8pdVfxjPuXWqJ1TpSUCsjvBL8Jh
-        hawPaBwcHUKIexzg5OBrQB9L0nFn7he5WG1sTy30AdaWWlyFyJAU8bOKTbKEvAVjrh2dU9
-        LZzhuvObvkNyN52W4YE1B2PWXA7ohhg=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C1ABBACB0;
-        Fri, 29 Jan 2021 08:51:16 +0000 (UTC)
-Date:   Fri, 29 Jan 2021 09:51:15 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        id S229661AbhA2RHq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 29 Jan 2021 12:07:46 -0500
+IronPort-SDR: p8Wk3Hi2WuNznyoMrufDgJFn7F9VOXeBmA4l4QoM+/O1YkE4hafl3i0YrK5VktZ0X0WnCGBb98
+ eum5jgSYygUw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="244539471"
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="244539471"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 09:07:04 -0800
+IronPort-SDR: C/Gip6dt70g3XPeD/k4QNm3XwpXa4g6YixqTOPTrUIQe2OCJdT+eg0GeWv9j/C1xQYmir9cCxf
+ nxlk7ED7pvqw==
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="576531508"
+Received: from bkmossma-mobl.amr.corp.intel.com (HELO [10.209.175.74]) ([10.209.175.74])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 09:07:02 -0800
+Subject: Re: [PATCH v18 24/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <YBPMg/C5Sb78gFEB@dhcp22.suse.cz>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
- <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz>
- <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
- <20210129072128.GD242749@kernel.org>
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
+ <20210127212524.10188-25-yu-cheng.yu@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzShEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gPGRhdmVAc3I3MS5uZXQ+wsF7BBMBAgAlAhsDBgsJCAcDAgYVCAIJ
+ CgsEFgIDAQIeAQIXgAUCTo3k0QIZAQAKCRBoNZUwcMmSsMO2D/421Xg8pimb9mPzM5N7khT0
+ 2MCnaGssU1T59YPE25kYdx2HntwdO0JA27Wn9xx5zYijOe6B21ufrvsyv42auCO85+oFJWfE
+ K2R/IpLle09GDx5tcEmMAHX6KSxpHmGuJmUPibHVbfep2aCh9lKaDqQR07gXXWK5/yU1Dx0r
+ VVFRaHTasp9fZ9AmY4K9/BSA3VkQ8v3OrxNty3OdsrmTTzO91YszpdbjjEFZK53zXy6tUD2d
+ e1i0kBBS6NLAAsqEtneplz88T/v7MpLmpY30N9gQU3QyRC50jJ7LU9RazMjUQY1WohVsR56d
+ ORqFxS8ChhyJs7BI34vQusYHDTp6PnZHUppb9WIzjeWlC7Jc8lSBDlEWodmqQQgp5+6AfhTD
+ kDv1a+W5+ncq+Uo63WHRiCPuyt4di4/0zo28RVcjtzlGBZtmz2EIC3vUfmoZbO/Gn6EKbYAn
+ rzz3iU/JWV8DwQ+sZSGu0HmvYMt6t5SmqWQo/hyHtA7uF5Wxtu1lCgolSQw4t49ZuOyOnQi5
+ f8R3nE7lpVCSF1TT+h8kMvFPv3VG7KunyjHr3sEptYxQs4VRxqeirSuyBv1TyxT+LdTm6j4a
+ mulOWf+YtFRAgIYyyN5YOepDEBv4LUM8Tz98lZiNMlFyRMNrsLV6Pv6SxhrMxbT6TNVS5D+6
+ UorTLotDZKp5+M7BTQRUY85qARAAsgMW71BIXRgxjYNCYQ3Xs8k3TfAvQRbHccky50h99TUY
+ sqdULbsb3KhmY29raw1bgmyM0a4DGS1YKN7qazCDsdQlxIJp9t2YYdBKXVRzPCCsfWe1dK/q
+ 66UVhRPP8EGZ4CmFYuPTxqGY+dGRInxCeap/xzbKdvmPm01Iw3YFjAE4PQ4hTMr/H76KoDbD
+ cq62U50oKC83ca/PRRh2QqEqACvIH4BR7jueAZSPEDnzwxvVgzyeuhwqHY05QRK/wsKuhq7s
+ UuYtmN92Fasbxbw2tbVLZfoidklikvZAmotg0dwcFTjSRGEg0Gr3p/xBzJWNavFZZ95Rj7Et
+ db0lCt0HDSY5q4GMR+SrFbH+jzUY/ZqfGdZCBqo0cdPPp58krVgtIGR+ja2Mkva6ah94/oQN
+ lnCOw3udS+Eb/aRcM6detZr7XOngvxsWolBrhwTQFT9D2NH6ryAuvKd6yyAFt3/e7r+HHtkU
+ kOy27D7IpjngqP+b4EumELI/NxPgIqT69PQmo9IZaI/oRaKorYnDaZrMXViqDrFdD37XELwQ
+ gmLoSm2VfbOYY7fap/AhPOgOYOSqg3/Nxcapv71yoBzRRxOc4FxmZ65mn+q3rEM27yRztBW9
+ AnCKIc66T2i92HqXCw6AgoBJRjBkI3QnEkPgohQkZdAb8o9WGVKpfmZKbYBo4pEAEQEAAcLB
+ XwQYAQIACQUCVGPOagIbDAAKCRBoNZUwcMmSsJeCEACCh7P/aaOLKWQxcnw47p4phIVR6pVL
+ e4IEdR7Jf7ZL00s3vKSNT+nRqdl1ugJx9Ymsp8kXKMk9GSfmZpuMQB9c6io1qZc6nW/3TtvK
+ pNGz7KPPtaDzvKA4S5tfrWPnDr7n15AU5vsIZvgMjU42gkbemkjJwP0B1RkifIK60yQqAAlT
+ YZ14P0dIPdIPIlfEPiAWcg5BtLQU4Wg3cNQdpWrCJ1E3m/RIlXy/2Y3YOVVohfSy+4kvvYU3
+ lXUdPb04UPw4VWwjcVZPg7cgR7Izion61bGHqVqURgSALt2yvHl7cr68NYoFkzbNsGsye9ft
+ M9ozM23JSgMkRylPSXTeh5JIK9pz2+etco3AfLCKtaRVysjvpysukmWMTrx8QnI5Nn5MOlJj
+ 1Ov4/50JY9pXzgIDVSrgy6LYSMc4vKZ3QfCY7ipLRORyalFDF3j5AGCMRENJjHPD6O7bl3Xo
+ 4DzMID+8eucbXxKiNEbs21IqBZbbKdY1GkcEGTE7AnkA3Y6YB7I/j9mQ3hCgm5muJuhM/2Fr
+ OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
+ ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
+ z5cecg==
+Message-ID: <ba39586d-25b6-6ea5-19c3-adf17b59f910@intel.com>
+Date:   Fri, 29 Jan 2021 09:07:01 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210129072128.GD242749@kernel.org>
+In-Reply-To: <20210127212524.10188-25-yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri 29-01-21 09:21:28, Mike Rapoport wrote:
-> On Thu, Jan 28, 2021 at 02:01:06PM +0100, Michal Hocko wrote:
-> > On Thu 28-01-21 11:22:59, Mike Rapoport wrote:
-> > 
-> > > And hugetlb pools may be also depleted by anybody by calling
-> > > mmap(MAP_HUGETLB) and there is no any limiting knob for this, while
-> > > secretmem has RLIMIT_MEMLOCK.
-> > 
-> > Yes it can fail. But it would fail at the mmap time when the reservation
-> > fails. Not during the #PF time which can be at any time.
+On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
+> arch_prctl(ARCH_X86_CET_STATUS, u64 *args)
+>     Get CET feature status.
 > 
-> It may fail at $PF time as well:
+>     The parameter 'args' is a pointer to a user buffer.  The kernel returns
+>     the following information:
 > 
-> hugetlb_fault()
->         hugeltb_no_page()
->                 ...
->                 alloc_huge_page()
->                         alloc_gigantic_page()
->                                 cma_alloc()
->                                         -ENOMEM; 
+>     *args = shadow stack/IBT status
+>     *(args + 1) = shadow stack base address
+>     *(args + 2) = shadow stack size
 
-I would have to double check. From what I remember cma allocator is an
-optimization to increase chances to allocate hugetlb pages when
-overcommiting because pages should be normally pre-allocated in the pool
-and reserved during mmap time. But even if a hugetlb page is not pre
-allocated then this will get propagated as SIGBUS unless that has
-changed.
-  
-> > > That said, simply replacing VM_FAULT_OOM with VM_FAULT_SIGBUS makes
-> > > secretmem at least as controllable and robust than hugeltbfs even without
-> > > complex reservation at mmap() time.
-> > 
-> > Still sucks huge!
->  
-> Any #PF can get -ENOMEM for whatever reason. Sucks huge indeed.
+What's the deal for 32-bit binaries?  The in-kernel code looks 64-bit
+only, but I don't see anything restricting the interface to 64-bit.
 
-I certainly can. But it doesn't in practice because most allocations
-will simply not fail and rather invoke OOM killer directly. Maybe there
-are cases which still might fail (higher order, weaker reclaim
-capabilities etc) but that would result in a bug in the end because the
-#PF handler would trigger the oom killer.
+> +static int copy_status_to_user(struct cet_status *cet, u64 arg2)
 
-[...]
-> > I would still like to understand whether that data is actually
-> > representative. With some underlying reasoning rather than I have run
-> > these XYZ benchmarks and numbers do not look terrible.
-> 
-> I would also very much like to see, for example, reasoning to enabling 1GB
-> pages in the direct map beyond "because we can" (commits 00d1c5e05736
-> ("x86: add gbpages switches") and ef9257668e31 ("x86: do kernel direct
-> mapping at boot using GB pages")).
-> 
-> The original Kconfig text for CONFIG_DIRECT_GBPAGES said
-> 
->           Enable gigabyte pages support (if the CPU supports it). This can
->           improve the kernel's performance a tiny bit by reducing TLB
->           pressure.
-> 
-> So it is very interesting how tiny that bit was.
+This has static scope, but it's still awfully generically named.  A cet_
+prefix would be nice.
 
-Yeah and that sucks! Because it is leaving us with speculations now. I
-hope you do not want to repeat the same mistake now and leave somebody
-in the future in the same situation.
+> +{
+> +	u64 buf[3] = {0, 0, 0};
+> +
+> +	if (cet->shstk_size) {
+> +		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_SHSTK;
+> +		buf[1] = (u64)cet->shstk_base;
+> +		buf[2] = (u64)cet->shstk_size;
 
-> > > I like the idea to have a pool as an optimization rather than a hard
-> > > requirement but I don't see why would it need a careful access control. As
-> > > the direct map fragmentation is not necessarily degrades the performance
-> > > (and even sometimes it actually improves it) and even then the degradation
-> > > is small, trying a PMD_ORDER allocation for a pool and then falling back to
-> > > 4K page may be just fine.
-> > 
-> > Well, as soon as this is a scarce resource then an access control seems
-> > like a first thing to think of. Maybe it is not really necessary but
-> > then this should be really justified.
-> 
-> And what being a scarce resource here?
+What's the casting for?
 
-A fixed size pool shared by all users of this feature.
+> +	}
+> +
+> +	return copy_to_user((u64 __user *)arg2, buf, sizeof(buf));
+> +}
+> +
+> +int prctl_cet(int option, u64 arg2)
+> +{
+> +	struct cet_status *cet;
+> +	unsigned int features;
+> +
+> +	/*
+> +	 * GLIBC's ENOTSUPP == EOPNOTSUPP == 95, and it does not recognize
+> +	 * the kernel's ENOTSUPP (524).  So return EOPNOTSUPP here.
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_X86_CET))
+> +		return -EOPNOTSUPP;
 
-> If we consider lack of the direct
-> map fragmentation as this resource, there enough measures secretmem
-> implements to limit user ability to fragment the direct map, as was already
-> discussed several times. Global limit, memcg and rlimit provide enough
-> access control already.
+Let's ignore glibc for a moment.  What error code *should* the kernel be
+returning here?  errno(3) says:
 
-Try to do a simple excercise. You have X amout of secret memory. How do
-you distribute that to all interested users (some of them adversaries)
-based on the above. Global limit is a DoS vector potentially, memcg is a
-mixed bag of all other memory and it would become really tricky to
-enforece proportion of the X while having other memory consumed and
-rlimit is per process rather than per user.
+       EOPNOTSUPP      Operation not supported on socket (POSIX.1)
+...
+       ENOTSUP         Operation not supported (POSIX.1)
 
-Look at how hugetlb had to develop its cgroup controler to distribute
-the pool among workloads. Then it has turned out that even reservations
-have to be per workload. Quite a convoluted stuff evolved around that
-feature because it turned out that the initial assumption that only few
-users would be using the pool simply didn't pass the reality check.
 
-As I've mentioned in other response to James. If the direct map
-manipulation is not as big of a problem as most of us dogmatically
-believed then things become much simpler. There is no need for global
-pool and you are back to mlock kinda model.
--- 
-Michal Hocko
-SUSE Labs
+> +	cet = &current->thread.cet;
+> +
+> +	if (option == ARCH_X86_CET_STATUS)
+> +		return copy_status_to_user(cet, arg2);
+
+What's the point of doing copy_status_to_user() if the processor doesn't
+support CET?  In other words, shouldn't this be below the CPU feature check?
+
+Also, please cast arg2 *here*.  It becomes a user pointer here, not at
+the copy_to_user().
+
+> +	if (!static_cpu_has(X86_FEATURE_CET))
+> +		return -EOPNOTSUPP;
+
+So, you went to the trouble of adding a disabled-features.h entry for
+this.  Why not just do:
+
+	if (cpu_feature_enabled(X86_FEATURE_CET))
+		...
+
+instead of the IS_ENABLED() check above?  That should get rid of one of
+these if's.
+
+> +	switch (option) {
+> +	case ARCH_X86_CET_DISABLE:
+> +		if (cet->locked)
+> +			return -EPERM;
+> +
+> +		features = (unsigned int)arg2;
+
+What's the purpose of this cast?
+
+> +		if (features & ~GNU_PROPERTY_X86_FEATURE_1_VALID)
+> +			return -EINVAL;
+> +		if (features & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
+> +			cet_disable_shstk();
+> +		return 0;
+
+This doesn't enforce that the high bits of arg2 be 0.  Shouldn't we call
+them reserved and enforce that they be 0?
+
+> +	case ARCH_X86_CET_LOCK:
+> +		cet->locked = 1;
+> +		return 0;
+
+This needs to check for and enforce that arg2==0.
+
+> +	default:
+> +		return -ENOSYS;
+> +	}
+> +}
