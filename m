@@ -2,139 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E46308D99
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 20:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14328308D9E
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 20:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbhA2TnR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 14:43:17 -0500
-Received: from mga02.intel.com ([134.134.136.20]:54042 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232579AbhA2TnP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 29 Jan 2021 14:43:15 -0500
-IronPort-SDR: rrXrmA6QRY+CxiKpyUeTWv1/LmVn7WbHBoxUEcNQ0ZaxHSq8+iLC0BDe9o2KOgiqz5Mb5TLSuj
- ccH9WfY+orhA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="167573055"
-X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
-   d="scan'208";a="167573055"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 11:42:34 -0800
-IronPort-SDR: 195gX9XdVpakp62fsy8xJUiigAhHk2qgv2DL+s0P6VpzOxWG+7HtZz4O3Oe6KwODX6FjlfPlM6
- Zfuo2joRTxcg==
-X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
-   d="scan'208";a="576567420"
-Received: from bkmossma-mobl.amr.corp.intel.com (HELO [10.209.175.74]) ([10.209.175.74])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 11:42:32 -0800
-Subject: Re: [PATCH v18 02/25] x86/cet/shstk: Add Kconfig option for user-mode
- control-flow protection
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
- <20210127212524.10188-3-yu-cheng.yu@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <40a5a9b5-9c83-473d-5f62-a16ecde50f2a@intel.com>
-Date:   Fri, 29 Jan 2021 11:42:31 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20210127212524.10188-3-yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S232752AbhA2ToL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 14:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232630AbhA2ToF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 14:44:05 -0500
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD59AC061756
+        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 11:43:24 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id dh16so6647332qvb.11
+        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 11:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=3SeeNcVsK2P/XlQ94PAyrrJlSF2nsUa9roDX0u/Qyk0=;
+        b=n3LuAM9o8mgd/+DA1a0GIDX9oPnXPqpqvuILu/cChVKUM5teGNlfcTzEVlTXavzk+O
+         8YcSVrE7+bxZ6PILpHDWg6kJf7KCcGUdp4L4ta9a4xYccVAlVrKzEclQDccBMJBkIz2+
+         CtVem1uB6hI1pJF679uQmTboCuR5WGgTFwAT8eZ56rRifzWHxznMwua1Sm9j6YJDqo47
+         0W7DbwDIBijstkONoVDUIZ7ISZHpvrxHbcaRuhPsAEk/FPQAEy2L7WzmZTQnINPMppDp
+         P5CYEX993wZY678AsoxOAO/1PFzw5/GmAbKKpXReq0QgsK9bjrmgot1fOJ//BvzcUkA/
+         DkRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=3SeeNcVsK2P/XlQ94PAyrrJlSF2nsUa9roDX0u/Qyk0=;
+        b=QyGubb8LvHhFZxcjQeUH4w57scoGBqEsDJa7tixlSp35WTIZQ7RoWF/J49wgHOak1O
+         9sZmVBaYNCt/IkGv2G4arirssCCKXiOxWnnxMArMK7mlFApeWvp+2jhxl09tOtIzpy0V
+         1y7IoTqB3N5g5XCGuLtygdaquai+850XLr/pHKQi/G8EIbZ+aUHgb1my+lVOMchhgDP/
+         u4Tf+h/fn/wPk8hJb0X0gkwyGPj9AC/Cn1dJCZJEegQgEyK9d3StIL6AmvxM4sOewVMu
+         cn4AFeZJAwYqON7P2N8KbT9SAjuE56jnhKJjo0uap3/hyOkhPAuQHP9pkN9NsuoBkNJq
+         Pisg==
+X-Gm-Message-State: AOAM532B86yIOucxKivPaIcuoxCBZFFxLRsb0thRhG/gQhuMe5UTy5Pc
+        jELac4K2ltlPDD3MQppTEQDl578oiBbOkvlwWAQ=
+X-Google-Smtp-Source: ABdhPJzmLTyrTl81fsKySXCx+7Nn8/qZl7i0MRMwGNomzVPxL7QV+uEFKsqAvuafgWtjkVaMFJt51l4xcH65WGPrM1Y=
+Sender: "ndesaulniers via sendgmr" 
+        <ndesaulniers@ndesaulniers1.mtv.corp.google.com>
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:f693:9fff:fef4:4d25])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6214:186b:: with SMTP id
+ eh11mr5646289qvb.30.1611949403920; Fri, 29 Jan 2021 11:43:23 -0800 (PST)
+Date:   Fri, 29 Jan 2021 11:43:16 -0800
+Message-Id: <20210129194318.2125748-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH v6 0/2] Kbuild: DWARF v5 support
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
-> +	help
-> +	  Control-flow protection is a hardware security hardening feature
-> +	  that detects function-return address or jump target changes by
-> +	  malicious code.
+DWARF v5 is the latest standard of the DWARF debug info format.
 
-It's not really one feature.  I also think it's not worth talking about
-shadow stacks or indirect branch tracking in *here*.  Leave that for
-Documentation/.
+DWARF5 wins significantly in terms of size and especially so when mixed
+with compression (CONFIG_DEBUG_INFO_COMPRESSED).
 
-Just say:
+Link: http://www.dwarfstd.org/doc/DWARF5.pdf
 
-	Control-flow protection is a set of hardware features which
-	place additional restrictions on indirect branches.  These help
-	mitigate ROP attacks.
+Patch 1 is a cleanup that lays the ground work and isn't DWARF
+v5 specific.
+Patch 2 implements Kconfig and Kbuild support for DWARFv5.
 
-... and add more in the IBT patches.
+Changes from v5:
+* Drop previous patch 1, it has been accepted into kbuild:
+  https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?h=kbuild&id=3f4d8ce271c7082be75bacbcbd2048aa78ce2b44
+* Trying to set -Wa,-gdwarf-4 in the earlier patch was the source of
+  additional complexity. Drop it that part of the patch. We can revisit
+  clang without the integrated assembler setting -Wa,-gdwarf-4 later.
+  That is a separate problem from generally supporting DWARF v5.
+* Rework the final patch for clang without the integrated assembler.
+  -Wa,-gdwarf-5 is required for DWARF5 in that case otherwise GAS will
+  not accept the assembler directives clang produces from C code when
+  generating asm.
 
->  Applications must be enabled to use it, and old
-> +	  userspace does not get protection "for free".
-> +	  Support for this feature is present on processors released in
-> +	  2020 or later.  Enabling this feature increases kernel text size
-> +	  by 3.7 KB.
+Changes from v4:
+* drop set -e from script as per Nathan.
+* add dependency on !CONFIG_DEBUG_INFO_BTF for DWARF v5 as per Sedat.
+* Move LLVM_IAS=1 complexity from patch 2 to patch 3 as per Arvind and
+  Masahiro. Sorry it took me a few tries to understand the point (I
+  might still not), but it looks much cleaner this way. Sorry Nathan, I
+  did not carry forward your previous reviews as a result, but I would
+  appreciate if you could look again.
+* Add Nathan's reviewed by tag to patch 1.
+* Reword commit message for patch 3 to mention LLVM_IAS=1 and -gdwarf-5
+  binutils addition later, and BTF issue.
+* I still happen to see a pahole related error spew for the combination
+  of:
+  * LLVM=1
+  * LLVM_IAS=1
+  * CONFIG_DEBUG_INFO_DWARF4
+  * CONFIG_DEBUG_INFO_BTF
+  Though they're non-fatal to the build. I'm not sure yet why removing
+  any one of the above prevents the warning spew. Maybe we'll need a v6.
 
-Did any CPUs ever get released that have this?  If so, name them.  If
-not, time to change this to 2021, I think.
+Changes from v3:
+
+Changes as per Arvind:
+* only add -Wa,-gdwarf-5 for (LLVM=1|CC=clang)+LLVM_IAS=0 builds.
+* add -gdwarf-5 to Kconfig shell script.
+* only run Kconfig shell script for Clang.
+
+Apologies to Sedat and Nathan; I appreciate previous testing/review, but
+I did no carry forward your Tested-by and Reviewed-by tags, as the
+patches have changed too much IMO.
+
+Changes from v2:
+* Drop two of the earlier patches that have been accepted already.
+* Add measurements with GCC 10.2 to commit message.
+* Update help text as per Arvind with help from Caroline.
+* Improve case/wording between DWARF Versions as per Masahiro.
+
+Changes from the RFC:
+* split patch in 3 patch series, include Fangrui's patch, too.
+* prefer `DWARF vX` format, as per Fangrui.
+* use spaces between assignment in Makefile as per Masahiro.
+* simplify setting dwarf-version-y as per Masahiro.
+* indent `prompt` in Kconfig change as per Masahiro.
+* remove explicit default in Kconfig as per Masahiro.
+* add comments to test_dwarf5_support.sh.
+* change echo in test_dwarf5_support.sh as per Masahiro.
+* remove -u from test_dwarf5_support.sh as per Masahiro.
+* add a -gdwarf-5 cc-option check to Kconfig as per Jakub.
+
+Nick Desaulniers (2):
+  Kbuild: make DWARF version a choice
+  Kbuild: implement support for DWARF v5
+
+ Makefile                          | 16 ++++++++++--
+ include/asm-generic/vmlinux.lds.h |  6 ++++-
+ lib/Kconfig.debug                 | 41 ++++++++++++++++++++++++++-----
+ scripts/test_dwarf5_support.sh    |  8 ++++++
+ 4 files changed, 62 insertions(+), 9 deletions(-)
+ create mode 100755 scripts/test_dwarf5_support.sh
+
+-- 
+2.30.0.365.g02bc693789-goog
+
