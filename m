@@ -2,97 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83821308F1C
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 22:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42B6308F1F
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 22:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbhA2VNE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 16:13:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbhA2VNC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 16:13:02 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AFDC061574;
-        Fri, 29 Jan 2021 13:12:22 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id j2so5844266pgl.0;
-        Fri, 29 Jan 2021 13:12:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vg06EYb42M3hpCfx5u7kHIys3A9k6t2mg9qHTWyzE3w=;
-        b=uss+hVCZDE3oRNcwh9eYfuy7m6VRQNYdgkoDVQImrhh57a/UlNuWWuuDgaosrP8ciq
-         +DwO0j1ysvGh4cUVVQ9CYyYjHZ4DZPQB5CBsDqi9mO6wbebhs6alezYxQHCVQzW9IFek
-         Rp06X5zmEh3kGZ8SkaurfmrsL/Lm8u5X/pl6pCXcjMXj/klvxIG7ISbTgElODiWfTVJv
-         yEFrgh0LoPRyxL4VnNIwminFNaJVpY6Tvjl2Bnc7jIoqk7cItGHZzr/w39c+0dgAUC2A
-         6jq/fWWg6kNZP3tfNSxGlO9oBcYqA0/FePKfkHG5v0QZFeMmCw5B0COX5RbUoovgO/MN
-         zSYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vg06EYb42M3hpCfx5u7kHIys3A9k6t2mg9qHTWyzE3w=;
-        b=dC8xe6yBaho557HFd1K3ZRVy/DZhL+1hJAdZOfa8SCa9B/t5jIVpRLVgnIC+Vdsfqw
-         kL0CdmO/8oM5xsfX+NGQI9iMG0DRgQe+hH84/nJXOt8A4/+2WD5BHolfX2gsZOD/hCGj
-         6Cy6KPmRJwFW+5lO7icBOyyOoKCBZ/p/iSazxGzCIgh+jE5wWxrYQadjK3PJ2+ta91+y
-         +6exUJX0DdRwfkoFTlBqLz3iHSXRvfcFV+cVygB43Vcwr/2DHrTeADx9uhjIZELbV3TB
-         DzGm9gCdhbvGrqqV3P/b+5rA34z42d2DLx0wxgAf4QWec6vcSsZjxfWVxSrpkYTcJKhS
-         R+EA==
-X-Gm-Message-State: AOAM532fdC3+r3xadOfgvgCiFmpB6wnhxS/dLFrNxDipIzLOtCp6Lxyo
-        E8Ed7BPVp5DhtN6uuPw1lgfBEOvlqLsiod6otU0=
-X-Google-Smtp-Source: ABdhPJzhasacDYoAPPOBBF8yQuC912YJpL6AW+IIK81jaA5iP/L3pxdDxPg5ljkrbUC+zNtJxfkDyiQtXR2kowiCXsE=
-X-Received: by 2002:a63:fc56:: with SMTP id r22mr6374949pgk.203.1611954742023;
- Fri, 29 Jan 2021 13:12:22 -0800 (PST)
+        id S233384AbhA2VOP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 16:14:15 -0500
+Received: from mga01.intel.com ([192.55.52.88]:55425 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232918AbhA2VON (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 29 Jan 2021 16:14:13 -0500
+IronPort-SDR: rS4XURAalZkPgLpfToHZEgxrW0ZODLXsiMsafLs/DchGJd5pAOASHuXF79bZwMCqhmhG5KtA1G
+ iVxmFblmwtcQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="199332505"
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="199332505"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 13:13:31 -0800
+IronPort-SDR: YKpYFCq+rRt4zqUspD1JImoQHJ9ODV3X6/aXQ4uP4iER2tVzPmgw/RbyRy3mSTJpd8CYqX9jRr
+ r0VhB8vP9R9A==
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="475532535"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.73.214]) ([10.212.73.214])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 13:13:29 -0800
+Subject: Re: [PATCH v18 02/25] x86/cet/shstk: Add Kconfig option for user-mode
+ control-flow protection
+To:     Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@intel.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <40a5a9b5-9c83-473d-5f62-a16ecde50f2a@intel.com>
+ <86F8CE62-A94B-46BD-9A29-DBE1CC14AA83@amacapital.net>
+ <58d5f029-ee8a-ca93-f0e6-0278db22e208@intel.com>
+ <20210129204601.GG27841@zn.tnic>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <9061f862-8711-2ca2-b737-8d171de2f0c2@intel.com>
+Date:   Fri, 29 Jan 2021 13:13:26 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <20210129204528.2118168-1-yury.norov@gmail.com> <CAAH8bW8cZYG0HxqVAK4HxZDP3abxkHXsqfhSzJ-amQ_S6yDY_w@mail.gmail.com>
-In-Reply-To: <CAAH8bW8cZYG0HxqVAK4HxZDP3abxkHXsqfhSzJ-amQ_S6yDY_w@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 29 Jan 2021 23:12:06 +0200
-Message-ID: <CAHp75VdkMGBKnyq4B+cckDUGh0ag3bGq26_SJp-K=jQd43pP-Q@mail.gmail.com>
-Subject: Re: [PATCH 0/6] lib/find_bit: fast path for small bitmaps
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Dennis Zhou <dennis@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        David Sterba <dsterba@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210129204601.GG27841@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 10:54 PM Yury Norov <yury.norov@gmail.com> wrote:
-> On Fri, Jan 29, 2021 at 12:45 PM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > Bitmap operations are much simpler and faster in case of small bitmaps, whicn
-> > fit into a single word. In linux/bitmap.h we have a machinery that allows
-> > compiler to replace actual function call with a few instructions if bitmaps
-> > passed into the function is small and its size is known at compile time.
-> >
-> > find_*_bit() API lacks this functionality; despite users will benefit from it
-> > a lot. One important example is cpumask subsystem, when NR_CPUS <= BITS_PER_LONG.
-> > In the very best case, the compiler may replace a find_*_bit() call for such a
-> > bitmap with a single ffs or ffz instruction.
-> >
-> > Tools is synchronized with new implementation where needed.
->
-> Sorry for the broken enumeration . If it's too confusing, please let me know
-> and I'll resend.
+On 1/29/2021 12:46 PM, Borislav Petkov wrote:
+> On Fri, Jan 29, 2021 at 12:33:43PM -0800, Dave Hansen wrote:
+>> In that case is there any reason to keep the "depends on CPU_SUP_INTEL"?
+> 
+> Probably not. I haven't heard of the AMD implementation being somehow
+> different from Intel's.
+> 
 
-Yeah, please resend with a bumped version and respective changelog.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Ok, I will remove it.
