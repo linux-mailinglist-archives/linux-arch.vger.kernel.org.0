@@ -2,113 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43E03085FA
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 07:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00912308630
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 08:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbhA2GnJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 01:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbhA2Gm5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 01:42:57 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87597C061574;
-        Thu, 28 Jan 2021 22:41:57 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id p72so8197130iod.12;
-        Thu, 28 Jan 2021 22:41:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iVAMGV92J/f/CkteAMcDz3wL9cSpiXqRvqsJUAbs4+w=;
-        b=pdaI6T09b4/35M8LZtfd5am6EJAi2hkvXoRBPVsi32LE8VBjR2dU2H7w8K9Ql8iAgf
-         VrbhUdwoVGL2ljic5eUiSCFsmaiCNtoueptBpiOAX8TLmIpI5z6pB8qdLSczv34d+Nv8
-         ZJSHqxyJgDo/rpNrzFxWaOCty38aakVFP7Gg6NzCpVwtv2hvrjgjoprP8QmvdZ1CRALU
-         xoi4Vdjt7+GltZVxJ8M5qAFeboZsNzHSZtxopPNx0cHM2nEGvt9LKCdEkZSm1R12TMPt
-         /OgMU7DX0mEN8j+431T3Mddp5jaf+1bIjJ8a/hYU8wjo8+OOE9ho17+xgpFYiKAeldfy
-         lk5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iVAMGV92J/f/CkteAMcDz3wL9cSpiXqRvqsJUAbs4+w=;
-        b=DEz8nersf7WcMfA/jQJREYVeDRZBIH1Pk3+Nov5rEVjyG2sIKSRJD4u7NYwn41R2PE
-         uxM7OycgimJjmAd85cTKHUXeRVMmu7bEo9uNg0E6Awq1xsHOEviPBG0R7oIHyJPhhjIF
-         rtMqVcaeReaPOv6APYqqf0FiC9aZWRFlnTCPK8h3qjKt1gpPAWZQaRXj4D2UxJKq49WH
-         O2Zp2ne6JwvJo5HUp0dIV1UzwWsMI6jOU27sDG8/MMVqL99hp//WPCM6E1Cj/1VzRT9M
-         FaiBMvLzOPMQOS6+Z4BfhH4f1E08z5aMFFmMVVA2xGRwbfyqcUiiqNuaMhdILHEaquIg
-         gqLg==
-X-Gm-Message-State: AOAM530Gg6ej69XmeCtgsgsolyXQviLY8RHXw+uflt3BxsbUQ57EL8Vm
-        dFIYVVmVaDIV2moJPG0VLERq3FmZUVWeZ8HGmqM=
-X-Google-Smtp-Source: ABdhPJxBYeN3I1wdA2fWrBSBowJmYe8hGPdJD45A7zJciUI858z9CrZbB7j0UfSZvdn/5JVuocI+7v+FXFR9WB/DEtw=
-X-Received: by 2002:a6b:8f58:: with SMTP id r85mr2296622iod.132.1611902516781;
- Thu, 28 Jan 2021 22:41:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20210121000630.371883-1-yury.norov@gmail.com> <20210121000630.371883-5-yury.norov@gmail.com>
- <YAlXMj7sIoPjZP3W@smile.fi.intel.com>
-In-Reply-To: <YAlXMj7sIoPjZP3W@smile.fi.intel.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Thu, 28 Jan 2021 22:41:45 -0800
-Message-ID: <CAAH8bW8LSk4Jr_T0TZqfmzgXPQ4MMGJoN6OF664F+SGLYJG+Eg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] lib: inline _find_next_bit() wrappers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-m68k@lists.linux-m68k.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Dennis Zhou <dennis@kernel.org>,
+        id S231926AbhA2HEz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 02:04:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229786AbhA2HEy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 29 Jan 2021 02:04:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6692D60234;
+        Fri, 29 Jan 2021 07:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611903853;
+        bh=B8baj/kr8egXx07AKTfXmu2q+uVtPa7Wa10vxWLTyX4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FU1gKzkR0Kkuw4BUPc2Ykvl/qSOzFXlBbHnlbTvI/BhKT7ahDUpGEZB46gpU40Y83
+         MoHNwFp1wY6tLb5AUTCsnEfd/AMZYsjtoOTM/ubtkBakz4JEJpx2QSQ5qDWK5JBhpB
+         4v3NJredQAUcuf0ikqua2sKTx8pGC/pdnTjma60/EtjBbJKLV0sBexjvYgwWm6cmAr
+         6YkTn12NhzoZ5vWMbb1h+pYot7MLL4lAT5rK7YbxkDbSaKqIWEB24dlTSavj0W7G0i
+         ikyrL756m9C6l5UyrhfShwTx10Viq23ua1S5t39e8a1T6A4j5m1JHtrkXMph6V4jLt
+         ck06v8VwMSCEw==
+Date:   Fri, 29 Jan 2021 09:03:55 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        David Sterba <dsterba@suse.com>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20210129070355.GC242749@kernel.org>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-8-rppt@kernel.org>
+ <20210126114657.GL827@dhcp22.suse.cz>
+ <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+ <20210126120823.GM827@dhcp22.suse.cz>
+ <20210128092259.GB242749@kernel.org>
+ <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
+ <2b6a5f22f0b062432186b89eeef58e2ba45e09c1.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b6a5f22f0b062432186b89eeef58e2ba45e09c1.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 2:27 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Jan 20, 2021 at 04:06:28PM -0800, Yury Norov wrote:
-> > lib/find_bit.c declares five single-line wrappers for _find_next_bit().
-> > We may turn those wrappers to inline functions. It eliminates
-> > unneeded function calls and opens room for compile-time optimizations.
->
-> ...
->
-> > --- a/include/asm-generic/bitops/le.h
-> > +++ b/include/asm-generic/bitops/le.h
-> > @@ -4,6 +4,7 @@
-> >
-> >  #include <asm/types.h>
-> >  #include <asm/byteorder.h>
-> > +#include <asm-generic/bitops/find.h>
->
-> I'm wondering if generic header inclusion should go before arch-dependent ones.
->
-> ...
->
-> > -#ifndef find_next_bit
->
-> > -#ifndef find_next_zero_bit
->
-> > -#if !defined(find_next_and_bit)
->
-> > -#ifndef find_next_zero_bit_le
->
-> > -#ifndef find_next_bit_le
->
-> Shouldn't you leave these in new wrappers as well?
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+On Thu, Jan 28, 2021 at 07:28:57AM -0800, James Bottomley wrote:
+> On Thu, 2021-01-28 at 14:01 +0100, Michal Hocko wrote:
+> > On Thu 28-01-21 11:22:59, Mike Rapoport wrote:
+> [...]
+> > > One of the major pushbacks on the first RFC [1] of the concept was
+> > > about the direct map fragmentation. I tried really hard to find
+> > > data that shows what is the performance difference with different
+> > > page sizes in the direct map and I didn't find anything.
+> > > 
+> > > So presuming that large pages do provide advantage the first
+> > > implementation of secretmem used PMD_ORDER allocations to amortise
+> > > the effect of the direct map fragmentation and then handed out 4k
+> > > pages at each fault. In addition there was an option to reserve a
+> > > finite pool at boot time and limit secretmem allocations only to
+> > > that pool.
+> > > 
+> > > At some point David suggested to use CMA to improve overall
+> > > flexibility [3], so I switched secretmem to use CMA.
+> > > 
+> > > Now, with the data we have at hand (my benchmarks and Intel's
+> > > report David mentioned) I'm even not sure this whole pooling even
+> > > required.
+> > 
+> > I would still like to understand whether that data is actually
+> > representative. With some underlying reasoning rather than I have run
+> > these XYZ benchmarks and numbers do not look terrible.
+> 
+> My theory, and the reason I made Mike run the benchmarks, is that our
+> fear of TLB miss has been alleviated by CPU speculation advances over
+> the years.  You can appreciate this if you think that both Intel and
+> AMD have increased the number of levels in the page table to
+> accommodate larger virtual memory size 5 instead of 3.  That increases
+> the length of the page walk nearly 2x in a physical system and even
+> more in a virtual system.  Unless this were massively optimized,
+> systems would have slowed down significantly.  Using 2M pages only
+> eliminates one level and 2G pages eliminates 2, so I theorized that
+> actually fragmentation wouldn't be the significant problem we once
+> thought it was and asked Mike to benchmark it.
+> 
+> The benchmarks show that indeed, it isn't a huge change in the data TLB
+> miss time, I suspect because data is nicely continuous nowadays and the
+> prediction that goes into the CPU optimizations quite easy.  ITLB
+> fragmentation actually seems to be quite a bit worse, likely because we
+> still don't have branch prediction down to an exact science.
 
-Could you please elaborate? Wrappers in find.h are protected, functions
-in lib/find_bit.c too. Maybe I misunderstood you?..
+Another thing is that normally useful work done by userspace so data
+accesses are dominated by userspace and any change in dTLB miss rate for
+kernel data accesses is only a small fraction of all misses.
+
+> James
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
