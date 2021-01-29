@@ -2,136 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C977630901F
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 23:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B7930902B
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Jan 2021 23:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbhA2WcG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 17:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbhA2Wbw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 17:31:52 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC79C06174A
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 14:31:12 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d2so1102793pjs.4
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 14:31:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mEuUNTLPjyCKU+1m6bFPUEO4cIWG2fR+kA7IEzmsiA0=;
-        b=MXQ3szzyutAJwpx9freM5P5nZtBdbzPRo9DqX45Y+eAKATqPcrdQ8wG5Cl5YJ/rm/D
-         X2E4zfRQqwpyQuRxesyxK6FL/smz/4zcdNBQ88GzDjV8VW2ci5WrKiKdTxCYWYA7+o2B
-         2P9y/wRdwIglbjUpEVC3bLxRXlzvalIG8Mc58ABIuLGso/xNT1XiFDiN4Y2YQ3zPDT4b
-         8+gzTn7RmCMg+xftHFBOifOW5zsiX7BLXZ42olQ1a5itnwUl2dEggiBQkgugVgGLEBgW
-         1Mymw9wHEVVblcehWi40xNb3k8GqVDiLpO2ABVf9WcYBaby+4QY45RsdK9JjTPnJzOiE
-         dLpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mEuUNTLPjyCKU+1m6bFPUEO4cIWG2fR+kA7IEzmsiA0=;
-        b=UwkOnLyo9CBiNZXHTYudLPBQmWjJE/XhtWU9a1hAmLXvHbYuBsHPDEKR0tJZl4WJWL
-         bWkVcTKeASRKN5FI8PAZLTiiZfHF1DzpEcX4Ohv0fCE+jFV6KnWjx3NTC4A6GEVfWly0
-         avJeJVFGvNLuhXK9JAX+8y7aRL5XQhW53ubE2eP072OkJ0UzqECMIVYT0b8tkU96rofQ
-         gFHVVmyYTD97nCGDRMCtia13BmYWlDJ1ZIdaGBBBQu/Pcu/tJvfVYh2lhpaY+kO8Sb69
-         NAIVTUHpYQ6ZQdcXZEDNRXB+eWPg2lx9iUQmTy54MCwjrkNBz+Qlk7tnQspn74iILb7J
-         cOCw==
-X-Gm-Message-State: AOAM531R2LtM7Jd6SHLNmfEiKQJ4b/WLSJRNYbAcYgdm3HHDF/sOV+kM
-        cDgiUodlvgmkp1/0EOO9+AUGSVLTa391NHK2olGmCA==
-X-Google-Smtp-Source: ABdhPJwZsd7PybQkVmrkiSQDc4U0xVvSfLsYOJxZuikVsd6WthzvrApfmvev2Zuw72TEGqzKpkNH/e4Nv7e7QE9S2ow=
-X-Received: by 2002:a17:90a:8b82:: with SMTP id z2mr6462674pjn.25.1611959471740;
- Fri, 29 Jan 2021 14:31:11 -0800 (PST)
+        id S232808AbhA2Wfp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 17:35:45 -0500
+Received: from mga06.intel.com ([134.134.136.31]:14537 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229683AbhA2Wfo (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 29 Jan 2021 17:35:44 -0500
+IronPort-SDR: dHlICr/bBKjj/s6kKxzyPrmxQjDfeizy2EwZPRU2RWp7BtfsrcY6f4BI5H226Rcuxe9TwN/VY4
+ yuLIUPGw77rg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9879"; a="242012800"
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="242012800"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 14:35:02 -0800
+IronPort-SDR: 8bq6hIfAMNgX92hbK4qH5hwd3yObjl/bcMQWw41W0LvWjm/TbPqtXNvZDJ35ASTSZm5aUQZoW5
+ 0tDrkCEfMImg==
+X-IronPort-AV: E=Sophos;i="5.79,386,1602572400"; 
+   d="scan'208";a="411753322"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.73.214]) ([10.212.73.214])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2021 14:35:01 -0800
+Subject: Re: [NEEDS-REVIEW] [PATCH v18 05/25] x86/fpu/xstate: Introduce CET
+ MSR and XSAVES supervisor states
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
+ <20210127212524.10188-6-yu-cheng.yu@intel.com>
+ <7793b36e-6386-3f2e-36ca-b7ca988a88c9@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <43f264df-2f3a-ea4c-c737-85cdc6714bd8@intel.com>
+Date:   Fri, 29 Jan 2021 14:35:01 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <20210129194318.2125748-1-ndesaulniers@google.com>
- <20210129194318.2125748-3-ndesaulniers@google.com> <CA+icZUX4q-JhCo+UZ9T3FhbC_gso-oaB0OR9KdH5iEpoGZyqVw@mail.gmail.com>
- <CAKwvOdnj1Np62+eOiTOCRXSW6GLSv4hmvtWaz=0aTZEEot_dhw@mail.gmail.com>
- <CA+icZUWsyjDY58ZZ0MAVfWqBJ8FUSpM6=_5aqPcRTfX2W8Y-+Q@mail.gmail.com>
- <CAKwvOd=mHvEtto37rzFMfsFYe2e-Cp2MAiyRYxHWPdc-HbT8EA@mail.gmail.com>
- <CA+icZUWxK9fdV8PNGqbQrOFmSZ2Ts4nNqfVMMNUh5u79Ld7hjA@mail.gmail.com>
- <CA+icZUUo6URpxHh6_Tppv9_Z1dyhGDB2OqSCY3yRw72aA0EbMQ@mail.gmail.com>
- <CAKwvOdmWx0reabY-S3nXfTZuhs-_SP7pbb0uHyGeaNSQnm8eRQ@mail.gmail.com>
- <CA+icZUWsncyKvxPZ5g=a3ssWy=cYahsU6hprM3n=jFUmnjPC6w@mail.gmail.com>
- <CAKwvOdk4kG-_c3inNj9ry_xUU9SQE-2AqQp40YL_V=6SHU6E=Q@mail.gmail.com> <CA+icZUX576Rt7HJ4hvrwRTCC2pTmoH-Yu-haU+MDb8B6yADAYA@mail.gmail.com>
-In-Reply-To: <CA+icZUX576Rt7HJ4hvrwRTCC2pTmoH-Yu-haU+MDb8B6yADAYA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 29 Jan 2021 14:31:01 -0800
-Message-ID: <CAKwvOdmq=L_ob-WpNBE-fSc3oYXT10ZvttfiXiZw3+SxaWWy-A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] Kbuild: implement support for DWARF v5
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <7793b36e-6386-3f2e-36ca-b7ca988a88c9@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 2:23 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, Jan 29, 2021 at 11:21 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Fri, Jan 29, 2021 at 2:11 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Fri, Jan 29, 2021 at 11:09 PM Nick Desaulniers
-> > > <ndesaulniers@google.com> wrote:
-> > > >
-> > > > On Fri, Jan 29, 2021 at 1:20 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Jan 29, 2021 at 10:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > > >
-> > > > > > On Fri, Jan 29, 2021 at 10:09 PM Nick Desaulniers
-> > > > > > <ndesaulniers@google.com> wrote:
-> > > > > > >
-> > > > > > > Can you tell me please what is the precise command line invocation of
-> > > > > > > make and which source file you observed this on so that I can
-> > > > > > > reproduce?
-> > > >
-> > > > If you don't send me your invocation of `make`, I cannot help you.
-> > > >
-> > >
-> > > /usr/bin/perf_5.10 stat make V=1 -j4 LLVM=1 LLVM_IAS=1
-> > > PAHOLE=/opt/pahole/bin/pahole LOCALVERSION=-10-amd64-clang12
-> > > -lto-pgo KBUILD_VERBOSE=1 KBUILD_BUILD_HOST=iniza
-> > > KBUILD_BUILD_USER=sedat.dilek@gmail.com
-> > > KBUILD_BUILD_TIMESTAMP=2021-01-29 bindeb-pkg
-> > > KDEB_PKGVERSION=5.11.0~rc5-10~bullseye+dileks1
-> >
-> > $ make LLVM=1 LLVM_IAS=1 -j72 defconfig
-> > $ make LLVM=1 LLVM_IAS=1 -j72 menuconfig
-> > <enable CONFIG_DEBUG_INFO and CONFIG_DEBUG_INFO_DWARF5>
-> > $ make LLVM=1 LLVM_IAS=1 -j72 V=1 &> log.txt
-> > $ grep '\-g -gdwarf-5 -g -gdwarf-5' log.txt | wc -l
-> > 0
-> > $ grep '\-g -gdwarf-5' log.txt | wc -l
-> > 2517
-> >
-> > Do have the patch applied twice, perhaps?
-> >
->
-> Switched to my v6 local Git branch and invoked above make line I gave you.
-> I still see that double.
-> Looks like I need some "undrunken" switch.
+On 1/29/2021 1:00 PM, Dave Hansen wrote:
+> On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
+>> @@ -135,6 +135,8 @@ enum xfeature {
+>>   #define XFEATURE_MASK_PT		(1 << XFEATURE_PT_UNIMPLEMENTED_SO_FAR)
+>>   #define XFEATURE_MASK_PKRU		(1 << XFEATURE_PKRU)
+>>   #define XFEATURE_MASK_PASID		(1 << XFEATURE_PASID)
+>> +#define XFEATURE_MASK_CET_USER		(1 << XFEATURE_CET_USER)
+>> +#define XFEATURE_MASK_CET_KERNEL	(1 << XFEATURE_CET_KERNEL)
+>>   #define XFEATURE_MASK_LBR		(1 << XFEATURE_LBR)
+>>   
+>>   #define XFEATURE_MASK_FPSSE		(XFEATURE_MASK_FP | XFEATURE_MASK_SSE)
+>> @@ -237,6 +239,23 @@ struct pkru_state {
+>>   	u32				pad;
+>>   } __packed;
+>>   
+>> +/*
+>> + * State component 11 is Control-flow Enforcement user states
+>> + */
+>> +struct cet_user_state {
+>> +	u64 user_cet;			/* user control-flow settings */
+>> +	u64 user_ssp;			/* user shadow stack pointer */
+>> +};
+> 
+> Andy Cooper just mentioned on IRC about this nugget in the spec:
+> 
+> 	XRSTORS on CET state will do reserved bit and canonicality
+> 	checks on the state in similar manner as done by the WRMSR to
+> 	these state elements.
+> 
+> We're using copy_kernel_to_xregs_err(), so the #GP *should* be OK.
+> Could we prove this out in practice, please?
+> 
 
-Can you follow my steps precisely to see whether it's your .config?
-Perhaps there is a config that duplicates DEBUG_CFLAGS that is not set
-in the defconfig?  If so, it's still harmless to specify the same
-commands twice, and likely isn't introduced by this patch set if so;
-so I'm not sure how much more effort is worth pursuing.
--- 
-Thanks,
-~Nick Desaulniers
+Do we want to verify that setting reserved bits in CET XSAVES states 
+triggers GP?  Then, yes, I just verified it again.  Thanks for 
+reminding.  Do we have any particular case relating to this?
+
+--
+Yu-cheng
