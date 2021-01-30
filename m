@@ -2,328 +2,264 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6F13097FC
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Jan 2021 20:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE7D3098C0
+	for <lists+linux-arch@lfdr.de>; Sun, 31 Jan 2021 00:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbhA3TUK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 30 Jan 2021 14:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S230360AbhA3XK4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 Jan 2021 18:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbhA3TTG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Jan 2021 14:19:06 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD72BC061351;
-        Sat, 30 Jan 2021 11:17:32 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id h16so8199797qth.11;
-        Sat, 30 Jan 2021 11:17:32 -0800 (PST)
+        with ESMTP id S230168AbhA3XK4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Jan 2021 18:10:56 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59805C061573;
+        Sat, 30 Jan 2021 15:10:16 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id e133so2554889iof.8;
+        Sat, 30 Jan 2021 15:10:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UTfrcUenHvrpTZ1xzOaq3X00wVLC+afGet4G6uhQumo=;
-        b=PSNVkDskAZMk1vQNP/Vx52uAF+Dr1i3ITygpCE/LXNQEiaDa7yOQz4acN17+MKsr6m
-         jFSZkABUxC/V8gqZ3WMmqJi6JPGJDBEpHsEGGZOgD943rzRLzbj4lEf5ECss63UavRIP
-         XtLTZyK/XNzvsJt5TBs8W5yDRG1YaETVcNLFlAcvdLJg0OK+sYfBkKpO5jLazfPS46DI
-         x/+ePhTGMPVajzahjXrSL7LdeS1c4uMvYfdk/Kcwt1FWWWfo+9KQckNewq5W9UYAcv1h
-         /Z62kGvp3H1HyFio7PH/1RBV22udQP/laqw0eSFPnu1kLYCT6G6hI7cQZ1a+V4srYqbH
-         mxlg==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=eUMkCHvaS5XtjP3wfPbJa/kaRkQN+NS5RoVd5CpPEk8=;
+        b=qqbBISE720uIwajkwyb3XHkorF6lGdTOu/QqSxgkot6jv3+R1p1PpqE5Qwq/8dHI6r
+         i0zJMsd2MDN6ziPS/+7UX/cQf5D5z9cqI8QaVIjmegi/A1J6i5GMqqVrDZfTTJGugBbR
+         f/7dcPisDdstVrHVVItxKggs/3rFkj7CNxVZa7LCVQRfFBdDf1Ie7W5jfd/vzGF0YsFu
+         IaXGrPG7+TeQVr5ADcHw9+qizrq3FdrQA77L4ITUpuyo13uIIOAVcPxih61rwKZW1zc/
+         HZCQ0ov86rF7GZZ+WBLkLYc/oDrZGhPYa3KeFT9pq6jCH/xHFaMf1pTxxKBkuafghIAo
+         SK0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UTfrcUenHvrpTZ1xzOaq3X00wVLC+afGet4G6uhQumo=;
-        b=R7+JsDM8Vs/Tm6JDt3HtZ27SNcNh7W+8op9MMeuy7yFl9U+QGNIiNohwWIHNTzJFWM
-         b/81VjWCG8rw81iXcdkE3R32Mz/y1JUJtBHfRjO3rA55SIQnLabmiZvdTEGC7M0/Rq4k
-         f1TR0NsLpqfTCXDmeWbusM4F2DwBlC7NtTzec3NlfiGvNbwbwRKCY9MyObqaDA5kCfYx
-         IZBR0mOcQv1nyvs3W9JZq4DrT7BZRRrZrXfXcM+KfcNQ6dp8ZI63CW+cblK9ngCvuZwe
-         5OnKTo2o+8AGLFZDR7AQG/P4uBKtZEHCY9LE/lrL5eXUA0FzgvMYOMZgMTBJArACpIf5
-         rmlA==
-X-Gm-Message-State: AOAM53245BL0TawePQTtFyJnIQ+E5BFHgC0ImB+mS3ED6ndWkwWNG3n8
-        ni6T7t6j3RbMizA2NmvEfiQ=
-X-Google-Smtp-Source: ABdhPJy7uAeftgSvYwqy0Pn+pYS4+rkdNmzO0LfH1YQ9byliZB/YRZ8OWv65jzhyh4jlwRw6c+ET3Q==
-X-Received: by 2002:a05:622a:109:: with SMTP id u9mr9022458qtw.116.1612034251761;
-        Sat, 30 Jan 2021 11:17:31 -0800 (PST)
-Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id k12sm9444342qkj.72.2021.01.30.11.17.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jan 2021 11:17:31 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Dennis Zhou <dennis@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        David Sterba <dsterba@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Joe Perches <joe@perches.com>
-Subject: [PATCH 8/8] lib: add fast path for find_first_*_bit() and find_last_bit()
-Date:   Sat, 30 Jan 2021 11:17:19 -0800
-Message-Id: <20210130191719.7085-9-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210130191719.7085-1-yury.norov@gmail.com>
-References: <20210130191719.7085-1-yury.norov@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=eUMkCHvaS5XtjP3wfPbJa/kaRkQN+NS5RoVd5CpPEk8=;
+        b=EneO4JSbovC+a8Nt7bOVMwIZO/FI47taTs35DWZ+c1IOJ276234z+qh2wlz2trcxib
+         ct8G+9gWceuGVGBTQDsOOc4lczgFB9oNvtCyZfAHjEzdK/qEfT3PJ+PWyzhxKHS52qpr
+         9b/WtABTuoucUtRd8rDSQyJHGXf6tY8Z1HzCBtjtupqs6Mic++aK0udy09l7Dxqm+YoI
+         IqU9CbJ/L2k+a+oiJj5gBaE0ssiC81JfN33wl4EbAOfVsJTV8hSH+VK6ttujkWLWYN0v
+         J3iDptNdViVLzjlsntgPS2ICsnlHKBQcFJHI1bdc8yh9jrc/lk46Dh0UBS7wTw3WkJlS
+         521Q==
+X-Gm-Message-State: AOAM5323eRPydyIGbsx6YQ0MVh1j7F0Q+GhEOMBwZYuokvYvHPz987SH
+        THLyMlSZgWah+re4h63JvqQk70m6rgErEneYpR1dq1VkGyyG+g==
+X-Google-Smtp-Source: ABdhPJxjQ3Mrxd312k+X5Sr51T5D5g/Ha+3zMsRyuXqfsowmmZ0xsG2pnO0B0/6ZjDBsZF7skM58SGwpdaU6RQu4Nfg=
+X-Received: by 2002:a5e:dd42:: with SMTP id u2mr5266437iop.57.1612048215456;
+ Sat, 30 Jan 2021 15:10:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210130004401.2528717-1-ndesaulniers@google.com> <20210130004401.2528717-3-ndesaulniers@google.com>
+In-Reply-To: <20210130004401.2528717-3-ndesaulniers@google.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sun, 31 Jan 2021 00:10:04 +0100
+Message-ID: <CA+icZUW8N8La=HX6PT0_gWzPPxqW8EMooYpc4jJx6g44przOnA@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] Kbuild: implement support for DWARF v5
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Similarly to bitmap functions, users will benefit if we'll handle
-a case of small-size bitmaps that fit into a single word.
+On Sat, Jan 30, 2021 at 1:44 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> DWARF v5 is the latest standard of the DWARF debug info format.
+>
+> Feature detection of DWARF5 is onerous, especially given that we've
+> removed $(AS), so we must query $(CC) for DWARF5 assembler directive
+> support.
+>
+> The DWARF version of a binary can be validated with:
+> $ llvm-dwarfdump vmlinux | head -n 4 | grep version
+> or
+> $ readelf --debug-dump=3Dinfo vmlinux 2>/dev/null | grep Version
+>
+> DWARF5 wins significantly in terms of size when mixed with compression
+> (CONFIG_DEBUG_INFO_COMPRESSED).
+>
+> 363M    vmlinux.clang12.dwarf5.compressed
+> 434M    vmlinux.clang12.dwarf4.compressed
+> 439M    vmlinux.clang12.dwarf2.compressed
+> 457M    vmlinux.clang12.dwarf5
+> 536M    vmlinux.clang12.dwarf4
+> 548M    vmlinux.clang12.dwarf2
+>
+> 515M    vmlinux.gcc10.2.dwarf5.compressed
+> 599M    vmlinux.gcc10.2.dwarf4.compressed
+> 624M    vmlinux.gcc10.2.dwarf2.compressed
+> 630M    vmlinux.gcc10.2.dwarf5
+> 765M    vmlinux.gcc10.2.dwarf4
+> 809M    vmlinux.gcc10.2.dwarf2
+>
+> Though the quality of debug info is harder to quantify; size is not a
+> proxy for quality.
+>
+> Jakub notes:
+>   All [GCC] 5.1 - 6.x did was start accepting -gdwarf-5 as experimental
+>   option that enabled some small DWARF subset (initially only a few
+>   DW_LANG_* codes newly added to DWARF5 drafts).  Only GCC 7 (released
+>   after DWARF 5 has been finalized) started emitting DWARF5 section
+>   headers and got most of the DWARF5 changes in...
+>
+> Version check GCC so that we don't need to worry about the difference in
+> command line args between GNU readelf and llvm-readelf/llvm-dwarfdump to
+> validate the DWARF Version in the assembler feature detection script.
+>
+> GNU `as` only recently gained support for specifying -gdwarf-5, so when
+> compiling with Clang but without Clang's integrated assembler
+> (LLVM_IAS=3D1 is not set), explicitly add -Wa,-gdwarf-5 to DEBUG_CFLAGS.
+>
+> Disabled for now if CONFIG_DEBUG_INFO_BTF is set; pahole doesn't yet
+> recognize the new additions to the DWARF debug info. Thanks to Sedat for
+> the report.
+>
+> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
+> Suggested-by: Caroline Tice <cmtice@google.com>
+> Suggested-by: Fangrui Song <maskray@google.com>
+> Suggested-by: Jakub Jelinek <jakub@redhat.com>
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Suggested-by: Nathan Chancellor <natechancellor@gmail.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  Makefile                          |  1 +
+>  include/asm-generic/vmlinux.lds.h |  7 ++++++-
+>  lib/Kconfig.debug                 | 18 ++++++++++++++++++
+>  scripts/test_dwarf5_support.sh    |  8 ++++++++
+>  4 files changed, 33 insertions(+), 1 deletion(-)
+>  create mode 100755 scripts/test_dwarf5_support.sh
+>
+> diff --git a/Makefile b/Makefile
+> index d2b4980807e0..5387a6f2f62d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -831,6 +831,7 @@ KBUILD_AFLAGS       +=3D -Wa,-gdwarf-2
+>  endif
+>
+>  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) :=3D 4
+> +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) :=3D 5
+>  DEBUG_CFLAGS   +=3D -gdwarf-$(dwarf-version-y)
+>
+>  ifdef CONFIG_DEBUG_INFO_REDUCED
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index 34b7e0d2346c..1e7cde4bd3f9 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -842,8 +842,13 @@
+>                 /* DWARF 4 */                                           \
+>                 .debug_types    0 : { *(.debug_types) }                 \
+>                 /* DWARF 5 */                                           \
+> +               .debug_addr     0 : { *(.debug_addr) }                  \
+> +               .debug_line_str 0 : { *(.debug_line_str) }              \
+> +               .debug_loclists 0 : { *(.debug_loclists) }              \
+>                 .debug_macro    0 : { *(.debug_macro) }                 \
+> -               .debug_addr     0 : { *(.debug_addr) }
+> +               .debug_names    0 : { *(.debug_names) }                 \
+> +               .debug_rnglists 0 : { *(.debug_rnglists) }              \
+> +               .debug_str_offsets      0 : { *(.debug_str_offsets) }
+>
 
-While here, move the find_last_bit() declaration to bitops/find.h
-where other find_*_bit() functions sit.
+I just looked at binutils 2.36 in the Debian/experimental repositories.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- include/asm-generic/bitops/find.h       | 50 +++++++++++++++++++++++--
- include/linux/bitops.h                  | 12 ------
- lib/find_bit.c                          | 12 +++---
- tools/include/asm-generic/bitops/find.h | 28 ++++++++++++--
- tools/lib/find_bit.c                    |  4 +-
- 5 files changed, 79 insertions(+), 27 deletions(-)
+[1] says:
 
-diff --git a/include/asm-generic/bitops/find.h b/include/asm-generic/bitops/find.h
-index 8bd7a33a889d..3633a37cec38 100644
---- a/include/asm-generic/bitops/find.h
-+++ b/include/asm-generic/bitops/find.h
-@@ -5,6 +5,9 @@
- extern unsigned long _find_next_bit(const unsigned long *addr1,
- 		const unsigned long *addr2, unsigned long nbits,
- 		unsigned long start, unsigned long invert, unsigned long le);
-+extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
-+extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
-+extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
- 
- #ifndef find_next_bit
- /**
-@@ -102,8 +105,17 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
-  * Returns the bit number of the first set bit.
-  * If no bits are set, returns @size.
-  */
--extern unsigned long find_first_bit(const unsigned long *addr,
--				    unsigned long size);
-+static inline
-+unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
-+{
-+	if (SMALL_CONST(size - 1)) {
-+		unsigned long val = *addr & BITS_FIRST(size - 1);
-+
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_first_bit(addr, size);
-+}
- 
- /**
-  * find_first_zero_bit - find the first cleared bit in a memory region
-@@ -113,8 +125,17 @@ extern unsigned long find_first_bit(const unsigned long *addr,
-  * Returns the bit number of the first cleared bit.
-  * If no bits are zero, returns @size.
-  */
--extern unsigned long find_first_zero_bit(const unsigned long *addr,
--					 unsigned long size);
-+static inline
-+unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
-+{
-+	if (SMALL_CONST(size - 1)) {
-+		unsigned long val = *addr | ~BITS_FIRST(size - 1);
-+
-+		return val == ~0UL ? size : ffz(val);
-+	}
-+
-+	return _find_first_zero_bit(addr, size);
-+}
- #else /* CONFIG_GENERIC_FIND_FIRST_BIT */
- 
- #ifndef find_first_bit
-@@ -126,6 +147,27 @@ extern unsigned long find_first_zero_bit(const unsigned long *addr,
- 
- #endif /* CONFIG_GENERIC_FIND_FIRST_BIT */
- 
-+#ifndef find_last_bit
-+/**
-+ * find_last_bit - find the last set bit in a memory region
-+ * @addr: The address to start the search at
-+ * @size: The number of bits to search
-+ *
-+ * Returns the bit number of the last set bit, or size.
-+ */
-+static inline
-+unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
-+{
-+	if (SMALL_CONST(size - 1)) {
-+		unsigned long val = *addr & BITS_FIRST(size - 1);
-+
-+		return val ? __fls(val) : size;
-+	}
-+
-+	return _find_last_bit(addr, size);
-+}
-+#endif
-+
- /**
-  * find_next_clump8 - find next 8-bit clump with set bits in a memory region
-  * @clump: location to store copy of found clump
-diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-index a5a48303b0f1..26bf15e6cd35 100644
---- a/include/linux/bitops.h
-+++ b/include/linux/bitops.h
-@@ -286,17 +286,5 @@ static __always_inline void __assign_bit(long nr, volatile unsigned long *addr,
- })
- #endif
- 
--#ifndef find_last_bit
--/**
-- * find_last_bit - find the last set bit in a memory region
-- * @addr: The address to start the search at
-- * @size: The number of bits to search
-- *
-- * Returns the bit number of the last set bit, or size.
-- */
--extern unsigned long find_last_bit(const unsigned long *addr,
--				   unsigned long size);
--#endif
--
- #endif /* __KERNEL__ */
- #endif
-diff --git a/lib/find_bit.c b/lib/find_bit.c
-index 2470ae390f3c..e2c301d28568 100644
---- a/lib/find_bit.c
-+++ b/lib/find_bit.c
-@@ -75,7 +75,7 @@ EXPORT_SYMBOL(_find_next_bit);
- /*
-  * Find the first set bit in a memory region.
-  */
--unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
-+unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
- {
- 	unsigned long idx;
- 
-@@ -86,14 +86,14 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
- 
- 	return size;
- }
--EXPORT_SYMBOL(find_first_bit);
-+EXPORT_SYMBOL(_find_first_bit);
- #endif
- 
- #ifndef find_first_zero_bit
- /*
-  * Find the first cleared bit in a memory region.
-  */
--unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
-+unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size)
- {
- 	unsigned long idx;
- 
-@@ -104,11 +104,11 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
- 
- 	return size;
- }
--EXPORT_SYMBOL(find_first_zero_bit);
-+EXPORT_SYMBOL(_find_first_zero_bit);
- #endif
- 
- #ifndef find_last_bit
--unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
-+unsigned long _find_last_bit(const unsigned long *addr, unsigned long size)
- {
- 	if (size) {
- 		unsigned long val = BITS_FIRST_MASK(size - 1);
-@@ -124,7 +124,7 @@ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
- 	}
- 	return size;
- }
--EXPORT_SYMBOL(find_last_bit);
-+EXPORT_SYMBOL(_find_last_bit);
- #endif
- 
- unsigned long find_next_clump8(unsigned long *clump, const unsigned long *addr,
-diff --git a/tools/include/asm-generic/bitops/find.h b/tools/include/asm-generic/bitops/find.h
-index eff868bd22f8..382cd80c61aa 100644
---- a/tools/include/asm-generic/bitops/find.h
-+++ b/tools/include/asm-generic/bitops/find.h
-@@ -5,6 +5,9 @@
- extern unsigned long _find_next_bit(const unsigned long *addr1,
- 		const unsigned long *addr2, unsigned long nbits,
- 		unsigned long start, unsigned long invert, unsigned long le);
-+extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
-+extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
-+extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
- 
- #ifndef find_next_bit
- /**
-@@ -102,8 +105,17 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
-  * Returns the bit number of the first set bit.
-  * If no bits are set, returns @size.
-  */
--extern unsigned long find_first_bit(const unsigned long *addr,
--				    unsigned long size);
-+static inline
-+unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
-+{
-+	if (SMALL_CONST(size - 1)) {
-+		unsigned long val = *addr & BITS_FIRST(size - 1);
-+
-+		return val ? __ffs(val) : size;
-+	}
-+
-+	return _find_first_bit(addr, size);
-+}
- 
- #endif /* find_first_bit */
- 
-@@ -117,7 +129,17 @@ extern unsigned long find_first_bit(const unsigned long *addr,
-  * Returns the bit number of the first cleared bit.
-  * If no bits are zero, returns @size.
-  */
--unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size);
-+static inline
-+unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
-+{
-+	if (SMALL_CONST(size - 1)) {
-+		unsigned long val = *addr | ~BITS_FIRST(size - 1);
-+
-+		return val == ~0UL ? size : ffz(val);
-+	}
-+
-+	return _find_first_zero_bit(addr, size);
-+}
- #endif
- 
- #endif /*_TOOLS_LINUX_ASM_GENERIC_BITOPS_FIND_H_ */
-diff --git a/tools/lib/find_bit.c b/tools/lib/find_bit.c
-index c3378b291205..a77884ca30ec 100644
---- a/tools/lib/find_bit.c
-+++ b/tools/lib/find_bit.c
-@@ -83,7 +83,7 @@ unsigned long _find_next_bit(const unsigned long *addr1,
- /*
-  * Find the first set bit in a memory region.
-  */
--unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
-+unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
- {
- 	unsigned long idx;
- 
-@@ -100,7 +100,7 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
- /*
-  * Find the first cleared bit in a memory region.
-  */
--unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
-+unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size)
- {
- 	unsigned long idx;
- 
--- 
-2.25.1
++ PR ld/27230
+=EF=BF=BC+ * scripttempl/DWARF.sc: Add DWARF-5 .debug_* sections.
 
+...
+
+-  /* DWARF Extension.  */
+=EF=BF=BC-  .debug_macro    0 : { *(.debug_macro) }
++  /* DWARF 5.  */
+   .debug_addr     0 : { *(.debug_addr) }
++  .debug_line_str 0 : { *(.debug_line_str) }
++  .debug_loclists 0 : { *(.debug_loclists) }
++  .debug_macro    0 : { *(.debug_macro) }
++  .debug_names    0 : { *(.debug_names) }
++  .debug_rnglists 0 : { *(.debug_rnglists) }
++  .debug_str_offsets 0 : { *(.debug_str_offsets) }
+=EF=BF=BC+  .debug_sup      0 : { *(.debug_sup) }
+
+The list of DWARF-5 .debug_* sections is alphabetically sorted.
+AFAICS .debug_sup section is missing?
+
+- Sedat -
+
+[1] https://salsa.debian.org/toolchain-team/binutils/-/commit/f58f330810356=
+72b01a04326a9c8daadbd09a430
+
+>  /* Stabs debugging sections. */
+>  #define STABS_DEBUG                                                    \
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 94c1a7ed6306..ad6f78989d4f 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -268,6 +268,24 @@ config DEBUG_INFO_DWARF4
+>           It makes the debug information larger, but it significantly
+>           improves the success of resolving variables in gdb on optimized=
+ code.
+>
+> +config DEBUG_INFO_DWARF5
+> +       bool "Generate DWARF Version 5 debuginfo"
+> +       depends on GCC_VERSION >=3D 50000 || CC_IS_CLANG
+> +       depends on CC_IS_GCC || $(success,$(srctree)/scripts/test_dwarf5_=
+support.sh $(CC) $(CLANG_FLAGS))
+> +       depends on !DEBUG_INFO_BTF
+> +       help
+> +         Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0=
++ (gcc
+> +         5.0+ accepts the -gdwarf-5 flag but only had partial support fo=
+r some
+> +         draft features until 7.0), and gdb 8.0+.
+> +
+> +         Changes to the structure of debug info in Version 5 allow for a=
+round
+> +         15-18% savings in resulting image and debug info section sizes =
+as
+> +         compared to DWARF Version 4. DWARF Version 5 standardizes previ=
+ous
+> +         extensions such as accelerators for symbol indexing and the for=
+mat
+> +         for fission (.dwo/.dwp) files. Users may not want to select thi=
+s
+> +         config if they rely on tooling that has not yet been updated to
+> +         support DWARF Version 5.
+> +
+>  endchoice # "DWARF version"
+>
+>  config DEBUG_INFO_BTF
+> diff --git a/scripts/test_dwarf5_support.sh b/scripts/test_dwarf5_support=
+.sh
+> new file mode 100755
+> index 000000000000..c46e2456b47a
+> --- /dev/null
+> +++ b/scripts/test_dwarf5_support.sh
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# Test that the assembler doesn't need -Wa,-gdwarf-5 when presented with=
+ DWARF
+> +# v5 input, such as `.file 0` and `md5 0x00`. Should be fixed in GNU bin=
+utils
+> +# 2.35.2. https://sourceware.org/bugzilla/show_bug.cgi?id=3D25611
+> +echo '.file 0 "filename" md5 0x7a0b65214090b6693bd1dc24dd248245' | \
+> +  $* -gdwarf-5 -Wno-unused-command-line-argument -c -x assembler -o /dev=
+/null -
+> --
+> 2.30.0.365.g02bc693789-goog
+>
