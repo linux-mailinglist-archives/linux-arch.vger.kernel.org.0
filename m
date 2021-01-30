@@ -2,201 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9D2309413
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Jan 2021 11:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9412E3097E5
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Jan 2021 20:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbhA3B4c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 20:56:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57160 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233067AbhA3ByX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 29 Jan 2021 20:54:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9371364E02;
-        Sat, 30 Jan 2021 01:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611971610;
-        bh=2twdufb3WDhkRf6qz92slUmsgv4sr6vzhDCvXDaglWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Di7ermcZdqbyH1BoUTyq+UCIhYaGGtauUKffNM4dO6bIbGeTmbwLCq9KjX9qyitv8
-         XaerQkND+MgoN3FZidxycH4G7qaxq0L9ZYTq/UWq+DTaRGWZIUvBO2x7R0vteUmWSg
-         tIHPG4fSL877JyEcXVkazPheVHOG6XA9cbm4L3rUufVOelESh9iAfpfY6wsQ4kYlyz
-         u51W/XEs7YxABnczptRi0j5/cJnrruFeVkwW4pIy/YRKDV2FC5DrNIRpynTYXq6zp5
-         EhkqlhM0VS0gWn2LdaXlmJ1cUT5mMkaBoZfVcacer5hSCzMd4Fc93O6NSwZHvjplCc
-         uRKINzaDjtMzg==
-Date:   Fri, 29 Jan 2021 18:53:27 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S232305AbhA3TSG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 Jan 2021 14:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230360AbhA3TSD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Jan 2021 14:18:03 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41540C06174A;
+        Sat, 30 Jan 2021 11:17:23 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id a19so12277372qka.2;
+        Sat, 30 Jan 2021 11:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pO8x+W3/RhKNWXLk18fJhGVEh86+dnSSlxFNL/9E6bg=;
+        b=c8/10LIzopFZ08cCOs0X8BsBESmOgqd78ZrcVXmOO/X8KpG04pOrNF10tmZTaRAM9n
+         QSStBpqsK2QDAV4A0NsDwobuwYbUid2VP90zYXPMN+JletPn7z8I5It/NN2/GEmupI2d
+         R73exft/YmWzYXnGALNKNOUveSGS7s5r544MMd6vH/gRfNxjp5piie++DDAIiyS20bG6
+         CYEfMYPcT6kTbWgoDb3SzmJdf8+V0SZmjPWuuSrdSe+4pSM5FVOt2mNbQ9U9hE3szMke
+         +CB7ME7RfuW+OSDNNyABopmld9e7Fm+XqYshx+TgAb4EZunc3GVor+x8aEoWzJo63o2w
+         +ktA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pO8x+W3/RhKNWXLk18fJhGVEh86+dnSSlxFNL/9E6bg=;
+        b=SqlJSwMx+Q7cw+LqrsleaNAlJTNollmxavXDFBhuzzN1renAgVC07xbxV0d2LPlb5y
+         r2zFaCYxo62wgEEI5He+YVQs+tLEdHfMfPBc/T8mlxwKIVUsUurd7QrB+Xd1ZqqaQKjo
+         aWK+EgvSrgz+wIX8oZ3gWrUjJamECt60heuEeWXeZhrBf+kyAOf7pjQ7F6LkUfjS4gy0
+         PeGVIvILbaeOrnZMk3kX2fmpJwJpi+F7Bcv1iFEHUSVf9XrcVVavHtPzC7PzrFx0AVKr
+         AUb7HAqvtoRa/tsqj3o3vGculcUuIIfv/hdvcGqvUzlUk71bVtWZy3sBCZRfL5jXXTEZ
+         s4Qw==
+X-Gm-Message-State: AOAM532f8mwpUQnsuCnVMMyaHSuoGL58JMmqyHEN/afakYUVV0wIbekW
+        ra296bGPYGtPDbCh3PhW8lQILbGw8R1fO/IR
+X-Google-Smtp-Source: ABdhPJznYltCMER1oGMNrA8R+49lC07w5P/oIsGITAmHtHrCvZwPjN0TVvS0Ka4sb9x3uo91ppUGHA==
+X-Received: by 2002:a05:620a:22ee:: with SMTP id p14mr9738753qki.466.1612034242432;
+        Sat, 30 Jan 2021 11:17:22 -0800 (PST)
+Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
+        by smtp.gmail.com with ESMTPSA id d3sm6700132qkg.120.2021.01.30.11.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Jan 2021 11:17:21 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dennis Zhou <dennis@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Subject: Re: [PATCH v7 2/2] Kbuild: implement support for DWARF v5
-Message-ID: <20210130015327.GD2709570@localhost>
-References: <20210130004401.2528717-1-ndesaulniers@google.com>
- <20210130004401.2528717-3-ndesaulniers@google.com>
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        David Sterba <dsterba@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Joe Perches <joe@perches.com>
+Subject: [RESEND PATCH v2 0/6] lib/find_bit: fast path for small bitmaps
+Date:   Sat, 30 Jan 2021 11:17:11 -0800
+Message-Id: <20210130191719.7085-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210130004401.2528717-3-ndesaulniers@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 04:44:01PM -0800, Nick Desaulniers wrote:
-> DWARF v5 is the latest standard of the DWARF debug info format.
-> 
-> Feature detection of DWARF5 is onerous, especially given that we've
-> removed $(AS), so we must query $(CC) for DWARF5 assembler directive
-> support.
-> 
-> The DWARF version of a binary can be validated with:
-> $ llvm-dwarfdump vmlinux | head -n 4 | grep version
-> or
-> $ readelf --debug-dump=info vmlinux 2>/dev/null | grep Version
-> 
-> DWARF5 wins significantly in terms of size when mixed with compression
-> (CONFIG_DEBUG_INFO_COMPRESSED).
-> 
-> 363M    vmlinux.clang12.dwarf5.compressed
-> 434M    vmlinux.clang12.dwarf4.compressed
-> 439M    vmlinux.clang12.dwarf2.compressed
-> 457M    vmlinux.clang12.dwarf5
-> 536M    vmlinux.clang12.dwarf4
-> 548M    vmlinux.clang12.dwarf2
-> 
-> 515M    vmlinux.gcc10.2.dwarf5.compressed
-> 599M    vmlinux.gcc10.2.dwarf4.compressed
-> 624M    vmlinux.gcc10.2.dwarf2.compressed
-> 630M    vmlinux.gcc10.2.dwarf5
-> 765M    vmlinux.gcc10.2.dwarf4
-> 809M    vmlinux.gcc10.2.dwarf2
-> 
-> Though the quality of debug info is harder to quantify; size is not a
-> proxy for quality.
-> 
-> Jakub notes:
->   All [GCC] 5.1 - 6.x did was start accepting -gdwarf-5 as experimental
->   option that enabled some small DWARF subset (initially only a few
->   DW_LANG_* codes newly added to DWARF5 drafts).  Only GCC 7 (released
->   after DWARF 5 has been finalized) started emitting DWARF5 section
->   headers and got most of the DWARF5 changes in...
-> 
-> Version check GCC so that we don't need to worry about the difference in
-> command line args between GNU readelf and llvm-readelf/llvm-dwarfdump to
-> validate the DWARF Version in the assembler feature detection script.
-> 
-> GNU `as` only recently gained support for specifying -gdwarf-5, so when
-> compiling with Clang but without Clang's integrated assembler
-> (LLVM_IAS=1 is not set), explicitly add -Wa,-gdwarf-5 to DEBUG_CFLAGS.
-> 
-> Disabled for now if CONFIG_DEBUG_INFO_BTF is set; pahole doesn't yet
-> recognize the new additions to the DWARF debug info. Thanks to Sedat for
-> the report.
-> 
-> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
-> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
-> Suggested-by: Caroline Tice <cmtice@google.com>
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Suggested-by: Jakub Jelinek <jakub@redhat.com>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Nathan Chancellor <natechancellor@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Bitmap operations are much simpler and faster in case of small bitmaps
+which fit into a single word. In linux/bitmap.h we have a machinery that
+allows compiler to replace actual function call with a few instructions
+if bitmaps passed into the function are small and their size is known at
+compile time.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+find_*_bit() API lacks this functionality; despite users will benefit from
+it a lot. One important example is cpumask subsystem when
+NR_CPUS <= BITS_PER_LONG. In the very best case, the compiler may replace
+a find_*_bit() call for such a bitmap with a single ffs or ffz instruction.
 
-> ---
->  Makefile                          |  1 +
->  include/asm-generic/vmlinux.lds.h |  7 ++++++-
->  lib/Kconfig.debug                 | 18 ++++++++++++++++++
->  scripts/test_dwarf5_support.sh    |  8 ++++++++
->  4 files changed, 33 insertions(+), 1 deletion(-)
->  create mode 100755 scripts/test_dwarf5_support.sh
-> 
-> diff --git a/Makefile b/Makefile
-> index d2b4980807e0..5387a6f2f62d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -831,6 +831,7 @@ KBUILD_AFLAGS	+= -Wa,-gdwarf-2
->  endif
->  
->  dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
->  DEBUG_CFLAGS	+= -gdwarf-$(dwarf-version-y)
->  
->  ifdef CONFIG_DEBUG_INFO_REDUCED
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 34b7e0d2346c..1e7cde4bd3f9 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -842,8 +842,13 @@
->  		/* DWARF 4 */						\
->  		.debug_types	0 : { *(.debug_types) }			\
->  		/* DWARF 5 */						\
-> +		.debug_addr	0 : { *(.debug_addr) }			\
-> +		.debug_line_str	0 : { *(.debug_line_str) }		\
-> +		.debug_loclists	0 : { *(.debug_loclists) }		\
->  		.debug_macro	0 : { *(.debug_macro) }			\
-> -		.debug_addr	0 : { *(.debug_addr) }
-> +		.debug_names	0 : { *(.debug_names) }			\
-> +		.debug_rnglists	0 : { *(.debug_rnglists) }		\
-> +		.debug_str_offsets	0 : { *(.debug_str_offsets) }
->  
->  /* Stabs debugging sections. */
->  #define STABS_DEBUG							\
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 94c1a7ed6306..ad6f78989d4f 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -268,6 +268,24 @@ config DEBUG_INFO_DWARF4
->  	  It makes the debug information larger, but it significantly
->  	  improves the success of resolving variables in gdb on optimized code.
->  
-> +config DEBUG_INFO_DWARF5
-> +	bool "Generate DWARF Version 5 debuginfo"
-> +	depends on GCC_VERSION >= 50000 || CC_IS_CLANG
-> +	depends on CC_IS_GCC || $(success,$(srctree)/scripts/test_dwarf5_support.sh $(CC) $(CLANG_FLAGS))
-> +	depends on !DEBUG_INFO_BTF
-> +	help
-> +	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-> +	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-> +	  draft features until 7.0), and gdb 8.0+.
-> +
-> +	  Changes to the structure of debug info in Version 5 allow for around
-> +	  15-18% savings in resulting image and debug info section sizes as
-> +	  compared to DWARF Version 4. DWARF Version 5 standardizes previous
-> +	  extensions such as accelerators for symbol indexing and the format
-> +	  for fission (.dwo/.dwp) files. Users may not want to select this
-> +	  config if they rely on tooling that has not yet been updated to
-> +	  support DWARF Version 5.
-> +
->  endchoice # "DWARF version"
->  
->  config DEBUG_INFO_BTF
-> diff --git a/scripts/test_dwarf5_support.sh b/scripts/test_dwarf5_support.sh
-> new file mode 100755
-> index 000000000000..c46e2456b47a
-> --- /dev/null
-> +++ b/scripts/test_dwarf5_support.sh
-> @@ -0,0 +1,8 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# Test that the assembler doesn't need -Wa,-gdwarf-5 when presented with DWARF
-> +# v5 input, such as `.file 0` and `md5 0x00`. Should be fixed in GNU binutils
-> +# 2.35.2. https://sourceware.org/bugzilla/show_bug.cgi?id=25611
-> +echo '.file 0 "filename" md5 0x7a0b65214090b6693bd1dc24dd248245' | \
-> +  $* -gdwarf-5 -Wno-unused-command-line-argument -c -x assembler -o /dev/null -
-> -- 
-> 2.30.0.365.g02bc693789-goog
-> 
+Tools is synchronized with new implementation where needed.
+
+v1: https://www.spinics.net/lists/kernel/msg3804727.html
+v2: - employ GENMASK() for bitmaps;
+    - unify find_bit inliners in;
+    - address comments to v1;
+
+
+
+Yury Norov (8):
+  tools: disable -Wno-type-limits
+  tools: bitmap: sync function declarations with linux kernel
+  arch: rearrange headers inclusion order in asm/bitops for m68k and sh
+  lib: introduce BITS_{FIRST,LAST} macro
+  bitsperlong.h: introduce SMALL_CONST() macro
+  lib: inline _find_next_bit() wrappers
+  lib: add fast path for find_next_*_bit()
+  lib: add fast path for find_first_*_bit() and find_last_bit()
+
+ arch/m68k/include/asm/bitops.h          |   4 +-
+ arch/sh/include/asm/bitops.h            |   3 +-
+ include/asm-generic/bitops/find.h       | 108 +++++++++++++++++++++---
+ include/asm-generic/bitops/le.h         |  38 ++++++++-
+ include/asm-generic/bitsperlong.h       |   2 +
+ include/linux/bitmap.h                  |  60 ++++++-------
+ include/linux/bitops.h                  |  12 ---
+ include/linux/bits.h                    |   6 ++
+ include/linux/cpumask.h                 |   8 +-
+ include/linux/netdev_features.h         |   2 +-
+ include/linux/nodemask.h                |   2 +-
+ lib/bitmap.c                            |  26 +++---
+ lib/find_bit.c                          |  72 +++-------------
+ lib/genalloc.c                          |   8 +-
+ tools/include/asm-generic/bitops/find.h |  85 +++++++++++++++++--
+ tools/include/asm-generic/bitsperlong.h |   2 +
+ tools/include/linux/bitmap.h            |  47 ++++-------
+ tools/include/linux/bits.h              |   6 ++
+ tools/lib/bitmap.c                      |  10 +--
+ tools/lib/find_bit.c                    |  56 +++++-------
+ tools/scripts/Makefile.include          |   1 +
+ tools/testing/radix-tree/bitmap.c       |   4 +-
+ 22 files changed, 337 insertions(+), 225 deletions(-)
+
+-- 
+2.25.1
+
