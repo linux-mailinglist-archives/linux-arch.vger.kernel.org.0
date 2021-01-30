@@ -2,115 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D303090A4
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Jan 2021 00:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADA13090D1
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Jan 2021 01:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbhA2XbY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Jan 2021 18:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S231316AbhA3AJA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Jan 2021 19:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbhA2XbV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 18:31:21 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377C7C061573
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 15:30:41 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id u11so6180149plg.13
-        for <linux-arch@vger.kernel.org>; Fri, 29 Jan 2021 15:30:41 -0800 (PST)
+        with ESMTP id S230009AbhA3AJA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Jan 2021 19:09:00 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014D5C061573;
+        Fri, 29 Jan 2021 16:08:20 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id l4so10101745ilo.11;
+        Fri, 29 Jan 2021 16:08:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wQXKy21pEcRclb3wAZG5ISCNN6W5kQy6JQslnD7Vmx0=;
-        b=QpFH+sYq9frbG1nqLvcOEsHB/q0UQxlaH0k6imY5kj6e1nFQjF4bMWPoSCJJNsmSjq
-         TYqorWB5pdzjpJvp3tAKpSQenuvRmE4jvmPmPGfnz34LWAJqMcqmRJOhtc7hQ9M4JuG0
-         9NwkrdUsFjQ6nZqCG+dVGSoTzgTuhMPhZuWJIsHUfE7M4reRjSQzJsIErsxfJx0e9Ewl
-         a2eJQCVLrjVf7+3NYaa9oMpoK0rAAFE9Paps6Z4CMq82EtCQGr0OpPt47BGyhSlVXBlY
-         8PqFBJt+pQcjBcBmRzgH6zaxQ4Mb77o/ZrXmg/y7FrsigvGjBCa2tPHG/9T3iQsHmIcL
-         l9XA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=VZDd1asC8dvFh6n2YN5mdYVp43kT9MvVXFzgygn8cX8=;
+        b=dUVUO05OD7GnA8IZvMwytebwJWb5RZ0FvAWUmMhd4Nd+dpmOfCHC4XZNghhCVRkTV8
+         YsunGNP6E5+uGHmU9HkrqE9q+/U3hWKkhsn5pFo9lzESIgwH0XJh8vfNhFif8y7iCJjO
+         52k5MoZOeUZjt51rPDefwH31Syie5RNVOWVo9O9tM4WLJ/7/m6t8gRMXPZ6IuLihz51d
+         l4F+bokymp5gVbzSrW6MXqFZRnfeQ3o1svrFooq9NKWdQtiXFD3cKIJB4S/n/eYr7o+K
+         sBeBBHD7d2uOuxs0Hlz22BJlFfLSf4qfssNTeGyWoNsbuVBHB8KVHn9lJTDIDN3H4IFj
+         GWgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wQXKy21pEcRclb3wAZG5ISCNN6W5kQy6JQslnD7Vmx0=;
-        b=dJkdzmX0f5TiGoA5ZNK1IMTzVtiidx5OK/OBh1ViZEVV1E/2WUOQyrfq7y2Y04kD1W
-         HphP8ebwH/s9LJW/MNUmgoWrtdGsAhc0W8xYpbhY5eoWtzZZoMfmxkPMqHkAoUcEK6qr
-         aAhMoLceTJ0drQKYTw/0yoewLq1C6tj+8JfVVQLm5BsPJOR327x45gDxyVd11StSefPg
-         WA59sXC8gHKlWQwstx+fiRdcb1uYWKiMS+IfqZDA6yrp2KUsXDcEsbP/8HsUdkZt5S2j
-         M4E5uBv2Jcg5q3eap9t6xl8eOFzD1w7kNnVF7/0pWrip2e6dXNgXuvNoI4MQbAaFGA6d
-         hAxA==
-X-Gm-Message-State: AOAM533Al1ww1grzpgptkVPywPSb38Ia8LkIf4mGEJ+FAZb8VVkw+K79
-        9UkXIKgMPaeAAdQg3AdRc/f8JkfWcV805wScSj4+wQ==
-X-Google-Smtp-Source: ABdhPJxWbqroS4GY8wD0aOcFCDcRe5dSwHiVZ5LIk65NCeueYb4W6ufs+KdY6D+ZkjIlCKZLLQzDDX7Zo/Z760ymWzg=
-X-Received: by 2002:a17:902:ed94:b029:de:8844:a650 with SMTP id
- e20-20020a170902ed94b02900de8844a650mr6619051plj.56.1611963040680; Fri, 29
- Jan 2021 15:30:40 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=VZDd1asC8dvFh6n2YN5mdYVp43kT9MvVXFzgygn8cX8=;
+        b=sun0kE5Y1yZ6lwxw/oLFY6EVOii7rvF6Lmif2UUpy4NffWQrj7iGJxoIcF7eg5vsuu
+         l0EC65ZcUtbbwlJqe5MZqBVoGttRKNizsv0Y+rM9mJ+8WPbkw+J6Co9eJpGUK3nQuSfz
+         jAkZdosw6CiHvMr/vvbn5uqTx33Ay1mx253pRMvCqkH1Uh/PsdnuV28d/CJx5j60fkad
+         IeiDjxrZPBvL8/kSlvRvroanVTGjmZ553/p4PSi4q01I5x+YTyTetivdke1K7ImRwdjg
+         Jt6Z1qPnLHnHN8P72pvPiDQQ6+h/XgjG01kVsErLhIWXPppGIs5wVJdTfekbSXPK1Gnn
+         YpCw==
+X-Gm-Message-State: AOAM531C55eocfP93M372BIsTjHX0YxeHwVKj+Zyt27VWSGDc4hOEpRF
+        0kyqLIjYHmYOV6EoV3NjlzuqiKTN119UlZQorUw=
+X-Google-Smtp-Source: ABdhPJy2Rz0mXty4O/EX5+19Ui7x7LdPx1jTfCT5q7QYpnPCBuJTZcNxhrutKv/AIN0+MGxsiy9u1D4ThXSCVNUFxP8=
+X-Received: by 2002:a05:6e02:d0:: with SMTP id r16mr4981903ilq.112.1611965299380;
+ Fri, 29 Jan 2021 16:08:19 -0800 (PST)
 MIME-Version: 1.0
 References: <20210129194318.2125748-1-ndesaulniers@google.com>
- <20210129194318.2125748-3-ndesaulniers@google.com> <CA+icZUX4q-JhCo+UZ9T3FhbC_gso-oaB0OR9KdH5iEpoGZyqVw@mail.gmail.com>
- <CAKwvOdnj1Np62+eOiTOCRXSW6GLSv4hmvtWaz=0aTZEEot_dhw@mail.gmail.com>
- <20210129205702.GS4020736@tucnak> <CAKwvOdmuSaf28dOdP8Yo6+RyiviMNKcq8JY=-qgbwjbPVwHmLw@mail.gmail.com>
- <20210129211102.GT4020736@tucnak> <CAKwvOdm-+xK=diSKKXXnS2m1+W6QZ70c7cRKTbtVF=dWi1_8_w@mail.gmail.com>
- <20210129220939.GY4020736@tucnak> <CAKwvOdnte8Ck1ywodbY7ED7U046j06C+D-ZcW6kS-fqyaJbmCQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdnte8Ck1ywodbY7ED7U046j06C+D-ZcW6kS-fqyaJbmCQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 29 Jan 2021 15:30:29 -0800
-Message-ID: <CAKwvOdkx=4SZAo_pxduWG=SvDNET14eo2ad4FeHvxHUcSZGbTA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] Kbuild: implement support for DWARF v5
-To:     Jakub Jelinek <jakub@redhat.com>, Nick Clifton <nickc@redhat.com>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+In-Reply-To: <20210129194318.2125748-1-ndesaulniers@google.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 30 Jan 2021 01:08:06 +0100
+Message-ID: <CA+icZUXpn_VKePTpnEhcpuSxPkuQTSKYfsVeMbxU9-rBp1ZJXw@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] Kbuild: DWARF v5 support
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
         Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jakub Jelinek <jakub@redhat.com>,
         Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>, Yonghong Song <yhs@fb.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>
+        Arnaldo Carvalho de Melo <acme@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 3:25 PM Nick Desaulniers
+On Fri, Jan 29, 2021 at 8:43 PM Nick Desaulniers
 <ndesaulniers@google.com> wrote:
 >
-> On Fri, Jan 29, 2021 at 2:10 PM Jakub Jelinek <jakub@redhat.com> wrote:
-> >
-> > On Fri, Jan 29, 2021 at 02:05:59PM -0800, Nick Desaulniers wrote:
-> > > Ah, I see.  Then I should update the script I add
-> > > (scripts/test_dwarf5_support.sh) to feature detect that bug, since
-> > > it's the latest of the bunch.  Also, should update my comment to note
-> > > that this requires binutils greater than 2.35.1 (which is what I have,
-> > > which fails, since the backport landed in ... what?!)  How was this
-> > > backported to 2.35
-> > > (https://sourceware.org/bugzilla/show_bug.cgi?id=27195#c12, Jan 26
-> > > 2021) when binutils-2_35_1 was tagged sept 19 2020?  Or will there be
-> > > a binutils 2.35.2 point release?
-> >
-> > AFAIK yes, soon.
+> DWARF v5 is the latest standard of the DWARF debug info format.
 >
-> Err...perhaps https://sourceware.org/bugzilla/show_bug.cgi?id=27195
-> was about `.file 0`, but it looks like `.file 1 "filename" md5
-> 0x7a0b65214090b6693bd1dc24dd248245` without -gdwarf-5. Specifically
-> the md5 ... .
+> DWARF5 wins significantly in terms of size and especially so when mixed
+> with compression (CONFIG_DEBUG_INFO_COMPRESSED).
 >
-> So https://sourceware.org/bugzilla/show_bug.cgi?id=25611 needs a rework perhaps?
+> Link: http://www.dwarfstd.org/doc/DWARF5.pdf
+>
+> Patch 1 is a cleanup that lays the ground work and isn't DWARF
+> v5 specific.
+> Patch 2 implements Kconfig and Kbuild support for DWARFv5.
+>
 
-$ echo '.file 1 "filename" md5 0x7a0b65214090b6693bd1dc24dd248245' |
-binutils-gdb/gas/as -
-{standard input}: Assembler messages:
-{standard input}:1: Error: junk at end of line, first unrecognized
-character is `m'
-$ echo '.file 1 "filename" md5 0x7a0b65214090b6693bd1dc24dd248245' |
-binutils-gdb/gas/as -gdwarf-5 -
-$
+When you will do a v7...
 
-https://sourceware.org/bugzilla/show_bug.cgi?id=27280
--- 
-Thanks,
-~Nick Desaulniers
+Can you look also at places where we have hardcoded DWARF-2 handling...
+
+For example:
+
+arch/x86/purgatory/Makefile:AFLAGS_REMOVE_setup-x86_$(BITS).o   += -Wa,-gdwarf-2
+arch/x86/purgatory/Makefile:AFLAGS_REMOVE_entry64.o
+ += -Wa,-gdwarf-2
+
+- Sedat -
+
+> Changes from v5:
+> * Drop previous patch 1, it has been accepted into kbuild:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?h=kbuild&id=3f4d8ce271c7082be75bacbcbd2048aa78ce2b44
+> * Trying to set -Wa,-gdwarf-4 in the earlier patch was the source of
+>   additional complexity. Drop it that part of the patch. We can revisit
+>   clang without the integrated assembler setting -Wa,-gdwarf-4 later.
+>   That is a separate problem from generally supporting DWARF v5.
+> * Rework the final patch for clang without the integrated assembler.
+>   -Wa,-gdwarf-5 is required for DWARF5 in that case otherwise GAS will
+>   not accept the assembler directives clang produces from C code when
+>   generating asm.
+>
+> Changes from v4:
+> * drop set -e from script as per Nathan.
+> * add dependency on !CONFIG_DEBUG_INFO_BTF for DWARF v5 as per Sedat.
+> * Move LLVM_IAS=1 complexity from patch 2 to patch 3 as per Arvind and
+>   Masahiro. Sorry it took me a few tries to understand the point (I
+>   might still not), but it looks much cleaner this way. Sorry Nathan, I
+>   did not carry forward your previous reviews as a result, but I would
+>   appreciate if you could look again.
+> * Add Nathan's reviewed by tag to patch 1.
+> * Reword commit message for patch 3 to mention LLVM_IAS=1 and -gdwarf-5
+>   binutils addition later, and BTF issue.
+> * I still happen to see a pahole related error spew for the combination
+>   of:
+>   * LLVM=1
+>   * LLVM_IAS=1
+>   * CONFIG_DEBUG_INFO_DWARF4
+>   * CONFIG_DEBUG_INFO_BTF
+>   Though they're non-fatal to the build. I'm not sure yet why removing
+>   any one of the above prevents the warning spew. Maybe we'll need a v6.
+>
+> Changes from v3:
+>
+> Changes as per Arvind:
+> * only add -Wa,-gdwarf-5 for (LLVM=1|CC=clang)+LLVM_IAS=0 builds.
+> * add -gdwarf-5 to Kconfig shell script.
+> * only run Kconfig shell script for Clang.
+>
+> Apologies to Sedat and Nathan; I appreciate previous testing/review, but
+> I did no carry forward your Tested-by and Reviewed-by tags, as the
+> patches have changed too much IMO.
+>
+> Changes from v2:
+> * Drop two of the earlier patches that have been accepted already.
+> * Add measurements with GCC 10.2 to commit message.
+> * Update help text as per Arvind with help from Caroline.
+> * Improve case/wording between DWARF Versions as per Masahiro.
+>
+> Changes from the RFC:
+> * split patch in 3 patch series, include Fangrui's patch, too.
+> * prefer `DWARF vX` format, as per Fangrui.
+> * use spaces between assignment in Makefile as per Masahiro.
+> * simplify setting dwarf-version-y as per Masahiro.
+> * indent `prompt` in Kconfig change as per Masahiro.
+> * remove explicit default in Kconfig as per Masahiro.
+> * add comments to test_dwarf5_support.sh.
+> * change echo in test_dwarf5_support.sh as per Masahiro.
+> * remove -u from test_dwarf5_support.sh as per Masahiro.
+> * add a -gdwarf-5 cc-option check to Kconfig as per Jakub.
+>
+> Nick Desaulniers (2):
+>   Kbuild: make DWARF version a choice
+>   Kbuild: implement support for DWARF v5
+>
+>  Makefile                          | 16 ++++++++++--
+>  include/asm-generic/vmlinux.lds.h |  6 ++++-
+>  lib/Kconfig.debug                 | 41 ++++++++++++++++++++++++++-----
+>  scripts/test_dwarf5_support.sh    |  8 ++++++
+>  4 files changed, 62 insertions(+), 9 deletions(-)
+>  create mode 100755 scripts/test_dwarf5_support.sh
+>
+> --
+> 2.30.0.365.g02bc693789-goog
+>
