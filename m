@@ -2,139 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A21330C6F8
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 18:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1688C30C979
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 19:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbhBBRFi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 12:05:38 -0500
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:40292 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237166AbhBBRDc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 12:03:32 -0500
-Received: by mail-wm1-f47.google.com with SMTP id c127so2922274wmf.5;
-        Tue, 02 Feb 2021 09:03:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DD+251eGktrSTImPGVbBwQ3z1hqdMBWG31qVIVIXP5o=;
-        b=fStGpbTmQ9RsYNxFFwZdQVV0O/3zB+ex7Q625Arm2BpuT+VPQSAXF7DIyrCJgg7zUj
-         i2FRWye1CguYTlBxKf17U/i9+YF38zmLd5oyMj2FWwNC0WsqkF2xhr4TQweMmNLGhWSi
-         hQEweJiIVEVFde7oKSu3sMgKppFK553YzcGS27/KidRx1s9wQNs4P2YSwffwRdJkiqAl
-         H9UXrW8U+QxjhcVl42lt1aPElfD2upiuDnp7joVj1q/UtVMDgGpqCn+MIwqCCl7CZUuk
-         4DBXD85K+MnXLqtS9KkR8GKLL0xZAsiJNsZEIZRyBDYKgK/PXvZVvobnbSjm8Bph/nQx
-         3i4Q==
-X-Gm-Message-State: AOAM532xSER91QRvq77oMlhc4OvIXSbkjKGWHdrB3hHVmPi/0k6OYznY
-        F+SJkcDzZBFKX9izvMJECoc=
-X-Google-Smtp-Source: ABdhPJwsEMGnEjA/NKpbirU1u3HMobdNK7rrUiV5kMJbI1JoH9E/2vjXHtijtgxHb7IEQSN6sjawmQ==
-X-Received: by 2002:a7b:c041:: with SMTP id u1mr4506508wmc.161.1612285370649;
-        Tue, 02 Feb 2021 09:02:50 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id r17sm18597208wro.46.2021.02.02.09.02.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 09:02:50 -0800 (PST)
-Date:   Tue, 2 Feb 2021 17:02:48 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v5 13/16] asm-generic/hyperv: introduce hv_device_id and
- auxiliary structures
-Message-ID: <20210202170248.4hds554cyxpuayqc@liuwe-devbox-debian-v2>
-References: <20210120120058.29138-1-wei.liu@kernel.org>
- <20210120120058.29138-14-wei.liu@kernel.org>
- <MWHPR21MB1593959647DA60219E19C25ED7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
+        id S237428AbhBBSTJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 13:19:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57624 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238384AbhBBSQ5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 2 Feb 2021 13:16:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9084864F92;
+        Tue,  2 Feb 2021 18:15:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612289771;
+        bh=jExAi6+S0KhwmLELocI6wMJuzz/tLWY8R7yvg8v3kSM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EDgDXp2MRosyELVG93hsa2FWpra6U+O1s/wok5z4I/qOXv7rdUmjG2axPtMIvq+YN
+         yBgA8wcWgNGCYn0pW2zVsZsv3wcPZETui3XjKumHzFywKHgYsDnq+d0PEjUY80BQCe
+         IzesvjbDuB+UAqmSCfbvnjKvS7w0UCcntNSHwnveAp/98Y5aklQbVLZ5aIeTMaBtIb
+         Y2S9E4/e0RHCm573D5HvZcykwBcZPsiKWKBYdn9Gm25wRz155OpIc0oI5MY1vEx2Z5
+         y6k9c5Z7N9NTPpMQGOvaiK4lasHyvoskCgCDKMvmuqHqWSSfiiKO+c0UX4uuveVSEz
+         Bmm6b/PXs32Ig==
+Date:   Tue, 2 Feb 2021 20:15:46 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20210202181546.GO242749@kernel.org>
+References: <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+ <YBkcyQsky2scjEcP@dhcp22.suse.cz>
+ <20210202124857.GN242749@kernel.org>
+ <6653288a-dd02-f9de-ef6a-e8d567d71d53@redhat.com>
+ <YBlUXdwV93xMIff6@dhcp22.suse.cz>
+ <211f0214-1868-a5be-9428-7acfc3b73993@redhat.com>
+ <YBlgCl8MQuuII22w@dhcp22.suse.cz>
+ <d4fe580a-ef0e-e13f-9ee4-16fb8b6d65dd@redhat.com>
+ <YBlicIupOyPF9f3D@dhcp22.suse.cz>
+ <95625b83-f7e2-b27a-2b99-d231338047fb@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MWHPR21MB1593959647DA60219E19C25ED7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <95625b83-f7e2-b27a-2b99-d231338047fb@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 01:26:52AM +0000, Michael Kelley wrote:
-> From: Wei Liu <wei.liu@kernel.org> Sent: Wednesday, January 20, 2021 4:01 AM
+On Tue, Feb 02, 2021 at 03:34:29PM +0100, David Hildenbrand wrote:
+> On 02.02.21 15:32, Michal Hocko wrote:
+> > On Tue 02-02-21 15:26:20, David Hildenbrand wrote:
+> > > On 02.02.21 15:22, Michal Hocko wrote:
+> > > > On Tue 02-02-21 15:12:21, David Hildenbrand wrote:
+> > > > [...]
+> > > > > I think secretmem behaves much more like longterm GUP right now
+> > > > > ("unmigratable", "lifetime controlled by user space", "cannot go on
+> > > > > CMA/ZONE_MOVABLE"). I'd either want to reasonably well control/limit it or
+> > > > > make it behave more like mlocked pages.
+> > > > 
+> > > > I thought I have already asked but I must have forgotten. Is there any
+> > > > actual reason why the memory is not movable? Timing attacks?
+> > > 
+> > > I think the reason is simple: no direct map, no copying of memory.
 > > 
-> > We will need to identify the device we want Microsoft Hypervisor to
-> > manipulate.  Introduce the data structures for that purpose.
-> > 
-> > They will be used in a later patch.
-> > 
-> > Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-> > Co-Developed-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-> > Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> > ---
-> >  include/asm-generic/hyperv-tlfs.h | 79 +++++++++++++++++++++++++++++++
-> >  1 file changed, 79 insertions(+)
-> > 
-> > diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> > index 8423bf53c237..42ff1326c6bd 100644
-> > --- a/include/asm-generic/hyperv-tlfs.h
-> > +++ b/include/asm-generic/hyperv-tlfs.h
-> > @@ -623,4 +623,83 @@ struct hv_set_vp_registers_input {
-> >  	} element[];
-> >  } __packed;
-> > 
-> > +enum hv_device_type {
-> > +	HV_DEVICE_TYPE_LOGICAL = 0,
-> > +	HV_DEVICE_TYPE_PCI = 1,
-> > +	HV_DEVICE_TYPE_IOAPIC = 2,
-> > +	HV_DEVICE_TYPE_ACPI = 3,
-> > +};
-> > +
-> > +typedef u16 hv_pci_rid;
-> > +typedef u16 hv_pci_segment;
-> > +typedef u64 hv_logical_device_id;
-> > +union hv_pci_bdf {
-> > +	u16 as_uint16;
-> > +
-> > +	struct {
-> > +		u8 function:3;
-> > +		u8 device:5;
-> > +		u8 bus;
-> > +	};
-> > +} __packed;
-> > +
-> > +union hv_pci_bus_range {
-> > +	u16 as_uint16;
-> > +
-> > +	struct {
-> > +		u8 subordinate_bus;
-> > +		u8 secondary_bus;
-> > +	};
-> > +} __packed;
-> > +
-> > +union hv_device_id {
-> > +	u64 as_uint64;
-> > +
-> > +	struct {
-> > +		u64 :62;
-> > +		u64 device_type:2;
-> > +	};
+> > This is an implementation detail though and not something terribly hard
+> > to add on top later on. I was more worried there would be really
+> > fundamental reason why this is not possible. E.g. security implications.
 > 
-> Are the above 4 lines extraneous junk? 
-> If not, a comment would be helpful.  And we
-> would normally label the 62 bit field as 
-> "reserved0" or something similar.
-> 
+> I don't remember all the details. Let's see what Mike thinks regarding
+> migration (e.g., security concerns).
 
-No. It is not junk. I got this from a header in tree.
+Thanks for considering me a security expert :-)
 
-I am inclined to just drop this hunk. If that breaks things, I will use
-"reserved0".
+Yet, I cannot estimate how dangerous is the temporal exposure of
+this data to the kernel via the direct map in the simple map/copy/unmap
+sequence.
 
-Wei.
+More secure way would be to map source and destination in a different page table
+rather than in the direct map, similarly to the way text_poke() on x86
+does.
+
+I've left the migration callback empty for now because it can be added on
+top and its implementation would depend on the way we do (or do not do)
+pooling.
+
+-- 
+Sincerely yours,
+Mike.
