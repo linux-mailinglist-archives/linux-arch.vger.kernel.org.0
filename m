@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4179D30BC92
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 12:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF6430BC95
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 12:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbhBBLGd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 06:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S229876AbhBBLGj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 06:06:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbhBBLGW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 06:06:22 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61502C0613ED;
-        Tue,  2 Feb 2021 03:05:41 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id o16so14673438pgg.5;
-        Tue, 02 Feb 2021 03:05:41 -0800 (PST)
+        with ESMTP id S229970AbhBBLG1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 06:06:27 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8027C061786;
+        Tue,  2 Feb 2021 03:05:46 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id q72so645978pjq.2;
+        Tue, 02 Feb 2021 03:05:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ySt43gO6smkJkMCT6Ltah9Oe/TqPH3vOFFL48JryRJY=;
-        b=Ski/mw3ycAZzNEp1UFr21+Cp/tNP720PSzUmqurvkfBxoQDFOdHtb4Yi9eWBxNV6x6
-         +MRDgMmXeeeNXkN7h69Vv/YGtRQLoU4gu68PmAX+iaTFwRtw9feFBK3kxowjty+NfCGp
-         wJjG4o7DoJQQWFnArGBu5VU1V+eurx/xHhFcfkDApot8q70HeCSOc4DXv4SA4HYlkMP5
-         aWmudl313UR7gg+iskpcCreNkld6pnmpoNr28vpuMtEdfcl2TZVn0y60J0qqWDltN55q
-         XJvGP8M1YI80tvPBQoEmf+W/oHq0c9FiT0+i8Ge9NUcoYfr2KGb3cBm0THh/VuMwAdiU
-         kUpA==
+        bh=3+2EgAIhGTTse8b+E+9Hf45DrzJMmCtp0U7AjAQfN8I=;
+        b=uZOsM1Oa1wBSEyJaD5TLxkV3c4vw+3dLuwTKngo1PampwYDVLBRdxK4OdSVGPqGQ/b
+         shWgHjLDWZbZzClH2Qep9MYEvKL36CGn1uFm33NLYLzPvz1Fh2Kj1wAvNKHWGN7gJP0e
+         gerI1kjJIAnIQdDEX0If7X70GAwtv/sifeti3p11TKAzmAljx4gG9I7ZTpJ2bwY+5UeO
+         XUUx1mG8g3dkjSRw3ivwHQWZ4J7ptJhFb209u9yNgJFTDs6X4R8Z2moN00HRrMtgyrpA
+         zaumTRSH+OiAk1Gvn+x0wx1eVq/J4DvLJy+CQM/31wr4JgrleqzVcVa+FrM5HnaC7E8v
+         ChFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ySt43gO6smkJkMCT6Ltah9Oe/TqPH3vOFFL48JryRJY=;
-        b=YDuwzbBXdbzlfANnJZ1rZmV8gtxrVowKXH+lsilDcMO1xNnUiwAgPFO3KRJrv1BlmP
-         q8Gv3nVMVlmtW0dM7/l78R8pSbD4n/76iEsQz+PXuUNH7kWfLBwjc3Vngg16flQfmaEL
-         TsESiDaryqBkj0yxPFy2x2Fq/UgEnEudqunhvdnQvYVKSnJ8i1mdF6EHnu8OPa/UGqiG
-         /1ME+GNNziUfynminOEKRq4RjiYg4eeU1t4wTpGuF91BUfUBl0mbT6h573mXbze9yEcm
-         TW+Xd6NJAA2Gln+OeFU6VmVMXWlP+ts6OVG2bQo5h+F32Fdjkx6yEbgvKP1gyHJxzjKQ
-         NYvA==
-X-Gm-Message-State: AOAM531V02E+yrOtKQ5kXMIvzSKKpLjJ9FeayXAJ7xFGaby/YMIS4NFt
-        VIG1EQ2w3u9u46vfmxUOv4U=
-X-Google-Smtp-Source: ABdhPJwEplkRosODeeIhv4PGeJvnvUh/GUzz0oBoKUwaxDzsLdjnBDFwwq84HqP/lXvnmbarkKvPng==
-X-Received: by 2002:a63:5705:: with SMTP id l5mr21883663pgb.415.1612263941041;
-        Tue, 02 Feb 2021 03:05:41 -0800 (PST)
+        bh=3+2EgAIhGTTse8b+E+9Hf45DrzJMmCtp0U7AjAQfN8I=;
+        b=O3M1V+kwLkFm6qWjS6Uh8zK11NuK2lKtjEd4zjxzxJD1t/Bh9QHEpSzp12oso7CEwQ
+         4BoVbei3KbK9mcavzqOilyIJB7XD9Q8PNsGEF8N1Zv4thm1JsOYEcW+e4Moa8GB7IAlt
+         hX8yvNLLrTdSuzjQM6tHkK7puZtZ66QKbMRHuMR8GmYI6ql3lVVApwwETf0i6Zjg6WJM
+         KKXCFW30hZ1WKQBpd9upYzgRL9NaC7r8NHP/DL4KlbZCeTHzak9jEmVYw3+EQTnZ69KW
+         Hi2wxxIizBD623FcBKCBpUG9t1d7PQQBQipVn7SizYeaZr8PYruUCFSxQ5CH6U+/a2UT
+         1T5w==
+X-Gm-Message-State: AOAM533MXn4cbrOB42g5EsKlwAMLevxTwE15mq5qGEDAKgmQadOAPOpi
+        4B6RM6YvYGaZaLvQpS5/CVs=
+X-Google-Smtp-Source: ABdhPJwaR2Bb0JXFdZBuyi1lv6jRMbgUP/VjBu4qZRccLPfnbDkpnPbWOkKknA3n0/zqafzqaoXEsw==
+X-Received: by 2002:a17:90a:9310:: with SMTP id p16mr3810901pjo.211.1612263946582;
+        Tue, 02 Feb 2021 03:05:46 -0800 (PST)
 Received: from bobo.ozlabs.ibm.com (60-242-11-44.static.tpgi.com.au. [60.242.11.44])
-        by smtp.gmail.com with ESMTPSA id g19sm3188979pfk.113.2021.02.02.03.05.35
+        by smtp.gmail.com with ESMTPSA id g19sm3188979pfk.113.2021.02.02.03.05.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 03:05:40 -0800 (PST)
+        Tue, 02 Feb 2021 03:05:46 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
         Ding Tianhong <dingtianhong@huawei.com>,
         Miaohe Lin <linmiaohe@huawei.com>,
         Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v12 03/14] mm: apply_to_pte_range warn and fail if a large pte is encountered
-Date:   Tue,  2 Feb 2021 21:05:04 +1000
-Message-Id: <20210202110515.3575274-4-npiggin@gmail.com>
+Subject: [PATCH v12 04/14] mm/vmalloc: rename vmap_*_range vmap_pages_*_range
+Date:   Tue,  2 Feb 2021 21:05:05 +1000
+Message-Id: <20210202110515.3575274-5-npiggin@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20210202110515.3575274-1-npiggin@gmail.com>
 References: <20210202110515.3575274-1-npiggin@gmail.com>
@@ -70,121 +70,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-apply_to_pte_range might mistake a large pte for bad, or treat it as a
-page table, resulting in a crash or corruption. Add a test to warn and
-return error if large entries are found.
+The vmalloc mapper operates on a struct page * array rather than a
+linear physical address, re-name it to make this distinction clear.
 
 Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- mm/memory.c | 66 +++++++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 49 insertions(+), 17 deletions(-)
+ mm/vmalloc.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index feff48e1465a..672e39a72788 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2440,13 +2440,21 @@ static int apply_to_pmd_range(struct mm_struct *mm, pud_t *pud,
- 	}
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 62372f9e0167..7f2f36116980 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -189,7 +189,7 @@ void unmap_kernel_range_noflush(unsigned long start, unsigned long size)
+ 		arch_sync_kernel_mappings(start, end);
+ }
+ 
+-static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
++static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -217,7 +217,7 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
+ 	return 0;
+ }
+ 
+-static int vmap_pmd_range(pud_t *pud, unsigned long addr,
++static int vmap_pages_pmd_range(pud_t *pud, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -229,13 +229,13 @@ static int vmap_pmd_range(pud_t *pud, unsigned long addr,
+ 		return -ENOMEM;
  	do {
  		next = pmd_addr_end(addr, end);
--		if (create || !pmd_none_or_clear_bad(pmd)) {
--			err = apply_to_pte_range(mm, pmd, addr, next, fn, data,
--						 create, mask);
--			if (err)
--				break;
-+		if (pmd_none(*pmd) && !create)
-+			continue;
-+		if (WARN_ON_ONCE(pmd_leaf(*pmd)))
-+			return -EINVAL;
-+		if (!pmd_none(*pmd) && WARN_ON_ONCE(pmd_bad(*pmd))) {
-+			if (!create)
-+				continue;
-+			pmd_clear_bad(pmd);
- 		}
-+		err = apply_to_pte_range(mm, pmd, addr, next,
-+					 fn, data, create, mask);
-+		if (err)
-+			break;
+-		if (vmap_pte_range(pmd, addr, next, prot, pages, nr, mask))
++		if (vmap_pages_pte_range(pmd, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
  	} while (pmd++, addr = next, addr != end);
-+
- 	return err;
+ 	return 0;
  }
  
-@@ -2468,13 +2476,21 @@ static int apply_to_pud_range(struct mm_struct *mm, p4d_t *p4d,
- 	}
+-static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
++static int vmap_pages_pud_range(p4d_t *p4d, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -247,13 +247,13 @@ static int vmap_pud_range(p4d_t *p4d, unsigned long addr,
+ 		return -ENOMEM;
  	do {
  		next = pud_addr_end(addr, end);
--		if (create || !pud_none_or_clear_bad(pud)) {
--			err = apply_to_pmd_range(mm, pud, addr, next, fn, data,
--						 create, mask);
--			if (err)
--				break;
-+		if (pud_none(*pud) && !create)
-+			continue;
-+		if (WARN_ON_ONCE(pud_leaf(*pud)))
-+			return -EINVAL;
-+		if (!pud_none(*pud) && WARN_ON_ONCE(pud_bad(*pud))) {
-+			if (!create)
-+				continue;
-+			pud_clear_bad(pud);
- 		}
-+		err = apply_to_pmd_range(mm, pud, addr, next,
-+					 fn, data, create, mask);
-+		if (err)
-+			break;
+-		if (vmap_pmd_range(pud, addr, next, prot, pages, nr, mask))
++		if (vmap_pages_pmd_range(pud, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
  	} while (pud++, addr = next, addr != end);
-+
- 	return err;
+ 	return 0;
  }
  
-@@ -2496,13 +2512,21 @@ static int apply_to_p4d_range(struct mm_struct *mm, pgd_t *pgd,
- 	}
+-static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
++static int vmap_pages_p4d_range(pgd_t *pgd, unsigned long addr,
+ 		unsigned long end, pgprot_t prot, struct page **pages, int *nr,
+ 		pgtbl_mod_mask *mask)
+ {
+@@ -265,7 +265,7 @@ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr,
+ 		return -ENOMEM;
  	do {
  		next = p4d_addr_end(addr, end);
--		if (create || !p4d_none_or_clear_bad(p4d)) {
--			err = apply_to_pud_range(mm, p4d, addr, next, fn, data,
--						 create, mask);
--			if (err)
--				break;
-+		if (p4d_none(*p4d) && !create)
-+			continue;
-+		if (WARN_ON_ONCE(p4d_leaf(*p4d)))
-+			return -EINVAL;
-+		if (!p4d_none(*p4d) && WARN_ON_ONCE(p4d_bad(*p4d))) {
-+			if (!create)
-+				continue;
-+			p4d_clear_bad(p4d);
- 		}
-+		err = apply_to_pud_range(mm, p4d, addr, next,
-+					 fn, data, create, mask);
-+		if (err)
-+			break;
+-		if (vmap_pud_range(p4d, addr, next, prot, pages, nr, mask))
++		if (vmap_pages_pud_range(p4d, addr, next, prot, pages, nr, mask))
+ 			return -ENOMEM;
  	} while (p4d++, addr = next, addr != end);
-+
- 	return err;
- }
- 
-@@ -2522,9 +2546,17 @@ static int __apply_to_page_range(struct mm_struct *mm, unsigned long addr,
- 	pgd = pgd_offset(mm, addr);
- 	do {
+ 	return 0;
+@@ -306,7 +306,7 @@ int map_kernel_range_noflush(unsigned long addr, unsigned long size,
  		next = pgd_addr_end(addr, end);
--		if (!create && pgd_none_or_clear_bad(pgd))
-+		if (pgd_none(*pgd) && !create)
- 			continue;
--		err = apply_to_p4d_range(mm, pgd, addr, next, fn, data, create, &mask);
-+		if (WARN_ON_ONCE(pgd_leaf(*pgd)))
-+			return -EINVAL;
-+		if (!pgd_none(*pgd) && WARN_ON_ONCE(pgd_bad(*pgd))) {
-+			if (!create)
-+				continue;
-+			pgd_clear_bad(pgd);
-+		}
-+		err = apply_to_p4d_range(mm, pgd, addr, next,
-+					 fn, data, create, &mask);
+ 		if (pgd_bad(*pgd))
+ 			mask |= PGTBL_PGD_MODIFIED;
+-		err = vmap_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
++		err = vmap_pages_p4d_range(pgd, addr, next, prot, pages, &nr, &mask);
  		if (err)
- 			break;
+ 			return err;
  	} while (pgd++, addr = next, addr != end);
 -- 
 2.23.0
