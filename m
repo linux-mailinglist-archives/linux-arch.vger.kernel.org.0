@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3566D30B870
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 08:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A223F30B87D
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 08:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbhBBHLD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 02:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S229462AbhBBHOu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 02:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbhBBHKy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 02:10:54 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B30C06174A;
-        Mon,  1 Feb 2021 23:10:14 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id q5so18117980ilc.10;
-        Mon, 01 Feb 2021 23:10:14 -0800 (PST)
+        with ESMTP id S231225AbhBBHOt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 02:14:49 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83457C06174A;
+        Mon,  1 Feb 2021 23:14:09 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id q9so18141866ilo.1;
+        Mon, 01 Feb 2021 23:14:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zmSuw7wDu6a3wNmrLo/hehSg5Yx/sWDPdhwepqYWewQ=;
-        b=jmGBdch1E0RYAJSsIuQKYd/7GqQSCYar8lmsR3O4nlZjMjz/mS+iLV8WB3TN+m+4//
-         E/QWSg2+PpaAjC7/92+P85CLbqpTmNWw7vcoGWP70xKSCL4R8UzbL/2lNs826ubbqhd3
-         zdSP2Omj+LHhgyGSRJvuynEKJojEKr30uKIk0zMLIyhEhRgCeEn7Yjs6Rx4l1ym0J8Vs
-         Cg/JrdNsSE2xqxodw4sverEW1vhLEcirvkwiMGhA8f9IjOXmA0vy3/+ZC2V6R61NNszf
-         +zFE/NC7/bjaBxYYdneLUDjzPIcrKjBXXwDNA8t3hGFIosjTh+M92UxiXnf92b/kej8L
-         B3jw==
+        bh=i+rprk54pLD+tPDUDUth98iylk1i9f9VqxJ5r+zi39c=;
+        b=Th9dnnelCfdRL7BYukHCwGMUPbVimhNiEEJWsLCr8Q13rAkjxz5K8GqnB1qapqAkGU
+         nj06n8frT81N36DIcD858nXiNFRgYM+yIctWtBQ5Fxslvi9RLKfvd+6tURpfxr1JSMG2
+         RtT3XmXnl7/Yiy0Gsjk4xBeGJizgyyoU2CzRdURLcv/3cfM98rngr/SxAzVIwRFPFqmM
+         taJqz+DKifH3yetB6gYAKRzkC9nVQl6gO1vlBSLkwgPPorEXoq8M6C2ZPKvQe/M8EU8Q
+         BHUjsCK6ebAba+SHxu5qrobawj+MFn/UvoyDOEE5DUR8PrY9vBGQSx73F+TRNhJESQlO
+         6U7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zmSuw7wDu6a3wNmrLo/hehSg5Yx/sWDPdhwepqYWewQ=;
-        b=g8u1LeUsiuOLHLCIXc/BlXmkFLyNLLhsNFciRzWtHQFFxCTuKSt2xZkKRqlnQVkxdL
-         TidIPU0XhL9hjWpoiw9eQTMsKccVtU+WqguemGLPD0oLsiVkORh8Sd5OtztVKIkw4ngM
-         cEGed8/Q+ywNR3Xoh8p3zUYAiitrKLijjw6i6BnlBXl8uOCR6/62eeaiL99RMNMuNbUu
-         HPg+B0vY/5VwdlHn7pp9Oxx3EXaNpQ4ixjwkNYndbxtc5sN5wIBYQ7V1QxziRRBrY79i
-         Ks9L61UzVDrs4V7gn/XGCC9hqXhTwCUXBxxngZcI8Nf+HMKcuwKMccJgj5J1zczv7VHx
-         Un2g==
-X-Gm-Message-State: AOAM533cepLw0kKpmpzzBeRmI92gpVBd9KgKxJtoClo4X3kSfSYYTybP
-        3o8rhrJ2nf6cO2EVdJiJl05CuUxX89ens9hodZHNtpVI/ltFuQ==
-X-Google-Smtp-Source: ABdhPJz2VpiyzoIfttXg9MvJMNS9zPgO0x9UhiGqOhJ/5rolRWPoNgq4omjMpEyBcebchyReWcuBEdIM+H1hVrBgozA=
-X-Received: by 2002:a05:6e02:cb:: with SMTP id r11mr17996768ilq.116.1612249813762;
- Mon, 01 Feb 2021 23:10:13 -0800 (PST)
+        bh=i+rprk54pLD+tPDUDUth98iylk1i9f9VqxJ5r+zi39c=;
+        b=LLXEMbiBPukveOhcuz98FRFjz0enaSK+l0m8IAAyQk75xfAXJEmjfQcM6ttvYYp2C3
+         cPIQKSUUuXz3BIJlwa2yTWzOZqYQ/sUyXPA1FHuvUM6Tz7ShUMD2Unfp8wB071fldE9f
+         YRoXiHxnjCGE/kg/VETOrcFOR1+w3j9gf4lN4FB//fcb/PLmlE6E4NFNAkw0wz8U9vFs
+         7VGT8Q2vC+nH5UYG7QMYvi3Uv/T8ZhW4VqL/VTSRQzMrnYaH77Q7vbbHgQHpnBiUiW1G
+         APRxWwUVX4adOUcGAIxNxlNaPyXhH6VWHv1lKYtMEY+m9oq7Seshpz6oPzWiQ6QiRT/D
+         S9Yg==
+X-Gm-Message-State: AOAM533synBw8ilcVNhJmphY170RprQNL/2TlctokpJxxKukoxoKJ9xS
+        vQ/s0XDOCQjTBBEj+tGr3aV0coDkaK948nWAsTI=
+X-Google-Smtp-Source: ABdhPJzBBRVeY2XvzS/PhDUkTY1NGKiWnEwaAxpWkPAguR8twjHyytuvNS0+zU7r9F0yqCcsul4GAOM+Mru+mdzQGQc=
+X-Received: by 2002:a92:3646:: with SMTP id d6mr16601311ilf.170.1612250048847;
+ Mon, 01 Feb 2021 23:14:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20210130191719.7085-1-yury.norov@gmail.com> <20210130191719.7085-6-yury.norov@gmail.com>
- <YBgF3RYQ5F6xmpj8@smile.fi.intel.com>
-In-Reply-To: <YBgF3RYQ5F6xmpj8@smile.fi.intel.com>
+References: <20210130191719.7085-1-yury.norov@gmail.com> <20210130191719.7085-7-yury.norov@gmail.com>
+ <YBgGf8y/K0da5MWz@smile.fi.intel.com>
+In-Reply-To: <YBgGf8y/K0da5MWz@smile.fi.intel.com>
 From:   Yury Norov <yury.norov@gmail.com>
-Date:   Mon, 1 Feb 2021 23:10:02 -0800
-Message-ID: <CAAH8bW8VP+gjY7+nu6aAXOOTtZqrb1ForPJUBNMYW-_JFdX9-w@mail.gmail.com>
-Subject: Re: [PATCH 5/8] bitsperlong.h: introduce SMALL_CONST() macro
+Date:   Mon, 1 Feb 2021 23:13:58 -0800
+Message-ID: <CAAH8bW-rOejgtYFpHQMA-M7MnpPT-8XAZtNOqMMYYxFo7xX8mw@mail.gmail.com>
+Subject: Re: [PATCH 6/8] lib: inline _find_next_bit() wrappers
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -74,30 +74,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 1, 2021 at 5:45 AM Andy Shevchenko
+On Mon, Feb 1, 2021 at 5:47 AM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Sat, Jan 30, 2021 at 11:17:16AM -0800, Yury Norov wrote:
-> > Many algorithms become simpler if they are passed with relatively small
-> > input values. One example is bitmap operations when the whole bitmap fits
-> > into one word. To implement such simplifications, linux/bitmap.h declares
-> > small_const_nbits() macro.
-> >
-> > Other subsystems may also benefit from optimizations of this sort, like
-> > find_bit API in the following patches. So it looks helpful to generalize
-> > the macro and extend it's visibility.
+> On Sat, Jan 30, 2021 at 11:17:17AM -0800, Yury Norov wrote:
+> > lib/find_bit.c declares five single-line wrappers for _find_next_bit().
+> > We may turn those wrappers to inline functions. It eliminates unneeded
+> > function calls and opens room for compile-time optimizations.
 >
-> Hmm... Are we really good to allow 0 as a parameter to it? I remember we had
-> a thread at some point where Rasmus explained why 0 is excluded.
+> >  tools/include/asm-generic/bitops/find.h | 27 +++++++++---
+> >  tools/lib/find_bit.c                    | 52 ++++++++++-------------
+>
+> In a separated patch, please. I don't think we need to defer this series in
+> case if tools lagged (which is usual case in my practice).
 
-Now we pass (nbits - 1) instead of nbits, which is ULONG_MAX in case
-of nbits == 0
+Splitting it to kernel and tools parts means either a patch bomb for tools or
+doubling the size of the series. Both options look worse than what we have now.
 
-> > --- a/tools/include/asm-generic/bitsperlong.h
-> > +++ b/tools/include/asm-generic/bitsperlong.h
->
-> Tools part in a separate patch?
->
+Can you explain more on the lagged tools argument?
+
 > --
 > With Best Regards,
 > Andy Shevchenko
