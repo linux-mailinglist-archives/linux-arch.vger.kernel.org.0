@@ -2,168 +2,216 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5B730BB25
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 10:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753E330BBFD
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 11:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbhBBJhX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 04:37:23 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56880 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233019AbhBBJfy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 2 Feb 2021 04:35:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612258506; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q54UyAniLH3WTtqS2/eEFFAOsABqgVttGqq1oJHHl3o=;
-        b=pwRKjSfmAAUl4rpfKIVMY6cCCIH0A1qOnaV8W5VBLKM6omzrGDOVmq/p9akJdMt/mFgkO8
-        V2tc8GFVYU80SWASGLlyhGF0EaS9YLNXv/f0XhQU0L4onN+4ztKCsUfGmCzaoW6V54AWau
-        ShSpuMgXIb5koikt2IimucJXrn9ZlD0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9998AB171;
-        Tue,  2 Feb 2021 09:35:06 +0000 (UTC)
-Date:   Tue, 2 Feb 2021 10:35:05 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <YBkcyQsky2scjEcP@dhcp22.suse.cz>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
- <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz>
- <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
- <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
- <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
- <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+        id S229889AbhBBKXX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 05:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229767AbhBBKXW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 05:23:22 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286EEC061573;
+        Tue,  2 Feb 2021 02:22:42 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id e9so2083405pjj.0;
+        Tue, 02 Feb 2021 02:22:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=feNMs9NZIZZBFRuPZuPQAraD1ls2HBTzJnPTDra1dJo=;
+        b=Hsn610B9baMjUo1dtjNGVVl0OMIYTZTIqhnRX3zMn7zT8usqwHFf51r2OfflOoiC0c
+         19XwAcKChgc/bO3PHxkM0Sszy87AP165fkRjy9N9U5+kYTBBFGNrGeeMkAHUGleudAgh
+         54LrQGzm/wtP2C3shypmgkoFHl1Peul+jfBAvSV9vdz+0Ah0FzSZ9hGANzqMRm4IDNhC
+         Y7lLxrRQxpvh1/LVTxLwGEhvGLkM1b/wWBUPLvVlX8QBHq2pAhmDzzDPLIphrrd6Bljg
+         aGFaAJHE9uUfySvC5HASZYUAGc4IyII5YQS6M975rZTgLCb/ciN2JNJi3IlkvM8ZJeVN
+         A/qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=feNMs9NZIZZBFRuPZuPQAraD1ls2HBTzJnPTDra1dJo=;
+        b=QwwS/BmUvbj10aDzr4f9C+P1HsHkSuGgHUK1EhZZhG1IQJZPjtxPm9+NeeCjyrdyUa
+         J6dAuZLlOawcKD6JRcdH1pM96JkQC3HNUA2QBwjbVAbHN4eF/ahOs0TT7cggV4043gn/
+         9oXaR6JIJFQ0MjG0RTeEskVUdTzNhaj43fQ8YqAB89Ndl68EjEzhp5s3yDurcdOBBg+s
+         JPRhkwvnxf0c+oEAGal9/A8BGYy9hJbV5eD70+qmwvneFu2Moo4j25Upf1Mgh2+8ozcZ
+         ONJ3Ilawn3SBXAvxMR4Ah+2183AJ8EjOz8EVsUkr3NzjFlbpMEoATFE1/8wGYe9lA8n3
+         Vh0A==
+X-Gm-Message-State: AOAM533/w+Z91gKsqPI5tOgmySmkpNJfbN63+PZkKdc1ay6BZ3CPaqbr
+        bawXfads9nP4jU8FMRzWSb8=
+X-Google-Smtp-Source: ABdhPJwAydycRDrEu05vCkvnwXNns+f1xdrkCkAXHMftwOd5L2+xxwr6QxnPETGvBPuRovul4hnQfw==
+X-Received: by 2002:a17:90a:aa85:: with SMTP id l5mr3754761pjq.230.1612261361659;
+        Tue, 02 Feb 2021 02:22:41 -0800 (PST)
+Received: from localhost (60-242-11-44.static.tpgi.com.au. [60.242.11.44])
+        by smtp.gmail.com with ESMTPSA id o10sm21105273pfp.87.2021.02.02.02.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Feb 2021 02:22:40 -0800 (PST)
+Date:   Tue, 02 Feb 2021 20:22:35 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v11 01/13] mm/vmalloc: fix HUGE_VMAP regression by
+ enabling huge pages in vmalloc_to_page
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Ding Tianhong <dingtianhong@huawei.com>, linux-mm@kvack.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <20210126044510.2491820-1-npiggin@gmail.com>
+        <20210126044510.2491820-2-npiggin@gmail.com>
+        <2dcbe2c9-c968-4895-fc43-c40dfe9f06d3@huawei.com>
+In-Reply-To: <2dcbe2c9-c968-4895-fc43-c40dfe9f06d3@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+Message-Id: <1612261080.2gjaa5ecdf.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon 01-02-21 08:56:19, James Bottomley wrote:
-> On Fri, 2021-01-29 at 09:23 +0100, Michal Hocko wrote:
-> > On Thu 28-01-21 13:05:02, James Bottomley wrote:
-> > > Obviously the API choice could be revisited
-> > > but do you have anything to add over the previous discussion, or is
-> > > this just to get your access control?
-> > 
-> > Well, access control is certainly one thing which I still believe is
-> > missing. But if there is a general agreement that the direct map
-> > manipulation is not that critical then this will become much less of
-> > a problem of course.
-> 
-> The secret memory is a scarce resource but it's not a facility that
-> should only be available to some users.
+Excerpts from Ding Tianhong's message of January 28, 2021 1:13 pm:
+> On 2021/1/26 12:44, Nicholas Piggin wrote:
+>> vmalloc_to_page returns NULL for addresses mapped by larger pages[*].
+>> Whether or not a vmap is huge depends on the architecture details,
+>> alignments, boot options, etc., which the caller can not be expected
+>> to know. Therefore HUGE_VMAP is a regression for vmalloc_to_page.
+>>=20
+>> This change teaches vmalloc_to_page about larger pages, and returns
+>> the struct page that corresponds to the offset within the large page.
+>> This makes the API agnostic to mapping implementation details.
+>>=20
+>> [*] As explained by commit 029c54b095995 ("mm/vmalloc.c: huge-vmap:
+>>     fail gracefully on unexpected huge vmap mappings")
+>>=20
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+>> ---
+>>  mm/vmalloc.c | 41 ++++++++++++++++++++++++++---------------
+>>  1 file changed, 26 insertions(+), 15 deletions(-)
+>>=20
+>> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+>> index e6f352bf0498..62372f9e0167 100644
+>> --- a/mm/vmalloc.c
+>> +++ b/mm/vmalloc.c
+>> @@ -34,7 +34,7 @@
+>>  #include <linux/bitops.h>
+>>  #include <linux/rbtree_augmented.h>
+>>  #include <linux/overflow.h>
+>> -
+>> +#include <linux/pgtable.h>
+>>  #include <linux/uaccess.h>
+>>  #include <asm/tlbflush.h>
+>>  #include <asm/shmparam.h>
+>> @@ -343,7 +343,9 @@ int is_vmalloc_or_module_addr(const void *x)
+>>  }
+>> =20
+>>  /*
+>> - * Walk a vmap address to the struct page it maps.
+>> + * Walk a vmap address to the struct page it maps. Huge vmap mappings w=
+ill
+>> + * return the tail page that corresponds to the base page address, whic=
+h
+>> + * matches small vmap mappings.
+>>   */
+>>  struct page *vmalloc_to_page(const void *vmalloc_addr)
+>>  {
+>> @@ -363,25 +365,33 @@ struct page *vmalloc_to_page(const void *vmalloc_a=
+ddr)
+>> =20
+>>  	if (pgd_none(*pgd))
+>>  		return NULL;
+>> +	if (WARN_ON_ONCE(pgd_leaf(*pgd)))
+>> +		return NULL; /* XXX: no allowance for huge pgd */
+>> +	if (WARN_ON_ONCE(pgd_bad(*pgd)))
+>> +		return NULL;
+>> +
+>>  	p4d =3D p4d_offset(pgd, addr);
+>>  	if (p4d_none(*p4d))
+>>  		return NULL;
+>> -	pud =3D pud_offset(p4d, addr);
+>> +	if (p4d_leaf(*p4d))
+>> +		return p4d_page(*p4d) + ((addr & ~P4D_MASK) >> PAGE_SHIFT);
+>> +	if (WARN_ON_ONCE(p4d_bad(*p4d)))
+>> +		return NULL;
+>> =20
+>> -	/*
+>> -	 * Don't dereference bad PUD or PMD (below) entries. This will also
+>> -	 * identify huge mappings, which we may encounter on architectures
+>> -	 * that define CONFIG_HAVE_ARCH_HUGE_VMAP=3Dy. Such regions will be
+>> -	 * identified as vmalloc addresses by is_vmalloc_addr(), but are
+>> -	 * not [unambiguously] associated with a struct page, so there is
+>> -	 * no correct value to return for them.
+>> -	 */
+>> -	WARN_ON_ONCE(pud_bad(*pud));
+>> -	if (pud_none(*pud) || pud_bad(*pud))
+>> +	pud =3D pud_offset(p4d, addr);
+>> +	if (pud_none(*pud))
+>> +		return NULL;
+>> +	if (pud_leaf(*pud))
+>> +		return pud_page(*pud) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+>=20
+> Hi Nicho:
+>=20
+> /builds/1mzfdQzleCy69KZFb5qHNSEgabZ/mm/vmalloc.c: In function 'vmalloc_to=
+_page':
+> /builds/1mzfdQzleCy69KZFb5qHNSEgabZ/include/asm-generic/pgtable-nop4d-hac=
+k.h:48:27: error: implicit declaration of function 'pud_page'; did you mean=
+ 'put_page'? [-Werror=3Dimplicit-function-declaration]
+>    48 | #define pgd_page(pgd)    (pud_page((pud_t){ pgd }))
+>       |                           ^~~~~~~~
+>=20
+> the pug_page is not defined for aarch32 when enabling 2-level page config=
+, it break the system building.
 
-How those two objectives go along? Or maybe our understanding of what
-scrace really means here. If the pool of the secret memory is very limited
-then you really need a way to stop one party from depriving others. More
-on that below.
+Hey thanks for finding that, not sure why that didn't trigger any CI.
 
-> > It all boils down whether secret memory is a scarce resource. With
-> > the existing implementation it really is. It is effectivelly
-> > repeating same design errors as hugetlb did. And look now, we have a
-> > subtle and convoluted reservation code to track mmap requests and we
-> > have a cgroup controller to, guess what, have at least some control
-> > over distribution if the preallocated pool. See where am I coming
-> > from?
-> 
-> I'm fairly sure rlimit is the correct way to control this.  The
-> subtlety in both rlimit and memcg tracking comes from deciding to
-> account under an existing category rather than having our own new one. 
-> People don't like new stuff in accounting because it requires
-> modifications to everything in userspace.  Accounting under and
-> existing limit keeps userspace the same but leads to endless arguments
-> about which limit it should be under.  It took us several patch set
-> iterations to get to a fragile consensus on this which you're now
-> disrupting for reasons you're not making clear.
+Anyway newer kernels don't have the ptable-*-hack.h headers, but even so=20
+it still breaks upstream. arm is using some hand-rolled 2-level folding
+of its own (which is fair enough because most 32-bit archs were 2 level
+at the time I added pgtable-nopud.h header).
 
-I hoped I had made my points really clear. The existing scheme allows
-one users (potentially adversary) to deplete the preallocated pool
-and cause a shitstorm of OOM killer because there is no real way to
-replenish the pool from the oom killer other than randomly keep killing
-tasks until one happens to release its secret memory back to the
-pool. Is that more clear now?
+This patch seems to at least make it build.
 
-And no, rlimit and memcg limit will not save you from that because the
-former is per process and later is hard to manage under a single limit
-which might be order of magnitude larger than the secret memory pool
-size. See the point?
+Thanks,
+Nick
 
-I have also proposed potential ways out of this. Either the pool is not
-fixed sized and you make it a regular unevictable memory (if direct map
-fragmentation is not considered a major problem) or you need a careful
-access control or you need SIGBUS on the mmap failure (to allow at least
-some fallback mode to caller).
+---
+ arch/arm/include/asm/pgtable-3level.h | 2 --
+ arch/arm/include/asm/pgtable.h        | 3 +++
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-I do not see any other way around it. I might be missing some other
-ways but so far I keep hearing that the existing scheme is just fine
-because this has been discussed in the past and you have agreed it is
-ok. Without any specifics...
+diff --git a/arch/arm/include/asm/pgtable-3level.h b/arch/arm/include/asm/p=
+gtable-3level.h
+index 2b85d175e999..d4edab51a77c 100644
+--- a/arch/arm/include/asm/pgtable-3level.h
++++ b/arch/arm/include/asm/pgtable-3level.h
+@@ -186,8 +186,6 @@ static inline pte_t pte_mkspecial(pte_t pte)
+=20
+ #define pmd_write(pmd)		(pmd_isclear((pmd), L_PMD_SECT_RDONLY))
+ #define pmd_dirty(pmd)		(pmd_isset((pmd), L_PMD_SECT_DIRTY))
+-#define pud_page(pud)		pmd_page(__pmd(pud_val(pud)))
+-#define pud_write(pud)		pmd_write(__pmd(pud_val(pud)))
+=20
+ #define pmd_hugewillfault(pmd)	(!pmd_young(pmd) || !pmd_write(pmd))
+ #define pmd_thp_or_huge(pmd)	(pmd_huge(pmd) || pmd_trans_huge(pmd))
+diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.=
+h
+index c02f24400369..d63a5bb6bd0c 100644
+--- a/arch/arm/include/asm/pgtable.h
++++ b/arch/arm/include/asm/pgtable.h
+@@ -166,6 +166,9 @@ extern struct page *empty_zero_page;
+=20
+ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
+=20
++#define pud_page(pud)		pmd_page(__pmd(pud_val(pud)))
++#define pud_write(pud)		pmd_write(__pmd(pud_val(pud)))
++
+ #define pmd_none(pmd)		(!pmd_val(pmd))
+=20
+ static inline pte_t *pmd_page_vaddr(pmd_t pmd)
+--=20
+2.23.0
 
-Please keep in mind this is a user interface and it is due to careful
-scrutiny. So rather than pushing back with "you are disrupting a
-consensus" kinda feedback, please try to stay technical.
-
-> > If the secret memory is more in line with mlock without any imposed
-> > limit (other than available memory) in the end then, sure, using the
-> > same access control as mlock sounds reasonable. Btw. if this is
-> > really just a more restrictive mlock then is there any reason to not
-> > hook this into the existing mlock infrastructure (e.g.
-> > MCL_EXCLUSIVE)? Implications would be that direct map would be
-> > handled on instantiation/tear down paths, migration would deal with
-> > the same (if possible). Other than that it would be mlock like.
-> 
-> In the very first patch set we proposed a mmap flag to do this.  Under
-> detailed probing it emerged that this suffers from several design
-> problems: the KVM people want VMM to be able to remove the secret
-> memory range from the process; there may be situations where sharing is
-> useful and some people want to be able to seal the operations.  All of
-> this ended up convincing everyone that a file descriptor based approach
-> was better than a mmap one.
-
-OK, fair enough. This belongs to the changelog IMHO. It is good to know
-why existing interfaces do not match the need.
--- 
-Michal Hocko
-SUSE Labs
