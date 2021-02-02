@@ -2,432 +2,238 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E079E30C56A
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 17:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A117830C5C7
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 17:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbhBBQWT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 11:22:19 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]:39412 "EHLO
-        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236216AbhBBQUO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 11:20:14 -0500
-Received: by mail-wr1-f50.google.com with SMTP id a1so21107387wrq.6;
-        Tue, 02 Feb 2021 08:19:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JrLCgdivBEVmDMdcQ1NaQdm7/SMoJr7CgaCLRpH7NnQ=;
-        b=Nt2aiiTn+h/wvPtrZyaNastl1dz3lkHfJvWm4EYOKtnL+0ky2gQK/VSAz4VFe3EXfp
-         tH3Eh8OZzDh4WK/sPEZ8W+dBMZpkks31uM2LyOd4P/w5zzYbkp8afdGgJSs4ZaYrCtpS
-         f5OHXxtDg45pz/n8B0tKJ6XMnuEmFTlMewnjgbJDEp9qYzBb48ps4Af9N1wh7Mg2LcwE
-         J6GQOSta4mmqHVgiA6ifU7P9qPhGBXDOY681ESk2NA0RaoiJ52VVmO5bT9wL9IxAnPcD
-         ZOGahEvGpC/BWZfnR5OESEnTjxKcpRfdHVO1Kn69/Bta1ewvd3yeJ0hX3Hv6XwLSsbVU
-         bG9Q==
-X-Gm-Message-State: AOAM5312zKnJlFKiCaLNapplSQt9rDKOnQWef8/g5hfW+8KW4HC2f7RH
-        H5bKcpvNWYK+OAJeZexLaL8=
-X-Google-Smtp-Source: ABdhPJy7iW6ZS9n503ZkvhBbOnNym4MUcukxoE0RKb3+SODK4A9ORJxzgS7DaLSL70IouwQL/uFSCg==
-X-Received: by 2002:adf:d0d2:: with SMTP id z18mr25511772wrh.70.1612282769948;
-        Tue, 02 Feb 2021 08:19:29 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id t197sm4640600wmt.3.2021.02.02.08.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Feb 2021 08:19:29 -0800 (PST)
-Date:   Tue, 2 Feb 2021 16:19:28 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>,
-        Lillian Grassin-Drake <Lillian.GrassinDrake@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v5 09/16] x86/hyperv: provide a bunch of helper functions
-Message-ID: <20210202161928.vqth7u7ohpk6mykc@liuwe-devbox-debian-v2>
-References: <20210120120058.29138-1-wei.liu@kernel.org>
- <20210120120058.29138-10-wei.liu@kernel.org>
- <MWHPR21MB159390266F2172D12FEBBDD8D7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
+        id S236534AbhBBQac (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 11:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236411AbhBBQ2a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 11:28:30 -0500
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C347BC06174A;
+        Tue,  2 Feb 2021 08:27:16 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DVVZq07znzMqBHG;
+        Tue,  2 Feb 2021 17:27:15 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4DVVZn4SWnzlh8TH;
+        Tue,  2 Feb 2021 17:27:13 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v28 00/12] Landlock LSM
+Date:   Tue,  2 Feb 2021 17:26:58 +0100
+Message-Id: <20210202162710.657398-1-mic@digikod.net>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR21MB159390266F2172D12FEBBDD8D7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 01:20:36AM +0000, Michael Kelley wrote:
-> From: Wei Liu <wei.liu@kernel.org> Sent: Wednesday, January 20, 2021 4:01 AM
-[...]
-> > +#include <asm/trace/hyperv.h>
-> > +
-> > +#define HV_DEPOSIT_MAX_ORDER (8)
-> > +#define HV_DEPOSIT_MAX (1 << HV_DEPOSIT_MAX_ORDER)
-> 
-> Is there any reason to not let the maximum be 511, which is
-> how many entries will fit on the hypercall input page?  The
-> max could be define in terms of HY_HYP_PAGE_SIZE so that
-> the logical dependency is fully expressed.  
+Hi,
 
-Let me try changing this. This file is largely authored by Lilian and
-Nuno. I don't see a particular reason why the value can't be larger.
+This patch series fixes a corner-case with non-overlapping access rights
+coming from different layers.  This is now handled in a generic way and
+verified with new tests.  A stricter check is enforced for
+landlock_add_rule(2) to forbid useless rules.  Finally, the previous
+landlock_enforce_ruleset_self(2) is renamed to
+landlock_restrict_self(2), which is more consistent.
 
-I've updated the value to the following.
+The SLOC count is 1314 for security/landlock/ and 2484 for
+tools/testing/selftest/landlock/ .  Test coverage for security/landlock/
+is 94.7% of lines.  The code not covered only deals with internal kernel
+errors (e.g. memory allocation) and race conditions.  This series is
+being fuzzed by syzkaller, and patches are on their way:
+https://github.com/google/syzkaller/pull/2380
 
-/*
- * See struct hv_deposit_memory. The first u64 is partition ID, the rest
- * are GPAs.
- */
-#define HV_DEPOSIT_MAX (HV_HYP_PAGE_SIZE / sizeof(u64) - 1)
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v28/userspace-api/landlock.html
 
-Let's see how that goes. I will test it once I fix other places.
+This series can be applied on top of v5.11-rc6 .  This can be tested
+with CONFIG_SECURITY_LANDLOCK, CONFIG_SAMPLE_LANDLOCK and by prepending
+"landlock," to CONFIG_LSM.  This patch series can be found in a Git
+repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v28
+This patch series seems ready for upstream and I would really appreciate
+final reviews.
 
-> 
-> > +
-> > +/*
-> > + * Deposits exact number of pages
-> > + * Must be called with interrupts enabled
-> > + * Max 256 pages
-> > + */
-> > +int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
-> > +{
-> > +	struct page **pages;
-> > +	int *counts;
-> > +	int num_allocations;
-> > +	int i, j, page_count;
-> > +	int order;
-> > +	int desired_order;
-> > +	u16 status;
-> > +	int ret;
-> > +	u64 base_pfn;
-> > +	struct hv_deposit_memory *input_page;
-> > +	unsigned long flags;
-> > +
-> > +	if (num_pages > HV_DEPOSIT_MAX)
-> > +		return -E2BIG;
-> > +	if (!num_pages)
-> > +		return 0;
-> > +
-> > +	/* One buffer for page pointers and counts */
-> > +	pages = page_address(alloc_page(GFP_KERNEL));
-> > +	if (!pages)
-> 
-> Does the above check work?  If alloc_pages() returns NULL, it looks like
-> page_address() might fault.
-> 
 
-Good catch. Fixed.
+# Landlock LSM
 
-> > +		return -ENOMEM;
-> > +
-> > +	counts = kcalloc(HV_DEPOSIT_MAX, sizeof(int), GFP_KERNEL);
-> > +	if (!counts) {
-> > +		free_page((unsigned long)pages);
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	/* Allocate all the pages before disabling interrupts */
-> > +	num_allocations = 0;
-> > +	i = 0;
-> > +	order = HV_DEPOSIT_MAX_ORDER;
-> > +
-> > +	while (num_pages) {
-> > +		/* Find highest order we can actually allocate */
-> > +		desired_order = 31 - __builtin_clz(num_pages);
-> > +		order = min(desired_order, order);
-> 
-> The above seems redundant since request sizes larger than the
-> max have already been rejected.
-> 
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [1], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
 
-min(...) can be dropped.
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
 
-> > +		do {
-> > +			pages[i] = alloc_pages_node(node, GFP_KERNEL, order);
-> > +			if (!pages[i]) {
-> > +				if (!order) {
-> > +					ret = -ENOMEM;
-> > +					goto err_free_allocations;
-> > +				}
-> > +				--order;
-> > +			}
-> > +		} while (!pages[i]);
-> 
-> The duplicative test of !pages[i] is somewhat annoying.  How about
-> this:
-> 
-> 		while{!pages[i] = alloc_pages_node(node, GFP_KERNEL, order) {
-> 			if (!order) {
-> 				ret = -ENOMEM;
-> 				goto err_free_allocations;
-> 			}
-> 			--order;
-> 		}
-> 
-> or if you don't like doing an assignment in the while test:
-> 
-> 		while(1) {
-> 			pages[i] = alloc_pages_node(node, GFP_KERNEL, order);
-> 			if (page[i])
-> 				break;
-> 			if (!order) {
-> 				ret = -ENOMEM;
-> 				goto err_free_allocations;
-> 			}
-> 			--order;
-> 		}
-> 
+In this current form, Landlock misses some access-control features.
+This enables to minimize this patch series and ease review.  This series
+still addresses multiple use cases, especially with the combined use of
+seccomp-bpf: applications with built-in sandboxing, init systems,
+security sandbox tools and security-oriented APIs [2].
 
-I will use this variant.
+Previous version:
+https://lore.kernel.org/lkml/20210121205119.793296-1-mic@digikod.net/
 
-> > +
-> > +		split_page(pages[i], order);
-> > +		counts[i] = 1 << order;
-> > +		num_pages -= counts[i];
-> > +		i++;
-> > +		num_allocations++;
-> 
-> Incrementing both I and num_allocations in the loop seems
-> redundant, especially since num_allocations isn't used in the loop.
-> Could num_allocations be assigned the value of i once the loop
-> is exited?  (and num_allocations would not need to be initialized to 0.) 
-> Would also have to do the assignment in the error case.
-> 
+[1] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+[2] https://lore.kernel.org/lkml/f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net/
 
-Yes. That can be done.
 
-> > +	}
-> > +
-> > +	local_irq_save(flags);
-> > +
-> > +	input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +
-> > +	input_page->partition_id = partition_id;
-> > +
-> > +	/* Populate gpa_page_list - these will fit on the input page */
-> > +	for (i = 0, page_count = 0; i < num_allocations; ++i) {
-> > +		base_pfn = page_to_pfn(pages[i]);
-> > +		for (j = 0; j < counts[i]; ++j, ++page_count)
-> > +			input_page->gpa_page_list[page_count] = base_pfn + j;
-> > +	}
-> > +	status = hv_do_rep_hypercall(HVCALL_DEPOSIT_MEMORY,
-> > +				     page_count, 0, input_page,
-> > +				     NULL) & HV_HYPERCALL_RESULT_MASK;
-> 
-> Similar comment about how hypercall status is checked.
-> 
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
 
-Fixed.
+Mickaël Salaün (11):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementations
+  arch: Wire up Landlock syscalls
+  selftests/landlock: Add user space tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
 
-> > +	local_irq_restore(flags);
-> > +
-> > +	if (status != HV_STATUS_SUCCESS) {
-> > +		pr_err("Failed to deposit pages: %d\n", status);
-> > +		ret = status;
-> > +		goto err_free_allocations;
-> > +	}
-> > +
-> > +	ret = 0;
-> > +	goto free_buf;
-> > +
-> > +err_free_allocations:
-> > +	for (i = 0; i < num_allocations; ++i) {
-> > +		base_pfn = page_to_pfn(pages[i]);
-> > +		for (j = 0; j < counts[i]; ++j)
-> > +			__free_page(pfn_to_page(base_pfn + j));
-> > +	}
-> > +
-> > +free_buf:
-> > +	free_page((unsigned long)pages);
-> > +	kfree(counts);
-> > +	return ret;
-> > +}
-> > +
-> > +int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
-> > +{
-> > +	struct hv_add_logical_processor_in *input;
-> > +	struct hv_add_logical_processor_out *output;
-> > +	int status;
-> > +	unsigned long flags;
-> > +	int ret = 0;
-> > +#ifdef CONFIG_ACPI_NUMA
-> > +	int pxm = node_to_pxm(node);
-> > +#else
-> > +	int pxm = 0;
-> > +#endif
-> 
-> It seems like the above #ifdef'ery might be better fixed in
-> include/acpi/acpi_numa.h, where there's already a null definition
-> of pxm_to_node() in case CONFIG_ACPI_NUMA isn't defined.  There
-> should also be a null definition of node_to_pxm() in that file.
-> 
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock.rst           |   79 +
+ Documentation/userspace-api/index.rst         |    1 +
+ Documentation/userspace-api/landlock.rst      |  307 ++
+ MAINTAINERS                                   |   15 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    3 +
+ arch/arm/tools/syscall.tbl                    |    3 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    3 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    3 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    3 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    7 +
+ include/uapi/asm-generic/unistd.h             |    8 +-
+ include/uapi/linux/landlock.h                 |  128 +
+ kernel/sys_ni.c                               |    5 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   13 +
+ samples/landlock/sandboxer.c                  |  238 ++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   21 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  627 ++++
+ security/landlock/fs.h                        |   56 +
+ security/landlock/limits.h                    |   21 +
+ security/landlock/object.c                    |   67 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 +
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  473 +++
+ security/landlock/ruleset.h                   |  165 +
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscalls.c                  |  444 +++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   24 +
+ tools/testing/selftests/landlock/base_test.c  |  219 ++
+ tools/testing/selftests/landlock/common.h     |  169 ++
+ tools/testing/selftests/landlock/config       |    6 +
+ tools/testing/selftests/landlock/fs_test.c    | 2664 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  314 ++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 72 files changed, 6668 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock.rst
+ create mode 100644 Documentation/userspace-api/landlock.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/limits.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscalls.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
 
-Sure.
 
-> > +
-> > +	/*
-> > +	 * When adding a logical processor, the hypervisor may return
-> > +	 * HV_STATUS_INSUFFICIENT_MEMORY. When that happens, we deposit more
-> > +	 * pages and retry.
-> > +	 */
-> > +	do {
-> > +		local_irq_save(flags);
-> > +
-> > +		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +		/* We don't do anything with the output right now */
-> > +		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-> > +
-> > +		input->lp_index = lp_index;
-> > +		input->apic_id = apic_id;
-> > +		input->flags = 0;
-> > +		input->proximity_domain_info.domain_id = pxm;
-> > +		input->proximity_domain_info.flags.reserved = 0;
-> > +		input->proximity_domain_info.flags.proximity_info_valid = 1;
-> > +		input->proximity_domain_info.flags.proximity_preferred = 1;
-> > +		status = hv_do_hypercall(HVCALL_ADD_LOGICAL_PROCESSOR,
-> > +					 input, output);
-> > +		local_irq_restore(flags);
-> > +
-> > +		if (status != HV_STATUS_INSUFFICIENT_MEMORY) {
-> 
-> The 'and' with HV_HYPERCALL_RESULT_MASK isn't coded anywhere for this
-> hypercall, and 'status' is declared as 'int'.
-> 
+base-commit: 1048ba83fb1c00cd24172e23e8263972f6b5d9ac
+-- 
+2.30.0
 
-Fixed.
-
-> > +			if (status != HV_STATUS_SUCCESS) {
-> > +				pr_err("%s: cpu %u apic ID %u, %d\n", __func__,
-> > +				       lp_index, apic_id, status);
-> > +				ret = status;
-> > +			}
-> > +			break;
-> > +		}
-> > +		ret = hv_call_deposit_pages(node, hv_current_partition_id, 1);
-> > +	} while (!ret);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
-> > +{
-> > +	struct hv_create_vp *input;
-> > +	u16 status;
-> > +	unsigned long irq_flags;
-> > +	int ret = 0;
-> > +#ifdef CONFIG_ACPI_NUMA
-> > +	int pxm = node_to_pxm(node);
-> > +#else
-> > +	int pxm = 0;
-> > +#endif
-> 
-> Same comment.
-> 
-> > +
-> > +	/* Root VPs don't seem to need pages deposited */
-> > +	if (partition_id != hv_current_partition_id) {
-> > +		ret = hv_call_deposit_pages(node, partition_id, 90);
-> 
-> Perhaps add a comment about the value "90".  Was it
-> empirically determined?
-
-I think so. I will add a comment.
-
-> 
-> > +		if (ret)
-> > +			return ret;
-> > +	}
-> > +
-> > +	do {
-> > +		local_irq_save(irq_flags);
-> > +
-> > +		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +
-> > +		input->partition_id = partition_id;
-> > +		input->vp_index = vp_index;
-> > +		input->flags = flags;
-> > +		input->subnode_type = HvSubnodeAny;
-> > +		if (node != NUMA_NO_NODE) {
-> > +			input->proximity_domain_info.domain_id = pxm;
-> > +			input->proximity_domain_info.flags.reserved = 0;
-> > +			input->proximity_domain_info.flags.proximity_info_valid = 1;
-> > +			input->proximity_domain_info.flags.proximity_preferred = 1;
-> > +		} else {
-> > +			input->proximity_domain_info.as_uint64 = 0;
-> > +		}
-> > +		status = hv_do_hypercall(HVCALL_CREATE_VP, input, NULL);
-> > +		local_irq_restore(irq_flags);
-> > +
-> > +		if (status != HV_STATUS_INSUFFICIENT_MEMORY) {
-> 
-> Same problems with the status check.
-
-Fixed.
-
-> 
-> > +			if (status != HV_STATUS_SUCCESS) {
-> > +				pr_err("%s: vcpu %u, lp %u, %d\n", __func__,
-> > +				       vp_index, flags, status);
-> > +				ret = status;
-> > +			}
-> > +			break;
-> > +		}
-> > +		ret = hv_call_deposit_pages(node, partition_id, 1);
-> > +
-> > +	} while (!ret);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> > index 67f5d35a73d3..4e590a167160 100644
-> > --- a/arch/x86/include/asm/mshyperv.h
-> > +++ b/arch/x86/include/asm/mshyperv.h
-[...]
-> > +/* HvAddLogicalProcessor hypercall */
-> > +struct hv_add_logical_processor_in {
-> > +	u32 lp_index;
-> > +	u32 apic_id;
-> > +	union hv_proximity_domain_info proximity_domain_info;
-> > +	u64 flags;
-> > +};
-> 
-> __packed is missing from this struct definition
-> 
-
-Fixed.
-
-> > +
-> > +struct hv_add_logical_processor_out {
-> > +	struct hv_lp_startup_status startup_status;
-> > +} __packed;
-> > +
-> > +enum HV_SUBNODE_TYPE
-> > +{
-> > +    HvSubnodeAny = 0,
-> > +    HvSubnodeSocket,
-> > +    HvSubnodeAmdNode,
-> > +    HvSubnodeL3,
-> > +    HvSubnodeCount,
-> > +    HvSubnodeInvalid = -1
-> > +};
-> 
-> Are these values defined by Hyper-V?  If so, explicitly coding the
-> value of each enum member might be better.
-
-Fixed.
-
-Wei.
