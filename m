@@ -2,43 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B8D30C251
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 15:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E9630C248
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 15:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbhBBOra (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 09:47:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59513 "EHLO
+        id S234354AbhBBOqS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 09:46:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45059 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232314AbhBBOgR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 09:36:17 -0500
+        by vger.kernel.org with ESMTP id S234720AbhBBOoN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 09:44:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612276490;
+        s=mimecast20190719; t=1612276967;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DMQGIZBX3ZSdULucq6YnujqHSWIcTSgvTL7Om1Dz16I=;
-        b=HeWY0SPO9I+w5Nf+A+iM49ag+whqu8UMhO8LZco7RNs53hs/EThOp8rBytRQH6JMGBn4Un
-        /buq07FhlDMxn4pVzg2YkXjXbr6wYeFZShDsq87RQUUZbGwWmHLcd+TbLsDmI9Z/KP3efp
-        HU2dw6gqwo5QU2CSBKcBjBkmfZQCR4s=
+        bh=p9WVcjtJGSRM6w7F2m39UE8iZCliMcHMPGNuV986qrI=;
+        b=ef9GhwY3hFIcy7iOGjbtV8vjQUSaeYExmUGYz9HkArUUr/BpmRXhg8/eFsQB699Vqn571q
+        rJ9KwgVwL6IjKXOrMQso4pJphTJqTnrnhhzrid0aRiuAu/xrEQb57x6WUSD4yI/f3Flx5u
+        6fyc2MvnbewCMWlkOvwZK1V9ep1yvW8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-464-dkvrsbKJMeCl98dqyoVbLw-1; Tue, 02 Feb 2021 09:34:48 -0500
-X-MC-Unique: dkvrsbKJMeCl98dqyoVbLw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-521-8AQi4yF_NHCuVEWiuakmOQ-1; Tue, 02 Feb 2021 09:42:42 -0500
+X-MC-Unique: 8AQi4yF_NHCuVEWiuakmOQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0E886184DBF0;
-        Tue,  2 Feb 2021 14:34:44 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 46BB9184DBED;
+        Tue,  2 Feb 2021 14:42:36 +0000 (UTC)
 Received: from [10.36.114.148] (ovpn-114-148.ams2.redhat.com [10.36.114.148])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 505D15D9C6;
-        Tue,  2 Feb 2021 14:34:36 +0000 (UTC)
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 36D6560916;
+        Tue,  2 Feb 2021 14:42:28 +0000 (UTC)
+To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
@@ -48,6 +44,7 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
         Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -69,53 +66,70 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-References: <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
- <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
- <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
- <YBkcyQsky2scjEcP@dhcp22.suse.cz> <20210202124857.GN242749@kernel.org>
- <6653288a-dd02-f9de-ef6a-e8d567d71d53@redhat.com>
- <YBlUXdwV93xMIff6@dhcp22.suse.cz>
- <211f0214-1868-a5be-9428-7acfc3b73993@redhat.com>
- <YBlgCl8MQuuII22w@dhcp22.suse.cz>
- <d4fe580a-ef0e-e13f-9ee4-16fb8b6d65dd@redhat.com>
- <YBlicIupOyPF9f3D@dhcp22.suse.cz>
+References: <20210121122723.3446-1-rppt@kernel.org>
+ <20210121122723.3446-8-rppt@kernel.org> <20210126114657.GL827@dhcp22.suse.cz>
+ <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+ <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
+ <YBK1kqL7JA7NePBQ@dhcp22.suse.cz> <20210129072128.GD242749@kernel.org>
+ <YBPMg/C5Sb78gFEB@dhcp22.suse.cz>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat GmbH
-Message-ID: <95625b83-f7e2-b27a-2b99-d231338047fb@redhat.com>
-Date:   Tue, 2 Feb 2021 15:34:29 +0100
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <f1f65516-e222-6543-aeae-9a1dc9920de8@redhat.com>
+Date:   Tue, 2 Feb 2021 15:42:26 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <YBlicIupOyPF9f3D@dhcp22.suse.cz>
+In-Reply-To: <YBPMg/C5Sb78gFEB@dhcp22.suse.cz>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 02.02.21 15:32, Michal Hocko wrote:
-> On Tue 02-02-21 15:26:20, David Hildenbrand wrote:
->> On 02.02.21 15:22, Michal Hocko wrote:
->>> On Tue 02-02-21 15:12:21, David Hildenbrand wrote:
->>> [...]
->>>> I think secretmem behaves much more like longterm GUP right now
->>>> ("unmigratable", "lifetime controlled by user space", "cannot go on
->>>> CMA/ZONE_MOVABLE"). I'd either want to reasonably well control/limit it or
->>>> make it behave more like mlocked pages.
+On 29.01.21 09:51, Michal Hocko wrote:
+> On Fri 29-01-21 09:21:28, Mike Rapoport wrote:
+>> On Thu, Jan 28, 2021 at 02:01:06PM +0100, Michal Hocko wrote:
+>>> On Thu 28-01-21 11:22:59, Mike Rapoport wrote:
 >>>
->>> I thought I have already asked but I must have forgotten. Is there any
->>> actual reason why the memory is not movable? Timing attacks?
+>>>> And hugetlb pools may be also depleted by anybody by calling
+>>>> mmap(MAP_HUGETLB) and there is no any limiting knob for this, while
+>>>> secretmem has RLIMIT_MEMLOCK.
+>>>
+>>> Yes it can fail. But it would fail at the mmap time when the reservation
+>>> fails. Not during the #PF time which can be at any time.
 >>
->> I think the reason is simple: no direct map, no copying of memory.
+>> It may fail at $PF time as well:
+>>
+>> hugetlb_fault()
+>>          hugeltb_no_page()
+>>                  ...
+>>                  alloc_huge_page()
+>>                          alloc_gigantic_page()
+>>                                  cma_alloc()
+>>                                          -ENOMEM;
 > 
-> This is an implementation detail though and not something terribly hard
-> to add on top later on. I was more worried there would be really
-> fundamental reason why this is not possible. E.g. security implications.
+> I would have to double check. From what I remember cma allocator is an
+> optimization to increase chances to allocate hugetlb pages when
+> overcommiting because pages should be normally pre-allocated in the pool
+> and reserved during mmap time. But even if a hugetlb page is not pre
+> allocated then this will get propagated as SIGBUS unless that has
+> changed.
 
-I don't remember all the details. Let's see what Mike thinks regarding 
-migration (e.g., security concerns).
+It's an optimization to allocate gigantic pages dynamically later (so 
+not using memblock during boot). Not just for overcommit, but for any 
+kind of allocation.
+
+The actual allocation from cma should happen when setting nr_pages:
+
+nr_hugepages_store_common()->set_max_huge_pages()->alloc_pool_huge_page()...->alloc_gigantic_page()
+
+The path described above seems to be trying to overcommit gigantic 
+pages, something that can be expected to SIGBUS. Reservations are 
+handled via the pre-allocated pool.
 
 -- 
 Thanks,
