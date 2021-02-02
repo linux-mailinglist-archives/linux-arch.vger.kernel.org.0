@@ -2,116 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3565430B334
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 00:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7467730B4B8
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 02:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbhBAXPH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Feb 2021 18:15:07 -0500
-Received: from mga17.intel.com ([192.55.52.151]:3190 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229557AbhBAXPG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 1 Feb 2021 18:15:06 -0500
-IronPort-SDR: vvsdMPGtOstwkeFAigLeJ7e96AIiE57OEnec0WzMLYJwblskK6ZTyN+7J0Cijp1VKz6H9lCNmw
- DTJfPWhZwlWQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="160532926"
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="160532926"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 15:14:23 -0800
-IronPort-SDR: mcN+Umk6rIyo2zAXvIJpEgfqd+QGtFe5nbhUxtGgLoSo83qgAZjbrRu1ShfsfVHBBnaY7wDomI
- 5dYW9cgE5DKg==
-X-IronPort-AV: E=Sophos;i="5.79,393,1602572400"; 
-   d="scan'208";a="358783714"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.112.229]) ([10.212.112.229])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2021 15:14:21 -0800
-Subject: Re: [PATCH v18 05/25] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
- <20210127212524.10188-6-yu-cheng.yu@intel.com>
- <7793b36e-6386-3f2e-36ca-b7ca988a88c9@intel.com>
- <43f264df-2f3a-ea4c-c737-85cdc6714bd8@intel.com>
- <0a5a80c0-afc7-5f91-9e28-a300e30f1ab3@intel.com>
- <465836bd-9c80-fed9-d9af-89275ff810eb@intel.com>
- <cd8f4889-fbe4-fc0e-0686-9c9ecc4a125b@intel.com>
- <a6550292-cd99-a5e2-df7b-d43f6cc8fed0@intel.com>
- <834ac0ae-b03c-dfa0-3e91-72587226613f@intel.com>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <ea573956-a739-aef6-6073-3216eb3158c6@intel.com>
-Date:   Mon, 1 Feb 2021 15:14:20 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S230210AbhBBBdc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Feb 2021 20:33:32 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:52066 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230106AbhBBBdc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 1 Feb 2021 20:33:32 -0500
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [222.209.8.92])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax6dWvqxhg55gBAA--.961S2;
+        Tue, 02 Feb 2021 09:32:33 +0800 (CST)
+Date:   Tue, 2 Feb 2021 09:32:31 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH] MIPS: fix kernel_stack_pointer()
+Message-ID: <20210202013231.wzyb7clsu7jsze4v@ambrosehua-HP-xw6600-Workstation>
+References: <20210129043507.30488-1-huangpei@loongson.cn>
+ <20210201122352.GA8095@alpha.franken.de>
 MIME-Version: 1.0
-In-Reply-To: <834ac0ae-b03c-dfa0-3e91-72587226613f@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210201122352.GA8095@alpha.franken.de>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9Ax6dWvqxhg55gBAA--.961S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWUGryUJrWDCr47Kw17KFg_yoW8Ar4fpF
+        ZFy3Z5KFWkKryUGF9rJaySkr1ayrs8GrZ8KFW5JrW7WF9xXF1DXryxGr45Awn7Crsrta48
+        XFWaq3s8CFW7ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUOMKZDUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/1/2021 3:12 PM, Dave Hansen wrote:
-> On 2/1/21 3:05 PM, Yu, Yu-cheng wrote:
->>>>
->>>
->>> Wait a sec...  What about *THIS* series?  Will *THIS* series give us
->>> oopses when userspace blasts a new XSAVE buffer in with NT_X86_XSTATE?
->>>
->>
->> Fortunately, CET states are supervisor states.  NT_x86_XSTATE has only
->> user states.
+On Mon, Feb 01, 2021 at 01:23:52PM +0100, Thomas Bogendoerfer wrote:
+> On Fri, Jan 29, 2021 at 12:35:07PM +0800, Huang Pei wrote:
+> > MIPS always save kernel stack pointer in regs[29]
+> > 
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  arch/mips/include/asm/ptrace.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+> > index 1e76774b36dd..daf3cf244ea9 100644
+> > --- a/arch/mips/include/asm/ptrace.h
+> > +++ b/arch/mips/include/asm/ptrace.h
+> > @@ -53,7 +53,7 @@ struct pt_regs {
+> >  
+> >  static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
+> >  {
+> > -	return regs->regs[31];
+> > +	return regs->regs[29];
 > 
-> Ahhh, good point.  You did mention this in the changelog:
+> hmm, I'm still wondering where the trick is... looks like this is used
+> for uprobes, so nobody has ever used uprobes or I'm missing something.
 > 
->> Control-flow Enforcement Technology (CET) introduces these MSRs:
->>
->>      MSR_IA32_U_CET (user-mode CET settings),
->>      MSR_IA32_PL3_SSP (user-mode shadow stack pointer),
->>
->>      MSR_IA32_PL0_SSP (kernel-mode shadow stack pointer),
->>      MSR_IA32_PL1_SSP (Privilege Level 1 shadow stack pointer),
->>      MSR_IA32_PL2_SSP (Privilege Level 2 shadow stack pointer),
->>      MSR_IA32_S_CET (kernel-mode CET settings),
->>      MSR_IA32_INT_SSP_TAB (exception shadow stack table).
->>
->> The two user-mode MSRs belong to XFEATURE_CET_USER.  The first three of
->> kernel-mode MSRs belong to XFEATURE_CET_KERNEL.  Both XSAVES states are
->> supervisor states.
+> How did you find that ?
 > 
-> This is another great place to add some information about the feature.
+> Thomas.
 > 
-> "Both XSAVES states are supervisor states." ...  This means that there
-> is no direct, unprivileged access to this state, making it harder for an
-> attacker to subvert CET.
-> 
-> You could also allude to the future ptrace() support here.
-> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
-I will add that.
+
+Long story for short, 
+
++. I think I had fix this bug in 2018, when I backported Uprobe from my
+4.4 branch to CentOS 7 3.10. I just knwo it is *not* following MIPS
+ABI, but I do not know how it destroy the cool function of
+Kprobe/Uprobe, since the failure in porting eBPF from upstream to 3.10
+just leave the fix in 3.10, totally forgotten.
+
++. In 2020, I was told to validate the effect of GNU XHash, and it came
+to me that using Uprobe to count the number of "strcmp" called in ld.so,
+so I found this fix again.
+
++. With more work on Kprobe/Kprobe_event/Uprobe, I found it hit only when
+accessing arguments of Kprobe/Uprobe, so simple counting numbers of probe
+fired would not trigger it
+
