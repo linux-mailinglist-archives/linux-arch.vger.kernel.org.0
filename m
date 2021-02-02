@@ -2,137 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E9630C248
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 15:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84FB30C2F7
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 16:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbhBBOqS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 09:46:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45059 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234720AbhBBOoN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 09:44:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612276967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p9WVcjtJGSRM6w7F2m39UE8iZCliMcHMPGNuV986qrI=;
-        b=ef9GhwY3hFIcy7iOGjbtV8vjQUSaeYExmUGYz9HkArUUr/BpmRXhg8/eFsQB699Vqn571q
-        rJ9KwgVwL6IjKXOrMQso4pJphTJqTnrnhhzrid0aRiuAu/xrEQb57x6WUSD4yI/f3Flx5u
-        6fyc2MvnbewCMWlkOvwZK1V9ep1yvW8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-521-8AQi4yF_NHCuVEWiuakmOQ-1; Tue, 02 Feb 2021 09:42:42 -0500
-X-MC-Unique: 8AQi4yF_NHCuVEWiuakmOQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 46BB9184DBED;
-        Tue,  2 Feb 2021 14:42:36 +0000 (UTC)
-Received: from [10.36.114.148] (ovpn-114-148.ams2.redhat.com [10.36.114.148])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 36D6560916;
-        Tue,  2 Feb 2021 14:42:28 +0000 (UTC)
-To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        id S234800AbhBBPFo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 10:05:44 -0500
+Received: from mail-wr1-f46.google.com ([209.85.221.46]:36517 "EHLO
+        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234936AbhBBPEj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 10:04:39 -0500
+Received: by mail-wr1-f46.google.com with SMTP id 6so20813460wri.3;
+        Tue, 02 Feb 2021 07:04:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iVYfyMGBBAdTwlcTSqM4uE3+4I43aqu6Fgew0A9CUJo=;
+        b=mFab0TAT4rf17zoJsCwDhYWKGjt2vNQnR4sUsVBV8kINshGedIeHKsjONAL79j+bj3
+         zUJMRcw4e0bZeteVcC8nZfr6/YQOpgf0Rk3s/pbKopV1EFZb3r2X7bH4jTXLaZ8p1TLi
+         jmQmpaChKuPFzq4c4o1QvbSGwNMoTBuMGrUD5lN6aXVpVQWRH5YVQXNfvjWEmsfNK7XH
+         +WWfTawVzwslAv/O3AAt+bcG0uvUdln19rf1UzCE3+r3pbOFCxbwzlCn2IL4bXMjHuz2
+         tSQrf0o0BkmBqxkHpZrKI59x6lTFp64aS6d0+8E6v1ujRASd1H6XVjG0xi1DC74q4qEU
+         MFLg==
+X-Gm-Message-State: AOAM5327wX+UXrMKyGmd1SxPnYrFUtyoYMId1o9K4Z7r+oOdAAqVfXXC
+        2U1ca5KEv00d9o8sw+qZVD8=
+X-Google-Smtp-Source: ABdhPJzZC+iTEVoSjeOCsdq0a216h8yyFQ8OwFveadeqHCEB8hpTo/BBt1NUI/bDNVAowd+d4xZLnQ==
+X-Received: by 2002:adf:f183:: with SMTP id h3mr24722949wro.30.1612278236320;
+        Tue, 02 Feb 2021 07:03:56 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id r13sm3840262wmh.9.2021.02.02.07.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Feb 2021 07:03:55 -0800 (PST)
+Date:   Tue, 2 Feb 2021 15:03:53 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>,
+        Lillian Grassin-Drake <Lillian.GrassinDrake@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org> <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz> <20210129072128.GD242749@kernel.org>
- <YBPMg/C5Sb78gFEB@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <f1f65516-e222-6543-aeae-9a1dc9920de8@redhat.com>
-Date:   Tue, 2 Feb 2021 15:42:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v5 07/16] x86/hyperv: extract partition ID from Microsoft
+ Hypervisor if necessary
+Message-ID: <20210202150353.6npksy7tobrvfqlt@liuwe-devbox-debian-v2>
+References: <20210120120058.29138-1-wei.liu@kernel.org>
+ <20210120120058.29138-8-wei.liu@kernel.org>
+ <MWHPR21MB15932CD9CB9DA046EFFBA310D7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <YBPMg/C5Sb78gFEB@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR21MB15932CD9CB9DA046EFFBA310D7BC9@MWHPR21MB1593.namprd21.prod.outlook.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 29.01.21 09:51, Michal Hocko wrote:
-> On Fri 29-01-21 09:21:28, Mike Rapoport wrote:
->> On Thu, Jan 28, 2021 at 02:01:06PM +0100, Michal Hocko wrote:
->>> On Thu 28-01-21 11:22:59, Mike Rapoport wrote:
->>>
->>>> And hugetlb pools may be also depleted by anybody by calling
->>>> mmap(MAP_HUGETLB) and there is no any limiting knob for this, while
->>>> secretmem has RLIMIT_MEMLOCK.
->>>
->>> Yes it can fail. But it would fail at the mmap time when the reservation
->>> fails. Not during the #PF time which can be at any time.
->>
->> It may fail at $PF time as well:
->>
->> hugetlb_fault()
->>          hugeltb_no_page()
->>                  ...
->>                  alloc_huge_page()
->>                          alloc_gigantic_page()
->>                                  cma_alloc()
->>                                          -ENOMEM;
+On Tue, Jan 26, 2021 at 12:48:37AM +0000, Michael Kelley wrote:
+> From: Wei Liu <wei.liu@kernel.org> Sent: Wednesday, January 20, 2021 4:01 AM
+> > 
+> > We will need the partition ID for executing some hypercalls later.
+> > 
+> > Signed-off-by: Lillian Grassin-Drake <ligrassi@microsoft.com>
+> > Co-Developed-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> > Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> > ---
+> > v3:
+> > 1. Make hv_get_partition_id static.
+> > 2. Change code structure a bit.
+> > ---
+> >  arch/x86/hyperv/hv_init.c         | 27 +++++++++++++++++++++++++++
+> >  arch/x86/include/asm/mshyperv.h   |  2 ++
+> >  include/asm-generic/hyperv-tlfs.h |  6 ++++++
+> >  3 files changed, 35 insertions(+)
+> > 
+> > diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> > index 6f4cb40e53fe..fc9941bd8653 100644
+> > --- a/arch/x86/hyperv/hv_init.c
+> > +++ b/arch/x86/hyperv/hv_init.c
+> > @@ -26,6 +26,9 @@
+> >  #include <linux/syscore_ops.h>
+> >  #include <clocksource/hyperv_timer.h>
+> > 
+> > +u64 hv_current_partition_id = ~0ull;
+> > +EXPORT_SYMBOL_GPL(hv_current_partition_id);
+> > +
+> >  void *hv_hypercall_pg;
+> >  EXPORT_SYMBOL_GPL(hv_hypercall_pg);
+> > 
+> > @@ -331,6 +334,25 @@ static struct syscore_ops hv_syscore_ops = {
+> >  	.resume		= hv_resume,
+> >  };
+> > 
+> > +static void __init hv_get_partition_id(void)
+> > +{
+> > +	struct hv_get_partition_id *output_page;
+> > +	u16 status;
+> > +	unsigned long flags;
+> > +
+> > +	local_irq_save(flags);
+> > +	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
+> > +	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page) &
+> > +		HV_HYPERCALL_RESULT_MASK;
+> > +	if (status != HV_STATUS_SUCCESS) {
 > 
-> I would have to double check. From what I remember cma allocator is an
-> optimization to increase chances to allocate hugetlb pages when
-> overcommiting because pages should be normally pre-allocated in the pool
-> and reserved during mmap time. But even if a hugetlb page is not pre
-> allocated then this will get propagated as SIGBUS unless that has
-> changed.
+> Across the Hyper-V code in Linux, the way we check the hypercall result
+> is very inconsistent.  IMHO, the and'ing of hv_do_hypercall() with 
+> HV_HYPERCALL_RESULT_MASK so that status can be a u16 is stylistically
+> a bit unusual.
+> 
+> I'd like to see the hypercall result being stored into a u64 local variable.
+> Then the subsequent test for the status should 'and' the u64 with
+> HV_HYPERCALL_RESULT_MASK to determine the result code.
+> I've made a note to go fix the places that aren't doing it that way.
+> 
 
-It's an optimization to allocate gigantic pages dynamically later (so 
-not using memblock during boot). Not just for overcommit, but for any 
-kind of allocation.
+I will fold in the following diff in the next version. I will also check
+if there are other instances in this patch series that need fixing.
+Pretty sure there are a few.
 
-The actual allocation from cma should happen when setting nr_pages:
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index fc9941bd8653..6064f64a1295 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -337,14 +337,13 @@ static struct syscore_ops hv_syscore_ops = {
+ static void __init hv_get_partition_id(void)
+ {
+        struct hv_get_partition_id *output_page;
+-       u16 status;
++       u64 status;
+        unsigned long flags;
 
-nr_hugepages_store_common()->set_max_huge_pages()->alloc_pool_huge_page()...->alloc_gigantic_page()
+        local_irq_save(flags);
+        output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
+-       status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page) &
+-               HV_HYPERCALL_RESULT_MASK;
+-       if (status != HV_STATUS_SUCCESS) {
++       status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
++       if ((status & HV_HYPERCALL_RESULT_MASK) != HV_STATUS_SUCCESS) {
+                /* No point in proceeding if this failed */
+                pr_err("Failed to get partition ID: %d\n", status);
+                BUG();
+> > +		/* No point in proceeding if this failed */
+> > +		pr_err("Failed to get partition ID: %d\n", status);
+> > +		BUG();
+> > +	}
+> > +	hv_current_partition_id = output_page->partition_id;
+> > +	local_irq_restore(flags);
+> > +}
+> > +
+> >  /*
+> >   * This function is to be invoked early in the boot sequence after the
+> >   * hypervisor has been detected.
+> > @@ -426,6 +448,11 @@ void __init hyperv_init(void)
+> > 
+> >  	register_syscore_ops(&hv_syscore_ops);
+> > 
+> > +	if (cpuid_ebx(HYPERV_CPUID_FEATURES) & HV_ACCESS_PARTITION_ID)
+> > +		hv_get_partition_id();
+> 
+> Another place where the EBX value saved into the ms_hyperv structure
+> could be used.
 
-The path described above seems to be trying to overcommit gigantic 
-pages, something that can be expected to SIGBUS. Reservations are 
-handled via the pre-allocated pool.
+If you're okay with my response earlier, this will be handled later in
+another patch (series).
 
--- 
-Thanks,
-
-David / dhildenb
-
+Wei.
