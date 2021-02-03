@@ -2,145 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2907F30D755
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 11:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0556530D7BF
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 11:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbhBCKUg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 05:20:36 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:21334 "EHLO pegase1.c-s.fr"
+        id S233771AbhBCKlL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 05:41:11 -0500
+Received: from elvis.franken.de ([193.175.24.41]:49428 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233488AbhBCKUd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 3 Feb 2021 05:20:33 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4DVyNH4JzGz9tyRt;
-        Wed,  3 Feb 2021 11:19:43 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id y1ydXniTuRI4; Wed,  3 Feb 2021 11:19:43 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4DVyNH3029z9v0hX;
-        Wed,  3 Feb 2021 11:19:43 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9DED48B7DC;
-        Wed,  3 Feb 2021 11:19:44 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 9Hi595iGz4sc; Wed,  3 Feb 2021 11:19:44 +0100 (CET)
-Received: from po16121vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.103])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6ABFD8B7D3;
-        Wed,  3 Feb 2021 11:19:44 +0100 (CET)
-Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id 4390367252; Wed,  3 Feb 2021 10:19:44 +0000 (UTC)
-Message-Id: <f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH] mm/memory.c: Remove pte_sw_mkyoung()
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S233577AbhBCKlK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Feb 2021 05:41:10 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1l7FaD-0005T6-00; Wed, 03 Feb 2021 11:40:25 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 56F80C0D49; Wed,  3 Feb 2021 11:36:47 +0100 (CET)
+Date:   Wed, 3 Feb 2021 11:36:47 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Bibo Mao <maobibo@loongson.cn>, Jia He <justin.he@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Date:   Wed,  3 Feb 2021 10:19:44 +0000 (UTC)
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH] MIPS: fix kernel_stack_pointer()
+Message-ID: <20210203103647.GA7586@alpha.franken.de>
+References: <20210129043507.30488-1-huangpei@loongson.cn>
+ <20210201122352.GA8095@alpha.franken.de>
+ <20210202013231.wzyb7clsu7jsze4v@ambrosehua-HP-xw6600-Workstation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210202013231.wzyb7clsu7jsze4v@ambrosehua-HP-xw6600-Workstation>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Commit 83d116c53058 ("mm: fix double page fault on arm64 if PTE_AF
-is cleared") introduced arch_faults_on_old_pte() helper to identify
-platforms that don't set page access bit in HW and require a page
-fault to set it.
+On Tue, Feb 02, 2021 at 09:32:31AM +0800, Huang Pei wrote:
+> On Mon, Feb 01, 2021 at 01:23:52PM +0100, Thomas Bogendoerfer wrote:
+> > On Fri, Jan 29, 2021 at 12:35:07PM +0800, Huang Pei wrote:
+> > > MIPS always save kernel stack pointer in regs[29]
+> > > 
+> > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > > ---
+> > >  arch/mips/include/asm/ptrace.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+> > > index 1e76774b36dd..daf3cf244ea9 100644
+> > > --- a/arch/mips/include/asm/ptrace.h
+> > > +++ b/arch/mips/include/asm/ptrace.h
+> > > @@ -53,7 +53,7 @@ struct pt_regs {
+> > >  
+> > >  static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
+> > >  {
+> > > -	return regs->regs[31];
+> > > +	return regs->regs[29];
+> > 
+> > hmm, I'm still wondering where the trick is... looks like this is used
+> > for uprobes, so nobody has ever used uprobes or I'm missing something.
+> > 
+> > How did you find that ?
+> > 
+> > Thomas.
+> > 
+> > -- 
+> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> > good idea.                                                [ RFC1925, 2.3 ]
+> 
+> 
+> Long story for short, 
+> 
+> +. I think I had fix this bug in 2018, when I backported Uprobe from my
+> 4.4 branch to CentOS 7 3.10. I just knwo it is *not* following MIPS
+> ABI, but I do not know how it destroy the cool function of
+> Kprobe/Uprobe, since the failure in porting eBPF from upstream to 3.10
+> just leave the fix in 3.10, totally forgotten.
+> 
+> +. In 2020, I was told to validate the effect of GNU XHash, and it came
+> to me that using Uprobe to count the number of "strcmp" called in ld.so,
+> so I found this fix again.
+> 
+> +. With more work on Kprobe/Kprobe_event/Uprobe, I found it hit only when
+> accessing arguments of Kprobe/Uprobe, so simple counting numbers of probe
+> fired would not trigger it
 
-Commit 44bf431b47b4 ("mm/memory.c: Add memory read privilege on page
-fault handling") added pte_sw_mkyoung() which is yet another way to
-manage platforms that don't set page access bit in HW and require a
-page fault to set it.
+Thank you for the explanation, applied to mips-next.
 
-Remove that pte_sw_mkyoung() helper and use the already existing
-arch_faults_on_old_pte() helper together with pte_mkyoung() instead.
+Thomas.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/mips/include/asm/pgtable.h |  2 --
- include/linux/pgtable.h         | 16 ----------------
- mm/memory.c                     |  9 ++++++---
- 3 files changed, 6 insertions(+), 21 deletions(-)
-
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 4f9c37616d42..3275495adccb 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -406,8 +406,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
- 	return pte;
- }
- 
--#define pte_sw_mkyoung	pte_mkyoung
--
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
- static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
- 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 8fcdfa52eb4b..70d04931dff4 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -424,22 +424,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
- }
- #endif
- 
--/*
-- * On some architectures hardware does not set page access bit when accessing
-- * memory page, it is responsibilty of software setting this bit. It brings
-- * out extra page fault penalty to track page access bit. For optimization page
-- * access bit can be set during all page fault flow on these arches.
-- * To be differentiate with macro pte_mkyoung, this macro is used on platforms
-- * where software maintains page access bit.
-- */
--#ifndef pte_sw_mkyoung
--static inline pte_t pte_sw_mkyoung(pte_t pte)
--{
--	return pte;
--}
--#define pte_sw_mkyoung	pte_sw_mkyoung
--#endif
--
- #ifndef pte_savedwrite
- #define pte_savedwrite pte_write
- #endif
-diff --git a/mm/memory.c b/mm/memory.c
-index feff48e1465a..46fab785f7b3 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2890,7 +2890,8 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		}
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
--		entry = pte_sw_mkyoung(entry);
-+		if (arch_faults_on_old_pte())
-+			entry = pte_mkyoung(entry);
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 
- 		/*
-@@ -3548,7 +3549,8 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
- 	__SetPageUptodate(page);
- 
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
-+	if (arch_faults_on_old_pte())
-+		entry = pte_mkyoung(entry);
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
- 
-@@ -3824,7 +3826,8 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
- 
- 	flush_icache_page(vma, page);
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
-+	if (arch_faults_on_old_pte())
-+		entry = pte_mkyoung(entry);
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	/* copy-on-write page */
 -- 
-2.25.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
