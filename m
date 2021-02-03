@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB01930E115
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 18:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FEF30E116
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 18:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbhBCR2F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 12:28:05 -0500
-Received: from mga06.intel.com ([134.134.136.31]:4056 "EHLO mga06.intel.com"
+        id S232282AbhBCR2G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 12:28:06 -0500
+Received: from mga06.intel.com ([134.134.136.31]:4059 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231458AbhBCR2C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S231486AbhBCR2C (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 3 Feb 2021 12:28:02 -0500
-IronPort-SDR: Wqj/6Lb6Bw8ddYYlNE0gGDbE7U7TzjhqD66GXa/y8gPBW8i14GAk8/KFoBzqEMHSP+L/ZPrEPI
- +4pjHgn2nSAQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="242592372"
+IronPort-SDR: cUZWd+DWcbV5kdFuQIuq54M/wUx1AUi4FaqxNfMTttYlo+71DV17ONXO/mW12DoA5HDM46GgwR
+ 5VwlRZSmjNdg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="242592377"
 X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="242592372"
+   d="scan'208";a="242592377"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 09:27:20 -0800
-IronPort-SDR: oA3PaKU9GGXLkN4skpI8G0zZ4UhSSLoR9DRe6hQucbEG5o+5YjsqiWfNaxB3rPrX2+LHoGRZ/K
- mexo0SkdBtGA==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 09:27:21 -0800
+IronPort-SDR: Zai1BmQvbq3jyby+nkQruNCl9QuP/uC4qAGcVTVQo34i1MgpLZsnPeBoV6Ssqizf3Lw9tsF2t2
+ HeiWMdRh3u1g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="406723651"
+   d="scan'208";a="406723661"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2021 09:27:19 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2021 09:27:20 -0800
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
         x86@kernel.org
@@ -33,87 +33,62 @@ Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
         carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
         libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
         linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com
-Subject: [PATCH v5 0/5] x86: Improve Minimum Alternate Stack Size
-Date:   Wed,  3 Feb 2021 09:22:37 -0800
-Message-Id: <20210203172242.29644-1-chang.seok.bae@intel.com>
+        chang.seok.bae@intel.com, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 1/5] uapi: Move the aux vector AT_MINSIGSTKSZ define to uapi
+Date:   Wed,  3 Feb 2021 09:22:38 -0800
+Message-Id: <20210203172242.29644-2-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210203172242.29644-1-chang.seok.bae@intel.com>
+References: <20210203172242.29644-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-During signal entry, the kernel pushes data onto the normal userspace
-stack. On x86, the data pushed onto the user stack includes XSAVE state,
-which has grown over time as new features and larger registers have been
-added to the architecture.
+Move the AT_MINSIGSTKSZ definition to generic Linux from arm64. It is
+already used as generic ABI in glibc's generic elf.h, and this move will
+prevent future namespace conflicts. In particular, x86 will re-use this
+generic definition.
 
-MINSIGSTKSZ is a constant provided in the kernel signal.h headers and
-typically distributed in lib-dev(el) packages, e.g. [1]. Its value is
-compiled into programs and is part of the user/kernel ABI. The MINSIGSTKSZ
-constant indicates to userspace how much data the kernel expects to push on
-the user stack, [2][3].
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: Carlos O'Donell <carlos@redhat.com>
+Cc: Dave Martin <Dave.Martin@arm.com>
+Cc: libc-alpha@sourceware.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-api@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+---
+Change from v4:
+* Added as a new patch (Carlos O'Donell)
+---
+ arch/arm64/include/uapi/asm/auxvec.h | 1 -
+ include/uapi/linux/auxvec.h          | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-However, this constant is much too small and does not reflect recent
-additions to the architecture. For instance, when AVX-512 states are in
-use, the signal frame size can be 3.5KB while MINSIGSTKSZ remains 2KB.
-
-The bug report [4] explains this as an ABI issue. The small MINSIGSTKSZ can
-cause user stack overflow when delivering a signal.
-
-In this series, we suggest a couple of things:
-1. Provide a variable minimum stack size to userspace, as a similar
-   approach to [5]
-2. Avoid using a too-small alternate stack
-
-Changes from v4 [9]:
-* Moved the aux vector define to the generic header (Carlos O'Donell)
-
-Changes from v3 [8]:
-* Updated the changelog (Borislav Petkov)
-* Revised the test messages again (Borislav Petkov)
-
-Changes from v2 [7]:
-* Simplified the sigaltstack overflow prevention (Jann Horn)
-* Renamed fpstate size helper with cleanup (Borislav Petkov)
-* Cleaned up the signframe struct size defines (Borislav Petkov)
-* Revised the selftest messages (Borislav Petkov)
-* Revised a changelog (Borislav Petkov)
-
-Changes from v1 [6]:
-* Took stack alignment into account for sigframe size (Dave Martin)
-
-[1]: https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/bits/sigstack.h;h=b9dca794da09
-3dc4d41d39db9851d444e1b54d9b;hb=HEAD
-[2]: https://www.gnu.org/software/libc/manual/html_node/Signal-Stack.html
-[3]: https://man7.org/linux/man-pages/man2/sigaltstack.2.html
-[4]: https://bugzilla.kernel.org/show_bug.cgi?id=153531
-[5]: https://blog.linuxplumbersconf.org/2017/ocw/system/presentations/4671/original/plumbers-dm-2017.pdf
-[6]: https://lore.kernel.org/lkml/20200929205746.6763-1-chang.seok.bae@intel.com/
-[7]: https://lore.kernel.org/lkml/20201119190237.626-1-chang.seok.bae@intel.com/
-[8]: https://lore.kernel.org/lkml/20201223015312.4882-1-chang.seok.bae@intel.com/
-[9]: https://lore.kernel.org/lkml/20210115211038.2072-1-chang.seok.bae@intel.com/
-
-Chang S. Bae (5):
-  uapi: Move the aux vector AT_MINSIGSTKSZ define to uapi
-  x86/signal: Introduce helpers to get the maximum signal frame size
-  x86/elf: Support a new ELF aux vector AT_MINSIGSTKSZ
-  x86/signal: Detect and prevent an alternate signal stack overflow
-  selftest/x86/signal: Include test cases for validating sigaltstack
-
- arch/arm64/include/uapi/asm/auxvec.h      |   1 -
- arch/x86/include/asm/elf.h                |   4 +
- arch/x86/include/asm/fpu/signal.h         |   2 +
- arch/x86/include/asm/sigframe.h           |   2 +
- arch/x86/include/uapi/asm/auxvec.h        |   4 +-
- arch/x86/kernel/cpu/common.c              |   3 +
- arch/x86/kernel/fpu/signal.c              |  19 ++++
- arch/x86/kernel/signal.c                  |  69 +++++++++++-
- include/uapi/linux/auxvec.h               |   1 +
- tools/testing/selftests/x86/Makefile      |   2 +-
- tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
- 11 files changed, 227 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/x86/sigaltstack.c
-
+diff --git a/arch/arm64/include/uapi/asm/auxvec.h b/arch/arm64/include/uapi/asm/auxvec.h
+index 743c0b84fd30..767d710c92aa 100644
+--- a/arch/arm64/include/uapi/asm/auxvec.h
++++ b/arch/arm64/include/uapi/asm/auxvec.h
+@@ -19,7 +19,6 @@
+ 
+ /* vDSO location */
+ #define AT_SYSINFO_EHDR	33
+-#define AT_MINSIGSTKSZ	51	/* stack needed for signal delivery */
+ 
+ #define AT_VECTOR_SIZE_ARCH 2 /* entries in ARCH_DLINFO */
+ 
+diff --git a/include/uapi/linux/auxvec.h b/include/uapi/linux/auxvec.h
+index abe5f2b6581b..cc4fa77bd2a7 100644
+--- a/include/uapi/linux/auxvec.h
++++ b/include/uapi/linux/auxvec.h
+@@ -33,5 +33,6 @@
+ 
+ #define AT_EXECFN  31	/* filename of program */
+ 
++#define AT_MINSIGSTKSZ	51	/* stack needed for signal delivery  */
+ 
+ #endif /* _UAPI_LINUX_AUXVEC_H */
 -- 
 2.17.1
 
