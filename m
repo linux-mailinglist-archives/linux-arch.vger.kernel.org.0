@@ -2,183 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EB930E609
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 23:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B246530E612
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 23:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbhBCW1Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 17:27:25 -0500
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:23878 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbhBCW1Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Feb 2021 17:27:24 -0500
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 113MQSAm031538;
-        Thu, 4 Feb 2021 07:26:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 113MQSAm031538
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1612391189;
-        bh=KNoRa1M7aXZ9EARkAVysyDE3B2jC5KmUmnY6dfCesYk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zNjACUlIg12bIAcccjitZDjF/RWIcEO8Uvh+D1ulpAfG8sdz2bOtkL5J4zdMTBJeE
-         +dzWdBEpazYwVuuI62uCDQTzbz4aTESv4AWeiE8U8ETh63hHW1u8oxurX4jo0S6LFm
-         ajEweivWOf3pq/wQggyDwZMdI9OzHAY4A5ZwDZNha+49PbUKAhwB5ncNo4AsunNvLU
-         AO6UTgwt6cIeRcW383vGwJg93wYxRtbq/1S4rqEC/9+3pKvR8pmg3hDSF6O88SRqPh
-         Nqo8TR9LpbI2pWoNVtoDK3L/ZwTH6Cd1REWYr9zdplSwmfnUunO4SgNeSA/Z48YlM7
-         B34Soo9KQaiNA==
-X-Nifty-SrcIP: [209.85.210.174]
-Received: by mail-pf1-f174.google.com with SMTP id i63so759403pfg.7;
-        Wed, 03 Feb 2021 14:26:29 -0800 (PST)
-X-Gm-Message-State: AOAM530G1rG8T+GLpUlGCvmWZUYpLQUFSWpigvkEXZMWrRQ+nlzE0WAM
-        IxS4JBfKWmxtK/zjb8WeHDIt2xyzBjBUaxHBWKQ=
-X-Google-Smtp-Source: ABdhPJyi84leWrAFywSMqa/nad53Bjx45iXZhe6UpJpbvm4KbVLlT1HGear2Xvu+T/QoIiD6NCj6JKX7xNIq79mEO4w=
-X-Received: by 2002:aa7:8f13:0:b029:1bd:f965:66d8 with SMTP id
- x19-20020aa78f130000b02901bdf96566d8mr4811312pfr.80.1612391188381; Wed, 03
- Feb 2021 14:26:28 -0800 (PST)
+        id S232411AbhBCW3d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 17:29:33 -0500
+Received: from mga18.intel.com ([134.134.136.126]:44941 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232201AbhBCW3c (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Feb 2021 17:29:32 -0500
+IronPort-SDR: qCnO0xfovv3BelUrCDlUnNmfqHusXdVcXEQsOE7kbiDRIjlXTDZ8+wNahfWg/PBR4Bm0s+gcgb
+ ogZYZMEI+Rag==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="168811528"
+X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
+   d="scan'208";a="168811528"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:28:48 -0800
+IronPort-SDR: teAHso16AhsuO/DSh9wwnpQvwEfuXc8bhQHU+KbBseRyIWT4j15au9I7BKs1vITYb4rh6MgfvA
+ BREiF+xDa61g==
+X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
+   d="scan'208";a="356920008"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.43.162]) ([10.212.43.162])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:28:46 -0800
+Subject: Re: [PATCH v18 24/25] x86/cet/shstk: Add arch_prctl functions for
+ shadow stack
+To:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20210127212524.10188-1-yu-cheng.yu@intel.com>
+ <20210127212524.10188-25-yu-cheng.yu@intel.com>
+ <ba39586d-25b6-6ea5-19c3-adf17b59f910@intel.com>
+ <761ae8ce-0560-24cc-e6f7-684475cb3708@intel.com>
+ <6720b1a9-f785-dbbd-1f0e-8c9090be2069@intel.com>
+ <a7ef2df2-815f-9994-11b7-026afe45094f@intel.com>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <c68f0f9b-2e56-6ca6-511d-58acd3d96ff2@intel.com>
+Date:   Wed, 3 Feb 2021 14:28:45 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <20210130004401.2528717-1-ndesaulniers@google.com>
- <20210130004401.2528717-2-ndesaulniers@google.com> <20210130015222.GC2709570@localhost>
- <CAK7LNARfu-wqW9hfnoeeahiNPbwt4xhoWdxXtK8qjVfEi=7OOg@mail.gmail.com>
-In-Reply-To: <CAK7LNARfu-wqW9hfnoeeahiNPbwt4xhoWdxXtK8qjVfEi=7OOg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 4 Feb 2021 07:25:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT1xrU3t6xV2qHEO=J4Q3NV=ap4b=c129JD3MWsptEy9g@mail.gmail.com>
-Message-ID: <CAK7LNAT1xrU3t6xV2qHEO=J4Q3NV=ap4b=c129JD3MWsptEy9g@mail.gmail.com>
-Subject: Re: [PATCH v7 1/2] Kbuild: make DWARF version a choice
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <a7ef2df2-815f-9994-11b7-026afe45094f@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 7:23 AM Masahiro Yamada <masahiroy@kernel.org> wrote=
-:
->
-> On Sat, Jan 30, 2021 at 10:52 AM Nathan Chancellor <nathan@kernel.org> wr=
-ote:
-> >
-> > On Fri, Jan 29, 2021 at 04:44:00PM -0800, Nick Desaulniers wrote:
-> > > Modifies CONFIG_DEBUG_INFO_DWARF4 to be a member of a choice which is
-> > > the default. Does so in a way that's forward compatible with existing
-> > > configs, and makes adding future versions more straightforward.
-> > >
-> > > GCC since ~4.8 has defaulted to this DWARF version implicitly.
-> > >
-> > > Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
-> > > Suggested-by: Fangrui Song <maskray@google.com>
-> > > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > > Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > One comment below:
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > > ---
-> > >  Makefile          |  5 ++---
-> > >  lib/Kconfig.debug | 16 +++++++++++-----
-> > >  2 files changed, 13 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index 95ab9856f357..d2b4980807e0 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -830,9 +830,8 @@ ifneq ($(LLVM_IAS),1)
-> > >  KBUILD_AFLAGS        +=3D -Wa,-gdwarf-2
-> >
-> > It is probably worth a comment somewhere that assembly files will still
-> > have DWARF v2.
->
-> I agree.
-> Please noting the reason will be helpful.
->
-> Could you summarize Jakub's comment in short?
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20201022012106.18=
-75129-1-ndesaulniers@google.com/#23727667
->
->
->
->
->
->
-> One more question.
->
->
-> Can we remove -g option like follows?
->
->
->  ifdef CONFIG_DEBUG_INFO_SPLIT
->  DEBUG_CFLAGS   +=3D -gsplit-dwarf
-> -else
-> -DEBUG_CFLAGS   +=3D -g
->  endif
->
->
->
->
->
-> In the current mainline code,
-> -g is the only debug option
-> if CONFIG_DEBUG_INFO_DWARF4 is disabled.
->
->
-> The GCC manual says:
-> https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gcc/Debugging-Options.html#Debu=
-gging-Options
->
->
-> -g
->
->     Produce debugging information in the operating system=E2=80=99s
->     native format (stabs, COFF, XCOFF, or DWARF).
->     GDB can work with this debugging information.
->
->
-> Of course, we expect the -g option will produce
-> the debug info in the DWARF format.
->
->
->
->
->
-> With this patch set applied, it is very explicit.
->
-> Only the format type, but also the version.
+On 2/3/2021 2:11 PM, Dave Hansen wrote:
+> On 2/3/21 1:54 PM, Yu, Yu-cheng wrote:
+>> On 1/29/2021 10:56 AM, Yu, Yu-cheng wrote:
+>>> On 1/29/2021 9:07 AM, Dave Hansen wrote:
+>>>> On 1/27/21 1:25 PM, Yu-cheng Yu wrote:
+>>>>> +    if (!IS_ENABLED(CONFIG_X86_CET))
+>>>>> +        return -EOPNOTSUPP;
+>>>>
+>>>> Let's ignore glibc for a moment.  What error code *should* the kernel be
+>>>> returning here?  errno(3) says:
+>>>>
+>>>>          EOPNOTSUPP      Operation not supported on socket (POSIX.1)
+>>>> ...
+>>>>          ENOTSUP         Operation not supported (POSIX.1)
+>>>>
+>>>
+>>> Yeah, other places in kernel use ENOTSUPP.  This seems to be out of
+>>> line.  And since the issue is long-existing, applications already know
+>>> how to deal with it.  I should have made that argument.  Change it to
+>>> ENOTSUPP.
+>>
+>> When I make the change, checkpatch says...
+>>
+>> WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+>> #128: FILE: arch/x86/kernel/cet_prctl.c:33:
+>> +        return -ENOTSUPP;
+>>
+>> Do we want to reconsider?
+> 
+> I'm not sure I trust checkpatch over manpages.  I had to google "SUSV4".
+>   I'm not sure it matters at *all* for a 100% Linux-specific interface.
+> 
+> ENOTSUPP does seem less popular lately:
+> 
+>> $ git diff v5.0.. kernel/ arch/ drivers/ | grep ^+.*return.*E.*NO.*SUP.*\; | grep -o -- -E.*\; | sort | uniq -c | sort -n
+>> ... noise
+>>       61 -EOPNOTSUPP);
+>>      260 -ENOTSUPP;
+>>     1577 -EOPNOTSUPP;
+> 
+> but far from unused.  That might be due to checkpatch spew more than
+> anything.
+> 
 
+Maybe I will keep it ENOTSUPP for now.  If any logical reason should 
+come up, I will be happy to change it again.  Thanks!
 
-I mean:
-
-Not only the format type, but also the version
-is explicit.
-
-
-
-
-> The compiler will be given either
-> -gdwarf-4 or -gdwarf-5,
-> making the -g option redundant, I think.
->
->
->
->
->
->
---=20
-Best Regards
-Masahiro Yamada
+--
+Yu-cheng
