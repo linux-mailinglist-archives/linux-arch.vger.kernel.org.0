@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D431230E6CD
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 00:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD7330E69D
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 00:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbhBCXDv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 18:03:51 -0500
-Received: from mga06.intel.com ([134.134.136.31]:30214 "EHLO mga06.intel.com"
+        id S233255AbhBCXDw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 18:03:52 -0500
+Received: from mga06.intel.com ([134.134.136.31]:30209 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232591AbhBCXCx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S233591AbhBCXCx (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Wed, 3 Feb 2021 18:02:53 -0500
-IronPort-SDR: EeEyyH1PPCzY59FscaoF0Zk294hz6So5frCXVnBO7TGFKlb6kdMw0vPqhKovAqSpYAnVe/IP26
- ko0evwkJAbEw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="242642708"
+IronPort-SDR: OPZnYxQSa7Pnw+FnPjW2tcVWOILEwTnZvvuUeHZmWk2E6i0HHm8x0dC29E8dxxJQXaZ0qd6Y7H
+ PeTtR370s/7A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="242642710"
 X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="242642708"
+   d="scan'208";a="242642710"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:59:42 -0800
-IronPort-SDR: 97LwXPWtB6dY+Nn6ic/wdCq75HfVK2dsSs9RtjdmSe6jSwvy3YkPa92CuvX/wtLs5fdTnzf5vl
- mwUoneySHvrw==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:59:43 -0800
+IronPort-SDR: 0Bj1lQC6b8Istb399+hTMKe8nEFRobb64fLPwc9AmnvWaLrvsox0jAgg1z1V4SqkWipBKrbAv3
+ e2sxyOZTwh4Q==
 X-IronPort-AV: E=Sophos;i="5.79,399,1602572400"; 
-   d="scan'208";a="392698004"
+   d="scan'208";a="392698020"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:59:40 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 14:59:42 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -52,9 +52,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v19 5/7] x86/cet/ibt: Update arch_prctl functions for Indirect Branch Tracking
-Date:   Wed,  3 Feb 2021 14:59:00 -0800
-Message-Id: <20210203225902.479-6-yu-cheng.yu@intel.com>
+Subject: [PATCH v19 6/7] x86/vdso/32: Add ENDBR32 to __kernel_vsyscall entry point
+Date:   Wed,  3 Feb 2021 14:59:01 -0800
+Message-Id: <20210203225902.479-7-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210203225902.479-1-yu-cheng.yu@intel.com>
 References: <20210203225902.479-1-yu-cheng.yu@intel.com>
@@ -66,38 +66,29 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "H.J. Lu" <hjl.tools@gmail.com>
 
-Update ARCH_X86_CET_STATUS and ARCH_X86_CET_DISABLE for Indirect Branch
-Tracking.
+Add ENDBR32 to __kernel_vsyscall entry point.
 
 Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Acked-by: Andy Lutomirski <luto@kernel.org>
 ---
- arch/x86/kernel/cet_prctl.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/entry/vdso/vdso32/system_call.S | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kernel/cet_prctl.c b/arch/x86/kernel/cet_prctl.c
-index 0030c63a08c0..4df1eac41965 100644
---- a/arch/x86/kernel/cet_prctl.c
-+++ b/arch/x86/kernel/cet_prctl.c
-@@ -22,6 +22,9 @@ static int cet_copy_status_to_user(struct cet_status *cet, u64 __user *ubuf)
- 		buf[2] = cet->shstk_size;
- 	}
- 
-+	if (cet->ibt_enabled)
-+		buf[0] |= GNU_PROPERTY_X86_FEATURE_1_IBT;
-+
- 	return copy_to_user(ubuf, buf, sizeof(buf));
- }
- 
-@@ -46,6 +49,8 @@ int prctl_cet(int option, u64 arg2)
- 			return -EINVAL;
- 		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_SHSTK)
- 			cet_disable_shstk();
-+		if (arg2 & GNU_PROPERTY_X86_FEATURE_1_IBT)
-+			cet_disable_ibt();
- 		return 0;
- 
- 	case ARCH_X86_CET_LOCK:
+diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
+index de1fff7188aa..f19eaec3de3b 100644
+--- a/arch/x86/entry/vdso/vdso32/system_call.S
++++ b/arch/x86/entry/vdso/vdso32/system_call.S
+@@ -14,6 +14,9 @@
+ 	ALIGN
+ __kernel_vsyscall:
+ 	CFI_STARTPROC
++#ifdef CONFIG_X86_CET
++	endbr32
++#endif
+ 	/*
+ 	 * Reshuffle regs so that all of any of the entry instructions
+ 	 * will preserve enough state.
 -- 
 2.21.0
 
