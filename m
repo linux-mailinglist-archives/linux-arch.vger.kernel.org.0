@@ -2,153 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EF730CB1C
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Feb 2021 20:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EA530D21A
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 04:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239320AbhBBTN5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Feb 2021 14:13:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45758 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231862AbhBBTLw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 2 Feb 2021 14:11:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 47C6D64D87;
-        Tue,  2 Feb 2021 19:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612293066;
-        bh=Pzyl+wYYgvPCwgJ+GvBahmfBmshzS1gdeGZydw56C1k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=urlxNYufSkfJp0SH0EEfwFzSeIYwXDdueMnyILwXIullWx4SbMoEerX80f5OQqyLU
-         Bg+fxp5cMzP5FzVAMlOPfjBauj+B1/aEKphaIK3R5lVLYCvCQesqrDIQmZvMjDXmNR
-         wmsGMRNi9ZfDbI6vAJ5p7VMbSsLj4nb8l1NhazBIB10phtLBckQ1cOU2nN3vTXLilS
-         uJtQ4CoJagfCIkQnsWqgtg/k3AnTkwWKwrvb5ozbBGjBggCHGi2zD+24ANJ5uL76kr
-         bEh+jPfAk+q1UtVeseCuM6MVzwqCxfVLsegGHFyjAVr0PWSO8yZEm61pbzlwU5cRc5
-         HnguLQxiFymVg==
-Date:   Tue, 2 Feb 2021 21:10:40 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20210202191040.GP242749@kernel.org>
-References: <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz>
- <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
- <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
- <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
- <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
- <YBkcyQsky2scjEcP@dhcp22.suse.cz>
- <20210202124857.GN242749@kernel.org>
- <YBlTMqjB06aqyGbT@dhcp22.suse.cz>
+        id S232409AbhBCDVt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Feb 2021 22:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232719AbhBCDNU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Feb 2021 22:13:20 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D10C061573;
+        Tue,  2 Feb 2021 19:01:54 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id g3so13656676plp.2;
+        Tue, 02 Feb 2021 19:01:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=1D1lbt3Rz38vk3ZD1aJTQKM02Emv7JinCawTwnh8mas=;
+        b=sjnb/xpg2f3ib4neVS501ZZ2+5QYiUqICTfujzksFFyQvYH9TTRQ1OHrQ42QsKAXSw
+         bYeMWQeeyhhJ2MqhVAjE/WET+Lr0Z5huKLrYJ8ysoXbZDvjSBYqrbZV2uDM/7yce2mp4
+         xqiKORJgRDQ2BObp815Hkg/jms8ML0Waag35kaQiy4qmqOHdGz92PvVy8Q7IB/VJMguq
+         lHOoJy5FAmrj4d4B6yT8Dc98F4Lvm3ysZk3pWiatccBV6pgOgdhhBhtMFa3uP5o4RDHo
+         MYU9ebBwx4j4daf2bNPsakaE9OJcuDEYdJ07eo99qx2mYqdjYpE59yOSMBlWXXOBZ5ui
+         FWsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=1D1lbt3Rz38vk3ZD1aJTQKM02Emv7JinCawTwnh8mas=;
+        b=WZjMecXcWWDQVxjGRw3gYx0yXFiZxnPLDji+jYcguCqPHXRQlZeNl6VOJmUUT4YYM0
+         /YgfqAcy12bho83b5v80HGDL24zVU5p1yl/C75YrH/PjRJs1inThWTPA7EpUG5L1/qAJ
+         sVYNOOlg+1hVqlFLcY1zsD5IG4dZL3MCpEF01a2pBaLDk9YmknXrwOmuppG8CCIwCoTY
+         /Qbd/jMYz3pGUI1kddtEp2P2wOjqAVgjXHS9u9fF+mCa+ZiM82M78rWsLhKKRGU7rK0Z
+         2pgPV3UOsqPvLI1NeZQPoe1WGR4Fb28HxmVc3ZNuXtt3MZkD64ZXPsXHv+i1D2Z+vBbZ
+         e6sQ==
+X-Gm-Message-State: AOAM532gZvNDoFXgBGlBNZP32TpTnn83p9wW5MzqCWfUd7rzgoD9cCIz
+        qe15lYvtamwrfWUArT+tYcM=
+X-Google-Smtp-Source: ABdhPJzMyqDrlccGlrZjTkYB9avc7WfWGiiIvH2N7+xa6oX+t0dwLupW2e+1/RqMFKXpP4AxmXtK+Q==
+X-Received: by 2002:a17:902:a40b:b029:e0:1096:7fb with SMTP id p11-20020a170902a40bb02900e0109607fbmr1125710plq.40.1612321313502;
+        Tue, 02 Feb 2021 19:01:53 -0800 (PST)
+Received: from localhost (60-242-11-44.static.tpgi.com.au. [60.242.11.44])
+        by smtp.gmail.com with ESMTPSA id 78sm322545pfx.127.2021.02.02.19.01.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Feb 2021 19:01:53 -0800 (PST)
+Date:   Wed, 03 Feb 2021 13:01:47 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v12 01/14] ARM: mm: add missing pud_page define to 2-level
+ page tables
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ding Tianhong <dingtianhong@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <20210202110515.3575274-1-npiggin@gmail.com>
+        <20210202110515.3575274-2-npiggin@gmail.com>
+        <20210202111319.GL1463@shell.armlinux.org.uk>
+In-Reply-To: <20210202111319.GL1463@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBlTMqjB06aqyGbT@dhcp22.suse.cz>
+Message-Id: <1612321006.e59gckigqu.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 02:27:14PM +0100, Michal Hocko wrote:
-> On Tue 02-02-21 14:48:57, Mike Rapoport wrote:
-> > On Tue, Feb 02, 2021 at 10:35:05AM +0100, Michal Hocko wrote:
-> > > On Mon 01-02-21 08:56:19, James Bottomley wrote:
-> > > 
-> > > I have also proposed potential ways out of this. Either the pool is not
-> > > fixed sized and you make it a regular unevictable memory (if direct map
-> > > fragmentation is not considered a major problem)
-> > 
-> > I think that the direct map fragmentation is not a major problem, and the
-> > data we have confirms it, so I'd be more than happy to entirely drop the
-> > pool, allocate memory page by page and remove each page from the direct
-> > map. 
-> > 
-> > Still, we cannot prove negative and it could happen that there is a
-> > workload that would suffer a lot from the direct map fragmentation, so
-> > having a pool of large pages upfront is better than trying to fix it
-> > afterwards. As we get more confidence that the direct map fragmentation is
-> > not an issue as it is common to believe we may remove the pool altogether.
-> 
-> I would drop the pool altogether and instantiate pages to the
-> unevictable LRU list and internally treat it as ramdisk/mlock so you
-> will get an accounting correctly. The feature should be still opt-in
-> (e.g. a kernel command line parameter) for now. The recent report by
-> Intel (http://lkml.kernel.org/r/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com)
-> there is no clear win to have huge mappings in _general_ but there are
-> still workloads which benefit. 
->  
-> > I think that using PMD_ORDER allocations for the pool with a fallback to
-> > order 0 will do the job, but unfortunately I doubt we'll reach a consensus
-> > about this because dogmatic beliefs are hard to shake...
-> 
-> If this is opt-in then those beliefs can be relaxed somehow. Long term
-> it makes a lot of sense to optimize for a better direct map management
-> but I do not think this is a hard requirement for an initial
-> implementation if it is not imposed to everybody by default.
->
-> > A more restrictive possibility is to still use plain PMD_ORDER allocations
-> > to fill the pool, without relying on CMA. In this case there will be no
-> > global secretmem specific pool to exhaust, but then it's possible to drain
-> > high order free blocks in a system, so CMA has an advantage of limiting
-> > secretmem pools to certain amount of memory with somewhat higher
-> > probability for high order allocation to succeed. 
-> > 
-> > > or you need a careful access control 
-> > 
-> > Do you mind elaborating what do you mean by "careful access control"?
-> 
-> As already mentioned, a mechanism to control who can use this feature -
-> e.g. make it a special device which you can access control by
-> permissions or higher level security policies. But that is really needed
-> only if the pool is fixed sized.
-  
-Let me reiterate to make sure I don't misread your suggestion.
+Excerpts from Russell King - ARM Linux admin's message of February 2, 2021 =
+9:13 pm:
+> On Tue, Feb 02, 2021 at 09:05:02PM +1000, Nicholas Piggin wrote:
+>> diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtab=
+le.h
+>> index c02f24400369..d63a5bb6bd0c 100644
+>> --- a/arch/arm/include/asm/pgtable.h
+>> +++ b/arch/arm/include/asm/pgtable.h
+>> @@ -166,6 +166,9 @@ extern struct page *empty_zero_page;
+>> =20
+>>  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
+>> =20
+>> +#define pud_page(pud)		pmd_page(__pmd(pud_val(pud)))
+>> +#define pud_write(pud)		pmd_write(__pmd(pud_val(pud)))
+>=20
+> As there is no PUD, does it really make sense to return a valid
+> struct page (which will be the PTE page) for pud_page(), which is
+> several tables above?
 
-If we make secretmem an opt-in feature with, e.g. kernel parameter, the
-pooling of large pages is unnecessary. In this case there is no limited
-resource we need to protect because secretmem will allocate page by page.
+There is no PUD on 3-level either, and the pgtable-nopud.h which it uses=20
+also passes down p4d_page to pud_page, so by convention...
 
-Since there is no limited resource, we don't need special permissions
-to access secretmem so we can move forward with a system call that creates
-a mmapable file descriptor and save the hassle of a chardev.
+Although in this case at least for my next patch it won't acutally use=20
+pud_page unless it's a leaf entry so maybe it shouldn't get called
+anyway.
 
-I cannot say I don't like this as it cuts roughly half of mm/secretmem.c :)
-
-But I must say I am still a bit concerned about that we have no provisions
-here for dealing with the direct map fragmentation even with the set goal
-to improve the direct map management in the long run...
-
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Nick
