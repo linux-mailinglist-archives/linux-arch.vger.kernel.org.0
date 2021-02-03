@@ -2,159 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5765C30D477
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 08:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D9430D5FF
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Feb 2021 10:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbhBCH6E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 02:58:04 -0500
-Received: from conssluserg-06.nifty.com ([210.131.2.91]:42800 "EHLO
-        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbhBCH6D (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Feb 2021 02:58:03 -0500
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 1137upih029648;
-        Wed, 3 Feb 2021 16:56:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 1137upih029648
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1612339012;
-        bh=N/D47fbOBRad6M/ZDk/32EhFpPJEKVijkKmIa+v6ag4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ym+O+5PBZd3TiH1J/boWvO7Ah+7Zw1dd+m1WCL2PLHVOaxj/kaJk3luE8wzSc0v/N
-         +XxXE+Gh0CJEVQJRH6Qvsk1KW8y2eh7/eDdidHLTzWfpwJlRsBfQjrrMY3rbCKE9Zd
-         IRPd3yBPcTztb7e9utJY55XNhkr7amSnGFGhyYEr0/LLpC4O3h4gWnBTihyISJgned
-         AWiRpyPzcrPBdwyKOQQQz6B0TQMJpA+KcjyJ/IKjHKQHqL7dyYDiA2ysOSOXQFuh8s
-         0d4smHg9jSwOG5iaccwYqCC4Rzx7nCy3qNkOZaEgjaCQdrQGBdAT/KORwm/fYBChgm
-         4I4j4UzVqhoVw==
-X-Nifty-SrcIP: [209.85.210.177]
-Received: by mail-pf1-f177.google.com with SMTP id y205so16126796pfc.5;
-        Tue, 02 Feb 2021 23:56:51 -0800 (PST)
-X-Gm-Message-State: AOAM530Z2BKO8ZRYlvEeNCG7eEePvh7wA50jiFjx8Rln4zi9VMjhEaWY
-        ayv63Ah1TkKSpv5ccRyARU/kV8ripkAwVd+DyGc=
-X-Google-Smtp-Source: ABdhPJwocduLKpxLPGkPF7gvS0SZMMyZYVYiwpkUTAOZSWGMy/U578SIQChgZdM6kmhVK8/Dc+NmFTmNbOS5nDC1rGc=
-X-Received: by 2002:a63:ff09:: with SMTP id k9mr2382791pgi.175.1612339010996;
- Tue, 02 Feb 2021 23:56:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20210129194318.2125748-1-ndesaulniers@google.com>
- <20210129194318.2125748-3-ndesaulniers@google.com> <CA+icZUX4q-JhCo+UZ9T3FhbC_gso-oaB0OR9KdH5iEpoGZyqVw@mail.gmail.com>
- <CAKwvOdnj1Np62+eOiTOCRXSW6GLSv4hmvtWaz=0aTZEEot_dhw@mail.gmail.com>
- <CA+icZUWsyjDY58ZZ0MAVfWqBJ8FUSpM6=_5aqPcRTfX2W8Y-+Q@mail.gmail.com>
- <CAKwvOd=mHvEtto37rzFMfsFYe2e-Cp2MAiyRYxHWPdc-HbT8EA@mail.gmail.com>
- <CA+icZUWxK9fdV8PNGqbQrOFmSZ2Ts4nNqfVMMNUh5u79Ld7hjA@mail.gmail.com>
- <CA+icZUUo6URpxHh6_Tppv9_Z1dyhGDB2OqSCY3yRw72aA0EbMQ@mail.gmail.com>
- <CAKwvOdmWx0reabY-S3nXfTZuhs-_SP7pbb0uHyGeaNSQnm8eRQ@mail.gmail.com>
- <CA+icZUWsncyKvxPZ5g=a3ssWy=cYahsU6hprM3n=jFUmnjPC6w@mail.gmail.com>
- <CAKwvOdk4kG-_c3inNj9ry_xUU9SQE-2AqQp40YL_V=6SHU6E=Q@mail.gmail.com>
- <CA+icZUX576Rt7HJ4hvrwRTCC2pTmoH-Yu-haU+MDb8B6yADAYA@mail.gmail.com>
- <CAKwvOdmq=L_ob-WpNBE-fSc3oYXT10ZvttfiXiZw3+SxaWWy-A@mail.gmail.com> <CA+icZUXMxM4CuNa0P+JFJO7LSj6QvJneArYXpqLRJrzqJMYj6g@mail.gmail.com>
-In-Reply-To: <CA+icZUXMxM4CuNa0P+JFJO7LSj6QvJneArYXpqLRJrzqJMYj6g@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 3 Feb 2021 16:56:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR0jHV9gdCT7-e0njtEjxpuADkAttYAxOT6N-sNUiuV+w@mail.gmail.com>
-Message-ID: <CAK7LNAR0jHV9gdCT7-e0njtEjxpuADkAttYAxOT6N-sNUiuV+w@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] Kbuild: implement support for DWARF v5
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S233279AbhBCJNy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 04:13:54 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42272 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233208AbhBCJNM (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Feb 2021 04:13:12 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1612343545; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zc3hq7uDsgQ0b+vRRJzp2lKKXI9473aJH0r0Js1Sba8=;
+        b=HpVLWbDI2jrNX+ptbYXzVMjwEnvzT3tSDstsq31vn45eKVS7LJjYVzwqj1uQ2gr6lLmqUT
+        bC8zchNPhAk8QJcRoCgvPjBBGQ1e/qoJChvnC3zjw9HWM74APhhMECX1FCKKYKCE1otg6M
+        cOV8/W7XZopQR2+Wl4/NVeGMFzXcJ6g=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id CDE7CB0EA;
+        Wed,  3 Feb 2021 09:12:24 +0000 (UTC)
+Date:   Wed, 3 Feb 2021 10:12:22 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Content-Type: text/plain; charset="UTF-8"
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <YBpo9mC5feVQ0mpG@dhcp22.suse.cz>
+References: <20210126120823.GM827@dhcp22.suse.cz>
+ <20210128092259.GB242749@kernel.org>
+ <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
+ <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
+ <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
+ <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+ <YBkcyQsky2scjEcP@dhcp22.suse.cz>
+ <20210202124857.GN242749@kernel.org>
+ <YBlTMqjB06aqyGbT@dhcp22.suse.cz>
+ <20210202191040.GP242749@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210202191040.GP242749@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 30, 2021 at 7:42 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, Jan 29, 2021 at 11:31 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
+On Tue 02-02-21 21:10:40, Mike Rapoport wrote:
+> On Tue, Feb 02, 2021 at 02:27:14PM +0100, Michal Hocko wrote:
+> > On Tue 02-02-21 14:48:57, Mike Rapoport wrote:
+> > > On Tue, Feb 02, 2021 at 10:35:05AM +0100, Michal Hocko wrote:
+> > > > On Mon 01-02-21 08:56:19, James Bottomley wrote:
+> > > > 
+> > > > I have also proposed potential ways out of this. Either the pool is not
+> > > > fixed sized and you make it a regular unevictable memory (if direct map
+> > > > fragmentation is not considered a major problem)
+> > > 
+> > > I think that the direct map fragmentation is not a major problem, and the
+> > > data we have confirms it, so I'd be more than happy to entirely drop the
+> > > pool, allocate memory page by page and remove each page from the direct
+> > > map. 
+> > > 
+> > > Still, we cannot prove negative and it could happen that there is a
+> > > workload that would suffer a lot from the direct map fragmentation, so
+> > > having a pool of large pages upfront is better than trying to fix it
+> > > afterwards. As we get more confidence that the direct map fragmentation is
+> > > not an issue as it is common to believe we may remove the pool altogether.
+> > 
+> > I would drop the pool altogether and instantiate pages to the
+> > unevictable LRU list and internally treat it as ramdisk/mlock so you
+> > will get an accounting correctly. The feature should be still opt-in
+> > (e.g. a kernel command line parameter) for now. The recent report by
+> > Intel (http://lkml.kernel.org/r/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com)
+> > there is no clear win to have huge mappings in _general_ but there are
+> > still workloads which benefit. 
+> >  
+> > > I think that using PMD_ORDER allocations for the pool with a fallback to
+> > > order 0 will do the job, but unfortunately I doubt we'll reach a consensus
+> > > about this because dogmatic beliefs are hard to shake...
+> > 
+> > If this is opt-in then those beliefs can be relaxed somehow. Long term
+> > it makes a lot of sense to optimize for a better direct map management
+> > but I do not think this is a hard requirement for an initial
+> > implementation if it is not imposed to everybody by default.
 > >
-> > On Fri, Jan 29, 2021 at 2:23 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Fri, Jan 29, 2021 at 11:21 PM Nick Desaulniers
-> > > <ndesaulniers@google.com> wrote:
-> > > >
-> > > > On Fri, Jan 29, 2021 at 2:11 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Jan 29, 2021 at 11:09 PM Nick Desaulniers
-> > > > > <ndesaulniers@google.com> wrote:
-> > > > > >
-> > > > > > On Fri, Jan 29, 2021 at 1:20 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > > > >
-> > > > > > > On Fri, Jan 29, 2021 at 10:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, Jan 29, 2021 at 10:09 PM Nick Desaulniers
-> > > > > > > > <ndesaulniers@google.com> wrote:
-> > > > > > > > >
-> > > > > > > > > Can you tell me please what is the precise command line invocation of
-> > > > > > > > > make and which source file you observed this on so that I can
-> > > > > > > > > reproduce?
-> > > > > >
-> > > > > > If you don't send me your invocation of `make`, I cannot help you.
-> > > > > >
-> > > > >
-> > > > > /usr/bin/perf_5.10 stat make V=1 -j4 LLVM=1 LLVM_IAS=1
-> > > > > PAHOLE=/opt/pahole/bin/pahole LOCALVERSION=-10-amd64-clang12
-> > > > > -lto-pgo KBUILD_VERBOSE=1 KBUILD_BUILD_HOST=iniza
-> > > > > KBUILD_BUILD_USER=sedat.dilek@gmail.com
-> > > > > KBUILD_BUILD_TIMESTAMP=2021-01-29 bindeb-pkg
-> > > > > KDEB_PKGVERSION=5.11.0~rc5-10~bullseye+dileks1
-> > > >
-> > > > $ make LLVM=1 LLVM_IAS=1 -j72 defconfig
-> > > > $ make LLVM=1 LLVM_IAS=1 -j72 menuconfig
-> > > > <enable CONFIG_DEBUG_INFO and CONFIG_DEBUG_INFO_DWARF5>
-> > > > $ make LLVM=1 LLVM_IAS=1 -j72 V=1 &> log.txt
-> > > > $ grep '\-g -gdwarf-5 -g -gdwarf-5' log.txt | wc -l
-> > > > 0
-> > > > $ grep '\-g -gdwarf-5' log.txt | wc -l
-> > > > 2517
-> > > >
-> > > > Do have the patch applied twice, perhaps?
-> > > >
-> > >
-> > > Switched to my v6 local Git branch and invoked above make line I gave you.
-> > > I still see that double.
-> > > Looks like I need some "undrunken" switch.
-> >
-> > Can you follow my steps precisely to see whether it's your .config?
-> > Perhaps there is a config that duplicates DEBUG_CFLAGS that is not set
-> > in the defconfig?  If so, it's still harmless to specify the same
-> > commands twice, and likely isn't introduced by this patch set if so;
-> > so I'm not sure how much more effort is worth pursuing.
-> >
->
-> If I follow your steps of make I do not see it "double" (in my local
-> v6 Git branch).
->
-> Looks like this is coming from my build-script.
->
-> I checked if I have some double dwarf(-5) patches double - Nope.
+> > > A more restrictive possibility is to still use plain PMD_ORDER allocations
+> > > to fill the pool, without relying on CMA. In this case there will be no
+> > > global secretmem specific pool to exhaust, but then it's possible to drain
+> > > high order free blocks in a system, so CMA has an advantage of limiting
+> > > secretmem pools to certain amount of memory with somewhat higher
+> > > probability for high order allocation to succeed. 
+> > > 
+> > > > or you need a careful access control 
+> > > 
+> > > Do you mind elaborating what do you mean by "careful access control"?
+> > 
+> > As already mentioned, a mechanism to control who can use this feature -
+> > e.g. make it a special device which you can access control by
+> > permissions or higher level security policies. But that is really needed
+> > only if the pool is fixed sized.
+>   
+> Let me reiterate to make sure I don't misread your suggestion.
+> 
+> If we make secretmem an opt-in feature with, e.g. kernel parameter, the
+> pooling of large pages is unnecessary. In this case there is no limited
+> resource we need to protect because secretmem will allocate page by page.
 
+Yes.
 
-Sorry for the late reply.
+> Since there is no limited resource, we don't need special permissions
+> to access secretmem so we can move forward with a system call that creates
+> a mmapable file descriptor and save the hassle of a chardev.
 
-I do not know which command you input,
-but this happens for deb-pkg builds for example.
+Yes, I assume you implicitly assume mlock rlimit here. Also memcg
+accounting should be in place. Wrt to the specific syscall, please
+document why existing interfaces are not a good fit as well. It would be
+also great to describe interaction with mlock itself (I assume the two
+to be incompatible - mlock will fail on and mlockall will ignore it).
 
-Please try this patch:
-https://lore.kernel.org/patchwork/patch/1374926/
+> I cannot say I don't like this as it cuts roughly half of mm/secretmem.c :)
+> 
+> But I must say I am still a bit concerned about that we have no provisions
+> here for dealing with the direct map fragmentation even with the set goal
+> to improve the direct map management in the long run...
 
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+Yes that is something that will be needed long term. I do not think this
+is strictly necessary for the initial submission, though. The
+implementation should be as simple as possible now and complexity added
+on top.
+-- 
+Michal Hocko
+SUSE Labs
