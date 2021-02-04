@@ -2,99 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68BC30F264
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 12:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BA630F24F
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 12:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbhBDLgg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 06:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235683AbhBDL2V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 06:28:21 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3523EC061573;
-        Thu,  4 Feb 2021 03:27:41 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id j2so1905787pgl.0;
-        Thu, 04 Feb 2021 03:27:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=AVPcBDEqhBj+ZdkvNQJyb4mL8zPleMQDoEgdiBoAh1c=;
-        b=PjGnb6/4PtgP9jRVLqMbZ0CPDZ63a9cLblye5NvYoK32KRewNNQl7O0kLpHSOu1K1U
-         DbCTPaJAFWPympHAS0SX5mRDQwO0UqptBf+xpv3UHBMIFv+suoSiRPX2MYFYtsmo154Z
-         APGWFeYjIRnIu75gBP8iAeJPNnrfO6tfIUp2LJbv2nLV15q6xW8gz3rQahm9vm0vnu9e
-         J0jq7i3g8tY8xCbvmeTiXVNskKT7bMYs4IuTZ2EYFnR5BPn2+sXU8WEozasmLNMeA55Z
-         5JugoOH2YfVHJMMBaFw2jtplCZPWdnXCk93RnGfHb3kE7wjpODIVj9D++RaFNKuc6Sr2
-         FTNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=AVPcBDEqhBj+ZdkvNQJyb4mL8zPleMQDoEgdiBoAh1c=;
-        b=KHT/ZBcZuM0fhAHkYO3f4BigKfMwWA7BEhjEOyQP612IjXuHY8EHidTNg15MV8JOxe
-         tQ9wONE+b4bdAlvE9OpCq/iAdIFzGDPl+zIBgtSvzr5K3ZnJ2AuQ6ugdVes/KdfEouZq
-         gGZxRDZEDL67BaYcXE0g/zYXY1FdF3Ph7+QCs8nC5y7RGhHN1Un6LZdSBJe4930xtefy
-         wyJ4HGbtKiqtzd5EnPkc5H8CdeCJ+PGf7S1/6FyhwhyNQ/GHDr7tFF0h0XZmIStItCUi
-         xCWDw7boO1LyVvTgDJpPwYnAD1/PpAooaEJYKGM2gELpu29/3FlpoJ6ib4w3MB8V/qxO
-         zUZA==
-X-Gm-Message-State: AOAM530m4KMQeM8efQyP7SNlqJ1NqiGYhoXpGy3qdulASG4zp0pVgSk5
-        WcI4+y5HwtERngVVzq/pN/c=
-X-Google-Smtp-Source: ABdhPJwlVsXEcTxuAbN8SYea8wHGiN0UVg9yeSiT3jonSYGOAxSCXe9g5u87CZ/f94De5Kycwbw2RQ==
-X-Received: by 2002:a62:b410:0:b029:1a4:7868:7e4e with SMTP id h16-20020a62b4100000b02901a478687e4emr8103392pfn.62.1612438060844;
-        Thu, 04 Feb 2021 03:27:40 -0800 (PST)
-Received: from localhost (60-242-11-44.static.tpgi.com.au. [60.242.11.44])
-        by smtp.gmail.com with ESMTPSA id x17sm488633pfq.132.2021.02.04.03.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 03:27:40 -0800 (PST)
-Date:   Thu, 04 Feb 2021 21:27:34 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH] MIPS: make userspace mapping young by default
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, ambrosehua@gmail.com,
-        Huacai Chen <chenhc@lemote.com>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huang Pei <huangpei@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, Li Xuefeng <lixuefeng@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Paul Burton <paulburton@kernel.org>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>
-References: <20210204013942.8398-1-huangpei@loongson.cn>
-        <1612409285.q4gi3x2bhk.astroid@bobo.none>
-        <20210204103459.GA10558@alpha.franken.de>
-In-Reply-To: <20210204103459.GA10558@alpha.franken.de>
+        id S235988AbhBDLes (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 06:34:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40704 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235851AbhBDLcn (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 4 Feb 2021 06:32:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B8D5A64F43;
+        Thu,  4 Feb 2021 11:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612438323;
+        bh=2YjywL5SDoEOedQJhLkpDYn35JOZkPUsSSTuGmTvbGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kfyPb2gRQK0VJ0bG96IqzhK4wj3EQuLqLz846zpApxcBwm6WX5CtQsTqXRtAiettV
+         Besll6N47ziUztkxZ9uvbAsAManAgkDNtO1dfWhHGfCVtc763gwDqZuV/PJHM4amXe
+         NzZHR6+dZdeHxPTLxYHYjwbMQNb3w6QbyNiepEAxlD0e9d57gxLWScwoHeMOz0zzxT
+         Vme4kodJtOqIlDuUlby8EOucFxgZASr9qI2lvWzc7i6T1yxSrrhOjO19hjpFL65gQr
+         YqgO9vVlRT1CTjfaXTK0DGlZqxa/k2Qn7Vs36jPxV0PXtDTyFjDcxi+38fcdf2VRVr
+         ganUhejqO/Vig==
+Date:   Thu, 4 Feb 2021 13:31:45 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20210204113145.GR242749@kernel.org>
+References: <6653288a-dd02-f9de-ef6a-e8d567d71d53@redhat.com>
+ <YBlUXdwV93xMIff6@dhcp22.suse.cz>
+ <211f0214-1868-a5be-9428-7acfc3b73993@redhat.com>
+ <YBlgCl8MQuuII22w@dhcp22.suse.cz>
+ <d4fe580a-ef0e-e13f-9ee4-16fb8b6d65dd@redhat.com>
+ <YBlicIupOyPF9f3D@dhcp22.suse.cz>
+ <95625b83-f7e2-b27a-2b99-d231338047fb@redhat.com>
+ <20210202181546.GO242749@kernel.org>
+ <f26a17366194880d58e67d10cb5d7d7fdf2f3c19.camel@linux.ibm.com>
+ <YBqSejZ3XbUKFudR@dhcp22.suse.cz>
 MIME-Version: 1.0
-Message-Id: <1612437994.rfmweyhtiy.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YBqSejZ3XbUKFudR@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Thomas Bogendoerfer's message of February 4, 2021 8:34 pm:
-> On Thu, Feb 04, 2021 at 01:29:26PM +1000, Nicholas Piggin wrote:
->> Excerpts from Huang Pei's message of February 4, 2021 11:39 am:
->> > MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
->> > + 2 TLB Invalid), butthe second TLB Invalid exception is just
->> > triggered by __update_tlb from do_page_fault writing tlb without
->> > _PAGE_VALID set. With this patch, user space mapping prot is made
->> > young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
->> > and it only take 1 TLB Miss + 1 TLB Invalid exception
->> >=20
->> > Remove pte_sw_mkyoung without polluting MM code and make page fault
->> > delay of MIPS on par with other architecture
->> >=20
->> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
->>=20
->> Could we merge this? For the core code,
->=20
-> sure, but IMHO I should only merge the MIPS part, correct ?
+On Wed, Feb 03, 2021 at 01:09:30PM +0100, Michal Hocko wrote:
+> On Tue 02-02-21 10:55:40, James Bottomley wrote:
+> > On Tue, 2021-02-02 at 20:15 +0200, Mike Rapoport wrote:
+> > > On Tue, Feb 02, 2021 at 03:34:29PM +0100, David Hildenbrand wrote:
+> > > > On 02.02.21 15:32, Michal Hocko wrote:
+> > 
+> > Well the safest security statement is that we never expose the data to
+> > the kernel because it's a very clean security statement and easy to
+> > enforce. It's also the easiest threat model to analyse.   Once we do
+> > start exposing the secret to the kernel it alters the threat profile
+> > and the analysis and obviously potentially provides the ROP gadget to
+> > an attacker to do the same. Instinct tells me that the loss of
+> > security doesn't really make up for the ability to swap or migrate but
+> > if there were a case for doing the latter, it would have to be a
+> > security policy of the user (i.e. a user should be able to decide their
+> > data is too sensitive to expose to the kernel).
+> 
+> The security/threat model should be documented in the changelog as
+> well. I am not a security expert but I would tend to agree that not
+> allowing even temporal mapping for data copying (in the kernel) is the
+> most robust approach. Whether that is generally necessary for users I do
+> not know.
+> 
+> From the API POV I think it makes sense to have two
+> modes. NEVER_MAP_IN_KERNEL which would imply no migrateability, no
+> copy_{from,to}_user, no gup or any other way for the kernel to access
+> content of the memory. Maybe even zero the content on the last unmap to
+> never allow any data leak. ALLOW_TEMPORARY would unmap the page from
+> the direct mapping but it would still allow temporary mappings for
+> data copying inside the kernel (thus allow CoW, copy*user, migration).
+> Which one should be default and which an opt-in I do not know. A less
+> restrictive mode to be default and the more restrictive an opt-in via
+> flags makes a lot of sense to me though.
 
-You could ack it for MIPS and Andrew could take it through his tree=20
-would avoid dependencies.
+The default is already NEVER_MAP_IN_KERNEL, so there is no explicit flag
+for this. ALLOW_TEMPORARY should be opt-in, IMHO, and we can add it on top
+later on.
 
-Thanks,
-Nick
+-- 
+Sincerely yours,
+Mike.
