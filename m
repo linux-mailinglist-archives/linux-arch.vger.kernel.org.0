@@ -2,112 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B123030FE52
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3879630FE58
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239811AbhBDU3E convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 4 Feb 2021 15:29:04 -0500
-Received: from wildebeest.demon.nl ([212.238.236.112]:38078 "EHLO
-        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbhBDU24 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:28:56 -0500
-Received: from tarox.wildebeest.org (tarox.wildebeest.org [172.31.17.39])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by gnu.wildebeest.org (Postfix) with ESMTPSA id 0C55230278CD;
-        Thu,  4 Feb 2021 21:28:05 +0100 (CET)
-Received: by tarox.wildebeest.org (Postfix, from userid 1000)
-        id D4F1840C9DA3; Thu,  4 Feb 2021 21:28:05 +0100 (CET)
-Message-ID: <42d2542d4b7f9836121b92d9bf349afa920bd4cd.camel@klomp.org>
-Subject: Re: [PATCH v7 1/2] Kbuild: make DWARF version a choice
-From:   Mark Wielaard <mark@klomp.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nathan Chancellor <nathan@kernel.org>
-Date:   Thu, 04 Feb 2021 21:28:05 +0100
-In-Reply-To: <CAKwvOdmT4t==akMN7eHWgD_XdpN--PLpUj8vgujGJ4TpREvteQ@mail.gmail.com>
-References: <20210130004401.2528717-1-ndesaulniers@google.com>
-         <20210130004401.2528717-2-ndesaulniers@google.com>
-         <20210204103946.GA14802@wildebeest.org>
-         <CAKwvOdm0O8m_+mxy7Z91Lu=Hzf6-DyCdAjMOsCRiMmNis4Pd2A@mail.gmail.com>
-         <20fdd20fe067dba00b349407c4a0128c97c1a707.camel@klomp.org>
-         <CAKwvOdmT4t==akMN7eHWgD_XdpN--PLpUj8vgujGJ4TpREvteQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-X-Spam-Flag: NO
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=ham autolearn_force=no version=3.4.0
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on gnu.wildebeest.org
+        id S240033AbhBDU3d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 15:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240048AbhBDU3E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:29:04 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58544C061794
+        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 12:28:09 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d2so2485693pjs.4
+        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 12:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IZXHMkkF5la794RToqIjRZW5Sf0o5ADpzH8P/DUSqM8=;
+        b=WPv79kCio4eGaa+1n6kJbUiCr+03EUTatrYglWJE03qfeFrKHQzZVbBtF49ld+k4ze
+         7lEEgOI28vEeRahv9M+5hNCWfrIKDpDdagm/LThs/rcnb6mqbDMlpyjeSuswWn5/cjQF
+         8HEg8Q2Ubdq/QtSINwilr9Xr1IyuglpkxjnlI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IZXHMkkF5la794RToqIjRZW5Sf0o5ADpzH8P/DUSqM8=;
+        b=uZqCI+TXuxbbUNXq9TnQpfOmhKExnVyDjAOVDKmByTBiAUmAGHORPEBU+avxfWQCl5
+         oCUzl/+XhiprR2fA/ec08m/u7dEXr4VrOI/Fcb7XtnyQbxya4eP++mpM4CEQXnx2uAVL
+         xdhvErUtaLqaOQOpazCsHB8RJWFWzlZTiXCErumCrc6/g1768ahhoStBjPz3cNDYpgta
+         CjGdwaqi6ukpx7uJl6B7cRvZ6hJYsdyvSkkh89zK5mZa5dBlk7peK2xQO+Y+cuLgGpea
+         frExghTb8o1FbPYT0ek66uo/40hnNCXTtoiJN3LirPu3e32nVaYvcceL/wdvT49dVHr8
+         PlYg==
+X-Gm-Message-State: AOAM530Wgdi9fszAjoPSOLyHpWGllXIR1EnUw9AInOYObywQUYnam6Ll
+        pBXyC+rXuaz5KvQIjJ3nhBs8fw==
+X-Google-Smtp-Source: ABdhPJxaLK/3FaRcCdBuM/ynvQhoUqRuwNE06CjEMBKRxvH0MC7s6Ljyc3PQcHyuCfh0R5pvWUrRfw==
+X-Received: by 2002:a17:90b:4d06:: with SMTP id mw6mr708971pjb.24.1612470488976;
+        Thu, 04 Feb 2021 12:28:08 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b26sm6838438pfo.202.2021.02.04.12.28.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Feb 2021 12:28:08 -0800 (PST)
+Date:   Thu, 4 Feb 2021 12:28:07 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v19 19/25] mm: Re-introduce vm_flags to do_mmap()
+Message-ID: <202102041228.E6FED55C@keescook>
+References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
+ <20210203225547.32221-20-yu-cheng.yu@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210203225547.32221-20-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 2021-02-04 at 12:04 -0800, Nick Desaulniers wrote:
-> On Thu, Feb 4, 2021 at 11:56 AM Mark Wielaard <mark@klomp.org> wrote:
-> > I agree with Jakub. Now that GCC has defaulted to DWARF5 all the
-> > tools
-> > have adopted to the new default version. And DWARF5 has been out
-> > for
+On Wed, Feb 03, 2021 at 02:55:41PM -0800, Yu-cheng Yu wrote:
+> There was no more caller passing vm_flags to do_mmap(), and vm_flags was
+> removed from the function's input by:
 > 
-> "all of the tools" ?
-
-I believe so yes, we did a mass-rebuild of all of Fedora a few weeks
-back with a GCC11 pre-release and did find some tools which weren't
-ready, but as far as I know all have been fixed now. I did try to
-coordinate with the Suse and Debian packagers too, so all the major
-distros should have all the necessary updates once switching to GCC11.
-
-> > more than 4 years already. It isn't unreasonable to assume that people
-> > using GCC11 will also be using the rest of the toolchain that has moved
-> > on. Which DWARF consumers are you concerned about not being ready for
-> > GCC defaulting to DWARF5 once GCC11 is released?
+>     commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
 > 
-> Folks who don't have top of tree pahole or binutils are the two that
-> come to mind.
+> There is a new user now.  Shadow stack allocation passes VM_SHSTK to
+> do_mmap().  Re-introduce vm_flags to do_mmap(), but without the old wrapper
+> do_mmap_pgoff().  Instead, make all callers of the wrapper pass a zero
+> vm_flags to do_mmap().
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-I believe pahole just saw a 1.20 release. I am sure it will be widely
-available once GCC11 is released (which will still be 1 or 2 months)
-and people are actually using it. Or do you expect distros/people are
-going to upgrade to GCC11 without updating their other toolchain tools?
-BTW. GCC11 doesn't need top of tree binutils, it will detect the
-binutils capabilities (bugs) and adjust its DWARF output based on it.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
->   I don't have specifics on out of tree consumers, but
-> some Aarch64 extensions which had some changes to DWARF for ARMv8.3
-> PAC support broke some debuggers.
-
-It would be really helpful if you could provide some specifics. I did
-fix some consumers to handle the PAC operands in CFI last year, but I
-don't believe that had anything to do with the default DWARF version,
-just with dealing with DW_CFA_AARCH64_negate_ra_state.
-
-> I don't doubt a lot of work has gone into fixing many downstream
-> projects and then when building everything from ToT that there are no
-> issues with DWARF v5.  The issue is getting upgrades into developers
-> hands, and what to default to until then.
-
-I would suggest you simply default to what you already do when the
-compiler is given -g. Just like you do already for the implicit default
--std=gnuc*. Once GCC11 is actually released and people upgrade their
-toolchain to use it the tools will be ready and in developers hands.
-
-Cheers,
-
-Mark
+-- 
+Kees Cook
