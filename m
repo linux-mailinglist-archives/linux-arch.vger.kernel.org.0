@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C11D30FD51
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 20:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE62D30FD5D
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 20:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbhBDTvD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 14:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S238594AbhBDTyE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 14:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239105AbhBDTul (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 14:50:41 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA98C061786
-        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 11:50:01 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id q131so2757684pfq.10
-        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 11:50:01 -0800 (PST)
+        with ESMTP id S239437AbhBDTvj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 14:51:39 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A72C06121C
+        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 11:50:17 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id o16so2866915pgg.5
+        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 11:50:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=YGpFXYKJAyY687eckGJmRvP0PWeimiXLgNP+xU7/nqo=;
-        b=jNNn3+1W3q2GnDkbDg5t75Hoqqb6seGdjr7W6ch2OjxIYQ+lEj9RXyDW8vL2LnL17O
-         7p4KUfwWEJhn1xLRJXFWJ4/XLv358OAS0rDOQxTuyiD+CqW3xrLuas3TWxdLSS2H7Xb5
-         ku1U3RHyZzcqD1+7uVRUTDF5v4lSLOACpHUeo=
+        bh=xVfkuBJxoMHahNTAuzjMVwQ5V275LoCHtWLRN4+qRmA=;
+        b=SMhMJ0y1hFFkybLoK6RuX6W/uHtQZL/bYx1Vgct5XlRDHsQX7hEStJhU3muUb4fbEv
+         hiUTrOqPhcz1pfUb97munHXmjX0c8gXGZ3hYDWbcMqclDY0sjxLOb8ku8yWr5/G0SoNh
+         WUrWnsUWQvaHO1lagOpKt+BD5lQaiuCJGoC+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YGpFXYKJAyY687eckGJmRvP0PWeimiXLgNP+xU7/nqo=;
-        b=t47E829PBHdcS/Mq1kDPR7H5cwlYjS6b34r+34e6RzZrnuIT89fYtk8aceIq0kbFcX
-         qdxo8tXbgUqRIO8U2gNpppMazWKc+wpG2cTWgqggu8N3pqzp1g5muNsnK4XakWtDLJxL
-         H2Ck+9aiKqMVXgn96UgeoaGnZeOOeqJtLy1SZvO/ndTa1VhoMyLezjZTA+XS3foSsuvR
-         UPNL6eL4mhhiWCi/EQB8skJXjOKZzgTP4ECbAbsdpS7qN8nEvKpQIvKSI74oKU0PTds/
-         i/4jJwOFjkkkg3PK9PDh6mN0sNSy4V3e6F3KbsAGGUbqaVPBkFcCfZmtxhnqnbUGejWj
-         3Dug==
-X-Gm-Message-State: AOAM533QupwiWnz2/0a4T1BQzPLmkzSNZC1h+X1JVMBfRvCiBBx6mm9f
-        ZtDKc+BkSgRx6TnuO4BMX4ZolA==
-X-Google-Smtp-Source: ABdhPJy5N6yshiiKOkoPYx0cJNX+OaE9hEUPv9SEHAC+Nz8m2HAkwuR8P/TY+xrcUega9fpe8DszDQ==
-X-Received: by 2002:a65:6886:: with SMTP id e6mr588022pgt.73.1612468201098;
-        Thu, 04 Feb 2021 11:50:01 -0800 (PST)
+        bh=xVfkuBJxoMHahNTAuzjMVwQ5V275LoCHtWLRN4+qRmA=;
+        b=a4s7vC4WDuYoDQExykKeJFh2vV/isueYLue2sy5C3tcH2ts1OjKj9BzSslB0gSRZI3
+         kARW4f4YL+94/9fAbEhn82lNW9JTkjgx6oWdzFtHTfsJde5AXvKz5Ld6A1b9FFNU47W4
+         /whQz70E/xwP8QtkSyO3zuzlG53OefRc2mAwXjB+OXGw3JSkppXwWApXDRgZpqdrpr89
+         +SSLyT1RWBw3J3M+7E0aqFUhvpyHKxXDu/VYTvfGuxQc97oeuVJXsXcmfWcjnCxN/hm8
+         IPJNZ6vaY8rE8QaaGVL57JFdQvVH7ycwhVjvwibzeFJATD/ucz7YFMaBXdoT5f6raKZ2
+         3ZMQ==
+X-Gm-Message-State: AOAM533pxWIOkNC1DahLgvcM2vwW4bEnwyD5ZtMB7mkJmigE4M3EWMl9
+        XurZZw5tump6YfLGMo81WORu4w==
+X-Google-Smtp-Source: ABdhPJzOajMVaIDiSuI0Zs6A72FQUA7Xr4U1otuUXAtASSA9xiRUczq+mdvc5mt1TaWo3NxHiyLjQw==
+X-Received: by 2002:a62:7d03:0:b029:1bb:5919:6dec with SMTP id y3-20020a627d030000b02901bb59196decmr766097pfc.76.1612468217541;
+        Thu, 04 Feb 2021 11:50:17 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j5sm6035843pjf.47.2021.02.04.11.49.59
+        by smtp.gmail.com with ESMTPSA id y16sm7231723pfb.83.2021.02.04.11.50.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 11:49:59 -0800 (PST)
-Date:   Thu, 4 Feb 2021 11:49:58 -0800
+        Thu, 04 Feb 2021 11:50:16 -0800 (PST)
+Date:   Thu, 4 Feb 2021 11:50:15 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -72,26 +72,23 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v19 1/7] x86/cet/ibt: Update Kconfig for user-mode
+Subject: Re: [PATCH v19 4/7] x86/cet/ibt: Update ELF header parsing for
  Indirect Branch Tracking
-Message-ID: <202102041149.8B30B1E@keescook>
+Message-ID: <202102041150.191C2FC@keescook>
 References: <20210203225902.479-1-yu-cheng.yu@intel.com>
- <20210203225902.479-2-yu-cheng.yu@intel.com>
+ <20210203225902.479-5-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210203225902.479-2-yu-cheng.yu@intel.com>
+In-Reply-To: <20210203225902.479-5-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 02:58:56PM -0800, Yu-cheng Yu wrote:
-> Indirect branch tracking is a hardware security feature that verifies near
-> indirect call/jump instructions arrive at intended targets, which are
-> labeled by the compiler with ENDBR opcodes.  If such instructions reach
-> unlabeled locations, the processor raises control-protection faults.
-> 
-> Check the compiler is up-to-date at config time.
+On Wed, Feb 03, 2021 at 02:58:59PM -0800, Yu-cheng Yu wrote:
+> An ELF file's .note.gnu.property indicates features the file supports.
+> The property is parsed at loading time and passed to arch_setup_elf_
+> property().  Update it for Indirect Branch Tracking.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
