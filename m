@@ -2,93 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AE430EDA5
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 08:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA68930EE3F
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 09:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbhBDHpv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 02:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S234777AbhBDIWP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 03:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234585AbhBDHpu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 02:45:50 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7AAC061786
-        for <linux-arch@vger.kernel.org>; Wed,  3 Feb 2021 23:45:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id g15so1301587pjd.2
-        for <linux-arch@vger.kernel.org>; Wed, 03 Feb 2021 23:45:10 -0800 (PST)
+        with ESMTP id S233460AbhBDIWO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 03:22:14 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2144C061573;
+        Thu,  4 Feb 2021 00:21:34 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id r38so1556480pgk.13;
+        Thu, 04 Feb 2021 00:21:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lgxkPUBlJj+m7PzcHNu0RuzFBoZ+BL1D5oU26v/3jtc=;
-        b=dEOb1Bs1sP3/z5oYFbnSNfK2PIZUlSSt2acWLQ/74zn9vY+wUqfW/TAPGV3XtEGzKl
-         1gsyUYF5VFvM5Rq20Z+yqr5sGHc97qGIVURk4P/y7NDwf6YsFrzysu6LaNlWuumgoWSe
-         sYxTmRtMGnNJbKKJ+vAO2ZeUVPyayz8PvPwXfEQkdrXyh9k42Nsi9HxApzh2I4qzGuNd
-         3vj6ysacX/ZnO63MNKDdq1Ue6U+jsit095NG/XgKhoRbfinXa5tOu20V4Vrqd0fAORvC
-         gmPRw5PNOeGLLkQcCh+nEeezKc0NixIL/1WT/kKZrZKE5fEa77I6lnb7e7sV1D56PYwG
-         JXWQ==
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=XXkvcBKboNN7LGIeynhgZT6EpSB86akvi9IwRytyAz8=;
+        b=LxvPH9bB5kAaZOYcJLU2iOG2OormPkekcFLSUlN6cpK/oqo551ZRevlJQSdTj9CxB1
+         rCfZlOPlLe/FAdkjd2tYzWS9LBxKvSFzufueWwEGAGkcWFAqv25IWvqpQyhSiMt4SAVS
+         IpwD9JkOriCnJ+Q2+N5mwql7JWGZEvEdu+lsUSo2ZjViWm0HoCSwf31f0+Si9XG/N8Y+
+         ctZRHcpTf6yjXhE1LnhjgMfKCvchelCV6B1Rd/DFlkGhGVypKY6ORTk+GdVvtVOW0AFN
+         N/inRTqZVWOdJbPmt5xeAky+ZVODprxaeWovrbG6up5GSTM5MOdsUH7PHg5NhFEcKaQX
+         F6aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lgxkPUBlJj+m7PzcHNu0RuzFBoZ+BL1D5oU26v/3jtc=;
-        b=fJbf/ymVxI1l+0SgBjoDgPEwWmVCeXenBMmuKOhdyzTVNJGWbmDJcdlGyl7rK7Mgi4
-         0xT+u154HQmENJRsF46aLiT8ZlhZU0Lu4F5o3tkopeBvfsKW4Bl25XvMqPx7O8hT6zOs
-         KcEAPMKmMF5GzM//wxfI+irewDwz/v7vrTOD87ETEHfQjf5M9MEqzBoYk2LRAKxVUfMG
-         O+JUcq8TxiXldy1v7GrQm2Mu1rke3vHq31sr3iq4Nzypeeh/EZsqUIZU01ZEEZftq84R
-         AGoAMK0/R9upuQ8PYcfXYMV68nsNNoQev18c4jydjgxCA3TrjwClnNZAWKrsfsNphzhG
-         RJrQ==
-X-Gm-Message-State: AOAM532zKgrYZOwNn3NH5DT07qJext95jezDzCuIzRhD0rtIfMQkbKg5
-        z7c3Se1XnRmeO28M1mYuv74VD7lE2D75GOoyBclxGQ==
-X-Google-Smtp-Source: ABdhPJy05vgBYJxOXEdbRDVra76zNpviLVb46Q+2BWJB9L+q8Mdow/Rorl074tN+Fu/zU47B4SSfh0lp9AvwWaQHirY=
-X-Received: by 2002:a17:90a:bf10:: with SMTP id c16mr7104915pjs.101.1612424709320;
- Wed, 03 Feb 2021 23:45:09 -0800 (PST)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=XXkvcBKboNN7LGIeynhgZT6EpSB86akvi9IwRytyAz8=;
+        b=YGTTU6HYnz2yu73rec0y5sfqV1WTNeXuuKuiMY0wcU0NeE0DDDxgL1y1EnjXqmm9Er
+         V1X2Nw1WZ4HyoGZMHz95lMxO80vmnnMHzwX22Hz3Sh1L2e7dNzPwkUIfr3c27Ri50D9J
+         +8y3NF3BUw0c2IweHzWkB7zt898nOC1Dgp8RW5FUrAOt80u64aleHC3hhkeocVmLPh7y
+         jJeLiwxtD+lOw4zsIfEJkJ9MMS99Ve7fkmmDayZbDhH6TQx73h2yyyG1rRt7BP3nwIaO
+         9gvvpF/YEcd2AAMbFAzGhzcG1ACKHEzKvKjdmTmlHLM/Q3iPFsb6ZLwR7cBlJwonTMhY
+         KExg==
+X-Gm-Message-State: AOAM532gxUK/Cl2krbmK80dmOc4PNHFmEWAcA1awszicN3YUvxgnTk9H
+        wATdcMAj87B+RqNaZ8Hke9BVLP8cHdo=
+X-Google-Smtp-Source: ABdhPJyFh2UIalFWfH9S0Gigao8PrBaKb3QduCZYTwG0z0xvXFRe3aj70yzjXDYS3R0QrYEyG2SNLA==
+X-Received: by 2002:a63:1c13:: with SMTP id c19mr7570212pgc.359.1612426893809;
+        Thu, 04 Feb 2021 00:21:33 -0800 (PST)
+Received: from localhost ([1.132.253.145])
+        by smtp.gmail.com with ESMTPSA id 72sm4819621pfw.170.2021.02.04.00.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Feb 2021 00:21:33 -0800 (PST)
+Date:   Thu, 04 Feb 2021 18:21:25 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2 0/5] shoot lazy tlbs
+To:     linux-kernel@vger.kernel.org
+Cc:     Anton Blanchard <anton@ozlabs.org>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        Andy Lutomirski <luto@kernel.org>
+References: <20201214065312.270062-1-npiggin@gmail.com>
+In-Reply-To: <20201214065312.270062-1-npiggin@gmail.com>
 MIME-Version: 1.0
-References: <20210204064037.1281726-1-ndesaulniers@google.com> <CA+icZUVVcP5MSUSDM18Wab46n-20eskRE59akdwfxXKpKXDOFg@mail.gmail.com>
-In-Reply-To: <CA+icZUVVcP5MSUSDM18Wab46n-20eskRE59akdwfxXKpKXDOFg@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 3 Feb 2021 23:44:56 -0800
-Message-ID: <CAKwvOdkYkgViVfzAn1J+SoSfzWn4aYVi+O3uwHhTsV92CVEeJQ@mail.gmail.com>
-Subject: Re: [PATCH v8 0/2] Kbuild: DWARF v5 support
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Chris Murphy <bugzilla@colorremedies.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <1612426668.622xblt2lx.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 3, 2021 at 10:58 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> I guess I need to test harder to get a Tested-by credit :-)?
+I'll ask Andrew to put this in -mm if no objections.
 
-You're right Sedat, I'm sorry.  Your testing is invaluable; thank you
-for taking the time to help and credit is a powerful incentive.
+The series now doesn't touch other archs in non-trivial ways, and core code
+is functionally not changed much / at all if the option is not selected so
+it's actually pretty simple aside from the powerpc change.
 
-It can be difficult to know whether to carry forward tags or not when
-a patch is revised.
-
-Keeping track whether someone sent an explicit Tested By vs including
-it based on feedback that implied they tried it.  If you've tested v7
-or v8, please reply explicitly with tested by tags, or perhaps
-Masahiro can apply those for you.
-
-It can be difficult to know what's broken if you apply too many out of
-tree patches though.
--- 
 Thanks,
-~Nick Desaulniers
+Nick
+
+Excerpts from Nicholas Piggin's message of December 14, 2020 4:53 pm:
+> This is another rebase, on top of mainline now (don't need the
+> asm-generic tree), and without any x86 or membarrier changes.
+> This makes the series far smaller and more manageable and
+> without the controversial bits.
+>=20
+> Thanks,
+> Nick
+>=20
+> Nicholas Piggin (5):
+>   lazy tlb: introduce lazy mm refcount helper functions
+>   lazy tlb: allow lazy tlb mm switching to be configurable
+>   lazy tlb: shoot lazies, a non-refcounting lazy tlb option
+>   powerpc: use lazy mm refcount helper functions
+>   powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
+>=20
+>  arch/Kconfig                         | 30 ++++++++++
+>  arch/arm/mach-rpc/ecard.c            |  2 +-
+>  arch/powerpc/Kconfig                 |  1 +
+>  arch/powerpc/kernel/smp.c            |  2 +-
+>  arch/powerpc/mm/book3s64/radix_tlb.c |  4 +-
+>  fs/exec.c                            |  4 +-
+>  include/linux/sched/mm.h             | 20 +++++++
+>  kernel/cpu.c                         |  2 +-
+>  kernel/exit.c                        |  2 +-
+>  kernel/fork.c                        | 52 ++++++++++++++++
+>  kernel/kthread.c                     | 11 ++--
+>  kernel/sched/core.c                  | 88 ++++++++++++++++++++--------
+>  kernel/sched/sched.h                 |  4 +-
+>  13 files changed, 184 insertions(+), 38 deletions(-)
+>=20
+> --=20
+> 2.23.0
+>=20
+>=20
