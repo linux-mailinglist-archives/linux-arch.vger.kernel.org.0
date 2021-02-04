@@ -2,51 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C04B430FE96
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C3F30FE4F
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239776AbhBDUhj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 15:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240108AbhBDU2Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:28:16 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A335DC0613D6
-        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 12:27:36 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id s15so2364213plr.9
-        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 12:27:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/KkzilzXEisJddaLgkjR4cjm+2gZx2aIAgczeuG3frI=;
-        b=SQnBGiEH7SyjfxJqdii1BqfZaqzWi1I4ROQ+T9GW6ajXhOT3uDA3RK4TvfKWUbUWhy
-         MIj0IL32FR9WV3RHADy1VD4Q77Q6mNKUCLqwwws+lNkcfFqSMvCOp0kEeObfoGsW907m
-         zujxwsHELU1cNG7gpww149IJuWidCm5N4ZGL8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/KkzilzXEisJddaLgkjR4cjm+2gZx2aIAgczeuG3frI=;
-        b=OTgmqwUoObGcK0PPxzGrjeF2c8iO/shwLPMVZ31gDYD34zo+yv3RhhChlsapEZURsU
-         5gpyUvh2I+pRQKzUvCW5SSWr7gNJ4p03hn23NAZeOLcVirMqck6Ckx1IUupyyRUhsgsP
-         vuMlO4P3kBGoVQXxOo0g4N9boK+bRX3Iqop7Mn4Bzb+2wBmnXI2ufbJsqiYEJ1FaFs/W
-         pc1CNT85ggJzuAsndjPZXy2Yj8NQj4sboCcg6GpEtxa11qKtJI1/D/PenBxVXiU0wf3c
-         MZSGGIkw/kNJp687rODoJy8qFrBUPKw26OdFppVH+rF79QXAvMpVqUcLJHy98or1QCwR
-         HrHQ==
-X-Gm-Message-State: AOAM532V26pY+A/Ez7TDjJxYBZXFnmjf6OfBIDDv014Twu+S8BQeZ9RY
-        kXsYVfHx3ut27V3opjUg5sazKw==
-X-Google-Smtp-Source: ABdhPJyj8hnNU5LEzeZQ1jHOEtqoFt0d6CyhuA9vknTPXqFjOzzNcOwB9CQKOQdvjeVU2Ogq22aWeA==
-X-Received: by 2002:a17:90a:c902:: with SMTP id v2mr720901pjt.144.1612470456119;
-        Thu, 04 Feb 2021 12:27:36 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q2sm6995012pfg.190.2021.02.04.12.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 12:27:34 -0800 (PST)
-Date:   Thu, 4 Feb 2021 12:27:34 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S240173AbhBDU2r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 15:28:47 -0500
+Received: from mga03.intel.com ([134.134.136.65]:2185 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240060AbhBDU2i (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 4 Feb 2021 15:28:38 -0500
+IronPort-SDR: VXwchtpjYCUrRSFb5TVExtTuN13N4enEq3dsNwcPj6+fi6XEHYFNdlHAbiYsGVCDPH6I5xJjzB
+ nKflZoBxLXrw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="181391437"
+X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
+   d="scan'208";a="181391437"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 12:27:53 -0800
+IronPort-SDR: /K+3Oq7Co2BriTI3sDGwdXTCFu7OL8ZXD3NHidW/C48Z0/CDB38uP2y9WMiMNfqUpOK0c+91/s
+ eKIAHc1ajx7Q==
+X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
+   d="scan'208";a="483698775"
+Received: from mmjajodi-mobl1.amr.corp.intel.com (HELO [10.251.130.164]) ([10.251.130.164])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 12:27:53 -0800
+Subject: Re: [PATCH v19 08/25] x86/mm: Introduce _PAGE_COW
+To:     Kees Cook <keescook@chromium.org>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -72,103 +52,79 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v19 18/25] mm: Update can_follow_write_pte() for shadow
- stack
-Message-ID: <202102041226.D3E2B437@keescook>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-19-yu-cheng.yu@intel.com>
+ <20210203225547.32221-9-yu-cheng.yu@intel.com>
+ <202102041215.B54FCA552F@keescook>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <2e43bf0b-e1a9-99f6-8d5d-d6e6886b4217@intel.com>
+Date:   Thu, 4 Feb 2021 12:27:52 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210203225547.32221-19-yu-cheng.yu@intel.com>
+In-Reply-To: <202102041215.B54FCA552F@keescook>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 02:55:40PM -0800, Yu-cheng Yu wrote:
-> Can_follow_write_pte() ensures a read-only page is COWed by checking the
-> FOLL_COW flag, and uses pte_dirty() to validate the flag is still valid.
-> 
-> Like a writable data page, a shadow stack page is writable, and becomes
-> read-only during copy-on-write, but it is always dirty.  Thus, in the
-> can_follow_write_pte() check, it belongs to the writable page case and
-> should be excluded from the read-only page pte_dirty() check.  Apply
-> the same changes to can_follow_write_pmd().
+On 2/4/21 12:19 PM, Kees Cook wrote:
+>> (e) A page where the processor observed a Write=1 PTE, started a write, set
+>>     Dirty=1, but then observed a Write=0 PTE.  That's possible today, but
+>>     will not happen on processors that support shadow stack.
+> What happens for "e" with/without CET? It sounds like direct writes to
+> such pages will be (correctly) rejected by the MMU?
 
-Does this need the vma passed down? Should it just pass vm_flags? I
-suppose it doesn't really matter, though.
+A page fault would be generated regardless of CET support.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+If CET were not around, the fault would be reported as a present, write
+fault.
 
--Kees
-
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
->  mm/gup.c         | 8 +++++---
->  mm/huge_memory.c | 8 +++++---
->  2 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index e4c224cd9661..66ab67626f57 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -357,10 +357,12 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
->   * FOLL_FORCE can write to even unwritable pte's, but only
->   * after we've gone through a COW cycle and they are dirty.
->   */
-> -static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
-> +static inline bool can_follow_write_pte(pte_t pte, unsigned int flags,
-> +					struct vm_area_struct *vma)
->  {
->  	return pte_write(pte) ||
-> -		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
-> +		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte) &&
-> +				  !arch_shadow_stack_mapping(vma->vm_flags));
->  }
->  
->  static struct page *follow_page_pte(struct vm_area_struct *vma,
-> @@ -403,7 +405,7 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  	}
->  	if ((flags & FOLL_NUMA) && pte_protnone(pte))
->  		goto no_page;
-> -	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags)) {
-> +	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags, vma)) {
->  		pte_unmap_unlock(ptep, ptl);
->  		return NULL;
->  	}
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index bfec65c9308b..eb64e2b56bc9 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1337,10 +1337,12 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf, pmd_t orig_pmd)
->   * FOLL_FORCE can write to even unwritable pmd's, but only
->   * after we've gone through a COW cycle and they are dirty.
->   */
-> -static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags)
-> +static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags,
-> +					struct vm_area_struct *vma)
->  {
->  	return pmd_write(pmd) ||
-> -	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd));
-> +	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd) &&
-> +				  !arch_shadow_stack_mapping(vma->vm_flags));
->  }
->  
->  struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
-> @@ -1353,7 +1355,7 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
->  
->  	assert_spin_locked(pmd_lockptr(mm, pmd));
->  
-> -	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags))
-> +	if (flags & FOLL_WRITE && !can_follow_write_pmd(*pmd, flags, vma))
->  		goto out;
->  
->  	/* Avoid dumping huge zero page */
-> -- 
-> 2.21.0
-> 
-> 
-
--- 
-Kees Cook
+If this happened and CET were around (which shouldn't happen in
+practice, it means we have a hardware issue) a page fault exception is
+generated.  Yu-cheng, I'm not sure there's enough debugging around to
+tell us if this happens.  Would we even notice?
