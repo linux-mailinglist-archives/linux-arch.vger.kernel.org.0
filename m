@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374A730FE2B
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E48130FE2E
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240114AbhBDUYK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 15:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S240007AbhBDUZA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 15:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbhBDUXg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:23:36 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C0AC061794
-        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 12:22:56 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id z21so2926208pgj.4
-        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 12:22:56 -0800 (PST)
+        with ESMTP id S240041AbhBDUYv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:24:51 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1E2C061794
+        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 12:24:11 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id e9so2490758pjj.0
+        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 12:24:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=388dygswvemg3Mj3TiR7mQNJ/V6JIsMVBitRKVSrLsY=;
-        b=YBxlqh3o4VbdvCSD8fiFV07eUilq+0xn80cMGEG4eVl46Gc/k3lWSMs/5g7fP5iXe1
-         MHCEVDlZsBWs6S/5TBVbdo/n3Twj70ulawIUmo04ahBphIU6j6i7QJqqkR6EQp9e/h2D
-         vytPtTBr/gks7MTZzAPC5ap2f0bLl9MipDB0A=
+        bh=YiBh8kjoQsH+w1ie1OfB7U+mi5FxxL8KWnwrDiJ80SQ=;
+        b=PPt+H4wqt1A6KWRSkPhPkxwMn/vw3TKT91vvsKmHebL+0nltYCjD9IrFeHTRAjQymj
+         BUG3q3cW2DBZiH22qiC37rSeMW4mlApOQfqnOR82W1zU+j/au6dXILhqYy9A8+6Iv8qY
+         bcd9AfXep4kZgB1Vmchd6yJteQKwVnKD37aR4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=388dygswvemg3Mj3TiR7mQNJ/V6JIsMVBitRKVSrLsY=;
-        b=DhoBZB15T2Owo1x/Hop4Rf02Ro0OApPlzksCEsSdoLJfDQLhWkohj040Px7a0K/Ja/
-         zEhYvC1vtONxdXZ/kIF5Q6tzanhEKfg9DAKZn4TW+ysRF8eN2BycpA6LAeeo5u4j/p6v
-         GedV1ShMjdMbVjlEYYeWF8zTaietJ5raV6zJ6wjJ9/sUwMDB0Nfcm74VGEjc4w6i33pu
-         xx/Z++v9BURs7FaQF2ZGzq/DUqJw36TlOEfpf6OxDwpjepMzr0yDGKxp2+fQhmXP/zTe
-         DnHn8M72nssz8744yLYBDyV2yuscCWPe+RVWef1yiFdvVC7yaWiVRKmXz44+ZsKLqXpL
-         40/Q==
-X-Gm-Message-State: AOAM532msWrhJjudBevlZxXD+sehb7HSplsuKboYRNJuLFYtDFg10H6p
-        T46XqDaDFFGn4aVLS18RSBoFdQ==
-X-Google-Smtp-Source: ABdhPJwWgksGDBlRqYjE9XMhgf8NQ8Q9/HDu4uVh6JKJ+AthAtLYo5N1j7SLRKfmihKDYNlkwLJYqQ==
-X-Received: by 2002:a63:1865:: with SMTP id 37mr738085pgy.206.1612470176112;
-        Thu, 04 Feb 2021 12:22:56 -0800 (PST)
+        bh=YiBh8kjoQsH+w1ie1OfB7U+mi5FxxL8KWnwrDiJ80SQ=;
+        b=SaHh20L3kwWZMDBbpLtC+I2c9DtCTEcLq74cfnGdH/aTWR1BxLd3r0G/6ZtqMNUBeH
+         gW14+TuulD6J32xtkTbtP7DoIuFGm2aufPHzMNPhpbztBE6L9mHOY59r8sb51qnEhWJI
+         PPMz5a2JB/f06HrpMh3obpSkbOFlt2P7Hgjf3rivkOn/SyQ5wvR0hkf7W4uv8hkU8+54
+         aAkYTsA7kCO3qk3HcHlINYguzXnXeT+A3oJ+ytVh7nsvTPqyDWaqum8kHjPiqSKOwV3g
+         aibXu0nGYqSve0qeOSD1/ueavSVmMFY31hlZwX+WD4EMVNAzawzZkvvj89KxKQ//DorE
+         +5pQ==
+X-Gm-Message-State: AOAM533476/fhO554+EqAKjp7+QUF//gyfdvdAFS4O406YvHFMt80jDi
+        tb5QPSnc7y0qouiOqqlMl+ytpQ==
+X-Google-Smtp-Source: ABdhPJw0Vm+wT2LUNwph4uBXmL08ISQPaD4Ai/QvO5oPqXHsNDkCcUZJ728ruOrlMF1dvvaBvhbAXQ==
+X-Received: by 2002:a17:902:59dc:b029:e2:9e80:1537 with SMTP id d28-20020a17090259dcb02900e29e801537mr954553plj.66.1612470251540;
+        Thu, 04 Feb 2021 12:24:11 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r194sm6560531pfr.168.2021.02.04.12.22.54
+        by smtp.gmail.com with ESMTPSA id k11sm6241168pfc.22.2021.02.04.12.24.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 12:22:54 -0800 (PST)
-Date:   Thu, 4 Feb 2021 12:22:54 -0800
+        Thu, 04 Feb 2021 12:24:10 -0800 (PST)
+Date:   Thu, 4 Feb 2021 12:24:09 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -72,43 +72,31 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v19 15/25] mm: Fixup places that call pte_mkwrite()
- directly
-Message-ID: <202102041222.C53C9A462@keescook>
+Subject: Re: [PATCH v19 16/25] mm: Add guard pages around a shadow stack.
+Message-ID: <202102041224.5D300A122B@keescook>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-16-yu-cheng.yu@intel.com>
+ <20210203225547.32221-17-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210203225547.32221-16-yu-cheng.yu@intel.com>
+In-Reply-To: <20210203225547.32221-17-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 02:55:37PM -0800, Yu-cheng Yu wrote:
-> When serving a page fault, maybe_mkwrite() makes a PTE writable if it is in
-> a writable vma.  A shadow stack vma is writable, but its PTEs need
-> _PAGE_DIRTY to be set to become writable.  For this reason, maybe_mkwrite()
-> has been updated.
+On Wed, Feb 03, 2021 at 02:55:38PM -0800, Yu-cheng Yu wrote:
+> INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
+> first and the last elements in the range, effectively touches those memory
+> areas.
 > 
-> There are a few places that call pte_mkwrite() directly, but effect the
-> same result as from maybe_mkwrite().  These sites need to be updated for
-> shadow stack as well.  Thus, change them to maybe_mkwrite():
-> 
-> - do_anonymous_page() and migrate_vma_insert_page() check VM_WRITE directly
->   and call pte_mkwrite(), which is the same as maybe_mkwrite().  Change
->   them to maybe_mkwrite().
-> 
-> - In do_numa_page(), if the numa entry 'was-writable', then pte_mkwrite()
->   is called directly.  Fix it by doing maybe_mkwrite().
-> 
-> - In change_pte_range(), pte_mkwrite() is called directly.  Replace it with
->   maybe_mkwrite().
-> 
->   A shadow stack vma is writable but has different vma
-> flags, and handled accordingly in maybe_mkwrite().
+> The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
+> 255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
+> Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
+> CALL, and RET from going beyond.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+
+Yay guard pages! :)
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
