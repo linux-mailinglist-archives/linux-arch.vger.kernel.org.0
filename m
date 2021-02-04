@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E48130FE2E
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9AC30FE33
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbhBDUZA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 15:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S240130AbhBDUZa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 15:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240041AbhBDUYv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:24:51 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1E2C061794
-        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 12:24:11 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id e9so2490758pjj.0
-        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 12:24:11 -0800 (PST)
+        with ESMTP id S240035AbhBDUZ0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:25:26 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A843AC06178A
+        for <linux-arch@vger.kernel.org>; Thu,  4 Feb 2021 12:24:45 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id r38so2890960pgk.13
+        for <linux-arch@vger.kernel.org>; Thu, 04 Feb 2021 12:24:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=YiBh8kjoQsH+w1ie1OfB7U+mi5FxxL8KWnwrDiJ80SQ=;
-        b=PPt+H4wqt1A6KWRSkPhPkxwMn/vw3TKT91vvsKmHebL+0nltYCjD9IrFeHTRAjQymj
-         BUG3q3cW2DBZiH22qiC37rSeMW4mlApOQfqnOR82W1zU+j/au6dXILhqYy9A8+6Iv8qY
-         bcd9AfXep4kZgB1Vmchd6yJteQKwVnKD37aR4=
+        bh=v8ghTr9pbY/sls4eNB3Cpe47CdWbhMFVnLsnjhJ6vZc=;
+        b=NfWYk55j/9pHR6ZwBz1BiHiQ0zm0oSAiebaqx41lmY8ATDui9uD4zOpvr1aLyvQ1N3
+         cxj4/Lz8KdrMEVhUcrOSC+gPXJol6Oyi1FF2l+7sSp8oIhLsLo4n/2IIXR/XGMyByy9/
+         f5USnJaT8vnRTsACtxnaMEBT0DQnYr74i4M/A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YiBh8kjoQsH+w1ie1OfB7U+mi5FxxL8KWnwrDiJ80SQ=;
-        b=SaHh20L3kwWZMDBbpLtC+I2c9DtCTEcLq74cfnGdH/aTWR1BxLd3r0G/6ZtqMNUBeH
-         gW14+TuulD6J32xtkTbtP7DoIuFGm2aufPHzMNPhpbztBE6L9mHOY59r8sb51qnEhWJI
-         PPMz5a2JB/f06HrpMh3obpSkbOFlt2P7Hgjf3rivkOn/SyQ5wvR0hkf7W4uv8hkU8+54
-         aAkYTsA7kCO3qk3HcHlINYguzXnXeT+A3oJ+ytVh7nsvTPqyDWaqum8kHjPiqSKOwV3g
-         aibXu0nGYqSve0qeOSD1/ueavSVmMFY31hlZwX+WD4EMVNAzawzZkvvj89KxKQ//DorE
-         +5pQ==
-X-Gm-Message-State: AOAM533476/fhO554+EqAKjp7+QUF//gyfdvdAFS4O406YvHFMt80jDi
-        tb5QPSnc7y0qouiOqqlMl+ytpQ==
-X-Google-Smtp-Source: ABdhPJw0Vm+wT2LUNwph4uBXmL08ISQPaD4Ai/QvO5oPqXHsNDkCcUZJ728ruOrlMF1dvvaBvhbAXQ==
-X-Received: by 2002:a17:902:59dc:b029:e2:9e80:1537 with SMTP id d28-20020a17090259dcb02900e29e801537mr954553plj.66.1612470251540;
-        Thu, 04 Feb 2021 12:24:11 -0800 (PST)
+        bh=v8ghTr9pbY/sls4eNB3Cpe47CdWbhMFVnLsnjhJ6vZc=;
+        b=LycYVAOnmuy3Ajt0qPCRAS4OOhIlPT/o4s0TomgaXQ4Si3YwAOzZVo1CDP28gkKQ/U
+         bejD721WhZfxE9ScVrt0VCtpUeLBDo+fW9TIPe4f+hNkv6g21maQAWI39fNP5klWC60V
+         DBMgQggnUrqKqCAY0HYqP2Y+8Rvbhb9sSTBMBMXRMhKY7BC059xCcDG5eTDimut3qisw
+         cHFnSin4GSs4csq9TADil680f4oJD7mOZulhrmzexe05iKicYpsyD4sBUI/yn4zQ78kC
+         yP3HOl0x6wW6QpRaS4M8NynbCvlVevA3pJkZHMVZiFlngFTEXk6vXnB1f9o+d7vjur45
+         RG3w==
+X-Gm-Message-State: AOAM532pe2NZowQgaiiGHj0NRMtDSGUbUAgCZSrKsdv/bxjZidq5ODnO
+        T6+ghCIdWCcqvPd6XFVHH/8Jzw==
+X-Google-Smtp-Source: ABdhPJwx/qC+502sdYByWHnbj542w1LMu6piAa6mgivDXuOnGvWTdAo7oGxK4C8n+Ttq1teH4i0atA==
+X-Received: by 2002:a62:1c47:0:b029:1c8:81d2:b413 with SMTP id c68-20020a621c470000b02901c881d2b413mr889462pfc.56.1612470285277;
+        Thu, 04 Feb 2021 12:24:45 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k11sm6241168pfc.22.2021.02.04.12.24.10
+        by smtp.gmail.com with ESMTPSA id p17sm3624550pgn.38.2021.02.04.12.24.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 12:24:10 -0800 (PST)
-Date:   Thu, 4 Feb 2021 12:24:09 -0800
+        Thu, 04 Feb 2021 12:24:44 -0800 (PST)
+Date:   Thu, 4 Feb 2021 12:24:43 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
@@ -72,31 +72,23 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v19 16/25] mm: Add guard pages around a shadow stack.
-Message-ID: <202102041224.5D300A122B@keescook>
+Subject: Re: [PATCH v19 17/25] mm/mmap: Add shadow stack pages to memory
+ accounting
+Message-ID: <202102041224.14CB1AA@keescook>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-17-yu-cheng.yu@intel.com>
+ <20210203225547.32221-18-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210203225547.32221-17-yu-cheng.yu@intel.com>
+In-Reply-To: <20210203225547.32221-18-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 02:55:38PM -0800, Yu-cheng Yu wrote:
-> INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
-> first and the last elements in the range, effectively touches those memory
-> areas.
-> 
-> The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
-> 255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
-> Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
-> CALL, and RET from going beyond.
+On Wed, Feb 03, 2021 at 02:55:39PM -0800, Yu-cheng Yu wrote:
+> Account shadow stack pages to stack memory.
 > 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-
-Yay guard pages! :)
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
