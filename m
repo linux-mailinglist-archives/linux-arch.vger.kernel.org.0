@@ -2,241 +2,354 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 004D030EAFA
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 04:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C2D30EB24
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 04:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbhBDDc4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 22:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbhBDDc4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Feb 2021 22:32:56 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72EFC0613ED
-        for <linux-arch@vger.kernel.org>; Wed,  3 Feb 2021 19:32:15 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id g3so1024361plp.2
-        for <linux-arch@vger.kernel.org>; Wed, 03 Feb 2021 19:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=gQHcS0Zulo4R/LyMo03/XNTnPCP/zAgLWckCskRb6ro=;
-        b=vO7GGOQk7GWz57rv1m7I4tgRQZA/DtNc+hNWa6hL/eY/TBFRf+kB+IhSRiEmJ9nfMV
-         96IIAZ1phNLDpmO0+/WM0C1pY6eblPyruKU6MpIzbi93C6nD/meXczT5y2qWdvogoI8H
-         SRQ9eH1y40ODrZJBAddWBtP1BQ9jj6wQ9eyVfRdw3NXmp3LS8OLx/kOtOFvCw6SSA3eP
-         cPQafOJD8qp0qAVKVtC6Ver9nAOZFi0dkYqW9kr+Kd6JP9Enx2pEHm5m4cRyyvqzBvoe
-         GPG/wsfF0MsWeAkT0wIDTPBiKL8W87cx1cgrOuFYL9fZrAhLUY7m7IdwYeYOQDJdQwyb
-         rIAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=gQHcS0Zulo4R/LyMo03/XNTnPCP/zAgLWckCskRb6ro=;
-        b=Srjgx1C0cjYhylMr2/g1HlwOvJcq7/pzMMsGe+oF/XnsCe73fKV8jVZ4FWzeEJfIrV
-         YDSxGiTx0hjihJC6ue7uNdjZpaiVlJf9aJNQuVCAqBv6qIInctju1MvNERE2VVi8/Jwy
-         uKq3QJK1mIfGT6MFn2FJqNb974T/Ue1CZdaWa0T3G3+VL0nl3Dm06POHJ3UKcqMC1vNz
-         Wr6z/kq8RJyqP6HOmwUIPlOEo31LBUf7xGOf0wYJIs7mUF0EdqwYi+OHQu0ZMfDquhVZ
-         +jv1oS5oi5a5BUtmbZ6J+qfU6whUmLKoZdiwV6njxnpS/8V/9g6I+752t8J0LzfI0rjt
-         XMhw==
-X-Gm-Message-State: AOAM532Qv3mb9Mp/9Zyj1rnr1ATAqLDrllkQG2jxCzrhiFQfxiek5ev6
-        X/nFzTPbSfY0e1Q0ibDCFXse3Q==
-X-Google-Smtp-Source: ABdhPJyY/gyck+kKXk9IdTSfor9ljygAlz6hdpSd+uLcgV2hml00FEQyzNZY9sV9+qYnATce8eQ0Jg==
-X-Received: by 2002:a17:90a:206:: with SMTP id c6mr6442140pjc.50.1612409535272;
-        Wed, 03 Feb 2021 19:32:15 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:0:4d44:7b6c:ce63:a46c])
-        by smtp.gmail.com with ESMTPSA id x21sm4296908pgi.75.2021.02.03.19.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 19:32:14 -0800 (PST)
-Date:   Wed, 3 Feb 2021 19:32:10 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S234397AbhBDDrO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 22:47:14 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:33022 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234209AbhBDDrN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Feb 2021 22:47:13 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 4284922D; Wed,  3 Feb 2021 21:46:28 -0600 (CST)
+Date:   Wed, 3 Feb 2021 21:46:28 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>
-Subject: Re: [PATCH v7 1/2] Kbuild: make DWARF version a choice
-Message-ID: <20210204033210.ie2a5zuumtlb4jth@google.com>
-References: <20210130004401.2528717-1-ndesaulniers@google.com>
- <20210130004401.2528717-2-ndesaulniers@google.com>
- <20210130015222.GC2709570@localhost>
- <CAK7LNARfu-wqW9hfnoeeahiNPbwt4xhoWdxXtK8qjVfEi=7OOg@mail.gmail.com>
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v28 03/12] landlock: Set up the security framework and
+ manage credentials
+Message-ID: <20210204034628.GC29022@mail.hallyn.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-4-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNARfu-wqW9hfnoeeahiNPbwt4xhoWdxXtK8qjVfEi=7OOg@mail.gmail.com>
+In-Reply-To: <20210202162710.657398-4-mic@digikod.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2021-02-04, Masahiro Yamada wrote:
->On Sat, Jan 30, 2021 at 10:52 AM Nathan Chancellor <nathan@kernel.org> wrote:
->>
->> On Fri, Jan 29, 2021 at 04:44:00PM -0800, Nick Desaulniers wrote:
->> > Modifies CONFIG_DEBUG_INFO_DWARF4 to be a member of a choice which is
->> > the default. Does so in a way that's forward compatible with existing
->> > configs, and makes adding future versions more straightforward.
->> >
->> > GCC since ~4.8 has defaulted to this DWARF version implicitly.
->> >
->> > Suggested-by: Arvind Sankar <nivedita@alum.mit.edu>
->> > Suggested-by: Fangrui Song <maskray@google.com>
->> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
->> > Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
->> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->>
->> One comment below:
->>
->> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->>
->> > ---
->> >  Makefile          |  5 ++---
->> >  lib/Kconfig.debug | 16 +++++++++++-----
->> >  2 files changed, 13 insertions(+), 8 deletions(-)
->> >
->> > diff --git a/Makefile b/Makefile
->> > index 95ab9856f357..d2b4980807e0 100644
->> > --- a/Makefile
->> > +++ b/Makefile
->> > @@ -830,9 +830,8 @@ ifneq ($(LLVM_IAS),1)
->> >  KBUILD_AFLAGS        += -Wa,-gdwarf-2
->>
->> It is probably worth a comment somewhere that assembly files will still
->> have DWARF v2.
->
->I agree.
->Please noting the reason will be helpful.
->
->Could you summarize Jakub's comment in short?
->https://patchwork.kernel.org/project/linux-kbuild/patch/20201022012106.1875129-1-ndesaulniers@google.com/#23727667
->
->
->
->
->
->
->One more question.
->
->
->Can we remove -g option like follows?
->
->
-> ifdef CONFIG_DEBUG_INFO_SPLIT
-> DEBUG_CFLAGS   += -gsplit-dwarf
->-else
->-DEBUG_CFLAGS   += -g
-> endif
+On Tue, Feb 02, 2021 at 05:27:01PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Process's credentials point to a Landlock domain, which is underneath
+> implemented with a ruleset.  In the following commits, this domain is
+> used to check and enforce the ptrace and filesystem security policies.
+> A domain is inherited from a parent to its child the same way a thread
+> inherits a seccomp policy.
+> 
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
 
-GCC 11/Clang 12 -gsplit-dwarf no longer imply -g2
-(https://reviews.llvm.org/D80391). May be worth checking whether
--gsplit-dwarf is used without a debug info enabling option.
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
->
->
->
->
->In the current mainline code,
->-g is the only debug option
->if CONFIG_DEBUG_INFO_DWARF4 is disabled.
->
->
->The GCC manual says:
->https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gcc/Debugging-Options.html#Debugging-Options
->
->
->-g
->
->    Produce debugging information in the operating systemâ€™s
->    native format (stabs, COFF, XCOFF, or DWARF).
->    GDB can work with this debugging information.
->
->
->Of course, we expect the -g option will produce
->the debug info in the DWARF format.
->
->
->
->
->
->With this patch set applied, it is very explicit.
->
->Only the format type, but also the version.
->
->The compiler will be given either
->-gdwarf-4 or -gdwarf-5,
->making the -g option redundant, I think.
-
--gdwarf-N does imply -g2 but personally I'd not suggest remove it if it
-already exists. The non-orthogonality is the reason Clang has
--fdebug-default-version (https://reviews.llvm.org/D69822).
-
->
->
->
->
->
->
->
->
->>
->> >  endif
->> >
->> > -ifdef CONFIG_DEBUG_INFO_DWARF4
->> > -DEBUG_CFLAGS += -gdwarf-4
->> > -endif
->> > +dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
->> > +DEBUG_CFLAGS += -gdwarf-$(dwarf-version-y)
->> >
->> >  ifdef CONFIG_DEBUG_INFO_REDUCED
->> >  DEBUG_CFLAGS += $(call cc-option, -femit-struct-debug-baseonly) \
->> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->> > index e906ea906cb7..94c1a7ed6306 100644
->> > --- a/lib/Kconfig.debug
->> > +++ b/lib/Kconfig.debug
->> > @@ -256,13 +256,19 @@ config DEBUG_INFO_SPLIT
->> >         to know about the .dwo files and include them.
->> >         Incompatible with older versions of ccache.
->> >
->> > +choice
->> > +     prompt "DWARF version"
->> > +     help
->> > +       Which version of DWARF debug info to emit.
->> > +
->> >  config DEBUG_INFO_DWARF4
->> > -     bool "Generate dwarf4 debuginfo"
->> > +     bool "Generate DWARF Version 4 debuginfo"
->> >       help
->> > -       Generate dwarf4 debug info. This requires recent versions
->> > -       of gcc and gdb. It makes the debug information larger.
->> > -       But it significantly improves the success of resolving
->> > -       variables in gdb on optimized code.
->> > +       Generate DWARF v4 debug info. This requires gcc 4.5+ and gdb 7.0+.
->> > +       It makes the debug information larger, but it significantly
->> > +       improves the success of resolving variables in gdb on optimized code.
->> > +
->> > +endchoice # "DWARF version"
->> >
->> >  config DEBUG_INFO_BTF
->> >       bool "Generate BTF typeinfo"
->> > --
->> > 2.30.0.365.g02bc693789-goog
->> >
->
->
->
->-- 
->Best Regards
->Masahiro Yamada
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Reviewed-by: Jann Horn <jannh@google.com>
+> ---
+> 
+> Changes since v25:
+> * Rename function to landlock_add_cred_hooks().
+> 
+> Changes since v23:
+> * Add an early check for the current domain in hook_cred_free() to avoid
+>   superfluous call.
+> * Cosmetic cleanup to make the code more readable.
+> 
+> Changes since v22:
+> * Add Reviewed-by: Jann Horn <jannh@google.com>
+> 
+> Changes since v21:
+> * Fix copyright dates.
+> 
+> Changes since v17:
+> * Constify returned domain pointers from landlock_get_current_domain()
+>   and landlock_get_task_domain() helpers.
+> 
+> Changes since v15:
+> * Optimize landlocked() for current thread.
+> * Display the greeting message when everything is initialized.
+> 
+> Changes since v14:
+> * Uses pr_fmt from common.h .
+> * Constify variables.
+> * Remove useless NULL initialization.
+> 
+> Changes since v13:
+> * totally get ride of the seccomp dependency
+> * only keep credential management and LSM setup.
+> 
+> Previous changes:
+> https://lore.kernel.org/lkml/20191104172146.30797-4-mic@digikod.net/
+> ---
+>  security/Kconfig           | 10 +++----
+>  security/landlock/Makefile |  3 +-
+>  security/landlock/common.h | 20 +++++++++++++
+>  security/landlock/cred.c   | 46 ++++++++++++++++++++++++++++++
+>  security/landlock/cred.h   | 58 ++++++++++++++++++++++++++++++++++++++
+>  security/landlock/setup.c  | 31 ++++++++++++++++++++
+>  security/landlock/setup.h  | 16 +++++++++++
+>  7 files changed, 178 insertions(+), 6 deletions(-)
+>  create mode 100644 security/landlock/common.h
+>  create mode 100644 security/landlock/cred.c
+>  create mode 100644 security/landlock/cred.h
+>  create mode 100644 security/landlock/setup.c
+>  create mode 100644 security/landlock/setup.h
+> 
+> diff --git a/security/Kconfig b/security/Kconfig
+> index 15a4342b5d01..0ced7fd33e4d 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -278,11 +278,11 @@ endchoice
+>  
+>  config LSM
+>  	string "Ordered list of enabled LSMs"
+> -	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+> -	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+> -	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+> -	default "lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
+> -	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+> +	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+> +	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+> +	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+> +	default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
+> +	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+>  	help
+>  	  A comma-separated list of LSMs, in initialization order.
+>  	  Any LSMs left off this list will be ignored. This can be
+> diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+> index d846eba445bb..041ea242e627 100644
+> --- a/security/landlock/Makefile
+> +++ b/security/landlock/Makefile
+> @@ -1,3 +1,4 @@
+>  obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
+>  
+> -landlock-y := object.o ruleset.o
+> +landlock-y := setup.o object.o ruleset.o \
+> +	cred.o
+> diff --git a/security/landlock/common.h b/security/landlock/common.h
+> new file mode 100644
+> index 000000000000..5dc0fe15707d
+> --- /dev/null
+> +++ b/security/landlock/common.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Landlock LSM - Common constants and helpers
+> + *
+> + * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2018-2020 ANSSI
+> + */
+> +
+> +#ifndef _SECURITY_LANDLOCK_COMMON_H
+> +#define _SECURITY_LANDLOCK_COMMON_H
+> +
+> +#define LANDLOCK_NAME "landlock"
+> +
+> +#ifdef pr_fmt
+> +#undef pr_fmt
+> +#endif
+> +
+> +#define pr_fmt(fmt) LANDLOCK_NAME ": " fmt
+> +
+> +#endif /* _SECURITY_LANDLOCK_COMMON_H */
+> diff --git a/security/landlock/cred.c b/security/landlock/cred.c
+> new file mode 100644
+> index 000000000000..6725af24c684
+> --- /dev/null
+> +++ b/security/landlock/cred.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Landlock LSM - Credential hooks
+> + *
+> + * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2018-2020 ANSSI
+> + */
+> +
+> +#include <linux/cred.h>
+> +#include <linux/lsm_hooks.h>
+> +
+> +#include "common.h"
+> +#include "cred.h"
+> +#include "ruleset.h"
+> +#include "setup.h"
+> +
+> +static int hook_cred_prepare(struct cred *const new,
+> +		const struct cred *const old, const gfp_t gfp)
+> +{
+> +	struct landlock_ruleset *const old_dom = landlock_cred(old)->domain;
+> +
+> +	if (old_dom) {
+> +		landlock_get_ruleset(old_dom);
+> +		landlock_cred(new)->domain = old_dom;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void hook_cred_free(struct cred *const cred)
+> +{
+> +	struct landlock_ruleset *const dom = landlock_cred(cred)->domain;
+> +
+> +	if (dom)
+> +		landlock_put_ruleset_deferred(dom);
+> +}
+> +
+> +static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
+> +	LSM_HOOK_INIT(cred_prepare, hook_cred_prepare),
+> +	LSM_HOOK_INIT(cred_free, hook_cred_free),
+> +};
+> +
+> +__init void landlock_add_cred_hooks(void)
+> +{
+> +	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
+> +			LANDLOCK_NAME);
+> +}
+> diff --git a/security/landlock/cred.h b/security/landlock/cred.h
+> new file mode 100644
+> index 000000000000..5f99d3decade
+> --- /dev/null
+> +++ b/security/landlock/cred.h
+> @@ -0,0 +1,58 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Landlock LSM - Credential hooks
+> + *
+> + * Copyright © 2019-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2019-2020 ANSSI
+> + */
+> +
+> +#ifndef _SECURITY_LANDLOCK_CRED_H
+> +#define _SECURITY_LANDLOCK_CRED_H
+> +
+> +#include <linux/cred.h>
+> +#include <linux/init.h>
+> +#include <linux/rcupdate.h>
+> +
+> +#include "ruleset.h"
+> +#include "setup.h"
+> +
+> +struct landlock_cred_security {
+> +	struct landlock_ruleset *domain;
+> +};
+> +
+> +static inline struct landlock_cred_security *landlock_cred(
+> +		const struct cred *cred)
+> +{
+> +	return cred->security + landlock_blob_sizes.lbs_cred;
+> +}
+> +
+> +static inline const struct landlock_ruleset *landlock_get_current_domain(void)
+> +{
+> +	return landlock_cred(current_cred())->domain;
+> +}
+> +
+> +/*
+> + * The call needs to come from an RCU read-side critical section.
+> + */
+> +static inline const struct landlock_ruleset *landlock_get_task_domain(
+> +		const struct task_struct *const task)
+> +{
+> +	return landlock_cred(__task_cred(task))->domain;
+> +}
+> +
+> +static inline bool landlocked(const struct task_struct *const task)
+> +{
+> +	bool has_dom;
+> +
+> +	if (task == current)
+> +		return !!landlock_get_current_domain();
+> +
+> +	rcu_read_lock();
+> +	has_dom = !!landlock_get_task_domain(task);
+> +	rcu_read_unlock();
+> +	return has_dom;
+> +}
+> +
+> +__init void landlock_add_cred_hooks(void);
+> +
+> +#endif /* _SECURITY_LANDLOCK_CRED_H */
+> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+> new file mode 100644
+> index 000000000000..8661112fb238
+> --- /dev/null
+> +++ b/security/landlock/setup.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Landlock LSM - Security framework setup
+> + *
+> + * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2018-2020 ANSSI
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/lsm_hooks.h>
+> +
+> +#include "common.h"
+> +#include "cred.h"
+> +#include "setup.h"
+> +
+> +struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
+> +	.lbs_cred = sizeof(struct landlock_cred_security),
+> +};
+> +
+> +static int __init landlock_init(void)
+> +{
+> +	landlock_add_cred_hooks();
+> +	pr_info("Up and running.\n");
+> +	return 0;
+> +}
+> +
+> +DEFINE_LSM(LANDLOCK_NAME) = {
+> +	.name = LANDLOCK_NAME,
+> +	.init = landlock_init,
+> +	.blobs = &landlock_blob_sizes,
+> +};
+> diff --git a/security/landlock/setup.h b/security/landlock/setup.h
+> new file mode 100644
+> index 000000000000..9fdbf33fcc33
+> --- /dev/null
+> +++ b/security/landlock/setup.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Landlock LSM - Security framework setup
+> + *
+> + * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
+> + * Copyright © 2018-2020 ANSSI
+> + */
+> +
+> +#ifndef _SECURITY_LANDLOCK_SETUP_H
+> +#define _SECURITY_LANDLOCK_SETUP_H
+> +
+> +#include <linux/lsm_hooks.h>
+> +
+> +extern struct lsm_blob_sizes landlock_blob_sizes;
+> +
+> +#endif /* _SECURITY_LANDLOCK_SETUP_H */
+> -- 
+> 2.30.0
