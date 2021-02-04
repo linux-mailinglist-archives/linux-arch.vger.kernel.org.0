@@ -2,56 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB97030FEC2
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 21:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB14A30FFA2
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 22:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbhBDUrZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 15:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbhBDUrX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 15:47:23 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065DFC0613D6;
-        Thu,  4 Feb 2021 12:46:41 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id m22so6621840lfg.5;
-        Thu, 04 Feb 2021 12:46:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3fSrYxUXmlBaB+2NXWGl7tEc3+t2JcOM6NbRWxINsXA=;
-        b=E5L8mx2TZxzo7nyiCm8lezIbPoDAbvkz1PckVfaH/u1Mu+Q5TQfbEgPftlNj+Z4Z90
-         BvexiDRA75M3TXXeiUoQJxOAIDOlD5umJkLm92wGmWwAkHekez0bDy5vtSyyIy1okHm7
-         MmVy9TTvOCjUbMU/4lHlfxVHFIxC2okBF3e6xo4QozIw0Eyh4udmJudDRKHNvWRGFRRf
-         0VHGewJPxMLv0sjAfZNJ53BNSjex5br4lRaOZ+fetxtN/MImxZfO6+J4u2rV+nJ3tihx
-         Oite0B9bGX+BeiFQ9/6wpR0qnyaZ7dRZOkbC2FCk78C33GNvq8WNJuBKEUd6DqtikioA
-         aUlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3fSrYxUXmlBaB+2NXWGl7tEc3+t2JcOM6NbRWxINsXA=;
-        b=DPHN6mKcJPR6u7y/nhzynderLJuF+z0sO35vVs1HypV1+FQGfELtOtM7P/61fXPQh1
-         H3nTCwlwi4mmACgxKb2+KdtOVj6j3Atcb57xneIq/2XfQ80u13f8mnSwDwbHI6d0y/0h
-         SjxCFK2v4OC9dHO6mteQ1DV5LN9YVdC0ZLYcdZN+upxv/Nkx/x+xJyhFLKHsws+YDH1e
-         CwAaEluYp5aEKgNKiTk1GSMczO482au1VyHX8XFzTVyiuRGFzO9+abdleuhC/M0VTP2f
-         90XaZEMamlKcvf9O9K6LbsaIaHCYfoihMok3eggjCjpWTLu2hkpt1FpOvp7gDmorinlk
-         0Ezg==
-X-Gm-Message-State: AOAM532jzIKKtQDlKEUdvTD4FIMiBMKXqLggVtykgJ/n5JJlcUGBANIN
-        E0OfpCnW0wYyT3k6OfXbsxs=
-X-Google-Smtp-Source: ABdhPJxLQ8Fe8SBO4JjytedIKGgsbxx/sY199uRRk+DUm6B/HVymjVfU9EKXw5MgrZ59/eUPJ+TVWg==
-X-Received: by 2002:ac2:592b:: with SMTP id v11mr606993lfi.512.1612471598856;
-        Thu, 04 Feb 2021 12:46:38 -0800 (PST)
-Received: from grain.localdomain ([5.18.103.226])
-        by smtp.gmail.com with ESMTPSA id d23sm784872ljo.17.2021.02.04.12.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 12:46:37 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 6A112560087; Thu,  4 Feb 2021 23:46:36 +0300 (MSK)
-Date:   Thu, 4 Feb 2021 23:46:36 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        id S230134AbhBDVtx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 16:49:53 -0500
+Received: from mga14.intel.com ([192.55.52.115]:4838 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229613AbhBDVti (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 4 Feb 2021 16:49:38 -0500
+IronPort-SDR: pY+Nr6jAgIxyBSpAvvvsgXOwo2hNItuw9siAkK7SOvOxAnkVR0xZ2PX5iO24yXStyRd4G6C3S7
+ yUGldeJTw3/w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="180557971"
+X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
+   d="scan'208";a="180557971"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 13:48:49 -0800
+IronPort-SDR: myV1KE9j7kkbr5D5pXV2bGsPNu9vv8X5WxtJ9c2sz4znxzOvH794zrs0zwYjGwOu0gcq//xvG6
+ PNYTZBCr3OEg==
+X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
+   d="scan'208";a="393459920"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.100.6]) ([10.209.100.6])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 13:48:34 -0800
+Subject: Re: [PATCH v19 12/25] mm: Introduce VM_SHSTK for shadow stack memory
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -77,34 +51,41 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v19 12/25] mm: Introduce VM_SHSTK for shadow stack memory
-Message-ID: <20210204204636.GH2172@grain>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-13-yu-cheng.yu@intel.com>
+ <20210203225547.32221-13-yu-cheng.yu@intel.com> <20210204204636.GH2172@grain>
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+Message-ID: <44f18779-efdb-e3f9-55d4-b46fb35d60cd@intel.com>
+Date:   Thu, 4 Feb 2021 13:48:34 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210203225547.32221-13-yu-cheng.yu@intel.com>
-User-Agent: Mutt/1.14.6 (2020-07-11)
+In-Reply-To: <20210204204636.GH2172@grain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 02:55:34PM -0800, Yu-cheng Yu wrote:
->  
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 602e3a52884d..59623dcd92bb 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -661,6 +661,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  		[ilog2(VM_PKEY_BIT4)]	= "",
->  #endif
->  #endif /* CONFIG_ARCH_HAS_PKEYS */
-> +#ifdef CONFIG_X86_CET
-> +		[ilog2(VM_SHSTK)]	= "ss",
-> +#endif
->  	};
+On 2/4/2021 12:46 PM, Cyrill Gorcunov wrote:
+> On Wed, Feb 03, 2021 at 02:55:34PM -0800, Yu-cheng Yu wrote:
+>>   
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 602e3a52884d..59623dcd92bb 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -661,6 +661,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+>>   		[ilog2(VM_PKEY_BIT4)]	= "",
+>>   #endif
+>>   #endif /* CONFIG_ARCH_HAS_PKEYS */
+>> +#ifdef CONFIG_X86_CET
+>> +		[ilog2(VM_SHSTK)]	= "ss",
+>> +#endif
+>>   	};
+> 
+> IIRC we've these abbreviations explained in documentaion
+> (proc.rst file). Could you please update it once time
+> permit? I think it can be done on top of the series.
+> 
 
-IIRC we've these abbreviations explained in documentaion
-(proc.rst file). Could you please update it once time
-permit? I think it can be done on top of the series.
+I will add that.  Thanks!
