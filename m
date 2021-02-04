@@ -2,127 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B0A30E979
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 02:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9194030E98B
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Feb 2021 02:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbhBDBcB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Feb 2021 20:32:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbhBDBb7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Feb 2021 20:31:59 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA944C061788
-        for <linux-arch@vger.kernel.org>; Wed,  3 Feb 2021 17:31:18 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id m6so1066253pfk.1
-        for <linux-arch@vger.kernel.org>; Wed, 03 Feb 2021 17:31:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PJqnhB5HVj5MI8qvIgTsWnsv8A6arsvgFZ5dYqMe6qM=;
-        b=m+Eh59y2xsdnp+1LpDbiAgN0Kzvnz4LwOWrCOwMQg3rsSpuXecVX+c1HBeBVr6S2Ao
-         9P3QyLUTCSZfNOALC3KN63xy1dyBzY4lx3oroHYhH8zaJWS2zd87L/lSPLiUIlteDF+a
-         6EbAS21kqksqw6D3A84SVgapYHnnJc7SRlqThvIb35YmuckaDP3XEg5D/rumXJHIHgaK
-         AcbXBhKhX4s8wev9BG72pyRux0z6Px5kp8IxBMAh41/zwu2HF6hqu8JWvt4qExAWP4/X
-         0IXOSI1zLWpIF/kn98J6ibyAYEcZEVj8o0agQb2JlrsDHSJrbWybHuPDVSSxeAp5Ekp/
-         RYSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PJqnhB5HVj5MI8qvIgTsWnsv8A6arsvgFZ5dYqMe6qM=;
-        b=JeEPqop3NJVbsqUttJDMFS9x1QJykSBGHv24QCwDZzHm+Nok61y4DvfqqX8Ot2kVI4
-         YK9yMMIUBiBkHZp0e+AEtRL4wtwzR4TppUuQbcfSUFtjyYYM5CWO3sJjI0oFHp7lOBOo
-         8vDOnlkVZf//DqMPb3gGfeXOKz8XO6r5OgawrBDkux7Qo5dq8HItDToSqQkectGs1Li4
-         Fn2nsS5joknES57Kfs7hgJP1kJxn6+tKveWdwFnZrkZYGXeTNDAhfVBc/vWF57jUXH3R
-         d0pzxPfXcbxOwPSzRVgfa/D8Pjz5t7ttJYsknpNacYg+mYRGNNxBKd06rSh5w8fseo99
-         KjUw==
-X-Gm-Message-State: AOAM532T3VROFyJXNeWYrElCDKjtUPLeYGBok4bp34BeDq6IpG0+lGMi
-        bxQLweaOVA9riWsjEABvySfGXgKYIgp3rgac+RFiXA==
-X-Google-Smtp-Source: ABdhPJxr3rLB/E1G8S1nW2JPZMVdN7cLT+ZjzmaMOGnRre01XJb9SALC+eAJ6fFfxsy7ER8je1Qa0RSQEYA4XtApfTg=
-X-Received: by 2002:a63:7e10:: with SMTP id z16mr6561848pgc.263.1612402277804;
- Wed, 03 Feb 2021 17:31:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20210115210616.404156-1-ndesaulniers@google.com>
- <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
- <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com> <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
- <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com> <20210117201500.GO457607@kernel.org>
-In-Reply-To: <20210117201500.GO457607@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 3 Feb 2021 17:31:05 -0800
-Message-ID: <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S229601AbhBDBlN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Feb 2021 20:41:13 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50052 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230090AbhBDBlL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 3 Feb 2021 20:41:11 -0500
+Received: from localhost.localdomain (unknown [222.209.9.63])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxydVkUBtgQSIDAA--.1258S2;
+        Thu, 04 Feb 2021 09:40:10 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
         Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH] MIPS: make userspace mapping young by default
+Date:   Thu,  4 Feb 2021 09:39:42 +0800
+Message-Id: <20210204013942.8398-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAf9AxydVkUBtgQSIDAA--.1258S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur18Gryrur45ur17Gr4xXrb_yoWrtrWfpa
+        s7Ca4xA3yaqw13JryxGw47Zw4rCwsxt3W8Jry7C3WUu3s7X34kKFnrGFWFvrykAFZ0y3yU
+        ZF1UXr45uay7uFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUbNzVUUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 17, 2021 at 12:14 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
-> >
-> >
-> > On 1/15/21 3:34 PM, Nick Desaulniers wrote:
-> > > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
-> > > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
-> > > > > CONFIG_DEBUG_INFO_DWARF4.
-> > > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
-> > >
-> > > Can you privately send me your configs that repro? Maybe I can isolate
-> > > it to a set of configs?
-> > >
-> > > >
-> > > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
-> > > > It is not there before and adding this may suddenly break some users.
-> > > >
-> > > > If certain combination of gcc/llvm does not work for
-> > > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
-> > > > should fix.
-> > >
-> > > Is there a place I should report bugs?
-> >
-> > You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
-> > dwarves@vger.kernel.org and bpf@vger.kernel.org.
->
-> I'm coming back from vacation, will try to read the messages and see if
-> I can fix this.
+MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
++ 2 TLB Invalid), butthe second TLB Invalid exception is just
+triggered by __update_tlb from do_page_fault writing tlb without
+_PAGE_VALID set. With this patch, user space mapping prot is made
+young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
+and it only take 1 TLB Miss + 1 TLB Invalid exception
 
-IDK about DWARF v4; that seems to work for me.  I was previously observing
-https://bugzilla.redhat.com/show_bug.cgi?id=1922698
-with DWARF v5.  I just re-pulled the latest pahole, rebuilt, and no
-longer see that warning.
+Remove pte_sw_mkyoung without polluting MM code and make page fault
+delay of MIPS on par with other architecture
 
-I now observe a different set.  I plan on attending "BPF office hours
-tomorrow morning," but if anyone wants a sneak peak of the errors and
-how to reproduce:
-https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
+ include/linux/pgtable.h |  8 --------
+ mm/memory.c             |  3 ---
+ 3 files changed, 16 insertions(+), 25 deletions(-)
 
-
-(FWIW: some other folks are hitting issues now with kernel's lack of
-DWARF v5 support: https://bugzilla.redhat.com/show_bug.cgi?id=1922707)
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index 23b16bfd97b2..e19cf424bb39 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -156,29 +156,31 @@ unsigned long _page_cachable_default;
+ EXPORT_SYMBOL(_page_cachable_default);
+ 
+ #define PM(p)	__pgprot(_page_cachable_default | (p))
++#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
+ 
+ static inline void setup_protection_map(void)
+ {
+ 	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[4]  = PM(_PAGE_PRESENT);
+-	protection_map[5]  = PM(_PAGE_PRESENT);
+-	protection_map[6]  = PM(_PAGE_PRESENT);
+-	protection_map[7]  = PM(_PAGE_PRESENT);
++	protection_map[1]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[2]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	protection_map[3]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[4]  = PVA(_PAGE_PRESENT);
++	protection_map[5]  = PVA(_PAGE_PRESENT);
++	protection_map[6]  = PVA(_PAGE_PRESENT);
++	protection_map[7]  = PVA(_PAGE_PRESENT);
+ 
+ 	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
++	protection_map[9]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+ 				_PAGE_NO_READ);
+-	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-	protection_map[12] = PM(_PAGE_PRESENT);
+-	protection_map[13] = PM(_PAGE_PRESENT);
+-	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+-	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
++	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
++	protection_map[12] = PVA(_PAGE_PRESENT);
++	protection_map[13] = PVA(_PAGE_PRESENT);
++	protection_map[14] = PVA(_PAGE_PRESENT);
++	protection_map[15] = PVA(_PAGE_PRESENT);
+ }
+ 
++#undef _PVA
+ #undef PM
+ 
+ void cpu_cache_init(void)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 8fcdfa52eb4b..8c042627399a 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -432,14 +432,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
+  * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+  * where software maintains page access bit.
+  */
+-#ifndef pte_sw_mkyoung
+-static inline pte_t pte_sw_mkyoung(pte_t pte)
+-{
+-	return pte;
+-}
+-#define pte_sw_mkyoung	pte_sw_mkyoung
+-#endif
+-
+ #ifndef pte_savedwrite
+ #define pte_savedwrite pte_write
+ #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index feff48e1465a..95718a623884 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2890,7 +2890,6 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+-		entry = pte_sw_mkyoung(entry);
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 
+ 		/*
+@@ -3548,7 +3547,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 	__SetPageUptodate(page);
+ 
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (vma->vm_flags & VM_WRITE)
+ 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 
+@@ -3824,7 +3822,6 @@ vm_fault_t alloc_set_pte(struct vm_fault *vmf, struct page *page)
+ 
+ 	flush_icache_page(vma, page);
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 	/* copy-on-write page */
 -- 
-Thanks,
-~Nick Desaulniers
+2.17.1
+
