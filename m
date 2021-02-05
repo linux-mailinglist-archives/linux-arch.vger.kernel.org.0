@@ -2,150 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E99B310161
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 01:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCB4310328
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 04:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhBEALA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Feb 2021 19:11:00 -0500
-Received: from mga07.intel.com ([134.134.136.100]:33647 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231567AbhBEAK6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 4 Feb 2021 19:10:58 -0500
-IronPort-SDR: dcLHhzwVxGlhA6eizk0mzgYgWHL+jGH4p6IPB6bUnlIVtrBr4+bx13YGCPN5JE42rVzSM8BOWL
- J7JQ2BqAmDkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9885"; a="245422593"
-X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
-   d="scan'208";a="245422593"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 16:10:16 -0800
-IronPort-SDR: FyGhBUUZHeP4fcvvfhWFvX9OftF/q5PlQTD0LPuXDJkP8OJ1TrRk/5I7SgFZh+TPiGSD+cMsTm
- 9ZdEZg3R6jTw==
-X-IronPort-AV: E=Sophos;i="5.81,153,1610438400"; 
-   d="scan'208";a="434168522"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.209.100.6]) ([10.209.100.6])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 16:10:14 -0800
-Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
-To:     Kees Cook <keescook@chromium.org>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-7-yu-cheng.yu@intel.com>
- <202102041201.C2B93F8D8A@keescook>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <518c6ce4-1e6e-ef8d-ba55-fb35a828b874@intel.com>
-Date:   Thu, 4 Feb 2021 16:10:13 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S229972AbhBEDJN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Feb 2021 22:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229579AbhBEDJH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Feb 2021 22:09:07 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F553C061786;
+        Thu,  4 Feb 2021 19:08:27 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id c12so5962722wrc.7;
+        Thu, 04 Feb 2021 19:08:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=Eti10+JFGOol8jfOa14o47a/rpSAorKcSZ0ncPqyw/9cX0DR0jaUWy3HHGbGUhwsnC
+         VFuwhbPOIBVrJrFHpCZDCZG4vabnvZdlBNv5AjO+bq+ihNBfTeNOxavFjcJeCpE9wN+T
+         jLQiM089Oqb8NlWXCWY6TjPwFcAPUlRGNcGxE3FcGF+ceJIN+ZQ0hbcDvUS5EbrY6x3I
+         x9M7GzV17ocILyG3UYVmSBxDi2zXXb64pPDSLip+jaVHP06GZzDmbbW2EjmMvhhOLME2
+         lintPMJTlsNvzqjtSuEV8JAMdvS+9A5kt9yYq7umOz/Mou8Xk3B7SwtlAEmG0xAjhZun
+         JggA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=NVo3risIIK0+MV0jqksFi+V1uAgTEAPVFgKlWHFfOxMNbi14IVhylqNlKAjJy0XDfK
+         FxCwQFoTp+cdv/lsz3L4YRw0U6SKJiTTarFgqol+8Cp0OKdy+0axVcIOrrE1NAWSBaIy
+         AX08McBHUDPLjE9JA4qIk6ZXBCwRpxjftVL1P6nfkWsGOZ0tWKEQnsLKMhLWIV2Cepm/
+         G0J+oNkPj1znxIM90s8jRWz8kpR3LAKtXV5fUBhH7HWTC3kdsj55PfOpaipQwneGw7uM
+         Cl+Nnue7s3+YGSOEdKVqlRkaYqyMOg8+dDeuxj8NeWiSmJHXF7De88SEEW+VnVUmYGA+
+         zYdg==
+X-Gm-Message-State: AOAM531uMe2U6lUKQB3QqE4wsGpl2AvBsXD0NECn7hj5f7Mwf2OMQMaL
+        htyGnEoMvJRnLIySpaWRzW7xKFzV2PEkag==
+X-Google-Smtp-Source: ABdhPJzCLixohysxQzqUyd290R0CNpRU05l+zBb4lSCQmopswAm1/zYVCjd0eRxXi50uofjGxjJEfg==
+X-Received: by 2002:a05:6000:1364:: with SMTP id q4mr2459978wrz.335.1612494504125;
+        Thu, 04 Feb 2021 19:08:24 -0800 (PST)
+Received: from [192.168.1.6] ([154.124.28.35])
+        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.18
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 04 Feb 2021 19:08:23 -0800 (PST)
+Message-ID: <601cb6a7.1c69fb81.5ea54.2ea6@mx.google.com>
+Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
+From:   calantha camara <sgt.andersonskylar0@gmail.com>
+X-Google-Original-From: calantha camara
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <202102041201.C2B93F8D8A@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hi dear
+To:     Recipients <calantha@vger.kernel.org>
+Date:   Fri, 05 Feb 2021 03:08:08 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/4/2021 12:09 PM, Kees Cook wrote:
-> On Wed, Feb 03, 2021 at 02:55:28PM -0800, Yu-cheng Yu wrote:
-
-[...]
-
->> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
->> index 7f5aec758f0e..f5354c35df32 100644
->> --- a/arch/x86/kernel/traps.c
->> +++ b/arch/x86/kernel/traps.c
->> @@ -606,6 +606,66 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
->>   	cond_local_irq_disable(regs);
->>   }
->>   
->> +#ifdef CONFIG_X86_CET
->> +static const char * const control_protection_err[] = {
->> +	"unknown",
->> +	"near-ret",
->> +	"far-ret/iret",
->> +	"endbranch",
->> +	"rstorssp",
->> +	"setssbsy",
->> +};
->> +
->> +/*
->> + * When a control protection exception occurs, send a signal to the responsible
->> + * application.  Currently, control protection is only enabled for user mode.
->> + * This exception should not come from kernel mode.
->> + */
->> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->> +{
->> +	static DEFINE_RATELIMIT_STATE(rs, DEFAULT_RATELIMIT_INTERVAL,
->> +				      DEFAULT_RATELIMIT_BURST);
->> +	struct task_struct *tsk;
->> +
->> +	if (!user_mode(regs)) {
->> +		pr_emerg("PANIC: unexpected kernel control protection fault\n");
->> +		die("kernel control protection fault", regs, error_code);
->> +		panic("Machine halted.");
->> +	}
->> +
->> +	cond_local_irq_enable(regs);
->> +
->> +	if (!boot_cpu_has(X86_FEATURE_CET))
->> +		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
->> +
->> +	tsk = current;
->> +	tsk->thread.error_code = error_code;
->> +	tsk->thread.trap_nr = X86_TRAP_CP;
->> +
->> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
->> +	    __ratelimit(&rs)) {
->> +		unsigned int max_err;
->> +		unsigned long ssp;
->> +
->> +		max_err = ARRAY_SIZE(control_protection_err) - 1;
->> +		if (error_code < 0 || error_code > max_err)
->> +			error_code = 0;
-> 
-> Do you want to mask the error_code here before printing its value?
-> 
->> +
->> +		rdmsrl(MSR_IA32_PL3_SSP, ssp);
->> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
->> +			 tsk->comm, task_pid_nr(tsk),
->> +			 regs->ip, regs->sp, ssp, error_code,
->> +			 control_protection_err[error_code]);
-> 
-> Instead, you could clamp error_code to ARRAY_SIZE(control_protection_err),
-> and add another "unknown" to the end of the strings:
-> 
-> 	control_protection_err[
-> 		array_index_nospec(error_code,
-> 				   ARRAY_SIZE(control_protection_err))]
-> 
-> Everything else looks good.
-> 
-
-I will update it.  Thanks!
-
-[...]
+do you speak Eglish
