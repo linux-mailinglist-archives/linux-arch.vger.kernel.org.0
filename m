@@ -2,103 +2,183 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 634C7311355
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 22:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B5B3114BF
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 23:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhBEVUA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Feb 2021 16:20:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S232852AbhBEWNv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Feb 2021 17:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbhBEVTH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 16:19:07 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87F7C0613D6
-        for <linux-arch@vger.kernel.org>; Fri,  5 Feb 2021 13:18:26 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id t8so9418029ljk.10
-        for <linux-arch@vger.kernel.org>; Fri, 05 Feb 2021 13:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M/mNa0cCFnCBPv9oOHupxAJvNU5NKzX9ZpjTVG00V9k=;
-        b=Rtet6B6oBepuSfwX0Mt1avgYBOHHWa0CgvSO6WFeSeKf4J1sM4DcMrG5bc65K79XZ9
-         nKaRKqf4tLFb9DqAqjBdbVPE1pdd7ix3IWQtmQAvk+oFRK3jkfLSnLwd7A+0E1uGVp3f
-         xbuoidh/QLlOJvEzBI3DNxo12oITSdhV/7NbJzexL7yOOWW2cbQHBvCbceZSgqfwYZyD
-         TxYkr5eMaDsX+I7LjX6SN5fYusfBv+D4ILY7o5uSP2GEU5GkDyureKlPfYmR6aTaxQyc
-         d95Y4a5cKG0yLJppR9vT8lGXoEr6hW2yf1/7lZLh6p7jVNZMPwjZRyTtkYG5LYODQKjC
-         pb4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M/mNa0cCFnCBPv9oOHupxAJvNU5NKzX9ZpjTVG00V9k=;
-        b=NZlVCsdfRBXAs6b8nLreHZM/mY0Ixgr4hj9PO1STPYH8zqSc2BOQ1VjkO7wdQskNVt
-         bDpy4XSqnYU+y9wTgModmdD+IKoyOhgCC5dTorEkvMEZZqvGBDFVM+PxRmWzF/fgQdnn
-         a1qwdIuAx5pEHko6Ca3rRXe0ccQ/hQdtd1zJZPOaprZcY7D4tzBQtk18tVxNFw2ArBxn
-         VEwVeGIvBZURYQAAB6eF0mNUVDgvWxWANa96wSC2G+vcgTbp2doWy/8BAVe9fABV0d+D
-         DCErpLidNQW0WDyuv0zBLqSJcIKOTh3IhaRTEIbz5izeogHkdDtATgtTBa6WCWM114Fj
-         o++g==
-X-Gm-Message-State: AOAM532uSg1ENZUWdiKATlyaUnkFlB9pj/9cFr5QB+wKqeYAHXtiXAlr
-        EpCnF1y/6L6rSPkvHJT69rl5ndEFgBGhp1NczbS2AQ==
-X-Google-Smtp-Source: ABdhPJx5dPeDrLYGW00hRiU8hbhTVJoK1h7ZXHKdpr6PjoJlcg9frjh8W/xaexNoFtIzucZTyFu9xlz6J9W1fEiRPhc=
-X-Received: by 2002:a2e:9cc8:: with SMTP id g8mr3809288ljj.479.1612559905021;
- Fri, 05 Feb 2021 13:18:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20210130004401.2528717-1-ndesaulniers@google.com>
- <20210130004401.2528717-2-ndesaulniers@google.com> <20210204103946.GA14802@wildebeest.org>
- <CAKwvOdm0O8m_+mxy7Z91Lu=Hzf6-DyCdAjMOsCRiMmNis4Pd2A@mail.gmail.com>
- <20fdd20fe067dba00b349407c4a0128c97c1a707.camel@klomp.org>
- <CAKwvOdmT4t==akMN7eHWgD_XdpN--PLpUj8vgujGJ4TpREvteQ@mail.gmail.com>
- <42d2542d4b7f9836121b92d9bf349afa920bd4cd.camel@klomp.org>
- <CAKwvOdmHM8srtLaEy+L_XGzO9TBbhP3csQNAhUTH_TmeDePkDQ@mail.gmail.com> <8696ef2e86c5d8078bf2d2c74fb3cbbecbd22c83.camel@klomp.org>
-In-Reply-To: <8696ef2e86c5d8078bf2d2c74fb3cbbecbd22c83.camel@klomp.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 5 Feb 2021 13:18:11 -0800
-Message-ID: <CAKwvOd=jMykgiR+fthEVeaP1c3-N6veZhKd2LZjeJ5KaqF4PHg@mail.gmail.com>
-Subject: Re: [PATCH v7 1/2] Kbuild: make DWARF version a choice
-To:     Mark Wielaard <mark@klomp.org>, Jakub Jelinek <jakub@redhat.com>,
-        Nick Clifton <nickc@redhat.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        with ESMTP id S232704AbhBEOiJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 09:38:09 -0500
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530E5C06121D
+        for <linux-arch@vger.kernel.org>; Fri,  5 Feb 2021 08:08:47 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DXJRw6S0qzMqPtr;
+        Fri,  5 Feb 2021 15:57:32 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DXJRs4xvlzlh8TC;
+        Fri,  5 Feb 2021 15:57:29 +0100 (CET)
+Subject: Re: [PATCH v28 06/12] fs,security: Add sb_delete hook
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-7-mic@digikod.net>
+ <20210205142143.GA18451@mail.hallyn.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <92e6a8a6-19da-0b1f-c1cf-01dc0af61299@digikod.net>
+Date:   Fri, 5 Feb 2021 15:57:37 +0100
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <20210205142143.GA18451@mail.hallyn.com>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 4:49 AM Mark Wielaard <mark@klomp.org> wrote:
->
-> Hi Nick,
->
-> On Thu, 2021-02-04 at 14:06 -0800, Nick Desaulniers wrote:
-> > On Thu, Feb 4, 2021 at 12:28 PM Mark Wielaard <mark@klomp.org> wrote:
-> > > I believe so yes, we did a mass-rebuild of all of Fedora a few weeks
-> > > back with a GCC11 pre-release and did find some tools which weren't
-> > > ready, but as far as I know all have been fixed now. I did try to
 
-I guess I'm curious whether
-https://bugzilla.redhat.com/show_bug.cgi?id=1922707 came up during the
-mass rebuild of all of Fedora a few weeks ago?  Assuming the Linux
-kernel was part of that test, those warnings would have been both new
-and obviously related to changing the implicit default DWARF version.
-It's possible it was a kernel build without debug info enabled or a
-kernel version old enough to not have that linker warning enabled, I
-suppose.  It might be good to check though, that way changes to GCC
-that impact the kernel are caught even sooner or ASAP. New diagnostics
-added every compiler release come to mind in particular.
--- 
-Thanks,
-~Nick Desaulniers
+On 05/02/2021 15:21, Serge E. Hallyn wrote:
+> On Tue, Feb 02, 2021 at 05:27:04PM +0100, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> The sb_delete security hook is called when shutting down a superblock,
+>> which may be useful to release kernel objects tied to the superblock's
+>> lifetime (e.g. inodes).
+>>
+>> This new hook is needed by Landlock to release (ephemerally) tagged
+>> struct inodes.  This comes from the unprivileged nature of Landlock
+>> described in the next commit.
+>>
+>> Cc: Al Viro <viro@zeniv.linux.org.uk>
+>> Cc: James Morris <jmorris@namei.org>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Serge E. Hallyn <serge@hallyn.com>
+> 
+> One note below, but
+> 
+> Acked-by: Serge Hallyn <serge@hallyn.com>
+> 
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>> Reviewed-by: Jann Horn <jannh@google.com>
+>> ---
+>>
+>> Changes since v22:
+>> * Add Reviewed-by: Jann Horn <jannh@google.com>
+>>
+>> Changes since v17:
+>> * Initial patch to replace the direct call to landlock_release_inodes()
+>>   (requested by James Morris).
+>>   https://lore.kernel.org/lkml/alpine.LRH.2.21.2005150536440.7929@namei.org/
+>> ---
+>>  fs/super.c                    | 1 +
+>>  include/linux/lsm_hook_defs.h | 1 +
+>>  include/linux/lsm_hooks.h     | 2 ++
+>>  include/linux/security.h      | 4 ++++
+>>  security/security.c           | 5 +++++
+>>  5 files changed, 13 insertions(+)
+>>
+>> diff --git a/fs/super.c b/fs/super.c
+>> index 2c6cdea2ab2d..c3c5178cde65 100644
+>> --- a/fs/super.c
+>> +++ b/fs/super.c
+>> @@ -454,6 +454,7 @@ void generic_shutdown_super(struct super_block *sb)
+>>  		evict_inodes(sb);
+>>  		/* only nonzero refcount inodes can have marks */
+>>  		fsnotify_sb_delete(sb);
+>> +		security_sb_delete(sb);
+>>  
+>>  		if (sb->s_dio_done_wq) {
+>>  			destroy_workqueue(sb->s_dio_done_wq);
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index 7aaa753b8608..32472b3849bc 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -59,6 +59,7 @@ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
+>>  LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
+>>  	 struct fs_parameter *param)
+>>  LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
+>> +LSM_HOOK(void, LSM_RET_VOID, sb_delete, struct super_block *sb)
+>>  LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
+>>  LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
+>>  LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index 970106d98306..e339b201f79b 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -108,6 +108,8 @@
+>>   *	allocated.
+>>   *	@sb contains the super_block structure to be modified.
+>>   *	Return 0 if operation was successful.
+>> + * @sb_delete:
+>> + *	Release objects tied to a superblock (e.g. inodes).
+> 
+> It's customary here to add the line detailing the @sb argument.
+
+What about "@sb contains the super_block structure being released."?
+
+> 
+>>   * @sb_free_security:
+>>   *	Deallocate and clear the sb->s_security field.
+>>   *	@sb contains the super_block structure to be modified.
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index c35ea0ffccd9..c41a94e29b62 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -288,6 +288,7 @@ void security_bprm_committed_creds(struct linux_binprm *bprm);
+>>  int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
+>>  int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
+>>  int security_sb_alloc(struct super_block *sb);
+>> +void security_sb_delete(struct super_block *sb);
+>>  void security_sb_free(struct super_block *sb);
+>>  void security_free_mnt_opts(void **mnt_opts);
+>>  int security_sb_eat_lsm_opts(char *options, void **mnt_opts);
+>> @@ -620,6 +621,9 @@ static inline int security_sb_alloc(struct super_block *sb)
+>>  	return 0;
+>>  }
+>>  
+>> +static inline void security_sb_delete(struct super_block *sb)
+>> +{ }
+>> +
+>>  static inline void security_sb_free(struct super_block *sb)
+>>  { }
+>>  
+>> diff --git a/security/security.c b/security/security.c
+>> index 9f979d4afe6c..1b4a73b2549a 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -900,6 +900,11 @@ int security_sb_alloc(struct super_block *sb)
+>>  	return rc;
+>>  }
+>>  
+>> +void security_sb_delete(struct super_block *sb)
+>> +{
+>> +	call_void_hook(sb_delete, sb);
+>> +}
+>> +
+>>  void security_sb_free(struct super_block *sb)
+>>  {
+>>  	call_void_hook(sb_free_security, sb);
+>> -- 
+>> 2.30.0
