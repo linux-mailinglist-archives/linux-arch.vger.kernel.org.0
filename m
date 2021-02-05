@@ -2,52 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19DB310FE8
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 19:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46174311004
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 19:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbhBEQr1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Feb 2021 11:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S233270AbhBEQyI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Feb 2021 11:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbhBEQpN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 11:45:13 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAC7C061788
-        for <linux-arch@vger.kernel.org>; Fri,  5 Feb 2021 10:26:55 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id x23so3379802pfn.6
-        for <linux-arch@vger.kernel.org>; Fri, 05 Feb 2021 10:26:55 -0800 (PST)
+        with ESMTP id S233561AbhBEQto (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 11:49:44 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA64C061A2D
+        for <linux-arch@vger.kernel.org>; Fri,  5 Feb 2021 10:29:12 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id z21so5148099pgj.4
+        for <linux-arch@vger.kernel.org>; Fri, 05 Feb 2021 10:29:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=9PTifcKN8spL3ClpqXcFGHeUFpoZ67atZiPMBU3wuDs=;
-        b=HS3+D2H5qhhSXm5Mhv9pAeIQrIxIDrLLhrbubqDRQEHMzcshMMVXCtDGapcRO+w0Mh
-         Ry8wZrTRSu5DzM6JkcjQdB4e+rwquqcyHdk4BllNxbt4vd8dhxxn1Gu3pKXPPcBOYGMW
-         19euoavfkMowdIXaQ6HyNSFWSTVzj4YuS1o84=
+        bh=/gKrMLsfGobXkiI6sjUHxc4o3Yi1e64+iFtcBHCUDvY=;
+        b=AiVGW8ZfV6b/ee/LcCv+Op+DKesFAlTEGF/07NV2m2QST+5RqOHjwLrN8SOTlsHXpp
+         GbTzYG/+F9OEtL49Tmfgwy9qbiHLoh6BzlrxNqzQJg8e0KXxzOS/DRVO7uq4SegSZl/A
+         bNR0Obo6GjVDXaQLKqtbvrdxhjKO3vjvpLXwA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9PTifcKN8spL3ClpqXcFGHeUFpoZ67atZiPMBU3wuDs=;
-        b=rUsJfarLtoE82KNyOn5zRxddwpsZeL/fuq/7AF9VzKN2F2PXQhWcIXHLMnUZtK/DFn
-         7blKtuCZvC8Q4Q2CX4w8qT0XnpEbjNXP6+BkUdjh132y/tJhGAt8c0xbB1WUxBy+9YCU
-         NGtdgoNySGdvcaVvhbBVrRs0WskBsUZeYo3y5NIbr0nMvHdQEvCWeMHbrM2T/AqdlChx
-         7MAj4A92lxMvC6v8yIV416G9seCab+VnS1ICile6vM6VXVXPdWKK+TLmnGZyzyZKXPni
-         N7GEEeT6G4QI6vdrZd2f5nhphm7ZSobTR/QASFKbTrS7MjnEXmZkQcBBPQQit0mxn0Y6
-         2RCg==
-X-Gm-Message-State: AOAM531R9aklLp60UWB/yePgifjkbY2e+67xE+Uj14sTY8xWiEMNNgkJ
-        KGM7a20XMVXVlgRRIZnoWFY2AQ==
-X-Google-Smtp-Source: ABdhPJyovoQ5m59St1KtJeobhPYp42OO5wY6rGeSKoIt1K/gK6R9dUzhVZK3/QwGz1Hw+E4zxyllEA==
-X-Received: by 2002:a63:1c08:: with SMTP id c8mr5528896pgc.228.1612549614604;
-        Fri, 05 Feb 2021 10:26:54 -0800 (PST)
+        bh=/gKrMLsfGobXkiI6sjUHxc4o3Yi1e64+iFtcBHCUDvY=;
+        b=oEv1uYQn45UKfMbWidHKdsQVLqiNfV83OHqSMrZgjRXoD4D1KDO03EmBEbS9fT9Quf
+         Jd9E20c9dZfXJfoH614TbS5Gy6oxNyq/XrZKXzfDPJ6Q4MvTQX51pZOy8kfqTLK0MCd5
+         nanxCl/YRtNK7zSNrM+eqdCRbO3+le1F9dIFQakU+nFKBrAu2SXfXXDqXQmNGldeNNhC
+         rHl5Jp72hEfV2VrMEt+Z+TzZv4b1quO1qKA4k7ZOgW0p2774G4KVq1vRSwx6gYhd9EvW
+         3LUo+6MvhaW0bgxfAZV8yj00PMkMy4FnLNf5ABOLMfNbhr3G2UT/cx9QiRfsAsc848UH
+         02Tw==
+X-Gm-Message-State: AOAM530tuXv04W9JtQpg6LAUKZDQ3mrbAPrjciteTzYtcjyDv3LGu84Y
+        n9qLoSPWauaeFBm9NLyTJ+HZUA==
+X-Google-Smtp-Source: ABdhPJzgdXL2yWJ9K+9ihBWlUxHBRPB2BDMQz9MrbEyfZkzXsv0feLphNyFqyBnHRUIq1f0V1bWsMQ==
+X-Received: by 2002:a62:8c05:0:b029:1d8:7f36:bcd8 with SMTP id m5-20020a628c050000b02901d87f36bcd8mr2771317pfd.43.1612549752486;
+        Fri, 05 Feb 2021 10:29:12 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m4sm3441246pfd.130.2021.02.05.10.26.53
+        by smtp.gmail.com with ESMTPSA id v3sm9644169pff.217.2021.02.05.10.29.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 10:26:53 -0800 (PST)
-Date:   Fri, 5 Feb 2021 10:26:52 -0800
+        Fri, 05 Feb 2021 10:29:11 -0800 (PST)
+Date:   Fri, 5 Feb 2021 10:29:10 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -55,7 +56,6 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
@@ -71,52 +71,63 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>
-Subject: Re: [PATCH v19 24/25] x86/cet/shstk: Add arch_prctl functions for
- shadow stack
-Message-ID: <202102051026.B250352D4@keescook>
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
+Message-ID: <202102051028.A10679FF@keescook>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-25-yu-cheng.yu@intel.com>
- <202102041235.BA6C4982F@keescook>
- <6d7dd90f-dc03-06ce-57a2-57e4c2f803f3@intel.com>
+ <20210203225547.32221-7-yu-cheng.yu@intel.com>
+ <20210205135927.GH17488@zn.tnic>
+ <2d829cba-784e-635a-e0c5-a7b334fa9b40@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6d7dd90f-dc03-06ce-57a2-57e4c2f803f3@intel.com>
+In-Reply-To: <2d829cba-784e-635a-e0c5-a7b334fa9b40@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 03:41:59PM -0800, Yu, Yu-cheng wrote:
-> On 2/4/2021 12:35 PM, Kees Cook wrote:
-> > On Wed, Feb 03, 2021 at 02:55:46PM -0800, Yu-cheng Yu wrote:
-> > > arch_prctl(ARCH_X86_CET_STATUS, u64 *args)
-> > >      Get CET feature status.
-> > > 
-> > >      The parameter 'args' is a pointer to a user buffer.  The kernel returns
-> > >      the following information:
-> > > 
-> > >      *args = shadow stack/IBT status
-> > >      *(args + 1) = shadow stack base address
-> > >      *(args + 2) = shadow stack size
+On Fri, Feb 05, 2021 at 10:00:21AM -0800, Yu, Yu-cheng wrote:
+> On 2/5/2021 5:59 AM, Borislav Petkov wrote:
+> > On Wed, Feb 03, 2021 at 02:55:28PM -0800, Yu-cheng Yu wrote:
+> > > +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> > > +{
+> > > +	static DEFINE_RATELIMIT_STATE(rs, DEFAULT_RATELIMIT_INTERVAL,
+> > > +				      DEFAULT_RATELIMIT_BURST);
+> > > +	struct task_struct *tsk;
+> > > +
+> > > +	if (!user_mode(regs)) {
+> > > +		pr_emerg("PANIC: unexpected kernel control protection fault\n");
+> > > +		die("kernel control protection fault", regs, error_code);
+> > > +		panic("Machine halted.");
+> > > +	}
+> > > +
+> > > +	cond_local_irq_enable(regs);
+> > > +
+> > > +	if (!boot_cpu_has(X86_FEATURE_CET))
+> > > +		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
+> > > +
+> > > +	tsk = current;
+> > > +	tsk->thread.error_code = error_code;
+> > > +	tsk->thread.trap_nr = X86_TRAP_CP;
+> > > +
+> > > +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
+> > > +	    __ratelimit(&rs)) {
 > > 
-> > What happens if this needs to grow in the future? Should the first u64
-> > contain the array size?
-> > 
-> > Otherwise, looks sensible.
-> > 
-> > -Kees
+> > I can't find it written down anywhere why the ratelimiting is needed at
+> > all?
 > > 
 > 
-> The first item is a bitmap, and there are two possible bits.  Should there
-> be a need, we can then do things about it.  My thought at the moment is, we
-> may not meet the situation.  Can we keep this for now?
+> The ratelimit here is only for #CP, and its rate is not counted together
+> with other types of faults.  If a task gets here, it will exit.  The only
+> condition the ratelimit will trigger is when multiple tasks hit #CP at once,
+> which is unlikely.  Are you suggesting that we do not need the ratelimit
+> here?
 
-Ah, good point. Yes, since that's a bitmap it ends up describing what
-follows. This is fine as-is. Thanks!
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
+Since this is a potentially unprivileged-userspace-triggerable
+condition, I tend to prefer having a ratelimit. I don't feel _strongly_
+about it, but I find it better to be defensive against log spamming
+(whether malicious or accidental).
 
 -- 
 Kees Cook
