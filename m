@@ -2,162 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E04310E86
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 18:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF60310E8C
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 18:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbhBEPjz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Feb 2021 10:39:55 -0500
-Received: from sonic313-15.consmr.mail.ne1.yahoo.com ([66.163.185.38]:39151
-        "EHLO sonic313-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233297AbhBEPef (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 10:34:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1612545370; bh=LGQ2+Oq5r94j/3FnA4uP6fw1KLX7JE1Bzu43eSjT32U=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=E5Q3AHC7DrRTGTsWfwbVH/vY2ynDAPHpRKCt/EuZ59E+7FPCmkn/mZjw0Kau9q6GS5kPpCzuPrIyWCmwTAONGipXMrc+q+mLWYsPqJZrbFouCbWoJGlyWpVXfd/EupkhHNBQZW/8t3omo8omfzYCUYVBBb7z3Uu6VbP+snNIo8UiSxCxbh7umPhk1NFEXzX8nihG0EFtVwzz2OzkflNjC4Xjjv8cp9bH2XH+zPik9WTcwkx4+5MwTqPYfyy0cGmEobGIUfJ4y8RhLaBnHyN8WgNwC7TvLn4d/TjTxnvTIuX8qB5FJELhBmT3LHyXFp7xEVLsozxHQ3B/nDft+M65Pw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1612545370; bh=cgAezcU+rfBYUVpPL7B1njba4nL3WIL5lNqQ0LX2zof=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=XUDBiC+BVAFC3P/Pz4IHBxu81DvhXNLz1cANDT3YxDd74BfQY6z6BklBe2us5T4SlRTgQ+442I20epejsMOfGQM3BIcTHqA4H0kSxsnVNcX/8T7e+bbAkY0jQPuVd1fUxpiyxgBZRDA592d5vThmYcuvGjK38qa8wNWBAuGyc7bIaEb8AQrWgszZJf9L44NzWkFg9+L98lSez1jm8+5NqsXqADAZUL28BRARuwk0I3/13SJdfEuGo4T3T50//VPt6p/H+YoPAuHWSyZgdE4AkFSkxvWe6I77IlG6NoyIfsRcqGc7u/J16ztdkbmYJ9KGCOrx3UN27ySXfJej2sEX1A==
-X-YMail-OSG: ZjJJ_xIVM1kunllM1eH67wULJ1tnM5MUGY1TOnLrNcjuw_tmlIrZn6iJEZ5NmYk
- o8FpD4aBRfRTh1SvDSJw2QZS3vZ406f5WfjUo9KmxyiMbRRGAuMuE1WePT88UFJ0O_wQqZXGFtpL
- 0CtlltkSGETb9uKXg602HONBi3QON1.I77WBMCkLozMZYl2PiKo8qdlRflpELwv4vrHpIOf_qwcQ
- flvP3gHp9BFpZE1u5UWxh7IlquiVOtmu4KNePwQX3ootb1e4obbSr2hOgRPsYZwTZ1MlA8qoH_3g
- fMn840d3Ts3wfU91leMY.BrVYIabrJLCR483FAX2oNAvRSeeUtqLslnVzbqSWZo7WqW2UnDvDtsX
- JExOpLsgg_99y5uiApfdxtvC4L2kLAWo1FhMgkLZ5nRfR71FZfZt6FrYuun23LSNDdFTSndhKU3O
- cXg8pr2IQpYw1p65_cYbBO1PslNq467Y_TY4tL99UMBtrZ9laa9Xo3u8rNT.MKCcCPtPL9C4DtAm
- Mwdw1Btr5jK0qNV9b1hIpWhWq9W3KtQzn85EI.N37LJJhpT_emyqCk0E9Pke.nECaa9KRPtSxhSG
- rfrbN2vjgdpkTRLG1IlxUcbSDuFY7J2DqlQ12qCisGsFJOXX1TyEBncFism4JShMb1Xbiihk0xZ6
- BIPSP5SqW1FisDoIwXV8ydrDyuWlOWt_0sSXPX2gypqT6uMXnjsxMGIUgTPVk8Lv3jhkTpkiaxtb
- WVivogYFByYWlLDwG7lxQd.RMZsCNl4XGb3hySTzw6Scs_H8_WUlUpLx3CiqzA2MvL3NX6MQhe92
- hHnIIvdBRuWAPpqS9frxZz5tmLs6MFDCaWTxdZettJHE79KNOgtOnm0vX4jhTtbpxamRibdXPt8A
- LJECtqTkLJMmoeabN3Om0hWf4Ta4NTOceT1MRwJO_Dy4a8t1IP35NXevCW1eELTDf.KDHV1xddZY
- 4XOqpbuW6k4YdtFmQ63iM5w8zSmDGPXD3wN262a0k1jpTzuPbGXGgKl7t4vlrg8OI.SP1f9FVMa_
- N48rXvqN5IGMXNhX0uJetxLgub2Ac30M7HqrBFxH4XR2aIi4qb.6iFQrLP7PsZJPLRtG.t5DYv2Z
- RT9SQhyRCtqw2lh1L6oTIHtQvRTsLJAJvTd3IOocH07mxHdsM8JkFqW2SNk6WKOvRwhyFqtofx_w
- OzItS_85lHv0u3H3P29DrkoWLQB4GG6tCj2DcDVgnb2xaL5eiuj0p1uhS0DNlTDPm7BZiFS9XFDM
- 7LynlL95QEbnQJDq5gXh91PALBQEAcGCnwql2hgC3WpwLt9kdNCM6IwlLnw1qqSOu34bV_ni2vIH
- zt8fQsOjnI7NCMWyaiqSA_uVZlxhtQQ4i1x_vixHzOxaI2iyoMVy7EFPFX5z045DYEmWVI00XDmS
- aa9GTA9u05X1epCsRbphTvlU.o0u4Hs4WyICg2Twdf5Bz90VBuxk20zMCVyb1Ewn.Dh4O_f3OGFP
- Y0sHipvHJGSOHuqAXBMeRWXJubINzi5oLMtrTWTxxHWh_8ratU8YFYCQk_6GvQTOP_bRZdfZsmOM
- i2Gxbv6y60vhafJzEKJyMni4tnSZ9Wng24nDLfM2VCguys8t5zfJW3XQOjwpW7PqkpJcsjbG5wZP
- GHN0Ux4Z_Xo3.JXr3yZ1TtU2GRnNPPc.K0nss8.jp7VjC5lKQ9NmeECa60Efsv93cVLf3g100MpR
- _FkXsGjsnjMA8fkpnGR4HU_qb0fAiRIggaaECOZVdZOLvZLlKbY.5NUK3oc9QEzzrN4IPrj2i8gz
- V5XbqvOjT_f.oGoFEMMrsuPVZiN59Mcq_Z3urGUIeFdejq50u_q05A7.Fz_CM9eBIS.5eVWCt27U
- EmA3Dwd69B4Lsfz1i.N3taX_ZJj8Rzyrcn9Vr1Y7X.LS_tZeltOeZKFW6nBAjwr6u3jzkbAW7NPd
- tP5HYd9XJ1iB.giDVppiDu2jmSt7q.3NTAqcZiw5hrJi9O5JRIKGaH8a8JXA2NgGWZACgW8B_wj.
- NUNvYCOuUN5DPkjjrmubVWLXo_9NIkPx3KHM_2pRAD0pjj4VcljRV48fVJHG0D._bGOolqCQTkfg
- x.begYB2Hpn4.LqNSQgHiLi7Teyb2D4XedoSCQGG0_HRkFMiULcaARDeUrKuXC9tRW_KkRcV0fF8
- WqKVSRrge1x_auKz1Ba43LYR12mb1NiGAK2SDkk5gAz17zCnGllvU5Yi2.K3xMlzC5n4w78LpWAe
- 0f42WIVW5on0HeB3RlzMr5XZ13zyX_Zyw57Yc7nWIDi0mLbOZcILSZ_NWQx_g8TAChdbQEbvNGKV
- jTwVm.sVX73tnrTPbblEIQQP.bvYedxOOkWQYs8xJgWGowQ.04ENwmk6nRf8iXwoWk.KDpgIjhda
- R21I_I5gJ4egX_xgnolPoOP19IJcDuyVUPF_pU77xa1UMBinSLTozCfJViZQfpJ_nd1nQzLStSB9
- JOc3_bpJYz7bJ18fdeklII1k2F1ZwIGqfv7BgjBOtObSYNlz9T_LIirVYvwWuZzezPLXqLy2XdeO
- x7sR8m8s3D20.U0yzZhFmAISHi3zEVhQ1V4TQfBBBp6BwMEMbtDGutqKrBfr_5FIWFeR._vmeIku
- CiqnzDXjJAaBNEyu7ODFgQM6MK0XDxVTBLArFzNbysPgPmbZove1PW88nKGZ_J_AxQ546QwGsSIu
- dR1Mg7wzggCPV5GTEezOpS_oNzRXmOlpyYp50Jl92a.JeoCGIuegHPwR86VRi2NI03OpiBvHtZpZ
- Bz_KYRXoaDJ__naP6bhp__OKhk1LetRWboiVVtPeFqeMUVho.6j6B9ANNNtSKMhF6Bj5uJWV9KZQ
- AdBZ3uTo.gZpyYdF4zoukVtkBKFJTEPv_nE29vxJXmdYsLPQGocPFQAJbDbd978atlHROhxsZ4dT
- QHNM920hisHlYPc83wLO1WFZHNRQRIlWs09ylQ650KNEE.nSilcSOB5jtmqbClIQjtH7KI9.41P0
- 21OYIcu9AqA6MZXU7PNCYSrZS9jU2P453qqmD_SI.kkploGlJBJVcPRpxzI_.YBDwP5_vu5wzmpv
- BhQqag7NBxo9xBxAy.LRnANOQhl5RvUM180K5uvt0Ad06LHlY4DpbboQ5U6YqcjtNLXisyPQhsOW
- 0D0PkzEsleJWdxID1BRdC2EzfSLvMvg170zKYD1YswZEDR9p5_ytSMkT_RPAzQiyeWcsB0ke7okD
- XQKhf7HB6A28Jhbl1cafWqsf8maYsQH1M2FbJLGp2PXMwhK_JiiJxJX0BYSxfjdcV4FVWNGrDbeG
- h4moW2OoRCdamLyUkjRg5T38rvChTAZD_YHPkk.NW683x4Mmoa83NSBcm7rwlS_thP_Y0kVouP0R
- spUG9qPYMpCBgjlXG5g8DI_TEbp55IV9tYVZRgDIFYv2TU8cWM00vkX6nUl3sLZaPKih4ZzJXBv1
- q88Axpb3WYnOO79sybjpd60Cq50YFO7wU5UABw1FGUSaRSljkhUYREVvasCf2eddUDk_qfUyqq_3
- HAvgOMJ89ZNvF7F2QWPaCU8CxlD54as5NLCEZOC18JfyuPNEerA5uQqXYp998QUDJHwid00uRh2r
- DHYQIm_Rhig4V7gsTnWvuCd_diydegfN_AEsbWnoO48.8aUM3zrnm8Y_9fS9mwgLZFCa5By11SfK
- hCGO3wCgSJsWTgqtcWc16i5qRLWrvqxxDVa.6E0sVWctENrGbSPYgwi6npeetws6NfbqRc3Xbbtv
- Lwb4TLX5Usx3EASZik57eB7dNtMGr79mYjslhRNhARAMdEpVy_eSn7XDOcjcNOcFl98IuSZaqNYX
- X5fa.Sp92gLIZiSy.xAG630NrB6mfXHb3V37K1ocoZPA4Rs_bj5U0UEm50aiXDuNxvU7zgMmKUqQ
- 4SDgvW6gapT2TV5NNkQDPgSXe9eVDtDKrMJl5nCUQJWHOHe.HxMuFDy3K88os_gy5owYTFLEyB8w
- 4SsW0cAHmJjfHk8U53cO5VUF9sCeUsECKfMkZ9YcVS3WfRkeNNxbzvtJDFBAy_4r898hCJXw93uv
- 12RKcNm4xIRhcF0XDgiBRHYdtg6iyHubgqVenG1yNV7n2fCU.x38lUyZRyKhUbDzQcuGOqfiOkAL
- 7j35_80DSeF5AP3VP9ic7PN29Hl8VeI2i03acF4QUu6_D51Ot17UeyPJBhVP54WuUfsZcMGpxH1W
- 9JJ3cka2xVQp5b95CIevhPIhjmCbBcnb7af3qpqEbZ8zL7Q1ogrWAwUxFckXq2A3tdmf3C3PeRv8
- jZe3i7RJRy8n5ectMUHDbvS41n6R1KPhbfRukKGDfS1goxDfIKS56FatE1JPcYB6Z3td_m8bBmdY
- _pZLt4RvP778qJdaycSHCHyWYcxStbnHwAOLjw_kIDkyDk6lLhFJsxerCb26gphthuwiytgkOgYm
- nO_K6w99i2w4wri9iS9vtFWD31HFn.MwzJl5Fh7HlZ0RNbf9H0WcfaOYrENQgRuG_i.odfGqJh0k
- 3OHPfzXXEfgXcWWkCE4eDA7VlrIGnMdsh5hs22jsTAmEl9zxukOzcN0sIu3atwu4eiVnZE2vOsg_
- _hSpyB00kt5gs
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Fri, 5 Feb 2021 17:16:10 +0000
-Received: by smtp420.mail.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID bf260dce1b146895c8ce430a238f7200;
-          Fri, 05 Feb 2021 16:51:38 +0000 (UTC)
-Subject: Re: [PATCH v28 05/12] LSM: Infrastructure management of the
- superblock
-To:     "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20210202162710.657398-1-mic@digikod.net>
- <20210202162710.657398-6-mic@digikod.net>
- <20210205141749.GB17981@mail.hallyn.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Message-ID: <1fbca26f-57b6-27ca-b522-36a63e4fdf09@schaufler-ca.com>
-Date:   Fri, 5 Feb 2021 08:51:35 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S233308AbhBEPkR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Feb 2021 10:40:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233320AbhBEPiN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 10:38:13 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131D6C06174A
+        for <linux-arch@vger.kernel.org>; Fri,  5 Feb 2021 09:19:48 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id e15so5497586qte.9
+        for <linux-arch@vger.kernel.org>; Fri, 05 Feb 2021 09:19:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JI+1S8T48pFcr35wnbPxCUfOS4yHFzqI/JgwK92UMUE=;
+        b=Y1KlXeRl60DhAGK1OMQ2+nZVwB9IvEW7Z9d1AmkglS4SBaMjBmSAxjSgSFsRCAHgN0
+         vJVkxMhWbw5c4oq50K5uIjpwx0/gCXQqsO6PwDU3jVbEph1g/igusmAleN4F9FKli+pI
+         SdBttc3jID0SkLTqmOCF+SOHXFKNIBv9/oqEo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JI+1S8T48pFcr35wnbPxCUfOS4yHFzqI/JgwK92UMUE=;
+        b=p8ADJX5u59RtRW6N8B0zKmmqI4v7s0bFMUyAajpeYso6LUx5Ibj6vcBAnDvaSHH8tN
+         en0htPjzhDauFhrI5+oSOQaIE+QEtQvBa6w8IBinqoEshRNNrjFDUKMlCtqTA0005FFj
+         TmGwPwiQzREtwHNQAn1MHfZt0LjFZYGkgzsM98PC3Cj054FUHms7BN8wI3JbXfAeXoDN
+         GcOoLIpCLmpvew4/Pdwgpx60PxUrfp0/7Aqn2C/3JDYp+dK3IJa7LQeLtwT90mcpsqV0
+         sR9Ymd95PqZhzkm2WE+TrsMt2VL4Ed+SC1nKiDcjkUKDP6xtbvwQ7JotF407C5moD8Ui
+         QrWA==
+X-Gm-Message-State: AOAM530JbqNL8JFFMZuA87FeDukvGxs1te2BFq6rEolK9o2YvNZ8kpDg
+        4gP7Hy4WzCLKDFnRR8Qy6w8kMInghKDjzQ==
+X-Google-Smtp-Source: ABdhPJxzc6Cbp1+0ZyCyQHHHxFdpZEM90HJMz7tC0cW4LoNlcj1yjNOXBiAr0VAAk53TN2x8WZAIFw==
+X-Received: by 2002:ac8:4e55:: with SMTP id e21mr5098089qtw.159.1612545586947;
+        Fri, 05 Feb 2021 09:19:46 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id k12sm9587424qkj.72.2021.02.05.09.19.45
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Feb 2021 09:19:45 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id s61so7477026ybi.4
+        for <linux-arch@vger.kernel.org>; Fri, 05 Feb 2021 09:19:45 -0800 (PST)
+X-Received: by 2002:a25:60d6:: with SMTP id u205mr7882421ybb.276.1612545585241;
+ Fri, 05 Feb 2021 09:19:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210205141749.GB17981@mail.hallyn.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Mailer: WebService/1.1.17648 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.8)
+References: <20201203202737.7c4wrifqafszyd5y@google.com> <20201208054646.2913063-1-maskray@google.com>
+ <CAD=FV=WWSniXCaC+vAKRa1fCZB4_dbaejwq+NCF56aZFYE-Xsg@mail.gmail.com>
+ <CAKwvOdkFpqEDvJ5b9wpwEhnOdh-YJ8GxCc33JcHXqNRDnO=RfQ@mail.gmail.com> <CAD=FV=XUuo3OaDVOnFiczUTeyKt1moX7nQ+XEX_HiDpv2f3k8A@mail.gmail.com>
+In-Reply-To: <CAD=FV=XUuo3OaDVOnFiczUTeyKt1moX7nQ+XEX_HiDpv2f3k8A@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 5 Feb 2021 09:19:33 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UTQCdd9dDG8W8fZZZhSPY3cwWgZk-3VYXZdz6pRbp8Ow@mail.gmail.com>
+Message-ID: <CAD=FV=UTQCdd9dDG8W8fZZZhSPY3cwWgZk-3VYXZdz6pRbp8Ow@mail.gmail.com>
+Subject: Re: [PATCH v2] firmware_loader: Align .builtin_fw to 8
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Fangrui Song <maskray@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/5/2021 6:17 AM, Serge E. Hallyn wrote:
-> On Tue, Feb 02, 2021 at 05:27:03PM +0100, Micka=C3=ABl Sala=C3=BCn wrot=
-e:
->> From: Casey Schaufler <casey@schaufler-ca.com>
->>
->> Move management of the superblock->sb_security blob out of the
->> individual security modules and into the security infrastructure.
->> Instead of allocating the blobs from within the modules, the modules
->> tell the infrastructure how much space is required, and the space is
->> allocated there.
->>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: John Johansen <john.johansen@canonical.com>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->> Reviewed-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> Acked-by: Serge Hallyn <serge@hallyn.com>
+Hi,
+
+On Fri, Jan 22, 2021 at 11:04 AM Doug Anderson <dianders@chromium.org> wrote:
 >
-> I wonder how many out of tree modules this will impact :)
+> Hi,
+>
+> On Tue, Jan 5, 2021 at 11:20 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Tue, Jan 5, 2021 at 9:45 AM Doug Anderson <dianders@chromium.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Mon, Dec 7, 2020 at 9:49 PM Fangrui Song <maskray@google.com> wrote:
+> > > >
+> > > > arm64 references the start address of .builtin_fw (__start_builtin_fw)
+> > > > with a pair of R_AARCH64_ADR_PREL_PG_HI21/R_AARCH64_LDST64_ABS_LO12_NC
+> > > > relocations. The compiler is allowed to emit the
+> > > > R_AARCH64_LDST64_ABS_LO12_NC relocation because struct builtin_fw in
+> > > > include/linux/firmware.h is 8-byte aligned.
+> > > >
+> > > > The R_AARCH64_LDST64_ABS_LO12_NC relocation requires the address to be a
+> > > > multiple of 8, which may not be the case if .builtin_fw is empty.
+> > > > Unconditionally align .builtin_fw to fix the linker error. 32-bit
+> > > > architectures could use ALIGN(4) but that would add unnecessary
+> > > > complexity, so just use ALIGN(8).
+> > > >
+> > > > Fixes: 5658c76 ("firmware: allow firmware files to be built into kernel image")
+> > > > Link: https://github.com/ClangBuiltLinux/linux/issues/1204
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Signed-off-by: Fangrui Song <maskray@google.com>
+> > > > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > > >
+> > > > ---
+> > > > Change in v2:
+> > > > * Use output section alignment instead of inappropriate ALIGN_FUNCTION()
+> > > > ---
+> > > >  include/asm-generic/vmlinux.lds.h | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > Tested-by: Douglas Anderson <dianders@chromium.org>
+> > >
+> > > For whatever reason this is hitting developers on Chrome OS a whole
+> > > lot suddenly.  Any chance it could be landed?  Which tree should it go
+> > > through?
+> >
+> > Andrew,
+> > Would you mind picking up this patch for us, please?
+> > https://lore.kernel.org/lkml/20201208054646.2913063-1-maskray@google.com/
+>
+> I just synced today and I'm still hitting this error when building
+> mainline.  Perhaps Andrew is busy and someone else can pick it up?
+> It'd be nice to get this into v5.11
 
-There are several blobs that have already been converted
-to infrastructure management. Not a peep from out-of-tree
-module developers/maintainers. I can only speculate that
-OOT modules are either less common than we may think, using
-alternative data management models (as does eBPF) or
-sticking with very old kernels. It's also possible that
-they're suffering in silence, which would be sad because
-every module that's worth having should be in the tree.
+I hate to be a broken record, but I synced and built mainline today
+(v5.11-rc6-139-gdd86e7fa07a3) and I'm still hitting this.  It feels
+like we need an alternate way to get this landed...
 
-> Actually
-> if some new incoming module does an rcu callback to free the
-> sb_security, then the security_sb_free will need an update, but
-> that seems unlikely.
-
-We're already doing that for the inode blob, so it's
-really just a small matter of cut-n-paste and s/inode/sb/
-to make that happen.
-
-
+-Doug
