@@ -2,85 +2,210 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E65F3311504
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Feb 2021 23:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA5F311939
+	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 04:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbhBEWWf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Feb 2021 17:22:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41764 "EHLO mail.kernel.org"
+        id S231797AbhBFC7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Feb 2021 21:59:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232630AbhBEO26 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:28:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D08C264D92;
-        Fri,  5 Feb 2021 16:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612541205;
-        bh=m0Ived/Gtw9H0h9wzJs3877Bi8G+nGI9iZ9HA2qfSi0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N19lstyfIjNxGz0mYNCERX8vzhh1nu7jBG58K4mykiqzTPnAy4sUWlGy2fihm8BZi
-         2hvg6JcH/74yAAhr6kGe8CSdh/ZWeu7AyEJ/8qD47xa5QJXEcaBroFOEc+OXUz08Kp
-         qhqV4TzpAkO2qCCq6/smiou/HyIojpMLPsUEmQSznsUqfZar1K0byzoV/LkJWHiyNf
-         GSn6boP/u4Jy3y4I3pqrJKex77yGszmnrQq2B9G46HiUhOHS3NpdMcNFKD1T+gKx66
-         v6VBSmMkbxAta0qgbDwCXodwiEat97uh2Wh2Hy5PeLCJ7Pi/wtO0lNQ74b3RcRPfKe
-         1dLN2PLyiSV1w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3750740513; Fri,  5 Feb 2021 13:06:41 -0300 (-03)
-Date:   Fri, 5 Feb 2021 13:06:41 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Chris Murphy <lists@colorremedies.com>
-Cc:     bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        dwarves@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>
-Subject: Re: [FIXED] Re: 5:11: in-kernel BTF is malformed
-Message-ID: <20210205160641.GE920417@kernel.org>
-References: <CAJCQCtRHOidM7Vps1JQSpZA14u+B5fR860FwZB=eb1wYjTpqDw@mail.gmail.com>
- <CAEf4BzZ4oTB0-JizHe1VaCk2V+Jb9jJoTznkgh6CjE5VxNVqbg@mail.gmail.com>
- <CAJCQCtRw6UWGGvjn0x__godYKYQXXmtyQys4efW2Pb84Q5q8Eg@mail.gmail.com>
- <20210204010038.GA854763@kernel.org>
- <CAJCQCtQfgRp78_WSrSHLNUUYNCyOCH=vo10nVZW_cyMjpZiNJg@mail.gmail.com>
- <CAEf4Bza4XQxpS7VTNWGk6Rz-iUwZemF6+iAVBA_yvrWnV0k8Qg@mail.gmail.com>
- <CAJCQCtRDJ_uiJcanP_p+y6Kz76c4P-EmndMyfHN5f4rtkgYhjA@mail.gmail.com>
- <20210204132625.GB910119@kernel.org>
- <20210204163319.GD910119@kernel.org>
- <CAJCQCtT-i0Lv2zxUDko3XuiHpUqOnYPeND5LzD=zgrB1-GNvAg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJCQCtT-i0Lv2zxUDko3XuiHpUqOnYPeND5LzD=zgrB1-GNvAg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+        id S231913AbhBFCrB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:47:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C4F264FFB;
+        Fri,  5 Feb 2021 23:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1612568467;
+        bh=3sDRqog9DdOhZbI4zaNsJSd3/mxjGovx7LJZLTGAe4A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AQBVoz5fAvrmQBvzS5Wpy2fjUdcUJeCirBjQ++FHQLMCSz9Dk5PkyS5fhSkyvf8gz
+         am1nzOzy5qVGzpBArrXpKqWzpPL/KI6Cu/qupTNpLjv3IqwpDq7N0j8NPeHAo6LVoM
+         a7tgJliixmZoi4fUVuNG+pXlsyDEScG8bw+t+yH4=
+Date:   Fri, 5 Feb 2021 15:41:05 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Huang Pei <huangpei@loongson.cn>, ambrosehua@gmail.com,
+        Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] MIPS: make userspace mapping young by default
+Message-Id: <20210205154105.32bb13df439aa49b7fc167e7@linux-foundation.org>
+In-Reply-To: <20210204152239.GA14292@alpha.franken.de>
+References: <20210204013942.8398-1-huangpei@loongson.cn>
+        <20210204152239.GA14292@alpha.franken.de>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Em Thu, Feb 04, 2021 at 08:10:52PM -0700, Chris Murphy escreveu:
-> On Thu, Feb 4, 2021 at 9:33 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >
-> > So I think that for the problems related to building the kernel with gcc
-> > 11 in Fedora Rawhide using the default that is now DWARF5, pahole 1.20
-> > is good to go and I'll tag it now.
+On Thu, 4 Feb 2021 16:22:39 +0100 Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
+
+> On Thu, Feb 04, 2021 at 09:39:42AM +0800, Huang Pei wrote:
+> > MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
+> > + 2 TLB Invalid), butthe second TLB Invalid exception is just
+> > triggered by __update_tlb from do_page_fault writing tlb without
+> > _PAGE_VALID set. With this patch, user space mapping prot is made
+> > young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
+> > and it only take 1 TLB Miss + 1 TLB Invalid exception
+> > 
+> > Remove pte_sw_mkyoung without polluting MM code and make page fault
+> > delay of MIPS on par with other architecture
+> > 
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
+> >  include/linux/pgtable.h |  8 --------
+> >  mm/memory.c             |  3 ---
+> >  3 files changed, 16 insertions(+), 25 deletions(-)
 > 
-> dwarves-1.20-1.fc34.x86_64
-> libdwarves1-1.20-1.fc34.x86_64
+> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > 
-> Fixes both "failed to validate module [?????] BTF: -22" type errors,
-> and 'in-kernel BTF is malformed" with qemu-kvm and libvirt.
+> Andrew, can you take this patch through your tree ?
 
-Cool! Any fedora user here please give the update some love by bumping
-its karma at:
+Sure.  I'll drop Christophe's "mm/memory.c: remove pte_sw_mkyoung()"
+(https://lkml.kernel.org/r/f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu)
+in favour of this one.
 
-https://bodhi.fedoraproject.org/updates/FEDORA-2021-804e7a572c
+I changed this patch a bit due to other changes in -next.  Please check
+do_set_pte().
 
-- Arnaldo
+
+
+From: Huang Pei <huangpei@loongson.cn>
+Subject: MIPS: make userspace mapping young by default
+
+MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss + 2
+TLB Invalid), butthe second TLB Invalid exception is just triggered by
+__update_tlb from do_page_fault writing tlb without _PAGE_VALID set.  With
+this patch, user space mapping prot is made young by default (with both
+_PAGE_VALID and _PAGE_YOUNG set), and it only take 1 TLB Miss + 1 TLB
+Invalid exception
+
+Remove pte_sw_mkyoung without polluting MM code and make page fault delay
+of MIPS on par with other architecture
+
+Link: https://lkml.kernel.org/r/20210204013942.8398-1-huangpei@loongson.cn
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Acked-by: <huangpei@loongson.cn>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: <ambrosehua@gmail.com>
+Cc: Bibo Mao <maobibo@loongson.cn>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Li Xuefeng <lixuefeng@loongson.cn>
+Cc: Yang Tiezhu <yangtiezhu@loongson.cn>
+Cc: Gao Juxin <gaojuxin@loongson.cn>
+Cc: Fuxin Zhang <zhangfx@lemote.com>
+Cc: Huacai Chen <chenhc@lemote.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ arch/mips/mm/cache.c    |   30 ++++++++++++++++--------------
+ include/linux/pgtable.h |    8 --------
+ mm/memory.c             |    4 ----
+ 3 files changed, 16 insertions(+), 26 deletions(-)
+
+--- a/arch/mips/mm/cache.c~mips-make-userspace-mapping-young-by-default
++++ a/arch/mips/mm/cache.c
+@@ -157,29 +157,31 @@ unsigned long _page_cachable_default;
+ EXPORT_SYMBOL(_page_cachable_default);
+ 
+ #define PM(p)	__pgprot(_page_cachable_default | (p))
++#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
+ 
+ static inline void setup_protection_map(void)
+ {
+ 	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[4]  = PM(_PAGE_PRESENT);
+-	protection_map[5]  = PM(_PAGE_PRESENT);
+-	protection_map[6]  = PM(_PAGE_PRESENT);
+-	protection_map[7]  = PM(_PAGE_PRESENT);
++	protection_map[1]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[2]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	protection_map[3]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[4]  = PVA(_PAGE_PRESENT);
++	protection_map[5]  = PVA(_PAGE_PRESENT);
++	protection_map[6]  = PVA(_PAGE_PRESENT);
++	protection_map[7]  = PVA(_PAGE_PRESENT);
+ 
+ 	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
++	protection_map[9]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+ 				_PAGE_NO_READ);
+-	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-	protection_map[12] = PM(_PAGE_PRESENT);
+-	protection_map[13] = PM(_PAGE_PRESENT);
+-	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+-	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
++	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
++	protection_map[12] = PVA(_PAGE_PRESENT);
++	protection_map[13] = PVA(_PAGE_PRESENT);
++	protection_map[14] = PVA(_PAGE_PRESENT);
++	protection_map[15] = PVA(_PAGE_PRESENT);
+ }
+ 
++#undef _PVA
+ #undef PM
+ 
+ void cpu_cache_init(void)
+--- a/include/linux/pgtable.h~mips-make-userspace-mapping-young-by-default
++++ a/include/linux/pgtable.h
+@@ -432,14 +432,6 @@ static inline void ptep_set_wrprotect(st
+  * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+  * where software maintains page access bit.
+  */
+-#ifndef pte_sw_mkyoung
+-static inline pte_t pte_sw_mkyoung(pte_t pte)
+-{
+-	return pte;
+-}
+-#define pte_sw_mkyoung	pte_sw_mkyoung
+-#endif
+-
+ #ifndef pte_savedwrite
+ #define pte_savedwrite pte_write
+ #endif
+--- a/mm/memory.c~mips-make-userspace-mapping-young-by-default
++++ a/mm/memory.c
+@@ -2902,7 +2902,6 @@ static vm_fault_t wp_page_copy(struct vm
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+-		entry = pte_sw_mkyoung(entry);
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 
+ 		/*
+@@ -3560,7 +3559,6 @@ static vm_fault_t do_anonymous_page(stru
+ 	__SetPageUptodate(page);
+ 
+ 	entry = mk_pte(page, vma->vm_page_prot);
+-	entry = pte_sw_mkyoung(entry);
+ 	if (vma->vm_flags & VM_WRITE)
+ 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 
+@@ -3745,8 +3743,6 @@ void do_set_pte(struct vm_fault *vmf, st
+ 
+ 	if (prefault && arch_wants_old_prefaulted_pte())
+ 		entry = pte_mkold(entry);
+-	else
+-		entry = pte_sw_mkyoung(entry);
+ 
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+_
+
