@@ -2,210 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA5F311939
-	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 04:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF563119C8
+	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 04:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbhBFC7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Feb 2021 21:59:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38970 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231913AbhBFCrB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:47:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C4F264FFB;
-        Fri,  5 Feb 2021 23:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1612568467;
-        bh=3sDRqog9DdOhZbI4zaNsJSd3/mxjGovx7LJZLTGAe4A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AQBVoz5fAvrmQBvzS5Wpy2fjUdcUJeCirBjQ++FHQLMCSz9Dk5PkyS5fhSkyvf8gz
-         am1nzOzy5qVGzpBArrXpKqWzpPL/KI6Cu/qupTNpLjv3IqwpDq7N0j8NPeHAo6LVoM
-         a7tgJliixmZoi4fUVuNG+pXlsyDEScG8bw+t+yH4=
-Date:   Fri, 5 Feb 2021 15:41:05 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huang Pei <huangpei@loongson.cn>, ambrosehua@gmail.com,
-        Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] MIPS: make userspace mapping young by default
-Message-Id: <20210205154105.32bb13df439aa49b7fc167e7@linux-foundation.org>
-In-Reply-To: <20210204152239.GA14292@alpha.franken.de>
-References: <20210204013942.8398-1-huangpei@loongson.cn>
-        <20210204152239.GA14292@alpha.franken.de>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S231756AbhBFDTJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Feb 2021 22:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231621AbhBFCpo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Feb 2021 21:45:44 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74628C08EE13
+        for <linux-arch@vger.kernel.org>; Fri,  5 Feb 2021 16:03:13 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id q12so12423684lfo.12
+        for <linux-arch@vger.kernel.org>; Fri, 05 Feb 2021 16:03:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NWPbrqSGD6rR+HAkD4dteJHXvU5H2qHvAqzNOoE/AX4=;
+        b=Q9wbjEdeHc4TeNxJ/V+vcdkXrft7Hdvxxn+SIjZxu8PZsrwK5feK1ppXy1XqnE28Ro
+         D4ok3CLhopKZbW5fYvBwYj1OZxnIx1dNO+j/IUzx9eM1ch5hzGzmxEydedxC76cWDlf8
+         vavb1T9si/T+EQjB+UhwvM+HTrxgBeGiY4jchmvvqyRbZ7E1tkbi4bGuJI010NTymG1W
+         KmVVl1eMaq4TdUrh/rsBFGcVys2kY3z/YQiM0T97plSvPSfTXUzx6jFYonOe57z75kmY
+         mapTq2Rquh3dM65g/II/UgJxQnA238NhsBg8vg+nUry3YhUuPw3/eRvpW50is8E+69vI
+         Ey4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWPbrqSGD6rR+HAkD4dteJHXvU5H2qHvAqzNOoE/AX4=;
+        b=FT9u5PjXLsY8X9JbvAe7tbnkSHaSzP1urfgX0Id1faAXkUuu8vrh7OOlZDZi329lWT
+         ZPXC2UeATPiKkhr1vkhGYdGqP3VqSqcuCQ1KhJM7xBJiKZUmDfqIkzJBWHvLp3x3UsWW
+         0AvE36nRqD3lG2ROkPviw8YyjaLP2KLAVDaja4fiuy27NxW/ZpN5ouxJwuIf6ikiW5ly
+         2XVAk454EIJdkAmeTAyOzaaIqgofdGVZnjloUrfrKgApG2u3gb0VBbqKFmn1Mzbj36S6
+         NLYamvblntUt52bMY2JHsUuUt2sxuEC85IACHOrDCZGadvjE9un2dU4rS+n3lzTEWXl2
+         B6Lw==
+X-Gm-Message-State: AOAM5301Wn6epEcC/5suf+zfUJfDN5etETp5JF4i1ssmKdmNkZayi1B/
+        hLpXjbG0+mfSHhoKIyiW4qX6lw/ZXn7ARDA8SvJCEQ==
+X-Google-Smtp-Source: ABdhPJwFLIr/GH5BZQINZQllHE4paJG7suSjTbzOFq6WfqnMVkh1s9cjISJEvl7WKkrsrv8vLH+/5AkJ3PEobamJQ4I=
+X-Received: by 2002:a2e:7d11:: with SMTP id y17mr4129417ljc.116.1612569791666;
+ Fri, 05 Feb 2021 16:03:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20210205202220.2748551-1-ndesaulniers@google.com>
+ <20210205202220.2748551-2-ndesaulniers@google.com> <20210205160034.a0e0ba06752bef03e60f91f8@linux-foundation.org>
+In-Reply-To: <20210205160034.a0e0ba06752bef03e60f91f8@linux-foundation.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 5 Feb 2021 16:02:58 -0800
+Message-ID: <CAKwvOdmkx=+MGkc5uCB=0TssnHNQXb0E+x=CqbGs6gGZc5GH7Q@mail.gmail.com>
+Subject: Re: [PATCH v9 1/3] vmlinux.lds.h: add DWARF v5 sections
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Chris Murphy <bugzilla@colorremedies.com>,
+        Mark Wielaard <mark@klomp.org>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        Chris Murphy <lists@colorremedies.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 4 Feb 2021 16:22:39 +0100 Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote:
+On Fri, Feb 5, 2021 at 4:00 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Fri,  5 Feb 2021 12:22:18 -0800 Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> > We expect toolchains to produce these new debug info sections as part of
+> > DWARF v5. Add explicit placements to prevent the linker warnings from
+> > --orphan-section=warn.
+> >
+> > Compilers may produce such sections with explicit -gdwarf-5, or based on
+> > the implicit default version of DWARF when -g is used via DEBUG_INFO.
+> > This implicit default changes over time, and has changed to DWARF v5
+> > with GCC 11.
+> >
+> > .debug_sup was mentioned in review, but without compilers producing it
+> > today, let's wait to add it until it becomes necessary.
+> >
+>
+> There isn't anything in this changelog which explains why a -stable
+> backport was requested?  Or is there?  Irritating linker warnings?
+> More than that?
 
-> On Thu, Feb 04, 2021 at 09:39:42AM +0800, Huang Pei wrote:
-> > MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
-> > + 2 TLB Invalid), butthe second TLB Invalid exception is just
-> > triggered by __update_tlb from do_page_fault writing tlb without
-> > _PAGE_VALID set. With this patch, user space mapping prot is made
-> > young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
-> > and it only take 1 TLB Miss + 1 TLB Invalid exception
-> > 
-> > Remove pte_sw_mkyoung without polluting MM code and make page fault
-> > delay of MIPS on par with other architecture
-> > 
-> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > ---
-> >  arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
-> >  include/linux/pgtable.h |  8 --------
-> >  mm/memory.c             |  3 ---
-> >  3 files changed, 16 insertions(+), 25 deletions(-)
-> 
-> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> 
-> Andrew, can you take this patch through your tree ?
-
-Sure.  I'll drop Christophe's "mm/memory.c: remove pte_sw_mkyoung()"
-(https://lkml.kernel.org/r/f302ef92c48d1f08a0459aaee1c568ca11213814.1612345700.git.christophe.leroy@csgroup.eu)
-in favour of this one.
-
-I changed this patch a bit due to other changes in -next.  Please check
-do_set_pte().
-
-
-
-From: Huang Pei <huangpei@loongson.cn>
-Subject: MIPS: make userspace mapping young by default
-
-MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss + 2
-TLB Invalid), butthe second TLB Invalid exception is just triggered by
-__update_tlb from do_page_fault writing tlb without _PAGE_VALID set.  With
-this patch, user space mapping prot is made young by default (with both
-_PAGE_VALID and _PAGE_YOUNG set), and it only take 1 TLB Miss + 1 TLB
-Invalid exception
-
-Remove pte_sw_mkyoung without polluting MM code and make page fault delay
-of MIPS on par with other architecture
-
-Link: https://lkml.kernel.org/r/20210204013942.8398-1-huangpei@loongson.cn
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-Acked-by: <huangpei@loongson.cn>
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: <ambrosehua@gmail.com>
-Cc: Bibo Mao <maobibo@loongson.cn>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Li Xuefeng <lixuefeng@loongson.cn>
-Cc: Yang Tiezhu <yangtiezhu@loongson.cn>
-Cc: Gao Juxin <gaojuxin@loongson.cn>
-Cc: Fuxin Zhang <zhangfx@lemote.com>
-Cc: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- arch/mips/mm/cache.c    |   30 ++++++++++++++++--------------
- include/linux/pgtable.h |    8 --------
- mm/memory.c             |    4 ----
- 3 files changed, 16 insertions(+), 26 deletions(-)
-
---- a/arch/mips/mm/cache.c~mips-make-userspace-mapping-young-by-default
-+++ a/arch/mips/mm/cache.c
-@@ -157,29 +157,31 @@ unsigned long _page_cachable_default;
- EXPORT_SYMBOL(_page_cachable_default);
- 
- #define PM(p)	__pgprot(_page_cachable_default | (p))
-+#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
- 
- static inline void setup_protection_map(void)
- {
- 	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[4]  = PM(_PAGE_PRESENT);
--	protection_map[5]  = PM(_PAGE_PRESENT);
--	protection_map[6]  = PM(_PAGE_PRESENT);
--	protection_map[7]  = PM(_PAGE_PRESENT);
-+	protection_map[1]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	protection_map[2]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	protection_map[3]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	protection_map[4]  = PVA(_PAGE_PRESENT);
-+	protection_map[5]  = PVA(_PAGE_PRESENT);
-+	protection_map[6]  = PVA(_PAGE_PRESENT);
-+	protection_map[7]  = PVA(_PAGE_PRESENT);
- 
- 	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
-+	protection_map[9]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
- 				_PAGE_NO_READ);
--	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--	protection_map[12] = PM(_PAGE_PRESENT);
--	protection_map[13] = PM(_PAGE_PRESENT);
--	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-+	protection_map[12] = PVA(_PAGE_PRESENT);
-+	protection_map[13] = PVA(_PAGE_PRESENT);
-+	protection_map[14] = PVA(_PAGE_PRESENT);
-+	protection_map[15] = PVA(_PAGE_PRESENT);
- }
- 
-+#undef _PVA
- #undef PM
- 
- void cpu_cache_init(void)
---- a/include/linux/pgtable.h~mips-make-userspace-mapping-young-by-default
-+++ a/include/linux/pgtable.h
-@@ -432,14 +432,6 @@ static inline void ptep_set_wrprotect(st
-  * To be differentiate with macro pte_mkyoung, this macro is used on platforms
-  * where software maintains page access bit.
-  */
--#ifndef pte_sw_mkyoung
--static inline pte_t pte_sw_mkyoung(pte_t pte)
--{
--	return pte;
--}
--#define pte_sw_mkyoung	pte_sw_mkyoung
--#endif
--
- #ifndef pte_savedwrite
- #define pte_savedwrite pte_write
- #endif
---- a/mm/memory.c~mips-make-userspace-mapping-young-by-default
-+++ a/mm/memory.c
-@@ -2902,7 +2902,6 @@ static vm_fault_t wp_page_copy(struct vm
- 		}
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
--		entry = pte_sw_mkyoung(entry);
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 
- 		/*
-@@ -3560,7 +3559,6 @@ static vm_fault_t do_anonymous_page(stru
- 	__SetPageUptodate(page);
- 
- 	entry = mk_pte(page, vma->vm_page_prot);
--	entry = pte_sw_mkyoung(entry);
- 	if (vma->vm_flags & VM_WRITE)
- 		entry = pte_mkwrite(pte_mkdirty(entry));
- 
-@@ -3745,8 +3743,6 @@ void do_set_pte(struct vm_fault *vmf, st
- 
- 	if (prefault && arch_wants_old_prefaulted_pte())
- 		entry = pte_mkold(entry);
--	else
--		entry = pte_sw_mkyoung(entry);
- 
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-_
-
+Users adopting GCC 11 will start to see warnings from the linker due
+to --orphan-section=warn when building the branches of the stable
+tree.  Stable has IME accepted patches for permitting newer toolchains
+to continue to compile warning free.
+-- 
+Thanks,
+~Nick Desaulniers
