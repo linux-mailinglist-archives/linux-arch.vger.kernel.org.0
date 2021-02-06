@@ -2,68 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90828311DD3
-	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 15:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF76311E39
+	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 16:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbhBFOj7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 6 Feb 2021 09:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbhBFOjt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 6 Feb 2021 09:39:49 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB2C061756
-        for <linux-arch@vger.kernel.org>; Sat,  6 Feb 2021 06:39:09 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id k204so9198297oih.3
-        for <linux-arch@vger.kernel.org>; Sat, 06 Feb 2021 06:39:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=AayuogBUs8qSl3i0UdthXrnanTfMq0tKkhskm3wt1sAzJL4mArzM+1RYCpG7MaMzZx
-         G33CTltvZSfxNUYGwdZB3QxVY0PzgnU04W/ULEQvCnTZ4bx58MflOAhH/XKpc9AjLSyf
-         gDjckVBCiZ4+Kf+JlzXJ+tJgnkdSui3zjeVysZC56hTW+ZR+8IBSWD9GbwkE9DFN7uMF
-         9AFiAh9ZNDb87FVlnz3QBQJJYMwmSW1AKx3xhS9C1YpQGaHK+Cum9b4Ufr+Xl4vUNAgp
-         MVTyNhQWs5r7ReYaQJbcPesvNps4B+aPdDlo3bmnmOnn8iqqiAFGW56shfIFB37agoON
-         U/Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=c6cEu64KyAPd/6O/lFAvIUEwyjpafq6GRX2zHAg6fAcWK1duz0HEhqncA15bspDn+7
-         ysaOLDvnR3+KHf/fAMXoBCQeHbzi/+ihAYdmvWMA6wIFIAiy8F04PAdixLs0j33JSQwb
-         oZl6vb3GLdUT9/8lj70axguGPV2Fngj9mvnfbg7BWIy1CKvwA0tc6eMSZP0V2JCYIveE
-         LU+A3ixC893dRJs9N81qN4tx9qzo0qkE1y0an/Q2LEBsqPQF4WEMsOdk5mO1JmmgEcsg
-         RFKI3EAnvzUeD3e8kADnhUs0sxBGeILNuNv3PHO6vKUx8DkedNcW3lZyPh5e8pv4msWM
-         j8ww==
-X-Gm-Message-State: AOAM532L8BHgkM5MUvK6UvVRcSpFJc9/sOZVVjDWh0GYIPizB6zLrB40
-        RNtprM/4edJUvoIDz9ToujbQ9vHWRNjQg2kZKOs=
-X-Google-Smtp-Source: ABdhPJz29puEdVPMnDwF0XxPsT6+o9O5KFajFGtBTE+NY/nF9GSnPU10ifFdcX1K9V26QMoDlB1I09N7/RUQHlutMsk=
-X-Received: by 2002:aca:d4ce:: with SMTP id l197mr6051800oig.36.1612622349011;
- Sat, 06 Feb 2021 06:39:09 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a9d:3e4c:0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:39:08 -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada@gmail.com>
-Date:   Sat, 6 Feb 2021 15:39:08 +0100
-Message-ID: <CAO_fDi-Pq84h0ZY8tet-GNe6hmXk6MqSNbujKqpBD_HoBF2yoQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        id S230034AbhBFPDA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Sat, 6 Feb 2021 10:03:00 -0500
+Received: from wildebeest.demon.nl ([212.238.236.112]:45684 "EHLO
+        gnu.wildebeest.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229854AbhBFPC4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 6 Feb 2021 10:02:56 -0500
+Received: from tarox.wildebeest.org (tarox.wildebeest.org [172.31.17.39])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by gnu.wildebeest.org (Postfix) with ESMTPSA id 1996F30278CD;
+        Sat,  6 Feb 2021 16:02:09 +0100 (CET)
+Received: by tarox.wildebeest.org (Postfix, from userid 1000)
+        id BEDE64000987; Sat,  6 Feb 2021 16:02:09 +0100 (CET)
+Message-ID: <642ceee8911e201438068f39f828af9f52cbb6a0.camel@klomp.org>
+Subject: Re: [PATCH v9 1/3] vmlinux.lds.h: add DWARF v5 sections
+From:   Mark Wielaard <mark@klomp.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Chris Murphy <bugzilla@colorremedies.com>,
+        stable@vger.kernel.org, Chris Murphy <lists@colorremedies.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Date:   Sat, 06 Feb 2021 16:02:09 +0100
+In-Reply-To: <20210205202220.2748551-2-ndesaulniers@google.com>
+References: <20210205202220.2748551-1-ndesaulniers@google.com>
+         <20210205202220.2748551-2-ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
+X-Spam-Flag: NO
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on gnu.wildebeest.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+Hi Nick,
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+On Fri, 2021-02-05 at 12:22 -0800, Nick Desaulniers wrote:
+> We expect toolchains to produce these new debug info sections as part of
+> DWARF v5. Add explicit placements to prevent the linker warnings from
+> --orphan-section=warn.
+> 
+> Compilers may produce such sections with explicit -gdwarf-5, or based on
+> the implicit default version of DWARF when -g is used via DEBUG_INFO.
+> This implicit default changes over time, and has changed to DWARF v5
+> with GCC 11.
+> 
+> .debug_sup was mentioned in review, but without compilers producing it
+> today, let's wait to add it until it becomes necessary.
+
+I don't think that will be necessary. .debug_sup is for Dwarf
+Supplemental file producers like dwz. Those would run after the linker.
+
+> Cc: stable@vger.kernel.org
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1922707
+> Reported-by: Chris Murphy <lists@colorremedies.com>
+> Suggested-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 34b7e0d2346c..1e7cde4bd3f9 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -842,8 +842,13 @@
+>  		/* DWARF 4 */						\
+>  		.debug_types	0 : { *(.debug_types) }			\
+>  		/* DWARF 5 */						\
+> +		.debug_addr	0 : { *(.debug_addr) }			\
+> +		.debug_line_str	0 : { *(.debug_line_str) }		\
+> +		.debug_loclists	0 : { *(.debug_loclists) }		\
+>  		.debug_macro	0 : { *(.debug_macro) }			\
+> -		.debug_addr	0 : { *(.debug_addr) }
+> +		.debug_names	0 : { *(.debug_names) }			\
+> +		.debug_rnglists	0 : { *(.debug_rnglists) }		\
+> +		.debug_str_offsets	0 : { *(.debug_str_offsets) }
+>  
+>  /* Stabs debugging sections. */
+>  #define STABS_DEBUG							\
+
+Looks good to me.
+
+Cheers,
+
+Mark
