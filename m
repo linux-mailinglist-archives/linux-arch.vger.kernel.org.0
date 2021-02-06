@@ -2,136 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEEC311D1B
-	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 13:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90828311DD3
+	for <lists+linux-arch@lfdr.de>; Sat,  6 Feb 2021 15:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbhBFM33 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 6 Feb 2021 07:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S229558AbhBFOj7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 6 Feb 2021 09:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbhBFM31 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 6 Feb 2021 07:29:27 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABA7C06174A;
-        Sat,  6 Feb 2021 04:28:46 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id q5so8379062ilc.10;
-        Sat, 06 Feb 2021 04:28:46 -0800 (PST)
+        with ESMTP id S230127AbhBFOjt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 6 Feb 2021 09:39:49 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB2C061756
+        for <linux-arch@vger.kernel.org>; Sat,  6 Feb 2021 06:39:09 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id k204so9198297oih.3
+        for <linux-arch@vger.kernel.org>; Sat, 06 Feb 2021 06:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=JBajd064PpTu/1CDE1Jdo8Su+QtGYLF6dTi4RlKWEEA=;
-        b=T2sqHXGgX7Un6Xv1/xkyr0Z5Q2LG50+DE94tSzxDfsN6B9vFdJsZygo10nHcvwpajE
-         M9InJ/bdjdgV/SRdRbT6bC5Wa2qr3qR/TOOJvviRRQmcb/PcdKkoVyoUJ/NzU6B+u58B
-         QVQ0kHD3igiBljW+ntK26oySyqZo+8bNM94vCifIqIOFrjxbV84kAKE47g3/ONkthzSk
-         nYayJ1GMdxYAn+gfMzr5gsWDJfIEIFfYEyzuAgLPth/jD4rJ+wfUVoBlb5ASJHbra1E+
-         9GfUlKh1j/xwls7XQKY+WgfPIkwUuhsCQBvdNGEUTM3EuTbEhtT1h4Vq5lK/TehpaiQK
-         81ZQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=AayuogBUs8qSl3i0UdthXrnanTfMq0tKkhskm3wt1sAzJL4mArzM+1RYCpG7MaMzZx
+         G33CTltvZSfxNUYGwdZB3QxVY0PzgnU04W/ULEQvCnTZ4bx58MflOAhH/XKpc9AjLSyf
+         gDjckVBCiZ4+Kf+JlzXJ+tJgnkdSui3zjeVysZC56hTW+ZR+8IBSWD9GbwkE9DFN7uMF
+         9AFiAh9ZNDb87FVlnz3QBQJJYMwmSW1AKx3xhS9C1YpQGaHK+Cum9b4Ufr+Xl4vUNAgp
+         MVTyNhQWs5r7ReYaQJbcPesvNps4B+aPdDlo3bmnmOnn8iqqiAFGW56shfIFB37agoON
+         U/Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=JBajd064PpTu/1CDE1Jdo8Su+QtGYLF6dTi4RlKWEEA=;
-        b=Z/HoONdiBSBLJmT3ghQgQP8a1nVZMouZcRZgOt1d+j0BW9lrG74s/gQAwZ6e7dQMD6
-         OpO+3E69OWCqmTpHKuMo+YwQVsoWsn1/bz8qAtdZgVRb4ylCujkty/MxhaHjOUOtnrma
-         Bw0gseY5F6D1FYhi/53K35J2BM2Hokwu/z0mbvIAkthwBgsbECXfg4DjrbetWdZEQq3o
-         7Tz3+NK7cR7UAQmifyVVPMUrU+EbJ6hgoksmz+5HLqtFnFw3i4Yti/BYvXGkWqA0UK0W
-         LeZZhBzPoXSAovB9QcHbzzfQoOZNPXn5c8fkpC+11ZGv1OT1HRBpkbWkVhxpTRtqwPav
-         muVg==
-X-Gm-Message-State: AOAM533mSD8fZylY0jKzzEq4uROFffg4I/H8zyFidtuNK9Fjcn9m4kO5
-        oHIIOUt9N2zpPsum05SGHK3hVi1Zz0983dLiN2c=
-X-Google-Smtp-Source: ABdhPJxkWEspd89Az+lzNCSx6GqZMqO0HD/bsY8trAsiOXaBDuMeY1Kw/42fxWVr0akJiCVy7UEaDt9MwXXerqWRiHU=
-X-Received: by 2002:a92:ce46:: with SMTP id a6mr8328535ilr.10.1612614525862;
- Sat, 06 Feb 2021 04:28:45 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=c6cEu64KyAPd/6O/lFAvIUEwyjpafq6GRX2zHAg6fAcWK1duz0HEhqncA15bspDn+7
+         ysaOLDvnR3+KHf/fAMXoBCQeHbzi/+ihAYdmvWMA6wIFIAiy8F04PAdixLs0j33JSQwb
+         oZl6vb3GLdUT9/8lj70axguGPV2Fngj9mvnfbg7BWIy1CKvwA0tc6eMSZP0V2JCYIveE
+         LU+A3ixC893dRJs9N81qN4tx9qzo0qkE1y0an/Q2LEBsqPQF4WEMsOdk5mO1JmmgEcsg
+         RFKI3EAnvzUeD3e8kADnhUs0sxBGeILNuNv3PHO6vKUx8DkedNcW3lZyPh5e8pv4msWM
+         j8ww==
+X-Gm-Message-State: AOAM532L8BHgkM5MUvK6UvVRcSpFJc9/sOZVVjDWh0GYIPizB6zLrB40
+        RNtprM/4edJUvoIDz9ToujbQ9vHWRNjQg2kZKOs=
+X-Google-Smtp-Source: ABdhPJz29puEdVPMnDwF0XxPsT6+o9O5KFajFGtBTE+NY/nF9GSnPU10ifFdcX1K9V26QMoDlB1I09N7/RUQHlutMsk=
+X-Received: by 2002:aca:d4ce:: with SMTP id l197mr6051800oig.36.1612622349011;
+ Sat, 06 Feb 2021 06:39:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20210205202220.2748551-1-ndesaulniers@google.com>
- <CA+icZUW3sg_PkbmKSFMs6EqwQV7=hvKuAgZSsbg=Qr6gTs7RbQ@mail.gmail.com> <CAK7LNAT8rjo=MdLqpjRXR2fnJ8XSeoA=uD633Pj1ENs5JOciXQ@mail.gmail.com>
-In-Reply-To: <CAK7LNAT8rjo=MdLqpjRXR2fnJ8XSeoA=uD633Pj1ENs5JOciXQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 6 Feb 2021 13:28:34 +0100
-Message-ID: <CA+icZUXcAGhqLTmWsQLnvH=7meZ4N0k3zDcwv7vMGCSsp4TxDg@mail.gmail.com>
-Subject: Re: [PATCH v9 0/3] Kbuild: DWARF v5 support
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jakub Jelinek <jakub@redhat.com>,
-        Fangrui Song <maskray@google.com>,
-        Caroline Tice <cmtice@google.com>,
-        Nick Clifton <nickc@redhat.com>, Yonghong Song <yhs@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Chris Murphy <bugzilla@colorremedies.com>,
-        Mark Wielaard <mark@klomp.org>
+Received: by 2002:a9d:3e4c:0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:39:08 -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada@gmail.com>
+Date:   Sat, 6 Feb 2021 15:39:08 +0100
+Message-ID: <CAO_fDi-Pq84h0ZY8tet-GNe6hmXk6MqSNbujKqpBD_HoBF2yoQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 1:05 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sat, Feb 6, 2021 at 6:00 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Fri, Feb 5, 2021 at 9:22 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > >
-> > > DWARF v5 is the latest standard of the DWARF debug info format.
-> > >
-> > > DWARF5 wins significantly in terms of size and especially so when mixed
-> > > with compression (CONFIG_DEBUG_INFO_COMPRESSED).
-> > >
-> > > Link: http://www.dwarfstd.org/doc/DWARF5.pdf
-> > >
-> > > Patch 1 places the DWARF v5 sections explicitly in the kernel linker
-> > > script.
-> > > Patch 2 modifies Kconfig for DEBUG_INFO_DWARF4 to be used as a fallback.
-> > > Patch 3 adds an explicit Kconfig for DWARF v5 for clang and older GCC
-> > > where the implicit default DWARF version is not 5.
-> > >
-> > > Changes from v8:
-> > > * Separate out the linker script changes (from v7 0002). Put those
-> > >   first. Carry Reviewed by and tested by tags.  Least contentious part
-> > >   of the series. Tagged for stable; otherwise users upgrading to GCC 11
-> > >   may find orphan section warnings from the implicit default DWARF
-> > >   version changing and generating the new debug info sections.
-> > > * Add CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT in 0002, make it the
-> > >   default rather than CONFIG_DEBUG_INFO_DWARF4, as per Mark, Jakub,
-> > >   Arvind.
-> > > * Drop reviewed by and tested by tags for 0002 and 0003; sorry
-> > >   reviewers/testers, but I view that as a big change. I will buy you
-> > >   beers if you're fatigued, AND for the help so far. I appreciate you.
-> >
-> > All 3 patches NACKed - I drink no beer.
->
-> LoL.
-> Other than beer, I am fine with v9.
->
-> Personally, I thought v8 (no CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT)
-> was good too, but I do not have a strong opinion about
-> leaving the compiler's freedom to choose the dwarf version.
->
-> Unless somebody has an objection, I will pick up v9 for the next MW.
->
->
-> Meanwhile, if you want to give reviewed-by / tested-by
-> please do so.
->
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
-Fine with me.
-
-I have no opinion towards distro-handling of toolchain-default(s).
-
-Feel free to add my:
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v12.0.0-rc1 x86-64
-
-Thanks to all involved people - I enjoyed the evolution of this patchset.
-
-- Sedat -
-
-P.S.: /me drinking right now an Earl Grey tea - drink whatever you prefer :-).
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
