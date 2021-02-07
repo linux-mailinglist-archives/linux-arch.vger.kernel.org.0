@@ -2,113 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4195312148
-	for <lists+linux-arch@lfdr.de>; Sun,  7 Feb 2021 05:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890DF31285D
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 00:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbhBGET3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 6 Feb 2021 23:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S229609AbhBGXcG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 7 Feb 2021 18:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbhBGETI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 6 Feb 2021 23:19:08 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C76C061756;
-        Sat,  6 Feb 2021 20:18:27 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id a16so9743459ilq.5;
-        Sat, 06 Feb 2021 20:18:27 -0800 (PST)
+        with ESMTP id S229590AbhBGXcF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 7 Feb 2021 18:32:05 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89445C06174A;
+        Sun,  7 Feb 2021 15:31:25 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id a12so12756674qkh.10;
+        Sun, 07 Feb 2021 15:31:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C0nh6s6iVQifHimFBlt9HsSWgh0AuZfoaMEvFjIFmTw=;
-        b=PXVstjrRPiSBUJHkTotsW1+xZIPbMhPQV5Z/9ECzLJcj9omaRFj/6zfj3OX82+S3ih
-         4w/Fs8HvInZDyln13YIVs84TWEv20e5JlM+hLuUBkx8JhC+7Ya2FeH6egJn9Gvj/uC0w
-         zmaw7JsHrGrkAVN7gBbG8l2NnPrGdoz7q/0vSzJgTZFRmUSKNdKu6zWNr/AuPlc06Pya
-         TADXJLoXyT+V0vCtPflXWT9WBl+pAbThonZAQRg0gMAt+PKYDU1+v8lZUy6X44QWMYPs
-         TdIlqmiX6q3jpt7L0LjxaceE+yaPwJzomfd4YU22pqHsqHjrDwDcBbt9DvoCfKx6hOs3
-         OOSg==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=o5IhRHEGMqXqh+QGBqGS9tIVGn7/L64cLJSFPIY/AWc=;
+        b=oaXRUPA2F/7aryfPuau3KqPF6FZaskYAxYMUtjXPSU/iaRh+dp3vv/WuM5lHSsOH77
+         K796rEVfqQxzbx7kpzn7bED/l1qsnf/K952NVEG/4Hu8N1ukn65rB5CNWYZkigHXs17B
+         YG4YnsxkHnfnATuIsVrMv7o7kZC73L1tQMQx/wLGfTmHiMQE5HLEX41Wid5z2eLwvatY
+         YDCIG8BhiVTcTji8wVLbtF4McQNOov4L7QmmsE7dOuOBoD/eLN+XucGQ38cshoziwC4U
+         CcWSYNxDJm2UlVrBdYpF+Ebkfy1m1/3mU899InPMB9fOwUzyYYL+GNMDAfUUGRu5VjJf
+         v+hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C0nh6s6iVQifHimFBlt9HsSWgh0AuZfoaMEvFjIFmTw=;
-        b=kmLw1bKaObUE+SvZzVJolTu1s/EVyMXQYyVTm/2W0/SRQUf4ehb1hRe5plP+2i6LRv
-         2hRfdCspqU5h9vFAVgzLRkVVDJkXCCMAUj1U6U6i4AOoeMFCLtsTd8dnPPkGVTKt68YP
-         ZaeNWsPhsyHQgfpVKKMZDkvspAuSdZgPBXlMqEVARgrhirSOuF35/Cgha0ddRJlxPbJm
-         UhOXnOS+N3pf3RJuL3S9lUktyUxJhM2Zp4DWcPgSklzXuQySVegsMFZxUd9/wwb3nTJA
-         6LMvzJZ3vmtNCzdPHUH5ZRp/mygGpORk4aw8BNv7ES5SbMzTcQPKcSXmUt8QFwaDPJWq
-         FsZQ==
-X-Gm-Message-State: AOAM533pEFQv5xru72vkZIqe4PUL5B8kaCtCtSStlMBnlpUNoKr1dwpc
-        6VuWO+TujL5Osirf5erW+jZ/mBi/2V3Y+G2G33g=
-X-Google-Smtp-Source: ABdhPJwuh8pvYd3UmzNgZcDRU1W1DbwxMv0Vdth/wCvy0cjMA/poeLmKteZhRQv890ip+9TXKH+FH3gDJI/8VK32ieo=
-X-Received: by 2002:a05:6e02:b2e:: with SMTP id e14mr10135604ilu.164.1612671507292;
- Sat, 06 Feb 2021 20:18:27 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=o5IhRHEGMqXqh+QGBqGS9tIVGn7/L64cLJSFPIY/AWc=;
+        b=nCrlQ4sLAHpTB2MEOlt3qdWxYoamZ1LHqg+HIKLGzHjm1ij1EY89ET8ZC0kGAnLt+u
+         d9DLRuRLo/yuvpXteMePV1qD8bHAZG6SHFhxuDQCIO1DP0jIeHVH5FzJsMnZJ7dMegHw
+         +jT3LFuTAuzTkgdyu4FGfhBJMNHEfjGisaJm4c+20a4QECNB9clLTjffGfaF36TSNiDs
+         SX4VFnxhMB/WoRFNquYMW6HpaQM+1rJOoBoh3BZUqcbJfWp7Q0LEiDPLi9KCTwWcLGZ6
+         6HEmGZRtBHdXIIXe3YqrwvGs9XNG/fjB1cVUWNnMT+5GA8/EDYr9Ptjh7qkrLP/mue/B
+         k+bg==
+X-Gm-Message-State: AOAM533rVOAC4kPnf8cojtsBEYaWBL/BhpRxtn50HAbryd/gurB+/bnL
+        bNtcmoqFXKC3VmuFtnyxg90=
+X-Google-Smtp-Source: ABdhPJwxl0ho6ygvAdO4u+DaD7lks38s9pkwgumfoUrWph/Twl9ejj5QD7qkIjSM5ocHuqPwFjJnHg==
+X-Received: by 2002:a37:a58d:: with SMTP id o135mr14012949qke.204.1612740684640;
+        Sun, 07 Feb 2021 15:31:24 -0800 (PST)
+Received: from arch-chirva.localdomain (pool-68-133-6-116.bflony.fios.verizon.net. [68.133.6.116])
+        by smtp.gmail.com with ESMTPSA id 12sm15494228qkg.39.2021.02.07.15.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Feb 2021 15:31:24 -0800 (PST)
+Date:   Sun, 7 Feb 2021 18:31:22 -0500
+From:   Stuart Little <achirvasub@gmail.com>
+To:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: PROBLEM: 5.11.0-rc7 fails to =?utf-8?Q?com?=
+ =?utf-8?Q?pile_with_error=3A_=E2=80=98-mindirect-branch=E2=80=99_and_?=
+ =?utf-8?B?4oCYLWZjZi1wcm90ZWN0aW9u4oCZ?= are not compatible
+Message-ID: <YCB4Sgk5g5B2Nu09@arch-chirva.localdomain>
 MIME-Version: 1.0
-References: <cover.1608963094.git.syednwaris@gmail.com> <da4eaafa84f32375319014f6e9af5c104a6153fd.1608963095.git.syednwaris@gmail.com>
- <CAHp75VcSsfDKY3w4ufZktXzRB=GiObAV6voPfmeAHcbdwX0uqg@mail.gmail.com> <CACG_h5otB5hhAX0z9YzN8bT6Nz5WVRUQWbhENF+u8Z3WsCp_8A@mail.gmail.com>
-In-Reply-To: <CACG_h5otB5hhAX0z9YzN8bT6Nz5WVRUQWbhENF+u8Z3WsCp_8A@mail.gmail.com>
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-Date:   Sun, 7 Feb 2021 09:48:17 +0530
-Message-ID: <CACG_h5rLzpo-oz9uPe4d66-e088Y8YXiUhkLwEEf7MVyLDcJRg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] lib/test_bitmap.c: Add for_each_set_clump test cases
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "vilhelm.gray@gmail.com" <vilhelm.gray@gmail.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "rrichter@marvell.com" <rrichter@marvell.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 2:25 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
->
-> On Sat, Dec 26, 2020 at 8:15 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> >
-> >
-> > On Saturday, December 26, 2020, Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> >>
-> >> The introduction of the generic for_each_set_clump macro need test
-> >> cases to verify the implementation. This patch adds test cases for
-> >> scenarios in which clump sizes are 8 bits, 24 bits, 30 bits and 6 bits.
-> >> The cases contain situations where clump is getting split at the word
-> >> boundary and also when zeroes are present in the start and middle of
-> >> bitmap.
-> >
-> >
-> > You have to split it to a separate test under drivers/gpio, because now it has no sense to be like this.
->
-> Hi Andy,
->
-> How do I split it into separate test under drivers/gpio ? I have
-> thought of making a test_clump_bits.c file in drivers/gpio.
-> But how do I integrate this test file so that tests are executed at
-> runtime? Similar to tests in lib/test_bitmap.c ?
->
-> I believe I need to make changes in config files so that tests in
-> test_clump_bits.c ( in drivers/gpio ) are executed at runtime. Could
-> you please provide some steps on how to do that. Thank You !
->
-> Regards
-> Syed Nayyar Waris
+I am trying to compile on an x86_64 host for a 32-bit system; my config is at
 
-Hi Andy, could you please help me on the above. Thanks !
+https://termbin.com/v8jl
 
-Regards
-Syed Nayyar Waris
+I am getting numerous errors of the form
+
+./include/linux/kasan-checks.h:17:1: error: ‘-mindirect-branch’ and ‘-fcf-protection’ are not compatible
+
+and
+
+./include/linux/kcsan-checks.h:143:6: error: ‘-mindirect-branch’ and ‘-fcf-protection’ are not compatible
+
+and
+
+./arch/x86/include/asm/arch_hweight.h:16:1: error: ‘-mindirect-branch’ and ‘-fcf-protection’ are not compatible
+
+(those include files indicated whom I should add to this list; apologies if this reaches you in error).
+
+The full log of the build is at
+
+https://termbin.com/wbgs
+
+---
+
+5.11.0-rc6 built fine last week on this same setup. 
