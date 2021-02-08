@@ -2,101 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 121A3313F91
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 20:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202B6313F8F
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 20:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbhBHTvR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Feb 2021 14:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236436AbhBHTtj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Feb 2021 14:49:39 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A338C06178B;
-        Mon,  8 Feb 2021 11:48:59 -0800 (PST)
-Received: from zn.tnic (p200300ec2f073f00132389f64ded89c1.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:3f00:1323:89f6:4ded:89c1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 82CA81EC0516;
-        Mon,  8 Feb 2021 20:48:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1612813737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MLLsJOPUX5aC5wPkAZgeTUlSqwoaRJCYi5u/Gu9Lyu4=;
-        b=j20s4Z1nZxUMIW4Emy6zOTMhJS+Xcv5dR20kO53dQqDMjCNNDTkNdDLIKPjBdy0I7OAcvH
-        qCppIT7lV0+u4OOJveK2lU/0X+HWSI+7IcRzU0HqTj7rUbn6tT9F57SbEPLGVY1cnpwBgQ
-        aZzuKYY7ZAMsOTAcYe/u7IMVKwUM220=
-Date:   Mon, 8 Feb 2021 20:48:54 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
-Message-ID: <20210208194854.GI18227@zn.tnic>
-References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
- <20210203225547.32221-7-yu-cheng.yu@intel.com>
- <20210205135927.GH17488@zn.tnic>
- <2d829cba-784e-635a-e0c5-a7b334fa9b40@intel.com>
- <20210208182009.GE18227@zn.tnic>
- <690bc3b9-2890-e68d-5e4b-cda5c21b496b@intel.com>
- <20210208185341.GF18227@zn.tnic>
- <0e0c9e9d-aee1-ad1e-6c63-21b58a52163f@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0e0c9e9d-aee1-ad1e-6c63-21b58a52163f@intel.com>
+        id S236475AbhBHTvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Feb 2021 14:51:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45124 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236330AbhBHTtj (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Feb 2021 14:49:39 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 92C1164E56;
+        Mon,  8 Feb 2021 19:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1612813738;
+        bh=fiMaPfVra/2zEjkMsZvR8Iyt6gmFiqnTTP4gAMQuARo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MTPknMTmNhE9DO36kKtRa7zJ2V5noBJBWB2U8EeHHO6MU76BZaAVYfbCCxMvHgNBe
+         D9LD+e3ehRFEhc2ZrcI+BLv11Pnzl/dtrwDbc4XJxBZvLi6h/tH+YlaYJANtx/m19P
+         UJTMWWsq4MxVBfXOB4lIOm65+CDZrCHF8dJc4vfc=
+Date:   Mon, 8 Feb 2021 11:48:56 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huang Pei <huangpei@loongson.cn>, ambrosehua@gmail.com,
+        Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH] MIPS: make userspace mapping young by default
+Message-Id: <20210208114856.e8062823b2e84e1adb1d59bb@linux-foundation.org>
+In-Reply-To: <30b3fcb5-a60d-228f-15d2-cd182953de45@csgroup.eu>
+References: <20210204013942.8398-1-huangpei@loongson.cn>
+        <20210204152239.GA14292@alpha.franken.de>
+        <20210205154105.32bb13df439aa49b7fc167e7@linux-foundation.org>
+        <30b3fcb5-a60d-228f-15d2-cd182953de45@csgroup.eu>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 08, 2021 at 11:23:18AM -0800, Yu, Yu-cheng wrote:
-> exc_general_protection() and do_trap() both call show_signal(), which
-> then calls printk_ratelimit().
+On Mon, 8 Feb 2021 18:44:22 +0100 Christophe Leroy <christophe.leroy@csgrou=
+p.eu> wrote:
 
-You could've done some git archeology and could've found
+>=20
+>=20
+> Le 06/02/2021 =E0 00:41, Andrew Morton a =E9crit=A0:
+> > On Thu, 4 Feb 2021 16:22:39 +0100 Thomas Bogendoerfer <tsbogend@alpha.f=
+ranken.de> wrote:
+> >=20
+> >> On Thu, Feb 04, 2021 at 09:39:42AM +0800, Huang Pei wrote:
+> >>> MIPS page fault path(except huge page) takes 3 exceptions (1 TLB Miss
+> >>> + 2 TLB Invalid), butthe second TLB Invalid exception is just
+> >>> triggered by __update_tlb from do_page_fault writing tlb without
+> >>> _PAGE_VALID set. With this patch, user space mapping prot is made
+> >>> young by default (with both _PAGE_VALID and _PAGE_YOUNG set),
+> >>> and it only take 1 TLB Miss + 1 TLB Invalid exception
+> >>>
+> >>> Remove pte_sw_mkyoung without polluting MM code and make page fault
+> >>> delay of MIPS on par with other architecture
+> >>>
+> >>> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> >>> ---
+> >>>   arch/mips/mm/cache.c    | 30 ++++++++++++++++--------------
+> >>>   include/linux/pgtable.h |  8 --------
+> >>>   mm/memory.c             |  3 ---
+> >>>   3 files changed, 16 insertions(+), 25 deletions(-)
+> >>
+> >> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> >>
+> >> Andrew, can you take this patch through your tree ?
+> >=20
+> > Sure.  I'll drop Christophe's "mm/memory.c: remove pte_sw_mkyoung()"
+> > (https://lkml.kernel.org/r/f302ef92c48d1f08a0459aaee1c568ca11213814.161=
+2345700.git.christophe.leroy@csgroup.eu)
+> > in favour of this one.
+> >=20
+>=20
+> Pitty. My patch was improving page faults on powerpc/32.
 
-  abd4f7505baf ("x86: i386-show-unhandled-signals-v3")
+How does it do that?  By running pte_mkyoung() for powerpc32?  Such a
+change is still valid, isn't it?
 
-which explains why that ratelimiting is needed.
+> That one is only addressing MIPS.
 
-> For example, if a shell script, in a loop re-starts an app when it
-> exits, and the app is causing control-protection fault. The log
-> messages should be rate limited.
+It cleans up core code nicely, by removing a MIPS wart.  We can still
+add a ppc32 wart?
 
-I think you should be able to get where I'm going with this, by now:
-please put a comment over the ratelimiting to explain why it is there,
-just like the above commit explains.
+>=20
+> Any plan to take the series from Nick=20
+> https://patchwork.kernel.org/project/linux-mm/list/?series=3D404539 ?
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+I expect so.  After -rc1, if the churn is settling down and reviewers
+are happy enough.
