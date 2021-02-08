@@ -2,124 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C037313394
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 14:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4B831376B
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 16:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbhBHNoO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Feb 2021 08:44:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49748 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231390AbhBHNm1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Feb 2021 08:42:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612791660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nIUUbNNEsbNY0qQ2TGTcojBdZ5jjYwt4zGR/YnTj+ow=;
-        b=KjIR+1bFrSfGCuc4MjpjrVFYPVg6asVqPBW7yGJKosn77Zf5F3MwQDAt3lkIyCl52MDEwr
-        D1ZRt3+ftfMEaFrV/6Vc+/MSGvjcQZnyMyOM6cgoyDR6B+z4H/pvTodEOKeuQ9eG9LPJMX
-        83DfaqI0wJ8Ou94/Abc4knappknl6OM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-144-Ransb7rrNHyz0DdVU9VPKA-1; Mon, 08 Feb 2021 08:40:56 -0500
-X-MC-Unique: Ransb7rrNHyz0DdVU9VPKA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EA297107ACC7;
-        Mon,  8 Feb 2021 13:40:51 +0000 (UTC)
-Received: from [10.36.113.240] (ovpn-113-240.ams2.redhat.com [10.36.113.240])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A34BC60C5B;
-        Mon,  8 Feb 2021 13:40:43 +0000 (UTC)
-Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
- secretmem users
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-References: <20210208084920.2884-1-rppt@kernel.org>
- <20210208084920.2884-9-rppt@kernel.org> <YCEP/bmqm0DsvCYN@dhcp22.suse.cz>
- <38c0cad4-ac55-28e4-81c6-4e0414f0620a@redhat.com>
- <YCEXwUYepeQvEWTf@dhcp22.suse.cz>
- <a488a0bb-def5-0249-99e2-4643787cef69@redhat.com>
- <YCEZAWOv63KYglJZ@dhcp22.suse.cz>
- <770690dc-634a-78dd-0772-3aba1a3beba8@redhat.com>
- <21f4e742-1aab-f8ba-f0e7-40faa6d6c0bb@redhat.com>
- <5db6ac46-d4e1-3c68-22a0-94f2ecde8801@redhat.com>
- <YCEr1JS8k/nDbcVR@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <f822a203-f7ec-8b97-b88d-1bf6bffa93d8@redhat.com>
-Date:   Mon, 8 Feb 2021 14:40:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S233602AbhBHPYu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Feb 2021 10:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233701AbhBHPUU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Feb 2021 10:20:20 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766C9C061786;
+        Mon,  8 Feb 2021 07:19:40 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id c5so1726850qth.2;
+        Mon, 08 Feb 2021 07:19:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:user-agent:in-reply-to:references:mime-version
+         :content-transfer-encoding:subject:to:cc:from:message-id;
+        bh=lfyLu2giIvQHAiyFdLqX9LY0OGrzlVaPuwSjSMWgNvo=;
+        b=bFgYcI0tXB2OYiUNwN3bYyLvWdrAC+HPXIh7Obmk7fDusJtRMl5HfHE+hxWj3u5AZc
+         ZlOhJ/RulM3wFzbX/YC7Sbs/WJYN/TOW/9F9IpFvGlzyFNmRstTTJJtXandLLEL9U4w9
+         GA5c9k8XTm5sXpQJ5Za3boxejN/5hL8t5cnY7Gj5EbGZ7+SNuTd1lJgkgRyqwPMXYzHv
+         PnoSKEDkCR6RbeFxUE78AzyrU4V3Uh3ta7Fmkr4qXlM5JowvjrGRtLaUyS7DU6sUUTzR
+         EqTU8kADUFogcrp+e0mBMmUKDv7Up++yAsHitwt53rE3lEYP1wn1SW/d5Mu8qE+nT4Z9
+         4H2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:user-agent:in-reply-to:references
+         :mime-version:content-transfer-encoding:subject:to:cc:from
+         :message-id;
+        bh=lfyLu2giIvQHAiyFdLqX9LY0OGrzlVaPuwSjSMWgNvo=;
+        b=ErtNKzjuYVkBCJL24bQvAYiUbowf8FuDRx6/gXz273PP7c+8G0knkUV1fJDNDfjwM4
+         JAiafR4ZbOSng3jWIjuxeq6efbAxGfxTT70zVh/pToEOZNrF0m3y6qnM3N2m69tlZWro
+         wODDUhQLa/Fk42GJFnVpwuuKhKE4V/QJJRJ0ali9/9DaXISIzs6cYiO/bcVVSEbdd/qD
+         HUiYaU6i6AHoeMJECcqA8fxtENu3iSy7SpUT7dNZH7IT19xmU5JQA7zATGotKuP4P343
+         766TUASE7B2vmG5SWvSZ82/IMutuBpAmwsyM0jq51iKKeFXP2toSUmXqACOI9Scm+DxX
+         ImRw==
+X-Gm-Message-State: AOAM531ZKtk3Kqs8KbboBIomREPwPT1ds+bObSa8QF0TLMJYQmOMXaVN
+        6WpQOxhGc0iepFJ+mDVlZMw=
+X-Google-Smtp-Source: ABdhPJyaGerJEvGjV9Mmzqw2vY71Mqu9z/fv3KZnlW+YoYJqXn0ZMX+wqGgUC7cywbF90lsQ090j7w==
+X-Received: by 2002:ac8:5909:: with SMTP id 9mr15873605qty.39.1612797576127;
+        Mon, 08 Feb 2021 07:19:36 -0800 (PST)
+Received: from [192.168.1.171] (pool-68-133-6-116.bflony.fios.verizon.net. [68.133.6.116])
+        by smtp.gmail.com with ESMTPSA id m64sm16848259qkb.90.2021.02.08.07.19.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Feb 2021 07:19:35 -0800 (PST)
+Date:   Mon, 08 Feb 2021 10:19:33 -0500
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20210208121227.GD17908@zn.tnic>
+References: <YCB4Sgk5g5B2Nu09@arch-chirva.localdomain> <YCCFGc97d2U5yUS7@arch-chirva.localdomain> <YCCIgMHkzh/xT4ex@arch-chirva.localdomain> <20210208121227.GD17908@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <YCEr1JS8k/nDbcVR@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: =?UTF-8?Q?Re=3A_PROBLEM=3A_5=2E11=2E0-rc7_fail?= =?UTF-8?Q?s_to_compile_with_error=3A_=E2=80=98-m?= =?UTF-8?Q?indirect-branch=E2=80=99_and_=E2=80=98-fcf-p?= =?UTF-8?Q?rotection=E2=80=99_are_not_compatible?=
+To:     Borislav Petkov <bp@suse.de>
+CC:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, jpoimboe@redhat.com, nborisov@suse.com,
+        seth.forshee@canonical.com, yamada.masahiro@socionext.com
+From:   AC <achirvasub@gmail.com>
+Message-ID: <82FA27E6-A46F-41E2-B7D3-2FEBEA8A4D70@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 08.02.21 13:17, Michal Hocko wrote:
-> On Mon 08-02-21 12:26:31, David Hildenbrand wrote:
-> [...]
->> My F33 system happily hibernates to disk, even with an application that
->> succeeded in din doing an mlockall().
->>
->> And it somewhat makes sense. Even my freshly-booted, idle F33 has
->>
->> $ cat /proc/meminfo  | grep lock
->> Mlocked:            4860 kB
->>
->> So, stopping to hibernate with mlocked memory would essentially prohibit any
->> modern Linux distro to hibernate ever.
-> 
-> My system seems to be completely fine without mlocked memory. It would
-> be interesting to see who mlocks memory on your system and check whether
-> the expectated mlock semantic really works for those. This should be
-> documented at least.
+That did fix it, thank you!
 
-I checked some other installations (Ubuntu, RHEL), and they also show no 
-sign of Mlock. My notebook (F33) and desktop (F33) both have mlocked 
-memory. Either related to F33 or due to some software (e.g., kerberos).
-
--- 
-Thanks,
-
-David / dhildenb
-
+On February 8, 2021 7:12:27 AM EST, Borislav Petkov <bp@suse=2Ede> wrote:
+>On Sun, Feb 07, 2021 at 07:40:32PM -0500, Stuart Little wrote:
+>> > On Sun, Feb 07, 2021 at 06:31:22PM -0500, Stuart Little wrote:
+>> > > I am trying to compile on an x86_64 host for a 32-bit system; my
+>config is at
+>> > >=20
+>> > > https://termbin=2Ecom/v8jl
+>> > >=20
+>> > > I am getting numerous errors of the form
+>> > >=20
+>> > > =2E/include/linux/kasan-checks=2Eh:17:1: error: =E2=80=98-mindirect=
+-branch=E2=80=99
+>and =E2=80=98-fcf-protection=E2=80=99 are not compatible
+>
+>Does this fix it?
+>
+>---
+>
+>diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+>index 5857917f83ee=2E=2E30920d70b48b 100644
+>--- a/arch/x86/Makefile
+>+++ b/arch/x86/Makefile
+>@@ -50,6 +50,9 @@ export BITS
+> KBUILD_CFLAGS +=3D -mno-sse -mno-mmx -mno-sse2 -mno-3dnow
+> KBUILD_CFLAGS +=3D $(call cc-option,-mno-avx,)
+>=20
+>+# Intel CET isn't enabled in the kernel
+>+KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
+>+
+> ifeq ($(CONFIG_X86_32),y)
+>         BITS :=3D 32
+>         UTS_MACHINE :=3D i386
+>@@ -120,9 +123,6 @@ else
+>=20
+>         KBUILD_CFLAGS +=3D -mno-red-zone
+>         KBUILD_CFLAGS +=3D -mcmodel=3Dkernel
+>-
+>-	# Intel CET isn't enabled in the kernel
+>-	KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
+> endif
+>=20
+> ifdef CONFIG_X86_X32
