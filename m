@@ -2,30 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAED313E0B
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 19:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C149313E25
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 19:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbhBHSvX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Feb 2021 13:51:23 -0500
-Received: from mga11.intel.com ([192.55.52.93]:19742 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235781AbhBHSvA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Feb 2021 13:51:00 -0500
-IronPort-SDR: jtO57MKjPDT2Hi85PUtM1GHO3bFumY+0XQqEcMQmoqatUfBm/XjK/o76hIlLmzIye30poOffZq
- IyRhZY/ccS1A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="178251561"
-X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
-   d="scan'208";a="178251561"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 10:50:11 -0800
-IronPort-SDR: RKBHoDdAWK2blnUYN00Qk4/M1GPezTS0E9lZ/If3NWriwtfE4VnzSdkvSBoLQzNvY2P1WCjvA+
- SuIcuc84nSYQ==
-X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
-   d="scan'208";a="487522995"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.251.11.33]) ([10.251.11.33])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 10:50:08 -0800
-Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
-To:     Borislav Petkov <bp@alien8.de>
+        id S235843AbhBHSzi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Feb 2021 13:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233463AbhBHSyZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Feb 2021 13:54:25 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13E5C061788;
+        Mon,  8 Feb 2021 10:53:45 -0800 (PST)
+Received: from zn.tnic (p200300ec2f073f00132389f64ded89c1.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:3f00:1323:89f6:4ded:89c1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 23DF21EC0512;
+        Mon,  8 Feb 2021 19:53:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1612810424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1uhG+yA903nD3x6ie0DaKdIZW5ha5ZFqYz7PTiHf344=;
+        b=LLIESv4cbsLI3itmuUSvfVcbCedzuZ1ZazsOyimWXj7EhAc0/OZiaJMJMw946UBnU6WiQ7
+        gVYf+bA1Lr/0EzmtW2rmpjCSpu1W8GDhP75Vr3dvIsQw3Ri+tq3dVrZudshCbmVt3p6e7L
+        GD3vH8fVko0z0dgGi0id9CON9ReQ1aA=
+Date:   Mon, 8 Feb 2021 19:53:41 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -52,42 +57,38 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
+Message-ID: <20210208185341.GF18227@zn.tnic>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
  <20210203225547.32221-7-yu-cheng.yu@intel.com>
  <20210205135927.GH17488@zn.tnic>
  <2d829cba-784e-635a-e0c5-a7b334fa9b40@intel.com>
  <20210208182009.GE18227@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <690bc3b9-2890-e68d-5e4b-cda5c21b496b@intel.com>
-Date:   Mon, 8 Feb 2021 10:50:07 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+ <690bc3b9-2890-e68d-5e4b-cda5c21b496b@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210208182009.GE18227@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <690bc3b9-2890-e68d-5e4b-cda5c21b496b@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/8/2021 10:20 AM, Borislav Petkov wrote:
-> On Fri, Feb 05, 2021 at 10:00:21AM -0800, Yu, Yu-cheng wrote:
->> The ratelimit here is only for #CP, and its rate is not counted together
->> with other types of faults.  If a task gets here, it will exit.  The only
->> condition the ratelimit will trigger is when multiple tasks hit #CP at once,
->> which is unlikely.  Are you suggesting that we do not need the ratelimit
->> here?
-> 
-> I'm trying to first find out why is it there.
-> 
-> Is this something you've hit during testing and thought, oh well, this
-> needs a ratelimit or was it added just because?
-> 
+On Mon, Feb 08, 2021 at 10:50:07AM -0800, Yu, Yu-cheng wrote:
+> I have not run into the situation.  Initially it was there because other
+> faults have it.
 
-I have not run into the situation.  Initially it was there because other 
-faults have it.  When you asked, I went through it and put out my 
-reasoning.  I think it still makes sense to keep it.
+Which other faults?
 
---
-Yu-cheng
+> When you asked, I went through it and put out my reasoning.
+
+What does that mean?
+
+> I think it still makes sense to keep it.
+
+Because you have a hunch or you actually have an objective reason why?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
