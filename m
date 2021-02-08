@@ -2,130 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D89A314209
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 22:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E8F31436D
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Feb 2021 00:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236865AbhBHVkJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Feb 2021 16:40:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47705 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235020AbhBHVjh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Feb 2021 16:39:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612820291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4aepynJlknVRj6NFbhX2n2ebQXb/zj5Dsa2tNMP+Ofs=;
-        b=a0IDh6Zb2XPVNyeBnBZdyMF1LHaqcAETY9VKn4VerK6yeVZo/u7HFrsUEVJgBlTZuEG+GE
-        VpFhtCLwQ1WP8MTSvq01t5i/JxUEu3dMfD8EjGSbo+59pISHwpJwvP+y8TAx/ZYcwlptGI
-        3nq2SfMBTp5TQs5d0xOfqym5LzhqL8w=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-434-AyyILxEKPNO5z0CKQHnAMw-1; Mon, 08 Feb 2021 16:38:09 -0500
-X-MC-Unique: AyyILxEKPNO5z0CKQHnAMw-1
-Received: by mail-wr1-f69.google.com with SMTP id w16so1400409wrl.15
-        for <linux-arch@vger.kernel.org>; Mon, 08 Feb 2021 13:38:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=4aepynJlknVRj6NFbhX2n2ebQXb/zj5Dsa2tNMP+Ofs=;
-        b=JHjtsFBB/F1/fHFV8SDR1cDvbfO0BlIuXFwSNtDmzoXEZr7xVDjQUyAjYlEhw3CF2u
-         6Ffe3XmIsQorkF/jGhsJ7F8etrQIeusA9Qkc3eEVAJuOhQ8WKviItpb4Ifj1LdUxD8WZ
-         N0/oZSHv1jq+JIbVGy/mWxC9PVE7Ffo4OjJmkZH6rTJ8lK0KTQurhPXzR3HSMopnuPp1
-         xqYT33ubzNDeniqpbWdAOXy5xzbJg8g5eXL2CB13PTBsOvGPOp9YSpp92+VyzV1DnjbJ
-         DNwEC3BYfVqiiydTjeYrA/6S93Wi/ADXk31vis6hefrZxA04eeQHywee3Flq1vWCIpEm
-         veMA==
-X-Gm-Message-State: AOAM532dOt8LVQRYrX0EtK4q2whAjf5Kk63Qm27ds27IhIJir2JPzJUd
-        nvX+HBYI0283hY8Je0mE+psafHZ+zaSIMQeCMIQ0D+x1kEoGgEWRu+EfPOXSFhjnygbhYsKNffU
-        q+xhNWkWExT12xthJp5ha0Q==
-X-Received: by 2002:adf:f8c1:: with SMTP id f1mr21815855wrq.76.1612820288169;
-        Mon, 08 Feb 2021 13:38:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwYU+ahfuGJ3mGlPDTjZ5sBTd5prIK5bha/7jxkj2wK46UMNjmdy8O20OWQnrZzKp7lrPlvQQ==
-X-Received: by 2002:a5d:4ac5:: with SMTP id y5mr589823wrs.345.1612820285413;
-        Mon, 08 Feb 2021 13:38:05 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c696d.dip0.t-ipconnect.de. [91.12.105.109])
-        by smtp.gmail.com with ESMTPSA id w15sm30039179wrp.15.2021.02.08.13.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Feb 2021 13:38:04 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   David Hildenbrand <david@redhat.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to create "secret" memory areas
-Date:   Mon, 8 Feb 2021 22:38:03 +0100
-Message-Id: <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
-References: <20210208211326.GV242749@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+        id S229736AbhBHXEf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Feb 2021 18:04:35 -0500
+Received: from mga11.intel.com ([192.55.52.93]:39580 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229609AbhBHXEc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Feb 2021 18:04:32 -0500
+IronPort-SDR: uM2xztBP8WqeggSLNW9fPwP7L5HM9d0qFDFdPf0tKGf8TvcT+UYWUi4c3pBoYLAAqXqxVIgl/q
+ hfYneGTf7k5Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="178284707"
+X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
+   d="scan'208";a="178284707"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 15:03:50 -0800
+IronPort-SDR: 6GEVXz/VgALvszVbd0TdqgdmvophOiP8mEI+0QbfRkrsOKkVyCH9sNyQbMCxLLxK5UlgBJvyVo
+ O6/xZ0f0qpKg==
+X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
+   d="scan'208";a="358962658"
+Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.251.11.33]) ([10.251.11.33])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 15:03:48 -0800
+Subject: Re: [PATCH v19 08/25] x86/mm: Introduce _PAGE_COW
+From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-In-Reply-To: <20210208211326.GV242749@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-X-Mailer: iPhone Mail (18D52)
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
+ <20210203225547.32221-9-yu-cheng.yu@intel.com>
+ <202102041215.B54FCA552F@keescook>
+ <2e43bf0b-e1a9-99f6-8d5d-d6e6886b4217@intel.com>
+ <7381d8c1-5e1c-2667-7cb8-0a99f2c79b6d@intel.com>
+Message-ID: <ce8e9493-4590-84dc-bc70-1105a53df3eb@intel.com>
+Date:   Mon, 8 Feb 2021 15:03:47 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
+MIME-Version: 1.0
+In-Reply-To: <7381d8c1-5e1c-2667-7cb8-0a99f2c79b6d@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 2/5/2021 10:41 AM, Yu, Yu-cheng wrote:
+> On 2/4/2021 12:27 PM, Dave Hansen wrote:
+>> On 2/4/21 12:19 PM, Kees Cook wrote:
+>>>> (e) A page where the processor observed a Write=1 PTE, started a 
+>>>> write, set
+>>>>      Dirty=1, but then observed a Write=0 PTE.  That's possible 
+>>>> today, but
+>>>>      will not happen on processors that support shadow stack.
+>>> What happens for "e" with/without CET? It sounds like direct writes to
+>>> such pages will be (correctly) rejected by the MMU?
+>>
+>> A page fault would be generated regardless of CET support.
+>>
+>> If CET were not around, the fault would be reported as a present, write
+>> fault.
+>>
+>> If this happened and CET were around (which shouldn't happen in
+>> practice, it means we have a hardware issue) a page fault exception is
+>> generated. 
+> 
+> Thanks for the clarification.  With or without CET, direct write to 
+> Write=0, Dirty=1 PTE triggers page fault.
+> 
+>> Yu-cheng, I'm not sure there's enough debugging around to
+>> tell us if this happens.  Would we even notice?
+> 
+> That potential hardware issue is, on a CET-capable system, a processor 
+> writes to a Write=1, Dirty=0 page, and then observes the PTE is Write=0, 
+> Dirty=1.  Let me think about it...
+> 
 
-> Am 08.02.2021 um 22:13 schrieb Mike Rapoport <rppt@kernel.org>:
->=20
-> =EF=BB=BFOn Mon, Feb 08, 2021 at 10:27:18AM +0100, David Hildenbrand wrote=
-:
->> On 08.02.21 09:49, Mike Rapoport wrote:
->>=20
->> Some questions (and request to document the answers) as we now allow to h=
-ave
->> unmovable allocations all over the place and I don't see a single comment=
+One way to detect the potential issue is adding a check when a 
+non-shadow stack page's PTE goes from RW=0 to RW=1, like the following...
 
->> regarding that in the cover letter:
->>=20
->> 1. How will the issue of plenty of unmovable allocations for user space b=
-e
->> tackled in the future?
->>=20
->> 2. How has this issue been documented? E.g., interaction with ZONE_MOVABL=
-E
->> and CMA, alloc_conig_range()/alloc_contig_pages?.
->=20
-> Secretmem sets the mappings gfp mask to GFP_HIGHUSER, so it does not
-> allocate movable pages at the first place.
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 29aa6f07e3c9..241b94a0fa77 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -405,6 +405,8 @@ static inline pte_t pte_mkyoung(pte_t pte)
+  static inline pte_t pte_mkwrite(pte_t pte)
+  {
+  	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
++		WARN_ONCE((pte_flags(pte) & (_PAGE_RW | _PAGE_DIRTY)) ==
++			  _PAGE_DIRTY, "Found transient shadow stack PTE\n");
+  		if (pte_flags(pte) & _PAGE_COW) {
+  			pte = pte_clear_flags(pte, _PAGE_COW);
+  			pte = pte_set_flags(pte, _PAGE_DIRTY);
 
-That is not the point. Secretmem cannot go on CMA / ZONE_MOVABLE memory and b=
-ehaves like long-term pinnings in that sense. This is a real issue when usin=
-g a lot of sectremem.
+I run all my routine stress tests with the changes, and do not see any 
+warning triggered.  If this change is desirable, we can probably add 
+#ifdef CONFIG_DEBUG_VM around it and make it a separate patch.
 
-Please have a look at what Pavel documents regarding long term pinnings and Z=
-ONE_MOVABLE in his patches currently on the list.=
-
+--
+Yu-cheng
