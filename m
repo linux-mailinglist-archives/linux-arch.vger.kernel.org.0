@@ -2,30 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4B5313ED6
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 20:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121A3313F91
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 20:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbhBHTYY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Feb 2021 14:24:24 -0500
-Received: from mga02.intel.com ([134.134.136.20]:47138 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232482AbhBHTYG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Feb 2021 14:24:06 -0500
-IronPort-SDR: mugynaee8hkJ81+tKn1UPz3M5Ib0ZFXm2QY3/9PVI8Po0LQ05POnKzFTH+r+WVkdfrLR3DLrmG
- 1ReXHy/cePBA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="168890238"
-X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
-   d="scan'208";a="168890238"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 11:23:23 -0800
-IronPort-SDR: hQ7EzHLh1XjKnGXhPuD/XToDkgJwmpEbNG7R0HZcj22PJbDNwj7jCGyg5PpGndMk2uHcpLhv2w
- rrglSOj3nHFg==
-X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
-   d="scan'208";a="377921602"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.251.11.33]) ([10.251.11.33])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 11:23:19 -0800
-Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
-To:     Borislav Petkov <bp@alien8.de>
+        id S236330AbhBHTvR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Feb 2021 14:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236436AbhBHTtj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Feb 2021 14:49:39 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A338C06178B;
+        Mon,  8 Feb 2021 11:48:59 -0800 (PST)
+Received: from zn.tnic (p200300ec2f073f00132389f64ded89c1.dip0.t-ipconnect.de [IPv6:2003:ec:2f07:3f00:1323:89f6:4ded:89c1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 82CA81EC0516;
+        Mon,  8 Feb 2021 20:48:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1612813737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MLLsJOPUX5aC5wPkAZgeTUlSqwoaRJCYi5u/Gu9Lyu4=;
+        b=j20s4Z1nZxUMIW4Emy6zOTMhJS+Xcv5dR20kO53dQqDMjCNNDTkNdDLIKPjBdy0I7OAcvH
+        qCppIT7lV0+u4OOJveK2lU/0X+HWSI+7IcRzU0HqTj7rUbn6tT9F57SbEPLGVY1cnpwBgQ
+        aZzuKYY7ZAMsOTAcYe/u7IMVKwUM220=
+Date:   Mon, 8 Feb 2021 20:48:54 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -52,6 +57,8 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: Re: [PATCH v19 06/25] x86/cet: Add control-protection fault handler
+Message-ID: <20210208194854.GI18227@zn.tnic>
 References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
  <20210203225547.32221-7-yu-cheng.yu@intel.com>
  <20210205135927.GH17488@zn.tnic>
@@ -59,44 +66,37 @@ References: <20210203225547.32221-1-yu-cheng.yu@intel.com>
  <20210208182009.GE18227@zn.tnic>
  <690bc3b9-2890-e68d-5e4b-cda5c21b496b@intel.com>
  <20210208185341.GF18227@zn.tnic>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <0e0c9e9d-aee1-ad1e-6c63-21b58a52163f@intel.com>
-Date:   Mon, 8 Feb 2021 11:23:18 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+ <0e0c9e9d-aee1-ad1e-6c63-21b58a52163f@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210208185341.GF18227@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0e0c9e9d-aee1-ad1e-6c63-21b58a52163f@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/8/2021 10:53 AM, Borislav Petkov wrote:
-> On Mon, Feb 08, 2021 at 10:50:07AM -0800, Yu, Yu-cheng wrote:
->> I have not run into the situation.  Initially it was there because other
->> faults have it.
-> 
-> Which other faults?
+On Mon, Feb 08, 2021 at 11:23:18AM -0800, Yu, Yu-cheng wrote:
+> exc_general_protection() and do_trap() both call show_signal(), which
+> then calls printk_ratelimit().
 
-exc_general_protection() and do_trap() both call show_signal(), which 
-then calls printk_ratelimit().
+You could've done some git archeology and could've found
 
-> 
->> When you asked, I went through it and put out my reasoning.
-> 
-> What does that mean?
-> 
+  abd4f7505baf ("x86: i386-show-unhandled-signals-v3")
 
-I went through my patch and check if ratelimit is necessary, and then 
-describe the finding.
+which explains why that ratelimiting is needed.
 
->> I think it still makes sense to keep it.
-> 
-> Because you have a hunch or you actually have an objective reason why?
-> 
+> For example, if a shell script, in a loop re-starts an app when it
+> exits, and the app is causing control-protection fault. The log
+> messages should be rate limited.
 
-For example, if a shell script, in a loop re-starts an app when it 
-exits, and the app is causing control-protection fault.  The log 
-messages should be rate limited.
+I think you should be able to get where I'm going with this, by now:
+please put a comment over the ratelimiting to explain why it is there,
+just like the above commit explains.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
