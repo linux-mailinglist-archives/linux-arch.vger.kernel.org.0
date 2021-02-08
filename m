@@ -2,87 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0183131E9
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 13:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7389731321D
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Feb 2021 13:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbhBHMNe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Feb 2021 07:13:34 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48806 "EHLO mx2.suse.de"
+        id S231520AbhBHMTL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Feb 2021 07:19:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57490 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230346AbhBHMNV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 8 Feb 2021 07:13:21 -0500
+        id S232876AbhBHMSN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 8 Feb 2021 07:18:13 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1612786646; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n+2LVFofWrDzo5XkXIbA8HqM46aC4ZldghhZ33psn6M=;
+        b=KSPyq7HV9X52hHkw5B3fAQ6GHHyEdJ7l95EmFctR048cvtpwwEJSzUjnHCHT2EQT2m1fwI
+        Jsts1jfz6j4PUcL+oOZWQPNH0wYw5qJxQghfmFs/AJ9ffQiRDEhRFqPxBNTbqXBqUQzMJN
+        tTTWa45AKjgqUKiY3BBR4wSnVehy4C8=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 75CCBAD3E;
-        Mon,  8 Feb 2021 12:12:39 +0000 (UTC)
-Date:   Mon, 8 Feb 2021 13:12:27 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Stuart Little <achirvasub@gmail.com>
-Cc:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, jpoimboe@redhat.com, nborisov@suse.com,
-        seth.forshee@canonical.com, yamada.masahiro@socionext.com
-Subject: Re: PROBLEM: 5.11.0-rc7 fails =?utf-8?Q?to?=
- =?utf-8?Q?_compile_with_error=3A_=E2=80=98-mindirect-branch=E2=80=99_and_?=
- =?utf-8?B?4oCYLWZjZi1wcm90ZWN0aW9u4oCZ?= are not compatible
-Message-ID: <20210208121227.GD17908@zn.tnic>
-References: <YCB4Sgk5g5B2Nu09@arch-chirva.localdomain>
- <YCCFGc97d2U5yUS7@arch-chirva.localdomain>
- <YCCIgMHkzh/xT4ex@arch-chirva.localdomain>
+        by mx2.suse.de (Postfix) with ESMTP id 268A7AC6E;
+        Mon,  8 Feb 2021 12:17:26 +0000 (UTC)
+Date:   Mon, 8 Feb 2021 13:17:24 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
+ secretmem users
+Message-ID: <YCEr1JS8k/nDbcVR@dhcp22.suse.cz>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-9-rppt@kernel.org>
+ <YCEP/bmqm0DsvCYN@dhcp22.suse.cz>
+ <38c0cad4-ac55-28e4-81c6-4e0414f0620a@redhat.com>
+ <YCEXwUYepeQvEWTf@dhcp22.suse.cz>
+ <a488a0bb-def5-0249-99e2-4643787cef69@redhat.com>
+ <YCEZAWOv63KYglJZ@dhcp22.suse.cz>
+ <770690dc-634a-78dd-0772-3aba1a3beba8@redhat.com>
+ <21f4e742-1aab-f8ba-f0e7-40faa6d6c0bb@redhat.com>
+ <5db6ac46-d4e1-3c68-22a0-94f2ecde8801@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YCCIgMHkzh/xT4ex@arch-chirva.localdomain>
+In-Reply-To: <5db6ac46-d4e1-3c68-22a0-94f2ecde8801@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 07, 2021 at 07:40:32PM -0500, Stuart Little wrote:
-> > On Sun, Feb 07, 2021 at 06:31:22PM -0500, Stuart Little wrote:
-> > > I am trying to compile on an x86_64 host for a 32-bit system; my config is at
-> > > 
-> > > https://termbin.com/v8jl
-> > > 
-> > > I am getting numerous errors of the form
-> > > 
-> > > ./include/linux/kasan-checks.h:17:1: error: ‘-mindirect-branch’ and ‘-fcf-protection’ are not compatible
+On Mon 08-02-21 12:26:31, David Hildenbrand wrote:
+[...]
+> My F33 system happily hibernates to disk, even with an application that
+> succeeded in din doing an mlockall().
+> 
+> And it somewhat makes sense. Even my freshly-booted, idle F33 has
+> 
+> $ cat /proc/meminfo  | grep lock
+> Mlocked:            4860 kB
+> 
+> So, stopping to hibernate with mlocked memory would essentially prohibit any
+> modern Linux distro to hibernate ever.
 
-Does this fix it?
-
----
-
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 5857917f83ee..30920d70b48b 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -50,6 +50,9 @@ export BITS
- KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow
- KBUILD_CFLAGS += $(call cc-option,-mno-avx,)
- 
-+# Intel CET isn't enabled in the kernel
-+KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
-+
- ifeq ($(CONFIG_X86_32),y)
-         BITS := 32
-         UTS_MACHINE := i386
-@@ -120,9 +123,6 @@ else
- 
-         KBUILD_CFLAGS += -mno-red-zone
-         KBUILD_CFLAGS += -mcmodel=kernel
--
--	# Intel CET isn't enabled in the kernel
--	KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
- endif
- 
- ifdef CONFIG_X86_X32
-
-
+My system seems to be completely fine without mlocked memory. It would
+be interesting to see who mlocks memory on your system and check whether
+the expectated mlock semantic really works for those. This should be
+documented at least.
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Michal Hocko
+SUSE Labs
