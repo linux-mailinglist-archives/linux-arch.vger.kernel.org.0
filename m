@@ -2,31 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D87314ACA
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Feb 2021 09:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5144314B18
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Feb 2021 10:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbhBIIuF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Feb 2021 03:50:05 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56736 "EHLO mx2.suse.de"
+        id S229908AbhBIJCd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Feb 2021 04:02:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36146 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230201AbhBIIr6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 9 Feb 2021 03:47:58 -0500
+        id S230286AbhBIJAT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 9 Feb 2021 04:00:19 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612860431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1612861172; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7uXNoYTwJcul85Ggr79faNz9sm4xUBP5tyQrp7MGBDU=;
-        b=igFK6y52//YbOeER2qu6o8xC111AEEf/9O0tsPnCXBARwevxGar35/sufXf6VC6tmzQnyW
-        /X0B3+BhzxxFnhgpH7/ijVkSsmiVTBYgLKz7SupOE55ZHrLDJUiANJxkyr5fgautM81txk
-        U8MaQSKu/ApzxONYDBE500FYqjbKj30=
+        bh=qKmPZ6awqg5hjlBR0sI2r8zXB8YBdpf3Fstd9lWw2l4=;
+        b=p4niOOYBVsAxuZvLvSyfuqafhhIwTbqalQ0XUlb0o+XPLT9GQJWEuScror9bMiRAM/VDNR
+        Gg1qoKrVPkiLaebs0ekDczrIK91xZLqc+rSpU+PO8Uxxh1llnmK79t7ldLJZVcdfnC2J7E
+        dBwPdj8xY5v0EllSgVlDCcSTDxSJc8Y=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 7514CAB71;
-        Tue,  9 Feb 2021 08:47:11 +0000 (UTC)
-Date:   Tue, 9 Feb 2021 09:47:08 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 14A0BAB71;
+        Tue,  9 Feb 2021 08:59:32 +0000 (UTC)
+Date:   Tue, 9 Feb 2021 09:59:31 +0100
 From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
@@ -34,7 +36,6 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
         James Bottomley <jejb@linux.ibm.com>,
@@ -57,78 +58,54 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
+        x86@kernel.org
+Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to
  create "secret" memory areas
-Message-ID: <YCJMDBss8Qhha7g9@dhcp22.suse.cz>
-References: <20210208084920.2884-1-rppt@kernel.org>
- <20210208084920.2884-8-rppt@kernel.org>
- <YCEXMgXItY7xMbIS@dhcp22.suse.cz>
- <20210208212605.GX242749@kernel.org>
+Message-ID: <YCJO8zLq8YkXGy8B@dhcp22.suse.cz>
+References: <20210208211326.GV242749@kernel.org>
+ <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210208212605.GX242749@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon 08-02-21 23:26:05, Mike Rapoport wrote:
-> On Mon, Feb 08, 2021 at 11:49:22AM +0100, Michal Hocko wrote:
-> > On Mon 08-02-21 10:49:17, Mike Rapoport wrote:
-[...]
-> > > The file descriptor based memory has several advantages over the
-> > > "traditional" mm interfaces, such as mlock(), mprotect(), madvise(). It
-> > > paves the way for VMMs to remove the secret memory range from the process;
+On Mon 08-02-21 22:38:03, David Hildenbrand wrote:
+> 
+> > Am 08.02.2021 um 22:13 schrieb Mike Rapoport <rppt@kernel.org>:
 > > 
-> > I do not understand how it helps to remove the memory from the process
-> > as the interface explicitly allows to add a memory that is removed from
-> > all other processes via direct map.
-> 
-> The current implementation does not help to remove the memory from the
-> process, but using fd-backed memory seems a better interface to remove
-> guest memory from host mappings than mmap. As Andy nicely put it:
-> 
-> "Getting fd-backed memory into a guest will take some possibly major work in
-> the kernel, but getting vma-backed memory into a guest without mapping it
-> in the host user address space seems much, much worse."
-
-OK, so IIUC this means that the model is to hand over memory from host
-to guest. I thought the guest would be under control of its address
-space and therefore it operates on the VMAs. This would benefit from
-an additional and more specific clarification.
-
-> > > As secret memory implementation is not an extension of tmpfs or hugetlbfs,
-> > > usage of a dedicated system call rather than hooking new functionality into
-> > > memfd_create(2) emphasises that memfd_secret(2) has different semantics and
-> > > allows better upwards compatibility.
+> > ﻿On Mon, Feb 08, 2021 at 10:27:18AM +0100, David Hildenbrand wrote:
+> >> On 08.02.21 09:49, Mike Rapoport wrote:
+> >> 
+> >> Some questions (and request to document the answers) as we now allow to have
+> >> unmovable allocations all over the place and I don't see a single comment
+> >> regarding that in the cover letter:
+> >> 
+> >> 1. How will the issue of plenty of unmovable allocations for user space be
+> >> tackled in the future?
+> >> 
+> >> 2. How has this issue been documented? E.g., interaction with ZONE_MOVABLE
+> >> and CMA, alloc_conig_range()/alloc_contig_pages?.
 > > 
-> > What is this supposed to mean? What are differences?
+> > Secretmem sets the mappings gfp mask to GFP_HIGHUSER, so it does not
+> > allocate movable pages at the first place.
 > 
-> Well, the phrasing could be better indeed. That supposed to mean that
-> they differ in the semantics behind the file descriptor: memfd_create
-> implements sealing for shmem and hugetlbfs while memfd_secret implements
-> memory hidden from the kernel.
+> That is not the point. Secretmem cannot go on CMA / ZONE_MOVABLE
+> memory and behaves like long-term pinnings in that sense. This is a
+> real issue when using a lot of sectremem.
 
-Right but why memfd_create model is not sufficient for the usecase?
-Please note that I am arguing against. To be honest I do not really care
-much. Using an existing scheme is usually preferable from my POV but
-there might be real reasons why shmem as a backing "storage" is not
-appropriate.
-  
-> > > The secretmem mappings are locked in memory so they cannot exceed
-> > > RLIMIT_MEMLOCK. Since these mappings are already locked an attempt to
-> > > mlock() secretmem range would fail and mlockall() will ignore secretmem
-> > > mappings.
-> > 
-> > What about munlock?
-> 
-> Isn't this implied? ;-)
+A lot of unevictable memory is a concern regardless of CMA/ZONE_MOVABLE.
+As I've said it is quite easy to land at the similar situation even with
+tmpfs/MAP_ANON|MAP_SHARED on swapless system. Neither of the two is
+really uncommon. It would be even worse that those would be allowed to
+consume both CMA/ZONE_MOVABLE.
 
-My bad here. I thought that munlock fails on vmas which are not mlocked
-and I was curious about the behavior when mlockall() is followed by
-munlock. But I do not see this being the case. So this should be ok.
+One has to be very careful when relying on CMA or movable zones. This is
+definitely worth a comment in the kernel command line parameter
+documentation. But this is not a new problem.
 
 -- 
 Michal Hocko
