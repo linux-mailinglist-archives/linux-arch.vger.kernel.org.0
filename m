@@ -2,51 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050AA317095
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 20:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A223170C8
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 20:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbhBJTtm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Feb 2021 14:49:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39484 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233093AbhBJTt1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Feb 2021 14:49:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 62A2064ED4
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 19:48:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612986526;
-        bh=FAPGExqOTkOBqOlkCN+OURryuSv/6YZbk+hA40//uP4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qqXiVHqcEQzlQMKfWyZGVyXTnVfbR0Nh8XzPsU/TsXK2AOyNqURhBBi73UGFdA2aB
-         rboYLFKEEveMuxdXxvRGNnyTxB7ojs/J4VffGjotsaBzDPMUT3o78Ziq9yw5Ek9VcO
-         r6ll9iFBr5goU8h60p/GWFjs9v9A5CXyWQqK5lTv65sAP/Jkrx9bCvjEqQ0FOEG713
-         Ao7Rnj1kfBo1n5tZHIJbUdNXJ3b9GITeeP8/oJplZbIDGzW8C8sYZvwBTSA7f2Xlke
-         ntUR0nnFo4lOMKI3sdwmwjBA8942xZ4C7JtIgne4ft3/ISBJZn16iHJVig8dw8pkEb
-         ThMuCmO5hLOqQ==
-Received: by mail-ej1-f43.google.com with SMTP id w2so6243305ejk.13
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:48:46 -0800 (PST)
-X-Gm-Message-State: AOAM532fM5kTYL2W0MZQXzLTVkvi0dAdXwS7rO5OJYE+Euxk8fEEBJ1A
-        RJEo2fOIqZFQ3JBZCUkf5UuO8UdOxBPhjFRPxfC9rg==
-X-Google-Smtp-Source: ABdhPJxZ1Oe7ZfDn2o8sh5z16NgXDE74CZwTf3R65dv3ub1JlsAMldes56Bodh/Kn0gw1S45DR4gxiZj4SL+x2P51Tw=
-X-Received: by 2002:a17:906:17d3:: with SMTP id u19mr4829127eje.316.1612986524982;
- Wed, 10 Feb 2021 11:48:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20210210175703.12492-1-yu-cheng.yu@intel.com> <20210210175703.12492-7-yu-cheng.yu@intel.com>
-In-Reply-To: <20210210175703.12492-7-yu-cheng.yu@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 10 Feb 2021 11:48:33 -0800
-X-Gmail-Original-Message-ID: <CALCETrVBTocCecYfTMEqeeHSquyWLPYBDP4eWQECo9WFYg2_pg@mail.gmail.com>
-Message-ID: <CALCETrVBTocCecYfTMEqeeHSquyWLPYBDP4eWQECo9WFYg2_pg@mail.gmail.com>
-Subject: Re: [PATCH v20 06/25] x86/cet: Add control-protection fault handler
+        id S232682AbhBJT7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Feb 2021 14:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232204AbhBJT7M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Feb 2021 14:59:12 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE69CC061574
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:58:32 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id d2so1792073pjs.4
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rJdB/sgQkrka332FpJ264hp+EiZ9dcP9q0J4GYGovng=;
+        b=On7U0LNn0WLtkxIH8UQVlWzBMAbKD0mWkE96dQqEToEm5sOOtYX219hO6uDftXHRz0
+         tLZKDJBOYso/m3R6WYyiPziC1WJ5YN44G3dP5t/KNm/pSPjgEArbG+kWDe3O81kpk44B
+         zI/TMz0n6dYbJpwjUGrjF5PURxHbP5PWN7XEw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rJdB/sgQkrka332FpJ264hp+EiZ9dcP9q0J4GYGovng=;
+        b=bLV5gqWxSCTsKLOjM+CqZH6wuzMYB2EcHccXE9jTzXNMOpdGMiGZQMrIaI4AYPwz/d
+         JCZlm+++7tHgzqDRuSdOEexj5DsK2pB/nnvkFZGn8JkmjXhpoL5nLU89rvCzQBoM4jvl
+         TkkeMf37PFM7y5ln14moGo2ER6oxMpg6WUJQKjvquja+ccsoREHaGAXJ9oFdVku0Ezfc
+         d3hNVeZMNYw/vVN5NWzeeitq1sdUo3wRzV1uR0Gl4YanqA6WheScBGzU5/4kl38Mpemd
+         wqaWQO0MCmUAyQ2zeuUpf3OIF8PnrzdY/WnfqI/hZNhQ9jnOxjdJbabZ9RuxjdE4nSHd
+         ex4A==
+X-Gm-Message-State: AOAM530gvYqCUxNo0BCLSxHE5UIkYIRBRG5lV8RNnc8Xnghy+ESdjdDU
+        3D4qHDrO+eNBP3UznCZ7+sdBxg==
+X-Google-Smtp-Source: ABdhPJw0QnGbFGYUFRzTeHES/2lKVc5CGyD8afL+dlpmMtkOyMp3uMT36tX5di6TSjjQYzfJWdIzFA==
+X-Received: by 2002:a17:90a:7bc2:: with SMTP id d2mr596856pjl.68.1612987112254;
+        Wed, 10 Feb 2021 11:58:32 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v1sm3178978pga.63.2021.02.10.11.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 11:58:31 -0800 (PST)
+Date:   Wed, 10 Feb 2021 11:58:30 -0800
+From:   Kees Cook <keescook@chromium.org>
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
@@ -57,7 +62,6 @@ Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Florian Weimer <fweimer@redhat.com>,
         "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
@@ -67,190 +71,586 @@ Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Pengfei Xu <pengfei.xu@intel.com>, haitao.huang@intel.com
+Subject: Re: [PATCH v20 21/25] x86/cet/shstk: Handle signals for shadow stack
+Message-ID: <202102101154.CEF2606E@keescook>
+References: <20210210175703.12492-1-yu-cheng.yu@intel.com>
+ <20210210175703.12492-22-yu-cheng.yu@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210210175703.12492-22-yu-cheng.yu@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 9:58 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
->
-> A control-protection fault is triggered when a control-flow transfer
-> attempt violates Shadow Stack or Indirect Branch Tracking constraints.
-> For example, the return address for a RET instruction differs from the copy
-> on the shadow stack; or an indirect JMP instruction, without the NOTRACK
-> prefix, arrives at a non-ENDBR opcode.
->
-> The control-protection fault handler works in a similar way as the general
-> protection fault handler.  It provides the si_code SEGV_CPERR to the signal
-> handler.
->
+On Wed, Feb 10, 2021 at 09:56:59AM -0800, Yu-cheng Yu wrote:
+> To deliver a signal, create a shadow stack restore token and put the token
+> and the signal restorer address on the shadow stack.  For sigreturn, verify
+> the token and restore from it the shadow stack pointer.
+> 
+> A shadow stack restore token marks a restore point of the shadow stack.
+> The token is distinctively different from any shadow stack address.
+
+How is it different? It seems like it just has the last 2 bits
+masked/set?
+
+> In sigreturn, restoring from a token ensures the target address is the
+> location pointed by the token.
+
+As in, a token (real stack address with 2-bit mask) is checked against
+the real stack address? I don't see a comparison -- it only checks that
+it is < TASK_SIZE.
+
+How does cet_restore_signal() figure into this? (As in, the MSR writes?)
+
+-Kees
+
+> Introduce WRUSS, which is a kernel-mode instruction but writes directly to
+> user shadow stack.  It is used to construct the user signal stack as
+> described above.
+> 
+> Currently there is no systematic facility for extending a signal context.
+> Introduce a signal context extension 'struct sc_ext', which is used to save
+> shadow stack restore token address and WAIT_ENDBR status.  WAIT_ENDBR will
+> be introduced later in the Indirect Branch Tracking (IBT) series, but add
+> that into sc_ext now to keep the struct stable in case the IBT series is
+> applied later.
+> 
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
 > ---
->  arch/x86/include/asm/idtentry.h    |  4 ++
->  arch/x86/kernel/idt.c              |  4 ++
->  arch/x86/kernel/signal_compat.c    |  2 +-
->  arch/x86/kernel/traps.c            | 63 ++++++++++++++++++++++++++++++
->  include/uapi/asm-generic/siginfo.h |  3 +-
->  5 files changed, 74 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index f656aabd1545..ff4b3bf634da 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -574,6 +574,10 @@ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_SS,    exc_stack_segment);
->  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP,        exc_general_protection);
->  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_AC,        exc_alignment_check);
->
-> +#ifdef CONFIG_X86_CET
-> +DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP, exc_control_protection);
-> +#endif
+>  arch/x86/ia32/ia32_signal.c            |  17 +++
+>  arch/x86/include/asm/cet.h             |   8 ++
+>  arch/x86/include/asm/fpu/internal.h    |  10 ++
+>  arch/x86/include/asm/special_insns.h   |  32 ++++++
+>  arch/x86/include/uapi/asm/sigcontext.h |   9 ++
+>  arch/x86/kernel/cet.c                  | 152 +++++++++++++++++++++++++
+>  arch/x86/kernel/fpu/signal.c           | 100 ++++++++++++++++
+>  arch/x86/kernel/signal.c               |  10 ++
+>  8 files changed, 338 insertions(+)
+> 
+> diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+> index 5e3d9b7fd5fb..aee3e367e184 100644
+> --- a/arch/x86/ia32/ia32_signal.c
+> +++ b/arch/x86/ia32/ia32_signal.c
+> @@ -35,6 +35,7 @@
+>  #include <asm/sigframe.h>
+>  #include <asm/sighandling.h>
+>  #include <asm/smap.h>
+> +#include <asm/cet.h>
+>  
+>  static inline void reload_segments(struct sigcontext_32 *sc)
+>  {
+> @@ -205,6 +206,7 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
+>  				 void __user **fpstate)
+>  {
+>  	unsigned long sp, fx_aligned, math_size;
+> +	void __user *restorer = NULL;
+>  
+>  	/* Default to using normal stack */
+>  	sp = regs->sp;
+> @@ -218,8 +220,23 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
+>  		 ksig->ka.sa.sa_restorer)
+>  		sp = (unsigned long) ksig->ka.sa.sa_restorer;
+>  
+> +	if (ksig->ka.sa.sa_flags & SA_RESTORER) {
+> +		restorer = ksig->ka.sa.sa_restorer;
+> +	} else if (current->mm->context.vdso) {
+> +		if (ksig->ka.sa.sa_flags & SA_SIGINFO)
+> +			restorer = current->mm->context.vdso +
+> +				vdso_image_32.sym___kernel_rt_sigreturn;
+> +		else
+> +			restorer = current->mm->context.vdso +
+> +				vdso_image_32.sym___kernel_sigreturn;
+> +	}
 > +
->  /* Raw exception entries which need extra work */
->  DECLARE_IDTENTRY_RAW(X86_TRAP_UD,              exc_invalid_op);
->  DECLARE_IDTENTRY_RAW(X86_TRAP_BP,              exc_int3);
-> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-> index ee1a283f8e96..e8166d9bbb10 100644
-> --- a/arch/x86/kernel/idt.c
-> +++ b/arch/x86/kernel/idt.c
-> @@ -105,6 +105,10 @@ static const __initconst struct idt_data def_idts[] = {
->  #elif defined(CONFIG_X86_32)
->         SYSG(IA32_SYSCALL_VECTOR,       entry_INT80_32),
->  #endif
+>  	sp = fpu__alloc_mathframe(sp, 1, &fx_aligned, &math_size);
+>  	*fpstate = (struct _fpstate_32 __user *) sp;
 > +
-> +#ifdef CONFIG_X86_CET
-> +       INTG(X86_TRAP_CP,               asm_exc_control_protection),
-> +#endif
->  };
->
+> +	if (save_cet_to_sigframe(1, *fpstate, (unsigned long)restorer))
+> +		return (void __user *)-1L;
+> +
+>  	if (copy_fpstate_to_sigframe(*fpstate, (void __user *)fx_aligned,
+>  				     math_size) < 0)
+>  		return (void __user *) -1L;
+> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+> index 5750fbcbb952..73435856ce54 100644
+> --- a/arch/x86/include/asm/cet.h
+> +++ b/arch/x86/include/asm/cet.h
+> @@ -6,6 +6,8 @@
+>  #include <linux/types.h>
+>  
+>  struct task_struct;
+> +struct sc_ext;
+> +
 >  /*
-> diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-> index a5330ff498f0..dd92490b1e7f 100644
-> --- a/arch/x86/kernel/signal_compat.c
-> +++ b/arch/x86/kernel/signal_compat.c
-> @@ -27,7 +27,7 @@ static inline void signal_compat_build_tests(void)
->          */
->         BUILD_BUG_ON(NSIGILL  != 11);
->         BUILD_BUG_ON(NSIGFPE  != 15);
-> -       BUILD_BUG_ON(NSIGSEGV != 9);
-> +       BUILD_BUG_ON(NSIGSEGV != 10);
->         BUILD_BUG_ON(NSIGBUS  != 5);
->         BUILD_BUG_ON(NSIGTRAP != 5);
->         BUILD_BUG_ON(NSIGCHLD != 6);
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 7f5aec758f0e..8c7fa91a57c9 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -39,6 +39,7 @@
->  #include <linux/io.h>
->  #include <linux/hardirq.h>
->  #include <linux/atomic.h>
-> +#include <linux/nospec.h>
->
->  #include <asm/stacktrace.h>
->  #include <asm/processor.h>
-> @@ -606,6 +607,68 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
->         cond_local_irq_disable(regs);
+>   * Per-thread CET status
+>   */
+> @@ -18,9 +20,15 @@ struct cet_status {
+>  int cet_setup_shstk(void);
+>  void cet_disable_shstk(void);
+>  void cet_free_shstk(struct task_struct *p);
+> +int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp);
+> +void cet_restore_signal(struct sc_ext *sc);
+> +int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
+>  #else
+>  static inline void cet_disable_shstk(void) {}
+>  static inline void cet_free_shstk(struct task_struct *p) {}
+> +static inline void cet_restore_signal(struct sc_ext *sc) { return; }
+> +static inline int cet_setup_signal(bool ia32, unsigned long rstor,
+> +				   struct sc_ext *sc) { return -EINVAL; }
+>  #endif
+>  
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
+> index 8d33ad80704f..2c1f59ebe9d8 100644
+> --- a/arch/x86/include/asm/fpu/internal.h
+> +++ b/arch/x86/include/asm/fpu/internal.h
+> @@ -443,6 +443,16 @@ static inline void copy_kernel_to_fpregs(union fpregs_state *fpstate)
+>  	__copy_kernel_to_fpregs(fpstate, -1);
 >  }
->
+>  
 > +#ifdef CONFIG_X86_CET
-> +static const char * const control_protection_err[] = {
-> +       "unknown",
-> +       "near-ret",
-> +       "far-ret/iret",
-> +       "endbranch",
-> +       "rstorssp",
-> +       "setssbsy",
-> +       "unknown",
-> +};
-> +
-> +/*
-> + * When a control protection exception occurs, send a signal to the responsible
-> + * application.  Currently, control protection is only enabled for user mode.
-> + * This exception should not come from kernel mode.
-> + */
-> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> +extern int save_cet_to_sigframe(int ia32, void __user *fp,
+> +				unsigned long restorer);
+> +#else
+> +static inline int save_cet_to_sigframe(int ia32, void __user *fp,
+> +				       unsigned long restorer)
 > +{
-> +       static DEFINE_RATELIMIT_STATE(rs, DEFAULT_RATELIMIT_INTERVAL,
-> +                                     DEFAULT_RATELIMIT_BURST);
-> +       struct task_struct *tsk;
-> +
-> +       if (!user_mode(regs)) {
-> +               pr_emerg("PANIC: unexpected kernel control protection fault\n");
-> +               die("kernel control protection fault", regs, error_code);
-> +               panic("Machine halted.");
-
-I think it would be nice to decode the error code and print the cause.
-
-> +       }
-> +
-> +       cond_local_irq_enable(regs);
-
-We got rid of user mode irqs off a while ago.   You can just do
-local_irq_enable();
-
-> +
-> +       if (!boot_cpu_has(X86_FEATURE_CET))
-> +               WARN_ONCE(1, "Control protection fault with CET support disabled\n");
-> +
-> +       tsk = current;
-> +       tsk->thread.error_code = error_code;
-> +       tsk->thread.trap_nr = X86_TRAP_CP;
-
-
-
-> +
-> +       /*
-> +        * Ratelimit to prevent log spamming.
-> +        */
-> +       if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-> +           __ratelimit(&rs)) {
-> +               unsigned long ssp;
-> +               int err;
-> +
-> +               err = array_index_nospec(error_code, ARRAY_SIZE(control_protection_err));
-
-Shouldn't this do a bounds check?  You also need to handle the ENCL bit.
-
-> +
-> +               rdmsrl(MSR_IA32_PL3_SSP, ssp);
-> +               pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
-> +                        tsk->comm, task_pid_nr(tsk),
-> +                        regs->ip, regs->sp, ssp, error_code,
-> +                        control_protection_err[err]);
-
-That should be pr_info();
-
-> +               print_vma_addr(KERN_CONT " in ", regs->ip);
-> +               pr_cont("\n");
-> +       }
-> +
-> +       force_sig_fault(SIGSEGV, SEGV_CPERR,
-> +                       (void __user *)uprobe_get_trap_addr(regs));
-> +       cond_local_irq_disable(regs);
+> +	return 0;
+> +}
+> +#endif
+>  extern int copy_fpstate_to_sigframe(void __user *buf, void __user *fp, int size);
+>  
+>  /*
+> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+> index cc177b4431ae..d979d0deb3ae 100644
+> --- a/arch/x86/include/asm/special_insns.h
+> +++ b/arch/x86/include/asm/special_insns.h
+> @@ -234,6 +234,38 @@ static inline void clwb(volatile void *__p)
+>  		: [pax] "a" (p));
+>  }
+>  
+> +#ifdef CONFIG_X86_CET
+> +#if defined(CONFIG_IA32_EMULATION) || defined(CONFIG_X86_X32)
+> +static inline int write_user_shstk_32(unsigned long addr, unsigned int val)
+> +{
+> +	asm_volatile_goto("1: wrussd %1, (%0)\n"
+> +			  _ASM_EXTABLE(1b, %l[fail])
+> +			  :: "r" (addr), "r" (val)
+> +			  :: fail);
+> +	return 0;
+> +fail:
+> +	return -EPERM;
+> +}
+> +#else
+> +static inline int write_user_shstk_32(unsigned long addr, unsigned int val)
+> +{
+> +	WARN_ONCE(1, "%s used but not supported.\n", __func__);
+> +	return -EFAULT;
 > +}
 > +#endif
 > +
->  static bool do_int3(struct pt_regs *regs)
->  {
->         int res;
-> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-> index d2597000407a..1c2ea91284a0 100644
-> --- a/include/uapi/asm-generic/siginfo.h
-> +++ b/include/uapi/asm-generic/siginfo.h
-> @@ -231,7 +231,8 @@ typedef struct siginfo {
->  #define SEGV_ADIPERR   7       /* Precise MCD exception */
->  #define SEGV_MTEAERR   8       /* Asynchronous ARM MTE error */
->  #define SEGV_MTESERR   9       /* Synchronous ARM MTE exception */
-> -#define NSIGSEGV       9
-> +#define SEGV_CPERR     10      /* Control protection fault */
-> +#define NSIGSEGV       10
->
+> +static inline int write_user_shstk_64(unsigned long addr, unsigned long val)
+> +{
+> +	asm_volatile_goto("1: wrussq %1, (%0)\n"
+> +			  _ASM_EXTABLE(1b, %l[fail])
+> +			  :: "r" (addr), "r" (val)
+> +			  :: fail);
+> +	return 0;
+> +fail:
+> +	return -EPERM;
+> +}
+> +#endif /* CONFIG_X86_CET */
+> +
+>  #define nop() asm volatile ("nop")
+>  
+>  static inline void serialize(void)
+> diff --git a/arch/x86/include/uapi/asm/sigcontext.h b/arch/x86/include/uapi/asm/sigcontext.h
+> index 844d60eb1882..cf2d55db3be4 100644
+> --- a/arch/x86/include/uapi/asm/sigcontext.h
+> +++ b/arch/x86/include/uapi/asm/sigcontext.h
+> @@ -196,6 +196,15 @@ struct _xstate {
+>  	/* New processor state extensions go here: */
+>  };
+>  
+> +/*
+> + * Located at the end of sigcontext->fpstate, aligned to 8.
+> + */
+> +struct sc_ext {
+> +	unsigned long total_size;
+> +	unsigned long ssp;
+> +	unsigned long wait_endbr;
+> +};
+> +
 >  /*
->   * SIGBUS si_codes
-> --
+>   * The 32-bit signal frame:
+>   */
+> diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+> index d25a03215984..08e43d9b5176 100644
+> --- a/arch/x86/kernel/cet.c
+> +++ b/arch/x86/kernel/cet.c
+> @@ -19,6 +19,8 @@
+>  #include <asm/fpu/xstate.h>
+>  #include <asm/fpu/types.h>
+>  #include <asm/cet.h>
+> +#include <asm/special_insns.h>
+> +#include <uapi/asm/sigcontext.h>
+>  
+>  static void start_update_msrs(void)
+>  {
+> @@ -72,6 +74,80 @@ static unsigned long alloc_shstk(unsigned long size, int flags)
+>  	return addr;
+>  }
+>  
+> +#define TOKEN_MODE_MASK	3UL
+> +#define TOKEN_MODE_64	1UL
+> +#define IS_TOKEN_64(token) (((token) & TOKEN_MODE_MASK) == TOKEN_MODE_64)
+> +#define IS_TOKEN_32(token) (((token) & TOKEN_MODE_MASK) == 0)
+> +
+> +/*
+> + * Verify the restore token at the address of 'ssp' is
+> + * valid and then set shadow stack pointer according to the
+> + * token.
+> + */
+> +int cet_verify_rstor_token(bool ia32, unsigned long ssp,
+> +			   unsigned long *new_ssp)
+> +{
+> +	unsigned long token;
+> +
+> +	*new_ssp = 0;
+> +
+> +	if (!IS_ALIGNED(ssp, 8))
+> +		return -EINVAL;
+> +
+> +	if (get_user(token, (unsigned long __user *)ssp))
+> +		return -EFAULT;
+> +
+> +	/* Is 64-bit mode flag correct? */
+> +	if (!ia32 && !IS_TOKEN_64(token))
+> +		return -EINVAL;
+> +	else if (ia32 && !IS_TOKEN_32(token))
+> +		return -EINVAL;
+> +
+> +	token &= ~TOKEN_MODE_MASK;
+> +
+> +	/*
+> +	 * Restore address properly aligned?
+> +	 */
+> +	if ((!ia32 && !IS_ALIGNED(token, 8)) || !IS_ALIGNED(token, 4))
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Token was placed properly?
+> +	 */
+> +	if (((ALIGN_DOWN(token, 8) - 8) != ssp) || token >= TASK_SIZE_MAX)
+> +		return -EINVAL;
+> +
+> +	*new_ssp = token;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Create a restore token on the shadow stack.
+> + * A token is always 8-byte and aligned to 8.
+> + */
+> +static int create_rstor_token(bool ia32, unsigned long ssp,
+> +			      unsigned long *new_ssp)
+> +{
+> +	unsigned long addr;
+> +
+> +	*new_ssp = 0;
+> +
+> +	if ((!ia32 && !IS_ALIGNED(ssp, 8)) || !IS_ALIGNED(ssp, 4))
+> +		return -EINVAL;
+> +
+> +	addr = ALIGN_DOWN(ssp, 8) - 8;
+> +
+> +	/* Is the token for 64-bit? */
+> +	if (!ia32)
+> +		ssp |= TOKEN_MODE_64;
+> +
+> +	if (write_user_shstk_64(addr, ssp))
+> +		return -EFAULT;
+> +
+> +	*new_ssp = addr;
+> +	return 0;
+> +}
+> +
+>  int cet_setup_shstk(void)
+>  {
+>  	unsigned long addr, size;
+> @@ -145,3 +221,79 @@ void cet_free_shstk(struct task_struct *tsk)
+>  	cet->shstk_base = 0;
+>  	cet->shstk_size = 0;
+>  }
+> +
+> +/*
+> + * Called from __fpu__restore_sig() and XSAVES buffer is protected by
+> + * set_thread_flag(TIF_NEED_FPU_LOAD) in the slow path.
+> + */
+> +void cet_restore_signal(struct sc_ext *sc_ext)
+> +{
+> +	struct cet_user_state *cet_user_state;
+> +	struct cet_status *cet = &current->thread.cet;
+> +	u64 msr_val = 0;
+> +
+> +	if (!static_cpu_has(X86_FEATURE_SHSTK))
+> +		return;
+> +
+> +	cet_user_state = get_xsave_addr(&current->thread.fpu.state.xsave,
+> +					XFEATURE_CET_USER);
+> +	if (!cet_user_state)
+> +		return;
+> +
+> +	if (cet->shstk_size) {
+> +		if (test_thread_flag(TIF_NEED_FPU_LOAD))
+> +			cet_user_state->user_ssp = sc_ext->ssp;
+> +		else
+> +			wrmsrl(MSR_IA32_PL3_SSP, sc_ext->ssp);
+> +
+> +		msr_val |= CET_SHSTK_EN;
+> +	}
+> +
+> +	if (test_thread_flag(TIF_NEED_FPU_LOAD))
+> +		cet_user_state->user_cet = msr_val;
+> +	else
+> +		wrmsrl(MSR_IA32_U_CET, msr_val);
+> +}
+> +
+> +/*
+> + * Setup the shadow stack for the signal handler: first,
+> + * create a restore token to keep track of the current ssp,
+> + * and then the return address of the signal handler.
+> + */
+> +int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
+> +{
+> +	struct cet_status *cet = &current->thread.cet;
+> +	unsigned long ssp = 0, new_ssp = 0;
+> +	int err;
+> +
+> +	if (cet->shstk_size) {
+> +		if (!rstor_addr)
+> +			return -EINVAL;
+> +
+> +		ssp = cet_get_shstk_addr();
+> +		err = create_rstor_token(ia32, ssp, &new_ssp);
+> +		if (err)
+> +			return err;
+> +
+> +		if (ia32) {
+> +			ssp = new_ssp - sizeof(u32);
+> +			err = write_user_shstk_32(ssp, (unsigned int)rstor_addr);
+> +		} else {
+> +			ssp = new_ssp - sizeof(u64);
+> +			err = write_user_shstk_64(ssp, rstor_addr);
+> +		}
+> +
+> +		if (err)
+> +			return err;
+> +
+> +		sc_ext->ssp = new_ssp;
+> +	}
+> +
+> +	if (ssp) {
+> +		start_update_msrs();
+> +		wrmsrl(MSR_IA32_PL3_SSP, ssp);
+> +		end_update_msrs();
+> +	}
+> +
+> +	return 0;
+> +}
+> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+> index a4ec65317a7f..270e4649f435 100644
+> --- a/arch/x86/kernel/fpu/signal.c
+> +++ b/arch/x86/kernel/fpu/signal.c
+> @@ -52,6 +52,74 @@ static inline int check_for_xstate(struct fxregs_state __user *buf,
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_X86_CET
+> +int save_cet_to_sigframe(int ia32, void __user *fp, unsigned long restorer)
+> +{
+> +	int err = 0;
+> +
+> +	if (!current->thread.cet.shstk_size)
+> +		return 0;
+> +
+> +	if (fp) {
+> +		struct sc_ext ext = {};
+> +
+> +		err = cet_setup_signal(ia32, restorer, &ext);
+> +		if (!err) {
+> +			void __user *p = fp;
+> +
+> +			ext.total_size = sizeof(ext);
+> +
+> +			if (ia32)
+> +				p += sizeof(struct fregs_state);
+> +
+> +			p += fpu_user_xstate_size + FP_XSTATE_MAGIC2_SIZE;
+> +			p = (void __user *)ALIGN((unsigned long)p, 8);
+> +
+> +			if (copy_to_user(p, &ext, sizeof(ext)))
+> +				return -EFAULT;
+> +		}
+> +	}
+> +
+> +	return err;
+> +}
+> +
+> +static int get_cet_from_sigframe(int ia32, void __user *fp, struct sc_ext *ext)
+> +{
+> +	int err = 0;
+> +
+> +	memset(ext, 0, sizeof(*ext));
+> +
+> +	if (!current->thread.cet.shstk_size)
+> +		return 0;
+> +
+> +	if (fp) {
+> +		void __user *p = fp;
+> +
+> +		if (ia32)
+> +			p += sizeof(struct fregs_state);
+> +
+> +		p += fpu_user_xstate_size + FP_XSTATE_MAGIC2_SIZE;
+> +		p = (void __user *)ALIGN((unsigned long)p, 8);
+> +
+> +		if (copy_from_user(ext, p, sizeof(*ext)))
+> +			return -EFAULT;
+> +
+> +		if (ext->total_size != sizeof(*ext))
+> +			return -EFAULT;
+> +
+> +		if (current->thread.cet.shstk_size)
+> +			err = cet_verify_rstor_token(ia32, ext->ssp, &ext->ssp);
+> +	}
+> +
+> +	return err;
+> +}
+> +#else
+> +static int get_cet_from_sigframe(int ia32, void __user *fp, struct sc_ext *ext)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  /*
+>   * Signal frame handlers.
+>   */
+> @@ -295,6 +363,7 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
+>  	struct task_struct *tsk = current;
+>  	struct fpu *fpu = &tsk->thread.fpu;
+>  	struct user_i387_ia32_struct env;
+> +	struct sc_ext sc_ext;
+>  	u64 user_xfeatures = 0;
+>  	int fx_only = 0;
+>  	int ret = 0;
+> @@ -335,6 +404,10 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
+>  	if ((unsigned long)buf_fx % 64)
+>  		fx_only = 1;
+>  
+> +	ret = get_cet_from_sigframe(ia32_fxstate, buf, &sc_ext);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (!ia32_fxstate) {
+>  		/*
+>  		 * Attempt to restore the FPU registers directly from user
+> @@ -349,6 +422,8 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
+>  		pagefault_enable();
+>  		if (!ret) {
+>  
+> +			cet_restore_signal(&sc_ext);
+> +
+>  			/*
+>  			 * Restore supervisor states: previous context switch
+>  			 * etc has done XSAVES and saved the supervisor states
+> @@ -423,6 +498,8 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
+>  		if (unlikely(init_bv))
+>  			copy_kernel_to_xregs(&init_fpstate.xsave, init_bv);
+>  
+> +		cet_restore_signal(&sc_ext);
+> +
+>  		/*
+>  		 * Restore previously saved supervisor xstates along with
+>  		 * copied-in user xstates.
+> @@ -491,12 +568,35 @@ int fpu__restore_sig(void __user *buf, int ia32_frame)
+>  	return __fpu__restore_sig(buf, buf_fx, size);
+>  }
+>  
+> +#ifdef CONFIG_X86_CET
+> +static unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
+> +{
+> +	struct cet_status *cet = &current->thread.cet;
+> +
+> +	/*
+> +	 * sigcontext_ext is at: fpu + fpu_user_xstate_size +
+> +	 * FP_XSTATE_MAGIC2_SIZE, then aligned to 8.
+> +	 */
+> +	if (cet->shstk_size)
+> +		sp -= (sizeof(struct sc_ext) + 8);
+> +
+> +	return sp;
+> +}
+> +#else
+> +static unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
+> +{
+> +	return sp;
+> +}
+> +#endif
+> +
+>  unsigned long
+>  fpu__alloc_mathframe(unsigned long sp, int ia32_frame,
+>  		     unsigned long *buf_fx, unsigned long *size)
+>  {
+>  	unsigned long frame_size = xstate_sigframe_size();
+>  
+> +	sp = fpu__alloc_sigcontext_ext(sp);
+> +
+>  	*buf_fx = sp = round_down(sp - frame_size, 64);
+>  	if (ia32_frame && use_fxsr()) {
+>  		frame_size += sizeof(struct fregs_state);
+> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> index ea794a083c44..1807379f1d86 100644
+> --- a/arch/x86/kernel/signal.c
+> +++ b/arch/x86/kernel/signal.c
+> @@ -46,6 +46,7 @@
+>  #include <asm/syscall.h>
+>  #include <asm/sigframe.h>
+>  #include <asm/signal.h>
+> +#include <asm/cet.h>
+>  
+>  #ifdef CONFIG_X86_64
+>  /*
+> @@ -239,6 +240,9 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+>  	unsigned long buf_fx = 0;
+>  	int onsigstack = on_sig_stack(sp);
+>  	int ret;
+> +#ifdef CONFIG_X86_64
+> +	void __user *restorer = NULL;
+> +#endif
+>  
+>  	/* redzone */
+>  	if (IS_ENABLED(CONFIG_X86_64))
+> @@ -270,6 +274,12 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+>  	if (onsigstack && !likely(on_sig_stack(sp)))
+>  		return (void __user *)-1L;
+>  
+> +#ifdef CONFIG_X86_64
+> +	if (ka->sa.sa_flags & SA_RESTORER)
+> +		restorer = ka->sa.sa_restorer;
+> +	ret = save_cet_to_sigframe(0, *fpstate, (unsigned long)restorer);
+> +#endif
+> +
+>  	/* save i387 and extended state */
+>  	ret = copy_fpstate_to_sigframe(*fpstate, (void __user *)buf_fx, math_size);
+>  	if (ret < 0)
+> -- 
 > 2.21.0
->
+> 
+> 
+
+-- 
+Kees Cook
