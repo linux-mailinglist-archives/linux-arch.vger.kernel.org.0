@@ -2,98 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9031E316E09
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 19:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C824A316ED9
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 19:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbhBJSIt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Feb 2021 13:08:49 -0500
-Received: from mga18.intel.com ([134.134.136.126]:40699 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233719AbhBJSGH (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Feb 2021 13:06:07 -0500
-IronPort-SDR: YYJ39vG+fosjEu9THSAs0bnSkCKbqN+Ouj95ql2+SsAhcGTbHqy9+xQA+Vji8jjdzR/LQxwpJ8
- JVH/wqcQwDug==
-X-IronPort-AV: E=McAfee;i="6000,8403,9891"; a="169798861"
-X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
-   d="scan'208";a="169798861"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 10:02:58 -0800
-IronPort-SDR: zqPL/7Ub8mmt1mujrAViDw5yh30rjmwkn4uihYbYOmCQgmqxGlm25lpRstYBEKUU6ND/7gHyuJ
- RNWQaVBcIxZw==
-X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
-   d="scan'208";a="380239231"
-Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 10:02:58 -0800
-From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
-To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        id S233352AbhBJSgt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Feb 2021 13:36:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53989 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234173AbhBJSen (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Feb 2021 13:34:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612981995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=U/kEUdiVTFSkXdDlFfnN0pNfEfW0SscYP5LvJr9uMD4=;
+        b=R/tfgvZuQ4G37CYzZET2pIZtBvkJ7VLpKg3kEmvqYnS/ufIiuF3FsT5YF+k30ItpFVlbsl
+        0AQ4qKgsb3CtXkE0NsYkFwCtfo+dcHNzGrNCgOp8v17Xx6NG92GbgGCxSyhcrd0T0+WzdS
+        Jsl4DSnCKHyWdMaAUWTdAcS6IeszSnU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-189-7FXvma-PPKic8Esl0H0dDw-1; Wed, 10 Feb 2021 13:33:10 -0500
+X-MC-Unique: 7FXvma-PPKic8Esl0H0dDw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E7678801977;
+        Wed, 10 Feb 2021 18:33:06 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 066025C1BD;
+        Wed, 10 Feb 2021 18:33:01 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Waiman Long <longman@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, <haitao.huang@intel.com>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v20 7/7] x86/vdso: Insert endbr32/endbr64 to vDSO
-Date:   Wed, 10 Feb 2021 10:02:45 -0800
-Message-Id: <20210210180245.13770-8-yu-cheng.yu@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210210180245.13770-1-yu-cheng.yu@intel.com>
-References: <20210210180245.13770-1-yu-cheng.yu@intel.com>
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT
+        (AARCH64 ARCHITECTURE)),
+        linux-mips@vger.kernel.org (open list:MIPS),
+        sparclinux@vger.kernel.org (open list:SPARC + UltraSPARC
+        (sparc/sparc64)),
+        linux-xtensa@linux-xtensa.org (open list:TENSILICA XTENSA PORT (xtensa)),
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES),
+        linux-csky@vger.kernel.org (open list:C-SKY ARCHITECTURE)
+Subject: [PATCH] locking/arch: Move qrwlock.h include after qspinlock.h
+Date:   Wed, 10 Feb 2021 13:33:01 -0500
+Message-Id: <20210210183301.453422-1-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "H.J. Lu" <hjl.tools@gmail.com>
+include/asm-generic/qrwlock.h was trying to get arch_spin_is_locked via
+asm-generic/qspinlock.h.  However, this does not work because architectures
+might be using queued rwlocks but not queued spinlocks (csky), or because they
+might be defining their own queued_* macros before including asm/qspinlock.h.
 
-When Indirect Branch Tracking (IBT) is enabled, vDSO functions may be
-called indirectly, and must have ENDBR32 or ENDBR64 as the first
-instruction.  The compiler must support -fcf-protection=branch so that it
-can be used to compile vDSO.
+To fix this, ensure that asm/spinlock.h always includes qrwlock.h after
+defining arch_spin_is_locked (either directly for csky, or via
+asm/qspinlock.h for other architectures).  The only inclusion elsewhere
+is in kernel/locking/qrwlock.c.  That one is really unnecessary because
+the file is only compiled in SMP configurations (config QUEUED_RWLOCKS
+depends on SMP) and in that case linux/spinlock.h already includes
+asm/qrwlock.h if needed, via asm/spinlock.h.
 
-Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Acked-by: Andy Lutomirski <luto@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Waiman Long <longman@redhat.com>
+Fixes: 26128cb6c7e6 ("locking/rwlocks: Add contention detection for rwlocks")
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- arch/x86/entry/vdso/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+	v1->v2: Fix sparc too.  Add a comment in qrwlock.h itself.
+	Remove unnecessary inclusion in kernel/locking/qrwlock.c
 
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 02e3e42f380b..ff7b56feb5c3 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -93,6 +93,10 @@ endif
+ arch/arm64/include/asm/spinlock.h    | 2 +-
+ arch/mips/include/asm/spinlock.h     | 2 +-
+ arch/sparc/include/asm/spinlock_64.h | 2 +-
+ arch/xtensa/include/asm/spinlock.h   | 2 +-
+ include/asm-generic/qrwlock.h        | 3 ++-
+ kernel/locking/qrwlock.c             | 1 -
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm64/include/asm/spinlock.h b/arch/arm64/include/asm/spinlock.h
+index 9083d6992603..0525c0b089ed 100644
+--- a/arch/arm64/include/asm/spinlock.h
++++ b/arch/arm64/include/asm/spinlock.h
+@@ -5,8 +5,8 @@
+ #ifndef __ASM_SPINLOCK_H
+ #define __ASM_SPINLOCK_H
  
- $(vobjs): KBUILD_CFLAGS := $(filter-out $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+-#include <asm/qrwlock.h>
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
  
-+ifdef CONFIG_X86_CET
-+$(vobjs) $(vobjs32): KBUILD_CFLAGS += -fcf-protection=branch
-+endif
+ /* See include/linux/spinlock.h */
+ #define smp_mb__after_spinlock()	smp_mb()
+diff --git a/arch/mips/include/asm/spinlock.h b/arch/mips/include/asm/spinlock.h
+index 8a88eb265516..6ce2117e49f6 100644
+--- a/arch/mips/include/asm/spinlock.h
++++ b/arch/mips/include/asm/spinlock.h
+@@ -10,7 +10,6 @@
+ #define _ASM_SPINLOCK_H
+ 
+ #include <asm/processor.h>
+-#include <asm/qrwlock.h>
+ 
+ #include <asm-generic/qspinlock_types.h>
+ 
+@@ -27,5 +26,6 @@ static inline void queued_spin_unlock(struct qspinlock *lock)
+ }
+ 
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ #endif /* _ASM_SPINLOCK_H */
+diff --git a/arch/sparc/include/asm/spinlock_64.h b/arch/sparc/include/asm/spinlock_64.h
+index 7fc82a233f49..3a9a0b0c7465 100644
+--- a/arch/sparc/include/asm/spinlock_64.h
++++ b/arch/sparc/include/asm/spinlock_64.h
+@@ -11,8 +11,8 @@
+ 
+ #include <asm/processor.h>
+ #include <asm/barrier.h>
+-#include <asm/qrwlock.h>
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ #endif /* !(__ASSEMBLY__) */
+ 
+diff --git a/arch/xtensa/include/asm/spinlock.h b/arch/xtensa/include/asm/spinlock.h
+index 584b0de6f2ca..41c449ece2d8 100644
+--- a/arch/xtensa/include/asm/spinlock.h
++++ b/arch/xtensa/include/asm/spinlock.h
+@@ -12,8 +12,8 @@
+ #define _XTENSA_SPINLOCK_H
+ 
+ #include <asm/barrier.h>
+-#include <asm/qrwlock.h>
+ #include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
+ 
+ #define smp_mb__after_spinlock()	smp_mb()
+ 
+diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
+index 0020d3b820a7..7ae0ece07b4e 100644
+--- a/include/asm-generic/qrwlock.h
++++ b/include/asm-generic/qrwlock.h
+@@ -14,7 +14,8 @@
+ #include <asm/processor.h>
+ 
+ #include <asm-generic/qrwlock_types.h>
+-#include <asm-generic/qspinlock.h>
 +
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
- #
++/* Must be included from asm/spinlock.h after defining arch_spin_is_locked.  */
+ 
+ /*
+  * Writer states & reader shift and bias.
+diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
+index fe9ca92faa2a..4786dd271b45 100644
+--- a/kernel/locking/qrwlock.c
++++ b/kernel/locking/qrwlock.c
+@@ -12,7 +12,6 @@
+ #include <linux/percpu.h>
+ #include <linux/hardirq.h>
+ #include <linux/spinlock.h>
+-#include <asm/qrwlock.h>
+ 
+ /**
+  * queued_read_lock_slowpath - acquire read lock of a queue rwlock
 -- 
-2.21.0
+2.26.2
 
