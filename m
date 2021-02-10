@@ -2,655 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A223170C8
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 20:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7569B31710F
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 21:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbhBJT7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Feb 2021 14:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
+        id S233215AbhBJUR4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Feb 2021 15:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbhBJT7M (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Feb 2021 14:59:12 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE69CC061574
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:58:32 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id d2so1792073pjs.4
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rJdB/sgQkrka332FpJ264hp+EiZ9dcP9q0J4GYGovng=;
-        b=On7U0LNn0WLtkxIH8UQVlWzBMAbKD0mWkE96dQqEToEm5sOOtYX219hO6uDftXHRz0
-         tLZKDJBOYso/m3R6WYyiPziC1WJ5YN44G3dP5t/KNm/pSPjgEArbG+kWDe3O81kpk44B
-         zI/TMz0n6dYbJpwjUGrjF5PURxHbP5PWN7XEw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rJdB/sgQkrka332FpJ264hp+EiZ9dcP9q0J4GYGovng=;
-        b=bLV5gqWxSCTsKLOjM+CqZH6wuzMYB2EcHccXE9jTzXNMOpdGMiGZQMrIaI4AYPwz/d
-         JCZlm+++7tHgzqDRuSdOEexj5DsK2pB/nnvkFZGn8JkmjXhpoL5nLU89rvCzQBoM4jvl
-         TkkeMf37PFM7y5ln14moGo2ER6oxMpg6WUJQKjvquja+ccsoREHaGAXJ9oFdVku0Ezfc
-         d3hNVeZMNYw/vVN5NWzeeitq1sdUo3wRzV1uR0Gl4YanqA6WheScBGzU5/4kl38Mpemd
-         wqaWQO0MCmUAyQ2zeuUpf3OIF8PnrzdY/WnfqI/hZNhQ9jnOxjdJbabZ9RuxjdE4nSHd
-         ex4A==
-X-Gm-Message-State: AOAM530gvYqCUxNo0BCLSxHE5UIkYIRBRG5lV8RNnc8Xnghy+ESdjdDU
-        3D4qHDrO+eNBP3UznCZ7+sdBxg==
-X-Google-Smtp-Source: ABdhPJw0QnGbFGYUFRzTeHES/2lKVc5CGyD8afL+dlpmMtkOyMp3uMT36tX5di6TSjjQYzfJWdIzFA==
-X-Received: by 2002:a17:90a:7bc2:: with SMTP id d2mr596856pjl.68.1612987112254;
-        Wed, 10 Feb 2021 11:58:32 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v1sm3178978pga.63.2021.02.10.11.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 11:58:31 -0800 (PST)
-Date:   Wed, 10 Feb 2021 11:58:30 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        with ESMTP id S233050AbhBJURq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Feb 2021 15:17:46 -0500
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8DEC06174A
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 12:16:59 -0800 (PST)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DbWJ96DZ5zMq18p;
+        Wed, 10 Feb 2021 21:16:57 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4DbWJ66tgwzlppyf;
+        Wed, 10 Feb 2021 21:16:54 +0100 (CET)
+Subject: Re: [PATCH v28 07/12] landlock: Support filesystem access-control
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, haitao.huang@intel.com
-Subject: Re: [PATCH v20 21/25] x86/cet/shstk: Handle signals for shadow stack
-Message-ID: <202102101154.CEF2606E@keescook>
-References: <20210210175703.12492-1-yu-cheng.yu@intel.com>
- <20210210175703.12492-22-yu-cheng.yu@intel.com>
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20210202162710.657398-1-mic@digikod.net>
+ <20210202162710.657398-8-mic@digikod.net>
+ <20210210193624.GA29893@mail.hallyn.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <aeba97b6-37cd-4870-0a40-3e7aa84ebd36@digikod.net>
+Date:   Wed, 10 Feb 2021 21:17:25 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210210175703.12492-22-yu-cheng.yu@intel.com>
+In-Reply-To: <20210210193624.GA29893@mail.hallyn.com>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 09:56:59AM -0800, Yu-cheng Yu wrote:
-> To deliver a signal, create a shadow stack restore token and put the token
-> and the signal restorer address on the shadow stack.  For sigreturn, verify
-> the token and restore from it the shadow stack pointer.
+
+On 10/02/2021 20:36, Serge E. Hallyn wrote:
+> On Tue, Feb 02, 2021 at 05:27:05PM +0100, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> Thanks to the Landlock objects and ruleset, it is possible to identify
+>> inodes according to a process's domain.  To enable an unprivileged
 > 
-> A shadow stack restore token marks a restore point of the shadow stack.
-> The token is distinctively different from any shadow stack address.
+> This throws me off a bit.  "identify inodes according to a process's domain".
+> What exactly does it mean?  "identify" how ?
 
-How is it different? It seems like it just has the last 2 bits
-masked/set?
+A domain is a set of rules (i.e. layers of rulesets) enforced on a set
+of threads. Inodes are tagged per domain (i.e. not system-wide) and
+actions are restricted thanks to these tags, which form rules. It means
+that the created access-controls are scoped to a set of threads.
 
-> In sigreturn, restoring from a token ensures the target address is the
-> location pointed by the token.
-
-As in, a token (real stack address with 2-bit mask) is checked against
-the real stack address? I don't see a comparison -- it only checks that
-it is < TASK_SIZE.
-
-How does cet_restore_signal() figure into this? (As in, the MSR writes?)
-
--Kees
-
-> Introduce WRUSS, which is a kernel-mode instruction but writes directly to
-> user shadow stack.  It is used to construct the user signal stack as
-> described above.
 > 
-> Currently there is no systematic facility for extending a signal context.
-> Introduce a signal context extension 'struct sc_ext', which is used to save
-> shadow stack restore token address and WAIT_ENDBR status.  WAIT_ENDBR will
-> be introduced later in the Indirect Branch Tracking (IBT) series, but add
-> that into sc_ext now to keep the struct stable in case the IBT series is
-> applied later.
+>> process to express a file hierarchy, it first needs to open a directory
+>> (or a file) and pass this file descriptor to the kernel through
+>> landlock_add_rule(2).  When checking if a file access request is
+>> allowed, we walk from the requested dentry to the real root, following
+>> the different mount layers.  The access to each "tagged" inodes are
+>> collected according to their rule layer level, and ANDed to create
+>> access to the requested file hierarchy.  This makes possible to identify
+>> a lot of files without tagging every inodes nor modifying the
+>> filesystem, while still following the view and understanding the user
+>> has from the filesystem.
+>>
+>> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+>> keep the same struct inodes for the same inodes whereas these inodes are
+>> in use.
 > 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
->  arch/x86/ia32/ia32_signal.c            |  17 +++
->  arch/x86/include/asm/cet.h             |   8 ++
->  arch/x86/include/asm/fpu/internal.h    |  10 ++
->  arch/x86/include/asm/special_insns.h   |  32 ++++++
->  arch/x86/include/uapi/asm/sigcontext.h |   9 ++
->  arch/x86/kernel/cet.c                  | 152 +++++++++++++++++++++++++
->  arch/x86/kernel/fpu/signal.c           | 100 ++++++++++++++++
->  arch/x86/kernel/signal.c               |  10 ++
->  8 files changed, 338 insertions(+)
+> -serge
 > 
-> diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-> index 5e3d9b7fd5fb..aee3e367e184 100644
-> --- a/arch/x86/ia32/ia32_signal.c
-> +++ b/arch/x86/ia32/ia32_signal.c
-> @@ -35,6 +35,7 @@
->  #include <asm/sigframe.h>
->  #include <asm/sighandling.h>
->  #include <asm/smap.h>
-> +#include <asm/cet.h>
->  
->  static inline void reload_segments(struct sigcontext_32 *sc)
->  {
-> @@ -205,6 +206,7 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
->  				 void __user **fpstate)
->  {
->  	unsigned long sp, fx_aligned, math_size;
-> +	void __user *restorer = NULL;
->  
->  	/* Default to using normal stack */
->  	sp = regs->sp;
-> @@ -218,8 +220,23 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
->  		 ksig->ka.sa.sa_restorer)
->  		sp = (unsigned long) ksig->ka.sa.sa_restorer;
->  
-> +	if (ksig->ka.sa.sa_flags & SA_RESTORER) {
-> +		restorer = ksig->ka.sa.sa_restorer;
-> +	} else if (current->mm->context.vdso) {
-> +		if (ksig->ka.sa.sa_flags & SA_SIGINFO)
-> +			restorer = current->mm->context.vdso +
-> +				vdso_image_32.sym___kernel_rt_sigreturn;
-> +		else
-> +			restorer = current->mm->context.vdso +
-> +				vdso_image_32.sym___kernel_sigreturn;
-> +	}
-> +
->  	sp = fpu__alloc_mathframe(sp, 1, &fx_aligned, &math_size);
->  	*fpstate = (struct _fpstate_32 __user *) sp;
-> +
-> +	if (save_cet_to_sigframe(1, *fpstate, (unsigned long)restorer))
-> +		return (void __user *)-1L;
-> +
->  	if (copy_fpstate_to_sigframe(*fpstate, (void __user *)fx_aligned,
->  				     math_size) < 0)
->  		return (void __user *) -1L;
-> diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-> index 5750fbcbb952..73435856ce54 100644
-> --- a/arch/x86/include/asm/cet.h
-> +++ b/arch/x86/include/asm/cet.h
-> @@ -6,6 +6,8 @@
->  #include <linux/types.h>
->  
->  struct task_struct;
-> +struct sc_ext;
-> +
->  /*
->   * Per-thread CET status
->   */
-> @@ -18,9 +20,15 @@ struct cet_status {
->  int cet_setup_shstk(void);
->  void cet_disable_shstk(void);
->  void cet_free_shstk(struct task_struct *p);
-> +int cet_verify_rstor_token(bool ia32, unsigned long ssp, unsigned long *new_ssp);
-> +void cet_restore_signal(struct sc_ext *sc);
-> +int cet_setup_signal(bool ia32, unsigned long rstor, struct sc_ext *sc);
->  #else
->  static inline void cet_disable_shstk(void) {}
->  static inline void cet_free_shstk(struct task_struct *p) {}
-> +static inline void cet_restore_signal(struct sc_ext *sc) { return; }
-> +static inline int cet_setup_signal(bool ia32, unsigned long rstor,
-> +				   struct sc_ext *sc) { return -EINVAL; }
->  #endif
->  
->  #endif /* __ASSEMBLY__ */
-> diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
-> index 8d33ad80704f..2c1f59ebe9d8 100644
-> --- a/arch/x86/include/asm/fpu/internal.h
-> +++ b/arch/x86/include/asm/fpu/internal.h
-> @@ -443,6 +443,16 @@ static inline void copy_kernel_to_fpregs(union fpregs_state *fpstate)
->  	__copy_kernel_to_fpregs(fpstate, -1);
->  }
->  
-> +#ifdef CONFIG_X86_CET
-> +extern int save_cet_to_sigframe(int ia32, void __user *fp,
-> +				unsigned long restorer);
-> +#else
-> +static inline int save_cet_to_sigframe(int ia32, void __user *fp,
-> +				       unsigned long restorer)
-> +{
-> +	return 0;
-> +}
-> +#endif
->  extern int copy_fpstate_to_sigframe(void __user *buf, void __user *fp, int size);
->  
->  /*
-> diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-> index cc177b4431ae..d979d0deb3ae 100644
-> --- a/arch/x86/include/asm/special_insns.h
-> +++ b/arch/x86/include/asm/special_insns.h
-> @@ -234,6 +234,38 @@ static inline void clwb(volatile void *__p)
->  		: [pax] "a" (p));
->  }
->  
-> +#ifdef CONFIG_X86_CET
-> +#if defined(CONFIG_IA32_EMULATION) || defined(CONFIG_X86_X32)
-> +static inline int write_user_shstk_32(unsigned long addr, unsigned int val)
-> +{
-> +	asm_volatile_goto("1: wrussd %1, (%0)\n"
-> +			  _ASM_EXTABLE(1b, %l[fail])
-> +			  :: "r" (addr), "r" (val)
-> +			  :: fail);
-> +	return 0;
-> +fail:
-> +	return -EPERM;
-> +}
-> +#else
-> +static inline int write_user_shstk_32(unsigned long addr, unsigned int val)
-> +{
-> +	WARN_ONCE(1, "%s used but not supported.\n", __func__);
-> +	return -EFAULT;
-> +}
-> +#endif
-> +
-> +static inline int write_user_shstk_64(unsigned long addr, unsigned long val)
-> +{
-> +	asm_volatile_goto("1: wrussq %1, (%0)\n"
-> +			  _ASM_EXTABLE(1b, %l[fail])
-> +			  :: "r" (addr), "r" (val)
-> +			  :: fail);
-> +	return 0;
-> +fail:
-> +	return -EPERM;
-> +}
-> +#endif /* CONFIG_X86_CET */
-> +
->  #define nop() asm volatile ("nop")
->  
->  static inline void serialize(void)
-> diff --git a/arch/x86/include/uapi/asm/sigcontext.h b/arch/x86/include/uapi/asm/sigcontext.h
-> index 844d60eb1882..cf2d55db3be4 100644
-> --- a/arch/x86/include/uapi/asm/sigcontext.h
-> +++ b/arch/x86/include/uapi/asm/sigcontext.h
-> @@ -196,6 +196,15 @@ struct _xstate {
->  	/* New processor state extensions go here: */
->  };
->  
-> +/*
-> + * Located at the end of sigcontext->fpstate, aligned to 8.
-> + */
-> +struct sc_ext {
-> +	unsigned long total_size;
-> +	unsigned long ssp;
-> +	unsigned long wait_endbr;
-> +};
-> +
->  /*
->   * The 32-bit signal frame:
->   */
-> diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
-> index d25a03215984..08e43d9b5176 100644
-> --- a/arch/x86/kernel/cet.c
-> +++ b/arch/x86/kernel/cet.c
-> @@ -19,6 +19,8 @@
->  #include <asm/fpu/xstate.h>
->  #include <asm/fpu/types.h>
->  #include <asm/cet.h>
-> +#include <asm/special_insns.h>
-> +#include <uapi/asm/sigcontext.h>
->  
->  static void start_update_msrs(void)
->  {
-> @@ -72,6 +74,80 @@ static unsigned long alloc_shstk(unsigned long size, int flags)
->  	return addr;
->  }
->  
-> +#define TOKEN_MODE_MASK	3UL
-> +#define TOKEN_MODE_64	1UL
-> +#define IS_TOKEN_64(token) (((token) & TOKEN_MODE_MASK) == TOKEN_MODE_64)
-> +#define IS_TOKEN_32(token) (((token) & TOKEN_MODE_MASK) == 0)
-> +
-> +/*
-> + * Verify the restore token at the address of 'ssp' is
-> + * valid and then set shadow stack pointer according to the
-> + * token.
-> + */
-> +int cet_verify_rstor_token(bool ia32, unsigned long ssp,
-> +			   unsigned long *new_ssp)
-> +{
-> +	unsigned long token;
-> +
-> +	*new_ssp = 0;
-> +
-> +	if (!IS_ALIGNED(ssp, 8))
-> +		return -EINVAL;
-> +
-> +	if (get_user(token, (unsigned long __user *)ssp))
-> +		return -EFAULT;
-> +
-> +	/* Is 64-bit mode flag correct? */
-> +	if (!ia32 && !IS_TOKEN_64(token))
-> +		return -EINVAL;
-> +	else if (ia32 && !IS_TOKEN_32(token))
-> +		return -EINVAL;
-> +
-> +	token &= ~TOKEN_MODE_MASK;
-> +
-> +	/*
-> +	 * Restore address properly aligned?
-> +	 */
-> +	if ((!ia32 && !IS_ALIGNED(token, 8)) || !IS_ALIGNED(token, 4))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Token was placed properly?
-> +	 */
-> +	if (((ALIGN_DOWN(token, 8) - 8) != ssp) || token >= TASK_SIZE_MAX)
-> +		return -EINVAL;
-> +
-> +	*new_ssp = token;
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Create a restore token on the shadow stack.
-> + * A token is always 8-byte and aligned to 8.
-> + */
-> +static int create_rstor_token(bool ia32, unsigned long ssp,
-> +			      unsigned long *new_ssp)
-> +{
-> +	unsigned long addr;
-> +
-> +	*new_ssp = 0;
-> +
-> +	if ((!ia32 && !IS_ALIGNED(ssp, 8)) || !IS_ALIGNED(ssp, 4))
-> +		return -EINVAL;
-> +
-> +	addr = ALIGN_DOWN(ssp, 8) - 8;
-> +
-> +	/* Is the token for 64-bit? */
-> +	if (!ia32)
-> +		ssp |= TOKEN_MODE_64;
-> +
-> +	if (write_user_shstk_64(addr, ssp))
-> +		return -EFAULT;
-> +
-> +	*new_ssp = addr;
-> +	return 0;
-> +}
-> +
->  int cet_setup_shstk(void)
->  {
->  	unsigned long addr, size;
-> @@ -145,3 +221,79 @@ void cet_free_shstk(struct task_struct *tsk)
->  	cet->shstk_base = 0;
->  	cet->shstk_size = 0;
->  }
-> +
-> +/*
-> + * Called from __fpu__restore_sig() and XSAVES buffer is protected by
-> + * set_thread_flag(TIF_NEED_FPU_LOAD) in the slow path.
-> + */
-> +void cet_restore_signal(struct sc_ext *sc_ext)
-> +{
-> +	struct cet_user_state *cet_user_state;
-> +	struct cet_status *cet = &current->thread.cet;
-> +	u64 msr_val = 0;
-> +
-> +	if (!static_cpu_has(X86_FEATURE_SHSTK))
-> +		return;
-> +
-> +	cet_user_state = get_xsave_addr(&current->thread.fpu.state.xsave,
-> +					XFEATURE_CET_USER);
-> +	if (!cet_user_state)
-> +		return;
-> +
-> +	if (cet->shstk_size) {
-> +		if (test_thread_flag(TIF_NEED_FPU_LOAD))
-> +			cet_user_state->user_ssp = sc_ext->ssp;
-> +		else
-> +			wrmsrl(MSR_IA32_PL3_SSP, sc_ext->ssp);
-> +
-> +		msr_val |= CET_SHSTK_EN;
-> +	}
-> +
-> +	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-> +		cet_user_state->user_cet = msr_val;
-> +	else
-> +		wrmsrl(MSR_IA32_U_CET, msr_val);
-> +}
-> +
-> +/*
-> + * Setup the shadow stack for the signal handler: first,
-> + * create a restore token to keep track of the current ssp,
-> + * and then the return address of the signal handler.
-> + */
-> +int cet_setup_signal(bool ia32, unsigned long rstor_addr, struct sc_ext *sc_ext)
-> +{
-> +	struct cet_status *cet = &current->thread.cet;
-> +	unsigned long ssp = 0, new_ssp = 0;
-> +	int err;
-> +
-> +	if (cet->shstk_size) {
-> +		if (!rstor_addr)
-> +			return -EINVAL;
-> +
-> +		ssp = cet_get_shstk_addr();
-> +		err = create_rstor_token(ia32, ssp, &new_ssp);
-> +		if (err)
-> +			return err;
-> +
-> +		if (ia32) {
-> +			ssp = new_ssp - sizeof(u32);
-> +			err = write_user_shstk_32(ssp, (unsigned int)rstor_addr);
-> +		} else {
-> +			ssp = new_ssp - sizeof(u64);
-> +			err = write_user_shstk_64(ssp, rstor_addr);
-> +		}
-> +
-> +		if (err)
-> +			return err;
-> +
-> +		sc_ext->ssp = new_ssp;
-> +	}
-> +
-> +	if (ssp) {
-> +		start_update_msrs();
-> +		wrmsrl(MSR_IA32_PL3_SSP, ssp);
-> +		end_update_msrs();
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
-> index a4ec65317a7f..270e4649f435 100644
-> --- a/arch/x86/kernel/fpu/signal.c
-> +++ b/arch/x86/kernel/fpu/signal.c
-> @@ -52,6 +52,74 @@ static inline int check_for_xstate(struct fxregs_state __user *buf,
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_X86_CET
-> +int save_cet_to_sigframe(int ia32, void __user *fp, unsigned long restorer)
-> +{
-> +	int err = 0;
-> +
-> +	if (!current->thread.cet.shstk_size)
-> +		return 0;
-> +
-> +	if (fp) {
-> +		struct sc_ext ext = {};
-> +
-> +		err = cet_setup_signal(ia32, restorer, &ext);
-> +		if (!err) {
-> +			void __user *p = fp;
-> +
-> +			ext.total_size = sizeof(ext);
-> +
-> +			if (ia32)
-> +				p += sizeof(struct fregs_state);
-> +
-> +			p += fpu_user_xstate_size + FP_XSTATE_MAGIC2_SIZE;
-> +			p = (void __user *)ALIGN((unsigned long)p, 8);
-> +
-> +			if (copy_to_user(p, &ext, sizeof(ext)))
-> +				return -EFAULT;
-> +		}
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static int get_cet_from_sigframe(int ia32, void __user *fp, struct sc_ext *ext)
-> +{
-> +	int err = 0;
-> +
-> +	memset(ext, 0, sizeof(*ext));
-> +
-> +	if (!current->thread.cet.shstk_size)
-> +		return 0;
-> +
-> +	if (fp) {
-> +		void __user *p = fp;
-> +
-> +		if (ia32)
-> +			p += sizeof(struct fregs_state);
-> +
-> +		p += fpu_user_xstate_size + FP_XSTATE_MAGIC2_SIZE;
-> +		p = (void __user *)ALIGN((unsigned long)p, 8);
-> +
-> +		if (copy_from_user(ext, p, sizeof(*ext)))
-> +			return -EFAULT;
-> +
-> +		if (ext->total_size != sizeof(*ext))
-> +			return -EFAULT;
-> +
-> +		if (current->thread.cet.shstk_size)
-> +			err = cet_verify_rstor_token(ia32, ext->ssp, &ext->ssp);
-> +	}
-> +
-> +	return err;
-> +}
-> +#else
-> +static int get_cet_from_sigframe(int ia32, void __user *fp, struct sc_ext *ext)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  /*
->   * Signal frame handlers.
->   */
-> @@ -295,6 +363,7 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
->  	struct task_struct *tsk = current;
->  	struct fpu *fpu = &tsk->thread.fpu;
->  	struct user_i387_ia32_struct env;
-> +	struct sc_ext sc_ext;
->  	u64 user_xfeatures = 0;
->  	int fx_only = 0;
->  	int ret = 0;
-> @@ -335,6 +404,10 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
->  	if ((unsigned long)buf_fx % 64)
->  		fx_only = 1;
->  
-> +	ret = get_cet_from_sigframe(ia32_fxstate, buf, &sc_ext);
-> +	if (ret)
-> +		return ret;
-> +
->  	if (!ia32_fxstate) {
->  		/*
->  		 * Attempt to restore the FPU registers directly from user
-> @@ -349,6 +422,8 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
->  		pagefault_enable();
->  		if (!ret) {
->  
-> +			cet_restore_signal(&sc_ext);
-> +
->  			/*
->  			 * Restore supervisor states: previous context switch
->  			 * etc has done XSAVES and saved the supervisor states
-> @@ -423,6 +498,8 @@ static int __fpu__restore_sig(void __user *buf, void __user *buf_fx, int size)
->  		if (unlikely(init_bv))
->  			copy_kernel_to_xregs(&init_fpstate.xsave, init_bv);
->  
-> +		cet_restore_signal(&sc_ext);
-> +
->  		/*
->  		 * Restore previously saved supervisor xstates along with
->  		 * copied-in user xstates.
-> @@ -491,12 +568,35 @@ int fpu__restore_sig(void __user *buf, int ia32_frame)
->  	return __fpu__restore_sig(buf, buf_fx, size);
->  }
->  
-> +#ifdef CONFIG_X86_CET
-> +static unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
-> +{
-> +	struct cet_status *cet = &current->thread.cet;
-> +
-> +	/*
-> +	 * sigcontext_ext is at: fpu + fpu_user_xstate_size +
-> +	 * FP_XSTATE_MAGIC2_SIZE, then aligned to 8.
-> +	 */
-> +	if (cet->shstk_size)
-> +		sp -= (sizeof(struct sc_ext) + 8);
-> +
-> +	return sp;
-> +}
-> +#else
-> +static unsigned long fpu__alloc_sigcontext_ext(unsigned long sp)
-> +{
-> +	return sp;
-> +}
-> +#endif
-> +
->  unsigned long
->  fpu__alloc_mathframe(unsigned long sp, int ia32_frame,
->  		     unsigned long *buf_fx, unsigned long *size)
->  {
->  	unsigned long frame_size = xstate_sigframe_size();
->  
-> +	sp = fpu__alloc_sigcontext_ext(sp);
-> +
->  	*buf_fx = sp = round_down(sp - frame_size, 64);
->  	if (ia32_frame && use_fxsr()) {
->  		frame_size += sizeof(struct fregs_state);
-> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-> index ea794a083c44..1807379f1d86 100644
-> --- a/arch/x86/kernel/signal.c
-> +++ b/arch/x86/kernel/signal.c
-> @@ -46,6 +46,7 @@
->  #include <asm/syscall.h>
->  #include <asm/sigframe.h>
->  #include <asm/signal.h>
-> +#include <asm/cet.h>
->  
->  #ifdef CONFIG_X86_64
->  /*
-> @@ -239,6 +240,9 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
->  	unsigned long buf_fx = 0;
->  	int onsigstack = on_sig_stack(sp);
->  	int ret;
-> +#ifdef CONFIG_X86_64
-> +	void __user *restorer = NULL;
-> +#endif
->  
->  	/* redzone */
->  	if (IS_ENABLED(CONFIG_X86_64))
-> @@ -270,6 +274,12 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
->  	if (onsigstack && !likely(on_sig_stack(sp)))
->  		return (void __user *)-1L;
->  
-> +#ifdef CONFIG_X86_64
-> +	if (ka->sa.sa_flags & SA_RESTORER)
-> +		restorer = ka->sa.sa_restorer;
-> +	ret = save_cet_to_sigframe(0, *fpstate, (unsigned long)restorer);
-> +#endif
-> +
->  	/* save i387 and extended state */
->  	ret = copy_fpstate_to_sigframe(*fpstate, (void __user *)buf_fx, math_size);
->  	if (ret < 0)
-> -- 
-> 2.21.0
-> 
-> 
-
--- 
-Kees Cook
