@@ -2,56 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB07317089
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 20:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050AA317095
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 20:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbhBJTrQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Feb 2021 14:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbhBJTrM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Feb 2021 14:47:12 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A919C06174A
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:46:32 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id j5so1902680pgb.11
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:46:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LOBexJVZl5O63ei2PKVTk/yEoofE8UPxbzZ4mG3AdFU=;
-        b=TKGDKYbQHgIOPRKX8liktIsLemZyxUCEJfXoV6JuwuzbpfwUT19ClQa0tNbeh1kwjO
-         peMEEpmUf/iJ9RMFYheTYcMNCbcH/fnYMVujd4ZvlaoHo7ETnnZNO/VAjDsY4D6U6AEl
-         jJNufnxus0dZeQfIXmnTep06cZ8AGCzmOmAi4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LOBexJVZl5O63ei2PKVTk/yEoofE8UPxbzZ4mG3AdFU=;
-        b=Bdod/FwcZYRF/G4rpTHvR5iV3ptu4CWKE65zZ+HbYYWc0QyV1P6OZ16uq6ECVIVMqF
-         N9tNzVCRWuCDHOV0qMJN1NU73W65jMY0LiXO7xgpWHVQF/4rCaOz6iRLxlHv29J5sfYy
-         L79iS4AetvCOqqoiJcL7Tcxl+0MlmFAeBnb9l4XXfIt0lNAtVLsUDPJXgWI4Up89jXKY
-         rCQPpRRk21R60DYaGIsoiLXrP6ypJ8KkpA3nHVB/PVew3LCplUqeBXCC14a558ARFWdk
-         LExzEouQ0931noRQ7AAvlzYyROfeh2WPK/Q1kHGdBJYUTUKNeFf3OJXec31YwcvRB87n
-         OICA==
-X-Gm-Message-State: AOAM532Pyf86BjTh8ue0Ua9Rnx0tYH231DQtgHmhq+F9oUiOEja+qUkN
-        RQ2KY2aRXNiRrg1lAslMPY3S+Q==
-X-Google-Smtp-Source: ABdhPJzU36iPUZB59irH169GzgM6TNqXFDVT4lz6gU6IaKnXXV8mNiT8RQ8Q6WVoTQsGfLesTa299A==
-X-Received: by 2002:a65:520d:: with SMTP id o13mr4568903pgp.57.1612986391981;
-        Wed, 10 Feb 2021 11:46:31 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v23sm2966724pgo.43.2021.02.10.11.46.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 11:46:31 -0800 (PST)
-Date:   Wed, 10 Feb 2021 11:46:30 -0800
-From:   Kees Cook <keescook@chromium.org>
+        id S233074AbhBJTtm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Feb 2021 14:49:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39484 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233093AbhBJTt1 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 10 Feb 2021 14:49:27 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 62A2064ED4
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 19:48:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612986526;
+        bh=FAPGExqOTkOBqOlkCN+OURryuSv/6YZbk+hA40//uP4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qqXiVHqcEQzlQMKfWyZGVyXTnVfbR0Nh8XzPsU/TsXK2AOyNqURhBBi73UGFdA2aB
+         rboYLFKEEveMuxdXxvRGNnyTxB7ojs/J4VffGjotsaBzDPMUT3o78Ziq9yw5Ek9VcO
+         r6ll9iFBr5goU8h60p/GWFjs9v9A5CXyWQqK5lTv65sAP/Jkrx9bCvjEqQ0FOEG713
+         Ao7Rnj1kfBo1n5tZHIJbUdNXJ3b9GITeeP8/oJplZbIDGzW8C8sYZvwBTSA7f2Xlke
+         ntUR0nnFo4lOMKI3sdwmwjBA8942xZ4C7JtIgne4ft3/ISBJZn16iHJVig8dw8pkEb
+         ThMuCmO5hLOqQ==
+Received: by mail-ej1-f43.google.com with SMTP id w2so6243305ejk.13
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 11:48:46 -0800 (PST)
+X-Gm-Message-State: AOAM532fM5kTYL2W0MZQXzLTVkvi0dAdXwS7rO5OJYE+Euxk8fEEBJ1A
+        RJEo2fOIqZFQ3JBZCUkf5UuO8UdOxBPhjFRPxfC9rg==
+X-Google-Smtp-Source: ABdhPJxZ1Oe7ZfDn2o8sh5z16NgXDE74CZwTf3R65dv3ub1JlsAMldes56Bodh/Kn0gw1S45DR4gxiZj4SL+x2P51Tw=
+X-Received: by 2002:a17:906:17d3:: with SMTP id u19mr4829127eje.316.1612986524982;
+ Wed, 10 Feb 2021 11:48:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20210210175703.12492-1-yu-cheng.yu@intel.com> <20210210175703.12492-7-yu-cheng.yu@intel.com>
+In-Reply-To: <20210210175703.12492-7-yu-cheng.yu@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Wed, 10 Feb 2021 11:48:33 -0800
+X-Gmail-Original-Message-ID: <CALCETrVBTocCecYfTMEqeeHSquyWLPYBDP4eWQECo9WFYg2_pg@mail.gmail.com>
+Message-ID: <CALCETrVBTocCecYfTMEqeeHSquyWLPYBDP4eWQECo9WFYg2_pg@mail.gmail.com>
+Subject: Re: [PATCH v20 06/25] x86/cet: Add control-protection fault handler
 To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+Cc:     X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
@@ -62,6 +57,7 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Florian Weimer <fweimer@redhat.com>,
         "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
@@ -71,55 +67,190 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, haitao.huang@intel.com
-Subject: Re: [PATCH v20 25/25] mm: Introduce PROT_SHSTK for shadow stack
-Message-ID: <202102101145.7DE8B381@keescook>
-References: <20210210175703.12492-1-yu-cheng.yu@intel.com>
- <20210210175703.12492-26-yu-cheng.yu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210210175703.12492-26-yu-cheng.yu@intel.com>
+        Pengfei Xu <pengfei.xu@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 09:57:03AM -0800, Yu-cheng Yu wrote:
-> There are three possible options to create a shadow stack allocation API:
-> an arch_prctl, a new syscall, or adding PROT_SHSTK to mmap()/mprotect().
-> Each has its advantages and compromises.
-> 
-> An arch_prctl() is the least intrusive.  However, the existing x86
-> arch_prctl() takes only two parameters.  Multiple parameters must be
-> passed in a memory buffer.  There is a proposal to pass more parameters in
-> registers [1], but no active discussion on that.
-> 
-> A new syscall minimizes compatibility issues and offers an extensible frame
-> work to other architectures, but this will likely result in some overlap of
-> mmap()/mprotect().
-> 
-> The introduction of PROT_SHSTK to mmap()/mprotect() takes advantage of
-> existing APIs.  The x86-specific PROT_SHSTK is translated to VM_SHSTK and
-> a shadow stack mapping is created without reinventing the wheel.  There are
-> potential pitfalls though.  The most obvious one would be using this as a
-> bypass to shadow stack protection.  However, the attacker would have to get
-> to the syscall first.
-> 
-> Since arch_calc_vm_prot_bits() is modified, I have moved arch_vm_get_page
-> _prot() and arch_calc_vm_prot_bits() to x86/include/asm/mman.h.
-> This will be more consistent with other architectures.
-
-This portion of the patch seems logically separate from the PROT_SHSTK
-implementation. Can you please separate it into its own patch?
-
-> 
-> [1] https://lore.kernel.org/lkml/20200828121624.108243-1-hjl.tools@gmail.com/
-> 
+On Wed, Feb 10, 2021 at 9:58 AM Yu-cheng Yu <yu-cheng.yu@intel.com> wrote:
+>
+> A control-protection fault is triggered when a control-flow transfer
+> attempt violates Shadow Stack or Indirect Branch Tracking constraints.
+> For example, the return address for a RET instruction differs from the copy
+> on the shadow stack; or an indirect JMP instruction, without the NOTRACK
+> prefix, arrives at a non-ENDBR opcode.
+>
+> The control-protection fault handler works in a similar way as the general
+> protection fault handler.  It provides the si_code SEGV_CPERR to the signal
+> handler.
+>
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> ---
+>  arch/x86/include/asm/idtentry.h    |  4 ++
+>  arch/x86/kernel/idt.c              |  4 ++
+>  arch/x86/kernel/signal_compat.c    |  2 +-
+>  arch/x86/kernel/traps.c            | 63 ++++++++++++++++++++++++++++++
+>  include/uapi/asm-generic/siginfo.h |  3 +-
+>  5 files changed, 74 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index f656aabd1545..ff4b3bf634da 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -574,6 +574,10 @@ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_SS,    exc_stack_segment);
+>  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP,        exc_general_protection);
+>  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_AC,        exc_alignment_check);
+>
+> +#ifdef CONFIG_X86_CET
+> +DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP, exc_control_protection);
+> +#endif
+> +
+>  /* Raw exception entries which need extra work */
+>  DECLARE_IDTENTRY_RAW(X86_TRAP_UD,              exc_invalid_op);
+>  DECLARE_IDTENTRY_RAW(X86_TRAP_BP,              exc_int3);
+> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+> index ee1a283f8e96..e8166d9bbb10 100644
+> --- a/arch/x86/kernel/idt.c
+> +++ b/arch/x86/kernel/idt.c
+> @@ -105,6 +105,10 @@ static const __initconst struct idt_data def_idts[] = {
+>  #elif defined(CONFIG_X86_32)
+>         SYSG(IA32_SYSCALL_VECTOR,       entry_INT80_32),
+>  #endif
+> +
+> +#ifdef CONFIG_X86_CET
+> +       INTG(X86_TRAP_CP,               asm_exc_control_protection),
+> +#endif
+>  };
+>
+>  /*
+> diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
+> index a5330ff498f0..dd92490b1e7f 100644
+> --- a/arch/x86/kernel/signal_compat.c
+> +++ b/arch/x86/kernel/signal_compat.c
+> @@ -27,7 +27,7 @@ static inline void signal_compat_build_tests(void)
+>          */
+>         BUILD_BUG_ON(NSIGILL  != 11);
+>         BUILD_BUG_ON(NSIGFPE  != 15);
+> -       BUILD_BUG_ON(NSIGSEGV != 9);
+> +       BUILD_BUG_ON(NSIGSEGV != 10);
+>         BUILD_BUG_ON(NSIGBUS  != 5);
+>         BUILD_BUG_ON(NSIGTRAP != 5);
+>         BUILD_BUG_ON(NSIGCHLD != 6);
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index 7f5aec758f0e..8c7fa91a57c9 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -39,6 +39,7 @@
+>  #include <linux/io.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/atomic.h>
+> +#include <linux/nospec.h>
+>
+>  #include <asm/stacktrace.h>
+>  #include <asm/processor.h>
+> @@ -606,6 +607,68 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+>         cond_local_irq_disable(regs);
+>  }
+>
+> +#ifdef CONFIG_X86_CET
+> +static const char * const control_protection_err[] = {
+> +       "unknown",
+> +       "near-ret",
+> +       "far-ret/iret",
+> +       "endbranch",
+> +       "rstorssp",
+> +       "setssbsy",
+> +       "unknown",
+> +};
+> +
+> +/*
+> + * When a control protection exception occurs, send a signal to the responsible
+> + * application.  Currently, control protection is only enabled for user mode.
+> + * This exception should not come from kernel mode.
+> + */
+> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> +{
+> +       static DEFINE_RATELIMIT_STATE(rs, DEFAULT_RATELIMIT_INTERVAL,
+> +                                     DEFAULT_RATELIMIT_BURST);
+> +       struct task_struct *tsk;
+> +
+> +       if (!user_mode(regs)) {
+> +               pr_emerg("PANIC: unexpected kernel control protection fault\n");
+> +               die("kernel control protection fault", regs, error_code);
+> +               panic("Machine halted.");
 
-With that done:
+I think it would be nice to decode the error code and print the cause.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> +       }
+> +
+> +       cond_local_irq_enable(regs);
 
--- 
-Kees Cook
+We got rid of user mode irqs off a while ago.   You can just do
+local_irq_enable();
+
+> +
+> +       if (!boot_cpu_has(X86_FEATURE_CET))
+> +               WARN_ONCE(1, "Control protection fault with CET support disabled\n");
+> +
+> +       tsk = current;
+> +       tsk->thread.error_code = error_code;
+> +       tsk->thread.trap_nr = X86_TRAP_CP;
+
+
+
+> +
+> +       /*
+> +        * Ratelimit to prevent log spamming.
+> +        */
+> +       if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
+> +           __ratelimit(&rs)) {
+> +               unsigned long ssp;
+> +               int err;
+> +
+> +               err = array_index_nospec(error_code, ARRAY_SIZE(control_protection_err));
+
+Shouldn't this do a bounds check?  You also need to handle the ENCL bit.
+
+> +
+> +               rdmsrl(MSR_IA32_PL3_SSP, ssp);
+> +               pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
+> +                        tsk->comm, task_pid_nr(tsk),
+> +                        regs->ip, regs->sp, ssp, error_code,
+> +                        control_protection_err[err]);
+
+That should be pr_info();
+
+> +               print_vma_addr(KERN_CONT " in ", regs->ip);
+> +               pr_cont("\n");
+> +       }
+> +
+> +       force_sig_fault(SIGSEGV, SEGV_CPERR,
+> +                       (void __user *)uprobe_get_trap_addr(regs));
+> +       cond_local_irq_disable(regs);
+> +}
+> +#endif
+> +
+>  static bool do_int3(struct pt_regs *regs)
+>  {
+>         int res;
+> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+> index d2597000407a..1c2ea91284a0 100644
+> --- a/include/uapi/asm-generic/siginfo.h
+> +++ b/include/uapi/asm-generic/siginfo.h
+> @@ -231,7 +231,8 @@ typedef struct siginfo {
+>  #define SEGV_ADIPERR   7       /* Precise MCD exception */
+>  #define SEGV_MTEAERR   8       /* Asynchronous ARM MTE error */
+>  #define SEGV_MTESERR   9       /* Synchronous ARM MTE exception */
+> -#define NSIGSEGV       9
+> +#define SEGV_CPERR     10      /* Control protection fault */
+> +#define NSIGSEGV       10
+>
+>  /*
+>   * SIGBUS si_codes
+> --
+> 2.21.0
+>
