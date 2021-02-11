@@ -2,30 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD68C31727A
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Feb 2021 22:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D6A31836B
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Feb 2021 03:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbhBJVi4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Feb 2021 16:38:56 -0500
-Received: from mga12.intel.com ([192.55.52.136]:53404 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232192AbhBJViz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 10 Feb 2021 16:38:55 -0500
-IronPort-SDR: tVPB0cyoz6KeKg1N2AMNEUj9ePcaKVssctrpTBBMttjm3MEzHZTvB5pAMQkUWH1/umhrw02i/T
- 1JR0gGzG46FQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9891"; a="161301778"
-X-IronPort-AV: E=Sophos;i="5.81,169,1610438400"; 
-   d="scan'208";a="161301778"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 13:38:14 -0800
-IronPort-SDR: lfBvtJxzP7eM7rxhNTEkSJQFKW6pSPQwDWDjL0xrSvc0rO529nfDOd01DxdtVXlVhrVpvVqI9D
- WUnuOVuiu4FQ==
-X-IronPort-AV: E=Sophos;i="5.81,169,1610438400"; 
-   d="scan'208";a="375624618"
-Received: from yyu32-mobl1.amr.corp.intel.com (HELO [10.212.188.167]) ([10.212.188.167])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 13:38:12 -0800
-Subject: Re: [PATCH v20 21/25] x86/cet/shstk: Handle signals for shadow stack
-To:     Kees Cook <keescook@chromium.org>
+        id S229477AbhBKCHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Feb 2021 21:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229729AbhBKCGb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Feb 2021 21:06:31 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D00BC061786
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 18:05:51 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id j5so2632224pgb.11
+        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 18:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GWehHpPBiIbtAUGV973qzMbhfGOacu1gexxk5hpereM=;
+        b=VkI1vNchcTfqZMT8TdeTKNunPyydlTDpaduc777AZXErfTUw+IoNoowB3buQXwB7D2
+         HM2cW4ajkZGMEI9fbbyaG+QS01IhsQO2IvFJRs0rrcX6Aw2nR/Sd0VcHmSULgTNW1OGQ
+         OrJ32pm7uzcNVvPSKZDo8yzfQ3HtJKHFRkXZY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GWehHpPBiIbtAUGV973qzMbhfGOacu1gexxk5hpereM=;
+        b=VJ0oZfOgzvValHGfq6dg72T0332TI0h70yxsK00ArWzKIWy11IXpm/RCGXxbGwBwYH
+         oO1wtmFBYpIJzYss4bsfa+W8NPhBEXRqpFtbwnOy6DzvoGkd4QAvCBK8qnuzxA4uEnaL
+         e9DTwmybGA5pK186hgZpq5vfnEwyjpJwDyV8MQrTup60OaHOc32Y9X7UUm4M+46ZVA6a
+         dB4CK1yRx41tRkH3htVuYmoCr9c+j36myi/XNxKI4Et9YgWKRNmFrVCICL+DVLoGlOOX
+         nErPVmb2AeiOkARQSo+1z6jD/JB3uhBCcKGI+34cTQPC06IEABEPWRzrsXtGFXhtiSHa
+         W4rg==
+X-Gm-Message-State: AOAM530+5MpnkUpqzX8f97gYZYLSRRik+NJc4jwKSY9s8qVV71QX9fQO
+        L3m8znHGQoZIw1LEYaj1PO5N0A==
+X-Google-Smtp-Source: ABdhPJzsWXbn1Ou/vFtG4NQUWw149O4AAHSFlrE0lP7i2j/RD0O7x0LK3DLeL8X3j84QUwiX06AIsg==
+X-Received: by 2002:a63:6381:: with SMTP id x123mr1570843pgb.177.1613009150490;
+        Wed, 10 Feb 2021 18:05:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h8sm3286360pfv.154.2021.02.10.18.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 18:05:49 -0800 (PST)
+Date:   Wed, 10 Feb 2021 18:05:48 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
 Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -51,163 +72,57 @@ Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         Pengfei Xu <pengfei.xu@intel.com>, haitao.huang@intel.com
+Subject: Re: [PATCH v20 21/25] x86/cet/shstk: Handle signals for shadow stack
+Message-ID: <202102101805.0B98ACA743@keescook>
 References: <20210210175703.12492-1-yu-cheng.yu@intel.com>
  <20210210175703.12492-22-yu-cheng.yu@intel.com>
  <202102101154.CEF2606E@keescook>
-From:   "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Message-ID: <57dcc827-052a-94cd-31d4-286675f9d506@intel.com>
-Date:   Wed, 10 Feb 2021 13:38:10 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ <57dcc827-052a-94cd-31d4-286675f9d506@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <202102101154.CEF2606E@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <57dcc827-052a-94cd-31d4-286675f9d506@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/10/2021 11:58 AM, Kees Cook wrote:
-> On Wed, Feb 10, 2021 at 09:56:59AM -0800, Yu-cheng Yu wrote:
->> To deliver a signal, create a shadow stack restore token and put the token
->> and the signal restorer address on the shadow stack.  For sigreturn, verify
->> the token and restore from it the shadow stack pointer.
->>
->> A shadow stack restore token marks a restore point of the shadow stack.
->> The token is distinctively different from any shadow stack address.
+On Wed, Feb 10, 2021 at 01:38:10PM -0800, Yu, Yu-cheng wrote:
+> On 2/10/2021 11:58 AM, Kees Cook wrote:
+> > On Wed, Feb 10, 2021 at 09:56:59AM -0800, Yu-cheng Yu wrote:
+> > > To deliver a signal, create a shadow stack restore token and put the token
+> > > and the signal restorer address on the shadow stack.  For sigreturn, verify
+> > > the token and restore from it the shadow stack pointer.
+> > > 
+> > > A shadow stack restore token marks a restore point of the shadow stack.
+> > > The token is distinctively different from any shadow stack address.
+> > 
+> > How is it different? It seems like it just has the last 2 bits
+> > masked/set?
+> > 
 > 
-> How is it different? It seems like it just has the last 2 bits
-> masked/set?
+> For example, for 64-bit apps,
 > 
-
-For example, for 64-bit apps,
-
-A shadow stack pointer value (*ssp) has to be in some code area, but for 
-a token, (*ptr_of_token) = (ptr_of_token + 8), which has to be within 
-the same shadow stack area.  In cet_verify_rstor_token(), this is checked.
-
->> In sigreturn, restoring from a token ensures the target address is the
->> location pointed by the token.
+> A shadow stack pointer value (*ssp) has to be in some code area, but for a
+> token, (*ptr_of_token) = (ptr_of_token + 8), which has to be within the same
+> shadow stack area.  In cet_verify_rstor_token(), this is checked.
 > 
-> As in, a token (real stack address with 2-bit mask) is checked against
-> the real stack address? I don't see a comparison -- it only checks that
-> it is < TASK_SIZE.
+> > > In sigreturn, restoring from a token ensures the target address is the
+> > > location pointed by the token.
+> > 
+> > As in, a token (real stack address with 2-bit mask) is checked against
+> > the real stack address? I don't see a comparison -- it only checks that
+> > it is < TASK_SIZE.
+> > 
+> > How does cet_restore_signal() figure into this? (As in, the MSR writes?)
+> > 
 > 
-> How does cet_restore_signal() figure into this? (As in, the MSR writes?)
-> 
+> The kernel takes the restore address from the token.  It will not mistakenly
+> take a wrong address from the shadow stack.  I will put this in my commit
+> logs.
 
-The kernel takes the restore address from the token.  It will not 
-mistakenly take a wrong address from the shadow stack.  I will put this 
-in my commit logs.
+Ah-ha, okay, got it now. Thank you!
 
-[...]
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
->> Introduce WRUSS, which is a kernel-mode instruction but writes directly to
->> user shadow stack.  It is used to construct the user signal stack as
->> described above.
->>
->> Currently there is no systematic facility for extending a signal context.
->> Introduce a signal context extension 'struct sc_ext', which is used to save
->> shadow stack restore token address and WAIT_ENDBR status.  WAIT_ENDBR will
->> be introduced later in the Indirect Branch Tracking (IBT) series, but add
->> that into sc_ext now to keep the struct stable in case the IBT series is
->> applied later.
->>
->> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-
-[...]
-
->> diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
->> index d25a03215984..08e43d9b5176 100644
->> --- a/arch/x86/kernel/cet.c
->> +++ b/arch/x86/kernel/cet.c
->> @@ -19,6 +19,8 @@
->>   #include <asm/fpu/xstate.h>
->>   #include <asm/fpu/types.h>
->>   #include <asm/cet.h>
->> +#include <asm/special_insns.h>
->> +#include <uapi/asm/sigcontext.h>
->>   
->>   static void start_update_msrs(void)
->>   {
->> @@ -72,6 +74,80 @@ static unsigned long alloc_shstk(unsigned long size, int flags)
->>   	return addr;
->>   }
->>   
->> +#define TOKEN_MODE_MASK	3UL
->> +#define TOKEN_MODE_64	1UL
->> +#define IS_TOKEN_64(token) (((token) & TOKEN_MODE_MASK) == TOKEN_MODE_64)
->> +#define IS_TOKEN_32(token) (((token) & TOKEN_MODE_MASK) == 0)
->> +
->> +/*
->> + * Verify the restore token at the address of 'ssp' is
->> + * valid and then set shadow stack pointer according to the
->> + * token.
->> + */
->> +int cet_verify_rstor_token(bool ia32, unsigned long ssp,
->> +			   unsigned long *new_ssp)
->> +{
->> +	unsigned long token;
->> +
->> +	*new_ssp = 0;
->> +
->> +	if (!IS_ALIGNED(ssp, 8))
->> +		return -EINVAL;
->> +
->> +	if (get_user(token, (unsigned long __user *)ssp))
->> +		return -EFAULT;
->> +
->> +	/* Is 64-bit mode flag correct? */
->> +	if (!ia32 && !IS_TOKEN_64(token))
->> +		return -EINVAL;
->> +	else if (ia32 && !IS_TOKEN_32(token))
->> +		return -EINVAL;
->> +
->> +	token &= ~TOKEN_MODE_MASK;
->> +
->> +	/*
->> +	 * Restore address properly aligned?
->> +	 */
->> +	if ((!ia32 && !IS_ALIGNED(token, 8)) || !IS_ALIGNED(token, 4))
->> +		return -EINVAL;
->> +
->> +	/*
->> +	 * Token was placed properly?
->> +	 */
->> +	if (((ALIGN_DOWN(token, 8) - 8) != ssp) || token >= TASK_SIZE_MAX)
->> +		return -EINVAL;
->> +
->> +	*new_ssp = token;
->> +	return 0;
->> +}
->> +
->> +/*
->> + * Create a restore token on the shadow stack.
->> + * A token is always 8-byte and aligned to 8.
->> + */
->> +static int create_rstor_token(bool ia32, unsigned long ssp,
->> +			      unsigned long *new_ssp)
->> +{
->> +	unsigned long addr;
->> +
->> +	*new_ssp = 0;
->> +
->> +	if ((!ia32 && !IS_ALIGNED(ssp, 8)) || !IS_ALIGNED(ssp, 4))
->> +		return -EINVAL;
->> +
->> +	addr = ALIGN_DOWN(ssp, 8) - 8;
->> +
->> +	/* Is the token for 64-bit? */
->> +	if (!ia32)
->> +		ssp |= TOKEN_MODE_64;
->> +
->> +	if (write_user_shstk_64(addr, ssp))
->> +		return -EFAULT;
->> +
->> +	*new_ssp = addr;
->> +	return 0;
->> +}
->> +
-
-[...]
+-- 
+Kees Cook
