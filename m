@@ -2,127 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D6A31836B
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Feb 2021 03:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7617D318593
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Feb 2021 08:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbhBKCHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Feb 2021 21:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbhBKCGb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Feb 2021 21:06:31 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D00BC061786
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 18:05:51 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id j5so2632224pgb.11
-        for <linux-arch@vger.kernel.org>; Wed, 10 Feb 2021 18:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GWehHpPBiIbtAUGV973qzMbhfGOacu1gexxk5hpereM=;
-        b=VkI1vNchcTfqZMT8TdeTKNunPyydlTDpaduc777AZXErfTUw+IoNoowB3buQXwB7D2
-         HM2cW4ajkZGMEI9fbbyaG+QS01IhsQO2IvFJRs0rrcX6Aw2nR/Sd0VcHmSULgTNW1OGQ
-         OrJ32pm7uzcNVvPSKZDo8yzfQ3HtJKHFRkXZY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GWehHpPBiIbtAUGV973qzMbhfGOacu1gexxk5hpereM=;
-        b=VJ0oZfOgzvValHGfq6dg72T0332TI0h70yxsK00ArWzKIWy11IXpm/RCGXxbGwBwYH
-         oO1wtmFBYpIJzYss4bsfa+W8NPhBEXRqpFtbwnOy6DzvoGkd4QAvCBK8qnuzxA4uEnaL
-         e9DTwmybGA5pK186hgZpq5vfnEwyjpJwDyV8MQrTup60OaHOc32Y9X7UUm4M+46ZVA6a
-         dB4CK1yRx41tRkH3htVuYmoCr9c+j36myi/XNxKI4Et9YgWKRNmFrVCICL+DVLoGlOOX
-         nErPVmb2AeiOkARQSo+1z6jD/JB3uhBCcKGI+34cTQPC06IEABEPWRzrsXtGFXhtiSHa
-         W4rg==
-X-Gm-Message-State: AOAM530+5MpnkUpqzX8f97gYZYLSRRik+NJc4jwKSY9s8qVV71QX9fQO
-        L3m8znHGQoZIw1LEYaj1PO5N0A==
-X-Google-Smtp-Source: ABdhPJzsWXbn1Ou/vFtG4NQUWw149O4AAHSFlrE0lP7i2j/RD0O7x0LK3DLeL8X3j84QUwiX06AIsg==
-X-Received: by 2002:a63:6381:: with SMTP id x123mr1570843pgb.177.1613009150490;
-        Wed, 10 Feb 2021 18:05:50 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h8sm3286360pfv.154.2021.02.10.18.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Feb 2021 18:05:49 -0800 (PST)
-Date:   Wed, 10 Feb 2021 18:05:48 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S229592AbhBKHOU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Feb 2021 02:14:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229517AbhBKHOS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 11 Feb 2021 02:14:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9ABFC64E70;
+        Thu, 11 Feb 2021 07:13:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613027617;
+        bh=mFb5e+mcFjieGwWXbuKlq9q0UpNNbyeAq1/dwdNreuY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r612v7W+RCFxSqtS+kG65T2iZaVwzZel4btR0FeMO2RkiMdOJ50IMLVhWxhHEVjeq
+         RWIWvUmaSjvpNuRiWAmSDAzQxhntPIcqMrjyseEOwkEKs8om6hanjiK/XvklN5gvM6
+         4IRSCxhZL6+efdSsP/rZVDzTJVVy90foUNPuGiwSGjLg9nOaHA3e8aP5tOIg2ASxIJ
+         Sp6nUBHKEK6j6j934tjzENjbujdOFEbYvxhqtUewKvYJI0DUbn0exEQp0qLWLIqa56
+         Txi+Gq3TeUWe+Arxca2HZee6BKF625xZfgl8d82Twk0iYyM/fBr2k70XriEGyOWcL0
+         DaEcHGkrjBISA==
+Date:   Thu, 11 Feb 2021 09:13:19 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Vedvyas Shanbhogue <vedvyas.shanbhogue@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, haitao.huang@intel.com
-Subject: Re: [PATCH v20 21/25] x86/cet/shstk: Handle signals for shadow stack
-Message-ID: <202102101805.0B98ACA743@keescook>
-References: <20210210175703.12492-1-yu-cheng.yu@intel.com>
- <20210210175703.12492-22-yu-cheng.yu@intel.com>
- <202102101154.CEF2606E@keescook>
- <57dcc827-052a-94cd-31d4-286675f9d506@intel.com>
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+Message-ID: <20210211071319.GF242749@kernel.org>
+References: <20210208084920.2884-1-rppt@kernel.org>
+ <20210208084920.2884-8-rppt@kernel.org>
+ <YCEXMgXItY7xMbIS@dhcp22.suse.cz>
+ <20210208212605.GX242749@kernel.org>
+ <YCJMDBss8Qhha7g9@dhcp22.suse.cz>
+ <20210209090938.GP299309@linux.ibm.com>
+ <YCKLVzBR62+NtvyF@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <57dcc827-052a-94cd-31d4-286675f9d506@intel.com>
+In-Reply-To: <YCKLVzBR62+NtvyF@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 01:38:10PM -0800, Yu, Yu-cheng wrote:
-> On 2/10/2021 11:58 AM, Kees Cook wrote:
-> > On Wed, Feb 10, 2021 at 09:56:59AM -0800, Yu-cheng Yu wrote:
-> > > To deliver a signal, create a shadow stack restore token and put the token
-> > > and the signal restorer address on the shadow stack.  For sigreturn, verify
-> > > the token and restore from it the shadow stack pointer.
+On Tue, Feb 09, 2021 at 02:17:11PM +0100, Michal Hocko wrote:
+> On Tue 09-02-21 11:09:38, Mike Rapoport wrote:
+> > On Tue, Feb 09, 2021 at 09:47:08AM +0100, Michal Hocko wrote:
 > > > 
-> > > A shadow stack restore token marks a restore point of the shadow stack.
-> > > The token is distinctively different from any shadow stack address.
+> > > OK, so IIUC this means that the model is to hand over memory from host
+> > > to guest. I thought the guest would be under control of its address
+> > > space and therefore it operates on the VMAs. This would benefit from
+> > > an additional and more specific clarification.
 > > 
-> > How is it different? It seems like it just has the last 2 bits
-> > masked/set?
-> > 
+> > How guest would operate on VMAs if the interface between host and guest is
+> > virtual hardware?
 > 
-> For example, for 64-bit apps,
-> 
-> A shadow stack pointer value (*ssp) has to be in some code area, but for a
-> token, (*ptr_of_token) = (ptr_of_token + 8), which has to be within the same
-> shadow stack area.  In cet_verify_rstor_token(), this is checked.
-> 
-> > > In sigreturn, restoring from a token ensures the target address is the
-> > > location pointed by the token.
-> > 
-> > As in, a token (real stack address with 2-bit mask) is checked against
-> > the real stack address? I don't see a comparison -- it only checks that
-> > it is < TASK_SIZE.
-> > 
-> > How does cet_restore_signal() figure into this? (As in, the MSR writes?)
-> > 
-> 
-> The kernel takes the restore address from the token.  It will not mistakenly
-> take a wrong address from the shadow stack.  I will put this in my commit
-> logs.
+> I have to say that I am not really familiar with this area so my view
+> might be misleading or completely wrong. I thought that the HW address
+> ranges are mapped to the guest process and therefore have a VMA.
 
-Ah-ha, okay, got it now. Thank you!
+There is a qemu process that currently has mappings of what guest sees as
+its physical memory, but qemu is a part of hypervisor, i.e. host.
+ 
+> > Citing my older email:
+> > 
+> >     I've hesitated whether to continue to use new flags to memfd_create() or to
+> >     add a new system call and I've decided to use a new system call after I've
+> >     started to look into man pages update. There would have been two completely
+> >     independent descriptions and I think it would have been very confusing.
+> 
+> Could you elaborate? Unmapping from the kernel address space can work
+> both for sealed or hugetlb memfds, no? Those features are completely
+> orthogonal AFAICS. With a dedicated syscall you will need to introduce
+> this functionality on top if that is required. Have you considered that?
+> I mean hugetlb pages are used to back guest memory very often. Is this
+> something that will be a secret memory usecase?
+> 
+> Please be really specific when giving arguments to back a new syscall
+> decision.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Isn't "syscalls have completely independent description" specific enough?
+
+We are talking about API here, not the implementation details whether
+secretmem supports large pages or not.
+
+The purpose of memfd_create() is to create a file-like access to memory.
+The purpose of memfd_secret() is to create a way to access memory hidden
+from the kernel.
+
+I don't think overloading memfd_create() with the secretmem flags because
+they happen to return a file descriptor will be better for users, but
+rather will be more confusing.
 
 -- 
-Kees Cook
+Sincerely yours,
+Mike.
