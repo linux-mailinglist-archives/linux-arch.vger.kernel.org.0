@@ -2,155 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BF2319BBE
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Feb 2021 10:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA06A319FB5
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Feb 2021 14:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbhBLJUS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 Feb 2021 04:20:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54899 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229862AbhBLJUG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 12 Feb 2021 04:20:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613121520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=baunC+JA0c74vn12rH+deswOvAmvXs+9aRij2anuo18=;
-        b=EIAQr1/4cfTc1EtGT8i0WH/AvFqMt5jbhgYzYWT2tq2E4G/nx0JDwzcYzhI3KUPB1JYMt3
-        2aY1m2Qn8W6SXUB1jyoRpd70bScqxxDEfM2nXs5+I+4Bcg+AyBo0xXnkNycLJsK31/Xzzy
-        zNmbIzBIt7FXkltTBWnIDv4wvHFvvK8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-380-Led8hCyZOVOQcxBvYOphjw-1; Fri, 12 Feb 2021 04:18:35 -0500
-X-MC-Unique: Led8hCyZOVOQcxBvYOphjw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA327192CC41;
-        Fri, 12 Feb 2021 09:18:29 +0000 (UTC)
-Received: from [10.36.114.178] (ovpn-114-178.ams2.redhat.com [10.36.114.178])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA5E310023AC;
-        Fri, 12 Feb 2021 09:18:20 +0000 (UTC)
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-References: <YCEXMgXItY7xMbIS@dhcp22.suse.cz>
- <20210208212605.GX242749@kernel.org> <YCJMDBss8Qhha7g9@dhcp22.suse.cz>
- <20210209090938.GP299309@linux.ibm.com> <YCKLVzBR62+NtvyF@dhcp22.suse.cz>
- <20210211071319.GF242749@kernel.org> <YCTtSrCEvuBug2ap@dhcp22.suse.cz>
- <0d66baec-1898-987b-7eaf-68a015c027ff@redhat.com>
- <20210211112702.GI242749@kernel.org>
- <05082284-bd85-579f-2b3e-9b1af663eb6f@redhat.com>
- <20210211230910.GL242749@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <a903338e-3d56-ff0a-4f4f-0f23db7ec0da@redhat.com>
-Date:   Fri, 12 Feb 2021 10:18:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S231197AbhBLNU1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 Feb 2021 08:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230482AbhBLNUZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 Feb 2021 08:20:25 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96F7C061756;
+        Fri, 12 Feb 2021 05:19:44 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cl8so418684pjb.0;
+        Fri, 12 Feb 2021 05:19:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=4cqievP1oLWYJ4Ny++CVFsTeEL6uztXwZyN4nT6gCro=;
+        b=o5ZQbFt3B3FNXTmRxyQrf5MaQvp1zVQr+8Ct25pANYhFgjoWEVXVvSB/sP3eFz8bRR
+         +GRpVSWZZTTeAR8kL+vzT2VfOBPiEz3tEJWEZ2MbI7Z/xO7M1iEkJPw7z7SANxTNL1Lu
+         p/l7Gxu5fEPPZ7VVmOIHNcWcuj0GCUyQGUn0BMUnX0LwFJNA5PdroaKS2NtNBEzInIVM
+         TQImvrYekeJhPHUmYAOdxSiB6uuoqLZMyYQJacafSLCTQchn6BD5h5sQ681Uv1/kDu/k
+         gtE2j8nGri1FW298EGy6ug3ATnrT2d0SwB1Lk2uZfAGcAZzxKWPj+yxYYNkQjg5bVfTQ
+         Tsfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=4cqievP1oLWYJ4Ny++CVFsTeEL6uztXwZyN4nT6gCro=;
+        b=GbvQlrmPj2KXBbhvB0oefD+M3QJk/0gDri3AWsdlVKq2+pePK0wtaWUwpgGsxjChe3
+         8w5xm5yTMcs20WlmJD1p8XFPNbaOgzYVFktQwGzH07SH1SYis4yZ0jxRsLotcw04AkDg
+         CUTM6F6CxcQwJ1jKI/J+s1fiM0uHYlYRc1L1Zv+fVcj2iJOBXvjfp2tfQ7km5zDv5/rF
+         D2iKpJeyJERoJNhcVX9exi94xRyxnQeazpzWCerZ4tK1zVOi3UEBUxAEcPT90ZsJNGLg
+         p6833ww8p6kfr9PUlr1NjOZkqkywYrJcGPMgemTD6VoKmzlGvRd+yMnsNQ65NjsJs5+4
+         qE6Q==
+X-Gm-Message-State: AOAM533aP4IMhWrkdtkMAOCatc6H1i/Uj5BfwpHzIrnK/USCIVctwLzK
+        5mrvm7yJNz0H1elepyI2At4=
+X-Google-Smtp-Source: ABdhPJw0W9r8mdFX58Wo4VzZMJed+tKGDHGxxiRlac9ze/7Q95PPuP7D90PvhGJ1KFgc0+sISreARg==
+X-Received: by 2002:a17:90a:c84:: with SMTP id v4mr2763919pja.228.1613135984448;
+        Fri, 12 Feb 2021 05:19:44 -0800 (PST)
+Received: from syed.domain.name ([103.201.127.1])
+        by smtp.gmail.com with ESMTPSA id g6sm8729106pfi.15.2021.02.12.05.19.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Feb 2021 05:19:43 -0800 (PST)
+Date:   Fri, 12 Feb 2021 18:49:28 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     bgolaszewski@baylibre.com
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, akpm@linux-foundation.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, linux-arch@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/3] Introduce the for_each_set_clump macro
+Message-ID: <cover.1613134924.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210211230910.GL242749@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12.02.21 00:09, Mike Rapoport wrote:
-> On Thu, Feb 11, 2021 at 01:07:10PM +0100, David Hildenbrand wrote:
->> On 11.02.21 12:27, Mike Rapoport wrote:
->>> On Thu, Feb 11, 2021 at 10:01:32AM +0100, David Hildenbrand wrote:
->>
->> So let's talk about the main user-visible differences to other memfd files
->> (especially, other purely virtual files like hugetlbfs). With secretmem:
->>
->> - File content can only be read/written via memory mappings.
->> - File content cannot be swapped out.
->>
->> I think there are still valid ways to modify file content using syscalls:
->> e.g., fallocate(PUNCH_HOLE). Things like truncate also seems to work just
->> fine.
->   
-> These work perfectly with any file, so maybe we should have added
-> memfd_create as a flag to open(2) back then and now the secretmem file
-> descriptors?
+Hello Bartosz,
 
-I think open() vs memfd_create() makes sense: for open, the path 
-specifies main properties (tmpfs, hugetlbfs, filesystem). On memfd, 
-there is no such path and the "type" has to be specified differently.
+Since this patchset primarily affects GPIO drivers, would you like
+to pick it up through your GPIO tree?
 
-Also, open() might open existing files - memfd always creates new files.
+This patchset introduces a new generic version of for_each_set_clump.
+The previous version of for_each_set_clump8 used a fixed size 8-bit
+clump, but the new generic version can work with clump of any size but
+less than or equal to BITS_PER_LONG. The patchset utilizes the new macro
+in several GPIO drivers.
 
->   
->>>> AFAIKS, we would need MFD_SECRET and disallow
->>>> MFD_ALLOW_SEALING and MFD_HUGETLB.
->>>
->>> So here we start to multiplex.
->>
->> Yes. And as Michal said, maybe we can support combinations in the future.
-> 
-> Isn't there a general agreement that syscall multiplexing is not a good
-> thing?
+The earlier 8-bit for_each_set_clump8 facilitated a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-Looking at mmap(), madvise(), fallocate(), I think multiplexing is just 
-fine and flags can be mutually exclusive - as long as we're not 
-squashing completely unrelated things into a single system call.
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
 
-As one example: we don't have mmap_private() vs. mmap_shared() vs. 
-mmap_shared_validate(). E.g., MAP_SYNC is only available for 
-MAP_SHARED_VALIDATE.
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
+
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+But with the new for_each_set_clump the clump size can be different from 8 bits.
+Moreover, the clump can be split at word boundary in situations where word
+size is not multiple of clump size. Following are examples showing the working
+of new macro for clump sizes of 24 bits and 6 bits.
+
+Example 1:
+clump size: 24 bits, Number of clumps (or ports): 10
+bitmap stores the bit information from where successive clumps are retrieved.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x000000aa000000aa;
+        0xbbbbabcdeffedcba;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:-
+'offset' is the bit position and 'clump' is the 24 bit clump from the
+above bitmap.
+Iteration first:        offset: 0 clump: 0xfedcba
+Iteration second:       offset: 24 clump: 0xabcdef
+Iteration third:        offset: 48 clump: 0xaabbbb
+Iteration fourth:       offset: 96 clump: 0xaa
+Iteration fifth:        offset: 144 clump: 0xff
+Iteration sixth:        offset: 168 clump: 0xaaaaaa
+Iteration seventh:      offset: 216 clump: 0xff
+Loop breaks because in the end the remaining bits (0x00aa) size was less
+than clump size of 24 bits.
+
+In above example it can be seen that in iteration third, the 24 bit clump
+that was retrieved was split between bitmap[0] and bitmap[1]. This example
+also shows that 24 bit zeroes if present in between, were skipped (preserving
+the previous for_each_set_macro8 behaviour).
+
+Example 2:
+clump size = 6 bits, Number of clumps (or ports) = 3.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x0f00000000000000;
+        0x0000000000000ac0;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:
+'offset' is the bit position and 'clump' is the 6 bit clump from the
+above bitmap.
+Iteration first:        offset: 6 clump: 0x2b
+Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+Here 6 * 3 is clump size * no. of clumps.
+
+Changes in v2:
+ - [Patch 1/3]: Shift the macros and related functions to gpiolib inside 
+   gpio/. Reduce the visibilty of 'for_each_set_clump' to gpio.
+ - [Patch 1/3]: Remove __builtin_unreachable and simply use return
+   statement.
+ - Remove tests from lib/test_bitmap.c as 'for_each_set_clump' is
+   now localised inside gpio/ only.
+
+Syed Nayyar Waris (3):
+  gpiolib: : Introduce the for_each_set_clump macro
+  gpio: thunderx: Utilize for_each_set_clump macro
+  gpio: xilinx: Utilize generic bitmap_get_value and _set_value
+
+ drivers/gpio/gpio-thunderx.c | 13 ++++--
+ drivers/gpio/gpio-xilinx.c   | 63 ++++++++++++-------------
+ drivers/gpio/gpiolib.c       | 90 ++++++++++++++++++++++++++++++++++++
+ drivers/gpio/gpiolib.h       | 28 +++++++++++
+ 4 files changed, 158 insertions(+), 36 deletions(-)
 
 
-> memfd_create already has flags validation that does not look very nice.
-
-I assume you're talking about the hugetlb size specifications, right? 
-It's not nice but fairly compact.
-
-> Adding there only MFD_SECRET will make it a bit less nice, but when we'll
-> grow new functionality into secretmem that will become horrible.
-
-What do you have in mind? A couple of MFD_SECRET_* flags that only work 
-with MFD_SECRET won't hurt IMHO. Just like we allow MFD_HUGE_* only with 
-MFD_HUGETLB.
-
-Thanks,
-
-David / dhildenb
+base-commit: e71ba9452f0b5b2e8dc8aa5445198cd9214a6a62
+-- 
+2.29.0
 
