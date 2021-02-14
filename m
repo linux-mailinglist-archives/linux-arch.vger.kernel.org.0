@@ -2,161 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F031AFF3
-	for <lists+linux-arch@lfdr.de>; Sun, 14 Feb 2021 11:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3951431B160
+	for <lists+linux-arch@lfdr.de>; Sun, 14 Feb 2021 18:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbhBNKA2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 14 Feb 2021 05:00:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:51828 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229563AbhBNKAY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 14 Feb 2021 05:00:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613296736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FB1Zi7Y2SkOv/JvlFfpIv8DdC9H5NuowZUsuUzsgYnw=;
-        b=BaundisF4ulMmQwWvQ0c0Fpd3RzbBXPaf1xxDkX9S4P5ijRJ4g+4N0sgI/Dn5A/OqlKzxY
-        8drf6t58AIflRiWK59Jm7Gfn4T5bmNcuvk1RYm0W9uF4lI9M3pjVeIM3WdK1r9Sl4Zm2Ke
-        GzO4cJKcUAwGj4QEJWZOPiodVM7rNdA=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-104-WKiYnG6kMpm7ZuZIn4We9A-1; Sun, 14 Feb 2021 04:58:54 -0500
-X-MC-Unique: WKiYnG6kMpm7ZuZIn4We9A-1
-Received: by mail-wr1-f71.google.com with SMTP id x1so6125324wrg.22
-        for <linux-arch@vger.kernel.org>; Sun, 14 Feb 2021 01:58:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=FB1Zi7Y2SkOv/JvlFfpIv8DdC9H5NuowZUsuUzsgYnw=;
-        b=BZEVdz5KzOvi8USU0qMju3nsNN4tE764uYrz5u+hSEsfkYAxiWNq4eLB90S/R9sJu5
-         cNxk+aUKX8N+dtpRuBGmaFckcymsJZrHOQW8RO1UVjcRk/DmGWJ5zyzzRnU3RVxd4wzR
-         HA3eOFtj8Vzu6rxRU6IVRMtjFjELnIKTayPAmO5JgclCk1r6ZLc15D9RloKc/Iml4x+E
-         v6C6ZPxDiFynd3X5S5Yen36ToLb+YzYUdFYMkOrEJVEgBf+ZUsfkAcFGCkJPMZCra+RM
-         E3Fo542aYxM8ALvZaVSqqbKd96TcYu9tyYZP0UL6Z+dI41GJHvD2NGa10ZjLdTM/iTpP
-         nuxQ==
-X-Gm-Message-State: AOAM532PsAmdEVtUTa6DChVIKGk7DZuMIrKBMTyPcIwGNqxvU1Dhill7
-        6nTONoylLBbLyBOJQ28hgPTv12DRB9XbunIF9wYICohMS6VdGaCVQBgssKJhVIlB8pIpNau5nvK
-        ywLlDapBw6DJwj43kpZWI1w==
-X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr9687109wmk.163.1613296732940;
-        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6AiGKsLxdVOEv3lcfmH3b0B76nApmRsRYcgYL0hyAbXvIT8wdTN/HlT3/mJBi3lug6LzkMg==
-X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr9687058wmk.163.1613296732697;
-        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
-Received: from [192.168.3.108] (p4ff23363.dip0.t-ipconnect.de. [79.242.51.99])
-        by smtp.gmail.com with ESMTPSA id x15sm18554557wro.66.2021.02.14.01.58.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Feb 2021 01:58:52 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   David Hildenbrand <david@redhat.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to create "secret" memory areas
-Date:   Sun, 14 Feb 2021 10:58:44 +0100
-Message-Id: <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
-References: <20210214091954.GM242749@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-In-Reply-To: <20210214091954.GM242749@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-X-Mailer: iPhone Mail (18D52)
+        id S229768AbhBNRCQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 14 Feb 2021 12:02:16 -0500
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:58612 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhBNRCP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 14 Feb 2021 12:02:15 -0500
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 11EH1DmW022819;
+        Mon, 15 Feb 2021 02:01:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 11EH1DmW022819
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1613322074;
+        bh=SP1sGJk9Sz6Zv6lJ9Wi/Vff8sScxvUIuNUkChOHpFR8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eW5SCVd/ORO2ykDHxnNRrd0j5pNeofX24lJWfc1sAWEZK87VwCvlyBONkk1p+q0pw
+         n9urDcCM7JXO/83SDgjvjWIuq0kCzJpxghQ0kdEY/9lSUqF57fsB4kVM44LTekaoBL
+         2K5usgTVkdb+i9kzobmJV+tecZNrbgkAygUEWwX3cvMZxzFNtx08+4IWsN9L58B4V9
+         msLNld5lBI4A8trmLyO3EgTzKOINsLN5xgyvh+eWnDvPTyAVb6rNcHXCo6xnYQ8S9l
+         7hdmlhpR1RGeMV1AEHEn5ADueffOKPk44du6buIJ89LAEEs34fToTGEhTLY+vWrQY3
+         BiMMNZH6MaRbw==
+X-Nifty-SrcIP: [209.85.210.181]
+Received: by mail-pf1-f181.google.com with SMTP id d26so2778301pfn.5;
+        Sun, 14 Feb 2021 09:01:13 -0800 (PST)
+X-Gm-Message-State: AOAM533clch37dk64kSPjlB2+UzCYJ2WwCkw3YGVARLYTXnzf3SZiAY5
+        Tzj3X9RmE4N8rzRkjvZlSrTCVbRotG+c+HSmbvQ=
+X-Google-Smtp-Source: ABdhPJynyvRuko2AvW0s/Rsmpz6hR6NWNFNxrImHm+1o7F+Y7g0dNzPk8oFZuEX0oJ2YCILzMn7MQK6BnXeqMrnP+x0=
+X-Received: by 2002:a63:1f1d:: with SMTP id f29mr11945438pgf.47.1613322073045;
+ Sun, 14 Feb 2021 09:01:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20210128005110.2613902-1-masahiroy@kernel.org> <20210128005110.2613902-22-masahiroy@kernel.org>
+In-Reply-To: <20210128005110.2613902-22-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 15 Feb 2021 02:00:35 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQDcfqSCsCeG9+ytrJNfD5mS8OLS2uZS8WRBuTHRL1qRg@mail.gmail.com>
+Message-ID: <CAK7LNAQDcfqSCsCeG9+ytrJNfD5mS8OLS2uZS8WRBuTHRL1qRg@mail.gmail.com>
+Subject: Re: [PATCH 21/27] sparc: remove wrong comment from arch/sparc/include/asm/Kbuild
+To:     linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-alpha@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-um@lists.infradead.org,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jan 28, 2021 at 9:52 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> These are NOT exported to userspace.
+>
+> The headers listed in arch/sparc/include/uapi/asm/Kbuild are exported.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-> Am 14.02.2021 um 10:20 schrieb Mike Rapoport <rppt@kernel.org>:
->=20
-> =EF=BB=BFOn Fri, Feb 12, 2021 at 10:18:19AM +0100, David Hildenbrand wrote=
-:
->>> On 12.02.21 00:09, Mike Rapoport wrote:
->>> On Thu, Feb 11, 2021 at 01:07:10PM +0100, David Hildenbrand wrote:
->>>> On 11.02.21 12:27, Mike Rapoport wrote:
->>>>> On Thu, Feb 11, 2021 at 10:01:32AM +0100, David Hildenbrand wrote:
->>>>=20
->>>> So let's talk about the main user-visible differences to other memfd fi=
-les
->>>> (especially, other purely virtual files like hugetlbfs). With secretmem=
-:
->>>>=20
->>>> - File content can only be read/written via memory mappings.
->>>> - File content cannot be swapped out.
->>>>=20
->>>> I think there are still valid ways to modify file content using syscall=
-s:
->>>> e.g., fallocate(PUNCH_HOLE). Things like truncate also seems to work ju=
-st
->>>> fine.
->>> These work perfectly with any file, so maybe we should have added
->>> memfd_create as a flag to open(2) back then and now the secretmem file
->>> descriptors?
->>=20
->> I think open() vs memfd_create() makes sense: for open, the path specifie=
-s
->> main properties (tmpfs, hugetlbfs, filesystem). On memfd, there is no suc=
-h
->> path and the "type" has to be specified differently.
->>=20
->> Also, open() might open existing files - memfd always creates new files.
->=20
-> Yes, but still open() returns a handle to a file and memfd_create() return=
-s
-> a handle to a file. The differences may be well hidden by e.g. O_MEMORY an=
-d
-> than features unique to memfd files will have their set of O_SOMETHING
-> flags.
->=20
+Applied to linux-kbuild/fixes.
 
-Let=E2=80=98s agree to disagree.
 
-> It's the same logic that says "we already have an interface that's close
-> enough and it's fine to add a bunch of new flags there".
+> ---
+>
+>  arch/sparc/include/asm/Kbuild | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/sparc/include/asm/Kbuild b/arch/sparc/include/asm/Kbuild
+> index 3688fdae50e4..aec20406145e 100644
+> --- a/arch/sparc/include/asm/Kbuild
+> +++ b/arch/sparc/include/asm/Kbuild
+> @@ -1,6 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -# User exported sparc header files
+> -
+>  generated-y += syscall_table_32.h
+>  generated-y += syscall_table_64.h
+>  generated-y += syscall_table_c32.h
+> --
+> 2.27.0
+>
 
-No, not quite. But let=E2=80=98s agree to disagree.
 
->=20
-> And here we come to the question "what are the differences that justify a
-> new system call?" and the answer to this is very subjective. And as such w=
-e
-> can continue bikeshedding forever.
-
-I think this fits into the existing memfd_create() syscall just fine, and I h=
-eard no compelling argument why it shouldn=E2=80=98t. That=E2=80=98s all I c=
-an say.=
-
+-- 
+Best Regards
+Masahiro Yamada
