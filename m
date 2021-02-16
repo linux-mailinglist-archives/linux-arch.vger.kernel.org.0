@@ -2,104 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F3031C39B
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Feb 2021 22:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D8931C7A5
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 09:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhBOVbc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Feb 2021 16:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbhBOVb0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Feb 2021 16:31:26 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95283C061574;
-        Mon, 15 Feb 2021 13:30:46 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id m144so7662971qke.10;
-        Mon, 15 Feb 2021 13:30:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/ZVUXlIXARs+8uXUZ4VUGe97t/0+FH4zGariG/23quw=;
-        b=oYNPrcJWdwYDcjfr7BRtAMS1ZsIXADGqMxANcWv4k/DopQuXeqYdiTElcc49nNE8qY
-         Yk1qhDCBEziQr03O3cdRQxqrMoCXCuyUhJh+t/9tAsP2rJTyzUk4iL0HbQwt5ZkDsORd
-         QO3GwJHoN1hy01k8G8HRQ0jiJYumQo2qotPTWeCY+c/o4NJ8SCuMt6le81Wl+BHDOFSJ
-         NMUxmsOF3Qi81GJU27WtG8bwB/0POcex15oXQRskGeXUcEhrxkXNX2oyBx24M2MMslET
-         XZC0wGQLpf1OV3jgX2AkouJ6ZDdqMePIuj7AFc0JFZkwwqyZTIUuDkIfFOortZX59Aoq
-         Kzug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/ZVUXlIXARs+8uXUZ4VUGe97t/0+FH4zGariG/23quw=;
-        b=tqHUt9Eoya4Nlf9mX3MOH5oRMQq29jrGm9bWnDn4E8rZkWoZ/spgzpwg2HU/o9Q5W5
-         7MgQ/DEW3kf0lOcuW7hadO3E2iLa4/EYmnwAFsSF4jWga81B1hFr9EGJmtwsg1jGkTH2
-         RjMjUgAGbgYORZEpoI/h7M28M3J37bHPj38y0XsgCxOjHTdmbIxZGPhJ+ytcCHq2I70+
-         mr7FIPt0WMgB371RQT0WSqMUaH/neiEqfustDYX+8TXxhnDAX2IcQQjSu5HhGt7fAb7/
-         eXtO1ink/lvtKcgPUrzb29w/nBAZy0wBd4eGtTfCrsrz58z/ZtgjeetMDFxx+2vXo1OY
-         hdrQ==
-X-Gm-Message-State: AOAM533E0V675nSk6VG7U0eJPjy7ZHKy+KqAVU3anhm2UPzmMYMqNxtc
-        5X7yIhO1nwiBaFewqD8dA2g=
-X-Google-Smtp-Source: ABdhPJww+HEbybVa+NuUj1pReo4TCwVy8br4xX0cmIo5Fn/aZvp3joZCCkrRkQAmV1/YWqIfdDubsQ==
-X-Received: by 2002:a37:8a04:: with SMTP id m4mr16638337qkd.78.1613424645583;
-        Mon, 15 Feb 2021 13:30:45 -0800 (PST)
-Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id a145sm7038704qkc.125.2021.02.15.13.30.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 13:30:45 -0800 (PST)
-Date:   Mon, 15 Feb 2021 13:30:44 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Dennis Zhou <dennis@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        David Sterba <dsterba@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [RESEND PATCH v2 0/6] lib/find_bit: fast path for small bitmaps
-Message-ID: <20210215213044.GB394846@yury-ThinkPad>
-References: <20210130191719.7085-1-yury.norov@gmail.com>
+        id S229662AbhBPI41 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Feb 2021 03:56:27 -0500
+Received: from mail-40136.protonmail.ch ([185.70.40.136]:16247 "EHLO
+        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229754AbhBPI41 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Feb 2021 03:56:27 -0500
+Date:   Tue, 16 Feb 2021 08:55:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1613465743; bh=Z1B3dJxurktF44XrKPp/L6aM/W1WYsFcVWu3eznTvaw=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=XoH45ZIlE9KmzLuba90pWudggzbMSyC/rqULk0uCPZXV91Qj4Nkx45usHN1gE3m9e
+         XnUyQp2RXSVRhiPrrdzDIzTGRQzeof3nTw2deqUyZ2A3mc9H9RcnITfzsGy+3AawHh
+         RwKxVATRQsTcOWC25zFl+UdlexCfH8zgHmjhPpxPa7stDs6FcNjsmkhKul5s2XBjvg
+         /7VvXCn1U9gQtpKtkgJxbaUIwOtj8FoPSKQHm3yUlF5Zwsd4+VY0K2IG702UYztvKW
+         PrNsDvZbU4BHCabfjSB43UlkMrnc3ihEC+Og4ignXhSnP+E35f0y87AY7NE3wAWgRc
+         icxXlzsRVboHw==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Pei Huang <huangpei@loongson.cn>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Fangrui Song <maskray@google.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, clang-built-linux@googlegroups.com
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH mips-next] vmlinux.lds.h: catch more UBSAN symbols into .data
+Message-ID: <20210216085442.2967-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210130191719.7085-1-yury.norov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[add David Laight <David.Laight@ACULAB.COM> ]
+LKP triggered lots of LD orphan warnings [0]:
 
-On Sat, Jan 30, 2021 at 11:17:11AM -0800, Yury Norov wrote:
-> Bitmap operations are much simpler and faster in case of small bitmaps
-> which fit into a single word. In linux/bitmap.h we have a machinery that
-> allows compiler to replace actual function call with a few instructions
-> if bitmaps passed into the function are small and their size is known at
-> compile time.
-> 
-> find_*_bit() API lacks this functionality; despite users will benefit from
-> it a lot. One important example is cpumask subsystem when
-> NR_CPUS <= BITS_PER_LONG. In the very best case, the compiler may replace
-> a find_*_bit() call for such a bitmap with a single ffs or ffz instruction.
-> 
-> Tools is synchronized with new implementation where needed.
-> 
-> v1: https://www.spinics.net/lists/kernel/msg3804727.html
-> v2: - employ GENMASK() for bitmaps;
->     - unify find_bit inliners in;
->     - address comments to v1;
+mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data299' from
+`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data299'
+mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data183' from
+`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data183'
+mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type3' from
+`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type3'
+mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type2' from
+`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type2'
+mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type0' from
+`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type0'
 
-Comments so far:
- - increased image size (patch #8) - addressed by introducing
-   CONFIG_FAST_PATH;
- - split tools and kernel parts - not clear why it's better.
+[...]
 
- Anything else?
+Seems like "unnamed data" isn't the only type of symbols that UBSAN
+instrumentation can emit.
+Catch these into .data with the wildcard as well.
+
+[0] https://lore.kernel.org/linux-mm/202102160741.k57GCNSR-lkp@intel.com
+
+Fixes: f41b233de0ae ("vmlinux.lds.h: catch UBSAN's "unnamed data" into data=
+")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ include/asm-generic/vmlinux.lds.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinu=
+x.lds.h
+index cc659e77fcb0..83537e5ee78f 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -95,7 +95,7 @@
+  */
+ #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+-#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliter=
+al* .data.$__unnamed_*
++#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliter=
+al* .data.$__unnamed_* .data.$Lubsan_*
+ #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+ #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+ #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
+--=20
+2.30.1
+
+
