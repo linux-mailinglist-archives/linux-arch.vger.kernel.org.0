@@ -2,144 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 620F031CED7
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 18:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3C831CFBF
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 18:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbhBPRSc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Feb 2021 12:18:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24953 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229956AbhBPRS0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Feb 2021 12:18:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613495820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IbwyoqWTddMQQM4e/pb2Tn5NqnOPDp0+cC8mDVS66VE=;
-        b=GHo9tkX1SbVo+1OOHOI1jCap6OUfB4bCMxW4oxuD76Er6F/ojThTD9WEJhFPj/LLOeWxh5
-        rSf81Za2VtpvsR2+eMKnxChzNeT/KJwyy7RWzdfAu44wYqjcSZo4J8dA2tESKfBcpfItMc
-        bWFb/MJKriWt99QEJM9NEz4rxujy5z0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-581-KxZdhhyXMpKDSHckankMMw-1; Tue, 16 Feb 2021 12:16:50 -0500
-X-MC-Unique: KxZdhhyXMpKDSHckankMMw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 465FB80402E;
-        Tue, 16 Feb 2021 17:16:45 +0000 (UTC)
-Received: from [10.36.114.70] (ovpn-114-70.ams2.redhat.com [10.36.114.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 615F35D9CC;
-        Tue, 16 Feb 2021 17:16:37 +0000 (UTC)
-To:     jejb@linux.ibm.com, Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-References: <20210214091954.GM242749@kernel.org>
- <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
- <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
- <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
- <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
- <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
- <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
- <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
- <000cfaa0a9a09f07c5e50e573393cda301d650c9.camel@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <5a8567a9-6940-c23f-0927-e4b5c5db0d5e@redhat.com>
-Date:   Tue, 16 Feb 2021 18:16:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S231148AbhBPR5b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Feb 2021 12:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231280AbhBPR50 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Feb 2021 12:57:26 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AB3C0613D6
+        for <linux-arch@vger.kernel.org>; Tue, 16 Feb 2021 09:56:45 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j19so17244424lfr.12
+        for <linux-arch@vger.kernel.org>; Tue, 16 Feb 2021 09:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sB0GNU2NK22ymf4WR/Z3NGO8dPeB6xu5QjQGtDipdYg=;
+        b=HeWFqx35KDD6di4h49i+CZJ1MoRmUxZQvvS9mHzFdoVMb4N5qKkqW4szZJnu6x//3k
+         5OvKdKRP69NRL0qvu+Zdyg0uLmSgk8XXA813RidddooTJHRR8A/U95cEIWzN8qkue0pk
+         MECQDpLW9QqkXSCqB/k4mEiJaY16bg3dn3WK6/OvSOXKP3NG1yc0cJhYggTHIrrNUqwo
+         8X24ShJQU0J6sKwzNjXRoVMYUDewyN/u/ri8YspcMsQ6vyF2zg7Lja5DFXLNEvo+5U7y
+         S2Uoa4LdGOBjg8+LW2CO9S306tt3eF9KaLlhnVbypERWZC1mk+jUNa8bQwK5rohESe9i
+         pI0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sB0GNU2NK22ymf4WR/Z3NGO8dPeB6xu5QjQGtDipdYg=;
+        b=UuDKqp55jQWaTFIx3pp0M0PeUG1aZihec2qNOnTnpGmPcjPFtFGjy/J2nFR4Ico0oc
+         hhkVIbN18IrdJb2RjmHXpbpmsG4pp0XHY5SaXpLRPMLlJQkdYl0YZK22J11p7/OGQq2W
+         VKRAtWW8INFUDDFkpKxQ74u9ng+zMkiV2yxihkw/Fhe76EKaueyiz+BxAycMetG8AvCP
+         +cToSMowt+wC+TwhxcORyIs6wKw8jaIutOK8juXz6riIPUOvFLdhXaQocNJsSuo/ljQX
+         p4bGnhm8I9Dis7Mg4jqKSWCSFEwNIDWcGF5PYNFQxqlVwzPFdRa+G/DLVPxdPPAFi837
+         g3SA==
+X-Gm-Message-State: AOAM533ureLz1fVulqEhKLH/tWgz3tvq+sRR4OeJ6dabYy28/rnMvOgC
+        mIS+6JPW8acPilCGeMzS7HE6fYsQO84+cvjPI0xX5w==
+X-Google-Smtp-Source: ABdhPJwn31TSYs/0OA4XZrRaZd+s0VSHEF9NBGej8B0mRnrxI+16aTu69fq+6Z6wgQZzmaDZvMFPwrzKhtlcBtn2kRs=
+X-Received: by 2002:a05:6512:2e3:: with SMTP id m3mr12641403lfq.547.1613498203806;
+ Tue, 16 Feb 2021 09:56:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <000cfaa0a9a09f07c5e50e573393cda301d650c9.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <20210216085442.2967-1-alobakin@pm.me>
+In-Reply-To: <20210216085442.2967-1-alobakin@pm.me>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 16 Feb 2021 09:56:32 -0800
+Message-ID: <CAKwvOdnBgpRff6wa8u1_ogCm_pRey5d_Yro4UCa_O_=tib0FHQ@mail.gmail.com>
+Subject: Re: [PATCH mips-next] vmlinux.lds.h: catch more UBSAN symbols into .data
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Pei Huang <huangpei@loongson.cn>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Corey Minyard <cminyard@mvista.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->>   For the other parts, the question is what we actually want to let
->> user space configure.
->>
->> Being able to specify "Very secure" "maximum secure" "average
->> secure"  all doesn't really make sense to me.
-> 
-> Well, it doesn't to me either unless the user feels a cost/benefit, so
-> if max cost $100 per invocation and average cost nothing, most people
-> would chose average unless they had a very good reason not to.  In your
-> migratable model, if we had separate limits for non-migratable and
-> migratable, with non-migratable being set low to prevent exhaustion,
-> max secure becomes a highly scarce resource, whereas average secure is
-> abundant then having the choice might make sense.
+On Tue, Feb 16, 2021 at 12:55 AM Alexander Lobakin <alobakin@pm.me> wrote:
+>
+> LKP triggered lots of LD orphan warnings [0]:
 
-I hope that we can find a way to handle the migration part internally. 
-Especially, because Mike wants the default to be "as secure as 
-possible", so if there is a flag, it would have to be an opt-out flag.
+Thanks for the patch, just some questions.
 
-I guess as long as we don't temporarily map it into the "owned" location 
-in the direct map shared by all VCPUs we are in a good positon. But this 
-needs more thought, of course.
+With which linker?  Was there a particular config from the bot's
+report that triggered this?
 
-> 
->>   The discussion regarding migratability only really popped up because
->> this is a user-visible thing and not being able to migrate can be a
->> real problem (fragmentation, ZONE_MOVABLE, ...).
-> 
-> I think the biggest use will potentially come from hardware
-> acceleration.  If it becomes simple to add say encryption to a secret
-> page with no cost, then no flag needed.  However, if we only have a
-> limited number of keys so once we run out no more encrypted memory then
-> it becomes a costly resource and users might want a choice of being
-> backed by encryption or not.
+>
+> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data299' from
+> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data299'
+> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data183' from
+> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data183'
+> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type3' from
+> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type3'
+> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type2' from
+> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type2'
+> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type0' from
+> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type0'
+>
+> [...]
+>
+> Seems like "unnamed data" isn't the only type of symbols that UBSAN
+> instrumentation can emit.
+> Catch these into .data with the wildcard as well.
+>
+> [0] https://lore.kernel.org/linux-mm/202102160741.k57GCNSR-lkp@intel.com
+>
+> Fixes: f41b233de0ae ("vmlinux.lds.h: catch UBSAN's "unnamed data" into data")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index cc659e77fcb0..83537e5ee78f 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -95,7 +95,7 @@
+>   */
+>  #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+>  #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+> -#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_*
+> +#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$Lubsan_*
 
-Right. But wouldn't HW support with configurable keys etc. need more 
-syscall parameters (meaning, even memefd_secret() as it is would not be 
-sufficient?). I suspect the simplistic flag approach might not be 
-sufficient. I might be wrong because I have no clue about MKTME and friends.
+Are these sections only created when
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is selected?  (Same with
+.data.$__unnamed_*)
 
-Anyhow, I still think extending memfd_create() might just be good enough 
-- at least for now. Things like HW support might have requirements we 
-don't even know yet and that we cannot even model in memfd_secret() 
-right now.
+>  #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+>  #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+>  #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
+> --
+> 2.30.1
+>
+>
+
 
 -- 
 Thanks,
-
-David / dhildenb
-
+~Nick Desaulniers
