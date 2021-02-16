@@ -2,41 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EF731CE26
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 17:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B0E31CE59
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 17:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbhBPQgE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Feb 2021 11:36:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53548 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229894AbhBPQgD (ORCPT
+        id S230097AbhBPQqt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Feb 2021 11:46:49 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14584 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229699AbhBPQqt (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Feb 2021 11:36:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613493275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KysYIYMpQ7qMwmL/JUOCOKvLfXo3jE4QCyxH618MYzE=;
-        b=YOYDTf7Trq50U2iN2ri3ebMVB/pbjAdiqZeHv8At2BKNYOswrJirI8kB1TbesObe/kJwF6
-        sukwNjy6F1RB/9+0tlMP1KGSx/zseuyNpexWV/eJO+LThf4778H+Ky3IqPklNjMTAR11hm
-        BzKTUuH/MWO2whGJTBQMTTFkLiHUdW4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-12-p1-EOjkyMC-fthVSXfK3rw-1; Tue, 16 Feb 2021 11:34:33 -0500
-X-MC-Unique: p1-EOjkyMC-fthVSXfK3rw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8B1051E561;
-        Tue, 16 Feb 2021 16:34:28 +0000 (UTC)
-Received: from [10.36.114.70] (ovpn-114-70.ams2.redhat.com [10.36.114.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BF8E31970A;
-        Tue, 16 Feb 2021 16:34:18 +0000 (UTC)
+        Tue, 16 Feb 2021 11:46:49 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11GGcjPe025880;
+        Tue, 16 Feb 2021 11:44:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=Q5aHAR7pPlj/atdytcBPZccatqTpy1qm0hvpI6B2Sf0=;
+ b=aSu0QIsUki902qrNU04AQuAffNS2rmmkgsvzPX/SqRGj503dHwb0uANR9/3BdjdcUOTr
+ a5u+ik+W33ZCsmtUxgwWVAHgOiZ8625M6a9uJEkw5M0bu2XcLPXd+ZZsxLUXrIenOu/d
+ IJMvDOwpYRE2a0EWmrznneVzszNnlWCT+VonA6hJOlSqIE/ENo5L4A6mG3mzNFTH5W3W
+ vYfcPIlcyeuiYpY+PitOIUSYlhf7/ijhbppqWPgF2sgzNwq3Tdj1awqDTi3lk7pFWD+x
+ 7YUipYk80l508mrZJAmUo4t0geEsdokwhvGGU4dlOtVmuxjC7/TzSbCC36zPfRgAJOZ1 WQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36rhb68s0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Feb 2021 11:44:29 -0500
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11GGd9Qa029758;
+        Tue, 16 Feb 2021 11:44:25 -0500
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36rhb68rud-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Feb 2021 11:44:24 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11GGflQF029695;
+        Tue, 16 Feb 2021 16:44:16 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 36p6d8ypak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Feb 2021 16:44:16 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11GGiFGX8716868
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Feb 2021 16:44:15 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F8AE78060;
+        Tue, 16 Feb 2021 16:44:15 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EE9578063;
+        Tue, 16 Feb 2021 16:44:05 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.199.127])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 16 Feb 2021 16:44:05 +0000 (GMT)
+Message-ID: <000cfaa0a9a09f07c5e50e573393cda301d650c9.camel@linux.ibm.com>
 Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
  create "secret" memory areas
-To:     jejb@linux.ibm.com, Michal Hocko <mhocko@suse.com>
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>
 Cc:     Mike Rapoport <rppt@kernel.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -69,66 +94,91 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
+Date:   Tue, 16 Feb 2021 08:44:04 -0800
+In-Reply-To: <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
 References: <20210214091954.GM242749@kernel.org>
- <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
- <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
- <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
- <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
- <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
- <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
-Date:   Tue, 16 Feb 2021 17:34:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+         <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
+         <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
+         <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
+         <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
+         <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
+         <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
+         <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-16_07:2021-02-16,2021-02-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=398 spamscore=0
+ suspectscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102160146
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 16.02.21 17:25, James Bottomley wrote:
-> On Mon, 2021-02-15 at 20:20 +0100, Michal Hocko wrote:
-> [...]
->>>>    What kind of flags are we talking about and why would that be a
->>>> problem with memfd_create interface? Could you be more specific
->>>> please?
->>>
->>> You mean what were the ioctl flags in the patch series linked
->>> above? They were SECRETMEM_EXCLUSIVE and SECRETMEM_UNCACHED in
->>> patch 3/5.
->>
->> OK I see. How many potential modes are we talking about? A few or
->> potentially many?
->   
-> Well I initially thought there were two (uncached or not) until you
-> came up with the migratable or non-migratable, which affects the
-> security properties.  But now there's also potential for hardware
-> backing, like mktme,  described by flags as well.  I suppose you could
-> also use RDT to restrict which cache the data goes into: say L1 but not
-> L2 on to lessen the impact of fully uncached (although the big thrust
-> of uncached was to blunt hyperthread side channels).  So there is
-> potential for quite a large expansion even though I'd be willing to bet
-> that a lot of the modes people have thought about turn out not to be
-> very effective in the field.
+On Tue, 2021-02-16 at 17:34 +0100, David Hildenbrand wrote:
+> On 16.02.21 17:25, James Bottomley wrote:
+> > On Mon, 2021-02-15 at 20:20 +0100, Michal Hocko wrote:
+> > [...]
+> > > > >    What kind of flags are we talking about and why would that
+> > > > > be a problem with memfd_create interface? Could you be more
+> > > > > specific please?
+> > > > 
+> > > > You mean what were the ioctl flags in the patch series linked
+> > > > above? They were SECRETMEM_EXCLUSIVE and SECRETMEM_UNCACHED in
+> > > > patch 3/5.
+> > > 
+> > > OK I see. How many potential modes are we talking about? A few or
+> > > potentially many?
+> >   
+> > Well I initially thought there were two (uncached or not) until you
+> > came up with the migratable or non-migratable, which affects the
+> > security properties.  But now there's also potential for hardware
+> > backing, like mktme,  described by flags as well.  I suppose you
+> > could also use RDT to restrict which cache the data goes into: say
+> > L1 but not L2 on to lessen the impact of fully uncached (although
+> > the big thrust of uncached was to blunt hyperthread side
+> > channels).  So there is potential for quite a large expansion even
+> > though I'd be willing to bet that a lot of the modes people have
+> > thought about turn out not to be very effective in the field.
+> 
+> Thanks for the insight. I remember that even the "uncached" parts
+> was effectively nacked by x86 maintainers (I might be wrong).
 
-Thanks for the insight. I remember that even the "uncached" parts was 
-effectively nacked by x86 maintainers (I might be wrong). For the other 
-parts, the question is what we actually want to let user space configure.
+It wasn't liked by x86 maintainers, no.  Plus there's no
+architecturally standard mechanism for making a page uncached and, as
+the arm people pointed out, sometimes no way of ensuring it's never
+cached.
 
-Being able to specify "Very secure" "maximum secure" "average secure" 
-all doesn't really make sense to me. The discussion regarding 
-migratability only really popped up because this is a user-visible thing 
-and not being able to migrate can be a real problem (fragmentation, 
-ZONE_MOVABLE, ...).
+>  For the other parts, the question is what we actually want to let
+> user space configure.
+> 
+> Being able to specify "Very secure" "maximum secure" "average
+> secure"  all doesn't really make sense to me.
 
--- 
-Thanks,
+Well, it doesn't to me either unless the user feels a cost/benefit, so
+if max cost $100 per invocation and average cost nothing, most people
+would chose average unless they had a very good reason not to.  In your
+migratable model, if we had separate limits for non-migratable and
+migratable, with non-migratable being set low to prevent exhaustion,
+max secure becomes a highly scarce resource, whereas average secure is
+abundant then having the choice might make sense.
 
-David / dhildenb
+>  The discussion regarding migratability only really popped up because
+> this is a user-visible thing and not being able to migrate can be a
+> real problem (fragmentation, ZONE_MOVABLE, ...).
+
+I think the biggest use will potentially come from hardware
+acceleration.  If it becomes simple to add say encryption to a secret
+page with no cost, then no flag needed.  However, if we only have a
+limited number of keys so once we run out no more encrypted memory then
+it becomes a costly resource and users might want a choice of being
+backed by encryption or not.
+
+James
+
 
