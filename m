@@ -2,103 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D8931C7A5
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 09:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB26231C7E3
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 10:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbhBPI41 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Feb 2021 03:56:27 -0500
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:16247 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbhBPI41 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Feb 2021 03:56:27 -0500
-Date:   Tue, 16 Feb 2021 08:55:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1613465743; bh=Z1B3dJxurktF44XrKPp/L6aM/W1WYsFcVWu3eznTvaw=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=XoH45ZIlE9KmzLuba90pWudggzbMSyC/rqULk0uCPZXV91Qj4Nkx45usHN1gE3m9e
-         XnUyQp2RXSVRhiPrrdzDIzTGRQzeof3nTw2deqUyZ2A3mc9H9RcnITfzsGy+3AawHh
-         RwKxVATRQsTcOWC25zFl+UdlexCfH8zgHmjhPpxPa7stDs6FcNjsmkhKul5s2XBjvg
-         /7VvXCn1U9gQtpKtkgJxbaUIwOtj8FoPSKQHm3yUlF5Zwsd4+VY0K2IG702UYztvKW
-         PrNsDvZbU4BHCabfjSB43UlkMrnc3ihEC+Og4ignXhSnP+E35f0y87AY7NE3wAWgRc
-         icxXlzsRVboHw==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, clang-built-linux@googlegroups.com
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH mips-next] vmlinux.lds.h: catch more UBSAN symbols into .data
-Message-ID: <20210216085442.2967-1-alobakin@pm.me>
+        id S229757AbhBPJQd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Feb 2021 04:16:33 -0500
+Received: from mga07.intel.com ([134.134.136.100]:8550 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229676AbhBPJQT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Feb 2021 04:16:19 -0500
+IronPort-SDR: YwQi6r+UXddcEZs6XG7AK9mOKvQjmJEvJiUniJRZpUFnYhXtEPBmfddgR/LUMUow4RrTaMCtV+
+ 3U37Zus2uMVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="246904649"
+X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
+   d="scan'208";a="246904649"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 01:14:32 -0800
+IronPort-SDR: tPkmKh2OTx4znumaJmxTa2l2vBJfWMkEjT34Z+L3rFz0la3AfJcfUFiM2BL5vE5rYPheUPAQ7d
+ zf7ZUrYkEr1A==
+X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
+   d="scan'208";a="512455158"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 01:14:27 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lBwR5-005Qf3-SD; Tue, 16 Feb 2021 11:14:23 +0200
+Date:   Tue, 16 Feb 2021 11:14:23 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dennis Zhou <dennis@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        David Sterba <dsterba@suse.com>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [RESEND PATCH v2 0/6] lib/find_bit: fast path for small bitmaps
+Message-ID: <YCuM7yzMoXjpuj8Y@smile.fi.intel.com>
+References: <20210130191719.7085-1-yury.norov@gmail.com>
+ <20210215213044.GB394846@yury-ThinkPad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210215213044.GB394846@yury-ThinkPad>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-LKP triggered lots of LD orphan warnings [0]:
+On Mon, Feb 15, 2021 at 01:30:44PM -0800, Yury Norov wrote:
+> [add David Laight <David.Laight@ACULAB.COM> ]
+> 
+> On Sat, Jan 30, 2021 at 11:17:11AM -0800, Yury Norov wrote:
+> > Bitmap operations are much simpler and faster in case of small bitmaps
+> > which fit into a single word. In linux/bitmap.h we have a machinery that
+> > allows compiler to replace actual function call with a few instructions
+> > if bitmaps passed into the function are small and their size is known at
+> > compile time.
+> > 
+> > find_*_bit() API lacks this functionality; despite users will benefit from
+> > it a lot. One important example is cpumask subsystem when
+> > NR_CPUS <= BITS_PER_LONG. In the very best case, the compiler may replace
+> > a find_*_bit() call for such a bitmap with a single ffs or ffz instruction.
+> > 
+> > Tools is synchronized with new implementation where needed.
+> > 
+> > v1: https://www.spinics.net/lists/kernel/msg3804727.html
+> > v2: - employ GENMASK() for bitmaps;
+> >     - unify find_bit inliners in;
+> >     - address comments to v1;
+> 
+> Comments so far:
+>  - increased image size (patch #8) - addressed by introducing
+>    CONFIG_FAST_PATH;
 
-mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data299' from
-`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data299'
-mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data183' from
-`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data183'
-mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type3' from
-`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type3'
-mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type2' from
-`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type2'
-mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type0' from
-`init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type0'
+>  - split tools and kernel parts - not clear why it's better.
 
-[...]
+Because tools are user space programs and sometimes may not follow kernel
+specifics, so they are different logically and changes should be separated.
 
-Seems like "unnamed data" isn't the only type of symbols that UBSAN
-instrumentation can emit.
-Catch these into .data with the wildcard as well.
+>  Anything else?
 
-[0] https://lore.kernel.org/linux-mm/202102160741.k57GCNSR-lkp@intel.com
-
-Fixes: f41b233de0ae ("vmlinux.lds.h: catch UBSAN's "unnamed data" into data=
-")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- include/asm-generic/vmlinux.lds.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinu=
-x.lds.h
-index cc659e77fcb0..83537e5ee78f 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -95,7 +95,7 @@
-  */
- #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
- #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
--#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliter=
-al* .data.$__unnamed_*
-+#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliter=
-al* .data.$__unnamed_* .data.$Lubsan_*
- #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
- #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
- #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
---=20
-2.30.1
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
