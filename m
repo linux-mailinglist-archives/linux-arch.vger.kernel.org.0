@@ -2,135 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3C831CFBF
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 18:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007F431CFC8
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Feb 2021 19:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhBPR5b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Feb 2021 12:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S229907AbhBPSBa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Feb 2021 13:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbhBPR50 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Feb 2021 12:57:26 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AB3C0613D6
-        for <linux-arch@vger.kernel.org>; Tue, 16 Feb 2021 09:56:45 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id j19so17244424lfr.12
-        for <linux-arch@vger.kernel.org>; Tue, 16 Feb 2021 09:56:45 -0800 (PST)
+        with ESMTP id S230299AbhBPSBZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Feb 2021 13:01:25 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A038C061786;
+        Tue, 16 Feb 2021 10:00:44 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id x3so1927420qti.5;
+        Tue, 16 Feb 2021 10:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sB0GNU2NK22ymf4WR/Z3NGO8dPeB6xu5QjQGtDipdYg=;
-        b=HeWFqx35KDD6di4h49i+CZJ1MoRmUxZQvvS9mHzFdoVMb4N5qKkqW4szZJnu6x//3k
-         5OvKdKRP69NRL0qvu+Zdyg0uLmSgk8XXA813RidddooTJHRR8A/U95cEIWzN8qkue0pk
-         MECQDpLW9QqkXSCqB/k4mEiJaY16bg3dn3WK6/OvSOXKP3NG1yc0cJhYggTHIrrNUqwo
-         8X24ShJQU0J6sKwzNjXRoVMYUDewyN/u/ri8YspcMsQ6vyF2zg7Lja5DFXLNEvo+5U7y
-         S2Uoa4LdGOBjg8+LW2CO9S306tt3eF9KaLlhnVbypERWZC1mk+jUNa8bQwK5rohESe9i
-         pI0g==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MZv88LoGDyoqj+JUsBfVabeWm3XvrAKVtmhQ8+/+qO4=;
+        b=noA0wnAT0o9cRCGQUDoWCay8HcKLJOp41CqraJbgr0dUVJgXnzgQUAbSsAcgKYFWrz
+         ZX4/8YMQjlkIrdJpgK7JvG7txBlCksTyIhn5WVGDX8YoSuEYB9bscqYA+I1tlZKObnNT
+         9gMnfORrhEIAw+8s/tjErap/Fe1hn98xqNTAjMhkziAaXL7kJAb+84hE4+WGPBMhVrIU
+         j4DhjZH7IM+6wbQnSY9MM5SKq/XkmovP+72t7oEF85pbrMehGtV2+DkPBnCl6YUpMLv7
+         WepA5REasHrXHRgJBWvi/WiOJxxbgPUhgbMLwoenvZ0Du9OfqIw1VKee4tVQKsoPzQGC
+         lxrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sB0GNU2NK22ymf4WR/Z3NGO8dPeB6xu5QjQGtDipdYg=;
-        b=UuDKqp55jQWaTFIx3pp0M0PeUG1aZihec2qNOnTnpGmPcjPFtFGjy/J2nFR4Ico0oc
-         hhkVIbN18IrdJb2RjmHXpbpmsG4pp0XHY5SaXpLRPMLlJQkdYl0YZK22J11p7/OGQq2W
-         VKRAtWW8INFUDDFkpKxQ74u9ng+zMkiV2yxihkw/Fhe76EKaueyiz+BxAycMetG8AvCP
-         +cToSMowt+wC+TwhxcORyIs6wKw8jaIutOK8juXz6riIPUOvFLdhXaQocNJsSuo/ljQX
-         p4bGnhm8I9Dis7Mg4jqKSWCSFEwNIDWcGF5PYNFQxqlVwzPFdRa+G/DLVPxdPPAFi837
-         g3SA==
-X-Gm-Message-State: AOAM533ureLz1fVulqEhKLH/tWgz3tvq+sRR4OeJ6dabYy28/rnMvOgC
-        mIS+6JPW8acPilCGeMzS7HE6fYsQO84+cvjPI0xX5w==
-X-Google-Smtp-Source: ABdhPJwn31TSYs/0OA4XZrRaZd+s0VSHEF9NBGej8B0mRnrxI+16aTu69fq+6Z6wgQZzmaDZvMFPwrzKhtlcBtn2kRs=
-X-Received: by 2002:a05:6512:2e3:: with SMTP id m3mr12641403lfq.547.1613498203806;
- Tue, 16 Feb 2021 09:56:43 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MZv88LoGDyoqj+JUsBfVabeWm3XvrAKVtmhQ8+/+qO4=;
+        b=nGSOPpQqlgQ6NEVwNQiChA/GECX0nF7+z4kc3htPleph3pkjIcb2IKexbFe7nLPT//
+         90pSKPRThd4Y4e6G70SQ4TZtPwjGtibEeI0u/HPt1UVTaPM47C6Z0Jd20p2LqdJ9H1wJ
+         uICLh91OUrTKyJ1z68WdynAONl2mUTi/OhLD4wnlAJSdKMxZOfmZdEm1+W/RHjlPnvoz
+         P9lsneSdKAvWJyaLQK1y3G0T8WdTSHGIm8mf+QU2duEaI/LkBkkAgzrC3NvewhZecxVM
+         qpMriPm1bZRW027ketoOsKv64zPznqJIatLbc1jG7/L6MOkgbweZk3/NmZLA2kURXiGE
+         ifOw==
+X-Gm-Message-State: AOAM530vQ5r5xHlxBLu189qh4/Pr4UqSDvWNeheaFWFdliF1T0L7UZVu
+        XfR94SBjIFwoTFfVWv1cGJCRIX16rt0=
+X-Google-Smtp-Source: ABdhPJwYR92x2g6usp+e+eae7hovcmvLl8Gibk+9FAtpv8JCfKDcc7oYg5seY7OMZNn+EkTx8nA98A==
+X-Received: by 2002:a05:622a:8:: with SMTP id x8mr20156343qtw.359.1613498443928;
+        Tue, 16 Feb 2021 10:00:43 -0800 (PST)
+Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
+        by smtp.gmail.com with ESMTPSA id c81sm14537171qkb.88.2021.02.16.10.00.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Feb 2021 10:00:43 -0800 (PST)
+Date:   Tue, 16 Feb 2021 10:00:42 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dennis Zhou <dennis@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        David Sterba <dsterba@suse.com>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        "Ma, Jianpeng" <jianpeng.ma@intel.com>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Joe Perches <joe@perches.com>
+Subject: Re: [RESEND PATCH v2 0/6] lib/find_bit: fast path for small bitmaps
+Message-ID: <20210216180042.GA421019@yury-ThinkPad>
+References: <20210130191719.7085-1-yury.norov@gmail.com>
+ <20210215213044.GB394846@yury-ThinkPad>
+ <YCuM7yzMoXjpuj8Y@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20210216085442.2967-1-alobakin@pm.me>
-In-Reply-To: <20210216085442.2967-1-alobakin@pm.me>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 16 Feb 2021 09:56:32 -0800
-Message-ID: <CAKwvOdnBgpRff6wa8u1_ogCm_pRey5d_Yro4UCa_O_=tib0FHQ@mail.gmail.com>
-Subject: Re: [PATCH mips-next] vmlinux.lds.h: catch more UBSAN symbols into .data
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Pei Huang <huangpei@loongson.cn>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YCuM7yzMoXjpuj8Y@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 16, 2021 at 12:55 AM Alexander Lobakin <alobakin@pm.me> wrote:
->
-> LKP triggered lots of LD orphan warnings [0]:
+On Tue, Feb 16, 2021 at 11:14:23AM +0200, Andy Shevchenko wrote:
+> On Mon, Feb 15, 2021 at 01:30:44PM -0800, Yury Norov wrote:
+> > [add David Laight <David.Laight@ACULAB.COM> ]
+> > 
+> > On Sat, Jan 30, 2021 at 11:17:11AM -0800, Yury Norov wrote:
+> > > Bitmap operations are much simpler and faster in case of small bitmaps
+> > > which fit into a single word. In linux/bitmap.h we have a machinery that
+> > > allows compiler to replace actual function call with a few instructions
+> > > if bitmaps passed into the function are small and their size is known at
+> > > compile time.
+> > > 
+> > > find_*_bit() API lacks this functionality; despite users will benefit from
+> > > it a lot. One important example is cpumask subsystem when
+> > > NR_CPUS <= BITS_PER_LONG. In the very best case, the compiler may replace
+> > > a find_*_bit() call for such a bitmap with a single ffs or ffz instruction.
+> > > 
+> > > Tools is synchronized with new implementation where needed.
+> > > 
+> > > v1: https://www.spinics.net/lists/kernel/msg3804727.html
+> > > v2: - employ GENMASK() for bitmaps;
+> > >     - unify find_bit inliners in;
+> > >     - address comments to v1;
+> > 
+> > Comments so far:
+> >  - increased image size (patch #8) - addressed by introducing
+> >    CONFIG_FAST_PATH;
+> 
+> >  - split tools and kernel parts - not clear why it's better.
+> 
+> Because tools are user space programs and sometimes may not follow kernel
+> specifics, so they are different logically and changes should be separated.
 
-Thanks for the patch, just some questions.
+In this specific case tools follow kernel well.
 
-With which linker?  Was there a particular config from the bot's
-report that triggered this?
-
->
-> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data299' from
-> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data299'
-> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_data183' from
-> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_data183'
-> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type3' from
-> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type3'
-> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type2' from
-> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type2'
-> mipsel-linux-ld: warning: orphan section `.data.$Lubsan_type0' from
-> `init/do_mounts_rd.o' being placed in section `.data.$Lubsan_type0'
->
-> [...]
->
-> Seems like "unnamed data" isn't the only type of symbols that UBSAN
-> instrumentation can emit.
-> Catch these into .data with the wildcard as well.
->
-> [0] https://lore.kernel.org/linux-mm/202102160741.k57GCNSR-lkp@intel.com
->
-> Fixes: f41b233de0ae ("vmlinux.lds.h: catch UBSAN's "unnamed data" into data")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->  include/asm-generic/vmlinux.lds.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index cc659e77fcb0..83537e5ee78f 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -95,7 +95,7 @@
->   */
->  #ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
->  #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
-> -#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_*
-> +#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$Lubsan_*
-
-Are these sections only created when
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is selected?  (Same with
-.data.$__unnamed_*)
-
->  #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
->  #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
->  #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
-> --
-> 2.30.1
->
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Nevertheless, if you think it's a blocker for the series, I can split. What
+option for tools is better for you - doubling the number of patches or 
+squashing everything in a patch bomb?
