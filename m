@@ -2,360 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9DA31DCB2
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 16:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB6B31DD30
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 17:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbhBQPui (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Feb 2021 10:50:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57811 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233845AbhBQPuf (ORCPT
+        id S234116AbhBQQVM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Feb 2021 11:21:12 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56992 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233418AbhBQQVB (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 17 Feb 2021 10:50:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613576947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=yAWDsPHL6qVi6EQFSh9JjZtDjXH6VNWvFfdhBEAIS5U=;
-        b=UxQkMfRkHNGmHRwBqLg16/7SHP5tgRFbW5291CR+HAa0w9VO5P3QX24bEIz5vcC8s+zpqp
-        PliLyE1qvIe1TsToPZW14tG9Ynbl+WmshhSn4SsLo26koidiZk6eWh100icFrkvm0/e2Cz
-        bKalmvqe2tYNSLgVM45Vh+pgCGhytgo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-543-kNffKRMnOdqMBusloKeOcg-1; Wed, 17 Feb 2021 10:49:02 -0500
-X-MC-Unique: kNffKRMnOdqMBusloKeOcg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1DBDB107ACF7;
-        Wed, 17 Feb 2021 15:48:58 +0000 (UTC)
-Received: from t480s.redhat.com (ovpn-114-178.ams2.redhat.com [10.36.114.178])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 884435C3E4;
-        Wed, 17 Feb 2021 15:48:45 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Wed, 17 Feb 2021 11:21:01 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11HG4Wsg043012;
+        Wed, 17 Feb 2021 11:19:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=Ks6WtbUp554Hx99i4JOUNKQ1uY1qWSRYOgnpaGD1k9g=;
+ b=OZR9mAJP+weCO5wC0AbzdiyHu7DYQzuc+dwiihhMbc0STeS4aGRo/LKkbKsJ1VIorPQi
+ B2hPyx+0Pq88F+iAuexTIMeKFcIg3y9ej5DYGsKSryWCElnkjGzOvF9LtUXrwRsvUiOA
+ /GgB4E9NS3yYQyZD1s/aLEl1EebDHJrt+ZdYWGmUdtCrBL1X5CnM5UVtSk/aypNetw9P
+ OutaIXUG4y8raLuypVI4vJgSQ2BUlDf0TH070wCspRNZ3WjsuPmn6FP12nZrHltzzq8j
+ UO92XVyQu80qeJSPz2bPa/ya91/Awg6dxydKcITUa3/bk1TEIBqkaOtkF8hUvLz8Z/dM Kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36s5q2j553-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Feb 2021 11:19:38 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11HG4uk5044788;
+        Wed, 17 Feb 2021 11:19:37 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36s5q2j54a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Feb 2021 11:19:37 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11HG3f69032451;
+        Wed, 17 Feb 2021 16:19:35 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma05wdc.us.ibm.com with ESMTP id 36p6d9fc26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Feb 2021 16:19:35 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11HGJYeC25690478
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 Feb 2021 16:19:35 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D0E4A7806A;
+        Wed, 17 Feb 2021 16:19:34 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F5837805E;
+        Wed, 17 Feb 2021 16:19:27 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.199.127])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 17 Feb 2021 16:19:27 +0000 (GMT)
+Message-ID: <b58debfe598331791ecc238a6bf8d2cf1762203a.camel@linux.ibm.com>
+Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
         Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
-Subject: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to prefault/prealloc memory
-Date:   Wed, 17 Feb 2021 16:48:44 +0100
-Message-Id: <20210217154844.12392-1-david@redhat.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Date:   Wed, 17 Feb 2021 08:19:26 -0800
+In-Reply-To: <5a8567a9-6940-c23f-0927-e4b5c5db0d5e@redhat.com>
+References: <20210214091954.GM242749@kernel.org>
+         <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
+         <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
+         <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
+         <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
+         <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
+         <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
+         <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
+         <000cfaa0a9a09f07c5e50e573393cda301d650c9.camel@linux.ibm.com>
+         <5a8567a9-6940-c23f-0927-e4b5c5db0d5e@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-17_13:2021-02-16,2021-02-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=5 suspectscore=0
+ priorityscore=1501 mlxscore=5 phishscore=0 clxscore=1011 impostorscore=0
+ bulkscore=0 adultscore=0 malwarescore=0 mlxlogscore=127 spamscore=5
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102170122
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When we manage sparse memory mappings dynamically in user space - also
-sometimes involving MADV_NORESERVE - we want to dynamically populate/
-discard memory inside such a sparse memory region. Example users are
-hypervisors (especially implementing memory ballooning or similar
-technologies like virtio-mem) and memory allocators. In addition, we want
-to fail in a nice way if populating does not succeed because we are out of
-backend memory (which can happen easily with file-based mappings,
-especially tmpfs and hugetlbfs).
+On Tue, 2021-02-16 at 18:16 +0100, David Hildenbrand wrote:
+[...]
+> > >   The discussion regarding migratability only really popped up
+> > > because this is a user-visible thing and not being able to
+> > > migrate can be a real problem (fragmentation, ZONE_MOVABLE, ...).
+> > 
+> > I think the biggest use will potentially come from hardware
+> > acceleration.  If it becomes simple to add say encryption to a
+> > secret page with no cost, then no flag needed.  However, if we only
+> > have a limited number of keys so once we run out no more encrypted
+> > memory then it becomes a costly resource and users might want a
+> > choice of being backed by encryption or not.
+> 
+> Right. But wouldn't HW support with configurable keys etc. need more 
+> syscall parameters (meaning, even memefd_secret() as it is would not
+> be sufficient?). I suspect the simplistic flag approach might not
+> be sufficient. I might be wrong because I have no clue about MKTME
+> and friends.
 
-While MADV_DONTNEED and FALLOC_FL_PUNCH_HOLE provide us ways to reliably
-discard memory, there is no generic approach to populate ("preallocate")
-memory.
+The theory I was operating under is key management is automatic and
+hidden, but key scarcity can't be, so if you flag requesting hardware
+backing then you either get success (the kernel found a key) or failure
+(the kernel is out of keys).  If we actually want to specify the key
+then we need an extra argument and we *must* have a new system call.
 
-Although mmap() supports MAP_POPULATE, it is not applicable to the concept
-of sparse memory mappings, where we want to do populate/discard
-dynamically and avoid expensive/problematic remappings. In addition,
-we never actually report error during the final populate phase - it is
-best-effort only.
+> Anyhow, I still think extending memfd_create() might just be good
+> enough - at least for now.
 
-fallocate() can be used to preallocate file-based memory and fail in a safe
-way. However, it is less useful for private mappings on anonymous files
-due to COW semantics. For example, using fallocate() to preallocate memory
-on an anonymous memfd files that are mapped MAP_PRIVATE results in a double
-memory consumption when actually writing via the mapping. In addition,
-fallocate() does not actually populate page tables, so we still always
-have to resolve minor faults on first access.
+I really think this is the wrong approach for a user space ABI.  If we
+think we'll ever need to move to a separate syscall, we should begin
+with one.  The pain of trying to shift userspace from memfd_create to a
+new syscall would be enormous.  It's not impossible (see clone3) but
+it's a pain we should avoid if we know it's coming.
 
-Because we don't have a proper interface, what applications
-(like QEMU and databases) end up doing is touching (i.e., writing) all
-individual pages. However, it requires expensive signal handling (SIGBUS);
-for example, this is problematic in hypervisors like QEMU where SIGBUS
-handlers might already be used by other subsystems concurrently to e.g,
-handle hardware errors. "Simply" doing preallocation from another thread
-is not that easy.
+>  Things like HW support might have requirements we don't even know
+> yet and that we cannot even model in memfd_secret() right now.
 
-Let's introduce MADV_POPULATE with the following semantics
-1. MADV_POPULATED does not work on PROT_NONE and special VMAs. It works
-   on everything else.
-2. Errors during MADV_POPULATED (especially OOM) are reported. If we hit
-   hardware errors on pages, ignore them - nothing we really can or
-   should do.
-3. On errors during MADV_POPULATED, some memory might have been
-   populated. Callers have to clean up if they care.
-4. Concurrent changes to the virtual memory layour are tolerated - we
-   process each and every PFN only once, though.
-5. If MADV_POPULATE succeeds, all memory in the range can be accessed
-   without SIGBUS. (of course, not if user space changed mappings in the
-   meantime or KSM kicked in on anonymous memory).
+This is the annoying problem with our Linux unbreakable ABI policy: we
+get to plan when the ABI is introduced for stuff we don't yet even know
+about.
 
-Although sparse memory mappings are the primary use case, this will
-also be useful for ordinary preallocations where MAP_POPULATE is not
-desired (e.g., in QEMU, where users can trigger preallocation of
-guest RAM after the mapping was created).
+James
 
-Looking at the history, MADV_POPULATE was already proposed in 2013 [1],
-however, the main motivation back than was performance improvements
-(which should also still be the case, but it's a seconary concern).
-
-Basic functionality was tested with:
-- anonymous memory
-- MAP_PRIVATE on anonymous file via memfd
-- MAP_SHARED on anonymous file via memf
-- MAP_PRIVATE on anonymous hugetlbfs file via memfd
-- MAP_SHARED on anonymous hugetlbfs file via memfd
-- MAP_PRIVATE on tmpfs/shmem file (we end up with double memory consumption
-  though, as the actual file gets populated with zeroes)
-- MAP_SHARED on tmpfs/shmem file
-
-Note: For populating/preallocating zeroed-out memory while userfaultfd is
-active, it's even faster to use first fallocate() or placing zeroed pages
-via userfaultfd APIs. Otherwise, we'll have to route every fault while
-populating via the userfaultfd handler.
-
-[1] https://lkml.org/lkml/2013/6/27/698
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Michael S. Tsirkin <mst@redhat.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Richard Henderson <rth@twiddle.net>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-arch@vger.kernel.org
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-If we agree that this makes sense I'll do more testing to see if we
-are missing any return value handling and prepare a man page update to
-document the semantics.
-
-Thoughts?
-
----
- arch/alpha/include/uapi/asm/mman.h     |  2 +
- arch/mips/include/uapi/asm/mman.h      |  2 +
- arch/parisc/include/uapi/asm/mman.h    |  2 +
- arch/xtensa/include/uapi/asm/mman.h    |  2 +
- include/uapi/asm-generic/mman-common.h |  2 +
- mm/madvise.c                           | 70 ++++++++++++++++++++++++++
- 6 files changed, 80 insertions(+)
-
-diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-index a18ec7f63888..e90eeb5e6cf1 100644
---- a/arch/alpha/include/uapi/asm/mman.h
-+++ b/arch/alpha/include/uapi/asm/mman.h
-@@ -71,6 +71,8 @@
- #define MADV_COLD	20		/* deactivate these pages */
- #define MADV_PAGEOUT	21		/* reclaim these pages */
- 
-+#define MADV_POPULATE	22		/* populate pages */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm/mman.h
-index 57dc2ac4f8bd..b928becc5308 100644
---- a/arch/mips/include/uapi/asm/mman.h
-+++ b/arch/mips/include/uapi/asm/mman.h
-@@ -98,6 +98,8 @@
- #define MADV_COLD	20		/* deactivate these pages */
- #define MADV_PAGEOUT	21		/* reclaim these pages */
- 
-+#define MADV_POPULATE	22		/* populate pages */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-index ab78cba446ed..9d3a56044287 100644
---- a/arch/parisc/include/uapi/asm/mman.h
-+++ b/arch/parisc/include/uapi/asm/mman.h
-@@ -52,6 +52,8 @@
- #define MADV_COLD	20		/* deactivate these pages */
- #define MADV_PAGEOUT	21		/* reclaim these pages */
- 
-+#define MADV_POPULATE	22		/* populate pages */
-+
- #define MADV_MERGEABLE   65		/* KSM may merge identical pages */
- #define MADV_UNMERGEABLE 66		/* KSM may not merge identical pages */
- 
-diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi/asm/mman.h
-index e5e643752947..3169b1be8920 100644
---- a/arch/xtensa/include/uapi/asm/mman.h
-+++ b/arch/xtensa/include/uapi/asm/mman.h
-@@ -106,6 +106,8 @@
- #define MADV_COLD	20		/* deactivate these pages */
- #define MADV_PAGEOUT	21		/* reclaim these pages */
- 
-+#define MADV_POPULATE	22		/* populate pages */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index f94f65d429be..fa617fd0d733 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -72,6 +72,8 @@
- #define MADV_COLD	20		/* deactivate these pages */
- #define MADV_PAGEOUT	21		/* reclaim these pages */
- 
-+#define MADV_POPULATE	22		/* populate pages */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 6a660858784b..f76fdd6fcf10 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -53,6 +53,7 @@ static int madvise_need_mmap_write(int behavior)
- 	case MADV_COLD:
- 	case MADV_PAGEOUT:
- 	case MADV_FREE:
-+	case MADV_POPULATE:
- 		return 0;
- 	default:
- 		/* be safe, default to 1. list exceptions explicitly */
-@@ -821,6 +822,72 @@ static long madvise_dontneed_free(struct vm_area_struct *vma,
- 		return -EINVAL;
- }
- 
-+static long madvise_populate(struct vm_area_struct *vma,
-+			     struct vm_area_struct **prev,
-+			     unsigned long start, unsigned long end)
-+{
-+	struct mm_struct *mm = vma->vm_mm;
-+	unsigned long tmp_end;
-+	int locked = 1;
-+	long pages;
-+
-+	*prev = vma;
-+
-+	while (start < end) {
-+		/*
-+		 * We might have temporarily dropped the lock. For example,
-+		 * our VMA might have been split.
-+		 */
-+		if (!vma || start >= vma->vm_end) {
-+			vma = find_vma(mm, start);
-+			if (!vma)
-+				return -ENOMEM;
-+		}
-+
-+		/* Bail out on incompatible VMA types. */
-+		if (vma->vm_flags & (VM_IO | VM_PFNMAP) ||
-+		    !vma_is_accessible(vma)) {
-+			return -EINVAL;
-+		}
-+
-+		/*
-+		 * Populate pages and take care of VM_LOCKED: simulate user
-+		 * space access.
-+		 *
-+		 * For private, writable mappings, trigger a write fault to
-+		 * break COW (i.e., shared zeropage). For other mappings (i.e.,
-+		 * read-only, shared), trigger a read fault.
-+		 */
-+		tmp_end = min_t(unsigned long, end, vma->vm_end);
-+		pages = populate_vma_page_range(vma, start, tmp_end, &locked);
-+		if (!locked) {
-+			mmap_read_lock(mm);
-+			*prev = NULL;
-+			vma = NULL;
-+		}
-+		if (pages < 0) {
-+			switch (pages) {
-+			case -EINTR:
-+			case -ENOMEM:
-+				return pages;
-+			case -EHWPOISON:
-+				/* Skip over any poisoned pages. */
-+				start += PAGE_SIZE;
-+				continue;
-+			case -EBUSY:
-+			case -EAGAIN:
-+				continue;
-+			default:
-+				pr_warn_once("%s: unhandled return value: %ld\n",
-+					     __func__, pages);
-+				return -ENOMEM;
-+			}
-+		}
-+		start += pages * PAGE_SIZE;
-+	}
-+	return 0;
-+}
-+
- /*
-  * Application wants to free up the pages and associated backing store.
-  * This is effectively punching a hole into the middle of a file.
-@@ -934,6 +1001,8 @@ madvise_vma(struct vm_area_struct *vma, struct vm_area_struct **prev,
- 	case MADV_FREE:
- 	case MADV_DONTNEED:
- 		return madvise_dontneed_free(vma, prev, start, end, behavior);
-+	case MADV_POPULATE:
-+		return madvise_populate(vma, prev, start, end);
- 	default:
- 		return madvise_behavior(vma, prev, start, end, behavior);
- 	}
-@@ -954,6 +1023,7 @@ madvise_behavior_valid(int behavior)
- 	case MADV_FREE:
- 	case MADV_COLD:
- 	case MADV_PAGEOUT:
-+	case MADV_POPULATE:
- #ifdef CONFIG_KSM
- 	case MADV_MERGEABLE:
- 	case MADV_UNMERGEABLE:
--- 
-2.29.2
 
