@@ -2,167 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB6B31DD30
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 17:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5F831DD98
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 17:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbhBQQVM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Feb 2021 11:21:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56992 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233418AbhBQQVB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 17 Feb 2021 11:21:01 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11HG4Wsg043012;
-        Wed, 17 Feb 2021 11:19:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=Ks6WtbUp554Hx99i4JOUNKQ1uY1qWSRYOgnpaGD1k9g=;
- b=OZR9mAJP+weCO5wC0AbzdiyHu7DYQzuc+dwiihhMbc0STeS4aGRo/LKkbKsJ1VIorPQi
- B2hPyx+0Pq88F+iAuexTIMeKFcIg3y9ej5DYGsKSryWCElnkjGzOvF9LtUXrwRsvUiOA
- /GgB4E9NS3yYQyZD1s/aLEl1EebDHJrt+ZdYWGmUdtCrBL1X5CnM5UVtSk/aypNetw9P
- OutaIXUG4y8raLuypVI4vJgSQ2BUlDf0TH070wCspRNZ3WjsuPmn6FP12nZrHltzzq8j
- UO92XVyQu80qeJSPz2bPa/ya91/Awg6dxydKcITUa3/bk1TEIBqkaOtkF8hUvLz8Z/dM Kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36s5q2j553-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Feb 2021 11:19:38 -0500
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11HG4uk5044788;
-        Wed, 17 Feb 2021 11:19:37 -0500
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36s5q2j54a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Feb 2021 11:19:37 -0500
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11HG3f69032451;
-        Wed, 17 Feb 2021 16:19:35 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma05wdc.us.ibm.com with ESMTP id 36p6d9fc26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Feb 2021 16:19:35 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11HGJYeC25690478
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Feb 2021 16:19:35 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0E4A7806A;
-        Wed, 17 Feb 2021 16:19:34 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F5837805E;
-        Wed, 17 Feb 2021 16:19:27 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.85.199.127])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 17 Feb 2021 16:19:27 +0000 (GMT)
-Message-ID: <b58debfe598331791ecc238a6bf8d2cf1762203a.camel@linux.ibm.com>
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        id S234238AbhBQQrF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Feb 2021 11:47:05 -0500
+Received: from mga17.intel.com ([192.55.52.151]:43001 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233694AbhBQQrD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 17 Feb 2021 11:47:03 -0500
+IronPort-SDR: hPshM5T/ZdeKBkFN87/89j/ADOKxlM9utzraJSs1OlWwLawf6jvZYCdVG7a1Q5EMPHicx4ZRyf
+ v+O3WhccvWpA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="163027689"
+X-IronPort-AV: E=Sophos;i="5.81,184,1610438400"; 
+   d="scan'208";a="163027689"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 08:46:20 -0800
+IronPort-SDR: p4xrecJyz2xm+4iEhhcQ2Zo6DlugFHtfJpi72DQKxt3FDm18sE0+dRVssUpEM0OnV0Pe2qS8YL
+ 81PxLW1ZmbZg==
+X-IronPort-AV: E=Sophos;i="5.81,184,1610438400"; 
+   d="scan'208";a="400024934"
+Received: from mdyakos-mobl2.amr.corp.intel.com (HELO [10.212.191.220]) ([10.212.191.220])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 08:46:19 -0800
+Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
+ prefault/prealloc memory
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
         Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Date:   Wed, 17 Feb 2021 08:19:26 -0800
-In-Reply-To: <5a8567a9-6940-c23f-0927-e4b5c5db0d5e@redhat.com>
-References: <20210214091954.GM242749@kernel.org>
-         <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
-         <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
-         <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
-         <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
-         <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
-         <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
-         <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
-         <000cfaa0a9a09f07c5e50e573393cda301d650c9.camel@linux.ibm.com>
-         <5a8567a9-6940-c23f-0927-e4b5c5db0d5e@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+References: <20210217154844.12392-1-david@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <726b0766-9624-69c5-5a45-ffad42c446b1@intel.com>
+Date:   Wed, 17 Feb 2021 08:46:18 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-17_13:2021-02-16,2021-02-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=5 suspectscore=0
- priorityscore=1501 mlxscore=5 phishscore=0 clxscore=1011 impostorscore=0
- bulkscore=0 adultscore=0 malwarescore=0 mlxlogscore=127 spamscore=5
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102170122
+In-Reply-To: <20210217154844.12392-1-david@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2021-02-16 at 18:16 +0100, David Hildenbrand wrote:
-[...]
-> > >   The discussion regarding migratability only really popped up
-> > > because this is a user-visible thing and not being able to
-> > > migrate can be a real problem (fragmentation, ZONE_MOVABLE, ...).
-> > 
-> > I think the biggest use will potentially come from hardware
-> > acceleration.  If it becomes simple to add say encryption to a
-> > secret page with no cost, then no flag needed.  However, if we only
-> > have a limited number of keys so once we run out no more encrypted
-> > memory then it becomes a costly resource and users might want a
-> > choice of being backed by encryption or not.
+On 2/17/21 7:48 AM, David Hildenbrand wrote:
+> While MADV_DONTNEED and FALLOC_FL_PUNCH_HOLE provide us ways to reliably
+> discard memory, there is no generic approach to populate ("preallocate")
+> memory.
 > 
-> Right. But wouldn't HW support with configurable keys etc. need more 
-> syscall parameters (meaning, even memefd_secret() as it is would not
-> be sufficient?). I suspect the simplistic flag approach might not
-> be sufficient. I might be wrong because I have no clue about MKTME
-> and friends.
+> Although mmap() supports MAP_POPULATE, it is not applicable to the concept
+> of sparse memory mappings, where we want to do populate/discard
+> dynamically and avoid expensive/problematic remappings. In addition,
+> we never actually report error during the final populate phase - it is
+> best-effort only.
 
-The theory I was operating under is key management is automatic and
-hidden, but key scarcity can't be, so if you flag requesting hardware
-backing then you either get success (the kernel found a key) or failure
-(the kernel is out of keys).  If we actually want to specify the key
-then we need an extra argument and we *must* have a new system call.
+Seems pretty sane to me.
 
-> Anyhow, I still think extending memfd_create() might just be good
-> enough - at least for now.
+But, I was surprised that MADV_WILLNEED was no mentioned.  It might be
+nice to touch on on why MADV_WILLNEED is a bad choice for this
+functionality?  We could theoretically have it populate anonymous
+mappings instead of just swapping in.
 
-I really think this is the wrong approach for a user space ABI.  If we
-think we'll ever need to move to a separate syscall, we should begin
-with one.  The pain of trying to shift userspace from memfd_create to a
-new syscall would be enormous.  It's not impossible (see clone3) but
-it's a pain we should avoid if we know it's coming.
+I guess it's possible that folks are using MADV_WILLNEED on sparse
+mappings that they don't want to populate, but it would be nice to get
+that in the changelog.
 
->  Things like HW support might have requirements we don't even know
-> yet and that we cannot even model in memfd_secret() right now.
+I was also a bit bummed to see the broad VM_IO/PFNMAP restriction show
+up again.  I was just looking at implementing pre-faulting for the new
+SGX driver:
 
-This is the annoying problem with our Linux unbreakable ABI policy: we
-get to plan when the ABI is introduced for stuff we don't yet even know
-about.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/cpu/sgx/driver.c
 
-James
-
-
+It has a vm_ops->fault handler, but the VMAs are VM_IO.  It obviously
+don't work with gup, though.  Not a deal breaker, and something we could
+certainly add to this later.
