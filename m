@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBB531E248
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 23:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB9931E243
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 23:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhBQWbG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Feb 2021 17:31:06 -0500
-Received: from mga09.intel.com ([134.134.136.24]:13777 "EHLO mga09.intel.com"
+        id S233974AbhBQWa6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Feb 2021 17:30:58 -0500
+Received: from mga09.intel.com ([134.134.136.24]:13800 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233922AbhBQW3t (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 17 Feb 2021 17:29:49 -0500
-IronPort-SDR: Unfiuprb39bp2oBe9+W3Bth/fQiXmdIyT6YGuFtrgaxWXjE8XKUVQhKqJcr4qLXyvGYL+hFVV+
- xxWXWGaJ9qWw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="183461456"
+        id S233924AbhBQW3x (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 17 Feb 2021 17:29:53 -0500
+IronPort-SDR: gun0bD+jx4EfpLj+otFTdndSEdrGgx6CLWKe5ySmf0d/zxWmU0eOTXgJpVutyw6gDwclr+IW/H
+ NxQihpaEacnA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="183461459"
 X-IronPort-AV: E=Sophos;i="5.81,185,1610438400"; 
-   d="scan'208";a="183461456"
+   d="scan'208";a="183461459"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:28:01 -0800
-IronPort-SDR: 9rHEgYBDW+Uldj0pb1njzoreePCNPAz4kDBHKr2ZnU2Uom93Vl/0AeHZEY7pDrjbpqPJZEeJDi
- nopNVyf/8IIA==
+IronPort-SDR: cKmcJ2c0sUj1WaZehqmuzDTSoIIY8fj5Ww7jX+EOULFeNJFMbnsdsWUQ0tDny5fqbUj61nSpgF
+ qmuFbgqTDcNw==
 X-IronPort-AV: E=Sophos;i="5.81,185,1610438400"; 
-   d="scan'208";a="400172637"
+   d="scan'208";a="400172642"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:28:00 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:28:01 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -53,9 +53,9 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v21 13/26] x86/mm: Shadow Stack page fault error checking
-Date:   Wed, 17 Feb 2021 14:27:17 -0800
-Message-Id: <20210217222730.15819-14-yu-cheng.yu@intel.com>
+Subject: [PATCH v21 14/26] x86/mm: Update maybe_mkwrite() for shadow stack
+Date:   Wed, 17 Feb 2021 14:27:18 -0800
+Message-Id: <20210217222730.15819-15-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20210217222730.15819-1-yu-cheng.yu@intel.com>
 References: <20210217222730.15819-1-yu-cheng.yu@intel.com>
@@ -65,92 +65,140 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Shadow stack accesses are those that are performed by the CPU where it
-expects to encounter a shadow stack mapping.  These accesses are performed
-implicitly by CALL/RET at the site of the shadow stack pointer.  These
-accesses are made explicitly by shadow stack management instructions like
-WRUSSQ.
+When serving a page fault, maybe_mkwrite() makes a PTE writable if its vma
+has VM_WRITE.
 
-Shadow stacks accesses to shadow-stack mapping can see faults in normal,
-valid operation just like regular accesses to regular mappings.  Shadow
-stacks need some of the same features like delayed allocation, swap and
-copy-on-write.
+A shadow stack vma has VM_SHSTK.  Its PTEs have _PAGE_DIRTY, but not
+_PAGE_WRITE.  In fork(), _PAGE_DIRTY is cleared to effect copy-on-write,
+and in page fault, _PAGE_DIRTY is restored and the shadow stack page is
+writable again.
 
-Shadow stack accesses can also result in errors, such as when a shadow
-stack overflows, or if a shadow stack access occurs to a non-shadow-stack
-mapping.
+Update maybe_mkwrite() by introducing arch_maybe_mkwrite(), which sets
+_PAGE_DIRTY for a shadow stack PTE.
 
-In handling a shadow stack page fault, verify it occurs within a shadow
-stack mapping.  It is always an error otherwise.  For valid shadow stack
-accesses, set FAULT_FLAG_WRITE to effect copy-on-write.  Because clearing
-_PAGE_DIRTY (vs. _PAGE_RW) is used to trigger the fault, shadow stack read
-fault and shadow stack write fault are not differentiated and both are
-handled as a write access.
+Apply the same changes to maybe_pmd_mkwrite().
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/trap_pf.h |  2 ++
- arch/x86/mm/fault.c            | 19 +++++++++++++++++++
- 2 files changed, 21 insertions(+)
+ arch/x86/Kconfig        |  4 ++++
+ arch/x86/mm/pgtable.c   | 18 ++++++++++++++++++
+ include/linux/mm.h      |  2 ++
+ include/linux/pgtable.h | 24 ++++++++++++++++++++++++
+ mm/huge_memory.c        |  2 ++
+ 5 files changed, 50 insertions(+)
 
-diff --git a/arch/x86/include/asm/trap_pf.h b/arch/x86/include/asm/trap_pf.h
-index 10b1de500ab1..afa524325e55 100644
---- a/arch/x86/include/asm/trap_pf.h
-+++ b/arch/x86/include/asm/trap_pf.h
-@@ -11,6 +11,7 @@
-  *   bit 3 ==				1: use of reserved bit detected
-  *   bit 4 ==				1: fault was an instruction fetch
-  *   bit 5 ==				1: protection keys block access
-+ *   bit 6 ==				1: shadow stack access fault
-  *   bit 15 ==				1: SGX MMU page-fault
-  */
- enum x86_pf_error_code {
-@@ -20,6 +21,7 @@ enum x86_pf_error_code {
- 	X86_PF_RSVD	=		1 << 3,
- 	X86_PF_INSTR	=		1 << 4,
- 	X86_PF_PK	=		1 << 5,
-+	X86_PF_SHSTK	=		1 << 6,
- 	X86_PF_SGX	=		1 << 15,
- };
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index c80cead80a49..b6a1e2bd872d 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1955,12 +1955,16 @@ config X86_SGX
+ config ARCH_HAS_SHADOW_STACK
+ 	def_bool n
  
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index f1f1b5a0956a..4cfb8c474a82 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1131,6 +1131,17 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
- 				       (error_code & X86_PF_INSTR), foreign))
- 		return 1;
- 
-+	/*
-+	 * Verify a shadow stack access is within a shadow stack VMA.
-+	 * It is always an error otherwise.  Normal data access to a
-+	 * shadow stack area is checked in the case followed.
-+	 */
-+	if (error_code & X86_PF_SHSTK) {
-+		if (!(vma->vm_flags & VM_SHSTK))
-+			return 1;
-+		return 0;
-+	}
++config ARCH_MAYBE_MKWRITE
++	def_bool n
 +
- 	if (error_code & X86_PF_WRITE) {
- 		/* write, present and write, not present: */
- 		if (unlikely(!(vma->vm_flags & VM_WRITE)))
-@@ -1296,6 +1307,14 @@ void do_user_addr_fault(struct pt_regs *regs,
+ config X86_CET
+ 	prompt "Intel Control-flow protection for user-mode"
+ 	def_bool n
+ 	depends on AS_WRUSS
+ 	depends on ARCH_HAS_SHADOW_STACK
+ 	select ARCH_USES_HIGH_VMA_FLAGS
++	select ARCH_MAYBE_MKWRITE
+ 	help
+ 	  Control-flow protection is a set of hardware features which place
+ 	  additional restrictions on indirect branches.  These help
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index f6a9e2e36642..0f4fbf51a9fc 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -610,6 +610,24 @@ int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ }
+ #endif
  
- 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
++#ifdef CONFIG_ARCH_MAYBE_MKWRITE
++pte_t arch_maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
++{
++	if (likely(vma->vm_flags & VM_SHSTK))
++		pte = pte_mkwrite_shstk(pte);
++	return pte;
++}
++
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++pmd_t arch_maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
++{
++	if (likely(vma->vm_flags & VM_SHSTK))
++		pmd = pmd_mkwrite_shstk(pmd);
++	return pmd;
++}
++#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
++#endif /* CONFIG_ARCH_MAYBE_MKWRITE */
++
+ /**
+  * reserve_top_address - reserves a hole in the top of kernel address space
+  * @reserve - size of hole to reserve
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 7be5f8b874aa..abd756e426fc 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -993,6 +993,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+ {
+ 	if (likely(vma->vm_flags & VM_WRITE))
+ 		pte = pte_mkwrite(pte);
++	else
++		pte = arch_maybe_mkwrite(pte, vma);
+ 	return pte;
+ }
  
-+	/*
-+	 * Clearing _PAGE_DIRTY is used to detect shadow stack access.
-+	 * This method cannot distinguish shadow stack read vs. write.
-+	 * For valid shadow stack accesses, set FAULT_FLAG_WRITE to effect
-+	 * copy-on-write.
-+	 */
-+	if (hw_error_code & X86_PF_SHSTK)
-+		flags |= FAULT_FLAG_WRITE;
- 	if (hw_error_code & X86_PF_WRITE)
- 		flags |= FAULT_FLAG_WRITE;
- 	if (hw_error_code & X86_PF_INSTR)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 8fcdfa52eb4b..d8452218d09b 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1439,6 +1439,30 @@ static inline bool arch_has_pfn_modify_check(void)
+ }
+ #endif /* !_HAVE_ARCH_PFN_MODIFY_ALLOWED */
+ 
++#ifdef CONFIG_MMU
++#ifdef CONFIG_ARCH_MAYBE_MKWRITE
++pte_t arch_maybe_mkwrite(pte_t pte, struct vm_area_struct *vma);
++
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++pmd_t arch_maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma);
++#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
++
++#else /* !CONFIG_ARCH_MAYBE_MKWRITE */
++static inline pte_t arch_maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
++{
++	return pte;
++}
++
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++static inline pmd_t arch_maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
++{
++	return pmd;
++}
++#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
++
++#endif /* CONFIG_ARCH_MAYBE_MKWRITE */
++#endif /* CONFIG_MMU */
++
+ /*
+  * Architecture PAGE_KERNEL_* fallbacks
+  *
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 91ca9b103ee5..ac651d529dbe 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -478,6 +478,8 @@ pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+ {
+ 	if (likely(vma->vm_flags & VM_WRITE))
+ 		pmd = pmd_mkwrite(pmd);
++	else
++		pmd = arch_maybe_pmd_mkwrite(pmd, vma);
+ 	return pmd;
+ }
+ 
 -- 
 2.21.0
 
