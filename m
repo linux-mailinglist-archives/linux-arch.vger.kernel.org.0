@@ -2,28 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88ADC31E266
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 23:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270A231E269
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Feb 2021 23:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbhBQWfC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Feb 2021 17:35:02 -0500
-Received: from mga03.intel.com ([134.134.136.65]:15550 "EHLO mga03.intel.com"
+        id S231748AbhBQWfJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Feb 2021 17:35:09 -0500
+Received: from mga03.intel.com ([134.134.136.65]:15553 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233935AbhBQWc3 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 17 Feb 2021 17:32:29 -0500
-IronPort-SDR: c6cLwFIv7Kh4e1t/3HafvF1CUOtAoEsjXp+mlDQpB9nc0eN0AP9i1yily9xGXVlO9yjCvgXc67
- aMQsbPWlTZng==
-X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="183408999"
+        id S234144AbhBQWca (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 17 Feb 2021 17:32:30 -0500
+IronPort-SDR: BNaK0ehDTtQDp+2JLJdru5zZazeNwpQdsld/a6/AZ8uy5ySJBnq8WnD75JMWEZ9341/9DR/55m
+ EG5urNqKhEyA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="183409002"
 X-IronPort-AV: E=Sophos;i="5.81,185,1610438400"; 
-   d="scan'208";a="183408999"
+   d="scan'208";a="183409002"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:31:45 -0800
-IronPort-SDR: Lx1J4MPTKVtIOVaO9O+FGhFiogAn1Ae6Zwg9iidmqao5eDMpjO1TQ/CIJf6fJfnADJ060PfSG2
- Q6woQk53gXOw==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:31:46 -0800
+IronPort-SDR: kw1HrdNyLDd75O4PiZLQx7EPT6vTVbFEPiCxaxLTittvU8btPnqgcVALK/Yaa7aGpKcVLvJ+kk
+ iObrai7tz7bg==
 X-IronPort-AV: E=Sophos;i="5.81,185,1610438400"; 
-   d="scan'208";a="362200450"
+   d="scan'208";a="362200458"
 Received: from yyu32-desk.sc.intel.com ([143.183.136.146])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:31:44 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2021 14:31:45 -0800
 From:   Yu-cheng Yu <yu-cheng.yu@intel.com>
 To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -53,56 +53,43 @@ To:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         Haitao Huang <haitao.huang@intel.com>
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v21 0/7] Control-flow Enforcement: Indirect Branch Tracking
-Date:   Wed, 17 Feb 2021 14:31:28 -0800
-Message-Id: <20210217223135.16790-1-yu-cheng.yu@intel.com>
+Subject: [PATCH v21 1/7] x86/cet/ibt: Update Kconfig for user-mode Indirect Branch Tracking
+Date:   Wed, 17 Feb 2021 14:31:29 -0800
+Message-Id: <20210217223135.16790-2-yu-cheng.yu@intel.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20210217223135.16790-1-yu-cheng.yu@intel.com>
+References: <20210217223135.16790-1-yu-cheng.yu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Control-flow Enforcement (CET) is a new Intel processor feature that blocks
-return/jump-oriented programming attacks.  Details are in "Intel 64 and
-IA-32 Architectures Software Developer's Manual" [1].
+Indirect branch tracking is a hardware security feature that verifies near
+indirect call/jump instructions arrive at intended targets, which are
+labeled by the compiler with ENDBR opcodes.  If such instructions reach
+unlabeled locations, the processor raises control-protection faults.
 
-This is the second part of CET and enables Indirect Branch Tracking (IBT).
-It is built on top of the shadow stack series.
+Check the compiler is up-to-date at config time.
 
-Changes in v21:
-- Rebase to Linus tree v5.11.
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+ arch/x86/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-[1] Intel 64 and IA-32 Architectures Software Developer's Manual:
-
-    https://software.intel.com/en-us/download/intel-64-and-ia-32-
-    architectures-sdm-combined-volumes-1-2a-2b-2c-2d-3a-3b-3c-3d-and-4
-
-[2] Indirect Branch Tracking patches v20:
-
-    https://lkml.kernel.org/r/20210210180245.13770-1-yu-cheng.yu@intel.com/
-
-H.J. Lu (3):
-  x86/cet/ibt: Update arch_prctl functions for Indirect Branch Tracking
-  x86/vdso/32: Add ENDBR32 to __kernel_vsyscall entry point
-  x86/vdso: Insert endbr32/endbr64 to vDSO
-
-Yu-cheng Yu (4):
-  x86/cet/ibt: Update Kconfig for user-mode Indirect Branch Tracking
-  x86/cet/ibt: User-mode Indirect Branch Tracking support
-  x86/cet/ibt: Handle signals for Indirect Branch Tracking
-  x86/cet/ibt: Update ELF header parsing for Indirect Branch Tracking
-
- arch/x86/Kconfig                         |  1 +
- arch/x86/entry/vdso/Makefile             |  4 ++
- arch/x86/entry/vdso/vdso32/system_call.S |  3 ++
- arch/x86/include/asm/cet.h               |  3 ++
- arch/x86/kernel/cet.c                    | 59 +++++++++++++++++++++++-
- arch/x86/kernel/cet_prctl.c              |  5 ++
- arch/x86/kernel/fpu/signal.c             |  8 ++--
- arch/x86/kernel/process_64.c             |  8 ++++
- 8 files changed, 86 insertions(+), 5 deletions(-)
-
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index cafa4a2c1d2d..5e157031bf82 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1963,6 +1963,7 @@ config X86_CET
+ 	def_bool n
+ 	depends on AS_WRUSS
+ 	depends on ARCH_HAS_SHADOW_STACK
++	depends on $(cc-option,-fcf-protection)
+ 	select ARCH_USES_HIGH_VMA_FLAGS
+ 	select ARCH_MAYBE_MKWRITE
+ 	select ARCH_USE_GNU_PROPERTY
 -- 
 2.21.0
 
