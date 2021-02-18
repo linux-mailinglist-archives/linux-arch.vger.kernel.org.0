@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FB931EE07
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 19:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E4B31F051
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 20:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbhBRSIp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Feb 2021 13:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S233014AbhBRTqN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Feb 2021 14:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbhBRPfe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Feb 2021 10:35:34 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7388EC061574;
-        Thu, 18 Feb 2021 07:34:26 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id b24so1612158qtp.13;
-        Thu, 18 Feb 2021 07:34:26 -0800 (PST)
+        with ESMTP id S231338AbhBRTZF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Feb 2021 14:25:05 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D879C061574;
+        Thu, 18 Feb 2021 11:24:22 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id s10so854878qvl.9;
+        Thu, 18 Feb 2021 11:24:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=qdUGE0ei1PeIqXVirzz2L2hmAvJjnRfr69rW6TULXQM=;
-        b=evSDWFVK1uXHuQBlCdLbHM2UlZh8PIg2tlI0ar+EYH15gZMFZ/WvisEj1M+4ssKAgO
-         QoCwbWFk2xYFvYtfwpqfXDCGv2MlvCk9bMvErepQTW49NcvBp75VJZF1EyfbTNrGBqoD
-         QHuzKtGevEeo4/Hnhh5i5tuCGoYUurqoSTuLbno9W9NOv0PeioJl1VP/qDu/LdS0Q4yU
-         jLe8eJzHn7fYI+QiqMRLDhN/HgkHfooH0L4tsZhuj95u7yc2p4h+sbLTnx8FYUyYXSZt
-         u3lfQJfDh3gtt8HuzuQfKS9yqBlzgOjf/ReUWtOH+RLXB8zni0ZvDLz1EY0nrCLEV7ED
-         1nGw==
+        bh=mXM5l1A/rr2ByJpBGKJkreiRJB4kUscTTSOxZVH+5OE=;
+        b=S/1Zj2rIHDp94Hy7Lrt4L/xh6dTEeTwa+m6A8XtFbEUiecdRcMxUk1NgfIGY2q39AK
+         FzmYw7TJZUIqLjLFIZQpm1IhA43Glh72V3tlgVUnbXmG7chWrLq9i5YnB9GyhSoQdZKE
+         FlQry+iTUyO0pUzY0s3qymVBa/mztuIOExwpxrc1WzGs0GIVA+gLoCmkTsDjixArpIlK
+         V9wewO3y/NPHs66KUMNW8OtgcHb5o1ly+cOiawI8BHmX50kSY7Dx8qQyEf8YMiwaJfa5
+         SCq9Ku2s2wNmZxoCeaYJMLt6jfju1GZKd2fzi6Y7eDR0DQD1hbMOoJJ3yVW2uULSmZhF
+         Cu0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qdUGE0ei1PeIqXVirzz2L2hmAvJjnRfr69rW6TULXQM=;
-        b=CzHRK1U1CA8Up+mLZ73MeMSFREuDKlg4GSAggMghnNsL1dAqJTRRVW2MTeHsSYfKs6
-         GgtvRJc9PnaFJr53KRvWnqnZ6IajceXke0Wf+ZTgh4F4CAmxTUiepGEcfnky8lkYwiGn
-         M2OVbUCAo11SOxRhBOhriLiGj15YJq8iXzfBxBr1pEOG0MHvQJm5dFNlsV2cB1567ksA
-         4ikabRlrzASOFliKY3Y2OnpaSoq0WrIQHnKGpDk2OTbIglf2R9j17AB6Ul8IoWyBrlea
-         DBqHKt5K4RyhjBACWgY6CWxUt3JSCwkAmeRSNBCKQvBQNsocK4OZs6E7w17a/MwLmdn3
-         uHZA==
-X-Gm-Message-State: AOAM530y7cO6k1LJfOH4/eVh1Yta+LPTd+5rJJsmi+s3yYuHS4TQnm7h
-        SYMzyrPeEJS3D/JTkG0fw/4=
-X-Google-Smtp-Source: ABdhPJzKLm03m2ZM2weJmDc19njdUFo0p+tamBbKYBwgzzZL1EUg/dGEX0ItuZg3We5eXCMPQXGIrg==
-X-Received: by 2002:ac8:59cd:: with SMTP id f13mr4786833qtf.258.1613662465537;
-        Thu, 18 Feb 2021 07:34:25 -0800 (PST)
+        bh=mXM5l1A/rr2ByJpBGKJkreiRJB4kUscTTSOxZVH+5OE=;
+        b=eAW3THML+phXszvRpmXxPK6G7lhlask2pEM/+CYDjQN/dFskfwOuS578PLZDxT71Su
+         bTJgcVJEvZ9GxLWNcZ24Exbs8NpA1udz/VVFGaZnI4iMkjMh4+GzU6uCgHAI7WTryWjL
+         xXACoOXL0TyF/ZWYIu6xJU8zv5yeWAtJeb5loGU8VBC7RwFZOEwX5yUjuFnRt6ayW7Cj
+         IsawXjEIQe4kGf032JaG7+KCiOyDGSvkD2NFCmLlgqFWP/EsAFiRymqgiWyzLhmNr+Hu
+         km1MfaW4AHM6dVWlxOa41WmJhlXhEgV9lpH+5i8zMojKzvDep8LSmNLJEPrc+N0kWV+7
+         QoqQ==
+X-Gm-Message-State: AOAM533o3kLrWXdP0lEeDhOzq1dEFjLwQKVoBjukoL8TYtrY7VSjQ9wl
+        BV7GeERbcLEwsr59/w11MtQ=
+X-Google-Smtp-Source: ABdhPJyMSh9g14GV26Z4i40nLxt6vVBDIr9z7jhPcJi5tm6xS2HnR/vD0o8ec2Yg+2YlHh+kg/WzCg==
+X-Received: by 2002:a0c:90c9:: with SMTP id p67mr5761632qvp.14.1613676261132;
+        Thu, 18 Feb 2021 11:24:21 -0800 (PST)
 Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id m5sm4072260qke.134.2021.02.18.07.34.24
+        by smtp.gmail.com with ESMTPSA id f26sm4479242qkh.80.2021.02.18.11.24.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Feb 2021 07:34:25 -0800 (PST)
-Date:   Thu, 18 Feb 2021 07:34:24 -0800
+        Thu, 18 Feb 2021 11:24:20 -0800 (PST)
+Date:   Thu, 18 Feb 2021 11:24:19 -0800
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
@@ -67,68 +67,73 @@ Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         Wei Yang <richard.weiyang@linux.alibaba.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH 14/14] MAINTAINERS: Add entry for the bitmap API
-Message-ID: <20210218153424.GA701246@yury-ThinkPad>
+Subject: Re: [PATCH 08/14] lib/Kconfig: introduce FAST_PATH option
+Message-ID: <20210218192419.GA788573@yury-ThinkPad>
 References: <20210218040512.709186-1-yury.norov@gmail.com>
- <20210218040512.709186-15-yury.norov@gmail.com>
- <YC6HoF2lhSlrYs3j@smile.fi.intel.com>
+ <20210218040512.709186-9-yury.norov@gmail.com>
+ <YC6EnzFUXDuroy0+@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YC6HoF2lhSlrYs3j@smile.fi.intel.com>
+In-Reply-To: <YC6EnzFUXDuroy0+@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 18, 2021 at 05:28:32PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 17, 2021 at 08:05:12PM -0800, Yury Norov wrote:
-> > Add myself as maintainer for bitmap API.
+On Thu, Feb 18, 2021 at 05:15:43PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 17, 2021 at 08:05:06PM -0800, Yury Norov wrote:
+> > This series introduces fast paths for find_bit() routines. It is
+> > beneficial for typical systems, but those who limited in I-cache
+> > may be concerned about increasing the .text size of the Image.
 > > 
-> > I'm an author of current implementation of lib/find_bit and an
-> > active contributor to lib/bitmap. It was spotted that there's no
-> > maintainer for bitmap API. I'm willing to maintain it.
+> > To address this concern, one can disable FAST_PATH option in the config
+> > and some save memory.
+> > 
+> > The effect of this option on my arm64 next-20210217 build is:
 > 
-> Perhaps reviewers as well, like Rasmus, if he is okay with that, of course?
+> (Maybe bloat-o-meter will give better view on this, i.e. more human-readable)
 
-I'll be happy if you and Rasmus join the team. :) Guys, just let me
-know and I'll update the patch.
- 
-> Otherwise, why not?
-> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Never heard about this tool, thanks for the hint.
+
+scripts/bloat-o-meter vmlinux vmlinux.new
+add/remove: 16/13 grow/shrink: 111/439 up/down: 3616/-19352 (-15736)
+Function                                     old     new   delta
+find_next_bit.constprop                        -     220    +220
+apply_wqattrs_cleanup                          -     176    +176
+memcg_free_shrinker_maps                       -     172    +172
+...
+cpuset_hotplug_workfn                       2584    2288    -296
+task_numa_fault                             3640    3320    -320
+kmem_cache_free_bulk                        1684    1280    -404
+Total: Before=26085140, After=26069404, chg -0.06%
+
+The complete output is here:
+https://pastebin.com/kBSdVJcK
+
+So if I understand the output correctly, the size of .text is decreased...
+Looks weird, but if it's true, we don't need the FAST_BIT config at all
+because there's no tradeoff, and I should drop the patch.
+
+Hmm...
+
+> > +config FAST_PATH
 > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  MAINTAINERS | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 7bdf12d3e0a8..9f8540a9dabf 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -3146,6 +3146,20 @@ F:	Documentation/filesystems/bfs.rst
-> >  F:	fs/bfs/
-> >  F:	include/uapi/linux/bfs_fs.h
-> >  
-> > +BITMAP API
-> > +M:	Yury Norov <yury.norov@gmail.com>
-> > +S:	Maintained
-> > +F:	include/asm-generic/bitops/find.h
-> > +F:	include/linux/bitmap.h
-> > +F:	lib/bitmap.c
-> > +F:	lib/find_bit.c
-> > +F:	lib/find_find_bit_benchmark.c
-> > +F:	lib/test_bitmap.c
-> > +F:	tools/include/asm-generic/bitops/find.h
-> > +F:	tools/include/linux/bitmap.h
-> > +F:	tools/lib/bitmap.c
-> > +F:	tools/lib/find_bit.c
-> > +
-> >  BLINKM RGB LED DRIVER
-> >  M:	Jan-Simon Moeller <jansimon.moeller@gmx.de>
-> >  S:	Maintained
-> > -- 
-> > 2.25.1
-> > 
+> I think the name is to broad for this cases, perhaps BITS_FAST_PATH? or BITMAP?
+
+My logic was that since SMALL_CONST() is global, and FAST_PATH
+controls the SMALL_CONST, it should also be global. I believe,
+Linux should have a global switch to control the behaviour in
+such cases, similarly to -Os compiler option. And I was surprized
+when I found nothing like FAST_PATH in the config.
+
+What about having FAST_PATH as a global option, and later if someone
+will request for granularity, we'll introduce nested configs?
+
+> > +	bool "Enable fast path code generation"
+> > +	default y
+> > +	help
+> > +	  This option enables fast path optimization with the cost of increasing
+> > +	  the text section.
 > 
 > -- 
 > With Best Regards,
