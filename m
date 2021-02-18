@@ -2,33 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2464331EAF1
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 15:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6A131EAF3
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 15:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbhBRO0I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Feb 2021 09:26:08 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54006 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230386AbhBRLyd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 18 Feb 2021 06:54:33 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1613647717; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        id S230438AbhBRO00 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Feb 2021 09:26:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38964 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232723AbhBRMYI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 18 Feb 2021 07:24:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613650960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GmsCgAZLPBXWqpRTBQJmNesuC+VzbGrswlfwNCxzi2Y=;
-        b=DW7BCx40StPXtRqi8TB9MbTLE/gLCOfiRxXTism98TewhMtE8dWM10Pp3Z7pvRUoPLv1Z0
-        Jof5xr9quqaa8Gz7Y0grIaJYTF7eIK4n88jHV+9sm+FC9vP8Py2LxfZ+9JDhBS/rpaqj0x
-        JpYoUbS82OvN/3IGwpm+jVaj8mq1aWM=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B667AAFF8;
-        Thu, 18 Feb 2021 11:28:35 +0000 (UTC)
-Date:   Thu, 18 Feb 2021 12:28:34 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bh=yhLVfX0fB/D8R1zKoQVO+TMTBrUwUHt7HIxasf2kZek=;
+        b=Al081Z3aHbE5jdQK80eTI7QmH5Gpc/UmEcSCSp1N+3NUc118lXFA6lW6iJyXCYP6gcSESU
+        e/egyXlvEUcFkwth4sJUkP+tD1LLTpzJcYdfjrGICmpRH0ilBSE8tjvof/2oSg/OvFyq4w
+        HpxBShX6FYU7dN0k1lgM59mtkZ0I1Lg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-513-nqPI8Ju-OrO5-wTceZ7uYA-1; Thu, 18 Feb 2021 07:22:36 -0500
+X-MC-Unique: nqPI8Ju-OrO5-wTceZ7uYA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7A694835E25;
+        Thu, 18 Feb 2021 12:22:32 +0000 (UTC)
+Received: from t480s.redhat.com (ovpn-114-59.ams2.redhat.com [10.36.114.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A9F02C01F;
+        Thu, 18 Feb 2021 12:22:17 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
         Oscar Salvador <osalvador@suse.de>,
         Matthew Wilcox <willy@infradead.org>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -44,49 +54,151 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
- prefault/prealloc memory
-Message-ID: <YC5PYuYVMSs5Mm6Q@dhcp22.suse.cz>
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
+Subject: [PATCH RFC] madvise.2: Document MADV_POPULATE
+Date:   Thu, 18 Feb 2021 13:22:16 +0100
+Message-Id: <20210218122216.12424-1-david@redhat.com>
+In-Reply-To: <20210217154844.12392-1-david@redhat.com>
 References: <20210217154844.12392-1-david@redhat.com>
- <YC5Am6a4KMSA8XoK@dhcp22.suse.cz>
- <3763a505-02d6-5efe-a9f5-40381acfbdfd@redhat.com>
- <de28b8db-a103-5bc2-8ace-d2907026a95d@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de28b8db-a103-5bc2-8ace-d2907026a95d@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu 18-02-21 11:54:48, David Hildenbrand wrote:
-> > > >      If we hit
-> > > >      hardware errors on pages, ignore them - nothing we really can or
-> > > >      should do.
-> > > > 3. On errors during MADV_POPULATED, some memory might have been
-> > > >      populated. Callers have to clean up if they care.
-> > > 
-> > > How does caller find out? madvise reports 0 on success so how do you
-> > > find out how much has been populated?
-> > 
-> > If there is an error, something might have been populated. In my QEMU
-> > implementation, I simply discard the range again, good enough. I don't
-> > think we need to really indicate "error and populated" or "error and not
-> > populated".
-> 
-> Clarifying again: if madvise(MADV_POPULATED) succeeds, it returns 0. If
-> there was a problem poopulating memory, it returns -ENOMEM (similar to
-> MADV_WILLNEED). Callers can detect the error and discard.
+Preview of MADV_POPULATE documentation, which is still under discussion:
+https://lkml.kernel.org/r/20210217154844.12392-1-david@redhat.com
 
-As responded to the previous mail. I wouldn't really bother telling
-callers what they should do. The interface will not give them any means
-to identify the error. They just have to live with the fact that the
-operation has failed.
+Once/if merged, there will be an official patch to man-page folks.
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Jann Horn <jannh@google.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Michael S. Tsirkin <mst@redhat.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Rolf Eike Beer <eike-kernel@sf-tec.de>
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-arch@vger.kernel.org
+Cc: Linux API <linux-api@vger.kernel.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ man2/madvise.2 | 59 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+
+diff --git a/man2/madvise.2 b/man2/madvise.2
+index 2af407212..ff08768a3 100644
+--- a/man2/madvise.2
++++ b/man2/madvise.2
+@@ -469,6 +469,48 @@ If a page is file-backed and dirty, it will be written back to the backing
+ storage.
+ The advice might be ignored for some pages in the range when it is not
+ applicable.
++.TP
++.BR MADV_POPULATE " (since Linux 5.13)
++Populate (prefault) page tables for the whole range.
++Depending on the underlying mapping, preallocate memory or read the
++underlying file.
++Do not generate
++.B SIGBUS
++when populating fails, return an error instead.
++The populate semantics match
++.BR MAP_POPULATE
++(see
++.BR mmap (2))
++with the exception that
++.B MADV_POPULATE
++fails if there is a proplem populating page tables.
++.B MADV_POPULATE
++simulates user space access to all pages in the range without actually
++reading/writing the pages.
++For private, writable mappings, simulate a write access; for all other
++mappings, simulate a read access.
++.IP
++If
++.B MADV_POPULATE
++succeeds, all page tables have been populated (prefaulted) once.
++If
++.B MADV_POPULATE
++fails, some page tables might have been populated.
++.IP
++.B MADV_POPULATE
++cannot be applied to
++.B PROT_NONE
++and special mappings marked with the kernel-internal
++.B VM_PFNMAP
++and
++.BR VM_IO .
++.IP
++Note that
++.B MADV_POPULATE
++will ignore any poisoned pages in the range.
++Similar to
++.BR MAP_POPULATE ,
++it cannot protect from the OOM (Out Of Memory) handler killing the process.
+ .SH RETURN VALUE
+ On success,
+ .BR madvise ()
+@@ -533,6 +575,17 @@ or
+ .BR VM_PFNMAP
+ ranges.
+ .TP
++.B EINVAL
++.I advice
++is
++.BR MADV_POPULATE ,
++but the specified address range includes
++.BR PROT_NONE ,
++.B VM_IO
++or
++.B VM_PFNMAP
++ranges.
++.TP
+ .B EIO
+ (for
+ .BR MADV_WILLNEED )
+@@ -548,6 +601,12 @@ Not enough memory: paging in failed.
+ Addresses in the specified range are not currently
+ mapped, or are outside the address space of the process.
+ .TP
++.B ENOMEM
++.I advice
++is
++.BR MADV_POPULATE ,
++but populating (prefaulting) page tables failed.
++.TP
+ .B EPERM
+ .I advice
+ is
 -- 
-Michal Hocko
-SUSE Labs
+2.29.2
+
