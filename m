@@ -2,119 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A63531E504
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 05:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA06631E93C
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 12:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbhBREJY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Feb 2021 23:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbhBREHG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Feb 2021 23:07:06 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39421C0611C3;
-        Wed, 17 Feb 2021 20:05:32 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id f17so525096qth.7;
-        Wed, 17 Feb 2021 20:05:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=84gBY6rinb7deZXraCF0UsTbJivw5Olo0gL8/eJ63tU=;
-        b=KxfSS6niVzijRzEtdP/DC9eQUkwlu1PvxSxEgcuFub2GuTOz4WaJzl7H/fCoy3S4+a
-         eY4RldJTLxIdrBcLG0vRW7OXyBIjEZFa7saILAydNPEBgUNEHizOdS7B/TEiEx0rbstR
-         rev03iKVpZhbH2hPkQYiQIqUWyIcgRFiVWM1RG12hesTBatJevDd7loVlToiG+B1atGS
-         rGcBdPLVhqF6B8ANXWe6OR4SLeGgwF4iP707XgAkmtbFwUetmpHypCVFnhwUR5kfALT5
-         tlH5Sd+YLHI0F27k+7ecClMw1Obo98OnA0M042LYX8TCbWfoaLW7/YKRMUA+KYUrLYwI
-         MPnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=84gBY6rinb7deZXraCF0UsTbJivw5Olo0gL8/eJ63tU=;
-        b=Wc8ZQJ0jPvOcl+LG0wzPl4ISJmS6kNHMtELuDmslnDuDzhK0ptsp5NEb/8fs1td6xN
-         YfRTg2TnrtVgOdhd1VOZBSvwgHI4t6mUh3zIpddiAUqfCbaZuLZopBVA5kw2dFzvqvQ6
-         XrMb/gZ13i15ABOT61fGqgIFXGQ97BT+SIU81U8a/0wMaPcKjnM73wn8nZ73dHZrwKTI
-         0wahFeM94f0XCmSTCJBlvxCxvQhwskhxBXVNc7xGyZmUFlg26vA1Ltc9rVYl8QvkmdbX
-         UCS1pq0rgXJ3VHkTcU0w6c0eVJV07fsASeRXDwqTabkQsXbtci8PRgudltgr2kSx41Hh
-         dfkg==
-X-Gm-Message-State: AOAM531by5KdfynW+pi0UFePdp8Hb5qVH1GH1UU2vghBBpBjs4vkRBX4
-        bpNYXaRDsbXU/ODuUm6Be7v01vpI2RCHhg==
-X-Google-Smtp-Source: ABdhPJwZifiZxE3P8q/lcvCbxJp+cC2M2zwuZmUjKMFL5WEt9kpRarYcAFb6PR4VznGQdSPl6yydfw==
-X-Received: by 2002:ac8:5d44:: with SMTP id g4mr2660798qtx.93.1613621131027;
-        Wed, 17 Feb 2021 20:05:31 -0800 (PST)
-Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id b20sm2748495qto.45.2021.02.17.20.05.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 20:05:30 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-m68k@lists.linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexey Klimov <aklimov@redhat.com>,
+        id S229755AbhBRLpw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Feb 2021 06:45:52 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37714 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231766AbhBRKpm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 18 Feb 2021 05:45:42 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1613643933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s56Gnw396EhRPm1YevA7eLB2KjutFFHIZPiy2hOTxEM=;
+        b=A9MqyQw+uGhARjd9EqBxsZ4pVorl1rxQ2pnTECvYBMZUd3tcI8ZcXKSNfsXKlEzsZwlgy4
+        kBdzERLSQASsLtQFB/lm5Ifsli67inMrXKgnu8AA9uhsmo259oTESajGpXVylgsoEhb7PR
+        P4QBZEcvbiTdUv8WNCMjQckNPvqvXeQ=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 32F03ADE3;
+        Thu, 18 Feb 2021 10:25:33 +0000 (UTC)
+Date:   Thu, 18 Feb 2021 11:25:31 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 14/14] MAINTAINERS: Add entry for the bitmap API
-Date:   Wed, 17 Feb 2021 20:05:12 -0800
-Message-Id: <20210218040512.709186-15-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210218040512.709186-1-yury.norov@gmail.com>
-References: <20210218040512.709186-1-yury.norov@gmail.com>
+        Arnd Bergmann <arnd@arndb.de>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
+ prefault/prealloc memory
+Message-ID: <YC5Am6a4KMSA8XoK@dhcp22.suse.cz>
+References: <20210217154844.12392-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210217154844.12392-1-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add myself as maintainer for bitmap API.
+On Wed 17-02-21 16:48:44, David Hildenbrand wrote:
+> When we manage sparse memory mappings dynamically in user space - also
+> sometimes involving MADV_NORESERVE - we want to dynamically populate/
 
-I'm an author of current implementation of lib/find_bit and an
-active contributor to lib/bitmap. It was spotted that there's no
-maintainer for bitmap API. I'm willing to maintain it.
+Just wondering what is MADV_NORESERVE? I do not see anything like that
+in the Linus tree. Did you mean MAP_NORESERVE?
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- MAINTAINERS | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> discard memory inside such a sparse memory region. Example users are
+> hypervisors (especially implementing memory ballooning or similar
+> technologies like virtio-mem) and memory allocators. In addition, we want
+> to fail in a nice way if populating does not succeed because we are out of
+> backend memory (which can happen easily with file-based mappings,
+> especially tmpfs and hugetlbfs).
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7bdf12d3e0a8..9f8540a9dabf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3146,6 +3146,20 @@ F:	Documentation/filesystems/bfs.rst
- F:	fs/bfs/
- F:	include/uapi/linux/bfs_fs.h
- 
-+BITMAP API
-+M:	Yury Norov <yury.norov@gmail.com>
-+S:	Maintained
-+F:	include/asm-generic/bitops/find.h
-+F:	include/linux/bitmap.h
-+F:	lib/bitmap.c
-+F:	lib/find_bit.c
-+F:	lib/find_find_bit_benchmark.c
-+F:	lib/test_bitmap.c
-+F:	tools/include/asm-generic/bitops/find.h
-+F:	tools/include/linux/bitmap.h
-+F:	tools/lib/bitmap.c
-+F:	tools/lib/find_bit.c
-+
- BLINKM RGB LED DRIVER
- M:	Jan-Simon Moeller <jansimon.moeller@gmx.de>
- S:	Maintained
+by "fail in a nice way" you mean before a #PF would fail and SIGBUS
+which would be harder to handle?
+
+[...]
+> Because we don't have a proper interface, what applications
+> (like QEMU and databases) end up doing is touching (i.e., writing) all
+> individual pages. However, it requires expensive signal handling (SIGBUS);
+> for example, this is problematic in hypervisors like QEMU where SIGBUS
+> handlers might already be used by other subsystems concurrently to e.g,
+> handle hardware errors. "Simply" doing preallocation from another thread
+> is not that easy.
+
+OK, that clarifies my above question.
+
+> 
+> Let's introduce MADV_POPULATE with the following semantics
+> 1. MADV_POPULATED does not work on PROT_NONE and special VMAs. It works
+>    on everything else.
+
+This would better clarify what "does not work" means. I assume those are
+ignored and do not report any error?
+
+> 2. Errors during MADV_POPULATED (especially OOM) are reported.
+
+How do you want to achieve that? gup/page fault handler will allocate
+memory and trigger the oom without caller noticing that. You would
+somehow have to weaken the allocation context to GFP_RETRY_MAYFAIL or
+NORETRY to achieve the error handling.
+
+>    If we hit
+>    hardware errors on pages, ignore them - nothing we really can or
+>    should do.
+> 3. On errors during MADV_POPULATED, some memory might have been
+>    populated. Callers have to clean up if they care.
+
+How does caller find out? madvise reports 0 on success so how do you
+find out how much has been populated?
+
+> 4. Concurrent changes to the virtual memory layour are tolerated - we
+>    process each and every PFN only once, though.
+
+I do not understand this. madvise is about virtual address space not a
+physical address space.
+
+> 5. If MADV_POPULATE succeeds, all memory in the range can be accessed
+>    without SIGBUS. (of course, not if user space changed mappings in the
+>    meantime or KSM kicked in on anonymous memory).
+
+I do not see how KSM would change anything here and maybe it is not
+really important to mention it. KSM should be really transparent from
+the users space POV. Parallel and destructive virtual address space
+operations are also expected to change the outcome and there is nothing
+kernel do about at and provide any meaningful guarantees. I guess we
+want to assume a reasonable userspace behavior here.
+
+> Although sparse memory mappings are the primary use case, this will
+> also be useful for ordinary preallocations where MAP_POPULATE is not
+> desired (e.g., in QEMU, where users can trigger preallocation of
+> guest RAM after the mapping was created).
+> 
+> Looking at the history, MADV_POPULATE was already proposed in 2013 [1],
+> however, the main motivation back than was performance improvements
+> (which should also still be the case, but it's a seconary concern).
+
+Well, I think it is more of a concern than prior-spectre era when
+syscalls were quite cheap.
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs
