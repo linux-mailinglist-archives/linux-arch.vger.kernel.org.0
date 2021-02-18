@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2120031E4F3
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 05:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9705E31E4F6
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 05:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbhBREIJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Feb 2021 23:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S230219AbhBREIP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Feb 2021 23:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbhBREG4 (ORCPT
+        with ESMTP id S230336AbhBREG4 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Feb 2021 23:06:56 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6714C061356;
-        Wed, 17 Feb 2021 20:05:24 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id r77so926856qka.12;
-        Wed, 17 Feb 2021 20:05:24 -0800 (PST)
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C121AC06121D;
+        Wed, 17 Feb 2021 20:05:25 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id 2so385549qvd.0;
+        Wed, 17 Feb 2021 20:05:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cjSIeqJixMTGqRQf4pKdu4MWSI5GGmFq1M6YrJB6ms0=;
-        b=NwqiIYKiwQvjkCSg9zybdmkHUmSyFt2HOQn/UnvZHP1/cFo5L0xG2Qu2pDC776jxbP
-         CuAKEnW4PiUEXH+BYQwj7akf/i9yRdU6TBvYU0hxuFK4B/0KRSHcI7+ost9IZ5DjIeQh
-         vgbzSHWeKp99QlRbJROnOw7SYSI0RWLKVEwEPAQC3Ch8SJSn6WtwDRvHA0Pn6czqz2lX
-         3y6mYEVeSMqZHAnb1WK7uqgX4CsXsGJzryOu0kpByxDoE8jB554hRuKBlLerxp/K0upN
-         SUGhK7kDp8YtmJEWeafHWGpDJT6gijvMS8TFMLYj9E8wWtCanPW5sEl9uw8zvv5thqdp
-         ENQg==
+        bh=12ov5Wc2VLYqBN6pji2I8kDJUvO1aq9EkiflVHQIASU=;
+        b=gM1892Gp7EhVkJlC1YDQrEi+eVz/l3odoEPeC60+u3x0JmB7+bV23A9RxMC2b2Qa4n
+         2t9KQC2WEpA+40SQFez5eQycP5lpCkx+w6Fct1NfqkKWzPEANXdWiDoUvU0hBvS18i1/
+         Xdmn8EP/A9mrsSyldp1oB+3q8X7Xbq12KSIykPl7IcSNTKJvPdqzpbEyJrdD7U0fzbZC
+         CvKuQ1mXZuMUGzFxEM3PKpiRtBYGsNNpUgp3ICRQ2QfyPxN+/yDVTrETekwD/rXSbBmq
+         nDmTM+HCSpfbkOxzTdK/8a6CC0BJA8GEJ1+PrbiQPfPuktiUSULTAfdC8gb7DA3P+S6v
+         G/Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cjSIeqJixMTGqRQf4pKdu4MWSI5GGmFq1M6YrJB6ms0=;
-        b=pYHXUXx9mZgpgP4z8GiUzpbnYmTfjbN5thIkT+TFqlpJxLHPVwAjUO7OgaiO9GzB85
-         UB0wAoO1ZpMTsY3+z/kWEaPTsbdR7yjEP0r45ccJp9tFOLC6o8hC2rRqmgIqeWZfLNYu
-         b1b1/K1HJrd9EBL0/r7V647wL7N0aogsE4yYRc46tDhQUfcFBdrxuLSL9X1u6AJpSOiR
-         5jy8XZt4UTpDI4lP2sp+eism6TwU1IgTZMKpQue5eshAkZVQPTX+bgEydIFDALsT06Iw
-         ueOATGKWqEJWrZ/2m3yImhRQ9n+yo5uMB0iov7ZqayGYmlTh4AhtxsuPgGNzCIyuaXBc
-         zh7A==
-X-Gm-Message-State: AOAM531WCLkApLPzTPFn0oJ3djUa6/1hwqMFVVZ2JMPXHPjHCd9bCCa8
-        7ZUmIYKGfbcnW/5KlAAA1AmuhJ0Jjuq+sg==
-X-Google-Smtp-Source: ABdhPJwWyhO8SiOvUL7zClLuBCnRg+OdrKdBQxcsMRMEOJ5MAi89x93TmlkkOhuwzoAKgXCkxlDjpQ==
-X-Received: by 2002:a05:620a:166a:: with SMTP id d10mr2364582qko.213.1613621123624;
-        Wed, 17 Feb 2021 20:05:23 -0800 (PST)
+        bh=12ov5Wc2VLYqBN6pji2I8kDJUvO1aq9EkiflVHQIASU=;
+        b=sgn+bRP5O0daGADuv9bFHVj4Al9D7BWzINiPsHbUQ5tm5llANbFW3gdJPTuXFcSah+
+         w2u6Bi4/1jtt6Toz6q3NXvemBx9f/xyulnoE22nMW6PhyXMkbMVkCleSbWp8uqFZwqhU
+         uD0unuRA/bazJDIOvIK0kus0tQ9aH1mkklLOBxbgc6/ajMyi55A5pCm3cViqH/q2bEyJ
+         2tiRYTTdDJibvNi+Ncb7sRf1UmEGTJTvc+ibuJWfOJSYjueatRnWu9GvduBFbWD3VI90
+         DZd4S5XWPrybOjePbkStdbPdZDilTDHwNMEl95lhEI8DUdgwrNVyV7SGxAB4/rJ/JTPJ
+         01ig==
+X-Gm-Message-State: AOAM5320sfhLcoHaoIG3DoS/vZ7Qqf9VjyFpqi8ak7yVGGA6PmVdq+SH
+        PIs2LCOY3Rr9paAWrHQb/90jp39PTbrFPA==
+X-Google-Smtp-Source: ABdhPJxrSRuP+gTwPyAKuBZNi9wigb9Ulmo6Vw2o4RPWDN6boR/FDUrfh2GsiQQ7m2PZ9eioTSr4zw==
+X-Received: by 2002:a0c:c345:: with SMTP id j5mr2423906qvi.13.1613621124700;
+        Wed, 17 Feb 2021 20:05:24 -0800 (PST)
 Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id c7sm2637792qtc.82.2021.02.17.20.05.23
+        by smtp.gmail.com with ESMTPSA id u27sm3171707qku.82.2021.02.17.20.05.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 20:05:23 -0800 (PST)
+        Wed, 17 Feb 2021 20:05:24 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Yury Norov <yury.norov@gmail.com>, linux-m68k@lists.linux-m68k.org,
@@ -67,9 +67,9 @@ Cc:     Yury Norov <yury.norov@gmail.com>, linux-m68k@lists.linux-m68k.org,
         Wei Yang <richard.weiyang@linux.alibaba.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [PATCH 07/14] tools: introduce SMALL_CONST() macro
-Date:   Wed, 17 Feb 2021 20:05:05 -0800
-Message-Id: <20210218040512.709186-8-yury.norov@gmail.com>
+Subject: [PATCH 08/14] lib/Kconfig: introduce FAST_PATH option
+Date:   Wed, 17 Feb 2021 20:05:06 -0800
+Message-Id: <20210218040512.709186-9-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210218040512.709186-1-yury.norov@gmail.com>
 References: <20210218040512.709186-1-yury.norov@gmail.com>
@@ -79,113 +79,83 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Many algorithms become simpler if they are passed with relatively small
-input values. One example is bitmap operations when the whole bitmap fits
-into one word. To implement such simplifications, linux/bitmap.h declares
-small_const_nbits() macro.
+This series introduces fast paths for find_bit() routines. It is
+beneficial for typical systems, but those who limited in I-cache
+may be concerned about increasing the .text size of the Image.
 
-Other subsystems may also benefit from optimizations of this sort, like
-find_bit API in the following patches. So it looks helpful to generalize
-the macro and extend it's visibility.
+To address this concern, one can disable FAST_PATH option in the config
+and some save memory.
+
+The effect of this option on my arm64 next-20210217 build is:
+
+Before:
+	Sections:
+	Idx Name          Size      VMA               LMA               File off  Algn
+	  0 .head.text    00010000  ffff800010000000  ffff800010000000  00010000  2**16
+			  CONTENTS, ALLOC, LOAD, READONLY, CODE
+	  1 .text         0115e3a8  ffff800010010000  ffff800010010000  00020000  2**16
+			  CONTENTS, ALLOC, LOAD, READONLY, CODE
+	  2 .got.plt      00000018  ffff80001116e3a8  ffff80001116e3a8  0117e3a8  2**3
+			  CONTENTS, ALLOC, LOAD, DATA
+	  3 .rodata       007a72ca  ffff800011170000  ffff800011170000  01180000  2**12
+			  CONTENTS, ALLOC, LOAD, DATA
+	  ...
+
+After:
+	Sections:
+	Idx Name          Size      VMA               LMA               File off  Algn
+	  0 .head.text    00010000  ffff800010000000  ffff800010000000  00010000  2**16
+			  CONTENTS, ALLOC, LOAD, READONLY, CODE
+	  1 .text         011623a8  ffff800010010000  ffff800010010000  00020000  2**16
+			  CONTENTS, ALLOC, LOAD, READONLY, CODE
+	  2 .got.plt      00000018  ffff8000111723a8  ffff8000111723a8  011823a8  2**3
+			  CONTENTS, ALLOC, LOAD, DATA
+	  3 .rodata       007a772a  ffff800011180000  ffff800011180000  01190000  2**12
+			  CONTENTS, ALLOC, LOAD, DATA
+	  ...
+
+Notice that this is the cumulive effect on already existing fast paths
+controlled by SMALL_CONST() together with ones added by this series.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- tools/include/asm-generic/bitsperlong.h |  2 ++
- tools/include/linux/bitmap.h            | 19 ++++++++-----------
- 2 files changed, 10 insertions(+), 11 deletions(-)
+ include/asm-generic/bitsperlong.h | 4 ++++
+ lib/Kconfig                       | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/tools/include/asm-generic/bitsperlong.h b/tools/include/asm-generic/bitsperlong.h
-index 8f2283052333..432d272baf27 100644
---- a/tools/include/asm-generic/bitsperlong.h
-+++ b/tools/include/asm-generic/bitsperlong.h
-@@ -18,4 +18,6 @@
+diff --git a/include/asm-generic/bitsperlong.h b/include/asm-generic/bitsperlong.h
+index 0eeb77544f1d..209e531074c1 100644
+--- a/include/asm-generic/bitsperlong.h
++++ b/include/asm-generic/bitsperlong.h
+@@ -23,6 +23,10 @@
  #define BITS_PER_LONG_LONG 64
  #endif
  
-+#define SMALL_CONST(n) (__builtin_constant_p(n) && (unsigned long)(n) < BITS_PER_LONG)
-+
++#ifdef CONFIG_FAST_PATH
+ #define SMALL_CONST(n) (__builtin_constant_p(n) && (unsigned long)(n) < BITS_PER_LONG)
++#else
++#define SMALL_CONST(n) (0)
++#endif
+ 
  #endif /* __ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
-index b6e8430c8bc9..fdc0b64bbdbf 100644
---- a/tools/include/linux/bitmap.h
-+++ b/tools/include/linux/bitmap.h
-@@ -19,12 +19,9 @@ int __bitmap_equal(const unsigned long *bitmap1,
- 		   const unsigned long *bitmap2, unsigned int bits);
- void bitmap_clear(unsigned long *map, unsigned int start, int len);
+diff --git a/lib/Kconfig b/lib/Kconfig
+index a38cc61256f1..7a1b9c8d2a32 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -39,6 +39,13 @@ config PACKING
  
--#define small_const_nbits(nbits) \
--	(__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG)
--
- static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = 0UL;
- 	else {
- 		int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
-@@ -35,7 +32,7 @@ static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
- static inline void bitmap_fill(unsigned long *dst, unsigned int nbits)
- {
- 	unsigned int nlongs = BITS_TO_LONGS(nbits);
--	if (!small_const_nbits(nbits)) {
-+	if (!SMALL_CONST(nbits - 1)) {
- 		unsigned int len = (nlongs - 1) * sizeof(unsigned long);
- 		memset(dst, 0xff,  len);
- 	}
-@@ -44,7 +41,7 @@ static inline void bitmap_fill(unsigned long *dst, unsigned int nbits)
+ 	  When in doubt, say N.
  
- static inline int bitmap_empty(const unsigned long *src, unsigned nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return !(*src & BITS_FIRST(nbits - 1));
++config FAST_PATH
++	bool "Enable fast path code generation"
++	default y
++	help
++	  This option enables fast path optimization with the cost of increasing
++	  the text section.
++
+ config BITREVERSE
+ 	tristate
  
- 	return find_first_bit(src, nbits) == nbits;
-@@ -52,7 +49,7 @@ static inline int bitmap_empty(const unsigned long *src, unsigned nbits)
- 
- static inline int bitmap_full(const unsigned long *src, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return !(~(*src) & BITS_FIRST(nbits - 1));
- 
- 	return find_first_zero_bit(src, nbits) == nbits;
-@@ -60,7 +57,7 @@ static inline int bitmap_full(const unsigned long *src, unsigned int nbits)
- 
- static inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return hweight_long(*src & BITS_FIRST(nbits - 1));
- 	return __bitmap_weight(src, nbits);
- }
-@@ -68,7 +65,7 @@ static inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
- static inline void bitmap_or(unsigned long *dst, const unsigned long *src1,
- 			     const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		*dst = *src1 | *src2;
- 	else
- 		__bitmap_or(dst, src1, src2, nbits);
-@@ -146,7 +143,7 @@ size_t bitmap_scnprintf(unsigned long *bitmap, unsigned int nbits,
- static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
- 			     const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return (*dst = *src1 & *src2 & BITS_FIRST(nbits - 1)) != 0;
- 	return __bitmap_and(dst, src1, src2, nbits);
- }
-@@ -162,7 +159,7 @@ static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
- static inline int bitmap_equal(const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
- {
--	if (small_const_nbits(nbits))
-+	if (SMALL_CONST(nbits - 1))
- 		return !((*src1 ^ *src2) & BITS_FIRST(nbits - 1));
- 	if (__builtin_constant_p(nbits & BITMAP_MEM_MASK) &&
- 	    IS_ALIGNED(nbits, BITMAP_MEM_ALIGNMENT))
 -- 
 2.25.1
 
