@@ -2,58 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E4B31F051
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 20:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2C631F290
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Feb 2021 23:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbhBRTqN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Feb 2021 14:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S229787AbhBRWw3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Feb 2021 17:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbhBRTZF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Feb 2021 14:25:05 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D879C061574;
-        Thu, 18 Feb 2021 11:24:22 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id s10so854878qvl.9;
-        Thu, 18 Feb 2021 11:24:22 -0800 (PST)
+        with ESMTP id S229812AbhBRWw0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Feb 2021 17:52:26 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745E5C061786
+        for <linux-arch@vger.kernel.org>; Thu, 18 Feb 2021 14:51:46 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ly28so8253721ejb.13
+        for <linux-arch@vger.kernel.org>; Thu, 18 Feb 2021 14:51:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mXM5l1A/rr2ByJpBGKJkreiRJB4kUscTTSOxZVH+5OE=;
-        b=S/1Zj2rIHDp94Hy7Lrt4L/xh6dTEeTwa+m6A8XtFbEUiecdRcMxUk1NgfIGY2q39AK
-         FzmYw7TJZUIqLjLFIZQpm1IhA43Glh72V3tlgVUnbXmG7chWrLq9i5YnB9GyhSoQdZKE
-         FlQry+iTUyO0pUzY0s3qymVBa/mztuIOExwpxrc1WzGs0GIVA+gLoCmkTsDjixArpIlK
-         V9wewO3y/NPHs66KUMNW8OtgcHb5o1ly+cOiawI8BHmX50kSY7Dx8qQyEf8YMiwaJfa5
-         SCq9Ku2s2wNmZxoCeaYJMLt6jfju1GZKd2fzi6Y7eDR0DQD1hbMOoJJ3yVW2uULSmZhF
-         Cu0g==
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Vrc627xbuX2TMgkXGGkkQoTFvSmbGef3PT5dPjYaHq4=;
+        b=G+VppJXi/ZOG8gHCQ6TFEVZSG0VMgwjTbKRWl1GBBX3e9vwfVqsXJnB+Swrbm9Mbki
+         HeZGAKA758jQl1Wchle/AFqcf2AjQAMFFj13bi28/2IH0R2ELAAHaO0ZWoqacamBBtzs
+         uUGJ8VNz+ZknAy1z21qDfTSQ4nYI2gdZIrkck=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mXM5l1A/rr2ByJpBGKJkreiRJB4kUscTTSOxZVH+5OE=;
-        b=eAW3THML+phXszvRpmXxPK6G7lhlask2pEM/+CYDjQN/dFskfwOuS578PLZDxT71Su
-         bTJgcVJEvZ9GxLWNcZ24Exbs8NpA1udz/VVFGaZnI4iMkjMh4+GzU6uCgHAI7WTryWjL
-         xXACoOXL0TyF/ZWYIu6xJU8zv5yeWAtJeb5loGU8VBC7RwFZOEwX5yUjuFnRt6ayW7Cj
-         IsawXjEIQe4kGf032JaG7+KCiOyDGSvkD2NFCmLlgqFWP/EsAFiRymqgiWyzLhmNr+Hu
-         km1MfaW4AHM6dVWlxOa41WmJhlXhEgV9lpH+5i8zMojKzvDep8LSmNLJEPrc+N0kWV+7
-         QoqQ==
-X-Gm-Message-State: AOAM533o3kLrWXdP0lEeDhOzq1dEFjLwQKVoBjukoL8TYtrY7VSjQ9wl
-        BV7GeERbcLEwsr59/w11MtQ=
-X-Google-Smtp-Source: ABdhPJyMSh9g14GV26Z4i40nLxt6vVBDIr9z7jhPcJi5tm6xS2HnR/vD0o8ec2Yg+2YlHh+kg/WzCg==
-X-Received: by 2002:a0c:90c9:: with SMTP id p67mr5761632qvp.14.1613676261132;
-        Thu, 18 Feb 2021 11:24:21 -0800 (PST)
-Received: from localhost (d27-96-190-162.evv.wideopenwest.com. [96.27.162.190])
-        by smtp.gmail.com with ESMTPSA id f26sm4479242qkh.80.2021.02.18.11.24.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Feb 2021 11:24:20 -0800 (PST)
-Date:   Thu, 18 Feb 2021 11:24:19 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-arch@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexey Klimov <aklimov@redhat.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Vrc627xbuX2TMgkXGGkkQoTFvSmbGef3PT5dPjYaHq4=;
+        b=UdO6+X4W3kxeCJVnzUKpL9dVQNDVhe5p7pVwysvX7BZc3Q+dJctxFYvMiHo0+5sUFF
+         1Y5411dFCvDx9ojanjqwMMJzmkunJYM0O1dhKUE+XjJa19ocx9UBTBtEAf6rtic439HJ
+         DGSc7kUNvyuQ8zNwJxLW+JvK6bXzyBd+X1zr3ZXq8veCfIYuBTgv8z4RcrnS7nqD35KK
+         KPuw/jmTp0eb9jL9sM2mCQDoJTk06CAeb6P+tadjjTgj0rFOlIQnAW7t3gDNSVlA5aij
+         0bXnmT+5Q0xJPwEAcGbL3r4vtHNpUsyARS+hV39ENY5oMyuZJ/4GHfSU64P+P0p9h9MR
+         eEFA==
+X-Gm-Message-State: AOAM532hkYj1KD8uZ4qeBh6BK6OoyKY6+PNCKSWwtVdGob1CI7u/XvFq
+        f2DnGQPnDrrBBKo0KUYP19r3Ew==
+X-Google-Smtp-Source: ABdhPJyKhm7W7GiwYBIDb8MWNmpDRdcqaFasH1pPiX6+4A01bLs1vLg+znuOAZacAYcYbAiyu87wIA==
+X-Received: by 2002:a17:906:301b:: with SMTP id 27mr2584079ejz.230.1613688705192;
+        Thu, 18 Feb 2021 14:51:45 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.71.141])
+        by smtp.gmail.com with ESMTPSA id m7sm3279119ejk.52.2021.02.18.14.51.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Feb 2021 14:51:44 -0800 (PST)
+Subject: Re: [PATCH 04/14] lib: introduce BITS_{FIRST,LAST} macro
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     linux-m68k@lists.linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-sh@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
         Dennis Zhou <dennis@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -61,81 +58,39 @@ Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         Joe Perches <joe@perches.com>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Rich Felker <dalias@libc.org>,
         Stefano Brivio <sbrivio@redhat.com>,
         Wei Yang <richard.weiyang@linux.alibaba.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH 08/14] lib/Kconfig: introduce FAST_PATH option
-Message-ID: <20210218192419.GA788573@yury-ThinkPad>
 References: <20210218040512.709186-1-yury.norov@gmail.com>
- <20210218040512.709186-9-yury.norov@gmail.com>
- <YC6EnzFUXDuroy0+@smile.fi.intel.com>
+ <20210218040512.709186-5-yury.norov@gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <b371c94c-7480-5af4-d2bd-481436f535eb@rasmusvillemoes.dk>
+Date:   Thu, 18 Feb 2021 23:51:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YC6EnzFUXDuroy0+@smile.fi.intel.com>
+In-Reply-To: <20210218040512.709186-5-yury.norov@gmail.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 18, 2021 at 05:15:43PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 17, 2021 at 08:05:06PM -0800, Yury Norov wrote:
-> > This series introduces fast paths for find_bit() routines. It is
-> > beneficial for typical systems, but those who limited in I-cache
-> > may be concerned about increasing the .text size of the Image.
-> > 
-> > To address this concern, one can disable FAST_PATH option in the config
-> > and some save memory.
-> > 
-> > The effect of this option on my arm64 next-20210217 build is:
+On 18/02/2021 05.05, Yury Norov wrote:
+> BITMAP_{LAST,FIRST}_WORD_MASK() in linux/bitmap.h duplicates the
+> functionality of GENMASK(). The scope of there macros is wider
+> than just bitmap. This patch defines 4 new macros: BITS_FIRST(),
+> BITS_LAST(), BITS_FIRST_MASK() and BITS_LAST_MASK() in linux/bits.h
+> on top of GENMASK() and replaces BITMAP_{LAST,FIRST}_WORD_MASK()
+> to avoid duplication and increase the scope of the macros.
 > 
-> (Maybe bloat-o-meter will give better view on this, i.e. more human-readable)
 
-Never heard about this tool, thanks for the hint.
+Please include some info on changes in generated code, if any. When the
+parameter to the macro is a constant I'm sure it all folds to a
+compile-time constant either way, but when it's not, I'm not sure gcc
+can do the same optimizations when the expressions become more complicated.
 
-scripts/bloat-o-meter vmlinux vmlinux.new
-add/remove: 16/13 grow/shrink: 111/439 up/down: 3616/-19352 (-15736)
-Function                                     old     new   delta
-find_next_bit.constprop                        -     220    +220
-apply_wqattrs_cleanup                          -     176    +176
-memcg_free_shrinker_maps                       -     172    +172
-...
-cpuset_hotplug_workfn                       2584    2288    -296
-task_numa_fault                             3640    3320    -320
-kmem_cache_free_bulk                        1684    1280    -404
-Total: Before=26085140, After=26069404, chg -0.06%
-
-The complete output is here:
-https://pastebin.com/kBSdVJcK
-
-So if I understand the output correctly, the size of .text is decreased...
-Looks weird, but if it's true, we don't need the FAST_BIT config at all
-because there's no tradeoff, and I should drop the patch.
-
-Hmm...
-
-> > +config FAST_PATH
-> 
-> I think the name is to broad for this cases, perhaps BITS_FAST_PATH? or BITMAP?
-
-My logic was that since SMALL_CONST() is global, and FAST_PATH
-controls the SMALL_CONST, it should also be global. I believe,
-Linux should have a global switch to control the behaviour in
-such cases, similarly to -Os compiler option. And I was surprized
-when I found nothing like FAST_PATH in the config.
-
-What about having FAST_PATH as a global option, and later if someone
-will request for granularity, we'll introduce nested configs?
-
-> > +	bool "Enable fast path code generation"
-> > +	default y
-> > +	help
-> > +	  This option enables fast path optimization with the cost of increasing
-> > +	  the text section.
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
+Rasmus
