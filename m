@@ -2,158 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D27C31F2CB
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Feb 2021 00:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD5431F399
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Feb 2021 02:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbhBRXIM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Feb 2021 18:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbhBRXIK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Feb 2021 18:08:10 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC3AC061756
-        for <linux-arch@vger.kernel.org>; Thu, 18 Feb 2021 15:07:30 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id ly28so8307399ejb.13
-        for <linux-arch@vger.kernel.org>; Thu, 18 Feb 2021 15:07:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sJ5d0ZObxlJmFwJLKE12O8RmYqwub+T3UwgmplQq6AE=;
-        b=Jo5g6iOuyD0BqTUzqL5h57SSH+EeNnhpMwvLvFVX6MxUWBTDBsqzDxkvg8FpT/imeV
-         liNLub0Tlg4eSf0srTc9b7UGVY2O8Njj4v1Pg1ZuNmLScVnb1WDVaszWS5AJZwbQt33H
-         qp17CzaTpYHW1EsfgC4jpRW4lgndPH6DdJYhs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sJ5d0ZObxlJmFwJLKE12O8RmYqwub+T3UwgmplQq6AE=;
-        b=OhLYmjQnNTSD0YYG/KeHMyppcyHNuit6QCVWH/Xp8qdqKOJOY3tgbPc+tjctcaE1l+
-         EWinpccx+MgCbZyB8GemBF6krgLZsRGOgjSo/hjUPzwZuZO4BVAnjPFHmUgZH/GMxhSe
-         MQphKM+rXhnUnrUIoUxRrjch1hqx/ZuUy2Z9lt8bqXZUIxRztb/xNVeiciGs6Fs7oX4r
-         ZpTd4UZeC26hidviJjNeSqoeomJ1CqB/BwUBlwrAhszEQJUSj6qJEJFQCex3lQctKndN
-         aEYYTvj0qczdRQFLNstDKnVqUBOa5sJpaMeXFvkvVcuZyZ4Lswo1Vkp03ei/9UUR8H6v
-         ntkw==
-X-Gm-Message-State: AOAM531eda2UEaqOAE3tuHcKAIqOLvzDRFmoRwgqUQ+LHLYCgdCJ1IUo
-        ZEl9lcouvMqQqeZD6NQ4XpCy0UsgrT1u8w==
-X-Google-Smtp-Source: ABdhPJzYHdNT9GqXgfQD21oEC7iYSyGizicKOn318FZ+K56DF/69E5Vl8IATzjttfzUAWvPTfps3Mw==
-X-Received: by 2002:a17:906:2a8b:: with SMTP id l11mr6170970eje.1.1613689648835;
-        Thu, 18 Feb 2021 15:07:28 -0800 (PST)
-Received: from [192.168.1.149] ([80.208.71.141])
-        by smtp.gmail.com with ESMTPSA id a23sm3383140ejy.60.2021.02.18.15.07.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Feb 2021 15:07:28 -0800 (PST)
-Subject: Re: [PATCH 06/14] bitsperlong.h: introduce SMALL_CONST() macro
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     linux-m68k@lists.linux-m68k.org, linux-arch@vger.kernel.org,
-        linux-sh@vger.kernel.org, Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Sterba <dsterba@suse.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jianpeng Ma <jianpeng.ma@intel.com>,
-        Joe Perches <joe@perches.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Rich Felker <dalias@libc.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-References: <20210218040512.709186-1-yury.norov@gmail.com>
- <20210218040512.709186-7-yury.norov@gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <55f1e25a-3211-8247-9dd3-3777e29287db@rasmusvillemoes.dk>
-Date:   Fri, 19 Feb 2021 00:07:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229652AbhBSB0w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Feb 2021 20:26:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229468AbhBSB0v (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 18 Feb 2021 20:26:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB84564ED5
+        for <linux-arch@vger.kernel.org>; Fri, 19 Feb 2021 01:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613697971;
+        bh=fJwtJB/HDR3ilN4vGWzecz9MdjUktr8sE8/8Lj+agnk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NuoPwIT6jPCvq7CVpE/RtirLulnNpdzGlK68XaOpM3R2YKEuoOh4eUnIJ144K9FeD
+         6mIwP/zrONWtPFo6OHrcsNp1aXfjgcNLWNwFLsX3H5Scj914pyJNKvFBWOWApvATtw
+         7h6NlWL1eYUnrkN9HRAyHFOdSPrb+CXmf0yr8Sp5OFGWvade7pZLgsqt0ht7KqatCl
+         CiqO6oW2LnJtN0PrpEbJXPdv8Zp4RFmd17DwZFZfaXQFJu3ESBjCDyEhmhcY+0jUQ/
+         4uGPniGZBe40KP38/d4NEbZM3D1QtWNuvnMzHnZu3f71z+GXGjUUcC3uYpTQQdwWQ0
+         xFTMhRK9xtSIQ==
+Received: by mail-ed1-f41.google.com with SMTP id o3so6719031edv.4
+        for <linux-arch@vger.kernel.org>; Thu, 18 Feb 2021 17:26:10 -0800 (PST)
+X-Gm-Message-State: AOAM531vpgB3xrp5gYvFXPw9pUaMI4LQG8Ej/iFBc1O3GiCokmDyRMKY
+        EVTonQcJ13uslpD2/f4EFoKlbgsBVc7eNMXKNTPxJA==
+X-Google-Smtp-Source: ABdhPJz9RKmMCDP9wSoKObG17qi1NUro62wHOW6LLChZ1Op/hEl2UrY5iiGTy+gNcjBpcwId0RTiDEISDMvJE8ODtTI=
+X-Received: by 2002:a05:6402:1bc7:: with SMTP id ch7mr6925128edb.84.1613697969219;
+ Thu, 18 Feb 2021 17:26:09 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210218040512.709186-7-yury.norov@gmail.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210203172242.29644-1-chang.seok.bae@intel.com> <20210203172242.29644-5-chang.seok.bae@intel.com>
+In-Reply-To: <20210203172242.29644-5-chang.seok.bae@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 18 Feb 2021 17:25:58 -0800
+X-Gmail-Original-Message-ID: <CALCETrXuFrHUU-L=HMofTgEDZk9muPnVtK=EjsTHqQ01XhbRYg@mail.gmail.com>
+Message-ID: <CALCETrXuFrHUU-L=HMofTgEDZk9muPnVtK=EjsTHqQ01XhbRYg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/5] x86/signal: Detect and prevent an alternate signal
+ stack overflow
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H. J. Lu" <hjl.tools@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Jann Horn <jannh@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Carlos O'Donell" <carlos@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        libc-alpha <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 18/02/2021 05.05, Yury Norov wrote:
-> Many algorithms become simpler if they are passed with relatively small
-> input values. One example is bitmap operations when the whole bitmap fits
-> into one word. To implement such simplifications, linux/bitmap.h declares
-> small_const_nbits() macro.
-> 
-> Other subsystems may also benefit from optimizations of this sort, like
-> find_bit API in the following patches. So it looks helpful to generalize
-> the macro and extend it's visibility.
-
-Perhaps, but SMALL_CONST is too generic a name, it needs to keep "bits"
-somewhere in there. So why not just keep it at small_const_nbits?
-
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+On Wed, Feb 3, 2021 at 9:27 AM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> The kernel pushes context on to the userspace stack to prepare for the
+> user's signal handler. When the user has supplied an alternate signal
+> stack, via sigaltstack(2), it is easy for the kernel to verify that the
+> stack size is sufficient for the current hardware context.
+>
+> Check if writing the hardware context to the alternate stack will exceed
+> it's size. If yes, then instead of corrupting user-data and proceeding with
+> the original signal handler, an immediate SIGSEGV signal is delivered.
+>
+> While previous patches in this series allow new source code to discover and
+> use a sufficient alternate signal stack size, this check is still necessary
+> to protect binaries with insufficient alternate signal stack size from data
+> corruption.
+>
+> Suggested-by: Jann Horn <jannh@google.com>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Reviewed-by: Jann Horn <jannh@google.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
 > ---
->  include/asm-generic/bitsperlong.h |  2 ++
->  include/linux/bitmap.h            | 33 ++++++++++++++-----------------
->  2 files changed, 17 insertions(+), 18 deletions(-)
-> 
-> diff --git a/include/asm-generic/bitsperlong.h b/include/asm-generic/bitsperlong.h
-> index 3905c1c93dc2..0eeb77544f1d 100644
-> --- a/include/asm-generic/bitsperlong.h
-> +++ b/include/asm-generic/bitsperlong.h
-> @@ -23,4 +23,6 @@
->  #define BITS_PER_LONG_LONG 64
->  #endif
->  
-> +#define SMALL_CONST(n) (__builtin_constant_p(n) && (unsigned long)(n) < BITS_PER_LONG)
-> +
->  #endif /* __ASM_GENERIC_BITS_PER_LONG */
-> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> index adf7bd9f0467..e89f1dace846 100644
-> --- a/include/linux/bitmap.h
-> +++ b/include/linux/bitmap.h
-> @@ -224,9 +224,6 @@ extern int bitmap_print_to_pagebuf(bool list, char *buf,
->   * so make such users (should any ever turn up) call the out-of-line
->   * versions.
->   */
-> -#define small_const_nbits(nbits) \
-> -	(__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
-> -
->  static inline void bitmap_zero(unsigned long *dst, unsigned int nbits)
->  {
->  	unsigned int len = BITS_TO_LONGS(nbits) * sizeof(unsigned long);
-> @@ -278,7 +275,7 @@ extern void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap,
->  static inline int bitmap_and(unsigned long *dst, const unsigned long *src1,
->  			const unsigned long *src2, unsigned int nbits)
->  {
-> -	if (small_const_nbits(nbits))
-> +	if (SMALL_CONST(nbits - 1))
+> Changes from v3:
+> * Updated the changelog (Borislav Petkov)
+>
+> Changes from v2:
+> * Simplified the implementation (Jann Horn)
+> ---
+>  arch/x86/kernel/signal.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+> index 0d24f64d0145..8e2df070dbfd 100644
+> --- a/arch/x86/kernel/signal.c
+> +++ b/arch/x86/kernel/signal.c
+> @@ -242,7 +242,7 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+>         unsigned long math_size = 0;
+>         unsigned long sp = regs->sp;
+>         unsigned long buf_fx = 0;
+> -       int onsigstack = on_sig_stack(sp);
+> +       bool onsigstack = on_sig_stack(sp);
+>         int ret;
+>
+>         /* redzone */
+> @@ -251,8 +251,11 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+>
+>         /* This is the X/Open sanctioned signal stack switching.  */
+>         if (ka->sa.sa_flags & SA_ONSTACK) {
+> -               if (sas_ss_flags(sp) == 0)
+> +               if (sas_ss_flags(sp) == 0) {
+>                         sp = current->sas_ss_sp + current->sas_ss_size;
+> +                       /* On the alternate signal stack */
+> +                       onsigstack = true;
 
-Please don't force most users to be changed to something less readable.
-What's wrong with just keeping small_const_nbits() the way it is,
-avoiding all this churn and keeping the readability?
+This is buggy.  The old code had a dubious special case for
+SS_AUTODISARM, and this interacts poorly with it.  I think you could
+fix it by separating the case in which you are already on the altstack
+from the case in which you're switching to the altstack, or you could
+fix it by changing the check at the end of the function to literally
+check whether the sp value is in bounds instead of calling
+on_sig_stack.
 
-At a quick reading, one of the very few places where you end up not
-passing nbits-1 but just nbits is this
-
- unsigned long find_next_zero_bit_le(const void *addr, unsigned
- 		long size, unsigned long offset)
- {
-+	if (SMALL_CONST(size)) {
-+		unsigned long val = *(const unsigned long *)addr;
-+
-+		if (unlikely(offset >= size))
-+			return size;
-
-which is a regression, for much the same reason the nbits==0 case was
-excluded from small_const_nbits in the first place. If size is 0, we
-used to just return 0 early in _find_next_bit. But you've introduced a
-dereference of addr before that check is now done, which is
-theoretically an oops.
-
-If find_next_zero_bit_le cannot handle nbits==BITS_PER_LONG efficiently
-but requires one off-limits bit position, fine, so be it, add an extra
-"small_const_nbits() && nbits < BITS_PER_LONG" (and a comment).
-
-Rasmus
+Arguably the generic helpers could be adjusted to make this less annoying.
