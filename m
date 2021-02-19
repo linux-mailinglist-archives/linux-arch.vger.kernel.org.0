@@ -2,38 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BAC31FDBA
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Feb 2021 18:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352F031FF47
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Feb 2021 20:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbhBSRPr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Feb 2021 12:15:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20431 "EHLO
+        id S230024AbhBSTQi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Feb 2021 14:16:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59037 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229784AbhBSRPk (ORCPT
+        by vger.kernel.org with ESMTP id S230001AbhBSTQe (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 19 Feb 2021 12:15:40 -0500
+        Fri, 19 Feb 2021 14:16:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613754853;
+        s=mimecast20190719; t=1613762108;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nOq6obPMpKNx+xpOHX66/BOR1Jhu9sxgWKkPOBd406Y=;
-        b=H7UHUbwnBldHPIGhR2Q3B2txTrPfqlQFCAjGNlA2RxvXEvfpvt+ZkTQv86YfUM51PJv0Aw
-        OJK/Dn5+yRLacYMf6uDG6pSgdyJAZx5EDvmgBbSCnOFjpp76itX050C7fyZBgumop6QVz5
-        z7F0akmVA0twzjutlpYAKoVzn5ouI/k=
+        bh=GuikDQq1sciUIXGoinMOJrB+j3nRzQ2K1NXhrcaqYcg=;
+        b=V+qdyJl+teNWY825F4XzZbZjVNp9iTT8m79yWee3p/LdReW6tsnmVlVR+hf+UpRfnkTroq
+        7iNZmsAceylrdcYmo/M87buSk/5KUPRWvYOA9IbHNdJSlNDBsG6ODAbH+FG6prgQfv0jmJ
+        YDo/0z8LWy1K8AZ7L1WiJyyZcUAEHqk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-1-nldniRpjOUixcYtuqIdmbw-1; Fri, 19 Feb 2021 12:14:10 -0500
-X-MC-Unique: nldniRpjOUixcYtuqIdmbw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-386-On0zvAUYOq6qvarRhkE3xg-1; Fri, 19 Feb 2021 14:15:04 -0500
+X-MC-Unique: On0zvAUYOq6qvarRhkE3xg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 595B3107ACE3;
-        Fri, 19 Feb 2021 17:14:05 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BC82A8030BB;
+        Fri, 19 Feb 2021 19:15:00 +0000 (UTC)
 Received: from [10.36.113.117] (ovpn-113-117.ams2.redhat.com [10.36.113.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C71895D9C2;
-        Fri, 19 Feb 2021 17:13:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8671B5C1BB;
+        Fri, 19 Feb 2021 19:14:46 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
 To:     Peter Xu <peterx@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -62,159 +63,82 @@ References: <20210217154844.12392-1-david@redhat.com>
  <20210218225904.GB6669@xz-x1>
  <b24996a6-7652-f88c-301e-28417637fd02@redhat.com>
  <20210219163157.GF6669@xz-x1>
-From:   David Hildenbrand <david@redhat.com>
+ <41444eb8-8bb8-8d5b-4cec-be7fa7530d0e@redhat.com>
 Organization: Red Hat GmbH
 Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
  prefault/prealloc memory
-Message-ID: <41444eb8-8bb8-8d5b-4cec-be7fa7530d0e@redhat.com>
-Date:   Fri, 19 Feb 2021 18:13:47 +0100
+Message-ID: <4d8e6f55-66a6-d701-6a94-79f5e2b23e46@redhat.com>
+Date:   Fri, 19 Feb 2021 20:14:45 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210219163157.GF6669@xz-x1>
+In-Reply-To: <41444eb8-8bb8-8d5b-4cec-be7fa7530d0e@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 19.02.21 17:31, Peter Xu wrote:
-> On Fri, Feb 19, 2021 at 09:20:16AM +0100, David Hildenbrand wrote:
->> On 18.02.21 23:59, Peter Xu wrote:
->>> Hi, David,
->>>
->>> On Wed, Feb 17, 2021 at 04:48:44PM +0100, David Hildenbrand wrote:
->>>> When we manage sparse memory mappings dynamically in user space - also
->>>> sometimes involving MADV_NORESERVE - we want to dynamically populate/
->>>> discard memory inside such a sparse memory region. Example users are
->>>> hypervisors (especially implementing memory ballooning or similar
->>>> technologies like virtio-mem) and memory allocators. In addition, we want
->>>> to fail in a nice way if populating does not succeed because we are out of
->>>> backend memory (which can happen easily with file-based mappings,
->>>> especially tmpfs and hugetlbfs).
->>>
->>> Could you explain a bit more on how do you plan to use this new interface for
->>> the virtio-balloon scenario?
->>
->> Sure, that will bring up an interesting point to discuss
->> (MADV_POPULATE_WRITE).
->>
->> I'm planning on using it in virtio-mem: whenever the guests requests the
->> hypervisor (via a virtio-mem device) to make specific blocks available
->> ("plug"), I want to have a configurable option ("populate=on" /
->> "prealloc="on") to perform safety checks ("prealloc") and populate page
->> tables.
+>> It's interesting to know about commit 1e356fc14be ("mem-prealloc: reduce large
+>> guest start-up and migration time.", 2017-03-14).  It seems for speeding up VM
+>> boot, but what I can't understand is why it would cause the delay of hugetlb
+>> accounting - I thought we'd fail even earlier at either fallocate() on the
+>> hugetlb file (when we use /dev/hugepages) or on mmap() of the memfd which
+>> contains the huge pages.  See hugetlb_reserve_pages() and its callers.  Or did
+>> I miss something?
 > 
-> As you mentioned in the commit message, the original goal for MADV_POPULATE
-> should be for performance's sake, which I can understand.  But for safety
-> check, I'm curious whether we'd have better way to do that besides populating
-> the whole memory.
-
-Well, it's 100% what I want for "populate=on"/"prealloc=on" semantics.
-
-There is no real memory overcommit for huge pages, so any lacy 
-allocation ("reserve only") only saves you boot time - which is not 
-really an issue for virtio-mem, as the memory gets added and initialized 
-asynchronously as the guest boots up.
-
-"reserve=on,prealloc=off" is another future use case I have in mind - 
-possible only for some memory backends (esp. anonymous memory - below).
-
-
+> We should fail on mmap() when the reservation happens (unless
+> MAP_NORESERVE is passed) I think.
 > 
-> E.g., can we simply ask the kernel "how much memory this process can still
-> allocate", then get a number out of it?  I'm not sure whether it can be done
-
-Anything like that is completely racy and unreliable.
-
-> already by either cgroup or any other facilities, or maybe it's still missing.
-> But I'd raise this question up, since these two requirements seem to be two
-> standalone issues to solve at least to me.  It could be an overkill to populate
-> all the memory just for a sanity check.
-
-For anonymous memory I have something in the works to dynamically 
-reserve swap space per process for the memory reservation for not 
-accounted private writable MAP_DONTRESERVE memory.
-
-However, it works because swap space is per-system, not per-node or 
-anything else. Doing that for file systems/hugetlbfs is a different beast.
-
-And anonymous memory is right now less of my concern, as we're used to 
-overcommitting there - limited pool sizes are more of an issue.
-
->> --- Ways to populate/preallocate ---
 >>
->> I see the following ways to populate/preallocate:
->>
->> a) MADV_POPULATE: write fault on writable MAP_PRIVATE, read fault on
->>     MAP_SHARED
->> b) Writing to MAP_PRIVATE | MAP_SHARED from user space.
->> c) (below) MADV_POPULATE_WRITE: write fault on writable MAP_PRIVATE |
->>     MAP_SHARED
->>
->> Especially, 2) is kind of weird as implemented in QEMU
->> (util/oslib-posix.c:do_touch_pages):
->>
->> "Read & write back the same value, so we don't corrupt existing user/app
->> data ... TODO: get a better solution from kernel so we don't need to write
->> at all so we don't cause wear on the storage backing the region..."
+>> I think there's a special case if QEMU fork() with a MAP_PRIVATE hugetlbfs
+>> mapping, that could cause the memory accouting to be delayed until COW happens.
 > 
-> It's interesting to know about commit 1e356fc14be ("mem-prealloc: reduce large
-> guest start-up and migration time.", 2017-03-14).  It seems for speeding up VM
-> boot, but what I can't understand is why it would cause the delay of hugetlb
-> accounting - I thought we'd fail even earlier at either fallocate() on the
-> hugetlb file (when we use /dev/hugepages) or on mmap() of the memfd which
-> contains the huge pages.  See hugetlb_reserve_pages() and its callers.  Or did
-> I miss something?
-
-We should fail on mmap() when the reservation happens (unless 
-MAP_NORESERVE is passed) I think.
-
+> That would be kind of weird. I'd assume the reservation gets properly
+> done during fork() - just like for VM_ACCOUNT.
 > 
-> I think there's a special case if QEMU fork() with a MAP_PRIVATE hugetlbfs
-> mapping, that could cause the memory accouting to be delayed until COW happens.
-
-That would be kind of weird. I'd assume the reservation gets properly 
-done during fork() - just like for VM_ACCOUNT.
-
-> However that's definitely not the case for QEMU since QEMU won't work at all as
-> late as that point.
-> 
-> IOW, for hugetlbfs I don't know why we need to populate the pages at all if we
-> simply want to know "whether we do still have enough space"..  And IIUC 2)
-> above is the major issue you'd like to solve too.
-
-To avoid page faults at runtime on access I think. Reservation <= 
-Preallocation.
-
-[...]
-
->> --- HOW MADV_POPULATE_WRITE might be useful ---
+>> However that's definitely not the case for QEMU since QEMU won't work at all as
+>> late as that point.
 >>
->> With 3) 4) 5) MADV_POPULATE does partially what I want: preallocate memory
->> and populate page tables. But as it's a read fault, I think we'll have
->> another minor fault on access. Not perfect, but better than failing with
->> SIGBUS. One way around that would be having an additional
->> MADV_POPULATE_WRITE, to use in cases where it makes sense (I think at least
->> 3) and 4), most probably not on actual files like 5) ).
+>> IOW, for hugetlbfs I don't know why we need to populate the pages at all if we
+>> simply want to know "whether we do still have enough space"..  And IIUC 2)
+>> above is the major issue you'd like to solve too.
 > 
-> Right, it seems when populating memories we'll read-fault on file-backed.
-> However that'll be another performance issue to think about.  So I'd hope we
-> can start with the current virtio-mem issue on memory accounting, then we can
-> discuss them separately.
+> To avoid page faults at runtime on access I think. Reservation <=
+> Preallocation.
 
-MADV_POPULATE is certainly something I want and what fits nicely into 
-the existing model of MAP_POPULATE. Doing reservation only is a 
-different topic - and is most probably only possible for anonymous 
-memory in a clean way.
+I just learned that there is more to it: (test done on v5.9)
 
-> Btw, thanks for the long write-up, it definitely helps me to understand what
-> you wanted to achieve.
+# echo 512 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
+# cat /sys/devices/system/node/node*/meminfo | grep HugePages_
+Node 0 HugePages_Total:   512
+Node 0 HugePages_Free:    512
+Node 0 HugePages_Surp:      0
+Node 1 HugePages_Total:     0
+Node 1 HugePages_Free:      0
+Node 1 HugePages_Surp:      0
+# cat /proc/meminfo  | grep HugePages_
+HugePages_Total:     512
+HugePages_Free:      512
+HugePages_Rsvd:        0
+HugePages_Surp:        0
 
-Sure! Thanks!
+# /usr/libexec/qemu-kvm -m 1G -smp 1 -object memory-backend-memfd,id=mem0,size=1G,hugetlb=on,hugetlbsize=2M,policy=bind,host-nodes=0 -numa node,nodeid=0,memdev=mem0 -hda Fedora-Cloud-Base-Rawhide-20201004.n.1.x86_64.qcow2 -nographic
+-> works just fine
 
+# /usr/libexec/qemu-kvm -m 1G -smp 1 -object memory-backend-memfd,id=mem0,size=1G,hugetlb=on,hugetlbsize=2M,policy=bind,host-nodes=1 -numa node,nodeid=0,memdev=mem0 -hda Fedora-Cloud-Base-Rawhide-20201004.n.1.x86_64.qcow2 -nographic
+-> Does not fail nicely but crashes!
+
+
+See https://bugzilla.redhat.com/show_bug.cgi?id=1686261 for something similar, however, it no longer applies like that on more recent kernels.
+
+Hugetlbfs reservations don't always protect you (especially with NUMA) - that's why e.g., libvirt always tells QEMU to prealloc.
+
+I think the "issue" is that the reservation happens on mmap(). mbind() runs afterwards. Preallocation saves you from that.
+
+I suspect something similar will happen with anonymous memory with mbind() even if we reserved swap space. Did not test yet, though.
 
 -- 
 Thanks,
