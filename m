@@ -2,130 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630C332040B
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Feb 2021 06:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9359B32048E
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Feb 2021 10:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhBTFdl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Feb 2021 00:33:41 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:48857 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230125AbhBTFdi (ORCPT
+        id S229806AbhBTJDG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Feb 2021 04:03:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57472 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229819AbhBTJCu (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 20 Feb 2021 00:33:38 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 021F7C66;
-        Sat, 20 Feb 2021 00:32:30 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sat, 20 Feb 2021 00:32:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=s
-        gbAB7vyqaLQKJwGNk9KixP9bH0fTh7k6Pdv8GtmCKY=; b=hLurI2NWNmhSCVW9j
-        nwwrECxlJ7Au8M55Dqyy2Bxr57kU6Ru6A+sGln/1giRM9CpJ8R5AXmDh6BlTAeb8
-        1FGzKGJOKT73Ht1mwQqQW+1au+QgbtGCXzTiebUHq7ebbSX5tTrpMX5HJYiteemC
-        I7c6q90PZ1CpLmHRi0JsV23lO1obpvabA8zWPHXeRgPXsbZcG3iqaMCo19GVE8FU
-        Et0K8XeVV3AEKPc0seHM8fBXESdwHx9Lh30n5ceSjnlL8pARMsF4RqckL/fW8mIx
-        HexdhZEs5/O3nWutfU1XDs6jzII2qgW2faoOIbL4dW/P56P+QILhnIenluA0UO5L
-        x+gVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=sgbAB7vyqaLQKJwGNk9KixP9bH0fTh7k6Pdv8GtmC
-        KY=; b=KSp5HFIKAGKK5ErUFlv/rVdggqpXuEd1ez51sQuQ0f+oUAYQE6orBNMOK
-        GFbUU0eVBAFHGu+bIkmljf63pD4OUoVXBjGiTaMcNpCNoUpzMCuhI0HIjo1BmgGI
-        lAJEEjHcjjhuTWql9WUjKHuMqWbqdedbj6TOD0CdiT1K6wvNK9NX5LznwpsQKhxH
-        I0mVwlPjxEQeGMLygxDu1tI7IN7BNDo3HNDRPde2phids7WHOkOddoXrGSivs0dA
-        And2Xa/0UYBkQfTqa1OowJXI9yUlFGunsFfO/jGyFJbOjPgxv1p2R00qXSTVrL+o
-        lqD8sHPSXXuxedGfotBuLs5d2hpbQ==
-X-ME-Sender: <xms:7J4wYEcmeNSN290yYTZ1LC3TbiHrH-p5aFlTq5ob7sTY1cPxPezhgQ>
-    <xme:7J4wYGMy9oyGUD3xaQ6H4qLZvO4m4OyfLYfvps6Z4tZwqTBV_GDEbQK-iN_gaz6C6
-    uJcsnu4E_OU2p4ohM4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrjeejgdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeftnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepfeeludeitddvkeffgefgueekjeegfeefteelgffhkeffueetieej
-    geehhfeuffdvnecukfhppeduheegrddujedruddvrdelkeenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhih
-    ghhorghtrdgtohhm
-X-ME-Proxy: <xmx:7J4wYFi-vHoHZPv9mO7xBUl5hg0h7hk7Nr1Ezoai99TvHWXFb0x71Q>
-    <xmx:7J4wYJ-HY-NLcXDSi4ngdt5u3Zxjm1aY2d2DmHlpe7mGNiu52LlPtQ>
-    <xmx:7J4wYAtdEWK_6vGW3eKeGNw4XtMsTiI7yR_tQC8LVnmXdMgEOXvRAw>
-    <xmx:7p4wYAExEIvxhJQ9tDenvQcwD6WG_hCDTBt9_LgqEsx4bUMRdZY9-ZlsEEQ>
-Received: from [0.0.0.0] (unknown [154.17.12.98])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 71C5B1080059;
-        Sat, 20 Feb 2021 00:32:24 -0500 (EST)
-Subject: Re: [PATCH] MIPS: loongson64: use 0b011 instead of 0b101 as xphys
- cached
-To:     Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Sat, 20 Feb 2021 04:02:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613811684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JgoL6yAU+V/ArfjxO3XDCSurXdtNKbGCFrJc0uCVVRc=;
+        b=Eqny4QLbWroe99WbRgPEczS3QxqJ6zCAmUpNo1NVkWpylk1yb1153M2AwyqGLFwHRNsTQf
+        eA1KfWdtP8TwzdO2suo6ileRW0Q8tMarqtNJW8zV94w32FRI0IJbW4GQbiHXRScqNwojOx
+        LYdJVkdm9OrluYJgh+ww3fR+M+6jL7o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-527-EtcmsycmMP6Ck3kTppQAqg-1; Sat, 20 Feb 2021 04:01:20 -0500
+X-MC-Unique: EtcmsycmMP6Ck3kTppQAqg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 91037107ACE3;
+        Sat, 20 Feb 2021 09:01:16 +0000 (UTC)
+Received: from [10.36.112.45] (ovpn-112-45.ams2.redhat.com [10.36.112.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 60B415D9C2;
+        Sat, 20 Feb 2021 09:01:01 +0000 (UTC)
+Subject: Re: [PATCH RFC] mm/madvise: introduce MADV_POPULATE to
+ prefault/prealloc memory
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhc@lemote.com>
-References: <20210220033155.3856-1-huangpei@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <a3b02ec6-ed82-22b6-df95-d8a74dd8bc7d@flygoat.com>
-Date:   Sat, 20 Feb 2021 13:32:21 +0800
+        Arnd Bergmann <arnd@arndb.de>, Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org
+References: <20210217154844.12392-1-david@redhat.com>
+ <20210218225904.GB6669@xz-x1>
+ <b24996a6-7652-f88c-301e-28417637fd02@redhat.com>
+ <20210219163157.GF6669@xz-x1>
+ <41444eb8-8bb8-8d5b-4cec-be7fa7530d0e@redhat.com>
+ <4d8e6f55-66a6-d701-6a94-79f5e2b23e46@redhat.com>
+ <15da147c-e440-ee87-c505-a4684a5b29dc@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <2073702b-9e09-2033-2915-628c7b7ccb3d@redhat.com>
+Date:   Sat, 20 Feb 2021 10:01:00 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210220033155.3856-1-huangpei@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <15da147c-e440-ee87-c505-a4684a5b29dc@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ÔÚ 2021/2/20 ÉÏÎç11:31, Huang Pei Ð´µÀ:
-> Loongson 3 use *0b011* as Cachable(not 0b101), this only affect
-> loongson64 without enough CP0 Kscratch for holding current pgd.
-> 3A2000+ use CP0 PWbase holding current (user) pgd
->
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->   arch/mips/mm/tlbex.c | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-> index a7521b8f7658..51effa5dbf9d 100644
-> --- a/arch/mips/mm/tlbex.c
-> +++ b/arch/mips/mm/tlbex.c
-> @@ -848,8 +848,15 @@ void build_get_pmde64(u32 **p, struct uasm_label **l, struct uasm_reloc **r,
->   		/* Clear lower 23 bits of context. */
->   		uasm_i_dins(p, ptr, 0, 0, 23);
->   
-> +#ifdef CONFIG_CPU_LOONGSON64
-> +		/* 1 0	0 1 1  << 6  xkphys cached */
-> +		/* 0x98xx xxxx xxxx xxxx */
-> +		uasm_i_ori(p, ptr, ptr, 0x4c0);
+> Sorry, for jumping in late ... hugetlb keyword just hit my mail filters :)
+> 
 
-Hi Pei,
+Sorry for not realizing to cc you before I sent out the man page update :)
 
-What about (CAC_BASE >> 53) instead of magic number?
+> Yes, it is true that hugetlb reservations are not numa aware.  So, even if
+> pages are reserved at mmap time one could still SIGBUS if a fault is
+> restricted to a node with insufficient pages.
+> 
+> I looked into this some years ago, and there really is not a good way to
+> make hugetlb reservations numa aware.  preallocation, or on demand
+> populating as proposed here is a way around the issue.
 
-Also there is another similar usage at build_fast_tlb_refill_handler, please
-fix it as well.
 
-Thanks.
+Thanks for confirming, this makes a lot of sense to me now.
 
-- Jiaxun
 
-> +#else
->   		/* 1 0	1 0 1  << 6  xkphys cached */
-> +		/* 0xa8xx xxxx xxxx xxxx */
->   		uasm_i_ori(p, ptr, ptr, 0x540);
-> +#endif
->   		uasm_i_drotr(p, ptr, ptr, 11);
->   #elif defined(CONFIG_SMP)
->   		UASM_i_CPUID_MFC0(p, ptr, SMP_CPUID_REG);
+-- 
+Thanks,
+
+David / dhildenb
 
