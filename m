@@ -2,68 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD481320A9F
-	for <lists+linux-arch@lfdr.de>; Sun, 21 Feb 2021 14:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC90320CB1
+	for <lists+linux-arch@lfdr.de>; Sun, 21 Feb 2021 19:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbhBUNnA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 21 Feb 2021 08:43:00 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:51227 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbhBUNm6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 21 Feb 2021 08:42:58 -0500
-Received: from [192.168.1.100] (lfbn-lyo-1-457-219.w2-7.abo.wanadoo.fr [2.7.49.219])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id C7EE1100002;
-        Sun, 21 Feb 2021 13:42:09 +0000 (UTC)
-Subject: Re: [PATCH 0/4] Kasan improvements and fixes
-To:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, kasan-dev@googlegroups.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210208193017.30904-1-alex@ghiti.fr>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <24d45989-4f4e-281c-3f58-d492f0b582e9@ghiti.fr>
-Date:   Sun, 21 Feb 2021 08:42:08 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <20210208193017.30904-1-alex@ghiti.fr>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+        id S230172AbhBUSkR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 21 Feb 2021 13:40:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56126 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230107AbhBUSkQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 21 Feb 2021 13:40:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 648E06148E;
+        Sun, 21 Feb 2021 18:39:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613932776;
+        bh=5GoWN4pGByWaKK+ZMToa01cR0SV78JG9i1Ai2sqmyII=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=EG+OGadZvQFeksMrwXCsy5aIER5t956wyLhLL+tv8xlBXjfC9vbEFNsg/Jz3kT5dV
+         LLiA3KSYZN5/ZWI9SCrkOPtHn5lyKIFiDDrhoysvGGHpxfzzBE3pWb4ZaQvYZWkHHB
+         EkmST4mNVpsN9AEvi6IQia0ksr/Apoy336wY/8RKX8rYAaa9w6eE7KLwQx8RIrMtK4
+         AHIiZ5ggMoVyXxiCezGny8yrn2eEhHNyVB5B37h/WpgWQNDjSuBlHKoCECIo+u0nPG
+         fR9wiJzqIku1qO8zcr2I3eV72BCpM8WT6HTqQ7AOMPXy7SDaDrTvnChsgTqLv0F7aX
+         jA1+Jel/XK/eg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 605A860967;
+        Sun, 21 Feb 2021 18:39:36 +0000 (UTC)
+Subject: Re: [git pull] saner ELF compat handling
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YCqpJZxNrb7+O8Ns@zeniv-ca.linux.org.uk>
+References: <YCqpJZxNrb7+O8Ns@zeniv-ca.linux.org.uk>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YCqpJZxNrb7+O8Ns@zeniv-ca.linux.org.uk>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.elf-compat
+X-PR-Tracked-Commit-Id: e565d89e4aa07e3f20ac5e8757b1da24b5878e69
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 591fd30eee47ed75d1296d619dd467414d0894e3
+Message-Id: <161393277638.20435.1673939815325390026.pr-tracker-bot@kernel.org>
+Date:   Sun, 21 Feb 2021 18:39:36 +0000
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+The pull request you sent on Mon, 15 Feb 2021 17:02:29 +0000:
 
-Le 2/8/21 à 2:30 PM, Alexandre Ghiti a écrit :
-> This small series contains some improvements for the riscv KASAN code:
-> 
-> - it brings a better readability of the code (patch 1/2)
-> - it fixes oversight regarding page table population which I uncovered
->    while working on my sv48 patchset (patch 3)
-> - it helps to have better performance by using hugepages when possible
->    (patch 4)
-> 
-> Alexandre Ghiti (4):
->    riscv: Improve kasan definitions
->    riscv: Use KASAN_SHADOW_INIT define for kasan memory initialization
->    riscv: Improve kasan population function
->    riscv: Improve kasan population by using hugepages when possible
-> 
->   arch/riscv/include/asm/kasan.h |  22 +++++-
->   arch/riscv/mm/kasan_init.c     | 119 ++++++++++++++++++++++++---------
->   2 files changed, 108 insertions(+), 33 deletions(-)
-> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.elf-compat
 
-I'm cc-ing linux-arch and linux-mm to get more chance to have reviewers 
-on this series.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/591fd30eee47ed75d1296d619dd467414d0894e3
 
-Thanks,
+Thank you!
 
-Alex
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
