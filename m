@@ -2,150 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D49321346
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Feb 2021 10:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078393213A7
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Feb 2021 11:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbhBVJkg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Feb 2021 04:40:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28791 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229996AbhBVJkc (ORCPT
+        id S230350AbhBVKDV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Feb 2021 05:03:21 -0500
+Received: from jptosegrel01.sonyericsson.com ([124.215.201.71]:15340 "EHLO
+        JPTOSEGREL01.sonyericsson.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230417AbhBVKCY (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Feb 2021 04:40:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613986745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DFxc+0us/i36TuhQU4VjFE7oonKp2pd6VcvaTnTkT80=;
-        b=VmpxmvcRyGmKaIDm/4oAjtcVQ+dojXtl9vYmbKm4KHVKxwCjbZj3WtniPGzAsFgmUZ4g4Q
-        YDPSQgyqH693uC784GnWggclSPn8A3oeymrjqHZI4SjgXCLNLsZVGjzdwh1RoUblz3QgAW
-        8RU6a0CBku5H0o2ILlfu75IafAdwQr8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-60-uAjoBBddN9WmOEycYhZwYw-1; Mon, 22 Feb 2021 04:39:00 -0500
-X-MC-Unique: uAjoBBddN9WmOEycYhZwYw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D047D18A2F09;
-        Mon, 22 Feb 2021 09:38:20 +0000 (UTC)
-Received: from [10.36.115.16] (ovpn-115-16.ams2.redhat.com [10.36.115.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BABB110589DD;
-        Mon, 22 Feb 2021 09:38:11 +0000 (UTC)
-To:     jejb@linux.ibm.com, Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-References: <20210214091954.GM242749@kernel.org>
- <052DACE9-986B-424C-AF8E-D6A4277DE635@redhat.com>
- <244f86cba227fa49ca30cd595c4e5538fe2f7c2b.camel@linux.ibm.com>
- <YCo7TqUnBdgJGkwN@dhcp22.suse.cz>
- <be1d821d3f0aec24ad13ca7126b4359822212eb0.camel@linux.ibm.com>
- <YCrJjYmr7A2nO6lA@dhcp22.suse.cz>
- <12c3890b233c8ec8e3967352001a7b72a8e0bfd0.camel@linux.ibm.com>
- <dfd7db5c-a8c7-0676-59f8-70aa6bcaabe7@redhat.com>
- <000cfaa0a9a09f07c5e50e573393cda301d650c9.camel@linux.ibm.com>
- <5a8567a9-6940-c23f-0927-e4b5c5db0d5e@redhat.com>
- <b58debfe598331791ecc238a6bf8d2cf1762203a.camel@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Subject: Re: [PATCH v17 07/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <304e4c9d-81aa-20ac-cfbe-245ed0de9a86@redhat.com>
-Date:   Mon, 22 Feb 2021 10:38:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Mon, 22 Feb 2021 05:02:24 -0500
+X-Greylist: delayed 646 seconds by postgrey-1.27 at vger.kernel.org; Mon, 22 Feb 2021 05:02:08 EST
+Subject: Re: [PATCH] RTIC: selinux: ARM64: Move selinux_state to a separate
+ page
+To:     Will Deacon <will@kernel.org>,
+        Preeti Nagar <pnagar@codeaurora.org>, <maz@kernel.org>,
+        <ardb@kernel.org>
+CC:     <arnd@arndb.de>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <paul@paul-moore.com>, <stephen.smalley.work@gmail.com>,
+        <eparis@parisplace.org>, <linux-security-module@vger.kernel.org>,
+        <selinux@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <casey@schaufler-ca.com>, <ndesaulniers@google.com>,
+        <dhowells@redhat.com>, <ojeda@kernel.org>,
+        <psodagud@codeaurora.org>, <nmardana@codeaurora.org>,
+        <rkavati@codeaurora.org>, <vsekhar@codeaurora.org>,
+        <mreichar@codeaurora.org>, <johan@kernel.org>, <joe@perches.com>,
+        <jeyu@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1613470672-3069-1-git-send-email-pnagar@codeaurora.org>
+ <20210217094205.GA3570@willie-the-truck>
+From:   peter enderborg <peter.enderborg@sony.com>
+Message-ID: <5f6b5d38-266e-12f7-8e55-07fe794fbf97@sony.com>
+Date:   Mon, 22 Feb 2021 10:50:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <b58debfe598331791ecc238a6bf8d2cf1762203a.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <20210217094205.GA3570@willie-the-truck>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=fqOim2wf c=1 sm=1 tr=0 a=9drRLWArJOlETflmpfiyCA==:117 a=IkcTkHD0fZMA:10 a=qa6Q16uM49sA:10 a=aMTo-Due3bUgzeKeeW4A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 17.02.21 17:19, James Bottomley wrote:
-> On Tue, 2021-02-16 at 18:16 +0100, David Hildenbrand wrote:
-> [...]
->>>>    The discussion regarding migratability only really popped up
->>>> because this is a user-visible thing and not being able to
->>>> migrate can be a real problem (fragmentation, ZONE_MOVABLE, ...).
->>>
->>> I think the biggest use will potentially come from hardware
->>> acceleration.  If it becomes simple to add say encryption to a
->>> secret page with no cost, then no flag needed.  However, if we only
->>> have a limited number of keys so once we run out no more encrypted
->>> memory then it becomes a costly resource and users might want a
->>> choice of being backed by encryption or not.
+On 2/17/21 10:42 AM, Will Deacon wrote:
+> [Please include arm64 and kvm folks for threads involving the stage-2 MMU]
+>
+> On Tue, Feb 16, 2021 at 03:47:52PM +0530, Preeti Nagar wrote:
+>> The changes introduce a new security feature, RunTime Integrity Check
+>> (RTIC), designed to protect Linux Kernel at runtime. The motivation
+>> behind these changes is:
+>> 1. The system protection offered by Security Enhancements(SE) for
+>> Android relies on the assumption of kernel integrity. If the kernel
+>> itself is compromised (by a perhaps as yet unknown future vulnerability),
+>> SE for Android security mechanisms could potentially be disabled and
+>> rendered ineffective.
+>> 2. Qualcomm Snapdragon devices use Secure Boot, which adds cryptographic
+>> checks to each stage of the boot-up process, to assert the authenticity
+>> of all secure software images that the device executes.  However, due to
+>> various vulnerabilities in SW modules, the integrity of the system can be
+>> compromised at any time after device boot-up, leading to un-authorized
+>> SW executing.
 >>
->> Right. But wouldn't HW support with configurable keys etc. need more
->> syscall parameters (meaning, even memefd_secret() as it is would not
->> be sufficient?). I suspect the simplistic flag approach might not
->> be sufficient. I might be wrong because I have no clue about MKTME
->> and friends.
-> 
-> The theory I was operating under is key management is automatic and
-> hidden, but key scarcity can't be, so if you flag requesting hardware
-> backing then you either get success (the kernel found a key) or failure
-> (the kernel is out of keys).  If we actually want to specify the key
-> then we need an extra argument and we *must* have a new system call.
-> 
->> Anyhow, I still think extending memfd_create() might just be good
->> enough - at least for now.
-> 
-> I really think this is the wrong approach for a user space ABI.  If we
-> think we'll ever need to move to a separate syscall, we should begin
-> with one.  The pain of trying to shift userspace from memfd_create to a
-> new syscall would be enormous.  It's not impossible (see clone3) but
-> it's a pain we should avoid if we know it's coming.
+>> The feature's idea is to move some sensitive kernel structures to a
+>> separate page and monitor further any unauthorized changes to these,
+>> from higher Exception Levels using stage 2 MMU. Moving these to a
+>> different page will help avoid getting page faults from un-related data.
+>> The mechanism we have been working on removes the write permissions for
+>> HLOS in the stage 2 page tables for the regions to be monitored, such
+>> that any modification attempts to these will lead to faults being
+>> generated and handled by handlers. If the protected assets are moved to
+>> a separate page, faults will be generated corresponding to change attempts
+>> to these assets only. If not moved to a separate page, write attempts to
+>> un-related data present on the monitored pages will also be generated.
+>>
+>> Using this feature, some sensitive variables of the kernel which are
+>> initialized after init or are updated rarely can also be protected from
+>> simple overwrites and attacks trying to modify these.
+> Although I really like the idea of using stage-2 to protect the kernel, I
+> think the approach you outline here is deeply flawed. Identifying "sensitive
+> variables" of the kernel to protect is subjective and doesn't scale.
+> Furthermore, the triaging of what constitues a valid access is notably
+> absent from your description and is assumedly implemented in an opaque blob
+> at EL2.
+>
+> I think a better approach would be along the lines of:
+>
+>   1. Introduce the protection at stage-1 (like we already have for mapping
+>      e.g. the kernel text R/O)
 
-Sorry for the late reply, there is just too much going on :)
+Will that really solve the problem? There is a lot of caches that are used
+to resolve policy data in selinux, and this caches will not be protected.
+If you can manipulate kernel data you can do cache poisoning.
 
-*If* we ever realize we need to pass more parameters we can easily have 
-a new syscall for that purpose. *Then*, we know how that syscall will 
-look like. Right now, it's just pure speculation.
 
-Until then, going with memfd_create() works just fine IMHO.
+>   2. Implement the handlers in the kernel, so the heuristics are clear.
+>
+>   3. Extend this to involve KVM, so that the host can manage its own
+>      stage-2 to firm-up the stage-1 protections.
+>
+> I also think we should avoid tying this to specific data structures.
+> Rather, we should introduce a mechanism to make arbitrary data read-only.
+>
+> I've CC'd Ard and Marc, as I think they've both been thinking about this
+> sort of thing recently as well.
+>
+> Will
 
-The worst think that could happen is that we might not be able to create 
-all fancy sectremem flavors in the future via memfd_create() but only 
-via different, highly specialized syscall. I don't see a real problem 
-with that.
-
--- 
-Thanks,
-
-David / dhildenb
 
