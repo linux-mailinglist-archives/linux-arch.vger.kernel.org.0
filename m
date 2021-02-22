@@ -2,172 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8728320FF6
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Feb 2021 05:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B543321017
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Feb 2021 05:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbhBVEJH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 21 Feb 2021 23:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbhBVEJH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 21 Feb 2021 23:09:07 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A271C061574;
-        Sun, 21 Feb 2021 20:08:26 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id k8so5057252qvm.6;
-        Sun, 21 Feb 2021 20:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LczEaE48F+utnjkPuq1s+xKVZFE6A8WhpTBcnEGpZa8=;
-        b=Z3Ijjw6imodIyhMz0xEu6y5v5oVzoG6wjpJtA9SBmmBW/poIe3ffZ/aDEIOakFR5YT
-         F3yLV/TvG+8BCjVxzs7ZwkanmbIIufGlFhy++9Ykv8xTE0xs2KM2Ls9jNcM4X5fXT75r
-         7guy1ID2ep+Vtc1Cwl/aoXt2t08fv2tLf5g1Q7hriA47rMHFYiwABUXDsLnwUUBGOf2p
-         3taSTA/JMr5oDdOXMPIj0kNP6aEvguI7PAzxg7Zdjxx6K5N5QkzyO8F+P1t36DX+OajS
-         xsMFtGfuyZu81q2rlhCHZZ5LAlrvM2e34mJmpG4qRH+TltU8MEdpCasxrV7UFBaEO9js
-         +zzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LczEaE48F+utnjkPuq1s+xKVZFE6A8WhpTBcnEGpZa8=;
-        b=NrTkgfTlQ1IvcvlfKkB31/yyIJWcK9EadwUubthDnpr2W8t8/UcmZfrbFFOFlr8F0d
-         VAIRmeS+xwvDngxpEK6lWjtG1FqzIo3KxYeU7fjdMs9HVjcsXrxttEGtVqeDP4nvknwK
-         DceVd3V/tWBvhIgcDJQctJ9NxhvRNcWtxNCMQ/8oyVQVQZ9+757SJ4pUlJa32AsBG4/A
-         eFB7em//FWH18MRdCU0KiGgPbWuzjtElmzhv5+d4/OOh0YuiL7TxMMKx7V1Jg16ZXoOA
-         ZlLuWGWNWK9+hcnlucIQ2x9SaoRHbtf7tBVy/Gj61/mAc38ixC5OkrzciQSJfxV86qS+
-         ilVw==
-X-Gm-Message-State: AOAM533CTxdW+4Xr9V/JEiAP/FthOqQobJy/uZMd0L7cJ5MlGqpWBZ3c
-        GWzB3zrGat7XAH+1O6cMcGM=
-X-Google-Smtp-Source: ABdhPJyZZuUV5ti70yxIfWmrKFvIqr6NKFZ1SgpPQw5j4CIKgZcP8bsbkgVwjFZnQrBQJwNc1PMelA==
-X-Received: by 2002:a05:6214:38c:: with SMTP id l12mr11430205qvy.20.1613966905662;
-        Sun, 21 Feb 2021 20:08:25 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id z31sm3844191qtb.0.2021.02.21.20.08.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Feb 2021 20:08:25 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id B427B27C0054;
-        Sun, 21 Feb 2021 23:08:19 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 21 Feb 2021 23:08:24 -0500
-X-ME-Sender: <xms:Mi4zYA9oFh8DDxaRMYzJVlqRv1rVec9mbZ_fmqRAe44zqx9FF7hhAQ>
-    <xme:Mi4zYIvk0ZU7snXRoFbu0WF0ozGWZwXsoZouF30sg-y3FoqiXV7vfWIxg6m6LzGWB
-    x8zP6moaEJb-vM-rg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkedvgdeijecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
-    jeenucfkphepudeijedrvddvtddrvddruddvieenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
-    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
-    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:Mi4zYGCJN4-afnZaO0dYB1mgLM5X39dtGS86QG8itNV8L3vwhtilqA>
-    <xmx:Mi4zYAcqdQnu1LB7qzn7qfvAbfQNxOSCbO_vvmWpONf_oVGYBK1FUw>
-    <xmx:Mi4zYFPzXFcfpBuFzYx3FcQMTEoIJV8-NUTCaR2xAoTQq7jW47F3uA>
-    <xmx:My4zYJms5RCuXN-skRCvTXIg8Ni2caCJ8Z4Yigmah50qZjaGGaAo4LYrgew>
-Received: from localhost (unknown [167.220.2.126])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 1D71824005C;
-        Sun, 21 Feb 2021 23:08:18 -0500 (EST)
-Date:   Mon, 22 Feb 2021 12:07:46 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        daniel.lezcano@linaro.org, arnd@arndb.de,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 07/10] clocksource/drivers/hyper-v: Handle vDSO
- differences inline
-Message-ID: <YDMuEvgRMF152DbS@boqun-archlinux>
-References: <1611779025-21503-1-git-send-email-mikelley@microsoft.com>
- <1611779025-21503-8-git-send-email-mikelley@microsoft.com>
+        id S230144AbhBVE7h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 21 Feb 2021 23:59:37 -0500
+Received: from m42-2.mailgun.net ([69.72.42.2]:42122 "EHLO m42-2.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230064AbhBVE7f (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 21 Feb 2021 23:59:35 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1613969951; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=eMp/Oi18EvtK5YOknhy++/LedAfl59fyqLiaB5bvtI4=;
+ b=kVna8xnlQIC2dIfySXDmbIpMJjxJ8mNhnBN8opNYlx9kcvU3cmOls9GgkOhtlrtfP8SdKD8o
+ pamX7H6vQraBKYHoiDILT/zU7FkUmZsSpj/1scFUB9Jthx6lSthyVn84PT+dWG5+eMQKd7S3
+ Zw8SdpEofYYYcWH0uOHsVR3zb9s=
+X-Mailgun-Sending-Ip: 69.72.42.2
+X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 60333a027237f827dcf20c3d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Feb 2021 04:58:42
+ GMT
+Sender: pnagar=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 94EF4C43468; Mon, 22 Feb 2021 04:58:42 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pnagar)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 517FEC433CA;
+        Mon, 22 Feb 2021 04:58:41 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611779025-21503-8-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 22 Feb 2021 10:28:41 +0530
+From:   pnagar@codeaurora.org
+To:     Marc Zyngier <maz@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, ardb@kernel.org, arnd@arndb.de,
+        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, casey@schaufler-ca.com,
+        ndesaulniers@google.com, dhowells@redhat.com, ojeda@kernel.org,
+        psodagud@codeaurora.org, nmardana@codeaurora.org, johan@kernel.org,
+        joe@perches.com, jeyu@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RTIC: selinux: ARM64: Move selinux_state to a separate
+ page
+In-Reply-To: <09bd49a4d8fcb1bebaa4f40fd5c6eac3@kernel.org>
+References: <1613470672-3069-1-git-send-email-pnagar@codeaurora.org>
+ <20210217094205.GA3570@willie-the-truck>
+ <09bd49a4d8fcb1bebaa4f40fd5c6eac3@kernel.org>
+Message-ID: <5f33e59bf9c01ed5c33a9c3cbe277615@codeaurora.org>
+X-Sender: pnagar@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 12:23:42PM -0800, Michael Kelley wrote:
-> While the driver for the Hyper-V Reference TSC and STIMERs is architecture
-> neutral, vDSO is implemented for x86/x64, but not for ARM64.  Current code
-> calls into utility functions under arch/x86 (and coming, under arch/arm64)
-> to handle the difference.
+On 2021-02-17 15:45, Marc Zyngier wrote:
+> On 2021-02-17 09:42, Will Deacon wrote:
+>> [Please include arm64 and kvm folks for threads involving the stage-2 
+>> MMU]
+>> 
+>> On Tue, Feb 16, 2021 at 03:47:52PM +0530, Preeti Nagar wrote:
+>>> The changes introduce a new security feature, RunTime Integrity Check
+>>> (RTIC), designed to protect Linux Kernel at runtime. The motivation
+>>> behind these changes is:
+>>> 1. The system protection offered by Security Enhancements(SE) for
+>>> Android relies on the assumption of kernel integrity. If the kernel
+>>> itself is compromised (by a perhaps as yet unknown future 
+>>> vulnerability),
+>>> SE for Android security mechanisms could potentially be disabled and
+>>> rendered ineffective.
+>>> 2. Qualcomm Snapdragon devices use Secure Boot, which adds 
+>>> cryptographic
+>>> checks to each stage of the boot-up process, to assert the 
+>>> authenticity
+>>> of all secure software images that the device executes.  However, due 
+>>> to
+>>> various vulnerabilities in SW modules, the integrity of the system 
+>>> can be
+>>> compromised at any time after device boot-up, leading to 
+>>> un-authorized
+>>> SW executing.
+>>> 
+>>> The feature's idea is to move some sensitive kernel structures to a
+>>> separate page and monitor further any unauthorized changes to these,
+>>> from higher Exception Levels using stage 2 MMU. Moving these to a
+>>> different page will help avoid getting page faults from un-related 
+>>> data.
+>>> The mechanism we have been working on removes the write permissions 
+>>> for
+>>> HLOS in the stage 2 page tables for the regions to be monitored, such
+>>> that any modification attempts to these will lead to faults being
+>>> generated and handled by handlers. If the protected assets are moved 
+>>> to
+>>> a separate page, faults will be generated corresponding to change 
+>>> attempts
+>>> to these assets only. If not moved to a separate page, write attempts 
+>>> to
+>>> un-related data present on the monitored pages will also be 
+>>> generated.
+>>> 
+>>> Using this feature, some sensitive variables of the kernel which are
+>>> initialized after init or are updated rarely can also be protected 
+>>> from
+>>> simple overwrites and attacks trying to modify these.
+>> 
+>> Although I really like the idea of using stage-2 to protect the 
+>> kernel, I
+>> think the approach you outline here is deeply flawed. Identifying 
+>> "sensitive
+>> variables" of the kernel to protect is subjective and doesn't scale.
+>> Furthermore, the triaging of what constitues a valid access is notably
+>> absent from your description and is assumedly implemented in an opaque 
+>> blob
+>> at EL2.
+>> 
+>> I think a better approach would be along the lines of:
+>> 
+>>   1. Introduce the protection at stage-1 (like we already have for 
+>> mapping
+>>      e.g. the kernel text R/O)
+>> 
+>>   2. Implement the handlers in the kernel, so the heuristics are 
+>> clear.
+>> 
+>>   3. Extend this to involve KVM, so that the host can manage its own
+>>      stage-2 to firm-up the stage-1 protections.
 > 
-> Change this approach to handle the difference inline based on whether
-> VDSO_CLOCK_MODE_HVCLOCK is present.  The new approach removes code under
-> arch/* since the difference is tied more to the specifics of the Linux
-> implementation than to the architecture.
+> +1 on that. Even if, as I suspect, this is targeting some unspecified
+> hypervisor that is not KVM, the first course of action should be for
+> this to be implemented in the kernel's own hypervisor first so that
+> anyone can review understand what is at play.
 > 
-> No functional change.
+> Thanks,
 > 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>          M.
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Thank you for your comments. The key value add of the feature is a third
+party independent entity keeping a watch on crucial kernel assets, such 
+that
+in case the kernel itself is compromised, still, the protection can 
+remain intact.
+Can this be achieved if the implementation is done in KVM? I've limited 
+knowledge
+of KVM currently, can surely look into more details for a better 
+understanding.
 
-Regards,
-Boqun
-
-> ---
->  arch/x86/include/asm/mshyperv.h    |  4 ----
->  drivers/clocksource/hyperv_timer.c | 10 ++++++++--
->  2 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 4d3e0c5..ed9dc56 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -27,10 +27,6 @@ static inline u64 hv_get_register(unsigned int reg)
->  	return value;
->  }
->  
-> -#define hv_set_clocksource_vdso(val) \
-> -	((val).vdso_clock_mode = VDSO_CLOCKMODE_HVCLOCK)
-> -#define hv_enable_vdso_clocksource() \
-> -	vclocks_set_used(VDSO_CLOCKMODE_HVCLOCK);
->  #define hv_get_raw_timer() rdtsc_ordered()
->  
->  /*
-> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-> index 9425308..9cee6db 100644
-> --- a/drivers/clocksource/hyperv_timer.c
-> +++ b/drivers/clocksource/hyperv_timer.c
-> @@ -372,7 +372,9 @@ static void resume_hv_clock_tsc(struct clocksource *arg)
->  
->  static int hv_cs_enable(struct clocksource *cs)
->  {
-> -	hv_enable_vdso_clocksource();
-> +#ifdef VDSO_CLOCKMODE_HVCLOCK
-> +	vclocks_set_used(VDSO_CLOCKMODE_HVCLOCK);
-> +#endif
->  	return 0;
->  }
->  
-> @@ -385,6 +387,11 @@ static int hv_cs_enable(struct clocksource *cs)
->  	.suspend= suspend_hv_clock_tsc,
->  	.resume	= resume_hv_clock_tsc,
->  	.enable = hv_cs_enable,
-> +#ifdef VDSO_CLOCKMODE_HVCLOCK
-> +	.vdso_clock_mode = VDSO_CLOCKMODE_HVCLOCK,
-> +#else
-> +	.vdso_clock_mode = VDSO_CLOCKMODE_NONE,
-> +#endif
->  };
->  
->  static u64 notrace read_hv_clock_msr(void)
-> @@ -439,7 +446,6 @@ static bool __init hv_init_tsc_clocksource(void)
->  	tsc_msr = tsc_msr | 0x1 | (u64)phys_addr;
->  	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
->  
-> -	hv_set_clocksource_vdso(hyperv_cs_tsc);
->  	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
->  
->  	hv_sched_clock_offset = hv_read_reference_counter();
-> -- 
-> 1.8.3.1
-> 
+Agree that the mechanism for triaging what constitutes valid access 
+needs a clear
+approach. We will discuss your suggestions internally if we can use them 
+to improve
+the overall feature design and share updated patches. Thank you!
