@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3F0321020
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Feb 2021 06:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 513CB32110F
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Feb 2021 07:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhBVFHC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Feb 2021 00:07:02 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:23162 "EHLO m42-2.mailgun.net"
+        id S229903AbhBVGzc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Feb 2021 01:55:32 -0500
+Received: from m42-2.mailgun.net ([69.72.42.2]:15373 "EHLO m42-2.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229487AbhBVFHB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Feb 2021 00:07:01 -0500
+        id S229852AbhBVGzb (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Feb 2021 01:55:31 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1613970396; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1613976911; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=4sOm7RL/GojtBTEv2KuW3oPf8DiE8mWjcTb6fFV7JV0=;
- b=q15w7TpKD3SuUgFUpZpjZTnjiwij77gbICqP1zUbgX92Z48RZxAwuOBl1/OWp2DDiybpfzYz
- 1vSpl1aAuwkBXaoG9hvyzRXMZwrE3K4jWYRzHgR5tGd87+s9oUnhU1A7T61xM0MpDfOQQxDD
- DpyjWABcp1GI4TGJDButw4C0nFc=
+ MIME-Version: Sender; bh=ofgj+DChJuv4uQiMPMe3Ol2wZ5uQqx9bQQUd6t5Oc9A=;
+ b=B5qJS1Gg+dTGor5/AhSNgKPO6yoN+3iiZcKSbACSmEIcOL51bEPwbz67bzSkkOLAP7xysoQv
+ wrv7+nZx/uwYiRratMaXI9MvEtx4OW05fCK8LwlPpRyp8RrFaJjceKzUZrtoUQQv9X4NRg+C
+ HuBtEvXGM+4HvgbsJ4+saVRusnI=
 X-Mailgun-Sending-Ip: 69.72.42.2
 X-Mailgun-Sid: WyI5MDNlZiIsICJsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60333bdbf33d74123f42aafe (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Feb 2021 05:06:35
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 603355317237f827dc2474b0 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Feb 2021 06:54:41
  GMT
 Sender: pnagar=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 78FE0C4346A; Mon, 22 Feb 2021 05:06:34 +0000 (UTC)
+        id 4F542C433C6; Mon, 22 Feb 2021 06:54:41 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -38,40 +38,46 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: pnagar)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 15FC2C433C6;
-        Mon, 22 Feb 2021 05:06:33 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9710CC433CA;
+        Mon, 22 Feb 2021 06:54:38 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Mon, 22 Feb 2021 10:36:32 +0530
+Date:   Mon, 22 Feb 2021 12:24:38 +0530
 From:   pnagar@codeaurora.org
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, jmorris@namei.org, serge@hallyn.com,
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         Paul Moore <paul@paul-moore.com>,
-        stephen.smalley.work@gmail.com, Eric Paris <eparis@parisplace.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        selinux@vger.kernel.org, linux-arch <linux-arch@vger.kernel.org>,
-        casey@schaufler-ca.com, Nick Desaulniers <ndesaulniers@google.com>,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
         David Howells <dhowells@redhat.com>,
-        Miguel Ojeda <ojeda@kernel.org>, psodagud@codeaurora.org,
-        nmardana@codeaurora.org, Johan Hovold <johan@kernel.org>,
-        Joe Perches <joe@perches.com>, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Miguel Ojeda <ojeda@kernel.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>,
+        Will Deacon <will@kernel.org>, nmardana@codeaurora.org,
+        johan@kernel.org, Joe Perches <joe@perches.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Joel Galenson <jgalenson@google.com>
 Subject: Re: [PATCH] RTIC: selinux: ARM64: Move selinux_state to a separate
  page
-In-Reply-To: <CANiq72=O0RaHVRcKFF_YDDO4xDFdxaGdH94PgvuibK-ZzHvOxA@mail.gmail.com>
+In-Reply-To: <CAKwvOdkTkTV6U7zv1WyndLwK_JCB5ptTz64UbqAEwRMV5o7dLw@mail.gmail.com>
 References: <1613470672-3069-1-git-send-email-pnagar@codeaurora.org>
- <CANiq72=O0RaHVRcKFF_YDDO4xDFdxaGdH94PgvuibK-ZzHvOxA@mail.gmail.com>
-Message-ID: <f6b1520b7712ef7cd248a8120badd061@codeaurora.org>
+ <CAKwvOdkTkTV6U7zv1WyndLwK_JCB5ptTz64UbqAEwRMV5o7dLw@mail.gmail.com>
+Message-ID: <92c05669eca0307421cd224e0a06e785@codeaurora.org>
 X-Sender: pnagar@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2021-02-17 02:02, Miguel Ojeda wrote:
-> On Tue, Feb 16, 2021 at 11:22 AM Preeti Nagar <pnagar@codeaurora.org> 
+On 2021-02-16 23:39, Nick Desaulniers wrote:
+> On Tue, Feb 16, 2021 at 2:19 AM Preeti Nagar <pnagar@codeaurora.org> 
 > wrote:
 >> 
 >> The changes introduce a new security feature, RunTime Integrity Check
@@ -126,13 +132,85 @@ On 2021-02-17 02:02, Miguel Ojeda wrote:
 >> to
 >> move more security-related kernel assets to this page to enhance
 >> protection.
+>> 
+>> Signed-off-by: Preeti Nagar <pnagar@codeaurora.org>
 > 
-> Part of this commit message should likely be added as a new file under
-> Documentation/ somewhere.
+> This addresses my feedback from the RFC regarding the section symbols.
+> No comment on whether there is a better approach, or the 2MB vs page
+> alignment, but perhaps other folks cc'ed can please take a look.
 > 
-Yes, that will be helpful, will put it in Documentation/security in the
-next update. Thank you!
+> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+Thank you! I look forward to reviews and suggestions from the added 
+folks.
 
+>> ---
+>> The RFC patch reviewed available at:
+>> https://lore.kernel.org/linux-security-module/1610099389-28329-1-git-send-email-pnagar@codeaurora.org/
+>> ---
+>>  include/asm-generic/vmlinux.lds.h | 10 ++++++++++
+>>  include/linux/init.h              |  6 ++++++
+>>  security/Kconfig                  | 11 +++++++++++
+>>  security/selinux/hooks.c          |  2 +-
+>>  4 files changed, 28 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/include/asm-generic/vmlinux.lds.h 
+>> b/include/asm-generic/vmlinux.lds.h
+>> index b97c628..d1a5434 100644
+>> --- a/include/asm-generic/vmlinux.lds.h
+>> +++ b/include/asm-generic/vmlinux.lds.h
+>> @@ -770,6 +770,15 @@
+>>                 *(.scommon)                                            
+>>  \
+>>         }
+>> 
+>> +#ifdef CONFIG_SECURITY_RTIC
+>> +#define RTIC_BSS                                                      
+>>  \
+>> +       . = ALIGN(SZ_2M);                                              
+>>  \
+>> +       KEEP(*(.bss.rtic))                                             
+>>  \
+>> +       . = ALIGN(SZ_2M);
+>> +#else
+>> +#define RTIC_BSS
+>> +#endif
+>> +
+>>  /*
+>>   * Allow archectures to redefine BSS_FIRST_SECTIONS to add extra
+>>   * sections to the front of bss.
+>> @@ -782,6 +791,7 @@
+>>         . = ALIGN(bss_align);                                          
+>>  \
+>>         .bss : AT(ADDR(.bss) - LOAD_OFFSET) {                          
+>>  \
+>>                 BSS_FIRST_SECTIONS                                     
+>>  \
+>> +               RTIC_BSS                                               
+>>  \
+>>                 . = ALIGN(PAGE_SIZE);                                  
+>>  \
+>>                 *(.bss..page_aligned)                                  
+>>  \
+>>                 . = ALIGN(PAGE_SIZE);                                  
+>>  \
+>> diff --git a/include/linux/init.h b/include/linux/init.h
+>> index e668832..e6d452a 100644
+>> --- a/include/linux/init.h
+>> +++ b/include/linux/init.h
+>> @@ -300,6 +300,12 @@ void __init parse_early_options(char *cmdline);
+>>  /* Data marked not to be saved by software suspend */
+>>  #define __nosavedata __section(".data..nosave")
+>> 
+>> +#ifdef CONFIG_SECURITY_RTIC
+>> +#define __rticdata  __section(".bss.rtic")
+>> +#else
+>> +#define __rticdata
+>> +#endif
+>> +
+>>  #ifdef MODULE
+>>  #define __exit_p(x) x
+>>  #else
 >> diff --git a/security/Kconfig b/security/Kconfig
 >> index 7561f6f..1af913a 100644
 >> --- a/security/Kconfig
@@ -155,17 +233,24 @@ next update. Thank you!
 >> assets
 >> +         from a higher exception level(EL) against any unauthorized 
 >> changes.
-> 
-> Rewording suggestion:
-> 
->          The RTIC (RunTime Integrity Check) feature protects the kernel
->          at runtime by relocating some of its security-sensitive 
-> structures
->          to a separate RTIC-specific page. This enables monitoring and
->          and protecting them from a higher exception level against
->          unauthorized changes.
-> 
-Thanks :)
-
-> Cheers,
-> Miguel
+>> +
+>>  endmenu
+>> 
+>> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+>> index 644b17e..59d7eee 100644
+>> --- a/security/selinux/hooks.c
+>> +++ b/security/selinux/hooks.c
+>> @@ -104,7 +104,7 @@
+>>  #include "audit.h"
+>>  #include "avc_ss.h"
+>> 
+>> -struct selinux_state selinux_state;
+>> +struct selinux_state selinux_state __rticdata;
+>> 
+>>  /* SECMARK reference count */
+>>  static atomic_t selinux_secmark_refcount = ATOMIC_INIT(0);
+>> --
+>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
+>> member
+>> of Code Aurora Forum, hosted by The Linux Foundation
+>> 
