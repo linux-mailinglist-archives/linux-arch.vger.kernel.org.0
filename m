@@ -2,178 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CC8323210
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 21:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939293233B1
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 23:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbhBWU1w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 15:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S232237AbhBWW2U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Feb 2021 17:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbhBWU1t (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 15:27:49 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A795EC06174A
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 12:27:09 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id m6so9564897pfk.1
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 12:27:09 -0800 (PST)
+        with ESMTP id S231440AbhBWW1Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 17:27:25 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E92C06178A
+        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 14:26:44 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id d9so223427ote.12
+        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 14:26:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=Kk5JpRbDq4xRfQD7TUXlnwHHd/9lf684NeDm/b3OOQ4=;
-        b=rII14qYh1Cca7rwfLGWNs7Fyr/DUwNZTzihjQrueY5urtWwbdyJZi35sbOgST0WGK8
-         u8c10P1/0sKzEwqoIISzyv7qHK7OqsBDWWGGEIHMkRMnJ61cB7AZ/uYE0zd2u8NBUTeS
-         7e1Oyr9LFdWtr6nsQa4hcaHAIsqlBP8Zk6eNkYMmP39ibXz9dkAACaUE8Nk6w4sd0QGn
-         mA6HLSBiF7d+softgXGGLxwwD+7JfkwYEofLZG+QKBYyh7qZe/beElRyEsl2koQxbP0n
-         PHowSXAL+UBxZtt1DULgI5dSAXLy43tvQHLAcE60bPxxjR4deMccheLcAtJAkDmZvTYx
-         JzOQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fZxhrFPoVeuINwqWYDTQrRIMFcJNq/iX5+xBlXUPDIw=;
+        b=Lkb/fePhnB3TeXO8nhWGUpDpvuWHlvarKeD0HrVivi0T+3SB/3s96S+TLlJRZWdu/7
+         LzAu9w42VS6gqUKOAyRRnlVvojownec1/CLyOEfqurejaYCCK5tVfresc04+Dl2XW/iN
+         UGuZwMWXTPugvWndL9KLxaN5dLQR0IdCP9yjKf5/5tcsEkL84nOowVAysLLEnAfcg3cS
+         z28cIFKTN5FIt0IiQWX+cbneyBitwyKBKVvCyjrF08Xt9Exkv3ZXlzFYa0UB2Km3buwT
+         44bJM65RqceFOuvwN2cfOXlSaBbfpqTbw3rXZXWhefF7OsdNuGkVpewdqnJ/XW/wWUWS
+         blkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=Kk5JpRbDq4xRfQD7TUXlnwHHd/9lf684NeDm/b3OOQ4=;
-        b=ZR9vXtJFLIYz8uKQ0BUrcOR758l6q++tP2fexJC0EMx6iPUYO3JnthEVcVzQjsWZC4
-         c9IBHsXIn6evX6zHlroOie0QEUHlwSTlwLMWbAdF6ctEvvSp9kqgbTSqN/TXcgBA5Hgw
-         JkgZdXSplfRjmDNvA8dHD06y42L+85SK7HEAGVy3lnpade9BrXqxV+CLPBW2KkaWbYi0
-         9ny0GQHRnfU6gFbGsZ/NNDBcNRCb7xTfssGtwctIUOU8B9vwE+oGY/AfMhs4ro5gkbik
-         IDT/vJNW/ifPQ654h/olGfCymTD8MsgRtLcCcvqtPrAPoZXsu6i3Bg2Hal2ultlmUN/G
-         /ldQ==
-X-Gm-Message-State: AOAM530ch/WZpVuJ7t9lTiMEZC/2s7dMWop4MGruT8x9oWo1i+tORTqn
-        s4mhLYPmBJWRxGR436XK9mTafw==
-X-Google-Smtp-Source: ABdhPJx3SnBLKpP+diJy0QcY1fUev+Mdrm6tm5rjjQn8OW4pmR38bFO1x2yGkQGBShGe3PxvApRG/A==
-X-Received: by 2002:a62:1ad4:0:b029:1ed:b92c:6801 with SMTP id a203-20020a621ad40000b02901edb92c6801mr3749066pfa.7.1614112029199;
-        Tue, 23 Feb 2021 12:27:09 -0800 (PST)
-Received: from ?IPv6:2600:1010:b005:a3de:6cc4:ccf5:1045:b347? ([2600:1010:b005:a3de:6cc4:ccf5:1045:b347])
-        by smtp.gmail.com with ESMTPSA id o188sm16858149pfb.102.2021.02.23.12.27.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Feb 2021 12:27:08 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fZxhrFPoVeuINwqWYDTQrRIMFcJNq/iX5+xBlXUPDIw=;
+        b=AQ5B5tVGDT8Na0Spp+0NOVT8rXiVEEPrjxtIVnGWgeXWSeKU2w4u5EkYchVff9P64O
+         EEnKAVPmRs2NzbB9srmqDRlZrnA9cBjaeHQ7JTfd0xlGPC2p7nbXX6vwkOd+kk/cS9Au
+         THTw6SVDCzuVDfDQw0L8mbsKcGclI3NzNY5VdwEFD2ZljCumOeX4qQvdNZvBK5o5wShM
+         CDd2lA5YPwG/YZOfY2R5hqrErHVg17yYsVQsflBoAZf7UsLkn2Ik4NiAJAi4bDLfSPtW
+         rKGR4E9QKilMnSRsVF/TUx7vVeR77mYd9oozqy2jblx0M9J5r7q8LzhXzEx7qWjT+wzi
+         jpdg==
+X-Gm-Message-State: AOAM530ZRl4CG97BkS8l17oL+DYHtQ2ww+Mq+8Sgu3QTZzKR+7rmqJrr
+        GWVqJa2RDnhO6jdDXhRSK6Eg7Q3JXBBC3lzepvgPqA==
+X-Google-Smtp-Source: ABdhPJyKcJ1a+AjtPRO339TGkeeBUE+Uf/ejrr6lZnvFhmNcPW5GEY4o7F+DMHaSBgv4mLYXaBM1l4zKLP8jkuBLUWw=
+X-Received: by 2002:a9d:5a05:: with SMTP id v5mr22397134oth.17.1614119201352;
+ Tue, 23 Feb 2021 14:26:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20210223143426.2412737-1-elver@google.com> <3D507285-835F-4C83-8343-2888835971B4@amacapital.net>
+In-Reply-To: <3D507285-835F-4C83-8343-2888835971B4@amacapital.net>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 23 Feb 2021 23:26:29 +0100
+Message-ID: <CANpmjNOpq27pDnoPaNON7a_gi7Ls=7xQXBH5-BSe9jwiFE763A@mail.gmail.com>
 Subject: Re: [PATCH RFC 0/4] Add support for synchronous signals on perf events
-Date:   Tue, 23 Feb 2021 12:27:05 -0800
-Message-Id: <3D507285-835F-4C83-8343-2888835971B4@amacapital.net>
-References: <20210223143426.2412737-1-elver@google.com>
-Cc:     peterz@infradead.org, alexander.shishkin@linux.intel.com,
-        acme@kernel.org, mingo@redhat.com, jolsa@redhat.com,
-        mark.rutland@arm.com, namhyung@kernel.org, tglx@linutronix.de,
-        glider@google.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
-        christian@brauner.io, dvyukov@google.com, jannh@google.com,
-        axboe@kernel.dk, mascasa@google.com, pcc@google.com,
-        irogers@google.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        x86@kernel.org
-In-Reply-To: <20210223143426.2412737-1-elver@google.com>
-To:     Marco Elver <elver@google.com>
-X-Mailer: iPhone Mail (18D52)
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Matt Morehouse <mascasa@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Ian Rogers <irogers@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-m68k@lists.linux-m68k.org,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, 23 Feb 2021 at 21:27, Andy Lutomirski <luto@amacapital.net> wrote:
+> > On Feb 23, 2021, at 6:34 AM, Marco Elver <elver@google.com> wrote:
+> >
+> > =EF=BB=BFThe perf subsystem today unifies various tracing and monitorin=
+g
+> > features, from both software and hardware. One benefit of the perf
+> > subsystem is automatically inheriting events to child tasks, which
+> > enables process-wide events monitoring with low overheads. By default
+> > perf events are non-intrusive, not affecting behaviour of the tasks
+> > being monitored.
+> >
+> > For certain use-cases, however, it makes sense to leverage the
+> > generality of the perf events subsystem and optionally allow the tasks
+> > being monitored to receive signals on events they are interested in.
+> > This patch series adds the option to synchronously signal user space on
+> > events.
+>
+> Unless I missed some machinations, which is entirely possible, you can=E2=
+=80=99t call force_sig_info() from NMI context. Not only am I not convinced=
+ that the core signal code is NMI safe, but at least x86 can=E2=80=99t corr=
+ectly deliver signals on NMI return. You probably need an IPI-to-self.
 
-> On Feb 23, 2021, at 6:34 AM, Marco Elver <elver@google.com> wrote:
->=20
-> =EF=BB=BFThe perf subsystem today unifies various tracing and monitoring
-> features, from both software and hardware. One benefit of the perf
-> subsystem is automatically inheriting events to child tasks, which
-> enables process-wide events monitoring with low overheads. By default
-> perf events are non-intrusive, not affecting behaviour of the tasks
-> being monitored.
->=20
-> For certain use-cases, however, it makes sense to leverage the
-> generality of the perf events subsystem and optionally allow the tasks
-> being monitored to receive signals on events they are interested in.
-> This patch series adds the option to synchronously signal user space on
-> events.
+force_sig_info() is called from an irq_work only: perf_pending_event
+-> perf_pending_event_disable -> perf_sigtrap -> force_sig_info. What
+did I miss?
 
-Unless I missed some machinations, which is entirely possible, you can=E2=80=
-=99t call force_sig_info() from NMI context. Not only am I not convinced tha=
-t the core signal code is NMI safe, but at least x86 can=E2=80=99t correctly=
- deliver signals on NMI return. You probably need an IPI-to-self.
+> > The discussion at [1] led to the changes proposed in this series. The
+> > approach taken in patch 3/4 to use 'event_limit' to trigger the signal
+> > was kindly suggested by Peter Zijlstra in [2].
+> >
+> > [1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpoc=
+X2jwVAbZD=3D-XQ@mail.gmail.com/
+> > [2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kic=
+ks-ass.net/
+> >
+> > Motivation and example uses:
+> >
+> > 1.    Our immediate motivation is low-overhead sampling-based race
+> >    detection for user-space [3]. By using perf_event_open() at
+> >    process initialization, we can create hardware
+> >    breakpoint/watchpoint events that are propagated automatically
+> >    to all threads in a process. As far as we are aware, today no
+> >    existing kernel facility (such as ptrace) allows us to set up
+> >    process-wide watchpoints with minimal overheads (that are
+> >    comparable to mprotect() of whole pages).
+>
+> This would be doable much more simply with an API to set a breakpoint.  A=
+ll the machinery exists except the actual user API.
 
->=20
-> The discussion at [1] led to the changes proposed in this series. The
-> approach taken in patch 3/4 to use 'event_limit' to trigger the signal
-> was kindly suggested by Peter Zijlstra in [2].
->=20
-> [1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpocX2j=
-wVAbZD=3D-XQ@mail.gmail.com/
-> [2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-=
-ass.net/=20
->=20
-> Motivation and example uses:
->=20
-> 1.    Our immediate motivation is low-overhead sampling-based race
->    detection for user-space [3]. By using perf_event_open() at
->    process initialization, we can create hardware
->    breakpoint/watchpoint events that are propagated automatically
->    to all threads in a process. As far as we are aware, today no
->    existing kernel facility (such as ptrace) allows us to set up
->    process-wide watchpoints with minimal overheads (that are
->    comparable to mprotect() of whole pages).
+Isn't perf_event_open() that API?
 
-This would be doable much more simply with an API to set a breakpoint.  All t=
-he machinery exists except the actual user API.
+A new user API implementation will either be a thin wrapper around
+perf events or reinvent half of perf events to deal with managing
+watchpoints across a set of tasks (process-wide or some subset).
 
->    [3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf=20
->=20
-> 2.    Other low-overhead error detectors that rely on detecting
->    accesses to certain memory locations or code, process-wide and
->    also only in a specific set of subtasks or threads.
->=20
-> Other example use-cases we found potentially interesting:
->=20
-> 3.    Code hot patching without full stop-the-world. Specifically, by
->    setting a code breakpoint to entry to the patched routine, then
->    send signals to threads and check that they are not in the
->    routine, but without stopping them further. If any of the
->    threads will enter the routine, it will receive SIGTRAP and
->    pause.
+It's not just breakpoints though.
 
-Cute.
+> >    [3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf
+> >
+> > 2.    Other low-overhead error detectors that rely on detecting
+> >    accesses to certain memory locations or code, process-wide and
+> >    also only in a specific set of subtasks or threads.
+> >
+> > Other example use-cases we found potentially interesting:
+> >
+> > 3.    Code hot patching without full stop-the-world. Specifically, by
+> >    setting a code breakpoint to entry to the patched routine, then
+> >    send signals to threads and check that they are not in the
+> >    routine, but without stopping them further. If any of the
+> >    threads will enter the routine, it will receive SIGTRAP and
+> >    pause.
+>
+> Cute.
+>
+> >
+> > 4.    Safepoints without mprotect(). Some Java implementations use
+> >    "load from a known memory location" as a safepoint. When threads
+> >    need to be stopped, the page containing the location is
+> >    mprotect()ed and threads get a signal. This can be replaced with
+> >    a watchpoint, which does not require a whole page nor DTLB
+> >    shootdowns.
+>
+> I=E2=80=99m skeptical. Propagating a hardware breakpoint to all threads i=
+nvolves IPIs and horribly slow writes to DR1 (or 2, 3, or 4) and DR7.  A TL=
+B flush can be accelerated using paravirt or hypothetical future hardware. =
+Or real live hardware on ARM64.
+>
+> (The hypothetical future hardware is almost present on Zen 3.  A bit of w=
+ork is needed on the hardware end to make it useful.)
 
->=20
-> 4.    Safepoints without mprotect(). Some Java implementations use
->    "load from a known memory location" as a safepoint. When threads
->    need to be stopped, the page containing the location is
->    mprotect()ed and threads get a signal. This can be replaced with
->    a watchpoint, which does not require a whole page nor DTLB
->    shootdowns.
+Fair enough. Although watchpoints can be much more fine-grained than
+an mprotect() which then also has downsides (checking if the accessed
+memory was actually the bytes we're interested in). Maybe we should
+also ask CPU vendors to give us better watchpoints (perhaps start with
+more of them, and easier to set in batch)? We still need a user space
+API...
 
-I=E2=80=99m skeptical. Propagating a hardware breakpoint to all threads invo=
-lves IPIs and horribly slow writes to DR1 (or 2, 3, or 4) and DR7.  A TLB fl=
-ush can be accelerated using paravirt or hypothetical future hardware. Or re=
-al live hardware on ARM64.
+Thanks,
+-- Marco
 
-(The hypothetical future hardware is almost present on Zen 3.  A bit of work=
- is needed on the hardware end to make it useful.)
 
->=20
-> 5.    Tracking data flow globally.
->=20
-> 6.    Threads receiving signals on performance events to
->    throttle/unthrottle themselves.
->=20
-> Marco Elver (4):
->  perf/core: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
->  signal: Introduce TRAP_PERF si_code and si_perf to siginfo
->  perf/core: Add support for SIGTRAP on perf events
->  perf/core: Add breakpoint information to siginfo on SIGTRAP
->=20
-> arch/m68k/kernel/signal.c          |  3 ++
-> arch/x86/kernel/signal_compat.c    |  5 ++-
-> fs/signalfd.c                      |  4 +++
-> include/linux/compat.h             |  2 ++
-> include/linux/signal.h             |  1 +
-> include/uapi/asm-generic/siginfo.h |  6 +++-
-> include/uapi/linux/perf_event.h    |  3 +-
-> include/uapi/linux/signalfd.h      |  4 ++-
-> kernel/events/core.c               | 54 +++++++++++++++++++++++++++++-
-> kernel/signal.c                    | 11 ++++++
-> 10 files changed, 88 insertions(+), 5 deletions(-)
->=20
-> --=20
-> 2.30.0.617.g56c4b15f3c-goog
->=20
+
+> >
+> > 5.    Tracking data flow globally.
+> >
+> > 6.    Threads receiving signals on performance events to
+> >    throttle/unthrottle themselves.
