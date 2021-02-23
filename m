@@ -2,175 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFEA3231C4
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 21:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB883231C9
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 21:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234107AbhBWUFL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 15:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbhBWUEh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 15:04:37 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4E6C061786
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 12:03:57 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id b16so16916957otq.1
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 12:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KDbWfjB7meY0E7XLsjIrc5m2e7z/Yrkuj6hZaVwwlGE=;
-        b=uueyZEhCJsJkc1//64Eechxof/hRtg3m1Kam7rXXOkGxioSseruAEXvRT1gwPL8vci
-         FduZ0uQOv8+hJwNqH9PO99dchqYCcxQiJavaJVEq/x4E+GhQSZ1/+TJqGhdyxth/c9b0
-         uBrjxFkcXCrqELg63jTj2cOvhZihBwrbswwm24tvtYDcz3VfF4hdNH3wZ4J2dUZ+BkDt
-         MufANT3JpO5VQjXitgDU8rg0FNLkZhigCEZj/mve/wdbPae6jymb4nI850CjV70cb/eu
-         vERzojj1KOkEFfWGrh7Xvuh/pR7gscOH4+/AOHuoREQG0qNB8ht4uwrfaELflnr/vR/c
-         +bjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KDbWfjB7meY0E7XLsjIrc5m2e7z/Yrkuj6hZaVwwlGE=;
-        b=bJ5fR5e9sYMP3xzbGYXL9uAbCv5BvyKW/fiGCJ4+e7eq/7jGeIBXopW/49NQmKmj3N
-         EchLVMj7b5/K2Wj6IegGui0N+fYd4IMmSQBwkFye8iiqV417PkVOGpn2mXT/MbGA8tCb
-         4nf33xouDPAk+UlAodIiS/bWJRkTMRxHfLEd7I/KjwXLU0SkXwnKXug81spC4NMO1ipE
-         YeN2wMO600q6nxZLyNohkLdnpWTlP5ViD+6IFilA3EW3pZbpNcTaQM0unqiZ6bi40S+s
-         YNy2dIVsDFDCGWSzW/rTDKwsU+HU1KCHuPD9kh/5hXbDSWaj+Fcp+dAQBJfstU4SliLy
-         PT4Q==
-X-Gm-Message-State: AOAM530NXRhsIyt+iKmkHXZ8HQsEJLNSZKFPGUMRmuSkQl8XfYCeRxp+
-        dltqTywDUrApAc/FlWnTZKTtL7Yt9KgynCqI7GEzSQ==
-X-Google-Smtp-Source: ABdhPJym6kizV7WwEuRTO4LxrYB6Kngg9p2qqbI8TF8TQ17KCmxCWMoNs/hCqzqUJllLyQpwObR4PeorYP4v1txmJq8=
-X-Received: by 2002:a05:6830:18e6:: with SMTP id d6mr22473227otf.251.1614110636519;
- Tue, 23 Feb 2021 12:03:56 -0800 (PST)
+        id S232969AbhBWUF6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Feb 2021 15:05:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40400 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233143AbhBWUFI (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Feb 2021 15:05:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C3E7864E7A;
+        Tue, 23 Feb 2021 20:04:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614110667;
+        bh=+q89ijMSvNhad5i+4jjP9hqtvpz1FvP2yvByIBe2DdA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jQpCCSMtEUZVsQavQZlAwe0JjYbEVa3HagwuJ7x0tQEbkWrk1t8ku4cJxMYWmRCFi
+         zEv1ep8RKD0kRxNtNIwP3d9n4DhhQp04JciAHCWWorl5NpHtsgiEXvhd/2omwaPiz9
+         c8uvnBnk85Te0nrLuzz/YTf2ndyzUtrSmHzL+GIHDgbwJjKLM8iOelsm24RCXYDCS3
+         e9dXqd1hDW+VoqK/xaeiqu0dOw6RuKlJU7Mi8urY7l1479TieEKTH2ccYfkFWhKJ1F
+         Mh1IARuquX2ET6tpJGsKQ+bweHlGVwShMADtX7CayKFaaNiIs9mylzGO/FnLIQM+pI
+         7ttZTvuOYTajw==
+Received: by mail-oo1-f42.google.com with SMTP id p6so1093267oot.2;
+        Tue, 23 Feb 2021 12:04:27 -0800 (PST)
+X-Gm-Message-State: AOAM533h9TXMd7PXZVkfHu9M68KHeIfQo+swAHK4UiwGxRnE9dkYt2za
+        JxDzLIUZKc0cRaOpU4fY9LorGMcT1cub+KYFVnE=
+X-Google-Smtp-Source: ABdhPJyLv9KmjT20gbZA2OPNv7p6/gRIqYjkEw3fpRdyfqbW6VuV5ICNgpaiVoozgdmP/JCjH83/5LPx4uygLxHQyXA=
+X-Received: by 2002:a4a:870c:: with SMTP id z12mr21019075ooh.15.1614110667037;
+ Tue, 23 Feb 2021 12:04:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20210223143426.2412737-1-elver@google.com>
-In-Reply-To: <20210223143426.2412737-1-elver@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 23 Feb 2021 21:03:44 +0100
-Message-ID: <CANpmjNPEzA0EP9zEGE-O7tz=3EhKjdhVi43jbhoTDRG5wo3C1A@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/4] Add support for synchronous signals on perf events
-To:     Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+References: <20210223100619.798698-1-masahiroy@kernel.org>
+In-Reply-To: <20210223100619.798698-1-masahiroy@kernel.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 23 Feb 2021 21:04:10 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1b5Tr8Gt_DcUq9JQj4G6O5ZHf44P2ZdYZRGQY8iPs43Q@mail.gmail.com>
+Message-ID: <CAK8P3a1b5Tr8Gt_DcUq9JQj4G6O5ZHf44P2ZdYZRGQY8iPs43Q@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic/ioctl.h: use BUILD_BUG_ON_ZERO() for type check
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-m68k@lists.linux-m68k.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 23 Feb 2021 at 15:34, Marco Elver <elver@google.com> wrote:
->
-> The perf subsystem today unifies various tracing and monitoring
-> features, from both software and hardware. One benefit of the perf
-> subsystem is automatically inheriting events to child tasks, which
-> enables process-wide events monitoring with low overheads. By default
-> perf events are non-intrusive, not affecting behaviour of the tasks
-> being monitored.
->
-> For certain use-cases, however, it makes sense to leverage the
-> generality of the perf events subsystem and optionally allow the tasks
-> being monitored to receive signals on events they are interested in.
-> This patch series adds the option to synchronously signal user space on
-> events.
->
-> The discussion at [1] led to the changes proposed in this series. The
-> approach taken in patch 3/4 to use 'event_limit' to trigger the signal
-> was kindly suggested by Peter Zijlstra in [2].
->
-> [1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpocX2jwVAbZD=-XQ@mail.gmail.com/
-> [2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-ass.net/
->
-> Motivation and example uses:
->
-> 1.      Our immediate motivation is low-overhead sampling-based race
->         detection for user-space [3]. By using perf_event_open() at
->         process initialization, we can create hardware
->         breakpoint/watchpoint events that are propagated automatically
->         to all threads in a process. As far as we are aware, today no
->         existing kernel facility (such as ptrace) allows us to set up
->         process-wide watchpoints with minimal overheads (that are
->         comparable to mprotect() of whole pages).
->
->         [3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf
->
-> 2.      Other low-overhead error detectors that rely on detecting
->         accesses to certain memory locations or code, process-wide and
->         also only in a specific set of subtasks or threads.
->
-> Other example use-cases we found potentially interesting:
->
-> 3.      Code hot patching without full stop-the-world. Specifically, by
->         setting a code breakpoint to entry to the patched routine, then
->         send signals to threads and check that they are not in the
->         routine, but without stopping them further. If any of the
->         threads will enter the routine, it will receive SIGTRAP and
->         pause.
->
-> 4.      Safepoints without mprotect(). Some Java implementations use
->         "load from a known memory location" as a safepoint. When threads
->         need to be stopped, the page containing the location is
->         mprotect()ed and threads get a signal. This can be replaced with
->         a watchpoint, which does not require a whole page nor DTLB
->         shootdowns.
->
-> 5.      Tracking data flow globally.
->
-> 6.      Threads receiving signals on performance events to
->         throttle/unthrottle themselves.
->
->
-> Marco Elver (4):
->   perf/core: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
->   signal: Introduce TRAP_PERF si_code and si_perf to siginfo
->   perf/core: Add support for SIGTRAP on perf events
->   perf/core: Add breakpoint information to siginfo on SIGTRAP
-
-Note that we're currently pondering fork + exec, and suggestions would
-be appreciated. We think we'll need some restrictions, like Peter
-proposed here: here:
-https://lore.kernel.org/lkml/YBvj6eJR%2FDY2TsEB@hirez.programming.kicks-ass.net/
-
-We think what we want is to inherit the events to children only if
-cloned with CLONE_SIGHAND. If there's space for a 'inherit_mask' in
-perf_event_attr, that'd be most flexible, but perhaps we do not have
-the space.
-
-Thanks,
--- Marco
+On Tue, Feb 23, 2021 at 11:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 
 >
->  arch/m68k/kernel/signal.c          |  3 ++
->  arch/x86/kernel/signal_compat.c    |  5 ++-
->  fs/signalfd.c                      |  4 +++
->  include/linux/compat.h             |  2 ++
->  include/linux/signal.h             |  1 +
->  include/uapi/asm-generic/siginfo.h |  6 +++-
->  include/uapi/linux/perf_event.h    |  3 +-
->  include/uapi/linux/signalfd.h      |  4 ++-
->  kernel/events/core.c               | 54 +++++++++++++++++++++++++++++-
->  kernel/signal.c                    | 11 ++++++
->  10 files changed, 88 insertions(+), 5 deletions(-)
+> -#ifdef __CHECKER__
+> -#define _IOC_TYPECHECK(t) (sizeof(t))
+> -#else
+>  /* provoke compile error for invalid uses of size argument */
+> -extern unsigned int __invalid_size_argument_for_IOC;
+> +#undef _IOC_TYPECHECK
+>  #define _IOC_TYPECHECK(t) \
+> -       ((sizeof(t) == sizeof(t[1]) && \
+> -         sizeof(t) < (1 << _IOC_SIZEBITS)) ? \
+> -         sizeof(t) : __invalid_size_argument_for_IOC)
+> -#endif
+> +       BUILD_BUG_ON_ZERO(sizeof(t) != sizeof(t[1]) || \
+> +                         sizeof(t) >= (1 << _IOC_SIZEBITS))
+
+Using BUILD_BUG_ON_ZERO sounds like a good idea
+
+>  #endif /* _ASM_GENERIC_IOCTL_H */
+> diff --git a/include/uapi/asm-generic/ioctl.h b/include/uapi/asm-generic/ioctl.h
+> index a84f4db8a250..d50bd39ec3e3 100644
+> --- a/include/uapi/asm-generic/ioctl.h
+> +++ b/include/uapi/asm-generic/ioctl.h
+> @@ -72,9 +72,8 @@
+>          ((nr)   << _IOC_NRSHIFT) | \
+>          ((size) << _IOC_SIZESHIFT))
 >
-> --
-> 2.30.0.617.g56c4b15f3c-goog
->
+> -#ifndef __KERNEL__
+> -#define _IOC_TYPECHECK(t) (sizeof(t))
+> -#endif
+> +#define _IOC_TYPECHECK(t)      0
+> +#define _IOC_SIZE_WITH_TYPECHECK(t)    (sizeof(t) + _IOC_TYPECHECK(t))
+
+But I think replacing the #ifndef with an #undef in the other file makes it
+harder to understand when reading through it and trying to understand
+what it would do when this gets included from kernel and user space.
+
+        Arnd
