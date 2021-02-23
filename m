@@ -2,66 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1EF323060
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 19:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFEA3231C4
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 21:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbhBWSOh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 13:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S234107AbhBWUFL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Feb 2021 15:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbhBWSOg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 13:14:36 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DEEC06178A
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 10:13:56 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id gi9so8190859qvb.10
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 10:13:56 -0800 (PST)
+        with ESMTP id S233034AbhBWUEh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 15:04:37 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4E6C061786
+        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 12:03:57 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id b16so16916957otq.1
+        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 12:03:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=64chh81MrDhbGsEgUYAQK1O320WsxsfdzdSvZe/81Lc=;
-        b=FMcvcTOtJbk9S1OVOWzfwDI5hEJZtOOmWU/jx2w96FB7sbM4dTOUaL9uiX7+DbzOjh
-         SckAfTThgCrNq9MZdWyLykL8A8V2tpZq2WKyEu+IEcuT9vYdy42OJfU0uY5KQmUvOc14
-         IWOySySdL1dIZtnKCoAktLqbu5etA0LNHAujHL8fGQQx/khRZpqpAlO/3G9ifKZOSe7p
-         U/V1t1C2ssrd12UzPv6Tc8TI1ZQmeQL4SBk29m7M3GzQuqVAIvMNKithrg9NzgJ+wPvt
-         p3t+iw8zwvxfIY5nhwTyV9xO8IgyaZDSCJqvoTzizj2jdUg5IQ/zrKmsPyS0Q5cSX+pn
-         /DxA==
+        bh=KDbWfjB7meY0E7XLsjIrc5m2e7z/Yrkuj6hZaVwwlGE=;
+        b=uueyZEhCJsJkc1//64Eechxof/hRtg3m1Kam7rXXOkGxioSseruAEXvRT1gwPL8vci
+         FduZ0uQOv8+hJwNqH9PO99dchqYCcxQiJavaJVEq/x4E+GhQSZ1/+TJqGhdyxth/c9b0
+         uBrjxFkcXCrqELg63jTj2cOvhZihBwrbswwm24tvtYDcz3VfF4hdNH3wZ4J2dUZ+BkDt
+         MufANT3JpO5VQjXitgDU8rg0FNLkZhigCEZj/mve/wdbPae6jymb4nI850CjV70cb/eu
+         vERzojj1KOkEFfWGrh7Xvuh/pR7gscOH4+/AOHuoREQG0qNB8ht4uwrfaELflnr/vR/c
+         +bjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=64chh81MrDhbGsEgUYAQK1O320WsxsfdzdSvZe/81Lc=;
-        b=Cj0q1cGT6+alomTSPlwCTfBlDTmF5YpSkzF5IALrEaZTC1B6N7eIxwqUTY28VCI2bW
-         wm9v5M7vwrhMwOWsYd3KcZ3SkF4O+ySNIv3V4e0Hl9Nu6TuK3ZCyXfAVijznNKFLmi2e
-         I5tyMkppaevOG7ZBdIw4zOPBl+jzz+zq5GVmhNWZZ54QYznycf23HPtQR6rfZy9Bt7UL
-         YFCaAwv9hFz/cR6CwtRkSSLUsJlm+1T8FG4YqkMWCaS+wzMcMFkJf4OloAAcbEv5cdz/
-         BftCX3DPCVMAILsnl2vbkBe2XujhfU7MYYBNs/Jx85K8BtkgAFR7WS4YrZY0hvCsQCyy
-         CNZg==
-X-Gm-Message-State: AOAM531SNsOOMaoGlnIx7UuLT1fbj+Zd3UMQJd2UJhvwVOOJLqVN3Z7s
-        LH+g4DreziWW1zhDK74nUa4zQP4A1qq9nSDEoRJdAw==
-X-Google-Smtp-Source: ABdhPJzd2W30fvJh6WbDh5Kt5luVUnWfWNcb2OCq6wulmujrbpLeuMCS+sjlsu+6F+H08XVOLW05o0n0O0xTf4LNtqY=
-X-Received: by 2002:a0c:8304:: with SMTP id j4mr26498875qva.18.1614104034885;
- Tue, 23 Feb 2021 10:13:54 -0800 (PST)
+        bh=KDbWfjB7meY0E7XLsjIrc5m2e7z/Yrkuj6hZaVwwlGE=;
+        b=bJ5fR5e9sYMP3xzbGYXL9uAbCv5BvyKW/fiGCJ4+e7eq/7jGeIBXopW/49NQmKmj3N
+         EchLVMj7b5/K2Wj6IegGui0N+fYd4IMmSQBwkFye8iiqV417PkVOGpn2mXT/MbGA8tCb
+         4nf33xouDPAk+UlAodIiS/bWJRkTMRxHfLEd7I/KjwXLU0SkXwnKXug81spC4NMO1ipE
+         YeN2wMO600q6nxZLyNohkLdnpWTlP5ViD+6IFilA3EW3pZbpNcTaQM0unqiZ6bi40S+s
+         YNy2dIVsDFDCGWSzW/rTDKwsU+HU1KCHuPD9kh/5hXbDSWaj+Fcp+dAQBJfstU4SliLy
+         PT4Q==
+X-Gm-Message-State: AOAM530NXRhsIyt+iKmkHXZ8HQsEJLNSZKFPGUMRmuSkQl8XfYCeRxp+
+        dltqTywDUrApAc/FlWnTZKTtL7Yt9KgynCqI7GEzSQ==
+X-Google-Smtp-Source: ABdhPJym6kizV7WwEuRTO4LxrYB6Kngg9p2qqbI8TF8TQ17KCmxCWMoNs/hCqzqUJllLyQpwObR4PeorYP4v1txmJq8=
+X-Received: by 2002:a05:6830:18e6:: with SMTP id d6mr22473227otf.251.1614110636519;
+ Tue, 23 Feb 2021 12:03:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20210223143426.2412737-1-elver@google.com> <20210223143426.2412737-4-elver@google.com>
-In-Reply-To: <20210223143426.2412737-4-elver@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 23 Feb 2021 19:13:42 +0100
-Message-ID: <CACT4Y+byoqr4UjNcYO-VMRZorqVxGyZmQb==pJXiQ0WjqwXvhg@mail.gmail.com>
-Subject: Re: [PATCH RFC 3/4] perf/core: Add support for SIGTRAP on perf events
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+References: <20210223143426.2412737-1-elver@google.com>
+In-Reply-To: <20210223143426.2412737-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 23 Feb 2021 21:03:44 +0100
+Message-ID: <CANpmjNPEzA0EP9zEGE-O7tz=3EhKjdhVi43jbhoTDRG5wo3C1A@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/4] Add support for synchronous signals on perf events
+To:     Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Potapenko <glider@google.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
         Matt Morehouse <mascasa@google.com>,
         Peter Collingbourne <pcc@google.com>,
@@ -77,98 +78,99 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 3:34 PM Marco Elver <elver@google.com> wrote:
+On Tue, 23 Feb 2021 at 15:34, Marco Elver <elver@google.com> wrote:
 >
-> Adds bit perf_event_attr::sigtrap, which can be set to cause events to
-> send SIGTRAP (with si_code TRAP_PERF) to the task where the event
-> occurred. To distinguish perf events and allow user space to decode
-> si_perf (if set), the event type is set in si_errno.
+> The perf subsystem today unifies various tracing and monitoring
+> features, from both software and hardware. One benefit of the perf
+> subsystem is automatically inheriting events to child tasks, which
+> enables process-wide events monitoring with low overheads. By default
+> perf events are non-intrusive, not affecting behaviour of the tasks
+> being monitored.
 >
-> The primary motivation is to support synchronous signals on perf events
-> in the task where an event (such as breakpoints) triggered.
+> For certain use-cases, however, it makes sense to leverage the
+> generality of the perf events subsystem and optionally allow the tasks
+> being monitored to receive signals on events they are interested in.
+> This patch series adds the option to synchronously signal user space on
+> events.
 >
-> Link: https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-ass.net/
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  include/uapi/linux/perf_event.h |  3 ++-
->  kernel/events/core.c            | 21 +++++++++++++++++++++
->  2 files changed, 23 insertions(+), 1 deletion(-)
+> The discussion at [1] led to the changes proposed in this series. The
+> approach taken in patch 3/4 to use 'event_limit' to trigger the signal
+> was kindly suggested by Peter Zijlstra in [2].
 >
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index ad15e40d7f5d..b9cc6829a40c 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -389,7 +389,8 @@ struct perf_event_attr {
->                                 cgroup         :  1, /* include cgroup events */
->                                 text_poke      :  1, /* include text poke events */
->                                 build_id       :  1, /* use build id in mmap2 events */
-> -                               __reserved_1   : 29;
-> +                               sigtrap        :  1, /* send synchronous SIGTRAP on event */
-> +                               __reserved_1   : 28;
+> [1] https://lore.kernel.org/lkml/CACT4Y+YPrXGw+AtESxAgPyZ84TYkNZdP0xpocX2jwVAbZD=-XQ@mail.gmail.com/
+> [2] https://lore.kernel.org/lkml/YBv3rAT566k+6zjg@hirez.programming.kicks-ass.net/
 >
->         union {
->                 __u32           wakeup_events;    /* wakeup every n events */
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 37a8297be164..8718763045fd 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -6288,6 +6288,17 @@ void perf_event_wakeup(struct perf_event *event)
->         }
->  }
+> Motivation and example uses:
 >
-> +static void perf_sigtrap(struct perf_event *event)
-> +{
-> +       struct kernel_siginfo info;
-> +
-> +       clear_siginfo(&info);
-> +       info.si_signo = SIGTRAP;
-> +       info.si_code = TRAP_PERF;
-> +       info.si_errno = event->attr.type;
-> +       force_sig_info(&info);
-> +}
-> +
->  static void perf_pending_event_disable(struct perf_event *event)
->  {
->         int cpu = READ_ONCE(event->pending_disable);
-> @@ -6297,6 +6308,13 @@ static void perf_pending_event_disable(struct perf_event *event)
+> 1.      Our immediate motivation is low-overhead sampling-based race
+>         detection for user-space [3]. By using perf_event_open() at
+>         process initialization, we can create hardware
+>         breakpoint/watchpoint events that are propagated automatically
+>         to all threads in a process. As far as we are aware, today no
+>         existing kernel facility (such as ptrace) allows us to set up
+>         process-wide watchpoints with minimal overheads (that are
+>         comparable to mprotect() of whole pages).
 >
->         if (cpu == smp_processor_id()) {
->                 WRITE_ONCE(event->pending_disable, -1);
-> +
-> +               if (event->attr.sigtrap) {
-> +                       atomic_inc(&event->event_limit); /* rearm event */
+>         [3] https://llvm.org/devmtg/2020-09/slides/Morehouse-GWP-Tsan.pdf
+>
+> 2.      Other low-overhead error detectors that rely on detecting
+>         accesses to certain memory locations or code, process-wide and
+>         also only in a specific set of subtasks or threads.
+>
+> Other example use-cases we found potentially interesting:
+>
+> 3.      Code hot patching without full stop-the-world. Specifically, by
+>         setting a code breakpoint to entry to the patched routine, then
+>         send signals to threads and check that they are not in the
+>         routine, but without stopping them further. If any of the
+>         threads will enter the routine, it will receive SIGTRAP and
+>         pause.
+>
+> 4.      Safepoints without mprotect(). Some Java implementations use
+>         "load from a known memory location" as a safepoint. When threads
+>         need to be stopped, the page containing the location is
+>         mprotect()ed and threads get a signal. This can be replaced with
+>         a watchpoint, which does not require a whole page nor DTLB
+>         shootdowns.
+>
+> 5.      Tracking data flow globally.
+>
+> 6.      Threads receiving signals on performance events to
+>         throttle/unthrottle themselves.
+>
+>
+> Marco Elver (4):
+>   perf/core: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
+>   signal: Introduce TRAP_PERF si_code and si_perf to siginfo
+>   perf/core: Add support for SIGTRAP on perf events
+>   perf/core: Add breakpoint information to siginfo on SIGTRAP
 
-We send the signal to the current task. Can this fire outside of the
-current task context? E.g. in interrupt/softirq/etc? And then we will
-send the signal to the current task. Watchpoint can be set to
-userspace address and then something asynchronous (some IO completion)
-that does not belong to this task access the userspace address (is
-this possible?). But watchpoints can also be set to kernel addresses,
-then another context can definitely access it.
-(1) can this happen? maybe perf context is somehow disabled when !in_task()?
-(2) if yes, what is the desired behavior?
+Note that we're currently pondering fork + exec, and suggestions would
+be appreciated. We think we'll need some restrictions, like Peter
+proposed here: here:
+https://lore.kernel.org/lkml/YBvj6eJR%2FDY2TsEB@hirez.programming.kicks-ass.net/
 
+We think what we want is to inherit the events to children only if
+cloned with CLONE_SIGHAND. If there's space for a 'inherit_mask' in
+perf_event_attr, that'd be most flexible, but perhaps we do not have
+the space.
 
+Thanks,
+-- Marco
 
-
-> +                       perf_sigtrap(event);
-> +                       return;
-> +               }
-> +
->                 perf_event_disable_local(event);
->                 return;
->         }
-> @@ -11325,6 +11343,9 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
 >
->         event->state            = PERF_EVENT_STATE_INACTIVE;
+>  arch/m68k/kernel/signal.c          |  3 ++
+>  arch/x86/kernel/signal_compat.c    |  5 ++-
+>  fs/signalfd.c                      |  4 +++
+>  include/linux/compat.h             |  2 ++
+>  include/linux/signal.h             |  1 +
+>  include/uapi/asm-generic/siginfo.h |  6 +++-
+>  include/uapi/linux/perf_event.h    |  3 +-
+>  include/uapi/linux/signalfd.h      |  4 ++-
+>  kernel/events/core.c               | 54 +++++++++++++++++++++++++++++-
+>  kernel/signal.c                    | 11 ++++++
+>  10 files changed, 88 insertions(+), 5 deletions(-)
 >
-> +       if (event->attr.sigtrap)
-> +               atomic_set(&event->event_limit, 1);
-> +
->         if (task) {
->                 event->attach_state = PERF_ATTACH_TASK;
->                 /*
 > --
 > 2.30.0.617.g56c4b15f3c-goog
 >
