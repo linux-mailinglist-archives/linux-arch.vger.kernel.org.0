@@ -2,58 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DD9322F70
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 18:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 039FA32302A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Feb 2021 19:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbhBWRRO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Feb 2021 12:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbhBWRRN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 12:17:13 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A991C06174A
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 09:16:33 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id r19so9043522otk.2
-        for <linux-arch@vger.kernel.org>; Tue, 23 Feb 2021 09:16:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y/7lyBIawgXVibPEQjRnIJxZC4/J4mTsACbEERnxYDg=;
-        b=mRjlqnBTeAG3y2s8FAauHnaH1SamsOPskLA8yoP4qMATNnDLnjombF0ueoOHemI4v+
-         ON6jLAZhOorVDCKlKeVaclVW9ax1Wykz+j252M1N70rI88dT8+/ddGZqMupFk8ePUsvK
-         lR4xLAbwYMFT1IC4bvpofpMVF0Gyw4e25Mcw1bCWYrZ7TrIvqotBPjioRqMac5HIgLYa
-         XYfi7UxAvEjWctj8pwgTeUIb+FgkAKDx3VBwjigk5C2ZNvZd5+QhbZQoHnNks7gY3H+l
-         VwJXfx7Fo2e8npir946O3k87wAW02SzO5wtDlyBr5gc6B5JV4UqSIR3Y9/ZCsk3rsY7Q
-         MPSg==
+        id S233786AbhBWSCp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Feb 2021 13:02:45 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:43015 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233159AbhBWSCm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Feb 2021 13:02:42 -0500
+Received: by mail-oi1-f180.google.com with SMTP id d20so18498565oiw.10;
+        Tue, 23 Feb 2021 10:02:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Y/7lyBIawgXVibPEQjRnIJxZC4/J4mTsACbEERnxYDg=;
-        b=V4xEWIPkIpCPqs9vyhrZA8GTdNfdFlfrpIPVQveHcMkMxTfjfUXBqAYwz47Dv+VwoK
-         dMRwn1sdZLuMn+hW3cKrYYLT6DzIgV0E/bbQ3ov594dzuRuQUIp5u9wRUMTPP4Wd9ddw
-         vt1AnyDHR1sCB0ermn5vPrBSWf3IWyNoPNND1Ey/KXX6NKjXxIkfOdRO3k5bdhKQzzUZ
-         tdHR73K+vXOY23aRc/2mDN3WkZ1CnFr4e8sq3ctIebSbB4eMsoB8dHYda+wjVyALstXR
-         LwSgRiCpxHSMNyx2n5EKE+mzY2+/lDFZOyrvAtrmeVi+whZOiONpNtpAtymftMwKqp9V
-         hmzg==
-X-Gm-Message-State: AOAM532Abys5tAxdg5t/LaQ66AUwRW0S4JnvoHmNWQNJ76+DmzvXpOew
-        jixNLuXqDRI0NE63zhaU9nIMeoPoF2PD97cAk35rOA==
-X-Google-Smtp-Source: ABdhPJw2zJQHH6G+SOVfrrWuVDvoFs3AyTMegDYPDbhen+c9h8Rqfm/XJ8UoE2cbXebtHnL9Z/5RERNNXFBoFBXyXaU=
-X-Received: by 2002:a05:6830:1552:: with SMTP id l18mr21502367otp.233.1614100592568;
- Tue, 23 Feb 2021 09:16:32 -0800 (PST)
+        bh=Hr05fO8KOjmWsbPm+ZFI7vyJ8Gmfr+uEbMgTqe1usGE=;
+        b=sgeARuG4O56RZbMJgK6quqS4YwrKQsNKFyWkUYKtYIFhIJ/HZot1uYUfkkOcFoLFXh
+         fK8Gp1QY1yhyUxMZFSDAmSRIyBpLcDQJzC/Tee0+AhzsNCll3Z6FPfozHeoULfeDGuwe
+         fJ1bWASS4UEZ+N7nxDVAOz4S7w8z0ydykN90fMI4oPLBNVAum1K02UkBfqFhJCMbvUpJ
+         6aJBUSmFfkO71ED01NLQRAo/vZ3WwQLyhCNnNG/MPCj8of9F0OctpCR9VepJzqv9CBNj
+         6pJl0T1jWBa7CZNa/cc0C94SfJETqGecYy14sYDYjt+fICjw0505UYnPSx2XJKvaidxw
+         Dw2Q==
+X-Gm-Message-State: AOAM532PKzIrJxrd1doko6e9oAaU+YxMDpldtSY8tlM5X5wsrMxOKLHk
+        exfuCP21f7Fh2L1Vg7201EbUf17rGcCzMb7EcQY=
+X-Google-Smtp-Source: ABdhPJwrwpFr2FQwQpfeP6BA1gpGIIYhMdOoi69PRSdY4DWGPHU2qkE9Uf2//SENA34d4VSlTfbxzpMseSX7CraCA+8=
+X-Received: by 2002:aca:744:: with SMTP id 65mr19161636oih.153.1614103320874;
+ Tue, 23 Feb 2021 10:02:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20210223143426.2412737-1-elver@google.com> <20210223143426.2412737-5-elver@google.com>
- <CACT4Y+aq6voiAEfs0d5Vd9trumVbnQhv-PHYfns2LefijmfyoQ@mail.gmail.com>
- <CANpmjNP1wQvG0SNPP2L9QO=natf0XU8HXj-r2_-U4QZxtr-dVA@mail.gmail.com> <CACT4Y+ar7=q0p=LFxkbKbKhz-U3rwdf=PJ3Gg3=ZLP6w_sgTeA@mail.gmail.com>
-In-Reply-To: <CACT4Y+ar7=q0p=LFxkbKbKhz-U3rwdf=PJ3Gg3=ZLP6w_sgTeA@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 23 Feb 2021 18:16:20 +0100
-Message-ID: <CANpmjNO-xj8jnakVoWBbjPjn2gjHaugEVJTOebfdpvSwZhG5LQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 4/4] perf/core: Add breakpoint information to siginfo
- on SIGTRAP
-To:     Dmitry Vyukov <dvyukov@google.com>
+References: <20210223143426.2412737-1-elver@google.com> <20210223143426.2412737-3-elver@google.com>
+In-Reply-To: <20210223143426.2412737-3-elver@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 23 Feb 2021 19:01:49 +0100
+Message-ID: <CAMuHMdXVZ+UvNgoaNC-ZZoiuJ=DOsZs4oZzd8DubA7D+4iLCow@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/4] signal: Introduce TRAP_PERF si_code and si_perf
+ to siginfo
+To:     Marco Elver <elver@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -65,83 +49,38 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Christian Brauner <christian@brauner.io>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-m68k@lists.linux-m68k.org,
+        mascasa@google.com, Peter Collingbourne <pcc@google.com>,
+        irogers@google.com, kasan-dev@googlegroups.com,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
         "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 23 Feb 2021 at 16:16, Dmitry Vyukov <dvyukov@google.com> wrote:
+On Tue, Feb 23, 2021 at 3:52 PM Marco Elver <elver@google.com> wrote:
+> Introduces the TRAP_PERF si_code, and associated siginfo_t field
+> si_perf. These will be used by the perf event subsystem to send signals
+> (if requested) to the task where an event occurred.
 >
-> On Tue, Feb 23, 2021 at 4:10 PM 'Marco Elver' via kasan-dev
-> <kasan-dev@googlegroups.com> wrote:
-> > > > Encode information from breakpoint attributes into siginfo_t, which
-> > > > helps disambiguate which breakpoint fired.
-> > > >
-> > > > Note, providing the event fd may be unreliable, since the event may have
-> > > > been modified (via PERF_EVENT_IOC_MODIFY_ATTRIBUTES) between the event
-> > > > triggering and the signal being delivered to user space.
-> > > >
-> > > > Signed-off-by: Marco Elver <elver@google.com>
-> > > > ---
-> > > >  kernel/events/core.c | 11 +++++++++++
-> > > >  1 file changed, 11 insertions(+)
-> > > >
-> > > > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > > > index 8718763045fd..d7908322d796 100644
-> > > > --- a/kernel/events/core.c
-> > > > +++ b/kernel/events/core.c
-> > > > @@ -6296,6 +6296,17 @@ static void perf_sigtrap(struct perf_event *event)
-> > > >         info.si_signo = SIGTRAP;
-> > > >         info.si_code = TRAP_PERF;
-> > > >         info.si_errno = event->attr.type;
-> > > > +
-> > > > +       switch (event->attr.type) {
-> > > > +       case PERF_TYPE_BREAKPOINT:
-> > > > +               info.si_addr = (void *)(unsigned long)event->attr.bp_addr;
-> > > > +               info.si_perf = (event->attr.bp_len << 16) | (u64)event->attr.bp_type;
-> > > > +               break;
-> > > > +       default:
-> > > > +               /* No additional info set. */
-> > >
-> > > Should we prohibit using attr.sigtrap for !PERF_TYPE_BREAKPOINT if we
-> > > don't know what info to pass yet?
-> >
-> > I don't think it's necessary. This way, by default we get support for
-> > other perf events. If user space observes si_perf==0, then there's no
-> > information available. That would require that any event type that
-> > sets si_perf in future, must ensure that it sets si_perf!=0.
-> >
-> > I can add a comment to document the requirement here (and user space
-> > facing documentation should get a copy of how the info is encoded,
-> > too).
-> >
-> > Alternatively, we could set si_errno to 0 if no info is available, at
-> > the cost of losing the type information for events not explicitly
-> > listed here.
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Note that PERF_TYPE_HARDWARE == 0, so setting si_errno to 0 does not
-work. Which leaves us with:
+>  arch/m68k/kernel/signal.c          |  3 +++
 
-1. Ensure si_perf==0 (or some other magic value) if no info is
-available and !=0 otherwise.
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-2. Return error for events where we do not officially support
-requesting sigtrap.
+Gr{oetje,eeting}s,
 
-I'm currently leaning towards (1).
+                        Geert
 
-> > What do you prefer?
->
-> Ah, I see.
-> Let's wait for the opinions of other people. There are a number of
-> options for how to approach this.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
